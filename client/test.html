@@ -1,0 +1,109 @@
+<html ng-app>
+<head>
+<script type="text/javascript"
+src="http://ajax.googleapis.com/ajax/libs/angularjs/1.0.7/angular.min.js"></script>
+<script src="controllers.js"></script>
+</head>
+<body ng-cloak>
+  <div ng-controller='HelloController'>
+    <input ng-model='greeting.text'>
+    <p>{{greeting.text}}, World</p>
+  </div>
+
+  Write some text in textbox:
+  <input type="text" ng-model="sometext" />
+  <h1>Hello <span ng-bind="sometext"></span></h1>
+
+    <div ng-controller='CartController'>>
+      <h1>Your Order</h1>
+      <div ng-repeat='item in items'>
+        <span>{{item.title}}</span>
+        <input ng-model='item.quantity'>
+        <span>{{item.price | currency}}</span>
+        <span>{{item.price * item.quantity | currency}}</span>
+        <button ng-click="remove($index)">Remove</button>
+      </div>
+      <script>
+      function CartController($scope) {
+        $scope.items = [
+          {title: 'Paint pots', quantity: 8, price: 3.95},
+          {title: 'Polka dots', quantity: 17, price: 12.95},
+          {title: 'Pebbles', quantity: 5, price: 6.95}
+        ];
+        $scope.remove = function(index) {
+          $scope.items.splice(index, 1);
+        }
+      }
+      </script>
+    </div>
+    <hr/>
+    <div ng-controller="ContactController">
+      Email:<input type="text" ng-model="newcontact"/>
+      <button ng-click="add()">Add</button>
+      <h2>Contacts</h2>
+
+      <ul>
+        <li ng-repeat="contact in contacts"> {{ contact }} </li>
+      </ul>
+
+    </div>
+    <script type="text/javascript">
+    function ContactController($scope) {
+      $scope.contacts = ["hi@email.com", "hello@email.com"];
+
+      $scope.add = function() {
+        $scope.contacts.push($scope.newcontact);
+        $scope.newcontact = "";
+      }
+    }
+    </script>
+    <hr/>
+    <div ng-controller="DiscountsController">
+      <ul ng-show="show">
+        <li ng-repeat='discount in discounts'>
+          <img src="{{discount.image}}" width="100px"/> {{$index + 1}} -   {{discount.name}} - {{discount.type}}
+        </li>
+      </ul>
+    </div>
+    <div>
+      <table ng-controller='DiscountsController'>
+        <tr ng-repeat='discount in discounts' ng-click='selectRestaurant($index)'
+        ng-class='{selected: $index==selectedRow}'>
+        <td><img src="{{discount.image}}" width="100px"/></td>
+        <td>
+          <table>
+            <tr>
+              <td>{{discount.type}}</td>
+            </tr>
+            <tr>
+              <td>{{discount.name}}</td>
+            </tr>
+          </table>
+        </td>
+      </table>
+    </div>
+    <hr/>
+    <div ng-controller="Cart2Controller">
+      <div ng-repeat="item in items">
+        <span>{{item.title}}</span>
+        <input ng-model="item.quantity">
+        <span>{{item.price | currency}}</span>
+        <span>{{item.price * item.quantity | currency}}</span>
+      </div>
+      <div>Total: {{bill.total | currency}}</div>
+      <div>Discount: {{bill.discount | currency}}</div>
+      <div>Subtotal: {{bill.subtotal | currency}}</div>
+    </div>
+
+    <!-- you can use {{}} with this forms
+
+    <img src="/images/cats/{{favoriteCat}}">
+    Instead, you should use the ng-src attribute and write your template as:
+    <img ng-src="/images/cats/{{favoriteCat}}">
+    Similarly, for the <a> tag, you should use ng-href :
+    <a ng-href="/shop/category={{numberOfBalloons}}">some text</a>
+
+  -->
+
+</body>
+</html>
