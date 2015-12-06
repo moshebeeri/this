@@ -17,8 +17,10 @@ var BusinessSchema = new Schema({
   creator: {type: Schema.ObjectId, ref: 'User', required: true},
   info: String,
   active: Boolean,
-  lat : Number,
-  long : Number,
+  location : {
+    lat : String,
+    long : String
+  },
   id : String,
   type:{
     type: String,

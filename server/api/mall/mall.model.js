@@ -3,13 +3,18 @@
 var mongoose = require('mongoose'),
     Schema = mongoose.Schema;
 
+//http://stackoverflow.com/questions/24126985/mongodb-how-to-use-one-schema-as-sub-document-for-different-collections-defined
+//var Location = require('../location/location.model')
+
 var MallSchema = new Schema({
   name: String,
   address: String,
   info: String,
   active: Boolean,
-  lat: Number,
-  long: Number,
+  location : {
+    lat : String,
+    long : String
+  },
   state: String,
   country: String,
   city: String,
