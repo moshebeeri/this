@@ -1,0 +1,29 @@
+'use strict';
+
+var express = require('express');
+var controller = require('./image.controller');
+
+var router = express.Router();
+
+router.get('/', controller.index);
+router.get('/:id', controller.show);
+router.post('/', controller.create);
+router.put('/:id', controller.update);
+router.patch('/:id', controller.update);
+router.delete('/:id', controller.destroy);
+
+module.exports = router;
+
+
+
+
+//var express = require('express')
+//  , router = express.Router()
+//  , aws = require('aws-sdk');
+//
+//var controller = require('./image.controller');
+//
+//var uploading = multer({
+//  dest: __dirname + '../public/uploads/',
+//  limits: {fileSize: 1000000, files:1},
+//});
