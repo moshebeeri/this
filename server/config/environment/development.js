@@ -8,5 +8,12 @@ module.exports = {
     uri: 'mongodb://localhost/lowla-dev'
   },
 
+  aws: {
+    key: 'XXXXXXXXXXXX',
+    secret: 'XXXXXXXXXXXXXXXXXXXXXXXXXXXXXX',
+    region: 'us-east',
+    bucketName: 'ThisCounts'
+  },
+
   seedDB: true
 };
