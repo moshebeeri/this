@@ -8,6 +8,10 @@ var randomstring = require("randomstring");
 var s3 = new aws.S3();
 var folder = 'images'
 
+var multiparty = require('multiparty');
+var gm = require('gm');
+var fs = require('fs');
+
 var Upload = require('s3-uploader');
 var client = createClient();
 
@@ -86,35 +90,87 @@ exports.show = function (req, res) {
   });
 };
 
+exports.create = function(req, res) {
+  var form = new multiparty.Form();
+  var size = '';
+  var fileName = randomstring.generate({length:8,charset:'hex'});
+
+  form.on('part', function (part) {
+    console.log("part:"+part.filename)
+    if (!part.filename) return;
+    size = part.byteCount;
+    fileName = part.filename;
+  });
+  form.on('file', function (name, file) {
+    client.upload(file.path, { /*path: key*/ }, function (err, versions, meta) {
+      if (err) {
+        console.log(err);
+        return handleError(res, err);
+      }
+
+      versions.forEach(function (image) {
+        console.log(image.width, image.height, image.url);
+        // 1024 760 https://my-bucket.s3.amazonaws.com/path/110ec58a-a0f2-4ac4-8393-c866d813b8d1.jpg
+      });
+      return res.status(201).json(versions);
+    });
+
+  });
+  form.parse(req);
+};
+
+exports.works_create = function(req, res) {
+  var multiparty = require('multiparty');
+  var gm = require('gm');
+  var fs = require('fs');
+  var form = new multiparty.Form();
+  var size = '';
+  var fileName = randomstring.generate({length:8,charset:'hex'});
+  form.on('part', function (part) {
+    console.log("part:"+part.filename)
+    if (!part.filename) return;
+    size = part.byteCount;
+    fileName = part.filename;
+  });
+  form.on('file', function (name, file) {
+    console.log(file.path);
+    var extension = /[^.]+$/.exec(file.originalFilename)[0];
+    console.log('filename: ' + fileName);
+    console.log('fileSize: ' + (size / 1024));
+    var source_path = file.path;
+    var target_path = '/home/moshe/uploads/fullsize/' + fileName +'.' + extension;
+    var thumbPath = '/home/moshe/uploads/thumbs/' + fileName + '.png';
+    fs.renameSync(source_path, target_path);
+    gm(target_path)
+      .resize(150, 150)
+      .noProfile()
+      .write(thumbPath, function(err) {
+        if(err) console.error(err.stack);
+      });
+    return res.json(200, {
+      full_size : fileName,
+
+    } );
+  });
+  form.parse(req);
+};
+
 // Creates a new image in the DB.
 //see http://stackoverflow.com/questions/30166907/uploading-images-with-mongoose-express-and-angularjs
 //https://github.com/Turistforeningen/node-s3-uploader
-exports.create = function (req, res) {
-  switch(req.body.type){
-    case 'USER'      :  {} break;
-    case 'BUSINESS'  :  {BusinessSchema.findById()} break;
-    case 'PRODUCT'   :  {} break;
-    case 'PROMOTION' :  {} break;
-    case 'MALL'      :  {} break;
-    case 'CATEGORY'  :  {} break;
-    case 'CARD_TYPE' :  {} break;
-    default  :
-        break;
-
-  }
+exports.createX = function (req, res) {
+  //switch(req.body.type){
+  //  case 'USER'      :  {} break;
+  //  case 'BUSINESS'  :  {} break; //BusinessSchema.findById()
+  //  case 'PRODUCT'   :  {} break;
+  //  case 'PROMOTION' :  {} break;
+  //  case 'MALL'      :  {} break;
+  //  case 'CATEGORY'  :  {} break;
+  //  case 'CARD_TYPE' :  {} break;
+  //  default  :
+  //      break;
+  //}
   var key = folder + '/' + randomstring.generate({length:8,charset:'hex'}) + '_' + req.body.uploadName;
-  client.upload(req.files.image.path, { /*path: key*/ }, function (err, versions, meta) {
-    if (err) {
-      console.log(err);
-      return handleError(res, err);
-    }
-
-    versions.forEach(function (image) {
-      console.log(image.width, image.height, image.url);
-      // 1024 760 https://my-bucket.s3.amazonaws.com/path/110ec58a-a0f2-4ac4-8393-c866d813b8d1.jpg
-    });
-    return res.status(201).json(versions);
-  });
 
 
   var path = req.files.image.path;
@@ -137,6 +193,11 @@ exports.create = function (req, res) {
     });
   });
 
+};
+
+
+exports.create_upload_multipart = function(req,res){
+  //http://www.componentix.com/blog/9/file-uploads-using-nodejs-now-for-real
 };
 
 // Updates an existing image in the DB.

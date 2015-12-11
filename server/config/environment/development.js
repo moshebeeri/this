@@ -9,10 +9,10 @@ module.exports = {
   },
 
   aws: {
-    key: 'XXXXXXXXXXXX',
-    secret: 'XXXXXXXXXXXXXXXXXXXXXXXXXXXXXX',
-    region: 'us-east',
-    bucketName: 'ThisCounts'
+    key: 'AKIAJCUWYC5LA4HQRDEQ',
+    secret: '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',
+    region: 'us-east-1',
+    bucketName: 'thiscounts'
   },
 
   seedDB: true
