@@ -30,11 +30,12 @@ exports.index = function(req, res) {
  */
 exports.create = function (req, res, next) {
   var newUser = new User(req.body);
+
   newUser.provider = 'local';
   newUser.role = 'user';
   newUser.save(function(err, user) {
     if (err) return validationError(res, err);
-    var token = jwt.sign({_id: user._id }, config.secrets.session, { expiresInMinutes: 60*5 });
+    var token = jwt.sign({_id: user._id }, config.secrets.session, { expiresInMinutes: 60*24*30 });
     res.json({ token: token });
     graphModel.reflect(user, function (err) {
       if (err) {  return handleError(res, err); }
@@ -42,6 +43,18 @@ exports.create = function (req, res, next) {
   });
 };
 
+exports.login = function (req, res, next) {
+  User.find({$or: [{email: {$eq: req.body.email}}, {phone_number: {$eq: req.body.phone_number}}]}, function (err, user) {
+    if (err) {
+      return handleError(res, err);
+    }
+    if (user) {
+      var token = jwt.sign({_id: user._id}, config.secrets.session, {expiresInMinutes: 60 * 24 * 30});
+      res.json({token: token});
+    }
+  });
+
+}
 /**
  * Get a single user
  */
@@ -97,7 +110,11 @@ exports.me = function(req, res, next) {
   }, '-salt -hashedPassword', function(err, user) { // don't ever give out the password or salt
     if (err) return next(err);
     if (!user) return res.status(401).send('Unauthorized');
-    res.json(user);
+    var user_and_data = {
+      user : user,
+      pictures : JSON.parse(user.pictures)
+    }
+    res.json(user_and_data);
   });
 };
 

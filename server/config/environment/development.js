@@ -15,5 +15,6 @@ module.exports = {
     bucketName: 'thiscounts'
   },
 
-  seedDB: true
+  //seedDB: true
+  seedDB: false
 };

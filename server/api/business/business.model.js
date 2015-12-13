@@ -38,3 +38,11 @@ var BusinessSchema = new Schema({
 });
 
 module.exports = mongoose.model('Business', BusinessSchema);
+
+//module.exports = function() {
+//  var schema = new Schema({
+//    ...
+//  });
+//
+//  mongoose.model('Business', schema);
+//};

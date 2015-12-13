@@ -1,22 +1,20 @@
 'use strict';
 
 var _ = require('lodash');
+var async = require('async');
 var Image = require('./image.model');
 var aws = require('aws-sdk');
 var config = require('../../config/environment');
 var randomstring = require("randomstring");
 var s3 = new aws.S3();
-var folder = 'images'
+var folder = 'images';
 
 var multiparty = require('multiparty');
-var gm = require('gm');
+//var gm = require('gm');
 var fs = require('fs');
 
 var Upload = require('s3-uploader');
 var client = createClient();
-
-//var BusinessSchema = require('mongoose').model('Business').schema
-var Business = require('../business')
 
 function createClient() {
   return new Upload(config.aws.bucketName, {
@@ -90,13 +88,17 @@ exports.show = function (req, res) {
   });
 };
 
+exports.test_entity_param = function(req, res) {
+  console.log(req.params.id)
+}
+
 exports.create = function(req, res) {
   var form = new multiparty.Form();
   var size = '';
   var fileName = randomstring.generate({length:8,charset:'hex'});
 
   form.on('part', function (part) {
-    console.log("part:"+part.filename)
+    console.log("part:"+part.filename);
     if (!part.filename) return;
     size = part.byteCount;
     fileName = part.filename;
@@ -112,12 +114,61 @@ exports.create = function(req, res) {
         console.log(image.width, image.height, image.url);
         // 1024 760 https://my-bucket.s3.amazonaws.com/path/110ec58a-a0f2-4ac4-8393-c866d813b8d1.jpg
       });
+
+      updateImageVersions(versions, req.params.id, function (err) {
+        if (err) {
+          console.log(err);
+        }
+      });
+
       return res.status(201).json(versions);
     });
 
   });
   form.parse(req);
 };
+
+var Business = require('../business/business.model');
+var User = require('../user/user.model');
+
+function updateImageVersions(version, id, callback){
+  async.parallel({
+      user: function(callback){
+        User.findById(id, callback);
+      },
+      business: function(callback){
+        Business.findById(id, callback);
+      }
+    },
+    function(err, results) {
+      // results is now equals to: {one: 1, two: 2}
+      if(err) {console.log(err)}
+      else {
+        var updated;
+        if(results.user) {
+          console.log(results.user);
+          updated = results.user;
+        }
+        if(results.business) {
+          console.log(results.business);
+          updated = results.pictures;
+        }
+        updated.pictures = JSON.stringify(version);
+        updated.save(function (err) {
+          if (err) {
+            return callback(err);
+          }
+          callback(null)
+        });
+      }
+    });
+}
+
+function find (collection, query, callback) {
+    mongoose.connection.db.collection(collection, function (err, collection) {
+      collection.find(query).toArray(callback);
+    });
+}
 
 exports.works_create = function(req, res) {
   var multiparty = require('multiparty');
@@ -154,6 +205,7 @@ exports.works_create = function(req, res) {
   });
   form.parse(req);
 };
+
 
 // Creates a new image in the DB.
 //see http://stackoverflow.com/questions/30166907/uploading-images-with-mongoose-express-and-angularjs
