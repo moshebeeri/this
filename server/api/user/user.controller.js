@@ -113,7 +113,7 @@ exports.me = function(req, res, next) {
     var user_and_data = {
       user : user,
       pictures : JSON.parse(user.pictures)
-    }
+    };
     res.json(user_and_data);
   });
 };
