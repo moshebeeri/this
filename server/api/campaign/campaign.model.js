@@ -24,6 +24,7 @@ var CampaignPreferencesSchema = new Schema({
 
 var CampaignSchema = new Schema({
   name: String,
+  gid: Number,
   info: String,
   promotion: {type: Schema.ObjectId, ref: 'Promotion', require: true},
   amount: Number,

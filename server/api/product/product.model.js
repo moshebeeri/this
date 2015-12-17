@@ -5,6 +5,7 @@ var mongoose = require('mongoose'),
 
 var ProductSchema = new Schema({
   name: String,
+  gid: Number,
   info: String,
   brand: {type: Schema.ObjectId, ref: 'Brand', required: false},
   retail_price: Number,

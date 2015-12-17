@@ -8,7 +8,9 @@ var mongoose = require('mongoose'),
 
 var MallSchema = new Schema({
   name: String,
+  gid: Number,
   address: String,
+  pictures : [String],
   info: String,
   active: Boolean,
   location : {

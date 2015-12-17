@@ -12,9 +12,10 @@ function percent_range_validator(v) {
 
 var PromotionSchema = new Schema({
   name: {type: String, required: true},
+  gid: Number,
   creator: {type: Schema.ObjectId, ref: 'User', required: true},
   created: {type: Date, default: Date.now},
-  gid: Number,
+  pictures : [String],
   info: String,
   active: Boolean,
   lat: Number,

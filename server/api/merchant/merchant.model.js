@@ -5,6 +5,7 @@ var mongoose = require('mongoose'),
 
 var MerchantSchema = new Schema({
   name: String,
+  gid: Number,
   info: String,
   active: Boolean
 });

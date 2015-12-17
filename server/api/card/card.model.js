@@ -5,6 +5,7 @@ var mongoose = require('mongoose'),
 
 var CardSchema = new Schema({
   name: String,
+  gid: Number,
   card_id: String,
   password: String,
   type : String,

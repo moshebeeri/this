@@ -7,7 +7,7 @@ var db = require('seraph')({  server: "http://localhost:7474",
 var model = require('seraph-model');
 //var PromotionGraph = model(db, 'promotion');
 
-var winston = require('winston')
+var winston = require('winston');
 var logger = new (winston.Logger)({
     transports: [
         new (winston.transports.Console)()//,
@@ -18,12 +18,12 @@ var logger = new (winston.Logger)({
 function GraphModel(class_name) {
   //this.class_name = class_name;
   this.model = model(db, class_name);
-  this.connect();
+  //this.connect();
 }
 
 GraphModel.prototype.connect = function connect(){
   logger.info("--> Connect to GraphModel <--");
-}
+};
 
 GraphModel.prototype.saySomething = function saySomething(to, from, message) {
   logger.info("to:" + to + " from:" + from + " message:" + message)

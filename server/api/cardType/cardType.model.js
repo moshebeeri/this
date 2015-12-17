@@ -5,6 +5,7 @@ var mongoose = require('mongoose'),
 
 var CardTypeSchema = new Schema({
   name: String,
+  gid: Number,
   info: String,
   active: Boolean,
   issuer: String,
@@ -18,7 +19,7 @@ var CardTypeSchema = new Schema({
       'BRAND'
     ]
   },
-
+  pictures : [String]
 });
 
 module.exports = mongoose.model('CardType', CardTypeSchema);

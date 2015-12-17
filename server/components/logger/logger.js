@@ -12,5 +12,5 @@ function Logger() {
 
 Logger.prototype.get = function get() {
   return this.prototype.logger;
-}
+};
 module.exports = Logger;

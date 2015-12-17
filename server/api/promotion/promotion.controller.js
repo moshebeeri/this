@@ -2,31 +2,20 @@
 
 var _ = require('lodash');
 var Promotion = require('./promotion.model');
-var db = require('seraph')({  server: "http://localhost:7474",
-                              user: "neo4j",
-                              pass: "saywhat" });
+
 var model = require('seraph-model');
-//var PromotionGraph = model(db, 'promotion');
 
 var randomstring = require("randomstring");
-
-var winston = require('winston')
-var logger = new (winston.Logger)({
-    transports: [
-        new (winston.transports.Console)()//,
-        //new (winston.transports.File)({ filename: 'somefile.logger' })
-    ]
-});
-
+var logger = require('../../components/logger');
 var graphTools = require('../../components/graph-tools');
 var graphModel = graphTools.createGraphModel('promotion');
 
 exports.g = function(req, res) {
-  var message = "=="
+  var message = "==";
   if ( graphModel )
     graphModel.saySomething("to", "from", "message");
   if ( graphModel )
-    message = " graphModel ok"
+    message = " graphModel ok";
   return res.json(200, "g called" + message);
 };
 
@@ -71,17 +60,6 @@ exports.create = function(req, res) {
       if (err) { return handleError(res, err); }
     });
     return res.json(201, promotion);
-  //-->
-    // PromotionGraph.save(JSON.stringify(promotion), function(err, gpromotion) {
-    //     if(err) { return res.end(err.message); } //handleError(res, err); }
-    //     promotion.gid = gpromotion.id;
-    //     logger.info("promotion.gid=" + promotion.gid);
-    //     promotion.save(function (err) {
-    //       if (err) { return handleError(res, err); }
-    //       return res.json(200, promotion);
-    //   });
-    // });
-    //<--
   });
 };
 

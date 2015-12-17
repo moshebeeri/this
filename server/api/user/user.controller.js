@@ -38,7 +38,7 @@ exports.create = function (req, res, next) {
     var token = jwt.sign({_id: user._id }, config.secrets.session, { expiresInMinutes: 60*24*30 });
     res.json({ token: token });
     graphModel.reflect(user, function (err) {
-      if (err) {  return handleError(res, err); }
+      if(err) return res.send(500, err);
     });
   });
 };
@@ -54,14 +54,15 @@ exports.login = function (req, res, next) {
     }
   });
 
-}
+};
+
 /**
  * Get a single user
  */
 exports.show = function (req, res, next) {
   var userId = req.params.id;
 
-  User.findById(userId, function (err, user) {
+  User.findById(userId, '-salt -hashedPassword', function (err, user) {
     if (err) return next(err);
     if (!user) return res.status(401).send('Unauthorized');
     res.json(user.profile);
@@ -110,11 +111,7 @@ exports.me = function(req, res, next) {
   }, '-salt -hashedPassword', function(err, user) { // don't ever give out the password or salt
     if (err) return next(err);
     if (!user) return res.status(401).send('Unauthorized');
-    var user_and_data = {
-      user : user,
-      pictures : JSON.parse(user.pictures)
-    };
-    res.json(user_and_data);
+    res.json(user);
   });
 };
 

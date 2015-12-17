@@ -5,6 +5,7 @@ var mongoose = require('mongoose'),
 
 var GroupSchema = new Schema({
   name: String,
+  gid: Number,
   info: String,
   active: Boolean
 });

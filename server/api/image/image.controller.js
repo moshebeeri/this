@@ -36,11 +36,9 @@ function createClient() {
     },
 
     versions: [{
-      maxHeight: 1040,
-      maxWidth: 1040,
       format: 'jpg',
-      suffix: '-large',
-      quality: 80,
+      suffix: '-orig',
+      quality: 90,
       awsImageExpires: 31536000,
       awsImageMaxAge: 31536000
     }, {
@@ -52,15 +50,10 @@ function createClient() {
       aspect: '16:9!h',
       suffix: '-small'
     }, {
-      maxHeight: 100,
-      aspect: '1:1',
-      format: 'png',
-      suffix: '-thumb1'
-    }, {
       maxHeight: 250,
       maxWidth: 250,
       aspect: '1:1',
-      suffix: '-thumb2'
+      suffix: '-thumb'
     }]
   });
 }
@@ -88,10 +81,6 @@ exports.show = function (req, res) {
   });
 };
 
-exports.test_entity_param = function(req, res) {
-  console.log(req.params.id)
-}
-
 exports.create = function(req, res) {
   var form = new multiparty.Form();
   var size = '';
@@ -110,10 +99,10 @@ exports.create = function(req, res) {
         return handleError(res, err);
       }
 
-      versions.forEach(function (image) {
-        console.log(image.width, image.height, image.url);
-        // 1024 760 https://my-bucket.s3.amazonaws.com/path/110ec58a-a0f2-4ac4-8393-c866d813b8d1.jpg
-      });
+      //versions.forEach(function (image) {
+      // 1024 760 https://my-bucket.s3.amazonaws.com/path/110ec58a-a0f2-4ac4-8393-c866d813b8d1.jpg
+      //  console.log(image.width, image.height, image.url)
+      //});
 
       updateImageVersions(versions, req.params.id, function (err) {
         if (err) {
@@ -153,9 +142,13 @@ function updateImageVersions(version, id, callback){
           console.log(results.business);
           updated = results.pictures;
         }
-        updated.pictures = JSON.stringify(version);
+        version.forEach(function(version){
+          updated.pictures.push(version.url)
+        });
+       // updated.pictures = JSON.stringify(version);
         updated.save(function (err) {
           if (err) {
+            console.log(err);
             return callback(err);
           }
           callback(null)
@@ -165,9 +158,9 @@ function updateImageVersions(version, id, callback){
 }
 
 function find (collection, query, callback) {
-    mongoose.connection.db.collection(collection, function (err, collection) {
-      collection.find(query).toArray(callback);
-    });
+  mongoose.connection.db.collection(collection, function (err, collection) {
+    collection.find(query).toArray(callback);
+  });
 }
 
 exports.works_create = function(req, res) {
@@ -214,6 +207,7 @@ exports.createX = function (req, res) {
   //switch(req.body.type){
   //  case 'USER'      :  {} break;
   //  case 'BUSINESS'  :  {} break; //BusinessSchema.findById()
+  //  case 'SHOPPING_CHAIN'  :  {} break; //BusinessSchema.findById()
   //  case 'PRODUCT'   :  {} break;
   //  case 'PROMOTION' :  {} break;
   //  case 'MALL'      :  {} break;

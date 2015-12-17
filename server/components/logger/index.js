@@ -11,6 +11,5 @@ var logger = new (winston.Logger)({
 
 
 exports.createLogger = function createLogger() {
-//  return new Logger(params);
   return logger;
 };

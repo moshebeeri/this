@@ -5,8 +5,8 @@ var mongoose = require('mongoose'),
 
 var BrandSchema = new Schema({
   name: String,
+  gid: Number,
   info: String,
-
   active: Boolean,
   logo: String,
   pictures: [String],

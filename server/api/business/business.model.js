@@ -5,6 +5,7 @@ var mongoose = require('mongoose'),
 
 var BusinessSchema = new Schema({
   name: String,
+  gid: Number,
   shopping_chain: {type: Schema.ObjectId, ref: 'ShoppingChain', required: false},
   description : String,
   address : String,
