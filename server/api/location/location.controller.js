@@ -2,6 +2,12 @@
 
 var _ = require('lodash');
 var Location = require('./location.model');
+var logger = require('../../components/logger');
+var spatial = require('../../components/spatial');
+
+exports.test = function(req, res) {
+  res.json(200, "in test function");
+};
 
 // Get list of locations
 exports.index = function(req, res) {

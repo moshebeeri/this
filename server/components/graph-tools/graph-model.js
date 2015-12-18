@@ -4,7 +4,7 @@ var _ = require('lodash');
 var db = require('seraph')({  server: "http://localhost:7474",
                               user: "neo4j",
                               pass: "saywhat" });
-var model = require('seraph-model');
+var seraph_model = require('seraph-model');
 //var PromotionGraph = model(db, 'promotion');
 
 var winston = require('winston');
@@ -17,7 +17,7 @@ var logger = new (winston.Logger)({
 
 function GraphModel(class_name) {
   //this.class_name = class_name;
-  this.model = model(db, class_name);
+  this.model = seraph_model(db, class_name);
   //this.connect();
 }
 
@@ -26,18 +26,17 @@ GraphModel.prototype.connect = function connect(){
 };
 
 GraphModel.prototype.saySomething = function saySomething(to, from, message) {
-  logger.info("to:" + to + " from:" + from + " message:" + message)
+  logger.info("to:" + to + " from:" + from + " message:" + message);
   return "something";
-}
+};
 
-GraphModel.prototype.reflect = function reflect(object, callback) {
-  model = this.model;
-  model.save(JSON.stringify(object), function(err, g_object) {
+GraphModel.prototype.reflect = function reflect(object, g_object, callback) {
+  this.model.save(g_object, function(err, g_object) {
       if(err) callback(err, g_object );
       object.gid = g_object.id;
       object.save(function (err) {});
   });
-}
+};
 
 
 

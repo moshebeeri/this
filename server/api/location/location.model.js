@@ -10,7 +10,7 @@ var LocationSchema = new Schema({
   locations : [{
       timestamp : Date,
       lat : String,
-      long : String
+      lon : String
     }],
   userId: String,
   timestamp: { type : Date, default: Date.now },

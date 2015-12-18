@@ -11,6 +11,8 @@ var UserSchema = new Schema({
   phone_number: { type: String, index: true, unique : true, required : true, dropDups: true },
   pictures : [String],
   email: { type: String, lowercase: true, index: true, unique : true, required : true, dropDups: true },
+  sms_code: String,
+  sms_verified: Boolean,
   role: {
     type: String,
     default: 'user'

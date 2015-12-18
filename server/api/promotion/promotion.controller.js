@@ -5,7 +5,7 @@ var Promotion = require('./promotion.model');
 
 var model = require('seraph-model');
 
-var randomstring = require("randomstring");
+var randomstring = require('randomstring');
 var logger = require('../../components/logger');
 var graphTools = require('../../components/graph-tools');
 var graphModel = graphTools.createGraphModel('promotion');

@@ -7,17 +7,23 @@ var db = require('seraph')({
 
 
 function Spatial() {
+}
+
+Spatial.prototype.layer = function layer() {
+  //if layer exist return
+
+
+  //not exist then create the layer
   var operation = db.operation('ext/SpatialPlugin/graphdb/addEditableLayer', 'POST', {
     "layer": "user",
-    "format": "WKT",
-    "nodePropertyName": "wkt"
+    "lat" : "lat",
+    "lon" : "lon"
   });
   db.call(operation, function (err) {
     if (!err) console.log('Set `name` to `Jon` on node 4285!')
   });
-}
+};
 
-module.exports = Spatial;
 
 /**
  *  POST http://localhost:7575/db/data/ext/SpatialPlugin/graphdb/addNodeToLayer
@@ -66,6 +72,8 @@ Spatial.prototype.cypher = function cypher(cypher, cb) {
     //]);
   });
 };
+
+module.exports = Spatial;
 
 
 ////var neo4j = require('neo4j');

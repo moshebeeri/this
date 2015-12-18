@@ -19,5 +19,17 @@ module.exports = {
             process.env.MONGOHQ_URL ||
             process.env.OPENSHIFT_MONGODB_DB_URL+process.env.OPENSHIFT_APP_NAME ||
             'mongodb://localhost/lowla'
-  }
+  },
+  aws: {
+    key: 'AKIAJCUWYC5LA4HQRDEQ',
+    secret: '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',
+    region: 'us-east-1',
+    bucketName: 'thiscounts'
+  },
+
+  twilio:{
+    accountSid: 'ACc05b055681938f0a68791b2f2de08c08',
+    authToken: '802246c68c545894b87bf2e31e026936',
+    number: '+972526268723'
+  },
 };
