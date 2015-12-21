@@ -22,7 +22,7 @@ var validationError = function(res, err) {
  * restriction: 'admin'
  */
 exports.index = function(req, res) {
-  User.find({}, '-salt -hashedPassword', function (err, users) {
+  User.find({}, '-salt -hashedPassword -sms_code', function (err, users) {
     if(err) return res.send(500, err);
     res.json(200, users);
   });
@@ -41,6 +41,7 @@ function send_sms_verification_code(user) {
         console.log("sms verification sent sid: " + message.sid);
       });
 }
+
 /**
  * Creates a new user
  */
@@ -68,6 +69,15 @@ exports.create = function (req, res, next) {
   });
 };
 
+exports.phonebook = function (req, res){
+  var mongoose = require('mongoose');
+  var phonebook = req.body;
+  mongoose.connection.db.collection('phonebook', function (err, collection) {
+    collection.insert(phonebook);
+  });
+  return res.send(200, "ok");
+};
+
 exports.login = function (req, res, next) {
   User.find({$or: [{email: {$eq: req.body.email}}, {phone_number: {$eq: req.body.phone_number}}]}, function (err, user) {
     if (err) {
@@ -78,7 +88,6 @@ exports.login = function (req, res, next) {
       res.json({token: token});
     }
   });
-
 };
 
 /**
@@ -87,7 +96,7 @@ exports.login = function (req, res, next) {
 exports.show = function (req, res, next) {
   var userId = req.params.id;
 
-  User.findById(userId, '-salt -hashedPassword', function (err, user) {
+  User.findById(userId, '-salt -hashedPassword -sms_code', function (err, user) {
     if (err) return next(err);
     if (!user) return res.status(401).send('Unauthorized');
     res.json(user.profile);
@@ -167,7 +176,7 @@ exports.me = function(req, res, next) {
   var userId = req.user._id;
   User.findOne({
     _id: userId
-  }, '-salt -hashedPassword', function(err, user) { // don't ever give out the password or salt
+  }, '-salt -hashedPassword -sms_code', function(err, user) { // don't ever give out the password or salt
     if (err) return next(err);
     if (!user) return res.status(401).send('Unauthorized');
     res.json(user);

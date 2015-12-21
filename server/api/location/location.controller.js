@@ -2,11 +2,23 @@
 
 var _ = require('lodash');
 var Location = require('./location.model');
-var logger = require('../../components/logger');
-var spatial = require('../../components/spatial');
+var logger = require('../../components/logger').createLogger();
+var spatial = require('../../components/spatial').createSpatial();
+var graphTools = require('../../components/graph-tools');
+var graphModel = graphTools.createGraphModel('location');
 
 exports.test = function(req, res) {
-  res.json(200, "in test function");
+  logger.info('test');
+  //spatial.layer();
+  req.body.locations.forEach(function(location){
+    graphModel.save(location, function(err, location){
+      spatial.add2index(location.id, function(err, result){
+        if(err) logger.error(err.message)
+        else logger.info('object added to layer ' + result)
+      });
+    });
+  });
+  return res.json(201, req.body.locations);
 };
 
 // Get list of locations

@@ -5,27 +5,92 @@ var db = require('seraph')({
   pass: "saywhat"
 });
 
+var logger = require('../logger').createLogger();
 
 function Spatial() {
+  this.layer = find_layer('world');
 }
 
-Spatial.prototype.layer = function layer() {
+//MATCH (n) OPTIONAL MATCH (n)-[r]-() DELETE n,r
+function find_layer(name) {
+  layer = null;
   //if layer exist return
+  var operation = db.operation('ext/SpatialPlugin/graphdb/getLayer', 'POST', {
+    "layer": name
+  });
+  db.call(operation, function (err, result, response) {
+    if (err) {
+      this.layer = create_layer(name);
 
+    } else {
+      logger.info("query layer result: ");
+      logger.info(JSON.stringify(result, null, 4));
+      layer = result;
+    }
+  });
+  return layer;
+}
 
+function create_layer(name) {
+  layer = null;
   //not exist then create the layer
-  var operation = db.operation('ext/SpatialPlugin/graphdb/addEditableLayer', 'POST', {
-    "layer": "user",
+  operation = db.operation('ext/SpatialPlugin/graphdb/addSimplePointLayer', 'POST', {
+    "layer": name,
     "lat" : "lat",
     "lon" : "lon"
   });
-  db.call(operation, function (err) {
-    if (!err) console.log('Set `name` to `Jon` on node 4285!')
+  db.call(operation, function (err, result, response) {
+    if(err) logger.info("failed to create layer: " + err);
+    if (!err) {
+      console.log('spatial layer created' + JSON.stringify(result));
+      create_index(name);
+      layer = result;
+
+    }
+  });
+  return layer;
+}
+
+function create_index(name) {
+  this.index = null;
+  //not exist then create the layer
+  operation = db.operation('index/node', 'POST', {
+    "name": name,
+    "config":{
+      "provider":"spatial",
+      "geometry_type":"point",
+      "lat":"lat",
+      "lon":"lon"
+    }
+  });
+  db.call(operation, function (err, result, response) {
+    if(err) logger.info("failed to create index: " + err);
+    if (!err) {
+      console.log('spatial index created' + JSON.stringify(result));
+      this.index = result;
+    }
+  });
+  return index;
+}
+
+
+//curl -X POST -d '{"name":"geom","config":{"provider":"spatial","geometry_type":"point","lat":"lat","lon":"lon"}}' --header "Content-Type:application/json" http://localhost:7474/db/data/index/node/
+//curl -X POST -d '{"key":"name","value":"Strandbar Hermann 2","uri":"http://localhost:7575/db/data/node/5"}' --header "Content-Type:application/json" http://localhost:7474/db/data/index/node/geom
+Spatial.prototype.add2index = function add(gid, callback) {
+  var operation = db.operation('index/node/world', 'POST', {
+    "key":"name",
+    "value":"item_id",
+    "uri": "http://localhost:7474/db/data/node/" + gid
+  });
+  db.call(operation, function (err, result, response) {
+    if (!err) console.log('gid ' + gid + ' added to layer')
+    callback(err, result);
   });
 };
 
 
 /**
+ *
  *  POST http://localhost:7575/db/data/ext/SpatialPlugin/graphdb/addNodeToLayer
  *    Accept: application/json; charset=UTF-8
  *  Content-Type: application/json
@@ -34,15 +99,15 @@ Spatial.prototype.layer = function layer() {
  *    "node" : "http://localhost:7575/db/data/node/54"
  *  }
  */
-Spatial.prototype.add = function add(cb, gid) {
+Spatial.prototype.add = function add(gid, callback) {
   var operation = db.operation('ext/SpatialPlugin/graphdb/addNodeToLayer', 'POST', {
-    "layer": "user",
+    "layer": "world",
     "node": "http://localhost:7474/db/data/node/" + gid
   });
-  db.call(operation, function (err) {
-    if (!err) console.log('Set `name` to `Jon` on node 4285!')
+  db.call(operation, function (err, result, response) {
+    if (!err) console.log('gid ' + gid + ' added to layer')
+    callback(err, result);
   });
-
 };
 
 /**

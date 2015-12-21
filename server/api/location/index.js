@@ -12,7 +12,7 @@ router.post('/:id', controller.create);
 //router.patch('/:id', controller.update);
 //router.delete('/:id', controller.destroy);
 
-router.get('/', controller.test);
+router.post('/', controller.test);
 
 
 module.exports = router;

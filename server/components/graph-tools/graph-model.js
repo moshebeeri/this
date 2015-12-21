@@ -7,13 +7,7 @@ var db = require('seraph')({  server: "http://localhost:7474",
 var seraph_model = require('seraph-model');
 //var PromotionGraph = model(db, 'promotion');
 
-var winston = require('winston');
-var logger = new (winston.Logger)({
-    transports: [
-        new (winston.transports.Console)()//,
-        //new (winston.transports.File)({ filename: 'somefile.logger' })
-    ]
-});
+var logger = require('../logger').createLogger();
 
 function GraphModel(class_name) {
   //this.class_name = class_name;
@@ -32,12 +26,19 @@ GraphModel.prototype.saySomething = function saySomething(to, from, message) {
 
 GraphModel.prototype.reflect = function reflect(object, g_object, callback) {
   this.model.save(g_object, function(err, g_object) {
-      if(err) callback(err, g_object );
-      object.gid = g_object.id;
-      object.save(function (err) {});
+    if(err) callback(err, g_object );
+    object.gid = g_object.id;
+    object.save(function (err) {});
   });
 };
 
+GraphModel.prototype.save = function save(object, callback) {
+  this.model.save(object, function(err, object) {
+    if(err) callback(err, object );
+    callback(null, object);
+    logger.info('object created gid: ' + object.id)
+  });
+};
 
 
 module.exports = GraphModel;

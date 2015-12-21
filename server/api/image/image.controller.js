@@ -81,19 +81,19 @@ exports.show = function (req, res) {
   });
 };
 
-exports.create = function(req, res) {
+exports.create = function (req, res) {
   var form = new multiparty.Form();
   var size = '';
-  var fileName = randomstring.generate({length:8,charset:'hex'});
+  var fileName = randomstring.generate({length: 8, charset: 'hex'});
 
   form.on('part', function (part) {
-    console.log("part:"+part.filename);
+    console.log("part:" + part.filename);
     if (!part.filename) return;
     size = part.byteCount;
     fileName = part.filename;
   });
   form.on('file', function (name, file) {
-    client.upload(file.path, { /*path: key*/ }, function (err, versions, meta) {
+    client.upload(file.path, {/*path: key*/}, function (err, versions, meta) {
       if (err) {
         console.log(err);
         return handleError(res, err);
@@ -117,61 +117,84 @@ exports.create = function(req, res) {
   form.parse(req);
 };
 
-var Business = require('../business/business.model');
 var User = require('../user/user.model');
+var Business = require('../business/business.model');
+var ShoppingChain = require('../shoppingChain/shoppingChain.model');
+var Product = require('../product/product.model');
+var Promotion = require('../promotion/promotion.model');
+var Mall = require('../mall/mall.model');
+var Category = require('../category/category.model');
+var CardType = require('../cardType/cardType.model');
 
-function updateImageVersions(version, id, callback){
+function updateImageVersions(version, id, callback) {
+
   async.parallel({
-      user: function(callback){
+      user: function (callback) {
         User.findById(id, callback);
       },
-      business: function(callback){
+      business: function (callback) {
         Business.findById(id, callback);
+      },
+      shoppingChain: function (callback) {
+        ShoppingChain.findById(id, callback);
+      },
+      product: function (callback) {
+        Product.findById(id, callback);
+      },
+      promotion: function (callback) {
+        Promotion.findById(id, callback);
+      },
+      mall: function (callback) {
+        Mall.findById(id, callback);
+      },
+      category: function (callback) {
+        Category.findById(id, callback);
+      },
+      cardType: function (callback) {
+        CardType.findById(id, callback);
       }
     },
-    function(err, results) {
+    function (err, results) {
       // results is now equals to: {one: 1, two: 2}
-      if(err) {console.log(err)}
-      else {
-        var updated;
-        if(results.user) {
-          console.log(results.user);
-          updated = results.user;
-        }
-        if(results.business) {
-          console.log(results.business);
-          updated = results.pictures;
-        }
-        version.forEach(function(version){
-          updated.pictures.push(version.url)
+      if (err) {
+        console.log(err)
+      } else {
+
+        var pictures = [];
+        version.forEach(function (version) {
+          pictures.push(version.url)
         });
-       // updated.pictures = JSON.stringify(version);
-        updated.save(function (err) {
-          if (err) {
-            console.log(err);
-            return callback(err);
+
+        for(var key in results) {
+          var updated = results[key];
+          if(updated){
+            updated.pictures = pictures;
+            updated.save(function (err) {
+              if (err) {
+                console.log(err);
+              }
+            });
           }
-          callback(null)
-        });
+        }
       }
     });
 }
 
-function find (collection, query, callback) {
+function find(collection, query, callback) {
   mongoose.connection.db.collection(collection, function (err, collection) {
     collection.find(query).toArray(callback);
   });
 }
 
-exports.works_create = function(req, res) {
+exports.works_create = function (req, res) {
   var multiparty = require('multiparty');
   var gm = require('gm');
   var fs = require('fs');
   var form = new multiparty.Form();
   var size = '';
-  var fileName = randomstring.generate({length:8,charset:'hex'});
+  var fileName = randomstring.generate({length: 8, charset: 'hex'});
   form.on('part', function (part) {
-    console.log("part:"+part.filename)
+    console.log("part:" + part.filename)
     if (!part.filename) return;
     size = part.byteCount;
     fileName = part.filename;
@@ -182,19 +205,19 @@ exports.works_create = function(req, res) {
     console.log('filename: ' + fileName);
     console.log('fileSize: ' + (size / 1024));
     var source_path = file.path;
-    var target_path = '/home/moshe/uploads/fullsize/' + fileName +'.' + extension;
+    var target_path = '/home/moshe/uploads/fullsize/' + fileName + '.' + extension;
     var thumbPath = '/home/moshe/uploads/thumbs/' + fileName + '.png';
     fs.renameSync(source_path, target_path);
     gm(target_path)
       .resize(150, 150)
       .noProfile()
-      .write(thumbPath, function(err) {
-        if(err) console.error(err.stack);
+      .write(thumbPath, function (err) {
+        if (err) console.error(err.stack);
       });
     return res.json(200, {
-      full_size : fileName,
+      full_size: fileName,
 
-    } );
+    });
   });
   form.parse(req);
 };
@@ -216,7 +239,7 @@ exports.createX = function (req, res) {
   //  default  :
   //      break;
   //}
-  var key = folder + '/' + randomstring.generate({length:8,charset:'hex'}) + '_' + req.body.uploadName;
+  var key = folder + '/' + randomstring.generate({length: 8, charset: 'hex'}) + '_' + req.body.uploadName;
 
 
   var path = req.files.image.path;
@@ -242,7 +265,7 @@ exports.createX = function (req, res) {
 };
 
 
-exports.create_upload_multipart = function(req,res){
+exports.create_upload_multipart = function (req, res) {
   //http://www.componentix.com/blog/9/file-uploads-using-nodejs-now-for-real
 };
 
