@@ -12,10 +12,7 @@ router.post('/', controller.create);
 router.put('/:id', controller.update);
 router.patch('/:id', controller.update);
 router.delete('/:id', controller.destroy);
-router.get('/g/:id', controller.g);
 router.get('/info/server/time', controller.server_time);
-router.get('/like/:id/:uid', auth.isAuthenticated(), controller.like);
-router.delete('/like/:id/:uid', auth.isAuthenticated(), controller.unfollow);
 router.get('/realize/:id', auth.isAuthenticated(), controller.realize);
 router.get('/use/:id', auth.isAuthenticated(), controller.use);
 

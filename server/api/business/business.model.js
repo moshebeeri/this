@@ -4,7 +4,7 @@ var mongoose = require('mongoose'),
     Schema = mongoose.Schema;
 
 var BusinessSchema = new Schema({
-  name: String,
+  name: { type: String, index: true, unique : true, required : true, dropDups: false},
   gid: Number,
   shopping_chain: {type: Schema.ObjectId, ref: 'ShoppingChain', required: false},
   description : String,
@@ -13,14 +13,14 @@ var BusinessSchema = new Schema({
   city : String,
   state : String,
   main_phone_number : String,
-  email : String,
+  email : { type: String, index: true, unique : true, required : true, dropDups: false},
   website : String,
-  creator: {type: Schema.ObjectId, ref: 'User', required: true},
+  owner: {type: Schema.ObjectId, ref: 'User', required: true},
   info: String,
   active: Boolean,
   location : {
     lat : String,
-    long : String
+    lon : String
   },
   id : String,
   type:{

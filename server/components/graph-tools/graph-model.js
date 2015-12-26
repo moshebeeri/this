@@ -4,6 +4,7 @@ var _ = require('lodash');
 var db = require('seraph')({  server: "http://localhost:7474",
                               user: "neo4j",
                               pass: "saywhat" });
+
 var seraph_model = require('seraph-model');
 //var PromotionGraph = model(db, 'promotion');
 
@@ -19,16 +20,12 @@ GraphModel.prototype.connect = function connect(){
   logger.info("--> Connect to GraphModel <--");
 };
 
-GraphModel.prototype.saySomething = function saySomething(to, from, message) {
-  logger.info("to:" + to + " from:" + from + " message:" + message);
-  return "something";
-};
-
 GraphModel.prototype.reflect = function reflect(object, g_object, callback) {
   this.model.save(g_object, function(err, g_object) {
     if(err) callback(err, g_object );
     object.gid = g_object.id;
     object.save(function (err) {});
+    callback(null, object )
   });
 };
 
@@ -37,6 +34,43 @@ GraphModel.prototype.save = function save(object, callback) {
     if(err) callback(err, object );
     callback(null, object);
     logger.info('object created gid: ' + object.id)
+  });
+};
+
+GraphModel.prototype.db = function get_db() {
+  return db;
+};
+
+/***
+ * @param uid
+ * @param id
+ * @param name
+ *
+ *   see http://stephenmuss.com/using-seraph-as-a-neo4j-client-in-nodejs/
+ *   var query = [
+ *   'CREATE (john:Person{id: {id1}, name: "John", age: 22})',
+ *   'CREATE (sarah: Person{id: {id2}, name: "Sarah", age: 26})',
+ *   'CREATE (alan: Person({id: {id3}, name: "Alan", age: 19}))',
+ *   'CREATE (john)-[:KNOWS]->(sarah)-[:KNOWS]->(alan)',
+ *   'RETURN john, sara, alan'
+ *   ].join('\n');
+ *
+ *   db.query(query, {id1: 1, id2: 2, id3: 3}, function(err, results) {
+ *    if (err) { return; }
+ *      console.log(results[0].john, results[0].sarah, results[0].alan);
+ *    });
+ */
+GraphModel.prototype.relate = function relate(from, name, to){
+  var query =  "MATCH (f { _id:'{from}' }), (t { _id:'{to}' }) create (f)-[:'{name}']->(t)";
+  db.query(query, {from: from, name: name, to: to}, function(err) {
+    if (err) { logger.error(err.message); }
+  });
+};
+
+GraphModel.prototype.unrelate = function unrelate(from, name, to){
+  var query =  "MATCH (f { _id:'{from}' })-[r:'{name}']->(t { _id:'{id}' }) delete r";
+  db.query(query, {from: from, name: name, to: to}, function(err) {
+    if (err) { logger.error(err.message); }
   });
 };
 

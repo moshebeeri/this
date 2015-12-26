@@ -15,6 +15,8 @@ router.get('/verify/:id', auth.isAuthenticated(), controller.verify);
 router.put('/:id/password', auth.isAuthenticated(), controller.changePassword);
 router.get('/:id', auth.isAuthenticated(), controller.show);
 router.post('/', controller.create);
-router.post('/phonebook', controller.phonebook);
+router.get('/like/:id/:uid', auth.isAuthenticated(), controller.like);
+router.delete('/like/:id/:uid', auth.isAuthenticated(), controller.unlike);
+router.post('/phonebook', auth.isAuthenticated(), controller.phonebook);
 
 module.exports = router;

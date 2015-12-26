@@ -5,9 +5,7 @@ var passport = require('passport');
 var config = require('../../config/environment');
 var jwt = require('jsonwebtoken');
 var twilio = require('twilio')(config.twilio.accountSid, config.twilio.authToken);
-//var db = require('seraph')('http://localhost:7474')
-//var model = require('seraph-model');
-//var UserGraph = model(db, 'user');
+var util = require('util');
 var randomstring = require('randomstring');
 
 var graphTools = require('../../components/graph-tools');
@@ -26,6 +24,31 @@ exports.index = function(req, res) {
     if(err) return res.send(500, err);
     res.json(200, users);
   });
+};
+
+
+/**
+ * '/like/:id/:uid'
+ *
+ * MATCH (a:Person),(b:Person)
+ * WHERE a.name = 'Node A' AND b.name = 'Node B'
+ * CREATE (a)-[r:RELTYPE]->(b)
+ * RETURN r
+ *
+ * MATCH (u { _id:'567747ea034cfc2d372b14e5' }), (b { _id:'567ea4b5adef97f106cd6f78' }) create (u)-[:LIKE]->(b)
+ */
+exports.like = function(req, res) {
+  graphModel.relate(req.params.uid, 'LIKE', req.params.id);
+  return res.json(200, "like called for object " + req.params.id + " and user " + req.params.uid);
+};
+
+/***
+ *  '/unfollow/:id/:uid'
+ *
+ */
+exports.unlike = function(req, res) {
+  graphModel.unrelate(req.params.uid, 'LIKE', req.params.id);
+  return res.json(200, "unlike called for promotion " + req.params.id + " and user " + req.params.uid);
 };
 
 function send_sms_verification_code(user) {

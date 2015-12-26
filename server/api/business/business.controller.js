@@ -2,10 +2,13 @@
 
 var _ = require('lodash');
 var Business = require('./business.model');
+var logger = require('../../components/logger').createLogger();
+var User = require('../user/user.model');
+
 var graphTools = require('../../components/graph-tools');
 var graphModel = graphTools.createGraphModel('business');
 
-// Get list of businesss
+// Get list of businesses
 exports.index = function(req, res) {
   Business.find(function (err, businesss) {
     if(err) { return handleError(res, err); }
@@ -24,10 +27,25 @@ exports.show = function(req, res) {
 
 // Creates a new business in the DB.
 exports.create = function(req, res) {
+  var owner = null;
+  User.findById(req.body.owner, '-salt -hashedPassword -sms_code', function (err, user) {
+    if (err) return res.status(401).send(err.message);
+    if (!user) return res.status(401).send('Unauthorized');
+    owner = user;
+  });
+
   Business.create(req.body, function(err, business) {
     if(err) { return handleError(res, err); }
-    graphModel.reflect(business, function (err) {
+    graphModel.reflect(business, {
+      _id: business._id,
+      name: business.name,
+      owner: business.owner
+    }, function (err, business ) {
       if (err) {  return handleError(res, err); }
+      graphModel.db().relate(owner.gid, 'OWNS', business.gid, {}, function(err, relationship) {
+        if(err) {console.log(err.message);}
+        logger.info('(' + relationship.start + ')-[' + relationship.type + ']->(' + relationship.end + ')');
+      });
     });
     return res.status(201).json(business);
   });

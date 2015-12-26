@@ -10,27 +10,8 @@ var logger = require('../../components/logger');
 var graphTools = require('../../components/graph-tools');
 var graphModel = graphTools.createGraphModel('promotion');
 
-exports.g = function(req, res) {
-  var message = "==";
-  if ( graphModel )
-    graphModel.saySomething("to", "from", "message");
-  if ( graphModel )
-    message = " graphModel ok";
-  return res.json(200, "g called" + message);
-};
-
 exports.server_time = function(req, res) {
   return res.json(200, new Date().toString());
-};
-
-//'/like/:id/:uid'
-exports.like = function(req, res) {
-  return res.json(200, "like called for promotion " + req.params.id + " and user " + req.params.uid);
-};
-
-//'/unfollow/:id/:uid'
-exports.unfollow = function(req, res) {
-  return res.json(200, "unfollow called for promotion " + req.params.id + " and user " + req.params.uid);
 };
 
 // Get list of promotions

@@ -8,9 +8,9 @@ var authTypes = ['github', 'twitter', 'facebook', 'google'];
 var UserSchema = new Schema({
   name: String,
   gid: Number,
-  phone_number: { type: String, index: true, unique : true, required : true, dropDups: true },
+  phone_number: { type: String, index: true, unique : true, required : true, dropDups: false },
   pictures : [String],
-  email: { type: String, lowercase: true, index: true, unique : true, required : true, dropDups: true },
+  email: { type: String, lowercase: true, index: true, unique : true, required : true, dropDups: false },
   sms_code: String,
   sms_verified: Boolean,
   role: {
