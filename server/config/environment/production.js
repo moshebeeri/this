@@ -26,10 +26,14 @@ module.exports = {
     region: 'us-east-1',
     bucketName: 'thiscounts'
   },
-
   twilio:{
     accountSid: 'ACc05b055681938f0a68791b2f2de08c08',
     authToken: '802246c68c545894b87bf2e31e026936',
     number: '+972526268723'
   },
+  google_maps:{
+    key: 'AIzaSyACe_Cci4drnZovD8xjJOdrsIOQwyWSyCg',
+
+  },
+
 };

@@ -8,6 +8,17 @@ var User = require('../user/user.model');
 var graphTools = require('../../components/graph-tools');
 var graphModel = graphTools.createGraphModel('business');
 
+var location = require('../../components/location').createLocation();
+
+
+exports.address = function(req, res) {
+  location.address( req.body.address, function(err, data){
+    if(err) {return handleError(res, err);}
+    return res.status(200).json(data);
+  });
+};
+
+
 // Get list of businesses
 exports.index = function(req, res) {
   Business.find(function (err, businesss) {

@@ -13,4 +13,7 @@ router.put('/:id', auth.isAuthenticated(), controller.update);
 router.patch('/:id', auth.isAuthenticated(), controller.update);
 router.delete('/:id', auth.hasRole('admin'), controller.destroy);
 
+router.post('/address', controller.address);
+
+
 module.exports = router;

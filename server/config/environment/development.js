@@ -20,6 +20,10 @@ module.exports = {
     authToken: '802246c68c545894b87bf2e31e026936',
     number: '+972526268723'
   },
+  google_maps:{
+    key: 'AIzaSyACe_Cci4drnZovD8xjJOdrsIOQwyWSyCg',
+
+  },
   //seedDB: true
   seedDB: false
 };
