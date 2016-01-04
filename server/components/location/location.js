@@ -12,7 +12,7 @@ function Location() {
 Location.prototype.address_location = function address_location(address, callback) {
   geocode_address(address, function (err, data) {
     if (err) {
-      return callback(err, null);
+      return callback(err, data);
     }
     //logger.info(data);
     if (!data.results || data.results.length == 0)
@@ -25,7 +25,7 @@ Location.prototype.address_location = function address_location(address, callbac
       return callback({
         res: 400,
         message: 'Inconsistent address, google api find more then one location under this address : ' + address
-      }, null);
+      }, data);
 
     //logger.info("lat:" + data.results[0].geometry.location.lat);
     //logger.info("lng:" + data.results[0].geometry.location.lng);

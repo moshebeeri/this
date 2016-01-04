@@ -81,7 +81,8 @@ exports.create = function(req, res) {
   body_business.creator = userId;
   location.address_location( format_address(body_business), function(err, data){
     if(err) return res.status(401).send(err.message);
-    body_business.location = { lat : data.lat,
+    body_business.location = {
+      lat : data.lat,
       lon: data.lng
     };
     console.log(body_business.location);
