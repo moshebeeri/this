@@ -11,8 +11,8 @@ var BusinessSchema = new Schema({
   address : {type: String, required : true},
   address2 : String,
   city : {type: String, required : true},
-  country : {type: String, required : true},
-  state : String,
+  country : String,
+  state : {type: String, required : true},
   main_phone_number : String,
   email : { type: String, index: true, unique : true, required : true, dropDups: false},
   website : String,
@@ -33,7 +33,7 @@ var BusinessSchema = new Schema({
     phone_description : String,
     phone : String,
     email_description : String,
-    email : String,
+    email : String
   },
   logo : String,
   pictures : [String]

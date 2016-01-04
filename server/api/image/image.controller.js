@@ -82,6 +82,14 @@ exports.show = function (req, res) {
 };
 
 exports.create = function (req, res) {
+  return handle_image(req, res, 'image')
+};
+
+exports.logo = function (req, res) {
+  return handle_image(req, res, 'logo')
+};
+
+function handle_image(req, res, type) {
   var form = new multiparty.Form();
   var size = '';
   var fileName = randomstring.generate({length: 8, charset: 'hex'});
@@ -104,18 +112,15 @@ exports.create = function (req, res) {
       //  console.log(image.width, image.height, image.url)
       //});
 
-      updateImageVersions(versions, req.params.id, function (err) {
-        if (err) {
-          console.log(err);
-        }
-      });
+      updateImageVersions(versions, req.params.id, 'image');
 
       return res.status(201).json(versions);
     });
 
   });
   form.parse(req);
-};
+}
+
 
 var User = require('../user/user.model');
 var Business = require('../business/business.model');
@@ -126,7 +131,7 @@ var Mall = require('../mall/mall.model');
 var Category = require('../category/category.model');
 var CardType = require('../cardType/cardType.model');
 
-function updateImageVersions(version, id, callback) {
+function updateImageVersions(version, id, type) {
 
   async.parallel({
       user: function (callback) {
@@ -168,7 +173,10 @@ function updateImageVersions(version, id, callback) {
         for(var key in results) {
           var updated = results[key];
           if(updated){
-            updated.pictures = pictures;
+            if(type === 'image')
+              updated.pictures = pictures;
+            else if (type === 'logo')
+              updated.logo = pictures[0];
             updated.save(function (err) {
               if (err) {
                 console.log(err);

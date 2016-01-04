@@ -21,9 +21,9 @@ GraphModel.prototype.connect = function connect(){
 };
 
 GraphModel.prototype.reflect = function reflect(object, g_object, callback) {
-  this.model.save(g_object, function(err, g_object) {
-    if(err) callback(err, g_object );
-    object.gid = g_object.id;
+  this.model.save(g_object, function(err, in_graph) {
+    if(err) callback(err, null );
+    object.gid = in_graph.id;
     object.save(function (err) {});
     callback(null, object )
   });
@@ -42,8 +42,8 @@ GraphModel.prototype.db = function get_db() {
 };
 
 /***
- * @param uid
- * @param id
+ * @param from
+ * @param to
  * @param name
  *
  *   see http://stephenmuss.com/using-seraph-as-a-neo4j-client-in-nodejs/
@@ -70,6 +70,14 @@ GraphModel.prototype.relate = function relate(from, name, to){
 GraphModel.prototype.unrelate = function unrelate(from, name, to){
   var query =  "MATCH (f { _id:'{from}' })-[r:'{name}']->(t { _id:'{id}' }) delete r";
   db.query(query, {from: from, name: name, to: to}, function(err) {
+    if (err) { logger.error(err.message); }
+  });
+};
+
+//
+GraphModel.prototype.follow_phone = function follow_phone(number, nick, userId){
+  var query =  "MATCH (phone:user { phone:'number' }),MATCH (u:user { _id:'{userId}' }) CREATE (phone)<-[r:FOLLOW {nick : {nick}}]-(u)";
+  db.query(query, {number: number, nick: nick, userId: userId}, function(err) {
     if (err) { logger.error(err.message); }
   });
 };

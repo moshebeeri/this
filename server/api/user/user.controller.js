@@ -7,6 +7,7 @@ var jwt = require('jsonwebtoken');
 var twilio = require('twilio')(config.twilio.accountSid, config.twilio.authToken);
 var util = require('util');
 var randomstring = require('randomstring');
+var logger = require('../../components/logger').createLogger();
 
 var graphTools = require('../../components/graph-tools');
 var graphModel = graphTools.createGraphModel('user');
@@ -92,14 +93,83 @@ exports.create = function (req, res, next) {
   });
 };
 
+
+/**
+ *
+ * @param req
+ * @param res
+ * @returns {*}
+ * {
+ *  "phonebook" : [
+ *      {
+ *         "normalized_number" : "+972-54-3333-333",
+ *         "number": " 0543333333",
+ *         "name" : "mr 3" ,
+ *         "email" : "mr3@low.la"
+ *
+ *      },
+ *      {
+ *         "normalized_number" : "+972-54-2222-222",
+ *         "number": " 0542222222",
+ *         "name" : "mr 2" ,
+ *         "email" : "mr2@low.la"
+ *      }
+ *  ]
+ * }
+ * ContactsContract.CommonDataKinds.Email
+ * class	ContactsContract.CommonDataKinds.Nickname
+ * class	ContactsContract.CommonDataKinds.Phone
+ */
 exports.phonebook = function (req, res){
   var mongoose = require('mongoose');
-  var phonebook = req.body;
+  var phonebook = req.body.phonebook;
+  var userId = req.user._id;
+  console.log(userId);
   mongoose.connection.db.collection('phonebook', function (err, collection) {
-    collection.insert(phonebook);
+    if(err) return logger.error(err.message);
+    collection.save({
+      _id : userId,
+      phonebook : phonebook
+    });
+    mongoose.connection.db.collection('phone_numbers', function (err, numbers){
+      if(err) return logger.error(err.message);
+      phonebook.forEach(function(element, index, array) {
+        console.log(JSON.stringify(element));
+        //for each phone number store the users that has it in their phone book
+        //numbers.update({_id: element.normalized_number}, {$addToSet: {userIds: userId}}, {upsert: true});
+
+
+        numbers.findAndModify(
+          {_id: element.normalized_number},
+          [['_id','asc']]                 ,
+          {$addToSet: {contacts: userId}}  ,
+          {upsert: true, new: true }      ,
+          function(err, object) {
+            if (err){
+              console.warn(err.message);
+            }else{
+              console.dir(object);
+              connect_followers(object.value)
+            }
+          });
+
+
+        //if we have a user with this number, link users with <-[FOLLOWS]
+        //user  <id>:32 phone:+972543133943
+      });
+    });
   });
   return res.send(200, "ok");
 };
+
+
+function connect_followers(phone_number){
+  if(phone_number.owner == null || phone_number.contacts.length == 0)
+    return;
+  phone_number.contacts.forEach(function(contact){
+    logger.info('create (' + contact +')<-[Follow]-('+phone_number.owner+')');
+  });
+}
 
 exports.login = function (req, res, next) {
   User.find({$or: [{email: {$eq: req.body.email}}, {phone_number: {$eq: req.body.phone_number}}]}, function (err, user) {
@@ -139,6 +209,13 @@ exports.verification = function (req, res) {
     user.sms_verified = true;
     user.save(function (err) {
       if (err) { return handleError(res, err); }
+      //TODO: upsert phone number with owner
+      mongoose.connection.db.collection('phone_numbers', function (err, numbers) {
+        if(err)
+          logger.error(err.message);
+        else
+          numbers.update({_id: user.phone_number}, {$set: {owner: user._id}}, {upsert: true});
+      });
       return res.status(200).send('user verified');
     });
   });

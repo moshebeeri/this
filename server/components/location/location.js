@@ -9,13 +9,41 @@ var logger = require('../logger').createLogger();
 function Location() {
 }
 
+Location.prototype.address_location = function address_location(address, callback) {
+  geocode_address(address, function (err, data) {
+    if (err) {
+      return callback(err, null);
+    }
+    //logger.info(data);
+    if (!data.results || data.results.length == 0)
+      return callback({
+        res: 400,
+        message: 'No location under this address : ' + address
+      }, null);
+
+    if (data.results.length > 1)
+      return callback({
+        res: 400,
+        message: 'Inconsistent address, google api find more then one location under this address : ' + address
+      }, null);
+
+    //logger.info("lat:" + data.results[0].geometry.location.lat);
+    //logger.info("lng:" + data.results[0].geometry.location.lng);
+    var location = data.results[0].geometry.location;
+    return callback(null, {lat: location.lat, lng: location.lng});
+  });
+};
+
+Location.prototype.address = function address(address, callback) {
+  return geocode_address(address, callback);
+};
 
 /***
  * @param address
  * @param callback
  *
  * see: https://nodejs.org/docs/latest/api/https.html#https_https_get_options_callback
- *
+ *Herzel 7,Tel-Aviv,Israel
  * https://maps.googleapis.com/maps/api/geocode/json?address=1600+Amphitheatre+Parkway,+Mountain+View,+CA&key=mykey
  * {
  *   "results" : [],
@@ -23,15 +51,15 @@ function Location() {
  * }
  *
  */
-Location.prototype.address = function address(address, callback) {
-  var path = '/maps/api/geocode/json?address=' + address + '&key=' + config.google_maps.key;
+function geocode_address(address, callback) {
+  var path = '/maps/api/geocode/json?address=' + encodeURIComponent(address) + '&key=' + config.google_maps.key;
   var options = {
     hostname: 'maps.googleapis.com',
     port: 443,
     path: path,
     method: 'GET'
   };
-  var req = https.request(options, function(res) {
+  var req = https.request(options, function (res) {
     logger.info("statusCode: ", res.statusCode);
     logger.info("headers: ", res.headers);
     var body = '';
@@ -39,17 +67,22 @@ Location.prototype.address = function address(address, callback) {
       body += d;
     });
     res.on('end', function () {
-      var parsed = JSON.parse(body);
-      if (parsed.status === 'OK')
+      var parsed;
+      try {
+        parsed = JSON.parse(body);
+      } catch (e) {
+        callback('bad request: ' + e.message, null);
+      }
+      if (parsed && parsed.status === 'OK')
         callback(null, parsed);
       else
-        callback('BAD_ADDRESS', null);
+        callback('bad address', null);
 
     });
   });
   req.end();
 
-  req.on('error', function(e) {
+  req.on('error', function (e) {
     logger.error(e.message);
     callback('HTTP_ERROR ' + e.message, null)
   });

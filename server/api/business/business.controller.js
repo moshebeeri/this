@@ -11,9 +11,25 @@ var graphModel = graphTools.createGraphModel('business');
 var location = require('../../components/location').createLocation();
 
 
-exports.address = function(req, res) {
+exports.address2 = function(req, res) {
   location.address( req.body.address, function(err, data){
     if(err) {return handleError(res, err);}
+    //logger.info(data);
+    if(data.results==0)
+      return res.status(400).send('No location under this address : ' + req.body.address );
+
+    if(data.results.length > 1)
+      return res.status(400).send('Inconsistent address, google api find more then one location under this address : ' + req.body.address );
+
+    logger.info("lat:" +data.results[0].geometry.location.lat);
+    logger.info("lng:" +data.results[0].geometry.location.lng);
+    return res.status(200).send();
+  });
+};
+
+exports.address = function(req, res) {
+  location.address_location( req.body.address, function(err, data){
+    if(err) return res.status(err.res).send(err.message);
     return res.status(200).json(data);
   });
 };
@@ -36,29 +52,54 @@ exports.show = function(req, res) {
   });
 };
 
-// Creates a new business in the DB.
+function defined(obj){
+  return (typeof obj !== 'undefined' && obj !== null);
+}
+
+function format_address(business) {
+  var str = business.address;
+  if(defined(business.address2))
+    str += ',' + business.address2;
+  if(defined(business.city))
+    str += ',' + business.city;
+  if(defined(business.country))
+    str += ',' + business.country;
+  if(defined(business.state))
+    str += ',' + business.state;
+  return str;
+  //return business.address + ',' + business.address2 + ',' + business.city + ',' + business.country + ',' + business.state;
+}
 exports.create = function(req, res) {
-  var owner = null;
-  User.findById(req.body.owner, '-salt -hashedPassword -sms_code', function (err, user) {
+  var creator = null;
+  var body_business = req.body;
+  var userId = req.user._id;
+  User.findById(userId, '-salt -hashedPassword -sms_code', function (err, user) {
     if (err) return res.status(401).send(err.message);
     if (!user) return res.status(401).send('Unauthorized');
-    owner = user;
+    creator = user;
   });
-
-  Business.create(req.body, function(err, business) {
-    if(err) { return handleError(res, err); }
-    graphModel.reflect(business, {
-      _id: business._id,
-      name: business.name,
-      owner: business.owner
-    }, function (err, business ) {
-      if (err) {  return handleError(res, err); }
-      graphModel.db().relate(owner.gid, 'OWNS', business.gid, {}, function(err, relationship) {
-        if(err) {console.log(err.message);}
-        logger.info('(' + relationship.start + ')-[' + relationship.type + ']->(' + relationship.end + ')');
+  body_business.creator = userId;
+  location.address_location( format_address(body_business), function(err, data){
+    if(err) return res.status(401).send(err.message);
+    body_business.location = { lat : data.lat,
+      lon: data.lng
+    };
+    console.log(body_business.location);
+    Business.create(body_business, function(err, business) {
+      if(err) { return handleError(res, err); }
+      graphModel.reflect(business, {
+        _id: business._id,
+        name: business.name,
+        creator: business.creator
+      }, function (err, business ) {
+        if (err) {  return handleError(res, err); }
+        graphModel.db().relate(creator.gid, 'OWNS', business.gid, {}, function(err, relationship) {
+          if(err) {console.log(err.message);}
+          logger.info('(' + relationship.start + ')-[' + relationship.type + ']->(' + relationship.end + ')');
+        });
       });
+      return res.status(201).json(business);
     });
-    return res.status(201).json(business);
   });
 };
 
