@@ -13,7 +13,7 @@ exports.test = function(req, res) {
   req.body.locations.forEach(function(location){
     graphModel.save(location, function(err, location){
       spatial.add2index(location.id, function(err, result){
-        if(err) logger.error(err.message)
+        if(err) logger.error(err.message);
         else logger.info('object added to layer ' + result)
       });
     });

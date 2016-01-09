@@ -7,7 +7,7 @@ var User = require('../user/user.model');
 
 var graphTools = require('../../components/graph-tools');
 var graphModel = graphTools.createGraphModel('business');
-
+var spatial = require('../../components/spatial').createSpatial();
 var location = require('../../components/location').createLocation();
 
 
@@ -59,15 +59,14 @@ function defined(obj){
 function format_address(business) {
   var str = business.address;
   if(defined(business.address2))
-    str += ',' + business.address2;
+    str += '+' + business.address2;
   if(defined(business.city))
-    str += ',' + business.city;
+    str += '+' + business.city;
   if(defined(business.country))
-    str += ',' + business.country;
+    str += '+' + business.country;
   if(defined(business.state))
-    str += ',' + business.state;
+    str += '+' + business.state;
   return str;
-  //return business.address + ',' + business.address2 + ',' + business.city + ',' + business.country + ',' + business.state;
 }
 exports.create = function(req, res) {
   var creator = null;
@@ -91,12 +90,18 @@ exports.create = function(req, res) {
       graphModel.reflect(business, {
         _id: business._id,
         name: business.name,
-        creator: business.creator
+        creator: business.creator,
+        lat: body_business.location.lat,
+        lon: body_business.location.lon
       }, function (err, business ) {
         if (err) {  return handleError(res, err); }
         graphModel.db().relate(creator.gid, 'OWNS', business.gid, {}, function(err, relationship) {
           if(err) {console.log(err.message);}
           logger.info('(' + relationship.start + ')-[' + relationship.type + ']->(' + relationship.end + ')');
+        });
+        spatial.add2index(business.gid, function(err, result){
+          if(err) logger.error(err.message);
+          else logger.info('object added to layer ' + result)
         });
       });
       return res.status(201).json(business);
