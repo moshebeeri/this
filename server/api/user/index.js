@@ -10,13 +10,13 @@ var router = express.Router();
 router.get('/', auth.hasRole('admin'), controller.index);
 router.delete('/:id', auth.hasRole('admin'), controller.destroy);
 router.get('/me', auth.isAuthenticated(), controller.me);
-router.get('/verification/:id/:code', auth.isAuthenticated(), controller.verification);
-router.get('/verify/:id', auth.isAuthenticated(), controller.verify);
+router.get('/verification/:code', auth.isAuthenticated(), controller.verification);
+router.get('/verify', auth.isAuthenticated(), controller.verify);
 router.put('/:id/password', auth.isAuthenticated(), controller.changePassword);
 router.get('/:id', auth.isAuthenticated(), controller.show);
 router.post('/', controller.create);
-router.get('/like/:id/:uid', auth.isAuthenticated(), controller.like);
-router.delete('/like/:id/:uid', auth.isAuthenticated(), controller.unlike);
+router.get('/like/:id', auth.isAuthenticated(), controller.like);
+router.delete('/like/:id', auth.isAuthenticated(), controller.unlike);
 router.post('/phonebook', auth.isAuthenticated(), controller.phonebook);
 
 module.exports = router;

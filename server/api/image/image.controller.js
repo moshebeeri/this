@@ -1,6 +1,7 @@
 'use strict';
 
 var _ = require('lodash');
+var mongoose = require('mongoose');
 var async = require('async');
 var Image = require('./image.model');
 var aws = require('aws-sdk');

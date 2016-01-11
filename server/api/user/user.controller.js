@@ -1,5 +1,6 @@
 'use strict';
 
+var mongoose = require('mongoose');
 var User = require('./user.model');
 var passport = require('passport');
 var config = require('../../config/environment');
@@ -29,7 +30,7 @@ exports.index = function(req, res) {
 
 
 /**
- * '/like/:id/:uid'
+ * '/like/:id'
  *
  * MATCH (a:Person),(b:Person)
  * WHERE a.name = 'Node A' AND b.name = 'Node B'
@@ -39,17 +40,19 @@ exports.index = function(req, res) {
  * MATCH (u { _id:'567747ea034cfc2d372b14e5' }), (b { _id:'567ea4b5adef97f106cd6f78' }) create (u)-[:LIKE]->(b)
  */
 exports.like = function(req, res) {
-  graphModel.relate(req.params.uid, 'LIKE', req.params.id);
-  return res.json(200, "like called for object " + req.params.id + " and user " + req.params.uid);
+  var userId = req.user._id;
+  graphModel.relate(userId, 'LIKE', req.params.id);
+  return res.json(200, "like called for object " + req.params.id + " and user " + userId);
 };
 
 /***
- *  '/unfollow/:id/:uid'
+ *  '/unlike/:id'
  *
  */
 exports.unlike = function(req, res) {
-  graphModel.unrelate(req.params.uid, 'LIKE', req.params.id);
-  return res.json(200, "unlike called for promotion " + req.params.id + " and user " + req.params.uid);
+  var userId = req.user._id;
+  graphModel.unrelate(userId, 'LIKE', req.params.id);
+  return res.json(200, "unlike called for promotion " + req.params.id + " and user " + userId);
 };
 
 function send_sms_verification_code(user) {
@@ -201,8 +204,9 @@ exports.show = function (req, res, next) {
  */
 exports.verification = function (req, res) {
   var code = req.params.code;
-  if(req.body._id) { delete req.body._id; }
-  User.findById(req.params.id, function (err, user) {
+  var userId = req.user._id;
+  if(req.body._id) { return res.status(404).send('bad request _id in body not allowed'); }
+  User.findById(userId, function (err, user) {
     if (err) { return handleError(res, err); }
     if(!user) { return res.status(404).send('Not Found'); }
     if(user.sms_code != code){return res.status(404).send('code not match');}
@@ -222,7 +226,7 @@ exports.verification = function (req, res) {
 };
 
 exports.verify = function (req, res) {
-  var userId = req.params.id;
+  var userId = req.user._id;
   var sms_code = randomstring.generate({length:4,charset:'numeric'});
   User.findById(userId, function (err, user) {
     if (err) return next(err);
