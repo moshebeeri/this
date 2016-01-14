@@ -41,6 +41,46 @@ GraphModel.prototype.db = function get_db() {
   return db;
 };
 
+/**
+ *
+ * @param from
+ * @param name
+ * @param to
+ * @param properties
+ * @param callback
+ *
+ * @see https://github.com/brikteknologier/seraph#rel.create
+ *
+ * db.relate(1, 'knows', 2, { for: '2 months' }, function(err, relationship) {
+ *   assert.deepEqual(relationship, {
+ *     start: 1,
+ *     end: 2,
+ *     type: 'knows',
+ *     properties: { for: '2 months' },
+ *     id: 1
+ *   });
+ * });
+ */
+GraphModel.prototype.relate = function relate(from, name, to, properties, callback){
+  return db.relate(from, name, to, properties, callback);
+  //var query = " MATCH (f), (t) \
+  //              WHERE id(f)={from} and id(t)={to} \
+  //              create (f)-[:{name}]->(t) ";
+  //db.query(query, {from: from, name: name, to: to}, function(err) {
+  //  if (err) { logger.error(err.message); }
+  //});
+};
+
+GraphModel.prototype.unrelate = function unrelate(from, name, to){
+  //var query =  "MATCH (f { _id:'{from}' })-[r:'{name}']->(t { _id:'{id}' }) delete r";
+  var query = " MATCH (f)-[r:{name}]->(t) \
+                WHERE id(f)={from} and id(t)={to} \
+                delete r";
+  db.query(query, {from: from, name: name, to: to}, function(err) {
+    if (err) { logger.error(err.message); }
+  });
+};
+
 /***
  * @param from
  * @param to
@@ -60,14 +100,15 @@ GraphModel.prototype.db = function get_db() {
  *      console.log(results[0].john, results[0].sarah, results[0].alan);
  *    });
  */
-GraphModel.prototype.relate = function relate(from, name, to){
+GraphModel.prototype.relate_ids = function relate_id(from, name, to){
   var query =  "MATCH (f { _id:'{from}' }), (t { _id:'{to}' }) create (f)-[:'{name}']->(t)";
   db.query(query, {from: from, name: name, to: to}, function(err) {
     if (err) { logger.error(err.message); }
   });
 };
 
-GraphModel.prototype.unrelate = function unrelate(from, name, to){
+
+GraphModel.prototype.unrelate_ids = function unrelate(from, name, to){
   var query =  "MATCH (f { _id:'{from}' })-[r:'{name}']->(t { _id:'{id}' }) delete r";
   db.query(query, {from: from, name: name, to: to}, function(err) {
     if (err) { logger.error(err.message); }

@@ -41,7 +41,7 @@ exports.index = function(req, res) {
  */
 exports.like = function(req, res) {
   var userId = req.user._id;
-  graphModel.relate(userId, 'LIKE', req.params.id);
+  graphModel.relate_ids(userId, 'LIKE', req.params.id);
   return res.json(200, "like called for object " + req.params.id + " and user " + userId);
 };
 
@@ -51,7 +51,7 @@ exports.like = function(req, res) {
  */
 exports.unlike = function(req, res) {
   var userId = req.user._id;
-  graphModel.unrelate(userId, 'LIKE', req.params.id);
+  graphModel.unrelate_ids(userId, 'LIKE', req.params.id);
   return res.json(200, "unlike called for promotion " + req.params.id + " and user " + userId);
 };
 
@@ -134,14 +134,13 @@ exports.phonebook = function (req, res){
       _id : userId,
       phonebook : phonebook
     });
+    //for each phone number store the users that has it in their phone book
     mongoose.connection.db.collection('phone_numbers', function (err, numbers){
       if(err) return logger.error(err.message);
       phonebook.forEach(function(element, index, array) {
         console.log(JSON.stringify(element));
-        //for each phone number store the users that has it in their phone book
+
         //numbers.update({_id: element.normalized_number}, {$addToSet: {userIds: userId}}, {upsert: true});
-
-
         numbers.findAndModify(
           {_id: element.normalized_number},
           [['_id','asc']]                 ,
@@ -152,13 +151,9 @@ exports.phonebook = function (req, res){
               console.warn(err.message);
             }else{
               console.dir(object);
-              connect_followers(object.value)
+              owner_follow(object.value)
             }
           });
-
-
-        //if we have a user with this number, link users with <-[FOLLOWS]
-        //user  <id>:32 phone:+972543133943
       });
     });
   });
@@ -166,11 +161,11 @@ exports.phonebook = function (req, res){
 };
 
 
-function connect_followers(phone_number){
+function owner_follow(phone_number){
   if(phone_number.owner == null || phone_number.contacts.length == 0)
     return;
   phone_number.contacts.forEach(function(contact){
-    logger.info('create (' + contact +')<-[Follow]-('+phone_number.owner+')');
+    logger.info('create (' + contact +')<-[Follows]-('+phone_number.owner+')');
   });
 }
 

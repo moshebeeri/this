@@ -7,6 +7,7 @@ var BusinessSchema = new Schema({
   name: { type: String, index: true, unique : true, required : true, dropDups: false},
   gid: Number,
   shopping_chain: {type: Schema.ObjectId, ref: 'ShoppingChain', required: false},
+  mall: {type: Schema.ObjectId, ref: 'mall', required: false},
   description : String,
   address : {type: String, required : true},
   address2 : String,

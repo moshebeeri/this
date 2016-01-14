@@ -98,10 +98,17 @@ exports.create = function(req, res) {
         graphModel.db().relate(creator.gid, 'OWNS', business.gid, {}, function(err, relationship) {
           if(err) {console.log(err.message);}
           logger.info('(' + relationship.start + ')-[' + relationship.type + ']->(' + relationship.end + ')');
-        });
-        spatial.add2index(business.gid, function(err, result){
-          if(err) logger.error(err.message);
-          else logger.info('object added to layer ' + result)
+
+          if(defined(business.shopping_chain))
+            graphModel.db().relate_ids(business._id, 'BRANCH_OF', business.shopping_chain);
+
+          if(defined(business.mall))
+            graphModel.db().relate_ids(business._id, 'IN_MALL', business.mall);
+
+          spatial.add2index(business.gid, function(err, result){
+            if(err) logger.error(err.message);
+            else logger.info('object added to layer ' + result)
+          });
         });
       });
       return res.status(201).json(business);
