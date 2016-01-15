@@ -27,14 +27,6 @@ exports.address2 = function(req, res) {
   });
 };
 
-exports.address = function(req, res) {
-  location.address_location( req.body.address, function(err, data){
-    if(err) return res.status(err.res).send(err.message);
-    return res.status(200).json(data);
-  });
-};
-
-
 // Get list of businesses
 exports.index = function(req, res) {
   Business.find(function (err, businesss) {
@@ -52,22 +44,6 @@ exports.show = function(req, res) {
   });
 };
 
-function defined(obj){
-  return (typeof obj !== 'undefined' && obj !== null);
-}
-
-function format_address(business) {
-  var str = business.address;
-  if(defined(business.address2))
-    str += '+' + business.address2;
-  if(defined(business.city))
-    str += '+' + business.city;
-  if(defined(business.country))
-    str += '+' + business.country;
-  if(defined(business.state))
-    str += '+' + business.state;
-  return str;
-}
 exports.create = function(req, res) {
   var creator = null;
   var body_business = req.body;
@@ -78,13 +54,13 @@ exports.create = function(req, res) {
     creator = user;
   });
   body_business.creator = userId;
-  location.address_location( format_address(body_business), function(err, data){
-    if(err) return res.status(401).send(err.message);
+  location.address_location( body_business, function(err, data) {
+    if (err) return res.status(401).send(err.message);
     body_business.location = {
       lat : data.lat,
-      lon: data.lng
+      lon: data.lon
     };
-    console.log(body_business.location);
+    //console.log(body_business.location);
     Business.create(body_business, function(err, business) {
       if(err) { return handleError(res, err); }
       graphModel.reflect(business, {

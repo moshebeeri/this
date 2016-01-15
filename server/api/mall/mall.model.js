@@ -9,7 +9,6 @@ var mongoose = require('mongoose'),
 var MallSchema = new Schema({
   name: String,
   gid: Number,
-  address: String,
   pictures : [String],
   info: String,
   active: Boolean,
@@ -17,9 +16,13 @@ var MallSchema = new Schema({
     lat : String,
     long : String
   },
-  state: String,
-  country: String,
-  city: String,
+
+  address : {type: String, required : true},
+  address2 : String,
+  city : {type: String, required : true},
+  country : String,
+  state : {type: String, required : true},
+
   type: {
     type: String,
     enum: [ 'NEIGHBORHOOD_CENTER',

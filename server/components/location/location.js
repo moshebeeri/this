@@ -9,7 +9,26 @@ var logger = require('../logger').createLogger();
 function Location() {
 }
 
-Location.prototype.address_location = function address_location(address, callback) {
+function defined(obj){
+  return (typeof obj !== 'undefined' && obj !== null);
+}
+
+function format_address(addressed) {
+  var str = addressed.address;
+  if(defined(addressed.address2))
+    str += '+' + addressed.address2;
+  if(defined(addressed.city))
+    str += '+' + addressed.city;
+  if(defined(addressed.country))
+    str += '+' + addressed.country;
+  if(defined(addressed.state))
+    str += '+' + addressed.state;
+  return str;
+}
+
+
+Location.prototype.address_location = function address_location(addressed, callback) {
+  var address = format_address(addressed);
   geocode_address(address, function (err, data) {
     if (err) {
       return callback(err, data);
@@ -30,7 +49,7 @@ Location.prototype.address_location = function address_location(address, callbac
     //logger.info("lat:" + data.results[0].geometry.location.lat);
     //logger.info("lng:" + data.results[0].geometry.location.lng);
     var location = data.results[0].geometry.location;
-    return callback(null, {lat: location.lat, lng: location.lng});
+    return callback(null, {lat: location.lat, lon: location.lng});
   });
 };
 

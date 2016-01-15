@@ -24,12 +24,20 @@ exports.show = function(req, res) {
 
 // Creates a new mall in the DB.
 exports.create = function(req, res) {
-  Mall.create(req.body, function(err, mall) {
-    if(err) { return handleError(res, err); }
-    graphModel.reflect(mall, function (err) {
-      if (err) {  return handleError(res, err); }
+  var bmall = req.body;
+  location.address_location( bmall, function(err, data) {
+    if (err) return res.status(401).send(err.message);
+    bmall.location = {
+      lat: data.lat,
+      lon: data.lon
+    };
+    Mall.create(bmall, function(err, mall) {
+      if(err) { return handleError(res, err); }
+      graphModel.reflect(mall, function (err) {
+        if (err) {  return handleError(res, err); }
+      });
+      return res.status(201).json(mall);
     });
-    return res.status(201).json(mall);
   });
 };
 
