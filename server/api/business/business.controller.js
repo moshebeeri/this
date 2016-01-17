@@ -9,7 +9,7 @@ var graphTools = require('../../components/graph-tools');
 var graphModel = graphTools.createGraphModel('business');
 var spatial = require('../../components/spatial').createSpatial();
 var location = require('../../components/location').createLocation();
-
+var utils = require('../../components/utils').createUtils();
 
 exports.address2 = function(req, res) {
   location.address( req.body.address, function(err, data){
@@ -44,6 +44,10 @@ exports.show = function(req, res) {
   });
 };
 
+function defined(obj){
+  return utils.defined(obj);
+}
+
 exports.create = function(req, res) {
   var creator = null;
   var body_business = req.body;
@@ -58,7 +62,7 @@ exports.create = function(req, res) {
     if (err) return res.status(401).send(err.message);
     body_business.location = {
       lat : data.lat,
-      lon: data.lon
+      lng: data.lng
     };
     //console.log(body_business.location);
     Business.create(body_business, function(err, business) {
@@ -68,7 +72,7 @@ exports.create = function(req, res) {
         name: business.name,
         creator: business.creator,
         lat: body_business.location.lat,
-        lon: body_business.location.lon
+        lng: body_business.location.lng
       }, function (err, business ) {
         if (err) {  return handleError(res, err); }
         graphModel.db().relate(creator.gid, 'OWNS', business.gid, {}, function(err, relationship) {

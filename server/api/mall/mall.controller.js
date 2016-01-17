@@ -29,7 +29,7 @@ exports.create = function(req, res) {
     if (err) return res.status(401).send(err.message);
     bmall.location = {
       lat: data.lat,
-      lon: data.lon
+      lng: data.lng
     };
     Mall.create(bmall, function(err, mall) {
       if(err) { return handleError(res, err); }

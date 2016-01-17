@@ -18,14 +18,19 @@ var PromotionSchema = new Schema({
   pictures : [String],
   info: String,
   active: Boolean,
-  lat: Number,
-  long: Number,
+  report: {type: Boolean, default: false},
+  system_report: {type: Boolean, default: false},
+  //report location
+  location : {
+    lat : String,
+    lng : String
+  },
   mall : {type: Schema.ObjectId, ref: 'Mall', required: false},
   shopping_chain: {type: Schema.ObjectId, ref: 'ShoppingChain', required: false},
   business: {type: Schema.ObjectId, ref: 'Business', required: true},
   realize_code: String,
   realize_time: Date,
-  type: {
+      type: {
     type: String,
     required: true,
     enum: [
@@ -47,15 +52,14 @@ var PromotionSchema = new Schema({
       'CASH_BACK',
       'EARLY_BOOKING',
       'HAPPY_HOUR',
-      'MORE_THAN',       //15% off for purchases more than 1000$ OR buy iphone for 600$ and get 50% off for earphones
+      'MORE_THAN'       //15% off for purchases more than 1000$ OR buy iphone for 600$ and get 50% off for earphones
     ]
   },
   social: {
     type: String,
     enum: [
-      'NONE',
       'ROLLING',
-      'GIVE_TO_FRIEND',
+      'GIVE_TO_FRIEND'
     ]
   },
 
@@ -137,7 +141,7 @@ var PromotionSchema = new Schema({
   },
   cash_back: {
     amount : Number,
-    back : Number,
+    back : Number
   },
   early_booking: {
     percent : Number,
@@ -152,7 +156,7 @@ var PromotionSchema = new Schema({
     value : [Number],
     value_type: {type: String, enum: ['PERCENT', 'AMOUNT']},
     other : String
-  },
+  }
 });
 //http://mongoosejs.com/docs/2.7.x/docs/validation.html
 //PromotionSchema.path('percent_range').validate(function (v, fn) {

@@ -14,7 +14,7 @@ var MallSchema = new Schema({
   active: Boolean,
   location : {
     lat : String,
-    long : String
+    lng : String
   },
 
   address : {type: String, required : true},

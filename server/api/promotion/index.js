@@ -16,6 +16,8 @@ router.get('/info/server/time', controller.server_time);
 router.get('/realize/:id', auth.isAuthenticated(), controller.realize);
 router.get('/use/:id', auth.isAuthenticated(), controller.use);
 
+router.get('/init/data', /*auth.isAuthenticated(),*/ controller.initialize);
+
 
 
 module.exports = router;

@@ -41,6 +41,10 @@ GraphModel.prototype.db = function get_db() {
   return db;
 };
 
+GraphModel.prototype.model = function get_model() {
+  return this.model;
+};
+
 /**
  *
  * @param from

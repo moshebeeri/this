@@ -9,10 +9,35 @@ var randomstring = require('randomstring');
 var logger = require('../../components/logger');
 var graphTools = require('../../components/graph-tools');
 var graphModel = graphTools.createGraphModel('promotion');
+var utils = require('../../components/utils').createUtils();
 
 exports.server_time = function(req, res) {
   return res.json(200, new Date().toString());
 };
+
+
+exports.initialize = function(req, res) {
+  var PromotionType = graphTools.createGraphModel('PromotionType');
+  PromotionType.model.setUniqueKey('PromotionType', true);
+  var typEnum = Promotion.schema.path('type').enumValues;
+    typEnum.forEach(function(typeStr){
+    PromotionType.save({PromotionType: typeStr}, function(err, obj){
+      if(err) console.log("failed " + err.message);
+      else console.log("PromotionType " + JSON.stringify(obj) + "created");
+    });
+  });
+  var SocialType = graphTools.createGraphModel('SocialType');
+  SocialType.model.setUniqueKey('SocialType', true);
+  var socialEnum = Promotion.schema.path('social').enumValues;
+    socialEnum.forEach(function(typeStr){
+    SocialType.save({SocialType: typeStr}, function(err, obj){
+      if(err) console.log("failed " + err.message);
+      else console.log("SocialType " + JSON.stringify(obj) + "created");
+    });
+  });
+  return res.json(200, { type: typEnum, social: socialEnum });
+};
+
 
 // Get list of promotions
 exports.index = function(req, res) {
@@ -31,14 +56,55 @@ exports.show = function(req, res) {
   });
 };
 
+function to_graph(promotion){
+  return {
+    lat: promotion.location.lat,
+    lng: promotion.location.lng,
+    created: promotion.created,
+    report: promotion.report,
+    system_report: promotion.system_report
+  }
+}
+
 // Creates a new promotion in the DB.
+var relateTypes = function (promotion) {
+  var db = graphModel.db();
+  var query = " MATCH (promotion), (type:PromotionType{PromotionType:'{type}'}) \
+                WHERE id(promotion)={promotion} \
+                create (promotion)-[:'PROMOTION_TYPE']->(type) ";
+  db.query(query, {promotion: promotion.gid, type: promotion.type}, function(err) {
+    if (err) { logger.error(err.message); }
+  });
+
+  if(utils.defined(promotion.social)) {
+    query = " MATCH (promotion), (social:SocialType{SocialType:'{social}') \
+                WHERE id(promotion)={promotion} \
+                create (promotion)-[:'SOCIAL_TYPE']->(social) ";
+    db.query(query, {promotion: promotion.gid, social: promotion.social}, function (err) {
+      if (err) {
+        logger.error(err.message);
+      }
+    });
+  }
+};
+
 exports.create = function(req, res) {
   Promotion.create(req.body, function(err, promotion) {
-    logger.info("Promotion.created : " + promotion._id);
+    //logger.info("Promotion.created : " + promotion._id);
     if(err) { return handleError(res, err); }
-    logger.info("JSON.stringify=" + JSON.stringify(promotion, ["creator","name", "_id"]));
-    graphModel.reflect(promotion, function(err) {
+    //logger.info("JSON.stringify=" + JSON.stringify(promotion, ["creator","name", "_id"]));
+    graphModel.reflect(to_graph(promotion), function(err, promotion) {
       if (err) { return handleError(res, err); }
+      //create relationships
+      if(promotion.report)
+        graphModel.db().relate_ids(promotion._id, 'REPORTED_BY', req.body._id);
+      if(utils.defined(promotion.mall))
+        graphModel.db().relate_ids(promotion._id, 'MALL_PROMOTION', promotion.mall);
+      if(utils.defined(promotion.shopping_chain))
+        graphModel.db().relate_ids(promotion._id, 'CHAIN_PROMOTION', promotion.shopping_chain);
+      if(utils.defined(promotion.business))
+        graphModel.db().relate_ids(promotion._id, 'CHAIN_PROMOTION', promotion.business);
+      relateTypes(promotion);
     });
     return res.json(201, promotion);
   });
@@ -83,7 +149,7 @@ exports.realize = function(req, res){
       return res.json(200, promotion);
     });
   });
-}
+};
 
 //'/use/:id'
 exports.use = function(req, res){
@@ -98,7 +164,7 @@ exports.use = function(req, res){
       return res.json(200, promotion);
     });
   });
-}
+};
 
 
 function handleError(res, err) {

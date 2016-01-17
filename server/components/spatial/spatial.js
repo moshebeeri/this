@@ -37,7 +37,7 @@ function create_layer(name) {
   operation = db.operation('ext/SpatialPlugin/graphdb/addSimplePointLayer', 'POST', {
     "layer": name,
     "lat" : "lat",
-    "lon" : "lon"
+    "lng" : "lng"
   });
   db.call(operation, function (err, result, response) {
     if(err) logger.info("failed to create layer: " + err);
@@ -60,7 +60,7 @@ function create_index(name) {
       "provider":"spatial",
       "geometry_type":"point",
       "lat":"lat",
-      "lon":"lon"
+      "lng":"lng"
     }
   });
   db.call(operation, function (err, result, response) {
@@ -74,7 +74,7 @@ function create_index(name) {
 }
 
 
-//curl -X POST -d '{"name":"geom","config":{"provider":"spatial","geometry_type":"point","lat":"lat","lon":"lon"}}' --header "Content-Type:application/json" http://localhost:7474/db/data/index/node/
+//curl -X POST -d '{"name":"geom","config":{"provider":"spatial","geometry_type":"point","lat":"lat","lng":"lng"}}' --header "Content-Type:application/json" http://localhost:7474/db/data/index/node/
 //curl -X POST -d '{"key":"name","value":"Strandbar Hermann 2","uri":"http://localhost:7575/db/data/node/5"}' --header "Content-Type:application/json" http://localhost:7474/db/data/index/node/geom
 Spatial.prototype.add2index = function add(gid, callback) {
   var operation = db.operation('index/node/world', 'POST', {
@@ -83,7 +83,7 @@ Spatial.prototype.add2index = function add(gid, callback) {
     "uri": "http://localhost:7474/db/data/node/" + gid
   });
   db.call(operation, function (err, result, response) {
-    if (!err) console.log('gid ' + gid + ' added to layer')
+    if (!err) console.log('gid ' + gid + ' added to layer');
     callback(err, result);
   });
 };

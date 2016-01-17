@@ -49,7 +49,7 @@ Location.prototype.address_location = function address_location(addressed, callb
     //logger.info("lat:" + data.results[0].geometry.location.lat);
     //logger.info("lng:" + data.results[0].geometry.location.lng);
     var location = data.results[0].geometry.location;
-    return callback(null, {lat: location.lat, lon: location.lng});
+    return callback(null, {lat: location.lat, lng: location.lng});
   });
 };
 
