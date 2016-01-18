@@ -6,7 +6,7 @@ var Promotion = require('./promotion.model');
 var model = require('seraph-model');
 
 var randomstring = require('randomstring');
-var logger = require('../../components/logger');
+var logger = require('../../components/logger').createLogger();
 var graphTools = require('../../components/graph-tools');
 var graphModel = graphTools.createGraphModel('promotion');
 var utils = require('../../components/utils').createUtils();
@@ -32,7 +32,7 @@ exports.initialize = function(req, res) {
     socialEnum.forEach(function(typeStr){
     SocialType.save({SocialType: typeStr}, function(err, obj){
       if(err) console.log("failed " + err.message);
-      else console.log("SocialType " + JSON.stringify(obj) + "created");
+      else console.log("SocialType " + JSON.stringify(obj) + " created");
     });
   });
   return res.json(200, { type: typEnum, social: socialEnum });
@@ -58,6 +58,7 @@ exports.show = function(req, res) {
 
 function to_graph(promotion){
   return {
+    _id : promotion._id,
     lat: promotion.location.lat,
     lng: promotion.location.lng,
     created: promotion.created,
@@ -71,7 +72,7 @@ var relateTypes = function (promotion) {
   var db = graphModel.db();
   var query = " MATCH (promotion), (type:PromotionType{PromotionType:'{type}'}) \
                 WHERE id(promotion)={promotion} \
-                create (promotion)-[:'PROMOTION_TYPE']->(type) ";
+                create (promotion)-[:PROMOTION_TYPE]->(type) ";
   db.query(query, {promotion: promotion.gid, type: promotion.type}, function(err) {
     if (err) { logger.error(err.message); }
   });
@@ -79,7 +80,7 @@ var relateTypes = function (promotion) {
   if(utils.defined(promotion.social)) {
     query = " MATCH (promotion), (social:SocialType{SocialType:'{social}') \
                 WHERE id(promotion)={promotion} \
-                create (promotion)-[:'SOCIAL_TYPE']->(social) ";
+                create (promotion)-[:SOCIAL_TYPE]->(social) ";
     db.query(query, {promotion: promotion.gid, social: promotion.social}, function (err) {
       if (err) {
         logger.error(err.message);
@@ -93,17 +94,17 @@ exports.create = function(req, res) {
     //logger.info("Promotion.created : " + promotion._id);
     if(err) { return handleError(res, err); }
     //logger.info("JSON.stringify=" + JSON.stringify(promotion, ["creator","name", "_id"]));
-    graphModel.reflect(to_graph(promotion), function(err, promotion) {
+    graphModel.reflect(promotion, to_graph(promotion), function(err, promotion) {
       if (err) { return handleError(res, err); }
       //create relationships
       if(promotion.report)
-        graphModel.db().relate_ids(promotion._id, 'REPORTED_BY', req.body._id);
+        graphModel.relate_ids(promotion._id, 'REPORTED_BY', req.body._id);
       if(utils.defined(promotion.mall))
-        graphModel.db().relate_ids(promotion._id, 'MALL_PROMOTION', promotion.mall);
+        graphModel.relate_ids(promotion._id, 'MALL_PROMOTION', promotion.mall);
       if(utils.defined(promotion.shopping_chain))
-        graphModel.db().relate_ids(promotion._id, 'CHAIN_PROMOTION', promotion.shopping_chain);
+        graphModel.relate_ids(promotion._id, 'CHAIN_PROMOTION', promotion.shopping_chain);
       if(utils.defined(promotion.business))
-        graphModel.db().relate_ids(promotion._id, 'CHAIN_PROMOTION', promotion.business);
+        graphModel.relate_ids(promotion._id, 'BUSINESS_PROMOTION', promotion.business);
       relateTypes(promotion);
     });
     return res.json(201, promotion);

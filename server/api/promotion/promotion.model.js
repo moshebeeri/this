@@ -124,9 +124,9 @@ var PromotionSchema = new Schema({
   },
   prepay_for_discount: {
     prepay : [Number],
-    prepay_to : { type: Date, required : true},
-    eligible_from : { type: Date, required : true},
-    eligible_until : { type: Date, required : true},
+    prepay_to : { type: Date },
+    eligible_from : { type: Date },
+    eligible_until : { type: Date },
     value : [Number],
     value_type: {type: String, enum: ['PERCENT', 'AMOUNT']}
   },

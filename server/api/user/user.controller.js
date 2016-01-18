@@ -135,16 +135,20 @@ exports.phonebook = function (req, res){
       phonebook : phonebook
     });
     //for each phone number store the users that has it in their phone book
-    mongoose.connection.db.collection('phone_numbers', function (err, numbers){
+    mongoose.connection.db.collection('phone_numbers', function (err, collection){
       if(err) return logger.error(err.message);
       phonebook.forEach(function(element, index, array) {
         console.log(JSON.stringify(element));
 
-        //numbers.update({_id: element.normalized_number}, {$addToSet: {userIds: userId}}, {upsert: true});
-        numbers.findAndModify(
+        //collection.update({_id: element.normalized_number}, {$addToSet: {userIds: userId}}, {upsert: true});
+        collection.findAndModify(
           {_id: element.normalized_number},
           [['_id','asc']]                 ,
-          {$addToSet: {contacts: userId}}  ,
+          {$addToSet: {contacts: {
+            userId: userId,
+            nick: element.nick
+            }
+          }},
           {upsert: true, new: true }      ,
           function(err, object) {
             if (err){
@@ -165,9 +169,11 @@ function owner_follow(phone_number){
   if(phone_number.owner == null || phone_number.contacts.length == 0)
     return;
   phone_number.contacts.forEach(function(contact){
+    graphModel.follow_phone(number._id, contact.nick, contact.userId);
     logger.info('create (' + contact +')<-[Follows]-('+phone_number.owner+')');
   });
 }
+
 
 exports.login = function (req, res, next) {
   User.find({$or: [{email: {$eq: req.body.email}}, {phone_number: {$eq: req.body.phone_number}}]}, function (err, user) {

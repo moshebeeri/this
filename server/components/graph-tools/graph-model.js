@@ -7,8 +7,9 @@ var db = require('seraph')({  server: "http://localhost:7474",
 
 var seraph_model = require('seraph-model');
 //var PromotionGraph = model(db, 'promotion');
-
 var logger = require('../logger').createLogger();
+var util = require('util');
+
 
 function GraphModel(class_name) {
   //this.class_name = class_name;
@@ -67,16 +68,9 @@ GraphModel.prototype.model = function get_model() {
  */
 GraphModel.prototype.relate = function relate(from, name, to, properties, callback){
   return db.relate(from, name, to, properties, callback);
-  //var query = " MATCH (f), (t) \
-  //              WHERE id(f)={from} and id(t)={to} \
-  //              create (f)-[:{name}]->(t) ";
-  //db.query(query, {from: from, name: name, to: to}, function(err) {
-  //  if (err) { logger.error(err.message); }
-  //});
 };
 
 GraphModel.prototype.unrelate = function unrelate(from, name, to){
-  //var query =  "MATCH (f { _id:'{from}' })-[r:'{name}']->(t { _id:'{id}' }) delete r";
   var query = " MATCH (f)-[r:{name}]->(t) \
                 WHERE id(f)={from} and id(t)={to} \
                 delete r";
@@ -105,23 +99,23 @@ GraphModel.prototype.unrelate = function unrelate(from, name, to){
  *    });
  */
 GraphModel.prototype.relate_ids = function relate_id(from, name, to){
-  var query =  "MATCH (f { _id:'{from}' }), (t { _id:'{to}' }) create (f)-[:'{name}']->(t)";
-  db.query(query, {from: from, name: name, to: to}, function(err) {
+  var query = util.format("MATCH (f { _id:'%s' }), (t { _id:'%s' }) create (f)-[:%s]->(t)",from, to, name);
+  db.query(query, function(err) {
     if (err) { logger.error(err.message); }
   });
 };
 
 
 GraphModel.prototype.unrelate_ids = function unrelate(from, name, to){
-  var query =  "MATCH (f { _id:'{from}' })-[r:'{name}']->(t { _id:'{id}' }) delete r";
-  db.query(query, {from: from, name: name, to: to}, function(err) {
+  var query = util.format("MATCH (f { _id:'{%s}' })-[r:{%s}]->(t { _id:'{%s}' }) delete r", from, name, to);
+  db.query(query, function(err) {
     if (err) { logger.error(err.message); }
   });
 };
 
-//
+
 GraphModel.prototype.follow_phone = function follow_phone(number, nick, userId){
-  var query =  "MATCH (phone:user { phone:'number' }),MATCH (u:user { _id:'{userId}' }) CREATE (phone)<-[r:FOLLOW {nick : {nick}}]-(u)";
+  var query = util.format("MATCH (phone:user { phone:'%s' }),MATCH (u:user { _id:'{%s}' }) CREATE (phone)<-[r:FOLLOW {nick : {%s}}]-(u)", number,userId, nick);
   db.query(query, {number: number, nick: nick, userId: userId}, function(err) {
     if (err) { logger.error(err.message); }
   });
