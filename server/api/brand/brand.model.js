@@ -9,7 +9,7 @@ var BrandSchema = new Schema({
   info: String,
   active: Boolean,
   logo: String,
-  pictures: [String],
+  pictures: [],
 });
 
 module.exports = mongoose.model('Brand', BrandSchema);

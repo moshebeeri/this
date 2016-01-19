@@ -10,10 +10,11 @@ var LocationSchema = new Schema({
   locations : [{
       timestamp : { type : Date, default: Date.now },
       lat : Number,
-      lng : Number
+      lng : Number,
+      speed: { type : Number, default: 0}
     }],
   userId: String,
-  timestamp: { type : Date, default: Date.now },
+  timestamp: { type : Date, default: Date.now }
 });
 
 module.exports = mongoose.model('Location', LocationSchema);

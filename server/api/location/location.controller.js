@@ -7,6 +7,7 @@ var spatial = require('../../components/spatial').createSpatial();
 var graphTools = require('../../components/graph-tools');
 var graphModel = graphTools.createGraphModel('location');
 
+/*
 exports.test = function(req, res) {
   logger.info('test');
   //spatial.layer();
@@ -20,6 +21,7 @@ exports.test = function(req, res) {
   });
   return res.json(201, req.body.locations);
 };
+*/
 
 // Get list of locations
 exports.index = function(req, res) {
@@ -40,9 +42,22 @@ exports.show = function(req, res) {
 
 // Creates a new location in the DB.
 exports.create = function(req, res) {
+  var userId = req.user._id
   Location.create(req.body, function(err, location) {
     if(err) { return handleError(res, err); }
-    //How should I update spatial information
+    req.body.locations.forEach(function(location){
+      graphModel.save({
+        lat: location.lat,
+        lng: location.lng,
+        speed: location.speed,
+        userId: userId
+      }, function(err, location){
+        spatial.add2index(location.id, function(err, result){
+          if(err) logger.error(err.message);
+          else logger.info('object added to layer ' + result)
+        });
+      });
+    });
     return res.json(201, location);
   });
 };

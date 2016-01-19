@@ -15,7 +15,7 @@ var PromotionSchema = new Schema({
   gid: Number,
   creator: {type: Schema.ObjectId, ref: 'User', required: true},
   created: {type: Date, default: Date.now},
-  pictures : [String],
+  pictures : [],
   info: String,
   active: Boolean,
   report: {type: Boolean, default: false},

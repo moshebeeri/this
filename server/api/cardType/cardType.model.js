@@ -19,7 +19,7 @@ var CardTypeSchema = new Schema({
       'BRAND'
     ]
   },
-  pictures : [String]
+  pictures: []
 });
 
 module.exports = mongoose.model('CardType', CardTypeSchema);

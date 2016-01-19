@@ -59,7 +59,10 @@ exports.create = function(req, res) {
   });
   body_business.creator = userId;
   location.address_location( body_business, function(err, data) {
-    if (err) return res.status(401).send(err.message);
+    if (err) {
+      if (err.code >= 400) return res.status(err.code).send(err.message);
+      else if (err.code == 202) return res.status(202).json(data)
+    }
     body_business.location = {
       lat : data.lat,
       lng: data.lng

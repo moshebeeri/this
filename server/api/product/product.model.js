@@ -9,7 +9,7 @@ var ProductSchema = new Schema({
   info: String,
   brand: {type: Schema.ObjectId, ref: 'Brand', required: false},
   retail_price: Number,
-  pictures: [String],
+  pictures: [],
   active: Boolean
 });
 

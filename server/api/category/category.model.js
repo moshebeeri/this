@@ -8,7 +8,7 @@ var CategorySchema = new Schema({
   gid: Number,
   info: String,
   active: Boolean,
-  pictures : [String],
+  pictures: [],
   background_image: String,
   text_color : Number,
   text: String,

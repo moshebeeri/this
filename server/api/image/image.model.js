@@ -4,19 +4,17 @@ var mongoose = require('mongoose'),
     Schema = mongoose.Schema;
 
 var ImageSchema = new Schema({
-  objectId : Schema.ObjectId,
-  type: {
+  title: String,
+  description: String,
+  orientation: {
     type: String,
-    required: true,
+    required: false,
     enum: [
-      'USER',
-      'BUSINESS',
-      'PRODUCT',
-      'PROMOTION',
-      'MALL',
-      'CATEGORY',
-      'CARD_TYPE'
-    ]
+      'UNKNOWN',
+      'LANDSCAPE',
+      'PORTRAIT'
+    ],
+    default : 'UNKNOWN'
   }
 });
 

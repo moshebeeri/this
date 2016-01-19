@@ -91,6 +91,7 @@ exports.logo = function (req, res) {
 };
 
 function handle_image(req, res, type) {
+  var meta_data = req.headers.meta;
   var form = new multiparty.Form();
   var size = '';
   var fileName = randomstring.generate({length: 8, charset: 'hex'});
@@ -113,7 +114,7 @@ function handle_image(req, res, type) {
       //  console.log(image.width, image.height, image.url)
       //});
 
-      updateImageVersions(versions, req.params.id, 'image');
+      updateImageVersions(versions, req.params.id, meta_data, type);
 
       return res.status(201).json(versions);
     });
@@ -132,7 +133,7 @@ var Mall = require('../mall/mall.model');
 var Category = require('../category/category.model');
 var CardType = require('../cardType/cardType.model');
 
-function updateImageVersions(version, id, type) {
+function updateImageVersions(version, id, meta_data, type) {
 
   async.parallel({
       user: function (callback) {
@@ -175,8 +176,13 @@ function updateImageVersions(version, id, type) {
           var updated = results[key];
           if(updated){
             if(type === 'image')
-              updated.pictures = pictures;
+              updated.pictures.push({
+                pictures: pictures,
+                meta : meta_data,
+                id : randomstring.generate({length: 8, charset: 'hex'})
+              });
             else if (type === 'logo')
+            //[0] for original
               updated.logo = pictures[0];
             updated.save(function (err) {
               if (err) {

@@ -28,6 +28,9 @@ function format_address(addressed) {
 
 
 Location.prototype.address_location = function address_location(addressed, callback) {
+  if(defined(addressed.location) && defined(addressed.location.lat) && defined(addressed.location.lng))
+    return callback(null, {lat: addressed.location.lat, lng: addressed.location.lng});
+
   var address = format_address(addressed);
   geocode_address(address, function (err, data) {
     if (err) {
@@ -36,13 +39,13 @@ Location.prototype.address_location = function address_location(addressed, callb
     //logger.info(data);
     if (!data.results || data.results.length == 0)
       return callback({
-        res: 400,
+        code: 400,
         message: 'No location under this address : ' + address
       }, null);
 
     if (data.results.length > 1)
       return callback({
-        res: 400,
+        code: 202,
         message: 'Inconsistent address, google api find more then one location under this address : ' + address
       }, data);
 

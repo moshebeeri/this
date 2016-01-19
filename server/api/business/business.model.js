@@ -37,8 +37,8 @@ var BusinessSchema = new Schema({
     email_description : String,
     email : String
   },
-  logo : String,
-  pictures : [String]
+  logo: String,
+  pictures: []
 });
 
 module.exports = mongoose.model('Business', BusinessSchema);
