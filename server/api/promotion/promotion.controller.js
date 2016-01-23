@@ -10,6 +10,7 @@ var logger = require('../../components/logger').createLogger();
 var graphTools = require('../../components/graph-tools');
 var graphModel = graphTools.createGraphModel('promotion');
 var utils = require('../../components/utils').createUtils();
+var util = require('util');
 
 exports.server_time = function(req, res) {
   return res.json(200, new Date().toString());
@@ -70,21 +71,21 @@ function to_graph(promotion){
 // Creates a new promotion in the DB.
 var relateTypes = function (promotion) {
   var db = graphModel.db();
-  var query = " MATCH (promotion), (type:PromotionType{PromotionType:'{type}'}) \
-                WHERE id(promotion)={promotion} \
-                create (promotion)-[:PROMOTION_TYPE]->(type) ";
-  db.query(query, {promotion: promotion.gid, type: promotion.type}, function(err) {
+  var query = util.format(" MATCH (promotion), (type:PromotionType{PromotionType:'%s'}) \
+                            WHERE  id(promotion)=%d \
+                            CREATE (promotion)-[:PROMOTION_TYPE]->(type) ", promotion.type, promotion.gid );
+  console.log(query);
+  db.query(query, function(err) {
     if (err) { logger.error(err.message); }
   });
 
   if(utils.defined(promotion.social)) {
-    query = " MATCH (promotion), (social:SocialType{SocialType:'{social}') \
-                WHERE id(promotion)={promotion} \
-                create (promotion)-[:SOCIAL_TYPE]->(social) ";
-    db.query(query, {promotion: promotion.gid, social: promotion.social}, function (err) {
-      if (err) {
-        logger.error(err.message);
-      }
+    query = util.format(" MATCH (promotion), (type:SocialType{SocialType:'%s'}) \
+                            WHERE  id(promotion)=%d \
+                            CREATE (promotion)-[:SOCIAL_TYPE]->(type) ", promotion.social, promotion.gid );
+    console.log(query);
+    db.query(query, function (err) {
+      if (err) { logger.error(err.message); }
     });
   }
 };

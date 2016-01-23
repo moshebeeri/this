@@ -5,7 +5,7 @@ var mongoose = require('mongoose'),
 
 var BusinessSchema = new Schema({
   name: { type: String, index: true, unique : true, required : true, dropDups: false},
-  gid: Number,
+  gid: { type: Number, index: true, unique : true },
   tax_id: { type: String, index: true, required : true} ,
   shopping_chain: {type: Schema.ObjectId, ref: 'ShoppingChain', required: false},
   mall: {type: Schema.ObjectId, ref: 'mall', required: false},

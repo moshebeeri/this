@@ -5,7 +5,7 @@ var mongoose = require('mongoose'),
 
 var CategorySchema = new Schema({
   name: String,
-  gid: Number,
+  gid: { type: Number, index: true, unique : true },
   info: String,
   active: Boolean,
   pictures: [],

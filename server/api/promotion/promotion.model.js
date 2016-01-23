@@ -12,7 +12,7 @@ function percent_range_validator(v) {
 
 var PromotionSchema = new Schema({
   name: {type: String, required: true},
-  gid: Number,
+  gid: { type: Number, index: true, unique : true },
   creator: {type: Schema.ObjectId, ref: 'User', required: true},
   created: {type: Date, default: Date.now},
   pictures : [],
@@ -30,7 +30,7 @@ var PromotionSchema = new Schema({
   business: {type: Schema.ObjectId, ref: 'Business', required: true},
   realize_code: String,
   realize_time: Date,
-      type: {
+  type: {
     type: String,
     required: true,
     enum: [

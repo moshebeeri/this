@@ -56,17 +56,29 @@ exports.unlike = function(req, res) {
 };
 
 function send_sms_verification_code(user) {
-//send sms verification
+  send_sms_message(user.phone_number,
+    "Thank you for using ThisCounts your sms code is " + user.sms_code
+  );
+}
+
+function send_sms_new_password(phone_number, new_password) {
+  send_sms_message(phone_number,
+    "ThisCounts new password " + new_password
+  );
+}
+
+
+function send_sms_message(phone_number, message) {
   twilio.messages.create({
-    body: "Thank you for using ThisCounts your sms code is " + user.sms_code,
-    to: user.phone_number,
+    body: message,
+    to: phone_number,
     from: config.twilio.number
   }, function (err, message) {
-      if(err)
-        console.log("failed to send sms verification err: " + err.message);
-      else
-        console.log("sms verification sent sid: " + message.sid);
-      });
+    if (err)
+      console.log("failed to send sms verification err: " + err.message);
+    else
+      console.log("sms verification sent sid: " + message.sid);
+  });
 }
 
 /**
@@ -200,8 +212,24 @@ exports.show = function (req, res, next) {
   });
 };
 
+exports.recover_password = function (req, res) {
+  var phone_number = req.params.phone_number;
+  User.findOne({ 'phone_number': phone_number}, function (err, user) {
+    if (err) return handleError(err);
+    var new_password = randomstring.generate({length: 6, charset: 'alphanumeric'});
+    user.password = new_password;
+    user.save(function (err, user) {
+      if (err) return validationError(res, err);
+      var token = jwt.sign({_id: user._id}, config.secrets.session, {expiresInMinutes: 60 * 24 * 30});
+      send_sms_new_password(phone_number, new_password);
+      res.json({token: token});
+      //return res.send(200, "ok");
+    })
+  })
+};
+
 /**
- * sms verification
+ * code verification
  */
 exports.verification = function (req, res) {
   var code = req.params.code;
@@ -212,6 +240,7 @@ exports.verification = function (req, res) {
     if(!user) { return res.status(404).send('Not Found'); }
     if(user.sms_code != code){return res.status(404).send('code not match');}
     user.sms_verified = true;
+    user.sms_code = '';
     user.save(function (err) {
       if (err) { return handleError(res, err); }
       //TODO: upsert phone number with owner
@@ -226,6 +255,9 @@ exports.verification = function (req, res) {
   });
 };
 
+/***
+ * sends sms code
+ */
 exports.verify = function (req, res) {
   var userId = req.user._id;
   var sms_code = randomstring.generate({length:4,charset:'numeric'});

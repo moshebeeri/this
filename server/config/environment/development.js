@@ -25,5 +25,6 @@ module.exports = {
 
   },
   //seedDB: true
-  seedDB: false
+  seedDB: false,
+  initializeNeo4j: true,
 };

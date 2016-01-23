@@ -42,7 +42,7 @@ exports.show = function(req, res) {
 
 // Creates a new location in the DB.
 exports.create = function(req, res) {
-  var userId = req.user._id
+  var userId = req.user._id;
   Location.create(req.body, function(err, location) {
     if(err) { return handleError(res, err); }
     req.body.locations.forEach(function(location){

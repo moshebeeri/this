@@ -35,5 +35,5 @@ module.exports = {
     key: 'AIzaSyACe_Cci4drnZovD8xjJOdrsIOQwyWSyCg',
 
   },
-
+  initializeNeo4j: true
 };
