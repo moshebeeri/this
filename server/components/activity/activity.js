@@ -26,37 +26,9 @@ function update_feeds(effected, activity) {
       }, function(err) {
         if(err) { logger.error(err.message); }
       });
-/*
-      collection.findAndModify(
-        {_id: user._id},
-        [['timestamp', 'desc']],
-        {
-          $push: {
-            activity: {
-              $each: [activity],
-              $sort: {timestamp: 1},
-              $slice: -500
-            }
-          }
-        },
-        {upsert: true, new: true},
-        function (err, object) {
-          if (err) {
-            console.warn(err.message);
-          } else {
-            console.dir(object);
-          }
-        });
-*/
     });
   });
 }
-
-//db.collection.update(
-//  <query>,
-//  { $setOnInsert: { <field1>: <value1>, ... } },
-//  { upsert: true }
-//)
 
 /**
  * @param activity
