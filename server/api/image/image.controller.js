@@ -209,7 +209,7 @@ exports.works_create = function (req, res) {
   var size = '';
   var fileName = randomstring.generate({length: 8, charset: 'hex'});
   form.on('part', function (part) {
-    console.log("part:" + part.filename)
+    console.log("part:" + part.filename);
     if (!part.filename) return;
     size = part.byteCount;
     fileName = part.filename;

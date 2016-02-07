@@ -10,6 +10,7 @@ var graphModel = graphTools.createGraphModel('business');
 var spatial = require('../../components/spatial').createSpatial();
 var location = require('../../components/location').createLocation();
 var utils = require('../../components/utils').createUtils();
+var activity = require('../../components/activity').createActivity();
 
 exports.address2 = function(req, res) {
   location.address( req.body.address, function(err, data){
@@ -93,11 +94,33 @@ exports.create = function(req, res) {
             else logger.info('object added to layer ' + result)
           });
         });
+        activity.activity({
+          business  : business._id,
+          actor_user: business.creator,
+          action : "created"
+        }, function (err) {if(err) logger.error(err.message)});
       });
       return res.status(201).json(business);
     });
   });
 };
+
+/* {
+*   promotion : promotion ,
+*   user      : user      ,
+*   business  : business  ,
+*   mall      : mall      ,
+*   chain     : chain     ,
+*
+*   actor_user      : user      ,
+*   actor_business  : business  ,
+*   actor_mall      : mall      ,
+*   actor_chain     : chain     ,
+*
+*   action    : action
+ * } */
+
+
 
 // Updates an existing business in the DB.
 exports.update = function(req, res) {

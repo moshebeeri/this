@@ -5,7 +5,14 @@ var mongoose = require('mongoose'),
 
 var FeedSchema = new Schema({
   user: {type: Schema.ObjectId, ref: 'User', required: true},
-  activity: {type: Schema.ObjectId, ref: 'activity'}
+  activity: {type: Schema.ObjectId, ref: 'Activity'}
 });
 
 module.exports = mongoose.model('Feed', FeedSchema);
+
+
+
+
+//collection: String,
+//updated: {type: Date, default: Date.now},
+//created: {type: Date, default: Date.now},

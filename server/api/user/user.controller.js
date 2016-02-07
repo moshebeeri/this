@@ -2,18 +2,23 @@
 
 var mongoose = require('mongoose');
 var User = require('./user.model');
+var PhoneNumber = require('../phone_number/phone_number.model');
+
 var passport = require('passport');
 var config = require('../../config/environment');
 var jwt = require('jsonwebtoken');
 var twilio = require('twilio')(config.twilio.accountSid, config.twilio.authToken);
 var util = require('util');
+var utils = require('../../components/utils').createUtils();
+
 var randomstring = require('randomstring');
 var logger = require('../../components/logger').createLogger();
 
 var graphTools = require('../../components/graph-tools');
 var graphModel = graphTools.createGraphModel('user');
 
-var validationError = function(res, err) {
+
+var validationError = function (res, err) {
   return res.json(422, err);
 };
 
@@ -21,13 +26,12 @@ var validationError = function(res, err) {
  * Get list of users
  * restriction: 'admin'
  */
-exports.index = function(req, res) {
+exports.index = function (req, res) {
   User.find({}, '-salt -hashedPassword -sms_code', function (err, users) {
-    if(err) return res.send(500, err);
+    if (err) return res.send(500, err);
     res.json(200, users);
   });
 };
-
 
 /**
  * '/like/:id'
@@ -39,7 +43,7 @@ exports.index = function(req, res) {
  *
  * MATCH (u { _id:'567747ea034cfc2d372b14e5' }), (b { _id:'567ea4b5adef97f106cd6f78' }) create (u)-[:LIKE]->(b)
  */
-exports.like = function(req, res) {
+exports.like = function (req, res) {
   var userId = req.user._id;
   graphModel.relate_ids(userId, 'LIKE', req.params.id);
   return res.json(200, "like called for object " + req.params.id + " and user " + userId);
@@ -49,7 +53,7 @@ exports.like = function(req, res) {
  *  '/unlike/:id'
  *
  */
-exports.unlike = function(req, res) {
+exports.unlike = function (req, res) {
   var userId = req.user._id;
   graphModel.unrelate_ids(userId, 'LIKE', req.params.id);
   return res.json(200, "unlike called for promotion " + req.params.id + " and user " + userId);
@@ -89,22 +93,26 @@ exports.create = function (req, res, next) {
 
   newUser.provider = 'local';
   newUser.role = 'user';
-  newUser.sms_code = randomstring.generate({length:4,charset:'numeric'});
+  newUser.sms_code = randomstring.generate({length: 4, charset: 'numeric'});
   newUser.sms_verified = false;
-  newUser.save(function(err, user) {
+  newUser.phone_number = utils.clean_phone_number(newUser.phone_number);
+  newUser.save(function (err, user) {
     if (err) return validationError(res, err);
-    var token = jwt.sign({_id: user._id }, config.secrets.session, { expiresInMinutes: 60*24*30 });
-    res.json({ token: token });
+    var token = jwt.sign({_id: user._id}, config.secrets.session, {expiresInMinutes: 60 * 24 * 30});
+    res.json({token: token});
 
     send_sms_verification_code(user);
 
-    graphModel.reflect( user,
+    graphModel.reflect(user,
       {
         _id: user._id,
         phone: user.phone_number
-      },function (err) {
-      if(err) return res.send(500, err);
-    });
+      }, function (err) {
+        if (err) return res.send(500, err);
+        //if this users number exist in phone_numbers collection
+        //then all users (ids in contacts) should be followed by him
+        new_user_follow(user)
+      });
   });
 };
 
@@ -132,40 +140,45 @@ exports.create = function (req, res, next) {
  *  ]
  * }
  * ContactsContract.CommonDataKinds.Email
- * class	ContactsContract.CommonDataKinds.Nickname
- * class	ContactsContract.CommonDataKinds.Phone
+ * class  ContactsContract.CommonDataKinds.Nickname
+ * class  ContactsContract.CommonDataKinds.Phone
  */
-exports.phonebook = function (req, res){
+exports.phonebook = function (req, res) {
   var mongoose = require('mongoose');
-  var phonebook = req.body.phonebook;
+  var phonebook = req.body;
   var userId = req.user._id;
-  console.log(userId);
+
   mongoose.connection.db.collection('phonebook', function (err, collection) {
-    if(err) return logger.error(err.message);
+    if (err) return logger.error(err.message);
     collection.save({
-      _id : userId,
-      phonebook : phonebook
+      _id: userId,
+      phonebook: phonebook.phonebook
     });
+    //TODO: implement this way http://stackoverflow.com/questions/5794834/how-to-access-a-preexisting-collection-with-mongoose
     //for each phone number store the users that has it in their phone book
-    mongoose.connection.db.collection('phone_numbers', function (err, collection){
-      if(err) return logger.error(err.message);
-      phonebook.forEach(function(element, index, array) {
-        console.log(JSON.stringify(element));
+
+    mongoose.connection.db.collection('phone_numbers', function (err, collection) {
+      if (err) return logger.error(err.message);
+      phonebook.phonebook.forEach(function (contact, index, array) {
+        console.log(JSON.stringify(contact));
 
         //collection.update({_id: element.normalized_number}, {$addToSet: {userIds: userId}}, {upsert: true});
         collection.findAndModify(
-          {_id: element.normalized_number},
-          [['_id','asc']]                 ,
-          {$addToSet: {contacts: {
-            userId: userId,
-            nick: element.nick
+          {_id: utils.clean_phone_number(contact.normalized_number)},
+          [['_id', 'asc']],
+          {
+            $addToSet: {
+              contacts: {
+                userId: userId,
+                nick: contact.name
+              }
             }
-          }},
-          {upsert: true, new: true }      ,
-          function(err, object) {
-            if (err){
+          },
+          {upsert: true, new: true},
+          function (err, object) {
+            if (err) {
               console.warn(err.message);
-            }else{
+            } else {
               console.dir(object);
               owner_follow(object.value)
             }
@@ -173,16 +186,34 @@ exports.phonebook = function (req, res){
       });
     });
   });
-  return res.send(200, "ok");
+  return res.status(200).send("ok")
 };
 
 
-function owner_follow(phone_number){
-  if(phone_number.owner == null || phone_number.contacts.length == 0)
+function owner_follow(phone_number) {
+  if (!utils.defined(phone_number._id) || phone_number.contacts.length == 0)
     return;
-  phone_number.contacts.forEach(function(contact){
-    graphModel.follow_phone(number._id, contact.nick, contact.userId);
-    logger.info('create (' + contact +')<-[Follows]-('+phone_number.owner+')');
+  phone_number.contacts.forEach(function (contact) {
+    graphModel.follow_phone(phone_number._id, contact.nick, contact.userId);
+    logger.info('create (' + contact + ')<-[Follows]-(' + phone_number.owner + ')');
+  });
+}
+
+
+/**
+ * if this users number exist in phone_numbers collection
+ * then all users (ids in contacts) should be followed by him
+ * @param user
+ */
+function new_user_follow(user){
+  PhoneNumber.findById(user._id, function (err, phone_number) {
+    if (err) { return logger.error(err.message); }
+    if(!phone_number) return ;
+    //We have this number, make user follow the users who have his number
+    phone_number.contacts.forEach(function (contact) {
+      graphModel.follow_phone(contact.userId, contact.nick, user._id);
+      logger.info('create (' + contact + ')<-[Follows]-(' + phone_number.owner + ')');
+    });
   });
 }
 
@@ -214,7 +245,7 @@ exports.show = function (req, res, next) {
 
 exports.recover_password = function (req, res) {
   var phone_number = req.params.phone_number;
-  User.findOne({ 'phone_number': phone_number}, function (err, user) {
+  User.findOne({'phone_number': phone_number}, function (err, user) {
     if (err) return handleError(err);
     var new_password = randomstring.generate({length: 6, charset: 'alphanumeric'});
     user.password = new_password;
@@ -234,18 +265,28 @@ exports.recover_password = function (req, res) {
 exports.verification = function (req, res) {
   var code = req.params.code;
   var userId = req.user._id;
-  if(req.body._id) { return res.status(404).send('bad request _id in body not allowed'); }
+  if (req.body._id) {
+    return res.status(404).send('bad request _id in body not allowed');
+  }
   User.findById(userId, function (err, user) {
-    if (err) { return handleError(res, err); }
-    if(!user) { return res.status(404).send('Not Found'); }
-    if(user.sms_code != code){return res.status(404).send('code not match');}
+    if (err) {
+      return handleError(res, err);
+    }
+    if (!user) {
+      return res.status(404).send('Not Found');
+    }
+    if (user.sms_code != code) {
+      return res.status(404).send('code not match');
+    }
     user.sms_verified = true;
     user.sms_code = '';
     user.save(function (err) {
-      if (err) { return handleError(res, err); }
+      if (err) {
+        return handleError(res, err);
+      }
       //TODO: upsert phone number with owner
       mongoose.connection.db.collection('phone_numbers', function (err, numbers) {
-        if(err)
+        if (err)
           logger.error(err.message);
         else
           numbers.update({_id: user.phone_number}, {$set: {owner: user._id}}, {upsert: true});
@@ -260,7 +301,7 @@ exports.verification = function (req, res) {
  */
 exports.verify = function (req, res) {
   var userId = req.user._id;
-  var sms_code = randomstring.generate({length:4,charset:'numeric'});
+  var sms_code = randomstring.generate({length: 4, charset: 'numeric'});
   User.findById(userId, function (err, user) {
     if (err) return next(err);
     if (!user) return res.status(401).send('Unauthorized');
@@ -268,7 +309,9 @@ exports.verify = function (req, res) {
     user.sms_code = sms_code;
     send_sms_verification_code(user);
     user.save(function (err) {
-      if (err) { return handleError(res, err); }
+      if (err) {
+        return handleError(res, err);
+      }
       return res.status(200).send('verification sms sent');
     });
   });
@@ -278,9 +321,9 @@ exports.verify = function (req, res) {
  * Deletes a user
  * restriction: 'admin'
  */
-exports.destroy = function(req, res) {
-  User.findByIdAndRemove(req.params.id, function(err, user) {
-    if(err) return res.send(500, err);
+exports.destroy = function (req, res) {
+  User.findByIdAndRemove(req.params.id, function (err, user) {
+    if (err) return res.send(500, err);
     return res.status(204).send('No Content');
   });
 };
@@ -288,15 +331,15 @@ exports.destroy = function(req, res) {
 /**
  * Change a users password
  */
-exports.changePassword = function(req, res, next) {
+exports.changePassword = function (req, res, next) {
   var userId = req.user._id;
   var oldPass = String(req.body.oldPassword);
   var newPass = String(req.body.newPassword);
 
   User.findById(userId, function (err, user) {
-    if(user.authenticate(oldPass)) {
+    if (user.authenticate(oldPass)) {
       user.password = newPass;
-      user.save(function(err) {
+      user.save(function (err) {
         if (err) return validationError(res, err);
         res.status(200).send('OK');
       });
@@ -309,11 +352,11 @@ exports.changePassword = function(req, res, next) {
 /**
  * Get my info
  */
-exports.me = function(req, res, next) {
+exports.me = function (req, res, next) {
   var userId = req.user._id;
   User.findOne({
     _id: userId
-  }, '-salt -hashedPassword -sms_code', function(err, user) { // don't ever give out the password or salt
+  }, '-salt -hashedPassword -sms_code', function (err, user) { // don't ever give out the password or salt
     if (err) return next(err);
     if (!user) return res.status(401).send('Unauthorized');
     res.json(user);
@@ -323,6 +366,6 @@ exports.me = function(req, res, next) {
 /**
  * Authentication callback
  */
-exports.authCallback = function(req, res, next) {
+exports.authCallback = function (req, res, next) {
   res.redirect('/');
 };

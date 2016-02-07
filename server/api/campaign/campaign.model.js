@@ -13,7 +13,7 @@ var CampaignPreferencesSchema = new Schema({
     type: String,
     enum: ['MALE', 'FEMALE', 'ALL']
   },
-  State: String,
+  state: String,
   countries: [String],
   cities: [String],
   mall: [String],

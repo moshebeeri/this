@@ -18,5 +18,8 @@ Utils.prototype.log = function log(){
   return logger;
 };
 
+Utils.prototype.clean_phone_number = function clean_phone_number(number){
+  return number.replace(/\D/g, '');
+};
 
 module.exports = Utils;

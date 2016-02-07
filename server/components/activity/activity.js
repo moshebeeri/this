@@ -1,6 +1,7 @@
 'use strict';
 
 var _ = require('lodash');
+var util = require('util');
 var graphTools = require('../graph-tools');
 var graphModel = graphTools.createGraphModel('feed');
 var logger = require('../logger').createLogger();
@@ -11,18 +12,16 @@ var Feed = require('../../api/feed/feed.model');
 var ActivitySchema = require('../../api/activity/activity.model');
 
 
-//See - http://stackoverflow.com/questions/19647012/mongoose-activity-model-with-dynamic-reference
-function Activity(params) {
+function Activity() {
   logger.info("Activity constructed");
-  this.prototype.params = params;
 }
-
+//pagination http://blog.mongodirector.com/fast-paging-with-mongodb/
 function update_feeds(effected, activity) {
   mongoose.connection.db.collection('feed', function (err, collection) {
     if (err) return logger.error(err.message);
     effected.forEach(function (user) {
       Feed.create({
-          user: effected._id,
+          user: user._id,
           activity: activity._id
       }, function(err) {
         if(err) { logger.error(err.message); }
@@ -131,21 +130,20 @@ function run(query, callback) {
 }
 //MATCH (actor) where actor._id='56a3cb8071cef8c460461c08' return actor
 function effected_out_rel(actor_id, relationship, callback) {
-  var query = util.format(" MATCH (actor)-[:$s]->(effected) \
+  var query = util.format(" MATCH (actor)-[:%s]->(effected) \
                             where actor._id='%s'         \
                             return effected ", relationship, actor_id);
   run(db, query, callback);
 }
 
 function effected_in_rel(actor_id, relationship, callback) {
-  var query = util.format(" MATCH (actor)<-[:$s]-(effected) \
+  var query = util.format(" MATCH (actor)<-[:%s]-(effected) \
                             where actor._id='%s'         \
                             return effected ", relationship, actor_id);
   run(query, callback);
 }
 function like_effected(actor) {
   return effected(actor, 'LIKE');
-
 }
 
 
