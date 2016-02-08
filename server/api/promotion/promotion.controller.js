@@ -10,6 +10,7 @@ var logger = require('../../components/logger').createLogger();
 var graphTools = require('../../components/graph-tools');
 var graphModel = graphTools.createGraphModel('promotion');
 var utils = require('../../components/utils').createUtils();
+var activity = require('../../components/activity').createActivity();
 var util = require('util');
 
 exports.server_time = function(req, res) {
@@ -107,10 +108,30 @@ exports.create = function(req, res) {
       if(utils.defined(promotion.business))
         graphModel.relate_ids(promotion._id, 'BUSINESS_PROMOTION', promotion.business);
       relateTypes(promotion);
+      promotion_created_activity(promotion);
     });
     return res.json(201, promotion);
   });
 };
+
+function promotion_created_activity(promotion) {
+  var act = {
+    promotion: promotion._id,
+    action: "created"
+  };
+  if(promotion.report)
+    act.actor_user = promotion.creator;
+  if(utils.defined(promotion.mall))
+    act.actor_mall = promotion.creator;
+  if(utils.defined(promotion.shopping_chain))
+    act.actor_chain = promotion.creator;
+  if(utils.defined(promotion.business))
+    act.actor_business = promotion.creator;
+
+  activity.activity(act, function (err) {
+    if (err) logger.error(err.message)
+  });
+}
 
 // Updates an existing promotion in the DB.
 exports.update = function(req, res) {

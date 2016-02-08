@@ -36,6 +36,7 @@ function update_feeds(effected, activity) {
  *
  * {
  *   promotion : promotion ,
+ *   product   : product   ,
  *   user      : user      ,
  *   business  : business  ,
  *   mall      : mall      ,
@@ -105,7 +106,7 @@ function effected_out_rel(actor_id, relationship, callback) {
   var query = util.format(" MATCH (actor)-[:%s]->(effected) \
                             where actor._id='%s'         \
                             return effected ", relationship, actor_id);
-  run(db, query, callback);
+  run(query, callback);
 }
 
 function effected_in_rel(actor_id, relationship, callback) {

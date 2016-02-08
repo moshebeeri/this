@@ -21,7 +21,7 @@ exports.index = function (req, res) {
   //});
 
 //http://stackoverflow.com/questions/19222520/populate-nested-array-in-mongoose
-  Feed.find().populate({path: 'activity'})
+  Feed.find().populate({path: 'activity', select: '-user'})
     .exec(function (err, feeds) {
       if (err) {
         return handleError(res, err);
@@ -29,6 +29,9 @@ exports.index = function (req, res) {
 
       function populate_promotion(feeds, callback) {
         Feed.populate(feeds, {path: 'activity.promotion', model: 'Promotion'}, callback);
+      }
+      function populate_product(feeds, callback) {
+        Feed.populate(feeds, {path: 'activity.product', model: 'Product'}, callback);
       }
       function populate_user(feeds, callback) {
         Feed.populate(feeds, {path: 'activity.user', select: '-salt -hashedPassword -gid -role -__v -email -phone_number', model: 'User'}, callback);
@@ -57,6 +60,7 @@ exports.index = function (req, res) {
 
       async.waterfall([
         async.apply(populate_promotion, feeds),
+        populate_product,
         populate_user,
         populate_business,
         populate_mall,

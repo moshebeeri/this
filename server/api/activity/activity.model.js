@@ -7,6 +7,7 @@ var ActivitySchema = new Schema({
   timestamp: {type: Date, default: Date.now},
 
   promotion: {type: Schema.ObjectId, ref: 'Promotion'},
+  product: {type: Schema.ObjectId, ref: 'Product'},
 
   user: {type: Schema.ObjectId, ref: 'User'},
   business: {type: Schema.ObjectId, ref: 'Business'},
@@ -18,7 +19,7 @@ var ActivitySchema = new Schema({
   actor_mall: {type: Schema.ObjectId, ref: 'Mall'},
   actor_chain: {type: Schema.ObjectId, ref: 'ShoppingChain'},
 
-  action: {type: String, default: ""} //ex: has replied to:, or started following:
+  action: {type: String, default: ''} //ex: has replied to:, or started following:
 });
 
 module.exports = mongoose.model('Activity', ActivitySchema);

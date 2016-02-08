@@ -1,22 +1,31 @@
 'use strict';
 
+var _ = require('lodash');
 var mongoose = require('mongoose');
+var async = require('async');
 var User = require('./user.model');
-var PhoneNumber = require('../phone_number/phone_number.model');
 
+var PhoneNumber = require('../phone_number/phone_number.model');
 var passport = require('passport');
 var config = require('../../config/environment');
 var jwt = require('jsonwebtoken');
 var twilio = require('twilio')(config.twilio.accountSid, config.twilio.authToken);
 var util = require('util');
+
 var utils = require('../../components/utils').createUtils();
-
 var randomstring = require('randomstring');
+
 var logger = require('../../components/logger').createLogger();
-
 var graphTools = require('../../components/graph-tools');
-var graphModel = graphTools.createGraphModel('user');
 
+var graphModel = graphTools.createGraphModel('user');
+var activity = require('../../components/activity').createActivity();
+var Business = require('../business/business.model');
+var ShoppingChain = require('../shoppingChain/shoppingChain.model');
+var Product = require('../product/product.model');
+var Promotion = require('../promotion/promotion.model');
+var Mall = require('../mall/mall.model');
+var Activity = require('../activity/activity.model');
 
 var validationError = function (res, err) {
   return res.json(422, err);
@@ -56,8 +65,67 @@ exports.like = function (req, res) {
 exports.unlike = function (req, res) {
   var userId = req.user._id;
   graphModel.unrelate_ids(userId, 'LIKE', req.params.id);
+  like_activity(userId, req.params.id);
   return res.json(200, "unlike called for promotion " + req.params.id + " and user " + userId);
 };
+
+
+function like_activity(userId, itemId) {
+  var act = {
+    actor_user: userId,
+    action: "like"
+  };
+
+  async.parallel({
+    user: function (callback) {
+      User.findById(itemId, callback);
+    },
+    business: function (callback) {
+      Business.findById(itemId, callback);
+    },
+    chain: function (callback) {
+      ShoppingChain.findById(itemId, callback);
+    },
+    product: function (callback) {
+      Product.findById(itemId, callback);
+    },
+    promotion: function (callback) {
+      Promotion.findById(itemId, callback);
+    },
+    mall: function (callback) {
+      Mall.findById(itemId, callback);
+    }
+  }, function (err, results) {
+    for (var key in results) {
+      if (!_.isUndefined(results[key])) {
+        switch (key) {
+          case 'user':
+            act.user = itemId;
+            break;
+          case 'business':
+            act.business = itemId;
+            break;
+          case 'chain':
+            act.chain = itemId;
+            break;
+          case 'product':
+            act.product = itemId;
+            break;
+          case 'promotion':
+            act.promotion = itemId;
+            break;
+          case 'mall':
+            act.mall = itemId;
+            break;
+        }
+        activity.activity(act, function (err) {
+          if (err) logger.error(err.message)
+        });
+      }
+    }
+  });
+}
+
 
 function send_sms_verification_code(user) {
   send_sms_message(user.phone_number,
@@ -205,18 +273,38 @@ function owner_follow(phone_number) {
  * then all users (ids in contacts) should be followed by him
  * @param user
  */
-function new_user_follow(user){
+function new_user_follow(user) {
   PhoneNumber.findById(user._id, function (err, phone_number) {
-    if (err) { return logger.error(err.message); }
-    if(!phone_number) return ;
+    if (err) {
+      return logger.error(err.message);
+    }
+    if (!phone_number) return;
     //We have this number, make user follow the users who have his number
     phone_number.contacts.forEach(function (contact) {
       graphModel.follow_phone(contact.userId, contact.nick, user._id);
+      activity_follow(user._id, contact.userId)
       logger.info('create (' + contact + ')<-[Follows]-(' + phone_number.owner + ')');
     });
   });
 }
 
+function activity_follow(follower, followed){
+  Activity.create({
+    user: followed,
+    actor_user: follower,
+    action: 'followed'
+  }, function(err) {
+    if(err) { logger.error(err.message) }
+  });
+
+  Activity.create({
+    user: follower,
+    actor_user: followed,
+    action: 'following'
+  }, function(err) {
+    if(err) { logger.error(err.message) }
+  });
+}
 
 exports.login = function (req, res, next) {
   User.find({$or: [{email: {$eq: req.body.email}}, {phone_number: {$eq: req.body.phone_number}}]}, function (err, user) {
