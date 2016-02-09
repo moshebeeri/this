@@ -45,6 +45,16 @@ exports.show = function(req, res) {
   });
 };
 
+exports.mine = function(req, res) {
+  var userId = req.user._id;
+  Business.find({'creator' : userId}, function (err, businesses) {
+    if(err) { return handleError(res, err); }
+    if(!business) { return res.status(404).send('Not Found'); }
+    return res.json(businesses);
+  });
+};
+
+
 function defined(obj){
   return utils.defined(obj);
 }

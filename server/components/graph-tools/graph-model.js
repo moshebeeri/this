@@ -99,7 +99,7 @@ GraphModel.prototype.unrelate = function unrelate(from, name, to){
  *    });
  */
 GraphModel.prototype.relate_ids = function relate_id(from, name, to){
-  var query = util.format("MATCH (f { _id:'%s' }), (t { _id:'%s' }) create (f)-[:%s]->(t)",from, to, name);
+  var query = util.format("MATCH (f { _id:'%s' }), (t { _id:'%s' }) CREATE UNIQUE (f)-[:%s]->(t)",from, to, name);
   db.query(query, function(err) {
     if (err) { logger.error(err.message); }
   });

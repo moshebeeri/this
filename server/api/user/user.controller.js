@@ -55,6 +55,7 @@ exports.index = function (req, res) {
 exports.like = function (req, res) {
   var userId = req.user._id;
   graphModel.relate_ids(userId, 'LIKE', req.params.id);
+  activity.action_activity(userId, req.params.id, 'like');
   return res.json(200, "like called for object " + req.params.id + " and user " + userId);
 };
 
@@ -65,66 +66,33 @@ exports.like = function (req, res) {
 exports.unlike = function (req, res) {
   var userId = req.user._id;
   graphModel.unrelate_ids(userId, 'LIKE', req.params.id);
-  like_activity(userId, req.params.id);
   return res.json(200, "unlike called for promotion " + req.params.id + " and user " + userId);
 };
 
+exports.share = function (req, res) {
+  var userId = req.user._id;
+  logger.info("share called for object " + req.params.id + " and user " + userId);
+  activity.action_activity(userId, req.params.id, 'share');
+  return res.json(200, "share called for object " + req.params.id);
+};
 
-function like_activity(userId, itemId) {
-  var act = {
-    actor_user: userId,
-    action: "like"
-  };
+exports.follow = function (req, res) {
+  var userId = req.user._id;
+  graphModel.relate_ids(userId, 'FOLLOW', req.params.id);
+  activity_follow(user._id, req.params.id);
 
-  async.parallel({
-    user: function (callback) {
-      User.findById(itemId, callback);
-    },
-    business: function (callback) {
-      Business.findById(itemId, callback);
-    },
-    chain: function (callback) {
-      ShoppingChain.findById(itemId, callback);
-    },
-    product: function (callback) {
-      Product.findById(itemId, callback);
-    },
-    promotion: function (callback) {
-      Promotion.findById(itemId, callback);
-    },
-    mall: function (callback) {
-      Mall.findById(itemId, callback);
-    }
-  }, function (err, results) {
-    for (var key in results) {
-      if (!_.isUndefined(results[key])) {
-        switch (key) {
-          case 'user':
-            act.user = itemId;
-            break;
-          case 'business':
-            act.business = itemId;
-            break;
-          case 'chain':
-            act.chain = itemId;
-            break;
-          case 'product':
-            act.product = itemId;
-            break;
-          case 'promotion':
-            act.promotion = itemId;
-            break;
-          case 'mall':
-            act.mall = itemId;
-            break;
-        }
-        activity.activity(act, function (err) {
-          if (err) logger.error(err.message)
-        });
-      }
-    }
-  });
-}
+  return res.json(200, "like called for object " + req.params.id + " and user " + userId);
+};
+
+/***
+ *  '/unlike/:id'
+ *
+ */
+exports.unfollow = function (req, res) {
+  var userId = req.user._id;
+  graphModel.unrelate_ids(userId, 'FOLLOW', req.params.id);
+  return res.json(200, "unlike called for promotion " + req.params.id + " and user " + userId);
+};
 
 
 function send_sms_verification_code(user) {
@@ -132,6 +100,7 @@ function send_sms_verification_code(user) {
     "Thank you for using ThisCounts your sms code is " + user.sms_code
   );
 }
+
 
 function send_sms_new_password(phone_number, new_password) {
   send_sms_message(phone_number,

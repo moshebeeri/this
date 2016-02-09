@@ -51,6 +51,10 @@ function update_feeds(effected, activity) {
  * }
  */
 Activity.prototype.activity = function activity(activity, callback) {
+  activity_impl(activity, callback);
+};
+
+function activity_impl(activity, callback){
   ActivitySchema.create(activity, function (err, activity) {
     if (err) {
       callback(err, null);
@@ -90,7 +94,66 @@ Activity.prototype.activity = function activity(activity, callback) {
       });
     }
   });
+
+}
+
+Activity.prototype.action_activity = function action_activity(userId, itemId, action) {
+  var act = {
+    actor_user: userId,
+    action: action
+  };
+
+  async.parallel({
+    user: function (callback) {
+      User.findById(itemId, callback);
+    },
+    business: function (callback) {
+      Business.findById(itemId, callback);
+    },
+    chain: function (callback) {
+      ShoppingChain.findById(itemId, callback);
+    },
+    product: function (callback) {
+      Product.findById(itemId, callback);
+    },
+    promotion: function (callback) {
+      Promotion.findById(itemId, callback);
+    },
+    mall: function (callback) {
+      Mall.findById(itemId, callback);
+    }
+  }, function (err, results) {
+    for (var key in results) {
+      if (!_.isUndefined(results[key])) {
+        switch (key) {
+          case 'user':
+            act.user = itemId;
+            break;
+          case 'business':
+            act.business = itemId;
+            break;
+          case 'chain':
+            act.chain = itemId;
+            break;
+          case 'product':
+            act.product = itemId;
+            break;
+          case 'promotion':
+            act.promotion = itemId;
+            break;
+          case 'mall':
+            act.mall = itemId;
+            break;
+        }
+        activity_impl(act, function (err) {
+          if (err) logger.error(err.message)
+        });
+      }
+    }
+  });
 };
+
+
 
 function run(query, callback) {
   var db = graphModel.db();

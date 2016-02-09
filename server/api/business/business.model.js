@@ -18,7 +18,7 @@ var BusinessSchema = new Schema({
   main_phone_number : String,
   email : { type: String, index: true, unique : true, required : true, dropDups: false},
   website : String,
-  creator: {type: Schema.ObjectId, ref: 'User', required: true},
+  creator: {type: Schema.ObjectId, index: true, ref: 'User', required: true},
   info: String,
   active: Boolean,
   location : {
