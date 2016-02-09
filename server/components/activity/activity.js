@@ -5,12 +5,12 @@ var util = require('util');
 var graphTools = require('../graph-tools');
 var graphModel = graphTools.createGraphModel('feed');
 var logger = require('../logger').createLogger();
+var utils = require('../utils').createUtils();
 var mongoose = require('mongoose'),
   Schema = mongoose.Schema;
 
 var Feed = require('../../api/feed/feed.model');
 var ActivitySchema = require('../../api/activity/activity.model');
-
 
 function Activity() {
   logger.info("Activity constructed");
@@ -50,12 +50,12 @@ function update_feeds(effected, activity) {
  *   action    : action
  * }
  */
-Activity.prototype.activity = function activity(activity, callback) {
-  activity_impl(activity, callback);
+Activity.prototype.activity = function activity(act, callback) {
+  activity_impl(act, callback);
 };
 
-function activity_impl(activity, callback){
-  ActivitySchema.create(activity, function (err, activity) {
+function activity_impl(act, callback){
+  ActivitySchema.create(act, function (err, activity) {
     if (err) {
       callback(err, null);
       return;
@@ -91,6 +91,7 @@ function activity_impl(activity, callback){
           return callback(err, null);
         }
         update_feeds(effected, activity)
+        callback(null, activity)
       });
     }
   });
@@ -102,57 +103,13 @@ Activity.prototype.action_activity = function action_activity(userId, itemId, ac
     actor_user: userId,
     action: action
   };
-
-  async.parallel({
-    user: function (callback) {
-      User.findById(itemId, callback);
-    },
-    business: function (callback) {
-      Business.findById(itemId, callback);
-    },
-    chain: function (callback) {
-      ShoppingChain.findById(itemId, callback);
-    },
-    product: function (callback) {
-      Product.findById(itemId, callback);
-    },
-    promotion: function (callback) {
-      Promotion.findById(itemId, callback);
-    },
-    mall: function (callback) {
-      Mall.findById(itemId, callback);
-    }
-  }, function (err, results) {
-    for (var key in results) {
-      if (!_.isUndefined(results[key])) {
-        switch (key) {
-          case 'user':
-            act.user = itemId;
-            break;
-          case 'business':
-            act.business = itemId;
-            break;
-          case 'chain':
-            act.chain = itemId;
-            break;
-          case 'product':
-            act.product = itemId;
-            break;
-          case 'promotion':
-            act.promotion = itemId;
-            break;
-          case 'mall':
-            act.mall = itemId;
-            break;
-        }
-        activity_impl(act, function (err) {
-          if (err) logger.error(err.message)
-        });
-      }
-    }
+  utils.parallel_id(itemId, act, function(err, act){
+    if(err) {return callback(err, null)}
+    activity_impl(act, function(err){
+      if(err) {logger.error(err.message)}
+    });
   });
 };
-
 
 
 function run(query, callback) {

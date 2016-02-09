@@ -20,11 +20,6 @@ var graphTools = require('../../components/graph-tools');
 
 var graphModel = graphTools.createGraphModel('user');
 var activity = require('../../components/activity').createActivity();
-var Business = require('../business/business.model');
-var ShoppingChain = require('../shoppingChain/shoppingChain.model');
-var Product = require('../product/product.model');
-var Promotion = require('../promotion/promotion.model');
-var Mall = require('../mall/mall.model');
 var Activity = require('../activity/activity.model');
 
 var validationError = function (res, err) {
