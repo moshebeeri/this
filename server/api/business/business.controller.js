@@ -54,7 +54,6 @@ exports.mine = function(req, res) {
   });
 };
 
-
 function defined(obj){
   return utils.defined(obj);
 }

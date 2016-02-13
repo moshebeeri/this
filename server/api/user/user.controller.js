@@ -4,6 +4,13 @@ var _ = require('lodash');
 var mongoose = require('mongoose');
 var async = require('async');
 var User = require('./user.model');
+var Business = require('../business/business.model');
+var ShoppingChain = require('../shoppingChain/shoppingChain.model');
+var Product = require('../product/product.model');
+var Promotion = require('../promotion/promotion.model');
+var Mall = require('../mall/mall.model');
+var Category = require('../category/category.model');
+var CardType = require('../cardType/cardType.model');
 
 var PhoneNumber = require('../phone_number/phone_number.model');
 var passport = require('passport');
@@ -17,8 +24,8 @@ var randomstring = require('randomstring');
 
 var logger = require('../../components/logger').createLogger();
 var graphTools = require('../../components/graph-tools');
-
 var graphModel = graphTools.createGraphModel('user');
+
 var activity = require('../../components/activity').createActivity();
 var Activity = require('../activity/activity.model');
 
@@ -37,6 +44,49 @@ exports.index = function (req, res) {
   });
 };
 
+var like_generates_follow = function (userId, itemId) {
+  async.parallel({
+      user: function (callback) {
+        User.findById(itemId, callback);
+      },
+      business: function (callback) {
+        Business.findById(itemId, callback);
+      },
+      shoppingChain: function (callback) {
+        ShoppingChain.findById(itemId, callback);
+      },
+      product: function (callback) {
+        Product.findById(itemId, callback);
+      },
+      promotion: function (callback) {
+        Promotion.findById(itemId, callback);
+      },
+      mall: function (callback) {
+        Mall.findById(itemId, callback);
+      },
+      category: function (callback) {
+        Category.findById(itemId, callback);
+      },
+      cardType: function (callback) {
+        CardType.findById(itemId, callback);
+      }
+    },
+    function (err, results) {
+      // results is now equals to: {one: 1, two: 2}
+      if (results['user']         ||
+        results['business']       ||
+        results['shoppingChain']  ||
+        results['product']        ||
+        results['promotion']      ||
+        results['mall']           ||
+        results['category']       ||
+        results['cardType']       ) {
+        graphModel.relate_ids(userId, 'FOLLOW', itemId);
+        activity_follow(userId, itemId);
+      }
+    });
+};
+
 /**
  * '/like/:id'
  *
@@ -51,6 +101,7 @@ exports.like = function (req, res) {
   var userId = req.user._id;
   graphModel.relate_ids(userId, 'LIKE', req.params.id);
   activity.action_activity(userId, req.params.id, 'like');
+  like_generates_follow(userId, req.params.id);
   return res.json(200, "like called for object " + req.params.id + " and user " + userId);
 };
 
@@ -67,14 +118,22 @@ exports.unlike = function (req, res) {
 exports.share = function (req, res) {
   var userId = req.user._id;
   logger.info("share called for object " + req.params.id + " and user " + userId);
+  graphModel.relate_ids(userId, 'SHARE', req.params.id, {timestamp: Date.now()});
   activity.action_activity(userId, req.params.id, 'share');
   return res.json(200, "share called for object " + req.params.id);
+};
+
+exports.save = function (req, res) {
+  var userId = req.user._id;
+  graphModel.relate_ids(userId, 'SAVE', req.params.id);
+  //activity.action_activity(userId, req.params.id, 'saved');
+  return res.json(200, "like called for object " + req.params.id + " and user " + userId);
 };
 
 exports.follow = function (req, res) {
   var userId = req.user._id;
   graphModel.relate_ids(userId, 'FOLLOW', req.params.id);
-  activity_follow(user._id, req.params.id);
+  activity_follow(userId, req.params.id);
 
   return res.json(200, "like called for object " + req.params.id + " and user " + userId);
 };
@@ -252,21 +311,25 @@ function new_user_follow(user) {
   });
 }
 
-function activity_follow(follower, followed){
+function activity_follow(follower, followed) {
   Activity.create({
     user: followed,
     actor_user: follower,
     action: 'followed'
-  }, function(err) {
-    if(err) { logger.error(err.message) }
+  }, function (err) {
+    if (err) {
+      logger.error(err.message)
+    }
   });
 
   Activity.create({
     user: follower,
     actor_user: followed,
     action: 'following'
-  }, function(err) {
-    if(err) { logger.error(err.message) }
+  }, function (err) {
+    if (err) {
+      logger.error(err.message)
+    }
   });
 }
 

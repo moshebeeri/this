@@ -6,15 +6,12 @@ var db = require('seraph')({  server: "http://localhost:7474",
                               pass: "saywhat" });
 
 var seraph_model = require('seraph-model');
-//var PromotionGraph = model(db, 'promotion');
 var logger = require('../logger').createLogger();
 var util = require('util');
 
 
 function GraphModel(class_name) {
-  //this.class_name = class_name;
   this.model = seraph_model(db, class_name);
-  //this.connect();
 }
 
 GraphModel.prototype.connect = function connect(){
@@ -70,6 +67,7 @@ GraphModel.prototype.relate = function relate(from, name, to, properties, callba
   return db.relate(from, name, to, properties, callback);
 };
 
+
 GraphModel.prototype.unrelate = function unrelate(from, name, to){
   var query = " MATCH (f)-[r:{name}]->(t) \
                 WHERE id(f)={from} and id(t)={to} \
@@ -79,10 +77,52 @@ GraphModel.prototype.unrelate = function unrelate(from, name, to){
   });
 };
 
+
+//see http://stackoverflow.com/questions/24097031/cypher-returning-boolean-after-checking-whether-relationship-exist-between-two-n
+GraphModel.prototype.is_related_ids = function relate(from, name, to, callback){
+  var query = util.format("MATCH (me{_id:'%s'})-[f:%s]->(follower{_id:'%s'}) return sign(count(f)) as exists", from, name, to);
+  db.query(query, function(err, result) {
+    if (err) { return callback(err) }
+    callback(null, result[0].exists != 0)
+  });
+};
+
+
+//"MATCH (me{_id:'%s'})-[f:%s]->(follower{_id:'%s'}) return sign(count(f))",
+GraphModel.prototype.sample_count_ids = function sample_count_ids(from, name, limit, callback){
+  var query = util.format("MATCH (me{_id:'%s'})-[f:%s]->(items) with distinct(items) " +
+    "limit %d return collect(items) as items, count(items) as count",
+    from, name, limit);
+  db.query(query, function(err, result) {
+    if (err) { return callback(err) }
+    callback(null, result)
+  });
+};
+
+GraphModel.prototype.count_out_rel_id = function count_out_rel(from, name, callback) {
+  var query = util.format("MATCH ({_id:'%s'})-[f:%s]->() return count(f) as count",
+    from, name);
+  db.query(query, function(err, result) {
+    if (err) { return callback(err) }
+    callback(null, result[0].count)
+  });
+};
+
+GraphModel.prototype.count_in_rel_id = function count_in_rel(name, to, callback) {
+  var query = util.format("MATCH ()-[f:%s]->({_id:'%s'}) return count(f) as count",
+    name, to);
+  db.query(query, function(err, result) {
+    if (err) { return callback(err) }
+    callback(null, result[0].count)
+  });
+};
+
+
 /***
  * @param from
  * @param to
  * @param name
+ * @param params
  *
  *   see http://stephenmuss.com/using-seraph-as-a-neo4j-client-in-nodejs/
  *   var query = [
@@ -98,8 +138,10 @@ GraphModel.prototype.unrelate = function unrelate(from, name, to){
  *      console.log(results[0].john, results[0].sarah, results[0].alan);
  *    });
  */
-GraphModel.prototype.relate_ids = function relate_id(from, name, to){
-  var query = util.format("MATCH (f { _id:'%s' }), (t { _id:'%s' }) CREATE UNIQUE (f)-[:%s]->(t)",from, to, name);
+GraphModel.prototype.relate_ids = function relate_id(from, name, to, params){
+  if(_.isUndefined(params))
+    params = {};
+  var query = util.format("MATCH (f { _id:'%s' }), (t { _id:'%s' }) CREATE UNIQUE (f)-[:%s %s]->(t)",from, to, name, JSON.stringify(params));
   db.query(query, function(err) {
     if (err) { logger.error(err.message); }
   });
@@ -116,11 +158,30 @@ GraphModel.prototype.unrelate_ids = function unrelate(from, name, to){
 
 GraphModel.prototype.follow_phone = function follow_phone(number, nick, userId){
   var query = util.format("MATCH (phone:user { phone:'%s' }), (u:user { _id:'%s' }) CREATE UNIQUE (phone)<-[r:FOLLOW {nick : '%s'}]-(u)", number,userId, nick);
-  db.query(query, {number: number, nick: nick, userId: userId}, function(err) {
+  db.query(query, function(err) {
     if (err) { logger.error(err.message); }
   });
 };
 
+GraphModel.prototype.promotion_instance_id = function promotion_instance(user_id, promotion, callback){
+  var query = util.format("MATCH (promotion { _id:'{%s}' })-[r:INSTANCE_OF]->(ins:instance) where r.by='%s' return inst", promotion._id, user_id);
+  db.query(query, function(err, instance) {
+    if (err) { callback(err, null) }
+    else callback(null, instance)
+  });
+};
+
+GraphModel.prototype.related_type_id = function related_type_id(start, name, ret_type, by_user_id, limit, callback){
+  var query = util.format("MATCH (s { _id:'{%s}' })-[r:%s]->(ret:%s) where r.by='%s' return ret limit %d", start, name, ret_type, by_user_id, limit);
+  db.query(query, function(err, related) {
+    if (err) { callback(err, null) }
+    else callback(null, related)
+  });
+};
+
+GraphModel.prototype.query = function query(query, callback){
+  db.query(query, callback);
+};
 
 module.exports = GraphModel;
 

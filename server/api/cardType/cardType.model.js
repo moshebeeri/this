@@ -7,7 +7,6 @@ var CardTypeSchema = new Schema({
   name: String,
   gid: { type: Number, index: true, unique : true },
   info: String,
-  active: Boolean,
   issuer: String,
   issuer_id: String,
   type : {

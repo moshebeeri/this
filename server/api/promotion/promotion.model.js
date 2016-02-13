@@ -11,8 +11,10 @@ function percent_range_validator(v) {
 }
 
 var PromotionSchema = new Schema({
+  social_state : {},
   name: {type: String, required: true},
   gid: { type: Number, index: true, unique : true },
+  card_type: {type: Schema.ObjectId, ref: 'CardType'},
   creator: {type: Schema.ObjectId, ref: 'User', required: true},
   created: {type: Date, default: Date.now},
   pictures : [],
@@ -30,6 +32,7 @@ var PromotionSchema = new Schema({
   business: {type: Schema.ObjectId, ref: 'Business'},
   realize_code: String,
   realize_time: Date,
+  realize_gid: Number,
   type: {
     type: String,
     required: true,

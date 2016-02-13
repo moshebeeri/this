@@ -4,6 +4,7 @@ var mongoose = require('mongoose'),
     Schema = mongoose.Schema;
 
 var BusinessSchema = new Schema({
+  social_state : {},
   name: { type: String, index: true, unique : true, required : true, dropDups: false},
   gid: { type: Number, index: true, unique : true },
   tax_id: { type: String, index: true, required : true} ,
@@ -19,6 +20,7 @@ var BusinessSchema = new Schema({
   email : { type: String, index: true, unique : true, required : true, dropDups: false},
   website : String,
   creator: {type: Schema.ObjectId, index: true, ref: 'User', required: true},
+  created: {type: Date, default: Date.now},
   info: String,
   active: Boolean,
   location : {

@@ -7,6 +7,7 @@ var mongoose = require('mongoose'),
 //var Location = require('../location/location.model')
 
 var MallSchema = new Schema({
+  social_state : {},
   name: String,
   gid: { type: Number, index: true, unique : true },
   pictures: [],

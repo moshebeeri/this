@@ -8,7 +8,7 @@ var CardSchema = new Schema({
   gid: { type: Number, index: true, unique : true },
   card_id: String,
   password: String,
-  type : String,
+  card_type: {type: Schema.ObjectId, ref: 'CardType'},
   type_id: String,
   holder: String,
   info: String,

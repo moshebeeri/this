@@ -1,5 +1,6 @@
 'use strict';
 
+var _ = require('lodash');
 var logger = require('../logger').createLogger();
 var async = require('async');
 

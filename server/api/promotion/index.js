@@ -14,7 +14,7 @@ router.patch('/:id', auth.isAuthenticated(), controller.update);
 router.delete('/:id', auth.isAuthenticated(), controller.destroy);
 router.get('/info/server/time', controller.server_time);
 router.get('/realize/:id', auth.isAuthenticated(), controller.realize);
-router.get('/use/:id', auth.isAuthenticated(), controller.use);
+router.get('/use/:id/:realize_code/:sale_point_code', auth.isAuthenticated(), controller.use);
 
 router.get('/init/data', /*auth.isAuthenticated(),*/ controller.initialize);
 
