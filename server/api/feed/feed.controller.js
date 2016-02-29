@@ -31,8 +31,9 @@ exports.index = function (req, res) {
 //http://stackoverflow.com/questions/19222520/populate-nested-array-in-mongoose
 //  Feed.find().populate({path: 'activity', select: '-user'})
   Feed.find().
-    populate({path: 'user'}).
-    populate({path: 'activity'})
+    populate({path: 'user',
+              select: '-salt -hashedPassword -gid -role -__v -email -phone_number -sms_verified -sms_code -provider'})
+    .populate({path: 'activity'})
     .exec(function (err, feeds) {
       if (err) {
         return handleError(res, err);
@@ -49,7 +50,7 @@ exports.index = function (req, res) {
       function populate_user(feeds, callback) {
         Feed.populate(feeds, {
           path: 'activity.user',
-          select: '-salt -hashedPassword -gid -role -__v -email -phone_number',
+          select: '-salt -hashedPassword -gid -role -__v -email -phone_number -sms_verified -sms_code -provider',
           model: 'User'
         }, callback);
       }
@@ -69,7 +70,7 @@ exports.index = function (req, res) {
       function populate_actor_user(feeds, callback) {
         Feed.populate(feeds, {
           path: 'activity.actor_user',
-          select: '-salt -hashedPassword -gid -role -__v -email -phone_number',
+          select: '-salt -hashedPassword -gid -role -__v -email -phone_number -sms_verified -sms_code -provider',
           model: 'User'
         }, callback);
       }
@@ -242,61 +243,61 @@ function update_state(feed, callback) {
   var user = feed.user;
   async.parallel({
       promotion: function (callback) {
-        if (!_.isUndefined(activity.promotion))
+        if (utils.defined(activity.promotion))
           promotion_state(user._id, activity.promotion, callback);
         else
           callback(null, null);
       },
       product: function (callback) {
-        if (!_.isUndefined(activity.product))
+        if (utils.defined(activity.product))
           product_state(user._id, activity.product, callback);
         else
           callback(null, null);
       },
       user: function (callback) {
-        if (!_.isUndefined(activity.user))
+        if (utils.defined(activity.user))
           user_state(user._id, activity.user, callback);
         else
           callback(null, null);
       },
       business: function (callback) {
-        if (!_.isUndefined(activity.business))
+        if (utils.defined(activity.business))
           business_state(user._id, activity.business, callback);
         else
           callback(null, null);
       },
       mall: function (callback) {
-        if (!_.isUndefined(activity.mall))
+        if (utils.defined(activity.mall))
           mall_state(user._id, activity.mall, callback);
         else
           callback(null, null);
       },
       chain: function (callback) {
-        if (!_.isUndefined(activity.chain))
+        if (utils.defined(activity.chain))
           chain_state(user._id, activity.chain, callback);
         else
           callback(null, null);
       },
       actor_user: function (callback) {
-        if (!_.isUndefined(activity.actor_user))
+        if (utils.defined(activity.actor_user))
           user_state(user._id, activity.actor_user, callback);
         else
           callback(null, null);
       },
       actor_business: function (callback) {
-        if (!_.isUndefined(activity.actor_business))
+        if (utils.defined(activity.actor_business))
           business_state(user._id, activity.actor_business, callback);
         else
           callback(null, null);
       },
       actor_mall: function (callback) {
-        if (!_.isUndefined(activity.actor_mall))
+        if (utils.defined(activity.actor_mall))
           mall_state(user._id, activity.actor_mall, callback);
         else
           callback(null, null);
       },
       actor_chain: function (callback) {
-        if (!_.isUndefined(activity.actor_chain))
+        if (utils.defined(activity.actor_chain))
           chain_state(user._id, activity.actor_chain, callback);
         else
           callback(null, null);
@@ -394,7 +395,7 @@ function fetch_feed(query_builder, res) {
       function populate_user(feeds, callback) {
         Feed.populate(feeds, {
           path: 'activity.user',
-          select: '-salt -hashedPassword -gid -role -__v -email -phone_number',
+          select: '-salt -hashedPassword -gid -role -__v -email -phone_number -sms_verified -sms_code -provider',
           model: 'User'
         }, callback);
       }
@@ -414,7 +415,7 @@ function fetch_feed(query_builder, res) {
       function populate_actor_user(feeds, callback) {
         Feed.populate(feeds, {
           path: 'activity.actor_user',
-          select: '-salt -hashedPassword -gid -role -__v -email -phone_number',
+          select: '-salt -hashedPassword -gid -role -__v -email -phone_number -sms_verified -sms_code -provider',
           model: 'User'
         }, callback);
       }

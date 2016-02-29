@@ -22,7 +22,7 @@ exports.show = function(req, res) {
 
 exports.element_reviews = function(req, res) {
   Review.find({'element_id':req.params.id})
-    .populate({path: 'creator', select: '-salt -hashedPassword -gid -role -__v -email -phone_number'})
+    .populate({path: 'creator', select: '-salt -hashedPassword -gid -role -__v -email -phone_number -sms_verified -sms_code -provider'})
     .populate({path: 'product'})
     .populate({path: 'promotion'})
     .populate({path: 'business'})
