@@ -22,6 +22,14 @@ exports.show = function(req, res) {
   });
 };
 
+exports.feed = function(req, res) {
+  Category.findById(req.params.id, function (err, category) {
+    if(err) { return handleError(res, err); }
+    if(!category) { return res.send(404); }
+    return res.json(category);
+  });
+};
+
 // Creates a new category in the DB.
 exports.create = function(req, res) {
   Category.create(req.body, function(err, category) {

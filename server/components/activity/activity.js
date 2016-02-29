@@ -90,7 +90,7 @@ function activity_impl(act, callback){
         if (err) {
           return callback(err, null);
         }
-        update_feeds(effected, activity)
+        update_feeds(effected, activity);
         callback(null, activity)
       });
     }

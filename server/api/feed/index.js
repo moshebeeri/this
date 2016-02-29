@@ -14,7 +14,7 @@ router.patch('/:id', controller.update);
 router.delete('/:id', controller.destroy);
 
 
-router.get('/:last_id/:scroll', auth.isAuthenticated(), controller.feed);
+router.get('/:_id/:scroll', auth.isAuthenticated(), controller.feed);
 
 //users = db.users.find({'_id'> last_id}). limit(10);
 //.hasRole('admin')
