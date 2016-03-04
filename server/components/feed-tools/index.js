@@ -1,1 +1,1 @@
-module.exports = require('feed');
+module.exports = require('./feed');

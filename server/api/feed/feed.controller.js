@@ -7,6 +7,7 @@ var utils = require('../../components/utils').createUtils();
 var logger = require('../../components/logger').createLogger();
 var graphTools = require('../../components/graph-tools');
 var graphModel = graphTools.createGraphModel('user');
+var feedTools = require('../../components/feed-tools');
 
 //var promotionGraphModel = graphTools.createGraphModel('promotion');
 //var instanceGraphModel = graphTools.createGraphModel('instance');
@@ -16,7 +17,11 @@ var Feed = require('./feed.model');
 
 // Get list of feeds
 // See http://mongoosejs.com/docs/populate.html
-exports.index = function (req, res) {
+exports.index = function (req, res){
+  return feedTools.fetch_feed(Feed.find(), Feed, res );
+};
+
+function bkp(){
   //Feed.find(function (err, feeds) {
   //  if(err) { return handleError(res, err); }
   //  return res.status(200).json(feeds);
@@ -376,9 +381,10 @@ function fetch_feed(query_builder, res) {
   //});
 //http://stackoverflow.com/questions/19222520/populate-nested-array-in-mongoose
 //  Feed.find().populate({path: 'activity', select: '-user'})
-  Feed.find().
-  populate({path: 'user'}).
-    populate({path: 'activity'})
+  query_builder
+    .populate({path: 'user',
+      select: '-salt -hashedPassword -gid -role -__v -email -phone_number -sms_verified -sms_code -provider'})
+    .populate({path: 'activity'})
     .exec(function (err, feeds) {
       if (err) {
         return handleError(res, err);
@@ -457,26 +463,22 @@ function fetch_feed(query_builder, res) {
 
 // feed
 exports.feed = function (req, res) {
-  var userId = req.params.id;
+  var userId = req.user._id;
   var _id = req.params._id;
   var scroll = req.params.scroll;
 
-  var query_builder = Feed.find({user: userId});
+  if (req.params.scroll != 'up' && req.params.scroll != 'down')
+    return res.status(400).send('scroll value may be only up or down');
+
+  var query_builder = Feed.find({user: userId}).sort({activity: -1}).limit(25);
   if (_id == 'start') {
-    query_builder = Feed.find({});
-    query_builder.sort({activity: -1}).limit(25);
     return fetch_feed(query_builder, res);
   }
-  if (req.params.scroll != 'up' && req.params.scroll != 'down') {
-    return res.status(400).send('scroll value may be only up or down');
-  }
-
   if (req.params.scroll === 'up')
-    query_builder = query_builder.gt(_id);
+    query_builder = query_builder.where('_id').gt(_id);
   else if (req.params.scroll === 'down')
-    query_builder = query_builder.lt(_id);
+    query_builder = query_builder.where('_id').lt(_id);
 
-  query_builder.sort({activity: -1}).limit(25);
   return fetch_feed(query_builder, res);
 
   //.exec(function (err, feed) {
@@ -489,6 +491,8 @@ exports.feed = function (req, res) {
   //  return res.json(feed);
   //});
 };
+//56bf6e777778cb8a77bad8b6
+//56b7af083b014fc937566f32
 
 //exec(callback);
 //

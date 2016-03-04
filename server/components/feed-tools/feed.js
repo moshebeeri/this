@@ -9,12 +9,12 @@ var logger = require('../logger').createLogger();
 var graphTools = require('../graph-tools');
 var graphModel = graphTools.createGraphModel('user');
 
-exports.generate = function(Model) {
-  this.Model = Model;
-  return "generated";
+
+exports.generate = function(msg) {
+  return "generated " + msg;
 };
 
-exports.fetch_feed = function(query_builder, res) {
+exports.fetch_feed = function(query_builder, Model, res) {
   //Feed.find(function (err, feeds) {
   //  if(err) { return handleError(res, err); }
   //  return res.status(200).json(feeds);
@@ -28,9 +28,9 @@ exports.fetch_feed = function(query_builder, res) {
   //});
 //http://stackoverflow.com/questions/19222520/populate-nested-array-in-mongoose
 //  Feed.find().populate({path: 'activity', select: '-user'})
-  query_builder.
-  populate({path: 'user',
-    select: '-salt -hashedPassword -gid -role -__v -email -phone_number -sms_verified -sms_code -provider'})
+  query_builder
+    .populate({path: 'user',
+                select: '-salt -hashedPassword -gid -role -__v -email -phone_number -sms_verified -sms_code -provider'})
     .populate({path: 'activity'})
     .exec(function (err, feeds) {
       if (err) {
@@ -38,15 +38,15 @@ exports.fetch_feed = function(query_builder, res) {
       }
 
       function populate_promotion(feeds, callback) {
-        this.Model.populate(feeds, {path: 'activity.promotion', model: 'Promotion'}, callback);
+        Model.populate(feeds, {path: 'activity.promotion', model: 'Promotion'}, callback);
       }
 
       function populate_product(feeds, callback) {
-        this.Model.populate(feeds, {path: 'activity.product', model: 'Product'}, callback);
+        Model.populate(feeds, {path: 'activity.product', model: 'Product'}, callback);
       }
 
       function populate_user(feeds, callback) {
-        this.Model.populate(feeds, {
+        Model.populate(feeds, {
           path: 'activity.user',
           select: '-salt -hashedPassword -gid -role -__v -email -phone_number -sms_verified -sms_code -provider',
           model: 'User'
@@ -54,19 +54,19 @@ exports.fetch_feed = function(query_builder, res) {
       }
 
       function populate_business(feeds, callback) {
-        this.Model.populate(feeds, {path: 'activity.business', model: 'Business'}, callback);
+        Model.populate(feeds, {path: 'activity.business', model: 'Business'}, callback);
       }
 
       function populate_mall(feeds, callback) {
-        this.Model.populate(feeds, {path: 'activity.mall', model: 'Mall'}, callback);
+        Model.populate(feeds, {path: 'activity.mall', model: 'Mall'}, callback);
       }
 
       function populate_chain(feeds, callback) {
-        this.Model.populate(feeds, {path: 'activity.chain', model: 'ShoppingChain'}, callback);
+        Model.populate(feeds, {path: 'activity.chain', model: 'ShoppingChain'}, callback);
       }
 
       function populate_actor_user(feeds, callback) {
-        this.Model.populate(feeds, {
+        Model.populate(feeds, {
           path: 'activity.actor_user',
           select: '-salt -hashedPassword -gid -role -__v -email -phone_number -sms_verified -sms_code -provider',
           model: 'User'
@@ -74,15 +74,15 @@ exports.fetch_feed = function(query_builder, res) {
       }
 
       function populate_actor_business(feeds, callback) {
-        this.Model.populate(feeds, {path: 'activity.actor_business', model: 'Business'}, callback);
+        Model.populate(feeds, {path: 'activity.actor_business', model: 'Business'}, callback);
       }
 
       function populate_actor_mall(feeds, callback) {
-        this.Model.populate(feeds, {path: 'activity.actor_mall', model: 'Mall'}, callback);
+        Model.populate(feeds, {path: 'activity.actor_mall', model: 'Mall'}, callback);
       }
 
       function populate_actor_chain(feeds, callback) {
-        this.Model.populate(feeds, {path: 'activity.actor_chain', model: 'ShoppingChain'}, callback);
+        Model.populate(feeds, {path: 'activity.actor_chain', model: 'ShoppingChain'}, callback);
       }
 
       async.waterfall([
