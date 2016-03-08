@@ -8,7 +8,7 @@ var router = express.Router();
 
 router.get('/', controller.index);
 router.get('/:id', controller.show);
-router.get('/:_id/:scroll', auth.isAuthenticated(), controller.feed);
+router.post('/cid/:_id/:scroll', auth.isAuthenticated(), controller.feed);
 
 //production, remove remark!!!
 router.post('/', /*auth.hasRole('admin'),*/ controller.create);

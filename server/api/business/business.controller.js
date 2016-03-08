@@ -85,7 +85,7 @@ exports.create = function(req, res) {
         name: business.name,
         creator: business.creator,
         lat: body_business.location.lat,
-        lng: body_business.location.lng
+        lon: body_business.location.lng
       }, function (err, business ) {
         if (err) {  return handleError(res, err); }
         graphModel.db().relate(creator.gid, 'OWNS', business.gid, {}, function(err, relationship) {

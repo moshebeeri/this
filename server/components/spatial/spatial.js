@@ -7,48 +7,45 @@ var db = require('seraph')({
 
 var logger = require('../logger').createLogger();
 
-function Spatial() {
-  this.layer = find_layer('world');
+function Spatial(create) {
+  if(create)
+    find_layer('world');
 }
 
 //MATCH (n) OPTIONAL MATCH (n)-[r]-() DELETE n,r
 function find_layer(name) {
-  layer = null;
   //if layer exist return
   var operation = db.operation('ext/SpatialPlugin/graphdb/getLayer', 'POST', {
     "layer": name
   });
   db.call(operation, function (err, result, response) {
     if (err) {
-      this.layer = create_layer(name);
+      console.log('name');
+      create_layer(name);
 
     } else {
       logger.info("query layer result: ");
       logger.info(JSON.stringify(result, null, 4));
-      layer = result;
     }
   });
-  return layer;
 }
 
 function create_layer(name) {
-  layer = null;
   //not exist then create the layer
   operation = db.operation('ext/SpatialPlugin/graphdb/addSimplePointLayer', 'POST', {
     "layer": name,
     "lat" : "lat",
-    "lng" : "lng"
+    "lon" : "lon"
   });
   db.call(operation, function (err, result, response) {
     if(err) logger.info("failed to create layer: " + err);
     if (!err) {
       console.log('spatial layer created' + JSON.stringify(result));
       create_index(name);
-      layer = result;
+      //layer === result;
 
     }
   });
-  return layer;
 }
 
 function create_index(name) {
@@ -60,7 +57,7 @@ function create_index(name) {
       "provider":"spatial",
       "geometry_type":"point",
       "lat":"lat",
-      "lng":"lng"
+      "lon":"lon"
     }
   });
   db.call(operation, function (err, result, response) {
@@ -105,7 +102,7 @@ Spatial.prototype.add = function add(gid, callback) {
     "node": "http://localhost:7474/db/data/node/" + gid
   });
   db.call(operation, function (err, result, response) {
-    if (!err) console.log('gid ' + gid + ' added to layer')
+    if (!err) console.log('gid ' + gid + ' added to layer');
     callback(err, result);
   });
 };

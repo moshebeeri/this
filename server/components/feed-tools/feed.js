@@ -1,6 +1,5 @@
 "use strict";
 
-
 var _ = require('lodash');
 var async = require('async');
 var utils = require('../utils').createUtils();
@@ -105,6 +104,39 @@ exports.fetch_feed = function(query_builder, Model, res) {
         });
       });
     });
+};
+
+exports.fetch_social_state = function(query_builder, userId, type, res) {
+  function update_state_by_type(object, callback) {
+    switch(type){
+      case 'promotion':
+        promotion_state(userId, object, callback);
+        break;
+      case 'product':
+        product_state(userId, object, callback);
+        break;
+      case 'user':
+        user_state(userId, object, callback);
+        break;
+      case 'business':
+        business_state(userId, object, callback);
+        break;
+      case 'mall':
+        mall_state(userId, object, callback);
+        break;
+      case 'chain':
+        chain_state(userId, object, callback);
+        break;
+    }
+  }
+  query_builder
+  .exec(function (err, types) {
+    if (err) return res.status(500).json(err);
+    async.each(types, update_state_by_type, function(err){
+      if(err) callback(err, null);
+      else callback(null, types)
+    });
+  })
 };
 
 //see http://www.markhneedham.com/blog/2013/02/24/neo4jcypher-combining-count-and-collect-in-one-query/
@@ -230,7 +262,7 @@ function chain_state(user_id, chain) {
 
 function update_states(feeds, callback) {
   async.each(feeds, update_state, function(err){
-    if(err) callback(err, null)
+    if(err) callback(err, null);
     else callback(null, feeds)
   });
 

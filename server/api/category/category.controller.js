@@ -4,6 +4,8 @@ var _ = require('lodash');
 var Category = require('./category.model');
 var graphTools = require('../../components/graph-tools');
 var graphModel = graphTools.createGraphModel('category');
+var feedTools = require('../../components/feed-tools');
+var Promotion = require('../promotion/promotion.model');
 
 // Get list of categorys
 exports.index = function(req, res) {
@@ -23,11 +25,29 @@ exports.show = function(req, res) {
 };
 
 exports.feed = function(req, res) {
-  Category.findById(req.params.id, function (err, category) {
-    if(err) { return handleError(res, err); }
-    if(!category) { return res.send(404); }
-    return res.json(category);
-  });
+  var _id = req.params._id;
+  var category = req.body;
+
+  var query_builder = Promotion.find();
+  switch (category.name) {
+    case  'HOT'     :
+    case  'LIKE'    :
+    case  'NEAR'    :
+    case  'MALL'    :
+    case  'FASHION' :
+      query_builder = Promotion.find({category: 'FASHION'});
+      break;
+    case  'GIFT'    :
+      query_builder = Promotion.find({category: 'GIFT'});
+      break;
+  }
+  query_builder = query_builder.sort({_id: -1}).limit(25);
+  if (req.params.scroll === 'up')
+    query_builder = query_builder.where('_id').gt(_id);
+  else if (req.params.scroll === 'down')
+    query_builder = query_builder.where('_id').lt(_id);
+
+  return feedTools.fetch_social_state(query_builder, req.user._id, 'promotion', res)
 };
 
 // Creates a new category in the DB.

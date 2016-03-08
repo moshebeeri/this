@@ -13,7 +13,8 @@ function percent_range_validator(v) {
 var PromotionSchema = new Schema({
   social_state : {},
   name: {type: String, required: true},
-  gid: { type: Number, index: true, unique : true },
+  //gid: { type: Number, index: true, unique : true },
+  gid: Number,
   card_type: {type: Schema.ObjectId, ref: 'CardType'},
   creator: {type: Schema.ObjectId, ref: 'User', required: true},
   created: {type: Date, default: Date.now},
@@ -22,10 +23,9 @@ var PromotionSchema = new Schema({
   active: Boolean,
   report: {type: Boolean, default: false},
   system_report: {type: Boolean, default: false},
-  //report location
   location : {
-    lat : String,
-    lng : String
+    lat : Number,
+    lng : Number
   },
   mall : {type: Schema.ObjectId, ref: 'Mall', required: false},
   shopping_chain: {type: Schema.ObjectId, ref: 'ShoppingChain', required: false},
@@ -33,6 +33,18 @@ var PromotionSchema = new Schema({
   realize_code: String,
   realize_time: Date,
   realize_gid: Number,
+  category: {
+    type: [{ type: String,  enum: [
+      'HOT'     ,
+      'LIKE'    ,
+      'NEAR'    ,
+      'MALL'    ,
+      'FASHION' ,
+      'GIFT'
+    ]}],
+    required: false
+    //TODO: consider default: 'LIKE'
+  },
   type: {
     type: String,
     required: true,
@@ -168,13 +180,3 @@ var PromotionSchema = new Schema({
 //
 
 module.exports = mongoose.model('Promotion', PromotionSchema);
-
-
-//enum: [ '',
-//  '',
-//  '',
-//  '',
-//  '',
-//  '',
-//  '',
-//  '']

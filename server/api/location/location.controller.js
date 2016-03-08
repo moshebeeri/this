@@ -7,21 +7,6 @@ var spatial = require('../../components/spatial').createSpatial();
 var graphTools = require('../../components/graph-tools');
 var graphModel = graphTools.createGraphModel('location');
 
-/*
-exports.test = function(req, res) {
-  logger.info('test');
-  //spatial.layer();
-  req.body.locations.forEach(function(location){
-    graphModel.save(location, function(err, location){
-      spatial.add2index(location.id, function(err, result){
-        if(err) logger.error(err.message);
-        else logger.info('object added to layer ' + result)
-      });
-    });
-  });
-  return res.json(201, req.body.locations);
-};
-*/
 
 // Get list of locations
 exports.index = function(req, res) {

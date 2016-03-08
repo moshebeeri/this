@@ -1,7 +1,11 @@
 'use strict';
 
 var Spatial = require('./spatial');
-
-exports.createSpatial = function createSpatial(params) {
-  return new Spatial(params);
+var create = true;
+exports.createSpatial = function createSpatial() {
+  var ret =  new Spatial(create);
+  create = false;
+  return ret;
 };
+
+//module.exports = require('./spatial');

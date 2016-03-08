@@ -8,6 +8,7 @@ var db = require('seraph')({  server: "http://localhost:7474",
 var seraph_model = require('seraph-model');
 var logger = require('../logger').createLogger();
 var util = require('util');
+var utils = require('../utils').createUtils();
 
 
 function GraphModel(class_name) {
@@ -139,9 +140,10 @@ GraphModel.prototype.count_in_rel_id = function count_in_rel(name, to, callback)
  *    });
  */
 GraphModel.prototype.relate_ids = function relate_id(from, name, to, params){
-  if(_.isUndefined(params))
+  if(!utils.defined(params))
     params = {};
   var query = util.format("MATCH (f { _id:'%s' }), (t { _id:'%s' }) CREATE UNIQUE (f)-[:%s %s]->(t)",from, to, name, JSON.stringify(params));
+  console.log(query);
   db.query(query, function(err) {
     if (err) { logger.error(err.message); }
   });

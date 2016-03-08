@@ -24,8 +24,8 @@ var BusinessSchema = new Schema({
   info: String,
   active: Boolean,
   location : {
-    lat : String,
-    lng : String
+    lat : Number,
+    lng : Number
   },
   id : String,
   type:{
