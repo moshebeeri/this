@@ -11,13 +11,13 @@ var MallSchema = new Schema({
   name: String,
   gid: { type: Number, index: true, unique : true },
   pictures: [],
-  info: String,
-  active: Boolean,
   location : {
+    lng : Number,
     lat : Number,
-    lng : Number
+    //for internal use
+    type: {type: String},
+    coordinates: []
   },
-
   address : {type: String, required : true},
   address2 : String,
   city : {type: String, required : true},

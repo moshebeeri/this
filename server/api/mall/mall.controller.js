@@ -4,6 +4,9 @@ var _ = require('lodash');
 var Mall = require('./mall.model');
 var graphTools = require('../../components/graph-tools');
 var graphModel = graphTools.createGraphModel('mall');
+var spatial = require('../../components/spatial').createSpatial();
+var location = require('../../components/location').createLocation();
+var logger = require('../../components/logger').createLogger();
 
 // Get list of malls
 exports.index = function(req, res) {
@@ -24,17 +27,27 @@ exports.show = function(req, res) {
 
 // Creates a new mall in the DB.
 exports.create = function(req, res) {
-  var bmall = req.body;
-  location.address_location( bmall, function(err, data) {
-    if (err) return res.status(401).send(err.message);
-    bmall.location = {
-      lat: data.lat,
-      lng: data.lng
-    };
-    Mall.create(bmall, function(err, mall) {
+  var mall = req.body;
+  location.address_location( mall, function(err, data) {
+    if (err) {
+      if (err.code >= 400) return res.status(err.code).send(err.message);
+      else if (err.code == 202) return res.status(202).json(data)
+    }
+    mall.location = spatial.geo_to_location(data);
+    Mall.create(mall, function(err, mall) {
       if(err) { return handleError(res, err); }
-      graphModel.reflect(mall, function (err) {
+      graphModel.reflect(mall, {
+        _id: mall._id,
+        name: mall.name,
+        lat: mall.location.lat,
+        lon: mall.location.lng
+      }, function (err) {
         if (err) {  return handleError(res, err); }
+        spatial.add2index(mall.gid, function(err, result){
+          if(err) logger.error(err.message);
+          else logger.info('object added to layer ' + result)
+        });
+
       });
       return res.status(201).json(mall);
     });

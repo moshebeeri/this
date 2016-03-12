@@ -28,7 +28,9 @@ function format_address(addressed) {
 
 
 Location.prototype.address_location = function address_location(addressed, callback) {
-  if(defined(addressed.location) && defined(addressed.location.lat) && defined(addressed.location.lng))
+  if(defined(addressed.lat) && defined(addressed.lng))
+    return callback(null, {lat: addressed.lat, lng: addressed.lng});
+  else if(defined(addressed.location) && defined(addressed.location.lat) && defined(addressed.location.lng))
     return callback(null, {lat: addressed.location.lat, lng: addressed.location.lng});
 
   var address = format_address(addressed);

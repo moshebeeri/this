@@ -33,7 +33,10 @@ exports.feed = function(req, res) {
     case  'HOT'     :
     case  'LIKE'    :
     case  'NEAR'    :
+      query_builder = Promotion.find({ location: { $near: { type: 'Point', coordinates:[category.location.lng, category.location.lat] }}});
+      break;
     case  'MALL'    :
+      graphModel.query(query, callback)
     case  'FASHION' :
       query_builder = Promotion.find({category: 'FASHION'});
       break;

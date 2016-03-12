@@ -6,6 +6,7 @@ var db = require('seraph')({
 });
 
 var logger = require('../logger').createLogger();
+var utils = require('../utils').createUtils();
 
 function Spatial(create) {
   if(create)
@@ -134,6 +135,45 @@ Spatial.prototype.cypher = function cypher(cypher, cb) {
     //]);
   });
 };
+
+Spatial.prototype.location_to_point = function location_to_point(location_obj) {
+  if(
+    utils.defined(location_obj.lng)  &&
+    utils.defined(location_obj.lat)   ){
+    location_obj.location =  {
+      type: 'Point',
+      coordinates: [location_obj.lng, location_obj.lat],
+      lng: location_obj.lng,
+      lat: location_obj.lat
+    }
+  }
+  else if( utils.defined(location_obj.location)      &&
+    utils.defined(location_obj.location.lng)  &&
+    utils.defined(location_obj.location.lat)   ){
+    location_obj.location =  {
+      type: 'Point',
+      coordinates: [location_obj.location.lng, location_obj.location.lat],
+      lng: location_obj.location.lng,
+      lat: location_obj.location.lat
+    }
+  }
+  else
+    location_obj.location = {};
+  return location_obj;
+};
+
+Spatial.prototype.geo_to_location = function geo_to_location(geo) {
+  if( utils.defined(geo.lng)  &&
+      utils.defined(geo.lat)   )
+    return {
+      type: 'Point',
+      coordinates: [geo.lng, geo.lat],
+      lng: geo.lng,
+      lat: geo.lat
+    };
+  return {};
+};
+
 
 module.exports = Spatial;
 

@@ -111,27 +111,24 @@ var set_promotion_location = function (promotion, callback) {
   else if (utils.defined(promotion.mall))
     Promotion.populate(promotion, {path: 'mall', model: 'Mall'}, function (err, promotion) {
       if (err) return logger.error('failed to populate location ', err);
-      promotion.location = {
-        lat: promotion.mall.location.lat,
-        lng: promotion.mall.location.lng
-      };
+      promotion.location = promotion.mall.location;
       promotion.mall = promotion.mall._id;
       callback(null, promotion)
     });
   else if (utils.defined(promotion.business))
     Promotion.populate(promotion, {path: 'business', model: 'Business'}, function (err, promotion) {
       if (err) return logger.error('failed to populate location ', err);
-      promotion.location = {
-        lat: promotion.business.location.lat,
-        lng: promotion.business.location.lng
-      };
+      promotion.location = promotion.business.location
       promotion.business = promotion.business._id;
       callback(null, promotion)
     });
 };
 
 exports.create = function (req, res) {
-  Promotion.create(req.body, function (err, promotion) {
+  var promotion = req.body;
+  //TODO: Convert to address location
+  spatial.location_to_point(promotion);
+  Promotion.create(promotion, function (err, promotion) {
     //logger.info("Promotion.created : " + promotion._id);
     if (err) {
       return handleError(res, err);
