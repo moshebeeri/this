@@ -37,7 +37,7 @@ var PromotionSchema = new Schema({
   shopping_chain: {type: Schema.ObjectId, ref: 'ShoppingChain', required: false},
   business: {type: Schema.ObjectId, ref: 'Business'},
   realize_code: String,
-  realize_time: Date,
+  save_time: Date,
   realize_gid: Number,
   category: {
     type: [{ type: String,  enum: [

@@ -202,7 +202,7 @@ function promotion_state(user_id, promotion, callback) {
       //instanceGraphModel.relate(instance.id, 'INSTANCE_OF', promotion.gid, {by: req.user._id});
       //promotionGraphModel.relate_ids(req.user._id, 'REALIZE', req.params.id, {timestamp: Date.now()});
       promotion.realize_code = instance.realize_code;
-      promotion.realize_time = instance.realize_time;
+      promotion.save_time = instance.save_time;
       promotion.realize_gid  = instance.realize_gid;
       callback(null, promotion);
     });

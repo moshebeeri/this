@@ -13,10 +13,11 @@ router.put('/:id', auth.isAuthenticated(), controller.update);
 router.patch('/:id', auth.isAuthenticated(), controller.update);
 router.delete('/:id', auth.isAuthenticated(), controller.destroy);
 router.get('/info/server/time', controller.server_time);
-router.get('/realize/:id', auth.isAuthenticated(), controller.realize);
-router.get('/use/:id/:realize_code/:sale_point_code', auth.isAuthenticated(), controller.use);
+router.get('/save/:id', auth.isAuthenticated(), controller.save);
+router.get('/realize/:id/:realize_code/:sale_point_code', auth.isAuthenticated(), controller.realize);
 
 router.get('/init/data', /*auth.isAuthenticated(),*/ controller.initialize);
+router.get('/test/graph', controller.test);
 
 module.exports = router;
 /*
@@ -31,3 +32,7 @@ localhost:9000/api/promotions/like/1/2
 Authorization Bearer eyJ0eXAiOiJKV...
 
 */
+//https://github.com/mongodb-labs/mongo-connector/wiki/Usage%20with%20ElasticSearch
+// http://stackoverflow.com/questions/27187591/deploy-mongodb-replicaset-servers-with-docker-on-different-physical-servers
+// mongod --port 27017 --dbpath /srv/mongodb/rs0-0 --replSet rs0 --smallfiles --oplogSize 128
+// mongod --port 27018 --dbpath /srv/mongodb/rs0-1 --replSet rs0 --smallfiles --oplogSize 128

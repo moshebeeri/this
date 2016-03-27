@@ -8,6 +8,7 @@ initNeo4j();
 function initNeo4j() {
   var PromotionType = graphTools.createGraphModel('PromotionType');
   PromotionType.model.setUniqueKey('PromotionType', true);
+  var db = PromotionType.db()
   var typEnum = Promotion.schema.path('type').enumValues;
   typEnum.forEach(function(typeStr){
     PromotionType.save({PromotionType: typeStr}, function(err, obj){
@@ -23,5 +24,24 @@ function initNeo4j() {
       if(err) console.log("failed " + err.message);
       else console.log("SocialType " + JSON.stringify(obj) + " created");
     });
+  });
+  // create indexes
+  db.index.createIfNone('user', '_id', function(err, index) {
+    console.log(index);
+  });
+  db.index.createIfNone('business', '_id', function(err, index) {
+    console.log(index);
+  });
+  db.index.createIfNone('mall', '_id', function(err, index) {
+    console.log(index);
+  });
+  db.index.createIfNone('promotion', '_id', function(err, index) {
+    console.log(index);
+  });
+  db.index.createIfNone('PromotionType', 'PromotionType', function(err, index) {
+    console.log(index);
+  });
+  db.index.createIfNone('SocialType', 'SocialType', function(err, index) {
+    console.log(index);
   });
 }

@@ -68,7 +68,8 @@ exports.create = function(req, res) {
     creator = user;
   });
   body_business.creator = userId;
-     if (err) {
+  location.address_location( body_business, function(err, data) {
+    if (err) {
       if (err.code >= 400) return res.status(err.code).send(err.message);
       else if (err.code == 202) return res.status(202).json(data)
     }
@@ -90,10 +91,10 @@ exports.create = function(req, res) {
           logger.info('(' + relationship.start + ')-[' + relationship.type + ']->(' + relationship.end + ')');
 
           if(defined(business.shopping_chain))
-            graphModel.db().relate_ids(business._id, 'BRANCH_OF', business.shopping_chain);
+            graphModel.relate_ids(business._id, 'BRANCH_OF', business.shopping_chain);
 
           if(defined(business.mall))
-            graphModel.db().relate_ids(business._id, 'IN_MALL', business.mall);
+            graphModel.relate_ids(business._id, 'IN_MALL', business.mall);
 
           spatial.add2index(business.gid, function(err, result){
             if(err) logger.error(err.message);
@@ -108,6 +109,7 @@ exports.create = function(req, res) {
       });
       return res.status(201).json(business);
     });
+  });
 };
 
 /* {

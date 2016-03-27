@@ -24,26 +24,7 @@ exports.show = function(req, res) {
   });
 };
 
-exports.feed = function(req, res) {
-  var _id = req.params._id;
-  var category = req.body;
-
-  var query_builder = Promotion.find();
-  switch (category.name) {
-    case  'HOT'     :
-    case  'LIKE'    :
-    case  'NEAR'    :
-      query_builder = Promotion.find({ location: { $near: { type: 'Point', coordinates:[category.location.lng, category.location.lat] }}});
-      break;
-    case  'MALL'    :
-      graphModel.query(query, callback)
-    case  'FASHION' :
-      query_builder = Promotion.find({category: 'FASHION'});
-      break;
-    case  'GIFT'    :
-      query_builder = Promotion.find({category: 'GIFT'});
-      break;
-  }
+function fetch_paged_social_state(query_builder, req, _id, res) {
   query_builder = query_builder.sort({_id: -1}).limit(25);
   if (req.params.scroll === 'up')
     query_builder = query_builder.where('_id').gt(_id);
@@ -51,6 +32,53 @@ exports.feed = function(req, res) {
     query_builder = query_builder.where('_id').lt(_id);
 
   return feedTools.fetch_social_state(query_builder, req.user._id, 'promotion', res)
+}
+exports.feed = function(req, res) {
+  var _id = req.params._id;
+  var category = req.body;
+  var query;
+  var query_builder = Promotion.find();
+  switch (category.name) {
+    case  'HOT'     :
+      query = util.format("MATCH (u:user{_id:'%s'})-[l:LIKE]->(p:promotion)  \
+                    RETURN p, COUNT(l)  \
+                    ORDER BY COUNT(l) DESC  \
+                    LIMIT 250", req.user._id);
+      graphModel.query(query, function (err, hot) {
+        if(err) { return handleError(res, err); }
+        query_builder = Promotion.find({}).where('_id').in(hot);
+        return fetch_paged_social_state(query_builder, req, _id, res);
+      });
+      break;
+    case  'LIKE'    :
+      query = util.format("MATCH (u:user{_id:'%s'})-[f:FOLLOW]->(o:user)-[l:LIKE]->(p:promotion) \
+                    WHERE u._id <> o._id RETURN p._id order by p.created limit 250", req.user._id);
+      graphModel.query(query, function (err, likes) {
+         if(err) { return handleError(res, err); }
+        query_builder = Promotion.find({}).where('_id').in(likes);
+        return fetch_paged_social_state(query_builder, req, _id, res);
+      });
+      break;
+    case  'MALL'    :
+      query = util.format("MATCH (u:user{_id:'%s'})-[l:LIKE]->(m:mall)<-[l*1..]->(p:promotion) \
+                    order by p.created limit 250", req.user._id);
+      graphModel.query(query, function (err, malls) {
+         if(err) { return handleError(res, err); }
+        query_builder = Promotion.find({}).where('_id').in(malls);
+        return fetch_paged_social_state(query_builder, req, _id, res);
+      });
+      break;
+    case  'NEAR'    :
+      query_builder = Promotion.find({ location: { $near: { type: 'Point', coordinates:[category.location.lng, category.location.lat] }}});
+      break;
+    case  'FASHION' :
+      query_builder = Promotion.find({category: 'FASHION'});
+      break;
+    case  'GIFT'    :
+      query_builder = Promotion.find({category: 'GIFT'});
+      break;
+  }
+  return fetch_paged_social_state(query_builder, req, _id, res);
 };
 
 // Creates a new category in the DB.

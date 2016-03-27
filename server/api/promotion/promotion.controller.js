@@ -220,8 +220,8 @@ exports.destroy = function (req, res) {
   });
 };
 
-//'/realize/:id'
-exports.realize = function (req, res) {
+//'/save/:id'
+exports.save = function (req, res) {
   Promotion.findById(req.params.id, function (err, promotion) {
     if (err) {
       return handleError(res, err);
@@ -230,35 +230,67 @@ exports.realize = function (req, res) {
       return res.send(404);
     }
     var realize_code = randomstring.generate({length: 8, charset: 'numeric'});
-    var realize_time = new Date();
+    var save_time = new Date();
     instanceGraphModel.save({
       _id: promotion._id,
+      user: req.params.id,
       gid: promotion._id,
       code: realize_code,
-      time: realize_time
+      used: false,
+      time: save_time
     }, function (err, instance) {
       if (err) {
         var err_msg = 'error saving promotion instance ' + err.message;
         logger.error(err_msg);
         return res.json(404, err_msg);
       }
-      //instanceGraphModel.relate(instance.id, 'INSTANCE_OF', promotion.gid, {by: req.user._id});
-      //promotionGraphModel.relate_ids(req.user._id, 'REALIZE', req.params.id, {timestamp: Date.now()});
+      instanceGraphModel.relate(instance.id, 'INSTANCE_OF', promotion.gid, {by: req.user._id});
+      promotionGraphModel.relate_ids(req.user._id, 'SAVED', req.params.id, {timestamp: Date.now()});
       promotion.realize_code = instance.realize_code;
-      promotion.realize_time = instance.realize_time;
+      promotion.save_time = instance.save_time;
       promotion.realize_gid = instance.realize_gid;
       return res.json(200, promotion);
     });
   });
 };
 
-//'/use/:id/:realize_code/:realize_gid/:sale_point_code'
+//'/realize/:id/:realize_code/:realize_gid/:sale_point_code'
 //TODO: add validation of sale_point_code
-//TODO: mark instance as used
-exports.use = function (req, res) {
-  promotionGraphModel.relate_ids(req.user._id, 'USE', req.params.id, {timestamp: Date.now()});
-  return res.json(200, promotion);
+exports.realize = function (req, res) {
+  var query = util.format("MATCH (i:instance { _id:'{%s}', user:'{%s}'})", req.params.id, req.user._id );
+  instanceGraphModel.query(query, function(err, instances){
+    if(err) return handleError(res, err);
+    if(instances.length > 0 )
+      return res.status(500).send('multiple instances found');
+    var instance = instances[0];
+    if(instance.realize_code != req.params.realize_code)
+      return res.status(400).send('mismatch realize_code');
+    if(instance.id != req.params.realize_gid)
+      return res.status(400).send('mismatch realize_gid');
+    if(instance.used)
+      return res.status(400).send('promotion already used');
+    if(instance.user != req.user._id)
+      return res.status(400).send('user not related to this promotion instance');
+
+    instance.used = true;
+    instance.time = new Date();
+    instanceGraphModel.save(instance, function(err, instance){
+      if(err) return handleError(res, err);
+      //promotionGraphModel.unrelate_ids(req.user._id, 'SAVED', req.params.id);
+      promotionGraphModel.relate_ids(req.user._id, 'REALIZED', req.params.id, {timestamp: Date.now()});
+      return res.json(200, instance);
+    })
+  });
 };
+
+exports.test = function (req, res) {
+  promotionGraphModel.query("MATCH (p:promotion) return p limit 5", function(err, promotions){
+    console.log(promotions.length);
+    console.log(promotions[0]);
+    return res.json(200, promotions);
+  })
+};
+
 
 function handleError(res, err) {
   return res.status(500).send(err)
