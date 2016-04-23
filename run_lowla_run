@@ -1,0 +1,8 @@
+#!/bin/bash
+mongod --port 27017 --dbpath /srv/mongodb/rs0-0 --replSet rs0 --smallfiles --oplogSize 128 > /dev/null 2>&1 &
+mongod --port 27018 --dbpath /srv/mongodb/rs0-1 --replSet rs0 --smallfiles --oplogSize 128 > /dev/null 2>&1 &
+mongo-connector -m localhost:27017 -t localhost:9200 -d elastic2_doc_manager > /dev/null 2>&1 &
+
+~/frameworks/neo4j/bin/neo4j start
+cd store/lowla
+grunt serve

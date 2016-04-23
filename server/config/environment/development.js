@@ -20,6 +20,13 @@ module.exports = {
     authToken: '802246c68c545894b87bf2e31e026936',
     number: '+972526268723'
   },
+
+  elasticsearch:{
+    host: 'localhost:9200',
+    log: 'trace',
+    index: 'lowla-dev'
+  },
+
   google_maps:{
     key: 'AIzaSyACe_Cci4drnZovD8xjJOdrsIOQwyWSyCg',
 
