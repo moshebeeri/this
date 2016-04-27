@@ -9,12 +9,22 @@ var config = require('../../config/environment');
 var randomstring = require("randomstring");
 var s3 = new aws.S3();
 var folder = 'images';
-
 var multiparty = require('multiparty');
 //var gm = require('gm');
 var fs = require('fs');
-
 var Upload = require('s3-uploader');
+
+var User = require('../user/user.model');
+var Business = require('../business/business.model');
+var ShoppingChain = require('../shoppingChain/shoppingChain.model');
+var Product = require('../product/product.model');
+var Group = require('../group/group.model');
+var Promotion = require('../promotion/promotion.model');
+var Mall = require('../mall/mall.model');
+var Category = require('../category/category.model');
+var CardType = require('../cardType/cardType.model');
+
+
 var client = createClient();
 
 function createClient() {
@@ -124,14 +134,6 @@ function handle_image(req, res, type) {
 }
 
 
-var User = require('../user/user.model');
-var Business = require('../business/business.model');
-var ShoppingChain = require('../shoppingChain/shoppingChain.model');
-var Product = require('../product/product.model');
-var Promotion = require('../promotion/promotion.model');
-var Mall = require('../mall/mall.model');
-var Category = require('../category/category.model');
-var CardType = require('../cardType/cardType.model');
 
 function updateImageVersions(version, id, meta_data, type) {
 
@@ -147,6 +149,9 @@ function updateImageVersions(version, id, meta_data, type) {
       },
       product: function (callback) {
         Product.findById(id, callback);
+      },
+      group: function (callback) {
+        Group.findById(id, callback);
       },
       promotion: function (callback) {
         Promotion.findById(id, callback);
@@ -230,8 +235,7 @@ exports.works_create = function (req, res) {
         if (err) console.error(err.stack);
       });
     return res.json(200, {
-      full_size: fileName,
-
+      full_size: fileName
     });
   });
   form.parse(req);
