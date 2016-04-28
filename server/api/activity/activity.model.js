@@ -8,6 +8,7 @@ var ActivitySchema = new Schema({
 
   promotion: {type: Schema.ObjectId, ref: 'Promotion'},
   product: {type: Schema.ObjectId, ref: 'Product'},
+  group: {type: Schema.ObjectId, ref: 'Group'},
 
   user: {type: Schema.ObjectId, ref: 'User'},
   business: {type: Schema.ObjectId, ref: 'Business'},
@@ -18,6 +19,7 @@ var ActivitySchema = new Schema({
   actor_business: {type: Schema.ObjectId, ref: 'Business'},
   actor_mall: {type: Schema.ObjectId, ref: 'Mall'},
   actor_chain: {type: Schema.ObjectId, ref: 'ShoppingChain'},
+  actor_group: {type: Schema.ObjectId, ref: 'Group'},
 
   action: {type: String, default: ''} //ex: has replied to:, or started following:
 });

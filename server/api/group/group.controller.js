@@ -35,7 +35,7 @@ function to_graph(group) {
 
 function group_created_activity(group) {
   var act = {
-    promotion: group._id,
+    group: group._id,
     action: "created"
   };
   if (group.creator_type == 'USER')
@@ -47,6 +47,17 @@ function group_created_activity(group) {
   if (group.creator_type == 'MALL')
     act.actor_mall = group.creator;
 
+  activity.activity(act, function (err) {
+    if (err) logger.error(err.message)
+  });
+}
+
+function group_join_activity(group, user) {
+  var act = {
+    group: group._id,
+    action: "group_join",
+    user: user_id
+  };
   activity.activity(act, function (err) {
     if (err) logger.error(err.message)
   });
@@ -93,12 +104,13 @@ exports.destroy = function(req, res) {
 
 function add_user_to_group(user, group, res){
   graphModel.relate_ids(user._id, 'GROUP_MEMBER', group._id);
+  group_join_activity(group, user);
   return res.json(200, group);
 }
 
 function add_user_to_group_admin(user, group, res){
   graphModel.relate_ids(user._id, 'GROUP_MEMBER', group._id);
-  group.admins.push(user._id)
+  group.admins.push(user._id);
   Group.save(function (err) {
     if (err) { return handleError(res, err); }
     return res.json(200, group);

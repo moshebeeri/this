@@ -4,10 +4,33 @@ var mongoose = require('mongoose'),
     Schema = mongoose.Schema;
 
 var InviteSchema = new Schema({
-  name: String,
+  text: String,
   gid: { type: Number, index: true, unique : true },
-  info: String,
-  active: Boolean
+  creator: {type: Schema.ObjectId, ref: 'User', required: true},
+  offers: [{type: Schema.ObjectId, ref: 'Offer', required: true}],
+  invited_users: [{type: Schema.ObjectId, ref: 'User', required: true}],
+  invited_groups: [{type: Schema.ObjectId, ref: 'Group', required: true}],
+  start: { type : Date, default: Date.now },
+  end: Date,
+  expireAt: {
+    type: Date,
+    validate: [ function(v) {
+      return (v - new Date()) > 60000*(3600*24*2 - 1);
+    }, 'Cannot expire less then 2 days in the future.' ],
+    default: function() {
+      // 2 days from now
+      return new Date(new Date().valueOf() + 60000*3600*24*2);
+    }
+  },
+  location : {
+    lng : Number,
+    lat : Number,
+    //for internal use
+    type: {type: String},
+    coordinates: []
+  }
+
 });
+InviteSchema.index({ location: '2dsphere' });
 
 module.exports = mongoose.model('Invite', InviteSchema);
