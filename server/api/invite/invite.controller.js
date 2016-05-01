@@ -59,6 +59,32 @@ exports.destroy = function(req, res) {
   });
 };
 
+exports.invite_user = function(req, res) {
+  if(req.body._id) { delete req.body._id; }
+  Invite.findById(req.params.id, function (err, invite) {
+    if (err) { return handleError(res, err); }
+    if(!invite) { return res.send(404); }
+    var updated = _.merge(invite, req.body);
+    updated.save(function (err) {
+      if (err) { return handleError(res, err); }
+      return res.json(200, invite);
+    });
+  });
+};
+
+exports.invite_group = function(req, res) {
+  if(req.body._id) { delete req.body._id; }
+  Invite.findById(req.params.id, function (err, invite) {
+    if (err) { return handleError(res, err); }
+    if(!invite) { return res.send(404); }
+    var updated = _.merge(invite, req.body);
+    updated.save(function (err) {
+      if (err) { return handleError(res, err); }
+      return res.json(200, invite);
+    });
+  });
+};
+
 function handleError(res, err) {
   return res.send(500, err);
 }

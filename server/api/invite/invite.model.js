@@ -7,6 +7,10 @@ var InviteSchema = new Schema({
   text: String,
   gid: { type: Number, index: true, unique : true },
   creator: {type: Schema.ObjectId, ref: 'User', required: true},
+  mall : {type: Schema.ObjectId, ref: 'Mall', required: false},
+  shopping_chain: {type: Schema.ObjectId, ref: 'ShoppingChain', required: false},
+  business: {type: Schema.ObjectId, ref: 'Business'},
+
   offers: [{type: Schema.ObjectId, ref: 'Offer', required: true}],
   invited_users: [{type: Schema.ObjectId, ref: 'User', required: true}],
   invited_groups: [{type: Schema.ObjectId, ref: 'Group', required: true}],
@@ -21,16 +25,7 @@ var InviteSchema = new Schema({
       // 2 days from now
       return new Date(new Date().valueOf() + 60000*3600*24*2);
     }
-  },
-  location : {
-    lng : Number,
-    lat : Number,
-    //for internal use
-    type: {type: String},
-    coordinates: []
   }
-
 });
-InviteSchema.index({ location: '2dsphere' });
 
 module.exports = mongoose.model('Invite', InviteSchema);

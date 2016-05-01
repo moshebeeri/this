@@ -35,7 +35,7 @@ var PromotionSchema = new Schema({
   },
   mall : {type: Schema.ObjectId, ref: 'Mall', required: false},
   shopping_chain: {type: Schema.ObjectId, ref: 'ShoppingChain', required: false},
-  business: {type: Schema.ObjectId, ref: 'Business'},
+  business: {type: Schema.ObjectId, ref: 'Business', required: false},
   realize_code: String,
   save_time: Date,
   realize_gid: Number,
