@@ -22,7 +22,6 @@ export class ProfilePage {
   user: string;
 
   constructor(private http: Http, private auth: AuthService, private globals: GlobalsService) {
-    console.log(this.globals.LOGIN_URL);
     this.auth = auth;
     this.globals = globals;
     let token = this.local.get('id_token')._result;
