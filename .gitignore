@@ -1,15 +1,21 @@
-node_modules
-public
-.tmp
-.sass-cache
-.idea
-client/bower_components
-dist
-/server/config/local.env.js
-npm-debug.log
-www/build/
-platforms/
-plugins/
-*.swp
-.DS_Store
-Thumbs.db
+//thiscounts files
+
+thiscounts/node_modules
+thiscounts/public
+thiscounts/.tmp
+thiscounts/.sass-cache
+thiscounts/.idea
+thiscounts/client/bower_components
+thiscounts/dist
+thiscounts/server/config/local.env.js
+thiscounts/npm-debug.log
+
+
+//groupys files
+groupys/node_modules/
+groupys/www/build/
+groupys/platforms/
+groupys/plugins/
+groupys/*.swp
+groupys/.DS_Store
+groupys/Thumbs.db
