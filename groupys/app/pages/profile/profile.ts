@@ -3,16 +3,15 @@ import {Http, Headers} from 'angular2/http';
 import {FORM_DIRECTIVES} from 'angular2/common';
 import {JwtHelper} from 'angular2-jwt';
 import {AuthService} from '../../services/auth/auth';
+import {GlobalsService} from '../../services/globals/globals';
 const map = require('rxjs/add/operator/map');
 
 @Page({
   templateUrl: 'build/pages/profile/profile.html',
   directives: [FORM_DIRECTIVES],
-  providers : [AuthService]
+  providers : [AuthService, GlobalsService]
 })
 export class ProfilePage {
-  LOGIN_URL: string = "http://localhost:3001/sessions/create";
-  SIGNUP_URL: string = "http://localhost:3001/users";
 
   // When the page loads, we want the Login segment to be selected
   authType: string = "login";
@@ -22,8 +21,10 @@ export class ProfilePage {
   local: Storage = new Storage(LocalStorage);
   user: string;
 
-  constructor(private http: Http, private auth: AuthService) {
+  constructor(private http: Http, private auth: AuthService, private globals: GlobalsService) {
+    console.log(this.globals.LOGIN_URL);
     this.auth = auth;
+    this.globals = globals;
     let token = this.local.get('id_token')._result;
     if(token) {
       this.user = this.jwtHelper.decodeToken(token).username;
@@ -31,7 +32,7 @@ export class ProfilePage {
   }
   
   login(credentials) {
-    this.http.post(this.LOGIN_URL, JSON.stringify(credentials), { headers: this.contentHeader })
+    this.http.post(this.globals.LOGIN_URL, JSON.stringify(credentials), { headers: this.contentHeader })
         .map(res => res.json())
         .subscribe(
             data => this.authSuccess(data.id_token),
@@ -40,7 +41,7 @@ export class ProfilePage {
   }
 
   signup(credentials) {
-    this.http.post(this.SIGNUP_URL, JSON.stringify(credentials), { headers: this.contentHeader })
+    this.http.post(this.globals.SIGNUP_URL, JSON.stringify(credentials), { headers: this.contentHeader })
         .map(res => res.json())
         .subscribe(
             data => this.authSuccess(data.id_token),
