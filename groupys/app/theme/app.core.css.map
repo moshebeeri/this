@@ -1,0 +1,7 @@
+{
+"version": 3,
+"mappings": "AAEE,OAAE;EACA,MAAM,EAAE,MAAM;EACd,WAAW,EAAE,IAAI;EACjB,SAAS,EAAE,IAAI;;ACFnB;;;;;;;;;;;;;;;;EAgBE;AAEF,SAAU;EACT,cAAc,EAAE,UAAU;;AAG3B,cAAe;EACX,cAAc,EAAE,SAAS;;AAG7B,aAAc;EACb,KAAK,EAAC,OAAO;;AAEd,uBAAwB;EACtB,cAAc,EAAE,SAAS",
+"sources": ["../pages/home/home.scss","../pages/countries/countries.scss"],
+"names": [],
+"file": "app.core.css"
+}
