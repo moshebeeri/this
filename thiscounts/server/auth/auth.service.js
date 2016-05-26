@@ -21,6 +21,8 @@ function isAuthenticated() {
       if(req.query && req.query.hasOwnProperty('access_token')) {
         req.headers.authorization = 'Bearer ' + req.query.access_token;
       }
+	  console.log("1111111111111111111111111 ----------req.headers.authorization: " + JSON.stringify(req.headers.authorization));
+	  
       validateJwt(req, res, next);
     })
     // Attach user to request
