@@ -24,7 +24,7 @@ export class ProfilePage {
   constructor(private http: Http, private auth: AuthService, private globals: GlobalsService) {
     this.auth = auth;
     this.globals = globals;
-    let token = this.local.get('id_token')._result;
+    let token = this.local.get('token')._result;
     if(token) {
       this.user = this.jwtHelper.decodeToken(token).username;
     }
@@ -34,7 +34,7 @@ export class ProfilePage {
     this.http.post(this.globals.LOGIN_URL, JSON.stringify(credentials), { headers: this.contentHeader })
         .map(res => res.json())
         .subscribe(
-            data => this.authSuccess(data.id_token),
+            data => this.authSuccess(data.token),
             err => this.error = err
         );
   }
@@ -43,19 +43,19 @@ export class ProfilePage {
     this.http.post(this.globals.SIGNUP_URL, JSON.stringify(credentials), { headers: this.contentHeader })
         .map(res => res.json())
         .subscribe(
-            data => this.authSuccess(data.id_token),
+            data => this.authSuccess(data.token),
             err => this.error = err
         );
   }
 
   logout() {
-    this.local.remove('id_token');
+    this.local.remove('token');
     this.user = null;
   }
 
   authSuccess(token) {
     this.error = null;
-    this.local.set('id_token', token);
+    this.local.set('token', token);
     this.user = this.jwtHelper.decodeToken(token).username;
   }
 }
