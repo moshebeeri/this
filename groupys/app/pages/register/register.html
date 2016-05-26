@@ -1,0 +1,41 @@
+<ion-navbar *navbar>
+  <ion-title>Your phone</ion-title>
+  <ion-buttons end>
+    <button (click)="register(loginCreds.value)">
+      <ion-icon name="checkmark"></ion-icon>
+    </button>
+
+  </ion-buttons>
+</ion-navbar>
+
+<!--<ion-content class="login" *ngIf="!auth.authenticated()">-->
+
+<!--<ion-content class="login" *ngIf="!auth.authenticated()">-->
+<ion-content class="login" [hidden]="isLoggedIn">
+  <form #loginCreds="ngForm" (ngSubmit)="register(loginCreds.value)">
+    <ion-item>
+	  <ion-label (click)="itemTapped()">{{countryName}}</ion-label>
+      <!--<ion-input (click)="itemTapped()" type="text" placeholder="{{countryName}}" ngControl="username"></ion-input>-->
+    </ion-item>
+
+    <ion-item>
+      <ion-label>+{{callingCodes}}</ion-label>
+      <ion-input type="text" ngControl="callingDigits" placeholder="{{callingDigits}}" id="phoneInput" (keypress)="validateNumbers($event)">
+	  </ion-input>
+    </ion-item>
+  </form>
+
+  <div padding>
+    <p  *ngIf="error" class="error">{{ error._body }}</p>
+  </div>
+</ion-content>
+
+<ion-content>
+  <!--<div *ngIf="auth.authenticated()">-->
+  <div [hidden]="!isLoggedIn">
+    <div padding>
+      <h1>Welcome, {{ user }}</h1>
+      <button block (click)="logout()">Logout</button>
+    </div>
+  </div>
+</ion-content>
