@@ -31,7 +31,7 @@ module.exports = {
     key: 'AIzaSyACe_Cci4drnZovD8xjJOdrsIOQwyWSyCg',
 
   },
-  //seedDB: true
-  seedDB: false,
+  seedDB: true,
+  //seedDB: false,
   initializeNeo4j: true,
 };

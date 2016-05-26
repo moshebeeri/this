@@ -31,7 +31,7 @@ Thing.find({}).remove(function() {
 });
 
 User.find({}).remove(function() {
-  User.create({
+ /* User.create({
     provider: 'local',
     name: 'Test User',
     email: 'test@test.com',
@@ -43,7 +43,7 @@ User.find({}).remove(function() {
     email: 'admin@admin.com',
     password: 'admin'
   }, function() {
-      console.log('finished populating users');
+      console.log('finished populating users-------------');
     }
-  );
+  );*/
 });
