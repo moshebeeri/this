@@ -30,8 +30,19 @@ var activity = require('../../components/activity').createActivity();
 var Activity = require('../activity/activity.model');
 
 var validationError = function (res, err) {
-  return res.json(422, err);
+  var firstKey = getKey(err.errors);
+  console.log("------------------------------------firstKey " + firstKey);
+  if(firstKey != undefined){
+	return res.status(422).json(err['errors'][firstKey]['message']);
+  } 
+  return res.status(422).json(err);
 };
+
+function getKey(data) {
+  for (var prop in data)
+    if (data.propertyIsEnumerable(prop))
+      return prop;
+}
 
 /**
  * Get list of users
@@ -40,7 +51,7 @@ var validationError = function (res, err) {
 exports.index = function (req, res) {
   User.find({}, '-salt -hashedPassword -sms_code', function (err, users) {
     if (err) return res.send(500, err);
-    res.json(200, users);
+    res.status(200).json(200, users);
   });
 };
 
@@ -151,14 +162,14 @@ exports.unfollow = function (req, res) {
 
 function send_sms_verification_code(user) {
   send_sms_message(user.phone_number,
-    "Thank you for using ThisCounts your sms code is " + user.sms_code
+    "GROUPYS code " + user.sms_code
   );
 }
 
 
 function send_sms_new_password(phone_number, new_password) {
   send_sms_message(phone_number,
-    "ThisCounts new password " + new_password
+    "GROUPYS new password " + new_password
   );
 }
 
@@ -181,30 +192,54 @@ function send_sms_message(phone_number, message) {
  */
 exports.create = function (req, res, next) {
   var newUser = new User(req.body);
+  console.log('USER CREATE-------------------------------------------------------');
+  //console.log(req.body);
+  //console.log("req.headers: " + JSON.stringify(req.headers));
+  //console.log("req.header: " + req.header);
+  console.log("req.headers.authorization: " + JSON.stringify(req.headers.authorization));
+  console.log('USER CREATE--------------------------------------------------------');
 
   newUser.provider = 'local';
   newUser.role = 'user';
   newUser.sms_code = randomstring.generate({length: 4, charset: 'numeric'});
+  
   newUser.sms_verified = false;
   newUser.phone_number = utils.clean_phone_number(newUser.phone_number);
-  newUser.save(function (err, user) {
-    if (err) return validationError(res, err);
-    var token = jwt.sign({_id: user._id}, config.secrets.session, {expiresInMinutes: 60 * 24 * 30});
-    res.json({token: token});
+  //newUser.email = newUser.phone_number + "@groupys.com";
+  
+  User.findOne({phone_number: newUser.phone_number}, function (err, user) {
+    if (user) {
+	  console.log("x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-");
+      var token = jwt.sign({_id: user._id}, config.secrets.session, {expiresInMinutes: 60 * 24 * 30});
+	  console.log("user: " + user);
+	  console.log("token: " + token);
+	  console.log("x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-");
+      res.status(200).json({token: token});
+    } else {
+		newUser.save(function (err, user) {
+			if (err) return validationError(res, err);
+			var token = jwt.sign({_id: user._id}, config.secrets.session, {expiresIn: 60 * 24 * 30});
+			console.log("user._id---------------------" + user._id);
+			console.log("token---------------------" + token);
+			console.log("config.secrets.session---------------------" + config.secrets.session);
+			res.status(200).json({token: token});
 
-    send_sms_verification_code(user);
+			//send_sms_verification_code(user);
 
-    graphModel.reflect(user,
-      {
-        _id: user._id,
-        phone: user.phone_number
-      }, function (err) {
-        if (err) return res.send(500, err);
-        //if this users number exist in phone_numbers collection
-        //then all users (ids in contacts) should be followed by him
-        new_user_follow(user)
-      });
+			graphModel.reflect(user,
+			  {
+				_id: user._id,
+				phone: user.phone_number
+			  }, function (err) {
+				if (err) return res.send(500, err);
+				//if this users number exist in phone_numbers collection
+				//then all users (ids in contacts) should be followed by him
+				new_user_follow(user)
+			  });
+		});
+	}
   });
+  
 };
 
 
@@ -334,13 +369,13 @@ function activity_follow(follower, followed) {
 }
 
 exports.login = function (req, res, next) {
-  User.find({$or: [{email: {$eq: req.body.email}}, {phone_number: {$eq: req.body.phone_number}}]}, function (err, user) {
+  User.findOne({$or: [{email: {$eq: req.body.email}}, {phone_number: {$eq: req.body.phone_number}}]}, function (err, user) {
     if (err) {
       return handleError(res, err);
     }
     if (user) {
       var token = jwt.sign({_id: user._id}, config.secrets.session, {expiresInMinutes: 60 * 24 * 30});
-      res.json({token: token});
+      res.status(200).json({token: token});
     }
   });
 };
@@ -354,7 +389,7 @@ exports.show = function (req, res, next) {
   User.findById(userId, '-salt -hashedPassword -sms_code', function (err, user) {
     if (err) return next(err);
     if (!user) return res.status(401).send('Unauthorized');
-    res.json(user.profile);
+    res.status(200).json(user.profile);
   });
 };
 
@@ -368,7 +403,7 @@ exports.recover_password = function (req, res) {
       if (err) return validationError(res, err);
       var token = jwt.sign({_id: user._id}, config.secrets.session, {expiresInMinutes: 60 * 24 * 30});
       send_sms_new_password(phone_number, new_password);
-      res.json({token: token});
+      res.status(200).json({token: token});
       //return res.send(200, "ok");
     })
   })
@@ -474,7 +509,7 @@ exports.me = function (req, res, next) {
   }, '-salt -hashedPassword -sms_code', function (err, user) { // don't ever give out the password or salt
     if (err) return next(err);
     if (!user) return res.status(401).send('Unauthorized');
-    res.json(user);
+    res.status(200).json(user);
   });
 };
 

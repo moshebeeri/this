@@ -8,10 +8,10 @@ var authTypes = ['github', 'twitter', 'facebook', 'google'];
 var UserSchema = new Schema({
   social_state : {},
   name: String,
-  gid: { type: Number, index: true, unique : true },
-  phone_number: { type: String, index: true, unique : true, required : true, dropDups: false },
+  gid: { type: Number, index: true, unique : false },
+  phone_number: { type: String, index: true, unique : true, required : true, dropDups: true },
   pictures: [],
-  email: { type: String, lowercase: true, index: true, unique : true, required : true, dropDups: false },
+  email: { type: String, lowercase: true, index: true, unique : false, required : false, dropDups: true },
   sms_code: String,
   sms_verified: Boolean,
   role: {
@@ -64,7 +64,7 @@ UserSchema
 /**
  * Validations
  */
-
+/*
 // Validate empty email
 UserSchema
   .path('email')
@@ -95,7 +95,7 @@ UserSchema
       respond(true);
     });
 }, 'The specified email address is already in use.');
-
+*/
 var validatePresenceOf = function(value) {
   return value && value.length;
 };
@@ -107,10 +107,11 @@ UserSchema
   .pre('save', function(next) {
     if (!this.isNew) return next();
 
-    if (!validatePresenceOf(this.hashedPassword) && authTypes.indexOf(this.provider) === -1)
+    /*if (!validatePresenceOf(this.hashedPassword) && authTypes.indexOf(this.provider) === -1)
       next(new Error('Invalid password'));
-    else
+    else*/
       next();
+	
   });
 
 /**
