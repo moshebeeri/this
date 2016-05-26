@@ -1,3 +1,7 @@
+// use only .scss and ignore all .css files
+
+!*.css
+
 //thiscounts files
 
 thiscounts/node_modules
