@@ -3,8 +3,8 @@
  */
 
 'use strict';
-
 var express = require('express');
+var cors = require('cors');
 var favicon = require('serve-favicon');
 var morgan = require('morgan');
 var compression = require('compression');
@@ -19,7 +19,9 @@ var session = require('express-session');
 var mongoStore = require('connect-mongo')(session);
 var mongoose = require('mongoose');
 
+
 module.exports = function(app) {
+  app.use(cors());
   var env = app.get('env');
 
   app.set('views', config.root + '/server/views');
@@ -43,7 +45,7 @@ module.exports = function(app) {
       db: 'lowla'
     })
   }));
-  
+
   if ('production' === env) {
     app.use(favicon(path.join(config.root, 'public', 'favicon.ico')));
     app.use(express.static(path.join(config.root, 'public')));
