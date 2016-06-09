@@ -1,7 +1,0 @@
-{
-"version": 3,
-"mappings": "AAGA;;;;;;;;;;;;;;;;EAgBE;AAEF,SAAU;EACT,cAAc,EAAE,UAAU;;AAG3B,cAAe;EACX,cAAc,EAAE,SAAS;;AAG7B,aAAc;EACb,KAAK,EAAC,OAAO;;AAEd,uBAAwB;EACtB,cAAc,EAAE,SAAS",
-"sources": ["countries.scss"],
-"names": [],
-"file": "countries.css"
-}
