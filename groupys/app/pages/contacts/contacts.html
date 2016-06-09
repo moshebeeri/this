@@ -1,0 +1,19 @@
+<!--
+  Generated template for the ContactsPage page.
+
+  See http://ionicframework.com/docs/v2/components/#navigation for more info on
+  Ionic pages and navigation.
+-->
+<ion-navbar *navbar>
+  <button menuToggle>
+    <ion-icon name="menu"></ion-icon>
+  </button>
+  <ion-title>contacts</ion-title>
+</ion-navbar>
+
+<ion-content padding class="contacts">
+	{{xContacts}}
+  <ion-item-group *ngFor="#contact of phoneContacts">
+    <ion-item >{{contact.displayName}}</ion-item>
+  </ion-item-group>
+</ion-content>
