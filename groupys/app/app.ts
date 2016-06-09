@@ -1,12 +1,13 @@
 import {bootstrap} from 'angular2/platform/browser';
 import {App, IonicApp, Platform} from 'ionic-angular';
-import {StatusBar} from 'ionic-native';
+import {StatusBar, Geolocation} from 'ionic-native';
 
 import {provide} from 'angular2/core';
 import {Http} from 'angular2/http';
 import {AuthHttp, AuthConfig} from 'angular2-jwt';
 import {Type} from 'angular2/core';
 import {AuthService} from './services/auth/auth';
+import {EntityManagerFactoryService} from './services/breezejs/entityManagerFactory';
 
 import {HomePage} from './pages/home/home';
 import {ListPage} from './pages/list/list';
@@ -17,8 +18,12 @@ import {FavouriteGroupsPage} from './pages/favourite-groups/favourite-groups';
 import {MyOffersPage} from './pages/my-offers/my-offers';
 import {MessagesPage} from './pages/messages/messages';
 import {ProfilePage} from './pages/profile/profile';
+import {LoginPage} from './pages/login/login';
 import {RegisterPage} from './pages/register/register';
 import {CountriesPage} from './pages/countries/countries';
+import {ContactsPage} from './pages/contacts/contacts';
+import {BreezePage} from './pages/breeze/breeze';
+
 
 
 
@@ -35,7 +40,8 @@ import {CountriesPage} from './pages/countries/countries';
       },
       deps: [Http]
     }),
-    AuthService
+    AuthService,
+	EntityManagerFactoryService
   ]
 })
 class MyApp {
@@ -45,21 +51,24 @@ class MyApp {
   isLoggedIn: boolean;
   isAuthorized: boolean;
   isAdmin: boolean;
+  currentLatitude: number;
+  currentLongitude: number;
 
-  constructor(private app: IonicApp, private platform: Platform, private auth: AuthService, public http: Http) {
+  constructor(private app: IonicApp, private platform: Platform, private auth: AuthService, public http: Http, private entityManagerFactoryService: EntityManagerFactoryService) {
     this.initializeApp();
     
     this.auth = auth;
+	this.entityManagerFactoryService = entityManagerFactoryService;
     this.authenticated = this.auth.authenticated();
 
     this.isLoggedIn = this.auth.isLoggedIn();
     this.isAuthorized = this.auth.isAuthorized('user');
     this.isAdmin = this.auth.isAdmin();
-    console.log("isLoggedIn: " +  this.isLoggedIn);
-    console.log("isAuthorized: " +  this.isAuthorized);
-    console.log("isAdmin: " +  this.isAdmin);
-
-
+    console.log("isLoggedIn3: " +  this.isLoggedIn);
+    console.log("isAuthorized3: " +  this.isAuthorized);
+    console.log("isAdmin3: " +  this.isAdmin);
+	
+	this.entityManagerFactoryService.emFactory().subscribe(data => console.log(data));
 
     // used for an example of ngFor and navigation
     this.pages = [
@@ -71,8 +80,11 @@ class MyApp {
       { title: 'My offers', component: MyOffersPage },
       { title: 'Messages', component: MessagesPage },
       { title: 'Profile', component: ProfilePage},
+      { title: 'Login', component: LoginPage},
       { title: 'Register', component: RegisterPage},
       { title: 'Countries', component: CountriesPage},
+      { title: 'Contacts', component: ContactsPage},
+      { title: 'Breeze', component: BreezePage},
       { title: 'List', component: ListPage }
     ];
 
@@ -83,6 +95,12 @@ class MyApp {
       // Okay, so the platform is ready and our plugins are available.
       // Here you can do any higher level native things you might need.
       StatusBar.styleDefault();
+      Geolocation.getCurrentPosition().then((resp) => {
+		this.currentLatitude = resp.coords.latitude;
+		this.currentLongitude = resp.coords.longitude;
+        console.log("Latitude: ", resp.coords.latitude);
+        console.log("Longitude: ", resp.coords.longitude);
+      });
     });
   }
 
