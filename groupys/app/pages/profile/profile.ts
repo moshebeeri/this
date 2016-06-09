@@ -1,61 +1,27 @@
-import {Page, NavController, Storage, LocalStorage} from 'ionic-angular';
-import {Http, Headers} from 'angular2/http';
-import {FORM_DIRECTIVES} from 'angular2/common';
-import {JwtHelper} from 'angular2-jwt';
-import {AuthService} from '../../services/auth/auth';
-import {GlobalsService} from '../../services/globals/globals';
-const map = require('rxjs/add/operator/map');
+import {Page, NavController} from 'ionic-angular';
+import {Camera} from 'ionic-native';
+
 
 @Page({
   templateUrl: 'build/pages/profile/profile.html',
-  directives: [FORM_DIRECTIVES],
-  providers : [AuthService, GlobalsService]
+  providers : [Camera]
 })
 export class ProfilePage {
-
-  // When the page loads, we want the Login segment to be selected
-  authType: string = "login";
-  contentHeader: Headers = new Headers({"Content-Type": "application/json"});
-  error: string;
-  jwtHelper: JwtHelper = new JwtHelper();
-  local: Storage = new Storage(LocalStorage);
-  user: string;
-
-  constructor(private http: Http, private auth: AuthService, private globals: GlobalsService) {
-    this.auth = auth;
-    this.globals = globals;
-    let token = this.local.get('token')._result;
-    if(token) {
-      this.user = this.jwtHelper.decodeToken(token).username;
-    }
-  }
+  public base64Image: string;
   
-  login(credentials) {
-    this.http.post(this.globals.LOGIN_URL, JSON.stringify(credentials), { headers: this.contentHeader })
-        .map(res => res.json())
-        .subscribe(
-            data => this.authSuccess(data.token),
-            err => this.error = err
-        );
+  constructor() {
+    
   }
-
-  signup(credentials) {
-    this.http.post(this.globals.SIGNUP_URL, JSON.stringify(credentials), { headers: this.contentHeader })
-        .map(res => res.json())
-        .subscribe(
-            data => this.authSuccess(data.token),
-            err => this.error = err
-        );
-  }
-
-  logout() {
-    this.local.remove('token');
-    this.user = null;
-  }
-
-  authSuccess(token) {
-    this.error = null;
-    this.local.set('token', token);
-    this.user = this.jwtHelper.decodeToken(token).username;
+  takePicture(){
+    Camera.getPicture({
+        destinationType: Camera.DestinationType.DATA_URL,
+        targetWidth: 1000,
+        targetHeight: 1000
+    }).then((imageData) => {
+      // imageData is a base64 encoded string
+        this.base64Image = "data:image/jpeg;base64," + imageData;
+    }, (err) => {
+        console.log(err);
+    });
   }
 }
