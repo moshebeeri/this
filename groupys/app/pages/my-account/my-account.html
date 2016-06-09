@@ -11,7 +11,17 @@
   <ion-title>My Account</ion-title>
 </ion-navbar>
 
-<ion-content padding class="my-account">
-  My Account
-  
+<ion-content  text-center class="my-account"> 
+	<div class="avatarBG" (click)="pictureModal()">
+		<ion-icon name="person" class="profileImage"></ion-icon>
+		<button fab class="cameraButton">
+			<ion-icon name="camera"></ion-icon>
+		</button>
+	</div>
+  <div padding></div>
+  <ion-list padding>
+    <a ion-item (click)="nameModal()">
+      Edit
+    </a>
+  </ion-list>
 </ion-content>
