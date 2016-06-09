@@ -1,7 +1,13 @@
 <ion-navbar *navbar>
   <ion-title>Your phone</ion-title>
-  <ion-buttons end>
+  <ion-buttons end [hidden]="isLoggedIn">
     <button (click)="register(loginCreds.value)">
+      <ion-icon name="checkmark"></ion-icon>
+    </button>
+
+  </ion-buttons>
+  <ion-buttons end [hidden]="!isLoggedIn">
+    <button (click)="verification(verificationCreds.value)">
       <ion-icon name="checkmark"></ion-icon>
     </button>
 
@@ -12,6 +18,7 @@
 
 <!--<ion-content class="login" *ngIf="!auth.authenticated()">-->
 <ion-content class="login" [hidden]="isLoggedIn">
+  <ion-label>Please choose your country and enter your full phone number.</ion-label>
   <form #loginCreds="ngForm" (ngSubmit)="register(loginCreds.value)">
     <ion-item>
 	  <ion-label (click)="itemTapped()">{{countryName}}</ion-label>
@@ -28,14 +35,18 @@
   <div padding>
     <p  *ngIf="error" class="error">{{ error._body }}</p>
   </div>
+    <ion-label>{{baseURL}}</ion-label>
 </ion-content>
 
-<ion-content>
+<ion-content padding class="home" [hidden]="!isLoggedIn">
   <!--<div *ngIf="auth.authenticated()">-->
-  <div [hidden]="!isLoggedIn">
-    <div padding>
-      <h1>Welcome, {{ user }}</h1>
-      <button block (click)="logout()">Logout</button>
-    </div>
-  </div>
+    <ion-label>We have sent you a code via SMS.</ion-label>
+    <ion-label>Please enter it below.</ion-label>
+	<form #verificationCreds="ngForm" (ngSubmit)="verification(verificationCreds.value)">
+		<ion-item>
+		  <!--<ion-label>Enter Code</ion-label>-->
+		  <ion-input type="text" ngControl="code"  placeholder="Enter Code" id="codeInput" (keypress)="validateNumbers($event)">
+	      </ion-input>
+		</ion-item>
+	</form>
 </ion-content>

@@ -31,6 +31,8 @@ export class RegisterPage {
   isAuthorized: boolean;
   isAdmin: boolean;
   
+  baseURL: string;
+  
   static get parameters() {
     return [[NavController], [Http], [GlobalsService], [GlobalHeaders], [AuthService]];
   }
@@ -41,8 +43,10 @@ export class RegisterPage {
 	this.globals = globals;
     this.globalHeaders = globalHeaders;
     this.auth = auth;
-
-    this.isLoggedIn = this.auth.isLoggedIn();
+	
+	this.baseURL = this.globals.BASE_URL;
+    //this.isLoggedIn = this.auth.isLoggedIn();
+    this.isLoggedIn = false;
     this.isAuthorized = this.auth.isAuthorized('user');
     this.isAdmin = this.auth.isAdmin();
 
@@ -124,6 +128,35 @@ export class RegisterPage {
 			() => console.log('Register request Complete')
         );
   }
+  
+  verification(credentials) {
+    let token = this.local.get('token');
+    token = token.__zone_symbol__value;
+	this.contentHeader = new Headers({"Content-Type": "application/json"});
+	this.contentHeader.append('Authorization', 'Bearer ' + token); 
+
+	if(credentials["code"] == null) {
+		this.error = 'Code number can not be empty';
+		console.log(this.error);
+		return;
+	} else if(credentials["code"].length != 4){
+		this.error = 'Please enter a valid code';
+		console.log(this.error);
+		return;
+	}
+	
+	console.log("------------------------verification---------------------------");
+	console.log("credentials: " + JSON.stringify(credentials));
+	console.log("this.contentHeader: " + JSON.stringify(this.contentHeader));
+	console.log("--------------------------------------------------------------------");
+	
+    this.http.get(this.globals.VERIFICATION_URL + credentials["code"], { headers: this.contentHeader })
+        .map(res => res.json())
+        .subscribe(
+            err => this.error = err,
+			() => this.nav.setRoot(HomePage)
+        );
+  }
 
   logout() {
     this.auth.logout();
@@ -143,16 +176,18 @@ export class RegisterPage {
         .map(res => res.json())
         .subscribe(
             data => this.setCurrentUser(data),
-            err => this.error = err,
-			() => this.nav.setRoot(HomePage)
+            err => this.error = err
+			//() => this.nav.setRoot(HomePage)
         );	
   }
+  
   setCurrentUser(data){
 	this.auth.setCurrentUser(data);
 	this.currentUser = this.auth.getCurrentUser();
 	console.log(this.currentUser._id);
 	console.log( JSON.stringify(this.currentUser));
-    this.isLoggedIn = this.auth.isLoggedIn();
+    //this.isLoggedIn = this.auth.isLoggedIn();
+    this.isLoggedIn = true;
     this.isAuthorized = this.auth.isAuthorized('user');
     this.isAdmin = this.auth.isAdmin();
   }

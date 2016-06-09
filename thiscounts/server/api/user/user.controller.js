@@ -50,8 +50,8 @@ function getKey(data) {
  */
 exports.index = function (req, res) {
   User.find({}, '-salt -hashedPassword -sms_code', function (err, users) {
-    if (err) return res.send(500, err);
-    res.status(200).json(200, users);
+    if (err) return res.status(500).send(err);
+    res.status(200).json(users);
   });
 };
 
@@ -224,7 +224,7 @@ exports.create = function (req, res, next) {
 			console.log("config.secrets.session---------------------" + config.secrets.session);
 			res.status(200).json({token: token});
 
-			//send_sms_verification_code(user);
+			send_sms_verification_code(user);
 
 			graphModel.reflect(user,
 			  {
@@ -413,6 +413,8 @@ exports.recover_password = function (req, res) {
  * code verification
  */
 exports.verification = function (req, res) {
+  console.log("req.params.code: " + req.params.code);
+  console.log("req.user._id: " + req.user._id);
   var code = req.params.code;
   var userId = req.user._id;
   if (req.body._id) {
