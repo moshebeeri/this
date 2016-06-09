@@ -36,6 +36,8 @@ module.exports = function(app) {
   app.use('/api/promotions', require('./api/promotion'));
   app.use('/api/things', require('./api/thing'));
   app.use('/api/users', require('./api/user'));
+  
+  app.use('/api/breeze', require('./components/breeze'));
 
   app.use('/auth', require('./auth'));
 
