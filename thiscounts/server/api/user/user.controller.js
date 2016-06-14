@@ -34,7 +34,7 @@ var validationError = function (res, err) {
   console.log("------------------------------------firstKey " + firstKey);
   if(firstKey != undefined){
 	return res.status(422).json(err['errors'][firstKey]['message']);
-  } 
+  }
   return res.status(422).json(err);
 };
 
@@ -202,11 +202,11 @@ exports.create = function (req, res, next) {
   newUser.provider = 'local';
   newUser.role = 'user';
   newUser.sms_code = randomstring.generate({length: 4, charset: 'numeric'});
-  
+
   newUser.sms_verified = false;
   newUser.phone_number = utils.clean_phone_number(newUser.phone_number);
   //newUser.email = newUser.phone_number + "@groupys.com";
-  
+
   User.findOne({phone_number: newUser.phone_number}, function (err, user) {
     if (user) {
 	  console.log("x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-");
@@ -239,7 +239,7 @@ exports.create = function (req, res, next) {
 		});
 	}
   });
-  
+
 };
 
 
@@ -340,7 +340,7 @@ function new_user_follow(user) {
     //We have this number, make user follow the users who have his number
     phone_number.contacts.forEach(function (contact) {
       graphModel.follow_phone(contact.userId, contact.nick, user._id);
-      activity_follow(user._id, contact.userId)
+      activity_follow(user._id, contact.userId);
       logger.info('create (' + contact + ')<-[Follows]-(' + phone_number.owner + ')');
     });
   });
