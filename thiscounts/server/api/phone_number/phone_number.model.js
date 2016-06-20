@@ -5,7 +5,7 @@ var mongoose = require('mongoose'),
 
 var PhoneNumberSchema = new Schema({
   contacts : [{
-    user : {type: Schema.ObjectId, ref: 'Promotion', require: true, index: true},
+    user : {type: Schema.ObjectId, ref: 'User', require: true, index: true},
     nick : String
   }],
   updated: { type : Date, default: Date.now }

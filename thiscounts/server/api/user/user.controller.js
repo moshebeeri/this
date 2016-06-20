@@ -345,7 +345,7 @@ function new_user_follow(user) {
     //We have this number, make user follow the users who have his number
     phone_number.contacts.forEach(function (contact) {
       graphModel.follow_phone(contact.userId, contact.nick, user._id);
-      activity_follow(user._id, contact.userId)
+      activity_follow(user._id, contact.userId);
       logger.info('create (' + contact + ')<-[Follows]-(' + phone_number.owner + ')');
     });
   });
