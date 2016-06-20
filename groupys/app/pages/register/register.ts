@@ -40,18 +40,18 @@ export class RegisterPage {
   constructor(nav, http, globals, globalHeaders, auth) {
     this.nav = nav;
     this.http = http;
-	this.globals = globals;
+    this.globals = globals;
     this.globalHeaders = globalHeaders;
     this.auth = auth;
-	
-	this.baseURL = this.globals.BASE_URL;
-    //this.isLoggedIn = this.auth.isLoggedIn();
-    this.isLoggedIn = false;
+
+    this.baseURL = this.globals.BASE_URL;
+    this.isLoggedIn = this.auth.isLoggedIn();
+    //this.isLoggedIn = false;
     this.isAuthorized = this.auth.isAuthorized('user');
     this.isAdmin = this.auth.isAdmin();
 
-	this.contentHeader = this.globalHeaders.getMyGlobalHeaders();
-    console.log("xxxxxxxxxxxxxxxxxxxxxxxxxxx" + JSON.stringify(this.contentHeader))	
+    this.contentHeader = this.globalHeaders.getMyGlobalHeaders();
+    console.log("xxxxxxxxxxxxxxxxxxxxxxxxxxx" + JSON.stringify(this.contentHeader))
     this.error = null;
     this.callingDigitsInput='';
     this.validatorLength=-99;
@@ -60,10 +60,10 @@ export class RegisterPage {
   }
 
   validateNumbers(evt){
-	if ([48, 49, 50, 51, 52, 53, 54, 55, 56, 57].indexOf(evt.keyCode || evt.which) == -1){
-		evt.returnValue = false;
-		if(evt.preventDefault){evt.preventDefault();}
-	}
+    if ([48, 49, 50, 51, 52, 53, 54, 55, 56, 57].indexOf(evt.keyCode || evt.which) == -1){
+      evt.returnValue = false;
+      if(evt.preventDefault){evt.preventDefault();}
+    }
   }
   
   getCountryDetails(){
@@ -85,13 +85,13 @@ export class RegisterPage {
     }).catch(error => {
       console.log(error);
     });
-	this.local.get('digitsValidator').then(digitsValidator => {
+	  this.local.get('digitsValidator').then(digitsValidator => {
       this.digitsValidator = JSON.parse(digitsValidator);
       console.log('digitsValidator' + this.digitsValidator);
-	  document.getElementById("phoneInput").setAttribute("maxlength", this.digitsValidator);
-	  document.getElementById("phoneInput").getElementsByTagName( 'input' )[0].setAttribute("maxlength", this.digitsValidator);
-    }).catch(error => {
-      console.log(error);
+      document.getElementById("phoneInput").setAttribute("maxlength", this.digitsValidator);
+      document.getElementById("phoneInput").getElementsByTagName( 'input' )[0].setAttribute("maxlength", this.digitsValidator);
+      }).catch(error => {
+        console.log(error);
     });
     
   }
@@ -101,102 +101,113 @@ export class RegisterPage {
 
   register(credentials) {
 
-	if(credentials["callingDigits"] == null) {
-		this.error = 'Phone number can not be empty';
-		console.log(this.error);
-		return;
-	} else if(credentials["callingDigits"].length != this.digitsValidator){
-		this.error = 'Please enter a valid phone number';
-		console.log(this.error);
-		return;
-	}
-	let phone_number = this.callingCodes + credentials["callingDigits"];
-	credentials["phone_number"] = phone_number;
-	/*
-	credentials["username"] = 'rami raz';
-	credentials["email"] = 'ramiraz76@gmail.com';
-	credentials["password"] = 'password';
-	*/
-	console.log(JSON.stringify(credentials));
-	console.log(JSON.stringify(this.contentHeader));
+    if(credentials["callingDigits"] == null) {
+      this.error = 'Phone number can not be empty';
+      console.log(this.error);
+      return;
+    } else if(credentials["callingDigits"].length != this.digitsValidator){
+      this.error = 'Please enter a valid phone number';
+      console.log(this.error);
+      return;
+    }
+    let phone_number = this.callingCodes + credentials["callingDigits"];
+    credentials["phone_number"] = phone_number;
+    /*
+    credentials["username"] = 'rami raz';
+    credentials["email"] = 'ramiraz76@gmail.com';
+    credentials["password"] = 'password';
+    */
+    console.log(JSON.stringify(credentials));
+    console.log(JSON.stringify(this.contentHeader));
 	
     this.http.post(this.globals.SIGNUP_URL, JSON.stringify(credentials), { headers: this.contentHeader })
         .map(res => res.json())
         .subscribe(
-            data => this.authSuccess(data.token),
-            err => this.error = err,
-			() => console.log('Register request Complete')
+          data => this.authSuccess(data.token),
+          err => this.error = err,
+          () => console.log('Register request Complete')
         );
   }
   
   verification(credentials) {
     let token = this.local.get('token');
     token = token.__zone_symbol__value;
-	this.contentHeader = new Headers({"Content-Type": "application/json"});
-	this.contentHeader.append('Authorization', 'Bearer ' + token); 
+    this.contentHeader = new Headers({"Content-Type": "application/json"});
+    this.contentHeader.append('Authorization', 'Bearer ' + token);
 
-	if(credentials["code"] == null) {
-		this.error = 'Code number can not be empty';
-		console.log(this.error);
-		return;
-	} else if(credentials["code"].length != 4){
-		this.error = 'Please enter a valid code';
-		console.log(this.error);
-		return;
-	}
-	
-	console.log("------------------------verification---------------------------");
-	console.log("credentials: " + JSON.stringify(credentials));
-	console.log("this.contentHeader: " + JSON.stringify(this.contentHeader));
-	console.log("--------------------------------------------------------------------");
+    if(credentials["code"] == null) {
+      this.error = 'Code number can not be empty';
+      console.log(this.error);
+      return;
+    } else if(credentials["code"].length != 4){
+      this.error = 'Please enter a valid code';
+      console.log(this.error);
+      return;
+    }
+
+    console.log("------------------------verification---------------------------");
+    console.log("credentials: " + JSON.stringify(credentials));
+    console.log("this.contentHeader: " + JSON.stringify(this.contentHeader));
+    console.log("--------------------------------------------------------------------");
 	
     this.http.get(this.globals.VERIFICATION_URL + credentials["code"], { headers: this.contentHeader })
         .map(res => res.json())
         .subscribe(
             err => this.error = err,
-			() => this.nav.setRoot(HomePage)
+			      () => this.updateCurrentUser()
         );
+  }
+  updateCurrentUser(){
+    let user = this.auth.getCurrentUser();
+    user.sms_verified = true;
+    this.auth.setCurrentUser(user);
+
+    this.isLoggedIn = this.auth.isLoggedIn();
+    this.isAuthorized = this.auth.isAuthorized('user');
+    this.isAdmin = this.auth.isAdmin();
+
+    this.nav.setRoot(HomePage);
   }
 
   logout() {
     this.auth.logout();
-	this.contentHeader = new Headers({"Content-Type": "application/json"});
+	  this.contentHeader = new Headers({"Content-Type": "application/json"});
     this.nav.setRoot(HomePage);
   }
 
   authSuccess(token) {
-	console.log("token---------------------------------------" + token);
+    console.log("token---------------------------------------" + token);
     this.error = null;
-	this.auth.setToken(token);
-	this.contentHeader = new Headers({"Content-Type": "application/json"});
-	this.contentHeader.append('Authorization', 'Bearer ' + token); 
-	  
-	console.log("contentHeader---------------------------------------" + JSON.stringify(this.contentHeader));
-	this.http.get(this.globals.ME_URL, { headers: this.contentHeader})
-        .map(res => res.json())
-        .subscribe(
-            data => this.setCurrentUser(data),
-            err => this.error = err
-			//() => this.nav.setRoot(HomePage)
-        );	
+    this.auth.setToken(token);
+    this.contentHeader = new Headers({"Content-Type": "application/json"});
+    this.contentHeader.append('Authorization', 'Bearer ' + token);
+
+    console.log("contentHeader---------------------------------------" + JSON.stringify(this.contentHeader));
+    this.http.get(this.globals.ME_URL, { headers: this.contentHeader})
+    .map(res => res.json())
+    .subscribe(
+        data => this.setCurrentUser(data),
+        err => this.error = err
+  //() => this.nav.setRoot(HomePage)
+    );
   }
   
   setCurrentUser(data){
-	this.auth.setCurrentUser(data);
-	this.currentUser = this.auth.getCurrentUser();
-	console.log(this.currentUser._id);
-	console.log( JSON.stringify(this.currentUser));
-    //this.isLoggedIn = this.auth.isLoggedIn();
-    this.isLoggedIn = true;
+    this.auth.setCurrentUser(data);
+    this.currentUser = this.auth.getCurrentUser();
+    console.log(this.currentUser._id);
+    console.log( JSON.stringify(this.currentUser));
+    this.isLoggedIn = this.auth.isLoggedIn();
+    //this.isLoggedIn = true;
     this.isAuthorized = this.auth.isAuthorized('user');
     this.isAdmin = this.auth.isAdmin();
   }
 
-  printObject(){
-	let output = '';
-	for (let property in object) {
-	  output += property + ': ' + object[property]+'; ';
-	}
-	console.log(output);
+  printObject(object){
+    let output = '';
+    for (let property in object) {
+      output += property + ': ' + object[property]+'; ';
+    }
+    console.log(output);
   }
 }
