@@ -1,6 +1,8 @@
+import {Injectable} from '@angular/core';
 /**
  * Minimum necessary deferred object for breeze Q/ES6 Promise adapter
  */
+@Injectable()
 export interface Deferred {
   promise: Promise<any>;
   resolve: (value? : {} | PromiseLike<{}>) => void;

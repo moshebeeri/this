@@ -49,7 +49,7 @@ export class BreezePage {
   
   getEmps() {
     this._heroService.getEmps()
-      .then((emps:any[]) => {
+      .then((emps) => {
         this.emps = emps;
         this.myEmp = emps[0];
       })

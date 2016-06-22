@@ -15,6 +15,7 @@
   <button (click)="sendContacts()">Send Contacts</button>
   <button (click)="back()">Back</button>
   {{xxx}}
+  <!--{{xContacts}}-->
   <!--<img style="width: 35px"  src='img/avatar3?time=' + {{xxx}} >
   <img style="width: 35px"  src='img/050-746-9936?time=' + {{xxx}} >-->
 
@@ -40,15 +41,16 @@
   </ion-item-group>-->
 
 
-  <ion-item-group>
-    <template ngFor #contact [ngForOf]="phoneContacts">
+  <ion-item-group *ngFor="let contact of phoneContacts">
+    <!--<template ngFor #contact [ngForOf]="phoneContacts">-->
       <ion-item >{{contact.displayName}}</ion-item>
       <ion-item >{{contact.phoneNumbers[0].value}}</ion-item>
       <img style="width: 35px" class="img-circle" [src]='getImageUrl(contact.phoneNumbers[0].value)' (load)="onImageLoaded(contact.phoneNumbers[0].value)" (error)='onImageError(contact.phoneNumbers[0].value)' onerror="this.src='img/avatar3.png'">
-      <div id="contact.phoneNumbers[0].value">
-        <button *ngIf='!isImage[contact.phoneNumbers[0].value]' (click)="sendContacts()">INVITE</button>
-      </div>
-    </template>
+      <button *ngIf='!isImage[contact.phoneNumbers[0].value]' (click)="sendContacts()">INVITE</button>
+    <!--<div id="contact.phoneNumbers[0].value">
+      <button *ngIf='!isImage[contact.phoneNumbers[0].value]' (click)="sendContacts()">INVITE</button>
+    </div>-->
+    <!--</template>-->
     <!--<button *ngIf='isImage[contact.phoneNumbers[0].value]' (click)="sendContacts()">Invite</button>-->
     <!--<img src="{{isPic(contact.phoneNumbers[0].value)}}" onerror="noPic()" height="42" width="42">-->
     <!--<ion-item >{{checkContact(contact.phoneNumbers[0].value)}}</ion-item>-->

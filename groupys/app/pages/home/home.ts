@@ -1,7 +1,7 @@
 import {Page} from 'ionic-angular';
 import {Geolocation} from 'ionic-native';
 import {AuthService} from '../../services/auth/auth';
-import {Http, Headers} from 'angular2/http';
+import {Http, Headers} from '@angular/http';
 import {GlobalsService} from '../../services/globals/globals';
 import {GlobalHeaders} from '../../services/headers/headers';
 //import {GeolocationService} from '../../services/geolocation/geolocation';

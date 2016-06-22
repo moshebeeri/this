@@ -1,11 +1,12 @@
 import {Page, NavController} from 'ionic-angular';
-import {Component, ChangeDetectionStrategy, ChangeDetectorRef} from 'angular2/core';
+import {Component, ChangeDetectionStrategy, ChangeDetectorRef} from '@angular/core';
 import {Contacts} from 'ionic-native';
-import {Http, Headers} from 'angular2/http';
+import {Http, Headers} from '@angular/http';
+import {LazyLoadImageDirective} from 'ng2-lazyload-image';
 import {GlobalsService} from '../../services/globals/globals';
 import {AuthService} from '../../services/auth/auth';
 import {GlobalHeaders} from '../../services/headers/headers';
-import {TimerWrapper} from 'angular2/src/facade/async';
+//import {TimerWrapper} from 'angular2/src/facade/async';
 import {HomePage} from '../home/home';
 
 
@@ -17,11 +18,12 @@ import {HomePage} from '../home/home';
 */
 @Page({
   templateUrl: 'build/pages/contacts/contacts.html',
-  providers : [Contacts, GlobalsService, GlobalHeaders, AuthService]
+  providers : [Contacts, GlobalsService, GlobalHeaders, AuthService],
+  directives: [LazyLoadImageDirective]
 })
 export class ContactsPage {
   phoneContacts: Array;
-  xContacts: string;
+  xContacts: any;
   xxContacts: string;
   xxxContacts: string;
   phonebook: any;
@@ -33,6 +35,8 @@ export class ContactsPage {
   isImage: any;
   url: any;
   xxx: any;
+  defaultImage: string;
+  offset: number;
 
 
 
@@ -48,6 +52,9 @@ export class ContactsPage {
     let session = new Date();
     let dontCache = session.getTime();
     this.xxx = dontCache;
+    
+    this.defaultImage = 'img/avatar3.png';
+    this.offset = 100;
     //this.phonebook = [];
       /*
 	  this.contacts = Contacts;
@@ -66,7 +73,7 @@ export class ContactsPage {
       multiple: true,
       hasPhoneNumber: true,
       contactFields: ['displayName']
-    }
+    };
     Contacts.find(['*'], options).then((contact) => {
       this.phoneContacts = contact;
       this.phonebook = [];
@@ -109,6 +116,7 @@ export class ContactsPage {
     this.nav.pop();
     this.nav.setRoot(HomePage);
   }
+  /*
   isImages(phoneNumber){
     TimerWrapper.setTimeout(() => {
       if(!this.isImage[phoneNumber]){
@@ -117,7 +125,7 @@ export class ContactsPage {
         return !this.isImage[phoneNumber];
       }
     }, 5000);
-  }
+  }*/
 
 
 

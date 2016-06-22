@@ -17,8 +17,8 @@ export class MyAccountPage {
 	this.nav = nav;
   }
   updatePic(){
-	console.log("updatePic");
-	this.nav.push(ProfilePage);
+    console.log("updatePic");
+    this.nav.push(ProfilePage);
   }
   nameModal() {
     let nameModal = Modal.create(NameModal);

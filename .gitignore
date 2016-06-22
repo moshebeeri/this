@@ -8,7 +8,7 @@ thiscounts/node_modules
 thiscounts/public
 thiscounts/.tmp
 thiscounts/.sass-cache
-thiscounts/.idea
+thiscounts/.idea/*
 thiscounts/client/bower_components
 thiscounts/dist
 thiscounts/server/config/local.env.js

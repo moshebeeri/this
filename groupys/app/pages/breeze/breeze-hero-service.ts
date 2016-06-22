@@ -1,4 +1,4 @@
-import {Injectable} from 'angular2/core';
+import {Injectable} from '@angular/core';
 import {Q} from './q';
 
 // Configure breeze with Q/ES6 Promise adapter

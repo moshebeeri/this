@@ -1,6 +1,6 @@
 import {Page, NavController, Storage, LocalStorage} from 'ionic-angular';
-import {Http, Headers} from 'angular2/http';
-import {FORM_DIRECTIVES,FormBuilder,ControlGroup} from 'angular2/common';
+import {Http, Headers} from '@angular/http';
+import {FORM_DIRECTIVES,FormBuilder,ControlGroup} from '@angular/common';
 import {GlobalsService} from '../../services/globals/globals';
 import {AuthService} from '../../services/auth/auth';
 import {GlobalHeaders} from '../../services/headers/headers';
@@ -33,11 +33,11 @@ export class RegisterPage {
   
   baseURL: string;
   
-  static get parameters() {
+  /*static get parameters() {
     return [[NavController], [Http], [GlobalsService], [GlobalHeaders], [AuthService]];
-  }
+  }*/
 
-  constructor(nav, http, globals, globalHeaders, auth) {
+  constructor(private nav:NavController, private http:Http, private globals:GlobalsService, private globalHeaders:GlobalHeaders, private auth:AuthService) {
     this.nav = nav;
     this.http = http;
     this.globals = globals;
@@ -53,7 +53,7 @@ export class RegisterPage {
     this.contentHeader = this.globalHeaders.getMyGlobalHeaders();
     console.log("xxxxxxxxxxxxxxxxxxxxxxxxxxx" + JSON.stringify(this.contentHeader))
     this.error = null;
-    this.callingDigitsInput='';
+    this.callingDigitsInput= null;
     this.validatorLength=-99;
     this.getCountryDetails();
     
