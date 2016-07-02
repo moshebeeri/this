@@ -276,7 +276,7 @@ exports.realize = function (req, res) {
     instance.time = new Date();
     instanceGraphModel.save(instance, function(err, instance){
       if(err) return handleError(res, err);
-      //promotionGraphModel.unrelate_ids(req.user._id, 'SAVED', req.params.id);
+      //graphModel.unrelate_ids(req.user._id, 'SAVED', req.params.id);
       promotionGraphModel.relate_ids(req.user._id, 'REALIZED', req.params.id, {timestamp: Date.now()});
       return res.json(200, instance);
     })

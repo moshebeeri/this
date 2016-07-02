@@ -9,7 +9,7 @@ var graphTools = require('../../components/graph-tools');
 var graphModel = graphTools.createGraphModel('user');
 var feedTools = require('../../components/feed-tools');
 
-//var promotionGraphModel = graphTools.createGraphModel('promotion');
+//var graphModel = graphTools.createGraphModel('promotion');
 //var instanceGraphModel = graphTools.createGraphModel('instance');
 
 

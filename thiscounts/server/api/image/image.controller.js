@@ -103,7 +103,7 @@ exports.logo = function (req, res) {
 function handle_image(req, res, type) {
   var meta_data = req.headers.meta;
   var form = new multiparty.Form();
-  var size = '';
+  var size = 0;
   var fileName = randomstring.generate({length: 8, charset: 'hex'});
 
   form.on('part', function (part) {

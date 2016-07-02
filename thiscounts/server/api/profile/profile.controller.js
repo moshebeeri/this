@@ -7,7 +7,7 @@ var Profile = require('./profile.model');
 var User = require('../user/user.model');
 var Business = require('../business/business.model');
 var graphTools = require('../../components/graph-tools');
-var promotionGraphModel = graphTools.createGraphModel('promotion');
+var graphModel = graphTools.createGraphModel('promotion');
 
 // Get a single profile
 exports.me = function (req, res) {
@@ -24,7 +24,7 @@ exports.me = function (req, res) {
 
   function add_saved(callback) {
     //console.log('1');                   start, name, ret_type, limit, callback
-    promotionGraphModel.related_type_id(req.user._id, 'SAVE', "promotion", req.user._id, 10, callback);
+    graphModel.related_type_id(req.user._id, 'SAVED', "promotion", req.user._id, 0, 10, callback);
   }
 
   async.parallel({
@@ -118,6 +118,7 @@ exports.destroy = function (req, res) {
 };
 
 exports.realized_promotions = function (req, res) {
+  //graphModel.relate_ids(req.user._id, 'REALIZED', req.params.id, {timestamp: Date.now()});
   return res.status(204).send('No Content');
 };
 
@@ -154,13 +155,16 @@ exports.realized_cards = function (req, res) {
 };
 
 exports.followers = function (req, res) {
+  graphModel.related_type_id(req.user._id, 'FOLLOWS', "promotion", req.user._id, 0, 10, callback);
+
   return res.status(204).send('No Content');
 };
 
 exports.following = function (req, res) {
+  //graphModel.relate_ids(req.user._id, 'REALIZED', req.params.id, {timestamp: Date.now()});
+
   return res.status(204).send('No Content');
 };
-
 
 function handleError(res, err) {
   return res.status(500).send(err);

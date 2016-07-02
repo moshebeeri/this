@@ -141,7 +141,7 @@ GraphModel.prototype.count_in_rel_id = function count_in_rel(name, to, callback)
  */
 GraphModel.prototype.relate_ids = function relate_id(from, name, to, params){
   if(!utils.defined(params))
-    params = {};
+    params = {timestamp: Date.now()};
   var query = util.format("MATCH (f { _id:'%s' }), (t { _id:'%s' }) CREATE UNIQUE (f)-[:%s %s]->(t)",from, to, name, JSON.stringify(params));
   console.log(query);
   db.query(query, function(err) {
@@ -173,12 +173,22 @@ GraphModel.prototype.promotion_instance_id = function promotion_instance(user_id
   });
 };
 
-GraphModel.prototype.related_type_id = function related_type_id(start, name, ret_type, by_user_id, limit, callback){
-  var query = util.format("MATCH (s { _id:'{%s}' })-[r:%s]->(ret:%s) where r.by='%s' return ret limit %d", start, name, ret_type, by_user_id, limit);
+GraphModel.prototype.related_type_id = function related_type_id(start, name, ret_type, skip, limit, callback){
+  var query = util.format(
+    "MATCH (s { _id:'{%s}' })-[r:%s]->(ret:%s) " +
+    "return ret " +
+    "ORDER BY r.timestamp DESC " +
+    "skip %d limit %d", start, name, ret_type, skip, limit);
   db.query(query, function(err, related) {
     if (err) { callback(err, null) }
     else callback(null, related)
   });
+};
+
+GraphModel.prototype.followes = function followes(userId, skip, limit, callback){
+};
+
+GraphModel.prototype.following = function following(userId, skip, limit, callback){
 };
 
 GraphModel.prototype.query = function query(query, callback){
