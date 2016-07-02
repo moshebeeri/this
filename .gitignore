@@ -3,6 +3,8 @@
 !*.css
 
 //thiscounts files
+.idea
+workspace.xml
 
 thiscounts/node_modules
 thiscounts/public
@@ -23,3 +25,4 @@ groupys/plugins/
 groupys/*.swp
 groupys/.DS_Store
 groupys/Thumbs.db
+thiscounts/server/config/docker/servers/server_install.sh
