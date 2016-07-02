@@ -1,6 +1,7 @@
 // use only .scss and ignore all .css files
 
 !*.css
+.idea/*
 
 //thiscounts files
 .idea
@@ -10,7 +11,7 @@ thiscounts/node_modules
 thiscounts/public
 thiscounts/.tmp
 thiscounts/.sass-cache
-thiscounts/.idea
+thiscounts/.idea/*
 thiscounts/client/bower_components
 thiscounts/dist
 thiscounts/server/config/local.env.js
@@ -18,6 +19,7 @@ thiscounts/npm-debug.log
 
 
 //groupys files
+groupys/.idea/*
 groupys/node_modules/
 groupys/www/build/
 groupys/platforms/

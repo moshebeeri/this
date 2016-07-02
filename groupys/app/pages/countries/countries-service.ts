@@ -1,4 +1,4 @@
-import {Injectable} from 'angular2/core';
+import {Injectable} from '@angular/core';
 import {COUNTRIES} from './countries-data';
 import {Observable} from 'rxjs/Observable';
 //import {SearchJson} from '../../config/search-json/search-json';
@@ -23,10 +23,10 @@ export class CountriesService {
         });
     }
 	
-	public findByName(name) {
-		return Observable.create(observer => {
-			observer.next(COUNTRIES);
-			let js = JSON.stringify(COUNTRIES);
+    public findByName(name) {
+    return Observable.create(observer => {
+      observer.next(COUNTRIES);
+      let js = JSON.stringify(COUNTRIES);
             let result =[];
             if(name.length>2) {
                 result = this.getObjects(COUNTRIES,'searchName',name);
@@ -35,9 +35,9 @@ export class CountriesService {
                 result = this.getObjects(COUNTRIES,'alpha2Code',name);
                 observer.next(result);
             } else {
-				observer.next(result);
-			}
-			observer.complete();
+        observer.next(result);
+      }
+      observer.complete();
         }); 
     }
     public getObjects(obj, key, val) {

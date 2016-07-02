@@ -1,4 +1,4 @@
-import {Injectable} from 'angular2/core';
+import {Injectable} from '@angular/core';
 import {tokenNotExpired} from 'angular2-jwt';
 import {Storage, LocalStorage} from 'ionic-angular';
 
@@ -22,19 +22,20 @@ export class AuthService {
   }
   isLoggedIn() {
      let currentUser = this.getCurrentUser();
-     return !!currentUser && currentUser.hasOwnProperty('role');
+     //return !!currentUser && currentUser.hasOwnProperty('role');
+     return !!currentUser && currentUser.sms_verified === true;
   }
   getCurrentUser() {
     let user = this.local.get('user');
-	console.log("getUser: " + JSON.parse(user.__zone_symbol__value));
-	return JSON.parse(user.__zone_symbol__value); 
+	  console.log("getUser: " + JSON.parse(user.__zone_symbol__value));
+	  return JSON.parse(user.__zone_symbol__value);
   }
   setCurrentUser(user) {
     this.local.set('user', JSON.stringify(user));
   }
   getToken() {
     let token = this.local.get('token');
-	return token.__zone_symbol__value;
+	  return token.__zone_symbol__value;
   }
   setToken(token) {
     this.local.set('token', token);

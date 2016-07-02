@@ -1,6 +1,6 @@
 import {Page, NavController, Storage, LocalStorage} from 'ionic-angular';
-import {Http, Headers} from 'angular2/http';
-import {FORM_DIRECTIVES} from 'angular2/common';
+import {Http, Headers} from '@angular/http';
+import {FORM_DIRECTIVES} from '@angular/common';
 import {JwtHelper} from 'angular2-jwt';
 import {AuthService} from '../../services/auth/auth';
 import {GlobalsService} from '../../services/globals/globals';

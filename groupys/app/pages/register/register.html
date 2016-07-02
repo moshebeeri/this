@@ -1,23 +1,27 @@
 <ion-navbar *navbar>
+  <button menuToggle [hidden]="!isLoggedIn">
+    <ion-icon name="menu"></ion-icon>
+  </button>
   <ion-title>Your phone</ion-title>
-  <ion-buttons end [hidden]="isLoggedIn">
+  <ion-buttons end [hidden]="isAuthorized">
     <button (click)="register(loginCreds.value)">
       <ion-icon name="checkmark"></ion-icon>
     </button>
 
   </ion-buttons>
-  <ion-buttons end [hidden]="!isLoggedIn">
+  <ion-buttons end [hidden]="!isAuthorized || isLoggedIn">
     <button (click)="verification(verificationCreds.value)">
       <ion-icon name="checkmark"></ion-icon>
     </button>
 
   </ion-buttons>
+
 </ion-navbar>
 
 <!--<ion-content class="login" *ngIf="!auth.authenticated()">-->
 
 <!--<ion-content class="login" *ngIf="!auth.authenticated()">-->
-<ion-content class="login" [hidden]="isLoggedIn">
+<ion-content class="login" [hidden]="isAuthorized">
   <ion-label>Please choose your country and enter your full phone number.</ion-label>
   <form #loginCreds="ngForm" (ngSubmit)="register(loginCreds.value)">
     <ion-item>
@@ -38,7 +42,7 @@
     <ion-label>{{baseURL}}</ion-label>
 </ion-content>
 
-<ion-content padding class="home" [hidden]="!isLoggedIn">
+<ion-content padding class="home" [hidden]="!isAuthorized || isLoggedIn">
   <!--<div *ngIf="auth.authenticated()">-->
     <ion-label>We have sent you a code via SMS.</ion-label>
     <ion-label>Please enter it below.</ion-label>
@@ -49,4 +53,8 @@
 	      </ion-input>
 		</ion-item>
 	</form>
+</ion-content>
+
+<ion-content padding class="home" [hidden]="!isLoggedIn">
+    <button (click)="logout()">Logout</button>
 </ion-content>

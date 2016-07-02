@@ -1,8 +1,8 @@
 import {Page, NavController, NavParams, Storage, LocalStorage} from 'ionic-angular';
-import {Http} from 'angular2/http';
+import {Http} from '@angular/http';
 import {CountriesService} from './countries-service';
 import {RegisterPage} from '../register/register';
-import {TimerWrapper} from 'angular2/src/facade/async';
+//import {TimerWrapper} from 'angular2/src/facade/async';
 
 
 
@@ -21,9 +21,9 @@ export class CountriesPage {
   countryName:string;
   callingCodes:string;
   callingDigits:string;
-  jsonResult:object;
+  jsonResult:Object;
   queryText:string;
-  toggleToolbar:boolian;
+  toggleToolbar:boolean;
 
 
   constructor(private nav:NavController, private navParams:NavParams, private countriesService:CountriesService) {
@@ -32,7 +32,7 @@ export class CountriesPage {
     // If we navigated to this page, we will have an item available as a nav param
     //this.selectedItem = navParams.get('item');
     this.countries = [];
-	this.toggleToolbar = false;
+	  this.toggleToolbar = false;
   }
 
   ngOnInit() {
@@ -43,12 +43,12 @@ export class CountriesPage {
   }
   
   toggleToolbars(){
-	this.toggleToolbar = !this.toggleToolbar;
+	  this.toggleToolbar = !this.toggleToolbar;
   }
   
   searchLowerCase(){
-	let lowerInput = this.queryText.toLowerCase();
-	this.searchCountries(lowerInput);
+    let lowerInput = this.queryText.toLowerCase();
+    this.searchCountries(lowerInput);
   }
 
   searchCountries(queryText){
@@ -62,9 +62,12 @@ export class CountriesPage {
     this.local.set('callingCodesDetails', JSON.stringify(callingCodes));
     this.local.set('callingDigitsDetails', JSON.stringify(callingDigits));
     this.local.set('digitsValidator', JSON.stringify(digitsValidator));
-	TimerWrapper.setTimeout(() => {  
-	  this.nav.setRoot(RegisterPage);
-	}, 100);
+    setTimeout(() => {
+      this.nav.setRoot(RegisterPage);
+    }, 100);
+    /*TimerWrapper.setTimeout(() => {  
+      this.nav.setRoot(RegisterPage);
+    }, 100);*/
   }
 
   alphabetList(countries){

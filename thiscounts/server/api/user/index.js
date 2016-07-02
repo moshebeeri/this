@@ -15,6 +15,7 @@ router.get('/verification/:code', auth.isAuthenticated(), controller.verificatio
 router.get('/verify', auth.isAuthenticated(), controller.verify);
 router.put('/:id/password', auth.isAuthenticated(), controller.changePassword);
 router.get('/:id', auth.isAuthenticated(), controller.show);
+router.get('/phone_number/:phone_number', auth.isAuthenticated(), controller.showByPhone);
 router.post('/', controller.create);
 router.get('/like/:id', auth.isAuthenticated(), controller.like);
 router.delete('/like/:id', auth.isAuthenticated(), controller.unlike);

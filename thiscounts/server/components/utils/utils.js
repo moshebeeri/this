@@ -30,6 +30,23 @@ Utils.prototype.log = function log(){
 Utils.prototype.clean_phone_number = function clean_phone_number(number){
   return number.replace(/\D/g, '');
 };
+Utils.prototype.clean_name = function clean_phone_number(name){
+  //var escaped_str = require('querystring').escape(name);
+  //return escaped_str;
+  return name.replace(/[-&\/\\#,+()$~%.'":*?<>{}]/g, '');
+};
+
+Utils.prototype.encode_name = function clean_phone_number(name){
+  var b = new Buffer(name);
+  var s = b.toString('base64');
+  return s;
+};
+
+Utils.prototype.decode_name = function clean_phone_number(name){
+  var b = new Buffer(name, 'base64');
+  var s = b.toString();
+  return s;
+};
 
 Utils.prototype.parallel_id =function set_parallel_id(itemId, element, callback){
   async.parallel({

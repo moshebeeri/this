@@ -224,7 +224,7 @@ exports.create = function (req, res, next) {
 			console.log("config.secrets.session---------------------" + config.secrets.session);
 			res.status(200).json({token: token});
 
-			send_sms_verification_code(user);
+			////send_sms_verification_code(user);
 
 			graphModel.reflect(user,
 			  {
@@ -270,9 +270,13 @@ exports.create = function (req, res, next) {
  * class  ContactsContract.CommonDataKinds.Phone
  */
 exports.phonebook = function (req, res) {
-  var mongoose = require('mongoose');
+  //req.user = [];
+  //req.user._id = 18;
+  //var mongoose = require('mongoose');
   var phonebook = req.body;
   var userId = req.user._id;
+  console.log(req.body);
+  console.log(req.user._id);
 
   mongoose.connection.db.collection('phonebook', function (err, collection) {
     if (err) return logger.error(err.message);
@@ -321,7 +325,8 @@ function owner_follow(phone_number) {
     return;
   phone_number.contacts.forEach(function (contact) {
     graphModel.follow_phone(phone_number._id, contact.nick, contact.userId);
-    logger.info('create (' + contact + ')<-[Follows]-(' + phone_number.owner + ')');
+    //logger.info('create (' + contact + ')<-[Follows]-(' + phone_number.owner + ')');
+    logger.info('create (' + contact + ')<-[Follows]-(' + phone_number._id + ')');
   });
 }
 
@@ -381,12 +386,24 @@ exports.login = function (req, res, next) {
 };
 
 /**
- * Get a single user
+ * Get a single user by id
  */
 exports.show = function (req, res, next) {
   var userId = req.params.id;
 
   User.findById(userId, '-salt -hashedPassword -sms_code', function (err, user) {
+    if (err) return next(err);
+    if (!user) return res.status(401).send('Unauthorized');
+    res.status(200).json(user.profile);
+  });
+};
+
+/**
+ * Get a single user by phone number
+ */
+exports.showByPhone = function (req, res, next) {
+  var userPhoneNumber = req.params.phone_number;
+  User.findOne({phone_number: userPhoneNumber}, function (err, user) {
     if (err) return next(err);
     if (!user) return res.status(401).send('Unauthorized');
     res.status(200).json(user.profile);

@@ -1,5 +1,5 @@
-import {Injectable} from 'angular2/core';
-import {Http, Headers} from 'angular2/http';
+import {Injectable} from '@angular/core';
+import {Http, Headers} from '@angular/http';
 import {Storage, LocalStorage} from 'ionic-angular';
 
 @Injectable()
@@ -16,5 +16,5 @@ export class GlobalHeaders {
 	}
 	getMyGlobalHeaders() {
 		return this.contentHeader;
-    }
+	}
 }

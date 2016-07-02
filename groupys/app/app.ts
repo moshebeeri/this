@@ -1,11 +1,9 @@
-import {bootstrap} from 'angular2/platform/browser';
-import {App, IonicApp, Platform} from 'ionic-angular';
+import {Component, ViewChild} from '@angular/core';
+import {ionicBootstrap, Platform, MenuController, Nav} from 'ionic-angular';
 import {StatusBar, Geolocation} from 'ionic-native';
 
-import {provide} from 'angular2/core';
-import {Http} from 'angular2/http';
-import {AuthHttp, AuthConfig} from 'angular2-jwt';
-import {Type} from 'angular2/core';
+import {Http} from '@angular/http';
+import {Type} from '@angular/core';
 import {AuthService} from './services/auth/auth';
 import {EntityManagerFactoryService} from './services/breezejs/entityManagerFactory';
 
@@ -23,30 +21,28 @@ import {RegisterPage} from './pages/register/register';
 import {CountriesPage} from './pages/countries/countries';
 import {ContactsPage} from './pages/contacts/contacts';
 import {BreezePage} from './pages/breeze/breeze';
+import {LazyLoadPage} from './pages/lazy-load/lazy-load';
 
 
 
 
 
-@App({
+
+@Component({
   templateUrl: 'build/app.html',
   config: {
     mode: "md"
   }, // http://ionicframework.com/docs/v2/api/config/Config/
   providers: [
-    provide(AuthHttp, {
-      useFactory: (http) => {
-        return new AuthHttp(new AuthConfig(), http);
-      },
-      deps: [Http]
-    }),
     AuthService,
-	EntityManagerFactoryService
+	  EntityManagerFactoryService
   ]
 })
 class MyApp {
+  @ViewChild(Nav) nav: Nav;
+
   rootPage: any = HomePage;
-  pages: Array<{title: string, component: any}>
+  pages: Array<{title: string, component: any}>;
   authenticated: boolean;
   isLoggedIn: boolean;
   isAuthorized: boolean;
@@ -54,11 +50,11 @@ class MyApp {
   currentLatitude: number;
   currentLongitude: number;
 
-  constructor(private app: IonicApp, private platform: Platform, private auth: AuthService, public http: Http, private entityManagerFactoryService: EntityManagerFactoryService) {
+  constructor(private menu: MenuController, private platform: Platform, private auth: AuthService, public http: Http, private entityManagerFactoryService: EntityManagerFactoryService) {
     this.initializeApp();
     
     this.auth = auth;
-	this.entityManagerFactoryService = entityManagerFactoryService;
+	  this.entityManagerFactoryService = entityManagerFactoryService;
     this.authenticated = this.auth.authenticated();
 
     this.isLoggedIn = this.auth.isLoggedIn();
@@ -68,7 +64,7 @@ class MyApp {
     console.log("isAuthorized3: " +  this.isAuthorized);
     console.log("isAdmin3: " +  this.isAdmin);
 	
-	this.entityManagerFactoryService.emFactory().subscribe(data => console.log(data));
+	  this.entityManagerFactoryService.emFactory().subscribe(data => console.log(data));
 
     // used for an example of ngFor and navigation
     this.pages = [
@@ -85,6 +81,7 @@ class MyApp {
       { title: 'Countries', component: CountriesPage},
       { title: 'Contacts', component: ContactsPage},
       { title: 'Breeze', component: BreezePage},
+	    { title: 'Lazy Load', component: LazyLoadPage },
       { title: 'List', component: ListPage }
     ];
 
@@ -92,22 +89,24 @@ class MyApp {
 
   initializeApp() {
     this.platform.ready().then(() => {
-      // Okay, so the platform is ready and our plugins are available.
-      // Here you can do any higher level native things you might need.
-      StatusBar.styleDefault();
-      Geolocation.getCurrentPosition().then((resp) => {
-		this.currentLatitude = resp.coords.latitude;
-		this.currentLongitude = resp.coords.longitude;
-        console.log("Latitude: ", resp.coords.latitude);
-        console.log("Longitude: ", resp.coords.longitude);
+        // Okay, so the platform is ready and our plugins are available.
+        // Here you can do any higher level native things you might need.
+        StatusBar.styleDefault();
+        Geolocation.getCurrentPosition().then((resp) => {
+          this.currentLatitude = resp.coords.latitude;
+          this.currentLongitude = resp.coords.longitude;
+          console.log("Latitude: ", resp.coords.latitude);
+          console.log("Longitude: ", resp.coords.longitude);
       });
     });
   }
 
   openPage(page) {
-    // Reset the content nav to have just this page
-    // we wouldn't want the back button to show in this scenario
-    let nav = this.app.getComponent('nav');
-    nav.setRoot(page.component);
+    // close the menu when clicking a link from the menu
+    this.menu.close();
+    // navigate to the new page if it is not the current page
+    this.nav.setRoot(page.component);
   }
 }
+
+ionicBootstrap(MyApp);
