@@ -25,6 +25,7 @@ exports.me = function (req, res) {
   function add_saved(callback) {
     //console.log('1');                   start, name, ret_type, limit, callback
     graphModel.related_type_id(req.user._id, 'SAVED', "promotion", req.user._id, 0, 10, callback);
+
   }
 
   async.parallel({
@@ -155,15 +156,17 @@ exports.realized_cards = function (req, res) {
 };
 
 exports.followers = function (req, res) {
-  graphModel.related_type_id(req.user._id, 'FOLLOWS', "promotion", req.user._id, 0, 10, callback);
-
-  return res.status(204).send('No Content');
+  graphModel.followers(req.user._id, 0, 10, function(err, followers) {
+    if (err) { return handleError(res, err)}
+    return res.status(200).json(followers);
+  });
 };
 
 exports.following = function (req, res) {
-  //graphModel.relate_ids(req.user._id, 'REALIZED', req.params.id, {timestamp: Date.now()});
-
-  return res.status(204).send('No Content');
+  graphModel.following(req.user._id, 0, 10, function(err, following) {
+    if (err) { return handleError(res, err)}
+    return res.status(200).json(following);
+  });
 };
 
 function handleError(res, err) {

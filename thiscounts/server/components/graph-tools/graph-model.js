@@ -174,8 +174,17 @@ GraphModel.prototype.promotion_instance_id = function promotion_instance(user_id
 };
 
 GraphModel.prototype.related_type_id = function related_type_id(start, name, ret_type, skip, limit, callback){
+  related_type_id_dir(start, name, ret_type, 'out', skip, limit, callback);
+};
+
+GraphModel.prototype.related_type_id_dir = function related_type_id_dir(start, name, ret_type, dir, skip, limit, callback){
+  var match = "MATCH (s { _id:'{%s}' })-[r:%s]-(ret:%s) ";
+  if(dir=="out")
+    match = "MATCH (s { _id:'{%s}' })-[r:%s]->(ret:%s) ";
+  else if(dir=="in")
+    match = "MATCH (s { _id:'{%s}' })<-[r:%s]-(ret:%s) ";
   var query = util.format(
-    "MATCH (s { _id:'{%s}' })-[r:%s]->(ret:%s) " +
+    match +
     "return ret " +
     "ORDER BY r.timestamp DESC " +
     "skip %d limit %d", start, name, ret_type, skip, limit);
@@ -185,10 +194,12 @@ GraphModel.prototype.related_type_id = function related_type_id(start, name, ret
   });
 };
 
-GraphModel.prototype.followes = function followes(userId, skip, limit, callback){
+GraphModel.prototype.followers = function followers(userId, skip, limit, callback){
+  related_type_id_dir(userId, 'FOLLOW', 'user', 'in', skip, limit, callback);
 };
 
 GraphModel.prototype.following = function following(userId, skip, limit, callback){
+  related_type_id_dir(userId, 'FOLLOW', 'user', 'out', skip, limit, callback);
 };
 
 GraphModel.prototype.query = function query(query, callback){
