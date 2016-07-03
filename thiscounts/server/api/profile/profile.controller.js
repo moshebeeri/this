@@ -3,6 +3,7 @@
 var _ = require('lodash');
 var async = require('async');
 
+var utils = require('../../components/utils').createUtils();
 var Profile = require('./profile.model');
 var User = require('../user/user.model');
 var Business = require('../business/business.model');
@@ -155,15 +156,32 @@ exports.realized_cards = function (req, res) {
   return res.status(204).send('No Content');
 };
 
+function to_paginate(req){
+  var skip = req.params.skip;
+  var limit = req.params.limit;
+
+  if(!utils.defined(skip) || !_.isNumber(skip))
+    skip = 0;
+  if(!utils.defined(limit) || !_.isNumber(limit))
+    limit = 10;
+
+  return {
+    skip: skip,
+    limit: limit
+  }
+}
+
 exports.followers = function (req, res) {
-  graphModel.followers(req.user._id, 0, 10, function(err, followers) {
+  var paginate = to_paginate(req)
+  graphModel.followers(req.user._id, paginate.skip, paginate.limit, function(err, followers) {
     if (err) { return handleError(res, err)}
     return res.status(200).json(followers);
   });
 };
 
 exports.following = function (req, res) {
-  graphModel.following(req.user._id, 0, 10, function(err, following) {
+  var paginate = to_paginate(req)
+  graphModel.following(req.user._id, paginate.skip, paginate.limit, function(err, following) {
     if (err) { return handleError(res, err)}
     return res.status(200).json(following);
   });
