@@ -26,8 +26,10 @@ exports.show = function(req, res) {
 exports.create = function(req, res) {
   Card.create(req.body, function(err, card) {
     if(err) { return handleError(res, err); }
-    graphModel.reflect(card, function (err) {
+    graphModel.reflect(card, function (err, card) {
       if (err) { return handleError(res, err); }
+      graphModel.relate_ids(req.user._id, 'CARD_MEMBER', card._id);
+      graphModel.relate_ids(card._id, 'CARD_TYPE', card.card_type._id);
     });
     return res.json(201, card);
   });

@@ -260,6 +260,7 @@ exports.realize = function (req, res) {
   var query = util.format("MATCH (i:instance { _id:'{%s}', user:'{%s}'})", req.params.id, req.user._id );
   instanceGraphModel.query(query, function(err, instances){
     if(err) return handleError(res, err);
+    
     if(instances.length > 0 )
       return res.status(500).send('multiple instances found');
     var instance = instances[0];

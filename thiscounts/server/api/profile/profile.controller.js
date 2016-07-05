@@ -10,6 +10,23 @@ var Business = require('../business/business.model');
 var graphTools = require('../../components/graph-tools');
 var graphModel = graphTools.createGraphModel('promotion');
 
+
+function to_paginate(req){
+  var skip = req.params.skip;
+  var limit = req.params.limit;
+
+  if(!utils.defined(skip) || !_.isNumber(skip))
+    skip = 0;
+  if(!utils.defined(limit) || !_.isNumber(limit))
+    limit = 10;
+
+  return {
+    skip: skip,
+    limit: limit
+  }
+}
+
+
 // Get a single profile
 exports.me = function (req, res) {
 
@@ -120,8 +137,11 @@ exports.destroy = function (req, res) {
 };
 
 exports.realized_promotions = function (req, res) {
-  //graphModel.relate_ids(req.user._id, 'REALIZED', req.params.id, {timestamp: Date.now()});
-  return res.status(204).send('No Content');
+  var paginate = to_paginate(req);
+  graphModel.related_type_id_dir(req.user._id, 'REALIZED', 'promotion', 'out', paginate.skip, paginate.limit, function(err, followers) {
+    if (err) { return handleError(res, err)}
+    return res.status(200).json(followers);
+  });
 };
 
 exports.shared_promotions = function (req, res) {
@@ -129,11 +149,20 @@ exports.shared_promotions = function (req, res) {
 };
 
 exports.saved_promotions = function (req, res) {
-  return res.status(204).send('No Content');
+  var paginate = to_paginate(req);
+  //TODO: return only not realized and valid
+  graphModel.related_type_id_dir(req.user._id, 'SAVED', 'promotion', 'out', paginate.skip, paginate.limit, function(err, followers) {
+    if (err) { return handleError(res, err)}
+    return res.status(200).json(followers);
+  });
 };
 
 exports.liked_malls = function (req, res) {
-  return res.status(204).send('No Content');
+  var paginate = to_paginate(req);
+  graphModel.related_type_id_dir(req.user._id, 'LIKE', 'mall', 'out', paginate.skip, paginate.limit, function(err, followers) {
+    if (err) { return handleError(res, err)}
+    return res.status(200).json(followers);
+  });
 };
 
 exports.promotions_malls = function (req, res) {
@@ -145,7 +174,11 @@ exports.realized_malls = function (req, res) {
 };
 
 exports.member_cards = function (req, res) {
-  return res.status(204).send('No Content');
+  var paginate = to_paginate(req);
+  graphModel.related_type_id_dir(req.user._id, 'CARD_MEMBER', 'card', 'out', paginate.skip, paginate.limit, function(err, followers) {
+    if (err) { return handleError(res, err)}
+    return res.status(200).json(followers);
+  });
 };
 
 exports.promotions_cards = function (req, res) {
@@ -156,23 +189,8 @@ exports.realized_cards = function (req, res) {
   return res.status(204).send('No Content');
 };
 
-function to_paginate(req){
-  var skip = req.params.skip;
-  var limit = req.params.limit;
-
-  if(!utils.defined(skip) || !_.isNumber(skip))
-    skip = 0;
-  if(!utils.defined(limit) || !_.isNumber(limit))
-    limit = 10;
-
-  return {
-    skip: skip,
-    limit: limit
-  }
-}
-
 exports.followers = function (req, res) {
-  var paginate = to_paginate(req)
+  var paginate = to_paginate(req);
   graphModel.followers(req.user._id, paginate.skip, paginate.limit, function(err, followers) {
     if (err) { return handleError(res, err)}
     return res.status(200).json(followers);
@@ -180,7 +198,7 @@ exports.followers = function (req, res) {
 };
 
 exports.following = function (req, res) {
-  var paginate = to_paginate(req)
+  var paginate = to_paginate(req);
   graphModel.following(req.user._id, paginate.skip, paginate.limit, function(err, following) {
     if (err) { return handleError(res, err)}
     return res.status(200).json(following);

@@ -54,9 +54,9 @@ function group_created_activity(group) {
 
 function group_join_activity(group, user) {
   var act = {
-    group: group._id,
+    group: group,
     action: "group_join",
-    user: user_id
+    user: user
   };
   activity.activity(act, function (err) {
     if (err) logger.error(err.message)
@@ -102,15 +102,15 @@ exports.destroy = function(req, res) {
   });
 };
 
-function add_user_to_group(user, group, res){
-  graphModel.relate_ids(user._id, 'GROUP_MEMBER', group._id);
-  group_join_activity(group, user);
+function add_user_to_group(user_id, group, res){
+  graphModel.relate_ids(user_id, 'GROUP_MEMBER', group._id);
+  group_join_activity(group, user_id);
   return res.json(200, group);
 }
 
-function add_user_to_group_admin(user, group, res){
-  graphModel.relate_ids(user._id, 'GROUP_MEMBER', group._id);
-  group.admins.push(user._id);
+function add_user_to_group_admin(user_id, group, res){
+   graphModel.relate_ids(user_id, 'GROUP_MEMBER_ADMIN', group._id);
+  group.admins.push(user_id);
   Group.save(function (err) {
     if (err) { return handleError(res, err); }
     return res.json(200, group);
@@ -121,9 +121,10 @@ exports.add_admin = function(req, res) {
   Group.findById(req.params.to_group, function (err, group) {
     if(err) { return handleError(res, err); }
     if(!group) { return res.send(404); }
+    //if requester is group admin he may add admins
     if(utils.defined(_.find(group.admins, req.user._id))) {
-      add_user_to_group(user, group, function(err, group){
-        add_user_to_group_admin(user, group)
+      add_user_to_group(req.user._id, group, function(err, group){
+        add_user_to_group_admin(req.user._id, group)
       });
     }
   });
@@ -143,11 +144,12 @@ exports.add_admin = function(req, res) {
 // },
 exports.add_user = function(req, res) {
     Group.findById(req.params.to_group, function (err, group) {
-    if(err) { return handleError(res, err); }
-    if(!group) { return res.send(404); }
+      if(err) { return handleError(res, err); }
+      if(!group) { return res.send(404); }
+
       if(group.add_policy == 'OPEN'){
         if(req.user._id ==  req.params.user )
-          return add_user_to_group(user, group, res);
+          return add_user_to_group(req.user._id, group, res);
         else
           return res.send(404, 'Group add policy OPEN - authenticated user may only add himself');
       }
