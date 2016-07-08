@@ -52,15 +52,26 @@ function group_created_activity(group) {
   });
 }
 
-function group_join_activity(group, user) {
+function user_follow_group_activity(group, user) {
   var act = {
     group: group,
-    action: "group_join",
-    user: user
+    action: "group_follow",
+    actor_user: user
   };
   activity.activity(act, function (err) {
     if (err) logger.error(err.message)
   });
+}
+
+function group_follow_group_activity(group, user) {
+  var act = {
+    group: group,
+    action: "group_follow",
+    actor_group: user
+  };
+  activity.activity(act, function (err) {
+    if (err) logger.error(err.message)
+  }); 
 }
 
 // Creates a new group in the DB.
@@ -102,9 +113,15 @@ exports.destroy = function(req, res) {
   });
 };
 
-function add_user_to_group(user_id, group, res){
-  graphModel.relate_ids(user_id, 'GROUP_MEMBER', group._id);
-  group_join_activity(group, user_id);
+function user_follow_group(user_id, group, res){
+  graphModel.relate_ids(user_id, 'FOLLOW', group._id);
+  user_follow_group_activity(group, user_id);
+  return res.json(200, group);
+}
+
+function group_follow_group(following_group_id, group_to_follow_id, res){
+  graphModel.relate_ids(following_group_id, 'FOLLOW', group_to_follow_id);
+  group_follow_group_activity(group, user_id);
   return res.json(200, group);
 }
 
@@ -123,7 +140,7 @@ exports.add_admin = function(req, res) {
     if(!group) { return res.send(404); }
     //if requester is group admin he may add admins
     if(utils.defined(_.find(group.admins, req.user._id))) {
-      add_user_to_group(req.user._id, group, function(err, group){
+      user_follow_group(req.user._id, group, function(err, group){
         add_user_to_group_admin(req.user._id, group)
       });
     }
@@ -149,13 +166,13 @@ exports.add_user = function(req, res) {
 
       if(group.add_policy == 'OPEN'){
         if(req.user._id ==  req.params.user )
-          return add_user_to_group(req.user._id, group, res);
+          return user_follow_group(req.user._id, group, res);
         else
           return res.send(404, 'Group add policy OPEN - authenticated user may only add himself');
       }
       if(group.add_policy == 'CLOSE'){
         if(utils.defined(_.find(group.admins, req.user._id)))
-          return add_user_to_group(user, group, res);
+          return user_follow_group(req.user._id, group, res);
         else
           return res.send(404, 'Group add policy CLOSE - only admin may add users');
       }
@@ -171,10 +188,11 @@ exports.add_group = function(req, res) {
   Group.findById(req.params.id, function (err, group) {
     if(err) { return handleError(res, err); }
     if(!group) { return res.send(404); }
-    group.remove(function(err) {
-      if(err) { return handleError(res, err); }
-      return res.send(204);
-    });
+    //user mast be one of the admins
+    if(utils.defined(_.find(group.admins, req.user._id)))
+      return group_follow_group(req.user._id, group, res);
+    else
+      return res.send(404, 'Only group admin may follow other groups');
   });
 };
 

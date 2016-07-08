@@ -17,9 +17,11 @@ var activity = require('../../components/activity').createActivity();
 var util = require('util');
 var spatial = require('../../components/spatial').createSpatial();
 
+/*
 exports.server_time = function (req, res) {
   return res.json(200, new Date().toString());
 };
+
 
 
 exports.initialize = function (req, res) {
@@ -43,6 +45,8 @@ exports.initialize = function (req, res) {
   });
   return res.json(200, {type: typEnum, social: socialEnum});
 };
+*/
+
 
 
 // Get list of promotions
@@ -260,7 +264,7 @@ exports.realize = function (req, res) {
   var query = util.format("MATCH (i:instance { _id:'{%s}', user:'{%s}'})", req.params.id, req.user._id );
   instanceGraphModel.query(query, function(err, instances){
     if(err) return handleError(res, err);
-    
+
     if(instances.length > 0 )
       return res.status(500).send('multiple instances found');
     var instance = instances[0];
@@ -291,7 +295,6 @@ exports.test = function (req, res) {
     return res.json(200, promotions);
   })
 };
-
 
 function handleError(res, err) {
   return res.status(500).send(err)

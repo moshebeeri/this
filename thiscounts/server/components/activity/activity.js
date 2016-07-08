@@ -111,7 +111,6 @@ Activity.prototype.action_activity = function action_activity(userId, itemId, ac
   });
 };
 
-
 function run(query, callback) {
   var db = graphModel.db();
   db.query(query, function (err, effected) {
@@ -135,6 +134,7 @@ function effected_in_rel(actor_id, relationship, callback) {
                             return effected ", relationship, actor_id);
   run(query, callback);
 }
+
 function like_effected(actor) {
   return effected(actor, 'LIKE');
 }

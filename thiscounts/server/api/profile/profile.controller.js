@@ -164,9 +164,15 @@ exports.liked_malls = function (req, res) {
     return res.status(200).json(followers);
   });
 };
+var util = require('util');
 
 exports.promotions_malls = function (req, res) {
-  return res.status(204).send('No Content');
+  var paginate = to_paginate(req);
+  var query = util.format("MATCH (user { _id:'{%s}'})-[]->(:instance)-[]->(:promotion)-[r:MALL_PROMOTION]->(m:mall)' return m skip %s limit %s", req.user._id, paginate.skip, paginate.limit);
+  graphModel.query(query,function(err, malls) {
+    if (err) { return handleError(res, err)}
+    return res.status(200).json(malls);
+  });
 };
 
 exports.realized_malls = function (req, res) {
