@@ -4,7 +4,8 @@ var mongoose = require('mongoose'),
     Schema = mongoose.Schema;
 
 var FeedSchema = new Schema({
-  user: {type: Schema.ObjectId, ref: 'User', required: true},
+  user: {type: Schema.ObjectId, ref: 'User'},
+  group: {type: Schema.ObjectId, ref: 'Group'},
   activity: {type: Schema.ObjectId, ref: 'Activity'}
 });
 

@@ -33,45 +33,59 @@ function to_graph(group) {
   }
 }
 
-function group_created_activity(group) {
+function group_activity(group, action) {
   var act = {
     group: group._id,
-    action: "created"
+    action: action
   };
   if (group.creator_type == 'USER')
     act.actor_user = group.creator;
-  if (group.creator_type == 'CHAIN')
+  else if (group.creator_type == 'CHAIN')
     act.actor_chain = group.creator;
-  if (group.creator_type == 'BUSINESS')
+  else if (group.creator_type == 'BUSINESS')
     act.actor_business = group.creator;
-  if (group.creator_type == 'MALL')
+  else if (group.creator_type == 'MALL')
     act.actor_mall = group.creator;
-
-  activity.activity(act, function (err) {
-    if (err) logger.error(err.message)
-  });
+  user_activity(act);
 }
 
 function user_follow_group_activity(group, user) {
-  var act = {
+  user_activity({
     group: group,
     action: "group_follow",
     actor_user: user
-  };
-  activity.activity(act, function (err) {
-    if (err) logger.error(err.message)
   });
 }
 
-function group_follow_group_activity(group, user) {
-  var act = {
-    group: group,
-    action: "group_follow",
-    actor_group: user
-  };
+function user_activity(act){
   activity.activity(act, function (err) {
     if (err) logger.error(err.message)
-  }); 
+  });
+
+}
+
+function group_offer_activity(group, offer){
+
+  activity.group_activity({
+    offer: offer,
+    action: "group_offer",
+    actor_group: group
+  }, function (err) {
+    if (err) logger.error(err.message)
+  });
+
+}
+
+function group_message_activity(){
+
+}
+
+function group_follow_group_activity(following, followed) {
+  user_activity({
+    group: followed,
+    action: "group_follow",
+    actor_group: following
+  });
 }
 
 // Creates a new group in the DB.
@@ -81,7 +95,7 @@ exports.create = function(req, res) {
     graphModel.reflect(group, to_graph(group), function (err) {
       if (err) {  return handleError(res, err); }
       graphModel.relate_ids(group._id, 'CREATED_BY', req.body._id);
-      group_created_activity(group);
+      group_activity(group, "create");
     });
     return res.json(201, group);
   });
@@ -109,6 +123,34 @@ exports.destroy = function(req, res) {
     group.remove(function(err) {
       if(err) { return handleError(res, err); }
       return res.send(204);
+    });
+  });
+};
+
+// offer to group.
+//router.post('/offer/:group', auth.isAuthenticated(), controller.offer);
+exports.offer = function(req, res) {
+  var offer = req.body;
+  Group.findById(req.params.group, function (err, group) {
+    if (err) { return handleError(res, err); }
+    if(!group) { return res.send(404); }
+    graphModel.relate_ids(group._id, 'OFFER', offer._id);
+    group_offer_activity(group, offer);
+    return res.json(200, group);
+  });
+};
+
+//router.post('/message/:group', auth.isAuthenticated(), controller.message);
+exports.message = function(req, res) {
+  Group.findById(req.params.group, function (err, group) {
+    if (err) { return handleError(res, err); }
+    if(!group) { return res.send(404); }
+    //var updated = _.merge(group, req.body);
+    updated.save(function (err) {
+      if (err) { return handleError(res, err); }
+      graphModel.relate_ids(group._id, 'CREATED_BY', req.body._id);
+      group_message_activity(group);
+      return res.json(200, group);
     });
   });
 };

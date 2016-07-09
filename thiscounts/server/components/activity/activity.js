@@ -30,9 +30,48 @@ function update_feeds(effected, activity) {
   });
 }
 
+function update_group_feeds(effected, activity) {
+  mongoose.connection.db.collection('feed', function (err, collection) {
+    if (err) return logger.error(err.message);
+    effected.forEach(function (group) {
+      Feed.create({
+          group: group._id,
+          activity: activity._id
+      }, function(err) {
+        if(err) { logger.error(err.message); }
+      });
+    });
+  });
+}
+
+Activity.prototype.group_activity = function group_activity(act, callback) {
+  ActivitySchema.create(act, function (err, activity) {
+    if (err) {
+      callback(err, null);
+      return;
+    }
+    //update own group
+    var query = util.format(" MATCH (actor:group) \
+                              where actor._id='%s'         \
+                              return actor ", act.actor_group);
+    run(query, function (err, group) {
+      if (err) { return callback(err, null); }
+      update_group_feeds(group, activity);
+
+      //update following groups
+      var query = util.format(" MATCH (actor:group)<-[:FOLLOW]-(effected:group) \
+                              where actor._id='%s'         \
+                              return effected ", act.actor_group);
+      run(query, function (err, effected) {
+        if (err) { return callback(err, null); }
+        update_group_feeds(effected, activity);
+        callback(null, activity)
+      });
+    });
+  });
+};
+
 /**
- * @param activity
- * @param callback
  *
  * {
  *   promotion : promotion ,
@@ -49,6 +88,8 @@ function update_feeds(effected, activity) {
  *
  *   action    : action
  * }
+ * @param act
+ * @param callback
  */
 Activity.prototype.activity = function activity(act, callback) {
   activity_impl(act, callback);
@@ -65,7 +106,8 @@ function activity_impl(act, callback){
         if (err) {
           return callback(err, null);
         }
-        update_feeds(effected, activity)
+        update_feeds(effected, activity);
+        callback(null, activity)
       });
     }
     else if (activity.actor_business) {
@@ -73,7 +115,8 @@ function activity_impl(act, callback){
         if (err) {
           return callback(err, null);
         }
-        update_feeds(effected, activity)
+        update_feeds(effected, activity);
+        callback(null, activity)
       });
     }
     else if (activity.actor_mall) {
@@ -81,12 +124,22 @@ function activity_impl(act, callback){
         if (err) {
           return callback(err, null);
         }
-        update_feeds(effected, activity)
+        update_feeds(effected, activity);
+        callback(null, activity)
       });
 
     }
     else if (activity.actor_chain) {
       effected_out_rel(activity.actor_chain, "LIKE", function (err, effected) {
+        if (err) {
+          return callback(err, null);
+        }
+        update_feeds(effected, activity);
+        callback(null, activity)
+      });
+    }
+    else if (activity.actor_group) {
+      effected_in_rel(activity.actor_group, "FOLLOW", function (err, effected) {
         if (err) {
           return callback(err, null);
         }
@@ -133,10 +186,6 @@ function effected_in_rel(actor_id, relationship, callback) {
                             where actor._id='%s'         \
                             return effected ", relationship, actor_id);
   run(query, callback);
-}
-
-function like_effected(actor) {
-  return effected(actor, 'LIKE');
 }
 
 
