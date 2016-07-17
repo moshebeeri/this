@@ -5,12 +5,9 @@ var async = require('async');
 var utils = require('../../components/utils').createUtils();
 
 var logger = require('../../components/logger').createLogger();
-var graphTools = require('../../components/graph-tools');
-var graphModel = graphTools.createGraphModel('user');
+// var graphTools = require('../../components/graph-tools');
+// var graphModel = graphTools.createGraphModel('user');
 var feedTools = require('../../components/feed-tools');
-
-//var graphModel = graphTools.createGraphModel('promotion');
-//var instanceGraphModel = graphTools.createGraphModel('instance');
 
 
 var Feed = require('./feed.model');
@@ -36,36 +33,32 @@ exports.show = function (req, res) {
 
 // feed
 exports.feed = function (req, res) {
-  var userId = req.user._id;
-  var _id = req.params._id;
+  //var userId = req.user._id;
+  var feed_id = req.params.feed_id;
+  var entity_id = req.params.entity_id;
+  var type = req.params.type;
   var scroll = req.params.scroll;
 
   if (req.params.scroll != 'up' && req.params.scroll != 'down')
     return res.status(400).send('scroll value may be only up or down');
 
-  var query_builder = Feed.find({user: userId}).sort({activity: -1}).limit(25);
+  var query_builder;
+  if(type=="user")
+    query_builder = Feed.find({user: entity_id}).sort({activity: -1}).limit(25);
+  else if (type=="group")
+    query_builder = Feed.find({group: entity_id}).sort({activity: -1}).limit(25);
+
   if (_id == 'start') {
     return feedTools.fetch_feed(query_builder, Feed, res);
   }
   if (req.params.scroll === 'up')
-    query_builder = query_builder.where('_id').gt(_id);
+    query_builder = query_builder.where('_id').gt(feed_id);
   else if (req.params.scroll === 'down')
-    query_builder = query_builder.where('_id').lt(_id);
+    query_builder = query_builder.where('_id').lt(feed_id);
 
   return feedTools.fetch_feed(query_builder, Feed, res);
-
-  //.exec(function (err, feed) {
-  //  if (err) {
-  //    return handleError(res, err);
-  //  }
-  //  if (!feed) {
-  //    return res.status(404).send('Not Found');
-  //  }
-  //  return res.json(feed);
-  //});
 };
-//56bf6e777778cb8a77bad8b6
-//56b7af083b014fc937566f32
+
 
 //exec(callback);
 //

@@ -65,7 +65,6 @@ function user_activity(act){
 }
 
 function group_offer_activity(group, offer){
-
   activity.group_activity({
     offer: offer,
     action: "group_offer",
@@ -73,7 +72,6 @@ function group_offer_activity(group, offer){
   }, function (err) {
     if (err) logger.error(err.message)
   });
-
 }
 
 function group_message_activity(){
@@ -168,7 +166,7 @@ function group_follow_group(following_group_id, group_to_follow_id, res){
 }
 
 function add_user_to_group_admin(user_id, group, res){
-   graphModel.relate_ids(user_id, 'GROUP_MEMBER_ADMIN', group._id);
+   graphModel.relate_ids(user_id, 'GROUP_ADMIN', group._id);
   group.admins.push(user_id);
   Group.save(function (err) {
     if (err) { return handleError(res, err); }
