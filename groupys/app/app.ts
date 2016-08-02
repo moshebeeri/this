@@ -1,5 +1,5 @@
 import {Component, ViewChild} from '@angular/core';
-import {ionicBootstrap, Platform, MenuController, Nav} from 'ionic-angular';
+import {ionicBootstrap, Platform, MenuController, Nav, Storage, LocalStorage} from 'ionic-angular';
 import {StatusBar, Geolocation} from 'ionic-native';
 
 import {Http} from '@angular/http';
@@ -49,6 +49,7 @@ class MyApp {
   isAdmin: boolean;
   currentLatitude: number;
   currentLongitude: number;
+  local: Storage = new Storage(LocalStorage);
 
   constructor(private menu: MenuController, private platform: Platform, private auth: AuthService, public http: Http, private entityManagerFactoryService: EntityManagerFactoryService) {
     this.initializeApp();
@@ -63,6 +64,14 @@ class MyApp {
     console.log("isLoggedIn3: " +  this.isLoggedIn);
     console.log("isAuthorized3: " +  this.isAuthorized);
     console.log("isAdmin3: " +  this.isAdmin);
+	
+    this.local.remove('countryNameDetails');
+    this.local.remove('callingCodesDetails');
+    this.local.remove('callingDigitsDetails');
+    this.local.remove('digitsValidator');
+    this.local.remove('isSIM');
+    this.local.remove('countryCode');
+    this.local.set('isSIM', 'true');
 	
 	  this.entityManagerFactoryService.emFactory().subscribe(data => console.log(data));
 
