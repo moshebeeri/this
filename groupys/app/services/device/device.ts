@@ -76,6 +76,11 @@ export class DeviceService {
       window.cache.cleartemp();
     })
   }
+  unixName() {
+    let d = new Date();
+    let n = d.getTime();
+    return n + ".jpg";
+  }
 
   
 
