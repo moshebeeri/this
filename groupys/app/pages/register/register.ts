@@ -4,14 +4,16 @@ import {FORM_DIRECTIVES,FormBuilder,ControlGroup} from '@angular/common';
 import {GlobalsService} from '../../services/globals/globals';
 import {AuthService} from '../../services/auth/auth';
 import {GlobalHeaders} from '../../services/headers/headers';
+import {CountriesService} from '../countries/countries-service';
 import {CountriesPage} from '../countries/countries';
 import {HomePage} from '../home/home';
+import {Observable} from 'rxjs/Observable';
 const map = require('rxjs/add/operator/map');
 
 @Page({
   templateUrl: 'build/pages/register/register.html',
   directives: [FORM_DIRECTIVES],
-  providers : [GlobalsService, GlobalHeaders, AuthService]
+  providers : [GlobalsService, GlobalHeaders, AuthService, CountriesService]
 })
 export class RegisterPage {
 
@@ -32,17 +34,20 @@ export class RegisterPage {
   isAdmin: boolean;
   
   baseURL: string;
+
   
   /*static get parameters() {
     return [[NavController], [Http], [GlobalsService], [GlobalHeaders], [AuthService]];
   }*/
 
-  constructor(private nav:NavController, private http:Http, private globals:GlobalsService, private globalHeaders:GlobalHeaders, private auth:AuthService) {
+  constructor(private nav:NavController, private http:Http, private globals:GlobalsService, private globalHeaders:GlobalHeaders, private auth:AuthService, private countriesService:CountriesService) {
+    
     this.nav = nav;
     this.http = http;
     this.globals = globals;
     this.globalHeaders = globalHeaders;
     this.auth = auth;
+    this.countriesService = countriesService;
 
     this.baseURL = this.globals.BASE_URL;
     this.isLoggedIn = this.auth.isLoggedIn();
@@ -51,12 +56,77 @@ export class RegisterPage {
     this.isAdmin = this.auth.isAdmin();
 
     this.contentHeader = this.globalHeaders.getMyGlobalHeaders();
-    console.log("xxxxxxxxxxxxxxxxxxxxxxxxxxx" + JSON.stringify(this.contentHeader))
+    console.log("xxxxxxxxxxxxxxxxxxxxxxxxxxx" + JSON.stringify(this.contentHeader));
     this.error = null;
     this.callingDigitsInput= null;
     this.validatorLength=-99;
-    this.getCountryDetails();
+	
+	this.getCurrentCountry().subscribe(data => console.log(data));
+	/*
+	//this.getcountries();
+	this.getCountryFromSim();
+	setTimeout(() => {
+      this.getCountries();
+    }, 1);
+	setTimeout(() => {
+      this.getCountryDetails();
+    }, 1000);
+	*/
+  }
+  getCurrentCountry(){
+	return Observable.create(observer => {
+		observer.next(this.getCountryFromSim());
+		setTimeout(() => {
+			observer.next(this.getCountries());
+		}, 250);
+		setTimeout(() => {
+			observer.next(this.getCountryDetails());
+			observer.complete();
+		}, 250);
+		
+	});
+  }
+
+  getCountries(){
+	this.local.get('countryCode').then(countryCode => {
+	  //alert("countryCode: " + JSON.parse(countryCode));
+	  this.countriesService.findByName(JSON.parse(countryCode)).subscribe(
+      data => this.setDefaultCountry(data)
+    );
+	}).catch(error => {
+	  console.log(error);
+	});
     
+  }
+  getCountryFromSim(){
+    window.plugins.sim.getSimInfo(this.successCallback, this.errorCallback);
+  }
+
+  successCallback(result) {
+    //alert("1: " + JSON.stringify(result.countryCode));
+	window.localStorage.setItem('countryCode', JSON.stringify(result.countryCode));
+	//alert(JSON.stringify(this.local.get('countryCode')));	
+  }
+  errorCallback(error) {
+    //alert(error);
+    this.nav.push(CountriesPage);
+  }
+  setDefaultCountry(data) {
+    //alert(JSON.stringify(data));
+    this.local.get('isSIM').then(isSIM => {
+	  //alert("isSIM: " + JSON.parse(isSIM));
+	  if(JSON.parse(isSIM) === true){
+		//alert("in SIM");
+		this.local.set('countryNameDetails', JSON.stringify(data[0].name));
+		this.local.set('callingCodesDetails', JSON.stringify(data[0].callingCodes));
+		this.local.set('callingDigitsDetails', JSON.stringify(data[0].callingDigits));
+		this.local.set('digitsValidator', JSON.stringify(data[0].digitsValidator));
+		this.local.set('isSIM', 'false');
+	  }
+	}).catch(error => {
+	  console.log(error);
+	});
+
   }
 
   validateNumbers(evt){
@@ -67,33 +137,33 @@ export class RegisterPage {
   }
   
   getCountryDetails(){
-    this.local.get('countryNameDetails').then(countryNameDetails => {
-      this.countryName = JSON.parse(countryNameDetails);
-      console.log('countryName' + this.countryName);
-    }).catch(error => {
-      console.log(error);
-    });
-    this.local.get('callingCodesDetails').then(callingCodesDetails => {
-      this.callingCodes = JSON.parse(callingCodesDetails);
-      console.log('callingCodes' + this.callingCodes);
-    }).catch(error => {
-      console.log(error);
-    });
-    this.local.get('callingDigitsDetails').then(callingDigitsDetails => {
-      this.callingDigits = JSON.parse(callingDigitsDetails);
-      console.log('callingDigits' + this.callingDigits);
-    }).catch(error => {
-      console.log(error);
-    });
+	//alert('getCountryDetails');
+	this.local.get('countryNameDetails').then(countryNameDetails => {
+	  this.countryName = JSON.parse(countryNameDetails);
+	  console.log('countryName' + this.countryName);
+	}).catch(error => {
+	  console.log(error);
+	});
+	this.local.get('callingCodesDetails').then(callingCodesDetails => {
+	  this.callingCodes = JSON.parse(callingCodesDetails);
+	  console.log('callingCodes' + this.callingCodes);
+	}).catch(error => {
+	  console.log(error);
+	});
+	this.local.get('callingDigitsDetails').then(callingDigitsDetails => {
+	  this.callingDigits = JSON.parse(callingDigitsDetails);
+	  console.log('callingDigits' + this.callingDigits);
+	}).catch(error => {
+	  console.log(error);
+	});
 	  this.local.get('digitsValidator').then(digitsValidator => {
-      this.digitsValidator = JSON.parse(digitsValidator);
-      console.log('digitsValidator' + this.digitsValidator);
-      document.getElementById("phoneInput").setAttribute("maxlength", this.digitsValidator);
-      document.getElementById("phoneInput").getElementsByTagName( 'input' )[0].setAttribute("maxlength", this.digitsValidator);
-      }).catch(error => {
-        console.log(error);
-    });
-    
+	  this.digitsValidator = JSON.parse(digitsValidator);
+	  console.log('digitsValidator' + this.digitsValidator);
+	  document.getElementById("phoneInput").setAttribute("maxlength", this.digitsValidator);
+	  document.getElementById("phoneInput").getElementsByTagName( 'input' )[0].setAttribute("maxlength", this.digitsValidator);
+	  }).catch(error => {
+		console.log(error);
+	});
   }
   itemTapped() {
     this.nav.push(CountriesPage);
