@@ -14,6 +14,7 @@
 <ion-content padding class="contacts">
   <button (click)="sendContacts()">Send Contacts</button>
   <button (click)="back()">Back</button>
+  <button (click)='sendSMS("0523325411")'>SMS</button>
   {{xxx}}
   <!--{{xContacts}}-->
   <!--<img style="width: 35px"  src='img/avatar3?time=' + {{xxx}} >
@@ -41,12 +42,20 @@
   </ion-item-group>-->
 
 
-  <ion-item-group *ngFor="let contact of phoneContacts">
+  <ion-list [virtualScroll]="phoneContacts">
     <!--<template ngFor #contact [ngForOf]="phoneContacts">-->
-      <ion-item >{{contact.displayName}}</ion-item>
-      <ion-item >{{contact.phoneNumbers[0].value}}</ion-item>
-      <img style="width: 35px" class="img-circle" [src]='getImageUrl(contact.phoneNumbers[0].value)' (load)="onImageLoaded(contact.phoneNumbers[0].value)" (error)='onImageError(contact.phoneNumbers[0].value)' onerror="this.src='img/avatar3.png'">
-      <button *ngIf='!isImage[contact.phoneNumbers[0].value]' (click)="sendContacts()">INVITE</button>
+    <ion-item *virtualItem="#contact">
+      <ion-avatar item-left>
+        <img [src]='getImageUrl(contact.phoneNumbers[0].value)' (load)="onImageLoaded(contact.phoneNumbers[0].value)" (error)='onImageError(contact.phoneNumbers[0].value)' onerror="this.src='img/avatar3.png'">
+      </ion-avatar>
+      <h2>{{contact.displayName}}</h2>
+      <p>{{contact.phoneNumbers[0].value}}</p>
+      <button *ngIf='!isImage[contact.phoneNumbers[0].value]' (click)="sendSMS(contact.phoneNumbers[0].value)" item-right>INVITE</button>
+    </ion-item>
+	<!--<ion-infinite-scroll (infinite)="doInfinite($event)">
+		<ion-infinite-scroll-content></ion-infinite-scroll-content>
+	</ion-infinite-scroll>
+
     <!--<div id="contact.phoneNumbers[0].value">
       <button *ngIf='!isImage[contact.phoneNumbers[0].value]' (click)="sendContacts()">INVITE</button>
     </div>-->
@@ -56,6 +65,6 @@
     <!--<ion-item >{{checkContact(contact.phoneNumbers[0].value)}}</ion-item>-->
     <!--<ion-item checkContact(contact.phoneNumbers[0].value)></ion-item>-->
     <!--<ion-item >{{contact.emails[0].value}}</ion-item>-->
-  </ion-item-group>
+  </ion-list>
 </ion-content>
 

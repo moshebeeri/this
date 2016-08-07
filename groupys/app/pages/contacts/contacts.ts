@@ -2,6 +2,7 @@ import {Page, NavController} from 'ionic-angular';
 import {Component, ChangeDetectionStrategy, ChangeDetectorRef} from '@angular/core';
 import {Contacts} from 'ionic-native';
 import {Http, Headers} from '@angular/http';
+import {SMS} from 'ionic-native';
 import {LazyLoadImageDirective} from 'ng2-lazyload-image';
 import {GlobalsService} from '../../services/globals/globals';
 import {AuthService} from '../../services/auth/auth';
@@ -18,7 +19,7 @@ import {HomePage} from '../home/home';
 */
 @Page({
   templateUrl: 'build/pages/contacts/contacts.html',
-  providers : [Contacts, GlobalsService, GlobalHeaders, AuthService],
+  providers : [Contacts, GlobalsService, GlobalHeaders, AuthService, SMS],
   directives: [LazyLoadImageDirective]
 })
 export class ContactsPage {
@@ -37,6 +38,8 @@ export class ContactsPage {
   xxx: any;
   defaultImage: string;
   offset: number;
+  private start:number=0;
+  private end:number=20;
 
 
 
@@ -68,12 +71,16 @@ export class ContactsPage {
           console.log("contacts: " + JSON.stringify(contacts))},
         (err) => {console.log("error: " + err)})
 	*/
-	
-    let options = {
-      multiple: true,
-      hasPhoneNumber: true,
-      contactFields: ['displayName']
-    };
+	  this.getContacts();
+    
+  }
+  
+  getContacts(){
+	let options = {
+	  multiple: true,
+	  hasPhoneNumber: true,
+	  contactFields: ['displayName']
+	};
     Contacts.find(['*'], options).then((contact) => {
       this.phoneContacts = contact;
       this.phonebook = [];
@@ -100,6 +107,7 @@ export class ContactsPage {
       //console.log(this.phoneContacts); // This shows the complete object.
       //console.log(this.phoneContacts.displayName); // it says undefined :( IDK why....
     }, (err) => {console.log("error: " + err)})
+  
   }
 
   sendContacts(){
@@ -111,6 +119,25 @@ export class ContactsPage {
           () => console.log('Phone Book Export Complete')
       );
   }
+
+  sendSMS(phoneNumber){
+    console.log("sending SMS");
+    let number = phoneNumber;
+    let message = 'Check out GROUPYS discounts for your smartphone. Download it today from https://groupys.com/dl/';
+    let options = {
+      replaceLineBreaks: false, // true to replace \n by a new line, false by default
+      android: {
+        intent: 'INTENT'  // send SMS with the native android SMS messaging
+        //intent: '' // send SMS without open any other app
+      }
+    };
+
+    //let success = function () { console.log('Message sent successfully'); };
+    //let error = function (e) { console.log('Message Failed:' + e); };
+
+    SMS.send(number, message, options);
+  }
+
 
   back(){
     this.nav.pop();
@@ -178,7 +205,7 @@ export class ContactsPage {
   }
 
   private onImageLoaded(phoneNumber) {
-    this.isImage[phoneNumber] = true;
+    //this.isImage[phoneNumber] = true;
     this.detach();
   }
 
@@ -189,5 +216,16 @@ export class ContactsPage {
     //return url;
     ////this.imageRetries++;
   }
+  
+  /*doInfinite(infiniteScroll:any) {
+     console.log('doInfinite, start is currently '+this.start);
+     this.start+=20;
+     this.end+=20;
+     
+     this.loadPeople().then(()=>{
+       infiniteScroll.complete();
+     });
+     
+  }*/
 
 }

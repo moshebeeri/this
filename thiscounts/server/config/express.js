@@ -36,6 +36,7 @@ module.exports = function(app) {
     extended: true,
     parameterLimit:50000
   }));
+  app.use(bodyParser({ keepExtensions: true, uploadDir: config.uploadDir }));
   app.use(methodOverride());
   app.use(cookieParser());
   app.use(passport.initialize());
