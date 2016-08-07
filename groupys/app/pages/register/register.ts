@@ -51,7 +51,7 @@ export class RegisterPage {
     this.isAdmin = this.auth.isAdmin();
 
     this.contentHeader = this.globalHeaders.getMyGlobalHeaders();
-    console.log("xxxxxxxxxxxxxxxxxxxxxxxxxxx" + JSON.stringify(this.contentHeader))
+    console.log("xxxxxxxxxxxxxxxxxxxxxxxxxxx" + JSON.stringify(this.contentHeader));
     this.error = null;
     this.callingDigitsInput= null;
     this.validatorLength=-99;
@@ -110,8 +110,7 @@ export class RegisterPage {
       console.log(this.error);
       return;
     }
-    let phone_number = this.callingCodes + credentials["callingDigits"];
-    credentials["phone_number"] = phone_number;
+    credentials["phone_number"] = this.callingCodes + credentials["callingDigits"];
     /*
     credentials["username"] = 'rami raz';
     credentials["email"] = 'ramiraz76@gmail.com';

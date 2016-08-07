@@ -4,5 +4,5 @@ mongod --port 27018 --dbpath /srv/mongodb/rs0-1 --replSet rs0 --smallfiles --opl
 mongo-connector -m localhost:27017 -t localhost:9200 -d elastic2_doc_manager > /dev/null 2>&1 &
 
 ~/frameworks/neo4j/bin/neo4j start
-cd store/lowla/thiscounts
+# cd store/lowla/thiscounts
 grunt serve
