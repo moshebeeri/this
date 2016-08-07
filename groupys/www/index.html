@@ -4,6 +4,7 @@
   <title>Ionic</title>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <meta http-equiv="Content-Security-Policy" content="default-src * 'self' 'unsafe-inline' cdvfile:* data: gap: https://ssl.gstatic.com; style-src 'unsafe-inline' 'self' cdvfile:*; script-src 'self' 'unsafe-inline' 'unsafe-eval' cdvfile:* https://*">
 
   <link ios-href="build/css/app.ios.css" rel="stylesheet">
   <link md-href="build/css/app.md.css" rel="stylesheet">
@@ -26,5 +27,22 @@
   <script src="build/js/zone.js"></script>
   <!-- the bundle which is built from the app's source code -->
   <script src="build/js/app.bundle.js"></script>
+
+  <script type="text/javascript">
+    function windowService() {
+      return window.plugins;
+    }
+    function info() {
+      console.log(window.plugins.sim);
+      window.plugins.sim.getSimInfo(successCallback, errorCallback);
+    }
+    function successCallback(result) {
+      console.log(result);
+      alert(JSON.stringify(result));
+    }
+    function errorCallback(error) {
+      console.log(error);
+    }
+  </script>
 </body>
 </html>

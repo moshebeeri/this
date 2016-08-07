@@ -12,12 +12,14 @@
 </ion-navbar>
 
 <ion-content  text-center class="my-account"> 
-	<div class="avatarBG" (click)="pictureModal()">
-		<ion-icon name="person" class="profileImage"></ion-icon>
-		<button fab class="cameraButton">
-			<ion-icon name="camera"></ion-icon>
-		</button>
-	</div>
+
+		<!--<ion-icon name="person" class="profileImage"></ion-icon>-->
+
+  <img id="avatar" class="avatar" src='{{base64Image}}' (click)="pictureModal()">
+  <!--<img id="avatar2" class="avatar" src='{{base64Image2}}'>-->
+  <button fab class="cameraButton" (click)="presentActionSheet()">
+    <ion-icon name="camera" ></ion-icon>
+  </button>
   <div padding></div>
   <ion-list padding>
     <a ion-item (click)="nameModal()">

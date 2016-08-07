@@ -11,6 +11,7 @@ export class GlobalsService {
     METADATA_URL: string;
     PHONE_BOOK_URL: string;
     PHONE_NUMBER_URL: string;
+    FILE_TRANSFER_URL: string;
 
     constructor() {
 	
@@ -27,6 +28,7 @@ export class GlobalsService {
         this.METADATA_URL = this.BASE_URL + "breeze/metadata";
         this.PHONE_BOOK_URL = this.BASE_URL + "users/phonebook";
         this.PHONE_NUMBER_URL = this.BASE_URL + "users/phone_number/";
+        this.FILE_TRANSFER_URL = this.BASE_URL + "images/";
 
 	}
 
