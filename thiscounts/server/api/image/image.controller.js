@@ -101,20 +101,27 @@ exports.logo = function (req, res) {
 };
 
 function handle_image(req, res, type) {
-  var meta_data = req.headers.meta;
+  //var meta_data = req.headers.meta;
+  var meta_data = {};
   var form = new multiparty.Form();
   var size = 0;
   var fileName = randomstring.generate({length: 8, charset: 'hex'});
 
   form.on('part', function (part) {
-    console.log("part:" + part.filename);
+    part.filename = part.name;
+    console.log(JSON.stringify(part));
     if (!part.filename) return;
     size = part.byteCount;
     fileName = part.filename;
   });
   form.on('file', function (name, file) {
+    console.log("----------------------------------------------------------");
+    console.log(JSON.stringify(file));
+    console.log(name);
+    console.log("----------------------------------------------------------");
     client.upload(file.path, {/*path: key*/}, function (err, versions, meta) {
       if (err) {
+        console.log("ERROR-ERROR-ERROR-ERROR-ERROR-ERROR-ERROR-ERROR-ERROR-ERROR-");
         console.log(err);
         return handleError(res, err);
       }

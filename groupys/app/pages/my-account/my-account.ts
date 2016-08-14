@@ -21,7 +21,7 @@ import {NgZone} from '@angular/core';
 })
 export class MyAccountPage {
   public base64Image: string;
-  public base64Image2: string;
+  //public base64Image2: string;
   public imageLocalStorage: string;
   public filePath: string;
   local: Storage = new Storage(LocalStorage);
@@ -86,15 +86,36 @@ export class MyAccountPage {
         this.base64Image =  'img/loading.gif';
         this.local.remove('base64Image');
         this.deviceService.clearCache();
-
         setTimeout(() => {
           this.base64Image = this.deviceService.getImageData(imageData);
+          alert("getGalleryPic  file://" + this.base64Image);
+          this.deviceService.getLocalFileSystemURL("file://" + this.base64Image);
+
+        }, 300);
+
+
+
+        setTimeout(() => {
+          alert("getGalleryPic - imageData: " + imageData);
           //alert("base64Image: " + this.base64Image);
           this.imageLocalStorage = this.deviceService.setImageLocalStorage(imageData);
           //alert("imageLocalStorage: " + this.imageLocalStorage);
-          this.upload("file://" + this.base64Image);
+
           this.local.set('base64Image', this.imageLocalStorage);
-        }, 300);
+          this.upload("file://" + this.base64Image);
+
+
+/*
+          function resolveLocalFileErrorHandler(error) {
+            console.log(error);
+          }
+          function resolveLocalFileSuccessHandler(fileEntry) {
+            window.localStorage.setItem('filePath', fileEntry.toInternalURL());
+            //window.localStorage.setItem('filePath2', fileEntry.toInternalURL());
+          }
+          window.resolveLocalFileSystemURL("file://" + this.base64Image, resolveLocalFileSuccessHandler, resolveLocalFileErrorHandler);
+          */
+        }, 1000);
       }, (err) => {
         console.log(err);
       });
@@ -166,26 +187,28 @@ export class MyAccountPage {
     this.contentHeader = new Headers({"Content-Type": "application/json"});
     this.contentHeader.append('Authorization', 'Bearer ' + token);
     alert("this.contentHeader: "+ this.contentHeader);
-
+    this.deviceService.getLocalFileSystemURL(image);
+/*
     function resolveLocalFileErrorHandler(error) {
       console.log(error);
     }
     function resolveLocalFileSuccessHandler(fileEntry) {
       window.localStorage.setItem('filePath', fileEntry.toInternalURL());
-      window.localStorage.setItem('filePath2', fileEntry.toInternalURL());
+      //window.localStorage.setItem('filePath2', fileEntry.toInternalURL());
     }
     window.resolveLocalFileSystemURL(image, resolveLocalFileSuccessHandler, resolveLocalFileErrorHandler);
+    */
     setTimeout(() => {
       this.local.get('filePath').then(filePath => {
-        this.base64Image2 = filePath;
+        //this.base64Image2 = filePath;
         let fileURL = filePath;
-        alert("filePath: " + this.base64Image2);
+        alert("filePath: " + filePath);
 
 
         let ft = new Transfer();
         //alert(ft);
         let filename = fileURL.substr(fileURL.lastIndexOf('/') + 1).toString();
-        alert("------------------" + filename);
+        alert("------------------ filename: " + filename);
         if(filename === '.Pic.jpg' || filename === undefined){
           filename = this.deviceService.unixName();
         }
@@ -198,6 +221,12 @@ export class MyAccountPage {
 
         let params = new Object();
         params['fileName'] = filename;
+        params['key'] = filename;
+        params['AWSAccessKeyId'] = 'AWSAccessKeyId';
+        params['acl'] = "private";
+        params['policy'] = 'policy';
+        params['signature'] = 'signature';
+        params['Content-Type'] = "image/jpeg";
         options.params = params;
         
         let headers = new Object();
@@ -292,7 +321,7 @@ export class MyAccountPage {
         alert("METADATA: " + metadata.size); // or do something more useful with it..
       });*/
       window.localStorage.setItem('filePath', fileEntry.toInternalURL());
-      window.localStorage.setItem('filePath2', fileEntry.toInternalURL());
+      //window.localStorage.setItem('filePath2', fileEntry.toInternalURL());
       //window.localStorage.setItem('filePath', fileEntry.toURL().substring(7));
     }
 
@@ -312,10 +341,10 @@ export class MyAccountPage {
      }*/
 
     setTimeout(() => {
-      this.local.get('filePath2').then(filePath2 => {
+      /*this.local.get('filePath2').then(filePath2 => {
         this.base64Image2 = filePath2;
         alert("222222222222222222: " + this.base64Image2)
-      });
+      });*/
       this.local.get('filePath').then(filePath => {
         alert("------------  " + filePath);
 
