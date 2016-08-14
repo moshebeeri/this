@@ -82,6 +82,18 @@ export class DeviceService {
     return n + ".jpg";
   }
 
+  getLocalFileSystemURL(image){
+    function resolveLocalFileErrorHandler(error) {
+      console.log(error);
+    }
+    function resolveLocalFileSuccessHandler(fileEntry) {
+      window.localStorage.setItem('filePath', fileEntry.toInternalURL());
+      //window.localStorage.setItem('filePath2', fileEntry.toInternalURL());
+    }
+    window.resolveLocalFileSystemURL(image, resolveLocalFileSuccessHandler, resolveLocalFileErrorHandler);
+    
+  }
+
   
 
 }
