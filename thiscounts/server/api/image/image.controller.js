@@ -130,7 +130,10 @@ function handle_image(req, res, type) {
       // 1024 760 https://my-bucket.s3.amazonaws.com/path/110ec58a-a0f2-4ac4-8393-c866d813b8d1.jpg
       //  console.log(image.width, image.height, image.url)
       //});
-
+      console.log("------------- versions: " + versions);
+      console.log("------------- req.params.id: " + req.params.id);
+      console.log("------------- meta_data: " + meta_data);
+      console.log("------------- type: " + type);
       updateImageVersions(versions, req.params.id, meta_data, type);
 
       return res.status(201).json(versions);
