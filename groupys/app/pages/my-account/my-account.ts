@@ -151,7 +151,7 @@ export class MyAccountPage {
 
   done = () : void => {
     //this.nav.setRoot(Home);
-  }
+  };
 
   success = (result: any) : void => {
     alert(JSON.stringify(result));
@@ -162,13 +162,13 @@ export class MyAccountPage {
     } else {
       this.uploading = false;
     }
-  }
+  };
 
   failed = (err: any) : void => {
     alert(JSON.stringify(err));
     let code = err.code;
     alert("Failed to upload image. Code: " + code);
-  }
+  };
 
   onProgress =  (progressEvent: ProgressEvent) : void => {
     this.ngZone.run(() => {
@@ -178,7 +178,7 @@ export class MyAccountPage {
         this.progress = progress
       }
     });
-  }
+  };
 
   upload = (image: string) : void => {
     alert(image);
