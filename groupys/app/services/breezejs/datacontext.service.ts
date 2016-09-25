@@ -1,12 +1,13 @@
 import {Injectable} from '@angular/core';
 import {Http} from '@angular/http';
 import {PromiseWrapper} from '@angular/core/src/facade/promise';
+import { EntityManager, DataService, MetadataStore, Entity, NamingConvention, EntityQuery, Predicate, EntityType } from 'breeze-client';
 import {Q} from './q';
 import {EntityManagerFactoryService} from './entityManagerFactory';
 import {Observable} from 'rxjs/Observable';
 
 // Configure breeze with Q/ES6 Promise adapter
-breeze.config.setQ(Q);
+//breeze.config.setQ(Q);
 
 @Injectable()
 export class DataContextService {
@@ -22,7 +23,8 @@ export class DataContextService {
 
   constructor(private http:Http, private entityManagerFactoryService:EntityManagerFactoryService, private promiseWrapper:PromiseWrapper) {
 
-    this.EntityQuery = breeze.EntityQuery;
+    //this.EntityQuery = breeze.EntityQuery;
+    this.EntityQuery = EntityQuery;
     this.manager = entityManagerFactoryService.newManager();
     //this.$q = promiseWrapper;
     this.$q = Q;
@@ -44,7 +46,7 @@ export class DataContextService {
     let take = size || 20;
     let skip = page ? (page - 1) * size : 0;
 
-    if(this._areContactsLoaded() && !forceRemote) {
+    if(this._areContactsLoaded(true) && !forceRemote) {
       return this.$q.when(getByPage());
 
     }
@@ -99,7 +101,8 @@ export class DataContextService {
   }
 
   _namePredicate(filterValue) {
-    return breeze.Predicate.create("name","contains",filterValue)
+    //return breeze.Predicate.create("name","contains",filterValue)
+    return Predicate.create("name","contains",filterValue)
       .or("_id","contains",filterValue);
     //.or("category","contains",filterValue);
   }
@@ -109,7 +112,7 @@ export class DataContextService {
     x.forEach(function (entity) { this.manager.detachEntity(entity); });
   }
   getContactsCount() {
-    if(this._areContactsLoaded()) {
+    if(this._areContactsLoaded(true)) {
       return this.$q.when(this._getLocalEntityCount(this.entityNames.contacts));
     }
     return this.EntityQuery.from(this.entityNames.contacts)
@@ -157,7 +160,8 @@ export class DataContextService {
       let metadataStore = this.manager.metadataStore;
       let types = metadataStore.getEntityTypes();
       types.forEach(function(type) {
-        if(type instanceof breeze.EntityType) {
+        //if(type instanceof breeze.EntityType) {
+        if(type instanceof EntityType) {
           set(type.shortName, type);
         }
       });

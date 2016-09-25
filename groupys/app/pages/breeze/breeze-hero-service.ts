@@ -13,7 +13,7 @@ export class BreezeHeroService {
     let host="http://sampleservice.breezejs.com";
     let serviceName = host+"/api/northwind";
     this._manager = new breeze.EntityManager(serviceName);
-	console.log(this._manager);    
+	console.log(this._manager);
   }
 
   getEmps(){
