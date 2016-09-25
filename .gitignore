@@ -16,6 +16,7 @@ thiscounts/client/bower_components
 thiscounts/dist
 thiscounts/server/config/local.env.js
 thiscounts/npm-debug.log
+thiscounts/server/config/docker/servers/server_install.sh
 
 
 //groupys files
@@ -27,4 +28,5 @@ groupys/plugins/
 groupys/*.swp
 groupys/.DS_Store
 groupys/Thumbs.db
-thiscounts/server/config/docker/servers/server_install.sh
+groupys/typings/
+
