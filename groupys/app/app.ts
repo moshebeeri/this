@@ -1,6 +1,7 @@
 import {Component, ViewChild} from '@angular/core';
 import {ionicBootstrap, Platform, MenuController, Nav, Storage, LocalStorage} from 'ionic-angular';
 import {StatusBar, Geolocation} from 'ionic-native';
+import { BreezeBridgeAngular2Module } from 'breeze-bridge-angular2';
 
 import {Http} from '@angular/http';
 import {Type} from '@angular/core';
@@ -10,6 +11,8 @@ import {EntityManagerFactoryService} from './services/breezejs/entityManagerFact
 import {HomePage} from './pages/home/home';
 import {ListPage} from './pages/list/list';
 import {MyAccountPage} from './pages/my-account/my-account';
+import {GroupPage} from './pages/group/group';
+import {TestPage} from './pages/test/test';
 import {CouponsPage} from './pages/coupons/coupons';
 import {WishListPage} from './pages/wish-list/wish-list';
 import {FavouriteGroupsPage} from './pages/favourite-groups/favourite-groups';
@@ -35,7 +38,8 @@ import {LazyLoadPage} from './pages/lazy-load/lazy-load';
   }, // http://ionicframework.com/docs/v2/api/config/Config/
   providers: [
     AuthService,
-	  EntityManagerFactoryService
+    EntityManagerFactoryService,
+    BreezeBridgeAngular2Module
   ]
 })
 class MyApp {
@@ -55,7 +59,7 @@ class MyApp {
     this.initializeApp();
     
     this.auth = auth;
-	  this.entityManagerFactoryService = entityManagerFactoryService;
+    this.entityManagerFactoryService = entityManagerFactoryService;
     this.authenticated = this.auth.authenticated();
 
     this.isLoggedIn = this.auth.isLoggedIn();
@@ -72,13 +76,17 @@ class MyApp {
     this.local.remove('isSIM');
     this.local.remove('countryCode');
     this.local.set('isSIM', 'true');
-	
-	  this.entityManagerFactoryService.emFactory().subscribe(data => console.log(data));
+	  console.log("####################################################");
+    this.entityManagerFactoryService.emFactory().subscribe(data => console.log(data));
+	  console.log("####################################################");
+
 
     // used for an example of ngFor and navigation
     this.pages = [
       { title: 'Home', component: HomePage },
       { title: 'My Account', component: MyAccountPage },
+			{ title: 'Test', component: TestPage },
+      { title: 'Group', component: GroupPage },
       { title: 'Coupons', component: CouponsPage },
       { title: 'Wish List', component: WishListPage },
       { title: 'Favourite Groups', component: FavouriteGroupsPage },

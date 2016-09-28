@@ -1,13 +1,17 @@
 import {Injectable} from '@angular/core';
 import {Http, Headers} from '@angular/http';
+import { EntityManager, DataService, MetadataStore, Entity, NamingConvention } from 'breeze-client';
 import {Q} from './q';
 import {Observable} from 'rxjs/Observable';
 
 // Configure breeze with Q/ES6 Promise adapter
-breeze.config.setQ(Q);
+//breeze.config.setQ(Q);
 
 @Injectable()
-export class EntityManagerFactoryService { 
+export class EntityManagerFactoryService {
+
+  entityManager: EntityManager;
+  private _metadataStore: MetadataStore;
 
   private _manager:any; // no type def for EM yet
   baseURL: string;
@@ -27,7 +31,8 @@ export class EntityManagerFactoryService {
 		}
 		this.http = http;
 		this.serviceName = this.baseURL + 'breeze/metadata';
-		this.store = new breeze.MetadataStore();
+		//this.store = new breeze.MetadataStore();
+		this.store = new MetadataStore();
 	}
   
 	emFactory() {
@@ -53,22 +58,29 @@ export class EntityManagerFactoryService {
 		// Because of Breeze bug, must stringify metadata first.
 		this.store.importMetadata(JSON.stringify(data));
 		
-		//let allTypes = this.store.getEntityTypes();
-		//console.log(allTypes);
-		//console.log(this.store.isEmpty());
+		let allTypes = this.store.getEntityTypes();
+		console.log(allTypes);
+
+    let groupType = this.store.getEntityType('Group');
+    console.log(groupType.dataProperties);
+
+		console.log(this.store.isEmpty());
 
 		// Associate these metadata data with the service
 		// if not already associated
 		if (!this.store.hasMetadataFor(this.serviceName)){
 			this.store.addDataService(
-				new breeze.DataService({ serviceName: this.serviceName }));
+				//new breeze.DataService({ serviceName: this.serviceName }));
+				new DataService({ serviceName: this.serviceName }));
 		}
 		console.log(this.store);
+
 	}
 
 	newManager() {
 
-		let mgr = new breeze.EntityManager({
+		//let mgr = new breeze.EntityManager({
+		let mgr = new EntityManager({
 			serviceName: this.serviceName,
 			metadataStore: this.store
 		});

@@ -86,7 +86,7 @@ function _parseEntitySchema(modelName, properties, structuralType){
                 _parseEntitySchema(_toPascalCase(key), Array.isArray(property) ? property[0] : property, { isComplexType: true });
             }
         }
-        
+
         var propertyInfo = _getDataProperty(property, key);
 
         if(propertyInfo.isForeignKey){
@@ -157,8 +157,66 @@ function _getDataProperty(property, propertyName){
     } else {
         propertyInfo.dataType = _getDataType(property);
     }
+    // validation properties
 
-    // ToDo: add validation properties
+    var dataType;
+    dataType = _getTypeValidation(propertyInfo.dataType);
+
+    if(_getDataRequired(property)){
+      propertyInfo.validators = [];
+      propertyInfo.validators[0] = {"name" : "required"};
+    }
+
+    propertyInfo.defaultValue = _getDataEnum(property);
+
+    //propertyInfo.defaultValue = _getDataDefault(property);
+
+    if(_getDataUnique(property)){
+      if(propertyInfo.custom === undefined) {
+        propertyInfo.custom = [];
+      }
+      propertyInfo.custom[propertyInfo.custom.length] = {"unique" : true};
+    }
+
+    if(_getNumberMax(property) || _getNumberMin(property)){
+
+      if(propertyInfo.validators === undefined) {
+        propertyInfo.validators = [];
+      }
+      propertyInfo.validators[propertyInfo.validators.length] = {"name" : dataType, "min" : _getNumberMin(property), "max" : _getNumberMax(property)};
+    }
+
+    if(_getStringMaxLength(property) || _getStringMinLength(property)){
+      if(propertyInfo.validators === undefined) {
+        propertyInfo.validators = [];
+      }
+      propertyInfo.validators[propertyInfo.validators.length] = {"name" : dataType, "MinLength" : _getStringMinLength(property), "MaxLength" : _getStringMaxLength(property)};
+    }
+
+    if(_getStringMaxLength(property)){
+      if(propertyInfo.validators === undefined) {
+        propertyInfo.validators = [];
+      }
+      if(typeof _getStringMaxLength(property) === "number"){
+        propertyInfo.maxLength = _getStringMaxLength(property);
+      }
+
+    }
+
+    if(_getStringMatch(property)){
+      if(propertyInfo.validators === undefined) {
+        propertyInfo.validators = [];
+      }
+      propertyInfo.validators[propertyInfo.validators.length] = {"name" : dataType, "match" : _getStringMatch(property)};
+    }
+/*
+    if(_getValidateFunction(property)){
+      if(propertyInfo.custom === undefined) {
+        propertyInfo.custom = [];
+      }
+      propertyInfo.custom[propertyInfo.custom.length] = {"name" : dataType, "function" : _getStringMatch(property)};
+    }
+*/
 
     return {
         prop: propertyInfo,
@@ -166,6 +224,24 @@ function _getDataProperty(property, propertyName){
     };
 }
 
+function _getTypeValidation(prop){
+  switch(prop) {
+    case "String":
+      return 'string';
+    case "Decimal":
+      return 'number';
+    case "Binary":
+      return 'none';
+    case "DateTime":
+      return 'date';
+    case "Boolean":
+      return 'bool';
+    case "Array":
+      return 'array';
+    default:
+      return 'string';
+  }
+}
 /**
  * Checks if the given property is a foreign key
  * @param property
@@ -221,12 +297,158 @@ function _getDataType(prop) {
             return 'Binary';
         case Date:
             return 'DateTime';
-		case Boolean:
+		    case Boolean:
             return 'Boolean';
+        case Array:
+          return 'Array';
         default:
             return 'complexTypeName';
     }
 }
+
+/**
+ * Returns required: true/false
+ * @param required
+ * @private
+ */
+function _getDataRequired(prop) {
+  var mongooseType = prop.required || '';
+
+  if(mongooseType !='' && mongooseType instanceof Array){
+    mongooseType = prop[0];
+  }
+  switch(mongooseType) {
+    case true:
+      return true;
+    case false:
+      return false;
+    default:
+      return false;
+  }
+}
+
+/**
+ * Returns enum data
+ * @param enum
+ * @private
+ */
+function _getDataEnum(prop) {
+  var mongooseType = prop.enum || '';
+
+  if(mongooseType !='' && mongooseType instanceof Array){
+    return prop.enum;
+  } else return;
+}
+
+/**
+ * Returns default data
+ * @param default
+ * @private
+ */
+function _getDataDefault(prop) {
+  var mongooseType = prop.default || '';
+
+  if(mongooseType !='' && mongooseType instanceof Array){
+    return prop.default;
+  } else return;
+}
+
+/**
+ * Returns Unique: true/false
+ * @param unique
+ * @private
+ */
+function _getDataUnique(prop) {
+  var mongooseType = prop.unique || '';
+
+  if(mongooseType !='' && mongooseType instanceof Array){
+    mongooseType = prop[0];
+  }
+  switch(mongooseType) {
+    case true:
+      return true;
+    case false:
+      return false;
+    default:
+      return false;
+  }
+}
+
+/**
+ * Returns maxlength string
+ * @param maxlength
+ * @private
+ */
+function _getStringMaxLength (prop) {
+  var mongooseType = prop.maxlength || '';
+
+  if(mongooseType !=''){
+    return prop.maxlength;
+  } else return;
+}
+
+/**
+ * Returns maxlength string
+ * @param maxlength
+ * @private
+ */
+function _getStringMinLength (prop) {
+  var mongooseType = prop.minlength || '';
+
+  if(mongooseType !=''){
+    return prop.minlength;
+  } else return;
+}
+
+function _getStringMatch (prop) {
+  var mongooseType = prop.match || '';
+
+  if(mongooseType !=''){
+    return prop.match;
+  } else return;
+}
+
+/**
+ * Returns max number
+ * @param max
+ * @private
+ */
+function _getNumberMax(prop) {
+  var mongooseType = prop.max || '';
+
+  if(mongooseType !=''){
+    return prop.max;
+  } else return;
+}
+
+/**
+ * Returns max number
+ * @param max
+ * @private
+ */
+function _getNumberMin (prop) {
+  var mongooseType = prop.max || '';
+
+  if(mongooseType !=''){
+    return prop.min;
+  } else return;
+}
+
+
+/**
+ * Returns validate function
+ * @param max
+ * @private
+ */
+function _getValidateFunction (prop) {
+  var mongooseType = prop.validate || '';
+
+  if(mongooseType !=''){
+    return prop.validate;
+  } else return;
+}
+
+
 
 
 // endregion

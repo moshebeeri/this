@@ -7,6 +7,8 @@
   },
   "filesGlob": [
     "**/*.ts",
+    "app/typings/ngcordova.d.ts",
+    "app/typings/phonegap.d.ts",
     "!node_modules/**/*"
   ],
   "exclude": [
