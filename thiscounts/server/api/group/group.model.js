@@ -5,14 +5,14 @@ var mongoose = require('mongoose'),
 
 var GroupSchema = new Schema({
   name: String,
-  gid: { type: Number, index: true, unique : true },
+  gid: { type: Number, index: true, unique: true },
   description: String,
-  created: { type : Date, default: Date.now },
+  created: { type: Date, default: Date.now },
   creator: {type: Schema.ObjectId, ref: 'User', required: true},
   admins: [{ type: Schema.ObjectId, ref: 'User', index: true, unique: false}],
   creator_type: {
     type: String,
-    required : true,
+    required: true,
     enum: [
       'BUSINESS',
       'CHAIN',
@@ -22,7 +22,7 @@ var GroupSchema = new Schema({
   },
   add_policy: {
     type: String,
-    required : true,
+    required: true,
     enum: [
       'OPEN',         //  any one can add himself
       'CLOSE',        //  only admin adds
@@ -31,7 +31,7 @@ var GroupSchema = new Schema({
       'MEMBER_INVITE' //  member invite
     ]
   },
-  pictures : []
+  pictures: []
 
 });
 

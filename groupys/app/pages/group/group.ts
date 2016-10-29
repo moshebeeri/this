@@ -4,6 +4,8 @@ import {Http} from '@angular/http';
 import {EntitiesService} from '../../services/entities/entities-service';
 import {FormBuilderService} from '../../services/form-builder/form-builder';
 import {DebugPanelComponent} from '../../services/form-builder/debug-panel/debug-panel.component';
+import {MyCameraService} from '../../services/my-camera/my-camera';
+import {DeviceService} from '../../services/device/device';
 import {RegisterPage} from '../register/register';
 //import {TimerWrapper} from 'angular2/src/facade/async';
 
@@ -11,7 +13,7 @@ import {RegisterPage} from '../register/register';
 
 @Page({
   templateUrl: 'build/pages/group/group.html',
-  providers : [EntitiesService, FormBuilderService],
+  providers : [EntitiesService, FormBuilderService, MyCameraService, DeviceService],
   directives: [DebugPanelComponent]
 })
 export class GroupPage {
@@ -36,7 +38,7 @@ export class GroupPage {
     this.formBuilderService.buildFormByEntity('Test').subscribe(
       data => this.entityForm = data
     );
-    this.formBuilderService.buildHTMLByEntity('Test').subscribe(
+    this.formBuilderService.buildHTMLByEntity('Test',[],[],[]).subscribe(
       data => this.bodyHTML = data
     );
 		//this.controlArray = this.entityForm.find('controlArrayField') as ControlArray;
@@ -45,10 +47,10 @@ export class GroupPage {
   }
   onSubmitForm() {
     //console.log(this.entityForm.value);
-		this.formBuilderService.onSubmitForm(this.entityForm, 'Test');
+		this.formBuilderService.onSubmitForm(this.entityForm);
   }
 	onClearForm(formActiveFlag) {
-		this.formBuilderService.onClearForm(this.entityForm, formActiveFlag);
+		//this.formBuilderService.onClearForm(this.entityForm, formActiveFlag);
   }
 	
 	onAddArrayRequest(controlArray) {
