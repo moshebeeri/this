@@ -17,18 +17,34 @@ function isAuthenticated() {
   return compose()
     // Validate jwt
     .use(function(req, res, next) {
+
+      console.log("000000000000000000000000 ----------req.headers.authorization: " + JSON.stringify(req.headers.authorization));
+      var indexOfBearer = req.headers.authorization.indexOf("Bearer");
+      console.log("*************** ----------indexOfBearer: " + indexOfBearer);
+
+      // allow Cordove FileTransfer Plugin  header as well
+      if(indexOfBearer != 0 && indexOfBearer != -1){
+
+        var headerLength = req.headers.authorization.length;
+        console.log("headerLength: " + headerLength);
+        req.headers.authorization = req.headers.authorization.slice(indexOfBearer, headerLength-3);
+        console.log("NO JSON ----------req.headers.authorization: " + req.headers.authorization);
+        console.log("JSON ----------req.headers.authorization: " + JSON.stringify(req.headers.authorization));
+
+      }
       // allow access_token to be passed through query parameter as well
       if(req.query && req.query.hasOwnProperty('access_token')) {
         req.headers.authorization = 'Bearer ' + req.query.access_token;
       }
-	  console.log("1111111111111111111111111 ----------req.headers.authorization: " + JSON.stringify(req.headers.authorization));
-	  
+	    console.log("1111111111111111111111111 ----------req.headers.authorization: " + JSON.stringify(req.headers.authorization));
+
       validateJwt(req, res, next);
     })
     // Attach user to request
     .use(function(req, res, next) {
+			console.log(req.user._id);
       User.findById(req.user._id, function (err, user) {
-        if (err) return next(err);
+        //if (err) return next(err);
         if (!user) return res.status(401).send('Unauthorized');
 
         req.user = user;
