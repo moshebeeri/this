@@ -10,6 +10,7 @@ var TestSchema = new Schema({
   created: { type : Date, default: Date.now },
   creator: {type: Schema.ObjectId, ref: 'User', required: true},
   admins: [{ type: Schema.ObjectId, ref: 'User', index: true, unique: false}],
+	user: {type: Schema.ObjectId, ref: 'User'},
   _select: {
     type: String,
     required : true,
@@ -37,6 +38,7 @@ var TestSchema = new Schema({
 	_checkbox: {
     type: String,
     required : true,
+		default: 'OPEN',
     enum: [
 			'checkbox',
       'OPEN',         //  any one can add himself
@@ -50,7 +52,33 @@ var TestSchema = new Schema({
     type: Array,
     required : true
   },
-  pictures : []
+	active: Boolean,
+  pictures : [],
+	//business
+	/*action: {type: String, default: ''},
+	location : {
+    lng : Number,
+    lat : Number,
+    //for internal use
+    type: {type: String},
+    coordinates: []
+  },
+	additional_contacts : {
+    phone_description : String,
+    phone : String,
+    email_description : String,
+    email : String
+  },
+	expireAt: {
+    type: Date,
+    validate: [ function(v) {
+      return (v - new Date()) > 60000*(3600*24*2 - 1);
+    }, 'Cannot expire less then 2 days in the future.' ],
+    default: function() {
+      // 2 days from now
+      return new Date(new Date().valueOf() + 60000*3600*24*2);
+    }
+  }*/
 
 });
 

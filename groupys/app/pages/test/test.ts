@@ -1,9 +1,15 @@
 import {Page, NavController, NavParams, Storage, LocalStorage} from 'ionic-angular';
 import {ControlGroup, Control, ControlArray, FormBuilder} from '@angular/common';
+//import {ChangeDetectionStrategy} from '@angular/core';
 import {Http} from '@angular/http';
 import {EntitiesService} from '../../services/entities/entities-service';
 import {FormBuilderService} from '../../services/form-builder/form-builder';
 import {DebugPanelComponent} from '../../services/form-builder/debug-panel/debug-panel.component';
+import {FormButtonsComponent} from '../../services/form-builder/form-buttons-component/form-buttons-component';
+import {MyCameraService} from '../../services/my-camera/my-camera';
+import {DeviceService} from '../../services/device/device';
+import {PhotoComponent } from '../photo/photo-component/photo-component';
+
 import {RegisterPage} from '../register/register';
 //import {TimerWrapper} from 'angular2/src/facade/async';
 
@@ -11,8 +17,9 @@ import {RegisterPage} from '../register/register';
 
 @Page({
   templateUrl: 'build/pages/test/test.html',
-  providers : [EntitiesService, FormBuilderService],
-  directives: [DebugPanelComponent]
+  providers : [EntitiesService, FormBuilderService, MyCameraService, DeviceService],
+	//changeDetection: ChangeDetectionStrategy.OnPush,
+  directives: [DebugPanelComponent, PhotoComponent, FormButtonsComponent]
 })
 export class TestPage {
   entityForm: ControlGroup;
@@ -33,10 +40,10 @@ export class TestPage {
   }
 
   ngOnInit() {
-    this.formBuilderService.buildFormByEntity('Test').subscribe(
+    this.formBuilderService.buildFormByEntity('Group').subscribe(
       data => this.entityForm = data
     );
-    this.formBuilderService.buildHTMLByEntity('Test').subscribe(
+    this.formBuilderService.buildHTMLByEntity('Group',[],[],[]).subscribe(
       data => this.bodyHTML = data
     );
 		//this.controlArray = this.entityForm.find('controlArrayField') as ControlArray;
@@ -45,10 +52,17 @@ export class TestPage {
   }
   onSubmitForm() {
     //console.log(this.entityForm.value);
-		this.formBuilderService.onSubmitForm(this.entityForm, 'Test');
+    //this.entityForm.value.creator = 999999;
+		this.formBuilderService.onSubmitForm(this.entityForm);
   }
-	onClearForm(formActiveFlag) {
-		this.formBuilderService.onClearForm(this.entityForm, formActiveFlag);
+	onClearForm() {
+    this.formBuilderService.buildFormByEntity('Group').subscribe(
+      data => this.entityForm = data
+    );
+    this.formActive = false;
+    setTimeout(() => {
+      this.formActive = true;
+    }, 0);
   }
 	
 	onAddArrayRequest(controlArray) {
