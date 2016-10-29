@@ -7,14 +7,19 @@ export class GlobalHeaders {
     contentHeader: Headers = new Headers({"Content-Type": "application/json"});
     local: Storage = new Storage(LocalStorage);
 	
-    constructor() {
-		let jwt = this.local.get('token');
-		console.log("----------------------------------------------------------" + JSON.stringify(jwt.__zone_symbol__value));
-		if(jwt.__zone_symbol__value) {
-			this.contentHeader.append('Authorization', 'Bearer ' + jwt.__zone_symbol__value);      
-		}
+  constructor() {
+    this.local.get('token').then(token => {
+      this.contentHeader.append('Authorization', 'Bearer ' + token);
+      //alert(JSON.stringify(this.contentHeader));
+      console.log("111111111111111111111----------------------------" + JSON.stringify(this.contentHeader));
+    }).catch(error => {
+      console.log(error);
+    });
+    this.getMyGlobalHeaders();
 	}
 	getMyGlobalHeaders() {
+    //alert("getMyGlobalHeaders");
+    //alert(JSON.stringify(this.contentHeader));
 		return this.contentHeader;
 	}
 }
