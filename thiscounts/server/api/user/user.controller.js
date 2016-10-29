@@ -224,7 +224,7 @@ exports.create = function (req, res, next) {
 			console.log("config.secrets.session---------------------" + config.secrets.session);
 			res.status(200).json({token: token});
 
-			////send_sms_verification_code(user);
+			send_sms_verification_code(user);
 
 			graphModel.reflect(user,
 			  {
