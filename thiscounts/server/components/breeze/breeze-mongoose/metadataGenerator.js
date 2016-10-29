@@ -209,14 +209,13 @@ function _getDataProperty(property, propertyName){
       }
       propertyInfo.validators[propertyInfo.validators.length] = {"name" : dataType, "match" : _getStringMatch(property)};
     }
-/*
+
     if(_getValidateFunction(property)){
       if(propertyInfo.custom === undefined) {
         propertyInfo.custom = [];
       }
-      propertyInfo.custom[propertyInfo.custom.length] = {"name" : dataType, "function" : _getStringMatch(property)};
+      propertyInfo.custom[propertyInfo.custom.length] = {"name" : dataType, "function" : _getValidateFunction(property)};
     }
-*/
 
     return {
         prop: propertyInfo,
@@ -444,7 +443,7 @@ function _getValidateFunction (prop) {
   var mongooseType = prop.validate || '';
 
   if(mongooseType !=''){
-    return prop.validate;
+    return prop.validate.toString();
   } else return;
 }
 
