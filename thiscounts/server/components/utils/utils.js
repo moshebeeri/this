@@ -98,4 +98,19 @@ Utils.prototype.parallel_id =function set_parallel_id(itemId, element, callback)
   });
 };
 
+Utils.prototype.to_paginate = function paginate(req){
+  var skip = req.params.skip;
+  var limit = req.params.limit;
+
+  if(!utils.defined(skip) || !_.isNumber(skip))
+    skip = 0;
+  if(!utils.defined(limit) || !_.isNumber(limit))
+    limit = 10;
+
+  return {
+    skip: skip,
+    limit: limit
+  }
+};
+
 module.exports = Utils;

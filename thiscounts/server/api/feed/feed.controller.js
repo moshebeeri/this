@@ -34,7 +34,7 @@ exports.show = function (req, res) {
 // feed
 exports.feed = function (req, res) {
   //var userId = req.user._id;
-  var feed_id = req.params.feed_id;
+  var from_id = req.params.from_id;
   var entity_id = req.params.entity_id;
   var type = req.params.type;
   var scroll = req.params.scroll;
@@ -52,9 +52,9 @@ exports.feed = function (req, res) {
     return feedTools.fetch_feed(query_builder, Feed, res);
   }
   if (req.params.scroll === 'up')
-    query_builder = query_builder.where('_id').gt(feed_id);
+    query_builder = query_builder.where('_id').gt(from_id);
   else if (req.params.scroll === 'down')
-    query_builder = query_builder.where('_id').lt(feed_id);
+    query_builder = query_builder.where('_id').lt(from_id);
 
   return feedTools.fetch_feed(query_builder, Feed, res);
 };

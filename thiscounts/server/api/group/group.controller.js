@@ -2,6 +2,8 @@
 
 var _ = require('lodash');
 var Group = require('./group.model');
+var User = require('./user.model');
+
 var graphTools = require('../../components/graph-tools');
 var graphModel = graphTools.createGraphModel('group');
 var activity = require('../../components/activity').createActivity();
@@ -230,9 +232,54 @@ exports.add_group = function(req, res) {
     if(!group) { return res.send(404); }
     //user mast be one of the admins
     if(utils.defined(_.find(group.admins, req.user._id)))
-      return group_follow_group(req.user._id, group, res);
+      return group_follow_group(req.params.group, group, res);
     else
       return res.send(404, 'Only group admin may follow other groups');
+  });
+};
+
+//router.get('/add/:group/:to_group', auth.isAuthenticated(), controller.add_group);
+exports.members = function(req, res) {
+  Group.findById(req.params.id, function (err, group) {
+    if(err) { return handleError(res, err); }
+    if(!group) { return res.send(404); }
+    //user mast be one of the admins
+    if(utils.defined(_.find(group.admins, req.user._id)))
+      return group_follow_group(req.params.group, group, res);
+    else
+      return res.send(404, 'Only group admin may follow other groups');
+  });
+};
+
+exports.following_groups = function (req, res) {
+  Group.findById(req.params.id, function (err, group) {
+    if(err) { return handleError(res, err); }
+    if(!group) { return res.send(404); }
+    var skip = req.params.skip;
+    var limit = req.params.limit;
+    graphModel.incoming_ids(req.params.group, 'FOLLOW', 'group', 'in', skip, limit, function (err, following) {
+      if (err) {return handleError(res, err)}
+      Group.find({}).where('_id').in(following).exec(function (err, following_groups) {
+        if (err) {return handleError(res, err)}
+        return res.status(200).json(following_groups);
+      });
+    });
+  });
+};
+
+exports.following_users = function (req, res) {
+  Group.findById(req.params.id, function (err, group) {
+    if(err) { return handleError(res, err); }
+    if(!group) { return res.send(404); }
+    var skip = req.params.skip;
+    var limit = req.params.limit;
+    graphModel.incoming_ids(req.params.group, 'FOLLOW', 'user', 'in', skip, limit, function (err, following) {
+      if (err) {return handleError(res, err)}
+      User.find({}).where('_id').in(following).exec(function (err, following_users) {
+        if (err) {return handleError(res, err)}
+        return res.status(200).json(following_users);
+      });
+    });
   });
 };
 

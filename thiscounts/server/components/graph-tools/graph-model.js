@@ -194,6 +194,19 @@ GraphModel.prototype.related_type_id_dir = function related_type_id_dir(start, n
   });
 };
 
+GraphModel.prototype.incoming_ids = function related_incoming_ids(start, name, ret_type, skip, limit, callback){
+  var query = util.format(
+    "MATCH (s { _id:'{%s}' })<-[r:%s]-(ret:%s) " +
+    "return ret._id " +
+    "ORDER BY r.name DESC " + //TODO: make order an input
+    "skip %d limit %d", start, name, ret_type, skip, limit);
+  db.query(query, function(err, related) {
+    if (err) { callback(err, null) }
+    else callback(null, related)
+  });
+};
+
+
 GraphModel.prototype.followers = function followers(userId, skip, limit, callback){
   related_type_id_dir(userId, 'FOLLOW', 'user', 'in', skip, limit, callback);
 };

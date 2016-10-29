@@ -31,9 +31,6 @@ export class GlobalsService {
         this.FILE_TRANSFER_URL = this.BASE_URL + "images/";
 
 	}
-
-
-
 }
 
 
