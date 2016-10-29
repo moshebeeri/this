@@ -1,4 +1,4 @@
-import {Page, NavController, Storage, LocalStorage} from 'ionic-angular';
+import {Page, NavController, Storage, LocalStorage, Platform} from 'ionic-angular';
 import {Http, Headers} from '@angular/http';
 import {FORM_DIRECTIVES,FormBuilder,ControlGroup} from '@angular/common';
 import {GlobalsService} from '../../services/globals/globals';
@@ -7,6 +7,7 @@ import {GlobalHeaders} from '../../services/headers/headers';
 import {CountriesService} from '../countries/countries-service';
 import {CountriesPage} from '../countries/countries';
 import {HomePage} from '../home/home';
+import {MyAccountPage} from '../my-account/my-account';
 import {Observable} from 'rxjs/Observable';
 const map = require('rxjs/add/operator/map');
 
@@ -40,7 +41,7 @@ export class RegisterPage {
     return [[NavController], [Http], [GlobalsService], [GlobalHeaders], [AuthService]];
   }*/
 
-  constructor(private nav:NavController, private http:Http, private globals:GlobalsService, private globalHeaders:GlobalHeaders, private auth:AuthService, private countriesService:CountriesService) {
+  constructor(private nav:NavController, private platform: Platform, private http:Http, private globals:GlobalsService, private globalHeaders:GlobalHeaders, private auth:AuthService, private countriesService:CountriesService) {
     
     this.nav = nav;
     this.http = http;
@@ -56,7 +57,7 @@ export class RegisterPage {
     this.isAdmin = this.auth.isAdmin();
 
     this.contentHeader = this.globalHeaders.getMyGlobalHeaders();
-    console.log("xxxxxxxxxxxxxxxxxxxxxxxxxxx" + JSON.stringify(this.contentHeader));
+    console.log("xxxxxxxxxxxxxxxxxxxxxxxxxxx111111111111111" + JSON.stringify(this.contentHeader));
     this.error = null;
     this.callingDigitsInput= null;
     this.validatorLength=-99;
@@ -88,24 +89,26 @@ export class RegisterPage {
   }
 
   getCountries(){
-	this.local.get('countryCode').then(countryCode => {
-	  //alert("countryCode: " + JSON.parse(countryCode));
-	  this.countriesService.findByName(JSON.parse(countryCode)).subscribe(
-      data => this.setDefaultCountry(data)
-    );
-	}).catch(error => {
-	  console.log(error);
-	});
-    
+    this.local.get('countryCode').then(countryCode => {
+      //alert("countryCode: " + JSON.parse(countryCode));
+      this.countriesService.findByName(JSON.parse(countryCode)).subscribe(
+        data => this.setDefaultCountry(data)
+      );
+    }).catch(error => {
+      console.log(error);
+    });
   }
   getCountryFromSim(){
-    window.plugins.sim.getSimInfo(this.successCallback, this.errorCallback);
+    this.platform.ready().then(() => {
+      window.plugins.sim.getSimInfo(this.successCallback, this.errorCallback);
+    });
+
   }
 
   successCallback(result) {
     //alert("1: " + JSON.stringify(result.countryCode));
-	window.localStorage.setItem('countryCode', JSON.stringify(result.countryCode));
-	//alert(JSON.stringify(this.local.get('countryCode')));	
+	  window.localStorage.setItem('countryCode', JSON.stringify(result.countryCode));
+	  //alert(JSON.stringify(this.local.get('countryCode')));
   }
   errorCallback(error) {
     //alert(error);
@@ -160,7 +163,7 @@ export class RegisterPage {
 	  this.digitsValidator = JSON.parse(digitsValidator);
 	  console.log('digitsValidator' + this.digitsValidator);
 	  document.getElementById("phoneInput").setAttribute("maxlength", this.digitsValidator);
-	  document.getElementById("phoneInput").getElementsByTagName( 'input' )[0].setAttribute("maxlength", this.digitsValidator);
+	  document.getElementById("phoneInput").getElementsByTagName( 'input' )[0]["setAttribute"]("maxlength", this.digitsValidator);
 	  }).catch(error => {
 		console.log(error);
 	});
@@ -180,7 +183,8 @@ export class RegisterPage {
       console.log(this.error);
       return;
     }
-    credentials["phone_number"] = this.callingCodes + credentials["callingDigits"];
+    let phone_number = this.callingCodes + credentials["callingDigits"];
+    credentials["phone_number"] = phone_number;
     /*
     credentials["username"] = 'rami raz';
     credentials["email"] = 'ramiraz76@gmail.com';
@@ -192,7 +196,7 @@ export class RegisterPage {
     this.http.post(this.globals.SIGNUP_URL, JSON.stringify(credentials), { headers: this.contentHeader })
         .map(res => res.json())
         .subscribe(
-          data => this.authSuccess(data.token),
+          data => this.authSuccess(data['token']),
           err => this.error = err,
           () => console.log('Register request Complete')
         );
@@ -200,7 +204,7 @@ export class RegisterPage {
   
   verification(credentials) {
     let token = this.local.get('token');
-    token = token.__zone_symbol__value;
+    token = token["__zone_symbol__value"];
     this.contentHeader = new Headers({"Content-Type": "application/json"});
     this.contentHeader.append('Authorization', 'Bearer ' + token);
 
@@ -235,7 +239,8 @@ export class RegisterPage {
     this.isAuthorized = this.auth.isAuthorized('user');
     this.isAdmin = this.auth.isAdmin();
 
-    this.nav.setRoot(HomePage);
+    //this.nav.setRoot(HomePage);
+    this.nav.setRoot(MyAccountPage);
   }
 
   logout() {
@@ -264,7 +269,7 @@ export class RegisterPage {
   setCurrentUser(data){
     this.auth.setCurrentUser(data);
     this.currentUser = this.auth.getCurrentUser();
-    console.log(this.currentUser._id);
+    console.log(this.currentUser["_id"]);
     console.log( JSON.stringify(this.currentUser));
     this.isLoggedIn = this.auth.isLoggedIn();
     //this.isLoggedIn = true;
