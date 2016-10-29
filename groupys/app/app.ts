@@ -6,6 +6,8 @@ import { BreezeBridgeAngular2Module } from 'breeze-bridge-angular2';
 import {Http} from '@angular/http';
 import {Type} from '@angular/core';
 import {AuthService} from './services/auth/auth';
+import {GlobalHeaders} from './services/headers/headers';
+import {GlobalsService} from './services/globals/globals';
 import {EntityManagerFactoryService} from './services/breezejs/entityManagerFactory';
 
 import {HomePage} from './pages/home/home';
@@ -38,6 +40,8 @@ import {LazyLoadPage} from './pages/lazy-load/lazy-load';
   }, // http://ionicframework.com/docs/v2/api/config/Config/
   providers: [
     AuthService,
+    GlobalHeaders,
+    GlobalsService,
     EntityManagerFactoryService,
     BreezeBridgeAngular2Module
   ]
@@ -55,9 +59,15 @@ class MyApp {
   currentLongitude: number;
   local: Storage = new Storage(LocalStorage);
 
-  constructor(private menu: MenuController, private platform: Platform, private auth: AuthService, public http: Http, private entityManagerFactoryService: EntityManagerFactoryService) {
+  constructor(private globals: GlobalsService, private menu: MenuController, private platform: Platform, private auth: AuthService, public http: Http, private entityManagerFactoryService: EntityManagerFactoryService) {
     this.initializeApp();
-    
+    /*
+    let x = this.globals.getPostUrlByEntity('group');
+    console.log("++++++++++++++++++++++++++++++++++++++++++++++++++");
+    console.log(x);
+    console.log("++++++++++++++++++++++++++++++++++++++++++++++++++");
+    */
+
     this.auth = auth;
     this.entityManagerFactoryService = entityManagerFactoryService;
     this.authenticated = this.auth.authenticated();
@@ -84,9 +94,12 @@ class MyApp {
     // used for an example of ngFor and navigation
     this.pages = [
       { title: 'Home', component: HomePage },
+      { title: 'Register', component: RegisterPage},
       { title: 'My Account', component: MyAccountPage },
-			{ title: 'Test', component: TestPage },
+      { title: 'Contacts', component: ContactsPage},
       { title: 'Group', component: GroupPage },
+			{ title: 'Test', component: TestPage }
+      /*
       { title: 'Coupons', component: CouponsPage },
       { title: 'Wish List', component: WishListPage },
       { title: 'Favourite Groups', component: FavouriteGroupsPage },
@@ -94,12 +107,10 @@ class MyApp {
       { title: 'Messages', component: MessagesPage },
       { title: 'Profile', component: ProfilePage},
       { title: 'Login', component: LoginPage},
-      { title: 'Register', component: RegisterPage},
       { title: 'Countries', component: CountriesPage},
-      { title: 'Contacts', component: ContactsPage},
       { title: 'Breeze', component: BreezePage},
 	    { title: 'Lazy Load', component: LazyLoadPage },
-      { title: 'List', component: ListPage }
+      { title: 'List', component: ListPage }*/
     ];
 
   }
