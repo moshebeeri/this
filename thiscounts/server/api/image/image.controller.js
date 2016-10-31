@@ -117,6 +117,9 @@ function handle_image(req, res, type) {
   form.on('file', function (name, file) {
     console.log("----------------------------------------------------------");
     console.log(JSON.stringify(file));
+		var entityId = file.originalFilename.substring(file.originalFilename.lastIndexOf('--'),0).toString();
+		console.log("entityId: " + entityId);
+
     console.log(name);
     console.log("----------------------------------------------------------");
     client.upload(file.path, {/*path: key*/}, function (err, versions, meta) {
@@ -131,10 +134,19 @@ function handle_image(req, res, type) {
       //  console.log(image.width, image.height, image.url)
       //});
       console.log("------------- versions: " + versions);
+      console.log("------------- req.params.rami: " + req.params.rami);
       console.log("------------- req.params.id: " + req.params.id);
-      console.log("------------- meta_data: " + meta_data);
+      console.log(JSON.stringify(req.params));
+      console.log(JSON.stringify(meta_data));
       console.log("------------- type: " + type);
-      updateImageVersions(versions, req.params.id, meta_data, type);
+      console.log("------------- req.user._id: " + req.user._id);
+			if(entityId.length === 0){
+				updateImageVersions(versions, req.user._id, meta_data, type);
+			} else {
+				updateImageVersions(versions, entityId, meta_data, type);
+			}
+			
+      
 
       return res.status(201).json(versions);
     });

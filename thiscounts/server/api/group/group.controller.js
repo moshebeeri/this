@@ -22,7 +22,7 @@ exports.index = function(req, res) {
 exports.show = function(req, res) {
   Group.findById(req.params.id, function (err, group) {
     if(err) { return handleError(res, err); }
-    if(!group) { return res.send(404); }
+    if(!group) { return res.status(404).send('no group'); }
     return res.json(group);
   });
 };
@@ -90,11 +90,28 @@ function group_follow_group_activity(following, followed) {
 
 // Creates a new group in the DB.
 exports.create = function(req, res) {
+	console.log("--------------------------------------------");
+	console.log(req);
+	console.log("--------------------------------------------");
+
+	//req.body._id = req.body.id;
+
+	/*var d = new Date();
+  var n = d.getTime();
+	console.log(n);
+
+	req.body.created = Date.now();*/
+	console.log(req.body);
+	console.log("--------------------------------------------");
+	console.log(req.user._id);
+	console.log("--------------------------------------------");
+	//req.body.pictures = [];
   Group.create(req.body, function(err, group) {
     if(err) { return handleError(res, err); }
     graphModel.reflect(group, to_graph(group), function (err) {
       if (err) {  return handleError(res, err); }
-      graphModel.relate_ids(group._id, 'CREATED_BY', req.body._id);
+			console.log('success');
+      graphModel.relate_ids(group._id, 'CREATED_BY', req.user._id);
       group_activity(group, "create");
     });
     return res.json(201, group);
@@ -106,7 +123,7 @@ exports.update = function(req, res) {
   if(req.body._id) { delete req.body._id; }
   Group.findById(req.params.id, function (err, group) {
     if (err) { return handleError(res, err); }
-    if(!group) { return res.send(404); }
+    if(!group) { return res.status(404).send('no group'); }
     var updated = _.merge(group, req.body);
     updated.save(function (err) {
       if (err) { return handleError(res, err); }
@@ -119,7 +136,7 @@ exports.update = function(req, res) {
 exports.destroy = function(req, res) {
   Group.findById(req.params.id, function (err, group) {
     if(err) { return handleError(res, err); }
-    if(!group) { return res.send(404); }
+    if(!group) { return res.status(404).send('no group'); }
     group.remove(function(err) {
       if(err) { return handleError(res, err); }
       return res.send(204);
@@ -133,7 +150,7 @@ exports.offer = function(req, res) {
   var offer = req.body;
   Group.findById(req.params.group, function (err, group) {
     if (err) { return handleError(res, err); }
-    if(!group) { return res.send(404); }
+    if(!group) { return res.status(404).send('no group'); }
     graphModel.relate_ids(group._id, 'OFFER', offer._id);
     group_offer_activity(group, offer);
     return res.json(200, group);
@@ -144,11 +161,11 @@ exports.offer = function(req, res) {
 exports.message = function(req, res) {
   Group.findById(req.params.group, function (err, group) {
     if (err) { return handleError(res, err); }
-    if(!group) { return res.send(404); }
+    if(!group) { return res.status(404).send('no group'); }
     //var updated = _.merge(group, req.body);
     updated.save(function (err) {
       if (err) { return handleError(res, err); }
-      graphModel.relate_ids(group._id, 'CREATED_BY', req.body._id);
+      graphModel.relate_ids(group._id, 'CREATED_BY', req.user._id);
       group_message_activity(group);
       return res.json(200, group);
     });
@@ -179,7 +196,7 @@ function add_user_to_group_admin(user_id, group, res){
 exports.add_admin = function(req, res) {
   Group.findById(req.params.to_group, function (err, group) {
     if(err) { return handleError(res, err); }
-    if(!group) { return res.send(404); }
+    if(!group) { return res.status(404).send('no group'); }
     //if requester is group admin he may add admins
     if(utils.defined(_.find(group.admins, req.user._id))) {
       user_follow_group(req.user._id, group, function(err, group){
@@ -204,19 +221,19 @@ exports.add_admin = function(req, res) {
 exports.add_user = function(req, res) {
     Group.findById(req.params.to_group, function (err, group) {
       if(err) { return handleError(res, err); }
-      if(!group) { return res.send(404); }
+      if(!group) { return res.status(404).send('no group'); }
 
       if(group.add_policy == 'OPEN'){
         if(req.user._id ==  req.params.user )
           return user_follow_group(req.user._id, group, res);
         else
-          return res.send(404, 'Group add policy OPEN - authenticated user may only add himself');
+          return res.status(404).send('Group add policy OPEN - authenticated user may only add himself');
       }
       if(group.add_policy == 'CLOSE'){
         if(utils.defined(_.find(group.admins, req.user._id)))
           return user_follow_group(req.user._id, group, res);
         else
-          return res.send(404, 'Group add policy CLOSE - only admin may add users');
+          return res.status(404).send('Group add policy CLOSE - only admin may add users');
       }
       if(group.add_policy == 'REQUEST' ||
         group.add_policy == 'ADMIN_INVITE' ||
@@ -229,12 +246,12 @@ exports.add_user = function(req, res) {
 exports.add_group = function(req, res) {
   Group.findById(req.params.id, function (err, group) {
     if(err) { return handleError(res, err); }
-    if(!group) { return res.send(404); }
-    //user mast be one of the admins
+    if(!group) { return res.status(404).send('no group'); }
+    //user must be one of the admins
     if(utils.defined(_.find(group.admins, req.user._id)))
-      return group_follow_group(req.params.group, group, res);
+      return group_follow_group(req.user._id, group, res);
     else
-      return res.send(404, 'Only group admin may follow other groups');
+      return res.status(404).send('Only group admin may follow other groups');
   });
 };
 
@@ -243,7 +260,7 @@ exports.members = function(req, res) {
   Group.findById(req.params.id, function (err, group) {
     if(err) { return handleError(res, err); }
     if(!group) { return res.send(404); }
-    //user mast be one of the admins
+    //user must be one of the admins
     if(utils.defined(_.find(group.admins, req.user._id)))
       return group_follow_group(req.params.group, group, res);
     else
@@ -285,5 +302,6 @@ exports.following_users = function (req, res) {
 
 
 function handleError(res, err) {
-  return res.send(500, err);
+  //return res.send(500, err);
+  return res.status(500).send(err);
 }

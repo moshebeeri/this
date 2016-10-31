@@ -8,43 +8,27 @@
 
 <ion-content padding class="test">
   Test
-	
-<form novalidate [ngFormModel]="entityForm" (ngSubmit)="onSubmitForm()">
-	<input type="text" placeholder="name" ngControl="name">
-	<input type="text" placeholder="description" ngControl="description">
-	<select ngControl="_select" #_select="ngForm"> 
-	<option value="OPEN">OPEN</option>
-	<option value="CLOSE">CLOSE</option>
-	<option value="REQUEST">REQUEST</option>
-	<option value="ADMIN_INVITE">ADMIN_INVITE</option>
-	<option value="MEMBER_INVITE">MEMBER_INVITE</option>
-	</select>
-	<ul ngControlGroup="_radio" #_radio="ngForm"> 
-	<li> 
-	 <input id="OPEN" type="radio" name="_radio" ngControl="OPEN"><label for="OPEN">OPEN</label>
-	<li> 
-	 <input id="CLOSE" type="radio" name="_radio" ngControl="CLOSE"><label for="CLOSE">CLOSE</label>
-	<li> 
-	 <input id="REQUEST" type="radio" name="_radio" ngControl="REQUEST"><label for="REQUEST">REQUEST</label>
-	<li> 
-	 <input id="ADMIN_INVITE" type="radio" name="_radio" ngControl="ADMIN_INVITE"><label for="ADMIN_INVITE">ADMIN_INVITE</label>
-	<li> 
-	 <input id="MEMBER_INVITE" type="radio" name="_radio" ngControl="MEMBER_INVITE"><label for="MEMBER_INVITE">MEMBER_INVITE</label>
-	</ul>
-	<ul ngControlGroup="_checkbox" #_checkbox="ngForm"> 
-	<li> 
-	 <input id="OPEN" type="checkbox" ngControl="OPEN"><label for="OPEN">OPEN</label>
-	<li> 
-	 <input id="CLOSE" type="checkbox" ngControl="CLOSE"><label for="CLOSE">CLOSE</label>
-	<li> 
-	 <input id="REQUEST" type="checkbox" ngControl="REQUEST"><label for="REQUEST">REQUEST</label>
-	<li> 
-	 <input id="ADMIN_INVITE" type="checkbox" ngControl="ADMIN_INVITE"><label for="ADMIN_INVITE">ADMIN_INVITE</label>
-	<li> 
-	 <input id="MEMBER_INVITE" type="checkbox" ngControl="MEMBER_INVITE"><label for="MEMBER_INVITE">MEMBER_INVITE</label>
-	</ul>
+	<form novalidate *ngIf="formActive" [ngFormModel]="entityForm" (ngSubmit)="onSubmitForm()">
+		<ion-item><ion-label fixed>name</ion-label><ion-input type="text" ngControl="name"></ion-input></ion-item>
+		<ion-item><ion-label fixed>description</ion-label><ion-input type="text" ngControl="description"></ion-input></ion-item>
+		<ion-item><ion-label>creator_type</ion-label><ion-select ngControl="creator_type" #creator_type="ngForm"> 
+		<ion-option value="BUSINESS">BUSINESS</ion-option>
+		<ion-option value="CHAIN">CHAIN</ion-option>
+		<ion-option value="MALL">MALL</ion-option>
+		<ion-option value="USERS">USERS</ion-option>
+		</ion-select></ion-item>
+		<ion-item><ion-label>add_policy</ion-label><ion-select ngControl="add_policy" #add_policy="ngForm"> 
+		<ion-option value="OPEN">OPEN</ion-option>
+		<ion-option value="CLOSE">CLOSE</ion-option>
+		<ion-option value="REQUEST">REQUEST</ion-option>
+		<ion-option value="ADMIN_INVITE">ADMIN_INVITE</ion-option>
+		<ion-option value="MEMBER_INVITE">MEMBER_INVITE</ion-option>
+		</ion-select></ion-item>
+		<photo-upload [data]=Group></photo-upload>
+		<div padding></div>
+		<button type="submit">Submit</button>
+    <button type="button" (click)="onClearForm()">Reset</button>
 	</form>
- 
   <debug-panel style="z-index:999999999;margin-top:50px" [data]="entityForm.value"></debug-panel>
 
 </ion-content>
