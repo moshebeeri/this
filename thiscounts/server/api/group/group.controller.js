@@ -2,7 +2,7 @@
 
 var _ = require('lodash');
 var Group = require('./group.model');
-var User = require('./user.model');
+var User = require('../user/user.model');
 
 var graphTools = require('../../components/graph-tools');
 var graphModel = graphTools.createGraphModel('group');
