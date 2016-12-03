@@ -17,6 +17,8 @@ var passport = require('passport');
 var config = require('../../config/environment');
 var jwt = require('jsonwebtoken');
 var twilio = require('twilio')(config.twilio.accountSid, config.twilio.authToken);
+var twilioLookupsClient = require('twilio').LookupsClient;
+var twilioClient = new twilioLookupsClient(config.twilio.accountSid, config.twilio.authToken);
 var util = require('util');
 
 var utils = require('../../components/utils').createUtils();
@@ -209,36 +211,92 @@ exports.create = function (req, res, next) {
 
   User.findOne({phone_number: newUser.phone_number}, function (err, user) {
     if (user) {
-	  console.log("x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-");
-      var token = jwt.sign({_id: user._id}, config.secrets.session, {expiresInMinutes: 60 * 24 * 30});
-	  console.log("user: " + user);
-	  console.log("token: " + token);
-	  console.log("x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-");
-      res.status(200).json({token: token});
+			console.log("x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-");
+			var token = jwt.sign({_id: user._id}, config.secrets.session, {expiresInMinutes: 60 * 24 * 30});
+			console.log("user: " + user);
+			console.log("token: " + token);
+			console.log("x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-");
+			res.status(200).json({token: token});
     } else {
+			newUser.save(function (err, user) {
+				if (err) return validationError(res, err);
+				var token = jwt.sign({_id: user._id}, config.secrets.session, {expiresIn: 60 * 24 * 30});
+				console.log("user._id---------------------" + user._id);
+				console.log("token---------------------" + token);
+				console.log("config.secrets.session---------------------" + config.secrets.session);
+				res.status(200).json({token: token});
+
+				send_sms_verification_code(user);
+
+				graphModel.reflect(user,
+					{
+					_id: user._id,
+					phone: user.phone_number
+					}, function (err) {
+					if (err) return res.send(500, err);
+					//if this users number exist in phone_numbers collection
+					//then all users (ids in contacts) should be followed by him
+					new_user_follow(user)
+					});
+			});
+	}
+  });
+
+};
+
+
+/**
+ * Creates a new demo user
+ */
+exports.createDemo = function (req, res, next) {
+	for(var i =0; i<11;i++){
+		var newUser = new User(req.body);
+
+		newUser.provider = 'local';
+		newUser.role = 'user';
+		newUser.sms_verified = true;
+		//var randomPhone = randomstring.generate({length: 6, charset: 'numeric'});
+		//newUser.phone_number = "972111" + i + i + i + i + i + i ;
+    if(i === 10) {
+      newUser.phone_number = "972523325411";
+    } else {
+      newUser.phone_number = "0" + i + i + i + i + i + i ;
+    }
+		newUser.pictures = {
+			 "0": {
+				 "pictures": {
+					 "0": "https: \/\/s3.amazonaws.com\/thiscounts\/images\/bx\/mX\/rv-orig.jpeg",
+					 "1": "https: \/\/s3.amazonaws.com\/thiscounts\/images\/bx\/mX\/rv-medium.jpeg",
+					 "2": "https: \/\/s3.amazonaws.com\/thiscounts\/images\/bx\/mX\/rv-small.jpeg",
+					 "3": "https: \/\/s3.amazonaws.com\/thiscounts\/images\/bx\/mX\/rv-thumb.jpeg"
+				},
+				 "meta": [
+
+				],
+				 "id": "8786f6ea"
+			}
+		}
+
+		console.log("****************************************");
+		console.log(newUser);
+		console.log("****************************************");
+
 		newUser.save(function (err, user) {
 			if (err) return validationError(res, err);
-			var token = jwt.sign({_id: user._id}, config.secrets.session, {expiresIn: 60 * 24 * 30});
-			console.log("user._id---------------------" + user._id);
-			console.log("token---------------------" + token);
-			console.log("config.secrets.session---------------------" + config.secrets.session);
-			res.status(200).json({token: token});
-
-			send_sms_verification_code(user);
 
 			graphModel.reflect(user,
-			  {
+				{
 				_id: user._id,
 				phone: user.phone_number
-			  }, function (err) {
+				}, function (err) {
 				if (err) return res.send(500, err);
 				//if this users number exist in phone_numbers collection
 				//then all users (ids in contacts) should be followed by him
 				new_user_follow(user)
-			  });
+				});
 		});
+
 	}
-  });
 
 };
 
@@ -275,8 +333,8 @@ exports.phonebook = function (req, res) {
   //var mongoose = require('mongoose');
   var phonebook = req.body;
   var userId = req.user._id;
-  console.log(req.body);
-  console.log(req.user._id);
+  ////console.log(req.body);
+  ////console.log(req.user._id);
 
   mongoose.connection.db.collection('phonebook', function (err, collection) {
     if (err) return logger.error(err.message);
@@ -290,7 +348,11 @@ exports.phonebook = function (req, res) {
     mongoose.connection.db.collection('phone_numbers', function (err, collection) {
       if (err) return logger.error(err.message);
       phonebook.phonebook.forEach(function (contact, index, array) {
-        console.log(JSON.stringify(contact));
+        ////console.log(JSON.stringify(contact));
+
+        ////identifyPhoneByTwilio(contact.normalized_number,'972');
+
+
 
         //collection.update({_id: element.normalized_number}, {$addToSet: {userIds: userId}}, {upsert: true});
         collection.findAndModify(
@@ -316,7 +378,8 @@ exports.phonebook = function (req, res) {
       });
     });
   });
-  return res.status(200).send("ok")
+  checkPhones(phonebook.phonebook, res);
+
 };
 
 
@@ -326,8 +389,60 @@ function owner_follow(phone_number) {
   phone_number.contacts.forEach(function (contact) {
     graphModel.follow_phone(phone_number._id, contact.nick, contact.userId);
     //logger.info('create (' + contact + ')<-[Follows]-(' + phone_number.owner + ')');
-    logger.info('create (' + contact + ')<-[Follows]-(' + phone_number._id + ')');
+    ////logger.info('create (' + contact + ')<-[Follows]-(' + phone_number._id + ')');
   });
+}
+
+function identifyPhoneByTwilio(phone, countryCode){
+
+  var verifiedPhone = [];
+  var cleanedPhone = utils.clean_phone_number(phone);
+
+  if(cleanedPhone != undefined){
+    console.log("--------------identifyPhoneByTwilio------------------");
+    twilioClient.phoneNumbers(cleanedPhone).get({
+      //type: 'carrier'
+    }, function(error, number) {
+      if (error){
+        logger.error(error.message);
+        identifyPhoneByTwilioFallBack(countryCode + cleanedPhone);
+      }
+      else {
+        /*console.log('twilio--twilio--twilio--twilio--twilio--twilio--twilio--twilio--');
+        //console.log(JSON.stringify(number));
+        //console.log(number.carrier.type);
+        //console.log(number.carrier.name);
+        console.log("country_code: " + number.country_code);
+        console.log("phone_number: " + number.phone_number);
+        console.log("national_format: " + number.national_format);
+        console.log('twilio--twilio--twilio--twilio--twilio--twilio--twilio--twilio--');*/
+      }
+    });
+  } else {
+    console.log("--------------UNDEFINED identifyPhoneByTwilio------------------");
+  }
+}
+function identifyPhoneByTwilioFallBack(phone){
+  if(phone != undefined){
+    console.log("--------------identifyPhoneByTwilio------------------");
+    twilioClient.phoneNumbers(phone).get({
+      //type: 'carrier'
+    }, function(error, number) {
+      if (error)
+        logger.error(error.message);
+      else {
+        /*console.log('FallBack--FallBack--FallBack--FallBack--FallBack--FallBack--');
+        //console.log(number.carrier.type);
+        //console.log(number.carrier.name);
+        console.log("country_code: " + number.country_code);
+        console.log("phone_number: " + number.phone_number);
+        console.log("national_format: " + number.national_format);
+        console.log('FallBack--FallBack--FallBack--FallBack--FallBack--FallBack--');*/
+      }
+    });
+  } else {
+    console.log("--------------UNDEFINED identifyPhoneByTwilio------------------");
+  }
 }
 
 
@@ -408,6 +523,91 @@ exports.showByPhone = function (req, res, next) {
     if (!user) return res.status(401).send('Unauthorized');
     res.status(200).json(user.profile);
   });
+};
+/**
+ * Get multi users by phone numbers array
+ */
+exports.checkPhoneNumbers = function (req, res, next) {
+  //console.log(req.body);
+  var list = req.body.phonebook;
+  var users = [];
+
+  getPhoneNumbers(list, users, function(message, users, list) {
+    // this anonymous function will run when the
+    // callback is called
+    console.log("callback called! " + users);
+    res.status(200).json(users);
+  });
+};
+
+/**
+ * Get multi users by phone numbers array
+ */
+function checkPhones (phoneBook, res){
+  console.log("inside checkPhones");
+  var list = phoneBook;
+  var users = [];
+
+  getPhoneNumbers(list, users, function(message, users, list) {
+    // this anonymous function will run when the
+    // callback is called
+    console.log("callback called! " + users);
+    users = normalizePhoneBookList(users);
+    res.status(200).json(users);
+  });
+};
+
+
+function normalizePhoneBookList(data){
+  console.log("--------------------normalizePhoneBookList-----------------------");
+  var tempData = {};
+  for ( var contact in data ) {
+    console.log(data[contact]);
+    tempData[data[contact]["phone_number"]] = true;
+  }
+  console.log(tempData);
+  console.log("--------------------normalizePhoneBookList-----------------------");
+  return tempData;
+}
+
+function getPhoneNumbers(list, users, callback){
+  var userPhones = [];
+  //var users = [];         // shortcut to find them faster afterwards
+
+  for (var l in list) {       // first build the search array
+    var o = list[l];
+    console.log(o.number);
+    if (o.number) {
+      //userPhones.push( new mongoose.Types.ObjectId( o.number ) );           // for the Mongo query
+      userPhones.push(o.number);           // for the Mongo query
+      //users[o.number] = o;                                // to find the user quickly afterwards
+    }
+  }
+
+  //console.log(JSON.stringify(list));
+  //console.log(JSON.stringify(users));
+  console.log(JSON.stringify(userPhones));
+
+  mongoose.connection.db.collection("users").find( {phone_number: {$in: userPhones}} ).each(function(err, user) {
+    //if (err) return handleError(err);
+    if (err) callback( err, users);
+    else {
+      //console.log(JSON.stringify(user));
+      if (user && user._id) {
+        console.log(JSON.stringify(user));
+        users.push(user);
+        console.log("--------------------------------");
+        console.log(JSON.stringify(users));
+        console.log("--------------------------------");
+      } else {                        // end of list
+        console.log("end--end--end--end--end--end--end--");
+        //res.status(200).json(users);
+        callback( null, users );
+      }
+    }
+  });
+
+  //if (!users) return res.status(401).send('Unauthorized');
 };
 
 exports.recover_password = function (req, res) {

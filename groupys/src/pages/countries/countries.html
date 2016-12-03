@@ -1,0 +1,58 @@
+<!--
+  Generated template for the CountriesPage page.
+
+  See http://ionicframework.com/docs/v2/components/#navigation for more info on
+  Ionic pages and navigation.
+-->
+
+<ion-header>
+  <ion-toolbar [hidden]="toggleToolbar">
+    <ion-title>
+      countries
+    </ion-title>
+    <ion-buttons end>
+      <button ion-button (click)="toggleToolbars()">
+        <ion-icon name="search"></ion-icon>
+      </button>
+    </ion-buttons>
+  </ion-toolbar>
+  <ion-toolbar [hidden]="!toggleToolbar">
+    <ion-searchbar primary
+                   [(ngModel)]="queryText"
+                   (ionInput)="searchLowerCase()"
+                   (ionCancel)="toggleToolbars()"
+                   placeholder="Search"
+                   debounce="500">
+    </ion-searchbar>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content padding class="countries">
+  <ion-item-group [hidden]="queryText" *ngFor="let letter of alphabet" class="ion_alpha_list_outer">
+    <ion-item-divider light attr.id="index_{{letter}}">{{letter}}</ion-item-divider >
+    <ion-item *ngFor="let item of sorted_items[letter]" (click)="itemTapped($event, item.callingCodes,item.name, item.callingDigits, item.digitsValidator)">
+	{{item.name}}<span class="uppercase" item-right class="callingCodes"> +{{item.callingCodes}}</span>
+	</ion-item>
+  </ion-item-group>
+  <ion-item-group [hidden]="!queryText" class="ion_alpha_list_outer">
+    <ion-item *ngFor="let item of items" (click)="itemTapped($event, item.callingCodes,item.name, item.callingDigits, item.digitsValidator)">
+	{{item.name}}<span class="uppercase" item-right class="callingCodes"> +{{item.callingCodes}}</span>
+	</ion-item>
+  </ion-item-group>
+  
+  <ul class="ion_alpha_sidebar">
+    <li *ngFor="let letter of alphabet">
+      <a href="#index_{{letter}}">{{ letter }}</a>
+    </li>
+  </ul>
+  <!--<ion-list>
+    <button ion-item *ngFor="#country of countries" (click)="itemTapped($event, country)">
+      <ion-icon item-left></ion-icon>
+      {{country.name}}
+      {{country.callingCodes}}
+      <!--<div class="item-note" item-right>
+        {{country.callingCode}}
+      </div>-->
+    <!--</button>
+  </ion-list>-->
+</ion-content>
