@@ -212,7 +212,7 @@ exports.create = function (req, res, next) {
   User.findOne({phone_number: newUser.phone_number}, function (err, user) {
     if (user) {
 			console.log("x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-");
-			var token = jwt.sign({_id: user._id}, config.secrets.session, {expiresInMinutes: 60 * 24 * 30});
+			var token = jwt.sign({_id: user._id}, config.secrets.session, {expiresIn: 60 * 24 * 30});
 			console.log("user: " + user);
 			console.log("token: " + token);
 			console.log("x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-");
@@ -494,7 +494,7 @@ exports.login = function (req, res, next) {
       return handleError(res, err);
     }
     if (user) {
-      var token = jwt.sign({_id: user._id}, config.secrets.session, {expiresInMinutes: 60 * 24 * 30});
+      var token = jwt.sign({_id: user._id}, config.secrets.session, {expiresIn: 60 * 24 * 30});
       res.status(200).json({token: token});
     }
   });
@@ -618,7 +618,7 @@ exports.recover_password = function (req, res) {
     user.password = new_password;
     user.save(function (err, user) {
       if (err) return validationError(res, err);
-      var token = jwt.sign({_id: user._id}, config.secrets.session, {expiresInMinutes: 60 * 24 * 30});
+      var token = jwt.sign({_id: user._id}, config.secrets.session, {expiresIn: 60 * 24 * 30});
       send_sms_new_password(phone_number, new_password);
       res.status(200).json({token: token});
       //return res.send(200, "ok");

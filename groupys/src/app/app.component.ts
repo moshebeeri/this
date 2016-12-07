@@ -21,9 +21,10 @@ import {MyCameraService} from '../services/my-camera/my-camera';
 import {PhotoService} from '../pages/photo/photo-service';
 import {RegisterPage} from '../pages/register/register';
 import {CountriesPage} from '../pages/countries/countries';
+import {HomePage} from '../pages/home/home';
 
 /*
-import {HomePage} from './pages/home/home';
+
 import {ListPage} from './pages/list/list';
 import {MyAccountPage} from './pages/my-account/my-account';
 import {GroupPage} from './pages/group/group';
@@ -75,8 +76,8 @@ import {LazyLoadPage} from './pages/lazy-load/lazy-load';*/
 export class MyApp {
   @ViewChild(Nav) nav: Nav;
 
-  //rootPage: any = HomePage;
-  rootPage: any = Page1;
+  rootPage: any = HomePage;
+  //rootPage: any = Page1;
   pages: Array<{title: string, component: any}>;
   authenticated: boolean;
   isLoggedIn: boolean;
@@ -124,13 +125,14 @@ export class MyApp {
 
     // used for an example of ngFor and navigation
     this.pages = [
+      { title: 'Home', component: HomePage },
       { title: 'Page One', component: Page1 },
       { title: 'Page Two', component: Page2 },
       { title: 'Register', component: RegisterPage},
       { title: 'My Account', component: MyAccountPage },
       { title: 'Countries', component: CountriesPage}
       /*11
-       { title: 'Home', component: HomePage },
+       
       
       { title: 'My Account', component: MyAccountPage },
       { title: 'Contacts', component: ContactsPage},

@@ -1,11 +1,11 @@
 <ion-header>
-  <ion-navbar *navbar>
+  <ion-navbar>
     <button menuToggle [hidden]="!isLoggedIn">
       <ion-icon name="menu"></ion-icon>
     </button>
     <ion-title>Your phone</ion-title>
     <ion-buttons end [hidden]="isAuthorized">
-      <button (click)="register(loginCreds.value)">
+      <button (click)="register()">
         <ion-icon name="checkmark"></ion-icon>
       </button>
 
@@ -24,7 +24,8 @@
 <!--<ion-content class="login" *ngIf="!auth.authenticated()">-->
 <ion-content class="login" [hidden]="isAuthorized">
   <ion-label>Please choose your country and enter your full phone number.</ion-label>
-  <form #loginCreds="ngForm" (ngSubmit)="register(loginCreds.value)">
+
+  <form (ngSubmit)="register()">
     <ion-item>
 	  <ion-label (click)="itemTapped()">{{countryName}}</ion-label>
       <!--<ion-input (click)="itemTapped()" type="text" placeholder="{{countryName}}" ngControl="username"></ion-input>-->
@@ -32,7 +33,7 @@
 `
     <ion-item>
       <ion-label>+{{callingCodes}}</ion-label>
-      <ion-input type="text" ngControl="callingDigits" placeholder="{{callingDigits}}" id="phoneInput" (keypress)="validateNumbers($event)">
+      <ion-input type="text" [(ngModel)]="loginCred.callingDigits"  name="description" placeholder="{{callingDigits}}" id="phoneInput" (keypress)="validateNumbers($event)">
 	  </ion-input>
     </ion-item>
   </form>

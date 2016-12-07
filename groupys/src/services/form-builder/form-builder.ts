@@ -1,3 +1,4 @@
+import * as _ from 'lodash';
 //import {NavController, Platform} from 'ionic-angular';
 import {Storage} from '@ionic/storage';
 import {Injectable} from '@angular/core';
@@ -11,7 +12,7 @@ import {EntitiesService} from '../entities/entities-service';
 import {AuthService} from '../auth/auth';
 import {MyCameraService} from '../my-camera/my-camera';
 import {Observable} from 'rxjs/Observable';
-import * as _ from 'lodash';
+
 //import {SearchJson} from '../../config/search-json/search-json';
 
 @Injectable()
@@ -24,7 +25,7 @@ export class FormBuilderService {
   defaultHTML: Object;
   excludedFields: Array<string>;
   excludedFieldsHTML: Array<string>;
-  user: Object;
+  user: any;
   local: any;
   contentHeader: Headers = new Headers();
   entityType: string;
@@ -39,9 +40,9 @@ export class FormBuilderService {
     this.globalHeaders = globalHeaders;
     this.globals = globals;
     this.http = http;
+    this.user ={};
 
     this.user = this.auth.getCurrentUser();
-    console.log(JSON.stringify(this.user));
 
     this.contentHeader = this.globalHeaders.getMyGlobalHeaders();
     console.log("xxxxxxxxxxxxxxxxxxxxxxxxxxx" + JSON.stringify(this.contentHeader));
@@ -176,17 +177,17 @@ export class FormBuilderService {
 
 		let allValidators = [];
 		
-		let obj = _.find((prop["validators"]), function(obj) { return obj.name == 'required' });
+		let obj = _.find((prop["validators"]), function(obj) { return obj["name"] == 'required' });
 		if(obj['name'] != null){
 			allValidators[allValidators.length] = Validators.required;
 		}
 		
-		obj = _.find((prop["validators"]), function(obj) { return obj.min != -1 });
+		obj = _.find((prop["validators"]), function(obj) { return obj["min"] != -1 });
 		if(obj['min'] != null){
 			allValidators[allValidators.length] = Validators.minLength(obj['min']);
 		}
 		
-		obj = _.find((prop["validators"]), function(obj) { return obj.max != -1 });
+		obj = _.find((prop["validators"]), function(obj) { return obj["max"] != -1 });
 		if(obj['max'] != null){
 			allValidators[allValidators.length] = Validators.minLength(obj['max']);
 		}
@@ -348,7 +349,7 @@ export class FormBuilderService {
 			console.log("******************************************************");
 			
 			console.log(properties[propt]["name"]);
-			obj = _.find((navigationProperties), function(obj) { return obj.name == properties[propt]["name"]});
+			obj = _.find((navigationProperties), function(obj) { return obj["name"] == properties[propt]["name"]});
 			console.log(obj);
 			
 			console.log("******************************************************");

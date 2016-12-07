@@ -16,6 +16,7 @@ export class GlobalsService {
   FILE_TRANSFER_URL: string;
   TEST_URL: string;
   GROUP_URL: string;
+  IP_URL: string;
 
   constructor() {
     this.allURLS = [];
@@ -27,7 +28,7 @@ export class GlobalsService {
     }
     this.LOGIN_URL = this.BASE_URL + "local";
     this.SIGNUP_URL = this.BASE_URL + "users";
-    this.ME_URL = this.BASE_URL + "users/me";
+    this.ME_URL = this.BASE_URL + "users/me?" + (new Date).getTime();
     this.VERIFICATION_URL = this.BASE_URL + "users/verification/";
     this.METADATA_URL = this.BASE_URL + "breeze/metadata";
     //this.PHONE_BOOK_URL = this.BASE_URL + "users/phonebook";
@@ -37,6 +38,7 @@ export class GlobalsService {
     this.FILE_TRANSFER_URL = this.BASE_URL + "images/";
     this.TEST_URL = this.BASE_URL + "tests/";
     this.GROUP_URL = this.BASE_URL + "groups/";
+    this.IP_URL = this.BASE_URL + "ip/?" + (new Date).getTime();
 
     this.allURLS["Group"] = this.GROUP_URL;
     this.allURLS["Test"] = this.TEST_URL;

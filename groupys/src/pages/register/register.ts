@@ -34,14 +34,17 @@ export class RegisterPage {
   digitsValidator:string;
   callingDigitsInput:number;
   validatorLength:number;
-  currentUser: string;
+  currentUser: any;
 
-  isLoggedIn: boolean;
-  isAuthorized: boolean;
-  isAdmin: boolean;
+  isLoggedIn: any;
+  isAuthorized: any;
+  isAdmin: any;
   
   baseURL: string;
   tmpCountryCode: any;
+  clientIp: string;
+  todo: any;
+  loginCred: any;
 
   
   /*static get parameters() {
@@ -70,10 +73,14 @@ export class RegisterPage {
     this.error = null;
     this.callingDigitsInput= null;
     this.validatorLength=-99;
+    this.todo = {};
+    this.loginCred = {};
+    this.currentUser = {};
+    this.isAuthorizedPromise('user');
 
 
-	
-	  this.getCurrentCountry().subscribe(data => console.log(data));
+
+    this.getCurrentCountry().subscribe(data => console.log(data));
     this.local.set('isSIM', 'true');
 	/*
 	//this.getcountries();
@@ -87,17 +94,36 @@ export class RegisterPage {
 	*/
   }
 
+  isAuthorizedPromise(role) {
+    this.local.get('user').then(user => {
+      let currentUser = user;
+      alert("currentUser: " + currentUser);
+      if(!!currentUser && currentUser["role"] && currentUser["role"].indexOf(role) > -1){
+        this.isAuthorized = true;
+      } else {
+        this.isAuthorized = false;
+      }
+    }).catch(error => {
+      console.log(error);
+    });
+  }
+
+  logForm() {
+    console.log(this.todo);
+  }
+
   resetLocalStorage(){
-    alert("remove all data");
+    //alert("remove all data");
     this.local.clear();
   }
 
   getCurrentCountry(){
     return Observable.create(observer => {
+      observer.next(this.getClientIp());
       observer.next(this.getLocalCountryCode());
       setTimeout(() => {
         observer.next(this.findCountryByName());
-      }, 250);
+      }, 0);
       setTimeout(() => {
         observer.next(this.getCountryDetails());
         observer.complete();
@@ -117,12 +143,16 @@ export class RegisterPage {
   }
 
   getLocalCountryCode(){
-    this.tmpCountryCode = window.localStorage.getItem('countryCode');
-    alert(this.tmpCountryCode);
+    //alert("22222222222222222");
+    //alert("ip:" + this.clientIp);
+    this.tmpCountryCode = window.localStorage.getItem('countryCode') || JSON.stringify('il');
+    //alert(this.tmpCountryCode);
     return this.tmpCountryCode;
   }
 
   findCountryByName(){
+    //alert("333333333333333333333");
+    //alert(JSON.parse(this.tmpCountryCode));
     this.countriesService.findByName(JSON.parse(this.tmpCountryCode)).subscribe(
       data => this.setDefaultCountry(data)
     );
@@ -162,17 +192,25 @@ export class RegisterPage {
     this.nav.push(CountriesPage);
   }
   setDefaultCountry(data) {
-    alert(JSON.stringify(data));
+    //alert("setDefaultCountry");
+    //alert(JSON.stringify(data));
     this.local.get('isSIM').then(isSIM => {
-	  alert("isSIM: " + JSON.parse(isSIM));
-	  if(JSON.parse(isSIM) === true){
-      alert("in SIM");
-      this.local.set('countryNameDetails', JSON.stringify(data[0].name));
-      this.local.set('callingCodesDetails', JSON.stringify(data[0].callingCodes));
-      this.local.set('callingDigitsDetails', JSON.stringify(data[0].callingDigits));
-      this.local.set('digitsValidator', JSON.stringify(data[0].digitsValidator));
-      this.local.set('isSIM', 'false');
-	  }
+      //alert("isSIM: " + JSON.parse(isSIM));
+      if(JSON.parse(isSIM)){
+        /*
+        alert("in SIM");
+        alert(JSON.stringify(data[0].name));
+        alert(JSON.stringify(data[0].callingCodes));
+        alert(JSON.stringify(data[0].callingDigits));
+        alert(JSON.stringify(data[0].digitsValidator));
+        */
+
+        this.local.set('countryNameDetails', JSON.stringify(data[0].name));
+        this.local.set('callingCodesDetails', JSON.stringify(data[0].callingCodes));
+        this.local.set('callingDigitsDetails', JSON.stringify(data[0].callingDigits));
+        this.local.set('digitsValidator', JSON.stringify(data[0].digitsValidator));
+        this.local.set('isSIM', 'false');
+      }
 	}).catch(error => {
 	  console.log(error);
 	});
@@ -187,7 +225,7 @@ export class RegisterPage {
   }
   
   getCountryDetails(){
-    alert('getCountryDetails');
+    //alert('44444444444444444444');
     this.local.get('countryNameDetails').then(countryNameDetails => {
       this.countryName = JSON.parse(countryNameDetails);
       console.log('countryName' + this.countryName);
@@ -219,8 +257,10 @@ export class RegisterPage {
     this.nav.push(CountriesPage);
   }
 
-  register(credentials) {
-
+  register() {
+    let credentials = {};
+    credentials = this.loginCred;
+    alert(JSON.stringify(credentials));
     if(credentials["callingDigits"] == null) {
       this.error = 'Phone number can not be empty';
       console.log(this.error);
@@ -279,7 +319,7 @@ export class RegisterPage {
   }
   updateCurrentUser(){
     let user = this.auth.getCurrentUser();
-    user.sms_verified = true;
+    user["sms_verified"] = true;
     this.auth.setCurrentUser(user);
 
     this.isLoggedIn = this.auth.isLoggedIn();
@@ -316,14 +356,24 @@ export class RegisterPage {
   setCurrentUser(data){
     this.auth.setCurrentUser(data);
     this.currentUser = this.auth.getCurrentUser();
-    console.log(this.currentUser["_id"]);
-    console.log( JSON.stringify(this.currentUser));
+    //alert(this.currentUser["_id"]);
+    alert(JSON.stringify(this.currentUser));
     this.isLoggedIn = this.auth.isLoggedIn();
     //this.isLoggedIn = true;
     this.isAuthorized = this.auth.isAuthorized('user');
     this.isAdmin = this.auth.isAdmin();
   }
 
+  getClientIp(){
+    //alert("1111111111111111111");
+    this.http.get(this.globals.IP_URL, { headers: this.contentHeader })
+      .map(res => res.json())
+      .subscribe(
+        data => this.clientIp = data,
+        err => this.error = err
+        //() => alert(this.clientIp)
+      );
+  }
   printObject(object){
     let output = '';
     for (let property in object) {

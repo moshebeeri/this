@@ -1,6 +1,7 @@
 //import {Page} from 'ionic-angular';
 import {Component} from '@angular/core';
 import {Geolocation} from 'ionic-native';
+import {Storage} from '@ionic/storage';
 import {AuthService} from '../../services/auth/auth';
 import {Http, Headers} from '@angular/http';
 import {global} from '@angular/core/src/facade/lang';
@@ -20,28 +21,31 @@ export class HomePage {
   contentHeader: Headers = new Headers();
   error: string;
   plugin: string;
-  isLoggedIn: boolean;
-  isAuthorized: boolean;
-  isAdmin: boolean;
+  isLoggedIn: any;
+  isAuthorized: any;
+  isAdmin: any;
   currentLatitude: number;
   currentLongitude: number;
   EM:any; // no type def for EM yet
   cordova:any;
   navigator:any;
   win:any;
+  local:any;
 
 
-  constructor(private auth: AuthService, private windowService:WindowService, private globals:GlobalsService, private globalHeaders:GlobalHeaders, private http:Http) {
+  constructor(private storage: Storage, private auth: AuthService, private windowService:WindowService, private globals:GlobalsService, private globalHeaders:GlobalHeaders, private http:Http) {
 
+    this.local = storage;
     this.http = http;
     this.globals = globals;
     this.globalHeaders = globalHeaders;
     this.win = windowService;
     this.contentHeader = this.globalHeaders.getMyGlobalHeaders();
 
-    this.isLoggedIn = auth.isLoggedIn();
+    /*this.isLoggedIn = auth.isLoggedIn();
     this.isAuthorized = auth.isAuthorized('user');
-    this.isAdmin = auth.isAdmin();
+    this.isAdmin = auth.isAdmin();*/
+    auth.isAuthorized('user').subscribe(data => alert("====================" + data));
 	
 	  Geolocation.getCurrentPosition().then((resp) => {
       this.currentLatitude = resp.coords.latitude;
@@ -58,8 +62,23 @@ export class HomePage {
     console.log("isAdmin2: " +  this.isAdmin);
 
     //this.disablePassive();
-
+    this.isAuthorizedPromise('user');
   }
+  isAuthorizedPromise(role) {
+    this.local.get('user').then(user => {
+      let currentUser = JSON.parse(user);
+      alert("=============currentUser: " + currentUser);
+      //alert("role: " + currentUser["role"]);
+      if(currentUser && currentUser["role"].indexOf(role) > -1){
+        this.isAuthorized = true;
+      } else {
+        this.isAuthorized = false;
+      }
+    }).catch(error => {
+      console.log(error);
+    });
+  }
+
 
   checkPlugin(){
     this.plugin = JSON.stringify(navigator);
@@ -94,6 +113,10 @@ export class HomePage {
   }
   errorCallback2(error) {
     console.log(error);
+  }
+  logout() {
+    this.auth.logout();
+    this.contentHeader = new Headers({"Content-Type": "application/json"});
   }
   onHold(){
     alert("onHold");

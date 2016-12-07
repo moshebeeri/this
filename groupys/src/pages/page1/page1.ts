@@ -8,10 +8,16 @@ import { NavController } from 'ionic-angular';
 })
 export class Page1 {
   local: any;
+  todo: any;
 
   constructor(private storage: Storage, public navCtrl: NavController) {
     this.local = storage;
     this.resetLocalStorage();
+    this.todo = {};
+  }
+  
+  logForm() {
+    console.log(this.todo)
   }
   resetLocalStorage(){
     alert("remove all data");
