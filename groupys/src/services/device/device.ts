@@ -3,6 +3,7 @@ import {Injectable} from '@angular/core';
 import {Platform} from 'ionic-angular';
 import {Storage} from '@ionic/storage';
 import {Camera, File} from 'ionic-native';
+declare var window;
 
 
 @Injectable()
@@ -13,6 +14,7 @@ export class DeviceService {
   
   constructor(private storage: Storage, private platform: Platform) {
     this.local = storage;
+    this.platform = platform;
   }
 
   getDevicePlatform(){
@@ -89,37 +91,48 @@ export class DeviceService {
     return n + ".jpg";
   }
   //shidrog
-  /*
+
   getLocalFileSystemURL(image){
     function resolveLocalFileErrorHandler(error) {
+      alert("error");
       console.log(error);
     }
     function resolveLocalFileSuccessHandler(fileEntry) {
+      alert("success");
+      alert(fileEntry.toInternalURL());
       window.localStorage.setItem('filePath', fileEntry.toInternalURL());
       //window.localStorage.setItem('filePath2', fileEntry.toInternalURL());
     }
 
     window.resolveLocalFileSystemURL(image, resolveLocalFileSuccessHandler, resolveLocalFileErrorHandler);
   }
-  */
+  /*
   getLocalFileSystemURL(image){
-    File.resolveLocalFilesystemUrl(image)
-      .then(() => resolveLocalFileSuccessHandler(image))
-      .catch((e) => resolveLocalFileErrorHandler(e));
+    alert("getLocalFileSystemURL" + image);
+
+    this.platform.ready().then(() => {
+      File.resolveLocalFilesystemUrl(image)
+        .then(() => resolveLocalFileSuccessHandler(image))
+        .catch((e) => resolveLocalFileErrorHandler(e));
+    });
 
     function resolveLocalFileErrorHandler(error) {
-      console.log('File doesnt exist', error);
+      alert('File doesnt exist: ' + error);
     }
     function resolveLocalFileSuccessHandler(fileEntry) {
-      console.log('File exists');
-      window.localStorage.setItem('filePath', fileEntry.toInternalURL());
-      //window.localStorage.setItem('filePath2', fileEntry.toInternalURL());
+      alert('File exists');
+      window.localStorage.setItem('filePath', fileEntry);
+      alert("fileEntry.toInternalURL(): " + fileEntry.toInternalURL());
+      alert("window.localStorage.getItem('filePath'): " + window.localStorage.getItem('filePath'));
+      //return fileEntry;
     }
+    //return resolveLocalFileSuccessHandler;
     //shidrog
     //window.resolveLocalFileSystemURL(image, resolveLocalFileSuccessHandler, resolveLocalFileErrorHandler);
     //File.resolveLocalFilesystemUrl(image, resolveLocalFileSuccessHandler, resolveLocalFileErrorHandler);
 
   }
+  */
 
   
 

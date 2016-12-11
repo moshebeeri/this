@@ -9,10 +9,18 @@ import { NameModal } from '../pages/my-account/modals/nameModal';
 import { PictureModal } from '../pages/my-account/modals/pictureModal';
 import { PhotoPage } from '../pages/photo/photo';
 import { PhotoComponent } from '../pages/photo/photo-component/photo-component';
-import {RegisterPage} from '../pages/register/register';
-import {CountriesPage} from '../pages/countries/countries';
-import {ProfilePage} from '../pages/profile/profile';
-import {HomePage} from '../pages/home/home';
+import { RegisterPage} from '../pages/register/register';
+import { CountriesPage} from '../pages/countries/countries';
+import { ProfilePage} from '../pages/profile/profile';
+import { HomePage} from '../pages/home/home';
+import { ContactsPage} from '../pages/contacts/contacts';
+import { GroupPage} from '../pages/group/group';
+import { DebugPanelComponent} from '../services/form-builder/debug-panel/debug-panel.component';
+import { FormButtonsComponent} from '../services/form-builder/form-buttons-component/form-buttons-component';
+import { FormBuilderService} from '../services/form-builder/form-builder';
+
+
+
 
 
 import {DeviceService} from '../services/device/device';
@@ -34,7 +42,11 @@ import {PhotoService} from '../pages/photo/photo-service';
     RegisterPage,
     CountriesPage,
     ProfilePage,
-    HomePage
+    HomePage,
+    ContactsPage,
+    GroupPage,
+    DebugPanelComponent,
+    FormButtonsComponent
 
 
   ],
@@ -54,7 +66,11 @@ import {PhotoService} from '../pages/photo/photo-service';
     RegisterPage,
     CountriesPage,
     ProfilePage,
-    HomePage
+    HomePage,
+    ContactsPage,
+    GroupPage,
+    DebugPanelComponent,
+    FormButtonsComponent
   ],
   providers: [
     Storage

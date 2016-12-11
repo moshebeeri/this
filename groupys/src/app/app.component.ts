@@ -22,13 +22,15 @@ import {PhotoService} from '../pages/photo/photo-service';
 import {RegisterPage} from '../pages/register/register';
 import {CountriesPage} from '../pages/countries/countries';
 import {HomePage} from '../pages/home/home';
+import {ContactsPage} from '../pages/contacts/contacts';
+import {GroupPage} from '../pages/group/group';
 
 /*
 
 import {ListPage} from './pages/list/list';
 import {MyAccountPage} from './pages/my-account/my-account';
 import {GroupPage} from './pages/group/group';
-import {TestPage} from './pages/test/test';
+
 import {CouponsPage} from './pages/coupons/coupons';
 import {WishListPage} from './pages/wish-list/wish-list';
 import {FavouriteGroupsPage} from './pages/favourite-groups/favourite-groups';
@@ -38,7 +40,7 @@ import {ProfilePage} from './pages/profile/profile';
 import {LoginPage} from './pages/login/login';
 
 
-import {ContactsPage} from './pages/contacts/contacts';
+
 import {BreezePage} from './pages/breeze/breeze';
 import {LazyLoadPage} from './pages/lazy-load/lazy-load';*/
 
@@ -130,14 +132,16 @@ export class MyApp {
       { title: 'Page Two', component: Page2 },
       { title: 'Register', component: RegisterPage},
       { title: 'My Account', component: MyAccountPage },
+      { title: 'Contacts', component: ContactsPage},
+      { title: 'Group', component: GroupPage },
       { title: 'Countries', component: CountriesPage}
       /*11
        
       
       { title: 'My Account', component: MyAccountPage },
-      { title: 'Contacts', component: ContactsPage},
+      
       { title: 'Group', component: GroupPage },
-			{ title: 'Test', component: TestPage }
+
       //
       { title: 'Coupons', component: CouponsPage },
       { title: 'Wish List', component: WishListPage },

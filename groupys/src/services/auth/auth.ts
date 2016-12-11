@@ -21,7 +21,7 @@ export class AuthService {
   isAdmin() {
     this.local.get('user').then(user => {
       let currentUser = user;
-      alert("currentUser: " + currentUser);
+      //alert("currentUser: " + currentUser);
       //let result =  !!currentUser && currentUser["role"] === 'admin';
       //alert("result: " + result);
       return false;
@@ -38,8 +38,8 @@ export class AuthService {
   isAuthorizedPromise(role) {
     this.local.get('user').then(user => {
       let currentUser = JSON.parse(user);
-      alert("isAuthorized: " + JSON.stringify(currentUser));
-      alert("isAuthorized: " + currentUser["role"].indexOf(role));
+      //alert("isAuthorized: " + JSON.stringify(currentUser));
+      //alert("isAuthorized: " + currentUser["role"].indexOf(role));
       if(currentUser["role"].indexOf(role) > -1){
         return true;
       } else {
@@ -52,7 +52,7 @@ export class AuthService {
   isAuthorized2(role) {
     this.local.get('user').then(user => {
       let currentUser = user;
-      alert("currentUser: " + currentUser);
+      //alert("currentUser: " + currentUser);
       //let result =  !!currentUser && currentUser["role"] && currentUser["role"].indexOf(role) > -1;
       //alert("result: " + result);
       return false;
@@ -63,7 +63,7 @@ export class AuthService {
   isLoggedIn() {
     this.local.get('user').then(user => {
       let currentUser = user;
-      alert("currentUser: " + currentUser);
+      //alert("currentUser: " + currentUser);
       //return !!currentUser && currentUser.hasOwnProperty('role');
       //let result = !!currentUser && currentUser["sms_verified"] === true;
       //alert("result: " + result);
@@ -73,27 +73,25 @@ export class AuthService {
     });
   }
   getCurrentUser() {
-    alert("getCurrentUser");
+    //alert("getCurrentUser");
     this.local.get('user').then(user => {
-      alert(JSON.stringify(user));
+      //alert(JSON.stringify(user));
       return JSON.parse(user);
     }).catch(error => {
       console.log(error);
     });
-
   }
   setCurrentUser(user) {
-    alert("setCurrentUser");
+    //alert("setCurrentUser");
     this.local.set('user', JSON.stringify(user));
   }
   getToken() {
     this.local.get('token').then(token => {
-      alert(JSON.stringify(token));
+      //alert(JSON.stringify(token));
       return token;
     }).catch(error => {
       console.log(error);
     });
-
   }
   setToken(token) {
     this.local.set('token', token);

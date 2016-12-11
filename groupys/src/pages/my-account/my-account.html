@@ -1,31 +1,37 @@
-<!--
-  Generated template for the MyAccountPage page.
-
-  See http://ionicframework.com/docs/v2/components/#navigation for more info on
-  Ionic pages and navigation.
--->
 <ion-header>
   <ion-navbar>
-    <button ion-button menuToggle>
+    <button menuToggle>
       <ion-icon name="menu"></ion-icon>
     </button>
-    <ion-title>My Account</ion-title>
+    <ion-title>User</ion-title>
+    <ion-buttons end>
+      <button (click)="onSubmitForm()">
+        <ion-icon name="checkmark"></ion-icon>
+      </button>
+
+    </ion-buttons>
   </ion-navbar>
 </ion-header>
 
-<ion-content  text-center class="my-account"> 
 
-		<!--<ion-icon name="person" class="profileImage"></ion-icon>-->
 
-  <img id="avatar" class="avatar" src='{{base64Image}}' (click)="pictureModal()">
-  <!--<img id="avatar2" class="avatar" src='{{base64Image2}}'>-->
-  <button fab class="cameraButton" (click)="presentActionSheet()">
-    <ion-icon name="camera" ></ion-icon>
-  </button>
+<ion-content padding class="user">
+  User
+
+  <form novalidate *ngIf="formActive" [formGroup]="entityForm" (ngSubmit)="onSubmitForm()">
+    <ion-item><ion-label fixed>name</ion-label><ion-input type="text" formControlName="name"></ion-input></ion-item>
+    <ion-item><ion-label fixed>email</ion-label><ion-input type="text" formControlName="email"></ion-input></ion-item>
+
+    <button type="submit">Submit</button>
+    <button type="button" (click)="onClearForm()">Reset</button>
+  </form>
+
   <div padding></div>
-  <ion-list padding>
-    <a ion-item (click)="nameModal()">
-      Edit
-    </a>
-  </ion-list>
+  <div padding></div>
+  <div padding></div>
+  <photo-upload [formID]="formID" [data]="photoData"></photo-upload>
+  <debug-panel style="z-index:999999999;margin-top:50px" [data]="entityForm.value"></debug-panel>
+
+  <span class="large" [innerHTML]="theHtmlString"></span>
+
 </ion-content>

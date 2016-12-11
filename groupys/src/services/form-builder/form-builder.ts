@@ -25,11 +25,14 @@ export class FormBuilderService {
   defaultHTML: Object;
   excludedFields: Array<string>;
   excludedFieldsHTML: Array<string>;
-  user: any;
+  currentUser: any;
   local: any;
   contentHeader: Headers = new Headers();
   entityType: string;
-	
+  formID: string;
+  //photoData: string;
+  //photoFormID: string;
+
 
 
   constructor(private storage: Storage, private entitiesService:EntitiesService,private myCameraService: MyCameraService, private _formBuilder: FormBuilder, private auth:AuthService, private globalHeaders:GlobalHeaders, private globals:GlobalsService, private http:Http) {
@@ -40,9 +43,17 @@ export class FormBuilderService {
     this.globalHeaders = globalHeaders;
     this.globals = globals;
     this.http = http;
-    this.user ={};
+    this.currentUser ={};
+    this.formID = '';
+    //this.photoData = "Group";
+    //this.photoFormID = "Group";
 
-    this.user = this.auth.getCurrentUser();
+    //this.currentUser = this.auth.getCurrentUser();
+    this.local.get('user').then(user => {
+      this.currentUser = JSON.parse(user);
+    }).catch(error => {
+      console.log(error);
+    });
 
     this.contentHeader = this.globalHeaders.getMyGlobalHeaders();
     console.log("xxxxxxxxxxxxxxxxxxxxxxxxxxx" + JSON.stringify(this.contentHeader));
@@ -57,8 +68,8 @@ export class FormBuilderService {
       label: '',
       option: ''
     };
-		this.excludedFields = ["gid","created","timestamp", "id"];
-		this.excludedFieldsHTML = ["gid","created","timestamp","id"];
+		this.excludedFields = ["gid","created","timestamp", "id", "sms_code", "sms_verified", "role", "hashedPassword","provider","salt"];
+		this.excludedFieldsHTML = ["gid","created","timestamp","id", "sms_code", "sms_verified", "role", "hashedPassword","provider","salt", "phone_number"];
     //this.weiredRequestNames = [];
     this._buildForm();
 
@@ -257,19 +268,25 @@ export class FormBuilderService {
 
 
 
-  public buildHTMLByEntity(entity, aliasFields, excludedFields, defaultHTML){
+  public buildHTMLByEntity(entity, formID, isUpload, aliasFields, excludedFields, defaultHTML){
+    alert("buildHTMLByEntity -- isUpload" + isUpload);
+    alert("buildHTMLByEntity -- entity" + entity);
     return Observable.create(observer => {
       observer.next(this._searchEntities(entity));
       //console.log("@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@");
       //console.log(this.entities);
       //console.log("@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@");
-      observer.next(this._generateFormHTML(this.entities["dataProperties"], this.entities["navigationProperties"], aliasFields, excludedFields, defaultHTML));
+      observer.next(this._generateFormHTML(this.entities["dataProperties"], this.entities["navigationProperties"], aliasFields, excludedFields, defaultHTML, formID, isUpload));
       observer.complete();
     });
 
   }
 
   public onSubmitForm(myForm) {
+
+    //myForm.value["formID"] = this.formID;
+    myForm.value["formID"] = this.formID;
+
     this._setComplexValues(myForm);
 		console.log("-------------------------------------");
     console.log(myForm.value["postURL"]);
@@ -299,10 +316,11 @@ export class FormBuilderService {
     console.log(JSON.stringify(data));
     console.log("SUCCESS------SUCCESS------SUCCESS------SUCCESS------SUCCESS------SUCCESS------");
 		
-    this.myCameraService.getImageToUpload(data._id);
+    this.myCameraService.getImageToUpload(data._id, data.formID);
   }
   
   private _setComplexValues(myForm){
+    alert(this.currentUser["_id"]);
     console.log(myForm.value);
     for(let propt in myForm.value) {
       switch (propt)
@@ -312,16 +330,16 @@ export class FormBuilderService {
           console.log("SET PICTURES ARRAY");
           break;
         case "admins":
-          myForm.value[propt] = this.user["_id"];
-          console.log("SET ADMINS: " + this.user["_id"]);
+          myForm.value[propt] = this.currentUser["_id"];
+          console.log("SET ADMINS: " + this.currentUser["_id"]);
           break;
 				case "creator":
-          myForm.value[propt] = this.user["_id"];
-          console.log("SET CREATOR: " + this.user["_id"]);
+          myForm.value[propt] = this.currentUser["_id"];
+          console.log("SET CREATOR: " + this.currentUser["_id"]);
           break;
         case "testing":
-          myForm.value[propt] = this.user["_id"];
-          console.log("SET TESTING: " + this.user["_id"]);
+          myForm.value[propt] = this.currentUser["_id"];
+          console.log("SET TESTING: " + this.currentUser["_id"]);
           break;
         default:
           console.log('Default case:' + propt);
@@ -331,13 +349,13 @@ export class FormBuilderService {
     console.log(myForm.value);
   }
 
-  private _generateFormHTML(properties, navigationProperties, aliasFields, excludedFields, defaultHTML){
-
+  private _generateFormHTML(properties, navigationProperties, aliasFields, excludedFields, defaultHTML, formID, isUpload){
+    this.formID = formID;
     let structureObject = {};
     let propertyArray = [];
     let bodyHTML = '';
     let elementHTML = '';
-    let startForm = '<form novalidate *ngIf="formActive" [ngFormModel]="entityForm" (ngSubmit)="onSubmitForm()">'+"\n\t";
+    let startForm = '<form novalidate *ngIf="formActive" [formGroup]="entityForm" (ngSubmit)="onSubmitForm()">'+"\n\t";
     //let endForm = '</form><debug-panel style="z-index:999999999;margin-top:50px" [data]="entityForm.value"></debug-panel>';
     //let endForm = '<form-buttons [data]="entityForm"></form-buttons></form>';
     let endForm = '</form>';
@@ -386,7 +404,8 @@ export class FormBuilderService {
 					elementHTML = this._setHTMLArrayGroup(properties[propt], aliasFields);
 				}
 				else if(properties[propt]["name"] === 'pictures'){
-					elementHTML = this._setHTMLPictures(this.entityType);
+          alert("_generateFormHTML -- isUpload" + isUpload);
+					elementHTML = this._setHTMLPictures(this.entityType, formID, isUpload);
 				}
 			}
       bodyHTML += elementHTML;
@@ -402,7 +421,7 @@ export class FormBuilderService {
 	private _setHTMLInputControls(inputType, property, aliasFields){
 		/*<ion-item>
 			<ion-label fixed>name</ion-label>
-			<ion-input type="text" value="" ngControl="name"></ion-input>
+			<ion-input type="text" value="" formControlName="name"></ion-input>
 		</ion-item>*/
 		let startElement = '<ion-item><ion-label fixed>'; 
 		let endElement = '"></ion-input></ion-item>' +"\n\t";
@@ -411,7 +430,7 @@ export class FormBuilderService {
 		let dataName = property["name"];
 		let dataValue = property["defaultValue"];
 		
-		return startElement + dataName +'</ion-label><ion-input type="' + dataType + '" ngControl="' + dataName + endElement;
+		return startElement + dataName +'</ion-label><ion-input type="' + dataType + '" formControlName="' + dataName + endElement;
 		
 	}
 	private _setHTMLDateTimeControl(inputType, property, aliasFields){
@@ -428,16 +447,16 @@ export class FormBuilderService {
 		let dataName = property["name"];
 		let dataValue = property["defaultValue"];
 		
-		return startElement + dataName +'</ion-label><ion-datetime displayFormat="MM/DD/YYYY" ngControl="' + dataName + endElement;
+		return startElement + dataName +'</ion-label><ion-datetime displayFormat="MM/DD/YYYY" formControlName="' + dataName + endElement;
 		
 	}
 	
 	private _setHTMLSelectGroup(properties, alias){
-		//<select ngControl="specialtySandwich" #specialtySandwich="ngForm">
+		//<select formControlName="specialtySandwich" #specialtySandwich="ngForm">
 		
 		/*
 		
-		<ion-select ngControl="_select" #_select="ngForm"> 
+		<ion-select formControlName="_select" #_select="ngForm">
 			<ion-option value="OPEN">OPEN</ion-option>
 			<ion-option value="CLOSE">CLOSE</ion-option>
 			<ion-option value="REQUEST">REQUEST</ion-option>
@@ -462,15 +481,15 @@ export class FormBuilderService {
 				options += '<ion-option value="' + properties["defaultValue"][propt] + '">' + properties["defaultValue"][propt] + '</ion-option>' + "\n\t";
 			}
 		}
-		return startElement + controlName +'</ion-label><ion-select ngControl="' + controlName + '" #' + controlName + '="ngForm"> \n\t' + options + endElement;
+		return startElement + controlName +'</ion-label><ion-select formControlName="' + controlName + '" let ' + controlName + '="ngForm"> \n\t' + options + endElement;
 		
 	}
 	private _setHTMLDefaultSelectGroup(properties, alias){
-		//<select ngControl="specialtySandwich" #specialtySandwich="ngForm">
+		//<select formControlName="specialtySandwich" #specialtySandwich="ngForm">
 		
 		/*
 		
-		<ion-select ngControl="_select" #_select="ngForm"> 
+		<ion-select formControlName="_select" #_select="ngForm">
 			<ion-option value="OPEN">OPEN</ion-option>
 			<ion-option value="CLOSE">CLOSE</ion-option>
 			<ion-option value="REQUEST">REQUEST</ion-option>
@@ -490,7 +509,7 @@ export class FormBuilderService {
 		for(let propt in properties["defaultValue"]) {
 			options += '<ion-option value="' + properties["defaultValue"][propt] + '">' + properties["defaultValue"][propt] + '</ion-option>' + "\n\t";
 		}
-		return startElement + controlName +'</ion-label><ion-select ngControl="' + controlName + '" #' + controlName + '="ngForm"> \n\t' + options + endElement;
+		return startElement + controlName +'</ion-label><ion-select formControlName="' + controlName + '" let ' + controlName + '="ngForm"> \n\t' + options + endElement;
 		
 	}
 	private _setHTMLBooleanSelectGroup(properties){
@@ -507,7 +526,7 @@ export class FormBuilderService {
 		for(let propt in properties["defaultValue"]) {
 			options += '<ion-option value="' + properties["defaultValue"][propt] + '">' + properties["defaultValue"][propt] + '</ion-option>' + "\n\t";
 		}
-		return startElement + controlName +'</ion-label><ion-select ngControl="' + controlName + '" #' + controlName + '="ngForm"> \n\t' + options + endElement;
+		return startElement + controlName +'</ion-label><ion-select formControlName="' + controlName + '" let ' + controlName + '="ngForm"> \n\t' + options + endElement;
 		
 	}
 	
@@ -529,11 +548,11 @@ export class FormBuilderService {
 						<ion-radio value="cord"></ion-radio>
 					</ion-item>
 				*/
-				options += '<li> \n\t <input id="' + properties["defaultValue"][propt] + '" type="radio" name="' + controlName + '" ngControl="' + properties["defaultValue"][propt] + '">';
+				options += '<li> \n\t <input id="' + properties["defaultValue"][propt] + '" type="radio" name="' + controlName + '" formControlName="' + properties["defaultValue"][propt] + '">';
 				options += '<label for="' + properties["defaultValue"][propt] + '">' + properties["defaultValue"][propt] + '</label>' + "\n\t";
 			}
 		}
-		return startElement + controlName + '" #' + controlName + '="ngForm"> \n\t' + options + endElement;
+		return startElement + controlName + '" let ' + controlName + '="ngForm"> \n\t' + options + endElement;
 		
 	}
 	
@@ -558,10 +577,10 @@ export class FormBuilderService {
 
 				*/
 				options += '<ion-item> \n\t <ion-label for="' + properties["defaultValue"][propt] + '">' + properties["defaultValue"][propt] + '</ion-label>';
-				options += '<ion-checkbox id="' + properties["defaultValue"][propt] + '" type="checkbox" ngControl="' + properties["defaultValue"][propt] + '"></ion-checkbox></ion-item>' + "\n\t";
+				options += '<ion-checkbox id="' + properties["defaultValue"][propt] + '" type="checkbox" formControlName="' + properties["defaultValue"][propt] + '"></ion-checkbox></ion-item>' + "\n\t";
 			}
 		}
-		return startElement + controlName + '" #' + controlName + '="ngForm"> \n\t' + options + endElement;
+		return startElement + controlName + '" let ' + controlName + '="ngForm"> \n\t' + options + endElement;
 		
 	}
 	
@@ -571,10 +590,19 @@ export class FormBuilderService {
 
 		
 	}
-	private _setHTMLPictures(entityType){
+	private _setHTMLPictures(entityType, formID, isUpload){
+    alert("_setHTMLPictures -- isUpload" + isUpload);
 		//alert(entityType);
-		
-    return '<photo-upload [data]=' + entityType + '></photo-upload>';
+		//unix
+    //update form
+    //send local picture id to photo component
+    //this.formID = this.myCameraService.unixID();
+    //this.formID = entityType;
+    this.local.set(formID, []);
+    alert("xxxxxxxxxx: " + formID);
+
+
+    return '<photo-upload [formID]=' + '"'+ formID +'"' + ' [isUpload]=' + '"' + isUpload +'"' + ' [data]=' + '"' + entityType +'"' + '></photo-upload>';
 	}
 	/*
 	private _setHTMLGroupControls(dataType, defaultValue, aliasFields){
@@ -586,7 +614,7 @@ export class FormBuilderService {
 		let dataName = property["name"];
 		let dataValue = property["defaultValue"];
 		
-		return startElement + dataType +'" placeholder="' + dataName + '" ngControl="' + dataName + endElement;
+		return startElement + dataType +'" placeholder="' + dataName + '" formControlName="' + dataName + endElement;
 	}
 */
 

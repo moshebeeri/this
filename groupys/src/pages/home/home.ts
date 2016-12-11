@@ -42,11 +42,17 @@ export class HomePage {
     this.win = windowService;
     this.contentHeader = this.globalHeaders.getMyGlobalHeaders();
 
-    /*this.isLoggedIn = auth.isLoggedIn();
+    /*
+    this.isLoggedIn = auth.isLoggedIn();
     this.isAuthorized = auth.isAuthorized('user');
-    this.isAdmin = auth.isAdmin();*/
+    this.isAdmin = auth.isAdmin();
     auth.isAuthorized('user').subscribe(data => alert("====================" + data));
-	
+     */
+
+    this.isAuthorizedPromise('user');
+    this.isLoggedInPromise();
+    this.isAdminPromise();
+
 	  Geolocation.getCurrentPosition().then((resp) => {
       this.currentLatitude = resp.coords.latitude;
       this.currentLongitude = resp.coords.longitude;
@@ -62,18 +68,44 @@ export class HomePage {
     console.log("isAdmin2: " +  this.isAdmin);
 
     //this.disablePassive();
-    this.isAuthorizedPromise('user');
+
+
   }
   isAuthorizedPromise(role) {
     this.local.get('user').then(user => {
       let currentUser = JSON.parse(user);
-      alert("=============currentUser: " + currentUser);
+      //alert("=============currentUser: " + JSON.stringify(currentUser));
       //alert("role: " + currentUser["role"]);
       if(currentUser && currentUser["role"].indexOf(role) > -1){
         this.isAuthorized = true;
       } else {
         this.isAuthorized = false;
       }
+    }).catch(error => {
+      console.log(error);
+    });
+  }
+  isLoggedInPromise() {
+    this.local.get('user').then(user => {
+      let currentUser = JSON.parse(user);
+      if(currentUser && currentUser["sms_verified"] === true){
+        this.isLoggedIn = true;
+      } else {
+        this.isLoggedIn = false;
+      }
+    }).catch(error => {
+      console.log(error);
+    });
+  }
+  isAdminPromise() {
+    this.local.get('user').then(user => {
+      let currentUser = JSON.parse(user);
+      if(!!currentUser && currentUser["role"] === 'admin'){
+        this.isAdmin = true;
+      } else {
+        this.isAdmin = false;
+      }
+      return false;
     }).catch(error => {
       console.log(error);
     });

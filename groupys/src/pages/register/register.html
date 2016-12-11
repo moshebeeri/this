@@ -11,7 +11,7 @@
 
     </ion-buttons>
     <ion-buttons end [hidden]="!isAuthorized || isLoggedIn">
-      <button (click)="verification(verificationCreds.value)">
+      <button (click)="verification()">
         <ion-icon name="checkmark"></ion-icon>
       </button>
 
@@ -48,10 +48,10 @@
   <!--<div *ngIf="auth.authenticated()">-->
     <ion-label>We have sent you a code via SMS.</ion-label>
     <ion-label>Please enter it below.</ion-label>
-	<form #verificationCreds="ngForm" (ngSubmit)="verification(verificationCreds.value)">
+	<form (ngSubmit)="verification()">
 		<ion-item>
 		  <!--<ion-label>Enter Code</ion-label>-->
-		  <ion-input type="text" ngControl="code"  placeholder="Enter Code" id="codeInput" (keypress)="validateNumbers($event)">
+          <ion-input type="text" [(ngModel)]="loginCred.code" name="code" placeholder="Enter Code"  id="codeInput" (keypress)="validateNumbers($event)">
 	      </ion-input>
 		</ion-item>
 	</form>

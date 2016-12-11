@@ -5,6 +5,7 @@
     <author email="hi@ionicframework" href="http://ionicframework.com/">Ionic Framework Team</author>
     <content src="index.html" />
     <access origin="*" />
+    <access launch-external="yes" origin="sms:*" />
     <allow-intent href="http://*/*" />
     <allow-intent href="https://*/*" />
     <allow-intent href="tel:*" />
@@ -28,5 +29,6 @@
     <feature name="StatusBar">
         <param name="ios-package" onload="true" value="CDVStatusBar" />
     </feature>
+    <plugin name="cordova-sms-plugin" spec="~0.1.11" />
     <plugin name="cordova-sqlite-storage" spec="~1.5.0" />
 </widget>

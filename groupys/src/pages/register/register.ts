@@ -35,6 +35,7 @@ export class RegisterPage {
   callingDigitsInput:number;
   validatorLength:number;
   currentUser: any;
+  currentToken: any;
 
   isLoggedIn: any;
   isAuthorized: any;
@@ -63,10 +64,16 @@ export class RegisterPage {
     this.countriesService = countriesService;
 
     this.baseURL = this.globals.BASE_URL;
-    this.isLoggedIn = this.auth.isLoggedIn();
-    //this.isLoggedIn = false;
-    //this.isAuthorized = this.auth.isAuthorized('user');
-    //this.isAdmin = this.auth.isAdmin();
+    /*
+     this.isLoggedIn = auth.isLoggedIn();
+     this.isAuthorized = auth.isAuthorized('user');
+     this.isAdmin = auth.isAdmin();
+     auth.isAuthorized('user').subscribe(data => alert("====================" + data));
+     */
+
+    this.isAuthorizedPromise('user');
+    this.isLoggedInPromise();
+    this.isAdminPromise();
 
     this.contentHeader = this.globalHeaders.getMyGlobalHeaders();
     console.log("xxxxxxxxxxxxxxxxxxxxxxxxxxx111111111111111" + JSON.stringify(this.contentHeader));
@@ -76,12 +83,12 @@ export class RegisterPage {
     this.todo = {};
     this.loginCred = {};
     this.currentUser = {};
+    this.currentToken = {};
     this.isAuthorizedPromise('user');
-
-
 
     this.getCurrentCountry().subscribe(data => console.log(data));
     this.local.set('isSIM', 'true');
+
 	/*
 	//this.getcountries();
 	this.getCountryFromSim();
@@ -96,13 +103,53 @@ export class RegisterPage {
 
   isAuthorizedPromise(role) {
     this.local.get('user').then(user => {
-      let currentUser = user;
-      alert("currentUser: " + currentUser);
-      if(!!currentUser && currentUser["role"] && currentUser["role"].indexOf(role) > -1){
+      let currentUser = JSON.parse(user);
+      //alert("=============currentUser: " + JSON.stringify(currentUser));
+      //alert("role: " + currentUser["role"]);
+      if(currentUser && currentUser["role"].indexOf(role) > -1){
         this.isAuthorized = true;
       } else {
         this.isAuthorized = false;
       }
+    }).catch(error => {
+      console.log(error);
+    });
+  }
+  isLoggedInPromise() {
+    this.local.get('user').then(user => {
+      let currentUser = JSON.parse(user);
+      //alert(JSON.stringify(currentUser));
+      console.log(currentUser);
+      console.log(currentUser["sms_verified"]);
+      if(currentUser && currentUser["sms_verified"] === true){
+        this.isLoggedIn = true;
+      } else {
+        this.isLoggedIn = false;
+      }
+    }).catch(error => {
+      console.log(error);
+    });
+  }
+  isAdminPromise() {
+    this.local.get('user').then(user => {
+      let currentUser = JSON.parse(user);
+      if(!!currentUser && currentUser["role"] === 'admin'){
+        this.isAdmin = true;
+      } else {
+        this.isAdmin = false;
+      }
+      return false;
+    }).catch(error => {
+      console.log(error);
+    });
+  }
+  getCurrentUserPromise() {
+    this.local.get('user').then(user => {
+      this.currentUser = JSON.parse(user);
+
+      this.isAuthorizedPromise('user');
+      this.isLoggedInPromise();
+      this.isAdminPromise();
     }).catch(error => {
       console.log(error);
     });
@@ -260,7 +307,7 @@ export class RegisterPage {
   register() {
     let credentials = {};
     credentials = this.loginCred;
-    alert(JSON.stringify(credentials));
+    //alert(JSON.stringify(credentials));
     if(credentials["callingDigits"] == null) {
       this.error = 'Phone number can not be empty';
       console.log(this.error);
@@ -289,12 +336,9 @@ export class RegisterPage {
         );
   }
   
-  verification(credentials) {
-    let token = this.local.get('token');
-    token = token["__zone_symbol__value"];
-    this.contentHeader = new Headers({"Content-Type": "application/json"});
-    this.contentHeader.append('Authorization', 'Bearer ' + token);
-
+  verification() {
+    let credentials = this.loginCred;
+    alert(this.loginCred);
     if(credentials["code"] == null) {
       this.error = 'Code number can not be empty';
       console.log(this.error);
@@ -305,26 +349,43 @@ export class RegisterPage {
       return;
     }
 
-    console.log("------------------------verification---------------------------");
-    console.log("credentials: " + JSON.stringify(credentials));
-    console.log("this.contentHeader: " + JSON.stringify(this.contentHeader));
-    console.log("--------------------------------------------------------------------");
-	
-    this.http.get(this.globals.VERIFICATION_URL + credentials["code"], { headers: this.contentHeader })
+    this.local.get('token').then(token => {
+      this.currentToken = token;
+
+      this.contentHeader = new Headers({"Content-Type": "application/json"});
+      this.contentHeader.append('Authorization', 'Bearer ' + this.currentToken);
+
+      console.log("------------------------verification---------------------------");
+      console.log("credentials: " + JSON.stringify(credentials));
+      console.log("this.contentHeader: " + JSON.stringify(this.contentHeader));
+      console.log("--------------------------------------------------------------------");
+
+      this.http.get(this.globals.VERIFICATION_URL + credentials["code"], { headers: this.contentHeader })
         .map(res => res.json())
         .subscribe(
-            err => this.error = err,
-			      () => this.updateCurrentUser()
+          err => this.error = err,
+          () => this.updateCurrentUser()
         );
+
+    }).catch(error => {
+      console.log(error);
+    });
+
+
   }
   updateCurrentUser(){
-    let user = this.auth.getCurrentUser();
-    user["sms_verified"] = true;
-    this.auth.setCurrentUser(user);
-
+    //let user = this.auth.getCurrentUser();
+    this.getCurrentUserPromise();
+    this.currentUser["sms_verified"] = true;
+    this.auth.setCurrentUser(this.currentUser);
+    /*
     this.isLoggedIn = this.auth.isLoggedIn();
     this.isAuthorized = this.auth.isAuthorized('user');
     this.isAdmin = this.auth.isAdmin();
+    */
+    this.isAuthorizedPromise('user');
+    this.isLoggedInPromise();
+    this.isAdminPromise();
 
     //this.nav.setRoot(HomePage);
     this.nav.setRoot(MyAccountPage);
@@ -355,13 +416,16 @@ export class RegisterPage {
   
   setCurrentUser(data){
     this.auth.setCurrentUser(data);
-    this.currentUser = this.auth.getCurrentUser();
+    //this.currentUser = this.auth.getCurrentUser();
+    this.getCurrentUserPromise();
     //alert(this.currentUser["_id"]);
-    alert(JSON.stringify(this.currentUser));
+    //alert(JSON.stringify(this.currentUser));
+    /*
     this.isLoggedIn = this.auth.isLoggedIn();
-    //this.isLoggedIn = true;
     this.isAuthorized = this.auth.isAuthorized('user');
     this.isAdmin = this.auth.isAdmin();
+    */
+
   }
 
   getClientIp(){

@@ -44,6 +44,8 @@ import {PhotoService} from '../../photo/photo-service';
 })
 export class PhotoComponent{
   @Input() data;
+  @Input() formID;
+  @Input() isUpload;
 	public base64Image: string;
 	cameraDestinationType: any;
   local: any;
@@ -54,11 +56,12 @@ export class PhotoComponent{
     this.actionSheetCtrl = actionSheetCtrl;
     this.local = storage;
 		this.nav = nav;
-		this.base64Image =  'img/avatar3.png';
+		this.base64Image =  'assets/img/avatar3.png';
 		this.cameraDestinationType = this.deviceService.getCameraDestinationType();
 		this.getBase64Image();
     this.entityType = this.data;
 	}
+
 	
 	getBase64Image(){
     this.local.get('base64Image').then(base64Image => {
@@ -66,6 +69,8 @@ export class PhotoComponent{
       if(this.deviceService.getImageLocalStorage(base64Image).length>-1){
         this.base64Image = this.deviceService.getImageLocalStorage(base64Image);
         //alert('base64Image: ' + this.base64Image);
+      } else {
+        this.base64Image =  'assets/img/avatar3.png';
       }
       //return this.base64Image;
 
@@ -75,6 +80,11 @@ export class PhotoComponent{
   }
 
   pictureModal() {
+    alert("this.data: " + this.data);
+    alert("this.formID: " + this.formID);
+    alert("this.isUpload: " + this.isUpload);
+    alert("this.entityType: " + this.entityType);
+    
     this.photoService.navigateToPhoto(this.base64Image);
     /*
      let pictureModal = Modal.create(PictureModal);
@@ -85,13 +95,16 @@ export class PhotoComponent{
   getGalleryPic(){
     //this.base64Image = this.myCameraService.getGalleryPic();
     //this.myCameraService.getGalleryPic().subscribe(data => this.setImage(data));
-    this.myCameraService.getGalleryPic(this.entityType);
+    alert("this.entityType: " + this.entityType);
+    alert("this.formID: " + this.formID);
+    alert("this.isUpload: " + this.isUpload);
+    this.myCameraService.getGalleryPic(this.entityType, this.formID, this.isUpload );
   }
 
   takePicture(){
     //this.base64Image = this.myCameraService.takePicture();
     //this.myCameraService.takePicture().subscribe(data => this.setImage(data));
-    this.myCameraService.takePicture(this.entityType);
+    this.myCameraService.takePicture(this.entityType, this.formID, this.isUpload);
   }
 	
 	presentActionSheet() {
@@ -114,7 +127,7 @@ export class PhotoComponent{
           text: 'Remove Photo',
           handler: () => {
             console.log('Remove Photo clicked');
-            this.base64Image =  'img/avatar3.png';
+            this.base64Image =  'assets/img/avatar3.png';
             this.local.remove('base64Image');
           }
         },{

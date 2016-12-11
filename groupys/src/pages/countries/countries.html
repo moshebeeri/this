@@ -21,6 +21,7 @@
                    [(ngModel)]="queryText"
                    (ionInput)="searchLowerCase()"
                    (ionCancel)="toggleToolbars()"
+                   showCancelButton = "true"
                    placeholder="Search"
                    debounce="500">
     </ion-searchbar>

@@ -42,6 +42,7 @@ export class GlobalsService {
 
     this.allURLS["Group"] = this.GROUP_URL;
     this.allURLS["Test"] = this.TEST_URL;
+    this.allURLS["User"] = this.SIGNUP_URL;
 }
 
   public getPostUrlByEntity(entity){

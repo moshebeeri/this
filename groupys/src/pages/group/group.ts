@@ -1,6 +1,5 @@
 import { Component, NgModule } from '@angular/core';
 import {NavController, NavParams} from 'ionic-angular';
-import {Storage} from '@ionic/storage';
 //import {ControlGroup, Control, ControlArray, FormBuilder} from '@angular/common';
 import {FormGroup, FormArray, FormBuilder, Validators} from '@angular/forms';
 //import {ChangeDetectionStrategy} from '@angular/core';
@@ -17,101 +16,82 @@ import {RegisterPage} from '../register/register';
 //import {TimerWrapper} from 'angular2/src/facade/async';
 
 /*@NgModule({
- //imports:      [ BrowserModule],
- declarations: [ DebugPanelComponent, PhotoComponent, FormButtonsComponent ],  //<----here
- //providers:    [],
- //bootstrap:    [ AppComponent ]
- })*/
+  //imports:      [ BrowserModule],
+  declarations: [ DebugPanelComponent, PhotoComponent, FormButtonsComponent ],  //<----here
+  //providers:    [],
+  //bootstrap:    [ AppComponent ]
+})*/
 
 @Component({
-  templateUrl: 'my-account.html',
+  templateUrl: 'group.html',
   providers : [EntitiesService, FormBuilderService, MyCameraService, DeviceService],
-  //changeDetection: ChangeDetectionStrategy.OnPush,
+	//changeDetection: ChangeDetectionStrategy.OnPush,
   //directives: [DebugPanelComponent, PhotoComponent, FormButtonsComponent]
 })
-export class MyAccountPage {
+export class GroupPage {
   entityForm: FormGroup;
   //controlArray: ControlArray;
   bodyHTML: String;
   theHtmlString: String;
-  formActive = true;
+	formActive = true;
   photoData: string;
   formID: string;
-  local:any;
-  currentUser:any;
 
   entities: Array<string>;
 
-  constructor(private storage: Storage, private nav:NavController, private navParams:NavParams, private entitiesService:EntitiesService, private formBuilderService:FormBuilderService) {
+  constructor(private nav:NavController, private navParams:NavParams, private entitiesService:EntitiesService, private formBuilderService:FormBuilderService) {
     this.nav = nav;
-    this.photoData = "User";
+    this.photoData = "Group";
     this.formID = this.unixID();
-    this.local = storage;
 
     this.entitiesService = entitiesService;
     this.formBuilderService = formBuilderService;
     this.entities = [];
 
-    this.theHtmlString = '<div>GROUPYS APP</div>';
-
+		this.theHtmlString = '<div>GROUPYS APP</div>';
+		
   }
 
   ngOnInit() {
     let isUpload = false;
-
-    this.formBuilderService.buildFormByEntity('User').subscribe(
+    
+    this.formBuilderService.buildFormByEntity('Group').subscribe(
       data => this.entityForm = data
     );
-    this.formBuilderService.buildHTMLByEntity('User',this.formID, isUpload ,[],[],[]).subscribe(
+    this.formBuilderService.buildHTMLByEntity('Group',this.formID, isUpload ,[],[],[]).subscribe(
       data => this.bodyHTML = data
     );
-    //this.controlArray = this.entityForm.find('controlArrayField') as ControlArray;
+		//this.controlArray = this.entityForm.find('controlArrayField') as ControlArray;
     console.log(this.bodyHTML);
-    setTimeout(() => {
-      this.getCurrentUser();
-    }, 300);
-
-
   }
   onSubmitForm() {
     console.log(this.entityForm.value);
     //this.entityForm.value.creator = 999999;
-    this.formBuilderService.onSubmitForm(this.entityForm);
+		this.formBuilderService.onSubmitForm(this.entityForm);
   }
-  onClearForm() {
+	onClearForm() {
     /*this.formBuilderService.buildFormByEntity('Group').subscribe(
-     data => this.entityForm = data
-     );
-     this.formActive = false;
-     setTimeout(() => {
-     this.formActive = true;
-     }, 0);*/
+      data => this.entityForm = data
+    );
+    this.formActive = false;
+    setTimeout(() => {
+      this.formActive = true;
+    }, 0);*/
     //console.log("reset: " + this.entityForm);
     this.entityForm.reset();
   }
-
-  onAddArrayRequest(controlArray) {
+	
+	onAddArrayRequest(controlArray) {
     this.formBuilderService.onAddArrayRequest(controlArray);
   }
-
+  
   onRemoveArrayRequest(controlArray, index) {
-    this.formBuilderService.onRemoveArrayRequest(controlArray, index);
+		this.formBuilderService.onRemoveArrayRequest(controlArray, index);
   }
   unixID() {
     let d = new Date();
     let n = d.getTime();
     return n.toString();
   }
-
-  getCurrentUser() {
-    //alert("getCurrentUser");
-    this.local.get('user').then(user => {
-      this.currentUser = JSON.parse(user);
-      this.entityForm.value["phone_number"] = this.currentUser["phone_number"];
-    }).catch(error => {
-      console.log(error);
-    });
-  }
-
 
 }
