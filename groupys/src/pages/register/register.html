@@ -1,17 +1,17 @@
 <ion-header>
   <ion-navbar>
-    <button menuToggle [hidden]="!isLoggedIn">
+    <button ion-button menuToggle [hidden]="!isLoggedIn">
       <ion-icon name="menu"></ion-icon>
     </button>
     <ion-title>Your phone</ion-title>
     <ion-buttons end [hidden]="isAuthorized">
-      <button (click)="register()">
+      <button ion-button (click)="register()">
         <ion-icon name="checkmark"></ion-icon>
       </button>
 
     </ion-buttons>
     <ion-buttons end [hidden]="!isAuthorized || isLoggedIn">
-      <button (click)="verification()">
+      <button ion-button (click)="verification()">
         <ion-icon name="checkmark"></ion-icon>
       </button>
 

@@ -1,18 +1,16 @@
 <ion-header>
   <ion-navbar>
-    <button menuToggle>
+    <button ion-button menuToggle>
       <ion-icon name="menu"></ion-icon>
     </button>
-    <ion-title>User</ion-title>
+    <ion-title>Group</ion-title>
     <ion-buttons end>
-      <button (click)="onSubmitForm()">
+      <button ion-button (click)="onSubmitForm()">
         <ion-icon name="checkmark"></ion-icon>
       </button>
-
     </ion-buttons>
   </ion-navbar>
 </ion-header>
-
 
 
 <ion-content padding class="user">
@@ -22,8 +20,8 @@
     <ion-item><ion-label fixed>name</ion-label><ion-input type="text" formControlName="name"></ion-input></ion-item>
     <ion-item><ion-label fixed>email</ion-label><ion-input type="text" formControlName="email"></ion-input></ion-item>
 
-    <button type="submit">Submit</button>
-    <button type="button" (click)="onClearForm()">Reset</button>
+    <button ion-button type="submit">Submit</button>
+    <button ion-button type="button" (click)="onClearForm()">Reset</button>
   </form>
 
   <div padding></div>

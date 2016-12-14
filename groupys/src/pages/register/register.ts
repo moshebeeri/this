@@ -84,7 +84,6 @@ export class RegisterPage {
     this.loginCred = {};
     this.currentUser = {};
     this.currentToken = {};
-    this.isAuthorizedPromise('user');
 
     this.getCurrentCountry().subscribe(data => console.log(data));
     this.local.set('isSIM', 'true');
@@ -228,10 +227,14 @@ export class RegisterPage {
   }
 
   successCallback(info) {
-    console.log('Sim info: ', info)
+    console.log('Sim info: ', info);
+    this.alertMe();
     //alert("1: " + JSON.stringify(result.countryCode));
 	  window.localStorage.setItem('countryCode', JSON.stringify(info.countryCode));
 	  //alert(JSON.stringify(this.local.get('countryCode')));
+  }
+  alertMe(){
+    alert("111111111111");
   }
   errorCallback(err) {
     console.log('Unable to get sim info: ', err);

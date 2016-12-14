@@ -58,18 +58,16 @@ export class MyAccountPage {
 
   ngOnInit() {
     let isUpload = false;
+    let httpMethod = 'PUT';
 
     this.formBuilderService.buildFormByEntity('User').subscribe(
       data => this.entityForm = data
     );
-    this.formBuilderService.buildHTMLByEntity('User',this.formID, isUpload ,[],[],[]).subscribe(
+    this.formBuilderService.buildHTMLByEntity('User',this.formID, isUpload ,httpMethod, [],[],[]).subscribe(
       data => this.bodyHTML = data
     );
     //this.controlArray = this.entityForm.find('controlArrayField') as ControlArray;
     console.log(this.bodyHTML);
-    setTimeout(() => {
-      this.getCurrentUser();
-    }, 300);
 
 
   }
@@ -107,7 +105,7 @@ export class MyAccountPage {
     //alert("getCurrentUser");
     this.local.get('user').then(user => {
       this.currentUser = JSON.parse(user);
-      this.entityForm.value["phone_number"] = this.currentUser["phone_number"];
+      //this.entityForm.value["phone_number"] = this.currentUser["phone_number"];
     }).catch(error => {
       console.log(error);
     });

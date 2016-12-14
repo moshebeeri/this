@@ -153,6 +153,11 @@ export class HomePage {
   onHold(){
     alert("onHold");
   }
+  //http://ionicframework.com/docs/v2/components/#gestures
+  //http://www.roblouie.com/article/198/using-gestures-in-the-ionic-2-beta/
+  pressEvent(e) {
+    alert("onPress");
+  }
 
   disablePassive(){
 

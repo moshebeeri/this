@@ -30,6 +30,7 @@ export class FormBuilderService {
   contentHeader: Headers = new Headers();
   entityType: string;
   formID: string;
+  httpMethod: string;
   //photoData: string;
   //photoFormID: string;
 
@@ -45,6 +46,7 @@ export class FormBuilderService {
     this.http = http;
     this.currentUser ={};
     this.formID = '';
+    this.httpMethod = '';
     //this.photoData = "Group";
     //this.photoFormID = "Group";
 
@@ -268,7 +270,7 @@ export class FormBuilderService {
 
 
 
-  public buildHTMLByEntity(entity, formID, isUpload, aliasFields, excludedFields, defaultHTML){
+  public buildHTMLByEntity(entity, formID, isUpload, httpMethod, aliasFields, excludedFields, defaultHTML){
     alert("buildHTMLByEntity -- isUpload" + isUpload);
     alert("buildHTMLByEntity -- entity" + entity);
     return Observable.create(observer => {
@@ -276,7 +278,7 @@ export class FormBuilderService {
       //console.log("@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@");
       //console.log(this.entities);
       //console.log("@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@");
-      observer.next(this._generateFormHTML(this.entities["dataProperties"], this.entities["navigationProperties"], aliasFields, excludedFields, defaultHTML, formID, isUpload));
+      observer.next(this._generateFormHTML(this.entities["dataProperties"], this.entities["navigationProperties"], aliasFields, excludedFields, defaultHTML, formID, isUpload, httpMethod));
       observer.complete();
     });
 
@@ -286,12 +288,18 @@ export class FormBuilderService {
 
     //myForm.value["formID"] = this.formID;
     myForm.value["formID"] = this.formID;
+    alert("this.httpMethod: " + this.httpMethod);
 
     this._setComplexValues(myForm);
 		console.log("-------------------------------------");
     console.log(myForm.value["postURL"]);
     console.log("-------------------------------------");
-    this._postFormByType(myForm.value["postURL"],myForm.value);
+    if(this.httpMethod === 'POST'){
+      this._postFormByType(myForm.value["postURL"],myForm.value);
+    } else if(this.httpMethod === 'PUT'){
+      this._putFormByType(myForm.value["postURL"],myForm.value);
+    }
+    
 
   }
   private _postFormByType(entity, myForm){
@@ -310,6 +318,22 @@ export class FormBuilderService {
         () => console.log('Create '+ entity + ' request Complete')
       );
   }
+  private _putFormByType(entity, myForm){
+    console.log("-------------------------------------");
+    console.log(entity);
+    console.log(this.contentHeader );
+    console.log("-------------------------------------");
+    let postUrl = this.globals.getPutUrlByEntity(entity);
+    console.log(postUrl);
+
+    this.http.put(postUrl, JSON.stringify(myForm), { headers: this.contentHeader })
+      .map(res => res.json())
+      .subscribe(
+        data => this.authSuccess(data),
+        err => this.error = err,
+        () => console.log('Create '+ entity + ' request Complete')
+      );
+  }
 
   authSuccess(data) {
 		console.log("SUCCESS------SUCCESS------SUCCESS------SUCCESS------SUCCESS------SUCCESS------");
@@ -321,7 +345,7 @@ export class FormBuilderService {
   
   private _setComplexValues(myForm){
     alert(this.currentUser["_id"]);
-    console.log(myForm.value);
+    console.log("_setComplexValues: " + JSON.stringify(myForm.value));
     for(let propt in myForm.value) {
       switch (propt)
       {
@@ -329,6 +353,14 @@ export class FormBuilderService {
           myForm.value[propt] = [];
           console.log("SET PICTURES ARRAY");
           break;
+        case "_id":
+          myForm.value[propt] = this.currentUser["_id"];
+          console.log("SET PICTURES ARRAY");
+          break;
+				case "phone_number":
+					myForm.value[propt] = this.currentUser["phone_number"];
+					console.log("SET PICTURES ARRAY");
+					break;
         case "admins":
           myForm.value[propt] = this.currentUser["_id"];
           console.log("SET ADMINS: " + this.currentUser["_id"]);
@@ -349,8 +381,9 @@ export class FormBuilderService {
     console.log(myForm.value);
   }
 
-  private _generateFormHTML(properties, navigationProperties, aliasFields, excludedFields, defaultHTML, formID, isUpload){
+  private _generateFormHTML(properties, navigationProperties, aliasFields, excludedFields, defaultHTML, formID, isUpload, httpMethod){
     this.formID = formID;
+    this.httpMethod = httpMethod;
     let structureObject = {};
     let propertyArray = [];
     let bodyHTML = '';

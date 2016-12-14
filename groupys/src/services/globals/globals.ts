@@ -3,7 +3,8 @@ import {Injectable} from '@angular/core';
 @Injectable()
 export class GlobalsService {
 
-  allURLS: Object;
+  allPostURLS: Object;
+  allPutURLS: Object;
   BASE_URL: string;
   LOGIN_URL: string;
   SIGNUP_URL: string;
@@ -19,7 +20,8 @@ export class GlobalsService {
   IP_URL: string;
 
   constructor() {
-    this.allURLS = [];
+    this.allPostURLS = [];
+    this.allPutURLS = [];
     if (window.location.host.match("localhost")) {
       this.BASE_URL = "http://localhost:9000/api/";
     } else {
@@ -40,14 +42,21 @@ export class GlobalsService {
     this.GROUP_URL = this.BASE_URL + "groups/";
     this.IP_URL = this.BASE_URL + "ip/?" + (new Date).getTime();
 
-    this.allURLS["Group"] = this.GROUP_URL;
-    this.allURLS["Test"] = this.TEST_URL;
-    this.allURLS["User"] = this.SIGNUP_URL;
+    this.allPostURLS["Group"] = this.GROUP_URL;
+    this.allPostURLS["Test"] = this.TEST_URL;
+    this.allPutURLS["User"] = this.SIGNUP_URL;
 }
 
   public getPostUrlByEntity(entity){
-    if(this.allURLS[entity] != undefined && this.allURLS[entity].length > 0){
-      return this.allURLS[entity];
+    if(this.allPostURLS[entity] != undefined && this.allPostURLS[entity].length > 0){
+      return this.allPostURLS[entity];
+    } else {
+      return this.BASE_URL;
+    }
+  }
+  public getPutUrlByEntity(entity){
+    if(this.allPutURLS[entity] != undefined && this.allPutURLS[entity].length > 0){
+      return this.allPutURLS[entity];
     } else {
       return this.BASE_URL;
     }

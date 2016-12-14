@@ -719,6 +719,34 @@ exports.changePassword = function (req, res, next) {
 };
 
 /**
+ * Change a users info
+ */
+exports.updateInfo = function (req, res, next) {
+  var userId = req.user._id;
+  console.log("===========req.user._id: "+ req.user._id);
+  console.log("===========req.body['phone_number']: "+ req.body['phone_number']);
+  var newUser = req.body;
+  printObject(req.body);
+
+
+  var query = {'phone_number':req.body['phone_number']};
+
+  User.findOneAndUpdate(query, newUser, {upsert:true}, function(err, doc){
+    if (err) return res.status(500).send(err);
+    return res.status(200).send("succesfully saved");
+  });
+/*
+  User.findById(userId, function (err, user) {
+    newUser.update(function (err, user) {
+      if (err) return next(err);
+      if (!user) return res.status(401).send('Unauthorized');
+      res.status(200).json(user);
+    });
+  });
+  */
+};
+
+/**
  * Get my info
  */
 exports.me = function (req, res, next) {
@@ -738,3 +766,12 @@ exports.me = function (req, res, next) {
 exports.authCallback = function (req, res, next) {
   res.redirect('/');
 };
+
+function printObject(object){
+  var output = '';
+  for (var property in object) {
+    output += property + ': ' + object[property]+'; ';
+  }
+  console.log(output);
+
+}

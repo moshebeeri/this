@@ -8,11 +8,11 @@
 <ion-header>
   <ion-navbar [hidden]="toggleToolbar">
     <ion-title>contacts</ion-title>
-    <button menuToggle>
+    <button ion-button menuToggle>
       <ion-icon name="menu"></ion-icon>
     </button>
     <ion-buttons end>
-      <button (click)="toggleToolbars()">
+      <button ion-button (click)="toggleToolbars()">
         <ion-icon name="search"></ion-icon>
       </button>
     </ion-buttons>
@@ -39,11 +39,11 @@
 </ion-navbar>-->
 
 <ion-content padding class="contacts">
-  <button (click)="sendAndCheckContacts()">Send Contacts</button>
-  <button (click)="back()">Back</button>
-  <button (click)='sendSMS("0523325411")'>SMS</button>
+  <button ion-button (click)="sendAndCheckContacts()">Send Contacts</button>
+  <button ion-button (click)="back()">Back</button>
+  <button ion-button (click)='sendSMS("0523325411")'>SMS</button>
   <img src='assets/img/loading.gif' >
-  <button (click)="checkContacts()">Check Contacts</button>
+  <button ion-button (click)="checkContacts()">Check Contacts</button>
 
   {{xxx}}
   <!--{{xContacts}}-->
@@ -80,7 +80,7 @@
       </ion-avatar>
       <h2>{{contact.displayName}}</h2>
       <p>{{contact.phoneNumbers[0].value}}</p>
-      <button *ngIf='!inviteButtons[contact.phoneNumbers[0].value]["invite"]' (click)="sendSMS(contact.phoneNumbers[0].value)" item-right>INVITE</button>
+      <button ion-button *ngIf='!inviteButtons[contact.phoneNumbers[0].value]["invite"]' (click)="sendSMS(contact.phoneNumbers[0].value)" item-right>INVITE</button>
     </ion-item>
 	<!--<ion-infinite-scroll (infinite)="doInfinite($event)">
 		<ion-infinite-scroll-content></ion-infinite-scroll-content>

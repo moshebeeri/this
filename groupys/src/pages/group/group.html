@@ -1,17 +1,17 @@
 <ion-header>
   <ion-navbar>
-    <button menuToggle>
+    <button ion-button menuToggle>
       <ion-icon name="menu"></ion-icon>
     </button>
     <ion-title>Group</ion-title>
     <ion-buttons end>
-      <button (click)="onSubmitForm()">
+      <button ion-button (click)="onSubmitForm()">
         <ion-icon name="checkmark"></ion-icon>
       </button>
-
     </ion-buttons>
   </ion-navbar>
 </ion-header>
+
 
 
 
@@ -33,8 +33,8 @@
       <ion-option value="ADMIN_INVITE">ADMIN_INVITE</ion-option>
       <ion-option value="MEMBER_INVITE">MEMBER_INVITE</ion-option>
     </ion-select></ion-item>
-    <button type="submit">Submit</button>
-    <button type="button" (click)="onClearForm()">Reset</button>
+    <button ion-button type="submit">Submit</button>
+    <button ion-button type="button" (click)="onClearForm()">Reset</button>
   </form>
   <div padding></div>
   <div padding></div>

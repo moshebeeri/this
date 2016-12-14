@@ -5,8 +5,6 @@ import { MyApp } from './app.component';
 import { Page1 } from '../pages/page1/page1';
 import { Page2 } from '../pages/page2/page2';
 import { MyAccountPage } from '../pages/my-account/my-account';
-import { NameModal } from '../pages/my-account/modals/nameModal';
-import { PictureModal } from '../pages/my-account/modals/pictureModal';
 import { PhotoPage } from '../pages/photo/photo';
 import { PhotoComponent } from '../pages/photo/photo-component/photo-component';
 import { RegisterPage} from '../pages/register/register';
@@ -35,8 +33,6 @@ import {PhotoService} from '../pages/photo/photo-service';
     Page1,
     Page2,
     MyAccountPage,
-    NameModal,
-    PictureModal,
     PhotoPage,
     PhotoComponent,
     RegisterPage,
@@ -59,8 +55,6 @@ import {PhotoService} from '../pages/photo/photo-service';
     Page1,
     Page2,
     MyAccountPage,
-    NameModal,
-    PictureModal,
     PhotoPage,
     PhotoComponent,
     RegisterPage,

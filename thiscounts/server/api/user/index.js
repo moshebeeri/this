@@ -14,6 +14,7 @@ router.get('/password/:phone_number', controller.recover_password);
 router.get('/verification/:code', auth.isAuthenticated(), controller.verification);
 router.get('/verify', auth.isAuthenticated(), controller.verify);
 router.put('/:id/password', auth.isAuthenticated(), controller.changePassword);
+router.put('/', auth.isAuthenticated(), controller.updateInfo);
 router.get('/:id', auth.isAuthenticated(), controller.show);
 router.get('/phone_number/:phone_number', auth.isAuthenticated(), controller.showByPhone);
 router.post('/check_phone_numbers', auth.isAuthenticated(), controller.checkPhoneNumbers);

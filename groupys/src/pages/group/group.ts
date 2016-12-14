@@ -54,11 +54,12 @@ export class GroupPage {
 
   ngOnInit() {
     let isUpload = false;
+    let httpMethod = 'POST';
     
     this.formBuilderService.buildFormByEntity('Group').subscribe(
       data => this.entityForm = data
     );
-    this.formBuilderService.buildHTMLByEntity('Group',this.formID, isUpload ,[],[],[]).subscribe(
+    this.formBuilderService.buildHTMLByEntity('Group',this.formID, isUpload ,httpMethod , [],[],[]).subscribe(
       data => this.bodyHTML = data
     );
 		//this.controlArray = this.entityForm.find('controlArrayField') as ControlArray;
