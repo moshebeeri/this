@@ -169,7 +169,7 @@ function group_follow_group(following_group_id, group_to_follow_id, res){
 }
 
 function add_user_to_group_admin(user_id, group, res){
-   graphModel.relate_ids(user_id, 'GROUP_ADMIN', group._id);
+	graphModel.relate_ids(user_id, 'GROUP_ADMIN', group._id);
   group.admins.push(user_id);
   Group.save(function (err) {
     if (err) { return handleError(res, err); }
@@ -203,27 +203,56 @@ exports.add_admin = function(req, res) {
 //   ]
 // },
 exports.add_user = function(req, res) {
-    Group.findById(req.params.to_group, function (err, group) {
-      if(err) { return handleError(res, err); }
-      if(!group) { return res.status(404).send('no group'); }
+	Group.findById(req.params.to_group, function (err, group) {
+		if(err) { return handleError(res, err); }
+		if(!group) { return res.status(404).send('no group'); }
 
-      if(group.add_policy == 'OPEN'){
-        if(req.user._id ==  req.params.user )
-          return user_follow_group(req.user._id, group, res);
-        else
-          return res.status(404).send('Group add policy OPEN - authenticated user may only add himself');
+		if(group.add_policy == 'OPEN'){
+			if(req.user._id ==  req.params.user )
+				return user_follow_group(req.user._id, group, res);
+			else
+				return res.status(404).send('Group add policy OPEN - authenticated user may only add himself');
+		}
+		if(group.add_policy == 'CLOSE'){
+			if(utils.defined(_.find(group.admins, req.user._id)))
+				return user_follow_group(req.user._id, group, res);
+			else
+				return res.status(404).send('Group add policy CLOSE - only admin may add users');
+		}
+		if(group.add_policy == 'REQUEST' ||
+			group.add_policy == 'ADMIN_INVITE' ||
+			group.add_policy == 'MEMBER_INVITE' )
+			return handleError(res, 'add policy ' + group.add_policy + ' not implemented');
+	});
+};
+
+//router.get('/add/users/:to_group', auth.isAuthenticated(), controller.add_users);
+// add_policy: {
+//   type: String,
+//     required : true,
+// enum: [
+//     'OPEN',         //  any one can add himself
+//     'CLOSE',        //  only admin adds
+//     'REQUEST',      //  anyone can request to be added
+//     'ADMIN_INVITE', //  admin invite
+//     'MEMBER_INVITE' //  member invite
+//   ]
+// },
+exports.add_users = function(req, res) {
+	Group.findById(req.params.to_group, function (err, group) {
+		if(err) { return handleError(res, err); }
+		if(!group) { return res.status(404).send('no group'); }
+
+    if(utils.defined(_.find(group.admins, req.user._id) && (group.add_policy == 'OPEN' || group.add_policy == 'CLOSE'))){
+      for(var user in req.body.users) {
+        user_follow_group(user, group, res);
       }
-      if(group.add_policy == 'CLOSE'){
-        if(utils.defined(_.find(group.admins, req.user._id)))
-          return user_follow_group(req.user._id, group, res);
-        else
-          return res.status(404).send('Group add policy CLOSE - only admin may add users');
-      }
-      if(group.add_policy == 'REQUEST' ||
-        group.add_policy == 'ADMIN_INVITE' ||
-        group.add_policy == 'MEMBER_INVITE' )
-        return handleError(res, 'add policy ' + group.add_policy + ' not implemented');
-  });
+    }
+    else if(group.add_policy == 'REQUEST' || group.add_policy == 'ADMIN_INVITE' || group.add_policy == 'MEMBER_INVITE' )
+      return handleError(res, 'add policy ' + group.add_policy + ' not implemented');
+    else
+      return res.status(404).send('Can not add users');
+	});
 };
 
 //router.get('/add/:group/:to_group', auth.isAuthenticated(), controller.add_group);

@@ -31,7 +31,9 @@ var GroupSchema = new Schema({
       'MEMBER_INVITE' //  member invite
     ]
   },
-  pictures: []
+  pictures: [],
+  formID: {type: String, required: true}
+
 
 });
 

@@ -1,0 +1,115 @@
+<!--
+  Generated template for the ContactsPage page.
+
+  See http://ionicframework.com/docs/v2/components/#navigation for more info on
+  Ionic pages and navigation.
+-->
+
+<ion-header>
+  <ion-navbar [hidden]="toggleToolbar">
+    <ion-title>contacts</ion-title>
+    <button ion-button menuToggle>
+      <ion-icon name="menu"></ion-icon>
+    </button>
+    <ion-buttons end>
+      <button ion-button (click)="toggleToolbars()">
+        <ion-icon name="search"></ion-icon>
+      </button>
+    </ion-buttons>
+  </ion-navbar>
+
+</ion-header>
+
+<ion-toolbar [hidden]="!toggleToolbar">
+  <ion-searchbar primary
+     [(ngModel)]="queryText"
+     (ionInput)="searchLowerCase()"
+     (ionCancel)="toggleToolbars()"
+     showCancelButton = "true"
+     placeholder="Search"
+     debounce="500">
+  </ion-searchbar>
+</ion-toolbar>
+<!--
+<ion-navbar *navbar>
+  <button menuToggle>
+    <ion-icon name="menu"></ion-icon>
+  </button>
+  <ion-title>contacts</ion-title>
+</ion-navbar>-->
+
+<ion-content padding class="contacts">
+  <button ion-button (click)="sendAndCheckContacts()">Send Contacts</button>
+  <button ion-button (click)="back()">Back</button>
+  <button ion-button (click)='sendSMS("0523325411")'>SMS</button>
+  <img src='assets/img/loading.gif' >
+  <button ion-button (click)="checkContacts()">Check Contacts</button>
+
+  {{xxx}}
+  <!--{{xContacts}}-->
+  <!--<img style="width: 35px"  src='img/avatar3?time=' + {{xxx}} >
+  <img style="width: 35px"  src='img/050-746-9936?time=' + {{xxx}} >-->
+
+  <!--<img src="img/avatar.png"  height="42" width="42">
+  <img src="img/1111.png" error="img/avatar.png" height="42" width="42">-->
+  <!--<img style="width: 35px" class="img-circle" [src]='getImageUrl("0507469936")' (load)="onImageLoaded()" (error)='onImageError("0507469936")' />-->
+  <!--<img [hidden]='isImage["999"]' style="width: 35px" class="img-circle" [src]='getImageUrl("999")' (load)="onImageLoaded()" (error)='src=""' />-->
+  <!--<img [src]='getImageUrl("999")' onerror="this.src='img/avatar3.png'">
+  <img [src]='getImageUrl("0507469936")' onerror="this.src='img/avatar3.png'">-->
+  <!--<img style="width: 35px" class="img-circle" [src]='getImageUrl("999")' (load)='onImageLoaded()' (error)='onImageError("999")' onerror="this.src='img/avatar3.png'">
+  <button [hidden]='isImage["999"]' (click)="sendContacts()">Invite</button>
+  <img style="width: 35px" class="img-circle" [src]='getImageUrl("0507469936")' (load)='onImageLoaded()' (error)='onImageError("0507469936")' onerror="this.src='img/avatar3.png'">
+  <button *ngIf='isImage["0507469936"]' (click)="sendContacts()">Invite</button>-->
+
+  <!--<ion-item-group>
+    <template ngFor #contact [ngForOf]="phoneContacts">
+      <ion-item >{{contact.displayName}}</ion-item>
+      <ion-item >{{contact.phoneNumbers}}</ion-item>
+      <img style="width: 35px" class="img-circle" [src]='getImageUrl(contact.phoneNumbers)' (load)="onImageLoaded()" (error)='onImageError(contact.phoneNumbers)' onerror="this.src='img/avatar3.png'">
+      <ion-item >isImage[contact.phoneNumbers]</ion-item>
+      <button *ngIf='isImage[contact.phoneNumbers] == true' (click)="sendContacts()">Invite</button>
+    </template>
+  </ion-item-group>-->
+
+
+  <ion-list [hidden]="queryText" [virtualScroll]="phoneContacts2">
+    <!--<template ngFor #contact [ngForOf]="phoneContacts">-->
+    <ion-item *virtualItem="let contact" on-hold="onHold(contact)">
+      <ion-avatar item-left>
+        <img [src]='getImageUrl(contact.phoneNumbers[0].value)' (load)="onImageLoaded(contact.phoneNumbers[0].value)" (error)='onImageError(contact.phoneNumbers[0].value)' onerror="this.src='assets/img/avatar3.png'">
+      </ion-avatar>
+      <h2>{{contact.displayName}}</h2>
+      <p>{{contact.phoneNumbers[0].value}}</p>
+      <button ion-button *ngIf='!inviteButtons[contact.phoneNumbers[0].value]["invite"]' (click)="sendSMS(contact.phoneNumbers[0].value)" item-right>INVITE</button>
+    </ion-item>
+	<!--<ion-infinite-scroll (infinite)="doInfinite($event)">
+		<ion-infinite-scroll-content></ion-infinite-scroll-content>
+	</ion-infinite-scroll>
+
+    <!--<div id="contact.phoneNumbers">
+      <button *ngIf='!isImage[contact.phoneNumbers]' (click)="sendContacts()">INVITE</button>
+    </div>-->
+    <!--</template>-->
+    <!--<button *ngIf='isImage[contact.phoneNumbers]' (click)="sendContacts()">Invite</button>-->
+    <!--<img src="{{isPic(contact.phoneNumbers)}}" onerror="noPic()" height="42" width="42">-->
+    <!--<ion-item >{{checkContact(contact.phoneNumbers)}}</ion-item>-->
+    <!--<ion-item checkContact(contact.phoneNumbers)></ion-item>-->
+    <!--<ion-item >{{contact.emails}}</ion-item>-->
+  </ion-list>
+
+  <!--<ion-list [hidden]="!queryText" [virtualScroll]="items">-->
+  <ion-list [hidden]="!queryText">
+    <!--<template ngFor #contact [ngForOf]="phoneContacts">
+    <ion-item *virtualItem="#contact2">-->
+    <ion-item *ngFor="let contact2 of items" on-hold="onHold(contact2)">
+      <ion-avatar item-left>
+        <img [src]='getImageUrl(contact2.phoneNumbers)' (load)="onImageLoaded(contact2.phoneNumbers)" (error)='onImageError(contact2.phoneNumbers)' onerror="this.src='assets/img/avatar3.png'">
+      </ion-avatar>
+      <h2>{{contact2.displayName}}</h2>
+      <p>{{contact2.phoneNumbers}}</p>
+      <button *ngIf='!inviteButtons[contact2.phoneNumbers]["invite"]' (click)="sendSMS(contact2.phoneNumbers)" item-right>INVITE</button>
+    </ion-item>
+  </ion-list>
+
+</ion-content>
+

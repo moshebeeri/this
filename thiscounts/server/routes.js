@@ -15,6 +15,7 @@ module.exports = function(app) {
   app.use('/api/invites', require('./api/invite'));
   app.use('/api/reviews', require('./api/review'));
   app.use('/api/phone_numbers', require('./api/phone_number'));
+  app.use('/api/phonebooks', require('./api/phonebook'));
   app.use('/api/images', require('./api/image'));
   app.use('/api/campaigns', require('./api/campaign'));
   app.use('/api/cardTypes', require('./api/cardType'));
@@ -36,9 +37,10 @@ module.exports = function(app) {
   app.use('/api/promotions', require('./api/promotion'));
   app.use('/api/things', require('./api/thing'));
   app.use('/api/users', require('./api/user'));
-	
+  app.use('/api/ip', require('./components/ip'));
+
   app.use('/api/tests', require('./api/test'));
-  
+
   app.use('/api/breeze', require('./components/breeze'));
 
   app.use('/auth', require('./auth'));
