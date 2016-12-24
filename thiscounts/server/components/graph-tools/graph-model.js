@@ -209,6 +209,25 @@ GraphModel.prototype.incoming_ids = function related_incoming_ids(start, name, r
   });
 };
 
+// util.format("MATCH (s { _id:'{%s}' })<-[r:%s]-(ret:%s) " + "return ret._id ", start, name, ret_type)
+//"ORDER BY r.name DESC " +
+GraphModel.prototype.query_ids = function query_ids(query, order, skip, limit, callback){
+  var query_str  = util.format("%s %s skip %d limit %d", query, order, skip, limit);
+  db.query(query_str, function(err, related) {
+    if (err) { callback(err, null) }
+    else callback(null, related)
+  });
+};
+
+GraphModel.prototype.query_objects = function query_objects(schema, query, order, skip, limit, callback){
+  query_ids(query, order, skip, limit, function(err, _ids) {
+    if (err) { callback(err, null) }
+    schema.find({}).where('_id').in(_ids).exec(function (err, objects) {
+      if (err) { callback(err, null) }
+      else callback(null, objects)
+    });
+  });
+};
 
 GraphModel.prototype.followers = function followers(userId, skip, limit, callback){
   related_type_id_dir(userId, 'FOLLOW', 'user', 'in', skip, limit, callback);

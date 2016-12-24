@@ -90,22 +90,6 @@ function group_follow_group_activity(following, followed) {
 
 // Creates a new group in the DB.
 exports.create = function(req, res) {
-	console.log("--------------------------------------------");
-	console.log(req);
-	console.log("--------------------------------------------");
-
-	//req.body._id = req.body.id;
-
-	/*var d = new Date();
-  var n = d.getTime();
-	console.log(n);
-
-	req.body.created = Date.now();*/
-	console.log(req.body);
-	console.log("--------------------------------------------");
-	console.log(req.user._id);
-	console.log("--------------------------------------------");
-	//req.body.pictures = [];
   Group.create(req.body, function(err, group) {
     if(err) { return handleError(res, err); }
     graphModel.reflect(group, to_graph(group), function (err) {
@@ -278,18 +262,18 @@ exports.add_group = function(req, res) {
   });
 };
 
-//router.get('/add/:group/:to_group', auth.isAuthenticated(), controller.add_group);
-exports.members = function(req, res) {
-  Group.findById(req.params.id, function (err, group) {
-    if(err) { return handleError(res, err); }
-    if(!group) { return res.send(404); }
-    //user must be one of the admins
-    if(utils.defined(_.find(group.admins, req.user._id)))
-      return group_follow_group(req.params.group, group, res);
-    else
-      return res.send(404, 'Only group admin may follow other groups');
-  });
-};
+// //router.get('/add/:group/:to_group', auth.isAuthenticated(), controller.add_group);
+// exports.members = function(req, res) {
+//   Group.findById(req.params.id, function (err, group) {
+//     if(err) { return handleError(res, err); }
+//     if(!group) { return res.send(404); }
+//     //user must be one of the admins
+//     if(utils.defined(_.find(group.admins, req.user._id)))
+//       return group_follow_group(req.params.group, group, res);
+//     else
+//       return res.send(404, 'Only group admin may follow other groups');
+//   });
+// };
 
 exports.following_groups = function (req, res) {
   Group.findById(req.params.id, function (err, group) {
@@ -325,6 +309,5 @@ exports.following_users = function (req, res) {
 
 
 function handleError(res, err) {
-  //return res.send(500, err);
   return res.status(500).send(err);
 }
