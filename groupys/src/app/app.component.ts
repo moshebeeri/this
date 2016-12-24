@@ -1,186 +1,135 @@
-import {Component, ViewChild} from '@angular/core';
-//import {ionicBootstrap, Platform, MenuController, Nav, Storage, LocalStorage} from 'ionic-angular';
-import {Platform, MenuController, Nav } from 'ionic-angular';
-import {StatusBar, Geolocation, Splashscreen} from 'ionic-native';
-import { BreezeBridgeAngular2Module } from 'breeze-bridge-angular2';
+import { Component, ViewChild } from '@angular/core';
 
-import {Http} from '@angular/http';
-import {Type} from '@angular/core';
+import { Events, MenuController, Nav, Platform } from 'ionic-angular';
+import { Splashscreen, StatusBar } from 'ionic-native';
+import { Storage } from '@ionic/storage';
 
-import { Page1 } from '../pages/page1/page1';
-import { Page2 } from '../pages/page2/page2';
+import { AccountPage } from '../pages/account/account';
+import { LoginPage } from '../pages/login/login';
+import { SignupPage } from '../pages/signup/signup';
+import { TabsPage } from '../pages/tabs/tabs';
+import { TutorialPage } from '../pages/tutorial/tutorial';
+import { SupportPage } from '../pages/support/support';
 
-import {MyAccountPage} from '../pages/my-account/my-account';
+import { ConferenceData } from '../providers/conference-data';
+import { UserData } from '../providers/user-data';
 
-import {DeviceService} from '../services/device/device';
-import {AuthService} from '../services/auth/auth';
-import {GlobalHeaders} from '../services/headers/headers';
-import {GlobalsService} from '../services/globals/globals';
-import {EntityManagerFactoryService} from '../services/breezejs/entityManagerFactory';
-import {MyCameraService} from '../services/my-camera/my-camera';
-import {PhotoService} from '../pages/photo/photo-service';
-import {RegisterPage} from '../pages/register/register';
-import {CountriesPage} from '../pages/countries/countries';
-import {HomePage} from '../pages/home/home';
-import {ContactsPage} from '../pages/contacts/contacts';
-import {GroupPage} from '../pages/group/group';
-
-/*
-
-import {ListPage} from './pages/list/list';
-import {MyAccountPage} from './pages/my-account/my-account';
-import {GroupPage} from './pages/group/group';
-
-import {CouponsPage} from './pages/coupons/coupons';
-import {WishListPage} from './pages/wish-list/wish-list';
-import {FavouriteGroupsPage} from './pages/favourite-groups/favourite-groups';
-import {MyOffersPage} from './pages/my-offers/my-offers';
-import {MessagesPage} from './pages/messages/messages';
-import {ProfilePage} from './pages/profile/profile';
-import {LoginPage} from './pages/login/login';
-
-
-
-import {BreezePage} from './pages/breeze/breeze';
-import {LazyLoadPage} from './pages/lazy-load/lazy-load';*/
-
-
-
-
-
+export interface PageInterface {
+  title: string;
+  component: any;
+  icon: string;
+  logsOut?: boolean;
+  index?: number;
+}
 
 @Component({
-  templateUrl: 'app.html',
-  providers: [
-    DeviceService,
-    AuthService,
-    GlobalHeaders,
-    GlobalsService,
-    EntityManagerFactoryService,
-    MyCameraService,
-    PhotoService
-
-  ]
-  /**config: {
-    mode: "md"
-  }, // http://ionicframework.com/docs/v2/api/config/Config/
-   **/
-  /*11
-  providers: [
-    AuthService,
-    GlobalHeaders,
-    GlobalsService,
-    EntityManagerFactoryService,
-    BreezeBridgeAngular2Module
-  ]
-  11*/
+  templateUrl: 'app.template.html'
 })
-export class MyApp {
+export class GroupysApp {
+  // the root nav is a child of the root app component
+  // @ViewChild(Nav) gets a reference to the app's root nav
   @ViewChild(Nav) nav: Nav;
 
-  rootPage: any = HomePage;
-  //rootPage: any = Page1;
-  pages: Array<{title: string, component: any}>;
-  authenticated: boolean;
-  isLoggedIn: boolean;
-  isAuthorized: boolean;
-  isAdmin: boolean;
-  currentLatitude: number;
-  currentLongitude: number;
-  ////local: Storage = new Storage(LocalStorage);
+  // List of pages that can be navigated to from the left menu
+  // the left menu only works after login
+  // the login page disables the left menu
+  appPages: PageInterface[] = [
+    //{ title: 'Schedule', component: TabsPage, icon: 'calendar' },
+    //{ title: 'Speakers', component: TabsPage, index: 1, icon: 'contacts' },
+    { title: 'Groups', component: TabsPage, index: 0, icon: 'contacts' },
+    { title: 'Contacts', component: TabsPage, index: 1, icon: 'contact' },
+    { title: 'Map', component: TabsPage, index: 2, icon: 'map' },
+    //{ title: 'About', component: TabsPage, index: 3, icon: 'information-circle' }
+  ];
+  loggedInPages: PageInterface[] = [
+    { title: 'Account', component: AccountPage, icon: 'person' },
+    { title: 'Support', component: SupportPage, icon: 'help' },
+    { title: 'Logout', component: TabsPage, icon: 'log-out', logsOut: true }
+  ];
+  loggedOutPages: PageInterface[] = [
+    { title: 'Login', component: LoginPage, icon: 'log-in' },
+    { title: 'Support', component: SupportPage, icon: 'help' },
+    { title: 'Signup', component: SignupPage, icon: 'person-add' }
+  ];
+  rootPage: any;
 
-  ////constructor(private globals: GlobalsService, private menu: MenuController, private platform: Platform, private auth: AuthService, public http: Http, private entityManagerFactoryService: EntityManagerFactoryService) {
-  constructor(private menu: MenuController, private platform: Platform, public http: Http) {
-    this.initializeApp();
-    /*
-    let x = this.globals.getPostUrlByEntity('group');
-    console.log("++++++++++++++++++++++++++++++++++++++++++++++++++");
-    console.log(x);
-    console.log("++++++++++++++++++++++++++++++++++++++++++++++++++");
-    */
-/*11
-    this.auth = auth;
-    this.entityManagerFactoryService = entityManagerFactoryService;
-    this.authenticated = this.auth.authenticated();
+  constructor(
+    public events: Events,
+    public userData: UserData,
+    public menu: MenuController,
+    public platform: Platform,
+    public confData: ConferenceData,
+    public storage: Storage
+  ) {
+    // Call any initial plugins when ready
+    platform.ready().then(() => {
+      StatusBar.styleDefault();
+      Splashscreen.hide();
+    });
 
-    this.isLoggedIn = this.auth.isLoggedIn();
-    this.isAuthorized = this.auth.isAuthorized('user');
-    this.isAdmin = this.auth.isAdmin();
- 11*/
-    console.log("isLoggedIn3: " +  this.isLoggedIn);
-    console.log("isAuthorized3: " +  this.isAuthorized);
-    console.log("isAdmin3: " +  this.isAdmin);
-	
-    /*11
-    this.local.remove('countryNameDetails');
-    this.local.remove('callingCodesDetails');
-    this.local.remove('callingDigitsDetails');
-    this.local.remove('digitsValidator');
-    this.local.remove('isSIM');
-    this.local.remove('countryCode');
-    this.local.set('isSIM', 'true');
-    11*/
-	  console.log("####################################################");
-    ////this.entityManagerFactoryService.emFactory().subscribe(data => console.log(data));
-	  console.log("####################################################");
+    // Check if the user has already seen the tutorial
+    this.userData.checkHasSeenTutorial().then((hasSeenTutorial) => {
+      if (hasSeenTutorial === null) {
+        // User has not seen tutorial
+        this.rootPage = TutorialPage;
+      } else {
+        // User has seen tutorial
+        this.rootPage = TabsPage;
+      }
+    });
 
+    // load the conference data
+    confData.load();
 
-    // used for an example of ngFor and navigation
-    this.pages = [
-      { title: 'Home', component: HomePage },
-      { title: 'Page One', component: Page1 },
-      { title: 'Page Two', component: Page2 },
-      { title: 'Register', component: RegisterPage},
-      { title: 'My Account', component: MyAccountPage },
-      { title: 'Contacts', component: ContactsPage},
-      { title: 'Group', component: GroupPage },
-      { title: 'Countries', component: CountriesPage}
-      /*11
-       
-      
-      { title: 'My Account', component: MyAccountPage },
-      
-      { title: 'Group', component: GroupPage },
+    // decide which menu items should be hidden by current login status stored in local storage
+    this.userData.hasLoggedIn().then((hasLoggedIn) => {
+      this.enableMenu(hasLoggedIn === true);
+    });
 
-      //
-      { title: 'Coupons', component: CouponsPage },
-      { title: 'Wish List', component: WishListPage },
-      { title: 'Favourite Groups', component: FavouriteGroupsPage },
-      { title: 'My offers', component: MyOffersPage },
-      { title: 'Messages', component: MessagesPage },
-      { title: 'Profile', component: ProfilePage},
-      { title: 'Login', component: LoginPage},
-      
-      { title: 'Breeze', component: BreezePage},
-	    { title: 'Lazy Load', component: LazyLoadPage },
-      { title: 'List', component: ListPage }
-      11*/
-    ];
-
+    this.listenToLoginEvents();
   }
 
-  initializeApp() {
-    this.platform.ready().then(() => {
-        // Okay, so the platform is ready and our plugins are available.
-        // Here you can do any higher level native things you might need.
-        StatusBar.styleDefault();
-        Splashscreen.hide();
+  openPage(page: PageInterface) {
+    // the nav component was found using @ViewChild(Nav)
+    // reset the nav to remove previous pages and only have this page
+    // we wouldn't want the back button to show in this scenario
+    if (page.index) {
+      this.nav.setRoot(page.component, { tabIndex: page.index });
 
-      Geolocation.getCurrentPosition().then((resp) => {
-          this.currentLatitude = resp.coords.latitude;
-          this.currentLongitude = resp.coords.longitude;
-          console.log("Latitude: ", resp.coords.latitude);
-          console.log("Longitude: ", resp.coords.longitude);
+    } else {
+      this.nav.setRoot(page.component).catch(() => {
+        console.log("Didn't set nav root");
       });
+    }
+
+    if (page.logsOut === true) {
+      // Give the menu time to close before changing to logged out
+      setTimeout(() => {
+        this.userData.logout();
+      }, 1000);
+    }
+  }
+
+  openTutorial() {
+    this.nav.setRoot(TutorialPage);
+  }
+
+  listenToLoginEvents() {
+    this.events.subscribe('user:login', () => {
+      this.enableMenu(true);
+    });
+
+    this.events.subscribe('user:signup', () => {
+      this.enableMenu(true);
+    });
+
+    this.events.subscribe('user:logout', () => {
+      this.enableMenu(false);
     });
   }
 
-  openPage(page) {
-    // close the menu when clicking a link from the menu
-    this.menu.close();
-    // navigate to the new page if it is not the current page
-    this.nav.setRoot(page.component);
+  enableMenu(loggedIn) {
+    this.menu.enable(loggedIn, 'loggedInMenu');
+    this.menu.enable(!loggedIn, 'loggedOutMenu');
   }
 }
-
-////ionicBootstrap(MyApp);

@@ -242,25 +242,19 @@ exports.add_user = function(req, res) {
 	});
 };
 
-//router.get('/add/users/:to_group', auth.isAuthenticated(), controller.add_users);
-// add_policy: {
-//   type: String,
-//     required : true,
-// enum: [
-//     'OPEN',         //  any one can add himself
-//     'CLOSE',        //  only admin adds
-//     'REQUEST',      //  anyone can request to be added
-//     'ADMIN_INVITE', //  admin invite
-//     'MEMBER_INVITE' //  member invite
-//   ]
-// },
+//router.post('/add/users/:to_group', auth.isAuthenticated(), controller.add_users);
+// user[phone_number] and user[sms_verified]
 exports.add_users = function(req, res) {
+    console.log("=================== ADD USERS TO GROUP ===================");
 	Group.findById(req.params.to_group, function (err, group) {
 		if(err) { return handleError(res, err); }
 		if(!group) { return res.status(404).send('no group'); }
 
     if(utils.defined(_.find(group.admins, req.user._id) && (group.add_policy == 'OPEN' || group.add_policy == 'CLOSE'))){
+      console.log("=================== USERS FOLLOW GROUP ===================");
+      console.log(req.body.users);
       for(var user in req.body.users) {
+        console.log(user);
         user_follow_group(user, group, res);
       }
     }

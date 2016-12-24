@@ -1,78 +1,109 @@
 import { NgModule } from '@angular/core';
-import { Storage } from '@ionic/storage';
+
 import { IonicApp, IonicModule } from 'ionic-angular';
-import { MyApp } from './app.component';
-import { Page1 } from '../pages/page1/page1';
-import { Page2 } from '../pages/page2/page2';
-import { MyAccountPage } from '../pages/my-account/my-account';
-import { PhotoPage } from '../pages/photo/photo';
-import { PhotoComponent } from '../pages/photo/photo-component/photo-component';
-import { RegisterPage} from '../pages/register/register';
-import { CountriesPage} from '../pages/countries/countries';
-import { ProfilePage} from '../pages/profile/profile';
-import { HomePage} from '../pages/home/home';
-import { ContactsPage} from '../pages/contacts/contacts';
-import { GroupPage} from '../pages/group/group';
-import { DebugPanelComponent} from '../services/form-builder/debug-panel/debug-panel.component';
-import { FormButtonsComponent} from '../services/form-builder/form-buttons-component/form-buttons-component';
-import { FormBuilderService} from '../services/form-builder/form-builder';
+import { Storage } from '@ionic/storage';
+import { SMS, Contacts } from 'ionic-native';
+
+import { GroupysApp } from './app.component';
+
+import { AboutPage } from '../pages/about/about';
+import { PopoverPage } from '../pages/about-popover/about-popover';
+import { AccountPage } from '../pages/account/account';
+import { LoginPage } from '../pages/login/login';
+import { MapPage } from '../pages/map/map';
+import { SchedulePage } from '../pages/schedule/schedule';
+import { ScheduleFilterPage } from '../pages/schedule-filter/schedule-filter';
+import { SessionDetailPage } from '../pages/session-detail/session-detail';
+import { SignupPage } from '../pages/signup/signup';
+import { SpeakerDetailPage } from '../pages/speaker-detail/speaker-detail';
+import { SpeakerListPage } from '../pages/speaker-list/speaker-list';
+import { TabsPage } from '../pages/tabs/tabs';
+import { TutorialPage } from '../pages/tutorial/tutorial';
+import { SupportPage } from '../pages/support/support';
+import { CountryPage } from '../pages/country/country';
+import { ContactPage } from '../pages/contact/contact';
+import { GroupListPage } from '../pages/group-list/group-list';
+import { GroupPage } from '../pages/group/group';
+import { GroupContactPage } from '../pages/group-contact/group-contact';
 
 
+import { FormBuilderService } from '../components/form-builder/form-builder';
+import { DebugPanelComponent } from '../components/form-builder/debug-panel/debug-panel.component';
+import { FormButtonsComponent } from '../components/form-builder/form-buttons-component/form-buttons-component';
+import { PhotoComponent } from '../components/photo/photo-component/photo-component';
+import { ContactComponent } from '../components/contact-component/contact-component';
+import { PhotoPage } from '../components/photo/photo';
 
+import { ConferenceData } from '../providers/conference-data';
+import { UserData } from '../providers/user-data';
+import { CountryData } from '../providers/country-data';
+import { UrlData } from '../providers/url-data';
+import { HeaderData } from '../providers/header-data';
+import { ContactData } from '../providers/contact-data';
+import { EntityData } from '../providers/entity-data/entity-data';
+import { CameraData } from '../providers/camera-data';
+import { DeviceData } from '../providers/device-data';
 
-
-import {DeviceService} from '../services/device/device';
-import {MyCameraService} from '../services/my-camera/my-camera';
-import {GlobalsService} from '../services/globals/globals';
-import {GlobalHeaders} from '../services/headers/headers';
-import {PhotoService} from '../pages/photo/photo-service';
 
 @NgModule({
   declarations: [
-    MyApp,
-    Page1,
-    Page2,
-    MyAccountPage,
-    PhotoPage,
-    PhotoComponent,
-    RegisterPage,
-    CountriesPage,
-    ProfilePage,
-    HomePage,
-    ContactsPage,
+    GroupysApp,
+    AboutPage,
+    AccountPage,
+    LoginPage,
+    MapPage,
+    PopoverPage,
+    SchedulePage,
+    ScheduleFilterPage,
+    SessionDetailPage,
+    SignupPage,
+    SpeakerDetailPage,
+    SpeakerListPage,
+    TabsPage,
+    TutorialPage,
+    SupportPage,
+    CountryPage,
+    ContactPage,
+    GroupListPage,
     GroupPage,
+    GroupContactPage,
     DebugPanelComponent,
-    FormButtonsComponent
-
-
+    FormButtonsComponent,
+    PhotoComponent,
+    PhotoPage,
+    ContactComponent
   ],
   imports: [
-    IonicModule.forRoot(MyApp)
+    IonicModule.forRoot(GroupysApp)
   ],
   bootstrap: [IonicApp],
   entryComponents: [
-    MyApp,
-    Page1,
-    Page2,
-    MyAccountPage,
-    PhotoPage,
-    PhotoComponent,
-    RegisterPage,
-    CountriesPage,
-    ProfilePage,
-    HomePage,
-    ContactsPage,
+    GroupysApp,
+    AboutPage,
+    AccountPage,
+    LoginPage,
+    MapPage,
+    PopoverPage,
+    SchedulePage,
+    ScheduleFilterPage,
+    SessionDetailPage,
+    SignupPage,
+    SpeakerDetailPage,
+    SpeakerListPage,
+    TabsPage,
+    TutorialPage,
+    SupportPage,
+    CountryPage,
+    ContactPage,
+    GroupListPage,
     GroupPage,
+    GroupContactPage,
     DebugPanelComponent,
-    FormButtonsComponent
+    FormButtonsComponent,
+    PhotoComponent,
+    PhotoPage,
+    ContactComponent
   ],
-  providers: [
-    Storage
-    /*DeviceService,
-    MyCameraService,
-    GlobalsService,
-    GlobalHeaders,
-    PhotoService*/
-  ]
+  providers: [ConferenceData, UserData, CountryData, UrlData, HeaderData, ContactData, Storage, SMS, Contacts, EntityData, CameraData, DeviceData, FormBuilderService]
 })
-export class AppModule {}
+export class AppModule { }
