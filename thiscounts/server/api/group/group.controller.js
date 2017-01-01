@@ -90,6 +90,22 @@ function group_follow_group_activity(following, followed) {
 
 // Creates a new group in the DB.
 exports.create = function(req, res) {
+  console.log("--------------------------------------------");
+  console.log(req);
+  console.log("--------------------------------------------");
+
+  //req.body._id = req.body.id;
+
+  /*var d = new Date();
+   var n = d.getTime();
+   console.log(n);
+
+   req.body.created = Date.now();*/
+  console.log(req.body);
+  console.log("--------------------------------------------");
+  console.log(req.user._id);
+  console.log("--------------------------------------------");
+  //req.body.pictures = [];
   Group.create(req.body, function(err, group) {
     if(err) { return handleError(res, err); }
     graphModel.reflect(group, to_graph(group), function (err) {
@@ -160,6 +176,10 @@ function user_follow_group(user_id, group, res){
   graphModel.relate_ids(user_id, 'FOLLOW', group._id);
   user_follow_group_activity(group, user_id);
   return res.json(200, group);
+}
+function users_follow_group(user_id, group, res){
+  graphModel.relate_ids(user_id, 'FOLLOW', group._id);
+  user_follow_group_activity(group, user_id);
 }
 
 function group_follow_group(following_group_id, group_to_follow_id, res){
@@ -238,8 +258,14 @@ exports.add_users = function(req, res) {
       console.log("=================== USERS FOLLOW GROUP ===================");
       console.log(req.body.users);
       for(var user in req.body.users) {
-        console.log(user);
-        user_follow_group(user, group, res);
+        console.log(req.body.users[user]);
+        console.log("==============================: " + Object.keys(req.body.users)[Object.keys(req.body.users).length-1]);
+        console.log("==============================: " + user);
+        if(user != Object.keys(req.body.users)[Object.keys(req.body.users).length-1]){
+          users_follow_group(req.body.users[user], group, res);
+        } else {
+          user_follow_group(req.body.users[user], group, res);
+        }
       }
     }
     else if(group.add_policy == 'REQUEST' || group.add_policy == 'ADMIN_INVITE' || group.add_policy == 'MEMBER_INVITE' )

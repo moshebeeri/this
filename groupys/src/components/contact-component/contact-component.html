@@ -37,10 +37,11 @@
 
   <ion-item [hidden]="!isContact" *ngFor="let contact of groupContacts; let i = index;" (click)="removeContact($event, contact)"  (press)="pressEvent($event, contact)">
     <ion-avatar item-left>
-      <img [src]='getImageUrl(contact.phoneNumbers)' (load)="onImageLoaded(contact.phoneNumbers)" (error)='onImageError(contact.phoneNumbers)' onerror="this.src='assets/img/avatar3.png'">
+      <img *ngIf='contact["pictures"]' [src]='contact["pictures"][0][0]["pictures"][0]' (error)="this.src='assets/img/avatar3.png'" onerror="this.src='assets/img/avatar3.png'">
+      <img *ngIf='!contact["pictures"]' src="assets/img/avatar3.png">
     </ion-avatar>
-    <h2>{{contact.displayName}}</h2>
-    <p>{{contact.phoneNumbers[0].value}}</p>
+    <h2>{{contact.name}}</h2>
+    <p>{{contact.number}}</p>
     <button ion-button (click)="removeContact(i, contact)" item-right>Remove</button>
 
   </ion-item>
@@ -49,14 +50,15 @@
   <div padding></div>
   <div padding></div>
 
-  <ion-list *ngIf="pageType === 'page'" [hidden]="queryText" [virtualScroll]="phoneContacts2">
+  <ion-list *ngIf="pageType === 'page'" [hidden]="queryText" [virtualScroll]="phonebook">
     <ion-item *virtualItem="let contact" (click)="tapEvent($event, contact)" (press)="pressEvent($event, contact)">
       <ion-avatar item-left>
-        <img [src]='getImageUrl(contact.phoneNumbers[0].value)' (load)="onImageLoaded(contact.phoneNumbers[0].value)" (error)='onImageError(contact.phoneNumbers[0].value)' onerror="this.src='assets/img/avatar3.png'">
+        <img *ngIf='contact["pictures"]' [src]='contact["pictures"][0][0]["pictures"][0]' (error)="this.src='assets/img/avatar3.png'" onerror="this.src='assets/img/avatar3.png'">
+        <img *ngIf='!contact["pictures"]' src="assets/img/avatar3.png">
       </ion-avatar>
-      <h2>{{contact.displayName}}</h2>
-      <p>{{contact.phoneNumbers[0].value}}</p>
-      <button ion-button *ngIf='!inviteButtons[contact.phoneNumbers[0].value]["invite"]' (click)="sendSMS(contact.phoneNumbers[0].value)" item-right>INVITE</button>
+      <h2>{{contact.name}}</h2>
+      <p>{{contact.number}}</p>
+      <button ion-button *ngIf='!contact.isMember' (click)="sendSMS(contact.number)" item-right>INVITE</button>
     </ion-item>
   </ion-list>
 
@@ -64,11 +66,12 @@
 
     <ion-item *ngFor="let contact of items" (click)="tapEvent($event, contact)"  (press)="pressEvent($event, contact)">
       <ion-avatar item-left>
-        <img [src]='getImageUrl(contact.phoneNumbers)' (load)="onImageLoaded(contact.phoneNumbers)" (error)='onImageError(contact.phoneNumbers)' onerror="this.src='assets/img/avatar3.png'">
+        <img *ngIf='contact["pictures"]' [src]='contact["pictures"][0][0]["pictures"][0]' (error)="this.src='assets/img/avatar3.png'" onerror="this.src='assets/img/avatar3.png'">
+        <img *ngIf='!contact["pictures"]' src="assets/img/avatar3.png">
       </ion-avatar>
-      <h2>{{contact.displayName}}</h2>
-      <p>{{contact.phoneNumbers}}</p>
-      <button ion-button *ngIf='!inviteButtons[contact.phoneNumbers]["invite"]' (click)="sendSMS(contact.phoneNumbers)" item-right>INVITE</button>
+      <h2>{{contact.name}}</h2>
+      <p>{{contact.number}}</p>
+      <button ion-button *ngIf='!contact.isMember' (click)="sendSMS(contact.phoneNumbers)" item-right>INVITE</button>
     </ion-item>
   </ion-list>
 
@@ -76,26 +79,29 @@
 
 
 
-  <ion-list *ngIf="pageType === 'wizard'" [hidden]="queryText" [virtualScroll]="phoneContacts2">
+  <ion-list *ngIf="pageType === 'wizard'" [hidden]="queryText" [virtualScroll]="phonebook2">
     <ion-item *virtualItem="let contact" (press)="pressEvent($event, contact)">
       <ion-avatar item-left>
-        <img [src]='getImageUrl(contact.phoneNumbers[0].value)' (load)="onImageLoaded(contact.phoneNumbers[0].value)" (error)='onImageError(contact.phoneNumbers[0].value)' onerror="this.src='assets/img/avatar3.png'">
+        <img *ngIf='contact["pictures"]' [src]='contact["pictures"][0][0]["pictures"][0]' (error)="this.src='assets/img/avatar3.png'" onerror="this.src='assets/img/avatar3.png'">
+        <img *ngIf='!contact["pictures"]' src="assets/img/avatar3.png">
       </ion-avatar>
-      <h2>{{contact.displayName}}</h2>
-      <p>{{contact.phoneNumbers[0].value}}</p>
-      <button ion-button *ngIf='!inviteButtons[contact.phoneNumbers[0].value]["invite"]' (click)="sendSMS(contact.phoneNumbers[0].value)" item-right>INVITE</button>
+      <h2>{{contact.name}}</h2>
+      <p>{{contact.number}}</p>
+      <!--<button ion-button *ngIf='!contact.isMember' (click)="sendSMS(contact.number)" item-right>INVITE</button>-->
     </ion-item>
   </ion-list>
+
 
   <ion-list *ngIf="pageType === 'wizard'" [hidden]="!queryText">
 
     <ion-item *ngFor="let contact of items" (press)="pressEvent($event, contact)">
       <ion-avatar item-left>
-        <img [src]='getImageUrl(contact.phoneNumbers)' (load)="onImageLoaded(contact.phoneNumbers)" (error)='onImageError(contact.phoneNumbers)' onerror="this.src='assets/img/avatar3.png'">
+        <img *ngIf='contact["pictures"]' [src]='contact["pictures"][0][0]["pictures"][0]' (error)="this.src='assets/img/avatar3.png'" onerror="this.src='assets/img/avatar3.png'">
+        <img *ngIf='!contact["pictures"]' src="assets/img/avatar3.png">
       </ion-avatar>
-      <h2>{{contact.displayName}}</h2>
-      <p>{{contact.phoneNumbers}}</p>
-      <button ion-button *ngIf='!inviteButtons[contact.phoneNumbers]["invite"]' (click)="sendSMS(contact.phoneNumbers)" item-right>INVITE</button>
+      <h2>{{contact.name}}</h2>
+      <p>{{contact.number}}</p>
+      <!--<button ion-button *ngIf='!contact.isMember' (click)="sendSMS(contact.phoneNumbers)" item-right>INVITE</button>-->
     </ion-item>
   </ion-list>
 

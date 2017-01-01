@@ -74,11 +74,26 @@ exports.create = function (req, res) {
   console.log(req.user._id);
 
   console.log("==============================");
-  Phonebook.create({userId: userId, phonebook: phonebook.phonebook}, function(err, phonebook) {
-    if(err) { return handleError(res, err); }
+
+  Phonebook.findOne({userId: userId}, function (err, user) {
+    if (user) {
+      Phonebook.update({userId: userId, phonebook: phonebook.phonebook}, function(err, phonebook) {
+        if(err) { return handleError(res, err); }
+      });
+      checkPhones(phonebook.phonebook, res);
+
+    } else {
+      Phonebook.create({userId: userId, phonebook: phonebook.phonebook}, function(err, phonebook) {
+        if(err) { return handleError(res, err); }
+
+        checkPhones(phonebook.phonebook, res);
+      });
+    }
   });
 
-  checkPhones(phonebook.phonebook, res);
+
+
+
   /*
   mongoose.connection.db.collection('phonebook', function (err, collection) {
     if (err) return logger.error(err.message);
@@ -139,22 +154,42 @@ function checkPhones (phoneBook, res){
     // this anonymous function will run when the
     // callback is called
     console.log("callback called! " + users);
-    users = normalizePhoneBookList(users);
+    users = normalizePhoneBookList(users, list);
     res.status(200).json(users);
   });
 };
 
 
-function normalizePhoneBookList(data){
+function normalizePhoneBookList(users, phonebook){
   console.log("--------------------normalizePhoneBookList-----------------------");
   var tempData = {};
-  for ( var contact in data ) {
-    console.log(data[contact]);
-    tempData[data[contact]["phone_number"]] = true;
+  var tempData2 = [];
+  var counterUser = 0;
+  for ( var user in users ) {
+    console.log(users[user]["phone_number"]);
+    tempData[users[user]["phone_number"]] = true;
+    tempData2[counterUser] = users[user]["phone_number"];
+    counterUser++;
   }
-  console.log(tempData);
+  console.log("-------------------------------------------");
+  console.log(tempData2);
+  console.log("--------------------phonebook-----------------------");
+  console.log(JSON.stringify(users));
+  for ( var contact in phonebook ) {
+    if(tempData2.indexOf(phonebook[contact]["number"])>-1){
+      phonebook[contact]["pictures"] = users[tempData2.indexOf(phonebook[contact]["number"])]["pictures"];
+      phonebook[contact]["_id"] = users[tempData2.indexOf(phonebook[contact]["number"])]["_id"];
+      phonebook[contact]["sms_verified"] = users[tempData2.indexOf(phonebook[contact]["number"])]["sms_verified"];
+      phonebook[contact]["isMember"] = true;
+      console.log("---" + JSON.stringify(phonebook[contact]));
+    } else {
+      phonebook[contact]["isMember"] = false;
+    }
+    //console.log(contact + " : " + phonebook[contact]["number"].length);
+  }
+  console.log("--------------------phonebook-----------------------");
   console.log("--------------------normalizePhoneBookList-----------------------");
-  return tempData;
+  return phonebook;
 }
 
 function getPhoneNumbers(list, users, callback){
@@ -177,7 +212,7 @@ function getPhoneNumbers(list, users, callback){
 
   mongoose.connection.db.collection("users").find( {phone_number: {$in: userPhones}} ).each(function(err, user) {
     //if (err) return handleError(err);
-    if (err) callback( err, users);
+    if (err) callback( err, users, list);
     else {
       //console.log(JSON.stringify(user));
       if (user && user._id) {
@@ -189,7 +224,7 @@ function getPhoneNumbers(list, users, callback){
       } else {                        // end of list
         console.log("end--end--end--end--end--end--end--");
         //res.status(200).json(users);
-        callback( null, users );
+        callback( null, users, list );
       }
     }
   });

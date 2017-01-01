@@ -39,36 +39,37 @@ import { PhotoService} from '../../photo/photo-service';
       margin-left: -25px;
     }
   `],
-	providers :[DeviceData, PhotoService, CameraData]
+  providers :[DeviceData, PhotoService, CameraData]
 
 })
 export class PhotoComponent{
   @Input() data;
   @Input() formID;
   @Input() isUpload;
-	public base64Image: string;
-	cameraDestinationType: any;
+  public base64Image: string;
+  cameraDestinationType: any;
   local: any;
   entityType: string;
-	
-	constructor(public actionSheetCtrl: ActionSheetController, private storage: Storage, private deviceService: DeviceData, private photoService: PhotoService, private myCameraService: CameraData, public nav: NavController){
+  serviceName: string;
 
+  constructor(public actionSheetCtrl: ActionSheetController, private storage: Storage, private deviceService: DeviceData, private photoService: PhotoService, private myCameraService: CameraData, public nav: NavController){
+    this.serviceName = "PhotoComponent ======";
     this.actionSheetCtrl = actionSheetCtrl;
     this.local = storage;
-		this.nav = nav;
-		this.base64Image =  'assets/img/avatar3.png';
-		this.cameraDestinationType = this.deviceService.getCameraDestinationType();
-		this.getBase64Image();
+    this.nav = nav;
+    this.base64Image =  'assets/img/avatar3.png';
+    this.cameraDestinationType = this.deviceService.getCameraDestinationType();
+    this.getBase64Image();
     this.entityType = this.data;
-	}
+  }
 
-	
-	getBase64Image(){
+
+  getBase64Image(){
     this.local.get('base64Image').then(base64Image => {
-      //alert("IN getBase64Image");
+      //console.log("IN getBase64Image");
       if(this.deviceService.getImageLocalStorage(base64Image).length>-1){
         this.base64Image = this.deviceService.getImageLocalStorage(base64Image);
-        //alert('base64Image: ' + this.base64Image);
+        //console.log('base64Image: ' + this.base64Image);
       } else {
         this.base64Image =  'assets/img/avatar3.png';
       }
@@ -80,24 +81,24 @@ export class PhotoComponent{
   }
 
   pictureModal() {
-    alert("this.data: " + this.data);
-    alert("this.formID: " + this.formID);
-    alert("this.isUpload: " + this.isUpload);
-    alert("this.entityType: " + this.entityType);
-    
+    console.log(this.serviceName + "this.data: " + this.data);
+    console.log(this.serviceName + "this.formID: " + this.formID);
+    console.log(this.serviceName + "this.isUpload: " + this.isUpload);
+    console.log(this.serviceName + "this.entityType: " + this.entityType);
+
     this.photoService.navigateToPhoto(this.base64Image);
     /*
      let pictureModal = Modal.create(PictureModal);
      this.nav.present(pictureModal);
      */
   }
-	
+
   getGalleryPic(){
     //this.base64Image = this.myCameraService.getGalleryPic();
     //this.myCameraService.getGalleryPic().subscribe(data => this.setImage(data));
-    alert("this.entityType: " + this.entityType);
-    alert("this.formID: " + this.formID);
-    alert("this.isUpload: " + this.isUpload);
+    console.log(this.serviceName + "this.entityType: " + this.entityType);
+    console.log(this.serviceName + "this.formID: " + this.formID);
+    console.log(this.serviceName + "this.isUpload: " + this.isUpload);
     this.myCameraService.getGalleryPic(this.entityType, this.formID, this.isUpload );
   }
 
@@ -106,27 +107,27 @@ export class PhotoComponent{
     //this.myCameraService.takePicture().subscribe(data => this.setImage(data));
     this.myCameraService.takePicture(this.entityType, this.formID, this.isUpload);
   }
-	
-	presentActionSheet() {
+
+  presentActionSheet() {
     let actionSheet = this.actionSheetCtrl.create({
       title: 'Profile Photo',
       buttons: [
         {
           text: 'Gallery',
           handler: () => {
-            console.log('Gallery clicked');
+            console.log(this.serviceName + 'Gallery clicked');
             this.getGalleryPic();
           }
         },{
           text: 'Camera',
           handler: () => {
-            console.log('Camera clicked');
+            console.log(this.serviceName + 'Camera clicked');
             this.takePicture();
           }
         },{
           text: 'Remove Photo',
           handler: () => {
-            console.log('Remove Photo clicked');
+            console.log(this.serviceName + 'Remove Photo clicked');
             this.base64Image =  'assets/img/avatar3.png';
             this.local.remove('base64Image');
           }
@@ -134,12 +135,12 @@ export class PhotoComponent{
           text: 'Cancel',
           role: 'cancel',
           handler: () => {
-            console.log('Cancel clicked');
+            console.log(this.serviceName + 'Cancel clicked');
           }
         }
       ]
     });
     actionSheet.present();
   }
-	
+
 }

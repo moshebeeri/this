@@ -10,8 +10,10 @@ export class DeviceData {
 
   //local: Storage = new Storage(LocalStorage);
   local:any;
-  
+  serviceName: string;
+
   constructor(private storage: Storage, private platform: Platform) {
+    this.serviceName = "DeviceData ======";
     this.local = storage;
     this.platform = platform;
   }
@@ -30,7 +32,7 @@ export class DeviceData {
       :this.platform.is('tablet')? 'tablet'
       :this.platform.is('windows')? 'windows'
       :null;
-    
+
     return deviceType;
 
   }
@@ -40,7 +42,7 @@ export class DeviceData {
       :(this.getDevicePlatform() === 'ipad')? Camera.DestinationType.NATIVE_URI
       :(this.getDevicePlatform() === 'iphone')? Camera.DestinationType.NATIVE_URI
       :Camera.DestinationType.DATA_URL;
-    
+
     return cameraDestinationType;
   }
   getImageData(data){
@@ -50,7 +52,7 @@ export class DeviceData {
       :(this.getDevicePlatform() === 'iphone')? data
       :"data:image/jpeg;base64," + data;
     return imageData;
-    
+
   }
   setImageLocalStorage(data){
     let imageData = (this.getDevicePlatform() === 'android')? data
@@ -93,12 +95,11 @@ export class DeviceData {
 
   getLocalFileSystemURL(image){
     function resolveLocalFileErrorHandler(error) {
-      alert("error");
       console.log(error);
     }
     function resolveLocalFileSuccessHandler(fileEntry) {
-      alert("success");
-      alert(fileEntry.toInternalURL());
+      console.log("success");
+      console.log(this.serviceName + "fileEntry: " + fileEntry.toInternalURL());
       window.localStorage.setItem('filePath', fileEntry.toInternalURL());
       //window.localStorage.setItem('filePath2', fileEntry.toInternalURL());
     }
@@ -133,6 +134,6 @@ export class DeviceData {
   }
   */
 
-  
+
 
 }

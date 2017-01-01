@@ -38,24 +38,24 @@
     "ionic_bundler": "webpack"
   },
   "cordovaPlugins": [
-    "cordova-plugin-crosswalk-webview",
-
-    "cordova-plugin-whitelist",
-    "cordova-plugin-console",
-    "cordova-plugin-statusbar",
-    "cordova-plugin-device",
-    "ionic-plugin-keyboard",
-    "cordova-plugin-splashscreen",
     "cordova-plugin-camera",
     "cordova-plugin-compat",
+    "cordova-plugin-console",
     "cordova-plugin-contacts",
     "cordova-plugin-crop",
+    "cordova-plugin-device",
     "cordova-plugin-file",
     "cordova-plugin-file-transfer",
     "cordova-plugin-geolocation",
+    "cordova-plugin-googlemaps",
+    "cordova-plugin-inappbrowser",
     "cordova-plugin-network-information",
     "cordova-plugin-sim",
-    "cordova-plugin-cache"
+    "cordova-plugin-splashscreen",
+    "cordova-plugin-statusbar",
+    "cordova-plugin-whitelist",
+    "cordova-plugin-crosswalk-webview",
+    "ionic-plugin-keyboard"
   ],
   "cordovaPlatforms": [
     "ios",

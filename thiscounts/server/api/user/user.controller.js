@@ -249,7 +249,7 @@ exports.create = function (req, res, next) {
  * Creates a new demo user
  */
 exports.createDemo = function (req, res, next) {
-	for(var i =0; i<11;i++){
+	for(var i =0; i<12;i++){
 		var newUser = new User(req.body);
 
 		newUser.provider = 'local';
@@ -257,7 +257,9 @@ exports.createDemo = function (req, res, next) {
 		newUser.sms_verified = true;
 		//var randomPhone = randomstring.generate({length: 6, charset: 'numeric'});
 		//newUser.phone_number = "972111" + i + i + i + i + i + i ;
-    if(i === 10) {
+    if(i === 11) {
+      newUser.phone_number = "972543133943";
+    } else if(i === 10) {
       newUser.phone_number = "972523325411";
     } else {
       newUser.phone_number = "0" + i + i + i + i + i + i ;
@@ -265,10 +267,10 @@ exports.createDemo = function (req, res, next) {
 		newUser.pictures = {
 			 "0": {
 				 "pictures": {
-					 "0": "https: \/\/s3.amazonaws.com\/thiscounts\/images\/bx\/mX\/rv-orig.jpeg",
-					 "1": "https: \/\/s3.amazonaws.com\/thiscounts\/images\/bx\/mX\/rv-medium.jpeg",
-					 "2": "https: \/\/s3.amazonaws.com\/thiscounts\/images\/bx\/mX\/rv-small.jpeg",
-					 "3": "https: \/\/s3.amazonaws.com\/thiscounts\/images\/bx\/mX\/rv-thumb.jpeg"
+					 "0": "https:\/\/s3.amazonaws.com\/thiscounts\/images\/bx\/mX\/rv-orig.jpeg",
+					 "1": "https:\/\/s3.amazonaws.com\/thiscounts\/images\/bx\/mX\/rv-medium.jpeg",
+					 "2": "https:\/\/s3.amazonaws.com\/thiscounts\/images\/bx\/mX\/rv-small.jpeg",
+					 "3": "https:\/\/s3.amazonaws.com\/thiscounts\/images\/bx\/mX\/rv-thumb.jpeg"
 				},
 				 "meta": [
 

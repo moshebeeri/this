@@ -13,9 +13,10 @@ import { UserData } from '../../providers/user-data';
 })
 export class AccountPage {
   username: string;
+  serviceName: string;
 
   constructor(public alertCtrl: AlertController, public nav: NavController, public userData: UserData) {
-
+    this.serviceName = "AccountPage ======";
   }
 
   ngAfterViewInit() {
@@ -54,7 +55,7 @@ export class AccountPage {
 
   getUsername() {
     this.userData.getUsername().then((username) => {
-      alert("========" + username);
+      console.log(this.serviceName + "username: " + username);
       this.username = username;
     });
   }

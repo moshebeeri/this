@@ -1,7 +1,8 @@
 import { Component, NgModule } from '@angular/core';
 import { NavController, NavParams } from 'ionic-angular';
 //import {ControlGroup, Control, ControlArray, FormBuilder} from '@angular/common';
-import {FormGroup, FormArray, FormBuilder, Validators} from '@angular/forms';
+import { FormGroup, FormArray, FormBuilder, Validators } from '@angular/forms';
+import { TabsPage } from '../tabs/tabs';
 //import {ChangeDetectionStrategy} from '@angular/core';
 import {Http} from '@angular/http';
 
@@ -35,13 +36,14 @@ export class GroupPage {
   photoData: string;
   formID: string;
   entities: Array<string>;
+  serviceName:string;
 
   constructor(private params:NavParams, private nav:NavController, private entitiesService:EntityData, private formBuilderService:FormBuilderService) {
-    this.nav = nav;
+    this.serviceName = "GroupPage ======";
     this.photoData = "Group";
 
     this.formID = this.params.get("formID");
-    alert("PARAM==PARAM==PARAM==PARAM==: "+ this.formID);
+    console.log(this.serviceName + "formID: "+ this.formID);
     if(this.formID === undefined){
       this.formID = this.unixID();
     }
@@ -67,12 +69,13 @@ export class GroupPage {
       data => this.bodyHTML = data
     );
     //this.controlArray = this.entityForm.find('controlArrayField') as ControlArray;
-    console.log(this.bodyHTML);
+    console.log(this.serviceName + "bodyHTML: " + this.bodyHTML);
   }
   onSubmitForm() {
-    console.log(this.entityForm.value);
+    console.log(this.serviceName + "entityForm: " + this.entityForm.value);
     //this.entityForm.value.creator = 999999;
     this.formBuilderService.onSubmitForm(this.entityForm);
+    this.nav.setRoot(TabsPage);
   }
   onClearForm() {
     /*this.formBuilderService.buildFormByEntity('Group').subscribe(

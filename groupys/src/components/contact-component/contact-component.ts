@@ -32,6 +32,7 @@ export class ContactComponent{
   xxContacts: string;
   xxxContacts: string;
   phonebook: any;
+  phonebook2: any;
   contentHeader: Headers = new Headers({"Content-Type": "application/json"});
   error: string;
   picExist: boolean;
@@ -48,20 +49,16 @@ export class ContactComponent{
   toggleToolbar:boolean;
   isContact:boolean;
   items: Array<string>;
+  serviceName: string;
 
   constructor(private _app: App, private storage: Storage, private platform: Platform, public nav: NavController, public contacts: Contacts, private globals:UrlData, private globalHeaders:HeaderData, private http:Http, private cdr:ChangeDetectorRef, private contactsService:ContactData) {
-
-    this.platform = platform;
-    this.http = http;
-    this.globals = globals;
-    this.globalHeaders = globalHeaders;
-    this.contactsService = contactsService;
+    this.serviceName = "ContactComponent ======";
     this.groupContacts = [];
     this.groupContactsIndex = {};
     //this.contentHeader = this.globalHeaders.getMyGlobalHeaders();
     this.storage.get('token').then(token => {
       this.contentHeader.append('Authorization', 'Bearer ' + token);
-      //alert("token: " + JSON.stringify(this.contentHeader));
+      //console.log("token: " + JSON.stringify(this.contentHeader));
     }).catch(error => {
       console.log(error);
     });
@@ -79,13 +76,13 @@ export class ContactComponent{
     this.offset = 100;
     this.queryText = '';
     this.isContact = false;
+    this.inviteButtons = {};
     //TODO set formID
     //this.storage.set('groupContacts', []);
     this.getContacts();
-	}
+  }
 
   getContacts(){
-    //alert(this.pageType);
     let options = {
       multiple: true,
       hasPhoneNumber: true,
@@ -94,19 +91,18 @@ export class ContactComponent{
     this.platform.ready().then(() => {
       //Contacts.find(['*'], options).then((contact) => {
       Contacts.find(['phoneNumbers','displayName','emails'], options).then((contact) => {
-        //console.log(contact);
         //contact = this.sortByDisplayName(contact);
         contact.sort(this.compare);
         this.phoneContacts2 = contact;
         this.phoneContacts = this.normalizeContacts(contact);
         this.inviteButtons = this.normalizePhoneBookList(contact);
         this.phonebook = [];
+        this.phonebook2 = [];
         for(let i=0, length=contact.length; i < length; i++){
           this.phonebook[i] = {};
           if(contact[i]['phoneNumbers']){
             this.phonebook[i]['normalized_number'] = contact[i]['phoneNumbers'][0].value || null;
             this.phonebook[i]['number'] = contact[i]['phoneNumbers'][0].value || null;
-
             this.isImage[contact[i]['phoneNumbers'][0].value] = true;
           }
           if(contact[i]['displayName']){
@@ -115,6 +111,7 @@ export class ContactComponent{
           if(contact[i]['emails']){
             this.phonebook[i]['email'] = contact[i]['emails'][0].value || null;
           }
+          this.phonebook[i]['isMember'] = false;
         }
 
         this.uploadPhonebookContacts();
@@ -130,26 +127,39 @@ export class ContactComponent{
   }
 
   uploadPhonebookContacts(){
-    alert(JSON.stringify(this.contentHeader));
+    console.log(this.serviceName + "contentHeader: " + JSON.stringify(this.contentHeader));
     this.http.post(this.globals.PHONE_BOOK_URL, JSON.stringify({phonebook:this.phonebook}), { headers: this.contentHeader })
       .map(res => res.json())
       .subscribe(
-        data => this.compareInviteButtons(data),
+        data => this.updatedPhonebook(data),
         err => this.error = err,
-        () => console.log('Phone Book Export Complete')
+        () => console.log(this.serviceName + 'Phone Book Export Complete')
       );
   }
   checkContacts(){
     this.http.post(this.globals.CHECK_PHONE_NUMBERS_URL, JSON.stringify({phonebook:this.phonebook}), { headers: this.contentHeader })
       .map(res => res.json())
       .subscribe(
-        data => console.log("checkContacts"),
+        data => console.log(this.serviceName + "checkContacts"),
         err => this.error = err,
         () => console.log('Phone Book Check Complete')
       );
   }
+  updatedPhonebook(contacts){
+    console.log(this.serviceName + JSON.stringify(contacts));
+    this.phonebook = contacts;
+    let counter = 0;
+    for(let i=0, length=contacts.length; i < length; i++){
+      if(contacts[i]['isMember']){
+        console.log("******************" + this.serviceName + JSON.stringify(contacts[i]));
+        this.phonebook2[counter] = {};
+        this.phonebook2[counter] = contacts[i];
+        counter++;
+      }
+    }
+  }
   compareInviteButtons(data){
-    //alert(JSON.stringify(data));
+    console.log(this.serviceName + "compareInviteButtons: " + JSON.stringify(data));
     for ( let contact in data ) {
       //console.log("----------------compareInviteButtons-------------------");
       //console.log(data[contact]);
@@ -160,7 +170,7 @@ export class ContactComponent{
   }
 
   normalizePhoneBookList(data){
-    console.log("--------------------normalizePhoneBookList-----------------------");
+    console.log(this.serviceName + "normalizePhoneBookList-----------------------");
     let tempData = {};
     for ( let contact in data ) {
 
@@ -192,7 +202,7 @@ export class ContactComponent{
   }
 
   normalizeContacts(data){
-    console.log("--------------------normalizeContacts-----------------------");
+    console.log(this.serviceName + "normalizeContacts-----------------------");
     //console.log(JSON.stringify(data));
     let tempData = [];
     let i=0;
@@ -215,7 +225,7 @@ export class ContactComponent{
 
     }
     //console.log(JSON.stringify(tempData));
-    console.log("--------------------normalizeContacts-----------------------");
+    console.log(this.serviceName + "normalizeContacts-----------------------");
 
     //let allContacts = [];
     //allContacts.push(tempData);
@@ -223,8 +233,8 @@ export class ContactComponent{
   }
 
   sendSMS(phoneNumber){
-    //alert("sending SMS");
-    //alert(phoneNumber);
+    //console.log("sending SMS");
+    //console.log(phoneNumber);
     let number = phoneNumber;
     let message = 'Check out GROUPYS discounts for your smartphone. Download it today from https://groupys.com/dl/';
     let options = {
@@ -241,9 +251,9 @@ export class ContactComponent{
     this.platform.ready().then(() => {
       SMS.send(number, message, options)
         .then(()=>{
-          //alert("success");
+          //console.log("success");
         },(e)=>{
-          //alert("failed: " + e);
+          //console.log("failed: " + e);
         });
     });
 
@@ -290,6 +300,10 @@ export class ContactComponent{
   }
 
   private getImageUrl(phoneNumber) {
+    //console.log(this.serviceName + JSON.stringify(phoneNumber));
+    if(phoneNumber["pictures"] != undefined){
+      console.log(this.serviceName + phoneNumber["pictures"][0][0]["pictures"][0]);
+    }
     //let url = '';
     /*switch (this.imageRetries){
      case 0: {
@@ -346,63 +360,61 @@ export class ContactComponent{
     this.searchContacts(lowerInput);
   }
   searchContacts(queryText){
-    console.log(this.phoneContacts);
-    console.log(queryText);
+    console.log(this.serviceName + "phoneContacts: " + this.phoneContacts);
+    console.log(this.serviceName + "queryText: " + queryText);
     this.items = [];
-    this.contactsService.findByName(queryText,this.phoneContacts).subscribe(
+    this.contactsService.findByName(queryText,this.phonebook2).subscribe(
       data => this.items = data
     );
   }
 
   pressEvent(e, contact) {
-    alert("rawId: " + contact["rawId"]);
+    console.log(this.serviceName + "number: " + contact["number"]);
 
     this.isContact = true;
-    if(!this.groupContactsIndex[contact["rawId"]]){
+    if(!this.groupContactsIndex[contact["number"]]){
       this.groupContacts.push(contact);
-      this.groupContactsIndex[contact["rawId"]]= true;
-      alert("onPress: " + JSON.stringify(this.groupContacts));
-      alert("groupContactsIndex: " + JSON.stringify(this.groupContactsIndex));
-      //alert("index: " + this.groupContactsIndex.indexOf(contact["rawId"]));
+      this.groupContactsIndex[contact["number"]]= true;
+      console.log(this.serviceName + "onPress: " + JSON.stringify(this.groupContacts));
+      console.log(this.serviceName + "groupContactsIndex: " + JSON.stringify(this.groupContactsIndex));
+      //console.log("index: " + this.groupContactsIndex.indexOf(contact["number"]));
     } else {
-      alert("DUPLICATE");
+      console.log(this.serviceName + "DUPLICATE");
     }
   }
 
   tapEvent(e, contact) {
-    alert("rawId: " + contact["rawId"]);
+    console.log(this.serviceName + "number: " + contact["number"]);
 
     this.isContact = true;
-    if(!this.groupContactsIndex[contact["rawId"]]){
+    if(!this.groupContactsIndex[contact["number"]]){
       this.groupContacts.push(contact);
-      this.groupContactsIndex[contact["rawId"]]= true;
-      alert("onPress: " + JSON.stringify(this.groupContacts));
-      alert("groupContactsIndex: " + JSON.stringify(this.groupContactsIndex));
-      //alert("index: " + this.groupContactsIndex.indexOf(contact["rawId"]));
+      this.groupContactsIndex[contact["number"]]= true;
+      console.log(this.serviceName + "onPress: " + JSON.stringify(this.groupContacts));
+      console.log(this.serviceName + "groupContactsIndex: " + JSON.stringify(this.groupContactsIndex));
+      //console.log("index: " + this.groupContactsIndex.indexOf(contact["number"]));
     } else {
-      alert("DUPLICATE");
+      console.log(this.serviceName + "DUPLICATE");
     }
   }
   removeContact(contactIndex, contact){
-    alert("remove: " + contactIndex);
-    alert("groupContactsIndex: " + this.groupContactsIndex[contact["rawId"]]);
+    console.log(this.serviceName + "remove: " + contactIndex);
+    console.log(this.serviceName + "groupContactsIndex: " + this.groupContactsIndex[contact["number"]]);
     this.groupContacts.splice(contactIndex, 1);
-    this.groupContactsIndex[contact["rawId"]]= false;
+    this.groupContactsIndex[contact["number"]]= false;
     /*if(this.groupContacts.length === -1){
-      this.isContact = false;
-      alert("empty");
-    }*/
+     this.isContact = false;
+     console.log("empty");
+     }*/
   }
   groupContactsInfo(){
-    alert("groupContactsInfo");
+    console.log(this.serviceName + "groupContactsInfo");
     let tmpGroup = {};
     let formID = this.unixID();
     tmpGroup[formID] = {};
     tmpGroup[formID]["contacts"] = {};
     tmpGroup[formID]["contacts"] = this.groupContacts;
-    console.log("contact ****************************************");
-    console.log(JSON.stringify(tmpGroup));
-    console.log("contact ****************************************");
+    console.log(this.serviceName + "contact: " + JSON.stringify(tmpGroup));
     this.storage.set(formID, tmpGroup);
     //this._app.getRootNav().push(GroupPage, {formID: "111"});
     this.nav.push(GroupPage, {formID: formID});
@@ -413,7 +425,7 @@ export class ContactComponent{
     let n = d.getTime();
     return n.toString();
   }
-  
+
 
 
 

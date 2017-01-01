@@ -10,8 +10,11 @@ import 'rxjs/add/observable/of';
 @Injectable()
 export class EntityData {
   data: any;
+  serviceName: string;
 
-  constructor(public http: Http) { }
+  constructor(public http: Http) {
+    this.serviceName = "EntityData ======";
+  }
 
   load(): any {
     if (this.data) {
@@ -45,7 +48,7 @@ export class EntityData {
     return this.load().map(data => {
       let result =[];
       result = this.getObjects(data,'shortName',name);
-      alert("findByName result: " + JSON.stringify(result));
+      alert(this.serviceName + "findByName result: " + JSON.stringify(result));
       return result;
     });
   }

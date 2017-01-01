@@ -30,6 +30,7 @@ export class FormBuilderService {
   formID: string;
   formIdParam:any;
   httpMethod: string;
+  serviceName: string;
   //photoData: string;
   //photoFormID: string;
 
@@ -43,17 +44,17 @@ export class FormBuilderService {
     this.globals = globals;
     this.http = http;
     this.currentUser ={};
+    this.serviceName = 'FormBuilderService ======= '; 
 
     this.httpMethod = '';
     //this.photoData = "Group";
     //this.photoFormID = "Group";
-   // alert(this.params.get('formID'));
+    // console.log(this.params.get('formID'));
 
     //this.currentUser = this.auth.getCurrentUser();
     this.storage.get('user').then(user => {
       this.currentUser = JSON.parse(user);
-      alert("currentUser: " + JSON.stringify(user));
-      alert("currentUser: " + this.currentUser["_id"]);
+      console.log(this.serviceName + "currentUser: " + JSON.stringify(user));
     }).catch(error => {
       console.log(error);
     });
@@ -61,12 +62,12 @@ export class FormBuilderService {
     //this.contentHeader = this.globalHeaders.getMyGlobalHeaders();
     this.storage.get('token').then(token => {
       this.contentHeader.append('Authorization', 'Bearer ' + token);
-      alert("token: " + JSON.stringify(this.contentHeader));
+      console.log(this.serviceName + "token: " + JSON.stringify(this.contentHeader));
     }).catch(error => {
       console.log(error);
     });
 
-    alert("xxxxxxxxxxxxxxxxxxxxxxxxxxx" + JSON.stringify(this.contentHeader));
+    console.log(this.serviceName + "contentHeader: " + JSON.stringify(this.contentHeader));
     this.error = null;
 
     this.entities = [];
@@ -92,9 +93,7 @@ export class FormBuilderService {
   public buildFormByEntity(entity){
     return Observable.create(observer => {
       observer.next(this._searchEntities(entity));
-      console.log("@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@");
-      console.log(this.entities["dataProperties"]);
-      console.log("@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@");
+      console.log(this.serviceName + "dataProperties: " + this.entities["dataProperties"]);
       observer.next(this._generateFormStructure(this.entities["shortName"], this.entities["dataProperties"], this.entities["navigationProperties"]));
       observer.complete();
     });
@@ -125,20 +124,7 @@ export class FormBuilderService {
   }
 
   private _generateFormStructure(entityType, properties, navigationProperties){
-
-    /*
-     var arr = [];
-     var obj = {};
-
-     console.log(arr.constructor.prototype.hasOwnProperty('push'));//true
-     console.log(obj.constructor.prototype.hasOwnProperty('push'));// false
-
-     let x = this.controlArray;
-     console.log(x);
-
-     this.entitiesService.printSomething("cool");
-     */
-
+    
     let structureObject = {};
     let propertyArray = [];
     let controlValidators = [];
@@ -148,46 +134,27 @@ export class FormBuilderService {
     structureObject["postURL"] = this._formBuilder.control(entityType);
 
     for(let propt in properties) {
-      //console.log(propt);//logs name
-      //console.log(properties[propt]["defaultValue"]);//logs "Simon"
       if(this.excludedFields.indexOf(properties[propt]["name"]) === -1){
         if(properties[propt]["defaultValue"] === undefined){
           properties[propt]["defaultValue"] = '';
         }
-        //"validators":[{"name":"required"
-        /*console.log('########################################################');
-         console.log(JSON.stringify(properties[propt]["validators"]));
-         console.log('########################################################');
-         if(properties[propt]["validators"] != undefined){
-         let obj = _.find((properties[propt]["validators"]), function(obj) { return obj.name == 'required' });
-         console.log(obj['name']);
-         }*/
+
         if(properties[propt]["validators"] != undefined){
           controlValidators = this._getControlValidators(properties[propt]);
-
-          console.log('########################################################');
-          console.log(properties[propt]);
-          console.log(controlValidators);
-          console.log('########################################################');
+          
+          console.log(this.serviceName + "properties: " + properties[propt]);
+          console.log(this.serviceName + "controlValidators: " + controlValidators);
         }
 
 
 
         structureObject[properties[propt]["name"]] = this._setFormControls(properties[propt], controlValidators);
-        console.log(structureObject[properties[propt]["name"]]);
+        console.log(this.serviceName +  "name: " + structureObject[properties[propt]["name"]]);
       }
-
-
-
       propertyArray = [];
     }
 
-    //propertyArray[0] = this.setDefaultValue(property.defaultValue);
-    //structureObject[property.name] = propertyArray;
-
-    console.log("-------------------");
-    //console.log(structureObject);
-    console.log(this._formBuilder.group(structureObject));
+    console.log(this.serviceName + "structureObject: " + this._formBuilder.group(structureObject));
 
     return this._formBuilder.group(structureObject);
   }
@@ -220,10 +187,10 @@ export class FormBuilderService {
 
   private _setFormControls(propertyValue, controlValidators){
     let formBuilderControl;
-    console.log("***************************************");
-    console.log(propertyValue["defaultValue"][0]);
-    console.log(propertyValue["dataType"]);
-    console.log("***************************************");
+    
+    console.log(this.serviceName + "defaultValue: " + propertyValue["defaultValue"][0]);
+    console.log(this.serviceName + "dataType:" + propertyValue["dataType"]);
+    
     if((propertyValue['dataType'] === 'Boolean')){
       formBuilderControl = this._formBuilder.control('Yes', Validators.compose(controlValidators));
     } else if((typeof propertyValue["defaultValue"] === 'object') && (propertyValue["defaultValue"][0] === 'select')){
@@ -279,14 +246,11 @@ export class FormBuilderService {
 
 
   public buildHTMLByEntity(entity, formID, isUpload, httpMethod, aliasFields, excludedFields, defaultHTML){
-    alert("buildHTMLByEntity -- isUpload" + isUpload);
-    alert("buildHTMLByEntity -- entity" + entity);
-    alert("form builder -- formID: " + formID);
+    console.log(this.serviceName +  "buildHTMLByEntity -- isUpload" + isUpload);
+    console.log(this.serviceName +  "buildHTMLByEntity -- entity" + entity);
+    console.log(this.serviceName +  "formID: " + formID);
     return Observable.create(observer => {
       observer.next(this._searchEntities(entity));
-      //console.log("@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@");
-      //console.log(this.entities);
-      //console.log("@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@");
       observer.next(this._generateFormHTML(this.entities["dataProperties"], this.entities["navigationProperties"], aliasFields, excludedFields, defaultHTML, formID, isUpload, httpMethod));
       observer.complete();
     });
@@ -294,13 +258,12 @@ export class FormBuilderService {
   }
 
   public onSubmitForm(myForm) {
-
-    //myForm.value["formID"] = this.formID;
+    
     myForm.value["formID"] = this.formID;
-    alert("this.httpMethod: " + this.httpMethod);
+    console.log(this.serviceName + "this.httpMethod: " + this.httpMethod);
 
     this._setComplexValues(myForm);
-    alert("form: " + JSON.stringify(myForm.value))
+    console.log(this.serviceName + "form: " + JSON.stringify(myForm.value))
     if(this.httpMethod === 'POST'){
       this._postFormByType(myForm.value["postURL"],myForm.value);
     } else if(this.httpMethod === 'PUT'){
@@ -311,41 +274,39 @@ export class FormBuilderService {
   }
   private _postFormByType(entity, myForm){
 
-    alert("entity: " + entity);
-    alert("form: " + JSON.stringify(myForm));
-    alert("_postFormByType: " + this.contentHeader);
+    console.log(this.serviceName + "entity: " + entity);
+    console.log(this.serviceName + "form: " + JSON.stringify(myForm));
+    console.log(this.serviceName + "_postFormByType: " + this.contentHeader);
 
     let postUrl = this.globals.getPostUrlByEntity(entity);
-    alert("postUrl: " + postUrl);
+    console.log(this.serviceName + "postUrl: " + postUrl);
 
     this.http.post(postUrl, JSON.stringify(myForm), { headers: this.contentHeader })
       .map(res => res.json())
       .subscribe(
         data => this.authSuccess(data),
         err => this.error = err,
-        () => console.log('Create '+ entity + ' request Complete')
+        () => console.log(this.serviceName + 'Create '+ entity + ' request Complete')
       );
   }
   private _putFormByType(entity, myForm){
-    console.log("-------------------------------------");
-    console.log(entity);
-    alert("_putFormByType: " + this.contentHeader);
-    console.log("-------------------------------------");
+    console.log(this.serviceName + "entity: " + entity);
+    console.log(this.serviceName + "_putFormByType: " + this.contentHeader);
     let postUrl = this.globals.getPutUrlByEntity(entity);
-    console.log(postUrl);
+    console.log(this.serviceName + "postUrl: " + postUrl);
 
     this.http.put(postUrl, JSON.stringify(myForm), { headers: this.contentHeader })
       .map(res => res.json())
       .subscribe(
         data => this.authSuccess(data),
         err => this.error = err,
-        () => console.log('Create '+ entity + ' request Complete')
+        () => console.log(this.serviceName + 'Create '+ entity + ' request Complete')
       );
   }
 
   authSuccess(data) {
     console.log("SUCCESS------SUCCESS------SUCCESS------SUCCESS------SUCCESS------SUCCESS------");
-    alert("authSuccess: " + JSON.stringify(data));
+    console.log(this.serviceName + "authSuccess: " + JSON.stringify(data));
     console.log("SUCCESS------SUCCESS------SUCCESS------SUCCESS------SUCCESS------SUCCESS------");
 
     this.myCameraService.getImageToUpload(data._id, data.formID);
@@ -353,41 +314,41 @@ export class FormBuilderService {
   }
 
   private _setComplexValues(myForm){
-    alert(this.currentUser["_id"]);
-    console.log("_setComplexValues: " + JSON.stringify(myForm.value));
+    console.log(this.serviceName + "currentUser: " + this.currentUser["_id"]);
+    console.log(this.serviceName + "_setComplexValues: " + JSON.stringify(myForm.value));
     for(let propt in myForm.value) {
       switch (propt)
       {
         case "pictures":
           myForm.value[propt] = [];
-          console.log("SET PICTURES ARRAY");
+          console.log(this.serviceName +  "SET PICTURES ARRAY");
           break;
         case "_id":
           myForm.value[propt] = this.currentUser["_id"];
-          console.log("SET PICTURES ARRAY");
+          console.log(this.serviceName + "SET PICTURES ARRAY");
           break;
         case "phone_number":
           myForm.value[propt] = this.currentUser["phone_number"];
-          console.log("SET PICTURES ARRAY");
+          console.log(this.serviceName +  "SET PICTURES ARRAY");
           break;
         case "admins":
           myForm.value[propt] = this.currentUser["_id"];
-          console.log("SET ADMINS: " + this.currentUser["_id"]);
+          console.log(this.serviceName +  "SET ADMINS: " + this.currentUser["_id"]);
           break;
         case "creator":
           myForm.value[propt] = this.currentUser["_id"];
-          console.log("SET CREATOR: " + this.currentUser["_id"]);
+          console.log(this.serviceName +  "SET CREATOR: " + this.currentUser["_id"]);
           break;
         case "testing":
           myForm.value[propt] = this.currentUser["_id"];
-          console.log("SET TESTING: " + this.currentUser["_id"]);
+          console.log(this.serviceName +  "SET TESTING: " + this.currentUser["_id"]);
           break;
         default:
-          console.log('Default case:' + propt);
+          console.log(this.serviceName +  'Default case:' + propt);
           break;
       }
     }
-    console.log(myForm.value);
+    console.log(this.serviceName + "myForm: " + myForm.value);
   }
 
   private _generateFormHTML(properties, navigationProperties, aliasFields, excludedFields, defaultHTML, formID, isUpload, httpMethod){
@@ -406,13 +367,9 @@ export class FormBuilderService {
     let obj = {};
     for(let propt in properties) {
 
-      console.log("******************************************************");
-
-      console.log(properties[propt]["name"]);
+      console.log(this.serviceName +  properties[propt]["name"]);
       obj = _.find((navigationProperties), function(obj) { return obj["name"] == properties[propt]["name"]});
-      console.log(obj);
-
-      console.log("******************************************************");
+      console.log(this.serviceName +  obj);
 
       if(this.excludedFieldsHTML.indexOf(properties[propt]["name"]) === -1 && obj === undefined){
 
@@ -446,7 +403,7 @@ export class FormBuilderService {
           elementHTML = this._setHTMLArrayGroup(properties[propt], aliasFields);
         }
         else if(properties[propt]["name"] === 'pictures'){
-          alert("_generateFormHTML -- isUpload" + isUpload);
+          console.log(this.serviceName +  "_generateFormHTML -- isUpload" + isUpload);
           elementHTML = this._setHTMLPictures(this.entityType, formID, isUpload);
         }
       }
@@ -455,9 +412,7 @@ export class FormBuilderService {
     }
     bodyHTML += endForm;
 
-    console.log("-------------------");
-    //console.log(structureObject);
-    console.log(bodyHTML);
+    console.log(this.serviceName + "bodyHTML: " + bodyHTML);
     return bodyHTML;
   }
   private _setHTMLInputControls(inputType, property, aliasFields){
@@ -518,8 +473,6 @@ export class FormBuilderService {
     for(let propt in properties["defaultValue"]) {
       //shidrog
       if(propt){
-        //<option value="The Grinder">The Grinder</option>
-        //console.log("------------------------------------------------------ : " + properties["defaultValue"][0]);
         options += '<ion-option value="' + properties["defaultValue"][propt] + '">' + properties["defaultValue"][propt] + '</ion-option>' + "\n\t";
       }
     }
@@ -633,17 +586,17 @@ export class FormBuilderService {
 
   }
   private _setHTMLPictures(entityType, formID, isUpload){
-    alert("_setHTMLPictures -- isUpload" + isUpload);
-    alert("_setHTMLPictures -- formID: " + formID);
-    //alert(entityType);
+    console.log(this.serviceName + "_setHTMLPictures -- isUpload" + isUpload);
+    console.log(this.serviceName +  "_setHTMLPictures -- formID: " + formID);
+    //console.log(entityType);
     //unix
     //update form
     //send local picture id to photo component
     //this.formID = this.myCameraService.unixID();
     //this.formID = entityType;
     //this.storage.set(formID, []);
-    //alert("xxxxxxxxxx: " + formID);
-    alert('<photo-upload [formID]="'+ formID + '"' + ' [isUpload]="' + isUpload + '"' + ' [data]="' + entityType + '"' + '></photo-upload>');
+    //console.log("xxxxxxxxxx: " + formID);
+    console.log(this.serviceName +  '<photo-upload [formID]="'+ formID + '"' + ' [isUpload]="' + isUpload + '"' + ' [data]="' + entityType + '"' + '></photo-upload>');
 
     return '<photo-upload [formID]="'+ formID + '"' + ' [isUpload]="' + isUpload + '"' + ' [data]="' + formID + '"' + '></photo-upload>';
   }

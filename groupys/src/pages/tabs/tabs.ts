@@ -24,4 +24,15 @@ export class TabsPage {
     this.mySelectedIndex = navParams.data.tabIndex || 0;
   }
 
+  ionViewCanEnter(): boolean{
+    // here we can either return true or false
+    // depending on if we want to leave this view
+    let randomValue = true;
+    if(randomValue){
+      return true;
+    } else {
+      return false;
+    }
+  }
+
 }

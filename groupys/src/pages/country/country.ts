@@ -25,6 +25,7 @@ export class CountryPage {
   jsonResult:Object;
   queryText:string;
   toggleToolbar:boolean;
+  serviceName:string;
 
 
   constructor(
@@ -32,7 +33,11 @@ export class CountryPage {
     private nav:NavController,
     private countryData:CountryData
   ) {
+
+    this.serviceName = "CountryPage ======";
+
     this.local = storage;
+
 
     // If we navigated to this page, we will have an item available as a nav param
     this.countries = [];
@@ -79,7 +84,7 @@ export class CountryPage {
     this.items = [];
     this.items = countries;
     this.countries = countries;
-    alert(JSON.stringify(countries));
+    console.log(this.serviceName + "countries: " + JSON.stringify(countries));
     let tmp = {};
     for (let i = 0; i < this.items.length; i++) {
       let letter = this.items[i]['name'].toUpperCase().charAt(0);

@@ -44,7 +44,7 @@ export class GroupysApp {
   loggedInPages: PageInterface[] = [
     { title: 'Account', component: AccountPage, icon: 'person' },
     { title: 'Support', component: SupportPage, icon: 'help' },
-    { title: 'Logout', component: TabsPage, icon: 'log-out', logsOut: true }
+    { title: 'Logout', component: SignupPage, icon: 'log-out', logsOut: true }
   ];
   loggedOutPages: PageInterface[] = [
     { title: 'Login', component: LoginPage, icon: 'log-in' },
@@ -61,6 +61,7 @@ export class GroupysApp {
     public confData: ConferenceData,
     public storage: Storage
   ) {
+    console.log("app");
     // Call any initial plugins when ready
     platform.ready().then(() => {
       StatusBar.styleDefault();
@@ -74,7 +75,7 @@ export class GroupysApp {
         this.rootPage = TutorialPage;
       } else {
         // User has seen tutorial
-        this.rootPage = TabsPage;
+        this.rootPage = SignupPage;
       }
     });
 
@@ -93,9 +94,16 @@ export class GroupysApp {
     // the nav component was found using @ViewChild(Nav)
     // reset the nav to remove previous pages and only have this page
     // we wouldn't want the back button to show in this scenario
+    alert(JSON.stringify(page));
     if (page.index) {
       this.nav.setRoot(page.component, { tabIndex: page.index });
 
+    } else if(page.title === 'Logout'){
+      this.storage.remove('user');
+      
+      this.nav.setRoot(page.component).catch(() => {
+        console.log("Didn't set nav root");
+      });
     } else {
       this.nav.setRoot(page.component).catch(() => {
         console.log("Didn't set nav root");

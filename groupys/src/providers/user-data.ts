@@ -10,8 +10,11 @@ export class UserData {
   _favorites = [];
   HAS_LOGGED_IN = 'hasLoggedIn';
   HAS_SEEN_TUTORIAL = 'hasSeenTutorial';
+  serviceName: string;
 
-  constructor(public events: Events, public storage: Storage) {}
+  constructor(public events: Events, public storage: Storage) {
+    this.serviceName = "UserData ======";
+  }
 
   hasFavorite(sessionName) {
     return (this._favorites.indexOf(sessionName) > -1);
@@ -41,7 +44,7 @@ export class UserData {
   };
 
   logout() {
-    alert("logout");
+    console.log(this.serviceName + "logout");
     this.storage.remove('token');
     this.storage.remove('user');
 
@@ -113,7 +116,7 @@ export class UserData {
     });
   }
   setCurrentUser(user) {
-    alert("user: " + JSON.stringify(user));
+    console.log(this.serviceName + "user: " + JSON.stringify(user));
     this.login(user["phone_number"]);
     return this.storage.set('user', JSON.stringify(user)).then(user => {
       return true;
@@ -131,7 +134,7 @@ export class UserData {
     });
   }
   setToken(token) {
-    alert("setToken: " + token);
+    console.log(this.serviceName + "setToken: " + token);
     this.storage.set('token', token);
   }
 }

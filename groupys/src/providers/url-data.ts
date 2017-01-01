@@ -36,8 +36,8 @@ export class UrlData {
     this.METADATA_URL = this.BASE_URL + "breeze/metadata";
     //this.PHONE_BOOK_URL = this.BASE_URL + "users/phonebook";
     this.PHONE_BOOK_URL = this.BASE_URL + "phonebooks";
-    this.PHONE_NUMBER_URL = this.BASE_URL + "users/phone_number/";
-    this.CHECK_PHONE_NUMBERS_URL = this.BASE_URL + "users/check_phone_numbers";
+    this.PHONE_NUMBER_URL = this.BASE_URL + "users/phone_number?" + (new Date).getTime();
+    this.CHECK_PHONE_NUMBERS_URL = this.BASE_URL + "users/check_phone_numbers?" + (new Date).getTime();
     this.FILE_TRANSFER_URL = this.BASE_URL + "images/";
     this.TEST_URL = this.BASE_URL + "tests/";
     this.GROUP_URL = this.BASE_URL + "groups/";

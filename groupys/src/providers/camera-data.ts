@@ -28,9 +28,10 @@ export class CameraData {
   progress: number;
   refreshPage: any;
   entityId: any;
+  serviceName: string;
 
   constructor(private storage: Storage, private platform: Platform, private globalHeaders:HeaderData, private deviceService: DeviceData, private globals: UrlData, private ngZone: NgZone) {
-
+    this.serviceName = "CameraData ======";
     //this.nav = nav;
     this.globals = globals;
     this.globalHeaders = globalHeaders;
@@ -38,11 +39,11 @@ export class CameraData {
     //this.contentHeader = this.globalHeaders.getMyGlobalHeaders();
     this.storage.get('token').then(token => {
       this.contentHeader.append('Authorization', 'Bearer ' + token);
-      alert("token: " + JSON.stringify(this.contentHeader));
+      console.log(this.serviceName + "token: " + JSON.stringify(this.contentHeader));
     }).catch(error => {
       console.log(error);
     });
-    alert(JSON.stringify(this.contentHeader));
+    console.log(this.serviceName + "contentHeader:" + JSON.stringify(this.contentHeader));
 
     this.cameraDestinationType = this.deviceService.getCameraDestinationType();
 
@@ -53,26 +54,25 @@ export class CameraData {
 
 
   upload = (image: string, id: string) : void => {
-    alert(image);
-    alert(id);
-    alert("this.contentHeader: "+ JSON.stringify(this.contentHeader));
-    console.log("xxxxxxxxxxxxxxxxxxxxxxxxxxx222222222222222222222222222" + JSON.stringify(this.contentHeader));
+    console.log(this.serviceName + "image: " + image);
+    console.log(this.serviceName + "id: " + id);
+    console.log(this.serviceName + "contentHeader: "+ JSON.stringify(this.contentHeader));
 
     this.deviceService.getLocalFileSystemURL(image);
     setTimeout(() => {
       let filePath = window.localStorage.getItem('filePath');
       setTimeout(() => {
-        alert("xxxxxxxxxxx: " + filePath);
+        console.log(this.serviceName + "filePath: " + filePath);
 
         //this.base64Image2 = filePath;
         let fileURL = filePath;
-        alert("filePath: " + filePath);
+        console.log(this.serviceName +  "filePath: " + filePath);
 
 
         let ft = new Transfer();
-        //alert(ft);
+        //console.log(ft);
         let filename = fileURL.substr(fileURL.lastIndexOf('/') + 1).toString();
-        alert("------------------ filename: " + filename);
+        console.log(this.serviceName + "filename: " + filename);
         if(filename === '.Pic.jpg' || filename === undefined){
           filename = this.deviceService.unixName();
         }
@@ -80,7 +80,7 @@ export class CameraData {
         let options = new FileUploadOptions();
         options.fileKey ='avatar';
         options.fileName = id + '--' + filename;
-        alert("------------------ filename: " + options.fileName);
+        console.log(this.serviceName + "filename: " + options.fileName);
         options.mimeType='image/jpeg';
         options.chunkedMode=false;
 
@@ -98,16 +98,15 @@ export class CameraData {
 
         let headers = new Object();
         headers['Connection'] = 'close';
-        console.log("-------------------------- this.contentHeader ----------------------------");
-        console.log("xxxxxxxxxxxxxxxxxxxxxxxxxxx33333333333333333333333" + JSON.stringify(this.contentHeader));
+        console.log(this.serviceName + "contentHeader: " + JSON.stringify(this.contentHeader));
         headers['Authorization'] = this.contentHeader || '';
         options.headers = headers;
 
         //ft.onProgress(this.onProgress);
         let filenameURL = filename.slice(0, -4).toString();
-        alert("params['rami']: " + params['rami']);
-        alert(filenameURL);
-        alert(filename);
+        console.log(this.serviceName + "params['rami']: " + params['rami']);
+        console.log(this.serviceName + "filenameURL: " + filenameURL);
+        console.log(this.serviceName + "filename: " + filename);
         ft.upload(fileURL, this.globals.FILE_TRANSFER_URL + filenameURL, options, false)
           .then((result: any) => {
             this.success(result);
@@ -122,7 +121,7 @@ export class CameraData {
 
 
   success = (result: any) : void => {
-    alert(JSON.stringify(result));
+    console.log(this.serviceName + "result: " + JSON.stringify(result));
     if(this.current < this.total) {
       this.current++;
       this.progress = 0;
@@ -133,9 +132,9 @@ export class CameraData {
   };
 
   failed = (err: any) : void => {
-    alert(JSON.stringify(err));
+    console.log(JSON.stringify(err));
     let code = err.code;
-    alert("Failed to upload image. Code: " + code);
+    console.log("Failed to upload image. Code: " + code);
   };
 
   onProgress =  (progressEvent: ProgressEvent) : void => {
@@ -147,18 +146,18 @@ export class CameraData {
       }
     });
   };
-/*
-  takePicture_(){
-    return Observable.create(observer => {
-      //observer.next(this.takePictureFunction());
-      observer.next(this.takePictureReturn());
-      observer.complete();
-    });
-  }
-  takePictureReturn(){
-    return this.base64Image;
-  }
-  */
+  /*
+   takePicture_(){
+   return Observable.create(observer => {
+   //observer.next(this.takePictureFunction());
+   observer.next(this.takePictureReturn());
+   observer.complete();
+   });
+   }
+   takePictureReturn(){
+   return this.base64Image;
+   }
+   */
   takePicture(page, formID, isUpload){
     this.refreshPage = page;
     this.platform.ready().then(() => {
@@ -174,9 +173,9 @@ export class CameraData {
       }).then((imageData) => {
 
         this.base64Image = this.deviceService.getImageData(imageData);
-        //alert("base64Image: " + this.base64Image);
+        //console.log("base64Image: " + this.base64Image);
         this.imageLocalStorage = this.deviceService.setImageLocalStorage(imageData);
-        //alert("imageLocalStorage: " + this.imageLocalStorage);
+        //console.log("imageLocalStorage: " + this.imageLocalStorage);
         //this.uploadImage(this.base64Image);
         //this.upload(this.base64Image);
         this.setPhotosToUpload(formID, this.imageLocalStorage);
@@ -184,8 +183,8 @@ export class CameraData {
           this.upload(this.base64Image, '');
         }
         //this.storage.set('base64Image', this.imageLocalStorage);
-        console.log("--------------- this.base64Image: " + this.base64Image);
-        //alert("this.refreshPage: " + this.refreshPage);
+        console.log(this.serviceName + "base64Image: " + this.base64Image);
+        //console.log("this.refreshPage: " + this.refreshPage);
         //this.nav.push(this.refreshPage);
 
       }, (err) => {
@@ -197,10 +196,10 @@ export class CameraData {
 
   getBase64Image(){
     this.storage.get('base64Image').then(base64Image => {
-      alert("IN getBase64Image");
+      console.log(this.serviceName + "IN getBase64Image");
       if(this.deviceService.getImageLocalStorage(base64Image).length>-1){
         this.base64Image = this.deviceService.getImageLocalStorage(base64Image);
-        //alert('base64Image: ' + this.base64Image);
+        //console.log('base64Image: ' + this.base64Image);
       }
       //return this.base64Image;
 
@@ -209,22 +208,22 @@ export class CameraData {
     });
   }
   getImageToUpload(entityId, formID){
-		//alert('getImageToUpload -- entityId: ' + entityId);
-		//alert('getImageToUpload -- formID: ' + formID);
+    //console.log('getImageToUpload -- entityId: ' + entityId);
+    //console.log('getImageToUpload -- formID: ' + formID);
 
     this.storage.get(formID).then(form => {
 
       console.log("get camera ****************************************");
-      console.log(JSON.stringify(form));
+      console.log(this.serviceName + JSON.stringify(form));
       console.log("get camera ****************************************");
 
       for(let photo in form[formID]["photos"]){
-        //alert("IN getBase64Image");
+        //console.log("IN getBase64Image");
         if(this.deviceService.getImageLocalStorage(photo).length>-1){
           let imageToUpload = this.deviceService.getImageLocalStorage(photo);
-          alert('imageToUpload: ' + imageToUpload);
+          console.log(this.serviceName + 'imageToUpload: ' + imageToUpload);
           this.upload(imageToUpload, entityId);
-          //alert('base64Image: ' + this.base64Image);
+          //console.log('base64Image: ' + this.base64Image);
         }
       }
       if(form["contacts"].length === -1){
@@ -234,39 +233,39 @@ export class CameraData {
       console.log(error);
     });
 
-/*
-    this.storage.get('base64Image').then(base64Image => {
-      //alert("IN getBase64Image");
-      if(this.deviceService.getImageLocalStorage(base64Image).length>-1){
-        let imageToUpload = this.deviceService.getImageLocalStorage(base64Image);
-				alert('imageToUpload: ' + imageToUpload);
-				this.upload(imageToUpload, entityId);
-        //alert('base64Image: ' + this.base64Image);
-      }
+    /*
+     this.storage.get('base64Image').then(base64Image => {
+     //console.log("IN getBase64Image");
+     if(this.deviceService.getImageLocalStorage(base64Image).length>-1){
+     let imageToUpload = this.deviceService.getImageLocalStorage(base64Image);
+     console.log('imageToUpload: ' + imageToUpload);
+     this.upload(imageToUpload, entityId);
+     //console.log('base64Image: ' + this.base64Image);
+     }
 
-      //return this.base64Image;
+     //return this.base64Image;
 
-    }).catch(error => {
-      console.log(error);
-    });
- */
+     }).catch(error => {
+     console.log(error);
+     });
+     */
   }
-/*
-  getGalleryPic_(){
-    return Observable.create(observer => {
-      //observer.next(this.getGalleryPicFunction());
-      observer.next(this.getGalleryPicReturn());
-      observer.complete();
-    });
-  }
-  getGalleryPicReturn(){
-    if(this.base64Image === 'img/avatar3.png'){
-      return this.base64Image;
-    } else {
-      return "file://" + this.base64Image;
-    }
-  }
-  */
+  /*
+   getGalleryPic_(){
+   return Observable.create(observer => {
+   //observer.next(this.getGalleryPicFunction());
+   observer.next(this.getGalleryPicReturn());
+   observer.complete();
+   });
+   }
+   getGalleryPicReturn(){
+   if(this.base64Image === 'img/avatar3.png'){
+   return this.base64Image;
+   } else {
+   return "file://" + this.base64Image;
+   }
+   }
+   */
   getGalleryPic(page, formID, isUpload){
     this.refreshPage = page;
     this.platform.ready().then(() => {
@@ -280,19 +279,19 @@ export class CameraData {
         this.base64Image =  'img/loading.gif';
         this.storage.remove('base64Image');
         //this.deviceService.clearCache();
-        alert("=================== imageData: " + imageData);
+        console.log(this.serviceName + "imageData: " + imageData);
         setTimeout(() => {
           this.base64Image = this.deviceService.getImageData(imageData);
-          alert("getGalleryPic: " + this.base64Image);
+          console.log(this.serviceName + "getGalleryPic: " + this.base64Image);
           this.deviceService.getLocalFileSystemURL(this.base64Image);
 
         }, 300);
 
         setTimeout(() => {
-          alert("getGalleryPic - imageData: " + imageData);
-          //alert("base64Image: " + this.base64Image);
+          console.log(this.serviceName + "getGalleryPic - imageData: " + imageData);
+          //console.log("base64Image: " + this.base64Image);
           this.imageLocalStorage = this.deviceService.setImageLocalStorage(imageData);
-          //alert("imageLocalStorage: " + this.imageLocalStorage);
+          //console.log("imageLocalStorage: " + this.imageLocalStorage);
 
           //this.storage.set('base64Image', this.imageLocalStorage);
           this.setPhotosToUpload(formID, this.imageLocalStorage);
@@ -300,8 +299,8 @@ export class CameraData {
           if(isUpload){
             this.upload(this.base64Image, '');
           }
-          console.log("--------------- file:// + this.base64Image: " + "file://" + this.base64Image);
-          //alert("this.refreshPage: " + this.refreshPage);
+          console.log(this.serviceName + "file:// + this.base64Image: " + "file://" + this.base64Image);
+          //console.log("this.refreshPage: " + this.refreshPage);
           //this.nav.push(this.refreshPage);
         }, 300);
       }, (err) => {
@@ -371,11 +370,11 @@ export class CameraData {
    clearCache(){
     this.platform.ready().then(() => {
       let success = function(status) {
-        //alert('Message: ' + status);
+        //console.log('Message: ' + status);
       }
 
       let error = function(status) {
-        //alert('Error: ' + status);
+        //console.log('Error: ' + status);
       }
         //shidrog
 
@@ -431,13 +430,13 @@ export class CameraData {
   }
 
   setPhotosToUpload(formID, newPhoto) {
-    alert("setPhotosToUpload 2 -- formID: " + formID);
-    alert("setPhotosToUpload 2 -- newPhoto: " + newPhoto);
+    console.log("setPhotosToUpload 2 -- formID: " + formID);
+    console.log("setPhotosToUpload 2 -- newPhoto: " + newPhoto);
 
     this.storage.get(formID).then(form => {
-      alert("form: " + JSON.stringify(form));
-      alert("form[contacts]: " + JSON.stringify(form["contacts"]));
-      alert("form[contacts]2: " + form[formID]["contacts"]);
+      console.log("form: " + JSON.stringify(form));
+      console.log("form[contacts]: " + JSON.stringify(form["contacts"]));
+      console.log("form[contacts]2: " + form[formID]["contacts"]);
 
       if(form[formID]["photos"] === undefined || form[formID]["photos"].length === -1){
         form[formID]["photos"] = [];
@@ -446,7 +445,7 @@ export class CameraData {
         form[formID]["photos"][form[formID]["photos"].length] = newPhoto;
       }
 
-      alert("************" + JSON.stringify(form));
+      console.log("************" + JSON.stringify(form));
       this.storage.remove(formID);
       this.storage.set(formID, form);
 
