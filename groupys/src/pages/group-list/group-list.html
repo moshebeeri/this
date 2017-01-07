@@ -14,6 +14,15 @@
 </ion-header>
 
 <ion-content class="outer-content speaker-list">
-  group
+  <ion-list >
+
+    <ion-item *ngFor="let group of groupList" (click)="goToGroup($event, group)">
+      <ion-avatar item-left>
+        <img *ngIf='group["pictures"]' [src]='group["pictures"][0][0]["pictures"][0]' (error)="this.src='assets/img/avatar3.png'" onerror="this.src='assets/img/avatar3.png'">
+        <img *ngIf='!group["pictures"]' src="assets/img/avatar3.png">
+      </ion-avatar>
+      <h2>{{group.name}}</h2>
+    </ion-item>
+  </ion-list>
 
 </ion-content>

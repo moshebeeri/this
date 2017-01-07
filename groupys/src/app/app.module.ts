@@ -24,6 +24,7 @@ import { CountryPage } from '../pages/country/country';
 import { ContactPage } from '../pages/contact/contact';
 import { GroupListPage } from '../pages/group-list/group-list';
 import { GroupPage } from '../pages/group/group';
+import { GroupChatPage } from '../pages/group-chat/group-chat';
 import { GroupContactPage } from '../pages/group-contact/group-contact';
 
 
@@ -66,6 +67,7 @@ import { DeviceData } from '../providers/device-data';
     ContactPage,
     GroupListPage,
     GroupPage,
+    GroupChatPage,
     GroupContactPage,
     DebugPanelComponent,
     FormButtonsComponent,
@@ -97,6 +99,7 @@ import { DeviceData } from '../providers/device-data';
     ContactPage,
     GroupListPage,
     GroupPage,
+    GroupChatPage,
     GroupContactPage,
     DebugPanelComponent,
     FormButtonsComponent,

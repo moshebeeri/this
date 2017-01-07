@@ -18,6 +18,7 @@ export class UrlData {
   TEST_URL: string;
   GROUP_URL: string;
   GROUP_CONTACTS_URL: string;
+  GROUP_LIST_URL: string;
   IP_URL: string;
 
   constructor() {
@@ -43,6 +44,7 @@ export class UrlData {
     this.GROUP_URL = this.BASE_URL + "groups/";
     // groups/add/users/:to_group
     this.GROUP_CONTACTS_URL = this.BASE_URL + "groups/add/users/";
+    this.GROUP_LIST_URL = this.BASE_URL + "groups/following/user/";
     this.IP_URL = this.BASE_URL + "ip/?" + (new Date).getTime();
 
     // used by formBuilder - get the post/put url automatically by entity name

@@ -110,8 +110,10 @@ exports.create = function(req, res) {
     if(err) { return handleError(res, err); }
     graphModel.reflect(group, to_graph(group), function (err) {
       if (err) {  return handleError(res, err); }
-			console.log('success');
+      console.log('success');
       graphModel.relate_ids(group._id, 'CREATED_BY', req.user._id);
+      graphModel.relate_ids(req.user._id, 'FOLLOW', group._id );
+      graphModel.relate_ids(req.user._id, 'GROUP_ADMIN', group._id );
       group_activity(group, "create");
     });
     return res.json(201, group);
@@ -172,14 +174,12 @@ exports.message = function(req, res) {
   });
 };
 
-function user_follow_group(user_id, group, res){
+function user_follow_group(user_id, group, isReturn, res){
   graphModel.relate_ids(user_id, 'FOLLOW', group._id);
   user_follow_group_activity(group, user_id);
-  return res.json(200, group);
-}
-function users_follow_group(user_id, group, res){
-  graphModel.relate_ids(user_id, 'FOLLOW', group._id);
-  user_follow_group_activity(group, user_id);
+  if(isReturn){
+    return res.json(200, group);
+  }
 }
 
 function group_follow_group(following_group_id, group_to_follow_id, res){
@@ -188,12 +188,14 @@ function group_follow_group(following_group_id, group_to_follow_id, res){
   return res.json(200, group);
 }
 
-function add_user_to_group_admin(user_id, group, res){
-	graphModel.relate_ids(user_id, 'GROUP_ADMIN', group._id);
+function add_user_to_group_admin(user_id, group, isReturn, res){
+  graphModel.relate_ids(user_id, 'GROUP_ADMIN', group._id);
   group.admins.push(user_id);
   Group.save(function (err) {
     if (err) { return handleError(res, err); }
-    return res.json(200, group);
+    if(isReturn){
+      return res.json(200, group);
+    }
   });
 }
 
@@ -203,8 +205,8 @@ exports.add_admin = function(req, res) {
     if(!group) { return res.status(404).send('no group'); }
     //if requester is group admin he may add admins
     if(utils.defined(_.find(group.admins, req.user._id))) {
-      user_follow_group(req.user._id, group, function(err, group){
-        add_user_to_group_admin(req.user._id, group)
+      user_follow_group(req.user._id, group, true, function(err, group){
+        add_user_to_group_admin(req.user._id, group, true)
       });
     }
   });
@@ -229,13 +231,13 @@ exports.add_user = function(req, res) {
 
 		if(group.add_policy == 'OPEN'){
 			if(req.user._id ==  req.params.user )
-				return user_follow_group(req.user._id, group, res);
+				return user_follow_group(req.user._id, group, true, res);
 			else
 				return res.status(404).send('Group add policy OPEN - authenticated user may only add himself');
 		}
 		if(group.add_policy == 'CLOSE'){
 			if(utils.defined(_.find(group.admins, req.user._id)))
-				return user_follow_group(req.user._id, group, res);
+				return user_follow_group(req.user._id, group, true, res);
 			else
 				return res.status(404).send('Group add policy CLOSE - only admin may add users');
 		}
@@ -262,9 +264,9 @@ exports.add_users = function(req, res) {
         console.log("==============================: " + Object.keys(req.body.users)[Object.keys(req.body.users).length-1]);
         console.log("==============================: " + user);
         if(user != Object.keys(req.body.users)[Object.keys(req.body.users).length-1]){
-          users_follow_group(req.body.users[user], group, res);
+          user_follow_group(req.body.users[user], group, false, res);
         } else {
-          user_follow_group(req.body.users[user], group, res);
+          user_follow_group(req.body.users[user], group, true, res);
         }
       }
     }
@@ -330,6 +332,19 @@ exports.following_users = function (req, res) {
         return res.status(200).json(following_users);
       });
     });
+  });
+};
+
+exports.following_user = function (req, res) {
+  console.log("user_following_groups");
+  console.log("user: " + req.user._id);
+  var userId = req.user._id;
+  console.log("MATCH (u:user {_id:'"+ userId +"'})-[r:FOLLOW]->(g:group) RETURN g LIMIT 25");
+  graphModel.query("MATCH (u:user {_id:'"+ userId +"'})-[r:FOLLOW]->(g:group) RETURN g LIMIT 25", function(err, groups){
+    if (err) {return handleError(res, err)}
+    if(!groups) { return res.send(404); }
+    console.log(JSON.stringify(groups));
+    return res.status(200).json(groups);
   });
 };
 
