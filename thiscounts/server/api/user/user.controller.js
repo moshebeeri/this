@@ -721,7 +721,7 @@ exports.changePassword = function (req, res, next) {
 };
 
 /**
- * Change a users info
+ * Change users info
  */
 exports.updateInfo = function (req, res, next) {
   var userId = req.user._id;

@@ -18,6 +18,7 @@ router.post('/add/users/:to_group', auth.isAuthenticated(), controller.add_users
 router.get('/add/group/:group/:to_group', auth.isAuthenticated(), controller.add_group);
 router.get('/following/groups/:group/:skip/:limit/', auth.isAuthenticated(), controller.following_groups);
 router.get('/following/users/:group/:skip/:limit/', auth.isAuthenticated(), controller.following_users);
+router.get('/following/user', auth.isAuthenticated(), controller.following_user);
 router.post('/offer/:group', auth.isAuthenticated(), controller.offer);
 router.post('/message/:group', auth.isAuthenticated(), controller.message);
 
