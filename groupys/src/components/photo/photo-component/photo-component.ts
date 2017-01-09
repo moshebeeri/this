@@ -52,7 +52,7 @@ export class PhotoComponent{
   entityType: string;
   serviceName: string;
 
-  constructor(public actionSheetCtrl: ActionSheetController, private storage: Storage, private deviceService: DeviceData, private photoService: PhotoService, private myCameraService: CameraData, public nav: NavController){
+  constructor(public actionSheetCtrl: ActionSheetController, private storage: Storage, private deviceService: DeviceData, private photoService: PhotoService, private cameraData: CameraData, public nav: NavController){
     this.serviceName = "PhotoComponent ======";
     this.actionSheetCtrl = actionSheetCtrl;
     this.local = storage;
@@ -94,18 +94,18 @@ export class PhotoComponent{
   }
 
   getGalleryPic(){
-    //this.base64Image = this.myCameraService.getGalleryPic();
-    //this.myCameraService.getGalleryPic().subscribe(data => this.setImage(data));
+    //this.base64Image = this.cameraData.getGalleryPic();
+    //this.cameraData.getGalleryPic().subscribe(data => this.setImage(data));
     console.log(this.serviceName + "this.entityType: " + this.entityType);
     console.log(this.serviceName + "this.formID: " + this.formID);
     console.log(this.serviceName + "this.isUpload: " + this.isUpload);
-    this.myCameraService.getGalleryPic(this.entityType, this.formID, this.isUpload );
+    this.cameraData.getGalleryPic(this.entityType, this.formID, this.isUpload);
   }
 
   takePicture(){
-    //this.base64Image = this.myCameraService.takePicture();
-    //this.myCameraService.takePicture().subscribe(data => this.setImage(data));
-    this.myCameraService.takePicture(this.entityType, this.formID, this.isUpload);
+    //this.base64Image = this.cameraData.takePicture();
+    //this.cameraData.takePicture().subscribe(data => this.setImage(data));
+    this.cameraData.takePicture(this.entityType, this.formID, this.isUpload);
   }
 
   presentActionSheet() {
