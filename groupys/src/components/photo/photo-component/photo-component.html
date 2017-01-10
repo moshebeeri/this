@@ -1,6 +1,8 @@
-<!--<img id="avatar" class="avatar" src='{{base64Image}}' (click)="pictureModal()">
-<button fab class="cameraButton" (click)="presentActionSheet()">
+<img id="avatar" class="avatar" [src]="base64Image" (click)="pictureModal()">
+<ion-fab>
+  <button ion-fab class="cameraButton" (click)="presentActionSheet()">
     <ion-icon name="camera" ></ion-icon>
-</button>-->
+  </button>
 
-COMPONENT
+</ion-fab>
+

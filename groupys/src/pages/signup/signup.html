@@ -33,7 +33,7 @@
 		`
 		<ion-item>
 			<ion-label>+{{callingCodes}}</ion-label>
-			<ion-input type="text" [(ngModel)]="loginCred.callingDigits"  name="description" placeholder="{{callingDigits}}" id="phoneInput" (keypress)="validateNumbers($event)">
+			<ion-input type="number" [(ngModel)]="loginCred.callingDigits"  name="description" placeholder="{{callingDigits}}" id="phoneInput" (keydown)="validateNumbers($event)">
 			</ion-input>
 		</ion-item>
 	</form>
@@ -51,7 +51,7 @@
 	<form (ngSubmit)="verification()">
 		<ion-item>
 			<!--<ion-label>Enter Code</ion-label>-->
-			<ion-input type="text" [(ngModel)]="loginCred.code" name="code" placeholder="Enter Code"  id="codeInput" (keypress)="validateNumbers($event)">
+			<ion-input type="number" [(ngModel)]="loginCred.code" name="code" placeholder="Enter Code"  id="codeInput" (keydown)="validateNumbers($event)">
 			</ion-input>
 		</ion-item>
 	</form>

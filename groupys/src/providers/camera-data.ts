@@ -1,4 +1,4 @@
-import { Injectable, ViewChild } from '@angular/core';
+import { Injectable, ViewChild, NgZone } from '@angular/core';
 import { Platform, NavController } from 'ionic-angular';
 import { Storage } from '@ionic/storage';
 import { Headers } from '@angular/http';
@@ -8,8 +8,6 @@ import { HeaderData } from './header-data';
 import { UrlData } from './url-data';
 import { UserData } from './user-data';
 import { DeviceData } from './device-data';
-
-import { NgZone} from '@angular/core';
 
 @Injectable()
 export class CameraData {
@@ -158,7 +156,7 @@ export class CameraData {
    return this.base64Image;
    }
    */
-  takePicture(page, formID, isUpload){
+  takePicture(page, formID, isUpload, callback){
     this.refreshPage = page;
     this.platform.ready().then(() => {
       Camera.getPicture({
@@ -186,6 +184,7 @@ export class CameraData {
         console.log("CameraData ====== " + "base64Image: " + this.base64Image);
         //console.log("this.refreshPage: " + this.refreshPage);
         //this.nav.push(this.refreshPage);
+        callback(this.base64Image);
 
       }, (err) => {
         console.log(err);
@@ -207,6 +206,7 @@ export class CameraData {
       console.log(error);
     });
   }
+
   getImageToUpload(entityId, formID){
     //console.log('getImageToUpload -- entityId: ' + entityId);
     //console.log('getImageToUpload -- formID: ' + formID);
@@ -266,7 +266,7 @@ export class CameraData {
    }
    }
    */
-  getGalleryPic(page, formID, isUpload){
+  getGalleryPic(page, formID, isUpload, callback){
     this.refreshPage = page;
     this.platform.ready().then(() => {
       Camera.getPicture({
@@ -302,6 +302,7 @@ export class CameraData {
           console.log("CameraData ====== " + "file:// + this.base64Image: " + "file://" + this.base64Image);
           //console.log("this.refreshPage: " + this.refreshPage);
           //this.nav.push(this.refreshPage);
+          callback(this.base64Image);
         }, 300);
       }, (err) => {
         console.log(err);
