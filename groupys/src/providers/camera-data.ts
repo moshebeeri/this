@@ -1,4 +1,4 @@
-import { Injectable, ViewChild } from '@angular/core';
+import { Injectable, ViewChild, NgZone } from '@angular/core';
 import { Platform, NavController } from 'ionic-angular';
 import { Storage } from '@ionic/storage';
 import { Headers } from '@angular/http';
@@ -8,8 +8,6 @@ import { HeaderData } from './header-data';
 import { UrlData } from './url-data';
 import { UserData } from './user-data';
 import { DeviceData } from './device-data';
-
-import { NgZone} from '@angular/core';
 
 @Injectable()
 export class CameraData {
@@ -39,11 +37,11 @@ export class CameraData {
     //this.contentHeader = this.globalHeaders.getMyGlobalHeaders();
     this.storage.get('token').then(token => {
       this.contentHeader.append('Authorization', 'Bearer ' + token);
-      console.log(this.serviceName + "token: " + JSON.stringify(this.contentHeader));
+      console.log("CameraData ====== " + "token: " + JSON.stringify(this.contentHeader));
     }).catch(error => {
       console.log(error);
     });
-    console.log(this.serviceName + "contentHeader:" + JSON.stringify(this.contentHeader));
+    console.log("CameraData ====== " + "contentHeader:" + JSON.stringify(this.contentHeader));
 
     this.cameraDestinationType = this.deviceService.getCameraDestinationType();
 
@@ -54,25 +52,25 @@ export class CameraData {
 
 
   upload = (image: string, id: string) : void => {
-    console.log(this.serviceName + "image: " + image);
-    console.log(this.serviceName + "id: " + id);
-    console.log(this.serviceName + "contentHeader: "+ JSON.stringify(this.contentHeader));
+    console.log("CameraData ====== " + "image: " + image);
+    console.log("CameraData ====== " + "id: " + id);
+    console.log("CameraData ====== " + "contentHeader: "+ JSON.stringify(this.contentHeader));
 
     this.deviceService.getLocalFileSystemURL(image);
     setTimeout(() => {
       let filePath = window.localStorage.getItem('filePath');
       setTimeout(() => {
-        console.log(this.serviceName + "filePath: " + filePath);
+        console.log("CameraData ====== " + "filePath: " + filePath);
 
         //this.base64Image2 = filePath;
         let fileURL = filePath;
-        console.log(this.serviceName +  "filePath: " + filePath);
+        console.log("CameraData ====== " +  "filePath: " + filePath);
 
 
         let ft = new Transfer();
         //console.log(ft);
         let filename = fileURL.substr(fileURL.lastIndexOf('/') + 1).toString();
-        console.log(this.serviceName + "filename: " + filename);
+        console.log("CameraData ====== " + "filename: " + filename);
         if(filename === '.Pic.jpg' || filename === undefined){
           filename = this.deviceService.unixName();
         }
@@ -80,7 +78,7 @@ export class CameraData {
         let options = new FileUploadOptions();
         options.fileKey ='avatar';
         options.fileName = id + '--' + filename;
-        console.log(this.serviceName + "filename: " + options.fileName);
+        console.log("CameraData ====== " + "filename: " + options.fileName);
         options.mimeType='image/jpeg';
         options.chunkedMode=false;
 
@@ -98,15 +96,15 @@ export class CameraData {
 
         let headers = new Object();
         headers['Connection'] = 'close';
-        console.log(this.serviceName + "contentHeader: " + JSON.stringify(this.contentHeader));
+        console.log("CameraData ====== " + "contentHeader: " + JSON.stringify(this.contentHeader));
         headers['Authorization'] = this.contentHeader || '';
         options.headers = headers;
 
         //ft.onProgress(this.onProgress);
         let filenameURL = filename.slice(0, -4).toString();
-        console.log(this.serviceName + "params['rami']: " + params['rami']);
-        console.log(this.serviceName + "filenameURL: " + filenameURL);
-        console.log(this.serviceName + "filename: " + filename);
+        console.log("CameraData ====== " + "params['rami']: " + params['rami']);
+        console.log("CameraData ====== " + "filenameURL: " + filenameURL);
+        console.log("CameraData ====== " + "filename: " + filename);
         ft.upload(fileURL, this.globals.FILE_TRANSFER_URL + filenameURL, options, false)
           .then((result: any) => {
             this.success(result);
@@ -121,7 +119,7 @@ export class CameraData {
 
 
   success = (result: any) : void => {
-    console.log(this.serviceName + "result: " + JSON.stringify(result));
+    console.log("CameraData ====== " + "result: " + JSON.stringify(result));
     if(this.current < this.total) {
       this.current++;
       this.progress = 0;
@@ -158,7 +156,7 @@ export class CameraData {
    return this.base64Image;
    }
    */
-  takePicture(page, formID, isUpload){
+  takePicture(page, formID, isUpload, callback){
     this.refreshPage = page;
     this.platform.ready().then(() => {
       Camera.getPicture({
@@ -183,9 +181,10 @@ export class CameraData {
           this.upload(this.base64Image, '');
         }
         //this.storage.set('base64Image', this.imageLocalStorage);
-        console.log(this.serviceName + "base64Image: " + this.base64Image);
+        console.log("CameraData ====== " + "base64Image: " + this.base64Image);
         //console.log("this.refreshPage: " + this.refreshPage);
         //this.nav.push(this.refreshPage);
+        callback(this.base64Image);
 
       }, (err) => {
         console.log(err);
@@ -196,7 +195,7 @@ export class CameraData {
 
   getBase64Image(){
     this.storage.get('base64Image').then(base64Image => {
-      console.log(this.serviceName + "IN getBase64Image");
+      console.log("CameraData ====== " + "IN getBase64Image");
       if(this.deviceService.getImageLocalStorage(base64Image).length>-1){
         this.base64Image = this.deviceService.getImageLocalStorage(base64Image);
         //console.log('base64Image: ' + this.base64Image);
@@ -207,6 +206,7 @@ export class CameraData {
       console.log(error);
     });
   }
+
   getImageToUpload(entityId, formID){
     //console.log('getImageToUpload -- entityId: ' + entityId);
     //console.log('getImageToUpload -- formID: ' + formID);
@@ -214,14 +214,14 @@ export class CameraData {
     this.storage.get(formID).then(form => {
 
       console.log("get camera ****************************************");
-      console.log(this.serviceName + JSON.stringify(form));
+      console.log("CameraData ====== " + JSON.stringify(form));
       console.log("get camera ****************************************");
 
       for(let photo in form[formID]["photos"]){
         //console.log("IN getBase64Image");
         if(this.deviceService.getImageLocalStorage(photo).length>-1){
           let imageToUpload = this.deviceService.getImageLocalStorage(photo);
-          console.log(this.serviceName + 'imageToUpload: ' + imageToUpload);
+          console.log("CameraData ====== " + 'imageToUpload: ' + imageToUpload);
           this.upload(imageToUpload, entityId);
           //console.log('base64Image: ' + this.base64Image);
         }
@@ -266,7 +266,7 @@ export class CameraData {
    }
    }
    */
-  getGalleryPic(page, formID, isUpload){
+  getGalleryPic(page, formID, isUpload, callback){
     this.refreshPage = page;
     this.platform.ready().then(() => {
       Camera.getPicture({
@@ -279,16 +279,16 @@ export class CameraData {
         this.base64Image =  'img/loading.gif';
         this.storage.remove('base64Image');
         //this.deviceService.clearCache();
-        console.log(this.serviceName + "imageData: " + imageData);
+        console.log("CameraData ====== " + "imageData: " + imageData);
         setTimeout(() => {
           this.base64Image = this.deviceService.getImageData(imageData);
-          console.log(this.serviceName + "getGalleryPic: " + this.base64Image);
+          console.log("CameraData ====== " + "getGalleryPic: " + this.base64Image);
           this.deviceService.getLocalFileSystemURL(this.base64Image);
 
         }, 300);
 
         setTimeout(() => {
-          console.log(this.serviceName + "getGalleryPic - imageData: " + imageData);
+          console.log("CameraData ====== " + "getGalleryPic - imageData: " + imageData);
           //console.log("base64Image: " + this.base64Image);
           this.imageLocalStorage = this.deviceService.setImageLocalStorage(imageData);
           //console.log("imageLocalStorage: " + this.imageLocalStorage);
@@ -299,9 +299,10 @@ export class CameraData {
           if(isUpload){
             this.upload(this.base64Image, '');
           }
-          console.log(this.serviceName + "file:// + this.base64Image: " + "file://" + this.base64Image);
+          console.log("CameraData ====== " + "file:// + this.base64Image: " + "file://" + this.base64Image);
           //console.log("this.refreshPage: " + this.refreshPage);
           //this.nav.push(this.refreshPage);
+          callback(this.base64Image);
         }, 300);
       }, (err) => {
         console.log(err);

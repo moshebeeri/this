@@ -75,17 +75,25 @@ exports.create = function (req, res) {
 
   console.log("==============================");
 
+
+  
+  
+
   Phonebook.findOne({userId: userId}, function (err, user) {
     if (user) {
-      Phonebook.update({userId: userId, phonebook: phonebook.phonebook}, function(err, phonebook) {
-        if(err) { return handleError(res, err); }
+      /*Phonebook.update({userId: userId, phonebook: phonebook.phonebook}, function(err, phonebook) {
+        if(err) { console.log("ERRRRRRRRRRRRRROR"); return handleError(res, err); }
+        checkPhones(phonebook.phonebook, res);
+      });*/
+      var query = {'userId':userId};
+      Phonebook.findOneAndUpdate(query, phonebook.phonebook, {upsert:true}, function(err, doc){
+        if (err) return res.status(500).send(err);
+        checkPhones(phonebook.phonebook, res);
       });
-      checkPhones(phonebook.phonebook, res);
-
+      
     } else {
       Phonebook.create({userId: userId, phonebook: phonebook.phonebook}, function(err, phonebook) {
         if(err) { return handleError(res, err); }
-
         checkPhones(phonebook.phonebook, res);
       });
     }

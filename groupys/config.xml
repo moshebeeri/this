@@ -9,6 +9,8 @@
   </author>
   <content src="index.html"/>
   <access origin="*"/>
+  <access origin="cdvfile:*"/>
+  <allow-intent href="cdvfile:*"/>
   <allow-intent href="http://*/*"/>
   <allow-intent href="https://*/*"/>
   <allow-intent href="tel:*"/>
@@ -19,6 +21,7 @@
   <allow-navigation href="tel:*"/>
   <allow-navigation href="mailto:*"/>
   <allow-navigation href="http://192.168.14.169:8000"/>
+  <allow-navigation href="cdvfile:*"/>
   <allow-navigation href="http://10.0.0.7:8100"/>
   <allow-navigation href="http://*/*"/>
   <platform name="android">

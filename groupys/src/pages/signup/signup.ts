@@ -216,8 +216,8 @@ export class SignupPage {
     this.storage.get('digitsValidator').then(digitsValidator => {
       this.digitsValidator = JSON.parse(digitsValidator);
       console.log(this.serviceName + 'digitsValidator: ' + this.digitsValidator);
-      document.getElementById("phoneInput").setAttribute("maxlength", this.digitsValidator);
-      document.getElementById("phoneInput").getElementsByTagName( 'input' )[0]["setAttribute"]("maxlength", this.digitsValidator);
+      document.getElementById("phoneInput").setAttribute("max", this.digitsValidator);
+      document.getElementById("phoneInput").getElementsByTagName( 'input' )[0]["setAttribute"]("max", this.digitsValidator);
     }).catch(error => {
       console.log(error);
     });
@@ -225,10 +225,16 @@ export class SignupPage {
 
 
   validateNumbers(evt){
-    if ([48, 49, 50, 51, 52, 53, 54, 55, 56, 57].indexOf(evt.keyCode || evt.which) == -1){
+    //alert(this.loginCred.callingDigits);
+    //alert(this.digitsValidator);
+    //alert(JSON.stringify(evt));
+    //evt.returnValue = true;
+    //evt.isTrusted = false;
+    //alert(JSON.stringify(evt));
+    /*if ([48, 49, 50, 51, 52, 53, 54, 55, 56, 57].indexOf(evt.keyCode || evt.which) == -1){
       evt.returnValue = false;
       if(evt.preventDefault){evt.preventDefault();}
-    }
+    }**/
   }
 
   itemTapped() {
@@ -359,7 +365,7 @@ export class SignupPage {
     console.log(this.serviceName + "setCurrentUser");
     this.userData.setCurrentUser(data).then(isSet => {
       this.getUserPermissions();
-      this.nav.setRoot(TabsPage);
+      //this.nav.setRoot(TabsPage);
     }).catch(error => {
       console.log(error);
     });

@@ -13,7 +13,7 @@ export class DeviceData {
   serviceName: string;
 
   constructor(private storage: Storage, private platform: Platform) {
-    this.serviceName = "DeviceData ======";
+    this.serviceName = "DeviceData ====== ";
     this.local = storage;
     this.platform = platform;
   }
@@ -99,7 +99,7 @@ export class DeviceData {
     }
     function resolveLocalFileSuccessHandler(fileEntry) {
       console.log("success");
-      console.log(this.serviceName + "fileEntry: " + fileEntry.toInternalURL());
+      console.log("DeviceData ====== " + "fileEntry: " + fileEntry.toInternalURL());
       window.localStorage.setItem('filePath', fileEntry.toInternalURL());
       //window.localStorage.setItem('filePath2', fileEntry.toInternalURL());
     }

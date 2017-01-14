@@ -75,7 +75,7 @@ export class GroupPage {
     console.log(this.serviceName + "entityForm: " + this.entityForm.value);
     //this.entityForm.value.creator = 999999;
     this.formBuilderService.onSubmitForm(this.entityForm);
-    this.nav.setRoot(TabsPage);
+    //this.nav.setRoot(TabsPage);
   }
   onClearForm() {
     /*this.formBuilderService.buildFormByEntity('Group').subscribe(
