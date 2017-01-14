@@ -11,6 +11,8 @@ import { UrlData } from '../../providers/url-data';
 import { HeaderData } from '../../providers/header-data';
 import { ContactData } from '../../providers/contact-data';
 import { GroupPage } from '../../pages/group/group';
+import { BusinessPage } from '../../pages/business/business';
+import { TabsPage } from '../../pages/tabs/tabs';
 
 @Component({
   selector: 'contact-add',
@@ -22,6 +24,7 @@ export class ContactComponent{
   @Input() data;
   @Input() formID;
   @Input() pageType;
+  @Input() entityType;
 
   phoneContacts: Array<string>;
   phoneContacts2: any;
@@ -50,6 +53,9 @@ export class ContactComponent{
   isContact:boolean;
   items: Array<string>;
   serviceName: string;
+  GroupPageType:any;
+  BusinessPageType:any;
+  TabsPageType:any;
 
   constructor(private _app: App, private storage: Storage, private platform: Platform, public nav: NavController, public contacts: Contacts, private globals:UrlData, private globalHeaders:HeaderData, private http:Http, private cdr:ChangeDetectorRef, private contactsService:ContactData) {
     this.serviceName = "ContactComponent ======";
@@ -80,6 +86,9 @@ export class ContactComponent{
     //TODO set formID
     //this.storage.set('groupContacts', []);
     this.getContacts();
+    this.GroupPageType = GroupPage;
+    this.BusinessPageType = BusinessPage;
+    this.TabsPageType = TabsPage;
   }
 
   getContacts(){
@@ -357,15 +366,22 @@ export class ContactComponent{
   }
   searchLowerCase(){
     let lowerInput = this.queryText.toLowerCase();
-    this.searchContacts(lowerInput);
+    this.searchContacts(lowerInput, this.pageType);
   }
-  searchContacts(queryText){
+  searchContacts(queryText, pageType){
     console.log(this.serviceName + "phoneContacts: " + this.phoneContacts);
     console.log(this.serviceName + "queryText: " + queryText);
+    console.log(this.serviceName + "pageType: " + pageType);
     this.items = [];
-    this.contactsService.findByName(queryText,this.phonebook2).subscribe(
-      data => this.items = data
-    );
+    if(pageType === "wizard"){
+      this.contactsService.findByName(queryText,this.phonebook2).subscribe(
+        data => this.items = data
+      );
+    } else {
+      this.contactsService.findByName(queryText,this.phonebook).subscribe(
+        data => this.items = data
+      );
+    }
   }
 
   pressEvent(e, contact) {
@@ -417,7 +433,23 @@ export class ContactComponent{
     console.log(this.serviceName + "contact: " + JSON.stringify(tmpGroup));
     this.storage.set(formID, tmpGroup);
     //this._app.getRootNav().push(GroupPage, {formID: "111"});
-    this.nav.push(GroupPage, {formID: formID});
+    let pageToNavigate = this.setPage(this.entityType);
+    this.nav.push(pageToNavigate, {formID: formID});
+  }
+
+  setPage(page){
+    alert(page);
+    switch (page)
+    {
+      case "Group":
+        alert("Group Nav");
+        return this.GroupPageType;
+      case "Business":
+        alert("Business Nav");
+        return this.BusinessPageType;
+      default:
+        return this.TabsPageType;
+    }
   }
 
   unixID() {

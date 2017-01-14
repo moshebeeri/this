@@ -13,5 +13,7 @@ router.put('/:id', auth.isAuthenticated(), controller.update);
 router.patch('/:id', auth.isAuthenticated(), controller.update);
 router.delete('/:id', auth.hasRole('admin'), controller.destroy);
 router.get('/mine', auth.isAuthenticated(), controller.mine);
+router.post('/add/users/:to_group', auth.isAuthenticated(), controller.add_users);
+router.get('/following/user', auth.isAuthenticated(), controller.following_user);
 
 module.exports = router;

@@ -27,6 +27,12 @@ import { GroupPage } from '../pages/group/group';
 import { GroupChatPage } from '../pages/group-chat/group-chat';
 import { GroupContactPage } from '../pages/group-contact/group-contact';
 
+import { BusinessListPage } from '../pages/business-list/business-list';
+import { BusinessPage } from '../pages/business/business';
+import { BusinessChatPage } from '../pages/business-chat/business-chat';
+import { BusinessContactPage } from '../pages/business-contact/business-contact';
+
+
 
 import { FormBuilderService } from '../components/form-builder/form-builder';
 import { DebugPanelComponent } from '../components/form-builder/debug-panel/debug-panel.component';
@@ -69,6 +75,10 @@ import { DeviceData } from '../providers/device-data';
     GroupPage,
     GroupChatPage,
     GroupContactPage,
+    BusinessListPage,
+    BusinessPage,
+    BusinessChatPage,
+    BusinessContactPage,
     DebugPanelComponent,
     FormButtonsComponent,
     PhotoComponent,
@@ -101,6 +111,10 @@ import { DeviceData } from '../providers/device-data';
     GroupPage,
     GroupChatPage,
     GroupContactPage,
+    BusinessListPage,
+    BusinessPage,
+    BusinessChatPage,
+    BusinessContactPage,
     DebugPanelComponent,
     FormButtonsComponent,
     PhotoComponent,

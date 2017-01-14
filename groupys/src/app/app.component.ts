@@ -36,6 +36,7 @@ export class GroupysApp {
   appPages: PageInterface[] = [
     //{ title: 'Schedule', component: TabsPage, icon: 'calendar' },
     //{ title: 'Speakers', component: TabsPage, index: 1, icon: 'contacts' },
+    { title: 'Business', component: TabsPage, index: 0, icon: 'contacts' },
     { title: 'Groups', component: TabsPage, index: 0, icon: 'contacts' },
     { title: 'Contacts', component: TabsPage, index: 1, icon: 'contact' },
     { title: 'Map', component: TabsPage, index: 2, icon: 'map' },

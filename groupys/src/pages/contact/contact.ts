@@ -3,7 +3,7 @@ import {NavController} from 'ionic-angular';
 
 
 @Component({
-  selector: 'contact-page',
+  selector: 'page-contact',
   templateUrl: 'contact.html'
 })
 export class ContactPage {

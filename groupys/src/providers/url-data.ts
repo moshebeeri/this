@@ -19,9 +19,14 @@ export class UrlData {
   GROUP_URL: string;
   GROUP_CONTACTS_URL: string;
   GROUP_LIST_URL: string;
+  BUSINESS_URL: string;
+  BUSINESS_CONTACTS_URL: string;
+  BUSINESS_LIST_URL: string;
   IP_URL: string;
+  modified: any;
 
   constructor() {
+    this.modified = "?" + (new Date).getTime();
     this.allPostURLS = [];
     this.allPutURLS = [];
     if (window.location.host.match("localhost")) {
@@ -32,23 +37,27 @@ export class UrlData {
     }
     this.LOGIN_URL = this.BASE_URL + "local";
     this.SIGNUP_URL = this.BASE_URL + "users";
-    this.ME_URL = this.BASE_URL + "users/me?" + (new Date).getTime();
+    this.ME_URL = this.BASE_URL + "users/me" + this.modified;
     this.VERIFICATION_URL = this.BASE_URL + "users/verification/";
     this.METADATA_URL = this.BASE_URL + "breeze/metadata";
     //this.PHONE_BOOK_URL = this.BASE_URL + "users/phonebook";
-    this.PHONE_BOOK_URL = this.BASE_URL + "phonebooks";
-    this.PHONE_NUMBER_URL = this.BASE_URL + "users/phone_number?" + (new Date).getTime();
-    this.CHECK_PHONE_NUMBERS_URL = this.BASE_URL + "users/check_phone_numbers?" + (new Date).getTime();
+    this.PHONE_BOOK_URL = this.BASE_URL + "phonebooks" + this.modified;
+    this.PHONE_NUMBER_URL = this.BASE_URL + "users/phone_number" + this.modified;
+    this.CHECK_PHONE_NUMBERS_URL = this.BASE_URL + "users/check_phone_numbers" + this.modified;
     this.FILE_TRANSFER_URL = this.BASE_URL + "images/";
     this.TEST_URL = this.BASE_URL + "tests/";
     this.GROUP_URL = this.BASE_URL + "groups/";
+    this.BUSINESS_URL = this.BASE_URL + "businesses/";
     // groups/add/users/:to_group
     this.GROUP_CONTACTS_URL = this.BASE_URL + "groups/add/users/";
-    this.GROUP_LIST_URL = this.BASE_URL + "groups/following/user/";
-    this.IP_URL = this.BASE_URL + "ip/?" + (new Date).getTime();
+    this.BUSINESS_CONTACTS_URL = this.BASE_URL + "businesses/add/users/";
+    this.GROUP_LIST_URL = this.BASE_URL + "groups/following/user" + this.modified;
+    this.BUSINESS_LIST_URL = this.BASE_URL + "businesses/following/user" + this.modified;
+    this.IP_URL = this.BASE_URL + "ip" + this.modified;
 
     // used by formBuilder - get the post/put url automatically by entity name
     this.allPostURLS["Group"] = this.GROUP_URL;
+    this.allPostURLS["Business"] = this.BUSINESS_URL;
     this.allPostURLS["Test"] = this.TEST_URL;
     this.allPutURLS["User"] = this.SIGNUP_URL;
 }

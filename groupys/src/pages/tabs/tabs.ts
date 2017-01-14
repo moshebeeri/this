@@ -8,6 +8,7 @@ import { SchedulePage } from '../schedule/schedule';
 import { SpeakerListPage } from '../speaker-list/speaker-list';
 import { ContactPage } from '../contact/contact';
 import { GroupListPage } from '../group-list/group-list';
+import { BusinessListPage } from '../business-list/business-list';
 
 
 @Component({
@@ -15,9 +16,10 @@ import { GroupListPage } from '../group-list/group-list';
 })
 export class TabsPage {
   // set the root pages for each tab
-  tab1Root: any = GroupListPage;
-  tab2Root: any = ContactPage;
-  tab3Root: any = MapPage;
+  tab1Root: any = BusinessListPage;
+  tab2Root: any = GroupListPage;
+  tab3Root: any = ContactPage;
+  tab4Root: any = MapPage;
   mySelectedIndex: number;
 
   constructor(navParams: NavParams) {

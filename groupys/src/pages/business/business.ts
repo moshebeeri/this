@@ -1,6 +1,5 @@
 import { Component, NgModule } from '@angular/core';
 import { NavController, NavParams } from 'ionic-angular';
-//import {ControlGroup, Control, ControlArray, FormBuilder} from '@angular/common';
 import { FormGroup, FormArray, FormBuilder, Validators } from '@angular/forms';
 import { TabsPage } from '../tabs/tabs';
 //import {ChangeDetectionStrategy} from '@angular/core';
@@ -24,10 +23,10 @@ import { PhotoComponent } from '../../components/photo/photo-component/photo-com
  })*/
 
 @Component({
-  selector: 'page-group',
-  templateUrl: 'group.html'
+  selector: 'page-business',
+  templateUrl: 'business.html'
 })
-export class GroupPage {
+export class BusinessPage {
   entityForm: FormGroup;
   //controlArray: ControlArray;
   bodyHTML: String;
@@ -39,8 +38,8 @@ export class GroupPage {
   serviceName:string;
 
   constructor(private params:NavParams, private nav:NavController, private entitiesService:EntityData, private formBuilderService:FormBuilderService) {
-    this.serviceName = "GroupPage ======";
-    this.photoData = "Group";
+    this.serviceName = "BusinessPage ======";
+    this.photoData = "Business";
 
     this.formID = this.params.get("formID");
     console.log(this.serviceName + "formID: "+ this.formID);
@@ -62,10 +61,10 @@ export class GroupPage {
     let httpMethod = 'POST';
 
 
-    this.formBuilderService.buildFormByEntity('Group').subscribe(
+    this.formBuilderService.buildFormByEntity('Business').subscribe(
       data => this.entityForm = data
     );
-    this.formBuilderService.buildHTMLByEntity('Group', this.formID ,isUpload ,httpMethod , [],[],[]).subscribe(
+    this.formBuilderService.buildHTMLByEntity('Business', this.formID ,isUpload ,httpMethod , [],[],[]).subscribe(
       data => this.bodyHTML = data
     );
     //this.controlArray = this.entityForm.find('controlArrayField') as ControlArray;
