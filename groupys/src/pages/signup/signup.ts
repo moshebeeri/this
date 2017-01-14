@@ -81,6 +81,9 @@ export class SignupPage {
   getUserPermissions(){
     this.userData.isLoggedIn().then((data) => {
       this.isLoggedIn = data;
+      if(this.isLoggedIn){
+        this.nav.setRoot(TabsPage);
+      }
     });
 
     this.userData.isAuthorized('user').then((data) => {
@@ -365,7 +368,6 @@ export class SignupPage {
     console.log(this.serviceName + "setCurrentUser");
     this.userData.setCurrentUser(data).then(isSet => {
       this.getUserPermissions();
-      //this.nav.setRoot(TabsPage);
     }).catch(error => {
       console.log(error);
     });

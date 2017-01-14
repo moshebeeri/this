@@ -1,13 +1,13 @@
 import { Component, NgModule } from '@angular/core';
-import {NavController, NavParams} from 'ionic-angular';
+import { NavController, NavParams } from 'ionic-angular';
 
 
 
 @Component({
-  selector: 'page-group-contact',  
-  templateUrl: 'group-contact.html'
+  selector: 'page-business-contact',  
+  templateUrl: 'business-contact.html'
 })
-export class GroupContactPage {
+export class BusinessContactPage {
   data:string;
   formID:string;
   pageType:string;
@@ -18,7 +18,7 @@ export class GroupContactPage {
     this.formID = "formID";
     //this.pageType = "page";
     this.pageType = "wizard";
-    this.entityType = "Group";
+    this.entityType = "Business";
   }
 
 

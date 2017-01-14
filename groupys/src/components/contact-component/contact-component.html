@@ -37,8 +37,8 @@
 
   <ion-item [hidden]="!isContact" *ngFor="let contact of groupContacts; let i = index;" (click)="removeContact($event, contact)"  (press)="pressEvent($event, contact)">
     <ion-avatar item-left>
-      <img *ngIf='contact["pictures"]' [src]='contact["pictures"][0][0]["pictures"][0]' (error)="this.src='assets/img/avatar3.png'" onerror="this.src='assets/img/avatar3.png'">
-      <img *ngIf='!contact["pictures"]' src="assets/img/avatar3.png">
+      <img *ngIf='contact["pictures"]' [src]='contact["pictures"][0][0]["pictures"][0]' (error)="this.src='assets/img/person.png'" onerror="this.src='assets/img/person.png'">
+      <img *ngIf='!contact["pictures"]' src="assets/img/person.png">
     </ion-avatar>
     <h2>{{contact.name}}</h2>
     <p>{{contact.number}}</p>
@@ -53,8 +53,8 @@
   <ion-list *ngIf="pageType === 'page'" [hidden]="queryText" [virtualScroll]="phonebook">
     <ion-item *virtualItem="let contact" (click)="tapEvent($event, contact)" (press)="pressEvent($event, contact)">
       <ion-avatar item-left>
-        <img *ngIf='contact["pictures"]' [src]='contact["pictures"][0][0]["pictures"][0]' (error)="this.src='assets/img/avatar3.png'" onerror="this.src='assets/img/avatar3.png'">
-        <img *ngIf='!contact["pictures"]' src="assets/img/avatar3.png">
+        <img *ngIf='contact["pictures"]' [src]='contact["pictures"][0][0]["pictures"][0]' (error)="this.src='assets/img/person.png'" onerror="this.src='assets/img/person.png'">
+        <img *ngIf='!contact["pictures"]' src="assets/img/person.png">
       </ion-avatar>
       <h2>{{contact.name}}</h2>
       <p>{{contact.number}}</p>
@@ -66,8 +66,8 @@
 
     <ion-item *ngFor="let contact of items" (click)="tapEvent($event, contact)"  (press)="pressEvent($event, contact)">
       <ion-avatar item-left>
-        <img *ngIf='contact["pictures"]' [src]='contact["pictures"][0][0]["pictures"][0]' (error)="this.src='assets/img/avatar3.png'" onerror="this.src='assets/img/avatar3.png'">
-        <img *ngIf='!contact["pictures"]' src="assets/img/avatar3.png">
+        <img *ngIf='contact["pictures"]' [src]='contact["pictures"][0][0]["pictures"][0]' (error)="this.src='assets/img/person.png'" onerror="this.src='assets/img/person.png'">
+        <img *ngIf='!contact["pictures"]' src="assets/img/person.png">
       </ion-avatar>
       <h2>{{contact.name}}</h2>
       <p>{{contact.number}}</p>
@@ -82,8 +82,8 @@
   <ion-list *ngIf="pageType === 'wizard'" [hidden]="queryText" [virtualScroll]="phonebook2">
     <ion-item *virtualItem="let contact" (press)="pressEvent($event, contact)">
       <ion-avatar item-left>
-        <img *ngIf='contact["pictures"]' [src]='contact["pictures"][0][0]["pictures"][0]' (error)="this.src='assets/img/avatar3.png'" onerror="this.src='assets/img/avatar3.png'">
-        <img *ngIf='!contact["pictures"]' src="assets/img/avatar3.png">
+        <img *ngIf='contact["pictures"]' [src]='contact["pictures"][0][0]["pictures"][0]' (error)="this.src='assets/img/person.png'" onerror="this.src='assets/img/person.png'">
+        <img *ngIf='!contact["pictures"]' src="assets/img/person.png">
       </ion-avatar>
       <h2>{{contact.name}}</h2>
       <p>{{contact.number}}</p>
@@ -96,8 +96,8 @@
 
     <ion-item *ngFor="let contact of items" (press)="pressEvent($event, contact)">
       <ion-avatar item-left>
-        <img *ngIf='contact["pictures"]' [src]='contact["pictures"][0][0]["pictures"][0]' (error)="this.src='assets/img/avatar3.png'" onerror="this.src='assets/img/avatar3.png'">
-        <img *ngIf='!contact["pictures"]' src="assets/img/avatar3.png">
+        <img *ngIf='contact["pictures"]' [src]='contact["pictures"][0][0]["pictures"][0]' (error)="this.src='assets/img/person.png'" onerror="this.src='assets/img/person.png'">
+        <img *ngIf='!contact["pictures"]' src="assets/img/person.png">
       </ion-avatar>
       <h2>{{contact.name}}</h2>
       <p>{{contact.number}}</p>
