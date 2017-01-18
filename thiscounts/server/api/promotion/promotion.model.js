@@ -58,7 +58,6 @@ var PromotionSchema = new Schema({
     enum: [
       'PERCENT',
       'PERCENT_RANGE',
-      'ROLLING',
       'GIFT',   // get something free if you buy
       'AMOUNT', // reduced price by amount
       'PRICE',  // reduced new price
