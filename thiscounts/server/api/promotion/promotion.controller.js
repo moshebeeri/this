@@ -131,6 +131,7 @@ var set_promotion_location = function (promotion, callback) {
 exports.create = function (req, res) {
   var promotion = req.body;
   //TODO: Convert to address location
+  console.log(JSON.stringify(promotion));
   spatial.location_to_point(promotion);
   Promotion.create(promotion, function (err, promotion) {
     //logger.info("Promotion.created : " + promotion._id);
@@ -297,5 +298,6 @@ exports.test = function (req, res) {
 };
 
 function handleError(res, err) {
+  console.log(err);
   return res.status(500).send(err)
 }

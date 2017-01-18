@@ -32,6 +32,11 @@ import { BusinessPage } from '../pages/business/business';
 import { BusinessChatPage } from '../pages/business-chat/business-chat';
 import { BusinessContactPage } from '../pages/business-contact/business-contact';
 
+import { PromotionListPage } from '../pages/promotion-list/promotion-list';
+import { PromotionPage } from '../pages/promotion/promotion';
+import { PromotionChatPage } from '../pages/promotion-chat/promotion-chat';
+import { PromotionContactPage } from '../pages/promotion-contact/promotion-contact';
+
 
 
 import { FormBuilderService } from '../components/form-builder/form-builder';
@@ -79,6 +84,10 @@ import { DeviceData } from '../providers/device-data';
     BusinessPage,
     BusinessChatPage,
     BusinessContactPage,
+    PromotionListPage,
+    PromotionPage,
+    PromotionChatPage,
+    PromotionContactPage,
     DebugPanelComponent,
     FormButtonsComponent,
     PhotoComponent,
@@ -115,6 +124,10 @@ import { DeviceData } from '../providers/device-data';
     BusinessPage,
     BusinessChatPage,
     BusinessContactPage,
+    PromotionListPage,
+    PromotionPage,
+    PromotionChatPage,
+    PromotionContactPage,
     DebugPanelComponent,
     FormButtonsComponent,
     PhotoComponent,

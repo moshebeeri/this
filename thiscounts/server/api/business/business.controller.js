@@ -4,6 +4,7 @@ var _ = require('lodash');
 var Business = require('./business.model');
 var logger = require('../../components/logger').createLogger();
 var User = require('../user/user.model');
+var Group = require('../group/group.controller');
 
 var graphTools = require('../../components/graph-tools');
 var graphModel = graphTools.createGraphModel('business');
@@ -107,7 +108,22 @@ exports.create = function(req, res) {
           action : "created"
         }, function (err) {if(err) logger.error(err.message)});
       });
-      return res.status(201).json(business);
+      console.log("================================================");
+      console.log("GO CREATE GROUP");
+      console.log("================================================");
+
+      req.body["creator_type"] = 'BUSINESS';
+      req.body["add_policy"] = 'REQUEST';
+      req.body["business_id"] = business._id;
+      console.log("================================================");
+      console.log(req.body);
+      console.log(req.body["creator_type"]);
+      console.log(req.body["add_policy"]);
+      console.log(req.body["business_id"]);
+      console.log("================================================");
+
+      Group.create(req, res);
+      //return res.status(201).json(business);
     });
   });
 };

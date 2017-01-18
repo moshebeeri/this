@@ -80,7 +80,7 @@ export class FormBuilderService {
       option: ''
     };
     this.excludedFields = ["gid","created","timestamp", "id", "sms_code", "sms_verified", "role", "hashedPassword","provider","salt"];
-    this.excludedFieldsHTML = ["gid","created","timestamp","id", "sms_code", "sms_verified", "role", "hashedPassword","provider","salt", "phone_number"];
+    this.excludedFieldsHTML = ["gid","created","timestamp","id", "sms_code", "sms_verified", "role", "hashedPassword","provider","salt", "phone_number", "formID", "pictures"];
     //this.weiredRequestNames = [];
     this._buildForm();
 
@@ -316,6 +316,7 @@ export class FormBuilderService {
   private _setComplexValues(myForm){
     console.log(this.serviceName + "currentUser: " + this.currentUser["_id"]);
     console.log(this.serviceName + "_setComplexValues: " + JSON.stringify(myForm.value));
+    alert(JSON.stringify(myForm.value));
     for(let propt in myForm.value) {
       switch (propt)
       {
@@ -329,7 +330,7 @@ export class FormBuilderService {
           break;
         case "phone_number":
           myForm.value[propt] = this.currentUser["phone_number"];
-          console.log(this.serviceName +  "SET PICTURES ARRAY");
+          console.log(this.serviceName +  "SET PHONE_NUMBER");
           break;
         case "admins":
           myForm.value[propt] = this.currentUser["_id"];
@@ -348,6 +349,7 @@ export class FormBuilderService {
           break;
       }
     }
+    alert(JSON.stringify(myForm.value));
     console.log(this.serviceName + "myForm: " + myForm.value);
   }
 

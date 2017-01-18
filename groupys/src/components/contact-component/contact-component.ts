@@ -438,14 +438,11 @@ export class ContactComponent{
   }
 
   setPage(page){
-    alert(page);
     switch (page)
     {
       case "Group":
-        alert("Group Nav");
         return this.GroupPageType;
       case "Business":
-        alert("Business Nav");
         return this.BusinessPageType;
       default:
         return this.TabsPageType;

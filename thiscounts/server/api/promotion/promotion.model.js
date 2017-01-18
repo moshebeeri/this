@@ -11,6 +11,7 @@ function percent_range_validator(v) {
 }
 
 var PromotionSchema = new Schema({
+  formID: {type: String, required: true},
   social_state : {},
   name: {type: String, required: true},
   //gid: { type: Number, index: true, unique : true },
@@ -26,13 +27,13 @@ var PromotionSchema = new Schema({
   //see https://docs.mongodb.org/manual/reference/geojson/#geospatial-indexes-store-geojson
   //{ type: "Point", coordinates: [ 40, 5 ] },
   //Always list coordinates in longitude, latitude order.
-  location : {
+  /**location : {
     lng : Number,
     lat : Number,
     //for internal use
     type: {type: String},
     coordinates: []
-  },
+  },**/
   mall : {type: Schema.ObjectId, ref: 'Mall', required: false},
   shopping_chain: {type: Schema.ObjectId, ref: 'ShoppingChain', required: false},
   business: {type: Schema.ObjectId, ref: 'Business', required: false},
@@ -91,14 +92,14 @@ var PromotionSchema = new Schema({
   start: { type : Date, default: Date.now },
   end: Date, // TODO: Add default
   expireAt: {
-    type: Date,
-    validate: [ function(v) {
+    type: Date
+    /**validate: [ function(v) {
       return (v - new Date()) > 60000*(3600*24*14 - 1);
     }, 'Cannot expire less then 14 days in the future.' ],
     default: function() {
       // 14 days from now
       return new Date(new Date().valueOf() + 60000*3600*24*14);
-    }
+    }**/
   },
   percent: {
     percent : { type : Number, min:1, max: 100}

@@ -22,6 +22,9 @@ export class UrlData {
   BUSINESS_URL: string;
   BUSINESS_CONTACTS_URL: string;
   BUSINESS_LIST_URL: string;
+  PROMOTION_URL: string;
+  PROMOTION_CONTACTS_URL: string;
+  PROMOTION_LIST_URL: string;
   IP_URL: string;
   modified: any;
 
@@ -48,16 +51,20 @@ export class UrlData {
     this.TEST_URL = this.BASE_URL + "tests/";
     this.GROUP_URL = this.BASE_URL + "groups/";
     this.BUSINESS_URL = this.BASE_URL + "businesses/";
+    this.PROMOTION_URL = this.BASE_URL + "promotions/";
     // groups/add/users/:to_group
     this.GROUP_CONTACTS_URL = this.BASE_URL + "groups/add/users/";
     this.BUSINESS_CONTACTS_URL = this.BASE_URL + "businesses/add/users/";
+    this.PROMOTION_CONTACTS_URL = this.BASE_URL + "promotions/add/users/";
     this.GROUP_LIST_URL = this.BASE_URL + "groups/following/user" + this.modified;
     this.BUSINESS_LIST_URL = this.BASE_URL + "businesses/following/user" + this.modified;
+    this.PROMOTION_LIST_URL = this.BASE_URL + "promotions/following/user" + this.modified;
     this.IP_URL = this.BASE_URL + "ip" + this.modified;
 
     // used by formBuilder - get the post/put url automatically by entity name
     this.allPostURLS["Group"] = this.GROUP_URL;
     this.allPostURLS["Business"] = this.BUSINESS_URL;
+    this.allPostURLS["Promotion"] = this.PROMOTION_URL;
     this.allPostURLS["Test"] = this.TEST_URL;
     this.allPutURLS["User"] = this.SIGNUP_URL;
 }

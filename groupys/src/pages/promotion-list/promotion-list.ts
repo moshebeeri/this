@@ -9,16 +9,16 @@ import { UrlData } from '../../providers/url-data';
 import { UserData } from '../../providers/user-data';
 import { SessionDetailPage } from '../session-detail/session-detail';
 import { SpeakerDetailPage } from '../speaker-detail/speaker-detail';
-import { BusinessPage } from '../business/business';
-import { BusinessContactPage } from '../business-contact/business-contact';
-import { BusinessChatPage } from '../business-chat/business-chat';
+import { PromotionPage } from '../promotion/promotion';
+import { PromotionContactPage } from '../promotion-contact/promotion-contact';
+import { PromotionChatPage } from '../promotion-chat/promotion-chat';
 
 
 @Component({
-  selector: 'page-business-list',
-  templateUrl: 'business-list.html'
+  selector: 'page-promotion-list',
+  templateUrl: 'promotion-list.html'
 })
-export class BusinessListPage {
+export class PromotionListPage {
   error: string;
   actionSheet: ActionSheet;
   speakers = [];
@@ -36,7 +36,7 @@ export class BusinessListPage {
     this.formID = "formID";
     this.data = "data";
     this.pageType = "page";
-    this.serviceName = "BusinessListPage ======";
+    this.serviceName = "PromotionListPage ======";
     this.getUserGroupList();
   }
 
@@ -49,15 +49,15 @@ export class BusinessListPage {
   }
   createGroup(){
     //this._app.getRootNav().setRoot(SignupPage);
-    this._app.getRootNav().push(BusinessContactPage);
+    this._app.getRootNav().push(PromotionContactPage);
   }
   getUserGroupList(){
     this.userData.getToken().then((token) => {
       this.contentHeader.append('Authorization', 'Bearer ' + token);
       console.log(this.serviceName + this.contentHeader);
-      console.log(this.serviceName + this.urlData.BUSINESS_LIST_URL + " ---------- " + this.contentHeader);
+      console.log(this.serviceName + this.urlData.PROMOTION_LIST_URL + " ---------- " + this.contentHeader);
 
-      this.http.get(this.urlData.BUSINESS_LIST_URL, { headers: this.contentHeader })
+      this.http.get(this.urlData.PROMOTION_LIST_URL, { headers: this.contentHeader })
         .map(res => res.json())
         .subscribe(
           data => this.groupList = data,
@@ -68,8 +68,8 @@ export class BusinessListPage {
     });
   }
   goToGroup(e, group) {
-    //console.log(this.serviceName + "group: " + JSON.stringify(group));
-    this._app.getRootNav().push(BusinessChatPage, {'groupName': group.name, 'groupID': group._id});
+    console.log(this.serviceName + "group: " + JSON.stringify(group));
+    this._app.getRootNav().push(PromotionChatPage, {'groupName': group.name});
 
   }
 }

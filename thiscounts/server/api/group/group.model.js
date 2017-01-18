@@ -4,6 +4,7 @@ var mongoose = require('mongoose'),
     Schema = mongoose.Schema;
 
 var GroupSchema = new Schema({
+  formID: {type: String, required: true},
   name: String,
   gid: { type: Number, index: true, unique: true },
   description: String,
@@ -31,10 +32,7 @@ var GroupSchema = new Schema({
       'MEMBER_INVITE' //  member invite
     ]
   },
-  pictures: [],
-  formID: {type: String, required: true}
-
-
+  pictures: []
 });
 
 module.exports = mongoose.model('Group', GroupSchema);

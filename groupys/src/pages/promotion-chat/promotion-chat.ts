@@ -12,14 +12,13 @@ import { SessionDetailPage } from '../session-detail/session-detail';
 import { SpeakerDetailPage } from '../speaker-detail/speaker-detail';
 import { GroupPage } from '../group/group';
 import { GroupContactPage } from '../group-contact/group-contact';
-import { PromotionPage } from '../promotion/promotion';
 
 
 @Component({
-  selector: 'page-business-chat',
-  templateUrl: 'business-chat.html'
+  selector: 'page-promotion-chat',
+  templateUrl: 'promotion-chat.html'
 })
-export class BusinessChatPage {
+export class PromotionChatPage {
   error: string;
   actionSheet: ActionSheet;
   speakers = [];
@@ -31,7 +30,6 @@ export class BusinessChatPage {
   currentUser:any;
   serviceName:string;
   groupName:string;
-  groupID:string;
 
 
 
@@ -41,15 +39,9 @@ export class BusinessChatPage {
     this.pageType = "page";
     this.serviceName = "GroupChatPage ======";
     this.groupName = this.navParams.get('groupName');
-    this.groupID = this.navParams.get('groupID');
   }
 
   ionViewDidLoad() {
     
-  }
-
-  createPromotion(){
-    //this._app.getRootNav().setRoot(SignupPage);
-    this._app.getRootNav().push(PromotionPage, {"groupID":this.groupID});
   }
 }
