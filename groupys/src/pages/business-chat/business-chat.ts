@@ -27,7 +27,6 @@ export class BusinessChatPage {
   data: string;
   pageType: string;
   contentHeader: Headers = new Headers({"Content-Type": "application/json"});
-  groupList = [];
   currentUser:any;
   serviceName:string;
   groupName:string;
@@ -52,4 +51,6 @@ export class BusinessChatPage {
     //this._app.getRootNav().setRoot(SignupPage);
     this._app.getRootNav().push(PromotionPage, {"groupID":this.groupID});
   }
+
+  
 }

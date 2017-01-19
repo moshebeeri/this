@@ -36,19 +36,25 @@ exports.feed = function (req, res) {
   //var userId = req.user._id;
   var from_id = req.params.from_id;
   var entity_id = req.params.entity_id;
-  var type = req.params.type;
+  var entity_type = req.params.entity_type;
   var scroll = req.params.scroll;
+  console.log("=============================================");
+  console.log("from_id: " + from_id);
+  console.log("entity_id: " + entity_id);
+  console.log("entity_type: " + entity_type);
+  console.log("scroll: " + scroll);
+  console.log("=============================================");
 
   if (req.params.scroll != 'up' && req.params.scroll != 'down')
     return res.status(400).send('scroll value may be only up or down');
 
   var query_builder;
-  if(type=="user")
+  if(entity_type=="user")
     query_builder = Feed.find({user: entity_id}).sort({activity: -1}).limit(25);
-  else if (type=="group")
+  else if (entity_type=="group")
     query_builder = Feed.find({group: entity_id}).sort({activity: -1}).limit(25);
 
-  if (_id == 'start') {
+  if (from_id == 'start') {
     return feedTools.fetch_feed(query_builder, Feed, res);
   }
   if (req.params.scroll === 'up')

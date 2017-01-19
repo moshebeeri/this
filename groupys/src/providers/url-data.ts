@@ -26,6 +26,7 @@ export class UrlData {
   PROMOTION_CONTACTS_URL: string;
   PROMOTION_LIST_URL: string;
   IP_URL: string;
+  FEED_URL: string;
   modified: any;
 
   constructor() {
@@ -36,7 +37,8 @@ export class UrlData {
       this.BASE_URL = "http://localhost:9000/api/";
     } else {
       //this.BASE_URL = "http://low.la:9000/api/";
-      this.BASE_URL = "http://10.0.0.7:9000/api/";
+      //this.BASE_URL = "http://10.0.0.7:9000/api/";
+      this.BASE_URL = "http://www-pc:9000/api/";
     }
     this.LOGIN_URL = this.BASE_URL + "local";
     this.SIGNUP_URL = this.BASE_URL + "users";
@@ -60,6 +62,7 @@ export class UrlData {
     this.BUSINESS_LIST_URL = this.BASE_URL + "businesses/following/user" + this.modified;
     this.PROMOTION_LIST_URL = this.BASE_URL + "promotions/following/user" + this.modified;
     this.IP_URL = this.BASE_URL + "ip" + this.modified;
+    this.FEED_URL = this.BASE_URL + "feeds";
 
     // used by formBuilder - get the post/put url automatically by entity name
     this.allPostURLS["Group"] = this.GROUP_URL;

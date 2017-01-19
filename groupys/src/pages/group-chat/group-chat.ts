@@ -26,10 +26,13 @@ export class GroupChatPage {
   data: string;
   pageType: string;
   contentHeader: Headers = new Headers({"Content-Type": "application/json"});
+  groupFeed:any;
   groupList = [];
   currentUser:any;
   serviceName:string;
   groupName:string;
+  groupID:string;
+  modified: any;
 
 
 
@@ -37,11 +40,44 @@ export class GroupChatPage {
     this.formID = "formID";
     this.data = "data";
     this.pageType = "page";
+    this.modified = "?" + (new Date).getTime();
     this.serviceName = "GroupChatPage ======";
     this.groupName = this.navParams.get('groupName');
+    this.groupID = this.navParams.get('groupID');
+    this.getGroupFeed();
   }
 
   ionViewDidLoad() {
     
+  }
+
+  getGroupFeed(){
+    alert("getBusinessFeed");
+    this.userData.getToken().then((token) => {
+      this.contentHeader.append('Authorization', 'Bearer ' + token);
+      console.log(this.serviceName + this.contentHeader);
+      console.log(this.serviceName + this.urlData.FEED_URL + " ---------- " + this.contentHeader);
+
+      /**
+       * :from_id - feed reference id, the last if you scroll down and the top most if you scroll up, in case of fresh start just set to 'start'
+       * :scroll -  down or up
+       * :entity_type - user or group
+       * :entity_id - the _id of the item of which you like to show the feed
+       */
+      //router.get('/:from_id/:scroll/:entity_type/:entity_id', auth.isAuthenticated(), controller.feed);
+      let params = '/start/down/group/' + this.groupID + this.modified;
+      alert(this.urlData.FEED_URL + params);
+      alert(this.urlData.BUSINESS_LIST_URL + params);
+      alert(this.urlData.BUSINESS_LIST_URL + params);
+
+      this.http.get(this.urlData.FEED_URL + params, { headers: this.contentHeader })
+        .map(res => res.json())
+        .subscribe(
+          data => this.groupFeed = data,
+          err => this.error = err,
+          () => alert(JSON.stringify(this.groupFeed))
+        );
+
+    });
   }
 }

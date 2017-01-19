@@ -69,7 +69,7 @@ export class GroupListPage {
   }
   goToGroup(e, group) {
     console.log(this.serviceName + "group: " + JSON.stringify(group));
-    this._app.getRootNav().push(GroupChatPage, {'groupName': group.name});
+    this._app.getRootNav().push(GroupChatPage, {'groupName': group.name, 'groupID': group._id});
 
   }
 }
