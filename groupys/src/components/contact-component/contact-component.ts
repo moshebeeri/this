@@ -12,6 +12,7 @@ import { HeaderData } from '../../providers/header-data';
 import { ContactData } from '../../providers/contact-data';
 import { GroupPage } from '../../pages/group/group';
 import { BusinessPage } from '../../pages/business/business';
+import { CampaignPage } from '../../pages/campaign/campaign';
 import { TabsPage } from '../../pages/tabs/tabs';
 
 @Component({
@@ -25,6 +26,7 @@ export class ContactComponent{
   @Input() formID;
   @Input() pageType;
   @Input() entityType;
+  @Input() entityID;
 
   phoneContacts: Array<string>;
   phoneContacts2: any;
@@ -55,6 +57,7 @@ export class ContactComponent{
   serviceName: string;
   GroupPageType:any;
   BusinessPageType:any;
+  CampaignPageType:any;
   TabsPageType:any;
 
   constructor(private _app: App, private storage: Storage, private platform: Platform, public nav: NavController, public contacts: Contacts, private globals:UrlData, private globalHeaders:HeaderData, private http:Http, private cdr:ChangeDetectorRef, private contactsService:ContactData) {
@@ -88,6 +91,7 @@ export class ContactComponent{
     this.getContacts();
     this.GroupPageType = GroupPage;
     this.BusinessPageType = BusinessPage;
+    this.CampaignPageType = CampaignPage;
     this.TabsPageType = TabsPage;
   }
 
@@ -434,7 +438,7 @@ export class ContactComponent{
     this.storage.set(formID, tmpGroup);
     //this._app.getRootNav().push(GroupPage, {formID: "111"});
     let pageToNavigate = this.setPage(this.entityType);
-    this.nav.push(pageToNavigate, {formID: formID});
+    this.nav.push(pageToNavigate, {formID: formID, entityID: this.entityID});
   }
 
   setPage(page){
@@ -444,6 +448,8 @@ export class ContactComponent{
         return this.GroupPageType;
       case "Business":
         return this.BusinessPageType;
+      case "Campaign":
+        return this.CampaignPageType;
       default:
         return this.TabsPageType;
     }

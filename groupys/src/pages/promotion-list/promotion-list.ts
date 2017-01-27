@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 import { Http, Headers} from '@angular/http';
 
-import { App, ActionSheet, ActionSheetController, Config, NavController } from 'ionic-angular';
+import { App, ActionSheet, ActionSheetController, Config, NavController, NavParams } from 'ionic-angular';
 import { InAppBrowser } from 'ionic-native';
 
 import { ConferenceData } from '../../providers/conference-data';
@@ -29,14 +29,20 @@ export class PromotionListPage {
   groupList = [];
   currentUser:any;
   serviceName:string;
+  campaignName:string;
+  campaignID:string;
+  businessID:string;
 
 
 
-  constructor(private http:Http, private urlData:UrlData, private _app: App, public actionSheetCtrl: ActionSheetController, public navCtrl: NavController, private userData:UserData, public confData: ConferenceData, public config: Config) {
+  constructor(private navParams:NavParams, private http:Http, private urlData:UrlData, private _app: App, public actionSheetCtrl: ActionSheetController, public navCtrl: NavController, private userData:UserData, public confData: ConferenceData, public config: Config) {
     this.formID = "formID";
     this.data = "data";
     this.pageType = "page";
     this.serviceName = "PromotionListPage ======";
+    this.campaignName = this.navParams.get('campaignName');
+    this.campaignID = this.navParams.get('campaignID');
+    this.businessID = this.navParams.get('businessID');
     this.getUserGroupList();
   }
 
@@ -56,8 +62,9 @@ export class PromotionListPage {
       this.contentHeader.append('Authorization', 'Bearer ' + token);
       console.log(this.serviceName + this.contentHeader);
       console.log(this.serviceName + this.urlData.PROMOTION_LIST_URL + " ---------- " + this.contentHeader);
+      var urlParams = this.businessID + "/" + this.campaignID ;
 
-      this.http.get(this.urlData.PROMOTION_LIST_URL, { headers: this.contentHeader })
+      this.http.get(this.urlData.PROMOTION_LIST_URL + urlParams, { headers: this.contentHeader })
         .map(res => res.json())
         .subscribe(
           data => this.groupList = data,

@@ -2,7 +2,7 @@
   <ion-navbar [hidden]="toggleToolbar">
 
     <ion-title *ngIf="pageType === 'page'">page</ion-title>
-    <ion-title *ngIf="pageType === 'wizard'">New Group</ion-title>
+    <ion-title *ngIf="pageType === 'wizard'">New {{entityType}}</ion-title>
     <ion-title *ngIf="pageType === 'wizard'">Add participants</ion-title>
 
     <button ion-button menuToggle>

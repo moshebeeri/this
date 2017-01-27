@@ -25,6 +25,9 @@ export class UrlData {
   PROMOTION_URL: string;
   PROMOTION_CONTACTS_URL: string;
   PROMOTION_LIST_URL: string;
+  CAMPAIGN_URL: string;
+  CAMPAIGN_CONTACTS_URL: string;
+  CAMPAIGN_LIST_URL: string;
   IP_URL: string;
   FEED_URL: string;
   modified: any;
@@ -54,13 +57,17 @@ export class UrlData {
     this.GROUP_URL = this.BASE_URL + "groups/";
     this.BUSINESS_URL = this.BASE_URL + "businesses/";
     this.PROMOTION_URL = this.BASE_URL + "promotions/";
+    this.CAMPAIGN_URL = this.BASE_URL + "campaigns/";
     // groups/add/users/:to_group
     this.GROUP_CONTACTS_URL = this.BASE_URL + "groups/add/users/";
     this.BUSINESS_CONTACTS_URL = this.BASE_URL + "businesses/add/users/";
     this.PROMOTION_CONTACTS_URL = this.BASE_URL + "promotions/add/users/";
+    this.CAMPAIGN_CONTACTS_URL = this.BASE_URL + "campaigns/add/users/";
     this.GROUP_LIST_URL = this.BASE_URL + "groups/following/user" + this.modified;
     this.BUSINESS_LIST_URL = this.BASE_URL + "businesses/following/user" + this.modified;
-    this.PROMOTION_LIST_URL = this.BASE_URL + "promotions/following/user" + this.modified;
+    //this.PROMOTION_LIST_URL = this.BASE_URL + "promotions/following/user" + this.modified;
+    this.PROMOTION_LIST_URL = this.BASE_URL + "promotions/list/"; 
+    this.CAMPAIGN_LIST_URL = this.BASE_URL + "campaigns/list/";
     this.IP_URL = this.BASE_URL + "ip" + this.modified;
     this.FEED_URL = this.BASE_URL + "feeds";
 
@@ -68,6 +75,7 @@ export class UrlData {
     this.allPostURLS["Group"] = this.GROUP_URL;
     this.allPostURLS["Business"] = this.BUSINESS_URL;
     this.allPostURLS["Promotion"] = this.PROMOTION_URL;
+    this.allPostURLS["Campaign"] = this.CAMPAIGN_URL;
     this.allPostURLS["Test"] = this.TEST_URL;
     this.allPutURLS["User"] = this.SIGNUP_URL;
 }

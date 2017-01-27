@@ -12,6 +12,7 @@ import { SpeakerDetailPage } from '../speaker-detail/speaker-detail';
 import { BusinessPage } from '../business/business';
 import { BusinessContactPage } from '../business-contact/business-contact';
 import { BusinessChatPage } from '../business-chat/business-chat';
+import { CampaignListPage } from '../campaign-list/campaign-list';
 
 
 @Component({
@@ -67,9 +68,10 @@ export class BusinessListPage {
 
     });
   }
-  goToGroup(e, group) {
+  goToGroup(e, business) {
     //console.log(this.serviceName + "group: " + JSON.stringify(group));
-    this._app.getRootNav().push(BusinessChatPage, {'groupName': group.name, 'groupID': group._id});
+    //this._app.getRootNav().push(BusinessChatPage, {'businessName': business.name, 'businessID': business._id});
+    this._app.getRootNav().push(CampaignListPage, {'businessName': business.name, 'businessID': business._id});
 
   }
 }

@@ -63,6 +63,7 @@ export class GroupysApp {
     public storage: Storage
   ) {
     console.log("app");
+    this.storage.remove('user');
     // Call any initial plugins when ready
     platform.ready().then(() => {
       StatusBar.styleDefault();

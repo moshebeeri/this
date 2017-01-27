@@ -31,7 +31,7 @@ Thing.find({}).remove(function() {
     info : 'Easily deploy your app to Heroku or Openshift with the heroku and openshift subgenerators'
   });
 });
-
+/*
 User.find({}).remove(function() {
  UserDemo.createDemo({}, function() {
       console.log('finished populating users-------------');
@@ -42,3 +42,4 @@ User.find({}).remove(function() {
 PhoneNumber.find({}).remove(function() {
 
 });
+ */

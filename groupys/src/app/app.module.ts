@@ -37,6 +37,11 @@ import { PromotionPage } from '../pages/promotion/promotion';
 import { PromotionChatPage } from '../pages/promotion-chat/promotion-chat';
 import { PromotionContactPage } from '../pages/promotion-contact/promotion-contact';
 
+import { CampaignListPage } from '../pages/campaign-list/campaign-list';
+import { CampaignPage } from '../pages/campaign/campaign';
+import { CampaignInfoPage } from '../pages/campaign-info/campaign-info';
+import { CampaignContactPage } from '../pages/campaign-contact/campaign-contact';
+
 
 
 import { FormBuilderService } from '../components/form-builder/form-builder';
@@ -55,6 +60,7 @@ import { ContactData } from '../providers/contact-data';
 import { EntityData } from '../providers/entity-data/entity-data';
 import { CameraData } from '../providers/camera-data';
 import { DeviceData } from '../providers/device-data';
+import { FeedData } from '../providers/feed-data';
 
 
 @NgModule({
@@ -88,6 +94,10 @@ import { DeviceData } from '../providers/device-data';
     PromotionPage,
     PromotionChatPage,
     PromotionContactPage,
+    CampaignListPage,
+    CampaignPage,
+    CampaignInfoPage,
+    CampaignContactPage,
     DebugPanelComponent,
     FormButtonsComponent,
     PhotoComponent,
@@ -128,12 +138,16 @@ import { DeviceData } from '../providers/device-data';
     PromotionPage,
     PromotionChatPage,
     PromotionContactPage,
+    CampaignListPage,
+    CampaignPage,
+    CampaignInfoPage,
+    CampaignContactPage,
     DebugPanelComponent,
     FormButtonsComponent,
     PhotoComponent,
     PhotoPage,
     ContactComponent
   ],
-  providers: [ConferenceData, UserData, CountryData, UrlData, HeaderData, ContactData, Storage, SMS, Contacts, EntityData, CameraData, DeviceData, FormBuilderService]
+  providers: [ConferenceData, UserData, CountryData, UrlData, HeaderData, ContactData, Storage, SMS, Contacts, EntityData, CameraData, DeviceData, FeedData, FormBuilderService]
 })
 export class AppModule { }
