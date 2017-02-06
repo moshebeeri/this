@@ -109,22 +109,14 @@ function handle_image(req, res, type) {
 
   form.on('part', function (part) {
     part.filename = part.name;
-    console.log(JSON.stringify(part));
     if (!part.filename) return;
     size = part.byteCount;
     fileName = part.filename;
   });
   form.on('file', function (name, file) {
-    console.log("----------------------------------------------------------");
-    console.log(JSON.stringify(file));
 		var entityId = file.originalFilename.substring(file.originalFilename.lastIndexOf('--'),0).toString();
-		console.log("entityId: " + entityId);
-
-    console.log(name);
-    console.log("----------------------------------------------------------");
     client.upload(file.path, {/*path: key*/}, function (err, versions, meta) {
       if (err) {
-        console.log("ERROR-ERROR-ERROR-ERROR-ERROR-ERROR-ERROR-ERROR-ERROR-ERROR-");
         console.log(err);
         return handleError(res, err);
       }
@@ -133,28 +125,72 @@ function handle_image(req, res, type) {
       // 1024 760 https://my-bucket.s3.amazonaws.com/path/110ec58a-a0f2-4ac4-8393-c866d813b8d1.jpg
       //  console.log(image.width, image.height, image.url)
       //});
-      console.log("------------- versions: " + versions);
-      console.log("------------- req.params.rami: " + req.params.rami);
-      console.log("------------- req.params.id: " + req.params.id);
-      console.log(JSON.stringify(req.params));
-      console.log(JSON.stringify(meta_data));
-      console.log("------------- type: " + type);
-      console.log("------------- req.user._id: " + req.user._id);
 			if(entityId.length === 0){
 				updateImageVersions(versions, req.user._id, meta_data, type);
 			} else {
 				updateImageVersions(versions, entityId, meta_data, type);
 			}
-			
-      
-
       return res.status(201).json(versions);
     });
 
   });
   form.parse(req);
 }
+var fs = require("fs");
+var base64 = require('file-base64');
 
+exports.base64_create = function (req, res) {
+  return base64_handle_image(req, res, 'image')
+};
+
+exports.base64_logo = function (req, res) {
+  return base64_handle_image(req, res, 'logo')
+};
+
+function base64_handle_image(req, res, type) {
+  //var meta_data = req.headers.meta;
+  var meta_data = {};
+  var form = new multiparty.Form();
+  var size = 0;
+  var fileName = randomstring.generate({length: 8, charset: 'hex'});
+
+  form.on('part', function (part) {
+    part.filename = part.name;
+    if (!part.filename) return;
+    size = part.byteCount;
+    fileName = part.filename;
+  });
+  form.on('file', function (name, file) {
+
+    fs.readFile(file.path, 'utf-8', function (err,data) {
+      if (err) {
+        return console.log(err);
+      }
+      var clear_img = data.replace(/^data:image\/*;base64,/, "");
+      base64.decode(clear_img, file.path, function(err, output) {
+        if (err) {
+          console.log(err);
+          return handleError(res, err);
+        }
+        var entityId = file.originalFilename.substring(file.originalFilename.lastIndexOf('--'),0).toString();
+        client.upload(file.path, {/*path: key*/}, function (err, versions, meta) {
+          if (err) {
+            console.log(err);
+            return handleError(res, err);
+          }
+          if(entityId.length === 0){
+            updateImageVersions(versions, req.user._id, meta_data, type);
+          } else {
+            updateImageVersions(versions, entityId, meta_data, type);
+          }
+          return res.status(201).json(versions);
+        });
+      });
+
+    });
+  });
+  form.parse(req);
+}
 
 
 function updateImageVersions(version, id, meta_data, type) {
