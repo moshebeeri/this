@@ -134,7 +134,8 @@ export class FormBuilderService {
     structureObject["postURL"] = this._formBuilder.control(entityType);
 
     for(let propt in properties) {
-      if(this.excludedFields.indexOf(properties[propt]["name"]) === -1){
+      console.log("**************: " + propt["name"] + " : " + propt["validators"]);
+      if(this.excludedFields.indexOf(properties[propt]["name"]) === -1 && (properties[propt]["validators"] != undefined && properties[propt]["validators"][0]["name"] != undefined && properties[propt]["validators"][0]["name"] === "required")){
         if(properties[propt]["defaultValue"] === undefined){
           properties[propt]["defaultValue"] = '';
         }
@@ -372,8 +373,9 @@ export class FormBuilderService {
       console.log(this.serviceName +  properties[propt]["name"]);
       obj = _.find((navigationProperties), function(obj) { return obj["name"] == properties[propt]["name"]});
       console.log(this.serviceName +  obj);
+      console.log("**************: " + properties[propt]["name"] + " : " + properties[propt]["validators"]);
 
-      if(this.excludedFieldsHTML.indexOf(properties[propt]["name"]) === -1 && obj === undefined){
+      if(this.excludedFieldsHTML.indexOf(properties[propt]["name"]) === -1 && obj === undefined && (properties[propt]["validators"] != undefined && properties[propt]["validators"][0] != undefined && properties[propt]["validators"][0]["name"] === "required")){
 
         if(properties[propt]["dataType"] === 'String' && typeof properties[propt]["defaultValue"] != 'object'){
           elementHTML = this._setHTMLInputControls("text", properties[propt], aliasFields);

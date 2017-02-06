@@ -12,7 +12,7 @@ import { SessionDetailPage } from '../session-detail/session-detail';
 import { SpeakerDetailPage } from '../speaker-detail/speaker-detail';
 import { GroupPage } from '../group/group';
 import { GroupContactPage } from '../group-contact/group-contact';
-import { PromotionPage } from '../promotion/promotion';
+import { CampaignPage } from '../campaign/campaign';
 
 
 @Component({
@@ -29,8 +29,8 @@ export class BusinessChatPage {
   contentHeader: Headers = new Headers({"Content-Type": "application/json"});
   currentUser:any;
   serviceName:string;
-  groupName:string;
-  groupID:string;
+  businessName:string;
+  businessID:string;
 
 
 
@@ -39,17 +39,17 @@ export class BusinessChatPage {
     this.data = "data";
     this.pageType = "page";
     this.serviceName = "GroupChatPage ======";
-    this.groupName = this.navParams.get('groupName');
-    this.groupID = this.navParams.get('groupID');
+    this.businessName = this.navParams.get('businessName');
+    this.businessID = this.navParams.get('businessID');
   }
 
   ionViewDidLoad() {
     
   }
 
-  createPromotion(){
+  createCampaign(){
     //this._app.getRootNav().setRoot(SignupPage);
-    this._app.getRootNav().push(PromotionPage, {"groupID":this.groupID});
+    this._app.getRootNav().push(CampaignPage, {"businessID":this.businessID});
   }
 
   

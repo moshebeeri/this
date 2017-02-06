@@ -15,6 +15,7 @@ router.delete('/:id', auth.isAuthenticated(), controller.destroy);
 //router.get('/info/server/time', controller.server_time);
 router.get('/save/:id', auth.isAuthenticated(), controller.save);
 router.get('/realize/:id/:realize_code/:sale_point_code', auth.isAuthenticated(), controller.realize);
+router.get('/list/:business_id/:campaign_id', auth.isAuthenticated(), controller.campaign_promotions);
 
 // router.get('/init/data', /*auth.isAuthenticated(),*/ controller.initialize);
 // router.get('/test/graph', controller.test);

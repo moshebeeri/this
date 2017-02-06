@@ -17,7 +17,7 @@
 
 <ion-content padding class="business">
   Business
-
+<!--
   <form novalidate *ngIf="formActive" [formGroup]="entityForm" (ngSubmit)="onSubmitForm()">
     <ion-item><ion-label fixed>name</ion-label><ion-input type="text" formControlName="name"></ion-input></ion-item>
     <ion-item><ion-label fixed>tax_id</ion-label><ion-input type="text" formControlName="tax_id"></ion-input></ion-item>
@@ -42,6 +42,22 @@
       <ion-option value="ENTERPRISE">ENTERPRISE</ion-option>
     </ion-select></ion-item>
     <ion-item><ion-label fixed>logo</ion-label><ion-input type="text" formControlName="logo"></ion-input></ion-item>
+  </form>
+-->
+
+  <form novalidate *ngIf="formActive" [formGroup]="entityForm" (ngSubmit)="onSubmitForm()">
+    <ion-item><ion-label fixed>name</ion-label><ion-input type="text" formControlName="name"></ion-input></ion-item>
+    <ion-item><ion-label fixed>tax_id</ion-label><ion-input type="text" formControlName="tax_id"></ion-input></ion-item>
+    <ion-item><ion-label fixed>address</ion-label><ion-input type="text" formControlName="address"></ion-input></ion-item>
+    <ion-item><ion-label fixed>city</ion-label><ion-input type="text" formControlName="city"></ion-input></ion-item>
+    <ion-item><ion-label fixed>state</ion-label><ion-input type="text" formControlName="state"></ion-input></ion-item>
+    <ion-item><ion-label fixed>email</ion-label><ion-input type="text" formControlName="email"></ion-input></ion-item>
+    <ion-item><ion-label>type</ion-label><ion-select formControlName="type" let type="ngForm">
+      <ion-option value="PERSONAL_SERVICES">PERSONAL_SERVICES</ion-option>
+      <ion-option value="SMALL_BUSINESS">SMALL_BUSINESS</ion-option>
+      <ion-option value="COMPANY">COMPANY</ion-option>
+      <ion-option value="ENTERPRISE">ENTERPRISE</ion-option>
+    </ion-select></ion-item>
   </form>
   <div padding></div>
   <div padding></div>

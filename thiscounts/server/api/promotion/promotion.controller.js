@@ -75,8 +75,8 @@ exports.show = function (req, res) {
 function to_graph(promotion) {
   return {
     _id: promotion._id,
-    lat: promotion.location.lat,
-    lon: promotion.location.lng,
+    //lat: promotion.location.lat,
+    //lon: promotion.location.lng,
     created: promotion.created,
     report: promotion.report,
     system_report: promotion.system_report
@@ -122,13 +122,15 @@ var set_promotion_location = function (promotion, callback) {
   else if (utils.defined(promotion.business))
     Promotion.populate(promotion, {path: 'business', model: 'Business'}, function (err, promotion) {
       if (err) return logger.error('failed to populate location ', err);
-      promotion.location = promotion.business.location
+      promotion.location = promotion.business.location;
       promotion.business = promotion.business._id;
       callback(null, promotion)
     });
 };
 
 exports.create = function (req, res) {
+  //TODO: where to set the gid? number/string?
+  req.body.gid = Math.floor(Math.random() * 100000);
   var promotion = req.body;
   //TODO: Convert to address location
   console.log(JSON.stringify(promotion));
@@ -152,8 +154,11 @@ exports.create = function (req, res) {
           promotionGraphModel.relate_ids(promotion._id, 'MALL_PROMOTION', promotion.mall);
         if (utils.defined(promotion.shopping_chain))
           promotionGraphModel.relate_ids(promotion._id, 'CHAIN_PROMOTION', promotion.shopping_chain);
-        if (utils.defined(promotion.business))
-          promotionGraphModel.relate_ids(promotion._id, 'BUSINESS_PROMOTION', promotion.business);
+        //if (utils.defined(promotion.business))
+        //  promotionGraphModel.relate_ids(promotion._id, 'BUSINESS_PROMOTION', promotion.business);
+        if(utils.defined(req.body["campaign_id"])){
+          promotionGraphModel.relate_ids(req.body["campaign_id"], 'CAMPAIGN_PROMOTION', promotion._id);
+        }
         relateTypes(promotion);
         promotion_created_activity(promotion);
         spatial.add2index(promotion.gid, function (err, result) {
@@ -295,6 +300,21 @@ exports.test = function (req, res) {
     console.log(promotions[0]);
     return res.json(200, promotions);
   })
+};
+
+exports.campaign_promotions = function (req, res) {
+  console.log("user_promotions");
+  console.log("user: " + req.user._id);
+  var userID = req.user._id;
+  var businessID = req.params.business_id;
+  var campaignID = req.params.campaign_id;
+  console.log("MATCH (u:user {_id:'"+ userID +"'})-[r:OWNS]->(b:business {_id:'"+ businessID +"'})-[bc:BUSINESS_CAMPAIGN]->(c:campaign {_id:'"+ campaignID +"'})-[cp:CAMPAIGN_PROMOTION]->(p:promotion) RETURN p LIMIT 25");
+  promotionGraphModel.query("MATCH (u:user {_id:'"+ userID +"'})-[r:OWNS]->(b:business {_id:'"+ businessID +"'})-[bc:BUSINESS_CAMPAIGN]->(c:campaign {_id:'"+ campaignID +"'})-[cp:CAMPAIGN_PROMOTION]->(p:promotion) RETURN p LIMIT 25", function(err, groups){
+    if (err) {return handleError("13",res, err)}
+    if(!groups) { return res.send(404); }
+    console.log(JSON.stringify(groups));
+    return res.status(200).json(groups);
+  });
 };
 
 function handleError(res, err) {

@@ -17,7 +17,7 @@
 
 <ion-content padding class="promotion">
   Promotion
-
+<!--
   <form novalidate *ngIf="formActive" [formGroup]="entityForm" (ngSubmit)="onSubmitForm()">
     <ion-item><ion-label fixed>name</ion-label><ion-input type="text" formControlName="name"></ion-input></ion-item>
     <ion-item><ion-label fixed>info</ion-label><ion-input type="text" formControlName="info"></ion-input></ion-item>
@@ -65,8 +65,31 @@
     <ion-item><ion-label>end</ion-label><ion-datetime displayFormat="MM/DD/YYYY" formControlName="end"></ion-datetime></ion-item>
     <ion-item><ion-label>expireAt</ion-label><ion-datetime displayFormat="MM/DD/YYYY" formControlName="expireAt"></ion-datetime></ion-item>
   </form>
+-->
 
-
+  <form novalidate *ngIf="formActive" [formGroup]="entityForm" (ngSubmit)="onSubmitForm()">
+    <ion-item><ion-label fixed>name</ion-label><ion-input type="text" formControlName="name"></ion-input></ion-item>
+    <ion-item><ion-label>type</ion-label><ion-select formControlName="type" let type="ngForm">
+      <ion-option value="PERCENT">PERCENT</ion-option>
+      <ion-option value="PERCENT_RANGE">PERCENT_RANGE</ion-option>
+      <ion-option value="GIFT">GIFT</ion-option>
+      <ion-option value="AMOUNT">AMOUNT</ion-option>
+      <ion-option value="PRICE">PRICE</ion-option>
+      <ion-option value="X+Y">X+Y</ion-option>
+      <ion-option value="X+N%OFF">X+N%OFF</ion-option>
+      <ion-option value="X_FOR_Y">X_FOR_Y</ion-option>
+      <ion-option value="INCREASING">INCREASING</ion-option>
+      <ion-option value="DOUBLING">DOUBLING</ion-option>
+      <ion-option value="ITEMS_GROW">ITEMS_GROW</ion-option>
+      <ion-option value="PREPAY_FOR_DISCOUNT">PREPAY_FOR_DISCOUNT</ion-option>
+      <ion-option value="REDUCED_AMOUNT">REDUCED_AMOUNT</ion-option>
+      <ion-option value="PUNCH_CARD">PUNCH_CARD</ion-option>
+      <ion-option value="CASH_BACK">CASH_BACK</ion-option>
+      <ion-option value="EARLY_BOOKING">EARLY_BOOKING</ion-option>
+      <ion-option value="HAPPY_HOUR">HAPPY_HOUR</ion-option>
+      <ion-option value="MORE_THAN">MORE_THAN</ion-option>
+    </ion-select></ion-item>
+  </form>
   <div padding></div>
   <div padding></div>
   <div padding></div>

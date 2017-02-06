@@ -16,10 +16,10 @@ import { GroupContactPage } from '../group-contact/group-contact';
 
 
 @Component({
-  selector: 'page-group-chat',
-  templateUrl: 'group-chat.html'
+  selector: 'page-campaign-info',
+  templateUrl: 'campaign-info.html'
 })
-export class GroupChatPage {
+export class CampaignInfoPage {
   error: string;
   actionSheet: ActionSheet;
   formID: string;
@@ -31,8 +31,8 @@ export class GroupChatPage {
   groupList = [];
   currentUser:any;
   serviceName:string;
-  groupName:string;
-  groupID:string;
+  campaignName:string;
+  campaignID:string;
   modified: any;
 
 
@@ -42,9 +42,9 @@ export class GroupChatPage {
     this.data = "data";
     this.pageType = "page";
     this.modified = "?" + (new Date).getTime();
-    this.serviceName = "GroupChatPage ======";
-    this.groupName = this.navParams.get('groupName');
-    this.groupID = this.navParams.get('groupID');
+    this.serviceName = "CampaignInfoPage ======";
+    this.campaignName = this.navParams.get('campaignName');
+    this.campaignID = this.navParams.get('campaignID');
     this.getGroupFeed();
     this.getUserFeed();
   }
@@ -67,7 +67,7 @@ export class GroupChatPage {
        * :entity_id - the _id of the item of which you like to show the feed
        */
       //router.get('/:from_id/:scroll/:entity_type/:entity_id', auth.isAuthenticated(), controller.feed);
-      let params = '/start/down/group/' + this.groupID + this.modified;
+      let params = '/start/down/group/' + this.campaignID + this.modified;
       alert(this.urlData.FEED_URL + params);
 
       this.http.get(this.urlData.FEED_URL + params, { headers: this.contentHeader })

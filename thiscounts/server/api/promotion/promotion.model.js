@@ -45,6 +45,7 @@ var PromotionSchema = new Schema({
       'HOT'     ,
       'LIKE'    ,
       'NEAR'    ,
+        
       'MALL'    ,
       'FASHION' ,
       'GIFT'
