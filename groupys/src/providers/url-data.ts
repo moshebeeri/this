@@ -37,8 +37,8 @@ export class UrlData {
       this.BASE_URL = "http://localhost:9000/api/";
     } else {
       //this.BASE_URL = "http://low.la:9000/api/";
-      //this.BASE_URL = "http://10.0.0.7:9000/api/";
-      this.BASE_URL = "http://www-pc:9000/api/";
+      this.BASE_URL = "http://10.0.0.5:9000/api/";
+      //this.BASE_URL = "http://www-pc:9000/api/";
     }
     this.LOGIN_URL = this.BASE_URL + "local";
     this.SIGNUP_URL = this.BASE_URL + "users";

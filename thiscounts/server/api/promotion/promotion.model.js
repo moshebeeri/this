@@ -54,7 +54,7 @@ var PromotionSchema = new Schema({
   },
   type: {
     type: String,
-    required: true,
+    required: false,
     enum: [
       'PERCENT',
       'PERCENT_RANGE',
