@@ -4,6 +4,7 @@ import { Image, Platform } from 'react-native';
 import { connect } from 'react-redux';
 import { actions } from 'react-native-navigation-redux-helpers';
 import { Container, Content, Text, InputGroup, Input, Button, Icon, View } from 'native-base';
+import store from 'react-native-simple-store';
 
 import login from './signup-theme';
 import styles from './styles';
@@ -28,39 +29,52 @@ class Signup extends Component {
     this.state = {
       email: '',
       password: '',
+      phone_number:'',
       scroll: false,
         error:''
     };
   }
 
-  signup() {
-      console.log("try to sigunp");
+    replaceRoute(route) {
+        this.props.replaceAt('signup', { key: route }, this.props.navigation.key);
+    }
 
-      fetch('http://low.la:9000/auth/local', {
+  signup() {
+
+      fetch('http://low.la:9000/api/users', {
           method: 'POST',
           headers: {
               'Accept': 'application/json, text/plain, */*',
               'Content-Type': 'application/json;charset=utf-8',
           },
           body: JSON.stringify({
-              email: this.state.email,
+              phone_number: this.state.phone_number,
+              email: this.state.phone_number + "@lowla.co.il",
               password:this.state.password,
+
+
           })
-      }).then(function (response) {
-          console.log(response._bodyText);
-          console.log(response.status);
-          this.replaceRoute('home', {email: this.state.email, password: this.state.password})
-      }).catch(function (error) {
+      }).then((response) => response.json())
+          .then((responseData) => {
+              if(responseData.token){
+                  console.log("return token: " + responseData.token);
+                  store.save('token',responseData.token);
+                  this.replaceRoute('home');
+              }else{
+                  this.replaceRoute('login');
+              }
+
+          }).catch(function (error) {
+
               console.log('There has been a problem with your fetch operation: ' + error.message);
+              this.replaceRoute('login');
           });
 
 
 
 
   }
-  replaceRoute(route) {
-    this.props.replaceAt('Signup', { key: route }, this.props.navigation.key);
-  }
+
 
   render() {
     return (
@@ -77,7 +91,7 @@ class Signup extends Component {
                 <Icon name="ios-person" />
                 <Input
                   placeholder="Phone"
-                  onChangeText={email => this.setState({ email })}
+                  onChangeText={phone_number => this.setState({ phone_number })}
                 />
               </InputGroup>
             </View>
@@ -94,7 +108,7 @@ class Signup extends Component {
             </View>
 
 
-            <Button style={styles.login} onPress={() => this.signup({ email: this.state.email, password: this.state.password }) }>
+            <Button style={styles.login} onPress={() => this.signup({ phone_number: this.state.phone_number, password: this.state.password }) }>
                 Signup
             </Button>
               <Text>
