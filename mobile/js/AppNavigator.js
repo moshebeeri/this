@@ -10,6 +10,7 @@ import { closeDrawer } from './actions/drawer';
 import Login from './components/login/';
 import SplashPage from './components/splashscreen/';
 import Home from './components/home/';
+import Signup from './components/signup/';
 import Product from './components/product/';
 import Cart from './components/cart/';
 import MyOrder from './components/myOrder/';
@@ -86,6 +87,8 @@ class AppNavigator extends Component {
         return <Login />;
       case 'home':
         return <Home />;
+      case 'signup':
+        return <Signup />;
       case 'cart':
         return <Cart />;
       case 'shipping':
