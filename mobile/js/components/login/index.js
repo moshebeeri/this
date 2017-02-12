@@ -119,6 +119,7 @@ class Login extends Component {
               transparent
               style={styles.transparentButton}
               textStyle={{ lineHeight: (Platform.OS === 'ios') ? 15 : 18, textDecorationLine: 'underline' }}
+              onPress={() =>  this.replaceRoute('signup')}
             >
               Sign up here
             </Button>
