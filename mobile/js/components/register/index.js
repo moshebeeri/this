@@ -18,6 +18,7 @@ const {
 
 const logo = require('../../../images/logo.png');
 
+
 class Register extends Component {
 
     static propTypes = {
@@ -42,6 +43,7 @@ class Register extends Component {
     }
 
 
+
     replaceRoute(route) {
         this.props.replaceAt('register', {key: route}, this.props.navigation.key);
     }
@@ -57,7 +59,7 @@ class Register extends Component {
             headers: {
                 'Accept': 'application/json, text/plain, */*',
                 'Content-Type': 'application/json;charset=utf-8',
-                'Authorization': 'Bearer '+ this.state.authToken,
+                'Authorization': 'Bearer ' + this.state.authToken,
             }
 
         }).then((response) => response.json())
@@ -72,7 +74,7 @@ class Register extends Component {
 
             }).catch(function (error) {
                 console.log('There has been a problem with your fetch operation: ' + error.message);
-               // this.replaceRoute('login');
+                this.replaceRoute('login');
         });
     }
 
@@ -82,14 +84,14 @@ class Register extends Component {
             validationMessage: ''
         });
 
-        this.getUserId();
+        //this.getUserId();
 
-        fetch('http://low.la:9000/api/users/verificaiton/'+ this.state.userId + "/" + this.state.registerCode, {
+        fetch('http://low.la:9000/api/users/verificaiton/'+ this.state.registerCode, {
             method: 'GET',
             headers: {
                 'Accept': 'application/json, text/plain, */*',
                 'Content-Type': 'application/json;charset=utf-8',
-                'Authorization': 'Bearer '+ this.state.authToken,
+                'Authorization': 'Bearer ' + this.state.authToken,
             }
 
         }).then((response) =>
@@ -106,7 +108,7 @@ class Register extends Component {
         })
            .catch(function (error) {
             console.log('There has been a problem with your fetch operation: ' + error.message);
-            // this.replaceRoute('login');
+             this.replaceRoute('login');
         });
     }
 
