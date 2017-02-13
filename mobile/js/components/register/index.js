@@ -86,7 +86,7 @@ class Register extends Component {
 
         //this.getUserId();
 
-        fetch('http://low.la:9000/api/users/verificaiton/'+ this.state.registerCode, {
+        fetch('http://low.la:9000/api/users/verification/'+ this.state.registerCode, {
             method: 'GET',
             headers: {
                 'Accept': 'application/json, text/plain, */*',
@@ -96,6 +96,7 @@ class Register extends Component {
 
         }).then((response) =>
         {
+            console.log(this.state.authToken);
             if (response.status == '200') {
                 this.replaceRoute('home');
                 return;
