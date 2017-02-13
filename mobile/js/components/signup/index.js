@@ -38,7 +38,8 @@ class Signup extends Component {
             phone_number: '',
             scroll: false,
             cca2: 'US',
-            error: ''
+            error: '',
+            validationMessage: ''
         };
     }
     componentDidMount(){
@@ -64,6 +65,20 @@ class Signup extends Component {
     }
 
     signup() {
+        this.setState({
+            validationMessage: ''
+        });
+        if(this.refs.phone.isValidNumber()) {
+            this.callServerSignupAndRedirect();
+            return;
+        }
+
+        this.setState({
+            validationMessage: 'Invalid Number'
+        })
+    }
+
+    callServerSignupAndRedirect() {
         var phoneNumber = this.refs.phone.getValue();
         console.log(phoneNumber);
         fetch('http://low.la:9000/api/users', {
@@ -75,7 +90,7 @@ class Signup extends Component {
             body: JSON.stringify({
                 phone_number: phoneNumber,
                 email: phoneNumber + "@lowla.co.il",
-                password:this.state.password,
+                password: this.state.password,
 
 
             })
@@ -83,7 +98,7 @@ class Signup extends Component {
             .then((responseData) => {
                 if (responseData.token) {
                     store.save('token', responseData.token);
-                    this.replaceRoute('home');
+                    this.replaceRoute('register');
                 } else {
                     this.replaceRoute('login');
                 }
@@ -123,7 +138,9 @@ class Signup extends Component {
                                 <View></View>
                             </CountryPicker>
 
-
+                            <Text style={{padding: 10, fontSize: 16, color: 'red'}}>
+                                {this.state.validationMessage}
+                            </Text>
                         </View>
 
 

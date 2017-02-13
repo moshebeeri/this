@@ -27,7 +27,7 @@ class Login extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      email: '',
+        phoneNumber: '',
       password: '',
       scroll: false,
         error:''
@@ -44,13 +44,13 @@ class Login extends Component {
               'Content-Type': 'application/json;charset=utf-8',
           },
           body: JSON.stringify({
-              email: this.state.email,
+              email:  this.state.phoneNumber + "@lowla.co.il",
               password:this.state.password,
           })
       }).then(function (response) {
           console.log(response._bodyText);
           console.log(response.status);
-          this.replaceRoute('home', {email: this.state.email, password: this.state.password})
+          this.replaceRoute('home')
       }).catch(function (error) {
               console.log('There has been a problem with your fetch operation: ' + error.message);
           });
@@ -97,7 +97,7 @@ class Login extends Component {
             <Button transparent style={styles.forgot} textStyle={{ fontSize: 14, textDecorationLine: 'underline' }}>
                     Forgot Login details?
             </Button>
-            <Button style={styles.login} onPress={() => this.login( { email: this.state.email, password: this.state.password }) }>
+            <Button style={styles.login} onPress={() => this.login( { phoneNumber: this.state.phoneNumber, password: this.state.password }) }>
                 Login
             </Button>
               <Text>
