@@ -67,42 +67,47 @@ class Signup extends Component {
     signup() {
         this.setState({
             validationMessage: ''
-        })
+        });
         if(this.refs.phone.isValidNumber()) {
-            var phoneNumber = this.refs.phone.getValue();
-            console.log(phoneNumber);
-            fetch('http://low.la:9000/api/users', {
-                method: 'POST',
-                headers: {
-                    'Accept': 'application/json, text/plain, */*',
-                    'Content-Type': 'application/json;charset=utf-8',
-                },
-                body: JSON.stringify({
-                    phone_number: phoneNumber,
-                    email: phoneNumber + "@lowla.co.il",
-                    password: this.state.password,
-
-
-                })
-            }).then((response) => response.json())
-                .then((responseData) => {
-                    if (responseData.token) {
-                        store.save('token', responseData.token);
-                        this.replaceRoute('home');
-                    } else {
-                        this.replaceRoute('login');
-                    }
-
-                }).catch(function (error) {
-
-                console.log('There has been a problem with your fetch operation: ' + error.message);
-                this.replaceRoute('login');
-            });
-        }else{
-            this.setState({
-                validationMessage: 'Invalid Number'
-            })
+            this.callServerSignupAndRedirect();
+            return;
         }
+
+        this.setState({
+            validationMessage: 'Invalid Number'
+        })
+    }
+
+    callServerSignupAndRedirect() {
+        var phoneNumber = this.refs.phone.getValue();
+        console.log(phoneNumber);
+        fetch('http://low.la:9000/api/users', {
+            method: 'POST',
+            headers: {
+                'Accept': 'application/json, text/plain, */*',
+                'Content-Type': 'application/json;charset=utf-8',
+            },
+            body: JSON.stringify({
+                phone_number: phoneNumber,
+                email: phoneNumber + "@lowla.co.il",
+                password: this.state.password,
+
+
+            })
+        }).then((response) => response.json())
+            .then((responseData) => {
+                if (responseData.token) {
+                    store.save('token', responseData.token);
+                    this.replaceRoute('home');
+                } else {
+                    this.replaceRoute('login');
+                }
+
+            }).catch(function (error) {
+
+            console.log('There has been a problem with your fetch operation: ' + error.message);
+            this.replaceRoute('login');
+        });
     }
 
 
