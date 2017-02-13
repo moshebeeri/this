@@ -38,7 +38,8 @@ class Signup extends Component {
             phone_number: '',
             scroll: false,
             cca2: 'US',
-            error: ''
+            error: '',
+            validationMessage: ''
         };
     }
     componentDidMount(){
@@ -64,35 +65,44 @@ class Signup extends Component {
     }
 
     signup() {
-        var phoneNumber = this.refs.phone.getValue();
-        console.log(phoneNumber);
-        fetch('http://low.la:9000/api/users', {
-            method: 'POST',
-            headers: {
-                'Accept': 'application/json, text/plain, */*',
-                'Content-Type': 'application/json;charset=utf-8',
-            },
-            body: JSON.stringify({
-                phone_number: phoneNumber,
-                email: phoneNumber + "@lowla.co.il",
-                password:this.state.password,
+        this.setState({
+            validationMessage: ''
+        })
+        if(this.refs.phone.isValidNumber()) {
+            var phoneNumber = this.refs.phone.getValue();
+            console.log(phoneNumber);
+            fetch('http://low.la:9000/api/users', {
+                method: 'POST',
+                headers: {
+                    'Accept': 'application/json, text/plain, */*',
+                    'Content-Type': 'application/json;charset=utf-8',
+                },
+                body: JSON.stringify({
+                    phone_number: phoneNumber,
+                    email: phoneNumber + "@lowla.co.il",
+                    password: this.state.password,
 
 
+                })
+            }).then((response) => response.json())
+                .then((responseData) => {
+                    if (responseData.token) {
+                        store.save('token', responseData.token);
+                        this.replaceRoute('home');
+                    } else {
+                        this.replaceRoute('login');
+                    }
+
+                }).catch(function (error) {
+
+                console.log('There has been a problem with your fetch operation: ' + error.message);
+                this.replaceRoute('login');
+            });
+        }else{
+            this.setState({
+                validationMessage: 'Invalid Number'
             })
-        }).then((response) => response.json())
-            .then((responseData) => {
-                if (responseData.token) {
-                    store.save('token', responseData.token);
-                    this.replaceRoute('home');
-                } else {
-                    this.replaceRoute('login');
-                }
-
-            }).catch(function (error) {
-
-            console.log('There has been a problem with your fetch operation: ' + error.message);
-            this.replaceRoute('login');
-        });
+        }
     }
 
 
@@ -123,7 +133,9 @@ class Signup extends Component {
                                 <View></View>
                             </CountryPicker>
 
-
+                            <Text style={{padding: 10, fontSize: 16, color: 'red'}}>
+                                {this.state.validationMessage}
+                            </Text>
                         </View>
 
 
