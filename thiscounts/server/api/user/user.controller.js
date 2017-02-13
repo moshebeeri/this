@@ -647,7 +647,8 @@ exports.verification = function (req, res) {
       return res.status(404).send('Not Found');
     }
     if (user.sms_code != code) {
-      return res.status(401).send('code not match userId ' + userId + ' user code ' + user.sms_code + ' received' + code);
+      console.log('Code not match userId ' + userId + ' user code ' + user.sms_code + ' received ' + code);
+      return res.status(401).send('Code not match userId ' + userId + ' user code ' + user.sms_code + ' received ' + code);
     }
     user.sms_verified = true;
     user.sms_code = '';

@@ -9,9 +9,10 @@ var UserSchema = new Schema({
   social_state : {},
   name: String,
   gid: { type: Number, index: true, unique : false },
-  phone_number: { type: String, index: true, unique : true, required : true, dropDups: true },
+  phone_number: { type: String, index: true, unique : true, required : true},
+  country_code: { type: Number, required : true },
   pictures: [],
-  email: { type: String, lowercase: true, index: true, unique : false, required : false, dropDups: true },
+  email: { type: String, lowercase: true, index: true, unique : false, required : false},
   sms_code: String,
   sms_verified: Boolean,
   role: {
@@ -111,7 +112,7 @@ UserSchema
       next(new Error('Invalid password'));
     else*/
       next();
-	
+
   });
 
 /**
