@@ -98,7 +98,7 @@ class Signup extends Component {
             .then((responseData) => {
                 if (responseData.token) {
                     store.save('token', responseData.token);
-                    this.replaceRoute('home');
+                    this.replaceRoute('register');
                 } else {
                     this.replaceRoute('login');
                 }
