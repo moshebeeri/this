@@ -647,7 +647,7 @@ exports.verification = function (req, res) {
       return res.status(404).send('Not Found');
     }
     if (user.sms_code != code) {
-      return res.status(404).send('code not match');
+      return res.status(401).send('code not match ' + user.sms_code + ' ' + code);
     }
     user.sms_verified = true;
     user.sms_code = '';
@@ -674,7 +674,7 @@ exports.verify = function (req, res) {
   var userId = req.user._id;
   var sms_code = randomstring.generate({length: 4, charset: 'numeric'});
   User.findById(userId, function (err, user) {
-    if (err) return next(err);
+    if (err) return handleError(res, err);
     if (!user) return res.status(401).send('Unauthorized');
     user.sms_verified = false;
     user.sms_code = sms_code;
@@ -768,6 +768,11 @@ exports.me = function (req, res, next) {
 exports.authCallback = function (req, res, next) {
   res.redirect('/');
 };
+
+function handleError(res, err) {
+  return res.send(500, err);
+}
+
 
 function printObject(object){
   var output = '';

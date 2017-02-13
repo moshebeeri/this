@@ -25,6 +25,7 @@
     "react-native-modalbox": "^1.3.4",
     "react-native-navigation-redux-helpers": "^0.4.1",
     "react-native-phone-input": "^0.1.6",
+    "react-native-simple-store": "^1.1.0",
     "react-native-vector-icons": "^2.0.3",
     "react-phone-input": "^1.1.3",
     "react-redux": "^4.4.5",
@@ -32,7 +33,8 @@
     "redux-persist": "^3.2.2",
     "redux-thunk": "^2.1.0",
     "remote-redux-devtools": "^0.3.3",
-    "remote-redux-devtools-on-debugger": "^0.4.6"
+    "remote-redux-devtools-on-debugger": "^0.4.6",
+    "whatwg-fetch": "^1.1.1"
   },
   "devDependencies": {
     "babel-eslint": "^6.1.2",
