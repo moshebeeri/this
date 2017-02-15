@@ -36,24 +36,24 @@ class Login extends Component {
 
   login() {
       console.log("try to login");
-
-      fetch('http://low.la:9000/auth/local', {
-          method: 'POST',
-          headers: {
-              'Accept': 'application/json, text/plain, */*',
-              'Content-Type': 'application/json;charset=utf-8',
-          },
-          body: JSON.stringify({
-              email:  this.state.phoneNumber + "@lowla.co.il",
-              password:this.state.password,
-          })
-      }).then(function (response) {
-          console.log(response._bodyText);
-          console.log(response.status);
-          this.replaceRoute('home')
-      }).catch(function (error) {
-              console.log('There has been a problem with your fetch operation: ' + error.message);
-          });
+      this.replaceRoute('home')
+      // fetch('http://low.la:9000/auth/local', {
+      //     method: 'POST',
+      //     headers: {
+      //         'Accept': 'application/json, text/plain, */*',
+      //         'Content-Type': 'application/json;charset=utf-8',
+      //     },
+      //     body: JSON.stringify({
+      //         email:  this.state.phoneNumber + "@lowla.co.il",
+      //         password:this.state.password,
+      //     })
+      // }).then(function (response) {
+      //     console.log(response._bodyText);
+      //     console.log(response.status);
+      //     this.replaceRoute('home')
+      // }).catch(function (error) {
+      //         console.log('There has been a problem with your fetch operation: ' + error.message);
+      //     });
 
 
 

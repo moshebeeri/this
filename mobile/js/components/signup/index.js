@@ -38,6 +38,7 @@ class Signup extends Component {
             phone_number: '',
             scroll: false,
             cca2: 'US',
+            callingCode: "",
             error: '',
             validationMessage: ''
         };
@@ -57,6 +58,10 @@ class Signup extends Component {
 
     selectCountry(country){
         this.refs.phone.selectCountry(country.cca2.toLowerCase())
+        this.setState({
+            callingCode: country.callingCode
+        });
+
         this.setState({cca2: country.cca2})
     }
 
@@ -80,7 +85,11 @@ class Signup extends Component {
 
     callServerSignupAndRedirect() {
         var phoneNumber = this.refs.phone.getValue();
+        var type = this.refs.phone.getNumberType();
+
         console.log(phoneNumber);
+        console.log(type);
+        console.log(this.state.callingCode);
         fetch('http://low.la:9000/api/users', {
             method: 'POST',
             headers: {

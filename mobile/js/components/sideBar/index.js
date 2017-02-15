@@ -32,12 +32,12 @@ class SideBar extends Component {
 
         <Text style={{ color: '#000', fontSize: 16, margin: 20, fontWeight: '500', marginBottom: 10 }}>Shop by Category </Text>
         <List foregroundColor={'#000'} style={styles.list}>
-          <ListItem button onPress={() => this.navigateTo('home')} iconLeft style={styles.links} >
+          <ListItem button onPress={() => this.navigateTo('business')} iconLeft style={styles.links} >
             <View style={styles.sidebarList}>
               <View style={[styles.sidebarIconView, { backgroundColor: '#00afc1', paddingLeft: 11 }]}>
                 <Icon name="ios-phone-portrait" style={styles.sidebarIcon} />
               </View>
-              <Text style={styles.linkText} >Electronics</Text>
+              <Text style={styles.linkText} >Business</Text>
             </View>
           </ListItem>
           <ListItem button onPress={() => this.navigateTo('cart')} iconLeft style={styles.links} >
