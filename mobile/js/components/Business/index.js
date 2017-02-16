@@ -11,6 +11,7 @@ import styles from './style';
 
 const {
   popRoute,
+    replaceAt,
 } = actions;
 
 const cartItem1 = require('../../../images/cart-item1.png');
@@ -35,6 +36,10 @@ class Business extends Component {
 
   }
 
+    replaceRoute(route) {
+        this.props.replaceAt('business', { key: route }, this.props.navigation.key);
+    }
+
   navigateTo(route) {
     this.props.navigateTo(route, 'home');
   }
@@ -50,8 +55,8 @@ class Business extends Component {
         </Header>
 
         <Content padder style={{ backgroundColor: 'transparent' }}>
-          <View style={{ flex: 0, marginButtom: 40}}>
-          <Button  onPress={() => this.popRoute()} >
+          <View style={{ flex: 0}}>
+          <Button  onPress={() => this.replaceRoute('addBusinessForm')} >
             Add Business
           </Button>
           </View>
@@ -102,6 +107,7 @@ function bindAction(dispatch) {
   return {
     popRoute: key => dispatch(popRoute(key)),
     navigateTo: (route, homeRoute) => dispatch(navigateTo(route, homeRoute)),
+      replaceAt: (routeKey, route, key) => dispatch(replaceAt(routeKey, route, key)),
   };
 }
 
