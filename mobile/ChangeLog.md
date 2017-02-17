@@ -1,20 +1,14 @@
-# [5.2.0](http://gitstrap.com/strapmobile/Ecommerce/tags/v5.2.0)
-
-### Bug Fixes
-
-- **Packages:**
-    -   Fixed `Color` package dependency.
-    -   Excluded `rx` package.
-- **Memory Leak:** This has been fixed by implementation of Navigation Experimental.
-- **BackAndroid:** App exits appropriately on Android.
-
-### Enhancement Features
-
-- **Upgrade:** Upgraded versions of React, [React Native](https://facebook.github.io/react-native/), [NativeBase](http://nativebase.io/), [CodePush](https://github.com/Microsoft/react-native-code-push).
-- **ES Lint:** Configured ESLint (airbnb) to enforce coding style.
-- **Drawer:** Added shadow for drawer on open.
-
+# [5.2.0](http://gitstrap.com/strapmobile/SocialApp/tags/v5.2.0)
 
 ### New Features
 
-- **Navigation Experimental:** Integrated Navigation Experimental.
+- Integrated **[React](https://facebook.github.io/react/)** 15.3.2
+- Integrated **[React Native](https://facebook.github.io/react-native/)** 0.35.0
+- Integrated **[NativeBase](http://nativebase.io/docs/v0.5.13/)** 0.5.11
+- Integrated **[Redux](http://redux.js.org/)** for routing
+- Integrated **[CodePush](https://github.com/Microsoft/react-native-code-push)** 1.15.0-beta
+- Integrated **[React Native Swiper](https://github.com/leecade/react-native-swiper)** 1.4.5
+- Integrated **[React Native Vector Icons](https://github.com/oblador/react-native-vector-icons)** 2.0.3
+- Integrated **[React Native NativeBase Seed](https://github.com/GeekyAnts/react-native-native-base-seed)** 5.2.0
+- Integrated **Navigation Experimental**
+- Integrated **GitStrap CLI Tools**

@@ -10,7 +10,7 @@ platform :ios do
   before_all do
     ENV["SLACK_URL"] = "https://hooks.slack.com/services/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"
     ENV["USER_NAME"] = sh "git config --global user.name"
-    ENV["VERSION"] = sh "/usr/libexec/PlistBuddy -c 'Print:CFBundleShortVersionString' ../ios/Ecommerce/Info.plist"
+    ENV["VERSION"] = sh "/usr/libexec/PlistBuddy -c 'Print:CFBundleShortVersionString' ../ios/SocialApp/Info.plist"
   end
 
 
@@ -24,25 +24,24 @@ platform :ios do
   desc "Submit a new Beta Build to Apple TestFlight"
   lane :beta do
     increment_build_number({
-      xcodeproj: "./ios/Ecommerce.xcodeproj",
+      xcodeproj: "./ios/SocialApp.xcodeproj",
       build_number: latest_testflight_build_number + 1
     })
-    gym(scheme: "Ecommerce")
-    pilot(ipa: "./Ecommerce.ipa")
+    gym(scheme: "SocialApp")
+    pilot(ipa: "./SocialApp.ipa")
     ENV["SLACK_MESSAGE"]="Successfully Deployed New Update on TestFlight - Build Version: #{latest_testflight_build_number}"
   end
 
 
   desc "Deploy a new version to the App Store"
   lane :release do
-    # deliver(
-    #   force: true,
-    #   build_number: latest_testflight_build_number.to_s,
-    #   submit_for_review: true,
-    #   automatic_release: true
-    # )
-    # ENV["SLACK_MESSAGE"]="Submitted Ecommerce App on App Store - Build Version: #{latest_testflight_build_number}"
-    ENV["SLACK_MESSAGE"]="This lane is not functional"
+    deliver(
+      force: true,
+      build_number: latest_testflight_build_number.to_s,
+      submit_for_review: true,
+      automatic_release: true
+    )
+    ENV["SLACK_MESSAGE"]="Submitted Social App on App Store - Build Version: #{latest_testflight_build_number}"
   end
 
 
@@ -58,7 +57,7 @@ platform :ios do
         },
         {
           title: "Product",
-          value: "Strap Ecommerce App #{ENV['VERSION']}",
+          value: "Strap Social App #{ENV['VERSION']}",
           short: true
         },
         {
@@ -83,7 +82,7 @@ platform :ios do
         },
         {
           title: "Product",
-          value: "Strap Ecommerce App #{ENV['VERSION']}",
+          value: "Strap Social App #{ENV['VERSION']}",
           short: true
         }]
       },
@@ -111,7 +110,7 @@ platform :android do
     sh "./generate-apk.sh"
     supply(
       json_key: "./key.json",
-      package_name: "io.market.nativebase.geekyants.ecommerceapp",
+      package_name: "io.market.nativebase.geekyants.socialapp",
       apk: "./android/app/build/outputs/apk/app-release.apk"
     )
 
@@ -131,7 +130,7 @@ platform :android do
         },
         {
           title: "Product",
-          value: "Strap Ecommerce App",
+          value: "Strap Social App",
           short: true
         },
         {
@@ -156,7 +155,7 @@ platform :android do
         },
         {
           title: "Product",
-          value: "Strap Ecommerce App",
+          value: "Strap Social App",
           short: true
         }]
       },

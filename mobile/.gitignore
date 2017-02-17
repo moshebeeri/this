@@ -45,4 +45,4 @@ android/keystores/debug.keystore
 *.mobileprovision
 *.zip
 key.json
-ecommerce-app-key.keystore
+social-app-key.keystore

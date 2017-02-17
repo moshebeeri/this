@@ -88,7 +88,7 @@ android {
     buildToolsVersion "23.0.1"
 
     defaultConfig {
-        applicationId "io.market.nativebase.geekyants.ecommerceapp"
+        applicationId "io.market.nativebase.geekyants.socialapp"
         minSdkVersion 16
         targetSdkVersion 22
         versionCode 1
