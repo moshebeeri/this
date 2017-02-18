@@ -22,7 +22,7 @@ class Login extends Component {
     navigation: React.PropTypes.shape({
       key: React.PropTypes.string,
     }),
-  }
+  };
 
   constructor(props) {
     super(props);
@@ -36,7 +36,7 @@ class Login extends Component {
 
   login() {
       console.log("try to login");
-      this.replaceRoute('home')
+      this.replaceRoute('home');
       // fetch('http://low.la:9000/auth/local', {
       //     method: 'POST',
       //     headers: {

@@ -56,9 +56,12 @@ class Business extends Component {
 
         <Content padder style={{ backgroundColor: 'transparent' }}>
           <View style={{ flex: 0}}>
-          <Button  onPress={() => this.replaceRoute('addBusinessForm')} >
-            Add Business
-          </Button>
+            <Button  onPress={() => this.replaceRoute('addBusinessForm')} >
+              Add Business
+            </Button>
+            <Button  onPress={() => this.replaceRoute('formTests')} >
+              From Tests
+            </Button>
           </View>
           <Card foregroundColor="#000" style={styles.card} >
             <CardItem >
