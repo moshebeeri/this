@@ -1,0 +1,13 @@
+stages:
+  - testflight
+
+archive_project_test:
+  stage: testflight
+  script:
+    - npm install
+    - fastlane ios testflight
+  only:
+    - development
+  tags:
+    - ios
+    - android
