@@ -59,6 +59,9 @@ class Business extends Component {
           <Button  onPress={() => this.replaceRoute('addBusinessForm')} >
             Add Business
           </Button>
+            <Button  onPress={() => this.replaceRoute('formTests')} >
+              From Tests
+            </Button>
           </View>
           <Card foregroundColor="#000" style={styles.card} >
             <CardItem >

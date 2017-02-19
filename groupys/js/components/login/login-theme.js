@@ -17,7 +17,7 @@ module.exports = {
   titleFontSize: 17,
 
   get darkenButton() {
-    return color(this.backgroundColor).darken(0.4).string();
+    return color(this.backgroundColor).darken(0.4).hexString();
   },
 
   get fontSizeH1() {
@@ -67,7 +67,7 @@ module.exports = {
   cardDefaultBg: '#fff',
 
   get darkenHeader() {
-    return color(this.tabBgColor).darken(0.03).string();
+    return color(this.tabBgColor).darken(0.03).hexString();
   },
   get btnPrimaryBg() {
     return this.brandPrimary;
