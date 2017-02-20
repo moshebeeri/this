@@ -3,6 +3,8 @@ import {ScrollView} from 'react-native';
 import {connect} from 'react-redux';
 import navigateTo from '../../../actions/sideBarNav';
 import {actions} from 'react-native-navigation-redux-helpers';
+import ImagePicker from 'react-native-image-crop-picker';
+
 const {
     popRoute,
 } = actions;
@@ -34,6 +36,16 @@ class FormTests extends Component {
         this.props.popRoute(this.props.navigation.key);
     }
 
+    selectLogo() {
+        ImagePicker.openPicker({
+            width: 300,
+            height: 400,
+            cropping: true
+        }).then(image => {
+            console.log(image);
+        });
+    }
+
     render() {
         return (
             <Container>
@@ -47,6 +59,7 @@ class FormTests extends Component {
                     </Header>
                     <ScrollView keyboardShouldPersistTaps={true} style={{paddingLeft:10,paddingRight:10}}>
                         <Text>Blah blah blah</Text>
+                        <Button onPress={() => this.selectLogo()}>Logo</Button>
                     </ScrollView>
                 </Content>
             </Container>
