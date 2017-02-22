@@ -10,7 +10,8 @@
     "react": "15.4.2",
     "react-native": "0.41.2",
     "react-native-image-crop-picker": "^0.12.4",
-    "react-native-simple-store": "^1.1.0"
+    "react-native-simple-store": "^1.1.0",
+    "react-native-uploader": "0.0.10"
   },
   "devDependencies": {
     "babel-jest": "19.0.0",

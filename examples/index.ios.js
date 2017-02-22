@@ -19,6 +19,9 @@ import {
 
 import ImagePicker from 'react-native-image-crop-picker';
 import store from 'react-native-simple-store';
+const NativeModules = require('NativeModules');
+const RNUploader = NativeModules.RNUploader;
+
 
 export default class examples extends Component {
     constructor(props) {
@@ -32,7 +35,7 @@ export default class examples extends Component {
             validationMessage:'',
             user:"",
             password:"",
-            userText:"User"
+            userId:""
         };
     }
 
@@ -120,6 +123,30 @@ export default class examples extends Component {
         });
     }
 
+    getUser(){
+        fetch('http://low.la:9000/api/users/me/', {
+            method: 'GET',
+            headers: {
+                'Accept': 'application/json, text/plain, */*',
+                'Content-Type': 'application/json;charset=utf-8',
+                'Authorization': 'Bearer ' + this.state.token,
+            }
+
+        }).then((response) => response.json())
+            .then((responseData) => {
+                if (responseData._id) {
+
+                    this.setState({userId:responseData._id})
+                }
+
+            }).catch(function (error) {
+
+            console.log('There has been a problem with your fetch operation: ' + error.message);
+
+        });
+
+    }
+
     registerUser() {
 
         this.setState({
@@ -155,7 +182,38 @@ export default class examples extends Component {
             });
     }
 
+    doUpload() {
+        let files = [
+            {
+                name: "myimange",
+                filename: 'image1.png',
+                filepath:this.state.image.uri,  // image from camera roll/assets library
+                filetype: this.state.image.mime,
+            }
 
+        ];
+
+        let opts = {
+            url: 'http://low.la:9000/api/images/' + this.state.userId,
+            files: files,
+            method: 'POST',                             // optional: POST or PUT
+            headers: { 'Accept': 'application/json', 'Authorization': 'Bearer ' + this.state.token },  // optional
+            params: { },                   // optional
+        };
+
+        RNUploader.upload( opts, (err, response) => {
+            if( err ){
+                console.log(err);
+                return;
+            }
+
+            let status = response.status;
+            let responseString = response.data;
+            let json = JSON.parse( responseString );
+
+            console.log('upload complete with status ' + status);
+        });
+    }
 
     render() {
 
@@ -201,6 +259,10 @@ export default class examples extends Component {
                 <TouchableOpacity onPress={() => this.login()} style={styles.button}>
                     <Text style={styles.text}>login</Text>
                 </TouchableOpacity>
+
+                <TouchableOpacity onPress={() => this.getUser()} style={styles.button}>
+                    <Text style={styles.text}>User</Text>
+                </TouchableOpacity>
                 <TouchableOpacity onPress={() => this.pickSingle(true)} style={styles.button}>
                     <Text style={styles.text}>Select Single With Cropping</Text>
                 </TouchableOpacity>
@@ -208,6 +270,10 @@ export default class examples extends Component {
                     style={{width: 50, height: 50}}
                     source={{uri: this.state.path}}
                 />
+
+                <TouchableOpacity onPress={() => this.doUpload()} style={styles.button}>
+                    <Text style={styles.text}>upload file</Text>
+                </TouchableOpacity>
 
 
             </View>
