@@ -106,13 +106,18 @@ export default class examples extends Component {
                 email:  this.state.user,
                 password:this.state.password,
             })
-        }).then(function (response) {
-            console.log(response._bodyText);
-            console.log(response.status);
+        }).then((response) => response.json())
+            .then((responseData) => {
+                if (responseData.token) {
+                    store.save('token', responseData.token);
+                    this.setState({token:responseData.token})
+                }
 
-        }).catch(function (error) {
-                console.log('There has been a problem with your fetch operation: ' + error.message);
-            });
+            }).catch(function (error) {
+
+            console.log('There has been a problem with your fetch operation: ' + error.message);
+
+        });
     }
 
     registerUser() {
@@ -160,13 +165,6 @@ export default class examples extends Component {
 
 
 
-                <TouchableOpacity onPress={() => this.pickSingle(true)} style={styles.button}>
-                <Text style={styles.text}>Select Single With Cropping</Text>
-              </TouchableOpacity>
-              <Image
-                  style={{width: 50, height: 50}}
-                  source={{uri: this.state.path}}
-              />
 
                 <TouchableOpacity onPress={() => this.signup()} style={styles.button}>
                     <Text style={styles.text}>signup user</Text>
@@ -203,6 +201,14 @@ export default class examples extends Component {
                 <TouchableOpacity onPress={() => this.login()} style={styles.button}>
                     <Text style={styles.text}>login</Text>
                 </TouchableOpacity>
+                <TouchableOpacity onPress={() => this.pickSingle(true)} style={styles.button}>
+                    <Text style={styles.text}>Select Single With Cropping</Text>
+                </TouchableOpacity>
+                <Image
+                    style={{width: 50, height: 50}}
+                    source={{uri: this.state.path}}
+                />
+
 
             </View>
 
