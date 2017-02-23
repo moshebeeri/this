@@ -5,8 +5,13 @@ import {
     Text,
     TextInput,
     View,
-    Button
+    Button,
+    Image,
+    TouchableHighlight ,
+    Icon
 } from 'react-native';
+import ImagePicker from 'react-native-image-crop-picker';
+//var ImageButton = require('react-native-icon-button');
 
 export default class myForm extends Component {
 
@@ -15,7 +20,16 @@ export default class myForm extends Component {
         this.state = {
             name: null,
             address:'',
-            formdata:''
+            email:'',
+            website:'',
+            country:'',
+            city:'',
+            state:'',
+            path:'',
+            image:'',
+            images:''
+
+
 
 
         };
@@ -25,7 +39,28 @@ export default class myForm extends Component {
     saveFormData(){
         this.props.saveForm(this.state);
     }
-
+    pickSingle(cropit, circular=false) {
+        ImagePicker.openPicker({
+            width: 300,
+            height: 300,
+            cropping: cropit,
+            cropperCircleOverlay: circular,
+            compressImageMaxWidth: 640,
+            compressImageMaxHeight: 480,
+            compressImageQuality: 0.5,
+            compressVideoPreset: 'MediumQuality',
+        }).then(image => {
+            console.log('received image', image);
+            this.setState({
+                image: {uri: image.path, width: image.width, height: image.height, mime: image.mime},
+                images: null,
+                path: image.path
+            });
+        }).catch(e => {
+            console.log(e);
+            Alert.alert(e.message ? e.message : e);
+        });
+    }
     render() {
         return (
             <View style={styles.container}>
@@ -39,7 +74,7 @@ export default class myForm extends Component {
 
                     <View style={styles.row}>
                         <Text style={styles.titleText}>
-                          Name:
+                          Name
                         </Text>
                         <TextInput style={styles.input}
                             onChangeText={(name) => this.setState({name})}
@@ -49,12 +84,73 @@ export default class myForm extends Component {
 
                     <View style={styles.row}>
                         <Text style={styles.titleText}>
-                            Address:
+                            Email
                         </Text>
                         <TextInput
                             style={styles.input}
-                            onChangeText={(address) => this.setState({address})}
+                            onChangeText={(email) => this.setState({email})}
 
+                        />
+                    </View>
+
+                    <View style={styles.row}>
+                        <Text style={styles.titleText}>
+                            Website
+                        </Text>
+                        <TextInput
+                            style={styles.input}
+                            onChangeText={(website) => this.setState({website})}
+
+                        />
+                    </View>
+                    <View style={styles.row}>
+                        <Text style={styles.titleText}>
+                            Country
+                        </Text>
+                        <TextInput
+                            style={styles.input}
+                            onChangeText={(country) => this.setState({country})}
+
+                        />
+                    </View>
+
+                    <View style={styles.row}>
+                        <Text style={styles.titleText}>
+                            City
+                        </Text>
+                        <TextInput
+                            style={styles.input}
+                            onChangeText={(city) => this.setState({city})}
+
+                        />
+                    </View>
+
+                    <View style={styles.row}>
+                        <Text style={styles.titleText}>
+                            State
+                        </Text>
+                        <TextInput
+                            style={styles.input}
+                            onChangeText={(state) => this.setState({state})}
+
+                        />
+                    </View>
+                    <View style={styles.row}>
+                        <Text style={styles.titleText}>
+                            Image
+                        </Text>
+                        <TouchableHighlight
+                            onPress={() => this.pickSingle(true)} style={styles.btnClickContain}
+                           >
+                            <Image
+                                style={{flex: 1,width: 20,
+                                    height: 20}}
+                                source={ require('../image/attach.png')}
+                            />
+                        </TouchableHighlight>
+                        <Image
+                            style={{width: 50, height: 50}}
+                            source={{uri: this.state.path}}
                         />
                     </View>
 
@@ -79,7 +175,7 @@ const styles = StyleSheet.create({
         flex: 0,
         justifyContent: 'flex-start',
         alignItems: 'flex-start',
-        backgroundColor: '#F5FCFF',
+
 
         marginRight: 10
     },
@@ -105,6 +201,34 @@ const styles = StyleSheet.create({
         width: 200,
         borderColor: 'gray',
         borderWidth: 1
+    },
+    btnClickContain: {
+
+        flexDirection: 'row',
+        justifyContent: 'center',
+        width: 20,
+        height: 20,
+        backgroundColor: '#009D6E',
+        borderRadius: 5,
+
+    },
+    btnContainer: {
+        flex: 1,
+        flexDirection: 'row',
+        justifyContent: 'center',
+        alignItems: 'stretch',
+        alignSelf: 'stretch',
+        borderRadius: 10,
+    },
+    btnIcon: {
+        height: 25,
+        width: 25,
+    },
+    btnText: {
+        fontSize: 3,
+        color: '#FAFAFA',
+        marginLeft: 10,
+        marginTop: 2,
     }
 
 });
