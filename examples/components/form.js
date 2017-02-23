@@ -15,9 +15,15 @@ export default class myForm extends Component {
         this.state = {
             name: null,
             address:'',
+            formdata:''
 
 
         };
+    }
+
+
+    saveFormData(){
+        this.props.saveForm(this.state);
     }
 
     render() {
@@ -53,7 +59,7 @@ export default class myForm extends Component {
                     </View>
 
                     <Button
-                        onPress={this.props.saveForm(this.state)}
+                        onPress={this.saveFormData.bind(this)}
                         title="Save"
                         color="#841584"
 
