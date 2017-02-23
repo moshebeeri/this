@@ -21,6 +21,7 @@ import ImagePicker from 'react-native-image-crop-picker';
 import store from 'react-native-simple-store';
 const NativeModules = require('NativeModules');
 const RNUploader = NativeModules.RNUploader;
+var From = require("./components/form");
 
 
 export default class examples extends Component {
@@ -35,7 +36,11 @@ export default class examples extends Component {
             validationMessage:'',
             user:"",
             password:"",
-            userId:""
+            userId:"",
+            titleText: "Business Form",
+            name: "Name: ",
+            Address: "Address:",
+            bodyText: 'example for business form.'
         };
     }
 
@@ -182,6 +187,10 @@ export default class examples extends Component {
             });
     }
 
+    saveForm(data){
+        console.log(data);
+    }
+
     doUpload() {
         let files = [
             {
@@ -219,6 +228,7 @@ export default class examples extends Component {
 
 
         return (
+
             <View style={styles.container}>
 
 
@@ -275,10 +285,13 @@ export default class examples extends Component {
                     <Text style={styles.text}>upload file</Text>
                 </TouchableOpacity>
 
+            <From
+                saveForm={this.saveForm.bind(this)}
+            />
+
+
 
             </View>
-
-
         );
     }
 }
@@ -289,6 +302,14 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
         alignItems: 'center',
         backgroundColor: '#F5FCFF',
+    },
+    baseText: {
+        fontFamily: 'Cochin',
+    },
+    titleText: {
+        fontSize: 10,
+        fontWeight: 'bold',
+        textAlign:  "left"
     },
     button: {
         backgroundColor: 'blue',
