@@ -9,7 +9,10 @@
   "dependencies": {
     "react": "15.4.2",
     "react-native": "0.41.2",
+    "react-native-camera": "^0.6.0",
+    "react-native-icon-button": "^1.0.0",
     "react-native-image-crop-picker": "^0.12.4",
+    "react-native-qrcode-scanner": "0.0.6",
     "react-native-simple-store": "^1.1.0",
     "react-native-uploader": "0.0.10"
   },

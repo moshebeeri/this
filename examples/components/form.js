@@ -2,17 +2,19 @@ import React, { Component } from 'react';
 import {
     AppRegistry,
     StyleSheet,
+    NavigatorIOS,
     Text,
     TextInput,
     View,
     Button,
     Image,
+    TouchableOpacity,
     TouchableHighlight ,
     Icon
 } from 'react-native';
 import ImagePicker from 'react-native-image-crop-picker';
-//var ImageButton = require('react-native-icon-button');
-
+//var IageButton = require('react-native-icon-button');
+import QRCodeScanner from 'react-native-qrcode-scanner';
 export default class myForm extends Component {
 
     constructor(props){
@@ -29,12 +31,12 @@ export default class myForm extends Component {
             image:'',
             images:''
 
-
-
-
         };
     }
 
+    readQc(code){
+
+    }
 
     saveFormData(){
         this.props.saveForm(this.state);
@@ -229,7 +231,39 @@ const styles = StyleSheet.create({
         color: '#FAFAFA',
         marginLeft: 10,
         marginTop: 2,
-    }
+    },
+    button: {
+        flexDirection: 'row',
+        justifyContent: 'center',
+        alignItems: 'center',
+        backgroundColor: 'pink',
+        borderRadius: 3,
+        padding: 32,
+        width: 100,
+        marginTop: 64,
+        marginBottom: 64,
+    },
+
+    centerText: {
+        flex: 1,
+        fontSize: 18,
+        padding: 32,
+        color: '#777',
+    },
+
+    textBold: {
+        fontWeight: '500',
+        color: '#000',
+    },
+
+    buttonText: {
+        fontSize: 21,
+        color: 'rgb(0,122,255)',
+    },
+
+    buttonTouchable: {
+        padding: 16,
+    },
 
 });
 
