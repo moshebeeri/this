@@ -18,7 +18,7 @@ class Home extends Component {  // eslint-disable-line
     navigation: React.PropTypes.shape({
       key: React.PropTypes.string,
     }),
-  }
+  };
 
   render() { // eslint-disable-line class-methods-use-this
     return (

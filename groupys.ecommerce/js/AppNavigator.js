@@ -14,7 +14,6 @@ import SplashPage from './components/splashscreen/';
 import Home from './components/home/';
 import Signup from './components/signup/';
 import Register from './components/register/';
-
 import Product from './components/product/';
 import Cart from './components/cart/';
 import MyOrder from './components/myOrder/';
@@ -98,8 +97,6 @@ class AppNavigator extends Component {
                 return <AddBusinessForm />;
             case 'formTests':
                 return <FormTests/>;
-
-
             case 'signup':
                 return <Signup />;
             case 'register':

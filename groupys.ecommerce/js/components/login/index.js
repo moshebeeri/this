@@ -95,10 +95,10 @@ class Login extends Component {
             </View>
 
             <Button transparent style={styles.forgot} textStyle={{ fontSize: 14, textDecorationLine: 'underline' }}>
-                    Forgot Login details?
+              <Text>Forgot Login details?</Text>
             </Button>
             <Button style={styles.login} onPress={() => this.login( { phoneNumber: this.state.phoneNumber, password: this.state.password }) }>
-                Login
+              <Text>Login</Text>
             </Button>
               <Text>
                   {this.state.error}
@@ -122,7 +122,7 @@ class Login extends Component {
               textStyle={{ lineHeight: (Platform.OS === 'ios') ? 15 : 18, textDecorationLine: 'underline' }}
               onPress={() =>  this.replaceRoute('signup')}
             >
-              Sign up here
+              <Text>Sign up here</Text>
             </Button>
           </View>
         </Content>
