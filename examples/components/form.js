@@ -13,6 +13,7 @@ import {
     Icon
 } from 'react-native';
 import ImagePicker from 'react-native-image-crop-picker';
+import ModalDropdown from 'react-native-modal-dropdown';
 //var IageButton = require('react-native-icon-button');
 import QRCodeScanner from 'react-native-qrcode-scanner';
 export default class myForm extends Component {
@@ -29,8 +30,11 @@ export default class myForm extends Component {
             state:'',
             path:'',
             image:'',
-            images:''
-
+            type:'',
+            images:'',
+            tax_id:'',
+            formID:'',
+            formData:{}
         };
     }
 
@@ -38,7 +42,21 @@ export default class myForm extends Component {
 
     }
 
+    selectType(index, value){
+        this.setState({
+            type:value
+        })
+
+
+    }
+
     saveFormData(){
+        this.setState({
+                formData:{name: this.state.name,address: this.state.address, email: this.state.email,
+                    website: this.state.website,  country: this.state.country,  city: this.state.city,
+                    state: this.state.state,type :this.state.type,formID:this.state.formID, tax_id:this.state.tax_id}
+            }
+        );
         this.props.saveForm(this.state);
     }
     pickSingle(cropit, circular=false) {
@@ -94,6 +112,16 @@ export default class myForm extends Component {
 
                         />
                     </View>
+                    <View style={styles.row}>
+                        <Text style={styles.titleText}>
+                            Address
+                        </Text>
+                        <TextInput
+                            style={styles.input}
+                            onChangeText={(address) => this.setState({address})}
+
+                        />
+                    </View>
 
                     <View style={styles.row}>
                         <Text style={styles.titleText}>
@@ -136,6 +164,36 @@ export default class myForm extends Component {
                             onChangeText={(state) => this.setState({state})}
 
                         />
+                    </View>
+                    <View style={styles.row}>
+                        <Text style={styles.titleText}>
+                            Form id
+                        </Text>
+                        <TextInput
+                            style={styles.input}
+                            onChangeText={(formID) => this.setState({formID})}
+
+                        />
+                    </View>
+                    <View style={styles.row}>
+                        <Text style={styles.titleText}>
+                            Tax id
+                        </Text>
+                        <TextInput
+                            style={styles.input}
+                            onChangeText={(tax_id) => this.setState({tax_id})}
+
+                        />
+                    </View>
+
+                    <View style={styles.row}>
+                        <Text style={styles.titleText}>
+                            Type
+                        </Text>
+                    <ModalDropdown
+                        options={['PERSONAL_SERVICES', 'SMALL_BUSINESS', 'COMPANY', 'ENTERPRISE']}
+                        onSelect={this.selectType.bind(this)}
+                    />
                     </View>
                     <View style={styles.row}>
                         <Text style={styles.titleText}>
