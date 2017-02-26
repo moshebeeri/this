@@ -22,7 +22,7 @@ import store from 'react-native-simple-store';
 const NativeModules = require('NativeModules');
 const RNUploader = NativeModules.RNUploader;
 var From = require("./components/form");
-var QcCode = require("./components/qccode");
+var createEntity = require("./tools/createEntity");
 
 export default class examples extends Component {
     constructor(props) {
@@ -119,6 +119,7 @@ export default class examples extends Component {
                 if (responseData.token) {
                     store.save('token', responseData.token);
                     this.setState({token:responseData.token})
+                    this.getUser();
                 }
 
             }).catch(function (error) {
@@ -187,9 +188,19 @@ export default class examples extends Component {
             });
     }
 
+    saveFailed(){
+        console.log('save failed');
+    }
+
     saveForm(data){
+        createEntity('campaigns',data,this.state.token,this.formSaved.bind(this),this.saveFailed.bind(this),this.state.userId)
         console.log(data);
     }
+
+    formSaved(){
+        console.log('save done');
+    }
+
 
     doUpload() {
         let files = [
@@ -234,20 +245,6 @@ export default class examples extends Component {
 
 
 
-                <TouchableOpacity onPress={() => this.signup()} style={styles.button}>
-                    <Text style={styles.text}>signup user</Text>
-                </TouchableOpacity>
-
-                <TouchableOpacity onPress={() => this.registerUser()} style={styles.button}>
-                    <Text style={styles.text}>register user</Text>
-                </TouchableOpacity>
-                <View style={{marginBottom: 20}}>
-                    <TextInput
-                        style={{height: 20,width: 100, borderColor: 'gray', borderWidth: 1}}
-                        onChangeText={(registerCode) => this.setState({registerCode})}
-
-                    />
-                </View>
                 <View style={{marginBottom: 20}}>
 
                     <TextInput
@@ -270,20 +267,8 @@ export default class examples extends Component {
                     <Text style={styles.text}>login</Text>
                 </TouchableOpacity>
 
-                <TouchableOpacity onPress={() => this.getUser()} style={styles.button}>
-                    <Text style={styles.text}>User</Text>
-                </TouchableOpacity>
-                <TouchableOpacity onPress={() => this.pickSingle(true)} style={styles.button}>
-                    <Text style={styles.text}>Select Single With Cropping</Text>
-                </TouchableOpacity>
-                <Image
-                    style={{width: 50, height: 50}}
-                    source={{uri: this.state.path}}
-                />
 
-                <TouchableOpacity onPress={() => this.doUpload()} style={styles.button}>
-                    <Text style={styles.text}>upload file</Text>
-                </TouchableOpacity>
+
 
             <From
                 saveForm={this.saveForm.bind(this)}
