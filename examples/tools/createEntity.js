@@ -6,11 +6,11 @@ function transformJson(json){
   return json.formData;
 }
 
-function doUpload(json,imagePath,imageMime,userId,token,callbackFunction,errorCallBack,entityApi) {
+function doUpload(imagePath,imageMime,userId,token,callbackFunction,errorCallBack,responseData) {
     let files = [
         {
-            name: "myimange",
-            filename: 'image1.png',
+            name: imagePath + '___' +responseData._id ,
+            filename: imagePath + '___' +responseData._id ,
             filepath:imagePath,  // image from camera roll/assets library
             filetype: imageMime,
         }
@@ -28,17 +28,17 @@ function doUpload(json,imagePath,imageMime,userId,token,callbackFunction,errorCa
     RNUploader.upload( opts, (err, response) => {
         if( err ){
             console.log(err);
+            errorCallBack(err);
             return;
         }
 
-        saveEntity(entityApi,json,token,callbackFunction,errorCallBack);
-
+        callbackFunction(responseData);
 
 
     });
 }
 
- function saveEntity(entityApi,json,token,callbackFunction,errorCallBack) {
+ function saveEntity(entityData,entityApi,json,token,callbackFunction,errorCallBack,userId) {
      fetch('http://low.la:9000/api/' + entityApi, {
              method: 'POST',
              headers: {
@@ -52,6 +52,10 @@ function doUpload(json,imagePath,imageMime,userId,token,callbackFunction,errorCa
 
      ).then((response) => response.json())
          .then((responseData) => {
+             if(entityData.image){
+                 doUpload(entityData.image.uri,entityData.image.mime,userId,token,callbackFunction,errorCallBack,responseData);
+                 return
+             }
              callbackFunction(responseData);
 
          }).catch(function (error) {
@@ -69,11 +73,8 @@ module.exports = function(entityApi,entityData,token,callbackFunction,errorCallB
 
     let entity = transformJson(entityData);
     let json  = JSON.stringify(entity);
-    if(entityData.image){
-        doUpload(json,entityData.image.uri,entityData.image.mime,userId,token,callbackFunction,errorCallBack,entityApi);
-        return
-    }
-    saveEntity(entityApi,json,token,callbackFunction,errorCallBack);
+
+    saveEntity(entityData,entityApi,json,token,callbackFunction,errorCallBack,userId);
 
 }
 
