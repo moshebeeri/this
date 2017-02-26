@@ -16,7 +16,7 @@ class Header extends Component {
   static propTypes = {
     openDrawer: React.PropTypes.func,
     navigateTo: React.PropTypes.func,
-  }
+  };
 
   navigateTo(route) {
     this.props.navigateTo(route, 'home');

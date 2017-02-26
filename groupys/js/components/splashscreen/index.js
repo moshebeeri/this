@@ -8,7 +8,7 @@ export default class SplashPage extends Component {
 
   static propTypes = {
     navigator: React.PropTypes.shape({}),
-  }
+  };
   componentWillMount() {
     const navigator = this.props.navigator;
     setTimeout(() => {

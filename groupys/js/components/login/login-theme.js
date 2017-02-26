@@ -6,7 +6,8 @@ module.exports = {
   brandPrimary: '#428bca',
   brandInfo: '#5bc0de',
   brandSuccess: '#5cb85c',
-  backgroundColor: '#7d59c8',
+  // backgroundColor: '#7d59c8',
+  backgroundColor: '#8e8dc8',
   brandWarning: '#f0ad4e',
   brandSidebar: '#252932',
 

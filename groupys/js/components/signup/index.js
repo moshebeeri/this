@@ -6,7 +6,6 @@ import {Container, Content, Text, InputGroup, Input, Button, Icon, View} from 'n
 import store from 'react-native-simple-store';
 
 
-
 import PhoneInput from 'react-native-phone-input'
 import CountryPicker from 'react-native-country-picker-modal'
 import login from './signup-theme';
@@ -25,7 +24,7 @@ class Signup extends Component {
         navigation: React.PropTypes.shape({
             key: React.PropTypes.string,
         }),
-    }
+    };
 
     constructor(props) {
         super(props);
@@ -43,20 +42,21 @@ class Signup extends Component {
             validationMessage: ''
         };
     }
-    componentDidMount(){
+
+    componentDidMount() {
         this.setState({
             phone_number: this.refs.phone.getPickerData()
         })
     }
 
-    onPressFlag(){
+    onPressFlag() {
         this.refs.countryPicker.openModal()
         this.setState({
             phone_number: this.refs.phone.getPickerData()
         })
     }
 
-    selectCountry(country){
+    selectCountry(country) {
         this.refs.phone.selectCountry(country.cca2.toLowerCase())
         this.setState({
             callingCode: country.callingCode
@@ -73,7 +73,7 @@ class Signup extends Component {
         this.setState({
             validationMessage: ''
         });
-        if(this.refs.phone.isValidNumber()) {
+        if (this.refs.phone.isValidNumber()) {
             this.callServerSignupAndRedirect();
             return;
         }
@@ -125,40 +125,38 @@ class Signup extends Component {
             <Container>
                 <Content theme={login} style={{backgroundColor: login.backgroundColor}}>
                     <Image source={logo} style={styles.shadow}/>
-                    {/*<div>*/}
-                    {/*<AlertContainer ref={(a) => global.msg = a} {...this.alertOptions} />*/}
-                    {/*<button onClick={this.showAlert}>Show Alert</button>*/}
-                    {/*</div>*/}
                     <View style={styles.inputContainer}>
                         <View style={{marginBottom: 20}}>
+                            <InputGroup>
+                                <Icon name="ios-phone-portrait-outline" style={{color:"#00f"}}/>
+                                <PhoneInput
+                                    ref='phone'
+                                    onPressFlag={this.onPressFlag}
+                                    onChange={(value)=> this.componentDidMount(value)}
+                                />
+                                <CountryPicker
+                                    ref='countryPicker'
+                                    onChange={(value)=> this.selectCountry(value)}
+                                    translation='eng'
+                                    cca2={this.state.cca2}
+                                >
+                                    <View/>
+                                </CountryPicker>
 
-
-                            <PhoneInput
-                                ref='phone'
-                                onPressFlag={this.onPressFlag}
-                                onChange={(value)=> this.componentDidMount(value)}
-                            />
-                            <CountryPicker
-                                ref='countryPicker'
-                                onChange={(value)=> this.selectCountry(value)}
-                                translation='eng'
-                                cca2={this.state.cca2}
-                            >
-                                <View></View>
-                            </CountryPicker>
-
-                            <Text style={{padding: 10, fontSize: 16, color: 'red'}}>
-                                {this.state.validationMessage}
-                            </Text>
+                                <Text style={{padding: 10, fontSize: 16, color: 'red'}}>
+                                    {this.state.validationMessage}
+                                </Text>
+                            </InputGroup>
                         </View>
 
 
                         <View style={{marginBottom: 20}}>
                             <InputGroup >
-                                <Icon name="ios-unlock-outline"/>
+                                <Icon name="ios-unlock-outline" style={{color:"#00F"}}/>
                                 <Input
                                     placeholder="Password"
                                     secureTextEntry
+                                    placeholderTextColor='#444'
                                     onChangeText={password => this.setState({password})}
                                 />
                             </InputGroup>
@@ -169,7 +167,7 @@ class Signup extends Component {
                             phone_number: this.state.phone_number,
                             password: this.state.password
                         }) }>
-                            Signup
+                            <Text> Signup </Text>
                         </Button>
                         <Text>
                             {this.state.error}

@@ -1,12 +1,12 @@
 /* @flow */
 
-import React from 'react';
+import React, { Component } from 'react';
 import ProgressBarAndroid from 'react-native';
-import NativeBaseComponent from 'native-base/Components/Base/NativeBaseComponent';
+//import NativeBaseComponent from 'native-base/Components/Base/NativeBaseComponent';
 import computeProps from 'native-base/Utils/computeProps';
 
 
-export default class SpinnerNB extends NativeBaseComponent {
+export default class SpinnerNB extends Component {
 
   prepareRootProps() {
     const type = {

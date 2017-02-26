@@ -6,7 +6,7 @@ const React = require('react-native');
 
 const { StyleSheet, Platform } = React;
 
-module.exports = StyleSheet.create({
+module.exports = {
   shadow: {
     flex: 1,
     width: 330,
@@ -41,4 +41,4 @@ module.exports = StyleSheet.create({
     padding: 0,
     alignItems: 'flex-start',
   },
-});
+};

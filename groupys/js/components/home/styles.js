@@ -4,7 +4,7 @@ const { StyleSheet, Dimensions } = React;
 
 const deviceWidth = Dimensions.get('window').width;
 
-module.exports = StyleSheet.create({
+module.exports = {
   container: {
     flex: 1,
     width: null,
@@ -79,4 +79,4 @@ module.exports = StyleSheet.create({
     height: (deviceWidth / 2) - 10,
     top: 0,
   },
-});
+};

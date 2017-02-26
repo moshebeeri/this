@@ -1,10 +1,10 @@
 /* @flow */
 
-import React from 'react';
+import React, { Component } from 'react';
 import { ProgressViewIOS } from 'react-native';
-import NativeBaseComponent from 'native-base/Components/Base/NativeBaseComponent';
+//import NativeBaseComponent from 'native-base/Components/Base/NativeBaseComponent';
 
-export default class ProgressBarNB extends NativeBaseComponent {
+export default class ProgressBarNB extends Component {
 
 
   render() {
