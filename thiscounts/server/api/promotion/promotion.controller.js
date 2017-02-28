@@ -129,8 +129,6 @@ var set_promotion_location = function (promotion, callback) {
 };
 
 exports.create = function (req, res) {
-  //TODO: where to set the gid? number/string?
-  req.body.gid = Math.floor(Math.random() * 100000);
   var promotion = req.body;
   //TODO: Convert to address location
   console.log(JSON.stringify(promotion));
@@ -154,8 +152,8 @@ exports.create = function (req, res) {
           promotionGraphModel.relate_ids(promotion._id, 'MALL_PROMOTION', promotion.mall);
         if (utils.defined(promotion.shopping_chain))
           promotionGraphModel.relate_ids(promotion._id, 'CHAIN_PROMOTION', promotion.shopping_chain);
-        //if (utils.defined(promotion.business))
-        //  promotionGraphModel.relate_ids(promotion._id, 'BUSINESS_PROMOTION', promotion.business);
+        if (utils.defined(promotion.business))
+         promotionGraphModel.relate_ids(promotion._id, 'BUSINESS_PROMOTION', promotion.business);
         if(utils.defined(req.body["campaign_id"])){
           promotionGraphModel.relate_ids(req.body["campaign_id"], 'CAMPAIGN_PROMOTION', promotion._id);
         }

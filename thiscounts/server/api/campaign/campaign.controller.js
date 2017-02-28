@@ -26,37 +26,15 @@ exports.show = function(req, res) {
 // Creates a new campaign in the DB.
 exports.create = function(req, res) {
   req.body.creator = req.user._id;
-  console.log("**********************************");
-  console.log("body: " + JSON.stringify(req.body));
-  console.log("**********************************");
-  //TODO: where to set the gid? number/string?
-  req.body.gid = Math.floor(Math.random() * 100000);
   Campaign.create(req.body, function(err, campaign) {
     if(err) { return handleError("3",res, err); }
     graphModel.reflect(campaign, to_graph(campaign), function (err) {
       if (err) { return handleError("4",res, err); }
     });
 
-    console.log("================================================");
-    console.log("req.body[business_id]: " + req.body["business_id"]);
-    console.log("================================================");
-
     graphModel.relate_ids(req.body["business_id"], 'BUSINESS_CAMPAIGN', campaign._id );
-
-    console.log("================================================");
-    console.log("GO CREATE PROMOTION");
-    console.log("================================================");
-
     req.body["type"] = 'PERCENT';
     req.body["campaign_id"] = campaign._id;
-    console.log("================================================");
-    console.log(req.body);
-    console.log(req.body["type"]);
-    console.log(req.body["business_id"]);
-    console.log(req.body["campaign_id"]);
-    console.log(req.body["creator"]);
-    console.log("================================================");
-
     Promotion.create(req, res);
     //return res.status(201).json(campaign);
   });

@@ -127,7 +127,7 @@ Spatial.prototype.cypher = function cypher(cypher, cb) {
 
   db.query(cypher, {id: 1}, function (err, result) {
     if (err) cb(err);
-    else cb(null, result)
+    else cb(null, result);
 
     //assert.deepEqual(result, [
     //  { name: 'Katie', age: 29, id: 3 },

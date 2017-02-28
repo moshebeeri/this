@@ -26,13 +26,13 @@ var PromotionSchema = new Schema({
   //see https://docs.mongodb.org/manual/reference/geojson/#geospatial-indexes-store-geojson
   //{ type: "Point", coordinates: [ 40, 5 ] },
   //Always list coordinates in longitude, latitude order.
-  /**location : {
+  location : {
     lng : Number,
     lat : Number,
     //for internal use
     type: {type: String},
     coordinates: []
-  },**/
+  },
   mall : {type: Schema.ObjectId, ref: 'Mall', required: false},
   shopping_chain: {type: Schema.ObjectId, ref: 'ShoppingChain', required: false},
   business: {type: Schema.ObjectId, ref: 'Business', required: false},

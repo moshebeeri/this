@@ -60,11 +60,6 @@ function defined(obj){
 }
 
 exports.create = function(req, res) {
-  //TODO: where to set the gid? number/string?
-  req.body.gid = Math.floor(Math.random() * 100000);
-  console.log("**********************************");
-  console.log("body: " + JSON.stringify(req.body));
-  console.log("**********************************");
   var creator = null;
   var body_business = req.body;
   var userId = req.user._id;
