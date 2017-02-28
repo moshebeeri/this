@@ -13,7 +13,7 @@ import {actions} from 'react-native-navigation-redux-helpers';
 import {Container, Content, Text, InputGroup, Input, Button, Icon, View,Header} from 'native-base';
 
 import ModalDropdown from 'react-native-modal-dropdown';
-import login from './add-business-theme';
+import login from './add-promotions-theme';
 import styles from './styles';
 import HeaderContent from '.././../homeHeader';
 
@@ -38,17 +38,10 @@ class AddBusiness extends Component {
 
         this.state = {
             name: null,
-            address:'',
-            email:'',
-            website:'',
-            country:'',
-            city:'',
-            state:'',
             path:'',
             image:'',
             type:'',
             images:'',
-            tax_id:'',
             formID:'',
             formData:{}
         };
@@ -141,69 +134,8 @@ class AddBusiness extends Component {
                             />
                         </View>
 
-                        <View style={styles.row}>
-                            <Text style={styles.titleText}>
-                                Email
-                            </Text>
-                            <TextInput
-                                style={styles.input}
-                                onChangeText={(email) => this.setState({email})}
 
-                            />
-                        </View>
-                        <View style={styles.row}>
-                            <Text style={styles.titleText}>
-                                Address
-                            </Text>
-                            <TextInput
-                                style={styles.input}
-                                onChangeText={(address) => this.setState({address})}
 
-                            />
-                        </View>
-
-                        <View style={styles.row}>
-                            <Text style={styles.titleText}>
-                                Website
-                            </Text>
-                            <TextInput
-                                style={styles.input}
-                                onChangeText={(website) => this.setState({website})}
-
-                            />
-                        </View>
-                        <View style={styles.row}>
-                            <Text style={styles.titleText}>
-                                Country
-                            </Text>
-                            <TextInput
-                                style={styles.input}
-                                onChangeText={(country) => this.setState({country})}
-
-                            />
-                        </View>
-
-                        <View style={styles.row}>
-                            <Text style={styles.titleText}>
-                                City
-                            </Text>
-                            <TextInput
-                                style={styles.input}
-                                onChangeText={(city) => this.setState({city})}
-
-                            />
-                        </View>
-
-                        <View style={styles.row}>
-                            <Text style={styles.titleText}>
-                                State
-                            </Text>
-                            <TextInput
-                                style={styles.input}
-                                onChangeText={(state) => this.setState({state})}
-
-                            />
-                        </View>
                         <View style={styles.row}>
                             <Text style={styles.titleText}>
                                 Form id
@@ -225,15 +157,6 @@ class AddBusiness extends Component {
                             />
                         </View>
 
-                        <View style={styles.row}>
-                            <Text style={styles.titleText}>
-                                Type
-                            </Text>
-                            <ModalDropdown
-                                options={['PERSONAL_SERVICES', 'SMALL_BUSINESS', 'COMPANY', 'ENTERPRISE']}
-                                onSelect={this.selectType.bind(this)}
-                            />
-                        </View>
                         <View style={styles.row}>
                             <Text style={styles.titleText}>
                                 Image
