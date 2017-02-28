@@ -5,7 +5,7 @@ var mongoose = require('mongoose'),
 
 var CardSchema = new Schema({
   name: String,
-  gid: { type: Number, index: true, unique : true },
+  gid: { type: Number, index: true},
   card_id: String,
   password: String,
   card_type: {type: Schema.ObjectId, ref: 'CardType'},

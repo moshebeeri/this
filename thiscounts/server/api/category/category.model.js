@@ -16,7 +16,7 @@ var CategorySchema = new Schema({
     required: true,
     default: 'LIKE'
   },
-  gid: { type: Number, index: true, unique : true },
+  gid: { type: Number, index: true},
   location: {
     timestamp : { type : Date, default: Date.now },
     lat : Number,
