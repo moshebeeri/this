@@ -5,7 +5,7 @@ var mongoose = require('mongoose'),
 
 var OfferSchema = new Schema({
   name: String,
-  gid: { type: Number, index: true, unique : true },
+  gid: { type: Number, index: true},
   creator: {type: Schema.ObjectId, ref: 'User', required: true},
   promotion: {type: Schema.ObjectId, ref: 'Promotion', required: true}
 });

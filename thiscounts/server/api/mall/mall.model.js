@@ -9,7 +9,7 @@ var mongoose = require('mongoose'),
 var MallSchema = new Schema({
   social_state : {},
   name: String,
-  gid: { type: Number, index: true, unique : true },
+  gid: { type: Number, index: true},
   pictures: [],
   location : {
     lng : Number,

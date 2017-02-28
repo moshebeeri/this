@@ -6,7 +6,7 @@ var mongoose = require('mongoose'),
 var ShoppingChainSchema = new Schema({
   social_state : {},
   name: String,
-  gid: { type: Number, index: true, unique : true },
+  gid: { type: Number, index: true},
   pictures : [],
   info: String,
   active: Boolean

@@ -23,11 +23,10 @@ var CampaignPreferencesSchema = new Schema({
 });
 
 var CampaignSchema = new Schema({
-  formID: {type: String, required: true},
   creator: {type: Schema.ObjectId, ref: 'User', required: true},
   created: {type: Date, default: Date.now},
   name: {type: String, required: true},
-  gid: { type: Number, index: true, unique : true },
+  gid: { type: Number, index: true},
   info: String,
   promotion: {type: Schema.ObjectId, ref: 'Promotion', require: true},
   amount: Number,

@@ -6,7 +6,7 @@ var mongoose = require('mongoose'),
 var ProductSchema = new Schema({
   social_state : {},
   name: String,
-  gid: { type: Number, index: true, unique : true },
+  gid: { type: Number, index: true},
   info: String,
   brand: {type: Schema.ObjectId, ref: 'Brand', required: false},
   retail_price: Number,

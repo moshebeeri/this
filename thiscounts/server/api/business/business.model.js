@@ -3,11 +3,9 @@
 var mongoose = require('mongoose'),
     Schema = mongoose.Schema;
 
-var BusinessSchema = new Schema({
-  formID: {type: String, required: true},
-  social_state : {},
+var BusinessSchema = new Schema({social_state : {},
   name: { type: String, index: true, unique : true, required : true, dropDups: false},
-  gid: { type: Number, index: true, unique : true },
+  gid: { type: Number, index: true},
   tax_id: { type: String, index: true, required : true} ,
   shopping_chain: {type: Schema.ObjectId, ref: 'ShoppingChain', required: false},
   mall: {type: Schema.ObjectId, ref: 'mall', required: false},

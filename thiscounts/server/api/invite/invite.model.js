@@ -5,7 +5,7 @@ var mongoose = require('mongoose'),
 
 var InviteSchema = new Schema({
   text: String,
-  gid: { type: Number, index: true, unique : true },
+  gid: { type: Number, index: true},
   creator: {type: Schema.ObjectId, ref: 'User', required: true},
   mall : {type: Schema.ObjectId, ref: 'Mall', required: false},
   shopping_chain: {type: Schema.ObjectId, ref: 'ShoppingChain', required: false},

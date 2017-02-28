@@ -6,7 +6,7 @@ var mongoose = require('mongoose'),
 var GroupSchema = new Schema({
   formID: {type: String, required: true},
   name: String,
-  gid: { type: Number, index: true, unique: true },
+  gid: { type: Number, index: true},
   description: String,
   created: { type: Date, default: Date.now },
   creator: {type: Schema.ObjectId, ref: 'User', required: true},

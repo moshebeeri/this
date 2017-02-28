@@ -244,7 +244,6 @@ exports.save = function (req, res) {
     instanceGraphModel.save({
       _id: promotion._id,
       user: req.params.id,
-      gid: promotion._id,
       code: realize_code,
       used: false,
       time: save_time
@@ -258,7 +257,7 @@ exports.save = function (req, res) {
       promotionGraphModel.relate_ids(req.user._id, 'SAVED', req.params.id, {timestamp: Date.now()});
       promotion.realize_code = instance.realize_code;
       promotion.save_time = instance.save_time;
-      promotion.realize_gid = instance.realize_gid;
+      promotion.realize_gid = instance.gid;
       return res.json(200, promotion);
     });
   });
