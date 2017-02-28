@@ -2,9 +2,9 @@ import React, {Component} from 'react';
 import {Image, Platform} from 'react-native';
 import {connect} from 'react-redux';
 import {actions} from 'react-native-navigation-redux-helpers';
-import {Container, Content, Text, InputGroup, Input, Button, Icon, View} from 'native-base';
+import {Container, Content, Text, InputGroup, Input, Button, Icon, View,Header} from 'native-base';
 
-
+import HeaderContent from './../homeHeader';
 import login from './business-theme';
 import styles from './styles';
 //import AlertContainer from 'react-alert';
@@ -47,6 +47,17 @@ class Business extends Component {
     render() {
         return (
             <Container>
+                <Header
+                    style={{ flexDirection: 'column',
+                        height: 110,
+                        elevation: 0,
+                        paddingTop: (Platform.OS === 'ios') ? 20 : 3,
+                        justifyContent: 'space-between',
+                    }}
+                >
+                    <HeaderContent />
+                </Header>
+
 
                 <Content theme={login} style={{backgroundColor: login.backgroundColor}}>
 
