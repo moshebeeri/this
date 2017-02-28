@@ -8,7 +8,6 @@ import {Container, Content, Text, InputGroup, Input, Button, Icon, View} from 'n
 import login from './business-theme';
 import styles from './styles';
 //import AlertContainer from 'react-alert';
-const addIcon = require('../../../images/add-property-xxl.png');
 
 const {
     replaceAt,
@@ -39,7 +38,7 @@ class Business extends Component {
 
 
     replaceRoute(route) {
-        this.props.replaceAt('signup', {key: route}, this.props.navigation.key);
+        this.props.replaceAt('business', {key: route}, this.props.navigation.key);
     }
 
 
@@ -53,7 +52,7 @@ class Business extends Component {
 
 
                     <View theme={login} style={styles.AddContainer}>
-                        <Button style={styles.logoButton}>
+                        <Button  onPress={() =>  this.replaceRoute('add-business')} style={styles.logoButton} >
                             <Icon name="ios-add-circle-outline" />
                         </Button>
                     </View>

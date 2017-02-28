@@ -7,8 +7,7 @@ import {Container, Content, Text, InputGroup, Input, Button, Icon, View} from 'n
 
 import login from './add-business-theme';
 import styles from './styles';
-//import AlertContainer from 'react-alert';
-const addIcon = require('../../../images/add-property-xxl.png');
+
 
 const {
     replaceAt,
@@ -52,11 +51,6 @@ class AddBusiness extends Component {
                 <Content theme={login} style={{backgroundColor: login.backgroundColor}}>
 
 
-                    <View theme={login} style={styles.AddContainer}>
-                        <Button style={styles.logoButton} onPress={}>
-                            <Icon name="ios-add-circle-outline" />
-                        </Button>
-                    </View>
 
 
                 </Content>
@@ -76,4 +70,4 @@ const mapStateToProps = state => ({
     navigation: state.cardNavigation,
 });
 
-export default connect(mapStateToProps, bindActions)(<AddBusiness></AddBusiness>);
+export default connect(mapStateToProps, bindActions)(AddBusiness);
