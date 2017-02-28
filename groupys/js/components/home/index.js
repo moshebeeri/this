@@ -23,15 +23,15 @@ class Home extends Component {  // eslint-disable-line
         return (
             <Container theme={theme}>
                 <Header
-                    style={{ flexDirection: 'column',
-                            height: 110,
-                            elevation: 0,
-                            paddingTop: (Platform.OS === 'ios') ? 20 : 3,
-                            justifyContent: 'space-between',
-                          }}
-                >
-                    <HeaderContent />
-                </Header>
+                style={{ flexDirection: 'column',
+                    height: 110,
+                    elevation: 0,
+                    paddingTop: (Platform.OS === 'ios') ? 20 : 3,
+                    justifyContent: 'space-between',
+                }}
+            >
+                <HeaderContent />
+            </Header>
                 <View >
                         <Text>HOME</Text>
                         <Text>HOME</Text>
