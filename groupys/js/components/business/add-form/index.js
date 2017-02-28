@@ -17,7 +17,7 @@ import login from './add-business-theme';
 import styles from './styles';
 import HeaderContent from '.././../homeHeader';
 
-
+import ImagePicker from 'react-native-image-crop-picker';
 const {
     replaceAt,
 } = actions;
@@ -85,26 +85,26 @@ class AddBusiness extends Component {
         this.props.saveForm(this.state);
     }
     pickSingle(cropit, circular=false) {
-        {/*ImagePicker.openPicker({*/}
-            {/*width: 300,*/}
-            {/*height: 300,*/}
-        //     cropping: cropit,
-        //     cropperCircleOverlay: circular,
-        //     compressImageMaxWidth: 640,
-        //     compressImageMaxHeight: 480,
-        //     compressImageQuality: 0.5,
-        //     compressVideoPreset: 'MediumQuality',
-        // }).then(image => {
-        //     console.log('received image', image);
-        //     this.setState({
-        //         image: {uri: image.path, width: image.width, height: image.height, mime: image.mime},
-        //         images: null,
-        //         path: image.path
-        //     });
-        // }).catch(e => {
-        //     console.log(e);
-        //     Alert.alert(e.message ? e.message : e);
-        // });
+        ImagePicker.openPicker({
+            width: 300,
+            height: 300,
+            cropping: cropit,
+            cropperCircleOverlay: circular,
+            compressImageMaxWidth: 640,
+            compressImageMaxHeight: 480,
+            compressImageQuality: 0.5,
+            compressVideoPreset: 'MediumQuality',
+        }).then(image => {
+            console.log('received image', image);
+            this.setState({
+                image: {uri: image.path, width: image.width, height: image.height, mime: image.mime},
+                images: null,
+                path: image.path
+            });
+        }).catch(e => {
+            console.log(e);
+            Alert.alert(e.message ? e.message : e);
+        });
     }
     render() {
         return (
@@ -237,11 +237,12 @@ class AddBusiness extends Component {
                             <Text style={styles.titleText}>
                                 Image
                             </Text>
-                            <TouchableHighlight
-                                onPress={() => this.pickSingle(true)} style={styles.btnClickContain}
-                            >
+
+                            <Button   style={styles.attachButton} onPress={() => this.pickSingle(true)}>
                                 <Icon style={styles.attachButton} name="ios-attach" />
-                            </TouchableHighlight>
+
+                            </Button>
+
                             <Image
                                 style={{width: 50, height: 50}}
                                 source={{uri: this.state.path}}
