@@ -126,7 +126,7 @@ exports.create_group = function(group, callback) {
     });
     callback(null, group);
   });
-}
+};
 
 // Updates an existing group in the DB.
 exports.update = function(req, res) {

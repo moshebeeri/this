@@ -89,6 +89,7 @@ exports.create = function (req, res) {
         console.log(err);
         return res.status(202).json(data);
       }
+      else return res.status(400).send(err);
     }
 
     body_business.location = spatial.geo_to_location(data);
@@ -140,7 +141,7 @@ exports.create = function (req, res) {
         add_policy: 'OPEN',
         business_id: business._id,
         creator: req.user._id
-      }, function (group, res) {
+      }, function (err, group) {
         if (err) {
           return handleError(res, err);
         }
