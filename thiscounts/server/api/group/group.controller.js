@@ -91,26 +91,6 @@ function group_follow_group_activity(following, followed) {
 // Creates a new group in the DB.
 exports.create = function(req, res) {
 
-  console.log("--------------------------------------------");
-  console.log(req);
-  console.log("--------------------------------------------");
-
-  //req.body._id = req.body.id;
-
-  /*var d = new Date();
-   var n = d.getTime();
-   console.log(n);
-
-   req.body.created = Date.now();*/
-  console.log(req.body);
-  console.log("--------------------------------------------");
-  console.log(req.user._id);
-  console.log("--------------------------------------------");
-  console.log("================================================");
-  console.log("CREATING GROUP");
-  console.log("================================================");
-  //req.body.business_id = null;
-  //req.body.pictures = [];
   Group.create(req.body, function(err, group) {
     if(err) { return handleError(res, err); }
     graphModel.reflect(group, to_graph(group), function (err) {
@@ -119,9 +99,6 @@ exports.create = function(req, res) {
       graphModel.relate_ids(group._id, 'CREATED_BY', req.user._id);
       graphModel.relate_ids(req.user._id, 'FOLLOW', group._id );
       graphModel.relate_ids(req.user._id, 'GROUP_ADMIN', group._id );
-      console.log("============================================================");
-      console.log(req.body.business_id);
-      console.log("============================================================");
       if(req.body.business_id != undefined){
         graphModel.relate_ids(group._id, 'FOLLOW', req.body.business_id );
       }
@@ -129,6 +106,25 @@ exports.create = function(req, res) {
       group_activity(group, "create");
     });
     return res.json(201, group);
+  });
+};
+
+exports.create_group = function(group, callback) {
+
+  Group.create(group, function(err, group) {
+    if(err) { return callback(err); }
+    graphModel.reflect(group, to_graph(group), function (err) {
+      if (err) {  { return callback(err); } }
+      graphModel.relate_ids(group._id, 'CREATED_BY', group.creator);
+      graphModel.relate_ids(group.creator, 'FOLLOW', group._id );
+      graphModel.relate_ids(group.creator, 'GROUP_ADMIN', group._id );
+      if(group.business_id != undefined){
+        graphModel.relate_ids(group._id, 'FOLLOW', group.business_id );
+      }
+
+      group_activity(group, "create");
+    });
+    callback(null, group);
   });
 };
 
