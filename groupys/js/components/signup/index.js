@@ -83,13 +83,16 @@ class Signup extends Component {
         })
     }
 
-    callServerSignupAndRedirect() {
-        var phoneNumber = this.refs.phone.getValue();
-        var type = this.refs.phone.getNumberType();
+    normalizePhoneNumber(phone,countryCode){
 
-        console.log(phoneNumber);
-        console.log(type);
-        console.log(this.state.callingCode);
+        let newPhone = phone.toString().substring(phone.indexOf(countryCode.toString()) + countryCode.toString().length);
+        return newPhone;
+    }
+
+    callServerSignupAndRedirect() {
+        let phoneNumber = this.refs.phone.getValue();
+        let normalizedPhone = this.normalizePhoneNumber(phoneNumber,this.state.callingCode);
+
         fetch('http://low.la:9000/api/users', {
             method: 'POST',
             headers: {
@@ -97,7 +100,8 @@ class Signup extends Component {
                 'Content-Type': 'application/json;charset=utf-8',
             },
             body: JSON.stringify({
-                phone_number: phoneNumber,
+                country_code: this.state.callingCode,
+                phone_number: normalizedPhone,
                 email: phoneNumber + "@lowla.co.il",
                 password: this.state.password,
 

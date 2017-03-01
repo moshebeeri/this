@@ -77,7 +77,7 @@ class AddBusiness extends Component {
 
 
     replaceRoute(route) {
-        this.props.replaceAt('business', {key: route}, this.props.navigation.key);
+        this.props.replaceAt('add-business', {key: route}, this.props.navigation.key);
     }
 
 
@@ -103,7 +103,7 @@ class AddBusiness extends Component {
 
     formSuccess(response){
         store.save("b-id",response._id);
-        this.replaceRoute('home');
+        this.replaceRoute('business');
     }
 
     formFailed(error){
