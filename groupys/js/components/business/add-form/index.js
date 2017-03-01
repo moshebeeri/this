@@ -19,6 +19,7 @@ import HeaderContent from '.././../homeHeader';
 
 var createEntity = require("../../../utils/createEntity");
 import ImagePicker from 'react-native-image-crop-picker';
+import store from 'react-native-simple-store';
 const {
     replaceAt,
 } = actions;
@@ -49,9 +50,26 @@ class AddBusiness extends Component {
             type:'',
             images:'',
             tax_id:'',
-            formID:'',
+            formID:'12345',
+            userId:'',
+            token:'',
             formData:{}
         };
+
+
+        let stateFunc = this.setState.bind(this);
+        store.get('token').then(storeToken => {
+            stateFunc({
+                    token: storeToken
+                }
+            );
+        });
+        store.get('user_id').then(storeUserId => {
+            stateFunc({
+                userId: storeUserId
+                }
+            );
+        });
     }
 
 
@@ -59,7 +77,7 @@ class AddBusiness extends Component {
 
 
     replaceRoute(route) {
-        this.props.replaceAt('signup', {key: route}, this.props.navigation.key);
+        this.props.replaceAt('business', {key: route}, this.props.navigation.key);
     }
 
 
@@ -76,14 +94,20 @@ class AddBusiness extends Component {
 
     }
 
+
     saveFormData(){
-        this.setState({
-                formData:{name: this.state.name,address: this.state.address, email: this.state.email,
-                    website: this.state.website,  country: this.state.country,  city: this.state.city,
-                    state: this.state.state,type :this.state.type,tax_id:this.state.tax_id}
-            }
-        );
-        this.props.saveForm(this.state);
+
+
+        createEntity('businesses',this.state,this.state.token,this.formSuccess.bind(this),this.formFailed.bind(this),this.state.userId);
+    }
+
+    formSuccess(response){
+        store.save("b-id",response._id);
+        this.replaceRoute('home');
+    }
+
+    formFailed(error){
+        console.log('failed');
     }
     pickSingle(cropit, circular=false) {
         ImagePicker.openPicker({
@@ -242,7 +266,9 @@ class AddBusiness extends Component {
                         </View>
                         <View style={styles.row}>
 
-                            <Button style={styles.login}>
+                            <Button style={styles.login}
+                                    onPress={this.saveFormData.bind(this)}
+                            >
                                 <Text>Save</Text>
                             </Button>
                         </View>
