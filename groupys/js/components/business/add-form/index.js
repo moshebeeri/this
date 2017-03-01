@@ -80,7 +80,7 @@ class AddBusiness extends Component {
         this.setState({
                 formData:{name: this.state.name,address: this.state.address, email: this.state.email,
                     website: this.state.website,  country: this.state.country,  city: this.state.city,
-                    state: this.state.state,type :this.state.type,formID:this.state.formID, tax_id:this.state.tax_id}
+                    state: this.state.state,type :this.state.type,tax_id:this.state.tax_id}
             }
         );
         this.props.saveForm(this.state);
@@ -204,16 +204,7 @@ class AddBusiness extends Component {
 
                             />
                         </View>
-                        <View style={styles.row}>
-                            <Text style={styles.titleText}>
-                                Form id
-                            </Text>
-                            <TextInput
-                                style={styles.input}
-                                onChangeText={(formID) => this.setState({formID})}
 
-                            />
-                        </View>
                         <View style={styles.row}>
                             <Text style={styles.titleText}>
                                 Tax id
