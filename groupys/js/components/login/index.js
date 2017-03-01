@@ -30,6 +30,7 @@ class Login extends Component {
     this.state = {
         phoneNumber: '',
       password: '',
+
       scroll: false,
         error:''
     };
@@ -39,6 +40,7 @@ class Login extends Component {
       this.setState ({error: ''});
       let routFunc =  this.props;
       let currentState = this.setState.bind(this);
+      let userFunc = this.getUser.bind(this);
       fetch('http://low.la:9000/auth/local', {
           method: 'POST',
           headers: {
@@ -57,6 +59,7 @@ class Login extends Component {
           response.json().then((responseData) => {
               if (responseData.token) {
                   store.save('token', responseData.token);
+                  userFunc(responseData.token);
               }
           })
           routFunc.replaceAt('login', { key: 'home' }, routFunc.navigation.key);
@@ -65,11 +68,35 @@ class Login extends Component {
               console.log('There has been a problem with your fetch operation: ' + error.message);
       });
 
-
-
-
   }
-  replaceRoute(route) {
+
+
+
+    getUser(token){
+        fetch('http://low.la:9000/api/users/me/', {
+            method: 'GET',
+            headers: {
+                'Accept': 'application/json, text/plain, */*',
+                'Content-Type': 'application/json;charset=utf-8',
+                'Authorization': 'Bearer ' + token,
+            }
+
+        }).then((response) => response.json())
+            .then((responseData) => {
+                if (responseData._id) {
+                    store.save('user_id', responseData._id);
+
+                }
+
+            }).catch(function (error) {
+
+            console.log('There has been a problem with your fetch operation: ' + error.message);
+
+        });
+
+    }
+
+    replaceRoute(route) {
     this.props.replaceAt('login', { key: route }, this.props.navigation.key);
   }
 
