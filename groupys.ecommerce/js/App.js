@@ -55,6 +55,7 @@ class App extends Component {
   }
 
   componentDidMount() {
+    //  h75DOvlvUPFRsZYqxnPtGySo9B7HNyzQodRKf
     // CodePush.sync({ updateDialog: true, installMode: CodePush.InstallMode.IMMEDIATE },
     //         (status) => {
     //           switch (status) {

@@ -21,7 +21,10 @@ var BusinessSchema = new Schema({social_state : {},
   creator: {type: Schema.ObjectId, index: true, ref: 'User', required: true},
   created: {type: Date, default: Date.now},
   info: String,
-  active: Boolean,
+
+  default_group: {type: Schema.ObjectId, index: true, ref: 'Group', required: true},
+  groups: [{type: Schema.ObjectId, index: true, ref: 'Group'}],
+
   location : {
     lng : Number,
     lat : Number,

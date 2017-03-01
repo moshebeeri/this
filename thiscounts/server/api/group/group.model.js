@@ -4,13 +4,12 @@ var mongoose = require('mongoose'),
     Schema = mongoose.Schema;
 
 var GroupSchema = new Schema({
-  formID: {type: String, required: true},
   name: String,
   gid: { type: Number, index: true},
   description: String,
   created: { type: Date, default: Date.now },
   creator: {type: Schema.ObjectId, ref: 'User', required: true},
-  admins: [{ type: Schema.ObjectId, ref: 'User', index: true, unique: false}],
+  admins: [{ type: Schema.ObjectId, ref: 'User', index: true}],
   creator_type: {
     type: String,
     required: true,

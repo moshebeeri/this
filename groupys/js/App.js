@@ -57,29 +57,31 @@ class App extends Component {
         };
     }
 
-//////
-    render_del() {
-        return (
-            <Content theme={theme} style={{ backgroundColor: '#fff', paddingTop:25 }} >
-                <Text style={styles.name}>John Doe </Text>
-                <Text style={styles.status}>$ 500, Strap Sale Credit </Text>
-                <Image style={styles.image} source={cover} >
-                    <Image style={styles.thumbnail} source={profile} />
-                </Image>
-
-                <Text style={{ color: '#000', top:120, fontSize: 16, margin: 20, fontWeight: '500', marginBottom: 10 }}>Shop by Category </Text>
-                <List foregroundColor={'#000'} style={styles.list}>
-
-                    {/*<Nav to="home"  name="Home" style={styles} icon="ios-home-outline" navigateTo={this.navigateTo.bind(this)} />*/}
-                    {/*<Nav to="business" name="Business" style={styles} icon="ios-cash-outline" navigateTo={this.navigateTo.bind(this)} />*/}
-                    {/*<Nav to="groups" name="Groups" style={styles} icon="ios-people-outline" navigateTo={this.navigateTo.bind(this)} />*/}
-                    {/*<Nav to="promotions" name="Promotions" style={styles} icon="ios-pricetags-outline" navigateTo={this.navigateTo.bind(this)} />*/}
-                </List>
-            </Content>
-        );
+    componentDidMount() {
+        //  h75DOvlvUPFRsZYqxnPtGySo9B7HNyzQodRKf
+        // CodePush.sync({ updateDialog: true, installMode: CodePush.InstallMode.IMMEDIATE },
+        //         (status) => {
+        //           switch (status) {
+        //             case CodePush.SyncStatus.DOWNLOADING_PACKAGE:
+        //               this.setState({ showDownloadingModal: true });
+        //               this._modal.open();
+        //               break;
+        //             case CodePush.SyncStatus.INSTALLING_UPDATE:
+        //               this.setState({ showInstalling: true });
+        //               break;
+        //             case CodePush.SyncStatus.UPDATE_INSTALLED:
+        //               this._modal.close();
+        //               this.setState({ showDownloadingModal: false });
+        //               break;
+        //             default:
+        //               break;
+        //           }
+        //         },
+        //         ({ receivedBytes, totalBytes }) => {
+        //           this.setState({ downloadProgress: (receivedBytes / totalBytes) * 100 });
+        //         }
+        //     );
     }
-
-//////
 
     render() {
         if (this.state.showDownloadingModal) {
