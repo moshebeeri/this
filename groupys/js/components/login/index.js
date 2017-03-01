@@ -14,6 +14,7 @@ const {
 const logo = require('../../../images/logo.png');
 import login from './login-theme';
 import styles from './styles';
+import store from 'react-native-simple-store';
 
 class Login extends Component {
 
@@ -35,25 +36,34 @@ class Login extends Component {
   }
 
   login() {
-      console.log("try to login");
-      this.replaceRoute('home');
-      // fetch('http://low.la:9000/auth/local', {
-      //     method: 'POST',
-      //     headers: {
-      //         'Accept': 'application/json, text/plain, */*',
-      //         'Content-Type': 'application/json;charset=utf-8',
-      //     },
-      //     body: JSON.stringify({
-      //         email:  this.state.phoneNumber + "@low.la",
-      //         password:this.state.password,
-      //     })
-      // }).then(function (response) {
-      //     console.log(response._bodyText);
-      //     console.log(response.status);
-      //     this.replaceRoute('home')
-      // }).catch(function (error) {
-      //         console.log('There has been a problem with your fetch operation: ' + error.message);
-      //     });
+      this.setState ({error: ''});
+      let routFunc =  this.props;
+      let currentState = this.setState.bind(this);
+      fetch('http://low.la:9000/auth/local', {
+          method: 'POST',
+          headers: {
+              'Accept': 'application/json, text/plain, */*',
+              'Content-Type': 'application/json;charset=utf-8',
+          },
+          body: JSON.stringify({
+              email:  this.state.phoneNumber + "@lowla.co.il",
+              password:this.state.password,
+          })
+      }).then(function (response) {
+          if (response.status == '401') {
+              currentState({error: 'Login Failed Validation'});
+              return;
+          }
+          response.json().then((responseData) => {
+              if (responseData.token) {
+                  store.save('token', responseData.token);
+              }
+          })
+          routFunc.replaceAt('login', { key: 'home' }, routFunc.navigation.key);
+
+      }).catch(function (error) {
+              console.log('There has been a problem with your fetch operation: ' + error.message);
+      });
 
 
 
@@ -76,7 +86,7 @@ class Login extends Component {
                           keyboardType="phone-pad"
                           placeholderTextColor='#444'
                           placeholder="Phone"
-                          onChangeText={email => this.setState({ email })}
+                          onChangeText={phoneNumber => this.setState({ phoneNumber })}
                       />
                     </InputGroup>
                   </View>
@@ -92,16 +102,17 @@ class Login extends Component {
                       />
                     </InputGroup>
                   </View>
+                  <View style={{ flexDirection: 'row', justifyContent: 'center',marginBottom:10 }}>
+                    <Text> {this.state.error}</Text>
+                  </View>
+
 
                   <Button transparent style={styles.forgotButton}>
                     <Text style={styles.forgotText}>Forgot Login details?</Text>
                   </Button>
-                  <Button style={styles.login} onPress={() => this.login( { phoneNumber: this.state.phoneNumber, password: this.state.password }) }>
+                  <Button style={styles.login} onPress={this.login.bind(this) }>
                     <Text>Login</Text>
                   </Button>
-                  <Text>
-                      {this.state.error}
-                  </Text>
                 </View>
 
                 <View style={{ flexDirection: 'row', justifyContent: 'space-around', paddingVertical: 20 }}>
