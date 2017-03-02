@@ -401,7 +401,6 @@ function identifyPhoneByTwilio(phone, countryCode){
   var cleanedPhone = utils.clean_phone_number(phone);
 
   if(cleanedPhone != undefined){
-    console.log("--------------identifyPhoneByTwilio------------------");
     twilioClient.phoneNumbers(cleanedPhone).get({
       //type: 'carrier'
     }, function(error, number) {
@@ -421,7 +420,6 @@ function identifyPhoneByTwilio(phone, countryCode){
       }
     });
   } else {
-    console.log("--------------UNDEFINED identifyPhoneByTwilio------------------");
   }
 }
 function identifyPhoneByTwilioFallBack(phone){
@@ -594,15 +592,9 @@ function getPhoneNumbers(list, users, callback){
     //if (err) return handleError(err);
     if (err) callback( err, users);
     else {
-      //console.log(JSON.stringify(user));
       if (user && user._id) {
-        console.log(JSON.stringify(user));
         users.push(user);
-        console.log("--------------------------------");
-        console.log(JSON.stringify(users));
-        console.log("--------------------------------");
       } else {                        // end of list
-        console.log("end--end--end--end--end--end--end--");
         //res.status(200).json(users);
         callback( null, users );
       }
@@ -726,12 +718,7 @@ exports.changePassword = function (req, res, next) {
  */
 exports.updateInfo = function (req, res, next) {
   var userId = req.user._id;
-  console.log("===========req.user._id: "+ req.user._id);
-  console.log("===========req.body['phone_number']: "+ req.body['phone_number']);
   var newUser = req.body;
-  printObject(req.body);
-
-
   var query = {'phone_number':req.body['phone_number']};
 
   User.findOneAndUpdate(query, newUser, {upsert:true}, function(err, doc){
@@ -776,10 +763,9 @@ function handleError(res, err) {
 
 
 function printObject(object){
-  var output = '';
-  for (var property in object) {
+  let output = '';
+  for (let property in object) {
     output += property + ': ' + object[property]+'; ';
   }
   console.log(output);
-
 }

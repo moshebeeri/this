@@ -108,29 +108,24 @@ function handle_image(req, res, type) {
   var fileName = randomstring.generate({length: 8, charset: 'hex'});
 
   form.on('part', function (part) {
+    console.log("====on part");
     part.filename = part.name;
     if (!part.filename) return;
     size = part.byteCount;
     fileName = part.filename;
   });
   form.on('file', function (name, file) {
-		var entityId = file.originalFilename.substring(file.originalFilename.lastIndexOf('--'),0).toString();
+    console.log("====on file");
     client.upload(file.path, {/*path: key*/}, function (err, versions, meta) {
       if (err) {
         console.log(err);
         return handleError(res, err);
       }
-
-      //versions.forEach(function (image) {
-      // 1024 760 https://my-bucket.s3.amazonaws.com/path/110ec58a-a0f2-4ac4-8393-c866d813b8d1.jpg
-      //  console.log(image.width, image.height, image.url)
-      //});
-			if(entityId.length === 0){
-				updateImageVersions(versions, req.user._id, meta_data, type);
-			} else {
-				updateImageVersions(versions, entityId, meta_data, type);
-			}
-      return res.status(201).json(versions);
+      console.log("====update versions");
+      updateImageVersions(versions, req.params.id, meta_data, type, function (err, updated) {
+        if(err) return handleError(res, err);
+        return res.status(201).json(updated);
+      });
     });
 
   });
@@ -172,17 +167,12 @@ function base64_handle_image(req, res, type) {
           console.log(err);
           return handleError(res, err);
         }
-        var entityId = file.originalFilename.substring(file.originalFilename.lastIndexOf('--'),0).toString();
         client.upload(file.path, {/*path: key*/}, function (err, versions, meta) {
           if (err) {
             console.log(err);
             return handleError(res, err);
           }
-          if(entityId.length === 0){
-            updateImageVersions(versions, req.user._id, meta_data, type);
-          } else {
-            updateImageVersions(versions, entityId, meta_data, type);
-          }
+          updateImageVersions(versions, req.params.id, meta_data, type);
           return res.status(201).json(versions);
         });
       });
@@ -193,7 +183,7 @@ function base64_handle_image(req, res, type) {
 }
 
 
-function updateImageVersions(version, id, meta_data, type) {
+function updateImageVersions(version, id, meta_data, type, callback) {
 
   async.parallel({
       user: function (callback) {
@@ -235,22 +225,25 @@ function updateImageVersions(version, id, meta_data, type) {
           pictures.push(version.url)
         });
 
-        for(var key in results) {
+        for (var key in results) {
           var updated = results[key];
-          if(updated){
-            if(type === 'image')
-              updated.pictures.push({
-                pictures: pictures,
-                meta : meta_data,
-                id : randomstring.generate({length: 8, charset: 'hex'})
-              });
-            else if (type === 'logo')
-            //[0] for original
+          if (updated) {
+            if (type === 'logo')
               updated.logo = pictures[0];
-            updated.save(function (err) {
+            //type === 'image'
+            else updated.pictures.push({
+              pictures: pictures,
+              meta: meta_data,
+              date: Date.now(),
+              order: 0
+            });
+
+            updated.save(function (err, updated) {
               if (err) {
                 console.log(err);
+                callback(err, null);
               }
+              callback(null, updated);
             });
           }
         }

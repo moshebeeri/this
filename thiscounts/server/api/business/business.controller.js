@@ -56,14 +56,15 @@ exports.show = function (req, res) {
 
 exports.mine = function (req, res) {
   var userId = req.user._id;
+  console.log("get businesses of user " + userId );
   Business.find({'creator': userId}, function (err, businesses) {
     if (err) {
       return handleError(res, err);
     }
-    if (!business) {
+    if (!defined(businesses)) {
       return res.status(404).send('Not Found');
     }
-    return res.json(businesses);
+    return res.status(200).json(businesses);
   });
 };
 
