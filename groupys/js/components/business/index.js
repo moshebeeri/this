@@ -5,10 +5,10 @@ import {actions} from 'react-native-navigation-redux-helpers';
 import {Container, Content, Text, InputGroup, Input, Button, Icon, View,Header} from 'native-base';
 
 import HeaderContent from './../homeHeader';
+
 import login from './business-theme';
 import styles from './styles';
-//import AlertContainer from 'react-alert';
-
+import store from 'react-native-simple-store';
 const {
     replaceAt,
 } = actions;
@@ -25,15 +25,69 @@ class Business extends Component {
 
     constructor(props) {
         super(props);
-
         this.state = {
 
             error: '',
-            validationMessage: ''
-        };
+            validationMessage: '',
+            token: '',
+            userId: '',
+            rowsView: []
+        }
+        ;
+
+        let stateFunc = this.setState.bind(this);
+        store.get('token').then(storeToken => {
+
+            stateFunc({
+                    token: storeToken
+                }
+            );
+        });
+        store.get('user_id').then(storeUserId => {
+            stateFunc({
+                    userId: storeUserId
+                }
+            );
+        });
+
+
     }
 
+    fetchBusiness(){
+        let stateFunc = this.setState.bind(this);
+        store.get('token').then(storeToken => {
+            fetch('http://low.la:9000/api/businesses/list/mine', {
+                method: 'GET',
+                headers: {
+                    'Accept': 'application/json, text/plain, */*',
+                    'Content-Type': 'application/json;charset=utf-8',
+                    'Authorization': 'Bearer ' + storeToken
 
+                }
+
+            }).then(function (response) {
+                if (response.status == '401') {
+
+                    return;
+                }
+
+
+                response.json().then((responseData) => {
+
+                    stateFunc({
+                        rowsView: responseData
+                        }
+                    );
+                })
+
+            }).catch(function (error) {
+                console.log('There has been a problem with your fetch operation: ' + error.message);
+            });
+
+        });
+
+
+    }
 
 
 
@@ -42,10 +96,25 @@ class Business extends Component {
     }
 
 
-
+    componentWillMount(){
+        this.fetchBusiness();
+    }
 
     render() {
+
+
+        let index = 0
+
+
+        let rows = this.state.rowsView.map((r, i) => {
+            return <View theme={login} style={styles.AddContainer}>
+                <Text > { r.name }</Text>
+            </View>
+        })
+
+
         return (
+
             <Container>
                 <Header
                     style={{ flexDirection: 'column',
@@ -68,7 +137,7 @@ class Business extends Component {
                         </Button>
                     </View>
 
-
+                    { rows }
                 </Content>
             </Container>
         );

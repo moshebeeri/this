@@ -47,6 +47,13 @@ module.exports = {
     padding: 4,
       backgroundColor: 'transparent'
   },
+    row: {
+        height:40,
+        alignItems: 'center',
+        justifyContent: 'center',
+        borderBottomColor: '#ededed',
+        borderBottomWidth: 1
+    },
   transparentButton: {
     padding: 0,
     alignItems: 'flex-start',
