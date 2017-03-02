@@ -69,29 +69,6 @@ function createClient() {
   });
 }
 
-// Get list of images
-exports.index = function (req, res) {
-  Image.find(function (err, images) {
-    if (err) {
-      return handleError(res, err);
-    }
-    return res.status(200).json(images);
-  });
-};
-
-// Get a single image
-exports.show = function (req, res) {
-  Image.findById(req.params.id, function (err, image) {
-    if (err) {
-      return handleError(res, err);
-    }
-    if (!image) {
-      return res.status(404).send('Not Found');
-    }
-    return res.json(image);
-  });
-};
-
 exports.create = function (req, res) {
   return handle_image(req, res, 'image')
 };
@@ -108,29 +85,24 @@ function handle_image(req, res, type) {
   var fileName = randomstring.generate({length: 8, charset: 'hex'});
 
   form.on('part', function (part) {
+    console.log("====on part");
     part.filename = part.name;
     if (!part.filename) return;
     size = part.byteCount;
     fileName = part.filename;
   });
   form.on('file', function (name, file) {
-		var entityId = file.originalFilename.substring(file.originalFilename.lastIndexOf('--'),0).toString();
+    console.log("====on file");
     client.upload(file.path, {/*path: key*/}, function (err, versions, meta) {
       if (err) {
         console.log(err);
         return handleError(res, err);
       }
-
-      //versions.forEach(function (image) {
-      // 1024 760 https://my-bucket.s3.amazonaws.com/path/110ec58a-a0f2-4ac4-8393-c866d813b8d1.jpg
-      //  console.log(image.width, image.height, image.url)
-      //});
-			if(entityId.length === 0){
-				updateImageVersions(versions, req.user._id, meta_data, type);
-			} else {
-				updateImageVersions(versions, entityId, meta_data, type);
-			}
-      return res.status(201).json(versions);
+      console.log("====update versions");
+      updateImageVersions(versions, req.params.id, meta_data, type, function (err, updated) {
+        if (err) return handleError(res, err);
+        return res.status(201).json(updated);
+      });
     });
 
   });
@@ -160,30 +132,27 @@ function base64_handle_image(req, res, type) {
     size = part.byteCount;
     fileName = part.filename;
   });
-  form.on('file', function (name, file) {
 
-    fs.readFile(file.path, 'utf-8', function (err,data) {
+  form.on('file', function (name, file) {
+    fs.readFile(file.path, 'utf-8', function (err, data) {
       if (err) {
         return console.log(err);
       }
       var clear_img = data.replace(/^data:image\/*;base64,/, "");
-      base64.decode(clear_img, file.path, function(err, output) {
+      base64.decode(clear_img, file.path, function (err, output) {
         if (err) {
           console.log(err);
           return handleError(res, err);
         }
-        var entityId = file.originalFilename.substring(file.originalFilename.lastIndexOf('--'),0).toString();
         client.upload(file.path, {/*path: key*/}, function (err, versions, meta) {
           if (err) {
             console.log(err);
             return handleError(res, err);
           }
-          if(entityId.length === 0){
-            updateImageVersions(versions, req.user._id, meta_data, type);
-          } else {
-            updateImageVersions(versions, entityId, meta_data, type);
-          }
-          return res.status(201).json(versions);
+          updateImageVersions(versions, req.params.id, meta_data, type, function (err, updated) {
+            if (err) return handleError(res, err);
+            return res.status(201).json(updated);
+          });
         });
       });
 
@@ -193,7 +162,7 @@ function base64_handle_image(req, res, type) {
 }
 
 
-function updateImageVersions(version, id, meta_data, type) {
+function updateImageVersions(version, id, meta_data, type, callback) {
 
   async.parallel({
       user: function (callback) {
@@ -234,23 +203,26 @@ function updateImageVersions(version, id, meta_data, type) {
         version.forEach(function (version) {
           pictures.push(version.url)
         });
-
-        for(var key in results) {
+        // we aim for one match only - hence return after first iteration
+        for (var key in results) {
           var updated = results[key];
-          if(updated){
-            if(type === 'image')
-              updated.pictures.push({
-                pictures: pictures,
-                meta : meta_data,
-                id : randomstring.generate({length: 8, charset: 'hex'})
-              });
-            else if (type === 'logo')
-            //[0] for original
+          if (updated) {
+            if (type === 'logo')
               updated.logo = pictures[0];
-            updated.save(function (err) {
+            //type === 'image'
+            else updated.pictures.push({
+              pictures: pictures,
+              meta: meta_data,
+              date: Date.now(),
+              order: 0
+            });
+
+            updated.save(function (err, updated) {
               if (err) {
                 console.log(err);
+                return callback(err, null);
               }
+              return callback(null, updated);
             });
           }
         }
@@ -258,160 +230,103 @@ function updateImageVersions(version, id, meta_data, type) {
     });
 }
 
-function find(collection, query, callback) {
-  mongoose.connection.db.collection(collection, function (err, collection) {
-    collection.find(query).toArray(callback);
+function find_object(id, callback) {
+  async.parallel({
+      user: function (callback) {
+        User.findById(id, callback);
+      },
+      business: function (callback) {
+        Business.findById(id, callback);
+      },
+      shoppingChain: function (callback) {
+        ShoppingChain.findById(id, callback);
+      },
+      product: function (callback) {
+        Product.findById(id, callback);
+      },
+      group: function (callback) {
+        Group.findById(id, callback);
+      },
+      promotion: function (callback) {
+        Promotion.findById(id, callback);
+      },
+      mall: function (callback) {
+        Mall.findById(id, callback);
+      },
+      category: function (callback) {
+        Category.findById(id, callback);
+      },
+      cardType: function (callback) {
+        CardType.findById(id, callback);
+      }
+    },
+    function (err, results) {
+      if (err)
+        return callback(err, null);
+
+      for (var key in results) {
+        var updated = results[key];
+        if (updated) {
+          return callback(null, updated);
+        }
+      }
+    })
+}
+
+let s3del = new AWS.S3(options = {
+  accessKeyId: config.aws.key,
+  secretAccessKey: config.aws.secret
+});
+
+
+function delete_picture_storage(picture){
+  let objects = [];
+  //url - formatted as https://s3.amazonaws.com/thiscounts/images/Af/FI/Cw-orig.jpeg
+  let prefix_str = "https://s3.amazonaws.com/thiscounts/";
+  picture.pictures.forEach((url)=>{
+    let object = url.slice(prefix_str.length, str.length);
+    objects.push(object);
+  });
+
+  let params = {
+    Bucket: 'thiscounts',
+    Delete: {
+      Objects: objects,
+    },
+  };
+  s3del.deleteObjects(params, function(err, data) {
+    if (err) console.log(err, err.stack); // an error occurred
+    else     console.log(data);           // successful response
   });
 }
 
-exports.works_create = function (req, res) {
-  var multiparty = require('multiparty');
-  var gm = require('gm');
-  var fs = require('fs');
-  var form = new multiparty.Form();
-  var size = '';
-  var fileName = randomstring.generate({length: 8, charset: 'hex'});
-  form.on('part', function (part) {
-    console.log("part:" + part.filename);
-    if (!part.filename) return;
-    size = part.byteCount;
-    fileName = part.filename;
-  });
-  form.on('file', function (name, file) {
-    console.log(file.path);
-    var extension = /[^.]+$/.exec(file.originalFilename)[0];
-    console.log('filename: ' + fileName);
-    console.log('fileSize: ' + (size / 1024));
-    var source_path = file.path;
-    var target_path = '/home/moshe/uploads/fullsize/' + fileName + '.' + extension;
-    var thumbPath = '/home/moshe/uploads/thumbs/' + fileName + '.png';
-    fs.renameSync(source_path, target_path);
-    gm(target_path)
-      .resize(150, 150)
-      .noProfile()
-      .write(thumbPath, function (err) {
-        if (err) console.error(err.stack);
-      });
-    return res.json(200, {
-      full_size: fileName
-    });
-  });
-  form.parse(req);
-};
+//'/order/:id/:date/:order'
+exports.order = function (req, res) {
+  find_object(req.params.id, function (err, object) {
+    if (err) return handleError(res, err);
 
-
-// Creates a new image in the DB.
-//see http://stackoverflow.com/questions/30166907/uploading-images-with-mongoose-express-and-angularjs
-//https://github.com/Turistforeningen/node-s3-uploader
-exports.createX = function (req, res) {
-  //switch(req.body.type){
-  //  case 'USER'      :  {} break;
-  //  case 'BUSINESS'  :  {} break; //BusinessSchema.findById()
-  //  case 'SHOPPING_CHAIN'  :  {} break; //BusinessSchema.findById()
-  //  case 'PRODUCT'   :  {} break;
-  //  case 'PROMOTION' :  {} break;
-  //  case 'MALL'      :  {} break;
-  //  case 'CATEGORY'  :  {} break;
-  //  case 'CARD_TYPE' :  {} break;
-  //  default  :
-  //      break;
-  //}
-  var key = folder + '/' + randomstring.generate({length: 8, charset: 'hex'}) + '_' + req.body.uploadName;
-
-
-  var path = req.files.image.path;
-  fs.readFile(path, function (err, file_buffer) {
-    var params = {
-      Bucket: config.aws.bucketName,
-      Body: file_buffer,
-      Key: key,
-      Expires: 60,
-      ContentType: req.query.file_type,
-      ACL: 'public-read'
-    };
-
-    s3.putObject(params, function (err, image) {
-      if (err) {
-        console.log(err);
-        return handleError(res, err);
+    object.pictures.forEach(function (pic) {
+      if (pic.date == req.params.date) {
+        pic.order = req.params.order;
+        object.save();
+        return res.status(201).json(object);
       }
-      return res.status(201).json(params);
     });
-  });
-
-};
-
-
-exports.create_upload_multipart = function (req, res) {
-  //http://www.componentix.com/blog/9/file-uploads-using-nodejs-now-for-real
-};
-
-// Updates an existing image in the DB.
-exports.update = function (req, res) {
-  if (req.body._id) {
-    delete req.body._id;
-  }
-  Image.findById(req.params.id, function (err, image) {
-    if (err) {
-      return handleError(res, err);
-    }
-    if (!image) {
-      return res.status(404).send('Not Found');
-    }
-    var updated = _.merge(image, req.body);
-    updated.save(function (err) {
-      if (err) {
-        return handleError(res, err);
-      }
-      return res.status(200).json(image);
-    });
+    return res.status(400).json('could not find picture on tagged with date = ' + req.params.date);
   });
 };
 
-// Deletes a image from the DB.
-exports.destroy = function (req, res) {
-  Image.findById(req.params.id, function (err, image) {
-    if (err) {
-      return handleError(res, err);
-    }
-    if (!image) {
-      return res.status(404).send('Not Found');
-    }
-    image.remove(function (err) {
-      if (err) {
-        return handleError(res, err);
-      }
-      return res.status(204).send('No Content');
-    });
+//'/delete/:id/:date'
+exports.delete = function (req, res) {
+  find_object(req.params.id, function (err, object) {
+    if (err) return handleError(res, err);
+    object.pictures = object.pictures.filter((pic) => pic.date != req.params.date);
+    delete_picture_storage(object.pictures.filter((pic) => pic.date == req.params.date));
+    object.save();
+    return res.status(201).json(object);
   });
 };
 
 function handleError(res, err) {
   return res.status(500).send(err);
 }
-
-var multer  =   require('multer');
-var storage =   multer.diskStorage({
-  destination: function (req, file, callback) {
-    callback(null, './public/images/uploads');
-  },
-  filename: function (req, file, callback) {
-    //callback(null, file.fieldname + '-' + Date.now());
-    callback(null, file.originalname);
-  }
-});
-var upload = multer({ storage : storage }).array('avatar');
-
-exports.create2 = function (req, res) {
-
-  upload(req,res,function(err) {
-    console.log(req.body);
-    console.log(req.headers);
-    console.log(req.files);
-    if(err) {
-      return res.end("Error uploading file.");
-    }
-    res.end("File is uploaded");
-  });
-};
-

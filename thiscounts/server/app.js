@@ -6,10 +6,6 @@
 
 // Set default node environment to development
 process.env.NODE_ENV = process.env.NODE_ENV || 'development';
-//process.env['PATH'] = "C:\\ImageMagick;" + process.env['PATH'];
-console.log("------------------------------");
-console.log(process.env['PATH']);
-console.log("------------------------------");
 
 var express = require('express');
 var mongoose = require('mongoose');
