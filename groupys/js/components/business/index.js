@@ -105,9 +105,9 @@ class Business extends Component {
 
         let index = 0
 
-
         let rows = this.state.rowsView.map((r, i) => {
-            return <View theme={login} style={styles.AddContainer}>
+            index++;
+            return <View key={index} theme={login} style={styles.AddContainer}>
                 <Text > { r.name }</Text>
             </View>
         })
