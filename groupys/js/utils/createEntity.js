@@ -50,7 +50,9 @@ function doUpload(imagePath,imageMime,userId,token,callbackFunction,errorCallBac
 
          }
 
-     ).then((response) => response.json())
+     ).then((
+
+         response) => response.json())
          .then((responseData) => {
              if(entityData.image){
                  doUpload(entityData.image.uri,entityData.image.mime,userId,token,callbackFunction,errorCallBack,responseData);
@@ -71,8 +73,8 @@ function doUpload(imagePath,imageMime,userId,token,callbackFunction,errorCallBac
 
 module.exports = function(entityApi,entityData,token,callbackFunction,errorCallBack,userId) {
 
-    let entity = transformJson(entityData);
-    let json  = JSON.stringify(entity);
+    //let entity = transformJson(entityData);
+    let json  = JSON.stringify(entityData);
 
     saveEntity(entityData,entityApi,json,token,callbackFunction,errorCallBack,userId);
 
