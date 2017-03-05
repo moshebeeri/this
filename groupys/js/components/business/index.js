@@ -107,6 +107,16 @@ class Business extends Component {
 
         let rows = this.state.rowsView.map((r, i) => {
             index++;
+            if(r.pictures.length > 0){
+                return  <View key={index} theme={login} style={styles.AddContainer}>
+                    <Image
+                        style={{width: 50, height: 50}}
+                        source={{uri: r.pictures[0].pictures[3]}}
+                    />
+                    <Text > { r.name }</Text>
+                </View>
+
+            }
             return <View key={index} theme={login} style={styles.AddContainer}>
                 <Text > { r.name }</Text>
             </View>

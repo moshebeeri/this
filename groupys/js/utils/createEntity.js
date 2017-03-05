@@ -18,7 +18,7 @@ function doUpload(imagePath,imageMime,userId,token,callbackFunction,errorCallBac
     ];
 
     let opts = {
-        url: 'http://low.la:9000/api/images/' + userId,
+        url: 'http://low.la:9000/api/images/' + responseData._id,
         files: files,
         method: 'POST',                             // optional: POST or PUT
         headers: { 'Accept': 'application/json', 'Authorization': 'Bearer ' + token },  // optional
