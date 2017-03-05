@@ -273,7 +273,7 @@ function find_object(id, callback) {
     })
 }
 
-let s3del = new aws.S3(options = {
+let s3del = new aws.S3({
   accessKeyId: config.aws.key,
   secretAccessKey: config.aws.secret
 });
