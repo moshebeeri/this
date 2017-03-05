@@ -28,8 +28,8 @@ class Login extends Component {
   constructor(props) {
     super(props);
     this.state = {
-        phoneNumber: '',
-      password: '',
+        phoneNumber: '+972544402680',
+      password: 'de123456',
 
       scroll: false,
         error:''
@@ -113,6 +113,7 @@ class Login extends Component {
                           keyboardType="phone-pad"
                           placeholderTextColor='#444'
                           placeholder="Phone"
+                          defaultValue="+972544402680"
                           onChangeText={phoneNumber => this.setState({ phoneNumber })}
                       />
                     </InputGroup>
@@ -124,6 +125,7 @@ class Login extends Component {
                       <Input
                           placeholder="Password"
                           placeholderTextColor='#444'
+                          defaultValue="de123456"
                           secureTextEntry
                           onChangeText={password => this.setState({ password })}
                       />
