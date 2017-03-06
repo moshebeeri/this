@@ -32,7 +32,7 @@ class Qrcode extends Component {
             validationMessage: '',
             token: '',
             userId: '',
-            rowsView: []
+            qrCode:''
         }
         ;
 
@@ -67,7 +67,9 @@ class Qrcode extends Component {
 
 
     onBarCodeRead(data){
-        console.log(data);
+        this.setState({
+            qrCode:data.data
+        })
 
     }
 
@@ -106,6 +108,7 @@ class Qrcode extends Component {
                         style={styles.preview}
                         aspect={Camera.constants.Aspect.fill}>
                         <Text style={styles.capture} onPress={this.takePicture.bind(this)}>[CAPTURE]</Text>
+                        <Text style={styles.capture} >{this.state.qrCode}</Text>
                     </Camera>
 
                 </Content>
