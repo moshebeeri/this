@@ -15,7 +15,7 @@ const logo = require('../../../images/logo.png');
 import login from './login-theme';
 import styles from './styles';
 import store from 'react-native-simple-store';
-
+var Contacts = require('react-native-contacts');
 class Login extends Component {
 
   static propTypes = {
@@ -41,6 +41,7 @@ class Login extends Component {
       let routFunc =  this.props;
       let currentState = this.setState.bind(this);
       let userFunc = this.getUser.bind(this);
+      let updateFunc = this.updateContacts.bind(this);
       fetch('http://low.la:9000/auth/local', {
           method: 'POST',
           headers: {
@@ -60,6 +61,7 @@ class Login extends Component {
               if (responseData.token) {
                   store.save('token', responseData.token);
                   userFunc(responseData.token);
+                  updateFunc(responseData.token);
               }
           })
           routFunc.replaceAt('login', { key: 'home' }, routFunc.navigation.key);
@@ -96,6 +98,15 @@ class Login extends Component {
 
     }
 
+    updateContacts(token){
+        Contacts.getAll((err, contacts) => {
+            if(err && err.type === 'permissionDenied'){
+                // x.x
+            } else {
+                console.log(contacts)
+            }
+        })
+    }
     replaceRoute(route) {
     this.props.replaceAt('login', { key: route }, this.props.navigation.key);
   }

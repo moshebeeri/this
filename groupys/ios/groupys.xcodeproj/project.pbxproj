@@ -85,6 +85,7 @@
 		E7A50201D2334932804CABDC /* Ionicons.ttf in Resources */ = {isa = PBXBuildFile; fileRef = BD86011176744E11AC5FB238 /* Ionicons.ttf */; };
 		E7D8D14E412E4999903B17FC /* Foundation.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 26228C91AD9947698888235F /* Foundation.ttf */; };
 		E9FA9B97801F4F0ABE46C133 /* Arial Black.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 6451EDC9B0A54DE1A9237B49 /* Arial Black.ttf */; };
+		F6D777991E6D430E00B52027 /* libRCTContacts.a in Frameworks */ = {isa = PBXBuildFile; fileRef = F6D777811E6D42F500B52027 /* libRCTContacts.a */; };
 		FACB582E8FCD481D93368248 /* Skia.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 6A97515A59AF46198488CB97 /* Skia.ttf */; };
 		FC166705FCD34474A63B3070 /* FontAwesome.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 609109B1056043FF960E1B56 /* FontAwesome.ttf */; };
 /* End PBXBuildFile section */
@@ -293,6 +294,13 @@
 			remoteGlobalIDString = 5DBEB1501B18CEA900B34395;
 			remoteInfo = RNVectorIcons;
 		};
+		F6D777801E6D42F500B52027 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = F6D777781E6D42F400B52027 /* RCTContacts.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 1441618E1BD0A79300FA4F59;
+			remoteInfo = RCTContacts;
+		};
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -384,6 +392,7 @@
 		E3AADCE2DD744F21A22899AA /* RNVectorIcons.xcodeproj */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = "wrapper.pb-project"; name = RNVectorIcons.xcodeproj; path = "../node_modules/react-native-vector-icons/RNVectorIcons.xcodeproj"; sourceTree = "<group>"; };
 		E3E6754EDC194550B3EC37B2 /* Roboto.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = Roboto.ttf; path = "../node_modules/native-base/Fonts/Roboto.ttf"; sourceTree = "<group>"; };
 		F558E5B8C7D24D56BFBA69E7 /* Andale Mono.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "Andale Mono.ttf"; path = "../node_modules/native-base/Fonts/Andale Mono.ttf"; sourceTree = "<group>"; };
+		F6D777781E6D42F400B52027 /* RCTContacts.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = RCTContacts.xcodeproj; path = "/Users/roilandshut/projects/lowla/groupys/node_modules/react-native/Libraries/NativeAnimation/../../../react-native-contacts/ios/RCTContacts.xcodeproj"; sourceTree = "<absolute>"; };
 		F7284580BB3244258F6F4CEB /* libimageCropPicker.a */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = archive.ar; path = libimageCropPicker.a; sourceTree = "<group>"; };
 		FEAF7CAC02DD4EF1B402D7BA /* Rubik-BlackItalic.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "Rubik-BlackItalic.ttf"; path = "../node_modules/native-base/Fonts/Rubik-BlackItalic.ttf"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -405,6 +414,7 @@
 				5E9157361DD0AC6A00FF2AA8 /* libRCTAnimation.a in Frameworks */,
 				00C302E51ABCBA2D00DB3ED1 /* libRCTActionSheet.a in Frameworks */,
 				461B08601E65C9D50081775B /* RSKImageCropper.framework in Frameworks */,
+				F6D777991E6D430E00B52027 /* libRCTContacts.a in Frameworks */,
 				00C302E71ABCBA2D00DB3ED1 /* libRCTGeolocation.a in Frameworks */,
 				461B08641E65C9D90081775B /* QBImagePicker.framework in Frameworks */,
 				00C302E81ABCBA2D00DB3ED1 /* libRCTImage.a in Frameworks */,
@@ -579,6 +589,7 @@
 		832341AE1AAA6A7D00B99B32 /* Libraries */ = {
 			isa = PBXGroup;
 			children = (
+				F6D777781E6D42F400B52027 /* RCTContacts.xcodeproj */,
 				5E91572D1DD0AC6500FF2AA8 /* RCTAnimation.xcodeproj */,
 				146833FF1AC3E56700842450 /* React.xcodeproj */,
 				00C302A71ABCB8CE00DB3ED1 /* RCTActionSheet.xcodeproj */,
@@ -687,6 +698,14 @@
 			isa = PBXGroup;
 			children = (
 				F6D774C21E62C34400B52027 /* libRNVectorIcons.a */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		F6D777791E6D42F400B52027 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				F6D777811E6D42F500B52027 /* libRCTContacts.a */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -814,6 +833,10 @@
 				{
 					ProductGroup = 5E91572E1DD0AC6500FF2AA8 /* Products */;
 					ProjectRef = 5E91572D1DD0AC6500FF2AA8 /* RCTAnimation.xcodeproj */;
+				},
+				{
+					ProductGroup = F6D777791E6D42F400B52027 /* Products */;
+					ProjectRef = F6D777781E6D42F400B52027 /* RCTContacts.xcodeproj */;
 				},
 				{
 					ProductGroup = 00C302B61ABCB90400DB3ED1 /* Products */;
@@ -1054,6 +1077,13 @@
 			fileType = archive.ar;
 			path = libRNVectorIcons.a;
 			remoteRef = F6D774C11E62C34400B52027 /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		F6D777811E6D42F500B52027 /* libRCTContacts.a */ = {
+			isa = PBXReferenceProxy;
+			fileType = archive.ar;
+			path = libRCTContacts.a;
+			remoteRef = F6D777801E6D42F500B52027 /* PBXContainerItemProxy */;
 			sourceTree = BUILT_PRODUCTS_DIR;
 		};
 /* End PBXReferenceProxy section */
