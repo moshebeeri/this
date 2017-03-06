@@ -10,6 +10,7 @@ import Login from './components/login/';
 import SplashPage from './components/splashscreen/';
 import Home from './components/home/';
 import Business from './components/business/';
+import Qrcode from './components/qrcode/';
 import Register from './components/register/';
 import Promotions from './components/promtions/';
 import AddPromotions from './components/promtions/add-form';
@@ -88,6 +89,8 @@ class AppNavigator extends Component {
                 return <SplashPage />;
             case 'login':
                 return <Login />;
+            case 'qrcode':
+                return <Qrcode />;
             case 'business':
                 return <Business />;
             case 'register':

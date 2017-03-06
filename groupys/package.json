@@ -11,6 +11,7 @@
     "native-base": "^2.0.8",
     "react": "15.4.2",
     "react-native": "0.41.2",
+    "react-native-camera": "^0.6.0",
     "react-native-country-picker-modal": "^0.2.10",
     "react-native-drawer": "^2.3.0",
     "react-native-fileupload": "^1.2.0",

@@ -45,6 +45,8 @@ class SideBar extends Component {
                     <Nav to="groups" name="Groups" icon="ios-people-outline" navigateTo={this.navigateTo.bind(this)}/>
                     <Nav to="promotions" name="Promotions" icon="ios-pricetags-outline"
                          navigateTo={this.navigateTo.bind(this)}/>
+                    <Nav to="qrcode" name="Qrcode" icon="ios-people-outline" navigateTo={this.navigateTo.bind(this)}/>
+
                 </List>
             </Content>
         );
