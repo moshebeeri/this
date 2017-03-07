@@ -9,6 +9,7 @@ import HeaderContent from './../homeHeader';
 import login from './business-theme';
 import styles from './styles';
 import store from 'react-native-simple-store';
+var GLOBAL = require('../../conf/global');
 const {
     replaceAt,
 } = actions;
@@ -56,7 +57,7 @@ class Business extends Component {
     fetchBusiness(){
         let stateFunc = this.setState.bind(this);
         store.get('token').then(storeToken => {
-            fetch('http://low.la:9000/api/businesses/list/mine', {
+            fetch(GLOBAL.server_host +'/api/businesses/list/mine', {
                 method: 'GET',
                 headers: {
                     'Accept': 'application/json, text/plain, */*',

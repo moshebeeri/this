@@ -6,7 +6,7 @@ import { connect } from 'react-redux';
 import { actions } from 'react-native-navigation-redux-helpers';
 import { Container, Content, Text, InputGroup, Input, Button, Icon, View } from 'native-base';
 
-
+import store from 'react-native-simple-store';
 const {
   replaceAt,
 } = actions;
@@ -14,8 +14,11 @@ const {
 const logo = require('../../../images/logo.png');
 import login from './login-theme';
 import styles from './styles';
-import store from 'react-native-simple-store';
-var Contacts = require('react-native-contacts');
+var contacsManager = require("../../utils/contactsManager");
+var GLOBAL = require('../../conf/global');
+
+
+
 class Login extends Component {
 
   static propTypes = {
@@ -42,7 +45,7 @@ class Login extends Component {
       let currentState = this.setState.bind(this);
       let userFunc = this.getUser.bind(this);
       let updateFunc = this.updateContacts.bind(this);
-      fetch('http://low.la:9000/auth/local', {
+      fetch(GLOBAL.server_host +'/auth/local', {
           method: 'POST',
           headers: {
               'Accept': 'application/json, text/plain, */*',
@@ -75,7 +78,7 @@ class Login extends Component {
 
 
     getUser(token){
-        fetch('http://low.la:9000/api/users/me/', {
+        fetch(GLOBAL.server_host +'/api/users/me/', {
             method: 'GET',
             headers: {
                 'Accept': 'application/json, text/plain, */*',
@@ -99,13 +102,8 @@ class Login extends Component {
     }
 
     updateContacts(token){
-        Contacts.getAll((err, contacts) => {
-            if(err && err.type === 'permissionDenied'){
-                // x.x
-            } else {
-                console.log(contacts)
-            }
-        })
+        contacsManager(token);
+
     }
     replaceRoute(route) {
     this.props.replaceAt('login', { key: route }, this.props.navigation.key);

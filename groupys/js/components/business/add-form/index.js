@@ -20,6 +20,7 @@ import HeaderContent from '.././../homeHeader';
 var createEntity = require("../../../utils/createEntity");
 import ImagePicker from 'react-native-image-crop-picker';
 import store from 'react-native-simple-store';
+
 const {
     replaceAt,
 } = actions;
