@@ -19,9 +19,26 @@ module.exports = {
         borderBottomWidth: 1,
         borderBottomColor: 'rgba(255, 255, 255, 0.2)',
         paddingBottom: 10,
+        borderRadius : 1,
+        transform: [
+            {scaleX: 1}
+        ],
+        backgroundColor: '#fff',
+        borderRadius: 10,
         flexDirection: 'row',
-        justifyContent: 'flex-start'
+        justifyContent: 'flex-start',
+
+
     } ,
+    title: {
+        fontSize: 20,
+        backgroundColor: 'transparent'
+    },
+    button: {
+        marginRight: 10
+    },
+
+
   inputContainer: {
     paddingHorizontal: 20,
     marginTop: -120,
@@ -41,11 +58,11 @@ module.exports = {
     paddingHorizontal: 40,
   },
   logoButton: {
-    paddingHorizontal: 50,
+    paddingHorizontal: 20,
     borderRadius: 4,
-    height: 40,
+    height: 20,
     padding: 4,
-      backgroundColor: 'transparent'
+
   },
     row: {
         height:40,
