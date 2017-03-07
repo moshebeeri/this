@@ -4,10 +4,9 @@ import {connect} from 'react-redux';
 import {actions} from 'react-native-navigation-redux-helpers';
 import {Container, Content, Text, InputGroup, Input, Button, Icon, View,Header, Body, Right, ListItem, Thumbnail,Left} from 'native-base';
 
-import HeaderContent from './../homeHeader';
+import BusinessHeader from './header';
 
-import login from './business-theme';
-import styles from './styles';
+
 import store from 'react-native-simple-store';
 var GLOBAL = require('../../conf/global');
 
@@ -151,24 +150,20 @@ class Business extends Component {
             <Container>
                 <Header
                     style={{ flexDirection: 'column',
-                        height: 110,
+                        height: 60,
                         elevation: 0,
                         paddingTop: (Platform.OS === 'ios') ? 20 : 3,
                         justifyContent: 'space-between',
                     }}
                 >
-                    <HeaderContent />
+                    <BusinessHeader />
                 </Header>
 
 
                 <Content  style={{  backgroundColor: '#fff'}}>
 
 
-                    <View theme={login} style={styles.AddContainer}>
-                        <Button  onPress={() =>  this.replaceRoute('add-business')} style={styles.logoButton} >
-                            <Icon name="ios-add-circle-outline" />
-                        </Button>
-                    </View>
+
 
                     { rows }
                 </Content>

@@ -9,7 +9,6 @@ import navigateTo from '../../actions/sideBarNav';
 import theme from '../../themes/base-theme';
 import styles from './styles';
 
-const logo = require('../../../images/strapsale-logo.png');
 
 class Header extends Component {
 
@@ -25,29 +24,13 @@ class Header extends Component {
   render() {
     return (
       <View style={styles.header} >
-        <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignSelf: 'stretch', marginLeft: 2, marginRight: 2, paddingBottom: 5 }}>
           <View style={{ flexDirection: 'row', alignItems: 'center' }}>
             <Button transparent style={{ paddingRight: 15 }} onPress={this.props.openDrawer}>
               <Icon name="ios-menu" />
             </Button>
-            <Image source={logo} style={{ height: 30, width: 95, resizeMode: 'contain' }} />
+
           </View>
-          <View style={{ flexDirection: 'row' }}>
-            <Button transparent style={{ paddingHorizontal: 10 }}>
-              <Icon name="ios-heart" />
-            </Button>
-            <Button transparent style={{ paddingHorizontal: 10 }} onPress={() => this.navigateTo('cart')}>
-              <Icon name="ios-cart-outline" />
-            </Button>
-            <Button transparent style={{ paddingLeft: 10 }}>
-              <Icon name="md-more" />
-            </Button>
-          </View>
-        </View>
-        <InputGroup borderType="regular" style={{ marginHorizontal: 10, borderColor: 'transparent', backgroundColor: '#fff' }} >
-          <Icon name="ios-search" style={{ color: theme.brandPrimary }} />
-          <Input placeholder="Find your deal" placeholderTextColor={theme.brandPrimary} />
-        </InputGroup>
+
       </View>
     );
   }
