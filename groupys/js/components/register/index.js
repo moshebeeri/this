@@ -50,7 +50,7 @@ class Register extends Component {
         let code = this.state.code;
         store.get('token').then(token => {
 
-            fetch('http://low.la:9000/api/users/verification/' + code, {
+            fetch(`${server_host}/api/users/verification/` + code, {
                 method: 'GET',
                 headers: {
                     'Accept': 'application/json, text/plain, */*',
