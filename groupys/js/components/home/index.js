@@ -48,7 +48,7 @@ class Home extends Component {  // eslint-disable-line
                 <Header hasTabs
                     style={{
                         flexDirection: 'column',
-                        height: 110,
+                        height: 50,
                         elevation: 0,
                         paddingTop: (Platform.OS === 'ios') ? 20 : 3,
                         justifyContent: 'space-between',

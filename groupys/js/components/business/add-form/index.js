@@ -10,12 +10,12 @@ import { Platform,
 } from 'react-native';
 import {connect} from 'react-redux';
 import {actions} from 'react-native-navigation-redux-helpers';
-import {Container, Content, Text, InputGroup, Input, Button, Icon, View,Header} from 'native-base';
+import {Container, Content, Text, InputGroup, Input, Button, Icon, View,Header,Item,Picker,Footer} from 'native-base';
 
 import ModalDropdown from 'react-native-modal-dropdown';
 import login from './add-business-theme';
 import styles from './styles';
-import HeaderContent from '.././../homeHeader';
+import AddBusinessHeader from './header';
 
 var createEntity = require("../../../utils/createEntity");
 import ImagePicker from 'react-native-image-crop-picker';
@@ -48,7 +48,7 @@ class AddBusiness extends Component {
             state:'',
             path:'',
             image:'',
-            type:'',
+            type:'PERSONAL_SERVICES',
             images:'',
             tax_id:'',
             formID:'12345',
@@ -87,7 +87,7 @@ class AddBusiness extends Component {
 
     }
 
-    selectType(index, value){
+    selectType(value){
         this.setState({
             type:value
         })
@@ -133,151 +133,93 @@ class AddBusiness extends Component {
         });
     }
     render() {
+
+        let image ;
+        if(this.state.path){
+            image =  <Image
+                            style={{width: 50, height: 50}}
+                            source={{uri: this.state.path}}
+                        />
+
+
+        }
         return (
             <Container>
                 <Header
                     style={{ flexDirection: 'column',
-                        height: 110,
+                        height: 60,
                         elevation: 0,
                         paddingTop: (Platform.OS === 'ios') ? 20 : 3,
                         justifyContent: 'space-between',
                     }}
                 >
-                    <HeaderContent />
+                    <AddBusinessHeader />
                 </Header>
 
-                <Content theme={login} style={{backgroundColor: login.backgroundColor}}>
+                <Content  style={{backgroundColor: '#fff'}}>
+                    <Picker
+                        iosHeader="Select one"
+                        mode="dropdown"
+                        selectedValue={this.state.type}
+                        onValueChange={this.selectType.bind(this)}>
+                        <Item label="Personal Services" value="PERSONAL_SERVICES" />
+                        <Item label="Small Business" value="SMALL_BUSINESS" />
+                        <Item label="Company" value="COMPANY" />
+                        <Item label="Enterprise" value="ENTERPRISE" />
 
-                    <View style={styles.AddContainer}>
+                    </Picker>
+                    <Item underline>
+                        <Input onChangeText={(name) => this.setState({name})} placeholder='Name' />
+                    </Item>
+                    <Item underline>
+                        <Input onChangeText={(email) => this.setState({email})} placeholder='Email' />
+                    </Item>
 
-                    <View style={{
+                    <Item underline>
+                        <Input onChangeText={(website) => this.setState({website})} placeholder='Website' />
+                    </Item>
+                    <Item underline>
+                        <Input onChangeText={(country) => this.setState({country})} placeholder='Country' />
+                    </Item>
+                    <Item underline>
+                        <Input onChangeText={(state) => this.setState({state})} placeholder='State' />
+                    </Item>
+                    <Item underline>
+                        <Input onChangeText={(city) => this.setState({city})} placeholder='City' />
+                    </Item>
+                    <Item underline>
+                        <Input onChangeText={(address) => this.setState({address})} placeholder='Addresss' />
+                    </Item>
+                    <Item underline>
+                        <Input onChangeText={(tax_id) => this.setState({tax_id})} placeholder='Tax ID' />
+                    </Item>
 
-                        flexDirection: 'column',
 
-                    }}>
+                    <View style={{ flexDirection: 'row',marginTop:5 }}>
 
-                        <View style={styles.row}>
-                            <Text style={styles.titleText}>
-                                Name
-                            </Text>
-                            <TextInput style={styles.input}
-                                       onChangeText={(name) => this.setState({name})}
+                    <Button   transparent  onPress={() => this.pickSingle(true)}>
+                        <Text> select image </Text>
+                    </Button>
 
-                            />
-                        </View>
-
-                        <View style={styles.row}>
-                            <Text style={styles.titleText}>
-                                Email
-                            </Text>
-                            <TextInput
-                                style={styles.input}
-                                onChangeText={(email) => this.setState({email})}
-
-                            />
-                        </View>
-                        <View style={styles.row}>
-                            <Text style={styles.titleText}>
-                                Address
-                            </Text>
-                            <TextInput
-                                style={styles.input}
-                                onChangeText={(address) => this.setState({address})}
-
-                            />
-                        </View>
-
-                        <View style={styles.row}>
-                            <Text style={styles.titleText}>
-                                Website
-                            </Text>
-                            <TextInput
-                                style={styles.input}
-                                onChangeText={(website) => this.setState({website})}
-
-                            />
-                        </View>
-                        <View style={styles.row}>
-                            <Text style={styles.titleText}>
-                                Country
-                            </Text>
-                            <TextInput
-                                style={styles.input}
-                                onChangeText={(country) => this.setState({country})}
-
-                            />
-                        </View>
-
-                        <View style={styles.row}>
-                            <Text style={styles.titleText}>
-                                City
-                            </Text>
-                            <TextInput
-                                style={styles.input}
-                                onChangeText={(city) => this.setState({city})}
-
-                            />
-                        </View>
-
-                        <View style={styles.row}>
-                            <Text style={styles.titleText}>
-                                State
-                            </Text>
-                            <TextInput
-                                style={styles.input}
-                                onChangeText={(state) => this.setState({state})}
-
-                            />
-                        </View>
-
-                        <View style={styles.row}>
-                            <Text style={styles.titleText}>
-                                Tax id
-                            </Text>
-                            <TextInput
-                                style={styles.input}
-                                onChangeText={(tax_id) => this.setState({tax_id})}
-
-                            />
-                        </View>
-
-                        <View style={styles.row}>
-                            <Text style={styles.titleText}>
-                                Type
-                            </Text>
-                            <ModalDropdown
-                                options={['PERSONAL_SERVICES', 'SMALL_BUSINESS', 'COMPANY', 'ENTERPRISE']}
-                                onSelect={this.selectType.bind(this)}
-                            />
-                        </View>
-                        <View style={styles.row}>
-                            <Text style={styles.titleText}>
-                                Image
-                            </Text>
-
-                            <Button   style={styles.attachButton} onPress={() => this.pickSingle(true)}>
-                                <Icon style={styles.attachButton} name="ios-attach" />
-
-                            </Button>
-
-                            <Image
-                                style={{width: 50, height: 50}}
-                                source={{uri: this.state.path}}
-                            />
-                        </View>
-                        <View style={styles.row}>
-
-                            <Button style={styles.login}
-                                    onPress={this.saveFormData.bind(this)}
-                            >
-                                <Text>Save</Text>
-                            </Button>
-                        </View>
+                    {image}
                     </View>
-                </View>
+
+
+
+
+
+
 
 
                 </Content>
+                <Footer>
+
+                    <Button transparent
+                            onPress={this.saveFormData.bind(this)}
+                    >
+                        <Text>Add Business</Text>
+                    </Button>
+                </Footer>
             </Container>
         );
     }

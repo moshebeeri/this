@@ -15,7 +15,6 @@ const logo = require('../../../images/logo.png');
 import login from './login-theme';
 import styles from './styles';
 var contacsManager = require("../../utils/contactsManager");
-var GLOBAL = require('../../conf/global');
 
 
 
@@ -44,8 +43,7 @@ class Login extends Component {
       let routFunc =  this.props;
       let currentState = this.setState.bind(this);
       let userFunc = this.getUser.bind(this);
-      let updateFunc = this.updateContacts.bind(this);
-      fetch(GLOBAL.server_host +'/auth/local', {
+      fetch(`${server_host}/auth/local`, {
           method: 'POST',
           headers: {
               'Accept': 'application/json, text/plain, */*',
@@ -64,7 +62,7 @@ class Login extends Component {
               if (responseData.token) {
                   store.save('token', responseData.token);
                   userFunc(responseData.token);
-                  updateFunc(responseData.token);
+
               }
           })
           routFunc.replaceAt('login', { key: 'home' }, routFunc.navigation.key);
@@ -78,7 +76,7 @@ class Login extends Component {
 
 
     getUser(token){
-        fetch(GLOBAL.server_host +'/api/users/me/', {
+        fetch(`${server_host}/api/users/me/`, {
             method: 'GET',
             headers: {
                 'Accept': 'application/json, text/plain, */*',
@@ -90,7 +88,7 @@ class Login extends Component {
             .then((responseData) => {
                 if (responseData._id) {
                     store.save('user_id', responseData._id);
-
+                    contacsManager(token,responseData._id);
                 }
 
             }).catch(function (error) {
@@ -101,10 +99,7 @@ class Login extends Component {
 
     }
 
-    updateContacts(token){
-        contacsManager(token);
 
-    }
     replaceRoute(route) {
     this.props.replaceAt('login', { key: route }, this.props.navigation.key);
   }

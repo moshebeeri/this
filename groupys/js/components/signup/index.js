@@ -93,7 +93,7 @@ class Signup extends Component {
         let phoneNumber = this.refs.phone.getValue();
         let normalizedPhone = this.normalizePhoneNumber(phoneNumber,this.state.callingCode);
 
-        fetch('http://low.la:9000/api/users', {
+        fetch(`${server_host}/api/users`, {
             method: 'POST',
             headers: {
                 'Accept': 'application/json, text/plain, */*',

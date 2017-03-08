@@ -2,14 +2,17 @@ import React, {Component} from 'react';
 import {Image, Platform} from 'react-native';
 import {connect} from 'react-redux';
 import {actions} from 'react-native-navigation-redux-helpers';
-import {Container, Content, Text, InputGroup, Input, Button, Icon, View,Header} from 'native-base';
+import {Container, Content, Text, InputGroup, Input, Button, Icon, View,Header, Body, Right, ListItem, Thumbnail,Left} from 'native-base';
 
-import HeaderContent from './../homeHeader';
+import BusinessHeader from './header';
 
-import login from './business-theme';
-import styles from './styles';
+
 import store from 'react-native-simple-store';
 var GLOBAL = require('../../conf/global');
+
+
+
+
 const {
     replaceAt,
 } = actions;
@@ -109,18 +112,36 @@ class Business extends Component {
         let rows = this.state.rowsView.map((r, i) => {
             index++;
             if(r.pictures.length > 0){
-                return  <View key={index} theme={login} style={styles.AddContainer}>
-                    <Image
-                        style={{width: 50, height: 50}}
-                        source={{uri: r.pictures[0].pictures[3]}}
-                    />
-                    <Text > { r.name }</Text>
-                </View>
-
+                return <ListItem key={index} thumbnail>
+                    <Left>
+                        <Thumbnail square size={80} source={{uri: r.pictures[0].pictures[3]}} />
+                    </Left>
+                    <Body>
+                    <Text>{r.name}</Text>
+                    <Text note>Its time to build a dif.</Text>
+                    </Body>
+                    <Right>
+                        <Button transparent>
+                            <Text>View</Text>
+                        </Button>
+                    </Right>
+                </ListItem>
             }
-            return <View key={index} theme={login} style={styles.AddContainer}>
-                <Text > { r.name }</Text>
-            </View>
+            return <ListItem key={index} thumbnail style={{  backgroundColor: '#fff'}}>
+                <Left>
+                    <Thumbnail square size={80} source={require('../../../images/client_1.png')} />
+                </Left>
+                <Body>
+
+                <Text>{r.name}</Text>
+                <Text note>Its time to build a diffe. .</Text>
+                </Body>
+                <Right>
+                    <Button transparent>
+                        <Text>View</Text>
+                    </Button>
+                </Right>
+            </ListItem>
         })
 
 
@@ -129,24 +150,20 @@ class Business extends Component {
             <Container>
                 <Header
                     style={{ flexDirection: 'column',
-                        height: 110,
+                        height: 60,
                         elevation: 0,
                         paddingTop: (Platform.OS === 'ios') ? 20 : 3,
                         justifyContent: 'space-between',
                     }}
                 >
-                    <HeaderContent />
+                    <BusinessHeader />
                 </Header>
 
 
-                <Content theme={login} style={{backgroundColor: login.backgroundColor}}>
+                <Content  style={{  backgroundColor: '#fff'}}>
 
 
-                    <View theme={login} style={styles.AddContainer}>
-                        <Button  onPress={() =>  this.replaceRoute('add-business')} style={styles.logoButton} >
-                            <Icon name="ios-add-circle-outline" />
-                        </Button>
-                    </View>
+
 
                     { rows }
                 </Content>

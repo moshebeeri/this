@@ -1,7 +1,7 @@
 
 const NativeModules = require('NativeModules');
 const RNUploader = NativeModules.RNUploader;
-var GLOBAL = require('../conf/global');
+
 function transformJson(json){
   return json.formData;
 }
@@ -18,7 +18,7 @@ function doUpload(imagePath,imageMime,userId,token,callbackFunction,errorCallBac
     ];
 
     let opts = {
-        url: GLOBAL.server_host +'/api/images/' + responseData._id,
+        url: `${server_host}/api/images/` + responseData._id,
         files: files,
         method: 'POST',                             // optional: POST or PUT
         headers: { 'Accept': 'application/json', 'Authorization': 'Bearer ' + token },  // optional
@@ -39,7 +39,7 @@ function doUpload(imagePath,imageMime,userId,token,callbackFunction,errorCallBac
 }
 
  function saveEntity(entityData,entityApi,json,token,callbackFunction,errorCallBack,userId) {
-     fetch(GLOBAL.server_host +'/api/' + entityApi, {
+     fetch(`${server_host}/api/` + entityApi, {
              method: 'POST',
              headers: {
                  'Accept': 'application/json, text/plain, */*',
