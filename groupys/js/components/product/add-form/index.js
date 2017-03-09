@@ -83,19 +83,6 @@ class AddBusiness extends Component {
 
 
 
-    readQc(code){
-
-    }
-
-    selectType(value){
-        this.setState({
-            type:value
-        })
-
-
-    }
-
-
     saveFormData(){
 
 
