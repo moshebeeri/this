@@ -16,7 +16,7 @@ const {
 } = actions;
 
 
-class Business extends Component {
+class Product extends Component {
 
     static propTypes = {
         replaceAt: React.PropTypes.func,
@@ -33,6 +33,7 @@ class Business extends Component {
             validationMessage: '',
             token: '',
             userId: '',
+            ready: true,
             rowsView: []
         }
         ;
@@ -57,6 +58,8 @@ class Business extends Component {
 
     fetchProducts(){
         let stateFunc = this.setState.bind(this);
+
+
         store.get('token').then(storeToken => {
             fetch(`${server_host}/api/products`, {
                 method: 'GET',
@@ -77,9 +80,12 @@ class Business extends Component {
                 response.json().then((responseData) => {
 
                     stateFunc({
-                        rowsView: responseData
+                        rowsView: responseData,
+
                         }
                     );
+
+
                 })
 
             }).catch(function (error) {
@@ -89,10 +95,12 @@ class Business extends Component {
         });
 
 
+
+
     }
 
     deleteProduct(index){
-        let fetch = this.fetchProducts.bind(this)
+
         fetch(`${server_host}/api/products/` + this.state.rowsView[index-1]._id , {
             method: 'DELETE',
             headers: {
@@ -107,7 +115,7 @@ class Business extends Component {
 
                 return;
             }
-            this.fetch();
+
 
 
 
@@ -115,6 +123,7 @@ class Business extends Component {
         }).catch(function (error) {
             console.log('There has been a problem with your fetch operation: ' + error.message);
         });
+        this.fetchProducts();
     }
 
 
@@ -129,6 +138,7 @@ class Business extends Component {
     }
 
     render() {
+
 
 
         let index = 0
@@ -158,7 +168,7 @@ class Business extends Component {
                 <Body>
 
                 <Text>{r.name}</Text>
-                <Text note>{r.info}.</Text>
+                <Text note>{r.info}</Text>
                 </Body>
                 <Right>
                     <Button transparent onPress={() =>  this.deleteProduct(`${index}`)} >
@@ -208,4 +218,4 @@ const mapStateToProps = state => ({
     navigation: state.cardNavigation,
 });
 
-export default connect(mapStateToProps, bindActions)(Business);
+export default connect(mapStateToProps, bindActions)(Product);
