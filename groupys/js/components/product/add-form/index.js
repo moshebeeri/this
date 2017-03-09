@@ -12,12 +12,10 @@ import {connect} from 'react-redux';
 import {actions} from 'react-native-navigation-redux-helpers';
 import {Container, Content, Text, InputGroup, Input, Button, Icon, View,Header,Item,Picker,Footer} from 'native-base';
 
-import ModalDropdown from 'react-native-modal-dropdown';
-import login from './add-product-theme';
-import styles from './styles';
-import AddBusinessHeader from './header';
+import AddProductHeader from './header';
 
 var createEntity = require("../../../utils/createEntity");
+var fetchBusiness = require("../../../api/business");
 import ImagePicker from 'react-native-image-crop-picker';
 import store from 'react-native-simple-store';
 
@@ -26,7 +24,7 @@ const {
 } = actions;
 
 
-class AddBusiness extends Component {
+class AddProduct extends Component {
 
     static propTypes = {
         replaceAt: React.PropTypes.func,
@@ -35,12 +33,12 @@ class AddBusiness extends Component {
         }),
     };
 
+
     constructor(props) {
         super(props);
 
         this.state = {
             name: null,
-            address:'',
             email:'',
             website:'',
             country:'',
@@ -48,18 +46,18 @@ class AddBusiness extends Component {
             state:'',
             path:'',
             image:'',
-            type:'PERSONAL_SERVICES',
             images:'',
             tax_id:'',
-            formID:'12345',
             userId:'',
             token:'',
+            services: [],
+            business: '',
             formData:{}
         };
 
 
         let stateFunc = this.setState.bind(this);
-        store.get('token').then(storeToken => {
+         store.get('token').then(storeToken => {
             stateFunc({
                     token: storeToken
                 }
@@ -76,11 +74,26 @@ class AddBusiness extends Component {
 
 
 
+    componentWillMount(){
+        let callback = this.initBusiness.bind(this);
+        store.get('token').then(storeToken => {
+            fetchBusiness(storeToken,callback);
+        });
+    }
 
     replaceRoute(route) {
         this.props.replaceAt('add-product', {key: route}, this.props.navigation.key);
     }
 
+
+
+    initBusiness(responseData){
+
+        this.setState({
+            services: responseData,
+            business: responseData[0]._id
+        });
+    }
 
 
     saveFormData(){
@@ -93,6 +106,15 @@ class AddBusiness extends Component {
 
         this.replaceRoute('product');
     }
+
+    selectBusiness(value){
+        this.setState({
+            business:value
+        })
+
+
+    }
+
 
     formFailed(error){
         console.log('failed');
@@ -130,6 +152,32 @@ class AddBusiness extends Component {
 
 
         }
+
+        let pikkerTag = undefined;
+
+        if(this.state.services.length > 0 ){
+            pikkerTag = <Picker
+                iosHeader="Select Business"
+                mode="dropdown"
+                selectedValue={this.state.business}
+                onValueChange={this.selectBusiness.bind(this)}>
+
+                {
+
+
+                    this.state.services.map((s, i) => {
+                        return <Item
+                            key={i}
+                            value={s._id}
+                            label={s.name} />
+                    }) }
+            </Picker>
+
+        }
+
+
+
+
         return (
             <Container>
                 <Header
@@ -140,7 +188,7 @@ class AddBusiness extends Component {
                         justifyContent: 'space-between',
                     }}
                 >
-                    <AddBusinessHeader />
+                    <AddProductHeader />
                 </Header>
 
                 <Content  style={{backgroundColor: '#fff'}}>
@@ -152,19 +200,20 @@ class AddBusiness extends Component {
                         <Input onChangeText={(info) => this.setState({info})} placeholder='Description' />
                     </Item>
 
+
                     <Item underline>
                         <Input onChangeText={(retail_price) => this.setState({retail_price})} placeholder='Price' />
                     </Item>
 
-
+                    {pikkerTag}
 
                     <View style={{ flexDirection: 'row',marginTop:5 }}>
 
-                    <Button   transparent  onPress={() => this.pickSingle(true)}>
-                        <Text> select image </Text>
-                    </Button>
+                        <Button   transparent  onPress={() => this.pickSingle(true)}>
+                            <Text> select image </Text>
+                        </Button>
 
-                    {image}
+                        {image}
                     </View>
 
 
@@ -199,4 +248,4 @@ const mapStateToProps = state => ({
     navigation: state.cardNavigation,
 });
 
-export default connect(mapStateToProps, bindActions)(AddBusiness);
+export default connect(mapStateToProps, bindActions)(AddProduct);
