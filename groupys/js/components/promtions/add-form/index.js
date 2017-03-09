@@ -24,7 +24,7 @@ const {
 } = actions;
 
 
-class AddBusiness extends Component {
+class AddPromotion extends Component {
 
     static propTypes = {
         replaceAt: React.PropTypes.func,
@@ -199,4 +199,4 @@ const mapStateToProps = state => ({
     navigation: state.cardNavigation,
 });
 
-export default connect(mapStateToProps, bindActions)(AddBusiness);
+export default connect(mapStateToProps, bindActions)(AddPromotion);

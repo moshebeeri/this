@@ -2,9 +2,9 @@ import React, {Component} from 'react';
 import {Image, Platform} from 'react-native';
 import {connect} from 'react-redux';
 import {actions} from 'react-native-navigation-redux-helpers';
-import {Container, Content, Text, InputGroup, Input, Button, Icon, View,Header, Body, Right, ListItem, Thumbnail,Left} from 'native-base';
+import {Container, Content, Text,Title, InputGroup, Input, Button, Icon, View,Header, Body, Right, ListItem, Thumbnail,Left} from 'native-base';
 
-import BusinessHeader from './header';
+import ProductsHeader from './header';
 
 
 import store from 'react-native-simple-store';
@@ -55,10 +55,10 @@ class Business extends Component {
 
     }
 
-    fetchBusiness(){
+    fetchProducts(){
         let stateFunc = this.setState.bind(this);
         store.get('token').then(storeToken => {
-            fetch(`${server_host}/api/businesses/list/mine`, {
+            fetch(`${server_host}/api/products`, {
                 method: 'GET',
                 headers: {
                     'Accept': 'application/json, text/plain, */*',
@@ -91,15 +91,41 @@ class Business extends Component {
 
     }
 
+    deleteProduct(index){
+        let fetch = this.fetchProducts.bind(this)
+        fetch(`${server_host}/api/products/` + this.state.rowsView[index-1]._id , {
+            method: 'DELETE',
+            headers: {
+                'Accept': 'application/json, text/plain, */*',
+                'Content-Type': 'application/json;charset=utf-8',
+                'Authorization': 'Bearer ' + this.state.token
+
+            }
+
+        }).then(function (response) {
+            if (response.status == '401') {
+
+                return;
+            }
+            this.fetch();
+
+
+
+
+        }).catch(function (error) {
+            console.log('There has been a problem with your fetch operation: ' + error.message);
+        });
+    }
+
 
 
     replaceRoute(route) {
-        this.props.replaceAt('business', {key: route}, this.props.navigation.key);
+        this.props.replaceAt('product', {key: route}, this.props.navigation.key);
     }
 
 
     componentWillMount(){
-        this.fetchBusiness();
+        this.fetchProducts();
     }
 
     render() {
@@ -116,11 +142,11 @@ class Business extends Component {
                     </Left>
                     <Body>
                     <Text>{r.name}</Text>
-                    <Text note>Its time to build a dif.</Text>
+                    <Text note>{r.info}</Text>
                     </Body>
                     <Right>
-                        <Button transparent>
-                            <Text>View</Text>
+                        <Button transparent onPress={() =>  this.deleteProduct(`${index}`)}>
+                            <Text>Remove</Text>
                         </Button>
                     </Right>
                 </ListItem>
@@ -132,11 +158,11 @@ class Business extends Component {
                 <Body>
 
                 <Text>{r.name}</Text>
-                <Text note>Its time to build a diffe. .</Text>
+                <Text note>{r.info}.</Text>
                 </Body>
                 <Right>
-                    <Button transparent>
-                        <Text>View</Text>
+                    <Button transparent onPress={() =>  this.deleteProduct(`${index}`)} >
+                        <Text>Remove</Text>
                     </Button>
                 </Right>
             </ListItem>
@@ -154,7 +180,8 @@ class Business extends Component {
                         justifyContent: 'space-between',
                     }}
                 >
-                    <BusinessHeader />
+                    <ProductsHeader />
+
                 </Header>
 
 

@@ -45,6 +45,8 @@ class SideBar extends Component {
                     <Nav to="home" name="Home" icon="ios-home-outline" navigateTo={this.navigateTo.bind(this)}/>
                     <Nav to="business" name="Business" icon="ios-cash-outline" navigateTo={this.navigateTo.bind(this)}/>
                     <Nav to="groups" name="Groups" icon="ios-people-outline" navigateTo={this.navigateTo.bind(this)}/>
+                    <Nav to="product" name="Products" icon="ios-cart-outline" navigateTo={this.navigateTo.bind(this)}/>
+
                     <Nav to="promotions" name="Promotions" icon="ios-pricetags-outline"
                          navigateTo={this.navigateTo.bind(this)}/>
 

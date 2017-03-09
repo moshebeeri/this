@@ -16,7 +16,7 @@ import login from './login-theme';
 import styles from './styles';
 var contacsManager = require("../../utils/contactsManager");
 
-
+const global = require('../../conf/global')
 
 class Login extends Component {
 
