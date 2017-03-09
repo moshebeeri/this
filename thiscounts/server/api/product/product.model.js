@@ -9,6 +9,7 @@ var ProductSchema = new Schema({
   gid: { type: Number, index: true},
   info: String,
   brand: {type: Schema.ObjectId, ref: 'Brand', required: false},
+  business: {type: Schema.ObjectId, ref: 'Business', required: false},
   retail_price: Number,
   pictures: [],
   active: Boolean

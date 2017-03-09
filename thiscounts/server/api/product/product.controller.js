@@ -28,6 +28,15 @@ exports.show = function (req, res) {
   });
 };
 
+exports.find_by_business = function (req, res) {
+  Product.find({business: req.params.id}, function (err, products) {
+    if (err) {
+      return handleError(res, err);
+    }
+    return res.json(200, products);
+  });
+};
+
 // Creates a new product in the DB.
 exports.create = function (req, res) {
   Product.create(req.body, function (err, product) {
