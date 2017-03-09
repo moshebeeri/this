@@ -17,6 +17,7 @@ var PromotionSchema = new Schema({
   realize_gid: Number,
   card_type: {type: Schema.ObjectId, ref: 'CardType'},
   creator: {type: Schema.ObjectId, ref: 'User', required: true},
+  products: [{type: Schema.ObjectId, ref: 'Product', required: true}],
   created: {type: Date, default: Date.now},
   pictures : [],
   info: String,
