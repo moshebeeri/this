@@ -7,8 +7,6 @@ import {Container, Content, Text, InputGroup, Input, Button, Icon, View,Header, 
 import BusinessHeader from './header';
 
 
-import store from 'react-native-simple-store';
-
 import BusinessApi from "../../api/business"
 let businessApi = new BusinessApi();
 const {

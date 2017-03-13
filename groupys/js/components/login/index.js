@@ -14,6 +14,10 @@ const {
 const logo = require('../../../images/logo.png');
 import login from './login-theme';
 import styles from './styles';
+import LoginApi from '../../api/login'
+import UserApi from '../../api/user'
+let loginApi = new LoginApi()
+let userApi = new UserApi()
 var contacsManager = require("../../utils/contactsManager");
 
 const global = require('../../conf/global')
@@ -32,72 +36,31 @@ class Login extends Component {
     this.state = {
         phoneNumber: '+972544402680',
       password: 'de123456',
-
+        token: false,
       scroll: false,
         error:''
     };
   }
 
-  login() {
+  async login() {
       this.setState ({error: ''});
-      let routFunc =  this.props;
-      let currentState = this.setState.bind(this);
-      let userFunc = this.getUser.bind(this);
-      fetch(`${server_host}/auth/local`, {
-          method: 'POST',
-          headers: {
-              'Accept': 'application/json, text/plain, */*',
-              'Content-Type': 'application/json;charset=utf-8',
-          },
-          body: JSON.stringify({
-              email:  this.state.phoneNumber + "@lowla.co.il",
-              password:this.state.password,
-          })
-      }).then(function (response) {
-          if (response.status == '401') {
-              currentState({error: 'Login Failed Validation'});
-              return;
+      try {
+
+          let response = await loginApi.login(this.state.phoneNumber, this.state.password);
+          if(response.token ){
+              userApi.getUser();
+              this.replaceRoute('home');
           }
-          response.json().then((responseData) => {
-              if (responseData.token) {
-                  store.save('token', responseData.token);
-                  userFunc(responseData.token);
 
-              }
+      }catch (error){
+          this.setState({
+              error: error.error
           })
-          routFunc.replaceAt('login', { key: 'home' }, routFunc.navigation.key);
-
-      }).catch(function (error) {
-              console.log('There has been a problem with your fetch operation: ' + error.message);
-      });
+      }
 
   }
 
 
-
-    getUser(token){
-        fetch(`${server_host}/api/users/me/`, {
-            method: 'GET',
-            headers: {
-                'Accept': 'application/json, text/plain, */*',
-                'Content-Type': 'application/json;charset=utf-8',
-                'Authorization': 'Bearer ' + token,
-            }
-
-        }).then((response) => response.json())
-            .then((responseData) => {
-                if (responseData._id) {
-                    store.save('user_id', responseData._id);
-                    contacsManager(token,responseData._id);
-                }
-
-            }).catch(function (error) {
-
-            console.log('There has been a problem with your fetch operation: ' + error.message);
-
-        });
-
-    }
 
 
     replaceRoute(route) {
@@ -105,6 +68,7 @@ class Login extends Component {
   }
 
     render() {
+
         return (
             <Container>
               <Content theme={login} style={{ backgroundColor: login.backgroundColor }} >
