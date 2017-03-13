@@ -15,15 +15,16 @@ import {Container, Content, Text, InputGroup, Input, Button, Icon, View,Header,I
 import AddProductHeader from './header';
 
 var createEntity = require("../../../utils/createEntity");
-var fetchBusiness = require("../../../api/business");
+
 import ImagePicker from 'react-native-image-crop-picker';
 import store from 'react-native-simple-store';
+import BusinessApi from "../../../api/business"
 
 const {
     replaceAt,
 } = actions;
 
-
+let businessApi = new BusinessApi();
 class AddProduct extends Component {
 
     static propTypes = {
@@ -74,11 +75,16 @@ class AddProduct extends Component {
 
 
 
-    componentWillMount(){
-        let callback = this.initBusiness.bind(this);
-        store.get('token').then(storeToken => {
-            fetchBusiness(storeToken,callback);
-        });
+    async componentWillMount(){
+        try {
+            let response = await businessApi.getAll();
+            if (response) {
+                this.initBusiness(response);
+            }
+        }catch (error){
+            console.log(error);
+        }
+
     }
 
     replaceRoute(route) {

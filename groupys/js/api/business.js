@@ -1,34 +1,39 @@
+import store from 'react-native-simple-store';
 
+class BusinessApi
+{
+   getAll() {
+        return new Promise(async(resolve, reject) => {
 
-module.exports = function(token,callback) {
+            try {
+                let token = await store.get('token');
+                const response = await fetch(`${server_host}/api/businesses/list/mine`, {
+                    method: 'GET',
+                    headers: {
+                        'Accept': 'application/json, text/plain, */*',
+                        'Content-Type': 'application/json;charset=utf-8',
+                        'Authorization': 'Bearer ' + token
 
+                    }
 
-        fetch(`${server_host}/api/businesses/list/mine`, {
-            method: 'GET',
-            headers: {
-                'Accept': 'application/json, text/plain, */*',
-                'Content-Type': 'application/json;charset=utf-8',
-                'Authorization': 'Bearer ' + token
+                })
+                if (response.status == '401') {
+                    reject(response);
+                    return;
+                }
 
+                let responseData = await response.json();
+                resolve(responseData);
             }
+            catch (error) {
 
-        }).then(function (response) {
-            if (response.status == '401') {
-
-                return;
+                console.log('There has been a problem with your fetch operation: ' + error.message);
+                reject(error);
             }
+        })
 
 
-            response.json().then((responseData) => {
-
-                callback(responseData);
-            })
-
-        }).catch(function (error) {
-            console.log('There has been a problem with your fetch operation: ' + error.message);
-        });
-
-
-
+    }
 }
 
+export default BusinessApi;
