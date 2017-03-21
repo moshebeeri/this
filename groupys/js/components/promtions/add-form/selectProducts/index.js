@@ -10,7 +10,7 @@ import CheckBox from 'react-native-check-box'
 import {actions} from 'react-native-navigation-redux-helpers';
 import { openDrawer } from '../../../../actions/drawer';
 import navigateTo from '../../../../actions/sideBarNav';
-import AddPromotionHeader from '../header';
+import AddFormHeader from '../../../header/addFormHeader';
 
 import styles from './styles';
 
@@ -84,7 +84,8 @@ class SelectProductsComponent extends Component {
                         paddingTop: (Platform.OS === 'ios') ? 20 : 3,
                         justifyContent: 'space-between',
                     }}>
-                  <AddPromotionHeader />
+                  <AddFormHeader currentLocation="add-promotions" backLocation="promotions" />
+
                 </Header>
 
 

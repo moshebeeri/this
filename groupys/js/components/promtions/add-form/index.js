@@ -13,8 +13,7 @@ import {actions} from 'react-native-navigation-redux-helpers';
 import {Container, Content, Text, InputGroup, Input, Button,Body ,Icon,Left,
     View,Header,Item,Footer,Picker,ListItem,Right,Thumbnail} from 'native-base';
 
-import CheckBox from 'react-native-check-box'
-import AddPromotionHeader from './header';
+import AddFormHeader from '../../header/addFormHeader';
 import SelectProductsComponent from './selectProducts';
 
 var createEntity = require("../../../utils/createEntity");
@@ -218,7 +217,8 @@ class AddPromotion extends Component {
                         paddingTop: (Platform.OS === 'ios') ? 20 : 3,
                         justifyContent: 'space-between',
                     }}>
-                    <AddPromotionHeader />
+                    <AddFormHeader currentLocation="add-promotions" backLocation="promotions" />
+
                 </Header>
 
                 <Content  style={{backgroundColor: '#fff'}}>

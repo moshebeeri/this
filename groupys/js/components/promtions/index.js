@@ -3,10 +3,9 @@ import {Image, Platform} from 'react-native';
 import {connect} from 'react-redux';
 import {actions} from 'react-native-navigation-redux-helpers';
 import {Container, Content, Text, InputGroup, Input, Button, Icon, View,Header} from 'native-base';
-import PromotionHeader from './header';
+import GeneralComponentHeader from '../header/index';
 
-import styles from './styles';
-//import AlertContainer from 'react-alert';
+
 
 const {
     replaceAt,
@@ -104,7 +103,8 @@ class Promotions extends Component {
                         justifyContent: 'space-between',
                     }}
                 >
-                    <PromotionHeader />
+                    <GeneralComponentHeader title="Promotion" current="promotions" to="add-promotions"/>
+
                 </Header>
 
 
