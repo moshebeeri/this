@@ -4,7 +4,7 @@ import {connect} from 'react-redux';
 import {actions} from 'react-native-navigation-redux-helpers';
 import {Container, Content, Text, InputGroup, Input, Button, Icon, View,Header, Body, Right, ListItem, Thumbnail,Left} from 'native-base';
 
-import BusinessHeader from './header';
+import GeneralComponentHeader from '../header/index';
 
 
 import BusinessApi from "../../api/business"
@@ -112,7 +112,7 @@ class Business extends Component {
                         justifyContent: 'space-between',
                     }}
                 >
-                    <BusinessHeader />
+                    <GeneralComponentHeader title="Business" current="business" to="add-business"/>
                 </Header>
 
 
