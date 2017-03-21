@@ -4,8 +4,8 @@ import { connect } from 'react-redux';
 
 import { Icon, View, Button, InputGroup, Input,Text } from 'native-base';
 import {actions} from 'react-native-navigation-redux-helpers';
-import { openDrawer } from '../../../../actions/drawer';
-import navigateTo from '../../../../actions/sideBarNav';
+import { openDrawer } from '../../../actions/drawer';
+import navigateTo from '../../../actions/sideBarNav';
 
 import styles from './styles';
 
@@ -14,20 +14,27 @@ const {
 } = actions;
 
 
-class AddProductHeader extends Component {
+class AddFormHeader extends Component {
+
+
+
+    constructor(props) {
+        super(props);
+
+
+    }
+
 
   static propTypes = {
     openDrawer: React.PropTypes.func,
     navigateTo: React.PropTypes.func,
   };
 
-  navigateTo(route) {
-    this.props.navigateTo(route, 'home');
-  }
+
 
 
     replaceRoute(route) {
-        this.props.replaceAt('add-product', {key: route}, this.props.navigation.key);
+        this.props.replaceAt(this.props.currentLocation, {key: route}, this.props.navigation.key);
     }
 
 
@@ -38,7 +45,7 @@ class AddProductHeader extends Component {
           <View style={{ flexDirection: 'row', alignItems: 'stretch'  }}>
 
 
-            <Button style={{ backgroundColor: 'transparent'}} iconLeft light onPress={() =>  this.replaceRoute('product') }>
+            <Button style={{ backgroundColor: 'transparent'}} iconLeft light onPress={() =>  this.replaceRoute(this.props.backLocation) }>
               <Icon name="ios-arrow-back" />
               <Text> Cancel </Text>
             </Button>
@@ -62,4 +69,4 @@ const mapStateToProps = state => ({
   navigation: state.cardNavigation,
 });
 
-export default connect(mapStateToProps, bindAction)(AddProductHeader);
+export default connect(mapStateToProps, bindAction)(AddFormHeader);
