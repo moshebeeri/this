@@ -11,7 +11,7 @@ const {
 } = actions;
 ;
 
-class ProductListView extends Component {
+class GenericListView extends Component {
 
 
     constructor(props) {
@@ -79,4 +79,4 @@ const mapStateToProps = state => ({
     navigation: state.cardNavigation,
 });
 
-export default connect(mapStateToProps, bindActions)(ProductListView);
+export default connect(mapStateToProps, bindActions)(GenericListView);

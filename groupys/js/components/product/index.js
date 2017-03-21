@@ -4,7 +4,7 @@ import {connect} from 'react-redux';
 import {actions} from 'react-native-navigation-redux-helpers';
 import {Container, Content, Text,Title, InputGroup, Input, Button, Icon, View,Header, Body, Right, ListItem, Thumbnail,Left} from 'native-base';
 
-import ProductListView from './listView/index'
+import GenericListView from '../generic-list-manager/generic-list-view/index'
 
 import GenericListManager from '../generic-list-manager/index'
 
@@ -31,17 +31,12 @@ class Product extends Component {
 
 
 
-
-    componentWillMount(){
-
-    }
-
     render() {
 
 
         return (
            <GenericListManager title="Products" component="product" addComponent="add-product" api={productApi}
-                               ItemDetail = {ProductListView}/>
+                               ItemDetail = {GenericListView}/>
         );
     }
 }
