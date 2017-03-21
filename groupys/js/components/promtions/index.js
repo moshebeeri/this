@@ -35,58 +35,11 @@ class Promotions extends Component {
         ;
 
         let stateFunc = this.setState.bind(this);
-        store.get('token').then(storeToken => {
 
-            stateFunc({
-                    token: storeToken
-                }
-            );
-        });
-        store.get('user_id').then(storeUserId => {
-            stateFunc({
-                    userId: storeUserId
-                }
-            );
-        });
 
 
     }
 
-    fetchBusiness(){
-        let stateFunc = this.setState.bind(this);
-        store.get('token').then(storeToken => {
-            fetch(`${server_host}/api/businesses/list/mine`, {
-                method: 'GET',
-                headers: {
-                    'Accept': 'application/json, text/plain, */*',
-                    'Content-Type': 'application/json;charset=utf-8',
-                    'Authorization': 'Bearer ' + storeToken
-
-                }
-
-            }).then(function (response) {
-                if (response.status == '401') {
-
-                    return;
-                }
-
-
-                response.json().then((responseData) => {
-
-                    stateFunc({
-                            rowsView: responseData
-                        }
-                    );
-                })
-
-            }).catch(function (error) {
-                console.log('There has been a problem with your fetch operation: ' + error.message);
-            });
-
-        });
-
-
-    }
 
 
 
@@ -96,7 +49,7 @@ class Promotions extends Component {
 
 
     componentWillMount(){
-        this.fetchBusiness();
+
     }
 
     render() {

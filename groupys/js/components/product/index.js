@@ -14,7 +14,8 @@ import store from 'react-native-simple-store';
 const {
     replaceAt,
 } = actions;
-
+import ProductApi from "../../api/product"
+let productApi = new ProductApi();
 
 class Product extends Component {
 
@@ -56,44 +57,16 @@ class Product extends Component {
 
     }
 
-    fetchProducts(){
-        let stateFunc = this.setState.bind(this);
+    async fetchProducts(){
+        try {
+            let response = await productApi.getAll();
+            this.setState({
+                rowsView: response
+            })
 
-
-        store.get('token').then(storeToken => {
-            fetch(`${server_host}/api/products`, {
-                method: 'GET',
-                headers: {
-                    'Accept': 'application/json, text/plain, */*',
-                    'Content-Type': 'application/json;charset=utf-8',
-                    'Authorization': 'Bearer ' + storeToken
-
-                }
-
-            }).then(function (response) {
-                if (response.status == '401') {
-
-                    return;
-                }
-
-
-                response.json().then((responseData) => {
-
-                    stateFunc({
-                        rowsView: responseData,
-
-                        }
-                    );
-
-
-                })
-
-            }).catch(function (error) {
-                console.log('There has been a problem with your fetch operation: ' + error.message);
-            });
-
-        });
-
+        }catch (error){
+            console.log(error);
+        }
 
 
 
