@@ -27,14 +27,14 @@ class ProductListView extends Component {
 
         let row = undefined
 
-        if(this.props.product.pictures.length > 0){
+        if(this.props.item.pictures.length > 0){
             row =  <ListItem key={this.props.index} thumbnail>
                 <Left>
-                    <Thumbnail square size={80} source={{uri: this.props.product.pictures[0].pictures[3]}} />
+                    <Thumbnail square size={80} source={{uri: this.props.item.pictures[0].pictures[3]}} />
                 </Left>
                 <Body>
-                <Text>{this.props.product.name}</Text>
-                <Text note>{this.props.product.info}</Text>
+                <Text>{this.props.item.name}</Text>
+                <Text note>{this.props.item.info}</Text>
                 </Body>
                 <Right>
                     <Button transparent onPress={() =>  this.props.deleteProduct(`${this.props.index}`)}>
@@ -49,8 +49,8 @@ class ProductListView extends Component {
                 </Left>
                 <Body>
 
-                <Text>{this.props.product.name}</Text>
-                <Text note>{this.props.product.info}</Text>
+                <Text>{this.props.item.name}</Text>
+                <Text note>{this.props.item.info}</Text>
                 </Body>
                 <Right>
                     <Button transparent onPress={() =>  this.props.deleteProduct(`${this.props.index}`)}>
