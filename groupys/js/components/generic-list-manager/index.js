@@ -83,8 +83,6 @@ class GenericListManager extends Component {
     }
 
     render() {
-        const { ItemDetail } = this.props.ItemDetail
-
         let index = 0
         let rows = undefined;
         if(this.state.rowsView.length > 0) {
