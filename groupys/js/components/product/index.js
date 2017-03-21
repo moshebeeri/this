@@ -4,7 +4,7 @@ import {connect} from 'react-redux';
 import {actions} from 'react-native-navigation-redux-helpers';
 import {Container, Content, Text,Title, InputGroup, Input, Button, Icon, View,Header, Body, Right, ListItem, Thumbnail,Left} from 'native-base';
 
-import ProductsHeader from './header';
+import GeneralComponentHeader from '../header/index';
 
 
 import store from 'react-native-simple-store';
@@ -163,7 +163,7 @@ class Product extends Component {
                         justifyContent: 'space-between',
                     }}
                 >
-                    <ProductsHeader />
+                    <GeneralComponentHeader title="Products" current="product" to="add-product" />
 
                 </Header>
 
