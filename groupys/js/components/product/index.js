@@ -6,7 +6,7 @@ import {Container, Content, Text,Title, InputGroup, Input, Button, Icon, View,He
 
 import GeneralComponentHeader from '../header/index';
 
-
+import ProductListView from './listView/index'
 import store from 'react-native-simple-store';
 
 
@@ -112,48 +112,16 @@ class Product extends Component {
 
     render() {
 
-
-
         let index = 0
-
-        let rows = this.state.rowsView.map((r, i) => {
-            index++;
-            if(r.pictures.length > 0){
-                return <ListItem key={index} thumbnail>
-                    <Left>
-                        <Thumbnail square size={80} source={{uri: r.pictures[0].pictures[3]}} />
-                    </Left>
-                    <Body>
-                    <Text>{r.name}</Text>
-                    <Text note>{r.info}</Text>
-                    </Body>
-                    <Right>
-                        <Button transparent onPress={() =>  this.deleteProduct(`${index}`)}>
-                            <Text>Remove</Text>
-                        </Button>
-                    </Right>
-                </ListItem>
-            }
-            return <ListItem key={index} thumbnail style={{  backgroundColor: '#fff'}}>
-                <Left>
-                    <Thumbnail square size={80} source={require('../../../images/client_1.png')} />
-                </Left>
-                <Body>
-
-                <Text>{r.name}</Text>
-                <Text note>{r.info}</Text>
-                </Body>
-                <Right>
-                    <Button transparent onPress={() =>  this.deleteProduct(`${index}`)} >
-                        <Text>Remove</Text>
-                    </Button>
-                </Right>
-            </ListItem>
-        })
-
+        let rows = undefined;
+        if(this.state.rowsView.length > 0) {
+             rows = this.state.rowsView.map((r, i) => {
+                index++;
+                return <ProductListView key= {index} index={index} product={r} deleteProduct={this.deleteProduct.bind(this)}/>
+            });
+        }
 
         return (
-
             <Container>
                 <Header
                     style={{ flexDirection: 'column',
@@ -164,15 +132,8 @@ class Product extends Component {
                     }}
                 >
                     <GeneralComponentHeader title="Products" current="product" to="add-product" />
-
                 </Header>
-
-
                 <Content  style={{  backgroundColor: '#fff'}}>
-
-
-
-
                     { rows }
                 </Content>
             </Container>
