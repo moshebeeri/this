@@ -37,12 +37,19 @@ class SelectProductsComponent extends Component {
         let index = 0;
         let productsRows = this.state.productList.map((r, i) => {
             index++;
+            let selected = false;
+            if(this.props.selectedProduct.find(function(val, i) {
+                    return val._id === r._id;
+                })){
+                selected = true;
+
+            }
             if(r.pictures.length > 0){
                 return <ListItem key={index} thumbnail>
                   <Left>
                     <CheckBox
                         onClick={()=>this.props.selectProduct(r)}
-                        isChecked={r.checked}
+                        isChecked={selected}
 
                     />
 
@@ -60,7 +67,7 @@ class SelectProductsComponent extends Component {
               <Left>
                 <CheckBox
                     onClick={()=>this.props.selectProduct(r)}
-                    isChecked={r.checked}
+                    isChecked={selected}
 
                 />
               </Left>
@@ -93,7 +100,7 @@ class SelectProductsComponent extends Component {
                 <Footer>
 
                   <Button transparent
-                          onPress={() => this.showProducts(false)}
+                          onPress={() => this.props.showProducts(false)}
                   >
                     <Text>Select</Text>
                   </Button>

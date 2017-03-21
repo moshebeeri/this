@@ -149,18 +149,25 @@ class AddPromotion extends Component {
         })
     }
 
+
+
     selectProduct(product){
-        if(product.selected){
-            product.selected = false;
-            return
+        if(this.state.selectedProduct.find(function(val, i) {
+                return val._id === product._id;
+            })){
+            let selectedProducts = this.state.selectedProduct.filter(function(val, i) {
+                return val._id !== product._id;
+            });
+            this.setState({
+                selectedProduct: selectedProducts
+            })
+            return;
         }
-        var selectedProducts = this.state.selectedProduct;
+        let selectedProducts = this.state.selectedProduct;
         selectedProducts.push(product);
-        product.selected = true;
         this.setState({
             selectedProduct: selectedProducts
         })
-
 
 
     }
@@ -168,9 +175,22 @@ class AddPromotion extends Component {
     render() {
 
         if(this.state.showProductsList){
-             return ( <SelectProductsComponent products={this.state.productList}  selectProduct = {this.selectProduct.bind(this)} />
+             return ( <SelectProductsComponent showProducts = {this.showProducts.bind(this)} selectedProduct = {this.state.selectedProduct} products={this.state.productList}  selectProduct = {this.selectProduct.bind(this)} />
 
             );
+        }
+        let items = undefined;
+
+        if(this.state.selectedProduct.length > 0){
+            let index = 0
+            items = this.state.selectedProduct.map((r, i) => {
+                index++;
+                return  <ListItem  key={index}>
+                    <Text>
+                        {r.name}
+                    </Text>
+                </ListItem>
+            });
         }
 
         let image ;
@@ -242,7 +262,9 @@ class AddPromotion extends Component {
                         <Button   transparent  onPress={() => this.showProducts(true)}>
                             <Text> select products </Text>
                         </Button>
+
                     </Item>
+                    {items}
                     <Item underline>
                         <View style={{ flexDirection: 'row',marginTop:5 }}>
 
