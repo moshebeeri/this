@@ -29,6 +29,83 @@ let businessApi = new BusinessApi();
 import ProductApi from "../../../api/product"
 let productApi = new ProductApi();
 
+import PercentComponent from "./percent/index"
+import PercentRangeComponent from "./precent-range/index"
+const types = [
+    {
+        value:'PERCENT',
+        label:'percent'
+    },
+    {
+        value:'PERCENT_RANGE',
+        label:'Percent Range'
+    },
+    {
+        value:'GIFT',
+        label:'Gift'
+    },
+    {
+        value:'AMOUNT',
+        label:'Amount'
+    },
+    {
+        value:'PRICE',
+        label:'Price'
+    },
+    {
+        value:'X+Y',
+        label:'x + y'
+    },
+    {
+        value:'X+N%OFF',
+        label:'X+N%OFF'
+    },
+    {
+        value:'INCREASING',
+        label:'Incresing'
+    },
+
+    {
+        value:'DOUBLING',
+        label:'Doubling'
+    },
+
+    {
+        value:'ITEMS_GROW',
+        label:'Item Grow'
+    },
+    {
+        value:'PREPAY_FOR_DISCOUNT',
+        label:'Prepay For Discount'
+    },
+    {
+        value:'REDUCED_AMOUNT',
+        label:'Reduce Amount'
+    },
+    {
+        value:'PUNCH_CARD',
+        label:'Punch Catd'
+    },
+    {
+        value:'CASH_BACK',
+        label:'Cash Back'
+    },
+    {
+        value:'EARLY_BOOKING',
+        label:'Early Booking'
+    },
+    {
+        value:'HAPPY_HOUR',
+        label:'Happy Hour'
+    },
+    {
+        value:'MORE_THAN',
+        label:'More Than'
+    },
+
+    ]
+      //15% off for purchases more than 1000$ OR buy iphone for 600$ and get 50% off for earphones
+;
 class AddPromotion extends Component {
 
     static propTypes = {
@@ -38,22 +115,25 @@ class AddPromotion extends Component {
         }),
     };
 
+
+
     constructor(props) {
         super(props);
 
         this.state = {
             businessId: undefined,
-            path:'',
-            image:'',
-            type:'',
-            images:'',
+            path: '',
+            image: '',
+            type: '',
+            images: '',
             businesses: [],
-            selectedBusiness:'',
-            selectedProduct:[],
-            productList:[],
-            showProductsList:false,
-
-
+            selectedBusiness: '',
+            selectedProduct: [],
+            productList: [],
+            showProductsList: false,
+            selectedType: 'PERCENT',
+            precent: {},
+            percent_range: {},
 
 
         };
@@ -107,6 +187,11 @@ class AddPromotion extends Component {
         await this.initProducts(productsReponse);
 
 
+    }
+    async selectPromotionType(value){
+        this.setState({
+            selectedType:value
+        })
     }
 
     saveFormData(){
@@ -172,7 +257,12 @@ class AddPromotion extends Component {
 
     }
 
+
+
+
+
     render() {
+
 
         if(this.state.showProductsList){
              return ( <SelectProductsComponent showProducts = {this.showProducts.bind(this)} selectedProduct = {this.state.selectedProduct} products={this.state.productList}  selectProduct = {this.selectProduct.bind(this)} />
@@ -207,7 +297,7 @@ class AddPromotion extends Component {
 
         if(this.state.businesses.length > 0 ){
             businessesPikkerTag = <Picker
-                iosHeader="Select Business"
+                iosHeader="Business"
                 mode="dropdown"
                 selectedValue={this.state.selectedBusiness}
                 onValueChange={this.selectBusiness.bind(this)}>
@@ -222,6 +312,37 @@ class AddPromotion extends Component {
                             label={s.name} />
                     }) }
             </Picker>
+
+        }
+
+
+        let  typePikkerTag = <Picker
+                iosHeader="Discount"
+                mode="dropdown"
+                selectedValue={this.state.selectedType}
+                onValueChange={this.selectPromotionType.bind(this)}>
+
+                {
+
+
+                    types.map((s, i) => {
+                        return <Item
+                            key={i}
+                            value={s.value}
+                            label={s.label} />
+                    }) }
+            </Picker>
+
+        let discountForm = undefined;
+
+        switch(this.state.selectedType){
+            case 'PERCENT':
+                discountForm = <PercentComponent setState={this.setState.bind(this)}/>
+                break;
+            case 'PERCENT_RANGE':
+                discountForm = <PercentRangeComponent setState={this.setState.bind(this)}/>
+                break;
+
 
         }
 
@@ -275,6 +396,11 @@ class AddPromotion extends Component {
                             {image}
                         </View>
                     </Item>
+                    <Item underline>
+                        {typePikkerTag}
+                    </Item>
+
+                       {discountForm}
 
                 </Content>
                 <Footer>
