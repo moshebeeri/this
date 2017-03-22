@@ -10,7 +10,7 @@ import Login from './components/login/';
 import SplashPage from './components/splashscreen/';
 import Home from './components/home/';
 import Business from './components/business/';
-import Product from './components/product\/';
+import Product from './components/product/';
 import AddProduct from './components/product/add-form';
 import Qrcode from './components/qrcode/';
 import Register from './components/register/';

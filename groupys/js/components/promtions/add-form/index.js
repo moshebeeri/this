@@ -10,12 +10,11 @@ import { Platform,
 } from 'react-native';
 import {connect} from 'react-redux';
 import {actions} from 'react-native-navigation-redux-helpers';
-import {Container, Content, Text, InputGroup, Input, Button, Icon, View,Header} from 'native-base';
+import {Container, Content, Text, InputGroup, Input, Button,Body ,Icon,Left,
+    View,Header,Item,Footer,Picker,ListItem,Right,Thumbnail} from 'native-base';
 
-import ModalDropdown from 'react-native-modal-dropdown';
-import login from './add-promotions-theme';
-import styles from './styles';
-import HeaderContent from '.././../homeHeader';
+import AddFormHeader from '../../header/addFormHeader';
+import SelectProductsComponent from './selectProducts';
 
 var createEntity = require("../../../utils/createEntity");
 import ImagePicker from 'react-native-image-crop-picker';
@@ -24,6 +23,91 @@ const {
 } = actions;
 
 
+import BusinessApi from "../../../api/business"
+let businessApi = new BusinessApi();
+
+import ProductApi from "../../../api/product"
+let productApi = new ProductApi();
+
+import PercentComponent from "./percent/index"
+import PercentRangeComponent from "./precent-range/index"
+import DatePicker from 'react-native-datepicker'
+import store from 'react-native-simple-store';
+const types = [
+    {
+        value:'PERCENT',
+        label:'percent'
+    },
+    {
+        value:'PERCENT_RANGE',
+        label:'Percent Range'
+    },
+    {
+        value:'GIFT',
+        label:'Gift'
+    },
+    {
+        value:'AMOUNT',
+        label:'Amount'
+    },
+    {
+        value:'PRICE',
+        label:'Price'
+    },
+    {
+        value:'X+Y',
+        label:'x + y'
+    },
+    {
+        value:'X+N%OFF',
+        label:'X+N%OFF'
+    },
+    {
+        value:'INCREASING',
+        label:'Incresing'
+    },
+
+    {
+        value:'DOUBLING',
+        label:'Doubling'
+    },
+
+    {
+        value:'ITEMS_GROW',
+        label:'Item Grow'
+    },
+    {
+        value:'PREPAY_FOR_DISCOUNT',
+        label:'Prepay For Discount'
+    },
+    {
+        value:'REDUCED_AMOUNT',
+        label:'Reduce Amount'
+    },
+    {
+        value:'PUNCH_CARD',
+        label:'Punch Catd'
+    },
+    {
+        value:'CASH_BACK',
+        label:'Cash Back'
+    },
+    {
+        value:'EARLY_BOOKING',
+        label:'Early Booking'
+    },
+    {
+        value:'HAPPY_HOUR',
+        label:'Happy Hour'
+    },
+    {
+        value:'MORE_THAN',
+        label:'More Than'
+    },
+
+    ]
+      //15% off for purchases more than 1000$ OR buy iphone for 600$ and get 50% off for earphones
+;
 class AddPromotion extends Component {
 
     static propTypes = {
@@ -33,51 +117,119 @@ class AddPromotion extends Component {
         }),
     };
 
+
+
     constructor(props) {
         super(props);
 
         this.state = {
-            name: null,
-            path:'',
-            image:'',
-            type:'',
-            images:'',
-            formID:'',
-            formData:{}
-        };
+            token:'',
+            path: '',
+            image: '',
+            type: 'PERCENT',
+            images: '',
+            businesses: [],
+            business: '',
+            products: [],
+            productList: [],
+            showProductsList: false,
+            percent: {},
+            percent_range: {},
+            start: "",
+            end: "",
+
+
+        }
+
+        let stateFunc = this.setState.bind(this);
+        store.get('token').then(storeToken => {
+            stateFunc({
+                    token: storeToken
+                }
+            );
+        });
+        store.get('user_id').then(storeUserId => {
+            stateFunc({
+                    creator: storeUserId
+                }
+            );
+        });
+
+        ;
     }
 
 
+    async componentWillMount(){
+        try {
+            let response = await businessApi.getAll();
+            if (response) {
+                await this.initBusiness(response);
+            }
+            if(this.state.selectedBusiness){
+                let productsReponse = await productApi.findByBusinessId(this.state.selectedBusiness);
+                await this.initProducts(productsReponse);
+            }
 
+        }catch (error){
+            console.log(error);
+        }
+
+    }
+
+    async initProducts(responseData){
+
+        this.setState({
+            productList: responseData,
+
+        });
+    }
+
+    async initBusiness(responseData){
+
+         this.setState({
+            businesses: responseData,
+             business: responseData[0]._id
+        });
+    }
 
 
     replaceRoute(route) {
-        this.props.replaceAt('signup', {key: route}, this.props.navigation.key);
-    }
-
-
-
-    readQc(code){
-
-    }
-
-    selectType(index, value){
-        this.setState({
-            type:value
-        })
-
-
+        this.props.replaceAt('add-promotions', {key: route}, this.props.navigation.key);
     }
 
     saveFormData(){
-        this.setState({
-                formData:{name: this.state.name,address: this.state.address, email: this.state.email,
-                    website: this.state.website,  country: this.state.country,  city: this.state.city,
-                    state: this.state.state,type :this.state.type,formID:this.state.formID, tax_id:this.state.tax_id}
-            }
-        );
-        this.props.saveForm(this.state);
+
+
+        createEntity('promotions',this.state,this.state.token,this.formSuccess.bind(this),this.formFailed.bind(this),this.state.userId);
     }
+
+    formSuccess(response){
+
+        this.replaceRoute('promotions');
+    }
+
+    formFailed(response){
+        console.log(response);
+        this.replaceRoute('promotions');
+    }
+
+    async selectBusiness(value){
+        this.setState({
+            business:value
+        })
+        let productsReponse = await productApi.findByBusinessId(value);
+        await this.initProducts(productsReponse);
+
+
+    }
+    async selectPromotionType(value){
+        this.setState({
+            type:value
+        })
+    }
+
+
+
     pickSingle(cropit, circular=false) {
         ImagePicker.openPicker({
             width: 300,
@@ -100,89 +252,221 @@ class AddPromotion extends Component {
             Alert.alert(e.message ? e.message : e);
         });
     }
+
+    showProducts(boolean){
+        this.setState({
+            showProductsList:boolean
+        })
+    }
+
+
+
+    selectProduct(product){
+        if(this.state.products.find(function(val, i) {
+                return val._id === product._id;
+            })){
+            let selectedProducts = this.state.products.filter(function(val, i) {
+                return val._id !== product._id;
+            });
+            this.setState({
+                products: selectedProducts
+            })
+            return;
+        }
+        let selectedProducts = this.state.products;
+        selectedProducts.push(product);
+        this.setState({
+            products: selectedProducts
+        })
+
+
+    }
+
+
+
+
+
     render() {
+
+
+        if(this.state.showProductsList){
+             return ( <SelectProductsComponent showProducts = {this.showProducts.bind(this)} selectedProduct = {this.state.products} products={this.state.productList}  selectProduct = {this.selectProduct.bind(this)} />
+
+            );
+        }
+        let items = undefined;
+
+        if(this.state.products.length > 0){
+            let index = 0
+            items = this.state.products.map((r, i) => {
+                index++;
+                return  <ListItem  key={index}>
+                    <Text>
+                        {r.name}
+                    </Text>
+                </ListItem>
+            });
+        }
+
+        let image ;
+        if(this.state.path){
+            image =  <Image
+                style={{width: 50, height: 50}}
+                source={{uri: this.state.path}}
+            />
+
+
+        }
+
+        let businessesPikkerTag = undefined;
+
+        if(this.state.businesses.length > 0 ){
+            businessesPikkerTag = <Picker
+
+                iosHeader="Business"
+                mode="dropdown"
+                selectedValue={this.state.business}
+                onValueChange={this.selectBusiness.bind(this)}>
+
+                {
+
+
+                    this.state.businesses.map((s, i) => {
+                        return <Item
+                            key={i}
+                            value={s._id}
+                            label={s.name} />
+                    }) }
+            </Picker>
+
+        }
+
+
+        let  typePikkerTag = <Picker
+                iosHeader="Discount"
+                mode="dropdown"
+                selectedValue={this.state.type}
+                onValueChange={this.selectPromotionType.bind(this)}>
+
+                {
+
+
+                    types.map((s, i) => {
+                        return <Item
+                            key={i}
+                            value={s.value}
+                            label={s.label} />
+                    }) }
+            </Picker>
+
+        let discountForm = undefined;
+
+        switch(this.state.type){
+            case 'PERCENT':
+                discountForm = <PercentComponent state={this.state} setState={this.setState.bind(this)}/>
+                break;
+            case 'PERCENT_RANGE':
+                discountForm = <PercentRangeComponent state={this.state} setState={this.setState.bind(this)}/>
+                break;
+
+
+        }
+
+
+
+
         return (
             <Container>
                 <Header
                     style={{ flexDirection: 'column',
-                        height: 110,
+                        height: 60,
                         elevation: 0,
                         paddingTop: (Platform.OS === 'ios') ? 20 : 3,
                         justifyContent: 'space-between',
-                    }}
-                >
-                    <HeaderContent />
+                    }}>
+                    <AddFormHeader currentLocation="add-promotions" backLocation="promotions" />
+
                 </Header>
 
-                <Content theme={login} style={{backgroundColor: login.backgroundColor}}>
+                <Content  style={{backgroundColor: '#fff'}}>
+                    <Item underline>
+                        <Text style={{ padding: 18}}>Business: </Text>
+                        {businessesPikkerTag}
+                    </Item>
 
-                    <View style={styles.AddContainer}>
-
-                    <View style={{
-
-                        flexDirection: 'column',
-
-                    }}>
-
-                        <View style={styles.row}>
-                            <Text style={styles.titleText}>
-                                Name
-                            </Text>
-                            <TextInput style={styles.input}
-                                       onChangeText={(name) => this.setState({name})}
-
-                            />
-                        </View>
+                    <Item underline>
+                        <Input value= {this.state.name} onChangeText={(name) => this.setState({name})} placeholder='Name' />
+                    </Item>
+                    <Item underline>
+                        <Input value= {this.state.info} onChangeText={(info) => this.setState({info})} placeholder='Description' />
+                    </Item>
 
 
 
-                        <View style={styles.row}>
-                            <Text style={styles.titleText}>
-                                Form id
-                            </Text>
-                            <TextInput
-                                style={styles.input}
-                                onChangeText={(formID) => this.setState({formID})}
+                    <Item underline>
+                        <Button   transparent  onPress={() => this.showProducts(true)}>
+                            <Text>Select Products </Text>
+                        </Button>
 
-                            />
-                        </View>
-                        <View style={styles.row}>
-                            <Text style={styles.titleText}>
-                                Tax id
-                            </Text>
-                            <TextInput
-                                style={styles.input}
-                                onChangeText={(tax_id) => this.setState({tax_id})}
+                    </Item>
+                    {items}
+                    <Item underline>
+                        <View style={{ flexDirection: 'row',marginTop:5 }}>
 
-                            />
-                        </View>
-
-                        <View style={styles.row}>
-                            <Text style={styles.titleText}>
-                                Image
-                            </Text>
-
-                            <Button   style={styles.attachButton} onPress={() => this.pickSingle(true)}>
-                                <Icon style={styles.attachButton} name="ios-attach" />
-
+                            <Button   transparent  onPress={() => this.pickSingle(true)}>
+                                <Text>Select Image </Text>
                             </Button>
 
-                            <Image
-                                style={{width: 50, height: 50}}
-                                source={{uri: this.state.path}}
-                            />
+                            {image}
                         </View>
-                        <View style={styles.row}>
+                    </Item>
+                    <Item underline>
 
-                            <Button style={styles.login}>
-                                <Text>Save</Text>
-                            </Button>
-                        </View>
-                    </View>
-                </View>
+                            <Text style={{ padding: 18}}>Discount: </Text>
+                        {typePikkerTag}
+                    </Item>
 
+                       {discountForm}
 
+                    <Item underline>
+                    <DatePicker
+                        style={{width: 200}}
+                        date={this.state.start}
+                        mode="date"
+                        placeholder="From"
+                        format="YYYY-MM-DD"
+                        minDate="2016-05-01"
+                        maxDate="2020-06-01"
+                        confirmBtnText="Confirm"
+                        cancelBtnText="Cancel"
+
+                        onDateChange={(date) => {this.setState({start: date})}}
+                    />
+                    </Item>
+                    <Item underline>
+                        <DatePicker
+                            style={{width: 200}}
+                            date={this.state.end}
+                            mode="date"
+                            placeholder="To"
+                            format="YYYY-MM-DD"
+                            minDate="2016-05-01"
+                            maxDate="2020-06-01"
+                            confirmBtnText="Confirm"
+                            cancelBtnText="Cancel"
+
+                            onDateChange={(date) => {this.setState({end: date})}}
+                        />
+                    </Item>
                 </Content>
+                <Footer>
+
+                    <Button transparent
+                            onPress={this.saveFormData.bind(this)}
+                    >
+                        <Text>Add Promotion</Text>
+                    </Button>
+                </Footer>
             </Container>
         );
     }

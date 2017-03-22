@@ -12,10 +12,7 @@ import {connect} from 'react-redux';
 import {actions} from 'react-native-navigation-redux-helpers';
 import {Container, Content, Text, InputGroup, Input, Button, Icon, View,Header,Item,Picker,Footer} from 'native-base';
 
-import ModalDropdown from 'react-native-modal-dropdown';
-import login from './add-business-theme';
-import styles from './styles';
-import AddBusinessHeader from './header';
+import AddFormHeader from '../../header/addFormHeader';
 
 var createEntity = require("../../../utils/createEntity");
 import ImagePicker from 'react-native-image-crop-picker';
@@ -153,7 +150,8 @@ class AddBusiness extends Component {
                         justifyContent: 'space-between',
                     }}
                 >
-                    <AddBusinessHeader />
+                    <AddFormHeader currentLocation="add-business" backLocation="business" />
+
                 </Header>
 
                 <Content  style={{backgroundColor: '#fff'}}>

@@ -12,7 +12,7 @@ import {connect} from 'react-redux';
 import {actions} from 'react-native-navigation-redux-helpers';
 import {Container, Content, Text, InputGroup, Input, Button, Icon, View,Header,Item,Picker,Footer} from 'native-base';
 
-import AddProductHeader from './header';
+import AddFormHeader from '../../header/addFormHeader';
 
 var createEntity = require("../../../utils/createEntity");
 
@@ -194,7 +194,7 @@ class AddProduct extends Component {
                         justifyContent: 'space-between',
                     }}
                 >
-                    <AddProductHeader />
+                    <AddFormHeader currentLocation="add-product" backLocation="product" />
                 </Header>
 
                 <Content  style={{backgroundColor: '#fff'}}>

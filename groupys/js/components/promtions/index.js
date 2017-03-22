@@ -3,10 +3,9 @@ import {Image, Platform} from 'react-native';
 import {connect} from 'react-redux';
 import {actions} from 'react-native-navigation-redux-helpers';
 import {Container, Content, Text, InputGroup, Input, Button, Icon, View,Header} from 'native-base';
-import PromotionHeader from './header';
+import GeneralComponentHeader from '../header/index';
 
-import styles from './styles';
-//import AlertContainer from 'react-alert';
+
 
 const {
     replaceAt,
@@ -35,68 +34,21 @@ class Promotions extends Component {
         ;
 
         let stateFunc = this.setState.bind(this);
-        store.get('token').then(storeToken => {
 
-            stateFunc({
-                    token: storeToken
-                }
-            );
-        });
-        store.get('user_id').then(storeUserId => {
-            stateFunc({
-                    userId: storeUserId
-                }
-            );
-        });
 
 
     }
 
-    fetchBusiness(){
-        let stateFunc = this.setState.bind(this);
-        store.get('token').then(storeToken => {
-            fetch(`${server_host}/api/businesses/list/mine`, {
-                method: 'GET',
-                headers: {
-                    'Accept': 'application/json, text/plain, */*',
-                    'Content-Type': 'application/json;charset=utf-8',
-                    'Authorization': 'Bearer ' + storeToken
-
-                }
-
-            }).then(function (response) {
-                if (response.status == '401') {
-
-                    return;
-                }
-
-
-                response.json().then((responseData) => {
-
-                    stateFunc({
-                            rowsView: responseData
-                        }
-                    );
-                })
-
-            }).catch(function (error) {
-                console.log('There has been a problem with your fetch operation: ' + error.message);
-            });
-
-        });
-
-
-    }
 
 
 
     replaceRoute(route) {
-        this.props.replaceAt('business', {key: route}, this.props.navigation.key);
+        this.props.replaceAt('promotions', {key: route}, this.props.navigation.key);
     }
 
 
     componentWillMount(){
-        this.fetchBusiness();
+
     }
 
     render() {
@@ -151,7 +103,8 @@ class Promotions extends Component {
                         justifyContent: 'space-between',
                     }}
                 >
-                    <PromotionHeader />
+                    <GeneralComponentHeader title="Promotion" current="promotions" to="add-promotions"/>
+
                 </Header>
 
 

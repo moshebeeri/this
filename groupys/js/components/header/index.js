@@ -4,8 +4,8 @@ import { connect } from 'react-redux';
 
 import { Icon, View, Button, InputGroup, Input,Text } from 'native-base';
 import {actions} from 'react-native-navigation-redux-helpers';
-import { openDrawer } from '../../../actions/drawer';
-import navigateTo from '../../../actions/sideBarNav';
+import { openDrawer } from '../../actions/drawer';
+import navigateTo from '../../actions/sideBarNav';
 
 import styles from './styles';
 
@@ -14,7 +14,12 @@ const {
 } = actions;
 
 
-class ProductHeader extends Component {
+class GeneralComponentHeader extends Component {
+    constructor(props) {
+        super(props);
+
+
+    }
 
   static propTypes = {
     openDrawer: React.PropTypes.func,
@@ -27,7 +32,7 @@ class ProductHeader extends Component {
 
 
     replaceRoute(route) {
-        this.props.replaceAt('product', {key: route}, this.props.navigation.key);
+        this.props.replaceAt(this.props.current, {key: route}, this.props.navigation.key);
     }
 
 
@@ -38,10 +43,10 @@ class ProductHeader extends Component {
             <Button transparent style={{ paddingRight: 15 }} onPress={this.props.openDrawer}>
               <Icon name="ios-menu" />
             </Button>
-            <Text transparent style={{  paddingTop: 10, backgroundColor: 'transparent'}} > Products</Text>
+            <Text transparent style={{  paddingTop: 10, backgroundColor: 'transparent'}} > {this.props.title}</Text>
             <Button style={{ backgroundColor: 'transparent'}} iconLeft light>
 
-              <Icon name='ios-add-outline'  onPress={() =>  this.replaceRoute('add-product')}  />
+              <Icon name='ios-add-outline'  onPress={() =>  this.replaceRoute(this.props.to)}  />
             </Button>
 
 
@@ -64,4 +69,4 @@ const mapStateToProps = state => ({
   navigation: state.cardNavigation,
 });
 
-export default connect(mapStateToProps, bindAction)(ProductHeader);
+export default connect(mapStateToProps, bindAction)(GeneralComponentHeader);
