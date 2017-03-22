@@ -137,6 +137,7 @@ class AddPromotion extends Component {
             percent_range: {},
             start: "",
             end: "",
+            location: ""
 
 
         }
@@ -197,9 +198,15 @@ class AddPromotion extends Component {
         this.props.replaceAt('add-promotions', {key: route}, this.props.navigation.key);
     }
 
-    saveFormData(){
+   async saveFormData(){
 
 
+
+       this.setState({
+            businesses: '',
+
+
+        })
         createEntity('promotions',this.state,this.state.token,this.formSuccess.bind(this),this.formFailed.bind(this),this.state.userId);
     }
 
@@ -214,8 +221,14 @@ class AddPromotion extends Component {
     }
 
     async selectBusiness(value){
+        let businessId = value;
+        let selectedBusiness = this.state.businesses.find(function(val, i) {
+            return val._id === businessId;
+        });
+
         this.setState({
-            business:value
+            business:value,
+            location: selectedBusiness.location
         })
         let productsReponse = await productApi.findByBusinessId(value);
         await this.initProducts(productsReponse);
