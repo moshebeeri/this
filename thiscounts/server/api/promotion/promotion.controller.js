@@ -1,21 +1,21 @@
 'use strict';
 
-var _ = require('lodash');
-var async = require('async');
+let _ = require('lodash');
+let async = require('async');
 
-var Promotion = require('./promotion.model');
+let Promotion = require('./promotion.model');
 
-var model = require('seraph-model');
+let model = require('seraph-model');
 
-var randomstring = require('randomstring');
-var logger = require('../../components/logger').createLogger();
-var graphTools = require('../../components/graph-tools');
-var promotionGraphModel = graphTools.createGraphModel('promotion');
-var instanceGraphModel = graphTools.createGraphModel('instance');
-var utils = require('../../components/utils').createUtils();
-var activity = require('../../components/activity').createActivity();
-var util = require('util');
-var spatial = require('../../components/spatial').createSpatial();
+let randomstring = require('randomstring');
+let logger = require('../../components/logger').createLogger();
+let graphTools = require('../../components/graph-tools');
+let promotionGraphModel = graphTools.createGraphModel('promotion');
+let instanceGraphModel = graphTools.createGraphModel('instance');
+let utils = require('../../components/utils').createUtils();
+let activity = require('../../components/activity').createActivity();
+let util = require('util');
+let spatial = require('../../components/spatial').createSpatial();
 
 /*
 exports.server_time = function (req, res) {
@@ -25,18 +25,18 @@ exports.server_time = function (req, res) {
 
 
 exports.initialize = function (req, res) {
-  var PromotionType = graphTools.createGraphModel('PromotionType');
+  let PromotionType = graphTools.createGraphModel('PromotionType');
   PromotionType.model.setUniqueKey('PromotionType', true);
-  var typEnum = Promotion.schema.path('type').enumValues;
+  let typEnum = Promotion.schema.path('type').enumValues;
   typEnum.forEach(function (typeStr) {
     PromotionType.save({PromotionType: typeStr}, function (err, obj) {
       if (err) console.log("failed " + err.message);
       else console.log("PromotionType " + JSON.stringify(obj) + "created");
     });
   });
-  var SocialType = graphTools.createGraphModel('SocialType');
+  let SocialType = graphTools.createGraphModel('SocialType');
   SocialType.model.setUniqueKey('SocialType', true);
-  var socialEnum = Promotion.schema.path('social').enumValues;
+  let socialEnum = Promotion.schema.path('social').enumValues;
   socialEnum.forEach(function (typeStr) {
     SocialType.save({SocialType: typeStr}, function (err, obj) {
       if (err) console.log("failed " + err.message);
@@ -84,9 +84,9 @@ function to_graph(promotion) {
 }
 
 // Creates a new promotion in the DB.
-var relateTypes = function (promotion) {
-  var db = promotionGraphModel.db();
-  var query = util.format(" MATCH (promotion), (type:PromotionType{PromotionType:'%s'}) \
+let relateTypes = function (promotion) {
+  let db = promotionGraphModel.db();
+  let query = util.format(" MATCH (promotion), (type:PromotionType{PromotionType:'%s'}) \
                             WHERE  id(promotion)=%d \
                             CREATE (promotion)-[:PROMOTION_TYPE]->(type) ", promotion.type, promotion.gid);
   console.log(query);
@@ -109,7 +109,7 @@ var relateTypes = function (promotion) {
   }
 };
 
-var set_promotion_location = function (promotion, callback) {
+let set_promotion_location = function (promotion, callback) {
   if (!(utils.defined(promotion.mall) || utils.defined(promotion.business)))
     callback(null, promotion);
   else if (utils.defined(promotion.mall))
@@ -129,7 +129,7 @@ var set_promotion_location = function (promotion, callback) {
 };
 
 exports.create = function (req, res) {
-  var promotion = req.body;
+  let promotion = req.body;
   //TODO: Convert to address location
   console.log(JSON.stringify(promotion));
   spatial.location_to_point(promotion);
@@ -170,7 +170,7 @@ exports.create = function (req, res) {
 };
 
 function promotion_created_activity(promotion) {
-  var act = {
+  let act = {
     promotion: promotion._id,
     action: "created"
   };
@@ -200,7 +200,7 @@ exports.update = function (req, res) {
     if (!promotion) {
       return res.send(404);
     }
-    var updated = _.merge(promotion, req.body);
+    let updated = _.merge(promotion, req.body);
     updated.save(function (err) {
       if (err) {
         return handleError(res, err);
@@ -237,8 +237,8 @@ exports.save = function (req, res) {
     if (!promotion) {
       return res.send(404);
     }
-    var realize_code = randomstring.generate({length: 8, charset: 'numeric'});
-    var save_time = new Date();
+    let realize_code = randomstring.generate({length: 8, charset: 'numeric'});
+    let save_time = new Date();
     instanceGraphModel.save({
       _id: promotion._id,
       user: req.params.id,
@@ -247,7 +247,7 @@ exports.save = function (req, res) {
       time: save_time
     }, function (err, instance) {
       if (err) {
-        var err_msg = 'error saving promotion instance ' + err.message;
+        let err_msg = 'error saving promotion instance ' + err.message;
         logger.error(err_msg);
         return res.json(404, err_msg);
       }
@@ -264,13 +264,13 @@ exports.save = function (req, res) {
 //'/realize/:id/:realize_code/:realize_gid/:sale_point_code'
 //TODO: add validation of sale_point_code
 exports.realize = function (req, res) {
-  var query = util.format("MATCH (i:instance { _id:'{%s}', user:'{%s}'})", req.params.id, req.user._id );
+  const query = util.format("MATCH (i:instance { _id:'{%s}', user:'{%s}'})", req.params.id, req.user._id );
   instanceGraphModel.query(query, function(err, instances){
     if(err) return handleError(res, err);
 
     if(instances.length > 0 )
       return res.status(500).send('multiple instances found');
-    var instance = instances[0];
+    let instance = instances[0];
     if(instance.realize_code != req.params.realize_code)
       return res.status(400).send('mismatch realize_code');
     if(instance.id != req.params.realize_gid)
@@ -300,19 +300,56 @@ exports.test = function (req, res) {
 };
 
 exports.campaign_promotions = function (req, res) {
-  console.log("user_promotions");
+  console.log("user campaign promotions");
   console.log("user: " + req.user._id);
-  var userID = req.user._id;
-  var businessID = req.params.business_id;
-  var campaignID = req.params.campaign_id;
-  console.log("MATCH (u:user {_id:'"+ userID +"'})-[r:OWNS]->(b:business {_id:'"+ businessID +"'})-[bc:BUSINESS_CAMPAIGN]->(c:campaign {_id:'"+ campaignID +"'})-[cp:CAMPAIGN_PROMOTION]->(p:promotion) RETURN p LIMIT 25");
-  promotionGraphModel.query("MATCH (u:user {_id:'"+ userID +"'})-[r:OWNS]->(b:business {_id:'"+ businessID +"'})-[bc:BUSINESS_CAMPAIGN]->(c:campaign {_id:'"+ campaignID +"'})-[cp:CAMPAIGN_PROMOTION]->(p:promotion) RETURN p LIMIT 25", function(err, groups){
-    if (err) {return handleError("13",res, err)}
-    if(!groups) { return res.send(404); }
-    console.log(JSON.stringify(groups));
-    return res.status(200).json(groups);
+  let userID = req.user._id;
+  let businessID = req.params.business_id;
+  let campaignID = req.params.campaign_id;
+
+  promotionGraphModel.query_objects(Promotion,
+    `MATCH (u:user {_id:'${userID}'})-[r:OWNS]->`
+      `(b:business {_id:'${businessID}'})-[bc:BUSINESS_CAMPAIGN]->`
+      `(c:campaign {_id:'${campaignID}'})-[cp:CAMPAIGN_PROMOTION]->(p:promotion) RETURN p`,
+      'p.created DESC', 0, 1000,
+          function(err, promotions){
+    if (err) {return handleError(res, err)}
+    if(!promotions) { return res.send(404); }
+    console.log(JSON.stringify(promotions));
+    return res.status(200).json(promotions);
   });
 };
+
+exports.business_promotions = function (req, res) {
+  console.log("business promotions");
+  console.log("user: " + req.user._id);
+  let userID = req.user._id;
+  let businessID = req.params.business_id;
+
+  promotionGraphModel.query_objects(Promotion,
+              `MATCH (u:user {_id:'${userID}'})-[r:OWNS]->(b:business {_id:'${businessID}'})<-[]-(p:promotion) RETURN p`,
+              'p.created DESC', 0, 1000, function(err, promotions){
+    if (err) {return handleError(res, err)}
+    if(!promotions) { return res.send(404); }
+    console.log(JSON.stringify(promotions));
+    return res.status(200).json(promotions);
+  });
+};
+
+exports.user_promotions = function (req, res) {
+  console.log("user promotions");
+  console.log("user: " + req.user._id);
+  let userID = req.user._id;
+
+  promotionGraphModel.query_objects(Promotion,
+              `MATCH (u:user {_id:'${userID}'})-[r:OWNS]->(b:business)<-[]-(p:promotion) RETURN p`,
+              'p.created DESC', 0, 1000, function(err, promotions){
+    if (err) {return handleError(res, err)}
+    if(!promotions) { return res.send(404); }
+    console.log(JSON.stringify(promotions));
+    return res.status(200).json(promotions);
+  });
+};
+
 
 function handleError(res, err) {
   console.log(err);

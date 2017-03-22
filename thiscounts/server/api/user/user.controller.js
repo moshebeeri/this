@@ -33,7 +33,6 @@ var Activity = require('../activity/activity.model');
 
 var validationError = function (res, err) {
   var firstKey = getKey(err.errors);
-  console.log("------------------------------------firstKey " + firstKey);
   if(firstKey != undefined){
 	return res.status(422).json(err['errors'][firstKey]['message']);
   }
@@ -424,7 +423,6 @@ function identifyPhoneByTwilio(phone, countryCode){
 }
 function identifyPhoneByTwilioFallBack(phone){
   if(phone != undefined){
-    console.log("--------------identifyPhoneByTwilio------------------");
     twilioClient.phoneNumbers(phone).get({
       //type: 'carrier'
     }, function(error, number) {
@@ -441,7 +439,6 @@ function identifyPhoneByTwilioFallBack(phone){
       }
     });
   } else {
-    console.log("--------------UNDEFINED identifyPhoneByTwilio------------------");
   }
 }
 
