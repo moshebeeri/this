@@ -7,7 +7,12 @@ var mongoose = require('mongoose'),
 function percent_range_validator(v) {
   if (_.isNull(v))
     return false;
-  return v.from < v.to;
+  return percent_validator(v) && v.from < v.to;
+}
+function percent_validator(v) {
+  if (_.isNull(v))
+    return false;
+  return v.from >0 && v.to < 100;
 }
 
 var PromotionSchema = new Schema({
@@ -17,7 +22,7 @@ var PromotionSchema = new Schema({
   realize_gid: Number,
   card_type: {type: Schema.ObjectId, ref: 'CardType'},
   creator: {type: Schema.ObjectId, ref: 'User', required: true},
-  products: [{type: Schema.ObjectId, ref: 'Product', required: true}],
+  product: {type: Schema.ObjectId, ref: 'Product', required: true},
   created: {type: Date, default: Date.now},
   pictures : [],
   info: String,
@@ -112,12 +117,13 @@ var PromotionSchema = new Schema({
     condition : String,
     gift : String
   },
-  amount: {
-    amount : Number
+
+  amount: { amount : Number, required: true},
+  retail_price: { price: Number, required: true},
+  discount_percent:{
+    discount: Number, min:1, max: 100, required: true
   },
-  price: {
-    price: Number
-  },
+
   x_plus_y: {
     buy : Number,
     get : Number

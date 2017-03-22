@@ -28,10 +28,7 @@ var CampaignSchema = new Schema({
   name: {type: String, required: true},
   gid: { type: Number, index: true},
   info: String,
-  promotion: {type: Schema.ObjectId, ref: 'Promotion', require: true},
-  amount: Number,
-  min: {type: String, default: 10, min: 1, max: 90},
-  max: {type: String, default: 90, min: 1, max: 99},
+  promotion: [{type: Schema.ObjectId, ref: 'Promotion', require: true}],
   match: [CampaignPreferencesSchema],
   prefer: [CampaignPreferencesSchema],
   active: Boolean
