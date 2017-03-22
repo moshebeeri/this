@@ -1,7 +1,7 @@
 
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { Platform
+import { Platform,TextInput
 } from 'react-native'
 import {Container, Content, Text, InputGroup, Input, Button,Body ,Icon,Left,
     View,Header,Item,Footer,Picker,ListItem,Right,Thumbnail} from 'native-base';
@@ -27,10 +27,11 @@ class PercentComponent extends Component {
     }
 
     setPercent(value){
+        let percentNum = Number(value.value);
         this.props.setState(
             {
                 percent: {
-                    percent: value
+                    percent: percentNum
                 }
             }
 
@@ -39,13 +40,13 @@ class PercentComponent extends Component {
 
     render() {
 
-        let defaultvalue = "";
+        let defaultvalue = undefined;
         if(this.props.state.percent.percent){
             defaultvalue = this.props.state.percent.percent.value;
         }
 
        return  <Item underline>
-           <Input value={defaultvalue}  onChangeText={(value) => this.setPercent({value})} placeholder='%Precent' />
+           <Input keyboardType = 'numeric' value={defaultvalue}  onChangeText={(value) => this.setPercent({value})} placeholder='%Precent' />
        </Item>
   }
 }

@@ -32,6 +32,7 @@ let productApi = new ProductApi();
 import PercentComponent from "./percent/index"
 import PercentRangeComponent from "./precent-range/index"
 import DatePicker from 'react-native-datepicker'
+import store from 'react-native-simple-store';
 const types = [
     {
         value:'PERCENT',
@@ -122,24 +123,37 @@ class AddPromotion extends Component {
         super(props);
 
         this.state = {
-            businessId: undefined,
+            token:'',
             path: '',
             image: '',
-            type: '',
+            type: 'PERCENT',
             images: '',
             businesses: [],
-            selectedBusiness: '',
-            selectedProduct: [],
+            business: '',
+            products: [],
             productList: [],
             showProductsList: false,
-            selectedType: 'PERCENT',
             percent: {},
             percent_range: {},
-            fromDate: "",
-            toDate: "",
+            start: "",
+            end: "",
+
 
         }
 
+        let stateFunc = this.setState.bind(this);
+        store.get('token').then(storeToken => {
+            stateFunc({
+                    token: storeToken
+                }
+            );
+        });
+        store.get('user_id').then(storeUserId => {
+            stateFunc({
+                    creator: storeUserId
+                }
+            );
+        });
 
         ;
     }
@@ -174,19 +188,34 @@ class AddPromotion extends Component {
 
          this.setState({
             businesses: responseData,
-            selectedBusiness: responseData[0]._id
+             business: responseData[0]._id
         });
     }
 
 
     replaceRoute(route) {
-        this.props.replaceAt('signup', {key: route}, this.props.navigation.key);
+        this.props.replaceAt('add-promotions', {key: route}, this.props.navigation.key);
     }
 
+    saveFormData(){
+
+
+        createEntity('promotions',this.state,this.state.token,this.formSuccess.bind(this),this.formFailed.bind(this),this.state.userId);
+    }
+
+    formSuccess(response){
+
+        this.replaceRoute('promotions');
+    }
+
+    formFailed(response){
+        console.log(response);
+        this.replaceRoute('promotions');
+    }
 
     async selectBusiness(value){
         this.setState({
-            selectedBusiness:value
+            business:value
         })
         let productsReponse = await productApi.findByBusinessId(value);
         await this.initProducts(productsReponse);
@@ -195,19 +224,10 @@ class AddPromotion extends Component {
     }
     async selectPromotionType(value){
         this.setState({
-            selectedType:value
+            type:value
         })
     }
 
-    saveFormData(){
-        this.setState({
-                formData:{name: this.state.name,address: this.state.address, email: this.state.email,
-                    website: this.state.website,  country: this.state.country,  city: this.state.city,
-                    state: this.state.state,type :this.state.type,formID:this.state.formID, tax_id:this.state.tax_id}
-            }
-        );
-        this.props.saveForm(this.state);
-    }
 
 
     pickSingle(cropit, circular=false) {
@@ -242,21 +262,21 @@ class AddPromotion extends Component {
 
 
     selectProduct(product){
-        if(this.state.selectedProduct.find(function(val, i) {
+        if(this.state.products.find(function(val, i) {
                 return val._id === product._id;
             })){
-            let selectedProducts = this.state.selectedProduct.filter(function(val, i) {
+            let selectedProducts = this.state.products.filter(function(val, i) {
                 return val._id !== product._id;
             });
             this.setState({
-                selectedProduct: selectedProducts
+                products: selectedProducts
             })
             return;
         }
-        let selectedProducts = this.state.selectedProduct;
+        let selectedProducts = this.state.products;
         selectedProducts.push(product);
         this.setState({
-            selectedProduct: selectedProducts
+            products: selectedProducts
         })
 
 
@@ -270,15 +290,15 @@ class AddPromotion extends Component {
 
 
         if(this.state.showProductsList){
-             return ( <SelectProductsComponent showProducts = {this.showProducts.bind(this)} selectedProduct = {this.state.selectedProduct} products={this.state.productList}  selectProduct = {this.selectProduct.bind(this)} />
+             return ( <SelectProductsComponent showProducts = {this.showProducts.bind(this)} selectedProduct = {this.state.products} products={this.state.productList}  selectProduct = {this.selectProduct.bind(this)} />
 
             );
         }
         let items = undefined;
 
-        if(this.state.selectedProduct.length > 0){
+        if(this.state.products.length > 0){
             let index = 0
-            items = this.state.selectedProduct.map((r, i) => {
+            items = this.state.products.map((r, i) => {
                 index++;
                 return  <ListItem  key={index}>
                     <Text>
@@ -305,7 +325,7 @@ class AddPromotion extends Component {
 
                 iosHeader="Business"
                 mode="dropdown"
-                selectedValue={this.state.selectedBusiness}
+                selectedValue={this.state.business}
                 onValueChange={this.selectBusiness.bind(this)}>
 
                 {
@@ -325,7 +345,7 @@ class AddPromotion extends Component {
         let  typePikkerTag = <Picker
                 iosHeader="Discount"
                 mode="dropdown"
-                selectedValue={this.state.selectedType}
+                selectedValue={this.state.type}
                 onValueChange={this.selectPromotionType.bind(this)}>
 
                 {
@@ -341,7 +361,7 @@ class AddPromotion extends Component {
 
         let discountForm = undefined;
 
-        switch(this.state.selectedType){
+        switch(this.state.type){
             case 'PERCENT':
                 discountForm = <PercentComponent state={this.state} setState={this.setState.bind(this)}/>
                 break;
@@ -411,7 +431,7 @@ class AddPromotion extends Component {
                     <Item underline>
                     <DatePicker
                         style={{width: 200}}
-                        date={this.state.fromDate}
+                        date={this.state.start}
                         mode="date"
                         placeholder="From"
                         format="YYYY-MM-DD"
@@ -420,13 +440,13 @@ class AddPromotion extends Component {
                         confirmBtnText="Confirm"
                         cancelBtnText="Cancel"
 
-                        onDateChange={(date) => {this.setState({fromDate: date})}}
+                        onDateChange={(date) => {this.setState({start: date})}}
                     />
                     </Item>
                     <Item underline>
                         <DatePicker
                             style={{width: 200}}
-                            date={this.state.toDate}
+                            date={this.state.end}
                             mode="date"
                             placeholder="To"
                             format="YYYY-MM-DD"
@@ -435,7 +455,7 @@ class AddPromotion extends Component {
                             confirmBtnText="Confirm"
                             cancelBtnText="Cancel"
 
-                            onDateChange={(date) => {this.setState({toDate: date})}}
+                            onDateChange={(date) => {this.setState({end: date})}}
                         />
                     </Item>
                 </Content>

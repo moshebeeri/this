@@ -43,7 +43,7 @@ class Promotions extends Component {
 
 
     replaceRoute(route) {
-        this.props.replaceAt('business', {key: route}, this.props.navigation.key);
+        this.props.replaceAt('promotions', {key: route}, this.props.navigation.key);
     }
 
 

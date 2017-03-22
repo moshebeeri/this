@@ -28,21 +28,23 @@ class PercentRangeComponent extends Component {
 
 
     setPercentFrom(value){
+        let percentNum = Number(value.value);
         this.props.setState(
             {
                 percent_range: {
                     to: this.props.state.percent_range.to,
-                    from: value
+                    from: percentNum
                 }
             }
 
         )
     }
     setPercentTo(value){
+        let percentNum = Number(value.value);
         this.props.setState(
             {
                 percent_range: {
-                    to: value,
+                    to: percentNum,
                     from:this.props.state.percent_range.from,
                 }
             }
