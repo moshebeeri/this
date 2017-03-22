@@ -51,12 +51,21 @@ class PercentRangeComponent extends Component {
     }
 
     render() {
-       return  <View>
+        let fromDefaultValue = "";
+        if(this.props.state.percent_range.from){
+            fromDefaultValue = this.props.state.percent_range.from.value;
+        }
+        let toDefaultValue = "";
+        if(this.props.state.percent_range.to){
+            toDefaultValue = this.props.state.percent_range.to.value;
+        }
+
+        return  <View>
            <Item underline>
-               <Input onChangeText={(value) => this.setPercentFrom({value})} placeholder=' from %Precent' />
+               <Input value={fromDefaultValue}  onChangeText={(value) => this.setPercentFrom({value})} placeholder=' from %Precent' />
            </Item>
            <Item underline>
-               <Input onChangeText={(value) => this.setPercentTo({value})} placeholder=' to %Precent' />
+               <Input value= {toDefaultValue} onChangeText={(value) => this.setPercentTo({value})} placeholder=' to %Precent' />
            </Item>
        </View>
   }

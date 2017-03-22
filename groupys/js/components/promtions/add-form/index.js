@@ -31,6 +31,7 @@ let productApi = new ProductApi();
 
 import PercentComponent from "./percent/index"
 import PercentRangeComponent from "./precent-range/index"
+import DatePicker from 'react-native-datepicker'
 const types = [
     {
         value:'PERCENT',
@@ -134,9 +135,13 @@ class AddPromotion extends Component {
             selectedType: 'PERCENT',
             percent: {},
             percent_range: {},
+            fromDate: "",
+            toDate: "",
+
+        }
 
 
-        };
+        ;
     }
 
 
@@ -338,7 +343,7 @@ class AddPromotion extends Component {
 
         switch(this.state.selectedType){
             case 'PERCENT':
-                discountForm = <PercentComponent setState={this.setState.bind(this)}/>
+                discountForm = <PercentComponent state={this.state} setState={this.setState.bind(this)}/>
                 break;
             case 'PERCENT_RANGE':
                 discountForm = <PercentRangeComponent state={this.state} setState={this.setState.bind(this)}/>
@@ -370,20 +375,17 @@ class AddPromotion extends Component {
                     </Item>
 
                     <Item underline>
-                        <Input onChangeText={(name) => this.setState({name})} placeholder='Name' />
+                        <Input value= {this.state.name} onChangeText={(name) => this.setState({name})} placeholder='Name' />
                     </Item>
                     <Item underline>
-                        <Input onChangeText={(info) => this.setState({info})} placeholder='Description' />
+                        <Input value= {this.state.info} onChangeText={(info) => this.setState({info})} placeholder='Description' />
                     </Item>
 
 
-                    <Item underline>
-                        <Input onChangeText={(retail_price) => this.setState({retail_price})} placeholder='Price' />
-                    </Item>
 
                     <Item underline>
                         <Button   transparent  onPress={() => this.showProducts(true)}>
-                            <Text> select products </Text>
+                            <Text>Select Products </Text>
                         </Button>
 
                     </Item>
@@ -392,7 +394,7 @@ class AddPromotion extends Component {
                         <View style={{ flexDirection: 'row',marginTop:5 }}>
 
                             <Button   transparent  onPress={() => this.pickSingle(true)}>
-                                <Text> select image </Text>
+                                <Text>Select Image </Text>
                             </Button>
 
                             {image}
@@ -406,6 +408,36 @@ class AddPromotion extends Component {
 
                        {discountForm}
 
+                    <Item underline>
+                    <DatePicker
+                        style={{width: 200}}
+                        date={this.state.fromDate}
+                        mode="date"
+                        placeholder="From"
+                        format="YYYY-MM-DD"
+                        minDate="2016-05-01"
+                        maxDate="2020-06-01"
+                        confirmBtnText="Confirm"
+                        cancelBtnText="Cancel"
+
+                        onDateChange={(date) => {this.setState({fromDate: date})}}
+                    />
+                    </Item>
+                    <Item underline>
+                        <DatePicker
+                            style={{width: 200}}
+                            date={this.state.toDate}
+                            mode="date"
+                            placeholder="To"
+                            format="YYYY-MM-DD"
+                            minDate="2016-05-01"
+                            maxDate="2020-06-01"
+                            confirmBtnText="Confirm"
+                            cancelBtnText="Cancel"
+
+                            onDateChange={(date) => {this.setState({toDate: date})}}
+                        />
+                    </Item>
                 </Content>
                 <Footer>
 

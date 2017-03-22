@@ -38,8 +38,14 @@ class PercentComponent extends Component {
     }
 
     render() {
+
+        let defaultvalue = "";
+        if(this.props.state.percent.percent){
+            defaultvalue = this.props.state.percent.percent.value;
+        }
+
        return  <Item underline>
-           <Input onChangeText={(value) => this.setPercent({value})} placeholder='%Precent' />
+           <Input value={defaultvalue}  onChangeText={(value) => this.setPercent({value})} placeholder='%Precent' />
        </Item>
   }
 }
