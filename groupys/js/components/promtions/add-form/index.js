@@ -132,7 +132,7 @@ class AddPromotion extends Component {
             productList: [],
             showProductsList: false,
             selectedType: 'PERCENT',
-            precent: {},
+            percent: {},
             percent_range: {},
 
 
@@ -340,7 +340,7 @@ class AddPromotion extends Component {
                 discountForm = <PercentComponent setState={this.setState.bind(this)}/>
                 break;
             case 'PERCENT_RANGE':
-                discountForm = <PercentRangeComponent setState={this.setState.bind(this)}/>
+                discountForm = <PercentRangeComponent state={this.state} setState={this.setState.bind(this)}/>
                 break;
 
 

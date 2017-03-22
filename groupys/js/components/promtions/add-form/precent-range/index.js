@@ -31,7 +31,7 @@ class PercentRangeComponent extends Component {
         this.props.setState(
             {
                 percent_range: {
-                    to: this.state.percent_range.to,
+                    to: this.props.state.percent_range.to,
                     from: value
                 }
             }
@@ -43,7 +43,7 @@ class PercentRangeComponent extends Component {
             {
                 percent_range: {
                     to: value,
-                    from:this.state.percent_range.from,
+                    from:this.props.state.percent_range.from,
                 }
             }
 
