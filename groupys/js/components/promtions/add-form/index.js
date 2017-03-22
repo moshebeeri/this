@@ -297,6 +297,7 @@ class AddPromotion extends Component {
 
         if(this.state.businesses.length > 0 ){
             businessesPikkerTag = <Picker
+
                 iosHeader="Business"
                 mode="dropdown"
                 selectedValue={this.state.selectedBusiness}
@@ -364,6 +365,7 @@ class AddPromotion extends Component {
 
                 <Content  style={{backgroundColor: '#fff'}}>
                     <Item underline>
+                        <Text style={{ padding: 18}}>Business: </Text>
                         {businessesPikkerTag}
                     </Item>
 
@@ -397,6 +399,8 @@ class AddPromotion extends Component {
                         </View>
                     </Item>
                     <Item underline>
+
+                            <Text style={{ padding: 18}}>Discount: </Text>
                         {typePikkerTag}
                     </Item>
 
