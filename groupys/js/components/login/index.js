@@ -15,13 +15,15 @@ const logo = require('../../../images/logo.png');
 import login from './login-theme';
 import styles from './styles';
 import LoginApi from '../../api/login'
+import LoginUtils from '../../utils/login_utils'
 import UserApi from '../../api/user'
 let loginApi = new LoginApi()
 let userApi = new UserApi()
 var contacsManager = require("../../utils/contactsManager");
+let lu = new LoginUtils();
 
 const global = require('../../conf/global')
-
+let calc_login = true;
 class Login extends Component {
 
   static propTypes = {
@@ -48,7 +50,7 @@ class Login extends Component {
 
           let response = await loginApi.login(this.state.phoneNumber, this.state.password);
           if(response.token ){
-              userApi.getUser();
+              await userApi.getUser();
               this.replaceRoute('home');
           }
 
@@ -59,7 +61,42 @@ class Login extends Component {
       }
 
   }
+    calc_login_status() {
+        return new Promise(async(resolve, reject) => {
 
+            const _id = await store.get('user_id');
+            if (!_id) {
+                this.replaceRoute('signup');
+                return resolve(true);
+            }
+            try {
+                const token = await lu.getToken();
+                if (token) {
+                    this.replaceRoute('home');
+                    return resolve(true);
+                }
+            }catch(error){
+                if(error == 'login'){
+                    this.state.fingerprint_login = false;
+                    this.state.recover_account = true;
+                }
+                else{
+                    console.log('this.replaceRoute(\'error\') should go to error page');
+                    this.replaceRoute('signup');
+                }
+                return resolve(true);
+            }
+            return resolve(true);
+
+        })
+    }
+
+    componentWillMount() {
+        if(calc_login){
+            this.calc_login_status();
+            calc_login = false;
+        }
+    }
 
 
 
