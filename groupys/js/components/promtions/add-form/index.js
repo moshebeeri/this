@@ -130,7 +130,7 @@ class AddPromotion extends Component {
             images: '',
             businesses: [],
             business: '',
-            products: [],
+            product: '',
             productList: [],
             showProductsList: false,
             percent: {},
@@ -227,6 +227,7 @@ class AddPromotion extends Component {
         });
 
         this.setState({
+            product: '',
             business:value,
             location: selectedBusiness.location
         })
@@ -267,6 +268,10 @@ class AddPromotion extends Component {
     }
 
     showProducts(boolean){
+        if(this.state.productList.length == 0){
+            return;
+        }
+
         this.setState({
             showProductsList:boolean
         })
@@ -275,21 +280,10 @@ class AddPromotion extends Component {
 
 
     selectProduct(product){
-        if(this.state.products.find(function(val, i) {
-                return val._id === product._id;
-            })){
-            let selectedProducts = this.state.products.filter(function(val, i) {
-                return val._id !== product._id;
-            });
-            this.setState({
-                products: selectedProducts
-            })
-            return;
-        }
-        let selectedProducts = this.state.products;
-        selectedProducts.push(product);
+
         this.setState({
-            products: selectedProducts
+            product: product,
+            showProductsList:false
         })
 
 
@@ -303,22 +297,20 @@ class AddPromotion extends Component {
 
 
         if(this.state.showProductsList){
-             return ( <SelectProductsComponent showProducts = {this.showProducts.bind(this)} selectedProduct = {this.state.products} products={this.state.productList}  selectProduct = {this.selectProduct.bind(this)} />
+             return ( <SelectProductsComponent   products={this.state.productList}  selectProduct = {this.selectProduct.bind(this)} />
 
             );
         }
-        let items = undefined;
+        let item = undefined;
 
-        if(this.state.products.length > 0){
-            let index = 0
-            items = this.state.products.map((r, i) => {
-                index++;
-                return  <ListItem  key={index}>
-                    <Text>
-                        {r.name}
+        if(this.state.product){
+
+            item =
+                    <Text  style={{ padding: 10}}>
+                        {this.state.product.name}
                     </Text>
-                </ListItem>
-            });
+
+
         }
 
         let image ;
@@ -385,7 +377,17 @@ class AddPromotion extends Component {
 
         }
 
+        let selectProductButton = undefined;
+        if(this.state.productList.length > 0){
+            selectProductButton =  <Button   transparent  onPress={() => this.showProducts(true)}>
+                <Text>Select Product </Text>
+            </Button>
 
+        }else{
+            selectProductButton =    <Button disabled   transparent  onPress={() => this.showProducts(true)}>
+                <Text>Select Product </Text>
+            </Button>
+        }
 
 
         return (
@@ -417,12 +419,10 @@ class AddPromotion extends Component {
 
 
                     <Item underline>
-                        <Button   transparent  onPress={() => this.showProducts(true)}>
-                            <Text>Select Products </Text>
-                        </Button>
-
+                        {selectProductButton}
+                        {item}
                     </Item>
-                    {items}
+
                     <Item underline>
                         <View style={{ flexDirection: 'row',marginTop:5 }}>
 
