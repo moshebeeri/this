@@ -37,39 +37,30 @@ class SelectProductsComponent extends Component {
         let index = 0;
         let productsRows = this.state.productList.map((r, i) => {
             index++;
-            let selected = false;
-            if(this.props.selectedProduct.find(function(val, i) {
-                    return val._id === r._id;
-                })){
-                selected = true;
 
-            }
             if(r.pictures.length > 0){
                 return <ListItem key={index} thumbnail>
                   <Left>
-                    <CheckBox
-                        onClick={()=>this.props.selectProduct(r)}
-                        isChecked={selected}
 
-                    />
-
+                      <Thumbnail square size={80} source={{uri: r.pictures[0].pictures[3]}} />
                   </Left>
                   <Body>
                   <Text>{r.name}</Text>
                   <Text note>{r.info}</Text>
                   </Body>
                   <Right>
-                    <Thumbnail square size={80} source={{uri: r.pictures[0].pictures[3]}} />
+
+                      <Button transparent
+                              onPress={() => this.props.selectProduct(r)}
+                      >
+                          <Text>Select</Text>
+                      </Button>
                   </Right>
                 </ListItem>
             }
             return <ListItem key={index} thumbnail style={{  backgroundColor: '#fff'}}>
               <Left>
-                <CheckBox
-                    onClick={()=>this.props.selectProduct(r)}
-                    isChecked={selected}
-
-                />
+                  <Thumbnail square size={80} source={require('../../../../../images/client_1.png')} />
               </Left>
               <Body>
 
@@ -77,7 +68,11 @@ class SelectProductsComponent extends Component {
               <Text note>{r.info}</Text>
               </Body>
               <Right>
-                <Thumbnail square size={80} source={require('../../../../../images/client_1.png')} />
+                  <Button transparent
+                          onPress={() => this.props.selectProduct(r)}
+                  >
+                      <Text>Select</Text>
+                  </Button>
               </Right>
             </ListItem>
         });
@@ -97,14 +92,7 @@ class SelectProductsComponent extends Component {
 
 
                   { productsRows }
-                <Footer>
 
-                  <Button transparent
-                          onPress={() => this.props.showProducts(false)}
-                  >
-                    <Text>Select</Text>
-                  </Button>
-                </Footer>
               </Content>
             </Container>
 

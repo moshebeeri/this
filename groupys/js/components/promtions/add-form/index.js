@@ -36,74 +36,74 @@ import store from 'react-native-simple-store';
 const types = [
     {
         value:'PERCENT',
-        label:'percent'
+        label:'Fixed percentage'
     },
     {
         value:'PERCENT_RANGE',
-        label:'Percent Range'
+        label:'Automatic Percentage'
     },
-    {
-        value:'GIFT',
-        label:'Gift'
-    },
-    {
-        value:'AMOUNT',
-        label:'Amount'
-    },
-    {
-        value:'PRICE',
-        label:'Price'
-    },
-    {
-        value:'X+Y',
-        label:'x + y'
-    },
-    {
-        value:'X+N%OFF',
-        label:'X+N%OFF'
-    },
-    {
-        value:'INCREASING',
-        label:'Incresing'
-    },
-
-    {
-        value:'DOUBLING',
-        label:'Doubling'
-    },
-
-    {
-        value:'ITEMS_GROW',
-        label:'Item Grow'
-    },
-    {
-        value:'PREPAY_FOR_DISCOUNT',
-        label:'Prepay For Discount'
-    },
-    {
-        value:'REDUCED_AMOUNT',
-        label:'Reduce Amount'
-    },
-    {
-        value:'PUNCH_CARD',
-        label:'Punch Catd'
-    },
-    {
-        value:'CASH_BACK',
-        label:'Cash Back'
-    },
-    {
-        value:'EARLY_BOOKING',
-        label:'Early Booking'
-    },
-    {
-        value:'HAPPY_HOUR',
-        label:'Happy Hour'
-    },
-    {
-        value:'MORE_THAN',
-        label:'More Than'
-    },
+    // {
+    //     value:'GIFT',
+    //     label:'Gift'
+    // },
+    // {
+    //     value:'AMOUNT',
+    //     label:'Amount'
+    // },
+    // {
+    //     value:'PRICE',
+    //     label:'Price'
+    // },
+    // {
+    //     value:'X+Y',
+    //     label:'x + y'
+    // },
+    // {
+    //     value:'X+N%OFF',
+    //     label:'X+N%OFF'
+    // },
+    // {
+    //     value:'INCREASING',
+    //     label:'Incresing'
+    // },
+    //
+    // {
+    //     value:'DOUBLING',
+    //     label:'Doubling'
+    // },
+    //
+    // {
+    //     value:'ITEMS_GROW',
+    //     label:'Item Grow'
+    // },
+    // {
+    //     value:'PREPAY_FOR_DISCOUNT',
+    //     label:'Prepay For Discount'
+    // },
+    // {
+    //     value:'REDUCED_AMOUNT',
+    //     label:'Reduce Amount'
+    // },
+    // {
+    //     value:'PUNCH_CARD',
+    //     label:'Punch Catd'
+    // },
+    // {
+    //     value:'CASH_BACK',
+    //     label:'Cash Back'
+    // },
+    // {
+    //     value:'EARLY_BOOKING',
+    //     label:'Early Booking'
+    // },
+    // {
+    //     value:'HAPPY_HOUR',
+    //     label:'Happy Hour'
+    // },
+    // {
+    //     value:'MORE_THAN',
+    //     label:'More Than'
+    // },
 
     ]
       //15% off for purchases more than 1000$ OR buy iphone for 600$ and get 50% off for earphones
@@ -130,10 +130,13 @@ class AddPromotion extends Component {
             images: '',
             businesses: [],
             business: '',
-            products: [],
+            product: '',
             productList: [],
             showProductsList: false,
-            percent: {},
+            percent:{},
+            amount:'',
+            retail_price:'',
+            total_discount:'',
             percent_range: {},
             start: "",
             end: "",
@@ -227,6 +230,7 @@ class AddPromotion extends Component {
         });
 
         this.setState({
+            product: '',
             business:value,
             location: selectedBusiness.location
         })
@@ -267,6 +271,10 @@ class AddPromotion extends Component {
     }
 
     showProducts(boolean){
+        if(this.state.productList.length == 0){
+            return;
+        }
+
         this.setState({
             showProductsList:boolean
         })
@@ -275,21 +283,10 @@ class AddPromotion extends Component {
 
 
     selectProduct(product){
-        if(this.state.products.find(function(val, i) {
-                return val._id === product._id;
-            })){
-            let selectedProducts = this.state.products.filter(function(val, i) {
-                return val._id !== product._id;
-            });
-            this.setState({
-                products: selectedProducts
-            })
-            return;
-        }
-        let selectedProducts = this.state.products;
-        selectedProducts.push(product);
+
         this.setState({
-            products: selectedProducts
+            product: product,
+            showProductsList:false
         })
 
 
@@ -303,22 +300,20 @@ class AddPromotion extends Component {
 
 
         if(this.state.showProductsList){
-             return ( <SelectProductsComponent showProducts = {this.showProducts.bind(this)} selectedProduct = {this.state.products} products={this.state.productList}  selectProduct = {this.selectProduct.bind(this)} />
+             return ( <SelectProductsComponent   products={this.state.productList}  selectProduct = {this.selectProduct.bind(this)} />
 
             );
         }
-        let items = undefined;
+        let item = undefined;
 
-        if(this.state.products.length > 0){
-            let index = 0
-            items = this.state.products.map((r, i) => {
-                index++;
-                return  <ListItem  key={index}>
-                    <Text>
-                        {r.name}
+        if(this.state.product){
+
+            item =
+                    <Text  style={{ padding: 10}}>
+                        {this.state.product.name}
                     </Text>
-                </ListItem>
-            });
+
+
         }
 
         let image ;
@@ -385,7 +380,17 @@ class AddPromotion extends Component {
 
         }
 
+        let selectProductButton = undefined;
+        if(this.state.productList.length > 0){
+            selectProductButton =  <Button   transparent  onPress={() => this.showProducts(true)}>
+                <Text>Select Product </Text>
+            </Button>
 
+        }else{
+            selectProductButton =    <Button disabled   transparent  onPress={() => this.showProducts(true)}>
+                <Text>Select Product </Text>
+            </Button>
+        }
 
 
         return (
@@ -406,7 +411,10 @@ class AddPromotion extends Component {
                         <Text style={{ padding: 18}}>Business: </Text>
                         {businessesPikkerTag}
                     </Item>
-
+                    <Item underline>
+                        {selectProductButton}
+                        {item}
+                    </Item>
                     <Item underline>
                         <Input value= {this.state.name} onChangeText={(name) => this.setState({name})} placeholder='Name' />
                     </Item>
@@ -416,13 +424,36 @@ class AddPromotion extends Component {
 
 
 
-                    <Item underline>
-                        <Button   transparent  onPress={() => this.showProducts(true)}>
-                            <Text>Select Products </Text>
-                        </Button>
 
+                    <Item underline>
+                        <Input value= {this.state.amount} onChangeText={(amount) => this.setState({amount})} placeholder='Product Amount' />
                     </Item>
-                    {items}
+                    <Item underline>
+                        <Input value= {this.state.retail_price} onChangeText={(retail_price) => this.setState({retail_price})} placeholder='Product Reatai Price' />
+                    </Item>
+                    <Item underline>
+                    {typePikkerTag}
+                    </Item>
+                    {discountForm}
+
+                    <Item underline>
+                        <Input value= {this.state.total_discount} onChangeText={(total_discount) => this.setState({total_discount})} placeholder='Product Total Price' />
+                    </Item>
+                    <Item underline>
+                        <DatePicker
+                            style={{width: 200}}
+                            date={this.state.end}
+                            mode="date"
+                            placeholder="Promotion End Date"
+                            format="YYYY-MM-DD"
+                            minDate="2016-05-01"
+                            maxDate="2020-06-01"
+                            confirmBtnText="Confirm"
+                            cancelBtnText="Cancel"
+
+                            onDateChange={(date) => {this.setState({end: date})}}
+                        />
+                    </Item>
                     <Item underline>
                         <View style={{ flexDirection: 'row',marginTop:5 }}>
 
@@ -433,44 +464,7 @@ class AddPromotion extends Component {
                             {image}
                         </View>
                     </Item>
-                    <Item underline>
 
-                            <Text style={{ padding: 18}}>Discount: </Text>
-                        {typePikkerTag}
-                    </Item>
-
-                       {discountForm}
-
-                    <Item underline>
-                    <DatePicker
-                        style={{width: 200}}
-                        date={this.state.start}
-                        mode="date"
-                        placeholder="From"
-                        format="YYYY-MM-DD"
-                        minDate="2016-05-01"
-                        maxDate="2020-06-01"
-                        confirmBtnText="Confirm"
-                        cancelBtnText="Cancel"
-
-                        onDateChange={(date) => {this.setState({start: date})}}
-                    />
-                    </Item>
-                    <Item underline>
-                        <DatePicker
-                            style={{width: 200}}
-                            date={this.state.end}
-                            mode="date"
-                            placeholder="To"
-                            format="YYYY-MM-DD"
-                            minDate="2016-05-01"
-                            maxDate="2020-06-01"
-                            confirmBtnText="Confirm"
-                            cancelBtnText="Cancel"
-
-                            onDateChange={(date) => {this.setState({end: date})}}
-                        />
-                    </Item>
                 </Content>
                 <Footer>
 
