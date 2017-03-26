@@ -26,6 +26,8 @@ const {
 import BusinessApi from "../../../api/business"
 let businessApi = new BusinessApi();
 
+import PromotionApi from "../../../api/promotion"
+let promotionApi = new PromotionApi();
 import ProductApi from "../../../api/product"
 let productApi = new ProductApi();
 
@@ -140,7 +142,8 @@ class AddPromotion extends Component {
             percent_range: {},
             start: "",
             end: "",
-            location: ""
+            location: "",
+            info:"",
 
 
         }
@@ -202,15 +205,26 @@ class AddPromotion extends Component {
     }
 
    async saveFormData(){
+        let promotion = {
 
+            image: this.state.image,
+            type: this.state.type,
+            business: this.state.business,
+            product: this.state.product,
+            percent:this.state.percent,
+            amount:Number(this.state.amount),
+            retail_price:Number(this.state.retail_price),
+            total_discount:Number(this.state.total_discount),
+            percent_range: this.state.percent_range,
+            start: this.state.start,
+            end: this.state.end,
+            location: this.state.location,
+            info:this.state.info,
 
+            name:this.state.name,
 
-       this.setState({
-            businesses: '',
-
-
-        })
-        createEntity('promotions',this.state,this.state.token,this.formSuccess.bind(this),this.formFailed.bind(this),this.state.userId);
+        };
+       promotionApi.createPromotion(promotion)
     }
 
     formSuccess(response){
