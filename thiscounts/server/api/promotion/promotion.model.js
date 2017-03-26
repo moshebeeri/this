@@ -14,6 +14,12 @@ function percent_validator(v) {
     return false;
   return v.from >0 && v.to < 100;
 }
+function on_validator(v) {
+  if (_.isNull(v))
+    return false;
+  return v.business || v.product || v.chain || v.mall;
+}
+
 
 var PromotionSchema = new Schema({
   social_state : {},
@@ -22,7 +28,17 @@ var PromotionSchema = new Schema({
   realize_gid: Number,
   card_type: {type: Schema.ObjectId, ref: 'CardType'},
   creator: {type: Schema.ObjectId, ref: 'User', required: true},
-  product: {type: Schema.ObjectId, ref: 'Product', required: true},
+
+  on: {
+    business: {type: Schema.ObjectId, ref: 'Business'},
+    product: {type: Schema.ObjectId, ref: 'Product'},
+    shopping_chain: {type: Schema.ObjectId, ref: 'ShoppingChain'},
+    mall: {type: Schema.ObjectId, ref: 'Mall'},
+    validate: [on_validator, 'at least on of those fields should not be empty [business, product, chain, mall]'],
+    require: true
+  },
+
+
   created: {type: Date, default: Date.now},
   pictures : [],
   info: String,
@@ -39,9 +55,6 @@ var PromotionSchema = new Schema({
     type: {type: String},
     coordinates: []
   },
-  mall : {type: Schema.ObjectId, ref: 'Mall', required: false},
-  shopping_chain: {type: Schema.ObjectId, ref: 'ShoppingChain', required: false},
-  business: {type: Schema.ObjectId, ref: 'Business', required: false},
   realize_code: String,
   save_time: Date,
   category: {
@@ -54,12 +67,10 @@ var PromotionSchema = new Schema({
       'FASHION' ,
       'GIFT'
     ]}],
-    required: false
     //TODO: consider default: 'LIKE'
   },
   type: {
     type: String,
-    required: false,
     enum: [
       'PERCENT',
       'PERCENT_RANGE',
@@ -118,9 +129,9 @@ var PromotionSchema = new Schema({
     gift : String
   },
 
-  amount: { type : Number, required: true},
+  amount: { type : Number},
 
-  retail_price: { type: Number, required: true},
+  retail_price: { type: Number},
 
   x_plus_y: {
     buy : Number,
