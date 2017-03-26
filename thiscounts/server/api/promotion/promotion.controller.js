@@ -216,6 +216,7 @@ exports.create_backup = function (req, res) {
 exports.create_campaign = function (req, res) {
   let promotion = req.body;
   let campaign = req.body;
+
   create_promotion(promotion, function(err, promotion) {
     if (err) return handleError(res, err);
     campaign.promotions = [promotion._id];
