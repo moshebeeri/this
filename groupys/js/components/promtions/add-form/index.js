@@ -133,7 +133,10 @@ class AddPromotion extends Component {
             product: '',
             productList: [],
             showProductsList: false,
-            percent: {},
+            percent:'',
+            amount:'',
+            retail_price:'',
+            total_discount:'',
             percent_range: {},
             start: "",
             end: "",
@@ -408,7 +411,10 @@ class AddPromotion extends Component {
                         <Text style={{ padding: 18}}>Business: </Text>
                         {businessesPikkerTag}
                     </Item>
-
+                    <Item underline>
+                        {selectProductButton}
+                        {item}
+                    </Item>
                     <Item underline>
                         <Input value= {this.state.name} onChangeText={(name) => this.setState({name})} placeholder='Name' />
                     </Item>
@@ -418,9 +424,15 @@ class AddPromotion extends Component {
 
 
 
+
                     <Item underline>
-                        {selectProductButton}
-                        {item}
+                        <Input value= {this.state.amount} onChangeText={(amount) => this.setState({amount})} placeholder='Product Amount' />
+                    </Item>
+                    <Item underline>
+                        <Input value= {this.state.retail_price} onChangeText={(retail_price) => this.setState({retail_price})} placeholder='Product Reatai Price' />
+                    </Item>
+                    <Item underline>
+                        <Input value= {this.state.total_discount} onChangeText={(total_discount) => this.setState({discount_percent})} placeholder='Products Total Discount ' />
                     </Item>
 
                     <Item underline>
@@ -433,44 +445,7 @@ class AddPromotion extends Component {
                             {image}
                         </View>
                     </Item>
-                    <Item underline>
 
-                            <Text style={{ padding: 18}}>Discount: </Text>
-                        {typePikkerTag}
-                    </Item>
-
-                       {discountForm}
-
-                    <Item underline>
-                    <DatePicker
-                        style={{width: 200}}
-                        date={this.state.start}
-                        mode="date"
-                        placeholder="From"
-                        format="YYYY-MM-DD"
-                        minDate="2016-05-01"
-                        maxDate="2020-06-01"
-                        confirmBtnText="Confirm"
-                        cancelBtnText="Cancel"
-
-                        onDateChange={(date) => {this.setState({start: date})}}
-                    />
-                    </Item>
-                    <Item underline>
-                        <DatePicker
-                            style={{width: 200}}
-                            date={this.state.end}
-                            mode="date"
-                            placeholder="To"
-                            format="YYYY-MM-DD"
-                            minDate="2016-05-01"
-                            maxDate="2020-06-01"
-                            confirmBtnText="Confirm"
-                            cancelBtnText="Cancel"
-
-                            onDateChange={(date) => {this.setState({end: date})}}
-                        />
-                    </Item>
                 </Content>
                 <Footer>
 
