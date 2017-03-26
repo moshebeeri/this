@@ -224,18 +224,15 @@ class AddPromotion extends Component {
             name:this.state.name,
 
         };
-       promotionApi.createPromotion(promotion)
+        try {
+            await promotionApi.createPromotion(promotion)
+            this.replaceRoute('promotions')
+        }catch (error){
+            console.log(error);
+            this.replaceRoute('promotions')
+        }
     }
 
-    formSuccess(response){
-
-        this.replaceRoute('promotions');
-    }
-
-    formFailed(response){
-        console.log(response);
-        this.replaceRoute('promotions');
-    }
 
     async selectBusiness(value){
         let businessId = value;
