@@ -76,8 +76,8 @@ exports.show = function (req, res) {
 function to_graph(promotion) {
   return {
     _id: promotion._id,
-    //lat: promotion.location.lat,
-    //lon: promotion.location.lng,
+    lat: promotion.location.lat,
+    lon: promotion.location.lng,
     created: promotion.created,
     report: promotion.report,
     system_report: promotion.system_report
@@ -228,7 +228,7 @@ exports.create_campaign = function (req, res) {
     campaign.name = promotion.name;
     Campaign.create(campaign, function (err, campaign) {
       if (err) return handleError(res, err);
-      return res.json(201, campaign);
+      return res.status(201).json(campaign)
     })
   });
 };
