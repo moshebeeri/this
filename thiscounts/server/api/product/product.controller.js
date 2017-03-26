@@ -33,7 +33,7 @@ exports.find_by_business = function (req, res) {
     if (err) {
       return handleError(res, err);
     }
-    return res.json(200, products);
+    return res.status(200).json(products);
   });
 };
 
@@ -51,7 +51,7 @@ exports.create = function (req, res) {
       if (err) {
         return handleError(res, err);
       }
-      return res.json(201, product);
+      return res.status(201).json(product);
     });
   });
 };
@@ -73,7 +73,7 @@ exports.update = function (req, res) {
       if (err) {
         return handleError(res, err);
       }
-      return res.json(200, product);
+      return res.status(200).json(product);
     });
   });
 };
