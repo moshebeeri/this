@@ -31,7 +31,6 @@ var CampaignSchema = new Schema({
   promotion: [{type: Schema.ObjectId, ref: 'Promotion', require: true}],
   match: [CampaignPreferencesSchema],
   prefer: [CampaignPreferencesSchema],
-  active: Boolean
 });
 
 module.exports = mongoose.model('Campaign', CampaignSchema);
