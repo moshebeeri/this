@@ -134,7 +134,6 @@ function create_promotion(promotion, callback) {
   console.log(JSON.stringify(promotion));
 
   spatial.location_to_point(promotion);
-  promotion.creator = req.user._id;
 
   Promotion.create(promotion, function (err, promotion) {
     if (err) return callback(err, null);
@@ -169,6 +168,7 @@ function create_promotion(promotion, callback) {
 
 exports.create = function (req, res) {
   let promotion = req.body;
+  promotion.creator = req.user._id;
   create_promotion(promotion, function(err, promotion){
     if (err) return handleError(res, err);
     return res.json(201, promotion);
@@ -219,6 +219,7 @@ exports.create_backup = function (req, res) {
 exports.create_campaign = function (req, res) {
   let promotion = req.body;
   let campaign = req.body;
+  promotion.creator = req.user._id;
 
   create_promotion(promotion, function(err, promotion) {
     if (err) return handleError(res, err);
