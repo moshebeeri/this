@@ -36,74 +36,74 @@ import store from 'react-native-simple-store';
 const types = [
     {
         value:'PERCENT',
-        label:'percent'
+        label:'Fixed percentage'
     },
     {
         value:'PERCENT_RANGE',
-        label:'Percent Range'
+        label:'Automatic Percentage'
     },
-    {
-        value:'GIFT',
-        label:'Gift'
-    },
-    {
-        value:'AMOUNT',
-        label:'Amount'
-    },
-    {
-        value:'PRICE',
-        label:'Price'
-    },
-    {
-        value:'X+Y',
-        label:'x + y'
-    },
-    {
-        value:'X+N%OFF',
-        label:'X+N%OFF'
-    },
-    {
-        value:'INCREASING',
-        label:'Incresing'
-    },
-
-    {
-        value:'DOUBLING',
-        label:'Doubling'
-    },
-
-    {
-        value:'ITEMS_GROW',
-        label:'Item Grow'
-    },
-    {
-        value:'PREPAY_FOR_DISCOUNT',
-        label:'Prepay For Discount'
-    },
-    {
-        value:'REDUCED_AMOUNT',
-        label:'Reduce Amount'
-    },
-    {
-        value:'PUNCH_CARD',
-        label:'Punch Catd'
-    },
-    {
-        value:'CASH_BACK',
-        label:'Cash Back'
-    },
-    {
-        value:'EARLY_BOOKING',
-        label:'Early Booking'
-    },
-    {
-        value:'HAPPY_HOUR',
-        label:'Happy Hour'
-    },
-    {
-        value:'MORE_THAN',
-        label:'More Than'
-    },
+    // {
+    //     value:'GIFT',
+    //     label:'Gift'
+    // },
+    // {
+    //     value:'AMOUNT',
+    //     label:'Amount'
+    // },
+    // {
+    //     value:'PRICE',
+    //     label:'Price'
+    // },
+    // {
+    //     value:'X+Y',
+    //     label:'x + y'
+    // },
+    // {
+    //     value:'X+N%OFF',
+    //     label:'X+N%OFF'
+    // },
+    // {
+    //     value:'INCREASING',
+    //     label:'Incresing'
+    // },
+    //
+    // {
+    //     value:'DOUBLING',
+    //     label:'Doubling'
+    // },
+    //
+    // {
+    //     value:'ITEMS_GROW',
+    //     label:'Item Grow'
+    // },
+    // {
+    //     value:'PREPAY_FOR_DISCOUNT',
+    //     label:'Prepay For Discount'
+    // },
+    // {
+    //     value:'REDUCED_AMOUNT',
+    //     label:'Reduce Amount'
+    // },
+    // {
+    //     value:'PUNCH_CARD',
+    //     label:'Punch Catd'
+    // },
+    // {
+    //     value:'CASH_BACK',
+    //     label:'Cash Back'
+    // },
+    // {
+    //     value:'EARLY_BOOKING',
+    //     label:'Early Booking'
+    // },
+    // {
+    //     value:'HAPPY_HOUR',
+    //     label:'Happy Hour'
+    // },
+    // {
+    //     value:'MORE_THAN',
+    //     label:'More Than'
+    // },
 
     ]
       //15% off for purchases more than 1000$ OR buy iphone for 600$ and get 50% off for earphones
@@ -133,7 +133,7 @@ class AddPromotion extends Component {
             product: '',
             productList: [],
             showProductsList: false,
-            percent:'',
+            percent:{},
             amount:'',
             retail_price:'',
             total_discount:'',
@@ -432,9 +432,28 @@ class AddPromotion extends Component {
                         <Input value= {this.state.retail_price} onChangeText={(retail_price) => this.setState({retail_price})} placeholder='Product Reatai Price' />
                     </Item>
                     <Item underline>
-                        <Input value= {this.state.total_discount} onChangeText={(total_discount) => this.setState({discount_percent})} placeholder='Products Total Discount ' />
+                    {typePikkerTag}
                     </Item>
+                    {discountForm}
 
+                    <Item underline>
+                        <Input value= {this.state.total_discount} onChangeText={(total_discount) => this.setState({total_discount})} placeholder='Product Total Price' />
+                    </Item>
+                    <Item underline>
+                        <DatePicker
+                            style={{width: 200}}
+                            date={this.state.end}
+                            mode="date"
+                            placeholder="Promotion End Date"
+                            format="YYYY-MM-DD"
+                            minDate="2016-05-01"
+                            maxDate="2020-06-01"
+                            confirmBtnText="Confirm"
+                            cancelBtnText="Cancel"
+
+                            onDateChange={(date) => {this.setState({end: date})}}
+                        />
+                    </Item>
                     <Item underline>
                         <View style={{ flexDirection: 'row',marginTop:5 }}>
 
