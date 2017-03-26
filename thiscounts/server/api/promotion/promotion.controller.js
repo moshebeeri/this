@@ -132,7 +132,9 @@ let set_promotion_location = function (promotion, callback) {
 function create_promotion(promotion, callback) {
   //TODO: Convert to address location
   console.log(JSON.stringify(promotion));
+
   spatial.location_to_point(promotion);
+
   Promotion.create(promotion, function (err, promotion) {
     if (err) return callback(err, null);
     set_promotion_location(promotion, function (err, promotion) {
@@ -166,6 +168,7 @@ function create_promotion(promotion, callback) {
 
 exports.create = function (req, res) {
   let promotion = req.body;
+  promotion.creator = req.user._id;
   create_promotion(promotion, function(err, promotion){
     if (err) return handleError(res, err);
     return res.json(201, promotion);
@@ -216,6 +219,7 @@ exports.create_backup = function (req, res) {
 exports.create_campaign = function (req, res) {
   let promotion = req.body;
   let campaign = req.body;
+  promotion.creator = req.user._id;
 
   create_promotion(promotion, function(err, promotion) {
     if (err) return handleError(res, err);
@@ -228,7 +232,6 @@ exports.create_campaign = function (req, res) {
     })
   });
 };
-
 
 function promotion_created_activity(promotion) {
   let act = {

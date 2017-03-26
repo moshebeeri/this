@@ -117,11 +117,10 @@ var PromotionSchema = new Schema({
     condition : String,
     gift : String
   },
+
   amount: { type : Number, required: true},
+
   retail_price: { type: Number, required: true},
-  discount_percent:{
-    type: Number, min:1, max: 100, required: true
-  },
 
   x_plus_y: {
     buy : Number,
