@@ -116,7 +116,7 @@ const types = [
         },
         {
             value:'PRODUCT',
-            label:'Product discount'
+            label:'Product Discount'
         }
     ];
 
