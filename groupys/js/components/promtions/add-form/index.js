@@ -245,7 +245,7 @@ class AddPromotion extends Component {
                end: this.state.end,
                location: this.state.location,
                info: this.state.info,
-
+               path: this.state.path,
                name: this.state.name,
 
            };
@@ -256,7 +256,7 @@ class AddPromotion extends Component {
                    business: this.state.business,
                    product: this.state.product,
                },
-
+               path: this.state.path,
                image: this.state.image,
                type: this.state.type,
                percent: this.state.percent,
