@@ -28,19 +28,31 @@ class PercentComponent extends Component {
 
     setPercent(value){
         let percentNum = Number(value.value);
-        let discount = (percentNum /100) * this.props.state.amount  * this.props.state.retail_price;
-        let totalDiscount = this.props.state.amount  * this.props.state.retail_price - discount;
-        this.props.setState(
-            {
-                percent: {
-                    percent: percentNum,
 
-                },
-                total_discount: totalDiscount.toString()
-            }
+        if(this.props.state.amount && this.props.state.retail_price) {
+           let discount = (percentNum / 100) * this.props.state.amount * this.props.state.retail_price;
+            let totalDiscount = this.props.state.amount * this.props.state.retail_price - discount;
+            this.props.setState(
+                {
+                    percent: {
+                        percent: percentNum,
 
+                    },
+                    total_discount: totalDiscount.toString()
+                }
+            )
+        }else{
+            this.props.setState(
+                {
+                    percent: {
+                        percent: percentNum,
 
-        )
+                    },
+
+                }
+            )
+        }
+
     }
 
     render() {
@@ -54,7 +66,7 @@ class PercentComponent extends Component {
 
 
             if (this.props.state.percent.percent) {
-                defaultvalue = this.props.state.perc2ent.percent.value;
+                defaultvalue = this.props.state.percent.percent.value;
             }
         }
 
