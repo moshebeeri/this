@@ -65,7 +65,7 @@ function updateServer(token,userId,contacts){
     })
 
     var json = JSON.stringify(phoneBooks);
-    fetch(`${server_host}/api/phonebooks` , {
+    fetch(`${server_host}/api/users/phonebook` , {
             method: 'POST',
             headers: {
                 'Accept': 'application/json, text/plain, */*',

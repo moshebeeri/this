@@ -98,7 +98,8 @@ class ContactsApi
             let userId = await store.get('user_id');
             if (token && userId) {
                 try {
-                    if (contacts.length > 0) {
+
+                    if (contacts && contacts.length > 0) {
                         this.updateContacts(token, userId, contacts)
                         return
                     }
