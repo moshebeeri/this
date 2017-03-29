@@ -15,11 +15,13 @@ const logo = require('../../../images/logo.png');
 import login from './login-theme';
 import styles from './styles';
 import LoginApi from '../../api/login'
+import ContactApi from '../../api/contacts'
 import LoginUtils from '../../utils/login_utils'
 import UserApi from '../../api/user'
 let loginApi = new LoginApi()
 let userApi = new UserApi()
-var contacsManager = require("../../utils/contactsManager");
+let contactApi = new ContactApi();
+
 let lu = new LoginUtils();
 
 const global = require('../../conf/global')
@@ -51,6 +53,7 @@ class Login extends Component {
           let response = await loginApi.login(this.state.phoneNumber, this.state.password);
           if(response.token ){
               await userApi.getUser();
+              contactApi.syncContacts();
               this.replaceRoute('home');
           }
 
@@ -72,6 +75,7 @@ class Login extends Component {
             try {
                 const token = await lu.getToken();
                 if (token) {
+                    contactApi.syncContacts();
                     this.replaceRoute('home');
                     return resolve(true);
                 }
@@ -93,6 +97,7 @@ class Login extends Component {
 
     componentWillMount() {
         if(calc_login){
+
             this.calc_login_status();
             calc_login = false;
         }

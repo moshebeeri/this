@@ -9,6 +9,7 @@
   "dependencies": {
     "color": "^1.0.3",
     "native-base": "^2.0.8",
+    "radio-button-react-native": "^1.1.6",
     "react": "15.4.2",
     "react-native": "0.41.2",
     "react-native-camera": "^0.6.0",
