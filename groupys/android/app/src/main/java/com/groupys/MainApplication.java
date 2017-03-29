@@ -35,8 +35,7 @@ public class MainApplication extends Application implements ReactApplication {
             new FileUploadPackage(),
             new RCTCameraPackage(),
             new PickerPackage(),
-            new VectorIconsPackage(),
-            new RCTCameraPackage()
+            new VectorIconsPackage()
       );
     }
   };
