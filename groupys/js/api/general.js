@@ -1,4 +1,7 @@
 /**
+ * Created by roilandshut on 29/03/2017.
+ */
+/**
  * Created by roilandshut on 26/03/2017.
  */
 /**
@@ -6,18 +9,17 @@
  */
 import store from 'react-native-simple-store';
 
-import EntityUtils from "../utils/createEntity";
 
-let entityUtils = new EntityUtils();
-class PromotionApi
+
+class GeneralApi
 {
-    createPromotion(promotion) {
+    submitREqeust(api,jsonRequest) {
+        let json = JSON.parse(jsonRequest);
         return new Promise(async(resolve, reject) => {
 
             try {
                 let token = await store.get('token');
-                let userId = await store.get('user_id');
-                const response = await fetch(`${server_host}/api/promotions/campaign`, {
+                const response = await fetch(`${server_host}/api/` + api, {
                     method: 'POST',
                     headers: {
                         'Accept': 'application/json, text/plain, */*',
@@ -25,18 +27,15 @@ class PromotionApi
                         'Authorization': 'Bearer ' + token
 
                     },
-                    body: JSON.stringify(promotion)
+                    body: JSON.stringify(json)
 
                 })
-                if (response.status == '401') {
+                if (response.status == '401' || response.status == '400' ) {
                     reject(response);
                     return;
                 }
 
-                if(promotion.image){
-                    entityUtils.doUpload(promotion.image.uri,promotion.image.mime,userId,token,callbackFunction,errorCallBack,responseData);
-                    return
-                }
+
 
                 let responseData = await response.json();
                 resolve(responseData);
@@ -52,4 +51,4 @@ class PromotionApi
     }
 }
 
-export default PromotionApi;
+export default GeneralApi;

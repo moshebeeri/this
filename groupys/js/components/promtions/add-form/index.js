@@ -109,7 +109,18 @@ const types = [
 
     ]
       //15% off for purchases more than 1000$ OR buy iphone for 600$ and get 50% off for earphones
-;
+;const Discouint_on = [
+            {
+            value:'GLOBAL',
+            label:'Global Discount'
+        },
+        {
+            value:'PRODUCT',
+            label:'Product Discount'
+        }
+    ];
+
+
 class AddPromotion extends Component {
 
     static propTypes = {
@@ -144,6 +155,7 @@ class AddPromotion extends Component {
             end: "",
             location: "",
             info:"",
+            discount_on: 'GLOBAL'
 
 
         }
@@ -205,25 +217,63 @@ class AddPromotion extends Component {
     }
 
    async saveFormData(){
-        let promotion = {
+       // on: {
+       //     business: {type: Schema.ObjectId, ref: 'Business'},
+       //     product: {type: Schema.ObjectId, ref: 'Product'},
+       //     shopping_chain: {type: Schema.ObjectId, ref: 'ShoppingChain'},
+       //     mall: {type: Schema.ObjectId, ref: 'Mall'},
+       //     validate: [on_validator, 'at least on of those fields should not be empty [business, product, chain, mall]'],
+       //         require: true
+       // },
+       let promotion = {};
 
-            image: this.state.image,
-            type: this.state.type,
-            business: this.state.business,
-            product: this.state.product,
-            percent:this.state.percent,
-            amount:Number(this.state.amount),
-            retail_price:Number(this.state.retail_price),
-            total_discount:Number(this.state.total_discount),
-            percent_range: this.state.percent_range,
-            start: this.state.start,
-            end: this.state.end,
-            location: this.state.location,
-            info:this.state.info,
+       if(this.state.discount_on == 'GLOBAL'){
+           promotion = {
 
-            name:this.state.name,
+               on: {
+                   business: this.state.business,
+               },
 
-        };
+               image: this.state.image,
+               type: this.state.type,
+               percent: this.state.percent,
+               amount: Number(this.state.amount),
+               retail_price: Number(this.state.retail_price),
+               total_discount: Number(this.state.total_discount),
+               percent_range: this.state.percent_range,
+               start: this.state.start,
+               end: this.state.end,
+               location: this.state.location,
+               info: this.state.info,
+               path: this.state.path,
+               name: this.state.name,
+
+           };
+       }else {
+           promotion = {
+
+               on: {
+                   business: this.state.business,
+                   product: this.state.product,
+               },
+               path: this.state.path,
+               image: this.state.image,
+               type: this.state.type,
+               percent: this.state.percent,
+               amount: Number(this.state.amount),
+               retail_price: Number(this.state.retail_price),
+               total_discount: Number(this.state.total_discount),
+               percent_range: this.state.percent_range,
+               start: this.state.start,
+               end: this.state.end,
+               location: this.state.location,
+               info: this.state.info,
+
+               name: this.state.name,
+
+           };
+       }
+
         try {
             await promotionApi.createPromotion(promotion)
             this.replaceRoute('promotions')
@@ -253,6 +303,12 @@ class AddPromotion extends Component {
     async selectPromotionType(value){
         this.setState({
             type:value
+        })
+    }
+
+    async selectDiscountType(value){
+        this.setState({
+            discount_on:value
         })
     }
 
@@ -308,60 +364,79 @@ class AddPromotion extends Component {
 
 
     render() {
+        let discountPiker = <Picker
+            iosHeader="Discount"
+            mode="dropdown"
+            selectedValue={this.state.discount_on}
+            onValueChange={this.selectDiscountType.bind(this)}>
+
+            {
 
 
-        if(this.state.showProductsList){
-             return ( <SelectProductsComponent   products={this.state.productList}  selectProduct = {this.selectProduct.bind(this)} />
+                Discouint_on.map((s, i) => {
+                    return <Item
+                        key={i}
+                        value={s.value}
+                        label={s.label}/>
+                }) }
+        </Picker>
 
-            );
-        }
-        let item = undefined;
 
-        if(this.state.product){
+        if(this.state.discount_on == 'PRODUCT') {
 
-            item =
-                    <Text  style={{ padding: 10}}>
+            if (this.state.showProductsList) {
+                return (<SelectProductsComponent products={this.state.productList}
+                                                 selectProduct={this.selectProduct.bind(this)}/>
+
+                );
+            }
+            let item = undefined;
+
+            if (this.state.product) {
+
+                item =
+                    <Text style={{padding: 10}}>
                         {this.state.product.name}
                     </Text>
 
 
-        }
+            }
 
-        let image ;
-        if(this.state.path){
-            image =  <Image
-                style={{width: 50, height: 50}}
-                source={{uri: this.state.path}}
-            />
-
-
-        }
-
-        let businessesPikkerTag = undefined;
-
-        if(this.state.businesses.length > 0 ){
-            businessesPikkerTag = <Picker
-
-                iosHeader="Business"
-                mode="dropdown"
-                selectedValue={this.state.business}
-                onValueChange={this.selectBusiness.bind(this)}>
-
-                {
+            let image;
+            if (this.state.path) {
+                image = <Image
+                    style={{width: 50, height: 50}}
+                    source={{uri: this.state.path}}
+                />
 
 
-                    this.state.businesses.map((s, i) => {
-                        return <Item
-                            key={i}
-                            value={s._id}
-                            label={s.name} />
-                    }) }
-            </Picker>
+            }
 
-        }
+            let businessesPikkerTag = undefined;
+
+            if (this.state.businesses.length > 0) {
+                businessesPikkerTag = <Picker
+
+                    iosHeader="Business"
+                    mode="dropdown"
+                    selectedValue={this.state.business}
+                    onValueChange={this.selectBusiness.bind(this)}>
+
+                    {
 
 
-        let  typePikkerTag = <Picker
+                        this.state.businesses.map((s, i) => {
+                            return <Item
+                                key={i}
+                                value={s._id}
+                                label={s.name}/>
+                        }) }
+                </Picker>
+
+            }
+
+
+            let typePikkerTag = <Picker
                 iosHeader="Discount"
                 mode="dropdown"
                 selectedValue={this.state.type}
@@ -374,119 +449,253 @@ class AddPromotion extends Component {
                         return <Item
                             key={i}
                             value={s.value}
-                            label={s.label} />
+                            label={s.label}/>
                     }) }
             </Picker>
 
-        let discountForm = undefined;
+            let discountForm = undefined;
 
-        switch(this.state.type){
-            case 'PERCENT':
-                discountForm = <PercentComponent state={this.state} setState={this.setState.bind(this)}/>
-                break;
-            case 'PERCENT_RANGE':
-                discountForm = <PercentRangeComponent state={this.state} setState={this.setState.bind(this)}/>
-                break;
+            switch (this.state.type) {
+                case 'PERCENT':
+                    discountForm = <PercentComponent state={this.state} setState={this.setState.bind(this)}/>
+                    break;
+                case 'PERCENT_RANGE':
+                    discountForm = <PercentRangeComponent state={this.state} setState={this.setState.bind(this)}/>
+                    break;
 
 
-        }
+            }
 
-        let selectProductButton = undefined;
-        if(this.state.productList.length > 0){
-            selectProductButton =  <Button   transparent  onPress={() => this.showProducts(true)}>
-                <Text>Select Product </Text>
-            </Button>
+            let selectProductButton = undefined;
+            if (this.state.productList.length > 0) {
+                selectProductButton = <Button transparent onPress={() => this.showProducts(true)}>
+                    <Text>Select Product </Text>
+                </Button>
 
+            } else {
+                selectProductButton = <Button disabled transparent onPress={() => this.showProducts(true)}>
+                    <Text>Select Product </Text>
+                </Button>
+            }
+
+
+            return (
+                <Container>
+                    <Header
+                        style={{
+                            flexDirection: 'column',
+                            height: 60,
+                            elevation: 0,
+                            paddingTop: (Platform.OS === 'ios') ? 20 : 3,
+                            justifyContent: 'space-between',
+                        }}>
+                        <AddFormHeader currentLocation="add-promotions" backLocation="promotions"/>
+
+                    </Header>
+
+                    <Content style={{backgroundColor: '#fff'}}>
+                        <Item underline>
+                            <Text style={{padding: 18}}>Business: </Text>
+                            {businessesPikkerTag}
+                        </Item>
+
+                        <Item underline>
+                            <Text style={{padding: 18}}>Discount Type: </Text>
+                            {discountPiker}
+                        </Item>
+
+
+                        <Item underline>
+                            <Input value={this.state.name} onChangeText={(name) => this.setState({name})}
+                                   placeholder='Name'/>
+                        </Item>
+                        <Item underline>
+                            <Input value={this.state.info} onChangeText={(info) => this.setState({info})}
+                                   placeholder='Description'/>
+                        </Item>
+
+
+                        <Item underline>
+                            {selectProductButton}
+                            {item}
+                        </Item>
+                        <Item underline>
+                            <Input value={this.state.amount} onChangeText={(amount) => this.setState({amount})}
+                                   placeholder='Product Amount'/>
+                        </Item>
+                        <Item underline>
+                            <Input value={this.state.retail_price}
+                                   onChangeText={(retail_price) => this.setState({retail_price})}
+                                   placeholder='Product Reatai Price'/>
+                        </Item>
+                        <Item underline>
+                            <Input value={this.state.total_discount}
+                                   onChangeText={(total_discount) => this.setState({total_discount})}
+                                   placeholder='Product Total Price'/>
+                        </Item>
+                        <Item underline>
+                            {typePikkerTag}
+                        </Item>
+                        {discountForm}
+
+
+                        <Item underline>
+                            <DatePicker
+                                style={{width: 200}}
+                                date={this.state.end}
+                                mode="date"
+                                placeholder="Promotion End Date"
+                                format="YYYY-MM-DD"
+                                minDate="2016-05-01"
+                                maxDate="2020-06-01"
+                                confirmBtnText="Confirm"
+                                cancelBtnText="Cancel"
+
+                                onDateChange={(date) => {
+                                    this.setState({end: date})
+                                }}
+                            />
+                        </Item>
+                        <Item underline>
+                            <View style={{flexDirection: 'row', marginTop: 5}}>
+
+                                <Button transparent onPress={() => this.pickSingle(true)}>
+                                    <Text>Select Image </Text>
+                                </Button>
+
+                                {image}
+                            </View>
+                        </Item>
+
+                    </Content>
+                    <Footer>
+
+                        <Button transparent
+                                onPress={this.saveFormData.bind(this)}
+                        >
+                            <Text>Add Promotion</Text>
+                        </Button>
+                    </Footer>
+                </Container>
+            );
         }else{
-            selectProductButton =    <Button disabled   transparent  onPress={() => this.showProducts(true)}>
-                <Text>Select Product </Text>
-            </Button>
+
+
+            let businessesPikkerTag = undefined;
+
+            if (this.state.businesses.length > 0) {
+                businessesPikkerTag = <Picker
+
+                    iosHeader="Business"
+                    mode="dropdown"
+                    selectedValue={this.state.business}
+                    onValueChange={this.selectBusiness.bind(this)}>
+
+                    {
+
+
+                        this.state.businesses.map((s, i) => {
+                            return <Item
+                                key={i}
+                                value={s._id}
+                                label={s.name}/>
+                        }) }
+                </Picker>
+
+            }
+
+
+            let image;
+            if (this.state.path) {
+                image = <Image
+                    style={{width: 50, height: 50}}
+                    source={{uri: this.state.path}}
+                />
+
+
+            }
+
+
+
+
+            return (
+                <Container>
+                    <Header
+                        style={{
+                            flexDirection: 'column',
+                            height: 60,
+                            elevation: 0,
+                            paddingTop: (Platform.OS === 'ios') ? 20 : 3,
+                            justifyContent: 'space-between',
+                        }}>
+                        <AddFormHeader currentLocation="add-promotions" backLocation="promotions"/>
+
+                    </Header>
+
+                    <Content style={{backgroundColor: '#fff'}}>
+                        <Item underline>
+                            <Text style={{padding: 18}}>Business: </Text>
+                            {businessesPikkerTag}
+                        </Item>
+
+                        <Item underline>
+                            <Text style={{padding: 18}}>Discount Type: </Text>
+                            {discountPiker}
+                        </Item>
+
+
+                        <Item underline>
+                            <Input value={this.state.name} onChangeText={(name) => this.setState({name})}
+                                   placeholder='Name'/>
+                        </Item>
+                        <Item underline>
+                            <Input value={this.state.info} onChangeText={(info) => this.setState({info})}
+                                   placeholder='Description'/>
+                        </Item>
+
+
+                        <PercentComponent state={this.state} setState={this.setState.bind(this)}/>
+
+                        <Item underline>
+                            <DatePicker
+                                style={{width: 200}}
+                                date={this.state.end}
+                                mode="date"
+                                placeholder="Promotion End Date"
+                                format="YYYY-MM-DD"
+                                minDate="2016-05-01"
+                                maxDate="2020-06-01"
+                                confirmBtnText="Confirm"
+                                cancelBtnText="Cancel"
+
+                                onDateChange={(date) => {
+                                    this.setState({end: date})
+                                }}
+                            />
+                        </Item>
+                        <Item underline>
+                            <View style={{flexDirection: 'row', marginTop: 5}}>
+
+                                <Button transparent onPress={() => this.pickSingle(true)}>
+                                    <Text>Select Image </Text>
+                                </Button>
+
+                                {image}
+                            </View>
+                        </Item>
+
+                    </Content>
+                    <Footer>
+
+                        <Button transparent
+                                onPress={this.saveFormData.bind(this)}
+                        >
+                            <Text>Add Promotion</Text>
+                        </Button>
+                    </Footer>
+                </Container>
+            );
         }
-
-
-        return (
-            <Container>
-                <Header
-                    style={{ flexDirection: 'column',
-                        height: 60,
-                        elevation: 0,
-                        paddingTop: (Platform.OS === 'ios') ? 20 : 3,
-                        justifyContent: 'space-between',
-                    }}>
-                    <AddFormHeader currentLocation="add-promotions" backLocation="promotions" />
-
-                </Header>
-
-                <Content  style={{backgroundColor: '#fff'}}>
-                    <Item underline>
-                        <Text style={{ padding: 18}}>Business: </Text>
-                        {businessesPikkerTag}
-                    </Item>
-                    <Item underline>
-                        {selectProductButton}
-                        {item}
-                    </Item>
-                    <Item underline>
-                        <Input value= {this.state.name} onChangeText={(name) => this.setState({name})} placeholder='Name' />
-                    </Item>
-                    <Item underline>
-                        <Input value= {this.state.info} onChangeText={(info) => this.setState({info})} placeholder='Description' />
-                    </Item>
-
-
-
-
-                    <Item underline>
-                        <Input value= {this.state.amount} onChangeText={(amount) => this.setState({amount})} placeholder='Product Amount' />
-                    </Item>
-                    <Item underline>
-                        <Input value= {this.state.retail_price} onChangeText={(retail_price) => this.setState({retail_price})} placeholder='Product Reatai Price' />
-                    </Item>
-                    <Item underline>
-                    {typePikkerTag}
-                    </Item>
-                    {discountForm}
-
-                    <Item underline>
-                        <Input value= {this.state.total_discount} onChangeText={(total_discount) => this.setState({total_discount})} placeholder='Product Total Price' />
-                    </Item>
-                    <Item underline>
-                        <DatePicker
-                            style={{width: 200}}
-                            date={this.state.end}
-                            mode="date"
-                            placeholder="Promotion End Date"
-                            format="YYYY-MM-DD"
-                            minDate="2016-05-01"
-                            maxDate="2020-06-01"
-                            confirmBtnText="Confirm"
-                            cancelBtnText="Cancel"
-
-                            onDateChange={(date) => {this.setState({end: date})}}
-                        />
-                    </Item>
-                    <Item underline>
-                        <View style={{ flexDirection: 'row',marginTop:5 }}>
-
-                            <Button   transparent  onPress={() => this.pickSingle(true)}>
-                                <Text>Select Image </Text>
-                            </Button>
-
-                            {image}
-                        </View>
-                    </Item>
-
-                </Content>
-                <Footer>
-
-                    <Button transparent
-                            onPress={this.saveFormData.bind(this)}
-                    >
-                        <Text>Add Promotion</Text>
-                    </Button>
-                </Footer>
-            </Container>
-        );
     }
 }
 
