@@ -329,13 +329,8 @@ exports.createDemo = function (req, res, next) {
  * class  ContactsContract.CommonDataKinds.Phone
  */
 exports.phonebook = function (req, res) {
-  //req.user = [];
-  //req.user._id = 18;
-  //var mongoose = require('mongoose');
-  var phonebook = req.body;
-  var userId = req.user._id;
-  ////console.log(req.body);
-  ////console.log(req.user._id);
+  const phonebook = req.body;
+  const userId = req.user._id;
 
   mongoose.connection.db.collection('phonebook', function (err, collection) {
     if (err) return logger.error(err.message);
@@ -345,17 +340,9 @@ exports.phonebook = function (req, res) {
     });
     //TODO: implement this way http://stackoverflow.com/questions/5794834/how-to-access-a-preexisting-collection-with-mongoose
     //for each phone number store the users that has it in their phone book
-
     mongoose.connection.db.collection('phone_numbers', function (err, collection) {
       if (err) return logger.error(err.message);
       phonebook.phonebook.forEach(function (contact, index, array) {
-        ////console.log(JSON.stringify(contact));
-
-        ////identifyPhoneByTwilio(contact.normalized_number,'972');
-
-
-
-        //collection.update({_id: element.normalized_number}, {$addToSet: {userIds: userId}}, {upsert: true});
         collection.findAndModify(
           {_id: utils.clean_phone_number(contact.normalized_number)},
           [['_id', 'asc']],
@@ -385,7 +372,7 @@ exports.phonebook = function (req, res) {
 
 
 function owner_follow(phone_number) {
-  if (!utils.defined(phone_number._id) || phone_number.contacts.length == 0)
+  if (!utils.defined(phone_number._id) || phone_number.contacts.length === 0)
     return;
   phone_number.contacts.forEach(function (contact) {
     graphModel.follow_phone(phone_number._id, contact.nick, contact.userId);
@@ -399,7 +386,7 @@ function identifyPhoneByTwilio(phone, countryCode){
   var verifiedPhone = [];
   var cleanedPhone = utils.clean_phone_number(phone);
 
-  if(cleanedPhone != undefined){
+  if(cleanedPhone !== undefined){
     twilioClient.phoneNumbers(cleanedPhone).get({
       //type: 'carrier'
     }, function(error, number) {
