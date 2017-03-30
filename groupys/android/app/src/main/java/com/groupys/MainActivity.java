@@ -1,6 +1,9 @@
 package com.groupys;
 
 import com.facebook.react.ReactActivity;
+import com.yoloci.fileupload.FileUploadPackage;
+
+import android.app.Activity;
 
 public class MainActivity extends ReactActivity {
 

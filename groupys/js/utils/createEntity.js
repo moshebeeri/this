@@ -1,6 +1,7 @@
 
 const NativeModules = require('NativeModules');
 const RNUploader = NativeModules.RNUploader;
+const FILeUploader = NativeModules.FileUpload;
 class EntityUtils {
 
 
@@ -21,25 +22,48 @@ class EntityUtils {
 
         ];
 
-        let opts = {
-            url: `${server_host}/api/images/` + responseData._id,
-            files: files,
-            method: 'POST',                             // optional: POST or PUT
-            headers: {'Accept': 'application/json', 'Authorization': 'Bearer ' + token},  // optional
-            params: {},                   // optional
-        };
-
-        RNUploader.upload(opts, (err, response) => {
-            if (err) {
-                console.log(err);
-                errorCallBack(err);
-                return;
-            }
-
-            callbackFunction(responseData);
 
 
-        });
+        if(RNUploader){
+            let opts = {
+                url: `${server_host}/api/images/` + responseData._id,
+                files: files,
+                method: 'POST',                             // optional: POST or PUT
+                headers: {'Accept': 'application/json', 'Authorization': 'Bearer ' + token},  // optional
+                params: {},                   // optional
+            };
+            RNUploader.upload(opts, (err, response) => {
+                if (err) {
+                    console.log(err);
+                    errorCallBack(err);
+                    return;
+                }
+
+
+
+
+            });
+
+        }else{
+            let option2 = {
+                uploadUrl: `${server_host}/api/images/` + responseData._id,
+                files: files,
+                method: 'POST',                             // optional: POST or PUT
+                headers: {'Accept': 'application/json', 'Authorization': 'Bearer ' + token},  // optional
+                fields:{}
+                             // optional
+            };
+            FILeUploader.upload(option2, function(err, result) {
+                if (err) {
+                    console.log(err);
+                    errorCallBack(err);
+                    return;
+                }
+
+            })
+        }
+        callbackFunction(responseData);
+
     }
 
 
