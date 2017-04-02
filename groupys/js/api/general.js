@@ -19,6 +19,9 @@ class GeneralApi
 
             try {
                 let token = await store.get('token');
+                let userId = await store.get('user_id');
+                console.log(userId +" "+  token);
+
                 const response = await fetch(`${server_host}/api/` + api, {
                     method: 'POST',
                     headers: {
