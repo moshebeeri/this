@@ -223,7 +223,7 @@ class AddPromotion extends Component {
        if(this.state.discount_on == 'GLOBAL'){
            promotion = {
 
-               on: {
+               entity: {
                    business: this.state.business,
                },
 
@@ -245,7 +245,7 @@ class AddPromotion extends Component {
        }else {
            promotion = {
 
-               on: {
+               entity : {
                    business: this.state.business,
                    product: this.state.product,
                },
