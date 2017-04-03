@@ -14,11 +14,18 @@ function percent_validator(v) {
     return false;
   return v.from >0 && v.to < 100;
 }
-function on_validator(v) {
+function entity_validator(v) {
   if (_.isNull(v))
     return false;
   return v.business || v.product || v.chain || v.mall;
 }
+
+const Entities = {
+  business: {type: Schema.ObjectId, ref: 'Business'},
+  product: {type: Schema.ObjectId, ref: 'Product'},
+  shopping_chain: {type: Schema.ObjectId, ref: 'ShoppingChain'},
+  mall: {type: Schema.ObjectId, ref: 'Mall'}
+};
 
 
 var PromotionSchema = new Schema({
@@ -28,17 +35,9 @@ var PromotionSchema = new Schema({
   realize_gid: Number,
   card_type: {type: Schema.ObjectId, ref: 'CardType'},
   creator: {type: Schema.ObjectId, ref: 'User', required: true},
-
-  on: {
-    business: {type: Schema.ObjectId, ref: 'Business'},
-    product: {type: Schema.ObjectId, ref: 'Product'},
-    shopping_chain: {type: Schema.ObjectId, ref: 'ShoppingChain'},
-    mall: {type: Schema.ObjectId, ref: 'Mall'},
-    validate: [on_validator, 'at least on of those fields should not be empty [business, product, chain, mall]'],
-    require: true
+  entity: { type: Entities, require: true,
+    validate: [entity_validator, 'at least on of those fields should not be empty [business, product, chain, mall]'],
   },
-
-
   created: {type: Date, default: Date.now},
   pictures : [],
   info: String,

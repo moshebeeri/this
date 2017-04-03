@@ -413,14 +413,10 @@ exports.user_promotions = function (req, res) {
   let userID = req.user._id;
 
   promotionGraphModel.query_objects(Promotion,
-    `MATCH (u:user {_id:'${userID}'})-[r:OWNS]->(b:business)<-[]-(p:promotion) RETURN p`,
-    'p.created DESC', 0, 1000, function (err, promotions) {
-      if (err) {
-        return handleError(res, err)
-      }
-      if (!promotions) {
-        return res.send(404);
-      }
+    `MATCH (u:user {_id:'${userID}'})-[r:OWNS]->(b:business)<-[]-(p:promotion) RETURN p._id`,
+    'order by p.created DESC', 0, 1000, function (err, promotions) {
+      if (err) return handleError(res, err);
+
       console.log(JSON.stringify(promotions));
       return res.status(200).json(promotions);
     });
