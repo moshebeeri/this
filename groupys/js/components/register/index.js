@@ -42,7 +42,7 @@ class Register extends Component {
 
 
     replaceRoute(route) {
-        this.props.replaceAt('signup', {key: route}, this.props.navigation.key);
+        this.props.replaceAt('register', {key: route}, this.props.navigation.key);
     }
 
 
