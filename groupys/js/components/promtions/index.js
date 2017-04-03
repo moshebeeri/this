@@ -5,6 +5,8 @@ import {actions} from 'react-native-navigation-redux-helpers';
 import {Container, Content, Text, InputGroup, Input, Button, Icon, View,Header} from 'native-base';
 import GeneralComponentHeader from '../header/index';
 
+import PromotionApi from "../../api/promotion"
+let promotionApi = new PromotionApi();
 
 
 const {
@@ -20,6 +22,24 @@ class Promotions extends Component {
             key: React.PropTypes.string,
         }),
     };
+    //
+    // on: {
+    //     business: this.state.business,
+    //     product: this.state.product,
+    // },
+    // path: this.state.path,
+    // image: this.state.image,
+    // type: this.state.type,
+    // percent: this.state.percent,
+    // amount: Number(this.state.amount),
+    // retail_price: Number(this.state.retail_price),
+    // total_discount: Number(this.state.total_discount),
+    // percent_range: this.state.percent_range,
+    // start: this.state.start,
+    // end: this.state.end,
+    // location: this.state.location,
+    // info: this.state.info,
+    // name: this.state.name,
 
     constructor(props) {
         super(props);
@@ -29,7 +49,8 @@ class Promotions extends Component {
             validationMessage: '',
             token: '',
             userId: '',
-            rowsView: []
+            rowsView: [],
+            promotions:{}
         }
         ;
 
@@ -47,8 +68,12 @@ class Promotions extends Component {
     }
 
 
-    componentWillMount(){
+    async componentWillMount(){
+        let promotions = await promotionApi.getAll();
 
+        this.setState({
+            promotions:promotions
+        })
     }
 
     render() {

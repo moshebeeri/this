@@ -22,6 +22,7 @@ import AddBusiness from './components/business/add-form';
 import General from './components/general';
 import Signup from './components/signup/';
 import SideBar from './components/sideBar';
+import Feed from './components/feed';
 
 
 import {statusBarColor} from './themes/base-theme';
@@ -120,7 +121,7 @@ class AppNavigator extends Component {
                 return <AddBusiness />;
 
             case 'home':
-                return <Home />;
+                return <Feed />;
             case 'signup':
                 return <Signup />;
             default :
