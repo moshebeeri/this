@@ -105,9 +105,10 @@ class Feed extends Component {
 
 
 
-    componentWillMount() {
-
+    async componentWillMount(){
+        this.props.navigateAction('home',this.props.index)
     }
+
 
     getAll(){
       return this.state.feeds

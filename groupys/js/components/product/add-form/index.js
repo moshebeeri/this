@@ -111,7 +111,7 @@ class AddProduct extends Component {
 
     formSuccess(response){
 
-        this.replaceRoute('product');
+        this.replaceRoute('home');
     }
 
     selectBusiness(value){
@@ -195,7 +195,7 @@ class AddProduct extends Component {
                         justifyContent: 'space-between',
                     }}
                 >
-                    <AddFormHeader currentLocation="add-product" backLocation="product" />
+                    <AddFormHeader currentLocation="add-product" backLocation="home" />
                 </Header>
 
                 <Content  style={{backgroundColor: '#fff'}}>

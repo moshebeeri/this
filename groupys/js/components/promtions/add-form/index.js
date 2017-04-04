@@ -269,10 +269,10 @@ class AddPromotion extends Component {
 
         try {
             await promotionApi.createPromotion(promotion)
-            this.replaceRoute('promotions')
+            this.replaceRoute('יhome')
         }catch (error){
             console.log(error);
-            this.replaceRoute('promotions')
+            this.replaceRoute('יhome')
         }
     }
 
@@ -487,7 +487,7 @@ class AddPromotion extends Component {
                             paddingTop: (Platform.OS === 'ios') ? 20 : 3,
                             justifyContent: 'space-between',
                         }}>
-                        <AddFormHeader currentLocation="add-promotions" backLocation="promotions"/>
+                        <AddFormHeader currentLocation="add-promotions" backLocation="home"/>
 
                     </Header>
 
@@ -625,7 +625,7 @@ class AddPromotion extends Component {
                             paddingTop: (Platform.OS === 'ios') ? 20 : 3,
                             justifyContent: 'space-between',
                         }}>
-                        <AddFormHeader currentLocation="add-promotions" backLocation="promotions"/>
+                        <AddFormHeader currentLocation="add-promotions" backLocation="home"/>
 
                     </Header>
 

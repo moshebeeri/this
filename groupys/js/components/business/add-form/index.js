@@ -103,7 +103,7 @@ class AddBusiness extends Component {
 
     formSuccess(response){
         store.save("b-id",response._id);
-        this.replaceRoute('business');
+        this.replaceRoute('home');
     }
 
     formFailed(error){
@@ -152,7 +152,7 @@ class AddBusiness extends Component {
                         justifyContent: 'space-between',
                     }}
                 >
-                    <AddFormHeader currentLocation="add-business" backLocation="business" />
+                    <AddFormHeader currentLocation="add-business" backLocation="home" />
 
                 </Header>
 

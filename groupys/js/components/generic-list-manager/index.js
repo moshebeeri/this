@@ -93,21 +93,11 @@ class GenericListManager extends Component {
         }
 
         return (
-            <Container>
-                <Header
-                    style={{ flexDirection: 'column',
-                        height: 60,
-                        elevation: 0,
-                        paddingTop: (Platform.OS === 'ios') ? 20 : 3,
-                        justifyContent: 'space-between',
-                    }}
-                >
-                    <GeneralComponentHeader title={this.props.title} current={this.props.component} to={this.props.addComponent} />
-                </Header>
+
                 <Content  style={{  backgroundColor: '#fff'}}>
                     { rows }
                 </Content>
-            </Container>
+
         );
     }
 }

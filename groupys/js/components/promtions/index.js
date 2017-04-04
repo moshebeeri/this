@@ -64,16 +64,18 @@ class Promotions extends Component {
 
 
     replaceRoute(route) {
-        this.props.replaceAt('promotions', {key: route}, this.props.navigation.key);
+        this.props.replaceAt('יhome', {key: route}, this.props.navigation.key);
     }
 
 
     async componentWillMount(){
-        let promotions = await promotionApi.getAll();
+       // .let promotions = await promotionApi.getAll();
 
-        this.setState({
-            promotions:promotions
-        })
+        // this.setState({
+        //     promotions:promotions
+        // })
+
+        this.props.navigateAction('add-promotions',this.props.index)
     }
 
     render() {
@@ -119,28 +121,15 @@ class Promotions extends Component {
 
         return (
 
-            <Container>
-                <Header
-                    style={{ flexDirection: 'column',
-                        height: 60,
-                        elevation: 0,
-                        paddingTop: (Platform.OS === 'ios') ? 20 : 3,
-                        justifyContent: 'space-between',
-                    }}
-                >
-                    <GeneralComponentHeader title="Promotion" current="promotions" to="add-promotions"/>
 
-                </Header>
 
 
                 <Content  style={{  backgroundColor: '#fff'}}>
 
 
-
-
                     { rows }
                 </Content>
-            </Container>
+
         );
     }
 }

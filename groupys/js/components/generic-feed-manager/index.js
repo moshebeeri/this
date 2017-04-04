@@ -2,9 +2,8 @@ import React, {Component} from 'react';
 import {Image, Platform} from 'react-native';
 import {connect} from 'react-redux';
 import {actions} from 'react-native-navigation-redux-helpers';
-import {Container, Content, Text,Title, InputGroup, Input, Button, Icon, View,Header, Body, Right, ListItem, Thumbnail,Left} from 'native-base';
-
-import GeneralComponentHeader from '../header/index';
+import {Container, Content, Text,Title, InputGroup,
+    Input, Button, Icon, View,Header, Body, Right, ListItem,Tabs,Tab, TabHeading,Thumbnail,Left} from 'native-base';
 
 
 
@@ -33,7 +32,9 @@ class GenericFeedManager extends Component {
             token: '',
             userId: '',
             ready: true,
-            rowsView: []
+            addComponent:'',
+            rowsView: [],
+
         }
         ;
 
@@ -70,6 +71,7 @@ class GenericFeedManager extends Component {
         this.fetchList();
     }
 
+
     render() {
         let index = 0
         let rows = undefined;
@@ -81,21 +83,12 @@ class GenericFeedManager extends Component {
         }
 
         return (
-            <Container>
-                <Header
-                    style={{ flexDirection: 'column',
-                        height: 60,
-                        elevation: 0,
-                        paddingTop: (Platform.OS === 'ios') ? 20 : 3,
-                        justifyContent: 'space-between',
-                    }}
-                >
-                    <GeneralComponentHeader title={this.props.title} current={this.props.component} to={this.props.addComponent} />
-                </Header>
+
                 <Content  style={{  backgroundColor: '#fff'}}>
-                    { rows }
+                             { rows }
+
                 </Content>
-            </Container>
+
         );
     }
 }
