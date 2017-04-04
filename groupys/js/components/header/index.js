@@ -37,6 +37,15 @@ class GeneralComponentHeader extends Component {
 
 
     render() {
+      let action = undefined;
+      if(this.props.showAction && this.props.showAction==true){
+          action =  <Button style={{ backgroundColor: 'transparent'}} iconLeft light>
+
+              <Icon style = {{width:20,backgroundColor: 'transparent'}} name='create'  onPress={() =>  this.replaceRoute(this.props.to)}  />
+          </Button>;
+      }
+
+
     return (
         <Header
             style={{ flexDirection: 'column',
@@ -58,11 +67,8 @@ class GeneralComponentHeader extends Component {
                 <Button transparent style={{ paddingRight: 15 }} onPress={this.props.openDrawer}>
                   <Icon name="menu" />
                 </Button>
+                  {action}
 
-                <Button style={{ backgroundColor: 'transparent'}} iconLeft light>
-
-                   <Icon style = {{width:20,backgroundColor: 'transparent'}} name='create'  onPress={() =>  this.replaceRoute(this.props.to)}  />
-                 </Button>
               </View>
               <Text transparent style={{ paddingRight: 20, paddingTop: 10, backgroundColor: 'transparent'}} >Groupies</Text>
           </View>

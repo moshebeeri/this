@@ -54,6 +54,9 @@ class GenericFeedManager extends Component {
     onChangeTab(ref){
          let component = 'home';
          switch (ref.i){
+             case 0:
+                 component ='add-producthome'
+                 break;
              case 1:
                  component ='add-product'
                  break;
@@ -67,25 +70,13 @@ class GenericFeedManager extends Component {
          }
 
          this.setState({
-             addComponent: component
+             addComponent: component,
+             initialPage: ref.i
          });
 
     }
 
-    async fetchList(){
-        try {
-            let response = await this.props.api.getAll();
-            this.setState({
-                rowsView: response
-            })
 
-        }catch (error){
-            console.log(error);
-        }
-
-
-
-    }
 
 
 
@@ -101,6 +92,8 @@ class GenericFeedManager extends Component {
             if(this.props.scene.scenes && this.props.scene.scenes.length == 2){
                 let productKey = this.props.scene.scenes[1].route.key;
                 switch (productKey){
+                    case 'home':
+                        return 0;
                     case 'add-product':
                         return 1;
                     case 'add-business':
@@ -119,6 +112,20 @@ class GenericFeedManager extends Component {
 
     }
 
+    showAction(index){
+        switch (index){
+            case 0:
+                return false;
+            case 1:
+                return true;
+            case 2:
+                return true;
+            case 3:
+                return true;
+        }
+
+    }
+
     componentWillMount(){
 
     }
@@ -131,12 +138,12 @@ class GenericFeedManager extends Component {
     }
     render() {
         let index = this.extractTabIndexFromNavigation();
-
+        let showAction = this.showAction(index);
 
         return (
             <Container>
 
-                <GeneralComponentHeader  current='home' to={this.state.addComponent} />
+                <GeneralComponentHeader  showAction = {showAction} current='home' to={this.state.addComponent} />
 
 
                 <Tabs onChangeTab={this.onChangeTab.bind(this)} initialPage={index} style={{ backgroundColor: '#fff',}}>
