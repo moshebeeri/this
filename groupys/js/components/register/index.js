@@ -49,7 +49,7 @@ class Register extends Component {
 
     async validateCode(){
         try{
-            let response = await loginApi.validateCode(this.state.code);
+            let response = await loginApi.verifyCode(this.state.code);
             if (response.token) {
 
                 this.replaceRoute('home');
