@@ -10,6 +10,8 @@ import PhoneInput from 'react-native-phone-input'
 import CountryPicker from 'react-native-country-picker-modal'
 import login from './signup-theme';
 import styles from './styles';
+import LoginApi from '../../api/login'
+let loginApi = new LoginApi()
 //import AlertContainer from 'react-alert';
 const {
     replaceAt,
@@ -89,38 +91,20 @@ class Signup extends Component {
         return newPhone;
     }
 
-    callServerSignupAndRedirect() {
+    async callServerSignupAndRedirect() {
         let phoneNumber = this.refs.phone.getValue();
         let normalizedPhone = this.normalizePhoneNumber(phoneNumber,this.state.callingCode);
-
-        fetch(`${server_host}/api/users`, {
-            method: 'POST',
-            headers: {
-                'Accept': 'application/json, text/plain, */*',
-                'Content-Type': 'application/json;charset=utf-8',
-            },
-            body: JSON.stringify({
-                country_code: this.state.callingCode,
-                phone_number: normalizedPhone,
-                email: phoneNumber + "@lowla.co.il",
-                password: this.state.password,
-
-
-            })
-        }).then((response) => response.json())
-            .then((responseData) => {
-                if (responseData.token) {
-                    store.save('token', responseData.token);
-                    this.replaceRoute('register');
-                } else {
-                    this.replaceRoute('login');
-                }
-
-            }).catch(function (error) {
-
+        try{
+            let responseData = await loginApi.signup(phoneNumber,normalizedPhone,this.state.password,this.state.callingCode);
+            if (responseData.token) {
+                this.replaceRoute('register');
+            } else {
+                this.replaceRoute('login');
+            }
+        }catch(error) {
             console.log('There has been a problem with your fetch operation: ' + error.message);
             this.replaceRoute('login');
-        });
+        };
     }
 
 

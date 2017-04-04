@@ -3,19 +3,20 @@ import {Image, Platform} from 'react-native';
 import {connect} from 'react-redux';
 import {actions} from 'react-native-navigation-redux-helpers';
 import {Container, Content, Text, InputGroup, Input, Button, Icon, View} from 'native-base';
-import store from 'react-native-simple-store';
 
 
-import PhoneInput from 'react-native-phone-input'
-import CountryPicker from 'react-native-country-picker-modal'
+
+
 import login from './signup-theme';
 import styles from './styles';
-//import AlertContainer from 'react-alert';
+
 const {
     replaceAt,
 } = actions;
 
 const logo = require('../../../images/logo.png');
+import LoginApi from '../../api/login'
+let loginApi = new LoginApi()
 
 class Register extends Component {
 
@@ -46,37 +47,20 @@ class Register extends Component {
     }
 
 
-    validateCode(){
-        let code = this.state.code;
-        store.get('token').then(token => {
+    async validateCode(){
+        try{
+            let response = await loginApi.validateCode(this.state.code);
+            if (response.token) {
 
-            fetch(`${server_host}/api/users/verification/` + code, {
-                method: 'GET',
-                headers: {
-                    'Accept': 'application/json, text/plain, */*',
-                    'Content-Type': 'application/json;charset=utf-8',
-                    'Authorization': 'Bearer ' + token,
-                }
+                this.replaceRoute('home');
+            } else {
+                this.replaceRoute('login');
+            }
 
-            }).then(
-                (response) => response.json())
-                .then((responseData) => {
-                    if (responseData.token) {
-
-                        this.replaceRoute('home');
-                    } else {
-                        this.replaceRoute('login');
-                    }
-
-                }).catch(function (error) {
-
+            }catch(error) {
                 console.log('There has been a problem with your fetch operation: ' + error.message);
                 this.replaceRoute('login');
-            });
-        })
-
-
-
+        }
 
     }
 
