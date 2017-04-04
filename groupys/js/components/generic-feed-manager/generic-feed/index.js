@@ -19,6 +19,7 @@ class GenericFeedItem extends Component {
     constructor(props) {
         super(props);
 
+
     }
 
 
@@ -78,6 +79,8 @@ class GenericFeedItem extends Component {
                 likeIcon = <Icon active name="thumbs-up" />
 
             }
+
+
 
             return (  <Card >
                     <CardItem>
