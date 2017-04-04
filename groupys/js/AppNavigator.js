@@ -121,7 +121,7 @@ class AppNavigator extends Component {
                 return <AddBusiness />;
 
             case 'home':
-                return <Application />;
+                return <Application scene={props}/>;
             case 'signup':
                 return <Signup />;
             default :
