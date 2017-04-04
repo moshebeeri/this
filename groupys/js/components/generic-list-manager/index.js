@@ -36,6 +36,7 @@ class GenericListManager extends Component {
             rowsView: []
         }
         ;
+        this.fetchList();
 
 
 
