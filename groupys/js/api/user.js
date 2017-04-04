@@ -25,6 +25,7 @@ class UserApi
 
                 let responseData = await response.json();
                 store.save('user_id', responseData._id);
+
                 resolve(responseData);
             }
             catch (error) {

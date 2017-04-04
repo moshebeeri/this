@@ -76,6 +76,7 @@ class Login extends Component {
                 const token = await lu.getToken();
                 if (token) {
                     contactApi.syncContacts();
+                    await userApi.getUser();
                     this.replaceRoute('home');
                     return resolve(true);
                 }
