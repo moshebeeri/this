@@ -7,6 +7,7 @@ import { actions } from 'react-native-navigation-redux-helpers';
 import { Container, Content, Text, InputGroup, Input, Button, Icon, View } from 'native-base';
 
 import store from 'react-native-simple-store';
+
 const {
   replaceAt,
 } = actions;
@@ -18,13 +19,13 @@ import LoginApi from '../../api/login'
 import ContactApi from '../../api/contacts'
 import LoginUtils from '../../utils/login_utils'
 import UserApi from '../../api/user'
-let loginApi = new LoginApi()
-let userApi = new UserApi()
+let loginApi = new LoginApi();
+let userApi = new UserApi();
 let contactApi = new ContactApi();
 
 let lu = new LoginUtils();
 
-const global = require('../../conf/global')
+const global = require('../../conf/global');
 let calc_login = true;
 class Login extends Component {
 
@@ -38,11 +39,11 @@ class Login extends Component {
   constructor(props) {
     super(props);
     this.state = {
-        phoneNumber: '+972544402680',
+      phoneNumber: '+972544402680',
       password: 'de123456',
-        token: false,
+      token: false,
       scroll: false,
-        error:''
+      error:''
     };
   }
 
@@ -80,7 +81,7 @@ class Login extends Component {
                     return resolve(true);
                 }
             }catch(error){
-                if(error == 'login'){
+                if(error === 'login'){
                     this.state.fingerprint_login = false;
                     this.state.recover_account = true;
                 }

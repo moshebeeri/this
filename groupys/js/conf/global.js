@@ -1,6 +1,5 @@
 module.exports = {
-    server_host: 'http://low.la:9000',
-
+    server_host: 'http://localhost:9000',
 };
 
-global.server_host =  'http://low.la:9000'
+global.server_host =  'http://localhost:9000';

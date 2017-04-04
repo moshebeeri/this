@@ -28,8 +28,8 @@ class Signup extends Component {
 
     constructor(props) {
         super(props);
-        this.onPressFlag = this.onPressFlag.bind(this)
-        this.selectCountry = this.selectCountry.bind(this)
+        this.onPressFlag = this.onPressFlag.bind(this);
+        this.selectCountry = this.selectCountry.bind(this);
 
         this.state = {
             email: '',
@@ -50,14 +50,14 @@ class Signup extends Component {
     }
 
     onPressFlag() {
-        this.refs.countryPicker.openModal()
+        this.refs.countryPicker.openModal();
         this.setState({
             phone_number: this.refs.phone.getPickerData()
         })
     }
 
     selectCountry(country) {
-        this.refs.phone.selectCountry(country.cca2.toLowerCase())
+        this.refs.phone.selectCountry(country.cca2.toLowerCase());
         this.setState({
             callingCode: country.callingCode
         });
@@ -102,7 +102,7 @@ class Signup extends Component {
             body: JSON.stringify({
                 country_code: this.state.callingCode,
                 phone_number: normalizedPhone,
-                email: phoneNumber + "@lowla.co.il",
+                email: phoneNumber + "@low.la",
                 password: this.state.password,
 
 
