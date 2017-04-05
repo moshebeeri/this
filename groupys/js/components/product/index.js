@@ -33,12 +33,25 @@ class Product extends Component {
         this.props.navigateAction('add-product',this.props.index)
     }
 
+    async getAll(){
+        let response =  await  productApi.getAll();
+        return response;
+    }
+    fetchApi(pageOffset,pageSize ) {
+
+        return new Promise(async function(resolve, reject) {
+            response =  await  productApi.getAll();
+            resolve(response);
+        });
+
+
+    }
 
     render() {
 
 
         return (
-           <GenericListManager title="Products" component="home" addComponent="add-product" api={productApi}
+           <GenericListManager title="Products" component="home" addComponent="add-product" api={this}
                                ItemDetail = {GenericListView}/>
         );
     }

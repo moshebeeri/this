@@ -2,12 +2,12 @@ import React, {Component} from 'react';
 import {Image, Platform} from 'react-native';
 import {connect} from 'react-redux';
 import {actions} from 'react-native-navigation-redux-helpers';
-import {Container, Content, Text,Title, InputGroup, Input, Button, Icon, View,Header, Body, Right, ListItem, Thumbnail,Left} from 'native-base';
+import {Container, Content, Text,Title, InputGroup, Input, Button, Icon, View,Header,Spinner, Body, Right, ListItem, Thumbnail,Left} from 'native-base';
 
 import GeneralComponentHeader from '../header/index';
 
 
-
+import Dataset from 'impagination';
 
 
 const {
@@ -41,6 +41,25 @@ class GenericListManager extends Component {
 
 
 
+    }
+
+    setupImpagination() {
+        let fetchApi = this.props.api.fetchApi.bind(this);
+        let dataset = new Dataset({
+            pageSize: 8,
+            observe: (rowsView) => {
+                this.setState({rowsView});
+            },
+
+            // Where to fetch the data from.
+
+            fetch(pageOffset, pageSize, stats) {
+                return fetchApi(pageOffset + 1,pageSize );
+
+            }
+        });
+        dataset.setReadOffset(0);
+        this.setState({dataset});
     }
 
     async fetchList(){
@@ -80,15 +99,27 @@ class GenericListManager extends Component {
 
 
     componentWillMount(){
-        this.fetchList();
+        if(this.props.api.fetchApi) {
+            this.setupImpagination();
+        }else{
+            this.fetchList();
+        }
     }
 
     render() {
         let index = 0
         let rows = undefined;
         if(this.state.rowsView.length > 0) {
+
              rows = this.state.rowsView.map((r, i) => {
+                 if (!r.isSettled && r.isSettled != undefined) {
+                     return <Spinner key={Math.random()}/>;
+                 }
                 index++;
+                 if(r.content){
+                     return <this.props.ItemDetail key= {index} index={index} item={r.content} deleteProduct={this.deleteProduct.bind(this)}/>
+
+                 }
                 return <this.props.ItemDetail key= {index} index={index} item={r} deleteProduct={this.deleteProduct.bind(this)}/>
             });
         }

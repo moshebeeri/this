@@ -31,6 +31,20 @@ class Business extends Component {
 
     }
 
+    async getAll(){
+       let response =  await  businessApi.getAll();
+       return response;
+    }
+    fetchApi(pageOffset,pageSize ) {
+
+        return new Promise(async function(resolve, reject) {
+            response =  await  businessApi.getAll();
+            resolve(response);
+        });
+
+
+    }
+
     async componentWillMount(){
         this.props.navigateAction('add-business',this.props.index)
     }
@@ -39,7 +53,7 @@ class Business extends Component {
 
 
         return (
-            <GenericListManager title="Business" component="home" addComponent="add-business" api={businessApi}
+            <GenericListManager title="Business" component="home" addComponent="add-business" api={this}
                                 ItemDetail={GenericListView}/>
         );
     }

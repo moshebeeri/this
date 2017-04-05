@@ -105,8 +105,18 @@ class AddProduct extends Component {
 
     saveFormData(){
 
+        let product = {
+            name:this.state.name,
+            image:this.state.image,
+            business: this.state.business,
+            info : this.state.info,
+            retail_price: this.state.retail_price,
 
-        entityUtils.create('products',this.state,this.state.token,this.formSuccess.bind(this),this.formFailed.bind(this),this.state.userId);
+
+
+
+        }
+        entityUtils.create('products',product,this.state.token,this.formSuccess.bind(this),this.formFailed.bind(this),this.state.userId);
     }
 
     formSuccess(response){
