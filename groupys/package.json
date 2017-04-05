@@ -8,7 +8,8 @@
   },
   "dependencies": {
     "color": "^1.0.3",
-    "native-base": "^2.0.8",
+    "impagination": "^1.0.0-alpha.3",
+    "native-base": "^2.0.13",
     "radio-button-react-native": "^1.1.6",
     "react": "15.4.2",
     "react-native": "0.41.2",
@@ -35,7 +36,8 @@
     "redux-persist": "^4.4.1",
     "redux-thunk": "^2.2.0",
     "remote-redux-devtools": "^0.5.7",
-    "symbol-observable": "^1.0.4"
+    "symbol-observable": "^1.0.4",
+    "util": "^0.10.3"
   },
   "devDependencies": {
     "babel-jest": "19.0.0",

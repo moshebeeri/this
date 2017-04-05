@@ -21,7 +21,111 @@ var castro = require('../../../images/castro.jpg');
 var castroBanner = require('../../../images/castro_final.png');
 var myprofile = require('../../../images/profile.jpeg');
 
+const feeds = [
+        {
+            social:{
+                like:false,
+                numberLikes: 10,
 
+
+            },
+            logo:{
+                require:myprofile,
+            },
+            itemTitle: 'Roi share with you',
+            description: 'Cafe Discount',
+
+            feed:{
+                social:{
+                    like:false,
+                    numberLikes: 10,
+                },
+                logo:{
+                    require:aroma,
+                },
+                itemTitle: 'Cafe 20% off',
+                description: 'Cafe Discount',
+                banner: {
+                    require:aromCafe
+                }
+            }
+        },
+        {
+            social:{
+                like:false,
+                numberLikes: 12,
+
+
+
+            },
+            logo:{
+                require:aroma,
+            },
+            itemTitle: 'Cafe 20% off',
+            description: 'Cafe Discount',
+            banner: {
+                require:aromCafe
+            }
+        },
+        {
+            social:{
+                like:true,
+                numberLikes: 12,
+            },
+            logo:{
+                require:castro,
+            },
+            itemTitle: 'All Store 10% off',
+            description: 'Total discount',
+            banner: {
+                require:castroBanner
+            },
+        },
+        {
+            social:{
+                like:true,
+                numberLikes: 12,
+            },
+            logo:{
+                require:castro,
+            },
+            itemTitle: 'All Store 10% off',
+            description: 'Total discount',
+            banner: {
+                require:castroBanner
+            },
+        },
+        {
+            social:{
+                like:false,
+                numberLikes: 10,
+
+
+            },
+            logo:{
+                require:myprofile,
+            },
+            itemTitle: 'Roi share with you',
+            description: 'Cafe Discount',
+
+            feed:{
+                social:{
+                    like:false,
+                    numberLikes: 10,
+                },
+                logo:{
+                    require:aroma,
+                },
+                itemTitle: 'Cafe 20% off',
+                description: 'Cafe Discount',
+                banner: {
+                    require:aromCafe
+                }
+            }
+        },
+
+
+    ];
 
 class Feed extends Component {
 
@@ -34,70 +138,7 @@ class Feed extends Component {
 
   constructor(props) {
     super(props);
-      this.state = {
-          feeds: [
-              {
-                  social:{
-                      like:false,
-                      numberLikes: 10,
 
-
-                  },
-                  logo:{
-                      require:myprofile,
-                  },
-                  itemTitle: 'Roi share with you',
-                  description: 'Cafe Discount',
-
-                  feed:{
-                      social:{
-                          like:false,
-                          numberLikes: 10,
-                      },
-                      logo:{
-                          require:aroma,
-                      },
-                      itemTitle: 'Cafe 20% off',
-                      description: 'Cafe Discount',
-                      banner: {
-                          require:aromCafe
-                      }
-                  }
-              },
-              {
-                  social:{
-                      like:false,
-                      numberLikes: 12,
-
-
-
-                  },
-                  logo:{
-                      require:aroma,
-                  },
-                  itemTitle: 'Cafe 20% off',
-                  description: 'Cafe Discount',
-                  banner: {
-                      require:aromCafe
-                  }
-              },
-              {
-                  social:{
-                      like:true,
-                      numberLikes: 12,
-                  },
-                  logo:{
-                      require:castro,
-                  },
-                  itemTitle: 'All Store 10% off',
-                  description: 'Total discount',
-                  banner: {
-                      require:castroBanner
-                  },
-              },
-
-          ]
-      };
   }
 
 
@@ -111,7 +152,16 @@ class Feed extends Component {
 
 
     getAll(){
-      return this.state.feeds
+      return feeds;
+    }
+
+
+    fetchApi(pageOffset,pageSize ) {
+        return new Promise(function(resolve, reject) {
+            resolve(feeds);
+        });
+
+
     }
 
 

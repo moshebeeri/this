@@ -36,6 +36,9 @@ class GenericFeedItem extends Component {
 
 
         createFeed(item){
+            if(item.content){
+                item = item.content;
+            }
             let secondFeed = undefined;
             if(item.feed){
                 secondFeed = this.createFeed(item.feed);
