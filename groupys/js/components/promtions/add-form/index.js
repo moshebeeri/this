@@ -10,8 +10,8 @@ import { Platform,
 } from 'react-native';
 import {connect} from 'react-redux';
 import {actions} from 'react-native-navigation-redux-helpers';
-import {Container, Content, Text, InputGroup, Input, Button,Body ,Icon,Left,
-    View,Header,Item,Footer,Picker,ListItem,Right,Thumbnail} from 'native-base';
+import {Container, Content, Text, InputGroup, Picker,Input, Button,Body ,Icon,Left,
+    View,Header,Item,Footer,ListItem,Right,Thumbnail} from 'native-base';
 
 import AddFormHeader from '../../header/addFormHeader';
 import SelectProductsComponent from './selectProducts';
@@ -217,20 +217,13 @@ class AddPromotion extends Component {
     }
 
    async saveFormData(){
-       // on: {
-       //     business: {type: Schema.ObjectId, ref: 'Business'},
-       //     product: {type: Schema.ObjectId, ref: 'Product'},
-       //     shopping_chain: {type: Schema.ObjectId, ref: 'ShoppingChain'},
-       //     mall: {type: Schema.ObjectId, ref: 'Mall'},
-       //     validate: [on_validator, 'at least on of those fields should not be empty [business, product, chain, mall]'],
-       //         require: true
-       // },
+
        let promotion = {};
 
        if(this.state.discount_on == 'GLOBAL'){
            promotion = {
 
-               on: {
+               entity: {
                    business: this.state.business,
                },
 
@@ -252,7 +245,7 @@ class AddPromotion extends Component {
        }else {
            promotion = {
 
-               on: {
+               entity : {
                    business: this.state.business,
                    product: this.state.product,
                },
@@ -276,10 +269,10 @@ class AddPromotion extends Component {
 
         try {
             await promotionApi.createPromotion(promotion)
-            this.replaceRoute('promotions')
+            this.replaceRoute('יhome')
         }catch (error){
             console.log(error);
-            this.replaceRoute('promotions')
+            this.replaceRoute('יhome')
         }
     }
 
@@ -367,6 +360,7 @@ class AddPromotion extends Component {
         let discountPiker = <Picker
             iosHeader="Discount"
             mode="dropdown"
+            style={{ flex:1}}
             selectedValue={this.state.discount_on}
             onValueChange={this.selectDiscountType.bind(this)}>
 
@@ -420,7 +414,10 @@ class AddPromotion extends Component {
                     iosHeader="Business"
                     mode="dropdown"
                     selectedValue={this.state.business}
-                    onValueChange={this.selectBusiness.bind(this)}>
+                    onValueChange={this.selectBusiness.bind(this)}
+                    style={{ flex:1}}
+                >
+
 
                     {
 
@@ -440,7 +437,8 @@ class AddPromotion extends Component {
                 iosHeader="Discount"
                 mode="dropdown"
                 selectedValue={this.state.type}
-                onValueChange={this.selectPromotionType.bind(this)}>
+                onValueChange={this.selectPromotionType.bind(this)}
+            >
 
                 {
 
@@ -489,18 +487,16 @@ class AddPromotion extends Component {
                             paddingTop: (Platform.OS === 'ios') ? 20 : 3,
                             justifyContent: 'space-between',
                         }}>
-                        <AddFormHeader currentLocation="add-promotions" backLocation="promotions"/>
+                        <AddFormHeader currentLocation="add-promotions" backLocation="home"/>
 
                     </Header>
 
                     <Content style={{backgroundColor: '#fff'}}>
                         <Item underline>
-                            <Text style={{padding: 18}}>Business: </Text>
                             {businessesPikkerTag}
                         </Item>
 
                         <Item underline>
-                            <Text style={{padding: 18}}>Discount Type: </Text>
                             {discountPiker}
                         </Item>
 
@@ -588,6 +584,7 @@ class AddPromotion extends Component {
 
                     iosHeader="Business"
                     mode="dropdown"
+                    style={{ flex:1}}
                     selectedValue={this.state.business}
                     onValueChange={this.selectBusiness.bind(this)}>
 
@@ -628,18 +625,16 @@ class AddPromotion extends Component {
                             paddingTop: (Platform.OS === 'ios') ? 20 : 3,
                             justifyContent: 'space-between',
                         }}>
-                        <AddFormHeader currentLocation="add-promotions" backLocation="promotions"/>
+                        <AddFormHeader currentLocation="add-promotions" backLocation="home"/>
 
                     </Header>
 
                     <Content style={{backgroundColor: '#fff'}}>
                         <Item underline>
-                            <Text style={{padding: 18}}>Business: </Text>
                             {businessesPikkerTag}
                         </Item>
 
                         <Item underline>
-                            <Text style={{padding: 18}}>Discount Type: </Text>
                             {discountPiker}
                         </Item>
 

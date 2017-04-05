@@ -5,7 +5,10 @@ const { StyleSheet, Dimensions,Platform } = React;
 module.exports = {
   header: {
     width: Dimensions.get('window').width,
-    marginLeft: (Platform.OS === 'ios') ? undefined : -15
+      flexDirection: 'column',
+    marginLeft: (Platform.OS === 'ios') ? undefined : -15,
+      backgroundColor: '#fff',
+
   },
     button:{
         backgroundColor: 'transparent'

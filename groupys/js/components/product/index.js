@@ -29,13 +29,16 @@ class Product extends Component {
 
     }
 
+    async componentWillMount(){
+        this.props.navigateAction('add-product',this.props.index)
+    }
 
 
     render() {
 
 
         return (
-           <GenericListManager title="Products" component="product" addComponent="add-product" api={productApi}
+           <GenericListManager title="Products" component="home" addComponent="add-product" api={productApi}
                                ItemDetail = {GenericListView}/>
         );
     }

@@ -70,13 +70,14 @@ class Login extends Component {
 
             const _id = await store.get('user_id');
             if (!_id) {
-                this.replaceRoute('signup');
+                this.replaceRoute('login');
                 return resolve(true);
             }
             try {
                 const token = await lu.getToken();
                 if (token) {
                     contactApi.syncContacts();
+                    await userApi.getUser();
                     this.replaceRoute('home');
                     return resolve(true);
                 }
@@ -87,7 +88,7 @@ class Login extends Component {
                 }
                 else{
                     console.log('this.replaceRoute(\'error\') should go to error page');
-                    this.replaceRoute('signup');
+                    this.replaceRoute('login');
                 }
                 return resolve(true);
             }

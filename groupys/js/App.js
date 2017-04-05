@@ -86,7 +86,7 @@ class App extends Component {
     render() {
         if (this.state.showDownloadingModal) {
             return (
-                <Container theme={theme} style={{ backgroundColor: theme.defaultBackgroundColor }}>
+                <Container theme={theme} style={{ backgroundColor: '#fff' }}>
                     <Content style={styles.container}>
                         <Modal
                             style={[styles.modal, styles.modal1]}

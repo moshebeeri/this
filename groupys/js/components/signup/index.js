@@ -89,7 +89,7 @@ class Signup extends Component {
         return newPhone;
     }
 
-    callServerSignupAndRedirect() {
+    async callServerSignupAndRedirect() {
         let phoneNumber = this.refs.phone.getValue();
         let normalizedPhone = this.normalizePhoneNumber(phoneNumber,this.state.callingCode);
 

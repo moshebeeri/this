@@ -2,9 +2,8 @@ import React, {Component} from 'react';
 import {Image, Platform} from 'react-native';
 import {connect} from 'react-redux';
 import {actions} from 'react-native-navigation-redux-helpers';
-import {Container, Content, Text,Title, InputGroup, Input, Button, Icon, View,Header, Body, Right, ListItem, Thumbnail,Left} from 'native-base';
-
-import GeneralComponentHeader from '../header/index';
+import {Container, Content, Text,Title, InputGroup,
+    Input, Button, Icon, View,Header, Body, Right, ListItem,Tabs,Tab, TabHeading,Thumbnail,Left} from 'native-base';
 
 
 
@@ -14,7 +13,7 @@ const {
     replaceAt,
 } = actions;
 
-class GenericListManager extends Component {
+class GenericFeedManager extends Component {
 
     static propTypes = {
         replaceAt: React.PropTypes.func,
@@ -33,10 +32,11 @@ class GenericListManager extends Component {
             token: '',
             userId: '',
             ready: true,
-            rowsView: []
+            addComponent:'',
+            rowsView: [],
+
         }
         ;
-        this.fetchList();
 
 
 
@@ -58,19 +58,7 @@ class GenericListManager extends Component {
 
     }
 
-    async deleteProduct(index){
 
-        try {
-            await this.props.api.delete(index);
-            let response = await this.props.api.getAll();
-            this.setState({
-                rowsView: response
-            })
-
-        }catch (error){
-            console.log(error);
-        }
-    }
 
 
 
@@ -83,20 +71,22 @@ class GenericListManager extends Component {
         this.fetchList();
     }
 
+
     render() {
         let index = 0
         let rows = undefined;
         if(this.state.rowsView.length > 0) {
              rows = this.state.rowsView.map((r, i) => {
                 index++;
-                return <this.props.ItemDetail key= {index} index={index} item={r} deleteProduct={this.deleteProduct.bind(this)}/>
+                return <this.props.ItemDetail key= {index} index={index} item={r} />
             });
         }
 
         return (
 
                 <Content  style={{  backgroundColor: '#fff'}}>
-                    { rows }
+                             { rows }
+
                 </Content>
 
         );
@@ -114,4 +104,4 @@ const mapStateToProps = state => ({
     navigation: state.cardNavigation,
 });
 
-export default connect(mapStateToProps, bindActions)(GenericListManager);
+export default connect(mapStateToProps, bindActions)(GenericFeedManager);
