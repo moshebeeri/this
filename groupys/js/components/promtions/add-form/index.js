@@ -268,11 +268,11 @@ class AddPromotion extends Component {
        }
 
         try {
-            await promotionApi.createPromotion(promotion)
-            this.replaceRoute('יhome')
+            await promotionApi.createPromotion(promotion);
+            this.replaceRoute('home');
         }catch (error){
             console.log(error);
-            this.replaceRoute('יhome')
+            this.replaceRoute('home');
         }
     }
 
