@@ -4,7 +4,7 @@
 # PLEASE DO NOT EDIT IT DIRECTLY.
 #
 
-FROM ubuntu:latest
+FROM debian:jessie
 
 # persistent / runtime deps
 ENV PHPIZE_DEPS \

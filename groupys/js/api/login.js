@@ -13,7 +13,7 @@ class LoginApi
                         'Content-Type': 'application/json;charset=utf-8',
                     },
                     body: JSON.stringify({
-                        email:  phoneNumber + "@lowla.co.il",
+                        email:  phoneNumber + "@low.la",
                         password:password,
                     })
                 })
@@ -49,13 +49,11 @@ class LoginApi
                     body: JSON.stringify({
                         country_code: callingCode,
                         phone_number: normalizedPhone,
-                        email: phoneNumber + "@lowla.co.il",
+                        email: phoneNumber + "@low.la",
                         password: password,
-
-
                     })
                 });
-                if (response.status == '401') {
+                if (response.status ===   '401') {
                     reject({error: 'Signup Failed Validation'});
                     return;
                 }
