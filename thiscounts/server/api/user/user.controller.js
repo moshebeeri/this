@@ -1,46 +1,46 @@
 'use strict';
 
-var _ = require('lodash');
-var mongoose = require('mongoose');
-var async = require('async');
-var User = require('./user.model');
-var Business = require('../business/business.model');
-var ShoppingChain = require('../shoppingChain/shoppingChain.model');
-var Product = require('../product/product.model');
-var Promotion = require('../promotion/promotion.model');
-var Mall = require('../mall/mall.model');
-var Category = require('../category/category.model');
-var CardType = require('../cardType/cardType.model');
+let  _ = require('lodash');
+let  mongoose = require('mongoose');
+let  async = require('async');
+let  User = require('./user.model');
+let  Business = require('../business/business.model');
+let  ShoppingChain = require('../shoppingChain/shoppingChain.model');
+let  Product = require('../product/product.model');
+let  Promotion = require('../promotion/promotion.model');
+let  Mall = require('../mall/mall.model');
+let  Category = require('../category/category.model');
+let  CardType = require('../cardType/cardType.model');
 
-var PhoneNumber = require('../phone_number/phone_number.model');
-var passport = require('passport');
-var config = require('../../config/environment');
-var jwt = require('jsonwebtoken');
-var twilio = require('twilio')(config.twilio.accountSid, config.twilio.authToken);
-var twilioLookupsClient = require('twilio').LookupsClient;
-var twilioClient = new twilioLookupsClient(config.twilio.accountSid, config.twilio.authToken);
-var util = require('util');
+let  PhoneNumber = require('../phone_number/phone_number.model');
+let  passport = require('passport');
+let  config = require('../../config/environment');
+let  jwt = require('jsonwebtoken');
+let  twilio = require('twilio')(config.twilio.accountSid, config.twilio.authToken);
+let  twilioLookupsClient = require('twilio').LookupsClient;
+let  twilioClient = new twilioLookupsClient(config.twilio.accountSid, config.twilio.authToken);
+let  util = require('util');
 
-var utils = require('../../components/utils').createUtils();
-var randomstring = require('randomstring');
+let  utils = require('../../components/utils').createUtils();
+let  randomstring = require('randomstring');
 
-var logger = require('../../components/logger').createLogger();
-var graphTools = require('../../components/graph-tools');
-var graphModel = graphTools.createGraphModel('user');
+let  logger = require('../../components/logger').createLogger();
+let  graphTools = require('../../components/graph-tools');
+let  graphModel = graphTools.createGraphModel('user');
 
-var activity = require('../../components/activity').createActivity();
-var Activity = require('../activity/activity.model');
+let  activity = require('../../components/activity').createActivity();
+let  Activity = require('../activity/activity.model');
 
-var validationError = function (res, err) {
-  var firstKey = getKey(err.errors);
-  if(firstKey != undefined){
+let  validationError = function (res, err) {
+  let  firstKey = getKey(err.errors);
+  if(firstKey !== undefined){
 	return res.status(422).json(err['errors'][firstKey]['message']);
   }
   return res.status(422).json(err);
 };
 
 function getKey(data) {
-  for (var prop in data)
+  for (let  prop in data)
     if (data.propertyIsEnumerable(prop))
       return prop;
 }
@@ -56,7 +56,7 @@ exports.index = function (req, res) {
   });
 };
 
-var like_generates_follow = function (userId, itemId) {
+let  like_generates_follow = function (userId, itemId) {
   async.parallel({
       user: function (callback) {
         User.findById(itemId, callback);
@@ -110,7 +110,7 @@ var like_generates_follow = function (userId, itemId) {
  * MATCH (u { _id:'567747ea034cfc2d372b14e5' }), (b { _id:'567ea4b5adef97f106cd6f78' }) create (u)-[:LIKE]->(b)
  */
 exports.like = function (req, res) {
-  var userId = req.user._id;
+  let  userId = req.user._id;
   graphModel.relate_ids(userId, 'LIKE', req.params.id);
   activity.action_activity(userId, req.params.id, 'like');
   like_generates_follow(userId, req.params.id);
@@ -122,13 +122,13 @@ exports.like = function (req, res) {
  *
  */
 exports.unlike = function (req, res) {
-  var userId = req.user._id;
+  let  userId = req.user._id;
   graphModel.unrelate_ids(userId, 'LIKE', req.params.id);
   return res.json(200, "unlike called for promotion " + req.params.id + " and user " + userId);
 };
 
 exports.share = function (req, res) {
-  var userId = req.user._id;
+  let  userId = req.user._id;
   logger.info("share called for object " + req.params.id + " and user " + userId);
   graphModel.relate_ids(userId, 'SHARE', req.params.id, {timestamp: Date.now()});
   activity.action_activity(userId, req.params.id, 'share');
@@ -136,14 +136,14 @@ exports.share = function (req, res) {
 };
 
 exports.save = function (req, res) {
-  var userId = req.user._id;
+  let  userId = req.user._id;
   graphModel.relate_ids(userId, 'SAVE', req.params.id);
   //activity.action_activity(userId, req.params.id, 'saved');
   return res.json(200, "like called for object " + req.params.id + " and user " + userId);
 };
 
 exports.follow = function (req, res) {
-  var userId = req.user._id;
+  let  userId = req.user._id;
   graphModel.relate_ids(userId, 'FOLLOW', req.params.id);
   activity_follow(userId, req.params.id);
 
@@ -155,7 +155,7 @@ exports.follow = function (req, res) {
  *
  */
 exports.unfollow = function (req, res) {
-  var userId = req.user._id;
+  let  userId = req.user._id;
   graphModel.unrelate_ids(userId, 'FOLLOW', req.params.id);
   return res.json(200, "unlike called for promotion " + req.params.id + " and user " + userId);
 };
@@ -192,13 +192,7 @@ function send_sms_message(phone_number, message) {
  * Creates a new user
  */
 exports.create = function (req, res, next) {
-  var newUser = new User(req.body);
-  console.log('USER CREATE-------------------------------------------------------');
-  //console.log(req.body);
-  //console.log("req.headers: " + JSON.stringify(req.headers));
-  //console.log("req.header: " + req.header);
-  console.log("req.headers.authorization: " + JSON.stringify(req.headers.authorization));
-  console.log('USER CREATE--------------------------------------------------------');
+  let  newUser = new User(req.body);
 
   newUser.provider = 'local';
   newUser.role = 'user';
@@ -210,19 +204,12 @@ exports.create = function (req, res, next) {
 
   User.findOne({phone_number: newUser.phone_number}, function (err, user) {
     if (user) {
-			console.log("x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-");
-			var token = jwt.sign({_id: user._id}, config.secrets.session, {expiresIn: 60 * 24 * 30});
-			console.log("user: " + user);
-			console.log("token: " + token);
-			console.log("x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-");
+			let  token = jwt.sign({_id: user._id}, config.secrets.session, {expiresIn: 60 * 24 * 30});
 			res.status(200).json({token: token});
     } else {
 			newUser.save(function (err, user) {
 				if (err) return validationError(res, err);
-				var token = jwt.sign({_id: user._id}, config.secrets.session, {expiresIn: 60 * 24 * 30});
-				console.log("user._id---------------------" + user._id);
-				console.log("token---------------------" + token);
-				console.log("config.secrets.session---------------------" + config.secrets.session);
+				let  token = jwt.sign({_id: user._id}, config.secrets.session, {expiresIn: 60 * 24 * 30});
 				res.status(200).json({token: token});
 
 				send_sms_verification_code(user);
@@ -248,13 +235,13 @@ exports.create = function (req, res, next) {
  * Creates a new demo user
  */
 exports.createDemo = function (req, res, next) {
-	for(var i =0; i<12;i++){
-		var newUser = new User(req.body);
+	for(let  i =0; i<12;i++){
+		let  newUser = new User(req.body);
 
 		newUser.provider = 'local';
 		newUser.role = 'user';
 		newUser.sms_verified = true;
-		//var randomPhone = randomstring.generate({length: 6, charset: 'numeric'});
+		//let  randomPhone = randomstring.generate({length: 6, charset: 'numeric'});
 		//newUser.phone_number = "972111" + i + i + i + i + i + i ;
     if(i === 11) {
       newUser.phone_number = "972543133943";
@@ -276,11 +263,7 @@ exports.createDemo = function (req, res, next) {
 				],
 				 "id": "8786f6ea"
 			}
-		}
-
-		console.log("****************************************");
-		console.log(newUser);
-		console.log("****************************************");
+		};
 
 		newUser.save(function (err, user) {
 			if (err) return validationError(res, err);
@@ -298,7 +281,6 @@ exports.createDemo = function (req, res, next) {
 		});
 
 	}
-
 };
 
 
@@ -383,8 +365,8 @@ function owner_follow(phone_number) {
 
 function identifyPhoneByTwilio(phone, countryCode){
 
-  var verifiedPhone = [];
-  var cleanedPhone = utils.clean_phone_number(phone);
+  let  verifiedPhone = [];
+  let  cleanedPhone = utils.clean_phone_number(phone);
 
   if(cleanedPhone !== undefined){
     twilioClient.phoneNumbers(cleanedPhone).get({
@@ -478,7 +460,7 @@ exports.login = function (req, res, next) {
       return handleError(res, err);
     }
     if (user) {
-      var token = jwt.sign({_id: user._id}, config.secrets.session, {expiresIn: 60 * 24 * 30});
+      let  token = jwt.sign({_id: user._id}, config.secrets.session, {expiresIn: 60 * 24 * 30});
       res.status(200).json({token: token});
     }
   });
@@ -488,7 +470,7 @@ exports.login = function (req, res, next) {
  * Get a single user by id
  */
 exports.show = function (req, res, next) {
-  var userId = req.params.id;
+  let  userId = req.params.id;
 
   User.findById(userId, '-salt -hashedPassword -sms_code', function (err, user) {
     if (err) return next(err);
@@ -501,7 +483,7 @@ exports.show = function (req, res, next) {
  * Get a single user by phone number
  */
 exports.showByPhone = function (req, res, next) {
-  var userPhoneNumber = req.params.phone_number;
+  let  userPhoneNumber = req.params.phone_number;
   User.findOne({phone_number: userPhoneNumber}, function (err, user) {
     if (err) return next(err);
     if (!user) return res.status(401).send('Unauthorized');
@@ -513,8 +495,8 @@ exports.showByPhone = function (req, res, next) {
  */
 exports.checkPhoneNumbers = function (req, res, next) {
   //console.log(req.body);
-  var list = req.body.phonebook;
-  var users = [];
+  let  list = req.body.phonebook;
+  let  users = [];
 
   getPhoneNumbers(list, users, function(message, users, list) {
     // this anonymous function will run when the
@@ -529,8 +511,8 @@ exports.checkPhoneNumbers = function (req, res, next) {
  */
 function checkPhones (phoneBook, res){
   console.log("inside checkPhones");
-  var list = phoneBook;
-  var users = [];
+  let  list = phoneBook;
+  let  users = [];
 
   getPhoneNumbers(list, users, function(message, users, list) {
     // this anonymous function will run when the
@@ -544,8 +526,8 @@ function checkPhones (phoneBook, res){
 
 function normalizePhoneBookList(data){
   console.log("--------------------normalizePhoneBookList-----------------------");
-  var tempData = {};
-  for ( var contact in data ) {
+  let  tempData = {};
+  for ( let  contact in data ) {
     console.log(data[contact]);
     tempData[data[contact]["phone_number"]] = true;
   }
@@ -555,11 +537,11 @@ function normalizePhoneBookList(data){
 }
 
 function getPhoneNumbers(list, users, callback){
-  var userPhones = [];
-  //var users = [];         // shortcut to find them faster afterwards
+  let  userPhones = [];
+  //let  users = [];         // shortcut to find them faster afterwards
 
-  for (var l in list) {       // first build the search array
-    var o = list[l];
+  for (let  l in list) {       // first build the search array
+    let  o = list[l];
     console.log(o.number);
     if (o.number) {
       //userPhones.push( new mongoose.Types.ObjectId( o.number ) );           // for the Mongo query
@@ -589,14 +571,14 @@ function getPhoneNumbers(list, users, callback){
 };
 
 exports.recover_password = function (req, res) {
-  var phone_number = req.params.phone_number;
+  let  phone_number = req.params.phone_number;
   User.findOne({'phone_number': phone_number}, function (err, user) {
     if (err) return handleError(err);
-    var new_password = randomstring.generate({length: 6, charset: 'alphanumeric'});
+    let  new_password = randomstring.generate({length: 6, charset: 'alphanumeric'});
     user.password = new_password;
     user.save(function (err, user) {
       if (err) return validationError(res, err);
-      var token = jwt.sign({_id: user._id}, config.secrets.session, {expiresIn: 60 * 24 * 30});
+      let  token = jwt.sign({_id: user._id}, config.secrets.session, {expiresIn: 60 * 24 * 30});
       send_sms_new_password(phone_number, new_password);
       res.status(200).json({token: token});
       //return res.send(200, "ok");
@@ -610,8 +592,8 @@ exports.recover_password = function (req, res) {
 exports.verification = function (req, res) {
   console.log("req.params.code: " + req.params.code);
   console.log("req.user._id: " + req.user._id);
-  var code = req.params.code;
-  var userId = req.user._id;
+  let  code = req.params.code;
+  let  userId = req.user._id;
   if (req.body._id) {
     return res.status(404).send('bad request _id in body not allowed');
   }
@@ -648,8 +630,8 @@ exports.verification = function (req, res) {
  * sends sms code
  */
 exports.verify = function (req, res) {
-  var userId = req.user._id;
-  var sms_code = randomstring.generate({length: 4, charset: 'numeric'});
+  let  userId = req.user._id;
+  let  sms_code = randomstring.generate({length: 4, charset: 'numeric'});
   User.findById(userId, function (err, user) {
     if (err) return handleError(res, err);
     if (!user) return res.status(401).send('Unauthorized');
@@ -680,9 +662,9 @@ exports.destroy = function (req, res) {
  * Change a users password
  */
 exports.changePassword = function (req, res, next) {
-  var userId = req.user._id;
-  var oldPass = String(req.body.oldPassword);
-  var newPass = String(req.body.newPassword);
+  let  userId = req.user._id;
+  let  oldPass = String(req.body.oldPassword);
+  let  newPass = String(req.body.newPassword);
 
   User.findById(userId, function (err, user) {
     if (user.authenticate(oldPass)) {
@@ -701,9 +683,9 @@ exports.changePassword = function (req, res, next) {
  * Change users info
  */
 exports.updateInfo = function (req, res, next) {
-  var userId = req.user._id;
-  var newUser = req.body;
-  var query = {'phone_number':req.body['phone_number']};
+  let  userId = req.user._id;
+  let  newUser = req.body;
+  let  query = {'phone_number':req.body['phone_number']};
 
   User.findOneAndUpdate(query, newUser, {upsert:true}, function(err, doc){
     if (err) return res.status(500).send(err);
@@ -724,7 +706,7 @@ exports.updateInfo = function (req, res, next) {
  * Get my info
  */
 exports.me = function (req, res, next) {
-  var userId = req.user._id;
+  let  userId = req.user._id;
   User.findOne({
     _id: userId
   }, '-salt -hashedPassword -sms_code', function (err, user) { // don't ever give out the password or salt

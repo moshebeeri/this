@@ -9,7 +9,8 @@ var router = express.Router();
 
 router.get('/save/:id', auth.isAuthenticated(), controller.save);
 router.get('/realize/:id/:realize_code/:sale_point_code', auth.isAuthenticated(), controller.realize);
-router.get('/list/by/user', auth.isAuthenticated(), controller.user_promotions);
+router.get('/list/create/by/user/:skip/:limit', auth.isAuthenticated(), controller.user_promotions);
+router.get('/list/by/user/business', auth.isAuthenticated(), controller.user_business);
 router.get('/list/by/business/:business_id', auth.isAuthenticated(), controller.business_promotions);
 router.get('/list/:business_id/:campaign_id', auth.isAuthenticated(), controller.campaign_promotions);
 router.post('/campaign', auth.isAuthenticated(), controller.create_campaign);

@@ -213,6 +213,7 @@ GraphModel.prototype.incoming_ids = function related_incoming_ids(start, name, r
 //"ORDER BY r.name DESC " +
 GraphModel.prototype.query_ids = function query_ids(query, order, skip, limit, callback){
   let query_str  = util.format("%s %s skip %d limit %d", query, order, skip, limit);
+  console.log(query_str);
   db.query(query_str, function(err, related) {
     if (err) { callback(err, null) }
     else callback(null, related)
@@ -222,6 +223,8 @@ GraphModel.prototype.query_ids = function query_ids(query, order, skip, limit, c
 GraphModel.prototype.query_objects = function query_objects(schema, query, order, skip, limit, callback){
   this.query_ids(query, order, skip, limit, function(err, _ids) {
     if (err) { callback(err, null) }
+    let ids = _ids.map((o)=>o._id);
+    console.log(JSON.stringify(ids));
     schema.find({}).where('_id').in(_ids).exec(function (err, objects) {
       if (err) { callback(err, null) }
       else callback(null, objects)

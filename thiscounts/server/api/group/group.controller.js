@@ -237,21 +237,21 @@ exports.add_user = function(req, res) {
 		if(err) { return handleError(res, err); }
 		if(!group) { return res.status(404).send('no group'); }
 
-		if(group.add_policy == 'OPEN'){
-			if(req.user._id ==  req.params.user )
+		if(group.add_policy === 'OPEN'){
+			if(req.user._id ===  req.params.user )
 				return user_follow_group(req.user._id, group, true, res);
 			else
 				return res.status(404).send('Group add policy OPEN - authenticated user may only add himself');
 		}
-		if(group.add_policy == 'CLOSE'){
+		if(group.add_policy === 'CLOSE'){
 			if(utils.defined(_.find(group.admins, req.user._id)))
 				return user_follow_group(req.user._id, group, true, res);
 			else
 				return res.status(404).send('Group add policy CLOSE - only admin may add users');
 		}
-		if(group.add_policy == 'REQUEST' ||
-			group.add_policy == 'ADMIN_INVITE' ||
-			group.add_policy == 'MEMBER_INVITE' )
+		if(group.add_policy === 'REQUEST' ||
+			group.add_policy === 'ADMIN_INVITE' ||
+			group.add_policy === 'MEMBER_INVITE' )
 			return handleError(res, 'add policy ' + group.add_policy + ' not implemented');
 	});
 };
@@ -259,13 +259,11 @@ exports.add_user = function(req, res) {
 //router.post('/add/users/:to_group', auth.isAuthenticated(), controller.add_users);
 // user[phone_number] and user[sms_verified]
 exports.add_users = function(req, res) {
-    console.log("=================== ADD USERS TO GROUP ===================");
 	Group.findById(req.params.to_group, function (err, group) {
 		if(err) { return handleError(res, err); }
 		if(!group) { return res.status(404).send('no group'); }
 
     if(utils.defined(_.find(group.admins, req.user._id) && (group.add_policy == 'OPEN' || group.add_policy == 'CLOSE'))){
-      console.log("=================== USERS FOLLOW GROUP ===================");
       console.log(req.body.users);
       for(var user in req.body.users) {
         console.log(req.body.users[user]);

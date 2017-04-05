@@ -142,8 +142,9 @@ function create_promotion(promotion, callback) {
       promotionGraphModel.reflect(promotion, to_graph(promotion), function (err, promotion) {
         if (err) return callback(err, null);
         //create relationships
+        promotionGraphModel.relate_ids(promotion._id, 'CREATED_BY', promotion.creator);
         if (promotion.report)
-          promotionGraphModel.relate_ids(promotion._id, 'REPORTED_BY', req.body._id);
+          promotionGraphModel.relate_ids(promotion._id, 'REPORTED_BY', promotion.creator);
         if (utils.defined(promotion.mall))
           promotionGraphModel.relate_ids(promotion._id, 'MALL_PROMOTION', promotion.mall);
         if (utils.defined(promotion.shopping_chain))
@@ -371,9 +372,9 @@ exports.campaign_promotions = function (req, res) {
   let campaignID = req.params.campaign_id;
 
   promotionGraphModel.query_objects(Promotion,
-    `MATCH (u:user {_id:'${userID}'})-[r:OWNS]->`
-      `(b:business {_id:'${businessID}'})-[bc:BUSINESS_CAMPAIGN]->`
-      `(c:campaign {_id:'${campaignID}'})-[cp:CAMPAIGN_PROMOTION]->(p:promotion) RETURN p`,
+    `MATCH (u:user {_id:'${userID}'})-[r:OWNS]->
+      (b:business {_id:'${businessID}'})-[bc:BUSINESS_CAMPAIGN]->
+      (c:campaign {_id:'${campaignID}'})-[cp:CAMPAIGN_PROMOTION]->(p:promotion) RETURN p`,
     'p.created DESC', 0, 1000,
     function (err, promotions) {
       if (err) {
@@ -407,13 +408,11 @@ exports.business_promotions = function (req, res) {
     });
 };
 
-exports.user_promotions = function (req, res) {
-  console.log("user promotions");
-  console.log("user: " + req.user._id);
+exports.user_business = function (req, res) {
   let userID = req.user._id;
 
   promotionGraphModel.query_objects(Promotion,
-    `MATCH (u:user {_id:'${userID}'})-[r:OWNS]->(b:business)<-[]-(p:promotion) RETURN p._id`,
+    `MATCH (u:user {_id:'${userID}'})-[r:OWNS]->(b:business)<-[]-(p:promotion) RETURN p._id as _id`,
     'order by p.created DESC', 0, 1000, function (err, promotions) {
       if (err) return handleError(res, err);
 
@@ -422,6 +421,20 @@ exports.user_promotions = function (req, res) {
     });
 };
 
+exports.user_promotions = function (req, res) {
+  let userID = req.user._id;
+  let skip =  req.params.skip;
+  let limit = req.params.limit;
+
+  promotionGraphModel.query_objects(Promotion,
+    `MATCH (u:user {_id:'${userID}'})<-[r:CREATED_BY]-(p:promotion) RETURN p._id as _id`,
+    'order by p.created DESC', skip, limit, function (err, promotions) {
+      if (err) return handleError(res, err);
+
+      console.log(JSON.stringify(promotions));
+      return res.status(200).json(promotions);
+    });
+};
 
 function handleError(res, err) {
   console.log(err);

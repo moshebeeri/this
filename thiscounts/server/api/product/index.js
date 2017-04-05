@@ -2,10 +2,15 @@
 
 var express = require('express');
 var controller = require('./product.controller');
+var auth = require('../../auth/auth.service');
 
 var router = express.Router();
 
-router.get('/', controller.index);
+router.get('/list/create/by/user/:skip/:limit', auth.isAuthenticated(), controller.user_products);
+
+
+router.get('/', auth.hasRole('admin'), controller.index);
+router.get('/:skip/:limit', auth.isAuthenticated(), controller.index_paginated);
 router.get('/:id', controller.show);
 router.post('/', controller.create);
 router.put('/:id', controller.update);

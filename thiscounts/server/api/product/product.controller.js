@@ -15,6 +15,22 @@ exports.index = function (req, res) {
   });
 };
 
+// Get list of products
+exports.index_paginated = function (req, res) {
+  let userId = req.user._id;
+  let skip = req.params.skip;
+  let limit = req.params.limit;
+
+  Product.find({business: req.params.id})
+    .skip(skip)
+    .limit(limit)
+    .exec(function (err, products) {
+      if (err)
+        return handleError(res, err);
+      return res.status(200).json(products);
+    });
+};
+
 // Get a single product
 exports.show = function (req, res) {
   Product.findById(req.params.id, function (err, product) {
@@ -48,12 +64,24 @@ exports.create = function (req, res) {
       info: product.info,
       retail_price: product.retail_price
     }, function (err, product) {
-      if (err) {
+      if (err)
         return handleError(res, err);
-      }
+      graphModel.relate_ids(product._id, 'CREATED_BY', req.user._id);
       return res.status(201).json(product);
     });
   });
+};
+
+exports.user_products = function (req, res) {
+  let userID = req.user._id;
+  let skip =  req.params.skip;
+  let limit = req.params.limit;
+  graphModel.query_objects(Product,
+    `MATCH (u:user {_id:'${userID}'})<-[r:CREATED_BY]-(p:product) RETURN p._id as _id`,
+    'order by p.created DESC', skip, limit, function (err, products) {
+      if (err) return handleError(res, err);
+      return res.status(200).json(products);
+    });
 };
 
 // Updates an existing product in the DB.
