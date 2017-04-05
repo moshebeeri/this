@@ -11,11 +11,11 @@ router.get('/list/create/by/user/:skip/:limit', auth.isAuthenticated(), controll
 
 router.get('/', auth.hasRole('admin'), controller.index);
 router.get('/:skip/:limit', auth.isAuthenticated(), controller.index_paginated);
-router.get('/:id', controller.show);
-router.post('/', controller.create);
-router.put('/:id', controller.update);
-router.patch('/:id', controller.update);
-router.delete('/:id', controller.destroy);
-router.get('/find/by/business/:id', controller.find_by_business);
+router.get('/:id', auth.isAuthenticated(), controller.show);
+router.post('/', auth.isAuthenticated(), controller.create);
+router.put('/:id', auth.isAuthenticated(), controller.update);
+router.patch('/:id', auth.isAuthenticated(), controller.update);
+router.delete('/:id', auth.isAuthenticated(),  controller.destroy);
+router.get('/find/by/business/:id', auth.isAuthenticated(), controller.find_by_business);
 
 module.exports = router;
