@@ -58,7 +58,7 @@ class PromotionApi
             try {
                 let token = await store.get('token');
                 let userId = await store.get('user_id');
-                const response = await fetch(`${server_host}/api/promotions/list/by/user`, {
+                const response = await fetch(`${server_host}/api/promotions`, {
                     method: 'GET',
                     headers: {
                         'Accept': 'application/json, text/plain, */*',

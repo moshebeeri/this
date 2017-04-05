@@ -4,7 +4,9 @@ import {connect} from 'react-redux';
 import {actions} from 'react-native-navigation-redux-helpers';
 import {Container, Content, Text, InputGroup, Input, Button, Icon, View,Header} from 'native-base';
 import GeneralComponentHeader from '../header/index';
+import GenericListManager from '../generic-list-manager/index';
 
+import GenericListView from '../generic-list-manager/generic-list-view/index'
 import PromotionApi from "../../api/promotion"
 let promotionApi = new PromotionApi();
 
@@ -54,8 +56,6 @@ class Promotions extends Component {
         }
         ;
 
-        let stateFunc = this.setState.bind(this);
-
 
 
     }
@@ -81,54 +81,14 @@ class Promotions extends Component {
     render() {
 
 
-        let index = 0
-
-        let rows = this.state.rowsView.map((r, i) => {
-            index++;
-            if(r.pictures.length > 0){
-                return <ListItem key={index} thumbnail>
-                    <Left>
-                        <Thumbnail square size={80} source={{uri: r.pictures[0].pictures[3]}} />
-                    </Left>
-                    <Body>
-                    <Text>{r.name}</Text>
-                    <Text note>Its time to build a dif.</Text>
-                    </Body>
-                    <Right>
-                        <Button transparent>
-                            <Text>View</Text>
-                        </Button>
-                    </Right>
-                </ListItem>
-            }
-            return <ListItem key={index} thumbnail style={{  backgroundColor: '#fff'}}>
-                <Left>
-                    <Thumbnail square size={80} source={require('../../../images/client_1.png')} />
-                </Left>
-                <Body>
-
-                <Text>{r.name}</Text>
-                <Text note>Its time to build a diffe. .</Text>
-                </Body>
-                <Right>
-                    <Button transparent>
-                        <Text>View</Text>
-                    </Button>
-                </Right>
-            </ListItem>
-        })
 
 
         return (
 
 
 
-
-                <Content  style={{  backgroundColor: '#fff'}}>
-
-
-                    { rows }
-                </Content>
+            <GenericListManager title="Promotion" component="home" addComponent="add-promotion" api={promotionApi}
+                                ItemDetail={GenericListView}/>
 
         );
     }
