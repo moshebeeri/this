@@ -4,7 +4,7 @@ import {connect} from 'react-redux';
 import {actions} from 'react-native-navigation-redux-helpers';
 import {Container, Content, Text,Title, InputGroup, Input, Button, Icon, View,Header,Spinner, Body, Right, ListItem, Thumbnail,Left} from 'native-base';
 
-import GeneralComponentHeader from '../header/index';
+import store from 'react-native-simple-store';
 
 
 import Dataset from 'impagination';
@@ -45,6 +45,7 @@ class GenericListManager extends Component {
 
     setupImpagination() {
         let fetchApi = this.props.api.fetchApi.bind(this);
+        let component = this.props.title;
         let dataset = new Dataset({
             pageSize: 8,
             observe: (rowsView) => {
@@ -54,7 +55,9 @@ class GenericListManager extends Component {
             // Where to fetch the data from.
 
             fetch(pageOffset, pageSize, stats) {
-                return fetchApi(pageOffset + 1,pageSize );
+                let promise =  fetchApi(pageOffset + 1,pageSize );
+                promise.then(response => store.save(component,response))
+                return promise;
 
             }
         });
@@ -64,10 +67,11 @@ class GenericListManager extends Component {
 
     async fetchList(){
         try {
-            let response = await this.props.api.getAll();
+            let response = await store.get(this.props.title);
             this.setState({
                 rowsView: response
             })
+
 
         }catch (error){
             console.log(error);
@@ -99,11 +103,13 @@ class GenericListManager extends Component {
 
 
     componentWillMount(){
+
+
+        this.fetchList();
         if(this.props.api.fetchApi) {
             this.setupImpagination();
-        }else{
-            this.fetchList();
         }
+
     }
 
     render() {
