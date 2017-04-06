@@ -143,6 +143,7 @@ function create_promotion(promotion, callback) {
     Promotion.create(promotion, function (err, promotion) {
       promotionGraphModel.reflect(promotion, to_graph(promotion), function (err, promotion) {
         if (err) return callback(err, null);
+        console.log(`creating relationships (${promotion._id})-[CREATED_BY]->(${promotion.creator})`);
         //create relationships
         promotionGraphModel.relate_ids(promotion._id, 'CREATED_BY', promotion.creator);
         if (promotion.report)
