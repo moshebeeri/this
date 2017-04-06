@@ -229,9 +229,10 @@ exports.create_backup = function (req, res) {
     set_promotion_location(promotion, function (err, promotion) {
 
       promotionGraphModel.reflect(promotion, to_graph(promotion), function (err, promotion) {
-        if (err) {
+        if (err)
           return handleError(res, err);
-        }
+
+        promotionGraphModel.relate_ids(promotion._id, 'CREATED_BY', promotion.creator);
         //create relationships
         if (promotion.report)
           promotionGraphModel.relate_ids(promotion._id, 'REPORTED_BY', req.body._id);
