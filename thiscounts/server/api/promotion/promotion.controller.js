@@ -113,18 +113,18 @@ let relateTypes = function (promotion) {
 let set_promotion_location = function (promotion, callback) {
   if (!(utils.defined(promotion.mall) || utils.defined(promotion.business)))
     callback(null, promotion);
-  else if (utils.defined(promotion.mall))
-    Promotion.populate(promotion, {path: 'mall', model: 'Mall'}, function (err, promotion) {
+  else if (utils.defined(promotion.entity.mall))
+    Promotion.populate(promotion, {path: 'entity.mall', model: 'Mall'}, function (err, promotion) {
       if (err) return logger.error('failed to populate location ', err);
-      promotion.location = promotion.mall.location;
-      promotion.mall = promotion.mall._id;
+      promotion.location = promotion.entity.mall.location;
+      promotion.mall = promotion.entity.mall._id;
       callback(null, promotion)
     });
-  else if (utils.defined(promotion.business))
-    Promotion.populate(promotion, {path: 'business', model: 'Business'}, function (err, promotion) {
+  else if (utils.defined(promotion.entity.business))
+    Promotion.populate(promotion, {path: 'entity.business', model: 'Business'}, function (err, promotion) {
       if (err) return logger.error('failed to populate location ', err);
-      promotion.location = promotion.business.location;
-      promotion.business = promotion.business._id;
+      promotion.location = promotion.entity.business.location;
+      promotion.business = promotion.entity.business._id;
       callback(null, promotion)
     });
 };
