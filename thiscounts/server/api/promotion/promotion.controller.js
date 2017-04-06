@@ -4,7 +4,7 @@ let _ = require('lodash');
 let async = require('async');
 
 let Promotion = require('./promotion.model');
-let Campaign = require('../campaign/campaign.model');
+let Campaign = require('../campaign/campaign.controller');
 
 let model = require('seraph-model');
 
@@ -146,14 +146,19 @@ function create_promotion(promotion, callback) {
         console.log(`creating relationships (${promotion._id})-[CREATED_BY]->(${promotion.creator})`);
         //create relationships
         promotionGraphModel.relate_ids(promotion._id, 'CREATED_BY', promotion.creator);
+
         if (promotion.report)
           promotionGraphModel.relate_ids(promotion._id, 'REPORTED_BY', promotion.creator);
-        if (utils.defined(promotion.mall))
-          promotionGraphModel.relate_ids(promotion._id, 'MALL_PROMOTION', promotion.mall);
-        if (utils.defined(promotion.shopping_chain))
-          promotionGraphModel.relate_ids(promotion._id, 'CHAIN_PROMOTION', promotion.shopping_chain);
-        if (utils.defined(promotion.business))
-          promotionGraphModel.relate_ids(promotion._id, 'BUSINESS_PROMOTION', promotion.business);
+
+        if (utils.defined(promotion.entity.mall))
+          promotionGraphModel.relate_ids(promotion._id, 'MALL_PROMOTION', promotion.entity.mall);
+
+        if (utils.defined(promotion.entity.shopping_chain))
+          promotionGraphModel.relate_ids(promotion._id, 'CHAIN_PROMOTION', promotion.entity.shopping_chain);
+
+        if (utils.defined(promotion.entity.business))
+          promotionGraphModel.relate_ids(promotion._id, 'BUSINESS_PROMOTION', promotion.entity.business);
+
         if (utils.defined(promotion.campaign_id)) {
           promotionGraphModel.relate_ids(promotion.campaign_id, 'CAMPAIGN_PROMOTION', promotion._id);
         }
@@ -268,7 +273,7 @@ exports.create_campaign = function (req, res) {
     campaign.promotions = [promotion._id];
     campaign.creator = req.user._id;
     campaign.name = promotion.name;
-    Campaign.create(campaign, function (err, campaign) {
+    Campaign.create_campaign(campaign, function (err, campaign) {
       if (err) return handleError(res, err);
       return res.status(201).json(campaign)
     })

@@ -1,15 +1,15 @@
 'use strict';
 
-var _ = require('lodash');
-var Campaign = require('./campaign.model');
-var graphTools = require('../../components/graph-tools');
-var graphModel = graphTools.createGraphModel('campaign');
-var Promotion = require('../promotion/promotion.controller');
+let _ = require('lodash');
+let Campaign = require('./campaign.model');
+let graphTools = require('../../components/graph-tools');
+let graphModel = graphTools.createGraphModel('campaign');
+let Promotion = require('../promotion/promotion.controller');
 
 // Get list of campaigns
 exports.index = function(req, res) {
   Campaign.find(function (err, campaigns) {
-    if(err) { return handleError("1", res, err); }
+    if(err) { return handleError(res, err); }
     return res.status(200).json(campaigns);
   });
 };
@@ -17,21 +17,30 @@ exports.index = function(req, res) {
 // Get a single campaign
 exports.show = function(req, res) {
   Campaign.findById(req.params.id, function (err, campaign) {
-    if(err) { return handleError("2",res, err); }
+    if(err) { return handleError(res, err); }
     if(!campaign) { return res.status(404).send('Not Found'); }
     return res.json(campaign);
+  });
+};
+
+exports.create_campaign = function(campaign, callback) {
+  Campaign.create(campaign, function(err, campaign) {
+    if(err) { return callback(err); }
+    graphModel.reflect(campaign, to_graph(campaign), function (err) {
+      if(err) { return callback(err); }
+      callback(null, campaign);
+    });
   });
 };
 
 // Creates a new campaign in the DB.
 exports.create = function(req, res) {
   req.body.creator = req.user._id;
-  Campaign.create(req.body, function(err, campaign) {
-    if(err) { return handleError("3",res, err); }
+  this.create_campaign(req.body, function(err, campaign) {
+    if(err) { return handleError(res, err); }
     graphModel.reflect(campaign, to_graph(campaign), function (err) {
-      if (err) { return handleError("4",res, err); }
+      if (err) { return handleError(res, err); }
     });
-
     graphModel.relate_ids(req.body["business_id"], 'BUSINESS_CAMPAIGN', campaign._id );
     req.body["type"] = 'PERCENT';
     req.body["campaign_id"] = campaign._id;
@@ -44,11 +53,11 @@ exports.create = function(req, res) {
 exports.update = function(req, res) {
   if(req.body._id) { delete req.body._id; }
   Campaign.findById(req.params.id, function (err, campaign) {
-    if (err) { return handleError("5",res, err); }
+    if (err) { return handleError(res, err); }
     if(!campaign) { return res.status(404).send('Not Found'); }
-    var updated = _.merge(campaign, req.body);
+    let updated = _.merge(campaign, req.body);
     updated.save(function (err) {
-      if (err) { return handleError("6",res, err); }
+      if (err) { return handleError(res, err); }
       return res.status(200).json(campaign);
     });
   });
@@ -57,10 +66,10 @@ exports.update = function(req, res) {
 // Deletes a campaign from the DB.
 exports.destroy = function(req, res) {
   Campaign.findById(req.params.id, function (err, campaign) {
-    if(err) { return handleError("7",res, err); }
+    if(err) { return handleError(res, err); }
     if(!campaign) { return res.status(404).send('Not Found'); }
     campaign.remove(function(err) {
-      if(err) { return handleError("8",res, err); }
+      if(err) { return handleError(res, err); }
       return res.status(204).send('No Content');
     });
   });
@@ -73,22 +82,21 @@ function to_graph(campaign) {
   }
 }
 
-exports.business_campagins = function (req, res) {
-  console.log("user_campagins");
+exports.business_campaigns = function (req, res) {
+  console.log("user_campaigns");
   console.log("user: " + req.user._id);
-  var userID = req.user._id;
-  var businessID = req.params.business_id;
+  let userID = req.user._id;
+  let businessID = req.params.business_id;
   console.log("MATCH (u:user {_id:'"+ userID +"'})-[r:OWNS]->(b:business {_id:'"+ businessID +"'})-[bc:BUSINESS_CAMPAIGN]->(c:campaign) RETURN c LIMIT 25");
   graphModel.query("MATCH (u:user {_id:'"+ userID +"'})-[r:OWNS]->(b:business {_id:'"+ businessID +"'})-[bc:BUSINESS_CAMPAIGN]->(c:campaign) RETURN c LIMIT 25", function(err, groups){
-    if (err) {return handleError("13",res, err)}
+    if (err) {return handleError(res, err)}
     if(!groups) { return res.send(404); }
     console.log(JSON.stringify(groups));
     return res.status(200).json(groups);
   });
 };
 
-function handleError(msg, res, err) {
-  console.log("--------- " + msg + " ---------");
+function handleError(res, err) {
   console.log(err);
   return res.status(500).send(err);
 }
