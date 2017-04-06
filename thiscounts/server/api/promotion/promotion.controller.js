@@ -111,13 +111,16 @@ let relateTypes = function (promotion) {
 };
 
 let set_promotion_location = function (promotion, callback) {
-  if (!(utils.defined(promotion.mall) || utils.defined(promotion.business)))
+  if (!utils.defined(promotion.entity))
+    callback(null, promotion);
+  if (!(utils.defined(promotion.entity.mall) || utils.defined(promotion.entity.business)))
     callback(null, promotion);
   else if (utils.defined(promotion.entity.mall))
     Promotion.populate(promotion, {path: 'entity.mall', model: 'Mall'}, function (err, promotion) {
       if (err) return logger.error('failed to populate location ', err);
       promotion.location = promotion.entity.mall.location;
       promotion.mall = promotion.entity.mall._id;
+      spatial.location_to_point(promotion);
       callback(null, promotion)
     });
   else if (utils.defined(promotion.entity.business))
@@ -125,11 +128,47 @@ let set_promotion_location = function (promotion, callback) {
       if (err) return logger.error('failed to populate location ', err);
       promotion.location = promotion.entity.business.location;
       promotion.business = promotion.entity.business._id;
+      spatial.location_to_point(promotion);
       callback(null, promotion)
     });
+
 };
 
 function create_promotion(promotion, callback) {
+  //TODO: Convert to address location
+  console.log(JSON.stringify(promotion));
+
+  set_promotion_location(promotion, function (err, promotion) {
+    if (err) return callback(err, null);
+    Promotion.create(promotion, function (err, promotion) {
+      promotionGraphModel.reflect(promotion, to_graph(promotion), function (err, promotion) {
+        if (err) return callback(err, null);
+        //create relationships
+        promotionGraphModel.relate_ids(promotion._id, 'CREATED_BY', promotion.creator);
+        if (promotion.report)
+          promotionGraphModel.relate_ids(promotion._id, 'REPORTED_BY', promotion.creator);
+        if (utils.defined(promotion.mall))
+          promotionGraphModel.relate_ids(promotion._id, 'MALL_PROMOTION', promotion.mall);
+        if (utils.defined(promotion.shopping_chain))
+          promotionGraphModel.relate_ids(promotion._id, 'CHAIN_PROMOTION', promotion.shopping_chain);
+        if (utils.defined(promotion.business))
+          promotionGraphModel.relate_ids(promotion._id, 'BUSINESS_PROMOTION', promotion.business);
+        if (utils.defined(promotion.campaign_id)) {
+          promotionGraphModel.relate_ids(promotion.campaign_id, 'CAMPAIGN_PROMOTION', promotion._id);
+        }
+        relateTypes(promotion);
+        promotion_created_activity(promotion);
+        spatial.add2index(promotion.gid, function (err, result) {
+          if (err) return callback(err, null);
+          else logger.info('object added to layer ' + result)
+        });
+      });
+      callback(null, promotion);
+    });
+  });
+}
+
+function create_promotion_bak(promotion, callback) {
   //TODO: Convert to address location
   console.log(JSON.stringify(promotion));
 
