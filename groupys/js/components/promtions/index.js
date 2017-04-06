@@ -67,6 +67,19 @@ class Promotions extends Component {
         this.props.replaceAt('יhome', {key: route}, this.props.navigation.key);
     }
 
+    async getAll(){
+        let response =  await  promotionApi.getAll();
+        return response;
+    }
+    fetchApi(pageOffset,pageSize ) {
+
+        return new Promise(async function(resolve, reject) {
+            response =  await  promotionApi.getAll();
+            resolve(response);
+        });
+
+
+    }
 
     async componentWillMount(){
        // .let promotions = await promotionApi.getAll();
@@ -87,7 +100,7 @@ class Promotions extends Component {
 
 
 
-            <GenericListManager title="Promotion" component="home" addComponent="add-promotion" api={promotionApi}
+            <GenericListManager title="Promotion" component="home" addComponent="add-promotion" api={this}
                                 ItemDetail={GenericListView}/>
 
         );

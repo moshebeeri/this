@@ -7,7 +7,7 @@ class ProductsApi
 
             try {
                 let token = await store.get('token');
-                const response = await fetch(`${server_host}/api/products`, {
+                const response = await fetch(`${server_host}/api/products/0/10`, {
                     method: 'GET',
                     headers: {
                         'Accept': 'application/json, text/plain, */*',

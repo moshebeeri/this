@@ -157,6 +157,9 @@ class Feed extends Component {
 
 
     fetchApi(pageOffset,pageSize ) {
+        console.log(pageOffset);
+        console.log(pageSize);
+
         return new Promise(function(resolve, reject) {
             resolve(feeds);
         });
