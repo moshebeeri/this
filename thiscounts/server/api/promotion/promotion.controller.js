@@ -4,7 +4,7 @@ let _ = require('lodash');
 let async = require('async');
 
 let Promotion = require('./promotion.model');
-let Campaign = require('../campaign/campaign.controller');
+let campaign_controller = require('../campaign/campaign.controller');
 
 let model = require('seraph-model');
 
@@ -273,7 +273,7 @@ exports.create_campaign = function (req, res) {
     campaign.promotions = [promotion._id];
     campaign.creator = req.user._id;
     campaign.name = promotion.name;
-    Campaign.create_campaign(campaign, function (err, campaign) {
+    campaign_controller.create_campaign(campaign, function (err, campaign) {
       if (err) return handleError(res, err);
       return res.status(201).json(campaign)
     })
