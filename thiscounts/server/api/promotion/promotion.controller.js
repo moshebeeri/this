@@ -274,6 +274,9 @@ exports.create_campaign = function (req, res) {
     campaign.creator = req.user._id;
     campaign.name = promotion.name;
     campaign_controller.create_campaign(campaign, function (err, campaign) {
+      campaign.promotions.forEach((promotion) => {
+        promotionGraphModel.relate_ids(campaign._id, 'CAMPAIGN_PROMOTION', promotion);
+      });
       if (err) return handleError(res, err);
       return res.status(201).json(campaign)
     })
