@@ -29,8 +29,33 @@ class GenericFeedManager extends Component {
 
 
      constructor(props) {
-        super(props);
+        super(props)
 
+        let initialPage = 0;
+        let addComponentPressed = false;
+         if(this.props.scene){
+             if(this.props.scene.scenes && this.props.scene.scenes.length == 2){
+                 let productKey = this.props.scene.scenes[1].route.key;
+                 switch (productKey){
+                     case 'home':
+                         initialPage =  0;
+                         break;
+                     case 'add-product':
+                         initialPage =  1;
+                         break;
+                     case 'add-business':
+                         initialPage =  2;
+                         break;
+                     case 'add-promotions':
+                         initialPage =  3;
+                         break;
+                 }
+                 addComponentPressed = true;
+
+             }
+
+
+         }
 
 
         this.state = {
@@ -40,9 +65,12 @@ class GenericFeedManager extends Component {
             token: '',
             userId: '',
             ready: true,
-            addComponent:'',
+            addComponent: '',
+            addComponentPressed: addComponentPressed,
             rowsView: [],
-            initialPage: 0
+            initialPage: initialPage,
+            index: initialPage
+
         }
         ;
 
@@ -69,16 +97,21 @@ class GenericFeedManager extends Component {
 
          }
 
+
          this.setState({
              addComponent: component,
-             initialPage: ref.i
+             index : ref.i,
          });
 
     }
 
 
 
-
+    addComponentPressed(){
+        this.setState({
+            addComponentPressed:true
+        })
+    }
 
 
 
@@ -88,25 +121,7 @@ class GenericFeedManager extends Component {
 
 
     extractTabIndexFromNavigation(){
-        if(this.props.scene){
-            if(this.props.scene.scenes && this.props.scene.scenes.length == 2){
-                let productKey = this.props.scene.scenes[1].route.key;
-                switch (productKey){
-                    case 'home':
-                        return 0;
-                    case 'add-product':
-                        return 1;
-                    case 'add-business':
-                        return 2;
-                    case 'add-promotions':
-                        return 3;
-                }
 
-                return this.state.initialPage;
-            }
-
-
-        }
         return this.state.initialPage;
 
 
@@ -126,27 +141,35 @@ class GenericFeedManager extends Component {
 
     }
 
-    componentWillMount(){
 
-    }
 
    async headerAction(compoenet, index){
        this.setState({
-            initialPage:index,
             addComponent:compoenet,
         })
     }
+    componentDidMount(){
+        this.setState({
+            addComponentPressed:false
+        })
+    }
+
+
     render() {
-        let index = this.extractTabIndexFromNavigation();
-        let showAction = this.showAction(index);
+
+
+        let showAction = this.showAction(this.state.index);
+        let addComponnentPressed = this.addComponentPressed.bind(this);
+
+        let index = this.state.initialPage;
 
         return (
             <Container>
 
-                <GeneralComponentHeader  showAction = {showAction} current='home' to={this.state.addComponent} />
+                <GeneralComponentHeader    addCompoenentPressed={addComponnentPressed} showAction = {showAction} current='home' to={this.state.addComponent} />
 
 
-                <Tabs onChangeTab={this.onChangeTab.bind(this)} initialPage={index} style={{ backgroundColor: '#fff',}}>
+                <Tabs initialPage={index} onChangeTab={this.onChangeTab.bind(this)} style={{ backgroundColor: '#fff',}}>
                     <Tab  heading={ <TabHeading><Text style={{ color:'black', fontSize: 11,}}>Home</Text></TabHeading>}>
                         <Feeds index={0} navigateAction={this.headerAction.bind(this)}/>
                     </Tab>
