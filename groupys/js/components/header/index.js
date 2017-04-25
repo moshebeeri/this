@@ -33,7 +33,7 @@ class GeneralComponentHeader extends Component {
 
     replaceRoute(route) {
         this.props.replaceAt(this.props.current, {key: route}, this.props.navigation.key);
-        this.props.addCompoenentPressed();
+
 
     }
 

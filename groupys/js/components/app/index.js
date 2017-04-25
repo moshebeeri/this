@@ -32,7 +32,7 @@ class GenericFeedManager extends Component {
         super(props)
 
         let initialPage = 0;
-        let addComponentPressed = false;
+
          if(this.props.scene){
              if(this.props.scene.scenes && this.props.scene.scenes.length == 2){
                  let productKey = this.props.scene.scenes[1].route.key;
@@ -50,7 +50,7 @@ class GenericFeedManager extends Component {
                          initialPage =  3;
                          break;
                  }
-                 addComponentPressed = true;
+
 
              }
 
@@ -66,7 +66,6 @@ class GenericFeedManager extends Component {
             userId: '',
             ready: true,
             addComponent: '',
-            addComponentPressed: addComponentPressed,
             rowsView: [],
             initialPage: initialPage,
             index: initialPage
@@ -107,11 +106,6 @@ class GenericFeedManager extends Component {
 
 
 
-    addComponentPressed(){
-        this.setState({
-            addComponentPressed:true
-        })
-    }
 
 
 
@@ -148,25 +142,18 @@ class GenericFeedManager extends Component {
             addComponent:compoenet,
         })
     }
-    componentDidMount(){
-        this.setState({
-            addComponentPressed:false
-        })
-    }
 
 
     render() {
 
 
         let showAction = this.showAction(this.state.index);
-        let addComponnentPressed = this.addComponentPressed.bind(this);
-
         let index = this.state.initialPage;
 
         return (
             <Container>
 
-                <GeneralComponentHeader    addCompoenentPressed={addComponnentPressed} showAction = {showAction} current='home' to={this.state.addComponent} />
+                <GeneralComponentHeader     showAction = {showAction} current='home' to={this.state.addComponent} />
 
 
                 <Tabs initialPage={index} onChangeTab={this.onChangeTab.bind(this)} style={{ backgroundColor: '#fff',}}>
