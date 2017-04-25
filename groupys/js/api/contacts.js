@@ -67,7 +67,7 @@ class ContactsApi
             if(contact.emailAddresses &&  contact.emailAddresses.length > 0){
                 phone.email = contact.emailAddresses[0].email;
             }
-            phone.name = contact.givenName + ' ' + +contact.familyName;
+            phone.name = contact.givenName + ' ' +contact.familyName;
 
             return phone;
 
