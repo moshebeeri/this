@@ -28,8 +28,10 @@ Utils.prototype.log = function log(){
 };
 
 Utils.prototype.clean_phone_number = function clean_phone_number(number){
-  return number.replace(/\D/g, '');
+  // remove all non digits, and then remove first 0
+  return number.replace(/\D/g, '').replace(/0/,'')
 };
+
 Utils.prototype.clean_name = function clean_phone_number(name){
   //var escaped_str = require('querystring').escape(name);
   //return escaped_str;

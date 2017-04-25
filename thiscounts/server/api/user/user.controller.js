@@ -200,7 +200,6 @@ exports.create = function (req, res, next) {
 
   newUser.sms_verified = false;
   newUser.phone_number = utils.clean_phone_number(newUser.phone_number);
-  //newUser.email = newUser.phone_number + "@groupys.com";
 
   User.findOne({phone_number: newUser.phone_number}, function (err, user) {
     if (user) {
@@ -321,30 +320,32 @@ exports.phonebook = function (req, res) {
       phonebook: phonebook.phonebook
     });
     //TODO: implement this way http://stackoverflow.com/questions/5794834/how-to-access-a-preexisting-collection-with-mongoose
-    //for each phone number store the users that has it in their phone book
+    //For each phone number store the users that has it in their phonebook
     mongoose.connection.db.collection('phone_numbers', function (err, collection) {
       if (err) return logger.error(err.message);
       phonebook.phonebook.forEach(function (contact, index, array) {
-        collection.findAndModify(
-          {_id: utils.clean_phone_number(contact.normalized_number)},
-          [['_id', 'asc']],
-          {
-            $addToSet: {
-              contacts: {
-                userId: userId,
-                nick: contact.name
+        if(utils.defined(contact.normalized_number) && utils.defined(contact.name)){
+          collection.findAndModify(
+            {_id: utils.clean_phone_number(contact.normalized_number)},
+            [['_id', 'asc']],
+            {
+              $addToSet: {
+                contacts: {
+                  userId: userId,
+                  nick: contact.name
+                }
               }
-            }
-          },
-          {upsert: true, new: true},
-          function (err, object) {
-            if (err) {
-              console.warn(err.message);
-            } else {
-              console.dir(object);
-              owner_follow(object.value)
-            }
-          });
+            },
+            {upsert: true, new: true},
+            function (err, object) {
+              if (err) {
+                console.warn(err.message);
+              } else {
+                console.dir(object);
+                owner_follow(object.value)
+              }
+            });
+        }
       });
     });
   });
@@ -525,14 +526,12 @@ function checkPhones (phoneBook, res){
 
 
 function normalizePhoneBookList(data){
-  console.log("--------------------normalizePhoneBookList-----------------------");
   let  tempData = {};
   for ( let  contact in data ) {
     console.log(data[contact]);
     tempData[data[contact]["phone_number"]] = true;
   }
   console.log(tempData);
-  console.log("--------------------normalizePhoneBookList-----------------------");
   return tempData;
 }
 

@@ -4,7 +4,7 @@ let _ = require('lodash');
 let async = require('async');
 
 let Promotion = require('./promotion.model');
-let Campaign = require('../campaign/campaign.model');
+let campaign_controller = require('../campaign/campaign.controller');
 
 let model = require('seraph-model');
 
@@ -111,25 +111,70 @@ let relateTypes = function (promotion) {
 };
 
 let set_promotion_location = function (promotion, callback) {
-  if (!(utils.defined(promotion.mall) || utils.defined(promotion.business)))
+  if (!utils.defined(promotion.entity))
     callback(null, promotion);
-  else if (utils.defined(promotion.mall))
-    Promotion.populate(promotion, {path: 'mall', model: 'Mall'}, function (err, promotion) {
+  if (!(utils.defined(promotion.entity.mall) || utils.defined(promotion.entity.business)))
+    callback(null, promotion);
+  else if (utils.defined(promotion.entity.mall))
+    Promotion.populate(promotion, {path: 'entity.mall', model: 'Mall'}, function (err, promotion) {
       if (err) return logger.error('failed to populate location ', err);
-      promotion.location = promotion.mall.location;
-      promotion.mall = promotion.mall._id;
+      promotion.location = promotion.entity.mall.location;
+      promotion.mall = promotion.entity.mall._id;
+      spatial.location_to_point(promotion);
       callback(null, promotion)
     });
-  else if (utils.defined(promotion.business))
-    Promotion.populate(promotion, {path: 'business', model: 'Business'}, function (err, promotion) {
+  else if (utils.defined(promotion.entity.business))
+    Promotion.populate(promotion, {path: 'entity.business', model: 'Business'}, function (err, promotion) {
       if (err) return logger.error('failed to populate location ', err);
-      promotion.location = promotion.business.location;
-      promotion.business = promotion.business._id;
+      promotion.location = promotion.entity.business.location;
+      promotion.business = promotion.entity.business._id;
+      spatial.location_to_point(promotion);
       callback(null, promotion)
     });
+
 };
 
 function create_promotion(promotion, callback) {
+  //TODO: Convert to address location
+  console.log(JSON.stringify(promotion));
+
+  set_promotion_location(promotion, function (err, promotion) {
+    if (err) return callback(err, null);
+    Promotion.create(promotion, function (err, promotion) {
+      promotionGraphModel.reflect(promotion, to_graph(promotion), function (err, promotion) {
+        if (err) return callback(err, null);
+        console.log(`creating relationships (${promotion._id})-[CREATED_BY]->(${promotion.creator})`);
+        //create relationships
+        promotionGraphModel.relate_ids(promotion._id, 'CREATED_BY', promotion.creator);
+
+        if (promotion.report)
+          promotionGraphModel.relate_ids(promotion._id, 'REPORTED_BY', promotion.creator);
+
+        if (utils.defined(promotion.entity.mall))
+          promotionGraphModel.relate_ids(promotion._id, 'MALL_PROMOTION', promotion.entity.mall);
+
+        if (utils.defined(promotion.entity.shopping_chain))
+          promotionGraphModel.relate_ids(promotion._id, 'CHAIN_PROMOTION', promotion.entity.shopping_chain);
+
+        if (utils.defined(promotion.entity.business))
+          promotionGraphModel.relate_ids(promotion._id, 'BUSINESS_PROMOTION', promotion.entity.business);
+
+        if (utils.defined(promotion.campaign_id)) {
+          promotionGraphModel.relate_ids(promotion.campaign_id, 'CAMPAIGN_PROMOTION', promotion._id);
+        }
+        relateTypes(promotion);
+        promotion_created_activity(promotion);
+        spatial.add2index(promotion.gid, function (err, result) {
+          if (err) return callback(err, null);
+          else logger.info('object added to layer ' + result)
+        });
+      });
+      callback(null, promotion);
+    });
+  });
+}
+
+function create_promotion_bak(promotion, callback) {
   //TODO: Convert to address location
   console.log(JSON.stringify(promotion));
 
@@ -190,9 +235,10 @@ exports.create_backup = function (req, res) {
     set_promotion_location(promotion, function (err, promotion) {
 
       promotionGraphModel.reflect(promotion, to_graph(promotion), function (err, promotion) {
-        if (err) {
+        if (err)
           return handleError(res, err);
-        }
+
+        promotionGraphModel.relate_ids(promotion._id, 'CREATED_BY', promotion.creator);
         //create relationships
         if (promotion.report)
           promotionGraphModel.relate_ids(promotion._id, 'REPORTED_BY', req.body._id);
@@ -227,7 +273,10 @@ exports.create_campaign = function (req, res) {
     campaign.promotions = [promotion._id];
     campaign.creator = req.user._id;
     campaign.name = promotion.name;
-    Campaign.create(campaign, function (err, campaign) {
+    campaign_controller.create_campaign(campaign, function (err, campaign) {
+      campaign.promotions.forEach((promotion) => {
+        promotionGraphModel.relate_ids(campaign._id, 'CAMPAIGN_PROMOTION', promotion);
+      });
       if (err) return handleError(res, err);
       return res.status(201).json(campaign)
     })
