@@ -118,7 +118,7 @@ exports.create_group = function(group, callback) {
       graphModel.relate_ids(group._id, 'CREATED_BY', group.creator);
       graphModel.relate_ids(group.creator, 'FOLLOW', group._id );
       graphModel.relate_ids(group.creator, 'GROUP_ADMIN', group._id );
-      if(group.business_id != undefined){
+      if(utils.defined(group.business_id)){
         graphModel.relate_ids(group._id, 'FOLLOW', group.business_id );
       }
 
