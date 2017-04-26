@@ -20,6 +20,8 @@ var aromCafe = require('../../../images/aroma-cafe.jpeg');
 var castro = require('../../../images/castro.jpg');
 var castroBanner = require('../../../images/castro_final.png');
 var myprofile = require('../../../images/profile.jpeg');
+import FeedApi from '../../api/feed'
+let feedApi = new FeedApi();
 
 const feeds = [
         {
@@ -151,21 +153,22 @@ class Feed extends Component {
     }
 
 
-    getAll(){
+     getAll(){
+        feedApi.getAll();
       return feeds;
     }
 
 
     fetchApi(pageOffset,pageSize ) {
-        console.log(pageOffset);
-        console.log(pageSize);
 
-        return new Promise(function(resolve, reject) {
-            resolve(feeds);
-        });
+        return feedApi.getAll();
+        // return new Promise(function(resolve, reject) {
+        //     resolve(feeds);
+        // });
 
 
     }
+
 
 
 

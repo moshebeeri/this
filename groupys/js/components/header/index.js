@@ -8,7 +8,8 @@ import { openDrawer } from '../../actions/drawer';
 import navigateTo from '../../actions/sideBarNav';
 
 import styles from './styles';
-
+import ContactApi from '../../api/contacts'
+let contactApi = new ContactApi();
 const {
     replaceAt,
 } = actions;
@@ -35,6 +36,10 @@ class GeneralComponentHeader extends Component {
         this.props.replaceAt(this.props.current, {key: route}, this.props.navigation.key);
 
 
+    }
+
+    refreshContact(){
+        contactApi.syncContacts();
     }
 
 
@@ -69,6 +74,9 @@ class GeneralComponentHeader extends Component {
                 <Button transparent style={{ paddingRight: 15 }} onPress={this.props.openDrawer}>
                   <Icon name="menu" />
                 </Button>
+                  <Button transparent style={{ paddingRight: 15 }} onPress={this.refreshContact}>
+                      <Icon name="bookmarks" />
+                  </Button>
                   {action}
 
               </View>
