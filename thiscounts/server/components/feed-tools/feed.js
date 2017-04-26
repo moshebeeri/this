@@ -13,7 +13,7 @@ exports.generate = function(msg) {
   return "generated " + msg;
 };
 
-exports.fetch_feed = function(query_builder, Model, res) {
+exports.fetch_feed = function(userId, query_builder, Model, res) {
   //Feed.find(function (err, feeds) {
   //  if(err) { return handleError(res, err); }
   //  return res.status(200).json(feeds);
@@ -67,9 +67,18 @@ exports.fetch_feed = function(query_builder, Model, res) {
       function populate_actor_user(feeds, callback) {
         Model.populate(feeds, {
           path: 'activity.actor_user',
-          select: '-salt -hashedPassword -gid -role -__v -email -phone_number -sms_verified -sms_code -provider',
+          select: '-salt -hashedPassword -gid -role -__v -email -sms_verified -sms_code -provider',
           model: 'User'
-        }, callback);
+        }, function(err, actor_user){
+          if(err) return callback(err);
+          graphModel.query_ids_relation(user_id, 'FOLLOW', actor_user._id, 'nick', function(err, nick){
+            if(err || !utils.defined(nick))
+              actor_user.name = actor_user.phone;
+            actor_user.name = nick;
+            callback(null,actor_user);
+          })
+
+        });
       }
 
       function populate_actor_business(feeds, callback) {
@@ -335,25 +344,25 @@ function update_state(feed, callback) {
     },
     function (err, states) {
       if(err){ return callback(err, null) }
-      if (states['promotion'] != null)
+      if (states['promotion'] !== null)
         activity.promotion = states['promotion'];
-      if (states['product'] != null)
+      if (states['product'] !== null)
         activity.product = states['product'];
-      if (states['user'] != null)
+      if (states['user'] !== null)
         activity.user = states['user'];
-      if (states['business'] != null)
+      if (states['business'] !== null)
         activity.business = states['business'];
-      if (states['mall'] != null)
+      if (states['mall'] !== null)
         activity.mall = states['mall'];
-      if (states['chain'] != null)
+      if (states['chain'] !== null)
         activity.chain = states['chain'];
-      if (states['actor_user'] != null)
+      if (states['actor_user'] !== null)
         activity.actor_user = states['actor_user'];
-      if (states['actor_business'] != null)
+      if (states['actor_business'] !== null)
         activity.actor_business = states['actor_business'];
-      if (states['actor_mall'] != null)
+      if (states['actor_mall'] !== null)
         activity.actor_mall = states['actor_mall'];
-      if (states['actor_chain'] != null)
+      if (states['actor_chain'] !== null)
         activity.actor_chain = states['actor_chain'];
 
       callback(null, feed)

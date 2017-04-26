@@ -141,11 +141,14 @@ GraphModel.prototype.count_in_rel_id = function count_in_rel(name, to, callback)
  */
 GraphModel.prototype.relate_ids = function relate_id(from, name, to, params){
   if(!utils.defined(params))
-    params = {timestamp: Date.now()};
+    params = JSON.stringify({timestamp: Date.now()});
+  else
+    params = JSON.stringify(params);
+
   //MATCH (f { _id:'58076f8a45e648a81b79e9f8' }), (t { _id:'5807697a45e648a81b79e9ed' }) CREATE UNIQUE (f)-[:CREATED_BY {"timestamp":1476882314737}]->(t)
   //let query = util.format("MATCH (f { _id:'%s' }), (t { _id:'%s' }) CREATE UNIQUE (f)-[:%s %s]->(t)",from, to, name, JSON.stringify(params));
   //console.log(query);
-  let query = 'MATCH (f { _id:"' + from + '"}), (t { _id:"' + to +  '"}) CREATE UNIQUE (f)-[:'+ name + '{timestamp:' + Date.now() +'}]->(t)';
+  let query = 'MATCH (f { _id:"' + from + '"}), (t { _id:"' + to +  '"}) CREATE UNIQUE (f)-[:'+ name + params +']->(t)';
   console.log(query);
   db.query(query, function(err) {
     if (err) { logger.error(err.message); }
@@ -182,9 +185,9 @@ GraphModel.prototype.related_type_id = function related_type_id(start, name, ret
 
 GraphModel.prototype.related_type_id_dir = function related_type_id_dir(start, name, ret_type, dir, skip, limit, callback){
   let match = "MATCH (s { _id:'{%s}' })-[r:%s]-(ret:%s) ";
-  if(dir=="out")
+  if(dir==="out")
     match = "MATCH (s { _id:'{%s}' })-[r:%s]->(ret:%s) ";
-  else if(dir=="in")
+  else if(dir==="in")
     match = "MATCH (s { _id:'{%s}' })<-[r:%s]-(ret:%s) ";
   let query = util.format(
     match +
@@ -215,6 +218,16 @@ GraphModel.prototype.query_ids = function query_ids(query, order, skip, limit, c
   let query_str  = util.format("%s %s skip %d limit %d", query, order, skip, limit);
   console.log(query_str);
   db.query(query_str, function(err, related) {
+    if (err) { callback(err, null) }
+    else callback(null, related)
+  });
+};
+
+GraphModel.prototype.query_ids_relation = function query_ids(from_id, rel, to_id, ret, callback){
+  let query = util.format(
+    "MATCH (from_id{ _id:'{%s}' })-[r:%s]->(to_id:%s) " +
+    "return r%s ", from_id, rel, to_id, ret!==''? '.' + ret:'');
+  db.query(query, function(err, related) {
     if (err) { callback(err, null) }
     else callback(null, related)
   });

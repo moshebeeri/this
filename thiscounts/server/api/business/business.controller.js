@@ -133,7 +133,7 @@ exports.create = function (req, res) {
           actor_user: business.creator,
           action: "created"
         }, function (err) {
-          if (err) logger.error(err.message)
+          if (err) console.error(err.message)
         });
       });
 
