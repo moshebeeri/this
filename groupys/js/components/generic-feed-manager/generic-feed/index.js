@@ -3,9 +3,8 @@ import {Image ,Platform} from 'react-native';
 import {connect} from 'react-redux';
 import {actions} from 'react-native-navigation-redux-helpers';
 import { Container, Content, Text, InputGroup, Input,Thumbnail,Button,Picker,Right,Item, Icon,Left,Header,Footer,Body, View,Card,CardItem } from 'native-base';
-
-
-
+import UserApi from '../../../api/user'
+let userApi = new UserApi();
 const {
     replaceAt,
 } = actions;
@@ -27,14 +26,16 @@ class GenericFeedItem extends Component {
 
 
         render() {
-            let feed = this.createFeed(this.props.item);
-
-
+            let feed = undefined;
+            feed = this.createFeed(this.props.item);
 
             return feed;
         }
 
 
+        like(item){
+            userApi.like(item.actor);
+        }
         createFeed(item){
             if(item.content){
                 item = item.content;
@@ -77,9 +78,21 @@ class GenericFeedItem extends Component {
                 }
             }
 
-            let likeIcon =  <Icon  active style={{color: 'gray'}} name="thumbs-up" />;
-            if(item.social.like == true){
-                likeIcon = <Icon active name="thumbs-up" />
+            let likeIcon = <Button transparent small onPress={this.like.bind(this,item.actor)}>
+                            <Icon  active style={{color: 'gray'}} name="thumbs-up" />
+                </Button>
+
+            if(item.social && item.social.like == true){
+                likeIcon = <Button transparent small onPress={this.like.bind(this,item.actor)} >
+                                 <Icon active name="thumbs-up"  />
+                            </Button>
+
+
+            }
+
+            let followIcon =  <Icon  active style={{color: 'gray'}} name="person" />;
+            if( item.social && item.social.follow == true){
+                followIcon = <Icon active name="person" />
 
             }
 
@@ -109,6 +122,10 @@ class GenericFeedItem extends Component {
                         <Button transparent>
                             {likeIcon}
                             <Text> {item.social.numberLikes} Like</Text>
+                        </Button>
+                        <Button transparent>
+                            {followIcon}
+                            <Text> follow</Text>
                         </Button>
 
                     </CardItem>

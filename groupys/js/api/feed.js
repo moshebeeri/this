@@ -25,7 +25,9 @@ class FeedApi {
                 }
 
                 let responseData = await response.json();
-                let feeds = responseData.map(feed => this.createFeed(feed));
+                let feeds = responseData.map(feed => this.createFeed(feed)).filter(function(x){
+                    return x != undefined;
+                });
                 resolve(feeds);
             }
             catch (error) {
@@ -66,7 +68,7 @@ class FeedApi {
                         numberLikes: feed.activity.actor_user.social_state.likes,
                         follow: feed.activity.actor_user.social_state.follow,
                     },
-
+                    actor:feed.activity.actor_user._id,
                     itemTitle: feed.activity.actor_user._id + ' ' + feed.activity.action + ' ' + feed.activity.business.name,
                     description: feed.activity.business.name + ' location: ' + feed.activity.business.city + ' ' + feed.activity.business.address,
                     banner: {
@@ -81,7 +83,7 @@ class FeedApi {
                         numberLikes: feed.activity.actor_user.social_state.likes,
                         follow: feed.activity.actor_user.social_state.follow,
                     },
-
+                    actor:feed.activity.actor_user._id,
                     itemTitle: feed.activity.actor_user._id + ' ' + feed.activity.action + ' ' + feed.activity.business.name,
                     description: feed.activity.business.name + ' location: ' + feed.activity.business.city + ' ' + feed.activity.business.address,
 
