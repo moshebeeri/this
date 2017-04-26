@@ -57,7 +57,7 @@ class GenericFeedManager extends Component {
 
             }
         });
-        dataset.setReadOffset(0);
+        dataset.setReadOffset(10);
         this.setState({dataset});
     }
 

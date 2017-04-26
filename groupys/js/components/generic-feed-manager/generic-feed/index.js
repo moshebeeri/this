@@ -66,7 +66,7 @@ class GenericFeedItem extends Component {
 
                 if (item.banner.uri) {
                     banner = <Image
-                        style={{padding: 5, flex: -1}}
+                        style={{width: 400, height: 300,padding: 0, flex: -1}}
                         source={{uri: item.banner.uri}}/>
                 }
 
