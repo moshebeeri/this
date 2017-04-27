@@ -49,7 +49,7 @@ exports.feed = function (req, res) {
     query_builder = Feed.find({group: entity_id}).sort({activity: 1}).limit(25);
 
   if (from_id === 'start') {
-    return feedTools.fetch_feed(query_builder, Feed, res);
+    return feedTools.fetch_feed(userId, query_builder, Feed, res);
   }
   if (req.params.scroll === 'up')
     query_builder = query_builder.where('_id').gt(from_id);
