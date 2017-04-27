@@ -15,7 +15,7 @@ let Feed = require('./feed.model');
 // Get list of feeds
 // See http://mongoosejs.com/docs/populate.html
 exports.index = function (req, res){
-  return feedTools.fetch_feed(Feed.find(), Feed, res );
+  return feedTools.fetch_feed(req.user._id, Feed.find(), Feed, res );
 };
 
 // Get a single feed
