@@ -140,10 +140,8 @@ GraphModel.prototype.count_in_rel_id = function count_in_rel(name, to, callback)
  *    });
  */
 GraphModel.prototype.relate_ids = function relate_id(from, name, to, params){
-  if(!utils.defined(params))
-    params = JSON.stringify({timestamp: Date.now()});
-  else
-    params = JSON.stringify(params);
+  if(!utils.defined(params) || typeof params !== 'string')
+    params = `{timestamp: "${Date.now()}")`;
 
   //MATCH (f { _id:'58076f8a45e648a81b79e9f8' }), (t { _id:'5807697a45e648a81b79e9ed' }) CREATE UNIQUE (f)-[:CREATED_BY {"timestamp":1476882314737}]->(t)
   //let query = util.format("MATCH (f { _id:'%s' }), (t { _id:'%s' }) CREATE UNIQUE (f)-[:%s %s]->(t)",from, to, name, JSON.stringify(params));
