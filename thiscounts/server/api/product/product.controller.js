@@ -62,6 +62,7 @@ exports.create = function (req, res) {
       return handleError(res, err);
     }
     graphModel.reflect(product, {
+      _id: product._id,
       name: product.name,
       info: product.info,
       retail_price: product.retail_price
@@ -84,6 +85,7 @@ exports.create = function (req, res) {
 
 exports.user_products = function (req, res) {
   let userID = req.user._id;
+  console.log(userID);
   let skip =  req.params.skip;
   let limit = req.params.limit;
   graphModel.query_objects(Product,
