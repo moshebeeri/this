@@ -14,8 +14,9 @@ import {Container, Content, Text, InputGroup, Input, Button, Icon, View,Header,I
 
 import AddFormHeader from '../../header/addFormHeader';
 
-var createEntity = require("../../../utils/createEntity");
+import EntityUtils from "../../../utils/createEntity";
 
+let entityUtils = new EntityUtils();
 import ImagePicker from 'react-native-image-crop-picker';
 import store from 'react-native-simple-store';
 import BusinessApi from "../../../api/business"
@@ -104,13 +105,23 @@ class AddProduct extends Component {
 
     saveFormData(){
 
+        let product = {
+            name:this.state.name,
+            image:this.state.image,
+            business: this.state.business,
+            info : this.state.info,
+            retail_price: this.state.retail_price,
 
-        createEntity('products',this.state,this.state.token,this.formSuccess.bind(this),this.formFailed.bind(this),this.state.userId);
+
+
+
+        }
+        entityUtils.create('products',product,this.state.token,this.formSuccess.bind(this),this.formFailed.bind(this),this.state.userId);
     }
 
     formSuccess(response){
 
-        this.replaceRoute('product');
+        this.replaceRoute('home');
     }
 
     selectBusiness(value){
@@ -194,7 +205,7 @@ class AddProduct extends Component {
                         justifyContent: 'space-between',
                     }}
                 >
-                    <AddFormHeader currentLocation="add-product" backLocation="product" />
+                    <AddFormHeader currentLocation="add-product" backLocation="home" />
                 </Header>
 
                 <Content  style={{backgroundColor: '#fff'}}>

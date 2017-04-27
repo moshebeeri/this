@@ -6,25 +6,22 @@ var auth = require('../../auth/auth.service');
 
 var router = express.Router();
 
-//router.get('/', auth.hasRole('admin'), controller.index);
-//TODO: Change back to admin
-router.get('/', auth.isAuthenticated(), controller.index);
+
+router.get('/save/:id', auth.isAuthenticated(), controller.save);
+router.get('/realize/:id/:realize_code/:sale_point_code', auth.isAuthenticated(), controller.realize);
+router.get('/list/create/by/user/:skip/:limit', auth.isAuthenticated(), controller.user_promotions);
+router.get('/list/by/user/business', auth.isAuthenticated(), controller.user_business);
+router.get('/list/by/business/:business_id', auth.isAuthenticated(), controller.business_promotions);
+router.get('/list/:business_id/:campaign_id', auth.isAuthenticated(), controller.campaign_promotions);
+router.post('/campaign', auth.isAuthenticated(), controller.create_campaign);
+
+//TODO: undo remark required Admin role
+router.get('/',/* auth.hasRole('admin'),*/ controller.index);
 router.get('/:id', auth.isAuthenticated(), controller.show);
 router.post('/', auth.isAuthenticated(), controller.create);
 router.put('/:id', auth.isAuthenticated(), controller.update);
 router.patch('/:id', auth.isAuthenticated(), controller.update);
 router.delete('/:id', auth.isAuthenticated(), controller.destroy);
-//router.get('/info/server/time', controller.server_time);
-router.get('/save/:id', auth.isAuthenticated(), controller.save);
-router.get('/realize/:id/:realize_code/:sale_point_code', auth.isAuthenticated(), controller.realize);
-
-router.get('/list/by/user', auth.isAuthenticated(), controller.user_promotions);
-router.get('/list/by/business/:business_id', auth.isAuthenticated(), controller.business_promotions);
-router.get('/list/:business_id/:campaign_id', auth.isAuthenticated(), controller.campaign_promotions);
-
-
-// router.get('/init/data', /*auth.isAuthenticated(),*/ controller.initialize);
-// router.get('/test/graph', controller.test);
 
 module.exports = router;
 /*

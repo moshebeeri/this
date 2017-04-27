@@ -28,10 +28,9 @@ var CampaignSchema = new Schema({
   name: {type: String, required: true},
   gid: { type: Number, index: true},
   info: String,
-  promotion: [{type: Schema.ObjectId, ref: 'Promotion', require: true}],
+  promotions: [{type: Schema.ObjectId, ref: 'Promotion', require: true}],
   match: [CampaignPreferencesSchema],
   prefer: [CampaignPreferencesSchema],
-  active: Boolean
 });
 
 module.exports = mongoose.model('Campaign', CampaignSchema);

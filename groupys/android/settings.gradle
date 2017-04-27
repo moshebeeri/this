@@ -1,4 +1,6 @@
 rootProject.name = 'groupys'
+include ':react-native-file-uploader'
+project(':react-native-file-uploader').projectDir = new File(rootProject.projectDir, '../node_modules/react-native-file-uploader/android')
 include ':react-native-contacts'
 project(':react-native-contacts').projectDir = new File(rootProject.projectDir, '../node_modules/react-native-contacts/android')
 include ':react-native-fileupload'
@@ -9,7 +11,6 @@ include ':react-native-image-crop-picker'
 project(':react-native-image-crop-picker').projectDir = new File(rootProject.projectDir, '../node_modules/react-native-image-crop-picker/android')
 include ':react-native-vector-icons'
 project(':react-native-vector-icons').projectDir = new File(rootProject.projectDir, '../node_modules/react-native-vector-icons/android')
-include ':react-native-camera'
-project(':react-native-camera').projectDir = new File(rootProject.projectDir,   '../node_modules/react-native-camera/android')
-
+include ':react-native-fileupload'
+project(':react-native-fileupload').projectDir = new File(rootProject.projectDir, '../node_modules/react-native-fileupload/android')
 include ':app'

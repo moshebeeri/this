@@ -15,8 +15,8 @@ exports.generate = function(msg) {
 
 function handleError(res, err) {
   return res.send(500, err);
-}
-exports.fetch_feed = function(query_builder, Model, res) {
+
+exports.fetch_feed = function(userId, query_builder, Model, res) {
   //Feed.find(function (err, feeds) {
   //  if(err) { return handleError(res, err); }
   //  return res.status(200).json(feeds);
@@ -70,9 +70,18 @@ exports.fetch_feed = function(query_builder, Model, res) {
       function populate_actor_user(feeds, callback) {
         Model.populate(feeds, {
           path: 'activity.actor_user',
-          select: '-salt -hashedPassword -gid -role -__v -email -phone_number -sms_verified -sms_code -provider',
+          select: '-salt -hashedPassword -gid -role -__v -email -sms_verified -sms_code -provider',
           model: 'User'
-        }, callback);
+        }, function(err, actor_user){
+          if(err) return callback(err);
+          graphModel.query_ids_relation(user_id, 'FOLLOW', actor_user._id, 'nick', function(err, nick){
+            if(err || !utils.defined(nick))
+              actor_user.name = actor_user.phone;
+            actor_user.name = nick;
+            callback(null,actor_user);
+          })
+
+        });
       }
 
       function populate_actor_business(feeds, callback) {

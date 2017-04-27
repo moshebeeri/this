@@ -14,6 +14,19 @@ function percent_validator(v) {
     return false;
   return v.from >0 && v.to < 100;
 }
+function entity_validator(v) {
+  if (_.isNull(v))
+    return false;
+  return v.business || v.product || v.chain || v.mall;
+}
+
+const Entities = {
+  business: {type: Schema.ObjectId, ref: 'Business'},
+  product: {type: Schema.ObjectId, ref: 'Product'},
+  shopping_chain: {type: Schema.ObjectId, ref: 'ShoppingChain'},
+  mall: {type: Schema.ObjectId, ref: 'Mall'}
+};
+
 
 var PromotionSchema = new Schema({
   social_state : {},
@@ -22,7 +35,9 @@ var PromotionSchema = new Schema({
   realize_gid: Number,
   card_type: {type: Schema.ObjectId, ref: 'CardType'},
   creator: {type: Schema.ObjectId, ref: 'User', required: true},
-  product: {type: Schema.ObjectId, ref: 'Product', required: true},
+  entity: { type: Entities, require: true,
+    validate: [entity_validator, 'at least on of those fields should not be empty [business, product, chain, mall]'],
+  },
   created: {type: Date, default: Date.now},
   pictures : [],
   info: String,
@@ -39,9 +54,6 @@ var PromotionSchema = new Schema({
     type: {type: String},
     coordinates: []
   },
-  mall : {type: Schema.ObjectId, ref: 'Mall', required: false},
-  shopping_chain: {type: Schema.ObjectId, ref: 'ShoppingChain', required: false},
-  business: {type: Schema.ObjectId, ref: 'Business', required: false},
   realize_code: String,
   save_time: Date,
   category: {
@@ -54,12 +66,10 @@ var PromotionSchema = new Schema({
       'FASHION' ,
       'GIFT'
     ]}],
-    required: false
     //TODO: consider default: 'LIKE'
   },
   type: {
     type: String,
-    required: false,
     enum: [
       'PERCENT',
       'PERCENT_RANGE',
@@ -105,12 +115,9 @@ var PromotionSchema = new Schema({
       return new Date(new Date().valueOf() + 60000*3600*24*14);
     }**/
   },
-
-  percent: {type : Number, min:1, max: 100},
-  amount: { type : Number, required: true},
-  retail_price: { type: Number, required: true},
-  discount_percent:{ type: Number, min:1, max: 100, required: true },
-
+  percent: {
+    percent : { type : Number, min:1, max: 100}
+  },
   percent_range: {
     from : Number,
     to :  Number,
@@ -120,6 +127,10 @@ var PromotionSchema = new Schema({
     condition : String,
     gift : String
   },
+
+  amount: { type : Number},
+
+  retail_price: { type: Number},
 
   x_plus_y: {
     buy : Number,

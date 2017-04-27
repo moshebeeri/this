@@ -14,7 +14,9 @@ import {Container, Content, Text, InputGroup, Input, Button, Icon, View,Header,I
 
 import AddFormHeader from '../../header/addFormHeader';
 
-var createEntity = require("../../../utils/createEntity");
+import EntityUtils from "../../../utils/createEntity";
+
+let entityUtils = new EntityUtils();
 import ImagePicker from 'react-native-image-crop-picker';
 import store from 'react-native-simple-store';
 
@@ -96,12 +98,12 @@ class AddBusiness extends Component {
     saveFormData(){
 
 
-        createEntity('businesses',this.state,this.state.token,this.formSuccess.bind(this),this.formFailed.bind(this),this.state.userId);
+        entityUtils.create('businesses',this.state,this.state.token,this.formSuccess.bind(this),this.formFailed.bind(this),this.state.userId);
     }
 
     formSuccess(response){
         store.save("b-id",response._id);
-        this.replaceRoute('business');
+        this.replaceRoute('home');
     }
 
     formFailed(error){
@@ -150,7 +152,7 @@ class AddBusiness extends Component {
                         justifyContent: 'space-between',
                     }}
                 >
-                    <AddFormHeader currentLocation="add-business" backLocation="business" />
+                    <AddFormHeader currentLocation="add-business" backLocation="home" />
 
                 </Header>
 

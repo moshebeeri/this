@@ -7,6 +7,7 @@ import { actions } from 'react-native-navigation-redux-helpers';
 import { Container, Content, Text, InputGroup, Input, Button, Icon, View } from 'native-base';
 
 import store from 'react-native-simple-store';
+
 const {
   replaceAt,
 } = actions;
@@ -15,13 +16,17 @@ const logo = require('../../../images/logo.png');
 import login from './login-theme';
 import styles from './styles';
 import LoginApi from '../../api/login'
+import ContactApi from '../../api/contacts'
+import LoginUtils from '../../utils/login_utils'
 import UserApi from '../../api/user'
-let loginApi = new LoginApi()
-let userApi = new UserApi()
-var contacsManager = require("../../utils/contactsManager");
+let loginApi = new LoginApi();
+let userApi = new UserApi();
+let contactApi = new ContactApi();
 
-const global = require('../../conf/global')
+let lu = new LoginUtils();
 
+const global = require('../../conf/global');
+let calc_login = true;
 class Login extends Component {
 
   static propTypes = {
@@ -34,11 +39,11 @@ class Login extends Component {
   constructor(props) {
     super(props);
     this.state = {
-        phoneNumber: '+972544402680',
+      phoneNumber: '+972544402680',
       password: 'de123456',
-        token: false,
+      token: false,
       scroll: false,
-        error:''
+      error:''
     };
   }
 
@@ -48,7 +53,8 @@ class Login extends Component {
 
           let response = await loginApi.login(this.state.phoneNumber, this.state.password);
           if(response.token ){
-              userApi.getUser();
+              await userApi.getUser();
+              contactApi.syncContacts();
               this.replaceRoute('home');
           }
 
@@ -59,7 +65,45 @@ class Login extends Component {
       }
 
   }
+    calc_login_status() {
+        return new Promise(async(resolve, reject) => {
 
+            const _id = await store.get('user_id');
+            if (!_id) {
+                this.replaceRoute('login');
+                return resolve(true);
+            }
+            try {
+                const token = await lu.getToken();
+                if (token) {
+                    contactApi.syncContacts();
+                    await userApi.getUser();
+                    this.replaceRoute('home');
+                    return resolve(true);
+                }
+            }catch(error){
+                if(error === 'login'){
+                    this.state.fingerprint_login = false;
+                    this.state.recover_account = true;
+                }
+                else{
+                    console.log('this.replaceRoute(\'error\') should go to error page');
+                    this.replaceRoute('login');
+                }
+                return resolve(true);
+            }
+            return resolve(true);
+
+        })
+    }
+
+    componentWillMount() {
+        if(calc_login){
+
+            this.calc_login_status();
+            calc_login = false;
+        }
+    }
 
 
 

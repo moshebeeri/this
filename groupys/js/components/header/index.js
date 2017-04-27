@@ -1,14 +1,15 @@
 
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-
-import { Icon, View, Button, InputGroup, Input,Text } from 'native-base';
+import { Platform} from 'react-native';
+import { Icon, View, Button, InputGroup,Tabs,Tab,TabHeading,Input,Text,Header } from 'native-base';
 import {actions} from 'react-native-navigation-redux-helpers';
 import { openDrawer } from '../../actions/drawer';
 import navigateTo from '../../actions/sideBarNav';
 
 import styles from './styles';
-
+import ContactApi from '../../api/contacts'
+let contactApi = new ContactApi();
 const {
     replaceAt,
 } = actions;
@@ -33,26 +34,60 @@ class GeneralComponentHeader extends Component {
 
     replaceRoute(route) {
         this.props.replaceAt(this.props.current, {key: route}, this.props.navigation.key);
+
+
+    }
+
+    refreshContact(){
+        contactApi.syncContacts();
     }
 
 
     render() {
+      let action = undefined;
+      if(this.props.showAction && this.props.showAction==true){
+          action =  <Button style={{ backgroundColor: 'transparent'}} iconLeft light>
+
+              <Icon style = {{width:20,backgroundColor: 'transparent'}} name='create'  onPress={() =>  this.replaceRoute(this.props.to)}  />
+          </Button>;
+      }
+
+
     return (
+        <Header
+            style={{ flexDirection: 'column',
+                height: 60,
+                elevation: 0,
+
+                borderBottomColor: 'gray',
+
+                borderStyle:'solid',
+                backgroundColor: '#fff',
+                borderBottomWidth:0.5,
+                paddingTop: (Platform.OS === 'ios') ? 20 : 3,
+                justifyContent: 'space-between',
+            }}
+        >
       <View style={styles.header} >
           <View style={{ flexDirection: 'row', alignItems: 'stretch' ,justifyContent: 'space-between' }}>
-            <Button transparent style={{ paddingRight: 15 }} onPress={this.props.openDrawer}>
-              <Icon name="ios-menu" />
-            </Button>
-            <Text transparent style={{  paddingTop: 10, backgroundColor: 'transparent'}} > {this.props.title}</Text>
-            <Button style={{ backgroundColor: 'transparent'}} iconLeft light>
+              <View style={{ flexDirection: 'row', alignItems: 'stretch' ,justifyContent: 'flex-start' }}>
+                <Button transparent style={{ paddingRight: 15 }} onPress={this.props.openDrawer}>
+                  <Icon name="menu" />
+                </Button>
+                  <Button transparent style={{ paddingRight: 15 }} onPress={this.refreshContact}>
+                      <Icon name="bookmarks" />
+                  </Button>
+                  {action}
 
-              <Icon name='ios-add-outline'  onPress={() =>  this.replaceRoute(this.props.to)}  />
-            </Button>
-
-
+              </View>
+              <Text transparent style={{ paddingRight: 20, paddingTop: 10, backgroundColor: 'transparent'}} >Groupies</Text>
           </View>
 
+
       </View>
+
+
+        </Header>
     );
   }
 }

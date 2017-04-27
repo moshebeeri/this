@@ -19,9 +19,10 @@ import AddPromotions from './components/promtions/add-form';
 
 import AddBusiness from './components/business/add-form';
 
-
+import General from './components/general';
 import Signup from './components/signup/';
 import SideBar from './components/sideBar';
+import Application from './components/app';
 
 
 import {statusBarColor} from './themes/base-theme';
@@ -89,6 +90,10 @@ class AppNavigator extends Component {
         switch (props.scene.route.key) {
             case 'splashscreen':
                 return <SplashPage />;
+
+
+            case 'general':
+                return <General />;
             case 'login':
                 return <Login />;
             case 'qrcode':
@@ -116,7 +121,7 @@ class AppNavigator extends Component {
                 return <AddBusiness />;
 
             case 'home':
-                return <Home />;
+                return <Application scene={props}/>;
             case 'signup':
                 return <Signup />;
             default :

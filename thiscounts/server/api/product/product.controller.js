@@ -4,6 +4,8 @@ var _ = require('lodash');
 var Product = require('./product.model');
 var graphTools = require('../../components/graph-tools');
 var graphModel = graphTools.createGraphModel('product');
+var utils = require('../../components/utils').createUtils();
+var activity = require('../../components/activity').createActivity();
 
 // Get list of products
 exports.index = function (req, res) {
@@ -13,6 +15,22 @@ exports.index = function (req, res) {
     }
     return res.json(200, products);
   });
+};
+
+// Get list of products
+exports.index_paginated = function (req, res) {
+  let userId = req.user._id;
+  let skip = req.params.skip;
+  let limit = req.params.limit;
+
+  Product.find({business: req.params.id})
+    .skip(skip)
+    .limit(limit)
+    .exec(function (err, products) {
+      if (err)
+        return handleError(res, err);
+      return res.status(200).json(products);
+    });
 };
 
 // Get a single product
@@ -33,7 +51,7 @@ exports.find_by_business = function (req, res) {
     if (err) {
       return handleError(res, err);
     }
-    return res.json(200, products);
+    return res.status(200).json(products);
   });
 };
 
@@ -48,12 +66,32 @@ exports.create = function (req, res) {
       info: product.info,
       retail_price: product.retail_price
     }, function (err, product) {
-      if (err) {
+      if (err)
         return handleError(res, err);
+      graphModel.relate_ids(product._id, 'CREATED_BY', req.user._id);
+      if(utils.defined(product.business)){
+        graphModel.relate_ids(product.business, 'SELL', product._id);
+        activity.create({
+          product: product._id,
+          actor_business: product.business,
+          action: "created"
+        });
       }
-      return res.json(201, product);
+      return res.status(201).json(product);
     });
   });
+};
+
+exports.user_products = function (req, res) {
+  let userID = req.user._id;
+  let skip =  req.params.skip;
+  let limit = req.params.limit;
+  graphModel.query_objects(Product,
+    `MATCH (u:user {_id:'${userID}'})<-[r:CREATED_BY]-(p:product) RETURN p._id as _id`,
+    'order by p.created DESC', skip, limit, function (err, products) {
+      if (err) return handleError(res, err);
+      return res.status(200).json(products);
+    });
 };
 
 // Updates an existing product in the DB.
@@ -73,7 +111,7 @@ exports.update = function (req, res) {
       if (err) {
         return handleError(res, err);
       }
-      return res.json(200, product);
+      return res.status(200).json(product);
     });
   });
 };
