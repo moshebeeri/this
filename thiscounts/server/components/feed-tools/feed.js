@@ -13,6 +13,9 @@ exports.generate = function(msg) {
   return "generated " + msg;
 };
 
+function handleError(res, err) {
+  return res.send(500, err);
+}
 exports.fetch_feed = function(query_builder, Model, res) {
   //Feed.find(function (err, feeds) {
   //  if(err) { return handleError(res, err); }

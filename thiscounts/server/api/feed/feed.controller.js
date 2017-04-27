@@ -45,16 +45,16 @@ exports.feed = function (req, res) {
   console.log("scroll: " + scroll);
   console.log("=============================================");
 
-  if (req.params.scroll != 'up' && req.params.scroll != 'down')
+  if (req.params.scroll !== 'up' && req.params.scroll !== 'down')
     return res.status(400).send('scroll value may be only up or down');
 
   var query_builder;
-  if(entity_type=="user")
+  if(entity_type==="user")
     query_builder = Feed.find({user: entity_id}).sort({activity: -1}).limit(25);
-  else if (entity_type=="group")
+  else if (entity_type==="group")
     query_builder = Feed.find({group: entity_id}).sort({activity: -1}).limit(25);
 
-  if (from_id == 'start') {
+  if (from_id === 'start') {
     return feedTools.fetch_feed(query_builder, Feed, res);
   }
   if (req.params.scroll === 'up')

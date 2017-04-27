@@ -98,8 +98,8 @@ let relateTypes = function (promotion) {
 
   if (utils.defined(promotion.social)) {
     query = util.format(" MATCH (promotion), (type:SocialType{SocialType:'%s'}) \
-                            WHERE  id(promotion)=%d \
-                            CREATE (promotion)-[:SOCIAL_TYPE]->(type) ", promotion.social, promotion.gid);
+                          WHERE  id(promotion)=%d \
+                          CREATE (promotion)-[:SOCIAL_TYPE]->(type) ", promotion.social, promotion.gid);
     console.log(query);
     db.query(query, function (err) {
       if (err) {
