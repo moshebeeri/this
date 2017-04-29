@@ -44,9 +44,9 @@ exports.feed = function (req, res) {
 
   let query_builder;
   if(entity_type === "user")
-    query_builder = Feed.find({user: entity_id}).sort({activity: 1}).limit(25);
+    query_builder = Feed.find({user: entity_id}).sort({activity: 'desc'}).limit(25);
   else if (entity_type === "group")
-    query_builder = Feed.find({group: entity_id}).sort({activity: 1}).limit(25);
+    query_builder = Feed.find({group: entity_id}).sort({activity: 'desc'}).limit(25);
 
   if (from_id === 'start') {
     return feedTools.fetch_feed(userId, query_builder, Feed, res);
