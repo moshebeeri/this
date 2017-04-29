@@ -13,20 +13,12 @@ exports.generate = function(msg) {
   return "generated " + msg;
 };
 
-exports.fetch_feed = function(query_builder, Model, res) {
-  //Feed.find(function (err, feeds) {
-  //  if(err) { return handleError(res, err); }
-  //  return res.status(200).json(feeds);
-  //});
-  //Feed.find().populate({
-  //  path: 'activity',
-  //  populate: { path: 'actor_user', model: 'User' }
-  //}).exec(function (err, feeds) {
-  //  if(err) { return handleError(res, err); }
-  //  return res.status(200).json(feeds);
-  //});
-//http://stackoverflow.com/questions/19222520/populate-nested-array-in-mongoose
-//  Feed.find().populate({path: 'activity', select: '-user'})
+function handleError(res, err) {
+  return res.send(500, err);
+}
+
+exports.fetch_feed = function(userId, query_builder, Model, res) {
+  //http://stackoverflow.com/questions/19222520/populate-nested-array-in-mongoose
   query_builder
     .populate({path: 'user',
                 select: '-salt -hashedPassword -gid -role -__v -email -phone_number -sms_verified -sms_code -provider'})
@@ -67,9 +59,18 @@ exports.fetch_feed = function(query_builder, Model, res) {
       function populate_actor_user(feeds, callback) {
         Model.populate(feeds, {
           path: 'activity.actor_user',
-          select: '-salt -hashedPassword -gid -role -__v -email -phone_number -sms_verified -sms_code -provider',
+          select: '-salt -hashedPassword -gid -role -__v -email -sms_verified -sms_code -provider',
           model: 'User'
-        }, callback);
+        }, function(err, actor_user){
+          if(err) return callback(err);
+          graphModel.query_ids_relation(userId, 'FOLLOW', actor_user._id, 'nick', function(err, nick){
+            if(err || !utils.defined(nick))
+              actor_user.name = actor_user.phone;
+            actor_user.name = nick;
+            callback(null,actor_user);
+          })
+
+        });
       }
 
       function populate_actor_business(feeds, callback) {
@@ -86,14 +87,14 @@ exports.fetch_feed = function(query_builder, Model, res) {
 
       async.waterfall([
         async.apply(populate_promotion, feeds),
-        populate_product,
-        populate_user,
-        populate_business,
-        populate_mall,
-        populate_chain,
-        populate_actor_user,
-        populate_actor_business,
-        populate_actor_mall,
+        populate_product        ,
+        populate_user           ,
+        populate_business       ,
+        populate_mall           ,
+        populate_chain          ,
+        populate_actor_user     ,
+        populate_actor_business ,
+        populate_actor_mall     ,
         populate_actor_chain
 
       ], function (err, feeds) {

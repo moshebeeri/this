@@ -86,7 +86,7 @@ exports.create = function (req, res) {
   location.address_location(body_business, function (err, data) {
     if (err) {
       if (err.code >= 400) return res.status(err.code).send(err.message);
-      else if (err.code == 202) {
+      else if (err.code === 202) {
         console.log(err);
         return res.status(202).json(data);
       }
@@ -133,7 +133,7 @@ exports.create = function (req, res) {
           actor_user: business.creator,
           action: "created"
         }, function (err) {
-          if (err) logger.error(err.message)
+          if (err) console.error(err.message)
         });
       });
 

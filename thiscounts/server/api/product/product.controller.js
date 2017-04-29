@@ -4,6 +4,8 @@ var _ = require('lodash');
 var Product = require('./product.model');
 var graphTools = require('../../components/graph-tools');
 var graphModel = graphTools.createGraphModel('product');
+var utils = require('../../components/utils').createUtils();
+var activity = require('../../components/activity').createActivity();
 
 // Get list of products
 exports.index = function (req, res) {
@@ -60,6 +62,7 @@ exports.create = function (req, res) {
       return handleError(res, err);
     }
     graphModel.reflect(product, {
+      _id: product._id,
       name: product.name,
       info: product.info,
       retail_price: product.retail_price
@@ -67,6 +70,14 @@ exports.create = function (req, res) {
       if (err)
         return handleError(res, err);
       graphModel.relate_ids(product._id, 'CREATED_BY', req.user._id);
+      if(utils.defined(product.business)){
+        graphModel.relate_ids(product.business, 'SELL', product._id);
+        activity.create({
+          product: product._id,
+          actor_business: product.business,
+          action: "created"
+        });
+      }
       return res.status(201).json(product);
     });
   });
@@ -74,6 +85,7 @@ exports.create = function (req, res) {
 
 exports.user_products = function (req, res) {
   let userID = req.user._id;
+  console.log(userID);
   let skip =  req.params.skip;
   let limit = req.params.limit;
   graphModel.query_objects(Product,

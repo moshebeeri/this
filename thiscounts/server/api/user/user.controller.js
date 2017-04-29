@@ -349,6 +349,7 @@ exports.phonebook = function (req, res) {
       });
     });
   });
+  //Not needed
   checkPhones(phonebook.phonebook, res);
 
 };
@@ -359,8 +360,6 @@ function owner_follow(phone_number) {
     return;
   phone_number.contacts.forEach(function (contact) {
     graphModel.follow_phone(phone_number._id, contact.nick, contact.userId);
-    //logger.info('create (' + contact + ')<-[Follows]-(' + phone_number.owner + ')');
-    ////logger.info('create (' + contact + ')<-[Follows]-(' + phone_number._id + ')');
   });
 }
 
@@ -511,14 +510,10 @@ exports.checkPhoneNumbers = function (req, res, next) {
  * Get multi users by phone numbers array
  */
 function checkPhones (phoneBook, res){
-  console.log("inside checkPhones");
   let  list = phoneBook;
   let  users = [];
 
   getPhoneNumbers(list, users, function(message, users, list) {
-    // this anonymous function will run when the
-    // callback is called
-    console.log("callback called! " + users);
     users = normalizePhoneBookList(users);
     res.status(200).json(users);
   });

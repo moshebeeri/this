@@ -99,8 +99,8 @@ let relateTypes = function (promotion) {
 
   if (utils.defined(promotion.social)) {
     query = util.format(" MATCH (promotion), (type:SocialType{SocialType:'%s'}) \
-                            WHERE  id(promotion)=%d \
-                            CREATE (promotion)-[:SOCIAL_TYPE]->(type) ", promotion.social, promotion.gid);
+                          WHERE  id(promotion)=%d \
+                          CREATE (promotion)-[:SOCIAL_TYPE]->(type) ", promotion.social, promotion.gid);
     console.log(query);
     db.query(query, function (err) {
       if (err) {
@@ -173,44 +173,6 @@ function create_promotion(promotion, callback) {
     });
   });
 }
-
-function create_promotion_bak(promotion, callback) {
-  //TODO: Convert to address location
-  console.log(JSON.stringify(promotion));
-
-  spatial.location_to_point(promotion);
-
-  Promotion.create(promotion, function (err, promotion) {
-    if (err) return callback(err, null);
-    set_promotion_location(promotion, function (err, promotion) {
-
-      promotionGraphModel.reflect(promotion, to_graph(promotion), function (err, promotion) {
-        if (err) return callback(err, null);
-        //create relationships
-        promotionGraphModel.relate_ids(promotion._id, 'CREATED_BY', promotion.creator);
-        if (promotion.report)
-          promotionGraphModel.relate_ids(promotion._id, 'REPORTED_BY', promotion.creator);
-        if (utils.defined(promotion.mall))
-          promotionGraphModel.relate_ids(promotion._id, 'MALL_PROMOTION', promotion.mall);
-        if (utils.defined(promotion.shopping_chain))
-          promotionGraphModel.relate_ids(promotion._id, 'CHAIN_PROMOTION', promotion.shopping_chain);
-        if (utils.defined(promotion.business))
-          promotionGraphModel.relate_ids(promotion._id, 'BUSINESS_PROMOTION', promotion.business);
-        if (utils.defined(promotion.campaign_id)) {
-          promotionGraphModel.relate_ids(promotion.campaign_id, 'CAMPAIGN_PROMOTION', promotion._id);
-        }
-        relateTypes(promotion);
-        promotion_created_activity(promotion);
-        spatial.add2index(promotion.gid, function (err, result) {
-          if (err) return callback(err, null);
-          else logger.info('object added to layer ' + result)
-        });
-      });
-    });
-    callback(null, promotion);
-  });
-}
-
 
 exports.create = function (req, res) {
   let promotion = req.body;
@@ -297,9 +259,7 @@ function promotion_created_activity(promotion) {
   if (utils.defined(promotion.business))
     act.actor_business = promotion.creator;
 
-  activity.activity(act, function (err) {
-    if (err) logger.error(err.message)
-  });
+  activity.create(act);
 }
 
 // Updates an existing promotion in the DB.

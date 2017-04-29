@@ -1,16 +1,16 @@
 'use strict';
 
-var _ = require('lodash');
-var util = require('util');
-var graphTools = require('../graph-tools');
-var graphModel = graphTools.createGraphModel('feed');
-var logger = require('../logger').createLogger();
-var utils = require('../utils').createUtils();
-var mongoose = require('mongoose'),
+let _ = require('lodash');
+let util = require('util');
+let graphTools = require('../graph-tools');
+let graphModel = graphTools.createGraphModel('feed');
+let logger = require('../logger').createLogger();
+let utils = require('../utils').createUtils();
+let mongoose = require('mongoose'),
   Schema = mongoose.Schema;
 
-var Feed = require('../../api/feed/feed.model');
-var ActivitySchema = require('../../api/activity/activity.model');
+let Feed = require('../../api/feed/feed.model');
+let ActivitySchema = require('../../api/activity/activity.model');
 
 function Activity() {
   logger.info("Activity constructed");
@@ -51,7 +51,7 @@ Activity.prototype.group_activity = function group_activity(act, callback) {
       return;
     }
     //update own group
-    var query = util.format(" MATCH (actor:group) \
+    let query = util.format(" MATCH (actor:group) \
                               where actor._id='%s'         \
                               return actor ", act.actor_group);
     run(query, function (err, group) {
@@ -59,7 +59,7 @@ Activity.prototype.group_activity = function group_activity(act, callback) {
       update_group_feeds(group, activity);
 
       //update following groups
-      var query = util.format(" MATCH (actor:group)<-[:FOLLOW]-(effected:group) \
+      let query = util.format(" MATCH (actor:group)<-[:FOLLOW]-(effected:group) \
                               where actor._id='%s'         \
                               return effected ", act.actor_group);
       run(query, function (err, effected) {
@@ -95,6 +95,12 @@ Activity.prototype.activity = function activity(act, callback) {
   activity_impl(act, callback);
 };
 
+Activity.prototype.create = function create(act) {
+  this.activity(act, function (err) {
+    if (err) console.error(err.message)
+  });
+};
+
 function activity_impl(act, callback){
   ActivitySchema.create(act, function (err, activity) {
     if (err) {
@@ -111,7 +117,7 @@ function activity_impl(act, callback){
       });
     }
     else if (activity.actor_business) {
-      effected_out_rel(activity.actor_business, "LIKE", function (err, effected) {
+      effected_in_rel(activity.actor_business, "LIKE", function (err, effected) {
         if (err) {
           return callback(err, null);
         }
@@ -120,17 +126,16 @@ function activity_impl(act, callback){
       });
     }
     else if (activity.actor_mall) {
-      effected_out_rel(activity.actor_mall, "LIKE", function (err, effected) {
+      effected_in_rel(activity.actor_mall, "LIKE", function (err, effected) {
         if (err) {
           return callback(err, null);
         }
         update_feeds(effected, activity);
         callback(null, activity)
       });
-
     }
     else if (activity.actor_chain) {
-      effected_out_rel(activity.actor_chain, "LIKE", function (err, effected) {
+      effected_in_rel(activity.actor_chain, "LIKE", function (err, effected) {
         if (err) {
           return callback(err, null);
         }
@@ -152,7 +157,7 @@ function activity_impl(act, callback){
 }
 
 Activity.prototype.action_activity = function action_activity(userId, itemId, action) {
-  var act = {
+  let act = {
     actor_user: userId,
     action: action
   };
@@ -165,7 +170,7 @@ Activity.prototype.action_activity = function action_activity(userId, itemId, ac
 };
 
 function run(query, callback) {
-  var db = graphModel.db();
+  let db = graphModel.db();
   db.query(query, function (err, effected) {
     if (err) {
       return callback(err, null);
@@ -175,15 +180,15 @@ function run(query, callback) {
 }
 //MATCH (actor) where actor._id='56a3cb8071cef8c460461c08' return actor
 function effected_out_rel(actor_id, relationship, callback) {
-  var query = util.format(" MATCH (actor)-[:%s]->(effected) \
-                            where actor._id='%s'         \
+  let query = util.format(" MATCH (actor)-[:%s]->(effected) \
+                            where actor._id='%s' and actor <> effected \
                             return effected ", relationship, actor_id);
   run(query, callback);
 }
 
 function effected_in_rel(actor_id, relationship, callback) {
-  var query = util.format(" MATCH (actor)<-[:%s]-(effected) \
-                            where actor._id='%s'         \
+  let query = util.format(" MATCH (actor)<-[:%s]-(effected) \
+                            where actor._id='%s' and actor <> effected \
                             return effected ", relationship, actor_id);
   run(query, callback);
 }
