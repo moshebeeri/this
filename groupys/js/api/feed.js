@@ -4,12 +4,15 @@
 import store from 'react-native-simple-store';
 
 class FeedApi {
-    getAll() {
+    getAll(direction,id) {
         return new Promise(async(resolve, reject) => {
 
             try {
+                console.log(id);
+                console.log(direction);
                 let token = await store.get('token');
-                const response = await fetch(`${server_host}/api/feeds`, {
+                let userId = await store.get('user_id');
+                const response = await fetch(`${server_host}/api/feeds/`+id+`/`+ direction +`/user/` +userId , {
                     method: 'GET',
                     headers: {
                         'Accept': 'application/json, text/plain, */*',
@@ -19,6 +22,8 @@ class FeedApi {
                     }
 
                 })
+
+
                 if (response.status == '401') {
                     reject(response);
                     return;
@@ -63,13 +68,14 @@ class FeedApi {
         if(feed.activity.business){
             if(feed.activity.business.pictures.length > 0  ){
                 response = {
+                    id:feed._id,
                     social: {
                         like: feed.activity.actor_user.social_state.like,
                         numberLikes: feed.activity.actor_user.social_state.likes,
                         follow: feed.activity.actor_user.social_state.follow,
                     },
                     actor:feed.activity.actor_user._id,
-                    itemTitle: feed.activity.actor_user._id + ' ' + feed.activity.action + ' ' + feed.activity.business.name,
+                    itemTitle: feed.activity.actor_user.phone_number + ' ' + feed.activity.action + ' ' + feed.activity.business.name,
                     description: feed.activity.business.name + ' location: ' + feed.activity.business.city + ' ' + feed.activity.business.address,
                     banner: {
                         uri:feed.activity.business.pictures[0].pictures[1]
@@ -78,13 +84,14 @@ class FeedApi {
             }else {
 
                 response = {
+                    id:feed._id,
                     social: {
                         like: feed.activity.actor_user.social_state.like,
                         numberLikes: feed.activity.actor_user.social_state.likes,
                         follow: feed.activity.actor_user.social_state.follow,
                     },
                     actor:feed.activity.actor_user._id,
-                    itemTitle: feed.activity.actor_user._id + ' ' + feed.activity.action + ' ' + feed.activity.business.name,
+                    itemTitle: feed.activity.actor_user.phone_number + ' ' + feed.activity.action + ' ' + feed.activity.business.name,
                     description: feed.activity.business.name + ' location: ' + feed.activity.business.city + ' ' + feed.activity.business.address,
 
                 }
