@@ -6,7 +6,6 @@ import {Container, Content, Text,Title, InputGroup, Input, Button, Icon, View,He
 
 import store from 'react-native-simple-store';
 
-
 import Dataset from 'impagination';
 
 

@@ -23,42 +23,55 @@ var myprofile = require('../../../images/profile.jpeg');
 import FeedApi from '../../api/feed'
 let feedApi = new FeedApi();
 
-const feeds = [
-        {
+const feeds2 = [
+{
+    id:3,
+    social:{
+        like:true,
+        numberLikes: 12,
+    },
+    logo:{
+        require:castro,
+    },
+    itemTitle: 'All Store 10% off',
+    description: 'Total discount',
+    banner: {
+        require:castroBanner
+    },
+},
+    {
+        id:4,
+        social:{
+            like:true,
+            numberLikes: 12,
+        },
+        logo:{
+            require:castro,
+        },
+        itemTitle: 'All Store 10% off',
+        description: 'Total discount',
+        banner: {
+            require:castroBanner
+        },
+    },
+    {
+        id:1,
+        social:{
+            like:false,
+            numberLikes: 10,
+
+
+        },
+        logo:{
+            require:myprofile,
+        },
+        itemTitle: 'Roi share with you',
+        description: 'Cafe Discount',
+
+        feed:{
             social:{
                 like:false,
                 numberLikes: 10,
-
-
-            },
-            logo:{
-                require:myprofile,
-            },
-            itemTitle: 'Roi share with you',
-            description: 'Cafe Discount',
-
-            feed:{
-                social:{
-                    like:false,
-                    numberLikes: 10,
-                },
-                logo:{
-                    require:aroma,
-                },
-                itemTitle: 'Cafe 20% off',
-                description: 'Cafe Discount',
-                banner: {
-                    require:aromCafe
-                }
-            }
-        },
-        {
-            social:{
-                like:false,
-                numberLikes: 12,
-
-
-
             },
             logo:{
                 require:aroma,
@@ -68,36 +81,35 @@ const feeds = [
             banner: {
                 require:aromCafe
             }
+        }
+    },
+    {
+        id: 2,
+        social: {
+            like: false,
+            numberLikes: 12,
+
+
         },
-        {
-            social:{
-                like:true,
-                numberLikes: 12,
-            },
-            logo:{
-                require:castro,
-            },
-            itemTitle: 'All Store 10% off',
-            description: 'Total discount',
-            banner: {
-                require:castroBanner
-            },
+        logo: {
+            require: aroma,
         },
+        itemTitle: 'Cafe 20% off',
+        description: 'Cafe Discount',
+        banner: {
+            require: aromCafe
+        }
+    }
+    // },
+
+
+
+
+];
+
+const feeds = [
         {
-            social:{
-                like:true,
-                numberLikes: 12,
-            },
-            logo:{
-                require:castro,
-            },
-            itemTitle: 'All Store 10% off',
-            description: 'Total discount',
-            banner: {
-                require:castroBanner
-            },
-        },
-        {
+            id:1,
             social:{
                 like:false,
                 numberLikes: 10,
@@ -125,6 +137,25 @@ const feeds = [
                 }
             }
         },
+    {
+        id: 2,
+        social: {
+            like: false,
+            numberLikes: 12,
+
+
+        },
+        logo: {
+            require: aroma,
+        },
+        itemTitle: 'Cafe 20% off',
+        description: 'Cafe Discount',
+        banner: {
+            require: aromCafe
+        }
+    }
+        // },
+
 
 
     ];
@@ -153,19 +184,49 @@ class Feed extends Component {
     }
 
 
-     getAll(){
-        feedApi.getAll();
-      return feeds;
+     async getAll(direction,id){
+        let feed = await feedApi.getAll(direction,id);
+      return feed;
     }
 
 
     fetchApi(pageOffset,pageSize ) {
 
-        return feedApi.getAll();
-        // return new Promise(function(resolve, reject) {
-        //     resolve(feeds);
+         return feedApi.getAll();
+        // return new Promise(async function(resolve, reject) {
+        //         console.log('featching: '+ pageOffset);
+        //
+        //     if(pageOffset < 10 && pageOffset % 2 ==0){
+        //         await setTimeout(function (x) {
+        //             return resolve(feeds2);
+        //             ;
+        //         }, 0);
+        //     }else {
+        //         if(pageOffset < 10){
+        //             await setTimeout(function (x) {
+        //                 return resolve(feeds2);
+        //                 ;
+        //             }, 0);
+        //         }else {
+        //
+        //             if(pageOffset % 2 ==0){
+        //                 await setTimeout(function (x) {
+        //                     return resolve(feeds2);
+        //                     ;
+        //                 }, 0);
+        //             }else {
+        //                 await setTimeout(function (x) {
+        //                     return resolve(feeds2);
+        //                     ;
+        //                 }, 0);
+        //             }
+        //         }
+        //     }
+        //
+        //
+        //
         // });
-
+        //
 
     }
 
