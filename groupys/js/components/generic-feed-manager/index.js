@@ -80,6 +80,11 @@ class GenericFeedManager extends Component {
                     rowsView: response,
                     showLoader: false
                 })
+            }else{
+                this.setState({
+                    showLoader:false
+                })
+
             }
 
         }catch (error){
