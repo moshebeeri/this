@@ -152,6 +152,7 @@ class GenericFeedManager extends Component {
                             <this.props.ItemDetail item={item} selectApi={this}  />
                         }
                         onEndReached={(event)=>this.endEvent(event)}
+                        enableEmptySections={true}
                     />
                     {loader}
 
