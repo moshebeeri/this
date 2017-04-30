@@ -8,8 +8,6 @@ class FeedApi {
         return new Promise(async(resolve, reject) => {
 
             try {
-                console.log(id);
-                console.log(direction);
                 let token = await store.get('token');
                 let userId = await store.get('user_id');
                 const response = await fetch(`${server_host}/api/feeds/`+id+`/`+ direction +`/user/` +userId , {
@@ -33,6 +31,7 @@ class FeedApi {
                 let feeds = responseData.map(feed => this.createFeed(feed)).filter(function(x){
                     return x != undefined;
                 });
+                console.log('token: ' + token +' user id' + userId + ' for item id: '+ id + ' direction: ' + direction + ' number of items: ' + feeds.length);
                 resolve(feeds);
             }
             catch (error) {

@@ -5,7 +5,7 @@ import {actions} from 'react-native-navigation-redux-helpers';
 import {Container, Content, Text,Title, InputGroup,
     Input, Button, Icon, View,Header, Body, Right, ListItem,Tabs,Tab,Spinner, TabHeading,Thumbnail,Left} from 'native-base';
 import SGListView from 'react-native-sglistview';
-
+import BackgroundTimer from 'react-native-background-timer';
 
  import Dataset from 'impagination';
 
@@ -43,12 +43,16 @@ class GenericFeedManager extends Component {
         }
         ;
 
+        const intervalId = BackgroundTimer.setInterval(() => {
+            // this will be executed every 200 ms
+            // even when app is the the background
+            this.fetchTopList(this.state.rowsView[0].id,false);
+        }, 60000);
     }
 
 
 
      componentWillMount(){
-         console.log('compone')
         this.fetchList();
 
     }
@@ -82,13 +86,14 @@ class GenericFeedManager extends Component {
 
     }
 
-    async fetchTopList(id){
+    async fetchTopList(id,showTimer){
         try {
             if(id== this.state.rowsView[0].id) {
-
-                this.setState({
-                    showTopLoader: true
-                })
+                if(showTimer) {
+                    this.setState({
+                        showTopLoader: true
+                    })
+                }
                 let response = await this.props.api.getAll('up', this.state.rowsView[0].id);
                 response = response.concat(this.state.rowsView);
                 this.setState({
