@@ -159,8 +159,17 @@ GraphModel.prototype.unrelate_ids = function unrelate(from, name, to){
 };
 
 
-GraphModel.prototype.follow_phone = function follow_phone(number, nick, userId){
+GraphModel.prototype.follow_user_by_phone_number = function follow_user_by_phone_number(number, nick, userId){
   let query = util.format("MATCH (phone:user { phone:'%s' }), (u:user { _id:'%s' }) CREATE UNIQUE (phone)<-[r:FOLLOW {nick : '%s'}]-(u)", number,userId, nick);
+  db.query(query, function(err) {
+    if (err) { logger.error(err.message); }
+  });
+};
+
+GraphModel.prototype.follow_business_owner_by_phone_number = function follow_business_by_owner_phone_number(owner_number){
+  let query = `MATCH (b:business), (owner:user { phone:'${owner_number}' }), (u:user) 
+               WHERE (owner)-[:OWNS]->(b) and (u)-[:FOLLOW]->(owner)
+               CREATE UNIQUE (u)-[r:FOLLOW]->(u)`;
   db.query(query, function(err) {
     if (err) { logger.error(err.message); }
   });

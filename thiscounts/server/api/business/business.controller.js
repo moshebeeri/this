@@ -106,22 +106,23 @@ exports.create = function (req, res) {
           lat: body_business.location.lat,
           lon: body_business.location.lng
         }, function (err, business) {
+
           if (err) return handleError(res, err);
 
-          graphModel.db().relate(creator.gid, 'OWNS', business.gid, {}, function (err, relationship) {
-            if (err) return handleError(res, err);
-            logger.info('(' + relationship.start + ')-[' + relationship.type + ']->(' + relationship.end + ')');
+          if(business.type === 'PERSONAL_SERVICES' ||  business.type ===  'SMALL_BUSINESS') {
+            graphModel.relate_ids(creator._id, 'OWNS', business._id);
+            graphModel.follow_business_owner_by_phone_number(user.phone_number);
+          }
 
-            if (defined(business.shopping_chain))
-              graphModel.relate_ids(business._id, 'BRANCH_OF', business.shopping_chain);
+          if (defined(business.shopping_chain))
+            graphModel.relate_ids(business._id, 'BRANCH_OF', business.shopping_chain);
 
-            if (defined(business.mall))
-              graphModel.relate_ids(business._id, 'IN_MALL', business.mall);
+          if (defined(business.mall))
+            graphModel.relate_ids(business._id, 'IN_MALL', business.mall);
 
-            spatial.add2index(business.gid, function (err, result) {
-              if (err) logger.error(err.message);
-              else logger.info('object added to layer ' + result)
-            });
+          spatial.add2index(business.gid, function (err, result) {
+            if (err) logger.error(err.message);
+            else logger.info('object added to layer ' + result)
           });
           activity.activity({
             business: business._id,
