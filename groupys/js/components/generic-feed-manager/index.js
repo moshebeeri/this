@@ -46,7 +46,9 @@ class GenericFeedManager extends Component {
         const intervalId = BackgroundTimer.setInterval(() => {
             // this will be executed every 200 ms
             // even when app is the the background
-            this.fetchTopList(this.state.rowsView[0].id,false);
+            if(this.state.rowsView.length > 0) {
+                this.fetchTopList(this.state.rowsView[0].id, false);
+            }
         }, 60000);
     }
 
@@ -71,12 +73,14 @@ class GenericFeedManager extends Component {
             }else{
                 response =  await this.props.api.getAll('down',this.state.rowsView[this.state.rowsView.length-1].id);
             }
+            if(response.length > 0) {
 
-            response =  this.state.rowsView.concat(response);
-            this.setState({
-                rowsView: response,
-                showLoader:false
-            })
+                response = this.state.rowsView.concat(response);
+                this.setState({
+                    rowsView: response,
+                    showLoader: false
+                })
+            }
 
         }catch (error){
             console.log(error);
@@ -88,18 +92,20 @@ class GenericFeedManager extends Component {
 
     async fetchTopList(id,showTimer){
         try {
-            if(id== this.state.rowsView[0].id) {
-                if(showTimer) {
+            if(this.state.rowsView.length > 0 ) {
+                if (id == this.state.rowsView[0].id) {
+                    if (showTimer) {
+                        this.setState({
+                            showTopLoader: true
+                        })
+                    }
+                    let response = await this.props.api.getAll('up', this.state.rowsView[0].id);
+                    response = response.concat(this.state.rowsView);
                     this.setState({
-                        showTopLoader: true
+                        rowsView: response,
+                        showTopLoader: false
                     })
                 }
-                let response = await this.props.api.getAll('up', this.state.rowsView[0].id);
-                response = response.concat(this.state.rowsView);
-                this.setState({
-                    rowsView: response,
-                    showTopLoader: false
-                })
             }
 
         }catch (error){
