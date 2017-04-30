@@ -33,7 +33,7 @@ exports.create = function(req, res) {
     req.body.locations.forEach(function(location){
       graphModel.save({
         lat: location.lat,
-        lng: location.lng,
+        lon: location.lng,
         speed: location.speed,
         userId: userId
       }, function(err, location){
