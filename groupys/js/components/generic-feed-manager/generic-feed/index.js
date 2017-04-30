@@ -98,7 +98,7 @@ class GenericFeedItem extends Component {
 
 
 
-            return (  <Card >
+            return (  <Card onMoveShouldSetResponder={event => this.props.selectApi.fetchTopList(item.id,true)}>
                     <CardItem>
 
                         <Left>

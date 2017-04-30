@@ -126,6 +126,7 @@ android {
 }
 
 dependencies {
+    compile project(':react-native-background-timer')
     compile project(':react-native-file-uploader')
     compile project(':react-native-contacts')
     compile project(':react-native-fileupload')

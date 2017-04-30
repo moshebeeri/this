@@ -1,0 +1,12 @@
+{
+  "type": "service_account",
+  "project_id": "lowla-thiscount",
+  "private_key_id": "45ce78efca49bb3ac988826432dd704e1e60bb2f",
+  "private_key": "-----BEGIN PRIVATE KEY-----\nMIIEvQIBADANBgkqhkiG9w0BAQEFAASCBKcwggSjAgEAAoIBAQDY6o0/58oPqgpa\nWfNhNa2Hm622HXrxr6sZVoDfsG2kwvBBsdg0o5gP75dWkDaRvSINwrUlDpBoBCGC\noarqYFE3qZZC5VgnCTAdL5gdIuPGajWH2SwSxEHX+w6nun3XwUZOW/CoLPlLXrl3\n29AI+pP1fihcAEKpkfaDy1mBjykIwUUjxXhIlyuHWCOErdPrO9UNTPKvnSCJ+yoq\n3nhBwNdHikvgtp8oRtxLQawNjFVsNJh47n0j0mLGD4ITiO6XF2J4pDD3uDFu9BFs\n3K78c7IA9NGZ04A0lrjLNCvrPeAdlwfEpYMOXfThUFdz2LLrZLS9+wMOav2uEK7c\nCb25Xpj7AgMBAAECggEAN7iQzkC5nCp+/FSs+2SxjetExUpvYZRRrHGXK18D21Yk\nJ4wK0QLRNg7C3n6vNeLS05wXskw6di3ReeATqp9RXa4XplmJuoVWsbifJ6Tlw/tW\ngu4brzpw+41HZ3i1iO3iJJDjkh/zbhQIKqzxlMzhoydkMLX0aeDP5W0gMfLXhKK/\nsZDAqa1LvMwOcBWpm0xVTpDpC3LDlkHrLWywVI8NcvyMP5CjBOwRO06QbOqgI4g9\n0sSe6mgsB0gvXZoFtIZFOwIZKFsAv0MFhD6W6lyT6PMe9wXWucY5zWzrMiu5Szgr\n42RQaiHFBaiDMvot19vt7VExsQ40inCYEgQ8guQ3YQKBgQD+8ePtOeS9sNkXivzd\nez8o4pR3+V9xfIHq83/aCj2OBAc9Fwj3GnYut4Cwsr2vjWGskhqstdacwAtoKkt2\nXEZGHpF1t99t0g6FlbM1pFshOYJtxJn7dqJt29MpnFTF5tQCop2irneA4CxQ7d6+\nXCDzGhB5jifXocoH7bCtYHyiiwKBgQDZ0F7mwsG8URfxlw+YzARjYBOeB+riY6Af\nhVmiUZ3OWYQDH23XadfSnULNl1+j6AiA5Nvopyxph/tkry0WcbZdy8ggUc2V+XJI\n9Wfsn+xusYivEnLdoR+nE3fPJwph1kUf31j5p/XqbO5Nqq3N54LOMnGtKAF+U5tz\nU46gxpnhUQKBgBHWCHUrTLZ8reN4xNIV8khA+dQe7S96X3h5iqNNfhr2ay858lWf\nU09XZTh3eM/UW1YAbr9QhXA3+1RRSTBBqmTzdIfA0m/Td1KfM4d4NSvw4xAc5gzy\nstBuxaoulru1t3VrvQ2JmTC5/j+3NJMqzN9VHnvylxT96618UpT+oBmbAoGAFZpZ\nD0IZvPe+DDQTU/BILyMETxQx86o142pybWry39h5A2ZGmqrgwP7f9UwiLDuDPGV2\neii6eu0FvgKx0hwNHlhrzOjQHyPSdfIBELL73C63g8WsptaoMQX5SA5zNSjvSi34\nwSordcjACev3uQhRLOpL5ASnwUPBkzqiVsfb00ECgYEAqMVreurNELfWn8KwAXNU\n+HNrEMToIcYerS9PQy5DYHOg8Zq2IpffS7MRbBTgTsH7w2AfBfwd4+ScsQxVVM8W\nQeW6M2tmK0h6+amKA18+ftXsnZCW9WiFq/0AUvYNasvLd/rxWDntlnRV9dMpohKq\n92+5WOberwQouIxuidB91nQ=\n-----END PRIVATE KEY-----\n",
+  "client_email": "lowla-bigquery@lowla-thiscount.iam.gserviceaccount.com",
+  "client_id": "107925718051301914541",
+  "auth_uri": "https://accounts.google.com/o/oauth2/auth",
+  "token_uri": "https://accounts.google.com/o/oauth2/token",
+  "auth_provider_x509_cert_url": "https://www.googleapis.com/oauth2/v1/certs",
+  "client_x509_cert_url": "https://www.googleapis.com/robot/v1/metadata/x509/lowla-bigquery%40lowla-thiscount.iam.gserviceaccount.com"
+}

@@ -1,10 +1,11 @@
 import React, {Component} from 'react';
-import {Image, Platform} from 'react-native';
+import {Image, Platform,ListView} from 'react-native';
 import {connect} from 'react-redux';
 import {actions} from 'react-native-navigation-redux-helpers';
 import {Container, Content, Text,Title, InputGroup,
     Input, Button, Icon, View,Header, Body, Right, ListItem,Tabs,Tab,Spinner, TabHeading,Thumbnail,Left} from 'native-base';
-
+import SGListView from 'react-native-sglistview';
+import BackgroundTimer from 'react-native-background-timer';
 
  import Dataset from 'impagination';
 
@@ -36,44 +37,45 @@ class GenericFeedManager extends Component {
             addComponent:'',
             rowsView: [],
             dataset: null,
+            showLoader:false,
+            showTopLoader:false,
 
         }
         ;
 
+        const intervalId = BackgroundTimer.setInterval(() => {
+            // this will be executed every 200 ms
+            // even when app is the the background
+            this.fetchTopList(this.state.rowsView[0].id,false);
+        }, 60000);
     }
 
-    setupImpagination() {
-        let fetchApi = this.props.api.fetchApi.bind(this);
-        let dataset = new Dataset({
-            pageSize: 5,
-            observe: (rowsView) => {
-                this.setState({rowsView});
-            },
 
-            // Where to fetch the data from.
 
-            fetch(pageOffset, pageSize, stats) {
-                return fetchApi(pageOffset + 1,pageSize );
+     componentWillMount(){
+        this.fetchList();
 
-            }
-        });
-        dataset.setReadOffset(10);
-        this.setState({dataset});
     }
 
-    componentWillMount(){
-        if(this.props.api.fetchApi) {
-            this.setupImpagination();
-        }else{
-            this.fetchList();
-        }
-    }
-
-    async fetchList(){
+    async fetchList(event){
         try {
-            let response = await this.props.api.getAll();
+
             this.setState({
-                rowsView: response
+                showLoader:true
+            })
+
+
+            let response = null;
+            if(this.state.rowsView.length == 0){
+                response =  await this.props.api.getAll('down','start');
+            }else{
+                response =  await this.props.api.getAll('down',this.state.rowsView[this.state.rowsView.length-1].id);
+            }
+
+            response =  this.state.rowsView.concat(response);
+            this.setState({
+                rowsView: response,
+                showLoader:false
             })
 
         }catch (error){
@@ -81,6 +83,28 @@ class GenericFeedManager extends Component {
         }
 
 
+
+    }
+
+    async fetchTopList(id,showTimer){
+        try {
+            if(id== this.state.rowsView[0].id) {
+                if(showTimer) {
+                    this.setState({
+                        showTopLoader: true
+                    })
+                }
+                let response = await this.props.api.getAll('up', this.state.rowsView[0].id);
+                response = response.concat(this.state.rowsView);
+                this.setState({
+                    rowsView: response,
+                    showTopLoader: false
+                })
+            }
+
+        }catch (error){
+            console.log(error);
+        }
 
     }
 
@@ -94,31 +118,43 @@ class GenericFeedManager extends Component {
 
 
 
-    setCurrentReadOffset (event) {
-        let itemHeight = 402;
-        let currentOffset = Math.floor(event.nativeEvent.contentOffset.y);
-        let currentItemIndex = Math.ceil(currentOffset / itemHeight);
-        this.state.dataset.setReadOffset(currentItemIndex);
+
+     getDataSource() {
+
+        const dataSource = new ListView.DataSource(
+            { rowHasChanged: (r1, r2) => r1.id !== r2.id });
+
+
+        return dataSource.cloneWithRows(this.state.rowsView);
     }
 
-
+    endEvent(event){
+        console.log('end event')
+        this.fetchList(event);
+    }
     render() {
-        let index = 0
-        let rows = undefined;
-        if(this.state.rowsView.length > 0) {
-             rows = this.state.rowsView.map((r, i) => {
-                 if (!r.isSettled) {
-                     return <Spinner key={Math.random()}/>;
-                 }
-                index++;
-                return <this.props.ItemDetail key= {index} index={index} item={r} />
-            });
-        }
+        let loader = this.state.showLoader?<View><Spinner color='red' /></View>:null
+        let topLoader = this.state.showTopLoader?<View><Spinner color='red' /></View>:null
 
         return (
 
-                <Content  removeClippedSubviews={true} style={{  backgroundColor: '#fff'} } scrollEventThrottle={300} onScroll={this.setCurrentReadOffset.bind(this)}>
-                             { rows }
+                <Content  removeClippedSubviews={true} style={{  backgroundColor: '#fff'} } >
+                    {topLoader}
+                    <SGListView
+                        dataSource={this.getDataSource() } //data source
+                        ref={'listview'}
+                        initialListSize={13}
+                        stickyHeaderIndices={[]}
+                        onEndReachedThreshold={100}
+                        scrollRenderAheadDistance={100}
+                        pageSize={13}
+                        renderRow={(item) =>
+                            <this.props.ItemDetail item={item} selectApi={this}  />
+                        }
+                        onEndReached={(event)=>this.endEvent(event)}
+                        enableEmptySections={true}
+                    />
+                    {loader}
 
                 </Content>
 
