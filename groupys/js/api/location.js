@@ -9,13 +9,14 @@ class LocationApi
                 let token = await store.get('token');
                 let userId = await store.get('user_id');
                 let request = {
-                    locations : [{
-                        timestamp : time,
-                        lat : lat,
-                        lng : lng,
+                    locations :[ {
+                        timestamp: time,
+                        lat: lat,
+                        lng: lng,
                         speed: speed
-                    }],
-                    userId: userId,
+                    }
+                    ],
+
                 };
 
 
