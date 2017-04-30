@@ -12,13 +12,16 @@ import Feeds from '../feed/index'
 import Promotions from '../promtions/index'
 
 import store from 'react-native-simple-store';
-
-
+import LocationApi from '../../api/location'
+import ContactApi from '../../api/contacts'
+import BackgroundTimer from 'react-native-background-timer';
+let locationApi = new LocationApi();
+let contactApi = new ContactApi();
 const {
     replaceAt,
 } = actions;
 
-class GenericFeedManager extends Component {
+class ApplicationManager extends Component {
 
     static propTypes = {
         replaceAt: React.PropTypes.func,
@@ -74,6 +77,30 @@ class GenericFeedManager extends Component {
         ;
 
 
+         // add location
+         navigator.geolocation.getCurrentPosition(
+             (position) => {
+                 var initialPosition = JSON.stringify(position);
+                 locationApi.sendLocation(position.coords.longitude,position.coords.latitude,position.timestamp,position.coords.speed);
+                 console.log(initialPosition);
+
+             },
+             (error) => alert(JSON.stringify(error)),
+             {enableHighAccuracy: true, timeout: 20000, maximumAge: 1000}
+         );
+         this.watchID = navigator.geolocation.watchPosition((position) => {
+             var lastPosition = JSON.stringify(position);
+             console.log(lastPosition);
+             locationApi.sendLocation(position.coords.longitude,position.coords.latitude,position.timestamp,position.coords.speed);
+
+         });
+
+         //add contacts
+         const intervalId = BackgroundTimer.setInterval(() => {
+             // this will be executed every 200 ms
+             // even when app is the the background
+             contactApi.syncContacts();
+         }, 60000);
 
 
     }
@@ -187,4 +214,4 @@ const mapStateToProps = state => ({
     navigation: state.cardNavigation,
 });
 
-export default connect(mapStateToProps, bindActions)(GenericFeedManager);
+export default connect(mapStateToProps, bindActions)(ApplicationManager);
