@@ -363,6 +363,7 @@ function owner_follow(phone_number) {
   });
 }
 
+/*
 function identifyPhoneByTwilio(phone, countryCode){
 
   let  verifiedPhone = [];
@@ -377,14 +378,14 @@ function identifyPhoneByTwilio(phone, countryCode){
         identifyPhoneByTwilioFallBack(countryCode + cleanedPhone);
       }
       else {
-        /*console.log('twilio--twilio--twilio--twilio--twilio--twilio--twilio--twilio--');
+        /!*console.log('twilio--twilio--twilio--twilio--twilio--twilio--twilio--twilio--');
         //console.log(JSON.stringify(number));
         //console.log(number.carrier.type);
         //console.log(number.carrier.name);
         console.log("country_code: " + number.country_code);
         console.log("phone_number: " + number.phone_number);
         console.log("national_format: " + number.national_format);
-        console.log('twilio--twilio--twilio--twilio--twilio--twilio--twilio--twilio--');*/
+        console.log('twilio--twilio--twilio--twilio--twilio--twilio--twilio--twilio--');*!/
       }
     });
   } else {
@@ -398,18 +399,19 @@ function identifyPhoneByTwilioFallBack(phone){
       if (error)
         logger.error(error.message);
       else {
-        /*console.log('FallBack--FallBack--FallBack--FallBack--FallBack--FallBack--');
+        /!*console.log('FallBack--FallBack--FallBack--FallBack--FallBack--FallBack--');
         //console.log(number.carrier.type);
         //console.log(number.carrier.name);
         console.log("country_code: " + number.country_code);
         console.log("phone_number: " + number.phone_number);
         console.log("national_format: " + number.national_format);
-        console.log('FallBack--FallBack--FallBack--FallBack--FallBack--FallBack--');*/
+        console.log('FallBack--FallBack--FallBack--FallBack--FallBack--FallBack--');*!/
       }
     });
   } else {
   }
 }
+*/
 
 
 /**

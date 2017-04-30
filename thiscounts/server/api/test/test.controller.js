@@ -38,13 +38,13 @@ function test_activity(test, action) {
     test: test._id,
     action: action
   };
-  if (test.creator_type == 'USER')
+  if (test.entity_type == 'USER')
     act.actor_user = test.creator;
-  else if (test.creator_type == 'CHAIN')
+  else if (test.entity_type == 'CHAIN')
     act.actor_chain = test.creator;
-  else if (test.creator_type == 'BUSINESS')
+  else if (test.entity_type == 'BUSINESS')
     act.actor_business = test.creator;
-  else if (test.creator_type == 'MALL')
+  else if (test.entity_type == 'MALL')
     act.actor_mall = test.creator;
   user_activity(act);
 }

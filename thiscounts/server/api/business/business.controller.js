@@ -73,85 +73,81 @@ function defined(obj) {
 }
 
 exports.create = function (req, res) {
-  var creator = null;
   var body_business = req.body;
   var userId = req.user._id;
+
   User.findById(userId, '-salt -hashedPassword -sms_code', function (err, user) {
     if (err) return res.status(401).send(err.message);
     if (!user) return res.status(401).send('Unauthorized');
+    var creator = null;
     creator = user;
-  });
-  body_business.creator = userId;
+    body_business.creator = userId;
 
-  location.address_location(body_business, function (err, data) {
-    if (err) {
-      if (err.code >= 400) return res.status(err.code).send(err.message);
-      else if (err.code === 202) {
-        console.log(err);
-        return res.status(202).json(data);
-      }
-      else return res.status(400).send(err);
-    }
-
-    body_business.location = spatial.geo_to_location(data);
-
-    //console.log(body_business.location);
-    Business.create(body_business, function (err, business) {
+    location.address_location(body_business, function (err, data) {
       if (err) {
-        return handleError(res, err);
-      }
-      graphModel.reflect(business, {
-        _id: business._id,
-        name: business.name,
-        creator: business.creator,
-        lat: body_business.location.lat,
-        lon: body_business.location.lng
-      }, function (err, business) {
-        if (err) {
-          return handleError(res, err);
+        if (err.code >= 400) return res.status(err.code).send(err.message);
+        else if (err.code === 202) {
+          console.log(err);
+          return res.status(202).json(data);
         }
+        else return res.status(400).send(err);
+      }
 
-        graphModel.db().relate(creator.gid, 'OWNS', business.gid, {}, function (err, relationship) {
-          if (err) {
-            console.log(err.message);
-          }
-          logger.info('(' + relationship.start + ')-[' + relationship.type + ']->(' + relationship.end + ')');
+      body_business.location = spatial.geo_to_location(data);
 
-          if (defined(business.shopping_chain))
-            graphModel.relate_ids(business._id, 'BRANCH_OF', business.shopping_chain);
+      //console.log(body_business.location);
+      Business.create(body_business, function (err, business) {
+        if (err) return handleError(res, err);
 
-          if (defined(business.mall))
-            graphModel.relate_ids(business._id, 'IN_MALL', business.mall);
+        graphModel.reflect(business, {
+          _id: business._id,
+          name: business.name,
+          creator: business.creator,
+          lat: body_business.location.lat,
+          lon: body_business.location.lng
+        }, function (err, business) {
+          if (err) return handleError(res, err);
 
-          spatial.add2index(business.gid, function (err, result) {
-            if (err) logger.error(err.message);
-            else logger.info('object added to layer ' + result)
+          graphModel.db().relate(creator.gid, 'OWNS', business.gid, {}, function (err, relationship) {
+            if (err) return handleError(res, err);
+            logger.info('(' + relationship.start + ')-[' + relationship.type + ']->(' + relationship.end + ')');
+
+            if (defined(business.shopping_chain))
+              graphModel.relate_ids(business._id, 'BRANCH_OF', business.shopping_chain);
+
+            if (defined(business.mall))
+              graphModel.relate_ids(business._id, 'IN_MALL', business.mall);
+
+            spatial.add2index(business.gid, function (err, result) {
+              if (err) logger.error(err.message);
+              else logger.info('object added to layer ' + result)
+            });
+          });
+          activity.activity({
+            business: business._id,
+            actor_user: business.creator,
+            action: 'created'
+          }, function (err) {
+            if (err) console.error(err.message)
           });
         });
-        activity.activity({
-          business: business._id,
-          actor_user: business.creator,
-          action: "created"
-        }, function (err) {
-          if (err) console.error(err.message)
-        });
-      });
 
-      Group.create_group({
-        creator_type: 'BUSINESS',
-        add_policy: 'OPEN',
-        business_id: business._id,
-        creator: req.user._id
-      }, function (err, group) {
-        if (err) {
-          return handleError(res, err);
-        }
-        business.default_group = group.id;
-        business.save(function (err) {
-            if (err) return console.log("error: " + err)
+        Group.create_group({
+          add_policy: 'OPEN',
+          entity_type: 'BUSINESS',
+          entity: business._id,
+          creator: req.user._id
+        }, function (err, group) {
+          if (err) {
+            return handleError(res, err);
           }
-        );
-        return res.status(201).json(business);
+          business.default_group = group.id;
+          business.save(function (err) {
+              if (err) return console.log("error: " + err)
+            }
+          );
+          return res.status(201).json(business);
+        });
       });
     });
   });
@@ -229,6 +225,7 @@ exports.destroy = function (req, res) {
 
 //router.post('/add/users/:to_group', auth.isAuthenticated(), controller.add_users);
 // user[phone_number] and user[sms_verified]
+//TODO: Fix this function!!!
 exports.add_users = function (req, res) {
   Business.findById(req.params.to_group, function (err, group) {
     if (err) {
@@ -238,17 +235,17 @@ exports.add_users = function (req, res) {
       return res.status(404).send('no group');
     }
 
-    if (utils.defined(_.find(group.admins, req.user._id) && (group.add_policy == 'OPEN' || group.add_policy == 'CLOSE'))) {
+    if (utils.defined(_.find(group.admins, req.user._id) && (group.add_policy === 'OPEN' || group.add_policy === 'CLOSE'))) {
       console.log(req.body.users);
-      for (var user in req.body.users) {
-        if (user != Object.keys(req.body.users)[Object.keys(req.body.users).length - 1]) {
+      for (let user in req.body.users) {
+        if (user !== Object.keys(req.body.users)[Object.keys(req.body.users).length - 1]) {
           user_follow_group(req.body.users[user], group, false, res);
         } else {
           user_follow_group(req.body.users[user], group, true, res);
         }
       }
     }
-    else if (group.add_policy == 'REQUEST' || group.add_policy == 'ADMIN_INVITE' || group.add_policy == 'MEMBER_INVITE')
+    else if (group.add_policy === 'REQUEST' || group.add_policy === 'ADMIN_INVITE' || group.add_policy === 'MEMBER_INVITE')
       return handleError(res, 'add policy ' + group.add_policy + ' not implemented');
     else
       return res.status(404).send('Can not add users');
