@@ -66,18 +66,11 @@ exports.showByUserId = function (req, res, next) {
  */
 exports.create = function (req, res) {
 
-  console.log("==============================");
-
   var phonebook = req.body;
   var userId = req.user._id;
   console.log(req.body);
   console.log(req.user._id);
 
-  console.log("==============================");
-
-
-  
-  
 
   Phonebook.findOne({userId: userId}, function (err, user) {
     if (user) {
@@ -90,7 +83,7 @@ exports.create = function (req, res) {
         if (err) return res.status(500).send(err);
         checkPhones(phonebook.phonebook, res);
       });
-      
+
     } else {
       Phonebook.create({userId: userId, phonebook: phonebook.phonebook}, function(err, phonebook) {
         if(err) { return handleError(res, err); }
@@ -154,7 +147,6 @@ exports.create = function (req, res) {
  * Get multi users by phone numbers array
  */
 function checkPhones (phoneBook, res){
-  console.log("inside checkPhones");
   var list = phoneBook;
   var users = [];
 
