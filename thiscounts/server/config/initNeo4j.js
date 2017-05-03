@@ -26,16 +26,55 @@ function initNeo4j() {
     });
   });
   // create indexes
-  db.index.createIfNone('user', '_id', function(err, index) {
+  db.index.createIfNone('activity', '_id', function(err, index) {
+    console.log(index);
+  });
+  db.index.createIfNone('brand', '_id', function(err, index) {
     console.log(index);
   });
   db.index.createIfNone('business', '_id', function(err, index) {
     console.log(index);
   });
+  db.index.createIfNone('card', '_id', function(err, index) {
+    console.log(index);
+  });
+  db.index.createIfNone('cardType', '_id', function(err, index) {
+    console.log(index);
+  });
+  db.index.createIfNone('campaign', '_id', function(err, index) {
+    console.log(index);
+  });
+  db.index.createIfNone('category', '_id', function(err, index) {
+    console.log(index);
+  });
+  db.index.createIfNone('feed', '_id', function(err, index) {
+    console.log(index);
+  });
+  db.index.createIfNone('group', '_id', function(err, index) {
+    console.log(index);
+  });
   db.index.createIfNone('mall', '_id', function(err, index) {
     console.log(index);
   });
+  db.index.createIfNone('phone_number', '_id', function(err, index) {
+    console.log(index);
+  });
+  db.index.createIfNone('phonebook', '_id', function(err, index) {
+    console.log(index);
+  });
+  db.index.createIfNone('product', '_id', function(err, index) {
+    console.log(index);
+  });
   db.index.createIfNone('promotion', '_id', function(err, index) {
+    console.log(index);
+  });
+  db.index.createIfNone('shoppingChain', '_id', function(err, index) {
+    console.log(index);
+  });
+  db.index.createIfNone('user', '_id', function(err, index) {
+    console.log(index);
+  });
+  db.index.createIfNone('user', 'phone', function(err, index) {
     console.log(index);
   });
   db.index.createIfNone('PromotionType', 'PromotionType', function(err, index) {

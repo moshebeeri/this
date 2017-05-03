@@ -1,9 +1,9 @@
 'use strict';
 
-var mongoose = require('mongoose'),
+let mongoose = require('mongoose'),
     Schema = mongoose.Schema;
 
-var BusinessSchema = new Schema({social_state: {},
+let BusinessSchema = new Schema({social_state: {},
   name: { type: String, index: true, required: true},
   gid: { type: Number, index: true},
   tax_id: { type: String, index: true, required: true} ,
@@ -35,7 +35,7 @@ var BusinessSchema = new Schema({social_state: {},
   id: String,
   type:{
     type: String,
-    enum: ['PERSONAL_SERVICES', 'SMALL_BUSINESS', 'COMPANY', 'ENTERPRISE'],
+    enum: ['PERSONAL_SERVICES', 'SMALL_BUSINESS', 'PARTNERSHIP', 'COMPANY', 'ENTERPRISE'],
     required: true
   },
   additional_contacts: {

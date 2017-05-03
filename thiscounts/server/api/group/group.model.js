@@ -10,7 +10,9 @@ var GroupSchema = new Schema({
   created: { type: Date, default: Date.now },
   creator: {type: Schema.ObjectId, ref: 'User', required: true},
   admins: [{ type: Schema.ObjectId, ref: 'User', index: true}],
-  creator_type: {
+
+  entity: {type: String},
+  entity_type: {
     type: String,
     required: true,
     enum: [

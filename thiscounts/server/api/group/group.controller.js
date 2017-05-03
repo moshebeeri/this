@@ -36,17 +36,17 @@ function to_graph(group) {
 }
 
 function group_activity(group, action) {
-  var act = {
+  const act = {
     group: group._id,
     action: action
   };
-  if (group.creator_type == 'USER')
+  if (group.entity_type === 'USER')
     act.actor_user = group.creator;
-  else if (group.creator_type == 'CHAIN')
+  else if (group.entity_type === 'CHAIN')
     act.actor_chain = group.creator;
-  else if (group.creator_type == 'BUSINESS')
+  else if (group.entity_type === 'BUSINESS')
     act.actor_business = group.creator;
-  else if (group.creator_type == 'MALL')
+  else if (group.entity_type === 'MALL')
     act.actor_mall = group.creator;
   user_activity(act);
 }
@@ -114,14 +114,11 @@ exports.create_group = function(group, callback) {
   Group.create(group, function(err, group) {
     if(err) { return callback(err); }
     graphModel.reflect(group, to_graph(group), function (err) {
-      if (err) {  { return callback(err); } }
+      if (err) return callback(err);
       graphModel.relate_ids(group._id, 'CREATED_BY', group.creator);
       graphModel.relate_ids(group.creator, 'FOLLOW', group._id );
       graphModel.relate_ids(group.creator, 'GROUP_ADMIN', group._id );
-      if(utils.defined(group.business_id)){
-        graphModel.relate_ids(group._id, 'FOLLOW', group.business_id );
-      }
-
+      graphModel.relate_ids(group.entity, 'HAS_GROUP', group._id );
       group_activity(group, "create");
     });
     callback(null, group);

@@ -141,11 +141,8 @@ GraphModel.prototype.count_in_rel_id = function count_in_rel(name, to, callback)
  */
 GraphModel.prototype.relate_ids = function relate_id(from, name, to, params){
   if(!utils.defined(params) || typeof params !== 'string')
-    params = `{timestamp: "${Date.now()}"}`;
+    params = ''; //`{timestamp: "${Date.now()}"}`;
 
-  //MATCH (f { _id:'58076f8a45e648a81b79e9f8' }), (t { _id:'5807697a45e648a81b79e9ed' }) CREATE UNIQUE (f)-[:CREATED_BY {"timestamp":1476882314737}]->(t)
-  //let query = util.format("MATCH (f { _id:'%s' }), (t { _id:'%s' }) CREATE UNIQUE (f)-[:%s %s]->(t)",from, to, name, JSON.stringify(params));
-  //console.log(query);
   let query = 'MATCH (f { _id:"' + from + '"}), (t { _id:"' + to +  '"}) CREATE UNIQUE (f)-[:'+ name + params +']->(t)';
   console.log(query);
   db.query(query, function(err) {
@@ -162,8 +159,17 @@ GraphModel.prototype.unrelate_ids = function unrelate(from, name, to){
 };
 
 
-GraphModel.prototype.follow_phone = function follow_phone(number, nick, userId){
+GraphModel.prototype.follow_user_by_phone_number = function follow_user_by_phone_number(number, nick, userId){
   let query = util.format("MATCH (phone:user { phone:'%s' }), (u:user { _id:'%s' }) CREATE UNIQUE (phone)<-[r:FOLLOW {nick : '%s'}]-(u)", number,userId, nick);
+  db.query(query, function(err) {
+    if (err) { logger.error(err.message); }
+  });
+};
+
+GraphModel.prototype.follow_business_owner_by_phone_number = function follow_business_by_owner_phone_number(owner_number){
+  let query = `MATCH (b:business), (owner:user { phone:'${owner_number}' }), (u:user) 
+               WHERE (owner)-[:OWNS]->(b) and (u)-[:FOLLOW]->(owner)
+               CREATE UNIQUE (u)-[r:FOLLOW]->(u)`;
   db.query(query, function(err) {
     if (err) { logger.error(err.message); }
   });
