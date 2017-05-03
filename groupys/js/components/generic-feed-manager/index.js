@@ -39,17 +39,11 @@ class GenericFeedManager extends Component {
             dataset: null,
             showLoader:false,
             showTopLoader:false,
+            intervalId:{},
 
         }
         ;
 
-        const intervalId = BackgroundTimer.setInterval(() => {
-            // this will be executed every 200 ms
-            // even when app is the the background
-            if(this.state.rowsView.length > 0) {
-                this.fetchTopList(this.state.rowsView[0].id, false);
-            }
-        }, 60000);
     }
 
 
@@ -57,6 +51,22 @@ class GenericFeedManager extends Component {
      componentWillMount(){
         this.fetchList();
 
+         const intervalId = BackgroundTimer.setInterval(() => {
+             // this will be executed every 200 ms
+             // even when app is the the background
+             if(this.state.rowsView.length > 0) {
+                 this.fetchTopList(this.state.rowsView[0].id, false);
+             }
+         }, 60000);
+
+         this.setState({
+             intervalId : intervalId
+         })
+
+    }
+
+    componentWillUnmount() {
+        BackgroundTimer.clearTimeout(this.state.intervalId);
     }
 
     async fetchList(event){
