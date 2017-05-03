@@ -131,32 +131,56 @@ class AddProduct extends Component {
 
 
     }
+    focusNextField(nextField) {
+
+        this.refs[nextField]._root.focus()
+
+    }
 
 
     formFailed(error){
         console.log('failed');
     }
-    pickSingle(cropit, circular=false) {
-        ImagePicker.openPicker({
-            width: 300,
-            height: 300,
-            cropping: cropit,
-            cropperCircleOverlay: circular,
-            compressImageMaxWidth: 640,
-            compressImageMaxHeight: 480,
-            compressImageQuality: 0.5,
-            compressVideoPreset: 'MediumQuality',
-        }).then(image => {
-            console.log('received image', image);
+    async pickFromCamera() {
+        try {
+            let image = await ImagePicker.openCamera({
+                width: 300,
+                height: 300,
+                cropping: true,
+                compressImageMaxWidth: 640,
+                compressImageMaxHeight: 480,
+                compressImageQuality: 0.5,
+                compressVideoPreset: 'MediumQuality',
+            });
             this.setState({
                 image: {uri: image.path, width: image.width, height: image.height, mime: image.mime},
                 images: null,
                 path: image.path
             });
-        }).catch(e => {
+        }catch (e){
             console.log(e);
-            Alert.alert(e.message ? e.message : e);
-        });
+        }
+    }
+
+    async pickPicture() {
+        try {
+            let image = await ImagePicker.openPicker({
+                width: 300,
+                height: 300,
+                cropping: true,
+                compressImageMaxWidth: 640,
+                compressImageMaxHeight: 480,
+                compressImageQuality: 0.5,
+                compressVideoPreset: 'MediumQuality',
+            });
+            this.setState({
+                image: {uri: image.path, width: image.width, height: image.height, mime: image.mime},
+                images: null,
+                path: image.path
+            });
+        }catch (e){
+            console.log(e);
+        }
     }
     render() {
 
@@ -211,23 +235,31 @@ class AddProduct extends Component {
                 <Content  style={{backgroundColor: '#fff'}}>
 
                     <Item underline>
-                        <Input onChangeText={(name) => this.setState({name})} placeholder='Name' />
+                        <Input  blurOnSubmit={true} returnKeyType='next' ref="1" onSubmitEditing={this.focusNextField.bind(this,"2")} autoFocus = {true} onChangeText={(name) => this.setState({name})} placeholder='Name' />
                     </Item>
                     <Item underline>
-                        <Input onChangeText={(info) => this.setState({info})} placeholder='Description' />
+                        <Input  blurOnSubmit={true} returnKeyType='next' ref="2" onSubmitEditing={this.focusNextField.bind(this,"3")} onChangeText={(info) => this.setState({info})} placeholder='Description' />
                     </Item>
 
 
                     <Item underline>
-                        <Input onChangeText={(retail_price) => this.setState({retail_price})} placeholder='Price' />
+                        <Input  blurOnSubmit={true} returnKeyType='done' ref="3"   onChangeText={(retail_price) => this.setState({retail_price})} placeholder='Price' />
                     </Item>
 
                     {pikkerTag}
 
                     <View style={{ flexDirection: 'row',marginTop:5 }}>
 
-                        <Button   transparent  onPress={() => this.pickSingle(true)}>
+                        <Button   transparent  onPress={() => this.pickPicture()}>
                             <Text> select image </Text>
+                        </Button>
+
+                        {image}
+                    </View>
+                    <View style={{ flexDirection: 'row',marginTop:5 }}>
+
+                        <Button   transparent  onPress={() => this.pickFromCamera()}>
+                            <Text> take picture </Text>
                         </Button>
 
                         {image}

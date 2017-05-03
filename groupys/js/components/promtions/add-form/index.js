@@ -210,7 +210,11 @@ class AddPromotion extends Component {
              business: responseData[0]._id
         });
     }
+    focusNextField(nextField) {
 
+        this.refs[nextField]._root.focus()
+
+    }
 
     replaceRoute(route) {
         this.props.replaceAt('add-promotions', {key: route}, this.props.navigation.key);
@@ -306,28 +310,46 @@ class AddPromotion extends Component {
     }
 
 
-
-    pickSingle(cropit, circular=false) {
-        ImagePicker.openPicker({
-            width: 300,
-            height: 300,
-            cropping: cropit,
-            cropperCircleOverlay: circular,
-            compressImageMaxWidth: 640,
-            compressImageMaxHeight: 480,
-            compressImageQuality: 0.5,
-            compressVideoPreset: 'MediumQuality',
-        }).then(image => {
-            console.log('received image', image);
+    async pickFromCamera() {
+        try {
+            let image = await ImagePicker.openCamera({
+                width: 300,
+                height: 300,
+                cropping: true,
+                compressImageMaxWidth: 640,
+                compressImageMaxHeight: 480,
+                compressImageQuality: 0.5,
+                compressVideoPreset: 'MediumQuality',
+            });
             this.setState({
                 image: {uri: image.path, width: image.width, height: image.height, mime: image.mime},
                 images: null,
                 path: image.path
             });
-        }).catch(e => {
+        }catch (e){
             console.log(e);
-            Alert.alert(e.message ? e.message : e);
-        });
+        }
+    }
+
+    async pickPicture() {
+        try {
+            let image = await ImagePicker.openPicker({
+                width: 300,
+                height: 300,
+                cropping: true,
+                compressImageMaxWidth: 640,
+                compressImageMaxHeight: 480,
+                compressImageQuality: 0.5,
+                compressVideoPreset: 'MediumQuality',
+            });
+            this.setState({
+                image: {uri: image.path, width: image.width, height: image.height, mime: image.mime},
+                images: null,
+                path: image.path
+            });
+        }catch (e){
+            console.log(e);
+        }
     }
 
     showProducts(boolean){
@@ -502,11 +524,11 @@ class AddPromotion extends Component {
 
 
                         <Item underline>
-                            <Input value={this.state.name} onChangeText={(name) => this.setState({name})}
+                            <Input  blurOnSubmit={true} returnKeyType='next' ref="1" onSubmitEditing={this.focusNextField.bind(this,"2")} value={this.state.name} onChangeText={(name) => this.setState({name})}
                                    placeholder='Name'/>
                         </Item>
                         <Item underline>
-                            <Input value={this.state.info} onChangeText={(info) => this.setState({info})}
+                            <Input  blurOnSubmit={true} returnKeyType='next' ref="2" onSubmitEditing={this.focusNextField.bind(this,"3")} value={this.state.info} onChangeText={(info) => this.setState({info})}
                                    placeholder='Description'/>
                         </Item>
 
@@ -516,16 +538,16 @@ class AddPromotion extends Component {
                             {item}
                         </Item>
                         <Item underline>
-                            <Input value={this.state.amount} onChangeText={(amount) => this.setState({amount})}
+                            <Input blurOnSubmit={true} returnKeyType='next' ref="3" onSubmitEditing={this.focusNextField.bind(this,"4")} value={this.state.amount} onChangeText={(amount) => this.setState({amount})}
                                    placeholder='Product Amount'/>
                         </Item>
                         <Item underline>
-                            <Input value={this.state.retail_price}
+                            <Input blurOnSubmit={true} returnKeyType='next' ref="4" onSubmitEditing={this.focusNextField.bind(this,"5")} value={this.state.retail_price}
                                    onChangeText={(retail_price) => this.setState({retail_price})}
                                    placeholder='Product Reatai Price'/>
                         </Item>
                         <Item underline>
-                            <Input value={this.state.total_discount}
+                            <Input blurOnSubmit={true} returnKeyType='done' ref="5"  value={this.state.total_discount}
                                    onChangeText={(total_discount) => this.setState({total_discount})}
                                    placeholder='Product Total Price'/>
                         </Item>
@@ -555,7 +577,7 @@ class AddPromotion extends Component {
                         <Item underline>
                             <View style={{flexDirection: 'row', marginTop: 5}}>
 
-                                <Button transparent onPress={() => this.pickSingle(true)}>
+                                <Button transparent onPress={() => this.pickFromCamera()}>
                                     <Text>Select Image </Text>
                                 </Button>
 
@@ -640,11 +662,11 @@ class AddPromotion extends Component {
 
 
                         <Item underline>
-                            <Input value={this.state.name} onChangeText={(name) => this.setState({name})}
+                            <Input blurOnSubmit={true} returnKeyType='next' ref="1" onSubmitEditing={this.focusNextField.bind(this,"2")} value={this.state.name} onChangeText={(name) => this.setState({name})}
                                    placeholder='Name'/>
                         </Item>
                         <Item underline>
-                            <Input value={this.state.info} onChangeText={(info) => this.setState({info})}
+                            <Input blurOnSubmit={true} returnKeyType='done' ref="2"  value={this.state.info} onChangeText={(info) => this.setState({info})}
                                    placeholder='Description'/>
                         </Item>
 
@@ -671,7 +693,7 @@ class AddPromotion extends Component {
                         <Item underline>
                             <View style={{flexDirection: 'row', marginTop: 5}}>
 
-                                <Button transparent onPress={() => this.pickSingle(true)}>
+                                <Button transparent onPress={() => this.pickFromCamera()}>
                                     <Text>Select Image </Text>
                                 </Button>
 
