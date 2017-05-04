@@ -102,18 +102,33 @@ exports.create = function (req, res) {
         graphModel.reflect(business, {
           _id: business._id,
           name: business.name,
+          type: business.type,
           creator: business.creator,
           lat: body_business.location.lat,
           lon: body_business.location.lng
         }, function (err, business) {
 
           if (err) return handleError(res, err);
+          Group.create_business_default_group({
+            add_policy: 'OPEN',
+            entity_type: 'BUSINESS',
+            entity: business._id,
+            creator: req.user._id
+          }, function (err, group) {
+            if (err) return handleError(res, err);
+            if(business.type === 'PERSONAL_SERVICES' ||  business.type ===  'SMALL_BUSINESS')
+              graphModel.relate_ids(creator._id, 'OWNS', business._id, function(err){
+                if(err) console.log(err);
+                graphModel.owner_followers_follow_business_default_group(user._id);
+              });
 
-          if(business.type === 'PERSONAL_SERVICES' ||  business.type ===  'SMALL_BUSINESS') {
-            graphModel.relate_ids(creator._id, 'OWNS', business._id);
-            graphModel.follow_business_owner_by_phone_number(user.phone_number);
-          }
-
+            business.default_group = group.id;
+            business.save(function (err) {
+                if (err) return console.log("error: " + err)
+              }
+            );
+            return res.status(201).json(business);
+          });
           if (defined(business.shopping_chain))
             graphModel.relate_ids(business._id, 'BRANCH_OF', business.shopping_chain);
 
@@ -131,23 +146,6 @@ exports.create = function (req, res) {
           }, function (err) {
             if (err) console.error(err.message)
           });
-        });
-
-        Group.create_group({
-          add_policy: 'OPEN',
-          entity_type: 'BUSINESS',
-          entity: business._id,
-          creator: req.user._id
-        }, function (err, group) {
-          if (err) {
-            return handleError(res, err);
-          }
-          business.default_group = group.id;
-          business.save(function (err) {
-              if (err) return console.log("error: " + err)
-            }
-          );
-          return res.status(201).json(business);
         });
       });
     });

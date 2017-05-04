@@ -5,6 +5,11 @@ var bigquery = require('@google-cloud/bigquery')({
   keyFilename: 'lowla-45ce78efca49.json'
 });
 
+//TODO: use to exec with query from last id
+//export GOOGLE_APPLICATION_CREDENTIALS=/home/moshe/install/mongobq-master/lowla-7b578e2ebcfe.json
+//bin/mongobq --host low.la -d lowla-dev -c promotions -P "lowla-thiscount" -D promotions -T all -B lowla_bucket
+
+
 // The project ID to use, e.g. "your-project-id"
 // const projectId = "lowla-thiscount";
 

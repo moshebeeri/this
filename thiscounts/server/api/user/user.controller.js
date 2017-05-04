@@ -341,18 +341,19 @@ exports.phonebook = function (req, res) {
               } else {
                 let phone_number = object.value;
                 if (utils.defined(phone_number._id)) {
-                  graphModel.follow_user_by_phone_number(phone_number._id, contact.nick, contact.userId);
-                  graphModel.follow_business_owner_by_phone_number(phone_number._id);
+                  graphModel.follow_user_by_phone_number(phone_number._id, contact.nick, userId);
                 }
               }
             });
         }
       });
+      graphModel.owner_followers_follow_business_default_group(userId);
+
     });
   });
   //Not needed
   //checkPhones(phonebook.phonebook, res);
-  return res.status(200);
+  return res.status(200).send('phonebook received');
 };
 
 

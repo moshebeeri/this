@@ -14,6 +14,10 @@ var Mall = require('../../api/mall/mall.model');
 function Utils(class_name) {
 }
 
+Utils.prototype.undefined = function undefined(obj){
+  return !this.defined(obj);
+};
+
 Utils.prototype.defined = function defined(obj){
   return (typeof obj !== 'undefined' && obj !== null);
 };
