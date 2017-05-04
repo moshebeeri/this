@@ -75,5 +75,30 @@ module.exports = {
     padding: 0,
     alignItems: 'flex-start',
   },
+    container: {
+        flex: 1
+    },
+    center: {
+        flex: 1,
+        alignItems: "center",
+        justifyContent: "center"
+    },
+    zone1: {
+        top: 40,
+        left: 0,
+        right: 0,
+        height: 50,
+        position: 'absolute',
+        backgroundColor: "red"
+    },
+    zone2: {
+        left: 0,
+        right: 0,
+        bottom: 0,
+        height: 50,
+        position: 'absolute',
+        backgroundColor: "blue"
+    }
+
 
 };
