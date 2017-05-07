@@ -1,14 +1,14 @@
 'use strict';
 
-var _ = require('lodash');
-var Group = require('./group.model');
-var User = require('../user/user.model');
+let _ = require('lodash');
+let Group = require('./group.model');
+let User = require('../user/user.model');
 
-var graphTools = require('../../components/graph-tools');
-var graphModel = graphTools.createGraphModel('group');
-var activity = require('../../components/activity').createActivity();
-var logger = require('../../components/logger').createLogger();
-var utils = require('../../components/utils').createUtils();
+let graphTools = require('../../components/graph-tools');
+let graphModel = graphTools.createGraphModel('group');
+let activity = require('../../components/activity').createActivity();
+let logger = require('../../components/logger').createLogger();
+let utils = require('../../components/utils').createUtils();
 
 // Get list of groups
 exports.index = function(req, res) {
@@ -99,7 +99,7 @@ exports.create = function(req, res) {
       graphModel.relate_ids(group._id, 'CREATED_BY', req.user._id);
       graphModel.relate_ids(req.user._id, 'FOLLOW', group._id );
       graphModel.relate_ids(req.user._id, 'GROUP_ADMIN', group._id );
-      if(req.body.business_id != undefined){
+      if(req.body.business_id !== undefined){
         graphModel.relate_ids(group._id, 'FOLLOW', req.body.business_id );
       }
 
@@ -154,7 +154,7 @@ exports.destroy = function(req, res) {
 // offer to group.
 //router.post('/offer/:group', auth.isAuthenticated(), controller.offer);
 exports.offer = function(req, res) {
-  var offer = req.body;
+  let offer = req.body;
   Group.findById(req.params.group, function (err, group) {
     if (err) { return handleError(res, err); }
     if(!group) { return res.status(404).send('no group'); }

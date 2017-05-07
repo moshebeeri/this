@@ -1,17 +1,17 @@
 'use strict';
 
-var _ = require('lodash');
-var Business = require('./business.model');
-var logger = require('../../components/logger').createLogger();
-var User = require('../user/user.model');
-var Group = require('../group/group.controller');
+let _ = require('lodash');
+let Business = require('./business.model');
+let logger = require('../../components/logger').createLogger();
+let User = require('../user/user.model');
+let Group = require('../group/group.controller');
 
-var graphTools = require('../../components/graph-tools');
-var graphModel = graphTools.createGraphModel('business');
-var spatial = require('../../components/spatial').createSpatial();
-var location = require('../../components/location').createLocation();
-var utils = require('../../components/utils').createUtils();
-var activity = require('../../components/activity').createActivity();
+let graphTools = require('../../components/graph-tools');
+let graphModel = graphTools.createGraphModel('business');
+let spatial = require('../../components/spatial').createSpatial();
+let location = require('../../components/location').createLocation();
+let utils = require('../../components/utils').createUtils();
+let activity = require('../../components/activity').createActivity();
 
 exports.address2 = function (req, res) {
   location.address(req.body.address, function (err, data) {
@@ -19,7 +19,7 @@ exports.address2 = function (req, res) {
       return handleError(res, err);
     }
     //logger.info(data);
-    if (data.results == 0)
+    if (data.results === 0)
       return res.status(400).send('No location under this address : ' + req.body.address);
 
     if (data.results.length > 1)
@@ -55,7 +55,7 @@ exports.show = function (req, res) {
 };
 
 exports.mine = function (req, res) {
-  var userId = req.user._id;
+  let userId = req.user._id;
   console.log("get businesses of user " + userId );
   Business.find({'creator': userId}, function (err, businesses) {
     if (err) {
@@ -73,13 +73,13 @@ function defined(obj) {
 }
 
 exports.create = function (req, res) {
-  var body_business = req.body;
-  var userId = req.user._id;
+  let body_business = req.body;
+  let userId = req.user._id;
 
   User.findById(userId, '-salt -hashedPassword -sms_code', function (err, user) {
     if (err) return res.status(401).send(err.message);
     if (!user) return res.status(401).send('Unauthorized');
-    var creator = null;
+    let creator = null;
     creator = user;
     body_business.creator = userId;
 
@@ -123,30 +123,6 @@ exports.create = function (req, res) {
               else logger.info('object added to layer ' + result)
             });
           });
-          activity.activity({
-            business: business._id,
-            actor_user: business.creator,
-            action: 'created'
-          }, function (err) {
-            if (err) console.error(err.message)
-          });
-        });
-
-        Group.create_group({
-          add_policy: 'OPEN',
-          entity_type: 'BUSINESS',
-          entity: business._id,
-          creator: req.user._id
-        }, function (err, group) {
-          if (err) {
-            return handleError(res, err);
-          }
-          business.default_group = group.id;
-          business.save(function (err) {
-              if (err) return console.log("error: " + err)
-            }
-          );
-          return res.status(201).json(business);
         });
       });
     });
@@ -155,7 +131,31 @@ exports.create = function (req, res) {
 
 
 /*
- var updated = _.merge(business, req.body);
+ Group.create_group({
+ add_policy: 'OPEN',
+ entity_type: 'BUSINESS',
+ entity: business._id,
+ creator: req.user._id
+ }, function (err, group) {
+ if (err) {
+ return handleError(res, err);
+ }
+ business.default_group = group.id;
+ business.save(function (err) {
+ if (err) return console.log("error: " + err)
+ }
+ );
+ activity.activity({
+ business: business._id,
+ actor_user: business.creator,
+ action: 'created'
+ }, function (err) {
+ if (err) console.error(err.message)
+ });
+ return res.status(201).json(business);
+ });
+
+ let updated = _.merge(business, req.body);
  updated.save(function (err) {
  if (err) {
  return handleError(res, err);
@@ -195,7 +195,7 @@ exports.update = function (req, res) {
     if (!business) {
       return res.status(404).send('Not Found');
     }
-    var updated = _.merge(business, req.body);
+    let updated = _.merge(business, req.body);
     updated.save(function (err) {
       if (err) {
         return handleError(res, err);
@@ -278,7 +278,7 @@ function user_activity(act) {
 exports.following_user = function (req, res) {
   console.log("user_following_groups");
   console.log("user: " + req.user._id);
-  var userId = req.user._id;
+  let userId = req.user._id;
   console.log("MATCH (u:user {_id:'" + userId + "'})-[r:OWNS]->(b:business) RETURN b LIMIT 25");
   graphModel.query("MATCH (u:user {_id:'" + userId + "'})-[r:OWNS]->(b:business) RETURN b LIMIT 25", function (err, groups) {
     if (err) {
