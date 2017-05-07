@@ -86,7 +86,7 @@ class ApplicationManager extends Component {
 
              },
              (error) => alert(JSON.stringify(error)),
-             {enableHighAccuracy: true, timeout: 20000, maximumAge: 1000}
+             {enableHighAccuracy: true, timeout: 20000, maximumAge: 1000,distanceFilter:100}
          );
 
          //add contacts

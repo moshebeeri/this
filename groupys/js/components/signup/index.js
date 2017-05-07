@@ -36,7 +36,7 @@ class Signup extends Component {
             password: '',
             phone_number: '',
             scroll: false,
-            cca2: 'US',
+            cca2: 'IS',
             callingCode: "",
             error: '',
             validationMessage: ''

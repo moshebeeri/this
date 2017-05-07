@@ -2,7 +2,14 @@ import store from 'react-native-simple-store';
 
 class LoginApi
 {
+    clean_phone_number(number){
+    // remove all non digits, and then remove 0 if it is the first digit
+    return number.replace(/\D/g, '').replace(/^0/,'')
+    };
+
     login(phoneNumber, password) {
+
+        let normalizePhoneNumber = this.clean_phone_number(phoneNumber);
         return new Promise(async(resolve, reject) => {
             try {
 
@@ -13,7 +20,7 @@ class LoginApi
                         'Content-Type': 'application/json;charset=utf-8',
                     },
                     body: JSON.stringify({
-                        email:  phoneNumber + "@low.la",
+                        email:  normalizePhoneNumber + "@low.la",
                         password:password,
                     })
                 })
@@ -37,6 +44,7 @@ class LoginApi
     }
 
     signup(phoneNumber,normalizedPhone, password,callingCode) {
+        let normalizePhoneNumber = this.clean_phone_number(phoneNumber);
         return new Promise(async(resolve, reject) => {
             try {
 
@@ -49,7 +57,7 @@ class LoginApi
                     body: JSON.stringify({
                         country_code: callingCode,
                         phone_number: normalizedPhone,
-                        email: phoneNumber + "@low.la",
+                        email: normalizePhoneNumber + "@low.la",
                         password: password,
                     })
                 });
