@@ -4,12 +4,22 @@
 import store from 'react-native-simple-store';
 
 class FeedApi {
+
+
+    clean_phone_number(number){
+        // remove all non digits, and then remove 0 if it is the first digit
+        return number.replace(/\D/g, '').replace(/^0/,'')
+    };
+
+
     getAll(direction,id) {
         return new Promise(async(resolve, reject) => {
 
             try {
                 let token = await store.get('token');
                 let userId = await store.get('user_id');
+                let contacts = await store.get("all-contacts");
+                contacts = JSON.parse(contacts);
                 const response = await fetch(`${server_host}/api/feeds/`+id+`/`+ direction +`/user/` +userId , {
                     method: 'GET',
                     headers: {
@@ -28,7 +38,17 @@ class FeedApi {
                 }
 
                 let responseData = await response.json();
-                let feeds = responseData.map(feed => this.createFeed(feed)).filter(function(x){
+
+
+                let contacsMap = new Map();
+
+                let normalizeFuncrion = this.clean_phone_number.bind(this);
+                if(contacts) {
+                    contacts.forEach(function (element) {
+                        contacsMap.set(normalizeFuncrion(element.phoneNumbers[0].number), element);
+                    });
+                }
+                let feeds = responseData.map(feed => this.createFeed(feed,contacsMap)).filter(function(x){
                     return x != undefined;
                 });
                 console.log('token: ' + token +' user id' + userId + ' for item id: '+ id + ' direction: ' + direction + ' number of items: ' + feeds.length);
@@ -62,8 +82,15 @@ class FeedApi {
 //     }
 // },
 
-    createFeed(feed){
+
+    createFeed(feed,contacsMap){
         let response = undefined;
+        let name = feed.activity.actor_user.phone_number;
+        let contact = contacsMap.get(feed.activity.actor_user.phone_number);
+        if(contact){
+            name = contact.givenName + ' ' + contact.familyName;
+        }
+
         if(feed.activity.business){
             if(feed.activity.business.pictures.length > 0  ){
                 response = {
@@ -74,7 +101,7 @@ class FeedApi {
                         follow: feed.activity.actor_user.social_state.follow,
                     },
                     actor:feed.activity.actor_user._id,
-                    itemTitle: feed.activity.actor_user.phone_number + ' ' + feed.activity.action + ' ' + feed.activity.business.name,
+                    itemTitle: name + ' ' + feed.activity.action + ' ' + feed.activity.business.name,
                     description: feed.activity.business.name + ' location: ' + feed.activity.business.city + ' ' + feed.activity.business.address,
                     banner: {
                         uri:feed.activity.business.pictures[0].pictures[1]
@@ -90,7 +117,7 @@ class FeedApi {
                         follow: feed.activity.actor_user.social_state.follow,
                     },
                     actor:feed.activity.actor_user._id,
-                    itemTitle: feed.activity.actor_user.phone_number + ' ' + feed.activity.action + ' ' + feed.activity.business.name,
+                    itemTitle: name+ ' ' + feed.activity.action + ' ' + feed.activity.business.name,
                     description: feed.activity.business.name + ' location: ' + feed.activity.business.city + ' ' + feed.activity.business.address,
 
                 }

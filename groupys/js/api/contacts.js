@@ -17,11 +17,12 @@ class ContactsApi
             if(err && err.type === 'permissionDenied'){
                 return;
             }
-            var contactsMap = new Map();
-            contacts.forEach(function (element) {
-                contactsMap.set(element.recordID,element);
-            })
-            store.save('contacts', contactsMap);
+
+            contacts = contacts.filter(function (element) {
+                return element.phoneNumbers.length >0;
+            });
+
+            store.save('all-contacts', JSON.stringify(contacts));
             this.updateServer(token,userId,contacts)
 
         })
@@ -36,16 +37,25 @@ class ContactsApi
             }
 
             var newContacts = [];
+            contacts = contacts.filter(function (element) {
+                return element.phoneNumbers.length >0;
+            });
+
+            let contacsMap = new Map();
+            contacts.forEach( function(element){
+                contacsMap.set(element.phoneNumbers[0].number,element);
+            });
+
             contacts.forEach(function (element) {
-                if(!currentContacts.get(element.recordID)){
+                if(!contacsMap.get(element.phoneNumbers[0].number)){
                     newContacts.push(element);
-                    currentContacts.put(element.recordID,element);
+                    currentContacts.push(element);
                 }
 
             })
 
             if(newContacts.length > 0 ){
-                store.save('contacts', currentContacts);
+                store.save('all-contacts', currentContacts);
                 this.updateServer(token,userId,newContacts)
             }
 
@@ -93,7 +103,10 @@ class ContactsApi
     async syncContacts() {
         return new Promise(async(resolve, reject) => {
 
-            let contacts = await store.get('contacts');
+            let contacts = await store.get('all-contacts');
+            if(contacts) {
+                 contacts = JSON.parse(contacts);
+            }
             let token = await store.get('token');
             let userId = await store.get('user_id');
             if (token && userId) {

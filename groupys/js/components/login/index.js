@@ -5,6 +5,8 @@ import { Image, Platform} from 'react-native';
 import { connect } from 'react-redux';
 import { actions } from 'react-native-navigation-redux-helpers';
 import { Container, Content, Text, InputGroup, Input, Button, Icon, View } from 'native-base';
+import PhoneInput from 'react-native-phone-input'
+import CountryPicker from 'react-native-country-picker-modal'
 
 import store from 'react-native-simple-store';
 
@@ -38,20 +40,29 @@ class Login extends Component {
 
   constructor(props) {
     super(props);
-    this.state = {
-      phoneNumber: '+972544402680',
-      password: 'de123456',
+
+      this.state = {
+        phone_number: '',
+      password: '',
       token: false,
       scroll: false,
+        cca2: 'ISR',
+        callingCode: "",
+        validationMessage: '',
       error:''
     };
+      this.onPressFlag = this.onPressFlag.bind(this);
+      this.selectCountry = this.selectCountry.bind(this);
+
   }
 
+
+
+  ///sss
   async login() {
       this.setState ({error: ''});
       try {
-
-          let response = await loginApi.login(this.state.phoneNumber, this.state.password);
+          let response = await loginApi.login(this.refs.phone.getValue(), this.state.password);
           if(response.token ){
               await userApi.getUser();
               contactApi.syncContacts();
@@ -65,6 +76,13 @@ class Login extends Component {
       }
 
   }
+    onPressFlag() {
+        this.refs.countryPicker.openModal();
+        this.setState({
+            phone_number: this.refs.phone.getPickerData()
+        })
+    }
+
     calc_login_status() {
         return new Promise(async(resolve, reject) => {
 
@@ -104,6 +122,20 @@ class Login extends Component {
             calc_login = false;
         }
     }
+    componentDidMount() {
+        this.setState({
+            phone_number: this.refs.phone.getPickerData()
+        })
+    }
+    selectCountry(country) {
+        this.refs.phone.selectCountry(country.cca2.toLowerCase());
+        this.setState({
+            callingCode: country.callingCode
+        });
+
+        this.setState({cca2: country.cca2})
+    }
+
 
 
 
@@ -118,18 +150,29 @@ class Login extends Component {
               <Content theme={login} style={{ backgroundColor: login.backgroundColor }} >
                 <Image source={logo} style={styles.shadow} />
                 <View style={styles.inputContainer}>
-                  <View style={{ marginBottom: 20 }}>
-                    <InputGroup>
-                      <Icon name="ios-phone-portrait-outline" style={{color:"#00f"}}/>
-                      <Input
-                          keyboardType="phone-pad"
-                          placeholderTextColor='#444'
-                          placeholder="Phone"
-                          defaultValue="+972544402680"
-                          onChangeText={phoneNumber => this.setState({ phoneNumber })}
-                      />
-                    </InputGroup>
-                  </View>
+                    <View style={{marginBottom: 20}}>
+                        <InputGroup>
+                            <Icon name="ios-phone-portrait-outline" style={{color:"#00f"}}/>
+                            <PhoneInput
+                                ref='phone'
+                                onPressFlag={this.onPressFlag}
+                                onChange={(value)=> this.componentDidMount(value)}
+                            />
+                            <CountryPicker
+                                ref='countryPicker'
+                                onChange={(value)=> this.selectCountry(value)}
+                                translation='eng'
+                                cca2={this.state.cca2}
+                            >
+                                <View/>
+                            </CountryPicker>
+
+                            <Text style={{padding: 10, fontSize: 16, color: 'red'}}>
+                                {this.state.validationMessage}
+                            </Text>
+                        </InputGroup>
+                    </View>
+
 
                   <View style={{ marginBottom: 20 }}>
                     <InputGroup >

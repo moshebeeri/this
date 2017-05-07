@@ -36,7 +36,7 @@ class Signup extends Component {
             password: '',
             phone_number: '',
             scroll: false,
-            cca2: 'US',
+            cca2: 'ISR',
             callingCode: "",
             error: '',
             validationMessage: ''
@@ -88,11 +88,15 @@ class Signup extends Component {
         let newPhone = phone.toString().substring(phone.indexOf(countryCode.toString()) + countryCode.toString().length);
         return newPhone;
     }
+    clean_phone_number(number){
+        // remove all non digits, and then remove 0 if it is the first digit
+        return number.replace(/\D/g, '').replace(/^0/,'')
+    };
 
     async callServerSignupAndRedirect() {
         let phoneNumber = this.refs.phone.getValue();
         let normalizedPhone = this.normalizePhoneNumber(phoneNumber,this.state.callingCode);
-
+        let cleanPhone = this.clean_phone_number(normalizedPhone);
         fetch(`${server_host}/api/users`, {
             method: 'POST',
             headers: {
@@ -101,8 +105,8 @@ class Signup extends Component {
             },
             body: JSON.stringify({
                 country_code: this.state.callingCode,
-                phone_number: normalizedPhone,
-                email: phoneNumber + "@low.la",
+                phone_number: cleanPhone,
+                email:  this.state.callingCode + cleanPhone + "@low.la",
                 password: this.state.password,
 
 
