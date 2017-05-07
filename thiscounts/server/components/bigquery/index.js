@@ -1,3 +1,15 @@
+
+'use strict';
+var bigquery = require('@google-cloud/bigquery')({
+  projectId: 'lowla-thiscount',
+  keyFilename: 'lowla-45ce78efca49.json'
+});
+
+//TODO: use to exec with query from last id
+//export GOOGLE_APPLICATION_CREDENTIALS=/home/moshe/install/mongobq-master/lowla-7b578e2ebcfe.json
+//bin/mongobq --host low.la -d lowla-dev -c promotions -P "lowla-thiscount" -D promotions -T all -B lowla_bucket
+
+
 // The project ID to use, e.g. "your-project-id"
 // const projectId = "lowla-thiscount";
 
@@ -5,33 +17,14 @@
 // const filename = "/path/to/file.csv";
 
 // The ID of the dataset of the table into which data should be imported, e.g. "my_dataset"
-const datasetId = "my_dataset";
 
-// The ID of the table into which data should be imported, e.g. "my_table"
-const tableId = "my_table";
+function BigQuery(options) {
+  this.prototype.datasetId = options.datasetId | "promotions";
+  this.prototype.tableId = options.tableId | "log";
+}
 
-
-var bigquery = require('@google-cloud/bigquery')({
-  projectId: 'lowla-thiscount',
-  keyFilename: 'lowla-45ce78efca49.json'
-});
-
-(function() {
-  'use strict';
-
-  /*  const assign = require('object-assign');
-   const vary = require('vary');
-
-   const defaults = {
-   origin: '*',
-   methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
-   preflightContinue: false,
-   optionsSuccessStatus: 204,
-   helloWorld: 'hello world'
-   };*/
-
-
-  function insertRows(rows) {
+BigQuery.insertRows =
+  BigQuery.prototype.insertRows = function(rows) {
   // Inserts data into a table
     bigquery
       .dataset(datasetId)
@@ -49,9 +42,10 @@ var bigquery = require('@google-cloud/bigquery')({
       .catch((err) => {
         console.error('ERROR:', err);
       });
-  }
+  };
 
-  function loadFile(filename) {
+BigQuery.loadFile =
+  BigQuery.prototype.loadFile = function(rows) {
     let job;
 
     // Imports data from a local file into the table
@@ -71,8 +65,6 @@ var bigquery = require('@google-cloud/bigquery')({
         console.error('ERROR:', err);
       });
 
-  }
+  };
 
-  exports.loadFile = loadFile;
-  exports.insertRows = insertRows;
-}());
+module.exports = BigQuery;

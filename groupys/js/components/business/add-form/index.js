@@ -10,7 +10,7 @@ import { Platform,
 } from 'react-native';
 import {connect} from 'react-redux';
 import {actions} from 'react-native-navigation-redux-helpers';
-import {Container, Content, Text, InputGroup, Input, Button, Icon, View,Header,Item,Picker,Footer} from 'native-base';
+import {Container, Content, Text, InputGroup, Input, Button, Icon, View,Header,Item,Picker,Form,Footer} from 'native-base';
 
 import AddFormHeader from '../../header/addFormHeader';
 
@@ -47,13 +47,14 @@ class AddBusiness extends Component {
             state:'',
             path:'',
             image:'',
-            type:'PERSONAL_SERVICES',
+            type:'SMALL_BUSINESS',
             images:'',
             tax_id:'',
             formID:'12345',
             userId:'',
             token:'',
-            formData:{}
+
+            formData:{},
         };
 
 
@@ -82,7 +83,9 @@ class AddBusiness extends Component {
 
 
 
-    readQc(code){
+    focusNextField(nextField) {
+
+       this.refs[nextField]._root.focus()
 
     }
 
@@ -109,27 +112,46 @@ class AddBusiness extends Component {
     formFailed(error){
         console.log('failed');
     }
-    pickSingle(cropit, circular=false) {
-        ImagePicker.openPicker({
+    async pickFromCamera() {
+        try {
+        let image = await ImagePicker.openCamera({
             width: 300,
             height: 300,
-            cropping: cropit,
-            cropperCircleOverlay: circular,
+            cropping: true,
             compressImageMaxWidth: 640,
             compressImageMaxHeight: 480,
             compressImageQuality: 0.5,
             compressVideoPreset: 'MediumQuality',
-        }).then(image => {
-            console.log('received image', image);
+        });
+        this.setState({
+            image: {uri: image.path, width: image.width, height: image.height, mime: image.mime},
+            images: null,
+            path: image.path
+        });
+        }catch (e){
+            console.log(e);
+        }
+    }
+
+    async pickPicture() {
+        try {
+            let image = await ImagePicker.openPicker({
+                width: 300,
+                height: 300,
+                cropping: true,
+                compressImageMaxWidth: 640,
+                compressImageMaxHeight: 480,
+                compressImageQuality: 0.5,
+                compressVideoPreset: 'MediumQuality',
+            });
             this.setState({
                 image: {uri: image.path, width: image.width, height: image.height, mime: image.mime},
                 images: null,
                 path: image.path
             });
-        }).catch(e => {
+        }catch (e){
             console.log(e);
-            Alert.alert(e.message ? e.message : e);
-        });
+        }
     }
     render() {
 
@@ -157,58 +179,67 @@ class AddBusiness extends Component {
                 </Header>
 
                 <Content  style={{backgroundColor: '#fff'}}>
+                    <Form>
                     <Picker
                         iosHeader="Select one"
                         mode="dropdown"
                         selectedValue={this.state.type}
                         onValueChange={this.selectType.bind(this)}>
-                        <Item label="Personal Services" value="PERSONAL_SERVICES" />
                         <Item label="Small Business" value="SMALL_BUSINESS" />
+                        <Item label="Personal Services" value="PERSONAL_SERVICES" />
                         <Item label="Company" value="COMPANY" />
                         <Item label="Enterprise" value="ENTERPRISE" />
 
                     </Picker>
                     <Item underline>
-                        <Input onChangeText={(name) => this.setState({name})} placeholder='Name' />
+                        <Input  blurOnSubmit={true} returnKeyType='next' ref="1" onSubmitEditing={this.focusNextField.bind(this,"2")} autoFocus = {true} onChangeText={(name) => this.setState({name})} placeholder='Name' />
                     </Item>
                     <Item underline>
-                        <Input onChangeText={(email) => this.setState({email})} placeholder='Email' />
+                        <Input blurOnSubmit={true} returnKeyType='next' ref="2"  onSubmitEditing={this.focusNextField.bind(this,"3")}  onChangeText={(email) => this.setState({email})} placeholder='Email' />
                     </Item>
 
                     <Item underline>
-                        <Input onChangeText={(website) => this.setState({website})} placeholder='Website' />
+                        <Input blurOnSubmit={true} returnKeyType='next' ref="3"  onSubmitEditing={this.focusNextField.bind(this,"4")}  onChangeText={(website) => this.setState({website})} placeholder='Website' />
                     </Item>
                     <Item underline>
-                        <Input onChangeText={(country) => this.setState({country})} placeholder='Country' />
+                        <Input blurOnSubmit={true} returnKeyType='next' ref="4"  onSubmitEditing={this.focusNextField.bind(this,"5")}  onChangeText={(country) => this.setState({country})} placeholder='Country' />
                     </Item>
                     <Item underline>
-                        <Input onChangeText={(state) => this.setState({state})} placeholder='State' />
+                        <Input blurOnSubmit={true} returnKeyType='next' ref="5"  onSubmitEditing={this.focusNextField.bind(this,"6")}  onChangeText={(state) => this.setState({state})} placeholder='State' />
                     </Item>
                     <Item underline>
-                        <Input onChangeText={(city) => this.setState({city})} placeholder='City' />
+                        <Input blurOnSubmit={true} returnKeyType='next' ref="6"  onSubmitEditing={this.focusNextField.bind(this,"7")}  onChangeText={(city) => this.setState({city})} placeholder='City' />
                     </Item>
                     <Item underline>
-                        <Input onChangeText={(address) => this.setState({address})} placeholder='Addresss' />
+                        <Input blurOnSubmit={true} returnKeyType='next' ref="7"  onSubmitEditing={this.focusNextField.bind(this,"8")}  onChangeText={(address) => this.setState({address})} placeholder='Addresss' />
                     </Item>
                     <Item underline>
-                        <Input onChangeText={(tax_id) => this.setState({tax_id})} placeholder='Tax ID' />
+                        <Input blurOnSubmit={true} returnKeyType='done' ref="8"   onChangeText={(tax_id) => this.setState({tax_id})} placeholder='Tax ID' />
                     </Item>
 
 
                     <View style={{ flexDirection: 'row',marginTop:5 }}>
 
-                    <Button   transparent  onPress={() => this.pickSingle(true)}>
+                    <Button   transparent  onPress={() => this.pickPicture()}>
                         <Text> select image </Text>
                     </Button>
 
                     {image}
+                    </View>
+                    <View style={{ flexDirection: 'row',marginTop:5 }}>
+
+                        <Button   transparent  onPress={() => this.pickFromCamera()}>
+                            <Text> take picture </Text>
+                        </Button>
+
+                        {image}
                     </View>
 
 
 
 
 
-
+                </Form>
 
 
                 </Content>

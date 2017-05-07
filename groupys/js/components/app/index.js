@@ -78,22 +78,16 @@ class ApplicationManager extends Component {
 
 
          // add location
-         navigator.geolocation.getCurrentPosition(
-             (position) => {
-                 var initialPosition = JSON.stringify(position);
-                 locationApi.sendLocation(position.coords.longitude,position.coords.latitude,position.timestamp,position.coords.speed);
-                 console.log(initialPosition);
 
-             },
-             (error) => alert(JSON.stringify(error)),
-             {enableHighAccuracy: true, timeout: 20000, maximumAge: 1000}
-         );
          this.watchID = navigator.geolocation.watchPosition((position) => {
              var lastPosition = JSON.stringify(position);
              console.log(lastPosition);
              locationApi.sendLocation(position.coords.longitude,position.coords.latitude,position.timestamp,position.coords.speed);
 
-         });
+             },
+             (error) => alert(JSON.stringify(error)),
+             {enableHighAccuracy: true, timeout: 20000, maximumAge: 1000}
+         );
 
          //add contacts
          const intervalId = BackgroundTimer.setInterval(() => {

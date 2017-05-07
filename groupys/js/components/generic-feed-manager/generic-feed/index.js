@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import {Image ,Platform} from 'react-native';
+import {Image ,Platform,PanResponder } from 'react-native';
 import {connect} from 'react-redux';
 import {actions} from 'react-native-navigation-redux-helpers';
 import { Container, Content, Text, InputGroup, Input,Thumbnail,Button,Picker,Right,Item, Icon,Left,Header,Footer,Body, View,Card,CardItem } from 'native-base';
@@ -17,13 +17,50 @@ class GenericFeedItem extends Component {
 
     constructor(props) {
         super(props);
+        this.state = {
+            zone:{}
+        }
 
 
     }
 
 
+    componentWillMount() {
+        const getDirectionAndColor = ({ moveX, moveY, dx, dy}) => {
+            const height = dx;
+            const width= dy;
+            const draggedDown = dy > 30;
+            const draggedUp = dy < -30;
+            const draggedLeft = dx < -30;
+            const draggedRight = dx > 30;
+            const isRed = moveY < 90 && moveY > 40 && moveX > 0 && moveX < width;
+            const isBlue = moveY > (height - 50) && moveX > 0 && moveX < width;
+            let dragDirection = '';
+            if (draggedDown || draggedUp) {
+                if (draggedDown) dragDirection += 'dragged down '
+                if (draggedUp) dragDirection +=  'dragged up ';
+            }
+            if (draggedLeft || draggedRight) {
+                if (draggedLeft) dragDirection += 'dragged left '
+                if (draggedRight) dragDirection +=  'dragged right ';
+            }
+            if (isRed) return `red ${dragDirection}`
+            if (isBlue) return `blue ${dragDirection}`
+            if (dragDirection) return dragDirection;
+        }
 
+        this._panResponder = PanResponder.create({
+             onMoveShouldSetPanResponder:(evt, gestureState) => this.onMove(evt, gestureState),
 
+        });
+    }
+
+    onMove(evt, gestureState){
+        if(gestureState.moveY < 300){
+            this.props.selectApi.fetchTopList(this.props.item.id,true)
+        }
+        return false;
+    }
 
         render() {
             let feed = undefined;
@@ -34,7 +71,7 @@ class GenericFeedItem extends Component {
 
 
         like(item){
-            userApi.like(item.actor);
+            userApi.like(item);
         }
         createFeed(item){
             if(item.content){
@@ -98,7 +135,7 @@ class GenericFeedItem extends Component {
 
 
 
-            return (  <Card onMoveShouldSetResponder={event => this.props.selectApi.fetchTopList(item.id,true)}>
+            return (  <Card   {...this._panResponder.panHandlers} >
                     <CardItem>
 
                         <Left>

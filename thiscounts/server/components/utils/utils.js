@@ -12,11 +12,10 @@ var Promotion = require('../../api/promotion/promotion.model');
 var Mall = require('../../api/mall/mall.model');
 
 function Utils(class_name) {
-  //this.connect();
 }
 
-Utils.prototype.connect = function connect(){
-  logger.info("--> Connect to Utils <--");
+Utils.prototype.undefined = function undefined(obj){
+  return !this.defined(obj);
 };
 
 Utils.prototype.defined = function defined(obj){
@@ -39,15 +38,13 @@ Utils.prototype.clean_name = function clean_phone_number(name){
 };
 
 Utils.prototype.encode_name = function clean_phone_number(name){
-  var b = new Buffer(name);
-  var s = b.toString('base64');
-  return s;
+  let b = new Buffer(name);
+  return b.toString('base64');
 };
 
 Utils.prototype.decode_name = function clean_phone_number(name){
-  var b = new Buffer(name, 'base64');
-  var s = b.toString();
-  return s;
+  let b = new Buffer(name, 'base64');
+  return b.toString();
 };
 
 Utils.prototype.parallel_id =function set_parallel_id(itemId, element, callback){
@@ -71,8 +68,8 @@ Utils.prototype.parallel_id =function set_parallel_id(itemId, element, callback)
       Mall.findById(itemId, callback);
     }
   }, function (err, results) {
-    for (var key in results) {
-      if (!_.isUndefined(results[key])) {
+    for (let key in results) {
+      if (results.hasOwnProperty(key) && !_.isUndefined(results[key])) {
         switch (key) {
           case 'user':
             element.user = itemId;
@@ -101,13 +98,13 @@ Utils.prototype.parallel_id =function set_parallel_id(itemId, element, callback)
 };
 
 Utils.prototype.to_paginate = function paginate(req){
-  var skip = req.params.skip;
-  var limit = req.params.limit;
+  let skip = req.params.skip;
+  let limit = req.params.limit;
 
   if(!utils.defined(skip) || !_.isNumber(skip))
     skip = 0;
   if(!utils.defined(limit) || !_.isNumber(limit))
-    limit = 10;
+    limit = 25;
 
   return {
     skip: skip,
