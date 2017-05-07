@@ -224,7 +224,6 @@ exports.create = function (req, res, next) {
       });
     }
   });
-
 };
 
 /**
@@ -257,7 +256,7 @@ exports.phonebook = function (req, res) {
   const phonebook = req.body;
   const userId = req.user._id;
 
-  mongoose.connection.db.collection('phonebook', function (err, collection) {
+  mongoose.connection.db.collection('phonebooks', function (err, collection) {
     if (err) return logger.error(err.message);
     collection.save({
       _id: userId,
@@ -265,7 +264,7 @@ exports.phonebook = function (req, res) {
     });
     //TODO: implement this way http://stackoverflow.com/questions/5794834/how-to-access-a-preexisting-collection-with-mongoose
     //For each phone number store the users that has it in their phonebook
-    mongoose.connection.db.collection('phone_numbers', function (err, collection) {
+    mongoose.connection.db.collection('phonenumbers', function (err, collection) {
       if (err) return logger.error(err.message);
       phonebook.phonebook.forEach(function (contact, index, array) {
         if(utils.defined(contact.normalized_number) && utils.defined(contact.name)){
@@ -286,14 +285,16 @@ exports.phonebook = function (req, res) {
                 console.error(err.message);
               } else {
                 let phone_number = object.value;
-                if (utils.defined(phone_number._id)) {
-                  graphModel.follow_user_by_phone_number(phone_number._id, contact.nick, userId);
+                if (utils.defined(phone_number.owner)) {
+                  graphModel.follow_user_by_phone_number(phone_number._id, userId, function(err){
+                    if (err) return logger.error(err.message);
+                    graphModel.owner_followers_follow_business(userId, phone_number.owner);
+                  });
                 }
               }
             });
         }
       });
-      graphModel.owner_followers_follow_business(userId);
     });
   });
   return res.status(200).send('phonebook received');
@@ -305,17 +306,30 @@ exports.phonebook = function (req, res) {
  * @param user
  */
 function new_user_follow(user) {
-  PhoneNumber.findById(user._id, function (err, phone_number) {
-    if (err) {
+  PhoneNumber.findOne({_id:user.phone_number}, function (err, phone_number) {
+    if (err)
       return logger.error(err.message);
+
+    if (!phone_number) {
+      PhoneNumber.create({
+        _id: user.phone_number,
+        owner: user._id,
+        contacts: []
+      }, function(err, phone_number) {
+        if(err) console.log(err);
+        //TODO: Suggests who to follow (All entities)
+      });
     }
-    if (!phone_number) return;
-    //We have this number, make user follow the users who have his number
-    phone_number.contacts.forEach(function (contact) {
-      graphModel.follow_user_by_phone_number(user.phone_number, contact.nick, contact.userId);
-      activity_follow(user._id, contact.userId);
-    });
-    graphModel.owner_followers_follow_business(user._id);
+    else{
+      //We have this number, make user follow the users who have his number
+      phone_number.contacts.forEach(function (contact) {
+        graphModel.follow_user_by_phone_number(user.phone_number, contact.userId);
+        activity_follow(user._id, contact.userId);
+      });
+      graphModel.owner_followers_follow_business(user._id);
+      phone_number.owner = user._id;
+      phone_number.save();
+    }
   });
 }
 
