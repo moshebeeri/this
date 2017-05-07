@@ -15,8 +15,7 @@ router.get('/list/by/business/:business_id', auth.isAuthenticated(), controller.
 router.get('/list/:business_id/:campaign_id', auth.isAuthenticated(), controller.campaign_promotions);
 router.post('/campaign', auth.isAuthenticated(), controller.create_campaign);
 
-//TODO: undo remark required Admin role
-router.get('/',/* auth.hasRole('admin'),*/ controller.index);
+router.get('/',auth.hasRole('admin'), controller.index);
 router.get('/:id', auth.isAuthenticated(), controller.show);
 router.post('/', auth.isAuthenticated(), controller.create);
 router.put('/:id', auth.isAuthenticated(), controller.update);
