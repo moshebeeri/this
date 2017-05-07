@@ -176,11 +176,11 @@ GraphModel.prototype.follow_user_by_phone_number = function follow_user_by_phone
   });
 };
 
-GraphModel.prototype.owner_followers_follow_business_default_group = function owner_followers_follow_business_default_group(owner_id){
-  let query = `MATCH (u:user)-[:FOLLOW]->(owner:user { _id:'${owner_id}' })-[:OWNS]->(b:business{type:'SMALL_BUSINESS'})-[:HAS_GROUP]->(g:group{default:true})
-  OPTIONAL MATCH (u:user)-[:FOLLOW]->(owner:user { _id:'${owner_id}' })-[:OWNS]->(b:business{type:'PERSONAL_SERVICE'})-[:HAS_GROUP]->(g:group{default:true})
-  CREATE UNIQUE (u)-[r:FOLLOW]->(g)` ;
-  console.log(`follow_business_owner_by_phone_number query: ${query}`);
+GraphModel.prototype.owner_followers_follow_business = function owner_followers_follow_business(owner_id){
+  let query = `MATCH (u:user)-[:FOLLOW]->(owner:user { _id:'${owner_id}' })-[:OWNS]->(b:business{type:'SMALL_BUSINESS'})
+  OPTIONAL MATCH (u:user)-[:FOLLOW]->(owner:user { _id:'${owner_id}' })-[:OWNS]->(b:business{type:'PERSONAL_SERVICE'})
+  CREATE UNIQUE (u)-[r:FOLLOW]->(b)` ;
+  console.log(`owner_followers_follow_business query: ${query}`);
   db.query(query, function(err) {
     if (err) { logger.error(err.message); }
   });

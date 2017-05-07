@@ -99,7 +99,7 @@ exports.create = function(req, res) {
       graphModel.relate_ids(group._id, 'CREATED_BY', req.user._id);
       graphModel.relate_ids(req.user._id, 'FOLLOW', group._id );
       graphModel.relate_ids(req.user._id, 'GROUP_ADMIN', group._id );
-      if(req.body.business_id !== undefined){
+      if(utils.defined(req.body.business_id)){
         graphModel.relate_ids(group._id, 'FOLLOW', req.body.business_id );
       }
 
@@ -109,19 +109,24 @@ exports.create = function(req, res) {
   });
 };
 
-exports.create_group = function(group, callback) {
+exports.create_business_default_group = function(group, callback) {
 
   Group.create(group, function(err, group) {
     if(err) { return callback(err); }
-    graphModel.reflect(group, to_graph(group), function (err) {
+    graphModel.reflect(group, {
+      _id: group._id,
+      default: true,
+      created: group.created
+    }, function (err) {
       if (err) return callback(err);
       graphModel.relate_ids(group._id, 'CREATED_BY', group.creator);
       graphModel.relate_ids(group.creator, 'FOLLOW', group._id );
       graphModel.relate_ids(group.creator, 'GROUP_ADMIN', group._id );
-      graphModel.relate_ids(group.entity, 'HAS_GROUP', group._id );
-      group_activity(group, "create");
+      graphModel.relate_ids(group.entity, 'HAS_GROUP', group._id,function(err){
+        if(err) return console.log(err);
+        return callback(null, group);
+      } );
     });
-    callback(null, group);
   });
 };
 
@@ -260,7 +265,7 @@ exports.add_users = function(req, res) {
 		if(err) { return handleError(res, err); }
 		if(!group) { return res.status(404).send('no group'); }
 
-    if(utils.defined(_.find(group.admins, req.user._id) && (group.add_policy == 'OPEN' || group.add_policy == 'CLOSE'))){
+    if(utils.defined(_.find(group.admins, req.user._id) && (group.add_policy === 'OPEN' || group.add_policy === 'CLOSE'))){
       console.log(req.body.users);
       for(var user in req.body.users) {
         console.log(req.body.users[user]);
@@ -273,7 +278,7 @@ exports.add_users = function(req, res) {
         }
       }
     }
-    else if(group.add_policy == 'REQUEST' || group.add_policy == 'ADMIN_INVITE' || group.add_policy == 'MEMBER_INVITE' )
+    else if(group.add_policy === 'REQUEST' || group.add_policy === 'ADMIN_INVITE' || group.add_policy === 'MEMBER_INVITE' )
       return handleError(res, 'add policy ' + group.add_policy + ' not implemented');
     else
       return res.status(404).send('Can not add users');

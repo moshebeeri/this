@@ -1,17 +1,17 @@
 'use strict';
 
-let _ = require('lodash');
-let Business = require('./business.model');
-let logger = require('../../components/logger').createLogger();
-let User = require('../user/user.model');
-let Group = require('../group/group.controller');
+var _ = require('lodash');
+var Business = require('./business.model');
+var logger = require('../../components/logger').createLogger();
+var User = require('../user/user.model');
+var Group = require('../group/group.controller');
 
-let graphTools = require('../../components/graph-tools');
-let graphModel = graphTools.createGraphModel('business');
-let spatial = require('../../components/spatial').createSpatial();
-let location = require('../../components/location').createLocation();
-let utils = require('../../components/utils').createUtils();
-let activity = require('../../components/activity').createActivity();
+var graphTools = require('../../components/graph-tools');
+var graphModel = graphTools.createGraphModel('business');
+var spatial = require('../../components/spatial').createSpatial();
+var location = require('../../components/location').createLocation();
+var utils = require('../../components/utils').createUtils();
+var activity = require('../../components/activity').createActivity();
 
 exports.address2 = function (req, res) {
   location.address(req.body.address, function (err, data) {
@@ -55,7 +55,7 @@ exports.show = function (req, res) {
 };
 
 exports.mine = function (req, res) {
-  let userId = req.user._id;
+  var userId = req.user._id;
   console.log("get businesses of user " + userId );
   Business.find({'creator': userId}, function (err, businesses) {
     if (err) {
@@ -102,27 +102,37 @@ exports.create = function (req, res) {
         graphModel.reflect(business, {
           _id: business._id,
           name: business.name,
+          type: business.type,
           creator: business.creator,
           lat: body_business.location.lat,
           lon: body_business.location.lng
         }, function (err, business) {
+
           if (err) return handleError(res, err);
-
-          graphModel.db().relate(creator.gid, 'OWNS', business.gid, {}, function (err, relationship) {
-            if (err) return handleError(res, err);
-            logger.info('(' + relationship.start + ')-[' + relationship.type + ']->(' + relationship.end + ')');
-
-            if (defined(business.shopping_chain))
-              graphModel.relate_ids(business._id, 'BRANCH_OF', business.shopping_chain);
-
-            if (defined(business.mall))
-              graphModel.relate_ids(business._id, 'IN_MALL', business.mall);
-
-            spatial.add2index(business.gid, function (err, result) {
-              if (err) logger.error(err.message);
-              else logger.info('object added to layer ' + result)
+          if(business.type === 'PERSONAL_SERVICES' ||  business.type ===  'SMALL_BUSINESS')
+            graphModel.relate_ids(creator._id, 'OWNS', business._id, function(err){
+              if(err) console.log(err);
+              graphModel.owner_followers_follow_business(user._id);
             });
+
+          if (defined(business.shopping_chain))
+            graphModel.relate_ids(business._id, 'BRANCH_OF', business.shopping_chain);
+
+          if (defined(business.mall))
+            graphModel.relate_ids(business._id, 'IN_MALL', business.mall);
+
+          spatial.add2index(business.gid, function (err, result) {
+            if (err) logger.error(err.message);
+            else logger.info('object added to layer ' + result)
           });
+          activity.activity({
+            business: business._id,
+            actor_user: business.creator,
+            action: 'created'
+          }, function (err) {
+            if (err) console.error(err.message)
+          });
+          return res.status(201).json(business);
         });
       });
     });
@@ -154,6 +164,11 @@ exports.create = function (req, res) {
  });
  return res.status(201).json(business);
  });
+        });
+      });
+    });
+  });
+};
 
  let updated = _.merge(business, req.body);
  updated.save(function (err) {
