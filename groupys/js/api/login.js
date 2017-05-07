@@ -56,7 +56,7 @@ class LoginApi
                     },
                     body: JSON.stringify({
                         country_code: callingCode,
-                        phone_number: normalizedPhone,
+                        phone_number: normalizePhoneNumber,
                         email: normalizePhoneNumber + "@low.la",
                         password: password,
                     })

@@ -41,10 +41,13 @@ class FeedApi {
 
 
                 let contacsMap = new Map();
+
                 let normalizeFuncrion = this.clean_phone_number.bind(this);
-                contacts.forEach( function(element){
-                    contacsMap.set(normalizeFuncrion(element.phoneNumbers[0].number),element);
-                });
+                if(contacts) {
+                    contacts.forEach(function (element) {
+                        contacsMap.set(normalizeFuncrion(element.phoneNumbers[0].number), element);
+                    });
+                }
                 let feeds = responseData.map(feed => this.createFeed(feed,contacsMap)).filter(function(x){
                     return x != undefined;
                 });
