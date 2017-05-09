@@ -252,11 +252,11 @@ function promotion_created_activity(promotion) {
   };
   if (promotion.report)
     act.actor_user = promotion.creator._id;
-  if (utils.defined(promotion.entity.mall._id))
+  if (utils.defined(promotion.entity.mall))
     act.actor_mall = promotion.entity.mall._id;
-  if (utils.defined(promotion.entity.shopping_chain._id))
+  if (utils.defined(promotion.entity.shopping_chain))
     act.actor_chain = promotion.entity.shopping_chain._id;
-  if (utils.defined(promotion.entity.business._id))
+  if (utils.defined(promotion.entity.business))
     act.actor_business = promotion.entity.business._id;
 
   activity.create(act);
