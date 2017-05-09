@@ -217,9 +217,6 @@ exports.create = function (req, res, next) {
             phone: user.phone_number
           }, function (err) {
             if (err) return res.send(500, err);
-            //if this users number exist in phone_numbers collection
-            //then all users (ids in contacts) should be followed by him
-            new_user_follow(user)
           });
       });
     }
@@ -436,12 +433,13 @@ exports.verification = function (req, res) {
       if (err) {
         return handleError(res, err);
       }
-      //TODO: upsert phone number with owner
-      mongoose.connection.db.collection('phone_numbers', function (err, numbers) {
-        if (err)
-          logger.error(err.message);
-        else
-          numbers.update({_id: user.phone_number}, {$set: {owner: user._id}}, {upsert: true});
+      mongoose.connection.db.collection('phonenumbers', function (err, numbers) {
+        if (err) return logger.error(err.message);
+        //numbers.update({_id: user.phone_number}, {$set: {owner: user._id}}, {upsert: true});
+        //if this users number exist in phonenumbers collection
+        //then all users (ids in contacts) should be followed by him
+        new_user_follow(user)
+
       });
       return res.status(200).send('user verified');
     });
