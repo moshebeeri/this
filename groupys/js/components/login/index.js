@@ -56,6 +56,12 @@ class Login extends Component {
 
   }
 
+    focusNextField(nextField) {
+
+        this.refs[nextField]._root.focus()
+
+    }
+
 
 
   ///sss
@@ -157,6 +163,10 @@ class Login extends Component {
                                 ref='phone'
                                 onPressFlag={this.onPressFlag}
                                 onChange={(value)=> this.componentDidMount(value)}
+                                blurOnSubmit={true}
+                                returnKeyType='next'
+                                onSubmitEditing={this.focusNextField.bind(this,"password")}
+                                autoFocus = {true}
                             />
                             <CountryPicker
                                 ref='countryPicker'
@@ -178,6 +188,8 @@ class Login extends Component {
                     <InputGroup >
                       <Icon name="ios-unlock-outline" style={{color:"#00f"}}/>
                       <Input
+                          ref='password'
+                          returnKeyType='done'
                           placeholder="Password"
                           placeholderTextColor='#444'
                           defaultValue="de123456"

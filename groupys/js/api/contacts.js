@@ -84,6 +84,7 @@ class ContactsApi
         });
 
         var json = JSON.stringify(phoneBooks);
+        console.log('Sending phone book' + json);
         try {
             let response = await fetch(`${server_host}/api/users/phonebook`, {
                 method: 'POST',

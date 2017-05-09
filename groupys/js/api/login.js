@@ -94,14 +94,16 @@ class LoginApi
                     }
 
                 });
-
+                console.log(response);
                 if (response.status == '401') {
                     reject({error: 'Signup Failed Validation'});
                     return;
                 }
+                let result = {
+                    token: token
+                };
+                resolve(result);
 
-                let responseData = await response.json();
-                resolve(responseData);
             }
             catch (error) {
 

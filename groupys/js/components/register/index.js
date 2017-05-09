@@ -49,6 +49,9 @@ class Register extends Component {
 
     async validateCode(){
         try{
+            await this.setState({
+                error:''
+            })
             let response = await loginApi.verifyCode(this.state.code);
             if (response.token) {
 
@@ -58,8 +61,10 @@ class Register extends Component {
             }
 
             }catch(error) {
-                console.log('There has been a problem with your fetch operation: ' + error.message);
-                this.replaceRoute('login');
+                this.setState({
+                    error:'Code is not valid',
+                    code: ""
+                })
         }
 
     }
