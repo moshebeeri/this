@@ -199,6 +199,7 @@ function promotion_state(user_id, promotion, callback) {
   social_state(user_id, promotion._id, function(err, social_state){
     if(err) {return callback(err, null);}
     promotion.social_state = social_state;
+    callback(null, promotion);
     //TODO: use it when reimplementing promotion instances
     // graphModel.promotion_instance_id(user_id, promotion, function(err, instance){
     //   //instanceGraphModel.relate(instance.id, 'INSTANCE_OF', promotion.gid, {by: req.user._id});
