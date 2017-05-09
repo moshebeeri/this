@@ -21,7 +21,7 @@ function isAuthenticated() {
       var indexOfBearer = req.headers.authorization.indexOf("Bearer");
 
       // allow Cordove FileTransfer Plugin  header as well
-      if(indexOfBearer != 0 && indexOfBearer != -1){
+      if(indexOfBearer !== 0 && indexOfBearer !== -1){
 
         var headerLength = req.headers.authorization.length;
         console.log("headerLength: " + headerLength);
@@ -39,7 +39,7 @@ function isAuthenticated() {
       User.findById(req.user._id, function (err, user) {
         //if (err) return next(err);
         if (!user) return res.status(401).send('Unauthorized');
-        if (user.sms_code!=='') return res.status(401).send('no sms verification');
+        //if (user.sms_code!=='') return res.status(401).send('no sms verification');
 
         req.user = user;
         next();
