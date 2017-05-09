@@ -38,9 +38,10 @@ function isAuthenticated() {
     .use(function(req, res, next) {
       User.findById(req.user._id, function (err, user) {
         //if (err) return next(err);
-        if (!user) {return res.status(401).send('Unauthorized')}
-        console.log("-----** " + req.url);
-        //if (user.sms_code!=='') return res.status(401).send('no sms verification');
+        if (!user) {return res.status(401).send('Unauthorized');}
+        if (!req.url.startsWith('/verification/') && user.sms_code!=='') {
+          return res.status(401).send('no sms verification');
+        }
 
         req.user = user;
         next();
