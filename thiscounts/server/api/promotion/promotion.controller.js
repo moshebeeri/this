@@ -252,12 +252,12 @@ function promotion_created_activity(promotion) {
   };
   if (promotion.report)
     act.actor_user = promotion.creator;
-  if (utils.defined(promotion.mall))
-    act.actor_mall = promotion.creator;
-  if (utils.defined(promotion.shopping_chain))
-    act.actor_chain = promotion.creator;
-  if (utils.defined(promotion.business))
-    act.actor_business = promotion.creator;
+  if (utils.defined(promotion.entity.mall))
+    act.actor_mall = promotion.entity.mall;
+  if (utils.defined(promotion.entity.shopping_chain))
+    act.actor_chain = promotion.entity.shopping_chain;
+  if (utils.defined(promotion.entity.business))
+    act.actor_business = promotion.entity.business;
 
   activity.create(act);
 }
