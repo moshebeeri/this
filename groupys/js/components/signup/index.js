@@ -126,6 +126,11 @@ class Signup extends Component {
             this.replaceRoute('login');
         });
     }
+    focusNextField(nextField) {
+
+        this.refs[nextField]._root.focus()
+
+    }
 
 
     render() {
@@ -141,6 +146,10 @@ class Signup extends Component {
                                     ref='phone'
                                     onPressFlag={this.onPressFlag}
                                     onChange={(value)=> this.componentDidMount(value)}
+                                    blurOnSubmit={true}
+                                    returnKeyType='next'
+                                    onSubmitEditing={this.focusNextField.bind(this,"password")}
+                                    autoFocus = {true}
                                 />
                                 <CountryPicker
                                     ref='countryPicker'
@@ -162,6 +171,8 @@ class Signup extends Component {
                             <InputGroup >
                                 <Icon name="ios-unlock-outline" style={{color:"#00F"}}/>
                                 <Input
+                                    returnKeyType='done'
+                                    ref='password'
                                     placeholder="Password"
                                     secureTextEntry
                                     placeholderTextColor='#444'
