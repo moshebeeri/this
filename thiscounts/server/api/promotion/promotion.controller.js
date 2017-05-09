@@ -251,13 +251,13 @@ function promotion_created_activity(promotion) {
     action: "created"
   };
   if (promotion.report)
-    act.actor_user = promotion.creator;
-  if (utils.defined(promotion.entity.mall))
-    act.actor_mall = promotion.entity.mall;
-  if (utils.defined(promotion.entity.shopping_chain))
-    act.actor_chain = promotion.entity.shopping_chain;
-  if (utils.defined(promotion.entity.business))
-    act.actor_business = promotion.entity.business;
+    act.actor_user = promotion.creator._id;
+  if (utils.defined(promotion.entity.mall._id))
+    act.actor_mall = promotion.entity.mall._id;
+  if (utils.defined(promotion.entity.shopping_chain._id))
+    act.actor_chain = promotion.entity.shopping_chain._id;
+  if (utils.defined(promotion.entity.business._id))
+    act.actor_business = promotion.entity.business._id;
 
   activity.create(act);
 }
