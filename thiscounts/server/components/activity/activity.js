@@ -117,7 +117,7 @@ function activity_impl(act, callback){
       });
     }
     else if (activity.actor_business) {
-      effected_in_rel(activity.actor_business, "LIKE", function (err, effected) {
+      effected_in_rel(activity.actor_business, "FOLLOW", function (err, effected) {
         if (err) {
           return callback(err, null);
         }
@@ -126,7 +126,7 @@ function activity_impl(act, callback){
       });
     }
     else if (activity.actor_mall) {
-      effected_in_rel(activity.actor_mall, "LIKE", function (err, effected) {
+      effected_in_rel(activity.actor_mall, "FOLLOW", function (err, effected) {
         if (err) {
           return callback(err, null);
         }
@@ -135,7 +135,7 @@ function activity_impl(act, callback){
       });
     }
     else if (activity.actor_chain) {
-      effected_in_rel(activity.actor_chain, "LIKE", function (err, effected) {
+      effected_in_rel(activity.actor_chain, "FOLLOW", function (err, effected) {
         if (err) {
           return callback(err, null);
         }

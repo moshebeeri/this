@@ -151,13 +151,13 @@ function create_promotion(promotion, callback) {
           promotionGraphModel.relate_ids(promotion._id, 'REPORTED_BY', promotion.creator);
 
         if (utils.defined(promotion.entity.mall))
-          promotionGraphModel.relate_ids(promotion._id, 'MALL_PROMOTION', promotion.entity.mall);
+          promotionGraphModel.relate_ids(promotion._id, 'MALL_PROMOTION', promotion.entity.mall._id);
 
         if (utils.defined(promotion.entity.shopping_chain))
-          promotionGraphModel.relate_ids(promotion._id, 'CHAIN_PROMOTION', promotion.entity.shopping_chain);
+          promotionGraphModel.relate_ids(promotion._id, 'CHAIN_PROMOTION', promotion.entity.shopping_chain._id);
 
         if (utils.defined(promotion.entity.business))
-          promotionGraphModel.relate_ids(promotion._id, 'BUSINESS_PROMOTION', promotion.entity.business);
+          promotionGraphModel.relate_ids(promotion._id, 'BUSINESS_PROMOTION', promotion.entity.business._id);
 
         if (utils.defined(promotion.campaign_id)) {
           promotionGraphModel.relate_ids(promotion.campaign_id, 'CAMPAIGN_PROMOTION', promotion._id);
@@ -345,13 +345,13 @@ exports.realize = function (req, res) {
     if (instances.length > 0)
       return res.status(500).send('multiple instances found');
     let instance = instances[0];
-    if (instance.realize_code != req.params.realize_code)
+    if (instance.realize_code !== req.params.realize_code)
       return res.status(400).send('mismatch realize_code');
-    if (instance.id != req.params.realize_gid)
+    if (instance.id !== req.params.realize_gid)
       return res.status(400).send('mismatch realize_gid');
     if (instance.used)
       return res.status(400).send('promotion already used');
-    if (instance.user != req.user._id)
+    if (instance.user !== req.user._id)
       return res.status(400).send('user not related to this promotion instance');
 
     instance.used = true;

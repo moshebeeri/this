@@ -123,7 +123,8 @@ GraphModel.prototype.count_in_rel_id = function count_in_rel(name, to, callback)
  * @param from
  * @param to
  * @param name
- * @param params
+ * @param params - optional
+ * @param callback - optinal
  *
  *   see http://stephenmuss.com/using-seraph-as-a-neo4j-client-in-nodejs/
  *   let query = [
@@ -168,22 +169,49 @@ GraphModel.prototype.unrelate_ids = function unrelate(from, name, to){
   });
 };
 
-GraphModel.prototype.follow_user_by_phone_number = function follow_user_by_phone_number(number, nick, userId){
-  let query = util.format("MATCH (phone:user { phone:'%s' }), (u:user { _id:'%s' }) CREATE UNIQUE (phone)-[r:FOLLOW {nick : '%s'}]->(u)", number,userId, nick);
+/***
+ *
+ * @param number
+ * @param userId
+ * @param callback - optional
+ */
+GraphModel.prototype.follow_user_by_phone_number = function follow_user_by_phone_number(number, userId, callback){
+  let query = util.format("MATCH (phone:user { phone:'%s' }), (u:user { _id:'%s' }) CREATE UNIQUE (phone)-[r:FOLLOW]->(u)", number,userId);
   console.log(`follow_user_by_phone_number query: ${query}`);
-  db.query(query, function(err) {
-    if (err) { logger.error(err.message); }
-  });
+  if (utils.defined(callback)) {
+    db.query(query, callback);
+  } else {
+    db.query(query, function (err) {
+      if (err) logger.error(err.message);
+    });
+  }
 };
 
-GraphModel.prototype.owner_followers_follow_business = function owner_followers_follow_business(owner_id){
-  let query = `MATCH (u:user)-[:FOLLOW]->(owner:user { _id:'${owner_id}' })-[:OWNS]->(b:business{type:'SMALL_BUSINESS'})
+/***
+ *
+ * @param owner_id
+ * @param follower_id - optional, if not set then will connect all follower operation that may be costly
+ */
+GraphModel.prototype.owner_followers_follow_business = function owner_followers_follow_business(owner_id, follower_id, callback){
+  if(typeof follower_id === 'function'){
+    callback = follower_id;
+    follower_id = null;
+  }
+  let userFilter = utils.undefined(follower_id)? '' : `{ _id:'${follower_id}'}`;
+
+  let query = `MATCH (u:user ${userFilter})-[:FOLLOW]->(owner:user { _id:'${owner_id}' })-[:OWNS]->(b:business{type:'SMALL_BUSINESS'})
   OPTIONAL MATCH (u:user)-[:FOLLOW]->(owner:user { _id:'${owner_id}' })-[:OWNS]->(b:business{type:'PERSONAL_SERVICE'})
   CREATE UNIQUE (u)-[r:FOLLOW]->(b)` ;
   console.log(`owner_followers_follow_business query: ${query}`);
-  db.query(query, function(err) {
-    if (err) { logger.error(err.message); }
-  });
+  if (utils.defined(callback)) {
+    db.query(query, callback);
+  } else {
+    db.query(query, function (err) {
+      if (err) {
+        logger.error(err.message);
+      }
+    });
+  }
 };
 
 GraphModel.prototype.promotion_instance_id = function promotion_instance(user_id, promotion, callback){
