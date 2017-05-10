@@ -183,48 +183,6 @@ exports.create = function (req, res) {
   })
 };
 
-exports.create_backup = function (req, res) {
-  let promotion = req.body;
-  //TODO: Convert to address location
-  console.log(JSON.stringify(promotion));
-  spatial.location_to_point(promotion);
-  Promotion.create(promotion, function (err, promotion) {
-    //logger.info("Promotion.created : " + promotion._id);
-    if (err) {
-      return handleError(res, err);
-    }
-    //logger.info("JSON.stringify=" + JSON.stringify(promotion, ["creator","name", "_id"]));
-    set_promotion_location(promotion, function (err, promotion) {
-
-      promotionGraphModel.reflect(promotion, to_graph(promotion), function (err, promotion) {
-        if (err)
-          return handleError(res, err);
-
-        promotionGraphModel.relate_ids(promotion._id, 'CREATED_BY', promotion.creator);
-        //create relationships
-        if (promotion.report)
-          promotionGraphModel.relate_ids(promotion._id, 'REPORTED_BY', req.body._id);
-        if (utils.defined(promotion.mall))
-          promotionGraphModel.relate_ids(promotion._id, 'MALL_PROMOTION', promotion.mall);
-        if (utils.defined(promotion.shopping_chain))
-          promotionGraphModel.relate_ids(promotion._id, 'CHAIN_PROMOTION', promotion.shopping_chain);
-        if (utils.defined(promotion.business))
-          promotionGraphModel.relate_ids(promotion._id, 'BUSINESS_PROMOTION', promotion.business);
-        if (utils.defined(req.body["campaign_id"])) {
-          promotionGraphModel.relate_ids(req.body["campaign_id"], 'CAMPAIGN_PROMOTION', promotion._id);
-        }
-        relateTypes(promotion);
-        promotion_created_activity(promotion);
-        spatial.add2index(promotion.gid, function (err, result) {
-          if (err) logger.error(err.message);
-          else logger.info('object added to layer ' + result)
-        });
-      });
-    });
-    return res.json(201, promotion);
-  });
-};
-
 exports.create_campaign = function (req, res) {
   let promotion = req.body;
   let campaign = req.body;

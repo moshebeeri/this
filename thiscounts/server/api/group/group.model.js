@@ -1,17 +1,33 @@
 'use strict';
 
-var mongoose = require('mongoose'),
+const mongoose = require('mongoose'),
     Schema = mongoose.Schema;
 
-var GroupSchema = new Schema({
+
+function entity_validator(v) {
+  if (_.isNull(v))
+    return false;
+  return v.user || v.business || v.shopping_chain || v.mall;
+}
+
+const Entities = {
+  user: {type: Schema.ObjectId, ref: 'User'},
+  business: {type: Schema.ObjectId, ref: 'Business'},
+  shopping_chain: {type: Schema.ObjectId, ref: 'ShoppingChain'},
+  mall: {type: Schema.ObjectId, ref: 'Mall'}
+};
+
+const GroupSchema = new Schema({
   name: String,
   gid: { type: Number, index: true},
   description: String,
-  created: { type: Date, default: Date.now },
+  created: {type: Date, default: Date.now },
   creator: {type: Schema.ObjectId, ref: 'User', required: true},
-  admins: [{ type: Schema.ObjectId, ref: 'User', index: true}],
+  admins: [{type: Schema.ObjectId, ref: 'User', index: true}],
 
-  entity: {type: String},
+  entity: {type: Entities, require: true,
+    validate: [entity_validator, 'at least on of those fields should not be empty [business, user, chain, mall]'],
+  },
   entity_type: {
     type: String,
     required: true,

@@ -17,7 +17,7 @@ function percent_validator(v) {
 function entity_validator(v) {
   if (_.isNull(v))
     return false;
-  return v.business || v.product || v.chain || v.mall;
+  return v.business || v.product || v.shopping_chain || v.mall;
 }
 
 const Entities = {
