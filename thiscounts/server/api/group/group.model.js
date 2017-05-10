@@ -19,7 +19,7 @@ const Entities = {
 
 const GroupSchema = new Schema({
   name: String,
-  gid: { type: Number, index: true},
+  gid: {type: Number, index: true},
   description: String,
   created: {type: Date, default: Date.now },
   creator: {type: Schema.ObjectId, ref: 'User', required: true},
