@@ -136,8 +136,6 @@ let set_promotion_location = function (promotion, callback) {
 
 function create_promotion(promotion, callback) {
   //TODO: Convert to address location
-  console.log(JSON.stringify(promotion));
-
   set_promotion_location(promotion, function (err, promotion) {
     if (err) return callback(err, null);
     Promotion.create(promotion, function (err, promotion) {

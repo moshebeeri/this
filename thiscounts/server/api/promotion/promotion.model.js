@@ -1,19 +1,15 @@
 'use strict';
 
-var _ = require('lodash');
-var mongoose = require('mongoose'),
+const _ = require('lodash');
+const mongoose = require('mongoose'),
   Schema = mongoose.Schema;
 
 function percent_range_validator(v) {
   if (_.isNull(v))
     return false;
-  return percent_validator(v) && v.from < v.to;
+  return v.from > 0 && v.to < 100 && v.from < v.to;
 }
-function percent_validator(v) {
-  if (_.isNull(v))
-    return false;
-  return v.from >0 && v.to < 100;
-}
+
 function entity_validator(v) {
   if (_.isNull(v))
     return false;
@@ -28,7 +24,7 @@ const Entities = {
 };
 
 
-var PromotionSchema = new Schema({
+const PromotionSchema = new Schema({
   social_state : {},
   name: {type: String, required: true},
   gid: { type: Number, index: true},
@@ -41,7 +37,6 @@ var PromotionSchema = new Schema({
   created: {type: Date, default: Date.now},
   pictures : [],
   info: String,
-  active: Boolean,
   report: {type: Boolean, default: false},
   system_report: {type: Boolean, default: false},
   //see https://docs.mongodb.org/manual/reference/geojson/#geospatial-indexes-store-geojson
@@ -61,12 +56,10 @@ var PromotionSchema = new Schema({
       'HOT'     ,
       'LIKE'    ,
       'NEAR'    ,
-
       'MALL'    ,
       'FASHION' ,
       'GIFT'
     ]}],
-    //TODO: consider default: 'LIKE'
   },
   type: {
     type: String,
@@ -98,11 +91,6 @@ var PromotionSchema = new Schema({
       'GIVE_TO_FRIEND'
     ]
   },
-
-//  if ( req.body.price ) {
-//  req.assert('price', 'Enter a price (numbers only)').regex(/^\d+(\.\d{2})?$/);
-//}
-
   start: { type : Date, default: Date.now },
   end: Date, // TODO: Add default
   expireAt: {

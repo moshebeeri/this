@@ -1,9 +1,9 @@
 'use strict';
 
-var mongoose = require('mongoose'),
+let mongoose = require('mongoose'),
   Schema = mongoose.Schema;
 
-var CampaignPreferencesSchema = new Schema({
+let CampaignPreferencesSchema = new Schema({
   within_distance_km: Number,
   age: {
     from: Number,
@@ -22,7 +22,7 @@ var CampaignPreferencesSchema = new Schema({
   first_buyers: Boolean
 });
 
-var CampaignSchema = new Schema({
+let CampaignSchema = new Schema({
   creator: {type: Schema.ObjectId, ref: 'User', required: true},
   created: {type: Date, default: Date.now},
   name: {type: String, required: true},
