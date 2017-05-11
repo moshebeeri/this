@@ -287,11 +287,11 @@ GraphModel.prototype.query_objects = function query_objects(schema, query, order
 };
 
 GraphModel.prototype.followers = function followers(userId, skip, limit, callback){
-  related_type_id_dir(userId, 'FOLLOW', 'user', 'in', skip, limit, callback);
+  this.related_type_id_dir(userId, 'FOLLOW', 'user', 'in', skip, limit, callback);
 };
 
 GraphModel.prototype.following = function following(userId, skip, limit, callback){
-  related_type_id_dir(userId, 'FOLLOW', 'user', 'out', skip, limit, callback);
+  this.related_type_id_dir(userId, 'FOLLOW', 'user', 'out', skip, limit, callback);
 };
 
 GraphModel.prototype.query = function query(query, callback){
