@@ -293,21 +293,49 @@ GraphModel.prototype.query_ids_relation = function query_ids(from_id, rel, to_id
   });
 };
 
-GraphModel.prototype.query_objects = function query_objects(schemas, query, order, skip, limit, callback){
-
+GraphModel.prototype.query_objects = function query_objects(schema, query, order, skip, limit, callback){
   this.query_ids(query, order, skip, limit, function(err, _ids) {
     if (err) { callback(err, null) }
-
-    ids.forEach(set => {
-
-    });
-
     schema.find({}).where('_id').in(_ids).exec(function (err, objects) {
       if (err) { callback(err, null) }
       else callback(null, objects)
     });
   });
 };
+
+var async = require("async");
+
+function make_schema_query_function(schema, _ids){
+  return function(callback){
+    schema.find({}).where('_id').in(_ids).exec(function (err, objects) {
+      if (err) { callback(err, null) }
+      else callback(null, objects)
+    });
+  }
+}
+
+GraphModel.prototype.query_objects_parallel = function query_objects_parallel(schemas, query, callback){
+  db.query(query, function(err, table) {
+    if (err) { callback(err, null) }
+    let acc = {};
+    Object.keys(table[0]).forEach(k => acc[k] = new Set());
+    let reduced = table.reduce(function (acc, obj) {
+      Object.keys(obj).forEach(k => acc[k].add(obj[k]));
+      return acc;
+    }, acc);
+    let queryFunctions = [];
+    Object.keys(reduced).forEach( key => {
+      (function (schema, _ids) {
+        queryFunctions.push(make_schema_query_function(schema, _ids));
+      })(schema, Array.from(reduced[key]));
+    });
+    return async.parallel(queryFunctions, function(err, result) {
+      console.log('ending: ' + result);
+      return callback();
+    });
+  });
+};
+
 
 GraphModel.prototype.query_objects_general = function query_objects_general(schema, query, callback){
   db.query(query, function(err, _ids) {

@@ -396,15 +396,13 @@ exports.following = function (req, res) {
   let group = req.params.group;
   let skip = req.params.skip;
   let limit = req.params.limit;
-
-  graphModel.query_objects([Group, User],
-    `MATCH (g:group {_id:'${group}'})<-[r:FOLLOW]-(g:group)
+  let query = graphModel.paginate_query(`MATCH (g:group {_id:'${group}'})<-[r:FOLLOW]-(g:group)
      OPTIONAL MATCH (g:group {_id:'${group}'})<-[r:FOLLOW]-(u:user) 
-     RETURN g._id as gid, u._id as uid`,
-    '', skip, limit, function (err, table) {
+     RETURN g._id as gid, u._id as uid`, skip,limit);
+  graphModel.query_objects_parallel({gid: Group, uid: User}, query,
+    function (err, objects) {
       if (err) return handleError(res, err);
-
-      return res.status(200).json(table);
+      return res.status(200).json(objects);
     });
 };
 
