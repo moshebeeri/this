@@ -2,6 +2,7 @@
 
 const mongoose = require('mongoose'),
     Schema = mongoose.Schema;
+let _ = require('lodash');
 
 
 function entity_validator(v) {
