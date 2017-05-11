@@ -20,6 +20,10 @@ class AddFormHeader extends Component {
 
     constructor(props) {
         super(props);
+        this.state = {
+            refreshing: false
+
+        }
 
 
     }
@@ -33,8 +37,12 @@ class AddFormHeader extends Component {
 
 
 
-    replaceRoute(route) {
+     replaceRoute(route) {
+         if (this.state.refreshing)
+             return
+         this.setState({refreshing: true});
         this.props.replaceAt(this.props.currentLocation, {key: route}, this.props.navigation.key);
+         this.setState({refreshing: false});
     }
 
 
@@ -45,7 +53,7 @@ class AddFormHeader extends Component {
           <View style={{ flexDirection: 'row', alignItems: 'stretch'  }}>
 
 
-            <Button style={{ backgroundColor: 'transparent'}} iconLeft light onPress={() =>  this.replaceRoute(this.props.backLocation) }>
+            <Button ref="cancel" style={{ backgroundColor: 'transparent'}} iconLeft light onPress={() =>  this.replaceRoute(this.props.backLocation) }>
               <Icon name="ios-arrow-back" />
               <Text> Cancel </Text>
             </Button>

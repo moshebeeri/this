@@ -10,6 +10,7 @@ import Product from '../product/index';
 import Business from '../business/index';
 import Feeds from '../feed/index'
 import Promotions from '../promtions/index'
+import Groups from '../groups/index'
 
 import store from 'react-native-simple-store';
 import LocationApi from '../../api/location'
@@ -51,6 +52,9 @@ class ApplicationManager extends Component {
                          break;
                      case 'add-promotions':
                          initialPage =  3;
+                         break;
+                     case 'add-group':
+                         initialPage =  4;
                          break;
                  }
 
@@ -114,6 +118,9 @@ class ApplicationManager extends Component {
              case 3:
                  component ='add-promotions'
                  break;
+             case 4:
+                 component ='add-group'
+                 break;
 
          }
 
@@ -152,6 +159,8 @@ class ApplicationManager extends Component {
                 return true;
             case 3:
                 return true;
+            case 4:
+                return true;
         }
 
     }
@@ -189,6 +198,9 @@ class ApplicationManager extends Component {
                     </Tab>
                     <Tab   heading={ <TabHeading><Text style={{ color:'black',fontSize: 11,}}>Promotions</Text></TabHeading>}>
                         <Promotions  index={3} navigateAction={this.headerAction.bind(this)}/>
+                    </Tab>
+                    <Tab   heading={ <TabHeading><Text style={{ color:'black',fontSize: 11,}}>Groups</Text></TabHeading>}>
+                        <Groups  index={4} navigateAction={this.headerAction.bind(this)}/>
                     </Tab>
                 </Tabs>
 

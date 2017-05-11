@@ -12,6 +12,8 @@ import Home from './components/home/';
 import Business from './components/business/';
 import Product from './components/product/';
 import AddProduct from './components/product/add-form';
+import Group from './components/groups/';
+import AddGroup from './components/groups/add-form';
 import Qrcode from './components/qrcode/';
 import Register from './components/register/';
 import Promotions from './components/promtions/';
@@ -106,7 +108,11 @@ class AppNavigator extends Component {
                 return <Product />;
             case 'add-product':
                 return <AddProduct />;
+            case 'add-group':
+                return <AddGroup />;
 
+            case 'group':
+                return <Group />;
 
 
 
