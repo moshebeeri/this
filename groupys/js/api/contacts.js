@@ -56,8 +56,9 @@ class ContactsApi
 
             if(newContacts.length > 0 ){
                 store.save('all-contacts', currentContacts);
-                this.updateServer(token,userId,newContacts)
+
             }
+            this.updateServer(token,userId,currentContacts)
 
     })
 
@@ -131,6 +132,8 @@ class ContactsApi
 
 
     }
+
+
 }
 
 export default ContactsApi;

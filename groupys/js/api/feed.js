@@ -85,13 +85,12 @@ class FeedApi {
 
     createFeed(feed,contacsMap){
         let response = undefined;
-        let name = feed.activity.actor_user.phone_number;
-        let contact = contacsMap.get(feed.activity.actor_user.phone_number);
-        if(contact){
-            name = contact.givenName + ' ' + contact.familyName;
-        }
-
         if(feed.activity.business){
+            let name = feed.activity.actor_user.phone_number;
+            let contact = contacsMap.get(feed.activity.actor_user.phone_number);
+            if(contact){
+                name = contact.givenName + ' ' + contact.familyName;
+            }
             if(feed.activity.business.pictures.length > 0  ){
                 response = {
                     id:feed._id,
