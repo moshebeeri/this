@@ -160,6 +160,14 @@ exports.promotions_malls = function (req, res) {
   });
 };
 
+exports.test_me = function (req, res) {
+  var query = "match (b:business) optional match (u:user) return b._id as bid, u._id as uid";
+  graphModel.query(query,function(err, data) {
+    if (err) { return handleError(res, err)}
+    return res.status(200).json(data);
+  });
+};
+
 exports.realized_malls = function (req, res) {
   return res.status(204).send('No Content');
 };
