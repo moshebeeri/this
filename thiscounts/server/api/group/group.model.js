@@ -3,12 +3,21 @@
 const mongoose = require('mongoose'),
     Schema = mongoose.Schema;
 let _ = require('lodash');
-
+let utils = require('../../components/utils').createUtils();
 
 function entity_validator(v) {
   if (_.isNull(v))
     return false;
-  return v.user || v.business || v.shopping_chain || v.mall;
+  let defs = 0;
+  if(utils.defined(v.user))
+    defs++;
+  if(utils.defined(v.business))
+    defs++;
+  if(utils.defined(v.shopping_chain))
+    defs++;
+  if(utils.defined(v.mall))
+    defs++;
+  return defs === 1
 }
 
 const Entities = {

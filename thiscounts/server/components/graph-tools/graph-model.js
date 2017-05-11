@@ -226,7 +226,7 @@ GraphModel.prototype.related_type_id = function related_type_id(start, name, ret
   related_type_id_dir(start, name, ret_type, 'out', skip, limit, callback);
 };
 
-GraphModel.prototype.related_type_id_dir = function related_type_id_dir(start, name, ret_type, dir, skip, limit, callback){
+GraphModel.prototype.related_type_id_dir_query = function related_type_id_dir_query(start, name, ret_type, dir, skip, limit) {
   let match = "MATCH (s { _id:'%s' })-[r:%s]-(ret:%s) ";
   if(dir==="out")
     match = "MATCH (s { _id:'%s' })-[r:%s]->(ret:%s) ";
@@ -234,19 +234,37 @@ GraphModel.prototype.related_type_id_dir = function related_type_id_dir(start, n
     match = "MATCH (s { _id:'%s' })<-[r:%s]-(ret:%s) ";
   let query = util.format(
     match +
-    "return ret " +
+    "return ret._id as _id " +
     "ORDER BY r.timestamp DESC " +
     "skip %d limit %d", start, name, ret_type, skip, limit);
-  db.query(query, function(err, related) {
-    if (err) { callback(err, null) }
-    else callback(null, related)
+  return query;
+};
+
+GraphModel.prototype.paginate_query = function(query, skip, limit){
+  return `${query} skip ${skip} limit ${limit}`
+};
+
+GraphModel.prototype.order_by_query = function(query, order){
+  return `${query} ORDER BY ${order}`
+};
+
+GraphModel.prototype.order_by_paginate_query = function(query, order, skip, limit){
+  return this.paginate_query(this.order_by_query(order), skip, limit)
+};
+
+GraphModel.prototype.related_type_id_dir = function related_type_id_dir(start, name, ret_type, dir, skip, limit, callback){
+  db.query(
+    this.related_type_id_dir_query(start, name, ret_type, dir, skip, limit),
+    function(err, related) {
+      if (err) { callback(err, null) }
+      else callback(null, related)
   });
 };
 
 GraphModel.prototype.incoming_ids = function related_incoming_ids(start, name, ret_type, skip, limit, callback){
   let query = util.format(
     "MATCH (s { _id:'{%s}' })<-[r:%s]-(ret:%s) " +
-    "return ret._id " +
+    "return ret._id as _id" +
     "ORDER BY r.name DESC " + //TODO: make order an input
     "skip %d limit %d", start, name, ret_type, skip, limit);
   db.query(query, function(err, related) {
@@ -259,7 +277,6 @@ GraphModel.prototype.incoming_ids = function related_incoming_ids(start, name, r
 //"ORDER BY r.name DESC " +
 GraphModel.prototype.query_ids = function query_ids(query, order, skip, limit, callback){
   let query_str  = util.format("%s %s skip %d limit %d", query, order, skip, limit);
-  console.log(query_str);
   db.query(query_str, function(err, related) {
     if (err) { callback(err, null) }
     else callback(null, related)
@@ -276,10 +293,26 @@ GraphModel.prototype.query_ids_relation = function query_ids(from_id, rel, to_id
   });
 };
 
-GraphModel.prototype.query_objects = function query_objects(schema, query, order, skip, limit, callback){
+GraphModel.prototype.query_objects = function query_objects(schemas, query, order, skip, limit, callback){
+
   this.query_ids(query, order, skip, limit, function(err, _ids) {
     if (err) { callback(err, null) }
+
+    ids.forEach(set => {
+
+    });
+
     schema.find({}).where('_id').in(_ids).exec(function (err, objects) {
+      if (err) { callback(err, null) }
+      else callback(null, objects)
+    });
+  });
+};
+
+GraphModel.prototype.query_objects_general = function query_objects_general(schema, query, callback){
+  db.query(query, function(err, _ids) {
+    if (err) { callback(err, null) }
+    schema.find({}).where('_id').in(_ids).exec((err, objects) =>{
       if (err) { callback(err, null) }
       else callback(null, objects)
     });
@@ -293,6 +326,15 @@ GraphModel.prototype.followers = function followers(userId, skip, limit, callbac
 GraphModel.prototype.following = function following(userId, skip, limit, callback){
   this.related_type_id_dir(userId, 'FOLLOW', 'user', 'out', skip, limit, callback);
 };
+
+GraphModel.prototype.followers_query = function followers(userId, skip, limit){
+  return related_type_id_dir_query(userId, 'FOLLOW', 'user', 'in', skip, limit);
+};
+
+GraphModel.prototype.following_query = function following(userId, skip, limit){
+  return related_type_id_dir_query(userId, 'FOLLOW', 'user', 'out', skip, limit);
+};
+
 
 GraphModel.prototype.query = function query(query, callback){
   db.query(query, callback);
