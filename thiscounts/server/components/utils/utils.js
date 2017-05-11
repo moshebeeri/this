@@ -101,9 +101,9 @@ Utils.prototype.to_paginate = function paginate(req){
   let skip = req.params.skip;
   let limit = req.params.limit;
 
-  if(!utils.defined(skip) || !_.isNumber(skip))
+  if(!this.defined(skip) || !_.isNumber(skip))
     skip = 0;
-  if(!utils.defined(limit) || !_.isNumber(limit))
+  if(!this.defined(limit) || !_.isNumber(limit))
     limit = 25;
 
   return {
