@@ -96,8 +96,9 @@ function group_follow_group_activity(following, followed) {
 
 // Creates a new group in the DB.
 exports.create = function (req, res) {
-
-  Group.create(req.body, function (err, group) {
+  let group = req.body;
+  group.creator = req.user._id;
+  Group.create(group, function (err, group) {
     if (err) {
       return handleError(res, err);
     }
@@ -120,7 +121,6 @@ exports.create = function (req, res) {
 };
 
 exports.create_business_default_group = function (group, callback) {
-
   Group.create(group, function (err, group) {
     if (err) {
       return callback(err);
@@ -221,7 +221,7 @@ exports.message = function (req, res) {
 };
 
 function user_follow_group(user_id, group, isReturn, res) {
-  graphModel.relate_ids(user_id, 'FOLLOW', group._id);
+  graphModel.relate_ids(user_id, 'FOLLOW', group._id, {timestamp: Date.now()});
   user_follow_group_activity(group, user_id);
   if (isReturn) {
     return res.json(200, group);
@@ -354,7 +354,7 @@ exports.following = function (req, res) {
   let skip = req.params.skip;
   let limit = req.params.limit;
 
-  graphModel.query_objects(Group,
+  graphModel.query_objects([Group, User],
     `MATCH (g:group {_id:'${group}'})<-[r:FOLLOW]-(g:group)
      OPTIONAL MATCH (g:group {_id:'${group}'})<-[r:FOLLOW]-(u:user) 
      RETURN g._id as gid, u._id as uid`,
@@ -415,7 +415,6 @@ exports.user_products = function (req, res) {
       return res.status(200).json(products);
     });
 };
-
 
 function handleError(res, err) {
   return res.status(500).send(err);
