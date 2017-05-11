@@ -227,11 +227,11 @@ GraphModel.prototype.related_type_id = function related_type_id(start, name, ret
 };
 
 GraphModel.prototype.related_type_id_dir = function related_type_id_dir(start, name, ret_type, dir, skip, limit, callback){
-  let match = "MATCH (s { _id:'{%s}' })-[r:%s]-(ret:%s) ";
+  let match = "MATCH (s { _id:'%s' })-[r:%s]-(ret:%s) ";
   if(dir==="out")
-    match = "MATCH (s { _id:'{%s}' })-[r:%s]->(ret:%s) ";
+    match = "MATCH (s { _id:'%s' })-[r:%s]->(ret:%s) ";
   else if(dir==="in")
-    match = "MATCH (s { _id:'{%s}' })<-[r:%s]-(ret:%s) ";
+    match = "MATCH (s { _id:'%s' })<-[r:%s]-(ret:%s) ";
   let query = util.format(
     match +
     "return ret " +
