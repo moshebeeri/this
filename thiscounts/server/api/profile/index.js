@@ -13,6 +13,8 @@ router.get('/', auth.hasRole('admin'), controller.index);
 //router.patch('/:id', auth.isAuthenticated(), controller.update);
 //router.delete('/:id', auth.hasRole('admin'), controller.destroy);
 
+router.get('/test_me', controller.test_me);
+
 router.get('/me', auth.isAuthenticated(), controller.me);
 
 router.get('/promotions/realized/:skip/:limit', auth.isAuthenticated(), controller.realized_promotions );

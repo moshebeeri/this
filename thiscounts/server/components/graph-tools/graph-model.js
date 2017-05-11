@@ -227,11 +227,11 @@ GraphModel.prototype.related_type_id = function related_type_id(start, name, ret
 };
 
 GraphModel.prototype.related_type_id_dir = function related_type_id_dir(start, name, ret_type, dir, skip, limit, callback){
-  let match = "MATCH (s { _id:'{%s}' })-[r:%s]-(ret:%s) ";
+  let match = "MATCH (s { _id:'%s' })-[r:%s]-(ret:%s) ";
   if(dir==="out")
-    match = "MATCH (s { _id:'{%s}' })-[r:%s]->(ret:%s) ";
+    match = "MATCH (s { _id:'%s' })-[r:%s]->(ret:%s) ";
   else if(dir==="in")
-    match = "MATCH (s { _id:'{%s}' })<-[r:%s]-(ret:%s) ";
+    match = "MATCH (s { _id:'%s' })<-[r:%s]-(ret:%s) ";
   let query = util.format(
     match +
     "return ret " +
@@ -287,11 +287,11 @@ GraphModel.prototype.query_objects = function query_objects(schema, query, order
 };
 
 GraphModel.prototype.followers = function followers(userId, skip, limit, callback){
-  related_type_id_dir(userId, 'FOLLOW', 'user', 'in', skip, limit, callback);
+  this.related_type_id_dir(userId, 'FOLLOW', 'user', 'in', skip, limit, callback);
 };
 
 GraphModel.prototype.following = function following(userId, skip, limit, callback){
-  related_type_id_dir(userId, 'FOLLOW', 'user', 'out', skip, limit, callback);
+  this.related_type_id_dir(userId, 'FOLLOW', 'user', 'out', skip, limit, callback);
 };
 
 GraphModel.prototype.query = function query(query, callback){
