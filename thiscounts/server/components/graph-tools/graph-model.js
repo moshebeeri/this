@@ -9,6 +9,7 @@ let seraph_model = require('seraph-model');
 let logger = require('../logger').createLogger();
 let util = require('util');
 let utils = require('../utils').createUtils();
+let async = require('async');
 
 
 function GraphModel(class_name) {
@@ -84,7 +85,7 @@ GraphModel.prototype.is_related_ids = function relate(from, name, to, callback){
   let query = util.format("MATCH (me{_id:'%s'})-[f:%s]->(follower{_id:'%s'}) return sign(count(f)) as exists", from, name, to);
   db.query(query, function(err, result) {
     if (err) { return callback(err) }
-    callback(null, result[0].exists != 0)
+    callback(null, result[0].exists !== 0)
   });
 };
 
@@ -302,8 +303,6 @@ GraphModel.prototype.query_objects = function query_objects(schema, query, order
     });
   });
 };
-
-var async = require("async");
 
 function make_schema_query_function(schema, _ids){
   return function(callback){

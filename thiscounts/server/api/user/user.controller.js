@@ -12,12 +12,12 @@ let Mall = require('../mall/mall.model');
 let Category = require('../category/category.model');
 let CardType = require('../cardType/cardType.model');
 
-let  PhoneNumber = require('../phone_number/phone_number.model');
-let  passport = require('passport');
-let  config = require('../../config/environment');
-let  jwt = require('jsonwebtoken');
-let  twilio = require('twilio')(config.twilio.accountSid, config.twilio.authToken);
-let    util = require('util');
+let PhoneNumber = require('../phone_number/phone_number.model');
+let passport = require('passport');
+let config = require('../../config/environment');
+let jwt = require('jsonwebtoken');
+let twilio = require('twilio')(config.twilio.accountSid, config.twilio.authToken);
+let util = require('util');
 
 let utils = require('../../components/utils').createUtils();
 let randomstring = require('randomstring');
@@ -83,14 +83,14 @@ let like_generates_follow = function (userId, itemId) {
     },
     function (err, results) {
       // results is now equals to: {one: 1, two: 2}
-      if (results['user']         ||
-        results['business']       ||
-        results['shoppingChain']  ||
-        results['product']        ||
-        results['promotion']      ||
-        results['mall']           ||
-        results['category']       ||
-        results['cardType']       ) {
+      if (results['user'] ||
+        results['business'] ||
+        results['shoppingChain'] ||
+        results['product'] ||
+        results['promotion'] ||
+        results['mall'] ||
+        results['category'] ||
+        results['cardType']) {
         graphModel.relate_ids(userId, 'FOLLOW', itemId);
         activity_follow(userId, itemId);
       }
@@ -254,47 +254,49 @@ exports.phonebook = function (req, res) {
   const userId = req.user._id;
 
   mongoose.connection.db.collection('phonebooks', function (err, collection) {
-    if (err) return logger.error(err.message);
+    if (err) return handleError(res, err);
     collection.save({
       _id: userId,
       phonebook: phonebook.phonebook
-    });
-    //TODO: implement this way http://stackoverflow.com/questions/5794834/how-to-access-a-preexisting-collection-with-mongoose
-    //For each phone number store the users that has it in their phonebook
-    mongoose.connection.db.collection('phonenumbers', function (err, collection) {
-      if (err) return logger.error(err.message);
-      phonebook.phonebook.forEach(function (contact, index, array) {
-        if(utils.defined(contact.normalized_number) && utils.defined(contact.name)){
-          collection.findAndModify(
-            {_id: utils.clean_phone_number(contact.normalized_number)},
-            [['_id', 'asc']],
-            {
-              $addToSet: {
-                contacts: {
-                  userId: userId,
-                  nick: contact.name
+    }, function (err) {
+      if (err) return handleError(res, err);
+      //TODO: implement this way http://stackoverflow.com/questions/5794834/how-to-access-a-preexisting-collection-with-mongoose
+      //For each phone number store the users that has it in their phonebook
+      mongoose.connection.db.collection('phonenumbers', function (err, collection) {
+        if (err) return logger.error(err.message);
+        phonebook.phonebook.forEach(function (contact, index, array) {
+          if (utils.defined(contact.normalized_number) && utils.defined(contact.name)) {
+            collection.findAndModify(
+              {_id: utils.clean_phone_number(contact.normalized_number)},
+              [['_id', 'asc']],
+              {
+                $addToSet: {
+                  contacts: {
+                    userId: userId,
+                    nick: contact.name
+                  }
                 }
-              }
-            },
-            {upsert: true, new: true},
-            function (err, object) {
-              if (err) {
-                console.error(err.message);
-              } else {
-                let phone_number = object.value;
-                if (utils.defined(phone_number.owner)) {
-                  graphModel.follow_user_by_phone_number(phone_number._id, userId, function(err){
-                    if (err) return logger.error(err.message);
-                    graphModel.owner_followers_follow_business(userId, phone_number.owner);
-                  });
+              },
+              {upsert: true, new: true},
+              function (err, object) {
+                if (err) {
+                  console.error(err.message);
+                } else {
+                  let phone_number = object.value;
+                  if (utils.defined(phone_number.owner)) {
+                    graphModel.follow_user_by_phone_number(phone_number._id, userId, function (err) {
+                      if (err) return logger.error(err.message);
+                      graphModel.owner_followers_follow_business(userId, phone_number.owner);
+                    });
+                  }
                 }
-              }
-            });
-        }
+              });
+          }
+        });
+        return res.status(200).send('phonebook received');
       });
     });
   });
-  return res.status(200).send('phonebook received');
 };
 
 /**
@@ -303,7 +305,7 @@ exports.phonebook = function (req, res) {
  * @param user
  */
 function new_user_follow(user) {
-  PhoneNumber.findOne({_id:user.phone_number}, function (err, phone_number) {
+  PhoneNumber.findOne({_id: user.phone_number}, function (err, phone_number) {
     if (err)
       return logger.error(err.message);
 
@@ -312,12 +314,12 @@ function new_user_follow(user) {
         _id: user.phone_number,
         owner: user._id,
         contacts: []
-      }, function(err, phone_number) {
-        if(err) console.log(err);
+      }, function (err, phone_number) {
+        if (err) console.log(err);
         //TODO: Suggests who to follow (All entities)
       });
     }
-    else{
+    else {
       //We have this number, make user follow the users who have his number
       phone_number.contacts.forEach(function (contact) {
         graphModel.follow_user_by_phone_number(user.phone_number, contact.userId);
@@ -507,7 +509,7 @@ exports.updateInfo = function (req, res, next) {
   let newUser = req.body;
   let query = {'phone_number': req.body['phone_number']};
 
-  User.findOneAndUpdate(query, newUser, {upsert:true}, function(err, doc){
+  User.findOneAndUpdate(query, newUser, {upsert: true}, function (err, doc) {
     if (err) return res.status(500).send(err);
     return res.status(200).send("succesfully saved");
   });
