@@ -8,16 +8,7 @@ let utils = require('../../components/utils').createUtils();
 function entity_validator(v) {
   if (_.isNull(v))
     return false;
-  let defs = 0;
-  if(utils.defined(v.user))
-    defs++;
-  if(utils.defined(v.business))
-    defs++;
-  if(utils.defined(v.shopping_chain))
-    defs++;
-  if(utils.defined(v.mall))
-    defs++;
-  return defs === 1
+  return true;
 }
 
 const Entities = {
