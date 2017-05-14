@@ -6,13 +6,11 @@ let auth = require('../../auth/auth.service');
 let router = express.Router();
 
 
-router.get('/test_me', controller.test_me);
-router.get('/test/add/user/:user/:to_group', auth.isAuthenticated(), controller.test_add_user);
 router.get('/touch/:group_id', auth.isAuthenticated(), controller.touch);
 router.get('/join/group/:group/:group2follow', auth.isAuthenticated(), controller.group_join_group);
 router.get('/join/:group', auth.isAuthenticated(), controller.join_group);
 
-router.get('/add/this/user/:user/:to_group', auth.isAuthenticated(), controller.add_user);
+router.get('/add/user/:user/:to_group', auth.isAuthenticated(), controller.add_user);
 router.post('/add/users/:to_group', auth.isAuthenticated(), controller.add_users);
 router.get('/following/groups/:group/:skip/:limit', auth.isAuthenticated(), controller.following_groups);
 router.get('/following/users/:group/:skip/:limit', auth.isAuthenticated(), controller.following_users);

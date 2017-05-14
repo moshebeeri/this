@@ -98,6 +98,7 @@ function group_follow_group_activity(following, followed) {
 exports.create = function (req, res) {
   let group = req.body;
   group.creator = req.user._id;
+  group.admins = [req.user._id];
   Group.create(group, function (err, group) {
     if (err) {
       return handleError(res, err);
