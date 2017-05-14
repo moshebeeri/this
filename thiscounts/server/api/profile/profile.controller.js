@@ -168,15 +168,26 @@ exports.promotions_malls = function (req, res) {
     return res.status(200).json(malls);
   });
 };
-
 exports.test_me = function (req, res) {
-  let query = "match (b:business) optional match (u:user) return b._id as bid, u._id as uid";
-  graphModel.query(query, function (err, data) {
-    if (err) {
-      return handleError(res, err)
+  var gaussian = require('gaussian');
+  var distribution = gaussian(0,1);
+// Take a random sample using inverse transform sampling method.
+  //var sample = distribution.ppf(Math.random());
+  let a = {
+    pdf : {
+      val: distribution.cdf(0),
+      msg: "the probability density function, which describes the probability of a random variable taking on the value x"
+    },
+    cdf : {
+      val: distribution.cdf(.75),
+      msg: "++ the cumulative distribution function, which describes the probability of a random variable falling in the interval (−∞, x]"
+    },
+    ppf : {
+      val: distribution.ppf(.5),
+      msg:"the percent point function, the inverse of cdf"
     }
-    return res.status(200).json(data);
-  });
+  };
+  return res.status(201).json(a)
 };
 
 exports.realized_malls = function (req, res) {
