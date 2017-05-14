@@ -7,6 +7,7 @@ let router = express.Router();
 
 
 router.get('/test_me', controller.test_me);
+router.get('/test/add/user', controller.test_add_user);
 router.get('/touch/:group_id', auth.isAuthenticated(), controller.touch);
 router.get('/join/group/:group/:group2follow', auth.isAuthenticated(), controller.group_join_group);
 router.get('/join/:group', auth.isAuthenticated(), controller.join_group);

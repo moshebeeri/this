@@ -144,9 +144,7 @@ exports.create_business_default_group = function (group, callback) {
 
 // Updates an existing group in the DB.
 exports.update = function (req, res) {
-  if (req.body._id) {
-    delete req.body._id;
-  }
+  if (req.body._id) { delete req.body._id; }
   Group.findById(req.params.id, function (err, group) {
     if (err) {
       return handleError(res, err);
@@ -352,6 +350,9 @@ exports.group_join_group = function (req, res) {
   });
 };
 
+exports.test_add_user = function (req, res) {
+  return res.json(200, "tested");
+};
 
 exports.test_me = function () {
   let a = [
