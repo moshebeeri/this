@@ -229,7 +229,7 @@ function user_follow_group(user_id, group, callback) {
   graphModel.relate_ids(user_id, 'FOLLOW', group._id, {timestamp: Date.now()}, function(err){
     if(err) {console.error(err);}
     user_follow_group_activity(group, user_id);
-    if(callback)
+    if(typeof callback === 'function')
       callback(null, group);
   } );
 }
