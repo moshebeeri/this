@@ -9,24 +9,29 @@ class UserApi
         return new Promise(async(resolve, reject) => {
             try {
                 let token = await store.get('token');
-                const response = await fetch(`${server_host}/api/users/me/`, {
-                    method: 'GET',
-                    headers: {
-                        'Accept': 'application/json, text/plain, */*',
-                        'Content-Type': 'application/json;charset=utf-8',
-                        'Authorization': 'Bearer ' + token,
+                if(token) {
+                    const response = await fetch(`${server_host}/api/users/me/`, {
+                        method: 'GET',
+                        headers: {
+                            'Accept': 'application/json, text/plain, */*',
+                            'Content-Type': 'application/json;charset=utf-8',
+                            'Authorization': 'Bearer ' + token,
+                        }
+
+                    })
+                    if (response.status == '401') {
+                        reject(error);
+                        return;
                     }
 
-                })
-                if (response.status == '401') {
-                    reject(error);
-                    return;
+                    let responseData = await response.json();
+                    store.save('user_id', responseData._id);
+
+                    resolve(responseData);
+                }else{
+                    reject('no token');
                 }
 
-                let responseData = await response.json();
-                store.save('user_id', responseData._id);
-
-                resolve(responseData);
             }
             catch (error) {
 
@@ -84,17 +89,17 @@ class UserApi
                 });
             }
             let fullContacts = contactPhones.map(function(contact){
-                let phoneContact = contacsMap.get(contact.phone);
+                let phoneContact = contacsMap.get(contact.phone_number);
                 if(phoneContact){
                     return {
                         name: phoneContact.givenName + ' ' + phoneContact.familyName,
-                        phone: contact.phone,
+                        phone: contact.phone_number,
                         _id: contact._id
                     };
                 }
 
                 return {
-                    phone: contact.phone,
+                    phone: contact.phone_number,
                     _id: contact._id
                 };
             })
