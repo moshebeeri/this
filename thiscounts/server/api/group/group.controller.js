@@ -107,7 +107,7 @@ exports.create = function (req, res) {
       graphModel.relate_ids(req.user._id, 'FOLLOW', group._id);
       graphModel.relate_ids(req.user._id, 'GROUP_ADMIN', group._id);
       if (group.entity_type === 'BUSINESS' && utils.defined(group.entity.business)) {
-        graphModel.relate_ids(group._id, 'FOLLOW', group.entity.business._id);
+        graphModel.relate_ids(group._id, 'FOLLOW', group.entity.business);
       }
       group_activity(group, "create");
     });
