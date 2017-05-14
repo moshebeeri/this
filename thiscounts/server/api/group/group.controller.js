@@ -98,6 +98,7 @@ function group_follow_group_activity(following, followed) {
 exports.create = function (req, res) {
   let group = req.body;
   group.creator = req.user._id;
+  group.admins = [req.user._id];
   Group.create(group, function (err, group) {
     if (err) {
       return handleError(res, err);
@@ -144,9 +145,7 @@ exports.create_business_default_group = function (group, callback) {
 
 // Updates an existing group in the DB.
 exports.update = function (req, res) {
-  if (req.body._id) {
-    delete req.body._id;
-  }
+  if (req.body._id) { delete req.body._id; }
   Group.findById(req.params.id, function (err, group) {
     if (err) {
       return handleError(res, err);
@@ -230,7 +229,7 @@ function user_follow_group(user_id, group, callback) {
   graphModel.relate_ids(user_id, 'FOLLOW', group._id, {timestamp: Date.now()}, function(err){
     if(err) {console.error(err);}
     user_follow_group_activity(group, user_id);
-    if(callback)
+    if(typeof callback === 'function')
       callback(null, group);
   } );
 }
@@ -352,6 +351,9 @@ exports.group_join_group = function (req, res) {
   });
 };
 
+exports.test_add_user = function (req, res) {
+  return res.json(200, "tested");
+};
 
 exports.test_me = function () {
   let a = [

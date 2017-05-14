@@ -326,7 +326,7 @@ GraphModel.prototype.query_objects_parallel = function query_objects_parallel(sc
     Object.keys(reduced).forEach( key => {
       (function (schema, _ids) {
         queryFunctions.push(make_schema_query_function(schema, _ids));
-      })(schema, Array.from(reduced[key]));
+      })(schemas[key], Array.from(reduced[key]));
     });
     return async.parallel(queryFunctions, function(err, result) {
       console.log('ending: ' + result);
@@ -355,11 +355,11 @@ GraphModel.prototype.following = function following(userId, skip, limit, callbac
 };
 
 GraphModel.prototype.followers_query = function followers(userId, skip, limit){
-  return related_type_id_dir_query(userId, 'FOLLOW', 'user', 'in', skip, limit);
+  return this.related_type_id_dir_query(userId, 'FOLLOW', 'user', 'in', skip, limit);
 };
 
 GraphModel.prototype.following_query = function following(userId, skip, limit){
-  return related_type_id_dir_query(userId, 'FOLLOW', 'user', 'out', skip, limit);
+  return this.related_type_id_dir_query(userId, 'FOLLOW', 'user', 'out', skip, limit);
 };
 
 
