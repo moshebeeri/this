@@ -105,7 +105,7 @@ class GroupsApi
 
             try {
                 let token = await store.get('token');
-                const response = await fetch(`${server_host}/api/groups/following/users/start/0/100`, {
+                const response = await fetch(`${server_host}/api/groups/user/follow/0/100`, {
                     method: 'GET',
                     headers: {
                         'Accept': 'application/json, text/plain, */*',
