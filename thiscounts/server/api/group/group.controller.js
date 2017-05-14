@@ -100,21 +100,15 @@ exports.create = function (req, res) {
   group.creator = req.user._id;
   group.admins = [req.user._id];
   Group.create(group, function (err, group) {
-    if (err) {
-      return handleError(res, err);
-    }
+    if (err) { return handleError(res, err); }
     graphModel.reflect(group, to_graph(group), function (err) {
-      if (err) {
-        return handleError(res, err);
-      }
-      console.log('success');
+      if (err) { return handleError(res, err); }
       graphModel.relate_ids(group._id, 'CREATED_BY', req.user._id);
       graphModel.relate_ids(req.user._id, 'FOLLOW', group._id);
       graphModel.relate_ids(req.user._id, 'GROUP_ADMIN', group._id);
-      if (utils.defined(req.body.business_id)) {
-        graphModel.relate_ids(group._id, 'FOLLOW', req.body.business_id);
+      if (group.entity_type === 'BUSINESS' && utils.defined(group.entity.business)) {
+        graphModel.relate_ids(group._id, 'FOLLOW', group.entity.business._id);
       }
-
       group_activity(group, "create");
     });
     return res.json(201, group);
