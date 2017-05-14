@@ -11,7 +11,7 @@ import { Platform,
 import {connect} from 'react-redux';
 import {actions} from 'react-native-navigation-redux-helpers';
 import {Container, Content, Text, InputGroup, Input, Button, Icon, View,Header,Item,Picker,Footer} from 'native-base';
-
+import store from 'react-native-simple-store';
 import AddFormHeader from '../../header/addFormHeader';
 
 
@@ -26,7 +26,8 @@ let userApi = new UserApi();
 
 import GroupApi from "../../../api/groups"
 let groupApi = new GroupApi();
-
+import BusinessApi from "../../../api/business"
+let businessApi = new BusinessApi();
 const {
     replaceAt,
 } = actions;
@@ -78,6 +79,8 @@ class AddGroup extends Component {
             groupType:'USERS',
             path:'',
             image: '',
+            business:',',
+            services:[]
 
 
 
@@ -88,7 +91,13 @@ class AddGroup extends Component {
 
     }
 
+    selectBusiness(value){
+        this.setState({
+            business:value
+        })
 
+
+    }
 
 
     async componentWillMount(){
@@ -97,10 +106,23 @@ class AddGroup extends Component {
           this.setState({
               users:users
           })
+            let response = await businessApi.getAll();
+            if (response) {
+                this.initBusiness(response);
+            }
         }catch (error){
             console.log(error);
         }
 
+    }
+
+
+    initBusiness(responseData){
+
+        this.setState({
+            services: responseData,
+            business: responseData[0]._id
+        });
     }
 
     replaceRoute(route) {
@@ -116,15 +138,37 @@ class AddGroup extends Component {
     }
 
     async saveFormData(){
-        let group = {
-            name : this.state.name,
-            description : this.state.info,
-            entity_type: this.state.groupType,
-            add_policy: this.state.groupPolocy,
-            image:this.state.image,
-            entity:this.state.selectedUsers
+        let group = {};
+        if(this.state.groupType == 'USERS'){
+            let userId = await store.get('user_id');
+            group = {
+                name : this.state.name,
+                description : this.state.info,
+                entity_type: this.state.groupType,
+                add_policy: this.state.groupPolocy,
+                image:this.state.image,
+                groupUsers:this.state.selectedUsers,
+                entity: {
+                    user: userId
+                }
+            };
+        }else{
+            if(this.state.groupType == 'BUSINESS'){
+                group = {
+                    name : this.state.name,
+                    description : this.state.info,
+                    entity_type: this.state.groupType,
+                    add_policy: this.state.groupPolocy,
+                    image:this.state.image,
+                    groupUsers:this.state.selectedUsers,
+                    entity: {
+                        business:this.state.business
+                    }
 
-        };
+                };
+            }
+        }
+
 
         try{
             let result = await groupApi.createGroup(group);
@@ -262,7 +306,27 @@ class AddGroup extends Component {
                         label={s.label}/>
                 }) }
         </Picker>
+        let BusinessPiker = undefined;
 
+        if(this.state.groupType == 'BUSINESS' ){
+            BusinessPiker = <Picker
+                iosHeader="Select Business"
+                mode="dropdown"
+                selectedValue={this.state.business}
+                onValueChange={this.selectBusiness.bind(this)}>
+
+                {
+
+
+                    this.state.services.map((s, i) => {
+                        return <Item
+                            key={i}
+                            value={s._id}
+                            label={s.name} />
+                    }) }
+            </Picker>
+
+        }
 
         return (
             <Container>
@@ -299,6 +363,7 @@ class AddGroup extends Component {
                     </Item>
                     {addPolicyTag}
                     {groupTypeTag}
+                    {BusinessPiker}
                     <Button  transparent onPress={() => this.showUsers(true)}>
                         <Text>Select Users </Text>
                         {users}

@@ -91,9 +91,10 @@ class Login extends Component {
 
     calc_login_status() {
         return new Promise(async(resolve, reject) => {
-
+            await userApi.getUser();
             const _id = await store.get('user_id');
             if (!_id) {
+
                 this.replaceRoute('login');
                 return resolve(true);
             }
