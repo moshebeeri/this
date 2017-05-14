@@ -14,6 +14,7 @@ router.get('/add/user/:user/:to_group', auth.isAuthenticated(), controller.add_u
 router.post('/add/users/:to_group', auth.isAuthenticated(), controller.add_users);
 router.get('/following/groups/:group/:skip/:limit', auth.isAuthenticated(), controller.following_groups);
 router.get('/following/users/:group/:skip/:limit', auth.isAuthenticated(), controller.following_users);
+router.get('/user/follow/:skip/:limit', auth.isAuthenticated(), controller.user_follow);
 //This REST API is not yet functional
 router.get('/following/:group/:skip/:limit', auth.isAuthenticated(), controller.following);
 router.get('/my/groups/:skip/:limit', auth.isAuthenticated(), controller.my_groups);

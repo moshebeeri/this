@@ -428,6 +428,20 @@ exports.following_users = function (req, res) {
     });
 };
 
+exports.user_follow = function (req, res) {
+  let skip = req.params.skip;
+  let limit = req.params.limit;
+
+  graphModel.query_objects(Group,
+    `MATCH (u:user {_id:'${req.user._id}'})-[r:FOLLOW]->(g:group) RETURN g._id as _id`,
+    'order by r.timestamp desc', skip, limit, function (err, users) {
+      if (err) return handleError(res, err);
+      return res.status(200).json(users);
+    });
+};
+
+
+
 exports.my_groups = function (req, res) {
   let userId = req.user._id;
   let skip = req.params.skip;
