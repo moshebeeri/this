@@ -62,7 +62,13 @@ export default class GenericListManager extends Component {
                 rowsView: response
             })
 
-
+            let setState = this.setState.bind(this);
+            DeviceEventEmitter.addListener(this.props.addComponent, (e)=>{
+                let rows = response;
+                rows.push(e);
+                setState({
+                    rowsView: rows,
+                })})
         }catch (error){
             console.log(error);
         }
@@ -97,13 +103,7 @@ export default class GenericListManager extends Component {
             this.setupImpagination();
         }
 
-        let state = this.setState.bind(this);
-        DeviceEventEmitter.addListener(this.props.addComponent, (e)=>{
-            let rows = state.rowsView;
-            rows.push(e);
-            state({
-                rowsView: rows,
-            })})
+
     }
 
     render() {

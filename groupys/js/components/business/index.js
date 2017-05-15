@@ -51,7 +51,7 @@ export default class Business extends Component {
 
 
         return (
-            <GenericListManager title="Business" component="home" addComponent="add-business" api={this}
+            <GenericListManager title="Business" component="home" addComponent="addBusiness" api={this}
                                 ItemDetail={GenericListView}/>
         );
     }
