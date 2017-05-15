@@ -169,21 +169,30 @@ exports.promotions_malls = function (req, res) {
   });
 };
 exports.test_me = function (req, res) {
-  var gaussian = require('gaussian');
-  var distribution = gaussian(0,1);
+  const units = 100;
+  const starts = 20;
+  const end = 50;
+
+  const gaussian = require('gaussian');
+  const ss = require('simple-statistics');
+
+  const vars =[starts, end];
+  const mean = ss.mean(vars);
+  var distribution = gaussian(mean, ss.variance(vars));
 // Take a random sample using inverse transform sampling method.
   //var sample = distribution.ppf(Math.random());
   let a = {
     pdf : {
-      val: distribution.cdf(0),
+      val: distribution.cdf(mean),
       msg: "the probability density function, which describes the probability of a random variable taking on the value x"
     },
     cdf : {
       val: distribution.cdf(.75),
-      msg: "++ the cumulative distribution function, which describes the probability of a random variable falling in the interval (−∞, x]"
+      msg: "the cumulative distribution function, which describes the probability of a random variable falling in the interval (−∞, x]"
     },
     ppf : {
-      val: distribution.ppf(.5),
+      val: distributiodQQbGHny2
+      ,
       msg:"the percent point function, the inverse of cdf"
     }
   };
