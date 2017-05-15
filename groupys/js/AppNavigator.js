@@ -25,6 +25,7 @@ import General from './components/general';
 import Signup from './components/signup/';
 import SideBar from './components/sideBar';
 import Application from './components/app';
+import GroupFeeds from './components/group-feeds';
 
 
 import {statusBarColor} from './themes/base-theme';
@@ -113,8 +114,9 @@ class AppNavigator extends Component {
 
             case 'group':
                 return <Group />;
+            case 'groupfeeds':
 
-
+                return <GroupFeeds/>
 
             case 'promotions':
                 return <Promotions />;

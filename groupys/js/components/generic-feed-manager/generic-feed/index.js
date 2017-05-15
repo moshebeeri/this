@@ -11,7 +11,7 @@ const {
 ;
 
 
-class GenericFeedItem extends Component {
+export default class GenericFeedItem extends Component {
 
 
 
@@ -174,14 +174,3 @@ class GenericFeedItem extends Component {
 }
 
 
-function bindActions(dispatch) {
-    return {
-        replaceAt: (routeKey, route, key) => dispatch(replaceAt(routeKey, route, key)),
-    };
-}
-
-const mapStateToProps = state => ({
-    navigation: state.cardNavigation,
-});
-
-export default connect(mapStateToProps, bindActions)(GenericFeedItem);

@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import {Image, Platform} from 'react-native';
+import {Image, Platform,StyleSheet} from 'react-native';
 import {connect} from 'react-redux';
 import {actions} from 'react-native-navigation-redux-helpers';
 import {Container, Content, Text,Title, InputGroup,
@@ -12,23 +12,18 @@ import Feeds from '../feed/index'
 import Promotions from '../promtions/index'
 import Groups from '../groups/index'
 
-import store from 'react-native-simple-store';
 import LocationApi from '../../api/location'
 import ContactApi from '../../api/contacts'
 import BackgroundTimer from 'react-native-background-timer';
 let locationApi = new LocationApi();
 let contactApi = new ContactApi();
-const {
-    replaceAt,
-} = actions;
 
-class ApplicationManager extends Component {
 
-    static propTypes = {
-        replaceAt: React.PropTypes.func,
-        navigation: React.PropTypes.shape({
-            key: React.PropTypes.string,
-        }),
+export default class ApplicationManager extends Component {
+
+    static navigationOptions = {
+        headerStyle: { position: "absolute" },
+
     };
 
 
@@ -36,33 +31,6 @@ class ApplicationManager extends Component {
         super(props)
 
         let initialPage = 0;
-
-         if(this.props.scene){
-             if(this.props.scene.scenes && this.props.scene.scenes.length == 2){
-                 let productKey = this.props.scene.scenes[1].route.key;
-                 switch (productKey){
-                     case 'home':
-                         initialPage =  0;
-                         break;
-                     case 'add-product':
-                         initialPage =  1;
-                         break;
-                     case 'add-business':
-                         initialPage =  2;
-                         break;
-                     case 'add-promotions':
-                         initialPage =  3;
-                         break;
-                     case 'add-group':
-                         initialPage =  4;
-                         break;
-                 }
-
-
-             }
-
-
-         }
 
 
         this.state = {
@@ -113,7 +81,7 @@ class ApplicationManager extends Component {
                  component ='add-product'
                  break;
              case 2:
-                 component ='add-business'
+                 component ='addBusiness'
                  break;
              case 3:
                  component ='add-promotions'
@@ -136,10 +104,6 @@ class ApplicationManager extends Component {
 
 
 
-
-    replaceRoute(route) {
-        this.props.replaceAt(this.props.component, {key: route}, this.props.navigation.key);
-    }
 
 
     extractTabIndexFromNavigation(){
@@ -183,7 +147,8 @@ class ApplicationManager extends Component {
         return (
             <Container>
 
-                <GeneralComponentHeader     showAction = {showAction} current='home' to={this.state.addComponent} />
+                <GeneralComponentHeader   navigate = {this.props.navigation.navigate} showAction = {showAction} current='home' to={this.state.addComponent} />
+
 
 
                 <Tabs initialPage={index} onChangeTab={this.onChangeTab.bind(this)} style={{ backgroundColor: '#fff',}}>
@@ -191,16 +156,19 @@ class ApplicationManager extends Component {
                         <Feeds index={0} navigateAction={this.headerAction.bind(this)}/>
                     </Tab>
                     <Tab  heading={ <TabHeading><Text style={{ color:'black',fontSize: 11,}}>Products</Text></TabHeading>}>
-                        <Product index={1} navigateAction={this.headerAction.bind(this)}/>
+                        <Text>tab 2</Text>
+                        {/*<Product index={1} navigateAction={this.headerAction.bind(this)}/>*/}
                     </Tab>
                     <Tab  heading={ <TabHeading><Text style={{ color:'black',fontSize: 11,}}>Buiesness</Text></TabHeading>}>
                         <Business  index={2} navigateAction={this.headerAction.bind(this)}/>
                     </Tab>
                     <Tab   heading={ <TabHeading><Text style={{ color:'black',fontSize: 11,}}>Promotions</Text></TabHeading>}>
-                        <Promotions  index={3} navigateAction={this.headerAction.bind(this)}/>
+                        <Text>tab 4</Text>
+                        {/*<Promotions  index={3} navigateAction={this.headerAction.bind(this)}/>*/}
                     </Tab>
                     <Tab   heading={ <TabHeading><Text style={{ color:'black',fontSize: 11,}}>Groups</Text></TabHeading>}>
-                        <Groups  index={4} navigateAction={this.headerAction.bind(this)}/>
+                        <Text>tab 5</Text>
+                        {/*<Groups  index={4} navigateAction={this.headerAction.bind(this)}/>*/}
                     </Tab>
                 </Tabs>
 
@@ -210,14 +178,4 @@ class ApplicationManager extends Component {
 }
 
 
-function bindActions(dispatch) {
-    return {
-        replaceAt: (routeKey, route, key) => dispatch(replaceAt(routeKey, route, key)),
-    };
-}
 
-const mapStateToProps = state => ({
-    navigation: state.cardNavigation,
-});
-
-export default connect(mapStateToProps, bindActions)(ApplicationManager);
