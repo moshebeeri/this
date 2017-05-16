@@ -4,39 +4,23 @@ import { connect } from 'react-redux';
 import { Platform} from 'react-native';
 import { Icon, View, Button, InputGroup,Tabs,Tab,TabHeading,Input,Text,Header } from 'native-base';
 import {actions} from 'react-native-navigation-redux-helpers';
-import { openDrawer } from '../../actions/drawer';
-import navigateTo from '../../actions/sideBarNav';
 
 import styles from './styles';
 import ContactApi from '../../api/contacts'
 let contactApi = new ContactApi();
-const {
-    replaceAt,
-} = actions;
 
 
-class GeneralComponentHeader extends Component {
+
+export default class GeneralComponentHeader extends Component {
+
+
     constructor(props) {
         super(props);
 
 
     }
 
-  static propTypes = {
-    openDrawer: React.PropTypes.func,
-    navigateTo: React.PropTypes.func,
-  };
 
-  navigateTo(route) {
-    this.props.navigateTo(route, 'home');
-  }
-
-
-    replaceRoute(route) {
-        this.props.replaceAt(this.props.current, {key: route}, this.props.navigation.key);
-
-
-    }
 
     refreshContact(){
         contactApi.syncContacts();
@@ -45,10 +29,11 @@ class GeneralComponentHeader extends Component {
 
     render() {
       let action = undefined;
+
       if(this.props.showAction && this.props.showAction==true){
           action =  <Button style={{ backgroundColor: 'transparent'}} iconLeft light>
 
-              <Icon style = {{width:20,backgroundColor: 'transparent'}} name='create'  onPress={() =>  this.replaceRoute(this.props.to)}  />
+              <Icon style = {{width:20,backgroundColor: 'transparent'}} name='create'  onPress={() =>  this.props.navigate(this.props.to)}  />
           </Button>;
       }
 
@@ -92,16 +77,4 @@ class GeneralComponentHeader extends Component {
   }
 }
 
-function bindAction(dispatch) {
-  return {
-      replaceAt: (routeKey, route, key) => dispatch(replaceAt(routeKey, route, key)),
-    openDrawer: () => dispatch(openDrawer()),
-    navigateTo: (route, homeRoute) => dispatch(navigateTo(route, homeRoute)),
-  };
-}
 
-const mapStateToProps = state => ({
-  navigation: state.cardNavigation,
-});
-
-export default connect(mapStateToProps, bindAction)(GeneralComponentHeader);

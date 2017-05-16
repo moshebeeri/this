@@ -7,20 +7,11 @@ import {Container, Content, Text,Title, InputGroup, Input, Button, Icon, View,He
 import store from 'react-native-simple-store';
 
 import Dataset from 'impagination';
+import {DeviceEventEmitter} from 'react-native'
 
 
-const {
-    replaceAt,
-} = actions;
 
-class GenericListManager extends Component {
-
-    static propTypes = {
-        replaceAt: React.PropTypes.func,
-        navigation: React.PropTypes.shape({
-            key: React.PropTypes.string,
-        }),
-    };
+export default class GenericListManager extends Component {
 
 
     constructor(props) {
@@ -71,7 +62,13 @@ class GenericListManager extends Component {
                 rowsView: response
             })
 
-
+            let setState = this.setState.bind(this);
+            DeviceEventEmitter.addListener(this.props.addComponent, (e)=>{
+                let rows = response;
+                rows.push(e);
+                setState({
+                    rowsView: rows,
+                })})
         }catch (error){
             console.log(error);
         }
@@ -96,9 +93,6 @@ class GenericListManager extends Component {
 
 
 
-    replaceRoute(route) {
-        this.props.replaceAt(this.props.component, {key: route}, this.props.navigation.key);
-    }
 
 
     componentWillMount(){
@@ -108,6 +102,7 @@ class GenericListManager extends Component {
         if(this.props.api.fetchApi) {
             this.setupImpagination();
         }
+
 
     }
 
@@ -140,14 +135,3 @@ class GenericListManager extends Component {
 }
 
 
-function bindActions(dispatch) {
-    return {
-        replaceAt: (routeKey, route, key) => dispatch(replaceAt(routeKey, route, key)),
-    };
-}
-
-const mapStateToProps = state => ({
-    navigation: state.cardNavigation,
-});
-
-export default connect(mapStateToProps, bindActions)(GenericListManager);

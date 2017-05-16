@@ -7,22 +7,9 @@ import {Container, Content, Text,Title, InputGroup,
 import SGListView from 'react-native-sglistview';
 import BackgroundTimer from 'react-native-background-timer';
 
- import Dataset from 'impagination';
 
-//
+export default class GenericFeedManager extends Component {
 
-const {
-    replaceAt,
-} = actions;
-
-class GenericFeedManager extends Component {
-
-    static propTypes = {
-        replaceAt: React.PropTypes.func,
-        navigation: React.PropTypes.shape({
-            key: React.PropTypes.string,
-        }),
-    };
 
 
     constructor(props) {
@@ -184,14 +171,3 @@ class GenericFeedManager extends Component {
 }
 
 
-function bindActions(dispatch) {
-    return {
-        replaceAt: (routeKey, route, key) => dispatch(replaceAt(routeKey, route, key)),
-    };
-}
-
-const mapStateToProps = state => ({
-    navigation: state.cardNavigation,
-});
-
-export default connect(mapStateToProps, bindActions)(GenericFeedManager);

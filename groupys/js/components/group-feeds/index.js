@@ -10,7 +10,7 @@ const {
   replaceAt,
 } = actions;
 
-
+import GeneralComponentHeader from '../header/index';
 import login from './general-theme';
 import GenericFeedManager from '../generic-feed-manager/index'
 import GenericFeedItem from '../generic-feed-manager/generic-feed'
@@ -160,7 +160,14 @@ const feeds = [
 
     ];
 
-export default class Feed extends Component {
+class GroupFeed extends Component {
+
+  static propTypes = {
+    replaceAt: React.PropTypes.func,
+    navigation: React.PropTypes.shape({
+      key: React.PropTypes.string,
+    }),
+  };
 
   constructor(props) {
     super(props);
@@ -172,17 +179,20 @@ export default class Feed extends Component {
 
 
 
+    async componentWillMount(){
+        this.props.navigateAction('home',this.props.index)
+    }
 
 
      async getAll(direction,id){
-        let feed = await feedApi.getAll(direction,id);
-      return feed;
+
+      return feeds;
     }
 
 
     fetchApi(pageOffset,pageSize ) {
 
-         return feedApi.getAll();
+         return feeds;
         // return new Promise(async function(resolve, reject) {
         //         console.log('featching: '+ pageOffset);
         //
@@ -230,11 +240,27 @@ export default class Feed extends Component {
     render() {
 
         return (
-            <GenericFeedManager api={this} title='Feeds' ItemDetail={GenericFeedItem}></GenericFeedManager>
+            <Container>
 
+                <GeneralComponentHeader     showAction = {false} current='home' to='home' />
+
+
+                <GenericFeedManager api={this} title='Feeds' ItemDetail={GenericFeedItem}></GenericFeedManager>
+            </Container>
         );
     }
 
 }
 
 
+function bindActions(dispatch) {
+  return {
+    replaceAt: (routeKey, route, key) => dispatch(replaceAt(routeKey, route, key)),
+  };
+}
+
+const mapStateToProps = state => ({
+  navigation: state.cardNavigation,
+});
+
+export default connect(mapStateToProps, bindActions)(GroupFeed);

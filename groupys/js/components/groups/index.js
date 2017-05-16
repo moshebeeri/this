@@ -4,6 +4,7 @@ import {connect} from 'react-redux';
 import {actions} from 'react-native-navigation-redux-helpers';
 import {Container, Content, Text,Title, InputGroup, Input, Button, Icon, View,Header, Body, Right, ListItem, Thumbnail,Left} from 'native-base';
 
+import GenericListGroupView from '../generic-list-manager/generic-list-group-view/index'
 import GenericListView from '../generic-list-manager/generic-list-view/index'
 
 import GenericListManager from '../generic-list-manager/index'

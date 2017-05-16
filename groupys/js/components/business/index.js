@@ -9,27 +9,24 @@ import GenericListManager from '../generic-list-manager/index';
 import GenericListView from '../generic-list-manager/generic-list-view/index'
 import BusinessApi from "../../api/business"
 let businessApi = new BusinessApi();
-const {
-    replaceAt,
-} = actions;
 
 
-class Business extends Component {
 
-    static propTypes = {
-        replaceAt: React.PropTypes.func,
-        navigation: React.PropTypes.shape({
-            key: React.PropTypes.string,
-        }),
-    };
+export default class Business extends Component {
+
+
 
     constructor(props) {
         super(props);
+        this.state = {
+            refresh: '',
+        }
 
 
 
 
     }
+
 
     async getAll(){
        let response =  await  businessApi.getAll();
@@ -47,27 +44,15 @@ class Business extends Component {
 
     async componentWillMount(){
         this.props.navigateAction('add-business',this.props.index)
+
     }
 
     render() {
 
 
         return (
-            <GenericListManager title="Business" component="home" addComponent="add-business" api={this}
+            <GenericListManager title="Business" component="home" addComponent="addBusiness" api={this}
                                 ItemDetail={GenericListView}/>
         );
     }
 }
-
-
-function bindActions(dispatch) {
-    return {
-        replaceAt: (routeKey, route, key) => dispatch(replaceAt(routeKey, route, key)),
-    };
-}
-
-const mapStateToProps = state => ({
-    navigation: state.cardNavigation,
-});
-
-export default connect(mapStateToProps, bindActions)(Business);

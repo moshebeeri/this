@@ -10,9 +10,6 @@ import CountryPicker from 'react-native-country-picker-modal'
 
 import store from 'react-native-simple-store';
 
-const {
-  replaceAt,
-} = actions;
 
 const logo = require('../../../images/logo.png');
 import login from './login-theme';
@@ -29,14 +26,12 @@ let lu = new LoginUtils();
 
 const global = require('../../conf/global');
 let calc_login = true;
-class Login extends Component {
+export default  class Login extends Component {
 
-  static propTypes = {
-    replaceAt: React.PropTypes.func,
-    navigation: React.PropTypes.shape({
-      key: React.PropTypes.string,
-    }),
-  };
+    static navigationOptions = {
+        headerStyle: { position: "absolute" },
+
+    };
 
   constructor(props) {
     super(props);
@@ -66,6 +61,7 @@ class Login extends Component {
 
   ///sss
   async login() {
+
       this.setState ({error: ''});
       try {
           let response = await loginApi.login(this.refs.phone.getValue(), this.state.password);
@@ -112,8 +108,7 @@ class Login extends Component {
                     this.state.recover_account = true;
                 }
                 else{
-                    console.log('this.replaceRoute(\'error\') should go to error page');
-                    this.replaceRoute('login');
+
                 }
                 return resolve(true);
             }
@@ -147,8 +142,10 @@ class Login extends Component {
 
 
     replaceRoute(route) {
-    this.props.replaceAt('login', { key: route }, this.props.navigation.key);
-  }
+
+        this.props.navigation.navigate(route);
+    // this.props.replaceAt('login', { key: route }, this.props.navigation.key);
+}
 
     render() {
 
@@ -240,14 +237,3 @@ class Login extends Component {
 }
 
 
-function bindActions(dispatch) {
-  return {
-    replaceAt: (routeKey, route, key) => dispatch(replaceAt(routeKey, route, key)),
-  };
-}
-
-const mapStateToProps = state => ({
-  navigation: state.cardNavigation,
-});
-
-export default connect(mapStateToProps, bindActions)(Login);

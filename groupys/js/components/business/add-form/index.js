@@ -14,25 +14,17 @@ import {Container, Content, Text, InputGroup, Input, Button, Icon, View,Header,I
 
 import AddFormHeader from '../../header/addFormHeader';
 
+
 import EntityUtils from "../../../utils/createEntity";
 
 let entityUtils = new EntityUtils();
 import ImagePicker from 'react-native-image-crop-picker';
 import store from 'react-native-simple-store';
 
-const {
-    replaceAt,
-} = actions;
+import {DeviceEventEmitter} from 'react-native'
 
+export default class AddBusiness extends Component {
 
-class AddBusiness extends Component {
-
-    static propTypes = {
-        replaceAt: React.PropTypes.func,
-        navigation: React.PropTypes.shape({
-            key: React.PropTypes.string,
-        }),
-    };
 
     constructor(props) {
         super(props);
@@ -78,7 +70,8 @@ class AddBusiness extends Component {
 
 
     replaceRoute(route) {
-        this.props.replaceAt('add-business', {key: route}, this.props.navigation.key);
+
+        this.props.navigation.goBack();
     }
 
 
@@ -105,6 +98,7 @@ class AddBusiness extends Component {
     }
 
     formSuccess(response){
+        DeviceEventEmitter.emit('addBusiness',  response);
         store.save("b-id",response._id);
         this.replaceRoute('home');
     }
@@ -166,17 +160,7 @@ class AddBusiness extends Component {
         }
         return (
             <Container>
-                <Header
-                    style={{ flexDirection: 'column',
-                        height: 60,
-                        elevation: 0,
-                        paddingTop: (Platform.OS === 'ios') ? 20 : 3,
-                        justifyContent: 'space-between',
-                    }}
-                >
-                    <AddFormHeader currentLocation="add-business" backLocation="home" />
 
-                </Header>
 
                 <Content  style={{backgroundColor: '#fff'}}>
                     <Form>
@@ -257,14 +241,3 @@ class AddBusiness extends Component {
 }
 
 
-function bindActions(dispatch) {
-    return {
-        replaceAt: (routeKey, route, key) => dispatch(replaceAt(routeKey, route, key)),
-    };
-}
-
-const mapStateToProps = state => ({
-    navigation: state.cardNavigation,
-});
-
-export default connect(mapStateToProps, bindActions)(AddBusiness);
