@@ -6,16 +6,9 @@ import { Platform,Provider
 import {Container, Content, Text, InputGroup, Input, Button,Body ,Icon,Left,
     View,Header,Item,Footer,Picker,ListItem,Right,Thumbnail} from 'native-base';
 
-import CheckBox from 'react-native-check-box'
-import {actions} from 'react-native-navigation-redux-helpers';
-import { openDrawer } from '../../../../actions/drawer';
-import navigateTo from '../../../../actions/sideBarNav';
-import AddFormHeader from '../../../header/addFormHeader';
-
-import styles from './styles';
 
 
-class SelectProductsComponent extends Component {
+export default class SelectProductsComponent extends Component {
 
     constructor(props) {
         super(props);
@@ -89,17 +82,3 @@ class SelectProductsComponent extends Component {
         );
   }
 }
-
-function bindAction(dispatch) {
-  return {
-      replaceAt: (routeKey, route, key) => dispatch(replaceAt(routeKey, route, key)),
-    openDrawer: () => dispatch(openDrawer()),
-    navigateTo: (route, homeRoute) => dispatch(navigateTo(route, homeRoute)),
-  };
-}
-
-const mapStateToProps = state => ({
-  navigation: state.cardNavigation,
-});
-
-export default connect(mapStateToProps, bindAction)(SelectProductsComponent);
