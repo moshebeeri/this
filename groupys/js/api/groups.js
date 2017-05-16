@@ -43,7 +43,7 @@ class GroupsApi
 
                 let responseData = await response.json();
                 if(group.groupUsers){
-                    this.addUsersToGroup(group);
+                    this.addUsersToGroup(group,responseData);
                 }
 
 
@@ -60,7 +60,7 @@ class GroupsApi
 
     }
 
-    addUsersToGroup(group){
+    addUsersToGroup(group,responseData){
         let addGroupsUsers = this.addUserToGroup.bind(this);
         group.groupUsers.forEach( function (user) {
             addGroupsUsers(user._id,responseData._id);

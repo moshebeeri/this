@@ -12,7 +12,7 @@ import {connect} from 'react-redux';
 import {actions} from 'react-native-navigation-redux-helpers';
 import {Container, Content, Text, InputGroup, Input, Button, Icon, View,Header,Item,Picker,Footer} from 'native-base';
 import store from 'react-native-simple-store';
-import AddFormHeader from '../../header/addFormHeader';
+
 
 
 
@@ -28,9 +28,6 @@ import GroupApi from "../../../api/groups"
 let groupApi = new GroupApi();
 import BusinessApi from "../../../api/business"
 let businessApi = new BusinessApi();
-const {
-    replaceAt,
-} = actions;
 
 const groupPolicy = [
     {
@@ -54,15 +51,9 @@ const groupType = [
     }
 
 ]
-class AddGroup extends Component {
 
-    static propTypes = {
-        replaceAt: React.PropTypes.func,
-        navigation: React.PropTypes.shape({
-            key: React.PropTypes.string,
-        }),
-    };
-
+import {DeviceEventEmitter} from 'react-native'
+export default class AddGroup extends Component {
 
     constructor(props) {
         super(props);
@@ -126,7 +117,7 @@ class AddGroup extends Component {
     }
 
     replaceRoute(route) {
-        this.props.replaceAt('add-group', {key: route}, this.props.navigation.key);
+        this.props.navigation.goBack();
     }
 
 
@@ -172,7 +163,7 @@ class AddGroup extends Component {
 
         try{
             let result = await groupApi.createGroup(group);
-            console.log(result)
+            DeviceEventEmitter.emit('AddGroups',  result);
             this.replaceRoute('home');
         }catch (e){
             console.log('failed adding group');
@@ -245,16 +236,12 @@ class AddGroup extends Component {
     }
 
     showUsers(show){
-        this.setState({
-            showUsers: show
-        })
+        let users = this.state.users;
+       this.props.navigation.navigate('SelectUsersComponent',{users:users ,selectUsers: this.selectUsers.bind(this)})
 
     }
     render() {
 
-        if(this.state.showUsers){
-            return <SelectUsersComponent selectUsers = {this.selectUsers.bind(this)}users={this.state.users}> </SelectUsersComponent>
-        }
 
         let image ;
         if(this.state.path){
@@ -330,16 +317,7 @@ class AddGroup extends Component {
 
         return (
             <Container>
-                <Header
-                    style={{ flexDirection: 'column',
-                        height: 60,
-                        elevation: 0,
-                        paddingTop: (Platform.OS === 'ios') ? 20 : 3,
-                        justifyContent: 'space-between',
-                    }}
-                >
-                    <AddFormHeader currentLocation="add-group" backLocation="home" />
-                </Header>
+
 
                 <Content  style={{backgroundColor: '#fff'}}>
 
@@ -385,16 +363,3 @@ class AddGroup extends Component {
         );
     }
 }
-
-
-function bindActions(dispatch) {
-    return {
-        replaceAt: (routeKey, route, key) => dispatch(replaceAt(routeKey, route, key)),
-    };
-}
-
-const mapStateToProps = state => ({
-    navigation: state.cardNavigation,
-});
-
-export default connect(mapStateToProps, bindActions)(AddGroup);

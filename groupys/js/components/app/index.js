@@ -75,7 +75,7 @@ export default class ApplicationManager extends Component {
          let component = 'home';
          switch (ref.i){
              case 0:
-                 component ='add-producthome'
+
                  break;
              case 1:
                  component ='add-product'
@@ -87,7 +87,7 @@ export default class ApplicationManager extends Component {
                  component ='addPromotions'
                  break;
              case 4:
-                 component ='add-group'
+                 component ='AddGroups'
                  break;
 
          }
@@ -166,8 +166,7 @@ export default class ApplicationManager extends Component {
                         <Promotions  index={3} navigateAction={this.headerAction.bind(this)}/>
                     </Tab>
                     <Tab   heading={ <TabHeading><Text style={{ color:'black',fontSize: 11,}}>Groups</Text></TabHeading>}>
-                        <Text>tab 5</Text>
-                        {/*<Groups  index={4} navigateAction={this.headerAction.bind(this)}/>*/}
+                        <Groups  index={4} navigateAction={this.headerAction.bind(this)}/>
                     </Tab>
                 </Tabs>
 

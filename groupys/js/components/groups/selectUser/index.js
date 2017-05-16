@@ -10,26 +10,20 @@ import {Container, Content, Text, InputGroup, Input, Button,Body ,Icon,Left,
 import {actions} from 'react-native-navigation-redux-helpers';
 
 import navigateTo from '../../../actions/sideBarNav';
-import AddFormHeader from '../../header/addFormHeader';
-
-import styles from './styles';
-
-const {
-    replaceAt,
-} = actions;
+import store from 'react-native-simple-store';
 
 
-class SelectUsersComponent extends Component {
+export default class SelectUsersComponent extends Component {
 
     constructor(props) {
         super(props);
 
-        let selectCheckBox = props.users.map(function (user) {
+        let selectCheckBox = this.props.navigation.state.params.users.map(function (user) {
             return false
         });
         this.state = {
 
-            users:props.users,
+            users:this.props.navigation.state.params.users,
             selectCheckBox: selectCheckBox
 
 
@@ -57,7 +51,8 @@ class SelectUsersComponent extends Component {
 
         })
 
-        this.props.selectUsers(selectedUsers);
+        this.props.navigation.state.params.selectUsers(selectedUsers);
+        this.props.navigation.goBack();
 
     }
 
@@ -100,17 +95,6 @@ class SelectUsersComponent extends Component {
         return ( <Container>
               <Content  style={{  backgroundColor: '#fff'}}>
 
-                <Header
-                    style={{ flexDirection: 'column',
-                        height: 60,
-                        elevation: 0,
-                        paddingTop: (Platform.OS === 'ios') ? 20 : 3,
-                        justifyContent: 'space-between',
-                    }}>
-                  <AddFormHeader currentLocation="add-group" backLocation="home" />
-
-                </Header>
-
 
                   { productsRows }
 
@@ -125,20 +109,8 @@ class SelectUsersComponent extends Component {
                 </Footer>
             </Container>
 
+
         );
   }
 }
 
-function bindAction(dispatch) {
-  return {
-      replaceAt: (routeKey, route, key) => dispatch(replaceAt(routeKey, route, key)),
-    openDrawer: () => dispatch(openDrawer()),
-    navigateTo: (route, homeRoute) => dispatch(navigateTo(route, homeRoute)),
-  };
-}
-
-const mapStateToProps = state => ({
-  navigation: state.cardNavigation,
-});
-
-export default connect(mapStateToProps, bindAction)(SelectUsersComponent);

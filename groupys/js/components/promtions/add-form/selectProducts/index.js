@@ -1,7 +1,7 @@
 
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { Platform
+import { Platform,Provider
 } from 'react-native'
 import {Container, Content, Text, InputGroup, Input, Button,Body ,Icon,Left,
     View,Header,Item,Footer,Picker,ListItem,Right,Thumbnail} from 'native-base';
@@ -13,10 +13,6 @@ import navigateTo from '../../../../actions/sideBarNav';
 import AddFormHeader from '../../../header/addFormHeader';
 
 import styles from './styles';
-
-const {
-    replaceAt,
-} = actions;
 
 
 class SelectProductsComponent extends Component {
@@ -76,25 +72,19 @@ class SelectProductsComponent extends Component {
               </Right>
             </ListItem>
         });
-        return ( <Container>
+        return (
+            <Provider>
+            <Container>
               <Content  style={{  backgroundColor: '#fff'}}>
 
-                <Header
-                    style={{ flexDirection: 'column',
-                        height: 60,
-                        elevation: 0,
-                        paddingTop: (Platform.OS === 'ios') ? 20 : 3,
-                        justifyContent: 'space-between',
-                    }}>
-                  <AddFormHeader currentLocation="add-promotions" backLocation="promotions" />
 
-                </Header>
 
 
                   { productsRows }
 
               </Content>
             </Container>
+            </Provider>
 
         );
   }
