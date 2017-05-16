@@ -21,19 +21,11 @@ import ImagePicker from 'react-native-image-crop-picker';
 import store from 'react-native-simple-store';
 import BusinessApi from "../../../api/business"
 
-const {
-    replaceAt,
-} = actions;
 
 let businessApi = new BusinessApi();
-class AddProduct extends Component {
+import {DeviceEventEmitter} from 'react-native'
+export default class AddProduct extends Component {
 
-    static propTypes = {
-        replaceAt: React.PropTypes.func,
-        navigation: React.PropTypes.shape({
-            key: React.PropTypes.string,
-        }),
-    };
 
 
     constructor(props) {
@@ -57,20 +49,6 @@ class AddProduct extends Component {
             formData:{}
         };
 
-
-        let stateFunc = this.setState.bind(this);
-         store.get('token').then(storeToken => {
-            stateFunc({
-                    token: storeToken
-                }
-            );
-        });
-        store.get('user_id').then(storeUserId => {
-            stateFunc({
-                userId: storeUserId
-                }
-            );
-        });
     }
 
 
@@ -79,6 +57,7 @@ class AddProduct extends Component {
     async componentWillMount(){
         try {
             let response = await businessApi.getAll();
+
             if (response) {
                 this.initBusiness(response);
             }
@@ -89,7 +68,7 @@ class AddProduct extends Component {
     }
 
     replaceRoute(route) {
-        this.props.replaceAt('add-product', {key: route}, this.props.navigation.key);
+        this.props.navigation.goBack();
     }
 
 
@@ -120,7 +99,7 @@ class AddProduct extends Component {
     }
 
     formSuccess(response){
-
+        DeviceEventEmitter.emit('AddProduct',  response);
         this.replaceRoute('home');
     }
 
@@ -221,16 +200,6 @@ class AddProduct extends Component {
 
         return (
             <Container>
-                <Header
-                    style={{ flexDirection: 'column',
-                        height: 60,
-                        elevation: 0,
-                        paddingTop: (Platform.OS === 'ios') ? 20 : 3,
-                        justifyContent: 'space-between',
-                    }}
-                >
-                    <AddFormHeader currentLocation="add-product" backLocation="home" />
-                </Header>
 
                 <Content  style={{backgroundColor: '#fff'}}>
 
@@ -286,15 +255,3 @@ class AddProduct extends Component {
     }
 }
 
-
-function bindActions(dispatch) {
-    return {
-        replaceAt: (routeKey, route, key) => dispatch(replaceAt(routeKey, route, key)),
-    };
-}
-
-const mapStateToProps = state => ({
-    navigation: state.cardNavigation,
-});
-
-export default connect(mapStateToProps, bindActions)(AddProduct);

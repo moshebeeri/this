@@ -78,7 +78,7 @@ export default class ApplicationManager extends Component {
 
                  break;
              case 1:
-                 component ='add-product'
+                 component ='AddProduct'
                  break;
              case 2:
                  component ='addBusiness'
@@ -156,8 +156,7 @@ export default class ApplicationManager extends Component {
                         <Feeds index={0} navigateAction={this.headerAction.bind(this)}/>
                     </Tab>
                     <Tab  heading={ <TabHeading><Text style={{ color:'black',fontSize: 11,}}>Products</Text></TabHeading>}>
-                        <Text>tab 2</Text>
-                        {/*<Product index={1} navigateAction={this.headerAction.bind(this)}/>*/}
+                        <Product index={1} navigateAction={this.headerAction.bind(this)}/>
                     </Tab>
                     <Tab  heading={ <TabHeading><Text style={{ color:'black',fontSize: 11,}}>Buiesness</Text></TabHeading>}>
                         <Business  index={2} navigateAction={this.headerAction.bind(this)}/>
