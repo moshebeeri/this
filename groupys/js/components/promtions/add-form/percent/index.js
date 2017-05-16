@@ -14,12 +14,9 @@ import AddFormHeader from '../../../header/addFormHeader';
 
 import styles from './styles';
 
-const {
-    replaceAt,
-} = actions;
 
 
-class PercentComponent extends Component {
+export default class PercentComponent extends Component {
 
     constructor(props) {
         super(props);
@@ -76,16 +73,3 @@ class PercentComponent extends Component {
   }
 }
 
-function bindAction(dispatch) {
-  return {
-      replaceAt: (routeKey, route, key) => dispatch(replaceAt(routeKey, route, key)),
-    openDrawer: () => dispatch(openDrawer()),
-    navigateTo: (route, homeRoute) => dispatch(navigateTo(route, homeRoute)),
-  };
-}
-
-const mapStateToProps = state => ({
-  navigation: state.cardNavigation,
-});
-
-export default connect(mapStateToProps, bindAction)(PercentComponent);

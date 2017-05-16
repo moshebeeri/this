@@ -10,16 +10,11 @@ import CheckBox from 'react-native-check-box'
 import {actions} from 'react-native-navigation-redux-helpers';
 import { openDrawer } from '../../../../actions/drawer';
 import navigateTo from '../../../../actions/sideBarNav';
-import AddFormHeader from '../../../header/addFormHeader';
-
-import styles from './styles';
-
-const {
-    replaceAt,
-} = actions;
 
 
-class PercentRangeComponent extends Component {
+
+
+export default class PercentRangeComponent extends Component {
 
     constructor(props) {
         super(props);
@@ -72,17 +67,3 @@ class PercentRangeComponent extends Component {
        </View>
   }
 }
-
-function bindAction(dispatch) {
-  return {
-      replaceAt: (routeKey, route, key) => dispatch(replaceAt(routeKey, route, key)),
-    openDrawer: () => dispatch(openDrawer()),
-    navigateTo: (route, homeRoute) => dispatch(navigateTo(route, homeRoute)),
-  };
-}
-
-const mapStateToProps = state => ({
-  navigation: state.cardNavigation,
-});
-
-export default connect(mapStateToProps, bindAction)(PercentRangeComponent);

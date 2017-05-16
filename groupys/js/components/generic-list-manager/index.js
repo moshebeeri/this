@@ -35,7 +35,9 @@ export default class GenericListManager extends Component {
 
     setupImpagination() {
         let fetchApi = this.props.api.fetchApi.bind(this);
+        let setState = this.setState.bind(this);
         let component = this.props.title;
+        let componentListener = this.props.addComponent;
         let dataset = new Dataset({
             pageSize: 8,
             observe: (rowsView) => {
@@ -46,8 +48,18 @@ export default class GenericListManager extends Component {
 
             fetch(pageOffset, pageSize, stats) {
                 let promise =  fetchApi(pageOffset + 1,pageSize );
-                promise.then(response => store.save(component,response))
+                promise.then(function(response){
+                    store.save(component,response);
+
+                    DeviceEventEmitter.addListener(componentListener, (e)=>{
+                        let rows = response;
+                        rows.push(e);
+                        setState({
+                            rowsView: rows,
+                        })});
+                });
                 return promise;
+
 
             }
         });
@@ -62,13 +74,7 @@ export default class GenericListManager extends Component {
                 rowsView: response
             })
 
-            let setState = this.setState.bind(this);
-            DeviceEventEmitter.addListener(this.props.addComponent, (e)=>{
-                let rows = response;
-                rows.push(e);
-                setState({
-                    rowsView: rows,
-                })})
+
         }catch (error){
             console.log(error);
         }

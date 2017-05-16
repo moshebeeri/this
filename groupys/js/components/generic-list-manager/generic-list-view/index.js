@@ -21,7 +21,7 @@ export default class GenericListView extends Component {
 
         let row = undefined
 
-        if(this.props.item.pictures.length > 0){
+        if(this.props.item.pictures && this.props.item.pictures.length > 0){
             row =  <ListItem key={this.props.index} thumbnail>
                 <Left>
                     <Thumbnail square size={80} source={{uri: this.props.item.pictures[0].pictures[3]}} />

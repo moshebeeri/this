@@ -13,15 +13,11 @@ import {actions} from 'react-native-navigation-redux-helpers';
 import {Container, Content, Text, InputGroup, Picker,Input, Button,Body ,Icon,Left,
     View,Header,Item,Footer,ListItem,Right,Thumbnail} from 'native-base';
 
-import AddFormHeader from '../../header/addFormHeader';
+
 import SelectProductsComponent from './selectProducts';
 
 var createEntity = require("../../../utils/createEntity");
 import ImagePicker from 'react-native-image-crop-picker';
-const {
-    replaceAt,
-} = actions;
-
 
 import BusinessApi from "../../../api/business"
 let businessApi = new BusinessApi();
@@ -34,7 +30,7 @@ let productApi = new ProductApi();
 import PercentComponent from "./percent/index"
 import PercentRangeComponent from "./precent-range/index"
 import DatePicker from 'react-native-datepicker'
-import store from 'react-native-simple-store';
+
 const types = [
     {
         value:'PERCENT',
@@ -121,14 +117,10 @@ const types = [
     ];
 
 
-class AddPromotion extends Component {
+import {DeviceEventEmitter} from 'react-native'
+export default class AddPromotion extends Component {
 
-    static propTypes = {
-        replaceAt: React.PropTypes.func,
-        navigation: React.PropTypes.shape({
-            key: React.PropTypes.string,
-        }),
-    };
+
 
 
 
@@ -160,21 +152,6 @@ class AddPromotion extends Component {
 
         }
 
-        let stateFunc = this.setState.bind(this);
-        store.get('token').then(storeToken => {
-            stateFunc({
-                    token: storeToken
-                }
-            );
-        });
-        store.get('user_id').then(storeUserId => {
-            stateFunc({
-                    creator: storeUserId
-                }
-            );
-        });
-
-        ;
     }
 
 
@@ -217,8 +194,9 @@ class AddPromotion extends Component {
     }
 
     replaceRoute(route) {
-        this.props.replaceAt('add-promotions', {key: route}, this.props.navigation.key);
+        this.props.navigation.goBack();
     }
+
 
    async saveFormData(){
 
@@ -272,7 +250,8 @@ class AddPromotion extends Component {
        }
 
         try {
-            await promotionApi.createPromotion(promotion);
+            let response = await promotionApi.createPromotion(promotion);
+            DeviceEventEmitter.emit('addPromotions',  response);
             this.replaceRoute('home');
         }catch (error){
             console.log(error);
@@ -501,17 +480,6 @@ class AddPromotion extends Component {
 
             return (
                 <Container>
-                    <Header
-                        style={{
-                            flexDirection: 'column',
-                            height: 60,
-                            elevation: 0,
-                            paddingTop: (Platform.OS === 'ios') ? 20 : 3,
-                            justifyContent: 'space-between',
-                        }}>
-                        <AddFormHeader currentLocation="add-promotions" backLocation="home"/>
-
-                    </Header>
 
                     <Content style={{backgroundColor: '#fff'}}>
                         <Item underline>
@@ -542,7 +510,7 @@ class AddPromotion extends Component {
                                    placeholder='Product Amount'/>
                         </Item>
                         <Item underline>
-                            <Input blurOnSubmit={true} returnKeyType='next' ref="4" onSubmitEditing={this.focusNextField.bind(this,"5")} value={this.state.retail_price}
+                            <Input blurOnSubmit={true} p='next' ref="4" onSubmitEditing={this.focusNextField.bind(this,"5")} value={this.state.retail_price}
                                    onChangeText={(retail_price) => this.setState({retail_price})}
                                    placeholder='Product Reatai Price'/>
                         </Item>
@@ -639,17 +607,6 @@ class AddPromotion extends Component {
 
             return (
                 <Container>
-                    <Header
-                        style={{
-                            flexDirection: 'column',
-                            height: 60,
-                            elevation: 0,
-                            paddingTop: (Platform.OS === 'ios') ? 20 : 3,
-                            justifyContent: 'space-between',
-                        }}>
-                        <AddFormHeader currentLocation="add-promotions" backLocation="home"/>
-
-                    </Header>
 
                     <Content style={{backgroundColor: '#fff'}}>
                         <Item underline>
@@ -715,16 +672,3 @@ class AddPromotion extends Component {
         }
     }
 }
-
-
-function bindActions(dispatch) {
-    return {
-        replaceAt: (routeKey, route, key) => dispatch(replaceAt(routeKey, route, key)),
-    };
-}
-
-const mapStateToProps = state => ({
-    navigation: state.cardNavigation,
-});
-
-export default connect(mapStateToProps, bindActions)(AddPromotion);

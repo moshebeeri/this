@@ -16,14 +16,8 @@ const {
 } = actions;
 
 
-class Promotions extends Component {
+export default class Promotions extends Component {
 
-    static propTypes = {
-        replaceAt: React.PropTypes.func,
-        navigation: React.PropTypes.shape({
-            key: React.PropTypes.string,
-        }),
-    };
     //
     // on: {
     //     business: this.state.business,
@@ -61,12 +55,6 @@ class Promotions extends Component {
     }
 
 
-
-
-    replaceRoute(route) {
-        this.props.replaceAt('יhome', {key: route}, this.props.navigation.key);
-    }
-
     async getAll(){
         let response =  await  promotionApi.getAll();
         return response;
@@ -82,40 +70,15 @@ class Promotions extends Component {
     }
 
     async componentWillMount(){
-       // .let promotions = await promotionApi.getAll();
-
-        // this.setState({
-        //     promotions:promotions
-        // })
-
-        this.props.navigateAction('add-promotions',this.props.index)
+        this.props.navigateAction('addPromotions',this.props.index)
     }
 
     render() {
-
-
-
-
         return (
-
-
-
-            <GenericListManager title="Promotion" component="home" addComponent="add-promotion" api={this}
+            <GenericListManager title="Promotion" component="home" addComponent="addPromotions" api={this}
                                 ItemDetail={GenericListView}/>
 
         );
     }
 }
 
-
-function bindActions(dispatch) {
-    return {
-        replaceAt: (routeKey, route, key) => dispatch(replaceAt(routeKey, route, key)),
-    };
-}
-
-const mapStateToProps = state => ({
-    navigation: state.cardNavigation,
-});
-
-export default connect(mapStateToProps, bindActions)(Promotions);

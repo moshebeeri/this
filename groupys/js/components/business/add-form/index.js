@@ -12,7 +12,7 @@ import {connect} from 'react-redux';
 import {actions} from 'react-native-navigation-redux-helpers';
 import {Container, Content, Text, InputGroup, Input, Button, Icon, View,Header,Item,Picker,Form,Footer} from 'native-base';
 
-import AddFormHeader from '../../header/addFormHeader';
+
 
 
 import EntityUtils from "../../../utils/createEntity";
