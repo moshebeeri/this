@@ -234,22 +234,18 @@ function spread_discounts(min, max, delta, quantity) {
   }
   let sumq=0;
 
+  //http://stackoverflow.com/questions/792460/how-to-round-floats-to-integers-while-preserving-their-sum
+  //https://jsfiddle.net/cd8xqy6e/
+  let fpTotal = 0;
+  let intTotal = 0;
   spreads.forEach( (spread)=>{
-    spread.quantity = Math.round((spread.area / some_area)*quantity);
+    let float = (spread.area / some_area)*quantity;
+    spread.quantity = Math.round(float + fpTotal) - intTotal;
+    fpTotal += float;
+    intTotal += spread.quantity;
     spread.area = undefined;
     sumq += spread.quantity;
   });
-  //http://stackoverflow.com/questions/792460/how-to-round-floats-to-integers-while-preserving-their-sum
-  //https://jsfiddle.net/cd8xqy6e/
-  // let fpTotal = 0;
-  // let intTotal = 0;
-  // let roundedArray = [];
-  // array.forEach(function (float, index) {
-  //   let integer = Math.round(float + fpTotal) - intTotal;
-  //   fpTotal += float;
-  //   intTotal += integer;
-  //   roundedArray.push(integer)
-  // });
   console.log(sumq);
   return spreads;
 }

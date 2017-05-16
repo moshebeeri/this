@@ -18,12 +18,12 @@ function isAuthenticated() {
     // Validate jwt
     .use(function(req, res, next) {
 
-      var indexOfBearer = req.headers.authorization.indexOf("Bearer");
+      let indexOfBearer = req.headers.authorization.indexOf("Bearer");
 
       // allow Cordove FileTransfer Plugin  header as well
       if(indexOfBearer !== 0 && indexOfBearer !== -1){
 
-        var headerLength = req.headers.authorization.length;
+        let headerLength = req.headers.authorization.length;
         console.log("headerLength: " + headerLength);
         req.headers.authorization = req.headers.authorization.slice(indexOfBearer, headerLength-3);
 
