@@ -6,21 +6,18 @@ import { connect } from 'react-redux';
 import { actions } from 'react-native-navigation-redux-helpers';
 import { Container, Content, Text, InputGroup, Input,Thumbnail,Button,Picker,Right,Item, Left,Icon,Header,Footer,Body, View,Card,CardItem } from 'native-base';
 
-const {
-  replaceAt,
-} = actions;
 
 
 import login from './general-theme';
-import GenericFeedManager from '../generic-feed-manager/index'
-import GenericFeedItem from '../generic-feed-manager/generic-feed'
+import GenericFeedManager from '../../generic-feed-manager/index'
+import GenericFeedItem from '../../generic-feed-manager/generic-feed'
 
-var aroma = require('../../../images/aroma.png');
-var aromCafe = require('../../../images/aroma-cafe.jpeg');
-var castro = require('../../../images/castro.jpg');
-var castroBanner = require('../../../images/castro_final.png');
-var myprofile = require('../../../images/profile.jpeg');
-import FeedApi from '../../api/feed'
+var aroma = require('../../../../images/aroma.png');
+var aromCafe = require('../../../../images/aroma-cafe.jpeg');
+var castro = require('../../../../images/castro.jpg');
+var castroBanner = require('../../../../images/castro_final.png');
+var myprofile = require('../../../../images/profile.jpeg');
+import FeedApi from '../../../api/feed'
 let feedApi = new FeedApi();
 
 const feeds2 = [
@@ -160,18 +157,33 @@ const feeds = [
 
     ];
 
-export default class Feed extends Component {
+export default class GroupFeed extends Component {
 
-      constructor(props) {
-        super(props);
+  constructor(props) {
+    super(props);
 
-      }
+  }
+
+
+
+
+
+
 
 
      async getAll(direction,id){
-        let feed = await feedApi.getAll(direction,id);
+      let feed = await feedApi.getAll(direction,id,this.props.navigation.state.params.group._id);
       return feed;
     }
+
+
+
+
+
+
+    replaceRoute(route) {
+    this.props.replaceAt('login', { key: route }, this.props.navigation.key);
+  }
 
     render() {
 

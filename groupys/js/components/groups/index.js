@@ -42,8 +42,8 @@ export default class Group extends Component {
 
 
         return (
-           <GenericListManager title="Groups" component="home" addComponent="AddGroups" api={this}
-                               ItemDetail = {GenericListView}/>
+           <GenericListManager  navigation = {this.props.navigation} title="Groups" component="home" addComponent="AddGroups" api={this}
+                               ItemDetail = {GenericListGroupView}/>
         );
     }
 }
