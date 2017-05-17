@@ -60,6 +60,34 @@ exports.feed = function (req, res) {
 };
 
 
+
+//[
+//  {feed_id, top_id},
+//  {feed_id, top_id},
+//  {feed_id, top_id}
+// ]
+exports.new_count_group = function (req, res) {
+  let list = req.body;
+  function query_function(feed_id, top_id){
+    return function(callback){
+      Feed.count({_id: feed_id}).where('activity').gt(top_id).exec(function (err, objects) {
+        if (err) { callback(err, null) }
+        else callback(null, objects)
+      });
+    }
+  }
+  let queryFunctions = [];
+  list.forEach( (pos) => {
+    (function (feed_id, top_id) {
+      queryFunctions.push(query_function(feed_id, top_id));
+    })(pos.feed_id, pos.top_id);
+  });
+  async.parallel(queryFunctions, function(err, result) {
+    console.log('ending: ' + result);
+    res.status(200).json(result);
+  });
+};
+
 //exec(callback);
 //
 //Feed.
