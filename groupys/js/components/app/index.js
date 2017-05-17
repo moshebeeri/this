@@ -165,7 +165,7 @@ export default class ApplicationManager extends Component {
                         <Promotions  index={3} navigateAction={this.headerAction.bind(this)}/>
                     </Tab>
                     <Tab   heading={ <TabHeading><Text style={{ color:'black',fontSize: 11,}}>Groups</Text></TabHeading>}>
-                        <Groups  index={4} navigateAction={this.headerAction.bind(this)}/>
+                        <Groups navigation={this.props.navigation} index={4} navigateAction={this.headerAction.bind(this)}/>
                     </Tab>
                 </Tabs>
 

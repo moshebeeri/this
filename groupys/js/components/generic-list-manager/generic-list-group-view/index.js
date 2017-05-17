@@ -5,13 +5,7 @@ import {actions} from 'react-native-navigation-redux-helpers';
 import {Container, Content, Text,Title, InputGroup, Input, Button, Icon, View,Header, Body, Right, ListItem, Thumbnail,Left} from 'native-base';
 
 
-
-const {
-    replaceAt,
-} = actions;
-;
-
-class GenericListGroupView extends Component {
+export default class GenericListGroupView extends Component {
 
 
     constructor(props) {
@@ -20,33 +14,31 @@ class GenericListGroupView extends Component {
     }
 
 
-    replaceRoute(route) {
-        this.props.replaceAt('groups', { key: route }, this.props.navigation.key);
+    showGroupFeeds(props,group){
+        this.props.navigation.navigate('GroupFeed',{group:group});
     }
 
-    showGroupFeeds(){
-        this.replaceRoute('groupfeeds');
-    }
 
     render() {
 
         let row = undefined
 
-        if(this.props.item.pictures.length > 0){
-            row =  <ListItem key={this.props.index}  onPress={this.showGroupFeeds.bind(this)} thumbnail>
+        if(this.props.item.pictures && this.props.item.pictures.length > 0){
+            row =  <ListItem key={this.props.index} onPress={this.showGroupFeeds.bind(this,this.props,this.props.item)} thumbnail>
                 <Left>
                     <Thumbnail square size={80} source={{uri: this.props.item.pictures[0].pictures[3]}} />
                 </Left>
                 <Body>
                 <Text>{this.props.item.name}</Text>
                 <Text note>{this.props.item.info}</Text>
+                <Text> New Promotions:  5</Text>
                 </Body>
                 <Right>
-                    <text>Promotion Available: 5 </text>
+
                 </Right>
             </ListItem>
         }else {
-            row =  <ListItem key={this.props.index}  onPress={this.showGroupFeeds.bind(this)} thumbnail style={{backgroundColor: '#fff'}}>
+            row =  <ListItem key={this.props.index} onPress={this.showGroupFeeds.bind(this,this.props,this.props.item)} thumbnail style={{backgroundColor: '#fff'}}>
                 <Left>
                     <Thumbnail square size={80} source={require('../../../../images/client_1.png')}/>
                 </Left>
@@ -54,9 +46,10 @@ class GenericListGroupView extends Component {
 
                 <Text>{this.props.item.name}</Text>
                 <Text note>{this.props.item.info}</Text>
+                <Text> New Promotions: 5</Text>
                 </Body>
                 <Right>
-                    <text>Promotion Available: 5 </text>
+
                 </Right>
             </ListItem>
         }
@@ -69,15 +62,3 @@ class GenericListGroupView extends Component {
     }
 }
 
-
-function bindActions(dispatch) {
-    return {
-        replaceAt: (routeKey, route, key) => dispatch(replaceAt(routeKey, route, key)),
-    };
-}
-
-const mapStateToProps = state => ({
-    navigation: state.cardNavigation,
-});
-
-export default connect(mapStateToProps, bindActions)(GenericListGroupView);

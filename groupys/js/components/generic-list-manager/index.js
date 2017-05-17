@@ -123,10 +123,10 @@ export default class GenericListManager extends Component {
                  }
                 index++;
                  if(r.content){
-                     return <this.props.ItemDetail key= {index} index={index} item={r.content} deleteProduct={this.deleteProduct.bind(this)}/>
+                     return <this.props.ItemDetail navigation={this.props.navigation} key= {index} index={index} item={r.content} deleteProduct={this.deleteProduct.bind(this)}/>
 
                  }
-                return <this.props.ItemDetail key= {index} index={index} item={r} deleteProduct={this.deleteProduct.bind(this)}/>
+                return <this.props.ItemDetail navigation={this.props.navigation} key= {index} index={index} item={r} deleteProduct={this.deleteProduct.bind(this)}/>
             });
         }
 
