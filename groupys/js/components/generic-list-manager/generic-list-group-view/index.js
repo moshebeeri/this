@@ -5,6 +5,8 @@ import {actions} from 'react-native-navigation-redux-helpers';
 import {Container, Content, Text,Title, InputGroup, Input, Button, Icon, View,Header, Body, Right, ListItem, Thumbnail,Left} from 'native-base';
 
 
+import GroupApi from "../../../api/groups"
+let groupApi = new GroupApi();
 export default class GenericListGroupView extends Component {
 
 
@@ -14,7 +16,8 @@ export default class GenericListGroupView extends Component {
     }
 
 
-    showGroupFeeds(props,group){
+     showGroupFeeds(props,group){
+        groupApi.touch(group._id);
         this.props.navigation.navigate('GroupFeed',{group:group});
     }
 
