@@ -134,6 +134,13 @@ let set_promotion_location = function (promotion, callback) {
 
 };
 
+exports.test_me = function (req, res) {
+  let distributor = require('../../components/distributor');
+  let spreads = distributor.distributePromotions(20, 40, 5, 30);
+  return res.status(201).json(spreads);
+};
+
+
 function create_promotion(promotion, callback) {
   //TODO: Convert to address location
   set_promotion_location(promotion, function (err, promotion) {
