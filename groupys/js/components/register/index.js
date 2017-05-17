@@ -18,13 +18,10 @@ const logo = require('../../../images/logo.png');
 import LoginApi from '../../api/login'
 let loginApi = new LoginApi()
 
-class Register extends Component {
+export default class Register extends Component {
 
-    static propTypes = {
-        replaceAt: React.PropTypes.func,
-        navigation: React.PropTypes.shape({
-            key: React.PropTypes.string,
-        }),
+    static navigationOptions = {
+        header:null
     };
 
     constructor(props) {
@@ -43,7 +40,7 @@ class Register extends Component {
 
 
     replaceRoute(route) {
-        this.props.replaceAt('register', {key: route}, this.props.navigation.key);
+        this.props.navigation.navigate(route);
     }
 
 
@@ -57,7 +54,7 @@ class Register extends Component {
 
                 this.replaceRoute('home');
             } else {
-                this.replaceRoute('login');
+                this.replaceRoute('Login');
             }
 
             }catch(error) {
@@ -105,16 +102,3 @@ class Register extends Component {
         );
     }
 }
-
-
-function bindActions(dispatch) {
-    return {
-        replaceAt: (routeKey, route, key) => dispatch(replaceAt(routeKey, route, key)),
-    };
-}
-
-const mapStateToProps = state => ({
-    navigation: state.cardNavigation,
-});
-
-export default connect(mapStateToProps, bindActions)(Register);
