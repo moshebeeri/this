@@ -172,50 +172,11 @@ export default class GroupFeed extends Component {
 
 
      async getAll(direction,id){
-       // let feed = await feedApi.getAll(direction,id);
-      return feeds;
+      let feed = await feedApi.getAll(direction,id,this.props.navigation.state.params.group._id);
+      return feed;
     }
 
 
-    fetchApi(pageOffset,pageSize ) {
-
-         return feeds; //feedApi.getAll();
-        // return new Promise(async function(resolve, reject) {
-        //         console.log('featching: '+ pageOffset);
-        //
-        //     if(pageOffset < 10 && pageOffset % 2 ==0){
-        //         await setTimeout(function (x) {
-        //             return resolve(feeds2);
-        //             ;
-        //         }, 0);
-        //     }else {
-        //         if(pageOffset < 10){
-        //             await setTimeout(function (x) {
-        //                 return resolve(feeds2);
-        //                 ;
-        //             }, 0);
-        //         }else {
-        //
-        //             if(pageOffset % 2 ==0){
-        //                 await setTimeout(function (x) {
-        //                     return resolve(feeds2);
-        //                     ;
-        //                 }, 0);
-        //             }else {
-        //                 await setTimeout(function (x) {
-        //                     return resolve(feeds2);
-        //                     ;
-        //                 }, 0);
-        //             }
-        //         }
-        //     }
-        //
-        //
-        //
-        // });
-        //
-
-    }
 
 
 

@@ -77,16 +77,16 @@ export default class ApplicationManager extends Component {
              case 0:
 
                  break;
-             case 1:
+             case 2:
                  component ='AddProduct'
                  break;
-             case 2:
+             case 3:
                  component ='addBusiness'
                  break;
-             case 3:
+             case 4:
                  component ='addPromotions'
                  break;
-             case 4:
+             case 1:
                  component ='AddGroups'
                  break;
 
@@ -155,6 +155,9 @@ export default class ApplicationManager extends Component {
                     <Tab  heading={ <TabHeading><Text style={{ color:'black', fontSize: 11,}}>Home</Text></TabHeading>}>
                         <Feeds index={0} navigateAction={this.headerAction.bind(this)}/>
                     </Tab>
+                    <Tab   heading={ <TabHeading><Text style={{ color:'black',fontSize: 11,}}>Groups</Text></TabHeading>}>
+                        <Groups navigation={this.props.navigation} index={4} navigateAction={this.headerAction.bind(this)}/>
+                    </Tab>
                     <Tab  heading={ <TabHeading><Text style={{ color:'black',fontSize: 11,}}>Products</Text></TabHeading>}>
                         <Product index={1} navigateAction={this.headerAction.bind(this)}/>
                     </Tab>
@@ -164,9 +167,7 @@ export default class ApplicationManager extends Component {
                     <Tab   heading={ <TabHeading><Text style={{ color:'black',fontSize: 11,}}>Promotions</Text></TabHeading>}>
                         <Promotions  index={3} navigateAction={this.headerAction.bind(this)}/>
                     </Tab>
-                    <Tab   heading={ <TabHeading><Text style={{ color:'black',fontSize: 11,}}>Groups</Text></TabHeading>}>
-                        <Groups navigation={this.props.navigation} index={4} navigateAction={this.headerAction.bind(this)}/>
-                    </Tab>
+
                 </Tabs>
 
             </Container>

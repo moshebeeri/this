@@ -12,12 +12,15 @@ class FeedApi {
     };
 
 
-    getAll(direction,id) {
+    getAll(direction,id, userId) {
         return new Promise(async(resolve, reject) => {
 
             try {
                 let token = await store.get('token');
-                let userId = await store.get('user_id');
+                if(!userId){
+                    userId = await store.get('user_id');
+                }
+
                 let contacts = await store.get("all-contacts");
                 contacts = JSON.parse(contacts);
                 const response = await fetch(`${server_host}/api/feeds/`+id+`/`+ direction +`/user/` +userId , {

@@ -162,70 +162,16 @@ const feeds = [
 
 export default class Feed extends Component {
 
-  constructor(props) {
-    super(props);
+      constructor(props) {
+        super(props);
 
-  }
-
-
-
-
-
-
+      }
 
 
      async getAll(direction,id){
         let feed = await feedApi.getAll(direction,id);
       return feed;
     }
-
-
-    fetchApi(pageOffset,pageSize ) {
-
-         return feedApi.getAll();
-        // return new Promise(async function(resolve, reject) {
-        //         console.log('featching: '+ pageOffset);
-        //
-        //     if(pageOffset < 10 && pageOffset % 2 ==0){
-        //         await setTimeout(function (x) {
-        //             return resolve(feeds2);
-        //             ;
-        //         }, 0);
-        //     }else {
-        //         if(pageOffset < 10){
-        //             await setTimeout(function (x) {
-        //                 return resolve(feeds2);
-        //                 ;
-        //             }, 0);
-        //         }else {
-        //
-        //             if(pageOffset % 2 ==0){
-        //                 await setTimeout(function (x) {
-        //                     return resolve(feeds2);
-        //                     ;
-        //                 }, 0);
-        //             }else {
-        //                 await setTimeout(function (x) {
-        //                     return resolve(feeds2);
-        //                     ;
-        //                 }, 0);
-        //             }
-        //         }
-        //     }
-        //
-        //
-        //
-        // });
-        //
-
-    }
-
-
-
-
-    replaceRoute(route) {
-    this.props.replaceAt('login', { key: route }, this.props.navigation.key);
-  }
 
     render() {
 
