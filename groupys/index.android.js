@@ -21,17 +21,25 @@ import AddGroups from './js/components/groups/add-form/index'
 import SelectUsersComponent from './js/components/groups/selectUser/index'
 import AddProduct from './js/components/product/add-form/index'
 import GroupFeed from  './js/components/groups/feeds/index'
-const Groupys = StackNavigator({
-    login: { screen: Login },
-    home: { screen: ApplicationManager },
-    addBusiness: { screen: AddBusiness },
-    addPromotions:{screen:AddPromotions},
-    AddGroups:{screen:AddGroups},
-    SelectUsersComponent:{screen: SelectUsersComponent},
-    AddProduct:{screen: AddProduct},
-    GroupFeed:{screen: GroupFeed},
+import Signup from './js/components/signup/index';
+import Register from './js/components/register/index';
 
-});
+const Groupys = StackNavigator({
+        login: { screen: Login },
+        home: { screen: ApplicationManager },
+        addBusiness: { screen: AddBusiness },
+        addPromotions:{screen:AddPromotions},
+        AddGroups:{screen:AddGroups},
+        SelectUsersComponent:{screen: SelectUsersComponent},
+        AddProduct:{screen: AddProduct},
+        GroupFeed:{screen: GroupFeed},
+        Signup:{screen: Signup},
+        Register:{screen: Register},
+
+
+
+    }
+);
 
 
 AppRegistry.registerComponent('groupys', () => Groupys);

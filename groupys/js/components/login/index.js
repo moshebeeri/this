@@ -27,10 +27,8 @@ let lu = new LoginUtils();
 const global = require('../../conf/global');
 let calc_login = true;
 export default  class Login extends Component {
-
     static navigationOptions = {
-        headerStyle: { position: "absolute" },
-
+        header:null
     };
 
   constructor(props) {
@@ -91,7 +89,7 @@ export default  class Login extends Component {
             const _id = await store.get('user_id');
             if (!_id) {
 
-                this.replaceRoute('login');
+                this.replaceRoute('Login');
                 return resolve(true);
             }
             try {
@@ -224,7 +222,7 @@ export default  class Login extends Component {
                       transparent
                       style={styles.transparentButton}
                       textStyle={{ lineHeight: (Platform.OS === 'ios') ? 15 : 18, textDecorationLine: 'underline' }}
-                      onPress={() =>  this.replaceRoute('signup')}
+                      onPress={() =>  this.replaceRoute('Signup')}
                   >
                     <Text style={styles.signUpHereText}>Sign up here</Text>
                   </Button>

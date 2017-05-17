@@ -17,15 +17,11 @@ const {
 
 const logo = require('../../../images/logo.png');
 
-class Signup extends Component {
+export default class Signup extends Component {
 
-    static propTypes = {
-        replaceAt: React.PropTypes.func,
-        navigation: React.PropTypes.shape({
-            key: React.PropTypes.string,
-        }),
+    static navigationOptions = {
+        header:null
     };
-
     constructor(props) {
         super(props);
         this.onPressFlag = this.onPressFlag.bind(this);
@@ -66,7 +62,7 @@ class Signup extends Component {
     }
 
     replaceRoute(route) {
-        this.props.replaceAt('signup', {key: route}, this.props.navigation.key);
+        this.props.navigation.navigate(route);
     }
 
     signup() {
@@ -115,15 +111,15 @@ class Signup extends Component {
             .then((responseData) => {
                 if (responseData.token) {
                     store.save('token', responseData.token);
-                    this.replaceRoute('register');
+                    this.replaceRoute('Register');
                 } else {
-                    this.replaceRoute('login');
+                    this.replaceRoute('Login');
                 }
 
             }).catch(function (error) {
 
             console.log('There has been a problem with your fetch operation: ' + error.message);
-            this.replaceRoute('login');
+            this.replaceRoute('Login');
         });
     }
     focusNextField(nextField) {
@@ -200,15 +196,3 @@ class Signup extends Component {
     }
 }
 
-
-function bindActions(dispatch) {
-    return {
-        replaceAt: (routeKey, route, key) => dispatch(replaceAt(routeKey, route, key)),
-    };
-}
-
-const mapStateToProps = state => ({
-    navigation: state.cardNavigation,
-});
-
-export default connect(mapStateToProps, bindActions)(Signup);

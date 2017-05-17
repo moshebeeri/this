@@ -20,12 +20,9 @@ let contactApi = new ContactApi();
 
 
 export default class ApplicationManager extends Component {
-
     static navigationOptions = {
-        headerStyle: { position: "absolute" },
-
+        header:null
     };
-
 
      constructor(props) {
         super(props)
