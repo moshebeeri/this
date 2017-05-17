@@ -215,7 +215,9 @@ exports.message = function (req, res) {
 
 exports.touch = function (req, res) {
   let query = `match (u:user{_id:'${req.user._id}'})-[r:FOLLOW]->(g:group{_id:'${req.params.group_id}'}) set r.timestamp=timestamp()`
-  graphModel.query(query);
+  graphModel.query(query, function(err){
+    if(err) console.error(err.message);
+  });
   return res.json(200, 'ok');
 };
 
