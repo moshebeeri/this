@@ -339,9 +339,6 @@ exports.join_group = function (req, res) {
     })
 };
 
-router.get('/follow/:group/:entity', auth.isAuthenticated(), controller.follow);
-
-
 exports.group_join_group = function (req, res) {
   Group.findById(req.params.group, function (err, following_group) {
     if (err) { return handleError(res, err); }
