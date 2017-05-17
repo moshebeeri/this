@@ -172,6 +172,7 @@ export default class GroupFeed extends Component {
 
 
      async getAll(direction,id){
+
       let feed = await feedApi.getAll(direction,id,this.props.navigation.state.params.group._id);
       return feed;
     }
