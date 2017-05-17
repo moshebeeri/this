@@ -20,6 +20,7 @@ import AddPromotions from './js/components/promtions/add-form/index'
 import AddGroups from './js/components/groups/add-form/index'
 import SelectUsersComponent from './js/components/groups/selectUser/index'
 import AddProduct from './js/components/product/add-form/index'
+import GroupFeed from  './js/components/groups/feeds/index'
 const Groupys = StackNavigator({
     login: { screen: Login },
     home: { screen: ApplicationManager },
@@ -28,6 +29,7 @@ const Groupys = StackNavigator({
     AddGroups:{screen:AddGroups},
     SelectUsersComponent:{screen: SelectUsersComponent},
     AddProduct:{screen: AddProduct},
+    GroupFeed:{screen: GroupFeed},
 
 });
 
