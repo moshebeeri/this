@@ -94,6 +94,14 @@ function group_follow_group_activity(following, followed) {
   });
 }
 
+function group_follow_business_activity(following, followed) {
+  user_activity({
+    business: followed,
+    action: "group_follow",
+    actor_group: following
+  });
+}
+
 // Creates a new group in the DB.
 exports.create = function (req, res) {
   let group = req.body;
@@ -149,9 +157,7 @@ exports.update = function (req, res) {
     }
     let updated = _.merge(group, req.body);
     updated.save(function (err) {
-      if (err) {
-        return handleError(res, err);
-      }
+      if (err) { return handleError(res, err); }
       return res.json(200, group);
     });
   });
@@ -234,6 +240,14 @@ function group_follow_group(following_group_id, group_to_follow_id, callback) {
   graphModel.relate_ids(following_group_id, 'FOLLOW', group_to_follow_id, function(err){
     if(err) return callback(err);
     group_follow_group_activity(group, user_id);
+    callback(null)
+  });
+}
+
+function group_follow_business(following_group_id, business_id, callback) {
+  graphModel.relate_ids(following_group_id, 'FOLLOW', business_id, function(err){
+    if(err) return callback(err);
+    group_follow_business_activity(group, user_id);
     callback(null)
   });
 }
@@ -325,6 +339,8 @@ exports.join_group = function (req, res) {
     })
 };
 
+router.get('/follow/:group/:entity', auth.isAuthenticated(), controller.follow);
+
 
 exports.group_join_group = function (req, res) {
   Group.findById(req.params.group, function (err, following_group) {
@@ -345,6 +361,22 @@ exports.group_join_group = function (req, res) {
       });
     })
   });
+};
+
+exports.group_follow_business = function (req, res) {
+  Group.findById(req.params.group, function (err, following_group) {
+    if (err) { return handleError(res, err); }
+    if (!following_group) { return res.status(404).send('source group not found'); }
+
+    //user must be one of the admins
+    if (!utils.defined(_.find(following_group.admins, req.user._id)))
+      return res.status(404).send('Only group admin may follow other groups');
+
+      group_follow_business(following_group._id, req.params.business, function (err) {
+        if(err) return handleError(res, err);
+        return res.status(200).json(group);
+      });
+    })
 };
 
 exports.test_add_user = function (req, res) {
