@@ -13,7 +13,7 @@ class EntityUtils {
 
 
 
-    doUpload(imagePath, imageMime, userId, token, callbackFunction, errorCallBack, entityApi,responseData) {
+    doUpload(imagePath, imageMime, token, callbackFunction, entityApi,responseData) {
         let files = [
             {
                 name: imagePath + '___' + responseData._id,
@@ -111,7 +111,7 @@ class EntityUtils {
         ).then((response) => response.json())
             .then((responseData) => {
                 if (entityData.image) {
-                    this.doUpload(entityData.image.uri, entityData.image.mime, userId, token, callbackFunction, errorCallBack, entityApi,responseData);
+                    this.doUpload(entityData.image.uri, entityData.image.mime, token, callbackFunction, entityApi,responseData);
                     return
                 }
                 callbackFunction(responseData);
