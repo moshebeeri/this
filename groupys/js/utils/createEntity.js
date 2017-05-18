@@ -2,6 +2,8 @@
 const NativeModules = require('NativeModules');
 const RNUploader = NativeModules.RNUploader;
 const FILeUploader = NativeModules.FileUpload;
+import store from 'react-native-simple-store';
+
 class EntityUtils {
 
 
@@ -11,7 +13,7 @@ class EntityUtils {
 
 
 
-    doUpload(imagePath, imageMime, userId, token, callbackFunction, errorCallBack, responseData) {
+    doUpload(imagePath, imageMime, userId, token, callbackFunction, errorCallBack, entityApi,responseData) {
         let files = [
             {
                 name: imagePath + '___' + responseData._id,
@@ -22,7 +24,7 @@ class EntityUtils {
 
         ];
 
-
+        let getEntity = this.getEntity.bind(this);
 
         if(RNUploader){
             let opts = {
@@ -33,13 +35,9 @@ class EntityUtils {
                 params: {},                   // optional
             };
             RNUploader.upload(opts, (err, response) => {
-                if (err) {
-                    console.log(err);
-                    errorCallBack(err);
-                    return;
-                }
 
 
+                getEntity(entityApi,responseData,callbackFunction)
 
 
             });
@@ -54,18 +52,49 @@ class EntityUtils {
                              // optional
             };
             FILeUploader.upload(option2, function(err, result) {
-                if (err) {
-                    console.log(err);
-                    errorCallBack(err);
-                    return;
-                }
 
+                getEntity(entityApi,responseData._id,callbackFunction)
             })
         }
-        callbackFunction(responseData);
+
 
     }
 
+
+
+    getEntity(entityApi ,entityId,callbackFunction) {
+        return new Promise(async(resolve, reject) => {
+
+            try {
+                let token = await store.get('token');
+                const response = await fetch(`${server_host}/api/${entityApi}/${entityId}`, {
+                    method: 'GET',
+                    headers: {
+                        'Accept': 'application/json, text/plain, */*',
+                        'Content-Type': 'application/json;charset=utf-8',
+                        'Authorization': 'Bearer ' + token
+
+                    }
+
+                })
+                if (response.status == '401') {
+                    reject(response);
+                    return;
+                }
+
+                let responseData = await response.json();
+                callbackFunction(responseData);
+                resolve(responseData);
+            }
+            catch (error) {
+
+                console.log('There has been a problem with your fetch operation: ' + error.message);
+                reject(error);
+            }
+        })
+
+
+    }
 
 
     saveEntity(entityData, entityApi, json, token, callbackFunction, errorCallBack, userId) {
@@ -82,7 +111,7 @@ class EntityUtils {
         ).then((response) => response.json())
             .then((responseData) => {
                 if (entityData.image) {
-                    this.doUpload(entityData.image.uri, entityData.image.mime, userId, token, callbackFunction, errorCallBack, responseData);
+                    this.doUpload(entityData.image.uri, entityData.image.mime, userId, token, callbackFunction, errorCallBack, entityApi,responseData);
                     return
                 }
                 callbackFunction(responseData);
