@@ -37,7 +37,7 @@ class EntityUtils {
             RNUploader.upload(opts, (err, response) => {
 
 
-                getEntity(entityApi,responseData,callbackFunction)
+                getEntity(entityApi,responseData._id,callbackFunction)
 
 
             });

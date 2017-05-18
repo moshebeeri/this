@@ -54,12 +54,12 @@ class FeedApi {
                 let feeds = responseData.map(feed => this.createFeed(feed,contacsMap)).filter(function(x){
                     return x != undefined;
                 });
-                console.log('token: ' + token +' user id' + userId + ' for item id: '+ id + ' direction: ' + direction + ' number of items: ' + feeds.length);
+                // console.log('token: ' + token +' user id' + userId + ' for item id: '+ id + ' direction: ' + direction + ' number of items: ' + feeds.length);
                 resolve(feeds);
             }
             catch (error) {
 
-                console.log('There has been a problem with your fetch operation: ' + error.message);
+                // console.log('There has been a problem with your fetch operation: ' + error.message);
                 reject(error);
             }
         })

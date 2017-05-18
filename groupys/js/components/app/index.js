@@ -50,7 +50,6 @@ export default class ApplicationManager extends Component {
 
          this.watchID = navigator.geolocation.watchPosition((position) => {
              var lastPosition = JSON.stringify(position);
-             console.log(lastPosition);
              locationApi.sendLocation(position.coords.longitude,position.coords.latitude,position.timestamp,position.coords.speed);
 
              },
