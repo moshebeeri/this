@@ -29,14 +29,13 @@ const PromotionSchema = new Schema({
   name: {type: String, required: true},
   gid: { type: Number, index: true},
   realize_gid: Number,
-  card_type: {type: Schema.ObjectId, ref: 'CardType'},
   creator: {type: Schema.ObjectId, ref: 'User', required: true},
   entity: { type: Entities, require: true,
     validate: [entity_validator, 'at least on of those fields should not be empty [business, product, chain, mall]'],
   },
   created: {type: Date, default: Date.now},
+  saved: Date,
   pictures : [],
-  info: String,
   report: {type: Boolean, default: false},
   system_report: {type: Boolean, default: false},
   //see https://docs.mongodb.org/manual/reference/geojson/#geospatial-indexes-store-geojson
@@ -50,7 +49,19 @@ const PromotionSchema = new Schema({
     coordinates: []
   },
   realize_code: String,
-  save_time: Date,
+  start: { type : Date, default: Date.now },
+  end: Date, // TODO: Add default
+  expireAt: {
+    type: Date
+    /**validate: [ function(v) {
+      return (v - new Date()) > 60000*(3600*24*14 - 1);
+    }, 'Cannot expire less then 14 days in the future.' ],
+     default: function() {
+      // 14 days from now
+      return new Date(new Date().valueOf() + 60000*3600*24*14);
+    }**/
+  },
+
   category: {
     type: [{ type: String,  enum: [
       'HOT'     ,
@@ -61,6 +72,14 @@ const PromotionSchema = new Schema({
       'GIFT'
     ]}],
   },
+  social: {
+    type: String,
+    enum: [
+      'ROLLING',
+      'GIVE_TO_FRIEND'
+    ]
+  },
+
   type: {
     type: String,
     enum: [
@@ -84,25 +103,7 @@ const PromotionSchema = new Schema({
       'MORE_THAN'       //15% off for purchases more than 1000$ OR buy iphone for 600$ and get 50% off for earphones
     ]
   },
-  social: {
-    type: String,
-    enum: [
-      'ROLLING',
-      'GIVE_TO_FRIEND'
-    ]
-  },
-  start: { type : Date, default: Date.now },
-  end: Date, // TODO: Add default
-  expireAt: {
-    type: Date
-    /**validate: [ function(v) {
-      return (v - new Date()) > 60000*(3600*24*14 - 1);
-    }, 'Cannot expire less then 14 days in the future.' ],
-    default: function() {
-      // 14 days from now
-      return new Date(new Date().valueOf() + 60000*3600*24*14);
-    }**/
-  },
+  cards: [{type: Schema.ObjectId, ref: 'CardType'}],
   percent: {
     percent : { type : Number, min:1, max: 100}
   },
