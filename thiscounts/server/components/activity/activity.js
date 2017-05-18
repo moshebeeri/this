@@ -17,17 +17,17 @@ function Activity() {
 }
 //pagination http://blog.mongodirector.com/fast-paging-with-mongodb/
 function update_feeds(effected, activity) {
-  mongoose.connection.db.collection('feed', function (err, collection) {
-    if (err) return logger.error(err.message);
-    effected.forEach(function (user) {
-      Feed.create({
-          user: user._id,
-          activity: activity._id
-      }, function(err) {
-        if(err) { logger.error(err.message); }
-      });
+  effected.forEach(function (user) {
+    Feed.create({
+      user: user._id,
+      activity: activity._id
+    }, function(err) {
+      if(err) { logger.error(err.message); }
     });
   });
+  if(utils.defined(activity.backfire)){
+
+  }
 }
 
 function update_group_feeds(effected, activity) {
@@ -153,7 +153,6 @@ function activity_impl(act, callback){
       });
     }
   });
-
 }
 
 Activity.prototype.action_activity = function action_activity(userId, itemId, action) {
@@ -182,14 +181,14 @@ function run(query, callback) {
 function effected_out_rel(actor_id, relationship, callback) {
   let query = util.format(" MATCH (actor)-[:%s]->(effected) \
                             where actor._id='%s' and actor <> effected \
-                            return effected ", relationship, actor_id);
+                            return effected._id, labels(e)", relationship, actor_id);
   run(query, callback);
 }
 
 function effected_in_rel(actor_id, relationship, callback) {
   let query = util.format(" MATCH (actor)<-[:%s]-(effected) \
                             where actor._id='%s' and actor <> effected \
-                            return effected ", relationship, actor_id);
+                            return effected._id, labels(e)", relationship, actor_id);
   run(query, callback);
 }
 

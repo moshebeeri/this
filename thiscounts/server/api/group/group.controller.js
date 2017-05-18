@@ -380,45 +380,6 @@ exports.test_add_user = function (req, res) {
   return res.json(200, "tested");
 };
 
-exports.test_me = function () {
-  let a = [
-    {
-      bid: '59119ecde0eda76b3d117240',
-      uid: '59119d04e0eda76b3d11722c'
-    },
-    {
-      bid: '59119ecde0eda76b3d117240',
-      uid: '59119e2fe0eda76b3d11722f'
-    },
-    {
-      bid: '59119ecde0eda76b3d117240',
-      uid: '5911aae57bb8a3f63eeb1f8e'
-    },
-    {
-      bid: '5911a02ce0eda76b3d11724b',
-      uid: '59119d04e0eda76b3d11722c'
-    },
-    {
-      bid: '5911a02ce0eda76b3d11724b',
-      uid: '59119e2fe0eda76b3d11722f'
-    },
-    {
-      bid: '5911a02ce0eda76b3d11724b',
-      uid: '5911aae57bb8a3f63eeb1f8e'
-    }];
-
-  //a.forEach( d => {Object.keys(d).forEach( (k)=>{console.log(`${k} , ${d[k]}`)})})
-  let acc = {};
-  Object.keys(a[0]).forEach(k => acc[k] = new Set());
-  let reduced = a.reduce(function (acc, obj) {
-    Object.keys(obj).forEach(k => acc[k].add(obj[k]));
-    return acc;
-  }, acc);
-  return reduced;
-};
-//a.reduce( (prev, cur) => console.log(`${JSON.stringify(prev)} ${JSON.stringify(cur)}`))
-
-
 exports.following = function (req, res) {
   let group = req.params.group;
   let skip = req.params.skip;
