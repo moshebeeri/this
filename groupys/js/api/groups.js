@@ -14,7 +14,7 @@ import EntityUtils from "../utils/createEntity";
 let entityUtils = new EntityUtils();
 class GroupsApi
 {
-    createGroup(group) {
+    createGroup(group,callbackFunction) {
         return new Promise(async(resolve, reject) => {
 
             try {
@@ -36,15 +36,17 @@ class GroupsApi
                     return;
                 }
 
-
-                if(group.image){
-                    entityUtils.doUpload(promotion.image.uri,promotion.image.mime,userId,token,callbackFunction,errorCallBack,responseData);
-                }
-
                 let responseData = await response.json();
                 if(group.groupUsers){
                     this.addUsersToGroup(group,responseData);
                 }
+
+                if(group.image){
+                    entityUtils.doUpload(group.image.uri,group.image.mime,token,callbackFunction,'groups',responseData);
+                }else{
+                    callbackFunction(responseData);
+                }
+
 
 
 

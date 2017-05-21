@@ -162,13 +162,17 @@ export default class AddGroup extends Component {
 
 
         try{
-            let result = await groupApi.createGroup(group);
-            DeviceEventEmitter.emit('AddGroups',  result);
+            let result = await groupApi.createGroup(group,this.addToList.bind(this));
+
             this.replaceRoute('home');
         }catch (e){
             console.log('failed adding group');
         }
 
+     }
+
+     addToList(responseData){
+         DeviceEventEmitter.emit('AddGroups',  responseData);
      }
 
 
@@ -337,7 +341,7 @@ export default class AddGroup extends Component {
                     </Item>
                     <Item underline>
                         <Input value = {this.state.info}  blurO
-                                nSubmit={true} returnKeyType='next' ref="2" onSubmitEditing={this.focusNextField.bind(this,"3")} onChangeText={(info) => this.setState({info})} placeholder='Description' />
+                                nSubmit={true} returnKeyType='done' ref="2"  onChangeText={(info) => this.setState({info})} placeholder='Description' />
                     </Item>
                     {addPolicyTag}
                     {groupTypeTag}

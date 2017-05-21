@@ -137,7 +137,6 @@ export default class GenericFeedManager extends Component {
     }
 
     endEvent(event){
-        console.log('end event')
         this.fetchList(event);
     }
     render() {
