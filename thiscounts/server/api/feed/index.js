@@ -20,8 +20,8 @@ router.delete('/:id', auth.hasRole('admin'), controller.destroy);
  * :entity_type - user or group
  * :entity_id - the _id of the item of which you like to show the feed
  */
-router.get('/:from_id/:scroll/:entity_type/:entity_id', auth.isAuthenticated(), controller.feed);
-router.post('/new/count/group', /*auth.isAuthenticated(),*/ controller.new_count_group);
+router.get('/:from_id/:scroll/:entity_id', auth.isAuthenticated(), controller.feed);
+router.post('/new/count/group', auth.isAuthenticated(), controller.new_count_group);
 
 //users = db.users.find({'_id'> last_id}). limit(10);
 //.hasRole('admin')

@@ -36,17 +36,13 @@ exports.feed = function (req, res) {
   let userId = req.user._id;
   let from_id = req.params.from_id;
   let entity_id = req.params.entity_id;
-  let entity_type = req.params.entity_type;
   let scroll = req.params.scroll;
 
   if (req.params.scroll !== 'up' && req.params.scroll !== 'down')
     return res.status(400).send('scroll value may be only up or down');
 
   let query_builder;
-  if(entity_type === "user")
-    query_builder = Feed.find({user: entity_id}).sort({activity: 'desc'}).limit(25);
-  else if (entity_type === "group")
-    query_builder = Feed.find({group: entity_id}).sort({activity: 'desc'}).limit(25);
+  query_builder = Feed.find({entity: entity_id}).sort({activity: 'desc'}).limit(25);
 
   if (from_id === 'start') {
     return feedTools.fetch_feed(userId, query_builder, Feed, res);

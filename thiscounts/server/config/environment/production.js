@@ -38,10 +38,11 @@ module.exports = {
     log: 'trace',
     index: 'lowla'
   },
-  
+
   google_maps:{
     key: 'AIzaSyACe_Cci4drnZovD8xjJOdrsIOQwyWSyCg',
 
   },
-  initializeNeo4j: true
+  initializeNeo4j: true,
+  sms_verification: true
 };
