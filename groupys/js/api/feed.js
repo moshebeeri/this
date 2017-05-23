@@ -125,6 +125,25 @@ class FeedApi {
                 }
             }
         }
+        if(feed.activity.action == 'group_follow'){
+            let name = feed.activity.actor_user.phone_number;
+            let contact = contacsMap.get(feed.activity.actor_user.phone_number);
+            if(contact){
+                name = contact.givenName + ' ' + contact.familyName;
+            }
+            response = {
+                id:feed._id,
+                social: {
+                    like: feed.activity.actor_user.social_state.like,
+                    numberLikes: feed.activity.actor_user.social_state.likes,
+                    follow: feed.activity.actor_user.social_state.follow,
+                },
+                actor:feed.activity.actor_user._id,
+                itemTitle: name ,
+                description: 'joined the group',
+
+            }
+        }
         return response;
 
 

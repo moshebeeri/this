@@ -258,7 +258,7 @@ export default class AddGroup extends Component {
 
         let users;
         if(this.state.selectedUsers){
-            users = <Text> {this.state.selectedUsers.length}  are selected </Text>
+            users = <Text> {this.state.selectedUsers.length}  selected </Text>
         }
 
 
@@ -348,8 +348,8 @@ export default class AddGroup extends Component {
                     {BusinessPiker}
                     <Button  transparent onPress={() => this.showUsers(true)}>
                         <Text>Select Users </Text>
-                        {users}
                     </Button>
+                    {users}
 
 
 

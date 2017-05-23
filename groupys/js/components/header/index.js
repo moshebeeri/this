@@ -59,9 +59,9 @@ export default class GeneralComponentHeader extends Component {
                 <Button transparent style={{ paddingRight: 15 }} onPress={this.props.openDrawer}>
                   <Icon name="menu" />
                 </Button>
-                  <Button transparent style={{ paddingRight: 15 }} onPress={this.refreshContact}>
-                      <Icon name="bookmarks" />
-                  </Button>
+                  {/*<Button transparent style={{ paddingRight: 15 }} onPress={this.refreshContact}>*/}
+                      {/*<Icon name="bookmarks" />*/}
+                  {/*</Button>*/}
                   {action}
 
               </View>
