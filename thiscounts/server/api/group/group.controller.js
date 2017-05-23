@@ -57,13 +57,12 @@ function group_activity(group, action) {
   sendActivity(act);
 }
 
-function user_follow_group_activity(group, user) {
+function user_follow_group_activity(group, user, actorType) {
   sendActivity({
-    group: group,
+    user: user,
     action: "group_follow",
-    actor_user: user,
-    audience: ['SELF', 'FOLLOWERS']
-
+    actor_group: group,
+    audience: ['SELF']
   });
 }
 
@@ -74,14 +73,14 @@ function sendActivity(act) {
 
 }
 
-function group_message_activity(message) {
+function group_message_activity(group, user_id, message) {
   sendActivity({
+    user: user_id,
     action: 'message',
     message: message,
     actor_group: group,
     audience: ['SELF']
   });
-
 }
 
 function group_follow_group_activity(following, followed) {
@@ -207,15 +206,8 @@ exports.message = function (req, res) {
     if (!group) {
       return res.status(404).send('no group');
     }
-    //var updated = _.merge(group, req.body);
-    updated.save(function (err) {
-      if (err) {
-        return handleError(res, err);
-      }
-      graphModel.relate_ids(group._id, 'CREATED_BY', req.user._id);
-      group_message_activity(group);
-      return res.json(200, group);
-    });
+    group_message_activity(group, req.user._id, req.body);
+    return res.json(200, group);
   });
 };
 
@@ -271,13 +263,17 @@ exports.add_admin = function (req, res) {
     }
     //if requester is group admin he may add admins
     if (utils.defined(_.find(group.admins, req.user._id))) {
-      user_follow_group(req.user._id, group, function (err, group) {
-        add_user_to_group_admin(req.user._id, group, function(err, group){
-          if (err) {return handleError(res, err);}
-          return res.status(200).json(group);
-        })
-      });
+      handleError(res, new Error('only group admin can add admin'))
     }
+    graphModel.is_related_ids(user_id, 'FOLLOW', group._id, function (err, exist) {
+      if(!exist){
+        handleError(res, new Error('only group members can be added to admin'))
+      }
+      add_user_to_group_admin(req.user._id, group, function(err, group){
+        if (err) {return handleError(res, err);}
+        return res.status(200).json(group);
+      })
+    });
   });
 };
 
