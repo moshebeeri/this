@@ -117,16 +117,17 @@ export default  class Login extends Component {
 
     componentWillMount() {
         if(calc_login){
-
             this.calc_login_status();
             calc_login = false;
         }
     }
+
     componentDidMount() {
         this.setState({
             phone_number: this.refs.phone.getPickerData()
         })
     }
+
     selectCountry(country) {
         this.refs.phone.selectCountry(country.cca2.toLowerCase());
         this.setState({
@@ -136,17 +137,11 @@ export default  class Login extends Component {
         this.setState({cca2: country.cca2})
     }
 
-
-
-
     replaceRoute(route) {
-
         this.props.navigation.navigate(route);
-    // this.props.replaceAt('login', { key: route }, this.props.navigation.key);
-}
+    }
 
     render() {
-
         return (
             <Container>
               <Content theme={login} style={{ backgroundColor: login.backgroundColor }} >
@@ -231,7 +226,6 @@ export default  class Login extends Component {
             </Container>
         );
     }
-
 }
 
 

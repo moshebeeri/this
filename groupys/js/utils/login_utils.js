@@ -54,7 +54,6 @@ class LoginUtils {
                 });
                 const responseData = await response.json();
                 await store.save('token', responseData.token);
-                await store.save('privateKey', responseData.privateKey);
                 resolve(responseData.token);
 
             } catch (error) {
@@ -102,7 +101,7 @@ class LoginUtils {
                         'Authorization': 'Bearer ' + token,
                     }
                 });
-                if(me.status == '401') {
+                if(me.status === '401') {
                     console.log('token expired');
                     try{
                         const token = await this.refreshToken();
@@ -143,10 +142,6 @@ class LoginUtils {
         store.delete('token');
         store.delete('privateKey');
         store.delete('recover_account');
-
-
     }
-
-
 }
 export default LoginUtils;
