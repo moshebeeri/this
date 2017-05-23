@@ -23,7 +23,7 @@ class FeedApi {
 
                 let contacts = await store.get("all-contacts");
                 contacts = JSON.parse(contacts);
-                const response = await fetch(`${server_host}/api/feeds/`+id+`/`+ direction +`/user/` +userId , {
+                const response = await fetch(`${server_host}/api/feeds/`+id+`/`+ direction +`/` +userId , {
                     method: 'GET',
                     headers: {
                         'Accept': 'application/json, text/plain, */*',
