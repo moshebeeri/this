@@ -24,22 +24,25 @@ import GroupFeed from  './js/components/groups/feeds/index'
 import Signup from './js/components/signup/index';
 import Register from './js/components/register/index';
 
-const Groupys = StackNavigator({
-    login: { screen: Login },
-    home: { screen: ApplicationManager },
-    addBusiness: { screen: AddBusiness },
-    addPromotions:{screen:AddPromotions},
-    AddGroups:{screen:AddGroups},
-    SelectUsersComponent:{screen: SelectUsersComponent},
-    AddProduct:{screen: AddProduct},
-    GroupFeed:{screen: GroupFeed},
-    Signup:{screen: Signup},
-    Register:{screen: Register},
+import codePush from "react-native-code-push";
+
+let Groupys = StackNavigator({
+        login: { screen: Login },
+        home: { screen: ApplicationManager },
+        addBusiness: { screen: AddBusiness },
+        addPromotions:{screen:AddPromotions},
+        AddGroups:{screen:AddGroups},
+        SelectUsersComponent:{screen: SelectUsersComponent},
+        AddProduct:{screen: AddProduct},
+        GroupFeed:{screen: GroupFeed},
+        Signup:{screen: Signup},
+        Register:{screen: Register},
 
 
 
     }
 );
 
+Groupys = codePush(Groupys);
 
 AppRegistry.registerComponent('groupys', () => Groupys);

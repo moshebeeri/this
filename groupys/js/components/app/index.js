@@ -19,7 +19,7 @@ let locationApi = new LocationApi();
 let contactApi = new ContactApi();
 
 import { NavigationActions } from 'react-navigation'
-
+import codePush from "react-native-code-push";
 
 
 const resetAction = NavigationActions.reset({
@@ -71,6 +71,11 @@ export default class ApplicationManager extends Component {
              // this will be executed every 200 ms
              // even when app is the the background
              contactApi.syncContacts();
+             this.props.navigation.dispatch(resetAction);
+             var updateDialogOption = {
+                 updateTitle:"update"
+             }
+             codePush.sync({updateDialog: updateDialogOption})
          }, 60000);
 
 
@@ -135,6 +140,10 @@ export default class ApplicationManager extends Component {
     }
     componentWillMount() {
         this.props.navigation.dispatch(resetAction);
+        var updateDialogOption = {
+            updateTitle:"update"
+        }
+        codePush.sync({updateDialog: updateDialogOption})
     }
 
    async headerAction(compoenet, index){
@@ -164,7 +173,7 @@ export default class ApplicationManager extends Component {
                         <Feeds index={0} navigateAction={this.headerAction.bind(this)}/>
                     </Tab>
                     <Tab
-                        heading={ <TabHeading><Text style={{color: 'black', fontSize: 11,}}>Groups</Text></TabHeading>}>
+                        heading={ <TabHeading><Text style={{color: 'black', fontSize: 11,}}>new Groups</Text></TabHeading>}>
                         <Groups navigation={this.props.navigation} index={4}
                                 navigateAction={this.headerAction.bind(this)}/>
                     </Tab>
