@@ -116,11 +116,10 @@ export default  class Login extends Component {
     }
 
     componentWillMount() {
-        if(calc_login){
 
-            this.calc_login_status();
-            calc_login = false;
-        }
+        this.calc_login_status();
+
+
     }
     componentDidMount() {
         this.setState({

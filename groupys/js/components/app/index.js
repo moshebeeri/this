@@ -18,7 +18,16 @@ import BackgroundTimer from 'react-native-background-timer';
 let locationApi = new LocationApi();
 let contactApi = new ContactApi();
 
+import { NavigationActions } from 'react-navigation'
 
+
+
+const resetAction = NavigationActions.reset({
+    index: 0,
+    actions: [
+        NavigationActions.navigate({ routeName: 'home'})
+    ]
+});
 export default class ApplicationManager extends Component {
     static navigationOptions = {
         header:null
@@ -124,8 +133,9 @@ export default class ApplicationManager extends Component {
         }
 
     }
-
-
+    componentWillMount() {
+        this.props.navigation.dispatch(resetAction);
+    }
 
    async headerAction(compoenet, index){
        this.setState({
@@ -140,34 +150,45 @@ export default class ApplicationManager extends Component {
         let showAction = this.showAction(this.state.index);
         let index = this.state.initialPage;
 
-        return (
-            <Container>
 
-                <GeneralComponentHeader   navigate = {this.props.navigation.navigate} showAction = {showAction} current='home' to={this.state.addComponent} />
+        if(this.props.navigation.state.key == 'Init0') {
+
+            return (<Container>
+
+                <GeneralComponentHeader navigate={this.props.navigation.navigate} showAction={showAction} current='home'
+                                        to={this.state.addComponent}/>
 
 
-
-                <Tabs initialPage={index} onChangeTab={this.onChangeTab.bind(this)} style={{ backgroundColor: '#fff',}}>
-                    <Tab  heading={ <TabHeading><Text style={{ color:'black', fontSize: 11,}}>Home</Text></TabHeading>}>
+                <Tabs initialPage={index} onChangeTab={this.onChangeTab.bind(this)} style={{backgroundColor: '#fff',}}>
+                    <Tab heading={ <TabHeading><Text style={{color: 'black', fontSize: 11,}}>Home</Text></TabHeading>}>
                         <Feeds index={0} navigateAction={this.headerAction.bind(this)}/>
                     </Tab>
-                    <Tab   heading={ <TabHeading><Text style={{ color:'black',fontSize: 11,}}>Groups</Text></TabHeading>}>
-                        <Groups navigation={this.props.navigation} index={4} navigateAction={this.headerAction.bind(this)}/>
+                    <Tab
+                        heading={ <TabHeading><Text style={{color: 'black', fontSize: 11,}}>Groups</Text></TabHeading>}>
+                        <Groups navigation={this.props.navigation} index={4}
+                                navigateAction={this.headerAction.bind(this)}/>
                     </Tab>
-                    <Tab  heading={ <TabHeading><Text style={{ color:'black',fontSize: 11,}}>Products</Text></TabHeading>}>
+                    <Tab heading={ <TabHeading><Text
+                        style={{color: 'black', fontSize: 11,}}>Products</Text></TabHeading>}>
                         <Product index={1} navigateAction={this.headerAction.bind(this)}/>
                     </Tab>
-                    <Tab  heading={ <TabHeading><Text style={{ color:'black',fontSize: 11,}}>Buiesness</Text></TabHeading>}>
-                        <Business  index={2} navigateAction={this.headerAction.bind(this)}/>
+                    <Tab heading={ <TabHeading><Text
+                        style={{color: 'black', fontSize: 11,}}>Buiesness</Text></TabHeading>}>
+                        <Business index={2} navigateAction={this.headerAction.bind(this)}/>
                     </Tab>
-                    <Tab   heading={ <TabHeading><Text style={{ color:'black',fontSize: 11,}}>Promotions</Text></TabHeading>}>
-                        <Promotions  index={3} navigateAction={this.headerAction.bind(this)}/>
+                    <Tab heading={ <TabHeading><Text
+                        style={{color: 'black', fontSize: 11,}}>Promotions</Text></TabHeading>}>
+                        <Promotions index={3} navigateAction={this.headerAction.bind(this)}/>
                     </Tab>
 
                 </Tabs>
 
-            </Container>
-        );
+            </Container>);
+        }
+        return  <Container></Container>;
+
+
+
     }
 }
 

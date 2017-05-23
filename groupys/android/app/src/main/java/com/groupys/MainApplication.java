@@ -1,9 +1,9 @@
 package com.groupys;
 
 import android.app.Application;
-import android.util.Log;
 
 import com.facebook.react.ReactApplication;
+
 import com.ocetnik.timer.BackgroundTimerPackage;
 import com.farmisen.react_native_file_uploader.RCTFileUploaderPackage;
 import com.rt2zz.reactnativecontacts.ReactNativeContacts;
