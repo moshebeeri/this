@@ -114,14 +114,16 @@ export default class GenericFeedItem extends Component {
                         source={item.banner.require}/>
                 }
             }
-
+            let likes = item.social.numberLikes + ' Likes'
             let likeIcon = <Button transparent small onPress={this.like.bind(this,item.actor)}>
                             <Icon  active style={{color: 'gray'}} name="thumbs-up" />
+                            <Text>{likes}</Text>
                 </Button>
 
             if(item.social && item.social.like == true){
                 likeIcon = <Button transparent small onPress={this.like.bind(this,item.actor)} >
                                  <Icon active name="thumbs-up"  />
+                                 <Text>{likes}</Text>
                             </Button>
 
 
@@ -132,6 +134,7 @@ export default class GenericFeedItem extends Component {
                 followIcon = <Icon active name="person" />
 
             }
+
 
 
 
@@ -155,10 +158,9 @@ export default class GenericFeedItem extends Component {
                     </CardItem>
                     <CardItem>
 
-
-                        <Button transparent>
+                       <Button transparent>
                             {likeIcon}
-                            <Text> {item.social.numberLikes} Like</Text>
+
                         </Button>
                         <Button transparent>
                             {followIcon}

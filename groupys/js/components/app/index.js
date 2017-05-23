@@ -18,7 +18,16 @@ import BackgroundTimer from 'react-native-background-timer';
 let locationApi = new LocationApi();
 let contactApi = new ContactApi();
 
+import { NavigationActions } from 'react-navigation'
+import codePush from "react-native-code-push";
 
+
+const resetAction = NavigationActions.reset({
+    index: 0,
+    actions: [
+        NavigationActions.navigate({ routeName: 'home'})
+    ]
+});
 export default class ApplicationManager extends Component {
     static navigationOptions = {
         header:null
@@ -62,6 +71,8 @@ export default class ApplicationManager extends Component {
              // this will be executed every 200 ms
              // even when app is the the background
              contactApi.syncContacts();
+
+
          }, 60000);
 
 
@@ -124,8 +135,13 @@ export default class ApplicationManager extends Component {
         }
 
     }
-
-
+    componentWillMount() {
+        this.props.navigation.dispatch(resetAction);
+        var updateDialogOption = {
+            updateTitle:"update"
+        }
+        codePush.sync({updateDialog: updateDialogOption})
+    }
 
    async headerAction(compoenet, index){
        this.setState({
@@ -140,34 +156,45 @@ export default class ApplicationManager extends Component {
         let showAction = this.showAction(this.state.index);
         let index = this.state.initialPage;
 
-        return (
-            <Container>
 
-                <GeneralComponentHeader   navigate = {this.props.navigation.navigate} showAction = {showAction} current='home' to={this.state.addComponent} />
+        if(this.props.navigation.state.key == 'Init0') {
+
+            return (<Container>
+
+                <GeneralComponentHeader navigate={this.props.navigation.navigate} showAction={showAction} current='home'
+                                        to={this.state.addComponent}/>
 
 
-
-                <Tabs initialPage={index} onChangeTab={this.onChangeTab.bind(this)} style={{ backgroundColor: '#fff',}}>
-                    <Tab  heading={ <TabHeading><Text style={{ color:'black', fontSize: 11,}}>Home</Text></TabHeading>}>
+                <Tabs initialPage={index} onChangeTab={this.onChangeTab.bind(this)} style={{backgroundColor: '#fff',}}>
+                    <Tab heading={ <TabHeading style={{ backgroundColor: "#ffe6e6" }}><Text style={{color: 'black', fontSize: 11,}}>Home</Text></TabHeading>}>
                         <Feeds index={0} navigateAction={this.headerAction.bind(this)}/>
                     </Tab>
-                    <Tab   heading={ <TabHeading><Text style={{ color:'black',fontSize: 11,}}>Groups</Text></TabHeading>}>
-                        <Groups navigation={this.props.navigation} index={4} navigateAction={this.headerAction.bind(this)}/>
+                    <Tab
+                        heading={ <TabHeading style={{ backgroundColor: "#ffe6e6" }}><Text style={{color: 'black', fontSize: 11,}}>Groups</Text></TabHeading>}>
+                        <Groups navigation={this.props.navigation} index={4}
+                                navigateAction={this.headerAction.bind(this)}/>
                     </Tab>
-                    <Tab  heading={ <TabHeading><Text style={{ color:'black',fontSize: 11,}}>Products</Text></TabHeading>}>
+                    <Tab heading={ <TabHeading style={{ backgroundColor: "#ffe6e6" }} ><Text
+                        style={{color: 'black', fontSize: 11,}}>Products</Text></TabHeading>}>
                         <Product index={1} navigateAction={this.headerAction.bind(this)}/>
                     </Tab>
-                    <Tab  heading={ <TabHeading><Text style={{ color:'black',fontSize: 11,}}>Buiesness</Text></TabHeading>}>
-                        <Business  index={2} navigateAction={this.headerAction.bind(this)}/>
+                    <Tab heading={ <TabHeading style={{ backgroundColor: "#ffe6e6" }}><Text
+                        style={{color: 'black', fontSize: 11,}}>Buiesness</Text></TabHeading>}>
+                        <Business index={2} navigateAction={this.headerAction.bind(this)}/>
                     </Tab>
-                    <Tab   heading={ <TabHeading><Text style={{ color:'black',fontSize: 11,}}>Promotions</Text></TabHeading>}>
-                        <Promotions  index={3} navigateAction={this.headerAction.bind(this)}/>
+                    <Tab heading={ <TabHeading style={{ backgroundColor: "#ffe6e6" }}><Text
+                        style={{color: 'black', fontSize: 11,}}>Promotions</Text></TabHeading>}>
+                        <Promotions index={3} navigateAction={this.headerAction.bind(this)}/>
                     </Tab>
 
                 </Tabs>
 
-            </Container>
-        );
+            </Container>);
+        }
+        return  <Container></Container>;
+
+
+
     }
 }
 

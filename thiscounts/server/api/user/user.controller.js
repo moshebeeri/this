@@ -417,6 +417,9 @@ exports.recover_password = function (req, res) {
  * code verification
  */
 exports.verification = function (req, res) {
+  if(!config.sms_verification) {
+    return res.status(200).send('user verified');
+  }
   console.log("req.params.code: " + req.params.code);
   console.log("req.user._id: " + req.user._id);
   let code = req.params.code;
