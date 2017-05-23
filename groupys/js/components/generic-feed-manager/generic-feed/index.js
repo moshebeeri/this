@@ -71,7 +71,17 @@ export default class GenericFeedItem extends Component {
 
 
         like(item){
+            this.props.item.social.like = true;
+            this.props.item.social.numberLikes = this.props.item.social.numberLikes + 1;
+            this.props.selectApi.reRender();
             userApi.like(item);
+        }
+
+        unlike(item){
+            this.props.item.social.like = false;
+            this.props.item.social.numberLikes = this.props.item.social.numberLikes - 1;
+            this.props.selectApi.reRender();
+            userApi.unlike(item);
         }
         createFeed(item){
             if(item.content){
@@ -121,7 +131,7 @@ export default class GenericFeedItem extends Component {
                 </Button>
 
             if(item.social && item.social.like == true){
-                likeIcon = <Button transparent small onPress={this.like.bind(this,item.actor)} >
+                likeIcon = <Button transparent small onPress={this.unlike.bind(this,item.actor)} >
                                  <Icon active name="thumbs-up"  />
                                  <Text>{likes}</Text>
                             </Button>

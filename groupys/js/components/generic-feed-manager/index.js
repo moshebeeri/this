@@ -26,6 +26,7 @@ export default class GenericFeedManager extends Component {
             dataset: null,
             showLoader:false,
             showTopLoader:false,
+            reRender: false,
             intervalId:{},
 
         }
@@ -35,6 +36,17 @@ export default class GenericFeedManager extends Component {
 
 
 
+    reRender(){
+        if(this.state.reRender){
+            this.setState({
+                reRender: false
+            })
+        }else {
+            this.setState({
+                reRender: true
+            })
+        }
+    }
      componentWillMount(){
         this.fetchList();
 
