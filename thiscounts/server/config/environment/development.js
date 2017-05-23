@@ -34,4 +34,5 @@ module.exports = {
   seedDB: true,
   //seedDB: false,
   initializeNeo4j: true,
+  sms_verification: false
 };

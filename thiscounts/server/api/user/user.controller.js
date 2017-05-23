@@ -194,9 +194,13 @@ exports.create = function (req, res, next) {
 
   newUser.provider = 'local';
   newUser.role = 'user';
-  newUser.sms_code = randomstring.generate({length: 4, charset: 'numeric'});
-
-  newUser.sms_verified = false;
+  if(config.sms_verification){
+    newUser.sms_code = randomstring.generate({length: 4, charset: 'numeric'});
+    newUser.sms_verified = false;
+  } else {
+    newUser.sms_code = '';
+    newUser.sms_verified = true;
+  }
   newUser.phone_number = utils.clean_phone_number(newUser.phone_number);
 
   User.findOne({phone_number: newUser.phone_number}, function (err, user) {
@@ -206,17 +210,19 @@ exports.create = function (req, res, next) {
     } else {
       newUser.save(function (err, user) {
         if (err) return validationError(res, err);
-        let token = jwt.sign({_id: user._id}, config.secrets.session, {expiresIn: 60 * 24 * 30});
-        res.status(200).json({token: token});
-
-        send_sms_verification_code(user);
-
         graphModel.reflect(user,
           {
             _id: user._id,
             phone: user.phone_number
           }, function (err) {
             if (err) return res.send(500, err);
+            let token = jwt.sign({_id: user._id}, config.secrets.session, {expiresIn: 60 * 24 * 30});
+            if(config.sms_verification){
+              send_sms_verification_code(user);
+            } else {
+              new_user_follow(user);
+            }
+            res.status(200).json({token: token});
           });
       });
     }

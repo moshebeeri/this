@@ -15,30 +15,59 @@ let ActivitySchema = require('../../api/activity/activity.model');
 function Activity() {
   logger.info("Activity constructed");
 }
+
+function getActivityActor(activity) {
+  if (activity.actor_user)
+    return actor_user;
+  if (activity.actor_business)
+    return actor_business;
+  if (activity.actor_group)
+    return actor_group;
+  if (activity.actor_mall)
+    return actor_mall;
+  if (activity.actor_chain)
+    return actor_chain;
+}
+
 //pagination http://blog.mongodirector.com/fast-paging-with-mongodb/
 function update_feeds(effected, activity) {
-  effected.forEach(function (user) {
-    Feed.create({
-      user: user._id,
-      activity: activity._id
-    }, function(err) {
-      if(err) { logger.error(err.message); }
+  if(!activity.audience || _.includes(activity.audience, 'FOLLOWERS')) {
+    effected.forEach(function (entity) {
+      console.log(`entity._id=${entity._id} activity._id=${activity._id}`);
+      Feed.create({
+        entity: entity._id,
+        activity: activity._id
+      }, function (err) {
+        if (err) {
+          logger.error(err.message);
+        }
+      });
     });
-  });
-  if(utils.defined(activity.backfire)){
-
+  }
+  if (_.includes(activity.audience, 'SELF')) {
+    Feed.create({
+      entity: getActivityActor(activity),
+      activity: activity._id
+    }, function (err) {
+      if (err) {
+        logger.error(err.message);
+      }
+    });
   }
 }
 
+/*
 function update_group_feeds(effected, activity) {
   mongoose.connection.db.collection('feed', function (err, collection) {
     if (err) return logger.error(err.message);
     effected.forEach(function (group) {
       Feed.create({
-          group: group._id,
-          activity: activity._id
-      }, function(err) {
-        if(err) { logger.error(err.message); }
+        group: group._id,
+        activity: activity._id
+      }, function (err) {
+        if (err) {
+          logger.error(err.message);
+        }
       });
     });
   });
@@ -55,7 +84,9 @@ Activity.prototype.group_activity = function group_activity(act, callback) {
                               where actor._id='%s'         \
                               return actor ", act.actor_group);
     run(query, function (err, group) {
-      if (err) { return callback(err, null); }
+      if (err) {
+        return callback(err, null);
+      }
       update_group_feeds(group, activity);
 
       //update following groups
@@ -63,13 +94,16 @@ Activity.prototype.group_activity = function group_activity(act, callback) {
                               where actor._id='%s'         \
                               return effected ", act.actor_group);
       run(query, function (err, effected) {
-        if (err) { return callback(err, null); }
+        if (err) {
+          return callback(err, null);
+        }
         update_group_feeds(effected, activity);
         callback(null, activity)
       });
     });
   });
 };
+*/
 
 /**
  *
@@ -101,12 +135,18 @@ Activity.prototype.create = function create(act) {
   });
 };
 
-function activity_impl(act, callback){
+function activity_impl(act, callback) {
   ActivitySchema.create(act, function (err, activity) {
     if (err) {
       callback(err, null);
       return;
     }
+
+    if(activity.audience && !_.includes(activity.audience, 'FOLLOWERS')) {
+      update_feeds([], activity);
+      return callback(null, activity)
+    }
+
     if (activity.actor_user) {
       effected_in_rel(activity.actor_user, "FOLLOW", function (err, effected) {
         if (err) {
@@ -160,10 +200,14 @@ Activity.prototype.action_activity = function action_activity(userId, itemId, ac
     actor_user: userId,
     action: action
   };
-  utils.parallel_id(itemId, act, function(err, act){
-    if(err) {return callback(err, null)}
-    activity_impl(act, function(err){
-      if(err) {logger.error(err.message)}
+  utils.parallel_id(itemId, act, function (err, act) {
+    if (err) {
+      return callback(err, null)
+    }
+    activity_impl(act, function (err) {
+      if (err) {
+        logger.error(err.message)
+      }
     });
   });
 };
@@ -181,14 +225,14 @@ function run(query, callback) {
 function effected_out_rel(actor_id, relationship, callback) {
   let query = util.format(" MATCH (actor)-[:%s]->(effected) \
                             where actor._id='%s' and actor <> effected \
-                            return effected._id, labels(e)", relationship, actor_id);
+                            return effected", relationship, actor_id);
   run(query, callback);
 }
 
 function effected_in_rel(actor_id, relationship, callback) {
   let query = util.format(" MATCH (actor)<-[:%s]-(effected) \
                             where actor._id='%s' and actor <> effected \
-                            return effected._id, labels(e)", relationship, actor_id);
+                            return effected", relationship, actor_id);
   run(query, callback);
 }
 

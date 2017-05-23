@@ -54,51 +54,51 @@ function group_activity(group, action) {
     act.actor_business = group.creator;
   else if (group.entity_type === 'MALL')
     act.actor_mall = group.creator;
-  user_activity(act);
+  sendActivity(act);
 }
 
 function user_follow_group_activity(group, user) {
-  user_activity({
+  sendActivity({
     group: group,
     action: "group_follow",
-    actor_user: user
+    actor_user: user,
+    audience: ['SELF', 'FOLLOWERS']
+
   });
 }
 
-function user_activity(act) {
+function sendActivity(act) {
   activity.activity(act, function (err) {
     if (err) logger.error(err.message)
   });
 
 }
 
-function group_offer_activity(group, offer) {
-  activity.group_activity({
-    offer: offer,
-    action: "group_offer",
-    actor_group: group
-  }, function (err) {
-    if (err) logger.error(err.message)
+function group_message_activity(message) {
+  sendActivity({
+    action: 'message',
+    message: message,
+    actor_group: group,
+    audience: ['SELF']
   });
-}
-
-function group_message_activity() {
 
 }
 
 function group_follow_group_activity(following, followed) {
-  user_activity({
+  sendActivity({
     group: followed,
     action: "group_follow",
-    actor_group: following
+    actor_group: following,
+    audience: ['SELF', 'FOLLOWERS']
   });
 }
 
 function group_follow_business_activity(following, followed) {
-  user_activity({
+  sendActivity({
     business: followed,
     action: "group_follow",
-    actor_group: following
+    actor_group: following,
+    audience: ['SELF', 'FOLLOWERS']
   });
 }
 

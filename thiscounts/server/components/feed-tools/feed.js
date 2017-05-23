@@ -1,12 +1,12 @@
 "use strict";
 
-var _ = require('lodash');
-var async = require('async');
-var utils = require('../utils').createUtils();
+const _ = require('lodash');
+const async = require('async');
+const utils = require('../utils').createUtils();
 
-var logger = require('../logger').createLogger();
-var graphTools = require('../graph-tools');
-var graphModel = graphTools.createGraphModel('user');
+const logger = require('../logger').createLogger();
+const graphTools = require('../graph-tools');
+const graphModel = graphTools.createGraphModel('user');
 
 
 exports.generate = function(msg) {
@@ -272,98 +272,98 @@ function update_states(feeds, callback) {
 }
 
 function update_state(feed, callback) {
-  var activity = feed.activity;
-  var user = feed.user;
+  const activity = feed.activity;
+  const entity = feed.entity;
   async.parallel({
       promotion: function (callback) {
         if (utils.defined(activity.promotion))
-          promotion_state(user._id, activity.promotion, callback);
+          promotion_state(entity, activity.promotion, callback);
         else
           callback(null, null);
       },
       product: function (callback) {
         if (utils.defined(activity.product))
-          product_state(user._id, activity.product, callback);
+          product_state(entity, activity.product, callback);
         else
           callback(null, null);
       },
       user: function (callback) {
         if (utils.defined(activity.user))
-          user_state(user._id, activity.user, callback);
+          user_state(entity, activity.user, callback);
         else
           callback(null, null);
       },
       business: function (callback) {
         if (utils.defined(activity.business))
-          business_state(user._id, activity.business, callback);
+          business_state(entity, activity.business, callback);
         else
           callback(null, null);
       },
       mall: function (callback) {
         if (utils.defined(activity.mall))
-          mall_state(user._id, activity.mall, callback);
+          mall_state(entity, activity.mall, callback);
         else
           callback(null, null);
       },
       chain: function (callback) {
         if (utils.defined(activity.chain))
-          chain_state(user._id, activity.chain, callback);
+          chain_state(entity, activity.chain, callback);
         else
           callback(null, null);
       },
       actor_user: function (callback) {
         if (utils.defined(activity.actor_user))
-          user_state(user._id, activity.actor_user, callback);
+          user_state(entity, activity.actor_user, callback);
         else
           callback(null, null);
       },
       actor_business: function (callback) {
         if (utils.defined(activity.actor_business))
-          business_state(user._id, activity.actor_business, callback);
+          business_state(entity, activity.actor_business, callback);
         else
           callback(null, null);
       },
       actor_mall: function (callback) {
         if (utils.defined(activity.actor_mall))
-          mall_state(user._id, activity.actor_mall, callback);
+          mall_state(entity, activity.actor_mall, callback);
         else
           callback(null, null);
       },
       actor_chain: function (callback) {
         if (utils.defined(activity.actor_chain))
-          chain_state(user._id, activity.actor_chain, callback);
+          chain_state(entity, activity.actor_chain, callback);
         else
           callback(null, null);
       }
     },
     function (err, states) {
       if(err){ return callback(err, null) }
-      if (states['promotion'] != null)
+      if (states['promotion'] !== null)
         activity.promotion = states['promotion'];
-      if (states['product'] != null)
+      if (states['product'] !== null)
         activity.product = states['product'];
-      if (states['user'] != null)
-        activity.user = states['user'];
-      if (states['business'] != null)
+      if (states['entity'] !== null)
+        activity.user = states['entity'];
+      if (states['business'] !== null)
         activity.business = states['business'];
-      if (states['mall'] != null)
+      if (states['mall'] !== null)
         activity.mall = states['mall'];
-      if (states['chain'] != null)
+      if (states['chain'] !== null)
         activity.chain = states['chain'];
-      if (states['actor_user'] != null)
+      if (states['actor_user'] !== null)
         activity.actor_user = states['actor_user'];
-      if (states['actor_business'] != null)
+      if (states['actor_business'] !== null)
         activity.actor_business = states['actor_business'];
-      if (states['actor_mall'] != null)
+      if (states['actor_mall'] !== null)
         activity.actor_mall = states['actor_mall'];
-      if (states['actor_chain'] != null)
+      if (states['actor_chain'] !== null)
         activity.actor_chain = states['actor_chain'];
 
       callback(null, feed)
     });
 }
 
-//var populate_all = async.compose(pupulate( { path: 'activity.actor_user', model: 'User' }, feeds), add1);
+//const populate_all = async.compose(pupulate( { path: 'activity.actor_user', model: 'User' }, feeds), add1);
 //async.parallel([
 //  { path: 'activity.promotion'      , model: 'Promotion'    },
 //  { path: 'activity.user'           , model: 'User'         },
@@ -376,7 +376,7 @@ function update_state(feed, callback) {
 //  { path: 'activity.actor_chain'    , model: 'SoppingChain' }
 //];
 
-//var options = {path: 'activity.actor_user', model: 'User'};
+//const options = {path: 'activity.actor_user', model: 'User'};
 //Feed.populate(feeds, options, function (err, feeds) {
 //  return res.status(200).json(feeds);
 //});

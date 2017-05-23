@@ -21,7 +21,9 @@ var ActivitySchema = new Schema({
   actor_chain: {type: Schema.ObjectId, ref: 'ShoppingChain'},
   actor_group: {type: Schema.ObjectId, ref: 'Group'},
 
-  action: {type: String, default: ''} //ex: has replied to:, or started following:
+  action: {type: String, default: ''}, //ex: has replied to:, or started following:
+  message: {type: String, default: ''}
+
 });
 
 module.exports = mongoose.model('Activity', ActivitySchema);

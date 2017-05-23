@@ -4,9 +4,8 @@ var mongoose = require('mongoose'),
     Schema = mongoose.Schema;
 
 var FeedSchema = new Schema({
-  user: {type: Schema.ObjectId, ref: 'User'},
-  group: {type: Schema.ObjectId, ref: 'Group'},
-  activity: {type: Schema.ObjectId, ref: 'Activity'}
+  entity: {type: Schema.ObjectId, required: true, index: true},
+  activity: {type: Schema.ObjectId, ref: 'Activity', required: true, index: true}
 });
 
 module.exports = mongoose.model('Feed', FeedSchema);
