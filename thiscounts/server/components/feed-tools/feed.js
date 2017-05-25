@@ -342,8 +342,8 @@ function update_state(feed, callback) {
         activity.promotion = states['promotion'];
       if (states['product'] !== null)
         activity.product = states['product'];
-      if (states['entity'] !== null)
-        activity.user = states['entity'];
+      if (states['user'] !== null)
+        activity.user = states['user'];
       if (states['business'] !== null)
         activity.business = states['business'];
       if (states['mall'] !== null)
