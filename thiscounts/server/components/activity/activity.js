@@ -18,15 +18,15 @@ function Activity() {
 
 function getActivityActor(activity) {
   if (activity.actor_user)
-    return actor_user;
+    return activity.actor_user;
   if (activity.actor_business)
-    return actor_business;
+    return activity.actor_business;
   if (activity.actor_group)
-    return actor_group;
+    return activity.actor_group;
   if (activity.actor_mall)
-    return actor_mall;
+    return activity.actor_mall;
   if (activity.actor_chain)
-    return actor_chain;
+    return activity.actor_chain;
 }
 
 //pagination http://blog.mongodirector.com/fast-paging-with-mongodb/
