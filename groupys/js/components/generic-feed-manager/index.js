@@ -53,9 +53,9 @@ export default class GenericFeedManager extends Component {
          const intervalId = BackgroundTimer.setInterval(() => {
              // this will be executed every 200 ms
              // even when app is the the background
-             if(this.state.rowsView.length > 0) {
-                 this.fetchTopList(this.state.rowsView[0].id, false);
-             }
+             // if(this.state.rowsView.length > 0) {
+             //     this.fetchTopList(this.state.rowsView[0].id, false);
+             // }
          }, 60000);
 
          this.setState({

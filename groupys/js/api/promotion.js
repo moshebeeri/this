@@ -36,7 +36,7 @@ class PromotionApi
                 let responseData = await response.json();
 
                 if(promotion.image){
-                    entityUtils.doUpload(promotion.image.uri,promotion.image.mime,token,callbackFunction,'promotions',responseData);
+                    entityUtils.doUpload(promotion.image.uri,promotion.image.mime,token,callbackFunction,'promotions',responseData.promotions[0]);
 
                 }else{
                     callbackFunction(responseData);

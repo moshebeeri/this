@@ -182,9 +182,7 @@ export default class GroupFeed extends Component {
 
 
 
-    replaceRoute(route) {
-    this.props.replaceAt('login', { key: route }, this.props.navigation.key);
-  }
+
 
     render() {
 
