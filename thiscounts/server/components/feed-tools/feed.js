@@ -39,7 +39,7 @@ exports.fetch_feed = function(userId, query_builder, Model, res) {
       function populate_user(feeds, callback) {
         Model.populate(feeds, {
           path: 'activity.user',
-          select: '-salt -hashedPassword -gid -role -__v -email -phone_number -sms_verified -sms_code -provider',
+          select: '-salt -hashedPassword -gid -role -__v -email -sms_verified -sms_code -provider',
           model: 'User'
         }, callback);
       }
