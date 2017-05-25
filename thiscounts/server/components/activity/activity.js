@@ -143,6 +143,7 @@ function activity_impl(act, callback) {
     }
 
     if(act.audience && !_.includes(act.audience, 'FOLLOW')) {
+      activity.audience = act.audience;
       update_feeds([], activity);
       return callback(null, activity)
     }
