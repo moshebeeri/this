@@ -145,7 +145,6 @@ function create_promotion(promotion, callback) {
   //TODO: Convert to address location
   set_promotion_location(promotion, function (err, promotion) {
     if (err) return callback(err, null);
-    console.log(JSON.stringify(promotion));
     Promotion.create(promotion, function (err, promotion) {
       if (err) return callback(err, null);
       promotionGraphModel.reflect(promotion, to_graph(promotion), function (err, promotion) {

@@ -151,7 +151,6 @@ GraphModel.prototype.relate_ids = function relate_id(from, name, to, params, cal
     params = ''; //`{timestamp: "${Date.now()}"}`;
 
   let query = 'MATCH (f { _id:"' + from + '"}), (t { _id:"' + to + '"}) CREATE UNIQUE (f)-[:' + name + params + ']->(t)';
-  console.log(query);
   if (utils.defined(callback)) {
     db.query(query, callback);
   } else {
@@ -178,7 +177,6 @@ GraphModel.prototype.unrelate_ids = function unrelate(from, name, to){
  */
 GraphModel.prototype.follow_user_by_phone_number = function follow_user_by_phone_number(number, userId, callback){
   let query = util.format("MATCH (phone:user { phone:'%s' }), (u:user { _id:'%s' }) CREATE UNIQUE (phone)-[r:FOLLOW]->(u)", number,userId);
-  console.log(`follow_user_by_phone_number query: ${query}`);
   if (utils.defined(callback)) {
     db.query(query, callback);
   } else {
@@ -203,7 +201,6 @@ GraphModel.prototype.owner_followers_follow_business = function owner_followers_
   let query = `MATCH (u:user ${userFilter})-[:FOLLOW]->(owner:user { _id:'${owner_id}' })-[:OWNS]->(b:business{type:'SMALL_BUSINESS'})
   OPTIONAL MATCH (u:user)-[:FOLLOW]->(owner:user { _id:'${owner_id}' })-[:OWNS]->(b:business{type:'PERSONAL_SERVICE'})
   CREATE UNIQUE (u)-[r:FOLLOW]->(b)` ;
-  console.log(`owner_followers_follow_business query: ${query}`);
   if (utils.defined(callback)) {
     db.query(query, callback);
   } else {
@@ -329,7 +326,6 @@ GraphModel.prototype.query_objects_parallel = function query_objects_parallel(sc
       })(schemas[key], Array.from(reduced[key]));
     });
     return async.parallel(queryFunctions, function(err, result) {
-      console.log('ending: ' + result);
       return callback();
     });
   });
