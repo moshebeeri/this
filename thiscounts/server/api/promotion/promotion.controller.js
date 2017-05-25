@@ -197,12 +197,12 @@ exports.create_campaign = function (req, res) {
 
   create_promotion(promotion, function(err, promotion) {
     if (err) return handleError(res, err);
-    campaign.promotions = [promotion._id];
+    campaign.promotions = [promotion];
     campaign.creator = req.user._id;
     campaign.name = promotion.name;
     campaign_controller.create_campaign(campaign, function (err, campaign) {
       campaign.promotions.forEach((promotion) => {
-        promotionGraphModel.relate_ids(campaign._id, 'CAMPAIGN_PROMOTION', promotion);
+        promotionGraphModel.relate_ids(campaign._id, 'CAMPAIGN_PROMOTION', promotion._id);
       });
       if (err) return handleError(res, err);
       return res.status(201).json(campaign)
