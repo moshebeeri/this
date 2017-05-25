@@ -62,7 +62,7 @@ export default class Promotions extends Component {
     fetchApi(pageOffset,pageSize ) {
 
         return new Promise(async function(resolve, reject) {
-            response =  await  promotionApi.getAll();
+            let response =  await  promotionApi.getAll();
             resolve(response);
         });
 

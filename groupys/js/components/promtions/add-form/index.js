@@ -236,14 +236,18 @@ export default class AddPromotion extends Component {
 
 
        try {
-            let response = await promotionApi.createPromotion(promotion);
-            DeviceEventEmitter.emit('addPromotions',  response);
+            let response = await promotionApi.createPromotion(promotion,this.addToList.bind(this));
             this.replaceRoute();
         }catch (error){
             console.log(error);
             this.replaceRoute();
         }
     }
+
+    addToList(responseData){
+        DeviceEventEmitter.emit('addPromotions',  responseData);
+    }
+
 
 
     async selectBusiness(value){

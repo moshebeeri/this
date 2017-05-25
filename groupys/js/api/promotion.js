@@ -11,7 +11,7 @@ import EntityUtils from "../utils/createEntity";
 let entityUtils = new EntityUtils();
 class PromotionApi
 {
-    createPromotion(promotion) {
+    createPromotion(promotion,callbackFunction) {
         return new Promise(async(resolve, reject) => {
 
             try {
@@ -33,12 +33,16 @@ class PromotionApi
                     return;
                 }
 
+                let responseData = await response.json();
+
                 if(promotion.image){
-                    entityUtils.doUpload(promotion.image.uri,promotion.image.mime,userId,token,callbackFunction,errorCallBack,responseData);
-                    return
+                    entityUtils.doUpload(promotion.image.uri,promotion.image.mime,token,callbackFunction,'promotions',responseData);
+
+                }else{
+                    callbackFunction(responseData);
                 }
 
-                let responseData = await response.json();
+
                 resolve(responseData);
             }
             catch (error) {
