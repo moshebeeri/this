@@ -85,20 +85,18 @@ function handle_image(req, res, type) {
   var fileName = randomstring.generate({length: 8, charset: 'hex'});
 
   form.on('part', function (part) {
-    console.log("====on part");
     part.filename = part.name;
     if (!part.filename) return;
     size = part.byteCount;
     fileName = part.filename;
   });
   form.on('file', function (name, file) {
-    console.log("====on file");
     client.upload(file.path, {/*path: key*/}, function (err, versions, meta) {
       if (err) {
         console.log(err);
         return handleError(res, err);
       }
-      console.log("====update versions");
+      console.log("handle_image = update versions");
       updateImageVersions(versions, req.params.id, meta_data, type, function (err, updated) {
         if (err) return handleError(res, err);
         return res.status(201).json(updated);
