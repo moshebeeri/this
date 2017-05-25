@@ -39,7 +39,7 @@ exports.fetch_feed = function(userId, query_builder, Model, res) {
       function populate_user(feeds, callback) {
         Model.populate(feeds, {
           path: 'activity.user',
-          select: '-salt -hashedPassword -gid -role -__v -email -phone_number -sms_verified -sms_code -provider',
+          select: '-salt -hashedPassword -gid -role -__v -email -sms_verified -sms_code -provider',
           model: 'User'
         }, callback);
       }
@@ -342,8 +342,8 @@ function update_state(feed, callback) {
         activity.promotion = states['promotion'];
       if (states['product'] !== null)
         activity.product = states['product'];
-      if (states['entity'] !== null)
-        activity.user = states['entity'];
+      if (states['user'] !== null)
+        activity.user = states['user'];
       if (states['business'] !== null)
         activity.business = states['business'];
       if (states['mall'] !== null)

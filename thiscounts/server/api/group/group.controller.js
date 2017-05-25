@@ -57,7 +57,7 @@ function group_activity(group, action) {
   sendActivity(act);
 }
 
-function user_follow_group_activity(group, user, actorType) {
+function user_follow_group_activity(group, user) {
   sendActivity({
     user: user,
     action: "group_follow",

@@ -110,12 +110,12 @@ const PromotionSchema = new Schema({
     ]
   },
   percent: {
-    type: {type: String, enum: ['SINGLE', 'RANGE', 'VALUES'], required: true},
+    type: {type: String, enum: ['SINGLE', 'RANGE', 'VALUES']},
     values: [{ type : Number, min:1, max: 100}]
   },
 
   gift: {
-    type: {type: String, enum: ['SINGLE', 'RANGE', 'VALUES'], required: true},
+    type: {type: String, enum: ['SINGLE', 'RANGE', 'VALUES']},
     values : [{
       product: {type: Schema.ObjectId, ref: 'Product'},
       retail_price: {type: Number}
@@ -123,7 +123,7 @@ const PromotionSchema = new Schema({
   },
 
   x_plus_y: {
-    type: {type: String, enum: ['SINGLE', 'RANGE', 'VALUES'], required: true},
+    type: {type: String, enum: ['SINGLE', 'RANGE', 'VALUES']},
     values : [{
       buy: Number,
       eligible: Number
@@ -131,7 +131,7 @@ const PromotionSchema = new Schema({
   },
 
   x_plus_n_percent_off: {
-    type: {type: String, enum: ['SINGLE', 'RANGE', 'VALUES'], required: true},
+    type: {type: String, enum: ['SINGLE', 'RANGE', 'VALUES']},
     values: [{
       buy: Number,
       eligible: Number
@@ -139,7 +139,7 @@ const PromotionSchema = new Schema({
   },
 
   x_for_y: {
-    type: {type: String, enum: ['SINGLE', 'RANGE', 'VALUES'], required: true},
+    type: {type: String, enum: ['SINGLE', 'RANGE', 'VALUES']},
     values: [{
       pay: Number,
       eligible: Number
@@ -147,7 +147,7 @@ const PromotionSchema = new Schema({
   },
 
   increasing: {
-    type: {type: String, enum: ['SINGLE', 'RANGE', 'VALUES'], required: true},
+    type: {type: String, enum: ['SINGLE', 'RANGE', 'VALUES']},
     values: [{
       next: Number,
       days_eligible: Number
@@ -155,13 +155,13 @@ const PromotionSchema = new Schema({
   },
 
   doubling: {
-    type: {type: String, enum: ['SINGLE', 'RANGE', 'VALUES'], required: true},
+    type: {type: String, enum: ['SINGLE', 'RANGE', 'VALUES']},
     values_type: {type: String, enum: ['PERCENT', 'AMOUNT']},
     values: [Number],
   },
 
   grow: {
-    type: {type: String, enum: ['SINGLE', 'RANGE', 'VALUES'], required: true},
+    type: {type: String, enum: ['SINGLE', 'RANGE', 'VALUES']},
     value_type: {type: String, enum: ['PERCENT', 'AMOUNT']},
     values: [{
       quantity: Number,
@@ -170,7 +170,7 @@ const PromotionSchema = new Schema({
   },
 
   prepay_discount: {
-    type: {type: String, enum: ['SINGLE', 'RANGE', 'VALUES'], required: true},
+    type: {type: String, enum: ['SINGLE', 'RANGE', 'VALUES']},
     eligible_from: { type: Date },
     eligible_to: { type: Date },
     value_type: {type: String, enum: ['PERCENT', 'AMOUNT']},
@@ -181,14 +181,14 @@ const PromotionSchema = new Schema({
   },
 
   reduced_amount: {
-    type: {type: String, enum: ['SINGLE', 'RANGE', 'VALUES'], required: true},
+    type: {type: String, enum: ['SINGLE', 'RANGE', 'VALUES']},
     values: [{
       amount: Number,
       price: Number
     }]
   },
   punch_card: {
-    type: {type: String, enum: ['SINGLE', 'RANGE', 'VALUES'], required: true},
+    type: {type: String, enum: ['SINGLE', 'RANGE', 'VALUES']},
     days: Number,
     values: [{
       number_of_punches: Number,
@@ -196,14 +196,14 @@ const PromotionSchema = new Schema({
     }]
   },
   cash_back: {
-    type: {type: String, enum: ['SINGLE', 'RANGE', 'VALUES'], required: true},
+    type: {type: String, enum: ['SINGLE', 'RANGE', 'VALUES']},
     values: [{
       pay: Number,
       back: Number
     }],
   },
   early_booking: {
-    type: {type: String, enum: ['SINGLE', 'RANGE', 'VALUES'], required: true},
+    type: {type: String, enum: ['SINGLE', 'RANGE', 'VALUES']},
     values: [{
       percent: Number,
       booking_before: Date
@@ -218,14 +218,14 @@ const PromotionSchema = new Schema({
   // // set according to the stored time
   // date.setSeconds(time);
   happy_hour: {
-    type: {type: String, enum: ['SINGLE', 'RANGE', 'VALUES'], required: true},
+    type: {type: String, enum: ['SINGLE', 'RANGE', 'VALUES']},
     values: [{
       from: Number, // seconds from midnight
       until: Number // seconds from 'from'
     }],
   },
   more_than: {
-    type: {type: String, enum: ['SINGLE', 'RANGE', 'VALUES'], required: true},
+    type: {type: String, enum: ['SINGLE', 'RANGE', 'VALUES']},
     value_type: {type: String, enum: ['PERCENT', 'AMOUNT']},
     values: [{
       more_than: Number,
