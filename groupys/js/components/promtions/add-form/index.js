@@ -193,69 +193,55 @@ export default class AddPromotion extends Component {
 
     }
 
-    replaceRoute(route) {
+    replaceRoute() {
         this.props.navigation.goBack();
     }
 
 
    async saveFormData(){
 
-       let promotion = {};
+       let promotion = {
+           image: this.state.image,
+           type: this.state.type,
+           percent: this.state.percent,
+           amount: Number(this.state.amount),
+           retail_price: Number(this.state.retail_price),
+           total_discount: Number(this.state.total_discount),
+          // percent_range: this.state.percent_range,
+           start: this.state.start,
+           end: this.state.end,
+           location: this.state.location,
+           info: this.state.info,
+           path: this.state.path,
+           name: this.state.name,
 
+       };
+       promotion.entity = {};
        if(this.state.discount_on == 'GLOBAL'){
-           promotion = {
-
-               entity: {
-                   business: this.state.business,
-               },
-
-               image: this.state.image,
-               type: this.state.type,
-               percent: this.state.percent,
-               amount: Number(this.state.amount),
-               retail_price: Number(this.state.retail_price),
-               total_discount: Number(this.state.total_discount),
-               percent_range: this.state.percent_range,
-               start: this.state.start,
-               end: this.state.end,
-               location: this.state.location,
-               info: this.state.info,
-               path: this.state.path,
-               name: this.state.name,
-
-           };
+           promotion.entity.business = this.state.business;
        }else {
-           promotion = {
-
-               entity : {
-                   business: this.state.business,
-                   product: this.state.product,
-               },
-               path: this.state.path,
-               image: this.state.image,
-               type: this.state.type,
-               percent: this.state.percent,
-               amount: Number(this.state.amount),
-               retail_price: Number(this.state.retail_price),
-               total_discount: Number(this.state.total_discount),
-               percent_range: this.state.percent_range,
-               start: this.state.start,
-               end: this.state.end,
-               location: this.state.location,
-               info: this.state.info,
-
-               name: this.state.name,
-
-           };
+           promotion.entity.business = this.state.business;
+           promotion.entity.product = this.state.product;
+       }
+       promotion.percent = {};
+       if(this.state.type == 'PERCENT'){
+           promotion.percent.type = 'SINGLE';
+           promotion.percent.value = [this.state.percent.percent]
        }
 
-        try {
+       if(this.state.type == 'PERCENT_RANGE'){
+           promotion.percent.type = 'RANGE';
+           promotion.percent.value = [this.state.percent_range.from,this.state.percent_range.to]
+       }
+
+
+       try {
             let response = await promotionApi.createPromotion(promotion);
             DeviceEventEmitter.emit('addPromotions',  response);
-            this.replaceRoute('home');
+            this.replaceRoute();
         }catch (error){
             console.log(error);
-            this.replaceRoute('home');
+            this.replaceRoute();
         }
     }
 
