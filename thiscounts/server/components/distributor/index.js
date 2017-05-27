@@ -6,20 +6,6 @@ const ss = require('simple-statistics');
 function Distributor() {
 }
 
-function isSingle(promotion) {
-
-}
-
-
-Distributor.distributePromotion =
-  Distributor.prototype.distributePromotion = function (promotion) {
-    if(isSingle(promotion))
-      return [promotion];
-    switch(promotion.typ){
-
-    }
-  };
-
 
 Distributor.distributePromotions =
   Distributor.prototype.distributePromotions = function (min, max, delta, quantity) {

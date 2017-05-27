@@ -18,19 +18,52 @@ function entity_validator(v) {
 
 const Entities = {
   business: {type: Schema.ObjectId, ref: 'Business'},
-  product: {type: Schema.ObjectId, ref: 'Product'},
   shopping_chain: {type: Schema.ObjectId, ref: 'ShoppingChain'},
   mall: {type: Schema.ObjectId, ref: 'Mall'}
 };
 
-const Variations = {type: String, enum: ['SINGLE', 'RANGE', 'VALUES']};
+const promotionTypes = [
+    'PERCENT',
+    'GIFT',   // get something free if you buy
+    'X+Y',
+    'X+N%OFF',
+    'X_FOR_Y',
+    'INCREASING',
+    'DOUBLING',
+    'GROW',
+    'PREPAY_DISCOUNT',
+    'REDUCED_AMOUNT',
+    'PUNCH_CARD',
+    'CASH_BACK',
+    'EARLY_BOOKING',
+    'HAPPY_HOUR',
+    'MORE_THAN'       //15% off for purchases more than 1000$ OR buy iphone for 600$ and get 50% off for earphones
+];
+
+const Variations = ['SINGLE', 'RANGE', 'VALUES'];
+
+const Automatic = {
+  type :{type: Boolean},
+  quantity: {type: Number},
+  discount: { type : Number, min:1, max: 100},
+  types: [{type: String, enum: promotionTypes}],
+  products: [{
+    product: {type: Schema.ObjectId, ref: 'Product'},
+    description: String,
+    price: Number,
+  }],
+};
+
 
 const PromotionSchema = new Schema({
   social_state : {},
   name: {type: String, required: true},
+  product: {type: Schema.ObjectId, ref: 'Product'},
   pictures : [],
-  amount: {type: Number},
-  retail_price: {type: Number},
+
+  automatic: {type: Automatic},
+
+  //retail_price: {type: Number},
   creator: {type: Schema.ObjectId, ref: 'User', required: true},
   entity: { type: Entities, require: true,
     validate: [entity_validator, 'at least on of those fields should not be empty [business, product, chain, mall]'],
@@ -89,33 +122,17 @@ const PromotionSchema = new Schema({
 
   type: {
     type: String,
-    enum: [
-      'PERCENT',
-      'GIFT',   // get something free if you buy
-      'AMOUNT', // reduced price by amount
-      'PRICE',  // reduced new price
-      'X+Y',
-      'X+N%OFF',
-      'X_FOR_Y',
-      'INCREASING',
-      'DOUBLING',
-      'GROW',
-      'PREPAY_DISCOUNT',
-      'REDUCED_AMOUNT',
-      'PUNCH_CARD',
-      'CASH_BACK',
-      'EARLY_BOOKING',
-      'HAPPY_HOUR',
-      'MORE_THAN'       //15% off for purchases more than 1000$ OR buy iphone for 600$ and get 50% off for earphones
-    ]
+    enum: promotionTypes
   },
   percent: {
-    type: {type: String, enum: ['SINGLE', 'RANGE', 'VALUES']},
+    variation: {type: String, enum: Variations},
+    quantity: Number,
     values: [{ type : Number, min:1, max: 100}]
   },
 
   gift: {
-    type: {type: String, enum: ['SINGLE', 'RANGE', 'VALUES']},
+    variation: {type: String, enum: Variations},
+    quantity: Number,
     values : [{
       product: {type: Schema.ObjectId, ref: 'Product'},
       retail_price: {type: Number}
@@ -123,7 +140,8 @@ const PromotionSchema = new Schema({
   },
 
   x_plus_y: {
-    type: {type: String, enum: ['SINGLE', 'RANGE', 'VALUES']},
+    variation: {type: String, enum: Variations},
+    quantity: Number,
     values : [{
       buy: Number,
       eligible: Number
@@ -131,7 +149,8 @@ const PromotionSchema = new Schema({
   },
 
   x_plus_n_percent_off: {
-    type: {type: String, enum: ['SINGLE', 'RANGE', 'VALUES']},
+    variation: {type: String, enum: Variations},
+    quantity: Number,
     values: [{
       buy: Number,
       eligible: Number
@@ -139,7 +158,8 @@ const PromotionSchema = new Schema({
   },
 
   x_for_y: {
-    type: {type: String, enum: ['SINGLE', 'RANGE', 'VALUES']},
+    variation: {type: String, enum: Variations},
+    quantity: Number,
     values: [{
       pay: Number,
       eligible: Number
@@ -147,7 +167,8 @@ const PromotionSchema = new Schema({
   },
 
   increasing: {
-    type: {type: String, enum: ['SINGLE', 'RANGE', 'VALUES']},
+    variation: {type: String, enum: Variations},
+    quantity: Number,
     values: [{
       next: Number,
       days_eligible: Number
@@ -155,14 +176,16 @@ const PromotionSchema = new Schema({
   },
 
   doubling: {
-    type: {type: String, enum: ['SINGLE', 'RANGE', 'VALUES']},
-    values_type: {type: String, enum: ['PERCENT', 'AMOUNT']},
+    variation: {type: String, enum: Variations},
+    quantity: Number,
+    values_type: {type: String, enum: ['PERCENT', 'quantity']},
     values: [Number],
   },
 
   grow: {
-    type: {type: String, enum: ['SINGLE', 'RANGE', 'VALUES']},
-    value_type: {type: String, enum: ['PERCENT', 'AMOUNT']},
+    variation: {type: String, enum: Variations},
+    quantity: Number,
+    value_type: {type: String, enum: ['PERCENT', 'quantity']},
     values: [{
       quantity: Number,
       value: Number
@@ -170,40 +193,46 @@ const PromotionSchema = new Schema({
   },
 
   prepay_discount: {
-    type: {type: String, enum: ['SINGLE', 'RANGE', 'VALUES']},
+    variation: {type: String, enum: Variations},
     eligible_from: { type: Date },
     eligible_to: { type: Date },
-    value_type: {type: String, enum: ['PERCENT', 'AMOUNT']},
+    quantity: Number,
+    value_type: {type: String, enum: ['PERCENT', 'quantity']},
     values: [{
       prepay: [Number],
       value: [Number],
     }]
   },
 
-  reduced_amount: {
-    type: {type: String, enum: ['SINGLE', 'RANGE', 'VALUES']},
+  reduced_quantity: {
+    variation: {type: String, enum: Variations},
+    quantity: Number,
     values: [{
-      amount: Number,
+      quantity: Number,
       price: Number
     }]
   },
   punch_card: {
-    type: {type: String, enum: ['SINGLE', 'RANGE', 'VALUES']},
-    days: Number,
+    variation: {type: String, enum: Variations},
+    quantity: Number,
+    product: {type: Schema.ObjectId, ref: 'Product'},
     values: [{
+      quantity: Number,
+      days: Number,
       number_of_punches: Number,
-      eligible: String
     }]
   },
   cash_back: {
-    type: {type: String, enum: ['SINGLE', 'RANGE', 'VALUES']},
+    variation: {type: String, enum: Variations},
+    quantity: Number,
     values: [{
       pay: Number,
       back: Number
     }],
   },
   early_booking: {
-    type: {type: String, enum: ['SINGLE', 'RANGE', 'VALUES']},
+    variation: {type: String, enum: Variations},
+    quantity: Number,
     values: [{
       percent: Number,
       booking_before: Date
@@ -218,15 +247,17 @@ const PromotionSchema = new Schema({
   // // set according to the stored time
   // date.setSeconds(time);
   happy_hour: {
-    type: {type: String, enum: ['SINGLE', 'RANGE', 'VALUES']},
+    variation: {type: String, enum: Variations},
+    quantity: Number,
     values: [{
       from: Number, // seconds from midnight
       until: Number // seconds from 'from'
     }],
   },
   more_than: {
-    type: {type: String, enum: ['SINGLE', 'RANGE', 'VALUES']},
-    value_type: {type: String, enum: ['PERCENT', 'AMOUNT']},
+    variation: {type: String, enum: Variations},
+    quantity: Number,
+    value_type: {type: String, enum: ['PERCENT', 'quantity']},
     values: [{
       more_than: Number,
       value: Number,
@@ -235,6 +266,15 @@ const PromotionSchema = new Schema({
   }
 });
 PromotionSchema.index({ location: '2dsphere' });
+
+PromotionSchema
+  .pre('save', function(next) {
+    //if (!this.isNew) return next();
+    /*if (!validatePresenceOf(this.hashedPassword) && authTypes.indexOf(this.provider) === -1)
+     next(new Error('Invalid password'));
+     else*/
+    next();
+  });
 
 //http://mongoosejs.com/docs/2.7.x/docs/validation.html
 //PromotionSchema.path('percent_range').validate(function (v, fn) {
