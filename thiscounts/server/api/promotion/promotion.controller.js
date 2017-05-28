@@ -17,6 +17,7 @@ let utils = require('../../components/utils').createUtils();
 let activity = require('../../components/activity').createActivity();
 let util = require('util');
 let spatial = require('../../components/spatial').createSpatial();
+let instance = require('../../components/instance');
 
 /*
  exports.server_time = function (req, res) {
@@ -90,7 +91,6 @@ let relateTypes = function (promotion) {
   let query = util.format(" MATCH (promotion), (type:PromotionType{PromotionType:'%s'}) \
                             WHERE  id(promotion)=%d \
                             CREATE (promotion)-[:PROMOTION_TYPE]->(type) ", promotion.type, promotion.gid);
-  console.log(query);
   db.query(query, function (err) {
     if (err) {
       logger.error(err.message);
@@ -101,7 +101,6 @@ let relateTypes = function (promotion) {
     query = util.format(" MATCH (promotion), (type:SocialType{SocialType:'%s'}) \
                           WHERE  id(promotion)=%d \
                           CREATE (promotion)-[:SOCIAL_TYPE]->(type) ", promotion.social, promotion.gid);
-    console.log(query);
     db.query(query, function (err) {
       if (err) {
         logger.error(err.message);
@@ -149,7 +148,6 @@ function create_promotion(promotion, callback) {
       if (err) return callback(err, null);
       promotionGraphModel.reflect(promotion, to_graph(promotion), function (err, promotion) {
         if (err) return callback(err, null);
-        console.log(`creating relationships (${promotion._id})-[CREATED_BY]->(${promotion.creator})`);
         //create relationships
         promotionGraphModel.relate_ids(promotion._id, 'CREATED_BY', promotion.creator);
 
@@ -172,7 +170,8 @@ function create_promotion(promotion, callback) {
         promotion_created_activity(promotion);
         spatial.add2index(promotion.gid, function (err, result) {
           if (err) return callback(err, null);
-          else logger.info('object added to layer ' + result)
+          logger.info('object added to layer ' + result);
+          instance.cratePromotionInstances(promotion);
         });
       });
       callback(null, promotion);

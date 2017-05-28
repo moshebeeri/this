@@ -13,7 +13,6 @@ let Feed = require('../../api/feed/feed.model');
 let ActivitySchema = require('../../api/activity/activity.model');
 
 function Activity() {
-  logger.info("Activity constructed");
 }
 
 function getActivityActor(activity) {
@@ -33,7 +32,6 @@ function getActivityActor(activity) {
 function update_feeds(effected, activity) {
   if(!activity.audience || _.includes(activity.audience, 'FOLLOWERS')) {
     effected.forEach(function (entity) {
-      console.log(`entity._id=${entity._id} activity._id=${activity._id}`);
       Feed.create({
         entity: entity._id,
         activity: activity._id

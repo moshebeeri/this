@@ -1,24 +1,102 @@
-const PromotionSchema = require('../../api/promotion/promotion.model');
+const mongoose = require('mongoose'),
+  Schema = mongoose.Schema;
 const logger = require('../logger').createLogger();
 const graphTools = require('../graph-tools');
-const promotionGraphModel = graphTools.createGraphModel('promotion');
 const instanceGraphModel = graphTools.createGraphModel('instance');
 const utils = require('../utils').createUtils();
 const activity = require('../activity').createActivity();
+const spatial = require('../spatial').createSpatial();
 const _ = require('lodash');
 let distributor = require('../../components/distributor');
+let promotionSchemaObject = require('../../api/promotion/promotion.schema');
 
 'use strict';
+
+delete promotionSchemaObject.percent.values;
+promotionSchemaObject.percent.value = { type : Number, min:1, max: 100};
+delete promotionSchemaObject.gift.values;
+promotionSchemaObject.gift.value = {
+  product: {type: Schema.ObjectId, ref: 'Product'},
+  retail_price: {type: Number}
+};
+delete promotionSchemaObject.x_plus_y.values;
+promotionSchemaObject.x_plus_y.value = {
+  buy: Number,
+  eligible: Number
+};
+delete promotionSchemaObject.x_plus_n_percent_off.values;
+promotionSchemaObject.x_plus_n_percent_off.value = {
+  buy: Number,
+  eligible: Number
+};
+delete promotionSchemaObject.x_for_y.values;
+promotionSchemaObject.x_for_y.value = {
+  pay: Number,
+  eligible: Number
+};
+delete promotionSchemaObject.increasing.values;
+promotionSchemaObject.increasing.value = {
+  next: Number,
+  days_eligible: Number
+};
+delete promotionSchemaObject.doubling.values;
+promotionSchemaObject.doubling.value = Number;
+delete promotionSchemaObject.grow.values;
+promotionSchemaObject.grow.value = {
+  quantity: Number,
+  value: Number
+};
+delete promotionSchemaObject.prepay_discount.values;
+promotionSchemaObject.prepay_discount.value = {
+  prepay: [Number],
+  value: [Number],
+};
+delete promotionSchemaObject.reduced_quantity.values;
+promotionSchemaObject.reduced_quantity.value = {
+  quantity: Number,
+  price: Number
+};
+delete promotionSchemaObject.punch_card.values;
+promotionSchemaObject.punch_card.value = {
+  quantity: Number,
+  days: Number,
+  number_of_punches: Number,
+};
+delete promotionSchemaObject.cash_back.values;
+promotionSchemaObject.cash_back.value = {
+  pay: Number,
+  back: Number
+};
+delete promotionSchemaObject.early_booking.values;
+promotionSchemaObject.early_booking.value = {
+  percent: Number,
+  booking_before: Date
+};
+delete promotionSchemaObject.happy_hour.values;
+promotionSchemaObject.happy_hour.value = {
+  from: Number, // seconds from midnight
+  until: Number // seconds from 'from'
+};
+delete promotionSchemaObject.more_than.values;
+promotionSchemaObject.more_than.value = {
+  more_than: Number,
+  value: Number,
+  product: {type: Schema.ObjectId, ref: 'Product'},
+};
+
+let InstanceSchema = mongoose.model('Instance', promotionSchemaObject);
 
 function Instances() {
 }
 
-function clone(obj) {
-  return _.cloneDeep(obj);
+function clone(promotion) {
+  let instance =  JSON.parse(JSON.stringify(promotion));
+  delete instance._id
+  return instance;
 }
 
 function isAutomatic(promotion) {
-  return utils.defined(promotion.automatic);
+  return utils.defined(promotion.automatic.quantity) && utils.defined(promotion.discount);
 }
 
 function getPromotionType(promotion) {
@@ -46,7 +124,9 @@ function MinMax(value, value2) {
 function createPercentInstances(promotion) {
   const p = promotion.percent;
   if (p.variation === 'SINGLE') {
-    return [promotion]
+    let instance = clone(promotion);
+    instance.percent.values = instance.percent.values[0];
+    return [instance]
   }
   else if (p.variation === 'VALUES') {
     let instances = [];
@@ -58,8 +138,8 @@ function createPercentInstances(promotion) {
     return instances;
   }
   else if (p.variation === 'RANGE') {
-    const minmax = MinMax(p.values[0], p.values[1]);
-    let spreads = distributor.distributePromotions(minmax.min, minmax.max, 5, p.quantity);
+    const minMax = MinMax(p.values[0], p.values[1]);
+    let spreads = distributor.distributePromotions(minMax.min, minMax.max, 5, p.quantity);
     let instances = [];
     spreads.forEach((spread) => {
       let instance = clone(promotion);
@@ -70,22 +150,18 @@ function createPercentInstances(promotion) {
       instances.push(instance);
     });
     return instances;
+  } else {
+    throw new Error('Missing Variation field')
   }
 }
-/*
- variation: {type: String, enum: Variations},
- product: {type: Schema.ObjectId, ref: 'Product'},
- values: [{
- quantity: Number,
- days: Number,
- number_of_punches: Number,
- }]
- */
+
 function createPunchCardInstances(promotion) {
   const p = promotion.punch_card;
 
   if (p.variation === 'SINGLE') {
-    return [promotion]
+    let instance = clone(promotion);
+    instance.punch_card.values = instance.punch_card.values[0];
+    return [instance]
   }
   else if (p.variation === 'VALUES') {
     let instances = [];
@@ -98,8 +174,8 @@ function createPunchCardInstances(promotion) {
     return instances;
   }
   else if (p.variation === 'RANGE') {
-    const minmax = MinMax(p.values[0], p.values[1]);
-    let spreads = distributor.distributePromotions(minmax.min, minmax.max, 1, p.quantity);
+    const minMax = MinMax(p.values[0], p.values[1]);
+    let spreads = distributor.distributePromotions(minMax.min, minMax.max, 1, p.quantity);
     let instances = [];
     spreads.forEach((spread) => {
       let instance = clone(promotion);
@@ -110,6 +186,8 @@ function createPunchCardInstances(promotion) {
       instances.push(instance);
     });
     return instances;
+  } else {
+    throw new Error('Missing Variation field')
   }
 }
 
@@ -196,108 +274,127 @@ Instances.createPromotionInstances =
     let instances = [];
     switch (promotion.type) {
       case 'PERCENT': {
-        let add = createPercentInstances(promotion.percent);
-        instances.concat(add);
+        let add = createPercentInstances(promotion);
+        instances = instances.concat(add);
       }
         break;
       case 'GIFT': {   // get something free if you buy
-        let add = createGiftInstances(promotion.gift);
-        instances.concat(add);
+        let add = createGiftInstances(promotion);
+        instances = instances.concat(add);
       }
         break;
       case 'X+Y': {
-        let add = createXPlusYInstances(promotion.x_plus_y);
-        instances.concat(add);
+        let add = createXPlusYInstances(promotion);
+        instances = instances.concat(add);
       }
         break;
       case 'X+N%OFF': {
-        let add = createXPlusNPercentOffInstances(promotion.x_plus_n_percent_off);
-        instances.concat(add);
+        let add = createXPlusNPercentOffInstances(promotion);
+        instances = instances.concat(add);
       }
         break;
       case 'X_FOR_Y': {
-        let add = createXForYInstances(promotion.x_for_y);
-        instances.concat(add);
+        let add = createXForYInstances(promotion);
+        instances = instances.concat(add);
       }
         break;
       case 'INCREASING': {
-        let add = createIncreasingInstances(promotion.increasing);
-        instances.concat(add);
+        let add = createIncreasingInstances(promotion);
+        instances = instances.concat(add);
       }
         break;
       case 'DOUBLING': {
-        let add = createDoublingInstances(promotion.doubling);
-        instances.concat(add);
+        let add = createDoublingInstances(promotion);
+        instances = instances.concat(add);
       }
         break;
       case 'GROW': {
-        let add = createGrowInstances(promotion.grow);
-        instances.concat(add);
+        let add = createGrowInstances(promotion);
+        instances = instances.concat(add);
       }
         break;
       case 'PREPAY_DISCOUNT': {
-        let add = createPrepayInstances(promotion.prepay_discount);
-        instances.concat(add);
+        let add = createPrepayInstances(promotion);
+        instances = instances.concat(add);
       }
         break;
       case 'REDUCED_AMOUNT': {
-        let add = createReducedInstances(promotion.reduced_quantity);
-        instances.concat(add);
+        let add = createReducedInstances(promotion);
+        instances = instances.concat(add);
       }
         break;
       case 'PUNCH_CARD': {
-        let add = createPunchCardInstances(promotion.punch_card);
-        instances.concat(add);
+        let add = createPunchCardInstances(promotion);
+        instances = instances.concat(add);
       }
         break;
       case 'CASH_BACK': {
-        let add = createCashBackInstances(promotion.cash_back);
-        instances.concat(add);
+        let add = createCashBackInstances(promotion);
+        instances = instances.concat(add);
       }
         break;
       case 'EARLY_BOOKING': {
-        let add = createEarlyBookingInstances(promotion.early_booking);
-        instances.concat(add);
+        let add = createEarlyBookingInstances(promotion);
+        instances = instances.concat(add);
       }
         break;
       case 'HAPPY_HOUR': {
-        let add = createHappyHourInstances(promotion.happy_hour);
-        instances.concat(add);
+        let add = createHappyHourInstances(promotion);
+        instances = instances.concat(add);
       }
         break;
       case 'MORE_THAN': {       //15% off for purchases more than 1000$ OR buy iphone for 600$ and get 50% off for earphones
-        let add = createMoreThanInstances(promotion.more_than);
-        instances.concat(add);
+        let add = createMoreThanInstances(promotion);
+        instances = instances.concat(add);
       }
         break;
     }
     return instances;
   };
-let mongoose = require('mongoose');
 
-function storeInstance(instance) {
-  mongoose.connection.db.collection('instances', function (err, instances_collection) {
-    if (err) return logger.error(err.message);
-    instances_collection.insert(instance, )
-  });
-
+function to_graph(instance) {
+  return {
+    _id: instance._id,
+    value: instance.value,
+    type: instance.type,
+    lat: instance.location.lat,
+    lon: instance.location.lng,
+  }
 }
 
-function storeInstances(instances) {
+function storeInstance(promotion, instance) {
+  InstanceSchema.create(instance, function (err, instance) {
+    if (err) return console.error(err);
+    instanceGraphModel.reflect(instance, to_graph(instance), function (err, instance) {
+      if (err) return console.error(err);
+      instanceGraphModel.relate_ids(instance._id, 'INSTANCE_OF', promotion._id, function (err) {
+        if (err) return console.error(err);
+        spatial.add2index(promotion.gid, function (err) {
+          if (err) return console.error(err);
+
+        });
+      });
+    })
+  })
+}
+
+function storeInstances(promotion, instances) {
+  if (!instances)
+    return;
   instances.forEach(instance => {
-    storeInstance(instance);
+    storeInstance(promotion, instance);
   })
 }
 
 Instances.cratePromotionInstances =
   Instances.prototype.cratePromotionInstances = function (promotion, callback) {
-  let instances = [];
+    let instances = [];
     if (isAutomatic(promotion)) {
       instances = this.createAutomaticPromotionInstances(promotion, callback);
     } else {
       instances = this.createPromotionInstances(promotion, callback);
     }
-    storeInstances(instances);
+    storeInstances(promotion, instances);
   };
 
 module.exports = Instances;
