@@ -8,99 +8,25 @@ const activity = require('../activity').createActivity();
 const spatial = require('../spatial').createSpatial();
 const _ = require('lodash');
 let distributor = require('../../components/distributor');
-let promotionSchemaObject = require('../../api/promotion/promotion.schema');
+let InstanceSchema = require('../../api/instance/instance.model');
 
 'use strict';
-
-delete promotionSchemaObject.percent.values;
-promotionSchemaObject.percent.value = { type : Number, min:1, max: 100};
-delete promotionSchemaObject.gift.values;
-promotionSchemaObject.gift.value = {
-  product: {type: Schema.ObjectId, ref: 'Product'},
-  retail_price: {type: Number}
-};
-delete promotionSchemaObject.x_plus_y.values;
-promotionSchemaObject.x_plus_y.value = {
-  buy: Number,
-  eligible: Number
-};
-delete promotionSchemaObject.x_plus_n_percent_off.values;
-promotionSchemaObject.x_plus_n_percent_off.value = {
-  buy: Number,
-  eligible: Number
-};
-delete promotionSchemaObject.x_for_y.values;
-promotionSchemaObject.x_for_y.value = {
-  pay: Number,
-  eligible: Number
-};
-delete promotionSchemaObject.increasing.values;
-promotionSchemaObject.increasing.value = {
-  next: Number,
-  days_eligible: Number
-};
-delete promotionSchemaObject.doubling.values;
-promotionSchemaObject.doubling.value = Number;
-delete promotionSchemaObject.grow.values;
-promotionSchemaObject.grow.value = {
-  quantity: Number,
-  value: Number
-};
-delete promotionSchemaObject.prepay_discount.values;
-promotionSchemaObject.prepay_discount.value = {
-  prepay: [Number],
-  value: [Number],
-};
-delete promotionSchemaObject.reduced_quantity.values;
-promotionSchemaObject.reduced_quantity.value = {
-  quantity: Number,
-  price: Number
-};
-delete promotionSchemaObject.punch_card.values;
-promotionSchemaObject.punch_card.value = {
-  quantity: Number,
-  days: Number,
-  number_of_punches: Number,
-};
-delete promotionSchemaObject.cash_back.values;
-promotionSchemaObject.cash_back.value = {
-  pay: Number,
-  back: Number
-};
-delete promotionSchemaObject.early_booking.values;
-promotionSchemaObject.early_booking.value = {
-  percent: Number,
-  booking_before: Date
-};
-delete promotionSchemaObject.happy_hour.values;
-promotionSchemaObject.happy_hour.value = {
-  from: Number, // seconds from midnight
-  until: Number // seconds from 'from'
-};
-delete promotionSchemaObject.more_than.values;
-promotionSchemaObject.more_than.value = {
-  more_than: Number,
-  value: Number,
-  product: {type: Schema.ObjectId, ref: 'Product'},
-};
-
-let InstanceSchema = mongoose.model('Instance', promotionSchemaObject);
 
 function Instances() {
 }
 
-function clone(promotion) {
-  let instance =  JSON.parse(JSON.stringify(promotion));
-  delete instance._id
-  return instance;
+function createInstance(promotion) {
+  let ret = {
+    promotion: promotion._id,
+    type: promotion.type,
+    location: promotion.location,
+    value: {}
+  };
+  return ret;
 }
 
 function isAutomatic(promotion) {
   return utils.defined(promotion.automatic.quantity) && utils.defined(promotion.discount);
-}
-
-function getPromotionType(promotion) {
-
 }
 
 Instances.createAutomaticPromotionInstances =
@@ -124,15 +50,15 @@ function MinMax(value, value2) {
 function createPercentInstances(promotion) {
   const p = promotion.percent;
   if (p.variation === 'SINGLE') {
-    let instance = clone(promotion);
-    instance.percent.values = instance.percent.values[0];
+    let instance = createInstance(promotion);
+    instance.value.percent = promotion.percent.values[0];
     return [instance]
   }
   else if (p.variation === 'VALUES') {
     let instances = [];
     p.values.forEach(value => {
-      let instance = clone(promotion);
-      instance.percent.values = value;
+      let instance = createInstance(promotion);
+      instance.value.percent = value;
       instances.push(instance);
     });
     return instances;
@@ -142,9 +68,9 @@ function createPercentInstances(promotion) {
     let spreads = distributor.distributePromotions(minMax.min, minMax.max, 5, p.quantity);
     let instances = [];
     spreads.forEach((spread) => {
-      let instance = clone(promotion);
-      instance.percent.values = {
-        value: spread.value,
+      let instance = createInstance(promotion);
+      instance.value.percent = {
+        percent: spread.value,
         quantity: spread.quantity
       };
       instances.push(instance);
@@ -159,16 +85,20 @@ function createPunchCardInstances(promotion) {
   const p = promotion.punch_card;
 
   if (p.variation === 'SINGLE') {
-    let instance = clone(promotion);
-    instance.punch_card.values = instance.punch_card.values[0];
+    let instance = createInstance(promotion);
+    instance.value.punch_card = promotion.punch_card.values[0];
     return [instance]
   }
   else if (p.variation === 'VALUES') {
     let instances = [];
     p.values.forEach(value => {
-      let instance = clone(promotion);
-      instance.punch_card.quantity = value.quantity;
-      instance.punch_card.number_of_punches = value.number_of_punches;
+      let instance = createInstance(promotion);
+      instance.value.punch_card = {
+        product: p.product,
+        number_of_punches: value.number_of_punches,
+        quantity: value.quantity,
+        days: value.days
+      };
       instances.push(instance);
     });
     return instances;
@@ -178,10 +108,11 @@ function createPunchCardInstances(promotion) {
     let spreads = distributor.distributePromotions(minMax.min, minMax.max, 1, p.quantity);
     let instances = [];
     spreads.forEach((spread) => {
-      let instance = clone(promotion);
-      instance.punch_card.values = {
-        value: spread.value,
-        quantity: spread.quantity
+      let instance = createInstance(promotion);
+      instance.value.punch_card = {
+        number_of_punches: spread.value,
+        quantity: spread.quantity,
+        days: promotion.punch_card.values[0].days
       };
       instances.push(instance);
     });
@@ -241,7 +172,7 @@ function createPrepayInstances(promotion) {
 
 }
 function createReducedInstances(promotion) {
-  if (promotion.reduced_quantity.variation === 'SINGLE') {
+  if (promotion.reduced_amount.variation === 'SINGLE') {
     return [promotion]
   }
 
@@ -269,6 +200,44 @@ function createMoreThanInstances(promotion) {
     return [promotion]
   }
 }
+
+function getValue(instance) {
+  switch (instance.type) {
+    case 'PERCENT':
+      return instance.value.percent;
+    case 'GIFT':
+      return instance.value.gift;
+    case 'X+Y':
+      return instance.value.x_plus_y;
+    case 'X+N%OFF':
+      return instance.value.x_plus_n_percent_off;
+    case 'X_FOR_Y':
+      return instance.value.x_for_y;
+    case 'INCREASING':
+      return instance.value.increasing;
+    case 'DOUBLING':
+      return instance.value.doubling;
+    case 'GROW':
+      return instance.value.grow;
+    case 'PREPAY_DISCOUNT':
+      return instance.value.prepay;
+    case 'REDUCED_AMOUNT':
+      return instance.value.reduced_amount;
+    case 'PUNCH_CARD':
+      return instance.value.punch_card;
+    case 'CASH_BACK':
+      return instance.value.cash_back;
+    case 'EARLY_BOOKING':
+      return instance.value.early_booking;
+    case 'HAPPY_HOUR':
+      return instance.value.happy_hour;
+    case 'MORE_THAN':
+      return instance.value.more_than;
+    default:
+      throw new Error("unsupported promotion type");
+  }
+}
+
 Instances.createPromotionInstances =
   Instances.prototype.createPromotionInstances = function (promotion, callback) {
     let instances = [];
@@ -353,19 +322,23 @@ Instances.createPromotionInstances =
   };
 
 function to_graph(instance) {
-  return {
+  let value = JSON.parse(JSON.stringify(getValue(instance)));
+  let ret = {
     _id: instance._id,
-    value: instance.value,
     type: instance.type,
     lat: instance.location.lat,
-    lon: instance.location.lng,
-  }
+    lon: instance.location.lng
+  };
+
+  return _.merge(ret, value);
 }
 
 function storeInstance(promotion, instance) {
   InstanceSchema.create(instance, function (err, instance) {
     if (err) return console.error(err);
-    instanceGraphModel.reflect(instance, to_graph(instance), function (err, instance) {
+    let g = to_graph(instance);
+    console.log(JSON.stringify(g));
+    instanceGraphModel.reflect(instance, g, function (err, instance) {
       if (err) return console.error(err);
       instanceGraphModel.relate_ids(instance._id, 'INSTANCE_OF', promotion._id, function (err) {
         if (err) return console.error(err);

@@ -36,7 +36,7 @@ Distributor.distributePromotions =
       spread.quantity = Math.round(float + fpTotal) - intTotal;
       fpTotal += float;
       intTotal += spread.quantity;
-      spread.area = undefined;
+      delete spread.area;
       sumq += spread.quantity;
     });
     console.log(sumq);
