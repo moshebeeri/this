@@ -13,7 +13,7 @@ import org.neo4j.graphdb.Node;
  */
 public class PenalizePriceDifference extends BasePostProcessor<Node, Node> {
 
-    private final TransformationFunction function = new ParetoFunction(10, 20);
+    private final TransformationFunction function = new ParetoFunction(100, 20);
 
     @Override
     protected String name() {
