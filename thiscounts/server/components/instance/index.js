@@ -104,7 +104,7 @@ function createPunchCardInstances(promotion) {
     return instances;
   }
   else if (p.variation === 'RANGE') {
-    const minMax = MinMax(p.values[0], p.values[1]);
+    const minMax = MinMax(p.values[0].number_of_punches, p.values[1].number_of_punches);
     let spreads = distributor.distributePromotions(minMax.min, minMax.max, 1, p.quantity);
     let instances = [];
     spreads.forEach((spread) => {
@@ -336,9 +336,7 @@ function to_graph(instance) {
 function storeInstance(promotion, instance) {
   InstanceSchema.create(instance, function (err, instance) {
     if (err) return console.error(err);
-    let g = to_graph(instance);
-    console.log(JSON.stringify(g));
-    instanceGraphModel.reflect(instance, g, function (err, instance) {
+    instanceGraphModel.reflect(instance, to_graph(instance), function (err, instance) {
       if (err) return console.error(err);
       instanceGraphModel.relate_ids(instance._id, 'INSTANCE_OF', promotion._id, function (err) {
         if (err) return console.error(err);
