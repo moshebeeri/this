@@ -3,7 +3,7 @@ import {Image, Platform,StyleSheet} from 'react-native';
 import {connect} from 'react-redux';
 import {actions} from 'react-native-navigation-redux-helpers';
 import {Container, Content, Text,Title, InputGroup,
-    Input, Button, Icon, View,Header, Body, Right, ListItem,Tabs,Tab, TabHeading,Thumbnail,Left} from 'native-base';
+    Input, Button, Icon, View,Header, Body, Right, ListItem,Tabs,Tab, TabHeading,Thumbnail,Left,Drawer} from 'native-base';
 
 import GeneralComponentHeader from '../header/index';
 import Product from '../product/index';
@@ -21,7 +21,7 @@ let contactApi = new ContactApi();
 import { NavigationActions } from 'react-navigation'
 import codePush from "react-native-code-push";
 
-
+import SideBar from '../drawer/index';
 const resetAction = NavigationActions.reset({
     index: 0,
     actions: [
@@ -45,7 +45,12 @@ const timer = BackgroundTimer.setInterval(() =>{
     contactApi.syncContacts();
 
 
+
 }, 60000);
+let updateDialogOption = {
+    updateTitle:"update"
+}
+codePush.sync({updateDialog: updateDialogOption})
 
 export default class ApplicationManager extends Component {
     static navigationOptions = {
@@ -68,16 +73,10 @@ export default class ApplicationManager extends Component {
             addComponent: '',
             rowsView: [],
             initialPage: initialPage,
-            index: initialPage
+            index: initialPage,
+            drawerState:''
 
         }
-        ;
-
-
-         // add location
-
-
-
 
 
     }
@@ -141,10 +140,7 @@ export default class ApplicationManager extends Component {
     }
     componentWillMount() {
         this.props.navigation.dispatch(resetAction);
-        var updateDialogOption = {
-            updateTitle:"update"
-        }
-        codePush.sync({updateDialog: updateDialogOption})
+
     }
 
    async headerAction(compoenet, index){
@@ -154,20 +150,41 @@ export default class ApplicationManager extends Component {
     }
 
 
+
+    openDrawer() {
+        this._drawer._root.open();
+    }
+
+    closeDrawer() {
+        this._drawer._root.close();
+    }
+    componentDidMount(){
+    //   this.openDrawer();
+    }
+
     render() {
 
-
+        closeDrawer = () => {
+            this.drawer._root.close()
+        };
+        openDrawer = () => {
+            this.drawer._root.open()
+        };
         let showAction = this.showAction(this.state.index);
         let index = this.state.initialPage;
 
 
         if(this.props.navigation.state.key == 'Init0') {
 
-            return (<Container>
+            return (
 
-                <GeneralComponentHeader navigate={this.props.navigation.navigate} showAction={showAction} current='home'
-                                        to={this.state.addComponent}/>
-
+                    <Drawer
+                ref={(ref) => { this.drawer = ref; }}
+                content={<SideBar/>}
+                onClose={() => closeDrawer} >
+                        <Container>
+                            <GeneralComponentHeader openDrawer= {openDrawer} navigate={this.props.navigation.navigate} showAction={showAction} current='home'
+                                                    to={this.state.addComponent}/>
 
                 <Tabs initialPage={index} onChangeTab={this.onChangeTab.bind(this)} style={{backgroundColor: '#fff',}}>
                     <Tab heading={ <TabHeading style={{ backgroundColor: "#ffe6e6" }}><Text style={{color: 'black', fontSize: 11,}}>Home</Text></TabHeading>}>
@@ -193,7 +210,9 @@ export default class ApplicationManager extends Component {
 
                 </Tabs>
 
-            </Container>);
+                        </Container>
+            </Drawer>
+               );
         }
         return  <Container></Container>;
 
