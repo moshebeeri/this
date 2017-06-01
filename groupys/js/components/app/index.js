@@ -28,6 +28,25 @@ const resetAction = NavigationActions.reset({
         NavigationActions.navigate({ routeName: 'home'})
     ]
 });
+
+const warch = navigator.geolocation.watchPosition((position) => {
+        var lastPosition = JSON.stringify(position);
+        locationApi.sendLocation(position.coords.longitude,position.coords.latitude,position.timestamp,position.coords.speed);
+
+    },
+    (error) => alert(JSON.stringify(error)),
+    {enableHighAccuracy: true, timeout: 20000, maximumAge: 1000,distanceFilter:100}
+);
+
+const timer = BackgroundTimer.setInterval(() =>{
+    console.log('sync contacts')
+    // this will be executed every 200 ms
+    // even when app is the the background
+    contactApi.syncContacts();
+
+
+}, 60000);
+
 export default class ApplicationManager extends Component {
     static navigationOptions = {
         header:null
@@ -57,23 +76,8 @@ export default class ApplicationManager extends Component {
 
          // add location
 
-         this.watchID = navigator.geolocation.watchPosition((position) => {
-             var lastPosition = JSON.stringify(position);
-             locationApi.sendLocation(position.coords.longitude,position.coords.latitude,position.timestamp,position.coords.speed);
-
-             },
-             (error) => alert(JSON.stringify(error)),
-             {enableHighAccuracy: true, timeout: 20000, maximumAge: 1000,distanceFilter:100}
-         );
-
-         //add contacts
-         const intervalId = BackgroundTimer.setInterval(() => {
-             // this will be executed every 200 ms
-             // even when app is the the background
-             contactApi.syncContacts();
 
 
-         }, 60000);
 
 
     }
