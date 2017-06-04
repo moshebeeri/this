@@ -27,8 +27,9 @@ import Register from './js/components/register/index';
 import codePush from "react-native-code-push";
 
 let Groupys = StackNavigator({
-        login: { screen: Login },
         home: { screen: ApplicationManager },
+
+        login: { screen: Login },
         addBusiness: { screen: AddBusiness },
         addPromotions:{screen:AddPromotions},
         AddGroups:{screen:AddGroups},

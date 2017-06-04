@@ -17,6 +17,13 @@ const {
 const logo = require('../../../images/logo.png');
 import LoginApi from '../../api/login'
 let loginApi = new LoginApi()
+import { NavigationActions } from 'react-navigation'
+const resetAction = NavigationActions.reset({
+    index: 0,
+    actions: [
+        NavigationActions.navigate({ routeName: 'home'})
+    ]
+});
 
 export default class Register extends Component {
 
@@ -40,6 +47,11 @@ export default class Register extends Component {
 
 
     replaceRoute(route) {
+        if(route == 'home'){
+            this.props.navigation.dispatch(resetAction);
+            return;
+        }
+
         this.props.navigation.navigate(route);
     }
 

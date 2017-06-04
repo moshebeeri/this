@@ -18,16 +18,10 @@ import BackgroundTimer from 'react-native-background-timer';
 let locationApi = new LocationApi();
 let contactApi = new ContactApi();
 
-import { NavigationActions } from 'react-navigation'
+
 import codePush from "react-native-code-push";
 
 import SideBar from '../drawer/index';
-const resetAction = NavigationActions.reset({
-    index: 0,
-    actions: [
-        NavigationActions.navigate({ routeName: 'home'})
-    ]
-});
 
 const warch = navigator.geolocation.watchPosition((position) => {
         var lastPosition = JSON.stringify(position);
@@ -52,6 +46,8 @@ let updateDialogOption = {
 }
 codePush.sync({updateDialog: updateDialogOption})
 
+import LoginUtils from '../../utils/login_utils'
+let lu = new LoginUtils();
 export default class ApplicationManager extends Component {
     static navigationOptions = {
         header:null
@@ -74,12 +70,36 @@ export default class ApplicationManager extends Component {
             rowsView: [],
             initialPage: initialPage,
             index: initialPage,
-            drawerState:''
+            drawerState:'',
+            start:true,
 
         }
 
 
     }
+    replaceRoute(route) {
+
+        this.props.navigation.navigate(route);
+    }
+
+    async calc_login_status() {
+        return new Promise(async(resolve, reject) => {
+
+            try {
+                const token = await lu.getToken();
+                if (!token) {
+                    this.replaceRoute('login');
+                    return resolve(true);
+                }
+            }catch(error){
+                this.replaceRoute('login');
+                return resolve(true);
+            }
+            return resolve(true);
+
+        })
+    }
+
 
     onChangeTab(ref){
          let component = 'home';
@@ -138,8 +158,9 @@ export default class ApplicationManager extends Component {
         }
 
     }
-    componentWillMount() {
-        this.props.navigation.dispatch(resetAction);
+    async componentWillMount() {
+        await this.calc_login_status();
+        this.setState({start:false});
 
     }
 
@@ -174,7 +195,7 @@ export default class ApplicationManager extends Component {
         let index = this.state.initialPage;
 
 
-        if(this.props.navigation.state.key == 'Init0') {
+        if(!this.start) {
 
             return (
 

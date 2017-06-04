@@ -26,6 +26,14 @@ let lu = new LoginUtils();
 
 const global = require('../../conf/global');
 let calc_login = true;
+import { NavigationActions } from 'react-navigation'
+const resetAction = NavigationActions.reset({
+    index: 0,
+    actions: [
+        NavigationActions.navigate({ routeName: 'home'})
+    ]
+});
+
 export default  class Login extends Component {
     static navigationOptions = {
         header:null
@@ -139,6 +147,10 @@ export default  class Login extends Component {
 
 
     replaceRoute(route) {
+        if(route == 'home'){
+            this.props.navigation.dispatch(resetAction);
+            return;
+        }
 
         this.props.navigation.navigate(route);
     // this.props.replaceAt('login', { key: route }, this.props.navigation.key);
