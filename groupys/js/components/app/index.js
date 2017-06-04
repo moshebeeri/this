@@ -3,7 +3,7 @@ import {Image, Platform,StyleSheet} from 'react-native';
 import {connect} from 'react-redux';
 import {actions} from 'react-native-navigation-redux-helpers';
 import {Container, Content, Text,Title, InputGroup,
-    Input, Button, Icon, View,Header, Body, Right, ListItem,Tabs,Tab, TabHeading,Thumbnail,Left} from 'native-base';
+    Input, Button, Icon, View,Header, Body, Right, ListItem,Tabs,Tab, TabHeading,Thumbnail,Left,Drawer} from 'native-base';
 
 import GeneralComponentHeader from '../header/index';
 import Product from '../product/index';
@@ -18,16 +18,36 @@ import BackgroundTimer from 'react-native-background-timer';
 let locationApi = new LocationApi();
 let contactApi = new ContactApi();
 
-import { NavigationActions } from 'react-navigation'
+
 import codePush from "react-native-code-push";
 
+import SideBar from '../drawer/index';
 
-const resetAction = NavigationActions.reset({
-    index: 0,
-    actions: [
-        NavigationActions.navigate({ routeName: 'home'})
-    ]
-});
+const warch = navigator.geolocation.watchPosition((position) => {
+        var lastPosition = JSON.stringify(position);
+        locationApi.sendLocation(position.coords.longitude,position.coords.latitude,position.timestamp,position.coords.speed);
+
+    },
+    (error) => alert(JSON.stringify(error)),
+    {enableHighAccuracy: true, timeout: 20000, maximumAge: 1000,distanceFilter:100}
+);
+
+const timer = BackgroundTimer.setInterval(() =>{
+    console.log('sync contacts')
+    // this will be executed every 200 ms
+    // even when app is the the background
+    contactApi.syncContacts();
+
+
+
+}, 60000);
+let updateDialogOption = {
+    updateTitle:"update"
+}
+codePush.sync({updateDialog: updateDialogOption})
+
+import LoginUtils from '../../utils/login_utils'
+let lu = new LoginUtils();
 export default class ApplicationManager extends Component {
     static navigationOptions = {
         header:null
@@ -49,34 +69,37 @@ export default class ApplicationManager extends Component {
             addComponent: '',
             rowsView: [],
             initialPage: initialPage,
-            index: initialPage
+            index: initialPage,
+            drawerState:'',
+            start:true,
 
         }
-        ;
-
-
-         // add location
-
-         this.watchID = navigator.geolocation.watchPosition((position) => {
-             var lastPosition = JSON.stringify(position);
-             locationApi.sendLocation(position.coords.longitude,position.coords.latitude,position.timestamp,position.coords.speed);
-
-             },
-             (error) => alert(JSON.stringify(error)),
-             {enableHighAccuracy: true, timeout: 20000, maximumAge: 1000,distanceFilter:100}
-         );
-
-         //add contacts
-         const intervalId = BackgroundTimer.setInterval(() => {
-             // this will be executed every 200 ms
-             // even when app is the the background
-             contactApi.syncContacts();
-
-
-         }, 60000);
 
 
     }
+    replaceRoute(route) {
+
+        this.props.navigation.navigate(route);
+    }
+
+    async calc_login_status() {
+        return new Promise(async(resolve, reject) => {
+
+            try {
+                const token = await lu.getToken();
+                if (!token) {
+                    this.replaceRoute('login');
+                    return resolve(true);
+                }
+            }catch(error){
+                this.replaceRoute('login');
+                return resolve(true);
+            }
+            return resolve(true);
+
+        })
+    }
+
 
     onChangeTab(ref){
          let component = 'home';
@@ -135,12 +158,10 @@ export default class ApplicationManager extends Component {
         }
 
     }
-    componentWillMount() {
-        this.props.navigation.dispatch(resetAction);
-        var updateDialogOption = {
-            updateTitle:"update"
-        }
-        codePush.sync({updateDialog: updateDialogOption})
+    async componentWillMount() {
+        await this.calc_login_status();
+        this.setState({start:false});
+
     }
 
    async headerAction(compoenet, index){
@@ -150,20 +171,41 @@ export default class ApplicationManager extends Component {
     }
 
 
+
+    openDrawer() {
+        this._drawer._root.open();
+    }
+
+    closeDrawer() {
+        this._drawer._root.close();
+    }
+    componentDidMount(){
+    //   this.openDrawer();
+    }
+
     render() {
 
-
+        closeDrawer = () => {
+            this.drawer._root.close()
+        };
+        openDrawer = () => {
+            this.drawer._root.open()
+        };
         let showAction = this.showAction(this.state.index);
         let index = this.state.initialPage;
 
 
-        if(this.props.navigation.state.key == 'Init0') {
+        if(!this.start) {
 
-            return (<Container>
+            return (
 
-                <GeneralComponentHeader navigate={this.props.navigation.navigate} showAction={showAction} current='home'
-                                        to={this.state.addComponent}/>
-
+                    <Drawer
+                ref={(ref) => { this.drawer = ref; }}
+                content={<SideBar/>}
+                onClose={() => closeDrawer} >
+                        <Container>
+                            <GeneralComponentHeader openDrawer= {openDrawer} navigate={this.props.navigation.navigate} showAction={showAction} current='home'
+                                                    to={this.state.addComponent}/>
 
                 <Tabs initialPage={index} onChangeTab={this.onChangeTab.bind(this)} style={{backgroundColor: '#fff',}}>
                     <Tab heading={ <TabHeading style={{ backgroundColor: "#ffe6e6" }}><Text style={{color: 'black', fontSize: 11,}}>Home</Text></TabHeading>}>
@@ -189,7 +231,9 @@ export default class ApplicationManager extends Component {
 
                 </Tabs>
 
-            </Container>);
+                        </Container>
+            </Drawer>
+               );
         }
         return  <Container></Container>;
 
