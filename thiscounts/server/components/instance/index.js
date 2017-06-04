@@ -1,14 +1,15 @@
-const mongoose = require('mongoose'),
-  Schema = mongoose.Schema;
+const _ = require('lodash');
+const mongoose = require('mongoose');
 const logger = require('../logger').createLogger();
 const graphTools = require('../graph-tools');
 const instanceGraphModel = graphTools.createGraphModel('instance');
 const utils = require('../utils').createUtils();
 const activity = require('../activity').createActivity();
 const spatial = require('../spatial').createSpatial();
-const _ = require('lodash');
-let distributor = require('../../components/distributor');
-let InstanceSchema = require('../../api/instance/instance.model');
+const distributor = require('../../components/distributor');
+const InstanceSchema = require('../../api/instance/instance.model');
+const async = require('async');
+
 
 'use strict';
 
@@ -30,7 +31,7 @@ function isAutomatic(promotion) {
 }
 
 Instances.createAutomaticPromotionInstances =
-  Instances.prototype.createAutomaticPromotionInstances = function (promotion, callback) {
+  Instances.prototype.createAutomaticPromotionInstances = function (promotion) {
 
   };
 
@@ -239,7 +240,7 @@ function getValue(instance) {
 }
 
 Instances.createPromotionInstances =
-  Instances.prototype.createPromotionInstances = function (promotion, callback) {
+  Instances.prototype.createPromotionInstances = function (promotion) {
     let instances = [];
     switch (promotion.type) {
       case 'PERCENT': {
@@ -333,39 +334,47 @@ function to_graph(instance) {
   return _.merge(ret, value);
 }
 
-function storeInstance(promotion, instance) {
-  InstanceSchema.create(instance, function (err, instance) {
-    if (err) return console.error(err);
-    instanceGraphModel.reflect(instance, to_graph(instance), function (err, instance) {
-      if (err) return console.error(err);
-      instanceGraphModel.relate_ids(instance._id, 'INSTANCE_OF', promotion._id, function (err) {
-        if (err) return console.error(err);
-        spatial.add2index(promotion.gid, function (err) {
-          if (err) return console.error(err);
-
-        });
-      });
+function createStoreInstancefunction(instances){
+  return function storeInstance(instance, callback) {
+    InstanceSchema.create(instance, function (err, instance) {
+      instance.populate('promotion',  function (err, instance) {
+        if (err) return callback(err);
+        instanceGraphModel.reflect(instance, to_graph(instance), function (err, instance) {
+          if (err) return callback(err);
+          instanceGraphModel.relate_ids(instance._id, 'INSTANCE_OF', instance.promotion._id, function (err) {
+            if (err) return callback(err);
+            spatial.add2index(instance.gid, function (err) {
+              if (err) return callback(err);
+              instances.push(instance);
+              callback(null, instance)
+            });
+          });
+        })
+      })
     })
-  })
+  }
 }
 
-function storeInstances(promotion, instances) {
-  if (!instances)
-    return;
-  instances.forEach(instance => {
-    storeInstance(promotion, instance);
-  })
+
+function storeInstances(instances, callback) {
+  let mongooseInstances = [];
+  async.each(instances, createStoreInstancefunction(mongooseInstances), function (err) {
+    if(err) return console.log(err);
+    return callback(null, mongooseInstances);
+  });
 }
 
 Instances.cratePromotionInstances =
   Instances.prototype.cratePromotionInstances = function (promotion, callback) {
     let instances = [];
-    if (isAutomatic(promotion)) {
-      instances = this.createAutomaticPromotionInstances(promotion, callback);
-    } else {
-      instances = this.createPromotionInstances(promotion, callback);
-    }
-    storeInstances(promotion, instances);
+    if (isAutomatic(promotion))
+      instances = this.createAutomaticPromotionInstances(promotion);
+    else
+      instances = this.createPromotionInstances(promotion);
+    storeInstances(instances, function(err, instances){
+      if(err) return callback(err);
+      callback(null, instances);
+    });
   };
 
 module.exports = Instances;

@@ -32,6 +32,10 @@ exports.fetch_feed = function(userId, query_builder, Model, res) {
         Model.populate(feeds, {path: 'activity.promotion', model: 'Promotion'}, callback);
       }
 
+      function populate_instance(feeds, callback) {
+        Model.populate(feeds, {path: 'activity.instance', model: 'Instance'}, callback);
+      }
+
       function populate_product(feeds, callback) {
         Model.populate(feeds, {path: 'activity.product', model: 'Product'}, callback);
       }
@@ -87,6 +91,7 @@ exports.fetch_feed = function(userId, query_builder, Model, res) {
 
       async.waterfall([
         async.apply(populate_promotion, feeds),
+        populate_instance       ,
         populate_product        ,
         populate_user           ,
         populate_business       ,
