@@ -83,8 +83,18 @@ export default class GenericFeedManager extends Component {
                 response =  await this.props.api.getAll('down',this.state.rowsView[this.state.rowsView.length-1].id);
             }
             if(response.length > 0) {
+                let currentRows = this.state.rowsView;
+                let newFeeds = response.filter(function (feed) {
+                    let filtered = currentRows.filter(function (currentFeed) {
+                        if(currentFeed.id == feed.id){
+                            return false;
+                        }
+                        return true;
 
-                response = this.state.rowsView.concat(response);
+                    })
+                    return filtered.length == 0;
+                })
+                response = this.state.rowsView.concat(newFeeds);
                 this.setState({
                     rowsView: response,
                     showLoader: false

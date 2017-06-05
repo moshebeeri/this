@@ -13,11 +13,12 @@ import Promotions from '../promtions/index'
 import Groups from '../groups/index'
 
 import LocationApi from '../../api/location'
+import UserApi from '../../api/user'
 import ContactApi from '../../api/contacts'
 import BackgroundTimer from 'react-native-background-timer';
 let locationApi = new LocationApi();
 let contactApi = new ContactApi();
-
+let userApi = new UserApi();
 
 import codePush from "react-native-code-push";
 
@@ -74,7 +75,7 @@ export default class ApplicationManager extends Component {
             start:true,
 
         }
-
+         userApi.getUser();
 
     }
     replaceRoute(route) {

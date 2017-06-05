@@ -2,7 +2,8 @@
  * Created by roilandshut on 25/04/2017.
  */
 import store from 'react-native-simple-store';
-
+import UserApi from './user'
+let userApi = new UserApi();
 class FeedApi {
 
 
@@ -19,6 +20,10 @@ class FeedApi {
                 let token = await store.get('token');
                 if(!userId){
                     userId = await store.get('user_id');
+                    if(!userId){
+                       let user = await userApi.getUser();
+                       userId = user._id;
+                    }
                 }
 
                 let contacts = await store.get("all-contacts");
