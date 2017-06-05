@@ -225,12 +225,12 @@ export default class AddPromotion extends Component {
        }
        promotion.percent = {};
        if(this.state.type == 'PERCENT'){
-           promotion.percent.type = 'SINGLE';
+           promotion.percent.variation = 'SINGLE';
            promotion.percent.values = [this.state.percent.percent]
        }
 
        if(this.state.type == 'PERCENT_RANGE'){
-           promotion.percent.type = 'RANGE';
+           promotion.percent.variation = 'RANGE';
            promotion.percent.values = [this.state.percent_range.from,this.state.percent_range.to]
        }
 
