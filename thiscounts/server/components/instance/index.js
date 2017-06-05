@@ -54,7 +54,7 @@ function createPercentInstances(promotion) {
   const p = promotion.percent;
 
   if (p.variation === 'SINGLE') {
-    let instance = createInstance(promotion, p.values[0], p.values[0].quantity);
+    let instance = createInstance(promotion, {percent: p.values[0]}, p.quantity);
     return [instance]
   }
   else if (p.variation === 'VALUES') {
@@ -82,7 +82,7 @@ function createPunchCardInstances(promotion) {
   const p = promotion.punch_card;
 
   if (p.variation === 'SINGLE') {
-    let instance = createInstance(promotion, p.values[0], p.values[0].quantity);
+    let instance = createInstance(promotion, p.values[0], p.quantity);
     return [instance]
   }
   else if (p.variation === 'VALUES') {

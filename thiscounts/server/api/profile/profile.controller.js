@@ -10,6 +10,7 @@ let Profile = require('./profile.model');
 let User = require('../user/user.model');
 let Card = require('../card/card.model');
 let Business = require('../business/business.model');
+let Instance = require('../instance/instance.model');
 let graphTools = require('../../components/graph-tools');
 let graphModel = graphTools.createGraphModel('promotion');
 
@@ -29,7 +30,7 @@ exports.me = function (req, res) {
 
   function add_saved(callback) {
     //console.log('1');                   start, name, ret_type, limit, callback
-    graphModel.related_type_id(req.user._id, 'SAVED', "promotion", req.user._id, 0, 10, callback);
+    graphModel.related_type_id(req.user._id, 'SAVED', "instance", req.user._id, 0, 10, callback);
 
   }
 
@@ -122,31 +123,44 @@ exports.destroy = function (req, res) {
     });
   });
 };
-
-exports.realized_promotions = function (req, res) {
+function instances_by_relation(rel, req, res) {
   let paginate = utils.to_paginate(req);
-  graphModel.related_type_id_dir(req.user._id, 'REALIZED', 'promotion', 'out', paginate.skip, paginate.limit, function (err, followers) {
+  let query = `MATCH (u:user{_id:'${req.user._id}' })-[rel:${rel}]->(instance:instance) return rel,instance ORDER BY rel.timestamp DESC
+                    skip ${paginate.skip} limit ${paginate.limit}`;
+  graphModel.query(query, function (err, g_instances) {
     if (err) {
       return handleError(res, err)
     }
-    return res.status(200).json(followers);
+    //let _ids = g_instances.map(instance => instance.i._id);
+    let _ids_map = g_instances.reduce(function (map, obj) {
+      map[obj.instance._id] = obj;
+      return map;
+    }, {});
+
+    Instance.find({}).where('_id').in(Object.keys(_ids_map)).exec(function (err, instances) {
+      if (err) {
+        callback(err, null)
+      }
+      let ret = instances.map(function (instance) {
+        return {instance: instance, graph: _ids_map[instance._id]}
+      });
+      return res.status(200).json(ret);
+    });
   });
+}
+exports.saved_instances = function (req, res) {
+  instances_by_relation('SAVED', req, res);
 };
 
-exports.shared_promotions = function (req, res) {
-  return res.status(204).send('No Content');
+
+exports.realized_instances = function (req, res) {
+  instances_by_relation('REALIZED', req, res);
 };
 
-exports.saved_promotions = function (req, res) {
-  let paginate = utils.to_paginate(req);
-  //TODO: return only not realized and valid
-  graphModel.related_type_id_dir(req.user._id, 'SAVED', 'promotion', 'out', paginate.skip, paginate.limit, function (err, followers) {
-    if (err) {
-      return handleError(res, err)
-    }
-    return res.status(200).json(followers);
-  });
+exports.shared_instances = function (req, res) {
+  instances_by_relation('SHARED', req, res);
 };
+
 
 exports.liked_malls = function (req, res) {
   let paginate = utils.to_paginate(req);
@@ -170,9 +184,15 @@ exports.promotions_malls = function (req, res) {
 };
 
 exports.test_me = function (req, res) {
-  let distributor = require('../../components/distributor');
-  let spreads = distributor.distributePromotions(20, 40, 5, 30);
-  return res.status(201).json(spreads);
+  // let distributor = require('../../components/distributor');
+  // let spreads = distributor.distributePromotions(20, 40, 5, 30);
+  // return res.status(201).json(spreads);
+  let a =[{_id: '5935a88d16972d5037c79991'},
+      {_id: '5935a88d16972d5037c79992'}];
+  const ret = a.reduce(function (acc, obj) {
+    acc.push(obj._id)
+  }, []);
+  return res.status(201).json(ret);
 };
 
 exports.realized_malls = function (req, res) {

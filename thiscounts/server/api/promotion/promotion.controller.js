@@ -188,7 +188,7 @@ exports.create = function (req, res) {
   promotion.creator = req.user._id;
   create_promotion(promotion, function(err, promotion){
     if (err) return handleError(res, err);
-    return res.json(201, promotion);
+    return  res.status(201).json(promotion);
   })
 };
 
