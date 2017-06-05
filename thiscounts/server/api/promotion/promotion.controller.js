@@ -167,11 +167,16 @@ function create_promotion(promotion, callback) {
           promotionGraphModel.relate_ids(promotion.campaign_id, 'CAMPAIGN_PROMOTION', promotion._id);
         }
         relateTypes(promotion);
-        promotion_created_activity(promotion);
+        //promotion_created_activity(promotion);
         spatial.add2index(promotion.gid, function (err, result) {
           if (err) return callback(err, null);
           logger.info('object added to layer ' + result);
-          instance.cratePromotionInstances(promotion);
+          instance.cratePromotionInstances(promotion, function (err, instances) {
+            if (err) return callback(err, null);
+            instances.forEach( instance => {
+              instance_eligible_activity(instance)
+            })
+          });
         });
       });
       callback(null, promotion);
@@ -224,6 +229,19 @@ function promotion_created_activity(promotion) {
 
   activity.create(act);
 }
+
+function instance_eligible_activity(instance){
+  if (utils.defined(instance.promotion.entity.business)) {
+    let act = {
+      instance: instance._id,
+      promotion: instance.promotion._id,
+      action: "eligible"
+    };
+    act.actor_business = instance.promotion.entity.business;
+    activity.create(act);
+  }
+}
+
 
 // Updates an existing promotion in the DB.
 exports.update = function (req, res) {

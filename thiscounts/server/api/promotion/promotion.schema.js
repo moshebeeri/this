@@ -1,7 +1,9 @@
+'use strict';
+
 const mongoose = require('mongoose'),
   Schema = mongoose.Schema;
-const _ = require('lodash');
 
+const _ = require('lodash');
 
 function percent_range_validator(v) {
   if (_.isNull(v))
