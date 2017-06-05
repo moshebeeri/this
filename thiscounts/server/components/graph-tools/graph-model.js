@@ -162,11 +162,15 @@ GraphModel.prototype.relate_ids = function relate_id(from, name, to, params, cal
   }
 };
 
-GraphModel.prototype.unrelate_ids = function unrelate(from, name, to){
+GraphModel.prototype.unrelate_ids = function unrelate_ids(from, name, to, callback){
   let query = util.format("MATCH (f { _id:'%s' })-[r:%s]->(t { _id:'%s' }) delete r", from, name, to);
-  db.query(query, function(err) {
-    if (err) { logger.error(err.message); }
-  });
+  if (utils.defined(callback)) {
+    db.query(query, callback);
+  } else {
+    db.query(query, function (err) {
+      if (err) logger.error(err.message);
+    });
+  }
 };
 
 /***

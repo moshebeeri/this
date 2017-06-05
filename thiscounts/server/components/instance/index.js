@@ -16,14 +16,15 @@ const async = require('async');
 function Instances() {
 }
 
-function createInstance(promotion) {
-  let ret = {
+function createInstance(promotion, value, quantity) {
+  return {
     promotion: promotion._id,
     type: promotion.type,
     location: promotion.location,
-    value: {}
+    quantity: quantity,
+    remaining: quantity,
+    value: value
   };
-  return ret;
 }
 
 function isAutomatic(promotion) {
@@ -49,17 +50,16 @@ function MinMax(value, value2) {
 }
 
 function createPercentInstances(promotion) {
+  let instances = [];
   const p = promotion.percent;
+
   if (p.variation === 'SINGLE') {
-    let instance = createInstance(promotion);
-    instance.value.percent = promotion.percent.values[0];
+    let instance = createInstance(promotion, p.values[0], p.values[0].quantity);
     return [instance]
   }
   else if (p.variation === 'VALUES') {
-    let instances = [];
     p.values.forEach(value => {
-      let instance = createInstance(promotion);
-      instance.value.percent = value;
+      let instance = createInstance(promotion, value, value.quantity);
       instances.push(instance);
     });
     return instances;
@@ -67,13 +67,8 @@ function createPercentInstances(promotion) {
   else if (p.variation === 'RANGE') {
     const minMax = MinMax(p.values[0], p.values[1]);
     let spreads = distributor.distributePromotions(minMax.min, minMax.max, 5, p.quantity);
-    let instances = [];
     spreads.forEach((spread) => {
-      let instance = createInstance(promotion);
-      instance.value.percent = {
-        percent: spread.value,
-        quantity: spread.quantity
-      };
+      let instance = createInstance(promotion, spread.value, spread.quantity);
       instances.push(instance);
     });
     return instances;
@@ -83,23 +78,16 @@ function createPercentInstances(promotion) {
 }
 
 function createPunchCardInstances(promotion) {
+  let instances = [];
   const p = promotion.punch_card;
 
   if (p.variation === 'SINGLE') {
-    let instance = createInstance(promotion);
-    instance.value.punch_card = promotion.punch_card.values[0];
+    let instance = createInstance(promotion, p.values[0], p.values[0].quantity);
     return [instance]
   }
   else if (p.variation === 'VALUES') {
-    let instances = [];
     p.values.forEach(value => {
-      let instance = createInstance(promotion);
-      instance.value.punch_card = {
-        product: p.product,
-        number_of_punches: value.number_of_punches,
-        quantity: value.quantity,
-        days: value.days
-      };
+      let instance = createInstance(promotion, value, value.quantity);
       instances.push(instance);
     });
     return instances;
@@ -107,14 +95,12 @@ function createPunchCardInstances(promotion) {
   else if (p.variation === 'RANGE') {
     const minMax = MinMax(p.values[0].number_of_punches, p.values[1].number_of_punches);
     let spreads = distributor.distributePromotions(minMax.min, minMax.max, 1, p.quantity);
-    let instances = [];
     spreads.forEach((spread) => {
-      let instance = createInstance(promotion);
-      instance.value.punch_card = {
+      let value = {
         number_of_punches: spread.value,
-        quantity: spread.quantity,
-        days: promotion.punch_card.values[0].days
+        days: p.values[0].days
       };
+      let instance = createInstance(promotion, value, spread.quantity);
       instances.push(instance);
     });
     return instances;
@@ -127,26 +113,22 @@ function createGiftInstances(promotion) {
   if (promotion.percent.variation === 'SINGLE') {
     return [promotion]
   }
-
 }
 function createXPlusYInstances(promotion) {
   if (promotion.x_plus_y.variation === 'SINGLE') {
     return [promotion]
   }
-
 }
 
 function createXPlusNPercentOffInstances(promotion) {
   if (promotion.x_plus_n_percent_off.variation === 'SINGLE') {
     return [promotion]
   }
-
 }
 function createXForYInstances(promotion) {
   if (promotion.x_for_y.variation === 'SINGLE') {
     return [promotion]
   }
-
 }
 function createIncreasingInstances(promotion) {
   if (promotion.increasing.variation === 'SINGLE') {
@@ -158,13 +140,11 @@ function createDoublingInstances(promotion) {
   if (promotion.doubling.variation === 'SINGLE') {
     return [promotion]
   }
-
 }
 function createGrowInstances(promotion) {
   if (promotion.percent.variation === 'SINGLE') {
     return [promotion]
   }
-
 }
 function createPrepayInstances(promotion) {
   if (promotion.prepay_discount.variation === 'SINGLE') {
@@ -176,25 +156,21 @@ function createReducedInstances(promotion) {
   if (promotion.reduced_amount.variation === 'SINGLE') {
     return [promotion]
   }
-
 }
 function createCashBackInstances(promotion) {
   if (promotion.cash_back.variation === 'SINGLE') {
     return [promotion]
   }
-
 }
 function createEarlyBookingInstances(promotion) {
   if (promotion.early_booking.variation === 'SINGLE') {
     return [promotion]
   }
-
 }
 function createHappyHourInstances(promotion) {
   if (promotion.happy_hour.variation === 'SINGLE') {
     return [promotion]
   }
-
 }
 function createMoreThanInstances(promotion) {
   if (promotion.more_than.variation === 'SINGLE') {
@@ -334,10 +310,10 @@ function to_graph(instance) {
   return _.merge(ret, value);
 }
 
-function createStoreInstancefunction(instances){
+function createStoreInstanceFunction(instances) {
   return function storeInstance(instance, callback) {
     InstanceSchema.create(instance, function (err, instance) {
-      instance.populate('promotion',  function (err, instance) {
+      instance.populate('promotion', function (err, instance) {
         if (err) return callback(err);
         instanceGraphModel.reflect(instance, to_graph(instance), function (err, instance) {
           if (err) return callback(err);
@@ -358,8 +334,8 @@ function createStoreInstancefunction(instances){
 
 function storeInstances(instances, callback) {
   let mongooseInstances = [];
-  async.each(instances, createStoreInstancefunction(mongooseInstances), function (err) {
-    if(err) return console.log(err);
+  async.each(instances, createStoreInstanceFunction(mongooseInstances), function (err) {
+    if (err) return console.log(err);
     return callback(null, mongooseInstances);
   });
 }
@@ -371,8 +347,8 @@ Instances.cratePromotionInstances =
       instances = this.createAutomaticPromotionInstances(promotion);
     else
       instances = this.createPromotionInstances(promotion);
-    storeInstances(instances, function(err, instances){
-      if(err) return callback(err);
+    storeInstances(instances, function (err, instances) {
+      if (err) return callback(err);
       callback(null, instances);
     });
   };
