@@ -2,7 +2,8 @@
  * Created by roilandshut on 25/04/2017.
  */
 import store from 'react-native-simple-store';
-
+import UserApi from './user'
+let userApi = new UserApi();
 class FeedApi {
 
 
@@ -19,6 +20,10 @@ class FeedApi {
                 let token = await store.get('token');
                 if(!userId){
                     userId = await store.get('user_id');
+                    if(!userId){
+                       let user = await userApi.getUser();
+                       userId = user._id;
+                    }
                 }
 
                 let contacts = await store.get("all-contacts");
@@ -54,7 +59,6 @@ class FeedApi {
                 let feeds = responseData.map(feed => this.createFeed(feed,contacsMap)).filter(function(x){
                     return x != undefined;
                 });
-                // console.log('token: ' + token +' user id' + userId + ' for item id: '+ id + ' direction: ' + direction + ' number of items: ' + feeds.length);
                 resolve(feeds);
             }
             catch (error) {
@@ -96,7 +100,8 @@ class FeedApi {
             }
             if(feed.activity.business.pictures.length > 0  ){
                 response = {
-                    id:feed._id,
+                    id:feed.activity.business._id,
+                    fid:feed.fid,
                     social: {
                         like: feed.activity.actor_user.social_state.like,
                         numberLikes: feed.activity.actor_user.social_state.likes,
@@ -112,7 +117,8 @@ class FeedApi {
             }else {
 
                 response = {
-                    id:feed._id,
+                    id:feed.activity.business._id,
+                    fid:feed.fid,
                     social: {
                         like: feed.activity.actor_user.social_state.like,
                         numberLikes: feed.activity.actor_user.social_state.likes,
@@ -147,6 +153,42 @@ class FeedApi {
                 description: 'joined the group',
 
             }
+        }
+
+        if(feed.activity.action =='eligible'){
+            if(feed.activity.promotion.pictures.length > 0  ){
+                response = {
+                    id:feed.activity.instance._id,
+                    fid:feed._id,
+                    social: {
+                        like: false,
+                        numberLikes: 0,
+                        follow: true,
+                    },
+                    actor:feed.activity.actor_business._id,
+                    itemTitle: 'Promotion : ' + feed.activity.promotion.percent.values[0] + ' % off',
+                    description: feed.activity.actor_business.name + ' ' + feed.activity.actor_business.city + ' ' + feed.activity.actor_business.address + ' offer a new promotion',
+                    banner: {
+                        uri:feed.activity.promotion.pictures[0].pictures[1]
+                    }
+                }
+            }else {
+
+                response = {
+                    id:feed.activity.instance._id,
+                    fid:feed._id,
+                    social: {
+                        like: false,
+                        numberLikes: 0,
+                        follow: true,
+                    },
+                    actor:feed.activity.actor_business._id,
+                    itemTitle: 'Promotion : ' + feed.activity.promotion.percent.values[0] + ' % off',
+                    description: feed.activity.actor_business.name + ' ' + feed.activity.actor_business.city + ' ' + feed.activity.actor_business.address + ' offer a new promotion',
+
+                }
+            }
+
         }
         return response;
 

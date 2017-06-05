@@ -125,13 +125,13 @@ export default class GenericFeedItem extends Component {
                 }
             }
             let likes = item.social.numberLikes + ' Likes'
-            let likeIcon = <Button transparent small onPress={this.like.bind(this,item.actor)}>
+            let likeIcon = <Button transparent small onPress={this.like.bind(this,item.id)}>
                             <Icon  active style={{color: 'gray'}} name="thumbs-up" />
                             <Text>{likes}</Text>
                 </Button>
 
             if(item.social && item.social.like == true){
-                likeIcon = <Button transparent small onPress={this.unlike.bind(this,item.actor)} >
+                likeIcon = <Button transparent small onPress={this.unlike.bind(this,item.id)} >
                                  <Icon active name="thumbs-up"  />
                                  <Text>{likes}</Text>
                             </Button>
