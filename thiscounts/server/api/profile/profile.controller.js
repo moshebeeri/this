@@ -148,7 +148,7 @@ function instances_by_relation_async(rel, user_id, paginate, callback) {
       let ret = instances.map(function (instance) {
         return {instance: instance, graph: _ids_map[instance._id]}
       });
-
+      console.log(JSON.stringify(ret));
       return callback(null, ret);
     });
   });
