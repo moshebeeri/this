@@ -26,6 +26,9 @@ export default class GeneralComponentHeader extends Component {
         contactApi.syncContacts();
     }
 
+    realize(){
+        this.props.navigate('realizePromotion')
+    }
 
     render() {
       let action = undefined;
@@ -59,9 +62,12 @@ export default class GeneralComponentHeader extends Component {
                 <Button transparent style={{ paddingRight: 15 }} onPress={this.props.openDrawer}>
                   <Icon name="menu" />
                 </Button>
-                  {/*<Button transparent style={{ paddingRight: 15 }} onPress={this.refreshContact}>*/}
-                      {/*<Icon name="bookmarks" />*/}
-                  {/*</Button>*/}
+
+                  <Button style={{ backgroundColor: 'transparent'}} iconLeft light>
+
+                      <Icon style = {{width:20,backgroundColor: 'transparent'}} name='md-cog'  onPress={() =>  this.props.navigate('realizePromotion')}  />
+                  </Button>
+
                   {action}
 
               </View>

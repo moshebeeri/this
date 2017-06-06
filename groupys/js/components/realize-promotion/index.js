@@ -1,10 +1,10 @@
 import React, {Component} from 'react';
 import {connect} from 'react-redux';
 
-import {View, Text, Icon, List, ListItem, Content} from 'native-base';
+import {View, Container,Button,Text,Input,Footer, Icon, List, ListItem, Content} from 'native-base';
 
 
-import store from 'react-native-simple-store';
+
 import PromotionApi from '../../api/promotion'
 
 let promotionApi = new PromotionApi()
