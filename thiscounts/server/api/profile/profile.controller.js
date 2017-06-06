@@ -125,6 +125,31 @@ exports.destroy = function (req, res) {
   });
 };
 
+function populatePromotionEntity(instances, callback) {
+  let ret_instances = [];
+  function createPopulateInstanceFunction(instances) {
+    return function populateInstance(instance, callback) {
+      let populateObj;
+      if(instance.promotion.entity.business)
+        populateObj = {path: 'promotion.entity.business', model: 'Business'};
+      else if(instance.promotion.entity.shopping_chain)
+        populateObj = {path: 'promotion.entity.shopping_chain', model: 'ShoppingChain'};
+      else if(instance.promotion.entity.mall)
+        populateObj = {path: 'promotion.entity.mall', model: 'Mall'};
+
+      Instance.populate(instance, populateObj, function (err, instance) {
+        if(err) return callback(err);
+        instances.push(instance);
+        callback(null, instance);
+      })
+    }
+  }
+  async.each(instances, createPopulateInstanceFunction(ret_instances), function (err) {
+    if (err) return console.log(err);
+    return callback(null, ret_instances);
+  });
+}
+
 function instances_by_relation_async(rel, user_id, paginate, callback) {
   let query = `MATCH (u:user{_id:'${user_id}' })-[rel:${rel}]->(instance:instance) return rel,instance ORDER BY rel.timestamp DESC
                     skip ${paginate.skip} limit ${paginate.limit}`;
@@ -140,16 +165,17 @@ function instances_by_relation_async(rel, user_id, paginate, callback) {
     Instance.find({}).where('_id')
       .in(Object.keys(_ids_map))
       .populate('promotion')
-      .populate({path: 'promotion.entity.business', model: 'Instance'})
       .exec(function (err, instances) {
       if (err) {
         callback(err)
       }
-      let ret = instances.map(function (instance) {
-        return {instance: instance, graph: _ids_map[instance._id]}
-      });
-      console.log(JSON.stringify(ret));
-      return callback(null, ret);
+      populatePromotionEntity(instances, function (err, instances) {
+        let ret = instances.map(function (instance) {
+          return {instance: instance, graph: _ids_map[instance._id]}
+        });
+        console.log(JSON.stringify(ret));
+        return callback(null, ret);
+      })
     });
   });
 }
