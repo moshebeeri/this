@@ -22,8 +22,8 @@ export default class MyPromotions extends Component {
 
 
      async getAll(direction,id){
-          let feed = {};
-          if(id == 'start'){
+          let feed = new Array();
+          if(id == 'start' || direction=='up'){
                feed = await profileApi.fetch(0,100);
           }
       return feed;

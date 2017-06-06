@@ -111,15 +111,17 @@ export default class GenericFeedManager extends Component {
             })
             return filtered.length == 0;
         })
-        if(top && response.length > 0){
-            response = response.concat(this.state.rowsView);
-
-        }else {
-            response = this.state.rowsView.concat(newFeeds);
+        if(newFeeds.length > 0) {
+            if (top) {
+                currentRows = newFeeds.concat(this.state.rowsView);
+            } else {
+                currentRows = this.state.rowsView.concat(newFeeds)
+            }
         }
         this.setState({
-            rowsView: response,
-            showLoader: false
+            rowsView: currentRows,
+            showLoader: false,
+            showTopLoader: false
         })
     }
 
@@ -134,7 +136,6 @@ export default class GenericFeedManager extends Component {
                     }
                     let response = await this.props.api.getAll('up', this.state.rowsView[0].id);
                     this.addToRows(response,true);
-                    response = response.concat(this.state.rowsView);
 
                 }
             }

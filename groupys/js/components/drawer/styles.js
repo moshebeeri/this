@@ -4,7 +4,8 @@ import loginTheme from './drwaer-theme';
 
 const React = require('react-native');
 
-const { StyleSheet, Platform } = React;
+const {Dimensions, StyleSheet, Platform } = React;
+const deviceHeight = Dimensions.get('window').height;
 
 module.exports = {
   shadow: {
@@ -41,4 +42,26 @@ module.exports = {
     padding: 0,
     alignItems: 'flex-start',
   },
+    thumbnail: {
+        position: 'absolute',
+        left: 20,
+        top: 40,
+        borderWidth: 2,
+        borderColor: '#fff',
+        shadowColor: '#000',
+        shadowOffset: {width: 2, height: 2},
+        shadowOpacity: 0.4,
+        shadowRadius: 1,
+        borderRadius: 33,
+        width: 65,
+        height: 65,
+    },
+    image: {
+        top:60,
+        alignSelf: 'stretch',
+        // resizeMode: 'cover',
+        height: deviceHeight / 3,
+        width: null,
+        position: 'relative',
+    },
 };

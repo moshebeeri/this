@@ -22,7 +22,7 @@ class ProfileApi {
 
 
                 itemTitle: 'Promotion : ' + feed.instance.promotion.percent.values[0] + ' % off',
-               // description: feed.instance.promotion.entity.business.name + ' ' + ffeed.instance.promotion.entity.business.city + ' ' + feed.instance.promotion.entity.business.address + ' offer a new promotion',
+                description: feed.instance.promotion.entity.business.name + ' ' + feed.instance.promotion.entity.business.city + ' ' + feed.instance.promotion.entity.business.address + ' offer a new promotion',
                 banner: {
                     uri:feed.instance.promotion.pictures[0].pictures[1]
                 },
@@ -33,7 +33,7 @@ class ProfileApi {
             response = {
                 id:feed.instance._id,
                 itemTitle: 'Promotion : ' + feed.instance.promotion.percent.values[0] + ' % off',
-              //  description: feed.instance.promotion.entity.business.name + ' ' + feed.instance.promotion.entity.business.city + ' ' + feed.instance.promotion.entity.business.address + ' offer a new promotion',
+                description: feed.instance.promotion.entity.business.name + ' ' + feed.instance.promotion.entity.business.city + ' ' + feed.instance.promotion.entity.business.address + ' offer a new promotion',
                 relcode:feed.graph.rel.properties.code
             }
         }
@@ -67,11 +67,12 @@ class ProfileApi {
 
                 let responseData = await response.json();
 
-
-
-                let feeds = responseData.map(feed => this.createfeed(feed)).filter(function (x) {
-                    return x != undefined;
-                });
+                let feeds = new Array();
+                if(responseData.length > 0) {
+                     feeds = responseData.map(feed => this.createfeed(feed)).filter(function (x) {
+                        return x != undefined;
+                    });
+                }
                 resolve(feeds);
             }
             catch (error) {

@@ -23,7 +23,7 @@ import AddProduct from './js/components/product/add-form/index'
 import GroupFeed from  './js/components/groups/feeds/index'
 import Signup from './js/components/signup/index';
 import Register from './js/components/register/index';
-
+import RealizePromotion from './js/components/realize-promotion/index';
 import codePush from "react-native-code-push";
 
 let Groupys = StackNavigator({
@@ -37,6 +37,7 @@ let Groupys = StackNavigator({
         AddProduct:{screen: AddProduct},
         GroupFeed:{screen: GroupFeed},
         Signup:{screen: Signup},
+        realizePromotion:{screen:RealizePromotion},
         Register:{screen: Register},
 
 
