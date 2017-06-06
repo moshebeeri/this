@@ -1,12 +1,12 @@
 //see http://neo4j.com/developer/javascript/
-var db = require('seraph')({
+let db = require('seraph')({
   server: "http://localhost:7474",
   user: "neo4j",
   pass: "saywhat"
 });
 
-var logger = require('../logger').createLogger();
-var utils = require('../utils').createUtils();
+let logger = require('../logger').createLogger();
+let utils = require('../utils').createUtils();
 
 function Spatial(create) {
   if(create)
@@ -16,7 +16,7 @@ function Spatial(create) {
 //MATCH (n) OPTIONAL MATCH (n)-[r]-() DELETE n,r
 function find_layer(name) {
   //if layer exist return
-  var operation = db.operation('ext/SpatialPlugin/graphdb/getLayer', 'POST', {
+  let operation = db.operation('ext/SpatialPlugin/graphdb/getLayer', 'POST', {
     "layer": name
   });
   db.call(operation, function (err, result, response) {
@@ -75,15 +75,16 @@ function create_index(name) {
 //curl -X POST -d '{"name":"geom","config":{"provider":"spatial","geometry_type":"point","lat":"lat","lng":"lng"}}' --header "Content-Type:application/json" http://localhost:7474/db/data/index/node/
 //curl -X POST -d '{"key":"name","value":"Strandbar Hermann 2","uri":"http://localhost:7575/db/data/node/5"}' --header "Content-Type:application/json" http://localhost:7474/db/data/index/node/geom
 Spatial.prototype.add2index = function add(gid, callback) {
-  var operation = db.operation('index/node/world', 'POST', {
-    "key":"name",
-    "value":"item_id",
-    "uri": "http://localhost:7474/db/data/node/" + gid
-  });
-  db.call(operation, function (err, result, response) {
-    if (!err) console.log('gid ' + gid + ' added to layer');
-    callback(err, result);
-  });
+  this.add(gid, callback);
+  // let operation = db.operation('index/node/world', 'POST', {
+  //   "key":"name",
+  //   "value":"item_id",
+  //   "uri": "http://localhost:7474/db/data/node/" + gid
+  // });
+  // db.call(operation, function (err, result, response) {
+  //   if (!err) console.log('gid ' + gid + ' added to layer');
+  //   callback(err, result);
+  // });
 };
 
 
@@ -98,12 +99,12 @@ Spatial.prototype.add2index = function add(gid, callback) {
  *  }
  */
 Spatial.prototype.add = function add(gid, callback) {
-  var operation = db.operation('ext/SpatialPlugin/graphdb/addNodeToLayer', 'POST', {
+  let operation = db.operation('ext/SpatialPlugin/graphdb/addNodeToLayer', 'POST', {
     "layer": "world",
     "node": "http://localhost:7474/db/data/node/" + gid
   });
   db.call(operation, function (err, result, response) {
-    if (!err) console.log('gid ' + gid + ' added to layer');
+    if (!err) console.log('gid ' + gid + ' added to layer world');
     callback(err, result);
   });
 };
@@ -120,7 +121,7 @@ Spatial.prototype.add = function add(gid, callback) {
  * @param cb
  */
 Spatial.prototype.cypher = function cypher(cypher, cb) {
-  //var cypher = "START x = node({id}) "
+  //let cypher = "START x = node({id}) "
   //  + "MATCH x -[r]-> n "
   //  + "RETURN n "
   //  + "ORDER BY n.name";
@@ -178,25 +179,25 @@ Spatial.prototype.geo_to_location = function geo_to_location(geo) {
 module.exports = Spatial;
 
 
-////var neo4j = require('neo4j');
-////var db = new neo4j.GraphDatabase('http://localhost:7474');
+////let neo4j = require('neo4j');
+////let db = new neo4j.GraphDatabase('http://localhost:7474');
 //
 ////https://github.com/philippkueng/node-neo4j
-//var neo4j = require('node-neo4j');
+//let neo4j = require('node-neo4j');
 //db = new neo4j('http://username:password@domain:port');
 //
 //// when using token based authentication introduced in Neo4j v2.2
 ////db = new neo4j('http://:your-authentication-token@domain:port');
-//var r = require("request");
-//var txUrl = "http://localhost:7474/db/data/transaction/commit";
+//let r = require("request");
+//let txUrl = "http://localhost:7474/db/data/transaction/commit";
 //
 //
 //
 ///**
 // *  Usage:
-// *   var query="MATCH (n:User) RETURN n, labels(n) as l LIMIT {limit}"
-// *   var params={limit: 10}
-// *   var cb=function(err,data) { console.log(JSON.stringify(data)) }
+// *   let query="MATCH (n:User) RETURN n, labels(n) as l LIMIT {limit}"
+// *   let params={limit: 10}
+// *   let cb=function(err,data) { console.log(JSON.stringify(data)) }
 // *   cypher(query,params,cb)
 //*/
 //Spatial.prototype.cypher = function cypher(query, params, cb) {
@@ -231,7 +232,7 @@ module.exports = Spatial;
 //};
 //
 //Spatial.prototype.node = function node() {
-//  var node = db.createNode({hello: 'world'});     // instantaneous, but...
+//  let node = db.createNode({hello: 'world'});     // instantaneous, but...
 //  node.save(function (err, node) {    // ...this is what actually persists.
 //    if (err) {
 //      console.error('Error saving new node to database:', err);
