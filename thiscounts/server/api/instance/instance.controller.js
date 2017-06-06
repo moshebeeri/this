@@ -134,28 +134,27 @@ function updateInstanceById(user_id, instance_id) {
   });
 }
 
-//'/realize/:id/:realize_code/:sale_point_code'
-//TODO: add validation of sale_point_code
+//'/realize/:realize_code'
+//TODO: add validation of authenticated user and sale_point_code
 exports.realize = function (req, res) {
-  const query = `MATCH (:instance { _id:'${req.params.id}'})<-[s:SAVED]-(:user{ _id: '${req.user._id}'}) return s`;
-  graphModel.query(query, function (err, instance) {
+  const query = `MATCH (instance:instance)<-[rel:SAVED{code: '${req.params.code}'}]-(user:user) return instance,rel,user`;
+  graphModel.query(query, function (err, objects) {
     if (err) return handleError(res, err);
-    if (instance.length === 0)
-      return res.status(404).send(`can not realize unsaved instance`);
+    if (objects.length === 0)
+      return res.status(404).send(`realize code mismatch`);
 
-    if (instance.length > 1)
+    if (objects.length > 1)
       return res.status(500).send('multiple instances found');
 
-    instance = instance[0];
-    let realize_code = instance.properties.code;
-    if ( realize_code !== req.params.realize_code)
-      return res.status(400).send('realize code mismatch');
+    let instance = objects[0].instance;
+    let rel = objects[0].rel;
+    let user = objects[0].user;
 
-    graphModel.relate_ids(req.user._id, 'REALIZED', req.params.id, `{code: '${realize_code}', timestamp: '${ new Date()}'}`, function (err) {
+    graphModel.relate_ids(user._id, 'REALIZED', instance._id, `{code: '${rel.properties.code}', timestamp: '${ new Date()}'}`, function (err) {
       if (err) return handleError(res, err);
-      graphModel.unrelate_ids(req.user._id, 'SAVED', req.params.id, function (err) {
+      graphModel.unrelate_ids(user._id, 'SAVED', instance._id, function (err) {
         if (err) return handleError(res, err);
-        updateInstanceById(req.user._id, req.params.id);
+        updateInstanceById(user._id, instance._id);
         return res.json(200, instance);
       })
     })
