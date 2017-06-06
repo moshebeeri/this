@@ -13,6 +13,7 @@ router.put('/:id', auth.isAuthenticated(), controller.update);
 router.patch('/:id', auth.isAuthenticated(), controller.update);
 router.delete('/:id', auth.isAuthenticated(), controller.destroy);
 router.get('/save/:id', auth.isAuthenticated(), controller.save);
+router.get('/realize/:id/:realize_code', auth.isAuthenticated(), controller.realize);
 router.get('/realize/:id/:realize_code/:sale_point_code', auth.isAuthenticated(), controller.realize);
 
 module.exports = router;
