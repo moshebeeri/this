@@ -21,10 +21,10 @@ class ProfileApi {
 
 
 
-                itemTitle: 'Promotion : ' + feed.activity.promotion.percent.values[0] + ' % off',
+                itemTitle: 'Promotion : ' + feed.instance.promotion.percent.values[0] + ' % off',
                // description: feed.instance.promotion.entity.business.name + ' ' + ffeed.instance.promotion.entity.business.city + ' ' + feed.instance.promotion.entity.business.address + ' offer a new promotion',
                 banner: {
-                    uri:feed.activity.promotion.pictures[0].pictures[1]
+                    uri:feed.instance.promotion.pictures[0].pictures[1]
                 },
                 relcode:feed.graph.rel.properties.code
             }
