@@ -101,7 +101,7 @@ class LoginUtils {
                         'Authorization': 'Bearer ' + token,
                     }
                 });
-                if(me.status === '401') {
+                if(me.status === 401) {
                     console.log('token expired');
                     try{
                         const token = await this.refreshToken();
@@ -121,12 +121,6 @@ class LoginUtils {
     async refreshToken() {
         return new Promise(async(resolve, reject) => {
             try {
-                const anon = await store.get('isAnonymous');
-                if (anon) {
-                    const credentials = await store.get("credentials");
-                    const token = await this.login(credentials.email, credentials.password);
-                    resolve(token)
-                }else
                     reject('login')
             }catch(error){
                 console.log(error);
