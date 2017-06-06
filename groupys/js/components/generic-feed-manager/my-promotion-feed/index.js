@@ -137,7 +137,7 @@ export default class MyPromotionFeedItem extends Component {
                         {banner}
                     </CardItem>
                     <CardItem>
-                        <Text>Realization Code: {item.relcode}/</Text>
+                        <Text>Realization Code: {item.relcode}</Text>
                     </CardItem>
                 </Card>
 

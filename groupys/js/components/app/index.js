@@ -113,16 +113,18 @@ export default class ApplicationManager extends Component {
 
                  break;
              case 2:
-                 component ='AddProduct'
+                 component ='AddGroups'
                  break;
              case 3:
-                 component ='addBusiness'
+                 component ='AddProduct'
                  break;
              case 4:
-                 component ='addPromotions'
+                 component ='addBusiness'
+
                  break;
              case 5:
-                 component ='AddGroups'
+                 component ='addPromotions'
+
                  break;
 
          }
@@ -220,24 +222,24 @@ export default class ApplicationManager extends Component {
                         <Feeds index={0} navigateAction={this.headerAction.bind(this)}/>
                     </Tab>
                     <Tab heading={ <TabHeading style={{ backgroundColor: "#ffe6e6" }}><Text style={{color: 'black', fontSize: 11,}}>My Saved</Text></TabHeading>}>
-                        <MydPromotions index={0} navigateAction={this.headerAction.bind(this)}/>
+                        <MydPromotions index={1} navigateAction={this.headerAction.bind(this)}/>
                     </Tab>
                     <Tab
                         heading={ <TabHeading style={{ backgroundColor: "#ffe6e6" }}><Text style={{color: 'black', fontSize: 11,}}>Groups</Text></TabHeading>}>
-                        <Groups navigation={this.props.navigation} index={4}
+                        <Groups navigation={this.props.navigation} index={2}
                                 navigateAction={this.headerAction.bind(this)}/>
                     </Tab>
                     <Tab heading={ <TabHeading style={{ backgroundColor: "#ffe6e6" }} ><Text
                         style={{color: 'black', fontSize: 11,}}>Products</Text></TabHeading>}>
-                        <Product index={1} navigateAction={this.headerAction.bind(this)}/>
+                        <Product index={3} navigateAction={this.headerAction.bind(this)}/>
                     </Tab>
                     <Tab heading={ <TabHeading style={{ backgroundColor: "#ffe6e6" }}><Text
                         style={{color: 'black', fontSize: 11,}}>Buiesness</Text></TabHeading>}>
-                        <Business index={2} navigateAction={this.headerAction.bind(this)}/>
+                        <Business index={4} navigateAction={this.headerAction.bind(this)}/>
                     </Tab>
                     <Tab heading={ <TabHeading style={{ backgroundColor: "#ffe6e6" }}><Text
                         style={{color: 'black', fontSize: 11,}}>Promotions</Text></TabHeading>}>
-                        <Promotions index={3} navigateAction={this.headerAction.bind(this)}/>
+                        <Promotions index={5} navigateAction={this.headerAction.bind(this)}/>
                     </Tab>
 
                 </Tabs>
