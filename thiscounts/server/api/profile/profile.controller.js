@@ -140,7 +140,7 @@ function instances_by_relation_async(rel, user_id, paginate, callback) {
     Instance.find({}).where('_id')
       .in(Object.keys(_ids_map))
       .populate('promotion')
-      .populate('promotion.entity.business')
+      .populate({path: 'promotion.entity.business', model: 'Instance'})
       .exec(function (err, instances) {
       if (err) {
         callback(err)
@@ -148,11 +148,11 @@ function instances_by_relation_async(rel, user_id, paginate, callback) {
       let ret = instances.map(function (instance) {
         return {instance: instance, graph: _ids_map[instance._id]}
       });
+      console.log(JSON.stringify(ret));
       return callback(null, ret);
     });
   });
 }
-
 
 function instances_by_relation(rel, req, res) {
   instances_by_relation_async(rel, req.user._id, utils.to_paginate(req), function (err, ret) {
