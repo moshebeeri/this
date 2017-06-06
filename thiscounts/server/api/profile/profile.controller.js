@@ -148,10 +148,10 @@ function instances_by_relation(rel, req, res) {
     });
   });
 }
+
 exports.saved_instances = function (req, res) {
   instances_by_relation('SAVED', req, res);
 };
-
 
 exports.realized_instances = function (req, res) {
   instances_by_relation('REALIZED', req, res);
@@ -160,7 +160,6 @@ exports.realized_instances = function (req, res) {
 exports.shared_instances = function (req, res) {
   instances_by_relation('SHARED', req, res);
 };
-
 
 exports.liked_malls = function (req, res) {
   let paginate = utils.to_paginate(req);
