@@ -17,9 +17,9 @@ router.get('/test_me', controller.test_me);
 
 router.get('/me', auth.isAuthenticated(), controller.me);
 
-router.get('/promotions/realized/:skip/:limit', auth.isAuthenticated(), controller.realized_promotions );
-router.get('/promotions/shared/:skip/:limit'  , auth.isAuthenticated(), controller.shared_promotions   );
-router.get('/promotions/saved/:skip/:limit'   , auth.isAuthenticated(), controller.saved_promotions    );
+router.get('/instances/realized/:skip/:limit', auth.isAuthenticated(), controller.realized_instances );
+router.get('/instances/saved/:skip/:limit'   , auth.isAuthenticated(), controller.saved_instances    );
+router.get('/instances/shared/:skip/:limit'  , auth.isAuthenticated(), controller.shared_instances   );
 
 router.get('/malls/liked/:skip/:limit'        , auth.isAuthenticated(), controller.liked_malls         );
 router.get('/malls/promotions/:skip/:limit'   , auth.isAuthenticated(), controller.promotions_malls    );
