@@ -13,7 +13,7 @@ const {
 ;
 
 
-export default class GenericFeedItem extends Component {
+export default class MyPromotionFeedItem extends Component {
 
 
 
@@ -71,24 +71,6 @@ export default class GenericFeedItem extends Component {
             return feed;
         }
 
-
-        like(item){
-            this.props.item.social.like = true;
-            this.props.item.social.numberLikes = this.props.item.social.numberLikes + 1;
-            this.props.selectApi.reRender();
-            userApi.like(item);
-        }
-
-        unlike(item){
-            this.props.item.social.like = false;
-            this.props.item.social.numberLikes = this.props.item.social.numberLikes - 1;
-            this.props.selectApi.reRender();
-            userApi.unlike(item);
-        }
-
-        saveFeed(item){
-            promotionApi.save(item.id);
-        }
         createFeed(item){
             if(item.content){
                 item = item.content;
@@ -130,43 +112,6 @@ export default class GenericFeedItem extends Component {
                         source={item.banner.require}/>
                 }
             }
-            let likes = item.social.numberLikes + ' Likes'
-            let likeIcon = <Button transparent small onPress={this.like.bind(this,item.id)}>
-                            <Icon  active style={{color: 'gray'}} name="thumbs-up" />
-                            <Text>{likes}</Text>
-                </Button>
-            let saveIcon = undefined;
-
-            let followIcon =undefined;
-            if(item.showsave){
-                saveIcon = <Button transparent small onPress={this.saveFeed.bind(this,item)} >
-                    <Icon active name="md-add"  />
-                    <Text>keep promotion</Text>
-                </Button>
-            }else{
-                followIcon = <Button transparent>
-                    <Icon  active style={{color: 'gray'}} name="person" />
-                        <Text> follow</Text>
-                    </Button>
-
-                if( item.social && item.social.follow == true){
-                    followIcon =  <Button transparent>
-                        <Icon active name="person" />
-                        <Text> follow</Text>
-                    </Button>
-
-                }
-            }
-
-
-            if(item.social && item.social.like == true){
-                likeIcon = <Button transparent small onPress={this.unlike.bind(this,item.id)} >
-                                 <Icon active name="thumbs-up"  />
-                                 <Text>{likes}</Text>
-                            </Button>
-
-
-            }
 
 
 
@@ -192,15 +137,7 @@ export default class GenericFeedItem extends Component {
                         {banner}
                     </CardItem>
                     <CardItem>
-
-                       <Button transparent>
-                            {likeIcon}
-
-                        </Button>
-                        {followIcon}
-                        <Button transparent>
-                        {saveIcon}
-                        </Button>
+                        <Text>Realization Code: {item.relcode}/</Text>
                     </CardItem>
                 </Card>
 

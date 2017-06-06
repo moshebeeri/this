@@ -87,9 +87,9 @@ export default class GenericFeedManager extends Component {
                 let newFeeds = response.filter(function (feed) {
                     let filtered = currentRows.filter(function (currentFeed) {
                         if(currentFeed.id == feed.id){
-                            return false;
+                            return true;
                         }
-                        return true;
+                        return false;
 
                     })
                     return filtered.length == 0;

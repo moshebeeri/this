@@ -9,6 +9,7 @@ import GeneralComponentHeader from '../header/index';
 import Product from '../product/index';
 import Business from '../business/index';
 import Feeds from '../feed/index'
+import MydPromotions from '../my-promotions/index'
 import Promotions from '../promtions/index'
 import Groups from '../groups/index'
 
@@ -108,6 +109,9 @@ export default class ApplicationManager extends Component {
              case 0:
 
                  break;
+             case 1:
+
+                 break;
              case 2:
                  component ='AddProduct'
                  break;
@@ -117,7 +121,7 @@ export default class ApplicationManager extends Component {
              case 4:
                  component ='addPromotions'
                  break;
-             case 1:
+             case 5:
                  component ='AddGroups'
                  break;
 
@@ -149,13 +153,16 @@ export default class ApplicationManager extends Component {
             case 0:
                 return false;
             case 1:
-                return true;
+                return false;
             case 2:
                 return true;
             case 3:
                 return true;
             case 4:
                 return true;
+            case 5:
+                return true;
+
         }
 
     }
@@ -211,6 +218,9 @@ export default class ApplicationManager extends Component {
                 <Tabs initialPage={index} onChangeTab={this.onChangeTab.bind(this)} style={{backgroundColor: '#fff',}}>
                     <Tab heading={ <TabHeading style={{ backgroundColor: "#ffe6e6" }}><Text style={{color: 'black', fontSize: 11,}}>Home</Text></TabHeading>}>
                         <Feeds index={0} navigateAction={this.headerAction.bind(this)}/>
+                    </Tab>
+                    <Tab heading={ <TabHeading style={{ backgroundColor: "#ffe6e6" }}><Text style={{color: 'black', fontSize: 11,}}>My Saved</Text></TabHeading>}>
+                        <MydPromotions index={0} navigateAction={this.headerAction.bind(this)}/>
                     </Tab>
                     <Tab
                         heading={ <TabHeading style={{ backgroundColor: "#ffe6e6" }}><Text style={{color: 'black', fontSize: 11,}}>Groups</Text></TabHeading>}>
