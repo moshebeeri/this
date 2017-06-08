@@ -6,10 +6,6 @@ import { Platform
 import {Container, Content, Text, InputGroup, Input, Button,Body ,Icon,Left,
     View,Header,Item,Footer,Picker,ListItem,Right,Thumbnail} from 'native-base';
 
-import CheckBox from 'react-native-check-box'
-import {actions} from 'react-native-navigation-redux-helpers';
-import { openDrawer } from '../../../../actions/drawer';
-import navigateTo from '../../../../actions/sideBarNav';
 
 
 
