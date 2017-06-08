@@ -1,9 +1,9 @@
 'use strict';
 
-var mongoose = require('mongoose'),
+let mongoose = require('mongoose'),
     Schema = mongoose.Schema;
 
-var ReviewSchema = new Schema({
+let ReviewSchema = new Schema({
   grade: {type: Number, required: true},
   message: { type: String, required: true},
   element_id: {type: Schema.ObjectId, required: true, index: true},

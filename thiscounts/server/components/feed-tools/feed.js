@@ -175,6 +175,12 @@ function social_state(user_id, item_id, callback) {
       share: function (callback) {
         graphModel.is_related_ids(user_id, 'SHARE', item_id, callback);
       },
+      saved: function (callback) {
+        graphModel.is_related_ids(user_id, 'SAVED', item_id, callback);
+      },
+      realized: function (callback) {
+        graphModel.is_related_ids(user_id, 'REALIZED', item_id, callback);
+      },
       follow: function (callback) {
         graphModel.is_related_ids(user_id, 'FOLLOW', item_id, callback);
       },
@@ -216,6 +222,15 @@ function promotion_state(user_id, promotion, callback) {
     // });
   });
 }
+function instance_state(user_id, instance, callback){
+  social_state(user_id, instance._id, function(err, social_state) {
+    if (err) {
+      return callback(err, null);
+    }
+    instance.social_state = social_state;
+    callback(null, instance);
+  })
+}
 
 function product_state(user_id, product, callback) {
   social_state(user_id, product._id, function(err, social_state) {
@@ -234,7 +249,6 @@ function user_state(user_id, user, callback) {
     }
     user.social_state = social_state;
     callback(null, user);
-
   });
 }
 
@@ -282,7 +296,13 @@ function update_state(feed, callback) {
   async.parallel({
       promotion: function (callback) {
         if (utils.defined(activity.promotion))
-          promotion_state(entity, activity.promotion, callback);
+          promotion_state(entity, activity.promotion,  callback);
+        else
+          callback(null, null);
+      },
+      instance: function (callback) {
+        if (utils.defined(activity.instance))
+          instance_state(entity, activity.instance,  callback);
         else
           callback(null, null);
       },

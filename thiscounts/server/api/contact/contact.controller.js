@@ -1,9 +1,9 @@
 'use strict';
 
-var _ = require('lodash');
-var Contact = require('./contact.model.js');
-var graphTools = require('../../components/graph-tools');
-var graphModel = graphTools.createGraphModel('contact');
+let _ = require('lodash');
+let Contact = require('./contact.model.js');
+let graphTools = require('../../components/graph-tools');
+let graphModel = graphTools.createGraphModel('contact');
 
 // Get list of contacts
 exports.index = function(req, res) {
@@ -39,7 +39,7 @@ exports.update = function(req, res) {
   Contact.findById(req.params.id, function (err, contact) {
     if (err) { return handleError(res, err); }
     if(!contact) { return res.send(404); }
-    var updated = _.merge(contact, req.body);
+    let updated = _.merge(contact, req.body);
     updated.save(function (err) {
       if (err) { return handleError(res, err); }
       return res.json(200, contact);

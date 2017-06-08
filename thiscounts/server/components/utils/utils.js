@@ -1,15 +1,15 @@
 'use strict';
 
-var _ = require('lodash');
-var logger = require('../logger').createLogger();
-var async = require('async');
+let _ = require('lodash');
+let logger = require('../logger').createLogger();
+let async = require('async');
 
-var User = require('../../api/user/user.model');
-var Business = require('../../api/business/business.model');
-var ShoppingChain = require('../../api/shoppingChain/shoppingChain.model');
-var Product = require('../../api/product/product.model');
-var Promotion = require('../../api/promotion/promotion.model');
-var Mall = require('../../api/mall/mall.model');
+let User = require('../../api/user/user.model');
+let Business = require('../../api/business/business.model');
+let ShoppingChain = require('../../api/shoppingChain/shoppingChain.model');
+let Product = require('../../api/product/product.model');
+let Promotion = require('../../api/promotion/promotion.model');
+let Mall = require('../../api/mall/mall.model');
 
 function Utils(class_name) {
 }
@@ -32,7 +32,7 @@ Utils.prototype.clean_phone_number = function clean_phone_number(number){
 };
 
 Utils.prototype.clean_name = function clean_phone_number(name){
-  //var escaped_str = require('querystring').escape(name);
+  //let escaped_str = require('querystring').escape(name);
   //return escaped_str;
   return name.replace(/[-&\/\\#,+()$~%.'":*?<>{}]/g, '');
 };

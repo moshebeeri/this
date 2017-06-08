@@ -1,13 +1,13 @@
 // region Import
 
-var Promise             = require('bluebird'),
+let Promise             = require('bluebird'),
     _                   = require('lodash');
 
 // endregion
 
 // region Enums
 
-var EntityState = {
+let EntityState = {
     ADDED: 'Added',
     MODIFIED: 'Modified',
     DELETED: 'Deleted'
@@ -17,7 +17,7 @@ var EntityState = {
 
 // region Consts
 
-var BREEZE_RELATED_PROPS = ['entityAspect'],
+let BREEZE_RELATED_PROPS = ['entityAspect'],
     MODEL_NAMESPACE,
     BREEZE_MONGOOSE_NS = 'breeze.mongoose';
 
@@ -25,7 +25,7 @@ var BREEZE_RELATED_PROPS = ['entityAspect'],
 
 // region Inner Fields
 
-var modelContainer,
+let modelContainer,
     itemsProcessed,
     currentId,
     saveResults;
@@ -41,7 +41,7 @@ var modelContainer,
 function saveChanges(saveBundle){
     return new Promise(function(resolve, reject){
         _initState();
-        var numOfItemsToProcess = saveBundle.entities.length;
+        let numOfItemsToProcess = saveBundle.entities.length;
 
         saveBundle.entities.forEach(_processEntity.bind(null, function(error){
             reject(error);
@@ -80,7 +80,7 @@ function _initState(){
  * @private
  */
 function _processEntity(errClb, entityInfo){
-    var entityType = _getModelName(entityInfo.entityAspect.entityTypeName);
+    let entityType = _getModelName(entityInfo.entityAspect.entityTypeName);
 
     switch(entityInfo.entityAspect.entityState){
         case EntityState.ADDED :
@@ -104,7 +104,7 @@ function _processEntity(errClb, entityInfo){
  * @private
  */
 function _addNewEntity(entityInfo, entityType, errClb){
-    var tempId = entityInfo.id,
+    let tempId = entityInfo.id,
         EntityModel = modelContainer(entityType),
         entityDataInfo = _getEntityFromInfo(entityInfo),
         entityData = entityDataInfo[0],
@@ -113,7 +113,7 @@ function _addNewEntity(entityInfo, entityType, errClb){
     // remove Id when adding
     delete entityData.id;
 
-    var entity = new EntityModel(entityData);
+    let entity = new EntityModel(entityData);
 
     // Add embedded documents
     embededDocuments.forEach(function(embededDoc){
@@ -143,7 +143,7 @@ function _addNewEntity(entityInfo, entityType, errClb){
  * @private
  */
 function _updateEntity(entityInfo, entityType, errClb){
-    var EntityModel = modelContainer(entityType),
+    let EntityModel = modelContainer(entityType),
         entityDataInfo = _getEntityFromInfo(entityInfo),
         entityData = entityDataInfo[0],
         embededDocuments = entityDataInfo[1];
@@ -169,7 +169,7 @@ function _updateEntity(entityInfo, entityType, errClb){
  * @private
  */
 function _deleteEntity(entityInfo, entityType, errClb){
-    var EntityModel = modelContainer(entityType),
+    let EntityModel = modelContainer(entityType),
         entityDataInfo = _getEntityFromInfo(entityInfo),
         entityData = entityDataInfo[0];
 
@@ -200,7 +200,7 @@ function _getModelName(breezeModelName){
  * @private
  */
 function _getEntityFromInfo(entityInfo){
-    var embededDocuments = [];
+    let embededDocuments = [];
 
     BREEZE_RELATED_PROPS.forEach(function(prop){
         delete entityInfo[prop];
@@ -226,7 +226,7 @@ function _getEntityFromInfo(entityInfo){
  * @private
  */
 function _getBreezeEntityFromNewDoc(doc, entityType, entityInfo){
-    var entity = {
+    let entity = {
         $id: currentId++,
         $type: _getTypeName(entityType),
         id: doc._id.toString()
@@ -242,7 +242,7 @@ function _getBreezeEntityFromNewDoc(doc, entityType, entityInfo){
  * @private
  */
 function _getBreezeEntityFromDto(dto, entityType){
-    var entity = {
+    let entity = {
         $id: currentId++,
         $type: _getTypeName(entityType),
         id: dto.id

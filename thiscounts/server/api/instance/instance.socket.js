@@ -4,7 +4,7 @@
 
 'use strict';
 
-var Instance = require('./instance.model.js');
+let Instance = require('./instance.model.js');
 
 exports.register = function(socket) {
   Instance.schema.post('save', function (doc) {

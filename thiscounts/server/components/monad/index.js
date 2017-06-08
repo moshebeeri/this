@@ -1,5 +1,5 @@
 'use strict';
-var Utils = require('./monad');
+let Utils = require('./monad');
 
 exports.createMonad = function createMonad() {
   return new Utils();

@@ -1,11 +1,11 @@
 'use strict';
 
-var _ = require('lodash');
-var Category = require('./category.model');
-var graphTools = require('../../components/graph-tools');
-var graphModel = graphTools.createGraphModel('category');
-var feedTools = require('../../components/feed-tools');
-var Promotion = require('../promotion/promotion.model');
+let _ = require('lodash');
+let Category = require('./category.model');
+let graphTools = require('../../components/graph-tools');
+let graphModel = graphTools.createGraphModel('category');
+let feedTools = require('../../components/feed-tools');
+let Promotion = require('../promotion/promotion.model');
 
 // Get list of categorys
 exports.index = function(req, res) {
@@ -34,10 +34,10 @@ function fetch_paged_social_state(query_builder, req, _id, res) {
   return feedTools.fetch_social_state(query_builder, req.user._id, 'promotion', res)
 }
 exports.feed = function(req, res) {
-  var _id = req.params._id;
-  var category = req.body;
-  var query;
-  var query_builder = Promotion.find();
+  let _id = req.params._id;
+  let category = req.body;
+  let query;
+  let query_builder = Promotion.find();
   switch (category.name) {
     case  'HOT'     :
       query = util.format("MATCH (u:user{_id:'%s'})-[l:LIKE]->(p:promotion)  \
@@ -98,7 +98,7 @@ exports.update = function(req, res) {
   Category.findById(req.params.id, function (err, category) {
     if (err) { return handleError(res, err); }
     if(!category) { return res.send(404); }
-    var updated = _.merge(category, req.body);
+    let updated = _.merge(category, req.body);
     updated.save(function (err) {
       if (err) { return handleError(res, err); }
       return res.json(200, category);

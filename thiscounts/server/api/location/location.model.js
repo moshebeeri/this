@@ -1,9 +1,9 @@
 'use strict';
 
-var mongoose = require('mongoose'),
+let mongoose = require('mongoose'),
     Schema = mongoose.Schema;
 
-var LocationSchema = new Schema({
+let LocationSchema = new Schema({
 
   // The valid range of latitude in degrees is -90 and +90 for the southern and northern hemisphere
   // respectively. Longitude is in the range -180 and +180 specifying the east-west position.

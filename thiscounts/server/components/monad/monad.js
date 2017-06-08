@@ -1,15 +1,15 @@
 'use strict';
 
-var _ = require('lodash');
-var logger = require('../logger').createLogger();
+let _ = require('lodash');
+let logger = require('../logger').createLogger();
 
 
 /**
  * @returns {unit}
  * @constructor
  *
- * var identity = new Monad();
- * var monad = identity("Hello World");
+ * let identity = new Monad();
+ * let monad = identity("Hello World");
  * monad.bind(alert);
  *
  * composition:
@@ -21,9 +21,9 @@ var logger = require('../logger').createLogger();
  *
  */
 function Monad() {
-  var  prototype = Object.create(null);
+  let  prototype = Object.create(null);
   function unit(value){
-    var monad = Object.create(prototype);
+    let monad = Object.create(prototype);
     monad.bind = function(func, args){
       // ES6 return func(value, ...args);
       return func.apply(undefined, [value].concat(Array.prototype.slice.apply(args || [])));

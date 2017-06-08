@@ -1,9 +1,9 @@
 'use strict';
 
-var _ = require('lodash');
-var ShoppingChain = require('./shoppingChain.model');
-var graphTools = require('../../components/graph-tools');
-var graphModel = graphTools.createGraphModel('shoppingChain');
+let _ = require('lodash');
+let ShoppingChain = require('./shoppingChain.model');
+let graphTools = require('../../components/graph-tools');
+let graphModel = graphTools.createGraphModel('shoppingChain');
 
 // Get list of shoppingChains
 exports.index = function(req, res) {
@@ -39,7 +39,7 @@ exports.update = function(req, res) {
   ShoppingChain.findById(req.params.id, function (err, shoppingChain) {
     if (err) { return handleError(res, err); }
     if(!shoppingChain) { return res.status(404).send('Not Found'); }
-    var updated = _.merge(shoppingChain, req.body);
+    let updated = _.merge(shoppingChain, req.body);
     updated.save(function (err) {
       if (err) { return handleError(res, err); }
       return res.status(200).json(shoppingChain);

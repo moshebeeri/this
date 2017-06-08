@@ -1,9 +1,9 @@
 'use strict';
 
-var _ = require('lodash');
-var Realize = require('./realize.model');
-var graphTools = require('../../components/graph-tools');
-var graphModel = graphTools.createGraphModel('realize');
+let _ = require('lodash');
+let Realize = require('./realize.model');
+let graphTools = require('../../components/graph-tools');
+let graphModel = graphTools.createGraphModel('realize');
 
 // Get list of realizes
 exports.index = function(req, res) {
@@ -39,7 +39,7 @@ exports.update = function(req, res) {
   Realize.findById(req.params.id, function (err, realize) {
     if (err) { return handleError(res, err); }
     if(!realize) { return res.send(404); }
-    var updated = _.merge(realize, req.body);
+    let updated = _.merge(realize, req.body);
     updated.save(function (err) {
       if (err) { return handleError(res, err); }
       return res.json(200, realize);

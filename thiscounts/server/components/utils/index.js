@@ -1,5 +1,5 @@
 'use strict';
-var Utils = require('./utils');
+let Utils = require('./utils');
 
 exports.createUtils = function createUtils() {
   return new Utils();

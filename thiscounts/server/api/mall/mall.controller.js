@@ -1,12 +1,12 @@
 'use strict';
 
-var _ = require('lodash');
-var Mall = require('./mall.model');
-var graphTools = require('../../components/graph-tools');
-var graphModel = graphTools.createGraphModel('mall');
-var spatial = require('../../components/spatial').createSpatial();
-var location = require('../../components/location').createLocation();
-var logger = require('../../components/logger').createLogger();
+let _ = require('lodash');
+let Mall = require('./mall.model');
+let graphTools = require('../../components/graph-tools');
+let graphModel = graphTools.createGraphModel('mall');
+let spatial = require('../../components/spatial').createSpatial();
+let location = require('../../components/location').createLocation();
+let logger = require('../../components/logger').createLogger();
 
 // Get list of malls
 exports.index = function(req, res) {
@@ -27,7 +27,7 @@ exports.show = function(req, res) {
 
 // Creates a new mall in the DB.
 exports.create = function(req, res) {
-  var mall = req.body;
+  let mall = req.body;
   location.address_location( mall, function(err, data) {
     if (err) {
       if (err.code >= 400) return res.status(err.code).send(err.message);
@@ -60,7 +60,7 @@ exports.update = function(req, res) {
   Mall.findById(req.params.id, function (err, mall) {
     if (err) { return handleError(res, err); }
     if(!mall) { return res.status(404).send('Not Found'); }
-    var updated = _.merge(mall, req.body);
+    let updated = _.merge(mall, req.body);
     updated.save(function (err) {
       if (err) { return handleError(res, err); }
       return res.status(200).json(mall);

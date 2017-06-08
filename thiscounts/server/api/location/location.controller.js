@@ -1,11 +1,11 @@
 'use strict';
 
-var _ = require('lodash');
-var Location = require('./location.model');
-var logger = require('../../components/logger').createLogger();
-var spatial = require('../../components/spatial').createSpatial();
-var graphTools = require('../../components/graph-tools');
-var graphModel = graphTools.createGraphModel('location');
+let _ = require('lodash');
+let Location = require('./location.model');
+let logger = require('../../components/logger').createLogger();
+let spatial = require('../../components/spatial').createSpatial();
+let graphTools = require('../../components/graph-tools');
+let graphModel = graphTools.createGraphModel('location');
 
 
 // Get list of locations
@@ -27,7 +27,7 @@ exports.show = function(req, res) {
 
 // Creates a new location in the DB.
 exports.create = function(req, res) {
-  var userId = req.user._id;
+  let userId = req.user._id;
   Location.create(req.body, function(err, location) {
     if(err) { return handleError(res, err); }
     req.body.locations.forEach(function(location){
@@ -53,7 +53,7 @@ exports.update = function(req, res) {
   Location.findById(req.params.id, function (err, location) {
     if (err) { return handleError(res, err); }
     if(!location) { return res.send(404); }
-    var updated = _.merge(location, req.body);
+    let updated = _.merge(location, req.body);
     updated.save(function (err) {
       if (err) { return handleError(res, err); }
       return res.json(200, location);

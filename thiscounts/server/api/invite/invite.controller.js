@@ -1,9 +1,9 @@
 'use strict';
 
-var _ = require('lodash');
-var Invite = require('./invite.model.js');
-var graphTools = require('../../components/graph-tools');
-var graphModel = graphTools.createGraphModel('invite');
+let _ = require('lodash');
+let Invite = require('./invite.model.js');
+let graphTools = require('../../components/graph-tools');
+let graphModel = graphTools.createGraphModel('invite');
 
 // Get list of invites
 exports.index = function(req, res) {
@@ -39,7 +39,7 @@ exports.update = function(req, res) {
   Invite.findById(req.params.id, function (err, invite) {
     if (err) { return handleError(res, err); }
     if(!invite) { return res.send(404); }
-    var updated = _.merge(invite, req.body);
+    let updated = _.merge(invite, req.body);
     updated.save(function (err) {
       if (err) { return handleError(res, err); }
       return res.json(200, invite);
@@ -64,7 +64,7 @@ exports.invite_user = function(req, res) {
   Invite.findById(req.params.id, function (err, invite) {
     if (err) { return handleError(res, err); }
     if(!invite) { return res.send(404); }
-    var updated = _.merge(invite, req.body);
+    let updated = _.merge(invite, req.body);
     updated.save(function (err) {
       if (err) { return handleError(res, err); }
       return res.json(200, invite);
@@ -77,7 +77,7 @@ exports.invite_group = function(req, res) {
   Invite.findById(req.params.id, function (err, invite) {
     if (err) { return handleError(res, err); }
     if(!invite) { return res.send(404); }
-    var updated = _.merge(invite, req.body);
+    let updated = _.merge(invite, req.body);
     updated.save(function (err) {
       if (err) { return handleError(res, err); }
       return res.json(200, invite);

@@ -1,6 +1,6 @@
 
 'use strict';
-var bigquery = require('@google-cloud/bigquery')({
+let bigquery = require('@google-cloud/bigquery')({
   projectId: 'lowla-thiscount',
   keyFilename: 'lowla-45ce78efca49.json'
 });

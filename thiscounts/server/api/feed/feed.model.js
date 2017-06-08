@@ -1,9 +1,9 @@
 'use strict';
 
-var mongoose = require('mongoose'),
+let mongoose = require('mongoose'),
     Schema = mongoose.Schema;
 
-var FeedSchema = new Schema({
+let FeedSchema = new Schema({
   entity: {type: Schema.ObjectId, required: true, index: true},
   activity: {type: Schema.ObjectId, ref: 'Activity', required: true, index: true}
 });

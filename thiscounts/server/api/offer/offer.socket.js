@@ -4,7 +4,7 @@
 
 'use strict';
 
-var Offer = require('./offer.model.js');
+let Offer = require('./offer.model.js');
 
 exports.register = function(socket) {
   Offer.schema.post('save', function (doc) {

@@ -1,13 +1,13 @@
 'use strict';
 
-var mongoose = require('mongoose');
-var passport = require('passport');
-var config = require('../config/environment');
-var jwt = require('jsonwebtoken');
-var expressJwt = require('express-jwt');
-var compose = require('composable-middleware');
-var User = require('../api/user/user.model');
-var validateJwt = expressJwt({ secret: config.secrets.session });
+let mongoose = require('mongoose');
+let passport = require('passport');
+let config = require('../config/environment');
+let jwt = require('jsonwebtoken');
+let expressJwt = require('express-jwt');
+let compose = require('composable-middleware');
+let User = require('../api/user/user.model');
+let validateJwt = expressJwt({ secret: config.secrets.session });
 
 /**
  * Attaches the user object to the request if authenticated
@@ -79,7 +79,7 @@ function signToken(id) {
  */
 function setTokenCookie(req, res) {
   if (!req.user) return res.status(404).json({ message: 'Something went wrong, please try again.'});
-  var token = signToken(req.user._id, req.user.role);
+  let token = signToken(req.user._id, req.user.role);
   res.cookie('token', JSON.stringify(token));
   res.redirect('/');
 }

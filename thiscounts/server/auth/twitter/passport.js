@@ -1,6 +1,6 @@
 exports.setup = function (User, config) {
-  var passport = require('passport');
-  var TwitterStrategy = require('passport-twitter').Strategy;
+  let passport = require('passport');
+  let TwitterStrategy = require('passport-twitter').Strategy;
 
   passport.use(new TwitterStrategy({
     consumerKey: config.twitter.clientID,

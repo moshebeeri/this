@@ -4,7 +4,7 @@
 
 'use strict';
 
-var Contact = require('./contact.model.js');
+let Contact = require('./contact.model.js');
 
 exports.register = function(socket) {
   Contact.schema.post('save', function (doc) {

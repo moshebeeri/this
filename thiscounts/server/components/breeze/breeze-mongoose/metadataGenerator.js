@@ -1,6 +1,6 @@
 // region Import
 
-var Schema    = require('mongoose').Schema,
+let Schema    = require('mongoose').Schema,
     _         = require('lodash'),
     inflect   = require('i')(true);
 
@@ -9,7 +9,7 @@ var Schema    = require('mongoose').Schema,
 
 // region Consts
 
-var MODEL_NAMESPACE,
+let MODEL_NAMESPACE,
     IGNORE_PROPEERTIES = ['_id', '__v'],
     FOREIGN_KEY_SUFFIX = 'ID';
 
@@ -17,7 +17,7 @@ var MODEL_NAMESPACE,
 
 // regionInner Fields
 
-var structuralTypes = [],
+let structuralTypes = [],
     resourceEntityTypeMap = {};
 
 // endregion
@@ -65,7 +65,7 @@ function _createStructuralType(models){
  * @private
  */
 function _parseEntitySchema(modelName, properties, structuralType){
-    var skippedProperties = IGNORE_PROPEERTIES;
+    let skippedProperties = IGNORE_PROPEERTIES;
 
     structuralType.shortName = modelName;
     structuralType.namespace = MODEL_NAMESPACE;
@@ -87,7 +87,7 @@ function _parseEntitySchema(modelName, properties, structuralType){
             }
         }
 
-        var propertyInfo = _getDataProperty(property, key);
+        let propertyInfo = _getDataProperty(property, key);
 
         if(propertyInfo.isForeignKey){
             structuralType.navigationProperties.push(_getForeignKeyInfo(property, modelName, key));
@@ -135,7 +135,7 @@ function _getFullPropertyName(propName){
  * @private
  */
 function _getDataProperty(property, propertyName){
-    var isScalar = !(property instanceof Array),
+    let isScalar = !(property instanceof Array),
         propertyInfo = {
             name: propertyName
         },
@@ -159,7 +159,7 @@ function _getDataProperty(property, propertyName){
     }
     // validation properties
 
-    var dataType;
+    let dataType;
     dataType = _getTypeValidation(propertyInfo.dataType);
 
     if(_getDataRequired(property)){
@@ -261,7 +261,7 @@ function _isForeignKey(property){
  */
 function _getForeignKeyInfo(property, modelName, foreignKeyName){
     // The convention is that all foreign key names end in ID !!!
-    var isScalar = !Array.isArray(property),
+    let isScalar = !Array.isArray(property),
         foreignKeyModelName = foreignKeyName.split(FOREIGN_KEY_SUFFIX)[0],
         normalizedForeignKeyModelName = isScalar
             ? foreignKeyModelName
@@ -281,7 +281,7 @@ function _getForeignKeyInfo(property, modelName, foreignKeyName){
  * @private
  */
 function _getDataType(prop) {
-    var mongooseType = prop.type || prop;
+    let mongooseType = prop.type || prop;
 
     if(mongooseType instanceof Array){
         mongooseType = prop[0];
@@ -311,7 +311,7 @@ function _getDataType(prop) {
  * @private
  */
 function _getDataRequired(prop) {
-  var mongooseType = prop.required || '';
+  let mongooseType = prop.required || '';
 
   if(mongooseType !='' && mongooseType instanceof Array){
     mongooseType = prop[0];
@@ -332,7 +332,7 @@ function _getDataRequired(prop) {
  * @private
  */
 function _getDataEnum(prop) {
-  var mongooseType = prop.enum || '';
+  let mongooseType = prop.enum || '';
 
   if(mongooseType !='' && mongooseType instanceof Array){
     return prop.enum;
@@ -345,7 +345,7 @@ function _getDataEnum(prop) {
  * @private
  */
 function _getDataDefault(prop) {
-  var mongooseType = prop.default || '';
+  let mongooseType = prop.default || '';
 
   if(mongooseType !='' && mongooseType instanceof Array){
     return prop.default;
@@ -358,7 +358,7 @@ function _getDataDefault(prop) {
  * @private
  */
 function _getDataUnique(prop) {
-  var mongooseType = prop.unique || '';
+  let mongooseType = prop.unique || '';
 
   if(mongooseType !='' && mongooseType instanceof Array){
     mongooseType = prop[0];
@@ -379,7 +379,7 @@ function _getDataUnique(prop) {
  * @private
  */
 function _getStringMaxLength (prop) {
-  var mongooseType = prop.maxlength || '';
+  let mongooseType = prop.maxlength || '';
 
   if(mongooseType !=''){
     return prop.maxlength;
@@ -392,7 +392,7 @@ function _getStringMaxLength (prop) {
  * @private
  */
 function _getStringMinLength (prop) {
-  var mongooseType = prop.minlength || '';
+  let mongooseType = prop.minlength || '';
 
   if(mongooseType !=''){
     return prop.minlength;
@@ -400,7 +400,7 @@ function _getStringMinLength (prop) {
 }
 
 function _getStringMatch (prop) {
-  var mongooseType = prop.match || '';
+  let mongooseType = prop.match || '';
 
   if(mongooseType !=''){
     return prop.match;
@@ -413,7 +413,7 @@ function _getStringMatch (prop) {
  * @private
  */
 function _getNumberMax(prop) {
-  var mongooseType = prop.max || '';
+  let mongooseType = prop.max || '';
 
   if(mongooseType !=''){
     return prop.max;
@@ -426,7 +426,7 @@ function _getNumberMax(prop) {
  * @private
  */
 function _getNumberMin (prop) {
-  var mongooseType = prop.max || '';
+  let mongooseType = prop.max || '';
 
   if(mongooseType !=''){
     return prop.min;
@@ -440,7 +440,7 @@ function _getNumberMin (prop) {
  * @private
  */
 function _getValidateFunction (prop) {
-  var mongooseType = prop.validate || '';
+  let mongooseType = prop.validate || '';
 
   if(mongooseType !=''){
     return prop.validate.toString();

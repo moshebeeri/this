@@ -1,9 +1,9 @@
 'use strict';
 
-var _ = require('lodash');
-var CardType = require('./cardType.model');
-var graphTools = require('../../components/graph-tools');
-var graphModel = graphTools.createGraphModel('cardType');
+let _ = require('lodash');
+let CardType = require('./cardType.model');
+let graphTools = require('../../components/graph-tools');
+let graphModel = graphTools.createGraphModel('cardType');
 
 // Get list of cardTypes
 exports.index = function(req, res) {
@@ -39,7 +39,7 @@ exports.update = function(req, res) {
   CardType.findById(req.params.id, function (err, cardType) {
     if (err) { return handleError(res, err); }
     if(!cardType) { return res.status(404).send('Not Found'); }
-    var updated = _.merge(cardType, req.body);
+    let updated = _.merge(cardType, req.body);
     updated.save(function (err) {
       if (err) { return handleError(res, err); }
       return res.status(200).json(cardType);

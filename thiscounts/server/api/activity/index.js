@@ -1,9 +1,9 @@
 'use strict';
 
-var express = require('express');
-var controller = require('./activity.controller');
+let express = require('express');
+let controller = require('./activity.controller');
 
-var router = express.Router();
+let router = express.Router();
 
 router.get('/', controller.index);
 router.get('/:id', controller.show);

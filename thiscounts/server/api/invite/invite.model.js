@@ -1,9 +1,9 @@
 'use strict';
 
-var mongoose = require('mongoose'),
+let mongoose = require('mongoose'),
     Schema = mongoose.Schema;
 
-var InviteSchema = new Schema({
+let InviteSchema = new Schema({
   text: String,
   gid: { type: Number, index: true},
   creator: {type: Schema.ObjectId, ref: 'User', required: true},

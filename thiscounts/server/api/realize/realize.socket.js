@@ -4,7 +4,7 @@
 
 'use strict';
 
-var Realize = require('./realize.model');
+let Realize = require('./realize.model');
 
 exports.register = function(socket) {
   Realize.schema.post('save', function (doc) {

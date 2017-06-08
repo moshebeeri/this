@@ -1,13 +1,13 @@
-var config = require('../../config/environment');
-var mongoose = require('mongoose');
-var dbConnection = mongoose.createConnection(config.mongo.uri);
+let config = require('../../config/environment');
+let mongoose = require('mongoose');
+let dbConnection = mongoose.createConnection(config.mongo.uri);
 
-var modelContainer = function getModel(model){ // the name of the model
+let modelContainer = function getModel(model){ // the name of the model
  return dbConnection.model(model);
 };
 
-var dbSchemas = dbConnection['base']['models'];
-var breezeMongoose = require('./breeze-mongoose')(modelContainer);
+let dbSchemas = dbConnection['base']['models'];
+let breezeMongoose = require('./breeze-mongoose')(modelContainer);
 
 // Get list of models
 exports.index = function(req, res) {

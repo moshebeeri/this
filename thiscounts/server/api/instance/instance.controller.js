@@ -1,10 +1,10 @@
 'use strict';
 
-var _ = require('lodash');
-var Instance = require('./instance.model.js');
-var Realize = require('../realize/realize.model');
-var graphTools = require('../../components/graph-tools');
-var graphModel = graphTools.createGraphModel('instance');
+let _ = require('lodash');
+let Instance = require('./instance.model.js');
+let Realize = require('../realize/realize.model');
+let graphTools = require('../../components/graph-tools');
+let graphModel = graphTools.createGraphModel('instance');
 let randomstring = require('randomstring');
 
 // Get list of instances
@@ -57,7 +57,7 @@ exports.update = function (req, res) {
     if (!instance) {
       return res.send(404);
     }
-    var updated = _.merge(instance, req.body);
+    let updated = _.merge(instance, req.body);
     updated.save(function (err) {
       if (err) {
         return handleError(res, err);

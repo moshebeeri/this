@@ -1,17 +1,17 @@
 'use strict';
 
-var elasticsearch = require('elasticsearch');
-var config = require('../../config/environment');
+let elasticsearch = require('elasticsearch');
+let config = require('../../config/environment');
 
-var client = new elasticsearch.Client( config.elasticsearch );
-var perPage = 50
+let client = new elasticsearch.Client( config.elasticsearch );
+let perPage = 50
 
 function Elasticsearch() {
 
 }
 
 Elasticsearch.prototype.search = function search(query, pageNum, callback) {
-  var searchParams = {
+  let searchParams = {
     index: config.elasticsearch.index,
     from: (pageNum - 1) * perPage,
     size: perPage,
@@ -39,12 +39,12 @@ Elasticsearch.prototype.search = function search(query, pageNum, callback) {
 
 
 Elasticsearch.prototype.demo_search = function demo_search(request, callback) {
-  var pageNum = request.params.page;
-  var perPage = request.params.per_page;
-  var userQuery = request.params.search_query;
-  var userId = request.session.userId;
+  let pageNum = request.params.page;
+  let perPage = request.params.per_page;
+  let userQuery = request.params.search_query;
+  let userId = request.session.userId;
 
-  var searchParams = {
+  let searchParams = {
     index: 'posts',
     from: (pageNum - 1) * perPage,
     size: perPage,

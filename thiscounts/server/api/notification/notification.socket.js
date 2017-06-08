@@ -4,7 +4,7 @@
 
 'use strict';
 
-var Notification = require('./notification.model');
+let Notification = require('./notification.model');
 
 exports.register = function(socket) {
   Notification.schema.post('save', function (doc) {

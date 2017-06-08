@@ -4,7 +4,7 @@
 
 'use strict';
 
-var PhoneNumber = require('./phone_number.model');
+let PhoneNumber = require('./phone_number.model');
 
 exports.register = function(socket) {
   PhoneNumber.schema.post('save', function (doc) {

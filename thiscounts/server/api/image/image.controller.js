@@ -1,31 +1,31 @@
 'use strict';
 
-var _ = require('lodash');
-var mongoose = require('mongoose');
-var async = require('async');
-var Image = require('./image.model');
-var aws = require('aws-sdk');
-var config = require('../../config/environment');
-var randomstring = require("randomstring");
-var s3 = new aws.S3();
-var folder = 'images';
-var multiparty = require('multiparty');
-//var gm = require('gm');
-var fs = require('fs');
-var Upload = require('s3-uploader');
+let _ = require('lodash');
+let mongoose = require('mongoose');
+let async = require('async');
+let Image = require('./image.model');
+let aws = require('aws-sdk');
+let config = require('../../config/environment');
+let randomstring = require("randomstring");
+let s3 = new aws.S3();
+let folder = 'images';
+let multiparty = require('multiparty');
+//let gm = require('gm');
+let fs = require('fs');
+let Upload = require('s3-uploader');
 
-var User = require('../user/user.model');
-var Business = require('../business/business.model');
-var ShoppingChain = require('../shoppingChain/shoppingChain.model');
-var Product = require('../product/product.model');
-var Group = require('../group/group.model');
-var Promotion = require('../promotion/promotion.model');
-var Mall = require('../mall/mall.model');
-var Category = require('../category/category.model');
-var CardType = require('../cardType/cardType.model');
+let User = require('../user/user.model');
+let Business = require('../business/business.model');
+let ShoppingChain = require('../shoppingChain/shoppingChain.model');
+let Product = require('../product/product.model');
+let Group = require('../group/group.model');
+let Promotion = require('../promotion/promotion.model');
+let Mall = require('../mall/mall.model');
+let Category = require('../category/category.model');
+let CardType = require('../cardType/cardType.model');
 
 
-var client = createClient();
+let client = createClient();
 
 function createClient() {
   return new Upload(config.aws.bucketName, {
@@ -78,11 +78,11 @@ exports.logo = function (req, res) {
 };
 
 function handle_image(req, res, type) {
-  //var meta_data = req.headers.meta;
-  var meta_data = {};
-  var form = new multiparty.Form();
-  var size = 0;
-  var fileName = randomstring.generate({length: 8, charset: 'hex'});
+  //let meta_data = req.headers.meta;
+  let meta_data = {};
+  let form = new multiparty.Form();
+  let size = 0;
+  let fileName = randomstring.generate({length: 8, charset: 'hex'});
 
   form.on('part', function (part) {
     part.filename = part.name;
@@ -106,8 +106,8 @@ function handle_image(req, res, type) {
   });
   form.parse(req);
 }
-var fs = require("fs");
-var base64 = require('file-base64');
+let fs = require("fs");
+let base64 = require('file-base64');
 
 exports.base64_create = function (req, res) {
   return base64_handle_image(req, res, 'image')
@@ -118,11 +118,11 @@ exports.base64_logo = function (req, res) {
 };
 
 function base64_handle_image(req, res, type) {
-  //var meta_data = req.headers.meta;
-  var meta_data = {};
-  var form = new multiparty.Form();
-  var size = 0;
-  var fileName = randomstring.generate({length: 8, charset: 'hex'});
+  //let meta_data = req.headers.meta;
+  let meta_data = {};
+  let form = new multiparty.Form();
+  let size = 0;
+  let fileName = randomstring.generate({length: 8, charset: 'hex'});
 
   form.on('part', function (part) {
     part.filename = part.name;
@@ -136,7 +136,7 @@ function base64_handle_image(req, res, type) {
       if (err) {
         return console.log(err);
       }
-      var clear_img = data.replace(/^data:image\/*;base64,/, "");
+      let clear_img = data.replace(/^data:image\/*;base64,/, "");
       base64.decode(clear_img, file.path, function (err, output) {
         if (err) {
           console.log(err);
@@ -197,13 +197,13 @@ function updateImageVersions(version, id, meta_data, type, callback) {
         console.log(err)
       } else {
 
-        var pictures = [];
+        let pictures = [];
         version.forEach(function (version) {
           pictures.push(version.url)
         });
         // we aim for one match only - hence return after first iteration
-        for (var key in results) {
-          var updated = results[key];
+        for (let key in results) {
+          let updated = results[key];
           if (updated) {
             if (type === 'logo')
               updated.logo = pictures[0];
@@ -262,8 +262,8 @@ function find_object(id, callback) {
       if (err)
         return callback(err, null);
 
-      for (var key in results) {
-        var updated = results[key];
+      for (let key in results) {
+        let updated = results[key];
         if (updated) {
           return callback(null, updated);
         }

@@ -1,10 +1,10 @@
 'use strict';
 
-var express = require('express');
-var controller = require('./feed.controller');
-var auth = require('../../auth/auth.service');
+let express = require('express');
+let controller = require('./feed.controller');
+let auth = require('../../auth/auth.service');
 
-var router = express.Router();
+let router = express.Router();
 
 
 router.get('/', auth.isAuthenticated(), controller.index);

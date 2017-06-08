@@ -3,26 +3,26 @@
  */
 
 'use strict';
-var express = require('express');
-var cors = require('cors');
-var favicon = require('serve-favicon');
-var morgan = require('morgan');
-var compression = require('compression');
-var bodyParser = require('body-parser');
-var methodOverride = require('method-override');
-var cookieParser = require('cookie-parser');
-var errorHandler = require('errorhandler');
-var path = require('path');
-var config = require('./environment');
-var passport = require('passport');
-var session = require('express-session');
-var mongoStore = require('connect-mongo')(session);
-var mongoose = require('mongoose');
+let express = require('express');
+let cors = require('cors');
+let favicon = require('serve-favicon');
+let morgan = require('morgan');
+let compression = require('compression');
+let bodyParser = require('body-parser');
+let methodOverride = require('method-override');
+let cookieParser = require('cookie-parser');
+let errorHandler = require('errorhandler');
+let path = require('path');
+let config = require('./environment');
+let passport = require('passport');
+let session = require('express-session');
+let mongoStore = require('connect-mongo')(session);
+let mongoose = require('mongoose');
 
 
 module.exports = function(app) {
   app.use(cors());
-  var env = app.get('env');
+  let env = app.get('env');
 
   app.set('views', config.root + '/server/views');
   app.engine('html', require('ejs').renderFile);

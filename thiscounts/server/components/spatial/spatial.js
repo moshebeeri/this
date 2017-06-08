@@ -4,7 +4,7 @@ let db = require('seraph')({
   user: "neo4j",
   pass: "saywhat"
 });
-
+let locationGraph = require('../../components/graph-tools').createGraphModel('location');
 let logger = require('../logger').createLogger();
 let utils = require('../utils').createUtils();
 
@@ -87,6 +87,32 @@ Spatial.prototype.add2index = function add(gid, callback) {
   // });
 };
 
+/**
+ * @param coordinate
+ * @param distance
+ * @param type
+ * @param callback
+ *
+ *  CALL spatial.withinDistance('world', coordinate, 20) YIELD node AS u
+ *  MATCH (u:instance)
+ *  with u._id as _id, labels(u) as ls
+ *  where _id IS NOT NULL
+ *  RETURN  distinct _id
+ *
+ */
+Spatial.prototype.withinDistanceByType = function add(coordinate, distance, type, callback) {
+  let query = `WITH ${JSON.stringify(coordinate)} AS coordinate
+    CALL spatial.withinDistance('world', coordinate, ${distance}) YIELD node AS u
+    MATCH (u:${type})
+    with u._id as _id
+    where _id IS NOT NULL
+    return distinct _id
+  `;
+  locationGraph.query(query, function (err, _ids) {
+    if(err) return callback(err);
+    return callback(null, _ids);
+  })
+};
 
 /**
  *
