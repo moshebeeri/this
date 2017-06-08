@@ -1,7 +1,7 @@
 'use strict';
 
-let _ = require('lodash');
-let Activity = require('./activity.model');
+const _ = require('lodash');
+const Activity = require('./activity.model');
 
 // Get list of activitys
 exports.index = function(req, res) {

@@ -365,6 +365,8 @@ function update_state(feed, callback) {
       if(err){ return callback(err, null) }
       if (states['promotion'] !== null)
         activity.promotion = states['promotion'];
+      if (states['instance'] !== null)
+        activity.instance = states['instance'];
       if (states['product'] !== null)
         activity.product = states['product'];
       if (states['user'] !== null)

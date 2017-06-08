@@ -1,28 +1,29 @@
 'use strict';
 
-let _ = require('lodash');
-let mongoose = require('mongoose');
-let async = require('async');
-let Image = require('./image.model');
-let aws = require('aws-sdk');
-let config = require('../../config/environment');
-let randomstring = require("randomstring");
-let s3 = new aws.S3();
-let folder = 'images';
-let multiparty = require('multiparty');
-//let gm = require('gm');
-let fs = require('fs');
-let Upload = require('s3-uploader');
+const _ = require('lodash');
+const mongoose = require('mongoose');
+const async = require('async');
+const Image = require('./image.model');
+const aws = require('aws-sdk');
+const config = require('../../config/environment');
+const randomstring = require("randomstring");
+const s3 = new aws.S3();
+const folder = 'images';
+const multiparty = require('multiparty');
 
-let User = require('../user/user.model');
-let Business = require('../business/business.model');
-let ShoppingChain = require('../shoppingChain/shoppingChain.model');
-let Product = require('../product/product.model');
-let Group = require('../group/group.model');
-let Promotion = require('../promotion/promotion.model');
-let Mall = require('../mall/mall.model');
-let Category = require('../category/category.model');
-let CardType = require('../cardType/cardType.model');
+const fs = require('fs');
+const Upload = require('s3-uploader');
+
+const User = require('../user/user.model');
+const Business = require('../business/business.model');
+const ShoppingChain = require('../shoppingChain/shoppingChain.model');
+const Product = require('../product/product.model');
+const Group = require('../group/group.model');
+const Promotion = require('../promotion/promotion.model');
+const Mall = require('../mall/mall.model');
+const Category = require('../category/category.model');
+const CardType = require('../cardType/cardType.model');
+const base64 = require('file-base64');
 
 
 let client = createClient();
@@ -106,8 +107,6 @@ function handle_image(req, res, type) {
   });
   form.parse(req);
 }
-let fs = require("fs");
-let base64 = require('file-base64');
 
 exports.base64_create = function (req, res) {
   return base64_handle_image(req, res, 'image')
