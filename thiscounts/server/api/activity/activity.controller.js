@@ -3,7 +3,7 @@
 const _ = require('lodash');
 const Activity = require('./activity.model');
 
-// Get list of activitys
+// Get list of activities
 exports.index = function(req, res) {
   Activity.find(function (err, activitys) {
     if(err) { return handleError(res, err); }

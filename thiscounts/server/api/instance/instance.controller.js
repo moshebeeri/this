@@ -1,11 +1,11 @@
 'use strict';
 
-let _ = require('lodash');
-let Instance = require('./instance.model.js');
-let Realize = require('../realize/realize.model');
-let graphTools = require('../../components/graph-tools');
-let graphModel = graphTools.createGraphModel('instance');
-let randomstring = require('randomstring');
+const _ = require('lodash');
+const Instance = require('./instance.model.js');
+const Realize = require('../realize/realize.model');
+const graphTools = require('../../components/graph-tools');
+const graphModel = graphTools.createGraphModel('instance');
+const randomstring = require('randomstring');
 
 // Get list of instances
 exports.index = function (req, res) {

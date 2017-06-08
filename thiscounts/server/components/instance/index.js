@@ -302,6 +302,7 @@ function to_graph(instance) {
   let value = JSON.parse(JSON.stringify(getValue(instance)));
   let ret = {
     _id: instance._id,
+    quantity: instance.quantity,
     type: instance.type,
     lat: instance.location.lat,
     lon: instance.location.lng
