@@ -1,10 +1,12 @@
+/**
+ * Created by stan229 on 5/27/16.
+ */
+import { combineReducers } from "redux";
+import feeds from "./feedReducer";
 
-import { combineReducers } from 'redux';
+export default function getRootReducer() {
 
-import drawer from './drawer';
-import cardNavigation from './cardNavigation';
-
-export default combineReducers({
-  drawer,
-  cardNavigation,
-});
+    return combineReducers({
+        feeds: feeds
+    });
+}

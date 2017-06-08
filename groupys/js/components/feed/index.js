@@ -1,166 +1,18 @@
 
 import React, { Component } from 'react';
 import { Image, Platform} from 'react-native';
-
 import { connect } from 'react-redux';
 import { actions } from 'react-native-navigation-redux-helpers';
 import { Container, Content, Text, InputGroup, Input,Thumbnail,Button,Picker,Right,Item, Left,Icon,Header,Footer,Body, View,Card,CardItem } from 'native-base';
-
-const {
-  replaceAt,
-} = actions;
-
-
-import login from './general-theme';
 import GenericFeedManager from '../generic-feed-manager/index'
 import GenericFeedItem from '../generic-feed-manager/generic-feed'
 
-var aroma = require('../../../images/aroma.png');
-var aromCafe = require('../../../images/aroma-cafe.jpeg');
-var castro = require('../../../images/castro.jpg');
-var castroBanner = require('../../../images/castro_final.png');
-var myprofile = require('../../../images/profile.jpeg');
+import { bindActionCreators } from "redux";
+
+import * as feedsAction from "../../actions/feeds";
 import FeedApi from '../../api/feed'
 let feedApi = new FeedApi();
-
-const feeds2 = [
-{
-    id:3,
-    social:{
-        like:true,
-        numberLikes: 12,
-    },
-    logo:{
-        require:castro,
-    },
-    itemTitle: 'All Store 10% off',
-    description: 'Total discount',
-    banner: {
-        require:castroBanner
-    },
-},
-    {
-        id:4,
-        social:{
-            like:true,
-            numberLikes: 12,
-        },
-        logo:{
-            require:castro,
-        },
-        itemTitle: 'All Store 10% off',
-        description: 'Total discount',
-        banner: {
-            require:castroBanner
-        },
-    },
-    {
-        id:1,
-        social:{
-            like:false,
-            numberLikes: 10,
-
-
-        },
-        logo:{
-            require:myprofile,
-        },
-        itemTitle: 'Roi share with you',
-        description: 'Cafe Discount',
-
-        feed:{
-            social:{
-                like:false,
-                numberLikes: 10,
-            },
-            logo:{
-                require:aroma,
-            },
-            itemTitle: 'Cafe 20% off',
-            description: 'Cafe Discount',
-            banner: {
-                require:aromCafe
-            }
-        }
-    },
-    {
-        id: 2,
-        social: {
-            like: false,
-            numberLikes: 12,
-
-
-        },
-        logo: {
-            require: aroma,
-        },
-        itemTitle: 'Cafe 20% off',
-        description: 'Cafe Discount',
-        banner: {
-            require: aromCafe
-        }
-    }
-    // },
-
-
-
-
-];
-
-const feeds = [
-        {
-            id:1,
-            social:{
-                like:false,
-                numberLikes: 10,
-
-
-            },
-            logo:{
-                require:myprofile,
-            },
-            itemTitle: 'Roi share with you',
-            description: 'Cafe Discount',
-
-            feed:{
-                social:{
-                    like:false,
-                    numberLikes: 10,
-                },
-                logo:{
-                    require:aroma,
-                },
-                itemTitle: 'Cafe 20% off',
-                description: 'Cafe Discount',
-                banner: {
-                    require:aromCafe
-                }
-            }
-        },
-    {
-        id: 2,
-        social: {
-            like: false,
-            numberLikes: 12,
-
-
-        },
-        logo: {
-            require: aroma,
-        },
-        itemTitle: 'Cafe 20% off',
-        description: 'Cafe Discount',
-        banner: {
-            require: aromCafe
-        }
-    }
-        // },
-
-
-
-    ];
-
-export default class Feed extends Component {
+class Feed extends Component {
 
       constructor(props) {
         super(props);
@@ -173,14 +25,31 @@ export default class Feed extends Component {
       return feed;
     }
 
+    fetchFeeds(){
+         this.props.fetchFeeds('GET_FEEDS',this.props.feeds.feeds,this);
+    }
+    fetchTop(id){
+        this.props.showTopLoader();
+        this.props.fetchTopList('GET_FEEDS',this.props.feeds.feeds,id,this);
+    }
+
     render() {
 
         return (
-            <GenericFeedManager api={this} title='Feeds' ItemDetail={GenericFeedItem}></GenericFeedManager>
+            <GenericFeedManager showTopTimer={this.props.feeds.showTopLoader} feeds={this.props.feeds.feeds} api={this} title='Feeds' ItemDetail={GenericFeedItem}></GenericFeedManager>
 
         );
     }
 
+
+
 }
+
+export default connect(
+    state => ({
+        feeds: state.feeds
+    }),
+    dispatch => bindActionCreators(feedsAction, dispatch)
+)(Feed);
 
 

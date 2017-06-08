@@ -161,6 +161,11 @@ export default class GroupFeed extends Component {
 
   constructor(props) {
     super(props);
+      this.state = {
+
+          messsage: '',
+
+      };
 
   }
 
@@ -187,7 +192,18 @@ export default class GroupFeed extends Component {
     render() {
 
         return (
+        <Container>
+
             <GenericFeedManager api={this} title='Feeds' ItemDetail={GenericFeedItem}></GenericFeedManager>
+            <Footer>
+                <Button transparent primary iconLeft>
+                    <Icon name='beer' />
+                </Button>
+                    <Input  blurOnSubmit={true} returnKeyType='done'  onChangeText={(messsage) => this.setState({messsage})} placeholder='Message' />
+
+            </Footer>
+        </Container>
+
 
         );
     }

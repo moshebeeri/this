@@ -245,7 +245,10 @@ class GroupFeed extends Component {
                 <GeneralComponentHeader     showAction = {false} current='home' to='home' />
 
 
-                <GenericFeedManager api={this} title='Feeds' ItemDetail={GenericFeedItem}></GenericFeedManager>
+                <GenericFeedManager api={this} title='Feeds' ItemDetail={GenericFeedItem}></GenericFeedManager>\
+                <Footer>
+
+                </Footer>
             </Container>
         );
     }
