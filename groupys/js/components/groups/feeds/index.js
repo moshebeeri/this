@@ -8,156 +8,19 @@ import { Container, Content, Text, InputGroup, Input,Thumbnail,Button,Picker,Rig
 
 
 
-import login from './general-theme';
 import GenericFeedManager from '../../generic-feed-manager/index'
 import GenericFeedItem from '../../generic-feed-manager/generic-feed'
 
-var aroma = require('../../../../images/aroma.png');
-var aromCafe = require('../../../../images/aroma-cafe.jpeg');
-var castro = require('../../../../images/castro.jpg');
-var castroBanner = require('../../../../images/castro_final.png');
-var myprofile = require('../../../../images/profile.jpeg');
+
 import FeedApi from '../../../api/feed'
 let feedApi = new FeedApi();
 
-const feeds2 = [
-{
-    id:3,
-    social:{
-        like:true,
-        numberLikes: 12,
-    },
-    logo:{
-        require:castro,
-    },
-    itemTitle: 'All Store 10% off',
-    description: 'Total discount',
-    banner: {
-        require:castroBanner
-    },
-},
-    {
-        id:4,
-        social:{
-            like:true,
-            numberLikes: 12,
-        },
-        logo:{
-            require:castro,
-        },
-        itemTitle: 'All Store 10% off',
-        description: 'Total discount',
-        banner: {
-            require:castroBanner
-        },
-    },
-    {
-        id:1,
-        social:{
-            like:false,
-            numberLikes: 10,
+import { bindActionCreators } from "redux";
+
+import * as feedsAction from "../../../actions/feeds";
 
 
-        },
-        logo:{
-            require:myprofile,
-        },
-        itemTitle: 'Roi share with you',
-        description: 'Cafe Discount',
-
-        feed:{
-            social:{
-                like:false,
-                numberLikes: 10,
-            },
-            logo:{
-                require:aroma,
-            },
-            itemTitle: 'Cafe 20% off',
-            description: 'Cafe Discount',
-            banner: {
-                require:aromCafe
-            }
-        }
-    },
-    {
-        id: 2,
-        social: {
-            like: false,
-            numberLikes: 12,
-
-
-        },
-        logo: {
-            require: aroma,
-        },
-        itemTitle: 'Cafe 20% off',
-        description: 'Cafe Discount',
-        banner: {
-            require: aromCafe
-        }
-    }
-    // },
-
-
-
-
-];
-
-const feeds = [
-        {
-            id:1,
-            social:{
-                like:false,
-                numberLikes: 10,
-
-
-            },
-            logo:{
-                require:myprofile,
-            },
-            itemTitle: 'Roi share with you',
-            description: 'Cafe Discount',
-
-            feed:{
-                social:{
-                    like:false,
-                    numberLikes: 10,
-                },
-                logo:{
-                    require:aroma,
-                },
-                itemTitle: 'Cafe 20% off',
-                description: 'Cafe Discount',
-                banner: {
-                    require:aromCafe
-                }
-            }
-        },
-    {
-        id: 2,
-        social: {
-            like: false,
-            numberLikes: 12,
-
-
-        },
-        logo: {
-            require: aroma,
-        },
-        itemTitle: 'Cafe 20% off',
-        description: 'Cafe Discount',
-        banner: {
-            require: aromCafe
-        }
-    }
-        // },
-
-
-
-    ];
-
-export default class GroupFeed extends Component {
+class GroupFeed extends Component {
 
   constructor(props) {
     super(props);
@@ -184,24 +47,32 @@ export default class GroupFeed extends Component {
 
 
 
-
+    fetchFeeds(){
+        this.props.fetchGroupFeeds(this.props.navigation.state.params.group._id,'GET_GROUP_FEEDS',this.props.feeds.savedfeeds,this);
+    }
+    fetchTop(id){
+        this.props.showGroupTopLoader(this.props.navigation.state.params.group._id);
+        this.props.fetchGroupTop(this.props.navigation.state.params.group._id,'GET_GROUP_FEEDS',this.props.feeds.savedfeeds,id,this);
+    }
 
 
 
 
     render() {
+        let feeds = this.props.feeds['groups'+this.props.navigation.state.params.group._id];
+        if(!feeds){
+            feeds = [];
+        }
 
+        let showTop = this.props.feeds['showTopLoader'+this.props.navigation.state.params.group._id];
+        if(!showTop){
+            showTop = false;
+        }
         return (
         <Container>
 
-            <GenericFeedManager api={this} title='Feeds' ItemDetail={GenericFeedItem}></GenericFeedManager>
-            <Footer>
-                <Button transparent primary iconLeft>
-                    <Icon name='beer' />
-                </Button>
-                    <Input  blurOnSubmit={true} returnKeyType='done'  onChangeText={(messsage) => this.setState({messsage})} placeholder='Message' />
+            <GenericFeedManager showTopTimer={showTop} feeds={feeds} api={this} title='Feeds' ItemDetail={GenericFeedItem}></GenericFeedManager>
 
-            </Footer>
         </Container>
 
 
@@ -209,5 +80,13 @@ export default class GroupFeed extends Component {
     }
 
 }
+
+export default connect(
+    state => ({
+        feeds: state.feeds
+    }),
+    dispatch => bindActionCreators(feedsAction, dispatch)
+)(GroupFeed);
+
 
 

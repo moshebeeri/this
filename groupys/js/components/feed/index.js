@@ -30,7 +30,7 @@ class Feed extends Component {
     }
     fetchTop(id){
         this.props.showTopLoader();
-        this.props.fetchTopList('GET_FEEDS',this.props.feeds.feeds,id,this);
+        this.props.fetchTop('GET_FEEDS',this.props.feeds.feeds,id,this);
     }
 
     render() {
