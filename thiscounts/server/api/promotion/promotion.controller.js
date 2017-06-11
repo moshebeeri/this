@@ -142,7 +142,7 @@ exports.test_me = function (req, res) {
 
 function applyToGroups(instance) {
   let business;
-  if (instance && instance.promotion && (business = instance.promotion.business)) {
+  if (instance && instance.promotion && (business = instance.promotion.entity.business)) {
     if (instance.variation === 'SINGLE') {
       let query = instanceGraphModel.related_type_id_dir_query(business, 'FOLLOW', 'group', 'in', 0, 1000);
       instanceGraphModel.query(query, function (err, groups_ids) {

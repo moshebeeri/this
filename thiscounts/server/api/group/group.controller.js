@@ -116,9 +116,9 @@ exports.create = function (req, res) {
       if (group.entity_type === 'BUSINESS' && utils.defined(group.entity.business)) {
         graphModel.relate_ids(group._id, 'FOLLOW', group.entity.business);
       }
-      group_activity(group, "create");
+      group_activity(group, 'create');
     });
-    return res.status(201).json(groups);
+    return res.status(201).json(group);
   });
 };
 
