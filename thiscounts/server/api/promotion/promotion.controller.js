@@ -12,6 +12,7 @@ let randomstring = require('randomstring');
 let logger = require('../../components/logger').createLogger();
 let graphTools = require('../../components/graph-tools');
 let promotionGraphModel = graphTools.createGraphModel('promotion');
+let instanceGraphModel = graphTools.createGraphModel('instance');
 let utils = require('../../components/utils').createUtils();
 let activity = require('../../components/activity').createActivity();
 let util = require('util');
@@ -139,6 +140,15 @@ exports.test_me = function (req, res) {
 };
 
 
+function applyToGroups(instance) {
+  //related_type_id_dir_query(start, name, ret_type, dir, skip, limit)
+  instanceGraphModel.related_type_id_dir_query(instance.id)
+}
+
+function applyToUsers(instance) {
+
+}
+
 function create_promotion(promotion, callback) {
   //TODO: Convert to address location
   set_promotion_location(promotion, function (err, promotion) {
@@ -172,9 +182,10 @@ function create_promotion(promotion, callback) {
 
           instance.cratePromotionInstances(promotion, function (err, instances) {
             if (err) return callback(err, null);
-            // instances.forEach( instance => {
-            //
-            // });
+            instances.forEach( instance => {
+              applyToGroups(instance);
+              applyToUsers(instance);
+            });
 
             instances.forEach( instance => {
               instance_eligible_activity(instance)
