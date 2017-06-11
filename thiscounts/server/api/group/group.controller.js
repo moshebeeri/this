@@ -16,7 +16,7 @@ exports.index = function (req, res) {
     if (err) {
       return handleError(res, err);
     }
-    return res.json(200, groups);
+    return res.status(200).json(groups);
   });
 };
 
@@ -29,7 +29,7 @@ exports.show = function (req, res) {
     if (!group) {
       return res.status(404).send('no group');
     }
-    return res.json(group);
+    return res.status(200).json(group);
   });
 };
 
@@ -76,8 +76,8 @@ function sendActivity(act) {
 function group_message_activity(group, user_id, message) {
   sendActivity({
     user: user_id,
-    action: 'message',
-    message: message,
+    action: 'group_message',
+    message: message.message,
     actor_group: group,
     audience: ['SELF']
   });
@@ -118,7 +118,7 @@ exports.create = function (req, res) {
       }
       group_activity(group, "create");
     });
-    return res.json(201, group);
+    return res.status(201).json(groups);
   });
 };
 
@@ -157,7 +157,7 @@ exports.update = function (req, res) {
     let updated = _.merge(group, req.body);
     updated.save(function (err) {
       if (err) { return handleError(res, err); }
-      return res.json(200, group);
+      return res.status(200).json(groups);
     });
   });
 };
@@ -193,7 +193,7 @@ exports.offer = function (req, res) {
     }
     graphModel.relate_ids(group._id, 'OFFER', offer._id);
     group_offer_activity(group, offer);
-    return res.json(200, group);
+    return res.status(200).json(groups);
   });
 };
 
@@ -207,7 +207,7 @@ exports.message = function (req, res) {
       return res.status(404).send('no group');
     }
     group_message_activity(group, req.user._id, req.body);
-    return res.json(200, group);
+    return res.status(200).json(groups);
   });
 };
 
@@ -216,7 +216,7 @@ exports.touch = function (req, res) {
   graphModel.query(query, function(err){
     if(err) console.error(err.message);
   });
-  return res.json(200, 'ok');
+  return res.status(200);
 };
 
 function user_follow_group(user_id, group, callback) {
@@ -373,7 +373,7 @@ exports.group_follow_business = function (req, res) {
 };
 
 exports.test_add_user = function (req, res) {
-  return res.json(200, "tested");
+  return res.status(200).json("tested");
 };
 
 exports.following = function (req, res) {

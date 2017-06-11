@@ -4,6 +4,7 @@ const mongoose = require('mongoose'),
   Schema = mongoose.Schema;
 
 let InstanceSchema = new Schema({
+  social_state : {},
   promotion: {type: Schema.ObjectId, ref: 'Promotion', index: true, required: true},
   gid: {type: Number, index: true},
   type: {type: String, index: true, required: true},
