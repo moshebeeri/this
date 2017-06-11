@@ -141,12 +141,19 @@ exports.test_me = function (req, res) {
 
 
 function applyToGroups(instance) {
-  //related_type_id_dir_query(start, name, ret_type, dir, skip, limit)
-  instanceGraphModel.related_type_id_dir_query(instance.id)
+  let business = instance.promise.business;
+  if (business) {
+    let query = instanceGraphModel.related_type_id_dir_query(business, 'FOLLOW', 'group', 'out', 0, 1000);
+    instanceGraphModel.query(query, function (err, groups_ids) {
+      if (err) return callback(err, null);
+      groups_ids.forEach(_id =>
+        instance_group_activity(instance, _id))
+    })
+  }
 }
 
 function applyToUsers(instance) {
-
+  instance_eligible_activity(instance);
 }
 
 function create_promotion(promotion, callback) {
@@ -182,14 +189,10 @@ function create_promotion(promotion, callback) {
 
           instance.cratePromotionInstances(promotion, function (err, instances) {
             if (err) return callback(err, null);
-            instances.forEach( instance => {
+            instances.forEach(instance => {
               applyToGroups(instance);
               applyToUsers(instance);
             });
-
-            instances.forEach( instance => {
-              instance_eligible_activity(instance)
-            })
           });
         });
       });
@@ -201,9 +204,9 @@ function create_promotion(promotion, callback) {
 exports.create = function (req, res) {
   let promotion = req.body;
   promotion.creator = req.user._id;
-  create_promotion(promotion, function(err, promotion){
+  create_promotion(promotion, function (err, promotion) {
     if (err) return handleError(res, err);
-    return  res.status(201).json(promotion);
+    return res.status(201).json(promotion);
   })
 };
 
@@ -212,7 +215,7 @@ exports.create_campaign = function (req, res) {
   let campaign = req.body;
   promotion.creator = req.user._id;
 
-  create_promotion(promotion, function(err, promotion) {
+  create_promotion(promotion, function (err, promotion) {
     if (err) return handleError(res, err);
     campaign.promotions = [promotion];
     campaign.creator = req.user._id;
@@ -244,7 +247,7 @@ function promotion_created_activity(promotion) {
   activity.create(act);
 }
 
-function instance_eligible_activity(instance){
+function instance_eligible_activity(instance) {
   if (utils.defined(instance.promotion.entity.business)) {
     let act = {
       instance: instance._id,
@@ -256,6 +259,14 @@ function instance_eligible_activity(instance){
   }
 }
 
+function instance_group_activity(instance, group_id) {
+  activity.create({
+    instance: instance._id,
+    promotion: instance.promotion._id,
+    action: "eligible",
+    actor_group: group_id
+  });
+}
 
 // Updates an existing promotion in the DB.
 exports.update = function (req, res) {
@@ -364,7 +375,7 @@ exports.user_business = function (req, res) {
 
 exports.user_promotions = function (req, res) {
   let userID = req.user._id;
-  let skip =  req.params.skip;
+  let skip = req.params.skip;
   let limit = req.params.limit;
 
   promotionGraphModel.query_objects(Promotion,
