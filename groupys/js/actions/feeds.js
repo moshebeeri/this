@@ -71,7 +71,7 @@ function addToRows(feeds,response,top){
 
 }
 
-async function fetchTopList(action,feeds,id,api,dispatch){
+async function fetchTopList(action,feeds,id,api,dispatch,groupid){
     try {
         if(feeds.length > 0 ) {
             if (id == feeds[0].id) {
@@ -82,9 +82,11 @@ async function fetchTopList(action,feeds,id,api,dispatch){
                     dispatch({
                         type: action,
                         feeds: feeds,
-                        showTopLoader: false
+                        showTopLoader: false,
+                        groupid:groupid
                     });
                 }
+
             }
 
         }
