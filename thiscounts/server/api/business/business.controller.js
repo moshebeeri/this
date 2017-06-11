@@ -4,7 +4,6 @@ let _ = require('lodash');
 let Business = require('./business.model');
 let logger = require('../../components/logger').createLogger();
 let User = require('../user/user.model');
-let Group = require('../group/group.controller');
 
 let graphTools = require('../../components/graph-tools');
 let graphModel = graphTools.createGraphModel('business');
@@ -95,7 +94,6 @@ exports.create = function (req, res) {
 
       body_business.location = spatial.geo_to_location(data);
 
-      //console.log(body_business.location);
       Business.create(body_business, function (err, business) {
         if (err) return handleError(res, err);
 
@@ -139,65 +137,6 @@ exports.create = function (req, res) {
   });
 };
 
-
-/*
- Group.create_group({
- add_policy: 'OPEN',
- entity_type: 'BUSINESS',
- entity: business._id,
- creator: req.user._id
- }, function (err, group) {
- if (err) {
- return handleError(res, err);
- }
- business.default_group = group.id;
- business.save(function (err) {
- if (err) return console.log("error: " + err)
- }
- );
- activity.activity({
- business: business._id,
- actor_user: business.creator,
- action: 'created'
- }, function (err) {
- if (err) console.error(err.message)
- });
- return res.status(201).json(business);
- });
-        });
-      });
-    });
-  });
-};
-
- let updated = _.merge(business, req.body);
- updated.save(function (err) {
- if (err) {
- return handleError(res, err);
- }
- return res.status(200).json(business);
- });
- });
- */
-
-
-/* {
- *   promotion : promotion ,
- *   user      : user      ,
- *   business  : business  ,
- *   mall      : mall      ,
- *   chain     : chain     ,
- *
- *   actor_user      : user      ,
- *   actor_business  : business  ,
- *   actor_mall      : mall      ,
- *   actor_chain     : chain     ,
- *
- *   action    : action
- * } */
-
-
-
 // Updates an existing business in the DB.
 exports.update = function (req, res) {
   if (req.body._id) {
@@ -237,76 +176,6 @@ exports.destroy = function (req, res) {
     });
   });
 };
-
-//router.post('/add/users/:to_group', auth.isAuthenticated(), controller.add_users);
-// user[phone_number] and user[sms_verified]
-//TODO: Fix this function!!!
-exports.add_users = function (req, res) {
-  Business.findById(req.params.to_group, function (err, group) {
-    if (err) {
-      return handleError(res, err);
-    }
-    if (!group) {
-      return res.status(404).send('no group');
-    }
-
-    if (utils.defined(_.find(group.admins, req.user._id) && (group.add_policy === 'OPEN' || group.add_policy === 'CLOSE'))) {
-      console.log(req.body.users);
-      for (let user in req.body.users) {
-        if (user !== Object.keys(req.body.users)[Object.keys(req.body.users).length - 1]) {
-          user_follow_group(req.body.users[user], group, false, res);
-        } else {
-          user_follow_group(req.body.users[user], group, true, res);
-        }
-      }
-    }
-    else if (group.add_policy === 'REQUEST' || group.add_policy === 'ADMIN_INVITE' || group.add_policy === 'MEMBER_INVITE')
-      return handleError(res, 'add policy ' + group.add_policy + ' not implemented');
-    else
-      return res.status(404).send('Can not add users');
-  });
-};
-
-function user_follow_group(user_id, group, isReturn, res) {
-  graphModel.relate_ids(user_id, 'FOLLOW', group._id);
-  user_follow_group_activity(group, user_id);
-  if (isReturn) {
-    return res.json(200, group);
-  }
-}
-
-function user_follow_group_activity(group, user) {
-  user_activity({
-    group: group,
-    action: "business_follow",
-    actor_user: user
-  });
-}
-
-function user_activity(act) {
-  activity.activity(act, function (err) {
-    if (err) logger.error(err.message)
-  });
-
-}
-
-exports.following_user = function (req, res) {
-  console.log("user_following_groups");
-  console.log("user: " + req.user._id);
-  let userId = req.user._id;
-  console.log("MATCH (u:user {_id:'" + userId + "'})-[r:OWNS]->(b:business) RETURN b LIMIT 25");
-  graphModel.query("MATCH (u:user {_id:'" + userId + "'})-[r:OWNS]->(b:business) RETURN b LIMIT 25", function (err, groups) {
-    if (err) {
-      return handleError(res, err)
-    }
-    if (!groups) {
-      return res.send(404);
-    }
-    console.log(JSON.stringify(groups));
-    return res.status(200).json(groups);
-  });
-};
-
 
 function handleError(res, err) {
   console.log(err);
