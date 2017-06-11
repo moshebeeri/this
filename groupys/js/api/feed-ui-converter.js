@@ -74,6 +74,30 @@ class FeedConverter
             }
         }
 
+        if(feed.activity.action == 'group_message'){
+            let user = feed.activity.actor_user;
+            if(!user){
+                user = feed.activity.user;
+            }
+            let name = user.phone_number;
+            let contact = contacsMap.get(user.phone_number);
+            if(contact){
+                name = contact.givenName + ' ' + contact.familyName;
+            }
+            response = {
+                id:feed._id,
+                social: {
+                    like: user.social_state.like,
+                    numberLikes: user.social_state.likes,
+                    follow: user.social_state.follow,
+                },
+                actor:user._id,
+                itemTitle: name ,
+                description:feed.activity.message,
+
+            }
+        }
+
         if(feed.activity.action =='eligible'){
             if(feed.activity.promotion.pictures.length > 0  ){
                 response = {

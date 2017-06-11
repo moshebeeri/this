@@ -1,16 +1,16 @@
 
 import React, { Component } from 'react';
-import { Image, Platform} from 'react-native';
+import { Image,TextInput, Platform,View} from 'react-native';
 
 import { connect } from 'react-redux';
 import { actions } from 'react-native-navigation-redux-helpers';
-import { Container, Content, Text, InputGroup, Input,Thumbnail,Button,Picker,Right,Item, Left,Icon,Header,Footer,Body, View,Card,CardItem } from 'native-base';
+import { Container,Footer,Icon,Button } from 'native-base';
 
 
 
 import GenericFeedManager from '../../generic-feed-manager/index'
 import GenericFeedItem from '../../generic-feed-manager/generic-feed'
-
+import styles from './styles'
 
 import FeedApi from '../../../api/feed'
 let feedApi = new FeedApi();
@@ -19,7 +19,8 @@ import { bindActionCreators } from "redux";
 
 import * as feedsAction from "../../../actions/feeds";
 
-
+import GroupApi from "../../../api/groups"
+let groupApi = new GroupApi();
 class GroupFeed extends Component {
 
   constructor(props) {
@@ -48,13 +49,32 @@ class GroupFeed extends Component {
 
 
     fetchFeeds(){
-        this.props.fetchGroupFeeds(this.props.navigation.state.params.group._id,'GET_GROUP_FEEDS',this.props.feeds.savedfeeds,this);
+         let groupid = this.props.navigation.state.params.group._id;
+         let goupfeeds = 'groups'+ groupid;
+         if(!this.props.feeds[goupfeeds]){
+             this.props.fetchGroupFeeds(groupid, 'GET_GROUP_FEEDS', new Array(), this);
+         }else {
+             this.props.fetchGroupFeeds(groupid, 'GET_GROUP_FEEDS', this.props.feeds[goupfeeds], this);
+         }
     }
     fetchTop(id){
-        this.props.showGroupTopLoader(this.props.navigation.state.params.group._id);
-        this.props.fetchGroupTop(this.props.navigation.state.params.group._id,'GET_GROUP_FEEDS',this.props.feeds.savedfeeds,id,this);
+        let groupid = this.props.navigation.state.params.group._id;
+        let groupFeeds = 'groups'+ groupid;
+
+        this.props.fetchGroupTop(groupid,'GET_GROUP_FEEDS',this.props.feeds[groupFeeds],this.props.feeds[groupFeeds][0].id,this);
     }
 
+    async _onPressButton(){
+        let groupid = this.props.navigation.state.params.group._id;
+        let groupFeeds = 'groups'+ groupid;
+        await groupApi.meesage(groupid,this.state.messsage);
+        this.props.fetchGroupTop(groupid,'GET_GROUP_FEEDS',this.props.feeds[groupFeeds],this.props.feeds[groupFeeds][0].id,this);
+        this.setState({
+            messsage:''
+        })
+
+
+    }
 
 
 
@@ -73,7 +93,28 @@ class GroupFeed extends Component {
 
             <GenericFeedManager showTopTimer={showTop} feeds={feeds} api={this} title='Feeds' ItemDetail={GenericFeedItem}></GenericFeedManager>
 
+            <View style={styles.itemborder}>
+                <View style={ {backgroundColor:'white',  flexDirection: 'row'}}>
+                <TextInput
+                    style={styles.item}
+
+                    autoFocus={true}
+                    placeholder="My Message"
+                    returnKeyType='done'
+                    onChangeText={(messsage) => this.setState({messsage})}
+                    value={this.state.messsage}/>
+                    <Button   onPress={() => this._onPressButton()} style={styles.icon} iconRight rounded light>
+
+                        <Icon name='send' />
+                    </Button>
+
+
+
+                </View>
+            </View>
+
         </Container>
+
 
 
         );

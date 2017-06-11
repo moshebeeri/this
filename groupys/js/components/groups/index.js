@@ -31,7 +31,7 @@ export default class Group extends Component {
     fetchApi(pageOffset,pageSize ) {
 
         return new Promise(async function(resolve, reject) {
-            response =  await  groupApi.getAll();
+            let response =  await  groupApi.getAll();
             resolve(response);
         });
 
