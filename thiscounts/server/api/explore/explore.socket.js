@@ -4,7 +4,7 @@
 
 'use strict';
 
-var Explore = require('./explore.model');
+let Explore = require('./explore.model');
 
 exports.register = function(socket) {
   Explore.schema.post('save', function (doc) {

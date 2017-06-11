@@ -1,17 +1,17 @@
 'use strict';
 
-var _ = require('lodash');
-var Business = require('./business.model');
-var logger = require('../../components/logger').createLogger();
-var User = require('../user/user.model');
-var Group = require('../group/group.controller');
+let _ = require('lodash');
+let Business = require('./business.model');
+let logger = require('../../components/logger').createLogger();
+let User = require('../user/user.model');
+let Group = require('../group/group.controller');
 
-var graphTools = require('../../components/graph-tools');
-var graphModel = graphTools.createGraphModel('business');
-var spatial = require('../../components/spatial').createSpatial();
-var location = require('../../components/location').createLocation();
-var utils = require('../../components/utils').createUtils();
-var activity = require('../../components/activity').createActivity();
+let graphTools = require('../../components/graph-tools');
+let graphModel = graphTools.createGraphModel('business');
+let spatial = require('../../components/spatial').createSpatial();
+let location = require('../../components/location').createLocation();
+let utils = require('../../components/utils').createUtils();
+let activity = require('../../components/activity').createActivity();
 
 exports.address2 = function (req, res) {
   location.address(req.body.address, function (err, data) {
@@ -55,7 +55,7 @@ exports.show = function (req, res) {
 };
 
 exports.mine = function (req, res) {
-  var userId = req.user._id;
+  let userId = req.user._id;
   console.log("get businesses of user " + userId );
   Business.find({'creator': userId}, function (err, businesses) {
     if (err) {

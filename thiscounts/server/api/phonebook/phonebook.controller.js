@@ -1,11 +1,11 @@
 'use strict';
 
-var _ = require('lodash');
-var Phonebook = require('./phonebook.model');
-var mongoose = require('mongoose');
-var config = require('../../config/environment');
-var twilioLookupsClient = require('twilio').LookupsClient;
-var twilioClient = new twilioLookupsClient(config.twilio.accountSid, config.twilio.authToken);
+let _ = require('lodash');
+let Phonebook = require('./phonebook.model');
+let mongoose = require('mongoose');
+let config = require('../../config/environment');
+let twilioLookupsClient = require('twilio').LookupsClient;
+let twilioClient = new twilioLookupsClient(config.twilio.accountSid, config.twilio.authToken);
 
 // Get list of phonebooks
 exports.index = function(req, res) {
@@ -29,8 +29,8 @@ exports.show = function(req, res) {
  * Get a single user by phone number
  */
 exports.showByUserId = function (req, res, next) {
-  var UserId = req.user._id;
-  //var UserId = req.params.id;
+  let UserId = req.user._id;
+  //let UserId = req.params.id;
   Phonebook.findOne({userId: UserId}, function (err, phonebook) {
     if (err) return next(err);
     if (!phonebook) return res.status(401).send('Unauthorized');
@@ -66,8 +66,8 @@ exports.showByUserId = function (req, res, next) {
  */
 exports.create = function (req, res) {
 
-  var phonebook = req.body;
-  var userId = req.user._id;
+  let phonebook = req.body;
+  let userId = req.user._id;
   console.log(req.body);
   console.log(req.user._id);
 
@@ -78,7 +78,7 @@ exports.create = function (req, res) {
         if(err) { console.log("ERRRRRRRRRRRRRROR"); return handleError(res, err); }
         checkPhones(phonebook.phonebook, res);
       });*/
-      var query = {'userId':userId};
+      let query = {'userId':userId};
       Phonebook.findOneAndUpdate(query, phonebook.phonebook, {upsert:true}, function(err, doc){
         if (err) return res.status(500).send(err);
         checkPhones(phonebook.phonebook, res);
@@ -147,8 +147,8 @@ exports.create = function (req, res) {
  * Get multi users by phone numbers array
  */
 function checkPhones (phoneBook, res){
-  var list = phoneBook;
-  var users = [];
+  let list = phoneBook;
+  let users = [];
 
   getPhoneNumbers(list, users, function(message, users, list) {
     // this anonymous function will run when the
@@ -162,10 +162,10 @@ function checkPhones (phoneBook, res){
 
 function normalizePhoneBookList(users, phonebook){
   console.log("--------------------normalizePhoneBookList-----------------------");
-  var tempData = {};
-  var tempData2 = [];
-  var counterUser = 0;
-  for ( var user in users ) {
+  let tempData = {};
+  let tempData2 = [];
+  let counterUser = 0;
+  for ( let user in users ) {
     console.log(users[user]["phone_number"]);
     tempData[users[user]["phone_number"]] = true;
     tempData2[counterUser] = users[user]["phone_number"];
@@ -175,7 +175,7 @@ function normalizePhoneBookList(users, phonebook){
   console.log(tempData2);
   console.log("--------------------phonebook-----------------------");
   console.log(JSON.stringify(users));
-  for ( var contact in phonebook ) {
+  for ( let contact in phonebook ) {
     if(tempData2.indexOf(phonebook[contact]["number"])>-1){
       phonebook[contact]["pictures"] = users[tempData2.indexOf(phonebook[contact]["number"])]["pictures"];
       phonebook[contact]["_id"] = users[tempData2.indexOf(phonebook[contact]["number"])]["_id"];
@@ -193,11 +193,11 @@ function normalizePhoneBookList(users, phonebook){
 }
 
 function getPhoneNumbers(list, users, callback){
-  var userPhones = [];
-  //var users = [];         // shortcut to find them faster afterwards
+  let userPhones = [];
+  //let users = [];         // shortcut to find them faster afterwards
 
-  for (var l in list) {       // first build the search array
-    var o = list[l];
+  for (let l in list) {       // first build the search array
+    let o = list[l];
     console.log(o.number);
     if (o.number) {
       //userPhones.push( new mongoose.Types.ObjectId( o.number ) );           // for the Mongo query
@@ -234,8 +234,8 @@ function getPhoneNumbers(list, users, callback){
 
 function identifyPhoneByTwilio(phone, countryCode){
 
-  var verifiedPhone = [];
-  var cleanedPhone = utils.clean_phone_number(phone);
+  let verifiedPhone = [];
+  let cleanedPhone = utils.clean_phone_number(phone);
 
   if(cleanedPhone != undefined){
     console.log("--------------identifyPhoneByTwilio------------------");
@@ -290,7 +290,7 @@ exports.update = function(req, res) {
   Phonebook.findById(req.params.id, function (err, phonebook) {
     if (err) { return handleError(res, err); }
     if(!phonebook) { return res.send(404); }
-    var updated = _.merge(phonebook, req.body);
+    let updated = _.merge(phonebook, req.body);
     updated.save(function (err) {
       if (err) { return handleError(res, err); }
       return res.json(200, phonebook);

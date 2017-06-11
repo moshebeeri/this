@@ -254,7 +254,7 @@ let PromotionSchemaObject = {
     }],
   },
   // // get the current date and time
-  // var date = new Date();
+  // let date = new Date();
   //
   // // reset the hours, mins, seconds, ms
   // date.setHours(0, 0, 0, 0);

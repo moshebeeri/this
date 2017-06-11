@@ -1,10 +1,10 @@
 'use strict';
 
-var express = require('express');
-var passport = require('passport');
-var auth = require('../auth.service');
+let express = require('express');
+let passport = require('passport');
+let auth = require('../auth.service');
 
-var router = express.Router();
+let router = express.Router();
 
 router
   .get('/', passport.authenticate('google', {

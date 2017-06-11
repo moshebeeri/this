@@ -4,7 +4,7 @@
 
 'use strict';
 
-var Card = require('./card.model');
+let Card = require('./card.model');
 
 exports.register = function(socket) {
   Card.schema.post('save', function (doc) {

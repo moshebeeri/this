@@ -4,7 +4,7 @@
 
 'use strict';
 
-var Group = require('./group.model');
+let Group = require('./group.model');
 
 exports.register = function(socket) {
   Group.schema.post('save', function (doc) {

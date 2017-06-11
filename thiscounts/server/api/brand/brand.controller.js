@@ -1,9 +1,9 @@
 'use strict';
 
-var _ = require('lodash');
-var Brand = require('./brand.model');
-var graphTools = require('../../components/graph-tools');
-var graphModel = graphTools.createGraphModel('brand');
+let _ = require('lodash');
+let Brand = require('./brand.model');
+let graphTools = require('../../components/graph-tools');
+let graphModel = graphTools.createGraphModel('brand');
 
 // Get list of brands
 exports.index = function(req, res) {
@@ -39,7 +39,7 @@ exports.update = function(req, res) {
   Brand.findById(req.params.id, function (err, brand) {
     if (err) { return handleError(res, err); }
     if(!brand) { return res.send(404); }
-    var updated = _.merge(brand, req.body);
+    let updated = _.merge(brand, req.body);
     updated.save(function (err) {
       if (err) { return handleError(res, err); }
       return res.json(200, brand);

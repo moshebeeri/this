@@ -4,7 +4,7 @@
 
 'use strict';
 
-var Profile = require('./profile.model');
+let Profile = require('./profile.model');
 
 exports.register = function(socket) {
   Profile.schema.post('save', function (doc) {

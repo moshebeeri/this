@@ -1,10 +1,10 @@
 'use strict';
 
-var express = require('express');
-var controller = require('./product.controller');
-var auth = require('../../auth/auth.service');
+let express = require('express');
+let controller = require('./product.controller');
+let auth = require('../../auth/auth.service');
 
-var router = express.Router();
+let router = express.Router();
 
 router.get('/list/create/by/user/:skip/:limit', auth.isAuthenticated(), controller.user_products);
 

@@ -1,9 +1,9 @@
 'use strict';
 
-var _ = require('lodash');
-var Card = require('./card.model');
-var graphTools = require('../../components/graph-tools');
-var graphModel = graphTools.createGraphModel('card');
+let _ = require('lodash');
+let Card = require('./card.model');
+let graphTools = require('../../components/graph-tools');
+let graphModel = graphTools.createGraphModel('card');
 
 // Get list of cards
 exports.index = function(req, res) {
@@ -41,7 +41,7 @@ exports.update = function(req, res) {
   Card.findById(req.params.id, function (err, card) {
     if (err) { return handleError(res, err); }
     if(!card) { return res.send(404); }
-    var updated = _.merge(card, req.body);
+    let updated = _.merge(card, req.body);
     updated.save(function (err) {
       if (err) { return handleError(res, err); }
       return res.json(200, card);

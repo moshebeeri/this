@@ -4,8 +4,8 @@
 
 'use strict';
 
-var errors = require('./components/errors');
-var path = require('path');
+let errors = require('./components/errors');
+let path = require('path');
 
 module.exports = function(app) {
 

@@ -1,11 +1,11 @@
 'use strict';
 
-var mongoose = require('mongoose');
-var Schema = mongoose.Schema;
-var crypto = require('crypto');
-var authTypes = ['github', 'twitter', 'facebook', 'google'];
+let mongoose = require('mongoose');
+let Schema = mongoose.Schema;
+let crypto = require('crypto');
+let authTypes = ['github', 'twitter', 'facebook', 'google'];
 
-var UserSchema = new Schema({
+let UserSchema = new Schema({
   social_state : {},
   name: String,
   gid: { type: Number, index: true},
@@ -86,7 +86,7 @@ UserSchema
 UserSchema
   .path('email')
   .validate(function(value, respond) {
-    var self = this;
+    let self = this;
     this.constructor.findOne({email: value}, function(err, user) {
       if(err) throw err;
       if(user) {
@@ -97,7 +97,7 @@ UserSchema
     });
 }, 'The specified email address is already in use.');
 */
-var validatePresenceOf = function(value) {
+let validatePresenceOf = function(value) {
   return value && value.length;
 };
 
@@ -149,7 +149,7 @@ UserSchema.methods = {
    */
   encryptPassword: function(password) {
     if (!password || !this.salt) return '';
-    var salt = new Buffer(this.salt, 'base64');
+    let salt = new Buffer(this.salt, 'base64');
     return crypto.pbkdf2Sync(password, salt, 10000, 64).toString('base64');
   }
 };

@@ -4,7 +4,7 @@
 
 'use strict';
 
-var Merchant = require('./merchant.model');
+let Merchant = require('./merchant.model');
 
 exports.register = function(socket) {
   Merchant.schema.post('save', function (doc) {

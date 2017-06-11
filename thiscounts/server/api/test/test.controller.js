@@ -1,12 +1,12 @@
 'use strict';
 
-var _ = require('lodash');
-var Test = require('./test.model');
-var graphTools = require('../../components/graph-tools');
-var graphModel = graphTools.createGraphModel('test');
-var activity = require('../../components/activity').createActivity();
-var logger = require('../../components/logger').createLogger();
-var utils = require('../../components/utils').createUtils();
+let _ = require('lodash');
+let Test = require('./test.model');
+let graphTools = require('../../components/graph-tools');
+let graphModel = graphTools.createGraphModel('test');
+let activity = require('../../components/activity').createActivity();
+let logger = require('../../components/logger').createLogger();
+let utils = require('../../components/utils').createUtils();
 
 // Get list of tests
 exports.index = function(req, res) {
@@ -34,7 +34,7 @@ function to_graph(test) {
 }
 
 function test_activity(test, action) {
-  var act = {
+  let act = {
     test: test._id,
     action: action
   };
@@ -105,7 +105,7 @@ exports.update = function(req, res) {
   Test.findById(req.params.id, function (err, test) {
     if (err) { return handleError(res, err); }
     if(!test) { return res.send(404); }
-    var updated = _.merge(test, req.body);
+    let updated = _.merge(test, req.body);
     updated.save(function (err) {
       if (err) { return handleError(res, err); }
       return res.json(200, test);
@@ -128,7 +128,7 @@ exports.destroy = function(req, res) {
 // offer to test.
 //router.post('/offer/:test', auth.isAuthenticated(), controller.offer);
 exports.offer = function(req, res) {
-  var offer = req.body;
+  let offer = req.body;
   Test.findById(req.params.test, function (err, test) {
     if (err) { return handleError(res, err); }
     if(!test) { return res.send(404); }
@@ -143,7 +143,7 @@ exports.message = function(req, res) {
   Test.findById(req.params.test, function (err, test) {
     if (err) { return handleError(res, err); }
     if(!test) { return res.send(404); }
-    //var updated = _.merge(test, req.body);
+    //let updated = _.merge(test, req.body);
     updated.save(function (err) {
       if (err) { return handleError(res, err); }
       graphModel.relate_ids(test._id, 'CREATED_BY', req.body._id);

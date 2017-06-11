@@ -1,9 +1,9 @@
 'use strict';
 
-var _ = require('lodash');
-var Offer = require('./offer.model.js');
-var graphTools = require('../../components/graph-tools');
-var graphModel = graphTools.createGraphModel('offer');
+let _ = require('lodash');
+let Offer = require('./offer.model.js');
+let graphTools = require('../../components/graph-tools');
+let graphModel = graphTools.createGraphModel('offer');
 
 // Get list of offers
 exports.index = function(req, res) {
@@ -39,7 +39,7 @@ exports.update = function(req, res) {
   Offer.findById(req.params.id, function (err, offer) {
     if (err) { return handleError(res, err); }
     if(!offer) { return res.send(404); }
-    var updated = _.merge(offer, req.body);
+    let updated = _.merge(offer, req.body);
     updated.save(function (err) {
       if (err) { return handleError(res, err); }
       return res.json(200, offer);

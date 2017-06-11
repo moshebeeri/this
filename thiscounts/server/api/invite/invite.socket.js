@@ -4,7 +4,7 @@
 
 'use strict';
 
-var Invite = require('./invite.model.js');
+let Invite = require('./invite.model.js');
 
 exports.register = function(socket) {
   Invite.schema.post('save', function (doc) {

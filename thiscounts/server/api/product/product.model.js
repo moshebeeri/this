@@ -1,9 +1,9 @@
 'use strict';
 
-var mongoose = require('mongoose'),
+let mongoose = require('mongoose'),
     Schema = mongoose.Schema;
 
-var ProductSchema = new Schema({
+let ProductSchema = new Schema({
   social_state : {},
   name: String,
   price: Number,

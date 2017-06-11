@@ -4,7 +4,7 @@
 
 'use strict';
 
-var Feed = require('./feed.model');
+let Feed = require('./feed.model');
 
 exports.register = function(socket) {
   Feed.schema.post('save', function (doc) {

@@ -4,7 +4,7 @@
 
 'use strict';
 
-var Campaign = require('./campaign.model');
+let Campaign = require('./campaign.model');
 
 exports.register = function(socket) {
   Campaign.schema.post('save', function (doc) {

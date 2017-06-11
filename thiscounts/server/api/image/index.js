@@ -1,10 +1,10 @@
 'use strict';
 
-var express = require('express');
-var controller = require('./image.controller.js');
-var auth = require('../../auth/auth.service');
+let express = require('express');
+let controller = require('./image.controller.js');
+let auth = require('../../auth/auth.service');
 
-var router = express.Router();
+let router = express.Router();
 
 router.post('/:id', auth.isAuthenticated(), controller.create);
 router.post('/base64/:id', auth.isAuthenticated(), controller.base64_create);
