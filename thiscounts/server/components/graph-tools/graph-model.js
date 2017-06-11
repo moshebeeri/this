@@ -225,7 +225,7 @@ GraphModel.prototype.promotion_instance_id = function promotion_instance(user_id
 };
 
 GraphModel.prototype.related_type_id = function related_type_id(start, name, ret_type, skip, limit, callback){
-  related_type_id_dir(start, name, ret_type, 'out', skip, limit, callback);
+  db.query(this.related_type_id_dir_query(start, name, ret_type, '', skip, limit),callback);
 };
 
 GraphModel.prototype.related_type_id_dir_query = function related_type_id_dir_query(start, name, ret_type, dir, skip, limit) {

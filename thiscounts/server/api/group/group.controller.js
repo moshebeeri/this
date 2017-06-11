@@ -317,9 +317,6 @@ exports.add_users = function (req, res) {
   });
 };
 
-// else if (group.add_policy === 'REQUEST' || group.add_policy === 'ADMIN_INVITE' || group.add_policy === 'MEMBER_INVITE')
-//   return handleError(res, 'add policy ' + group.add_policy + ' not implemented');
-
 exports.join_group = function (req, res) {
   Group.findById(req.params.group, function (err, group) {
     if (err) { return handleError(res, err); }

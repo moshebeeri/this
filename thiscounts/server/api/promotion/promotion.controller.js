@@ -141,14 +141,16 @@ exports.test_me = function (req, res) {
 
 
 function applyToGroups(instance) {
-  let business = instance.promise.business;
-  if (business) {
-    let query = instanceGraphModel.related_type_id_dir_query(business, 'FOLLOW', 'group', 'out', 0, 1000);
-    instanceGraphModel.query(query, function (err, groups_ids) {
-      if (err) return callback(err, null);
-      groups_ids.forEach(_id =>
-        instance_group_activity(instance, _id))
-    })
+  let business;
+  if (instance && instance.promotion && (business = instance.promotion.business)) {
+    if (instance.variation === 'SINGLE') {
+      let query = instanceGraphModel.related_type_id_dir_query(business, 'FOLLOW', 'group', 'in', 0, 1000);
+      instanceGraphModel.query(query, function (err, groups_ids) {
+        if (err) return callback(err, null);
+        groups_ids.forEach(_id =>
+          instance_group_activity(instance, _id))
+      })
+    }
   }
 }
 
@@ -263,7 +265,7 @@ function instance_group_activity(instance, group_id) {
   activity.create({
     instance: instance._id,
     promotion: instance.promotion._id,
-    action: "eligible",
+    action: "instance",
     actor_group: group_id
   });
 }
