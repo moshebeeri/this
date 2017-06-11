@@ -168,6 +168,43 @@ class GroupsApi
 
     }
 
+    meesage(groupid,message) {
+        return new Promise(async(resolve, reject) => {
+
+            try {
+                let token = await store.get('token');
+                let json = {
+                    message: message
+                }
+                const response = await fetch(`${server_host}/api/groups/message/${groupid}`, {
+                    method: 'POST',
+                    headers: {
+                        'Accept': 'application/json, text/plain, */*',
+                        'Content-Type': 'application/json;charset=utf-8',
+                        'Authorization': 'Bearer ' + token
+
+                    },
+                    body: JSON.stringify(json)
+
+                })
+                if (response.status == '401') {
+                    reject(response);
+                    return;
+                }
+
+                resolve(true)
+
+            }
+            catch (error) {
+
+                console.log('There has been a problem with your fetch operation');
+                reject('Failed to deliver message');
+            }
+        })
+
+
+    }
+
 }
 
 
