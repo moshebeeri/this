@@ -1,9 +1,9 @@
 'use strict';
 
-var express = require('express');
-var controller = require('./offer.controller.js');
+let express = require('express');
+let controller = require('./offer.controller.js');
 
-var router = express.Router();
+let router = express.Router();
 
 router.get('/', controller.index);
 router.get('/:id', controller.show);

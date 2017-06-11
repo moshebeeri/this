@@ -68,6 +68,9 @@ function initNeo4j() {
   db.index.createIfNone('promotion', '_id', function(err, index) {
     console.log(index);
   });
+  db.index.createIfNone('instance', '_id', function(err, index) {
+    console.log(index);
+  });
   db.index.createIfNone('shoppingChain', '_id', function(err, index) {
     console.log(index);
   });

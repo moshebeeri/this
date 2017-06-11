@@ -1,9 +1,9 @@
 'use strict';
 
-var mongoose = require('mongoose'),
+let mongoose = require('mongoose'),
     Schema = mongoose.Schema;
 
-var ActivitySchema = new Schema({
+let ActivitySchema = new Schema({
   timestamp: {type: Date, default: Date.now},
 
   promotion: {type: Schema.ObjectId, ref: 'Promotion'},

@@ -1,7 +1,7 @@
 // region Export
 
 module.exports = function(modelContainer, namespace){
-	var metadataGenerator = require('./metadataGenerator.js')(namespace || 'models.app'),
+	let metadataGenerator = require('./metadataGenerator.js')(namespace || 'models.app'),
     	dbManager         = require('./dbManager.js')(modelContainer, namespace || 'models.app');
 
 

@@ -1,9 +1,9 @@
 'use strict';
 
-var _ = require('lodash');
-var Merchant = require('./merchant.model');
-var graphTools = require('../../components/graph-tools');
-var graphModel = graphTools.createGraphModel('mall');
+let _ = require('lodash');
+let Merchant = require('./merchant.model');
+let graphTools = require('../../components/graph-tools');
+let graphModel = graphTools.createGraphModel('mall');
 
 // Get list of merchants
 exports.index = function(req, res) {
@@ -39,7 +39,7 @@ exports.update = function(req, res) {
   Merchant.findById(req.params.id, function (err, merchant) {
     if (err) { return handleError(res, err); }
     if(!merchant) { return res.send(404); }
-    var updated = _.merge(merchant, req.body);
+    let updated = _.merge(merchant, req.body);
     updated.save(function (err) {
       if (err) { return handleError(res, err); }
       return res.json(200, merchant);

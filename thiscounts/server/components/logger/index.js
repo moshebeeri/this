@@ -1,8 +1,8 @@
 'use strict';
 
-//var Logger = require('./logger');
-var winston = require('winston');
-var logger = new (winston.Logger)({
+//let Logger = require('./logger');
+let winston = require('winston');
+let logger = new (winston.Logger)({
   transports: [
     new (winston.transports.Console)()//,
     //new (winston.transports.File)({ filename: 'somefile.logger' })

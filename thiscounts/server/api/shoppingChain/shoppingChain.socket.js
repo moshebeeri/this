@@ -4,7 +4,7 @@
 
 'use strict';
 
-var ShoppingChain = require('./shoppingChain.model');
+let ShoppingChain = require('./shoppingChain.model');
 
 exports.register = function(socket) {
   ShoppingChain.schema.post('save', function (doc) {

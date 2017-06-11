@@ -1,9 +1,9 @@
 'use strict';
 
-var express = require('express');
-var controller = require('./instance.controller.js');
+let express = require('express');
+let controller = require('./instance.controller.js');
 
-var router = express.Router();
+let router = express.Router();
 let auth = require('../../auth/auth.service');
 
 router.get('/', auth.hasRole('admin'), controller.index);

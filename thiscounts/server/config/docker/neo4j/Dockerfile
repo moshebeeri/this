@@ -1,7 +1,7 @@
 FROM neo4j/neo4j:latest
 
 
-ADD *.jar /var/lib/neo4j/plugins/
+ADD *.jar /let/lib/neo4j/plugins/
 
 
 EXPOSE 7474 7473

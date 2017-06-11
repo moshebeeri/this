@@ -1,5 +1,5 @@
-var passport = require('passport');
-var FacebookStrategy = require('passport-facebook').Strategy;
+let passport = require('passport');
+let FacebookStrategy = require('passport-facebook').Strategy;
 
 exports.setup = function (User, config) {
   passport.use(new FacebookStrategy({

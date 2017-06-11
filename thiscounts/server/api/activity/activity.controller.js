@@ -1,9 +1,9 @@
 'use strict';
 
-var _ = require('lodash');
-var Activity = require('./activity.model');
+const _ = require('lodash');
+const Activity = require('./activity.model');
 
-// Get list of activitys
+// Get list of activities
 exports.index = function(req, res) {
   Activity.find(function (err, activitys) {
     if(err) { return handleError(res, err); }
@@ -34,7 +34,7 @@ exports.update = function(req, res) {
   Activity.findById(req.params.id, function (err, activity) {
     if (err) { return handleError(res, err); }
     if(!activity) { return res.send(404); }
-    var updated = _.merge(activity, req.body);
+    let updated = _.merge(activity, req.body);
     updated.save(function (err) {
       if (err) { return handleError(res, err); }
       return res.json(200, activity);

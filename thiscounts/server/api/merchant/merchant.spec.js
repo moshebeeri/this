@@ -1,8 +1,8 @@
 'use strict';
 
-var should = require('should');
-var app = require('../../app');
-var request = require('supertest');
+let should = require('should');
+let app = require('../../app');
+let request = require('supertest');
 
 describe('GET /api/merchants', function() {
 

@@ -1,11 +1,11 @@
 'use strict';
 
-var _ = require('lodash');
-var Product = require('./product.model');
-var graphTools = require('../../components/graph-tools');
-var graphModel = graphTools.createGraphModel('product');
-var utils = require('../../components/utils').createUtils();
-var activity = require('../../components/activity').createActivity();
+let _ = require('lodash');
+let Product = require('./product.model');
+let graphTools = require('../../components/graph-tools');
+let graphModel = graphTools.createGraphModel('product');
+let utils = require('../../components/utils').createUtils();
+let activity = require('../../components/activity').createActivity();
 
 // Get list of products
 exports.index = function (req, res) {
@@ -108,7 +108,7 @@ exports.update = function (req, res) {
     if (!product) {
       return res.send(404);
     }
-    var updated = _.merge(product, req.body);
+    let updated = _.merge(product, req.body);
     updated.save(function (err) {
       if (err) {
         return handleError(res, err);

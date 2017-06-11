@@ -4,7 +4,7 @@
 
 'use strict';
 
-var Image = require('./image.model');
+let Image = require('./image.model');
 
 exports.register = function(socket) {
   Image.schema.post('save', function (doc) {

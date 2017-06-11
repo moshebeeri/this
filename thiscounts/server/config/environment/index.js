@@ -1,7 +1,7 @@
 'use strict';
 
-var path = require('path');
-var _ = require('lodash');
+let path = require('path');
+let _ = require('lodash');
 
 function requiredProcessEnv(name) {
   if(!process.env[name]) {
@@ -12,7 +12,7 @@ function requiredProcessEnv(name) {
 
 // All configurations will extend these options
 // ============================================
-var all = {
+let all = {
   env: process.env.NODE_ENV,
 
   // Root path of server

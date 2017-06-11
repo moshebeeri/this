@@ -1,10 +1,10 @@
 'use strict';
 
-var _ = require('lodash');
-var config = require('../../config/environment');
+let _ = require('lodash');
+let config = require('../../config/environment');
 
-var https = require('https');
-var logger = require('../logger').createLogger();
+let https = require('https');
+let logger = require('../logger').createLogger();
 
 function Location() {
 }
@@ -14,7 +14,7 @@ function defined(obj){
 }
 
 function format_address(addressed) {
-  var str = addressed.address;
+  let str = addressed.address;
   if(defined(addressed.address2))
     str += '+' + addressed.address2;
   if(defined(addressed.city))
@@ -33,7 +33,7 @@ Location.prototype.address_location = function address_location(addressed, callb
   else if(defined(addressed.location) && defined(addressed.location.lat) && defined(addressed.location.lng))
     return callback(null, {lat: addressed.location.lat, lng: addressed.location.lng});
 
-  var address = format_address(addressed);
+  let address = format_address(addressed);
   geocode_address(address, function (err, data) {
     if (err) {
       return callback(err, data);
@@ -53,7 +53,7 @@ Location.prototype.address_location = function address_location(addressed, callb
 
     //logger.info("lat:" + data.results[0].geometry.location.lat);
     //logger.info("lng:" + data.results[0].geometry.location.lng);
-    var location = data.results[0].geometry.location;
+    let location = data.results[0].geometry.location;
     return callback(null, {lat: location.lat, lng: location.lng});
   });
 };
@@ -76,22 +76,22 @@ Location.prototype.address = function address(address, callback) {
  *
  */
 function geocode_address(address, callback) {
-  var path = '/maps/api/geocode/json?address=' + encodeURIComponent(address) + '&key=' + config.google_maps.key;
-  var options = {
+  let path = '/maps/api/geocode/json?address=' + encodeURIComponent(address) + '&key=' + config.google_maps.key;
+  let options = {
     hostname: 'maps.googleapis.com',
     port: 443,
     path: path,
     method: 'GET'
   };
-  var req = https.request(options, function (res) {
+  let req = https.request(options, function (res) {
     logger.info("statusCode: ", res.statusCode);
     logger.info("headers: ", res.headers);
-    var body = '';
+    let body = '';
     res.on('data', function (d) {
       body += d;
     });
     res.on('end', function () {
-      var parsed;
+      let parsed;
       try {
         parsed = JSON.parse(body);
       } catch (e) {

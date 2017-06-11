@@ -1,6 +1,6 @@
 'use strict';
 
-var Activity = require('./activity');
+let Activity = require('./activity');
 
 exports.createActivity = function createActivity(params) {
   return new Activity(params);

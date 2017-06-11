@@ -1,9 +1,9 @@
 'use strict';
 
-var mongoose = require('mongoose'),
+let mongoose = require('mongoose'),
     Schema = mongoose.Schema;
 
-var ExploreSchema = new Schema({
+let ExploreSchema = new Schema({
   name: String,
   info: String,
   active: Boolean,

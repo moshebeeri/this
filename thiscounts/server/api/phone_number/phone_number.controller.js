@@ -1,7 +1,7 @@
 'use strict';
 
-var _ = require('lodash');
-var PhoneNumber = require('./phone_number.model');
+let _ = require('lodash');
+let PhoneNumber = require('./phone_number.model');
 
 // Get list of phone_numbers
 exports.index = function(req, res) {
@@ -34,7 +34,7 @@ exports.update = function(req, res) {
   PhoneNumber.findById(req.params.id, function (err, phone_number) {
     if (err) { return handleError(res, err); }
     if(!phone_number) { return res.send(404); }
-    var updated = _.merge(phone_number, req.body);
+    let updated = _.merge(phone_number, req.body);
     updated.save(function (err) {
       if (err) { return handleError(res, err); }
       return res.json(200, phone_number);

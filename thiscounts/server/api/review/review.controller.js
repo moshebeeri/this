@@ -1,7 +1,7 @@
 'use strict';
 
-var _ = require('lodash');
-var Review = require('./review.model');
+let _ = require('lodash');
+let Review = require('./review.model');
 
 // Get list of reviews
 exports.index = function(req, res) {
@@ -37,8 +37,8 @@ exports.element_reviews = function(req, res) {
 
 // Creates a new review in the DB.
 exports.create = function(req, res) {
-  var userId = req.user._id;
-  var review = req.body;
+  let userId = req.user._id;
+  let review = req.body;
   review.creator = userId;
   utils.parallel_id(review.element_id, review, function(err, review){
     if(err) { return handleError(res, err); }
@@ -55,7 +55,7 @@ exports.update = function(req, res) {
   Review.findById(req.params.id, function (err, review) {
     if (err) { return handleError(res, err); }
     if(!review) { return res.send(404); }
-    var updated = _.merge(review, req.body);
+    let updated = _.merge(review, req.body);
     updated.save(function (err) {
       if (err) { return handleError(res, err); }
       return res.json(200, review);

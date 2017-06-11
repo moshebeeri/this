@@ -4,7 +4,7 @@
 
 'use strict';
 
-var Phonebook = require('./phonebook.model');
+let Phonebook = require('./phonebook.model');
 
 exports.register = function(socket) {
   Phonebook.schema.post('save', function (doc) {

@@ -1,7 +1,7 @@
 'use strict';
 
-var _ = require('lodash');
-var Explore = require('./explore.model');
+let _ = require('lodash');
+let Explore = require('./explore.model');
 
 // Get list of explores
 exports.index = function(req, res) {
@@ -34,7 +34,7 @@ exports.update = function(req, res) {
   Explore.findById(req.params.id, function (err, explore) {
     if (err) { return handleError(res, err); }
     if(!explore) { return res.status(404).send('Not Found'); }
-    var updated = _.merge(explore, req.body);
+    let updated = _.merge(explore, req.body);
     updated.save(function (err) {
       if (err) { return handleError(res, err); }
       return res.status(200).json(explore);

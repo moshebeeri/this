@@ -13,11 +13,11 @@ FROM groupys/tools:latest
 #
 #RUN curl --fail --silent --show-error --location --output neo4j.tar.gz $NEO4J_URI \
 #    && echo "$NEO4J_DOWNLOAD_SHA256 neo4j.tar.gz" | sha256sum --check --quiet - \
-#    && tar --extract --file neo4j.tar.gz --directory /var/lib \
-#    && mv /var/lib/neo4j-* /var/lib/neo4j \
+#    && tar --extract --file neo4j.tar.gz --directory /let/lib \
+#    && mv /let/lib/neo4j-* /let/lib/neo4j \
 #    && rm neo4j.tar.gz
 #
-#WORKDIR /var/lib/neo4j
+#WORKDIR /let/lib/neo4j
 #
 #RUN mv data /data \
 #    && ln --symbolic /data

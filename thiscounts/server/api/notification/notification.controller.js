@@ -1,7 +1,7 @@
 'use strict';
 
-var _ = require('lodash');
-var Notification = require('./notification.model');
+let _ = require('lodash');
+let Notification = require('./notification.model');
 
 // Get list of notifications
 exports.index = function(req, res) {
@@ -34,7 +34,7 @@ exports.update = function(req, res) {
   Notification.findById(req.params.id, function (err, notification) {
     if (err) { return handleError(res, err); }
     if(!notification) { return res.send(404); }
-    var updated = _.merge(notification, req.body);
+    let updated = _.merge(notification, req.body);
     updated.save(function (err) {
       if (err) { return handleError(res, err); }
       return res.json(200, notification);

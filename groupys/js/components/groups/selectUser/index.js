@@ -9,8 +9,6 @@ import {Container, Content, Text, InputGroup, Input, Button,Body ,Icon,Left,
 
 import {actions} from 'react-native-navigation-redux-helpers';
 
-import navigateTo from '../../../actions/sideBarNav';
-import store from 'react-native-simple-store';
 
 
 export default class SelectUsersComponent extends Component {

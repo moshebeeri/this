@@ -4,7 +4,7 @@
 
 'use strict';
 
-var Activity = require('./activity.model');
+let Activity = require('./activity.model');
 
 exports.register = function(socket) {
   Activity.schema.post('save', function (doc) {

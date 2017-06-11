@@ -1,9 +1,9 @@
 'use strict';
 
-var mongoose = require('mongoose'),
+let mongoose = require('mongoose'),
     Schema = mongoose.Schema;
 
-var CardTypeSchema = new Schema({
+let CardTypeSchema = new Schema({
   name: String,
   gid: { type: Number, index: true},
   info: String,

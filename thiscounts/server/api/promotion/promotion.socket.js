@@ -4,7 +4,7 @@
 
 'use strict';
 
-var Promotion = require('./promotion.model');
+let Promotion = require('./promotion.model');
 
 exports.register = function(socket) {
   Promotion.schema.post('save', function (doc) {

@@ -1,9 +1,9 @@
 'use strict';
 
-var mongoose = require('mongoose'),
+let mongoose = require('mongoose'),
     Schema = mongoose.Schema;
 
-var PhonebookSchema = new Schema({
+let PhonebookSchema = new Schema({
   phonebook : [],
   updated: { type : Date, default: Date.now }
 });

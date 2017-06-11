@@ -5,10 +5,10 @@
 
 'use strict';
 
-var Thing = require('../api/thing/thing.model');
-var User = require('../api/user/user.model');
-var UserDemo = require('../api/user/user.controller');
-var PhoneNumber = require('../api/phone_number/phone_number.model');
+let Thing = require('../api/thing/thing.model');
+let User = require('../api/user/user.model');
+let UserDemo = require('../api/user/user.controller');
+let PhoneNumber = require('../api/phone_number/phone_number.model');
 
 Thing.find({}).remove(function() {
   Thing.create({

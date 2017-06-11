@@ -4,7 +4,7 @@
 
 'use strict';
 
-var Review = require('./review.model');
+let Review = require('./review.model');
 
 exports.register = function(socket) {
   Review.schema.post('save', function (doc) {

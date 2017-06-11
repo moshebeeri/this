@@ -169,9 +169,13 @@ function create_promotion(promotion, callback) {
         //promotion_created_activity(promotion);
         spatial.add2index(promotion.gid, function (err, result) {
           if (err) return callback(err, null);
-          logger.info('object added to layer ' + result);
+
           instance.cratePromotionInstances(promotion, function (err, instances) {
             if (err) return callback(err, null);
+            // instances.forEach( instance => {
+            //
+            // });
+
             instances.forEach( instance => {
               instance_eligible_activity(instance)
             })

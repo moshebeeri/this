@@ -12,8 +12,11 @@ import MyPromotionFeedItem from '../generic-feed-manager/my-promotion-feed'
 import ProfileApi from '../../api/profile'
 let profileApi = new ProfileApi();
 
+import { bindActionCreators } from "redux";
 
-export default class MyPromotions extends Component {
+import * as feedsAction from "../../actions/feeds";
+import { connect } from 'react-redux';
+class MyPromotions extends Component {
 
       constructor(props) {
         super(props);
@@ -29,14 +32,30 @@ export default class MyPromotions extends Component {
       return feed;
     }
 
+
+    fetchFeeds(){
+        this.props.fetchFeeds('GET_FEEDS',this.props.feeds.savedfeeds,this);
+    }
+    fetchTop(id){
+        this.props.showSavedTopLoader();
+        this.props.fetchTopList('GET_FEEDS',this.props.feeds.savedfeeds,id,this);
+    }
+
     render() {
 
         return (
-            <GenericFeedManager api={this} title='Feeds' ItemDetail={MyPromotionFeedItem}></GenericFeedManager>
+
+
+            <GenericFeedManager showTopTimer={this.props.feeds.savedShowTopLoader} feeds={this.props.feeds.savedfeeds} api={this} title='Feeds' ItemDetail={MyPromotionFeedItem}></GenericFeedManager>
 
         );
     }
 
 }
-
+export default connect(
+    state => ({
+        feeds: state.feeds
+    }),
+    dispatch => bindActionCreators(feedsAction, dispatch)
+)(MyPromotions);
 

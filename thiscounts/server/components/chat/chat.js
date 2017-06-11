@@ -4,9 +4,9 @@
 
 
 //setup feed chat socket.io by; https://gist.github.com/crtr0/2896891
-var app = require('express')();
-var server = require('http').createServer(app);
-var io = require('socket.io')(server);
+let app = require('express')();
+let server = require('http').createServer(app);
+let io = require('socket.io')(server);
 
 io.sockets.on('connection', function(socket) {
   // once a client has connected, we expect to get a ping from them saying what room they want to join

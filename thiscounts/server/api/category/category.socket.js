@@ -4,7 +4,7 @@
 
 'use strict';
 
-var Category = require('./category.model');
+let Category = require('./category.model');
 
 exports.register = function(socket) {
   Category.schema.post('save', function (doc) {

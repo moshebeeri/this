@@ -1,10 +1,10 @@
 'use strict';
 
-var express = require('express');
-var controller = require('./phonebook.controller');
-var auth = require('../../auth/auth.service');
+let express = require('express');
+let controller = require('./phonebook.controller');
+let auth = require('../../auth/auth.service');
 
-var router = express.Router();
+let router = express.Router();
 
 //router.get('/', auth.isAuthenticated(), controller.index);
 router.get('/:id', controller.show);

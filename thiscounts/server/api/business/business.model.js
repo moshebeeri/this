@@ -51,7 +51,7 @@ let BusinessSchema = new Schema({social_state: {},
 module.exports = mongoose.model('Business', BusinessSchema);
 
 //module.exports = function() {
-//  var schema = new Schema({
+//  let schema = new Schema({
 //    ...
 //  });
 //
