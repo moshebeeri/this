@@ -68,12 +68,12 @@ exports.fetch_feed = function(userId, query_builder, Model, res) {
         }, function(err, actor_user){
           if(err) return callback(err);
           graphModel.query_ids_relation(userId, 'FOLLOW', actor_user._id, 'nick', function(err, nick){
-            if(err || !utils.defined(nick))
+            if(err || !utils.defined(nick)) {
               actor_user.name = actor_user.phone;
+            }
             actor_user.name = nick;
             callback(null,actor_user);
-          })
-
+          });
         });
       }
 
@@ -103,9 +103,9 @@ exports.fetch_feed = function(userId, query_builder, Model, res) {
         populate_actor_chain
 
       ], function (err, feeds) {
-        if (err) return res.status(500).json(err);
+        if (err) {return res.status(500).json(err);}
         update_states(feeds, function(err, feeds){
-          if (err) return res.status(500).json(err);
+          if (err) {return res.status(500).json(err);}
           return res.status(200).json(feeds);
         });
       });
@@ -137,10 +137,16 @@ exports.fetch_social_state = function(query_builder, userId, type, res) {
   }
   query_builder
   .exec(function (err, types) {
-    if (err) return res.status(500).json(err);
+    if (err) {
+      return res.status(500).json(err);
+    }
     async.each(types, update_state_by_type, function(err){
-      if(err) callback(err, null);
-      else callback(null, types)
+      if(err) {
+        callback(err, null);
+      }
+      else {
+        callback(null, types);
+      }
     });
   })
 };
@@ -193,10 +199,12 @@ function social_state(user_id, item_id, callback) {
       }
     },
     function (err, state) {
-      if (err)
+      if (err) {
         callback(err, null);
-      else
+      }
+      else {
         callback(null, state);
+      }
     });
 }
 
