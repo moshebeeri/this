@@ -93,11 +93,30 @@ Spatial.prototype.add2index = function add(gid, callback) {
  * @param type
  * @param callback
  *
+ * https://stackoverflow.com/questions/35125336/how-to-search-all-nodes-within-particular-radius-using-latitude-and-longitude-in
+ * // Find all
+ * WITH 46.9163 AS lat, -114.0905 AS lon
+ * MATCH (l:Location)
+ * WHERE 2 * 6371 * asin(sqrt(haversin(radians(lat - l.lat))+ cos(radians(lat))* cos(radians(l.lat))* haversin(radians(lon - l.lon)))) < 50.0
+ * MATCH (l)<-[:DEVELOPED_AT|:DEPLOYED_AT]-(i:Idea)
+ * RETURN i
+ *
+ *
+ * WITH {longitude:34.7843949,latitude:32.0907389} AS coordinate
  *  CALL spatial.withinDistance('world', coordinate, 20) YIELD node AS u
  *  MATCH (u:instance)
  *  with u._id as _id, labels(u) as ls
  *  where _id IS NOT NULL
  *  RETURN  distinct _id
+ *
+ * CALL spatial.withinDistance('world', coordinate, 20) YIELD node AS u
+ * MATCH (u:instance)
+ * with u._id as _id, labels(u) as ls, 34.7844949 as lon,32.0908389 as lat, u.lat as u_lat, u.lon as u_lon
+ * where _id IS NOT NULL
+ * RETURN ls, _id, 2 * 6371 * asin(sqrt(haversin(radians(lat - u_lat))+ cos(radians(lat))* cos(radians(u_lat))* haversin(radians(lon - u_lon)))) as d
+ *
+ *
+ *
  *
  */
 Spatial.prototype.withinDistanceByType = function add(coordinate, distance, type, callback) {
