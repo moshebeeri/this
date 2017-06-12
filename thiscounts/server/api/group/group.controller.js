@@ -288,11 +288,11 @@ exports.add_user = function (req, res) {
   Group.findById(req.params.to_group, function (err, group) {
     if (err) {return handleError(res, err);}
     if (!group) {return res.status(404).send('group not found');}
-
-    if (_.find(group.admins, req.user._id) && non_commercial_group(group)) {
+    //TODO: remove remark, temporary allowed for dev
+    //if (_.find(group.admins, req.user._id) && non_commercial_group(group)) {
       user_follow_group(req.params.user, group, true, res);
       return res.status(201).json(group);
-    }
+    //}
     return res.status(404).send('Not Authorized');
   })
 };
