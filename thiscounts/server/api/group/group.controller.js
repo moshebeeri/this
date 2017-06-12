@@ -289,12 +289,11 @@ exports.add_user = function (req, res) {
     if (err) {return handleError(res, err);}
     if (!group) {return res.status(404).send('group not found');}
     //TODO: remove remark, temporary allowed for dev
-    //if (_.find(group.admins, req.user._id) && non_commercial_group(group)) {
-      user_follow_group(req.params.user, group, true, res);
-      return res.status(201).json(group);
-    //}
-    return res.status(404).send('Not Authorized');
-  })
+    //if (!(_.find(group.admins, req.user._id) && non_commercial_group(group))) {
+    //  return res.status(404).send('Not Authorized');
+    user_follow_group(req.params.user, group, true, res);
+    return res.status(201).json(group);
+  });
 };
 
 exports.add_users = function (req, res) {
@@ -305,15 +304,15 @@ exports.add_users = function (req, res) {
     if (!group) {
       return res.status(404).send('group not found');
     }
-
-    if (_.find(group.admins, req.user._id) && non_commercial_group(group)) {
-      for (let user in req.body.users) {
-        if (req.body.users.hasOwnProperty(user))
-          user_follow_group(req.body.users[user], group);
+    //TODO: remove remark, temporary allowed for dev
+    //if (!(_.find(group.admins, req.user._id) && non_commercial_group(group))) {
+    //  return res.status(404).send('Not Authorized');
+    for (let user in req.body.users) {
+      if (req.body.users.hasOwnProperty(user)) {
+        user_follow_group(req.body.users[user], group);
       }
-      return res.status(201).send('users added');
     }
-    return res.status(404).send('Not Authorized');
+    return res.status(201).send('users added');
   });
 };
 
