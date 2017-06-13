@@ -120,7 +120,7 @@ Spatial.prototype.add2index = function add(gid, callback) {
  *
  */
 Spatial.prototype.withinDistance = function add(coordinate, distance, type, pattern, skip, limit, callback) {
-  let query = `WITH ${JSON.stringify(coordinate)} AS coordinate
+  let query = `WITH {longitude:${coordinate.longitude},latitude:${coordinate.latitude}} AS coordinate
     CALL spatial.withinDistance('world', coordinate, ${distance}) YIELD node AS u
     MATCH (u:${type})${pattern}
     with u._id as _id, ${coordinate.longitude} as lon, ${coordinate.latitude} as lat, u.lat as u_lat, u.lon as u_lon

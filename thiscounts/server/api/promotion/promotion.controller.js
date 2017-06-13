@@ -144,9 +144,10 @@ function applyToGroups(promotion, instances) {
     let business;
     if (instance && promotion && (business = promotion.entity.business)) {
       if (instance.variation === 'SINGLE') {
-        let query = instanceGraphModel.related_type_id_dir_query(business, 'FOLLOW', 'group', 'in', 0, 1000);
+        let query = instanceGraphModel.related_type_id_dir_query(business._id, 'FOLLOW', 'group', 'in', 0, instance.quantity);
+        console.log(query);
         instanceGraphModel.query(query, function (err, groups_ids) {
-          if (err) return callback(err, null);
+          if (err) return console.error(err); //return callback(err);
           groups_ids.forEach(_id =>
             instance_group_activity(instance, _id))
         })
@@ -154,16 +155,19 @@ function applyToGroups(promotion, instances) {
     }
   });
 }
+// lat: promotion.location.lat,
+//   lon: promotion.location.lng,
 
 //see https://neo4j.com/blog/real-time-recommendation-engine-data-science/
 function applyToUsers(promotion, instances, callback) {
   instances.forEach(instance => {
     instance_eligible_activity(instance);
+    //coordinate, distance, type, pattern, skip, limit, callback
     spatial.withinDistance({
-      longitude: instance.location.lon,
+      longitude: instance.location.lng,
       latitude: instance.location.lat
-    }, promotion.quantity, type, '', 0, promotion.query, function (err, results) {
-      if (err) return callback(err);
+    }, 30, 'instance', '', 0, instance.quantity, function (err, results) {
+      if (err) return console.error(err); //return callback(err);
       results.forEach(result => console.log(JSON.stringify(result)))
     });
   })
