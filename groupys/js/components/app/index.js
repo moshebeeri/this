@@ -50,16 +50,25 @@ codePush.sync({updateDialog: updateDialogOption})
 
 import LoginUtils from '../../utils/login_utils'
 let lu = new LoginUtils();
-export default class ApplicationManager extends Component {
+import { bindActionCreators } from "redux";
+
+import * as businessAction from "../../actions/business";
+
+ class ApplicationManager extends Component {
     static navigationOptions = {
         header:null
     };
+
+
+     getInitialState(){
+
+     }
 
      constructor(props) {
         super(props)
 
         let initialPage = 0;
-
+         this.props.fetchBusiness();
 
         this.state = {
 
@@ -77,6 +86,7 @@ export default class ApplicationManager extends Component {
 
         }
          userApi.getUser();
+
 
     }
     replaceRoute(route) {
@@ -255,5 +265,12 @@ export default class ApplicationManager extends Component {
     }
 }
 
+export default connect(
+    state => ({
+        businesses: state.businesses
+    }),
+
+    dispatch => bindActionCreators(businessAction, dispatch)
+)(ApplicationManager);
 
 

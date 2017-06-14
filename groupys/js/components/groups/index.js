@@ -5,17 +5,15 @@ import {actions} from 'react-native-navigation-redux-helpers';
 import {Container, Content, Text,Title, InputGroup, Input, Button, Icon, View,Header, Body, Right, ListItem, Thumbnail,Left} from 'native-base';
 
 import GenericListGroupView from '../generic-list-manager/generic-list-group-view/index'
-import GenericListView from '../generic-list-manager/generic-list-view/index'
 
 import GenericListManager from '../generic-list-manager/index'
 
-const {
-    replaceAt,
-} = actions;
-import GroupApi from "../../api/groups"
-let groupApi = new GroupApi();
 
-export default class Group extends Component {
+
+import * as groupsAction from "../../actions/groups";
+import { bindActionCreators } from "redux";
+
+ class Group extends Component {
 
 
     constructor(props) {
@@ -24,14 +22,13 @@ export default class Group extends Component {
 
     }
 
-    async getAll(){
-        let response =  await  groupApi.getAll();
-        return response;
-    }
+
     fetchApi(pageOffset,pageSize ) {
 
+        let fetchGroups = this.props.api.props.fetchGroups.bind(this);
+
         return new Promise(async function(resolve, reject) {
-            let response =  await  groupApi.getAll();
+            let response =  await  fetchGroups();
             resolve(response);
         });
 
@@ -42,11 +39,20 @@ export default class Group extends Component {
 
 
         return (
-           <GenericListManager  navigation = {this.props.navigation} title="Groups" component="home" addComponent="AddGroups" api={this}
+           <GenericListManager rows={this.props.groups.groups} navigation = {this.props.navigation} title="Groups" component="home" addComponent="AddGroups" api={this}
                                ItemDetail = {GenericListGroupView}/>
         );
     }
 }
+
+
+export default connect(
+    state => ({
+        groups: state.groups
+    }),
+
+    dispatch => bindActionCreators(groupsAction, dispatch)
+)(Group);
 
 
 

@@ -11,7 +11,7 @@ import {DeviceEventEmitter} from 'react-native'
 
 
 
-export default class GenericListManager extends Component {
+class GenericListManager extends Component {
 
 
     constructor(props) {
@@ -37,7 +37,6 @@ export default class GenericListManager extends Component {
         let fetchApi = this.props.api.fetchApi.bind(this);
         let setState = this.setState.bind(this);
         let component = this.props.title;
-        let componentListener = this.props.addComponent;
         let dataset = new Dataset({
             pageSize: 8,
             observe: (rowsView) => {
@@ -51,12 +50,7 @@ export default class GenericListManager extends Component {
                 promise.then(function(response){
                     store.save(component,response);
 
-                    DeviceEventEmitter.addListener(componentListener, (e)=>{
-                        let rows = response;
-                        rows.push(e);
-                        setState({
-                            rowsView: rows,
-                        })});
+
                 });
                 return promise;
 
@@ -115,9 +109,14 @@ export default class GenericListManager extends Component {
     render() {
         let index = 0
         let rows = undefined;
-        if(this.state.rowsView.length > 0) {
+        let dataRows = this.props.rows;
+        if(!dataRows){
+            dataRows = this.state.rowsView;
 
-             rows = this.state.rowsView.map((r, i) => {
+        }
+        if(dataRows.length > 0) {
+
+             rows = dataRows.map((r, i) => {
                  if (!r.isSettled && r.isSettled != undefined) {
                      return <Spinner key={Math.random()}/>;
                  }
@@ -139,5 +138,10 @@ export default class GenericListManager extends Component {
         );
     }
 }
+
+export default connect(
+
+
+)(GenericListManager);
 
 

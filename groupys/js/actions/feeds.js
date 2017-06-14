@@ -86,7 +86,6 @@ async function fetchTopList(action,feeds,id,api,dispatch,groupid){
                         groupid:groupid
                     });
                 }
-
             }
 
         }

@@ -3,20 +3,16 @@ import {Image, Platform} from 'react-native';
 import {connect} from 'react-redux';
 import {actions} from 'react-native-navigation-redux-helpers';
 import {Container, Content, Text, InputGroup, Input, Button, Icon, View,Header} from 'native-base';
-import GeneralComponentHeader from '../header/index';
 import GenericListManager from '../generic-list-manager/index';
 
 import GenericListView from '../generic-list-manager/generic-list-view/index'
 import PromotionApi from "../../api/promotion"
 let promotionApi = new PromotionApi();
+import * as promotionsAction from "../../actions/promotions";
 
+import { bindActionCreators } from "redux";
 
-const {
-    replaceAt,
-} = actions;
-
-
-export default class Promotions extends Component {
+ class Promotions extends Component {
 
     //
     // on: {
@@ -55,14 +51,13 @@ export default class Promotions extends Component {
     }
 
 
-    async getAll(){
-        let response =  await  promotionApi.getAll();
-        return response;
-    }
+
+
     fetchApi(pageOffset,pageSize ) {
+        let fetchPromotions = this.props.api.props.fetchPromotions.bind(this);
 
         return new Promise(async function(resolve, reject) {
-            let response =  await  promotionApi.getAll();
+            let response =  await  fetchPromotions();
             resolve(response);
         });
 
@@ -75,10 +70,20 @@ export default class Promotions extends Component {
 
     render() {
         return (
-            <GenericListManager title="Promotion" component="home" addComponent="addPromotions" api={this}
+            <GenericListManager rows={this.props.promotions.promotions}title="Promotion" component="home" addComponent="addPromotions" api={this}
                                 ItemDetail={GenericListView}/>
 
         );
     }
 }
+
+
+export default connect(
+    state => ({
+        promotions: state.promotions
+    }),
+
+    dispatch => bindActionCreators(promotionsAction, dispatch)
+)(Promotions);
+
 

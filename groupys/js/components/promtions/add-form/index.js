@@ -13,8 +13,9 @@ import {actions} from 'react-native-navigation-redux-helpers';
 import {Container, Content, Text, InputGroup, Picker,Input, Button,Body ,Icon,Left,
     View,Header,Item,Footer,ListItem,Right,Thumbnail} from 'native-base';
 
-
+import { bindActionCreators } from "redux";
 import SelectProductsComponent from './selectProducts';
+import * as promotionsAction from "../../../actions/promotions";
 
 var createEntity = require("../../../utils/createEntity");
 import ImagePicker from 'react-native-image-crop-picker';
@@ -118,7 +119,7 @@ const types = [
 
 
 import {DeviceEventEmitter} from 'react-native'
-export default class AddPromotion extends Component {
+ class AddPromotion extends Component {
 
 
 
@@ -126,6 +127,7 @@ export default class AddPromotion extends Component {
 
     constructor(props) {
         super(props);
+
 
         this.state = {
             token:'',
@@ -157,13 +159,8 @@ export default class AddPromotion extends Component {
 
     async componentWillMount(){
         try {
-            let response = await businessApi.getAll();
-            if (response) {
-                await this.initBusiness(response);
-            }
-            if(this.state.selectedBusiness){
-                let productsReponse = await productApi.findByBusinessId(this.state.selectedBusiness);
-                await this.initProducts(productsReponse);
+            if(this.props.businesses.businesses.length > 0) {
+                this.selectBusiness(this.props.businesses.businesses[0]._id);
             }
 
         }catch (error){
@@ -180,13 +177,7 @@ export default class AddPromotion extends Component {
         });
     }
 
-    async initBusiness(responseData){
 
-         this.setState({
-            businesses: responseData,
-             business: responseData[0]._id
-        });
-    }
     focusNextField(nextField) {
 
         this.refs[nextField]._root.focus()
@@ -245,14 +236,14 @@ export default class AddPromotion extends Component {
     }
 
     addToList(responseData){
-        DeviceEventEmitter.emit('addPromotions',  responseData);
+       this.props.fetchPromotions();
     }
 
 
 
     async selectBusiness(value){
         let businessId = value;
-        let selectedBusiness = this.state.businesses.find(function(val, i) {
+        let selectedBusiness = this.props.businesses.businesses.find(function(val, i) {
             return val._id === businessId;
         });
 
@@ -397,32 +388,27 @@ export default class AddPromotion extends Component {
 
             }
 
-            let businessesPikkerTag = undefined;
 
-            if (this.state.businesses.length > 0) {
-                businessesPikkerTag = <Picker
+            let businessesPikkerTag = <Picker
 
-                    iosHeader="Business"
-                    mode="dropdown"
-                    selectedValue={this.state.business}
-                    onValueChange={this.selectBusiness.bind(this)}
-                    style={{ flex:1}}
-                >
+                iosHeader="Business"
+                mode="dropdown"
+                style={{ flex:1}}
+                selectedValue={this.state.business}
+                onValueChange={this.selectBusiness.bind(this)}>
 
-
-                    {
+                {
 
 
-                        this.state.businesses.map((s, i) => {
-                            return <Item
-                                key={i}
-                                value={s._id}
-                                label={s.name}/>
-                        }) }
-                </Picker>
 
-            }
 
+                    this.props.businesses.businesses.map((s, i) => {
+                        return <Item
+                            key={i}
+                            value={s._id}
+                            label={s.name}/>
+                    }) }
+            </Picker>
 
             let typePikkerTag = <Picker
                 iosHeader="Discount"
@@ -557,29 +543,29 @@ export default class AddPromotion extends Component {
         }else{
 
 
-            let businessesPikkerTag = undefined;
 
-            if (this.state.businesses.length > 0) {
-                businessesPikkerTag = <Picker
+            let businessesPikkerTag = <Picker
 
-                    iosHeader="Business"
-                    mode="dropdown"
-                    style={{ flex:1}}
-                    selectedValue={this.state.business}
-                    onValueChange={this.selectBusiness.bind(this)}>
+                iosHeader="Business"
+                mode="dropdown"
+                style={{ flex:1}}
+                selectedValue={this.state.business}
+                onValueChange={this.selectBusiness.bind(this)}>
 
-                    {
+                {
 
 
-                        this.state.businesses.map((s, i) => {
-                            return <Item
-                                key={i}
-                                value={s._id}
-                                label={s.name}/>
-                        }) }
-                </Picker>
 
-            }
+
+                    this.props.businesses.businesses.map((s, i) => {
+                        return <Item
+                            key={i}
+                            value={s._id}
+                            label={s.name}/>
+                    }) }
+            </Picker>
+
+
 
 
             let image;
@@ -661,4 +647,14 @@ export default class AddPromotion extends Component {
             );
         }
     }
+
+
 }
+export default connect(
+    state => ({
+        promotions: state.promotions,
+        businesses: state.businesses
+    }),
+
+    dispatch => bindActionCreators(promotionsAction, dispatch)
+)(AddPromotion);

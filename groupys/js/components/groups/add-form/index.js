@@ -26,8 +26,6 @@ let userApi = new UserApi();
 
 import GroupApi from "../../../api/groups"
 let groupApi = new GroupApi();
-import BusinessApi from "../../../api/business"
-let businessApi = new BusinessApi();
 
 const groupPolicy = [
     {
@@ -52,8 +50,11 @@ const groupType = [
 
 ]
 
-import {DeviceEventEmitter} from 'react-native'
-export default class AddGroup extends Component {
+
+import * as groupsAction from "../../../actions/groups";
+import { bindActionCreators } from "redux";
+
+class AddGroup extends Component {
 
     constructor(props) {
         super(props);
@@ -97,10 +98,7 @@ export default class AddGroup extends Component {
           this.setState({
               users:users
           })
-            let response = await businessApi.getAll();
-            if (response) {
-                this.initBusiness(response);
-            }
+
         }catch (error){
             console.log(error);
         }
@@ -108,13 +106,8 @@ export default class AddGroup extends Component {
     }
 
 
-    initBusiness(responseData){
 
-        this.setState({
-            services: responseData,
-            business: responseData[0]._id
-        });
-    }
+
 
     replaceRoute(route) {
         this.props.navigation.goBack();
@@ -172,7 +165,7 @@ export default class AddGroup extends Component {
      }
 
      addToList(responseData){
-         DeviceEventEmitter.emit('AddGroups',  responseData);
+         this.props.fetchGroups();
      }
 
 
@@ -309,7 +302,7 @@ export default class AddGroup extends Component {
                 {
 
 
-                    this.state.services.map((s, i) => {
+                    this.props.businesses.businesses.map((s, i) => {
                         return <Item
                             key={i}
                             value={s._id}
@@ -366,4 +359,17 @@ export default class AddGroup extends Component {
             </Container>
         );
     }
+
+
 }
+
+
+
+export default connect(
+    state => ({
+        businesses: state.businesses
+    }),
+    dispatch => bindActionCreators(groupsAction, dispatch)
+)(AddGroup);
+
+
