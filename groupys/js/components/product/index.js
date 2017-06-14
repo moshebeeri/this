@@ -9,10 +9,11 @@ import GenericListView from '../generic-list-manager/generic-list-view/index'
 import GenericListManager from '../generic-list-manager/index'
 
 
-import ProductApi from "../../api/product"
-let productApi = new ProductApi();
 
-export default class Product extends Component {
+import * as productsAction from "../../actions/product";
+
+import { bindActionCreators } from "redux";
+class Product extends Component {
 
 
     constructor(props) {
@@ -21,14 +22,12 @@ export default class Product extends Component {
 
     }
 
-    async getAll(){
-        let response =  await  productApi.getAll();
-        return response;
-    }
+
     fetchApi(pageOffset,pageSize ) {
+        let fetchProducts = this.props.api.props.fetchProducts.bind(this);
 
         return new Promise(async function(resolve, reject) {
-            response =  await  productApi.getAll();
+            let response =  await  fetchProducts();
             resolve(response);
         });
 
@@ -39,8 +38,16 @@ export default class Product extends Component {
 
 
         return (
-           <GenericListManager title="Products" component="home" addComponent="AddProduct" api={this}
+           <GenericListManager rows={this.props.products.products} title="Products" component="home" addComponent="AddProduct" api={this}
                                ItemDetail = {GenericListView}/>
         );
     }
 }
+
+export default connect(
+    state => ({
+        products: state.products
+    }),
+
+    dispatch => bindActionCreators(productsAction, dispatch)
+)(Product);

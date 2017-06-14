@@ -6,13 +6,15 @@ import feeds from "./feedReducer";
 import businesses from "./businessReducer";
 import groups from "./groupReducer";
 import promotions from './promotionReducer';
+import products from './productReducer';
 export default function getRootReducer() {
 
     return combineReducers({
         feeds: feeds,
         businesses: businesses,
         groups:groups,
-        promotions: promotions
+        promotions: promotions,
+        products:products
 
     });
 }
