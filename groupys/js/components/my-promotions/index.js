@@ -34,11 +34,11 @@ class MyPromotions extends Component {
 
 
     fetchFeeds(){
-        this.props.fetchFeeds('GET_FEEDS',this.props.feeds.savedfeeds,this);
+        this.props.fetchFeeds('GET_SAVED_FEEDS',this.props.feeds.savedfeeds,this);
     }
     fetchTop(id){
         this.props.showSavedTopLoader();
-        this.props.fetchTopList('GET_FEEDS',this.props.feeds.savedfeeds,id,this);
+        this.props.fetchTopList('GET_SAVED_FEEDS',this.props.feeds.savedfeeds,id,this);
     }
 
     render() {

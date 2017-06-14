@@ -33,6 +33,8 @@ class Feed extends Component {
         this.props.fetchTop('GET_FEEDS',this.props.feeds.feeds,id,this);
     }
 
+
+
     render() {
 
         return (

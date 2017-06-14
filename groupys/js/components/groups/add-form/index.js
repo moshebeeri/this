@@ -71,7 +71,7 @@ class AddGroup extends Component {
             groupType:'USERS',
             path:'',
             image: '',
-            business:',',
+            business:'',
             services:[]
 
 
@@ -98,6 +98,12 @@ class AddGroup extends Component {
           this.setState({
               users:users
           })
+
+            if(this.props.businesses.businesses.length > 0 ) {
+                this.setState({
+                    business: this.props.businesses.businesses[0]
+                })
+            }
 
         }catch (error){
             console.log(error);
