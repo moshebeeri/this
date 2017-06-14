@@ -116,9 +116,9 @@ exports.create = function (req, res) {
       if (group.entity_type === 'BUSINESS' && utils.defined(group.entity.business)) {
         graphModel.relate_ids(group._id, 'FOLLOW', group.entity.business);
       }
-      group_activity(group, "create");
+      group_activity(group, 'create');
     });
-    return res.status(201).json(groups);
+    return res.status(201).json(group);
   });
 };
 
@@ -288,13 +288,12 @@ exports.add_user = function (req, res) {
   Group.findById(req.params.to_group, function (err, group) {
     if (err) {return handleError(res, err);}
     if (!group) {return res.status(404).send('group not found');}
-
-    if (_.find(group.admins, req.user._id) && non_commercial_group(group)) {
-      user_follow_group(req.params.user, group, true, res);
-      return res.status(201).json(group);
-    }
-    return res.status(404).send('Not Authorized');
-  })
+    //TODO: remove remark, temporary allowed for dev
+    //if (!(_.find(group.admins, req.user._id) && non_commercial_group(group))) {
+    //  return res.status(404).send('Not Authorized');
+    user_follow_group(req.params.user, group, true, res);
+    return res.status(201).json(group);
+  });
 };
 
 exports.add_users = function (req, res) {
@@ -305,15 +304,15 @@ exports.add_users = function (req, res) {
     if (!group) {
       return res.status(404).send('group not found');
     }
-
-    if (_.find(group.admins, req.user._id) && non_commercial_group(group)) {
-      for (let user in req.body.users) {
-        if (req.body.users.hasOwnProperty(user))
-          user_follow_group(req.body.users[user], group);
+    //TODO: remove remark, temporary allowed for dev
+    //if (!(_.find(group.admins, req.user._id) && non_commercial_group(group))) {
+    //  return res.status(404).send('Not Authorized');
+    for (let user in req.body.users) {
+      if (req.body.users.hasOwnProperty(user)) {
+        user_follow_group(req.body.users[user], group);
       }
-      return res.status(201).send('users added');
     }
-    return res.status(404).send('Not Authorized');
+    return res.status(201).send('users added');
   });
 };
 

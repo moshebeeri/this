@@ -8,6 +8,7 @@ let InstanceSchema = new Schema({
   promotion: {type: Schema.ObjectId, ref: 'Promotion', index: true, required: true},
   gid: {type: Number, index: true},
   type: {type: String, index: true, required: true},
+  variation: {type: String, index: true, required: true},
 
   quantity: Number,
   remaining: Number,
