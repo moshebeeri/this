@@ -32,7 +32,7 @@ import { bindActionCreators } from "redux";
     constructor(props) {
         super(props);
 
-        if(props.navigation.state.params.item){
+        if(props.navigation.state.params && props.navigation.state.params.item){
             let item = props.navigation.state.params.item;
             this.state = {
                 name: item.name,
@@ -189,7 +189,7 @@ import { bindActionCreators } from "redux";
                                   onPress={this.saveFormData.bind(this)}>
             <Text>Add Business</Text>
         </Button>
-        if(this.props.navigation.state.params.item){
+        if(this.props.navigation.state.params && this.props.navigation.state.params.item){
             saveButton =  <Button transparent
                                   onPress={this.updateFormData.bind(this)}
             >

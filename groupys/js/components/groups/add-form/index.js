@@ -283,6 +283,7 @@ class AddGroup extends Component {
             iosHeader="Group Type"
             mode="dropdown"
             selectedValue={this.state.groupType}
+            itemStyle={ {flexDirection: 'row',marginTop:10 }}
             onValueChange={this.selectGroupType.bind(this)}
         >
 
@@ -303,6 +304,7 @@ class AddGroup extends Component {
                 iosHeader="Select Business"
                 mode="dropdown"
                 selectedValue={this.state.business}
+                itemStyle={ {flexDirection: 'row',marginTop:4 }}
                 onValueChange={this.selectBusiness.bind(this)}>
 
                 {
@@ -319,42 +321,52 @@ class AddGroup extends Component {
         }
 
         return (
-            <Container>
+            <Container style={{margin:10,backgroundColor: '#fff'}}>
 
 
                 <Content  style={{backgroundColor: '#fff'}}>
 
-                    <View style={{ flexDirection: 'row',marginTop:5 }}>
+                    {addPolicyTag}
+                    {groupTypeTag}
+                    {BusinessPiker}
 
-                        <Button   transparent  onPress={() => this.pickPicture()}>
-                            <Text> select image </Text>
+
+
+
+
+                    <Item  style={{ margin:3 } } regular>
+                        <Input  value={this.state.name} blurOnSubmit={true} returnKeyType='next' ref="1" onSubmitEditing={this.focusNextField.bind(this,"2")} autoFocus = {true} onChangeText={(name) => this.setState({name})} placeholder='Name' />
+                    </Item>
+                    <Item  style={{ margin:3 } } regular>
+                        <Input value = {this.state.info}  blurO
+                                nSubmit={true} returnKeyType='done' ref="2"  onChangeText={(info) => this.setState({info})} placeholder='Description' />
+                    </Item>
+                     <Button  transparent onPress={() => this.showUsers(true)}>
+                        <Text>Select Users </Text>
+                    </Button>
+                    {users}
+
+                    <View style={{ flexDirection: 'row',marginTop:4 }}>
+
+                        <Button  iconRight transparent  onPress={() => this.pickPicture()}>
+                            <Text style={{ fontStyle: 'normal',fontSize:10 }}>Pick </Text>
+                            <Icon name='camera' />
+                        </Button>
+
+
+
+
+                        <Button   iconRight transparent  onPress={() => this.pickFromCamera()}>
+                            <Text style={{ fontStyle: 'normal',fontSize:10 }}>take </Text>
+                            <Icon name='camera' />
                         </Button>
 
                         {image}
                     </View>
 
-
-
-                    <Item underline>
-                        <Input value={this.state.name} blurOnSubmit={true} returnKeyType='next' ref="1" onSubmitEditing={this.focusNextField.bind(this,"2")} autoFocus = {true} onChangeText={(name) => this.setState({name})} placeholder='Name' />
-                    </Item>
-                    <Item underline>
-                        <Input value = {this.state.info}  blurO
-                                nSubmit={true} returnKeyType='done' ref="2"  onChangeText={(info) => this.setState({info})} placeholder='Description' />
-                    </Item>
-                    {addPolicyTag}
-                    {groupTypeTag}
-                    {BusinessPiker}
-                    <Button  transparent onPress={() => this.showUsers(true)}>
-                        <Text>Select Users </Text>
-                    </Button>
-                    {users}
-
-
-
-
                 </Content>
-                <Footer>
+                <Footer style={{backgroundColor: '#fff'}}>
+
 
                     <Button transparent
                             onPress={this.saveFormData.bind(this)}

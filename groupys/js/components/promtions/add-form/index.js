@@ -162,7 +162,7 @@ import {DeviceEventEmitter} from 'react-native'
                 this.selectBusiness(this.props.businesses.businesses[0]._id);
             }
 
-            if(this.props.navigation.state.params.item){
+            if(this.props.navigation.state.params && this.props.navigation.state.params.item){
                 let item = this.props.navigation.state.params.item;
                await  this.setState({
                     type: item.type,
@@ -412,7 +412,7 @@ import {DeviceEventEmitter} from 'react-native'
         >
             <Text>Add Promotion</Text>
         </Button>
-        if(this.props.navigation.state.params.item){
+        if(this.props.navigation.state.params && this.props.navigation.state.params.item){
             submitButton = <Button transparent
                                    onPress={this.updateFormData.bind(this)}
             >
