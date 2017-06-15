@@ -90,6 +90,7 @@ let PromotionSchemaObject = {
     coordinates: []
   },
   realize_code: String,
+  description:String,
   start: { type : Date, default: Date.now },
   end: Date, // TODO: Add default
   expireAt: {
