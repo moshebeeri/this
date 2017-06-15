@@ -48,7 +48,7 @@ import { bindActionCreators } from "redux";
 
 
         return (
-            <GenericListManager rows={this.props.businesses.businesses} title="Business" component="home" addComponent="addBusiness" api={this}
+            <GenericListManager navigation = {this.props.navigation} rows={this.props.businesses.businesses} title="Business" component="home" addComponent="addBusiness" api={this}
                                 ItemDetail={GenericListView}/>
         );
     }

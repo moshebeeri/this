@@ -15,14 +15,17 @@ export default class GenericListView extends Component {
 
 
 
+    showProduct(props,item){
 
+        this.props.navigation.navigate(this.props.addform,{item:item});
+    }
 
     render() {
 
         let row = undefined
 
         if(this.props.item.pictures && this.props.item.pictures.length > 0){
-            row =  <ListItem key={this.props.index} thumbnail>
+            row =  <ListItem key={this.props.index} onPress={this.showProduct.bind(this,this.props,this.props.item)} thumbnail>
                 <Left>
                     <Thumbnail square size={80} source={{uri: this.props.item.pictures[0].pictures[3]}} />
                 </Left>
@@ -37,7 +40,7 @@ export default class GenericListView extends Component {
                 </Right>
             </ListItem>
         }else {
-            row =  <ListItem key={this.props.index} thumbnail style={{backgroundColor: '#fff'}}>
+            row =  <ListItem key={this.props.index} onPress={this.showProduct.bind(this,this.props,this.props.item)}  thumbnail style={{backgroundColor: '#fff'}}>
                 <Left>
                     <Thumbnail square size={80} source={require('../../../../images/client_1.png')}/>
                 </Left>

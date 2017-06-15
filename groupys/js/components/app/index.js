@@ -241,15 +241,15 @@ import * as businessAction from "../../actions/business";
                     </Tab>
                     <Tab heading={ <TabHeading style={{ backgroundColor: "#ffe6e6" }} ><Text
                         style={{color: 'black', fontSize: 11,}}>Products</Text></TabHeading>}>
-                        <Product index={3} navigateAction={this.headerAction.bind(this)}/>
+                        <Product navigation={this.props.navigation} index={3} navigateAction={this.headerAction.bind(this)}/>
                     </Tab>
                     <Tab heading={ <TabHeading style={{ backgroundColor: "#ffe6e6" }}><Text
                         style={{color: 'black', fontSize: 11,}}>Buiesness</Text></TabHeading>}>
-                        <Business index={4} navigateAction={this.headerAction.bind(this)}/>
+                        <Business navigation={this.props.navigation} ndex={4} navigateAction={this.headerAction.bind(this)}/>
                     </Tab>
                     <Tab heading={ <TabHeading style={{ backgroundColor: "#ffe6e6" }}><Text
                         style={{color: 'black', fontSize: 11,}}>Promotions</Text></TabHeading>}>
-                        <Promotions index={5} navigateAction={this.headerAction.bind(this)}/>
+                        <Promotions navigation={this.props.navigation} index={5} navigateAction={this.headerAction.bind(this)}/>
                     </Tab>
 
                 </Tabs>

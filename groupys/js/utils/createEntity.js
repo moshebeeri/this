@@ -133,6 +133,40 @@ class EntityUtils {
          this.saveEntity(entityData,entityApi,json,token,callbackFunction,errorCallBack,userId);
 
      }
+
+    updateEntity(entityData, entityApi, json, token, callbackFunction, errorCallBack, entityId) {
+        fetch(`${server_host}/api/` + entityApi+'/'+ entityId, {
+                method: 'PUT',
+                headers: {
+                    'Accept': 'application/json, text/plain, */*',
+                    'Content-Type': 'application/json;charset=utf-8',
+                    'Authorization': 'Bearer ' + token,
+                },
+                body: json
+
+            }
+        ).then((response) => response.json())
+            .then((responseData) => {
+
+                callbackFunction(responseData);
+
+            }).catch(function (error) {
+
+            console.log('There has been a problem with your fetch operation: ');
+
+            errorCallBack(error);
+
+        });
+
+    }
+
+    update(entityApi,entityData,token,callbackFunction,errorCallBack,entityId){
+        //let entity = transformJson(entityData);
+        let json  = JSON.stringify(entityData);
+
+        this.updateEntity(entityData,entityApi,json,token,callbackFunction,errorCallBack,entityId);
+
+    }
 }
 
 

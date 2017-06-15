@@ -38,7 +38,7 @@ class MyPromotions extends Component {
     }
     fetchTop(id){
         this.props.showSavedTopLoader();
-        this.props.fetchTopList('GET_SAVED_FEEDS',this.props.feeds.savedfeeds,id,this);
+        this.props.fetchTop('GET_SAVED_FEEDS',this.props.feeds.savedfeeds,id,this);
     }
 
     render() {

@@ -70,7 +70,7 @@ import { bindActionCreators } from "redux";
 
     render() {
         return (
-            <GenericListManager rows={this.props.promotions.promotions}title="Promotion" component="home" addComponent="addPromotions" api={this}
+            <GenericListManager navigation = {this.props.navigation} rows={this.props.promotions.promotions}title="Promotion" component="home" addComponent="addPromotions" api={this}
                                 ItemDetail={GenericListView}/>
 
         );

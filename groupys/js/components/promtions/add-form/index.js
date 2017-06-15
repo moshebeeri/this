@@ -458,6 +458,7 @@ import {DeviceEventEmitter} from 'react-native'
                 <Container>
 
                     <Content style={{backgroundColor: '#fff'}}>
+
                         <Item underline>
                             {businessesPikkerTag}
                         </Item>
@@ -495,9 +496,7 @@ import {DeviceEventEmitter} from 'react-native'
                                    onChangeText={(total_discount) => this.setState({total_discount})}
                                    placeholder='Product Total Price'/>
                         </Item>
-                        <Item underline>
-                            {typePikkerTag}
-                        </Item>
+
                         {discountForm}
 
 
@@ -521,8 +520,16 @@ import {DeviceEventEmitter} from 'react-native'
                         <Item underline>
                             <View style={{flexDirection: 'row', marginTop: 5}}>
 
-                                <Button transparent onPress={() => this.pickFromCamera()}>
+                                <Button transparent onPress={() => this.pickPicture()}>
                                     <Text>Select Image </Text>
+                                </Button>
+
+                                {image}
+                            </View>
+                            <View style={{ flexDirection: 'row',marginTop:5 }}>
+
+                                <Button   transparent  onPress={() => this.pickFromCamera()}>
+                                    <Text> take picture </Text>
                                 </Button>
 
                                 {image}
@@ -585,6 +592,7 @@ import {DeviceEventEmitter} from 'react-native'
                 <Container>
 
                     <Content style={{backgroundColor: '#fff'}}>
+
                         <Item underline>
                             {businessesPikkerTag}
                         </Item>
@@ -626,8 +634,16 @@ import {DeviceEventEmitter} from 'react-native'
                         <Item underline>
                             <View style={{flexDirection: 'row', marginTop: 5}}>
 
-                                <Button transparent onPress={() => this.pickFromCamera()}>
+                                <Button transparent onPress={() => this.pickPicture()}>
                                     <Text>Select Image </Text>
+                                </Button>
+
+                                {image}
+                            </View>
+                            <View style={{ flexDirection: 'row',marginTop:5 }}>
+
+                                <Button   transparent  onPress={() => this.pickFromCamera()}>
+                                    <Text> take picture </Text>
                                 </Button>
 
                                 {image}
