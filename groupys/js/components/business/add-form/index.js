@@ -216,7 +216,7 @@ import { bindActionCreators } from "redux";
                         </Item>
 
                         <Item style={{ margin:3 } } regular >
-                           <Input value={this.state.Website}  blurOnSubmit={true} returnKeyType='next' ref="3"  onSubmitEditing={this.focusNextField.bind(this,"7")}  onChangeText={(website) => this.setState({website})} placeholder='Website' />
+                           <Input value={this.state.website}  blurOnSubmit={true} returnKeyType='next' ref="3"  onSubmitEditing={this.focusNextField.bind(this,"7")}  onChangeText={(website) => this.setState({website})} placeholder='Website' />
                         </Item>
                         {/*<Item style={{ margin:3 } } regular >*/}
                             {/*<Input blurOnSubmit={true} returnKeyType='next' ref="4"  onSubmitEditing={this.focusNextField.bind(this,"5")}  onChangeText={(country) => this.setState({country})} placeholder='Country' />*/}

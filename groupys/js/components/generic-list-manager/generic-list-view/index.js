@@ -34,9 +34,9 @@ export default class GenericListView extends Component {
                 <Text note>{this.props.item.info}</Text>
                 </Body>
                 <Right>
-                    <Button transparent onPress={() =>  this.props.deleteProduct(`${this.props.index}`)}>
-                        <Text>Remove</Text>
-                    </Button>
+                    {/*<Button transparent onPress={() =>  this.props.deleteProduct(`${this.props.index}`)}>*/}
+                        {/*<Text>Remove</Text>*/}
+                    {/*</Button>*/}
                 </Right>
             </ListItem>
         }else {
@@ -50,9 +50,9 @@ export default class GenericListView extends Component {
                 <Text note>{this.props.item.info}</Text>
                 </Body>
                 <Right>
-                    <Button transparent onPress={() =>  this.props.deleteProduct(`${this.props.index}`)}>
-                        <Text>Remove</Text>
-                    </Button>
+                    {/*<Button transparent onPress={() =>  this.props.deleteProduct(`${this.props.index}`)}>*/}
+                        {/*<Text>Remove</Text>*/}
+                    {/*</Button>*/}
                 </Right>
             </ListItem>
         }
