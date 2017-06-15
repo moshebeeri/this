@@ -649,22 +649,22 @@ import {DeviceEventEmitter} from 'react-native'
             return (
                 <Container>
 
-                    <Content style={{backgroundColor: '#fff'}}>
+                    <Content style={{margin:10,backgroundColor: '#fff'}}>
 
-                        <Item underline>
+                        <Item  style={{ margin:3 } } regular>
                             {businessesPikkerTag}
                         </Item>
 
-                        <Item underline>
+                        <Item  style={{ margin:3 } } regular>
                             {discountPiker}
                         </Item>
 
 
-                        <Item underline>
+                        <Item  style={{ margin:3 } } regular>
                             <Input  blurOnSubmit={true} returnKeyType='next' ref="1" onSubmitEditing={this.focusNextField.bind(this,"2")} value={this.state.name} onChangeText={(name) => this.setState({name})}
                                    placeholder='Name'/>
                         </Item>
-                        <Item underline>
+                        <Item  style={{ margin:3 } } regular>
                             <Input blurOnSubmit={true} returnKeyType='done' ref="2"  value={this.state.info} onChangeText={(info) => this.setState({info})}
                                    placeholder='Description'/>
                         </Item>
@@ -672,7 +672,7 @@ import {DeviceEventEmitter} from 'react-native'
 
                         <PercentComponent state={this.state} setState={this.setState.bind(this)}/>
 
-                        <Item underline>
+                        <Item  style={{ margin:3 } } regular>
                             <DatePicker
                                 style={{width: 200}}
                                 date={this.state.end}
@@ -689,27 +689,26 @@ import {DeviceEventEmitter} from 'react-native'
                                 }}
                             />
                         </Item>
-                        <Item underline>
-                            <View style={{flexDirection: 'row', marginTop: 5}}>
+                        <Item  style={{ margin:3 } } regular>
 
-                                <Button transparent onPress={() => this.pickPicture()}>
-                                    <Text>Select Image </Text>
-                                </Button>
+                            <Button  iconRight transparent  onPress={() => this.pickPicture()}>
+                                <Text style={{ fontStyle: 'normal',fontSize:10 }}>Pick </Text>
+                                <Icon name='camera' />
+                            </Button>
 
-                                {image}
-                            </View>
-                            <View style={{ flexDirection: 'row',marginTop:5 }}>
 
-                                <Button   transparent  onPress={() => this.pickFromCamera()}>
-                                    <Text> take picture </Text>
-                                </Button>
 
-                                {image}
-                            </View>
+
+                            <Button   iconRight transparent  onPress={() => this.pickFromCamera()}>
+                                <Text style={{ fontStyle: 'normal',fontSize:10 }}>take </Text>
+                                <Icon name='camera' />
+                            </Button>
+
+                            {image}
                         </Item>
 
                     </Content>
-                    <Footer>
+                    <Footer style={{backgroundColor: '#fff'}}>
 
                         {submitButton}
                     </Footer>

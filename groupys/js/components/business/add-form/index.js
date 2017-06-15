@@ -235,8 +235,7 @@ import { bindActionCreators } from "redux";
                         </Item>
 
 
-                        <View style={{ flexDirection: 'row',marginTop:4 }}>
-
+                        <Item  style={{ margin:3 } } regular>
                             <Button  iconRight transparent  onPress={() => this.pickPicture()}>
                                 <Text style={{ fontStyle: 'normal',fontSize:10 }}>Pick </Text>
                                 <Icon name='camera' />
@@ -251,7 +250,7 @@ import { bindActionCreators } from "redux";
                             </Button>
 
                             {image}
-                        </View>
+                        </Item>
 
 
 

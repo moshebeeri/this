@@ -60,7 +60,7 @@ export default class PercentComponent extends Component {
             }
         }
 
-       return  <Item underline>
+       return <Item  style={{ margin:3 } } regular>
            <Input keyboardType = 'numeric' value={defaultvalue}  onChangeText={(value) => this.setPercent({value})} placeholder='%Precent' />
        </Item>
   }

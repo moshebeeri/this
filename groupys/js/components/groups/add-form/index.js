@@ -264,6 +264,7 @@ class AddGroup extends Component {
         let addPolicyTag = <Picker
             iosHeader="Group Policy"
             mode="dropdown"
+            style={{ flex:1}}
             selectedValue={this.state.groupPolocy}
             onValueChange={this.selectGroupPolocy.bind(this)}
         >
@@ -282,6 +283,7 @@ class AddGroup extends Component {
         let groupTypeTag = <Picker
             iosHeader="Group Type"
             mode="dropdown"
+            style={{ flex:1}}
             selectedValue={this.state.groupType}
             itemStyle={ {flexDirection: 'row',marginTop:10 }}
             onValueChange={this.selectGroupType.bind(this)}
@@ -303,6 +305,7 @@ class AddGroup extends Component {
             BusinessPiker = <Picker
                 iosHeader="Select Business"
                 mode="dropdown"
+                style={{ flex:1}}
                 selectedValue={this.state.business}
                 itemStyle={ {flexDirection: 'row',marginTop:4 }}
                 onValueChange={this.selectBusiness.bind(this)}>
@@ -325,11 +328,15 @@ class AddGroup extends Component {
 
 
                 <Content  style={{backgroundColor: '#fff'}}>
-
-                    {addPolicyTag}
+                    <Item  style={{ margin:3 } } regular>
+                        {addPolicyTag}
+                    </Item>
+                    <Item  style={{ margin:3 } } regular>
                     {groupTypeTag}
+                    </Item>
+                    <Item  style={{ margin:3 } } regular>
                     {BusinessPiker}
-
+                    </Item>
 
 
 
@@ -341,12 +348,14 @@ class AddGroup extends Component {
                         <Input value = {this.state.info}  blurO
                                 nSubmit={true} returnKeyType='done' ref="2"  onChangeText={(info) => this.setState({info})} placeholder='Description' />
                     </Item>
+                    <Item  style={{ margin:3 } } regular>
                      <Button  transparent onPress={() => this.showUsers(true)}>
                         <Text>Select Users </Text>
                     </Button>
                     {users}
+                    </Item>
 
-                    <View style={{ flexDirection: 'row',marginTop:4 }}>
+                    <Item  style={{ margin:3 } } regular>
 
                         <Button  iconRight transparent  onPress={() => this.pickPicture()}>
                             <Text style={{ fontStyle: 'normal',fontSize:10 }}>Pick </Text>
@@ -362,7 +371,7 @@ class AddGroup extends Component {
                         </Button>
 
                         {image}
-                    </View>
+                    </Item>
 
                 </Content>
                 <Footer style={{backgroundColor: '#fff'}}>
