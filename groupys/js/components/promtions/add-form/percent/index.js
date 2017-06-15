@@ -56,7 +56,7 @@ export default class PercentComponent extends Component {
 
 
             if (this.props.state.percent.percent) {
-                defaultvalue = this.props.state.percent.percent.value;
+                defaultvalue = this.props.state.percent.percent.toString();
             }
         }
 

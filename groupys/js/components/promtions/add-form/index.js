@@ -127,10 +127,8 @@ import {DeviceEventEmitter} from 'react-native'
 
     constructor(props) {
         super(props);
-
-
         this.state = {
-            token:'',
+            token: '',
             path: '',
             image: '',
             type: 'PERCENT',
@@ -140,19 +138,20 @@ import {DeviceEventEmitter} from 'react-native'
             product: '',
             productList: [],
             showProductsList: false,
-            percent:{},
-            amount:'',
-            retail_price:'',
-            total_discount:'',
+            percent: {},
+            amount: '',
+            retail_price: '',
+            total_discount: '',
             percent_range: {},
             start: "",
             end: "",
             location: "",
-            info:"",
+            info: "",
             discount_on: 'GLOBAL'
 
 
         }
+
 
     }
 
@@ -161,6 +160,37 @@ import {DeviceEventEmitter} from 'react-native'
         try {
             if(this.props.businesses.businesses.length > 0) {
                 this.selectBusiness(this.props.businesses.businesses[0]._id);
+            }
+
+            if(this.props.navigation.state.params.item){
+                let item = this.props.navigation.state.params.item;
+               await  this.setState({
+                    type: item.type,
+                    start: item.start,
+                    end: item.end,
+                    location: item.location,
+                    name: item.name,
+                     info:item.description
+
+                });
+                if(item.type == 'PERCENT'){
+                    await   this.setState({
+                        percent:{
+                            percent:item.percent.values[0]
+                        }
+                    })
+                }
+                if(!item.product){
+                    await  this.setState({
+                        product:item.product,
+                        discount_on: 'GLOBAL'
+                    })
+                }else{
+                    await  this.setState({
+                        discount_on: 'PRODUCT'
+                    })
+                }
+
             }
 
         }catch (error){
@@ -191,40 +221,7 @@ import {DeviceEventEmitter} from 'react-native'
 
    async saveFormData(){
 
-       let promotion = {
-           image: this.state.image,
-           type: this.state.type,
-           percent: this.state.percent,
-           amount: Number(this.state.amount),
-           retail_price: Number(this.state.retail_price),
-           total_discount: Number(this.state.total_discount),
-          // percent_range: this.state.percent_range,
-           start: this.state.start,
-           end: this.state.end,
-           location: this.state.location,
-           info: this.state.info,
-           path: this.state.path,
-           name: this.state.name,
-
-       };
-       promotion.entity = {};
-       if(this.state.discount_on == 'GLOBAL'){
-           promotion.entity.business = this.state.business;
-       }else {
-           promotion.entity.business = this.state.business;
-           promotion.entity.product = this.state.product;
-       }
-       promotion.percent = {};
-       if(this.state.type == 'PERCENT'){
-           promotion.percent.variation = 'SINGLE';
-           promotion.percent.values = [this.state.percent.percent]
-       }
-
-       if(this.state.type == 'PERCENT_RANGE'){
-           promotion.percent.variation = 'RANGE';
-           promotion.percent.values = [this.state.percent_range.from,this.state.percent_range.to]
-       }
-
+       let promotion = this.createPromotionFromState();
 
        try {
             let response = await promotionApi.createPromotion(promotion,this.addToList.bind(this));
@@ -235,10 +232,63 @@ import {DeviceEventEmitter} from 'react-native'
         }
     }
 
-    addToList(responseData){
+     async updateFormData(){
+
+         let promotion = this.createPromotionFromState();
+
+         try {
+             let response = await promotionApi.updatePromotion(promotion,this.addToList.bind(this),this.props.navigation.state.params.item._id);
+             this.replaceRoute();
+         }catch (error){
+             console.log(error);
+             this.replaceRoute();
+         }
+     }
+
+     addToList(responseData){
        this.props.fetchPromotions();
     }
 
+
+    createPromotionFromState(){
+        let promotion = {
+            image: this.state.image,
+            type: this.state.type,
+            percent: this.state.percent,
+            amount: Number(this.state.amount),
+            retail_price: Number(this.state.retail_price),
+            total_discount: Number(this.state.total_discount),
+            // percent_range: this.state.percent_range,
+            start: this.state.start,
+            end: this.state.end,
+            location: this.state.location,
+            description: this.state.info,
+            path: this.state.path,
+            name: this.state.name,
+
+        };
+        promotion.entity = {};
+        if(this.state.discount_on == 'GLOBAL'){
+            promotion.entity.business = this.state.business;
+        }else {
+            promotion.entity.business = this.state.business;
+            promotion.product = this.state.product;
+        }
+
+        promotion.percent = {};
+        if(this.state.type == 'PERCENT'){
+            promotion.percent.variation = 'SINGLE';
+            promotion.percent.values = [this.state.percent.percent]
+        }
+
+        if(this.state.type == 'PERCENT_RANGE'){
+            promotion.percent.variation = 'RANGE';
+            promotion.percent.values = [this.state.percent_range.from,this.state.percent_range.to]
+        }
+
+        return promotion;
+
+    }
 
 
     async selectBusiness(value){
@@ -357,6 +407,18 @@ import {DeviceEventEmitter} from 'react-native'
                 }) }
         </Picker>
 
+        let submitButton = <Button transparent
+                                   onPress={this.saveFormData.bind(this)}
+        >
+            <Text>Add Promotion</Text>
+        </Button>
+        if(this.props.navigation.state.params.item){
+            submitButton = <Button transparent
+                                   onPress={this.updateFormData.bind(this)}
+            >
+                <Text>Update Promotion</Text>
+            </Button>
+        }
 
         if(this.state.discount_on == 'PRODUCT') {
 
@@ -538,12 +600,8 @@ import {DeviceEventEmitter} from 'react-native'
 
                     </Content>
                     <Footer>
+                        {submitButton}
 
-                        <Button transparent
-                                onPress={this.saveFormData.bind(this)}
-                        >
-                            <Text>Add Promotion</Text>
-                        </Button>
                     </Footer>
                 </Container>
             );
@@ -603,7 +661,7 @@ import {DeviceEventEmitter} from 'react-native'
 
 
                         <Item underline>
-                            <Input blurOnSubmit={true} returnKeyType='next' ref="1" onSubmitEditing={this.focusNextField.bind(this,"2")} value={this.state.name} onChangeText={(name) => this.setState({name})}
+                            <Input  blurOnSubmit={true} returnKeyType='next' ref="1" onSubmitEditing={this.focusNextField.bind(this,"2")} value={this.state.name} onChangeText={(name) => this.setState({name})}
                                    placeholder='Name'/>
                         </Item>
                         <Item underline>
@@ -653,11 +711,7 @@ import {DeviceEventEmitter} from 'react-native'
                     </Content>
                     <Footer>
 
-                        <Button transparent
-                                onPress={this.saveFormData.bind(this)}
-                        >
-                            <Text>Add Promotion</Text>
-                        </Button>
+                        {submitButton}
                     </Footer>
                 </Container>
             );
