@@ -3,7 +3,7 @@ import {Image, Platform,StyleSheet} from 'react-native';
 import {connect} from 'react-redux';
 import {actions} from 'react-native-navigation-redux-helpers';
 import {Container, Content, Text,Title, InputGroup,
-    Input, Button, Icon, View,Header, Body, Right, ListItem,Tabs,Tab, TabHeading,Thumbnail,Left,Drawer} from 'native-base';
+    Input, Button, Icon, View,Header, Body, Right, ListItem,Tabs,Tab, TabHeading,Thumbnail,Left,Drawer,Fab} from 'native-base';
 
 import GeneralComponentHeader from '../header/index';
 import Product from '../product/index';
@@ -152,7 +152,9 @@ import * as businessAction from "../../actions/business";
 
 
 
-
+     navigateToAdd(){
+        this.replaceRoute(this.state.addComponent);
+     }
     extractTabIndexFromNavigation(){
 
         return this.state.initialPage;
@@ -213,7 +215,21 @@ import * as businessAction from "../../actions/business";
         };
         let showAction = this.showAction(this.state.index);
         let index = this.state.initialPage;
+        let fav= undefined;
+        if(showAction){
+            fav =
+                <Fab
 
+                    direction="right"
+                    active={showAction}
+                    containerStyle={{ marginLeft: 10 }}
+                    style={{ backgroundColor: "#ffb3b3" }}
+                    position="bottomRight"
+                    onPress={() => this.navigateToAdd()}>
+                    <Icon name="add" />
+
+                </Fab>
+        }
 
         if(!this.start) {
 
@@ -253,7 +269,7 @@ import * as businessAction from "../../actions/business";
                     </Tab>
 
                 </Tabs>
-
+                            {fav}
                         </Container>
             </Drawer>
                );

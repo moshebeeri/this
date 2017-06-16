@@ -2,7 +2,7 @@ import React, {Component} from 'react';
 import {Image, Platform} from 'react-native';
 import {connect} from 'react-redux';
 import {actions} from 'react-native-navigation-redux-helpers';
-import {Container, Content, Text,Title, InputGroup, Input, Button, Icon, View,Header,Spinner, Body, Right, ListItem, Thumbnail,Left} from 'native-base';
+import {Container, Content, Text,Title,Fab, InputGroup, Input, Button, Icon, View,Header,Spinner, Body, Right, ListItem, Thumbnail,Left} from 'native-base';
 
 import store from 'react-native-simple-store';
 
@@ -133,6 +133,7 @@ class GenericListManager extends Component {
 
                 <Content  style={{  backgroundColor: '#fff'}}>
                     { rows }
+
                 </Content>
 
         );

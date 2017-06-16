@@ -31,14 +31,7 @@ export default class GeneralComponentHeader extends Component {
     }
 
     render() {
-      let action = undefined;
 
-      if(this.props.showAction && this.props.showAction==true){
-          action =  <Button style={{ backgroundColor: 'transparent'}} iconLeft light>
-
-              <Icon style = {{width:20,backgroundColor: 'transparent'}} name='create'  onPress={() =>  this.props.navigate(this.props.to)}  />
-          </Button>;
-      }
 
 
     return (
@@ -68,7 +61,6 @@ export default class GeneralComponentHeader extends Component {
                       <Icon style = {{width:20,backgroundColor: 'transparent'}} name='md-cog'  onPress={() =>  this.props.navigate('realizePromotion')}  />
                   </Button>
 
-                  {action}
 
               </View>
               <Text transparent style={{ paddingRight: 20, paddingTop: 10, backgroundColor: 'transparent'}} >Groupies</Text>
