@@ -57,7 +57,8 @@ module.exports = {
         height: 65,
     },
     image: {
-        top:60,
+
+
         alignSelf: 'stretch',
         // resizeMode: 'cover',
         height: deviceHeight / 3,
