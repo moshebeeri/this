@@ -26,7 +26,6 @@ class GenericListManager extends Component {
             rowsView: []
         }
         ;
-        this.fetchList();
 
 
 
@@ -47,11 +46,7 @@ class GenericListManager extends Component {
 
             fetch(pageOffset, pageSize, stats) {
                 let promise =  fetchApi(pageOffset + 1,pageSize );
-                promise.then(function(response){
-                    store.save(component,response);
 
-
-                });
                 return promise;
 
 
@@ -61,21 +56,6 @@ class GenericListManager extends Component {
         this.setState({dataset});
     }
 
-    async fetchList(){
-        try {
-            let response = await store.get(this.props.title);
-            this.setState({
-                rowsView: response
-            })
-
-
-        }catch (error){
-            console.log(error);
-        }
-
-
-
-    }
 
     async deleteProduct(index){
 
@@ -98,7 +78,7 @@ class GenericListManager extends Component {
     componentWillMount(){
 
 
-        this.fetchList();
+
         if(this.props.api.fetchApi) {
             this.setupImpagination();
         }
@@ -113,6 +93,12 @@ class GenericListManager extends Component {
         if(!dataRows){
             dataRows = this.state.rowsView;
 
+        }
+        if(!dataRows){
+            return <Content  style={{  backgroundColor: '#fff'}}>
+
+
+            </Content>
         }
         if(dataRows.length > 0) {
 

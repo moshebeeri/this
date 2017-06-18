@@ -100,10 +100,11 @@ import * as businessAction from "../../actions/business";
          switch (ref.i){
 
              case 0:
-                 component ='AddProduct'
+
+                 component ='addBusiness'
                  break;
              case 1:
-                 component ='addBusiness'
+                 component ='AddProduct'
 
                  break;
              case 2:
@@ -210,15 +211,15 @@ import * as businessAction from "../../actions/business";
                                                     to={this.state.addComponent}/>
 
                 <Tabs initialPage={index} onChangeTab={this.onChangeTab.bind(this)} style={{backgroundColor: '#fff',}}>
-
-                    <Tab heading={ <TabHeading style={{ backgroundColor: "#ffe6e6" }} ><Text
-                        style={{color: 'black', fontSize: 11,}}>Products</Text></TabHeading>}>
-                        <Product navigation={this.props.navigation} index={0} navigateAction={this.headerAction.bind(this)}/>
-                    </Tab>
                     <Tab heading={ <TabHeading style={{ backgroundColor: "#ffe6e6" }}><Text
                         style={{color: 'black', fontSize: 11,}}>Buiesness</Text></TabHeading>}>
                         <Business navigation={this.props.navigation} ndex={1} navigateAction={this.headerAction.bind(this)}/>
                     </Tab>
+                    <Tab heading={ <TabHeading style={{ backgroundColor: "#ffe6e6" }} ><Text
+                        style={{color: 'black', fontSize: 11,}}>Products</Text></TabHeading>}>
+                        <Product navigation={this.props.navigation} index={0} navigateAction={this.headerAction.bind(this)}/>
+                    </Tab>
+
                     <Tab heading={ <TabHeading style={{ backgroundColor: "#ffe6e6" }}><Text
                         style={{color: 'black', fontSize: 11,}}>Promotions</Text></TabHeading>}>
                         <Promotions navigation={this.props.navigation} index={2} navigateAction={this.headerAction.bind(this)}/>
