@@ -68,25 +68,22 @@ export default class ProfileDrawer extends Component {
                 </Image>
 
                 <Item   onPress={() => this.showPromotions()} style={{ margin:3 } } regular>
-                    <Button  onPress={() => this.showPromotions()} iconLeft transparent  >
                        <Icon name='home' />
-                        <Text style={{ fontStyle: 'normal',fontSize:15 }}>My Promotions </Text>
+                        <Text style={{  padding:20,color:'blue',fontStyle: 'normal',fontSize:15 }}>My Promotions </Text>
 
-                    </Button>
+
                 </Item>
                 <Item  onPress={() => this.showBusiness()}  style={{ margin:3 } } regular>
-                    <Button onPress={() => this.showBusiness()}   iconLeft transparent  >
                         {/*<Icon name='user' />*/}
-                        <Text style={{ fontStyle: 'normal',fontSize:15 }}>My Businesses</Text>
+                        <Text style={{ padding:20,color:'blue',fontStyle: 'normal',fontSize:15 }}>My Businesses</Text>
 
-                    </Button>
+
                 </Item>
                 <Item    style={{ margin:3 } } regular>
-                    <Button style={{width:100}} iconLeft transparent  >
                         {/*<Icon name='user' />*/}
-                        <Text style={{ fontStyle: 'normal',fontSize:15 }}>Profile </Text>
+                        <Text style={{ padding:20,color:'blue',fontStyle: 'normal',fontSize:15 }}>Profile </Text>
 
-                    </Button>
+
                 </Item>
                 {/*<Item  style={{ margin:3 } } regular>*/}
 
