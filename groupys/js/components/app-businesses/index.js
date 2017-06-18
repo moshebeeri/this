@@ -25,24 +25,6 @@ import codePush from "react-native-code-push";
 
 import SideBar from '../drawer/index';
 
-const warch = navigator.geolocation.watchPosition((position) => {
-        var lastPosition = JSON.stringify(position);
-        locationApi.sendLocation(position.coords.longitude,position.coords.latitude,position.timestamp,position.coords.speed);
-
-    },
-    (error) => alert(JSON.stringify(error)),
-    {enableHighAccuracy: true, timeout: 20000, maximumAge: 1000,distanceFilter:100}
-);
-
-const timer = BackgroundTimer.setInterval(() =>{
-    console.log('sync contacts')
-    // this will be executed every 200 ms
-    // even when app is the the background
-    contactApi.syncContacts();
-
-
-
-}, 60000);
 let updateDialogOption = {
     updateTitle:"update"
 }
@@ -54,7 +36,7 @@ import { bindActionCreators } from "redux";
 
 import * as businessAction from "../../actions/business";
 
- class ApplicationManager extends Component {
+ class ApplicationBusinessManager extends Component {
     static navigationOptions = {
         header:null
     };
@@ -116,23 +98,15 @@ import * as businessAction from "../../actions/business";
     onChangeTab(ref){
          let component = 'home';
          switch (ref.i){
+
              case 0:
-
-                 break;
-             case 1:
-
-                 break;
-             case 2:
-                 component ='AddGroups'
-                 break;
-             case 3:
                  component ='AddProduct'
                  break;
-             case 4:
+             case 1:
                  component ='addBusiness'
 
                  break;
-             case 5:
+             case 2:
                  component ='addPromotions'
 
                  break;
@@ -164,17 +138,8 @@ import * as businessAction from "../../actions/business";
 
     showAction(index){
         switch (index){
-            case 0:
-                return false;
-            case 1:
-                return false;
-            case 2:
-                return true;
-            case 3:
-                return true;
-            case 4:
-                return true;
-            case 5:
+
+            default :
                 return true;
 
         }
@@ -239,23 +204,25 @@ import * as businessAction from "../../actions/business";
                 ref={(ref) => { this.drawer = ref; }}
                 content={<SideBar navigation={this.props.navigation}/>}
                 onClose={() => closeDrawer} >
+
                         <Container>
                             <GeneralComponentHeader openDrawer= {openDrawer} navigate={this.props.navigation.navigate} showAction={showAction} current='home'
                                                     to={this.state.addComponent}/>
 
                 <Tabs initialPage={index} onChangeTab={this.onChangeTab.bind(this)} style={{backgroundColor: '#fff',}}>
-                    <Tab heading={ <TabHeading style={{ backgroundColor: "#ffe6e6" }}><Text style={{color: 'black', fontSize: 11,}}>Home</Text></TabHeading>}>
-                        <Feeds index={0} navigateAction={this.headerAction.bind(this)}/>
-                    </Tab>
-                    <Tab heading={ <TabHeading style={{ backgroundColor: "#ffe6e6" }}><Text style={{color: 'black', fontSize: 11,}}>My Promotions</Text></TabHeading>}>
-                        <MydPromotions index={1} navigateAction={this.headerAction.bind(this)}/>
-                    </Tab>
-                    <Tab
-                        heading={ <TabHeading style={{ backgroundColor: "#ffe6e6" }}><Text style={{color: 'black', fontSize: 11,}}>Groups</Text></TabHeading>}>
-                        <Groups navigation={this.props.navigation} index={2}
-                                navigateAction={this.headerAction.bind(this)}/>
-                    </Tab>
 
+                    <Tab heading={ <TabHeading style={{ backgroundColor: "#ffe6e6" }} ><Text
+                        style={{color: 'black', fontSize: 11,}}>Products</Text></TabHeading>}>
+                        <Product navigation={this.props.navigation} index={0} navigateAction={this.headerAction.bind(this)}/>
+                    </Tab>
+                    <Tab heading={ <TabHeading style={{ backgroundColor: "#ffe6e6" }}><Text
+                        style={{color: 'black', fontSize: 11,}}>Buiesness</Text></TabHeading>}>
+                        <Business navigation={this.props.navigation} ndex={1} navigateAction={this.headerAction.bind(this)}/>
+                    </Tab>
+                    <Tab heading={ <TabHeading style={{ backgroundColor: "#ffe6e6" }}><Text
+                        style={{color: 'black', fontSize: 11,}}>Promotions</Text></TabHeading>}>
+                        <Promotions navigation={this.props.navigation} index={2} navigateAction={this.headerAction.bind(this)}/>
+                    </Tab>
 
                 </Tabs>
                             {fav}
@@ -276,6 +243,6 @@ export default connect(
     }),
 
     dispatch => bindActionCreators(businessAction, dispatch)
-)(ApplicationManager);
+)(ApplicationBusinessManager);
 
 

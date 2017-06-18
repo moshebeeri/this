@@ -6,6 +6,7 @@ import React, { Component } from "react";
 import { Provider, connect } from "react-redux";
 import { StackNavigator, addNavigationHelpers } from "react-navigation";
 import  ApplicationManager from './components/app/index'
+import ApplicationBusinessManager from './components/app-businesses/index'
 import Login from './components/login/index';
 import AddBusiness from './components/business/add-form/index'
 import AddPromotions from './components/promtions/add-form/index'
@@ -17,9 +18,11 @@ import Signup from './components/signup/index';
 import Register from './components/register/index';
 import RealizePromotion from './components/realize-promotion/index';
 
+
+
 const AppNavigator = StackNavigator({
         home: { screen: ApplicationManager },
-
+        businesses:{screen:ApplicationBusinessManager},
         login: { screen: Login },
         addBusiness: { screen: AddBusiness },
         addPromotions:{screen:AddPromotions},
