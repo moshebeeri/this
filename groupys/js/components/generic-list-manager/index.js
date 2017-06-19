@@ -2,7 +2,7 @@ import React, {Component} from 'react';
 import {Image, Platform} from 'react-native';
 import {connect} from 'react-redux';
 import {actions} from 'react-native-navigation-redux-helpers';
-import {Container, Content, Text,Title, InputGroup, Input, Button, Icon, View,Header,Spinner, Body, Right, ListItem, Thumbnail,Left} from 'native-base';
+import {Container, Content, Text,Title,Fab, InputGroup, Input, Button, Icon, View,Header,Spinner, Body, Right, ListItem, Thumbnail,Left} from 'native-base';
 
 import store from 'react-native-simple-store';
 
@@ -11,7 +11,7 @@ import {DeviceEventEmitter} from 'react-native'
 
 
 
-export default class GenericListManager extends Component {
+class GenericListManager extends Component {
 
 
     constructor(props) {
@@ -26,7 +26,6 @@ export default class GenericListManager extends Component {
             rowsView: []
         }
         ;
-        this.fetchList();
 
 
 
@@ -37,7 +36,6 @@ export default class GenericListManager extends Component {
         let fetchApi = this.props.api.fetchApi.bind(this);
         let setState = this.setState.bind(this);
         let component = this.props.title;
-        let componentListener = this.props.addComponent;
         let dataset = new Dataset({
             pageSize: 8,
             observe: (rowsView) => {
@@ -48,16 +46,7 @@ export default class GenericListManager extends Component {
 
             fetch(pageOffset, pageSize, stats) {
                 let promise =  fetchApi(pageOffset + 1,pageSize );
-                promise.then(function(response){
-                    store.save(component,response);
 
-                    DeviceEventEmitter.addListener(componentListener, (e)=>{
-                        let rows = response;
-                        rows.push(e);
-                        setState({
-                            rowsView: rows,
-                        })});
-                });
                 return promise;
 
 
@@ -67,21 +56,6 @@ export default class GenericListManager extends Component {
         this.setState({dataset});
     }
 
-    async fetchList(){
-        try {
-            let response = await store.get(this.props.title);
-            this.setState({
-                rowsView: response
-            })
-
-
-        }catch (error){
-            console.log(error);
-        }
-
-
-
-    }
 
     async deleteProduct(index){
 
@@ -104,7 +78,7 @@ export default class GenericListManager extends Component {
     componentWillMount(){
 
 
-        this.fetchList();
+
         if(this.props.api.fetchApi) {
             this.setupImpagination();
         }
@@ -115,18 +89,29 @@ export default class GenericListManager extends Component {
     render() {
         let index = 0
         let rows = undefined;
-        if(this.state.rowsView.length > 0) {
+        let dataRows = this.props.rows;
+        if(!dataRows){
+            dataRows = this.state.rowsView;
 
-             rows = this.state.rowsView.map((r, i) => {
+        }
+        if(!dataRows){
+            return <Content  style={{  backgroundColor: '#fff'}}>
+
+
+            </Content>
+        }
+        if(dataRows.length > 0) {
+
+             rows = dataRows.map((r, i) => {
                  if (!r.isSettled && r.isSettled != undefined) {
                      return <Spinner key={Math.random()}/>;
                  }
                 index++;
                  if(r.content){
-                     return <this.props.ItemDetail navigation={this.props.navigation} key= {index} index={index} item={r.content} deleteProduct={this.deleteProduct.bind(this)}/>
+                     return <this.props.ItemDetail addform={this.props.addComponent} navigation={this.props.navigation} key= {index} index={index} item={r.content} deleteProduct={this.deleteProduct.bind(this)}/>
 
                  }
-                return <this.props.ItemDetail navigation={this.props.navigation} key= {index} index={index} item={r} deleteProduct={this.deleteProduct.bind(this)}/>
+                return <this.props.ItemDetail addform={this.props.addComponent}navigation={this.props.navigation} key= {index} index={index} item={r} deleteProduct={this.deleteProduct.bind(this)}/>
             });
         }
 
@@ -134,10 +119,16 @@ export default class GenericListManager extends Component {
 
                 <Content  style={{  backgroundColor: '#fff'}}>
                     { rows }
+
                 </Content>
 
         );
     }
 }
+
+export default connect(
+
+
+)(GenericListManager);
 
 

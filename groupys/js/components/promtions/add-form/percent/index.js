@@ -56,11 +56,11 @@ export default class PercentComponent extends Component {
 
 
             if (this.props.state.percent.percent) {
-                defaultvalue = this.props.state.percent.percent.value;
+                defaultvalue = this.props.state.percent.percent.toString();
             }
         }
 
-       return  <Item underline>
+       return <Item  style={{ margin:3 } } regular>
            <Input keyboardType = 'numeric' value={defaultvalue}  onChangeText={(value) => this.setPercent({value})} placeholder='%Precent' />
        </Item>
   }

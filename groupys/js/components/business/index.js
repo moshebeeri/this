@@ -7,12 +7,11 @@ import {Container, Content, Text, InputGroup, Input, Button, Icon, View,Header, 
 import GenericListManager from '../generic-list-manager/index';
 
 import GenericListView from '../generic-list-manager/generic-list-view/index'
-import BusinessApi from "../../api/business"
-let businessApi = new BusinessApi();
 
+import * as businessAction from "../../actions/business";
+import { bindActionCreators } from "redux";
 
-
-export default class Business extends Component {
+ class Business extends Component {
 
 
 
@@ -29,14 +28,12 @@ export default class Business extends Component {
 
 
     async getAll(){
-       let response =  await  businessApi.getAll();
-       return response;
+       return this.props.businesses.businesses;
     }
     fetchApi(pageOffset,pageSize ) {
-
+        let businesses = this.props.api.props.businesses.businesses;
         return new Promise(async function(resolve, reject) {
-            response =  await  businessApi.getAll();
-            resolve(response);
+            resolve(businesses);
         });
 
 
@@ -51,8 +48,15 @@ export default class Business extends Component {
 
 
         return (
-            <GenericListManager title="Business" component="home" addComponent="addBusiness" api={this}
+            <GenericListManager navigation = {this.props.navigation} rows={this.props.businesses.businesses} title="Business" component="home" addComponent="addBusiness" api={this}
                                 ItemDetail={GenericListView}/>
         );
     }
 }
+
+export default connect(
+    state => ({
+        businesses: state.businesses
+    }),
+    dispatch => bindActionCreators(businessAction, dispatch)
+)(Business);

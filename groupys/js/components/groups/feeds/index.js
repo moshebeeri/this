@@ -98,7 +98,7 @@ class GroupFeed extends Component {
                 <TextInput
                     style={styles.item}
 
-                    autoFocus={true}
+
                     placeholder="My Message"
                     returnKeyType='done'
                     onChangeText={(messsage) => this.setState({messsage})}

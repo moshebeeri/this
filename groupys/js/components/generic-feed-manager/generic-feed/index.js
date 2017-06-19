@@ -86,8 +86,13 @@ export default class GenericFeedItem extends Component {
             userApi.unlike(item);
         }
 
-        saveFeed(item){
-            promotionApi.save(item.id);
+        async saveFeed(item){
+            try {
+                await promotionApi.save(item.id);
+                this.props.item.social.saved = true;
+            }catch (error){
+
+            }
         }
         createFeed(item){
             if(item.content){

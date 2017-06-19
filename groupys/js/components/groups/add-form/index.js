@@ -26,8 +26,6 @@ let userApi = new UserApi();
 
 import GroupApi from "../../../api/groups"
 let groupApi = new GroupApi();
-import BusinessApi from "../../../api/business"
-let businessApi = new BusinessApi();
 
 const groupPolicy = [
     {
@@ -52,8 +50,11 @@ const groupType = [
 
 ]
 
-import {DeviceEventEmitter} from 'react-native'
-export default class AddGroup extends Component {
+
+import * as groupsAction from "../../../actions/groups";
+import { bindActionCreators } from "redux";
+
+class AddGroup extends Component {
 
     constructor(props) {
         super(props);
@@ -70,7 +71,7 @@ export default class AddGroup extends Component {
             groupType:'USERS',
             path:'',
             image: '',
-            business:',',
+            business:'',
             services:[]
 
 
@@ -97,10 +98,13 @@ export default class AddGroup extends Component {
           this.setState({
               users:users
           })
-            let response = await businessApi.getAll();
-            if (response) {
-                this.initBusiness(response);
+
+            if(this.props.businesses.businesses.length > 0 ) {
+                this.setState({
+                    business: this.props.businesses.businesses[0]
+                })
             }
+
         }catch (error){
             console.log(error);
         }
@@ -108,13 +112,8 @@ export default class AddGroup extends Component {
     }
 
 
-    initBusiness(responseData){
 
-        this.setState({
-            services: responseData,
-            business: responseData[0]._id
-        });
-    }
+
 
     replaceRoute(route) {
         this.props.navigation.goBack();
@@ -172,7 +171,7 @@ export default class AddGroup extends Component {
      }
 
      addToList(responseData){
-         DeviceEventEmitter.emit('AddGroups',  responseData);
+         this.props.fetchGroups();
      }
 
 
@@ -265,6 +264,7 @@ export default class AddGroup extends Component {
         let addPolicyTag = <Picker
             iosHeader="Group Policy"
             mode="dropdown"
+            style={{ flex:1}}
             selectedValue={this.state.groupPolocy}
             onValueChange={this.selectGroupPolocy.bind(this)}
         >
@@ -283,7 +283,9 @@ export default class AddGroup extends Component {
         let groupTypeTag = <Picker
             iosHeader="Group Type"
             mode="dropdown"
+            style={{ flex:1}}
             selectedValue={this.state.groupType}
+            itemStyle={ {flexDirection: 'row',marginTop:10 }}
             onValueChange={this.selectGroupType.bind(this)}
         >
 
@@ -303,13 +305,15 @@ export default class AddGroup extends Component {
             BusinessPiker = <Picker
                 iosHeader="Select Business"
                 mode="dropdown"
+                style={{ flex:1}}
                 selectedValue={this.state.business}
+                itemStyle={ {flexDirection: 'row',marginTop:4 }}
                 onValueChange={this.selectBusiness.bind(this)}>
 
                 {
 
 
-                    this.state.services.map((s, i) => {
+                    this.props.businesses.businesses.map((s, i) => {
                         return <Item
                             key={i}
                             value={s._id}
@@ -320,42 +324,58 @@ export default class AddGroup extends Component {
         }
 
         return (
-            <Container>
+            <Container style={{margin:10,backgroundColor: '#fff'}}>
 
 
                 <Content  style={{backgroundColor: '#fff'}}>
-
-                    <View style={{ flexDirection: 'row',marginTop:5 }}>
-
-                        <Button   transparent  onPress={() => this.pickPicture()}>
-                            <Text> select image </Text>
-                        </Button>
-
-                        {image}
-                    </View>
-
-
-
-                    <Item underline>
-                        <Input value={this.state.name} blurOnSubmit={true} returnKeyType='next' ref="1" onSubmitEditing={this.focusNextField.bind(this,"2")} autoFocus = {true} onChangeText={(name) => this.setState({name})} placeholder='Name' />
+                    <Item  style={{ margin:3 } } regular>
+                        {addPolicyTag}
                     </Item>
-                    <Item underline>
+                    <Item  style={{ margin:3 } } regular>
+                    {groupTypeTag}
+                    </Item>
+                    <Item  style={{ margin:3 } } regular>
+                    {BusinessPiker}
+                    </Item>
+
+
+
+
+                    <Item  style={{ margin:3 } } regular>
+                        <Input  value={this.state.name} blurOnSubmit={true} returnKeyType='next' ref="1" onSubmitEditing={this.focusNextField.bind(this,"2")} onChangeText={(name) => this.setState({name})} placeholder='Name' />
+                    </Item>
+                    <Item  style={{ margin:3 } } regular>
                         <Input value = {this.state.info}  blurO
                                 nSubmit={true} returnKeyType='done' ref="2"  onChangeText={(info) => this.setState({info})} placeholder='Description' />
                     </Item>
-                    {addPolicyTag}
-                    {groupTypeTag}
-                    {BusinessPiker}
-                    <Button  transparent onPress={() => this.showUsers(true)}>
+                    <Item  style={{ margin:3 } } regular>
+                     <Button  transparent onPress={() => this.showUsers(true)}>
                         <Text>Select Users </Text>
                     </Button>
                     {users}
+                    </Item>
+
+                    <Item  style={{ margin:3 } } regular>
+
+                        <Button  iconRight transparent  onPress={() => this.pickPicture()}>
+                            <Text style={{ fontStyle: 'normal',fontSize:10 }}>Pick </Text>
+                            <Icon name='camera' />
+                        </Button>
 
 
 
+
+                        <Button   iconRight transparent  onPress={() => this.pickFromCamera()}>
+                            <Text style={{ fontStyle: 'normal',fontSize:10 }}>take </Text>
+                            <Icon name='camera' />
+                        </Button>
+
+                        {image}
+                    </Item>
 
                 </Content>
-                <Footer>
+                <Footer style={{backgroundColor: '#fff'}}>
+
 
                     <Button transparent
                             onPress={this.saveFormData.bind(this)}
@@ -366,4 +386,17 @@ export default class AddGroup extends Component {
             </Container>
         );
     }
+
+
 }
+
+
+
+export default connect(
+    state => ({
+        businesses: state.businesses
+    }),
+    dispatch => bindActionCreators(groupsAction, dispatch)
+)(AddGroup);
+
+

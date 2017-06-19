@@ -3,53 +3,78 @@ import { Platform,
     AppRegistry,
     NavigatorIOS,
     TextInput,
-
+    View,
     Image,
+    ScrollView,
     TouchableOpacity,
+
     TouchableHighlight
 } from 'react-native';
-import {connect} from 'react-redux';
-import {actions} from 'react-native-navigation-redux-helpers';
-import {Container, Content, Text, InputGroup, Input, Button, Icon, View,Header,Item,Picker,Form,Footer} from 'native-base';
 
 
+
+import {Container,Content,Item,Form,Picker,Input,Footer,Button,Text,Icon} from 'native-base';
+
+import store from 'react-native-simple-store';
 
 
 import EntityUtils from "../../../utils/createEntity";
 
 let entityUtils = new EntityUtils();
 import ImagePicker from 'react-native-image-crop-picker';
-import store from 'react-native-simple-store';
-
-import {DeviceEventEmitter} from 'react-native'
-
-export default class AddBusiness extends Component {
+import styles from './styles'
+import * as businessAction from "../../../actions/business";
+import {connect} from 'react-redux';
+import { bindActionCreators } from "redux";
+ class AddBusiness extends Component {
 
 
     constructor(props) {
         super(props);
 
-        this.state = {
-            name: null,
-            address:'',
-            email:'',
-            website:'',
-            country:'',
-            city:'',
-            state:'',
-            path:'',
-            image:'',
-            type:'SMALL_BUSINESS',
-            images:'',
-            tax_id:'',
-            formID:'12345',
-            userId:'',
-            token:'',
+        if(props.navigation.state.params && props.navigation.state.params.item){
+            let item = props.navigation.state.params.item;
+            this.state = {
+                name: item.name,
+                address: item.address,
+                email: item.email,
+                website: item.website,
+                country: 'israel',
+                city: item.city,
+                state: '',
+                path: '',
+                image: '',
+                type: item.type,
+                images: '',
+                tax_id: item.tax_id,
+                formID: '12345',
+                userId: '',
+                token: '',
 
-            formData:{},
-        };
+                formData: {},
+            };
+        }else {
 
+            this.state = {
+                name: '',
+                address: '',
+                email: '',
+                website: '',
+                country: 'israel',
+                city: '',
+                state: '',
+                path: '',
+                image: '',
+                type: 'SMALL_BUSINESS',
+                images: '',
+                tax_id: '',
+                formID: '12345',
+                userId: '',
+                token: '',
 
+                formData: {},
+            };
+        }
         let stateFunc = this.setState.bind(this);
         store.get('token').then(storeToken => {
             stateFunc({
@@ -57,12 +82,7 @@ export default class AddBusiness extends Component {
                 }
             );
         });
-        store.get('user_id').then(storeUserId => {
-            stateFunc({
-                userId: storeUserId
-                }
-            );
-        });
+
     }
 
 
@@ -78,7 +98,7 @@ export default class AddBusiness extends Component {
 
     focusNextField(nextField) {
 
-       this.refs[nextField]._root.focus()
+       this.refs[nextField].focus()
 
     }
 
@@ -97,9 +117,15 @@ export default class AddBusiness extends Component {
         entityUtils.create('businesses',this.state,this.state.token,this.formSuccess.bind(this),this.formFailed.bind(this),this.state.userId);
     }
 
-    formSuccess(response){
-        DeviceEventEmitter.emit('addBusiness',  response);
-        store.save("b-id",response._id);
+
+     updateFormData(){
+
+
+         entityUtils.update('businesses',this.state,this.state.token,this.formSuccess.bind(this),this.formFailed.bind(this),this.props.navigation.state.params.item._id);
+     }
+
+     formSuccess(response){
+        this.props.fetchBusiness();
         this.replaceRoute('home');
     }
 
@@ -157,87 +183,97 @@ export default class AddBusiness extends Component {
                         />
 
 
+
         }
+        let saveButton =  <Button transparent
+                                  onPress={this.saveFormData.bind(this)}>
+            <Text>Add Business</Text>
+        </Button>
+        if(this.props.navigation.state.params && this.props.navigation.state.params.item){
+            saveButton =  <Button transparent
+                                  onPress={this.updateFormData.bind(this)}
+            >
+                <Text>Update Business</Text>
+            </Button>
+
+        }
+
         return (
+
             <Container>
 
 
-                <Content  style={{backgroundColor: '#fff'}}>
+                <Content  style={{margin:10,backgroundColor: '#fff'}}>
                     <Form>
-                    <Picker
-                        iosHeader="Select one"
-                        mode="dropdown"
-                        selectedValue={this.state.type}
-                        onValueChange={this.selectType.bind(this)}>
-                        <Item label="Small Business" value="SMALL_BUSINESS" />
-                        <Item label="Personal Services" value="PERSONAL_SERVICES" />
-                        <Item label="Company" value="COMPANY" />
-                        <Item label="Enterprise" value="ENTERPRISE" />
-
-                    </Picker>
-                    <Item underline>
-                        <Input  blurOnSubmit={true} returnKeyType='next' ref="1" onSubmitEditing={this.focusNextField.bind(this,"2")} autoFocus = {true} onChangeText={(name) => this.setState({name})} placeholder='Name' />
-                    </Item>
-                    <Item underline>
-                        <Input blurOnSubmit={true} returnKeyType='next' ref="2"  onSubmitEditing={this.focusNextField.bind(this,"3")}  onChangeText={(email) => this.setState({email})} placeholder='Email' />
-                    </Item>
-
-                    <Item underline>
-                        <Input blurOnSubmit={true} returnKeyType='next' ref="3"  onSubmitEditing={this.focusNextField.bind(this,"4")}  onChangeText={(website) => this.setState({website})} placeholder='Website' />
-                    </Item>
-                    <Item underline>
-                        <Input blurOnSubmit={true} returnKeyType='next' ref="4"  onSubmitEditing={this.focusNextField.bind(this,"5")}  onChangeText={(country) => this.setState({country})} placeholder='Country' />
-                    </Item>
-                    <Item underline>
-                        <Input blurOnSubmit={true} returnKeyType='next' ref="5"  onSubmitEditing={this.focusNextField.bind(this,"6")}  onChangeText={(state) => this.setState({state})} placeholder='State' />
-                    </Item>
-                    <Item underline>
-                        <Input blurOnSubmit={true} returnKeyType='next' ref="6"  onSubmitEditing={this.focusNextField.bind(this,"7")}  onChangeText={(city) => this.setState({city})} placeholder='City' />
-                    </Item>
-                    <Item underline>
-                        <Input blurOnSubmit={true} returnKeyType='next' ref="7"  onSubmitEditing={this.focusNextField.bind(this,"8")}  onChangeText={(address) => this.setState({address})} placeholder='Addresss' />
-                    </Item>
-                    <Item underline>
-                        <Input blurOnSubmit={true} returnKeyType='done' ref="8"   onChangeText={(tax_id) => this.setState({tax_id})} placeholder='Tax ID' />
-                    </Item>
 
 
-                    <View style={{ flexDirection: 'row',marginTop:5 }}>
 
-                    <Button   transparent  onPress={() => this.pickPicture()}>
-                        <Text> select image </Text>
-                    </Button>
+                        <Item style={{ margin:3 } } regular >
+                            <Input  value={this.state.name} blurOnSubmit={true} returnKeyType='next' ref="1" onSubmitEditing={this.focusNextField.bind(this,"2")} onChangeText={(name) => this.setState({name})} placeholder='Name' />
+                        </Item>
+                        <Item style={{ margin:3 } } regular >
+                          <Input value={this.state.email}  blurOnSubmit={true} returnKeyType='next' ref="2"  onSubmitEditing={this.focusNextField.bind(this,"3")}  onChangeText={(email) => this.setState({email})} placeholder='Email' />
+                        </Item>
 
-                    {image}
-                    </View>
-                    <View style={{ flexDirection: 'row',marginTop:5 }}>
+                        <Item style={{ margin:3 } } regular >
+                           <Input value={this.state.website}  blurOnSubmit={true} returnKeyType='next' ref="3"  onSubmitEditing={this.focusNextField.bind(this,"7")}  onChangeText={(website) => this.setState({website})} placeholder='Website' />
+                        </Item>
+                        {/*<Item style={{ margin:3 } } regular >*/}
+                            {/*<Input blurOnSubmit={true} returnKeyType='next' ref="4"  onSubmitEditing={this.focusNextField.bind(this,"5")}  onChangeText={(country) => this.setState({country})} placeholder='Country' />*/}
+                        {/*</Item>*/}
+                        {/*<Item style={{ margin:3 } } regular >*/}
+                            {/*<Input blurOnSubmit={true} returnKeyType='next' ref="5"  onSubmitEditing={this.focusNextField.bind(this,"6")}  onChangeText={(state) => this.setState({state})} placeholder='State' />*/}
+                        {/*</Item>*/}
+                        <Item style={{ margin:3 } } regular >
+                           <Input value={this.state.city} blurOnSubmit={true} returnKeyType='next' ref="6"  onSubmitEditing={this.focusNextField.bind(this,"7")}  onChangeText={(city) => this.setState({city})} placeholder='City' />
+                        </Item>
+                        <Item style={{ margin:3 } } regular >
+                           <Input value={this.state.address} blurOnSubmit={true} returnKeyType='next' ref="7"  onSubmitEditing={this.focusNextField.bind(this,"8")}  onChangeText={(address) => this.setState({address})} placeholder='Addresss' />
+                        </Item>
+                        <Item style={{ margin:3 } } regular >
+                           <Input value={this.state.tax_id} blurOnSubmit={true} returnKeyType='done' ref="8"   onChangeText={(tax_id) => this.setState({tax_id})} placeholder='Tax ID' />
+                        </Item>
 
-                        <Button   transparent  onPress={() => this.pickFromCamera()}>
-                            <Text> take picture </Text>
-                        </Button>
 
-                        {image}
-                    </View>
+                        <Item  style={{ margin:3 } } regular>
+                            <Button  iconRight transparent  onPress={() => this.pickPicture()}>
+                                <Text style={{ fontStyle: 'normal',fontSize:10 }}>Pick </Text>
+                                <Icon name='camera' />
+                            </Button>
+
+
+
+
+                            <Button   iconRight transparent  onPress={() => this.pickFromCamera()}>
+                                <Text style={{ fontStyle: 'normal',fontSize:10 }}>take </Text>
+                                <Icon name='camera' />
+                            </Button>
+
+                            {image}
+                        </Item>
 
 
 
 
 
-                </Form>
+                    </Form>
 
 
                 </Content>
-                <Footer>
+                <Footer style={{backgroundColor: '#fff'}}>
+                    {saveButton}
 
-                    <Button transparent
-                            onPress={this.saveFormData.bind(this)}
-                    >
-                        <Text>Add Business</Text>
-                    </Button>
                 </Footer>
             </Container>
+
         );
+
     }
 }
 
-
+export default connect(
+    state => ({
+        businesses: state.businesses
+    }),
+    dispatch => bindActionCreators(businessAction, dispatch)
+)(AddBusiness);

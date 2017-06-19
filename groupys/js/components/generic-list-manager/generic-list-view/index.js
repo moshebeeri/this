@@ -15,31 +15,34 @@ export default class GenericListView extends Component {
 
 
 
+    showProduct(props,item){
 
+        this.props.navigation.navigate(this.props.addform,{item:item});
+    }
 
     render() {
 
         let row = undefined
 
         if(this.props.item.pictures && this.props.item.pictures.length > 0){
-            row =  <ListItem key={this.props.index} thumbnail>
+            row =  <ListItem key={this.props.index} onPress={this.showProduct.bind(this,this.props,this.props.item)} thumbnail>
                 <Left>
-                    <Thumbnail square size={80} source={{uri: this.props.item.pictures[0].pictures[3]}} />
+                    <Thumbnail  size={80} source={{uri: this.props.item.pictures[0].pictures[3]}} />
                 </Left>
                 <Body>
                 <Text>{this.props.item.name}</Text>
                 <Text note>{this.props.item.info}</Text>
                 </Body>
                 <Right>
-                    <Button transparent onPress={() =>  this.props.deleteProduct(`${this.props.index}`)}>
-                        <Text>Remove</Text>
-                    </Button>
+                    {/*<Button transparent onPress={() =>  this.props.deleteProduct(`${this.props.index}`)}>*/}
+                        {/*<Text>Remove</Text>*/}
+                    {/*</Button>*/}
                 </Right>
             </ListItem>
         }else {
-            row =  <ListItem key={this.props.index} thumbnail style={{backgroundColor: '#fff'}}>
+            row =  <ListItem key={this.props.index} onPress={this.showProduct.bind(this,this.props,this.props.item)}  thumbnail style={{backgroundColor: '#fff'}}>
                 <Left>
-                    <Thumbnail square size={80} source={require('../../../../images/client_1.png')}/>
+                    <Thumbnail  size={80} source={require('../../../../images/client_1.png')}/>
                 </Left>
                 <Body>
 
@@ -47,9 +50,9 @@ export default class GenericListView extends Component {
                 <Text note>{this.props.item.info}</Text>
                 </Body>
                 <Right>
-                    <Button transparent onPress={() =>  this.props.deleteProduct(`${this.props.index}`)}>
-                        <Text>Remove</Text>
-                    </Button>
+                    {/*<Button transparent onPress={() =>  this.props.deleteProduct(`${this.props.index}`)}>*/}
+                        {/*<Text>Remove</Text>*/}
+                    {/*</Button>*/}
                 </Right>
             </ListItem>
         }

@@ -17,12 +17,12 @@ import EntityUtils from "../../../utils/createEntity";
 let entityUtils = new EntityUtils();
 import ImagePicker from 'react-native-image-crop-picker';
 
-import BusinessApi from "../../../api/business"
 
 
-let businessApi = new BusinessApi();
-import {DeviceEventEmitter} from 'react-native'
-export default class AddProduct extends Component {
+import * as productsAction from "../../../actions/product";
+import store from 'react-native-simple-store';
+import { bindActionCreators } from "redux";
+class AddProduct extends Component {
 
 
 
@@ -46,7 +46,14 @@ export default class AddProduct extends Component {
             business: '',
             formData:{}
         };
+        let stateFunc = this.setState.bind(this);
 
+        store.get('token').then(storeToken => {
+            stateFunc({
+                    token: storeToken
+                }
+            );
+        });
     }
 
 
@@ -54,11 +61,10 @@ export default class AddProduct extends Component {
 
     async componentWillMount(){
         try {
-            let response = await businessApi.getAll();
-
-            if (response) {
-                this.initBusiness(response);
+            if(this.props.businesses.businesses.length > 0) {
+                this.selectBusiness(this.props.businesses.businesses[0]);
             }
+
         }catch (error){
             console.log(error);
         }
@@ -97,7 +103,7 @@ export default class AddProduct extends Component {
     }
 
     formSuccess(response){
-        DeviceEventEmitter.emit('AddProduct',  response);
+        this.props.fetchProducts();
         this.replaceRoute('home');
     }
 
@@ -173,7 +179,7 @@ export default class AddProduct extends Component {
 
         let pikkerTag = undefined;
 
-        if(this.state.services.length > 0 ){
+        if(this.props.businesses.businesses.length > 0 ){
             pikkerTag = <Picker
                 iosHeader="Select Business"
                 mode="dropdown"
@@ -183,7 +189,7 @@ export default class AddProduct extends Component {
                 {
 
 
-                    this.state.services.map((s, i) => {
+                    this.props.businesses.businesses.map((s, i) => {
                         return <Item
                             key={i}
                             value={s._id}
@@ -252,4 +258,14 @@ export default class AddProduct extends Component {
         );
     }
 }
+
+
+export default connect(
+    state => ({
+        products: state.products,
+        businesses: state.businesses
+    }),
+
+    dispatch => bindActionCreators(productsAction, dispatch)
+)(AddProduct);
 

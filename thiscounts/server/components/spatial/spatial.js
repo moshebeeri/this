@@ -91,6 +91,9 @@ Spatial.prototype.add2index = function add(gid, callback) {
  * @param coordinate
  * @param distance
  * @param type
+ * @param pattern
+ * @param skip
+ * @param limit
  * @param callback
  *
  * https://stackoverflow.com/questions/35125336/how-to-search-all-nodes-within-particular-radius-using-latitude-and-longitude-in
@@ -115,23 +118,26 @@ Spatial.prototype.add2index = function add(gid, callback) {
  * where _id IS NOT NULL
  * RETURN ls, _id, 2 * 6371 * asin(sqrt(haversin(radians(lat - u_lat))+ cos(radians(lat))* cos(radians(u_lat))* haversin(radians(lon - u_lon)))) as d
  *
- *
- *
- *
  */
-Spatial.prototype.withinDistanceByType = function add(coordinate, distance, type, callback) {
-  let query = `WITH ${JSON.stringify(coordinate)} AS coordinate
+Spatial.prototype.withinDistance = function add(coordinate, distance, type, pattern, skip, limit, callback) {
+  let query = `WITH {longitude:${coordinate.longitude},latitude:${coordinate.latitude}} AS coordinate
     CALL spatial.withinDistance('world', coordinate, ${distance}) YIELD node AS u
-    MATCH (u:${type})
-    with u._id as _id
+    MATCH (u:${type})${pattern}
+    with u._id as _id, ${coordinate.longitude} as lon, ${coordinate.latitude} as lat, u.lat as u_lat, u.lon as u_lon
     where _id IS NOT NULL
-    return distinct _id
+    return _id, 2 * 6371 * asin(sqrt(haversin(radians(lat - u_lat))+ cos(radians(lat))* cos(radians(u_lat))* haversin(radians(lon - u_lon)))) as d
+    ORDER BY d DESC
+    skip ${skip} limit ${limit}
   `;
+  console.log(query);
   locationGraph.query(query, function (err, _ids) {
     if(err) return callback(err);
     return callback(null, _ids);
   })
 };
+
+
+
 
 /**
  *

@@ -139,23 +139,38 @@ exports.test_me = function (req, res) {
   return res.status(201).json(spreads);
 };
 
-
-function applyToGroups(instance) {
-  let business;
-  if (instance && instance.promotion && (business = instance.promotion.entity.business)) {
-    if (instance.variation === 'SINGLE') {
-      let query = instanceGraphModel.related_type_id_dir_query(business, 'FOLLOW', 'group', 'in', 0, 1000);
-      instanceGraphModel.query(query, function (err, groups_ids) {
-        if (err) return callback(err, null);
-        groups_ids.forEach(_id =>
-          instance_group_activity(instance, _id))
-      })
+function applyToGroups(promotion, instances) {
+  instances.forEach(instance => {
+    let business;
+    if (instance && promotion && (business = promotion.entity.business)) {
+      if (instance.variation === 'SINGLE') {
+        let query = instanceGraphModel.related_type_id_dir_query(business._id, 'FOLLOW', 'group', 'in', 0, instance.quantity);
+        console.log(query);
+        instanceGraphModel.query(query, function (err, groups_ids) {
+          if (err) return console.error(err); //return callback(err);
+          groups_ids.forEach(_id =>
+            instance_group_activity(instance, _id))
+        })
+      }
     }
-  }
+  });
 }
+// lat: promotion.location.lat,
+//   lon: promotion.location.lng,
 
-function applyToUsers(instance) {
-  instance_eligible_activity(instance);
+//see https://neo4j.com/blog/real-time-recommendation-engine-data-science/
+function applyToUsers(promotion, instances, callback) {
+  instances.forEach(instance => {
+    instance_eligible_activity(instance);
+    //coordinate, distance, type, pattern, skip, limit, callback
+    spatial.withinDistance({
+      longitude: instance.location.lng,
+      latitude: instance.location.lat
+    }, 30, 'instance', '', 0, instance.quantity, function (err, results) {
+      if (err) return console.error(err); //return callback(err);
+      results.forEach(result => console.log(JSON.stringify(result)))
+    });
+  })
 }
 
 function create_promotion(promotion, callback) {
@@ -191,10 +206,8 @@ function create_promotion(promotion, callback) {
 
           instance.cratePromotionInstances(promotion, function (err, instances) {
             if (err) return callback(err, null);
-            instances.forEach(instance => {
-              applyToGroups(instance);
-              applyToUsers(instance);
-            });
+            applyToGroups(promotion, instances);
+            applyToUsers(promotion, instances);
           });
         });
       });

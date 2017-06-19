@@ -13,8 +13,9 @@ import {actions} from 'react-native-navigation-redux-helpers';
 import {Container, Content, Text, InputGroup, Picker,Input, Button,Body ,Icon,Left,
     View,Header,Item,Footer,ListItem,Right,Thumbnail} from 'native-base';
 
-
+import { bindActionCreators } from "redux";
 import SelectProductsComponent from './selectProducts';
+import * as promotionsAction from "../../../actions/promotions";
 
 var createEntity = require("../../../utils/createEntity");
 import ImagePicker from 'react-native-image-crop-picker';
@@ -118,7 +119,7 @@ const types = [
 
 
 import {DeviceEventEmitter} from 'react-native'
-export default class AddPromotion extends Component {
+ class AddPromotion extends Component {
 
 
 
@@ -126,9 +127,8 @@ export default class AddPromotion extends Component {
 
     constructor(props) {
         super(props);
-
         this.state = {
-            token:'',
+            token: '',
             path: '',
             image: '',
             type: 'PERCENT',
@@ -138,32 +138,59 @@ export default class AddPromotion extends Component {
             product: '',
             productList: [],
             showProductsList: false,
-            percent:{},
-            amount:'',
-            retail_price:'',
-            total_discount:'',
+            percent: {},
+            amount: '',
+            retail_price: '',
+            total_discount: '',
             percent_range: {},
             start: "",
             end: "",
             location: "",
-            info:"",
+            info: "",
             discount_on: 'GLOBAL'
 
 
         }
+
 
     }
 
 
     async componentWillMount(){
         try {
-            let response = await businessApi.getAll();
-            if (response) {
-                await this.initBusiness(response);
+            if(this.props.businesses.businesses.length > 0) {
+                this.selectBusiness(this.props.businesses.businesses[0]._id);
             }
-            if(this.state.selectedBusiness){
-                let productsReponse = await productApi.findByBusinessId(this.state.selectedBusiness);
-                await this.initProducts(productsReponse);
+
+            if(this.props.navigation.state.params && this.props.navigation.state.params.item){
+                let item = this.props.navigation.state.params.item;
+               await  this.setState({
+                    type: item.type,
+                    start: item.start,
+                    end: item.end,
+                    location: item.location,
+                    name: item.name,
+                     info:item.description
+
+                });
+                if(item.type == 'PERCENT'){
+                    await   this.setState({
+                        percent:{
+                            percent:item.percent.values[0]
+                        }
+                    })
+                }
+                if(!item.product){
+                    await  this.setState({
+                        product:item.product,
+                        discount_on: 'GLOBAL'
+                    })
+                }else{
+                    await  this.setState({
+                        discount_on: 'PRODUCT'
+                    })
+                }
+
             }
 
         }catch (error){
@@ -180,13 +207,7 @@ export default class AddPromotion extends Component {
         });
     }
 
-    async initBusiness(responseData){
 
-         this.setState({
-            businesses: responseData,
-             business: responseData[0]._id
-        });
-    }
     focusNextField(nextField) {
 
         this.refs[nextField]._root.focus()
@@ -200,40 +221,7 @@ export default class AddPromotion extends Component {
 
    async saveFormData(){
 
-       let promotion = {
-           image: this.state.image,
-           type: this.state.type,
-           percent: this.state.percent,
-           amount: Number(this.state.amount),
-           retail_price: Number(this.state.retail_price),
-           total_discount: Number(this.state.total_discount),
-          // percent_range: this.state.percent_range,
-           start: this.state.start,
-           end: this.state.end,
-           location: this.state.location,
-           info: this.state.info,
-           path: this.state.path,
-           name: this.state.name,
-
-       };
-       promotion.entity = {};
-       if(this.state.discount_on == 'GLOBAL'){
-           promotion.entity.business = this.state.business;
-       }else {
-           promotion.entity.business = this.state.business;
-           promotion.entity.product = this.state.product;
-       }
-       promotion.percent = {};
-       if(this.state.type == 'PERCENT'){
-           promotion.percent.variation = 'SINGLE';
-           promotion.percent.values = [this.state.percent.percent]
-       }
-
-       if(this.state.type == 'PERCENT_RANGE'){
-           promotion.percent.variation = 'RANGE';
-           promotion.percent.values = [this.state.percent_range.from,this.state.percent_range.to]
-       }
-
+       let promotion = this.createPromotionFromState();
 
        try {
             let response = await promotionApi.createPromotion(promotion,this.addToList.bind(this));
@@ -244,15 +232,68 @@ export default class AddPromotion extends Component {
         }
     }
 
-    addToList(responseData){
-        DeviceEventEmitter.emit('addPromotions',  responseData);
+     async updateFormData(){
+
+         let promotion = this.createPromotionFromState();
+
+         try {
+             let response = await promotionApi.updatePromotion(promotion,this.addToList.bind(this),this.props.navigation.state.params.item._id);
+             this.replaceRoute();
+         }catch (error){
+             console.log(error);
+             this.replaceRoute();
+         }
+     }
+
+     addToList(responseData){
+       this.props.fetchPromotions();
     }
 
+
+    createPromotionFromState(){
+        let promotion = {
+            image: this.state.image,
+            type: this.state.type,
+            percent: this.state.percent,
+            amount: Number(this.state.amount),
+            retail_price: Number(this.state.retail_price),
+            total_discount: Number(this.state.total_discount),
+            // percent_range: this.state.percent_range,
+            start: this.state.start,
+            end: this.state.end,
+            location: this.state.location,
+            description: this.state.info,
+            path: this.state.path,
+            name: this.state.name,
+
+        };
+        promotion.entity = {};
+        if(this.state.discount_on == 'GLOBAL'){
+            promotion.entity.business = this.state.business;
+        }else {
+            promotion.entity.business = this.state.business;
+            promotion.product = this.state.product;
+        }
+
+        promotion.percent = {};
+        if(this.state.type == 'PERCENT'){
+            promotion.percent.variation = 'SINGLE';
+            promotion.percent.values = [this.state.percent.percent]
+        }
+
+        if(this.state.type == 'PERCENT_RANGE'){
+            promotion.percent.variation = 'RANGE';
+            promotion.percent.values = [this.state.percent_range.from,this.state.percent_range.to]
+        }
+
+        return promotion;
+
+    }
 
 
     async selectBusiness(value){
         let businessId = value;
-        let selectedBusiness = this.state.businesses.find(function(val, i) {
+        let selectedBusiness = this.props.businesses.businesses.find(function(val, i) {
             return val._id === businessId;
         });
 
@@ -366,6 +407,18 @@ export default class AddPromotion extends Component {
                 }) }
         </Picker>
 
+        let submitButton = <Button transparent
+                                   onPress={this.saveFormData.bind(this)}
+        >
+            <Text>Add Promotion</Text>
+        </Button>
+        if(this.props.navigation.state.params && this.props.navigation.state.params.item){
+            submitButton = <Button transparent
+                                   onPress={this.updateFormData.bind(this)}
+            >
+                <Text>Update Promotion</Text>
+            </Button>
+        }
 
         if(this.state.discount_on == 'PRODUCT') {
 
@@ -397,32 +450,27 @@ export default class AddPromotion extends Component {
 
             }
 
-            let businessesPikkerTag = undefined;
 
-            if (this.state.businesses.length > 0) {
-                businessesPikkerTag = <Picker
+            let businessesPikkerTag = <Picker
 
-                    iosHeader="Business"
-                    mode="dropdown"
-                    selectedValue={this.state.business}
-                    onValueChange={this.selectBusiness.bind(this)}
-                    style={{ flex:1}}
-                >
+                iosHeader="Business"
+                mode="dropdown"
+                style={{ flex:1}}
+                selectedValue={this.state.business}
+                onValueChange={this.selectBusiness.bind(this)}>
 
-
-                    {
+                {
 
 
-                        this.state.businesses.map((s, i) => {
-                            return <Item
-                                key={i}
-                                value={s._id}
-                                label={s.name}/>
-                        }) }
-                </Picker>
 
-            }
 
+                    this.props.businesses.businesses.map((s, i) => {
+                        return <Item
+                            key={i}
+                            value={s._id}
+                            label={s.name}/>
+                    }) }
+            </Picker>
 
             let typePikkerTag = <Picker
                 iosHeader="Discount"
@@ -472,6 +520,7 @@ export default class AddPromotion extends Component {
                 <Container>
 
                     <Content style={{backgroundColor: '#fff'}}>
+
                         <Item underline>
                             {businessesPikkerTag}
                         </Item>
@@ -509,9 +558,7 @@ export default class AddPromotion extends Component {
                                    onChangeText={(total_discount) => this.setState({total_discount})}
                                    placeholder='Product Total Price'/>
                         </Item>
-                        <Item underline>
-                            {typePikkerTag}
-                        </Item>
+
                         {discountForm}
 
 
@@ -535,8 +582,16 @@ export default class AddPromotion extends Component {
                         <Item underline>
                             <View style={{flexDirection: 'row', marginTop: 5}}>
 
-                                <Button transparent onPress={() => this.pickFromCamera()}>
+                                <Button transparent onPress={() => this.pickPicture()}>
                                     <Text>Select Image </Text>
+                                </Button>
+
+                                {image}
+                            </View>
+                            <View style={{ flexDirection: 'row',marginTop:5 }}>
+
+                                <Button   transparent  onPress={() => this.pickFromCamera()}>
+                                    <Text> take picture </Text>
                                 </Button>
 
                                 {image}
@@ -545,41 +600,37 @@ export default class AddPromotion extends Component {
 
                     </Content>
                     <Footer>
+                        {submitButton}
 
-                        <Button transparent
-                                onPress={this.saveFormData.bind(this)}
-                        >
-                            <Text>Add Promotion</Text>
-                        </Button>
                     </Footer>
                 </Container>
             );
         }else{
 
 
-            let businessesPikkerTag = undefined;
 
-            if (this.state.businesses.length > 0) {
-                businessesPikkerTag = <Picker
+            let businessesPikkerTag = <Picker
 
-                    iosHeader="Business"
-                    mode="dropdown"
-                    style={{ flex:1}}
-                    selectedValue={this.state.business}
-                    onValueChange={this.selectBusiness.bind(this)}>
+                iosHeader="Business"
+                mode="dropdown"
+                style={{ flex:1}}
+                selectedValue={this.state.business}
+                onValueChange={this.selectBusiness.bind(this)}>
 
-                    {
+                {
 
 
-                        this.state.businesses.map((s, i) => {
-                            return <Item
-                                key={i}
-                                value={s._id}
-                                label={s.name}/>
-                        }) }
-                </Picker>
 
-            }
+
+                    this.props.businesses.businesses.map((s, i) => {
+                        return <Item
+                            key={i}
+                            value={s._id}
+                            label={s.name}/>
+                    }) }
+            </Picker>
+
+
 
 
             let image;
@@ -598,21 +649,22 @@ export default class AddPromotion extends Component {
             return (
                 <Container>
 
-                    <Content style={{backgroundColor: '#fff'}}>
-                        <Item underline>
+                    <Content style={{margin:10,backgroundColor: '#fff'}}>
+
+                        <Item  style={{ margin:3 } } regular>
                             {businessesPikkerTag}
                         </Item>
 
-                        <Item underline>
+                        <Item  style={{ margin:3 } } regular>
                             {discountPiker}
                         </Item>
 
 
-                        <Item underline>
-                            <Input blurOnSubmit={true} returnKeyType='next' ref="1" onSubmitEditing={this.focusNextField.bind(this,"2")} value={this.state.name} onChangeText={(name) => this.setState({name})}
+                        <Item  style={{ margin:3 } } regular>
+                            <Input  blurOnSubmit={true} returnKeyType='next' ref="1" onSubmitEditing={this.focusNextField.bind(this,"2")} value={this.state.name} onChangeText={(name) => this.setState({name})}
                                    placeholder='Name'/>
                         </Item>
-                        <Item underline>
+                        <Item  style={{ margin:3 } } regular>
                             <Input blurOnSubmit={true} returnKeyType='done' ref="2"  value={this.state.info} onChangeText={(info) => this.setState({info})}
                                    placeholder='Description'/>
                         </Item>
@@ -620,7 +672,7 @@ export default class AddPromotion extends Component {
 
                         <PercentComponent state={this.state} setState={this.setState.bind(this)}/>
 
-                        <Item underline>
+                        <Item  style={{ margin:3 } } regular>
                             <DatePicker
                                 style={{width: 200}}
                                 date={this.state.end}
@@ -637,28 +689,41 @@ export default class AddPromotion extends Component {
                                 }}
                             />
                         </Item>
-                        <Item underline>
-                            <View style={{flexDirection: 'row', marginTop: 5}}>
+                        <Item  style={{ margin:3 } } regular>
 
-                                <Button transparent onPress={() => this.pickFromCamera()}>
-                                    <Text>Select Image </Text>
-                                </Button>
+                            <Button  iconRight transparent  onPress={() => this.pickPicture()}>
+                                <Text style={{ fontStyle: 'normal',fontSize:10 }}>Pick </Text>
+                                <Icon name='camera' />
+                            </Button>
 
-                                {image}
-                            </View>
+
+
+
+                            <Button   iconRight transparent  onPress={() => this.pickFromCamera()}>
+                                <Text style={{ fontStyle: 'normal',fontSize:10 }}>take </Text>
+                                <Icon name='camera' />
+                            </Button>
+
+                            {image}
                         </Item>
 
                     </Content>
-                    <Footer>
+                    <Footer style={{backgroundColor: '#fff'}}>
 
-                        <Button transparent
-                                onPress={this.saveFormData.bind(this)}
-                        >
-                            <Text>Add Promotion</Text>
-                        </Button>
+                        {submitButton}
                     </Footer>
                 </Container>
             );
         }
     }
+
+
 }
+export default connect(
+    state => ({
+        promotions: state.promotions,
+        businesses: state.businesses
+    }),
+
+    dispatch => bindActionCreators(promotionsAction, dispatch)
+)(AddPromotion);
