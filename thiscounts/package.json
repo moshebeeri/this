@@ -41,6 +41,7 @@
     "passport-local": "0.1.6",
     "passport-twitter": "1.0.4",
     "q": "1.4.1",
+    "qrcode": "^0.8.2",
     "randomstring": "1.1.5",
     "request-ip": "1.2.3",
     "s3-uploader": "0.9.0",

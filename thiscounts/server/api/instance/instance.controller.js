@@ -6,7 +6,7 @@ const Realize = require('../realize/realize.model');
 const graphTools = require('../../components/graph-tools');
 const graphModel = graphTools.createGraphModel('instance');
 const randomstring = require('randomstring');
-import QRCode from 'qrcode';
+const QRCode = require('qrcode');
 
 // Get list of instances
 exports.index = function (req, res) {
