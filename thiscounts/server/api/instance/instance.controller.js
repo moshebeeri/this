@@ -86,6 +86,30 @@ exports.destroy = function (req, res) {
   });
 };
 
+//'/available/:id'
+exports.available = function (req, res) {
+  Instance
+    .findById(req.params.id)
+    .exec(function (err, instance) {
+      if (err) {
+        return handleError(res, err);
+      }
+      if (!instance) {
+        return res.send(404);
+      }
+      const query = `MATCH (i:instance { _id:'${req.params.id}'}) return i.quantity`;
+      graphModel.query(query, function (err, results) {
+        if (err) {
+          return handleError(res, err);
+        }
+        if (results.length !== 1) {
+          return res.status(500).send(`results length error ${results.length} should be 1`);
+        }
+        return res.json(200, results[0]);
+      })
+    })
+};
+
 //'/save/:id'
 exports.save = function (req, res) {
   Instance
@@ -99,17 +123,52 @@ exports.save = function (req, res) {
       }
       const query = `MATCH (:instance { _id:'${req.params.id}'})<-[r:REALIZED|:SAVED]-(:user{ _id: '${req.user._id}'}) return r`;
       graphModel.query(query, function (err, realize) {
-        if (err) { return handleError(res, err); }
-        if (realize.length > 0) { return res.status(500).send('Instance already realized or saved'); }
-
-        let realize_code = randomstring.generate({length: 8, charset: 'numeric'});
-        let save_time = new Date();
-        graphModel.relate_ids(req.user._id, 'SAVED', instance._id, `{code: '${realize_code}',timestamp: '${save_time}'}`, function (err) {
-          if (err) return handleError(res, err);
-          instance.realize_code = realize_code;
-          instance.save_time = save_time;
-          return res.json(200, instance);
+        if (err) {
+          return handleError(res, err);
+        }
+        if (realize.length > 0) {
+          return res.status(500).send('Instance already realized or saved');
+        }
+        graphModel.query(`MATCH (i:instance { _id:'${req.params.id}'}) return i.quantity as quantity`, function (err, results) {
+          if (err) {
+            return handleError(res, err);
+          }
+          if (results.length !== 1 && results[0].quantity < 1) {
+            return res.status(400).send('Run out of instances');
+          }
+          let realize_code = randomstring.generate({length: 8, charset: 'numeric'});
+          let save_time = new Date();
+          graphModel.relate_ids(req.user._id, 'SAVED', instance._id, `{code: '${realize_code}',timestamp: '${save_time}'}`, function (err) {
+            if (err) return handleError(res, err);
+            instance.realize_code = realize_code;
+            instance.save_time = save_time;
+            graphModel.query(`MATCH (i:instance { _id:'${req.params.id}'}) SET i.quantity=i.quantity-1`, function (err) {
+              if (err) return handleError(res, err);
+              return res.json(200, instance);
+            });
+          });
         });
+      })
+    })
+};
+
+//'/unsave/:id'
+exports.unsave = function (req, res) {
+  Instance
+    .findById(req.params.id)
+    .exec(function (err, instance) {
+      if (err) {
+        return handleError(res, err);
+      }
+      if (!instance) {
+        return res.send(404);
+      }
+      const query = `MATCH (i:instance { _id:'${req.params.id}'})<-[r:SAVED]-(:user{ _id: '${req.user._id}'}) SET i.quantity=i.quantity+1 delete r`;
+      graphModel.query(query, function (err) {
+        if (err) {
+          return handleError(res, err);
+        }
+        return res.json(200, instance);
       });
     })
 };
@@ -127,7 +186,7 @@ function updateInstanceById(user_id, instance_id) {
         if (!instance)
           return console.error('instance not found');
         if (instance.remaining <= 0)
-        return console.error('instance remaining <= 0');
+          return console.error('instance remaining <= 0');
         instance.remaining -= 1;
         instance.realizations.push(realize);
         instance.save();

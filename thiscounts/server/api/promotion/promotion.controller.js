@@ -118,13 +118,15 @@ let set_promotion_location = function (promotion, callback) {
     Promotion.populate(promotion, {path: 'entity.mall', model: 'Mall'}, function (err, promotion) {
       if (err) return logger.error('failed to populate location ', err);
       promotion.location = promotion.entity.mall.location;
+      if(!promotion.entity.mall) return callback(new Error('Mall not found error'));
       promotion.mall = promotion.entity.mall._id;
       spatial.location_to_point(promotion);
       callback(null, promotion)
     });
   else if (utils.defined(promotion.entity.business))
     Promotion.populate(promotion, {path: 'entity.business', model: 'Business'}, function (err, promotion) {
-      if (err) return logger.error('failed to populate location ', err);
+      if (err) return callback(err);
+      if(!promotion.entity.business) return callback(new Error('Business not found error'));
       promotion.location = promotion.entity.business.location;
       promotion.business = promotion.entity.business._id;
       spatial.location_to_point(promotion);
@@ -162,12 +164,11 @@ function applyToGroups(promotion, instances) {
 function applyToUsers(promotion, instances, callback) {
   instances.forEach(instance => {
     instance_eligible_activity(instance);
-    //coordinate, distance, type, pattern, skip, limit, callback
     spatial.withinDistance({
       longitude: instance.location.lng,
       latitude: instance.location.lat
     }, 30, 'instance', '', 0, instance.quantity, function (err, results) {
-      if (err) return console.error(err); //return callback(err);
+      if (err) return console.error(err);
       results.forEach(result => console.log(JSON.stringify(result)))
     });
   })
