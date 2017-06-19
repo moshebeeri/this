@@ -157,7 +157,7 @@ exports.update = function (req, res) {
     let updated = _.merge(group, req.body);
     updated.save(function (err) {
       if (err) { return handleError(res, err); }
-      return res.status(200).json(groups);
+      return res.status(200).json(group);
     });
   });
 };
@@ -193,7 +193,7 @@ exports.offer = function (req, res) {
     }
     graphModel.relate_ids(group._id, 'OFFER', offer._id);
     group_offer_activity(group, offer);
-    return res.status(200).json(groups);
+    return res.status(200).json(group);
   });
 };
 
@@ -207,7 +207,7 @@ exports.message = function (req, res) {
       return res.status(404).send('no group');
     }
     group_message_activity(group, req.user._id, req.body);
-    return res.status(200).json(groups);
+    return res.status(200).json(group);
   });
 };
 

@@ -6,6 +6,7 @@ const Realize = require('../realize/realize.model');
 const graphTools = require('../../components/graph-tools');
 const graphModel = graphTools.createGraphModel('instance');
 const randomstring = require('randomstring');
+import QRCode from 'qrcode';
 
 // Get list of instances
 exports.index = function (req, res) {
@@ -159,6 +160,30 @@ exports.realize = function (req, res) {
       })
     })
   });
+};
+
+exports.qrcode = function (req, res) {
+  const query = `MATCH (instance:instance{_id:${req.params.id})<-[rel:SAVED]-(user:user{_id:${req.user._id}) return rel.code`;
+  graphModel.query(query, function (err, codes) {
+    if (err) return handleError(res, err);
+    if (codes.length === 0)
+      return res.status(404).send(`realize code mismatch`);
+
+    if (codes.length > 1)
+      return res.status(500).send('multiple instances found');
+
+    QRCode.toDataURL(JSON.stringify({
+      code: code[0]
+    }), function (err, url) {
+      if (err) {
+        return res.status(500).send(err);
+      } else {
+        return res.status(200).json({
+          qrcode: url
+        });
+      }
+    });
+  })
 };
 
 function handleError(res, err) {
