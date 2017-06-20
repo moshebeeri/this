@@ -90,6 +90,7 @@ export default class GenericFeedItem extends Component {
                 await promotionApi.save(item.id);
                 this.props.item.social.saved = true;
             }catch (error){
+                console.log('failed to save');
 
             }
         }

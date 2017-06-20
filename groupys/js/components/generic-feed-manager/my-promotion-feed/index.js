@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import {Image ,Platform,PanResponder } from 'react-native';
+import {Image ,Platform,PanResponder,TouchableHighlight } from 'react-native';
 import {connect} from 'react-redux';
 import {actions} from 'react-native-navigation-redux-helpers';
 import { Container, Content, Text, InputGroup, Input,Thumbnail,Button,Picker,Right,Item, Icon,Left,Header,Footer,Body, View,Card,CardItem } from 'native-base';
@@ -7,10 +7,9 @@ import UserApi from '../../../api/user'
 let userApi = new UserApi();
 import PromotionApi from '../../../api/promotion'
 let promotionApi = new PromotionApi();
-const {
-    replaceAt,
-} = actions;
-;
+
+import LinearGradient from 'react-native-linear-gradient';
+import styles from './styles'
 
 
 export default class MyPromotionFeedItem extends Component {
@@ -18,6 +17,7 @@ export default class MyPromotionFeedItem extends Component {
 
 
     constructor(props) {
+
         super(props);
         this.state = {
             zone:{}
@@ -55,6 +55,10 @@ export default class MyPromotionFeedItem extends Component {
              onMoveShouldSetPanResponder:(evt, gestureState) => this.onMove(evt, gestureState),
 
         });
+    }
+
+    realize(){
+        console.log('bemma');
     }
 
     onMove(evt, gestureState){
@@ -144,10 +148,31 @@ export default class MyPromotionFeedItem extends Component {
                     </CardItem>
 
 
-                    <CardItem content>
-                        {secondFeed}
+                    <View style={{flex:-1,justifyContent:'center',height:300}}>
+                    {secondFeed}
                         {banner}
-                    </CardItem>
+                    </View>
+                    <View   style={styles.buttonView}>
+
+                        <TouchableHighlight onPress={this.realize.bind(this)}>
+
+                            <LinearGradient
+                                start={{x: 0.0, y: 0.5}} end={{x: 1.0, y: 0.5}}
+
+                                locations={[0.0, 1.0]}
+                                colors={['#3e595c', '#00d3a9']}
+                                style={styles.button}>
+
+
+                                <Text style={styles.buttonText}>Realize</Text>
+
+
+                            </LinearGradient>
+                        </TouchableHighlight>
+
+
+
+                    </View>
                     <CardItem>
                         <Text>Realization Code: {item.relcode}</Text>
                     </CardItem>
