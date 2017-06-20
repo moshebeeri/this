@@ -205,38 +205,38 @@ class AddProduct extends Component {
         return (
             <Container>
 
-                <Content  style={{backgroundColor: '#fff'}}>
+                <Content style={{margin:10,backgroundColor: '#fff'}}>
 
-                    <Item underline>
-                        <Input  blurOnSubmit={true} returnKeyType='next' ref="1" onSubmitEditing={this.focusNextField.bind(this,"2")} autoFocus = {true} onChangeText={(name) => this.setState({name})} placeholder='Name' />
+                    <Item style={{ margin:3 } } regular >
+                        <Input  blurOnSubmit={true} returnKeyType='next' ref="1" onSubmitEditing={this.focusNextField.bind(this,"2")} onChangeText={(name) => this.setState({name})} placeholder='Name' />
                     </Item>
-                    <Item underline>
+                    <Item style={{ margin:3 } } regular >
                         <Input  blurOnSubmit={true} returnKeyType='next' ref="2" onSubmitEditing={this.focusNextField.bind(this,"3")} onChangeText={(info) => this.setState({info})} placeholder='Description' />
                     </Item>
 
 
-                    <Item underline>
+                    <Item style={{ margin:3 } } regular >
                         <Input  blurOnSubmit={true} returnKeyType='done' ref="3"   onChangeText={(retail_price) => this.setState({retail_price})} placeholder='Price' />
                     </Item>
 
                     {pikkerTag}
 
-                    <View style={{ flexDirection: 'row',marginTop:5 }}>
+                    <Item  style={{ margin:3 } } regular>
+                        <Button  iconRight transparent  onPress={() => this.pickPicture()}>
+                            <Text style={{ fontStyle: 'normal',fontSize:10 }}>Pick </Text>
+                            <Icon name='camera' />
+                        </Button>
 
-                        <Button   transparent  onPress={() => this.pickPicture()}>
-                            <Text> select image </Text>
+
+
+
+                        <Button   iconRight transparent  onPress={() => this.pickFromCamera()}>
+                            <Text style={{ fontStyle: 'normal',fontSize:10 }}>take </Text>
+                            <Icon name='camera' />
                         </Button>
 
                         {image}
-                    </View>
-                    <View style={{ flexDirection: 'row',marginTop:5 }}>
-
-                        <Button   transparent  onPress={() => this.pickFromCamera()}>
-                            <Text> take picture </Text>
-                        </Button>
-
-                        {image}
-                    </View>
+                    </Item>
 
 
 
@@ -246,7 +246,7 @@ class AddProduct extends Component {
 
 
                 </Content>
-                <Footer>
+                <Footer style={{backgroundColor: '#fff'}}>
 
                     <Button transparent
                             onPress={this.saveFormData.bind(this)}

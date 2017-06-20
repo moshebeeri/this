@@ -68,7 +68,7 @@ x
                         scrollRenderAheadDistance={100}
                         pageSize={13}
                         renderRow={(item) =>
-                            <this.props.ItemDetail item={item} selectApi={this}  />
+                            <this.props.ItemDetail navigation={this.props.navigation} item={item} selectApi={this}  />
                         }
                         onEndReached={(event)=>this.endEvent(event)}
                         enableEmptySections={true}

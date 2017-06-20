@@ -111,13 +111,17 @@ class FeedConverter
                         realized:feed.activity.instance.social_state.realized,
                         use:feed.activity.instance.social_state.use,
                     },
-                    showsave:!feed.activity.instance.social_state.saved && !feed.activity.instance.social_state.realized,
+                    showsave:feed.activity.instance.social_state.saved && !feed.activity.instance.social_state.realized,
                     actor:feed.activity.actor_business._id,
                     itemTitle: 'Promotion : ' + feed.activity.promotion.percent.values[0] + ' % off',
                     description: feed.activity.actor_business.name + ' ' + feed.activity.actor_business.city + ' ' + feed.activity.actor_business.address + ' offer a new promotion',
                     banner: {
                         uri:feed.activity.promotion.pictures[0].pictures[1]
                     }
+                }
+
+                if(feed.activity.actor_business.pictures.length > 0){
+                    response.businessLogo = feed.activity.actor_business.pictures[0].pictures[3];
                 }
             }else {
 
@@ -132,7 +136,7 @@ class FeedConverter
                         realized:feed.activity.instance.social_state.realized,
                         use:feed.activity.instance.social_state.use,
                     },
-                    showsave:!feed.activity.instance.social_state.saved && !feed.activity.instance.social_state.realized,
+                    showsave:feed.activity.instance.social_state.saved && !feed.activity.instance.social_state.realized,
                     actor:feed.activity.actor_business._id,
                     itemTitle: 'Promotion : ' + feed.activity.promotion.percent.values[0] + ' % off',
                     description: feed.activity.actor_business.name + ' ' + feed.activity.actor_business.city + ' ' + feed.activity.actor_business.address + ' offer a new promotion',

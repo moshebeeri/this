@@ -43,6 +43,7 @@ const timer = BackgroundTimer.setInterval(() =>{
 
 
 }, 60000);
+
 let updateDialogOption = {
     updateTitle:"update"
 }
@@ -245,7 +246,7 @@ import * as businessAction from "../../actions/business";
 
                 <Tabs initialPage={index} onChangeTab={this.onChangeTab.bind(this)} style={{backgroundColor: '#fff',}}>
                     <Tab heading={ <TabHeading style={{ backgroundColor: "#ffe6e6" }}><Text style={{color: 'black', fontSize: 11,}}>Home</Text></TabHeading>}>
-                        <Feeds index={0} navigateAction={this.headerAction.bind(this)}/>
+                        <Feeds index={0}  navigation={this.props.navigation} navigateAction={this.headerAction.bind(this)}/>
                     </Tab>
                     <Tab heading={ <TabHeading style={{ backgroundColor: "#ffe6e6" }}><Text style={{color: 'black', fontSize: 11,}}>My Promotions</Text></TabHeading>}>
                         <MydPromotions index={1} navigateAction={this.headerAction.bind(this)}/>

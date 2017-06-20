@@ -103,14 +103,26 @@ export default class MyPromotionFeedItem extends Component {
                 if (item.banner.uri) {
                     banner = <Image
                         style={{width: 400, height: 300,padding: 0, flex: -1}}
-                        source={{uri: item.banner.uri}}/>
-                }
+                        source={{uri: item.banner.uri}}>
+                        <Text style={{ fontWeight: 'bold',marginLeft:20,marginTop:170,fontSize:25,color:'white'}}>{item.itemTitle}</Text>
+                        <Text style={{fontWeight: 'bold',marginLeft:20,marginTop:5,color:'white',fontSize:15}}note>{item.description} </Text>
+                    </Image>
+                        }
 
                 if (item.banner.require) {
                     banner = <Image
                         style={{padding: 5, flex: -1}}
-                        source={item.banner.require}/>
+                        source={item.banner.require}>
+                        <Text style={{ fontWeight: 'bold',marginLeft:20,marginTop:170,fontSize:25,color:'white'}}>{item.itemTitle}</Text>
+                        <Text style={{fontWeight: 'bold',marginLeft:20,marginTop:5,color:'white',fontSize:15}}note>{item.description} </Text>
+                    </Image>
                 }
+            }else{
+                banner = <Item>
+                    <Text style={{marginLeft:20,marginTop:170,fontSize:25}}>{item.itemTitle}</Text>
+                    <Text style={{marginLeft:20,marginTop:200,fontSize:10}} note>{item.description} </Text>
+
+                </Item>
             }
 
 
@@ -124,8 +136,8 @@ export default class MyPromotionFeedItem extends Component {
                         <Left>
                             {logo}
                             <Body>
-                            <Text>{item.itemTitle}</Text>
-                            <Text note>{item.description} </Text>
+
+
                             </Body>
                         </Left>
 

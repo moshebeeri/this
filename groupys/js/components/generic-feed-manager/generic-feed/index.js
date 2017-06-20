@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import {Image ,Platform,PanResponder } from 'react-native';
+import {Image ,Platform,PanResponder,TouchableHighlight } from 'react-native';
 import {connect} from 'react-redux';
 import {actions} from 'react-native-navigation-redux-helpers';
 import { Container, Content, Text, InputGroup, Input,Thumbnail,Button,Picker,Right,Item, Icon,Left,Header,Footer,Body, View,Card,CardItem } from 'native-base';
@@ -7,11 +7,8 @@ import UserApi from '../../../api/user'
 let userApi = new UserApi();
 import PromotionApi from '../../../api/promotion'
 let promotionApi = new PromotionApi();
-const {
-    replaceAt,
-} = actions;
-;
-
+import LinearGradient from 'react-native-linear-gradient';
+import styles from './styles'
 
 export default class GenericFeedItem extends Component {
 
@@ -58,6 +55,8 @@ export default class GenericFeedItem extends Component {
     }
 
     onMove(evt, gestureState){
+
+
         if(gestureState.moveY < 300){
             this.props.selectApi.fetchTopList(this.props.item.id,true)
         }
@@ -94,6 +93,13 @@ export default class GenericFeedItem extends Component {
 
             }
         }
+    doAction(){
+        this.props.selectApi.props.api.props.navigation.navigate('realizePromotion')
+        }
+
+    save(){
+       this.saveFeed(this.props.item)
+    }
         createFeed(item){
             if(item.content){
                 item = item.content;
@@ -119,36 +125,78 @@ export default class GenericFeedItem extends Component {
                 }
             }
 
+            let feedAction = undefined;
+            if (item.showsave){
+                feedAction =  <View   style={styles.buttonView}>
 
+                    <TouchableHighlight onPress={this.save.bind(this)}>
+
+                    <LinearGradient
+
+                        locations={[0,0.6]}
+                        colors={['white', 'gray']}
+                        style={styles.button}>
+
+                        <Text style={styles.buttonText}>Save</Text>
+
+
+                    </LinearGradient>
+                    </TouchableHighlight>
+
+
+
+                </View>
+            }
+            let buisnessLogo = undefined;
+            if(item.businessLogo){
+                buisnessLogo =  <Thumbnail square size={100} source={{uri: item.businessLogo}} />
+
+            }
             let banner = undefined;
             if(item.banner) {
 
                 if (item.banner.uri) {
                     banner = <Image
-                        style={{width: 400, height: 300,padding: 0, flex: -1}}
-                        source={{uri: item.banner.uri}}/>
+                        style={styles.image}
+                        source={{uri: item.banner.uri}}
+                    >
+
+                        {buisnessLogo}
+
+                        <Text style={styles.imageTopText}>{item.itemTitle}</Text>
+                        <Text style={styles.imageButtomText} note>{item.description} </Text>
+
+                    </Image>
                 }
 
                 if (item.banner.require) {
                     banner = <Image
-                        style={{padding: 5, flex: -1}}
-                        source={item.banner.require}/>
+                        style={{padding: 0, flex: -1}}
+                        source={item.banner.require}>
+                        <Text style={{marginLeft:20,marginTop:170,fontSize:25}}>{item.itemTitle}</Text>
+                    <Text style={{marginLeft:20,marginTop:200,fontSize:10}} note>{item.description} </Text>
+                </Image>
                 }
+
+            }else{
+                banner = <Item>
+                    <Text style={{marginLeft:20,marginTop:170,fontSize:25}}>{item.itemTitle}</Text>
+                    <Text style={{marginLeft:20,marginTop:200,fontSize:10}} note>{item.description} </Text>
+
+                </Item>
             }
-            let likes = item.social.numberLikes + ' Likes'
+            let likes = new String(item.social.numberLikes);
             let likeIcon = <Button transparent small onPress={this.like.bind(this,item.id)}>
+                <Text>{likes}</Text>
                             <Icon  active style={{color: 'gray'}} name="thumbs-up" />
-                            <Text>{likes}</Text>
+
                 </Button>
             let saveIcon = undefined;
 
+
             let followIcon =undefined;
-            if(item.showsave){
-                saveIcon = <Button transparent small onPress={this.saveFeed.bind(this,item)} >
-                    <Icon active name="md-add"  />
-                    <Text>keep promotion</Text>
-                </Button>
-            }else{
+
+
                 followIcon = <Button transparent>
                     <Icon  active style={{color: 'gray'}} name="person" />
                         <Text> follow</Text>
@@ -161,13 +209,14 @@ export default class GenericFeedItem extends Component {
                     </Button>
 
                 }
-            }
+
 
 
             if(item.social && item.social.like == true){
                 likeIcon = <Button transparent small onPress={this.unlike.bind(this,item.id)} >
+
                                  <Icon active name="thumbs-up"  />
-                                 <Text>{likes}</Text>
+
                             </Button>
 
 
@@ -183,20 +232,24 @@ export default class GenericFeedItem extends Component {
 
                         <Left>
                             {logo}
-                            <Body>
-                            <Text>{item.itemTitle}</Text>
-                            <Text note>{item.description} </Text>
-                            </Body>
+
                         </Left>
 
                     </CardItem>
 
 
-                    <CardItem content>
+                    <View style={{flex:-1,justifyContent:'center',height:300}}>
                         {secondFeed}
                         {banner}
-                    </CardItem>
+
+
+
+
+                    </View>
+                    {feedAction}
+
                     <CardItem>
+
 
                        <Button transparent>
                             {likeIcon}
