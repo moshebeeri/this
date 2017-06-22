@@ -58,7 +58,7 @@ export default class MyPromotionFeedItem extends Component {
     }
 
     realize(){
-        console.log('bemma');
+        this.props.selectApi.props.api.props.navigation.navigate('realizePromotion',{item:this.props.item})
     }
 
     onMove(evt, gestureState){
@@ -173,9 +173,7 @@ export default class MyPromotionFeedItem extends Component {
 
 
                     </View>
-                    <CardItem>
-                        <Text>Realization Code: {item.relcode}</Text>
-                    </CardItem>
+
                 </Card>
 
             );

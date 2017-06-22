@@ -249,7 +249,7 @@ import * as businessAction from "../../actions/business";
                         <Feeds index={0}  navigation={this.props.navigation} navigateAction={this.headerAction.bind(this)}/>
                     </Tab>
                     <Tab heading={ <TabHeading style={{ backgroundColor: "#ffe6e6" }}><Text style={{color: 'black', fontSize: 11,}}>My Promotions</Text></TabHeading>}>
-                        <MydPromotions index={1} navigateAction={this.headerAction.bind(this)}/>
+                        <MydPromotions  navigation={this.props.navigation}  index={1} navigateAction={this.headerAction.bind(this)}/>
                     </Tab>
                     <Tab
                         heading={ <TabHeading style={{ backgroundColor: "#ffe6e6" }}><Text style={{color: 'black', fontSize: 11,}}>Groups</Text></TabHeading>}>
