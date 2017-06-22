@@ -222,7 +222,7 @@ exports.realize = function (req, res) {
 };
 
 exports.qrcode = function (req, res) {
-  const query = `MATCH (instance:instance{_id:${req.params.id})<-[rel:SAVED]-(user:user{_id:${req.user._id}) return rel.code`;
+  const query = `MATCH (instance:instance{_id:"${req.params.id}"})<-[rel:SAVED]-(user:user{_id:"${req.user._id}"}) return rel.code`;
   graphModel.query(query, function (err, codes) {
     if (err) return handleError(res, err);
     if (codes.length === 0)
@@ -232,7 +232,7 @@ exports.qrcode = function (req, res) {
       return res.status(500).send('multiple instances found');
 
     QRCode.toDataURL(JSON.stringify({
-      code: code[0]
+      code: codes[0]['rel.code']
     }), function (err, url) {
       if (err) {
         return res.status(500).send(err);
