@@ -51,6 +51,11 @@ export default class ProfileDrawer extends Component {
 
     }
 
+    showPromotionScaning(){
+        this.replaceRoute('ReadQrCode');
+
+    }
+
     showPromotions(){
         this.replaceRoute('home');
 
@@ -76,6 +81,13 @@ export default class ProfileDrawer extends Component {
                 <Item  onPress={() => this.showBusiness()}  style={{ margin:3 } } regular>
                         {/*<Icon name='user' />*/}
                         <Text style={{ padding:20,color:'blue',fontStyle: 'normal',fontSize:15 }}>My Businesses</Text>
+
+
+                </Item>
+
+                <Item  onPress={() => this.showPromotionScaning()}  style={{ margin:3 } } regular>
+                    {/*<Icon name='user' />*/}
+                    <Text style={{ padding:20,color:'blue',fontStyle: 'normal',fontSize:15 }}>Scan Promotion</Text>
 
 
                 </Item>

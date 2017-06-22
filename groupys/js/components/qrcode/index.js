@@ -4,18 +4,16 @@ import {connect} from 'react-redux';
 import {actions} from 'react-native-navigation-redux-helpers';
 import {Container, Content, Text, InputGroup, Input, Button, Icon, View,Header} from 'native-base';
 
-import HeaderContent from './../homeHeader';
+
 
 import theme from './qccode-theme';
 import styles from './styles';
 import store from 'react-native-simple-store';
 import Camera from 'react-native-camera';
-const {
-    replaceAt,
-} = actions;
+import PromotionApi from '../../api/promotion'
 
-
-class Qrcode extends Component {
+let promotionApi = new PromotionApi()
+export default  class Qrcode extends Component {
 
     static propTypes = {
         replaceAt: React.PropTypes.func,
@@ -32,24 +30,11 @@ class Qrcode extends Component {
             validationMessage: '',
             token: '',
             userId: '',
+            isRealized: false,
             qrCode:''
         }
         ;
 
-        let stateFunc = this.setState.bind(this);
-        store.get('token').then(storeToken => {
-
-            stateFunc({
-                    token: storeToken
-                }
-            );
-        });
-        store.get('user_id').then(storeUserId => {
-            stateFunc({
-                    userId: storeUserId
-                }
-            );
-        });
 
 
     }
@@ -58,25 +43,33 @@ class Qrcode extends Component {
 
 
 
-    replaceRoute(route) {
-        this.props.replaceAt('qrcode', {key: route}, this.props.navigation.key);
+
+
+
+
+
+    async onBarCodeRead(data){
+        let qrcode = JSON.parse(data.data);
+        if(!this.state.isRealized) {
+            this.setState({
+                qrcode: qrcode,
+                isRealized: true
+            })
+        }
+
+
     }
 
-
-
-
-
-    onBarCodeRead(data){
-        this.setState({
-            qrCode:data.data
-        })
+    async componentWillUpdate(){
+        console.log('will')
 
     }
 
-    takePicture() {
-        this.camera.capture()
-            .then((data) => console.log(data))
-            .catch(err => console.error(err));
+    async componentDidUpdate(){
+        console.log('did')
+        if(this.state.qrcode){
+            let response = await promotionApi.realizePromotion(this.state.qrcode.code)
+        }
     }
 
     render() {
@@ -85,17 +78,6 @@ class Qrcode extends Component {
         return (
 
             <Container>
-                <Header
-                    style={{ flexDirection: 'column',
-                        height: 110,
-                        elevation: 0,
-                        paddingTop: (Platform.OS === 'ios') ? 20 : 3,
-                        justifyContent: 'space-between',
-                    }}
-                >
-                    <HeaderContent />
-                </Header>
-
 
                 <Content theme={theme} style={{backgroundColor: theme.backgroundColor}}>
 
@@ -107,7 +89,6 @@ class Qrcode extends Component {
                         onBarCodeRead  = {this.onBarCodeRead.bind(this)}
                         style={styles.preview}
                         aspect={Camera.constants.Aspect.fill}>
-                        <Text style={styles.capture} onPress={this.takePicture.bind(this)}>[CAPTURE]</Text>
                         <Text style={styles.capture} >{this.state.qrCode}</Text>
                     </Camera>
 
@@ -118,14 +99,6 @@ class Qrcode extends Component {
 }
 
 
-function bindActions(dispatch) {
-    return {
-        replaceAt: (routeKey, route, key) => dispatch(replaceAt(routeKey, route, key)),
-    };
-}
 
-const mapStateToProps = state => ({
-    navigation: state.cardNavigation,
-});
 
-export default connect(mapStateToProps, bindActions)(Qrcode);
+

@@ -665,10 +665,13 @@ import {DeviceEventEmitter} from 'react-native'
                                    placeholder='Name'/>
                         </Item>
                         <Item  style={{ margin:3 } } regular>
-                            <Input blurOnSubmit={true} returnKeyType='done' ref="2"  value={this.state.info} onChangeText={(info) => this.setState({info})}
+                            <Input blurOnSubmit={true} returnKeyType='next' ref="2" onSubmitEditing={this.focusNextField.bind(this,"3")}  value={this.state.info} onChangeText={(info) => this.setState({info})}
                                    placeholder='Description'/>
                         </Item>
-
+                        <Item  style={{ margin:3 } } regular>
+                            <Input blurOnSubmit={true} returnKeyType='done' ref="3"  value={this.state.amount} onChangeText={(amount) => this.setState({amount})}
+                                   placeholder='Amount'/>
+                        </Item>
 
                         <PercentComponent state={this.state} setState={this.setState.bind(this)}/>
 

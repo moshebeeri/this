@@ -163,10 +163,10 @@ export default class GenericFeedItem extends Component {
                     >
 
                         {buisnessLogo}
-
+                        <View style={styles.backdropView}>
                         <Text style={styles.imageTopText}>{item.itemTitle}</Text>
                         <Text style={styles.imageButtomText} note>{item.description} </Text>
-
+                        </View>
                     </Image>
                 }
 
