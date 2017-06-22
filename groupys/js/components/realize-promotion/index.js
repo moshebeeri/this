@@ -1,8 +1,9 @@
 import React, {Component} from 'react';
 import {connect} from 'react-redux';
 
-import {View, Container,Button,Text,Input,Footer, Icon, List, ListItem, Content} from 'native-base';
-
+import {View, Container,Button,Text,Input,Footer, Icon, List, ListItem, Content,Item,Card,CardItem} from 'native-base';
+import {Image} from 'react-native';
+import styles from './style';
 
 
 import PromotionApi from '../../api/promotion'
@@ -16,18 +17,23 @@ export default class RealizePromotion extends Component {
 
         this.state = {
             code: '',
-
+            image: {
+                qrcode: ''
+                ,
+            }
 
         };
     }
     async componentWillMount(){
-
+        let qrCode  = await promotionApi.getPromotionQrcode(this.props.navigation.state.params.item.id);
+        this.setState({
+            image:qrCode
+        })
 
 
     }
 
     async realize(){
-       let respone  = await promotionApi.realizePromotion(this.state.code);
 
         this.props.navigation.goBack();
     }
@@ -36,22 +42,24 @@ export default class RealizePromotion extends Component {
 
 
     render() {
+        let item = this.props.navigation.state.params.item;
         return (
             <Container>
             <Content style={{backgroundColor: '#fff'}}>
-                <Input autoFocus = {true} blurOnSubmit={true} returnKeyType='done'   value={this.state.code} onChangeText={(code) => this.setState({code})}
-                       placeholder='Code'/>
 
 
+
+                <Card>
+                    <CardItem >
+                        <Text style={{ fontWeight: 'bold',marginLeft:20,marginTop:20,fontSize:25,color:'black'}}>{item.itemTitle}</Text>
+                    </CardItem>
+                    <CardItem style={styles.camera}>
+                       <Image style={{width: 300, height: 300, resizeMode: Image.resizeMode.contain, borderWidth: 1, borderColor: 'red'}} source={{uri: this.state.image.qrcode}}/>
+
+                    </CardItem>
+                </Card>
             </Content>
-                <Footer>
 
-                    <Button transparent
-                            onPress={this.realize.bind(this)}
-                    >
-                        <Text>Realize code</Text>
-                    </Button>
-                </Footer>
             </Container>
         );
     }
