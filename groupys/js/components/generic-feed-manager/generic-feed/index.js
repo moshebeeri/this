@@ -75,7 +75,7 @@ export default class GenericFeedItem extends Component {
         like(item){
             this.props.item.social.like = true;
             this.props.item.social.numberLikes = this.props.item.social.numberLikes + 1;
-            userApi.like( this.props.item);
+            userApi.like( this.props.item.id);
             this.props.selectApi.updateFeed( this.props.item);
         }
 
@@ -83,7 +83,7 @@ export default class GenericFeedItem extends Component {
             this.props.item.social.like = false;
             this.props.item.social.numberLikes = this.props.item.social.numberLikes - 1;
 
-            userApi.unlike(item);
+            userApi.unlike(this.props.item.id);
             this.props.selectApi.updateFeed( this.props.item);
         }
 
