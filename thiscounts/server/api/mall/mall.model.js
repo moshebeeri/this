@@ -10,6 +10,7 @@ let MallSchema = new Schema({
   social_state : {},
   name: String,
   gid: { type: Number, index: true},
+  logo: String,
   pictures: [],
   location : {
     lng : Number,
