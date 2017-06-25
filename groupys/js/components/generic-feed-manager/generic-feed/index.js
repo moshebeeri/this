@@ -74,21 +74,24 @@ export default class GenericFeedItem extends Component {
         like(item){
             this.props.item.social.like = true;
             this.props.item.social.numberLikes = this.props.item.social.numberLikes + 1;
-            this.props.selectApi.reRender();
             userApi.like(item);
+            this.props.selectApi.updateFeed( this.props.item);
         }
 
         unlike(item){
             this.props.item.social.like = false;
             this.props.item.social.numberLikes = this.props.item.social.numberLikes - 1;
-            this.props.selectApi.reRender();
+
             userApi.unlike(item);
+            this.props.selectApi.updateFeed( this.props.item);
         }
 
         async saveFeed(item){
             try {
                 await promotionApi.save(item.id);
                 this.props.item.social.saved = true;
+                this.props.item.showsave = false;
+                this.props.selectApi.updateFeed( this.props.item);
             }catch (error){
                 console.log('failed to save');
 
