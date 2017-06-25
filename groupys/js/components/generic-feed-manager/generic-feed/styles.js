@@ -31,8 +31,30 @@ module.exports = {
 
 
     },
+    like: {
+
+        marginLeft:15 ,
+
+
+
+    },
+    likeText: {
+
+        marginTop:15 ,
+
+
+
+    },
+    buttonLike: {
+
+
+
+
+
+
+    },
     buttonView:{
-        flex:-1,justifyContent:'center',flexDirection: 'row'
+        flex:-1,justifyContent:'center',flexDirection: 'row',height: 55,
     },
     image:{
         width: width, height: 300,flex:-1

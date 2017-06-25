@@ -7,6 +7,7 @@ import UserApi from '../../../api/user'
 let userApi = new UserApi();
 import PromotionApi from '../../../api/promotion'
 let promotionApi = new PromotionApi();
+
 import LinearGradient from 'react-native-linear-gradient';
 import styles from './styles'
 
@@ -74,7 +75,7 @@ export default class GenericFeedItem extends Component {
         like(item){
             this.props.item.social.like = true;
             this.props.item.social.numberLikes = this.props.item.social.numberLikes + 1;
-            userApi.like(item);
+            userApi.like( this.props.item);
             this.props.selectApi.updateFeed( this.props.item);
         }
 
@@ -191,11 +192,13 @@ export default class GenericFeedItem extends Component {
                 </Item>
             }
             let likes = new String(item.social.numberLikes);
-            let likeIcon = <Button transparent small onPress={this.like.bind(this,item.id)}>
+            let likeIcon =<Button  transparent style={styles.buttonView}  onPress={this.like.bind(this)}>
                 <Text>{likes}</Text>
-                            <Icon  active style={{color: 'gray'}} name="thumbs-up" />
+                <Thumbnail style={styles.like}  source={require('../../../../images/like.jpg')}/>
+            </Button>
 
-                </Button>
+
+
             let saveIcon = undefined;
 
 
@@ -218,10 +221,10 @@ export default class GenericFeedItem extends Component {
 
 
             if(item.social && item.social.like == true){
-                likeIcon = <Button transparent small onPress={this.unlike.bind(this,item.id)} >
+                likeIcon = <Button transparent  style={styles.buttonView}  onPress={this.unlike.bind(this,item.id)} >
 
-                                 <Icon active name="thumbs-up"  />
-
+                                      <Text>{likes}</Text>
+                                   <Thumbnail style={styles.like}  source={require('../../../../images/like_postive.jpg')}/>
                             </Button>
 
 
@@ -253,17 +256,15 @@ export default class GenericFeedItem extends Component {
                     </View>
                     {feedAction}
 
-                    <CardItem>
+                    <CardItem >
 
-
-                       <Button transparent>
                             {likeIcon}
 
-                        </Button>
+
                         {followIcon}
-                        <Button transparent>
+
                         {saveIcon}
-                        </Button>
+
                     </CardItem>
                 </Card>
 
