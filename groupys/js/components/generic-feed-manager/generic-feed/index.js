@@ -2,7 +2,7 @@ import React, {Component} from 'react';
 import {Image ,Platform,PanResponder,TouchableHighlight } from 'react-native';
 import {connect} from 'react-redux';
 import {actions} from 'react-native-navigation-redux-helpers';
-import { Container, Content, Text, InputGroup, Input,Thumbnail,Button,Picker,Right,Item, Icon,Left,Header,Footer,Body, View,Card,CardItem } from 'native-base';
+import { Container, Content, Text, InputGroup, Input,Thumbnail,Button,Picker,Right,Item,Left,Header,Footer,Body, View,Card,CardItem } from 'native-base';
 import UserApi from '../../../api/user'
 let userApi = new UserApi();
 import PromotionApi from '../../../api/promotion'
@@ -10,8 +10,11 @@ let promotionApi = new PromotionApi();
 
 import LinearGradient from 'react-native-linear-gradient';
 import styles from './styles'
-
+import Icon from 'react-native-vector-icons/SimpleLineIcons';
+import Icon2 from 'react-native-vector-icons/MaterialCommunityIcons';
 export default class GenericFeedItem extends Component {
+
+
 
 
 
@@ -191,11 +194,7 @@ export default class GenericFeedItem extends Component {
 
                 </Item>
             }
-            let likes = new String(item.social.numberLikes);
-            let likeIcon =<Button  transparent style={styles.buttonView}  onPress={this.like.bind(this)}>
-                <Text>{likes}</Text>
-                <Thumbnail style={styles.like}  source={require('../../../../images/like.jpg')}/>
-            </Button>
+
 
 
 
@@ -205,26 +204,35 @@ export default class GenericFeedItem extends Component {
             let followIcon =undefined;
 
 
-                followIcon = <Button transparent>
-                    <Icon  active style={{color: 'gray'}} name="person" />
-                        <Text> follow</Text>
+                followIcon = <Button style={styles.iconView} transparent>
+
+                    <Icon   size={20}  style={styles.like} name="user-follow" />
+                    <Text>Follow</Text>
                     </Button>
 
                 if( item.social && item.social.follow == true){
-                    followIcon =  <Button transparent>
-                        <Icon active name="person" />
-                        <Text> follow</Text>
+                    followIcon =  <Button transparent style={styles.iconView} >
+                        <Icon active size={20} style={styles.like} name="user-follow" />
+                        <Text>Follow</Text>
+
                     </Button>
 
                 }
 
+            let likes = new String(item.social.numberLikes);
+            let likeIcon =<Button  transparent style={styles.iconView}  onPress={this.like.bind(this)}>
+                <Text>{likes}</Text>
+                <Icon style={styles.like}    size={20}   name="like" />
+                <Text>like</Text>
 
+            </Button>
 
             if(item.social && item.social.like == true){
-                likeIcon = <Button transparent  style={styles.buttonView}  onPress={this.unlike.bind(this,item.id)} >
+                likeIcon = <Button transparent  style={styles.iconView}  onPress={this.unlike.bind(this,item.id)} >
+                                 <Text>{likes}</Text>
 
-                                      <Text>{likes}</Text>
-                                   <Thumbnail style={styles.like}  source={require('../../../../images/like_postive.jpg')}/>
+                                <Icon  color="#0000b3" style={styles.like}      size={20}   name="like" />
+                    <Text>like</Text>
                             </Button>
 
 

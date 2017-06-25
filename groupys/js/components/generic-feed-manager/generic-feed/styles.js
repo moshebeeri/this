@@ -34,7 +34,7 @@ module.exports = {
     like: {
 
         marginLeft:15 ,
-
+        marginRight:5 ,
 
 
     },
@@ -55,6 +55,9 @@ module.exports = {
     },
     buttonView:{
         flex:-1,justifyContent:'center',flexDirection: 'row',height: 55,
+    },
+    iconView:{
+        flex:-1,justifyContent:'center',flexDirection: 'row',height: 30,
     },
     image:{
         width: width, height: 300,flex:-1
