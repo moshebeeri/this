@@ -255,7 +255,7 @@ import {DeviceEventEmitter} from 'react-native'
             image: this.state.image,
             type: this.state.type,
             percent: this.state.percent,
-            amount: Number(this.state.amount),
+
             retail_price: Number(this.state.retail_price),
             total_discount: Number(this.state.total_discount),
             // percent_range: this.state.percent_range,
@@ -279,10 +279,12 @@ import {DeviceEventEmitter} from 'react-native'
         if(this.state.type == 'PERCENT'){
             promotion.percent.variation = 'SINGLE';
             promotion.percent.values = [this.state.percent.percent]
+            promotion.percent.quantity = Number(this.state.amount)
         }
 
         if(this.state.type == 'PERCENT_RANGE'){
             promotion.percent.variation = 'RANGE';
+            promotion.percent.quantity = Number(this.state.amount)
             promotion.percent.values = [this.state.percent_range.from,this.state.percent_range.to]
         }
 

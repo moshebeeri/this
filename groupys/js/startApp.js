@@ -35,7 +35,8 @@ const AppNavigator = StackNavigator({
         Signup:{screen: Signup},
         realizePromotion:{screen:RealizePromotion},
         Register:{screen: Register},
-        ReadQrCode:{screen:QrCode}
+        ReadQrCode:{screen:QrCode},
+
 
 
 

@@ -2,7 +2,7 @@ import React, {Component} from 'react';
 import {Image, Platform} from 'react-native';
 import {connect} from 'react-redux';
 import {actions} from 'react-native-navigation-redux-helpers';
-import {Container, Content, Text, InputGroup, Input, Button, Icon, View,Header} from 'native-base';
+import {Container, Content, Text, InputGroup, Input, Button, Icon, View,Header,Footer} from 'native-base';
 
 
 
@@ -31,7 +31,8 @@ export default  class Qrcode extends Component {
             token: '',
             userId: '',
             isRealized: false,
-            qrCode:''
+            qrCode:'',
+            realizedMessage:''
         }
         ;
 
@@ -48,38 +49,65 @@ export default  class Qrcode extends Component {
 
 
 
-    async onBarCodeRead(data){
+     onBarCodeRead(data){
         let qrcode = JSON.parse(data.data);
         if(!this.state.isRealized) {
-            this.setState({
+             this.setState({
                 qrcode: qrcode,
-                isRealized: true
+                isRealized: false,
+                realizedMessage:''
             })
         }
 
 
     }
 
-    async componentWillUpdate(){
-        console.log('will')
 
-    }
 
-    async componentDidUpdate(){
-        console.log('did')
+    async realize(){
+
         if(this.state.qrcode){
-            let response = await promotionApi.realizePromotion(this.state.qrcode.code)
+            try {
+                let response = await promotionApi.realizePromotion(this.props.navigation.state.params.qrcode.code)
+                let realizedMessage = 'Promotion ' + response.instance.promotion.name + ' realized';
+                this.setState({
+                    realizedMessage: realizedMessage,
+                    isRealized: true,
+                    qrcode: ''
+                })
+            }catch (error){
+                let realizedMessage = 'Promotion was realized'
+                this.setState({
+                    realizedMessage: realizedMessage,
+                    isRealized: true,
+                    qrcode: ''
+                })
+
+            }
+
+        }else{
+            this.setState({
+                realizedMessage: '',
+                isRealized: false,
+                qrcode: ''
+            })
         }
     }
 
     render() {
 
-
+        let showButton = undefined;
+        if(this.state.qrcode){
+            showButton=   <Button transparent title='Ok'
+                    onPress={() => this.realize()}>
+                <Text > Realize </Text>
+            </Button>
+        }
         return (
 
             <Container>
 
-                <Content theme={theme} style={{backgroundColor: theme.backgroundColor}}>
+                <Content >
 
 
                     <Camera
@@ -89,10 +117,14 @@ export default  class Qrcode extends Component {
                         onBarCodeRead  = {this.onBarCodeRead.bind(this)}
                         style={styles.preview}
                         aspect={Camera.constants.Aspect.fill}>
-                        <Text style={styles.capture} >{this.state.qrCode}</Text>
+                        <Text style={styles.imageButtomText} >{this.state.realizedMessage}</Text>
+
                     </Camera>
 
                 </Content>
+                <Footer style={{backgroundColor: '#fff'}}>
+                    {showButton}
+                </Footer>
             </Container>
         );
     }
