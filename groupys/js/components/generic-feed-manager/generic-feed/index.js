@@ -153,11 +153,12 @@ export default class GenericFeedItem extends Component {
             }
             let buisnessLogo = undefined;
             if(item.businessLogo){
-                buisnessLogo =  <Thumbnail square size={100} source={{uri: item.businessLogo}} />
+                buisnessLogo =  <Thumbnail style={styles.thumbnail} square source={{uri: item.businessLogo}} />
 
             }
             let banner = undefined;
             if(item.banner) {
+
 
                 if (item.banner.uri) {
                     banner = <Image

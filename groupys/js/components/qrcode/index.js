@@ -72,14 +72,14 @@ export default  class Qrcode extends Component {
                 let realizedMessage = 'Promotion ' + response.instance.promotion.name + ' realized';
                 this.setState({
                     realizedMessage: realizedMessage,
-                    isRealized: true,
+                    isRealized: false,
                     qrcode: ''
                 })
             }catch (error){
                 let realizedMessage = 'Promotion was realized'
                 this.setState({
                     realizedMessage: realizedMessage,
-                    isRealized: true,
+                    isRealized: false,
                     qrcode: ''
                 })
 
