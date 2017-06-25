@@ -71,11 +71,11 @@ function createClient() {
 }
 
 exports.create = function (req, res) {
-  return handle_image(req, res, 'image')
+  return handle_image(req, res, 'image');
 };
 
 exports.logo = function (req, res) {
-  return handle_image(req, res, 'logo')
+  return handle_image(req, res, 'logo');
 };
 
 function handle_image(req, res, type) {
@@ -193,12 +193,12 @@ function updateImageVersions(version, id, meta_data, type, callback) {
     function (err, results) {
       // results is now equals to: {one: 1, two: 2}
       if (err) {
-        console.log(err)
+        return console.log(err);
       } else {
 
         let pictures = [];
         version.forEach(function (version) {
-          pictures.push(version.url)
+          pictures.push(version.url);
         });
         // we aim for one match only - hence return after first iteration
         for (let key in results) {
