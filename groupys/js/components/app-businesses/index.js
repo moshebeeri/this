@@ -59,7 +59,7 @@ import * as businessAction from "../../actions/business";
             token: '',
             userId: '',
             ready: true,
-            addComponent: '',
+            addComponent: 'addBusiness',
             rowsView: [],
             initialPage: initialPage,
             index: initialPage,
