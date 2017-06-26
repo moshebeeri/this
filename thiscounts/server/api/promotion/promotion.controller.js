@@ -370,7 +370,6 @@ exports.business_promotions = function (req, res) {
       if (!promotions) {
         return res.send(404);
       }
-      console.log(JSON.stringify(promotions));
       return res.status(200).json(promotions);
     });
 };
