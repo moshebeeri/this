@@ -359,11 +359,10 @@ exports.campaign_promotions = function (req, res) {
 exports.business_promotions = function (req, res) {
   console.log("business promotions");
   console.log("user: " + req.user._id);
-  let userID = req.user._id;
   let businessID = req.params.business_id;
 
   promotionGraphModel.query_objects(Promotion,
-    `MATCH (u:user {_id:'${userID}'})-[r:OWNS]->(b:business {_id:'${businessID}'})<-[]-(p:promotion) RETURN p`,
+    `MATCH (b:business {_id:'${businessID}'})<-[:BUSINESS_PROMOTION]-(p:promotion) RETURN p._id as _id`,
     'p.created DESC', 0, 1000, function (err, promotions) {
       if (err) {
         return handleError(res, err)
