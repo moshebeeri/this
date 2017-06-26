@@ -108,10 +108,10 @@ class GenericListManager extends Component {
                  }
                 index++;
                  if(r.content){
-                     return <this.props.ItemDetail addform={this.props.addComponent} navigation={this.props.navigation} key= {index} index={index} item={r.content} deleteProduct={this.deleteProduct.bind(this)}/>
+                     return <this.props.ItemDetail api = {this.props.api}addform={this.props.addComponent} navigation={this.props.navigation} key= {index} index={index} item={r.content} deleteProduct={this.deleteProduct.bind(this)}/>
 
                  }
-                return <this.props.ItemDetail addform={this.props.addComponent}navigation={this.props.navigation} key= {index} index={index} item={r} deleteProduct={this.deleteProduct.bind(this)}/>
+                return <this.props.ItemDetail api = {this.props.api} addform={this.props.addComponent}navigation={this.props.navigation} key= {index} index={index} item={r} deleteProduct={this.deleteProduct.bind(this)}/>
             });
         }
 

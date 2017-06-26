@@ -56,10 +56,7 @@ export default class GeneralComponentHeader extends Component {
                   <Icon name="menu" />
                 </Button>
 
-                  <Button style={{ backgroundColor: 'transparent'}} iconLeft light>
 
-                      <Icon style = {{width:20,backgroundColor: 'transparent'}} name='md-cog'  onPress={() =>  this.props.navigate('realizePromotion')}  />
-                  </Button>
 
 
               </View>

@@ -26,7 +26,7 @@ export default function products(state = initialState, action) {
             let currentState = {...state};
             currentState['products'+ action.businessId] = action.products;
 
-            return feed;
+            return currentState;
         default:
             return state;
     }
