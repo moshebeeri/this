@@ -6,11 +6,11 @@ import {Container, Content, Text,Title, InputGroup,
     Input, Button, View,Header, Body, Right, ListItem,Tabs,Tab, TabHeading,Thumbnail,Left,Drawer,Fab} from 'native-base';
 import Icon from 'react-native-vector-icons/EvilIcons';
 import GeneralComponentHeader from '../header/index';
-import Product from '../product/index';
+
 import Business from '../business/index';
 import Feeds from '../feed/index'
 import MydPromotions from '../my-promotions/index'
-import Promotions from '../promtions/index'
+
 import Groups from '../groups/index'
 
 import LocationApi from '../../api/location'
@@ -53,7 +53,7 @@ import LoginUtils from '../../utils/login_utils'
 let lu = new LoginUtils();
 import { bindActionCreators } from "redux";
 
-import * as businessAction from "../../actions/business";
+import * as userAction from "../../actions/user";
 
  class ApplicationManager extends Component {
     static navigationOptions = {
@@ -61,15 +61,13 @@ import * as businessAction from "../../actions/business";
     };
 
 
-     getInitialState(){
 
-     }
 
      constructor(props) {
         super(props)
 
         let initialPage = 0;
-         this.props.fetchBusiness();
+
 
         this.state = {
 
@@ -149,12 +147,7 @@ import * as businessAction from "../../actions/business";
      navigateToAdd(){
         this.replaceRoute(this.state.addComponent);
      }
-    extractTabIndexFromNavigation(){
 
-        return this.state.initialPage;
-
-
-    }
 
     showAction(index){
         switch (index){
@@ -176,6 +169,7 @@ import * as businessAction from "../../actions/business";
     }
     async componentWillMount() {
         await this.calc_login_status();
+        this.props.fetchUsers();
         this.setState({start:false});
 
     }
@@ -275,7 +269,7 @@ export default connect(
         businesses: state.businesses
     }),
 
-    dispatch => bindActionCreators(businessAction, dispatch)
+    dispatch => bindActionCreators(userAction, dispatch)
 )(ApplicationManager);
 
 

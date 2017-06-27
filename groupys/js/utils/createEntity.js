@@ -135,28 +135,58 @@ class EntityUtils {
      }
 
     updateEntity(entityData, entityApi, json, token, callbackFunction, errorCallBack, entityId) {
-        fetch(`${server_host}/api/` + entityApi+'/'+ entityId, {
-                method: 'PUT',
-                headers: {
-                    'Accept': 'application/json, text/plain, */*',
-                    'Content-Type': 'application/json;charset=utf-8',
-                    'Authorization': 'Bearer ' + token,
-                },
-                body: json
+         if(entityId){
+             fetch(`${server_host}/api/` + entityApi+'/'+ entityId, {
+                     method: 'PUT',
+                     headers: {
+                         'Accept': 'application/json, text/plain, */*',
+                         'Content-Type': 'application/json;charset=utf-8',
+                         'Authorization': 'Bearer ' + token,
+                     },
+                     body: json
 
-            }
-        ).then((response) => response.json())
-            .then((responseData) => {
+                 }
+             ).then((response) => response.json())
+                 .then((responseData) => {
 
-                callbackFunction(responseData);
+                     callbackFunction(responseData);
 
-            }).catch(function (error) {
+                 }).catch(function (error) {
 
-            console.log('There has been a problem with your fetch operation: ');
+                 console.log('There has been a problem with your fetch operation: ');
 
-            errorCallBack(error);
+                 errorCallBack(error);
 
-        });
+             });
+         }else {
+             fetch(`${server_host}/api/` + entityApi , {
+                     method: 'PUT',
+                     headers: {
+                         'Accept': 'application/json, text/plain, */*',
+                         'Content-Type': 'application/json;charset=utf-8',
+                         'Authorization': 'Bearer ' + token,
+                     },
+                     body: json
+
+                 }
+             ).then((response) =>{
+                 if (entityData.image) {
+                     this.doUpload(entityData.image.uri, entityData.image.mime, token, callbackFunction, entityApi,entityData);
+                     return
+                 }
+                 if(response.status =='200'){
+                     callbackFunction('sucsses');
+                 }else{
+                     errorCallBack('failure')
+                 }
+             }).catch(function (error) {
+
+                 console.log('There has been a problem with your fetch operation: ');
+
+                 errorCallBack(error);
+
+             });
+         }
 
     }
 
