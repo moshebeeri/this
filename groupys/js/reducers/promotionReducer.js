@@ -19,10 +19,12 @@ export default function promotion(state = initialState, action) {
     switch (action.type) {
 
         case 'GET_PROMOTIONS' :
-            return {
-                ...state,
-                promotions : action.promotions,
-            };
+
+
+            let currentState = {...state};
+            currentState['promotions'+ action.businessId] = action.promotions;
+
+            return currentState;
 
 
         default:

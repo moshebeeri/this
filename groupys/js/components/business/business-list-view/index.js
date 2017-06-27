@@ -24,6 +24,10 @@ export default class BusinessListView extends Component {
         this.props.navigation.navigate("Products",{business:this.props.item});
     }
 
+    showPromotions(){
+        this.props.navigation.navigate("Promotions",{business:this.props.item});
+    }
+
     createView(){
         let banner = undefined;
         if(this.props.item.pictures && this.props.item.pictures.length > 0) {
@@ -66,12 +70,12 @@ export default class BusinessListView extends Component {
                         <Text>Edit</Text>
                     </Button>
                     <Button transparent onPress={() =>  this.showProducts()}>
-                                         <Icon   size={15}  style={styles.productIcon} name="cart" />
+                                         <Icon2   size={15}  style={styles.productIcon} name="add-shopping-cart" />
 
                                          <Text>Products</Text>
                                     </Button>
-                    <Button transparent onPress={() =>  this.showProducts()}>
-                        <Icon   size={15}  style={styles.productIcon} name="cash-multiple" />
+                    <Button transparent onPress={() =>  this.showPromotions()}>
+                        <Icon2   size={15}  style={styles.productIcon} name="collections" />
 
                         <Text>Promotions</Text>
                     </Button>

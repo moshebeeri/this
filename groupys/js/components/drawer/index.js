@@ -1,10 +1,10 @@
 import React, {Component} from 'react';
 import {Image, Platform} from 'react-native';
-import {Container, Content, Text, InputGroup, Input, Button, Icon, View,Item} from 'native-base';
+import {Container, Content, Text, InputGroup, Input, Button, View,Item} from 'native-base';
+import Icon2 from 'react-native-vector-icons/SimpleLineIcons';
 
 
-
-
+import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 
 import theme from '../../themes/base-theme';
 import styles from './styles';
@@ -73,26 +73,22 @@ export default class ProfileDrawer extends Component {
                 </Image>
 
                 <Item   onPress={() => this.showPromotions()} style={{ margin:3 } } regular>
-                       <Icon name='home' />
-                        <Text style={{  padding:20,color:'blue',fontStyle: 'normal',fontSize:15 }}>My Promotions </Text>
+                       <Icon2 size={20}  style={{paddingLeft:20}}name='home' />
+                        <Text style={{  padding:20,color:'blue',fontStyle: 'normal',fontSize:15 }}>Home</Text>
 
 
                 </Item>
-                <Item  onPress={() => this.showBusiness()}  style={{ margin:3 } } regular>
-                        {/*<Icon name='user' />*/}
-                        <Text style={{ padding:20,color:'blue',fontStyle: 'normal',fontSize:15 }}>My Businesses</Text>
 
-
-                </Item>
 
                 <Item  onPress={() => this.showPromotionScaning()}  style={{ margin:3 } } regular>
-                    {/*<Icon name='user' />*/}
+                    <Icon   size={20} style={{paddingLeft:20}} name="barcode" />
+
                     <Text style={{ padding:20,color:'blue',fontStyle: 'normal',fontSize:15 }}>Scan Promotion</Text>
 
 
                 </Item>
                 <Item    style={{ margin:3 } } regular>
-                        {/*<Icon name='user' />*/}
+                    <Icon2 size={20}  style={{paddingLeft:20}}name='user' />
                         <Text style={{ padding:20,color:'blue',fontStyle: 'normal',fontSize:15 }}>Profile </Text>
 
 

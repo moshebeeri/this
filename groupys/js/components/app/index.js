@@ -3,7 +3,7 @@ import {Image, Platform,StyleSheet} from 'react-native';
 import {connect} from 'react-redux';
 import {actions} from 'react-native-navigation-redux-helpers';
 import {Container, Content, Text,Title, InputGroup,
-    Input, Button, Icon, View,Header, Body, Right, ListItem,Tabs,Tab, TabHeading,Thumbnail,Left,Drawer,Fab} from 'native-base';
+    Input, Button, View,Header, Body, Right, ListItem,Tabs,Tab, TabHeading,Thumbnail,Left,Drawer,Fab} from 'native-base';
 
 import GeneralComponentHeader from '../header/index';
 import Product from '../product/index';
@@ -20,7 +20,7 @@ import BackgroundTimer from 'react-native-background-timer';
 let locationApi = new LocationApi();
 let contactApi = new ContactApi();
 let userApi = new UserApi();
-
+import Icon from 'react-native-vector-icons/Ionicons';
 import codePush from "react-native-code-push";
 
 import SideBar from '../drawer/index';
@@ -127,16 +127,9 @@ import * as businessAction from "../../actions/business";
                  component ='AddGroups'
                  break;
              case 3:
-                 component ='AddProduct'
-                 break;
-             case 4:
                  component ='addBusiness'
-
                  break;
-             case 5:
-                 component ='addPromotions'
 
-                 break;
 
          }
 
@@ -256,6 +249,12 @@ import * as businessAction from "../../actions/business";
                         <Groups navigation={this.props.navigation} index={2}
                                 navigateAction={this.headerAction.bind(this)}/>
                     </Tab>
+
+                    <Tab heading={ <TabHeading style={{ backgroundColor: "#ffe6e6" }}><Text style={{color: 'black', fontSize: 11,}}>Business</Text></TabHeading>}>
+
+                        <Business navigation={this.props.navigation} index={3} navigateAction={this.headerAction.bind(this)}/>
+                    </Tab>
+
 
 
                 </Tabs>
