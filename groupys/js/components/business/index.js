@@ -28,12 +28,15 @@ import { bindActionCreators } from "redux";
 
 
     async getAll(){
-       return this.props.businesses.businesses;
+       return  this.props.fetchBusiness();
     }
-    fetchApi(pageOffset,pageSize ) {
-        let businesses = this.props.api.props.businesses.businesses;
+    async fetchApi(pageOffset,pageSize ) {
+        let businesses = this.props.api.props.fetchBusiness.bind(this);
+
+
         return new Promise(async function(resolve, reject) {
-            resolve(businesses);
+            let response =  await  businesses();
+            resolve(response);
         });
 
 
