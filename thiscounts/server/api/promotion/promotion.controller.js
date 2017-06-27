@@ -363,7 +363,7 @@ exports.business_promotions = function (req, res) {
 
   promotionGraphModel.query_objects(Promotion,
     `MATCH (b:business {_id:'${businessID}'})<-[:BUSINESS_PROMOTION]-(p:promotion) RETURN p._id as _id`,
-    'p.created DESC', 0, 1000, function (err, promotions) {
+    'order by p.created DESC', 0, 1000, function (err, promotions) {
       if (err) {
         return handleError(res, err)
       }
