@@ -21,7 +21,7 @@ exports.show = function(req, res) {
   Location.findById(req.params.id, function (err, location) {
     if(err) { return handleError(res, err); }
     if(!location) { return res.send(404); }
-    return res.json(location);
+    return res.status(201).json(location);
   });
 };
 
@@ -43,7 +43,7 @@ exports.create = function(req, res) {
         });
       });
     });
-    return res.json(201, location);
+    return res.status(201).json(location);
   });
 };
 
@@ -56,7 +56,7 @@ exports.update = function(req, res) {
     let updated = _.merge(location, req.body);
     updated.save(function (err) {
       if (err) { return handleError(res, err); }
-      return res.json(200, location);
+      return res.status(201).json(location);
     });
   });
 };
