@@ -98,7 +98,7 @@ import { bindActionCreators } from "redux";
 
     focusNextField(nextField) {
 
-       this.refs[nextField].focus()
+       this.refs[nextField]._root.focus()
 
     }
 
