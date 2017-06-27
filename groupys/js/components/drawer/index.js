@@ -73,12 +73,6 @@ export default class ProfileDrawer extends Component {
                     <Image style={styles.thumbnail} source={noPic}/>
                 </Image>
 
-                <Item   onPress={() => this.showPromotions()} style={{ margin:3 } } regular>
-                       <Icon2 size={20}  style={{paddingLeft:20}}name='home' />
-                        <Text style={{  padding:20,color:'blue',fontStyle: 'normal',fontSize:15 }}>Home</Text>
-
-
-                </Item>
 
 
                 <Item  onPress={() => this.showPromotionScaning()}  style={{ margin:3 } } regular>

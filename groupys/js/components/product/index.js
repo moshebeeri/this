@@ -2,13 +2,13 @@ import React, {Component} from 'react';
 import {Image, Platform} from 'react-native';
 import {connect} from 'react-redux';
 import {actions} from 'react-native-navigation-redux-helpers';
-import {Container, Content, Fab,Text,Title, InputGroup, Input, Button, Icon, View,Header, Body, Right, ListItem, Thumbnail,Left} from 'native-base';
+import {Container, Content, Fab,Text,Title, InputGroup, Input, Button, View,Header, Body, Right, ListItem, Thumbnail,Left} from 'native-base';
 
 import GenericListView from '../generic-list-manager/generic-list-view/index'
 
 import GenericListManager from '../generic-list-manager/index'
 
-
+import Icon from 'react-native-vector-icons/EvilIcons';
 
 import * as productsAction from "../../actions/product";
 
@@ -53,12 +53,12 @@ class Product extends Component {
                <Fab
 
                     direction="right"
-                    active={true}
+                    active={false}
                     containerStyle={{ marginLeft: 10 }}
                     style={{ backgroundColor: "#ffb3b3" }}
                     position="bottomRight"
                     onPress={() => this.navigateToAdd()}>
-                <Icon name="add" />
+                   <Icon size={20} name="plus" />
 
                 </Fab>
             </Container>

@@ -4,7 +4,7 @@ import {connect} from 'react-redux';
 import {actions} from 'react-native-navigation-redux-helpers';
 import {Container, Content, Text,Title, InputGroup,
     Input, Button, View,Header, Body, Right, ListItem,Tabs,Tab, TabHeading,Thumbnail,Left,Drawer,Fab} from 'native-base';
-
+import Icon from 'react-native-vector-icons/EvilIcons';
 import GeneralComponentHeader from '../header/index';
 import Product from '../product/index';
 import Business from '../business/index';
@@ -20,7 +20,7 @@ import BackgroundTimer from 'react-native-background-timer';
 let locationApi = new LocationApi();
 let contactApi = new ContactApi();
 let userApi = new UserApi();
-import Icon from 'react-native-vector-icons/Ionicons';
+
 import codePush from "react-native-code-push";
 
 import SideBar from '../drawer/index';
@@ -220,7 +220,7 @@ import * as businessAction from "../../actions/business";
                     style={{ backgroundColor: "#ffb3b3" }}
                     position="bottomRight"
                     onPress={() => this.navigateToAdd()}>
-                    <Icon size={20} name="ios-add" />
+                    <Icon size={20} name="plus" />
 
                 </Fab>
         }

@@ -232,7 +232,7 @@ class PromotionApi
 
             try {
                 let token = await store.get('token');
-                const response = await fetch(`${server_host}/api/promotions/list/by/business`+ id, {
+                const response = await fetch(`${server_host}/api/promotions/list/by/business/`+ id, {
                     method: 'GET',
                     headers: {
                         'Accept': 'application/json, text/plain, */*',
