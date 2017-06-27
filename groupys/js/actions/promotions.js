@@ -11,14 +11,15 @@
 import PromotionsApi from "../api/promotion"
 let promotionApi = new PromotionsApi();
 
-async function getAll(dispatch){
+async function getAll(dispatch,id){
     try {
-        let response = await promotionApi.getAll();
+        let response = await promotionApi.getAllByBusinessId(id);
         if(response.length > 0) {
 
             dispatch({
                 type: 'GET_PROMOTIONS',
                 promotions: response,
+                businessId: id
 
             });
         }
@@ -30,9 +31,9 @@ async function getAll(dispatch){
 
 }
 
-export function fetchPromotions(){
+export function fetchPromotions(id){
     return function (dispatch, getState){
-        dispatch|(getAll(dispatch));
+        dispatch|(getAll(dispatch,id));
     }
 
 }
