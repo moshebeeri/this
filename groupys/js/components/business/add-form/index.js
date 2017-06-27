@@ -216,22 +216,17 @@ import { bindActionCreators } from "redux";
                         </Item>
 
                         <Item style={{ margin:3 } } regular >
-                           <Input value={this.state.website}  blurOnSubmit={true} returnKeyType='next' ref="3"  onSubmitEditing={this.focusNextField.bind(this,"7")}  onChangeText={(website) => this.setState({website})} placeholder='Website' />
+                           <Input value={this.state.website}  blurOnSubmit={true} returnKeyType='next' ref="3"  onSubmitEditing={this.focusNextField.bind(this,"4")}  onChangeText={(website) => this.setState({website})} placeholder='Website' />
                         </Item>
-                        {/*<Item style={{ margin:3 } } regular >*/}
-                            {/*<Input blurOnSubmit={true} returnKeyType='next' ref="4"  onSubmitEditing={this.focusNextField.bind(this,"5")}  onChangeText={(country) => this.setState({country})} placeholder='Country' />*/}
-                        {/*</Item>*/}
-                        {/*<Item style={{ margin:3 } } regular >*/}
-                            {/*<Input blurOnSubmit={true} returnKeyType='next' ref="5"  onSubmitEditing={this.focusNextField.bind(this,"6")}  onChangeText={(state) => this.setState({state})} placeholder='State' />*/}
-                        {/*</Item>*/}
+
                         <Item style={{ margin:3 } } regular >
-                           <Input value={this.state.city} blurOnSubmit={true} returnKeyType='next' ref="6"  onSubmitEditing={this.focusNextField.bind(this,"7")}  onChangeText={(city) => this.setState({city})} placeholder='City' />
+                           <Input value={this.state.city} blurOnSubmit={true} returnKeyType='next' ref="4"  onSubmitEditing={this.focusNextField.bind(this,"5")}  onChangeText={(city) => this.setState({city})} placeholder='City' />
                         </Item>
                         <Item style={{ margin:3 } } regular >
-                           <Input value={this.state.address} blurOnSubmit={true} returnKeyType='next' ref="7"  onSubmitEditing={this.focusNextField.bind(this,"8")}  onChangeText={(address) => this.setState({address})} placeholder='Addresss' />
+                           <Input value={this.state.address} blurOnSubmit={true} returnKeyType='next' ref="5"  onSubmitEditing={this.focusNextField.bind(this,"6")}  onChangeText={(address) => this.setState({address})} placeholder='Addresss' />
                         </Item>
                         <Item style={{ margin:3 } } regular >
-                           <Input value={this.state.tax_id} blurOnSubmit={true} returnKeyType='done' ref="8"   onChangeText={(tax_id) => this.setState({tax_id})} placeholder='Tax ID' />
+                           <Input value={this.state.tax_id} blurOnSubmit={true} returnKeyType='done' ref="6"   onChangeText={(tax_id) => this.setState({tax_id})} placeholder='Tax ID' />
                         </Item>
 
 
