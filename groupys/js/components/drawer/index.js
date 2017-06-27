@@ -46,13 +46,14 @@ export default class ProfileDrawer extends Component {
         this.props.navigation.navigate(route);
     }
 
-    showBusiness(){
-       this.replaceRoute('businesses');
-
-    }
 
     showPromotionScaning(){
         this.replaceRoute('ReadQrCode');
+
+    }
+
+    showUserProfile(){
+        this.replaceRoute('UserProfile');
 
     }
 
@@ -87,16 +88,13 @@ export default class ProfileDrawer extends Component {
 
 
                 </Item>
-                <Item    style={{ margin:3 } } regular>
+                <Item    onPress={() => this.showUserProfile()}  style={{ margin:3 } } regular>
                     <Icon2 size={20}  style={{paddingLeft:20}}name='user' />
                         <Text style={{ padding:20,color:'blue',fontStyle: 'normal',fontSize:15 }}>Profile </Text>
 
 
                 </Item>
-                {/*<Item  style={{ margin:3 } } regular>*/}
 
-                {/*<Text style={styles.status}>Phone nuumber: {this.state.phoneNumber}</Text>*/}
-                {/*</Item>*/}
 
             </Content>
         </Container>
