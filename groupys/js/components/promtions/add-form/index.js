@@ -152,15 +152,16 @@ import {DeviceEventEmitter} from 'react-native'
 
         }
 
+        let businessId = this.getBusinessId();
+        this.props.fetchProducts(businessId);
+
 
     }
 
 
     async componentWillMount(){
         try {
-            if(this.props.businesses.businesses.length > 0) {
-                this.selectBusiness(this.props.businesses.businesses[0]._id);
-            }
+
 
             if(this.props.navigation.state.params && this.props.navigation.state.params.item){
                 let item = this.props.navigation.state.params.item;
@@ -199,13 +200,7 @@ import {DeviceEventEmitter} from 'react-native'
 
     }
 
-    async initProducts(responseData){
 
-        this.setState({
-            productList: responseData,
-
-        });
-    }
 
 
     focusNextField(nextField) {
@@ -246,11 +241,22 @@ import {DeviceEventEmitter} from 'react-native'
      }
 
      addToList(responseData){
-       this.props.fetchPromotions();
+        let businessId = this.getBusinessId();
+       this.props.fetchPromotions(businessId);
     }
 
+    getBusinessId(){
+          let businessId = undefined;
+        if(this.props.navigation.state.params.item){
+            businessId = this.props.navigation.state.params.item.business
+        }else{
+            businessId = this.props.navigation.state.params.business._id;
+        }
+        return businessId;
+    }
 
     createPromotionFromState(){
+
         let promotion = {
             image: this.state.image,
             type: this.state.type,
@@ -261,17 +267,23 @@ import {DeviceEventEmitter} from 'react-native'
             // percent_range: this.state.percent_range,
             start: this.state.start,
             end: this.state.end,
-            location: this.state.location,
+
             description: this.state.info,
             path: this.state.path,
             name: this.state.name,
 
         };
+
+
+
+         let businessId = this.getBusinessId();
+
         promotion.entity = {};
+
         if(this.state.discount_on == 'GLOBAL'){
-            promotion.entity.business = this.state.business;
+            promotion.entity.business = businessId;
         }else {
-            promotion.entity.business = this.state.business;
+            promotion.entity.business = businessId;
             promotion.product = this.state.product;
         }
 
@@ -293,22 +305,7 @@ import {DeviceEventEmitter} from 'react-native'
     }
 
 
-    async selectBusiness(value){
-        let businessId = value;
-        let selectedBusiness = this.props.businesses.businesses.find(function(val, i) {
-            return val._id === businessId;
-        });
 
-        this.setState({
-            product: '',
-            business:value,
-            location: selectedBusiness.location
-        })
-        let productsReponse = await productApi.findByBusinessId(value);
-        await this.initProducts(productsReponse);
-
-
-    }
     async selectPromotionType(value){
         this.setState({
             type:value
@@ -365,7 +362,11 @@ import {DeviceEventEmitter} from 'react-native'
     }
 
     showProducts(boolean){
-        if(this.state.productList.length == 0){
+        if(!this.props.products){
+            return;
+        }
+        let products =  this.getProducts();
+        if(products.length == 0){
             return;
         }
 
@@ -374,6 +375,14 @@ import {DeviceEventEmitter} from 'react-native'
         })
     }
 
+    getProducts(){
+        let products = undefined;
+        let businessId = this.getBusinessId();
+        if(this.props.products) {
+            products = this.props.products['products' + businessId];
+        }
+        return products;
+    }
 
 
     selectProduct(product){
@@ -425,7 +434,8 @@ import {DeviceEventEmitter} from 'react-native'
         if(this.state.discount_on == 'PRODUCT') {
 
             if (this.state.showProductsList) {
-                return (<SelectProductsComponent products={this.state.productList}
+                let products =  this.getProducts();
+                return (<SelectProductsComponent products={products}
                                                  selectProduct={this.selectProduct.bind(this)}/>
 
                 );
@@ -453,26 +463,7 @@ import {DeviceEventEmitter} from 'react-native'
             }
 
 
-            let businessesPikkerTag = <Picker
 
-                iosHeader="Business"
-                mode="dropdown"
-                style={{ flex:1}}
-                selectedValue={this.state.business}
-                onValueChange={this.selectBusiness.bind(this)}>
-
-                {
-
-
-
-
-                    this.props.businesses.businesses.map((s, i) => {
-                        return <Item
-                            key={i}
-                            value={s._id}
-                            label={s.name}/>
-                    }) }
-            </Picker>
 
             let typePikkerTag = <Picker
                 iosHeader="Discount"
@@ -505,17 +496,11 @@ import {DeviceEventEmitter} from 'react-native'
 
             }
 
-            let selectProductButton = undefined;
-            if (this.state.productList.length > 0) {
-                selectProductButton = <Button transparent onPress={() => this.showProducts(true)}>
+            let selectProductButton = <Button transparent onPress={() => this.showProducts(true)}>
                     <Text>Select Product </Text>
                 </Button>
 
-            } else {
-                selectProductButton = <Button disabled transparent onPress={() => this.showProducts(true)}>
-                    <Text>Select Product </Text>
-                </Button>
-            }
+
 
 
             return (
@@ -523,39 +508,35 @@ import {DeviceEventEmitter} from 'react-native'
 
                     <Content style={{backgroundColor: '#fff'}}>
 
-                        <Item underline>
-                            {businessesPikkerTag}
-                        </Item>
-
-                        <Item underline>
+                        <Item style={{ margin:3 } } regular>
                             {discountPiker}
                         </Item>
 
 
-                        <Item underline>
+                        <Item style={{ margin:3 } } regular>
                             <Input  blurOnSubmit={true} returnKeyType='next' ref="1" onSubmitEditing={this.focusNextField.bind(this,"2")} value={this.state.name} onChangeText={(name) => this.setState({name})}
                                    placeholder='Name'/>
                         </Item>
-                        <Item underline>
+                        <Item style={{ margin:3 } } regular>
                             <Input  blurOnSubmit={true} returnKeyType='next' ref="2" onSubmitEditing={this.focusNextField.bind(this,"3")} value={this.state.info} onChangeText={(info) => this.setState({info})}
                                    placeholder='Description'/>
                         </Item>
 
 
-                        <Item underline>
+                        <Item style={{ margin:3 } } regular>
                             {selectProductButton}
                             {item}
                         </Item>
-                        <Item underline>
+                        <Item style={{ margin:3 } } regular>
                             <Input blurOnSubmit={true} returnKeyType='next' ref="3" onSubmitEditing={this.focusNextField.bind(this,"4")} value={this.state.amount} onChangeText={(amount) => this.setState({amount})}
                                    placeholder='Product Amount'/>
                         </Item>
-                        <Item underline>
+                        <Item style={{ margin:3 } } regular>
                             <Input blurOnSubmit={true} p='next' ref="4" onSubmitEditing={this.focusNextField.bind(this,"5")} value={this.state.retail_price}
                                    onChangeText={(retail_price) => this.setState({retail_price})}
                                    placeholder='Product Reatai Price'/>
                         </Item>
-                        <Item underline>
+                        <Item style={{ margin:3 } } regular>
                             <Input blurOnSubmit={true} returnKeyType='done' ref="5"  value={this.state.total_discount}
                                    onChangeText={(total_discount) => this.setState({total_discount})}
                                    placeholder='Product Total Price'/>
@@ -564,7 +545,7 @@ import {DeviceEventEmitter} from 'react-native'
                         {discountForm}
 
 
-                        <Item underline>
+                        <Item style={{ margin:3 } } regular>
                             <DatePicker
                                 style={{width: 200}}
                                 date={this.state.end}
@@ -581,27 +562,27 @@ import {DeviceEventEmitter} from 'react-native'
                                 }}
                             />
                         </Item>
-                        <Item underline>
-                            <View style={{flexDirection: 'row', marginTop: 5}}>
+                        <Item  style={{ margin:3 } } regular>
 
-                                <Button transparent onPress={() => this.pickPicture()}>
-                                    <Text>Select Image </Text>
-                                </Button>
+                            <Button  iconRight transparent  onPress={() => this.pickPicture()}>
+                                <Text style={{ fontStyle: 'normal',fontSize:10 }}>Pick </Text>
+                                <Icon name='camera' />
+                            </Button>
 
-                                {image}
-                            </View>
-                            <View style={{ flexDirection: 'row',marginTop:5 }}>
 
-                                <Button   transparent  onPress={() => this.pickFromCamera()}>
-                                    <Text> take picture </Text>
-                                </Button>
 
-                                {image}
-                            </View>
+
+                            <Button   iconRight transparent  onPress={() => this.pickFromCamera()}>
+                                <Text style={{ fontStyle: 'normal',fontSize:10 }}>take </Text>
+                                <Icon name='camera' />
+                            </Button>
+
+                            {image}
                         </Item>
 
+
                     </Content>
-                    <Footer>
+                    <Footer style={{backgroundColor: '#fff'}}>
                         {submitButton}
 
                     </Footer>
@@ -610,27 +591,6 @@ import {DeviceEventEmitter} from 'react-native'
         }else{
 
 
-
-            let businessesPikkerTag = <Picker
-
-                iosHeader="Business"
-                mode="dropdown"
-                style={{ flex:1}}
-                selectedValue={this.state.business}
-                onValueChange={this.selectBusiness.bind(this)}>
-
-                {
-
-
-
-
-                    this.props.businesses.businesses.map((s, i) => {
-                        return <Item
-                            key={i}
-                            value={s._id}
-                            label={s.name}/>
-                    }) }
-            </Picker>
 
 
 
@@ -653,9 +613,7 @@ import {DeviceEventEmitter} from 'react-native'
 
                     <Content style={{margin:10,backgroundColor: '#fff'}}>
 
-                        <Item  style={{ margin:3 } } regular>
-                            {businessesPikkerTag}
-                        </Item>
+
 
                         <Item  style={{ margin:3 } } regular>
                             {discountPiker}
@@ -727,7 +685,8 @@ import {DeviceEventEmitter} from 'react-native'
 export default connect(
     state => ({
         promotions: state.promotions,
-        businesses: state.businesses
+        products: state.products,
+
     }),
 
     dispatch => bindActionCreators(promotionsAction, dispatch)

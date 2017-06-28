@@ -66,7 +66,7 @@ export default class SelectProductsComponent extends Component {
             </ListItem>
         });
         return (
-            <Provider>
+
             <Container>
               <Content  style={{  backgroundColor: '#fff'}}>
 
@@ -77,7 +77,7 @@ export default class SelectProductsComponent extends Component {
 
               </Content>
             </Container>
-            </Provider>
+
 
         );
   }

@@ -122,13 +122,29 @@ export default class GenericFeedItem extends Component {
             if(item.logo) {
                 if (item.logo.uri) {
                     logo = <Image
-                        style={{width: 50, height: 50}}
+                        style={{
+                            flex:-1,
+                            alignSelf: 'center',
+                            height: 50,
+                            width: 50,
+                            marginLeft:10,
+                            borderWidth: 1,
+                            borderRadius: 25
+                        }}
                         source={{uri: item.logo.uri}}/>
                 }
 
                 if (item.logo.require) {
                     logo = <Image
-                        style={{width: 50, height: 50}}
+                        style={{
+                            flex:-1,
+                            alignSelf: 'center',
+                            height: 50,
+                            width: 50,
+                            marginLeft:10,
+                            borderWidth: 1,
+                            borderRadius: 25
+                        }}
                         source={item.logo.require}/>
                 }
             }
@@ -188,11 +204,11 @@ export default class GenericFeedItem extends Component {
                 }
 
             }else{
-                banner = <Item>
-                    <Text style={{marginLeft:20,marginTop:170,fontSize:25}}>{item.itemTitle}</Text>
-                    <Text style={{marginLeft:20,marginTop:200,fontSize:10}} note>{item.description} </Text>
+                banner = <View   style={{padding:5 }}>
+                    <Text style={{fontSize:20,marginLeft:10,marginRight:10}}>{item.itemTitle}</Text>
+                    <Text style={{fontSize:20}} note>{item.description} </Text>
 
-                </Item>
+                </View>
             }
 
 
@@ -200,43 +216,47 @@ export default class GenericFeedItem extends Component {
 
             let saveIcon = undefined;
 
-
+            let likeIcon = undefined;
             let followIcon =undefined;
+            if(item.showSocial) {
 
 
                 followIcon = <Button style={styles.iconView} transparent>
 
-                    <Icon   size={20}  style={styles.like} name="user-follow" />
+                    <Icon size={20} style={styles.like} name="user-follow"/>
                     <Text>Follow</Text>
-                    </Button>
+                </Button>
 
-                if( item.social && item.social.follow == true){
-                    followIcon =  <Button transparent style={styles.iconView} >
-                        <Icon active size={20} style={styles.like} name="user-follow" />
+                if (item.social && item.social.follow == true) {
+                    followIcon = <Button transparent style={styles.iconView}>
+                        <Icon active size={20} style={styles.like} name="user-follow"/>
                         <Text>Follow</Text>
 
                     </Button>
 
                 }
 
-            let likes = new String(item.social.numberLikes);
-            let likeIcon =<Button  transparent style={styles.iconView}  onPress={this.like.bind(this)}>
-                <Text>{likes}</Text>
-                <Icon style={styles.like}    size={20}   name="like" />
-                <Text>like</Text>
-
-            </Button>
-
-            if(item.social && item.social.like == true){
-                likeIcon = <Button transparent  style={styles.iconView}  onPress={this.unlike.bind(this,item.id)} >
-                                 <Text>{likes}</Text>
-
-                                <Icon  color="#0000b3" style={styles.like}      size={20}   name="like" />
+                let likes = new String(item.social.numberLikes);
+                 likeIcon = <Button transparent style={styles.iconView} onPress={this.like.bind(this)}>
+                    <Text>{likes}</Text>
+                    <Icon style={styles.like} size={20} name="like"/>
                     <Text>like</Text>
-                            </Button>
+
+                </Button>
+
+                if (item.social && item.social.like == true) {
+                    likeIcon = <Button transparent style={styles.iconView} onPress={this.unlike.bind(this, item.id)}>
+                        <Text>{likes}</Text>
+
+                        <Icon color="#0000b3" style={styles.like} size={20} name="like"/>
+                        <Text>like</Text>
+                    </Button>
 
 
+                }
             }
+
+
 
 
 
@@ -246,17 +266,19 @@ export default class GenericFeedItem extends Component {
             return (  <Card   {...this._panResponder.panHandlers} >
                     <CardItem>
 
-                        <Left>
-                            {logo}
-
-                        </Left>
 
                     </CardItem>
 
 
-                    <View style={{flex:-1,justifyContent:'center',height:300}}>
+                    <View style={{flex:-1, flexDirection: 'row',justifyContent:'space-between'}}>
+
+                            {logo}
+
+
+
                         {secondFeed}
                         {banner}
+
 
 
 

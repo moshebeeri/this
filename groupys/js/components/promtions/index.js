@@ -2,9 +2,9 @@ import React, {Component} from 'react';
 import {Image, Platform} from 'react-native';
 import {connect} from 'react-redux';
 import {actions} from 'react-native-navigation-redux-helpers';
-import {Container, Content, Text,Fab, InputGroup, Input, Button, Icon, View,Header} from 'native-base';
+import {Container, Content, Text,Fab, InputGroup, Input, Button, View,Header} from 'native-base';
 import GenericListManager from '../generic-list-manager/index';
-
+import Icon from 'react-native-vector-icons/EvilIcons';
 import GenericListView from '../generic-list-manager/generic-list-view/index'
 import PromotionApi from "../../api/promotion"
 let promotionApi = new PromotionApi();
@@ -86,12 +86,12 @@ import { bindActionCreators } from "redux";
                 <Fab
 
             direction="right"
-            active={true}
+            active={false}
             containerStyle={{ marginLeft: 10 }}
             style={{ backgroundColor: "#ffb3b3" }}
             position="bottomRight"
             onPress={() => this.navigateToAdd()}>
-        <Icon name="add" />
+                    <Icon size={20} name="plus" />
 
                 </Fab>
             </Container>

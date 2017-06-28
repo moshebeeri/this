@@ -31,7 +31,8 @@ class FeedConverter
                     description: feed.activity.business.name + ' location: ' + feed.activity.business.city + ' ' + feed.activity.business.address,
                     banner: {
                         uri:feed.activity.business.pictures[0].pictures[1]
-                    }
+                    },
+                    showSocial:true,
                 }
             }else {
 
@@ -46,7 +47,7 @@ class FeedConverter
                     actor:feed.activity.actor_user._id,
                     itemTitle: name+ ' ' + feed.activity.action + ' ' + feed.activity.business.name,
                     description: feed.activity.business.name + ' location: ' + feed.activity.business.city + ' ' + feed.activity.business.address,
-
+                    showSocial:true,
                 }
             }
         }
@@ -60,16 +61,24 @@ class FeedConverter
             if(contact){
                 name = contact.givenName + ' ' + contact.familyName;
             }
+
+            if(user.name){
+                name = user.name;
+            }
             response = {
                 id:feed._id,
-                social: {
-                    like: user.social_state.like,
-                    numberLikes: user.social_state.likes,
-                    follow: user.social_state.follow,
-                },
+
                 actor:user._id,
                 itemTitle: name ,
                 description: 'joined the group',
+                showSocial:false,
+            }
+            if( user.pictures && user.pictures.length > 0){
+
+                response.logo ={
+                    uri: user.pictures[user.pictures.length -1].pictures[0]
+                }
+
 
             }
         }
@@ -84,16 +93,23 @@ class FeedConverter
             if(contact){
                 name = contact.givenName + ' ' + contact.familyName;
             }
+            if(user.name){
+                name = user.name;
+            }
+
             response = {
                 id:feed._id,
-                social: {
-                    like: user.social_state.like,
-                    numberLikes: user.social_state.likes,
-                    follow: user.social_state.follow,
-                },
+
                 actor:user._id,
-                itemTitle: name ,
+                showSocial: false,
                 description:feed.activity.message,
+
+            }
+            if( user.pictures && user.pictures.length > 0){
+
+                response.logo ={
+                    uri: user.pictures[user.pictures.length -1].pictures[0]
+                }
 
             }
         }
@@ -115,6 +131,7 @@ class FeedConverter
                     actor:feed.activity.actor_business._id,
                     itemTitle: 'Promotion : ' + feed.activity.promotion.percent.values[0] + ' % off',
                     description: feed.activity.actor_business.name + ' ' + feed.activity.actor_business.city + ' ' + feed.activity.actor_business.address + ' offer a new promotion',
+                    showSocial:true,
                     banner: {
                         uri:feed.activity.promotion.pictures[0].pictures[1]
                     }
@@ -140,7 +157,7 @@ class FeedConverter
                     actor:feed.activity.actor_business._id,
                     itemTitle: 'Promotion : ' + feed.activity.promotion.percent.values[0] + ' % off',
                     description: feed.activity.actor_business.name + ' ' + feed.activity.actor_business.city + ' ' + feed.activity.actor_business.address + ' offer a new promotion',
-
+                    showSocial:true,
                 }
             }
 
