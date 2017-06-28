@@ -6,10 +6,10 @@ import Icon2 from 'react-native-vector-icons/SimpleLineIcons';
 
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 
-import theme from '../../themes/base-theme';
+
 import styles from './styles';
-
-
+import {connect} from 'react-redux';
+import { bindActionCreators } from "redux";
 const logo = require('../../../images/logo.png');
 const cover = require('../../../images/cover-default.png');
 const profile = require('../../../images/profile-default.png');
@@ -17,7 +17,7 @@ const noPic = require('../../../images/client_1.png');
 import UserApi from '../../api/user'
 import login from './drwaer-theme';
 let userApi = new UserApi()
-export default class ProfileDrawer extends Component {
+class ProfileDrawer extends Component {
 
     static navigationOptions = {
         header:null
@@ -64,13 +64,23 @@ export default class ProfileDrawer extends Component {
 
 
     render() {
+        let source = noPic;
+        if(this.props.user.user){
+            if( this.props.user.user.pictures && this.props.user.user.pictures.length > 0){
+
+                source = {
+                    uri:this.props.user.user.pictures[this.props.user.user.pictures.length -1].pictures[3]
+                }
+
+            }
+        }
         return (
         <Container>
             <Content theme={login} style={{backgroundColor: '#fff'}}>
 
 
                 <Image style={styles.image} source={cover}>
-                    <Image style={styles.thumbnail} source={noPic}/>
+                    <Image style={styles.thumbnail} source={source}/>
                 </Image>
 
 
@@ -96,3 +106,11 @@ export default class ProfileDrawer extends Component {
         );
     }
 }
+
+
+export default connect(
+    state => ({
+        user: state.user
+    }),
+
+)(ProfileDrawer);
