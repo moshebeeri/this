@@ -86,7 +86,7 @@ import { bindActionCreators } from "redux";
                 <Fab
 
             direction="right"
-            active={true}
+            active={false}
             containerStyle={{ marginLeft: 10 }}
             style={{ backgroundColor: "#ffb3b3" }}
             position="bottomRight"
