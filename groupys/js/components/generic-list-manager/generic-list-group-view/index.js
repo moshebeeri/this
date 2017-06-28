@@ -29,7 +29,7 @@ export default class GenericListGroupView extends Component {
         if(this.props.item.pictures && this.props.item.pictures.length > 0){
             row =  <ListItem key={this.props.index} onPress={this.showGroupFeeds.bind(this,this.props,this.props.item)} thumbnail>
                 <Left>
-                    <Thumbnail square size={80} source={{uri: this.props.item.pictures[0].pictures[3]}} />
+                    <Thumbnail  size={80} source={{uri: this.props.item.pictures[0].pictures[3]}} />
                 </Left>
                 <Body>
                 <Text>{this.props.item.name}</Text>
@@ -43,7 +43,7 @@ export default class GenericListGroupView extends Component {
         }else {
             row =  <ListItem key={this.props.index} onPress={this.showGroupFeeds.bind(this,this.props,this.props.item)} thumbnail style={{backgroundColor: '#fff'}}>
                 <Left>
-                    <Thumbnail square size={80} source={require('../../../../images/client_1.png')}/>
+                    <Thumbnail  size={80} source={require('../../../../images/client_1.png')}/>
                 </Left>
                 <Body>
 
