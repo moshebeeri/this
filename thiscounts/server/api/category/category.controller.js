@@ -1,11 +1,10 @@
 'use strict';
 
-let _ = require('lodash');
-let Category = require('./category.model');
-let graphTools = require('../../components/graph-tools');
-let graphModel = graphTools.createGraphModel('category');
-let feedTools = require('../../components/feed-tools');
-let Promotion = require('../promotion/promotion.model');
+const _ = require('lodash');
+const Category = require('./category.model');
+const graphTools = require('../../components/graph-tools');
+const graphModel = graphTools.createGraphModel('category');
+const async = require('async');
 
 let top = {
   "1000": "Arts, crafts, and collectibles",
@@ -338,13 +337,21 @@ let sub = {
 
 // Get list of categories
 exports.work = function (req, res) {
-  Category.find(function (err, categorys) {
-    if (err) {
-      return handleError(res, err);
-    }
-    return res.json(200, categorys);
+  createBusinessCategoryRoot(function(err, root){
+    async.each(Object.keys(top), function(key, callback) {
+      createBusinessTopCategory(key, top[key], root, callback);
+    },function (err) {
+      if(err) return handleError(err);
+      async.each(Object.keys(sub), function(key, callback){
+        createBusinessSubCategory(key, sub[key], callback);
+      }, function (err) {
+        if(err) return handleError(err);
+        return res.status(200);
+      });
+    });
   });
 };
+
 let productCategories = require('./product.category');
 exports.product = function (req, res) {
   return res.json(200, productCategories);
@@ -380,16 +387,6 @@ exports.show = function (req, res) {
     return res.json(category);
   });
 };
-
-function fetch_paged_social_state(query_builder, req, _id, res) {
-  query_builder = query_builder.sort({_id: -1}).limit(25);
-  if (req.params.scroll === 'up')
-    query_builder = query_builder.where('_id').gt(_id);
-  else if (req.params.scroll === 'down')
-    query_builder = query_builder.where('_id').lt(_id);
-
-  return feedTools.fetch_social_state(query_builder, req.user._id, 'promotion', res)
-}
 
 // Creates a new category in the DB.
 exports.create = function (req, res) {
