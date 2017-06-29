@@ -144,7 +144,7 @@ exports.save = function (req, res) {
             instance.save_time = save_time;
             graphModel.query(`MATCH (i:instance { _id:'${req.params.id}'}) SET i.quantity=i.quantity-1`, function (err) {
               if (err) return handleError(res, err);
-              return res.json(200, instance);
+              return res.status(200).json(instance);
             });
           });
         });
@@ -174,22 +174,26 @@ exports.unsave = function (req, res) {
 };
 
 
-function updateInstanceById(user_id, instance_id) {
+function updateInstanceById(user_id, instance_id, callback) {
   Realize.create({
     user: user_id,
     instance: instance_id
   }, function (err, realize) {
     Instance
       .findById(instance_id)
+      .populate('promotion')
       .exec(function (err, instance) {
-        if (err) console.error(err);
+        if (err) return callback(err);
         if (!instance)
-          return console.error('instance not found');
+          return callback( new Error('instance not found'));
         if (instance.remaining <= 0)
-          return console.error('instance remaining <= 0');
+          return callback( new Error('instance remaining <= 0'));
         instance.remaining -= 1;
         instance.realizations.push(realize);
-        instance.save();
+        instance.save(function (err) {
+          if(err) {return callback(err)}
+          return callback(null, instance);
+        });
       })
   });
 }
@@ -214,8 +218,10 @@ exports.realize = function (req, res) {
       if (err) return handleError(res, err);
       graphModel.unrelate_ids(user._id, 'SAVED', instance._id, function (err) {
         if (err) return handleError(res, err);
-        updateInstanceById(user._id, instance._id);
-        return res.json(200, instance);
+        updateInstanceById(user._id, instance._id, function (err, mongo_instance) {
+          if (err) return handleError(res, err);
+          return res.json(200, {g_instance: instance, instance:mongo_instance});
+        });
       })
     })
   });
