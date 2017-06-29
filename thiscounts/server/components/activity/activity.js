@@ -33,7 +33,7 @@ function update_feeds(effected, activity) {
   if(!activity.audience || _.includes(activity.audience, 'FOLLOWERS')) {
     effected.forEach(function (entity) {
       Feed.create({
-        entity: entity,
+        entity: entity._id,
         activity: activity._id
       }, function (err) {
         if (err) {
@@ -183,14 +183,14 @@ function run(query, callback) {
 function effected_out_rel(actor_id, relationship, callback) {
   let query = util.format(" MATCH (actor)-[:%s]->(effected) \
                             where actor._id='%s' and actor <> effected \
-                            return effected._id", relationship, actor_id);
+                            return effected._id as _id", relationship, actor_id);
   run(query, callback);
 }
 
 function effected_in_rel(actor_id, relationship, callback) {
   let query = util.format(" MATCH (actor)<-[:%s]-(effected) \
                             where actor._id='%s' and actor <> effected \
-                            return effected._id", relationship, actor_id);
+                            return effected._id as _id", relationship, actor_id);
   run(query, callback);
 }
 
