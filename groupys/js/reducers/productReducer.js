@@ -7,7 +7,7 @@
 /**
  * Created by stan229 on 5/27/16.
  */
-const initialState = {products:[]};
+const initialState = {products:[],categories:[]};
 
 
 
@@ -19,6 +19,12 @@ export default function products(state = initialState, action) {
             return {
                 ...state,
                 products : action.products,
+            };
+
+        case 'GET_PRODUCT_CATEGORIES' :
+            return {
+                ...state,
+                categories : action.categories,
             };
 
         case 'GET_BUSINESS_PRODUCTS' :

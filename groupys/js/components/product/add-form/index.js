@@ -17,7 +17,7 @@ import EntityUtils from "../../../utils/createEntity";
 let entityUtils = new EntityUtils();
 import ImagePicker from 'react-native-image-crop-picker';
 
-
+import Autocomplete from 'react-native-autocomplete-input';
 
 import * as productsAction from "../../../actions/product";
 import store from 'react-native-simple-store';
@@ -37,6 +37,7 @@ class AddProduct extends Component {
                 info : item.info,
                 retail_price: item.retail_price.toString(),
                 token:'',
+                query:''
             };
         }else {
             this.state = {
@@ -46,6 +47,7 @@ class AddProduct extends Component {
                 info : '',
                 retail_price: '',
                 token:'',
+                query:''
 
             };
         }
@@ -155,6 +157,36 @@ class AddProduct extends Component {
             console.log(e);
         }
     }
+
+    getCategories(){
+       let categories =  this.props.products.categories;
+        let keys = new Array();
+        for (var key in categories) {
+            keys.push(key);
+        }
+
+        return keys;
+
+    }
+
+    findCat(query) {
+
+        let cats = this.getCategories()
+        if (query === '') {
+            return [];
+        }
+
+
+        const regex = new RegExp(`${query.trim()}`, 'i');
+        let response =  cats.filter(cat => cat.search(regex) >= 0);
+
+        if(response.length == 1 && response ==query ){
+            return [];
+        }
+
+        return response;
+    }
+
     render() {
 
         let image ;
@@ -183,12 +215,28 @@ class AddProduct extends Component {
 
         }
 
+        let data = this.findCat(this.state.query);
 
         return (
             <Container>
 
                 <Content style={{margin:10,backgroundColor: '#fff'}}>
+                    <Autocomplete
+                        data={data}
+                        defaultValue={this.state.query}
+                        containerStyle={{     margin:3}}
+                        onChangeText={text => this.setState({ query: text })}
+                        renderItem={data => (
 
+                            <TouchableOpacity onPress={() => this.setState({ query: data })}>
+                                <Text style={{ fontStyle: 'normal',fontSize:20 }}>{data}</Text>
+                            </TouchableOpacity>
+                        )}
+                        renderTextInput = {() => (
+                                <Input  value={this.state.query}  blurOnSubmit={true} returnKeyType='next' ref="1" onSubmitEditing={this.focusNextField.bind(this,"2")} onChangeText={(query) => this.setState({query})} placeholder='Product Type' />
+
+                        )}
+                    />
                     <Item style={{ margin:3 } } regular >
                         <Input  value={this.state.name}  blurOnSubmit={true} returnKeyType='next' ref="1" onSubmitEditing={this.focusNextField.bind(this,"2")} onChangeText={(name) => this.setState({name})} placeholder='Name' />
                     </Item>

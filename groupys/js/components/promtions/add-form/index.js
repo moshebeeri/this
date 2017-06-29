@@ -366,6 +366,9 @@ import {DeviceEventEmitter} from 'react-native'
             return;
         }
         let products =  this.getProducts();
+        if(!products){
+            return;
+        }
         if(products.length == 0){
             return;
         }
