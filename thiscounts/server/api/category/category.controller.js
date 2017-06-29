@@ -336,6 +336,25 @@ let sub = {
 
 
 // Get list of categories
+function createBusinessCategoryRoot(callback) {
+  const BusinessRootCategory = graphTools.createGraphModel('BusinessRootCategory');
+  BusinessRootCategory.model.setUniqueKey('name', true);
+  BusinessRootCategory.save({name:'BusinessRootCategory'}, callback)
+}
+
+// const SocialType = graphTools.createGraphModel('SocialType');
+// SocialType.model.setUniqueKey('SocialType', true);
+// const socialEnum = Promotion.schema.path('social').enumValues;
+// socialEnum.forEach(function(typeStr){
+//   SocialType.save({SocialType: typeStr}, function(err, obj){
+//     if(err) console.log("failed " + err.message);
+//     else console.log("SocialType " + JSON.stringify(obj) + " created");
+//   });
+
+function createBusinessTopCategory(key, category, root, callback) {
+
+}
+
 exports.work = function (req, res) {
   createBusinessCategoryRoot(function(err, root){
     async.each(Object.keys(top), function(key, callback) {
