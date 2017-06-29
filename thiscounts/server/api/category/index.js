@@ -6,12 +6,13 @@ let auth = require('../../auth/auth.service');
 
 let router = express.Router();
 
-router.get('/', controller.index);
-router.get('/:id', controller.show);
-router.post('/cid/:_id/:scroll', auth.isAuthenticated(), controller.feed);
-
-//production, remove remark!!!
-router.post('/', /*auth.hasRole('admin'),*/ controller.create);
+router.get('/work', controller.work);
+router.get('/product', controller.product);
+router.get('/top/business', controller.top_business);
+router.get('/sub/business', controller.sub_business);
+router.get('/', auth.hasRole('admin'), controller.index);
+router.get('/:id', auth.hasRole('admin'), controller.show);
+router.post('/', auth.hasRole('admin'), controller.create);
 router.put('/:id', auth.hasRole('admin'), controller.update);
 router.patch('/:id', auth.hasRole('admin'), controller.update);
 router.delete('/:id', auth.hasRole('admin'), controller.destroy);

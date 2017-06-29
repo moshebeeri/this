@@ -12,7 +12,7 @@ let graphModel = graphTools.createGraphModel('location');
 exports.index = function(req, res) {
   Location.find(function (err, locations) {
     if(err) { return handleError(res, err); }
-    return res.json(200, locations);
+    return res.status(200).json(locations);
   });
 };
 
