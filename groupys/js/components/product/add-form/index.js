@@ -17,7 +17,7 @@ import EntityUtils from "../../../utils/createEntity";
 let entityUtils = new EntityUtils();
 import ImagePicker from 'react-native-image-crop-picker';
 
-
+import Autocomplete from 'react-native-autocomplete-input';
 
 import * as productsAction from "../../../actions/product";
 import store from 'react-native-simple-store';
@@ -28,24 +28,29 @@ class AddProduct extends Component {
 
     constructor(props) {
         super(props);
+        if(props.navigation.state.params && props.navigation.state.params.item) {
+            let item = props.navigation.state.params.item;
+            this.state = {
+                name:item.name,
+                image:'',
+                business: item.business,
+                info : item.info,
+                retail_price: item.retail_price.toString(),
+                token:'',
+                query:''
+            };
+        }else {
+            this.state = {
+                name:'',
+                image:'',
 
-        this.state = {
-            name: null,
-            email:'',
-            website:'',
-            country:'',
-            city:'',
-            state:'',
-            path:'',
-            image:'',
-            images:'',
-            tax_id:'',
-            userId:'',
-            token:'',
-            services: [],
-            business: '',
-            formData:{}
-        };
+                info : '',
+                retail_price: '',
+                token:'',
+                query:''
+
+            };
+        }
         let stateFunc = this.setState.bind(this);
 
         store.get('token').then(storeToken => {
@@ -59,17 +64,6 @@ class AddProduct extends Component {
 
 
 
-    async componentWillMount(){
-        try {
-            if(this.props.businesses.businesses.length > 0) {
-                this.selectBusiness(this.props.businesses.businesses[0]);
-            }
-
-        }catch (error){
-            console.log(error);
-        }
-
-    }
 
     replaceRoute(route) {
         this.props.navigation.goBack();
@@ -77,13 +71,6 @@ class AddProduct extends Component {
 
 
 
-    initBusiness(responseData){
-
-        this.setState({
-            services: responseData,
-            business: responseData[0]._id
-        });
-    }
 
 
     saveFormData(){
@@ -91,7 +78,7 @@ class AddProduct extends Component {
         let product = {
             name:this.state.name,
             image:this.state.image,
-            business: this.state.business,
+            business: this.props.navigation.state.params.business._id,
             info : this.state.info,
             retail_price: this.state.retail_price,
 
@@ -103,23 +90,28 @@ class AddProduct extends Component {
     }
 
     formSuccess(response){
-        this.props.fetchProducts();
+        let businessId = undefined;
+        if(this.props.navigation.state.params.item){
+            businessId = this.props.navigation.state.params.item.business
+        }else{
+            businessId = this.props.navigation.state.params.business._id;
+        }
+        this.props.fetchProductsByBusiness(businessId);
         this.replaceRoute('home');
     }
 
-    selectBusiness(value){
-        this.setState({
-            business:value
-        })
 
-
-    }
     focusNextField(nextField) {
 
         this.refs[nextField]._root.focus()
 
     }
 
+    updateFormData(){
+
+
+        entityUtils.update('products',this.state,this.state.token,this.formSuccess.bind(this),this.formFailed.bind(this),this.props.navigation.state.params.item._id);
+    }
 
     formFailed(error){
         console.log('failed');
@@ -165,6 +157,36 @@ class AddProduct extends Component {
             console.log(e);
         }
     }
+
+    getCategories(){
+       let categories =  this.props.products.categories;
+        let keys = new Array();
+        for (var key in categories) {
+            keys.push(key);
+        }
+
+        return keys;
+
+    }
+
+    findCat(query) {
+
+        let cats = this.getCategories()
+        if (query === '') {
+            return [];
+        }
+
+
+        const regex = new RegExp(`${query.trim()}`, 'i');
+        let response =  cats.filter(cat => cat.search(regex) >= 0);
+
+        if(response.length == 1 && response ==query ){
+            return [];
+        }
+
+        return response;
+    }
+
     render() {
 
         let image ;
@@ -177,49 +199,57 @@ class AddProduct extends Component {
 
         }
 
-        let pikkerTag = undefined;
-
-        if(this.props.businesses.businesses.length > 0 ){
-            pikkerTag = <Picker
-                iosHeader="Select Business"
-                mode="dropdown"
-                selectedValue={this.state.business}
-                onValueChange={this.selectBusiness.bind(this)}>
-
-                {
 
 
-                    this.props.businesses.businesses.map((s, i) => {
-                        return <Item
-                            key={i}
-                            value={s._id}
-                            label={s.name} />
-                    }) }
-            </Picker>
+        let saveButton =  <Button transparent
+                                  onPress={this.saveFormData.bind(this)}
+        >
+            <Text>Add Product</Text>
+        </Button>
+        if(this.props.navigation.state.params && this.props.navigation.state.params.item){
+            saveButton = <Button transparent
+                                 onPress={this.updateFormData.bind(this)}
+            >
+                <Text>Update Product</Text>
+            </Button>
 
         }
 
-
-
+        let data = this.findCat(this.state.query);
 
         return (
             <Container>
 
                 <Content style={{margin:10,backgroundColor: '#fff'}}>
+                    <Autocomplete
+                        data={data}
+                        defaultValue={this.state.query}
+                        containerStyle={{     margin:3}}
+                        onChangeText={text => this.setState({ query: text })}
+                        renderItem={data => (
 
+                            <TouchableOpacity onPress={() => this.setState({ query: data })}>
+                                <Text style={{ fontStyle: 'normal',fontSize:20 }}>{data}</Text>
+                            </TouchableOpacity>
+                        )}
+                        renderTextInput = {() => (
+                                <Input  value={this.state.query}  blurOnSubmit={true} returnKeyType='next' ref="1" onSubmitEditing={this.focusNextField.bind(this,"2")} onChangeText={(query) => this.setState({query})} placeholder='Product Type' />
+
+                        )}
+                    />
                     <Item style={{ margin:3 } } regular >
-                        <Input  blurOnSubmit={true} returnKeyType='next' ref="1" onSubmitEditing={this.focusNextField.bind(this,"2")} onChangeText={(name) => this.setState({name})} placeholder='Name' />
+                        <Input  value={this.state.name}  blurOnSubmit={true} returnKeyType='next' ref="1" onSubmitEditing={this.focusNextField.bind(this,"2")} onChangeText={(name) => this.setState({name})} placeholder='Name' />
                     </Item>
                     <Item style={{ margin:3 } } regular >
-                        <Input  blurOnSubmit={true} returnKeyType='next' ref="2" onSubmitEditing={this.focusNextField.bind(this,"3")} onChangeText={(info) => this.setState({info})} placeholder='Description' />
+                        <Input value={this.state.info}  blurOnSubmit={true} returnKeyType='next' ref="2" onSubmitEditing={this.focusNextField.bind(this,"3")} onChangeText={(info) => this.setState({info})} placeholder='Description' />
                     </Item>
 
 
                     <Item style={{ margin:3 } } regular >
-                        <Input  blurOnSubmit={true} returnKeyType='done' ref="3"   onChangeText={(retail_price) => this.setState({retail_price})} placeholder='Price' />
+                        <Input  value={this.state.retail_price} blurOnSubmit={true} returnKeyType='done' ref="3"   onChangeText={(retail_price) => this.setState({retail_price})} placeholder='Price' />
                     </Item>
 
-                    {pikkerTag}
+
 
                     <Item  style={{ margin:3 } } regular>
                         <Button  iconRight transparent  onPress={() => this.pickPicture()}>
@@ -247,12 +277,8 @@ class AddProduct extends Component {
 
                 </Content>
                 <Footer style={{backgroundColor: '#fff'}}>
+                    {saveButton}
 
-                    <Button transparent
-                            onPress={this.saveFormData.bind(this)}
-                    >
-                        <Text>Add Product</Text>
-                    </Button>
                 </Footer>
             </Container>
         );

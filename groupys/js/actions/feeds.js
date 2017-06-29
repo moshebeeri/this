@@ -152,4 +152,15 @@ export function showGroupTopLoader(groupid) {
 
 
 
+export function updateHomeFeed(feed) {
+    return function (dispatch, getState) {
+        dispatch({
+            type: 'UPDATE_HOME_FEED',
+            feed: feed
+        });
+    }
+}
+
+
+
 

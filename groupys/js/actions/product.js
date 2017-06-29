@@ -47,6 +47,24 @@ async function getAllByBusinessId(dispatch,id) {
 }
 
 
+async function getProductCategories(dispatch) {
+    try {
+        let response = await productApi.getProductCategories()
+
+
+            dispatch({
+                type: 'GET_PRODUCT_CATEGORIES',
+                categories: response,
+
+            });
+
+
+
+    } catch (error) {
+        console.log(error);
+    }
+}
+
 export function fetchProducts(){
     return function (dispatch, getState){
         dispatch|(getAll(dispatch));
@@ -57,6 +75,13 @@ export function fetchProducts(){
 export function fetchProductsByBusiness(businessId){
     return function (dispatch, getState){
         dispatch|(getAllByBusinessId(dispatch,businessId));
+    }
+
+}
+
+export function fetchProductCategories(){
+    return function (dispatch, getState){
+        dispatch|(getProductCategories(dispatch));
     }
 
 }

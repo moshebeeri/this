@@ -70,9 +70,19 @@ module.exports = {
         padding: 10,
         margin: 40
     },
+    imageButtomText:{
+        textShadowOffset:{width:1,height:1},
+        textShadowColor:'black',fontWeight: 'bold',marginLeft:20,marginTop:5,color:'white',fontSize:15
+    },
   transparentButton: {
     padding: 0,
     alignItems: 'flex-start',
   },
+    approveBtn:{
+        height: 70,
+
+
+        width:150
+    },
 
 };

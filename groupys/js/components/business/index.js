@@ -6,7 +6,7 @@ import {Container, Content, Text, InputGroup, Input, Button, Icon, View,Header, 
 
 import GenericListManager from '../generic-list-manager/index';
 
-import GenericListView from '../generic-list-manager/generic-list-view/index'
+import BusinessListView from './business-list-view/index'
 
 import * as businessAction from "../../actions/business";
 import { bindActionCreators } from "redux";
@@ -28,19 +28,22 @@ import { bindActionCreators } from "redux";
 
 
     async getAll(){
-       return this.props.businesses.businesses;
+       return  this.props.fetchBusiness();
     }
-    fetchApi(pageOffset,pageSize ) {
-        let businesses = this.props.api.props.businesses.businesses;
+    async fetchApi(pageOffset,pageSize ) {
+        let businesses = this.props.api.props.fetchBusiness.bind(this);
+
+
         return new Promise(async function(resolve, reject) {
-            resolve(businesses);
+            let response =  await  businesses();
+            resolve(response);
         });
 
 
     }
 
     async componentWillMount(){
-        this.props.navigateAction('add-business',this.props.index)
+        this.props.navigateAction('addBusiness',this.props.index)
 
     }
 
@@ -49,7 +52,7 @@ import { bindActionCreators } from "redux";
 
         return (
             <GenericListManager navigation = {this.props.navigation} rows={this.props.businesses.businesses} title="Business" component="home" addComponent="addBusiness" api={this}
-                                ItemDetail={GenericListView}/>
+                                ItemDetail={BusinessListView}/>
         );
     }
 }

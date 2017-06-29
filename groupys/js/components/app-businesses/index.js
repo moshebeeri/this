@@ -59,7 +59,7 @@ import * as businessAction from "../../actions/business";
             token: '',
             userId: '',
             ready: true,
-            addComponent: '',
+            addComponent: 'addBusiness',
             rowsView: [],
             initialPage: initialPage,
             index: initialPage,
@@ -210,22 +210,10 @@ import * as businessAction from "../../actions/business";
                             <GeneralComponentHeader openDrawer= {openDrawer} navigate={this.props.navigation.navigate} showAction={showAction} current='home'
                                                     to={this.state.addComponent}/>
 
-                <Tabs initialPage={index} onChangeTab={this.onChangeTab.bind(this)} style={{backgroundColor: '#fff',}}>
-                    <Tab heading={ <TabHeading style={{ backgroundColor: "#ffe6e6" }}><Text
-                        style={{color: 'black', fontSize: 11,}}>Buiesness</Text></TabHeading>}>
-                        <Business navigation={this.props.navigation} ndex={1} navigateAction={this.headerAction.bind(this)}/>
-                    </Tab>
-                    <Tab heading={ <TabHeading style={{ backgroundColor: "#ffe6e6" }} ><Text
-                        style={{color: 'black', fontSize: 11,}}>Products</Text></TabHeading>}>
-                        <Product navigation={this.props.navigation} index={0} navigateAction={this.headerAction.bind(this)}/>
-                    </Tab>
+                         <Business navigation={this.props.navigation} ndex={1} navigateAction={this.headerAction.bind(this)}/>
 
-                    <Tab heading={ <TabHeading style={{ backgroundColor: "#ffe6e6" }}><Text
-                        style={{color: 'black', fontSize: 11,}}>Promotions</Text></TabHeading>}>
-                        <Promotions navigation={this.props.navigation} index={2} navigateAction={this.headerAction.bind(this)}/>
-                    </Tab>
 
-                </Tabs>
+
                             {fav}
                         </Container>
             </Drawer>

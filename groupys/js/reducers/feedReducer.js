@@ -46,7 +46,26 @@ export default function feeds(state = initialState, action) {
             let feed2= {...state};
             feed2['showTopLoader' +action.groupid ] =true
             return feed2;
+        case 'UPDATE_HOME_FEED':
+
+            let feedState= {...state};
+            let updatedFeeds = updateFeeds(feedState,action.feed);
+            return {
+                ...state,
+                feeds : updatedFeeds,
+            };
         default:
             return state;
     }
 };
+
+function updateFeeds(feedState,feed) {
+
+   return feedState.feeds.map(function (item) {
+       if(item.id == feed.id){
+           return feed;
+       }
+       return item;
+    })
+
+}

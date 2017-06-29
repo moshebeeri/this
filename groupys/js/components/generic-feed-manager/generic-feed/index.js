@@ -2,15 +2,19 @@ import React, {Component} from 'react';
 import {Image ,Platform,PanResponder,TouchableHighlight } from 'react-native';
 import {connect} from 'react-redux';
 import {actions} from 'react-native-navigation-redux-helpers';
-import { Container, Content, Text, InputGroup, Input,Thumbnail,Button,Picker,Right,Item, Icon,Left,Header,Footer,Body, View,Card,CardItem } from 'native-base';
+import { Container, Content, Text, InputGroup, Input,Thumbnail,Button,Picker,Right,Item,Left,Header,Footer,Body, View,Card,CardItem } from 'native-base';
 import UserApi from '../../../api/user'
 let userApi = new UserApi();
 import PromotionApi from '../../../api/promotion'
 let promotionApi = new PromotionApi();
+
 import LinearGradient from 'react-native-linear-gradient';
 import styles from './styles'
-
+import Icon from 'react-native-vector-icons/SimpleLineIcons';
+import Icon2 from 'react-native-vector-icons/MaterialCommunityIcons';
 export default class GenericFeedItem extends Component {
+
+
 
 
 
@@ -74,21 +78,24 @@ export default class GenericFeedItem extends Component {
         like(item){
             this.props.item.social.like = true;
             this.props.item.social.numberLikes = this.props.item.social.numberLikes + 1;
-            this.props.selectApi.reRender();
-            userApi.like(item);
+            userApi.like( this.props.item.id);
+            this.props.selectApi.updateFeed( this.props.item);
         }
 
         unlike(item){
             this.props.item.social.like = false;
             this.props.item.social.numberLikes = this.props.item.social.numberLikes - 1;
-            this.props.selectApi.reRender();
-            userApi.unlike(item);
+
+            userApi.unlike(this.props.item.id);
+            this.props.selectApi.updateFeed( this.props.item);
         }
 
         async saveFeed(item){
             try {
                 await promotionApi.save(item.id);
                 this.props.item.social.saved = true;
+                this.props.item.showsave = false;
+                this.props.selectApi.updateFeed( this.props.item);
             }catch (error){
                 console.log('failed to save');
 
@@ -115,13 +122,29 @@ export default class GenericFeedItem extends Component {
             if(item.logo) {
                 if (item.logo.uri) {
                     logo = <Image
-                        style={{width: 50, height: 50}}
+                        style={{
+                            flex:-1,
+                            alignSelf: 'center',
+                            height: 50,
+                            width: 50,
+                            marginLeft:10,
+                            borderWidth: 1,
+                            borderRadius: 25
+                        }}
                         source={{uri: item.logo.uri}}/>
                 }
 
                 if (item.logo.require) {
                     logo = <Image
-                        style={{width: 50, height: 50}}
+                        style={{
+                            flex:-1,
+                            alignSelf: 'center',
+                            height: 50,
+                            width: 50,
+                            marginLeft:10,
+                            borderWidth: 1,
+                            borderRadius: 25
+                        }}
                         source={item.logo.require}/>
                 }
             }
@@ -150,11 +173,12 @@ export default class GenericFeedItem extends Component {
             }
             let buisnessLogo = undefined;
             if(item.businessLogo){
-                buisnessLogo =  <Thumbnail square size={100} source={{uri: item.businessLogo}} />
+                buisnessLogo =  <Thumbnail style={styles.thumbnail} square source={{uri: item.businessLogo}} />
 
             }
             let banner = undefined;
             if(item.banner) {
+
 
                 if (item.banner.uri) {
                     banner = <Image
@@ -163,10 +187,10 @@ export default class GenericFeedItem extends Component {
                     >
 
                         {buisnessLogo}
-
+                        <View style={styles.backdropView}>
                         <Text style={styles.imageTopText}>{item.itemTitle}</Text>
                         <Text style={styles.imageButtomText} note>{item.description} </Text>
-
+                        </View>
                     </Image>
                 }
 
@@ -180,48 +204,59 @@ export default class GenericFeedItem extends Component {
                 }
 
             }else{
-                banner = <Item>
-                    <Text style={{marginLeft:20,marginTop:170,fontSize:25}}>{item.itemTitle}</Text>
-                    <Text style={{marginLeft:20,marginTop:200,fontSize:10}} note>{item.description} </Text>
+                banner = <View   style={{padding:5 }}>
+                    <Text style={{fontSize:20,marginLeft:10,marginRight:10}}>{item.itemTitle}</Text>
+                    <Text style={{fontSize:20}} note>{item.description} </Text>
 
-                </Item>
+                </View>
             }
-            let likes = new String(item.social.numberLikes);
-            let likeIcon = <Button transparent small onPress={this.like.bind(this,item.id)}>
-                <Text>{likes}</Text>
-                            <Icon  active style={{color: 'gray'}} name="thumbs-up" />
 
-                </Button>
+
+
+
             let saveIcon = undefined;
 
-
+            let likeIcon = undefined;
             let followIcon =undefined;
+            if(item.showSocial) {
 
 
-                followIcon = <Button transparent>
-                    <Icon  active style={{color: 'gray'}} name="person" />
-                        <Text> follow</Text>
-                    </Button>
+                followIcon = <Button style={styles.iconView} transparent>
 
-                if( item.social && item.social.follow == true){
-                    followIcon =  <Button transparent>
-                        <Icon active name="person" />
-                        <Text> follow</Text>
+                    <Icon size={20} style={styles.like} name="user-follow"/>
+                    <Text>Follow</Text>
+                </Button>
+
+                if (item.social && item.social.follow == true) {
+                    followIcon = <Button transparent style={styles.iconView}>
+                        <Icon active size={20} style={styles.like} name="user-follow"/>
+                        <Text>Follow</Text>
+
                     </Button>
 
                 }
 
+                let likes = new String(item.social.numberLikes);
+                 likeIcon = <Button transparent style={styles.iconView} onPress={this.like.bind(this)}>
+                    <Text>{likes}</Text>
+                    <Icon style={styles.like} size={20} name="like"/>
+                    <Text>like</Text>
+
+                </Button>
+
+                if (item.social && item.social.like == true) {
+                    likeIcon = <Button transparent style={styles.iconView} onPress={this.unlike.bind(this, item.id)}>
+                        <Text>{likes}</Text>
+
+                        <Icon color="#0000b3" style={styles.like} size={20} name="like"/>
+                        <Text>like</Text>
+                    </Button>
 
 
-            if(item.social && item.social.like == true){
-                likeIcon = <Button transparent small onPress={this.unlike.bind(this,item.id)} >
-
-                                 <Icon active name="thumbs-up"  />
-
-                            </Button>
-
-
+                }
             }
+
+
 
 
 
@@ -231,17 +266,19 @@ export default class GenericFeedItem extends Component {
             return (  <Card   {...this._panResponder.panHandlers} >
                     <CardItem>
 
-                        <Left>
-                            {logo}
-
-                        </Left>
 
                     </CardItem>
 
 
-                    <View style={{flex:-1,justifyContent:'center',height:300}}>
+                    <View style={{flex:-1, flexDirection: 'row',justifyContent:'space-between'}}>
+
+                            {logo}
+
+
+
                         {secondFeed}
                         {banner}
+
 
 
 
@@ -249,17 +286,15 @@ export default class GenericFeedItem extends Component {
                     </View>
                     {feedAction}
 
-                    <CardItem>
+                    <CardItem >
 
-
-                       <Button transparent>
                             {likeIcon}
 
-                        </Button>
+
                         {followIcon}
-                        <Button transparent>
+
                         {saveIcon}
-                        </Button>
+
                     </CardItem>
                 </Card>
 

@@ -147,6 +147,7 @@ function applyToGroups(promotion, instances) {
     if (instance && promotion && (business = promotion.entity.business)) {
       if (instance.variation === 'SINGLE') {
         let query = instanceGraphModel.related_type_id_dir_query(business._id, 'FOLLOW', 'group', 'in', 0, instance.quantity);
+        console.log(query);
         instanceGraphModel.query(query, function (err, groups_ids) {
           if (err) return console.error(err); //return callback(err);
           groups_ids.forEach(_id =>
@@ -325,11 +326,15 @@ exports.destroy = function (req, res) {
 
 exports.test = function (req, res) {
   promotionGraphModel.query("MATCH (p:promotion) return p limit 5", function (err, promotions) {
+    console.log(promotions.length);
+    console.log(promotions[0]);
     return res.json(200, promotions);
   })
 };
 
 exports.campaign_promotions = function (req, res) {
+  console.log("user campaign promotions");
+  console.log("user: " + req.user._id);
   let userID = req.user._id;
   let businessID = req.params.business_id;
   let campaignID = req.params.campaign_id;
@@ -346,17 +351,19 @@ exports.campaign_promotions = function (req, res) {
       if (!promotions) {
         return res.send(404);
       }
+      console.log(JSON.stringify(promotions));
       return res.status(200).json(promotions);
     });
 };
 
 exports.business_promotions = function (req, res) {
-  let userID = req.user._id;
+  console.log("business promotions");
+  console.log("user: " + req.user._id);
   let businessID = req.params.business_id;
 
   promotionGraphModel.query_objects(Promotion,
-    `MATCH (u:user {_id:'${userID}'})-[r:OWNS]->(b:business {_id:'${businessID}'})<-[]-(p:promotion) RETURN p`,
-    'p.created DESC', 0, 1000, function (err, promotions) {
+    `MATCH (b:business {_id:'${businessID}'})<-[:BUSINESS_PROMOTION]-(p:promotion) RETURN p._id as _id`,
+    'order by p.created DESC', 0, 1000, function (err, promotions) {
       if (err) {
         return handleError(res, err)
       }
@@ -375,6 +382,7 @@ exports.user_business = function (req, res) {
     'order by p.created DESC', 0, 1000, function (err, promotions) {
       if (err) return handleError(res, err);
 
+      console.log(JSON.stringify(promotions));
       return res.status(200).json(promotions);
     });
 };
@@ -389,6 +397,7 @@ exports.user_promotions = function (req, res) {
     'order by p.created DESC', skip, limit, function (err, promotions) {
       if (err) return handleError(res, err);
 
+      console.log(JSON.stringify(promotions));
       return res.status(200).json(promotions);
     });
 };

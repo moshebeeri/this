@@ -33,11 +33,13 @@ import * as feedsAction from "../../actions/feeds";
     }
 
 
+        updateFeed(feed){
+          this.props.api.updateFeed(feed);
+        }
 
 
 
 
-x
 
      getDataSource() {
 

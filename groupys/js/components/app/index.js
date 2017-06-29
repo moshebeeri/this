@@ -3,14 +3,14 @@ import {Image, Platform,StyleSheet} from 'react-native';
 import {connect} from 'react-redux';
 import {actions} from 'react-native-navigation-redux-helpers';
 import {Container, Content, Text,Title, InputGroup,
-    Input, Button, Icon, View,Header, Body, Right, ListItem,Tabs,Tab, TabHeading,Thumbnail,Left,Drawer,Fab} from 'native-base';
-
+    Input, Button, View,Header, Body, Right, ListItem,Tabs,Tab, TabHeading,Thumbnail,Left,Drawer,Fab} from 'native-base';
+import Icon from 'react-native-vector-icons/EvilIcons';
 import GeneralComponentHeader from '../header/index';
-import Product from '../product/index';
+
 import Business from '../business/index';
 import Feeds from '../feed/index'
 import MydPromotions from '../my-promotions/index'
-import Promotions from '../promtions/index'
+
 import Groups from '../groups/index'
 
 import LocationApi from '../../api/location'
@@ -53,7 +53,7 @@ import LoginUtils from '../../utils/login_utils'
 let lu = new LoginUtils();
 import { bindActionCreators } from "redux";
 
-import * as businessAction from "../../actions/business";
+import * as userAction from "../../actions/user";
 
  class ApplicationManager extends Component {
     static navigationOptions = {
@@ -61,15 +61,13 @@ import * as businessAction from "../../actions/business";
     };
 
 
-     getInitialState(){
 
-     }
 
      constructor(props) {
         super(props)
 
         let initialPage = 0;
-         this.props.fetchBusiness();
+
 
         this.state = {
 
@@ -127,16 +125,9 @@ import * as businessAction from "../../actions/business";
                  component ='AddGroups'
                  break;
              case 3:
-                 component ='AddProduct'
-                 break;
-             case 4:
                  component ='addBusiness'
-
                  break;
-             case 5:
-                 component ='addPromotions'
 
-                 break;
 
          }
 
@@ -156,12 +147,7 @@ import * as businessAction from "../../actions/business";
      navigateToAdd(){
         this.replaceRoute(this.state.addComponent);
      }
-    extractTabIndexFromNavigation(){
 
-        return this.state.initialPage;
-
-
-    }
 
     showAction(index){
         switch (index){
@@ -183,6 +169,7 @@ import * as businessAction from "../../actions/business";
     }
     async componentWillMount() {
         await this.calc_login_status();
+        this.props.fetchUsers();
         this.setState({start:false});
 
     }
@@ -222,12 +209,12 @@ import * as businessAction from "../../actions/business";
                 <Fab
 
                     direction="right"
-                    active={showAction}
+                    active={false}
                     containerStyle={{ marginLeft: 10 }}
                     style={{ backgroundColor: "#ffb3b3" }}
                     position="bottomRight"
                     onPress={() => this.navigateToAdd()}>
-                    <Icon name="add" />
+                    <Icon size={20} name="plus" />
 
                 </Fab>
         }
@@ -257,6 +244,12 @@ import * as businessAction from "../../actions/business";
                                 navigateAction={this.headerAction.bind(this)}/>
                     </Tab>
 
+                    <Tab heading={ <TabHeading style={{ backgroundColor: "#ffe6e6" }}><Text style={{color: 'black', fontSize: 11,}}>Business</Text></TabHeading>}>
+
+                        <Business navigation={this.props.navigation} index={3} navigateAction={this.headerAction.bind(this)}/>
+                    </Tab>
+
+
 
                 </Tabs>
                             {fav}
@@ -276,7 +269,7 @@ export default connect(
         businesses: state.businesses
     }),
 
-    dispatch => bindActionCreators(businessAction, dispatch)
+    dispatch => bindActionCreators(userAction, dispatch)
 )(ApplicationManager);
 
 

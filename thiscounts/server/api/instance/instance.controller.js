@@ -106,8 +106,8 @@ exports.available = function (req, res) {
           return res.status(500).send(`results length error ${results.length} should be 1`);
         }
         return res.json(200, results[0]);
-      })
-    })
+      });
+    });
 };
 
 //'/save/:id'
@@ -136,7 +136,7 @@ exports.save = function (req, res) {
           if (results.length !== 1 && results[0].quantity < 1) {
             return res.status(400).send('Run out of instances');
           }
-          let realize_code = randomstring.generate({length: 8, charset: 'numeric'});
+          let realize_code = randomstring.generate({length: 10, charset: 'alphanumeric'});
           let save_time = new Date();
           graphModel.relate_ids(req.user._id, 'SAVED', instance._id, `{code: '${realize_code}',timestamp: '${save_time}'}`, function (err) {
             if (err) return handleError(res, err);
@@ -148,8 +148,8 @@ exports.save = function (req, res) {
             });
           });
         });
-      })
-    })
+      });
+    });
 };
 
 //'/unsave/:id'
@@ -224,6 +224,18 @@ exports.realize = function (req, res) {
         });
       })
     })
+  });
+};
+
+exports.realized = function (req, res) {
+  const query = `MATCH (instance:instance)<-[rel:REALIZED{code: '${req.params.code}'}]-(user:user) return instance,rel,user`;
+  graphModel.query(query, function (err, objects) {
+    if (err) return handleError(res, err);
+    if (objects.length === 0)
+      return res.status(404).send(`realize code mismatch`);
+
+    if (objects.length === 1)
+      return res.status(200).send(objects[0]);
   });
 };
 

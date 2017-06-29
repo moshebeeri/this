@@ -16,7 +16,14 @@ import AddProduct from './components/product/add-form/index'
 import GroupFeed from  './components/groups/feeds/index'
 import Signup from './components/signup/index';
 import Register from './components/register/index';
+import Products from './components/product/index';
+
+import  Promotions from './components/promtions/index'
+
+import  UserProfile from './components/user-profile/index'
 import RealizePromotion from './components/realize-promotion/index';
+
+import QrCode from './components/qrcode/index';
 
 
 
@@ -33,6 +40,12 @@ const AppNavigator = StackNavigator({
         Signup:{screen: Signup},
         realizePromotion:{screen:RealizePromotion},
         Register:{screen: Register},
+        ReadQrCode:{screen:QrCode},
+        Products:{screen:Products},
+        Promotions:{screen:Promotions},
+        UserProfile:{screen:UserProfile}
+
+
 
 
 

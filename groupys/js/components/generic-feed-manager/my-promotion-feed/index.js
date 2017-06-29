@@ -108,8 +108,11 @@ export default class MyPromotionFeedItem extends Component {
                     banner = <Image
                         style={{width: 400, height: 300,padding: 0, flex: -1}}
                         source={{uri: item.banner.uri}}>
+                        <View style={styles.backdropView}>
+
                         <Text style={{ fontWeight: 'bold',marginLeft:20,marginTop:170,fontSize:25,color:'white'}}>{item.itemTitle}</Text>
                         <Text style={{fontWeight: 'bold',marginLeft:20,marginTop:5,color:'white',fontSize:15}}note>{item.description} </Text>
+                        </View>
                     </Image>
                         }
 
@@ -117,8 +120,11 @@ export default class MyPromotionFeedItem extends Component {
                     banner = <Image
                         style={{padding: 5, flex: -1}}
                         source={item.banner.require}>
+                        <View style={styles.backdropView}>
+
                         <Text style={{ fontWeight: 'bold',marginLeft:20,marginTop:170,fontSize:25,color:'white'}}>{item.itemTitle}</Text>
                         <Text style={{fontWeight: 'bold',marginLeft:20,marginTop:5,color:'white',fontSize:15}}note>{item.description} </Text>
+                        </View>
                     </Image>
                 }
             }else{

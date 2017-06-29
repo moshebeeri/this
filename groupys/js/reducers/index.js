@@ -7,6 +7,7 @@ import businesses from "./businessReducer";
 import groups from "./groupReducer";
 import promotions from './promotionReducer';
 import products from './productReducer';
+import user from './UserReducer';
 export default function getRootReducer() {
 
     return combineReducers({
@@ -14,7 +15,7 @@ export default function getRootReducer() {
         businesses: businesses,
         groups:groups,
         promotions: promotions,
-        products:products
-
+        products:products,
+        user:user
     });
 }
