@@ -5,6 +5,9 @@ const Category = require('./category.model');
 const graphTools = require('../../components/graph-tools');
 const graphModel = graphTools.createGraphModel('category');
 const async = require('async');
+const BusinessRootCategory = graphTools.createGraphModel('BusinessRootCategory');
+const BusinessTopCategory = graphTools.createGraphModel('BusinessTopCategory');
+const BusinessCategory = graphTools.createGraphModel('BusinessCategory');
 
 let top = {
   "1000": "Arts, crafts, and collectibles",
@@ -337,8 +340,6 @@ let sub = {
 
 // Get list of categories
 function createBusinessCategoryRoot(callback) {
-  const BusinessRootCategory = graphTools.createGraphModel('BusinessRootCategory');
-  BusinessRootCategory.model.setUniqueKey('name', true);
   BusinessRootCategory.save({name:'BusinessRootCategory'}, callback)
 }
 
@@ -351,11 +352,26 @@ function createBusinessCategoryRoot(callback) {
 //     else console.log("SocialType " + JSON.stringify(obj) + " created");
 //   });
 
-function createBusinessTopCategory(key, category, root, callback) {
+function createBusinessTopCategory(code, category, root, callback) {
+  BusinessTopCategory.save({name: category, PayPalId: code}, function (err, category) {
+    BusinessTopCategory.relate(category.id, 'CATEGORY', root.id, '', callback)
+  })
+}
 
+function createBusinessSubCategory(code, category, callback) {
+  BusinessCategory.save({name: category[0], PayPalId: code}, function (err, category) {
+    let query = `MATCH (top:PayPalId:{"${category[1]}"}), (cat:BusinessCategory) 
+                            WHERE id(cat)= ${category.id} create (cat)-[:CATEGORY]->(top)`;
+    console.log(query);
+    BusinessCategory.query(query, callback)
+  })
 }
 
 exports.work = function (req, res) {
+  BusinessRootCategory.model.setUniqueKey('name', true);
+  BusinessTopCategory.model.setUniqueKey('PayPalId', true);
+  BusinessTopCategory.model.setUniqueKey('name', true);
+
   createBusinessCategoryRoot(function(err, root){
     async.each(Object.keys(top), function(key, callback) {
       createBusinessTopCategory(key, top[key], root, callback);
