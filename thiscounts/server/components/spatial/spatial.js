@@ -129,7 +129,7 @@ Spatial.prototype.withinDistance = function add(coordinate, distance, type, patt
     ORDER BY d DESC
     skip ${skip} limit ${limit}
   `;
-  console.log(query);
+  //console.log(query);
   locationGraph.query(query, function (err, _ids) {
     if(err) return callback(err);
     return callback(null, _ids);

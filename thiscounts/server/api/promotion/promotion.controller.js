@@ -157,19 +157,20 @@ function applyToGroups(promotion, instances) {
     }
   });
 }
-// lat: promotion.location.lat,
-//   lon: promotion.location.lng,
 
 //see https://neo4j.com/blog/real-time-recommendation-engine-data-science/
 function applyToUsers(promotion, instances, callback) {
   instances.forEach(instance => {
-    instance_eligible_activity(instance);
+    //instance_eligible_activity(instance);
     spatial.withinDistance({
       longitude: instance.location.lng,
       latitude: instance.location.lat
-    }, 30, 'instance', '', 0, instance.quantity, function (err, results) {
+    }, 30, 'user', '', 0, instance.quantity, function (err, results) {
       if (err) return console.error(err);
-      results.forEach(result => console.log(JSON.stringify(result)))
+      results.forEach(user => function (user) {
+        console.log(JSON.stringify(user));
+        user_instance_eligible_activity(user, instance);
+      })
     });
   })
 }
@@ -274,6 +275,20 @@ function instance_eligible_activity(instance) {
     activity.create(act);
   }
 }
+
+function user_instance_eligible_activity(user, instance){
+  if (utils.defined(instance.promotion.entity.business)) {
+    let act = {
+      instance: instance._id,
+      promotion: instance.promotion._id,
+      ids: [user._id],
+      action: "eligible"
+    };
+    act.actor_business = instance.promotion.entity.business;
+    activity.create(act);
+  }
+}
+
 
 function instance_group_activity(instance, group_id) {
   activity.create({
