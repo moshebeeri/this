@@ -145,7 +145,7 @@ function populatePromotionEntity(instances, callback) {
     }
   }
   async.each(instances, createPopulateInstanceFunction(ret_instances), function (err) {
-    if (err) return console.log(err);
+    if (err) return callback(err);
     return callback(null, ret_instances);
   });
 }
@@ -173,7 +173,6 @@ function instances_by_relation_async(rel, user_id, paginate, callback) {
         let ret = instances.map(function (instance) {
           return {instance: instance, graph: _ids_map[instance._id]}
         });
-        console.log(JSON.stringify(ret));
         return callback(null, ret);
       })
     });
