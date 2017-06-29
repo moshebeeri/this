@@ -380,7 +380,7 @@ exports.top_business = function (req, res) {
   return res.json(200, top);
 };
 
-exports.top_business = function (req, res) {
+exports.sub_business = function (req, res) {
   return res.json(200, sub);
 };
 
