@@ -33,7 +33,7 @@ function update_feeds(effected, activity) {
   if(!activity.audience || _.includes(activity.audience, 'FOLLOWERS')) {
     effected.forEach(function (entity) {
       Feed.create({
-        entity: entity._id,
+        entity: entity,
         activity: activity._id
       }, function (err) {
         if (err) {
@@ -53,55 +53,6 @@ function update_feeds(effected, activity) {
     });
   }
 }
-
-/*
-function update_group_feeds(effected, activity) {
-  mongoose.connection.db.collection('feed', function (err, collection) {
-    if (err) return logger.error(err.message);
-    effected.forEach(function (group) {
-      Feed.create({
-        group: group._id,
-        activity: activity._id
-      }, function (err) {
-        if (err) {
-          logger.error(err.message);
-        }
-      });
-    });
-  });
-}
-
-Activity.prototype.group_activity = function group_activity(act, callback) {
-  ActivitySchema.create(act, function (err, activity) {
-    if (err) {
-      callback(err, null);
-      return;
-    }
-    //update own group
-    let query = util.format(" MATCH (actor:group) \
-                              where actor._id='%s'         \
-                              return actor ", act.actor_group);
-    run(query, function (err, group) {
-      if (err) {
-        return callback(err, null);
-      }
-      update_group_feeds(group, activity);
-
-      //update following groups
-      let query = util.format(" MATCH (actor:group)<-[:FOLLOW]-(effected:group) \
-                              where actor._id='%s'         \
-                              return effected ", act.actor_group);
-      run(query, function (err, effected) {
-        if (err) {
-          return callback(err, null);
-        }
-        update_group_feeds(effected, activity);
-        callback(null, activity)
-      });
-    });
-  });
-};
-*/
 
 /**
  *
@@ -138,6 +89,11 @@ function activity_impl(act, callback) {
     if (err) {
       callback(err, null);
       return;
+    }
+
+    if(act.ids){
+      update_feeds(activity.ids, activity);
+      return callback(null, activity)
     }
 
     if(act.audience && !_.includes(act.audience, 'FOLLOW')) {
@@ -194,18 +150,21 @@ function activity_impl(act, callback) {
   });
 }
 
-Activity.prototype.action_activity = function action_activity(userId, itemId, action) {
+Activity.prototype.action_activity = function action_activity(userId, itemId, action, callback) {
   let act = {
     actor_user: userId,
     action: action
   };
   utils.parallel_id(itemId, act, function (err, act) {
-    if (err) {
+    if (err && callback) {
       return callback(err, null)
     }
     activity_impl(act, function (err) {
       if (err) {
-        logger.error(err.message)
+        if(callback)
+          return callback(err);
+        else
+          return logger.error(err)
       }
     });
   });
@@ -224,14 +183,14 @@ function run(query, callback) {
 function effected_out_rel(actor_id, relationship, callback) {
   let query = util.format(" MATCH (actor)-[:%s]->(effected) \
                             where actor._id='%s' and actor <> effected \
-                            return effected", relationship, actor_id);
+                            return effected._id", relationship, actor_id);
   run(query, callback);
 }
 
 function effected_in_rel(actor_id, relationship, callback) {
   let query = util.format(" MATCH (actor)<-[:%s]-(effected) \
                             where actor._id='%s' and actor <> effected \
-                            return effected", relationship, actor_id);
+                            return effected._id", relationship, actor_id);
   run(query, callback);
 }
 
