@@ -398,6 +398,8 @@ function createProductCategoryRoot(callback) {
 
 function createSubCategory(subCategoryName, topCategoryName, callback) {
   ProductCategory.save({name: subCategoryName}, function (err, category) {
+    if(!category)
+      return callback(null);
     let query = `MATCH (top:ProductTopCategory{name:"${topCategoryName}"}), (sub:ProductCategory)
                                 WHERE id(sub)=${category.id} CREATE UNIQUE (sub)-[:CATEGORY]->(top)`;
     ProductCategory.query(query, function (err) {
@@ -456,6 +458,14 @@ exports.work = function (req, res) {
 
 exports.product = function (req, res) {
   return res.status(200).json(ProductCategories);
+};
+
+exports.business = function (req, res) {
+  let query = `MATCH (b:BusinessRootCategory)-[:CATEGORY]-(t:BusinessTopCategory)<-[:CATEGORY]-(c:BusinessCategory) return t,c`;
+  ProductCategory.query(query, function (err, categories) {
+    if (err) return handleError(res, err);
+    return res.status(200).json(categories);
+  })
 };
 
 exports.top_business = function (req, res) {
