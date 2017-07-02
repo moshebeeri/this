@@ -173,7 +173,7 @@ export default class GenericFeedItem extends Component {
             }
             let buisnessLogo = undefined;
             if(item.businessLogo){
-                buisnessLogo =  <Thumbnail style={styles.thumbnail} square source={{uri: item.businessLogo}} />
+                buisnessLogo =  <Thumbnail size={50} source={{uri: item.businessLogo}} />
 
             }
             let banner = undefined;
@@ -181,17 +181,30 @@ export default class GenericFeedItem extends Component {
 
 
                 if (item.banner.uri) {
-                    banner = <Image
+                    banner = <View style={styles.container}>
+                        <View style={styles.backgroundContainer}>
+                        <Image resizeMode= "stretch"
                         style={styles.image}
                         source={{uri: item.banner.uri}}
                     >
 
-                        {buisnessLogo}
-                        <View style={styles.backdropView}>
-                        <Text style={styles.imageTopText}>{item.itemTitle}</Text>
-                        <Text style={styles.imageButtomText} note>{item.description} </Text>
-                        </View>
+
+
                     </Image>
+                        </View>
+
+
+                        <View style={styles.backdropView}>
+                            <View style={{paddingTop:170,marginLeft:10,flexDirection: 'row'}}>
+                            {buisnessLogo}
+                                <Text style={styles.imageLogoName}>{item.name}</Text>
+                            </View>
+                            <Text style={styles.imageTopText}>{item.itemTitle}</Text>
+                            <Text style={styles.imageButtomText} note>{item.description} </Text>
+                        </View>
+
+                    </View>
+
                 }
 
                 if (item.banner.require) {
@@ -264,10 +277,6 @@ export default class GenericFeedItem extends Component {
 
 
             return (  <Card   {...this._panResponder.panHandlers} >
-                    <CardItem>
-
-
-                    </CardItem>
 
 
                     <View style={{flex:-1, flexDirection: 'row',justifyContent:'space-between'}}>

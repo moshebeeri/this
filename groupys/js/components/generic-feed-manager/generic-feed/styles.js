@@ -22,6 +22,8 @@ module.exports = {
         fontSize:20,
         color:'white',
         justifyContent:'center'
+
+
     },
     thumbnail: {
 
@@ -60,21 +62,60 @@ module.exports = {
         flex:-1,justifyContent:'center',flexDirection: 'row',height: 30,
     },
     image:{
-        width: width, height: 300,flex:-1
+        width: width, height: 300,flex:-1,  borderWidth: 1,borderRadius: 15, alignSelf: 'center',
+    },
+    imageLogoName:{
+        textShadowOffset:{width:1,height:1},
+        textShadowColor:'black',
+            fontWeight: 'bold',marginLeft:2,fontSize:18,color:'white'
     },
     imageTopText:{
         textShadowOffset:{width:1,height:1},
         textShadowColor:'black',
-        fontWeight: 'bold',marginLeft:20,marginTop:100,fontSize:25,color:'white'
+        fontWeight: 'bold',marginLeft:20,marginTop:5,fontSize:20,color:'white'
     },
     imageButtomText:{
         textShadowOffset:{width:1,height:1},
-        textShadowColor:'black',fontWeight: 'bold',marginLeft:20,marginTop:5,marginBottom:10,color:'white',fontSize:15
+        textShadowColor:'black',fontWeight: 'bold',marginRight:20,marginLeft:10,marginTop:5,marginBottom:10,color:'white',fontSize:15
     },
     backdropView: {
         height: 300,
-        width: 320,
+        width: width,
         backgroundColor: 'rgba(0,0,0,0)',
+    },
+
+
+    backgroundContainer: {
+        position: 'absolute',
+        top: 0,
+        bottom: 0,
+        left: 0,
+        right: 0,
+    },
+    container: {
+        flex: 1,
+        height: 300,
+
+        alignItems: 'center',
+    },
+    overlay: {
+        opacity: 0.5,
+
+    },
+    logo: {
+        backgroundColor: 'rgba(0,0,0,0)',
+        width: 160,
+        height: 52
+    },
+    backdrop: {
+        flex:1,
+        flexDirection: 'column'
+    },
+    headline: {
+        fontSize: 18,
+        textAlign: 'center',
+        backgroundColor: 'black',
+        color: 'white'
     }
 
 

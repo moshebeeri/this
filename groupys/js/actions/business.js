@@ -24,9 +24,36 @@ async function getAll(dispatch){
 
 }
 
+async function getBusinessCategories(dispatch) {
+    try {
+        let response = await businessApi.getBusinessCategories();
+
+
+        dispatch({
+            type: 'GET_BUSINESS_CATEGORIES',
+            categories: response,
+
+        });
+
+
+
+    } catch (error) {
+        console.log(error);
+    }
+}
+
+
 export function fetchBusiness(){
     return function (dispatch, getState){
         dispatch|(getAll(dispatch));
+    }
+
+}
+
+
+export function fetchBusinessCategories(){
+    return function (dispatch, getState){
+        dispatch|(getBusinessCategories(dispatch));
     }
 
 }
