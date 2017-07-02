@@ -27,7 +27,8 @@ class FeedConverter
                         follow: feed.activity.actor_user.social_state.follow,
                     },
                     actor:feed.activity.actor_user._id,
-                    itemTitle: name + ' ' + feed.activity.action + ' ' + feed.activity.business.name,
+                    itemTitle: name + ' ' + feed.activity.action ,
+                    name:feed.activity.business.name,
                     description: feed.activity.business.name + ' location: ' + feed.activity.business.city + ' ' + feed.activity.business.address,
                     banner: {
                         uri:feed.activity.business.pictures[0].pictures[1]
@@ -44,8 +45,9 @@ class FeedConverter
                         numberLikes: feed.activity.actor_user.social_state.likes,
                         follow: feed.activity.actor_user.social_state.follow,
                     },
+                    name:feed.activity.business.name,
                     actor:feed.activity.actor_user._id,
-                    itemTitle: name+ ' ' + feed.activity.action + ' ' + feed.activity.business.name,
+                    itemTitle: name+ ' ' + feed.activity.action ,
                     description: feed.activity.business.name + ' location: ' + feed.activity.business.city + ' ' + feed.activity.business.address,
                     showSocial:true,
                 }
@@ -129,12 +131,13 @@ class FeedConverter
                     },
                     showsave:!feed.activity.instance.social_state.saved && !feed.activity.instance.social_state.realized,
                     actor:feed.activity.actor_business._id,
-                    itemTitle: 'Promotion : ' + feed.activity.promotion.percent.values[0] + ' % off',
-                    description: feed.activity.actor_business.name + ' ' + feed.activity.actor_business.city + ' ' + feed.activity.actor_business.address + ' offer a new promotion',
+                    itemTitle: feed.activity.promotion.percent.values[0] + ' % off',
+                    description:  feed.activity.actor_business.city + ' ' + feed.activity.actor_business.address ,
                     showSocial:true,
                     banner: {
                         uri:feed.activity.promotion.pictures[0].pictures[1]
-                    }
+                    },
+                    name:feed.activity.actor_business.name,
                 }
 
                 if(feed.activity.actor_business.pictures.length > 0){
@@ -155,8 +158,9 @@ class FeedConverter
                     },
                     showsave:!feed.activity.instance.social_state.saved && !feed.activity.instance.social_state.realized,
                     actor:feed.activity.actor_business._id,
-                    itemTitle: 'Promotion : ' + feed.activity.promotion.percent.values[0] + ' % off',
-                    description: feed.activity.actor_business.name + ' ' + feed.activity.actor_business.city + ' ' + feed.activity.actor_business.address + ' offer a new promotion',
+                    itemTitle:  feed.activity.promotion.percent.values[0] + ' % off',
+                    description:  feed.activity.actor_business.city + ' ' + feed.activity.actor_business.address ,
+                    name:feed.activity.actor_business.name,
                     showSocial:true,
                 }
             }

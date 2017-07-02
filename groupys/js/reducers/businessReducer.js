@@ -4,7 +4,7 @@
 /**
  * Created by stan229 on 5/27/16.
  */
-const initialState = {businesses:[]};
+const initialState = {businesses:[],categories:[]};
 
 
 
@@ -17,7 +17,11 @@ export default function business(state = initialState, action) {
                 ...state,
                 businesses : action.businesses,
             };
-
+        case 'GET_BUSINESS_CATEGORIES' :
+            return {
+                ...state,
+                categories : action.categories,
+            };
 
         default:
             return state;
