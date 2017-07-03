@@ -35,6 +35,15 @@ import Autocomplete from 'react-native-autocomplete-input';
 
         if(props.navigation.state.params && props.navigation.state.params.item){
             let item = props.navigation.state.params.item;
+            let category = item.category;
+            if(!category){
+                category = '';
+            }
+
+            let subcategory = item.subcategory;
+            if(!subcategory){
+                subcategory = '';
+            }
             this.state = {
                 name: item.name,
                 address: item.address,
@@ -51,8 +60,8 @@ import Autocomplete from 'react-native-autocomplete-input';
                 formID: '12345',
                 userId: '',
                 token: '',
-                category:'',
-                subcategory:'',
+                category:category,
+                subcategory:subcategory,
                 formData: {},
             };
         }else {
@@ -240,6 +249,10 @@ import Autocomplete from 'react-native-autocomplete-input';
          })
 
      }
+
+     keyPad(){
+         return true;
+     }
     render() {
 
         let categories =  this.getPickerCategories();
@@ -291,6 +304,7 @@ import Autocomplete from 'react-native-autocomplete-input';
         if(data){
             autoComplete =  <Autocomplete
                 data={data}
+                keyboardShouldPersistTaps={this.keyPad.bind(this)}
                 defaultValue={this.state.category}
                 containerStyle={{     margin:3}}
                 onChangeText={text => this.setTopCategory({ category: text })}
