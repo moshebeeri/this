@@ -197,7 +197,7 @@ export default class GenericFeedItem extends Component {
                         <View style={styles.backdropView}>
                             <View style={{paddingTop:170,marginLeft:10,flexDirection: 'row'}}>
                             {buisnessLogo}
-                                <Text style={styles.imageLogoName}>{item.name}</Text>
+                                <Text style={(styles.imageLogoName, {color: "white"})}>{item.name}</Text>
                             </View>
                             <Text style={styles.imageTopText}>{item.itemTitle}</Text>
                             <Text style={styles.imageButtomText} note>{item.description} </Text>
