@@ -11,12 +11,8 @@ const BusinessCategory = graphTools.createGraphModel('BusinessCategory');
 const ProductRootCategory = graphTools.createGraphModel('ProductRootCategory');
 const ProductTopCategory = graphTools.createGraphModel('ProductTopCategory');
 const ProductCategory = graphTools.createGraphModel('ProductCategory');
-const ProductCategories = require('./product.category');
-
-initializeGraphCategories(function (err) {
-  if(err) return console.error(err);
-  console.log("graph categories initialized");
-});
+const ProductCategories = require('./data/product.category');
+const EBayProductCategories = require('./data/product.category');
 
 let top = {
   "1000": "Arts, crafts, and collectibles",
@@ -46,7 +42,6 @@ let top = {
   "1024": "Vehicle sales",
   "1025": "Vehicle service and accessories"
 };
-
 let sub = {
   "2000": ["Antiques", "1000"],
   "2001": ["Art and craft supplies", "1000"],
@@ -393,9 +388,13 @@ function createBusinessCategories(callback) {
 }
 
 function createProductCategoryRoot(callback) {
-  ProductRootCategory.save({name: 'ProductRootCategory'}, callback)
+  ProductCategory.save({name: 'ProductRootCategory'}, callback)
 }
 
+/*
+ function createProductCategoryRoot(callback) {
+ ProductRootCategory.save({name: 'ProductRootCategory'}, callback)
+ }
 function createSubCategory(subCategoryName, topCategoryName, callback) {
   ProductCategory.save({name: subCategoryName}, function (err, category) {
     if(!category)
@@ -408,10 +407,9 @@ function createSubCategory(subCategoryName, topCategoryName, callback) {
     });
   });
 }
-
 function createProductTopCategories(categoryName, callback) {
   ProductTopCategory.save({name: categoryName}, function (err, category) {
-    let query = `MATCH (top:ProductTopCategory), (root:ProductRootCategory{name:"ProductRootCategory"})  
+    let query = `MATCH (top:ProductTopCategory), (root:ProductRootCategory{name:"ProductRootCategory"})
                   WHERE id(top)=${category.id} CREATE UNIQUE (top)-[:CATEGORY]->(root)`;
     ProductCategory.query(query, function (err) {
       if (err) return callback(err);
@@ -421,7 +419,7 @@ function createProductTopCategories(categoryName, callback) {
     })
   })
 }
-function createProductCategories(callback) {
+function createProductTwoLevelsCategories(callback) {
   ProductRootCategory.model.setUniqueKey('name', true);
   ProductTopCategory.model.setUniqueKey('name', true);
   ProductCategory.model.setUniqueKey('name', true);
@@ -437,16 +435,50 @@ function createProductCategories(callback) {
     }, callback);
   });
 }
+*/
+
+function createProductCategoriesNode(parent, node, callback) {
+  if(_.isEmpty(node))
+    return callback(null);
+
+  async.each(Object.keys(node), function(key, callback) {
+    ProductCategory.save({name: key}, function (err, category) {
+      let query = `MATCH (top:ProductCategory{name:"${parent.name}"}), (sub:ProductCategory{name:"${category.name})
+                                  CREATE UNIQUE (sub)-[:CATEGORY]->(top)`;
+      ProductCategory.query(query, function (err) {
+        if(err) return callback(err);
+        createProductCategoriesNode(node, node[key], callback)
+      });
+    })
+  }, function(err){
+    if(err) return callback(err);
+    return callback(null);
+  })
+}
+
+function createProductCategories(callback) {
+  //createProductTwoLevelsCategories(callback);
+  ProductRootCategory.model.setUniqueKey('name', true);
+  ProductCategory.model.setUniqueKey('name', true);
+
+  createProductCategoryRoot(function (err, root){
+    if (err) return callback(err);
+    createProductCategoriesNode(root, EBayProductCategories, function (err) {
+      if (err) return callback(err);
+      return callback(null);
+    })
+  })
+}
 
 function initializeGraphCategories(callback){
   createProductCategories(function (err){
     if (err) return callback(err);
-    createBusinessCategories(function (err) {
-      if (err) return callback(err);
-      return callback(null);
-    });
+    return callback(null);
+    // createBusinessCategories(function (err) {
+    //   if (err) return callback(err);
+    //   return callback(null);
+    // });
   })
-
 }
 
 exports.work = function (req, res) {
