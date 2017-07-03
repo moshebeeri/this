@@ -26,6 +26,7 @@ import styles from './styles'
 import * as businessAction from "../../../actions/business";
 import {connect} from 'react-redux';
 import { bindActionCreators } from "redux";
+import Autocomplete from 'react-native-autocomplete-input';
  class AddBusiness extends Component {
 
 
@@ -50,7 +51,8 @@ import { bindActionCreators } from "redux";
                 formID: '12345',
                 userId: '',
                 token: '',
-
+                category:'',
+                subcategory:'',
                 formData: {},
             };
         }else {
@@ -71,7 +73,8 @@ import { bindActionCreators } from "redux";
                 formID: '12345',
                 userId: '',
                 token: '',
-
+                category:'',
+                subcategory:'',
                 formData: {},
             };
         }
@@ -87,9 +90,60 @@ import { bindActionCreators } from "redux";
 
 
 
+     getCategories(){
+         let categories =  this.props.businesses.categories;
+         let categoriesTop = categories.map(function(cat){
+             return cat.t.name
+         })
+
+         categoriesTop = categoriesTop.filter(function (x, i, a) {
+             return a.indexOf(x) == i;
+         });
+         return categoriesTop;
+
+     }
+
+     getPickerCategories(){
+         let category = this.state.category;
+         let categoriesBottom = undefined;
+         if(this.state.category){
+             categoriesBottom = this.props.businesses.categories.filter(
+                 function (cat) {
+                   return  cat.t.name == category
+                 }
+             )
+
+             if(categoriesBottom){
+                 categoriesBottom  = categoriesBottom.map(function (cat) {
+                     return cat.c.name;
+
+                 })
+             }
+         }
+
+         return categoriesBottom;
+
+     }
+
+     findCat(query) {
+
+         let cats = this.getCategories()
+         if (query === '') {
+             return [];
+         }
 
 
-    replaceRoute(route) {
+         const regex = new RegExp(`${query.trim()}`, 'i');
+         let response =  cats.filter(cat => cat.search(regex) >= 0);
+
+         if(response.length == 1 && response ==query ){
+             return [];
+         }
+
+         return response;
+     }
+
+     replaceRoute(route) {
 
         this.props.navigation.goBack();
     }
@@ -173,7 +227,42 @@ import { bindActionCreators } from "redux";
             console.log(e);
         }
     }
+
+    setTopCategory(category){
+        this.setState({
+            category:category
+        })
+
+    }
+     setBottomCategory(category){
+         this.setState({
+             subcategory:category
+         })
+
+     }
     render() {
+
+        let categories =  this.getPickerCategories();
+        let discountPiker = undefined;
+        if(categories && categories.length > 0){
+             discountPiker = <Picker
+            iosHeader="Sub type"
+            mode="dropdown"
+            style={{ flex:1}}
+            selectedValue={this.state.subcategory}
+            onValueChange={this.setBottomCategory.bind(this)}>
+
+            {
+
+
+                categories.map((s, i) => {
+                    return <Item
+                        key={i}
+                        value={s}
+                        label={s}/>
+                }) }
+        </Picker>
+        }
 
         let image ;
         if(this.state.path){
@@ -197,6 +286,26 @@ import { bindActionCreators } from "redux";
             </Button>
 
         }
+        let data = this.findCat(this.state.category);
+        let autoComplete = undefined;
+        if(data){
+            autoComplete =  <Autocomplete
+                data={data}
+                defaultValue={this.state.category}
+                containerStyle={{     margin:3}}
+                onChangeText={text => this.setTopCategory({ category: text })}
+                renderItem={data => (
+
+                    <TouchableOpacity onPress={() => this.setState({ category: data })}>
+                        <Text style={{ fontStyle: 'normal',fontSize:20 }}>{data}</Text>
+                    </TouchableOpacity>
+                )}
+                renderTextInput = {() => (
+                    <Input  value={this.state.category}  blurOnSubmit={true} returnKeyType='next' ref="0" onSubmitEditing={this.focusNextField.bind(this,"1")} onChangeText={(category) => this.setState({category})} placeholder='Business Type' />
+
+                )}
+            />
+        }
 
         return (
 
@@ -205,8 +314,8 @@ import { bindActionCreators } from "redux";
 
                 <Content  style={{margin:10,backgroundColor: '#fff'}}>
                     <Form>
-
-
+                        {autoComplete}
+                        {discountPiker}
 
                         <Item style={{ margin:3 } } regular >
                             <Input  value={this.state.name} blurOnSubmit={true} returnKeyType='next' ref="1" onSubmitEditing={this.focusNextField.bind(this,"2")} onChangeText={(name) => this.setState({name})} placeholder='Name' />

@@ -131,7 +131,7 @@ class FeedConverter
                     },
                     showsave:!feed.activity.instance.social_state.saved && !feed.activity.instance.social_state.realized,
                     actor:feed.activity.actor_business._id,
-                    itemTitle: feed.activity.promotion.percent.values[0] + ' % off',
+                    itemTitle: feed.activity.promotion.percent.values[0] + ' % OFF',
                     description:  feed.activity.actor_business.city + ' ' + feed.activity.actor_business.address ,
                     showSocial:true,
                     banner: {
@@ -158,7 +158,7 @@ class FeedConverter
                     },
                     showsave:!feed.activity.instance.social_state.saved && !feed.activity.instance.social_state.realized,
                     actor:feed.activity.actor_business._id,
-                    itemTitle:  feed.activity.promotion.percent.values[0] + ' % off',
+                    itemTitle:  feed.activity.promotion.percent.values[0] + ' % OFF',
                     description:  feed.activity.actor_business.city + ' ' + feed.activity.actor_business.address ,
                     name:feed.activity.actor_business.name,
                     showSocial:true,

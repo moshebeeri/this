@@ -43,7 +43,7 @@ class BusinessApi
 
             try {
                 let token = await store.get('token');
-                const response = await fetch(`${server_host}/api/categories/work`, {
+                const response = await fetch(`${server_host}/api/categories/business`, {
                     method: 'GET',
                     headers: {
                         'Accept': 'application/json, text/plain, */*',
