@@ -11,12 +11,8 @@ const BusinessCategory = graphTools.createGraphModel('BusinessCategory');
 const ProductRootCategory = graphTools.createGraphModel('ProductRootCategory');
 const ProductTopCategory = graphTools.createGraphModel('ProductTopCategory');
 const ProductCategory = graphTools.createGraphModel('ProductCategory');
-const ProductCategories = require('./product.category');
-
-initializeGraphCategories(function (err) {
-  if(err) return console.error(err);
-  console.log("graph categories initialized");
-});
+const ProductCategories = require('./data/product.category');
+const EBayProductCategories = require('./data/product.category.ebay');
 
 let top = {
   "1000": "Arts, crafts, and collectibles",
@@ -46,7 +42,6 @@ let top = {
   "1024": "Vehicle sales",
   "1025": "Vehicle service and accessories"
 };
-
 let sub = {
   "2000": ["Antiques", "1000"],
   "2001": ["Art and craft supplies", "1000"],
@@ -386,16 +381,20 @@ function createBusinessCategories(callback) {
         createBusinessSubCategory(key, sub[key], callback);
       }, function (err) {
         if (err) return callback(err);
-        callback(null)
+        return callback(null)
       });
     });
   });
 }
 
 function createProductCategoryRoot(callback) {
-  ProductRootCategory.save({name: 'ProductRootCategory'}, callback)
+  ProductCategory.save({name: 'ProductRootCategory'}, callback)
 }
 
+/*
+ function createProductCategoryRoot(callback) {
+ ProductRootCategory.save({name: 'ProductRootCategory'}, callback)
+ }
 function createSubCategory(subCategoryName, topCategoryName, callback) {
   ProductCategory.save({name: subCategoryName}, function (err, category) {
     if(!category)
@@ -408,10 +407,9 @@ function createSubCategory(subCategoryName, topCategoryName, callback) {
     });
   });
 }
-
 function createProductTopCategories(categoryName, callback) {
   ProductTopCategory.save({name: categoryName}, function (err, category) {
-    let query = `MATCH (top:ProductTopCategory), (root:ProductRootCategory{name:"ProductRootCategory"})  
+    let query = `MATCH (top:ProductTopCategory), (root:ProductRootCategory{name:"ProductRootCategory"})
                   WHERE id(top)=${category.id} CREATE UNIQUE (top)-[:CATEGORY]->(root)`;
     ProductCategory.query(query, function (err) {
       if (err) return callback(err);
@@ -421,7 +419,7 @@ function createProductTopCategories(categoryName, callback) {
     })
   })
 }
-function createProductCategories(callback) {
+function createProductTwoLevelsCategories(callback) {
   ProductRootCategory.model.setUniqueKey('name', true);
   ProductTopCategory.model.setUniqueKey('name', true);
   ProductCategory.model.setUniqueKey('name', true);
@@ -437,17 +435,61 @@ function createProductCategories(callback) {
     }, callback);
   });
 }
+*/
+let nodes = 0;
+function createProductCategoriesNode(parentName, node, callback) {
+  if(_.isEmpty(node))
+    return callback(null);
+
+  async.eachLimit(Object.keys(node), 5, function(key, callback) {
+    console.log(`${++nodes}) ${parentName}<-${key}`);
+    ProductCategory.save({name: key}, function (err, category) {
+      let query = `MATCH (top:ProductCategory{name:"${parentName}"}), (sub:ProductCategory{name:"${category.name}"})
+                                  CREATE UNIQUE (sub)-[:CATEGORY]->(top)`;
+      ProductCategory.query(query, function (err) {
+        if(err) return callback(err);
+        Category.create({
+          type: 'product',
+          gid: category.id,
+          name: key,
+          translations: {en: key},
+          isLeaf: _.isEmpty(node[key])
+        });
+        createProductCategoriesNode(key, node[key], callback);
+      });
+    })
+  }, function(err){
+    if(err) return callback(err);
+    return callback(null);
+  })
+}
+
+function createProductCategories(callback) {
+  //createProductTwoLevelsCategories(callback);
+  ProductRootCategory.model.setUniqueKey('name', true);
+  ProductCategory.model.setUniqueKey('name', true);
+
+  createProductCategoryRoot(function (err, root){
+    if (err) return callback(err);
+    createProductCategoriesNode(root, EBayProductCategories, function (err) {
+      if (err) return callback(err);
+      return callback(null);
+    })
+  })
+}
 
 function initializeGraphCategories(callback){
   createProductCategories(function (err){
     if (err) return callback(err);
-    createBusinessCategories(function (err) {
-      if (err) return callback(err);
-      return callback(null);
-    });
+    return callback(null);
+    // createBusinessCategories(function (err) {
+    //   if (err) return callback(err);
+    //   return callback(null);
+    // });
   })
-
 }
+
+//initializeGraphCategories();
 
 exports.work = function (req, res) {
   initializeGraphCategories(function (err){
@@ -456,17 +498,31 @@ exports.work = function (req, res) {
   })
 };
 
-exports.product = function (req, res) {
-  return res.status(200).json(ProductCategories);
-};
-
 exports.business = function (req, res) {
   let query = `MATCH (b:BusinessRootCategory)-[:CATEGORY]-(t:BusinessTopCategory)<-[:CATEGORY]-(c:BusinessCategory) return t,c`;
+  BusinessCategory.query(query, function (err, categories) {
+    if (err) return handleError(res, err);
+    return res.status(200).json(categories);
+  })
+};
+//MATCH p=(n:ProductCategory{name:'ProductRootCategory'})<-[r*]-(c:ProductCategory) RETURN extract(c IN nodes(p)|[c,id(c)])
+exports.product = function (req, res) {
+  //let query = `match p=(n:ProductCategory)<-[r:CATEGORY*1..]-(m) RETURN extract(c IN nodes(p)|c)`;
+  let query = `MATCH p=(n:ProductCategory{name:'ProductRootCategory'})<-[r*]-(c:ProductCategory) 
+                  RETURN extract(c IN nodes(p)|[c,id(c)])`;
   ProductCategory.query(query, function (err, categories) {
     if (err) return handleError(res, err);
     return res.status(200).json(categories);
   })
 };
+
+exports.create_business = function (req, res) {
+  createBusinessCategories(function (err) {
+    if (err) return handleError(res, err);
+    return res.status(200);
+  });
+};
+
 
 exports.top_business = function (req, res) {
   return res.status(200).json(top);
