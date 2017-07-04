@@ -381,7 +381,7 @@ function createBusinessCategories(callback) {
         createBusinessSubCategory(key, sub[key], callback);
       }, function (err) {
         if (err) return callback(err);
-        callback(null)
+        return callback(null)
       });
     });
   });
@@ -455,7 +455,7 @@ function createProductCategoriesNode(parentName, node, callback) {
           translations: {en: key},
           isLeaf: _.isEmpty(node[key])
         });
-        createProductCategoriesNode(node, node[key], callback);
+        createProductCategoriesNode(key, node[key], callback);
       });
     })
   }, function(err){
@@ -489,7 +489,7 @@ function initializeGraphCategories(callback){
   })
 }
 
-initializeGraphCategories();
+//initializeGraphCategories();
 
 exports.work = function (req, res) {
   initializeGraphCategories(function (err){
