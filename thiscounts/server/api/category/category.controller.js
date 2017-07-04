@@ -12,7 +12,7 @@ const ProductRootCategory = graphTools.createGraphModel('ProductRootCategory');
 const ProductTopCategory = graphTools.createGraphModel('ProductTopCategory');
 const ProductCategory = graphTools.createGraphModel('ProductCategory');
 const ProductCategories = require('./data/product.category');
-const EBayProductCategories = require('./data/product.category');
+const EBayProductCategories = require('./data/product.category.ebay');
 
 let top = {
   "1000": "Arts, crafts, and collectibles",
