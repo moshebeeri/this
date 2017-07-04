@@ -86,4 +86,13 @@ function initNeo4j() {
   db.index.createIfNone('SocialType', 'SocialType', function(err, index) {
     console.log(index);
   });
+  db.index.createIfNone('ProductCategory', 'name', function(err, index) {
+    console.log(index);
+  });
+  db.index.createIfNone('BusinessCategory', 'name', function(err, index) {
+    console.log(index);
+  });
+  db.index.createIfNone('BusinessTopCategory', 'name', function(err, index) {
+    console.log(index);
+  });
 }

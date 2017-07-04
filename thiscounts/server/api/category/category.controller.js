@@ -12,7 +12,7 @@ const ProductRootCategory = graphTools.createGraphModel('ProductRootCategory');
 const ProductTopCategory = graphTools.createGraphModel('ProductTopCategory');
 const ProductCategory = graphTools.createGraphModel('ProductCategory');
 const ProductCategories = require('./data/product.category');
-const EBayProductCategories = require('./data/product.category');
+const EBayProductCategories = require('./data/product.category.ebay');
 
 let top = {
   "1000": "Arts, crafts, and collectibles",
@@ -436,18 +436,19 @@ function createProductTwoLevelsCategories(callback) {
   });
 }
 */
-
-function createProductCategoriesNode(parent, node, callback) {
+let nodes = 0;
+function createProductCategoriesNode(parentName, node, callback) {
   if(_.isEmpty(node))
     return callback(null);
 
-  async.each(Object.keys(node), function(key, callback) {
+  async.eachLimit(Object.keys(node), 5, function(key, callback) {
+    console.log(`${++nodes}) ${parentName}<-${key}`);
     ProductCategory.save({name: key}, function (err, category) {
-      let query = `MATCH (top:ProductCategory{name:"${parent.name}"}), (sub:ProductCategory{name:"${category.name})
+      let query = `MATCH (top:ProductCategory{name:"${parentName}"}), (sub:ProductCategory{name:"${category.name}"})
                                   CREATE UNIQUE (sub)-[:CATEGORY]->(top)`;
       ProductCategory.query(query, function (err) {
         if(err) return callback(err);
-        createProductCategoriesNode(node, node[key], callback)
+        createProductCategoriesNode(key, node[key], callback)
       });
     })
   }, function(err){
@@ -463,7 +464,7 @@ function createProductCategories(callback) {
 
   createProductCategoryRoot(function (err, root){
     if (err) return callback(err);
-    createProductCategoriesNode(root, EBayProductCategories, function (err) {
+    createProductCategoriesNode("Toys & Hobbies", EBayProductCategories["Toys & Hobbies"], function (err) {
       if (err) return callback(err);
       return callback(null);
     })
@@ -488,17 +489,24 @@ exports.work = function (req, res) {
   })
 };
 
-exports.product = function (req, res) {
-  return res.status(200).json(ProductCategories);
-};
-
 exports.business = function (req, res) {
   let query = `MATCH (b:BusinessRootCategory)-[:CATEGORY]-(t:BusinessTopCategory)<-[:CATEGORY]-(c:BusinessCategory) return t,c`;
+  BusinessCategory.query(query, function (err, categories) {
+    if (err) return handleError(res, err);
+    return res.status(200).json(categories);
+  })
+};
+//MATCH p=(n:ProductCategory{name:'ProductRootCategory'})<-[r*]-(c:ProductCategory) RETURN extract(c IN nodes(p)|[c,id(c)])
+exports.product = function (req, res) {
+  //let query = `match p=(n:ProductCategory)<-[r:CATEGORY*1..]-(m) RETURN extract(c IN nodes(p)|c)`;
+  let query = `MATCH p=(n:ProductCategory{name:'ProductRootCategory'})<-[r*]-(c:ProductCategory) 
+                  RETURN extract(c IN nodes(p)|[c,id(c)])`;
   ProductCategory.query(query, function (err, categories) {
     if (err) return handleError(res, err);
     return res.status(200).json(categories);
   })
 };
+
 
 exports.top_business = function (req, res) {
   return res.status(200).json(top);

@@ -1,4 +1,4 @@
-let cat =  {
+let EBayProductCategories =  {
     "Antiques": {
       "Antiquities": {
         "Byzantine": {},
@@ -12154,8 +12154,8 @@ let cat =  {
             "Brenda Starr": {},
             "Ellowyne Wilde": {},
             "Kitty Collier Collection": {
-              "10\" Tiny Kitty Collection": {},
-              "18\" Kitty Collier Collection": {},
+              "Tiny Kitty Collection": {},
+              "Kitty Collier Collection": {},
               "Other Kitty Collier Collection": {}
             },
             "Other Tonner Dolls": {},
@@ -20718,4 +20718,4 @@ let cat =  {
     }
   };
 
-module.exports = cat;
+module.exports = EBayProductCategories;
