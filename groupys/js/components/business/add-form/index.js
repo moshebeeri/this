@@ -97,7 +97,10 @@ import Autocomplete from 'react-native-autocomplete-input';
 
     }
 
+     componentWillMount(){
 
+
+     }
 
      getCategories(){
          let categories =  this.props.businesses.categories;
@@ -112,10 +115,12 @@ import Autocomplete from 'react-native-autocomplete-input';
 
      }
 
-     getPickerCategories(){
-         let category = this.state.category;
+     getPickerCategories(category){
+         if(!category) {
+             category = this.state.category;
+         }
          let categoriesBottom = undefined;
-         if(this.state.category){
+         if(category){
              categoriesBottom = this.props.businesses.categories.filter(
                  function (cat) {
                    return  cat.t.name == category
@@ -127,6 +132,7 @@ import Autocomplete from 'react-native-autocomplete-input';
                      return cat.c.name;
 
                  })
+
              }
          }
 
@@ -142,7 +148,7 @@ import Autocomplete from 'react-native-autocomplete-input';
          }
 
 
-         const regex = new RegExp(`${query.trim()}`, 'i');
+         const regex = new RegExp(`${new String(query).trim()}`, 'i');
          let response =  cats.filter(cat => cat.search(regex) >= 0);
 
          if(response.length == 1 && response ==query ){
@@ -242,6 +248,26 @@ import Autocomplete from 'react-native-autocomplete-input';
             category:category
         })
 
+        if(!category){
+            return;
+        }
+        let sub = this.getPickerCategories(category);
+        if(!sub){
+            return;
+        }
+
+        if(sub.length == 0){
+            return;
+        }
+
+        if(this.state.subcategory){
+            return;
+        }
+
+        this.setState({
+            subcategory: sub[0]
+        })
+
     }
      setBottomCategory(category){
          this.setState({
@@ -255,7 +281,7 @@ import Autocomplete from 'react-native-autocomplete-input';
      }
     render() {
 
-        let categories =  this.getPickerCategories();
+        let categories =  this.getPickerCategories(undefined);
         let discountPiker = undefined;
         if(categories && categories.length > 0){
              discountPiker = <Picker
@@ -310,7 +336,7 @@ import Autocomplete from 'react-native-autocomplete-input';
                 onChangeText={text => this.setTopCategory({ category: text })}
                 renderItem={data => (
 
-                    <TouchableOpacity onPress={() => this.setState({ category: data })}>
+                    <TouchableOpacity onPress={() => this.setTopCategory(data) }>
                         <Text style={{ fontStyle: 'normal',fontSize:20 }}>{data}</Text>
                     </TouchableOpacity>
                 )}
