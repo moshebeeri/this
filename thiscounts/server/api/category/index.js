@@ -9,6 +9,7 @@ let router = express.Router();
 router.get('/work', controller.work);
 router.get('/product', controller.product);
 router.get('/business', controller.business);
+router.get('/create/business', controller.create_business);
 router.get('/top/business', controller.top_business);
 router.get('/sub/business', controller.sub_business);
 router.get('/', auth.hasRole('admin'), controller.index);

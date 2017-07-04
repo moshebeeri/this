@@ -448,7 +448,14 @@ function createProductCategoriesNode(parentName, node, callback) {
                                   CREATE UNIQUE (sub)-[:CATEGORY]->(top)`;
       ProductCategory.query(query, function (err) {
         if(err) return callback(err);
-        createProductCategoriesNode(key, node[key], callback)
+        Category.create({
+          type: 'product',
+          gid: category.id,
+          name: key,
+          translations: {en: key},
+          isLeaf: _.isEmpty(node[key])
+        });
+        createProductCategoriesNode(node, node[key], callback);
       });
     })
   }, function(err){
@@ -464,7 +471,7 @@ function createProductCategories(callback) {
 
   createProductCategoryRoot(function (err, root){
     if (err) return callback(err);
-    createProductCategoriesNode("Toys & Hobbies", EBayProductCategories["Toys & Hobbies"], function (err) {
+    createProductCategoriesNode(root, EBayProductCategories, function (err) {
       if (err) return callback(err);
       return callback(null);
     })
@@ -481,6 +488,8 @@ function initializeGraphCategories(callback){
     // });
   })
 }
+
+initializeGraphCategories();
 
 exports.work = function (req, res) {
   initializeGraphCategories(function (err){
@@ -505,6 +514,13 @@ exports.product = function (req, res) {
     if (err) return handleError(res, err);
     return res.status(200).json(categories);
   })
+};
+
+exports.create_business = function (req, res) {
+  createBusinessCategories(function (err) {
+    if (err) return handleError(res, err);
+    return res.status(200);
+  });
 };
 
 
