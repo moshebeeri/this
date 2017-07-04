@@ -441,13 +441,20 @@ function createProductCategoriesNode(parent, node, callback) {
   if(_.isEmpty(node))
     return callback(null);
 
-  async.each(Object.keys(node), function(key, callback) {
+  async.eachLimit(Object.keys(node), 2, function(key, callback) {
     ProductCategory.save({name: key}, function (err, category) {
-      let query = `MATCH (top:ProductCategory{name:"${parent.name}"}), (sub:ProductCategory{name:"${category.name})
+      let query = `MATCH (top:ProductCategory{name:"${parent.name}"}), (sub:ProductCategory{name:"${category.name}"})
                                   CREATE UNIQUE (sub)-[:CATEGORY]->(top)`;
       ProductCategory.query(query, function (err) {
         if(err) return callback(err);
-        createProductCategoriesNode(node, node[key], callback)
+        Category.create({
+          type: 'product',
+          gid: category.id,
+          name: key,
+          translations: {en: key},
+          isLeaf: _.isEmpty(node[key])
+        });
+        createProductCategoriesNode(node, node[key], callback);
       });
     })
   }, function(err){
@@ -498,6 +505,13 @@ exports.business = function (req, res) {
     if (err) return handleError(res, err);
     return res.status(200).json(categories);
   })
+};
+
+exports.create_business = function (req, res) {
+  createBusinessCategories(function (err) {
+    if (err) return handleError(res, err);
+    return res.status(200);
+  });
 };
 
 exports.top_business = function (req, res) {
