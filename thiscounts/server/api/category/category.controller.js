@@ -488,6 +488,8 @@ function initializeGraphCategories(callback){
   })
 }
 
+initializeGraphCategories();
+
 exports.work = function (req, res) {
   initializeGraphCategories(function (err){
     if (err) return handleError(res, err);
