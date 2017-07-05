@@ -136,6 +136,23 @@ Spatial.prototype.withinDistance = function add(coordinate, distance, type, patt
   })
 };
 
+Spatial.prototype.userLocationWithinDistance = function add(coordinate, distance, skip, limit, callback) {
+  let query = `WITH {longitude:${coordinate.longitude},latitude:${coordinate.latitude}} AS coordinate
+    CALL spatial.withinDistance('world', coordinate, ${distance}) YIELD node AS u
+    MATCH (u:location)
+    with u.userId as _id, ${coordinate.longitude} as lon, ${coordinate.latitude} as lat, u.lat as u_lat, u.lon as u_lon
+    where _id IS NOT NULL
+    return  _id, min(2 * 6371 * asin(sqrt(haversin(radians(lat - u_lat))+ cos(radians(lat))* cos(radians(u_lat))* haversin(radians(lon - u_lon))))) as d
+    ORDER BY d ASC
+    skip ${skip} limit ${limit}
+  `;
+  //console.log(query);
+  locationGraph.query(query, function (err, _ids) {
+    if(err) return callback(err);
+    return callback(null, _ids);
+  })
+};
+
 
 
 

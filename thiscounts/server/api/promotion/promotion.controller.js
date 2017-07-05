@@ -162,13 +162,13 @@ function applyToGroups(promotion, instances) {
 function applyToUsers(promotion, instances, callback) {
   instances.forEach(instance => {
     //instance_eligible_activity(instance);
-    spatial.withinDistance({
+    spatial.userLocationWithinDistance({
       longitude: instance.location.lng,
       latitude: instance.location.lat
-    }, 30, 'user', '', 0, instance.quantity, function (err, results) {
+    }, 30, 0, instance.quantity, function (err, results) {
       if (err) return console.error(err);
       results.forEach(user => function (user) {
-        console.log(JSON.stringify(user));
+        console.log(`instance: ${instance._id} sent to user ${user} by location`);
         user_instance_eligible_activity(user, instance);
       })
     });
@@ -281,7 +281,7 @@ function user_instance_eligible_activity(user, instance){
     let act = {
       instance: instance._id,
       promotion: instance.promotion._id,
-      ids: [user._id],
+      ids: [user],
       action: "eligible"
     };
     act.actor_business = instance.promotion.entity.business;
