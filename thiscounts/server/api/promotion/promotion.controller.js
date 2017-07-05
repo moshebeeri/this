@@ -167,9 +167,10 @@ function applyToUsers(promotion, instances, callback) {
       latitude: instance.location.lat
     }, 30, 0, instance.quantity, function (err, results) {
       if (err) return console.error(err);
-      results.forEach(user => function (user) {
-        console.log(`instance: ${instance._id} sent to user ${user} by location`);
-        user_instance_eligible_activity(user, instance);
+      console.log(`applyToUsers: ${JSON.stringify(results)}`);
+      results.forEach(user => {
+        console.log(`instance: ${instance._id} sent to user ${user._id} by location`);
+        user_instance_eligible_activity(user._id, instance);
       })
     });
   })
@@ -276,12 +277,12 @@ function instance_eligible_activity(instance) {
   }
 }
 
-function user_instance_eligible_activity(user, instance){
+function user_instance_eligible_activity(userId, instance){
   if (utils.defined(instance.promotion.entity.business)) {
     let act = {
       instance: instance._id,
       promotion: instance.promotion._id,
-      ids: [user],
+      ids: [userId],
       action: "eligible"
     };
     act.actor_business = instance.promotion.entity.business;

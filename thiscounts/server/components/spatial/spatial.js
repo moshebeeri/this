@@ -147,9 +147,9 @@ Spatial.prototype.userLocationWithinDistance = function add(coordinate, distance
     skip ${skip} limit ${limit}
   `;
   //console.log(query);
-  locationGraph.query(query, function (err, _ids) {
+  locationGraph.query(query, function (err, results) {
     if(err) return callback(err);
-    return callback(null, _ids);
+    return callback(null, results);
   })
 };
 
