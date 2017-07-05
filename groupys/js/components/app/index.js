@@ -24,7 +24,7 @@ let userApi = new UserApi();
 import codePush from "react-native-code-push";
 
 import SideBar from '../drawer/index';
-var PushNotification = require('react-native-push-notification');
+//var PushNotification = require('react-native-push-notification');
 const warch = navigator.geolocation.watchPosition((position) => {
         var lastPosition = JSON.stringify(position);
         locationApi.sendLocation(position.coords.longitude,position.coords.latitude,position.timestamp,position.coords.speed);
