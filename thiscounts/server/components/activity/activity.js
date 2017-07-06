@@ -92,7 +92,9 @@ function activity_impl(act, callback) {
     }
 
     if(act.ids){
-      update_feeds(activity.ids, activity);
+      let effected = [];
+      activity.ids.forEach(_id => effected.push({_id:_id}));
+      update_feeds(effected, activity);
       return callback(null, activity)
     }
 
@@ -181,16 +183,16 @@ function run(query, callback) {
 }
 //MATCH (actor) where actor._id='56a3cb8071cef8c460461c08' return actor
 function effected_out_rel(actor_id, relationship, callback) {
-  let query = util.format(" MATCH (actor)-[:%s]->(effected) \
-                            where actor._id='%s' and actor <> effected \
-                            return effected._id as _id", relationship, actor_id);
+  let query = ` MATCH (actor)-[:${relationship}]->(effected) 
+                where actor._id='${actor_id}' and actor <> effected 
+                return effected._id as _id`;
   run(query, callback);
 }
 
 function effected_in_rel(actor_id, relationship, callback) {
-  let query = util.format(" MATCH (actor)<-[:%s]-(effected) \
-                            where actor._id='%s' and actor <> effected \
-                            return effected._id as _id", relationship, actor_id);
+  let query = `MATCH (actor)<-[:${relationship}]-(effected) 
+                            where actor._id='${actor_id}' and actor <> effected 
+                            return effected._id as _id`;
   run(query, callback);
 }
 
