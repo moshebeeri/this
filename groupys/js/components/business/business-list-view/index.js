@@ -3,7 +3,7 @@ import {Image, Platform} from 'react-native';
 import {Container, Content, Text,Title, InputGroup, Input, Button, View,Header, Body, Right, ListItem,Card,CardItem, Thumbnail,Left} from 'native-base';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import Icon2 from 'react-native-vector-icons/MaterialIcons';
-
+const covefr = require('../../../../images/cover2.png');
 import styles from './styles'
 export default class BusinessListView extends Component {
 
@@ -38,7 +38,13 @@ export default class BusinessListView extends Component {
                 style={styles.image}
 
                 source={{uri: this.props.item.pictures[0].pictures[0]}}>
-              </Image>
+                    <Image
+                        style={styles.imageb}
+
+                        source={covefr}>
+                    </Image>
+
+                </Image>
 
 
 

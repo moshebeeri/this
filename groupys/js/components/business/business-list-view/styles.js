@@ -34,11 +34,19 @@ module.exports = {
 
     },
     image:{
-        width: width +150,
+        width: width,
         height: 250,
-        borderBottomLeftRadius: 250, borderBottomRightRadius: 250,
-        borderBottomWidth:200,
+        top:10,
         bottom: 20,
+
+    },
+
+    imageb:{
+        width: width,
+        height: 70,
+        top: 180,
+        bottom: 20,
+
 
     },
     backgroundContainer: {
@@ -65,66 +73,5 @@ module.exports = {
     img: {
         width: Dimensions.get('window').width,
     },
-    tvscreen: {},
-    tvscreenMain: {
-        width: 150,
-        height: 75,
-        backgroundColor: 'blue',
-        borderTopLeftRadius: 15,
-        borderTopRightRadius: 15,
-        borderBottomRightRadius: 15,
-        borderBottomLeftRadius: 15,
-    },
-    tvscreenTop: {
-        width: 73,
-        height: 70,
-        backgroundColor: 'blue',
-        position: 'absolute',
-        top: -26,
-        left: 39,
-        borderRadius: 35,
-        transform: [
-            {scaleX: 2},
-            {scaleY: .5}
-        ]
-    },
-    tvscreenBottom: {
-        width: 73,
-        height: 70,
-        backgroundColor: 'blue',
-        position: 'absolute',
-        bottom: -26,
-        left: 39,
-        borderRadius: 35,
-        transform: [
-            {scaleX: 2},
-            {scaleY: .5}
-        ]
-    },
-    tvscreenLeft: {
-        width: 20,
-        height: 38,
-        backgroundColor: 'blue',
-        position: 'absolute',
-        left: -7,
-        top: 18,
-        borderRadius: 35,
-        transform: [
-            {scaleX: .5},
-            {scaleY: 2},
-        ]
-    },
-    tvscreenRight: {
-        width: 20,
-        height: 38,
-        backgroundColor: 'blue',
-        position: 'absolute',
-        right: -7,
-        top: 18,
-        borderRadius: 35,
-        transform: [
-            {scaleX: .5},
-            {scaleY: 2},
-        ]
-    },
+
 };
