@@ -441,25 +441,27 @@ function createProductCategoriesNode(parentName, node, callback) {
   if(_.isEmpty(node))
     return callback(null);
 
-  async.eachLimit(Object.keys(node), 5, function(key, callback) {
-    console.log(`${++nodes}) ${parentName}<-${key}`);
+  async.eachLimit(Object.keys(node), 2, function(key, callback) {
     ProductCategory.save({name: key}, function (err, category) {
       let query = `MATCH (top:ProductCategory{name:"${parentName}"}), (sub:ProductCategory{name:"${category.name}"})
                                   CREATE UNIQUE (sub)-[:CATEGORY]->(top)`;
       ProductCategory.query(query, function (err) {
         if(err) return callback(err);
-        Category.create({
-          type: 'product',
-          gid: category.id,
-          name: key,
-          translations: {en: key},
-          isLeaf: _.isEmpty(node[key])
-        });
         createProductCategoriesNode(key, node[key], callback);
       });
     })
   }, function(err){
     if(err) return callback(err);
+    ProductCategory.query('match(n:ProductCategory) return n', function (err, categories) {
+      categories.forEach(category => {
+        Category.create({
+          type: 'product',
+          gid: category.id,
+          name: category.name,
+          translations: {en: category.name},
+        });
+      })
+    });
     return callback(null);
   })
 }
@@ -471,7 +473,7 @@ function createProductCategories(callback) {
 
   createProductCategoryRoot(function (err, root){
     if (err) return callback(err);
-    createProductCategoriesNode(root, EBayProductCategories, function (err) {
+    createProductCategoriesNode('ProductRootCategory', EBayProductCategories, function (err) {
       if (err) return callback(err);
       return callback(null);
     })
@@ -492,10 +494,26 @@ function initializeGraphCategories(callback){
 //initializeGraphCategories();
 
 exports.work = function (req, res) {
-  initializeGraphCategories(function (err){
-    if (err) return handleError(res, err);
-      return res.status(200).json('ok');
-  })
+  ProductCategory.query('match(n:ProductCategory) return n', function (err, categories) {
+    categories.forEach(category => {
+      console.log(`insert category ${category.name}`);
+      Category.create({
+        type: 'product',
+        gid: category.id,
+        name: category.name,
+        isLeaf: false,
+        translations: {en: category.name},
+      }, function(err){
+        if(err) console.error(err);
+      });
+    })
+  });
+  return res.status(200).json('ok');
+  // nodes = 0;
+  // initializeGraphCategories(function (err){
+  //   if (err) return handleError(res, err);
+  //     return res.status(200).json('ok');
+  // })
 };
 
 exports.business = function (req, res) {
@@ -505,14 +523,24 @@ exports.business = function (req, res) {
     return res.status(200).json(categories);
   })
 };
-//MATCH p=(n:ProductCategory{name:'ProductRootCategory'})<-[r*]-(c:ProductCategory) RETURN extract(c IN nodes(p)|[c,id(c)])
+
 exports.product = function (req, res) {
-  //let query = `match p=(n:ProductCategory)<-[r:CATEGORY*1..]-(m) RETURN extract(c IN nodes(p)|c)`;
-  let query = `MATCH p=(n:ProductCategory{name:'ProductRootCategory'})<-[r*]-(c:ProductCategory) 
-                  RETURN extract(c IN nodes(p)|[c,id(c)])`;
+  let parent = req.params.parent;
+  let lang = req.params.lang || 'en';
+  let query = parent === 'root'?
+    `match(n:ProductCategory{name:"ProductRootCategory"})<-[c:CATEGORY]-(m) return m` :
+    `match(n:ProductCategory)<-[c:CATEGORY]-(m) where id(n)=${parent} return m`;
   ProductCategory.query(query, function (err, categories) {
     if (err) return handleError(res, err);
-    return res.status(200).json(categories);
+    let gids = [];
+    categories.forEach(category => {gids.push(category.id)});
+    console.log(gids);
+    Category.find({})
+      .where('gid').in(gids)
+      .select(`gid isLeaf translations.${lang} -_id`)
+      .exec(function (err, categories) {
+      return res.status(200).json(categories);
+    })
   })
 };
 

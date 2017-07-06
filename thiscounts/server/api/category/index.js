@@ -7,7 +7,7 @@ let auth = require('../../auth/auth.service');
 let router = express.Router();
 
 router.get('/work', controller.work);
-router.get('/product', controller.product);
+router.get('/product/:lang/:parent', controller.product);
 router.get('/business', controller.business);
 router.get('/create/business', controller.create_business);
 router.get('/top/business', controller.top_business);
