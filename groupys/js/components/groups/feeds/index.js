@@ -36,7 +36,9 @@ class GroupFeed extends Component {
 
 
 
-
+    componentWillMount(){
+      this.fetchFeeds();
+    }
 
 
 

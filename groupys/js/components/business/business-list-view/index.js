@@ -3,7 +3,7 @@ import {Image, Platform} from 'react-native';
 import {Container, Content, Text,Title, InputGroup, Input, Button, View,Header, Body, Right, ListItem,Card,CardItem, Thumbnail,Left} from 'native-base';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import Icon2 from 'react-native-vector-icons/MaterialIcons';
-
+const covefr = require('../../../../images/cover2.png');
 import styles from './styles'
 export default class BusinessListView extends Component {
 
@@ -32,35 +32,57 @@ export default class BusinessListView extends Component {
         let banner = undefined;
         if(this.props.item.pictures && this.props.item.pictures.length > 0) {
 
-            banner = <Image
-                style={{padding: 0, flex: -1,height:300}}
+            banner =  <View style={styles.container}>
+
+                <Image
+                style={styles.image}
+
                 source={{uri: this.props.item.pictures[0].pictures[0]}}>
+                    <Image
+                        style={styles.imageb}
+
+                        source={covefr}>
+                    </Image>
+
+                </Image>
+
+
+
+
+
+
                 <Text  style={styles.imageTopText}>{this.props.item.name}</Text>
                 <Text style={styles.imageButtomText} >{this.props.item.info}</Text>
-               </Image>
+
+
+            </View>
         }else{
             banner = <Image
                 style={{padding: 0, flex: -1,height:300}}
                 source={require('../../../../images/client_1.png')}>
-                <Text  style={styles.imageTopText}>{this.props.item.name}</Text>
-                <Text style={styles.imageButtomText} >{this.props.item.info}</Text>
-            </Image>
+             </Image>
 
 
         }
 
-        return (  <Card   key={this.props.index}>
+        return ( <View >
+            <View style={{flex:-1, flexDirection: 'row',justifyContent:'space-between'}}>
+                {banner}
+
+            </View>
+
+
+            <Card   key={this.props.index}>
 
 
 
-                <View style={{flex:-1,justifyContent:'center',height:300}}>
-
-                    {banner}
 
 
 
 
-                </View>
+
+
+
 
 
                 <CardItem >
@@ -84,6 +106,7 @@ export default class BusinessListView extends Component {
                 </CardItem>
             </Card>
 
+            </View>
         );
 
 

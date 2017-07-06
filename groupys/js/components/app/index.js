@@ -232,19 +232,19 @@ import * as userAction from "../../actions/user";
                                                     to={this.state.addComponent}/>
 
                 <Tabs initialPage={index} onChangeTab={this.onChangeTab.bind(this)} style={{backgroundColor: '#fff',}}>
-                    <Tab heading={ <TabHeading style={{ backgroundColor: "#ffe6e6" }}><Text style={{color: 'black', fontSize: 11,}}>Home</Text></TabHeading>}>
+                    <Tab heading={ <TabHeading style={{ backgroundColor: "#7dc5dd" }}><Text style={{color: 'black', fontSize: 11,}}>Home</Text></TabHeading>}>
                         <Feeds index={0}  navigation={this.props.navigation} navigateAction={this.headerAction.bind(this)}/>
                     </Tab>
-                    <Tab heading={ <TabHeading style={{ backgroundColor: "#ffe6e6" }}><Text style={{color: 'black', fontSize: 11,}}>My Promotions</Text></TabHeading>}>
+                    <Tab heading={ <TabHeading style={{ backgroundColor: "#7dc5dd" }}><Text style={{color: 'black', fontSize: 11,}}>My Promotions</Text></TabHeading>}>
                         <MydPromotions  navigation={this.props.navigation}  index={1} navigateAction={this.headerAction.bind(this)}/>
                     </Tab>
                     <Tab
-                        heading={ <TabHeading style={{ backgroundColor: "#ffe6e6" }}><Text style={{color: 'black', fontSize: 11,}}>Groups</Text></TabHeading>}>
+                        heading={ <TabHeading style={{ backgroundColor: "#7dc5dd" }}><Text style={{color: 'black', fontSize: 11,}}>Groups</Text></TabHeading>}>
                         <Groups navigation={this.props.navigation} index={2}
                                 navigateAction={this.headerAction.bind(this)}/>
                     </Tab>
 
-                    <Tab heading={ <TabHeading style={{ backgroundColor: "#ffe6e6" }}><Text style={{color: 'black', fontSize: 11,}}>Business</Text></TabHeading>}>
+                    <Tab heading={ <TabHeading style={{ backgroundColor: "#7dc5dd" }}><Text style={{color: 'black', fontSize: 11,}}>Business</Text></TabHeading>}>
 
                         <Business navigation={this.props.navigation} index={3} navigateAction={this.headerAction.bind(this)}/>
                     </Tab>

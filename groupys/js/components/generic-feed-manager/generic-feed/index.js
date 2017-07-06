@@ -183,7 +183,7 @@ export default class GenericFeedItem extends Component {
                 if (item.banner.uri) {
                     banner = <View style={styles.container}>
                         <View style={styles.backgroundContainer}>
-                        <Image resizeMode= "stretch"
+                        <Image resizeMode= "cover"
                         style={styles.image}
                         source={{uri: item.banner.uri}}
                     >
