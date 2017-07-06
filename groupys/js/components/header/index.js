@@ -46,7 +46,7 @@ export default class GeneralComponentHeader extends Component {
                 borderBottomColor: 'gray',
 
                 borderStyle:'solid',
-                backgroundColor: '#fff',
+                backgroundColor: '#2e8eca',
                 borderBottomWidth:0.5,
                 paddingTop: (Platform.OS === 'ios') ? 20 : 3,
                 justifyContent: 'space-between',
@@ -56,12 +56,12 @@ export default class GeneralComponentHeader extends Component {
 
           <View style={{ flexDirection: 'row', alignItems: 'stretch' ,justifyContent: 'space-between' }}>
                 <Button transparent style={{ paddingRight: 15 }} onPress={this.props.openDrawer}>
-                    <Icon active size={20} name="menu" />
+                    <Icon active color={"white"} size={20} name="menu" />
 
                 </Button>
 
 
-              <Text transparent style={{ paddingRight: 20, paddingTop: 10, backgroundColor: 'transparent'}} >Groupies</Text>
+              <Text transparent style={{ paddingRight: 20, paddingTop: 10,color:"white" ,backgroundColor: 'transparent'}} >Groupies</Text>
           </View>
 
 

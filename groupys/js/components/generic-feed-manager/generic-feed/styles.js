@@ -62,7 +62,7 @@ module.exports = {
         flex:-1,justifyContent:'center',flexDirection: 'row',height: 30,
     },
     image:{
-        width: width, height: 300,flex:-1,  borderWidth: 1,borderRadius: 15, alignSelf: 'center',
+        width: width-50, height: 300,flex:-1,  borderBottomLeftRadius: 15, borderTopLeftRadius: 15, borderWidth: 1, alignSelf: 'flex-start',
     },
     imageLogoName:{
         textShadowOffset:{width:1,height:1},
@@ -95,8 +95,12 @@ module.exports = {
     container: {
         flex: 1,
         height: 300,
-
+        overflow: 'hidden',
+        backgroundColor:'#ba5133',
         alignItems: 'center',
+        borderRadius:15
+
+
     },
     overlay: {
         opacity: 0.5,
