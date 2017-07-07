@@ -66,14 +66,14 @@ class ProductsApi
 
 
 
-    getProductCategories()
+    getProductCategories(gid)
     {
 
         return new Promise(async(resolve, reject) => {
 
             try {
                 let token = await store.get('token');
-                const response = await fetch(`${server_host}/api/categories/product`, {
+                const response = await fetch(`${server_host}/api/categories/product/en/` +gid, {
                     method: 'GET',
                     headers: {
                         'Accept': 'application/json, text/plain, */*',

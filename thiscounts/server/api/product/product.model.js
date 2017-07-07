@@ -12,7 +12,7 @@ let ProductSchema = new Schema({
   brand: {type: Schema.ObjectId, ref: 'Brand', required: false},
   business: {type: Schema.ObjectId, ref: 'Business', required: false},
   retail_price: Number,
-  category: {type: String, required: true},
+  category: [],
   pictures: [],
   active: Boolean
 });
