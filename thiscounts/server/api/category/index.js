@@ -11,7 +11,6 @@ router.get('/product/:lang/:parent', controller.product);
 router.get('/business/:lang/:parent', controller.business);
 router.post('/add/product/:parent', controller.add_product);
 router.post('/add/business/:parent', controller.add_business);
-//router.get('/business', controller.business);
 router.get('/', auth.hasRole('admin'), controller.index);
 router.get('/:id', auth.hasRole('admin'), controller.show);
 router.post('/', auth.hasRole('admin'), controller.create);

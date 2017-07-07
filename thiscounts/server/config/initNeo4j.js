@@ -92,7 +92,4 @@ function initNeo4j() {
   db.index.createIfNone('BusinessCategory', 'name', function(err, index) {
     console.log(index);
   });
-  db.index.createIfNone('BusinessTopCategory', 'name', function(err, index) {
-    console.log(index);
-  });
 }
