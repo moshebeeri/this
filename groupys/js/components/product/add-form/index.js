@@ -37,7 +37,7 @@ class AddProduct extends Component {
                 info : item.info,
                 retail_price: item.retail_price.toString(),
                 token:'',
-                query:''
+                categories:[]
             };
         }else {
             this.state = {
@@ -47,7 +47,7 @@ class AddProduct extends Component {
                 info : '',
                 retail_price: '',
                 token:'',
-                query:''
+                categories:[]
 
             };
         }
@@ -81,7 +81,7 @@ class AddProduct extends Component {
             business: this.props.navigation.state.params.business._id,
             info : this.state.info,
             retail_price: this.state.retail_price,
-            category: this.state.query,
+            category: this.state.categories,
 
 
 
@@ -110,8 +110,19 @@ class AddProduct extends Component {
 
     updateFormData(){
 
+        let product = {
+            name:this.state.name,
+            image:this.state.image,
+            business: this.props.navigation.state.params.business._id,
+            info : this.state.info,
+            retail_price: this.state.retail_price,
+            category: this.state.categories,
 
-        entityUtils.update('products',this.state,this.state.token,this.formSuccess.bind(this),this.formFailed.bind(this),this.props.navigation.state.params.item._id);
+
+
+
+        }
+        entityUtils.update('products',product,this.state.token,this.formSuccess.bind(this),this.formFailed.bind(this),this.props.navigation.state.params.item._id);
     }
 
     formFailed(error){
@@ -159,33 +170,92 @@ class AddProduct extends Component {
         }
     }
 
-    getCategories(){
-       let categories =  this.props.products.categories;
-        let keys = new Array();
-        for (var key in categories) {
-            keys.push(key);
+    setCategory(index,category){
+        let categpries = this.state.categories;
+        if(categpries.length <= index) {
+            categpries.push(category);
+        }else{
+            let newCategories =  new Array();
+            for (i = 0; i + 1 <= index; i++){
+                newCategories.push(categpries[i]);
+            }
+            categpries = newCategories
+            categpries.push(category);
         }
+        this.props.fetchProductCategories(category);
+       this.setState({
+           categories: categpries
 
-        return keys;
+       })
 
     }
 
-    findCat(query) {
-
-        let cats = this.getCategories()
-        if (query === '') {
-            return [];
-        }
 
 
-        const regex = new RegExp(`${query.trim()}`, 'i');
-        let response =  cats.filter(cat => cat.search(regex) >= 0);
+    createPickers() {
+           let categories = this.props.products['categoriesenroot'];
+        let rootOicker = undefined;
+           if(categories) {
+               categories.unshift({
+                   gid: "",
+                   translations:{
+                       en:""
+                   }
+               })
+                rootOicker = <Picker
+                   iosHeader="Sub type"
+                   mode="dropdown"
+                   style={{flex: 1}}
+                   selectedValue={this.state.categories[0]}
+                   onValueChange={this.setCategory.bind( this,0)}>
 
-        if(response.length == 1 && response ==query ){
-            return [];
-        }
+                   {
 
-        return response;
+
+                       categories.map((s, i) => {
+                           return <Item
+                               key={i}
+                               value={s.gid}
+                               label={s.translations.en}/>
+                       }) }
+               </Picker>
+           }
+
+        let props = this.props;
+        let stateCategories = this.state.categories;
+        let setCategoryFunction = this.setCategory.bind(this);
+        let pickers =  this.state.categories.map(function (gid,i) {
+            let categories = props.products['categoriesen' + gid];
+            if(categories && categories.length > 0){
+                categories.unshift({
+                    gid: "",
+                    translations:{
+                        en:""
+                    }
+                })
+                return <Picker
+                    key={i}
+                    iosHeader="Sub type"
+                    mode="dropdown"
+                    style={{flex: 1}}
+                    selectedValue={stateCategories[i+1]}
+                    onValueChange={cat => setCategoryFunction(i+1,cat)}>
+
+                    {
+
+
+                        categories.map((s, j) => {
+                            return <Item
+                                key={j}
+                                value={s.gid}
+                                label={s.translations.en}/>
+                        }) }
+                </Picker>
+            }
+            return undefined;
+        })
+      return <View>{rootOicker}{pickers}</View>
+
     }
 
     render() {
@@ -215,29 +285,15 @@ class AddProduct extends Component {
             </Button>
 
         }
+        let pickers = this.createPickers();
 
-        let data = this.findCat(this.state.query);
+
 
         return (
             <Container>
 
                 <Content style={{margin:10,backgroundColor: '#fff'}}>
-                    <Autocomplete
-                        data={data}
-                        defaultValue={this.state.query}
-                        containerStyle={{     margin:3}}
-                        onChangeText={text => this.setState({ query: text })}
-                        renderItem={data => (
-
-                            <TouchableOpacity onPress={() => this.setState({ query: data })}>
-                                <Text style={{ fontStyle: 'normal',fontSize:20 }}>{data}</Text>
-                            </TouchableOpacity>
-                        )}
-                        renderTextInput = {() => (
-                                <Input  value={this.state.query}  blurOnSubmit={true} returnKeyType='next' ref="1" onSubmitEditing={this.focusNextField.bind(this,"2")} onChangeText={(query) => this.setState({query})} placeholder='Product Type' />
-
-                        )}
-                    />
+                    {pickers}
                     <Item style={{ margin:3 } } regular >
                         <Input  value={this.state.name}  blurOnSubmit={true} returnKeyType='next' ref="1" onSubmitEditing={this.focusNextField.bind(this,"2")} onChangeText={(name) => this.setState({name})} placeholder='Name' />
                     </Item>

@@ -22,10 +22,10 @@ export default function products(state = initialState, action) {
             };
 
         case 'GET_PRODUCT_CATEGORIES' :
-            return {
-                ...state,
-                categories : action.categories,
-            };
+            let categoriesState = {...state};
+            categoriesState['categories'+ action.language + action.catId] = action.categories;
+
+            return categoriesState;
 
         case 'GET_BUSINESS_PRODUCTS' :
 

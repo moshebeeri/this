@@ -182,20 +182,22 @@ import Autocomplete from 'react-native-autocomplete-input';
 
     saveFormData(){
 
-
+        this.replaceRoute('home');
         entityUtils.create('businesses',this.state,this.state.token,this.formSuccess.bind(this),this.formFailed.bind(this),this.state.userId);
+
     }
 
 
      updateFormData(){
 
-
+         this.replaceRoute('home');
          entityUtils.update('businesses',this.state,this.state.token,this.formSuccess.bind(this),this.formFailed.bind(this),this.props.navigation.state.params.item._id);
+
      }
 
      formSuccess(response){
         this.props.fetchBusiness();
-        this.replaceRoute('home');
+
     }
 
     formFailed(error){

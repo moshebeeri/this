@@ -19,7 +19,7 @@ class Product extends Component {
     constructor(props) {
         super(props);
 
-        this.props.fetchProductCategories();
+        this.props.fetchProductCategories("root");
     }
 
 

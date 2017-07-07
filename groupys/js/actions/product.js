@@ -47,15 +47,16 @@ async function getAllByBusinessId(dispatch,id) {
 }
 
 
-async function getProductCategories(dispatch) {
+async function getProductCategories(dispatch,gid) {
     try {
-        let response = await productApi.getProductCategories()
+        let response = await productApi.getProductCategories(gid)
 
 
             dispatch({
                 type: 'GET_PRODUCT_CATEGORIES',
                 categories: response,
-
+                language:'en',
+                catId:gid
             });
 
 
@@ -79,9 +80,9 @@ export function fetchProductsByBusiness(businessId){
 
 }
 
-export function fetchProductCategories(){
+export function fetchProductCategories(gid){
     return function (dispatch, getState){
-        dispatch|(getProductCategories(dispatch));
+        dispatch|(getProductCategories(dispatch,gid));
     }
 
 }

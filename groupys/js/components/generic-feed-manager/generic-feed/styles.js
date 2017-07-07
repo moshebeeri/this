@@ -76,7 +76,11 @@ module.exports = {
     },
     imageButtomText:{
         textShadowOffset:{width:1,height:1},
-        textShadowColor:'black',fontWeight: 'bold',marginRight:20,marginLeft:10,marginTop:5,marginBottom:10,color:'white',fontSize:15
+        textShadowColor:'black',fontWeight: 'bold',marginRight:20,marginLeft:-50,marginTop:20,marginBottom:10,color:'white',fontSize:15
+    },
+    addressText:{
+        textShadowOffset:{width:1,height:1},
+        textShadowColor:'black',fontWeight: 'bold',marginRight:20,marginLeft:10,marginTop:15,marginBottom:15,color:'white',fontSize:15
     },
     backdropView: {
         height: 300,
