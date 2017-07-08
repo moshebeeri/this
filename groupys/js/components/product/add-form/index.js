@@ -28,8 +28,18 @@ class AddProduct extends Component {
 
     constructor(props) {
         super(props);
+        var milliseconds = (new Date).getTime();
         if(props.navigation.state.params && props.navigation.state.params.item) {
             let item = props.navigation.state.params.item;
+
+            let getCategories = props.fetchProductCategories.bind(this);
+            item.category.forEach(function (cat) {
+                let categories = props.products['categoriesen' + cat];
+                if(!categories ) {
+                    getCategories(cat);
+                }
+
+            })
             this.state = {
                 name:item.name,
                 image:'',
@@ -37,7 +47,9 @@ class AddProduct extends Component {
                 info : item.info,
                 retail_price: item.retail_price.toString(),
                 token:'',
-                categories:[]
+                categories:item.category,
+                time:milliseconds,
+
             };
         }else {
             this.state = {
@@ -47,7 +59,8 @@ class AddProduct extends Component {
                 info : '',
                 retail_price: '',
                 token:'',
-                categories:[]
+                categories:[],
+                time:milliseconds,
 
             };
         }
@@ -81,7 +94,6 @@ class AddProduct extends Component {
             business: this.props.navigation.state.params.business._id,
             info : this.state.info,
             retail_price: this.state.retail_price,
-            category: this.state.categories,
 
 
 
@@ -171,7 +183,16 @@ class AddProduct extends Component {
     }
 
     setCategory(index,category){
+        var milliseconds = (new Date).getTime();
+
+        if(milliseconds-this.state.time  < 1000 ){
+            return;
+        }
+        if(!category){
+            return;
+        }
         let categpries = this.state.categories;
+
         if(categpries.length <= index) {
             categpries.push(category);
         }else{
@@ -182,7 +203,11 @@ class AddProduct extends Component {
             categpries = newCategories
             categpries.push(category);
         }
-        this.props.fetchProductCategories(category);
+        let reduxxCategories = this.props.products['categoriesen' + category];
+        if(!reduxxCategories ) {
+
+            this.props.fetchProductCategories(category);
+        }
        this.setState({
            categories: categpries
 
@@ -196,7 +221,11 @@ class AddProduct extends Component {
            let categories = this.props.products['categoriesenroot'];
         let rootOicker = undefined;
            if(categories) {
-               categories.unshift({
+               let categoriesWIthBlank = new Array();
+               categories.forEach(function (cat) {
+                   categoriesWIthBlank.push(cat);
+               })
+               categoriesWIthBlank.unshift({
                    gid: "",
                    translations:{
                        en:""
@@ -212,7 +241,7 @@ class AddProduct extends Component {
                    {
 
 
-                       categories.map((s, i) => {
+                       categoriesWIthBlank.map((s, i) => {
                            return <Item
                                key={i}
                                value={s.gid}
@@ -227,7 +256,11 @@ class AddProduct extends Component {
         let pickers =  this.state.categories.map(function (gid,i) {
             let categories = props.products['categoriesen' + gid];
             if(categories && categories.length > 0){
-                categories.unshift({
+                let categoriesWIthBlank = new Array();
+                categories.forEach(function (cat) {
+                    categoriesWIthBlank.push(cat);
+                })
+                categoriesWIthBlank.unshift({
                     gid: "",
                     translations:{
                         en:""
@@ -239,12 +272,12 @@ class AddProduct extends Component {
                     mode="dropdown"
                     style={{flex: 1}}
                     selectedValue={stateCategories[i+1]}
-                    onValueChange={cat => setCategoryFunction(i+1,cat)}>
+                    onValueChange={setCategoryFunction.bind(this,i+1)}>
 
                     {
 
 
-                        categories.map((s, j) => {
+                        categoriesWIthBlank.map((s, j) => {
                             return <Item
                                 key={j}
                                 value={s.gid}
@@ -257,7 +290,9 @@ class AddProduct extends Component {
       return <View>{rootOicker}{pickers}</View>
 
     }
-
+    componentDidMount(){
+        console.log("mountx")
+    }
     render() {
 
         let image ;
