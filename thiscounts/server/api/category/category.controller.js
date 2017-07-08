@@ -135,24 +135,7 @@ exports.update_business_leafs = function (req, res) {
       return res.status(200).json('ok');
     })
 };
-/*
- {
- "n": {
- "name": "BusinessRootCategory",
- "id": 795
- },
- "t": {
- "PayPalId": "1025",
- "name": "Vehicle service and accessories",
- "id": 821
- },
- "c": {
- "PayPalId": "2297",
- "name": "Accessories",
- "id": 875
- }
- },
- */
+
 exports.init_business = function (req, res){
   BusinessCategory.model.setUniqueKey('name', true);
   BusinessCategory.model.setUniqueKey('PayPalId', true);
@@ -345,7 +328,6 @@ exports.add_business = function (req, res) {
       });
       return res.status(200).json('ok');
     });
-
   return res.status(201);
 };
 
