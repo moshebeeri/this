@@ -111,7 +111,7 @@ let PromotionSchemaObject = {
   realize_code: String,
   description:String,
   start: { type : Date, default: Date.now },
-  end: Date, // TODO: Add default
+  end: { type: Date, default: new Date(+new Date() + 14*24*60*60*1000) },
   expireAt: {
     type: Date
     /**validate: [ function(v) {
