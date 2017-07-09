@@ -23,6 +23,21 @@ const Entities = {
   mall: {type: Schema.ObjectId, ref: 'Mall'}
 };
 
+const Condition = {
+  business: {type: Schema.ObjectId, ref: 'Business'},
+  shopping_chain: {type: Schema.ObjectId, ref: 'ShoppingChain'},
+  mall: {type: Schema.ObjectId, ref: 'Mall'},
+  product: {type: Schema.ObjectId, ref: 'Product'},
+  category: [{type: Number}],
+  quantity: Number,
+  amount: Number
+};
+
+const Distribution = {
+  cards: [{type: Schema.ObjectId, ref: 'CardType'}],
+  groups: [{type: Schema.ObjectId, ref: 'Group'}]
+};
+
 const promotionTypes = [
   'PERCENT',
   'GIFT',   // get something free if you buy
@@ -43,36 +58,40 @@ const promotionTypes = [
 
 const Variations = ['SINGLE', 'RANGE', 'VALUES'];
 
-const Automatic = {
-
-  type :{type: Boolean},
-  quantity: {type: Number},
-  discount: { type : Number, min:1, max: 100},
-  types: [{type: String, enum: promotionTypes}],
-  products: [{
-    product: {type: Schema.ObjectId, ref: 'Product'},
-    description: String,
-    price: Number,
-  }],
-};
+// const Automatic = {
+//
+//   type :{type: Boolean},
+//   quantity: {type: Number},
+//   discount: { type : Number, min:1, max: 100},
+//   types: [{type: String, enum: promotionTypes}],
+//   products: [{
+//     product: {type: Schema.ObjectId, ref: 'Product'},
+//     description: String,
+//     price: Number,
+//   }],
+// };
 
 let PromotionSchemaObject = {
   social_state : {},
+
+  //automatic: Automatic,
+
   name: {type: String, required: true},
-  product: {type: Schema.ObjectId, ref: 'Product'},
   pictures : [],
+  type: {
+    type: String,
+    enum: promotionTypes
+  },
 
-  automatic: Automatic,
+  distribution: {type:Distribution, require: true},
+  condition: {type:Condition},
 
-  //retail_price: {type: Number},
+  //meta data
   creator: {type: Schema.ObjectId, ref: 'User', required: true},
   entity: { type: Entities, require: true,
     validate: [entity_validator, 'at least on of those fields should not be empty [business, product, chain, mall]'],
   },
   created: {type: Date, default: Date.now},
-  // Eligible for certain member cards
-  cards: [{type: Schema.ObjectId, ref: 'CardType'}],
-
   gid: {type: Number, index: true},
   realize_gid: Number,
   saved: Date,
@@ -121,14 +140,11 @@ let PromotionSchemaObject = {
       'GIVE_TO_FRIEND'
     ]
   },
-  type: {
-    type: String,
-    enum: promotionTypes
-  },
+
   percent: {
     variation: {type: String, enum: Variations},
     quantity: Number,
-    values: [{ type : Number, min:1, max: 100}]
+    values: [{ type : Number, min:1, max: 100}],
   },
 
   gift: {
@@ -138,7 +154,7 @@ let PromotionSchemaObject = {
       product: {type: Schema.ObjectId, ref: 'Product'},
       retail_price: {type: Number},
       quantity: Number
-    }]
+    }],
   },
 
   x_plus_y: {
