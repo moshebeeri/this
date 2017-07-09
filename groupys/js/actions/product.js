@@ -48,19 +48,22 @@ async function getAllByBusinessId(dispatch,id) {
 
 
 async function getProductCategories(dispatch,gid) {
+
     try {
-        let response = await productApi.getProductCategories(gid)
+        if(gid) {
+            let response = await productApi.getProductCategories(gid)
+            if (response) {
+
+                dispatch({
+                    type: 'GET_PRODUCT_CATEGORIES',
+                    categories: response,
+                    language: 'en',
+                    catId: gid
+                });
 
 
-            dispatch({
-                type: 'GET_PRODUCT_CATEGORIES',
-                categories: response,
-                language:'en',
-                catId:gid
-            });
-
-
-
+            }
+        }
     } catch (error) {
         console.log(error);
     }
