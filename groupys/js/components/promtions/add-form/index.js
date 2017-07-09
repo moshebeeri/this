@@ -279,10 +279,17 @@ import {DeviceEventEmitter} from 'react-native'
          let businessId = this.getBusinessId();
 
         promotion.entity = {};
+        promotion.condition = {};
+        promotion.distribution = {};
 
         if(this.state.discount_on == 'GLOBAL'){
+
+            promotion.condition.business = businessId;
             promotion.entity.business = businessId;
+            promotion.distribution.busines = businessId;
+
         }else {
+            promotion.distribution.busines = businessId;
             promotion.entity.business = businessId;
             promotion.product = this.state.product;
         }
