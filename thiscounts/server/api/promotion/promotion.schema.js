@@ -35,7 +35,8 @@ const Condition = {
 
 const Distribution = {
   cards: [{type: Schema.ObjectId, ref: 'CardType'}],
-  groups: [{type: Schema.ObjectId, ref: 'Group'}]
+  groups: [{type: Schema.ObjectId, ref: 'Group'}],
+  business: {type: Schema.ObjectId, ref: 'Business'},
 };
 
 const promotionTypes = [
