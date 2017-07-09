@@ -73,7 +73,7 @@ let PromotionSchemaObject = {
   // Eligible for certain member cards
   cards: [{type: Schema.ObjectId, ref: 'CardType'}],
 
-  gid: { type: Number, index: true},
+  gid: {type: Number, index: true},
   realize_gid: Number,
   saved: Date,
 
