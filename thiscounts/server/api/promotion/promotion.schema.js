@@ -124,16 +124,6 @@ let PromotionSchemaObject = {
     }**/
   },
 
-  category: {
-    type: [{ type: String,  enum: [
-      'HOT'     ,
-      'LIKE'    ,
-      'NEAR'    ,
-      'MALL'    ,
-      'FASHION' ,
-      'GIFT'
-    ]}],
-  },
   social: {
     type: String,
     enum: [
@@ -234,7 +224,6 @@ let PromotionSchemaObject = {
   },
 
   reduced_amount: {
-    product: {type: Schema.ObjectId, ref: 'Product'},
     price: Number,
     quantity: Number,
     values: [{
@@ -246,7 +235,6 @@ let PromotionSchemaObject = {
   punch_card: {
     variation: {type: String, enum: Variations},
     quantity: Number,
-    product: {type: Schema.ObjectId, ref: 'Product'},
     values: [{
       quantity: Number,
       days: Number,
