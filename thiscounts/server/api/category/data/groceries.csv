@@ -1,0 +1,263 @@
+TOP, SUB, CAT
+Foodstuffs,Fresh vegetables,Asparagus
+Foodstuffs,Fresh vegetables,Broccoli
+Foodstuffs,Fresh vegetables,Carrots
+Foodstuffs,Fresh vegetables,Cauliflower
+Foodstuffs,Fresh vegetables,Celery
+Foodstuffs,Fresh vegetables,Corn
+Foodstuffs,Fresh vegetables,Cucumbers
+Foodstuffs,Fresh vegetables,Lettuce / Greens
+Foodstuffs,Fresh vegetables,Mushrooms
+Foodstuffs,Fresh vegetables,Onions
+Foodstuffs,Fresh vegetables,Peppers
+Foodstuffs,Fresh vegetables,Potatoes
+Foodstuffs,Fresh vegetables,Spinach
+Foodstuffs,Fresh vegetables,Squash
+Foodstuffs,Fresh vegetables,Zucchini
+Foodstuffs,Fresh vegetables,Tomatoes
+Foodstuffs,Fresh fruits,Apples
+Foodstuffs,Fresh fruits,Avocados
+Foodstuffs,Fresh fruits,Bananas
+Foodstuffs,Fresh fruits,Berries
+Foodstuffs,Fresh fruits,Cherries
+Foodstuffs,Fresh fruits,Grapefruit
+Foodstuffs,Fresh fruits,Grapes
+Foodstuffs,Fresh fruits,Kiwis
+Foodstuffs,Fresh fruits,Lemons / Limes
+Foodstuffs,Fresh fruits,Melon
+Foodstuffs,Fresh fruits,Nectarines
+Foodstuffs,Fresh fruits,Oranges
+Foodstuffs,Fresh fruits,Peaches
+Foodstuffs,Fresh fruits,Pears
+Foodstuffs,Fresh fruits,Plums
+Foodstuffs,Refrigerated items,Bagels
+Foodstuffs,Refrigerated items,Chip dip
+Foodstuffs,Refrigerated items,Eggs / Fake eggs
+Foodstuffs,Refrigerated items,English muffins
+Foodstuffs,Refrigerated items,Fruit juice
+Foodstuffs,Refrigerated items,Hummus
+Foodstuffs,Refrigerated items,Ready-bake breads
+Foodstuffs,Refrigerated items,Tofu
+Foodstuffs,Refrigerated items,Tortillas
+Foodstuffs,Frozen,Breakfasts
+Foodstuffs,Frozen,Burritos
+Foodstuffs,Frozen,Fish sticks
+Foodstuffs,Frozen,Fries / Tater tots
+Foodstuffs,Frozen,Ice cream / Sorbet
+Foodstuffs,Frozen,Juice concentrate
+Foodstuffs,Frozen,Pizza
+Foodstuffs,Frozen,Pizza Rolls
+Foodstuffs,Frozen,Popsicles
+Foodstuffs,Frozen,TV dinners
+Foodstuffs,Frozen,Vegetables
+Foodstuffs,Condiments / Sauces,BBQ sauce
+Foodstuffs,Condiments / Sauces,Gravy
+Foodstuffs,Condiments / Sauces,Honey
+Foodstuffs,Condiments / Sauces,Hot sauce
+Foodstuffs,Condiments / Sauces,Jam / Jelly / Preserves
+Foodstuffs,Condiments / Sauces,Ketchup / Mustard
+Foodstuffs,Condiments / Sauces,Mayonnaise
+Foodstuffs,Condiments / Sauces,Pasta sauce
+Foodstuffs,Condiments / Sauces,Relish
+Foodstuffs,Condiments / Sauces,Salad dressing
+Foodstuffs,Condiments / Sauces,Salsa
+Foodstuffs,Condiments / Sauces,Soy sauce
+Foodstuffs,Condiments / Sauces,Steak sauce
+Foodstuffs,Condiments / Sauces,Syrup
+Foodstuffs,Condiments / Sauces,Worcestershire sauce
+Foodstuffs,Various groceries,Bouillon cubes
+Foodstuffs,Various groceries,Cereal
+Foodstuffs,Various groceries,Coffee / Filters
+Foodstuffs,Various groceries,Instant potatoes
+Foodstuffs,Various groceries,Lemon / Lime juice
+Foodstuffs,Various groceries,Mac & cheese
+Foodstuffs,Various groceries,Olive oil
+Foodstuffs,Various groceries,Packaged meals
+Foodstuffs,Various groceries,Pancake / Waffle mix
+Foodstuffs,Various groceries,Pasta
+Foodstuffs,Various groceries,Peanut butter
+Foodstuffs,Various groceries,Pickles
+Foodstuffs,Various groceries,Rice
+Foodstuffs,Various groceries,Tea
+Foodstuffs,Various groceries,Vegetable oil
+Foodstuffs,Various groceries,Vinegar
+Foodstuffs,Canned foods,Applesauce
+Foodstuffs,Canned foods,Baked beans
+Foodstuffs,Canned foods,Broth
+Foodstuffs,Canned foods,Fruit
+Foodstuffs,Canned foods,Olives
+Foodstuffs,Canned foods,Tinned meats
+Foodstuffs,Canned foods,Tuna / Chicken
+Foodstuffs,Canned foods,Soup / Chili
+Foodstuffs,Canned foods,Tomatoes
+Foodstuffs,Canned foods,Veggies
+Foodstuffs,Spices & herbs,Basil
+Foodstuffs,Spices & herbs,Black pepper
+Foodstuffs,Spices & herbs,Cilantro
+Foodstuffs,Spices & herbs,Cinnamon
+Foodstuffs,Spices & herbs,Garlic
+Foodstuffs,Spices & herbs,Ginger
+Foodstuffs,Spices & herbs,Mint
+Foodstuffs,Spices & herbs,Oregano
+Foodstuffs,Spices & herbs,Paprika
+Foodstuffs,Spices & herbs,Parsley
+Foodstuffs,Spices & herbs,Red pepper
+Foodstuffs,Spices & herbs,Salt
+Foodstuffs,Spices & herbs,Vanilla extract
+Foodstuffs,Dairy,Butter / Margarine
+Foodstuffs,Dairy,Cottage cheese
+Foodstuffs,Dairy,Half & half
+Foodstuffs,Dairy,Milk
+Foodstuffs,Dairy,Sour cream
+Foodstuffs,Dairy,Whipped cream
+Foodstuffs,Dairy,Yogurt
+Foodstuffs,Cheese,Bleu cheese
+Foodstuffs,Cheese,Cheddar
+Foodstuffs,Cheese,Cottage cheese
+Foodstuffs,Cheese,Cream cheese
+Foodstuffs,Cheese,Feta
+Foodstuffs,Cheese,Goat cheese
+Foodstuffs,Cheese,Mozzarella
+Foodstuffs,Cheese,Parmesan
+Foodstuffs,Cheese,Provolone
+Foodstuffs,Cheese,Ricotta
+Foodstuffs,Cheese,Sandwich slices
+Foodstuffs,Cheese,Swiss
+Foodstuffs,Meat,Bacon / Sausage
+Foodstuffs,Meat,Beef
+Foodstuffs,Meat,Chicken
+Foodstuffs,Meat,Ground beef / Turkey
+Foodstuffs,Meat,Ham / Pork
+Foodstuffs,Meat,Hot dogs
+Foodstuffs,Meat,Lunchmeat
+Foodstuffs,Meat,Turkey
+Foodstuffs,Seafood,Catfish
+Foodstuffs,Seafood,Crab
+Foodstuffs,Seafood,Lobster
+Foodstuffs,Seafood,Mussels
+Foodstuffs,Seafood,Oysters
+Foodstuffs,Seafood,Salmon
+Foodstuffs,Seafood,Shrimp
+Foodstuffs,Seafood,Tilapia
+Foodstuffs,Seafood,Tuna
+Foodstuffs,Beverages,Beer
+Foodstuffs,Beverages,Club soda / Tonic
+Foodstuffs,Beverages,Champagne
+Foodstuffs,Beverages,Gin
+Foodstuffs,Beverages,Juice
+Foodstuffs,Beverages,Mixers
+Foodstuffs,Beverages,Red wine / White wine
+Foodstuffs,Beverages,Rum
+Foodstuffs,Beverages,Saké
+Foodstuffs,Beverages,Soda pop
+Foodstuffs,Beverages,Sports drink
+Foodstuffs,Beverages,Whiskey
+Foodstuffs,Beverages,Vodka
+Foodstuffs,Baked goods,Bagels / Croissants
+Foodstuffs,Baked goods,Buns / Rolls
+Foodstuffs,Baked goods,Cake / Cookies
+Foodstuffs,Baked goods,Donuts / Pastries
+Foodstuffs,Baked goods,Fresh bread
+Foodstuffs,Baked goods,Pie! Pie! Pie!
+Foodstuffs,Baked goods,Pita bread
+Foodstuffs,Baked goods,Sliced bread
+Foodstuffs,Baking,Baking powder / Soda
+Foodstuffs,Baking,Bread crumbs
+Foodstuffs,Baking,Cake / Brownie mix
+Foodstuffs,Baking,Cake icing / Decorations
+Foodstuffs,Baking,Chocolate chips / Cocoa
+Foodstuffs,Baking,Flour
+Foodstuffs,Baking,Shortening
+Foodstuffs,Baking,Sugar
+Foodstuffs,Baking,Sugar substitute
+Foodstuffs,Baking,Yeast
+Foodstuffs,Snacks,Candy / Gum
+Foodstuffs,Snacks,Cookies
+Foodstuffs,Snacks,Crackers
+Foodstuffs,Snacks,Dried fruit
+Foodstuffs,Snacks,Granola bars / Mix
+Foodstuffs,Snacks,Nuts / Seeds
+Foodstuffs,Snacks,Oatmeal
+Foodstuffs,Snacks,Popcorn
+Foodstuffs,Snacks,Potato / Corn chips
+Foodstuffs,Snacks,Pretzels
+Foodstuffs,Themed meals,Burger night
+Foodstuffs,Themed meals,Chili night
+Foodstuffs,Themed meals,Pizza night
+Foodstuffs,Themed meals,Spaghetti night
+Foodstuffs,Themed meals,Taco night
+Foodstuffs,Themed meals,Take-out deli food
+Foodstuffs,Baby stuff,Baby food
+Foodstuffs,Baby stuff,Diapers
+Foodstuffs,Baby stuff,Formula
+Foodstuffs,Baby stuff,Lotion
+Foodstuffs,Baby stuff,Baby wash
+Foodstuffs,Baby stuff,Wipes
+Foodstuffs,Pets,Cat food / Treats
+Foodstuffs,Pets,Cat litter
+Foodstuffs,Pets,Dog food / Treats
+Foodstuffs,Pets,Flea treatment
+Foodstuffs,Pets,Pet shampoo
+Household,Personal care,Antiperspirant / Deodorant
+Household,Personal care,Bath soap / Hand soap
+Household,Personal care,Condoms / Other b.c.
+Household,Personal care,Cosmetics
+Household,Personal care,Cotton swabs / Balls
+Household,Personal care,Facial cleanser
+Household,Personal care,Facial tissue
+Household,Personal care,Feminine products
+Household,Personal care,Floss
+Household,Personal care,Hair gel / Spray
+Household,Personal care,Lip balm
+Household,Personal care,Moisturizing lotion
+Household,Personal care,Mouthwash
+Household,Personal care,Razors / Shaving cream
+Household,Personal care,Shampoo / Conditioner
+Household,Personal care,Sunblock
+Household,Personal care,Toilet paper
+Household,Personal care,Toothpaste
+Household,Personal care,Vitamins / Supplements
+Household,Medicine,Allergy
+Household,Medicine,Antibiotic
+Household,Medicine,Antidiarrheal
+Household,Medicine,Aspirin
+Household,Medicine,Antacid
+Household,Medicine,Band-aids / Medical
+Household,Medicine,Cold / Flu / Sinus
+Household,Medicine,Pain reliever
+Household,Medicine,Prescription pick-up
+Household,Kitchen,Aluminum foil
+Household,Kitchen,Napkins
+Household,Kitchen,Non-stick spray
+Household,Kitchen,Paper towels
+Household,Kitchen,Plastic wrap
+Household,Kitchen,Sandwich / Freezer bags
+Household,Kitchen,Wax paper
+Household,Cleaning products,Air freshener
+Household,Cleaning products,Bathroom cleaner
+Household,Cleaning products,Bleach / Detergent
+Household,Cleaning products,Dish / Dishwasher soap
+Household,Cleaning products,Garbage bags
+Household,Cleaning products,Glass cleaner
+Household,Cleaning products,Mop head / Vacuum bags
+Household,Cleaning products,Sponges / Scrubbers
+Household,Office supplies,CDRs / DVDRs
+Household,Office supplies,Notepad / Envelopes
+Household,Office supplies,Glue / Tape
+Household,Office supplies,Printer paper
+Household,Office supplies,Pens / Pencils
+Household,Office supplies,Postage stamps
+Household,Carcinogens,Arsenic
+Household,Carcinogens,Asbestos
+Household,Carcinogens,Cigarettes
+Household,Carcinogens,Radionuclides
+Household,Carcinogens,Vinyl chloride
+Household,Carcinogens,
+Household,Other stuff,Automotive
+Household,Other stuff,Batteries
+Household,Other stuff,Charcoal / Propane
+Household,Other stuff,Flowers / Greeting card
+Household,Other stuff,Insect repellent
+Household,Other stuff,Light bulbs
+Household,Other stuff,Newspaper / Magazine
+Household,Other stuff,Random impulse buy

@@ -165,6 +165,20 @@ exports.init_business = function (req, res){
     })
 };
 
+function temp(req, res) {
+  const csv=require('csvtojson');
+  csv()
+    .fromFile('/Users/moshe/projects/low.la/thiscounts/server/api/category/data/groceries.csv')
+    .on('json',(jsonObj)=>{
+      console.log(JSON.stringify(jsonObj));
+    })
+    .on('done',(error)=>{
+      console.log('end')
+    });
+
+  return res.status(200).json('ok');
+}
+
 exports.work = function (req, res) {
   switch(req.params.function){
     case 'update_product_leafs':
@@ -179,6 +193,8 @@ exports.work = function (req, res) {
       return exports.init_business(req, res);
     case 'init_product':
       return exports.init_product(req, res);
+    case 'temp':
+      return temp(req, res);
     default:
       return res.status(404).json(`${req.params.function} not supported please refer to the code`);
   }
