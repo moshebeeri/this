@@ -165,18 +165,38 @@ exports.init_business = function (req, res){
     })
 };
 
-function temp(req, res) {
-  const csv=require('csvtojson');
+function create_product_categories(req, res) {
+  let parent = req.body.input.parent;
+  let categories = req.body.input.categories;
+  async.each(categories, function (name, callback) {
+    ProductCategory.save({name: name}, function (err, category) {
+      let query = `MATCH (top:ProductCategory{name:"${parent}"}), (sub:ProductCategory{name:"${category.name}"})
+                        CREATE UNIQUE (sub)-[:CATEGORY]->(top)`;
+      ProductCategory.query(query, function(err, category){
+        Category.create({
+          type: 'product',
+          gid: category.id,
+          name: category.name,
+          isLeaf: true,
+          translations: {en: category.name},
+        }, callback)
+      })
+    });
+  },function (err) {
+    if(err) return handleError(res, err);
+    return res.status(200).json('ok');
+  })
+}
+function csv_load_product_categories(req, res) {
+  const csv = require('csvtojson');
   csv()
     .fromFile('/Users/moshe/projects/low.la/thiscounts/server/api/category/data/groceries.csv')
-    .on('json',(jsonObj)=>{
+    .on('json', (jsonObj) => {
       console.log(JSON.stringify(jsonObj));
     })
-    .on('done',(error)=>{
+    .on('done', (error) => {
       console.log('end')
     });
-
-  return res.status(200).json('ok');
 }
 
 exports.work = function (req, res) {
@@ -193,8 +213,8 @@ exports.work = function (req, res) {
       return exports.init_business(req, res);
     case 'init_product':
       return exports.init_product(req, res);
-    case 'temp':
-      return temp(req, res);
+    case 'create_product_category':
+      return create_product_categories(req, res);
     default:
       return res.status(404).json(`${req.params.function} not supported please refer to the code`);
   }
