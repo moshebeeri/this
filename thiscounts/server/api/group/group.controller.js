@@ -368,6 +368,17 @@ exports.group_follow_business = function (req, res) {
     })
 };
 
+exports.groups_following_business = function (req, res) {
+  let skip = req.params.skip;
+  let limit = req.params.limit;
+
+  let query = `MATCH (g:group)-[:FOLLOW]->(b:business{_id:"${req.params.business}"}) RETURN g._id as _id`;
+  graphModel.query_objects(Group, query, 'order by r.timestamp desc', skip, limit, function (err, groups) {
+    if(err) return handleError(res, err);
+    return res.status(200).json(groups);
+  })
+};
+
 exports.test_add_user = function (req, res) {
   return res.status(200).json("tested");
 };
