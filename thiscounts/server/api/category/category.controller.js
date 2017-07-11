@@ -249,6 +249,15 @@ function csv_load_product_categories(req, res) {
   });
 }
 
+let fast_food_product_categories = function (req, res) {
+  const fastFoodCategories = require('./data/wikipedia.fastfood');
+  add_categories('product', ["Fast food"], 'ProductRootCategory', function () {
+    add_categories('product', fastFoodCategories["Fast food"], 'fast food', function () {
+      return res.status(200).json('ok');
+    });
+  });
+};
+
 exports.work = function (req, res) {
   switch(req.params.function){
     case 'update_product_leafs':
@@ -267,6 +276,8 @@ exports.work = function (req, res) {
       return create_product_categories(req, res);
     case 'csv_load_product_categories':
       return csv_load_product_categories(req, res);
+    case 'fast_food_product_categories':
+      return fast_food_product_categories(req, res);
     default:
       return res.status(404).json(`${req.params.function} not supported please refer to the code`);
   }
