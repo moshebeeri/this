@@ -9,6 +9,7 @@ let router = express.Router();
 router.get('/touch/:group_id', auth.isAuthenticated(), controller.touch);
 router.get('/join/group/:group/:group2follow', auth.isAuthenticated(), controller.group_join_group);
 router.get('/follow/:group/:business', auth.isAuthenticated(), controller.group_follow_business);
+router.get('/following/:business/:skip/:limit', auth.isAuthenticated(), controller.groups_following_business);
 router.get('/join/:group', auth.isAuthenticated(), controller.join_group);
 
 router.get('/add/user/:user/:to_group', auth.isAuthenticated(), controller.add_user);
