@@ -14,7 +14,7 @@ import {Container, Content, Text, InputGroup, Picker,Input, Button,Body ,Icon,Le
     View,Header,Item,Footer,ListItem,Right,Thumbnail} from 'native-base';
 
 import { bindActionCreators } from "redux";
-import SelectProductsComponent from './selectProducts';
+
 import * as promotionsAction from "../../../actions/promotions";
 
 var createEntity = require("../../../utils/createEntity");
@@ -29,7 +29,12 @@ import ProductApi from "../../../api/product"
 let productApi = new ProductApi();
 
 import PercentComponent from "./percent/index"
-import PercentRangeComponent from "./precent-range/index"
+
+import PunchCardComponent from "./punch-card/index"
+import XPlusYComponent from './xPlusY/index'
+import XPlusYOffComponent from './xGetYwithPrecentage/index'
+import XForYComponent from './xForY/index'
+
 import DatePicker from 'react-native-datepicker'
 
 const types = [
@@ -38,17 +43,11 @@ const types = [
             label:'Choose Promotion'
         },
 
-    {
-        value:'PERCENT_RANGE',
-        label:'Automatic Percentage'
-    },
-    {
-        value:'GIFT',
-        label:'Gift'
-    },
+
+
         {
             value:'PERCENT',
-            label:'Fixed percentage'
+            label:'% Off'
         },
     // {
     //     value:'AMOUNT',
@@ -58,15 +57,21 @@ const types = [
     //     value:'PRICE',
     //     label:'Price'
     // },
-    // {
-    //     value:'X+Y',
-    //     label:'x + y'
-    // },
-    // {
-    //     value:'X+N%OFF',
-    //     label:'X+N%OFF'
-    // },
-    // {
+    {
+        value:'X+Y',
+        label:'Buy X Get Y'
+    },
+    {
+        value:'x_for_y',
+        label:'Buy X For Y'
+    },
+
+
+    {
+        value:'X+N%OFF',
+        label:'Buy X Get Y With % Off'
+    },
+    //{
     //     value:'INCREASING',
     //     label:'Incresing'
     // },
@@ -160,6 +165,7 @@ import {DeviceEventEmitter} from 'react-native'
             choose_distribution:false,
             show_save:false,
             showProductsList: false,
+            quantity:'',
             promotion:{}
 
 
@@ -376,6 +382,11 @@ import {DeviceEventEmitter} from 'react-native'
         }
     }
 
+    setQuantity(quantity){
+        this.setState({
+            quantity:quantity
+        })
+    }
     async pickPicture() {
         try {
             let image = await ImagePicker.openPicker({
@@ -445,10 +456,20 @@ import {DeviceEventEmitter} from 'react-native'
                 case 'PERCENT':
                     discountForm = <PercentComponent navigation={this.props.navigation} api= {this}state={this.state} setState={this.setState.bind(this)}/>
                     break;
-                case 'PERCENT_RANGE':
-                    discountForm = <PercentRangeComponent api= {this} state={this.state} setState={this.setState.bind(this)}/>
+                case 'PUNCH_CARD':
+                    discountForm = <PunchCardComponent navigation={this.props.navigation} api= {this}state={this.state} setState={this.setState.bind(this)}/>
+                    break;
+                case 'X+Y':
+                    discountForm = <XPlusYComponent navigation={this.props.navigation} api= {this}state={this.state} setState={this.setState.bind(this)}/>
                     break;
 
+                case 'X+N%OFF':
+                    discountForm = <XPlusYOffComponent navigation={this.props.navigation} api= {this}state={this.state} setState={this.setState.bind(this)}/>
+                    break;
+
+                case 'x_for_y':
+                    discountForm = <XForYComponent navigation={this.props.navigation} api= {this}state={this.state} setState={this.setState.bind(this)}/>
+                    break;
 
             }
         }
@@ -627,6 +648,9 @@ import {DeviceEventEmitter} from 'react-native'
                                         this.setState({end: date})
                                     }}
                                 />
+                            </Item>
+                            <Item  style={{ margin:3 } } regular>
+                                <Input keyboardType = 'numeric'   onChangeText={(value) => this.setQuantity(value)} placeholder='Quantity' />
                             </Item>
 
                         <Item  style={{ margin:3 } } regular>

@@ -61,34 +61,6 @@ export default class PercentComponent extends Component {
 
     }
 
-    setQuantity(value){
-        if(this.props.state.percent) {
-            let percent = this.props.state.percent.percent;
-            let retail_price = this.props.state.percent.retail_price;
-            this.props.setState(
-                {
-                    percent: {
-                        percent: percent,
-                        quantity:value,
-                        retail_price:retail_price,
-                    },
-
-                }
-            )
-        }
-        else {
-
-            this.props.setState(
-                {
-                    percent: {
-                        quantity: value,
-
-                    },
-
-                }
-            )
-        }
-    }
 
     setRetailPrice(value){
         if(this.props.state.percent) {
@@ -212,11 +184,9 @@ export default class PercentComponent extends Component {
         return <View>
             {typePikkerTag}
             <Item  style={{ margin:3 } } regular>
-               <Input keyboardType = 'numeric'   onChangeText={(value) => this.setPercent(value)} placeholder='%Precent' />
+               <Input keyboardType = 'numeric'   onChangeText={(value) => this.setPercent(value)} placeholder='Product %Precent' />
            </Item>
-            <Item  style={{ margin:3 } } regular>
-                <Input keyboardType = 'numeric'   onChangeText={(value) => this.setQuantity(value)} placeholder='Quantity' />
-            </Item>
+
                {selectProductButton}
 
 
