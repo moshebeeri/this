@@ -34,6 +34,7 @@ import PunchCardComponent from "./punch-card/index"
 import XPlusYComponent from './xPlusY/index'
 import XPlusYOffComponent from './xGetYwithPrecentage/index'
 import XForYComponent from './xForY/index'
+import ReduceAmountComponent from './reduceAmount/index'
 
 import DatePicker from 'react-native-datepicker'
 
@@ -49,10 +50,10 @@ const types = [
             value:'PERCENT',
             label:'% Off'
         },
-    // {
-    //     value:'AMOUNT',
-    //     label:'Amount'
-    // },
+    {
+        value:'reduced_amount',
+        label:'Buy $ Pay $'
+    },
     // {
     //     value:'PRICE',
     //     label:'Price'
@@ -63,7 +64,7 @@ const types = [
     },
     {
         value:'x_for_y',
-        label:'Buy X For Y'
+        label:'Buy X Pay $'
     },
 
 
@@ -71,48 +72,11 @@ const types = [
         value:'X+N%OFF',
         label:'Buy X Get Y With % Off'
     },
-    //{
-    //     value:'INCREASING',
-    //     label:'Incresing'
-    // },
-    //
-    // {
-    //     value:'DOUBLING',
-    //     label:'Doubling'
-    // },
-    //
-    // {
-    //     value:'ITEMS_GROW',
-    //     label:'Item Grow'
-    // },
-    // {
-    //     value:'PREPAY_FOR_DISCOUNT',
-    //     label:'Prepay For Discount'
-    // },
-    // {
-    //     value:'REDUCED_AMOUNT',
-    //     label:'Reduce Amount'
-    // },
-    {
+        {
         value:'PUNCH_CARD',
         label:'Punch Catd'
     },
-    // {
-    //     value:'CASH_BACK',
-    //     label:'Cash Back'
-    // },
-    // {
-    //     value:'EARLY_BOOKING',
-    //     label:'Early Booking'
-    // },
-    // {
-    //     value:'HAPPY_HOUR',
-    //     label:'Happy Hour'
-    // },
-    // {
-    //     value:'MORE_THAN',
-    //     label:'More Than'
-    // },
+
 
     ]
       //15% off for purchases more than 1000$ OR buy iphone for 600$ and get 50% off for earphones
@@ -469,6 +433,9 @@ import {DeviceEventEmitter} from 'react-native'
 
                 case 'x_for_y':
                     discountForm = <XForYComponent navigation={this.props.navigation} api= {this}state={this.state} setState={this.setState.bind(this)}/>
+                    break;
+                case 'reduced_amount':
+                    discountForm = <ReduceAmountComponent navigation={this.props.navigation} api= {this}state={this.state} setState={this.setState.bind(this)}/>
                     break;
 
             }

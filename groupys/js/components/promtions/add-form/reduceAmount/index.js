@@ -8,7 +8,7 @@ import {Container, Content, Text, InputGroup, Input, Button,Body ,Icon,Left,
 
 
 
-export default class XForYComponent extends Component {
+export default class ReduceAmountComponent extends Component {
 
     constructor(props) {
         super(props);
@@ -118,9 +118,9 @@ export default class XForYComponent extends Component {
         return <View>
 
             <Item  style={{ margin:3 } } regular>
-               <Input keyboardType = 'numeric'   onChangeText={(value) => this.setPunchCard(value)} placeholder='Buy Amount' />
+               <Input keyboardType = 'numeric'   onChangeText={(value) => this.setPunchCard(value)} placeholder='Buy $' />
            </Item>
-            {selectBuyProductButton}
+
             <Item  style={{ margin:3 } } regular>
                 <Input keyboardType = 'numeric'   onChangeText={(value) => this.setPunchCard(value)} placeholder='Pay $'/>
             </Item>
