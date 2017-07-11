@@ -8,13 +8,11 @@ import {Container, Content, Text, InputGroup, Input, Button,Body ,Icon,Left,
 
 
 
-export default class XPlusYOffComponent extends Component {
+export default class HappyHourComponent extends Component {
 
     constructor(props) {
         super(props);
-        props.setState({
-            discount_on: 'PRODUCT',
-        })
+
     }
 
 
@@ -32,7 +30,7 @@ export default class XPlusYOffComponent extends Component {
     selectBuyProduct(product){
         this.props.setState(
             {
-                product:product
+                buyProduct:product
             }
         )
     }
@@ -55,13 +53,13 @@ export default class XPlusYOffComponent extends Component {
 
     }
 
-    setOff(value) {
+    setPunchCard(value) {
         if (value) {
             this.props.setState({
-
+                discount_on: 'PRODUCT',
                 choose_distribution: true,
-                x_plus_n_percent_off:{
-                    eligible:value,
+                punch_card:{
+                    number_of_punches:value,
                 }
 
             })
@@ -120,14 +118,21 @@ export default class XPlusYOffComponent extends Component {
         return <View>
 
 
-            {selectBuyProductButton}
+
             {selectProductButton}
             <Item  style={{ margin:3 } } regular>
-                <Input keyboardType = 'numeric'   onChangeText={(value) => this.setOff(value)} placeholder='% Off' />
+                <Input keyboardType = 'numeric'   onChangeText={(value) => this.setPunchCard(value)} placeholder='Pay $' />
+            </Item>
+            <Item  style={{ margin:3 } } regular>
+                <Input keyboardType = 'numeric'   onChangeText={(value) => this.setPunchCard(value)} placeholder='From Hour (1 - 24)' />
+            </Item>
+            <Item  style={{ margin:3 } } regular>
+                <Input keyboardType = 'numeric'   onChangeText={(value) => this.setPunchCard(value)} placeholder='To Hour (1 - 24) ' />
             </Item>
 
-
-
+            <Item  style={{ margin:3 } } regular>
+                <Input  onChangeText={(value) => this.setPunchCard(value)} placeholder='Days of Week (1,2,3..,7)' />
+            </Item>
         </View>
   }
 }
