@@ -22,7 +22,8 @@ import  Promotions from './components/promtions/index'
 
 import  UserProfile from './components/user-profile/index'
 import RealizePromotion from './components/realize-promotion/index';
-
+import SelectProductsComponent from './components/promtions/add-form/selectProducts/index';
+import SelectGroupsComponent from './components/promtions/add-form/selectGroups/index';
 import QrCode from './components/qrcode/index';
 
 
@@ -78,7 +79,10 @@ const AppNavigator = StackNavigator({
         ReadQrCode:{screen:QrCode},
         Products:{screen:Products},
         Promotions:{screen:Promotions},
-        UserProfile:{screen:UserProfile}
+        UserProfile:{screen:UserProfile},
+         SelectProductsComponent:{screen:SelectProductsComponent},
+    SelectGroupsComponent:{screen:SelectGroupsComponent},
+
 
 
 

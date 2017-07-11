@@ -21,7 +21,12 @@ export default function group(state = initialState, action) {
                 groups : action.groups,
             };
 
+        case 'GET_GROUPS_BUSINESS' :
 
+            let currentState = {...state};
+            currentState['groups'+ action.bid] = action.groups;
+
+            return currentState;
         default:
             return state;
     }

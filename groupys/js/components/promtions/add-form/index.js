@@ -33,18 +33,23 @@ import PercentRangeComponent from "./precent-range/index"
 import DatePicker from 'react-native-datepicker'
 
 const types = [
-    {
-        value:'PERCENT',
-        label:'Fixed percentage'
-    },
+        {
+            value:'',
+            label:'Choose Promotion'
+        },
+
     {
         value:'PERCENT_RANGE',
         label:'Automatic Percentage'
     },
-    // {
-    //     value:'GIFT',
-    //     label:'Gift'
-    // },
+    {
+        value:'GIFT',
+        label:'Gift'
+    },
+        {
+            value:'PERCENT',
+            label:'Fixed percentage'
+        },
     // {
     //     value:'AMOUNT',
     //     label:'Amount'
@@ -83,10 +88,10 @@ const types = [
     //     value:'REDUCED_AMOUNT',
     //     label:'Reduce Amount'
     // },
-    // {
-    //     value:'PUNCH_CARD',
-    //     label:'Punch Catd'
-    // },
+    {
+        value:'PUNCH_CARD',
+        label:'Punch Catd'
+    },
     // {
     //     value:'CASH_BACK',
     //     label:'Cash Back'
@@ -106,14 +111,18 @@ const types = [
 
     ]
       //15% off for purchases more than 1000$ OR buy iphone for 600$ and get 50% off for earphones
-;const Discouint_on = [
+;const Distribution = [
+    {
+        value:'',
+        label:'Choose Distribution'
+    },
             {
-            value:'GLOBAL',
-            label:'Global Discount'
+            value:'GROUP',
+            label:'Group'
         },
         {
-            value:'PRODUCT',
-            label:'Product Discount'
+            value:'PERSONAL',
+            label:'Personal'
         }
     ];
 
@@ -131,13 +140,12 @@ import {DeviceEventEmitter} from 'react-native'
             token: '',
             path: '',
             image: '',
-            type: 'PERCENT',
+            type: '',
             images: '',
             businesses: [],
             business: '',
             product: '',
             productList: [],
-            showProductsList: false,
             percent: {},
             amount: '',
             retail_price: '',
@@ -147,7 +155,12 @@ import {DeviceEventEmitter} from 'react-native'
             end: "",
             location: "",
             info: "",
-            discount_on: 'GLOBAL'
+            discount_on: '',
+            distribution:'',
+            choose_distribution:false,
+            show_save:false,
+            showProductsList: false,
+            promotion:{}
 
 
         }
@@ -262,7 +275,7 @@ import {DeviceEventEmitter} from 'react-native'
             type: this.state.type,
             percent: this.state.percent,
 
-            retail_price: Number(this.state.retail_price),
+
             total_discount: Number(this.state.total_discount),
             // percent_range: this.state.percent_range,
             start: this.state.start,
@@ -286,19 +299,28 @@ import {DeviceEventEmitter} from 'react-native'
 
             promotion.condition.business = businessId;
             promotion.entity.business = businessId;
-            promotion.distribution.busines = businessId;
+
 
         }else {
-            promotion.distribution.busines = businessId;
-            promotion.entity.business = businessId;
+           promotion.entity.business = businessId;
             promotion.product = this.state.product;
+        }
+
+        if(this.state.distribution == 'GROUP'){
+            promotion.distribution.groups = this.state.groups;
+
+        }else{
+            promotion.distribution.business = businessId;
         }
 
         promotion.percent = {};
         if(this.state.type == 'PERCENT'){
             promotion.percent.variation = 'SINGLE';
             promotion.percent.values = [this.state.percent.percent]
-            promotion.percent.quantity = Number(this.state.amount)
+            promotion.percent.quantity = Number(this.state.percent.quantity)
+            if(this.state.percent.retail_price) {
+                promotion.retail_price = Number(this.state.percent.retail_price)
+            }
         }
 
         if(this.state.type == 'PERCENT_RANGE'){
@@ -315,8 +337,15 @@ import {DeviceEventEmitter} from 'react-native'
 
     async selectPromotionType(value){
         this.setState({
-            type:value
-        })
+            type:value,
+            choose_distribution:false,
+            showProductsList:false,
+            discount_on: '',
+            distribution:'',
+            show_save:false,
+
+
+    })
     }
 
     async selectDiscountType(value){
@@ -399,28 +428,147 @@ import {DeviceEventEmitter} from 'react-native'
 
         this.setState({
             product: product,
-            showProductsList:false
+            showProductsList:false,
+
         })
+
 
 
     }
 
 
+    createDiscountConditionForm(){
+        let result =undefined;
+        let discountForm = undefined;
+        if(this.state.type){
+            switch (this.state.type){
+                case 'PERCENT':
+                    discountForm = <PercentComponent navigation={this.props.navigation} api= {this}state={this.state} setState={this.setState.bind(this)}/>
+                    break;
+                case 'PERCENT_RANGE':
+                    discountForm = <PercentRangeComponent api= {this} state={this.state} setState={this.setState.bind(this)}/>
+                    break;
 
 
+            }
+        }
+
+        if(discountForm){
+            result =    <View style={{margin:10,borderWidth:3,borderRadius:10, backgroundColor: '#fff'}}>
+                                  {discountForm}
+                        </View>
+            }
+        return result;
+    }
+
+     selectDistributionType(type){
+
+        if(type== 'PERSONAL'){
+            this.setState({
+                distribution:type,
+                show_save:true,
+            })
+        }else {
+            this.setState({
+                distribution: type,
+                show_save:false,
+            })
+        }
+
+     }
+     selectGroup(group){
+         if(group && group.length > 0) {
+             this.setState({
+                 groups: group,
+                 show_save:true,
+             })
+         }
+     }
+     showGroups(){
+         let bid = this.getBusinessId();
+         let groupFunction = this.selectGroup.bind(this);
+         this.props.navigation.navigate("SelectGroupsComponent",{
+             bid:bid,selectGroup:groupFunction})
+     }
+    createDistributionForm(){
+        let result = undefined;
+        if(this.state.choose_distribution){
+            let distribution = <Picker
+                iosHeader="Discount"
+                mode="dropdown"
+                selectedValue={this.state.distribution}
+                onValueChange={this.selectDistributionType.bind(this)}
+            >
+
+                {
+
+
+                    Distribution.map((s, i) => {
+                        return <Item
+                            key={i}
+                            value={s.value}
+                            label={s.label}/>
+                    }) }
+            </Picker>
+            let button = undefined;
+
+            if(this.state.distribution == 'GROUP'){
+                let selectedGroup = undefined;
+                if(this.state.groups){
+                    selectedGroup = <Text>{this.state.groups.length} are selected</Text>
+                }
+                button = <Item><Button transparent onPress={() => this.showGroups()}>
+                    <Text>Select Groups </Text>
+                </Button>
+                    {selectedGroup}
+                </Item>
+
+            }
+            result =   <View style={{margin:10,borderWidth:3,borderRadius:10, backgroundColor: '#fff'}}>
+                {distribution}
+                {button}
+
+            </View>
+        }
+
+        return result
+    }
+
+
+     createSubmitButton(){
+        let result = undefined;
+        if(this.state.show_save){
+             let submitButton = <Button transparent
+                                        onPress={this.saveFormData.bind(this)}>
+                 <Text>Add Promotion</Text>
+             </Button>
+
+
+            result =   <Footer style={{backgroundColor: '#fff'}}>
+
+                {submitButton}
+            </Footer>
+
+        }
+        return result;
+
+     }
 
     render() {
-        let discountPiker = <Picker
+
+
+
+        let typePikkerTag = <Picker
             iosHeader="Discount"
             mode="dropdown"
-            style={{ flex:1}}
-            selectedValue={this.state.discount_on}
-            onValueChange={this.selectDiscountType.bind(this)}>
+            selectedValue={this.state.type}
+            onValueChange={this.selectPromotionType.bind(this)}
+        >
 
             {
 
 
-                Discouint_on.map((s, i) => {
+                types.map((s, i) => {
                     return <Item
                         key={i}
                         value={s.value}
@@ -428,240 +576,59 @@ import {DeviceEventEmitter} from 'react-native'
                 }) }
         </Picker>
 
-        let submitButton = <Button transparent
-                                   onPress={this.saveFormData.bind(this)}
-        >
-            <Text>Add Promotion</Text>
-        </Button>
-        if(this.props.navigation.state.params && this.props.navigation.state.params.item){
-            submitButton = <Button transparent
-                                   onPress={this.updateFormData.bind(this)}
-            >
-                <Text>Update Promotion</Text>
-            </Button>
+
+
+
+        let image = undefined;
+        if (this.state.path) {
+            image = <Image
+                style={{width: 50, height: 50}}
+                source={{uri: this.state.path}}
+            />
+
+
         }
 
-        if(this.state.discount_on == 'PRODUCT') {
-
-            if (this.state.showProductsList) {
-                let products =  this.getProducts();
-                return (<SelectProductsComponent products={products}
-                                                 selectProduct={this.selectProduct.bind(this)}/>
-
-                );
-            }
-            let item = undefined;
-
-            if (this.state.product) {
-
-                item =
-                    <Text style={{padding: 10}}>
-                        {this.state.product.name}
-                    </Text>
-
-
-            }
-
-            let image;
-            if (this.state.path) {
-                image = <Image
-                    style={{width: 50, height: 50}}
-                    source={{uri: this.state.path}}
-                />
-
-
-            }
-
-
-
-
-            let typePikkerTag = <Picker
-                iosHeader="Discount"
-                mode="dropdown"
-                selectedValue={this.state.type}
-                onValueChange={this.selectPromotionType.bind(this)}
-            >
-
-                {
-
-
-                    types.map((s, i) => {
-                        return <Item
-                            key={i}
-                            value={s.value}
-                            label={s.label}/>
-                    }) }
-            </Picker>
-
-            let discountForm = undefined;
-
-            switch (this.state.type) {
-                case 'PERCENT':
-                    discountForm = <PercentComponent state={this.state} setState={this.setState.bind(this)}/>
-                    break;
-                case 'PERCENT_RANGE':
-                    discountForm = <PercentRangeComponent state={this.state} setState={this.setState.bind(this)}/>
-                    break;
-
-
-            }
-
-            let selectProductButton = <Button transparent onPress={() => this.showProducts(true)}>
-                    <Text>Select Product </Text>
-                </Button>
-
-
-
-
-            return (
-                <Container>
-
-                    <Content style={{backgroundColor: '#fff'}}>
-
-                        <Item style={{ margin:3 } } regular>
-                            {discountPiker}
-                        </Item>
-
-
-                        <Item style={{ margin:3 } } regular>
-                            <Input  blurOnSubmit={true} returnKeyType='next' ref="1" onSubmitEditing={this.focusNextField.bind(this,"2")} value={this.state.name} onChangeText={(name) => this.setState({name})}
-                                   placeholder='Name'/>
-                        </Item>
-                        <Item style={{ margin:3 } } regular>
-                            <Input  blurOnSubmit={true} returnKeyType='next' ref="2" onSubmitEditing={this.focusNextField.bind(this,"3")} value={this.state.info} onChangeText={(info) => this.setState({info})}
-                                   placeholder='Description'/>
-                        </Item>
-
-
-                        <Item style={{ margin:3 } } regular>
-                            {selectProductButton}
-                            {item}
-                        </Item>
-                        <Item style={{ margin:3 } } regular>
-                            <Input blurOnSubmit={true} returnKeyType='next' ref="3" onSubmitEditing={this.focusNextField.bind(this,"4")} value={this.state.amount} onChangeText={(amount) => this.setState({amount})}
-                                   placeholder='Product Amount'/>
-                        </Item>
-                        <Item style={{ margin:3 } } regular>
-                            <Input blurOnSubmit={true} p='next' ref="4" onSubmitEditing={this.focusNextField.bind(this,"5")} value={this.state.retail_price}
-                                   onChangeText={(retail_price) => this.setState({retail_price})}
-                                   placeholder='Product Reatai Price'/>
-                        </Item>
-                        <Item style={{ margin:3 } } regular>
-                            <Input blurOnSubmit={true} returnKeyType='done' ref="5"  value={this.state.total_discount}
-                                   onChangeText={(total_discount) => this.setState({total_discount})}
-                                   placeholder='Product Total Price'/>
-                        </Item>
-
-                        {discountForm}
-
-
-                        <Item style={{ margin:3 } } regular>
-                            <DatePicker
-                                style={{width: 200}}
-                                date={this.state.end}
-                                mode="date"
-                                placeholder="Promotion End Date"
-                                format="YYYY-MM-DD"
-                                minDate="2016-05-01"
-                                maxDate="2020-06-01"
-                                confirmBtnText="Confirm"
-                                cancelBtnText="Cancel"
-
-                                onDateChange={(date) => {
-                                    this.setState({end: date})
-                                }}
-                            />
-                        </Item>
-                        <Item  style={{ margin:3 } } regular>
-
-                            <Button  iconRight transparent  onPress={() => this.pickPicture()}>
-                                <Text style={{ fontStyle: 'normal',fontSize:10 }}>Pick </Text>
-                                <Icon name='camera' />
-                            </Button>
-
-
-
-
-                            <Button   iconRight transparent  onPress={() => this.pickFromCamera()}>
-                                <Text style={{ fontStyle: 'normal',fontSize:10 }}>take </Text>
-                                <Icon name='camera' />
-                            </Button>
-
-                            {image}
-                        </Item>
-
-
-                    </Content>
-                    <Footer style={{backgroundColor: '#fff'}}>
-                        {submitButton}
-
-                    </Footer>
-                </Container>
-            );
-        }else{
-
-
-
-
-
-
-            let image;
-            if (this.state.path) {
-                image = <Image
-                    style={{width: 50, height: 50}}
-                    source={{uri: this.state.path}}
-                />
-
-
-            }
-
-
-
-
-            return (
+        let conditionForm = this.createDiscountConditionForm();
+        let distributionForm = this.createDistributionForm();
+        let submitButton = this.createSubmitButton();
+        return (
                 <Container>
 
                     <Content style={{margin:10,backgroundColor: '#fff'}}>
 
+                        <View style={{margin:10,borderWidth:3,borderRadius:10, backgroundColor: '#fff'}}>
+
+                            {typePikkerTag}
+
 
 
                         <Item  style={{ margin:3 } } regular>
-                            {discountPiker}
-                        </Item>
-
-
-                        <Item  style={{ margin:3 } } regular>
-                            <Input  blurOnSubmit={true} returnKeyType='next' ref="1" onSubmitEditing={this.focusNextField.bind(this,"2")} value={this.state.name} onChangeText={(name) => this.setState({name})}
+                            <Input  blurOnSubmit={true} returnKeyType='next' ref="1" onSubmitEditing={this.focusNextField.bind(this,"2")} value={this.state.promotion.name} onChangeText={(name) => this.setState({name})}
                                    placeholder='Name'/>
                         </Item>
                         <Item  style={{ margin:3 } } regular>
-                            <Input blurOnSubmit={true} returnKeyType='next' ref="2" onSubmitEditing={this.focusNextField.bind(this,"3")}  value={this.state.info} onChangeText={(info) => this.setState({info})}
+                            <Input blurOnSubmit={true} returnKeyType='done' ref="2"  value={this.state.promotion.info} onChangeText={(info) => this.setState({info})}
                                    placeholder='Description'/>
                         </Item>
-                        <Item  style={{ margin:3 } } regular>
-                            <Input blurOnSubmit={true} returnKeyType='done' ref="3"  value={this.state.amount} onChangeText={(amount) => this.setState({amount})}
-                                   placeholder='Amount'/>
-                        </Item>
+                            <Item style={{ margin:3 } } regular>
+                                <DatePicker
+                                    style={{width: 200}}
+                                    date={this.state.end}
+                                    mode="date"
+                                    placeholder="Promotion End Date"
+                                    format="YYYY-MM-DD"
+                                    minDate="2016-05-01"
+                                    maxDate="2020-06-01"
+                                    confirmBtnText="Confirm"
+                                    cancelBtnText="Cancel"
 
-                        <PercentComponent state={this.state} setState={this.setState.bind(this)}/>
+                                    onDateChange={(date) => {
+                                        this.setState({end: date})
+                                    }}
+                                />
+                            </Item>
 
-                        <Item  style={{ margin:3 } } regular>
-                            <DatePicker
-                                style={{width: 200}}
-                                date={this.state.end}
-                                mode="date"
-                                placeholder="Promotion End Date"
-                                format="YYYY-MM-DD"
-                                minDate="2016-05-01"
-                                maxDate="2020-06-01"
-                                confirmBtnText="Confirm"
-                                cancelBtnText="Cancel"
-
-                                onDateChange={(date) => {
-                                    this.setState({end: date})
-                                }}
-                            />
-                        </Item>
                         <Item  style={{ margin:3 } } regular>
 
                             <Button  iconRight transparent  onPress={() => this.pickPicture()}>
@@ -679,15 +646,15 @@ import {DeviceEventEmitter} from 'react-native'
 
                             {image}
                         </Item>
+                        </View>
+                             {conditionForm}
+                            {distributionForm}
 
                     </Content>
-                    <Footer style={{backgroundColor: '#fff'}}>
-
-                        {submitButton}
-                    </Footer>
+                    {submitButton}
                 </Container>
             );
-        }
+
     }
 
 
