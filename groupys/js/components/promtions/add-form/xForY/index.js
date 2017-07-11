@@ -12,37 +12,25 @@ export default class XForYComponent extends Component {
 
     constructor(props) {
         super(props);
-
+        props.setState({
+            discount_on: 'PRODUCT',
+        })
     }
 
 
 
 
 
-    selectProduct(product){
-        this.props.setState(
-            {
-                giftProduct:product
-            }
-        )
-    }
+
 
     selectBuyProduct(product){
         this.props.setState(
             {
-                buyProduct:product
+                product:product
             }
         )
     }
 
-    showProducts(){
-        let products =  this.props.api.getProducts();
-        let selectProductFunction = this.selectProduct.bind(this);
-        this.props.navigation.navigate("SelectProductsComponent",{
-            products:products,
-            selectProduct:selectProductFunction})
-
-    }
 
     showBuyProducts(){
         let products =  this.props.api.getProducts();
@@ -53,38 +41,46 @@ export default class XForYComponent extends Component {
 
     }
 
-    setPunchCard(value) {
+
+    setBuyAmount(value) {
         if (value) {
+            let pay = undefined;
+            if(this.props.state.x_for_y && this.props.state.x_for_y.values){
+                pay = this.props.state.x_for_y.values.pay;
+            }
             this.props.setState({
-                discount_on: 'PRODUCT',
                 choose_distribution: true,
-                punch_card:{
-                    number_of_punches:value,
+                x_for_y:{
+                    values: {
+                        pay:pay,
+                        eligible: value
+                    }
                 }
 
             })
         }
     }
 
-    createSelectProductButton(){
-        let result =  undefined;
-            let productName = undefined;
-            if(this.props.state.giftProduct){
-                productName = <Text> {this.props.state.giftProduct.name}</Text>
-
-
+    setPay(value) {
+        if (value) {
+            let eligible = undefined;
+            if(this.props.state.x_for_y && this.props.state.x_for_y.values){
+                eligible = this.props.state.x_for_y.values.eligible;
             }
-            let button = <Item><Button transparent onPress={() => this.showProducts(true)}>
-                <Text>Select Gift</Text>
-            </Button>
-                {productName}
-            </Item>
+            this.props.setState({
+                choose_distribution: true,
+                x_for_y:
+                    {
+                        values: {
+                            pay: value,
+                            eligible:eligible,
+                        }
+                     }
 
-
-            result = <View>{button}</View>
-
-        return result;
+            })
+        }
     }
+
     createSelectBuyProductButton(){
         let result =  undefined;
         let productName = undefined;
@@ -109,8 +105,6 @@ export default class XForYComponent extends Component {
         let selectBuyProductButton =this.createSelectBuyProductButton();
 
 
-        let selectProductButton =this.createSelectProductButton();
-
 
 
 
@@ -118,11 +112,11 @@ export default class XForYComponent extends Component {
         return <View>
 
             <Item  style={{ margin:3 } } regular>
-               <Input keyboardType = 'numeric'   onChangeText={(value) => this.setPunchCard(value)} placeholder='Buy Amount' />
+               <Input keyboardType = 'numeric'   onChangeText={(value) => this.setBuyAmount(value)} placeholder='Buy Amount' />
            </Item>
             {selectBuyProductButton}
             <Item  style={{ margin:3 } } regular>
-                <Input keyboardType = 'numeric'   onChangeText={(value) => this.setPunchCard(value)} placeholder='Pay $'/>
+                <Input keyboardType = 'numeric'   onChangeText={(value) => this.setPay(value)} placeholder='Pay $'/>
             </Item>
 
 

@@ -12,7 +12,9 @@ export default class XPlusYOffComponent extends Component {
 
     constructor(props) {
         super(props);
-
+        props.setState({
+            discount_on: 'PRODUCT',
+        })
     }
 
 
@@ -30,7 +32,7 @@ export default class XPlusYOffComponent extends Component {
     selectBuyProduct(product){
         this.props.setState(
             {
-                buyProduct:product
+                product:product
             }
         )
     }
@@ -53,13 +55,13 @@ export default class XPlusYOffComponent extends Component {
 
     }
 
-    setPunchCard(value) {
+    setOff(value) {
         if (value) {
             this.props.setState({
-                discount_on: 'PRODUCT',
+
                 choose_distribution: true,
-                punch_card:{
-                    number_of_punches:value,
+                x_plus_n_percent_off:{
+                    eligible:value,
                 }
 
             })
@@ -121,7 +123,7 @@ export default class XPlusYOffComponent extends Component {
             {selectBuyProductButton}
             {selectProductButton}
             <Item  style={{ margin:3 } } regular>
-                <Input keyboardType = 'numeric'   onChangeText={(value) => this.setPunchCard(value)} placeholder='% Off' />
+                <Input keyboardType = 'numeric'   onChangeText={(value) => this.setOff(value)} placeholder='% Off' />
             </Item>
 
 

@@ -12,9 +12,10 @@ export default class XPlusYComponent extends Component {
 
     constructor(props) {
         super(props);
-
+        props.setState({
+            discount_on: 'PRODUCT',
+        })
     }
-
 
 
 
@@ -30,7 +31,7 @@ export default class XPlusYComponent extends Component {
     selectBuyProduct(product){
         this.props.setState(
             {
-                buyProduct:product
+                product:product
             }
         )
     }
@@ -53,18 +54,45 @@ export default class XPlusYComponent extends Component {
 
     }
 
-    setPunchCard(value) {
+    setBuy(value) {
         if (value) {
+            let eligible = undefined;
+            if(this.props.state.x_plus_y && this.props.state.x_plus_y.values){
+                eligible = this.props.state.x_plus_y.values.eligible;
+            }
             this.props.setState({
-                discount_on: 'PRODUCT',
                 choose_distribution: true,
-                punch_card:{
-                    number_of_punches:value,
-                }
+                x_plus_y:
+                    {
+                        values: {
+                            buy: value,
+                            eligible:eligible,
+                        }
+                    }
 
             })
         }
     }
+
+    setEligible(value) {
+        if (value) {
+            let buy = undefined;
+            if(this.props.state.x_plus_y && this.props.state.x_plus_y.values){
+                buy = this.props.state.x_plus_y.values.buy;
+            }
+            this.props.setState({
+                x_plus_y:
+                    {
+                        values: {
+                            buy: buy,
+                            eligible:value,
+                        }
+                    }
+
+            })
+        }
+    }
+
 
     createSelectProductButton(){
         let result =  undefined;
@@ -118,11 +146,11 @@ export default class XPlusYComponent extends Component {
         return <View>
 
             <Item  style={{ margin:3 } } regular>
-               <Input keyboardType = 'numeric'   onChangeText={(value) => this.setPunchCard(value)} placeholder='Buy Amount' />
+               <Input keyboardType = 'numeric'   onChangeText={(value) => this.setBuy(value)} placeholder='Buy Amount' />
            </Item>
             {selectBuyProductButton}
             <Item  style={{ margin:3 } } regular>
-                <Input keyboardType = 'numeric'   onChangeText={(value) => this.setPunchCard(value)} placeholder='Number of Gifts' />
+                <Input keyboardType = 'numeric'   onChangeText={(value) => this.setEligible(value)} placeholder='Number of Gifts' />
             </Item>
                {selectProductButton}
 

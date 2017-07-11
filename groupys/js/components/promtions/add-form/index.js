@@ -271,7 +271,7 @@ import {DeviceEventEmitter} from 'react-native'
 
         }else {
            promotion.entity.business = businessId;
-            promotion.product = this.state.product;
+           promotion.condition.product = this.state.product;
         }
 
         if(this.state.distribution == 'GROUP'){
@@ -285,17 +285,54 @@ import {DeviceEventEmitter} from 'react-native'
         if(this.state.type == 'PERCENT'){
             promotion.percent.variation = 'SINGLE';
             promotion.percent.values = [this.state.percent.percent]
-            promotion.percent.quantity = Number(this.state.percent.quantity)
+            promotion.percent.quantity = Number(this.state.quantity)
             if(this.state.percent.retail_price) {
                 promotion.retail_price = Number(this.state.percent.retail_price)
             }
         }
 
-        if(this.state.type == 'PERCENT_RANGE'){
-            promotion.percent.variation = 'RANGE';
-            promotion.percent.quantity = Number(this.state.amount)
-            promotion.percent.values = [this.state.percent_range.from,this.state.percent_range.to]
+        if(this.state.type == 'REDUCED_AMOUNT'){
+            promotion.reduced_amount.variation = 'SINGLE';
+            promotion.reduced_amount.quantity = Number(this.state.quantity)
+            promotion.reduced_amount.values = [{
+                price:this.state.reduced_amount.values.price,
+                pay: this.state.reduced_amount.values.pay,
+
+            }]
         }
+        if(this.state.type == 'X_FOR_Y'){
+            promotion.x_for_y.variation = 'SINGLE';
+            promotion.x_for_y.quantity = Number(this.state.quantity)
+            promotion.x_for_y.values = [{
+                price:this.state.x_for_y.values.price,
+                pay: this.state.x_for_y.values.pay,
+
+            }]
+        }
+        if(this.state.type == 'X+N%OFF'){
+            promotion.x_plus_n_percent_off.variation = 'SINGLE';
+            promotion.x_plus_n_percent_off.quantity = Number(this.state.quantity);
+            promotion.x_plus_y.values = {
+                eligible: this.state.x_plus_n_percent_off.values.eligible,
+                product:this.state.giftProduct,
+
+            };
+        }
+
+        if(this.state.type == 'X+Y'){
+            promotion.x_plus_y.variation = 'SINGLE';
+            promotion.x_plus_y.quantity = Number(this.state.quantity);
+            promotion.x_plus_y.values = {
+                eligible: this.state.x_plus_y.values.eligible,
+                buy : this.state.x_plus_y.values.buy,
+                product:this.state.giftProduct,
+
+            };
+
+
+        }
+
+
 
         return promotion;
 
