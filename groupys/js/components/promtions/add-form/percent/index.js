@@ -184,7 +184,7 @@ export default class PercentComponent extends Component {
         return <View>
             {typePikkerTag}
             <Item  style={{ margin:3 } } regular>
-               <Input keyboardType = 'numeric'   onChangeText={(value) => this.setPercent(value)} placeholder='Product %Precent' />
+               <Input keyboardType = 'numeric'   onChangeText={(value) => this.setPercent(value)} placeholder='% Off' />
            </Item>
 
                {selectProductButton}

@@ -35,39 +35,36 @@ import XPlusYComponent from './xPlusY/index'
 import XPlusYOffComponent from './xGetYwithPrecentage/index'
 import XForYComponent from './xForY/index'
 import ReduceAmountComponent from './reduceAmount/index'
-
+import HappyHourComponent from './happyHour/index'
 import DatePicker from 'react-native-datepicker'
 
 const types = [
-        {
-            value:'',
-            label:'Choose Promotion'
-        },
-
-
-
-        {
-            value:'PERCENT',
-            label:'% Off'
-        },
     {
-        value:'reduced_amount',
+        value:'',
+        label:'Choose Promotion'
+    },
+
+
+    {
+        value:'HAPPY_HOUR',
+        label:'Happy Hour'
+    },
+    {
+        value:'PERCENT',
+        label:'% Off'
+    },
+    {
+        value:'REDUCED_AMOUNT',
         label:'Buy $ Pay $'
     },
-    // {
-    //     value:'PRICE',
-    //     label:'Price'
-    // },
     {
         value:'X+Y',
         label:'Buy X Get Y'
     },
     {
-        value:'x_for_y',
+        value:'X_FOR_Y',
         label:'Buy X Pay $'
     },
-
-
     {
         value:'X+N%OFF',
         label:'Buy X Get Y With % Off'
@@ -75,7 +72,8 @@ const types = [
         {
         value:'PUNCH_CARD',
         label:'Punch Catd'
-    },
+    }
+
 
 
     ]
@@ -431,11 +429,14 @@ import {DeviceEventEmitter} from 'react-native'
                     discountForm = <XPlusYOffComponent navigation={this.props.navigation} api= {this}state={this.state} setState={this.setState.bind(this)}/>
                     break;
 
-                case 'x_for_y':
+                case 'X_FOR_Y':
                     discountForm = <XForYComponent navigation={this.props.navigation} api= {this}state={this.state} setState={this.setState.bind(this)}/>
                     break;
-                case 'reduced_amount':
+                case 'REDUCED_AMOUNT':
                     discountForm = <ReduceAmountComponent navigation={this.props.navigation} api= {this}state={this.state} setState={this.setState.bind(this)}/>
+                    break;
+                case 'HAPPY_HOUR':
+                    discountForm = <HappyHourComponent navigation={this.props.navigation} api= {this}state={this.state} setState={this.setState.bind(this)}/>
                     break;
 
             }

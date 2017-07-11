@@ -8,7 +8,7 @@ import {Container, Content, Text, InputGroup, Input, Button,Body ,Icon,Left,
 
 
 
-export default class XPlusYOffComponent extends Component {
+export default class HappyHourComponent extends Component {
 
     constructor(props) {
         super(props);
@@ -118,14 +118,21 @@ export default class XPlusYOffComponent extends Component {
         return <View>
 
 
-            {selectBuyProductButton}
+
             {selectProductButton}
             <Item  style={{ margin:3 } } regular>
-                <Input keyboardType = 'numeric'   onChangeText={(value) => this.setPunchCard(value)} placeholder='% Off' />
+                <Input keyboardType = 'numeric'   onChangeText={(value) => this.setPunchCard(value)} placeholder='Pay $' />
+            </Item>
+            <Item  style={{ margin:3 } } regular>
+                <Input keyboardType = 'numeric'   onChangeText={(value) => this.setPunchCard(value)} placeholder='From Hour (1 - 24)' />
+            </Item>
+            <Item  style={{ margin:3 } } regular>
+                <Input keyboardType = 'numeric'   onChangeText={(value) => this.setPunchCard(value)} placeholder='To Hour (1 - 24) ' />
             </Item>
 
-
-
+            <Item  style={{ margin:3 } } regular>
+                <Input  onChangeText={(value) => this.setPunchCard(value)} placeholder='Days of Week (1,2,3..,7)' />
+            </Item>
         </View>
   }
 }
