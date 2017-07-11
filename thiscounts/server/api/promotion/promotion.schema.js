@@ -272,6 +272,7 @@ let PromotionSchemaObject = {
     variation: {type: String, enum: Variations},
     quantity: Number,
     values: [{
+      days:[Number],
       from: Number, // seconds from midnight
       until: Number // seconds from 'from'
     }],
