@@ -30,12 +30,17 @@ const Condition = {
   product: {type: Schema.ObjectId, ref: 'Product'},
   category: [{type: Number}],
   quantity: Number,
-  amount: Number
+  physical_unit: String,
+  amount: Number,
+  description: String,
 };
 
 const Distribution = {
+  //list of cards to distribute the promotion to
   cards: [{type: Schema.ObjectId, ref: 'CardType'}],
+  //list of the groups to distribute the promotion to
   groups: [{type: Schema.ObjectId, ref: 'Group'}],
+  //the business followers
   business: {type: Schema.ObjectId, ref: 'Business'},
 };
 
@@ -131,7 +136,7 @@ let PromotionSchemaObject = {
       'GIVE_TO_FRIEND'
     ]
   },
-
+  //v1
   percent: {
     variation: {type: String, enum: Variations},
     quantity: Number,
@@ -147,27 +152,29 @@ let PromotionSchemaObject = {
       quantity: Number
     }],
   },
-
+  //v1
   x_plus_y: {
     variation: {type: String, enum: Variations},
     quantity: Number,
     values : [{
       buy: Number,
       eligible: Number,
+      product: {type: Schema.ObjectId, ref: 'Product'},
       quantity: Number
     }]
   },
-
+  //v1
   x_plus_n_percent_off: {
     variation: {type: String, enum: Variations},
     quantity: Number,
     values: [{
       buy: Number,
       eligible: Number,
+      product: {type: Schema.ObjectId, ref: 'Product'},
       quantity: Number
     }]
   },
-
+  //v1
   x_for_y: {
     variation: {type: String, enum: Variations},
     quantity: Number,
@@ -184,7 +191,6 @@ let PromotionSchemaObject = {
     values: [{
       from: Number,
       to: Number,
-      steps: Number,
       days_eligible: Number,
       quantity: Number
     }]
@@ -200,6 +206,7 @@ let PromotionSchemaObject = {
     }]
   },
 
+  //????
   grow: {
     variation: {type: String, enum: Variations},
     quantity: Number,
@@ -222,7 +229,7 @@ let PromotionSchemaObject = {
       quantity: Number,
     }]
   },
-
+  //v1
   reduced_amount: {
     price: Number,
     quantity: Number,
@@ -232,6 +239,7 @@ let PromotionSchemaObject = {
       price: Number
     }]
   },
+  //v1
   punch_card: {
     variation: {type: String, enum: Variations},
     quantity: Number,
@@ -259,14 +267,7 @@ let PromotionSchemaObject = {
       booking_before: Date
     }],
   },
-  // // get the current date and time
-  // let date = new Date();
-  //
-  // // reset the hours, mins, seconds, ms
-  // date.setHours(0, 0, 0, 0);
-  //
-  // // set according to the stored time
-  // date.setSeconds(time);
+  //v1
   happy_hour: {
     variation: {type: String, enum: Variations},
     quantity: Number,

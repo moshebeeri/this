@@ -165,14 +165,12 @@ exports.init_business = function (req, res){
     })
 };
 
-function create_product_categories(req, res) {
-  let parent = req.body.input.parent;
-  let categories = req.body.input.categories;
+function add_product_categories(categories, parent, callback) {
   async.each(categories, function (name, callback) {
     ProductCategory.save({name: name}, function (err, category) {
       let query = `MATCH (top:ProductCategory{name:"${parent}"}), (sub:ProductCategory{name:"${category.name}"})
                         CREATE UNIQUE (sub)-[:CATEGORY]->(top)`;
-      ProductCategory.query(query, function(err, category){
+      ProductCategory.query(query, function (err) {
         Category.create({
           type: 'product',
           gid: category.id,
@@ -182,21 +180,73 @@ function create_product_categories(req, res) {
         }, callback)
       })
     });
-  },function (err) {
+  }, callback)
+}
+function create_product_categories(req, res) {
+  let parent = req.body.input.parent;
+  let categories = req.body.input.categories;
+  add_product_categories(categories, parent, function(err){
     if(err) return handleError(res, err);
     return res.status(200).json('ok');
-  })
+  });
 }
-function csv_load_product_categories(req, res) {
-  const csv = require('csvtojson');
-  csv()
-    .fromFile('/Users/moshe/projects/low.la/thiscounts/server/api/category/data/groceries.csv')
-    .on('json', (jsonObj) => {
-      console.log(JSON.stringify(jsonObj));
-    })
-    .on('done', (error) => {
-      console.log('end')
+
+function add_categories(type, categories, parent, callback) {
+  async.each(categories, function (name, callback) {
+    let typeName = type=== 'business'? 'BusinessCategory' : 'ProductCategory';
+    ProductCategory.save({name: name}, function (err, category) {
+      let query = `MATCH (top:${typeName}{name:"${parent}"}), (sub:${typeName}{name:"${category.name}"})
+                        CREATE UNIQUE (sub)-[:CATEGORY]->(top)`;
+      ProductCategory.query(query, function (err) {
+        Category.create({
+          type: type,
+          gid: category.id,
+          name: category.name,
+          isLeaf: true,
+          translations: {en: category.name},
+        }, callback)
+      })
     });
+  }, callback)
+}
+
+function add_categories_from_object(type, parent, node){
+  if(_.isEmpty(node))
+    return;
+  add_categories(type, Object.keys(node), parent, function (err) {
+    if(err) return console.error(err);
+    Object.keys(node).forEach(cat => {
+      add_categories_from_object(type, parent, node[cat]);
+    })
+  });
+}
+
+function csv_load_product_categories(req, res) {
+  add_product_categories(['Groceries'], 'ProductRootCategory', function(err){
+    if(err) return handleError(res, err);
+    const csv = require('csvtojson');
+    let top = {};
+    csv()
+      .fromFile('/Users/moshe/projects/low.la/thiscounts/server/api/category/data/groceries.csv')
+      .on('json', (jsonObj) => {
+        //console.log(Object.keys(jsonObj)  + '=>' + JSON.stringify(jsonObj));
+        let obj = top;
+        Object.keys(jsonObj).forEach(key => {
+          console.log(key);
+          function getValue(obj, key) {
+            if(!obj[key])
+              obj[key] = {};
+            return obj[key];
+          }
+          obj = getValue(obj, jsonObj[key])
+        });
+      })
+      .on('done', (error) => {
+        console.log(JSON.stringify(top,null,2));
+        add_categories_from_object('product', 'Groceries', top);
+        return res.status(200).json('ok');
+      });
+  });
 }
 
 exports.work = function (req, res) {
@@ -215,6 +265,8 @@ exports.work = function (req, res) {
       return exports.init_product(req, res);
     case 'create_product_category':
       return create_product_categories(req, res);
+    case 'csv_load_product_categories':
+      return csv_load_product_categories(req, res);
     default:
       return res.status(404).json(`${req.params.function} not supported please refer to the code`);
   }
