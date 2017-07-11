@@ -10,6 +10,7 @@ import {Container, Content, Text, InputGroup, Input, Button,Body ,Icon,Left,
 
 export default class SelectProductsComponent extends Component {
 
+
     constructor(props) {
         super(props);
 
@@ -21,10 +22,15 @@ export default class SelectProductsComponent extends Component {
     }
 
 
+    selectProduct(product){
+        this.props.navigation.state.params.selectProduct(product)
+        this.props.navigation.goBack();
+    }
+
 
     render() {
         let index = 0;
-        let productsRows = this.state.productList.map((r, i) => {
+        let productsRows = this.props.navigation.state.params.products.map((r, i) => {
             index++;
 
             if(r.pictures.length > 0){
@@ -40,7 +46,7 @@ export default class SelectProductsComponent extends Component {
                   <Right>
 
                       <Button transparent
-                              onPress={() => this.props.selectProduct(r)}
+                              onPress={() => this.selectProduct(r)}
                       >
                           <Text>Select</Text>
                       </Button>
