@@ -64,23 +64,23 @@ const promotionTypes = [
 
 const Variations = ['SINGLE', 'RANGE', 'VALUES'];
 
-// const Automatic = {
-//
-//   type :{type: Boolean},
-//   quantity: {type: Number},
-//   discount: { type : Number, min:1, max: 100},
-//   types: [{type: String, enum: promotionTypes}],
-//   products: [{
-//     product: {type: Schema.ObjectId, ref: 'Product'},
-//     description: String,
-//     price: Number,
-//   }],
-// };
+const Automatic = {
+
+  type :{type: Boolean},
+  quantity: {type: Number},
+  discount: { type : Number, min:1, max: 100},
+  types: [{type: String, enum: promotionTypes}],
+  products: [{
+    product: {type: Schema.ObjectId, ref: 'Product'},
+    description: String,
+    price: Number,
+  }],
+};
 
 let PromotionSchemaObject = {
   social_state : {},
 
-  //automatic: Automatic,
+  automatic: Automatic,
 
   name: {type: String, required: true},
   pictures : [],
