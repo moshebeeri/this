@@ -12,15 +12,17 @@ export default class ReduceAmountComponent extends Component {
 
     constructor(props) {
         super(props);
-        props.setState({
-                discount_on: 'GLOBAL'
-            }
-        )
+
 
     }
 
 
-
+    componentWillMount(){
+        this.props.setState({
+                discount_on: 'GLOBAL'
+            }
+        )
+    }
 
 
 

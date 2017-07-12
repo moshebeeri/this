@@ -149,6 +149,8 @@ import {DeviceEventEmitter} from 'react-native'
                await  this.setState({
                     type: item.type,
                     start: item.start,
+                   choose_distribution:true,
+
                     end: item.end,
                     location: item.location,
                     name: item.name,
@@ -241,14 +243,10 @@ import {DeviceEventEmitter} from 'react-native'
         let promotion = {
             image: this.state.image,
             type: this.state.type,
-            percent: this.state.percent,
-
-
             total_discount: Number(this.state.total_discount),
             // percent_range: this.state.percent_range,
             start: this.state.start,
             end: this.state.end,
-
             description: this.state.info,
             path: this.state.path,
             name: this.state.name,
@@ -281,8 +279,9 @@ import {DeviceEventEmitter} from 'react-native'
             promotion.distribution.business = businessId;
         }
 
-        promotion.percent = {};
+
         if(this.state.type == 'PERCENT'){
+            promotion.percent = {};
             promotion.percent.variation = 'SINGLE';
             promotion.percent.values = [this.state.percent.percent]
             promotion.percent.quantity = Number(this.state.quantity)
@@ -292,45 +291,64 @@ import {DeviceEventEmitter} from 'react-native'
         }
 
         if(this.state.type == 'REDUCED_AMOUNT'){
+            promotion.reduced_amount = {};
             promotion.reduced_amount.variation = 'SINGLE';
             promotion.reduced_amount.quantity = Number(this.state.quantity)
             promotion.reduced_amount.values = [{
-                price:this.state.reduced_amount.values.price,
-                pay: this.state.reduced_amount.values.pay,
+                price: Number(this.state.reduced_amount.values.price),
+                pay: Number(this.state.reduced_amount.values.pay),
 
             }]
         }
         if(this.state.type == 'X_FOR_Y'){
+            promotion.x_for_y = {};
             promotion.x_for_y.variation = 'SINGLE';
             promotion.x_for_y.quantity = Number(this.state.quantity)
             promotion.x_for_y.values = [{
-                price:this.state.x_for_y.values.price,
-                pay: this.state.x_for_y.values.pay,
+                price: Number(this.state.x_for_y.values.price),
+                pay: Number(this.state.x_for_y.values.pay),
 
             }]
         }
         if(this.state.type == 'X+N%OFF'){
+            promotion.x_plus_n_percent_off = {};
             promotion.x_plus_n_percent_off.variation = 'SINGLE';
             promotion.x_plus_n_percent_off.quantity = Number(this.state.quantity);
             promotion.x_plus_y.values = {
-                eligible: this.state.x_plus_n_percent_off.values.eligible,
+                eligible: Number(this.state.x_plus_n_percent_off.values.eligible),
                 product:this.state.giftProduct,
 
             };
         }
 
         if(this.state.type == 'X+Y'){
+            promotion.x_plus_y = {};
             promotion.x_plus_y.variation = 'SINGLE';
             promotion.x_plus_y.quantity = Number(this.state.quantity);
             promotion.x_plus_y.values = {
-                eligible: this.state.x_plus_y.values.eligible,
-                buy : this.state.x_plus_y.values.buy,
+                eligible: Number(this.state.x_plus_y.values.eligible),
+                buy : Number(this.state.x_plus_y.values.buy),
                 product:this.state.giftProduct,
 
             };
 
 
         }
+
+        if(this.state.type == 'PUNCH_CARD'){
+            promotion.punch_card = {};
+            promotion.punch_card.variation = 'SINGLE';
+            promotion.punch_card.quantity = Number(this.state.quantity);
+            promotion.punch_card.values = {
+                number_of_punches: Number(this.state.punch_card.values.number_of_punches),
+                product:this.state.giftProduct,
+
+            };
+
+
+        }
+
+
 
 
 

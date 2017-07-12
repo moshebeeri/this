@@ -12,12 +12,15 @@ export default class XPlusYComponent extends Component {
 
     constructor(props) {
         super(props);
-        props.setState({
-            discount_on: 'PRODUCT',
-        })
+
     }
 
 
+    componentWillMount(){
+        this.props.setState({
+            discount_on: 'PRODUCT'
+        })
+    }
 
 
     selectProduct(product){

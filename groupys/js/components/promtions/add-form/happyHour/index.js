@@ -18,22 +18,17 @@ export default class HappyHourComponent extends Component {
 
 
 
-
     selectProduct(product){
         this.props.setState(
             {
-                giftProduct:product
+                product:product
             }
         )
     }
 
-    selectBuyProduct(product){
-        this.props.setState(
-            {
-                buyProduct:product
-            }
-        )
-    }
+
+
+
 
     showProducts(){
         let products =  this.props.api.getProducts();
@@ -44,22 +39,21 @@ export default class HappyHourComponent extends Component {
 
     }
 
-    showBuyProducts(){
-        let products =  this.props.api.getProducts();
-        let selectProductFunction = this.selectBuyProduct.bind(this);
-        this.props.navigation.navigate("SelectProductsComponent",{
-            products:products,
-            selectProduct:selectProductFunction})
 
-    }
 
-    setPunchCard(value) {
+    setPay(value) {
         if (value) {
+            let pay = undefined;
+            if(this.props.state.happy_hour && this.props.state.happy_hour.values){
+                pay = this.props.state.happy_hour.values.pay;
+            }
             this.props.setState({
-                discount_on: 'PRODUCT',
                 choose_distribution: true,
-                punch_card:{
-                    number_of_punches:value,
+                happy_hour:{
+                    values: {
+                        pay:pay,
+                        eligible: value
+                    }
                 }
 
             })
@@ -69,8 +63,8 @@ export default class HappyHourComponent extends Component {
     createSelectProductButton(){
         let result =  undefined;
             let productName = undefined;
-            if(this.props.state.giftProduct){
-                productName = <Text> {this.props.state.giftProduct.name}</Text>
+            if(this.props.state.product){
+                productName = <Text> {this.props.state.product.name}</Text>
 
 
             }
@@ -85,29 +79,8 @@ export default class HappyHourComponent extends Component {
 
         return result;
     }
-    createSelectBuyProductButton(){
-        let result =  undefined;
-        let productName = undefined;
-        if(this.props.state.buyProduct){
-            productName = <Text> {this.props.state.buyProduct.name}</Text>
 
-
-        }
-        let button = <Item><Button transparent onPress={() => this.showBuyProducts(true)}>
-            <Text>Select Buy Product</Text>
-        </Button>
-            {productName}
-        </Item>
-
-
-        result = <View>{button}</View>
-
-        return result;
-    }
     render() {
-
-        let selectBuyProductButton =this.createSelectBuyProductButton();
-
 
         let selectProductButton =this.createSelectProductButton();
 
@@ -121,13 +94,13 @@ export default class HappyHourComponent extends Component {
 
             {selectProductButton}
             <Item  style={{ margin:3 } } regular>
-                <Input keyboardType = 'numeric'   onChangeText={(value) => this.setPunchCard(value)} placeholder='Pay $' />
+                <Input keyboardType = 'numeric'   onChangeText={(value) => this.setPay(value)} placeholder='Pay $' />
             </Item>
             <Item  style={{ margin:3 } } regular>
-                <Input keyboardType = 'numeric'   onChangeText={(value) => this.setPunchCard(value)} placeholder='From Hour (1 - 24)' />
+                <Input keyboardType = 'numeric'   onChangeText={(value) => this.setFrom(value)} placeholder='From Hour (1 - 24)' />
             </Item>
             <Item  style={{ margin:3 } } regular>
-                <Input keyboardType = 'numeric'   onChangeText={(value) => this.setPunchCard(value)} placeholder='To Hour (1 - 24) ' />
+                <Input keyboardType = 'numeric'   onChangeText={(value) => this.setTo(value)} placeholder='To Hour (1 - 24) ' />
             </Item>
 
             <Item  style={{ margin:3 } } regular>
