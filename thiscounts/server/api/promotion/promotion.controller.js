@@ -144,7 +144,7 @@ exports.test_me = function (req, res) {
 function applyToGroups(promotion, instances){
   instances.forEach(instance => {
     let groups;
-    if (instance && promotion && (groups = promotion.entity.groups)) {
+    if (instance && promotion && (groups = promotion.distribution.groups)) {
       groups.forEach(group =>
         instance_group_activity(instance, group._id))
     }
@@ -227,7 +227,7 @@ function create_promotion(promotion, callback) {
             if (err) return callback(err, null);
             if(promotion.distribution.business) {
               applyToFollowing(promotion, instances);
-            }else if(promotion.distribution.groups && promotion.distribution.groups > 0){
+            }else if(promotion.distribution.groups && promotion.distribution.groups.length > 0){
               applyToGroups(promotion, instances);
             }
           });
@@ -315,7 +315,7 @@ function instance_group_activity(instance, group_id) {
     instance: instance._id,
     promotion: instance.promotion._id,
     action: "instance",
-    actor_group: group_id
+    ids: [group_id],
   });
 }
 

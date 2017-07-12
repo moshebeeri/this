@@ -231,6 +231,7 @@ let PromotionSchemaObject = {
   },
   //v1
   reduced_amount: {
+    variation: {type: String, enum: Variations},
     price: Number,
     quantity: Number,
     values: [{
