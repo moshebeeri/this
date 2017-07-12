@@ -43,7 +43,6 @@ let InstanceSchema = new Schema({
     increasing: {
       from: Number,
       to: Number,
-      steps: Number,
       days_eligible: Number,
     },
     doubling: {
