@@ -43,7 +43,9 @@ class BusinessApi
     }
 
 
-    getBusinessCategories()
+
+
+    getBusinessCategories(gid)
     {
 
         return new Promise(async(resolve, reject) => {
@@ -52,7 +54,7 @@ class BusinessApi
                 let from = new Date();
 
                 let token = await store.get('token');
-                const response = await fetch(`${server_host}/api/categories/business`, {
+                const response = await fetch(`${server_host}/api/categories/business/en/` +gid, {
                     method: 'GET',
                     headers: {
                         'Accept': 'application/json, text/plain, */*',
@@ -66,12 +68,9 @@ class BusinessApi
                     reject(response);
                     return;
                 }
+                timer.logTime(from,new Date(),'categories','business/en')
 
                 let responseData = await response.json();
-                timer.logTime(from,new Date(),'categories','/business')
-
-
-
                 resolve(responseData);
             }
             catch (error) {

@@ -105,7 +105,7 @@ import Autocomplete from 'react-native-autocomplete-input';
      getCategories(){
          let categories =  this.props.businesses.categories;
          let categoriesTop = categories.map(function(cat){
-             return cat.t.name
+             return cat.translations.en
          })
 
          categoriesTop = categoriesTop.filter(function (x, i, a) {
@@ -123,13 +123,13 @@ import Autocomplete from 'react-native-autocomplete-input';
          if(category){
              categoriesBottom = this.props.businesses.categories.filter(
                  function (cat) {
-                   return  cat.t.name == category
+                   return  cat.translations.en == category
                  }
              )
 
              if(categoriesBottom){
                  categoriesBottom  = categoriesBottom.map(function (cat) {
-                     return cat.c.name;
+                     return cat.translations.en;
 
                  })
 

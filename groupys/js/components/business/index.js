@@ -17,7 +17,7 @@ import { bindActionCreators } from "redux";
 
     constructor(props) {
         super(props);
-        this.props.fetchBusinessCategories();
+        this.props.fetchBusinessCategories('root');
         this.state = {
             refresh: '',
         }
