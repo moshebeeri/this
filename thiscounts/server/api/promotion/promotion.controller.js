@@ -141,7 +141,18 @@ exports.test_me = function (req, res) {
   return res.status(201).json(spreads);
 };
 
-function applyToGroups(promotion, instances) {
+function applyToGroups(promotion, instances){
+  instances.forEach(instance => {
+    let groups;
+    if (instance && promotion && (groups = promotion.entity.groups)) {
+      groups.forEach(group =>
+        instance_group_activity(instance, group._id))
+    }
+  });
+}
+
+
+function applyToFollowingGroups(promotion, instances) {
   instances.forEach(instance => {
     let business;
     if (instance && promotion && (business = promotion.entity.business)) {
@@ -159,7 +170,7 @@ function applyToGroups(promotion, instances) {
 }
 
 //see https://neo4j.com/blog/real-time-recommendation-engine-data-science/
-function applyToUsers(promotion, instances, callback) {
+function applyToFollowingUsers(promotion, instances, callback) {
   instances.forEach(instance => {
     //instance_eligible_activity(instance);
     spatial.userLocationWithinDistance({
@@ -174,6 +185,11 @@ function applyToUsers(promotion, instances, callback) {
       })
     });
   })
+}
+
+function applyToFollowing(promotion, instances) {
+  applyToFollowingGroups(promotion, instances);
+  applyToFollowingUsers(promotion, instances);
 }
 
 function create_promotion(promotion, callback) {
@@ -209,8 +225,11 @@ function create_promotion(promotion, callback) {
 
           instance.cratePromotionInstances(promotion, function (err, instances) {
             if (err) return callback(err, null);
-            applyToGroups(promotion, instances);
-            applyToUsers(promotion, instances);
+            if(promotion.distribution.business) {
+              applyToFollowing(promotion, instances);
+            }else if(promotion.distribution.groups && promotion.distribution.groups > 0){
+              applyToGroups(promotion, instances);
+            }
           });
         });
       });
