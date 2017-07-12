@@ -39,7 +39,7 @@ class PromotionApi
                 }
 
                 let responseData = await response.json();
-                timer.logTime(from,new Date(),'PromotionApi','createPromotion')
+                timer.logTime(from,new Date(),'promotions','campaign')
 
                 if(promotion.image){
                     entityUtils.doUpload(promotion.image.uri,promotion.image.mime,token,callbackFunction,'promotions',responseData.promotions[0]);
@@ -83,7 +83,7 @@ class PromotionApi
                     reject(response);
                     return;
                 }
-                timer.logTime(from,new Date(),'PromotionApi','updatePromotion')
+                timer.logTime(from,new Date(),'promotions','update')
 
                 let responseData = await response.json();
 
@@ -122,7 +122,7 @@ class PromotionApi
                     reject(response);
                     return;
                 }
-                timer.logTime(from,new Date(),'PromotionApi','save')
+                timer.logTime(from,new Date(),'instances','save')
 
                 let responseData = await response.json();
                 resolve(responseData);
@@ -160,7 +160,7 @@ class PromotionApi
                     reject(response);
                     return;
                 }
-                timer.logTime(from,new Date(),'PromotionApi','realizePromotion')
+                timer.logTime(from,new Date(),'instances','realize')
 
                 let responseData = await response.json();
                 resolve(responseData);
@@ -197,7 +197,7 @@ class PromotionApi
                     reject(response);
                     return;
                 }
-                timer.logTime(from,new Date(),'PromotionApi','getPromotionQrcode')
+                timer.logTime(from,new Date(),'instances','qrcode')
 
                 let responseData = await response.json();
                 resolve(responseData);
@@ -234,7 +234,7 @@ class PromotionApi
                     reject(response);
                     return;
                 }
-                timer.logTime(from,new Date(),'PromotionApi','getAll')
+                timer.logTime(from,new Date(),'promotions','list/create/by/user')
 
                 let responseData = await response.json();
                 resolve(responseData);
@@ -272,7 +272,7 @@ class PromotionApi
                 }
 
                 let responseData = await response.json();
-                timer.logTime(from,new Date(),'PromotionApi','getAllByBusinessId')
+                timer.logTime(from,new Date(),'promotions','list/by/business')
 
                 resolve(responseData);
             }

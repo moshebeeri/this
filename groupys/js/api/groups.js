@@ -42,7 +42,7 @@ class GroupsApi
                 }
 
                 let responseData = await response.json();
-                timer.logTime(from,new Date(),'GroupsApi','createGroup')
+                timer.logTime(from,new Date(),'groups','/')
 
                 if(group.groupUsers){
                     this.addUsersToGroup(group,responseData);
@@ -99,7 +99,7 @@ class GroupsApi
                     reject(response);
                     return;
                 }
-                timer.logTime(from,new Date(),'GroupsApi','addUserToGroup')
+                timer.logTime(from,new Date(),'groups','/add/user')
 
                 let responseData = await response.json();
                 resolve(responseData);
@@ -133,7 +133,7 @@ class GroupsApi
                     reject(response);
                     return;
                 }
-                timer.logTime(from,new Date(),'GroupsApi','getAll')
+                timer.logTime(from,new Date(),'groups','/user/follow')
 
                 let responseData = await response.json();
                 resolve(responseData);
@@ -169,7 +169,7 @@ class GroupsApi
                     reject(response);
                     return;
                 }
-                timer.logTime(from,new Date(),'GroupsApi','getByBusinessId')
+                timer.logTime(from,new Date(),'groups','/user/follow')
 
                 let responseData = await response.json();
                 resolve(responseData);
@@ -205,7 +205,7 @@ class GroupsApi
                     reject(response);
                     return;
                 }
-                timer.logTime(from,new Date(),'GroupsApi','touch')
+                timer.logTime(from,new Date(),'groups','touch')
 
                 resolve(true)
 
@@ -245,7 +245,7 @@ class GroupsApi
                     reject(response);
                     return;
                 }
-                timer.logTime(from,new Date(),'GroupsApi','meesage')
+                timer.logTime(from,new Date(),'groups','meesage')
 
                 resolve(true)
 

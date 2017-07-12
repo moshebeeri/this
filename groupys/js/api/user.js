@@ -29,7 +29,7 @@ class UserApi
                     }
 
                     let responseData = await response.json();
-                    timer.logTime(from,new Date(),'UserApi','getUser')
+                    timer.logTime(from,new Date(),'users','me')
 
                     store.save('user_id', responseData._id);
 
@@ -71,7 +71,7 @@ class UserApi
                 }
 
                 let responseData = await response.json();
-                timer.logTime(from,new Date(),'UserApi','getUserFollowers')
+                timer.logTime(from,new Date(),'profiles','follow/followers')
 
                 let fullContacts = await this.getFullContacts(responseData)
                 resolve(fullContacts);
@@ -143,7 +143,7 @@ class UserApi
                 }
 
                 let responseData = await response.json();
-                timer.logTime(from,new Date(),'UserApi','like')
+                timer.logTime(from,new Date(),'users','like')
 
                 resolve(responseData);
             }
@@ -175,7 +175,7 @@ class UserApi
                 }
 
                 let responseData = await response.json();
-                timer.logTime(from,new Date(),'UserApi','unlike')
+                timer.logTime(from,new Date(),'users','unlike')
 
                 resolve(responseData);
             }

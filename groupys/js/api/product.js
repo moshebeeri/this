@@ -27,7 +27,7 @@ class ProductsApi
                 }
 
                 let responseData = await response.json();
-                timer.logTime(from,new Date(),'ProductsApi','getAll')
+                timer.logTime(from,new Date(),'products','/')
 
                 resolve(responseData);
             }
@@ -61,7 +61,7 @@ class ProductsApi
                     reject(response);
                     return;
                 }
-                timer.logTime(from,new Date(),'ProductsApi','findByBusinessId')
+                timer.logTime(from,new Date(),'products','find/by/business')
 
                 let responseData = await response.json();
                 resolve(responseData);
@@ -98,7 +98,7 @@ class ProductsApi
                     reject(response);
                     return;
                 }
-                timer.logTime(from,new Date(),'ProductsApi','getProductCategories')
+                timer.logTime(from,new Date(),'categories','product/en')
 
                 let responseData = await response.json();
                 resolve(responseData);

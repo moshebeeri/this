@@ -70,7 +70,7 @@ class ProfileApi {
                 }
 
                 let responseData = await response.json();
-                timer.logTime(from,new Date(),'ProfileApi','fetch instances')
+                timer.logTime(from,new Date(),'profiles','instances/saved')
 
                 let feeds = new Array();
                 if(responseData.length > 0) {

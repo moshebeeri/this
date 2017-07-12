@@ -27,7 +27,7 @@ class BusinessApi
                 }
 
                 let responseData = await response.json();
-                timer.logTime(from,new Date(),'bussines','getAll')
+                timer.logTime(from,new Date(),'businesses','list/mine')
                 resolve(responseData);
 
 
@@ -68,7 +68,7 @@ class BusinessApi
                 }
 
                 let responseData = await response.json();
-                timer.logTime(from,new Date(),'bussines','getBusinessCategories')
+                timer.logTime(from,new Date(),'categories','/business')
 
 
 

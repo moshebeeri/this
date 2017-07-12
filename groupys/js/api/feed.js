@@ -55,7 +55,7 @@ class FeedApi {
 
                 let responseData = await response.json();
 
-                timer.logTime(from,new Date(),'FeedApi','getAll')
+                timer.logTime(from,new Date(),'feeds','/')
 
                 let contacsMap = new Map();
 
