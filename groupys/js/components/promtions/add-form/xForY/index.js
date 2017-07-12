@@ -12,15 +12,18 @@ export default class XForYComponent extends Component {
 
     constructor(props) {
         super(props);
-        props.setState({
-            discount_on: 'PRODUCT',
-        })
+
     }
 
 
 
 
-
+    componentWillMount(){
+        this.props.setState({
+                discount_on: 'PRODUCT'
+            }
+        )
+    }
 
 
     selectBuyProduct(product){

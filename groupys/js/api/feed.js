@@ -7,6 +7,9 @@ let userApi = new UserApi();
 
 import  FeedUiConverter from './feed-ui-converter'
 let feedUiConverter = new FeedUiConverter();
+import Timer from './LogTimer'
+
+let timer = new Timer();
 class FeedApi {
 
 
@@ -20,6 +23,8 @@ class FeedApi {
         return new Promise(async(resolve, reject) => {
 
             try {
+                let from = new Date();
+
                 let token = await store.get('token');
                 if(!userId){
                     userId = await store.get('user_id');
@@ -50,6 +55,7 @@ class FeedApi {
 
                 let responseData = await response.json();
 
+                timer.logTime(from,new Date(),'feeds','/')
 
                 let contacsMap = new Map();
 

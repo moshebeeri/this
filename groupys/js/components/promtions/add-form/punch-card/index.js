@@ -14,15 +14,26 @@ export default class PunchCardComponent extends Component {
         super(props);
 
     }
+    componentWillMount(){
+        this.props.setState({
+            discount_on: 'PRODUCT'
+        })
+    }
 
-
+        selectBuyProduct(product){
+        this.props.setState(
+            {
+                product:product
+            }
+        )
+    }
 
 
 
     selectProduct(product){
         this.props.setState(
             {
-                product:product
+                giftProduct:product
             }
         )
     }
@@ -39,10 +50,9 @@ export default class PunchCardComponent extends Component {
     setPunchCard(value) {
         if (value) {
             this.props.setState({
-                discount_on: 'PRODUCT',
                 choose_distribution: true,
                 punch_card:{
-                    number_of_punches:value,
+                    values:{number_of_punches:value},
                 }
 
             })
@@ -59,8 +69,8 @@ export default class PunchCardComponent extends Component {
     createSelectBuyProductButton(){
         let result =  undefined;
         let productName = undefined;
-        if(this.props.state.buyProduct){
-            productName = <Text> {this.props.state.buyProduct.name}</Text>
+        if(this.props.state.prodict){
+            productName = <Text> {this.props.state.product.name}</Text>
 
 
         }
@@ -78,8 +88,8 @@ export default class PunchCardComponent extends Component {
     createSelectProductButton(){
         let result =  undefined;
             let productName = undefined;
-            if(this.props.state.product){
-                productName = <Text> {this.props.state.product.name}</Text>
+            if(this.props.state.giftProduct){
+                productName = <Text> {this.props.state.giftProduct.name}</Text>
 
 
             }
@@ -108,6 +118,7 @@ export default class PunchCardComponent extends Component {
             <Item  style={{ margin:3 } } regular>
                <Input keyboardType = 'numeric'   onChangeText={(value) => this.setPunchCard(value)} placeholder='Number of Punches' />
            </Item>
+
 
                {selectProductButton}
 

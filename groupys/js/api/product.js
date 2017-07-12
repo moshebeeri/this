@@ -1,11 +1,15 @@
 import store from 'react-native-simple-store';
+import Timer from './LogTimer'
 
+let timer = new Timer();
 class ProductsApi
 {
     getAll() {
         return new Promise(async(resolve, reject) => {
 
             try {
+                let from = new Date();
+
                 let token = await store.get('token');
                 const response = await fetch(`${server_host}/api/products/0/10`, {
                     method: 'GET',
@@ -23,6 +27,8 @@ class ProductsApi
                 }
 
                 let responseData = await response.json();
+                timer.logTime(from,new Date(),'products','/')
+
                 resolve(responseData);
             }
             catch (error) {
@@ -38,6 +44,8 @@ class ProductsApi
         return new Promise(async(resolve, reject) => {
 
             try {
+                let from = new Date();
+
                 let token = await store.get('token');
                 const response = await fetch(`${server_host}/api/products/find/by/business/${id}`, {
                     method: 'GET',
@@ -53,6 +61,7 @@ class ProductsApi
                     reject(response);
                     return;
                 }
+                timer.logTime(from,new Date(),'products','find/by/business')
 
                 let responseData = await response.json();
                 resolve(responseData);
@@ -72,6 +81,8 @@ class ProductsApi
         return new Promise(async(resolve, reject) => {
 
             try {
+                let from = new Date();
+
                 let token = await store.get('token');
                 const response = await fetch(`${server_host}/api/categories/product/en/` +gid, {
                     method: 'GET',
@@ -87,6 +98,7 @@ class ProductsApi
                     reject(response);
                     return;
                 }
+                timer.logTime(from,new Date(),'categories','product/en')
 
                 let responseData = await response.json();
                 resolve(responseData);

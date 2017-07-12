@@ -2,12 +2,16 @@
  * Created by roilandshut on 13/03/2017.
  */
 import store from 'react-native-simple-store';
+import Timer from './LogTimer'
 
+let timer = new Timer();
 class UserApi
 {
     getUser() {
         return new Promise(async(resolve, reject) => {
             try {
+                let from = new Date();
+
                 let token = await store.get('token');
                 if(token) {
                     const response = await fetch(`${server_host}/api/users/me/`, {
@@ -25,6 +29,8 @@ class UserApi
                     }
 
                     let responseData = await response.json();
+                    timer.logTime(from,new Date(),'users','me')
+
                     store.save('user_id', responseData._id);
 
                     resolve(responseData);
@@ -48,6 +54,8 @@ class UserApi
         return new Promise(async(resolve, reject) => {
             try {
                 let token = await store.get('token');
+                let from = new Date();
+
                 const response = await fetch(`${server_host}/api/profiles/follow/followers/0/1000`, {
                     method: 'GET',
                     headers: {
@@ -63,6 +71,7 @@ class UserApi
                 }
 
                 let responseData = await response.json();
+                timer.logTime(from,new Date(),'profiles','follow/followers')
 
                 let fullContacts = await this.getFullContacts(responseData)
                 resolve(fullContacts);
@@ -117,6 +126,8 @@ class UserApi
         return new Promise(async(resolve, reject) => {
             try {
                 let token = await store.get('token');
+                let from = new Date();
+
                 const response = await fetch(`${server_host}/api/users/like/`+id, {
                     method: 'GET',
                     headers: {
@@ -132,6 +143,7 @@ class UserApi
                 }
 
                 let responseData = await response.json();
+                timer.logTime(from,new Date(),'users','like')
 
                 resolve(responseData);
             }
@@ -145,6 +157,8 @@ class UserApi
     unlike(id){
         return new Promise(async(resolve, reject) => {
             try {
+                let from = new Date();
+
                 let token = await store.get('token');
                 const response = await fetch(`${server_host}/api/users/like/`+id, {
                     method: 'DELETE',
@@ -161,6 +175,7 @@ class UserApi
                 }
 
                 let responseData = await response.json();
+                timer.logTime(from,new Date(),'users','unlike')
 
                 resolve(responseData);
             }

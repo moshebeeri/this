@@ -5,7 +5,9 @@
  * Created by roilandshut on 26/03/2017.
  */
 import store from 'react-native-simple-store';
+import Timer from './LogTimer'
 
+let timer = new Timer();
 
 class ProfileApi {
     clean_phone_number(number) {
@@ -46,6 +48,8 @@ class ProfileApi {
         return new Promise(async(resolve, reject) => {
 
             try {
+                let from = new Date();
+
                 let token = await store.get('token');
 
                  const response = await fetch(`${server_host}/api/profiles/instances/saved/` + from + `/` + to + `/`, {
@@ -66,6 +70,7 @@ class ProfileApi {
                 }
 
                 let responseData = await response.json();
+                timer.logTime(from,new Date(),'profiles','instances/saved')
 
                 let feeds = new Array();
                 if(responseData.length > 0) {

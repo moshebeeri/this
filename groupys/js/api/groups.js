@@ -12,12 +12,17 @@ import store from 'react-native-simple-store';
 import EntityUtils from "../utils/createEntity";
 
 let entityUtils = new EntityUtils();
+import Timer from './LogTimer'
+
+let timer = new Timer();
 class GroupsApi
 {
     createGroup(group,callbackFunction) {
         return new Promise(async(resolve, reject) => {
 
             try {
+                let from = new Date();
+
                 let token = await store.get('token');
                 let userId = await store.get('user_id');
                 const response = await fetch(`${server_host}/api/groups/`, {
@@ -37,6 +42,8 @@ class GroupsApi
                 }
 
                 let responseData = await response.json();
+                timer.logTime(from,new Date(),'groups','/')
+
                 if(group.groupUsers){
                     this.addUsersToGroup(group,responseData);
                 }
@@ -74,6 +81,8 @@ class GroupsApi
         return new Promise(async(resolve, reject) => {
 
             try {
+                let from = new Date();
+
                 let token = await store.get('token');
                 let userId = await store.get('user_id');
                 const response = await fetch(`${server_host}/api/groups/add/user/${user}/${group}`, {
@@ -90,6 +99,7 @@ class GroupsApi
                     reject(response);
                     return;
                 }
+                timer.logTime(from,new Date(),'groups','/add/user')
 
                 let responseData = await response.json();
                 resolve(responseData);
@@ -106,6 +116,8 @@ class GroupsApi
         return new Promise(async(resolve, reject) => {
 
             try {
+                let from = new Date();
+
                 let token = await store.get('token');
                 const response = await fetch(`${server_host}/api/groups/user/follow/0/100`, {
                     method: 'GET',
@@ -121,6 +133,7 @@ class GroupsApi
                     reject(response);
                     return;
                 }
+                timer.logTime(from,new Date(),'groups','/user/follow')
 
                 let responseData = await response.json();
                 resolve(responseData);
@@ -139,6 +152,8 @@ class GroupsApi
         return new Promise(async(resolve, reject) => {
 
             try {
+                let from = new Date();
+
                 let token = await store.get('token');
                 const response = await fetch(`${server_host}/api/groups/user/follow/0/100`, {
                     method: 'GET',
@@ -154,6 +169,7 @@ class GroupsApi
                     reject(response);
                     return;
                 }
+                timer.logTime(from,new Date(),'groups','/user/follow')
 
                 let responseData = await response.json();
                 resolve(responseData);
@@ -172,6 +188,8 @@ class GroupsApi
         return new Promise(async(resolve, reject) => {
 
             try {
+                let from = new Date();
+
                 let token = await store.get('token');
                 const response = await fetch(`${server_host}/api/groups/touch/${groupid}`, {
                     method: 'GET',
@@ -187,6 +205,7 @@ class GroupsApi
                     reject(response);
                     return;
                 }
+                timer.logTime(from,new Date(),'groups','touch')
 
                 resolve(true)
 
@@ -205,6 +224,8 @@ class GroupsApi
         return new Promise(async(resolve, reject) => {
 
             try {
+                let from = new Date();
+
                 let token = await store.get('token');
                 let json = {
                     message: message
@@ -224,6 +245,7 @@ class GroupsApi
                     reject(response);
                     return;
                 }
+                timer.logTime(from,new Date(),'groups','meesage')
 
                 resolve(true)
 
