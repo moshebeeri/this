@@ -110,50 +110,100 @@ function createPunchCardInstances(promotion) {
 }
 
 function createGiftInstances(promotion) {
-  if (promotion.percent.variation === 'SINGLE') {
-    return [promotion]
+  const p = promotion.gift;
+
+  if (p.variation === 'SINGLE') {
+    let instance = createInstance(promotion, {
+      retail_price: p.values[0].retail_price,
+      product: p.values[0].product,
+    }, p.quantity, p.variation);
+    return [instance]
   }
 }
 function createXPlusYInstances(promotion) {
-  if (promotion.x_plus_y.variation === 'SINGLE') {
-    return [promotion]
+  const p = promotion.x_plus_y;
+
+  if (p.variation === 'SINGLE') {
+    let instance = createInstance(promotion, {
+      buy: p.values[0].buy,
+      eligible: p.values[0].eligible,
+    }, p.quantity, p.variation);
+    return [instance]
   }
 }
 
 function createXPlusNPercentOffInstances(promotion) {
-  if (promotion.x_plus_n_percent_off.variation === 'SINGLE') {
-    return [promotion]
+  const p = promotion.x_plus_n_percent_off;
+
+  if (p.variation === 'SINGLE') {
+    let instance = createInstance(promotion, {
+      buy: p.values[0].buy,
+      eligible: p.values[0].eligible,
+    }, p.quantity, p.variation);
+    return [instance]
   }
 }
+
 function createXForYInstances(promotion) {
-  if (promotion.x_for_y.variation === 'SINGLE') {
-    return [promotion]
+  const p = promotion.x_for_y;
+
+  if (p.variation === 'SINGLE') {
+    let instance = createInstance(promotion, {
+      buy: p.values[0].buy,
+      eligible: p.values[0].eligible,
+    }, p.quantity, p.variation);
+    return [instance]
   }
 }
 function createIncreasingInstances(promotion) {
-  if (promotion.increasing.variation === 'SINGLE') {
-    return [promotion]
-  }
+  const p = promotion.increasing;
 
+  if (p.variation === 'SINGLE') {
+    let instance = createInstance(promotion, {
+      from: p.values[0].from,
+      to: p.values[0].to,
+      days_eligible: p.values[0].days_eligible
+    }, p.quantity, p.variation);
+    return [instance]
+  }
 }
 function createDoublingInstances(promotion) {
-  if (promotion.doubling.variation === 'SINGLE') {
-    return [promotion]
+  const p = promotion.doubling;
+
+  if (p.variation === 'SINGLE') {
+    let instance = createInstance(promotion, {
+      value: p.values[0].value,
+      values_type: p.values[0].values_type
+    }, p.quantity, p.variation);
+    return [instance]
   }
 }
 function createGrowInstances(promotion) {
-  if (promotion.percent.variation === 'SINGLE') {
-    return [promotion]
+  const p = promotion.grow;
+
+  if (p.variation === 'SINGLE') {
+    let instance = createInstance(promotion, {
+      value: p.values[0].value,
+      values_type: p.values[0].values_type
+    }, p.quantity, p.variation);
+    return [instance]
   }
 }
 function createPrepayInstances(promotion) {
-  if (promotion.prepay_discount.variation === 'SINGLE') {
-    return [promotion]
-  }
+  const p = promotion.prepay_discount;
 
+  if (p.variation === 'SINGLE') {
+    let instance = createInstance(promotion, {
+      value_type: p.values[0].value_type,
+      eligible_from: p.values[0].eligible_from ,
+      eligible_to: p.values[0].eligible_to ,
+      prepay: p.values[0].prepay ,
+      value: p.values[0].value
+    }, p.quantity, p.variation);
+    return [instance]
+  }
 }
 function createReducedInstances(promotion) {
-  let instances = [];
   const p = promotion.reduced_amount;
 
   if (p.variation === 'SINGLE') {
@@ -163,30 +213,56 @@ function createReducedInstances(promotion) {
     }, p.quantity, p.variation);
     return [instance]
   }
-
-  // if (promotion.reduced_amount.variation === 'SINGLE') {
-  //   createInstance(promotion, {percent: p.values[0]}, p.quantity, p.variation);
-  //   return [promotion]
-  // }
 }
+
 function createCashBackInstances(promotion) {
-  if (promotion.cash_back.variation === 'SINGLE') {
-    return [promotion]
+  const p = promotion.cash_back;
+
+  if (p.variation === 'SINGLE') {
+    let instance = createInstance(promotion, {
+      pay: p.values[0].pay,
+      back: p.values[0].back
+    }, p.quantity, p.variation);
+    return [instance]
   }
 }
 function createEarlyBookingInstances(promotion) {
-  if (promotion.early_booking.variation === 'SINGLE') {
-    return [promotion]
+  const p = promotion.early_booking;
+
+  if (p.variation === 'SINGLE') {
+    let instance = createInstance(promotion, {
+      percent: p.values[0].percent,
+      booking_before: p.values[0].booking_before
+    }, p.quantity, p.variation);
+    return [instance]
   }
 }
 function createHappyHourInstances(promotion) {
-  if (promotion.happy_hour.variation === 'SINGLE') {
-    return [promotion]
+  const p = promotion.happy_hour;
+
+  if (p.variation === 'SINGLE') {
+    let instance = createInstance(promotion, {
+      product : p.values[0].product ,
+      pay     : p.values[0].pay     ,
+      days    : p.values[0].days    ,
+      from    : p.values[0].from    ,
+      until   : p.values[0].until   ,
+
+    }, p.quantity, p.variation);
+    return [instance]
   }
 }
 function createMoreThanInstances(promotion) {
-  if (promotion.more_than.variation === 'SINGLE') {
-    return [promotion]
+  const p = promotion.more_than;
+
+  if (p.variation === 'SINGLE') {
+    let instance = createInstance(promotion, {
+      value_type: p.values[0].value_type ,
+      more_than : p.values[0].more_than  ,
+      product   : p.values[0].product    ,
+      value     : p.values[0].value      ,
+    }, p.quantity, p.variation);
+    return [instance]
   }
 }
 
