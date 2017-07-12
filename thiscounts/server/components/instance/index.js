@@ -153,9 +153,21 @@ function createPrepayInstances(promotion) {
 
 }
 function createReducedInstances(promotion) {
-  if (promotion.reduced_amount.variation === 'SINGLE') {
-    return [promotion]
+  let instances = [];
+  const p = promotion.reduced_amount;
+
+  if (p.variation === 'SINGLE') {
+    let instance = createInstance(promotion, {
+      pay: p.values[0].pay,
+      quantity: p.values[0].quantity,
+    }, p.quantity, p.variation);
+    return [instance]
   }
+
+  // if (promotion.reduced_amount.variation === 'SINGLE') {
+  //   createInstance(promotion, {percent: p.values[0]}, p.quantity, p.variation);
+  //   return [promotion]
+  // }
 }
 function createCashBackInstances(promotion) {
   if (promotion.cash_back.variation === 'SINGLE') {
