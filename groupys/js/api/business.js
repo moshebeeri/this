@@ -1,11 +1,15 @@
 import store from 'react-native-simple-store';
 
+import Timer from './LogTimer'
+
+let timer = new Timer();
 class BusinessApi
 {
    getAll() {
         return new Promise(async(resolve, reject) => {
 
             try {
+                let from = new Date();
                 let token = await store.get('token');
                 const response = await fetch(`${server_host}/api/businesses/list/mine`, {
                     method: 'GET',
@@ -23,7 +27,10 @@ class BusinessApi
                 }
 
                 let responseData = await response.json();
+                timer.logTime(from,new Date(),'bussines','getAll')
                 resolve(responseData);
+
+
             }
             catch (error) {
 
@@ -42,35 +49,27 @@ class BusinessApi
         return new Promise(async(resolve, reject) => {
 
             try {
-                // let token = await store.get('token');
-                // const response = await fetch(`${server_host}/api/categories/business`, {
-                //     method: 'GET',
-                //     headers: {
-                //         'Accept': 'application/json, text/plain, */*',
-                //         'Content-Type': 'application/json;charset=utf-8',
-                //         'Authorization': 'Bearer ' + token
-                //
-                //     }
-                //
-                // })
-                // if (response.status == '401') {
-                //     reject(response);
-                //     return;
-                // }
-                //
-                // let responseData = await response.json();
+                let from = new Date();
 
-                let responseData =
-                    [
-                            {
-                            t: {
-                                name: "test"
-                            },
-                            c: {
-                                name: "test"
-                            }
-                        }
-                            ]
+                let token = await store.get('token');
+                const response = await fetch(`${server_host}/api/categories/business`, {
+                    method: 'GET',
+                    headers: {
+                        'Accept': 'application/json, text/plain, */*',
+                        'Content-Type': 'application/json;charset=utf-8',
+                        'Authorization': 'Bearer ' + token
+
+                    }
+
+                })
+                if (response.status == '401') {
+                    reject(response);
+                    return;
+                }
+
+                let responseData = await response.json();
+                timer.logTime(from,new Date(),'bussines','getBusinessCategories')
+
 
 
                 resolve(responseData);
