@@ -99,7 +99,7 @@ export default class GenericFeedItem extends Component {
             let colorStyle = {
                 color: item.promotionColor,
 
-                fontWeight: 'bold',marginLeft:10,marginTop:4,fontSize:14
+                fontWeight: 'bold',marginLeft:10,marginTop:4,fontSize:16
             }
 
             promotion = <Text style={colorStyle}>{item.promotion}</Text>
@@ -176,12 +176,20 @@ export default class GenericFeedItem extends Component {
                     <View style={styles.promotion_upperContainer}>
                         <View style={styles.logo_view}>
                            {buisnessLogo}
+                            <View style = {{  flexDirection: 'column'}}>
+                                <Text style={styles.promotion_nameText} note>{item.businessName } </Text>
+                                <Text style={styles.promotion_addressText} note>{item.businessAddress } </Text>
+                            </View>
                         </View>
-                        <View>
+                        <View style={styles.promotion_description}>
                             {promotion}
-                            <Text style={styles.promotion_imageTopText}>{item.itemTitle}</Text>
+                            <Text style={styles.promotion_type}>{item.itemTitle}</Text>
+                        </View>
+                        <View style={styles.promotion_description}>
 
-                            <Text style={styles.addressText} note>{item.address} </Text>
+                            <Text style={styles.promotion_type}>{item.name}</Text>
+                            <Text style={styles.promotion_type}>{item.description}</Text>
+
                         </View>
                     </View>
 
@@ -343,14 +351,14 @@ export default class GenericFeedItem extends Component {
                         style={{padding: 0, flex: -1}}
                         source={item.banner.require}>
                         <Text style={{marginLeft:20,marginTop:170,fontSize:25}}>{item.itemTitle}</Text>
-                    <Text style={{marginLeft:20,marginTop:200,fontSize:10}} note>{item.description} </Text>
+                    <Text style={{marginLeft:20,marginTop:200,fontSize:10}} note>{item.description}</Text>
                 </Image>
                 }
 
             }else{
                 banner = <View   style={{padding:5 }}>
                     <Text style={{fontSize:20,marginLeft:10,marginRight:10}}>{item.itemTitle}</Text>
-                    <Text style={{fontSize:20}} note>{item.description} </Text>
+                    <Text style={{fontSize:20}} note>{item.description}</Text>
 
                 </View>
             }

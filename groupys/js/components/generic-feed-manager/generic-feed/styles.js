@@ -131,14 +131,14 @@ module.exports = {
         bottom: 0,
         left: 0,
         right: 0,
-        marginTop:80,
+        marginTop:150,
         backgroundColor:'black',
         width: width,
         height: 200,
     },
     promotion_container: {
         flex: 1,
-        height: 340,
+        height: 400,
         overflow: 'hidden',
         backgroundColor:'#b7b7b7',
         // backgroundColor:'#FFF',
@@ -157,13 +157,20 @@ module.exports = {
 
         backgroundColor:'white',
         width: width ,
-        height: 80,
-        flexDirection: 'row'
+        height: 160,
+        flexDirection: 'column'
 
     },
     logo_view:{
+        flexDirection: 'row',
         marginLeft:10,
         marginTop:10
+    },
+
+    promotion_description:{
+        flexDirection: 'row',
+        marginLeft:10,
+        marginTop:2
     },
 
     promotion_bottomContainer: {
@@ -172,15 +179,15 @@ module.exports = {
         width: width ,
         height: 50,
         flexDirection: 'row',
-        marginTop:190,
+        marginTop:180,
     },
     promotion_backdropView: {
         height: 200,
         width: width,
         backgroundColor: 'rgba(0,0,0,0)',
     },
-    promotion_imageTopText:{
-        marginLeft:10,marginTop:5,fontSize:14,color:'black'
+    promotion_type:{
+        marginLeft:10,marginTop:5,fontSize:18,color:'black'
     },
     promotion_buttonText: {
         paddingTop:10,
@@ -215,6 +222,13 @@ module.exports = {
 
 
 
+    },
+
+    promotion_addressText:{
+       fontWeight: 'bold',marginRight:20,marginLeft:10,marginTop:5,marginBottom:5,color:'gray',fontSize:15
+    },
+    promotion_nameText:{
+        fontWeight: 'bold',marginRight:20,marginLeft:10,marginTop:5,marginBottom:5,color:'black',fontSize:18
     },
 
 

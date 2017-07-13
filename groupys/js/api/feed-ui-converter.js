@@ -185,48 +185,51 @@ class FeedConverter
     }
 
     createPromontionInstance(feed){
-
         let responseFeed = {};
-        responseFeed.id = feed.activity.instance._id;
-        responseFeed.fid = feed._id;
-        responseFeed.social = {
+        try {
+
+            responseFeed.id = feed.activity.instance._id;
+            responseFeed.fid = feed._id;
+            responseFeed.social = {
                 like: feed.activity.instance.social_state.like,
                 numberLikes: feed.activity.instance.social_state.likes,
                 follow: feed.activity.instance.social_state.follow,
-                saved:feed.activity.instance.social_state.saved,
-                realized:feed.activity.instance.social_state.realized,
-                use:feed.activity.instance.social_state.use,
+                saved: feed.activity.instance.social_state.saved,
+                realized: feed.activity.instance.social_state.realized,
+                use: feed.activity.instance.social_state.use,
             };
 
-        responseFeed.showsave= !feed.activity.instance.social_state.saved && !feed.activity.instance.social_state.realized;
-        responseFeed.name = feed.activity.promotion.name;
-        responseFeed.description = feed.activity.promotion.description;
-        responseFeed.showSocial = true;
-        if (feed.activity.promotion.pictures.length > 0) {
-            responseFeed.banner = {
-                uri: feed.activity.promotion.pictures[0].pictures[1]
-            };
-        }
-        switch (feed.activity.instance.type){
-            case "REDUCED_AMOUNT":
-                responseFeed.itemTitle ="Buy For "  +  feed.activity.promotion.reduced_amount.values[0].price + ' Pay Only ' +  feed.activity.promotion.reduced_amount.values[0].pay;
-                responseFeed.promotion = 'Reduce Amount';
-                responseFeed.promotionColor = '#e65100';
-                break;
-            default:
-                responseFeed.itemTitle =feed.activity.instance.type + " NOT SUPPORTED"
-                responseFeed.promotion = feed.activity.instance.type;
-                responseFeed.promotionColor = 'black';
-                break;
+            responseFeed.showsave = !feed.activity.instance.social_state.saved && !feed.activity.instance.social_state.realized;
+            responseFeed.name = feed.activity.promotion.name;
+            responseFeed.description = feed.activity.promotion.description;
+            responseFeed.showSocial = true;
+            if (feed.activity.promotion.pictures.length > 0) {
+                responseFeed.banner = {
+                    uri: feed.activity.promotion.pictures[0].pictures[1]
+                };
+            }
+            switch (feed.activity.instance.type) {
+                case "REDUCED_AMOUNT":
+                    responseFeed.itemTitle = "Buy For " + feed.activity.promotion.reduced_amount.values[0].price + ' Pay Only ' + feed.activity.promotion.reduced_amount.values[0].pay;
+                    responseFeed.promotion = 'Reduce Amount';
+                    responseFeed.promotionColor = '#e65100';
+                    break;
+                default:
+                    responseFeed.itemTitle = feed.activity.instance.type + " NOT SUPPORTED"
+                    responseFeed.promotion = feed.activity.instance.type;
+                    responseFeed.promotionColor = 'black';
+                    break;
 
+            }
+            if (feed.activity.promotion.entity && feed.activity.promotion.entity.business.pictures.length > 0) {
+                responseFeed.businessLogo = feed.activity.promotion.entity.business.pictures[0].pictures[3];
+                responseFeed.businessName = feed.activity.promotion.entity.business.name;
+                responseFeed.businessAddress = feed.activity.promotion.entity.business.city + ' ' + feed.activity.promotion.entity.business.address;
+            }
+            responseFeed.itemType = 'PROMOTION';
+        }catch (error){
+            console.log('error');
         }
-        if (feed.activity.promotion.entity && feed.activity.promotion.entity.business.pictures.length > 0) {
-            responseFeed.businessLogo = feed.activity.promotion.entity.business.pictures[0].pictures[3];
-            responseFeed.businessName = feed.activity.promotion.entity.business.name;
-            responseFeed.businessAddress = feed.activity.promotion.entity.business.city + ' ' + feed.activity.promotion.entity.business.address;
-        }
-        responseFeed.itemType = 'PROMOTION';
-
         return responseFeed;
     }
 }
