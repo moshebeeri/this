@@ -272,6 +272,8 @@ let PromotionSchemaObject = {
     variation: {type: String, enum: Variations},
     quantity: Number,
     values: [{
+      product: {type: Schema.ObjectId, ref: 'Product'},
+      pay: Number,
       days:[Number],
       from: Number, // seconds from midnight
       until: Number // seconds from 'from'

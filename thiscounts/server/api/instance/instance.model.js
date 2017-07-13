@@ -50,8 +50,8 @@ let InstanceSchema = new Schema({
       values_type: {type: String, enum: ['PERCENT', 'QUANTITY']},
     },
     grow: {
-      value_type: {type: String, enum: ['PERCENT', 'QUANTITY']},
-      value: Number
+      value: Number,
+      value_type: {type: String, enum: ['PERCENT', 'QUANTITY']}
     },
     prepay_discount: {
       value_type: {type: String, enum: ['PERCENT', 'QUANTITY']},
@@ -78,14 +78,17 @@ let InstanceSchema = new Schema({
       booking_before: Date
     },
     happy_hour: {
-      from: Number, // seconds from midnight
-      until: Number // seconds from 'from'
+      product : {type: Schema.ObjectId, ref: 'Product'},
+      pay     : Number,
+      days    :[Number],
+      from    : Number, // seconds from midnight
+      until   : Number // seconds from 'from'
     },
     more_than: {
       value_type: {type: String, enum: ['PERCENT', 'QUANTITY']},
-      more_than: Number,
-      product: {type: Schema.ObjectId, ref: 'Product'},
-      value: Number,
+      more_than : Number,
+      product   : {type: Schema.ObjectId, ref: 'Product'},
+      value     : Number,
     }
   }
 });
