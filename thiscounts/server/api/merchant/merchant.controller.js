@@ -26,7 +26,7 @@ exports.show = function(req, res) {
 exports.create = function(req, res) {
   Merchant.create(req.body, function(err, merchant) {
     if(err) { return handleError(res, err); }
-    graphModel.reflect(merchant, function (err) {
+    graphModel.reflect(merchant, {_id: merchant._id}, function (err) {
       if (err) { return handleError(res, err); }
     });
     return res.json(201, merchant);

@@ -2,6 +2,7 @@
 
 const mongoose = require('mongoose'),
   Schema = mongoose.Schema;
+const autopopulate = require('mongoose-autopopulate');
 
 
 
@@ -17,6 +18,7 @@ PromotionSchema
      else*/
     next();
   });
+PromotionSchema.plugin(autopopulate);
 
 //http://mongoosejs.com/docs/2.7.x/docs/validation.html
 //PromotionSchema.path('percent_range').validate(function (v, fn) {

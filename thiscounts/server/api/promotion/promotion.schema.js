@@ -2,7 +2,6 @@
 
 const mongoose = require('mongoose'),
   Schema = mongoose.Schema;
-
 const _ = require('lodash');
 
 function percent_range_validator(v) {
@@ -16,12 +15,6 @@ function entity_validator(v) {
     return false;
   return v.business || v.product || v.shopping_chain || v.mall;
 }
-
-const Entities = {
-  business: {type: Schema.ObjectId, ref: 'Business'},
-  shopping_chain: {type: Schema.ObjectId, ref: 'ShoppingChain'},
-  mall: {type: Schema.ObjectId, ref: 'Mall'}
-};
 
 const Condition = {
   business: {type: Schema.ObjectId, ref: 'Business'},
@@ -94,8 +87,11 @@ let PromotionSchemaObject = {
 
   //meta data
   creator: {type: Schema.ObjectId, ref: 'User', required: true},
-  entity: { type: Entities, require: true,
-    validate: [entity_validator, 'at least on of those fields should not be empty [business, product, chain, mall]'],
+  entity: {
+    business: {type: Schema.ObjectId, ref: 'Business', autopopulate: true},
+    shopping_chain: {type: Schema.ObjectId, ref: 'ShoppingChain', autopopulate: true},
+    mall: {type: Schema.ObjectId, ref: 'Mall', autopopulate: true},
+    validate: [entity_validator, 'at least on of those fields should not be empty [business, product, chain, mall]']
   },
   created: {type: Date, default: Date.now},
   gid: {type: Number, index: true},
@@ -231,6 +227,7 @@ let PromotionSchemaObject = {
   },
   //v1
   reduced_amount: {
+    variation: {type: String, enum: Variations},
     price: Number,
     quantity: Number,
     values: [{
@@ -272,6 +269,8 @@ let PromotionSchemaObject = {
     variation: {type: String, enum: Variations},
     quantity: Number,
     values: [{
+      product: {type: Schema.ObjectId, ref: 'Product'},
+      pay: Number,
       days:[Number],
       from: Number, // seconds from midnight
       until: Number // seconds from 'from'
@@ -289,5 +288,4 @@ let PromotionSchemaObject = {
     }]
   }
 };
-
 module.exports = PromotionSchemaObject;
