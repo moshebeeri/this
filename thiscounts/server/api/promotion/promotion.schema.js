@@ -16,27 +16,6 @@ function entity_validator(v) {
   return v.business || v.product || v.shopping_chain || v.mall;
 }
 
-const Condition = {
-  business: {type: Schema.ObjectId, ref: 'Business'},
-  shopping_chain: {type: Schema.ObjectId, ref: 'ShoppingChain'},
-  mall: {type: Schema.ObjectId, ref: 'Mall'},
-  product: {type: Schema.ObjectId, ref: 'Product'},
-  category: [{type: Number}],
-  quantity: Number,
-  physical_unit: String,
-  amount: Number,
-  description: String,
-};
-
-const Distribution = {
-  //list of cards to distribute the promotion to
-  cards: [{type: Schema.ObjectId, ref: 'CardType'}],
-  //list of the groups to distribute the promotion to
-  groups: [{type: Schema.ObjectId, ref: 'Group'}],
-  //the business followers
-  business: {type: Schema.ObjectId, ref: 'Business'},
-};
-
 const promotionTypes = [
   'PERCENT',
   'GIFT',   // get something free if you buy
@@ -57,23 +36,20 @@ const promotionTypes = [
 
 const Variations = ['SINGLE', 'RANGE', 'VALUES'];
 
-const Automatic = {
-
-  type :{type: Boolean},
-  quantity: {type: Number},
-  discount: { type : Number, min:1, max: 100},
-  types: [{type: String, enum: promotionTypes}],
-  products: [{
-    product: {type: Schema.ObjectId, ref: 'Product'},
-    description: String,
-    price: Number,
-  }],
-};
-
 let PromotionSchemaObject = {
   social_state : {},
 
-  automatic: Automatic,
+  automatic: {
+    type :{type: Boolean},
+    quantity: {type: Number},
+    discount: { type : Number, min:1, max: 100},
+    types: [{type: String, enum: promotionTypes}],
+    products: [{
+      product: {type: Schema.ObjectId, ref: 'Product', autopopulate: true},
+      description: String,
+      price: Number,
+    }],
+  },
 
   name: {type: String, required: true},
   pictures : [],
@@ -82,8 +58,26 @@ let PromotionSchemaObject = {
     enum: promotionTypes
   },
 
-  distribution: {type:Distribution, require: true},
-  condition: {type:Condition},
+  distribution: {
+    //list of cards to distribute the promotion to
+    cards: [{type: Schema.ObjectId, ref: 'CardType', autopopulate: true}],
+    //list of the groups to distribute the promotion to
+    groups: [{type: Schema.ObjectId, ref: 'Group', autopopulate: true}],
+    //the business followers
+    business: {type: Schema.ObjectId, ref: 'Business', autopopulate: true},
+  },
+
+  condition: {
+    business: {type: Schema.ObjectId, ref: 'Business', autopopulate: true},
+    shopping_chain: {type: Schema.ObjectId, ref: 'ShoppingChain', autopopulate: true},
+    mall: {type: Schema.ObjectId, ref: 'Mall', autopopulate: true},
+    product: {type: Schema.ObjectId, ref: 'Product', autopopulate: true},
+    category: [{type: Number}],
+    quantity: Number,
+    physical_unit: String,
+    amount: Number,
+    description: String,
+  },
 
   //meta data
   creator: {type: Schema.ObjectId, ref: 'User', required: true},
