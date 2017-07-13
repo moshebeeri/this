@@ -103,12 +103,12 @@ export default class GenericFeedItem extends Component {
             }
 
             promotion = <Text style={colorStyle}>{item.promotion}</Text>
+
             let buisnessLogo = undefined;
             if(item.businessLogo){
-                buisnessLogo =  <Thumbnail size={50} source={{uri: item.businessLogo}} />
+                buisnessLogo =  <Thumbnail  square={true} size={50} source={{uri: item.businessLogo}} />
 
             }
-
 
             let feedAction =  <View   style={styles.promotion_buttonView}>
 
@@ -174,10 +174,15 @@ export default class GenericFeedItem extends Component {
             let result =
                 <View style={styles.promotion_container}>
                     <View style={styles.promotion_upperContainer}>
-                        {promotion}
-                        <Text style={styles.promotion_imageTopText}>{item.itemTitle}</Text>
+                        <View style={styles.logo_view}>
+                           {buisnessLogo}
+                        </View>
+                        <View>
+                            {promotion}
+                            <Text style={styles.promotion_imageTopText}>{item.itemTitle}</Text>
 
-                        <Text style={styles.addressText} note>{item.address} </Text>
+                            <Text style={styles.addressText} note>{item.address} </Text>
+                        </View>
                     </View>
 
                     <View style={styles.promotion_backgroundContainer}>
@@ -185,14 +190,6 @@ export default class GenericFeedItem extends Component {
                         </Image>
                     </View>
 
-
-                    <View style={styles.promotion_backdropView}>
-                        <View style={{paddingTop:170,marginLeft:10,flexDirection: 'row'}}>
-                            {buisnessLogo}
-                        </View>
-
-
-                    </View>
 
 
                     <View style={styles.promotion_bottomContainer}>

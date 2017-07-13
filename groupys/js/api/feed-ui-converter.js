@@ -213,8 +213,18 @@ class FeedConverter
                 responseFeed.promotion = 'Reduce Amount';
                 responseFeed.promotionColor = '#e65100';
                 break;
-        }
+            default:
+                responseFeed.itemTitle =feed.activity.instance.type + " NOT SUPPORTED"
+                responseFeed.promotion = feed.activity.instance.type;
+                responseFeed.promotionColor = 'black';
+                break;
 
+        }
+        if (feed.activity.promotion.entity && feed.activity.promotion.entity.business.pictures.length > 0) {
+            responseFeed.businessLogo = feed.activity.promotion.entity.business.pictures[0].pictures[3];
+            responseFeed.businessName = feed.activity.promotion.entity.business.name;
+            responseFeed.businessAddress = feed.activity.promotion.entity.business.city + ' ' + feed.activity.promotion.entity.business.address;
+        }
         responseFeed.itemType = 'PROMOTION';
 
         return responseFeed;

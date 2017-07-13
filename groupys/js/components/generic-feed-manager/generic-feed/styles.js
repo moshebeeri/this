@@ -131,7 +131,7 @@ module.exports = {
         bottom: 0,
         left: 0,
         right: 0,
-        marginTop:90,
+        marginTop:80,
         backgroundColor:'black',
         width: width,
         height: 200,
@@ -157,7 +157,13 @@ module.exports = {
 
         backgroundColor:'white',
         width: width ,
-        height: 80
+        height: 80,
+        flexDirection: 'row'
+
+    },
+    logo_view:{
+        marginLeft:10,
+        marginTop:10
     },
 
     promotion_bottomContainer: {
@@ -165,7 +171,8 @@ module.exports = {
         backgroundColor:'white',
         width: width ,
         height: 50,
-        flexDirection: 'row'
+        flexDirection: 'row',
+        marginTop:190,
     },
     promotion_backdropView: {
         height: 200,
