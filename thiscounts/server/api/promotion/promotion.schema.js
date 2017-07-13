@@ -16,12 +16,6 @@ function entity_validator(v) {
   return v.business || v.product || v.shopping_chain || v.mall;
 }
 
-const Entities = {
-  business: {type: Schema.ObjectId, ref: 'Business', autopopulate: true},
-  shopping_chain: {type: Schema.ObjectId, ref: 'ShoppingChain', autopopulate: true},
-  mall: {type: Schema.ObjectId, ref: 'Mall', autopopulate: true}
-};
-
 const Condition = {
   business: {type: Schema.ObjectId, ref: 'Business'},
   shopping_chain: {type: Schema.ObjectId, ref: 'ShoppingChain'},
@@ -93,7 +87,10 @@ let PromotionSchemaObject = {
 
   //meta data
   creator: {type: Schema.ObjectId, ref: 'User', required: true},
-  entity: { type: Entities, require: true,
+  entity: {
+    business: {type: Schema.ObjectId, ref: 'Business', autopopulate: true},
+    shopping_chain: {type: Schema.ObjectId, ref: 'ShoppingChain', autopopulate: true},
+    mall: {type: Schema.ObjectId, ref: 'Mall', autopopulate: true},
     validate: [entity_validator, 'at least on of those fields should not be empty [business, product, chain, mall]']
   },
   created: {type: Date, default: Date.now},
