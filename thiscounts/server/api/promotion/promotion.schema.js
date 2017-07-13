@@ -2,7 +2,6 @@
 
 const mongoose = require('mongoose'),
   Schema = mongoose.Schema;
-
 const _ = require('lodash');
 
 function percent_range_validator(v) {
@@ -18,9 +17,9 @@ function entity_validator(v) {
 }
 
 const Entities = {
-  business: {type: Schema.ObjectId, ref: 'Business'},
-  shopping_chain: {type: Schema.ObjectId, ref: 'ShoppingChain'},
-  mall: {type: Schema.ObjectId, ref: 'Mall'}
+  business: {type: Schema.ObjectId, ref: 'Business', autopopulate: true},
+  shopping_chain: {type: Schema.ObjectId, ref: 'ShoppingChain', autopopulate: true},
+  mall: {type: Schema.ObjectId, ref: 'Mall', autopopulate: true}
 };
 
 const Condition = {
@@ -95,7 +94,7 @@ let PromotionSchemaObject = {
   //meta data
   creator: {type: Schema.ObjectId, ref: 'User', required: true},
   entity: { type: Entities, require: true,
-    validate: [entity_validator, 'at least on of those fields should not be empty [business, product, chain, mall]'],
+    validate: [entity_validator, 'at least on of those fields should not be empty [business, product, chain, mall]']
   },
   created: {type: Date, default: Date.now},
   gid: {type: Number, index: true},
@@ -290,5 +289,4 @@ let PromotionSchemaObject = {
     }]
   }
 };
-
 module.exports = PromotionSchemaObject;
