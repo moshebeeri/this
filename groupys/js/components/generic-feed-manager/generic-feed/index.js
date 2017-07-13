@@ -10,8 +10,14 @@ let promotionApi = new PromotionApi();
 
 import LinearGradient from 'react-native-linear-gradient';
 import styles from './styles'
-import Icon from 'react-native-vector-icons/SimpleLineIcons';
-import Icon2 from 'react-native-vector-icons/MaterialCommunityIcons';
+import Icon from 'react-native-vector-icons/FontAwesome';
+import Icon2 from 'react-native-vector-icons/EvilIcons';
+import Icon3 from 'react-native-vector-icons/MaterialIcons';
+
+
+
+
+
 export default class GenericFeedItem extends Component {
 
 
@@ -69,11 +75,134 @@ export default class GenericFeedItem extends Component {
 
         render() {
             let feed = undefined;
-            feed = this.createFeed(this.props.item);
+            let item = this.props.item;
+            if(item.content){
+                item = item.content;
+            }
+            switch (item.itemType){
+                case 'PROMOTION':
+                    feed = this.createPromotion(item);
+                    break;
+                default:
+                    feed = this.createFeed(this.props.item);
+                    break;
+            }
+
 
             return feed;
         }
 
+
+        createPromotion(item){
+
+            let promotion = undefined;
+            let colorStyle = {
+                color: item.promotionColor,
+
+                fontWeight: 'bold',marginLeft:10,marginTop:4,fontSize:14
+            }
+
+            promotion = <Text style={colorStyle}>{item.promotion}</Text>
+
+            let buisnessLogo = undefined;
+            if(item.businessLogo){
+                buisnessLogo =  <Thumbnail  square={true} size={50} source={{uri: item.businessLogo}} />
+
+            }
+
+            let feedAction =  <View   style={styles.promotion_buttonView}>
+
+                <TouchableHighlight style={{}} onPress={this.save.bind(this)}>
+
+
+                    <Text style={styles.promotion_buttonText}>Save</Text>
+
+
+
+                </TouchableHighlight>
+
+
+
+            </View>
+
+            let likes = new String(item.social.numberLikes);
+            let likeIcon = <Button transparent style={styles.promotion_iconView} onPress={this.like.bind(this)}>
+
+                <Icon style={styles.promotion_like}  size={25} name="heart"/>
+                <Text>{likes}</Text>
+
+            </Button>
+            if (item.social && item.social.like == true) {
+                likeIcon = <Button transparent style={styles.promotion_iconView} onPress={this.unlike.bind(this, item.id)}>
+
+
+                    <Icon  style={styles.promotion_like} size={25} name="heart"/>
+                    <Text>{likes}</Text>
+
+                </Button>
+
+
+            }
+            let commentICon = <Button transparent style={styles.promotion_iconView} onPress={this.like.bind(this)}>
+
+                <Icon2 style={styles.promotion_comment}  size={30} name="comment"/>
+                <Text>0</Text>
+
+
+            </Button>
+
+            let shareICon = <Button transparent style={styles.promotion_iconView} onPress={this.like.bind(this)}>
+
+                <Icon2 style={styles.promotion_comment}  size={30} name="share-google"/>
+                <Text>0</Text>
+
+
+            </Button>
+
+            let saveIcon = undefined;
+
+            if(item.showsave) {
+                 saveIcon = <Button transparent style={styles.promotion_iconView} onPress={this.save.bind(this)}>
+
+                    <Icon3 style={styles.promotion_comment} size={25} name="save"/>
+                    <Text>save</Text>
+
+
+                </Button>
+            }
+
+            let result =
+                <View style={styles.promotion_container}>
+                    <View style={styles.promotion_upperContainer}>
+                        <View style={styles.logo_view}>
+                           {buisnessLogo}
+                        </View>
+                        <View>
+                            {promotion}
+                            <Text style={styles.promotion_imageTopText}>{item.itemTitle}</Text>
+
+                            <Text style={styles.addressText} note>{item.address} </Text>
+                        </View>
+                    </View>
+
+                    <View style={styles.promotion_backgroundContainer}>
+                        <Image resizeMode= "cover" style={styles.promotion_image} source={{uri: item.banner.uri}}>
+                        </Image>
+                    </View>
+
+
+
+                    <View style={styles.promotion_bottomContainer}>
+                        {likeIcon}
+                        {commentICon}
+                        {shareICon}
+                        {saveIcon}
+                    </View>
+
+                </View>
+
+            return result;
+        }
 
         like(item){
             this.props.item.social.like = true;
@@ -106,6 +235,7 @@ export default class GenericFeedItem extends Component {
         }
 
     save(){
+
        this.saveFeed(this.props.item)
     }
         createFeed(item){
@@ -237,13 +367,13 @@ export default class GenericFeedItem extends Component {
 
                 followIcon = <Button style={styles.iconView} transparent>
 
-                    <Icon size={20} style={styles.like} name="user-follow"/>
+                    {/*<Icon size={20} style={styles.like} name="user-follow"/>*/}
                     <Text>Follow</Text>
                 </Button>
 
                 if (item.social && item.social.follow == true) {
                     followIcon = <Button transparent style={styles.iconView}>
-                        <Icon active size={20} style={styles.like} name="user-follow"/>
+                        {/*<Icon active size={20} style={styles.like} name="user-follow"/>*/}
                         <Text>Follow</Text>
 
                     </Button>
@@ -253,7 +383,7 @@ export default class GenericFeedItem extends Component {
                 let likes = new String(item.social.numberLikes);
                  likeIcon = <Button transparent style={styles.iconView} onPress={this.like.bind(this)}>
                     <Text>{likes}</Text>
-                    <Icon style={styles.like} size={20} name="like"/>
+                    <Icon style={styles.like} size={20} name="heart"/>
                     <Text>like</Text>
 
                 </Button>
@@ -262,7 +392,7 @@ export default class GenericFeedItem extends Component {
                     likeIcon = <Button transparent style={styles.iconView} onPress={this.unlike.bind(this, item.id)}>
                         <Text>{likes}</Text>
 
-                        <Icon color="#0000b3" style={styles.like} size={20} name="like"/>
+                        <Icon color="#0000b3" style={styles.like} size={20} name="heart"/>
                         <Text>like</Text>
                     </Button>
 

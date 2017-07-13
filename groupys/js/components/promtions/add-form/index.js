@@ -85,11 +85,11 @@ const types = [
     },
             {
             value:'GROUP',
-            label:'Group'
+            label:'Business Groups'
         },
         {
             value:'PERSONAL',
-            label:'Personal'
+            label:'Business Followers'
         }
     ];
 

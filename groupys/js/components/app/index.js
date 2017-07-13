@@ -47,7 +47,7 @@ const timer = BackgroundTimer.setInterval(() =>{
 let updateDialogOption = {
     updateTitle:"update"
 }
-codePush.sync({updateDialog: updateDialogOption})
+
 
 import LoginUtils from '../../utils/login_utils'
 let lu = new LoginUtils();
@@ -64,6 +64,7 @@ import * as userAction from "../../actions/user";
 
 
      constructor(props) {
+
         super(props)
 
         let initialPage = 0;
@@ -84,6 +85,7 @@ import * as userAction from "../../actions/user";
             start:true,
 
         }
+
          userApi.getUser();
 
 
@@ -190,7 +192,8 @@ import * as userAction from "../../actions/user";
         this._drawer._root.close();
     }
     componentDidMount(){
-    //   this.openDrawer();
+        codePush.sync({updateDialog: updateDialogOption})
+
     }
 
     render() {

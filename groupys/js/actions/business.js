@@ -24,9 +24,9 @@ async function getAll(dispatch){
 
 }
 
-async function getBusinessCategories(dispatch) {
+async function getBusinessCategories(dispatch,gid) {
     try {
-        let response = await businessApi.getBusinessCategories();
+        let response = await businessApi.getBusinessCategories(gid);
 
 
         dispatch({
@@ -51,9 +51,9 @@ export function fetchBusiness(){
 }
 
 
-export function fetchBusinessCategories(){
+export function fetchBusinessCategories(gid){
     return function (dispatch, getState){
-        dispatch|(getBusinessCategories(dispatch));
+        dispatch|(getBusinessCategories(dispatch,gid));
     }
 
 }
