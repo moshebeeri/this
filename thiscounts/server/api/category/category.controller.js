@@ -197,7 +197,9 @@ function add_categories(type, categories, parent, callback) {
     ProductCategory.save({name: name}, function (err, category) {
       let query = `MATCH (top:${typeName}{name:"${parent}"}), (sub:${typeName}{name:"${category.name}"})
                         CREATE UNIQUE (sub)-[:CATEGORY]->(top)`;
-      ProductCategory.query(query, function (err) {
+      console.log(`(top:${typeName}{name:"${parent}"})<-[:CATEGORY]-(sub:${typeName}{name:"${category.name}"})`);
+      ProductCategory.query(query, function (err, c) {
+        if(err) return console.log(err);
         Category.create({
           type: type,
           gid: category.id,
@@ -227,7 +229,7 @@ function csv_load_product_categories(req, res) {
     const csv = require('csvtojson');
     let top = {};
     csv()
-      .fromFile('/Users/moshe/projects/low.la/thiscounts/server/api/category/data/groceries.csv')
+      .fromFile('/home/ubuntu/low.la/thiscounts/server/api/category/data/groceries.csv')
       .on('json', (jsonObj) => {
         //console.log(Object.keys(jsonObj)  + '=>' + JSON.stringify(jsonObj));
         let obj = top;
@@ -251,8 +253,8 @@ function csv_load_product_categories(req, res) {
 
 let fast_food_product_categories = function (req, res) {
   const fastFoodCategories = require('./data/wikipedia.fastfood');
-  add_categories('product', ["Fast food"], 'ProductRootCategory', function () {
-    add_categories('product', fastFoodCategories["Fast food"], 'fast food', function () {
+  add_categories('product', ["Fast Food"], 'ProductRootCategory', function () {
+    add_categories('product', fastFoodCategories["Fast food"], 'Fast Food', function () {
       return res.status(200).json('ok');
     });
   });
@@ -272,7 +274,7 @@ exports.work = function (req, res) {
       return exports.init_business(req, res);
     case 'init_product':
       return exports.init_product(req, res);
-    case 'create_product_category':
+    case 'create_product_categories':
       return create_product_categories(req, res);
     case 'csv_load_product_categories':
       return csv_load_product_categories(req, res);
