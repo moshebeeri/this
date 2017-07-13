@@ -124,7 +124,91 @@ module.exports = {
         textAlign: 'center',
         backgroundColor: 'black',
         color: 'white'
-    }
+    },
+    promotion_backgroundContainer: {
+        position: 'absolute',
+        top: 0,
+        bottom: 0,
+        left: 0,
+        right: 0,
+        marginTop:90,
+        backgroundColor:'black',
+        width: width,
+        height: 200,
+    },
+    promotion_container: {
+        flex: 1,
+        height: 340,
+        overflow: 'hidden',
+        backgroundColor:'#b7b7b7',
+        // backgroundColor:'#FFF',
+        alignItems: 'center',
+        flexDirection: 'column',
+
+        padding:10
+
+
+
+    },
+    promotion_image:{
+        width: width, height: 200,flex:-1,   borderWidth: 1, alignSelf: 'flex-start',
+    },
+    promotion_upperContainer: {
+
+        backgroundColor:'white',
+        width: width ,
+        height: 80
+    },
+
+    promotion_bottomContainer: {
+
+        backgroundColor:'white',
+        width: width ,
+        height: 50,
+        flexDirection: 'row'
+    },
+    promotion_backdropView: {
+        height: 200,
+        width: width,
+        backgroundColor: 'rgba(0,0,0,0)',
+    },
+    promotion_imageTopText:{
+        marginLeft:10,marginTop:5,fontSize:14,color:'black'
+    },
+    promotion_buttonText: {
+        paddingTop:10,
+        paddingLeft:0,
+        fontSize:20,
+        color:'white',
+        justifyContent:'center'
+
+
+    },
+    promotion_buttonView:{
+        flex:-1,justifyContent:'center',flexDirection: 'row',height: 50, width: width ,backgroundColor:'#363636'
+    },
+
+    promotion_iconView:{
+        flex:-1,justifyContent:'center',flexDirection: 'row',height: 40,width:80
+    },
+
+
+    promotion_like: {
+
+        marginLeft:10 ,
+        marginRight:10 ,
+        color:'red',
+
+
+    },
+    promotion_comment: {
+
+        marginLeft:10 ,
+        marginRight:10 ,
+
+
+
+    },
 
 
 

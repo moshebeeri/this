@@ -147,7 +147,8 @@ import Autocomplete from 'react-native-autocomplete-input';
              return [];
          }
 
-
+         query =  query.replace('(','');
+         query =  query.replace(')','');
          const regex = new RegExp(`${new String(query).trim()}`, 'i');
          let response =  cats.filter(cat => cat.search(regex) >= 0);
 

@@ -106,7 +106,7 @@ export default class MyPromotionFeedItem extends Component {
 
                 if (item.banner.uri) {
                     banner = <Image
-                        style={{width: 400, height: 300,padding: 0, flex: -1}}
+                        style={{width: 400, height: 300,padding: 0, flex: -1,opacity: 0.8}}
                         source={{uri: item.banner.uri}}>
                         <View style={styles.backdropView}>
 
@@ -154,7 +154,7 @@ export default class MyPromotionFeedItem extends Component {
                     </CardItem>
 
 
-                    <View style={{flex:-1,justifyContent:'center',height:300}}>
+                    <View style={{flex:-1,backgroundColor:'black',justifyContent:'center',height:300}}>
                     {secondFeed}
                         {banner}
                     </View>
