@@ -125,38 +125,40 @@ module.exports = {
         backgroundColor: 'black',
         color: 'white'
     },
-    promotion_backgroundContainer: {
-        position: 'absolute',
-        top: 0,
-        bottom: 0,
-        left: 0,
-        right: 0,
-        marginTop:110,
-        backgroundColor:'black',
-        width: width,
-        height: 200,
-    },
+
     promotion_container: {
         flex: 1,
         height: 470,
+        width: width ,
         overflow: 'hidden',
         backgroundColor:'#b7b7b7',
         // backgroundColor:'#FFF',
         alignItems: 'center',
         flexDirection: 'column',
 
-        padding:10
+
 
 
 
     },
+    promotion_card:{
+        alignItems: 'center',
+        flexDirection: 'column',
+
+        width: width -16,
+
+         backgroundColor:'#FFF',
+        borderRadius:2,
+
+    },
     promotion_image:{
-        width: width, height: 200,flex:-1,   borderWidth: 1, alignSelf: 'flex-start',
+        width: width -18, height: 200, alignSelf: 'flex-start',
     },
     promotion_upperContainer: {
 
         backgroundColor:'white',
-        width: width ,
+        width: width -20,
+        borderRadius:2,
         height: 100,
         flexDirection: 'column'
 
@@ -212,25 +214,26 @@ module.exports = {
     },
 
     promotion_iconView:{
-        flex:-1,justifyContent:'center',flexDirection: 'row',height: 40,width:80
+        flex:-1,justifyContent:'center',flexDirection: 'row',height: 40,width:100
     },
 
     promotion_buttomUpperContainer: {
         backgroundColor:'white',
-        width: width ,
+        width: width -20,
         height: 120,
         flexDirection: 'row',
-        marginTop:200,
+        marginTop:0,
     },
     promotion_bottomContainer: {
 
         backgroundColor:'white',
-        width: width ,
+        width: width -18,
         height: 40,
         flexDirection: 'row',
         marginTop:0,
         borderWidth:1,
-        borderColor:'#e0e0eb'
+        borderColor:'#e0e0eb',
+
     },
 
         promotion_like: {

@@ -189,50 +189,50 @@ export default class GenericFeedItem extends Component {
 
             let result =
                 <View style={styles.promotion_container}>
-                    <View style={styles.promotion_upperContainer}>
-                        <View style={styles.logo_view}>
-                           {buisnessLogo}
-                            <View style = {{  flexDirection: 'column'}}>
-                                <Text style={styles.promotion_nameText} note>{item.businessName } </Text>
-                                <Text style={styles.promotion_addressText} note>{item.businessAddress } </Text>
+                    <View style={styles.promotion_card}>
+                        <View style={styles.promotion_upperContainer}>
+                            <View style={styles.logo_view}>
+                               {buisnessLogo}
+                                <View style = {{  flexDirection: 'column'}}>
+                                    <Text style={styles.promotion_nameText} note>{item.businessName } </Text>
+                                    <Text style={styles.promotion_addressText} note>{item.businessAddress } </Text>
+                                </View>
+                            </View>
+
+                            <View style={styles.promotion_description}>
+
+                                <Text style={styles.promotion_text_description}>{item.name}</Text>
+                                <Text style={styles.promotion_text_description}>{item.description}</Text>
+
                             </View>
                         </View>
 
-                        <View style={styles.promotion_description}>
+                            <Image resizeMode= "cover" style={styles.promotion_image} source={{uri: item.banner.uri}}>
+                            </Image>
 
-                            <Text style={styles.promotion_text_description}>{item.name}</Text>
-                            <Text style={styles.promotion_text_description}>{item.description}</Text>
+                        <View style={styles.promotion_buttomUpperContainer}>
+                            <View style={styles.promotion_buttom_description}>
+                                {promotion}
+                                <Text style={styles.promotion_type}>{item.itemTitle}</Text>
+                                <View style={styles.promotion_buttom_location}>
+                                    <Icon2 style={styles.promotion_location}  size={25} name="clock"/>
 
-                        </View>
-                    </View>
-
-                    <View style={styles.promotion_backgroundContainer}>
-                        <Image resizeMode= "cover" style={styles.promotion_image} source={{uri: item.banner.uri}}>
-                        </Image>
-                    </View>
-                    <View style={styles.promotion_buttomUpperContainer}>
-                        <View style={styles.promotion_buttom_description}>
-                            {promotion}
-                            <Text style={styles.promotion_type}>{item.itemTitle}</Text>
-                            <View style={styles.promotion_buttom_location}>
-                                <Icon2 style={styles.promotion_location}  size={25} name="clock"/>
-
-                            </View>
-                            <View style={styles.promotion_buttom_location}>
-                                <Icon3 style={styles.promotion_location}  size={25} name="location-on"/>
-                                <Text style={styles.promotion_addressText} note>{item.businessAddress } </Text>
+                                </View>
+                                <View style={styles.promotion_buttom_location}>
+                                    <Icon3 style={styles.promotion_location}  size={25} name="location-on"/>
+                                    <Text style={styles.promotion_addressText} note>{item.businessAddress } </Text>
+                                </View>
                             </View>
                         </View>
+
+
+                        <View style={styles.promotion_bottomContainer}>
+                            {likeIcon}
+                            {commentICon}
+                            {shareICon}
+                            {saveIcon}
+                        </View>
                     </View>
-
-
-                    <View style={styles.promotion_bottomContainer}>
-                        {likeIcon}
-                        {commentICon}
-                        {shareICon}
-                        {saveIcon}
-                    </View>
-
                 </View>
 
             return result;
