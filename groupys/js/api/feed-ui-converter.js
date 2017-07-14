@@ -214,6 +214,33 @@ class FeedConverter
                     responseFeed.promotion = 'Reduce Amount';
                     responseFeed.promotionColor = '#e65100';
                     break;
+                case "PERCENT":
+                    responseFeed.itemTitle = "Get " + feed.activity.promotion.percent.values[0] + ' % Off ' ;
+                    responseFeed.promotion = 'Precent';
+                    responseFeed.promotionColor = '#df80ff';
+                    break;
+                case "X_FOR_Y":
+                    responseFeed.itemTitle = '' ;
+                    responseFeed.promotion = 'Products for $';
+                    responseFeed.promotionColor = '#ff66b3';
+                    break;
+                case "X+N%OFF":
+                    responseFeed.itemTitle = '' ;
+                    responseFeed.promotion = 'Second Product % Off';
+                    responseFeed.promotionColor = '#ff66b3';
+                    break;
+                case "X+Y":
+                    responseFeed.itemTitle = '' ;
+                    responseFeed.promotion = 'Buy Product Get Gift';
+                    responseFeed.promotionColor = '#66ff1a';
+                    break;
+
+                case "PUNCH_CARD":
+                    responseFeed.itemTitle = '' ;
+                    responseFeed.promotion = 'Punch Card';
+                    responseFeed.promotionColor = '#d279a6';
+                    break;
+
                 default:
                     responseFeed.itemTitle = feed.activity.instance.type + " NOT SUPPORTED"
                     responseFeed.promotion = feed.activity.instance.type;
@@ -221,6 +248,7 @@ class FeedConverter
                     break;
 
             }
+
             if (feed.activity.promotion.entity && feed.activity.promotion.entity.business.pictures.length > 0) {
                 responseFeed.businessLogo = feed.activity.promotion.entity.business.pictures[0].pictures[3];
                 responseFeed.businessName = feed.activity.promotion.entity.business.name;
@@ -233,5 +261,73 @@ class FeedConverter
         return responseFeed;
     }
 }
+
+// if(this.state.type == 'PERCENT'){
+//     promotion.percent = {};
+//     promotion.percent.variation = 'SINGLE';
+//     promotion.percent.values = [this.state.percent.percent]
+//     promotion.percent.quantity = Number(this.state.quantity)
+//     if(this.state.percent.retail_price) {
+//         promotion.retail_price = Number(this.state.percent.retail_price)
+//     }
+// }
+//
+// if(this.state.type == 'REDUCED_AMOUNT'){
+//     promotion.reduced_amount = {};
+//     promotion.reduced_amount.variation = 'SINGLE';
+//     promotion.reduced_amount.quantity = Number(this.state.quantity)
+//     promotion.reduced_amount.values = [{
+//         price: Number(this.state.reduced_amount.values.price),
+//         pay: Number(this.state.reduced_amount.values.pay),
+//
+//     }]
+// }
+// if(this.state.type == 'X_FOR_Y'){
+//     promotion.x_for_y = {};
+//     promotion.x_for_y.variation = 'SINGLE';
+//     promotion.x_for_y.quantity = Number(this.state.quantity)
+//     promotion.x_for_y.values = [{
+//         price: Number(this.state.x_for_y.values.price),
+//         pay: Number(this.state.x_for_y.values.pay),
+//
+//     }]
+// }
+// if(this.state.type == 'X+N%OFF'){
+//     promotion.x_plus_n_percent_off = {};
+//     promotion.x_plus_n_percent_off.variation = 'SINGLE';
+//     promotion.x_plus_n_percent_off.quantity = Number(this.state.quantity);
+//     promotion.x_plus_y.values = {
+//         eligible: Number(this.state.x_plus_n_percent_off.values.eligible),
+//         product:this.state.giftProduct,
+//
+//     };
+// }
+//
+// if(this.state.type == 'X+Y'){
+//     promotion.x_plus_y = {};
+//     promotion.x_plus_y.variation = 'SINGLE';
+//     promotion.x_plus_y.quantity = Number(this.state.quantity);
+//     promotion.x_plus_y.values = {
+//         eligible: Number(this.state.x_plus_y.values.eligible),
+//         buy : Number(this.state.x_plus_y.values.buy),
+//         product:this.state.giftProduct,
+//
+//     };
+//
+//
+// }
+//
+// if(this.state.type == 'PUNCH_CARD'){
+//     promotion.punch_card = {};
+//     promotion.punch_card.variation = 'SINGLE';
+//     promotion.punch_card.quantity = Number(this.state.quantity);
+//     promotion.punch_card.values = {
+//         number_of_punches: Number(this.state.punch_card.values.number_of_punches),
+//         product:this.state.giftProduct,
+//
+//     };
+
+
+
 
 export default FeedConverter;
