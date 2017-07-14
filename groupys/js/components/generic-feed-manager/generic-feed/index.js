@@ -97,10 +97,12 @@ export default class GenericFeedItem extends Component {
 
             let promotion = undefined;
             let colorStyle = {
+
                 color: item.promotionColor,
 
-                fontWeight: 'bold',marginLeft:10,marginTop:4,fontSize:16
+                fontFamily:'Roboto-Regular' ,marginLeft:10,marginTop:4,fontSize:16
             }
+
 
             promotion = <Text style={colorStyle}>{item.promotion}</Text>
 

@@ -192,17 +192,18 @@ module.exports = {
         backgroundColor: 'rgba(0,0,0,0)',
     },
     promotion_type:{
-        fontWeight: 'bold',  marginLeft:10,marginTop:5,fontSize:18,color:'black'
+        fontFamily:'Roboto-Regular',fontWeight: 'bold',  marginLeft:10,marginTop:5,fontSize:18,color:'black'
     },
     promotion_text_description:{
-          marginLeft:10,marginTop:0,fontSize:14,color:'black'
+        fontFamily:'Roboto-Regular',  marginLeft:10,marginTop:0,fontSize:14,color:'black'
     },
     promotion_buttonText: {
         paddingTop:10,
         paddingLeft:0,
         fontSize:20,
         color:'white',
-        justifyContent:'center'
+        justifyContent:'center',
+        fontFamily:'Roboto-Regular'
 
 
     },
@@ -258,10 +259,10 @@ module.exports = {
     },
 
     promotion_addressText:{
-       fontWeight: 'bold',marginRight:20,marginLeft:10,marginTop:0,marginBottom:5,color:'gray',fontSize:15
+        fontFamily:'Roboto-Regular',marginRight:20,marginLeft:10,marginTop:0,marginBottom:5,color:'gray',fontSize:18
     },
     promotion_nameText:{
-        fontWeight: 'bold',marginRight:20,marginLeft:10,marginTop:5,marginBottom:5,color:'black',fontSize:18
+        fontFamily:'Roboto-Black',fontWeight: 'bold',marginRight:20,marginLeft:10,marginTop:5,marginBottom:5,color:'black',fontSize:18
     },
 
 
