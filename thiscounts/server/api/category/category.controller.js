@@ -22,7 +22,7 @@ function createProductCategoriesNode(parentName, node, callback) {
   if (_.isEmpty(node))
     return callback(null);
 
-  async.eachLimit(Object.keys(node), 2, function (key, callback) {
+  async.eachLimit(Object.keys(node), 1, function (key, callback) {
     ProductCategory.save({name: key}, function (err, category) {
       let query = `MATCH (top:ProductCategory{name:"${parentName}"}), (sub:ProductCategory{name:"${category.name}"})
                                   CREATE UNIQUE (sub)-[:CATEGORY]->(top)`;
