@@ -48,10 +48,6 @@ function createProductCategoriesNode(parentName, node, callback) {
 }
 
 function createProductCategories(callback) {
-  //createProductTwoLevelsCategories(callback);
-  ProductRootCategory.model.setUniqueKey('name', true);
-  ProductCategory.model.setUniqueKey('name', true);
-
   createProductCategoryRoot(function (err, root) {
     if (err) return callback(err);
     createProductCategoriesNode('ProductRootCategory', EBayProductCategories, function (err) {
@@ -137,8 +133,9 @@ exports.update_business_leafs = function (req, res) {
 };
 
 exports.init_business = function (req, res){
-  BusinessCategory.model.setUniqueKey('name', true);
-  BusinessCategory.model.setUniqueKey('PayPalId', true);
+  // BusinessCategory.model.setUniqueKey('name', true);
+  // BusinessCategory.model.setUniqueKey('PayPalId', true);
+
   const businessCategories = require('./data/business.categories');
   BusinessCategory.query(`CREATE(:BusinessCategory{name:"BusinessRootCategory"})`,
     function (err) {
@@ -260,6 +257,17 @@ let fast_food_product_categories = function (req, res) {
   });
 };
 
+function drop_uniqueness(req, res){
+  function callback(err){
+    if(err) console.log(err.message);
+  }
+  //DROP CONSTRAINT ON (n:\`${label}\`) ASSERT n.\`${key}\` IS UNIQUE
+  ProductCategory.db().constraints.uniqueness.drop('ProductCategory', 'name', callback);
+  BusinessCategory.db().constraints.uniqueness.drop('BusinessCategory', 'name', callback);
+  BusinessCategory.db().constraints.uniqueness.drop('BusinessCategory', 'PayPalId', callback);
+  return res.status(200).json('ok');
+}
+
 exports.work = function (req, res) {
   switch(req.params.function){
     case 'update_product_leafs':
@@ -280,6 +288,8 @@ exports.work = function (req, res) {
       return csv_load_product_categories(req, res);
     case 'fast_food_product_categories':
       return fast_food_product_categories(req, res);
+    case 'drop_uniqueness':
+      return drop_uniqueness(req, res);
     default:
       return res.status(404).json(`${req.params.function} not supported please refer to the code`);
   }
