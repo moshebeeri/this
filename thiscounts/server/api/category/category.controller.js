@@ -22,7 +22,7 @@ function createProductCategoriesNode(parentName, node, callback) {
   if (_.isEmpty(node))
     return callback(null);
 
-  async.eachLimit(Object.keys(node), 2, function (key, callback) {
+  async.eachLimit(Object.keys(node), 5, function (key, callback) {
     ProductCategory.save({name: key}, function (err, category) {
       let query = `MATCH (top:ProductCategory{name:"${parentName}"}), (sub:ProductCategory{name:"${category.name}"})
                                   CREATE UNIQUE (sub)-[:CATEGORY]->(top)`;
@@ -33,16 +33,6 @@ function createProductCategoriesNode(parentName, node, callback) {
     })
   }, function (err) {
     if (err) return callback(err);
-    ProductCategory.query('match(n:ProductCategory) return n', function (err, categories) {
-      categories.forEach(category => {
-        Category.create({
-          type: 'product',
-          gid: category.id,
-          name: category.name,
-          translations: {en: category.name},
-        });
-      })
-    });
     return callback(null);
   })
 }
