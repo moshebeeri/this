@@ -1,10 +1,10 @@
 
 import React, { Component } from 'react';
-import { Image, Platform} from 'react-native';
+import { Image, Platform,TouchableHighlight} from 'react-native';
 
 import { connect } from 'react-redux';
 import { actions } from 'react-native-navigation-redux-helpers';
-import { Container, Content, Text, InputGroup, Input, Button, Icon, View } from 'native-base';
+import { Container, Content, Text, InputGroup, Input, Button, Icon, View,Item } from 'native-base';
 import PhoneInput from 'react-native-phone-input'
 import CountryPicker from 'react-native-country-picker-modal'
 
@@ -33,6 +33,8 @@ const resetAction = NavigationActions.reset({
         NavigationActions.navigate({ routeName: 'home'})
     ]
 });
+import LinearGradient from 'react-native-linear-gradient';
+
 
 export default  class Login extends Component {
     static navigationOptions = {
@@ -52,8 +54,6 @@ export default  class Login extends Component {
         validationMessage: '',
       error:''
     };
-      this.onPressFlag = this.onPressFlag.bind(this);
-      this.selectCountry = this.selectCountry.bind(this);
 
   }
 
@@ -70,7 +70,8 @@ export default  class Login extends Component {
 
       this.setState ({error: ''});
       try {
-          let response = await loginApi.login(this.refs.phone.getValue(), this.state.password);
+          let phone = '+972' + this.state.phoneNumber;
+          let response = await loginApi.login(phone, this.state.password);
           if(response.token ){
               await userApi.getUser();
               contactApi.syncContacts();
@@ -86,9 +87,7 @@ export default  class Login extends Component {
   }
     onPressFlag() {
         this.refs.countryPicker.openModal();
-        this.setState({
-            phone_number: this.refs.phone.getPickerData()
-        })
+
     }
 
     calc_login_status() {
@@ -109,13 +108,7 @@ export default  class Login extends Component {
                     return resolve(true);
                 }
             }catch(error){
-                if(error === 'login'){
-                    this.state.fingerprint_login = false;
-                    this.state.recover_account = true;
-                }
-                else{
 
-                }
                 return resolve(true);
             }
             return resolve(true);
@@ -130,18 +123,9 @@ export default  class Login extends Component {
 
     }
     componentDidMount() {
-        this.setState({
-            phone_number: this.refs.phone.getPickerData()
-        })
-    }
-    selectCountry(country) {
-        this.refs.phone.selectCountry(country.cca2.toLowerCase());
-        this.setState({
-            callingCode: country.callingCode
-        });
 
-        this.setState({cca2: country.cca2})
     }
+
 
 
 
@@ -159,87 +143,75 @@ export default  class Login extends Component {
     render() {
 
         return (
-            <Container>
-              <Content theme={login} style={{ backgroundColor: login.backgroundColor }} >
-                <Image source={logo} style={styles.shadow} />
-                <View style={styles.inputContainer}>
-                    <View style={{marginBottom: 20}}>
-                        <InputGroup>
-                            <Icon name="ios-phone-portrait-outline" style={{color:"#00f"}}/>
-                            <PhoneInput
-                                ref='phone'
-                                onPressFlag={this.onPressFlag}
-                                onChange={(value)=> this.componentDidMount(value)}
-                                blurOnSubmit={true}
-                                returnKeyType='next'
-                                onSubmitEditing={this.focusNextField.bind(this,"password")}
-                                autoFocus = {true}
-                            />
-                            <CountryPicker
-                                ref='countryPicker'
-                                onChange={(value)=> this.selectCountry(value)}
-                                translation='eng'
-                                cca2={this.state.cca2}
-                            >
-                                <View/>
-                            </CountryPicker>
 
-                            <Text style={{padding: 10, fontSize: 16, color: 'red'}}>
-                                {this.state.validationMessage}
-                            </Text>
-                        </InputGroup>
+                  <LinearGradient
+
+
+                      colors={['#67ccf8', '#66cdcc']}
+                      style={styles.inputContainer}
+                     >
+
+
+               <View style={styles.inputContainer}>
+
+                   <View >
+                       <View style={styles.thiscountsContainer}>
+                            <Text style={styles.this}>This</Text>
+                           <Text style={styles.thiscount}>Counts</Text>
+                       </View>
+                       <View>
+
+                           <Text onPress={() => this.login()} style={styles.signginText}>sign in</Text>
+
+                           <Item style={styles.phoneTextInput} regular >
+                               <Input  value={this.state.name} blurOnSubmit={true} returnKeyType='next' ref="1" onSubmitEditing={this.focusNextField.bind(this,"2")} onChangeText={(phoneNumber) => this.setState({phoneNumber})} placeholder='Phone Number' />
+                           </Item>
+
+                           <Item style={styles.passwordTextInput} regular >
+
+                               <Input
+                                   ref='2'
+                                   returnKeyType='done'
+                                   placeholder="Password"
+                                   placeholderTextColor='#444'
+                                   defaultValue="de123456"
+                                   secureTextEntry
+                                   onChangeText={password => this.setState({ password })}
+                               />
+                           </Item>
+
+                            <View style={styles.signup_container}>
+                               <Text style={styles.forgetText}>Forgot Password</Text>
+                               <Text onPress={() => this.replaceRoute('Signup')} style={styles.signgupText} >Sign Up</Text>
+                            </View>
+                           <Text style={{padding: 10, fontSize: 16, color: 'red'}}>
+                               {this.state.validationMessage}
+                           </Text>
+                           <View style={{ flexDirection: 'row',color: 'red', justifyContent: 'center',marginBottom:10 }}>
+                               <Text> {this.state.error}</Text>
+                           </View>
+
+                           <View style={{ flexDirection: 'row', justifyContent: 'space-around', paddingVertical: 20 }}>
+                               <Button style={styles.logoFacebook}>
+                                   <Icon name="logo-facebook" />
+                               </Button>
+                               <Button style={styles.logoGoogle}>
+                                   <Icon name="logo-google" />
+                               </Button>
+                           </View>
+                       </View>
+
                     </View>
 
 
-                  <View style={{ marginBottom: 20 }}>
-                    <InputGroup >
-                      <Icon name="ios-unlock-outline" style={{color:"#00f"}}/>
-                      <Input
-                          ref='password'
-                          returnKeyType='done'
-                          placeholder="Password"
-                          placeholderTextColor='#444'
-                          defaultValue="de123456"
-                          secureTextEntry
-                          onChangeText={password => this.setState({ password })}
-                      />
-                    </InputGroup>
-                  </View>
-                  <View style={{ flexDirection: 'row', justifyContent: 'center',marginBottom:10 }}>
-                    <Text> {this.state.error}</Text>
-                  </View>
 
 
-                  <Button transparent style={styles.forgotButton}>
-                    <Text style={styles.forgotText}>Forgot Login details?</Text>
-                  </Button>
-                  <Button style={styles.login} onPress={this.login.bind(this) }>
-                    <Text>Login</Text>
-                  </Button>
+
+
+
                 </View>
+                  </LinearGradient>
 
-                <View style={{ flexDirection: 'row', justifyContent: 'space-around', paddingVertical: 20 }}>
-                  <Button style={styles.logoFacebook}>
-                    <Icon name="logo-facebook" />
-                  </Button>
-                  <Button style={styles.logoGoogle}>
-                    <Icon name="logo-google" />
-                  </Button>
-                </View>
-
-                <View style={{ flexDirection: 'row', justifyContent: 'center' }}>
-                  <Text>Do not have an account? </Text>
-                  <Button
-                      transparent
-                      style={styles.transparentButton}
-                      textStyle={{ lineHeight: (Platform.OS === 'ios') ? 15 : 18, textDecorationLine: 'underline' }}
-                      onPress={() =>  this.replaceRoute('Signup')}
-                  >
-                    <Text style={styles.signUpHereText}>Sign up here</Text>
-                  </Button>
-                </View>
-              </Content>
-            </Container>
         );
     }
 
