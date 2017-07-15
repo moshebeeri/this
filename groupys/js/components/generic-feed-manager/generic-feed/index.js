@@ -13,7 +13,7 @@ import styles from './styles'
 import Icon from 'react-native-vector-icons/FontAwesome';
 import Icon2 from 'react-native-vector-icons/EvilIcons';
 import Icon3 from 'react-native-vector-icons/MaterialIcons';
-
+import Icon4 from 'react-native-vector-icons/Entypo';
 
 
 
@@ -97,10 +97,12 @@ export default class GenericFeedItem extends Component {
 
             let promotion = undefined;
             let colorStyle = {
+
                 color: item.promotionColor,
 
-                fontWeight: 'bold',marginLeft:10,marginTop:4,fontSize:16
+                fontFamily:'Roboto-Regular' ,marginLeft:10,marginTop:4,fontSize:16
             }
+
 
             promotion = <Text style={colorStyle}>{item.promotion}</Text>
 
@@ -162,10 +164,24 @@ export default class GenericFeedItem extends Component {
             let saveIcon = undefined;
 
             if(item.showsave) {
-                 saveIcon = <Button transparent style={styles.promotion_iconView} onPress={this.save.bind(this)}>
+                let saveStyle ={
+                    flex:-1,justifyContent:'center',marginLeft:20 ,flexDirection: 'row',height: 40,width:100, backgroundColor: item.promotionColor,
+                };
+                 saveIcon = <Button  style={saveStyle} onPress={this.save.bind(this)}>
 
-                    <Icon3 style={styles.promotion_comment} size={25} name="save"/>
+
                     <Text>save</Text>
+
+
+                </Button>
+            }else{
+                let saveStyle ={
+                    flex:-1,justifyContent:'center',marginLeft:20 ,flexDirection: 'row',height: 40,width:100, backgroundColor: 'gray',
+                };
+                saveIcon = <Button  style={saveStyle} >
+
+
+                    <Text>saved</Text>
 
 
                 </Button>
@@ -181,14 +197,11 @@ export default class GenericFeedItem extends Component {
                                 <Text style={styles.promotion_addressText} note>{item.businessAddress } </Text>
                             </View>
                         </View>
-                        <View style={styles.promotion_description}>
-                            {promotion}
-                            <Text style={styles.promotion_type}>{item.itemTitle}</Text>
-                        </View>
+
                         <View style={styles.promotion_description}>
 
-                            <Text style={styles.promotion_type}>{item.name}</Text>
-                            <Text style={styles.promotion_type}>{item.description}</Text>
+                            <Text style={styles.promotion_text_description}>{item.name}</Text>
+                            <Text style={styles.promotion_text_description}>{item.description}</Text>
 
                         </View>
                     </View>
@@ -197,7 +210,20 @@ export default class GenericFeedItem extends Component {
                         <Image resizeMode= "cover" style={styles.promotion_image} source={{uri: item.banner.uri}}>
                         </Image>
                     </View>
+                    <View style={styles.promotion_buttomUpperContainer}>
+                        <View style={styles.promotion_buttom_description}>
+                            {promotion}
+                            <Text style={styles.promotion_type}>{item.itemTitle}</Text>
+                            <View style={styles.promotion_buttom_location}>
+                                <Icon2 style={styles.promotion_location}  size={25} name="clock"/>
 
+                            </View>
+                            <View style={styles.promotion_buttom_location}>
+                                <Icon3 style={styles.promotion_location}  size={25} name="location-on"/>
+                                <Text style={styles.promotion_addressText} note>{item.businessAddress } </Text>
+                            </View>
+                        </View>
+                    </View>
 
 
                     <View style={styles.promotion_bottomContainer}>
