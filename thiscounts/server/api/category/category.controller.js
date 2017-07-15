@@ -68,12 +68,17 @@ exports.reflect_products = function (req, res) {
 exports.update_product_leafs = function (req, res) {
   ProductCategory.query('MATCH (n:ProductCategory) WHERE NOT (n)<-[:CATEGORY]-(:ProductCategory) RETURN n',
     function (err, categories) {
-      categories.forEach(category => {
-        Category.findOne({ gid: category.id }, function (err, category) {
+      categories.forEach(g_category => {
+        console.log(`category.id=${g_category.id}`);
+        Category.findOne({ gid: g_category.id }, function (err, category) {
           if (err) console.log(err);
-          category.isLeaf = true;
-          category.save();
-          console.log(`update category ${category.name}`);
+          if(category) {
+            category.isLeaf = true;
+            category.save();
+            console.log(`update category ${category.name}`);
+          }else {
+            return console.log(`category is null ${JSON.stringify(g_category)}`);
+          }
         });
       });
       return res.status(200).json('ok');
@@ -100,7 +105,6 @@ exports.reflect_businesses = function (req, res) {
       }, function (err, category) {
         if (err) console.error(err);
         console.log(`insert category ${category.name}`);
-
       });
     })
   });
