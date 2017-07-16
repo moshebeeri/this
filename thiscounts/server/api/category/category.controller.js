@@ -17,40 +17,8 @@ const TestProductCategories = require('./data/product.category.test');
 function createProductCategoryRoot(callback) {
   ProductCategory.save({name: 'ProductRootCategory'}, callback)
 }
-let sleep = require('sleep');
-let nodes = 0;
-function createProductCategoriesNode(parentName, node, callback) {
-  if (_.isEmpty(node))
-    return callback(null);
 
-  async.eachLimit(Object.keys(node), 1, function (key, callback) {
-    sleep.msleep(5);
-    ProductCategory.save({name: key}, function (err, category) {
-      if(err || !category){
-        console.log(`category null for ${key} err:${err.message}`);
-        if (err) return callback(err);
-      }
-      let query = `MATCH (top:ProductCategory{name:"${parentName}"}), (sub:ProductCategory{name:"${category.name}"})
-                                  CREATE UNIQUE (sub)-[:CATEGORY]->(top)`;
-      ProductCategory.query(query, function (err) {
-        if (err) return callback(err);
-        //console.log(`${node++}:/${key}> \n ${Object.keys(node[key])}`);
-        return callback(null);
-      });
-    })
-  }, function (err) {
-    if (err) return callback(err);
-    sleep.msleep(500);
-    async.each(Object.keys(node), function (key, callback) {
-      createProductCategoriesNode(key, node[key], callback);
-    }, function (err) {
-      if (err) return callback(err);
-      callback(null);
-    })
-  })
-}
-
-function createProductCategoriesNode2(parent, node) {
+function createProductCategoriesNode(parent, node) {
   if (_.isEmpty(node))
     return;
   Object.keys(node).forEach(key => {
@@ -61,7 +29,7 @@ function createProductCategoriesNode2(parent, node) {
     ProductCategory.query(query, function (err, sub) {
       console.log(sub);
       if (err) return console.log(err);
-      createProductCategoriesNode2(sub[0], node[key])
+      createProductCategoriesNode(sub[0], node[key])
     });
   })
 }
@@ -71,7 +39,7 @@ function createProductCategoriesNode2(parent, node) {
 function createProductCategories(callback) {
   createProductCategoryRoot(function (err, root) {
     if (err) return callback(err);
-    createProductCategoriesNode2(root, EBayProductCategories, function (err) {
+    createProductCategoriesNode(root, EBayProductCategories, function (err) {
       if (err) return callback(err);
       return callback(null);
     })
@@ -117,7 +85,6 @@ exports.update_product_leafs = function (req, res) {
 };
 
 exports.init_product = function (req, res) {
-  nodes = 0;
   createProductCategories(function (err) {
     if (err) return handleError(res, err);
     return res.status(200).json('ok');
@@ -212,26 +179,45 @@ function create_product_categories(req, res) {
     return res.status(200).json('ok');
   });
 }
-
-function add_categories(type, categories, parent, callback) {
-  async.each(categories, function (name, callback) {
-    let typeName = type=== 'business'? 'BusinessCategory' : 'ProductCategory';
-    ProductCategory.save({name: name}, function (err, category) {
-      let query = `MATCH (top:${typeName}{name:"${parent}"}), (sub:${typeName}{name:"${category.name}"})
-                        CREATE UNIQUE (sub)-[:CATEGORY]->(top)`;
-      console.log(`(top:${typeName}{name:"${parent}"})<-[:CATEGORY]-(sub:${typeName}{name:"${category.name}"})`);
-      ProductCategory.query(query, function (err, c) {
-        if(err) return console.log(err);
-        Category.create({
-          type: type,
-          gid: category.id,
-          name: category.name,
-          isLeaf: true,
-          translations: {en: category.name},
-        }, callback)
-      })
+function add_object_categories(type, parent, node) {
+  if (_.isEmpty(node))
+    return;
+  let typeName = type=== 'business'? 'BusinessCategory' : 'ProductCategory';
+  let NeoModel = type=== 'business'? BusinessCategory : ProductCategory;
+  Object.keys(node).forEach(key => {
+    let query = ` MATCH (parent:${typeName})
+                  where id(parent)=${parent.id}
+                  CREATE (sub:${typeName}{name:"${key}"})-[:CATEGORY]->(parent)
+                  RETURN sub`;
+    NeoModel.query(query, function (err, sub) {
+      console.log(sub);
+      if (err) return console.log(err);
+      Category.create({
+        type: type,
+        gid: sub.id,
+        name: key,
+        isLeaf: false,
+        translations: {en: key},
+      });
+      add_object_categories(type, sub[0], node[key])
     });
-  }, callback)
+  })
+}
+
+function add_categories(type, categories, parent) {
+
+  categories.forEach(function (name, callback) {
+    let typeName = type=== 'business'? 'BusinessCategory' : 'ProductCategory';
+
+    let query = ` MATCH (parent:${typeName})
+                  where id(parent)=${parent.id}
+                  CREATE (sub:${typeName}{name:"${name}"})-[:CATEGORY]->(parent)
+                  RETURN sub`;
+
+      ProductCategory.query(query, function (err, category) {
+        if(err) return console.log(err);
+      })
+  })
 }
 
 function add_categories_from_object(type, parent, node){
@@ -246,7 +232,11 @@ function add_categories_from_object(type, parent, node){
 }
 
 function csv_load_product_categories(req, res) {
-  add_product_categories(['Groceries'], 'ProductRootCategory', function(err){
+    let query = ` MATCH (parent:ProductCategory{name:"ProductRootCategory"})
+                  CREATE (sub:ProductCategory{name:"Groceries"})-[:CATEGORY]->(parent)
+                  RETURN sub`;
+
+    ProductCategory.query(query, function (err, sub) {
     if(err) return handleError(res, err);
     const csv = require('csvtojson');
     let top = {};
@@ -267,7 +257,7 @@ function csv_load_product_categories(req, res) {
       })
       .on('done', (error) => {
         console.log(JSON.stringify(top,null,2));
-        add_categories_from_object('product', 'Groceries', top);
+        add_categories_from_object('product', sub[0], top);
         return res.status(200).json('ok');
       });
   });
@@ -275,10 +265,14 @@ function csv_load_product_categories(req, res) {
 
 let fast_food_product_categories = function (req, res) {
   const fastFoodCategories = require('./data/wikipedia.fastfood');
-  add_categories('product', ["Fast Food"], 'ProductRootCategory', function () {
-    add_categories('product', fastFoodCategories["Fast food"], 'Fast Food', function () {
-      return res.status(200).json('ok');
-    });
+  let query = ` MATCH (parent:ProductCategory{name:"ProductRootCategory"})
+                  CREATE (sub:ProductCategory{name:"Fast Food"})-[:CATEGORY]->(parent)
+                  RETURN sub`;
+
+  ProductCategory.query(query, function (err, fastFood) {
+    if(err) return handleError(res, err);
+    add_categories('product', fastFoodCategories["Fast food"], fastFood[0]);
+    return res.status(200).json('ok');
   });
 };
 
