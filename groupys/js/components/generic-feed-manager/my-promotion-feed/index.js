@@ -1,16 +1,22 @@
 import React, {Component} from 'react';
-import {Image ,Platform,PanResponder,TouchableHighlight } from 'react-native';
+import {Image ,PanResponder,TouchableHighlight } from 'react-native';
 import {connect} from 'react-redux';
 import {actions} from 'react-native-navigation-redux-helpers';
-import { Container, Content, Text, InputGroup, Input,Thumbnail,Button,Picker,Right,Item, Icon,Left,Header,Footer,Body, View,Card,CardItem } from 'native-base';
+import { Container, Content, Text, InputGroup, Input,Thumbnail,Button,Picker,Right,Item,Left,Header,Footer,Body, View,Card,CardItem } from 'native-base';
 import UserApi from '../../../api/user'
 let userApi = new UserApi();
 import PromotionApi from '../../../api/promotion'
 let promotionApi = new PromotionApi();
 
-import LinearGradient from 'react-native-linear-gradient';
 import styles from './styles'
+import Icon from 'react-native-vector-icons/FontAwesome';
+import Icon2 from 'react-native-vector-icons/EvilIcons';
+import Icon3 from 'react-native-vector-icons/MaterialIcons';
+import Icon4 from 'react-native-vector-icons/Entypo';
+const ReactNative = require('react-native');
+const { StyleSheet, Platform, Dimensions } = ReactNative;
 
+const {width, height} = Dimensions.get('window')
 
 export default class MyPromotionFeedItem extends Component {
 
@@ -70,121 +76,99 @@ export default class MyPromotionFeedItem extends Component {
 
         render() {
             let feed = undefined;
-            feed = this.createFeed(this.props.item);
+            feed = this.createPromotion(this.props.item);
 
             return feed;
         }
 
-        createFeed(item){
-            if(item.content){
-                item = item.content;
-            }
-            let secondFeed = undefined;
-            if(item.feed){
-                secondFeed = this.createFeed(item.feed);
-
-            }
-
-            let logo = undefined;
-            if(item.logo) {
-                if (item.logo.uri) {
-                    logo = <Image
-                        style={{width: 50, height: 50}}
-                        source={{uri: item.logo.uri}}/>
-                }
-
-                if (item.logo.require) {
-                    logo = <Image
-                        style={{width: 50, height: 50}}
-                        source={item.logo.require}/>
-                }
-            }
-
-
-            let banner = undefined;
-            if(item.banner) {
-
-                if (item.banner.uri) {
-                    banner = <Image
-                        style={{width: 400, height: 300,padding: 0, flex: -1,opacity: 0.8}}
-                        source={{uri: item.banner.uri}}>
-                        <View style={styles.backdropView}>
-
-                        <Text style={{ fontWeight: 'bold',marginLeft:20,marginTop:170,fontSize:25,color:'white'}}>{item.itemTitle}</Text>
-                        <Text style={{fontWeight: 'bold',marginLeft:20,marginTop:5,color:'white',fontSize:15}}note>{item.description} </Text>
-                        </View>
-                    </Image>
-                        }
-
-                if (item.banner.require) {
-                    banner = <Image
-                        style={{padding: 5, flex: -1}}
-                        source={item.banner.require}>
-                        <View style={styles.backdropView}>
-
-                        <Text style={{ fontWeight: 'bold',marginLeft:20,marginTop:170,fontSize:25,color:'white'}}>{item.itemTitle}</Text>
-                        <Text style={{fontWeight: 'bold',marginLeft:20,marginTop:5,color:'white',fontSize:15}}note>{item.description} </Text>
-                        </View>
-                    </Image>
-                }
-            }else{
-                banner = <Item>
-                    <Text style={{marginLeft:20,marginTop:170,fontSize:25}}>{item.itemTitle}</Text>
-                    <Text style={{marginLeft:20,marginTop:200,fontSize:10}} note>{item.description} </Text>
-
-                </Item>
-            }
 
 
 
 
+    createPromotion(item){
+
+        let promotion = undefined;
+        let colorStyle = {
+
+            color: item.promotionColor,
+
+            fontFamily:'Roboto-Regular' ,marginLeft:10,marginTop:4,fontSize:16
+        }
 
 
-            return (  <Card   {...this._panResponder.panHandlers} >
-                    <CardItem>
+        promotion = <Text style={colorStyle}>{item.promotion}</Text>
 
-                        <Left>
-                            {logo}
-                            <Body>
-
-
-                            </Body>
-                        </Left>
-
-                    </CardItem>
-
-
-                    <View style={{flex:-1,backgroundColor:'black',justifyContent:'center',height:300}}>
-                    {secondFeed}
-                        {banner}
-                    </View>
-                    <View   style={styles.buttonView}>
-
-                        <TouchableHighlight onPress={this.realize.bind(this)}>
-
-                            <LinearGradient
-                                start={{x: 0.0, y: 0.5}} end={{x: 1.0, y: 0.5}}
-
-                                locations={[0.0, 1.0]}
-                                colors={['#3e595c', '#00d3a9']}
-                                style={styles.button}>
-
-
-                                <Text style={styles.buttonText}>Realize</Text>
-
-
-                            </LinearGradient>
-                        </TouchableHighlight>
-
-
-
-                    </View>
-
-                </Card>
-
-            );
+        let buisnessLogo = undefined;
+        if(item.businessLogo){
+            buisnessLogo =  <Thumbnail  square={true} size={50} source={{uri: item.businessLogo}} />
 
         }
+
+        let reddemStyle ={
+            flex:-1,justifyContent:'center',marginLeft:0 ,flexDirection: 'row',height: 40,width:width/2, backgroundColor: item.promotionColor,
+        };
+        let postStyle ={
+            flex:-1,justifyContent:'center',marginLeft:0 ,flexDirection: 'row',height: 40,width:width/2, backgroundColor: '#363636',
+        };
+
+
+        let result =
+            <View style={styles.promotion_container}>
+                <View style={styles.promotion_card}>
+                    <View style={styles.promotion_upperContainer}>
+                        <View style={styles.logo_view}>
+                            {buisnessLogo}
+                            <View style = {{  flexDirection: 'column'}}>
+                                <Text style={styles.promotion_nameText} note>{item.businessName } </Text>
+                                <Text style={styles.promotion_addressText} note>{item.businessAddress } </Text>
+                            </View>
+                        </View>
+
+                    </View>
+
+                    <View style={styles.promotion_buttomUpperContainer}>
+                        <View style={styles.promotion_buttom_description}>
+                            {promotion}
+                            <Text style={styles.promotion_type}>{item.itemTitle}</Text>
+                            <View style={styles.promotion_buttom_location}>
+                                <Icon2 style={styles.promotion_location}  size={25} name="clock"/>
+
+                            </View>
+                            <View style={styles.promotion_buttom_location}>
+                                <Icon3 style={styles.promotion_location}  size={25} name="location-on"/>
+                                <Text style={styles.promotion_addressText} note>{item.businessAddress } </Text>
+                            </View>
+                        </View>
+                    </View>
+                    <View style={styles.promotion_action_container}>
+                        <Button  style={postStyle} onPress={this.realize.bind(this)}>
+
+
+                            <Text>see post</Text>
+
+
+                        </Button>
+                        <Button  style={reddemStyle} onPress={this.realize.bind(this)}>
+
+
+                            <Text>redeem</Text>
+
+
+                        </Button>
+                    </View>
+                    <View style={styles.promotion_button_space}>
+
+
+                    </View>
+            </View>
+            </View>
+
+
+        return result;
+    }
+
+
+
 }
 
 

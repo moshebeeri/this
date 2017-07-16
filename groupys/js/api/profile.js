@@ -6,7 +6,8 @@
  */
 import store from 'react-native-simple-store';
 import Timer from './LogTimer'
-
+import  FeedUiConverter from './feed-ui-converter'
+let feedUiConverter = new FeedUiConverter();
 let timer = new Timer();
 
 class ProfileApi {
@@ -15,34 +16,6 @@ class ProfileApi {
         return number.replace(/\D/g, '').replace(/^0/, '')
     };
 
-    createfeed(feed){
-        let response = {};
-        if(feed.instance.promotion.pictures.length > 0  ){
-            response = {
-                id:feed.instance._id,
-
-
-
-                itemTitle: 'Promotion : ' + feed.instance.promotion.percent.values[0] + ' % off',
-                description: feed.instance.promotion.entity.business.name + ' ' + feed.instance.promotion.entity.business.city + ' ' + feed.instance.promotion.entity.business.address + ' offer a new promotion',
-                banner: {
-                    uri:feed.instance.promotion.pictures[0].pictures[1]
-                },
-                relcode:feed.graph.rel.properties.code
-            }
-        }else {
-
-            response = {
-                id:feed.instance._id,
-                itemTitle: 'Promotion : ' + feed.instance.promotion.percent.values[0] + ' % off',
-                description: feed.instance.promotion.entity.business.name + ' ' + feed.instance.promotion.entity.business.city + ' ' + feed.instance.promotion.entity.business.address + ' offer a new promotion',
-                relcode:feed.graph.rel.properties.code
-            }
-        }
-        return response
-
-
-    }
 
     fetch(from, to) {
         return new Promise(async(resolve, reject) => {
@@ -51,8 +24,7 @@ class ProfileApi {
                 let from = new Date();
 
                 let token = await store.get('token');
-
-                 const response = await fetch(`${server_host}/api/profiles/instances/saved/` + from + `/` + to + `/`, {
+                  const response = await fetch(`${server_host}/api/profiles/instances/saved/` + from + `/` + to + `/`, {
                     method: 'GET',
                     headers: {
                         'Accept': 'application/json, text/plain, */*',
@@ -74,9 +46,10 @@ class ProfileApi {
 
                 let feeds = new Array();
                 if(responseData.length > 0) {
-                     feeds = responseData.map(feed => this.createfeed(feed)).filter(function (x) {
+                    feeds = responseData.map(feed => feedUiConverter.createSavedPomotion(feed)).filter(function(x){
                         return x != undefined;
                     });
+
                 }
                 resolve(feeds);
             }

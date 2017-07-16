@@ -122,67 +122,86 @@ class FeedConverter
 
             response.itemType = 'MESSAGE';
         }
-        if (feed.activity.action == 'instance') {
+        if (feed.activity.action == 'instance' || feed.activity.action == 'eligible') {
             return this.createPromontionInstance(feed);
         }
 
-        if (feed.activity.action == 'eligible') {
-            if (feed.activity.promotion.pictures.length > 0) {
-                response = {
-                    id: feed.activity.instance._id,
-                    fid: feed._id,
-                    social: {
-                        like: feed.activity.instance.social_state.like,
-                        numberLikes: feed.activity.instance.social_state.likes,
-                        follow: feed.activity.instance.social_state.follow,
-                        saved: feed.activity.instance.social_state.saved,
-                        realized: feed.activity.instance.social_state.realized,
-                        use: feed.activity.instance.social_state.use,
-                    },
-                    showsave: !feed.activity.instance.social_state.saved && !feed.activity.instance.social_state.realized,
-                    actor: feed.activity.actor_business._id,
-                    itemTitle: feed.activity.promotion.percent.values[0] + ' % OFF',
 
-                    address: feed.activity.actor_business.city + ' ' + feed.activity.actor_business.address,
-                    description: feed.activity.promotion.description,
-                    showSocial: true,
-                    banner: {
-                        uri: feed.activity.promotion.pictures[0].pictures[1]
-                    },
-                    name: feed.activity.actor_business.name,
-                }
-
-                if (feed.activity.actor_business.pictures.length > 0) {
-                    response.businessLogo = feed.activity.actor_business.pictures[0].pictures[3];
-                }
-            } else {
-
-                response = {
-                    id: feed.activity.instance._id,
-                    fid: feed._id,
-                    social: {
-                        like: feed.activity.instance.social_state.like,
-                        numberLikes: feed.activity.instance.social_state.likes,
-                        follow: feed.activity.instance.social_state.follow,
-                        saved: feed.activity.instance.social_state.saved,
-                        realized: feed.activity.instance.social_state.realized,
-                        use: feed.activity.instance.social_state.use,
-                    },
-                    showsave: !feed.activity.instance.social_state.saved && !feed.activity.instance.social_state.realized,
-                    actor: feed.activity.actor_business._id,
-                    itemTitle: feed.activity.promotion.percent.values[0] + ' % OFF',
-                    address: feed.activity.actor_business.city + ' ' + feed.activity.actor_business.address,
-                    description: feed.activity.promotion.description,
-                    name: feed.activity.actor_business.name,
-                    showSocial: true,
-                }
-            }
-
-        }
         return response;
 
 
     }
+
+
+    createSavedPomotion(feed){
+        let instance = feed.instance;
+        let responseFeed = {};
+        try {
+
+            responseFeed.id = instance._id;
+            responseFeed.fid = instance.gid;
+
+           responseFeed.name = instance.promotion.name;
+            responseFeed.description = instance.promotion.description;
+
+
+            switch (instance.type) {
+                case "REDUCED_AMOUNT":
+                    responseFeed.itemTitle = "Buy For " + instance.promotion.reduced_amount.values[0].price + ' Pay Only ' + instance.promotion.reduced_amount.values[0].pay;
+                    responseFeed.promotion = 'REDUCE AMOUNT';
+                    responseFeed.promotionColor = '#e65100';
+                    break;
+                case "PERCENT":
+                    responseFeed.itemTitle = "Get " + instance.promotion.percent.values[0] + ' % Off ' ;
+                    responseFeed.promotion = 'PRECENT';
+                    responseFeed.promotionColor = '#df80ff';
+                    break;
+                case "X_FOR_Y":
+                    responseFeed.itemTitle = '' ;
+                    responseFeed.promotion = 'X_FOR_Y';
+                    responseFeed.promotionColor = '#ff66b3';
+                    break;
+                case "X+N%OFF":
+                    responseFeed.itemTitle = '' ;
+                    responseFeed.promotion = 'X+N%OFF';
+                    responseFeed.promotionColor = '#ff66b3';
+                    break;
+                case "X+Y":
+                    responseFeed.itemTitle = '' ;
+                    responseFeed.promotion = 'X+Y';
+                    responseFeed.promotionColor = '#66ff1a';
+                    break;
+
+                case "PUNCH_CARD":
+                    responseFeed.itemTitle = '' ;
+                    responseFeed.promotion = 'PUNCH CARD';
+                    responseFeed.promotionColor = '#d279a6';
+                    break;
+
+                default:
+                    responseFeed.itemTitle = instance.type + " NOT SUPPORTED"
+                    responseFeed.promotion = instance.type;
+                    responseFeed.promotionColor = 'black';
+                    break;
+
+            }
+
+            if (instance.promotion.entity && instance.promotion.entity.business.pictures.length > 0) {
+                responseFeed.businessLogo = instance.promotion.entity.business.pictures[0].pictures[3];
+                responseFeed.businessName = instance.promotion.entity.business.name;
+                responseFeed.businessAddress = instance.promotion.entity.business.city + ' ' + instance.promotion.entity.business.address;
+            }else {
+                responseFeed.businessName = instance.promotion.entity.business.name;
+                responseFeed.businessAddress = finstance.promotion.entity.business.city + ' ' + instance.promotion.entity.business.address;
+
+            }
+            responseFeed.itemType = 'PROMOTION';
+        }catch (error){
+            console.log('error');
+        }
+        return responseFeed;
+    }
+
 
     createPromontionInstance(feed){
         let responseFeed = {};
@@ -211,33 +230,33 @@ class FeedConverter
             switch (feed.activity.instance.type) {
                 case "REDUCED_AMOUNT":
                     responseFeed.itemTitle = "Buy For " + feed.activity.promotion.reduced_amount.values[0].price + ' Pay Only ' + feed.activity.promotion.reduced_amount.values[0].pay;
-                    responseFeed.promotion = 'Reduce Amount';
+                    responseFeed.promotion = 'REDUCED AMOUNT';
                     responseFeed.promotionColor = '#e65100';
                     break;
                 case "PERCENT":
                     responseFeed.itemTitle = "Get " + feed.activity.promotion.percent.values[0] + ' % Off ' ;
-                    responseFeed.promotion = 'Precent';
+                    responseFeed.promotion = 'PERCENT';
                     responseFeed.promotionColor = '#df80ff';
                     break;
                 case "X_FOR_Y":
                     responseFeed.itemTitle = '' ;
-                    responseFeed.promotion = 'Products for $';
+                    responseFeed.promotion = 'X FOR Y';
                     responseFeed.promotionColor = '#ff66b3';
                     break;
                 case "X+N%OFF":
                     responseFeed.itemTitle = '' ;
-                    responseFeed.promotion = 'Second Product % Off';
+                    responseFeed.promotion = 'X+N%OFFf';
                     responseFeed.promotionColor = '#ff66b3';
                     break;
                 case "X+Y":
                     responseFeed.itemTitle = '' ;
-                    responseFeed.promotion = 'Buy Product Get Gift';
+                    responseFeed.promotion = 'X+Y';
                     responseFeed.promotionColor = '#66ff1a';
                     break;
 
                 case "PUNCH_CARD":
                     responseFeed.itemTitle = '' ;
-                    responseFeed.promotion = 'Punch Card';
+                    responseFeed.promotion = 'PUNCH CARD';
                     responseFeed.promotionColor = '#d279a6';
                     break;
 
