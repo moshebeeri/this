@@ -305,7 +305,7 @@ import {DeviceEventEmitter} from 'react-native'
             promotion.x_for_y.variation = 'SINGLE';
             promotion.x_for_y.quantity = Number(this.state.quantity)
             promotion.x_for_y.values = [{
-                price: Number(this.state.x_for_y.values.price),
+                eligible: Number(this.state.x_for_y.values.eligible),
                 pay: Number(this.state.x_for_y.values.pay),
 
             }]

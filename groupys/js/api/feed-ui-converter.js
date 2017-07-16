@@ -239,7 +239,7 @@ class FeedConverter
                     responseFeed.promotionColor = '#df80ff';
                     break;
                 case "X_FOR_Y":
-                    responseFeed.itemTitle = '' ;
+                    responseFeed.itemTitle = 'Buy ' + feed.activity.promotion.x_for_y.values[0].eligible + " " +  feed.activity.promotion.condition.product.name + " Pay only " + feed.activity.promotion.x_for_y.values[0].pay;
                     responseFeed.promotion = 'X FOR Y';
                     responseFeed.promotionColor = '#ff66b3';
                     break;
