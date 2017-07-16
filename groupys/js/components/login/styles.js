@@ -50,9 +50,9 @@ module.exports = {
     },
 
     phoneTextInput:{
-        marginLeft:30,marginTop:5,backgroundColor:'white', width:width/2 + 120 } ,
+        marginLeft:30,marginTop:5,backgroundColor:'white', height:50,width:width/2 + 120 } ,
     passwordTextInput:{
-        marginLeft:30,marginTop:10,backgroundColor:'white', width:width/2 + 120 } ,
+        marginLeft:30,marginTop:10,backgroundColor:'white', height:50,width:width/2 + 120 } ,
 
     signup_container:{
         marginLeft:0,

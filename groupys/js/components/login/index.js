@@ -174,7 +174,7 @@ export default  class Login extends Component {
                                    returnKeyType='done'
                                    placeholder="Password"
                                    placeholderTextColor='#444'
-                                   defaultValue="de123456"
+                                   defaultValue=""
                                    secureTextEntry
                                    onChangeText={password => this.setState({ password })}
                                    onSubmitEditing={this.login.bind(this)}

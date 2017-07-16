@@ -2,15 +2,13 @@ import React, {Component} from 'react';
 import {Image, Platform} from 'react-native';
 import {connect} from 'react-redux';
 import {actions} from 'react-native-navigation-redux-helpers';
-import {Container, Content, Text, InputGroup, Input, Button, Icon, View} from 'native-base';
+import {Container, Content, Text, InputGroup, Input, Button, Icon, View,Item} from 'native-base';
 import store from 'react-native-simple-store';
 
-
-import PhoneInput from 'react-native-phone-input'
-import CountryPicker from 'react-native-country-picker-modal'
-import login from './signup-theme';
 import styles from './styles';
-//import AlertContainer from 'react-alert';
+
+import LinearGradient from 'react-native-linear-gradient';
+
 const {
     replaceAt,
 } = actions;
@@ -24,42 +22,23 @@ export default class Signup extends Component {
     };
     constructor(props) {
         super(props);
-        this.onPressFlag = this.onPressFlag.bind(this);
-        this.selectCountry = this.selectCountry.bind(this);
+
 
         this.state = {
             email: '',
+            name:'',
             password: '',
-            phone_number: '',
+            phoneNumber: '',
+            lastname:'',
             scroll: false,
-            cca2: 'ISR',
-            callingCode: "",
             error: '',
             validationMessage: ''
         };
     }
 
-    componentDidMount() {
-        this.setState({
-            phone_number: this.refs.phone.getPickerData()
-        })
-    }
 
-    onPressFlag() {
-        this.refs.countryPicker.openModal();
-        this.setState({
-            phone_number: this.refs.phone.getPickerData()
-        })
-    }
 
-    selectCountry(country) {
-        this.refs.phone.selectCountry(country.cca2.toLowerCase());
-        this.setState({
-            callingCode: country.callingCode
-        });
 
-        this.setState({cca2: country.cca2})
-    }
 
     replaceRoute(route) {
         this.props.navigation.navigate(route);
@@ -69,7 +48,7 @@ export default class Signup extends Component {
         this.setState({
             validationMessage: ''
         });
-        if (this.refs.phone.isValidNumber()) {
+        if (this.state.phoneNumber.isValidNumber()) {
             this.callServerSignupAndRedirect();
             return;
         }
@@ -90,8 +69,8 @@ export default class Signup extends Component {
     };
 
     async callServerSignupAndRedirect() {
-        let phoneNumber = this.refs.phone.getValue();
-        let normalizedPhone = this.normalizePhoneNumber(phoneNumber,this.state.callingCode);
+        let phoneNumber = '+972' + this.state.phoneNumber;
+        let normalizedPhone = this.normalizePhoneNumber(phoneNumber,'+972');
         let cleanPhone = this.clean_phone_number(normalizedPhone);
         fetch(`${server_host}/api/users`, {
             method: 'POST',
@@ -100,10 +79,12 @@ export default class Signup extends Component {
                 'Content-Type': 'application/json;charset=utf-8',
             },
             body: JSON.stringify({
-                country_code: this.state.callingCode,
+                country_code: '+972',
                 phone_number: cleanPhone,
                 email:  this.state.callingCode + cleanPhone + "@low.la",
                 password: this.state.password,
+                name: this.state.name + this.state.lastname,
+
 
 
             })
@@ -131,67 +112,84 @@ export default class Signup extends Component {
 
     render() {
         return (
-            <Container>
-                <Content theme={login} style={{backgroundColor: login.backgroundColor}}>
-                    <Image source={logo} style={styles.shadow}/>
-                    <View style={styles.inputContainer}>
-                        <View style={{marginBottom: 20}}>
-                            <InputGroup>
-                                <Icon name="ios-phone-portrait-outline" style={{color:"#00f"}}/>
-                                <PhoneInput
-                                    ref='phone'
-                                    onPressFlag={this.onPressFlag}
-                                    onChange={(value)=> this.componentDidMount(value)}
-                                    blurOnSubmit={true}
-                                    returnKeyType='next'
-                                    onSubmitEditing={this.focusNextField.bind(this,"password")}
-                                    autoFocus = {true}
-                                />
-                                <CountryPicker
-                                    ref='countryPicker'
-                                    onChange={(value)=> this.selectCountry(value)}
-                                    translation='eng'
-                                    cca2={this.state.cca2}
-                                >
-                                    <View/>
-                                </CountryPicker>
+            <LinearGradient
 
-                                <Text style={{padding: 10, fontSize: 16, color: 'red'}}>
-                                    {this.state.validationMessage}
-                                </Text>
-                            </InputGroup>
+
+                colors={['#67ccf8', '#66cdcc']}
+                style={styles.inputContainer}
+            >
+
+
+                <View style={styles.inputContainer}>
+
+                    <View >
+                        <View style={styles.thiscountsContainer}>
+                            <Text style={styles.this}>This</Text>
+                            <Text style={styles.thiscount}>Counts</Text>
                         </View>
+                        <View>
+
+                            <Text style={styles.signginText}>sign up</Text>
+                            <View style={styles.nameContainer}>
+                                <Item style={styles.nameTextInput} regular >
+                                    <Input  value={this.state.name} blurOnSubmit={true} returnKeyType='next' ref="1" onSubmitEditing={this.focusNextField.bind(this,"2")} onChangeText={(phoneNumber) => this.setState({name})} placeholder='Name' />
+                                </Item>
+                                <Item style={styles.lastnameTextInput} regular >
+                                    <Input  value={this.state.lastname} blurOnSubmit={true} returnKeyType='next' ref="2" onSubmitEditing={this.focusNextField.bind(this,"3")} onChangeText={(lastname) => this.setState({lastname})} placeholder='Last Name' />
+                                </Item>
+                            </View>
 
 
-                        <View style={{marginBottom: 20}}>
-                            <InputGroup >
-                                <Icon name="ios-unlock-outline" style={{color:"#00F"}}/>
+                            <Item style={styles.phoneTextInput} regular >
+                                <Input  keyboardType = 'numeric' value={this.state.phoneNumber} blurOnSubmit={true} returnKeyType='next' ref="4" onSubmitEditing={this.focusNextField.bind(this,"5")} onChangeText={(phoneNumber) => this.setState({phoneNumber})} placeholder='Phone Number' />
+                            </Item>
+
+                            <Item style={styles.passwordTextInput} regular >
+
                                 <Input
+                                    ref='5'
                                     returnKeyType='done'
-                                    ref='password'
                                     placeholder="Password"
-                                    secureTextEntry
                                     placeholderTextColor='#444'
-                                    onChangeText={password => this.setState({password})}
+                                    defaultValue=""
+                                    secureTextEntry
+                                    onChangeText={password => this.setState({ password })}
+                                    onSubmitEditing={this.signup.bind(this)}
                                 />
-                            </InputGroup>
+                            </Item>
+
+                            <View style={styles.signup_container}>
+                                <Text style={styles.forgetText}>or sign up using </Text>
+                             </View>
+                            <Text style={{padding: 10, fontSize: 16, color: 'red'}}>
+                                {this.state.validationMessage}
+                            </Text>
+                            <View style={{ flexDirection: 'row',color: 'red', justifyContent: 'center',marginBottom:0 }}>
+                                <Text> {this.state.error}</Text>
+                            </View>
+
+                            <View style={{ flexDirection: 'row', justifyContent: 'space-around', paddingVertical: 0 }}>
+                                <Button style={styles.logoFacebook}>
+                                    <Icon name="logo-facebook" />
+                                </Button>
+                                <Button style={styles.logoGoogle}>
+                                    <Icon name="logo-google" />
+                                </Button>
+                            </View>
                         </View>
 
-
-                        <Button style={styles.login} onPress={() => this.signup({
-                            phone_number: this.state.phone_number,
-                            password: this.state.password
-                        }) }>
-                            <Text> Signup </Text>
-                        </Button>
-                        <Text>
-                            {this.state.error}
-                        </Text>
                     </View>
 
 
-                </Content>
-            </Container>
+
+
+
+
+
+                </View>
+            </LinearGradient>
+
+
         );
     }
 }
