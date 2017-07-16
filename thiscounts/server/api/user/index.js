@@ -25,5 +25,7 @@ router.post('/phonebook', auth.isAuthenticated(), controller.phonebook);
 router.get('/follow/:id', auth.isAuthenticated(), controller.follow);
 router.delete('/follow/:id', auth.isAuthenticated(), controller.unfollow);
 
+router.get('/role/:user/:role/:entity', auth.isAuthenticated(), controller.addEntityUserRole);
+router.delete('/role/:user/:role/:entity', auth.isAuthenticated(), controller.deleteEntityUserRole);
 
 module.exports = router;

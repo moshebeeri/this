@@ -83,14 +83,14 @@ let like_generates_follow = function (userId, itemId) {
     },
     function (err, results) {
       // results is now equals to: {one: 1, two: 2}
-      if (results['user'] ||
-        results['business'] ||
-        results['shoppingChain'] ||
-        results['product'] ||
-        results['promotion'] ||
-        results['mall'] ||
-        results['category'] ||
-        results['cardType']) {
+      if (results['user']           ||
+          results['business']       ||
+          results['shoppingChain']  ||
+          results['product']        ||
+          results['promotion']      ||
+          results['mall']           ||
+          results['category']       ||
+          results['cardType']) {
         graphModel.relate_ids(userId, 'FOLLOW', itemId);
         activity_follow(userId, itemId);
       }
@@ -171,7 +171,6 @@ function send_sms_new_password(phone_number, new_password) {
     "GROUPYS new password " + new_password
   );
 }
-
 
 function send_sms_message(phone_number, message) {
   twilio.messages.create({
@@ -536,6 +535,14 @@ exports.me = function (req, res, next) {
     if (!user) return res.status(401).send('Unauthorized');
     res.status(200).json(user);
   });
+};
+
+exports.addEntityUserRole = function (req, res) {
+  res.status(200).json('ok');
+};
+
+exports.deleteEntityUserRole = function (req, res) {
+  res.status(200).json('ok');
 };
 
 /**
