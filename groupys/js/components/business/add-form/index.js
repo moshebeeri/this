@@ -37,12 +37,12 @@ import Autocomplete from 'react-native-autocomplete-input';
             let item = props.navigation.state.params.item;
             let category = item.category;
             if(!category){
-                category = '';
+                category = '0';
             }
 
             let subcategory = item.subcategory;
             if(!subcategory){
-                subcategory = '';
+                subcategory = '0';
             }
             this.state = {
                 name: item.name,
@@ -62,6 +62,7 @@ import Autocomplete from 'react-native-autocomplete-input';
                 token: '',
                 category:category,
                 subcategory:subcategory,
+                categories:[Number(category),Number(subcategory)],
                 formData: {},
             };
         }else {
@@ -84,6 +85,7 @@ import Autocomplete from 'react-native-autocomplete-input';
                 token: '',
                 category:'',
                 subcategory:'',
+                categories:[],
                 formData: {},
             };
         }
@@ -102,62 +104,7 @@ import Autocomplete from 'react-native-autocomplete-input';
 
      }
 
-     getCategories(){
-         let categories =  this.props.businesses.categories;
-         let categoriesTop = categories.map(function(cat){
-             return cat.translations.en
-         })
 
-         categoriesTop = categoriesTop.filter(function (x, i, a) {
-             return a.indexOf(x) == i;
-         });
-         return categoriesTop;
-
-     }
-
-     getPickerCategories(category){
-         if(!category) {
-             category = this.state.category;
-         }
-         let categoriesBottom = undefined;
-         if(category){
-             categoriesBottom = this.props.businesses.categories.filter(
-                 function (cat) {
-                   return  cat.translations.en == category
-                 }
-             )
-
-             if(categoriesBottom){
-                 categoriesBottom  = categoriesBottom.map(function (cat) {
-                     return cat.translations.en;
-
-                 })
-
-             }
-         }
-
-         return categoriesBottom;
-
-     }
-
-     findCat(query) {
-
-         let cats = this.getCategories()
-         if (query === '') {
-             return [];
-         }
-
-         query =  query.replace('(','');
-         query =  query.replace(')','');
-         const regex = new RegExp(`${new String(query).trim()}`, 'i');
-         let response =  cats.filter(cat => cat.search(regex) >= 0);
-
-         if(response.length == 1 && response ==query ){
-             return [];
-         }
-
-         return response;
-     }
 
      replaceRoute(route) {
 
@@ -179,8 +126,128 @@ import Autocomplete from 'react-native-autocomplete-input';
 
 
     }
+     setCategory(index,category){
+         var milliseconds = (new Date).getTime();
+
+         if(milliseconds-this.state.time  < 1000 ){
+             return;
+         }
+         if(!category){
+             return;
+         }
+         let categpries = this.state.categories;
+
+         if(categpries.length <= index) {
+             categpries.push(category);
+         }else{
+             let newCategories =  new Array();
+             for (i = 0; i + 1 <= index; i++){
+                 newCategories.push(categpries[i]);
+             }
+             categpries = newCategories
+             categpries.push(category);
+         }
+         let reduxxCategories = this.props.businesses['categoriesen' + category];
+         if(!reduxxCategories ) {
+
+             this.props.fetchBusinessCategories(category);
+         }
+         this.setState({
+             categories: categpries
+
+         })
+
+         if(categpries.length == 1){
+             this.setState({
+                 category: categpries[0]
+
+             })
+         }
+
+         if(categpries.length == 2){
+             this.setState({
+                 category: categpries[0],
+                 subcategory: categpries[1]
+
+             })
+         }
+
+     }
 
 
+     createPickers() {
+         let categories = this.props.businesses['categoriesenroot'];
+         let rootOicker = undefined;
+         if(categories) {
+             let categoriesWIthBlank = new Array();
+             categories.forEach(function (cat) {
+                 categoriesWIthBlank.push(cat);
+             })
+             categoriesWIthBlank.unshift({
+                 gid: "",
+                 translations:{
+                     en:""
+                 }
+             })
+             rootOicker = <Picker
+                 iosHeader="Sub type"
+                 mode="dropdown"
+                 style={{flex: 1}}
+                 selectedValue={this.state.categories[0]}
+                 onValueChange={this.setCategory.bind( this,0)}>
+
+                 {
+
+
+                     categoriesWIthBlank.map((s, i) => {
+                         return <Item
+                             key={i}
+                             value={s.gid}
+                             label={s.translations.en}/>
+                     }) }
+             </Picker>
+         }
+
+         let props = this.props;
+         let stateCategories = this.state.categories;
+         let setCategoryFunction = this.setCategory.bind(this);
+         let pickers =  this.state.categories.map(function (gid,i) {
+             let categories = props.businesses['categoriesen' + gid];
+             if(categories && categories.length > 0){
+                 let categoriesWIthBlank = new Array();
+                 categories.forEach(function (cat) {
+                     categoriesWIthBlank.push(cat);
+                 })
+                 categoriesWIthBlank.unshift({
+                     gid: "",
+                     translations:{
+                         en:""
+                     }
+                 })
+                 return <Picker
+                     key={i}
+                     iosHeader="Sub type"
+                     mode="dropdown"
+                     style={{flex: 1}}
+                     selectedValue={stateCategories[i+1]}
+                     onValueChange={setCategoryFunction.bind(this,i+1)}>
+
+                     {
+
+
+                         categoriesWIthBlank.map((s, j) => {
+                             return <Item
+                                 key={j}
+                                 value={s.gid}
+                                 label={s.translations.en}/>
+                         }) }
+                 </Picker>
+             }
+             return undefined;
+         })
+         return <View>{rootOicker}{pickers}</View>
+
+     }
     saveFormData(){
 
         this.replaceRoute('home');
@@ -246,65 +313,15 @@ import Autocomplete from 'react-native-autocomplete-input';
         }
     }
 
-    setTopCategory(category){
-        this.setState({
-            category:category
-        })
 
-        if(!category){
-            return;
-        }
-        let sub = this.getPickerCategories(category);
-        if(!sub){
-            return;
-        }
-
-        if(sub.length == 0){
-            return;
-        }
-
-        if(this.state.subcategory){
-            return;
-        }
-
-        this.setState({
-            subcategory: sub[0]
-        })
-
-    }
-     setBottomCategory(category){
-         this.setState({
-             subcategory:category
-         })
-
-     }
 
      keyPad(){
          return true;
      }
     render() {
-
-        let categories =  this.getPickerCategories(undefined);
-        let discountPiker = undefined;
-        if(categories && categories.length > 0){
-             discountPiker = <Picker
-            iosHeader="Sub type"
-            mode="dropdown"
-            style={{ flex:1}}
-            selectedValue={this.state.subcategory}
-            onValueChange={this.setBottomCategory.bind(this)}>
-
-            {
+        let pickers = this.createPickers();
 
 
-                categories.map((s, i) => {
-                    return <Item
-                        key={i}
-                        value={s}
-                        label={s}/>
-                }) }
-        </Picker>
-        }
 
         let image ;
         if(this.state.path){
@@ -328,27 +345,7 @@ import Autocomplete from 'react-native-autocomplete-input';
             </Button>
 
         }
-        let data = this.findCat(this.state.category);
-        let autoComplete = undefined;
-        if(data){
-            autoComplete =  <Autocomplete
-                data={data}
-                keyboardShouldPersistTaps={this.keyPad.bind(this)}
-                defaultValue={this.state.category}
-                containerStyle={{     margin:3}}
-                onChangeText={text => this.setTopCategory({ category: text })}
-                renderItem={data => (
 
-                    <TouchableOpacity onPress={() => this.setTopCategory(data) }>
-                        <Text style={{ fontStyle: 'normal',fontSize:20 }}>{data}</Text>
-                    </TouchableOpacity>
-                )}
-                renderTextInput = {() => (
-                    <Input  value={this.state.category}  blurOnSubmit={true} returnKeyType='next' ref="0" onSubmitEditing={this.focusNextField.bind(this,"1")} onChangeText={(category) => this.setState({category})} placeholder='Business Type' />
-
-                )}
-            />
-        }
 
         return (
 
@@ -357,8 +354,8 @@ import Autocomplete from 'react-native-autocomplete-input';
 
                 <Content  style={{margin:10,backgroundColor: '#fff'}}>
                     <Form>
-                        {autoComplete}
-                        {discountPiker}
+                        {pickers}
+
 
                         <Item style={{ margin:3 } } regular >
                             <Input  value={this.state.name} blurOnSubmit={true} returnKeyType='next' ref="1" onSubmitEditing={this.focusNextField.bind(this,"2")} onChangeText={(name) => this.setState({name})} placeholder='Name' />

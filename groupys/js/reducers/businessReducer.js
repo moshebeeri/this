@@ -17,11 +17,12 @@ export default function business(state = initialState, action) {
                 ...state,
                 businesses : action.businesses,
             };
+
         case 'GET_BUSINESS_CATEGORIES' :
-            return {
-                ...state,
-                categories : action.categories,
-            };
+            let categoriesState = {...state};
+            categoriesState['categories'+ action.language + action.catId] = action.categories;
+
+            return categoriesState;
 
         default:
             return state;

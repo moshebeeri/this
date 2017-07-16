@@ -32,6 +32,8 @@ async function getBusinessCategories(dispatch,gid) {
         dispatch({
             type: 'GET_BUSINESS_CATEGORIES',
             categories: response,
+            language:'en',
+            catId:gid
 
         });
 
