@@ -51,6 +51,7 @@
     "seraph-model": "0.9.1",
     "serve-favicon": "2.0.1",
     "simple-statistics": "^4.1.0",
+    "sleep": "^5.1.1",
     "socket.io": "1.4.8",
     "socket.io-client": "1.4.8",
     "socketio-jwt": "3.0.0",

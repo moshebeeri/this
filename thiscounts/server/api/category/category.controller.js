@@ -16,19 +16,21 @@ const EBayProductCategories = require('./data/product.category.ebay');
 function createProductCategoryRoot(callback) {
   ProductCategory.save({name: 'ProductRootCategory'}, callback)
 }
-
+let sleep = require('sleep');
 let nodes = 0;
 function createProductCategoriesNode(parentName, node, callback) {
   if (_.isEmpty(node))
     return callback(null);
 
-  async.eachLimit(Object.keys(node), 1, function (key, callback) {
+  async.eachLimit(Object.keys(node), 5, function (key, callback) {
     ProductCategory.save({name: key}, function (err, category) {
       let query = `MATCH (top:ProductCategory{name:"${parentName}"}), (sub:ProductCategory{name:"${category.name}"})
                                   CREATE UNIQUE (sub)-[:CATEGORY]->(top)`;
       ProductCategory.query(query, function (err) {
         if (err) return callback(err);
-        createProductCategoriesNode(key, node[key], callback);
+        console.log(nodes++);
+        sleep.msleep(5);
+        return createProductCategoriesNode(key, node[key], callback);
       });
     })
   }, function (err) {
