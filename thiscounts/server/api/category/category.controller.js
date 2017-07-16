@@ -12,6 +12,7 @@ const ProductRootCategory = graphTools.createGraphModel('ProductRootCategory');
 const ProductTopCategory = graphTools.createGraphModel('ProductTopCategory');
 const ProductCategory = graphTools.createGraphModel('ProductCategory');
 const EBayProductCategories = require('./data/product.category.ebay');
+const TestProductCategories = require('./data/product.category.test');
 
 function createProductCategoryRoot(callback) {
   ProductCategory.save({name: 'ProductRootCategory'}, callback)
@@ -22,27 +23,55 @@ function createProductCategoriesNode(parentName, node, callback) {
   if (_.isEmpty(node))
     return callback(null);
 
-  async.eachLimit(Object.keys(node), 5, function (key, callback) {
+  async.eachLimit(Object.keys(node), 1, function (key, callback) {
+    sleep.msleep(5);
     ProductCategory.save({name: key}, function (err, category) {
+      if(err || !category){
+        console.log(`category null for ${key} err:${err.message}`);
+        if (err) return callback(err);
+      }
       let query = `MATCH (top:ProductCategory{name:"${parentName}"}), (sub:ProductCategory{name:"${category.name}"})
                                   CREATE UNIQUE (sub)-[:CATEGORY]->(top)`;
       ProductCategory.query(query, function (err) {
         if (err) return callback(err);
-        console.log(nodes++);
-        sleep.msleep(5);
-        return createProductCategoriesNode(key, node[key], callback);
+        //console.log(`${node++}:/${key}> \n ${Object.keys(node[key])}`);
+        return callback(null);
       });
     })
   }, function (err) {
     if (err) return callback(err);
-    return callback(null);
+    sleep.msleep(500);
+    async.each(Object.keys(node), function (key, callback) {
+      createProductCategoriesNode(key, node[key], callback);
+    }, function (err) {
+      if (err) return callback(err);
+      callback(null);
+    })
   })
 }
+
+function createProductCategoriesNode2(parent, node) {
+  if (_.isEmpty(node))
+    return;
+  Object.keys(node).forEach(key => {
+    let query = ` MATCH (parent:ProductCategory)
+                  where id(parent)=${parent.id}
+                  CREATE (sub:ProductCategory{name:"${key}"})-[:CATEGORY]->(parent)
+                  RETURN sub`;
+    ProductCategory.query(query, function (err, sub) {
+      console.log(sub);
+      if (err) return console.log(err);
+      createProductCategoriesNode2(sub[0], node[key])
+    });
+  })
+}
+
+
 
 function createProductCategories(callback) {
   createProductCategoryRoot(function (err, root) {
     if (err) return callback(err);
-    createProductCategoriesNode('ProductRootCategory', EBayProductCategories, function (err) {
+    createProductCategoriesNode2(root, EBayProductCategories, function (err) {
       if (err) return callback(err);
       return callback(null);
     })

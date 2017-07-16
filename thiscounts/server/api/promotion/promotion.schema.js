@@ -137,7 +137,7 @@ let PromotionSchemaObject = {
     variation: {type: String, enum: Variations},
     quantity: Number,
     values : [{
-      product: {type: Schema.ObjectId, ref: 'Product'},
+      product: {type: Schema.ObjectId, ref: 'Product', autopopulate: true},
       retail_price: {type: Number},
       quantity: Number
     }],
@@ -149,7 +149,7 @@ let PromotionSchemaObject = {
     values : [{
       buy: Number,
       eligible: Number,
-      product: {type: Schema.ObjectId, ref: 'Product'},
+      product: {type: Schema.ObjectId, ref: 'Product', autopopulate: true},
       quantity: Number
     }]
   },
@@ -160,7 +160,7 @@ let PromotionSchemaObject = {
     values: [{
       buy: Number,
       eligible: Number,
-      product: {type: Schema.ObjectId, ref: 'Product'},
+      product: {type: Schema.ObjectId, ref: 'Product', autopopulate: true},
       quantity: Number
     }]
   },
@@ -263,7 +263,7 @@ let PromotionSchemaObject = {
     variation: {type: String, enum: Variations},
     quantity: Number,
     values: [{
-      product: {type: Schema.ObjectId, ref: 'Product'},
+      product: {type: Schema.ObjectId, ref: 'Product', autopopulate: true},
       pay: Number,
       days:[Number],
       from: Number, // seconds from midnight
@@ -275,7 +275,7 @@ let PromotionSchemaObject = {
     quantity: Number,
     value_type: {type: String, enum: ['PERCENT', 'QUANTITY']},
     values: [{
-      product: {type: Schema.ObjectId, ref: 'Product'},
+      product: {type: Schema.ObjectId, ref: 'Product', autopopulate: true},
       more_than: Number,
       value: Number,
       quantity: Number
