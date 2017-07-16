@@ -2,10 +2,10 @@ import React, {Component} from 'react';
 import {Image, Platform} from 'react-native';
 import {connect} from 'react-redux';
 import {actions} from 'react-native-navigation-redux-helpers';
-import {Container, Content, Text, InputGroup, Input, Button, Icon, View} from 'native-base';
+import {Container, Content, Text, InputGroup, Input, Button, Icon, View,Item} from 'native-base';
 
 
-
+import LinearGradient from 'react-native-linear-gradient';
 
 import login from './signup-theme';
 import styles from './styles';
@@ -81,36 +81,50 @@ export default class Register extends Component {
 
     render() {
         return (
-            <Container>
-                <Content theme={login} style={{backgroundColor: login.backgroundColor}}>
-                    <Image source={logo} style={styles.shadow}/>
-                    <View style={styles.inputContainer}>
+            <LinearGradient
 
 
-                        <View style={{marginBottom: 20}}>
-                            <InputGroup >
-                                <Icon name="ios-code" style={{color:"#00F"}}/>
-                                <Input
-                                    placeholder="Code"
-                                    secureTextEntry
-                                    placeholderTextColor='#444'
-                                    onChangeText={code => this.setState({code})}
-                                />
-                            </InputGroup>
+                colors={['#67ccf8', '#66cdcc']}
+                style={styles.inputContainer}
+            >
+
+
+                <View style={styles.inputContainer}>
+
+                    <View >
+                        <View style={styles.thiscountsContainer}>
+                            <Text style={styles.this}>This</Text>
+                            <Text style={styles.thiscount}>Counts</Text>
+                        </View>
+                        <View style={styles.mainContainer}>
+
+                            <Text style={styles.signginText}>We have sent you a SMS</Text>
+                            <Text style={styles.decritpionLine2}>with a validation code!</Text>
+                                <Item style={styles.nameTextInput} regular >
+                                    <Input  value={this.state.name} blurOnSubmit={true} returnKeyType='done' ref="1" onSubmitEditing={this.validateCode.bind(this)} onChangeText={(code) => this.setState({code})} placeholder='Validation Code' />
+                                </Item>
+
+                            <Text style={{padding: 10, fontSize: 16, color: 'red'}}>
+                                {this.state.validationMessage}
+                            </Text>
+                            <View style={{ flexDirection: 'row',color: 'red', justifyContent: 'center',marginBottom:0 }}>
+                                <Text> {this.state.error}</Text>
+                            </View>
+
+
                         </View>
 
-
-                        <Button style={styles.login} onPress={ this.validateCode.bind(this)}>
-                            <Text>Validate Code</Text>
-                        </Button>
-                        <Text>
-                            {this.state.error}
-                        </Text>
                     </View>
 
 
-                </Content>
-            </Container>
+
+
+
+
+
+                </View>
+            </LinearGradient>
+
         );
     }
 }
