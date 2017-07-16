@@ -161,10 +161,10 @@ export default  class Login extends Component {
                        </View>
                        <View>
 
-                           <Text onPress={() => this.login()} style={styles.signginText}>sign in</Text>
+                           <Text style={styles.signginText}>sign in</Text>
 
                            <Item style={styles.phoneTextInput} regular >
-                               <Input  value={this.state.name} blurOnSubmit={true} returnKeyType='next' ref="1" onSubmitEditing={this.focusNextField.bind(this,"2")} onChangeText={(phoneNumber) => this.setState({phoneNumber})} placeholder='Phone Number' />
+                               <Input  keyboardType = 'numeric' value={this.state.name} blurOnSubmit={true} returnKeyType='next' ref="1" onSubmitEditing={this.focusNextField.bind(this,"2")} onChangeText={(phoneNumber) => this.setState({phoneNumber})} placeholder='Phone Number' />
                            </Item>
 
                            <Item style={styles.passwordTextInput} regular >
@@ -177,6 +177,7 @@ export default  class Login extends Component {
                                    defaultValue="de123456"
                                    secureTextEntry
                                    onChangeText={password => this.setState({ password })}
+                                   onSubmitEditing={this.login.bind(this)}
                                />
                            </Item>
 

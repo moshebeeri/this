@@ -72,7 +72,6 @@ module.exports = {
         color:'white',
         marginLeft:30,
         marginTop:40,
-        textDecorationLine:'underline'
 
 
     },
