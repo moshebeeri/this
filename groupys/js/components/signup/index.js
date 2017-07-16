@@ -48,7 +48,7 @@ export default class Signup extends Component {
         this.setState({
             validationMessage: ''
         });
-        if (this.state.phoneNumber.isValidNumber()) {
+        if (this.state.phoneNumber) {
             this.callServerSignupAndRedirect();
             return;
         }
@@ -132,7 +132,7 @@ export default class Signup extends Component {
                             <Text style={styles.signginText}>sign up</Text>
                             <View style={styles.nameContainer}>
                                 <Item style={styles.nameTextInput} regular >
-                                    <Input  value={this.state.name} blurOnSubmit={true} returnKeyType='next' ref="1" onSubmitEditing={this.focusNextField.bind(this,"2")} onChangeText={(phoneNumber) => this.setState({name})} placeholder='Name' />
+                                    <Input  value={this.state.name} blurOnSubmit={true} returnKeyType='next' ref="1" onSubmitEditing={this.focusNextField.bind(this,"2")} onChangeText={(name) => this.setState({name})} placeholder='Name' />
                                 </Item>
                                 <Item style={styles.lastnameTextInput} regular >
                                     <Input  value={this.state.lastname} blurOnSubmit={true} returnKeyType='next' ref="2" onSubmitEditing={this.focusNextField.bind(this,"3")} onChangeText={(lastname) => this.setState({lastname})} placeholder='Last Name' />
