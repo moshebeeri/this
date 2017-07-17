@@ -315,7 +315,7 @@ import {DeviceEventEmitter} from 'react-native'
             promotion.x_plus_n_percent_off.variation = 'SINGLE';
             promotion.x_plus_n_percent_off.quantity = Number(this.state.quantity);
             promotion.x_plus_y.values = {
-                eligible: Number(this.state.x_plus_n_percent_off.values.eligible),
+                eligible: Number(this.state.x_plus_n_percent_off.eligible),
                 product:this.state.giftProduct,
 
             };

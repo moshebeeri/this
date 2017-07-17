@@ -152,22 +152,27 @@ class FeedConverter
                     responseFeed.promotionColor = '#e65100';
                     break;
                 case "PERCENT":
-                    responseFeed.itemTitle = "Get " + instance.promotion.percent.values[0] + ' % Off ' ;
+                    if(instance.promotion.condition.product){
+                        responseFeed.itemTitle = "Get " +instance.promotion.condition.product.name + " with "+ instance.promotion.percent.values[0] + ' % Off ' ;
+
+                    }else {
+                        responseFeed.itemTitle = "Get " + instance.promotion.percent.values[0] + ' % Off ';
+                    }
                     responseFeed.promotion = 'PRECENT';
                     responseFeed.promotionColor = '#df80ff';
                     break;
                 case "X_FOR_Y":
-                    responseFeed.itemTitle = '' ;
+                    responseFeed.itemTitle = 'Buy ' + instance.promotion.x_for_y.values[0].eligible + " " +  instance.promotion.condition.product.name + " Pay only " + instance.promotion.x_for_y.values[0].pay;
                     responseFeed.promotion = 'X_FOR_Y';
                     responseFeed.promotionColor = '#ff66b3';
                     break;
                 case "X+N%OFF":
-                    responseFeed.itemTitle = '' ;
+                    responseFeed.itemTitle = 'Buy ' +   instance.condition.product.name + " Get " +  instance.x_plus_n_percent_off.values[0].product.name + " with "+instance.promotion.x_plus_n_percent_off.values[0].eligible + " %Off" ;
                     responseFeed.promotion = 'X+N%OFF';
                     responseFeed.promotionColor = '#ff66b3';
                     break;
                 case "X+Y":
-                    responseFeed.itemTitle = '' ;
+                    responseFeed.itemTitle = 'Buy ' + instance.promotion.x_plus_y.values[0].buy + " " +  instance.promotion.condition.product.name + " Get " +instance.promotion.x_plus_y.values[0].eligible + " " +  instance.promotion.x_plus_y.values[0].product.name;
                     responseFeed.promotion = 'X+Y';
                     responseFeed.promotionColor = '#66ff1a';
                     break;
@@ -234,7 +239,12 @@ class FeedConverter
                     responseFeed.promotionColor = '#e65100';
                     break;
                 case "PERCENT":
-                    responseFeed.itemTitle = "Get " + feed.activity.promotion.percent.values[0] + ' % Off ' ;
+                    if( feed.activity.promotion.condition.product) {
+                        responseFeed.itemTitle = "Get " +feed.activity.promotion.condition.product.name + " with " + feed.activity.promotion.percent.values[0] + ' % Off ';
+
+                    }else {
+                        responseFeed.itemTitle = "Get " + feed.activity.promotion.percent.values[0] + ' % Off ';
+                    }
                     responseFeed.promotion = 'PERCENT';
                     responseFeed.promotionColor = '#df80ff';
                     break;
@@ -244,12 +254,12 @@ class FeedConverter
                     responseFeed.promotionColor = '#ff66b3';
                     break;
                 case "X+N%OFF":
-                    responseFeed.itemTitle = '' ;
+                    responseFeed.itemTitle = 'Buy ' +   feed.activity.promotion.condition.product.name + " Get " +  feed.activity.promotion.x_plus_n_percent_off.values[0].product.name + " with "+feed.activity.promotion.x_plus_n_percent_off.values[0].eligible + " %Off" ;
                     responseFeed.promotion = 'X+N%OFFf';
                     responseFeed.promotionColor = '#ff66b3';
                     break;
                 case "X+Y":
-                    responseFeed.itemTitle = '' ;
+                    responseFeed.itemTitle = 'Buy ' + feed.activity.promotion.x_plus_y.values[0].buy + " " +  feed.activity.promotion.condition.product.name + " Get " +feed.activity.promotion.x_plus_y.values[0].eligible + " " +  feed.activity.promotion.x_plus_y.values[0].product.name;
                     responseFeed.promotion = 'X+Y';
                     responseFeed.promotionColor = '#66ff1a';
                     break;
