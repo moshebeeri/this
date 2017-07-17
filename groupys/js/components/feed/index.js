@@ -42,7 +42,7 @@ class Feed extends Component {
     render() {
 
         return (
-            <GenericFeedManager showTopTimer={this.props.feeds.showTopLoader} feeds={this.props.feeds.feeds} api={this} title='Feeds' ItemDetail={GenericFeedItem}></GenericFeedManager>
+            <GenericFeedManager loadingDone = {this.props.feeds.loadingDone} showTopTimer={this.props.feeds.showTopLoader} feeds={this.props.feeds.feeds} api={this} title='Feeds' ItemDetail={GenericFeedItem}></GenericFeedManager>
 
         );
     }
