@@ -8,7 +8,8 @@ import { AppRegistry } from "react-native";
 import App from "./js/startApp";
 import codePush from "react-native-code-push";
 
+let codePushOptions = { checkFrequency: codePush.CheckFrequency.MANUAL };
 
-let app = codePush(App);
+let app = codePush(codePushOptions)(App);
 
 AppRegistry.registerComponent('groupys', () => App);

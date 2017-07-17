@@ -56,6 +56,9 @@ import * as feedsAction from "../../actions/feeds";
     render() {
       //  let loader = this.state.showLoader?<View><Spinner color='red' /></View>:null
         let topLoader = this.props.showTopLoader?<View><Spinner color='red' /></View>:null
+        if(!this.props.loadingDone){
+            return <View><Spinner color='red' /></View>;
+        }
 
         return (
 

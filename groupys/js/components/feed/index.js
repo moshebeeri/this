@@ -26,7 +26,8 @@ class Feed extends Component {
     }
 
     fetchFeeds(){
-         this.props.fetchFeeds('GET_FEEDS',this.props.feeds.feeds,this);
+        this.props.fetchFeeds('GET_FEEDS',this.props.feeds.feeds,this);
+        this.props.fetchUsers()
     }
     fetchTop(id){
         this.props.showTopLoader();
@@ -42,7 +43,7 @@ class Feed extends Component {
     render() {
 
         return (
-            <GenericFeedManager showTopTimer={this.props.feeds.showTopLoader} feeds={this.props.feeds.feeds} api={this} title='Feeds' ItemDetail={GenericFeedItem}></GenericFeedManager>
+            <GenericFeedManager loadingDone = {this.props.feeds.loadingDone} showTopTimer={this.props.feeds.showTopLoader} feeds={this.props.feeds.feeds} api={this} title='Feeds' ItemDetail={GenericFeedItem}></GenericFeedManager>
 
         );
     }

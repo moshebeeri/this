@@ -305,7 +305,7 @@ import {DeviceEventEmitter} from 'react-native'
             promotion.x_for_y.variation = 'SINGLE';
             promotion.x_for_y.quantity = Number(this.state.quantity)
             promotion.x_for_y.values = [{
-                price: Number(this.state.x_for_y.values.price),
+                eligible: Number(this.state.x_for_y.values.eligible),
                 pay: Number(this.state.x_for_y.values.pay),
 
             }]
@@ -314,23 +314,24 @@ import {DeviceEventEmitter} from 'react-native'
             promotion.x_plus_n_percent_off = {};
             promotion.x_plus_n_percent_off.variation = 'SINGLE';
             promotion.x_plus_n_percent_off.quantity = Number(this.state.quantity);
-            promotion.x_plus_y.values = {
-                eligible: Number(this.state.x_plus_n_percent_off.values.eligible),
+            promotion.x_plus_n_percent_off.values = [{
+                eligible: Number(this.state.x_plus_n_percent_off.eligible),
                 product:this.state.giftProduct,
 
-            };
+
+            }];
         }
 
         if(this.state.type == 'X+Y'){
             promotion.x_plus_y = {};
             promotion.x_plus_y.variation = 'SINGLE';
             promotion.x_plus_y.quantity = Number(this.state.quantity);
-            promotion.x_plus_y.values = {
+            promotion.x_plus_y.values = [{
                 eligible: Number(this.state.x_plus_y.values.eligible),
                 buy : Number(this.state.x_plus_y.values.buy),
                 product:this.state.giftProduct,
 
-            };
+            }];
 
 
         }

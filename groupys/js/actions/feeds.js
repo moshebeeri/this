@@ -4,7 +4,8 @@
 
 
 
-
+import UserApi from "../api/user"
+let userApi = new UserApi();
 
 async function fetchList(action,feeds,api,dispatch,groupid){
     try {
@@ -150,6 +151,24 @@ export function showGroupTopLoader(groupid) {
     }
 }
 
+async function getUser(dispatch){
+    try {
+        let user = await userApi.getUser();
+
+        dispatch({
+            type: 'GET_USER',
+            user: user
+
+        });
+
+
+
+    }catch (error){
+        console.log(error);
+    }
+
+}
+
 
 
 export function updateHomeFeed(feed) {
@@ -159,6 +178,12 @@ export function updateHomeFeed(feed) {
             feed: feed
         });
     }
+}
+export function fetchUsers(){
+    return function (dispatch, getState){
+        dispatch|(getUser(dispatch,));
+    }
+
 }
 
 

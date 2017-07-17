@@ -17,7 +17,8 @@ export default function feeds(state = initialState, action) {
             return {
                 ...state,
                 feeds : action.feeds,
-                showTopLoader : action.showTopLoader
+                showTopLoader : action.showTopLoader,
+                loadingDone: true,
             };
 
         case 'GET_GROUP_FEEDS' :
@@ -30,7 +31,8 @@ export default function feeds(state = initialState, action) {
             return {
                 ...state,
                 savedfeeds : action.feeds,
-                savedShowTopLoader : action.showTopLoader
+                savedShowTopLoader : action.showTopLoader,
+                savedloadingDone: true,
             };
         case 'SHOW_TOP_LOADER' :
             return {

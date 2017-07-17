@@ -86,7 +86,7 @@ import * as userAction from "../../actions/user";
 
         }
 
-         userApi.getUser();
+         // userApi.getUser();
 
 
     }
@@ -171,7 +171,7 @@ import * as userAction from "../../actions/user";
     }
     async componentWillMount() {
         await this.calc_login_status();
-        this.props.fetchUsers();
+
         this.setState({start:false});
 
     }
@@ -192,8 +192,8 @@ import * as userAction from "../../actions/user";
         this._drawer._root.close();
     }
     componentDidMount(){
-        codePush.sync({updateDialog: updateDialogOption})
-
+         codePush.sync({updateDialog: updateDialogOption})
+        ;
     }
 
     render() {
@@ -221,8 +221,6 @@ import * as userAction from "../../actions/user";
 
                 </Fab>
         }
-
-        if(!this.start) {
 
             return (
 
@@ -259,8 +257,6 @@ import * as userAction from "../../actions/user";
                         </Container>
             </Drawer>
                );
-        }
-        return  <Container></Container>;
 
 
 
