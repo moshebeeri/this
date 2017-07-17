@@ -32,7 +32,7 @@ let Activity = require('../activity/activity.model');
 let validationError = function (res, err) {
   let firstKey = getKey(err.errors);
   if (firstKey !== undefined) {
-    return res.status(422).json(err['errors'][firstKey]['message']);
+    return res.status(422).json(err.errors.firstKey.message);
   }
   return res.status(422).json(err);
 };
@@ -83,14 +83,14 @@ let like_generates_follow = function (userId, itemId) {
     },
     function (err, results) {
       // results is now equals to: {one: 1, two: 2}
-      if (results['user']           ||
-          results['business']       ||
-          results['shoppingChain']  ||
-          results['product']        ||
-          results['promotion']      ||
-          results['mall']           ||
-          results['category']       ||
-          results['cardType']) {
+      if (results.user           ||
+          results.business       ||
+          results.shoppingChain  ||
+          results.product        ||
+          results.promotion      ||
+          results.mall           ||
+          results.category       ||
+          results.cardType) {
         graphModel.relate_ids(userId, 'FOLLOW', itemId);
         activity_follow(userId, itemId);
       }
@@ -513,7 +513,7 @@ exports.changePassword = function (req, res, next) {
  * Change users info
  */
 exports.updateInfo = function (req, res, next) {
-  let userId = req.user._id;
+  //let userId = req.user._id;
   let newUser = req.body;
   let query = {'phone_number': req.body['phone_number']};
 
@@ -538,10 +538,42 @@ exports.me = function (req, res, next) {
 };
 
 exports.addEntityUserRole = function (req, res) {
-  res.status(200).json('ok');
+  let me = req.user._id;
+  let entity = req.params.entity;
+  let role = req.params.role;
+  let user = req.params.user;
+
+  //Check is me is the owner of the entity, if so apply
+  let owner_query = `MATCH (me:user{_id:"${me}"})-[owns:OWNS]->(entity{_id:"${entity}"}) return me, owns, entity`;
+  graphModel.query(owner_query, function (err, me_owns_entities) {
+    if(err) return handleError(res, err);
+    if(me_owns_entities.length === 1){
+      //then me is the owner, allow role
+      graphModel.query(owner_query, function (err) {
+        if(err) return handleError(res, err);
+        return res.status(200).json('ok');
+      })
+    }
+    else if(me_owns_entities.length > 1){
+      return res.status(404).json(`Unauthorized user ${me}`);
+    }
+    else if(me_owns_entities.length === 0){
+      let rule_query = `MATCH (me:user{_id:"${me}"})-[role:ROLE]->(entity{_id:"${entity}"}) return me, role, entity`;
+      graphModel.query(rule_query, function (err, me_role_entities) {
+        if (err) return handleError(res, err);
+        console.log(me_role_entities);
+        return res.status(200).json('ok');
+      })
+    }
+  });
 };
 
 exports.deleteEntityUserRole = function (req, res) {
+  let me = req.user._id;
+  let entity = req.params.entity;
+  let role = req.params.role;
+  let user = req.params.user;
+
   res.status(200).json('ok');
 };
 

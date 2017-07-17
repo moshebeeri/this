@@ -179,6 +179,7 @@ function create_product_categories(req, res) {
     return res.status(200).json('ok');
   });
 }
+
 function add_object_categories(type, parent, node) {
   if (_.isEmpty(node))
     return;
@@ -204,32 +205,24 @@ function add_object_categories(type, parent, node) {
   })
 }
 
+
 function add_categories(type, categories, parent) {
 
-  categories.forEach(function (name, callback) {
+  categories.forEach(function (name) {
     let typeName = type=== 'business'? 'BusinessCategory' : 'ProductCategory';
 
     let query = ` MATCH (parent:${typeName})
                   where id(parent)=${parent.id}
                   CREATE (sub:${typeName}{name:"${name}"})-[:CATEGORY]->(parent)
                   RETURN sub`;
-
+      console.log(`add_categories ${parent.name}<-${name}`);
       ProductCategory.query(query, function (err, category) {
         if(err) return console.log(err);
       })
   })
 }
 
-function add_categories_from_object(type, parent, node){
-  if(_.isEmpty(node))
-    return;
-  add_categories(type, Object.keys(node), parent, function (err) {
-    if(err) return console.error(err);
-    Object.keys(node).forEach(cat => {
-      add_categories_from_object(type, parent, node[cat]);
-    })
-  });
-}
+
 
 function csv_load_product_categories(req, res) {
     let query = ` MATCH (parent:ProductCategory{name:"ProductRootCategory"})
@@ -242,6 +235,7 @@ function csv_load_product_categories(req, res) {
     let top = {};
     csv()
       .fromFile('/home/ubuntu/low.la/thiscounts/server/api/category/data/groceries.csv')
+      //.fromFile('/Users/moshe/projects/low.la/thiscounts/server/api/category/data/groceries.csv')
       .on('json', (jsonObj) => {
         //console.log(Object.keys(jsonObj)  + '=>' + JSON.stringify(jsonObj));
         let obj = top;
@@ -257,7 +251,7 @@ function csv_load_product_categories(req, res) {
       })
       .on('done', (error) => {
         console.log(JSON.stringify(top,null,2));
-        add_categories_from_object('product', sub[0], top);
+        add_object_categories('product', sub[0], top);
         return res.status(200).json('ok');
       });
   });
