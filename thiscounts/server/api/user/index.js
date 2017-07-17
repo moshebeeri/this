@@ -27,5 +27,6 @@ router.delete('/follow/:id', auth.isAuthenticated(), controller.unfollow);
 
 router.get('/role/:user/:role/:entity', auth.isAuthenticated(), controller.addEntityUserRole);
 router.delete('/role/:user/:role/:entity', auth.isAuthenticated(), controller.deleteEntityUserRole);
+router.get('/role/test', controller.roleTest);
 
 module.exports = router;
