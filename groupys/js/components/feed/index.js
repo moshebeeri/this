@@ -26,7 +26,8 @@ class Feed extends Component {
     }
 
     fetchFeeds(){
-         this.props.fetchFeeds('GET_FEEDS',this.props.feeds.feeds,this);
+        this.props.fetchFeeds('GET_FEEDS',this.props.feeds.feeds,this);
+        this.props.fetchUsers()
     }
     fetchTop(id){
         this.props.showTopLoader();
