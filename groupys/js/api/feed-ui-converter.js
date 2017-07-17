@@ -167,7 +167,7 @@ class FeedConverter
                     responseFeed.promotionColor = '#ff66b3';
                     break;
                 case "X+N%OFF":
-                    responseFeed.itemTitle = 'Buy ' +   instance.condition.product.name + " Get " +  instance.x_plus_n_percent_off.values[0].product.name + " with "+instance.promotion.x_plus_n_percent_off.values[0].eligible + " %Off" ;
+                    responseFeed.itemTitle = 'Buy ' +   instance.promotion.condition.product.name + " Get " +  instance.promotion.x_plus_n_percent_off.values[0].product.name + " with "+instance.promotion.x_plus_n_percent_off.values[0].eligible + " %Off" ;
                     responseFeed.promotion = 'X+N%OFF';
                     responseFeed.promotionColor = '#ff66b3';
                     break;
