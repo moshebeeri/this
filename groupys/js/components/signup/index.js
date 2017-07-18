@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import {Image, Platform} from 'react-native';
+import {Image, Platform,KeyboardAvoidingView} from 'react-native';
 import {connect} from 'react-redux';
 import {actions} from 'react-native-navigation-redux-helpers';
 import {Container, Content, Text, InputGroup, Input, Button, Icon, View,Item} from 'native-base';
@@ -122,14 +122,14 @@ export default class Signup extends Component {
 
                 <View style={styles.inputContainer}>
 
-                    <View >
+                    <KeyboardAvoidingView behavior={'position'} style={styles.avoidView}>
                         <View style={styles.thiscountsContainer}>
                             <Text style={styles.this}>This</Text>
                             <Text style={styles.thiscount}>Counts</Text>
                         </View>
-                        <View>
+                        <View  >
 
-                            <Text style={styles.signginText}>sign up</Text>
+                        <Text style={styles.signginText}>sign up</Text>
                             <View style={styles.nameContainer}>
                                 <Item style={styles.nameTextInput} regular >
                                     <Input  value={this.state.name} blurOnSubmit={true} returnKeyType='next' ref="1" onSubmitEditing={this.focusNextField.bind(this,"2")} onChangeText={(name) => this.setState({name})} placeholder='Name' />
@@ -178,7 +178,7 @@ export default class Signup extends Component {
                             </View>
                         </View>
 
-                    </View>
+                    </KeyboardAvoidingView>
 
 
 

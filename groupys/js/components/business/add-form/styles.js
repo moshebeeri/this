@@ -8,11 +8,44 @@ const React = require('react-native');
 const {Dimensions, Platform} = React;
 const {width, height} = Dimensions.get('window')
 module.exports = {
-    container:{
+    business_container:{
         flex:1,
-        backgroundColor:'#f7e6ff',
-        padding:10,
+        height:height,
+        width:width,
 
+        alignItems: 'center',
+        padding:5,
+
+    },
+    business_upper_container:{
+        width:width - 15,
+        height:120,
+        marginTop:3,
+        marginBottom:5,
+
+        flexDirection: 'row',
+    },
+    avoidView:{
+        width:width -25,
+        alignItems: 'center',
+    },
+    business_upper_image_container:{
+        width:width / 3,
+        height:110,
+        marginTop:10,
+        marginRight:12,
+        marginLeft:10,
+        backgroundColor:'white'
+    },
+    business_upper_name_container:{
+        width:width / 3 + 80,
+        height:90,
+        marginTop:10,
+        marginBottom:12,
+        marginRight:12,
+    },
+    picker:{
+        margin:3,height:50,width:width - 18 ,backgroundColor:'white'
     },
     itemborder:{
 
@@ -76,5 +109,10 @@ module.exports = {
 
 
 
+    },
+    contentContainer:{
+        paddingVertical: 3,
+        marginRight:10,
+        paddingLeft:10
     }
 };

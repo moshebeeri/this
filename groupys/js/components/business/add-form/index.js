@@ -7,13 +7,13 @@ import { Platform,
     Image,
     ScrollView,
     TouchableOpacity,
-
+    KeyboardAvoidingView,
     TouchableHighlight
 } from 'react-native';
 
 
 
-import {Container,Content,Item,Form,Picker,Input,Footer,Button,Text,Icon} from 'native-base';
+import {Container,Content,Item,Form,Picker,Input,Footer,Button,Text,Icon,Fab} from 'native-base';
 
 import store from 'react-native-simple-store';
 
@@ -35,6 +35,10 @@ import Autocomplete from 'react-native-autocomplete-input';
 
         if(props.navigation.state.params && props.navigation.state.params.item){
             let item = props.navigation.state.params.item;
+            let picture = undefined;
+            if(item.pictures.length > 0 && item.pictures[0].pictures[1]){
+                picture = item.pictures[0].pictures[1]
+            }
             let category = item.category;
             if(!category){
                 category = '0';
@@ -53,7 +57,7 @@ import Autocomplete from 'react-native-autocomplete-input';
                 city: item.city,
                 state: '',
                 path: '',
-                image: '',
+                image: picture,
                 type: item.type,
                 images: '',
                 tax_id: item.tax_id,
@@ -64,6 +68,7 @@ import Autocomplete from 'react-native-autocomplete-input';
                 subcategory:subcategory,
                 categories:[Number(category),Number(subcategory)],
                 formData: {},
+                active: false,
             };
         }else {
 
@@ -87,6 +92,7 @@ import Autocomplete from 'react-native-autocomplete-input';
                 subcategory:'',
                 categories:[],
                 formData: {},
+                active:false
             };
         }
         let stateFunc = this.setState.bind(this);
@@ -186,13 +192,14 @@ import Autocomplete from 'react-native-autocomplete-input';
              categoriesWIthBlank.unshift({
                  gid: "",
                  translations:{
-                     en:""
+                     en:"Select Category"
                  }
              })
              rootOicker = <Picker
-                 iosHeader="Sub type"
+
                  mode="dropdown"
-                 style={{flex: 1}}
+                 placeholder ="Select Category"
+                 style={styles.picker}
                  selectedValue={this.state.categories[0]}
                  onValueChange={this.setCategory.bind( this,0)}>
 
@@ -221,14 +228,15 @@ import Autocomplete from 'react-native-autocomplete-input';
                  categoriesWIthBlank.unshift({
                      gid: "",
                      translations:{
-                         en:""
+                         en:"Select Sub Category"
                      }
                  })
                  return <Picker
                      key={i}
-                     iosHeader="Sub type"
+
+                     placeholder ="Select Category"
                      mode="dropdown"
-                     style={{flex: 1}}
+                     style={styles.picker}
                      selectedValue={stateCategories[i+1]}
                      onValueChange={setCategoryFunction.bind(this,i+1)}>
 
@@ -326,19 +334,19 @@ import Autocomplete from 'react-native-autocomplete-input';
         let image ;
         if(this.state.path){
             image =  <Image
-                            style={{width: 50, height: 50}}
+                            style={{width: 120, height: 120}}
                             source={{uri: this.state.path}}
                         />
 
 
 
         }
-        let saveButton =  <Button transparent
+        let saveButton =  <Button style={{backgroundColor:'#2db6c8'}}
                                   onPress={this.saveFormData.bind(this)}>
-            <Text>Add Business</Text>
+                         <Text>Add Business</Text>
         </Button>
         if(this.props.navigation.state.params && this.props.navigation.state.params.item){
-            saveButton =  <Button transparent
+            saveButton =  <Button style={{backgroundColor:'#2db6c8'}}
                                   onPress={this.updateFormData.bind(this)}
             >
                 <Text>Update Business</Text>
@@ -349,66 +357,63 @@ import Autocomplete from 'react-native-autocomplete-input';
 
         return (
 
-            <Container>
+
+                <View  style={styles.business_container}>
 
 
-                <Content  style={{margin:10,backgroundColor: '#fff'}}>
-                    <Form>
-                        {pickers}
+                        <View style = {styles.business_upper_container}>
+                            <View style = {styles.business_upper_image_container}>
+                                {image}
+                            </View>
+                            <View style = {styles.business_upper_name_container}>
+                                <Item style={{ marginBottom:6,backgroundColor:'white' } } regular >
+                                    <Input  value={this.state.name} blurOnSubmit={true} returnKeyType='next' ref="1" onSubmitEditing={this.focusNextField.bind(this,"2")} onChangeText={(name) => this.setState({name})} placeholder='Bussines Name' />
+                                    <Button  iconRight transparent  onPress={() => this.pickPicture()}>
+                                        <Icon name='camera' />
+                                    </Button>
+
+                                </Item>
+                                <Item style={{ backgroundColor:'white'} } regular >
+                                    <Input value={this.state.email}  blurOnSubmit={true} returnKeyType='next' ref="2"  onSubmitEditing={this.focusNextField.bind(this,"3")}  onChangeText={(email) => this.setState({email})} placeholder='Email' />
+                                </Item>
+                            </View>
+                        </View>
+                    <ScrollView contentContainerStyle={styles.contentContainer}>
+
+                    <KeyboardAvoidingView  behavior={'position'} style={styles.avoidView}>
 
 
-                        <Item style={{ margin:3 } } regular >
-                            <Input  value={this.state.name} blurOnSubmit={true} returnKeyType='next' ref="1" onSubmitEditing={this.focusNextField.bind(this,"2")} onChangeText={(name) => this.setState({name})} placeholder='Name' />
-                        </Item>
-                        <Item style={{ margin:3 } } regular >
-                          <Input value={this.state.email}  blurOnSubmit={true} returnKeyType='next' ref="2"  onSubmitEditing={this.focusNextField.bind(this,"3")}  onChangeText={(email) => this.setState({email})} placeholder='Email' />
-                        </Item>
-
-                        <Item style={{ margin:3 } } regular >
+                    {pickers}
+                        <Item style={{ margin:3,backgroundColor:'white' } } regular >
                            <Input value={this.state.website}  blurOnSubmit={true} returnKeyType='next' ref="3"  onSubmitEditing={this.focusNextField.bind(this,"4")}  onChangeText={(website) => this.setState({website})} placeholder='Website' />
                         </Item>
 
-                        <Item style={{ margin:3 } } regular >
+                        <Item style={{ margin:3 ,backgroundColor:'white'} } regular >
                            <Input value={this.state.city} blurOnSubmit={true} returnKeyType='next' ref="4"  onSubmitEditing={this.focusNextField.bind(this,"5")}  onChangeText={(city) => this.setState({city})} placeholder='City' />
                         </Item>
-                        <Item style={{ margin:3 } } regular >
+                        <Item style={{ margin:3 ,backgroundColor:'white'} } regular >
                            <Input value={this.state.address} blurOnSubmit={true} returnKeyType='next' ref="5"  onSubmitEditing={this.focusNextField.bind(this,"6")}  onChangeText={(address) => this.setState({address})} placeholder='Addresss' />
                         </Item>
-                        <Item style={{ margin:3 } } regular >
+                        <Item style={{ margin:3 ,backgroundColor:'white'} } regular >
                            <Input value={this.state.tax_id} blurOnSubmit={true} returnKeyType='done' ref="6"   onChangeText={(tax_id) => this.setState({tax_id})} placeholder='Tax ID' />
                         </Item>
 
 
-                        <Item  style={{ margin:3 } } regular>
-                            <Button  iconRight transparent  onPress={() => this.pickPicture()}>
-                                <Text style={{ fontStyle: 'normal',fontSize:10 }}>Pick </Text>
-                                <Icon name='camera' />
-                            </Button>
+                        </KeyboardAvoidingView>
+
+                    </ScrollView>
+
+
+                    <Item  style={{ marginBottom:15 } } regular>
+
+                        {saveButton}
+                    </Item>
+
+
+                    </View>
 
 
 
-
-                            <Button   iconRight transparent  onPress={() => this.pickFromCamera()}>
-                                <Text style={{ fontStyle: 'normal',fontSize:10 }}>take </Text>
-                                <Icon name='camera' />
-                            </Button>
-
-                            {image}
-                        </Item>
-
-
-
-
-
-                    </Form>
-
-
-                </Content>
-                <Footer style={{backgroundColor: '#fff'}}>
-                    {saveButton}
-
-                </Footer>
-            </Container>
 
         );
 
