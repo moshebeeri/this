@@ -3,12 +3,15 @@
 let _ = require('lodash');
 let Group = require('./group.model');
 let User = require('../user/user.model');
+let Product = require('../product/product.model');
+let Feed = require('../feed/feed.model');
 
 let graphTools = require('../../components/graph-tools');
 let graphModel = graphTools.createGraphModel('group');
 let activity = require('../../components/activity').createActivity();
 let logger = require('../../components/logger').createLogger();
 let utils = require('../../components/utils').createUtils();
+const async = require('async');
 
 // Get list of groups
 exports.index = function (req, res) {
@@ -182,20 +185,20 @@ exports.destroy = function (req, res) {
 
 // offer to group.
 //router.post('/offer/:group', auth.isAuthenticated(), controller.offer);
-exports.offer = function (req, res) {
-  let offer = req.body;
-  Group.findById(req.params.group, function (err, group) {
-    if (err) {
-      return handleError(res, err);
-    }
-    if (!group) {
-      return res.status(404).send('no group');
-    }
-    graphModel.relate_ids(group._id, 'OFFER', offer._id);
-    group_offer_activity(group, offer);
-    return res.status(200).json(group);
-  });
-};
+// exports.offer = function (req, res) {
+//   let offer = req.body;
+//   Group.findById(req.params.group, function (err, group) {
+//     if (err) {
+//       return handleError(res, err);
+//     }
+//     if (!group) {
+//       return res.status(404).send('no group');
+//     }
+//     graphModel.relate_ids(group._id, 'OFFER', offer._id);
+//     group_offer_activity(group, offer);
+//     return res.status(200).json(group);
+//   });
+// };
 
 //router.post('/message/:group', auth.isAuthenticated(), controller.message);
 exports.message = function (req, res) {
@@ -231,7 +234,7 @@ function user_follow_group(user_id, group, callback) {
 function group_follow_group(following_group_id, group_to_follow_id, callback) {
   graphModel.relate_ids(following_group_id, 'FOLLOW', group_to_follow_id, function(err){
     if(err) return callback(err);
-    group_follow_group_activity(group, user_id);
+    group_follow_group_activity(following_group_id, group_to_follow_id);
     callback(null)
   });
 }
@@ -239,7 +242,7 @@ function group_follow_group(following_group_id, group_to_follow_id, callback) {
 function group_follow_business(following_group_id, business_id, callback) {
   graphModel.relate_ids(following_group_id, 'FOLLOW', business_id, function(err){
     if(err) return callback(err);
-    group_follow_business_activity(group, user_id);
+    group_follow_business_activity(business_id, following_group_id);
     callback(null)
   });
 }
@@ -265,7 +268,7 @@ exports.add_admin = function (req, res) {
     if (utils.defined(_.find(group.admins, req.user._id))) {
       handleError(res, new Error('only group admin can add admin'))
     }
-    graphModel.is_related_ids(user_id, 'FOLLOW', group._id, function (err, exist) {
+    graphModel.is_related_ids(req.params.user, 'FOLLOW', group._id, function (err, exist) {
       if(!exist){
         handleError(res, new Error('only group members can be added to admin'))
       }
@@ -346,7 +349,7 @@ exports.group_join_group = function (req, res) {
 
       group_follow_group(following_group._id, group2follow._id, function (err) {
         if(err) return handleError(res, err);
-        return res.status(200).json(group);
+        return res.status(200).json(following_group);
       });
     })
   });
@@ -363,7 +366,7 @@ exports.group_follow_business = function (req, res) {
 
       group_follow_business(following_group._id, req.params.business, function (err) {
         if(err) return handleError(res, err);
-        return res.status(200).json(group);
+        return res.status(200).json(following_group);
       });
     })
 };
@@ -436,6 +439,56 @@ exports.user_follow = function (req, res) {
 };
 
 
+function getGroupPreview(group, callback) {
+  async.parallel({
+    last_activity: function (callback) {
+      Feed.findOne({entity: group._id})
+        .where('message').eq(null)
+        .sort({activity: 'desc'})
+        .populate({path: 'user',
+          select: '-salt -hashedPassword -gid -role -__v -email -phone_number -sms_verified -sms_code -provider'
+        })
+        .populate({path: 'activity'})
+        .exec(function (err, act) {
+          if(err) return callback(err);
+          return callback(null, act)
+        })
+    },
+    last_message: function (callback) {
+      Feed.findOne({entity: group._id})
+        .where('message').ne(null)
+        .sort({activity: 'desc'})
+        .populate({path: 'user',
+          select: '-salt -hashedPassword -gid -role -__v -email -phone_number -sms_verified -sms_code -provider'
+        })
+        .populate({path: 'activity'})
+        .exec(function (err, msg) {
+          if(err) return callback(err);
+          return callback(null, msg)
+        })
+    },
+    group: function (callback) {
+          return callback(null, group)
+    },function (err, preview) {
+      if(err) return callback(err);
+      callback(null, preview)
+    }
+  })
+}
+
+function getGroupsLastInfo(groups, callback) {
+  let previews = [];
+  async.each(groups, function(group, callback){
+    getGroupPreview(group, function(err, preview){
+      if(err) return callback(err);
+      previews.push(preview);
+      callback(null, preview)
+    })
+  }, function (err) {
+    if(err) return callback(err);
+    callback(null, previews);
+  })
+}
 
 exports.my_groups = function (req, res) {
   let userId = req.user._id;
@@ -444,9 +497,13 @@ exports.my_groups = function (req, res) {
 
   graphModel.query_objects(Group,
     `MATCH (u:user {_id:'${userId}'})-[r:FOLLOW]->(g:group) RETURN g._id as _id`,
-    'order by p.created DESC', skip, limit, function (err, products) {
+    'order by p.created DESC', skip, limit, function (err, groups) {
       if (err) return handleError(res, err);
-      return res.status(200).json(products);
+      getGroupsLastInfo(groups, function(err, groups){
+        if (err) return handleError(res, err);
+        return res.status(200).json(groups);
+
+      });
     });
 };
 
