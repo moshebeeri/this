@@ -5,11 +5,12 @@
  * Created by roilandshut on 26/03/2017.
  */
 
-
+const noPic = require('../../images/client_1.png');
+import store from 'react-native-simple-store';
 class FeedConverter
 {
 
-    createFeed(feed,contacsMap) {
+    createFeed(feed,contacsMap,phoneUser) {
         let response = undefined;
         if (feed.activity.business) {
             let name = feed.activity.actor_user.phone_number;
@@ -118,7 +119,16 @@ class FeedConverter
                     uri: user.pictures[user.pictures.length - 1].pictures[0]
                 }
 
+            }else {
+                response.logo = noPic;
             }
+            if(phoneUser.phone_number == user.phone_number ) {
+                response.userMessage = true;
+            }else{
+                response.userMessage = false;
+            }
+
+            response.name = name;
 
             response.itemType = 'MESSAGE';
         }

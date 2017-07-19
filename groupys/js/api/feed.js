@@ -26,6 +26,7 @@ class FeedApi {
                 let from = new Date();
 
                 let token = await store.get('token');
+                let user = await store.get('user');
                 if(!userId){
                     userId = await store.get('user_id');
                     if(!userId){
@@ -65,7 +66,7 @@ class FeedApi {
                         contacsMap.set(normalizeFuncrion(element.phoneNumbers[0].number), element);
                     });
                 }
-                let feeds = responseData.map(feed => feedUiConverter.createFeed(feed,contacsMap)).filter(function(x){
+                let feeds = responseData.map(feed => feedUiConverter.createFeed(feed,contacsMap,user)).filter(function(x){
                     return x != undefined;
                 });
                 resolve(feeds);

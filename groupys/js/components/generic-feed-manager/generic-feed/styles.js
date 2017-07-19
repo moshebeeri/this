@@ -268,6 +268,17 @@ module.exports = {
         fontFamily:'Roboto-Black',fontWeight: 'bold',marginRight:20,marginLeft:10,marginTop:5,marginBottom:5,color:'black',fontSize:18
     },
 
+    messageContainer:{
+        flexDirection: 'row',
+        margin:2,
+        borderWidth:0,
+        maxWidth:width -20
+    },
+    messageName:{
+        margin:5,
+        flexDirection: 'column',
+
+    }
 
 
 };
