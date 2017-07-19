@@ -5,7 +5,7 @@ import { Image,TextInput, Platform,View} from 'react-native';
 import { connect } from 'react-redux';
 import { actions } from 'react-native-navigation-redux-helpers';
 import { Container,Footer,Icon,Button } from 'native-base';
-
+import GroupFeedHeader from './groupFeedHeader'
 
 
 import GenericFeedManager from '../../generic-feed-manager/index'
@@ -22,7 +22,10 @@ import * as feedsAction from "../../../actions/feeds";
 import GroupApi from "../../../api/groups"
 let groupApi = new GroupApi();
 class GroupFeed extends Component {
+    static navigationOptions = ({ navigation }) => ({
+        header:   <GroupFeedHeader navigation = {navigation} item={navigation.state.params.group}/>
 
+    });
   constructor(props) {
     super(props);
       this.state = {
@@ -32,6 +35,8 @@ class GroupFeed extends Component {
       };
 
   }
+
+
 
 
 
@@ -92,8 +97,7 @@ class GroupFeed extends Component {
         }
         return (
         <Container>
-
-            <GenericFeedManager showTopTimer={showTop} feeds={feeds} api={this} title='Feeds' ItemDetail={GenericFeedItem}></GenericFeedManager>
+            <GenericFeedManager loadingDone = {this.props.feeds['grouploadingDone' + this.props.navigation.state.params.group._id]} showTopTimer={showTop} feeds={feeds} api={this} title='Feeds' ItemDetail={GenericFeedItem}></GenericFeedManager>
 
             <View style={styles.itemborder}>
                 <View style={ {backgroundColor:'white',  flexDirection: 'row'}}>

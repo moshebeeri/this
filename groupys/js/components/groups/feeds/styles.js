@@ -33,6 +33,23 @@ module.exports = {
 
 
 
+    },
+    headerContainer:{
+        flexDirection: 'row',
+        width: width,
+        height:70,
+        backgroundColor:'#fff'
+    },
+    imageStyle:{
+        marginTop:7
+    },
+
+    group_name_text:{
+        fontFamily:'Roboto-Regular',fontWeight: 'bold',  marginLeft:10,marginTop:5,fontSize:24,color:'black'
+    },
+    group_members:{
+        fontFamily:'Roboto-Regular',  marginLeft:10,marginTop:5,fontSize:16,color:'black'
+
     }
 
 };

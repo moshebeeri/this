@@ -25,7 +25,8 @@ export default function feeds(state = initialState, action) {
 
             let feed = {...state};
             feed['groups'+ action.groupid] = action.feeds;
-            feed['showTopLoader' +action.groupid ] = action.showTopLoader
+            feed['showTopLoader' +action.groupid ] = action.showTopLoader;
+            feed['grouploadingDone'+ action.groupid] = true;
             return feed;
         case 'GET_SAVED_FEEDS' :
             return {
