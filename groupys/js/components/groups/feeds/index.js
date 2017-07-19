@@ -4,7 +4,7 @@ import { Image,TextInput, Platform,View} from 'react-native';
 
 import { connect } from 'react-redux';
 import { actions } from 'react-native-navigation-redux-helpers';
-import { Container,Footer,Icon,Button } from 'native-base';
+import { Container,Footer,Icon,Button,Text } from 'native-base';
 import GroupFeedHeader from './groupFeedHeader'
 
 
@@ -97,6 +97,18 @@ class GroupFeed extends Component {
         }
         return (
         <Container>
+
+            <View style={styles.headerTabContainer}>
+                <View style={styles.headerTabInnerContainer}>
+                <View style={styles.promotionTab}>
+                    <Text style={styles.group_promotion_text}>Promotions</Text>
+                </View>
+                    <View style={styles.chatTab}>
+                        <Text style={styles.group_chat_text}>Chat</Text>
+                    </View>
+                </View>
+
+            </View>
             <GenericFeedManager loadingDone = {this.props.feeds['grouploadingDone' + this.props.navigation.state.params.group._id]} showTopTimer={showTop} feeds={feeds} api={this} title='Feeds' ItemDetail={GenericFeedItem}></GenericFeedManager>
 
             <View style={styles.itemborder}>
