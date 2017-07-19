@@ -117,7 +117,7 @@ class GenericListManager extends Component {
 
         return (
 
-                <Content  style={{  backgroundColor: '#fff'}}>
+                <Content  style={{  backgroundColor: '#d7d7d7'}}>
                     { rows }
 
                 </Content>

@@ -1,79 +1,64 @@
 
 
-import loginTheme from './product-theme';
-
 const React = require('react-native');
 
-const { StyleSheet, Platform } = React;
+const { StyleSheet, Platform, Dimensions } = React;
+
+const {width, height} = Dimensions.get('window')
 
 module.exports = {
-  shadow: {
-    flex: 1,
-    width: 330,
-    height: 330,
-    backgroundColor: 'transparent',
-  },
-    AddContainer: {
-        paddingHorizontal: 20,
-        marginTop: 40,
-        borderBottomWidth: 1,
-        borderBottomColor: 'rgba(255, 255, 255, 0.2)',
-        paddingBottom: 10,
-        borderRadius : 1,
-        transform: [
-            {scaleX: 1}
-        ],
-        backgroundColor: '#fff',
-        borderRadius: 10,
+    group_container:{
+        width :width -10 ,
+        height: 220,
+        alignItems:'center',
+        borderWidth: 1,
+        margin: 5,
+        backgroundColor:'white'
+
+    },
+    group_description:{
+        width :width  -10,
+        height: 100,
         flexDirection: 'row',
-        justifyContent: 'flex-start',
-
-
-    } ,
-    title: {
-        fontSize: 20,
-        backgroundColor: 'transparent'
+        borderWidth: 0,
     },
-    button: {
-        marginRight: 10
+    group_content:{
+        width :width  -10,
+        height: 120,
+        flexDirection: 'column',
+        borderWidth: 0,
     },
 
-
-  inputContainer: {
-    paddingHorizontal: 20,
-    marginTop: -120,
-    borderBottomWidth: 1,
-    borderBottomColor: 'rgba(255, 255, 255, 0.2)',
-    paddingBottom: 20,
-  },
-  forgot: {
-    alignSelf: 'flex-end',
-    marginBottom: (Platform.OS === 'ios') ? 10 : 0,
-    marginTop: (Platform.OS === 'ios') ? -10 : 0,
-  },
-    addButton: {
-    marginBottom: 10,
-    alignSelf: 'center',
-    backgroundColor: loginTheme.darkenButton,
-    paddingHorizontal: 40,
-  },
-  logoButton: {
-    paddingHorizontal: 20,
-    borderRadius: 4,
-    height: 20,
-    padding: 4,
-
-  },
-    row: {
-        height:40,
-        alignItems: 'center',
-        justifyContent: 'center',
-        borderBottomColor: '#ededed',
-        borderBottomWidth: 1
+    group_messages:{
+        width :(width -10),
+        height: 60,
+        flexDirection: 'row',
+        borderWidth: 0,
+        borderTopWidth:0.5,
+        borderTopColor:'#dbdbdb',
+        borderRightWidth:1
     },
-  transparentButton: {
-    padding: 0,
-    alignItems: 'flex-start',
-  },
+    group_promotion:{
+        width :(width -10),
+        height: 60,
+        flexDirection: 'row',
+        borderTopColor:'#dbdbdb',
+        borderTopWidth:1,
+
+    },
+    group_image:{
+        marginTop:10,
+        marginLeft:10
+    },
+    group_name:{
+        marginTop:10,
+    },
+    group_name_text:{
+        fontFamily:'Roboto-Regular',fontWeight: 'bold',  marginLeft:10,marginTop:5,fontSize:24,color:'black'
+    },
+    group_members:{
+        fontFamily:'Roboto-Regular',  marginLeft:10,marginTop:5,fontSize:16,color:'black'
+
+    }
 
 };

@@ -32,6 +32,7 @@ class UserApi
                     timer.logTime(from,new Date(),'users','me')
 
                     store.save('user_id', responseData._id);
+                    store.save('user', responseData);
 
                     resolve(responseData);
                 }else{
