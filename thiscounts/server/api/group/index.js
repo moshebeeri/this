@@ -20,8 +20,6 @@ router.get('/following/users/:group/:skip/:limit', auth.isAuthenticated(), contr
 router.get('/user/follow/:skip/:limit', auth.isAuthenticated(), controller.user_follow);
 //This REST API is not yet functional
 router.get('/following/:group/:skip/:limit', auth.isAuthenticated(), controller.following);
-router.get('/my/groups/:skip/:limit', auth.isAuthenticated(), controller.my_groups);
-//router.post('/offer/:group', auth.isAuthenticated(), controller.offer);
 router.post('/message/:group', auth.isAuthenticated(), controller.message);
 
 router.get('/', auth.hasRole('admin'), controller.index);
