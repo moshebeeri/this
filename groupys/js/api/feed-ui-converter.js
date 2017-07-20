@@ -56,41 +56,8 @@ class FeedConverter
 
             response.itemType = 'BUSINESS';
         }
-        if (feed.activity.action == 'group_follow') {
-            let user = feed.activity.actor_user;
-            if (!user) {
-                user = feed.activity.user;
-            }
-            let name = user.phone_number;
-            let contact = contacsMap.get(user.phone_number);
-            if (contact) {
-                name = contact.givenName + ' ' + contact.familyName;
-            }
 
-            if (user.name) {
-                name = user.name;
-            }
-            response = {
-                id: feed._id,
-
-                actor: user._id,
-                itemTitle: name,
-                description: 'joined the group',
-                showSocial: false,
-            }
-            if (user.pictures && user.pictures.length > 0) {
-
-                response.logo = {
-                    uri: user.pictures[user.pictures.length - 1].pictures[0]
-                }
-
-
-            }
-
-            response.itemType = 'GROUP_FOLLOW';
-        }
-
-        if (feed.activity.action == 'group_message') {
+        if (feed.activity.action == 'group_message' || feed.activity.action == 'group_follow') {
 
             let user = feed.activity.actor_user;
             if (!user) {
@@ -129,7 +96,9 @@ class FeedConverter
             }
 
             response.name = name;
-
+            if(feed.activity.action == 'group_follow'){
+                response.description= "jonied the group";
+            }
             response.itemType = 'MESSAGE';
         }
         if (feed.activity.action == 'instance' || feed.activity.action == 'eligible') {

@@ -39,13 +39,18 @@ module.exports = {
         marginTop:100,
         marginLeft:width/2 - 80,
         justifyContent:'center',
+        backgroundColor:'transparent'
+
     },
     this:{
-        fontFamily:'BackToBlack',
+       // fontFamily:'BackToBlack',
         fontSize: 60,
+        height:100,
         color:'white',
         marginTop:-40,
-        paddingLeft:30
+        paddingLeft:30,
+        backgroundColor:'transparent'
+
 
     },
 
@@ -58,6 +63,7 @@ module.exports = {
         marginLeft:0,
         marginTop:5,
         flexDirection: 'row',
+        backgroundColor:'transparent',
     },
     thiscount:{
         fontFamily:'BackToBlack',
@@ -72,6 +78,7 @@ module.exports = {
         color:'white',
         marginLeft:30,
         marginTop:40,
+        backgroundColor:'transparent',
 
 
     },
@@ -86,6 +93,7 @@ module.exports = {
         borderRadius: 4,
         height: 40,
         padding: 4,
+        backgroundColor:'transparent',
     },
     logoGoogle: {
         backgroundColor: '#b63a48',
@@ -110,8 +118,8 @@ module.exports = {
         fontSize: 16,
         color:'white',
         marginLeft:100,
-        textDecorationLine:'underline'
-
+        textDecorationLine:'underline',
+        backgroundColor:'transparent'
 
     },
     forgetText:{
@@ -119,6 +127,7 @@ module.exports = {
         fontSize: 16,
         color:'white',
         marginLeft:30,
+        backgroundColor:'transparent',
         textDecorationLine:'underline'
 
 

@@ -39,13 +39,16 @@ module.exports = {
         marginTop:100,
         marginLeft:width/2 - 80,
         justifyContent:'center',
+        backgroundColor:'transparent',
     },
     this:{
         fontFamily:'BackToBlack',
         fontSize: 60,
+        height:100,
         color:'white',
         marginTop:-40,
-        paddingLeft:30
+        paddingLeft:30,
+        backgroundColor:'transparent',
 
     },
 
@@ -64,6 +67,7 @@ module.exports = {
         marginLeft:0,
         marginTop:5,
         flexDirection: 'row',
+        backgroundColor:'transparent',
     },
     thiscount:{
         fontFamily:'BackToBlack',
@@ -78,6 +82,7 @@ module.exports = {
         color:'white',
         marginLeft:30,
         marginTop:40,
+        backgroundColor:'transparent',
 
 
     },
@@ -111,6 +116,7 @@ module.exports = {
         fontSize: 16,
         color:'white',
         marginLeft:100,
+        backgroundColor:'transparent',
         textDecorationLine:'underline'
 
 
@@ -120,6 +126,7 @@ module.exports = {
         fontSize: 16,
         color:'white',
         marginLeft:30,
+        backgroundColor:'transparent',
         textDecorationLine:'underline'
 
 

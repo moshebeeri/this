@@ -185,14 +185,14 @@ export default  class Login extends Component {
                                <Text style={styles.forgetText}>Forgot Password</Text>
                                <Text onPress={() => this.replaceRoute('Signup')} style={styles.signgupText} >Sign Up</Text>
                             </View>
-                           <Text style={{padding: 10, fontSize: 16, color: 'red'}}>
+                           <Text style={{backgroundColor:'transparent',padding: 10, fontSize: 16, color: 'red'}}>
                                {this.state.validationMessage}
                            </Text>
-                           <View style={{ flexDirection: 'row',color: 'red', justifyContent: 'center',marginBottom:10 }}>
+                           <View style={{ backgroundColor:'transparent',flexDirection: 'row',color: 'red', justifyContent: 'center',marginBottom:10 }}>
                                <Text> {this.state.error}</Text>
                            </View>
 
-                           <View style={{ flexDirection: 'row', justifyContent: 'space-around', paddingVertical: 20 }}>
+                           <View style={{ backgroundColor:'transparent', flexDirection: 'row', justifyContent: 'space-around', paddingVertical: 20 }}>
                                <Button style={styles.logoFacebook}>
                                    <Icon name="logo-facebook" />
                                </Button>

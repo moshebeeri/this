@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import {Image, Platform,TouchableNativeFeedback} from 'react-native';
+import {Image, Platform,TouchableNativeFeedback,TouchableHighlight,TouchableOpacity} from 'react-native';
 import {connect} from 'react-redux';
 import {actions} from 'react-native-navigation-redux-helpers';
 import {Container, Content, Text,Title, InputGroup, Input, Button, Icon, View,Header, Body, Right, ListItem, Thumbnail,Left} from 'native-base';
@@ -32,7 +32,7 @@ export default class GenericListGroupView extends Component {
 
         }
 
-            row = <TouchableNativeFeedback  onPress={this.showGroupFeeds.bind(this,this.props,this.props.item)}  >
+            row = <TouchableOpacity  onPress={this.showGroupFeeds.bind(this,this.props,this.props.item)}  >
                     <View style = {styles.group_container}>
                     <View style = {styles.group_description}>
                         <View style = {styles.group_image}>
@@ -55,7 +55,7 @@ export default class GenericListGroupView extends Component {
                         </View>
                     </View>
                  </View>
-                </TouchableNativeFeedback>
+                </TouchableOpacity>
 
 
         return ( row

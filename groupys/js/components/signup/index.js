@@ -161,14 +161,14 @@ export default class Signup extends Component {
                             <View style={styles.signup_container}>
                                 <Text style={styles.forgetText}>or sign up using </Text>
                              </View>
-                            <Text style={{padding: 10, fontSize: 16, color: 'red'}}>
+                            <Text style={{ backgroundColor:'transparent',padding: 10, fontSize: 16, color: 'red'}}>
                                 {this.state.validationMessage}
                             </Text>
-                            <View style={{ flexDirection: 'row',color: 'red', justifyContent: 'center',marginBottom:0 }}>
+                            <View style={{  backgroundColor:'transparent',flexDirection: 'row',color: 'red', justifyContent: 'center',marginBottom:0 }}>
                                 <Text> {this.state.error}</Text>
                             </View>
 
-                            <View style={{ flexDirection: 'row', justifyContent: 'space-around', paddingVertical: 0 }}>
+                            <View style={{  backgroundColor:'transparent',flexDirection: 'row', justifyContent: 'space-around', paddingVertical: 0 }}>
                                 <Button style={styles.logoFacebook}>
                                     <Icon name="logo-facebook" />
                                 </Button>
