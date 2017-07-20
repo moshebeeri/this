@@ -27,20 +27,21 @@ export default class GenericListGroupView extends Component {
 
         let row = undefined
         let image =  <Thumbnail large square   source={require('../../../../images/client_1.png')}/>
-        if(this.props.item.pictures && this.props.item.pictures.length > 0) {
-            image =  <Thumbnail large square  source={{uri: this.props.item.pictures[0].pictures[3]}} />
+        let group = this.props.item.group;
+        if(group.pictures && group.pictures.length > 0) {
+            image =  <Thumbnail large square  source={{uri: group.pictures[0].pictures[3]}} />
 
         }
 
-            row = <TouchableOpacity  onPress={this.showGroupFeeds.bind(this,this.props,this.props.item)}  >
+            row = <TouchableOpacity  onPress={this.showGroupFeeds.bind(this,this.props,group)}  >
                     <View style = {styles.group_container}>
                     <View style = {styles.group_description}>
                         <View style = {styles.group_image}>
                         {image}
                         </View>
                         <View style={styles.group_name}>
-                        <Text style={styles.group_name_text}>{this.props.item.name}</Text>
-                        <Text  style={styles.group_members}>{this.props.item.description}</Text>
+                        <Text style={styles.group_name_text}>{group.name}</Text>
+                        <Text  style={styles.group_members}>{group.description}</Text>
                         </View>
                     </View>
                     <View style = {styles.group_content}>

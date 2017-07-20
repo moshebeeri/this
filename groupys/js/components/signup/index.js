@@ -81,7 +81,7 @@ export default class Signup extends Component {
             body: JSON.stringify({
                 country_code: '+972',
                 phone_number: cleanPhone,
-                email:  this.state.callingCode + cleanPhone + "@low.la",
+                email:  '972' + cleanPhone + "@low.la",
                 password: this.state.password,
                 name: this.state.name + this.state.lastname,
 

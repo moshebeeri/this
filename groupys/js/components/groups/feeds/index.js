@@ -169,7 +169,6 @@ class GroupFeed extends Component {
                     <Input value={this.state.messsage}  onFocus={this.hideEmoji.bind(this)} blurOnSubmit={true} returnKeyType='done' ref="3"  onSubmitEditing={this._onPressButton.bind(this)} onChangeText={(messsage) => this.setState({messsage})} placeholder='write text' />
 
 
-
                     <Button   onPress={() => this.showEmoji()} style={styles.icon} transparent>
 
                         <Icon2 style={{fontSize:35,color:"#2db6c8"}} name={this.state.iconEmoji} />

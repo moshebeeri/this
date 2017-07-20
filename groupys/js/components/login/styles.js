@@ -35,7 +35,7 @@ module.exports = {
 
     },
     thiscountsContainer:{
-        height: 100,
+        height: 150,
         marginTop:100,
         marginLeft:width/2 - 80,
         justifyContent:'center',
@@ -45,7 +45,7 @@ module.exports = {
     this:{
        // fontFamily:'BackToBlack',
         fontSize: 60,
-        height:100,
+        height:90,
         color:'white',
         marginTop:-40,
         paddingLeft:30,

@@ -35,14 +35,14 @@ module.exports = {
 
     },
     thiscountsContainer:{
-        height: 100,
+        height: 150,
         marginTop:100,
         marginLeft:width/2 - 80,
         justifyContent:'center',
         backgroundColor:'transparent',
     },
     this:{
-        fontFamily:'BackToBlack',
+        fontFamily:(Platform.OS === 'ios') ? 'Back To Black' : 'BackToBlack',
         fontSize: 60,
         height:100,
         color:'white',
@@ -70,14 +70,14 @@ module.exports = {
         backgroundColor:'transparent',
     },
     thiscount:{
-        fontFamily:'BackToBlack',
+        fontFamily:(Platform.OS === 'ios') ? 'BackToBlack' : 'Back To Black',
         fontSize: 60,
         color:'white',
         marginTop:-40,
 
     },
     signginText:{
-        fontFamily:'Roboto-Regular',
+        fontFamily:(Platform.OS === 'ios') ? 'Roboto' : 'Roboto-Regular',
         fontSize: 16,
         color:'white',
         marginLeft:30,
@@ -112,7 +112,7 @@ module.exports = {
         alignItems: 'flex-start',
     },
     signgupText:{
-        fontFamily:'Roboto-Regular',
+        fontFamily:(Platform.OS === 'ios') ? 'Roboto' : 'Roboto-Regular',
         fontSize: 16,
         color:'white',
         marginLeft:100,
@@ -122,7 +122,7 @@ module.exports = {
 
     },
     forgetText:{
-        fontFamily:'Roboto-Regular',
+        fontFamily:(Platform.OS === 'ios') ? 'Roboto' : 'Roboto-Regular',
         fontSize: 16,
         color:'white',
         marginLeft:30,

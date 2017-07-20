@@ -17,6 +17,7 @@ module.exports = {
     item:{
 
         backgroundColor:'white',
+
         borderColor:'black',
 
 
@@ -46,10 +47,11 @@ module.exports = {
     },
 
     group_name_text:{
-        fontFamily:'Roboto-Regular',fontWeight: 'bold',  marginLeft:10,marginTop:5,fontSize:24,color:'black'
+
+        fontFamily:(Platform.OS === 'ios') ? 'Roboto' : 'Roboto',fontWeight: 'bold',  marginLeft:10,marginTop:5,fontSize:24,color:'black'
     },
     group_members:{
-        fontFamily:'Roboto-Regular',  marginLeft:10,marginTop:5,fontSize:16,color:'black'
+        fontFamily:(Platform.OS === 'ios') ? 'Roboto' : 'Roboto',  marginLeft:10,marginTop:5,fontSize:16,color:'black'
 
     },
 
@@ -85,10 +87,10 @@ module.exports = {
 
     },
     group_promotion_text:{
-        fontFamily:'Roboto-Regular',  marginLeft:0,marginTop:5,fontSize:18,color:'#595959'
+        fontFamily:(Platform.OS === 'ios') ? 'Roboto' : 'Roboto',  marginLeft:0,marginTop:5,fontSize:18,color:'#595959'
     },
     group_chat_text:{
-        fontFamily:'Roboto-Regular',  marginLeft:0,marginTop:5,fontSize:18,color:'white'
+        fontFamily:(Platform.OS === 'ios') ? 'Roboto' : 'Roboto',  marginLeft:0,marginTop:5,fontSize:18,color:'white'
     },
 
 
