@@ -104,10 +104,10 @@ export default class Register extends Component {
                                     <Input  value={this.state.name} blurOnSubmit={true} returnKeyType='done' ref="1" onSubmitEditing={this.validateCode.bind(this)} onChangeText={(code) => this.setState({code})} placeholder='Validation Code' />
                                 </Item>
 
-                            <Text style={{padding: 10, fontSize: 16, color: 'red'}}>
+                            <Text style={{   backgroundColor:'transparent',padding: 10, fontSize: 16, color: 'red'}}>
                                 {this.state.validationMessage}
                             </Text>
-                            <View style={{ flexDirection: 'row',color: 'red', justifyContent: 'center',marginBottom:0 }}>
+                            <View style={{   backgroundColor:'transparent',flexDirection: 'row',color: 'red', justifyContent: 'center',marginBottom:0 }}>
                                 <Text> {this.state.error}</Text>
                             </View>
 

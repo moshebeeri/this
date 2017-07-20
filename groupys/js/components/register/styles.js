@@ -37,15 +37,18 @@ module.exports = {
     thiscountsContainer:{
         height: 100,
         marginTop:100,
+        backgroundColor:'transparent',
         marginLeft:width/2 - 80,
         justifyContent:'center',
     },
     this:{
         fontFamily:'BackToBlack',
         fontSize: 60,
+        height: 100,
         color:'white',
         marginTop:-40,
-        paddingLeft:30
+        paddingLeft:30,
+        backgroundColor:'transparent',
 
     },
 
@@ -63,6 +66,7 @@ module.exports = {
     signup_container:{
         marginLeft:0,
         marginTop:5,
+        backgroundColor:'transparent',
         flexDirection: 'row',
     },
     thiscount:{
@@ -75,9 +79,11 @@ module.exports = {
     signginText:{
         fontFamily:'Roboto-Regular',
         fontSize: 22,
+        backgroundColor:'transparent',
         color:'white',
         marginLeft:0,
         marginTop:40,
+
 
 
     },
@@ -85,6 +91,7 @@ module.exports = {
         fontFamily:'Roboto-Regular',
         fontSize: 22,
         color:'white',
+        backgroundColor:'transparent',
         marginLeft:0,
         marginTop:3,
 
@@ -125,6 +132,7 @@ module.exports = {
         fontSize: 16,
         color:'white',
         marginLeft:100,
+        backgroundColor:'transparent',
         textDecorationLine:'underline'
 
 
@@ -134,6 +142,7 @@ module.exports = {
         fontSize: 16,
         color:'white',
         marginLeft:30,
+        backgroundColor:'transparent',
         textDecorationLine:'underline'
 
 

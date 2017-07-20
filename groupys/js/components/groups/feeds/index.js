@@ -1,6 +1,6 @@
 
 import React, { Component } from 'react';
-import { Image,TextInput, Platform,View,Keyboard} from 'react-native';
+import { Image,TextInput, Platform,View,Keyboard,TouchableNativeFeedback,TouchableOpacity} from 'react-native';
 
 import { connect } from 'react-redux';
 import { actions } from 'react-native-navigation-redux-helpers';
@@ -99,13 +99,22 @@ class GroupFeed extends Component {
 
 
     showEmoji(){
-        Keyboard.dismiss();
-        let show = !this.state.showEmoji;
-        this.setState({
-            showEmoji:show,
-            iconEmoji:"keyboard"
 
-        })
+        let show = !this.state.showEmoji;
+        if(show) {
+            this.setState({
+                showEmoji: show,
+                iconEmoji: "keyboard"
+
+            })
+        }else{
+            Keyboard.dismiss();
+            this.setState({
+                showEmoji: show,
+                iconEmoji: "emoji-neutral"
+
+            })
+        }
     }
     hideEmoji(){
         this.setState({
@@ -114,6 +123,13 @@ class GroupFeed extends Component {
         })
     }
 
+    selectPromotions(){
+
+    }
+
+    selectChat(){
+
+    }
     render() {
         let feeds = this.props.feeds['groups'+this.props.navigation.state.params.group._id];
         if(!feeds){
@@ -129,12 +145,16 @@ class GroupFeed extends Component {
 
             <View style={styles.headerTabContainer}>
                 <View style={styles.headerTabInnerContainer}>
+                    <TouchableOpacity onPress={this.selectPromotions.bind(this)}>
                 <View style={styles.promotionTab}>
                     <Text style={styles.group_promotion_text}>Promotions</Text>
                 </View>
+                    </TouchableOpacity>
+                    <TouchableOpacity onPress={this.selectChat.bind(this)}>
                     <View style={styles.chatTab}>
                         <Text style={styles.group_chat_text}>Chat</Text>
                     </View>
+                    </TouchableOpacity>
                 </View>
 
             </View>
@@ -146,7 +166,7 @@ class GroupFeed extends Component {
 
                         <Icon style={{fontSize:35,color:"#2db6c8"}} name='send' />
                     </Button>
-                    <Input value={this.state.messsage}  onFocus={this.hideEmoji.bind(this)} blurOnSubmit={true} returnKeyType='done' ref="3"   onChangeText={(messsage) => this.setState({messsage})} placeholder='write text' />
+                    <Input value={this.state.messsage}  onFocus={this.hideEmoji.bind(this)} blurOnSubmit={true} returnKeyType='done' ref="3"  onSubmitEditing={this._onPressButton.bind(this)} onChangeText={(messsage) => this.setState({messsage})} placeholder='write text' />
 
 
 

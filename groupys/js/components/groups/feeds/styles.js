@@ -36,6 +36,7 @@ module.exports = {
     },
     headerContainer:{
         flexDirection: 'row',
+        marginTop:10,
         width: width,
         height:70,
         backgroundColor:'#fff'
