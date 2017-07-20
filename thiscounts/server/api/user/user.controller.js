@@ -83,14 +83,14 @@ let like_generates_follow = function (userId, itemId) {
     },
     function (err, results) {
       // results is now equals to: {one: 1, two: 2}
-      if (results.user           ||
-          results.business       ||
-          results.shoppingChain  ||
-          results.product        ||
-          results.promotion      ||
-          results.mall           ||
-          results.category       ||
-          results.cardType) {
+      if (results.user ||
+        results.business ||
+        results.shoppingChain ||
+        results.product ||
+        results.promotion ||
+        results.mall ||
+        results.category ||
+        results.cardType) {
         graphModel.relate_ids(userId, 'FOLLOW', itemId);
         activity_follow(userId, itemId);
       }
@@ -193,7 +193,7 @@ exports.create = function (req, res, next) {
 
   newUser.provider = 'local';
   newUser.role = 'user';
-  if(config.sms_verification){
+  if (config.sms_verification) {
     newUser.sms_code = randomstring.generate({length: 4, charset: 'numeric'});
     newUser.sms_verified = false;
   } else {
@@ -217,7 +217,7 @@ exports.create = function (req, res, next) {
           }, function (err) {
             if (err) return res.send(500, err);
             let token = jwt.sign({_id: user._id}, config.secrets.session, {expiresIn: 60 * 24 * 30});
-            if(config.sms_verification){
+            if (config.sms_verification) {
               send_sms_verification_code(user);
             } else {
               new_user_follow(user);
@@ -417,7 +417,7 @@ exports.recover_password = function (req, res) {
  * code verification
  */
 exports.verification = function (req, res) {
-  if(!config.sms_verification) {
+  if (!config.sms_verification) {
     return res.status(200).send('user verified');
   }
   console.log("req.params.code: " + req.params.code);
@@ -547,10 +547,10 @@ function createRole(user, entity, role, callback) {
   let set_query = `MATCH (user:user{_id:"${user}"})-[role:ROLE]->(entity{_id:"${entity}"}) set role.name=${role}`;
 
   graphModel.query(existing_query, function (err, roles) {
-    if(err) return callback(err);
-    if(roles.length === 0)
+    if (err) return callback(err);
+    if (roles.length === 0)
       graphModel.query(grunt_query, callback);
-    else if(roles.length === 1)
+    else if (roles.length === 1)
       graphModel.query(set_query, callback);
     else
       return callback(new Error(`more then one role for user`));
@@ -567,10 +567,10 @@ function handleEntityUserRole(type, req, res) {
   let entity = req.params.entity;
   let role = req.params.role;
   let user = req.params.user;
-  if(!Roles.get(role))
+  if (!Roles.get(role))
     return handleError(res, new Error(`undefined role ${role} maybe one of ${Roles.enums}`));
 
-  if(me === user)
+  if (me === user)
     return handleError(res, new Error(`you may not change your own role`));
 
 //Check is me is the owner of the entity, if so apply
@@ -579,12 +579,12 @@ function handleEntityUserRole(type, req, res) {
     if (err) return handleError(res, err);
     if (me_owns_entities.length === 1) {
       //then me is the owner, allow role
-      if(type === 'add') {
+      if (type === 'add') {
         createRole(user, entity, role, function (err) {
           if (err) return handleError(res, err);
           return res.status(200).json('ok');
         });
-      } else if(type === 'delete') {
+      } else if (type === 'delete') {
         deleteRole(user, entity, function (err) {
           if (err) return handleError(res, err);
           return res.status(200).json('ok');
@@ -607,12 +607,12 @@ function handleEntityUserRole(type, req, res) {
         if (Roles.get(me_role_entities[0].role) <= Roles.get(role))
           return res.status(404).json(`Unauthorized - User role can only be set by higher role only`);
 
-        if(type === 'add') {
+        if (type === 'add') {
           createRole(user, entity, role, function (err) {
             if (err) return handleError(res, err);
             return res.status(200).json('ok');
           })
-        }else if(type === 'delete') {
+        } else if (type === 'delete') {
           deleteRole(user, entity, function (err) {
             if (err) return handleError(res, err);
             return res.status(200).json('ok');
@@ -629,8 +629,8 @@ exports.addEntityUserRole = function (req, res) {
 
 exports.addEntityUserRoleByPhone = function (req, res) {
   User.findOne({phone_number: req.params.phone}, function (err, user) {
-    if(err) return handleError(res, err);
-    if(!user) return res.status(404);
+    if (err) return handleError(res, err);
+    if (!user) return res.status(404);
     req.params[user] = user._id;
     handleEntityUserRole('add', req, res);
   })

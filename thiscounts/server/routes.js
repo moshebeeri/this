@@ -35,6 +35,7 @@ module.exports = function(app) {
   app.use('/api/categories', require('./api/category'));
   app.use('/api/groups', require('./api/group'));
   app.use('/api/brands', require('./api/brand'));
+  app.use('/api/comments', require('./api/comment'));
   app.use('/api/products', require('./api/product'));
   app.use('/api/promotions', require('./api/promotion'));
   app.use('/api/things', require('./api/thing'));
