@@ -6,6 +6,8 @@ let mongoose = require('mongoose'),
 let ActivitySchema = new Schema({
   timestamp: {type: Date, default: Date.now},
   ids: [{type: Schema.ObjectId}],
+  sharable: {type: Boolean, default: true},
+
   promotion: {type: Schema.ObjectId, ref: 'Promotion'},
   instance: {type: Schema.ObjectId, ref: 'Instance'},
   product: {type: Schema.ObjectId, ref: 'Product'},
@@ -15,6 +17,7 @@ let ActivitySchema = new Schema({
   business: {type: Schema.ObjectId, ref: 'Business'},
   mall: {type: Schema.ObjectId, ref: 'Mall'},
   chain: {type: Schema.ObjectId, ref: 'ShoppingChain'},
+  activity: {type: Schema.ObjectId, ref: 'Activity'},
 
   actor_user: {type: Schema.ObjectId, ref: 'User'},
   actor_business: {type: Schema.ObjectId, ref: 'Business'},

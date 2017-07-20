@@ -2,6 +2,7 @@
 
 const _ = require('lodash');
 const Activity = require('./activity.model');
+let activity = require('../../components/activity').createActivity();
 
 // Get list of activities
 exports.index = function(req, res) {
@@ -52,6 +53,18 @@ exports.destroy = function(req, res) {
       return res.send(204);
     });
   });
+};
+
+exports.share = function(req, res) {
+  let act = {
+    activity: req.params.activity,
+    ids: [req.params.user],
+    action: 'share',
+    sharable : false
+  };
+  act.actor_user = req.user._id;
+  activity.create(act);
+  return res.json(200, activity);
 };
 
 function handleError(res, err) {

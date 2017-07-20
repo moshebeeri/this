@@ -204,8 +204,9 @@ exports.create = function (req, res, next) {
 
   User.findOne({phone_number: newUser.phone_number}, function (err, user) {
     if (user) {
-      let token = jwt.sign({_id: user._id}, config.secrets.session, {expiresIn: 60 * 24 * 30});
-      res.status(200).json({token: token});
+      // let token = jwt.sign({_id: user._id}, config.secrets.session, {expiresIn: 60 * 24 * 30});
+      // res.status(200).json({token: token});
+      res.status(200).json('user already exist');
     } else {
       newUser.save(function (err, user) {
         if (err) return validationError(res, err);
@@ -538,12 +539,30 @@ exports.me = function (req, res, next) {
 };
 
 let Roles = new Enum({'Admin': 100, 'Manager': 50, 'Seller': 10});
-// let query = ` MATCH (parent:${typeName})
-//                   where id(parent)=${parent.id}
-//                   CREATE (sub:${typeName}{name:"${name}"})-[:CATEGORY]->(parent)
-//                   RETURN sub`;
 
-exports.addEntityUserRole = function (req, res) {
+function createRole(user, entity, role, callback) {
+  let existing_query = `MATCH (user:user{_id:"${user}"})-[role:ROLE]->(entity{_id:"${entity}"}) return role`;
+  let grunt_query = `MATCH (user:user{_id:"${user}"}), (entity{_id:"${entity}"})
+                     CREATE (user)-[role:ROLE{name:"${role}"}]->(entity)`;
+  let set_query = `MATCH (user:user{_id:"${user}"})-[role:ROLE]->(entity{_id:"${entity}"}) set role.name=${role}`;
+
+  graphModel.query(existing_query, function (err, roles) {
+    if(err) return callback(err);
+    if(roles.length === 0)
+      graphModel.query(grunt_query, callback);
+    else if(roles.length === 1)
+      graphModel.query(set_query, callback);
+    else
+      return callback(new Error(`more then one role for user`));
+  });
+}
+
+function deleteRole(user, entity, callback) {
+  let delete_query = `MATCH (user:user{_id:"${user}"})-[role:ROLE]->(entity{_id:"${entity}"}) delete role`;
+  graphModel.query(delete_query, callback);
+}
+
+function handleEntityUserRole(type, req, res) {
   let me = req.user._id;
   let entity = req.params.entity;
   let role = req.params.role;
@@ -552,59 +571,104 @@ exports.addEntityUserRole = function (req, res) {
     return handleError(res, new Error(`undefined role ${role} maybe one of ${Roles.enums}`));
 
   if(me === user)
-    return handleError(res, new Error(`you may not grunt yourself roles`));
+    return handleError(res, new Error(`you may not change your own role`));
 
-  //Check is me is the owner of the entity, if so apply
-  let grunt_query = `MATCH (user:user{_id:"${user}"})
-                     CREATE (user)-[rule:RULE{role:"${role}"}]->(entity{_id:"${entity}"})`;
+//Check is me is the owner of the entity, if so apply
   let owner_query = `MATCH (me:user{_id:"${me}"})-[owns:OWNS]->(entity{_id:"${entity}"}) return me, owns, entity`;
   graphModel.query(owner_query, function (err, me_owns_entities) {
-    if(err) return handleError(res, err);
-    if(me_owns_entities.length === 1){
+    if (err) return handleError(res, err);
+    if (me_owns_entities.length === 1) {
       //then me is the owner, allow role
-      graphModel.query(grunt_query, function (err) {
-        if(err) return handleError(res, err);
-        return res.status(200).json('ok');
-      })
+      if(type === 'add') {
+        createRole(user, entity, role, function (err) {
+          if (err) return handleError(res, err);
+          return res.status(200).json('ok');
+        });
+      } else if(type === 'delete') {
+        deleteRole(user, entity, function (err) {
+          if (err) return handleError(res, err);
+          return res.status(200).json('ok');
+        });
+      }
     }
-    else if(me_owns_entities.length > 1){
+    else if (me_owns_entities.length > 1) {
       return res.status(404).json(`Unauthorized user ${me}`);
     }
-    else if(me_owns_entities.length === 0){
-      let rule_query = `MATCH (me:user{_id:"${me}"})-[role:ROLE]->(entity{_id:"${entity}"}) return me, role, entity`;
-      graphModel.query(rule_query, function (err, me_role_entities) {
+    else if (me_owns_entities.length === 0) {
+      let role_query = `MATCH (me:user{_id:"${me}"})-[role:ROLE]->(entity{_id:"${entity}"}) return me, role, entity`;
+      graphModel.query(role_query, function (err, me_role_entities) {
         if (err) return handleError(res, err);
-        if(me_role_entities.length===0){
+        if (me_role_entities.length === 0) {
           return res.status(404).json(`Unauthorized user ${me}`);
         }
-        if(me_role_entities.length>1){
-          return res.status(500).json(`Multi rules error`);
+        if (me_role_entities.length > 1) {
+          return res.status(500).json(`Multi roles error`);
         }
-        if(Roles.get(me_role_entities[0].role) <= Roles.get(role))
+        if (Roles.get(me_role_entities[0].role) <= Roles.get(role))
           return res.status(404).json(`Unauthorized - User role can only be set by higher role only`);
 
-        graphModel.query(grunt_query, function (err) {
-          if(err) return handleError(res, err);
-          return res.status(200).json('ok');
-        })
+        if(type === 'add') {
+          createRole(user, entity, role, function (err) {
+            if (err) return handleError(res, err);
+            return res.status(200).json('ok');
+          })
+        }else if(type === 'delete') {
+          deleteRole(user, entity, function (err) {
+            if (err) return handleError(res, err);
+            return res.status(200).json('ok');
+          });
+        }
       })
     }
   });
+}
+
+exports.addEntityUserRole = function (req, res) {
+  handleEntityUserRole('add', req, res);
 };
-exports.roleTest = function (req, res) {
-  console.log(Roles.Admin.value);
-  console.log(Roles.enums);
-  return res.status(200).json('ok');
+
+exports.addEntityUserRoleByPhone = function (req, res) {
+  User.findOne({phone_number: req.params.phone}, function (err, user) {
+    if(err) return handleError(res, err);
+    if(!user) return res.status(404);
+    req.params[user] = user._id;
+    handleEntityUserRole('add', req, res);
+  })
 };
 
 exports.deleteEntityUserRole = function (req, res) {
-  let me = req.user._id;
-  let entity = req.params.entity;
-  let role = req.params.role;
-  let user = req.params.user;
-
-  res.status(200).json('ok');
+  handleEntityUserRole('delete', req, res);
 };
+
+exports.entityRoles = function (req, res) {
+  let role = req.params.role;
+  let entity = req.params.entity;
+  let skip = req.params.skip;
+  let limit = req.params.limit;
+
+  graphModel.query_ids(`MATCH (user:user)-[role:ROLE{name=${role}}]->(e{_id:"${entity}"}) RETURN user,role`,
+    'order by p.created DESC', skip, limit, function (err, users_role) {
+      if (err) return handleError(res, err);
+      let _ids = [];
+      let userRoleById = {};
+      users_role.forEach(user_role => {
+        _ids.push(user_role.user._id);
+        userRoleById[user_role.user._id] = user_role.role;
+      });
+      User.find({}).where('_id').in(_ids).exec(function (err, users) {
+        if (err) return handleError(res, err);
+        let info = [];
+        users.forEach(user => {
+          info.push({
+            user: user,
+            role: userRoleById.role.name
+          });
+        });
+        return res.status(200).json(info);
+      });
+    })
+};
+
 
 /**
  * Authentication callback
