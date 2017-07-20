@@ -1,17 +1,17 @@
 
 import React, { Component } from 'react';
-import { Image,TextInput, Platform,View} from 'react-native';
+import { Image,TextInput, Platform,View,Keyboard} from 'react-native';
 
 import { connect } from 'react-redux';
 import { actions } from 'react-native-navigation-redux-helpers';
-import { Container,Footer,Icon,Button,Text } from 'native-base';
+import { Container,Footer,Icon,Button,Text,Input } from 'native-base';
 import GroupFeedHeader from './groupFeedHeader'
 
 
 import GenericFeedManager from '../../generic-feed-manager/index'
 import GenericFeedItem from '../../generic-feed-manager/generic-feed'
 import styles from './styles'
-
+import Icon2 from 'react-native-vector-icons/Entypo';
 import FeedApi from '../../../api/feed'
 let feedApi = new FeedApi();
 
@@ -21,6 +21,7 @@ import * as feedsAction from "../../../actions/feeds";
 
 import GroupApi from "../../../api/groups"
 let groupApi = new GroupApi();
+import EmojiPicker from 'react-native-emoji-picker-panel'
 class GroupFeed extends Component {
     static navigationOptions = ({ navigation }) => ({
         header:   <GroupFeedHeader navigation = {navigation} item={navigation.state.params.group}/>
@@ -31,8 +32,12 @@ class GroupFeed extends Component {
       this.state = {
 
           messsage: '',
+          showEmoji:false,
+          iconEmoji:'emoji-neutral'
 
       };
+      this.handlePick = this.handlePick.bind(this);
+
 
   }
 
@@ -77,13 +82,37 @@ class GroupFeed extends Component {
         await groupApi.meesage(groupid,this.state.messsage);
         this.props.fetchGroupTop(groupid,'GET_GROUP_FEEDS',this.props.feeds[groupFeeds],this.props.feeds[groupFeeds][0].id,this);
         this.setState({
-            messsage:''
+            messsage:'',
+            showEmoji:false,
+            iconEmoji:'emoji-neutral'
         })
 
 
     }
+    handlePick(emoji) {
+      let message = this.state.messsage;
+
+        this.setState({
+            messsage: message + emoji ,
+        });
+    }
 
 
+    showEmoji(){
+        Keyboard.dismiss();
+        let show = !this.state.showEmoji;
+        this.setState({
+            showEmoji:show,
+            iconEmoji:"keyboard"
+
+        })
+    }
+    hideEmoji(){
+        this.setState({
+            showEmoji:false,
+            iconEmoji:'emoji-neutral'
+        })
+    }
 
     render() {
         let feeds = this.props.feeds['groups'+this.props.navigation.state.params.group._id];
@@ -113,23 +142,24 @@ class GroupFeed extends Component {
 
             <View style={styles.itemborder}>
                 <View style={ {backgroundColor:'white',  flexDirection: 'row'}}>
-                <TextInput
-                    style={styles.item}
+                    <Button   onPress={() => this._onPressButton()} style={styles.icon} transparent>
+
+                        <Icon style={{fontSize:35,color:"#2db6c8"}} name='send' />
+                    </Button>
+                    <Input value={this.state.messsage}  onFocus={this.hideEmoji.bind(this)} blurOnSubmit={true} returnKeyType='done' ref="3"   onChangeText={(messsage) => this.setState({messsage})} placeholder='write text' />
 
 
-                    placeholder="My Message"
-                    returnKeyType='done'
-                    onChangeText={(messsage) => this.setState({messsage})}
-                    value={this.state.messsage}/>
-                    <Button   onPress={() => this._onPressButton()} style={styles.icon} iconRight rounded light>
 
-                        <Icon name='send' />
+                    <Button   onPress={() => this.showEmoji()} style={styles.icon} transparent>
+
+                        <Icon2 style={{fontSize:35,color:"#2db6c8"}} name={this.state.iconEmoji} />
                     </Button>
 
-
-
                 </View>
+
             </View>
+            <EmojiPicker stylw={{height:100}}visible={this.state.showEmoji}  onEmojiSelected={this.handlePick} />
+
 
         </Container>
 
