@@ -432,29 +432,30 @@ exports.user_follow = function (req, res) {
 
   graphModel.query_objects(Group,
     `MATCH (u:user {_id:'${req.user._id}'})-[r:FOLLOW]->(g:group) RETURN g._id as _id`,
-    'order by r.timestamp desc', skip, limit, function (err, users) {
+    'order by r.timestamp desc', skip, limit, function (err, groups) {
       if (err) return handleError(res, err);
-      return res.status(200).json(users);
+      getGroupsLastInfo(groups, function(err, groups_previews){
+        if (err) return handleError(res, err);
+        console.log(JSON.stringify(groups_previews));
+        return res.status(200).json(groups_previews);
+      });
     });
 };
 
 
 function getGroupPreview(group, callback) {
-  async.parallel({
-    last_activity: function (callback) {
-      Feed.findOne({entity: group._id})
-        .where('message').eq(null)
-        .sort({activity: 'desc'})
-        .populate({path: 'user',
-          select: '-salt -hashedPassword -gid -role -__v -email -phone_number -sms_verified -sms_code -provider'
-        })
-        .populate({path: 'activity'})
-        .exec(function (err, act) {
-          if(err) return callback(err);
-          return callback(null, act)
-        })
-    },
-    last_message: function (callback) {
+
+  Feed.findOne({entity: group._id})
+    .where('message').eq(null)
+    .sort({activity: 'desc'})
+    .populate({path: 'user',
+      select: '-salt -hashedPassword -gid -role -__v -email -phone_number -sms_verified -sms_code -provider'
+    })
+    .populate({path: 'activity'})
+    .exec(function (err, act) {
+      if(err)  console.log(err.message);
+      if(err) return callback(err);
+      console.log('getGroupPreview act ok');
       Feed.findOne({entity: group._id})
         .where('message').ne(null)
         .sort({activity: 'desc'})
@@ -463,49 +464,78 @@ function getGroupPreview(group, callback) {
         })
         .populate({path: 'activity'})
         .exec(function (err, msg) {
+          if(err)  console.log(err.message);
           if(err) return callback(err);
-          return callback(null, msg)
+          console.log('getGroupPreview msg ok');
+
+          return callback(null, {
+            act:act,
+            msg:msg,
+            group:group
+          })
         })
-    },
-    group: function (callback) {
-          return callback(null, group)
-    },function (err, preview) {
-      if(err) return callback(err);
-      callback(null, preview)
-    }
-  })
+    });
+
+
+  // async.parallel({
+  //   last_activity: function (callback) {
+  //     console.log('last_activity');
+  //
+  //     Feed.findOne({entity: group._id})
+  //       .where('message').eq(null)
+  //       .sort({activity: 'desc'})
+  //       .populate({path: 'user',
+  //         select: '-salt -hashedPassword -gid -role -__v -email -phone_number -sms_verified -sms_code -provider'
+  //       })
+  //       .populate({path: 'activity'})
+  //       .exec(function (err, act) {
+  //         if(err) return callback(err);
+  //         return callback(null, act)
+  //       })
+  //   },
+  //   last_message: function (callback) {
+  //     console.log('last_message');
+  //     Feed.findOne({entity: group._id})
+  //       .where('message').ne(null)
+  //       .sort({activity: 'desc'})
+  //       .populate({path: 'user',
+  //         select: '-salt -hashedPassword -gid -role -__v -email -phone_number -sms_verified -sms_code -provider'
+  //       })
+  //       .populate({path: 'activity'})
+  //       .exec(function (err, msg) {
+  //         if(err) return callback(err);
+  //         return callback(null, msg)
+  //       })
+  //   },
+  //   group: function (callback) {
+  //     console.log('group');
+  //     return callback(null, group)
+  //   },function (err, preview) {
+  //     if(err) return callback(err);
+  //     console.log(JSON.stringify(preview));
+  //     return callback(null, preview)
+  //   }
+  // })
 }
 
 function getGroupsLastInfo(groups, callback) {
   let previews = [];
   async.each(groups, function(group, callback){
     getGroupPreview(group, function(err, preview){
+      console.log('aaa');
+      console.log(`status: previews.length=${previews.length} err ${err? err.message : ':non'}`);
+
       if(err) return callback(err);
       previews.push(preview);
       callback(null, preview)
     })
   }, function (err) {
+    console.log(`getGroupsLastInfo`);
     if(err) return callback(err);
+    console.log(`getGroupPreview act ok ${previews}`);
     callback(null, previews);
   })
 }
-
-exports.my_groups = function (req, res) {
-  let userId = req.user._id;
-  let skip = req.params.skip;
-  let limit = req.params.limit;
-
-  graphModel.query_objects(Group,
-    `MATCH (u:user {_id:'${userId}'})-[r:FOLLOW]->(g:group) RETURN g._id as _id`,
-    'order by p.created DESC', skip, limit, function (err, groups) {
-      if (err) return handleError(res, err);
-      getGroupsLastInfo(groups, function(err, groups){
-        if (err) return handleError(res, err);
-        return res.status(200).json(groups);
-
-      });
-    });
-};
 
 exports.user_products = function (req, res) {
   let userID = req.user._id;
