@@ -20,6 +20,24 @@ function handleError(res, err) {
 exports.fetch_feed = function(userId, query_builder, Model, res) {
   //http://stackoverflow.com/questions/19222520/populate-nested-array-in-mongoose
   query_builder
+    // .populate({path: 'user',
+    //   select: '-salt -hashedPassword -gid -role -__v -email -phone_number -sms_verified -sms_code -provider'})
+    // .populate({path: 'activity'})
+    .exec(function (err, feeds) {
+      if (err) return handleError(res, err);
+      update_states(feeds, function(err, feeds){
+          if (err) {return res.status(500).json(err);}
+          return res.status(200).json(feeds);
+        });
+      });
+};
+
+
+
+
+exports.fetch_feed_slow = function(userId, query_builder, Model, res) {
+  //http://stackoverflow.com/questions/19222520/populate-nested-array-in-mongoose
+  query_builder
     .populate({path: 'user',
                 select: '-salt -hashedPassword -gid -role -__v -email -phone_number -sms_verified -sms_code -provider'})
     .populate({path: 'activity'})
@@ -112,44 +130,6 @@ exports.fetch_feed = function(userId, query_builder, Model, res) {
     });
 };
 
-exports.fetch_social_state = function(query_builder, userId, type, res) {
-  function update_state_by_type(object, callback) {
-    switch(type){
-      case 'promotion':
-        promotion_state(userId, object, callback);
-        break;
-      case 'product':
-        product_state(userId, object, callback);
-        break;
-      case 'user':
-        user_state(userId, object, callback);
-        break;
-      case 'business':
-        business_state(userId, object, callback);
-        break;
-      case 'mall':
-        mall_state(userId, object, callback);
-        break;
-      case 'chain':
-        chain_state(userId, object, callback);
-        break;
-    }
-  }
-  query_builder
-  .exec(function (err, types) {
-    if (err) {
-      return res.status(500).json(err);
-    }
-    async.each(types, update_state_by_type, function(err){
-      if(err) {
-        callback(err, null);
-      }
-      else {
-        callback(null, types);
-      }
-    });
-  })
-};
 
 //see http://www.markhneedham.com/blog/2013/02/24/neo4jcypher-combining-count-and-collect-in-one-query/
 //WOW !!! MATCH (me{_id:'56bb06e0875e4eca72774728'})-[f:FOLLOW]->(followers) with distinct(followers) limit 2 return collect(followers), count(followers)
@@ -280,7 +260,7 @@ function mall_state(user_id, mall, callback) {
   });
 }
 
-function chain_state(user_id, chain) {
+function chain_state(user_id, chain, callback) {
   social_state(user_id, chain._id, function(err, social_state) {
     if (err) {
       return callback(err, null);
@@ -371,28 +351,28 @@ function update_state(feed, callback) {
     },
     function (err, states) {
       if(err){ return callback(err, null) }
-      if (states['promotion'] !== null)
-        activity.promotion = states['promotion'];
-      if (states['instance'] !== null)
-        activity.instance = states['instance'];
-      if (states['product'] !== null)
-        activity.product = states['product'];
-      if (states['user'] !== null)
-        activity.user = states['user'];
-      if (states['business'] !== null)
-        activity.business = states['business'];
-      if (states['mall'] !== null)
-        activity.mall = states['mall'];
-      if (states['chain'] !== null)
-        activity.chain = states['chain'];
-      if (states['actor_user'] !== null)
-        activity.actor_user = states['actor_user'];
-      if (states['actor_business'] !== null)
-        activity.actor_business = states['actor_business'];
-      if (states['actor_mall'] !== null)
-        activity.actor_mall = states['actor_mall'];
-      if (states['actor_chain'] !== null)
-        activity.actor_chain = states['actor_chain'];
+      if (states.promotion)
+        activity.promotion = states.promotion;
+      if (states.instance)
+        activity.instance = states.instance;
+      if (states.product)
+        activity.product = states.product;
+      if (states.user)
+        activity.user = states.user;
+      if (states.business)
+        activity.business = states.business;
+      if (states.mall)
+        activity.mall = states.mall;
+      if (states.chain)
+        activity.chain = states.chain;
+      if (states.actor_user)
+        activity.actor_user = states.actor_user;
+      if (states.actor_business)
+        activity.actor_business = states.actor_business;
+      if (states.actor_mall)
+        activity.actor_mall = states.actor_mall;
+      if (states.actor_chain)
+        activity.actor_chain = states.actor_chain;
 
       callback(null, feed)
     });
