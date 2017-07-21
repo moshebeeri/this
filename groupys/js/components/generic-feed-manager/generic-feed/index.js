@@ -3,8 +3,7 @@ import {Image ,Platform,PanResponder,TouchableHighlight } from 'react-native';
 import {connect} from 'react-redux';
 import {actions} from 'react-native-navigation-redux-helpers';
 import { Container, Content, Text, InputGroup, Input,Thumbnail,Button,Picker,Right,Item,Left,Header,Footer,Body, View,Card,CardItem } from 'native-base';
-import UserApi from '../../../api/user'
-let userApi = new UserApi();
+
 import PromotionApi from '../../../api/promotion'
 let promotionApi = new PromotionApi();
 
@@ -15,6 +14,12 @@ import Icon2 from 'react-native-vector-icons/EvilIcons';
 import Icon3 from 'react-native-vector-icons/MaterialIcons';
 import Icon4 from 'react-native-vector-icons/Entypo';
 
+import  UserApi from '../../../api/user'
+
+let userApi = new UserApi();
+
+import AcrivityApi from "../../../api/activity"
+let activityApi = new AcrivityApi();
 
 
 
@@ -34,7 +39,8 @@ export default class GenericFeedItem extends Component {
     }
 
 
-    componentWillMount() {
+    async componentWillMount() {
+
         const getDirectionAndColor = ({ moveX, moveY, dx, dy}) => {
             const height = dx;
             const width= dy;
@@ -58,12 +64,39 @@ export default class GenericFeedItem extends Component {
             if (dragDirection) return dragDirection;
         }
 
+
         this._panResponder = PanResponder.create({
              onMoveShouldSetPanResponder:(evt, gestureState) => this.onMove(evt, gestureState),
 
         });
+        let users = await userApi.getUserFollowers();
+        this.setState({
+            users:users
+        })
+
+
+    }
+    showUsers(show){
+        let users = this.state.users;
+        if(users) {
+            this.props.navigation.navigate('SelectUsersComponent', {
+                users: users,
+                selectUsers: this.selectUsers.bind(this)
+            })
+        }
+
     }
 
+    async selectUsers(users){
+        let activityId = this.props.item.activityId;
+
+        if(activityId) {
+            users.forEach(async function (user) {
+                await activityApi.shareActivity(user,activityId)
+            })
+
+        }
+    }
     onMove(evt, gestureState){
 
 
@@ -227,7 +260,7 @@ export default class GenericFeedItem extends Component {
 
             </Button>
 
-            let shareICon = <Button transparent style={styles.promotion_iconView} onPress={this.like.bind(this)}>
+            let shareICon = <Button transparent style={styles.promotion_iconView} onPress={this.showUsers.bind(this)}>
 
                 <Icon2 style={styles.promotion_comment}  size={30} name="share-google"/>
                 <Text>0</Text>

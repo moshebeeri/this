@@ -1,6 +1,6 @@
 
 import React, { Component } from 'react';
-import { Image, Platform,TouchableHighlight} from 'react-native';
+import { Image, Platform,TouchableHighlight,KeyboardAvoidingView} from 'react-native';
 
 import { connect } from 'react-redux';
 import { actions } from 'react-native-navigation-redux-helpers';
@@ -150,9 +150,9 @@ export default  class Login extends Component {
                       colors={['#67ccf8', '#66cdcc']}
                       style={styles.inputContainer}
                      >
+                      <KeyboardAvoidingView behavior={'position'} style={styles.inputContainer}>
 
 
-               <View style={styles.inputContainer}>
 
                    <View >
                        <View style={styles.thiscountsContainer}>
@@ -210,7 +210,7 @@ export default  class Login extends Component {
 
 
 
-                </View>
+                </KeyboardAvoidingView>
                   </LinearGradient>
 
         );

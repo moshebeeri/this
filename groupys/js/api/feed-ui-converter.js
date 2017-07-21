@@ -193,6 +193,7 @@ class FeedConverter
 
             responseFeed.id = feed.activity.instance._id;
             responseFeed.fid = feed._id;
+            responseFeed.activityId = feed.activity._id;
             responseFeed.social = {
                 like: feed.activity.instance.social_state.like,
                 numberLikes: feed.activity.instance.social_state.likes,

@@ -43,7 +43,7 @@ class Feed extends Component {
     render() {
 
         return (
-            <GenericFeedManager loadingDone = {this.props.feeds.loadingDone} showTopTimer={this.props.feeds.showTopLoader} feeds={this.props.feeds.feeds} api={this} title='Feeds' ItemDetail={GenericFeedItem}></GenericFeedManager>
+            <GenericFeedManager navigation={this.props.navigation} loadingDone = {this.props.feeds.loadingDone} showTopTimer={this.props.feeds.showTopLoader} feeds={this.props.feeds.feeds} api={this} title='Feeds' ItemDetail={GenericFeedItem}></GenericFeedManager>
 
         );
     }
