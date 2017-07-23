@@ -3,6 +3,8 @@
 const _ = require('lodash');
 const Activity = require('./activity.model');
 let activity = require('../../components/activity').createActivity();
+let graphTools = require('../../components/graph-tools');
+let graphModel = graphTools.createGraphModel('activity');
 
 // Get list of activities
 exports.index = function(req, res) {
@@ -64,6 +66,7 @@ exports.share = function(req, res) {
   };
   act.actor_user = req.user._id;
   activity.create(act);
+  graphModel.relate_ids(req.user._id, 'SHARE', req.params.activity);
   return res.json(200, activity);
 };
 

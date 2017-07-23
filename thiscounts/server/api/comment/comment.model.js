@@ -8,7 +8,7 @@ let CommentSchema = new Schema({
   user: {type: Schema.ObjectId, ref: 'User', index: true , autopopulate: true, required: true},
   message: String,
   pictures: [],
-  entity: {
+  entities: {
     brand: {type: Schema.ObjectId, ref: 'Brand', index: true , autopopulate: true},
     business: {type: Schema.ObjectId, ref: 'Business', index: true , autopopulate: true},
     shopping_chain: {type: Schema.ObjectId, ref: 'ShoppingChain', index: true , autopopulate: true},
@@ -19,21 +19,22 @@ let CommentSchema = new Schema({
     activity: {type: Schema.ObjectId, ref: 'Activity', index: true , autopopulate: true},
   }
 });
-CommentSchema
-  .pre('save', function(next) {
-    let val =
-    (this.entity.brand             ? 1 : 0)+
-    (this.entity.business          ? 1 : 0)+
-    (this.entity.shopping_chain    ? 1 : 0)+
-    (this.entity.mall              ? 1 : 0)+
-    (this.entity.product           ? 1 : 0)+
-    (this.entity.promotion         ? 1 : 0)+
-    (this.entity.instance          ? 1 : 0)+
-    (this.entity.activity          ? 1 : 0);
 
-    if(val !== 1)
-      return next(new Error('one of entity fields should be set'));
-    next();
-  });
+// CommentSchema
+//   .pre('save', function(next) {
+//     let val =
+//     (this.entity.brand             ? 1 : 0)+
+//     (this.entity.business          ? 1 : 0)+
+//     (this.entity.shopping_chain    ? 1 : 0)+
+//     (this.entity.mall              ? 1 : 0)+
+//     (this.entity.product           ? 1 : 0)+
+//     (this.entity.promotion         ? 1 : 0)+
+//     (this.entity.instance          ? 1 : 0)+
+//     (this.entity.activity          ? 1 : 0);
+//
+//     if(val !== 1)
+//       return next(new Error('one of entity fields should be set'));
+//     next();
+//   });
 
 module.exports = mongoose.model('Comment', CommentSchema);

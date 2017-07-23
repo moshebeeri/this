@@ -11,10 +11,3 @@ let FeedSchema = new Schema({
 FeedSchema.plugin(autopopulate);
 
 module.exports = mongoose.model('Feed', FeedSchema);
-
-
-
-
-//collection: String,
-//updated: {type: Date, default: Date.now},
-//created: {type: Date, default: Date.now},

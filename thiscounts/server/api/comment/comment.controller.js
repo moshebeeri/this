@@ -62,17 +62,20 @@ exports.destroy = function(req, res) {
   });
 };
 
+function build_and_clause(entities){
+  let ret = [];
+  Object.keys(entities).forEach(key => {
+    if(key)
+      ret.push({
+        key : entities[key]
+      })
+  });
+  return ret;
+}
+
 exports.find = function(req, res) {
-  Comment.find({ $or:[
-    {'entity.brand'         : req.params.entity},
-    {'entity.business'      : req.params.entity},
-    {'entity.shopping_chain': req.params.entity},
-    {'entity.mall'          : req.params.entity},
-    {'entity.product'       : req.params.entity},
-    {'entity.promotion'     : req.params.entity},
-    {'entity.instance'      : req.params.entity},
-    {'entity.activity'      : req.params.entity}
-    ]})
+  let entities = req.body;
+  Comment.find({ $and: build_and_clause(entities)})
     .sort({_id: 'desc'})
     .skip(req.params.skip)
     .limit(req.params.limit)
