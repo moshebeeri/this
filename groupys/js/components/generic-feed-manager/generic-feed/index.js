@@ -126,16 +126,16 @@ export default class GenericFeedItem extends Component {
 
             switch (item.itemType){
                 case 'PROMOTION':
-                    feed = <FeedPromotion item={item} like={like}  unlike={unlike} showUsers={showUsers} save={save}    />
+                    feed = <FeedPromotion navigation={this.props.navigation} item={item} like={like}  unlike={unlike} showUsers={showUsers} save={save}    />
                     break;
                 case 'MESSAGE':
-                    feed = <FeedMessage item={item} />
+                    feed = <FeedMessage navigation={this.props.navigation} item={item} />
                     break
                 case 'GROUP_PROMOTION':
-                    //feed = this.createGroupPromotion(item);
+
                     break;
                 default:
-                    feed = <FeedBusiness item={item} like={like}  unlike={unlike} showUsers={showUsers} save={save} _panResponder={this._panResponder} />
+                    feed = <FeedBusiness navigation={this.props.navigation} item={item} like={like}  unlike={unlike} showUsers={showUsers} save={save} _panResponder={this._panResponder} />
                     break;
             }
 

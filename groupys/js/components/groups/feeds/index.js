@@ -141,7 +141,7 @@ class GroupFeed extends Component {
             showTop = false;
         }
         return (
-        <Container>
+        <Container style={{ backgroundColor:'#ebebeb'}}>
 
             <View style={styles.headerTabContainer}>
                 <View style={styles.headerTabInnerContainer}>
@@ -158,7 +158,7 @@ class GroupFeed extends Component {
                 </View>
 
             </View>
-            <GenericFeedManager loadingDone = {this.props.feeds['grouploadingDone' + this.props.navigation.state.params.group._id]} showTopTimer={showTop} feeds={feeds} api={this} title='Feeds' ItemDetail={GenericFeedItem}></GenericFeedManager>
+            <GenericFeedManager navigation={this.props.navigation} loadingDone = {this.props.feeds['grouploadingDone' + this.props.navigation.state.params.group._id]} showTopTimer={showTop} feeds={feeds} api={this} title='Feeds' ItemDetail={GenericFeedItem}></GenericFeedManager>
 
             <View style={styles.itemborder}>
                 <View style={ {backgroundColor:'white',  flexDirection: 'row'}}>

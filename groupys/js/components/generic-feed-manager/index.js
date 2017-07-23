@@ -62,7 +62,7 @@ import * as feedsAction from "../../actions/feeds";
 
         return (
 
-                <Content  removeClippedSubviews={true} style={{  backgroundColor: '#fff'} } >
+                <Content  removeClippedSubviews={true} style={{  backgroundColor: '#e7e7e7'} } >
                     {topLoader}
                     <SGListView
                         dataSource={this.getDataSource() } //data source
