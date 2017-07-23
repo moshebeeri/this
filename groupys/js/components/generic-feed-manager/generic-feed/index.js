@@ -21,6 +21,11 @@ let userApi = new UserApi();
 import AcrivityApi from "../../../api/activity"
 let activityApi = new AcrivityApi();
 
+import FeedMessage from './feed-components/feedMessage'
+import FeedPromotion from './feed-components/feedPromotion'
+import FeedBusiness from './feed-components/feedBusiness'
+
+
 
 
 export default class GenericFeedItem extends Component {
@@ -69,6 +74,7 @@ export default class GenericFeedItem extends Component {
              onMoveShouldSetPanResponder:(evt, gestureState) => this.onMove(evt, gestureState),
 
         });
+        //TODO move to redux
         let users = await userApi.getUserFollowers();
         this.setState({
             users:users
@@ -112,15 +118,24 @@ export default class GenericFeedItem extends Component {
             if(item.content){
                 item = item.content;
             }
+            let like = this.like.bind(this);
+            let unlike = this.unlike.bind(this);
+            let showUsers = this.showUsers.bind(this);
+            let save = this.save.bind(this);
+
+
             switch (item.itemType){
                 case 'PROMOTION':
-                    feed = this.createPromotion(item);
+                    feed = <FeedPromotion item={item} like={like}  unlike={unlike} showUsers={showUsers} save={save}    />
                     break;
                 case 'MESSAGE':
-                    feed = this.createMessage(item);
+                    feed = <FeedMessage item={item} />
                     break
+                case 'GROUP_PROMOTION':
+                    //feed = this.createGroupPromotion(item);
+                    break;
                 default:
-                    feed = this.createFeed(this.props.item);
+                    feed = <FeedBusiness item={item} like={like}  unlike={unlike} showUsers={showUsers} save={save} _panResponder={this._panResponder} />
                     break;
             }
 
@@ -128,231 +143,19 @@ export default class GenericFeedItem extends Component {
             return feed;
         }
 
-        createMessage(item){
-            let image =  <Thumbnail  square   source={item.logo}/>
 
-            let containerStyle = {
-                margin:10,
-                alignItems:'flex-start',
 
-            };
 
-            let messageStyle = {
-                backgroundColor:'#e7e7e7',
-                borderTopRightRadius:20,
-                borderBottomRightRadius:20,
-                borderBottomLeftRadius:20,
-                padding:10,
-                flex: 0.6,
-                flexDirection: 'column',
-                maxWidth:200
 
-            };
 
-            let messageContainer = <View style={styles.messageContainer}>
-                {image}
-                <View style={styles.messageName}>
-                    <Text>{item.name}</Text>
-                    <View style={messageStyle}>
-                        <Text>{item.description}</Text>
-                    </View>
-                </View>
-
-            </View>
-
-            if(item.userMessage){
-                containerStyle = {
-                    margin:10,
-                    alignItems:'flex-end',
-
-                };
-                messageStyle = {
-                    backgroundColor:'#26bac4',
-                    borderTopLeftRadius:20,
-                    borderBottomRightRadius:20,
-                    borderBottomLeftRadius:20,
-                    padding:10,
-                    flexDirection: 'column',
-                    flex: 0.6,
-                    maxWidth:200
-                };
-
-                messageContainer =  <View style={styles.messageContainer}>
-
-                    <View style={styles.messageName}>
-                        <View style={{alignItems:'flex-end',height:30}}>
-                        <Text>{item.name}</Text>
-                        </View>
-                        <View style={messageStyle}>
-                            <Text  numberOfLines={5} style={{fontSize: 16,
-                                flex: 0.4,
-                                color: 'white',
-                                textAlign: 'center',
-                                flexWrap: 'wrap',marginLeft:10}}>{item.description}</Text>
-                        </View>
-                    </View>
-                    {image}
-                </View>
-
-            }
-            return <View style = {containerStyle}>
-                {messageContainer}
-            </View>
-        }
-
-        createPromotion(item){
-
-            let promotion = undefined;
-            let colorStyle = {
-
-                color: item.promotionColor,
-
-                fontFamily:'Roboto-Regular' ,marginLeft:10,marginTop:4,fontSize:16
-            }
-
-
-            promotion = <Text style={colorStyle}>{item.promotion}</Text>
-
-            let buisnessLogo = undefined;
-            if(item.businessLogo){
-                buisnessLogo =  <Thumbnail  square={true} size={50} source={{uri: item.businessLogo}} />
-
-            }
-
-            let feedAction =  <View   style={styles.promotion_buttonView}>
-
-                <TouchableHighlight style={{}} onPress={this.save.bind(this)}>
-
-
-                    <Text style={styles.promotion_buttonText}>Save</Text>
-
-
-
-                </TouchableHighlight>
-
-
-
-            </View>
-
-            let likes = new String(item.social.numberLikes);
-            let likeIcon = <Button transparent style={styles.promotion_iconView} onPress={this.like.bind(this)}>
-
-                <Icon style={styles.promotion_like}  size={25} name="heart"/>
-                <Text>{likes}</Text>
-
-            </Button>
-            if (item.social && item.social.like == true) {
-                likeIcon = <Button transparent style={styles.promotion_iconView} onPress={this.unlike.bind(this, item.id)}>
-
-
-                    <Icon  style={styles.promotion_like} size={25} name="heart"/>
-                    <Text>{likes}</Text>
-
-                </Button>
-
-
-            }
-            let commentICon = <Button transparent style={styles.promotion_iconView} onPress={this.like.bind(this)}>
-
-                <Icon2 style={styles.promotion_comment}  size={30} name="comment"/>
-                <Text>0</Text>
-
-
-            </Button>
-
-            let shareICon = <Button transparent style={styles.promotion_iconView} onPress={this.showUsers.bind(this)}>
-
-                <Icon2 style={styles.promotion_comment}  size={30} name="share-google"/>
-                <Text>0</Text>
-
-
-            </Button>
-
-            let saveIcon = undefined;
-
-            if(item.showsave) {
-                let saveStyle ={
-                    flex:-1,justifyContent:'center',marginLeft:20 ,flexDirection: 'row',height: 40,width:100, backgroundColor: item.promotionColor,
-                };
-                 saveIcon = <Button  style={saveStyle} onPress={this.save.bind(this)}>
-
-
-                    <Text>save</Text>
-
-
-                </Button>
-            }else{
-                let saveStyle ={
-                    flex:-1,justifyContent:'center',marginLeft:20 ,flexDirection: 'row',height: 40,width:100, backgroundColor: 'gray',
-                };
-                saveIcon = <Button  style={saveStyle} >
-
-
-                    <Text>saved</Text>
-
-
-                </Button>
-            }
-
-            let result =
-                <View style={styles.promotion_container}>
-                    <View style={styles.promotion_card}>
-                        <View style={styles.promotion_upperContainer}>
-                            <View style={styles.logo_view}>
-                               {buisnessLogo}
-                                <View style = {{  flexDirection: 'column'}}>
-                                    <Text style={styles.promotion_nameText} note>{item.businessName } </Text>
-                                    <Text style={styles.promotion_addressText} note>{item.businessAddress } </Text>
-                                </View>
-                            </View>
-
-                            <View style={styles.promotion_description}>
-
-                                <Text style={styles.promotion_text_description}>{item.name}</Text>
-                                <Text style={styles.promotion_text_description}>{item.description}</Text>
-
-                            </View>
-                        </View>
-
-                            <Image resizeMode= "cover" style={styles.promotion_image} source={{uri: item.banner.uri}}>
-                            </Image>
-
-                        <View style={styles.promotion_buttomUpperContainer}>
-                            <View style={styles.promotion_buttom_description}>
-                                {promotion}
-                                <Text style={styles.promotion_type}>{item.itemTitle}</Text>
-                                <View style={styles.promotion_buttom_location}>
-                                    <Icon2 style={styles.promotion_location}  size={25} name="clock"/>
-
-                                </View>
-                                <View style={styles.promotion_buttom_location}>
-                                    <Icon3 style={styles.promotion_location}  size={25} name="location-on"/>
-                                    <Text style={styles.promotion_addressText} note>{item.businessAddress } </Text>
-                                </View>
-                            </View>
-                        </View>
-
-
-                        <View style={styles.promotion_bottomContainer}>
-                            {likeIcon}
-                            {commentICon}
-                            {shareICon}
-                            {saveIcon}
-                        </View>
-                    </View>
-                </View>
-
-            return result;
-        }
-
-        like(item){
+        like(){
             this.props.item.social.like = true;
             this.props.item.social.numberLikes = this.props.item.social.numberLikes + 1;
             userApi.like( this.props.item.id);
             this.props.selectApi.updateFeed( this.props.item);
         }
 
-        unlike(item){
+        unlike(){
             this.props.item.social.like = false;
             this.props.item.social.numberLikes = this.props.item.social.numberLikes - 1;
 
@@ -371,217 +174,12 @@ export default class GenericFeedItem extends Component {
 
             }
         }
-    doAction(){
-        this.props.selectApi.props.api.props.navigation.navigate('realizePromotion')
-        }
 
     save(){
 
        this.saveFeed(this.props.item)
     }
-        createFeed(item){
-            if(item.content){
-                item = item.content;
-            }
-            let secondFeed = undefined;
-            if(item.feed){
-                secondFeed = this.createFeed(item.feed);
 
-            }
-
-            let logo = undefined;
-            if(item.logo) {
-                if (item.logo.uri) {
-                    logo = <Image
-                        style={{
-                            flex:-1,
-                            alignSelf: 'center',
-                            height: 50,
-                            width: 50,
-                            marginLeft:10,
-                            borderWidth: 1,
-                            borderRadius: 25
-                        }}
-                        source={{uri: item.logo.uri}}/>
-                }
-
-                if (item.logo.require) {
-                    logo = <Image
-                        style={{
-                            flex:-1,
-                            alignSelf: 'center',
-                            height: 50,
-                            width: 50,
-                            marginLeft:10,
-                            borderWidth: 1,
-                            borderRadius: 25
-                        }}
-                        source={item.logo.require}/>
-                }
-            }
-
-            let feedAction = undefined;
-            if (item.showsave){
-                feedAction =  <View   style={styles.buttonView}>
-
-                    <TouchableHighlight onPress={this.save.bind(this)}>
-
-                    <LinearGradient
-
-                        locations={[0,0.6]}
-                        colors={['white', 'gray']}
-                        style={styles.button}>
-
-                        <Text style={styles.buttonText}>Save</Text>
-
-
-                    </LinearGradient>
-                    </TouchableHighlight>
-
-
-
-                </View>
-            }
-            let buisnessLogo = undefined;
-            if(item.businessLogo){
-                buisnessLogo =  <Thumbnail size={50} source={{uri: item.businessLogo}} />
-
-            }
-            let banner = undefined;
-            if(item.banner) {
-
-
-                if (item.banner.uri) {
-                    banner = <View style={styles.container}>
-                        <View style={styles.backgroundContainer}>
-                        <Image resizeMode= "cover"
-                        style={styles.image}
-                        source={{uri: item.banner.uri}}
-                    >
-
-
-
-                    </Image>
-                        </View>
-
-
-                        <View style={styles.backdropView}>
-                            <View style={{paddingTop:170,marginLeft:10,flexDirection: 'row'}}>
-                            {buisnessLogo}
-                                <Text style={(styles.imageLogoName, {color: "white"})}>{item.name}</Text>
-                                <Text style={styles.imageButtomText} note>{item.description} </Text>
-                            </View>
-                            <Text style={styles.imageTopText}>{item.itemTitle}</Text>
-                            <Text style={styles.addressText} note>{item.address} </Text>
-                        </View>
-
-                    </View>
-
-                }
-
-                if (item.banner.require) {
-                    banner = <Image
-                        style={{padding: 0, flex: -1}}
-                        source={item.banner.require}>
-                        <Text style={{marginLeft:20,marginTop:170,fontSize:25}}>{item.itemTitle}</Text>
-                    <Text style={{marginLeft:20,marginTop:200,fontSize:10}} note>{item.description}</Text>
-                </Image>
-                }
-
-            }else{
-                banner = <View   style={{padding:5 }}>
-                    <Text style={{fontSize:20,marginLeft:10,marginRight:10}}>{item.itemTitle}</Text>
-                    <Text style={{fontSize:20}} note>{item.description}</Text>
-
-                </View>
-            }
-
-
-
-
-            let saveIcon = undefined;
-
-            let likeIcon = undefined;
-            let followIcon =undefined;
-            if(item.showSocial) {
-
-
-                followIcon = <Button style={styles.iconView} transparent>
-
-                    {/*<Icon size={20} style={styles.like} name="user-follow"/>*/}
-                    <Text>Follow</Text>
-                </Button>
-
-                if (item.social && item.social.follow == true) {
-                    followIcon = <Button transparent style={styles.iconView}>
-                        {/*<Icon active size={20} style={styles.like} name="user-follow"/>*/}
-                        <Text>Follow</Text>
-
-                    </Button>
-
-                }
-
-                let likes = new String(item.social.numberLikes);
-                 likeIcon = <Button transparent style={styles.iconView} onPress={this.like.bind(this)}>
-                    <Text>{likes}</Text>
-                    <Icon style={styles.like} size={20} name="heart"/>
-                    <Text>like</Text>
-
-                </Button>
-
-                if (item.social && item.social.like == true) {
-                    likeIcon = <Button transparent style={styles.iconView} onPress={this.unlike.bind(this, item.id)}>
-                        <Text>{likes}</Text>
-
-                        <Icon color="#0000b3" style={styles.like} size={20} name="heart"/>
-                        <Text>like</Text>
-                    </Button>
-
-
-                }
-            }
-
-
-
-
-
-
-
-
-            return (  <Card   {...this._panResponder.panHandlers} >
-
-
-                    <View style={{flex:-1, flexDirection: 'row',justifyContent:'space-between'}}>
-
-                            {logo}
-
-
-
-                        {secondFeed}
-                        {banner}
-
-
-
-
-
-                    </View>
-                    {feedAction}
-
-                    <CardItem >
-
-                            {likeIcon}
-
-
-                        {followIcon}
-
-                        {saveIcon}
-
-                    </CardItem>
-                </Card>
-
-            );
-
-        }
 }
 
 
