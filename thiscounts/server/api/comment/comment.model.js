@@ -9,6 +9,7 @@ let CommentSchema = new Schema({
   message: String,
   pictures: [],
   entities: {
+    group: {type: Schema.ObjectId, ref: 'Group', index: true , autopopulate: true},
     brand: {type: Schema.ObjectId, ref: 'Brand', index: true , autopopulate: true},
     business: {type: Schema.ObjectId, ref: 'Business', index: true , autopopulate: true},
     shopping_chain: {type: Schema.ObjectId, ref: 'ShoppingChain', index: true , autopopulate: true},

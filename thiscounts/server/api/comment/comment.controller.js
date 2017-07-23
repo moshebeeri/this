@@ -63,9 +63,18 @@ exports.destroy = function(req, res) {
 };
 
 function build_and_clause(entities){
-  let ret = [];
+    let ret = [
+      { group:          null},
+      { brand:          null},
+      { business:       null},
+      { shopping_chain: null},
+      { mall:           null},
+      { product:        null},
+      { promotion:      null},
+      { instance:       null},
+      { activity:       null}
+  ];
   Object.keys(entities).forEach(key => {
-    if(key)
       ret.push({
         key : entities[key]
       })
