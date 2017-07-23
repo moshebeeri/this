@@ -42,7 +42,7 @@ exports.feed = function (req, res) {
     return res.status(400).send('scroll value may be only up or down');
 
   let query_builder;
-  query_builder = Feed.find({entity: entity_id}).sort({activity: 'desc'}).limit(25);
+  query_builder = Feed.find({entity: entity_id}).sort({activity: 'desc'}).limit(15);
 
   if (from_id === 'start') {
     return feedTools.fetch_feed(userId, query_builder, Feed, res);

@@ -13,6 +13,6 @@ router.put('/:id', auth.isAuthenticated(), controller.update);
 router.patch('/:id', auth.isAuthenticated(), controller.update);
 router.delete('/:id', auth.isAuthenticated(), controller.destroy);
 
-router.post('/:entity/:skip/:limit', auth.isAuthenticated(), controller.find);
+router.post('/:skip/:limit', auth.isAuthenticated(), controller.find);
 
 module.exports = router;

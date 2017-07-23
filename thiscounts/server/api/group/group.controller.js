@@ -436,7 +436,6 @@ exports.user_follow = function (req, res) {
       if (err) return handleError(res, err);
       getGroupsLastInfo(groups, function(err, groups_previews){
         if (err) return handleError(res, err);
-        console.log(JSON.stringify(groups_previews));
         return res.status(200).json(groups_previews);
       });
     });
@@ -455,7 +454,6 @@ function getGroupPreview(group, callback) {
     .exec(function (err, act) {
       if(err)  console.log(err.message);
       if(err) return callback(err);
-      console.log('getGroupPreview act ok');
       Feed.findOne({entity: group._id})
         .where('message').ne(null)
         .sort({activity: 'desc'})
@@ -466,7 +464,6 @@ function getGroupPreview(group, callback) {
         .exec(function (err, msg) {
           if(err)  console.log(err.message);
           if(err) return callback(err);
-          console.log('getGroupPreview msg ok');
 
           return callback(null, {
             act:act,
@@ -522,24 +519,18 @@ function getGroupsLastInfo(groups, callback) {
   let previews = [];
   async.each(groups, function(group, callback){
     getGroupPreview(group, function(err, preview){
-      console.log('aaa');
-      console.log(`status: previews.length=${previews.length} err ${err? err.message : ':non'}`);
-
       if(err) return callback(err);
       previews.push(preview);
       callback(null, preview)
     })
   }, function (err) {
-    console.log(`getGroupsLastInfo`);
     if(err) return callback(err);
-    console.log(`getGroupPreview act ok ${previews}`);
     callback(null, previews);
   })
 }
 
 exports.user_products = function (req, res) {
   let userID = req.user._id;
-  console.log(userID);
   let skip = req.params.skip;
   let limit = req.params.limit;
   graphModel.query_objects(Product,
