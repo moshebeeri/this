@@ -69,7 +69,7 @@ module.exports = {
         height:40,
         width:120,
         marginTop:5,
-        backgroundColor:'#d7d7d7',
+        backgroundColor:'#2db6c8',
         borderWidth:2,
         borderColor:'#bfbfbf',
         borderTopLeftRadius:20,
@@ -80,7 +80,8 @@ module.exports = {
         height:40,
         width:120,
         marginTop:5,
-        backgroundColor:'#2db6c8',
+        backgroundColor:'#d7d7d7',
+        borderColor:'#bfbfbf',
         borderTopRightRadius:20,
         borderBottomRightRadius:20,
         alignItems:'center',
@@ -93,5 +94,29 @@ module.exports = {
         fontFamily:(Platform.OS === 'ios') ? 'Roboto' : 'Roboto',  marginLeft:0,marginTop:5,fontSize:18,color:'white'
     },
 
+    comments_promotions:{
+        padding:0,
+        margin:10,
+        backgroundColor:'#ffffff',
+        flexDirection: 'row',
+    },
+    comments_logo:{
+        marginLeft:10
+    },
+    comment_description_container:{
+        flexDirection: 'column',
+        width:width/2+ 30
+
+    },
+    promotion_text_description:{
+        fontFamily:'Roboto-Regular',  marginLeft:10,marginTop:0,fontSize:14,color:'black'
+    },
+    promotion_type:{
+        fontFamily:'Roboto-Regular',fontWeight: 'bold',  marginLeft:10,marginTop:5,fontSize:18,color:'black'
+    },
+    comment_colapse:{
+        marginTop:10,
+
+    }
 
 };

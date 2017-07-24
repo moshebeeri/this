@@ -274,6 +274,13 @@ module.exports = {
         borderWidth:0,
         maxWidth:width -20
     },
+    message_Container:{
+        flexDirection: 'row',
+
+
+        width:width,
+
+    },
     messageName:{
         margin:5,
         flexDirection: 'column',

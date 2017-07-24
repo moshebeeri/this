@@ -93,6 +93,13 @@ export default class GenericFeedItem extends Component {
 
     }
 
+    comment(){
+        this.props.navigation.navigate('InstanceGroupComments', {
+            group: this.props.group,
+            instance: this.props.item
+        })
+
+    }
     async selectUsers(users){
         let activityId = this.props.item.activityId;
 
@@ -122,20 +129,19 @@ export default class GenericFeedItem extends Component {
             let unlike = this.unlike.bind(this);
             let showUsers = this.showUsers.bind(this);
             let save = this.save.bind(this);
+            let comment = this.comment.bind(this);
 
 
             switch (item.itemType){
                 case 'PROMOTION':
-                    feed = <FeedPromotion item={item} like={like}  unlike={unlike} showUsers={showUsers} save={save}    />
+                    feed = <FeedPromotion comment= {comment} navigation={this.props.navigation} item={item} like={like}  unlike={unlike} showUsers={showUsers} save={save}    />
                     break;
                 case 'MESSAGE':
-                    feed = <FeedMessage item={item} />
+                    feed = <FeedMessage navigation={this.props.navigation} item={item} />
                     break
-                case 'GROUP_PROMOTION':
-                    //feed = this.createGroupPromotion(item);
-                    break;
+
                 default:
-                    feed = <FeedBusiness item={item} like={like}  unlike={unlike} showUsers={showUsers} save={save} _panResponder={this._panResponder} />
+                    feed = <FeedBusiness navigation={this.props.navigation} item={item} like={like}  unlike={unlike} showUsers={showUsers} save={save} _panResponder={this._panResponder} />
                     break;
             }
 

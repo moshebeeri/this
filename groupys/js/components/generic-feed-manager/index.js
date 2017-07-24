@@ -62,7 +62,7 @@ import * as feedsAction from "../../actions/feeds";
 
         return (
 
-                <Content  removeClippedSubviews={true} style={{  backgroundColor: '#fff'} } >
+                <Content  removeClippedSubviews={true} style={{  backgroundColor: '#e7e7e7'} } >
                     {topLoader}
                     <SGListView
                         dataSource={this.getDataSource() } //data source
@@ -73,7 +73,7 @@ import * as feedsAction from "../../actions/feeds";
                         scrollRenderAheadDistance={100}
                         pageSize={13}
                         renderRow={(item) =>
-                            <this.props.ItemDetail navigation={this.props.navigation} item={item} selectApi={this}  />
+                            <this.props.ItemDetail group = {this.props.group}navigation={this.props.navigation} item={item} selectApi={this}  />
                         }
                         onEndReached={(event)=>this.endEvent(event)}
                         enableEmptySections={true}
