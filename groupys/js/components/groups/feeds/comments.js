@@ -11,12 +11,12 @@ import GenericFeedManager from '../../generic-feed-manager/index'
 import GenericFeedItem from '../../generic-feed-manager/generic-feed'
 import styles from './styles'
 import Icon2 from 'react-native-vector-icons/Entypo';
+import CommentApi from '../../../api/commet'
 
-
+let commentApi = new CommentApi();
 import { bindActionCreators } from "redux";
 
 import * as commentAction from "../../../actions/comments";
-
 
 import EmojiPicker from 'react-native-emoji-picker-panel'
 class Comments extends Component {
@@ -40,11 +40,17 @@ class Comments extends Component {
 
 
 
+    fetchFeeds(){
+        this.props.fetchInstanceGroupComments(this.props.navigation.state.params.group._id,this.props.navigation.state.params.instance.id)
 
+    }
+    fetchTop(id){
+        this.props.fetchInstanceGroupComments(this.props.navigation.state.params.group._id,this.props.navigation.state.params.instance.id)
+    }
 
 
     componentWillMount(){
-
+   //     this.props.fetchInstanceGroupComments(this.props.navigation.state.params.group._id,this.props.navigation.state.params.instance.id)
     }
 
 
@@ -93,8 +99,11 @@ class Comments extends Component {
     }
 
     _onPressButton(){
-        console.log('add comment');
+        commentApi.createComment(this.props.navigation.state.params.group._id, this.props.navigation.state.params.instance.id,this.state.messsage)
 
+        this.setState({
+            messsage:'',
+        })
     }
     showComments(){
 
@@ -117,7 +126,10 @@ class Comments extends Component {
 
         promotionType = <Text style={colorStyle}>{item.promotion}</Text>
 
-
+        let feeds = this.props.comments['comment'+this.props.navigation.state.params.group._id+ this.props.navigation.state.params.instance.id];
+        if(!feeds){
+            feeds = [];
+        }
         return (
             <Container style={{ backgroundColor:'#ebebeb'}}>
                 <View style={styles.comments_promotions}>
@@ -137,6 +149,7 @@ class Comments extends Component {
                         </Button>
                     </View>
                 </View>
+                <GenericFeedManager navigation={this.props.navigation} loadingDone = {this.props.comments['LoadingDone' + this.props.navigation.state.params.group._id]+ this.props.navigation.state.params.instance.id} showTopTimer={false} feeds={feeds} api={this} title='comments' ItemDetail={GenericFeedItem}></GenericFeedManager>
 
                 <View style={styles.itemborder}>
                     <View style={ {backgroundColor:'white',  flexDirection: 'row'}}>
@@ -156,7 +169,6 @@ class Comments extends Component {
 
                 </View>
                 <EmojiPicker stylw={{height:100}}visible={this.state.showEmoji}  onEmojiSelected={this.handlePick} />
-
 
             </Container>
 

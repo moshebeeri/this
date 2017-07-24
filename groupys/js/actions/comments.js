@@ -31,8 +31,8 @@ async function getInstanceGroupComments(dispatch,group,instance){
 }
 
 
-export function InstanceGroupComments(){
-    return function (dispatch, group,instance){
+export function fetchInstanceGroupComments( group,instance){
+    return function (dispatch){
         dispatch|(getInstanceGroupComments(dispatch,group,instance));
     }
 
