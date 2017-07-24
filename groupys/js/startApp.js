@@ -25,7 +25,7 @@ import RealizePromotion from './components/realize-promotion/index';
 import SelectProductsComponent from './components/promtions/add-form/selectProducts/index';
 import SelectGroupsComponent from './components/promtions/add-form/selectGroups/index';
 import QrCode from './components/qrcode/index';
-
+import InstanceGroupComments from './components/groups/feeds/comments'
 
 // var PushNotification = require('react-native-push-notification');
 //
@@ -82,7 +82,7 @@ const AppNavigator = StackNavigator({
         UserProfile:{screen:UserProfile},
          SelectProductsComponent:{screen:SelectProductsComponent},
     SelectGroupsComponent:{screen:SelectGroupsComponent},
-
+    InstanceGroupComments:{screen:InstanceGroupComments}
 
 
 

@@ -8,6 +8,7 @@ import groups from "./groupReducer";
 import promotions from './promotionReducer';
 import products from './productReducer';
 import user from './UserReducer';
+import comment from './commentReducer';
 export default function getRootReducer() {
 
     return combineReducers({
@@ -16,6 +17,7 @@ export default function getRootReducer() {
         groups:groups,
         promotions: promotions,
         products:products,
-        user:user
+        user:user,
+        comment:comment
     });
 }

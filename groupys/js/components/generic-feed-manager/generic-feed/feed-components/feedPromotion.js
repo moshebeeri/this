@@ -22,11 +22,11 @@ export default class FeedPromotion extends Component {
 
     render(){
 
-        return this.createPromotion(this.props.item,this.props.save,this.props.like,this.props.unlike,this.props.showUsers);
+        return this.createPromotion(this.props.item,this.props.save,this.props.like,this.props.unlike,this.props.showUsers,this.props.comment);
     }
 
 
-    createPromotion(item,save,like,unlike,showUsers){
+    createPromotion(item,save,like,unlike,showUsers,comment){
 
         let promotion = undefined;
         let colorStyle = {
@@ -78,7 +78,7 @@ export default class FeedPromotion extends Component {
 
 
         }
-        let commentICon = <Button transparent style={styles.promotion_iconView} onPress={like}>
+        let commentICon = <Button transparent style={styles.promotion_iconView} onPress={comment}>
 
             <Icon2 style={styles.promotion_comment}  size={30} name="comment"/>
             <Text>0</Text>

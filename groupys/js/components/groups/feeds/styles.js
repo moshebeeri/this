@@ -94,5 +94,29 @@ module.exports = {
         fontFamily:(Platform.OS === 'ios') ? 'Roboto' : 'Roboto',  marginLeft:0,marginTop:5,fontSize:18,color:'white'
     },
 
+    comments_promotions:{
+        padding:0,
+        margin:10,
+        backgroundColor:'#ffffff',
+        flexDirection: 'row',
+    },
+    comments_logo:{
+        marginLeft:10
+    },
+    comment_description_container:{
+        flexDirection: 'column',
+        width:width/2+ 30
+
+    },
+    promotion_text_description:{
+        fontFamily:'Roboto-Regular',  marginLeft:10,marginTop:0,fontSize:14,color:'black'
+    },
+    promotion_type:{
+        fontFamily:'Roboto-Regular',fontWeight: 'bold',  marginLeft:10,marginTop:5,fontSize:18,color:'black'
+    },
+    comment_colapse:{
+        marginTop:10,
+
+    }
 
 };

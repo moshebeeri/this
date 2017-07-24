@@ -157,8 +157,10 @@ class GroupFeed extends Component {
                     </TouchableOpacity>
                 </View>
 
+
+
             </View>
-            <GenericFeedManager navigation={this.props.navigation} loadingDone = {this.props.feeds['grouploadingDone' + this.props.navigation.state.params.group._id]} showTopTimer={showTop} feeds={feeds} api={this} title='Feeds' ItemDetail={GenericFeedItem}></GenericFeedManager>
+            <GenericFeedManager group ={this.props.navigation.state.params.group} navigation={this.props.navigation} loadingDone = {this.props.feeds['grouploadingDone' + this.props.navigation.state.params.group._id]} showTopTimer={showTop} feeds={feeds} api={this} title='Feeds' ItemDetail={GenericFeedItem}></GenericFeedManager>
 
             <View style={styles.itemborder}>
                 <View style={ {backgroundColor:'white',  flexDirection: 'row'}}>
