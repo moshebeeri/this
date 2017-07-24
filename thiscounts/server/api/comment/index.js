@@ -13,6 +13,7 @@ router.put('/:id', auth.isAuthenticated(), controller.update);
 router.patch('/:id', auth.isAuthenticated(), controller.update);
 router.delete('/:id', auth.isAuthenticated(), controller.destroy);
 
-router.post('/:skip/:limit', auth.isAuthenticated(), controller.find);
+router.post('/find/:skip/:limit', auth.isAuthenticated(), controller.find);
+router.post('/conversed/:skip/:limit', auth.isAuthenticated(), controller.conversed);
 
 module.exports = router;
