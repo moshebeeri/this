@@ -22,15 +22,35 @@ exports.show = function(req, res) {
   });
 };
 
+function list2object(list){
+  let ret = {};
+  list.forEach(obj => {
+    let key = Object.keys(obj)[0];
+    ret[key] = obj[key]
+  });
+  return ret;
+}
+
 // Creates a new comment in the DB.
 exports.create = function(req, res) {
   let comment = req.body;
+  let entities = comment.entities;
   comment.user = req.user._id;
+  comment.entities = list2object(entities);
+
   Comment.create(comment, function(err, comment) {
     if(err) { return handleError(res, err); }
     graphModel.reflect(comment, function (err, comment) {
       if (err) {  return handleError(res, err); }
-      graphModel.relate_ids(req.user._id, 'COMMENTED', comment._id)
+      let params = `{comment_id:${comment._id}}`;
+      for (let i = 0; i < entities.length; i++) {
+        if (i === 0)
+          graphModel.relate_ids(req.user._id, 'COMMENTED', entities[0] , params);
+        if (i === entities.length-1)
+          graphModel.relate_ids(entities[i], 'COMMENTED', comment._id , params);
+        else
+          graphModel.relate_ids(entities[i-1], 'COMMENTED', entities[i], params);
+      }
     });
     return res.json(201, comment);
   });
@@ -83,15 +103,20 @@ function build_and_clause(entities){
 }
 
 exports.find = function(req, res) {
+  let query = '(:user)-[:COMMENTED]';
   let entities = req.body;
-  Comment.find({ $and: build_and_clause(entities)})
-    .sort({_id: 'desc'})
-    .skip(req.params.skip)
-    .limit(req.params.limit)
-    .exec(function (err, comments) {
+
+  for(let i=0; i<entities.length; i++) {
+    query += `->(e${i}:{_id:'${entities[i]}'})-[:COMMENTED]`;
+  }
+  query += `->(:comment) return e${entities.length-1}._id as _id `;
+
+  graphModel.query_objects(Comment, query,
+    `ORDER BY e${entities.length-1}._id DESC`,
+    req.params.skip, req.params.limit, function (err, comments) {
       if(err) { return handleError(res, err); }
       return res.json(200, comments);
-    });
+  })
 };
 
 function handleError(res, err) {
