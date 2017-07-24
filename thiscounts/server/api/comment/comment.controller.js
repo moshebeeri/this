@@ -40,7 +40,9 @@ exports.create = function(req, res) {
 
   Comment.create(comment, function(err, comment) {
     if(err) { return handleError(res, err); }
-    graphModel.reflect(comment, function (err, comment) {
+    graphModel.reflect(comment, {
+      _id: comment._id
+    },function (err, comment) {
       if (err) {  return handleError(res, err); }
       let params = `{comment_id:${comment._id}}`;
       for (let i = 0; i < entities.length; i++) {
