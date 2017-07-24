@@ -4,6 +4,15 @@ let _ = require('lodash');
 let Comment = require('./comment.model');
 let graphTools = require('../../components/graph-tools');
 let graphModel = graphTools.createGraphModel('comment');
+let Group         = require('../group/group.model');
+let Brand         = require('../brand/brand.model');
+let Business      = require('../business/business.model');
+let ShoppingChain = require('../shoppingChain/shoppingChain.model');
+let Mall          = require('../mall/mall.model');
+let Product       = require('../product/product.model');
+let Promotion     = require('../promotion/promotion.model');
+let Instance      = require('../instance/instance.model');
+let Activity      = require('../activity/activity.model');
 
 // Get list of comments
 exports.index = function(req, res) {
@@ -109,19 +118,31 @@ exports.find = function(req, res) {
       return res.status(200).json(comments);
   })
 };
-function getSchema() {
-  return null
+function getSchema(entities) {
+  switch(Object.keys(entities[entities.length-1])[0]){
+    case "group":            return   Group;
+    case "brand":            return   Brand;
+    case "business":         return   Business;
+    case "shopping_chain":   return   ShoppingChain;
+    case "mall":             return   Mall;
+    case "product":          return   Product;
+    case "promotion":        return   Promotion;
+    case "instance":         return   Instance;
+    case "activity":         return   Activity;
+  }
 }
+
 //match (c:comment)<-[:COMMENTED]-(i:instance)<-[r*1..5]-(user:user{_id:'595b84b80c5177416072a1a1'}) return i
 exports.conversed = function(req, res) {
   let query = '';
-  let entities = req.body;
+  let entities = extract_ids(req.body.entities);
+  let schema = getSchema(req.body.entities);
 
   for(let i=0; i<entities.length; i++)
     query += `(e${i}:{_id:'${entities[i]}'})-[:COMMENTED]->`;
 
   query += `(:comment) return e${entities.length-1}._id as _id `;
-  graphModel.query_objects(getSchema(), query,
+  graphModel.query_objects(schema, query,
     `ORDER BY e${entities.length-1}._id DESC`,
     req.params.skip, req.params.limit, function (err, comments) {
       if(err) { return handleError(res, err); }
