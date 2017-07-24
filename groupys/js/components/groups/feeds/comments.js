@@ -29,6 +29,7 @@ class Comments extends Component {
         this.state = {
 
             messsage: '',
+            showComment:true,
             showEmoji:false,
             iconEmoji:'emoji-neutral'
 
@@ -66,7 +67,7 @@ class Comments extends Component {
 
     handlePick(emoji) {
         let message = this.state.messsage;
-
+        this.fetchFeeds();
         this.setState({
             messsage: message + emoji ,
         });
@@ -106,7 +107,10 @@ class Comments extends Component {
         })
     }
     showComments(){
-
+        let show = !this.state.showComment;
+        this.setState({
+            showComment:show
+        })
     }
     render() {
         let item = this.props.navigation.state.params.instance;
@@ -130,6 +134,41 @@ class Comments extends Component {
         if(!feeds){
             feeds = [];
         }
+
+        let arrowIcon = "chevron-small-up";
+        let commentsView = undefined;
+        let showMessageInput = undefined;
+        let showEmoji = undefined;
+        if(this.state.showComment){
+             arrowIcon = "chevron-small-down";
+
+            commentsView =
+                <GenericFeedManager navigation={this.props.navigation} loadingDone = {this.props.comments['LoadingDone' + this.props.navigation.state.params.group._id]+ this.props.navigation.state.params.instance.id} showTopTimer={false} feeds={feeds} api={this} title='comments' ItemDetail={GenericFeedItem}></GenericFeedManager>
+
+            showMessageInput =  <View style={styles.itemborder}>
+                <View style={ {backgroundColor:'white',  flexDirection: 'row'}}>
+                    <Button   onPress={() => this._onPressButton()} style={styles.icon} transparent>
+
+                        <Icon style={{fontSize:35,color:"#2db6c8"}} name='send' />
+                    </Button>
+                    <Input value={this.state.messsage}  onFocus={this.hideEmoji.bind(this)} blurOnSubmit={true} returnKeyType='done' ref="3"  onSubmitEditing={this._onPressButton.bind(this)} onChangeText={(messsage) => this.setState({messsage})} placeholder='write text' />
+
+
+                    <Button   onPress={() => this.showEmoji()} style={styles.icon} transparent>
+
+                        <Icon2 style={{fontSize:35,color:"#2db6c8"}} name={this.state.iconEmoji} />
+                    </Button>
+
+                </View>
+
+            </View>
+
+            showEmoji = <EmojiPicker stylw={{height:100}}visible={this.state.showEmoji}  onEmojiSelected={this.handlePick} />
+
+        }
+
+
+
         return (
             <Container style={{ backgroundColor:'#ebebeb'}}>
                 <View style={styles.comments_promotions}>
@@ -145,31 +184,13 @@ class Comments extends Component {
                     <View style={styles.comment_colapse}>
                         <Button   onPress={() => this.showComments()} style={styles.icon} transparent>
 
-                            <Icon2 style={{fontSize:35,color:"#dadada"}} name="chevron-small-down"/>
+                            <Icon2 style={{fontSize:35,color:"#dadada"}} name={arrowIcon}/>
                         </Button>
                     </View>
                 </View>
-                <GenericFeedManager navigation={this.props.navigation} loadingDone = {this.props.comments['LoadingDone' + this.props.navigation.state.params.group._id]+ this.props.navigation.state.params.instance.id} showTopTimer={false} feeds={feeds} api={this} title='comments' ItemDetail={GenericFeedItem}></GenericFeedManager>
-
-                <View style={styles.itemborder}>
-                    <View style={ {backgroundColor:'white',  flexDirection: 'row'}}>
-                        <Button   onPress={() => this._onPressButton()} style={styles.icon} transparent>
-
-                            <Icon style={{fontSize:35,color:"#2db6c8"}} name='send' />
-                        </Button>
-                        <Input value={this.state.messsage}  onFocus={this.hideEmoji.bind(this)} blurOnSubmit={true} returnKeyType='done' ref="3"  onSubmitEditing={this._onPressButton.bind(this)} onChangeText={(messsage) => this.setState({messsage})} placeholder='write text' />
-
-
-                        <Button   onPress={() => this.showEmoji()} style={styles.icon} transparent>
-
-                            <Icon2 style={{fontSize:35,color:"#2db6c8"}} name={this.state.iconEmoji} />
-                        </Button>
-
-                    </View>
-
-                </View>
-                <EmojiPicker stylw={{height:100}}visible={this.state.showEmoji}  onEmojiSelected={this.handlePick} />
-
+                {commentsView}
+                {showMessageInput}
+                {showEmoji}
             </Container>
 
 
