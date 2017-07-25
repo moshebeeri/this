@@ -44,6 +44,8 @@ class Comments extends Component {
     fetchFeeds(){
         this.props.fetchInstanceGroupComments(this.props.navigation.state.params.group._id,this.props.navigation.state.params.instance.id)
 
+        this.props.fetchGroupComments(this.props.navigation.state.params.group._id);
+
     }
     fetchTop(id){
         this.props.fetchInstanceGroupComments(this.props.navigation.state.params.group._id,this.props.navigation.state.params.instance.id)

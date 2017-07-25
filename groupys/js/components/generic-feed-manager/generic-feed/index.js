@@ -74,16 +74,12 @@ export default class GenericFeedItem extends Component {
              onMoveShouldSetPanResponder:(evt, gestureState) => this.onMove(evt, gestureState),
 
         });
-        //TODO move to redux
-        let users = await userApi.getUserFollowers();
-        this.setState({
-            users:users
-        })
+
 
 
     }
     showUsers(show){
-        let users = this.state.users;
+        let users = this.props.userFollowers;
         if(users) {
             this.props.navigation.navigate('SelectUsersComponent', {
                 users: users,

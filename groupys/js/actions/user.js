@@ -31,9 +31,35 @@ async function getUser(dispatch){
 
 }
 
+
+async function getUserFollowers(dispatch){
+    try {
+        let users = await userApi.getUserFollowers();
+
+        dispatch({
+            type: 'GET_USER_FOLLOWERS',
+            followers: users
+
+        });
+
+
+
+    }catch (error){
+        console.log(error);
+    }
+
+}
+
 export function fetchUsers(){
     return function (dispatch, getState){
         dispatch|(getUser(dispatch,));
+    }
+
+}
+
+export function fetchUsersFollowers(){
+    return function (dispatch, getState){
+        dispatch|(getUserFollowers(dispatch,));
     }
 
 }

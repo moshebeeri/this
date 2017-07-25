@@ -7,7 +7,7 @@
 /**
  * Created by stan229 on 5/27/16.
  */
-const initialState = {user:[]};
+const initialState = {user:[],followers:[]};
 
 
 
@@ -19,6 +19,12 @@ export default function user(state = initialState, action) {
             return {
                 ...state,
                 user : action.user,
+            };
+
+        case 'GET_USER_FOLLOWERS':
+            return {
+                ...state,
+                followers : action.followers,
             };
 
         default:

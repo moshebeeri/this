@@ -78,7 +78,7 @@ class AddGroup extends Component {
 
 
         };
-
+        this.props.fetchUsersFollowers();
 
 
     }
@@ -94,12 +94,8 @@ class AddGroup extends Component {
 
     async componentWillMount(){
         try {
-          let users = await userApi.getUserFollowers();
-          this.setState({
-              users:users
-          })
 
-            if(this.props.businesses.businesses.length > 0 ) {
+           if(this.props.businesses.businesses.length > 0 ) {
                 this.setState({
                     business: this.props.businesses.businesses[0]
                 })
@@ -239,8 +235,13 @@ class AddGroup extends Component {
     }
 
     showUsers(show){
-        let users = this.state.users;
-       this.props.navigation.navigate('SelectUsersComponent',{users:users ,selectUsers: this.selectUsers.bind(this)})
+        let users = this.props.user.followers;
+        if(users) {
+            this.props.navigation.navigate('SelectUsersComponent', {
+                users: users,
+                selectUsers: this.selectUsers.bind(this)
+            })
+        }
 
     }
     render() {
@@ -394,7 +395,8 @@ class AddGroup extends Component {
 
 export default connect(
     state => ({
-        businesses: state.businesses
+        businesses: state.businesses,
+        user: state.user,
     }),
     dispatch => bindActionCreators(groupsAction, dispatch)
 )(AddGroup);

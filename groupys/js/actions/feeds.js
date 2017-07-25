@@ -151,6 +151,24 @@ export function showGroupTopLoader(groupid) {
     }
 }
 
+async function getUserFollowers(dispatch){
+    try {
+        let users = await userApi.getUserFollowers();
+
+        dispatch({
+            type: 'GET_USER_FOLLOWERS',
+            followers: users
+
+        });
+
+
+
+    }catch (error){
+        console.log(error);
+    }
+
+}
+
 async function getUser(dispatch){
     try {
         let user = await userApi.getUser();
@@ -185,7 +203,12 @@ export function fetchUsers(){
     }
 
 }
+export function fetchUsersFollowers(){
+    return function (dispatch, getState){
+        dispatch|(getUserFollowers(dispatch,));
+    }
 
+}
 
 
 
