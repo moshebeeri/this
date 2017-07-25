@@ -39,12 +39,15 @@ class Feed extends Component {
         this.props.updateHomeFeed(feed);
     }
 
+    nextLoad(){
+        this.props.nextLoad();
+    }
 
 
     render() {
 
         return (
-            <GenericFeedManager navigation={this.props.navigation} loadingDone = {this.props.feeds.loadingDone} showTopTimer={this.props.feeds.showTopLoader} userFollowers= {this.props.user.followers} feeds={this.props.feeds.feeds} api={this} title='Feeds' ItemDetail={GenericFeedItem}></GenericFeedManager>
+            <GenericFeedManager navigation={this.props.navigation} nextLoad = {this.props.feeds.nextLoad}loadingDone = {this.props.feeds.loadingDone} showTopLoader={this.props.feeds.showTopLoader} userFollowers= {this.props.user.followers} feeds={this.props.feeds.feeds} api={this} title='Feeds' ItemDetail={GenericFeedItem}></GenericFeedManager>
 
         );
     }

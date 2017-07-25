@@ -39,6 +39,10 @@ async function fetchList(action,feeds,api,dispatch,groupid){
                     showTopLoader: false
                 });
             }
+        }else{
+            dispatch({
+                type: 'FEED_LOADING_DONE',
+            });
         }
 
     }catch (error){
@@ -209,6 +213,15 @@ export function fetchUsersFollowers(){
     }
 
 }
+export function nextLoad(){
+    return function (dispatch, getState) {
+        dispatch({
+            type: 'FEED_LOADING',
+        });
+    }
+
+}
+
 
 
 

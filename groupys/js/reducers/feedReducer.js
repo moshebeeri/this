@@ -4,7 +4,7 @@
 /**
  * Created by stan229 on 5/27/16.
  */
-const initialState = {feeds:[],savedfeeds:[],savedShowTopLoader:false};
+const initialState = {feeds:[],savedfeeds:[],savedShowTopLoader:false,nextLoad:false,showTopLoader:false};
 
 export const GET_FEED = 'GET_FEEDS'
 
@@ -19,7 +19,9 @@ export default function feeds(state = initialState, action) {
                 feeds : action.feeds,
                 showTopLoader : action.showTopLoader,
                 loadingDone: true,
+                nextLoad:false,
             };
+
 
         case 'GET_GROUP_FEEDS' :
 
@@ -56,6 +58,16 @@ export default function feeds(state = initialState, action) {
             return {
                 ...state,
                 feeds : updatedFeeds,
+            };
+        case 'FEED_LOADING':
+            return {
+                ...state,
+                nextLoad : true
+            };
+        case 'FEED_LOADING_DONE':
+            return {
+                ...state,
+                nextLoad : false
             };
         default:
             return state;

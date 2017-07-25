@@ -142,7 +142,10 @@ export default class GenericFeedItem extends Component {
             }
 
 
-            return feed;
+
+            return  <View  {...this._panResponder.panHandlers} >
+                {feed}
+            </View>
         }
 
 

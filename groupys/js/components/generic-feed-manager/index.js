@@ -51,6 +51,7 @@ import * as feedsAction from "../../actions/feeds";
     }
 
     endEvent(event){
+        this.props.api.nextLoad();
         this.props.api.fetchFeeds();
     }
     render() {
@@ -58,6 +59,11 @@ import * as feedsAction from "../../actions/feeds";
         let topLoader = this.props.showTopLoader?<View><Spinner color='red' /></View>:null
         if(!this.props.loadingDone){
             return <View><Spinner color='red' /></View>;
+        }
+        let spining = undefined;
+
+        if(this.props.nextLoad){
+            spining = <View><Spinner color='red' /></View>;
         }
 
         return (
@@ -78,7 +84,7 @@ import * as feedsAction from "../../actions/feeds";
                         onEndReached={(event)=>this.endEvent(event)}
                         enableEmptySections={true}
                     />
-
+                    {spining}
 
                 </Content>
 
