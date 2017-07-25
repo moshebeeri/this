@@ -118,8 +118,9 @@ exports.find = function(req, res) {
       return res.status(200).json(comments);
   })
 };
-function getSchema(entities) {
-  switch(Object.keys(entities[entities.length-1])[0]){
+
+function getSchema(type) {
+  switch(type){
     case "group":            return   Group;
     case "brand":            return   Brand;
     case "business":         return   Business;
@@ -132,23 +133,22 @@ function getSchema(entities) {
   }
 }
 
-//match (c:comment)<-[:COMMENTED]-(i:instance)<-[r*1..5]-(user:user{_id:'595b84b80c5177416072a1a1'}) return i
 exports.conversed = function(req, res) {
-  let query = '';
+  let query = 'match ';
   let entities = extract_ids(req.body.entities);
-  let schema = getSchema(req.body.entities);
+  let schema = getSchema(req.params.type); //getSchema(req.body.entities);
 
   for(let i=0; i<entities.length; i++)
-    query += `(e${i}:{_id:'${entities[i]}'})-[:COMMENTED]->`;
+    query += `(e${i}{_id:'${entities[i]}'})-[:COMMENTED]->`;
 
-  query += `(:comment) return e${entities.length-1}._id as _id `;
+  query += `(e:${req.params.type})-[:COMMENTED]->(:comment) with distinct e._id as _id return _id `;
+  console.log(query);
   graphModel.query_objects(schema, query,
-    `ORDER BY e${entities.length-1}._id DESC`,
+    `ORDER BY _id DESC`,
     req.params.skip, req.params.limit, function (err, comments) {
       if(err) { return handleError(res, err); }
       return res.status(200).json(comments);
     })
-
 };
 
 function handleError(res, err) {

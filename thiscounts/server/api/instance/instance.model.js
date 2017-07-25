@@ -2,10 +2,11 @@
 
 const mongoose = require('mongoose'),
   Schema = mongoose.Schema;
+const autopopulate = require('mongoose-autopopulate');
 
 let InstanceSchema = new Schema({
   social_state : {},
-  promotion: {type: Schema.ObjectId, ref: 'Promotion', index: true, required: true},
+  promotion: {type: Schema.ObjectId, ref: 'Promotion', index: true, required: true, autopopulate: true},
   gid: {type: Number, index: true},
   type: {type: String, index: true, required: true},
   variation: {type: String, index: true, required: true},
@@ -92,6 +93,7 @@ let InstanceSchema = new Schema({
     }
   }
 });
+InstanceSchema.plugin(autopopulate);
 InstanceSchema.index({ location: '2dsphere' });
 
 module.exports = mongoose.model('Instance', InstanceSchema);
