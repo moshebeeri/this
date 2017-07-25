@@ -21,7 +21,7 @@ export default function comment(state = initialState, action) {
 
             let currentState = {...state};
             currentState['comment'+ action.gid + action.instanceId] = action.comments;
-
+            currentState['LoadingDone'+ action.gid + action.instanceId] = true;
             return currentState;
         default:
             return state;

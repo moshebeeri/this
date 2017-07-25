@@ -12,6 +12,10 @@ import { Container, Content, Text, InputGroup, Input,Thumbnail,Button,Picker,Rig
 import Icon from 'react-native-vector-icons/FontAwesome';
 import Icon2 from 'react-native-vector-icons/EvilIcons';
 import Icon3 from 'react-native-vector-icons/MaterialIcons';
+import LinearGradient from 'react-native-linear-gradient';
+
+
+import Icon4 from 'react-native-vector-icons/Entypo';
 
 import styles from './styles'
 

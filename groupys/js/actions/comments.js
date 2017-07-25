@@ -30,10 +30,41 @@ async function getInstanceGroupComments(dispatch,group,instance){
 
 }
 
+async function getGroupComments(dispatch,group){
+    try {
+        let response = await commentsApi.getGroupComments(group);
+        if(response.length > 0) {
 
-export function InstanceGroupComments(){
-    return function (dispatch, group,instance){
+            dispatch({
+                type: 'GET_GROUP_COMMENTS',
+                comments: response,
+                gid:group,
+
+
+
+            });
+        }
+
+
+    }catch (error){
+        console.log(error);
+    }
+
+}
+
+
+export function fetchInstanceGroupComments( group,instance){
+    return function (dispatch){
         dispatch|(getInstanceGroupComments(dispatch,group,instance));
     }
 
 }
+
+
+export function fetchGroupComments( group){
+    return function (dispatch){
+        dispatch|(getGroupComments(dispatch,group));
+    }
+
+}
+

@@ -16,7 +16,8 @@ class Feed extends Component {
 
       constructor(props) {
         super(props);
-
+        this.props.fetchUsers();
+        this.props.fetchUsersFollowers();
       }
 
 
@@ -27,7 +28,7 @@ class Feed extends Component {
 
     fetchFeeds(){
         this.props.fetchFeeds('GET_FEEDS',this.props.feeds.feeds,this);
-        this.props.fetchUsers()
+
     }
     fetchTop(id){
         this.props.showTopLoader();
@@ -38,12 +39,15 @@ class Feed extends Component {
         this.props.updateHomeFeed(feed);
     }
 
+    nextLoad(){
+        this.props.nextLoad();
+    }
 
 
     render() {
 
         return (
-            <GenericFeedManager navigation={this.props.navigation} loadingDone = {this.props.feeds.loadingDone} showTopTimer={this.props.feeds.showTopLoader} feeds={this.props.feeds.feeds} api={this} title='Feeds' ItemDetail={GenericFeedItem}></GenericFeedManager>
+            <GenericFeedManager navigation={this.props.navigation} nextLoad = {this.props.feeds.nextLoad}loadingDone = {this.props.feeds.loadingDone} showTopLoader={this.props.feeds.showTopLoader} userFollowers= {this.props.user.followers} feeds={this.props.feeds.feeds} api={this} title='Feeds' ItemDetail={GenericFeedItem}></GenericFeedManager>
 
         );
     }
@@ -54,7 +58,8 @@ class Feed extends Component {
 
 export default connect(
     state => ({
-        feeds: state.feeds
+        feeds: state.feeds,
+        user: state.user
     }),
     dispatch => bindActionCreators(feedsAction, dispatch)
 )(Feed);

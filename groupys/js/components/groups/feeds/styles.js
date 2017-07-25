@@ -12,6 +12,7 @@ module.exports = {
         alignItems: 'center',
         padding:3,
 
+
     },
 
     item:{

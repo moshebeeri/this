@@ -7,6 +7,9 @@
 
 import GroupsApi from "../api/groups"
 let groupsApi = new GroupsApi();
+import UserApi from "../api/user"
+let userApi = new UserApi();
+
 
 async function getAll(dispatch){
     try {
@@ -45,6 +48,24 @@ async function getByBusinessId(dispatch,bid){
 
 }
 
+async function getUserFollowers(dispatch){
+    try {
+        let users = await userApi.getUserFollowers();
+
+        dispatch({
+            type: 'GET_USER_FOLLOWERS',
+            followers: users
+
+        });
+
+
+
+    }catch (error){
+        console.log(error);
+    }
+
+}
+
 export function fetchGroups(){
     return function (dispatch, getState){
         dispatch|(getAll(dispatch));
@@ -54,6 +75,13 @@ export function fetchGroups(){
 export function fetchBusinessGroups(bid){
     return function (dispatch, getState){
         dispatch|(getByBusinessId(dispatch,bid));
+    }
+
+}
+
+export function fetchUsersFollowers(){
+    return function (dispatch, getState){
+        dispatch|(getUserFollowers(dispatch,));
     }
 
 }
