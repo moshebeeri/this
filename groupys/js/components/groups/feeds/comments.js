@@ -1,6 +1,6 @@
 
 import React, { Component } from 'react';
-import { Image,TextInput, Platform,View,Keyboard,TouchableNativeFeedback,TouchableOpacity,} from 'react-native';
+import { Image,TextInput, Platform,View,Keyboard,TouchableNativeFeedback,TouchableOpacity,KeyboardAvoidingView} from 'react-native';
 
 import { connect } from 'react-redux';
 import { actions } from 'react-native-navigation-redux-helpers';
@@ -37,11 +37,13 @@ class Comments extends Component {
 
 
     render() {
-        return  <View>
-            <CommentsComponenet navigation={this.props.navigation}
+        return    <KeyboardAvoidingView behavior={'position'} style={styles.inputContainer}>
+
+
+        <CommentsComponenet navigation={this.props.navigation}
                                    instance={this.props.navigation.state.params.instance}
                                    group={this.props.navigation.state.params.group}/>
-        </View>
+        </KeyboardAvoidingView>
     }
 
 }

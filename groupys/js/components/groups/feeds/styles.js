@@ -14,6 +14,12 @@ module.exports = {
 
 
     },
+    inputContainer: {
+        flex:-1,
+        height:height,
+        width:width,
+
+    },
 
     item:{
 
@@ -117,6 +123,13 @@ module.exports = {
     },
     comment_colapse:{
         marginTop:10,
+
+    },
+
+    message_container:{
+        width:width,
+        flex:-1,
+
 
     }
 

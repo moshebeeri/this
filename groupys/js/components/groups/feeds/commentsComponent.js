@@ -1,6 +1,6 @@
 
 import React, { Component } from 'react';
-import { Image,TextInput, Platform,View,Keyboard,TouchableNativeFeedback,TouchableOpacity,} from 'react-native';
+import { Image,TextInput, Platform,View,Keyboard,TouchableNativeFeedback,TouchableOpacity,KeyboardAvoidingView} from 'react-native';
 
 import { connect } from 'react-redux';
 import { actions } from 'react-native-navigation-redux-helpers';
@@ -148,13 +148,13 @@ class CommentsComponent extends Component {
             commentsView =
                 <GenericFeedManager navigation={this.props.navigation} loadingDone = {this.props.comments['LoadingDone' + this.props.group._id]+ this.props.instance.id} showTopTimer={false} feeds={feeds} api={this} title='comments' ItemDetail={GenericFeedItem}></GenericFeedManager>
 
-            showMessageInput =  <View style={styles.itemborder}>
+            showMessageInput =  <View behavior={'position'} style={styles.message_container}>
                 <View style={ {backgroundColor:'white',  flexDirection: 'row'}}>
                     <Button   onPress={() => this._onPressButton()} style={styles.icon} transparent>
 
                         <Icon style={{fontSize:35,color:"#2db6c8"}} name='send' />
                     </Button>
-                    <Input value={this.state.messsage}  onFocus={this.hideEmoji.bind(this)} blurOnSubmit={true} returnKeyType='done' ref="3"  onSubmitEditing={this._onPressButton.bind(this)} onChangeText={(messsage) => this.setState({messsage})} placeholder='write text' />
+                    <Input style={{width:300}} value={this.state.messsage}  onFocus={this.hideEmoji.bind(this)} blurOnSubmit={true} returnKeyType='done' ref="3"  onSubmitEditing={this._onPressButton.bind(this)} onChangeText={(messsage) => this.setState({messsage})} placeholder='write text' />
 
 
                     <Button   onPress={() => this.showEmoji()} style={styles.icon} transparent>
