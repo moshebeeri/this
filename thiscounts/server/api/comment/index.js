@@ -14,6 +14,6 @@ router.patch('/:id', auth.isAuthenticated(), controller.update);
 router.delete('/:id', auth.isAuthenticated(), controller.destroy);
 
 router.post('/find/:skip/:limit', auth.isAuthenticated(), controller.find);
-router.post('/conversed/:skip/:limit', auth.isAuthenticated(), controller.conversed);
+router.post('/conversed/:type/:skip/:limit', auth.isAuthenticated(), controller.conversed);
 
 module.exports = router;
