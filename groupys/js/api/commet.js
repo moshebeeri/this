@@ -83,7 +83,7 @@ class CommentApi {
 
 
                 let token = await store.get('token');
-                const response = await fetch(`${server_host}/api/comments/conversed/`+0+'/' +100, {
+                const response = await fetch(`${server_host}/api/comments/conversed/instance/`+0+'/' +100, {
                     method: 'POST',
                     headers: {
                         'Accept': 'application/json, text/plain, */*',

@@ -130,6 +130,10 @@ class GroupFeed extends Component {
     selectChat(){
 
     }
+
+    nextLoad(){
+
+    }
     render() {
         let feeds = this.props.feeds['groups'+this.props.navigation.state.params.group._id];
         if(!feeds){

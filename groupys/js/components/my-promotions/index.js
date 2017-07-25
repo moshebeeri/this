@@ -41,6 +41,11 @@ class MyPromotions extends Component {
         this.props.fetchTop('GET_SAVED_FEEDS',this.props.feeds.savedfeeds,id,this);
     }
 
+
+    nextLoad(){
+
+    }
+
     render() {
 
         return (

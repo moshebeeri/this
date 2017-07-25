@@ -90,10 +90,16 @@ export default class GenericFeedItem extends Component {
     }
 
     comment(){
-        this.props.navigation.navigate('InstanceGroupComments', {
-            group: this.props.group,
-            instance: this.props.item
-        })
+        if(this.props.group) {
+            this.props.navigation.navigate('InstanceGroupComments', {
+                group: this.props.group,
+                instance: this.props.item
+            })
+            return;
+        }
+
+        //TODO add comments screen
+
 
     }
     async selectUsers(users){
