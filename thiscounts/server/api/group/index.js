@@ -11,8 +11,8 @@ router.get('/follow/:group/:business', auth.isAuthenticated(), controller.group_
 router.get('/following/:business/:skip/:limit', auth.isAuthenticated(), controller.groups_following_business);
 router.get('/join/:group', auth.isAuthenticated(), controller.join_group);
 
-router.get('/request/ask/:group', auth.isAuthenticated(), controller.ask_join_group);
-router.get('/request/approve/:group', auth.isAuthenticated(), controller.approve_join_group);
+router.get('/join/ask/:group', auth.isAuthenticated(), controller.ask_join_group);
+router.get('/join/approve/:group', auth.isAuthenticated(), controller.approve_join_group);
 
 router.get('/invite/ask/:group', auth.isAuthenticated(), controller.ask_invite_group);
 router.get('/invite/approve/:group', auth.isAuthenticated(), controller.approve_invite_group);

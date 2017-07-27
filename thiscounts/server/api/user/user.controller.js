@@ -420,8 +420,6 @@ exports.verification = function (req, res) {
   if (!config.sms_verification) {
     return res.status(200).send('user verified');
   }
-  console.log("req.params.code: " + req.params.code);
-  console.log("req.user._id: " + req.user._id);
   let code = req.params.code;
   let userId = req.user._id;
   if (req.body._id) {
@@ -435,7 +433,6 @@ exports.verification = function (req, res) {
       return res.status(404).send('Not Found');
     }
     if (user.sms_code !== code) {
-      console.log('Code not match userId ' + userId + ' user code ' + user.sms_code + ' received ' + code);
       return res.status(401).send('Code not match userId ' + userId + ' user code ' + user.sms_code + ' received ' + code);
     }
     user.sms_verified = true;
@@ -539,6 +536,10 @@ exports.me = function (req, res, next) {
 };
 
 let Roles = new Enum({'Admin': 100, 'Manager': 50, 'Seller': 10});
+
+exports.roles = function (req, res) {
+  res.status(200).json(Roles);
+};
 
 function createRole(user, entity, role, callback) {
   let existing_query = `MATCH (user:user{_id:"${user}"})-[role:ROLE]->(entity{_id:"${entity}"}) return role`;
@@ -646,7 +647,13 @@ exports.entityRoles = function (req, res) {
   let skip = req.params.skip;
   let limit = req.params.limit;
 
-  graphModel.query_ids(`MATCH (user:user)-[role:ROLE{name=${role}}]->(e{_id:"${entity}"}) RETURN user,role`,
+  let query;
+  if(role)
+    query = role ?
+      `MATCH (user:user)-[role:ROLE{name=${role}}]->(e{_id:"${entity}"})` :
+      `MATCH (user:user)-[role:ROLE|OWNS]->(e{_id:"${entity}"})`;
+
+  graphModel.query_ids(`${query} RETURN user,role`,
     'order by p.created DESC', skip, limit, function (err, users_role) {
       if (err) return handleError(res, err);
       let _ids = [];
@@ -669,6 +676,12 @@ exports.entityRoles = function (req, res) {
     })
 };
 
+exports.getUserByPhone = function (req, res) {
+  User.findOne({phone_number: req.params.phone}, function (err, user) {
+    if(err) return handleError(res, err);
+    return res.status(200).json(user);
+  });
+};
 
 /**
  * Authentication callback

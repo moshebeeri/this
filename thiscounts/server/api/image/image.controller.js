@@ -94,10 +94,8 @@ function handle_image(req, res, type) {
   form.on('file', function (name, file) {
     client.upload(file.path, {/*path: key*/}, function (err, versions, meta) {
       if (err) {
-        console.log(err);
         return handleError(res, err);
       }
-      console.log("handle_image = update versions");
       updateImageVersions(versions, req.params.id, meta_data, type, function (err, updated) {
         if (err) return handleError(res, err);
         return res.status(201).json(updated);
@@ -216,7 +214,6 @@ function updateImageVersions(version, id, meta_data, type, callback) {
 
             updated.save(function (err, updated) {
               if (err) {
-                console.log(err);
                 return callback(err, null);
               }
               return callback(null, updated);

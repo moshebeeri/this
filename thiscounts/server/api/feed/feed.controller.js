@@ -79,7 +79,6 @@ exports.new_count_group = function (req, res) {
     })(pos.feed_id, pos.top_id);
   });
   async.parallel(queryFunctions, function(err, result) {
-    console.log('ending: ' + result);
     res.status(200).json(result);
   });
 };

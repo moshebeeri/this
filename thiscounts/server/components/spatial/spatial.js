@@ -21,7 +21,6 @@ function find_layer(name) {
   });
   db.call(operation, function (err, result, response) {
     if (err) {
-      console.log('name');
       create_layer(name);
 
     } else {

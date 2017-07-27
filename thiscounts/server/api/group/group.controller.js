@@ -574,11 +574,17 @@ exports.user_products = function (req, res) {
 };
 
 exports.ask_join_group = function (req, res) {
-  //check user is has not asked before
-  //check user is not already member
-  //check group policy
-  //send req
-  return res.status(200);
+  let userId = req.user._id;
+  let group = req.params.group;
+  let query = `MATCH (u:user {_id:'${userId}'})-[r:ASK_JOIN_GROUP|FOLLOW]->(p:group{_id:"${group}"}) return r, type(r) as type`;
+  graphModel.query(query, function (err, rs) {
+
+    //check user is has not asked before
+    //check user is not already member
+    //check group policy
+    //send req
+    return res.status(200).json(rs);
+  });
 };
 
 exports.approve_join_group = function (req, res) {

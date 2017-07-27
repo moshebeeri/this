@@ -39,7 +39,6 @@ Distributor.distributePromotions =
       delete spread.area;
       sumq += spread.quantity;
     });
-    console.log(sumq);
     return spreads;
   };
 

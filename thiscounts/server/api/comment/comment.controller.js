@@ -55,7 +55,6 @@ exports.create = function(req, res) {
   let entities = extract_ids(comment.entities);
   comment.user = req.user._id;
   comment.entities = list2object(comment.entities);
-  console.log( JSON.stringify(comment));
   Comment.create(comment, function(err, comment) {
     if(err) { return handleError(res, err); }
     graphModel.reflect(comment, {
@@ -110,7 +109,6 @@ exports.find = function(req, res) {
     query += `->(e${i}{_id:'${entities[i]}'})-[:COMMENTED]`;
   }
   query += `->(c:comment) return c._id as _id `;
-  console.log(query);
   graphModel.query_objects(Comment, query,
     `ORDER BY e${entities.length-1}._id DESC`,
     req.params.skip, req.params.limit, function (err, comments) {
@@ -142,7 +140,6 @@ exports.conversed = function(req, res) {
     query += `(e${i}{_id:'${entities[i]}'})-[:COMMENTED]->`;
 
   query += `(e:${req.params.type})-[:COMMENTED]->(:comment) with distinct e._id as _id return _id `;
-  console.log(query);
   graphModel.query_objects(schema, query,
     `ORDER BY _id DESC`,
     req.params.skip, req.params.limit, function (err, comments) {

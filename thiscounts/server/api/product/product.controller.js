@@ -85,7 +85,6 @@ exports.create = function (req, res) {
 
 exports.user_products = function (req, res) {
   let userID = req.user._id;
-  console.log(userID);
   let skip =  req.params.skip;
   let limit = req.params.limit;
   graphModel.query_objects(Product,

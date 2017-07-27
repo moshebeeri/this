@@ -55,7 +55,6 @@ exports.show = function (req, res) {
 
 exports.mine = function (req, res) {
   let userId = req.user._id;
-  console.log("get businesses of user " + userId );
   Business.find({'creator': userId}, function (err, businesses) {
     if (err) {
       return handleError(res, err);

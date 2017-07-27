@@ -49,7 +49,6 @@ function createProductCategories(callback) {
 exports.reflect_products = function (req, res) {
   ProductCategory.query('match(n:ProductCategory) return n', function (err, categories) {
     categories.forEach(category => {
-      console.log(`insert category ${category.name}`);
       Category.create({
         type: 'product',
         gid: category.id,
@@ -68,7 +67,6 @@ exports.update_product_leafs = function (req, res) {
   ProductCategory.query('MATCH (n:ProductCategory) WHERE NOT (n)<-[:CATEGORY]-(:ProductCategory) RETURN n',
     function (err, categories) {
       categories.forEach(g_category => {
-        console.log(`category.id=${g_category.id}`);
         Category.findOne({ gid: g_category.id }, function (err, category) {
           if (err) console.log(err);
           if(category) {
@@ -215,7 +213,6 @@ function add_categories(type, categories, parent) {
                   where id(parent)=${parent.id}
                   CREATE (sub:${typeName}{name:"${name}"})-[:CATEGORY]->(parent)
                   RETURN sub`;
-      console.log(`add_categories ${parent.name}<-${name}`);
       ProductCategory.query(query, function (err, category) {
         if(err) return console.log(err);
       })
@@ -240,7 +237,6 @@ function csv_load_product_categories(req, res) {
         //console.log(Object.keys(jsonObj)  + '=>' + JSON.stringify(jsonObj));
         let obj = top;
         Object.keys(jsonObj).forEach(key => {
-          console.log(key);
           function getValue(obj, key) {
             if(!obj[key])
               obj[key] = {};
@@ -250,7 +246,6 @@ function csv_load_product_categories(req, res) {
         });
       })
       .on('done', (error) => {
-        console.log(JSON.stringify(top,null,2));
         add_object_categories('product', sub[0], top);
         return res.status(200).json('ok');
       });
@@ -320,7 +315,6 @@ exports.business = function (req, res) {
     categories.forEach(category => {
       gids.push(category.id)
     });
-    console.log(gids);
     Category.find({})
       .where('gid').in(gids)
       .select(`gid isLeaf translations.${lang} -_id`)
@@ -342,7 +336,6 @@ exports.product = function (req, res) {
     categories.forEach(category => {
       gids.push(category.id)
     });
-    console.log(gids);
     Category.find({})
       .where('gid').in(gids)
       .select(`gid isLeaf translations.${lang} -_id`)
@@ -411,7 +404,6 @@ exports.add_product = function (req, res) {
   ProductCategory.query(`MATCH (n:ProductCategory{name:'${parent}'}) RETURN n`,
     function (err, categories) {
       categories.forEach(category => {
-        console.log(`update category ${category.name}`);
         let conditions = {gid: category.gid};
         let update = {isLeaf: false};
         let options = {multi: false};
@@ -444,7 +436,6 @@ exports.add_business = function (req, res) {
   BusinessCategory.query(`MATCH (n:BusinessCategory{name:'${parent}'}) RETURN n`,
     function (err, categories) {
       categories.forEach(category => {
-        console.log(`update category ${category.name}`);
         let conditions = {gid: category.gid};
         let update = {isLeaf: false};
         let options = {multi: false};

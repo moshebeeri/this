@@ -83,11 +83,8 @@ function to_graph(campaign) {
 }
 
 exports.business_campaigns = function (req, res) {
-  console.log("user_campaigns");
-  console.log("user: " + req.user._id);
   let userID = req.user._id;
   let businessID = req.params.business_id;
-  console.log("MATCH (u:user {_id:'"+ userID +"'})-[r:OWNS]->(b:business {_id:'"+ businessID +"'})-[bc:BUSINESS_CAMPAIGN]->(c:campaign) RETURN c LIMIT 25");
   graphModel.query("MATCH (u:user {_id:'"+ userID +"'})-[r:OWNS]->(b:business {_id:'"+ businessID +"'})-[bc:BUSINESS_CAMPAIGN]->(c:campaign) RETURN c LIMIT 25", function(err, groups){
     if (err) {return handleError(res, err)}
     if(!groups) { return res.send(404); }
@@ -96,6 +93,5 @@ exports.business_campaigns = function (req, res) {
 };
 
 function handleError(res, err) {
-  console.log(err);
   return res.status(500).send(err);
 }

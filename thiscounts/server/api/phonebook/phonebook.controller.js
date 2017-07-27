@@ -68,9 +68,6 @@ exports.create = function (req, res) {
 
   let phonebook = req.body;
   let userId = req.user._id;
-  console.log(req.body);
-  console.log(req.user._id);
-
 
   Phonebook.findOne({userId: userId}, function (err, user) {
     if (user) {
@@ -153,7 +150,6 @@ function checkPhones (phoneBook, res){
   getPhoneNumbers(list, users, function(message, users, list) {
     // this anonymous function will run when the
     // callback is called
-    console.log("callback called! " + users);
     users = normalizePhoneBookList(users, list);
     res.status(200).json(users);
   });
@@ -161,34 +157,24 @@ function checkPhones (phoneBook, res){
 
 
 function normalizePhoneBookList(users, phonebook){
-  console.log("--------------------normalizePhoneBookList-----------------------");
   let tempData = {};
   let tempData2 = [];
   let counterUser = 0;
   for ( let user in users ) {
-    console.log(users[user]["phone_number"]);
     tempData[users[user]["phone_number"]] = true;
     tempData2[counterUser] = users[user]["phone_number"];
     counterUser++;
   }
-  console.log("-------------------------------------------");
-  console.log(tempData2);
-  console.log("--------------------phonebook-----------------------");
-  console.log(JSON.stringify(users));
   for ( let contact in phonebook ) {
     if(tempData2.indexOf(phonebook[contact]["number"])>-1){
       phonebook[contact]["pictures"] = users[tempData2.indexOf(phonebook[contact]["number"])]["pictures"];
       phonebook[contact]["_id"] = users[tempData2.indexOf(phonebook[contact]["number"])]["_id"];
       phonebook[contact]["sms_verified"] = users[tempData2.indexOf(phonebook[contact]["number"])]["sms_verified"];
       phonebook[contact]["isMember"] = true;
-      console.log("---" + JSON.stringify(phonebook[contact]));
     } else {
       phonebook[contact]["isMember"] = false;
     }
-    //console.log(contact + " : " + phonebook[contact]["number"].length);
   }
-  console.log("--------------------phonebook-----------------------");
-  console.log("--------------------normalizePhoneBookList-----------------------");
   return phonebook;
 }
 
@@ -198,7 +184,6 @@ function getPhoneNumbers(list, users, callback){
 
   for (let l in list) {       // first build the search array
     let o = list[l];
-    console.log(o.number);
     if (o.number) {
       //userPhones.push( new mongoose.Types.ObjectId( o.number ) );           // for the Mongo query
       userPhones.push(o.number);           // for the Mongo query
@@ -206,23 +191,14 @@ function getPhoneNumbers(list, users, callback){
     }
   }
 
-  //console.log(JSON.stringify(list));
-  //console.log(JSON.stringify(users));
-  console.log(JSON.stringify(userPhones));
-
   mongoose.connection.db.collection("users").find( {phone_number: {$in: userPhones}} ).each(function(err, user) {
     //if (err) return handleError(err);
     if (err) callback( err, users, list);
     else {
       //console.log(JSON.stringify(user));
       if (user && user._id) {
-        console.log(JSON.stringify(user));
         users.push(user);
-        console.log("--------------------------------");
-        console.log(JSON.stringify(users));
-        console.log("--------------------------------");
       } else {                        // end of list
-        console.log("end--end--end--end--end--end--end--");
         //res.status(200).json(users);
         callback( null, users, list );
       }
@@ -238,7 +214,6 @@ function identifyPhoneByTwilio(phone, countryCode){
   let cleanedPhone = utils.clean_phone_number(phone);
 
   if(cleanedPhone != undefined){
-    console.log("--------------identifyPhoneByTwilio------------------");
     twilioClient.phoneNumbers(cleanedPhone).get({
       //type: 'carrier'
     }, function(error, number) {
@@ -257,13 +232,10 @@ function identifyPhoneByTwilio(phone, countryCode){
          console.log('twilio--twilio--twilio--twilio--twilio--twilio--twilio--twilio--');*/
       }
     });
-  } else {
-    console.log("--------------UNDEFINED identifyPhoneByTwilio------------------");
   }
 }
 function identifyPhoneByTwilioFallBack(phone){
   if(phone != undefined){
-    console.log("--------------identifyPhoneByTwilio------------------");
     twilioClient.phoneNumbers(phone).get({
       //type: 'carrier'
     }, function(error, number) {
@@ -279,8 +251,6 @@ function identifyPhoneByTwilioFallBack(phone){
          console.log('FallBack--FallBack--FallBack--FallBack--FallBack--FallBack--');*/
       }
     });
-  } else {
-    console.log("--------------UNDEFINED identifyPhoneByTwilio------------------");
   }
 }
 
