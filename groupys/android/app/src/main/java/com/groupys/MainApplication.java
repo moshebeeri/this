@@ -3,6 +3,7 @@ package com.groupys;
 import android.app.Application;
 
 import com.facebook.react.ReactApplication;
+import com.mohtada.nestedscrollview.ReactNestedScrollViewPackage;
 import com.BV.LinearGradient.LinearGradientPackage;
 import com.microsoft.codepush.react.CodePush;
 
@@ -42,6 +43,7 @@ public class MainApplication extends Application implements ReactApplication {
     protected List<ReactPackage> getPackages() {
       return Arrays.<ReactPackage>asList(
           new MainReactPackage(),
+            new ReactNestedScrollViewPackage(),
             new LinearGradientPackage(),
             new CodePush(getResources().getString(R.string.reactNativeCodePush_androidDeploymentKey), getApplicationContext(), BuildConfig.DEBUG),
             new BackgroundTimerPackage(),

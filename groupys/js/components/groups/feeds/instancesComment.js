@@ -10,9 +10,12 @@ import GroupFeedHeader from './groupFeedHeader'
 import GenericFeedManager from '../../generic-feed-manager/index'
 import GenericFeedItem from '../../generic-feed-manager/generic-feed'
 import CommentsComponenet from './commentsComponent';
+import AndroidCommentsComponenet from './andoridCommentsComponent';
 import styles from './styles'
 import Icon2 from 'react-native-vector-icons/Entypo';
 import CommentApi from '../../../api/commet'
+import NestedScrollView from 'react-native-nested-scrollview';
+
 
 let commentApi = new CommentApi();
 import { bindActionCreators } from "redux";
@@ -49,25 +52,14 @@ class instancesComment extends Component {
     }
 
     createComponent(feed){
-        return <CommentsComponenet key={feed.id} navigation={this.props.navigation}
+        return <AndroidCommentsComponenet key={feed.id} navigation={this.props.navigation}
                             instance={feed}
                             group={this.props.group}/>
 
 
     }
 
-    test(){
-        return  <GenericFeedManager
-            group ={this.props.group}
-            navigation={this.props.navigation}
-            loadingDone = {loadingDone}
-            showTopTimer={false}
-            feeds={feeds}
-            api={this}
-            title='comments'
-            ItemDetail={CommentsComponenet}></GenericFeedManager>
 
-    }
 
     render() {
         let groupid = this.props.group._id;
@@ -75,7 +67,12 @@ class instancesComment extends Component {
         let loadingDone = this.props.comments['LoadingDone' + groupid];
 
         if(loadingDone && feeds.length >0){
-           // let body = feeds.map(feed => this.createComponent(feed))
+            let body = feeds.map(feed => this.createComponent(feed))
+            if(true){
+                return <NestedScrollView>
+                    {body}
+                </NestedScrollView>
+            }
             return   <GenericFeedManager
                 group ={this.props.group}
                 navigation={this.props.navigation}
