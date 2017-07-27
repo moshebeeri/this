@@ -23,12 +23,17 @@ class CommentsComponent extends Component {
 
     constructor(props) {
         super(props);
+        let showComment=false;
+        if(props.showComments){
+            showComment = true;
+        }
         this.state = {
 
             messsage: '',
-            showComment:true,
+            showComment:showComment,
             showEmoji:false,
-            iconEmoji:'emoji-neutral'
+            iconEmoji:'emoji-neutral',
+            componentHight:400,
 
         };
         this.handlePick = this.handlePick.bind(this);
@@ -39,13 +44,12 @@ class CommentsComponent extends Component {
 
 
     fetchFeeds(){
-        this.props.fetchInstanceGroupComments(this.props.group._id,this.props.instance.id)
 
-        this.props.fetchGroupComments(this.props.group._id);
+        this.props.fetchInstanceGroupComments(this.props.group._id,this.getInstance().id)
 
     }
     fetchTop(id){
-        this.props.fetchInstanceGroupComments(this.props.group._id,this.props.instance.id)
+        this.props.fetchInstanceGroupComments(this.props.group._id,this.getInstance().id)
     }
 
 
@@ -102,8 +106,19 @@ class CommentsComponent extends Component {
 
     }
 
+    getInstance(){
+        if(this.props.instance){
+            return this.props.instance;
+        }
+        if(this.props.navigation.state.params.instance){
+            return this.props.navigation.state.params.instance;
+        }
+
+        return this.props.item;
+    }
+
     _onPressButton(){
-        commentApi.createComment(this.props.group._id, this.props.instance.id,this.state.messsage)
+        commentApi.createComment(this.props.group._id, this.getInstance().id,this.state.messsage)
 
         this.setState({
             messsage:'',
@@ -116,7 +131,7 @@ class CommentsComponent extends Component {
         })
     }
     render() {
-        let item = this.props.navigation.state.params.instance;
+        let item = this.getInstance();
         let promotion = undefined;
         if(item.banner){
             promotion =  <Thumbnail  square={true} size={50} source={{uri: item.banner.uri}} />
@@ -133,20 +148,26 @@ class CommentsComponent extends Component {
 
         promotionType = <Text style={colorStyle}>{item.promotion}</Text>
 
-        let feeds = this.props.comments['comment'+this.props.group._id+ this.props.instance.id];
+        let feeds = this.props.comments['comment'+this.props.group._id+ this.getInstance().id];
         if(!feeds){
             feeds = [];
         }
 
-        let arrowIcon = "chevron-small-up";
+        let arrowIcon = "chevron-small-down";
         let commentsView = undefined;
         let showMessageInput = undefined;
         let showEmoji = undefined;
+        let style = {
+            height:90,backgroundColor:'#ebebeb'
+        }
         if(this.state.showComment){
-            arrowIcon = "chevron-small-down";
+            style = {
+                height:520,backgroundColor:'#ebebeb'
+            }
+            arrowIcon = "chevron-small-up";
 
             commentsView =
-                <GenericFeedManager navigation={this.props.navigation} loadingDone = {this.props.comments['LoadingDone' + this.props.group._id]+ this.props.instance.id} showTopTimer={false} feeds={feeds} api={this} title='comments' ItemDetail={GenericFeedItem}></GenericFeedManager>
+                <GenericFeedManager navigation={this.props.navigation} loadingDone = {this.props.comments['LoadingDone' + this.props.group._id]+ this.getInstance().id} showTopTimer={false} feeds={feeds} api={this} title='comments' ItemDetail={GenericFeedItem}></GenericFeedManager>
 
             showMessageInput =  <View behavior={'position'} style={styles.message_container}>
                 <View style={ {backgroundColor:'white',  flexDirection: 'row'}}>
@@ -172,8 +193,9 @@ class CommentsComponent extends Component {
 
 
 
+
         return (
-            <View style={{ height:400,backgroundColor:'#ebebeb'}}>
+            <View style={style}>
                 <View style={styles.comments_promotions}>
                     <View style={styles.comments_promotions}>
                         {promotion}

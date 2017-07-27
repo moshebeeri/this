@@ -186,60 +186,85 @@ class FeedConverter
         return responseFeed;
     }
 
+    getInstance(feed){
+        if(feed.activity){
+            return feed.activity.instance;
+        }
+
+        return feed;
+
+    }
+
+    getPromotion(feed){
+        if(feed.activity){
+            return  feed.activity.promotion;
+        }
+        return feed.promotion;
+    }
 
     createPromontionInstance(feed){
+
+        let instance = this.getInstance(feed)
+        let promotion = this.getPromotion(feed);
         let responseFeed = {};
+
         try {
 
-            responseFeed.id = feed.activity.instance._id;
+            responseFeed.id = instance._id;
             responseFeed.fid = feed._id;
-            responseFeed.activityId = feed.activity._id;
-            responseFeed.social = {
-                like: feed.activity.instance.social_state.like,
-                numberLikes: feed.activity.instance.social_state.likes,
-                follow: feed.activity.instance.social_state.follow,
-                saved: feed.activity.instance.social_state.saved,
-                realized: feed.activity.instance.social_state.realized,
-                use: feed.activity.instance.social_state.use,
-            };
 
-            responseFeed.showsave = !feed.activity.instance.social_state.saved && !feed.activity.instance.social_state.realized;
-            responseFeed.name = feed.activity.promotion.name;
-            responseFeed.description = feed.activity.promotion.description;
+            if(instance.social_state) {
+                responseFeed.social = {
+                    like: instance.social_state.like,
+                    numberLikes: instance.social_state.likes,
+                    follow: instance.social_state.follow,
+                    saved: instance.social_state.saved,
+                    activityId: feed.activity._id,
+                    realized: instance.social_state.realized,
+                    use: instance.social_state.use,
+                };
+                responseFeed.showsave = !instance.social_state.saved && !instance.social_state.realized;
+
+            }
+
+
+
+           responseFeed.name = promotion.name;
+            responseFeed.description = promotion.description;
             responseFeed.showSocial = true;
-            if (feed.activity.promotion.pictures.length > 0) {
+            if (promotion.pictures.length > 0) {
                 responseFeed.banner = {
-                    uri: feed.activity.promotion.pictures[0].pictures[1]
+                    uri: promotion.pictures[0].pictures[1]
                 };
             }
-            switch (feed.activity.instance.type) {
+            switch (instance.type) {
                 case "REDUCED_AMOUNT":
-                    responseFeed.itemTitle = "Buy For " + feed.activity.promotion.reduced_amount.values[0].price + ' Pay Only ' + feed.activity.promotion.reduced_amount.values[0].pay;
+                    responseFeed.itemTitle = "Buy For " + promotion.reduced_amount.values[0].price + ' Pay Only ' + promotion.reduced_amount.values[0].pay;
                     responseFeed.promotion = 'REDUCED AMOUNT';
                     responseFeed.promotionColor = '#e65100';
                     break;
                 case "PERCENT":
-                    if( feed.activity.promotion.condition.product) {
-                        responseFeed.itemTitle = "Get " +feed.activity.promotion.condition.product.name + " with " + feed.activity.promotion.percent.values[0] + ' % Off ';
+                    if( promotion.condition.product) {
+                        responseFeed.itemTitle = "Get " +promotion.condition.product.name + " with " + promotion.percent.values[0] + ' % Off ';
 
                     }else {
-                        responseFeed.itemTitle = "Get " + feed.activity.promotion.percent.values[0] + ' % Off ';
+                        responseFeed.itemTitle = "Get " + promotion.percent.values[0] + ' % Off ';
                     }
                     responseFeed.promotion = 'PERCENT';
                     responseFeed.promotionColor = '#df80ff';
                     break;
                 case "X_FOR_Y":
-                    responseFeed.itemTitle = 'Buy ' + feed.activity.promotion.x_for_y.values[0].eligible + " " +  feed.activity.promotion.condition.product.name + " Pay only " + feed.activity.promotion.x_for_y.values[0].pay;
+                    responseFeed.itemTitle = 'Buy ' + promotion.x_for_y.values[0].eligible + " " +  promotion.condition.product.name + " Pay only " + promotion.x_for_y.values[0].pay;
                     responseFeed.promotion = 'X FOR Y';
                     responseFeed.promotionColor = '#ff66b3';
                     break;
                 case "X+N%OFF":
-                    responseFeed.itemTitle = 'Buy ' +   feed.activity.promotion.condition.product.name + " Get " +  feed.activity.promotion.x_plus_n_percent_off.values[0].product.name + " with "+feed.activity.promotion.x_plus_n_percent_off.values[0].eligible + " %Off" ;
+                    responseFeed.itemTitle = 'Buy ' +   promotion.condition.product.name + " Get " +  promotion.x_plus_n_percent_off.values[0].product.name + " with "+promotion.x_plus_n_percent_off.values[0].eligible + " %Off" ;
                     responseFeed.promotion = 'X+N%OFFf';
                     responseFeed.promotionColor = '#ff66b3';
                     break;
                 case "X+Y":
-                    responseFeed.itemTitle = 'Buy ' + feed.activity.promotion.x_plus_y.values[0].buy + " " +  feed.activity.promotion.condition.product.name + " Get " +feed.activity.promotion.x_plus_y.values[0].eligible + " " +  feed.activity.promotion.x_plus_y.values[0].product.name;
+                    responseFeed.itemTitle = 'Buy ' + promotion.x_plus_y.values[0].buy + " " +  promotion.condition.product.name + " Get " +promotion.x_plus_y.values[0].eligible + " " +  promotion.x_plus_y.values[0].product.name;
                     responseFeed.promotion = 'X+Y';
                     responseFeed.promotionColor = '#66ff1a';
                     break;
@@ -251,17 +276,17 @@ class FeedConverter
                     break;
 
                 default:
-                    responseFeed.itemTitle = feed.activity.instance.type + " NOT SUPPORTED"
-                    responseFeed.promotion = feed.activity.instance.type;
+                    responseFeed.itemTitle = instance.type + " NOT SUPPORTED"
+                    responseFeed.promotion = instance.type;
                     responseFeed.promotionColor = 'black';
                     break;
 
             }
 
-            if (feed.activity.promotion.entity && feed.activity.promotion.entity.business.pictures.length > 0) {
-                responseFeed.businessLogo = feed.activity.promotion.entity.business.pictures[0].pictures[3];
-                responseFeed.businessName = feed.activity.promotion.entity.business.name;
-                responseFeed.businessAddress = feed.activity.promotion.entity.business.city + ' ' + feed.activity.promotion.entity.business.address;
+            if (promotion.entity && promotion.entity.business && promotion.entity.business.pictures.length > 0) {
+                responseFeed.businessLogo = promotion.entity.business.pictures[0].pictures[3];
+                responseFeed.businessName = promotion.entity.business.name;
+                responseFeed.businessAddress = promotion.entity.business.city + ' ' + promotion.entity.business.address;
             }
             responseFeed.itemType = 'PROMOTION';
         }catch (error){

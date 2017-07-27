@@ -37,7 +37,7 @@ async function getGroupComments(dispatch,group){
 
             dispatch({
                 type: 'GET_GROUP_COMMENTS',
-                comments: response,
+                groupcomments: response,
                 gid:group,
 
 
