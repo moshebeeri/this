@@ -110,9 +110,13 @@ exports.create = function (req, res) {
   group.creator = req.user._id;
   group.admins = [req.user._id];
   Group.create(group, function (err, group) {
-    if (err) { return handleError(res, err); }
+    if (err) {
+      return handleError(res, err);
+    }
     graphModel.reflect(group, to_graph(group), function (err) {
-      if (err) { return handleError(res, err); }
+      if (err) {
+        return handleError(res, err);
+      }
       graphModel.relate_ids(group._id, 'CREATED_BY', req.user._id);
       graphModel.relate_ids(req.user._id, 'FOLLOW', group._id);
       graphModel.relate_ids(req.user._id, 'GROUP_ADMIN', group._id);
@@ -149,7 +153,9 @@ exports.create_business_default_group = function (group, callback) {
 
 // Updates an existing group in the DB.
 exports.update = function (req, res) {
-  if (req.body._id) { delete req.body._id; }
+  if (req.body._id) {
+    delete req.body._id;
+  }
   Group.findById(req.params.id, function (err, group) {
     if (err) {
       return handleError(res, err);
@@ -159,7 +165,9 @@ exports.update = function (req, res) {
     }
     let updated = _.merge(group, req.body);
     updated.save(function (err) {
-      if (err) { return handleError(res, err); }
+      if (err) {
+        return handleError(res, err);
+      }
       return res.status(200).json(group);
     });
   });
@@ -216,32 +224,34 @@ exports.message = function (req, res) {
 
 exports.touch = function (req, res) {
   let query = `match (u:user{_id:'${req.user._id}'})-[r:FOLLOW]->(g:group{_id:'${req.params.group_id}'}) set r.timestamp=timestamp()`
-  graphModel.query(query, function(err){
-    if(err) console.error(err.message);
+  graphModel.query(query, function (err) {
+    if (err) console.error(err.message);
   });
   return res.status(200);
 };
 
 function user_follow_group(user_id, group, callback) {
-  graphModel.relate_ids(user_id, 'FOLLOW', group._id, {timestamp: Date.now()}, function(err){
-    if(err) {console.error(err);}
+  graphModel.relate_ids(user_id, 'FOLLOW', group._id, {timestamp: Date.now()}, function (err) {
+    if (err) {
+      console.error(err);
+    }
     user_follow_group_activity(group, user_id);
-    if(typeof callback === 'function')
+    if (typeof callback === 'function')
       callback(null, group);
-  } );
+  });
 }
 
 function group_follow_group(following_group_id, group_to_follow_id, callback) {
-  graphModel.relate_ids(following_group_id, 'FOLLOW', group_to_follow_id, function(err){
-    if(err) return callback(err);
+  graphModel.relate_ids(following_group_id, 'FOLLOW', group_to_follow_id, function (err) {
+    if (err) return callback(err);
     group_follow_group_activity(following_group_id, group_to_follow_id);
     callback(null)
   });
 }
 
 function group_follow_business(following_group_id, business_id, callback) {
-  graphModel.relate_ids(following_group_id, 'FOLLOW', business_id, function(err){
-    if(err) return callback(err);
+  graphModel.relate_ids(following_group_id, 'FOLLOW', business_id, function (err) {
+    if (err) return callback(err);
     group_follow_business_activity(business_id, following_group_id);
     callback(null)
   });
@@ -251,7 +261,9 @@ function add_user_to_group_admin(user_id, group, callback) {
   graphModel.relate_ids(user_id, 'GROUP_ADMIN', group._id);
   group.admins.push(user_id);
   Group.save(function (err, group) {
-    if (err) {return callback(err)}
+    if (err) {
+      return callback(err)
+    }
     callback(null, group)
   });
 }
@@ -269,11 +281,13 @@ exports.add_admin = function (req, res) {
       handleError(res, new Error('only group admin can add admin'))
     }
     graphModel.is_related_ids(req.params.user, 'FOLLOW', group._id, function (err, exist) {
-      if(!exist){
+      if (!exist) {
         handleError(res, new Error('only group members can be added to admin'))
       }
-      add_user_to_group_admin(req.user._id, group, function(err, group){
-        if (err) {return handleError(res, err);}
+      add_user_to_group_admin(req.user._id, group, function (err, group) {
+        if (err) {
+          return handleError(res, err);
+        }
         return res.status(200).json(group);
       })
     });
@@ -289,8 +303,12 @@ function non_commercial_group(group) {
 
 exports.add_user = function (req, res) {
   Group.findById(req.params.to_group, function (err, group) {
-    if (err) {return handleError(res, err);}
-    if (!group) {return res.status(404).send('group not found');}
+    if (err) {
+      return handleError(res, err);
+    }
+    if (!group) {
+      return res.status(404).send('group not found');
+    }
     //TODO: remove remark, temporary allowed for dev
     //if (!(_.find(group.admins, req.user._id) && non_commercial_group(group))) {
     //  return res.status(404).send('Not Authorized');
@@ -321,34 +339,42 @@ exports.add_users = function (req, res) {
 
 exports.join_group = function (req, res) {
   Group.findById(req.params.group, function (err, group) {
-    if (err) { return handleError(res, err); }
-    if (!group) { return res.status(404).send('source group not found'); }
+    if (err) {
+      return handleError(res, err);
+    }
+    if (!group) {
+      return res.status(404).send('source group not found');
+    }
 
-      if(group.add_policy !== 'OPEN')
-        return res.status(404).send('Group you try to follow is not open');
+    if (group.add_policy !== 'OPEN')
+      return res.status(404).send('Group you try to follow is not open');
 
-      user_follow_group(req.user._id, group, function (err) {
-        if(err) return handleError(res, err);
-        return res.status(200).json(group);
-      });
-    })
+    user_follow_group(req.user._id, group, function (err) {
+      if (err) return handleError(res, err);
+      return res.status(200).json(group);
+    });
+  })
 };
 
 exports.group_join_group = function (req, res) {
   Group.findById(req.params.group, function (err, following_group) {
-    if (err) { return handleError(res, err); }
-    if (!following_group) { return res.status(404).send('source group not found'); }
+    if (err) {
+      return handleError(res, err);
+    }
+    if (!following_group) {
+      return res.status(404).send('source group not found');
+    }
 
     //user must be one of the admins
     if (!utils.defined(_.find(following_group.admins, req.user._id)))
       return res.status(404).send('Only group admin may follow other groups');
 
     Group.findById(req.params.group2follow, function (err, group2follow) {
-      if(group2follow.add_policy !== 'OPEN')
+      if (group2follow.add_policy !== 'OPEN')
         return res.status(404).send('Group you try to follow is not open');
 
       group_follow_group(following_group._id, group2follow._id, function (err) {
-        if(err) return handleError(res, err);
+        if (err) return handleError(res, err);
         return res.status(200).json(following_group);
       });
     })
@@ -357,18 +383,22 @@ exports.group_join_group = function (req, res) {
 
 exports.group_follow_business = function (req, res) {
   Group.findById(req.params.group, function (err, following_group) {
-    if (err) { return handleError(res, err); }
-    if (!following_group) { return res.status(404).send('source group not found'); }
+    if (err) {
+      return handleError(res, err);
+    }
+    if (!following_group) {
+      return res.status(404).send('source group not found');
+    }
 
     //user must be one of the admins
     if (!utils.defined(_.find(following_group.admins, req.user._id)))
       return res.status(404).send('Only group admin may follow other groups');
 
-      group_follow_business(following_group._id, req.params.business, function (err) {
-        if(err) return handleError(res, err);
-        return res.status(200).json(following_group);
-      });
-    })
+    group_follow_business(following_group._id, req.params.business, function (err) {
+      if (err) return handleError(res, err);
+      return res.status(200).json(following_group);
+    });
+  })
 };
 
 exports.groups_following_business = function (req, res) {
@@ -377,7 +407,7 @@ exports.groups_following_business = function (req, res) {
 
   let query = `MATCH (g:group)-[:FOLLOW]->(b:business{_id:"${req.params.business}"}) RETURN g._id as _id`;
   graphModel.query_objects(Group, query, 'order by r.timestamp desc', skip, limit, function (err, groups) {
-    if(err) return handleError(res, err);
+    if (err) return handleError(res, err);
     return res.status(200).json(groups);
   })
 };
@@ -392,7 +422,7 @@ exports.following = function (req, res) {
   let limit = req.params.limit;
   let query = graphModel.paginate_query(`MATCH (g:group {_id:'${group}'})<-[r:FOLLOW]-(g:group)
      OPTIONAL MATCH (g:group {_id:'${group}'})<-[r:FOLLOW]-(u:user) 
-     RETURN g._id as gid, u._id as uid`, skip,limit);
+     RETURN g._id as gid, u._id as uid`, skip, limit);
   graphModel.query_objects_parallel({gid: Group, uid: User}, query,
     function (err, objects) {
       if (err) return handleError(res, err);
@@ -434,7 +464,7 @@ exports.user_follow = function (req, res) {
     `MATCH (u:user {_id:'${req.user._id}'})-[r:FOLLOW]->(g:group) RETURN g._id as _id`,
     'order by r.timestamp desc', skip, limit, function (err, groups) {
       if (err) return handleError(res, err);
-      getGroupsLastInfo(groups, function(err, groups_previews){
+      getGroupsLastInfo(groups, function (err, groups_previews) {
         if (err) return handleError(res, err);
         return res.status(200).json(groups_previews);
       });
@@ -447,28 +477,30 @@ function getGroupPreview(group, callback) {
   Feed.findOne({entity: group._id})
     .where('message').eq(null)
     .sort({activity: 'desc'})
-    .populate({path: 'user',
+    .populate({
+      path: 'user',
       select: '-salt -hashedPassword -gid -role -__v -email -phone_number -sms_verified -sms_code -provider'
     })
     .populate({path: 'activity'})
     .exec(function (err, act) {
-      if(err)  console.log(err.message);
-      if(err) return callback(err);
+      if (err) console.log(err.message);
+      if (err) return callback(err);
       Feed.findOne({entity: group._id})
         .where('message').ne(null)
         .sort({activity: 'desc'})
-        .populate({path: 'user',
+        .populate({
+          path: 'user',
           select: '-salt -hashedPassword -gid -role -__v -email -phone_number -sms_verified -sms_code -provider'
         })
         .populate({path: 'activity'})
         .exec(function (err, msg) {
-          if(err)  console.log(err.message);
-          if(err) return callback(err);
+          if (err) console.log(err.message);
+          if (err) return callback(err);
 
           return callback(null, {
-            act:act,
-            msg:msg,
-            group:group
+            act: act,
+            msg: msg,
+            group: group
           })
         })
     });
@@ -517,14 +549,14 @@ function getGroupPreview(group, callback) {
 
 function getGroupsLastInfo(groups, callback) {
   let previews = [];
-  async.each(groups, function(group, callback){
-    getGroupPreview(group, function(err, preview){
-      if(err) return callback(err);
+  async.each(groups, function (group, callback) {
+    getGroupPreview(group, function (err, preview) {
+      if (err) return callback(err);
       previews.push(preview);
       callback(null, preview)
     })
   }, function (err) {
-    if(err) return callback(err);
+    if (err) return callback(err);
     callback(null, previews);
   })
 }
@@ -539,6 +571,36 @@ exports.user_products = function (req, res) {
       if (err) return handleError(res, err);
       return res.status(200).json(products);
     });
+};
+
+exports.ask_join_group = function (req, res) {
+  //check user is has not asked before
+  //check user is not already member
+  //check group policy
+  //send req
+  return res.status(200);
+};
+
+exports.approve_join_group = function (req, res) {
+  //check auth user
+  //check user asked join
+  //add to group
+  return res.status(200);
+};
+
+exports.ask_invite_group = function (req, res) {
+  //check user is has not asked before
+  //check user is not already member
+  //check group policy
+  //send req
+  return res.status(200);
+};
+
+exports.approve_invite_group = function (req, res) {
+  //check auth user
+  //check use asked invite
+  //add to group
+  return res.status(200);
 };
 
 function handleError(res, err) {
