@@ -23,10 +23,14 @@ class CommentsComponent extends Component {
 
     constructor(props) {
         super(props);
+        let showComment=false;
+        if(props.showComments){
+            showComment = true;
+        }
         this.state = {
 
             messsage: '',
-            showComment:false,
+            showComment:showComment,
             showEmoji:false,
             iconEmoji:'emoji-neutral',
             componentHight:400,

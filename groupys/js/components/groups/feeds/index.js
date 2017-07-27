@@ -165,7 +165,7 @@ class GroupFeed extends Component {
                 <View style={styles.headerTabInnerContainer}>
                     <TouchableOpacity onPress={this.selectPromotions.bind(this)}>
                 <View style={promotionStyle}>
-                    <Text style={textPromotionStyle}>Feeds</Text>
+                    <Text style={textPromotionStyle}>Posts</Text>
                 </View>
                     </TouchableOpacity>
                     <TouchableOpacity onPress={this.selectChat.bind(this)}>

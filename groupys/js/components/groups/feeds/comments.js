@@ -43,7 +43,8 @@ class Comments extends Component {
 
         <CommentsComponenet navigation={this.props.navigation}
                                    instance={this.props.navigation.state.params.instance}
-                                   group={this.props.navigation.state.params.group}/>
+                                   group={this.props.navigation.state.params.group}
+                                    showComments={true}/>
         </KeyboardAvoidingView>
     }
 
