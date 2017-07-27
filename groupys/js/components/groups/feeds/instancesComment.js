@@ -67,23 +67,24 @@ class instancesComment extends Component {
         let loadingDone = this.props.comments['LoadingDone' + groupid];
 
         if(loadingDone && feeds.length >0){
-            let body = feeds.map(feed => this.createComponent(feed))
-            if(Platform.OS){
-                return   <GenericFeedManager
-                    group ={this.props.group}
-                    navigation={this.props.navigation}
-                    loadingDone = {loadingDone}
-                    showTopTimer={false}
-                    feeds={feeds}
-                    api={this}
-                    title='comments'
-                    ItemDetail={CommentsComponenet}></GenericFeedManager>
+            if(Platform.OS == 'android'){
+                let body = feeds.map(feed => this.createComponent(feed))
+
+                return <NestedScrollView>
+                    {body}
+                </NestedScrollView>
 
             }
-            return <NestedScrollView>
-                {body}
-            </NestedScrollView>
 
+            return   <GenericFeedManager
+                group ={this.props.group}
+                navigation={this.props.navigation}
+                loadingDone = {loadingDone}
+                showTopTimer={false}
+                feeds={feeds}
+                api={this}
+                title='comments'
+                ItemDetail={CommentsComponenet}></GenericFeedManager>
 
 
         }
