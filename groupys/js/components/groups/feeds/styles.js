@@ -15,7 +15,7 @@ module.exports = {
 
     },
     inputContainer: {
-        flex:-1,
+        flex:1,
         height:height,
         width:width,
 
@@ -72,7 +72,7 @@ module.exports = {
     headerTabInnerContainer:{
         flexDirection: 'row',
     },
-    promotionTab:{
+    נpromotionButtonOn:{
         height:40,
         width:120,
         marginTop:5,
@@ -83,10 +83,34 @@ module.exports = {
         borderBottomLeftRadius:20,
         alignItems:'center',
     },
-    chatTab:{
+    promotionButtonOff:{
         height:40,
         width:120,
         marginTop:5,
+        backgroundColor:'#d7d7d7',
+        borderWidth:2,
+        borderColor:'#bfbfbf',
+        borderTopLeftRadius:20,
+        borderBottomLeftRadius:20,
+        alignItems:'center',
+    },
+    chatButtonOn:{
+        height:40,
+        width:120,
+        marginTop:5,
+        borderWidth:2,
+        backgroundColor:'#2db6c8',
+        borderColor:'#bfbfbf',
+        borderTopRightRadius:20,
+        borderBottomRightRadius:20,
+        alignItems:'center',
+
+    },
+    נchatButtonOFf:{
+        height:40,
+        width:120,
+        marginTop:5,
+        borderWidth:2,
         backgroundColor:'#d7d7d7',
         borderColor:'#bfbfbf',
         borderTopRightRadius:20,
@@ -94,12 +118,13 @@ module.exports = {
         alignItems:'center',
 
     },
-    group_promotion_text:{
+    group_text_off:{
         fontFamily:(Platform.OS === 'ios') ? 'Roboto' : 'Roboto',  marginLeft:0,marginTop:5,fontSize:18,color:'#595959'
     },
-    group_chat_text:{
+    group_text_on:{
         fontFamily:(Platform.OS === 'ios') ? 'Roboto' : 'Roboto',  marginLeft:0,marginTop:5,fontSize:18,color:'white'
     },
+
 
     comments_promotions:{
         padding:0,

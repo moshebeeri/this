@@ -12,6 +12,8 @@ import Timer from './LogTimer'
 
 let timer = new Timer();
 const noPic = require('../../images/client_1.png');
+import  FeedUiConverter from './feed-ui-converter'
+let feedUiConverter = new FeedUiConverter();
 class CommentApi {
 
 
@@ -102,8 +104,15 @@ class CommentApi {
                 }
 
                 let responseData = await response.json();
+                let feeds = new Array();
+                if(responseData.length > 0) {
+                    feeds = responseData.map(feed => feedUiConverter.createPromontionInstance(feed)).filter(function(x){
+                        return x != undefined;
+                    });
 
-                resolve(responseData);
+                }
+                resolve(feeds);
+
             }
             catch (error) {
 

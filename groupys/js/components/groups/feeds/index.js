@@ -22,6 +22,8 @@ import * as feedsAction from "../../../actions/feeds";
 import GroupApi from "../../../api/groups"
 let groupApi = new GroupApi();
 import EmojiPicker from 'react-native-emoji-picker-panel'
+
+import InstanceComment from './instancesComment';
 class GroupFeed extends Component {
     static navigationOptions = ({ navigation }) => ({
         header:   <GroupFeedHeader navigation = {navigation} item={navigation.state.params.group}/>
@@ -33,7 +35,8 @@ class GroupFeed extends Component {
 
           messsage: '',
           showEmoji:false,
-          iconEmoji:'emoji-neutral'
+          iconEmoji:'emoji-neutral',
+          showChat:false
 
       };
       this.handlePick = this.handlePick.bind(this);
@@ -124,17 +127,68 @@ class GroupFeed extends Component {
     }
 
     selectPromotions(){
-
+        this.setState({
+            showChat: false
+        })
     }
 
     selectChat(){
 
+        this.setState({
+            showChat: true
+        })
     }
 
     nextLoad(){
 
     }
     render() {
+
+        let body = this.createGroupFeeds();
+        let promotionStyle = styles.נpromotionButtonOn;
+        let textPromotionStyle = styles.group_text_on;
+        let textChatStyle = styles.group_text_off;
+        let chatStyle = styles.נchatButtonOFf
+        if(this.state.showChat){
+            body = <InstanceComment navigation={this.props.navigation} group={this.props.navigation.state.params.group}/>
+             promotionStyle = styles.promotionButtonOff;
+             chatStyle = styles.chatButtonOn
+             textPromotionStyle = styles.group_text_off;
+             textChatStyle = styles.group_text_on;
+        }
+
+
+        return (
+        <Container style={{ backgroundColor:'#ebebeb'}}>
+
+            <View style={styles.headerTabContainer}>
+                <View style={styles.headerTabInnerContainer}>
+                    <TouchableOpacity onPress={this.selectPromotions.bind(this)}>
+                <View style={promotionStyle}>
+                    <Text style={textPromotionStyle}>Feeds</Text>
+                </View>
+                    </TouchableOpacity>
+                    <TouchableOpacity onPress={this.selectChat.bind(this)}>
+                    <View style={chatStyle}>
+                        <Text style={textChatStyle}>Promotions</Text>
+                    </View>
+                    </TouchableOpacity>
+                </View>
+
+
+
+            </View>
+
+            {body}
+        </Container>
+
+
+
+        );
+    }
+
+
+    createGroupFeeds(){
         let feeds = this.props.feeds['groups'+this.props.navigation.state.params.group._id];
         if(!feeds){
             feeds = [];
@@ -143,27 +197,10 @@ class GroupFeed extends Component {
         let showTop = this.props.feeds['showTopLoader'+this.props.navigation.state.params.group._id];
         if(!showTop){
             showTop = false;
+
+
         }
-        return (
-        <Container style={{ backgroundColor:'#ebebeb'}}>
-
-            <View style={styles.headerTabContainer}>
-                <View style={styles.headerTabInnerContainer}>
-                    <TouchableOpacity onPress={this.selectPromotions.bind(this)}>
-                <View style={styles.promotionTab}>
-                    <Text style={styles.group_promotion_text}>Promotions</Text>
-                </View>
-                    </TouchableOpacity>
-                    <TouchableOpacity onPress={this.selectChat.bind(this)}>
-                    <View style={styles.chatTab}>
-                        <Text style={styles.group_chat_text}>Chat</Text>
-                    </View>
-                    </TouchableOpacity>
-                </View>
-
-
-
-            </View>
+        return  <View style={styles.inputContainer}>
             <GenericFeedManager group ={this.props.navigation.state.params.group} navigation={this.props.navigation} loadingDone = {this.props.feeds['grouploadingDone' + this.props.navigation.state.params.group._id]} showTopTimer={showTop} feeds={feeds} api={this} title='Feeds' ItemDetail={GenericFeedItem}></GenericFeedManager>
 
             <View style={styles.itemborder}>
@@ -184,13 +221,7 @@ class GroupFeed extends Component {
 
             </View>
             <EmojiPicker stylw={{height:100}}visible={this.state.showEmoji}  onEmojiSelected={this.handlePick} />
-
-
-        </Container>
-
-
-
-        );
+        </View>
     }
 
 }

@@ -1,6 +1,6 @@
 
 import React, { Component } from 'react';
-import { Image,TextInput, Platform,View,Keyboard,TouchableNativeFeedback,TouchableOpacity,KeyboardAvoidingView} from 'react-native';
+import { Image,TextInput, Platform,View,ListView,Keyboard,TouchableNativeFeedback,TouchableWithoutFeedback,ScrollView,TouchableOpacity,KeyboardAvoidingView} from 'react-native';
 
 import { connect } from 'react-redux';
 import { actions } from 'react-native-navigation-redux-helpers';
@@ -25,30 +25,74 @@ class instancesComment extends Component {
     constructor(props) {
         super(props);
 
+
     }
 
 
 
 
+    componentWillMount(){
+        this.fetchFeeds();
+    }
+    fetchFeeds(){
+        let groupid = this.props.group._id;
+        this.props.fetchGroupComments(groupid);
 
+    }
+    fetchTop(id){
+        let groupid = this.props.group._id;
+        this.props.fetchGroupComments(groupid);
+    }
+
+    nextLoad(){
+
+    }
+
+    createComponent(feed){
+        return <CommentsComponenet key={feed.id} navigation={this.props.navigation}
+                            instance={feed}
+                            group={this.props.group}/>
+
+
+    }
+
+    test(){
+        return  <GenericFeedManager
+            group ={this.props.group}
+            navigation={this.props.navigation}
+            loadingDone = {loadingDone}
+            showTopTimer={false}
+            feeds={feeds}
+            api={this}
+            title='comments'
+            ItemDetail={CommentsComponenet}></GenericFeedManager>
+
+    }
 
     render() {
-        {/*let item = <CommentsComponenet navigation={this.props.navigation}*/}
-                                       {/*instance={this.props.navigation.state.params.instance}*/}
-                                       {/*group={this.props.navigation.state.params.group}/>*/}
-        return  <KeyboardAvoidingView behavior={'position'}>
-            <GenericFeedManager
-                group ={this.props.params.group}
+        let groupid = this.props.group._id;
+        let feeds = this.props.comments['comment'+ groupid];
+        let loadingDone = this.props.comments['LoadingDone' + groupid];
+
+        if(loadingDone && feeds.length >0){
+           // let body = feeds.map(feed => this.createComponent(feed))
+            return   <GenericFeedManager
+                group ={this.props.group}
                 navigation={this.props.navigation}
-                loadingDone = {this.props.feeds['grouploadingDone' + this.props.navigation.state.params.group._id]}
-                showTopTimer={showTop}
+                loadingDone = {loadingDone}
+                showTopTimer={false}
                 feeds={feeds}
-                api={this} t
-                itle='Feeds'
+                api={this}
+                title='comments'
                 ItemDetail={CommentsComponenet}></GenericFeedManager>
 
 
-        </KeyboardAvoidingView>
+
+        }
+        return   <View style={styles.inputContainer}>
+
+
+        </View>
     }
 
 }
