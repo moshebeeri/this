@@ -573,40 +573,124 @@ exports.user_products = function (req, res) {
     });
 };
 
+function sendGroupNotification(user, group, type) {
+  switch (type){
+    case 'ask_join':
+      break;
+    case 'approve_join':
+      break;
+    case 'ask_invite':
+      break;
+    case 'approve_invite':
+      break;
+  }
+}
+
 exports.ask_join_group = function (req, res) {
   let userId = req.user._id;
   let group = req.params.group;
-  let query = `MATCH (u:user {_id:'${userId}'})-[r:ASK_JOIN_GROUP|FOLLOW]->(p:group{_id:"${group}"}) return r, type(r) as type`;
+  let query = `MATCH (u:user {_id:'${userId}'})-[r:ASK_JOIN_GROUP|FOLLOW|GROUP_ADMIN]->(g:group{_id:"${group}"}) return r, type(r) as type`;
   graphModel.query(query, function (err, rs) {
+    if(err) return handleError(res, err);
+    if(rs.length > 0)
+      return res.status(201).json(rs);
+    Group.findById(group, function (err, group) {
+      if (err) return handleError(res, err);
+      if (!group) return res.status(404).send('no group');
+      if(group.add_policy === 'OPEN')
+        user_follow_group(userId, group, function (err) {
+          if (err) return handleError(res, err);
+          return res.status(200).json(group);
+        });
 
-    //check user is has not asked before
-    //check user is not already member
-    //check group policy
-    //send req
-    return res.status(200).json(rs);
+      if(group.add_policy !== 'REQUEST')
+        return res.status(404).send('group.add_policy miss match');
+
+      let create = `MATCH (g:group)
+                    WHERE id(g)=${group}
+                    CREATE (u:user {_id:'${userId}'})-[a:ASK_JOIN_GROUP]->(g)
+                    RETURN g`;
+      graphModel.query(create, function (err, gs) {
+        if(err) return handleError(res, err);
+        sendGroupNotification(userId, group, 'ask_join');
+        return res.status(200).json(group);
+      })
+    });
   });
 };
 
 exports.approve_join_group = function (req, res) {
-  //check auth user
-  //check user asked join
-  //add to group
-  return res.status(200);
+  let userId = req.user._id;
+  let group = req.params.group;
+  let user = req.params.user;
+
+  Group.findById(group, function (err, group) {
+    if (err) return handleError(res, err);
+    if (!group) return res.status(404).send('no group');
+    if(!group.admins.includes(userId))
+      return res.status(401).send('unauthorized');
+    user_follow_group(userId, group, function(err){
+      if(err) return handleError(res, err);
+      graphModel.unrelate(user, 'ASK_JOIN_GROUP', group);
+      sendGroupNotification(userId, group, 'approve_join');
+      return res.status(200).json(group);
+    });
+  });
 };
 
-exports.ask_invite_group = function (req, res) {
-  //check user is has not asked before
-  //check user is not already member
-  //check group policy
-  //send req
-  return res.status(200);
+exports.invite_group = function (req, res) {
+  let userId = req.user._id;
+  let group = req.params.group;
+  let user = req.params.user;
+
+  function invite(){
+    let create = `MATCH (g:group)
+                  WHERE id(g)=${group}
+                  CREATE (u:user {_id:'${user}'})-[a:INVITE_GROUP]->(g)
+                  RETURN g`;
+    graphModel.query(create, function (err, gs) {
+      if(err) return handleError(res, err);
+      sendGroupNotification(user, group, 'ask_invite');
+      return res.status(200).json(group);
+    })
+  }
+
+  Group.findById(group, function (err, group) {
+    if (err) return handleError(res, err);
+    if (!group) return res.status(404).send('no group');
+
+    if(group.admins.includes(userId))
+      return invite();
+    else if(group.add_policy === 'MEMBER_INVITE' ){
+      let query = `MATCH (u:user {_id:'${userId}'})-[r:FOLLOW]->(g:group{_id:"${group}"}) return r`;
+      graphModel.query(query, function (err, rs) {
+        if (err) return handleError(res, err);
+        if (rs.length === 0)
+          return res.status(404).send('user can not invite');
+        return invite();
+      })
+    }else{
+      return res.status(401).send('unauthorized');
+    }
+  });
 };
 
 exports.approve_invite_group = function (req, res) {
-  //check auth user
-  //check use asked invite
-  //add to group
-  return res.status(200);
+  let userId = req.user._id;
+  let group = req.params.group;
+
+  let query = `MATCH (u:user {_id:'${userId}'})-[r:INVITE_GROUP]->(g:group{_id:"${group}"}) return r, type(r) as type`;
+  graphModel.query(query, function (err, rs) {
+    if(err) return handleError(res, err);
+    if(rs.length === 0)
+      return res.status(404).send('user not invited');
+    user_follow_group(userId, group, function(err){
+      if(err) return handleError(res, err);
+      graphModel.unrelate(userId, 'INVITE_GROUP', group);
+      sendGroupNotification(userId, group, 'approve_invite');
+      return res.status(200).json(group);
+    })
+  });
 };
 
 function handleError(res, err) {
