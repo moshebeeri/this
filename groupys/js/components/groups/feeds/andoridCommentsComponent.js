@@ -83,14 +83,14 @@ class AndroidCommentsComponent extends Component {
         let show = !this.state.showEmoji;
         if(show) {
             this.setState({
-                showEmoji: show,
+                showEmoji: true,
                 iconEmoji: "keyboard"
 
             })
         }else{
             Keyboard.dismiss();
             this.setState({
-                showEmoji: show,
+                showEmoji: false,
                 iconEmoji: "emoji-neutral"
 
             })
@@ -167,7 +167,10 @@ class AndroidCommentsComponent extends Component {
             }
             arrowIcon = "chevron-small-up";
 
-            commentsView = this.createAndroidScroller(feeds)
+            if(!this.state.showEmoji){
+                commentsView = this.createAndroidScroller(feeds)
+            }
+
 
             showMessageInput =  <View behavior={'position'} style={styles.message_container}>
                 <View style={ {backgroundColor:'white',  flexDirection: 'row'}}>

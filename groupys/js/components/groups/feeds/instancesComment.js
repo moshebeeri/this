@@ -68,20 +68,21 @@ class instancesComment extends Component {
 
         if(loadingDone && feeds.length >0){
             let body = feeds.map(feed => this.createComponent(feed))
-            if(true){
-                return <NestedScrollView>
-                    {body}
-                </NestedScrollView>
+            if(Platform.OS){
+                return   <GenericFeedManager
+                    group ={this.props.group}
+                    navigation={this.props.navigation}
+                    loadingDone = {loadingDone}
+                    showTopTimer={false}
+                    feeds={feeds}
+                    api={this}
+                    title='comments'
+                    ItemDetail={CommentsComponenet}></GenericFeedManager>
+
             }
-            return   <GenericFeedManager
-                group ={this.props.group}
-                navigation={this.props.navigation}
-                loadingDone = {loadingDone}
-                showTopTimer={false}
-                feeds={feeds}
-                api={this}
-                title='comments'
-                ItemDetail={CommentsComponenet}></GenericFeedManager>
+            return <NestedScrollView>
+                {body}
+            </NestedScrollView>
 
 
 
