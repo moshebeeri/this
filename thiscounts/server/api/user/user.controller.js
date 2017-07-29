@@ -648,14 +648,12 @@ exports.entityRoles = function (req, res) {
   let skip = req.params.skip;
   let limit = req.params.limit;
 
-  let query;
-  if(role)
-    query = role ?
-      `MATCH (user:user)-[role:ROLE{name=${role}}]->(e{_id:"${entity}"})` :
-      `MATCH (user:user)-[role:ROLE|OWNS]->(e{_id:"${entity}"})`;
-
+  let query = role ?
+    `MATCH (user:user)-[role:ROLE{name=${role}}]->(e{_id:"${entity}"})` :
+    `MATCH (user:user)-[role:ROLE|OWNS]->(e{_id:"${entity}"})`;
+  console.log(query);
   graphModel.query_ids(`${query} RETURN user,role`,
-    'order by p.created DESC', skip, limit, function (err, users_role) {
+    '', skip, limit, function (err, users_role) {
       if (err) return handleError(res, err);
       let _ids = [];
       let userRoleById = {};
@@ -669,7 +667,7 @@ exports.entityRoles = function (req, res) {
         users.forEach(user => {
           info.push({
             user: user,
-            role: userRoleById.role.name
+            role: userRoleById[user._id].type
           });
         });
         return res.status(200).json(info);
