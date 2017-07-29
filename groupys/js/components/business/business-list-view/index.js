@@ -28,6 +28,10 @@ export default class BusinessListView extends Component {
         this.props.navigation.navigate("Promotions",{business:this.props.item});
     }
 
+    showUsersRoles(){
+        this.props.navigation.navigate("userPermittedRoles",{business:this.props.item});
+    }
+
     createView(){
         let banner = undefined;
         if(this.props.item.pictures && this.props.item.pictures.length > 0) {
@@ -72,7 +76,7 @@ export default class BusinessListView extends Component {
             </View>
 
 
-            <Card   key={this.props.index}>
+            <View   key={this.props.index}>
 
 
 
@@ -85,26 +89,34 @@ export default class BusinessListView extends Component {
 
 
 
-                <CardItem >
-                    <Button transparent onPress={this.showProduct.bind(this,this.props,this.props.item)}>
-                        <Icon2   size={15}  style={styles.productIcon} name="edit" />
+                <View style={{width:100,flexDirection: 'row'}} >
+                    <Button style={{width:77,marginLeft:0,marginRight:0}}small transparent onPress={() =>  this.showUsersRoles()}>
+                        <Icon2   size={15}  style={styles.productIcon} name="collections" />
 
-                        <Text>Edit</Text>
+                        <Text>Users</Text>
                     </Button>
-                    <Button transparent onPress={() =>  this.showProducts()}>
+                    <Button  style={{width:65,marginLeft:0,marginRight:0}}small transparent onPress={this.showProduct.bind(this,this.props,this.props.item)}>
+                        <Icon2   size={15}  style={styles.productIcon} name="edit" />
+                        <Text>Edit</Text>
+
+                    </Button>
+                    <Button  style={{width:105,marginLeft:0,marginRight:0}}small transparent onPress={() =>  this.showProducts()}>
                                          <Icon2   size={15}  style={styles.productIcon} name="add-shopping-cart" />
 
                                          <Text>Products</Text>
                                     </Button>
-                    <Button transparent onPress={() =>  this.showPromotions()}>
+                    <Button  style={{width:100,marginLeft:0,marginRight:0}}small transparent onPress={() =>  this.showPromotions()}>
                         <Icon2   size={15}  style={styles.productIcon} name="collections" />
 
                         <Text>Promotions</Text>
                     </Button>
 
 
-                </CardItem>
-            </Card>
+
+
+
+            </View>
+            </View>
 
             </View>
         );

@@ -13,6 +13,9 @@ class FeedConverter
     createFeed(feed,contacsMap,phoneUser) {
         let response = {};
         if (feed.activity.business) {
+            if(!feed.activity.actor_user){
+                return undefined;
+            }
             let name = feed.activity.actor_user.phone_number;
             let contact = contacsMap.get(feed.activity.actor_user.phone_number);
             if (contact) {

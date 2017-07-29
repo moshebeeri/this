@@ -67,7 +67,12 @@ export default function feeds(state = initialState, action) {
         case 'FEED_LOADING_DONE':
             return {
                 ...state,
-                nextLoad : false
+                loadingDone : true
+            };
+        case 'SAVED_FEED_LOADING_DONE':
+            return {
+                ...state,
+                savedloadingDone : true
             };
         default:
             return state;

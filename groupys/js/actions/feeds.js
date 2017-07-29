@@ -40,9 +40,15 @@ async function fetchList(action,feeds,api,dispatch,groupid){
                 });
             }
         }else{
-            dispatch({
-                type: 'FEED_LOADING_DONE',
-            });
+            if(action = 'GET_FEEDS') {
+                dispatch({
+                    type: 'FEED_LOADING_DONE',
+                });
+            }else{
+                dispatch({
+                    type: 'SAVED_FEED_LOADING_DONE',
+                });
+            }
         }
 
     }catch (error){
