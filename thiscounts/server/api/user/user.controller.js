@@ -629,7 +629,8 @@ exports.addEntityUserRole = function (req, res) {
 };
 
 exports.addEntityUserRoleByPhone = function (req, res) {
-  User.findOne({phone_number: req.params.phone}, function (err, user) {
+  User.findOne({ $and: [{phone_number: req.params.phone},
+    {country_code: req.params.country_code}]}, function (err, user) {
     if (err) return handleError(res, err);
     if (!user) return res.status(404);
     req.params[user] = user._id;
