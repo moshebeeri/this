@@ -32,6 +32,6 @@ router.get('/role/by/phone/:phone/:role/:entity', auth.isAuthenticated(), contro
 router.delete('/role/:user/:role/:entity', auth.isAuthenticated(), controller.deleteEntityUserRole);
 router.get('/roles/:role/:entity/:skip/:limit', auth.isAuthenticated(), controller.entityRoles);
 router.get('/roles/:entity/:skip/:limit', auth.isAuthenticated(), controller.entityRoles);
-router.get('/get/user/by/phone/:phone', auth.isAuthenticated(), controller.getUserByPhone);
+router.get('/get/user/by/phone/:country_code/:phone', auth.isAuthenticated(), controller.getUserByPhone);
 
 module.exports = router;

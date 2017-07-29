@@ -677,7 +677,9 @@ exports.entityRoles = function (req, res) {
 };
 
 exports.getUserByPhone = function (req, res) {
-  User.findOne({phone_number: req.params.phone}, function (err, user) {
+  //country_code
+  User.findOne({ $and: [{phone_number: req.params.phone},
+    {country_code: req.params.country_code}]}, function (err, user) {
     if(err) return handleError(res, err);
     return res.status(200).json(user);
   });
