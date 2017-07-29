@@ -59,6 +59,16 @@ const GroupSchema = new Schema({
       'MEMBER_INVITE' //  member invite
     ]
   },
+  post_policy: {
+    type: String,
+    required: true,
+    enum: [
+      'ANYONE',
+      'MEMBERS',
+      'ADMINS',
+      'MANAGERS'
+    ]
+  },
   pictures: []
 });
 
