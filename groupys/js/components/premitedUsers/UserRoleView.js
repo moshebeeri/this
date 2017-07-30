@@ -20,13 +20,13 @@ const noPic = require('../../../images/client_1.png');
 const rolesTypes =
     {
 
-       OWNS: 'owner',
+       OWNS: 'Owner',
 
-       OWNER: 'owner',
+        Owner: 'Owner',
 
-        ADMIN: 'Admin',
-        MANAGER:'Manager',
-        SALER :'Saler'
+        Admin: 'Admin',
+        Manager:'Manager',
+        Seller :'Seller'
     }
 export default class UserRoleView extends Component {
 

@@ -223,12 +223,44 @@ class UserApi
     }
 
     setUserRole(user,business,role) {
-        new Promise(async(resolve, reject) => {
+        return new Promise(async(resolve, reject) => {
             try {
                 let token = await store.get('token');
                 let from = new Date();
                  const response = await fetch(`${server_host}/api/users/role/` +user + '/' + role +  '/'+ business , {
                     method: 'GET',
+                    headers: {
+                        'Accept': 'application/json, text/plain, */*',
+                        'Content-Type': 'application/json;charset=utf-8',
+                        'Authorization': 'Bearer ' + token,
+                    }
+
+                })
+                if (response.status == '401') {
+                    reject(error);
+                    return;
+                }
+
+                let responseData = await response.json();
+                timer.logTime(from, new Date(), 'users', 'get/user/by/phone/')
+
+                resolve(responseData);
+            }
+            catch (error) {
+
+                console.log('There has been a problem with your fetch operation: ' + error.message);
+                reject(error);
+            }
+        })
+    }
+
+    removeUserRole(user,business) {
+       return new Promise(async(resolve, reject) => {
+            try {
+                let token = await store.get('token');
+                let from = new Date();
+                const response = await fetch(`${server_host}/api/users/role/` +user + '/' + business , {
+                    method: 'DELETE',
                     headers: {
                         'Accept': 'application/json, text/plain, */*',
                         'Content-Type': 'application/json;charset=utf-8',

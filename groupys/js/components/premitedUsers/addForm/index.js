@@ -37,21 +37,21 @@ const rolesTypes = [
     },
 
     {
-        value:'OWNER',
-        label:'owner'
+        value:'Owner',
+        label:'Owner'
     },
     {
-        value:'ADMIN',
+        value:'Admin',
         label:'Admin'
     },
     {
-        value:'MANAGER',
+        value:'Manager',
         label:'Manager'
     },
 
     {
-        value:'SALER',
-        label:'Saler'
+        value:'Seller',
+        label:'Seller'
     },
 
 ]
@@ -107,7 +107,8 @@ const rolesTypes = [
     }
     async save(){
         if(this.state.user) {
-            await userApi.setUserRole(this.state.user,this.state.userRole,this.props.navigation.state.params.business._id);
+            await userApi.removeUserRole(this.state.user,this.props.navigation.state.params.business._id);
+            await userApi.setUserRole(this.state.user,this.props.navigation.state.params.business._id,this.state.userRole);
             this.props.fetchUsersBusiness(this.props.navigation.state.params.business._id);
 
         }
