@@ -50,6 +50,25 @@ async function getUserFollowers(dispatch){
 
 }
 
+async function getBusinssUsers(dispatch,business){
+    try {
+        let users = await userApi.getBusinessUsers(business);
+
+        dispatch({
+            type: 'GET_USER_BUSINESS',
+            businessUsers: users,
+            businessId:business
+
+        });
+
+
+
+    }catch (error){
+        console.log(error);
+    }
+
+}
+
 export function fetchUsers(){
     return function (dispatch, getState){
         dispatch|(getUser(dispatch,));
@@ -60,6 +79,13 @@ export function fetchUsers(){
 export function fetchUsersFollowers(){
     return function (dispatch, getState){
         dispatch|(getUserFollowers(dispatch,));
+    }
+
+}
+
+export function fetchUsersBusiness(business){
+    return function (dispatch, getState){
+        dispatch|(getBusinssUsers(dispatch,business));
     }
 
 }

@@ -13,11 +13,11 @@ import { Platform,
 
 
 
-import {Container,Content,Item,Form,Picker,Input,Footer,Button,Text,Icon,Fab} from 'native-base';
+import {Container,Content,Item,Form,Picker,Input,Footer,Button,Text,Icon,Fab,Spinner,Thumbnail} from 'native-base';
 
 import store from 'react-native-simple-store';
 import Icon2 from 'react-native-vector-icons/MaterialIcons';
-
+const noPic = require('../../../../images/client_1.png');
 import EntityUtils from "../../../utils/createEntity";
 
 let entityUtils = new EntityUtils();
@@ -62,6 +62,7 @@ const rolesTypes = [
         super(props);
         this.state={
             userRole:'',
+            user:''
 
         }
 
@@ -99,14 +100,25 @@ const rolesTypes = [
 
 
     saveFormData(){
+       this.save();
+        this.props.navigation.goBack();
 
 
+    }
+    async save(){
+        if(this.state.user) {
+            await userApi.setUserRole(this.state.user,this.state.userRole,this.props.navigation.state.params.business._id);
+            this.props.fetchUsersBusiness(this.props.navigation.state.params.business._id);
+
+        }
 
     }
 
 
      updateFormData(){
-
+        if(this.state.user) {
+            userApi.setUserRole(this.state.user,this.state.userRole,this.props.navigation.state.params.business._id);
+        }
      }
 
      formSuccess(response){
@@ -125,14 +137,53 @@ const rolesTypes = [
         })
     }
 
-    async searchUser(){
-        let user =  await userApi.getUserByPhone(this.state.phoneNumber)
-        console.log('search' + this.state.phoneNumber );
+     searchUser(){
+       this.setState({
+           showSpinner:true,
+           showMessage:false
+       });
+       this.search();
 
-        console.log('found' + user)
+     }
+
+     async search(){
+         let user =  await userApi.getUserByPhone(this.state.phoneNumber)
+         if(user ) {
+             this.setState({
+                 user:user._id,
+                 fullUser:user
+             })
+         }else{
+             this.setState({
+                 user:'',
+                 fullUser:undefined,
+                 showMessage:true,
+                 message:"User not found",
+             })
+         }
+         this.setState({
+             showSpinner:false,
+
+         })
+
      }
 
 
+     createUserView(){
+
+         let pic =   <Thumbnail square size={80} source={noPic} />
+         if(this.state.fullUser && this.state.fullUser.pictures && this.state.fullUser.pictures.length > 0){
+
+                 let path = this.state.fullUser.pictures[this.state.fullUser.pictures.length -1].pictures[0];
+
+             pic = <Thumbnail square size={80} source={{uri: path} }/>
+         }
+         return <View style = {styles.user_view}>
+             {pic}
+             <Text  style = {{margin:10}}>{this.state.fullUser.name}</Text>
+
+         </View>
+     }
 
     render() {
 
@@ -155,6 +206,19 @@ const rolesTypes = [
                 }) }
 
         </Picker>
+        let spinner = undefined;
+        if(this.state.showSpinner){
+            spinner = <View><Spinner color='red' /></View>;
+        }
+        let userMessage = undefined;
+        if(this.state.showMessage){
+            userMessage =  <View><Text>{this.state.message}</Text></View>
+        }
+
+        let userView = undefined;
+        if(this.state.fullUser){
+            userView = this.createUserView();
+        }
         let saveButton =  <Button style={{backgroundColor:'#2db6c8'}}
                                   onPress={this.saveFormData.bind(this)}>
             <Text>Add User Role</Text>
@@ -168,6 +232,9 @@ const rolesTypes = [
                 </Button>
 
             </Item>
+            {spinner}
+            {userMessage}
+            {userView}
             {roles}
 
             <Item  style={{ margin:15 } } regular>

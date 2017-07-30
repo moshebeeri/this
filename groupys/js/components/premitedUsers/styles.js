@@ -4,8 +4,9 @@
 
 const React = require('react-native');
 
-const { StyleSheet, Platform } = React;
+const { StyleSheet,Dimensions, Platform } = React;
 
+const {width, height} = Dimensions.get('window')
 module.exports = {
   shadow: {
     flex: 1,
@@ -50,5 +51,10 @@ module.exports = {
     padding: 0,
     alignItems: 'flex-start',
   },
+    list_user_view:{
+        backgroundColor:'white', flexDirection: 'row',
+        width:width -10,margin:5,
+        height: 60,
+    },
 
 };

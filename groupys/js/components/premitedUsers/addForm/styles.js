@@ -53,6 +53,10 @@ module.exports = {
         padding:3
 
     },
+    user_view:{
+        backgroundColor:'white', flexDirection: 'row',
+        width:width -20,margin:3
+    },
     buttonsBorder:{
 
         flexDirection: 'row',

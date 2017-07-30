@@ -3,12 +3,14 @@ import {Image, Platform} from 'react-native';
 import {connect} from 'react-redux';
 import {actions} from 'react-native-navigation-redux-helpers';
 import {Container, Content, Text,Fab, InputGroup, Input, Button, View,Header} from 'native-base';
-import GenericListManager from '../generic-list-manager/index';
+import GenericFeedManager from '../generic-feed-manager/index';
 import Icon from 'react-native-vector-icons/EvilIcons';
 import GenericListView from '../generic-list-manager/generic-list-view/index'
 
 import * as usersAction from "../../actions/user";
-
+import UserRoleView from './UserRoleView'
+import UserApi from '../../api/user'
+let userApi = new UserApi();
 import { bindActionCreators } from "redux";
 
  class UserPermittedRoles extends Component {
@@ -35,25 +37,33 @@ import { bindActionCreators } from "redux";
 
 
 
-    fetchApi(pageOffset,pageSize ) {
+     fetchFeeds(){
+         this.props.fetchUsersBusiness(this.props.navigation.state.params.business._id);
+
+        }
+     fetchTop(id){
+
+     }
 
 
-
-    }
-
+     nextLoad(){
+        return false;
+     }
 
      navigateToAdd(){
-
-         this.props.navigation.navigate("addPremitedUsers");
+         this.props.navigation.navigate("addPremitedUsers",{business:this.props.navigation.state.params.business});
      }
 
     render() {
-
+        let rows = this.props.user['business'+this.props.navigation.state.params.business._id];
+        if(!rows){
+            rows = [];
+        }
 
         return (
             <Container>
-            {/*<GenericListManager navigation = {this.props.navigation} rows={promotions} title="Promotion" component="home" addComponent="addPromotions" api={this}*/}
-                                {/*ItemDetail={GenericListView}/>*/}
+            <GenericFeedManager  navigation = {this.props.navigation} loadingDone={true}feeds={rows} nextLoad={false} title="Bussines Users" api={this} ItemDetail={UserRoleView}/>
+
                 <Fab
 
             direction="right"
@@ -73,7 +83,7 @@ import { bindActionCreators } from "redux";
 
 export default connect(
     state => ({
-        promotions: state.promotions
+        user: state.user
     }),
 
     dispatch => bindActionCreators(usersAction, dispatch)
