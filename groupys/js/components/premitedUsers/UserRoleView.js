@@ -26,7 +26,7 @@ const rolesTypes =
 
         Admin: 'Admin',
         Manager:'Manager',
-        Saler :'Saler'
+        Seller :'Seller'
     }
 export default class UserRoleView extends Component {
 

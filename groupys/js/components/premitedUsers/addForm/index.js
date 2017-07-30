@@ -50,8 +50,8 @@ const rolesTypes = [
     },
 
     {
-        value:'Saler',
-        label:'Saler'
+        value:'Seller',
+        label:'Seller'
     },
 
 ]

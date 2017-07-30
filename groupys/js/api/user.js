@@ -223,7 +223,7 @@ class UserApi
     }
 
     setUserRole(user,business,role) {
-        new Promise(async(resolve, reject) => {
+        return new Promise(async(resolve, reject) => {
             try {
                 let token = await store.get('token');
                 let from = new Date();
@@ -255,7 +255,7 @@ class UserApi
     }
 
     removeUserRole(user,business) {
-        new Promise(async(resolve, reject) => {
+       return new Promise(async(resolve, reject) => {
             try {
                 let token = await store.get('token');
                 let from = new Date();
