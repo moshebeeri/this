@@ -26,7 +26,8 @@ import SelectProductsComponent from './components/promtions/add-form/selectProdu
 import SelectGroupsComponent from './components/promtions/add-form/selectGroups/index';
 import QrCode from './components/qrcode/index';
 import InstanceGroupComments from './components/groups/feeds/comments'
-
+import AddPermittedUser from './components/premitedUsers/addForm/index'
+import UserPermittedRoles from './components/premitedUsers/index'
 // var PushNotification = require('react-native-push-notification');
 //
 // PushNotification.configure({
@@ -82,7 +83,9 @@ const AppNavigator = StackNavigator({
         UserProfile:{screen:UserProfile},
          SelectProductsComponent:{screen:SelectProductsComponent},
     SelectGroupsComponent:{screen:SelectGroupsComponent},
-    InstanceGroupComments:{screen:InstanceGroupComments}
+    InstanceGroupComments:{screen:InstanceGroupComments},
+    addPremitedUsers:{screen:AddPermittedUser},
+    userPermittedRoles: {screen:UserPermittedRoles}
 
 
 
