@@ -81,7 +81,8 @@ function to_graph(promotion) {
     lon: promotion.location.lng,
     created: promotion.created,
     report: promotion.report,
-    system_report: promotion.system_report
+    system_report: promotion.system_report,
+    validate_barcode: promotion.validate_barcode
   }
 }
 
@@ -212,9 +213,12 @@ function create_promotion(promotion, callback) {
         if (utils.defined(promotion.entity.business))
           promotionGraphModel.relate_ids(promotion._id, 'BUSINESS_PROMOTION', promotion.entity.business._id);
 
-        if (utils.defined(promotion.campaign_id)) {
+        if (utils.defined(promotion.campaign_id))
           promotionGraphModel.relate_ids(promotion.campaign_id, 'CAMPAIGN_PROMOTION', promotion._id);
-        }
+
+        if (utils.defined(promotion.condition.product))
+          promotionGraphModel.relate_ids(promotion._id, 'PRODUCT', promotion.condition.product);
+
         relateTypes(promotion);
         //promotion_created_activity(promotion);
         spatial.add2index(promotion.gid, function (err, result) {

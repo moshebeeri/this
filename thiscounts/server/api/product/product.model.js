@@ -7,6 +7,7 @@ let ProductSchema = new Schema({
   social_state : {},
   name: String,
   barcode: String,
+  SKU: String,
   price: Number,
   gid: { type: Number, index: true},
   info: String,

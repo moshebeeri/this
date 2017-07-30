@@ -9,7 +9,9 @@ let utils = require('../../components/utils').createUtils();
 let activity = require('../../components/activity').createActivity();
 
 
-graphModel.db().constraints.uniqueness.createIfNone('barcode', 'code');
+graphModel.db().constraints.uniqueness.createIfNone('barcode', 'code', function (err) {
+  if(err) console.error(err);
+});
 
 
 // Get list of products
@@ -73,7 +75,7 @@ exports.find_by_barcode = function (req, res) {
 };
 
 function handleBarcode(product_id, barcode) {
-  barcodeGraphModel.save({code:barcode}, function (err, barcode) {
+  barcodeGraphModel.save({code: barcode}, function (err, barcode) {
     if (err) console.log( 'unable to handle barcode save', err);
     let create = `MATCH (product:product{_id:"${product_id}"}), (barcode:barcode) where id(barcode)=${barcode.id} 
                   CREATE (product)-[:BARCODE]->(barcode)`;
@@ -94,6 +96,7 @@ exports.create = function (req, res) {
       name: product.name,
       info: product.info,
       barcode: product.barcode,
+      SKU: product.SKU,
       retail_price: product.retail_price
     }, function (err, g_product) {
       if (err)

@@ -4,6 +4,7 @@ let _ = require('lodash');
 let Group = require('./group.model');
 let User = require('../user/user.model');
 let Product = require('../product/product.model');
+let Notification = require('../notification/notification.model');
 let Feed = require('../feed/feed.model');
 
 let graphTools = require('../../components/graph-tools');
@@ -574,16 +575,35 @@ exports.user_products = function (req, res) {
 };
 
 function sendGroupNotification(user, group, type) {
-  switch (type){
+  let audience = [];
+  switch (type) {
     case 'ask_join':
+      audience = group.admins;
       break;
     case 'approve_join':
+      audience = [user];
       break;
     case 'ask_invite':
+      audience = [user];
       break;
     case 'approve_invite':
+      audience = [user];
       break;
+    default: {
+      console.log(`Wrong type if ${type} at sendGroupNotification`);
+      return;
+    }
   }
+  audience.forEach(to => {
+    Notification.create({
+      note: type,
+      user: user,
+      group: group,
+      to: to
+    }, function (err, notification) {
+      //pns.push(notification)
+    });
+  });
 }
 
 exports.ask_join_group = function (req, res) {
