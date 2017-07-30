@@ -4,8 +4,13 @@ let _ = require('lodash');
 let Product = require('./product.model');
 let graphTools = require('../../components/graph-tools');
 let graphModel = graphTools.createGraphModel('product');
+let barcodeGraphModel = graphTools.createGraphModel('barcode');
 let utils = require('../../components/utils').createUtils();
 let activity = require('../../components/activity').createActivity();
+
+
+graphModel.db().constraints.uniqueness.createIfNone('barcode', 'code');
+
 
 // Get list of products
 exports.index = function (req, res) {
@@ -55,6 +60,29 @@ exports.find_by_business = function (req, res) {
   });
 };
 
+exports.find_by_barcode = function (req, res) {
+  Product.find({barcode: req.params.barcode})
+    .skip(req.params.skip)
+    .limit(req.params.limit)
+    .exec( function (err, products) {
+    if (err) {
+      return handleError(res, err);
+    }
+    return res.status(200).json(products);
+  });
+};
+
+function handleBarcode(product_id, barcode) {
+  barcodeGraphModel.save({code:barcode}, function (err, barcode) {
+    if (err) console.log( 'unable to handle barcode save', err);
+    let create = `MATCH (product:product{_id:"${product_id}"}), (barcode:barcode) where id(barcode)=${barcode.id} 
+                  CREATE (product)-[:BARCODE]->(barcode)`;
+    barcodeGraphModel.query(create, function (err) {
+      if (err) console.log( 'unable to create barcode relationship', err);
+    })
+  })
+}
+
 // Creates a new product in the DB.
 exports.create = function (req, res) {
   Product.create(req.body, function (err, product) {
@@ -65,20 +93,23 @@ exports.create = function (req, res) {
       _id: product._id,
       name: product.name,
       info: product.info,
+      barcode: product.barcode,
       retail_price: product.retail_price
-    }, function (err, product) {
+    }, function (err, g_product) {
       if (err)
         return handleError(res, err);
-      graphModel.relate_ids(product._id, 'CREATED_BY', req.user._id);
-      if(utils.defined(product.business)){
-        graphModel.relate_ids(product.business, 'SELL', product._id);
+      graphModel.relate_ids(g_product._id, 'CREATED_BY', req.user._id);
+      if(product.barcode)
+        handleBarcode(product._id, product.barcode);
+      if(utils.defined(g_product.business)){
+        graphModel.relate_ids(g_product.business, 'SELL', g_product._id);
         activity.create({
-          product: product._id,
-          actor_business: product.business,
-          action: "created"
+          product: g_product._id,
+          actor_business: g_product.business,
+          action: 'created'
         });
       }
-      return res.status(201).json(product);
+      return res.status(201).json(g_product);
     });
   });
 };

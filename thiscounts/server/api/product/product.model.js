@@ -6,6 +6,7 @@ let mongoose = require('mongoose'),
 let ProductSchema = new Schema({
   social_state : {},
   name: String,
+  barcode: String,
   price: Number,
   gid: { type: Number, index: true},
   info: String,
