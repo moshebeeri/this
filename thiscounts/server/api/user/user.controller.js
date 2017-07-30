@@ -535,7 +535,7 @@ exports.me = function (req, res, next) {
   });
 };
 
-let Roles = new Enum({'Admin': 100, 'Manager': 50, 'Seller': 10});
+let Roles = new Enum({'Admin': 100, 'Manager': 50, 'Seller': 10}, { ignoreCase: true });
 
 exports.roles = function (req, res) {
   res.status(200).json(Roles);
@@ -574,7 +574,7 @@ function handleEntityUserRole(type, req, res) {
   if (me === user)
     return handleError(res, new Error(`you may not change your own role`));
 
-//Check is me is the owner of the entity, if so apply
+  //Check if me is the entity owner, if so apply
   let owner_query = `MATCH (me:user{_id:"${me}"})-[owns:OWNS]->(entity{_id:"${entity}"}) return me, owns, entity`;
   graphModel.query(owner_query, function (err, me_owns_entities) {
     if (err) return handleError(res, err);
@@ -691,5 +691,5 @@ exports.authCallback = function (req, res, next) {
 };
 
 function handleError(res, err) {
-  return res.send(500, err);
+  return res.status(500).send(err);
 }
