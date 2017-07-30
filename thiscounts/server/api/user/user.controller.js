@@ -535,7 +535,7 @@ exports.me = function (req, res, next) {
   });
 };
 
-let Roles = new Enum({'Admin': 100, 'Manager': 50, 'Seller': 10});
+let Roles = new Enum({'Admin': 100, 'Manager': 50, 'Seller': 10}, { ignoreCase: true });
 
 exports.roles = function (req, res) {
   res.status(200).json(Roles);
@@ -574,7 +574,7 @@ function handleEntityUserRole(type, req, res) {
   if (me === user)
     return handleError(res, new Error(`you may not change your own role`));
 
-//Check is me is the owner of the entity, if so apply
+  //Check if me is the entity owner, if so apply
   let owner_query = `MATCH (me:user{_id:"${me}"})-[owns:OWNS]->(entity{_id:"${entity}"}) return me, owns, entity`;
   graphModel.query(owner_query, function (err, me_owns_entities) {
     if (err) return handleError(res, err);
@@ -652,14 +652,14 @@ exports.entityRoles = function (req, res) {
     `MATCH (user:user)-[role:ROLE{name=${role}}]->(e{_id:"${entity}"})` :
     `MATCH (user:user)-[role:ROLE|OWNS]->(e{_id:"${entity}"})`;
   console.log(query);
-  graphModel.query_ids(`${query} RETURN user,role`,
+  graphModel.query_ids(`${query} RETURN user,role,type(role) as type`,
     '', skip, limit, function (err, users_role) {
       if (err) return handleError(res, err);
       let _ids = [];
       let userRoleById = {};
       users_role.forEach(user_role => {
         _ids.push(user_role.user._id);
-        userRoleById[user_role.user._id] = user_role.role;
+        userRoleById[user_role.user._id] = user_role.type==='OWNS'? 'OWNS' : user_role.role.properties.name;
       });
       User.find({}).where('_id').in(_ids).exec(function (err, users) {
         if (err) return handleError(res, err);
@@ -667,7 +667,7 @@ exports.entityRoles = function (req, res) {
         users.forEach(user => {
           info.push({
             user: user,
-            role: userRoleById[user._id].type
+            role: userRoleById[user._id]
           });
         });
         return res.status(200).json(info);
@@ -692,5 +692,5 @@ exports.authCallback = function (req, res, next) {
 };
 
 function handleError(res, err) {
-  return res.send(500, err);
+  return res.status(500).send(err);
 }
