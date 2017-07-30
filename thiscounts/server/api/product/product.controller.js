@@ -101,15 +101,15 @@ exports.create = function (req, res) {
       graphModel.relate_ids(g_product._id, 'CREATED_BY', req.user._id);
       if(product.barcode)
         handleBarcode(product._id, product.barcode);
-      if(utils.defined(g_product.business)){
-        graphModel.relate_ids(g_product.business, 'SELL', g_product._id);
+      if(utils.defined(product.business)){
+        graphModel.relate_ids(product.business, 'SELL', g_product._id);
         activity.create({
-          product: g_product._id,
-          actor_business: g_product.business,
+          product: product._id,
+          actor_business: product.business,
           action: 'created'
         });
       }
-      return res.status(201).json(g_product);
+      return res.status(201).json(product);
     });
   });
 };
