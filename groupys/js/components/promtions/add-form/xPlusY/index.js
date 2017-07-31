@@ -119,8 +119,8 @@ export default class XPlusYComponent extends Component {
     createSelectBuyProductButton(){
         let result =  undefined;
         let productName = undefined;
-        if(this.props.state.buyProduct){
-            productName = <Text> {this.props.state.buyProduct.name}</Text>
+        if(this.props.state.product){
+            productName = <Text> {this.props.state.product.name}</Text>
 
 
         }
