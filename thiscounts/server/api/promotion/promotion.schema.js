@@ -39,8 +39,9 @@ const Variations = ['SINGLE', 'RANGE', 'VALUES'];
 let PromotionSchemaObject = {
   social_state : {},
 
+  validate_barcode :{type: Boolean, required: true, default: false},
+
   automatic: {
-    type :{type: Boolean},
     quantity: {type: Number},
     discount: { type : Number, min:1, max: 100},
     types: [{type: String, enum: promotionTypes}],

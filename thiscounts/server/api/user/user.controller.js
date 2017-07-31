@@ -542,6 +542,9 @@ exports.roles = function (req, res) {
 };
 
 function createRole(user, entity, role, callback) {
+  if (!Roles.get(role))
+    return callback( new Error(`undefined role ${role} maybe one of ${Roles.enums}`));
+
   let existing_query = `MATCH (user:user{_id:"${user}"})-[role:ROLE]->(entity{_id:"${entity}"}) return role`;
   let grunt_query = `MATCH (user:user{_id:"${user}"}), (entity{_id:"${entity}"})
                      CREATE (user)-[role:ROLE{name:"${role}"}]->(entity)`;
@@ -552,7 +555,7 @@ function createRole(user, entity, role, callback) {
     if (roles.length === 0)
       graphModel.query(grunt_query, callback);
     else if (roles.length === 1)
-      graphModel.query(set_query, callback);
+      return graphModel.query(set_query, callback);
     else
       return callback(new Error(`more then one role for user`));
   });
@@ -568,8 +571,6 @@ function handleEntityUserRole(type, req, res) {
   let entity = req.params.entity;
   let role = req.params.role;
   let user = req.params.user;
-  if (!Roles.get(role))
-    return handleError(res, new Error(`undefined role ${role} maybe one of ${Roles.enums}`));
 
   if (me === user)
     return handleError(res, new Error(`you may not change your own role`));
@@ -605,18 +606,25 @@ function handleEntityUserRole(type, req, res) {
         if (me_role_entities.length > 1) {
           return res.status(500).json(`Multi roles error`);
         }
-        if (Roles.get(me_role_entities[0].role) <= Roles.get(role))
-          return res.status(404).json(`Unauthorized - User role can only be set by higher role only`);
 
         if (type === 'add') {
+          if (Roles.get(me_role_entities[0].role) <= Roles.get(role))
+            return res.status(404).json(`Unauthorized - User role can only be set by higher role only`);
+
           createRole(user, entity, role, function (err) {
             if (err) return handleError(res, err);
             return res.status(200).json('ok');
           })
         } else if (type === 'delete') {
-          deleteRole(user, entity, function (err) {
+          let user_role_query = `MATCH (me:user{_id:"${user}"})-[role:ROLE]->(entity{_id:"${entity}"}) return role`;
+          graphModel.query(user_role_query, function (err, user_role) {
             if (err) return handleError(res, err);
-            return res.status(200).json('ok');
+            if (Roles.get(me_role_entities[0].role) <= Roles.get(user_role.name))
+              return res.status(404).json(`Unauthorized - User role can only be set by higher role only`);
+            deleteRole(user, entity, function (err) {
+              if (err) return handleError(res, err);
+              return res.status(200).json('ok');
+            });
           });
         }
       })
@@ -651,7 +659,7 @@ exports.entityRoles = function (req, res) {
   let query = role ?
     `MATCH (user:user)-[role:ROLE{name=${role}}]->(e{_id:"${entity}"})` :
     `MATCH (user:user)-[role:ROLE|OWNS]->(e{_id:"${entity}"})`;
-  console.log(query);
+
   graphModel.query_ids(`${query} RETURN user,role,type(role) as type`,
     '', skip, limit, function (err, users_role) {
       if (err) return handleError(res, err);
@@ -692,5 +700,6 @@ exports.authCallback = function (req, res, next) {
 };
 
 function handleError(res, err) {
+  console.log(err);
   return res.status(500).send(err);
 }

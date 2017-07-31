@@ -55,15 +55,37 @@ exports.show = function (req, res) {
 
 exports.mine = function (req, res) {
   let userId = req.user._id;
-  Business.find({'creator': userId}, function (err, businesses) {
-    if (err) {
-      return handleError(res, err);
-    }
-    if (!defined(businesses)) {
-      return res.status(404).send('Not Found');
-    }
-    return res.status(200).json(businesses);
-  });
+  let query = `MATCH (user:user{_id:"${userId}"})-[role:ROLE|OWNS]->(b:business) return b._id as business_id, role, type(role) as type`;
+
+  graphModel.query(query, function (err, businesses_role) {
+    if (err) return handleError(res, err);
+    let _ids = [];
+    let userRoleById = {};
+    businesses_role.forEach(business_role => {
+      _ids.push(business_role.business_id);
+      userRoleById[business_role.business_id] = business_role.type==='OWNS'? 'OWNS' : business_role.role.properties.name;
+    });
+    Business.find({}).where('_id').in(_ids).exec(function (err, businesses) {
+      if (err) return handleError(res, err);
+      let info = [];
+      businesses.forEach(business => {
+        info.push({
+          business: business,
+          role: userRoleById[business._id]
+        });
+      });
+      return res.status(200).json(info);
+    });
+  })
+  // Business.find({'creator': userId}, function (err, businesses) {
+  //   if (err) {
+  //     return handleError(res, err);
+  //   }
+  //   if (!defined(businesses)) {
+  //     return res.status(404).send('Not Found');
+  //   }
+  //   return res.status(200).json(businesses);
+  // });
 };
 
 function defined(obj) {

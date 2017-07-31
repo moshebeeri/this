@@ -4,6 +4,18 @@ let _ = require('lodash');
 let Notification = require('./notification.model');
 
 // Get list of notifications
+exports.find = function(req, res) {
+  //TODO: Validate authorization
+  Notification.find({entity: req.params.entity})
+    .skip(req.params.skip)
+    .limit(req.params.limit)
+    .exec(function (err, notifications) {
+    if(err) { return handleError(res, err); }
+    return res.json(200, notifications);
+  });
+};
+
+// Get list of notifications
 exports.index = function(req, res) {
   Notification.find(function (err, notifications) {
     if(err) { return handleError(res, err); }

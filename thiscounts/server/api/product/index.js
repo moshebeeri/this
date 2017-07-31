@@ -17,5 +17,6 @@ router.put('/:id', auth.isAuthenticated(), controller.update);
 router.patch('/:id', auth.isAuthenticated(), controller.update);
 router.delete('/:id', auth.isAuthenticated(),  controller.destroy);
 router.get('/find/by/business/:id', auth.isAuthenticated(), controller.find_by_business);
+router.get('/find/by/barcode/:barcode/skip/limit', auth.isAuthenticated(), controller.find_by_business);
 
 module.exports = router;
