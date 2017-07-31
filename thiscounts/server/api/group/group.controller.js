@@ -679,7 +679,7 @@ exports.invite_group = function (req, res) {
     if (err) return handleError(res, err);
     if (!group) return res.status(404).send('no group');
 
-    if(group.admins.includes(userId))
+    if(group.admins.includes(user))
       return invite();
     else if(group.add_policy === 'MEMBER_INVITE' ){
       let query = `MATCH (u:user {_id:'${userId}'})-[r:FOLLOW]->(g:group{_id:"${group}"}) return r`;
