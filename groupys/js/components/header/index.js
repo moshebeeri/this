@@ -61,7 +61,7 @@ export default class GeneralComponentHeader extends Component {
                 </Button>
 
 
-              <Text transparent style={{ paddingRight: 20, paddingTop: 10,color:"#2db6c8" ,backgroundColor: 'transparent'}} >Groupies</Text>
+              <Text transparent style={{ paddingRight: 20, paddingTop: 10,color:"#2db6c8" ,backgroundColor: 'transparent'}} >ThisCounts</Text>
           </View>
 
 
