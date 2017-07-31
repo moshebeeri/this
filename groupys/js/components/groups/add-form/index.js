@@ -78,7 +78,6 @@ class AddGroup extends Component {
 
 
         };
-        this.props.fetchUsersFollowers();
 
 
     }

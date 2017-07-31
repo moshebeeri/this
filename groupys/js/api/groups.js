@@ -112,6 +112,42 @@ class GroupsApi
         })
 
     }
+
+
+    inviteUser(user,group){
+        return new Promise(async(resolve, reject) => {
+
+            try {
+                let from = new Date();
+
+                let token = await store.get('token');
+                const response = await fetch(`${server_host}/api/groups//invite/ask/${group}/${user}`, {
+                    method: 'GET',
+                    headers: {
+                        'Accept': 'application/json, text/plain, */*',
+                        'Content-Type': 'application/json;charset=utf-8',
+                        'Authorization': 'Bearer ' + token
+
+                    },
+
+                })
+                if (response.status == '401' || response.status == '500') {
+                    reject(response);
+                    return;
+                }
+                timer.logTime(from,new Date(),'groups','invite/ask')
+
+                let responseData = await response.json();
+                resolve(responseData);
+            }
+            catch (error) {
+
+                console.log('There has been a problem with your fetch operation: ' + error.message);
+                reject(error);
+            }
+        })
+
+    }
     getAll() {
         return new Promise(async(resolve, reject) => {
 

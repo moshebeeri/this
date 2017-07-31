@@ -22,6 +22,16 @@ export default class GenericListGroupView extends Component {
         this.props.navigation.navigate('GroupFeed',{group:group});
     }
 
+    showUsers(show){
+        let users = this.props.user.followers;
+        if(users) {
+            this.props.navigation.navigate('SelectUsersComponent', {
+                users: users,
+                selectUsers: this.selectUsers.bind(this)
+            })
+        }
+
+    }
 
     render() {
 

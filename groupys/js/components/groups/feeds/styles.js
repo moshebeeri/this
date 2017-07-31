@@ -52,6 +52,17 @@ module.exports = {
     imageStyle:{
         marginTop:7
     },
+    invite_to_group:{
+        marginTop:7,
+
+
+    },
+    group_title:{
+        flexDirection: 'column',
+        height:50,
+        width: width/2
+
+    },
 
     group_name_text:{
 
