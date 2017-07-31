@@ -17,31 +17,32 @@ export default class BusinessListView extends Component {
 
     showProduct(props,item){
 
-        this.props.navigation.navigate(this.props.addform,{item:item});
+        this.props.navigation.navigate(this.props.addform,{item:item.business});
     }
 
     showProducts(){
-        this.props.navigation.navigate("Products",{business:this.props.item});
+        this.props.navigation.navigate("Products",{business:this.props.item.business});
     }
 
     showPromotions(){
-        this.props.navigation.navigate("Promotions",{business:this.props.item});
+        this.props.navigation.navigate("Promotions",{business:this.props.item.business});
     }
 
     showUsersRoles(){
-        this.props.navigation.navigate("userPermittedRoles",{business:this.props.item});
+        this.props.navigation.navigate("userPermittedRoles",{business:this.props.item.business});
     }
 
     createView(){
         let banner = undefined;
-        if(this.props.item.pictures && this.props.item.pictures.length > 0) {
+
+        if(this.props.item.business.pictures && this.props.item.business.pictures.length > 0) {
 
             banner =  <View style={styles.container}>
 
                 <Image
                 style={styles.image}
 
-                source={{uri: this.props.item.pictures[0].pictures[0]}}>
+                source={{uri: this.props.item.business.pictures[0].pictures[0]}}>
                     <Image
                         style={styles.imageb}
 
@@ -55,8 +56,8 @@ export default class BusinessListView extends Component {
 
 
 
-                <Text  style={styles.imageTopText}>{this.props.item.name}</Text>
-                <Text style={styles.imageButtomText} >{this.props.item.info}</Text>
+                <Text  style={styles.imageTopText}>{this.props.item.business.name}</Text>
+                <Text style={styles.imageButtomText} >{this.props.item.business.info}</Text>
 
 
             </View>
@@ -69,6 +70,32 @@ export default class BusinessListView extends Component {
 
         }
 
+
+        let editButton = undefined;
+        if(this.props.item.role == 'OWNS'){
+            editButton =  <Button  style={{width:65,marginLeft:0,marginRight:0}}small transparent onPress={this.showProduct.bind(this,this.props,this.props.item)}>
+                <Icon2   size={15}  style={styles.productIcon} name="edit" />
+                <Text>Edit</Text>
+
+            </Button>
+        }
+
+        let promotionButton = undefined;
+        if(this.props.item.role == 'OWNS' ||this.props.item.role == 'Admin' || this.props.item.role == 'Manager'  ){
+            promotionButton = <Button  style={{width:100,marginLeft:0,marginRight:0}}small transparent onPress={() =>  this.showPromotions()}>
+                <Icon2   size={15}  style={styles.productIcon} name="collections" />
+
+                <Text>Promotions</Text>
+            </Button>
+        }
+        let userButton = undefined;
+        if(this.props.item.role == 'OWNS' ||this.props.item.role == 'Admin' || this.props.item.role == 'Manager'  ) {
+            userButton=  <Button style={{width:77,marginLeft:0,marginRight:0}}small transparent onPress={() =>  this.showUsersRoles()}>
+                <Icon2   size={15}  style={styles.productIcon} name="collections" />
+
+                <Text>Users</Text>
+            </Button>
+        }
         return ( <View >
             <View style={{flex:-1, flexDirection: 'row',justifyContent:'space-between'}}>
                 {banner}
@@ -90,27 +117,16 @@ export default class BusinessListView extends Component {
 
 
                 <View style={{width:100,flexDirection: 'row'}} >
-                    <Button style={{width:77,marginLeft:0,marginRight:0}}small transparent onPress={() =>  this.showUsersRoles()}>
-                        <Icon2   size={15}  style={styles.productIcon} name="collections" />
+                    {userButton}
+                    {editButton}
 
-                        <Text>Users</Text>
-                    </Button>
-                    <Button  style={{width:65,marginLeft:0,marginRight:0}}small transparent onPress={this.showProduct.bind(this,this.props,this.props.item)}>
-                        <Icon2   size={15}  style={styles.productIcon} name="edit" />
-                        <Text>Edit</Text>
-
-                    </Button>
                     <Button  style={{width:105,marginLeft:0,marginRight:0}}small transparent onPress={() =>  this.showProducts()}>
                                          <Icon2   size={15}  style={styles.productIcon} name="add-shopping-cart" />
 
                                          <Text>Products</Text>
                                     </Button>
-                    <Button  style={{width:100,marginLeft:0,marginRight:0}}small transparent onPress={() =>  this.showPromotions()}>
-                        <Icon2   size={15}  style={styles.productIcon} name="collections" />
 
-                        <Text>Promotions</Text>
-                    </Button>
-
+                    {promotionButton}
 
 
 
