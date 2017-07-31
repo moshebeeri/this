@@ -40,7 +40,7 @@ export default class GeneralComponentHeader extends Component {
 
         <Header
             style={{ flexDirection: 'column',
-                height: 60,
+                height: 40,
                 elevation: 0,
 
                 borderBottomColor: 'white',
@@ -61,7 +61,7 @@ export default class GeneralComponentHeader extends Component {
                 </Button>
 
 
-              <Text transparent style={{ paddingRight: 20, paddingTop: 10,color:"#2db6c8" ,backgroundColor: 'transparent'}} >ThisCounts</Text>
+              <Text transparent style={{ paddingRight: 10, paddingTop: 10,color:"#2db6c8" ,backgroundColor: 'transparent'}} >ThisCounts</Text>
           </View>
 
 

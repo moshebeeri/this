@@ -322,7 +322,21 @@ import Autocomplete from 'react-native-autocomplete-input';
     }
 
 
+    validateForm(){
+        if(!this.state.name){
+            return false;
+        }
+        if(!this.state.city){
+            return false;
+        }
+        if(!this.state.address){
+            return false;
+        }
 
+        return true
+
+
+    }
      keyPad(){
          return true;
      }
@@ -341,6 +355,7 @@ import Autocomplete from 'react-native-autocomplete-input';
 
 
         }
+
         let saveButton =  <Button style={{backgroundColor:'#2db6c8'}}
                                   onPress={this.saveFormData.bind(this)}>
                          <Text>Add Business</Text>
@@ -354,6 +369,13 @@ import Autocomplete from 'react-native-autocomplete-input';
 
         }
 
+        if(!this.validateForm()){
+            saveButton =  <Button disabled= {true} style={{backgroundColor:'gray'}}
+                               >
+                <Text>Add Business</Text>
+            </Button>
+        }
+
 
         return (
 
@@ -364,13 +386,18 @@ import Autocomplete from 'react-native-autocomplete-input';
                         <View style = {styles.business_upper_container}>
                             <View style = {styles.business_upper_image_container}>
                                 {image}
+                                <View style={{marginLeft:55,marginTop:60}}>
+                                <Button  iconRight transparent  onPress={() => this.pickPicture()}>
+                                    <Icon name='camera' />
+
+                                </Button>
+                                </View>
                             </View>
                             <View style = {styles.business_upper_name_container}>
                                 <Item style={{ marginBottom:6,backgroundColor:'white' } } regular >
                                     <Input  value={this.state.name} blurOnSubmit={true} returnKeyType='next' ref="1" onSubmitEditing={this.focusNextField.bind(this,"2")} onChangeText={(name) => this.setState({name})} placeholder='Bussines Name' />
-                                    <Button  iconRight transparent  onPress={() => this.pickPicture()}>
-                                        <Icon name='camera' />
-                                    </Button>
+                                    <Icon style={{color:'red',fontSize:12}}name='star' />
+
 
                                 </Item>
                                 <Item style={{ backgroundColor:'white'} } regular >
@@ -386,13 +413,16 @@ import Autocomplete from 'react-native-autocomplete-input';
                     {pickers}
                         <Item style={{ margin:3,backgroundColor:'white' } } regular >
                            <Input value={this.state.website}  blurOnSubmit={true} returnKeyType='next' ref="3"  onSubmitEditing={this.focusNextField.bind(this,"4")}  onChangeText={(website) => this.setState({website})} placeholder='Website' />
+
                         </Item>
 
                         <Item style={{ margin:3 ,backgroundColor:'white'} } regular >
                            <Input value={this.state.city} blurOnSubmit={true} returnKeyType='next' ref="4"  onSubmitEditing={this.focusNextField.bind(this,"5")}  onChangeText={(city) => this.setState({city})} placeholder='City' />
+                            <Icon style={{color:'red',fontSize:12}}name='star' />
                         </Item>
                         <Item style={{ margin:3 ,backgroundColor:'white'} } regular >
                            <Input value={this.state.address} blurOnSubmit={true} returnKeyType='next' ref="5"  onSubmitEditing={this.focusNextField.bind(this,"6")}  onChangeText={(address) => this.setState({address})} placeholder='Addresss' />
+                            <Icon style={{color:'red',fontSize:12}}name='star' />
                         </Item>
                         <Item style={{ margin:3 ,backgroundColor:'white'} } regular >
                            <Input value={this.state.tax_id} blurOnSubmit={true} returnKeyType='done' ref="6"   onChangeText={(tax_id) => this.setState({tax_id})} placeholder='Tax ID' />
