@@ -21,7 +21,7 @@ class ProfileApi {
         return new Promise(async(resolve, reject) => {
 
             try {
-                let from = new Date();
+                let fromDate = new Date();
 
                 let token = await store.get('token');
                   const response = await fetch(`${server_host}/api/profiles/instances/saved/` + from + `/` + to + `/`, {
@@ -42,7 +42,7 @@ class ProfileApi {
                 }
 
                 let responseData = await response.json();
-                timer.logTime(from,new Date(),'profiles','instances/saved')
+                timer.logTime(fromDate,new Date(),'profiles','instances/saved')
 
                 let feeds = new Array();
                 if(responseData.length > 0) {
