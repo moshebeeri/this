@@ -128,7 +128,7 @@ module.exports = {
 
     promotion_container: {
         flex: 1,
-        height: 470,
+        height: 540,
         width: width ,
         overflow: 'hidden',
         backgroundColor:'#b7b7b7',
@@ -152,7 +152,7 @@ module.exports = {
 
     },
     promotion_image:{
-        width: width -18, height: 200, alignSelf: 'flex-start',
+        width: width -18, height: 250, alignSelf: 'flex-start',
     },
     promotion_upperContainer: {
 
@@ -220,7 +220,7 @@ module.exports = {
     promotion_buttomUpperContainer: {
         backgroundColor:'white',
         width: width -20,
-        height: 120,
+        height: 140,
         flexDirection: 'row',
         marginTop:0,
     },
