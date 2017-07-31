@@ -574,33 +574,16 @@ exports.user_products = function (req, res) {
     });
 };
 
-function sendGroupNotification(user, group, type) {
-  let audience = [];
-  switch (type) {
-    case 'ask_join':
-      audience = group.admins;
-      break;
-    case 'approve_join':
-      audience = [user];
-      break;
-    case 'ask_invite':
-      audience = [user];
-      break;
-    case 'approve_invite':
-      audience = [user];
-      break;
-    default: {
-      console.log(`Wrong type if ${type} at sendGroupNotification`);
-      return;
-    }
-  }
+function sendGroupNotification(actor_user, audience, group_id, type) {
+  let note = {
+    note: type,
+    group: group_id,
+    actor_user: actor_user
+  };
+
   audience.forEach(to => {
-    Notification.create({
-      note: type,
-      user: user,
-      group: group,
-      to: to
-    }, function (err, notification) {
+    note.to = to;
+    Notification.create(note, function (err, notification) {
       //pns.push(notification)
     });
   });
@@ -626,13 +609,11 @@ exports.ask_join_group = function (req, res) {
       if(group.add_policy !== 'REQUEST')
         return res.status(404).send('group.add_policy miss match');
 
-      let create = `MATCH (g:group)
-                    WHERE id(g)=${group}
-                    CREATE (u:user {_id:'${userId}'})-[a:ASK_JOIN_GROUP]->(g)
-                    RETURN g`;
-      graphModel.query(create, function (err, gs) {
+      let create = `MATCH (g:group{_id:'${group}'})
+                    CREATE (u:user{_id:'${userId}'})-[a:ASK_JOIN_GROUP]->(g)`;
+      graphModel.query(create, function (err) {
         if(err) return handleError(res, err);
-        sendGroupNotification(userId, group, 'ask_join');
+        sendGroupNotification(userId, group.admins, group._id, 'ask_join');
         return res.status(200).json(group);
       })
     });
@@ -652,7 +633,7 @@ exports.approve_join_group = function (req, res) {
     user_follow_group(userId, group, function(err){
       if(err) return handleError(res, err);
       graphModel.unrelate(user, 'ASK_JOIN_GROUP', group);
-      sendGroupNotification(userId, group, 'approve_join');
+      sendGroupNotification(userId, [user], group._id, 'approve_join');
       return res.status(200).json(group);
     });
   });
@@ -664,13 +645,11 @@ exports.invite_group = function (req, res) {
   let user = req.params.user;
 
   function invite(){
-    let create = `MATCH (g:group)
-                  WHERE id(g)=${group}
-                  CREATE (u:user {_id:'${user}'})-[a:INVITE_GROUP]->(g)
-                  RETURN g`;
-    graphModel.query(create, function (err, gs) {
+    let create = `MATCH (g:group{_id:"${group}"})
+                  CREATE UNIQUE (u:user {_id:'${user}'})-[a:INVITE_GROUP]->(g)`;
+    graphModel.query(create, function (err) {
       if(err) return handleError(res, err);
-      sendGroupNotification(user, group, 'ask_invite');
+      sendGroupNotification(userId, [user], group, 'ask_invite');
       return res.status(200).json(group);
     })
   }
@@ -679,7 +658,9 @@ exports.invite_group = function (req, res) {
     if (err) return handleError(res, err);
     if (!group) return res.status(404).send('no group');
 
-    if(group.admins.includes(user))
+    console.log(group.admins);
+    console.log(userId);
+    if(group.admins.indexOf(userId) > -1)
       return invite();
     else if(group.add_policy === 'MEMBER_INVITE' ){
       let query = `MATCH (u:user {_id:'${userId}'})-[r:FOLLOW]->(g:group{_id:"${group}"}) return r`;
@@ -707,7 +688,7 @@ exports.approve_invite_group = function (req, res) {
     user_follow_group(userId, group, function(err){
       if(err) return handleError(res, err);
       graphModel.unrelate(userId, 'INVITE_GROUP', group);
-      sendGroupNotification(userId, group, 'approve_invite');
+      sendGroupNotification(userId, [userId], group, 'approve_invite');
       return res.status(200).json(group);
     })
   });
