@@ -20,7 +20,7 @@ class LoginApi
                         'Content-Type': 'application/json;charset=utf-8',
                     },
                     body: JSON.stringify({
-                        email:  normalizePhoneNumber + "@low.la",
+                        email:  '+972' + normalizePhoneNumber + "@low.la",
                         password:password,
                     })
                 })

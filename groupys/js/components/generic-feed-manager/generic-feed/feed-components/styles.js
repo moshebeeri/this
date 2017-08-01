@@ -141,6 +141,21 @@ module.exports = {
 
 
     },
+   bussiness_container: {
+        flex: 1,
+        height: 450,
+        width: width ,
+        overflow: 'hidden',
+        backgroundColor:'#b7b7b7',
+        // backgroundColor:'#FFF',
+        alignItems: 'center',
+        flexDirection: 'column',
+
+
+
+
+
+    },
     promotion_card:{
         alignItems: 'center',
         flexDirection: 'column',
@@ -160,6 +175,15 @@ module.exports = {
         width: width -20,
         borderRadius:2,
         height: 100,
+        flexDirection: 'column'
+
+    },
+    bussiness_upperContainer: {
+
+        backgroundColor:'white',
+        width: width -20,
+        borderRadius:2,
+        height: 50,
         flexDirection: 'column'
 
     },
@@ -221,6 +245,13 @@ module.exports = {
         backgroundColor:'white',
         width: width -20,
         height: 140,
+        flexDirection: 'row',
+        marginTop:0,
+    },
+    business_buttomUpperContainer: {
+        backgroundColor:'white',
+        width: width -20,
+        height: 100,
         flexDirection: 'row',
         marginTop:0,
     },

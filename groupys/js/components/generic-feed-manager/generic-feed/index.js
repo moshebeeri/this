@@ -148,11 +148,13 @@ export default class GenericFeedItem extends Component {
                     break;
             }
 
+            if(feed) {
 
-
-            return  <View  {...this._panResponder.panHandlers} >
-                {feed}
-            </View>
+                return <View  {...this._panResponder.panHandlers} >
+                    {feed}
+                </View>
+            }
+            return <View></View>
         }
 
 
