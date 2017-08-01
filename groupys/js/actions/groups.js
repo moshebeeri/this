@@ -9,11 +9,31 @@ import GroupsApi from "../api/groups"
 let groupsApi = new GroupsApi();
 import UserApi from "../api/user"
 let userApi = new UserApi();
+import store from 'react-native-simple-store';
 
 
 async function getAll(dispatch){
     try {
         let response = await groupsApi.getAll();
+        if(response.length > 0) {
+
+            dispatch({
+                type: 'GET_GROUPS',
+                groups: response,
+
+            });
+        }
+
+
+    }catch (error){
+        console.log(error);
+    }
+
+}
+
+async function getGroupsFromStore(dispatch){
+    try {
+        let response = await store.get('groups');
         if(response.length > 0) {
 
             dispatch({
@@ -85,3 +105,11 @@ export function fetchUsersFollowers(){
     }
 
 }
+
+export function fetchGroupsFromStore(){
+    return function (dispatch, getState){
+        dispatch|(getGroupsFromStore(dispatch,));
+    }
+
+}
+

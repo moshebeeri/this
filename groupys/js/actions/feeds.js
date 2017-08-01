@@ -6,6 +6,7 @@
 
 import UserApi from "../api/user"
 let userApi = new UserApi();
+import store from 'react-native-simple-store';
 
 async function fetchList(action,feeds,api,dispatch,groupid){
     try {
@@ -59,6 +60,26 @@ async function fetchList(action,feeds,api,dispatch,groupid){
 
 }
 
+async function getFeedsFromStore(dispatch){
+    try {
+        let response = await store.get('feeds');
+        if(response.length > 0) {
+
+            dispatch({
+                type: 'GET_FEEDS_FROM_STORE',
+                feeds: response,
+
+            });
+        }
+
+
+    }catch (error){
+        console.log(error);
+    }
+}
+
+
+
 function addToRows(feeds,response,top){
     let currentRows = feeds;
     let newFeeds = response.filter(function (feed) {
@@ -103,6 +124,13 @@ async function fetchTopList(action,feeds,id,api,dispatch,groupid){
 
     }catch (error){
         console.log(error);
+    }
+
+}
+
+export function fetchFeedsFromStore(){
+    return function (dispatch, getState){
+        dispatch|(getFeedsFromStore(dispatch));
     }
 
 }
