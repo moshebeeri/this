@@ -149,6 +149,7 @@ export default class FeedPromotion extends Component {
                             <Text style={styles.promotion_type}>{item.itemTitle}</Text>
                             <View style={styles.promotion_buttom_location}>
                                 <Icon2 style={styles.promotion_location}  size={25} name="clock"/>
+                                <Text style={styles.promotion_addressText} note>{item.endDate } </Text>
 
                             </View>
                             <View style={styles.promotion_buttom_location}>

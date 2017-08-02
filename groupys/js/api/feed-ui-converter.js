@@ -212,7 +212,7 @@ class FeedConverter
         let responseFeed = {};
 
         try {
-
+            let date = new Date(promotion.end);
             responseFeed.id = instance._id;
             responseFeed.fid = feed._id;
 
@@ -230,7 +230,7 @@ class FeedConverter
 
             }
 
-
+            responseFeed.endDate = date.toDateString();
 
            responseFeed.name = promotion.name;
             responseFeed.description = promotion.description;

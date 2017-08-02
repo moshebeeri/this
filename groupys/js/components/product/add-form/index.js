@@ -148,7 +148,7 @@ class AddProduct extends Component {
                 cropping: true,
                 compressImageMaxWidth: 640,
                 compressImageMaxHeight: 480,
-                compressImageQuality: 0.5,
+                compressImageQuality: 1,
                 compressVideoPreset: 'MediumQuality',
             });
             this.setState({
@@ -169,7 +169,7 @@ class AddProduct extends Component {
                 cropping: true,
                 compressImageMaxWidth: 640,
                 compressImageMaxHeight: 480,
-                compressImageQuality: 0.5,
+                compressImageQuality: 1,
                 compressVideoPreset: 'MediumQuality',
             });
             this.setState({

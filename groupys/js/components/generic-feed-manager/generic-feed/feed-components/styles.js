@@ -143,7 +143,7 @@ module.exports = {
     },
    bussiness_container: {
         flex: 1,
-        height: 450,
+        height: 430,
         width: width ,
         overflow: 'hidden',
         backgroundColor:'#b7b7b7',
@@ -251,7 +251,7 @@ module.exports = {
     business_buttomUpperContainer: {
         backgroundColor:'white',
         width: width -20,
-        height: 100,
+        height: 80,
         flexDirection: 'row',
         marginTop:0,
     },

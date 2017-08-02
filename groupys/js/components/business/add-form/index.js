@@ -287,7 +287,7 @@ import Autocomplete from 'react-native-autocomplete-input';
             cropping: true,
             compressImageMaxWidth: 640,
             compressImageMaxHeight: 480,
-            compressImageQuality: 0.5,
+            compressImageQuality: 1,
             compressVideoPreset: 'MediumQuality',
         });
         this.setState({
@@ -308,7 +308,7 @@ import Autocomplete from 'react-native-autocomplete-input';
                 cropping: true,
                 compressImageMaxWidth: 640,
                 compressImageMaxHeight: 480,
-                compressImageQuality: 0.5,
+                compressImageQuality: 1,
                 compressVideoPreset: 'MediumQuality',
             });
             this.setState({
