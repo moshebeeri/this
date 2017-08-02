@@ -79,7 +79,7 @@ class AddGroup extends Component {
 
         };
 
-
+        this.props.fetchBusinesses();
     }
 
     selectBusiness(value){
@@ -316,8 +316,8 @@ class AddGroup extends Component {
                     this.props.businesses.businesses.map((s, i) => {
                         return <Item
                             key={i}
-                            value={s._id}
-                            label={s.name} />
+                            value={s.business._id}
+                            label={s.business.name} />
                     }) }
             </Picker>
 

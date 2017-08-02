@@ -236,9 +236,10 @@ import * as userAction from "../../actions/user";
                     <Tab heading={ <TabHeading style={{ backgroundColor: "white" }}><Text style={{color: '#2db6c8', fontSize: 13,}}>FEED</Text></TabHeading>}>
                         <Feeds index={0}  navigation={this.props.navigation} navigateAction={this.headerAction.bind(this)}/>
                     </Tab>
-                    <Tab heading={ <TabHeading style={{ backgroundColor: "white" }}><Text style={{color: '#2db6c8', fontSize: 13,}}>MY PROMOTION</Text></TabHeading>}>
+                    <Tab heading={ <TabHeading style={{ backgroundColor: "white" }}><Text style={{color: '#2db6c8', fontSize: 13,}}>PROMOTION</Text></TabHeading>}>
                         <MydPromotions  navigation={this.props.navigation}  index={1} navigateAction={this.headerAction.bind(this)}/>
                     </Tab>
+
                     <Tab
                         heading={ <TabHeading style={{ backgroundColor: "white" }}><Text style={{color: '#2db6c8', fontSize: 13,}}>GROUPS</Text></TabHeading>}>
                         <Groups navigation={this.props.navigation} index={2}

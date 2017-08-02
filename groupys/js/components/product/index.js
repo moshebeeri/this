@@ -25,15 +25,15 @@ class Product extends Component {
 
 
     fetchApi(pageOffset,pageSize ) {
-        let fetchProducts = this.props.api.props.fetchProductsByBusiness.bind(this);
         let id = this.props.api.props.navigation.state.params.business._id;
+
+        this.props.api.props.fetchProductsByBusiness(id);
+
+        let response = this.props.api.props.products['products' + id];
+
         return new Promise(async function(resolve, reject) {
-            let response =  await  fetchProducts(id);
             resolve(response);
         });
-
-
-
     }
 
     navigateToAdd(){

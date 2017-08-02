@@ -35,7 +35,7 @@ class FeedConverter
                     name: feed.activity.business.name,
                     businessAddress:feed.activity.business.city + ' ' + feed.activity.business.address,
                     banner: {
-                        uri: feed.activity.business.pictures[0].pictures[1]
+                        uri: feed.activity.business.pictures[0].pictures[0]
                     },
                     showSocial: true,
                 }
@@ -174,7 +174,7 @@ class FeedConverter
             }
 
             if (instance.promotion.entity && instance.promotion.entity.business.pictures.length > 0) {
-                responseFeed.businessLogo = instance.promotion.entity.business.pictures[0].pictures[3];
+                responseFeed.businessLogo = instance.promotion.entity.business.pictures[0].pictures[0];
                 responseFeed.businessName = instance.promotion.entity.business.name;
                 responseFeed.businessAddress = instance.promotion.entity.business.city + ' ' + instance.promotion.entity.business.address;
             }else {

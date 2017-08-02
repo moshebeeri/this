@@ -55,14 +55,14 @@ import { bindActionCreators } from "redux";
 
 
     fetchApi(pageOffset,pageSize ) {
-        let fetchPromotions = this.props.api.props.fetchPromotions.bind(this);
         let id = this.props.api.props.navigation.state.params.business._id;
+       this.props.api.props.fetchPromotions(id);
+        let response = this.props.api.props.promotions['promotions' + id];
+
 
         return new Promise(async function(resolve, reject) {
-            let response =  await  fetchPromotions(id);
             resolve(response);
         });
-
 
     }
 

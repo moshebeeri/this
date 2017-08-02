@@ -68,6 +68,25 @@ async function getByBusinessId(dispatch,bid){
 
 }
 
+async function getBusinessFromStore(dispatch){
+    try {
+        let response = await store.get('businesses');
+        if(response) {
+
+            dispatch({
+                type: 'GET_BUSINESS',
+                businesses: response,
+
+            });
+        }
+
+
+    }catch (error){
+        console.log(error);
+    }
+
+}
+
 async function getUserFollowers(dispatch){
     try {
         let users = await userApi.getUserFollowers();
@@ -89,6 +108,13 @@ async function getUserFollowers(dispatch){
 export function fetchGroups(){
     return function (dispatch, getState){
         dispatch|(getAll(dispatch));
+    }
+
+}
+
+export function fetchBusinesses(){
+    return function (dispatch, getState){
+        dispatch|(getBusinessFromStore(dispatch));
     }
 
 }
