@@ -20,6 +20,7 @@ class MyPromotions extends Component {
 
       constructor(props) {
         super(props);
+        this.props.fetchSavedFeedsFromStore();
 
       }
 

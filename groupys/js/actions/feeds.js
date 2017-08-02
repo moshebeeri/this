@@ -78,6 +78,24 @@ async function getFeedsFromStore(dispatch){
     }
 }
 
+async function getSavedFeedsFromStore(dispatch){
+    try {
+        let response = await store.get('savedFeeds');
+        if(response.length > 0) {
+
+            dispatch({
+                type: 'GET_SAVED_FEEDS_FROM_STORE',
+                feeds: response,
+
+            });
+        }
+
+
+    }catch (error){
+        console.log(error);
+    }
+}
+
 
 
 function addToRows(feeds,response,top){
@@ -131,6 +149,13 @@ async function fetchTopList(action,feeds,id,api,dispatch,groupid){
 export function fetchFeedsFromStore(){
     return function (dispatch, getState){
         dispatch|(getFeedsFromStore(dispatch));
+    }
+
+}
+
+export function fetchSavedFeedsFromStore(){
+    return function (dispatch, getState){
+        dispatch|(getSavedFeedsFromStore(dispatch));
     }
 
 }
@@ -226,7 +251,6 @@ async function getUser(dispatch){
 }
 
 
-
 export function updateHomeFeed(feed) {
     return function (dispatch, getState) {
         dispatch({
@@ -235,6 +259,7 @@ export function updateHomeFeed(feed) {
         });
     }
 }
+
 export function fetchUsers(){
     return function (dispatch, getState){
         dispatch|(getUser(dispatch,));

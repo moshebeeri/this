@@ -23,6 +23,7 @@ export default function feeds(state = initialState, action) {
                 loadingDone: true,
                 nextLoad:false,
             };
+
         case 'GET_FEEDS_FROM_STORE' :
             if(action.feeds.length > 0){
                 return {
@@ -51,12 +52,29 @@ export default function feeds(state = initialState, action) {
             feed['grouploadingDone'+ action.groupid] = true;
             return feed;
         case 'GET_SAVED_FEEDS' :
+            store.save('savedFeeds',action.feeds)
             return {
                 ...state,
                 savedfeeds : action.feeds,
                 savedShowTopLoader : action.showTopLoader,
                 savedloadingDone: true,
             };
+        case 'GET_SAVED_FEEDS_FROM_STORE':
+            if(action.feeds.length > 0){
+                return {
+                    ...state,
+                    savedfeeds : action.feeds,
+                    savedloadingDone: true,
+
+                };
+            }
+            return {
+                ...state,
+                savedfeeds : action.feeds,
+
+
+            };
+
         case 'SHOW_TOP_LOADER' :
             return {
                 ...state,
