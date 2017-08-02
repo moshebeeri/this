@@ -27,7 +27,7 @@ async function getAll(dispatch){
 async function getAllFromStore(dispatch){
     try {
         let response = await store.get('businesses');
-        if(response.length > 0) {
+        if(response) {
 
             dispatch({
                 type: 'GET_BUSINESS',

@@ -8,7 +8,7 @@
  * Created by stan229 on 5/27/16.
  */
 const initialState = {products:[],categories:[]};
-
+import store from 'react-native-simple-store';
 
 
 export default function products(state = initialState, action) {
@@ -30,6 +30,7 @@ export default function products(state = initialState, action) {
         case 'GET_BUSINESS_PRODUCTS' :
 
             let currentState = {...state};
+            store.save('products'+ action.businessId,action.products)
             currentState['products'+ action.businessId] = action.products;
 
             return currentState;

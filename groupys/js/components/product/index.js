@@ -18,8 +18,9 @@ class Product extends Component {
 
     constructor(props) {
         super(props);
-
+        let id = this.props.api.props.navigation.state.params.business._id;
         this.props.fetchProductCategories("root");
+        this.props.fetchFromStoreProductsByBusiness(id);
     }
 
 

@@ -45,8 +45,9 @@ import { bindActionCreators } from "redux";
             promotions:{}
         }
         ;
+        let id = this.props.api.props.navigation.state.params.business._id;
 
-
+        this.props.fetchFromStorePromotions(id)
 
     }
 

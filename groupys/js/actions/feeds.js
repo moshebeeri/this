@@ -63,7 +63,7 @@ async function fetchList(action,feeds,api,dispatch,groupid){
 async function getFeedsFromStore(dispatch){
     try {
         let response = await store.get('feeds');
-        if(response.length > 0) {
+        if(response) {
 
             dispatch({
                 type: 'GET_FEEDS_FROM_STORE',
@@ -81,7 +81,7 @@ async function getFeedsFromStore(dispatch){
 async function getSavedFeedsFromStore(dispatch){
     try {
         let response = await store.get('savedFeeds');
-        if(response.length > 0) {
+        if(response) {
 
             dispatch({
                 type: 'GET_SAVED_FEEDS_FROM_STORE',
@@ -96,7 +96,24 @@ async function getSavedFeedsFromStore(dispatch){
     }
 }
 
+async function getGroupFeedsFromStore(dispatch,group){
+    try {
+        let response = await store.get('groups'+ group);
+        if(response) {
 
+            dispatch({
+                type: 'GET_GROUP_FEEDS_FROM_STORE',
+                groupid:group,
+                feeds: response,
+
+            });
+        }
+
+
+    }catch (error){
+        console.log(error);
+    }
+}
 
 function addToRows(feeds,response,top){
     let currentRows = feeds;
@@ -177,6 +194,13 @@ export function fetchTop(action,feeds,id,api){
 export function fetchGroupFeeds(groupid,action,feeds,api){
     return function (dispatch, getState){
         dispatch|(fetchList(action,feeds,api,dispatch,groupid));
+    }
+
+}
+
+export function fetchGroupFeedsFromStore(groupid){
+    return function (dispatch, getState){
+        dispatch|(getGroupFeedsFromStore(dispatch,groupid));
     }
 
 }

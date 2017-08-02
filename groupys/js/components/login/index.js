@@ -70,7 +70,7 @@ export default  class Login extends Component {
 
       this.setState ({error: ''});
       try {
-          let phone =  this.state.phoneNumber;
+          let phone = this.state.phoneNumber;
           let response = await loginApi.login(phone, this.state.password);
           if(response.token ){
               await userApi.getUser();

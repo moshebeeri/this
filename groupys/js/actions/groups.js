@@ -34,7 +34,7 @@ async function getAll(dispatch){
 async function getGroupsFromStore(dispatch){
     try {
         let response = await store.get('groups');
-        if(response.length > 0) {
+        if(response) {
 
             dispatch({
                 type: 'GET_GROUPS',

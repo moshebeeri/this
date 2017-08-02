@@ -40,7 +40,7 @@ class GroupFeed extends Component {
 
       };
       this.handlePick = this.handlePick.bind(this);
-
+        this.props.fetchGroupFeedsFromStore(this.props.navigation.state.params.group._id);
 
   }
 

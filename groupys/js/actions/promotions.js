@@ -12,7 +12,7 @@ import PromotionsApi from "../api/promotion"
 import ProductApi from "../api/product"
 let promotionApi = new PromotionsApi();
 let productApi = new ProductApi();
-
+import store from 'react-native-simple-store';
 async function getAll(dispatch,id){
     try {
         let response = await promotionApi.getAllByBusinessId(id);
@@ -53,9 +53,36 @@ async function getAllProducts(dispatch,id){
 
 }
 
+async function getFromStorePromotions(dispatch,id){
+    try {
+        let response = await store.get('promotions'+id);
+        if(response) {
+
+            dispatch({
+                type: 'GET_PROMOTIONS',
+                products: response,
+                businessId: id
+
+            });
+        }
+
+
+    }catch (error){
+        console.log(error);
+    }
+
+}
+
 export function fetchPromotions(id){
     return function (dispatch, getState){
         dispatch|(getAll(dispatch,id));
+    }
+
+}
+
+export function fetchFromStorePromotions(id){
+    return function (dispatch, getState){
+        dispatch|(getFromStorePromotions(dispatch,id));
     }
 
 }
