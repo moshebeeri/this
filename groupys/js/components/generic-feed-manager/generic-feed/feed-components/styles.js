@@ -128,7 +128,7 @@ module.exports = {
 
     promotion_container: {
         flex: 1,
-        height: 540,
+        height: 560,
         width: width ,
         overflow: 'hidden',
         backgroundColor:'#b7b7b7',
@@ -244,7 +244,7 @@ module.exports = {
     promotion_buttomUpperContainer: {
         backgroundColor:'white',
         width: width -20,
-        height: 140,
+        height: 160,
         flexDirection: 'row',
         marginTop:0,
     },

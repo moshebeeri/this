@@ -143,11 +143,7 @@ class AddProduct extends Component {
     async pickFromCamera() {
         try {
             let image = await ImagePicker.openCamera({
-                width: 300,
-                height: 300,
                 cropping: true,
-                compressImageMaxWidth: 640,
-                compressImageMaxHeight: 480,
                 compressImageQuality: 1,
                 compressVideoPreset: 'MediumQuality',
             });
@@ -164,11 +160,7 @@ class AddProduct extends Component {
     async pickPicture() {
         try {
             let image = await ImagePicker.openPicker({
-                width: 300,
-                height: 300,
                 cropping: true,
-                compressImageMaxWidth: 640,
-                compressImageMaxHeight: 480,
                 compressImageQuality: 1,
                 compressVideoPreset: 'MediumQuality',
             });
