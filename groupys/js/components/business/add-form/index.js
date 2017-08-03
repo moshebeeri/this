@@ -8,7 +8,8 @@ import { Platform,
     ScrollView,
     TouchableOpacity,
     KeyboardAvoidingView,
-    TouchableHighlight
+    TouchableHighlight,
+    Keyboard
 } from 'react-native';
 
 
@@ -69,6 +70,7 @@ import Autocomplete from 'react-native-autocomplete-input';
                 categories:[Number(category),Number(subcategory)],
                 formData: {},
                 active: false,
+                showSave:true,
             };
         }else {
 
@@ -92,7 +94,8 @@ import Autocomplete from 'react-native-autocomplete-input';
                 subcategory:'',
                 categories:[],
                 formData: {},
-                active:false
+                active:false,
+                showSave:true,
             };
         }
         let stateFunc = this.setState.bind(this);
@@ -106,10 +109,26 @@ import Autocomplete from 'react-native-autocomplete-input';
     }
 
      componentWillMount(){
-
+         this.keyboardDidShowListener = Keyboard.addListener('keyboardDidShow', this._keyboardDidShow.bind(this));
+         this.keyboardDidHideListener = Keyboard.addListener('keyboardDidHide', this._keyboardDidHide.bind(this));
 
      }
+     componentWillUnmount () {
+         this.keyboardDidShowListener.remove();
+         this.keyboardDidHideListener.remove();
+     }
 
+     _keyboardDidShow () {
+         this.setState({
+             showSave : false
+         })
+     }
+
+     _keyboardDidHide () {
+         this.setState({
+             showSave : true
+         })
+     }
 
 
      replaceRoute(route) {
@@ -284,7 +303,8 @@ import Autocomplete from 'react-native-autocomplete-input';
         let image = await ImagePicker.openCamera({
 
             cropping: true,
-
+            width:600,
+            height:600,
             compressImageQuality: 1,
             compressVideoPreset: 'MediumQuality',
         });
@@ -303,7 +323,8 @@ import Autocomplete from 'react-native-autocomplete-input';
             let image = await ImagePicker.openPicker({
 
                 cropping: true,
-
+                width:600,
+                height:600,
                 compressImageQuality: 1,
                 compressVideoPreset: 'MediumQuality',
             });
@@ -329,6 +350,9 @@ import Autocomplete from 'react-native-autocomplete-input';
             return false;
         }
 
+        if(!this.state.tax_id){
+            return false;
+        }
         return true
 
 
@@ -364,6 +388,16 @@ import Autocomplete from 'react-native-autocomplete-input';
             </Button>
 
         }
+
+        let buttonView = undefined
+        if(this.state.showSave){
+            buttonView =    <Item  style={{ marginBottom:15 } } regular>
+
+                {saveButton}
+            </Item>
+
+        }
+
 
         if(!this.validateForm()){
             saveButton =  <Button disabled= {true} style={{backgroundColor:'gray'}}
@@ -422,19 +456,14 @@ import Autocomplete from 'react-native-autocomplete-input';
                         </Item>
                         <Item style={{ margin:3 ,backgroundColor:'white'} } regular >
                            <Input value={this.state.tax_id} blurOnSubmit={true} returnKeyType='done' ref="6"   onChangeText={(tax_id) => this.setState({tax_id})} placeholder='Tax ID' />
+                            <Icon style={{color:'red',fontSize:12}}name='star' />
                         </Item>
 
 
                         </KeyboardAvoidingView>
 
                     </ScrollView>
-
-
-                    <Item  style={{ marginBottom:15 } } regular>
-
-                        {saveButton}
-                    </Item>
-
+                    {buttonView}
 
                     </View>
 
