@@ -6,6 +6,7 @@
 
 import UserApi from "../api/user"
 let userApi = new UserApi();
+import store from 'react-native-simple-store';
 
 async function fetchList(action,feeds,api,dispatch,groupid){
     try {
@@ -59,6 +60,61 @@ async function fetchList(action,feeds,api,dispatch,groupid){
 
 }
 
+async function getFeedsFromStore(dispatch){
+    try {
+        let response = await store.get('feeds');
+        if(response) {
+
+            dispatch({
+                type: 'GET_FEEDS_FROM_STORE',
+                feeds: response,
+
+            });
+        }
+
+
+    }catch (error){
+        console.log(error);
+    }
+}
+
+async function getSavedFeedsFromStore(dispatch){
+    try {
+        let response = await store.get('savedFeeds');
+        if(response) {
+
+            dispatch({
+                type: 'GET_SAVED_FEEDS_FROM_STORE',
+                feeds: response,
+
+            });
+        }
+
+
+    }catch (error){
+        console.log(error);
+    }
+}
+
+async function getGroupFeedsFromStore(dispatch,group){
+    try {
+        let response = await store.get('groups'+ group);
+        if(response) {
+
+            dispatch({
+                type: 'GET_GROUP_FEEDS_FROM_STORE',
+                groupid:group,
+                feeds: response,
+
+            });
+        }
+
+
+    }catch (error){
+        console.log(error);
+    }
+}
+
 function addToRows(feeds,response,top){
     let currentRows = feeds;
     let newFeeds = response.filter(function (feed) {
@@ -107,6 +163,20 @@ async function fetchTopList(action,feeds,id,api,dispatch,groupid){
 
 }
 
+export function fetchFeedsFromStore(){
+    return function (dispatch, getState){
+        dispatch|(getFeedsFromStore(dispatch));
+    }
+
+}
+
+export function fetchSavedFeedsFromStore(){
+    return function (dispatch, getState){
+        dispatch|(getSavedFeedsFromStore(dispatch));
+    }
+
+}
+
 
 export function fetchFeeds(action,feeds,api){
     return function (dispatch, getState){
@@ -124,6 +194,13 @@ export function fetchTop(action,feeds,id,api){
 export function fetchGroupFeeds(groupid,action,feeds,api){
     return function (dispatch, getState){
         dispatch|(fetchList(action,feeds,api,dispatch,groupid));
+    }
+
+}
+
+export function fetchGroupFeedsFromStore(groupid){
+    return function (dispatch, getState){
+        dispatch|(getGroupFeedsFromStore(dispatch,groupid));
     }
 
 }
@@ -198,7 +275,6 @@ async function getUser(dispatch){
 }
 
 
-
 export function updateHomeFeed(feed) {
     return function (dispatch, getState) {
         dispatch({
@@ -207,6 +283,7 @@ export function updateHomeFeed(feed) {
         });
     }
 }
+
 export function fetchUsers(){
     return function (dispatch, getState){
         dispatch|(getUser(dispatch,));

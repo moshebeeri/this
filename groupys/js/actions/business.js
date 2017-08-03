@@ -4,11 +4,30 @@
 
 import BusinessApi from "../api/business"
 let businessApi = new BusinessApi();
-
+import store from 'react-native-simple-store';
 async function getAll(dispatch){
     try {
        let response = await businessApi.getAll();
         if(response.length > 0) {
+
+            dispatch({
+                type: 'GET_BUSINESS',
+                businesses: response,
+
+            });
+        }
+
+
+    }catch (error){
+        console.log(error);
+    }
+
+}
+
+async function getAllFromStore(dispatch){
+    try {
+        let response = await store.get('businesses');
+        if(response) {
 
             dispatch({
                 type: 'GET_BUSINESS',
@@ -48,6 +67,12 @@ async function getBusinessCategories(dispatch,gid) {
 export function fetchBusiness(){
     return function (dispatch, getState){
         dispatch|(getAll(dispatch));
+    }
+
+}
+export function fetchBusinessFromStore(){
+    return function (dispatch, getState){
+        dispatch|(getAllFromStore(dispatch));
     }
 
 }

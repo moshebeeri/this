@@ -10,6 +10,8 @@ class LoginApi
     login(phoneNumber, password) {
 
         let normalizePhoneNumber = this.clean_phone_number(phoneNumber);
+        let email =  '972' + normalizePhoneNumber + "@low.la";
+
         return new Promise(async(resolve, reject) => {
             try {
 
@@ -20,7 +22,7 @@ class LoginApi
                         'Content-Type': 'application/json;charset=utf-8',
                     },
                     body: JSON.stringify({
-                        email:  normalizePhoneNumber + "@low.la",
+                        email:  email,
                         password:password,
                     })
                 })

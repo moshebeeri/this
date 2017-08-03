@@ -33,9 +33,9 @@ class FeedConverter
                     actor: feed.activity.actor_user._id,
                     itemTitle: name + ' ' + feed.activity.action,
                     name: feed.activity.business.name,
-                    description: feed.activity.business.name + ' location: ' + feed.activity.business.city + ' ' + feed.activity.business.address,
+                    businessAddress:feed.activity.business.city + ' ' + feed.activity.business.address,
                     banner: {
-                        uri: feed.activity.business.pictures[0].pictures[1]
+                        uri: feed.activity.business.pictures[0].pictures[0]
                     },
                     showSocial: true,
                 }
@@ -52,7 +52,7 @@ class FeedConverter
                     name: feed.activity.business.name,
                     actor: feed.activity.actor_user._id,
                     itemTitle: name + ' ' + feed.activity.action,
-                    description: feed.activity.business.name + ' location: ' + feed.activity.business.city + ' ' + feed.activity.business.address,
+                    businessAddress: feed.activity.business.city + ' ' + feed.activity.business.address,
                     showSocial: true,
                 }
             }
@@ -174,7 +174,7 @@ class FeedConverter
             }
 
             if (instance.promotion.entity && instance.promotion.entity.business.pictures.length > 0) {
-                responseFeed.businessLogo = instance.promotion.entity.business.pictures[0].pictures[3];
+                responseFeed.businessLogo = instance.promotion.entity.business.pictures[0].pictures[0];
                 responseFeed.businessName = instance.promotion.entity.business.name;
                 responseFeed.businessAddress = instance.promotion.entity.business.city + ' ' + instance.promotion.entity.business.address;
             }else {
@@ -212,7 +212,7 @@ class FeedConverter
         let responseFeed = {};
 
         try {
-
+            let date = new Date(promotion.end);
             responseFeed.id = instance._id;
             responseFeed.fid = feed._id;
 
@@ -230,7 +230,7 @@ class FeedConverter
 
             }
 
-
+            responseFeed.endDate = date.toDateString();
 
            responseFeed.name = promotion.name;
             responseFeed.description = promotion.description;

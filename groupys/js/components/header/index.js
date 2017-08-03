@@ -40,13 +40,13 @@ export default class GeneralComponentHeader extends Component {
 
         <Header
             style={{ flexDirection: 'column',
-                height: 60,
+                height: 40,
                 elevation: 0,
 
-                borderBottomColor: 'gray',
+                borderBottomColor: 'white',
 
                 borderStyle:'solid',
-                backgroundColor: '#2e8eca',
+                backgroundColor: 'white',
                 borderBottomWidth:0.5,
                 paddingTop: (Platform.OS === 'ios') ? 20 : 3,
                 justifyContent: 'space-between',
@@ -55,13 +55,13 @@ export default class GeneralComponentHeader extends Component {
       <View style={styles.header} >
 
           <View style={{ flexDirection: 'row', alignItems: 'stretch' ,justifyContent: 'space-between' }}>
-                <Button transparent style={{ paddingRight: 15 }} onPress={this.props.openDrawer}>
-                    <Icon active color={"white"} size={20} name="menu" />
+                <Button transparent style={{ marginLeft:20,paddingRight: 15 }} onPress={this.props.openDrawer}>
+                    <Icon active color={"#2db6c8"} size={20} name="menu" />
 
                 </Button>
 
 
-              <Text transparent style={{ paddingRight: 20, paddingTop: 10,color:"white" ,backgroundColor: 'transparent'}} >Groupies</Text>
+              <Text transparent style={{ paddingRight: 10, paddingTop: 10,color:"#2db6c8" ,backgroundColor: 'transparent'}} >ThisCounts</Text>
           </View>
 
 

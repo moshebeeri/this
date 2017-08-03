@@ -11,7 +11,7 @@
  * Created by stan229 on 5/27/16.
  */
 const initialState = {promotions:[]};
-
+import store from 'react-native-simple-store';
 
 
 export default function promotion(state = initialState, action) {
@@ -20,7 +20,7 @@ export default function promotion(state = initialState, action) {
 
         case 'GET_PROMOTIONS' :
 
-
+            store.save('promotions'+ action.businessId,action.promotions)
             let currentState = {...state};
             currentState['promotions'+ action.businessId] = action.promotions;
 

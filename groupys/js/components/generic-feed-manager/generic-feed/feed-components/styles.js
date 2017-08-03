@@ -128,7 +128,22 @@ module.exports = {
 
     promotion_container: {
         flex: 1,
-        height: 470,
+        height: 540,
+        width: width ,
+        overflow: 'hidden',
+        backgroundColor:'#b7b7b7',
+        // backgroundColor:'#FFF',
+        alignItems: 'center',
+        flexDirection: 'column',
+
+
+
+
+
+    },
+   bussiness_container: {
+        flex: 1,
+        height: 430,
         width: width ,
         overflow: 'hidden',
         backgroundColor:'#b7b7b7',
@@ -152,7 +167,7 @@ module.exports = {
 
     },
     promotion_image:{
-        width: width -18, height: 200, alignSelf: 'flex-start',
+        width: width -18, height: 250, alignSelf: 'flex-start',
     },
     promotion_upperContainer: {
 
@@ -160,6 +175,15 @@ module.exports = {
         width: width -20,
         borderRadius:2,
         height: 100,
+        flexDirection: 'column'
+
+    },
+    bussiness_upperContainer: {
+
+        backgroundColor:'white',
+        width: width -20,
+        borderRadius:2,
+        height: 50,
         flexDirection: 'column'
 
     },
@@ -220,7 +244,14 @@ module.exports = {
     promotion_buttomUpperContainer: {
         backgroundColor:'white',
         width: width -20,
-        height: 120,
+        height: 140,
+        flexDirection: 'row',
+        marginTop:0,
+    },
+    business_buttomUpperContainer: {
+        backgroundColor:'white',
+        width: width -20,
+        height: 80,
         flexDirection: 'row',
         marginTop:0,
     },
@@ -262,7 +293,7 @@ module.exports = {
     },
 
     promotion_addressText:{
-        fontFamily:'Roboto-Regular',marginRight:20,marginLeft:10,marginTop:0,marginBottom:5,color:'gray',fontSize:18
+        fontFamily:'Roboto-Regular',marginRight:20,marginLeft:10,marginTop:0,marginBottom:5,color:'gray',fontSize:16
     },
     promotion_nameText:{
         fontFamily:'Roboto-Black',fontWeight: 'bold',marginRight:20,marginLeft:10,marginTop:5,marginBottom:5,color:'black',fontSize:18

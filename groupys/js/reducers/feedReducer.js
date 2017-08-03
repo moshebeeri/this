@@ -7,13 +7,15 @@
 const initialState = {feeds:[],savedfeeds:[],savedShowTopLoader:false,nextLoad:false,showTopLoader:false};
 
 export const GET_FEED = 'GET_FEEDS'
-
+import store from 'react-native-simple-store';
 
 export default function feeds(state = initialState, action) {
     console.log(action.type);
+
     switch (action.type) {
 
         case 'GET_FEEDS' :
+            store.save('feeds',action.feeds)
             return {
                 ...state,
                 feeds : action.feeds,
@@ -22,21 +24,64 @@ export default function feeds(state = initialState, action) {
                 nextLoad:false,
             };
 
+        case 'GET_FEEDS_FROM_STORE' :
+            if(action.feeds.length > 0){
+                return {
+                    ...state,
+                    feeds : action.feeds,
+                    loadingDone: true,
+                    nextLoad:false,
+                    showTopLoader :false,
+
+                };
+            }
+           return {
+                ...state,
+                feeds : action.feeds,
+
+
+            };
+
 
         case 'GET_GROUP_FEEDS' :
 
             let feed = {...state};
+            store.save('groups'+ action.groupid,action.feeds)
             feed['groups'+ action.groupid] = action.feeds;
             feed['showTopLoader' +action.groupid ] = action.showTopLoader;
             feed['grouploadingDone'+ action.groupid] = true;
             return feed;
+        case 'GET_GROUP_FEEDS_FROM_STORE' :
+
+            let storeFeed = {...state};
+            storeFeed['groups'+ action.groupid] = action.feeds;
+            storeFeed['grouploadingDone' + action.groupid] = true;
+
+            return storeFeed;
         case 'GET_SAVED_FEEDS' :
+            store.save('savedFeeds',action.feeds)
             return {
                 ...state,
                 savedfeeds : action.feeds,
                 savedShowTopLoader : action.showTopLoader,
                 savedloadingDone: true,
             };
+        case 'GET_SAVED_FEEDS_FROM_STORE':
+            if(action.feeds.length > 0){
+                return {
+                    ...state,
+                    savedfeeds : action.feeds,
+                    savedloadingDone: true,
+
+                };
+            }
+            return {
+                ...state,
+                savedfeeds : action.feeds,
+
+
+            };
+
         case 'SHOW_TOP_LOADER' :
             return {
                 ...state,
@@ -55,6 +100,7 @@ export default function feeds(state = initialState, action) {
 
             let feedState= {...state};
             let updatedFeeds = updateFeeds(feedState,action.feed);
+            store.save('feeds',updatedFeeds)
             return {
                 ...state,
                 feeds : updatedFeeds,

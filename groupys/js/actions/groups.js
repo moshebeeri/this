@@ -9,12 +9,32 @@ import GroupsApi from "../api/groups"
 let groupsApi = new GroupsApi();
 import UserApi from "../api/user"
 let userApi = new UserApi();
+import store from 'react-native-simple-store';
 
 
 async function getAll(dispatch){
     try {
         let response = await groupsApi.getAll();
         if(response.length > 0) {
+
+            dispatch({
+                type: 'GET_GROUPS',
+                groups: response,
+
+            });
+        }
+
+
+    }catch (error){
+        console.log(error);
+    }
+
+}
+
+async function getGroupsFromStore(dispatch){
+    try {
+        let response = await store.get('groups');
+        if(response) {
 
             dispatch({
                 type: 'GET_GROUPS',
@@ -38,6 +58,25 @@ async function getByBusinessId(dispatch,bid){
                 type: 'GET_GROUPS_BUSINESS',
                 groups: response,
                 bid:bid
+            });
+        }
+
+
+    }catch (error){
+        console.log(error);
+    }
+
+}
+
+async function getBusinessFromStore(dispatch){
+    try {
+        let response = await store.get('businesses');
+        if(response) {
+
+            dispatch({
+                type: 'GET_BUSINESS',
+                businesses: response,
+
             });
         }
 
@@ -72,6 +111,13 @@ export function fetchGroups(){
     }
 
 }
+
+export function fetchBusinesses(){
+    return function (dispatch, getState){
+        dispatch|(getBusinessFromStore(dispatch));
+    }
+
+}
 export function fetchBusinessGroups(bid){
     return function (dispatch, getState){
         dispatch|(getByBusinessId(dispatch,bid));
@@ -85,3 +131,11 @@ export function fetchUsersFollowers(){
     }
 
 }
+
+export function fetchGroupsFromStore(){
+    return function (dispatch, getState){
+        dispatch|(getGroupsFromStore(dispatch,));
+    }
+
+}
+

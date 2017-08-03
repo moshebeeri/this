@@ -50,6 +50,26 @@ const groupType = [
 
 ]
 
+const groupPostPolicy = [
+    {
+        value:'ANYONE',
+        label:'Anyone'
+    },
+    {
+        value:'MEMBERS',
+        label:'Membersp'
+    },
+    {
+        value:'ADMINS',
+        label:'Admins'
+    },
+    {
+        value:'MANAGERS',
+        label:'Managers'
+    }
+
+]
+
 
 import * as groupsAction from "../../../actions/groups";
 import { bindActionCreators } from "redux";
@@ -79,7 +99,7 @@ class AddGroup extends Component {
 
         };
 
-
+        this.props.fetchBusinesses();
     }
 
     selectBusiness(value){
@@ -133,6 +153,7 @@ class AddGroup extends Component {
                 add_policy: this.state.groupPolocy,
                 image:this.state.image,
                 groupUsers:this.state.selectedUsers,
+                post_policy:'ANYONE',
                 entity: {
                     user: userId
                 }
@@ -148,7 +169,8 @@ class AddGroup extends Component {
                     groupUsers:this.state.selectedUsers,
                     entity: {
                         business:this.state.business
-                    }
+                    },
+                    post_policy:'MANAGERS'
 
                 };
             }
@@ -195,13 +217,11 @@ class AddGroup extends Component {
     async pickFromCamera() {
         try {
             let image = await ImagePicker.openCamera({
-                width: 300,
-                height: 300,
                 cropping: true,
-                compressImageMaxWidth: 640,
-                compressImageMaxHeight: 480,
-                compressImageQuality: 0.5,
+                compressImageQuality: 1,
                 compressVideoPreset: 'MediumQuality',
+                width:2000,
+                height:2000,
             });
             this.setState({
                 image: {uri: image.path, width: image.width, height: image.height, mime: image.mime},
@@ -216,13 +236,11 @@ class AddGroup extends Component {
     async pickPicture() {
         try {
             let image = await ImagePicker.openPicker({
-                width: 300,
-                height: 300,
                 cropping: true,
-                compressImageMaxWidth: 640,
-                compressImageMaxHeight: 480,
-                compressImageQuality: 0.5,
+                compressImageQuality: 1,
                 compressVideoPreset: 'MediumQuality',
+                width:2000,
+                height:2000,
             });
             this.setState({
                 image: {uri: image.path, width: image.width, height: image.height, mime: image.mime},
@@ -316,8 +334,8 @@ class AddGroup extends Component {
                     this.props.businesses.businesses.map((s, i) => {
                         return <Item
                             key={i}
-                            value={s._id}
-                            label={s.name} />
+                            value={s.business._id}
+                            label={s.business.name} />
                     }) }
             </Picker>
 

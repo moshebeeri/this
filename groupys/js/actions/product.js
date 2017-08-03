@@ -7,6 +7,8 @@
 
 import ProdictApi from "../api/product"
 let productApi = new ProdictApi();
+import store from 'react-native-simple-store';
+
 
 async function getAll(dispatch){
     try {
@@ -47,6 +49,24 @@ async function getAllByBusinessId(dispatch,id) {
 }
 
 
+async function getAllFromStoreByBusinessId(dispatch,id) {
+    try {
+        let response = await store.get('products'+id);
+        if (response) {
+
+            dispatch({
+                type: 'GET_BUSINESS_PRODUCTS',
+                products: response,
+                businessId:id
+
+            });
+        }
+
+
+    } catch (error) {
+        console.log(error);
+    }
+}
 async function getProductCategories(dispatch,gid) {
 
     try {
@@ -79,6 +99,13 @@ export function fetchProducts(){
 export function fetchProductsByBusiness(businessId){
     return function (dispatch, getState){
         dispatch|(getAllByBusinessId(dispatch,businessId));
+    }
+
+}
+
+export function fetchFromStoreProductsByBusiness(businessId){
+    return function (dispatch, getState){
+        dispatch|(getAllFromStoreByBusinessId(dispatch,businessId));
     }
 
 }

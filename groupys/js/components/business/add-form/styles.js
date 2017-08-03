@@ -30,10 +30,11 @@ module.exports = {
         alignItems: 'center',
     },
     business_upper_image_container:{
-        width:width / 3,
+        width:width/3,
         height:110,
         marginTop:10,
         marginRight:12,
+        flexDirection: 'row',
         marginLeft:10,
         backgroundColor:'white'
     },
@@ -114,5 +115,10 @@ module.exports = {
         paddingVertical: 3,
         marginRight:10,
         paddingLeft:10
+    },
+    buttom_items:{
+        margin:3 ,
+        backgroundColor:'white',
+        width:width - 18
     }
 };

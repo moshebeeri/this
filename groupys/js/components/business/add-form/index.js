@@ -8,7 +8,8 @@ import { Platform,
     ScrollView,
     TouchableOpacity,
     KeyboardAvoidingView,
-    TouchableHighlight
+    TouchableHighlight,
+    Keyboard
 } from 'react-native';
 
 
@@ -26,6 +27,8 @@ import styles from './styles'
 import * as businessAction from "../../../actions/business";
 import {connect} from 'react-redux';
 import { bindActionCreators } from "redux";
+import Icon2 from 'react-native-vector-icons/Entypo';
+
 import Autocomplete from 'react-native-autocomplete-input';
  class AddBusiness extends Component {
 
@@ -69,6 +72,7 @@ import Autocomplete from 'react-native-autocomplete-input';
                 categories:[Number(category),Number(subcategory)],
                 formData: {},
                 active: false,
+                showSave:true,
             };
         }else {
 
@@ -92,7 +96,8 @@ import Autocomplete from 'react-native-autocomplete-input';
                 subcategory:'',
                 categories:[],
                 formData: {},
-                active:false
+                active:false,
+                showSave:true,
             };
         }
         let stateFunc = this.setState.bind(this);
@@ -106,10 +111,26 @@ import Autocomplete from 'react-native-autocomplete-input';
     }
 
      componentWillMount(){
-
+         this.keyboardDidShowListener = Keyboard.addListener('keyboardDidShow', this._keyboardDidShow.bind(this));
+         this.keyboardDidHideListener = Keyboard.addListener('keyboardDidHide', this._keyboardDidHide.bind(this));
 
      }
+     componentWillUnmount () {
+         this.keyboardDidShowListener.remove();
+         this.keyboardDidHideListener.remove();
+     }
 
+     _keyboardDidShow () {
+         this.setState({
+             showSave : false
+         })
+     }
+
+     _keyboardDidHide () {
+         this.setState({
+             showSave : true
+         })
+     }
 
 
      replaceRoute(route) {
@@ -282,12 +303,11 @@ import Autocomplete from 'react-native-autocomplete-input';
     async pickFromCamera() {
         try {
         let image = await ImagePicker.openCamera({
-            width: 300,
-            height: 300,
+
             cropping: true,
-            compressImageMaxWidth: 640,
-            compressImageMaxHeight: 480,
-            compressImageQuality: 0.5,
+            width:2000,
+            height:2000,
+            compressImageQuality: 1,
             compressVideoPreset: 'MediumQuality',
         });
         this.setState({
@@ -303,12 +323,11 @@ import Autocomplete from 'react-native-autocomplete-input';
     async pickPicture() {
         try {
             let image = await ImagePicker.openPicker({
-                width: 300,
-                height: 300,
+
                 cropping: true,
-                compressImageMaxWidth: 640,
-                compressImageMaxHeight: 480,
-                compressImageQuality: 0.5,
+                width:2000,
+                height:2000,
+                compressImageQuality: 1,
                 compressVideoPreset: 'MediumQuality',
             });
             this.setState({
@@ -322,7 +341,24 @@ import Autocomplete from 'react-native-autocomplete-input';
     }
 
 
+    validateForm(){
+        if(!this.state.name){
+            return false;
+        }
+        if(!this.state.city){
+            return false;
+        }
+        if(!this.state.address){
+            return false;
+        }
 
+        if(!this.state.tax_id){
+            return false;
+        }
+        return true
+
+
+    }
      keyPad(){
          return true;
      }
@@ -341,6 +377,7 @@ import Autocomplete from 'react-native-autocomplete-input';
 
 
         }
+
         let saveButton =  <Button style={{backgroundColor:'#2db6c8'}}
                                   onPress={this.saveFormData.bind(this)}>
                          <Text>Add Business</Text>
@@ -354,6 +391,23 @@ import Autocomplete from 'react-native-autocomplete-input';
 
         }
 
+        let buttonView = undefined
+
+        if(!this.validateForm()){
+            saveButton =  <Button disabled= {true} style={{backgroundColor:'gray'}}
+                               >
+                <Text>Add Business</Text>
+            </Button>
+        }
+
+        if(this.state.showSave){
+            buttonView =    <Item  style={{ marginBottom:15 } } regular>
+
+                {saveButton}
+            </Item>
+
+        }
+
 
         return (
 
@@ -361,16 +415,31 @@ import Autocomplete from 'react-native-autocomplete-input';
                 <View  style={styles.business_container}>
 
 
+
                         <View style = {styles.business_upper_container}>
                             <View style = {styles.business_upper_image_container}>
+
                                 {image}
+                                <View style={{marginLeft:10,marginTop:60}}>
+                                <Button  iconRight transparent  onPress={() => this.pickFromCamera()}>
+                                    <Icon name='camera' />
+
+                                </Button>
+
+                                </View>
+                                <View style={{marginLeft:0,marginTop:60}}>
+
+                                    <Button  iconRight transparent  onPress={() => this.pickPicture()}>
+                                        <Icon2 name='attachment' />
+
+                                    </Button>
+                                </View>
                             </View>
                             <View style = {styles.business_upper_name_container}>
                                 <Item style={{ marginBottom:6,backgroundColor:'white' } } regular >
                                     <Input  value={this.state.name} blurOnSubmit={true} returnKeyType='next' ref="1" onSubmitEditing={this.focusNextField.bind(this,"2")} onChangeText={(name) => this.setState({name})} placeholder='Bussines Name' />
-                                    <Button  iconRight transparent  onPress={() => this.pickPicture()}>
-                                        <Icon name='camera' />
-                                    </Button>
+                                    <Icon style={{color:'red',fontSize:12}}name='star' />
+
 
                                 </Item>
                                 <Item style={{ backgroundColor:'white'} } regular >
@@ -384,31 +453,29 @@ import Autocomplete from 'react-native-autocomplete-input';
 
 
                     {pickers}
-                        <Item style={{ margin:3,backgroundColor:'white' } } regular >
+                        <Item style={styles.buttom_items} regular >
                            <Input value={this.state.website}  blurOnSubmit={true} returnKeyType='next' ref="3"  onSubmitEditing={this.focusNextField.bind(this,"4")}  onChangeText={(website) => this.setState({website})} placeholder='Website' />
+
                         </Item>
 
-                        <Item style={{ margin:3 ,backgroundColor:'white'} } regular >
+                        <Item style={styles.buttom_items} regular >
                            <Input value={this.state.city} blurOnSubmit={true} returnKeyType='next' ref="4"  onSubmitEditing={this.focusNextField.bind(this,"5")}  onChangeText={(city) => this.setState({city})} placeholder='City' />
+                            <Icon style={{color:'red',fontSize:12}}name='star' />
                         </Item>
-                        <Item style={{ margin:3 ,backgroundColor:'white'} } regular >
+                        <Item style={styles.buttom_items} regular >
                            <Input value={this.state.address} blurOnSubmit={true} returnKeyType='next' ref="5"  onSubmitEditing={this.focusNextField.bind(this,"6")}  onChangeText={(address) => this.setState({address})} placeholder='Addresss' />
+                            <Icon style={{color:'red',fontSize:12}}name='star' />
                         </Item>
-                        <Item style={{ margin:3 ,backgroundColor:'white'} } regular >
+                        <Item style={styles.buttom_items} regular >
                            <Input value={this.state.tax_id} blurOnSubmit={true} returnKeyType='done' ref="6"   onChangeText={(tax_id) => this.setState({tax_id})} placeholder='Tax ID' />
+                            <Icon style={{color:'red',fontSize:12}}name='star' />
                         </Item>
 
 
                         </KeyboardAvoidingView>
 
                     </ScrollView>
-
-
-                    <Item  style={{ marginBottom:15 } } regular>
-
-                        {saveButton}
-                    </Item>
-
+                    {buttonView}
 
                     </View>
 
