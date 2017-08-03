@@ -26,12 +26,12 @@ export default class FeedBusiness extends Component {
 
 
     render(){
-        return this.createBussines(this.props.item,this.props.save,this.props.like,this.props.unlike,this.props.comment)
+        return this.createBussines(this.props.item,this.props.like,this.props.unlike,this.props.showUsers)
     }
 
 
 
-    createBussines(item,save,like,unlike,showUsers,comment){
+    createBussines(item,like,unlike,showUsers,comment){
 
         if(!item.name){
             return <View></View>;

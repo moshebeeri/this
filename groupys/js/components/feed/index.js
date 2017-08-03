@@ -32,8 +32,8 @@ class Feed extends Component {
         this.props.fetchFeeds('GET_FEEDS',this.props.feeds.feeds,this);
 
     }
-    fetchTop(id){
-        this.props.showTopLoader();
+    async fetchTop(id){
+        await this.props.showTopLoader();
         this.props.fetchTop('GET_FEEDS',this.props.feeds.feeds,id,this);
     }
 
