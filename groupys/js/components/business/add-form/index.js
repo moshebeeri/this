@@ -27,6 +27,8 @@ import styles from './styles'
 import * as businessAction from "../../../actions/business";
 import {connect} from 'react-redux';
 import { bindActionCreators } from "redux";
+import Icon2 from 'react-native-vector-icons/Entypo';
+
 import Autocomplete from 'react-native-autocomplete-input';
  class AddBusiness extends Component {
 
@@ -390,6 +392,14 @@ import Autocomplete from 'react-native-autocomplete-input';
         }
 
         let buttonView = undefined
+
+        if(!this.validateForm()){
+            saveButton =  <Button disabled= {true} style={{backgroundColor:'gray'}}
+                               >
+                <Text>Add Business</Text>
+            </Button>
+        }
+
         if(this.state.showSave){
             buttonView =    <Item  style={{ marginBottom:15 } } regular>
 
@@ -399,28 +409,30 @@ import Autocomplete from 'react-native-autocomplete-input';
         }
 
 
-        if(!this.validateForm()){
-            saveButton =  <Button disabled= {true} style={{backgroundColor:'gray'}}
-                               >
-                <Text>Add Business</Text>
-            </Button>
-        }
-
-
         return (
 
 
                 <View  style={styles.business_container}>
 
 
+
                         <View style = {styles.business_upper_container}>
                             <View style = {styles.business_upper_image_container}>
+
                                 {image}
-                                <View style={{marginLeft:55,marginTop:60}}>
-                                <Button  iconRight transparent  onPress={() => this.pickPicture()}>
+                                <View style={{marginLeft:10,marginTop:60}}>
+                                <Button  iconRight transparent  onPress={() => this.pickFromCamera()}>
                                     <Icon name='camera' />
 
                                 </Button>
+
+                                </View>
+                                <View style={{marginLeft:0,marginTop:60}}>
+
+                                    <Button  iconRight transparent  onPress={() => this.pickPicture()}>
+                                        <Icon2 name='attachment' />
+
+                                    </Button>
                                 </View>
                             </View>
                             <View style = {styles.business_upper_name_container}>
@@ -441,20 +453,20 @@ import Autocomplete from 'react-native-autocomplete-input';
 
 
                     {pickers}
-                        <Item style={{ margin:3,backgroundColor:'white' } } regular >
+                        <Item style={styles.buttom_items} regular >
                            <Input value={this.state.website}  blurOnSubmit={true} returnKeyType='next' ref="3"  onSubmitEditing={this.focusNextField.bind(this,"4")}  onChangeText={(website) => this.setState({website})} placeholder='Website' />
 
                         </Item>
 
-                        <Item style={{ margin:3 ,backgroundColor:'white'} } regular >
+                        <Item style={styles.buttom_items} regular >
                            <Input value={this.state.city} blurOnSubmit={true} returnKeyType='next' ref="4"  onSubmitEditing={this.focusNextField.bind(this,"5")}  onChangeText={(city) => this.setState({city})} placeholder='City' />
                             <Icon style={{color:'red',fontSize:12}}name='star' />
                         </Item>
-                        <Item style={{ margin:3 ,backgroundColor:'white'} } regular >
+                        <Item style={styles.buttom_items} regular >
                            <Input value={this.state.address} blurOnSubmit={true} returnKeyType='next' ref="5"  onSubmitEditing={this.focusNextField.bind(this,"6")}  onChangeText={(address) => this.setState({address})} placeholder='Addresss' />
                             <Icon style={{color:'red',fontSize:12}}name='star' />
                         </Item>
-                        <Item style={{ margin:3 ,backgroundColor:'white'} } regular >
+                        <Item style={styles.buttom_items} regular >
                            <Input value={this.state.tax_id} blurOnSubmit={true} returnKeyType='done' ref="6"   onChangeText={(tax_id) => this.setState({tax_id})} placeholder='Tax ID' />
                             <Icon style={{color:'red',fontSize:12}}name='star' />
                         </Item>
