@@ -382,8 +382,8 @@ import {DeviceEventEmitter} from 'react-native'
     async pickFromCamera() {
         try {
             let image = await ImagePicker.openCamera({
-                width:600,
-                height:600,
+                width:2000,
+                height:2000,
                 cropping: true,
                 compressImageQuality: 1,
                 compressVideoPreset: 'MediumQuality',
@@ -406,8 +406,8 @@ import {DeviceEventEmitter} from 'react-native'
     async pickPicture() {
         try {
             let image = await ImagePicker.openPicker({
-                width:600,
-                height:600,
+                width:2000,
+                height:2000,
                 cropping: true,
                 compressImageQuality: 1,
                 compressVideoPreset: 'MediumQuality',

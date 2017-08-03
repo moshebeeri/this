@@ -220,8 +220,8 @@ class AddGroup extends Component {
                 cropping: true,
                 compressImageQuality: 1,
                 compressVideoPreset: 'MediumQuality',
-                width:600,
-                height:600,
+                width:2000,
+                height:2000,
             });
             this.setState({
                 image: {uri: image.path, width: image.width, height: image.height, mime: image.mime},
@@ -239,8 +239,8 @@ class AddGroup extends Component {
                 cropping: true,
                 compressImageQuality: 1,
                 compressVideoPreset: 'MediumQuality',
-                width:600,
-                height:600,
+                width:2000,
+                height:2000,
             });
             this.setState({
                 image: {uri: image.path, width: image.width, height: image.height, mime: image.mime},

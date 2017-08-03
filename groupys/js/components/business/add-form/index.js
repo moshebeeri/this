@@ -305,8 +305,8 @@ import Autocomplete from 'react-native-autocomplete-input';
         let image = await ImagePicker.openCamera({
 
             cropping: true,
-            width:600,
-            height:600,
+            width:2000,
+            height:2000,
             compressImageQuality: 1,
             compressVideoPreset: 'MediumQuality',
         });
@@ -325,8 +325,8 @@ import Autocomplete from 'react-native-autocomplete-input';
             let image = await ImagePicker.openPicker({
 
                 cropping: true,
-                width:600,
-                height:600,
+                width:2000,
+                height:2000,
                 compressImageQuality: 1,
                 compressVideoPreset: 'MediumQuality',
             });
