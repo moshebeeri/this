@@ -300,7 +300,7 @@ exports.order = function (req, res) {
     if (err) return handleError(res, err);
 
     object.pictures.forEach(function (pic) {
-      if (pic.date == req.params.date) {
+      if (pic.date === req.params.date) {
         pic.order = req.params.order;
         object.save();
         return res.status(201).json(object);
@@ -314,8 +314,8 @@ exports.order = function (req, res) {
 exports.delete = function (req, res) {
   find_object(req.params.id, function (err, object) {
     if (err) return handleError(res, err);
-    object.pictures = object.pictures.filter((pic) => pic.date != req.params.date);
-    delete_picture_storage(object.pictures.filter((pic) => pic.date == req.params.date));
+    object.pictures = object.pictures.filter((pic) => pic.date !== req.params.date);
+    delete_picture_storage(object.pictures.filter((pic) => pic.date === req.params.date));
     object.save();
     return res.status(201).json(object);
   });
