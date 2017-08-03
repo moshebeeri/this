@@ -82,7 +82,23 @@ export default class MyPromotionFeedItem extends Component {
         }
 
 
+    comment(){
 
+
+        this.props.navigation.navigate('genericComments', {
+            instance: this.props.item,
+            generalId:this.props.item.activityId,
+            entities:{
+                activity:this.props.item.activityId
+            }
+
+        })
+
+
+        //TODO add comments screen
+
+
+    }
 
 
     createPromotion(item){
@@ -120,7 +136,6 @@ export default class MyPromotionFeedItem extends Component {
                             {buisnessLogo}
                             <View style = {{  flexDirection: 'column'}}>
                                 <Text style={styles.promotion_nameText} note>{item.businessName } </Text>
-                                <Text style={styles.promotion_addressText} note>{item.businessAddress } </Text>
                             </View>
                         </View>
 
@@ -132,6 +147,7 @@ export default class MyPromotionFeedItem extends Component {
                             <Text style={styles.promotion_type}>{item.itemTitle}</Text>
                             <View style={styles.promotion_buttom_location}>
                                 <Icon2 style={styles.promotion_location}  size={25} name="clock"/>
+                                <Text style={styles.promotion_addressText} note>{item.endDate } </Text>
 
                             </View>
                             <View style={styles.promotion_buttom_location}>
@@ -141,7 +157,7 @@ export default class MyPromotionFeedItem extends Component {
                         </View>
                     </View>
                     <View style={styles.promotion_action_container}>
-                        <Button  style={postStyle} onPress={this.realize.bind(this)}>
+                        <Button  style={postStyle} onPress={this.comment.bind(this)}>
 
 
                             <Text>see post</Text>

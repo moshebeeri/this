@@ -52,6 +52,30 @@ async function getGroupComments(dispatch,group){
 
 }
 
+async function getEntityComments(dispatch,entities,id){
+    try {
+        let response = await commentsApi.getComment(entities);
+        if(response.length > 0) {
+
+            dispatch({
+                type: 'GET_COMMENTS',
+                comments: response,
+                id:id,
+
+
+
+            });
+        }
+
+
+    }catch (error){
+        console.log(error);
+    }
+
+}
+
+
+
 
 export function fetchInstanceGroupComments( group,instance){
     return function (dispatch){
@@ -59,6 +83,14 @@ export function fetchInstanceGroupComments( group,instance){
     }
 
 }
+
+export function fetchEntityComments( entities,id){
+    return function (dispatch){
+        dispatch|(getEntityComments(dispatch,entities,id));
+    }
+
+}
+
 
 
 export function fetchGroupComments( group){

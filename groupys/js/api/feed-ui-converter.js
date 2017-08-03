@@ -125,6 +125,8 @@ class FeedConverter
 
            responseFeed.name = instance.promotion.name;
             responseFeed.description = instance.promotion.description;
+            let date = new Date(instance.promotion.end);
+            responseFeed.endDate = date.toDateString();
 
 
             switch (instance.type) {
@@ -215,6 +217,10 @@ class FeedConverter
             let date = new Date(promotion.end);
             responseFeed.id = instance._id;
             responseFeed.fid = feed._id;
+            if(feed.activity){
+                responseFeed.activityId = feed.activity._id;
+            }
+
 
             if(instance.social_state) {
                 responseFeed.social = {

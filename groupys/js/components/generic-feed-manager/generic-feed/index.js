@@ -99,6 +99,17 @@ export default class GenericFeedItem extends Component {
             return;
         }
 
+
+            this.props.navigation.navigate('genericComments', {
+                instance: this.props.item,
+                generalId:this.props.item.activityId,
+                entities:{
+                    activity:this.props.item.activityId
+                }
+
+            })
+
+
         //TODO add comments screen
 
 
@@ -144,7 +155,7 @@ export default class GenericFeedItem extends Component {
                     break
 
                 default:
-                    feed = <FeedBusiness navigation={this.props.navigation} item={item} like={like}  unlike={unlike} showUsers={showUsers} save={save} _panResponder={this._panResponder} />
+                    feed = <FeedBusiness navigation={this.props.navigation} item={item} comment= {comment} like={like}  unlike={unlike} showUsers={showUsers} save={save} _panResponder={this._panResponder} />
                     break;
             }
 
