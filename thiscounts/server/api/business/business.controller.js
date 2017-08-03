@@ -55,7 +55,8 @@ exports.show = function (req, res) {
 
 exports.mine = function (req, res) {
   let userId = req.user._id;
-  let query = `MATCH (user:user{_id:"${userId}"})-[role:ROLE|OWNS]->(b:business) return b._id as business_id, role, type(role) as type`;
+  let query = `MATCH (user:user{_id:"${userId}"})-[role:ROLE|OWNS]->(b:business) return b._id as business_id, role, type(role) as type
+                order by business_id`;
 
   graphModel.query(query, function (err, businesses_role) {
     if (err) return handleError(res, err);
