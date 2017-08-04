@@ -56,7 +56,7 @@ exports.show = function (req, res) {
 exports.mine = function (req, res) {
   let userId = req.user._id;
   let query = `MATCH (user:user{_id:"${userId}"})-[role:ROLE|OWNS]->(b:business) return b._id as business_id, role, type(role) as type
-                order by business_id`;
+                order by business_id desc`;
 
   graphModel.query(query, function (err, businesses_role) {
     if (err) return handleError(res, err);
@@ -66,7 +66,9 @@ exports.mine = function (req, res) {
       _ids.push(business_role.business_id);
       userRoleById[business_role.business_id] = business_role.type==='OWNS'? 'OWNS' : business_role.role.properties.name;
     });
-    Business.find({}).where('_id').in(_ids).exec(function (err, businesses) {
+    Business.find({}).where('_id').in(_ids)
+      .sort({_id: "desc"})
+      .exec(function (err, businesses) {
       if (err) return handleError(res, err);
       let info = [];
       businesses.forEach(business => {

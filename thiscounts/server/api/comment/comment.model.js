@@ -17,8 +17,7 @@ let CommentSchema = new Schema({
     mall                : {type: Schema.ObjectId, ref: 'Mall', index: true, autopopulate: true},
     product             : {type: Schema.ObjectId, ref: 'Product', index: true, autopopulate: true},
     promotion           : {type: Schema.ObjectId, ref: 'Promotion', index: true, autopopulate: true},
-    instance            : {type: Schema.ObjectId, ref: 'Instance', index: true, autopopulate: true},
-    activity            : {type: Schema.ObjectId, ref: 'Activity', index: true, autopopulate: true},
+    instance            : {type: Schema.ObjectId, ref: 'Instance', index: true, autopopulate: true}
   }
 });
 CommentSchema.plugin(autopopulate);
@@ -33,7 +32,6 @@ CommentSchema.plugin(autopopulate);
 //     (this.entity.product           ? 1 : 0)+
 //     (this.entity.promotion         ? 1 : 0)+
 //     (this.entity.instance          ? 1 : 0)+
-//     (this.entity.activity          ? 1 : 0);
 //
 //     if(val !== 1)
 //       return next(new Error('one of entity fields should be set'));
