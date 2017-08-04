@@ -16,6 +16,8 @@ class FeedConverter
             if(!feed.activity.actor_user){
                 return undefined;
             }
+
+
             let name = feed.activity.actor_user.phone_number;
             let contact = contacsMap.get(feed.activity.actor_user.phone_number);
             if (contact) {
@@ -56,6 +58,8 @@ class FeedConverter
                     showSocial: true,
                 }
             }
+            response.generalId = feed.activity.business._id;
+            response.entities = [{ business:feed.activity.business._id}];
 
             response.itemType = 'BUSINESS';
         }

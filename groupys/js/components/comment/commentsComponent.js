@@ -116,13 +116,14 @@ class CommentsComponent extends Component {
         return this.props.item;
     }
 
-    _onPressButton(){
-        commentApi.createGlobalComment(this.props.entities,this.state.messsage)
+   async _onPressButton(){
+       await commentApi.createGlobalComment(this.props.entities,this.state.messsage)
 
         this.setState({
             messsage:'',
         })
-        this.props.fetchEntityComments(this.props.entities,this.props.generalId)
+
+       this.props.fetchEntityComments(this.props.entities,this.props.generalId)
 
     }
     showComments(){
