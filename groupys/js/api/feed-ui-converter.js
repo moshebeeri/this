@@ -217,9 +217,10 @@ class FeedConverter
             let date = new Date(promotion.end);
             responseFeed.id = instance._id;
             responseFeed.fid = feed._id;
-            if(feed.activity){
-                responseFeed.activityId = feed.activity._id;
-            }
+
+            responseFeed.generalId = promotion._id;
+            responseFeed.entities = [{ promotion:promotion._id}];
+
 
 
             if(instance.social_state) {

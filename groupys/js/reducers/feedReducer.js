@@ -58,6 +58,12 @@ export default function feeds(state = initialState, action) {
             storeFeed['grouploadingDone' + action.groupid] = true;
 
             return storeFeed;
+
+        case 'GROUP_FEEDS_LOAD_DONE' :
+            let givenState = {...state};
+            givenState['grouploadingDone' + action.groupid] = true;
+
+            return givenState;
         case 'GET_SAVED_FEEDS' :
             store.save('savedFeeds',action.feeds)
             return {

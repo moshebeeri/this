@@ -17,6 +17,13 @@ async function fetchList(action,feeds,api,dispatch,groupid){
         }else{
             response =  await api.getAll('down',feeds[feeds.length-1].id);
         }
+
+        if(!response){
+            dispatchDone(dispatch,action,groupid);
+            return
+        }
+
+
         if(response.length > 0 && feeds.length > 0) {
             feeds =  addToRows(feeds,response, false);
 
@@ -40,17 +47,12 @@ async function fetchList(action,feeds,api,dispatch,groupid){
                     showTopLoader: false
                 });
             }
-        }else{
-            if(action = 'GET_FEEDS') {
-                dispatch({
-                    type: 'FEED_LOADING_DONE',
-                });
-            }else{
-                dispatch({
-                    type: 'SAVED_FEED_LOADING_DONE',
-                });
-            }
+
+            return;
         }
+
+        dispatchDone(dispatch,action,groupid);
+
 
     }catch (error){
        console.log('error')
@@ -60,10 +62,34 @@ async function fetchList(action,feeds,api,dispatch,groupid){
 
 }
 
+function dispatchDone(dispatch,action,groupid){
+
+    switch (action){
+        case 'GET_FEEDS':
+            dispatch({
+                type: 'FEED_LOADING_DONE',
+            });
+            break;
+        case 'GET_SAVED_FEEDS':
+            dispatch({
+                type: 'SAVED_FEED_LOADING_DONE',
+            });
+            break;
+        case 'GET_GROUP_FEEDS':
+            dispatch({
+                type: 'GROUP_FEEDS_LOAD_DONE',
+                groupid:groupid
+            });
+            break;
+    }
+
+
+}
+
 async function getFeedsFromStore(dispatch){
     try {
         let response = await store.get('feeds');
-        if(response) {
+        if(response){
 
             dispatch({
                 type: 'GET_FEEDS_FROM_STORE',

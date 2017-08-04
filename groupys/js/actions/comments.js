@@ -55,7 +55,6 @@ async function getGroupComments(dispatch,group){
 async function getEntityComments(dispatch,entities,id){
     try {
         let response = await commentsApi.getComment(entities);
-        if(response.length > 0) {
 
             dispatch({
                 type: 'GET_COMMENTS',
@@ -65,7 +64,7 @@ async function getEntityComments(dispatch,entities,id){
 
 
             });
-        }
+
 
 
     }catch (error){

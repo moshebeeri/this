@@ -122,6 +122,8 @@ class CommentsComponent extends Component {
         this.setState({
             messsage:'',
         })
+        this.props.fetchEntityComments(this.props.entities,this.props.generalId)
+
     }
     showComments(){
         let show = !this.state.showComment;
