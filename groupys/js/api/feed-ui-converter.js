@@ -131,6 +131,8 @@ class FeedConverter
             responseFeed.description = instance.promotion.description;
             let date = new Date(instance.promotion.end);
             responseFeed.endDate = date.toDateString();
+            responseFeed.generalId = instance.promotion._id;
+            responseFeed.entities = [{ promotion:instance.promotion._id}];
 
 
             switch (instance.type) {

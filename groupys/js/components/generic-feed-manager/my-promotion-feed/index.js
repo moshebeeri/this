@@ -87,13 +87,8 @@ export default class MyPromotionFeedItem extends Component {
 
         this.props.navigation.navigate('genericComments', {
             instance: this.props.item,
-            generalId:this.props.item.activityId,
-            entities:[
-                {
-                    activity:this.props.item.activityId
-                }
-
-            ]
+            generalId:this.props.item.generalId,
+            entities:this.props.item.entities,
 
         })
 
