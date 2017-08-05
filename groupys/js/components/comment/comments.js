@@ -31,7 +31,7 @@ class GenericComments extends Component {
 
 
     render() {
-        return    <KeyboardAvoidingView behavior={'position'} style={styles.inputContainer}>
+        return    <View behavior={'position'} style={styles.inputContainer}>
 
 
         <CommentsComponenet navigation={this.props.navigation}
@@ -39,7 +39,7 @@ class GenericComments extends Component {
                                     entities={this.props.navigation.state.params.entities}
                                     generalId={this.props.navigation.state.params.generalId}
                                     showComments={true}/>
-        </KeyboardAvoidingView>
+        </View>
     }
 
 }

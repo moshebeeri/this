@@ -53,9 +53,26 @@ class CommentsComponent extends Component {
 
 
     componentWillMount(){
-        //     this.props.fetchInstanceGroupComments(this.props.navigation.state.params.group._id,this.props.navigation.state.params.instance.id)
+        this.keyboardDidShowListener = Keyboard.addListener('keyboardDidShow', this._keyboardDidShow.bind(this));
+        this.keyboardDidHideListener = Keyboard.addListener('keyboardDidHide', this._keyboardDidHide.bind(this));
+
+    }
+    componentWillUnmount () {
+        this.keyboardDidShowListener.remove();
+        this.keyboardDidHideListener.remove();
     }
 
+    _keyboardDidShow () {
+        this.setState({
+            resizeCommenrs : true
+        })
+    }
+
+    _keyboardDidHide () {
+        this.setState({
+            resizeCommenrs : false
+        })
+    }
 
 
     async getAll(direction,id){
@@ -162,9 +179,16 @@ class CommentsComponent extends Component {
         let style = {
             height:90,backgroundColor:'#ebebeb'
         }
+
         if(this.state.showComment){
             style = {
-                height:520,backgroundColor:'#ebebeb'
+                height:550,backgroundColor:'#ebebeb'
+            }
+
+            if(this.state.resizeCommenrs){
+                style = {
+                    height:300,backgroundColor:'#ebebeb'
+                }
             }
             arrowIcon = "chevron-small-up";
 
@@ -208,12 +232,7 @@ class CommentsComponent extends Component {
                         <Text style={styles.promotion_type}>{item.itemTitle}</Text>
 
                     </View>
-                    <View style={styles.comment_colapse}>
-                        <Button   onPress={() => this.showComments()} style={styles.icon} transparent>
 
-                            <Icon2 style={{fontSize:35,color:"#dadada"}} name={arrowIcon}/>
-                        </Button>
-                    </View>
                 </View>
                 {commentsView}
                 {showMessageInput}
