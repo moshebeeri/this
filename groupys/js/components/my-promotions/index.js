@@ -52,7 +52,7 @@ class MyPromotions extends Component {
         return (
 
 
-            <GenericFeedManager loadingDone = {this.props.feeds.savedloadingDone} showTopTimer={this.props.feeds.savedShowTopLoader} feeds={this.props.feeds.savedfeeds} api={this} title='Feeds' ItemDetail={MyPromotionFeedItem}></GenericFeedManager>
+            <GenericFeedManager navigation={this.props.navigation} loadingDone = {this.props.feeds.savedloadingDone} showTopTimer={this.props.feeds.savedShowTopLoader} feeds={this.props.feeds.savedfeeds} api={this} title='Feeds' ItemDetail={MyPromotionFeedItem}></GenericFeedManager>
 
         );
     }

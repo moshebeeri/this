@@ -26,7 +26,7 @@ export default class FeedBusiness extends Component {
 
 
     render(){
-        return this.createBussines(this.props.item,this.props.like,this.props.unlike,this.props.showUsers)
+        return this.createBussines(this.props.item,this.props.like,this.props.unlike,this.props.showUsers,this.props.comment)
     }
 
 

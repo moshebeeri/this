@@ -29,6 +29,13 @@ export default function comment(state = initialState, action) {
             currentState['comment'+ action.gid ] = action.groupcomments;
             currentState['LoadingDone'+ action.gid ] = true;
             return currentState;
+        case 'GET_COMMENTS' :
+
+
+            currentState['comment'+ action.id ] = action.comments;
+            currentState['LoadingDone'+ action.id ] = true;
+            return currentState;
+
         default:
             return state;
     }

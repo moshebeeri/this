@@ -16,6 +16,8 @@ class FeedConverter
             if(!feed.activity.actor_user){
                 return undefined;
             }
+
+
             let name = feed.activity.actor_user.phone_number;
             let contact = contacsMap.get(feed.activity.actor_user.phone_number);
             if (contact) {
@@ -56,6 +58,8 @@ class FeedConverter
                     showSocial: true,
                 }
             }
+            response.generalId = feed.activity.business._id;
+            response.entities = [{ business:feed.activity.business._id}];
 
             response.itemType = 'BUSINESS';
         }
@@ -125,6 +129,10 @@ class FeedConverter
 
            responseFeed.name = instance.promotion.name;
             responseFeed.description = instance.promotion.description;
+            let date = new Date(instance.promotion.end);
+            responseFeed.endDate = date.toDateString();
+            responseFeed.generalId = instance.promotion._id;
+            responseFeed.entities = [{ promotion:instance.promotion._id}];
 
 
             switch (instance.type) {
@@ -215,6 +223,11 @@ class FeedConverter
             let date = new Date(promotion.end);
             responseFeed.id = instance._id;
             responseFeed.fid = feed._id;
+
+            responseFeed.generalId = promotion._id;
+            responseFeed.entities = [{ promotion:promotion._id}];
+
+
 
             if(instance.social_state) {
                 responseFeed.social = {

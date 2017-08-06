@@ -71,11 +71,11 @@ module.exports = function (socketio) {
     // Call onDisconnect.
     socket.on('disconnect', function () {
       onDisconnect(socket);
-      console.info('[%s] DISCONNECTED', socket.address);
+      console.info('[%s] DISCONNECTED', socket.handshake.address);
     });
 
     // Call onConnect.
     onConnect(socket);
-    console.info('[%s] CONNECTED', socket.address);
+    console.info('[%s] CONNECTED', socket.handshake.address);
   });
 };

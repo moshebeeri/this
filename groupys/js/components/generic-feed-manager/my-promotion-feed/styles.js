@@ -276,10 +276,10 @@ module.exports = {
     },
 
     promotion_addressText:{
-        fontFamily:'Roboto-Regular',marginRight:20,marginLeft:10,marginTop:0,marginBottom:5,color:'gray',fontSize:18
+        fontFamily:'Roboto-Regular',marginRight:20,marginLeft:10,marginTop:0,marginBottom:5,color:'gray',fontSize:16
     },
     promotion_nameText:{
-        fontFamily:'Roboto-Black',fontWeight: 'bold',marginRight:20,marginLeft:10,marginTop:5,marginBottom:5,color:'black',fontSize:18
+        fontFamily:'Roboto-Black',fontWeight: 'bold',marginRight:20,marginLeft:10,marginTop:5,marginBottom:5,color:'black',fontSize:16
     },
 
 

@@ -25,6 +25,7 @@ if(config.initializeNeo4j) { require('./config/initNeo4j'); }
 
 // Setup server
 let app = express();
+//to disable 304 app.disable('etag');
 let server = require('http').createServer(app);
 let socketio = require('socket.io')(server, {
   serveClient: config.env !== 'production',

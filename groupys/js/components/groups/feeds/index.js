@@ -75,15 +75,19 @@ class GroupFeed extends Component {
     fetchTop(id){
         let groupid = this.props.navigation.state.params.group._id;
         let groupFeeds = 'groups'+ groupid;
+        if(this.props.feeds[groupFeeds] && this.props.feeds[groupFeeds].length >0) {
 
-        this.props.fetchGroupTop(groupid,'GET_GROUP_FEEDS',this.props.feeds[groupFeeds],this.props.feeds[groupFeeds][0].id,this);
+            this.props.fetchGroupTop(groupid, 'GET_GROUP_FEEDS', this.props.feeds[groupFeeds], this.props.feeds[groupFeeds][0].id, this);
+        }
     }
 
     async _onPressButton(){
         let groupid = this.props.navigation.state.params.group._id;
         let groupFeeds = 'groups'+ groupid;
         await groupApi.meesage(groupid,this.state.messsage);
-        this.props.fetchGroupTop(groupid,'GET_GROUP_FEEDS',this.props.feeds[groupFeeds],this.props.feeds[groupFeeds][0].id,this);
+        if(this.props.feeds[groupFeeds] && this.props.feeds[groupFeeds].length >0) {
+            this.props.fetchGroupTop(groupid, 'GET_GROUP_FEEDS', this.props.feeds[groupFeeds], this.props.feeds[groupFeeds][0].id, this);
+        }
         this.setState({
             messsage:'',
             showEmoji:false,

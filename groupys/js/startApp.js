@@ -28,6 +28,7 @@ import QrCode from './components/qrcode/index';
 import InstanceGroupComments from './components/groups/feeds/comments'
 import AddPermittedUser from './components/premitedUsers/addForm/index'
 import UserPermittedRoles from './components/premitedUsers/index'
+import GenericComments from './components/comment/comments'
 // var PushNotification = require('react-native-push-notification');
 //
 // PushNotification.configure({
@@ -85,7 +86,8 @@ const AppNavigator = StackNavigator({
     SelectGroupsComponent:{screen:SelectGroupsComponent},
     InstanceGroupComments:{screen:InstanceGroupComments},
     addPremitedUsers:{screen:AddPermittedUser},
-    userPermittedRoles: {screen:UserPermittedRoles}
+    userPermittedRoles: {screen:UserPermittedRoles},
+    genericComments:{screen:GenericComments}
 
 
 
