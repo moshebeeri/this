@@ -24,6 +24,7 @@
     "express-jwt": "3.4.0",
     "express-session": "1.0.4",
     "file-base64": "^1.0.0",
+    "firebase-admin": "^5.1.0",
     "gaussian": "^1.1.0",
     "gm": "1.23.0",
     "grunt": "0.4.5",

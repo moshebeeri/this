@@ -19,6 +19,9 @@ let UserSchema = new Schema({
     type: String,
     default: 'user'
   },
+  firebase:{
+    tokens : [{ type: String}],
+  },
   hashedPassword: String,
   provider: String,
   salt: String,
