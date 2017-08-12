@@ -13,5 +13,6 @@ router.put('/:id', auth.isAuthenticated(), controller.update);
 router.patch('/:id', auth.isAuthenticated(), controller.update);
 router.delete('/:id', auth.hasRole('admin'), controller.destroy);
 router.get('/list/mine', auth.isAuthenticated(), controller.mine);
+router.get('/follow/:business', auth.isAuthenticated(), controller.follow);
 
 module.exports = router;

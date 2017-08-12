@@ -6,11 +6,8 @@ let async = require('async');
 let User = require('./user.model');
 let Business = require('../business/business.model');
 let ShoppingChain = require('../shoppingChain/shoppingChain.model');
-let Product = require('../product/product.model');
-let Promotion = require('../promotion/promotion.model');
 let Mall = require('../mall/mall.model');
-let Category = require('../category/category.model');
-let CardType = require('../cardType/cardType.model');
+let Group = require('../group/group.model');
 
 let PhoneNumber = require('../phone_number/phone_number.model');
 let passport = require('passport');
@@ -27,7 +24,6 @@ let graphTools = require('../../components/graph-tools');
 let graphModel = graphTools.createGraphModel('user');
 
 let activity = require('../../components/activity').createActivity();
-let Activity = require('../activity/activity.model');
 
 let validationError = function (res, err) {
   let firstKey = getKey(err.errors);
@@ -54,47 +50,34 @@ exports.index = function (req, res) {
   });
 };
 
-let like_generates_follow = function (userId, itemId) {
-  async.parallel({
-      user: function (callback) {
-        User.findById(itemId, callback);
+let generate_follow = function (userId, itemId) {
+  graphModel.relate_ids(userId, 'FOLLOW', itemId, function (err) {
+    async.parallel({
+        user: function (callback) {
+          User.findById(itemId, callback);
+        },
+        business: function (callback) {
+          Business.findById(itemId, callback);
+        },
+        group: function (callback) {
+          Group.findById(itemId, callback);
+        },
+        shoppingChain: function (callback) {
+          ShoppingChain.findById(itemId, callback);
+        },
+        mall: function (callback) {
+          Mall.findById(itemId, callback);
+        }
       },
-      business: function (callback) {
-        Business.findById(itemId, callback);
-      },
-      shoppingChain: function (callback) {
-        ShoppingChain.findById(itemId, callback);
-      },
-      product: function (callback) {
-        Product.findById(itemId, callback);
-      },
-      promotion: function (callback) {
-        Promotion.findById(itemId, callback);
-      },
-      mall: function (callback) {
-        Mall.findById(itemId, callback);
-      },
-      category: function (callback) {
-        Category.findById(itemId, callback);
-      },
-      cardType: function (callback) {
-        CardType.findById(itemId, callback);
-      }
-    },
-    function (err, results) {
-      // results is now equals to: {one: 1, two: 2}
-      if (results.user ||
-        results.business ||
-        results.shoppingChain ||
-        results.product ||
-        results.promotion ||
-        results.mall ||
-        results.category ||
-        results.cardType) {
-        graphModel.relate_ids(userId, 'FOLLOW', itemId);
-        activity_follow(userId, itemId);
-      }
-    });
+      function (err, results) {
+        // results is now equals to: {one: 1, two: 2}
+        if (results.user)               {activity_follow(userId, {user: results.user._id})}
+        else if( results.business )     {activity_follow(userId, {business: results.business._id})}
+        else if( results.group )        {activity_follow(userId, {group: results.group._id})}
+        else if( results.shoppingChain ){activity_follow(userId, {shoppingChain: results.shoppingChain._id})}
+        else if( results.mall )         {activity_follow(userId, {mall: results.mall._id})}
+      });
+  });
 };
 
 /**
@@ -109,9 +92,10 @@ let like_generates_follow = function (userId, itemId) {
  */
 exports.like = function (req, res) {
   let userId = req.user._id;
-  graphModel.relate_ids(userId, 'LIKE', req.params.id);
-  activity.action_activity(userId, req.params.id, 'like');
-  like_generates_follow(userId, req.params.id);
+  graphModel.relate_ids(userId, 'LIKE', req.params.id, function (err) {
+    if(err) return handleError(res, err);
+    generate_follow(userId, req.params.id);
+  });
   return res.json(200, "like called for object " + req.params.id + " and user " + userId);
 };
 
@@ -142,9 +126,7 @@ exports.save = function (req, res) {
 
 exports.follow = function (req, res) {
   let userId = req.user._id;
-  graphModel.relate_ids(userId, 'FOLLOW', req.params.id);
-  activity_follow(userId, req.params.id);
-
+  generate_follow(userId, req.params.id);
   return res.json(200, "like called for object " + req.params.id + " and user " + userId);
 };
 
@@ -329,7 +311,7 @@ function new_user_follow(user) {
       //We have this number, make user follow the users who have his number
       phone_number.contacts.forEach(function (contact) {
         graphModel.follow_user_by_phone_number(user.phone_number, contact.userId);
-        activity_follow(user._id, contact.userId);
+        activity_follow(user._id, {user: contact.userId});
       });
       graphModel.owner_followers_follow_business(user._id);
       phone_number.owner = user._id;
@@ -338,22 +320,10 @@ function new_user_follow(user) {
   });
 }
 
-function activity_follow(follower, followed) {
-  Activity.create({
-    user: followed,
-    actor_user: follower,
-    action: 'followed'
-  }, function (err) {
-    if (err) {
-      logger.error(err.message)
-    }
-  });
-
-  Activity.create({
-    user: follower,
-    actor_user: followed,
-    action: 'following'
-  }, function (err) {
+function activity_follow(follower, partial_activity) {
+  partial_activity.action = 'follow';
+  partial_activity.actor_user = follower;
+  activity.activity(partial_activity, function (err) {
     if (err) {
       logger.error(err.message)
     }

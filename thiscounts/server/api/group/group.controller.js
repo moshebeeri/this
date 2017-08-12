@@ -144,7 +144,7 @@ exports.create_business_default_group = function (group, callback) {
       graphModel.relate_ids(group._id, 'CREATED_BY', group.creator);
       graphModel.relate_ids(group.creator, 'FOLLOW', group._id);
       graphModel.relate_ids(group.creator, 'GROUP_ADMIN', group._id);
-      graphModel.relate_ids(group.entity, 'HAS_GROUP', group._id, function (err) {
+      graphModel.relate_ids(group.entity.business, 'DEFAULT_GROUP', group._id, function (err) {
         if (err) return console.log(err);
         return callback(null, group);
       });

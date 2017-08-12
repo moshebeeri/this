@@ -11,6 +11,7 @@ let spatial = require('../../components/spatial').createSpatial();
 let location = require('../../components/location').createLocation();
 let utils = require('../../components/utils').createUtils();
 let activity = require('../../components/activity').createActivity();
+let group_controller = require('../group/group.controller');
 
 exports.address2 = function (req, res) {
   location.address(req.body.address, function (err, data) {
@@ -67,7 +68,7 @@ exports.mine = function (req, res) {
       userRoleById[business_role.business_id] = business_role.type==='OWNS'? 'OWNS' : business_role.role.properties.name;
     });
     Business.find({}).where('_id').in(_ids)
-      .sort({_id: "desc"})
+      .sort({_id: 'desc'})
       .exec(function (err, businesses) {
       if (err) return handleError(res, err);
       let info = [];
@@ -80,19 +81,55 @@ exports.mine = function (req, res) {
       return res.status(200).json(info);
     });
   })
-  // Business.find({'creator': userId}, function (err, businesses) {
-  //   if (err) {
-  //     return handleError(res, err);
-  //   }
-  //   if (!defined(businesses)) {
-  //     return res.status(404).send('Not Found');
-  //   }
-  //   return res.status(200).json(businesses);
-  // });
+};
+
+function business_follow_activity(follower, business) {
+  activity.activity({
+    business: business,
+    actor_user: follower,
+    action: 'follow'
+  }, function (err) {
+    if (err) console.error(err.message)
+  });
+}
+
+exports.follow = function (req, res) {
+  let userId = req.user._id;
+  let businessId = req.params.business;
+  let query = `MATCH (user:user{_id:"${userId}"})-[f:FOLLOW]->(b:business{_id:"${businessId}"}) return count(f)`;
+  graphModel.query(query, function (err, count) {
+    if(err) return handleError(res, err);
+    if(count>0) return handleError(res, new Error('user already follows'));
+    graphModel.relate_ids(userId, 'FOLLOW', businessId, function (err) {
+      business_follow_activity(userId, businessId);
+      let query = `MATCH (b:business{_id:"${businessId}"})-[d:DEFAULT_GROUP]->(g:group) 
+                    CREATE UNIQUE (user:user{_id:"${userId}"})-[f:FOLLOW]->(g)`;
+      graphModel.query(query, function (err) {
+      if (err) return handleError(res, err);
+      return res.status(200);
+      })
+    });
+  })
 };
 
 function defined(obj) {
   return utils.defined(obj);
+}
+
+function create_business_default_group(business) {
+  group_controller.create_business_default_group({
+    name: business.name,
+    description: business.name + ' default group',
+    creator: business.creator,
+    admins: [business.creator],
+    entity: {business: business._id},
+    entity_type: 'BUSINESS',
+    add_policy: 'OPEN',
+    post_policy: 'MANAGERS',
+  }, function (err, group) {
+    if (err) return console.error(err.message);
+    console.log(`default group created successfully ${JSON.stringify(group)}`)
+  });
 }
 
 exports.create = function (req, res) {
@@ -154,6 +191,7 @@ exports.create = function (req, res) {
           }, function (err) {
             if (err) console.error(err.message)
           });
+          create_business_default_group(business);
           return res.status(201).json(business);
         });
       });
