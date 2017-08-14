@@ -49,7 +49,7 @@ function extract_ids(list){
   return ret;
 }
 
-// Creates a new comment in the DB.
+// Creates a new comment.
 exports.create = function(req, res) {
   let comment = req.body;
   let entities = extract_ids(comment.entities);

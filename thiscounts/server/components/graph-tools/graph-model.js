@@ -29,6 +29,15 @@ GraphModel.prototype.reflect = function reflect(object, g_object, callback) {
   });
 };
 
+GraphModel.prototype.reflect_create = function reflect(object, create, callback) {
+  db.query(object, function(err, in_graph) {
+    if(err) callback(err, null );
+    object.gid = in_graph.id;
+    object.save(function (err) {});
+    callback(null, object )
+  });
+};
+
 GraphModel.prototype.save = function save(object, callback) {
   this.model.save(object, function(err, object) {
     if(err) callback(err, object );
@@ -71,9 +80,9 @@ GraphModel.prototype.relate = function relate(from, name, to, properties, callba
 
 
 GraphModel.prototype.unrelate = function unrelate(from, name, to){
-  let query = " MATCH (f)-[r:{name}]->(t) \
-                WHERE id(f)={from} and id(t)={to} \
-                delete r";
+  let query = ` MATCH (f)-[r:{name}]->(t) 
+                WHERE id(f)=${from} and id(t)=${to} 
+                delete r;`;
   db.query(query, {from: from, name: name, to: to}, function(err) {
     if (err) { logger.error(err.message); }
   });
