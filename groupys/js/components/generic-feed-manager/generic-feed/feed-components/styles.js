@@ -128,7 +128,7 @@ module.exports = {
 
     promotion_container: {
         flex: 1,
-        height: 540,
+        height: 560,
         width: width ,
         overflow: 'hidden',
         backgroundColor:'#b7b7b7',
@@ -159,22 +159,22 @@ module.exports = {
     promotion_card:{
         alignItems: 'center',
         flexDirection: 'column',
+        backgroundColor:'#b7b7b7',
+        width: width,
 
-        width: width -16,
 
-         backgroundColor:'#FFF',
         borderRadius:2,
 
     },
     promotion_image:{
-        width: width -18, height: 250, alignSelf: 'flex-start',
+        width: width , height: 250,borderWidth:10
     },
     promotion_upperContainer: {
 
         backgroundColor:'white',
         width: width -20,
         borderRadius:2,
-        height: 100,
+        height: 120,
         flexDirection: 'column'
 
     },
@@ -194,8 +194,9 @@ module.exports = {
     },
 
     promotion_description:{
-        flexDirection: 'row',
-        marginLeft:10,
+        flexDirection: 'column',
+        margin:10,
+        height: 50,
         marginTop:2
     },
 
@@ -221,7 +222,7 @@ module.exports = {
         fontFamily:'Roboto-Regular',fontWeight: 'bold',  marginLeft:10,marginTop:5,fontSize:18,color:'black'
     },
     promotion_text_description:{
-        fontFamily:'Roboto-Regular',  marginLeft:10,marginTop:0,fontSize:14,color:'black'
+        fontFamily:'Roboto-Regular', marginLeft:10,marginTop:0,fontSize:14,color:'black'
     },
     promotion_buttonText: {
         paddingTop:10,
