@@ -15,16 +15,26 @@ export default function feeds(state = initialState, action) {
     switch (action.type) {
 
         case 'GET_FEEDS' :
-            let feeds = filterFeed(action.feeds);
-            store.save('feeds',feeds)
+            if(action.feeds && action.feeds.length > 0) {
+                let feeds = filterFeed(action.feeds);
+                store.save('feeds', feeds)
 
-            return {
-                ...state,
-                feeds : action.feeds,
-                showTopLoader : action.showTopLoader,
-                loadingDone: true,
-                nextLoad:false,
-            };
+
+                return {
+                    ...state,
+                    feeds: action.feeds,
+                    showTopLoader: action.showTopLoader,
+                    loadingDone: true,
+                    nextLoad: false,
+                }
+            }else {
+                return {
+                    ...state,
+                    showTopLoader: action.showTopLoader,
+                    loadingDone: true,
+                    nextLoad: false,
+                }
+            }
 
         case 'GET_FEEDS_FROM_STORE' :
             if(action.feeds.length > 0){
@@ -95,6 +105,11 @@ export default function feeds(state = initialState, action) {
             return {
                 ...state,
                 showTopLoader : true
+            };
+        case 'HIDE_TOP_LOADER':
+            return {
+                ...state,
+                showTopLoader : false
             };
         case 'SHOW_SAVED_TOP_LOADER' :
             return {
