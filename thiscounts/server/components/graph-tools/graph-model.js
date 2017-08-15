@@ -309,7 +309,6 @@ GraphModel.prototype.query_objects = function query_objects(schema, query, order
   this.query_ids(query, order, skip, limit, function(err, _ids) {
     if (err) { callback(err, null) }
     schema.find({}).where('_id').in(_ids).exec(function (err, objects) {
-      console.log(objects.length);
       if (err) { return callback(err, null) }
       return callback(null, objects)
     });

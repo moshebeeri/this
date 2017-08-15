@@ -14,7 +14,7 @@ exports.generate = function(msg) {
 };
 
 function handleError(res, err) {
-  return res.send(500, err);
+  return res.status(500).send(err);
 }
 
 exports.fetch_feed = function(userId, query_builder, Model, res) {
