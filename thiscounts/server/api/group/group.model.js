@@ -4,28 +4,23 @@ const mongoose = require('mongoose'),
     Schema = mongoose.Schema;
 let _ = require('lodash');
 let utils = require('../../components/utils').createUtils();
+const autopopulate = require('mongoose-autopopulate');
 
 function entity_validator(v) {
   if (_.isNull(v))
     return false;
-  let defs = 0;
+  let i = 0;
   if(utils.defined(v.user))
-    defs++;
+    i++;
   if(utils.defined(v.business))
-    defs++;
+    i++;
   if(utils.defined(v.shopping_chain))
-    defs++;
+    i++;
   if(utils.defined(v.mall))
-    defs++;
-  return defs === 1
+    i++;
+  return i === 1
 }
 
-const Entities = {
-  user: {type: Schema.ObjectId, ref: 'User'},
-  business: {type: Schema.ObjectId, ref: 'Business'},
-  shopping_chain: {type: Schema.ObjectId, ref: 'ShoppingChain'},
-  mall: {type: Schema.ObjectId, ref: 'Mall'}
-};
 
 const GroupSchema = new Schema({
   name: String,
@@ -35,8 +30,12 @@ const GroupSchema = new Schema({
   creator: {type: Schema.ObjectId, ref: 'User', required: true},
   admins: [{type: Schema.ObjectId, ref: 'User', index: true}],
 
-  entity: {type: Entities, require: true,
-    validate: [entity_validator, 'at least on of those fields should not be empty [business, user, chain, mall]'],
+  entity: {
+    user: {type: Schema.ObjectId, ref: 'User', autopopulate: true},
+    business: {type: Schema.ObjectId, ref: 'Business', autopopulate: true},
+    shopping_chain: {type: Schema.ObjectId, ref: 'ShoppingChain', autopopulate: true},
+    mall: {type: Schema.ObjectId, ref: 'Mall', autopopulate: true},
+    validate: [entity_validator, 'at least on of those fields should not be empty [business, product, chain, mall]']
   },
   entity_type: {
     type: String,
@@ -71,5 +70,7 @@ const GroupSchema = new Schema({
   },
   pictures: []
 });
+
+GroupSchema.plugin(autopopulate);
 
 module.exports = mongoose.model('Group', GroupSchema);

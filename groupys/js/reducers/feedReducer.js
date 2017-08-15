@@ -15,7 +15,9 @@ export default function feeds(state = initialState, action) {
     switch (action.type) {
 
         case 'GET_FEEDS' :
-            store.save('feeds',action.feeds)
+            let feeds = filterFeed(action.feeds);
+            store.save('feeds',feeds)
+
             return {
                 ...state,
                 feeds : action.feeds,
@@ -26,9 +28,10 @@ export default function feeds(state = initialState, action) {
 
         case 'GET_FEEDS_FROM_STORE' :
             if(action.feeds.length > 0){
+                let feeds = filterFeed(action.feeds);
                 return {
                     ...state,
-                    feeds : action.feeds,
+                    feeds : feeds,
                     loadingDone: true,
                     nextLoad:false,
                     showTopLoader :false,
@@ -106,6 +109,7 @@ export default function feeds(state = initialState, action) {
 
             let feedState= {...state};
             let updatedFeeds = updateFeeds(feedState,action.feed);
+            updatedFeeds = filterFeed(updatedFeeds);
             store.save('feeds',updatedFeeds)
             return {
                 ...state,
@@ -131,6 +135,7 @@ export default function feeds(state = initialState, action) {
     }
 };
 
+
 function updateFeeds(feedState,feed) {
 
    return feedState.feeds.map(function (item) {
@@ -140,4 +145,23 @@ function updateFeeds(feedState,feed) {
        return item;
     })
 
+}
+
+function filterFeed(feeds){
+    let feedIds = new Set();
+
+    feeds = feeds.filter(function (feed) {
+        if(!feed.id){
+            return false;
+        }
+        if(feedIds.has(feed.id)){
+            return false;
+        }
+
+        feedIds.add(feed.id)
+        return true;
+
+    })
+
+    return feeds;
 }
