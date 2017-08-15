@@ -35,6 +35,7 @@ exports.create = function(req, res) {
         lat: location.lat,
         lon: location.lng,
         speed: location.speed,
+        time: new Date(),
         userId: userId
       }, function(err, location){
         spatial.add2index(location.id, function(err, result){
