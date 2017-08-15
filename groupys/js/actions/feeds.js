@@ -167,6 +167,10 @@ function addToRows(feeds,response,top){
 async function fetchTopList(action,feeds,id,api,dispatch,groupid){
     try {
         if(feeds.length > 0 ) {
+            feeds = feeds.filter(function (feed) {
+                return feed.id
+
+            })
             if (id == feeds[0].id) {
 
                 let response = await api.getAll('up', feeds[0].id);
