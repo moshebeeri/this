@@ -26,7 +26,7 @@ class FeedConverter
             if (feed.activity.business.pictures.length > 0) {
                 response = {
                     id: feed.activity.business._id,
-                    fid: feed.fid,
+                    fid: feed._id,
                     social: {
                         like: feed.activity.actor_user.social_state.like,
                         numberLikes: feed.activity.actor_user.social_state.likes,
@@ -45,7 +45,7 @@ class FeedConverter
 
                 response = {
                     id: feed.activity.business._id,
-                    fid: feed.fid,
+                    fid: feed._id,
                     social: {
                         like: feed.activity.actor_user.social_state.like,
                         numberLikes: feed.activity.actor_user.social_state.likes,
@@ -70,6 +70,7 @@ class FeedConverter
             if (!user) {
                 user = feed.activity.user;
             }
+
             let name = user.phone_number;
             let contact = contacsMap.get(user.phone_number);
             if (contact) {
@@ -81,7 +82,7 @@ class FeedConverter
 
             response = {
                 id: feed._id,
-
+                fid: feed._id,
                 actor: user._id,
                 showSocial: false,
                 description: feed.activity.message,
