@@ -224,7 +224,7 @@ exports.message = function (req, res) {
 };
 
 exports.touch = function (req, res) {
-  let query = `match (u:user{_id:'${req.user._id}'})-[r:FOLLOW]->(g:group{_id:'${req.params.group_id}'}) set r.timestamp=timestamp()`
+  let query = `match (u:user{_id:'${req.user._id}'})-[r:FOLLOW]->(g:group{_id:'${req.params.group_id}'}) set r.timestamp=timestamp()`;
   graphModel.query(query, function (err) {
     if (err) console.error(err.message);
   });
@@ -462,7 +462,7 @@ exports.user_follow = function (req, res) {
   let limit = req.params.limit;
 
   graphModel.query_objects(Group,
-    `MATCH (u:user {_id:'${req.user._id}'})-[r:FOLLOW]->(g:group) RETURN g._id as _id`,
+    `MATCH (u:user {_id:'${req.user._id}'})-[r:FOLLOW]->(g:group) RETURN g._id as _id, r.timestamp as touched`,
     'order by r.timestamp desc', skip, limit, function (err, groups) {
       if (err) return handleError(res, err);
       getGroupsLastInfo(groups, function (err, groups_previews) {

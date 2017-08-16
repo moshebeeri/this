@@ -204,6 +204,14 @@ exports.create = function (req, res, next) {
             } else {
               new_user_follow(user);
             }
+            activity.activity({
+              user: user,
+              action: "welcome",
+              actor_user: user,
+              audience: ['SELF']
+            }, function (err) {
+              if (err) logger.error(err.message)
+            });
             res.status(200).json({token: token});
           });
       });
