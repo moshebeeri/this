@@ -56,7 +56,7 @@ class Product extends Component {
                     direction="right"
                     active={false}
                     containerStyle={{ marginLeft: 10 }}
-                    style={{ backgroundColor: "#ffb3b3" }}
+                    style={{ backgroundColor: "#ff6400" }}
                     position="bottomRight"
                     onPress={() => this.navigateToAdd()}>
                    <Icon size={20} name="plus" />

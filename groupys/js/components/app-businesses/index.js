@@ -187,12 +187,12 @@ import * as businessAction from "../../actions/business";
                 <Fab
 
                     direction="right"
-                    active={showAction}
+                    active={false}
                     containerStyle={{ marginLeft: 10 }}
                     style={{ backgroundColor: "#ff6400" }}
                     position="bottomRight"
                     onPress={() => this.navigateToAdd()}>
-                    <Icon name="add" />
+                    <Icon size={20} name="add" />
 
                 </Fab>
         }
