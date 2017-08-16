@@ -29,6 +29,7 @@ import InstanceGroupComments from './components/groups/feeds/comments'
 import AddPermittedUser from './components/premitedUsers/addForm/index'
 import UserPermittedRoles from './components/premitedUsers/index'
 import GenericComments from './components/comment/comments'
+import Businesses from './components/business/index'
 // var PushNotification = require('react-native-push-notification');
 //
 // PushNotification.configure({
@@ -87,7 +88,8 @@ const AppNavigator = StackNavigator({
     InstanceGroupComments:{screen:InstanceGroupComments},
     addPremitedUsers:{screen:AddPermittedUser},
     userPermittedRoles: {screen:UserPermittedRoles},
-    genericComments:{screen:GenericComments}
+    genericComments:{screen:GenericComments},
+
 
 
 

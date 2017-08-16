@@ -6,9 +6,8 @@ module.exports = {
   header: {
     width: Dimensions.get('window').width,
       flexDirection: 'column',
-    marginLeft: (Platform.OS === 'ios') ? undefined : -15,
-      backgroundColor: 'white',
 
+      height:50
   },
     button:{
         backgroundColor: 'transparent'
