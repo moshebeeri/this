@@ -18,6 +18,10 @@ const noPic = require('../../../images/client_1.png');
 const briefcase = require('../../../images/briefcase.png');
 const qrcode = require('../../../images/qr-code.png');
 const settings =  require('../../../images/settings-work-tool.png');
+const changePassword =  require('../../../images/change-password-img.png');
+
+
+
 
 import UserApi from '../../api/user'
 import login from './drwaer-theme';
@@ -59,6 +63,11 @@ class ProfileDrawer extends Component {
 
     showUserProfile(){
         this.replaceRoute('UserProfile');
+
+    }
+
+    changePassword(){
+        this.replaceRoute('changePassword');
 
     }
 
@@ -116,6 +125,12 @@ class ProfileDrawer extends Component {
 
                 </TouchableOpacity>
 
+                <TouchableOpacity    onPress={() => this.changePassword()}  style={{ margin:3, flexDirection: 'row', alignItems: 'center', } } regular>
+                    <Image style={{marginLeft:10,width:30,height:30}} source={changePassword}/>
+
+                    <Text style={{ padding:20,color:'#67ccf8',fontStyle: 'normal',fontSize:15 }}>Change Password </Text>
+
+                </TouchableOpacity>
 
 
             </Content>

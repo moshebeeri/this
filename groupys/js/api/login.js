@@ -116,6 +116,81 @@ class LoginApi
 
 
     }
+
+    recoverPassword(phoneNumber,callingCode) {
+
+        let normalizedPhone = this.clean_phone_number(phoneNumber);
+
+        return new Promise(async(resolve, reject) => {
+            try {
+
+                const response = await fetch(`${server_host}/api/users/password/` + normalizedPhone, {
+                    method: 'GET',
+                    headers: {
+                        'Accept': 'application/json, text/plain, */*',
+                        'Content-Type': 'application/json;charset=utf-8',
+                    }
+                });
+                if (response.status ===   '401') {
+                    reject({error: 'Signup Failed Validation'});
+                    return;
+                }
+
+                let responseData = await response.json();
+
+                resolve(responseData);
+            }
+            catch (error) {
+
+                console.log('There has been a problem with your fetch operation: ' + error.message);
+                reject({error: 'signup Failed '});
+            }
+        })
+
+
+    }
+
+    changePassword(oldPassword,newPassowrd,userId) {
+
+
+        return new Promise(async(resolve, reject) => {
+            try {
+                let token = await store.get('token');
+
+                const response = await fetch(`${server_host}/api/users/`+userId+ `/password/` , {
+                    method: 'PUT',
+                    headers: {
+                        'Accept': 'application/json, text/plain, */*',
+                        'Content-Type': 'application/json;charset=utf-8',
+                        'Authorization': 'Bearer ' + token,
+                    },
+                    body: JSON.stringify({
+                        oldPassword: oldPassword,
+                        newPassword: newPassowrd,
+                    })
+                });
+
+                if(response.status ==   '200'){
+                    resolve(true);
+                }
+
+
+
+
+
+                reject({error: 'Old Passowrd Validation failed'});
+            }
+            catch (error) {
+
+                console.log('There has been a problem with your fetch operation: ' + error.message);
+                reject({error: 'signup Failed '});
+            }
+        })
+
+
+    }
+
+
 }
 
 export default LoginApi;

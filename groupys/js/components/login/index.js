@@ -139,6 +139,9 @@ export default  class Login extends Component {
         this.props.navigation.navigate(route);
     // this.props.replaceAt('login', { key: route }, this.props.navigation.key);
 }
+    forgetPassowrd(){
+      loginApi.recoverPassword(this.state.phoneNumber,'')
+    }
 
     render() {
 
@@ -182,7 +185,7 @@ export default  class Login extends Component {
                            </Item>
 
                             <View style={styles.signup_container}>
-                               <Text style={styles.forgetText}>Forgot Password</Text>
+                               <Text onPress={this.forgetPassowrd.bind(this)}  style={styles.forgetText}>Forgot Password</Text>
                                <Text onPress={() => this.replaceRoute('Signup')} style={styles.signgupText} >Sign Up</Text>
                             </View>
                            <Text style={{backgroundColor:'transparent',padding: 10, fontSize: 16, color: 'red'}}>
