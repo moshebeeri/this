@@ -12,7 +12,7 @@ module.exports = {
 
         marginLeft:1 ,
         marginRight:3 ,
-
+        fontSize:25,
 
     },
     imageTopText:{

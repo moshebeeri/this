@@ -41,7 +41,15 @@ export default class GenericListGroupView extends Component {
         if(group.pictures && group.pictures.length > 0) {
             image =  <Thumbnail large square  source={{uri: group.pictures[0].pictures[3]}} />
 
+        }else{
+            if(group.entity && group.entity.business ){
+                image =  <Thumbnail large square  source={{uri: group.entity.business.pictures[0].pictures[3]}} />
+
+
+            }
         }
+
+
 
             row = <TouchableOpacity  onPress={this.showGroupFeeds.bind(this,this.props,group)}  >
                     <View style = {styles.group_container}>

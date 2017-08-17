@@ -173,12 +173,19 @@ async function fetchTopList(action,feeds,id,api,dispatch,groupid){
             })
             if (id == feeds[0].id) {
 
-                let response = await api.getAll('up', feeds[0].id);
+                let response = await api.getAll('up', feeds[0].fid);
                 if(response.length > 0) {
                     feeds = addToRows(feeds,response, true);
                     dispatch({
                         type: action,
                         feeds: feeds,
+                        showTopLoader: false,
+                        groupid:groupid
+                    });
+                }else{
+                    dispatch({
+                        type: action,
+                        feeds: {},
                         showTopLoader: false,
                         groupid:groupid
                     });
@@ -245,6 +252,15 @@ export function showTopLoader(){
     return function (dispatch, getState){
         dispatch({
             type:'SHOW_TOP_LOADER'
+        });
+    }
+
+}
+
+export function hideTopLoader(){
+    return function (dispatch, getState){
+        dispatch({
+            type:'HIDE_TOP_LOADER'
         });
     }
 

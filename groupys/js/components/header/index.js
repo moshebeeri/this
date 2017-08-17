@@ -10,8 +10,9 @@ import styles from './styles';
 
 import ContactApi from '../../api/contacts'
 let contactApi = new ContactApi();
-import Icon from 'react-native-vector-icons/SimpleLineIcons';
+import Icon from 'react-native-vector-icons/Ionicons';
 
+import Icon2 from 'react-native-vector-icons/SimpleLineIcons';
 
 export default class GeneralComponentHeader extends Component {
 
@@ -31,16 +32,24 @@ export default class GeneralComponentHeader extends Component {
     realize(){
         this.props.navigate('realizePromotion')
     }
+    back(){
+        this.props.navigation.goBack();
+    }
 
     render() {
+        let back = undefined;
+        if(this.props.showBack){
+            back = <Button transparent style={{ }} onPress={()=> this.back()}>
+                <Icon active color={"#2db6c8"} size={20} name="ios-arrow-back" />
 
-
+            </Button>
+        }
 
     return (
 
         <Header
             style={{ flexDirection: 'column',
-                height: 40,
+                height: 50,
                 elevation: 0,
 
                 borderBottomColor: 'white',
@@ -54,14 +63,15 @@ export default class GeneralComponentHeader extends Component {
         >
       <View style={styles.header} >
 
-          <View style={{ flexDirection: 'row', alignItems: 'stretch' ,justifyContent: 'space-between' }}>
-                <Button transparent style={{ marginLeft:20,paddingRight: 15 }} onPress={this.props.openDrawer}>
-                    <Icon active color={"#2db6c8"} size={20} name="menu" />
+          <View style={{ height:50,flexDirection: 'row' }}>
+              {back}
+                <Button transparent style={{  }} onPress={this.props.openDrawer}>
+                    <Icon2 active color={"#2db6c8"} size={20} name="menu" />
 
                 </Button>
 
 
-              <Text transparent style={{ paddingRight: 10, paddingTop: 10,color:"#2db6c8" ,backgroundColor: 'transparent'}} >ThisCounts</Text>
+              <Text transparent style={{ marginLeft:140,marginRight: 50, paddingTop: 10,color:"#2db6c8" ,backgroundColor: 'transparent'}} >ThisCounts</Text>
           </View>
 
 

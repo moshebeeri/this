@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import {Image, Platform} from 'react-native';
+import {Image, Platform,TouchableOpacity} from 'react-native';
 import {Container, Content, Text, InputGroup, Input, Button, View,Item} from 'native-base';
 import Icon2 from 'react-native-vector-icons/SimpleLineIcons';
 
@@ -14,6 +14,11 @@ const logo = require('../../../images/logo.png');
 const cover = require('../../../images/cover-default.png');
 const profile = require('../../../images/profile-default.png');
 const noPic = require('../../../images/client_1.png');
+
+const briefcase = require('../../../images/briefcase.png');
+const qrcode = require('../../../images/qr-code.png');
+const settings =  require('../../../images/settings-work-tool.png');
+
 import UserApi from '../../api/user'
 import login from './drwaer-theme';
 let userApi = new UserApi()
@@ -57,6 +62,13 @@ class ProfileDrawer extends Component {
 
     }
 
+
+    showBusinesses(){
+        this.replaceRoute('businesses');
+
+    }
+
+
     showPromotions(){
         this.replaceRoute('home');
 
@@ -83,21 +95,27 @@ class ProfileDrawer extends Component {
                     <Image style={styles.thumbnail} source={source}/>
                 </Image>
 
+                <TouchableOpacity    onPress={() => this.showBusinesses()}  style={{ margin:3 , flexDirection: 'row', alignItems: 'center',} } regular>
+                    <Image style={{marginLeft:10,width:30,height:30}} source={briefcase}/>
+                    <Text style={{ padding:20,color:'#67ccf8',fontStyle: 'normal',fontSize:15 }}>Businees </Text>
 
 
-                <Item  onPress={() => this.showPromotionScaning()}  style={{ margin:3 } } regular>
-                    <Icon   size={20} style={{paddingLeft:20}} name="barcode" />
+                </TouchableOpacity>
 
-                    <Text style={{ padding:20,color:'blue',fontStyle: 'normal',fontSize:15 }}>Scan Promotion</Text>
+                <TouchableOpacity  onPress={() => this.showPromotionScaning()}  style={{ margin:3, flexDirection: 'row', alignItems: 'center', } } regular>
+                    <Image style={{marginLeft:10,width:30,height:30}} source={qrcode}/>
 
-
-                </Item>
-                <Item    onPress={() => this.showUserProfile()}  style={{ margin:3 } } regular>
-                    <Icon2 size={20}  style={{paddingLeft:20}}name='user' />
-                        <Text style={{ padding:20,color:'blue',fontStyle: 'normal',fontSize:15 }}>Profile </Text>
+                    <Text style={{ padding:20,color:'#67ccf8',fontStyle: 'normal',fontSize:15 }}>Scan Promotion</Text>
 
 
-                </Item>
+                </TouchableOpacity>
+                <TouchableOpacity    onPress={() => this.showUserProfile()}  style={{ margin:3, flexDirection: 'row', alignItems: 'center', } } regular>
+                    <Image style={{marginLeft:10,width:30,height:30}} source={settings}/>
+
+                    <Text style={{ padding:20,color:'#67ccf8',fontStyle: 'normal',fontSize:15 }}>Settings </Text>
+
+                </TouchableOpacity>
+
 
 
             </Content>

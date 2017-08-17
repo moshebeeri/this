@@ -246,10 +246,7 @@ import * as userAction from "../../actions/user";
                                 navigateAction={this.headerAction.bind(this)}/>
                     </Tab>
 
-                    <Tab heading={ <TabHeading style={{ backgroundColor: "white" }}><Text style={{color: '#2db6c8', fontSize: 13,}}>BUSINESS</Text></TabHeading>}>
 
-                        <Business navigation={this.props.navigation} index={3} navigateAction={this.headerAction.bind(this)}/>
-                    </Tab>
 
 
 

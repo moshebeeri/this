@@ -187,12 +187,12 @@ import * as businessAction from "../../actions/business";
                 <Fab
 
                     direction="right"
-                    active={showAction}
+                    active={false}
                     containerStyle={{ marginLeft: 10 }}
-                    style={{ backgroundColor: "#ffb3b3" }}
+                    style={{ backgroundColor: "#ff6400" }}
                     position="bottomRight"
                     onPress={() => this.navigateToAdd()}>
-                    <Icon name="add" />
+                    <Icon size={20} name="add" />
 
                 </Fab>
         }
@@ -207,7 +207,7 @@ import * as businessAction from "../../actions/business";
                 onClose={() => closeDrawer} >
 
                         <Container>
-                            <GeneralComponentHeader openDrawer= {openDrawer} navigate={this.props.navigation.navigate} showAction={showAction} current='home'
+                            <GeneralComponentHeader showBack={true} openDrawer= {openDrawer} navigation={this.props.navigation} navigate={this.props.navigation.navigate} showAction={showAction} current='home'
                                                     to={this.state.addComponent}/>
 
                          <Business navigation={this.props.navigation} ndex={1} navigateAction={this.headerAction.bind(this)}/>
