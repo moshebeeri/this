@@ -38,9 +38,11 @@ export default class XForYComponent extends Component {
     showBuyProducts(){
         let products =  this.props.api.getProducts();
         let selectProductFunction = this.selectBuyProduct.bind(this);
+        let businessId = this.props.api.getBusinessId();
         this.props.navigation.navigate("SelectProductsComponent",{
             products:products,
-            selectProduct:selectProductFunction})
+            selectProduct:selectProductFunction,
+            businessId:businessId})
 
     }
 
