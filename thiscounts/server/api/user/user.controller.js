@@ -491,7 +491,7 @@ exports.changePassword = function (req, res, next) {
 exports.updateInfo = function (req, res, next) {
   //let userId = req.user._id;
   let newUser = req.body;
-  let query = {'phone_number': req.body['phone_number']};
+  let query = {'phone_number': req.body.phone_number};
 
   User.findOneAndUpdate(query, newUser, {upsert: true}, function (err, doc) {
     if (err) return res.status(500).send(err);

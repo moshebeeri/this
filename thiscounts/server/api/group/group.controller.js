@@ -461,20 +461,39 @@ exports.user_follow = function (req, res) {
   let skip = req.params.skip;
   let limit = req.params.limit;
 
-  graphModel.query_objects(Group,
-    `MATCH (u:user {_id:'${req.user._id}'})-[r:FOLLOW]->(g:group) RETURN g._id as _id, r.timestamp as touched`,
-    'order by r.timestamp desc', skip, limit, function (err, groups) {
-      if (err) return handleError(res, err);
-      getGroupsLastInfo(groups, function (err, groups_previews) {
-        if (err) return handleError(res, err);
-        return res.status(200).json(groups_previews);
+  graphModel.query_ids(`MATCH (u:user {_id:'${req.user._id}'})-[r:FOLLOW]->(g:group) RETURN g._id as _id, r.timestamp as touched`,
+    'order by r.timestamp desc', skip, limit, function(err, gObjects) {
+      let _ids = [];
+      let id2touch = {};
+      gObjects.forEach(gObject => {
+        _ids.push(gObject._id);
+        id2touch[gObject._id] = gObject.touched;
       });
+      if (err) return handleError(res, err);
+      Group.find({}).where('_id').in(_ids).exec(function (err, groups) {
+        if (err) return handleError(res, err);
+        getGroupsLastInfo(groups, function (err, groups_previews) {
+          if (err) return handleError(res, err);
+          groups_previews.forEach(groups_preview => {
+            groups_preview.touched = id2touch[groups_preview.group._id];
+          });
+          //console.log(JSON.stringify(groups_previews, null, '\t'));
+          return res.status(200).json(groups_previews);
+        });
     });
+  });
+
+
+  // graphModel.query_objects(Group,
+  //   `MATCH (u:user {_id:'${req.user._id}'})-[r:FOLLOW]->(g:group) RETURN g._id as _id, r.timestamp as touched`,
+  //   'order by r.timestamp desc', skip, limit, function (err, groups) {
+  //     if (err) return handleError(res, err);
+  //     //set touched
+  //   });
 };
 
 
 function getGroupPreview(group, callback) {
-
   Feed.findOne({entity: group._id})
     .where('message').eq(null)
     .sort({activity: 'desc'})
@@ -499,9 +518,9 @@ function getGroupPreview(group, callback) {
           if (err) return callback(err);
 
           return callback(null, {
+            group: group,
             act: act,
-            msg: msg,
-            group: group
+            msg: msg
           })
         })
     });
