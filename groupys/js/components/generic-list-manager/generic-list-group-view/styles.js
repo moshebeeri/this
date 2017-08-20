@@ -9,7 +9,7 @@ const {width, height} = Dimensions.get('window')
 module.exports = {
     group_container:{
         width :width -10 ,
-        height: 220,
+        height: 130,
         alignItems:'center',
         borderWidth: 1,
         margin: 5,
@@ -24,14 +24,14 @@ module.exports = {
     },
     group_content:{
         width :width  -10,
-        height: 120,
+        height: 40,
         flexDirection: 'column',
         borderWidth: 0,
     },
 
     group_messages:{
         width :(width -10),
-        height: 60,
+        height: 40,
         flexDirection: 'row',
         borderWidth: 0,
         borderTopWidth:0.5,

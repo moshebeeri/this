@@ -82,7 +82,6 @@ class UserProfile extends Component {
         let user = {
             name:this.state.name,
             _id: this.props.user.user._id,
-            email:this.state.email,
             image: this.state.image,
             phone_number:this.state.phone_number
         }

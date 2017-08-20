@@ -71,13 +71,24 @@ class SelectGroupsComponent extends Component {
         if(this.props.groups && this.props.groups[  'groups' + this.props.navigation.state.params.bid]) {
             productsRows =  this.props.groups[  'groups' + this.props.navigation.state.params.bid].map((r, i) => {
                 index++;
+                let group = r.group;
+                let image = undefined;
+                if(group.pictures && group.pictures.length > 0) {
+                    image =  <Thumbnail  square size={50} source={{uri: group.pictures[0].pictures[3]}} />
+
+                }else{
+                    if(group.entity && group.entity.business ){
+                        image =  <Thumbnail  square size={50}   source={{uri: group.entity.business.pictures[0].pictures[3]}} />
 
 
-                if(r.pictures.length > 0){
+
+                    }
+                }
+                if(image){
                     return <ListItem key={index} onPress={this.selectCheckBox.bind(this,index)} thumbnail>
                         <Left>
 
-                            <Thumbnail square size={80} source={{uri: r.pictures[0].pictures[3]}} />
+                            {image}
                         </Left>
                         <Body>
                         <Text>{r.name}</Text>
@@ -95,7 +106,7 @@ class SelectGroupsComponent extends Component {
                     </Left>
                     <Body>
 
-                    <Text>{r.name}</Text>
+                    <Text>{group.name}</Text>
 
                     </Body>
                     <Right>

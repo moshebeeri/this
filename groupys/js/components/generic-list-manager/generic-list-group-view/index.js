@@ -37,6 +37,11 @@ export default class GenericListGroupView extends Component {
 
         let row = undefined
         let image =  <Thumbnail large square   source={require('../../../../images/client_1.png')}/>
+        let lastMessage = undefined;
+        if(this.props.item.act && this.props.item.act.activity ){
+            lastMessage =   <Text  style={styles.group_members}>{ this.props.item.act.activity.user.name} { this.props.item.act.activity.message}</Text>
+
+        }
         let group = this.props.item.group;
         if(group.pictures && group.pictures.length > 0) {
             image =  <Thumbnail large square  source={{uri: group.pictures[0].pictures[3]}} />
@@ -59,20 +64,11 @@ export default class GenericListGroupView extends Component {
                         </View>
                         <View style={styles.group_name}>
                         <Text style={styles.group_name_text}>{group.name}</Text>
-                        <Text  style={styles.group_members}>{group.description}</Text>
+                            {lastMessage}
                         </View>
+
                     </View>
-                    <View style = {styles.group_content}>
-                        <View style = {styles.group_messages}>
 
-
-
-                        </View>
-
-                        <View style = {styles.group_promotion}>
-
-                        </View>
-                    </View>
                  </View>
                 </TouchableOpacity>
 

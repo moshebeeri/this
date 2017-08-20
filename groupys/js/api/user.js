@@ -13,6 +13,7 @@ class UserApi
                 let from = new Date();
 
                 let token = await store.get('token');
+                console.log(token);
                 if(token) {
                     const response = await fetch(`${server_host}/api/users/me/`, {
                         method: 'GET',

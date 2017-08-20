@@ -94,7 +94,7 @@ class AddProduct extends Component {
             business: this.props.navigation.state.params.business._id,
             info : this.state.info,
             retail_price: this.state.retail_price,
-
+            category: this.state.categories,
 
 
 
@@ -125,7 +125,7 @@ class AddProduct extends Component {
         let product = {
             name:this.state.name,
             image:this.state.image,
-            business: this.props.navigation.state.params.business._id,
+            business: this.props.navigation.state.params.item.business,
             info : this.state.info,
             retail_price: this.state.retail_price,
             category: this.state.categories,
