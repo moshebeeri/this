@@ -113,6 +113,7 @@ function group_follow_business_activity(following, followed) {
 exports.create = function (req, res) {
   let group = req.body;
   group.creator = req.user._id;
+  group.creator = req.user._id;
   group.admins = [req.user._id];
   Group.create(group, function (err, group) {
     if (err) {
@@ -127,6 +128,7 @@ exports.create = function (req, res) {
       graphModel.relate_ids(req.user._id, 'GROUP_ADMIN', group._id);
       if (group.entity_type === 'BUSINESS' && utils.defined(group.entity.business)) {
         graphModel.relate_ids(group._id, 'FOLLOW', group.entity.business);
+        graphModel.relate_ids(group.entity.business, 'BUSINESS_GROUP', group._id);
       }
       group_activity(group, 'create');
     });
@@ -148,6 +150,7 @@ exports.create_business_default_group = function (group, callback) {
       graphModel.relate_ids(group._id, 'CREATED_BY', group.creator);
       graphModel.relate_ids(group.creator, 'FOLLOW', group._id);
       graphModel.relate_ids(group.creator, 'GROUP_ADMIN', group._id);
+      graphModel.relate_ids(group._id, 'FOLLOW', group.entity.business);
       graphModel.relate_ids(group.entity.business, 'DEFAULT_GROUP', group._id, function (err) {
         if (err) return console.log(err);
         return callback(null, group);
@@ -465,13 +468,20 @@ exports.user_follow = function (req, res) {
   let skip = req.params.skip;
   let limit = req.params.limit;
 
-  graphModel.query_ids(`MATCH (u:user {_id:'${req.user._id}'})-[r:FOLLOW]->(g:group) RETURN g._id as _id, r.timestamp as touched`,
+  graphModel.query_ids(`MATCH (u:user {_id:'${req.user._id}'})-[r:FOLLOW]->(g:group) 
+                        OPTIONAL MATCH (u)-[role:ROLE]->(:business)-[:DEFAULT_GROUP|BUSINESS_GROUP]->(g)
+                        OPTIONAL MATCH (u)-[o:OWNS]->(:business)-[:DEFAULT_GROUP|BUSINESS_GROUP]->(g)
+                        RETURN g._id as _id, r.timestamp as touched
+                        CASE
+                          WHEN role <> null then role.name
+                          ELSE 'owner'
+                        END AS role`,
     'order by r.timestamp desc', skip, limit, function(err, gObjects) {
       let _ids = [];
       let id2touch = {};
       gObjects.forEach(gObject => {
         _ids.push(gObject._id);
-        id2touch[gObject._id] = gObject.touched;
+        id2touch[gObject._id] = {touched: gObject.touched, role: gObject.role}
       });
       if (err) return handleError(res, err);
       Group.find({}).where('_id').in(_ids).exec(function (err, groups) {
@@ -479,21 +489,13 @@ exports.user_follow = function (req, res) {
         getGroupsLastInfo(groups, function (err, groups_previews) {
           if (err) return handleError(res, err);
           groups_previews.forEach(groups_preview => {
-            groups_preview.touched = id2touch[groups_preview.group._id];
+            groups_preview.touched = id2touch[groups_preview.group._id].touched;
+            groups_preview.role = id2touch[groups_preview.group._id].role;
           });
-          //console.log(JSON.stringify(groups_previews, null, '\t'));
           return res.status(200).json(groups_previews);
         });
     });
   });
-
-
-  // graphModel.query_objects(Group,
-  //   `MATCH (u:user {_id:'${req.user._id}'})-[r:FOLLOW]->(g:group) RETURN g._id as _id, r.timestamp as touched`,
-  //   'order by r.timestamp desc', skip, limit, function (err, groups) {
-  //     if (err) return handleError(res, err);
-  //     //set touched
-  //   });
 };
 
 
