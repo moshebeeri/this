@@ -64,7 +64,7 @@ class instancesComment extends Component {
     render() {
         let groupid = this.props.group._id;
         let feeds = this.props.comments['comment'+ groupid];
-        if(feeds.length > 0) {
+        if(feeds && feeds.length > 0) {
             feeds = feeds.sort(function (a, b) {
                 let date1 = new Date( a.date);
                 let date2 = new Date(b.date);
