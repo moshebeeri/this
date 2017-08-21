@@ -660,6 +660,10 @@ import {DeviceEventEmitter} from 'react-native'
 
         let conditionForm = this.createDiscountConditionForm();
         let distributionForm = this.createDistributionForm();
+        if(this.props.navigation.state.params.group ){
+            distributionForm = undefined;
+        }
+
         let submitButton = this.createSubmitButton();
         return (
                 <Container>
