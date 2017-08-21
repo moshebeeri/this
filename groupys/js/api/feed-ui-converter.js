@@ -305,6 +305,11 @@ class FeedConverter
                 responseFeed.businessLogo = promotion.entity.business.pictures[0].pictures[3];
                 responseFeed.businessName = promotion.entity.business.name;
                 responseFeed.businessAddress = promotion.entity.business.city + ' ' + promotion.entity.business.address;
+
+            }
+
+            if(promotion.entity && promotion.entity.business){
+                responseFeed.business = promotion.entity.business;
             }
             responseFeed.itemType = 'PROMOTION';
         }catch (error){

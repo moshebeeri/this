@@ -2,7 +2,7 @@
  * Created by roilandshut on 23/07/2017.
  */
 import React, {Component} from 'react';
-import {Image ,Platform,PanResponder,TouchableHighlight } from 'react-native';
+import {Image ,Platform,PanResponder,TouchableHighlight,TouchableOpacity } from 'react-native';
 import {connect} from 'react-redux';
 import {actions} from 'react-native-navigation-redux-helpers';
 import { Container, Content, Text, InputGroup, Input,Thumbnail,Button,Picker,Right,Item,Left,Header,Footer,Body, View,Card,CardItem } from 'native-base';
@@ -25,6 +25,11 @@ export default class FeedPromotion extends Component {
         return this.createPromotion(this.props.item,this.props.save,this.props.like,this.props.unlike,this.props.showUsers,this.props.comment);
     }
 
+    showBussines(){
+        this.props.navigation.navigate("businessProfile",{ bussiness:this.props.item.business});
+
+
+    }
 
     createPromotion(item,save,like,unlike,showUsers,comment){
 
@@ -41,7 +46,11 @@ export default class FeedPromotion extends Component {
 
         let buisnessLogo = undefined;
         if(item.businessLogo){
-            buisnessLogo =  <Thumbnail  square={true} size={50} source={{uri: item.businessLogo}} />
+            buisnessLogo =  <TouchableOpacity onPress={this.showBussines.bind(this)}>
+                <View>
+                <Thumbnail  square={true} size={50} source={{uri: item.businessLogo}} />
+                </View>
+            </TouchableOpacity>
 
         }
 
