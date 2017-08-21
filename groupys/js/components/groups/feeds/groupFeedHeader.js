@@ -13,8 +13,14 @@ import store from 'react-native-simple-store';
 
 import GroupApi from "../../../api/groups"
 let groupApi = new GroupApi();
-
+import {
+    Menu,
+    MenuOptions,
+    MenuOption,
+    MenuTrigger,
+} from 'react-native-popup-menu';
 import * as groupsAction from "../../../actions/groups";
+import Icon2 from 'react-native-vector-icons/SimpleLineIcons';
 import { bindActionCreators } from "redux";
 
  class GroupFeedHeader extends Component {
@@ -45,6 +51,13 @@ import { bindActionCreators } from "redux";
                 selectUsers: this.inviteUser.bind(this)
             })
         }
+
+    }
+
+    addPromotion(){
+             let group = this.props.item;
+
+            this.props.navigation.navigate("addPromotions",{business:group.entity.business,group:group});
 
     }
 
@@ -95,13 +108,28 @@ import { bindActionCreators } from "redux";
         }
 
         let groupInvite = undefined;
-        if(this.isGroupAdmin(group)){
-            groupInvite =   <View style={styles.invite_to_group}>
-                <Button transparent  onPress={this.showUsers.bind(this)}>
-                    <Icon style={{fontSize:35,color:"#2db6c8"}} name="person-add" />
-                </Button>
-            </View>
+
+        if(this.isGroupAdmin(group)) {
+
+            groupInvite = <Menu>
+                <MenuTrigger >
+                    <Icon2 style={{fontSize: 25, color: "#2db6c8"}} name="options-vertical"/>
+                </MenuTrigger>
+                <MenuOptions>
+                    <MenuOption onSelect={this.showUsers.bind(this)}>
+                        <Text>Add User</Text>
+                    </MenuOption>
+                    <MenuOption onSelect={() => alert(`Follow Business`)}>
+                        <Text>Follow Business</Text>
+                    </MenuOption>
+                    <MenuOption onSelect={this.addPromotion.bind(this)}>
+                        <Text>Add Promotion</Text>
+                    </MenuOption>
+                </MenuOptions>
+            </Menu>
         }
+
+
         return <View style={styles.headerContainer}>
             <View style={styles.imageStyle}>
             <Button transparent  onPress={this.navigateBack.bind(this)}>
@@ -115,7 +143,9 @@ import { bindActionCreators } from "redux";
                 <Text style={styles.group_name_text}>{group.name}</Text>
                 <Text  style={styles.group_members}>{group.description}</Text>
             </View>
+            <View style={styles.group_actions}>
             {groupInvite}
+            </View>
         </View>
     }
 }

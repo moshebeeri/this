@@ -66,6 +66,7 @@ import Businesses from './components/business/index'
 //      */
 //     requestPermissions: true,
 // });
+import { MenuContext } from 'react-native-popup-menu';
 
 const AppNavigator = StackNavigator({
         home: { screen: ApplicationManager },
@@ -108,9 +109,11 @@ import getStore from "./store";
 class AppWithNavigationState extends Component {
     render() {
         return (
+            <MenuContext>
             <AppNavigator
 
             />
+            </MenuContext>
         );
     }
 }

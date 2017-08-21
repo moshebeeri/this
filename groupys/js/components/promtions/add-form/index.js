@@ -177,6 +177,15 @@ import {DeviceEventEmitter} from 'react-native'
 
             }
 
+            if(this.props.navigation.state.params.group ){
+                let groups = new Array();
+                groups.push(this.props.navigation.state.params.group)
+                this.setState({
+                        distribution:'GROUP',
+                        groups:groups
+                })
+            }
+
         }catch (error){
             console.log(error);
         }
@@ -370,6 +379,24 @@ import {DeviceEventEmitter} from 'react-native'
 
 
     })
+        if(this.props.navigation.state.params.group ){
+            this.setState({
+
+                distribution:'GROUP',
+                show_save:true,
+
+
+
+            })
+        }else{
+            this.setState({
+
+                distribution:'',
+
+
+
+            })
+        }
     }
 
     async selectDiscountType(value){
@@ -502,19 +529,20 @@ import {DeviceEventEmitter} from 'react-native'
         return result;
     }
 
-     selectDistributionType(type){
+     selectDistributionType(type) {
 
-        if(type== 'PERSONAL'){
-            this.setState({
-                distribution:type,
-                show_save:true,
-            })
-        }else {
-            this.setState({
-                distribution: type,
-                show_save:false,
-            })
-        }
+         if (type == 'PERSONAL') {
+             this.setState({
+                 distribution: type,
+                 show_save: true,
+             })
+         } else {
+             this.setState({
+                 distribution: type,
+                 show_save: false,
+             })
+         }
+
 
      }
      selectGroup(group){
