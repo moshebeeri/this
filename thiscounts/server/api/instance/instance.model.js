@@ -93,6 +93,8 @@ let InstanceSchema = new Schema({
     }
   }
 });
+InstanceSchema.index({'promotion.name': 'text', type: 'text'});
+
 InstanceSchema.plugin(autopopulate);
 InstanceSchema.index({ location: '2dsphere' });
 

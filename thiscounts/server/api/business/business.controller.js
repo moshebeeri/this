@@ -12,6 +12,10 @@ let location = require('../../components/location').createLocation();
 let utils = require('../../components/utils').createUtils();
 let activity = require('../../components/activity').createActivity();
 let group_controller = require('../group/group.controller');
+let MongodbSearch = require('../../components/mongo-search');
+
+
+exports.search = MongodbSearch.create(Business);
 
 exports.address2 = function (req, res) {
   location.address(req.body.address, function (err, data) {

@@ -4,6 +4,10 @@ let _ = require('lodash');
 let Card = require('./card.model');
 let graphTools = require('../../components/graph-tools');
 let graphModel = graphTools.createGraphModel('card');
+let MongodbSearch = require('../../components/mongo-search');
+
+
+exports.search = MongodbSearch.create(Card);
 
 // Get list of cards
 exports.index = function(req, res) {

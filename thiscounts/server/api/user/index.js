@@ -9,6 +9,7 @@ let router = express.Router();
 
 router.get('/', auth.hasRole('admin'), controller.index);
 router.delete('/:id', auth.hasRole('admin'), controller.destroy);
+router.get('/search/:skip/:limit/:searchString', auth.isAuthenticated(), controller.search);
 router.get('/me', auth.isAuthenticated(), controller.me);
 router.get('/password/:phone_number', controller.recover_password);
 router.get('/verification/:code', auth.isAuthenticated(), controller.verification);

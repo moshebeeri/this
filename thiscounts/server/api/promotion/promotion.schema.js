@@ -283,4 +283,5 @@ let PromotionSchemaObject = {
     }]
   }
 };
+
 module.exports = PromotionSchemaObject;

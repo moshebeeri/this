@@ -24,6 +24,8 @@ let graphTools = require('../../components/graph-tools');
 let graphModel = graphTools.createGraphModel('user');
 
 let activity = require('../../components/activity').createActivity();
+let MongodbSearch = require('../../components/mongo-search');
+
 
 let validationError = function (res, err) {
   let firstKey = getKey(err.errors);
@@ -512,6 +514,8 @@ exports.me = function (req, res, next) {
     res.status(200).json(user);
   });
 };
+
+exports.search = MongodbSearch.create(User);
 
 let Roles = new Enum({'Admin': 100, 'Manager': 50, 'Seller': 10}, { ignoreCase: true });
 

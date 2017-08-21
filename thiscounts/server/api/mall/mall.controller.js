@@ -7,6 +7,10 @@ let graphModel = graphTools.createGraphModel('mall');
 let spatial = require('../../components/spatial').createSpatial();
 let location = require('../../components/location').createLocation();
 let logger = require('../../components/logger').createLogger();
+let MongodbSearch = require('../../components/mongo-search');
+
+
+exports.search = MongodbSearch.create(Mall);
 
 // Get list of malls
 exports.index = function(req, res) {

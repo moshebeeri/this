@@ -14,5 +14,6 @@ let CardSchema = new Schema({
   info: String,
   active: Boolean
 });
+CardSchema.index({name: 'text', info: 'text'});
 
 module.exports = mongoose.model('Card', CardSchema);

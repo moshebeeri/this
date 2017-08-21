@@ -4,6 +4,9 @@ let _ = require('lodash');
 let ShoppingChain = require('./shoppingChain.model');
 let graphTools = require('../../components/graph-tools');
 let graphModel = graphTools.createGraphModel('shoppingChain');
+let MongodbSearch = require('../../components/mongo-search');
+
+exports.search = MongodbSearch.create(ShoppingChain);
 
 // Get list of shoppingChains
 exports.index = function(req, res) {

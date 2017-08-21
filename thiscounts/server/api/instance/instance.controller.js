@@ -7,6 +7,10 @@ const graphTools = require('../../components/graph-tools');
 const graphModel = graphTools.createGraphModel('instance');
 const randomstring = require('randomstring');
 const QRCode = require('qrcode');
+let MongodbSearch = require('../../components/mongo-search');
+
+
+exports.search = MongodbSearch.create(Instance);
 
 // Get list of instances
 exports.index = function (req, res) {

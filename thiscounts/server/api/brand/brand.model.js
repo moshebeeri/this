@@ -6,10 +6,11 @@ let mongoose = require('mongoose'),
 let BrandSchema = new Schema({
   name: String,
   gid: { type: Number, index: true},
-  info: String,
+  description: String,
   active: Boolean,
   logo: String,
   pictures: [],
 });
+BrandSchema.index({name: 'text', description: 'text'});
 
 module.exports = mongoose.model('Brand', BrandSchema);

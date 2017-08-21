@@ -31,6 +31,8 @@ let UserSchema = new Schema({
   github: {}
 });
 
+UserSchema.index({name: 'text', phone_number: 'text', email: 'text'});
+
 /**
  * Virtuals
  */
@@ -68,7 +70,7 @@ UserSchema
 /**
  * Validations
  */
-/*
+
 // Validate empty email
 UserSchema
   .path('email')
@@ -99,7 +101,7 @@ UserSchema
       respond(true);
     });
 }, 'The specified email address is already in use.');
-*/
+
 let validatePresenceOf = function(value) {
   return value && value.length;
 };
@@ -111,9 +113,9 @@ UserSchema
   .pre('save', function(next) {
     if (!this.isNew) return next();
 
-    /*if (!validatePresenceOf(this.hashedPassword) && authTypes.indexOf(this.provider) === -1)
+    if (!validatePresenceOf(this.hashedPassword) && authTypes.indexOf(this.provider) === -1)
       next(new Error('Invalid password'));
-    else*/
+    else
       next();
 
   });

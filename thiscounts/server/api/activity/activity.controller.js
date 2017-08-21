@@ -5,6 +5,7 @@ const Activity = require('./activity.model');
 let activity = require('../../components/activity').createActivity();
 let graphTools = require('../../components/graph-tools');
 let graphModel = graphTools.createGraphModel('activity');
+let MongodbSearch = require('../../components/mongo-search');
 
 // Get list of activities
 exports.index = function(req, res) {

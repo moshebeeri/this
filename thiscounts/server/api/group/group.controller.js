@@ -13,6 +13,10 @@ let activity = require('../../components/activity').createActivity();
 let logger = require('../../components/logger').createLogger();
 let utils = require('../../components/utils').createUtils();
 const async = require('async');
+let MongodbSearch = require('../../components/mongo-search');
+
+
+exports.search = MongodbSearch.create(Group);
 
 // Get list of groups
 exports.index = function (req, res) {
