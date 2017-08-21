@@ -13,4 +13,9 @@ let ShoppingChainSchema = new Schema({
   active: Boolean
 });
 
+ShoppingChainSchema.index({
+  name: 'text',
+  info: 'text'
+});
+
 module.exports = mongoose.model('ShoppingChain', ShoppingChainSchema);

@@ -38,4 +38,13 @@ let MallSchema = new Schema({
   }
 });
 
+MallSchema.index({
+  name: 'text',
+  address: 'text',
+  address2: 'text',
+  city: 'text',
+  country: 'text',
+  state: 'text'
+});
+
 module.exports = mongoose.model('Mall', MallSchema);

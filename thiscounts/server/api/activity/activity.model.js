@@ -30,7 +30,6 @@ let ActivitySchema = new Schema({
   message: {type: String, default: ''}
 
 });
-
 ActivitySchema.plugin(autopopulate);
 
 module.exports = mongoose.model('Activity', ActivitySchema);

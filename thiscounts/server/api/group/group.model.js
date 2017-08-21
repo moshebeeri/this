@@ -70,7 +70,7 @@ const GroupSchema = new Schema({
   },
   pictures: []
 });
-
+GroupSchema.index({name: 'text', description: 'text'});
 GroupSchema.plugin(autopopulate);
 
 module.exports = mongoose.model('Group', GroupSchema);

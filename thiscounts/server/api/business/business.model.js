@@ -1,12 +1,13 @@
 'use strict';
 
 let mongoose = require('mongoose'),
-    Schema = mongoose.Schema;
+  Schema = mongoose.Schema;
 
-let BusinessSchema = new Schema({social_state: {},
-  name: { type: String, index: true, required: true},
-  gid: { type: Number, index: true},
-  tax_id: { type: String, index: true, required: true} ,
+let BusinessSchema = new Schema({
+  social_state: {},
+  name: {type: String, index: true, required: true},
+  gid: {type: Number, index: true},
+  tax_id: {type: String, index: true, required: true},
   shopping_chain: {type: Schema.ObjectId, ref: 'ShoppingChain', required: false},
   mall: {type: Schema.ObjectId, ref: 'mall', required: false},
   description: String,
@@ -18,7 +19,7 @@ let BusinessSchema = new Schema({social_state: {},
   subcategory: {type: String, required: true},
   state: {type: String},
   main_phone_number: String,
-  email: { type: String, index: true, required: true},
+  email: {type: String, index: true, required: true},
   website: String,
   creator: {type: Schema.ObjectId, index: true, ref: 'User', required: true},
   created: {type: Date, default: Date.now},
@@ -35,7 +36,7 @@ let BusinessSchema = new Schema({social_state: {},
     coordinates: []
   },
   id: String,
-  type:{
+  type: {
     type: String,
     enum: ['PERSONAL_SERVICES', 'SMALL_BUSINESS', 'PARTNERSHIP', 'COMPANY', 'ENTERPRISE'],
     required: true
@@ -49,6 +50,22 @@ let BusinessSchema = new Schema({social_state: {},
   logo: String,
   pictures: []
 });
+BusinessSchema.index({
+  name: 'text',
+  description: 'text',
+  address: 'text',
+  address2: 'text',
+  city: 'text',
+  country: 'text',
+  category: 'text',
+  subcategory: 'text',
+  state: 'text',
+  main_phone_number: 'text',
+  email: 'text',
+  website: 'text',
+  info: 'text',
+});
+
 
 module.exports = mongoose.model('Business', BusinessSchema);
 

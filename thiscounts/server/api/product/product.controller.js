@@ -7,12 +7,15 @@ let graphModel = graphTools.createGraphModel('product');
 let barcodeGraphModel = graphTools.createGraphModel('barcode');
 let utils = require('../../components/utils').createUtils();
 let activity = require('../../components/activity').createActivity();
+let MongodbSearch = require('../../components/mongo-search');
+
 
 
 graphModel.db().constraints.uniqueness.createIfNone('barcode', 'code', function (err) {
   if(err) console.error(err);
 });
 
+exports.search = MongodbSearch.create(Product);
 
 // Get list of products
 exports.index = function (req, res) {

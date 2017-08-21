@@ -18,6 +18,14 @@ PromotionSchema
      else*/
     next();
   });
+
+PromotionSchema.index({
+  name: 'text',
+  'entity.business.name': 'text',
+  'entity.shopping_chain.name': 'text',
+  'entity.mall.name': 'text'
+});
+
 PromotionSchema.plugin(autopopulate);
 
 //http://mongoosejs.com/docs/2.7.x/docs/validation.html

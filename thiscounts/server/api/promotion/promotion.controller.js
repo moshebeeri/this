@@ -18,6 +18,7 @@ let activity = require('../../components/activity').createActivity();
 let util = require('util');
 let spatial = require('../../components/spatial').createSpatial();
 let instance = require('../../components/instance');
+let MongodbSearch = require('../../components/mongo-search');
 
 /*
  exports.server_time = function (req, res) {
@@ -49,7 +50,7 @@ let instance = require('../../components/instance');
  };
  */
 
-
+exports.search = MongodbSearch.create(Promotion);
 
 // Get list of promotions
 exports.index = function (req, res) {
@@ -89,9 +90,9 @@ function to_graph(promotion) {
 // Creates a new promotion in the DB.
 let relateTypes = function (promotion) {
   let db = promotionGraphModel.db();
-  let query = util.format(" MATCH (promotion), (type:PromotionType{PromotionType:'%s'}) \
-                            WHERE  id(promotion)=%d \
-                            CREATE (promotion)-[:PROMOTION_TYPE]->(type) ", promotion.type, promotion.gid);
+  let query =  `MATCH (promotion), (type:PromotionType{PromotionType:'${promotion.type}'}) 
+                WHERE  id(promotion)=${promotion.gid}} 
+                CREATE (promotion)-[:PROMOTION_TYPE]->(type) `;
   db.query(query, function (err) {
     if (err) {
       logger.error(err.message);
@@ -99,9 +100,9 @@ let relateTypes = function (promotion) {
   });
 
   if (utils.defined(promotion.social)) {
-    query = util.format(" MATCH (promotion), (type:SocialType{SocialType:'%s'}) \
-                          WHERE  id(promotion)=%d \
-                          CREATE (promotion)-[:SOCIAL_TYPE]->(type) ", promotion.social, promotion.gid);
+    query =  `MATCH (promotion), (type:SocialType{SocialType:'${promotion.social}'}) 
+              WHERE  id(promotion)=${promotion.gid} 
+              CREATE (promotion)-[:SOCIAL_TYPE]->(type)`;
     db.query(query, function (err) {
       if (err) {
         logger.error(err.message);

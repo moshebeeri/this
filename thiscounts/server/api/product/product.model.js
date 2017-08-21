@@ -19,4 +19,12 @@ let ProductSchema = new Schema({
   active: Boolean
 });
 
+ProductSchema.index({
+  name: 'text',
+  barcode: 'text',
+  SKU: 'text',
+  'business.name': 'text',
+  info: 'text'
+});
+
 module.exports = mongoose.model('Product', ProductSchema);
