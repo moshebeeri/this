@@ -2,7 +2,8 @@
  * Created by roilandshut on 08/06/2017.
  */
 
-
+import GroupsApi from "../api/groups"
+let groupsApi = new GroupsApi();
 
 import UserApi from "../api/user"
 let userApi = new UserApi();
@@ -351,6 +352,30 @@ export function nextLoad(){
 
 }
 
+export function fetchGroups(){
+    return function (dispatch, getState){
+        dispatch|(getAll(dispatch));
+    }
+
+}
+async function getAll(dispatch){
+    try {
+        let response = await groupsApi.getAll();
+        if(response.length > 0) {
+
+            dispatch({
+                type: 'GET_GROUPS',
+                groups: response,
+
+            });
+        }
+
+
+    }catch (error){
+        console.log(error);
+    }
+
+}
 
 
 

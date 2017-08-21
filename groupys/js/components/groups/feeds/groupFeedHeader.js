@@ -24,14 +24,17 @@ import { bindActionCreators } from "redux";
          this.state = {}
      }
     async componentWillMount(){
-
         let userId = await store.get('user_id');
         this.setState({
             userId:userId
         })
     }
+     handleBack() {
+        this.props.fetchGroups();
+     }
 
     navigateBack(){
+        this.handleBack();
         this.props.navigation.goBack();
     }
     showUsers(){

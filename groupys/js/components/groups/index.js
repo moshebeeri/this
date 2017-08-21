@@ -20,7 +20,7 @@ import { bindActionCreators } from "redux";
         super(props);
         this.props.fetchUsersFollowers();
         this.props.fetchGroupsFromStore();
-
+        console.log('renderrrr')
     }
 
 
@@ -36,13 +36,20 @@ import { bindActionCreators } from "redux";
 
     }
 
+    componentWillMount(){
+        this.props.fetchGroups();
+    }
     render() {
-
+        console.log('renderrrr')
 
         return (
            <GenericListManager rows={this.props.groups.groups} navigation = {this.props.navigation} title="Groups" component="home" addComponent="AddGroups" api={this}
                                ItemDetail = {GenericListGroupView}/>
         );
+    }
+
+    componentDidMount(){
+        console.log('didmount')
     }
 }
 

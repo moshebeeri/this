@@ -1,6 +1,6 @@
 
 import React, { Component } from 'react';
-import { Image,TextInput, Platform,View,Keyboard,TouchableNativeFeedback,TouchableOpacity} from 'react-native';
+import { Image,TextInput, Platform,View,Keyboard,TouchableNativeFeedback,TouchableOpacity,BackHandler} from 'react-native';
 
 import { connect } from 'react-redux';
 import { actions } from 'react-native-navigation-redux-helpers';
@@ -50,9 +50,14 @@ class GroupFeed extends Component {
 
 
     componentWillMount(){
-      this.fetchFeeds();
+        BackHandler.addEventListener('hardwareBackPress', this.handleBack.bind(this));
+
+        this.fetchFeeds();
     }
 
+    handleBack(){
+        this.props.fetchGroups();
+    }
 
 
      async getAll(direction,id){
@@ -201,7 +206,7 @@ class GroupFeed extends Component {
             feeds = feeds.sort(function (a, b) {
                 let date1 = new Date( a.date);
                 let date2 = new Date(b.date);
-                return date2 - date1  ;
+                return date1 - date2  ;
 
 
             })

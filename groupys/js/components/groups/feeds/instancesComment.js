@@ -68,7 +68,7 @@ class instancesComment extends Component {
             feeds = feeds.sort(function (a, b) {
                 let date1 = new Date( a.date);
                 let date2 = new Date(b.date);
-                return date2 - date1;
+                return date1 - date2;
 
             })
         }
