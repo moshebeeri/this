@@ -83,6 +83,12 @@ import { bindActionCreators } from "redux";
         if(this.props.item.pictures && this.props.item.pictures.length > 0) {
             image =  <Thumbnail  square  source={{uri: this.props.item.pictures[0].pictures[3]}} />
 
+        }else{
+            if(group.entity && group.entity.business ){
+                image =  <Thumbnail  square  source={{uri: group.entity.business.pictures[0].pictures[3]}} />
+
+
+            }
         }
 
         let groupInvite = undefined;

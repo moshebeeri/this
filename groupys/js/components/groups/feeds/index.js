@@ -197,7 +197,16 @@ class GroupFeed extends Component {
         if(!feeds){
             feeds = [];
         }
+        if(feeds.length > 0) {
+            feeds = feeds.sort(function (a, b) {
+                let date1 = new Date( a.date);
+                let date2 = new Date(b.date);
+                return date2 - date1  ;
 
+
+            })
+        }
+        console.log(feeds)
         let showTop = this.props.feeds['showTopLoader'+this.props.navigation.state.params.group._id];
         if(!showTop){
             showTop = false;
