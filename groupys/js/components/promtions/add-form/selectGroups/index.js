@@ -55,7 +55,7 @@ class SelectGroupsComponent extends Component {
         let selectedBool = this.state.selectCheckBox;
         this.props.groups[  'groups' + this.props.navigation.state.params.bid].forEach(function (group,i) {
             if(selectedBool[i + 1]) {
-                selectedGroups.push(group);
+                selectedGroups.push(group.group);
             }
 
         })
@@ -91,7 +91,7 @@ class SelectGroupsComponent extends Component {
                             {image}
                         </Left>
                         <Body>
-                        <Text>{r.name}</Text>
+                        <Text>{group.name}</Text>
 
                         </Body>
                         <Right>

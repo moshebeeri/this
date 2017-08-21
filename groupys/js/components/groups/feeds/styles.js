@@ -168,6 +168,12 @@ module.exports = {
 
 
 
-    }
+    },
+    group_actions:{
+        flexDirection: 'column',
+        marginLeft:10,
+        justifyContent: 'center',
+        alignItems: 'center',
+    },
 
 };

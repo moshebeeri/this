@@ -86,6 +86,7 @@ class FeedConverter
                 actor: user._id,
                 showSocial: false,
                 description: feed.activity.message,
+                date : feed.activity.timestamp
 
             }
             if (user.pictures && user.pictures.length > 0) {

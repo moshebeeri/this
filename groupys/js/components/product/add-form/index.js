@@ -65,6 +65,7 @@ class AddProduct extends Component {
             };
         }
         let stateFunc = this.setState.bind(this);
+        this.props.fetchProductCategories("root");
 
         store.get('token').then(storeToken => {
             stateFunc({

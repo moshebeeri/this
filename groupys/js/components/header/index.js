@@ -10,6 +10,12 @@ import styles from './styles';
 
 import ContactApi from '../../api/contacts'
 let contactApi = new ContactApi();
+import {
+    Menu,
+    MenuOptions,
+    MenuOption,
+    MenuTrigger,
+} from 'react-native-popup-menu';
 import Icon from 'react-native-vector-icons/Ionicons';
 
 import Icon2 from 'react-native-vector-icons/SimpleLineIcons';
@@ -45,6 +51,18 @@ export default class GeneralComponentHeader extends Component {
             </Button>
         }
 
+        let menuAction = <Menu>
+            <MenuTrigger >
+                <Icon2 style={{fontSize: 25, color: "#2db6c8"}} name="options-vertical"/>
+            </MenuTrigger>
+            <MenuOptions>
+
+                <MenuOption onSelect={() => alert(`Follow Business`)}>
+                    <Text>Follow Business</Text>
+                </MenuOption>
+
+            </MenuOptions>
+        </Menu>
     return (
 
         <Header
@@ -71,7 +89,11 @@ export default class GeneralComponentHeader extends Component {
                 </Button>
 
 
-              <Text transparent style={{ marginLeft:140,marginRight: 50, paddingTop: 10,color:"#2db6c8" ,backgroundColor: 'transparent'}} >ThisCounts</Text>
+              <Text transparent style={{ marginLeft:140,marginRight: 30, paddingTop: 10,color:"#2db6c8" ,backgroundColor: 'transparent'}} >ThisCounts</Text>
+            <View style={{justifyContent: 'center',
+                alignItems: 'center'}}>
+              {menuAction}
+            </View>
           </View>
 
 
