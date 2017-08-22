@@ -74,12 +74,12 @@ module.exports = {
         width: Dimensions.get('window').width,
     },
     follow_container:{
-        width:width,
+
         height:height,
 
     },
     follow_search:{
-        width:width,
+
         marginBottom:6,backgroundColor:'white'
     },
 

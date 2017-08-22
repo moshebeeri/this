@@ -105,7 +105,7 @@ export default class BusinessFollow extends Component {
                     flex:-1,justifyContent:'center',marginLeft:20 ,flexDirection: 'row',alignItems: 'center',height: 40,width:100, backgroundColor: '#e65100',
                 };
                 return  <View key={businees._id} style={{padding:5,backgroundColor:'#eaeaea'}}  >
-                    <View style={{flex:-1, padding:5,backgroundColor:'white',flexDirection: 'row' ,alignItems: 'center',}}>
+                    <View style={{flex:-1, justifyContent: 'space-between',padding:5,backgroundColor:'white',flexDirection: 'row' ,alignItems: 'center',}}>
                         {banner}
 
                         <Text style={{marginLeft:10}}>{businees.name}</Text>
