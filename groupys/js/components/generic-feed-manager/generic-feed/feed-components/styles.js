@@ -278,6 +278,14 @@ module.exports = {
 
 
     },
+    promotion_unlike: {
+
+        marginLeft:10 ,
+        marginRight:10 ,
+
+
+
+    },
     promotion_location: {
 
         marginLeft:10 ,

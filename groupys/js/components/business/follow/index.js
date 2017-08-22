@@ -105,7 +105,7 @@ export default class BusinessFollow extends Component {
                     flex:-1,justifyContent:'center',marginLeft:20 ,flexDirection: 'row',alignItems: 'center',height: 40,width:100, backgroundColor: '#e65100',
                 };
                 return  <View key={businees._id} style={{padding:5,backgroundColor:'#eaeaea'}}  >
-                    <View style={{flex:-1, padding:5,backgroundColor:'white',flexDirection: 'row' ,alignItems: 'center',}}>
+                    <View style={{flex:-1, justifyContent: 'space-between',padding:5,backgroundColor:'white',flexDirection: 'row' ,alignItems: 'center',}}>
                         {banner}
 
                         <Text style={{marginLeft:10}}>{businees.name}</Text>
@@ -127,7 +127,7 @@ export default class BusinessFollow extends Component {
                 <Item style={styles.follow_search}  regular >
                     {back}
                     <Input  style={styles.follow_search_field}   value={this.state.searchText} onSubmitEditing={this.search.bind(this)}blurOnSubmit={true} returnKeyType='search' ref="1" onChangeText={(searchText) => this.setState({searchText})} placeholder='Search Business' />
-                    <Button small  style={{backgroundColor:'white',height:50}}onPress={this.search.bind(this)}>
+                    <Button small  style={{backgroundColor:'white',height:48}}onPress={this.search.bind(this)}>
                         <Icon2 style={{marginRight:10,fontSize:30}}name='search' />
 
 

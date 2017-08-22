@@ -64,7 +64,7 @@ export default class FeedGroupPromotion extends Component {
         </View>
 
         let likes = new String(item.social.numberLikes);
-        let likeIcon = <Button transparent style={styles.promotion_iconView} onPress={like}>
+        let likeIcon = <Button transparent style={styles.promotion_unlike} onPress={like}>
 
             <Icon style={styles.promotion_like}  size={25} name="heart"/>
             <Text>{likes}</Text>

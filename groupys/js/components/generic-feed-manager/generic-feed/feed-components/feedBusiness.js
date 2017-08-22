@@ -50,7 +50,7 @@ export default class FeedBusiness extends Component {
         }
         let likeIcon = <Button transparent style={styles.promotion_iconView} onPress={like}>
 
-            <Icon style={styles.promotion_like}  size={25} name="heart"/>
+            <Icon style={styles.promotion_unlike}  size={25} name="heart"/>
             <Text>{likes}</Text>
 
         </Button>
