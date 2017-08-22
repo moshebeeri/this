@@ -50,29 +50,38 @@ let BusinessSchema = new Schema({
   logo: String,
   pictures: []
 });
+// db.businesses.ensureIndex({
+//   name: 'text',
+//   description: 'text',
+//   address: 'text',
+//   address2: 'text',
+//   city: 'text',
+//   state: 'text',
+//   website: 'text',
+//   info: 'text'
+// });
 BusinessSchema.index({
   name: 'text',
   description: 'text',
   address: 'text',
   address2: 'text',
   city: 'text',
-  country: 'text',
-  category: 'text',
-  subcategory: 'text',
   state: 'text',
-  main_phone_number: 'text',
-  email: 'text',
   website: 'text',
-  info: 'text',
+  info: 'text'
 });
 
+let model = mongoose.model('Business', BusinessSchema);
+model.collection.ensureIndex({
+  name: 'text',
+  description: 'text',
+  address: 'text',
+  address2: 'text',
+  city: 'text',
+  state: 'text',
+  website: 'text',
+  info: 'text'
+});
 
 module.exports = mongoose.model('Business', BusinessSchema);
 
-//module.exports = function() {
-//  let schema = new Schema({
-//    ...
-//  });
-//
-//  mongoose.model('Business', schema);
-//};
