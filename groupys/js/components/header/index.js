@@ -86,7 +86,8 @@ export default class GeneralComponentHeader extends Component {
         >
       <View style={styles.header} >
 
-          <View style={{ height:50,flexDirection: 'row' }}>
+          <View style={{ height:50,flexDirection: 'row', alignItems: 'center',
+               justifyContent: 'space-between', }}>
               {back}
                 <Button transparent style={{  }} onPress={this.props.openDrawer}>
                     <Icon2 active color={"#2db6c8"} size={20} name="menu" />
@@ -94,7 +95,7 @@ export default class GeneralComponentHeader extends Component {
                 </Button>
 
 
-              <Text transparent style={{ marginLeft:140,marginRight: 30, paddingTop: 10,color:"#2db6c8" ,backgroundColor: 'transparent'}} >ThisCounts</Text>
+              <Text transparent style={{color:"#2db6c8" ,backgroundColor: 'transparent'}} >ThisCounts</Text>
             <View style={{justifyContent: 'center',
                 alignItems: 'center'}}>
               {menuAction}

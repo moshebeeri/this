@@ -4,7 +4,6 @@ const { StyleSheet, Dimensions,Platform } = React;
 
 module.exports = {
   header: {
-    width: Dimensions.get('window').width,
       flexDirection: 'column',
 
       height:50

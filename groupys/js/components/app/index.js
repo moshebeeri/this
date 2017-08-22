@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import {Image, Platform,StyleSheet} from 'react-native';
+import {Image, Platform,StyleSheetm,Dimensions} from 'react-native';
 import {connect} from 'react-redux';
 import {actions} from 'react-native-navigation-redux-helpers';
 import {Container, Content, Text,Title, InputGroup,
@@ -20,7 +20,7 @@ import BackgroundTimer from 'react-native-background-timer';
 let locationApi = new LocationApi();
 let contactApi = new ContactApi();
 let userApi = new UserApi();
-
+import StyleUtils from '../../utils/styleUtils'
 import codePush from "react-native-code-push";
 
 import SideBar from '../drawer/index';
@@ -87,7 +87,19 @@ import * as userAction from "../../actions/user";
         }
 
          // userApi.getUser();
+         this.state = {
+             orientation: StyleUtils.isPortrait() ? 'portrait' : 'landscape',
+             devicetype: StyleUtils.isTablet() ? 'tablet' : 'phone'
+         };
 
+         // Event Listener for orientation changes
+         Dimensions.addEventListener('change', () => {
+
+
+             this.setState({
+                 orientation: StyleUtils.isPortrait() ? 'portrait' : 'landscape'
+             });
+         });
 
     }
     replaceRoute(route) {
