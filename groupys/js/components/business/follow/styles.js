@@ -79,7 +79,7 @@ module.exports = {
 
     },
     follow_search:{
-
+        height:50,
         marginBottom:6,backgroundColor:'white'
     },
 

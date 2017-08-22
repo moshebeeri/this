@@ -127,7 +127,7 @@ export default class BusinessFollow extends Component {
                 <Item style={styles.follow_search}  regular >
                     {back}
                     <Input  style={styles.follow_search_field}   value={this.state.searchText} onSubmitEditing={this.search.bind(this)}blurOnSubmit={true} returnKeyType='search' ref="1" onChangeText={(searchText) => this.setState({searchText})} placeholder='Search Business' />
-                    <Button small  style={{backgroundColor:'white',height:50}}onPress={this.search.bind(this)}>
+                    <Button small  style={{backgroundColor:'white',height:48}}onPress={this.search.bind(this)}>
                         <Icon2 style={{marginRight:10,fontSize:30}}name='search' />
 
 
