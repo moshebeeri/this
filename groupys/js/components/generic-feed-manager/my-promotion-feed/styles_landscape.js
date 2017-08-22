@@ -11,14 +11,14 @@ module.exports = {
 
     button: {
 
-        width: width,
+        width: height,
         height: 46,
         justifyContent:'center',
         marginTop:10
     },
     buttonText: {
 
-        paddingLeft:width/2 -20,
+        paddingLeft:height/2 -20,
         fontSize:20,
         color:'white',
         justifyContent:'center'
@@ -62,12 +62,12 @@ module.exports = {
         flex:-1,justifyContent:'center',flexDirection: 'row',height: 30,
     },
     image:{
-        width: width-50, height: 300,flex:-1,  borderBottomLeftRadius: 15, borderTopLeftRadius: 15, borderWidth: 1, alignSelf: 'flex-start',
+        width: height-50, height: 300,flex:-1,  borderBottomLeftRadius: 15, borderTopLeftRadius: 15, borderWidth: 1, alignSelf: 'flex-start',
     },
     imageLogoName:{
         textShadowOffset:{width:1,height:1},
         textShadowColor:'black',
-            fontWeight: 'bold',marginLeft:2,fontSize:18,color:'white'
+        fontWeight: 'bold',marginLeft:2,fontSize:18,color:'white'
     },
     imageTopText:{
         textShadowOffset:{width:1,height:1},
@@ -84,7 +84,7 @@ module.exports = {
     },
     backdropView: {
         height: 300,
-        width: width,
+        width: height,
         backgroundColor: 'rgba(0,0,0,0)',
     },
 
@@ -128,23 +128,8 @@ module.exports = {
 
     promotion_container: {
         flex: 1,
-        height: 560,
-        width: width ,
-        overflow: 'hidden',
-        backgroundColor:'#b7b7b7',
-        // backgroundColor:'#FFF',
-        alignItems: 'center',
-        flexDirection: 'column',
-
-
-
-
-
-    },
-   bussiness_container: {
-        flex: 1,
-        height: 430,
-        width: width ,
+        height: 235,
+        width: height ,
         overflow: 'hidden',
         backgroundColor:'#b7b7b7',
         // backgroundColor:'#FFF',
@@ -159,31 +144,22 @@ module.exports = {
     promotion_card:{
         alignItems: 'center',
         flexDirection: 'column',
-        backgroundColor:'#b7b7b7',
-        width: width,
 
+        width: height -16,
 
+        backgroundColor:'#FFF',
         borderRadius:2,
 
     },
     promotion_image:{
-        width: width , height: 250,borderWidth:10
+        width: height -18, height: 200, alignSelf: 'flex-start',
     },
     promotion_upperContainer: {
 
         backgroundColor:'white',
-        width: width -20,
+        width: height -20,
         borderRadius:2,
-        height: 120,
-        flexDirection: 'column'
-
-    },
-    bussiness_upperContainer: {
-
-        backgroundColor:'white',
-        width: width -20,
-        borderRadius:2,
-        height: 50,
+        height: 70,
         flexDirection: 'column'
 
     },
@@ -194,9 +170,8 @@ module.exports = {
     },
 
     promotion_description:{
-        flexDirection: 'column',
-        margin:10,
-        height: 50,
+        flexDirection: 'row',
+        marginLeft:10,
         marginTop:2
     },
 
@@ -215,14 +190,14 @@ module.exports = {
 
     promotion_backdropView: {
         height: 200,
-        width: width,
+        width: height,
         backgroundColor: 'rgba(0,0,0,0)',
     },
     promotion_type:{
         fontFamily:'Roboto-Regular',fontWeight: 'bold',  marginLeft:10,marginTop:5,fontSize:18,color:'black'
     },
     promotion_text_description:{
-        fontFamily:'Roboto-Regular', marginLeft:10,marginTop:0,fontSize:14,color:'black'
+        fontFamily:'Roboto-Regular',  marginLeft:10,marginTop:0,fontSize:14,color:'black'
     },
     promotion_buttonText: {
         paddingTop:10,
@@ -235,7 +210,7 @@ module.exports = {
 
     },
     promotion_buttonView:{
-        flex:-1,justifyContent:'center',flexDirection: 'row',height: 50, width: width ,backgroundColor:'#363636'
+        flex:-1,justifyContent:'center',flexDirection: 'row',height: 50, width: height ,backgroundColor:'#363636'
     },
 
     promotion_iconView:{
@@ -244,24 +219,29 @@ module.exports = {
 
     promotion_buttomUpperContainer: {
         backgroundColor:'white',
-        width: width -20,
-        height: 140,
+        width: height -20,
+        height: 120,
         flexDirection: 'row',
         marginTop:0,
     },
-    business_buttomUpperContainer: {
+    promotion_action_container: {
         backgroundColor:'white',
-        width: width -20,
-        height: 80,
+        width: height -20,
+        height: 40,
+        flexDirection: 'row',
+        marginTop:0,
+    },
+    promotion_button_space: {
+        backgroundColor:'white',
+        width: height -20,
+        height: 2,
         flexDirection: 'row',
         marginTop:0,
     },
     promotion_bottomContainer: {
 
         backgroundColor:'white',
-        width: width -18,
-        alignItems: 'center',
-        justifyContent: 'space-between',
+        width: height -18,
         height: 40,
         flexDirection: 'row',
         marginTop:0,
@@ -270,7 +250,7 @@ module.exports = {
 
     },
 
-        promotion_like: {
+    promotion_like: {
 
         marginLeft:10 ,
         marginRight:10 ,
@@ -299,27 +279,9 @@ module.exports = {
         fontFamily:'Roboto-Regular',marginRight:20,marginLeft:10,marginTop:0,marginBottom:5,color:'gray',fontSize:16
     },
     promotion_nameText:{
-        fontFamily:'Roboto-Black',fontWeight: 'bold',marginRight:20,marginLeft:10,marginTop:5,marginBottom:5,color:'black',fontSize:18
+        fontFamily:'Roboto-Black',fontWeight: 'bold',marginRight:20,marginLeft:10,marginTop:5,marginBottom:5,color:'black',fontSize:16
     },
 
-    messageContainer:{
-        flexDirection: 'row',
-        margin:2,
-        borderWidth:0,
-        maxWidth:width -20
-    },
-    message_Container:{
-        flexDirection: 'row',
-
-
-        width:width,
-
-    },
-    messageName:{
-        margin:5,
-        flexDirection: 'column',
-
-    }
 
 
 };

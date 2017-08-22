@@ -7,7 +7,10 @@ import {Container, Content, Text,Title, InputGroup, Input, Button, Icon, View,He
 
 import GroupApi from "../../../api/groups"
 let groupApi = new GroupApi();
-import styles from './styles'
+
+import stylesPortrate from './styles'
+import stylesLandscape from './styles_landscape'
+import StyleUtils from '../../../utils/styleUtils'
 export default class GenericListGroupView extends Component {
 
 
@@ -34,6 +37,11 @@ export default class GenericListGroupView extends Component {
     }
 
     render() {
+        let styles = stylesPortrate
+        if(StyleUtils.isLandscape()){
+            alert('changeStyle')
+            styles = stylesLandscape;
+        }
 
         let row = undefined
         let image =  <Thumbnail large square   source={require('../../../../images/client_1.png')}/>

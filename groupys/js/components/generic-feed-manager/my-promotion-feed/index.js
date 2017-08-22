@@ -8,7 +8,7 @@ let userApi = new UserApi();
 import PromotionApi from '../../../api/promotion'
 let promotionApi = new PromotionApi();
 
-import styles from './styles'
+
 import Icon from 'react-native-vector-icons/FontAwesome';
 import Icon2 from 'react-native-vector-icons/EvilIcons';
 import Icon3 from 'react-native-vector-icons/MaterialIcons';
@@ -17,6 +17,10 @@ const ReactNative = require('react-native');
 const { StyleSheet, Platform, Dimensions } = ReactNative;
 
 const {width, height} = Dimensions.get('window')
+
+import stylesPortrate from './styles'
+import stylesLandscape from './styles_landscape'
+import StyleUtils from '../../../utils/styleUtils'
 
 export default class MyPromotionFeedItem extends Component {
 
@@ -100,6 +104,10 @@ export default class MyPromotionFeedItem extends Component {
 
 
     createPromotion(item){
+        let styles = stylesPortrate
+        if(StyleUtils.isLandscape()){
+            styles = stylesLandscape;
+        }
 
         let promotion = undefined;
         let colorStyle = {
