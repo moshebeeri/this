@@ -31,6 +31,7 @@ import UserPermittedRoles from './components/premitedUsers/index'
 import GenericComments from './components/comment/comments'
 import  ChangePassword from './components/changePassword/index'
 import BusinessProfile from './components/business/profile/index'
+import BusinessFollow from './components/business/follow/index'
 import Businesses from './components/business/index'
 // var PushNotification = require('react-native-push-notification');
 //
@@ -93,7 +94,8 @@ const AppNavigator = StackNavigator({
     userPermittedRoles: {screen:UserPermittedRoles},
     genericComments:{screen:GenericComments},
     changePassword:{screen:ChangePassword},
-    businessProfile:{screen:BusinessProfile}
+    businessProfile:{screen:BusinessProfile},
+    businessFollow:{screen:BusinessFollow}
 
 
 

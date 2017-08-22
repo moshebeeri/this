@@ -54,6 +54,15 @@ import { bindActionCreators } from "redux";
 
     }
 
+    followBusiness(){
+        let group = this.props.item;
+
+        this.props.navigation.navigate("businessFollow",{business:group.entity.business,group:group});
+
+    }
+
+
+
     addPromotion(){
              let group = this.props.item;
 
@@ -119,7 +128,7 @@ import { bindActionCreators } from "redux";
                     <MenuOption onSelect={this.showUsers.bind(this)}>
                         <Text>Add User</Text>
                     </MenuOption>
-                    <MenuOption onSelect={() => alert(`Follow Business`)}>
+                    <MenuOption onSelect={this.followBusiness.bind(this)}>
                         <Text>Follow Business</Text>
                     </MenuOption>
                     <MenuOption onSelect={this.addPromotion.bind(this)}>
