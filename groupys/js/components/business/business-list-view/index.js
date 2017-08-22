@@ -116,10 +116,12 @@ export default class BusinessListView extends Component {
             </TouchableOpacity>
         }
         return ( <View style={{padding:5,backgroundColor:'#eaeaea'}}  >
-            <View style={{flex:-1, padding:5,backgroundColor:'white',flexDirection: 'row' ,alignItems: 'center',}}>
+            <View style={{flex:-1, padding:5,backgroundColor:'white',flexDirection: 'row' ,justifyContent: 'space-between',alignItems: 'center',}}>
+                <View  style={{flexDirection: 'row',alignItems: 'center'}}>
                 {banner}
 
                 <Text style={{marginLeft:10}}>{this.props.item.business.name}</Text>
+                </View>
                 <View style={{marginLeft:80,flex:-1, flexDirection: 'row' ,alignItems: 'center',}}>
                 {editButton}
                 </View>
@@ -140,7 +142,8 @@ export default class BusinessListView extends Component {
 
 
 
-                <View style={{height:40,flexDirection: 'row', alignItems: 'center'}} >
+                <View style={{height:40,flexDirection: 'row', alignItems: 'center',
+                    justifyContent: 'space-between', }} >
                     {premissionsButton}
 
 
