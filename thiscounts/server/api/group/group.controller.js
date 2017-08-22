@@ -468,14 +468,16 @@ exports.user_follow = function (req, res) {
   let skip = req.params.skip;
   let limit = req.params.limit;
 
-  graphModel.query_ids(`MATCH (u:user {_id:'${req.user._id}'})-[r:FOLLOW]->(g:group) 
+  const query = `MATCH (u:user {_id:'${req.user._id}'})-[r:FOLLOW]->(g:group) 
                         OPTIONAL MATCH (u)-[role:ROLE]->(:business)-[:DEFAULT_GROUP|BUSINESS_GROUP]->(g)
                         OPTIONAL MATCH (u)-[o:OWNS]->(:business)-[:DEFAULT_GROUP|BUSINESS_GROUP]->(g)
                         RETURN g._id as _id, r.timestamp as touched
                         CASE
                           WHEN role <> null then role.name
                           ELSE 'owner'
-                        END AS role`,
+                        END AS role`;
+  console.log(query);
+  graphModel.query_ids(query,
     'order by r.timestamp desc', skip, limit, function(err, gObjects) {
       let _ids = [];
       let id2touch = {};
