@@ -17,8 +17,9 @@ import LinearGradient from 'react-native-linear-gradient';
 
 import Icon4 from 'react-native-vector-icons/Entypo';
 
-import styles from './styles'
-
+import stylesPortrate from './styles'
+import stylesLandscape from './styles_lendscape'
+import StyleUtils from '../../../../utils/styleUtils'
 
 export default class FeedBusiness extends Component {
 
@@ -32,6 +33,10 @@ export default class FeedBusiness extends Component {
 
 
     createBussines(item,like,unlike,showUsers,comment){
+        let styles = stylesPortrate
+        if(StyleUtils.isLandscape()){
+            styles = stylesLandscape;
+        }
 
         if(!item.name){
             return <View></View>;

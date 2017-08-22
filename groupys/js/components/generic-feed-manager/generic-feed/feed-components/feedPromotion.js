@@ -2,7 +2,7 @@
  * Created by roilandshut on 23/07/2017.
  */
 import React, {Component} from 'react';
-import {Image ,Platform,PanResponder,TouchableHighlight,TouchableOpacity } from 'react-native';
+import {Image ,Platform,PanResponder,TouchableHighlight,TouchableOpacity,Dimensions } from 'react-native';
 import {connect} from 'react-redux';
 import {actions} from 'react-native-navigation-redux-helpers';
 import { Container, Content, Text, InputGroup, Input,Thumbnail,Button,Picker,Right,Item,Left,Header,Footer,Body, View,Card,CardItem } from 'native-base';
@@ -13,15 +13,20 @@ import Icon from 'react-native-vector-icons/FontAwesome';
 import Icon2 from 'react-native-vector-icons/EvilIcons';
 import Icon3 from 'react-native-vector-icons/MaterialIcons';
 
-import styles from './styles'
-
+import stylesPortrate from './styles'
+import stylesLandscape from './styles_lendscape'
+import StyleUtils from '../../../../utils/styleUtils'
 
 export default class FeedPromotion extends Component {
 
+    constructor() {
+        super();
+
+
+    }
 
 
     render(){
-
         return this.createPromotion(this.props.item,this.props.save,this.props.like,this.props.unlike,this.props.showUsers,this.props.comment);
     }
 
@@ -32,6 +37,10 @@ export default class FeedPromotion extends Component {
     }
 
     createPromotion(item,save,like,unlike,showUsers,comment){
+        let styles = stylesPortrate
+        if(StyleUtils.isLandscape()){
+            styles = stylesLandscape;
+        }
 
         let promotion = undefined;
         let colorStyle = {
@@ -128,6 +137,7 @@ export default class FeedPromotion extends Component {
 
             </Button>
         }
+
 
         let result =
             <View style={styles.promotion_container}>
