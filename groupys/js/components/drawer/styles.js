@@ -46,6 +46,19 @@ module.exports = {
         position: 'absolute',
         left: 20,
         top: 40,
+
+        borderColor: '#fff',
+        shadowColor: '#000',
+        shadowOffset: {width: 2, height: 2},
+        shadowOpacity: 0.4,
+        shadowRadius: 1,
+        borderRadius: 33,
+        width: 65,
+        height: 65,
+    },
+    thumbnail_image: {
+        position: 'absolute',
+
         borderWidth: 2,
         borderColor: '#fff',
         shadowColor: '#000',

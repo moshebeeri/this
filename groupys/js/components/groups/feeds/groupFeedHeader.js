@@ -117,7 +117,13 @@ import { bindActionCreators } from "redux";
         }
 
         let groupInvite = undefined;
+        let addPromotionMenu = undefined;
+        if(this.props.role == "owner" || this.props.role == "OWNS"||this.props.role == "Admin" || this.props.role == "Manager"  ){
 
+            addPromotionMenu =  <MenuOption onSelect={this.addPromotion.bind(this)}>
+                <Text>Add Promotion</Text>
+            </MenuOption>
+        }
         if(this.isGroupAdmin(group)) {
 
             groupInvite = <Menu>
@@ -131,9 +137,7 @@ import { bindActionCreators } from "redux";
                     <MenuOption onSelect={this.followBusiness.bind(this)}>
                         <Text>Follow Business</Text>
                     </MenuOption>
-                    <MenuOption onSelect={this.addPromotion.bind(this)}>
-                        <Text>Add Promotion</Text>
-                    </MenuOption>
+                    {addPromotionMenu}
                 </MenuOptions>
             </Menu>
         }

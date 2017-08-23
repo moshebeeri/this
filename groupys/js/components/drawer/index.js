@@ -5,7 +5,7 @@ import Icon2 from 'react-native-vector-icons/SimpleLineIcons';
 
 
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
-
+import ImagePicker from 'react-native-image-crop-picker';
 
 import styles from './styles';
 import {connect} from 'react-redux';
@@ -19,8 +19,11 @@ const briefcase = require('../../../images/briefcase.png');
 const qrcode = require('../../../images/qr-code.png');
 const settings =  require('../../../images/settings-work-tool.png');
 const changePassword =  require('../../../images/change-password-img.png');
+import EntityUtils from "../../utils/createEntity";
+import store from 'react-native-simple-store';
 
-
+let entityUtils = new EntityUtils();
+import * as userAction from "../../actions/user";
 
 
 import UserApi from '../../api/user'
@@ -39,6 +42,14 @@ class ProfileDrawer extends Component {
             phoneNumber:''
 
         };
+
+        let stateFunc = this.setState.bind(this);
+        store.get('token').then(storeToken => {
+            stateFunc({
+                    token: storeToken
+                }
+            );
+        });
     }
 
     async componentWillMount(){
@@ -82,7 +93,36 @@ class ProfileDrawer extends Component {
         this.replaceRoute('home');
 
     }
+    async pickPicture() {
+        try {
+            let image = await ImagePicker.openPicker({
 
+                cropping: true,
+                width:2000,
+                height:2000,
+                compressImageQuality: 1,
+                compressVideoPreset: 'MediumQuality',
+            });
+
+            let user = {
+                name:this.props.user.user.name,
+                _id: this.props.user.user._id,
+                image: {uri: image.path, width: image.width, height: image.height, mime: image.mime},
+                phone_number:this.props.user.user.phone_number,
+            }
+            entityUtils.update('users',user,this.state.token,this.formSuccess.bind(this),this.formFailed.bind(this),'');
+
+        }catch (e){
+            console.log(e);
+        }
+    }
+
+    formSuccess(){
+        this.props.fetchUsers();
+    }
+    formFailed(){
+
+    }
 
     render() {
         let source = noPic;
@@ -101,7 +141,10 @@ class ProfileDrawer extends Component {
 
 
                 <Image style={styles.image} source={cover}>
-                    <Image style={styles.thumbnail} source={source}/>
+                    <TouchableOpacity  style={styles.thumbnail}  onPress={() => this.pickPicture()} >
+
+                    <Image style={styles.thumbnail_image} source={source}/>
+                    </TouchableOpacity>
                 </Image>
 
                 <TouchableOpacity    onPress={() => this.showBusinesses()}  style={{ margin:3 , flexDirection: 'row', alignItems: 'center',} } regular>
@@ -145,5 +188,6 @@ export default connect(
     state => ({
         user: state.user
     }),
+    dispatch => bindActionCreators(userAction, dispatch)
 
 )(ProfileDrawer);

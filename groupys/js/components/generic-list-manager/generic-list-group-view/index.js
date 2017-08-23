@@ -22,7 +22,7 @@ export default class GenericListGroupView extends Component {
 
      showGroupFeeds(props,group){
         groupApi.touch(group._id);
-        this.props.navigation.navigate('GroupFeed',{group:group});
+        this.props.navigation.navigate('GroupFeed',{group:group,role:this.props.item.role});
     }
 
     showUsers(show){

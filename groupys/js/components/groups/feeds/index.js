@@ -26,7 +26,7 @@ import EmojiPicker from 'react-native-emoji-picker-panel'
 import InstanceComment from './instancesComment';
 class GroupFeed extends Component {
     static navigationOptions = ({ navigation }) => ({
-        header:   <GroupFeedHeader navigation = {navigation} item={navigation.state.params.group}/>
+        header:   <GroupFeedHeader navigation = {navigation} role = {navigation.state.params.role} item={navigation.state.params.group}/>
 
     });
   constructor(props) {
