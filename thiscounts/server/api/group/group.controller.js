@@ -488,10 +488,12 @@ exports.user_follow = function (req, res) {
   const query = `MATCH (u:user {_id:'${req.user._id}'})-[r:FOLLOW]->(g:group) 
                         OPTIONAL MATCH (u)-[role:ROLE]->(:business)-[:DEFAULT_GROUP|BUSINESS_GROUP]->(g)
                         RETURN g._id as _id, r.timestamp as touched, role.name AS role`;
+  console.log(query);
   graphModel.query_ids(query,
     'order by r.timestamp desc', skip, limit, function(err, gObjects) {
       let _ids = [];
       let id2touch = {};
+
       gObjects.forEach(gObject => {
         _ids.push(gObject._id);
         id2touch[gObject._id] = {touched: gObject.touched, role: gObject.role}
@@ -499,6 +501,7 @@ exports.user_follow = function (req, res) {
       if (err) return handleError(res, err);
       Group.find({}).where('_id').in(_ids).exec(function (err, groups) {
         if (err) return handleError(res, err);
+
         getGroupsLastInfo(groups, function (err, groups_previews) {
           if (err) return handleError(res, err);
           groups_previews.forEach(groups_preview => {
