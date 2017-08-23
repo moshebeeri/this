@@ -71,7 +71,7 @@ exports.createAndAssign = function(userId, data, callback){
     qrcode.assigned = true;
     qrcode.save(function (err, qrcode) {
       if(err) { return callback(err); }
-      return callback(qrcode);
+      return callback(null, qrcode);
     })
   });
 };

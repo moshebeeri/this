@@ -178,7 +178,7 @@ exports.create = function (req, res) {
 
             if (err) return handleError(res, err);
             if(business.type === 'PERSONAL_SERVICES' ||  business.type ===  'SMALL_BUSINESS'){
-              let grunt_query = `MATCH (user:user{_id:"${user}"}), (entity{_id:"${business._id}"})
+              let grunt_query = `MATCH (user:user{_id:"${user._id}"}), (entity{_id:"${business._id}"})
                      CREATE (user)-[role:ROLE{name:"OWNS"}]->(entity)`;
 
               graphModel.query(grunt_query, function(err){
