@@ -128,7 +128,7 @@ module.exports = {
 
     promotion_container: {
         flex: 1,
-        height: 150,
+        height: 195,
         width: width ,
         overflow: 'hidden',
         backgroundColor:'#b7b7b7',
@@ -167,7 +167,7 @@ module.exports = {
 
     },
     promotion_image:{
-        width: width , height: 250,borderWidth:10
+        width: 110 , height: 110,borderWidth:10
     },
     promotion_upperContainer: {
 
@@ -221,6 +221,12 @@ module.exports = {
     promotion_type:{
         fontFamily:'Roboto-Regular',fontWeight: 'bold',  marginLeft:10,marginTop:5,fontSize:18,color:'black'
     },
+    promotion_name:{
+        fontFamily:'Roboto-Regular',fontWeight: 'bold',  marginLeft:10,marginTop:5,fontSize:20,color:'black'
+    },
+    promotion_desc:{
+        fontFamily:'Roboto-Regular',  marginLeft:10,marginTop:0,fontSize:14,color:'black'
+    },
     promotion_text_description:{
         fontFamily:'Roboto-Regular', marginLeft:10,marginTop:0,fontSize:14,color:'black'
     },
@@ -245,9 +251,21 @@ module.exports = {
     promotion_buttomUpperContainer: {
         backgroundColor:'white',
         width: width -20,
-        height: 140,
+        height: 135,
         flexDirection: 'row',
         marginTop:0,
+
+    },
+    promotion_nameContainer: {
+        backgroundColor:'white',
+        borderBottomWidth:0.3,
+        borderColor:'#b7b7b7',
+        width: width -20,
+        height: 55,
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+        marginTop:0,
+
     },
     business_buttomUpperContainer: {
         backgroundColor:'white',
@@ -304,7 +322,7 @@ module.exports = {
     },
 
     promotion_addressText:{
-        fontFamily:'Roboto-Regular',marginRight:20,marginLeft:10,marginTop:0,marginBottom:5,color:'gray',fontSize:16
+        fontFamily:'Roboto-Regular',marginRight:20,marginLeft:10,marginTop:0,marginBottom:0,color:'gray',fontSize:16
     },
     promotion_nameText:{
         fontFamily:'Roboto-Black',fontWeight: 'bold',marginRight:20,marginLeft:10,marginTop:5,marginBottom:5,color:'black',fontSize:18

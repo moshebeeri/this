@@ -317,7 +317,76 @@ class FeedConverter
         }
         return responseFeed;
     }
+
+    createPromotionAttributes(promotion,type){
+        let response = {};
+        response.name = promotion.name;
+        response.description = promotion.description;
+        if (promotion.pictures.length > 0) {
+            response.banner = {
+                uri: promotion.pictures[0].pictures[1]
+            };
+        }
+        let date = new Date(promotion.end);
+        response.endDate =  date.toDateString();
+        response.businessAddress = promotion.entity.business.city + ' ' + promotion.entity.business.address;
+
+        switch (type) {
+            case "REDUCED_AMOUNT":
+                response.itemTitle = "Buy For " + promotion.reduced_amount.values[0].price + ' Pay Only ' + promotion.reduced_amount.values[0].pay;
+                response.promotion = 'REDUCED AMOUNT';
+                response.promotionColor = '#e65100';
+                response.quantity = 'Total ' + promotion.reduced_amount.quantity
+                break;
+            case "PERCENT":
+                if( promotion.condition.product) {
+                    response.itemTitle = "Get " +promotion.condition.product.name + " with " + promotion.percent.values[0] + ' % Off ';
+
+                }else {
+                    response.itemTitle = "Get " + promotion.percent.values[0] + ' % Off ';
+                }
+                response.promotion = 'PERCENT';
+                response.promotionColor = '#df80ff';
+                response.quantity = 'Total ' + promotion.percent.quantity
+                break;
+            case "X_FOR_Y":
+                response.itemTitle = 'Buy ' + promotion.x_for_y.values[0].eligible + " " +  promotion.condition.product.name + " Pay only " + promotion.x_for_y.values[0].pay;
+                response.promotion = 'X FOR Y';
+                response.promotionColor = '#ff66b3';
+                 response.quantity = 'Total ' +  promotion.x_for_y.quantity
+                break;
+            case "X+N%OFF":
+                response.itemTitle = 'Buy ' +   promotion.condition.product.name + " Get " +  promotion.x_plus_n_percent_off.values[0].product.name + " with "+promotion.x_plus_n_percent_off.values[0].eligible + " %Off" ;
+                response.promotion = 'X+N%OFFf';
+                response.promotionColor = '#ff66b3';
+                response.quantity = 'Total ' + promotion.x_plus_n_percent_off.quantity
+                break;
+            case "X+Y":
+                response.itemTitle = 'Buy ' + promotion.x_plus_y.values[0].buy + " " +  promotion.condition.product.name + " Get " +promotion.x_plus_y.values[0].eligible + " " +  promotion.x_plus_y.values[0].product.name;
+                response.promotion = 'X+Y';
+                response.promotionColor = '#66ff1a';
+                response.quantity ='Total ' +  promotion.x_plus_y.quantity
+                break;
+
+            case "PUNCH_CARD":
+                response.itemTitle = '' ;
+                response.promotion = 'PUNCH CARD';
+                response.promotionColor = '#d279a6';
+                break;
+
+            default:
+                response.itemTitle = instance.type + " NOT SUPPORTED"
+                response.promotion = instance.type;
+                response.promotionColor = 'black';
+                break;
+
+        }
+        return response
+
+    }
 }
+
+
 
 // if(this.state.type == 'PERCENT'){
 //     promotion.percent = {};
