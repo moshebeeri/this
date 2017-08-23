@@ -7,6 +7,20 @@ const React = require('react-native');
 const { StyleSheet, Platform } = React;
 
 module.exports = {
+    follow_search:{
+        height:50,
+        backgroundColor:'white',
+        flexDirection: 'row',
+        alignItems: 'center',
+        marginBottom:5,
+
+        justifyContent: 'space-between',
+    },
+
+    follow_search_field:{
+
+        marginRight:20,backgroundColor:'white'
+    },
   shadow: {
     flex: 1,
     width: 330,

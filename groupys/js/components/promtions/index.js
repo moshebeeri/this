@@ -2,37 +2,23 @@ import React, {Component} from 'react';
 import {Image, Platform} from 'react-native';
 import {connect} from 'react-redux';
 import {actions} from 'react-native-navigation-redux-helpers';
-import {Container, Content, Text,Fab, InputGroup, Input, Button, View,Header} from 'native-base';
+import {Container, Content, Text,Fab, InputGroup, Input, Button, View,Item,Header} from 'native-base';
 import GenericListManager from '../generic-list-manager/index';
 import Icon from 'react-native-vector-icons/EvilIcons';
 import PromotionListItem from './list-item/index'
 import PromotionApi from "../../api/promotion"
+import styles from './styles'
+import Icon2 from 'react-native-vector-icons/EvilIcons';
+import Icon3 from 'react-native-vector-icons/Ionicons';
 let promotionApi = new PromotionApi();
 import * as promotionsAction from "../../actions/promotions";
 
 import { bindActionCreators } from "redux";
 
  class Promotions extends Component {
-
-    //
-    // on: {
-    //     business: this.state.business,
-    //     product: this.state.product,
-    // },
-    // path: this.state.path,
-    // image: this.state.image,
-    // type: this.state.type,
-    // percent: this.state.percent,
-    // amount: Number(this.state.amount),
-    // retail_price: Number(this.state.retail_price),
-    // total_discount: Number(this.state.total_discount),
-    // percent_range: this.state.percent_range,
-    // start: this.state.start,
-    // end: this.state.end,
-    // location: this.state.location,
-    // info: this.state.info,
-    // name: this.state.name,
-
+     static navigationOptions = {
+         header:null
+     };
     constructor(props) {
         super(props);
         this.state = {
@@ -50,7 +36,9 @@ import { bindActionCreators } from "redux";
         this.props.fetchFromStorePromotions(id)
 
     }
-
+     back(){
+         this.props.navigation.goBack();
+     }
 
 
 
@@ -73,6 +61,10 @@ import { bindActionCreators } from "redux";
      }
 
     render() {
+        let back = <Button transparent style={{ }} onPress={()=> this.back()}>
+            <Icon3 active color={"#2db6c8"} size={20} name="ios-arrow-back" />
+
+        </Button>
 
         let businessId = this.props.navigation.state.params.business._id;
         let promotions = undefined;
@@ -81,7 +73,13 @@ import { bindActionCreators } from "redux";
         }
 
         return (
-            <Container>
+            <Container style={{backgroundColor:'#b7b7b7'}}>
+                    <View style={styles.follow_search}  regular >
+                        {back}
+                        <Text style={{fontSize:20,color:"#2db6c8"}}>Promotions</Text>
+                        <View></View>
+                    </View>
+
             <GenericListManager navigation = {this.props.navigation} rows={promotions} title="Promotion" component="home" addComponent="addPromotions" api={this}
                                 ItemDetail={PromotionListItem}/>
                 <Fab
