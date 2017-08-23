@@ -85,7 +85,10 @@ function to_graph(campaign) {
 exports.business_campaigns = function (req, res) {
   let userID = req.user._id;
   let businessID = req.params.business_id;
-  graphModel.query("MATCH (u:user {_id:'"+ userID +"'})-[r:OWNS]->(b:business {_id:'"+ businessID +"'})-[bc:BUSINESS_CAMPAIGN]->(c:campaign) RETURN c LIMIT 25", function(err, groups){
+
+  graphModel.query(`MATCH (u:user {_id:'"+ userID +"'})-[r:ROLE{name:"OWNS"}]->
+                    (b:business {_id:"${businessID}"})-[bc:BUSINESS_CAMPAIGN]->
+                    (c:campaign) RETURN c LIMIT 25`, function(err, groups){
     if (err) {return handleError(res, err)}
     if(!groups) { return res.send(404); }
     return res.status(200).json(groups);

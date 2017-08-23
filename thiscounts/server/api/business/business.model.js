@@ -27,6 +27,7 @@ let BusinessSchema = new Schema({
 
   default_group: {type: Schema.ObjectId, index: true, ref: 'Group'},
   groups: [{type: Schema.ObjectId, index: true, ref: 'Group'}],
+  qrcode: {type: Schema.ObjectId, ref:'QRCode'},
 
   location: {
     lng: Number,

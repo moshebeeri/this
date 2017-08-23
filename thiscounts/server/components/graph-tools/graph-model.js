@@ -211,8 +211,8 @@ GraphModel.prototype.owner_followers_follow_business = function owner_followers_
   }
   let userFilter = utils.undefined(follower_id)? '' : `{ _id:'${follower_id}'}`;
 
-  let query = `MATCH (u:user ${userFilter})-[:FOLLOW]->(owner:user { _id:'${owner_id}' })-[:OWNS]->(b:business{type:'SMALL_BUSINESS'})
-  OPTIONAL MATCH (u:user)-[:FOLLOW]->(owner:user { _id:'${owner_id}' })-[:OWNS]->(b:business{type:'PERSONAL_SERVICE'})
+  let query = `MATCH (u:user ${userFilter})-[:FOLLOW]->(owner:user { _id:'${owner_id}' })-[:ROLE{name:"OWNS"}]->(b:business{type:'SMALL_BUSINESS'})
+  OPTIONAL MATCH (u:user)-[:FOLLOW]->(owner:user { _id:'${owner_id}' })-[:ROLE{name:"OWNS"}]->(b:business{type:'PERSONAL_SERVICE'})
   CREATE UNIQUE (u)-[r:FOLLOW]->(b)` ;
   if (utils.defined(callback)) {
     db.query(query, callback);

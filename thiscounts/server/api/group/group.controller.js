@@ -14,7 +14,7 @@ let logger = require('../../components/logger').createLogger();
 let utils = require('../../components/utils').createUtils();
 const async = require('async');
 let MongodbSearch = require('../../components/mongo-search');
-
+const qrcodeController = require('../qrcode/qrcode.controller');
 
 exports.search = MongodbSearch.create(Group);
 
@@ -119,20 +119,29 @@ exports.create = function (req, res) {
     if (err) {
       return handleError(res, err);
     }
-    graphModel.reflect(group, to_graph(group), function (err) {
-      if (err) {
-        return handleError(res, err);
+    qrcodeController.createAndAssign(group.creator, {
+      type: 'FOLLOW_GROUP',
+      entities: {
+        group: group._id
       }
-      graphModel.relate_ids(group._id, 'CREATED_BY', req.user._id);
-      graphModel.relate_ids(req.user._id, 'FOLLOW', group._id);
-      graphModel.relate_ids(req.user._id, 'GROUP_ADMIN', group._id);
-      if (group.entity_type === 'BUSINESS' && utils.defined(group.entity.business)) {
-        graphModel.relate_ids(group._id, 'FOLLOW', group.entity.business);
-        graphModel.relate_ids(group.entity.business, 'BUSINESS_GROUP', group._id);
-      }
-      group_activity(group, 'create');
+    }, function (err, qrcode) {
+      group.qrcode = qrcode;
+      group.save();
+      graphModel.reflect(group, to_graph(group), function (err) {
+        if (err) {
+          return handleError(res, err);
+        }
+        graphModel.relate_ids(group._id, 'CREATED_BY', req.user._id);
+        graphModel.relate_ids(req.user._id, 'FOLLOW', group._id);
+        graphModel.relate_ids(req.user._id, 'GROUP_ADMIN', group._id);
+        if (group.entity_type === 'BUSINESS' && utils.defined(group.entity.business)) {
+          graphModel.relate_ids(group._id, 'FOLLOW', group.entity.business);
+          graphModel.relate_ids(group.entity.business, 'BUSINESS_GROUP', group._id);
+        }
+        group_activity(group, 'create');
+      });
+      return res.status(201).json(group);
     });
-    return res.status(201).json(group);
   });
 };
 
@@ -141,19 +150,28 @@ exports.create_business_default_group = function (group, callback) {
     if (err) {
       return callback(err);
     }
-    graphModel.reflect(group, {
-      _id: group._id,
-      default: true,
-      created: group.created
-    }, function (err) {
-      if (err) return callback(err);
-      graphModel.relate_ids(group._id, 'CREATED_BY', group.creator);
-      graphModel.relate_ids(group.creator, 'FOLLOW', group._id);
-      graphModel.relate_ids(group.creator, 'GROUP_ADMIN', group._id);
-      graphModel.relate_ids(group._id, 'FOLLOW', group.entity.business);
-      graphModel.relate_ids(group.entity.business, 'DEFAULT_GROUP', group._id, function (err) {
-        if (err) return console.log(err);
-        return callback(null, group);
+    qrcodeController.createAndAssign(group.creator, {
+      type: 'FOLLOW_GROUP',
+      entities: {
+        group: group._id
+      }
+    }, function (err, qrcode) {
+      group.qrcode = qrcode;
+      group.save();
+      graphModel.reflect(group, {
+        _id: group._id,
+        default: true,
+        created: group.created
+      }, function (err) {
+        if (err) return callback(err);
+        graphModel.relate_ids(group._id, 'CREATED_BY', group.creator);
+        graphModel.relate_ids(group.creator, 'FOLLOW', group._id);
+        graphModel.relate_ids(group.creator, 'GROUP_ADMIN', group._id);
+        graphModel.relate_ids(group._id, 'FOLLOW', group.entity.business);
+        graphModel.relate_ids(group.entity.business, 'DEFAULT_GROUP', group._id, function (err) {
+          if (err) return console.log(err);
+          return callback(null, group);
+        });
       });
     });
   });
@@ -467,16 +485,9 @@ exports.following_users = function (req, res) {
 exports.user_follow = function (req, res) {
   let skip = req.params.skip;
   let limit = req.params.limit;
-
   const query = `MATCH (u:user {_id:'${req.user._id}'})-[r:FOLLOW]->(g:group) 
                         OPTIONAL MATCH (u)-[role:ROLE]->(:business)-[:DEFAULT_GROUP|BUSINESS_GROUP]->(g)
-                        OPTIONAL MATCH (u)-[o:OWNS]->(:business)-[:DEFAULT_GROUP|BUSINESS_GROUP]->(g)
-                        RETURN g._id as _id, r.timestamp as touched
-                        CASE
-                          WHEN role <> null then role.name
-                          ELSE 'owner'
-                        END AS role`;
-  console.log(query);
+                        RETURN g._id as _id, r.timestamp as touched, role.name AS role`;
   graphModel.query_ids(query,
     'order by r.timestamp desc', skip, limit, function(err, gObjects) {
       let _ids = [];
