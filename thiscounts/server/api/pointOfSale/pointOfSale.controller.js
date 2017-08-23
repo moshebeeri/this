@@ -11,10 +11,18 @@ function checkUserFollows(userId, businessId, callback) {
 }
 
 function checkUserRole(userId, businessId, callback) {
-  callback(null, true);
+  let owner_query = `MATCH (me:user{_id:"${userId}"})-[role:ROLE{name:"OWNS"}]->(entity{_id:"${businessId}"}) return role`;
+  graphModel.query(owner_query, function (err, roles) {
+    if (err) return callback(err);
+    if (roles.length >= 1)
+      return callback(null, true);
+    return callback(null, false);
+    });
 }
 
 function getDiscounts(userId, businessId, products, callback){
+//  let owner_query = `MATCH (me:user{_id:"${userId}"})-[role:ROLE{name:"OWNS"}]->(entity{_id:"${businessId}"}) return me, role, entity`;
+
   let discounts = [];
   products.forEach(product => {
     discounts.push({

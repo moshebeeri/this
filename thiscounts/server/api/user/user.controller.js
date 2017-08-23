@@ -558,7 +558,7 @@ function handleEntityUserRole(type, req, res) {
     return handleError(res, new Error(`you may not change your own role`));
 
   //Check if me is the entity owner, if so apply
-  let owner_query = `MATCH (me:user{_id:"${me}"})-[role:ROLE{name:"OWNS"}]->(entity{_id:"${entity}"}) return me, owns, entity`;
+  let owner_query = `MATCH (me:user{_id:"${me}"})-[role:ROLE{name:"OWNS"}]->(entity{_id:"${entity}"}) return me, role, entity`;
   graphModel.query(owner_query, function (err, me_owns_entities) {
     if (err) return handleError(res, err);
     if (me_owns_entities.length === 1) {
