@@ -24,6 +24,7 @@ let activityApi = new AcrivityApi();
 import FeedMessage from './feed-components/feedMessage'
 import FeedPromotion from './feed-components/feedPromotion'
 import FeedBusiness from './feed-components/feedBusiness'
+import FeedWelcome from './feed-components/feedWelcome'
 
 
 
@@ -150,6 +151,9 @@ export default class GenericFeedItem extends Component {
                     break;
                 case 'MESSAGE':
                     feed = <FeedMessage navigation={this.props.navigation} item={item} />
+                    break
+                case 'WELCOME':
+                    feed = <FeedWelcome navigation={this.props.navigation} item={item} />
                     break
 
                 default:

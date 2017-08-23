@@ -7,7 +7,12 @@ let graphModel = graphTools.createGraphModel('pointOfSale');
 
 
 function checkUserFollows(userId, businessId, callback) {
-  callback(null, true);
+  let owner_query = `MATCH (me:user{_id:"${userId}"})-[:FOLLOW]->(entity{_id:"${businessId}"}) 
+                     MATCH (me)-[:FOLLOW]->(group)<-[]-(entity{_id:"${businessId}"}) return me`;
+  graphModel.query(owner_query, function (err, mes) {
+    if(err) return callback(err, null);
+    callback(null, mes && mes.length > 0);
+  })
 }
 
 function checkUserRole(userId, businessId, callback) {
@@ -21,15 +26,18 @@ function checkUserRole(userId, businessId, callback) {
 }
 
 function getDiscounts(userId, businessId, products, callback){
-//  let owner_query = `MATCH (me:user{_id:"${userId}"})-[role:ROLE{name:"OWNS"}]->(entity{_id:"${businessId}"}) return me, role, entity`;
-
-  let discounts = [];
-  products.forEach(product => {
-    discounts.push({
-      product: product,
-      instance: null
-    })
-  })
+  let barcodes = [];
+  products.forEach(product => {barcodes.push(product.barcode)});
+  let business_eligible =
+    `MATCH (b:barcode)-[:BARCODE]-(p:product)-(pr:promotion)<-[i:INSTANCE_OF]-(:instance)<-[rel:SAVED]-(:user{_id:"${userId}"})
+     WHERE b.code IN ${JSON.stringify(barcodes)} 
+     AND  (b:business{_id:'${businessId}'})-[:BUSINESS_PROMOTION]->(pr)
+     return i._id as product, b.code as barcode
+     `;
+  graphModel.query(business_eligible, function (err, eligible_saved_instances) {
+    if (err) return callback(err);
+    return callback(null, eligible_saved_instances);
+  });
 }
 
 // Get list of pointOfSales
@@ -40,9 +48,9 @@ exports.userRequestDiscounts = function(req, res) {
   checkUserFollows(userId, businessId, function(err, follows){
     if(err) { return handleError(res, err); }
     if(!follows) return res.status(404).send(new Error('user is not following business nor one of its groups'));
-    getDiscounts(userId, businessId, products, function (err, discounts) {
+    getDiscounts(userId, businessId, products, function (err, eligible_saved_instances) {
       if(err) { return handleError(res, err); }
-      return res.status(200).json(discounts);
+      return res.status(200).json(eligible_saved_instances);
     })
   })
 };
