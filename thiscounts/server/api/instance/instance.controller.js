@@ -272,6 +272,7 @@ exports.qrcode = function (req, res) {
       return res.status(500).send('multiple instances found');
 
     QRCode.toDataURL(JSON.stringify({
+      t:'i',
       code: codes[0]['rel.code']
     }), function (err, url) {
       if (err) {

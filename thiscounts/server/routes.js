@@ -22,6 +22,7 @@ module.exports = function(app) {
   app.use('/api/campaigns', require('./api/campaign'));
   app.use('/api/cardTypes', require('./api/cardType'));
   app.use('/api/shoppingChains', require('./api/shoppingChain'));
+  app.use('/api/pointOfSales', require('./api/pointOfSale'));
   app.use('/api/malls', require('./api/mall'));
   app.use('/api/businesses', require('./api/business'));
   app.use('/api/explores', require('./api/explore'));
@@ -38,6 +39,7 @@ module.exports = function(app) {
   app.use('/api/comments', require('./api/comment'));
   app.use('/api/products', require('./api/product'));
   app.use('/api/promotions', require('./api/promotion'));
+  app.use('/api/qrcodes', require('./api/qrcode'));
   app.use('/api/things', require('./api/thing'));
   app.use('/api/users', require('./api/user'));
   app.use('/api/ip', require('./components/ip'));

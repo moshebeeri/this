@@ -29,6 +29,7 @@ const GroupSchema = new Schema({
   created: {type: Date, default: Date.now},
   creator: {type: Schema.ObjectId, ref: 'User', required: true},
   admins: [{type: Schema.ObjectId, ref: 'User', index: true}],
+  qrcode: {type: Schema.ObjectId, ref:'QRCode'},
 
   entity: {
     user: {type: Schema.ObjectId, ref: 'User', autopopulate: true},

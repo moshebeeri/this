@@ -13,6 +13,7 @@ let utils = require('../../components/utils').createUtils();
 let activity = require('../../components/activity').createActivity();
 let group_controller = require('../group/group.controller');
 let MongodbSearch = require('../../components/mongo-search');
+const qrcodeController = require('../qrcode/qrcode.controller');
 
 
 exports.search = MongodbSearch.create(Business);
@@ -60,7 +61,7 @@ exports.show = function (req, res) {
 
 exports.mine = function (req, res) {
   let userId = req.user._id;
-  let query = `MATCH (user:user{_id:"${userId}"})-[role:ROLE|OWNS]->(b:business) return b._id as business_id, role, type(role) as type
+  let query = `MATCH (user:user{_id:"${userId}"})-[role:ROLE]->(b:business) return b._id as business_id, role
                 order by business_id desc`;
 
   graphModel.query(query, function (err, businesses_role) {
@@ -69,7 +70,7 @@ exports.mine = function (req, res) {
     let userRoleById = {};
     businesses_role.forEach(business_role => {
       _ids.push(business_role.business_id);
-      userRoleById[business_role.business_id] = business_role.type==='OWNS'? 'OWNS' : business_role.role.properties.name;
+      userRoleById[business_role.business_id] = business_role.role.properties.name;
     });
     Business.find({}).where('_id').in(_ids)
       .sort({_id: 'desc'})
@@ -143,10 +144,7 @@ exports.create = function (req, res) {
   User.findById(userId, '-salt -hashedPassword -sms_code', function (err, user) {
     if (err) return res.status(401).send(err.message);
     if (!user) return res.status(401).send('Unauthorized');
-    let creator = null;
-    creator = user;
     body_business.creator = userId;
-
     location.address_location(body_business, function (err, data) {
       if (err) {
         if (err.code >= 400) return res.status(err.code).send(err.message);
@@ -161,43 +159,55 @@ exports.create = function (req, res) {
 
       Business.create(body_business, function (err, business) {
         if (err) return handleError(res, err);
+        qrcodeController.createAndAssign(business.creator, {
+          type: 'FOLLOW_BUSINESS',
+          entities: {
+            business: business._id
+          }
+        }, function (err, qrcode) {
+          business.qrcode = qrcode;
+          business.save();
+          graphModel.reflect(business, {
+            _id: business._id,
+            name: business.name,
+            type: business.type,
+            creator: business.creator,
+            lat: body_business.location.lat,
+            lon: body_business.location.lng
+          }, function (err, business) {
 
-        graphModel.reflect(business, {
-          _id: business._id,
-          name: business.name,
-          type: business.type,
-          creator: business.creator,
-          lat: body_business.location.lat,
-          lon: body_business.location.lng
-        }, function (err, business) {
+            if (err) return handleError(res, err);
+            if(business.type === 'PERSONAL_SERVICES' ||  business.type ===  'SMALL_BUSINESS'){
+              let grunt_query = `MATCH (user:user{_id:"${user._id}"}), (entity{_id:"${business._id}"})
+                     CREATE (user)-[role:ROLE{name:"OWNS"}]->(entity)`;
 
-          if (err) return handleError(res, err);
-          if(business.type === 'PERSONAL_SERVICES' ||  business.type ===  'SMALL_BUSINESS')
-            graphModel.relate_ids(creator._id, 'OWNS', business._id, function(err){
-              if(err) console.log(err);
-              graphModel.owner_followers_follow_business(user._id);
+              graphModel.query(grunt_query, function(err){
+                if(err) console.log(err);
+                graphModel.owner_followers_follow_business(user._id);
+              });
+            }
+
+            if (defined(business.shopping_chain))
+              graphModel.relate_ids(business._id, 'BRANCH_OF', business.shopping_chain);
+
+            if (defined(business.mall))
+              graphModel.relate_ids(business._id, 'IN_MALL', business.mall);
+
+            spatial.add2index(business.gid, function (err, result) {
+              if (err) logger.error(err.message);
+              else logger.info('object added to layer ' + result)
             });
-
-          if (defined(business.shopping_chain))
-            graphModel.relate_ids(business._id, 'BRANCH_OF', business.shopping_chain);
-
-          if (defined(business.mall))
-            graphModel.relate_ids(business._id, 'IN_MALL', business.mall);
-
-          spatial.add2index(business.gid, function (err, result) {
-            if (err) logger.error(err.message);
-            else logger.info('object added to layer ' + result)
+            activity.activity({
+              business: business._id,
+              actor_user: business.creator,
+              action: 'created'
+            }, function (err) {
+              if (err) console.error(err.message)
+            });
+            create_business_default_group(business);
+            return res.status(201).json(business);
           });
-          activity.activity({
-            business: business._id,
-            actor_user: business.creator,
-            action: 'created'
-          }, function (err) {
-            if (err) console.error(err.message)
-          });
-          create_business_default_group(business);
-          return res.status(201).json(business);
-        });
+        })
       });
     });
   });
