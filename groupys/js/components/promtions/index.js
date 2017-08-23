@@ -5,7 +5,7 @@ import {actions} from 'react-native-navigation-redux-helpers';
 import {Container, Content, Text,Fab, InputGroup, Input, Button, View,Header} from 'native-base';
 import GenericListManager from '../generic-list-manager/index';
 import Icon from 'react-native-vector-icons/EvilIcons';
-import GenericListView from '../generic-list-manager/generic-list-view/index'
+import PromotionListItem from './list-item/index'
 import PromotionApi from "../../api/promotion"
 let promotionApi = new PromotionApi();
 import * as promotionsAction from "../../actions/promotions";
@@ -83,7 +83,7 @@ import { bindActionCreators } from "redux";
         return (
             <Container>
             <GenericListManager navigation = {this.props.navigation} rows={promotions} title="Promotion" component="home" addComponent="addPromotions" api={this}
-                                ItemDetail={GenericListView}/>
+                                ItemDetail={PromotionListItem}/>
                 <Fab
 
             direction="right"
