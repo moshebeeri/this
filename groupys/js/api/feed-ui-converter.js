@@ -63,6 +63,16 @@ class FeedConverter
 
             response.itemType = 'BUSINESS';
         }
+        if (feed.activity.action == 'welcome') {
+            response={
+                name:feed.activity.user.name,
+                message:'Thank you for joining THIS,' +
+                ' im a few minute you would start to receive Promotion',
+                itemType : 'WELCOME',
+                id: feed._id,
+                fid: feed._id,
+            }
+        }
 
         if (feed.activity.action == 'group_message' || feed.activity.action == 'group_follow') {
 

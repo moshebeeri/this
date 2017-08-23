@@ -156,6 +156,21 @@ module.exports = {
 
 
     },
+    Welcome_container: {
+        flex: 1,
+        height: 110,
+        width: width ,
+        overflow: 'hidden',
+        backgroundColor:'#b7b7b7',
+        // backgroundColor:'#FFF',
+        alignItems: 'center',
+        flexDirection: 'column',
+
+
+
+
+
+    },
     promotion_card:{
         alignItems: 'center',
         flexDirection: 'column',
@@ -184,6 +199,16 @@ module.exports = {
         width: width -20,
         borderRadius:2,
         height: 50,
+        flexDirection: 'column'
+
+    },
+    welcome_upperContainer: {
+
+        backgroundColor:'white',
+        width: width -20,
+        borderRadius:2,
+        height: 100,
+        marginTop:5,
         flexDirection: 'column'
 
     },
