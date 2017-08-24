@@ -91,7 +91,7 @@ function to_graph(promotion) {
 let relateTypes = function (promotion) {
   let db = promotionGraphModel.db();
   let query =  `MATCH (promotion), (type:PromotionType{PromotionType:'${promotion.type}'}) 
-                WHERE  id(promotion)=${promotion.gid}} 
+                WHERE  id(promotion)=${promotion.gid} 
                 CREATE (promotion)-[:PROMOTION_TYPE]->(type) `;
   db.query(query, function (err) {
     if (err) {
