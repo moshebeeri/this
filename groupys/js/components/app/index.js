@@ -5,6 +5,8 @@ import {actions} from 'react-native-navigation-redux-helpers';
 import {Container, Content, Text,Title, InputGroup,
     Input, Button, View,Header, Body, Right, ListItem,Tabs,Tab, TabHeading,Thumbnail,Left,Drawer,Fab} from 'native-base';
 import Icon from 'react-native-vector-icons/EvilIcons';
+import Icon2 from 'react-native-vector-icons/Ionicons';
+
 import GeneralComponentHeader from '../header/index';
 
 import Business from '../business/index';
@@ -17,6 +19,11 @@ import LocationApi from '../../api/location'
 import UserApi from '../../api/user'
 import ContactApi from '../../api/contacts'
 import BackgroundTimer from 'react-native-background-timer';
+
+const promotions =  require('../../../images/promotion.png');
+const save =  require('../../../images/save.png');
+const groups =  require('../../../images/groups.png');
+
 let locationApi = new LocationApi();
 let contactApi = new ContactApi();
 let userApi = new UserApi();
@@ -245,20 +252,23 @@ import * as userAction from "../../actions/user";
                                                     to={this.state.addComponent}/>
 
                 <Tabs tabBarUnderlineStyle={ {backgroundColor: '#2db6c8'} } initialPage={index} onChangeTab={this.onChangeTab.bind(this)} style={{backgroundColor: '#fff',}}>
-                    <Tab heading={ <TabHeading style={{ backgroundColor: "white" }}><Text style={{color: '#2db6c8', fontSize: 13,}}>FEED</Text></TabHeading>}>
+                    <Tab heading={ <TabHeading style={{ backgroundColor: "white" }}><Image style={{tintColor:'#2db6c8',marginLeft:0,width:35,height:35}} source={promotions}/></TabHeading>}>
                         <Feeds index={0}  navigation={this.props.navigation} navigateAction={this.headerAction.bind(this)}/>
                     </Tab>
-                    <Tab heading={ <TabHeading style={{ backgroundColor: "white" }}><Text style={{color: '#2db6c8', fontSize: 13,}}>PROMOTION</Text></TabHeading>}>
+                    <Tab heading={ <TabHeading style={{ backgroundColor: "white" }}><Image style={{tintColor:'#2db6c8',marginLeft:0,width:25,height:25}} source={save}/></TabHeading>}>
                         <MydPromotions  navigation={this.props.navigation}  index={1} navigateAction={this.headerAction.bind(this)}/>
                     </Tab>
 
                     <Tab
-                        heading={ <TabHeading style={{ backgroundColor: "white" }}><Text style={{color: '#2db6c8', fontSize: 13,}}>GROUPS</Text></TabHeading>}>
+                        heading={ <TabHeading style={{ backgroundColor: "white" }}><Image style={{tintColor:'#2db6c8',marginLeft:0,width:55,height:55}} source={groups}/></TabHeading>}>
                         <Groups navigation={this.props.navigation} index={2}
                                 navigateAction={this.headerAction.bind(this)}/>
                     </Tab>
 
-
+                    <Tab
+                        heading={ <TabHeading style={{ width:15,backgroundColor: "white" }}><Icon2 style={{color: '#2db6c8', fontSize: 30,}}name="md-notifications"/></TabHeading>}>
+                       <Text>hello</Text>
+                    </Tab>
 
 
 
