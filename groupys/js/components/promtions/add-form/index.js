@@ -102,6 +102,19 @@ import {DeviceEventEmitter} from 'react-native'
 
 
     constructor(props) {
+        let defaultDate = new Date();
+        let month = defaultDate.getMonth();
+
+
+        if(month < 12){
+            defaultDate.setMonth(month + 1);
+        }else{
+            let year = defaultDate.getYear();
+            defaultDate.setMonth(1);
+            defaultDate.setYear(year +1);
+        }
+
+
         super(props);
         this.state = {
             token: '',
@@ -119,7 +132,7 @@ import {DeviceEventEmitter} from 'react-native'
             total_discount: '',
             percent_range: {},
             start: "",
-            end: "",
+            end: defaultDate,
             location: "",
             info: "",
             discount_on: '',
