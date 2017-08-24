@@ -83,7 +83,7 @@ export default class Signup extends Component {
                 phone_number: cleanPhone,
                 email:  '972' + cleanPhone + "@low.la",
                 password: this.state.password,
-                name: this.state.name + this.state.lastname,
+                name: this.state.name +' ' + this.state.lastname,
 
 
 

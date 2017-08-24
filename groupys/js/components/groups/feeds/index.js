@@ -128,6 +128,10 @@ class GroupFeed extends Component {
             })
         }
     }
+
+    updateFeed(feed){
+        this.props.updateGroupFeed(feed,this.props.navigation.state.params.group);
+    }
     hideEmoji(){
         this.setState({
             showEmoji:false,
@@ -202,16 +206,8 @@ class GroupFeed extends Component {
         if(!feeds){
             feeds = [];
         }
-        if(feeds.length > 0) {
-            feeds = feeds.sort(function (a, b) {
-                let date1 = new Date( a.date);
-                let date2 = new Date(b.date);
-                return date1 - date2  ;
 
 
-            })
-        }
-        console.log(feeds)
         let showTop = this.props.feeds['showTopLoader'+this.props.navigation.state.params.group._id];
         if(!showTop){
             showTop = false;

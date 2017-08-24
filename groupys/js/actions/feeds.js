@@ -331,6 +331,16 @@ export function updateHomeFeed(feed) {
     }
 }
 
+export function updateGroupFeed(feed,group) {
+    return function (dispatch, getState) {
+        dispatch({
+            type: 'UPDATE_GROUP_FEED',
+            feed: feed,
+            group:group
+        });
+    }
+}
+
 export function fetchUsers(){
     return function (dispatch, getState){
         dispatch|(getUser(dispatch,));

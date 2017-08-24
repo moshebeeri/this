@@ -46,6 +46,10 @@ class Feed extends Component {
         this.props.nextLoad();
     }
 
+    fetchSaved(){
+
+    }
+
 
     render() {
 
