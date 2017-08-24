@@ -59,8 +59,10 @@ export default function feeds(state = initialState, action) {
         case 'GET_GROUP_FEEDS' :
 
             let feed = {...state};
-            store.save('groups'+ action.groupid,action.feeds)
-            feed['groups'+ action.groupid] = action.feeds;
+            if(action.feeds && action.feeds.length > 0) {
+                store.save('groups' + action.groupid, action.feeds)
+                feed['groups' + action.groupid] = action.feeds;
+            }
             feed['showTopLoader' +action.groupid ] = action.showTopLoader;
             feed['grouploadingDone'+ action.groupid] = true;
             return feed;
