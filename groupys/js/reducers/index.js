@@ -9,6 +9,7 @@ import promotions from './promotionReducer';
 import products from './productReducer';
 import user from './UserReducer';
 import comments from './commentReducer';
+import notification from './notificationReducer';
 export default function getRootReducer() {
 
     return combineReducers({
@@ -18,6 +19,7 @@ export default function getRootReducer() {
         promotions: promotions,
         products:products,
         user:user,
+        notification:notification,
         comments:comments
     });
 }

@@ -12,7 +12,7 @@ import GeneralComponentHeader from '../header/index';
 import Business from '../business/index';
 import Feeds from '../feed/index'
 import MydPromotions from '../my-promotions/index'
-
+import Notification from '../notifications/index'
 import Groups from '../groups/index'
 
 import LocationApi from '../../api/location'
@@ -179,7 +179,7 @@ import * as userAction from "../../actions/user";
             case 2:
                 return true;
             case 3:
-                return true;
+                return false;
             case 4:
                 return true;
             case 5:
@@ -233,7 +233,7 @@ import * as userAction from "../../actions/user";
                     direction="right"
                     active={false}
                     containerStyle={{ marginLeft: 10 }}
-                    style={{ backgroundColor: "#ffb3b3" }}
+                    style={{ backgroundColor: "#e65100" }}
                     position="bottomRight"
                     onPress={() => this.navigateToAdd()}>
                     <Icon size={20} name="plus" />
@@ -267,7 +267,7 @@ import * as userAction from "../../actions/user";
 
                     <Tab
                         heading={ <TabHeading style={{ width:15,backgroundColor: "white" }}><Icon2 style={{color: '#2db6c8', fontSize: 30,}}name="md-notifications"/></TabHeading>}>
-                       <Text>hello</Text>
+                         <Notification navigation={this.props.navigation} index={3} navigateAction={this.headerAction.bind(this)}></Notification>
                     </Tab>
 
 
