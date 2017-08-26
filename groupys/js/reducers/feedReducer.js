@@ -132,6 +132,15 @@ export default function feeds(state = initialState, action) {
                 ...state,
                 feeds : updatedFeeds,
             };
+        case 'UPDATE_GROUP_FEED':
+
+
+            let feedGroupState= {...state};
+            let updatedGroupFeeds = updateGroupFeeds(feedGroupState,action.feed,action.group);
+            updatedGroupFeeds = filterFeed(updatedGroupFeeds);
+            feedGroupState['groups'+ action.group._id] =updatedGroupFeeds;
+            store.save('groups'+ action.group._id,updatedGroupFeeds)
+            return feedGroupState;
         case 'FEED_LOADING':
             return {
                 ...state,
@@ -160,6 +169,17 @@ function updateFeeds(feedState,feed) {
            return feed;
        }
        return item;
+    })
+
+}
+
+function updateGroupFeeds(feedState,feed,group) {
+    let feeds =  feedState['groups'+ group._id]
+    return feeds.map(function (item) {
+        if(item.id == feed.id){
+            return feed;
+        }
+        return item;
     })
 
 }

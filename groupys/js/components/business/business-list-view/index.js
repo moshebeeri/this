@@ -5,7 +5,7 @@ import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import Icon2 from 'react-native-vector-icons/MaterialIcons';
 const covefr = require('../../../../images/cover2.png');
 import styles from './styles'
-const promotions =  require('../../../../images/noun_681891_cc.png');
+const promotions =  require('../../../../images/promotion.png');
 const products =  require('../../../../images/barcode.png');
 
 const premissions =  require('../../../../images/permissions.png');
