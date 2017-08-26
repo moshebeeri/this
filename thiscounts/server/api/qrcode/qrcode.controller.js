@@ -2,13 +2,30 @@
 
 let QRCode = require('./qrcode.model');
 const QRCodeImg = require('qrcode');
-
 const randomstring = require("randomstring");
+const fs = require('fs');
+const path = require('path');
+const rootDir = path.normalize(`${path.resolve(__dirname)}`);
+
 
 function allocate(quantity, userId){
-  for(let i=0; i<quantity; i++) {
-    allocate_one(userId);
+  function allocated(err, qrcode) {
+    if(err) {return console.log(err)}
+    QRCodeImg.toDataURL(JSON.stringify({
+      t: 'g',
+      code: qrcode.code
+    }), { errorCorrectionLevel: 'H', scale: 16 }, function (err, url) {
+      if (err) {return console.log(err)}
+      const base64Data = url.replace(/^data:image\/png;base64,/, '');
+      console.log(`${rootDir}/codes/out.png`);
+      fs.writeFile(`${rootDir}/codes/${(new Date()).getTime().toString()}.png`, base64Data, 'base64', function (err) {
+        if (err) {return console.log(err)}
+      });
+    });
   }
+
+  for(let i=0; i<quantity; i++)
+    allocate_one(userId, allocated)
 }
 
 function allocate_one(userId, callback){
