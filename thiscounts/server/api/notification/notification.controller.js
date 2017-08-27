@@ -59,7 +59,7 @@ exports.read = function(req, res) {
     if (err) { return handleError(res, err); }
     if(!notification) { return res.send(404); }
     notification.read = true;
-    updated.save(function (err) {
+    notification.save(function (err) {
       if (err) { return handleError(res, err); }
       return res.json(200, notification);
     });
