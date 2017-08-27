@@ -39,7 +39,7 @@ Location.prototype.address_location = function address_location(addressed, callb
       return callback(err, data);
     }
     //logger.info(data);
-    if (!data.results || data.results.length == 0)
+    if (!data.results || data.results.length === 0)
       return callback({
         code: 400,
         message: 'No location under this address : ' + address

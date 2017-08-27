@@ -137,6 +137,20 @@ function create_business_default_group(business) {
   });
 }
 
+exports.check_address = function (req, res) {
+  location.address_location(req.body, function (err, data) {
+    if (err) {
+      if (err.code >= 400) return res.status(err.code).send(err.message);
+      else if (err.code === 202) {
+        console.log(err);
+        return res.status(202).json(data);
+      }
+      else return res.status(400).send(err);
+    }
+    return res.status(200).json(data);
+  })
+};
+
 exports.create = function (req, res) {
   let body_business = req.body;
   let userId = req.user._id;
