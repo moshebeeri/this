@@ -7,20 +7,16 @@ const fs = require('fs');
 const path = require('path');
 const rootDir = path.normalize(`${path.resolve(__dirname)}`);
 
+const qr_opt = { errorCorrectionLevel: 'H', scale: 16 };
 
 function allocate(quantity, userId){
   function allocated(err, qrcode) {
     if(err) {return console.log(err)}
-    QRCodeImg.toDataURL(JSON.stringify({
+    QRCodeImg.toFile(`${rootDir}/codes/${(new Date()).getTime().toString()}.png`, JSON.stringify({
       t: 'g',
       code: qrcode.code
-    }), { errorCorrectionLevel: 'H', scale: 16 }, function (err, url) {
+    }), qr_opt, function (err) {
       if (err) {return console.log(err)}
-      const base64Data = url.replace(/^data:image\/png;base64,/, '');
-      console.log(`${rootDir}/codes/out.png`);
-      fs.writeFile(`${rootDir}/codes/${(new Date()).getTime().toString()}.png`, base64Data, 'base64', function (err) {
-        if (err) {return console.log(err)}
-      });
     });
   }
 
@@ -31,7 +27,7 @@ function allocate(quantity, userId){
 function allocate_one(userId, callback){
   QRCode.create({
     creator: userId,
-    code: randomstring.generate({length: 10, charset: 'alphanumeric'})
+    code: randomstring.generate({length: 12, charset: 'numeric'})
   }, function (err, qrcode) {
     if (err) {
       if(callback) return callback(err);
@@ -111,14 +107,12 @@ exports.image = function(req, res) {
   QRCodeImg.toDataURL(JSON.stringify({
     t:'g',
     code: req.params.code
-  }), function (err, url) {
+  }), qr_opt, function (err, url) {
     if (err) {
       return res.status(500).send(err);
     }
-    return res.status(200).json({
-        qrcode: url
-      });
-
+    res.setHeader('content-type', 'text/html');
+    return res.status(200).send(`<html><body><img src="${url}"/></body></html>`);
   });
 };
 
