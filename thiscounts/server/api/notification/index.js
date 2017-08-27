@@ -7,6 +7,7 @@ let router = express.Router();
 let auth = require('../../auth/auth.service');
 
 router.get('/read/:id', auth.isAuthenticated(), controller.read);
+router.get('/action/:id', auth.isAuthenticated(), controller.action);
 router.get('/:entity_id/:skip/:limit', auth.isAuthenticated(), controller.find);
 
 router.get('/', auth.hasRole('admin'), controller.index);
