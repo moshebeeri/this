@@ -28,7 +28,8 @@ import * as businessAction from "../../../actions/business";
 import {connect} from 'react-redux';
 import { bindActionCreators } from "redux";
 import Icon2 from 'react-native-vector-icons/Entypo';
-
+import BusinessApi from '../../../api/business'
+let businessApi = new BusinessApi();
 import Autocomplete from 'react-native-autocomplete-input';
  class AddBusiness extends Component {
 
@@ -73,6 +74,9 @@ import Autocomplete from 'react-native-autocomplete-input';
                 formData: {},
                 active: false,
                 showSave:true,
+                addressValidation:'',
+                valid:true,
+
             };
         }else {
 
@@ -98,6 +102,10 @@ import Autocomplete from 'react-native-autocomplete-input';
                 formData: {},
                 active:false,
                 showSave:true,
+                locations:{},
+                location:{},
+                valid:false,
+
             };
         }
         let stateFunc = this.setState.bind(this);
@@ -141,7 +149,9 @@ import Autocomplete from 'react-native-autocomplete-input';
 
 
     focusNextField(nextField) {
-
+        if(nextField =='6'){
+           this.checkAddress()
+        }
        this.refs[nextField]._root.focus()
 
     }
@@ -201,6 +211,37 @@ import Autocomplete from 'react-native-autocomplete-input';
 
      }
 
+
+     async checkAddress(){
+         this.setState({
+             addressValidation:''
+         })
+         let response = await businessApi.checkAddress(this.state)
+         if(!response.valid){
+            this.setState({
+                addressValidation:response.message
+            })
+             this.focusNextField("4")
+             return false;
+         }
+
+         if(response.results){
+             this.setState({
+                 locations:response.results
+             })
+             return false;
+         }else{
+             this.setState({
+                 valid:true,
+                 location:{
+                     lat: response.lat,
+                     lng:response.lng
+                 }
+             })
+         }
+
+         return true;
+     }
 
      createPickers() {
          let categories = this.props.businesses['categoriesenroot'];
@@ -277,8 +318,14 @@ import Autocomplete from 'react-native-autocomplete-input';
          return <View>{rootOicker}{pickers}</View>
 
      }
-    saveFormData(){
+    async saveFormData(){
 
+         if(!this.state.valid){
+              let response = await this.checkAddress();
+              if(!response)
+                  return;
+
+         }
         this.replaceRoute('home');
         entityUtils.create('businesses',this.state,this.state.token,this.formSuccess.bind(this),this.formFailed.bind(this),this.state.userId);
 
@@ -359,6 +406,38 @@ import Autocomplete from 'react-native-autocomplete-input';
 
 
     }
+
+    chooseAddress(address){
+        let city = address.address_components.filter(function (component) {
+            return component.types.includes("locality")
+
+        });
+        let street =address.address_components.filter(function (component) {
+            return component.types.includes("route")
+
+        });
+
+        let street_nummber = address.address_components.filter(function (component) {
+            return component.types.includes("street_number")
+
+        });
+
+        let address_string = street[0].long_name;
+        if(street_nummber.length > 0){
+            address_string = street[0].long_name + ' ' + street_nummber[0].long_name
+        }
+
+        this.setState({
+            locations:{},
+            location:{
+                lat:address.geometry.location.lat,
+                lng:address.geometry.location.lng,
+            },
+            city:city[0].long_name,
+            address: address_string,
+            valid:true,
+        })
+    }
      keyPad(){
          return true;
      }
@@ -408,6 +487,24 @@ import Autocomplete from 'react-native-autocomplete-input';
 
         }
 
+        let addressMessage = undefined;
+        if(this.state.addressValidation){
+            addressMessage = <Text style={{marginLeft:10,color:'red'}}>{this.state.addressValidation}</Text>
+        }
+
+        let addressOptions = undefined;
+
+        if(this.state.locations.length > 0 ){
+            let locationFunction = this.chooseAddress.bind(this);
+            addressOptions = this.state.locations.map(function (address) {
+               return  <TouchableOpacity   style={{height:30,borderTopWidth:0.5,backgroundColor:'white'}}  onPress={() => locationFunction(address)}  regular>
+
+                    <Text style={{ marginLeft: 10,color:'black',fontStyle: 'normal',fontSize:18 }}>{address.formatted_address}</Text>
+
+                </TouchableOpacity>
+
+            })
+        }
 
         return (
 
@@ -466,6 +563,8 @@ import Autocomplete from 'react-native-autocomplete-input';
                            <Input value={this.state.address} blurOnSubmit={true} returnKeyType='next' ref="5"  onSubmitEditing={this.focusNextField.bind(this,"6")}  onChangeText={(address) => this.setState({address})} placeholder='Addresss' />
                             <Icon style={{color:'red',fontSize:12}}name='star' />
                         </Item>
+                        {addressMessage}
+                        {addressOptions}
                         <Item style={styles.buttom_items} regular >
                            <Input value={this.state.tax_id} blurOnSubmit={true} returnKeyType='done' ref="6"   onChangeText={(tax_id) => this.setState({tax_id})} placeholder='Tax ID' />
                             <Icon style={{color:'red',fontSize:12}}name='star' />

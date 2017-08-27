@@ -10,6 +10,7 @@ import ApplicationBusinessManager from './components/app-businesses/index'
 import Login from './components/login/index';
 import AddBusiness from './components/business/add-form/index'
 import AddPromotions from './components/promtions/add-form/index'
+import EditPromotions from './components/promtions/add-form/edit_form'
 import AddGroups from './components/groups/add-form/index'
 import SelectUsersComponent from './components/groups/selectUser/index'
 import AddProduct from './components/product/add-form/index'
@@ -76,6 +77,7 @@ const AppNavigator = StackNavigator({
         login: { screen: Login },
         addBusiness: { screen: AddBusiness },
         addPromotions:{screen:AddPromotions},
+        editPromotion:{screen:EditPromotions},
         AddGroups:{screen:AddGroups},
         SelectUsersComponent:{screen: SelectUsersComponent},
         AddProduct:{screen: AddProduct},
