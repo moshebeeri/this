@@ -673,7 +673,7 @@ exports.approve_join_group = function (req, res) {
       return res.status(401).send('unauthorized');
     user_follow_group(userId, group, function(err){
       if(err) return handleError(res, err);
-      graphModel.unrelate(user, 'ASK_JOIN_GROUP', group);
+      graphModel.unrelate_ids(user, 'ASK_JOIN_GROUP', group);
       sendGroupNotification(userId, [user], group._id, 'approve_join');
       return res.status(200).json(group);
     });
@@ -726,7 +726,7 @@ exports.approve_invite_group = function (req, res) {
     if(err) return handleError(res, err);
     if(rs.length === 0)
       return res.status(404).send('user not invited');
-    user_follow_group(userId, group, function(err){
+    user_follow_group(userId, {_id:group}, function(err){
       if(err) return handleError(res, err);
       graphModel.unrelate(userId, 'INVITE_GROUP', group);
       sendGroupNotification(userId, [userId], group, 'approve_invite');

@@ -81,7 +81,8 @@ GraphModel.prototype.relate = function relate(from, name, to, properties, callba
 
 GraphModel.prototype.unrelate = function unrelate(from, name, to){
   let query = ` MATCH (f)-[r:{name}]->(t) 
-                WHERE id(f)=${from} and id(t)=${to} 
+                WHERE id(f)={from} and id(t)={to} 
+                WHERE id(f)={from} and id(t)={to} 
                 delete r;`;
   db.query(query, {from: from, name: name, to: to}, function(err) {
     if (err) { logger.error(err.message); }
