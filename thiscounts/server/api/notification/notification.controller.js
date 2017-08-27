@@ -66,6 +66,19 @@ exports.read = function(req, res) {
   });
 };
 
+exports.action = function(req, res) {
+  Notification.findById(req.params.id, function (err, notification) {
+    if (err) { return handleError(res, err); }
+    if(!notification) { return res.send(404); }
+    notification.read = true;
+    notification.action = true;
+    notification.save(function (err) {
+      if (err) { return handleError(res, err); }
+      return res.json(200, notification);
+    });
+  });
+};
+
 // Deletes a notification from the DB.
 exports.destroy = function(req, res) {
   Notification.findById(req.params.id, function (err, notification) {
