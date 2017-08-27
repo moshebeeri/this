@@ -728,7 +728,7 @@ exports.approve_invite_group = function (req, res) {
       return res.status(404).send('user not invited');
     user_follow_group(userId, {_id:group}, function(err){
       if(err) return handleError(res, err);
-      graphModel.unrelate(userId, 'INVITE_GROUP', group);
+      graphModel.unrelate_ids(userId, 'INVITE_GROUP', group);
       sendGroupNotification(userId, [userId], group, 'approve_invite');
       return res.status(200).json(group);
     })
