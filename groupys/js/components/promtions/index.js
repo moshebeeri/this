@@ -80,7 +80,7 @@ import { bindActionCreators } from "redux";
                         <View></View>
                     </View>
 
-            <GenericListManager navigation = {this.props.navigation} rows={promotions} title="Promotion" component="home" addComponent="addPromotions" api={this}
+            <GenericListManager navigation = {this.props.navigation} rows={promotions} title="Promotion" component="home" addComponent="editPromotion" api={this}
                                 ItemDetail={PromotionListItem}/>
                 <Fab
 
