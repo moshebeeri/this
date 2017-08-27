@@ -6,6 +6,9 @@ import Icon2 from 'react-native-vector-icons/MaterialIcons';
 const covefr = require('../../../../images/cover2.png');
 import styles from './styles'
 const {width, height} = Dimensions.get('window')
+import NotoficationApi from '../../../api/notification'
+let notoficationApi = new NotoficationApi();
+
 export default class BusinessListView extends Component {
 
 
@@ -20,7 +23,7 @@ export default class BusinessListView extends Component {
 
     accept(){
 
-
+        notoficationApi.acceptInvatation(this.props.item.group);
 
     }
 
@@ -76,13 +79,7 @@ export default class BusinessListView extends Component {
                     </View>
 
                     <View style={styles.promotion_action_container}>
-                        <Button  style={postStyle} onPress={this.decline.bind(this)}>
 
-
-                            <Text>Decline</Text>
-
-
-                        </Button>
                         <Button  style={reddemStyle} onPress={this.accept.bind(this)}>
 
 
