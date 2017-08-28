@@ -74,11 +74,12 @@ module.exports = {
         width: Dimensions.get('window').width,
     },
     promotion_action_container: {
-        backgroundColor:'white',
-        width: width -10,
-        height: 40,
-        flexDirection: 'row',
-        marginTop:0,
+        backgroundColor:'#fef8e0',
+        width: width,
+        height: 50,
+        justifyContent: 'center',
+        alignItems: 'center',
+        flex:-1,
     },
 
 };
