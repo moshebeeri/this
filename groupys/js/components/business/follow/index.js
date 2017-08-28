@@ -83,13 +83,16 @@ export default class BusinessFollow extends Component {
                     this.setState({
                         businesses:[response.assignment.business]
                     })
-                    this.setState({
-                        showSpin:false,
 
-                    })
+
                 }
             }
         }
+        this.setState({
+            showSpin:false,
+
+        })
+
 
 
     }
