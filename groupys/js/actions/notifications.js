@@ -6,6 +6,8 @@
  */
 
 import NotificationApi from "../api/notification"
+import GroupsApi from "../api/groups"
+let groupsApi = new GroupsApi();
 let notificationApi = new NotificationApi();
 import store from 'react-native-simple-store';
 
@@ -29,9 +31,32 @@ async function getAll(dispatch){
 
 }
 
+async function getAll(dispatch){
+    try {
+        let response = await groupsApi.getAll();
+        if(response.length > 0) {
 
+            dispatch({
+                type: 'GET_GROUPS',
+                groups: response,
+
+            });
+        }
+
+
+    }catch (error){
+        console.log(error);
+    }
+
+}
 
 export function fetchNotification(){
+    return function (dispatch, getState){
+        dispatch|(getAll(dispatch));
+    }
+
+}
+export function fetchGroups(){
     return function (dispatch, getState){
         dispatch|(getAll(dispatch));
     }

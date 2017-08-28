@@ -1,9 +1,9 @@
 import React, {Component} from 'react';
-import {Image, Platform} from 'react-native';
+import {Image, Platform,TouchableOpacity,Dimensions} from 'react-native';
 import {connect} from 'react-redux';
 import {actions} from 'react-native-navigation-redux-helpers';
 import {Container, Content, Text, InputGroup, Input, Button, Icon, View,Item} from 'native-base';
-
+const {width, height} = Dimensions.get('window')
 
 import LinearGradient from 'react-native-linear-gradient';
 
@@ -80,6 +80,20 @@ export default class Register extends Component {
 
 
     render() {
+        let message = undefined;
+        if(this.state.validationMessage){
+            message = <Text style={{ backgroundColor:'transparent',padding: 10, fontSize: 16, color: 'red'}}>
+                {this.state.validationMessage}
+            </Text>
+        }
+
+        let errorMessage = undefined;
+        if(this.state.error){
+            errorMessage = <View style={{  backgroundColor:'transparent',flexDirection: 'row',color: 'red', justifyContent: 'center',marginBottom:0 }}>
+                <Text> {this.state.error}</Text>
+            </View>
+
+        }
         return (
             <LinearGradient
 
@@ -104,13 +118,16 @@ export default class Register extends Component {
                                     <Input  value={this.state.name} blurOnSubmit={true} returnKeyType='done' ref="1" onSubmitEditing={this.validateCode.bind(this)} onChangeText={(code) => this.setState({code})} placeholder='Validation Code' />
                                 </Item>
 
-                            <Text style={{   backgroundColor:'transparent',padding: 10, fontSize: 16, color: 'red'}}>
-                                {this.state.validationMessage}
-                            </Text>
-                            <View style={{   backgroundColor:'transparent',flexDirection: 'row',color: 'red', justifyContent: 'center',marginBottom:0 }}>
-                                <Text> {this.state.error}</Text>
-                            </View>
+                            {message}
+                            {errorMessage}
+                            <View style={{height:40,justifyContent: 'center', alignItems: 'center',width:width/2 + 120}}>
 
+                                <TouchableOpacity  onPress={() => this.validateCode()}  style={{ width:100,height:30,borderRadius:10,backgroundColor:'skyblue',margin:3, flexDirection: 'row',  justifyContent: 'center',alignItems: 'center', } } regular>
+
+                                    <Text style={{ color:'white',fontStyle: 'normal',fontSize:15 }}>VALIDATE</Text>
+
+                                </TouchableOpacity>
+                            </View>
 
                         </View>
 

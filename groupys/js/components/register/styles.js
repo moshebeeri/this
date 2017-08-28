@@ -35,19 +35,20 @@ module.exports = {
 
     },
     thiscountsContainer:{
-        height: 100,
+        height: 150,
         marginTop:100,
-        backgroundColor:'transparent',
-        marginLeft:width/2 - 80,
         justifyContent:'center',
+        backgroundColor:'transparent',
+        flexDirection: 'column',
+
+        alignItems: 'center',
     },
     this:{
         fontFamily:'BackToBlack',
         fontSize: 60,
         height: 100,
         color:'white',
-        marginTop:-40,
-        paddingLeft:30,
+
         backgroundColor:'transparent',
 
     },

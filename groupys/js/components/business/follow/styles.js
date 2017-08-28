@@ -86,8 +86,20 @@ module.exports = {
     follow_search_field:{
 
         marginRight:20,backgroundColor:'white'
-    }
+    },
+    payment_camera_container:{
+        width:width-10,
+        height: height/1.7,
+        alignItems: 'center',
+        justifyContent: 'center',
 
+    },
+    payment_camera:{
+        width:width-10,
+        height: height/1.7,
+        marginLeft:10,
+        marginTop:10,
+    },
 
 
 };

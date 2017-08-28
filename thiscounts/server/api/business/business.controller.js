@@ -175,7 +175,7 @@ exports.create = function (req, res) {
         if (err) return handleError(res, err);
         qrcodeController.createAndAssign(business.creator, {
           type: 'FOLLOW_BUSINESS',
-          entities: {
+          assignment: {
             business: business._id
           }
         }, function (err, qrcode) {

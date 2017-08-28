@@ -1,10 +1,10 @@
 import React, {Component} from 'react';
-import {Image, Platform,KeyboardAvoidingView} from 'react-native';
+import {Image, Platform,KeyboardAvoidingView,Dimensions,TouchableOpacity} from 'react-native';
 import {connect} from 'react-redux';
 import {actions} from 'react-native-navigation-redux-helpers';
 import {Container, Content, Text, InputGroup, Input, Button, Icon, View,Item} from 'native-base';
 import store from 'react-native-simple-store';
-
+const {width, height} = Dimensions.get('window')
 import styles from './styles';
 
 import LinearGradient from 'react-native-linear-gradient';
@@ -111,6 +111,21 @@ export default class Signup extends Component {
 
 
     render() {
+
+        let message = undefined;
+        if(this.state.validationMessage){
+            message = <Text style={{ backgroundColor:'transparent',padding: 10, fontSize: 16, color: 'red'}}>
+                {this.state.validationMessage}
+            </Text>
+        }
+
+        let errorMessage = undefined;
+        if(this.state.error){
+            errorMessage = <View style={{  backgroundColor:'transparent',flexDirection: 'row',color: 'red', justifyContent: 'center',marginBottom:0 }}>
+                <Text> {this.state.error}</Text>
+            </View>
+
+        }
         return (
             <LinearGradient
 
@@ -127,9 +142,16 @@ export default class Signup extends Component {
                             <Text style={styles.this}>This</Text>
                             <Text style={styles.thiscount}>Counts</Text>
                         </View>
-                        <View  >
+                        <View style={{width:width,
 
-                        <Text style={styles.signginText}>sign up</Text>
+
+                            flexDirection: 'column',
+                            justifyContent: 'center',
+                            alignItems: 'center',}} >
+                            <View style={{height:50,justifyContent: 'flex-end',width:width/2 + 120}}>
+
+                                <Text style={styles.signginText}>sign up</Text>
+                            </View>
                             <View style={styles.nameContainer}>
                                 <Item style={styles.nameTextInput} regular >
                                     <Input  value={this.state.name} blurOnSubmit={true} returnKeyType='next' ref="1" onSubmitEditing={this.focusNextField.bind(this,"2")} onChangeText={(name) => this.setState({name})} placeholder='Name' />
@@ -161,14 +183,17 @@ export default class Signup extends Component {
                             <View style={styles.signup_container}>
                                 <Text style={styles.forgetText}>or sign up using </Text>
                              </View>
-                            <Text style={{ backgroundColor:'transparent',padding: 10, fontSize: 16, color: 'red'}}>
-                                {this.state.validationMessage}
-                            </Text>
-                            <View style={{  backgroundColor:'transparent',flexDirection: 'row',color: 'red', justifyContent: 'center',marginBottom:0 }}>
-                                <Text> {this.state.error}</Text>
-                            </View>
+                            {message}
+                            {errorMessage}
+                            <View style={{height:40,justifyContent: 'center', alignItems: 'center',width:width/2 + 120}}>
 
-                            <View style={{  backgroundColor:'transparent',flexDirection: 'row', justifyContent: 'space-around', paddingVertical: 0 }}>
+                                <TouchableOpacity  onPress={() => this.signup()}  style={{ width:100,height:30,borderRadius:10,backgroundColor:'skyblue',margin:3, flexDirection: 'row',  justifyContent: 'center',alignItems: 'center', } } regular>
+
+                                    <Text style={{ color:'white',fontStyle: 'normal',fontSize:15 }}>SINGUP</Text>
+
+                                </TouchableOpacity>
+                            </View>
+                            <View style={{ backgroundColor:'transparent',width:width/2 + 120, flexDirection: 'row', justifyContent: 'space-between' }}>
                                 <Button style={styles.logoFacebook}>
                                     <Icon name="logo-facebook" />
                                 </Button>

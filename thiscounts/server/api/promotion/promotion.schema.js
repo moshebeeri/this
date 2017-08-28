@@ -58,7 +58,25 @@ let PromotionSchemaObject = {
     type: String,
     enum: promotionTypes
   },
-
+  on_action:{
+    active: {type: Boolean, default: false},
+    type: {
+      type: String,
+      enum: [
+        'FOLLOW_BUSINESS',
+        'FOLLOW_SHOPPING_CHAIN',
+        'FOLLOW_MALL',
+        'FOLLOW_GROUP'
+      ]
+    },
+    entity :{
+      business: {type: Schema.ObjectId, ref: 'Business', autopopulate: true},
+      shopping_chain: {type: Schema.ObjectId, ref: 'ShoppingChain', autopopulate: true},
+      mall: {type: Schema.ObjectId, ref: 'Mall', autopopulate: true},
+      group: {type: Schema.ObjectId, ref: 'Group', autopopulate: true},
+      validate: [entity_validator, 'at least on of those fields should not be empty [business, product, chain, mall]']
+    }
+  },
   distribution: {
     //list of cards to distribute the promotion to
     cards: [{type: Schema.ObjectId, ref: 'CardType', autopopulate: true}],
