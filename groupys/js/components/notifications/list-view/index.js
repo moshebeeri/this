@@ -29,13 +29,12 @@ import { bindActionCreators } from "redux";
     async accept(){
 
         await notoficationApi.acceptInvatation(this.props.item.group);
-        notoficationApi.doNotificationAction(this.props.item._id)
+        await notoficationApi.doNotificationAction(this.props.item._id)
         this.props.fetchNotification();
+        this.props.fetchGroups();
     }
 
-    decline(){
 
-    }
     read(notification_id){
         if(!this.props.item.read) {
             notoficationApi.readNotification(notification_id)
