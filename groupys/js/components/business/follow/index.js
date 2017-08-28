@@ -5,8 +5,12 @@ import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import Icon2 from 'react-native-vector-icons/EvilIcons';
 import BusinessApi from '../../../api/business'
 import Icon3 from 'react-native-vector-icons/Ionicons';
-
+import Camera from 'react-native-camera';
+const qrcode = require('../../../../images/qr-code.png');
+const scan = require('../../../../images/scan.png');
 let businessApi = new BusinessApi();
+
+
 import styles from './styles'
 import Search from 'react-native-search-box';
 
@@ -21,7 +25,8 @@ export default class BusinessFollow extends Component {
         this.state ={
             searchText:'',
             businesses:{},
-            showSpin:false
+            showSpin:false,
+            showCamera:false,
         }
 
     }
@@ -40,7 +45,8 @@ export default class BusinessFollow extends Component {
     async search(){
 
         this.setState({
-            showSpin:true
+            showSpin:true,
+            showCamera:false,
         })
 
         let response = await businessApi.searchBusiness(this.state.searchText)
@@ -58,6 +64,35 @@ export default class BusinessFollow extends Component {
         businessApi.followBusiness(bussinesId);
     }
 
+    scanQrcCode(){
+        this.setState({
+            showCamera:true,
+        })
+    }
+
+    async onBarCodeRead(barcode){
+        await this.setState({
+            showSpin:true,
+            showCamera:false,
+        })
+        if(barcode.type && barcode.type == 'QR_CODE'){
+            let data = JSON.parse(barcode.data);
+            if(data.code) {
+                let response = await businessApi.searchBusinessByCode(data.code);
+                if(response && response.assignment  && response.assignment.business ) {
+                    this.setState({
+                        businesses:[response.assignment.business]
+                    })
+                    this.setState({
+                        showSpin:false,
+
+                    })
+                }
+            }
+        }
+
+
+    }
 
 
     createView(){
@@ -102,14 +137,14 @@ export default class BusinessFollow extends Component {
 
 
                 let followStyle ={
-                    flex:-1,justifyContent:'center',marginLeft:20 ,flexDirection: 'row',alignItems: 'center',height: 40,width:100, backgroundColor: '#e65100',
+                    flex:-1,justifyContent:'center',marginLeft:20 ,flexDirection: 'row',alignItems: 'center',height: 40,width:200, backgroundColor: '#e65100',
                 };
                 return  <View key={businees._id} style={{padding:5,backgroundColor:'#eaeaea'}}  >
-                    <View style={{flex:-1, justifyContent: 'space-between',padding:5,backgroundColor:'white',flexDirection: 'row' ,alignItems: 'center',}}>
+                    <View style={{flex:-1,padding:5,backgroundColor:'white',flexDirection: 'row' ,alignItems: 'center',}}>
                         {banner}
 
-                        <Text style={{marginLeft:10}}>{businees.name}</Text>
-                        <View style={{marginLeft:80,flex:-1, flexDirection: 'row' ,alignItems: 'center',}}>
+                        <Text style={{width:100,marginLeft:10}}>{businees.name}</Text>
+                        <View style={{marginLeft:20,flex:-1, flexDirection: 'row', width:180,alignItems: 'center',}}>
                             <TouchableOpacity    onPress={() => followF(businees._id)}  style={followStyle } regular>
 
                                 <Text style={{ color:'white',fontStyle: 'normal',fontSize:15 }}>Follow </Text>
@@ -122,18 +157,39 @@ export default class BusinessFollow extends Component {
 
             })
         }
+        let camera = undefined
+        if(this.state.showCamera){
+            camera = <View style={styles.payment_camera_container}><Camera
+                ref={(cam) => {
+                    this.camera = cam;
+                }}
+                onBarCodeRead={this.onBarCodeRead.bind(this)}
+                style={styles.payment_camera}
+                aspect={Camera.constants.Aspect.fill}>
+            </Camera>
+                <Text>Please Scan Code</Text>
+            </View>
+        }
 
         return ( <View style={styles.follow_container}  >
                 <Item style={styles.follow_search}  regular >
                     {back}
                     <Input  style={styles.follow_search_field}   value={this.state.searchText} onSubmitEditing={this.search.bind(this)}blurOnSubmit={true} returnKeyType='search' ref="1" onChangeText={(searchText) => this.setState({searchText})} placeholder='Search Business' />
-                    <Button small  style={{backgroundColor:'white',height:48}}onPress={this.search.bind(this)}>
-                        <Icon2 style={{marginRight:10,fontSize:30}}name='search' />
+                    <TouchableOpacity  onPress={this.search.bind(this)}   style={{marginRight:5, flexDirection: 'row', alignItems: 'center',}} regular>
+                        <Image style={{marginLeft:10,width:20,height:20}} source={scan}/>
 
 
-                    </Button>
 
+                    </TouchableOpacity>
+
+                    <TouchableOpacity  onPress={() => this.scanQrcCode()}  style={{ marginRight:5, flexDirection: 'row', alignItems: 'center', } } regular>
+                        <Image style={{marginLeft:10,width:20,height:20}} source={qrcode}/>
+
+
+
+                    </TouchableOpacity>
                 </Item>
+                {camera}
                 {spin}
                 {rows}
             </View>
