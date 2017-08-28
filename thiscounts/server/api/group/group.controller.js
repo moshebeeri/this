@@ -687,8 +687,8 @@ exports.invite_group = function (req, res) {
   let user = req.params.user;
 
   function invite(){
-    let create = `MATCH (g:group{_id:"${group}"})
-                  CREATE UNIQUE (u:user {_id:'${user}'})-[a:INVITE_GROUP]->(g)`;
+    let create = `MATCH (g:group{_id:"${group}"}), (u:user {_id:'${user}'})
+                  CREATE UNIQUE (u)-[:INVITE_GROUP]->(g)`;
     graphModel.query(create, function (err) {
       if(err) return handleError(res, err);
       sendGroupNotification(userId, [user], group, 'ask_invite');
