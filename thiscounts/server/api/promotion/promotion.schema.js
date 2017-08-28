@@ -86,8 +86,7 @@ let PromotionSchemaObject = {
     business: {type: Schema.ObjectId, ref: 'Business', autopopulate: true},
     shopping_chain: {type: Schema.ObjectId, ref: 'ShoppingChain', autopopulate: true},
     mall: {type: Schema.ObjectId, ref: 'Mall', autopopulate: true},
-    validate: [entity_validator, 'at least on of those fields should not be empty [business, product, chain, mall]']
-  },
+  } ,
   created: {type: Date, default: Date.now},
   gid: {type: Number, index: true},
   realize_gid: Number,

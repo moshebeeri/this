@@ -1,7 +1,6 @@
 'use strict';
 
 const _ = require('lodash');
-let utils = require('../utils').createUtils();
 
 function Validator() {
 }
@@ -10,15 +9,15 @@ Validator.entity_validator = function (v) {
         if (_.isNull(v))
           return false;
         let i = 0;
-        if(utils.defined(v.user))
+        if(v.user)
           i++;
-        if(utils.defined(v.group))
+        if(v.group)
           i++;
-        if(utils.defined(v.business))
+        if(v.business)
           i++;
-        if(utils.defined(v.shopping_chain))
+        if(v.shopping_chain)
           i++;
-        if(utils.defined(v.mall))
+        if(v.mall)
           i++;
         return i === 1
   };

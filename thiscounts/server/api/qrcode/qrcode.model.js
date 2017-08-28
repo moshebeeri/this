@@ -20,7 +20,6 @@ let QRCodeSchema = new Schema({
     group: {type: Schema.ObjectId, ref: 'Group', autopopulate: true},
     shopping_chain: {type: Schema.ObjectId, ref: 'ShoppingChain', autopopulate: true},
     mall: {type: Schema.ObjectId, ref: 'Mall', autopopulate: true},
-    validate: [Validate.entity_validator, 'One of those fields should not be empty [business, group, product, chain, mall]']
   },
 });
 

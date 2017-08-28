@@ -4,8 +4,8 @@ let _ = require('lodash');
 let Phonebook = require('./phonebook.model');
 let mongoose = require('mongoose');
 let config = require('../../config/environment');
-let twilioLookupsClient = require('twilio').LookupsClient;
-let twilioClient = new twilioLookupsClient(config.twilio.accountSid, config.twilio.authToken);
+var Twilio = require('twilio');
+var twilioClient = new Twilio(config.twilio.accountSid, config.twilio.authToken);
 
 // Get list of phonebooks
 exports.index = function(req, res) {
