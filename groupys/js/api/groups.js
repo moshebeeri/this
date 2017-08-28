@@ -121,7 +121,7 @@ class GroupsApi
                 let from = new Date();
 
                 let token = await store.get('token');
-                const response = await fetch(`${server_host}/api/groups//invite/ask/${group}/${user}`, {
+                const response = await fetch(`${server_host}/api/groups/invite/ask/${group}/${user}`, {
                     method: 'GET',
                     headers: {
                         'Accept': 'application/json, text/plain, */*',

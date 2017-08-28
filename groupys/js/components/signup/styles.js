@@ -37,9 +37,11 @@ module.exports = {
     thiscountsContainer:{
         height: 150,
         marginTop:100,
-        marginLeft:width/2 - 80,
         justifyContent:'center',
         backgroundColor:'transparent',
+        flexDirection: 'column',
+
+        alignItems: 'center',
     },
     this:{
         fontFamily:(Platform.OS === 'ios') ? 'Back To Black' : 'BackToBlack',
@@ -47,27 +49,30 @@ module.exports = {
         height:100,
         color:'white',
         marginTop:-40,
-        paddingLeft:30,
+
         backgroundColor:'transparent',
 
     },
 
     phoneTextInput:{
-        marginLeft:30,marginTop:5,backgroundColor:'white',height:50, width:width/2 + 120 } ,
+       marginTop:5,backgroundColor:'white',height:50, width:width/2 + 120 } ,
     nameTextInput:{
-        marginLeft:30,marginTop:5,backgroundColor:'white', height:50, width:width/2 - 35 } ,
+        marginTop:5,backgroundColor:'white', height:50, width:width/2 - 35 } ,
     lastnameTextInput:{
-        marginLeft:10,marginTop:5,backgroundColor:'white',height:50,  width:width/2 -35} ,
+        marginTop:5,backgroundColor:'white',height:50,  width:width/2 -35} ,
     passwordTextInput:{
-        marginLeft:30,marginTop:5,backgroundColor:'white',height:50,  width:width/2 + 120 } ,
+       marginTop:5,backgroundColor:'white',height:50,  width:width/2 + 120 } ,
     nameContainer:{
+        width:width/2 + 120,
         flexDirection: 'row',
+        justifyContent: 'space-between'
     },
     signup_container:{
-        marginLeft:0,
+        width:width/2 + 120,
         marginTop:5,
         flexDirection: 'row',
         backgroundColor:'transparent',
+        justifyContent: 'flex-start'
     },
     thiscount:{
         fontFamily:(Platform.OS === 'ios') ? 'BackToBlack' : 'Back To Black',
@@ -80,7 +85,6 @@ module.exports = {
         fontFamily:(Platform.OS === 'ios') ? 'Roboto' : 'Roboto-Regular',
         fontSize: 16,
         color:'white',
-        marginLeft:30,
         marginTop:40,
         backgroundColor:'transparent',
 
@@ -125,14 +129,12 @@ module.exports = {
         fontFamily:(Platform.OS === 'ios') ? 'Roboto' : 'Roboto-Regular',
         fontSize: 16,
         color:'white',
-        marginLeft:30,
         backgroundColor:'transparent',
         textDecorationLine:'underline'
 
 
     },
     avoidView:{
-        width:width -25,
         alignItems: 'center',
     },
 };

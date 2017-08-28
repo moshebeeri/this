@@ -36,48 +36,46 @@ module.exports = {
     },
     thiscountsContainer:{
         height: 150,
-        marginTop:100,
-        marginLeft:width/2 - 80,
+        marginTop:height / 7,
         justifyContent:'center',
-        backgroundColor:'transparent'
+        backgroundColor:'transparent',
+        flexDirection: 'column',
+
+        alignItems: 'center',
 
     },
     this:{
        // fontFamily:'BackToBlack',
         fontSize: 60,
-        height:90,
         color:'white',
-        marginTop:-40,
-        paddingLeft:30,
         backgroundColor:'transparent'
 
 
     },
 
     phoneTextInput:{
-        marginLeft:30,marginTop:5,backgroundColor:'white', height:50,width:width/2 + 120 } ,
+       marginTop:5,backgroundColor:'white', height:50,width:width/2 + 120 } ,
     passwordTextInput:{
-        marginLeft:30,marginTop:10,backgroundColor:'white', height:50,width:width/2 + 120 } ,
+        marginTop:10,backgroundColor:'white', height:50,width:width/2 + 120 } ,
 
     signup_container:{
-        marginLeft:0,
-        marginTop:5,
+        width:width/2 + 120,
+        justifyContent:'space-between',
         flexDirection: 'row',
-        backgroundColor:'transparent',
+
     },
     thiscount:{
         fontFamily:'BackToBlack',
         fontSize: 60,
+        marginTop:-20,
         color:'white',
-        marginTop:-40,
+
 
     },
     signginText:{
         fontFamily:'Roboto-Regular',
         fontSize: 16,
         color:'white',
-        marginLeft:30,
-        marginTop:40,
         backgroundColor:'transparent',
 
 
@@ -126,7 +124,6 @@ module.exports = {
         fontFamily:'Roboto-Regular',
         fontSize: 16,
         color:'white',
-        marginLeft:30,
         backgroundColor:'transparent',
         textDecorationLine:'underline'
 
