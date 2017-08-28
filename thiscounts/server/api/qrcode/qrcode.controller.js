@@ -63,7 +63,7 @@ exports.assign = function(req, res) {
   findQRCodeByCode(req.params.code, function(err, qrcode) {
     if(err) { return handleError(res, err); }
     if(qrcode.assigned) {return res.status(304).json(qrcode)}
-    qrcode.entities = req.body.entities;
+    qrcode.assignment = req.body.assignment;
     qrcode.type = req.type;
     qrcode.assigned = true;
     qrcode.save(function (err, qrcode) {
@@ -74,12 +74,12 @@ exports.assign = function(req, res) {
 };
 
 exports.createAndAssign = function(userId, data, callback){
-  if(!data.entities || !data.type || !userId )
+  if(!data.assignment || !data.type || !userId )
     return callback(new Error('invalid data'));
 
   allocate_one(userId, function(err, qrcode) {
     if(err) { return callback(err); }
-    qrcode.entities = data.entities;
+    qrcode.assignment = data.assignment;
     qrcode.type = data.type;
     qrcode.assigned = true;
     qrcode.save(function (err, qrcode) {
