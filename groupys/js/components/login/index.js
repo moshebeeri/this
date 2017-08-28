@@ -1,6 +1,6 @@
 
 import React, { Component } from 'react';
-import { Image, Platform,TouchableHighlight,KeyboardAvoidingView} from 'react-native';
+import { Image, Platform,TouchableHighlight,KeyboardAvoidingView,Dimensions,TouchableOpacity} from 'react-native';
 
 import { connect } from 'react-redux';
 import { actions } from 'react-native-navigation-redux-helpers';
@@ -33,6 +33,7 @@ const resetAction = NavigationActions.reset({
         NavigationActions.navigate({ routeName: 'home'})
     ]
 });
+const {width, height} = Dimensions.get('window')
 import LinearGradient from 'react-native-linear-gradient';
 
 
@@ -157,14 +158,23 @@ export default  class Login extends Component {
 
 
 
-                   <View >
+                   <View style={{
+                       flexDirection: 'column',
+                       justifyContent: 'center',
+                       alignItems: 'center',}} >
+
                        <View style={styles.thiscountsContainer}>
                             <Text style={styles.this}>This</Text>
                            <Text style={styles.thiscount}>Counts</Text>
                        </View>
-                       <View>
+                       <View style={{
+                           flexDirection: 'column',
+                           justifyContent: 'center',
+                           alignItems: 'center',}} >
 
-                           <Text style={styles.signginText}>sign in</Text>
+                           <View style={{height:60,justifyContent: 'flex-end',width:width/2 + 120}}>
+                               <Text style={styles.signginText}>sign in</Text>
+                           </View>
 
                            <Item style={styles.phoneTextInput} regular >
                                <Input  keyboardType = 'numeric' value={this.state.name} blurOnSubmit={true} returnKeyType='next' ref="1" onSubmitEditing={this.focusNextField.bind(this,"2")} onChangeText={(phoneNumber) => this.setState({phoneNumber})} placeholder='Phone Number' />
@@ -194,8 +204,15 @@ export default  class Login extends Component {
                            <View style={{ backgroundColor:'transparent',flexDirection: 'row',color: 'red', justifyContent: 'center',marginBottom:10 }}>
                                <Text> {this.state.error}</Text>
                            </View>
+                           <View style={{height:40,justifyContent: 'center', alignItems: 'center',width:width/2 + 120}}>
 
-                           <View style={{ backgroundColor:'transparent', flexDirection: 'row', justifyContent: 'space-around', paddingVertical: 20 }}>
+                               <TouchableOpacity  onPress={() => this.login()}  style={{ width:100,height:30,borderRadius:10,backgroundColor:'skyblue',margin:3, flexDirection: 'row',  justifyContent: 'center',alignItems: 'center', } } regular>
+
+                                   <Text style={{ color:'white',fontStyle: 'normal',fontSize:15 }}>LOGIN</Text>
+
+                               </TouchableOpacity>
+                           </View>
+                           <View style={{ backgroundColor:'transparent',width:width/2 + 120, flexDirection: 'row', justifyContent: 'space-between', paddingVertical: 20 }}>
                                <Button style={styles.logoFacebook}>
                                    <Icon name="logo-facebook" />
                                </Button>
