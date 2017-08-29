@@ -74,9 +74,10 @@ function user_follow_group_activity(group, user) {
   });
 }
 
-function sendActivity(act) {
-  activity.activity(act, function (err) {
-    if (err) logger.error(err.message)
+function sendActivity(act, callback) {
+  activity.activity(act, function (err, activity) {
+    if (err) return callback(err)
+    callback(null, activity)
   });
 
 }
@@ -88,6 +89,9 @@ function group_message_activity(group, user_id, message) {
     message: message.message,
     actor_group: group,
     audience: ['SELF']
+  }, function (err, activity) {
+    group.preview = {message_activity: activity._id};
+    group.save();
   });
 }
 
@@ -169,7 +173,7 @@ exports.create_business_default_group = function (group, callback) {
         graphModel.relate_ids(group.creator, 'GROUP_ADMIN', group._id);
         graphModel.relate_ids(group._id, 'FOLLOW', group.entity.business);
         graphModel.relate_ids(group.entity.business, 'DEFAULT_GROUP', group._id, function (err) {
-          if (err) return console.log(err);
+          if (err) return callback(err);
           return callback(null, group);
         });
       });
@@ -488,7 +492,6 @@ exports.user_follow = function (req, res) {
   const query = `MATCH (u:user {_id:'${req.user._id}'})-[r:FOLLOW]->(g:group) 
                         OPTIONAL MATCH (u)-[role:ROLE]->(:business)-[:DEFAULT_GROUP|BUSINESS_GROUP]->(g)
                         RETURN g._id as _id, r.timestamp as touched, role.name AS role`;
-  console.log(query);
   graphModel.query_ids(query,
     'order by r.timestamp desc', skip, limit, function(err, gObjects) {
       let _ids = [];
@@ -501,107 +504,14 @@ exports.user_follow = function (req, res) {
       if (err) return handleError(res, err);
       Group.find({}).where('_id').in(_ids).exec(function (err, groups) {
         if (err) return handleError(res, err);
-
-        getGroupsLastInfo(groups, function (err, groups_previews) {
-          if (err) return handleError(res, err);
-          groups_previews.forEach(groups_preview => {
-            groups_preview.touched = id2touch[groups_preview.group._id].touched;
-            groups_preview.role = id2touch[groups_preview.group._id].role;
-          });
-          return res.status(200).json(groups_previews);
+        groups.forEach(group => {
+          group.touched = id2touch[group._id].touched;
+          group.role = id2touch[group._id].role;
         });
+        return res.status(200).json(groups);
     });
   });
 };
-
-
-function getGroupPreview(group, callback) {
-  Feed.findOne({entity: group._id})
-    .where('activity.action').equals('instance')
-    .sort({activity: 'desc'})
-    .populate({
-      path: 'user',
-      select: '-salt -hashedPassword -gid -role -__v -email -phone_number -sms_verified -sms_code -provider'
-    })
-    .populate({path: 'activity'})
-    .exec(function (err, act) {
-      if (err) console.log(err.message);
-      if (err) return callback(err);
-      Feed.findOne({entity: group._id})
-        .where('activity.action').equals('group_message')
-        .sort({activity: 'desc'})
-        .populate({
-          path: 'user',
-          select: '-salt -hashedPassword -gid -role -__v -email -phone_number -sms_verified -sms_code -provider'
-        })
-        .populate({path: 'activity'})
-        .exec(function (err, msg) {
-          if (err) console.log(err.message);
-          if (err) return callback(err);
-
-          return callback(null, {
-            group: group,
-            act: act,
-            msg: msg
-          })
-        })
-    });
-
-
-  // async.parallel({
-  //   last_activity: function (callback) {
-  //     console.log('last_activity');
-  //
-  //     Feed.findOne({entity: group._id})
-  //       .where('message').eq(null)
-  //       .sort({activity: 'desc'})
-  //       .populate({path: 'user',
-  //         select: '-salt -hashedPassword -gid -role -__v -email -phone_number -sms_verified -sms_code -provider'
-  //       })
-  //       .populate({path: 'activity'})
-  //       .exec(function (err, act) {
-  //         if(err) return callback(err);
-  //         return callback(null, act)
-  //       })
-  //   },
-  //   last_message: function (callback) {
-  //     console.log('last_message');
-  //     Feed.findOne({entity: group._id})
-  //       .where('message').ne(null)
-  //       .sort({activity: 'desc'})
-  //       .populate({path: 'user',
-  //         select: '-salt -hashedPassword -gid -role -__v -email -phone_number -sms_verified -sms_code -provider'
-  //       })
-  //       .populate({path: 'activity'})
-  //       .exec(function (err, msg) {
-  //         if(err) return callback(err);
-  //         return callback(null, msg)
-  //       })
-  //   },
-  //   group: function (callback) {
-  //     console.log('group');
-  //     return callback(null, group)
-  //   },function (err, preview) {
-  //     if(err) return callback(err);
-  //     console.log(JSON.stringify(preview));
-  //     return callback(null, preview)
-  //   }
-  // })
-}
-
-function getGroupsLastInfo(groups, callback) {
-  let previews = [];
-  async.each(groups, function (group, callback) {
-    getGroupPreview(group, function (err, preview) {
-      if (err) return callback(err);
-      previews.push(preview);
-      callback(null, preview)
-    })
-  }, function (err) {
-    if (err) return callback(err);
-    callback(null, previews);
-  })
-}
 
 exports.user_products = function (req, res) {
   let userID = req.user._id;
@@ -698,9 +608,6 @@ exports.invite_group = function (req, res) {
   Group.findById(group, function (err, group) {
     if (err) return handleError(res, err);
     if (!group) return res.status(404).send('no group');
-
-    console.log(group.admins);
-    console.log(userId);
     if(group.admins.indexOf(userId) > -1)
       return invite();
     else if(group.add_policy === 'MEMBER_INVITE' ){

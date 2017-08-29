@@ -51,7 +51,6 @@ let PromotionSchemaObject = {
       price: Number,
     }],
   },
-
   name: {type: String, required: true},
   pictures : [],
   type: {

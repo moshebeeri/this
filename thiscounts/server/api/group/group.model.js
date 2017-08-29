@@ -33,7 +33,6 @@ const GroupSchema = new Schema({
   preview: {
     message_activity: {type: Schema.ObjectId, ref: 'Activity', autopopulate: true},
     instance_activity: {type: Schema.ObjectId, ref: 'Activity', autopopulate: true},
-
   },
   entity: {
     user: {type: Schema.ObjectId, ref: 'User', autopopulate: true},
