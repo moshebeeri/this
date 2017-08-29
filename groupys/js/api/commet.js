@@ -216,7 +216,7 @@ class CommentApi {
 
 
     }
-    getInstanceGroupComments(group,instance) {
+    getInstanceGroupComments(group,instance,size) {
         return new Promise(async(resolve, reject) => {
 
             try {
@@ -230,7 +230,7 @@ class CommentApi {
 
 
                 let token = await store.get('token');
-                const response = await fetch(`${server_host}/api/comments/find/`+0+'/' +100, {
+                const response = await fetch(`${server_host}/api/comments/find/`+size +'/' +10, {
                     method: 'POST',
                     headers: {
                         'Accept': 'application/json, text/plain, */*',

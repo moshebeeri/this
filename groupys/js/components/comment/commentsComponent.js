@@ -18,6 +18,11 @@ import { bindActionCreators } from "redux";
 import * as commentAction from "../../actions/comments";
 
 import EmojiPicker from 'react-native-emoji-picker-panel'
+
+import UiTools from '../../api/feed-ui-converter'
+let uiTools = new UiTools();
+import store from 'react-native-simple-store';
+
 class CommentsComponent extends Component {
 
     constructor(props) {
@@ -37,6 +42,7 @@ class CommentsComponent extends Component {
         };
         this.handlePick = this.handlePick.bind(this);
 
+        this.props.fetchStoreEntityComments(this.props.entities,this.props.generalId)
 
     }
 
@@ -133,12 +139,22 @@ class CommentsComponent extends Component {
         return this.props.item;
     }
 
-   async _onPressButton(){
-       await commentApi.createGlobalComment(this.props.entities,this.state.messsage)
+    async addDirectMessage(message){
+        let user = await store.get('user');
+        let messageInstance = uiTools.createMessage(user,message);
+        await this.props.updateEntityComments(this.props.generalId,messageInstance)
 
-        this.setState({
-            messsage:'',
-        })
+    }
+
+   async _onPressButton(){
+        let message = this.state.messsage;
+       await this.addDirectMessage(message);
+       this.setState({
+           messsage:'',
+       })
+       await commentApi.createGlobalComment(this.props.entities,message)
+
+
 
        this.props.fetchEntityComments(this.props.entities,this.props.generalId)
 
