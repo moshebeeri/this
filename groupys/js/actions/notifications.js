@@ -31,6 +31,25 @@ async function getAll(dispatch){
 
 }
 
+async function getAllFromStore(dispatch){
+    try {
+        let response = await store.get('notification');
+        if(response) {
+
+            dispatch({
+                type: 'GET_NOTIFICATION',
+                notification: response,
+
+            });
+        }
+
+
+    }catch (error){
+        console.log(error);
+    }
+
+}
+
 async function getAllGroups(dispatch){
     try {
         let response = await groupsApi.getAll();
@@ -53,6 +72,12 @@ async function getAllGroups(dispatch){
 export function fetchNotification(){
     return function (dispatch, getState){
         dispatch|(getAll(dispatch));
+    }
+
+}
+export function fetchStoreNotification(){
+    return function (dispatch, getState){
+        dispatch|(getAllFromStore(dispatch));
     }
 
 }

@@ -16,8 +16,10 @@ export default function notification(state = initialState, action) {
     switch (action.type) {
 
         case 'GET_NOTIFICATION' :
+            store.save|('notification',action.notification)
             return {
                 ...state,
+
                 notification : action.notification,
             };
 

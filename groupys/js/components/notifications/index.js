@@ -17,7 +17,7 @@ class Notification extends Component {
 
     constructor(props) {
         super(props);
-
+        this.props.fetchStoreNotification();
 
     }
 
