@@ -47,6 +47,11 @@ export default function comment(state = initialState, action) {
 
 
             let comments = currentState['comment'+ action.id ];
+
+            if(!comments || (comments && comments.length ==0)){
+                comments = new Array();
+            }
+
             comments.push(action.comment);
             currentState['comment'+ action.id ] = comments
             store.save('comment'+ action.id ,comments)
