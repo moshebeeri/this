@@ -31,7 +31,7 @@ async function getAll(dispatch){
 
 }
 
-async function getAll(dispatch){
+async function getAllGroups(dispatch){
     try {
         let response = await groupsApi.getAll();
         if(response.length > 0) {
@@ -58,7 +58,7 @@ export function fetchNotification(){
 }
 export function fetchGroups(){
     return function (dispatch, getState){
-        dispatch|(getAll(dispatch));
+        dispatch|(getAllGroups(dispatch));
     }
 
 }
