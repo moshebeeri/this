@@ -58,6 +58,20 @@ export default function comment(state = initialState, action) {
 
             currentState['LoadingDone'+ action.id ] = true;
             return currentState;
+        case 'UPDATE_INSTANCE_COMMENTS' :
+
+
+            let instanceComments = currentState['comment'+ action.gid + action.instanceId]
+
+            if(!instanceComments || (instanceComments && instanceComments.length ==0)){
+                instanceComments = new Array();
+            }
+
+            instanceComments.push(action.comment);
+            currentState['comment'+ action.gid + action.instanceId ] = instanceComments
+            store.save('comment'+ action.gid + action.instanceId,instanceComments)
+
+            return currentState;
 
         default:
             return state;

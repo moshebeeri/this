@@ -13,12 +13,15 @@ import styles from './styles'
 import Icon2 from 'react-native-vector-icons/Entypo';
 import CommentApi from '../../../api/commet'
 
+import UiTools from '../../../api/feed-ui-converter'
+let uiTools = new UiTools();
 let commentApi = new CommentApi();
 import { bindActionCreators } from "redux";
 
 import * as commentAction from "../../../actions/comments";
 
 import EmojiPicker from 'react-native-emoji-picker-panel'
+import store from 'react-native-simple-store';
 class CommentsComponent extends Component {
 
     constructor(props) {
@@ -38,18 +41,32 @@ class CommentsComponent extends Component {
         };
         this.handlePick = this.handlePick.bind(this);
 
+        this.props.fetchStoreInstanceGroupComments(this.props.group._id,this.getInstance().id)
+    }
+
+    async addDirectMessage(message){
+        let user = await store.get('user');
+        let messageInstance = uiTools.createMessage(user,message);
+        await this.props.updateInstanceEntityComments(this.props.group._id,this.getInstance().id,messageInstance)
 
     }
 
-
-
     fetchFeeds(){
-
-        this.props.fetchInstanceGroupComments(this.props.group._id,this.getInstance().id)
+        let item = this.getInstance();
+        let feeds = this.props.comments['comment'+this.props.group._id+ item.id];
+        if(!feeds){
+            feeds = [];
+        }
+        this.props.fetchInstanceGroupComments(this.props.group._id,this.getInstance().id,feeds.length)
 
     }
     fetchTop(id){
-        this.props.fetchInstanceGroupComments(this.props.group._id,this.getInstance().id)
+        let item = this.getInstance();
+        let feeds = this.props.comments['comment'+this.props.group._id+ item.id];
+        if(!feeds){
+            feeds = [];
+        }
+        this.props.fetchInstanceGroupComments(this.props.group._id,this.getInstance().id,feeds.length)
     }
 
 
@@ -117,12 +134,23 @@ class CommentsComponent extends Component {
         return this.props.item;
     }
 
-    _onPressButton(){
-        commentApi.createComment(this.props.group._id, this.getInstance().id,this.state.messsage)
+   async _onPressButton(){
+        let user = store.get('user');
+       let item = this.getInstance();
+       let feeds = this.props.comments['comment'+this.props.group._id+ item.id];
+       if(!feeds){
+           feeds = [];
+       }
+       let message = this.state.messsage;
+       await this.addDirectMessage(message);
 
-        this.setState({
-            messsage:'',
-        })
+       this.setState({
+           messsage:'',
+       })
+       commentApi.createComment(this.props.group._id, this.getInstance().id,message,feeds.length)
+
+
+
     }
     showComments(){
         let show = !this.state.showComment;
@@ -148,7 +176,7 @@ class CommentsComponent extends Component {
 
         promotionType = <Text style={colorStyle}>{item.promotion}</Text>
 
-        let feeds = this.props.comments['comment'+this.props.group._id+ this.getInstance().id];
+        let feeds = this.props.comments['comment'+this.props.group._id+ item.id];
         if(!feeds){
             feeds = [];
         }

@@ -10,7 +10,7 @@ let commentsApi = new CommentsApi();
 
 import store from 'react-native-simple-store';
 
-async function getInstanceGroupComments(dispatch,group,instance){
+async function getInstanceGroupComments(dispatch,group,instance,size){
     try {
         let response = await commentsApi.getInstanceGroupComments(group,instance,size);
         if(response.length > 0) {
@@ -182,6 +182,19 @@ export function updateEntityComments(id,comment){
             id:id,
 
 
+
+        });
+    }
+
+}
+
+export function updateInstanceEntityComments(group,instance,comment){
+    return function (dispatch){
+        dispatch({
+            type: 'UPDATE_INSTANCE_COMMENTS',
+            comment: comment,
+            gid:group,
+            instanceId:instance
 
         });
     }

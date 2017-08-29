@@ -19,6 +19,10 @@ import { bindActionCreators } from "redux";
 import * as commentAction from "../../../actions/comments";
 
 import EmojiPicker from 'react-native-emoji-picker-panel'
+
+
+import UiTools from '../../../api/feed-ui-converter'
+let uiTools = new UiTools();
 class AndroidCommentsComponent extends Component {
 
     constructor(props) {
@@ -40,17 +44,29 @@ class AndroidCommentsComponent extends Component {
         this.fetchFeeds();
     }
 
-
-
-
-
-    fetchFeeds(){
-
-        this.props.fetchInstanceGroupComments(this.props.group._id,this.getInstance().id)
+    async addDirectMessage(message){
+        let user = await store.get('user');
+        let messageInstance = uiTools.createMessage(user,message);
+        await this.props.updateInstanceEntityComments(this.props.group._id,this.getInstance().id,messageInstance)
 
     }
-    fetchTopList(id){
-        this.props.fetchInstanceGroupComments(this.props.group._id,this.getInstance().id)
+
+    fetchFeeds(){
+        let item = this.getInstance();
+        let feeds = this.props.comments['comment'+this.props.group._id+ item.id];
+        if(!feeds){
+            feeds = [];
+        }
+        this.props.fetchInstanceGroupComments(this.props.group._id,this.getInstance().id,feeds.length)
+
+    }
+    fetchTop(id){
+        let item = this.getInstance();
+        let feeds = this.props.comments['comment'+this.props.group._id+ item.id];
+        if(!feeds){
+            feeds = [];
+        }
+        this.props.fetchInstanceGroupComments(this.props.group._id,this.getInstance().id,feeds.length)
     }
 
 
@@ -83,14 +99,14 @@ class AndroidCommentsComponent extends Component {
         let show = !this.state.showEmoji;
         if(show) {
             this.setState({
-                showEmoji: true,
+                showEmoji: show,
                 iconEmoji: "keyboard"
 
             })
         }else{
             Keyboard.dismiss();
             this.setState({
-                showEmoji: false,
+                showEmoji: show,
                 iconEmoji: "emoji-neutral"
 
             })
@@ -118,12 +134,23 @@ class AndroidCommentsComponent extends Component {
         return this.props.item;
     }
 
-    _onPressButton(){
-        commentApi.createComment(this.props.group._id, this.getInstance().id,this.state.messsage)
+    async _onPressButton(){
+        let user = store.get('user');
+        let item = this.getInstance();
+        let feeds = this.props.comments['comment'+this.props.group._id+ item.id];
+        if(!feeds){
+            feeds = [];
+        }
+        let message = this.state.messsage;
+        await this.addDirectMessage(message);
 
         this.setState({
             messsage:'',
         })
+        commentApi.createComment(this.props.group._id, this.getInstance().id,message,feeds.length)
+
+
+
     }
     showComments(){
         let show = !this.state.showComment;
