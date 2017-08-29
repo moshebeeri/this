@@ -6,7 +6,7 @@ let Notification = require('./notification.model');
 // Get list of notifications
 exports.find = function(req, res) {
   //TODO: Validate authorization
-  Notification.find({entity: req.params.entity})
+  Notification.find({to: req.params.entity_id})
     .skip(req.params.skip)
     .limit(req.params.limit)
     .exec(function (err, notifications) {
