@@ -394,6 +394,37 @@ class FeedConverter
         return response
 
     }
+
+    createMessage(user,message){
+        let currentTime = new Date().toLocaleString()
+
+        let response = {
+            id: 100,
+            fid: 101,
+            actor: user._id,
+            showSocial: false,
+            description: message,
+            date : currentTime,
+
+        }
+        if (user.pictures && user.pictures.length > 0) {
+
+            response.logo = {
+                uri: user.pictures[user.pictures.length - 1].pictures[0]
+            }
+
+        }else {
+            response.logo = noPic;
+        }
+           response.userMessage = true;
+
+
+        response.name = user.name;
+
+        response.itemType = 'MESSAGE';
+
+        return response;
+    }
 }
 
 

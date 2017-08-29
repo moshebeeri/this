@@ -14,11 +14,12 @@ import styles from './styles'
 import Icon2 from 'react-native-vector-icons/Entypo';
 import FeedApi from '../../../api/feed'
 let feedApi = new FeedApi();
-
+import store from 'react-native-simple-store';
 import { bindActionCreators } from "redux";
 
 import * as feedsAction from "../../../actions/feeds";
-
+import UiTools from '../../../api/feed-ui-converter'
+let uiTools = new UiTools();
 import GroupApi from "../../../api/groups"
 let groupApi = new GroupApi();
 import EmojiPicker from 'react-native-emoji-picker-panel'
@@ -70,35 +71,81 @@ class GroupFeed extends Component {
 
     fetchFeeds(){
          let groupid = this.props.navigation.state.params.group._id;
-         let goupfeeds = 'groups'+ groupid;
-         if(!this.props.feeds[goupfeeds]){
-             this.props.fetchGroupFeeds(groupid, 'GET_GROUP_FEEDS', new Array(), this);
+         let groupFeeds = 'groups'+ groupid;
+
+        let feeds = this.props.feeds[groupFeeds];
+        if(feeds){
+            feeds = feeds.filter(function (feed) {
+                return feed.id != '100'
+
+            })
+        }
+         if(feeds && feeds.length > 0 ){
+             this.props.fetchGroupFeeds(groupid, 'GET_GROUP_FEEDS', feeds, this);
+
          }else {
-             this.props.fetchGroupFeeds(groupid, 'GET_GROUP_FEEDS', this.props.feeds[goupfeeds], this);
+             this.props.fetchGroupFeeds(groupid, 'GET_GROUP_FEEDS', new Array(), this);
          }
     }
     fetchTop(id){
         let groupid = this.props.navigation.state.params.group._id;
         let groupFeeds = 'groups'+ groupid;
         if(this.props.feeds[groupFeeds] && this.props.feeds[groupFeeds].length >0) {
+            let feeds = this.props.feeds[groupFeeds];
+            if(feeds){
+                feeds = feeds.filter(function (feed) {
+                    return feed.id != '100'
 
-            this.props.fetchGroupTop(groupid, 'GET_GROUP_FEEDS', this.props.feeds[groupFeeds], this.props.feeds[groupFeeds][0].id, this);
+                })
+            }
+
+            this.props.fetchGroupTop(groupid, 'GET_GROUP_FEEDS', feeds, feeds[0].id, this);
+
         }
     }
 
     async _onPressButton(){
         let groupid = this.props.navigation.state.params.group._id;
-        let groupFeeds = 'groups'+ groupid;
-        await groupApi.meesage(groupid,this.state.messsage);
-        if(this.props.feeds[groupFeeds] && this.props.feeds[groupFeeds].length >0) {
-            this.props.fetchGroupTop(groupid, 'GET_GROUP_FEEDS', this.props.feeds[groupFeeds], this.props.feeds[groupFeeds][0].id, this);
-        }
-        this.setState({
-            messsage:'',
-            showEmoji:false,
-            iconEmoji:'emoji-neutral'
-        })
 
+
+        let message = this.state.messsage;
+        if(message) {
+            this.setState({
+                messsage: '',
+                showEmoji: false,
+                iconEmoji: 'emoji-neutral'
+            })
+
+            let featchTop =false;
+            let groupFeeds = 'groups'+ groupid;
+            let feeds = this.props.feeds[groupFeeds];
+            if(feeds){
+                feeds = feeds.filter(function (feed) {
+                    return feed.id != '100'
+
+                })
+            }
+            if(feeds && feeds.length >0) {
+                featchTop = true;
+            }
+
+            await this.addDirectMessage(message);
+            await groupApi.meesage(groupid, message);
+            if(featchTop){
+                await this.fetchTop(0);
+            }else{
+                await this.fetchFeeds();
+            }
+        }
+
+
+
+    }
+
+    async addDirectMessage(message){
+        let user = await store.get('user');
+        let messageInstance = uiTools.createMessage(user,message);
+        await this.props.directAddMessage(this.props.navigation.state.params.group,messageInstance)
 
     }
     handlePick(emoji) {

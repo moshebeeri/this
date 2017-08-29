@@ -141,6 +141,14 @@ export default function feeds(state = initialState, action) {
             feedGroupState['groups'+ action.group._id] =updatedGroupFeeds;
             store.save('groups'+ action.group._id,updatedGroupFeeds)
             return feedGroupState;
+        case 'DIRECT_ADD_GROUP_FEED':
+            let feedDirectGroupState= {...state};
+            let updatedDirectGroupFeeds = addGroupFeeds(feedDirectGroupState,action.feed,action.group);
+            updatedDirectGroupFeeds = filterFeed(updatedDirectGroupFeeds);
+            feedDirectGroupState['groups'+ action.group._id] =updatedDirectGroupFeeds;
+            store.save('groups'+ action.group._id,updatedDirectGroupFeeds)
+            return feedDirectGroupState;
+
         case 'FEED_LOADING':
             return {
                 ...state,
@@ -184,6 +192,20 @@ function updateGroupFeeds(feedState,feed,group) {
 
 }
 
+function addGroupFeeds(feedState,feed,group) {
+    let feeds =  feedState['groups'+ group._id]
+    if(feeds && feeds.length>0){
+        feeds.unshift(feed);
+
+    }else {
+        feeds = new Array();
+        feeds.unshift(feed);
+
+    }
+    return feeds;
+
+}
+
 function filterFeed(feeds){
     let feedIds = new Set();
 
@@ -196,6 +218,9 @@ function filterFeed(feeds){
         }
 
         feedIds.add(feed.id)
+
+
+
         return true;
 
     })

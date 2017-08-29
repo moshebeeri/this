@@ -132,7 +132,7 @@ import { bindActionCreators } from "redux";
                 </MenuTrigger>
                 <MenuOptions>
                     <MenuOption onSelect={this.showUsers.bind(this)}>
-                        <Text>Add User</Text>
+                        <Text>Invite</Text>
                     </MenuOption>
                     <MenuOption onSelect={this.followBusiness.bind(this)}>
                         <Text>Follow Business</Text>

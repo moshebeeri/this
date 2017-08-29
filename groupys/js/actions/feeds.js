@@ -368,6 +368,17 @@ export function fetchGroups(){
     }
 
 }
+
+export function directAddMessage(group, message){
+    return function (dispatch, getState){
+
+        dispatch({
+            type: 'DIRECT_ADD_GROUP_FEED',
+            feed: message,
+            group:group
+        });
+    }
+}
 async function getAll(dispatch){
     try {
         let response = await groupsApi.getAll();
