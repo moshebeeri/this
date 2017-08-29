@@ -187,7 +187,7 @@ module.exports = {
     promotion_upperContainer: {
 
         backgroundColor:'white',
-        width: width -20,
+        width: width,
         borderRadius:2,
         height: 120,
         flexDirection: 'column'
@@ -196,7 +196,7 @@ module.exports = {
     bussiness_upperContainer: {
 
         backgroundColor:'white',
-        width: width -20,
+        width: width,
         borderRadius:2,
         height: 50,
         flexDirection: 'column'
@@ -205,7 +205,7 @@ module.exports = {
     welcome_upperContainer: {
 
         backgroundColor:'white',
-        width: width -20,
+        width: width,
         borderRadius:2,
         height: 100,
         marginTop:5,
@@ -269,14 +269,14 @@ module.exports = {
 
     promotion_buttomUpperContainer: {
         backgroundColor:'white',
-        width: width -20,
+        width: width ,
         height: 140,
         flexDirection: 'row',
         marginTop:0,
     },
     business_buttomUpperContainer: {
         backgroundColor:'white',
-        width: width -20,
+        width: width ,
         height: 80,
         flexDirection: 'row',
         marginTop:0,
@@ -284,7 +284,7 @@ module.exports = {
     promotion_bottomContainer: {
 
         backgroundColor:'white',
-        width: width -18,
+        width: width ,
         alignItems: 'center',
         justifyContent: 'space-between',
         height: 40,
