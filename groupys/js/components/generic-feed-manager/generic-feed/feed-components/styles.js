@@ -7,11 +7,16 @@ const React = require('react-native');
 const { StyleSheet, Platform, Dimensions } = React;
 
 const {width, height} = Dimensions.get('window')
+
+const   vw = width/100;
+const  vh = height/100
+const vmin = Math.min(vw, vh);
+const vmax = Math.max(vw, vh);
 module.exports = {
 
     button: {
 
-        width: width,
+        width: vmin * 100,
         height: 46,
         justifyContent:'center',
         marginTop:10
@@ -128,7 +133,7 @@ module.exports = {
 
     promotion_container: {
         flex: 1,
-        height: 560,
+        height: 81 *vh,
         width: width ,
         overflow: 'hidden',
         backgroundColor:'#b7b7b7',
@@ -143,7 +148,7 @@ module.exports = {
     },
    bussiness_container: {
         flex: 1,
-        height: 430,
+        height: vh*61,
         width: width ,
         overflow: 'hidden',
         backgroundColor:'#b7b7b7',
@@ -158,7 +163,7 @@ module.exports = {
     },
     Welcome_container: {
         flex: 1,
-        height: 110,
+        height: 18 * vh,
         width: width ,
         overflow: 'hidden',
         backgroundColor:'#b7b7b7',
@@ -182,14 +187,19 @@ module.exports = {
 
     },
     promotion_image:{
-        width: width , height: 250,borderWidth:10
+        flex: 1,
+        alignSelf: 'stretch',
+
+    },
+    promotion_image_view:{
+        height: vh*36, width: width
     },
     promotion_upperContainer: {
 
         backgroundColor:'white',
         width: width,
         borderRadius:2,
-        height: 120,
+        height: 18 *vh,
         flexDirection: 'column'
 
     },
@@ -198,7 +208,7 @@ module.exports = {
         backgroundColor:'white',
         width: width,
         borderRadius:2,
-        height: 50,
+        height: vh*7,
         flexDirection: 'column'
 
     },
@@ -215,13 +225,13 @@ module.exports = {
     logo_view:{
         flexDirection: 'row',
         marginLeft:10,
-        marginTop:10
+        marginTop:7
     },
 
     promotion_description:{
         flexDirection: 'column',
-        margin:10,
-        height: 50,
+        margin:4,
+        height: 20 *vh,
         marginTop:2
     },
 
@@ -247,10 +257,10 @@ module.exports = {
         fontFamily:'Roboto-Regular',fontWeight: 'bold',  marginLeft:10,marginTop:5,fontSize:18,color:'black'
     },
     promotion_text_description:{
-        fontFamily:'Roboto-Regular', marginLeft:10,marginTop:0,fontSize:14,color:'black'
+        fontFamily:'Roboto-Regular', marginLeft:10,marginTop:0,fontSize:4 *vmin,color:'black'
     },
     promotion_buttonText: {
-        paddingTop:10,
+        paddingTop:10 ,
         paddingLeft:0,
         fontSize:20,
         color:'white',
@@ -270,14 +280,14 @@ module.exports = {
     promotion_buttomUpperContainer: {
         backgroundColor:'white',
         width: width ,
-        height: 140,
+        height: 20 *vh,
         flexDirection: 'row',
         marginTop:0,
     },
     business_buttomUpperContainer: {
         backgroundColor:'white',
         width: width ,
-        height: 80,
+        height: vh*12,
         flexDirection: 'row',
         marginTop:0,
     },
@@ -287,7 +297,7 @@ module.exports = {
         width: width ,
         alignItems: 'center',
         justifyContent: 'space-between',
-        height: 40,
+        height: vh*6,
         flexDirection: 'row',
         marginTop:0,
         borderWidth:1,

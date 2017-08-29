@@ -99,9 +99,11 @@ export default class FeedBusiness extends Component {
 
                         </View>
                     </View>
+                    <View style={styles.promotion_image_view}>
 
                     <Image resizeMode= "cover" style={styles.promotion_image} source={{uri: item.banner.uri}}>
                     </Image>
+                    </View>
 
                     <View style={styles.business_buttomUpperContainer}>
                         <View style={styles.promotion_buttom_description}>

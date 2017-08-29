@@ -57,7 +57,7 @@ export default class FeedPromotion extends Component {
         if(item.businessLogo){
             buisnessLogo =  <TouchableOpacity onPress={this.showBussines.bind(this)}>
                 <View>
-                <Thumbnail  square={true} size={50} source={{uri: item.businessLogo}} />
+                <Thumbnail  square={true} size={40} source={{uri: item.businessLogo}} />
                 </View>
             </TouchableOpacity>
 
@@ -158,9 +158,11 @@ export default class FeedPromotion extends Component {
 
                         </View>
                     </View>
+                    <View style={styles.promotion_image_view}>
+                    <Image resizeMode= "stretch" style={styles.promotion_image} source={{uri: item.banner.uri}}>
 
-                    <Image resizeMode= "cover" style={styles.promotion_image} source={{uri: item.banner.uri}}>
-                    </Image>
+                        </Image>
+                    </View>
 
                     <View style={styles.promotion_buttomUpperContainer}>
                         <View style={styles.promotion_buttom_description}>
