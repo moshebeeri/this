@@ -517,8 +517,7 @@ exports.user_follow = function (req, res) {
 
 function getGroupPreview(group, callback) {
   Feed.findOne({entity: group._id})
-    .where('message').equals(null)
-    .where('action').equals('instance')
+    .where('activity.action').equals('instance')
     .sort({activity: 'desc'})
     .populate({
       path: 'user',
@@ -529,7 +528,7 @@ function getGroupPreview(group, callback) {
       if (err) console.log(err.message);
       if (err) return callback(err);
       Feed.findOne({entity: group._id})
-        .where('action').equals('group_message')
+        .where('activity.action').equals('group_message')
         .sort({activity: 'desc'})
         .populate({
           path: 'user',
