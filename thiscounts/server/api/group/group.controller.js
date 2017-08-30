@@ -502,6 +502,7 @@ exports.user_follow = function (req, res) {
         id2touch[gObject._id] = {touched: gObject.touched, role: gObject.role}
       });
       if (err) return handleError(res, err);
+
       Group.find({}).where('_id').in(_ids).exec(function (err, groups) {
         if (err) return handleError(res, err);
         groups.forEach(group => {
