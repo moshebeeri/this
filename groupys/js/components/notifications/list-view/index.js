@@ -6,6 +6,8 @@ import Icon2 from 'react-native-vector-icons/MaterialIcons';
 const covefr = require('../../../../images/cover2.png');
 import styles from './styles'
 const {width, height} = Dimensions.get('window')
+const   vw = width/100;
+const  vh = height/100
 import NotoficationApi from '../../../api/notification'
 let notoficationApi = new NotoficationApi();
 import {connect} from 'react-redux';
@@ -78,7 +80,7 @@ import { bindActionCreators } from "redux";
                 backgroundColor = 'white';
                 actionStyle = { backgroundColor:'white',
                     width: width,
-                    height: 50,
+                    height:  vh*9,
                     justifyContent: 'center',
                     alignItems: 'center',
                     flex:-1,
@@ -108,7 +110,7 @@ import { bindActionCreators } from "redux";
 
                     <TouchableOpacity onPress={() => this.read(this.props.item._id)}  style={{
                         flex: -1,
-                        padding: 5,
+
                         backgroundColor:backgroundColor,
                         flexDirection: 'row',
 
@@ -117,12 +119,12 @@ import { bindActionCreators } from "redux";
 
                         {image}
 
-                        <View style={{flexDirection: 'column',width:width - 50,height: 50 }}>
+                        <View style={{flexDirection: 'column',width:width - 50,height: vh*10 }}>
                             <View style={{flexDirection: 'row'}}>
-                                <Text style={{fontWeight:'bold',marginLeft:10 }}>{user.name}</Text>
-                                <Text style={{height:20 }}> invites you to join group </Text>
+                                <Text style={{fontWeight:'bold',marginLeft:vw*4 }}>{user.name}</Text>
+                                <Text style={{height: vh*4 }}> invites you to join group </Text>
                             </View>
-                            <Text style={{marginLeft:10,fontWeight:'bold',height:20,width:nameWidth }}> {this.props.item.group.name} </Text>
+                            <Text style={{marginLeft:vw*3,fontWeight:'bold',height:vh*5,width:nameWidth }}> {this.props.item.group.name} </Text>
 
 
                         </View>
