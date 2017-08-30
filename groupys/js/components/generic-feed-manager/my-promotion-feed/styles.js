@@ -7,6 +7,10 @@ const React = require('react-native');
 const { StyleSheet, Platform, Dimensions } = React;
 
 const {width, height} = Dimensions.get('window')
+const   vw = width/100;
+const  vh = height/100
+const vmin = Math.min(vw, vh);
+const vmax = Math.max(vw, vh);
 module.exports = {
 
     button: {
@@ -128,7 +132,7 @@ module.exports = {
 
     promotion_container: {
         flex: 1,
-        height: 235,
+        height: vh*37,
         width: width ,
         overflow: 'hidden',
         backgroundColor:'#b7b7b7',
@@ -145,7 +149,7 @@ module.exports = {
         alignItems: 'center',
         flexDirection: 'column',
 
-        width: width -16,
+        width: width,
 
         backgroundColor:'#FFF',
         borderRadius:2,
@@ -157,9 +161,9 @@ module.exports = {
     promotion_upperContainer: {
 
         backgroundColor:'white',
-        width: width -20,
+        width: width ,
         borderRadius:2,
-        height: 70,
+        height: vh*11,
         flexDirection: 'column'
 
     },
@@ -219,22 +223,22 @@ module.exports = {
 
     promotion_buttomUpperContainer: {
         backgroundColor:'white',
-        width: width -20,
-        height: 120,
+        width: width ,
+        height: vh*19,
         flexDirection: 'row',
         marginTop:0,
     },
     promotion_action_container: {
         backgroundColor:'white',
-        width: width -20,
-        height: 40,
+        width: width -2,
+        height: vh*6,
         flexDirection: 'row',
         marginTop:0,
     },
     promotion_button_space: {
         backgroundColor:'white',
         width: width -20,
-        height: 2,
+        height: vh*0.5,
         flexDirection: 'row',
         marginTop:0,
     },
