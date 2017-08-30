@@ -5,20 +5,23 @@ const React = require('react-native');
 const { StyleSheet, Platform, Dimensions } = React;
 
 const {width, height} = Dimensions.get('window')
-
+const   vw = width/100;
+const  vh = height/100
+const vmin = Math.min(vw, vh);
+const vmax = Math.max(vw, vh);
 module.exports = {
     group_container:{
-        width :width -10 ,
-        height: 130,
+        width :width  ,
+        height: vh*17,
         alignItems:'center',
-        borderWidth: 1,
-        margin: 5,
+        marginBottom: 4,
+
         backgroundColor:'white'
 
     },
     group_description:{
-        width :width  -10,
-        height: 100,
+        width :width  ,
+        height: vh*15,
         flexDirection: 'row',
         borderWidth: 0,
     },
