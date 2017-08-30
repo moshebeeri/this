@@ -78,9 +78,13 @@ Activity.prototype.activity = function activity(act, callback) {
   activity_impl(act, callback);
 };
 
-Activity.prototype.create = function create(act) {
-  this.activity(act, function (err) {
-    if (err) console.error(err.message)
+Activity.prototype.create = function create(act, callback) {
+  this.activity(act, function (err, activity) {
+    if(callback){
+      if (err) callback(err);
+      callback(null, activity);
+    }
+    if (err) return console.error(err.message);
   });
 };
 

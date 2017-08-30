@@ -4,11 +4,9 @@ let _ = require('lodash');
 let async = require('async');
 
 let Promotion = require('./promotion.model');
+let Group = require('../group/group.model');
 let campaign_controller = require('../campaign/campaign.controller');
 
-let model = require('seraph-model');
-
-let randomstring = require('randomstring');
 let logger = require('../../components/logger').createLogger();
 let graphTools = require('../../components/graph-tools');
 let promotionGraphModel = graphTools.createGraphModel('promotion');
@@ -162,12 +160,16 @@ function applyToFollowingGroups(promotion, instances) {
         let query = instanceGraphModel.related_type_id_dir_query(business._id, 'FOLLOW', 'group', 'in', 0, instance.quantity);
         instanceGraphModel.query(query, function (err, groups_ids) {
           if (err) return console.error(err); //return callback(err);
-          groups_ids.forEach(_id =>
-            instance_group_activity(instance, _id))
-        })
+            groups_ids.forEach(_id => {
+              Group.findById(_id, function (err, group) {
+                if (err) return console.error(err); //return callback(err);
+                instance_group_activity(instance, group);
+              })
+            })
+          })
+        }
       }
-    }
-  });
+  })
 }
 
 //see https://neo4j.com/blog/real-time-recommendation-engine-data-science/
@@ -312,12 +314,15 @@ function user_instance_eligible_activity(userId, instance){
 }
 
 
-function instance_group_activity(instance, group_id) {
+function instance_group_activity(instance, group) {
   activity.create({
     instance: instance._id,
     promotion: instance.promotion._id,
     action: "instance",
-    ids: [group_id],
+    ids: [group._id],
+  }, function(err, activity){
+    group.preview = {instance_activity: activity._id};
+    group.save();
   });
 }
 
