@@ -1,12 +1,14 @@
 
 import React, { Component } from 'react';
-import { Image,TextInput, Platform,View,Keyboard,TouchableNativeFeedback,TouchableOpacity,KeyboardAvoidingView} from 'react-native';
+import { Image,Dimensions,TextInput, Platform,View,Keyboard,TouchableNativeFeedback,TouchableOpacity,KeyboardAvoidingView} from 'react-native';
 
 import { connect } from 'react-redux';
 import { actions } from 'react-native-navigation-redux-helpers';
 import { Container,Footer,Icon,Button,Text,Input ,Thumbnail} from 'native-base';
 import GroupFeedHeader from './groupFeedHeader'
-
+const {width, height} = Dimensions.get('window')
+const   vw = width/100;
+const  vh = height/100
 import GenericFeedManager from '../../generic-feed-manager/index'
 import GenericFeedItem from '../../generic-feed-manager/generic-feed'
 import styles from './styles'
@@ -15,7 +17,7 @@ import CommentApi from '../../../api/commet'
 import NestedScrollView from 'react-native-nested-scrollview';
 let commentApi = new CommentApi();
 import { bindActionCreators } from "redux";
-
+import store from 'react-native-simple-store';
 import * as commentAction from "../../../actions/comments";
 
 import EmojiPicker from 'react-native-emoji-picker-panel'
@@ -51,6 +53,10 @@ class AndroidCommentsComponent extends Component {
 
     }
 
+    focusField(nextField) {
+        this.refs[nextField].focus()
+
+    }
     fetchFeeds(){
         let item = this.getInstance();
         let feeds = this.props.comments['comment'+this.props.group._id+ item.id];
@@ -70,10 +76,6 @@ class AndroidCommentsComponent extends Component {
     }
 
 
-    componentWillMount(){
-        //     this.props.fetchInstanceGroupComments(this.props.navigation.state.params.group._id,this.props.navigation.state.params.instance.id)
-    }
-
 
 
     async getAll(direction,id){
@@ -92,19 +94,25 @@ class AndroidCommentsComponent extends Component {
             messsage: message + emoji ,
         });
     }
+    async fetchTopList(id,showTimer){
+
+        this.fetchTop(id);
+    }
+
 
 
     showEmoji(){
 
         let show = !this.state.showEmoji;
         if(show) {
+            Keyboard.dismiss();
             this.setState({
                 showEmoji: show,
                 iconEmoji: "keyboard"
 
             })
         }else{
-            Keyboard.dismiss();
+
             this.setState({
                 showEmoji: show,
                 iconEmoji: "emoji-neutral"
@@ -113,6 +121,7 @@ class AndroidCommentsComponent extends Component {
         }
     }
     hideEmoji(){
+
         this.setState({
             showEmoji:false,
             iconEmoji:'emoji-neutral'
@@ -135,19 +144,25 @@ class AndroidCommentsComponent extends Component {
     }
 
     async _onPressButton(){
-        let user = store.get('user');
-        let item = this.getInstance();
-        let feeds = this.props.comments['comment'+this.props.group._id+ item.id];
-        if(!feeds){
-            feeds = [];
-        }
-        let message = this.state.messsage;
-        await this.addDirectMessage(message);
 
-        this.setState({
-            messsage:'',
-        })
-        commentApi.createComment(this.props.group._id, this.getInstance().id,message,feeds.length)
+        if(this.state.messsage) {
+            Keyboard.dismiss();
+            let user = store.get('user');
+            let item = this.getInstance();
+            let feeds = this.props.comments['comment' + this.props.group._id + item.id];
+            if (!feeds) {
+                feeds = [];
+            }
+            let message = this.state.messsage;
+            await this.addDirectMessage(message);
+
+            this.setState({
+                messsage: '',
+                showEmoji: false,
+            })
+            commentApi.createComment(this.props.group._id, this.getInstance().id, message, feeds.length)
+
+        }
 
 
 
@@ -186,20 +201,22 @@ class AndroidCommentsComponent extends Component {
         let showMessageInput = undefined;
         let showEmoji = undefined;
         let style = {
-            height:90,backgroundColor:'#ebebeb'
+            width:width,flex:1,height:vh*15,backgroundColor:'#ebebeb'
         }
         if(this.state.showComment){
             style = {
-                height:420,backgroundColor:'#ebebeb'
+                width:width,flex:-1,height:vh*77,backgroundColor:'#ebebeb'
             }
             arrowIcon = "chevron-small-up";
 
-            if(!this.state.showEmoji){
-                commentsView = this.createAndroidScroller(feeds)
+            if(this.state.showEmoji){
+                commentsView = this.createAndroidScroller(feeds,1)
+            }else{
+                commentsView = this.createAndroidScroller(feeds,10)
             }
 
 
-            showMessageInput =  <View behavior={'position'} style={styles.message_container}>
+            showMessageInput =  <View  style={styles.itemborder}>
                 <View style={ {backgroundColor:'white',  flexDirection: 'row'}}>
                     <Button   onPress={() => this._onPressButton()} style={styles.icon} transparent>
 
@@ -217,16 +234,17 @@ class AndroidCommentsComponent extends Component {
 
             </View>
 
-            showEmoji = <EmojiPicker stylw={{height:100}}visible={this.state.showEmoji}  onEmojiSelected={this.handlePick} />
+            showEmoji = <EmojiPicker stylw={{height:10,backgorundColor:'red'}}visible={this.state.showEmoji}  onEmojiSelected={this.handlePick} />
 
         }
 
 
 
 
-        return (
-            <View style={style}>
-                <View style={styles.comments_promotions}>
+        return (  <Container style={{ flex:1,backgroundColor:'#ebebeb'}}>
+
+        <View style={style}>
+                <View  style={styles.comments_promotions}>
                     <View style={styles.comments_promotions}>
                         {promotion}
                     </View>
@@ -243,10 +261,11 @@ class AndroidCommentsComponent extends Component {
                         </Button>
                     </View>
                 </View>
-                {commentsView}
+            {commentsView}
                 {showMessageInput}
                 {showEmoji}
             </View>
+            </Container>
 
 
 
@@ -254,16 +273,17 @@ class AndroidCommentsComponent extends Component {
     }
 
 
-    createAndroidScroller(feeds){
+    createAndroidScroller(feeds,size){
 
         let body = feeds.map(feed => this.createComponent(feed))
-        return <NestedScrollView style={{height:300}}>{body}</NestedScrollView>
+        return <NestedScrollView style={{height:vh*size}}>{body}</NestedScrollView>
 
 
     }
 
     createComponent(feed){
-       return  <GenericFeedItem key={feed.id} userFollowers={this.props.userFollowers} group = {this.props.group}navigation={this.props.navigation} item={feed} selectApi={this}  />
+        let componentKey = feed.id + feed.description;
+       return  <GenericFeedItem key={componentKey} userFollowers={this.props.userFollowers} group = {this.props.group}navigation={this.props.navigation} item={feed} selectApi={this}  />
 
     }
 

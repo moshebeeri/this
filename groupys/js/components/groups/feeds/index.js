@@ -119,6 +119,7 @@ class GroupFeed extends Component {
             let featchTop =false;
             let groupFeeds = 'groups'+ groupid;
             let feeds = this.props.feeds[groupFeeds];
+
             if(feeds){
                 feeds = feeds.filter(function (feed) {
                     return feed.id != '100'

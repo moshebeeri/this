@@ -5,6 +5,8 @@ const React = require('react-native');
 const {StyleSheet,Dimensions, Platform} = React;
 
 const {width, height} = Dimensions.get('window')
+const   vw = width/100;
+const  vh = height/100
 module.exports = {
     itemborder:{
 
@@ -44,9 +46,9 @@ module.exports = {
     },
     headerContainer:{
         flexDirection: 'row',
-        marginTop:10,
+
         width: width,
-        height:70,
+        height:vh*10,
         backgroundColor:'#fff'
     },
     imageStyle:{
@@ -74,7 +76,7 @@ module.exports = {
     },
 
     headerTabContainer:{
-        height:50,
+        height:vh*8,
         width: width,
         backgroundColor:'#d7d7d7',
         flexDirection: 'column',

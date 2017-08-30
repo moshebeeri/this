@@ -1,12 +1,14 @@
 
 import React, { Component } from 'react';
-import { Image,TextInput, Platform,View,Keyboard,TouchableNativeFeedback,TouchableOpacity,KeyboardAvoidingView} from 'react-native';
+import { Image,TextInput, Dimensions,Platform,View,Keyboard,TouchableNativeFeedback,TouchableOpacity,KeyboardAvoidingView} from 'react-native';
 
 import { connect } from 'react-redux';
 import { actions } from 'react-native-navigation-redux-helpers';
 import { Container,Footer,Icon,Button,Text,Input ,Thumbnail} from 'native-base';
 import GroupFeedHeader from './groupFeedHeader'
-
+const {width, height} = Dimensions.get('window')
+const   vw = width/100;
+const  vh = height/100
 import GenericFeedManager from '../../generic-feed-manager/index'
 import GenericFeedItem from '../../generic-feed-manager/generic-feed'
 import styles from './styles'
@@ -186,18 +188,18 @@ class CommentsComponent extends Component {
         let showMessageInput = undefined;
         let showEmoji = undefined;
         let style = {
-            height:90,backgroundColor:'#ebebeb'
+            height:vh*15,backgroundColor:'#ebebeb'
         }
         if(this.state.showComment){
             style = {
-                height:520,backgroundColor:'#ebebeb'
+                height:vh*77,backgroundColor:'red'
             }
             arrowIcon = "chevron-small-up";
 
             commentsView =
                 <GenericFeedManager navigation={this.props.navigation} loadingDone = {this.props.comments['LoadingDone' + this.props.group._id]+ this.getInstance().id} showTopTimer={false} feeds={feeds} api={this} title='comments' ItemDetail={GenericFeedItem}></GenericFeedManager>
 
-            showMessageInput =  <View behavior={'position'} style={styles.message_container}>
+            showMessageInput =  <View style={styles.message_container}>
                 <View style={ {backgroundColor:'white',  flexDirection: 'row'}}>
                     <Button   onPress={() => this._onPressButton()} style={styles.icon} transparent>
 

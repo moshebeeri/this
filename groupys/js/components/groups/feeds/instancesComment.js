@@ -1,12 +1,14 @@
 
 import React, { Component } from 'react';
-import { Image,TextInput, Platform,View,ListView,Keyboard,TouchableNativeFeedback,TouchableWithoutFeedback,ScrollView,TouchableOpacity,KeyboardAvoidingView} from 'react-native';
+import { Image,TextInput, Dimensions,Platform,View,ListView,Keyboard,TouchableNativeFeedback,TouchableWithoutFeedback,ScrollView,TouchableOpacity,KeyboardAvoidingView} from 'react-native';
 
 import { connect } from 'react-redux';
 import { actions } from 'react-native-navigation-redux-helpers';
 import { Container,Footer,Icon,Button,Text,Input ,Thumbnail} from 'native-base';
 import GroupFeedHeader from './groupFeedHeader'
-
+const {width, height} = Dimensions.get('window')
+const   vw = width/100;
+const  vh = height/100
 import GenericFeedManager from '../../generic-feed-manager/index'
 import GenericFeedItem from '../../generic-feed-manager/generic-feed'
 import CommentsComponenet from './commentsComponent';
@@ -78,8 +80,10 @@ class instancesComment extends Component {
             if(Platform.OS == 'android'){
                 let body = feeds.map(feed => this.createComponent(feed))
 
-                return <NestedScrollView>
-                    {body}
+                return <NestedScrollView  >
+
+                        {body}
+
                 </NestedScrollView>
 
             }
