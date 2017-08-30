@@ -1,13 +1,18 @@
 import React, {Component} from 'react';
-import {Image, Platform,TouchableOpacity} from 'react-native';
-import {Container, Content, Text,Title, InputGroup, Input, Button, View,Header, Body, Right, ListItem,Card,CardItem, Thumbnail,Left} from 'native-base';
+import {Image, Dimensions,Platform,TouchableOpacity} from 'react-native';
+import {Container, Content,Text,Title, InputGroup, Input, Button, View,Header, Body, Right, ListItem,Card,CardItem, Thumbnail,Left} from 'native-base';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import Icon2 from 'react-native-vector-icons/MaterialIcons';
 const covefr = require('../../../../images/cover2.png');
 import styles from './styles'
 const promotions =  require('../../../../images/promotion.png');
 const products =  require('../../../../images/barcode.png');
+const {width, height} = Dimensions.get('window')
 
+const   vw = width/100;
+const  vh = height/100
+const vmin = Math.min(vw, vh);
+const vmax = Math.max(vw, vh);
 const premissions =  require('../../../../images/permissions.png');
 export default class BusinessListView extends Component {
 
@@ -100,7 +105,7 @@ export default class BusinessListView extends Component {
         let promotionButton = undefined;
         if(this.props.item.role == 'OWNS' ||this.props.item.role == 'Admin' || this.props.item.role == 'Manager'  ){
             promotionButton =   <TouchableOpacity    onPress={() => this.showPromotions()}  style={{ margin:3, flexDirection: 'row', alignItems: 'center', } } regular>
-                <Image style={{tintColor:'#ff6400',marginLeft:10,width:20,height:20}} source={promotions}/>
+                <Image style={{tintColor:'#ff6400',marginLeft:10,width:vh*4,height:vh*4}} source={promotions}/>
 
                 <Text style={{ marginLeft:5,color:'black',fontStyle: 'normal',fontSize:13 }}>Promotions </Text>
 
@@ -109,20 +114,20 @@ export default class BusinessListView extends Component {
         let premissionsButton = undefined;
         if(this.props.item.role == 'OWNS' ||this.props.item.role == 'Admin' || this.props.item.role == 'Manager'  ) {
             premissionsButton=  <TouchableOpacity    onPress={() => this.showUsersRoles()}  style={{ margin:3, flexDirection: 'row', alignItems: 'center', } } regular>
-                <Image style={{tintColor:'#ff6400',marginLeft:10,width:20,height:20}} source={premissions}/>
+                <Image style={{tintColor:'#ff6400',marginLeft:10,width:vh*4,height:vh*4}} source={premissions}/>
 
                 <Text style={{ marginLeft:5,color:'black',fontStyle: 'normal',fontSize:13 }}>Permissions </Text>
 
             </TouchableOpacity>
         }
-        return ( <View style={{padding:5,backgroundColor:'#eaeaea'}}  >
+        return ( <View style={{marginTop:1,width:width,height:vh*22,backgroundColor:'#eaeaea'}}  >
             <View style={{flex:-1, padding:5,backgroundColor:'white',flexDirection: 'row' ,justifyContent: 'space-between',alignItems: 'center',}}>
                 <View  style={{flexDirection: 'row',alignItems: 'center'}}>
                 {banner}
 
-                <Text style={{marginLeft:10}}>{this.props.item.business.name}</Text>
+                <Text style={{marginLeft:vw*1}}>{this.props.item.business.name}</Text>
                 </View>
-                <View style={{marginLeft:80,flex:-1, flexDirection: 'row' ,alignItems: 'center',}}>
+                <View style={{flex:-1, flexDirection: 'row' ,alignItems: 'center',}}>
                 {editButton}
                 </View>
 
@@ -142,13 +147,13 @@ export default class BusinessListView extends Component {
 
 
 
-                <View style={{height:40,flexDirection: 'row', alignItems: 'center',
+                <View style={{height:vh*6,flexDirection: 'row', alignItems: 'center',
                     justifyContent: 'space-between', }} >
                     {premissionsButton}
 
 
                     <TouchableOpacity    onPress={() => this.showProducts()}  style={{ margin:3, flexDirection: 'row', alignItems: 'center', } } regular>
-                        <Image style={{tintColor:'#ff6400',marginLeft:10,width:20,height:20}} source={products}/>
+                        <Image style={{tintColor:'#ff6400',marginLeft:10,width:vh*3,height:vh*4}} source={products}/>
 
                         <Text style={{ marginLeft:5,color:'black',fontStyle: 'normal',fontSize:13 }}>Products </Text>
 
