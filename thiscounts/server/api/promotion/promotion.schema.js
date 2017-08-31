@@ -39,7 +39,7 @@ const Variations = ['SINGLE', 'RANGE', 'VALUES'];
 let PromotionSchemaObject = {
   social_state : {},
 
-  validate_barcode :{type: Boolean, required: true, default: false},
+  validate_barcode :{type: Boolean, default: false},
 
   automatic: {
     quantity: {type: Number},
@@ -61,7 +61,6 @@ let PromotionSchemaObject = {
     active: {type: Boolean, default: false},
     type: {
       type: String,
-      required: true,
       enum: [
         'FOLLOW_BUSINESS',
         'FOLLOW_SHOPPING_CHAIN',

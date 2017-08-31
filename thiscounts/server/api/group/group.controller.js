@@ -90,7 +90,7 @@ function group_message_activity(group, user_id, message) {
     actor_group: group,
     audience: ['SELF']
   }, function (err, activity) {
-    group.preview = {message_activity: activity._id};
+    group.preview.message_activity = activity._id;
     group.save();
   });
 }
@@ -503,7 +503,12 @@ exports.user_follow = function (req, res) {
       });
       if (err) return handleError(res, err);
 
-      Group.find({}).where('_id').in(_ids).exec(function (err, groups) {
+      Group.find({})
+        .where('_id').in(_ids)
+        .populate('preview.message_activity')
+        .populate('preview.instance_activity')
+        .exec(function (err, groups) {
+
         if (err) return handleError(res, err);
         groups.forEach(group => {
           group.touched = id2touch[group._id].touched;
