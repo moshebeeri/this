@@ -349,19 +349,35 @@ module.exports = {
         flexDirection: 'row',
         margin:2,
         borderWidth:0,
-        maxWidth:width -20
+        maxWidth:width,
+
     },
-    message_Container:{
+    message_component:{
         flexDirection: 'row',
-
-
+        justifyContent: 'space-between',
+        height: 10 *vh,
         width:width,
 
     },
     messageName:{
-        margin:5,
+
         flexDirection: 'column',
 
+    },
+    dateFont:{
+        fontFamily:'Roboto-Regular',  marginRight: 10,marginLeft:10,marginTop:vh*1,fontSize:14,color:'gray'
+
+    },
+    date_container:{
+        width:vw*30,
+        justifyContent: 'flex-end',
+        marginRight:10,
+
+        flexDirection: 'row',
+    },
+    message_container:{
+        width:vw*45,
+        justifyContent: 'flex-start',
     }
 
 
