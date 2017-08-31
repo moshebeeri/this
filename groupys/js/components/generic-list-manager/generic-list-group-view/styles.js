@@ -24,6 +24,7 @@ module.exports = {
         height: vh*15,
         flexDirection: 'row',
         borderWidth: 0,
+        justifyContent: 'space-between',
     },
     group_content:{
         width :width  -10,
@@ -55,13 +56,23 @@ module.exports = {
     },
     group_name:{
         marginTop:10,
+        width:vw*50,
     },
     group_name_text:{
-        fontFamily:'Roboto-Regular',fontWeight: 'bold',  marginLeft:10,marginTop:5,fontSize:24,color:'black'
+        fontFamily:'Roboto-Regular',fontWeight: 'bold',  marginLeft:10,marginTop:0,fontSize:24,color:'black'
     },
     group_members:{
         fontFamily:'Roboto-Regular',  marginLeft:10,marginTop:5,fontSize:16,color:'black'
 
+    },
+    dateFont:{
+        fontFamily:'Roboto-Regular',  marginRight: 10,marginLeft:10,marginTop:vh*3,fontSize:14,color:'gray'
+
+    },
+    date_container:{
+        width:vw*30,
+        justifyContent: 'flex-end',
+        flexDirection: 'row',
     }
 
 };
