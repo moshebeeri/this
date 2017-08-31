@@ -11,6 +11,9 @@ let groupApi = new GroupApi();
 import stylesPortrate from './styles'
 import stylesLandscape from './styles_landscape'
 import StyleUtils from '../../../utils/styleUtils'
+
+import DateUtils from '../../../utils/dateUtils';
+let dateUtils = new DateUtils();
 export default class GenericListGroupView extends Component {
 
 
@@ -39,24 +42,26 @@ export default class GenericListGroupView extends Component {
     render() {
         let styles = stylesPortrate
         if(StyleUtils.isLandscape()){
-            alert('changeStyle')
             styles = stylesLandscape;
         }
 
         let row = undefined
         let image =  <Thumbnail large square   source={require('../../../../images/client_1.png')}/>
         let lastMessage = undefined;
-        if(this.props.item.act && this.props.item.act.activity ){
-            lastMessage =   <Text note style={styles.group_members}>{ this.props.item.act.activity.user.name}: { this.props.item.act.activity.message}</Text>
+        let messageTime = undefined;
 
+
+        if(this.props.item.preview && this.props.item.preview.message_activity ){
+            lastMessage =   <Text note style={styles.group_members}>{ this.props.item.preview.message_activity.user.name}: { this.props.item.preview.message_activity.message}</Text>
+            messageTime = <Text note style={styles.dateFont}>{dateUtils.messageFormater(this.props.item.preview.message_activity.timestamp)}</Text>
         }
-        let group = this.props.item.group;
+        let group = this.props.item;
         if(group.pictures && group.pictures.length > 0) {
-            image =  <Thumbnail large square  source={{uri: group.pictures[0].pictures[3]}} />
+            image =  <Thumbnail Medium   source={{uri: group.pictures[0].pictures[3]}} />
 
         }else{
             if(group.entity && group.entity.business ){
-                image =  <Thumbnail large square  source={{uri: group.entity.business.pictures[0].pictures[3]}} />
+                image =  <Thumbnail Medium   source={{uri: group.entity.business.pictures[0].pictures[3]}} />
 
 
             }
@@ -74,7 +79,9 @@ export default class GenericListGroupView extends Component {
                         <Text  style={styles.group_name_text}>{group.name}</Text>
                             {lastMessage}
                         </View>
-
+                        <View style={styles.date_container}>
+                            {messageTime}
+                        </View>
                     </View>
 
                  </View>

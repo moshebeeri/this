@@ -11,7 +11,8 @@ import { connect } from 'react-redux';
 import { actions } from 'react-native-navigation-redux-helpers';
 import { Container,Footer,Icon,Button,Thumbnail,Text } from 'native-base';
 import styles from './styles'
-
+import DateUtils from '../../../../utils/dateUtils'
+let dateUtils = new DateUtils();
 
 export default class FeedMessage extends Component {
 
@@ -23,10 +24,10 @@ export default class FeedMessage extends Component {
     }
 
     createMessage(item){
-        let image =  <Thumbnail  square   source={item.logo}/>
+        let image =  <Thumbnail  medium    source={item.logo}/>
 
         let containerStyle = {
-            margin:10,
+            margin:5,
             alignItems:'flex-start',
             backgroundColor:'#ebebeb',
         };
@@ -39,15 +40,25 @@ export default class FeedMessage extends Component {
 
 
         };
+        let messageTime = undefined;
+        if(item.date) {
+            messageTime = <Text note
+                                style={styles.dateFont}>{dateUtils.messageFormater(item.date)}</Text>
 
-        let messageContainer = <View style={styles.message_Container}>
+        }
+        let messageContainer = <View style={styles.message_component}>
             {image}
             <View style={styles.messageName}>
                 <Text style={{  fontWeight: 'bold'}}>{item.name}</Text>
-                <View style={messageStyle}>
+                <View style={styles.message_container}>
                     <Text>{item.description}</Text>
+
                 </View>
             </View>
+            <View style={styles.date_container}>
+                {messageTime}
+            </View>
+
 
         </View>
 

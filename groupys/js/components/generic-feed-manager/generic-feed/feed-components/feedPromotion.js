@@ -7,7 +7,12 @@ import {connect} from 'react-redux';
 import {actions} from 'react-native-navigation-redux-helpers';
 import { Container, Content, Text, InputGroup, Input,Thumbnail,Button,Picker,Right,Item,Left,Header,Footer,Body, View,Card,CardItem } from 'native-base';
 
+const {width, height} = Dimensions.get('window')
 
+const   vw = width/100;
+const  vh = height/100
+const vmin = Math.min(vw, vh);
+const vmax = Math.max(vw, vh);
 
 import Icon from 'react-native-vector-icons/FontAwesome';
 import Icon2 from 'react-native-vector-icons/EvilIcons';
@@ -138,9 +143,41 @@ export default class FeedPromotion extends Component {
             </Button>
         }
 
+        let image = undefined;
+        let container ={
+            flex: 1,
+            height: 45 *vh,
+            width: width ,
+            overflow: 'hidden',
+            backgroundColor:'#b7b7b7',
+            // backgroundColor:'#FFF',
+            alignItems: 'center',
+            flexDirection: 'column',
+        }
+        if(item.banner){
+            image = <View style={styles.promotion_image_view}>
+
+            <Image resizeMode= "stretch" style={styles.promotion_image} source={{uri: item.banner.uri}}>
+
+            </Image>
+            </View>
+            container = {
+                flex: 1,
+                height: 81 *vh,
+                width: width ,
+                overflow: 'hidden',
+                backgroundColor:'#b7b7b7',
+                // backgroundColor:'#FFF',
+                alignItems: 'center',
+                flexDirection: 'column',
+            }
+        }
+
+
+
 
         let result =
-            <View style={styles.promotion_container}>
+            <View style={container}>
                 <View style={styles.promotion_card}>
                     <View style={styles.promotion_upperContainer}>
                         <View style={styles.logo_view}>
@@ -158,11 +195,8 @@ export default class FeedPromotion extends Component {
 
                         </View>
                     </View>
-                    <View style={styles.promotion_image_view}>
-                    <Image resizeMode= "stretch" style={styles.promotion_image} source={{uri: item.banner.uri}}>
+                        {image}
 
-                        </Image>
-                    </View>
 
                     <View style={styles.promotion_buttomUpperContainer}>
                         <View style={styles.promotion_buttom_description}>
