@@ -140,7 +140,7 @@ import { bindActionCreators } from "redux";
             );
         }
 
-        return <View></View>
+        return <View><Text>new notification with code: {this.props.item.id} And note:{this.props.item.note} </Text></View>
 
 
 
