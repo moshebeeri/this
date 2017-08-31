@@ -1,22 +1,24 @@
 'use strict';
 
-let _ = require('lodash');
-let async = require('async');
+const _ = require('lodash');
+const async = require('async');
 
-let Promotion = require('./promotion.model');
-let Group = require('../group/group.model');
-let campaign_controller = require('../campaign/campaign.controller');
+const Promotion = require('./promotion.model');
+const Group = require('../group/group.model');
+const campaign_controller = require('../campaign/campaign.controller');
 
-let logger = require('../../components/logger').createLogger();
-let graphTools = require('../../components/graph-tools');
-let promotionGraphModel = graphTools.createGraphModel('promotion');
-let instanceGraphModel = graphTools.createGraphModel('instance');
-let utils = require('../../components/utils').createUtils();
-let activity = require('../../components/activity').createActivity();
-let util = require('util');
-let spatial = require('../../components/spatial').createSpatial();
-let instance = require('../../components/instance');
-let MongodbSearch = require('../../components/mongo-search');
+const logger = require('../../components/logger').createLogger();
+const graphTools = require('../../components/graph-tools');
+const promotionGraphModel = graphTools.createGraphModel('promotion');
+const instanceGraphModel = graphTools.createGraphModel('instance');
+const utils = require('../../components/utils').createUtils();
+const activity = require('../../components/activity').createActivity();
+const util = require('util');
+const spatial = require('../../components/spatial').createSpatial();
+const instance = require('../../components/instance');
+const MongodbSearch = require('../../components/mongo-search');
+const feed = require('../../components/feed-tools');
+const SortedArray = require('sorted-array');
 
 /*
  exports.server_time = function (req, res) {
@@ -394,9 +396,33 @@ exports.campaign_promotions = function (req, res) {
       if (!promotions) {
         return res.send(404);
       }
-      return res.status(200).json(promotions);
+      get_promotions_state(promotions, function (err, promotions) {
+        if (err) {return handleError(res, err)}
+        return res.status(200).json(promotions);
+      });
     });
 };
+
+
+function createFeedPromotionStateFunction(statedPromotion, userId) {
+  return function storeInstance(promotion, callback) {
+    feed.promotion_state(userId, promotion, function(err, withState){
+      if(err) return callback(err);
+      statedPromotion.insert(withState);
+      callback(null, withState)
+    })
+  }
+}
+
+function get_promotions_state(promotions, callback){
+  let statedPromotions = new SortedArray([], function(a,b){
+    return b._id - a._id; //descending order
+  });
+  async.each(promotions, createFeedPromotionStateFunction(statedPromotions), function (err) {
+    if (err) return console.log(err);
+    return callback(null, statedPromotions.array);
+  });
+}
 
 exports.business_promotions = function (req, res) {
   let businessID = req.params.business_id;
@@ -410,7 +436,10 @@ exports.business_promotions = function (req, res) {
       if (!promotions) {
         return res.send(404);
       }
-      return res.status(200).json(promotions);
+      get_promotions_state(promotions, function (err, promotions) {
+        if (err) {return handleError(res, err)}
+        return res.status(200).json(promotions);
+      });
     });
 };
 
@@ -421,7 +450,10 @@ exports.user_business = function (req, res) {
     `MATCH (u:user {_id:'${userID}'})-[r:ROLE{name:"OWNS"}]->(b:business)<-[]-(p:promotion) RETURN p._id as _id`,
     'order by p.created DESC', 0, 1000, function (err, promotions) {
       if (err) return handleError(res, err);
-      return res.status(200).json(promotions);
+      get_promotions_state(promotions, function (err, promotions) {
+        if (err) {return handleError(res, err)}
+        return res.status(200).json(promotions);
+      });
     });
 };
 
