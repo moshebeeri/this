@@ -50,6 +50,9 @@ export default class GeneralComponentHeader extends Component {
         this.props.navigate("businessFollow");
 
     }
+    onBoardingPromotion(){
+        this.props.navigate("businessFollow");
+    }
     render() {
         let back = undefined;
         if(this.props.showBack){
@@ -67,6 +70,9 @@ export default class GeneralComponentHeader extends Component {
 
                 <MenuOption onSelect={this.followBusiness.bind(this)}>
                     <Text>Follow Business</Text>
+                </MenuOption>
+                <MenuOption onSelect={this.onBoardingPromotion.bind(this)}>
+                    <Text>On Boarding Promotions</Text>
                 </MenuOption>
 
             </MenuOptions>

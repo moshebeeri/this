@@ -156,5 +156,14 @@ module.exports = {
         backgroundColor: loginTheme.darkenButton,
         paddingHorizontal: 40,
     },
+    follow_search:{
+        height:50,
+        backgroundColor:'white',
+        flexDirection: 'row',
+        alignItems: 'center',
+        marginBottom:5,
+        borderWidth:0.3,
+        justifyContent: 'space-between',
+    },
 
 };

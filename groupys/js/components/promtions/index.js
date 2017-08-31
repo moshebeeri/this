@@ -10,6 +10,16 @@ import PromotionApi from "../../api/promotion"
 import styles from './styles'
 import Icon2 from 'react-native-vector-icons/EvilIcons';
 import Icon3 from 'react-native-vector-icons/Ionicons';
+
+import {
+    Menu,
+    MenuOptions,
+    MenuOption,
+    MenuTrigger,
+} from 'react-native-popup-menu';
+
+
+import Icon4 from 'react-native-vector-icons/SimpleLineIcons';
 let promotionApi = new PromotionApi();
 import * as promotionsAction from "../../actions/promotions";
 
@@ -60,7 +70,25 @@ import { bindActionCreators } from "redux";
          this.props.navigation.navigate("addPromotions",{business:this.props.navigation.state.params.business});
      }
 
+     onBoardingPromotion(){
+         this.props.navigation.navigate("addPromotions",{onBoardType:'BUSINESS',business:this.props.navigation.state.params.business});
+     }
+
     render() {
+
+        let menuAction = <Menu>
+            <MenuTrigger >
+                <Icon4 style={{fontSize: 25, color: "#2db6c8"}} name="options-vertical"/>
+            </MenuTrigger>
+            <MenuOptions>
+
+
+                <MenuOption onSelect={this.onBoardingPromotion.bind(this)}>
+                    <Text>On Boarding Promotions</Text>
+                </MenuOption>
+
+            </MenuOptions>
+        </Menu>
         let back = <Button transparent style={{ }} onPress={()=> this.back()}>
             <Icon3 active color={"#2db6c8"} size={20} name="ios-arrow-back" />
 
@@ -77,7 +105,7 @@ import { bindActionCreators } from "redux";
                     <View style={styles.follow_search}  regular >
                         {back}
                         <Text style={{fontSize:20,color:"#2db6c8"}}>Promotions</Text>
-                        <View></View>
+                        {menuAction}
                     </View>
 
             <GenericListManager navigation = {this.props.navigation} rows={promotions} title="Promotion" component="home" addComponent="editPromotion" api={this}

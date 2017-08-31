@@ -37,7 +37,8 @@ import XForYComponent from './xForY/index'
 import ReduceAmountComponent from './reduceAmount/index'
 import HappyHourComponent from './happyHour/index'
 import DatePicker from 'react-native-datepicker'
-
+import Icon3 from 'react-native-vector-icons/Ionicons';
+import styles from './styles'
 const types = [
     {
         value:'',
@@ -97,7 +98,9 @@ const types = [
 import {DeviceEventEmitter} from 'react-native'
  class AddPromotion extends Component {
 
-
+     static navigationOptions = {
+         header:null
+     };
 
 
 
@@ -152,6 +155,9 @@ import {DeviceEventEmitter} from 'react-native'
 
     }
 
+     back(){
+         this.props.navigation.goBack();
+     }
 
     async componentWillMount(){
         try {
@@ -260,6 +266,8 @@ import {DeviceEventEmitter} from 'react-native'
         return businessId;
     }
 
+
+
     createPromotionFromState(){
 
         let promotion = {
@@ -275,7 +283,20 @@ import {DeviceEventEmitter} from 'react-native'
 
         };
 
+        if(this.props.navigation.state.params.onBoardType){
 
+            switch (this.props.navigation.state.params.onBoardType){
+                case 'BUSINESS':
+                    promotion.on_action = {
+                        active: true,
+                        type: 'FOLLOW_BUSINESS',
+                        entity: {
+                            business: this.getBusinessId()
+                        }
+                    }
+                    break;
+            }
+        }
 
          let businessId = this.getBusinessId();
 
@@ -676,13 +697,30 @@ import {DeviceEventEmitter} from 'react-native'
         if(this.props.navigation.state.params.group ){
             distributionForm = undefined;
         }
+        let back = <Button transparent style={{ }} onPress={()=> this.back()}>
+            <Icon3 active color={"#2db6c8"} size={20} name="ios-arrow-back" />
 
+        </Button>
+
+        let header = "Add Promotion";
+        if(this.props.navigation.state.params.onBoardType){
+
+            switch (this.props.navigation.state.params.onBoardType){
+                case 'BUSINESS':
+                    header = "Add On Boarding Promotion"
+                    break;
+            }
+        }
         let submitButton = this.createSubmitButton();
         return (
                 <Container>
 
-                    <Content style={{margin:10,backgroundColor: '#fff'}}>
-
+                    <Content style={{backgroundColor: '#fff'}}>
+                        <View style={styles.follow_search}  regular >
+                            {back}
+                            <Text style={{fontSize:20,color:"#2db6c8"}}>{header}</Text>
+                            <View></View>
+                        </View>
                         <View style={{margin:10,borderWidth:3,borderRadius:10, backgroundColor: '#fff'}}>
 
                             {typePikkerTag}
