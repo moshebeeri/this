@@ -12,7 +12,7 @@ const vmax = Math.max(vw, vh);
 module.exports = {
     group_container:{
         width :width  ,
-        height: vh*17,
+        height: vh*43,
         alignItems:'center',
         marginBottom: 4,
 
@@ -23,7 +23,28 @@ module.exports = {
         width :width  ,
         height: vh*15,
         flexDirection: 'row',
-        borderWidth: 0,
+
+        borderColor:'gray',
+        justifyContent: 'flex-start',
+    },
+    group_message_container:{
+        width :width -10 ,
+        marginTop:1,
+
+        height: vh*14,
+        flexDirection: 'row',
+
+        borderWidth:0.2,
+        borderColor:'gray',
+        justifyContent: 'space-between',
+    },
+    group_promotion_container:{
+        width :width -10 ,
+        height: vh*14,
+        flexDirection: 'row',
+
+        borderWidth:0.2,
+        borderColor:'gray',
         justifyContent: 'space-between',
     },
     group_content:{
@@ -34,7 +55,7 @@ module.exports = {
     },
 
     group_messages:{
-        width :(width -10),
+        width :width -10,
         height: 40,
         flexDirection: 'row',
         borderWidth: 0,
@@ -43,7 +64,7 @@ module.exports = {
         borderRightWidth:1
     },
     group_promotion:{
-        width :(width -10),
+        width :width -15,
         height: 60,
         flexDirection: 'row',
         borderTopColor:'#dbdbdb',
@@ -52,27 +73,62 @@ module.exports = {
     },
     group_image:{
         marginTop:10,
-        marginLeft:10
+        marginLeft:10,
+        width:vw*25,
+
     },
     group_name:{
         marginTop:10,
-        width:vw*50,
+        width:vw*44,
+        height: vh*11,
+
+    },
+    message_container:{
+
+        width:vw*66,
+        height: vh*13,
     },
     group_name_text:{
         fontFamily:'Roboto-Regular',fontWeight: 'bold',  marginLeft:10,marginTop:0,fontSize:24,color:'black'
     },
     group_members:{
-        fontFamily:'Roboto-Regular',  marginLeft:10,marginTop:5,fontSize:16,color:'black'
+        fontFamily:'Roboto-Regular',  marginLeft:2,marginTop:2,fontSize:16,color:'black'
 
     },
     dateFont:{
-        fontFamily:'Roboto-Regular',  marginRight: 10,marginLeft:10,marginTop:vh*3,fontSize:14,color:'gray'
+        fontFamily:'Roboto-Regular',  marginRight: 2,marginLeft:2,fontSize:12,color:'gray'
 
     },
+    latest_text:{
+        fontFamily:'Roboto-Regular',  fontSize:12,color:'gray'
+
+    },
+    latest_text_container:{
+        width:width - 10,
+        justifyContent: 'flex-start',
+        flexDirection: 'row',
+    },
     date_container:{
-        width:vw*30,
+        width:vw*20,
         justifyContent: 'flex-end',
         flexDirection: 'row',
-    }
+    },
+    message_date_container:{
+        height:vh*10,
+        justifyContent: 'flex-end',
+        flexDirection: 'row',
+
+        flex: 1,
+    },
+    promotion_image:{
+        flex: 1,
+        alignSelf: 'stretch',
+        marginTop:5,
+        marginLeft:5,
+
+    },
+    promotion_image_view:{
+        height: 50, width: 50
+    },
 
 };

@@ -214,6 +214,7 @@ class FeedConverter
             return feed.activity.instance;
         }
 
+
         return feed;
 
     }
