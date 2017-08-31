@@ -145,8 +145,12 @@ function applyToGroups(promotion, instances){
   instances.forEach(instance => {
     let groups;
     if (instance && promotion && (groups = promotion.distribution.groups)) {
-      groups.forEach(group =>
-        instance_group_activity(instance, group._id))
+      groups.forEach(group =>{
+        Group.findById(group, function (err, group) {
+          if (err) return console.error(err); //return callback(err);
+          instance_group_activity(instance, group);
+        })
+      })
     }
   });
 }
@@ -255,13 +259,14 @@ exports.create_campaign = function (req, res) {
   let promotion = req.body;
   let campaign = req.body;
   promotion.creator = req.user._id;
-
+  console.log(JSON.stringify(promotion));
   create_promotion(promotion, function (err, promotion) {
     if (err) return handleError(res, err);
     campaign.promotions = [promotion];
     campaign.creator = req.user._id;
     campaign.name = promotion.name;
     campaign_controller.create_campaign(campaign, function (err, campaign) {
+      if(err) return handleError(err);
       campaign.promotions.forEach((promotion) => {
         promotionGraphModel.relate_ids(campaign._id, 'CAMPAIGN_PROMOTION', promotion._id);
       });
@@ -321,7 +326,7 @@ function instance_group_activity(instance, group) {
     action: "instance",
     ids: [group._id],
   }, function(err, activity){
-    group.preview = {instance_activity: activity._id};
+    group.preview.instance_activity = activity._id;
     group.save();
   });
 }
@@ -434,5 +439,6 @@ exports.user_promotions = function (req, res) {
 };
 
 function handleError(res, err) {
+  console.error(err.message);
   return res.status(500).send(err)
 }

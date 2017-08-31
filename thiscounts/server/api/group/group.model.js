@@ -31,8 +31,8 @@ const GroupSchema = new Schema({
   admins: [{type: Schema.ObjectId, ref: 'User', index: true}],
   qrcode: {type: Schema.ObjectId, ref:'QRCode'},
   preview: {
-    message_activity: {type: Schema.ObjectId, ref: 'Activity', autopopulate: true},
-    instance_activity: {type: Schema.ObjectId, ref: 'Activity', autopopulate: true},
+    message_activity: {type: Schema.ObjectId, ref: 'Activity'},
+    instance_activity: {type: Schema.ObjectId, ref: 'Activity'},
   },
   entity: {
     user: {type: Schema.ObjectId, ref: 'User', autopopulate: true},
