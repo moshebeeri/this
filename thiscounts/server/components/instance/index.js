@@ -386,6 +386,45 @@ Instances.createPromotionInstances =
     return instances;
   };
 
+Instances.getPromotionValue =
+  Instances.prototype.getPromotionValue = function (promotion) {
+  switch (promotion.type) {
+    case 'PERCENT':
+      return promotion.percent;
+    case 'GIFT':
+      return promotion.gift;
+    case 'X+Y':
+      return promotion.x_plus_y;
+    case 'X+N%OFF':
+      return promotion.x_plus_n_percent_off;
+    case 'X_FOR_Y':
+      return promotion.x_for_y;
+    case 'INCREASING':
+      return promotion.increasing;
+    case 'DOUBLING':
+      return promotion.doubling;
+    case 'GROW':
+      return promotion.grow;
+    case 'PREPAY_DISCOUNT':
+      return promotion.prepay_discount;
+    case 'REDUCED_AMOUNT':
+      return promotion.reduced_amount;
+    case 'PUNCH_CARD':
+      return promotion.punch_card;
+    case 'CASH_BACK':
+      return promotion.cash_back;
+    case 'EARLY_BOOKING':
+      return promotion.early_booking;
+    case 'HAPPY_HOUR':
+      return promotion.happy_hour;
+    case 'MORE_THAN': return promotion.more_than;
+    default:
+      throw new Error("unsupported promotion type");
+
+
+  }
+};
+
 function to_graph(instance) {
   let value = JSON.parse(JSON.stringify(getValue(instance)));
   let ret = {
@@ -439,6 +478,17 @@ Instances.cratePromotionInstances =
     storeInstances(instances, function (err, instances) {
       if (err) return callback(err);
       callback(null, instances);
+    });
+  };
+
+Instances.crateSingleInstance =
+  Instances.prototype.crateSingleInstance = function (promotion, callback) {
+    if(this.getPromotionValue(promotion).variation !== 'SINGLE' )
+      return callback(new Error('crateSingleInstance can only generate instance for value variation of Single'));
+    let instances = this.createPromotionInstances(promotion);
+    storeInstances(instances, function (err, instances) {
+      if (err) return callback(err);
+      callback(null, instances[0]);
     });
   };
 

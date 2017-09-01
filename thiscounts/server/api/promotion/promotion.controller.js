@@ -20,36 +20,6 @@ const MongodbSearch = require('../../components/mongo-search');
 const feed = require('../../components/feed-tools');
 const SortedArray = require('sorted-array');
 
-/*
- exports.server_time = function (req, res) {
- return res.json(200, new Date().toString());
- };
-
-
-
- exports.initialize = function (req, res) {
- let PromotionType = graphTools.createGraphModel('PromotionType');
- Promotion Type.model.setUniqueKey('PromotionType', true);
- let typEnum = Promotion.schema.path('type').enumValues;
- typEnum.forEach(function (typeStr) {
- PromotionType.save({PromotionType: typeStr}, function (err, obj) {
- if (err) console.log("failed " + err.message);
- else console.log("PromotionType " + JSON.stringify(obj) + "created");
- });
- });
- let SocialType = graphTools.createGraphModel('SocialType');
- SocialType.model.setUniqueKey('SocialType', true);
- let socialEnum = Promotion.schema.path('social').enumValues;
- socialEnum.forEach(function (typeStr) {
- SocialType.save({SocialType: typeStr}, function (err, obj) {
- if (err) console.log("failed " + err.message);
- else console.log("SocialType " + JSON.stringify(obj) + " created");
- });
- });
- return res.json(200, {type: typEnum, social: socialEnum});
- };
- */
-
 exports.search = MongodbSearch.create(Promotion);
 
 // Get list of promotions
@@ -86,30 +56,6 @@ function to_graph(promotion) {
     validate_barcode: promotion.validate_barcode
   }
 }
-
-// Creates a new promotion in the DB.
-let relateTypes = function (promotion) {
-  let db = promotionGraphModel.db();
-  let query =  `MATCH (promotion), (type:PromotionType{PromotionType:'${promotion.type}'}) 
-                WHERE  id(promotion)=${promotion.gid} 
-                CREATE (promotion)-[:PROMOTION_TYPE]->(type) `;
-  db.query(query, function (err) {
-    if (err) {
-      logger.error(err.message);
-    }
-  });
-
-  if (utils.defined(promotion.social)) {
-    query =  `MATCH (promotion), (type:SocialType{SocialType:'${promotion.social}'}) 
-              WHERE  id(promotion)=${promotion.gid} 
-              CREATE (promotion)-[:SOCIAL_TYPE]->(type)`;
-    db.query(query, function (err) {
-      if (err) {
-        logger.error(err.message);
-      }
-    });
-  }
-};
 
 let set_promotion_location = function (promotion, callback) {
   if (!utils.defined(promotion.entity))
@@ -199,51 +145,121 @@ function applyToFollowing(promotion, instances) {
   applyToFollowingUsers(promotion, instances);
 }
 
+function handlePromotionPostCreate(promotion, callback) {
+  function relatePromotion(promotion) {
+    const params = {end: promotion.end};
+    let db = promotionGraphModel.db();
+    async.parallel({
+        created: function (callback) {
+          promotionGraphModel.relate_ids(promotion._id, 'CREATED_BY', promotion.creator, callback);
+        },
+        report: function (callback) {
+          if (promotion.report)
+            return promotionGraphModel.relate_ids(promotion._id, 'REPORTED_BY', promotion.creator, callback);
+          return callback(null, true);
+        },
+        mall: function (callback) {
+          if (utils.defined(promotion.entity.mall))
+            return promotionGraphModel.relate_ids(promotion._id, 'MALL_PROMOTION', promotion.entity.mall._id, params, callback);
+          return callback(null, true);
+        },
+        shopping_chain: function (callback) {
+          if (utils.defined(promotion.entity.shopping_chain))
+            return promotionGraphModel.relate_ids(promotion._id, 'CHAIN_PROMOTION', promotion.entity.shopping_chain._id, params, callback);
+          return callback(null, true);
+        },
+        business: function (callback) {
+          if (utils.defined(promotion.entity.business))
+            return promotionGraphModel.relate_ids(promotion._id, 'BUSINESS_PROMOTION', promotion.entity.business._id, params, callback);
+          return callback(null, true);
+        },
+        group: function (callback) {
+          if (utils.defined(promotion.entity.group))
+            return promotionGraphModel.relate_ids(promotion._id, 'GROUP_PROMOTION', promotion.entity.group._id, params, callback);
+          return callback(null, true);
+        },
+        campaign_id: function (callback) {
+          if (utils.defined(promotion.campaign_id))
+            return promotionGraphModel.relate_ids(promotion.campaign_id, 'CAMPAIGN_PROMOTION', promotion._id, params, callback);
+          return callback(null, true);
+        },
+        product: function (callback) {
+          if (utils.defined(promotion.condition.product))
+            return promotionGraphModel.relate_ids(promotion._id, 'PRODUCT', promotion.condition.product, params, callback);
+          return callback(null, true);
+        },
+        promotionType: function (callback) {
+          let query =  `MATCH (promotion), (type:PromotionType{PromotionType:'${promotion.type}'}) 
+                WHERE  id(promotion)=${promotion.gid} 
+                CREATE (promotion)-[:PROMOTION_TYPE]->(type) `;
+          return db.query(query, callback);
+        },
+        socialType: function (callback) {
+          if (utils.defined(promotion.social)) {
+            let query =  `MATCH (promotion), (type:SocialType{SocialType:'${promotion.social}'}) 
+              WHERE  id(promotion)=${promotion.gid} 
+              CREATE (promotion)-[:SOCIAL_TYPE]->(type)`;
+            return db.query(query, callback);
+          }
+          return callback(null, true);
+        }
+      },
+      function (err, state) {
+        if (err) return callback(err, null);
+        callback(null, state);
+      });
+  }
+
+  function relateOnActionPromotion(promotion, callback) {
+    const params = {type: promotion.on_action.type};
+    if (utils.defined(promotion.entity.business))
+      promotionGraphModel.relate_ids(promotion.entity.business._id, 'ON_ACTION', promotion._id, params);
+    if (utils.defined(promotion.entity.shopping_chain))
+      promotionGraphModel.relate_ids(promotion.entity.shopping_chain._id, 'ON_ACTION', promotion._id, params);
+    if (utils.defined(promotion.entity.mall))
+      promotionGraphModel.relate_ids(promotion.entity.mall._id, 'ON_ACTION', promotion._id, params);
+    if (utils.defined(promotion.entity.group))
+      promotionGraphModel.relate_ids(promotion.entity.group._id, 'ON_ACTION', promotion._id, params);
+    return callback(new Error('undefined promotion.on_action.type'));
+  }
+
+  // instance.crateSingleInstance(promotion, function(err, instance){
+  // })
+
+  promotionGraphModel.reflect(promotion, to_graph(promotion), function (err, promotion) {
+    if (err) return callback(err, null);
+    relatePromotion(promotion, function (err) {
+      if (err) return callback(err, null);
+      spatial.add2index(promotion.gid, function (err) {
+        if (err) return callback(err, null);
+        if (promotion.on_action.active) {
+          return relateOnActionPromotion(promotion, callback);
+        }
+        else {
+          instance.cratePromotionInstances(promotion, function (err, instances) {
+            if (err) return callback(err, null);
+            if (promotion.distribution.business) {
+              applyToFollowing(promotion, instances);
+            } else if (promotion.distribution.groups && promotion.distribution.groups.length > 0) {
+              applyToGroups(promotion, instances);
+            }
+            return callback(null);
+          });
+        }
+      });
+    });
+  });
+}
+
 function create_promotion(promotion, callback) {
-  //TODO: Convert to address location
   set_promotion_location(promotion, function (err, promotion) {
     if (err) return callback(err, null);
     Promotion.create(promotion, function (err, promotion) {
       if (err) return callback(err, null);
-      promotionGraphModel.reflect(promotion, to_graph(promotion), function (err, promotion) {
-        if (err) return callback(err, null);
-        //create relationships
-        promotionGraphModel.relate_ids(promotion._id, 'CREATED_BY', promotion.creator);
-
-        if (promotion.report)
-          promotionGraphModel.relate_ids(promotion._id, 'REPORTED_BY', promotion.creator);
-
-        if (utils.defined(promotion.entity.mall))
-          promotionGraphModel.relate_ids(promotion._id, 'MALL_PROMOTION', promotion.entity.mall._id);
-
-        if (utils.defined(promotion.entity.shopping_chain))
-          promotionGraphModel.relate_ids(promotion._id, 'CHAIN_PROMOTION', promotion.entity.shopping_chain._id);
-
-        if (utils.defined(promotion.entity.business))
-          promotionGraphModel.relate_ids(promotion._id, 'BUSINESS_PROMOTION', promotion.entity.business._id);
-
-        if (utils.defined(promotion.campaign_id))
-          promotionGraphModel.relate_ids(promotion.campaign_id, 'CAMPAIGN_PROMOTION', promotion._id);
-
-        if (utils.defined(promotion.condition.product))
-          promotionGraphModel.relate_ids(promotion._id, 'PRODUCT', promotion.condition.product);
-
-        relateTypes(promotion);
-        //promotion_created_activity(promotion);
-        spatial.add2index(promotion.gid, function (err, result) {
-          if (err) return callback(err, null);
-
-          instance.cratePromotionInstances(promotion, function (err, instances) {
-            if (err) return callback(err, null);
-            if(promotion.distribution.business) {
-              applyToFollowing(promotion, instances);
-            }else if(promotion.distribution.groups && promotion.distribution.groups.length > 0){
-              applyToGroups(promotion, instances);
-            }
-          });
-        });
+      handlePromotionPostCreate(promotion, function(err){
+        if(err) return callback(err);
+        callback(null, promotion);
       });
-      callback(null, promotion);
     });
   });
 }

@@ -1,18 +1,19 @@
 'use strict';
 
-let _ = require('lodash');
-let Business = require('./business.model');
-let logger = require('../../components/logger').createLogger();
-let User = require('../user/user.model');
-
-let graphTools = require('../../components/graph-tools');
-let graphModel = graphTools.createGraphModel('business');
-let spatial = require('../../components/spatial').createSpatial();
-let location = require('../../components/location').createLocation();
-let utils = require('../../components/utils').createUtils();
-let activity = require('../../components/activity').createActivity();
-let group_controller = require('../group/group.controller');
-let MongodbSearch = require('../../components/mongo-search');
+const _ = require('lodash');
+const Business = require('./business.model');
+const logger = require('../../components/logger').createLogger();
+const User = require('../user/user.model');
+const Notifications = require('../../components/notification');
+const onAction = require('../../components/on-action');
+const graphTools = require('../../components/graph-tools');
+const graphModel = graphTools.createGraphModel('business');
+const spatial = require('../../components/spatial').createSpatial();
+const location = require('../../components/location').createLocation();
+const utils = require('../../components/utils').createUtils();
+const activity = require('../../components/activity').createActivity();
+const group_controller = require('../group/group.controller');
+const MongodbSearch = require('../../components/mongo-search');
 const qrcodeController = require('../qrcode/qrcode.controller');
 
 
@@ -111,6 +112,7 @@ exports.follow = function (req, res) {
                     CREATE UNIQUE (user:user{_id:"${userId}"})-[f:FOLLOW]->(g)`;
       graphModel.query(query, function (err) {
       if (err) return handleError(res, err);
+      onAction.follow(userId, businessId);
       return res.status(200);
       })
     });
@@ -219,6 +221,7 @@ exports.create = function (req, res) {
               if (err) console.error(err.message)
             });
             create_business_default_group(business);
+            notifyOnAction(business);
             return res.status(201).json(business);
           });
         })
@@ -226,6 +229,14 @@ exports.create = function (req, res) {
     });
   });
 };
+
+function notifyOnAction(business) {
+  Notifications.notify( {
+    note: 'ADD_BUSINESS_FOLLOW_ON_ACTION',
+    group: business.id,
+    actor_user: business.creator
+  },[business.creator])
+}
 
 // Updates an existing business in the DB.
 exports.update = function (req, res) {
