@@ -6,7 +6,6 @@ let auth = require('../../auth/auth.service');
 
 let router = express.Router();
 
-
 router.get('/search/:skip/:limit/:searchString', auth.isAuthenticated(), controller.search);
 router.get('/list/create/by/user/:skip/:limit', auth.isAuthenticated(), controller.user_promotions);
 router.get('/list/by/user/business', auth.isAuthenticated(), controller.user_business);

@@ -58,6 +58,7 @@
     "socket.io": "1.4.8",
     "socket.io-client": "1.4.8",
     "socketio-jwt": "3.0.0",
+    "sorted-array": "^2.0.1",
     "twilio": "2.9.2",
     "winston": "2.2.0"
   },
