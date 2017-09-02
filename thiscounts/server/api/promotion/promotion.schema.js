@@ -59,10 +59,7 @@ let PromotionSchemaObject = {
   },
   on_action:{
     active: {type: Boolean, default: false},
-    proximity: {
-      to: {type: Number, default: 0.01, min: [0.01, 'Too short'], max: [4.9, 'Too long']},
-      from: {type: Number, default: 0.5, min: [0.1, 'Too short'], max: [5, 'Too long']}
-    },
+    proximity: {type: Number, default: 5, min: [0, 'Too short'], max: [5, 'Too long']},
     type: {
       type: String,
       enum: [

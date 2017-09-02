@@ -31,6 +31,9 @@ function find_layer(name) {
 }
 
 function create_layer(name) {
+  let operation = db.operation('ext/SpatialPlugin/graphdb/getLayer', 'POST', {
+    "layer": name
+  });
   //not exist then create the layer
   operation = db.operation('ext/SpatialPlugin/graphdb/addSimplePointLayer', 'POST', {
     "layer": name,
@@ -49,6 +52,9 @@ function create_layer(name) {
 }
 
 function create_index(name) {
+  let operation = db.operation('ext/SpatialPlugin/graphdb/getLayer', 'POST', {
+    "layer": name
+  });
   this.index = null;
   //not exist then create the layer
   operation = db.operation('index/node', 'POST', {
@@ -67,7 +73,6 @@ function create_index(name) {
       this.index = result;
     }
   });
-  return index;
 }
 
 
@@ -125,7 +130,7 @@ Spatial.prototype.withinDistance = function add(coordinate, distance, type, patt
     with u._id as _id, ${coordinate.longitude} as lon, ${coordinate.latitude} as lat, u.lat as u_lat, u.lon as u_lon
     where _id IS NOT NULL
     return _id, 2 * 6371 * asin(sqrt(haversin(radians(lat - u_lat))+ cos(radians(lat))* cos(radians(u_lat))* haversin(radians(lon - u_lon)))) as d
-    ORDER BY d DESC
+    ORDER BY d ASC
     skip ${skip} limit ${limit}
   `;
   //console.log(query);
@@ -240,6 +245,18 @@ Spatial.prototype.geo_to_location = function geo_to_location(geo) {
       lat: geo.lat
     };
   return {};
+};
+Spatial.prototype.location_to_special= function location_to_special(location) {
+  if(location.coordinates && location.coordinates.length>1){
+    return {
+      longitude: location.coordinates[0],
+      latitude: location.coordinates[1]
+    }
+  }
+  return {
+    longitude: location.lng,
+    latitude: location.lat
+  }
 };
 
 

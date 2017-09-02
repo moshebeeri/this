@@ -65,7 +65,7 @@ function createPercentInstances(promotion) {
     return instances;
   }
   else if (p.variation === 'RANGE') {
-    const minMax = minMax(p.values[0], p.values[1]);
+    let minMax = minMax(p.values[0], p.values[1]);
     let spreads = distributor.distributePromotions(minMax.min, minMax.max, 5, p.quantity, p.variation);
     spreads.forEach((spread) => {
       let instance = createInstance(promotion, spread.value, spread.quantity);
@@ -93,7 +93,7 @@ function createPunchCardInstances(promotion) {
     return instances;
   }
   else if (p.variation === 'RANGE') {
-    const minMax = minMax(p.values[0].number_of_punches, p.values[1].number_of_punches);
+    let minMax = minMax(p.values[0].number_of_punches, p.values[1].number_of_punches);
     let spreads = distributor.distributePromotions(minMax.min, minMax.max, 1, p.quantity, p.variation);
     spreads.forEach((spread) => {
       let value = {
@@ -468,8 +468,8 @@ function storeInstances(instances, callback) {
   });
 }
 
-Instances.cratePromotionInstances =
-  Instances.prototype.cratePromotionInstances = function (promotion, callback) {
+Instances.createPromotionInstances =
+  Instances.prototype.createPromotionInstances = function (promotion, callback) {
     let instances = [];
     if (isAutomatic(promotion))
       instances = this.createAutomaticPromotionInstances(promotion);
@@ -481,10 +481,10 @@ Instances.cratePromotionInstances =
     });
   };
 
-Instances.crateSingleInstance =
-  Instances.prototype.crateSingleInstance = function (promotion, callback) {
+Instances.createSingleInstance =
+  Instances.prototype.createSingleInstance = function (promotion, callback) {
     if(this.getPromotionValue(promotion).variation !== 'SINGLE' )
-      return callback(new Error('crateSingleInstance can only generate instance for value variation of Single'));
+      return callback(new Error('createSingleInstance can only generate instance for value variation of Single'));
     let instances = this.createPromotionInstances(promotion);
     storeInstances(instances, function (err, instances) {
       if (err) return callback(err);

@@ -513,7 +513,7 @@ exports.me = function (req, res, next) {
 
 exports.search = MongodbSearch.create(User);
 
-let Roles = new Enum({'Admin': 100, 'Manager': 50, 'Seller': 10}, { ignoreCase: true });
+let Roles = new Enum({'OWNS': 200, 'Admin': 100, 'Manager': 50, 'Seller': 10}, { ignoreCase: true });
 
 exports.roles = function (req, res) {
   res.status(200).json(Roles);

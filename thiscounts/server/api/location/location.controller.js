@@ -1,11 +1,12 @@
 'use strict';
 
-let _ = require('lodash');
-let Location = require('./location.model');
-let logger = require('../../components/logger').createLogger();
-let spatial = require('../../components/spatial').createSpatial();
-let graphTools = require('../../components/graph-tools');
-let graphModel = graphTools.createGraphModel('location');
+const _ = require('lodash');
+const Location = require('./location.model');
+const logger = require('../../components/logger').createLogger();
+const spatial = require('../../components/spatial').createSpatial();
+const graphTools = require('../../components/graph-tools');
+const graphModel = graphTools.createGraphModel('location');
+const proximity = require('../../components/proximity');
 
 
 // Get list of locations

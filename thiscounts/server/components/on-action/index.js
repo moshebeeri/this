@@ -17,7 +17,7 @@ OnAction.follow = function(userId, entityId, callback){
     actions.forEach( action => {
       Promotion.findById(action.promotionId, function (err, promotion) {
         if(err) return callback(err);
-        Instance.crateSingleInstance(promotion, function (err, instance) {
+        Instance.createSingleInstance(promotion, function (err, instance) {
           if(err) return callback(err);
           let act = {
             instance: instance._id,

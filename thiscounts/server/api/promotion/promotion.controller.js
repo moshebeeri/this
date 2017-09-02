@@ -212,6 +212,8 @@ function handlePromotionPostCreate(promotion, callback) {
 
   function relateOnActionPromotion(promotion, callback) {
     const params = {type: promotion.on_action.type};
+    if(promotion.on_action.type === 'PROXIMITY')
+      params.proximity = promotion.on_action.proximity;
     if (utils.defined(promotion.entity.business))
       promotionGraphModel.relate_ids(promotion.entity.business._id, 'ON_ACTION', promotion._id, params);
     if (utils.defined(promotion.entity.shopping_chain))
@@ -223,7 +225,7 @@ function handlePromotionPostCreate(promotion, callback) {
     return callback(new Error('undefined promotion.on_action.type'));
   }
 
-  // instance.crateSingleInstance(promotion, function(err, instance){
+  // instance.createSingleInstance(promotion, function(err, instance){
   // })
 
   promotionGraphModel.reflect(promotion, to_graph(promotion), function (err, promotion) {
@@ -236,7 +238,7 @@ function handlePromotionPostCreate(promotion, callback) {
           return relateOnActionPromotion(promotion, callback);
         }
         else {
-          instance.cratePromotionInstances(promotion, function (err, instances) {
+          instance.createPromotionInstances(promotion, function (err, instances) {
             if (err) return callback(err, null);
             if (promotion.distribution.business) {
               applyToFollowing(promotion, instances);
