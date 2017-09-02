@@ -14,7 +14,7 @@ let Mall = require('../../api/mall/mall.model');
 function Utils(class_name) {
 }
 
-Utils.prototype.undefined = function undefined(obj){
+Utils.prototype.undefined = function is_undefined(obj){
   return !this.defined(obj);
 };
 
@@ -109,6 +109,18 @@ Utils.prototype.to_paginate = function paginate(req){
   return {
     skip: skip,
     limit: limit
+  }
+};
+Utils.prototype.minMax = function (value, value2) {
+  if (value < value2) {
+    return {
+      min: value,
+      max: value2
+    }
+  }
+  return {
+    min: value2,
+    max: value
   }
 };
 
