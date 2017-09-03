@@ -6,9 +6,7 @@ const Promotion = require('../../api/promotion/promotion.model');
 const graphModel = require('../graph-tools').createGraphModel('promotion');
 const Instance = require('../instance');
 
-function OnAction() {}
-
-OnAction.follow = function(userId, entityId, callback){
+exports.follow = function(userId, entityId, callback){
   let query = `MATCH (e{_id:'${entityId}'})-[action:ON_ACTION]->(p:promotion) 
                WHERE action.type = 'FOLLOW' and action.end <= timestamp()
                return p._id as promotionId, type(e) as entity_type`;
@@ -33,8 +31,6 @@ OnAction.follow = function(userId, entityId, callback){
   })
 };
 
-OnAction.proximity = function(userId, location, callback){
+exports.proximity = function(userId, location, callback){
 
 };
-
-module.export = OnAction;

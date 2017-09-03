@@ -11,11 +11,7 @@ admin.initializeApp({
   databaseURL: "https://this-f2f45.firebaseio.com"
 });
 
-function Notifications() {
-
-}
-
-Notifications.sendToDevice = function(registrationToken, payload){
+exports.sendToDevice = function(registrationToken, payload){
   admin.messaging().sendToDevice(registrationToken, payload)
     .then(function(response) {
       // See the MessagingDevicesResponse reference documentation for
@@ -27,9 +23,9 @@ Notifications.sendToDevice = function(registrationToken, payload){
     });
 
 };
-Notifications.pnsUserDevices = function(notification){
+exports.pnsUserDevices = function(notification){
   //pns.push(notification)
-
+  console.log('pnsUserDevices');
 };
 
 // let note = {
@@ -37,7 +33,7 @@ Notifications.pnsUserDevices = function(notification){
 //   group: group_id,
 //   actor_user: actor_user
 // };
-Notifications.notify = function(note, audience){
+exports.notify = function(note, audience){
   audience.forEach(to => {
     note.to = to;
     Notification.create(note, function (err, notification) {
@@ -46,5 +42,3 @@ Notifications.notify = function(note, audience){
     });
   });
 };
-
-module.export = Notifications;

@@ -93,7 +93,7 @@ function proximityEligibility(userId, location, eligible, callback) {
   })
 }
 
-Proximity.reportLastLocation = function (userId, location, callback) {
+exports.reportLastLocation = function(userId, location, callback) {
   ProximityModel.findById(userId, function (err, proximity) {
     if (err) return callback(err);
     if (!proximity)
@@ -115,5 +115,3 @@ Proximity.reportLastLocation = function (userId, location, callback) {
     })
   });
 };
-
-module.export = Proximity;

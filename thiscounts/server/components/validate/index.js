@@ -2,10 +2,8 @@
 
 const _ = require('lodash');
 
-function Validator() {
-}
 
-Validator.entity_validator = function (v) {
+exports.entity_validator = function (v) {
         if (_.isNull(v))
           return false;
         let i = 0;
@@ -21,7 +19,4 @@ Validator.entity_validator = function (v) {
           i++;
         return i === 1
   };
-
-
-module.exports = Validator;
 
