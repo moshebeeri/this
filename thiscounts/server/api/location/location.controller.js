@@ -28,10 +28,14 @@ exports.show = function(req, res) {
 
 // Creates a new location in the DB.
 exports.create = function(req, res) {
-  let userId = req.user._id;
+  let userId = req.body.userId = req.user._id;
+  let locations = req.body.locations;
+  if(locations.length === 0 )
+    return res.status(404).send('locations list is empty');
+
   Location.create(req.body, function(err, location) {
     if(err) { return handleError(res, err); }
-    req.body.locations.forEach(function(location){
+    locations.forEach(function(location){
       graphModel.save({
         lat: location.lat,
         lon: location.lng,
@@ -45,6 +49,7 @@ exports.create = function(req, res) {
         });
       });
     });
+    proximity.reportLastLocation(userId, locations[locations.length-1]);
     return res.status(201).json(location);
   });
 };

@@ -11,7 +11,7 @@ exports.find = function(req, res) {
     .limit(req.params.limit)
     .exec(function (err, notifications) {
     if(err) { return handleError(res, err); }
-    return res.json(200, notifications);
+    return res.status(200).json(notifications);
   });
 };
 
@@ -19,7 +19,7 @@ exports.find = function(req, res) {
 exports.index = function(req, res) {
   Notification.find(function (err, notifications) {
     if(err) { return handleError(res, err); }
-    return res.json(200, notifications);
+    return res.status(200).json(notifications);
   });
 };
 
@@ -28,7 +28,7 @@ exports.show = function(req, res) {
   Notification.findById(req.params.id, function (err, notification) {
     if(err) { return handleError(res, err); }
     if(!notification) { return res.send(404); }
-    return res.json(notification);
+    return res.status(200).json(notification);
   });
 };
 
@@ -49,7 +49,7 @@ exports.update = function(req, res) {
     let updated = _.merge(notification, req.body);
     updated.save(function (err) {
       if (err) { return handleError(res, err); }
-      return res.json(200, notification);
+      return res.status(200).json(notification)
     });
   });
 };
@@ -61,7 +61,7 @@ exports.read = function(req, res) {
     notification.read = true;
     notification.save(function (err) {
       if (err) { return handleError(res, err); }
-      return res.json(200, notification);
+      return res.status(200).json(notification)
     });
   });
 };
@@ -74,7 +74,7 @@ exports.action = function(req, res) {
     notification.action = true;
     notification.save(function (err) {
       if (err) { return handleError(res, err); }
-      return res.json(200, notification);
+      return res.status(200).json(notification)
     });
   });
 };
