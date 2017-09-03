@@ -28,6 +28,7 @@ let ActivitySchema = new Schema({
   location : {
     lng : Number,
     lat : Number,
+    type: {type: String},
     coordinates: []
   },
   action: {type: String, default: ''}, //ex: has replied to:, or started following:

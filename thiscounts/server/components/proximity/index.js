@@ -20,6 +20,7 @@ let ProximitySchema = new Schema({
   location: {
     lng: Number,
     lat: Number,
+    type: {type: String},
     coordinates: []
   },
   reported: {type: Date, default: Date.now(), require: true, index: true}
@@ -32,10 +33,12 @@ function Proximity() {
 }
 
 function createReport(userId, location, callback) {
-  ProximityModel.create({
+  let proximity = {
     _id: userId,
-    last_location: spatial.geo_to_location(location)
-  }, function (err, proximity) {
+    location: spatial.geo_to_location(location)
+  };
+  console.log(JSON.stringify(proximity, null, 2));
+  ProximityModel.create(proximity, function (err, proximity) {
     if (err) return callback(err);
     return callback(null, proximity);
   });
@@ -110,6 +113,9 @@ exports.reportLastLocation = function(userId, location, callback) {
   }
 
   handleProximityActions(userId, location, function (err, eligibles) {
+    if(err) return console.log('error calling handleProximityActions');
+    if(!eligibles)
+      return console.log('no eligibles found');
     eligibles.forEach(eligible => {
       proximityEligibility(userId, location, eligible, eligibilityCallback);
     })
