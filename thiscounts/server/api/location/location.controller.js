@@ -49,7 +49,9 @@ exports.create = function(req, res) {
         });
       });
     });
-    proximity.reportLastLocation(userId, locations[locations.length-1]);
+    proximity.reportLastLocation(userId, locations[locations.length-1], function (err) {
+      if(err) console.error(err);
+    });
     return res.status(201).json(location);
   });
 };
