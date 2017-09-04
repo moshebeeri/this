@@ -8,12 +8,22 @@
  * Created by stan229 on 5/27/16.
  */
 const initialState = {user:[],followers:[]};
+import { REHYDRATE } from 'redux-persist/constants'
 
 
 
 export default function user(state = initialState, action) {
     console.log(action.type);
     let extendedState = {...state};
+    if (action.type === REHYDRATE){
+
+        // retrive stored data for reducer callApi
+        const savedData = action.payload || initialState;
+
+        return {
+            ...state, ...savedData.user
+        };
+    }
     switch (action.type) {
 
         case 'GET_USER' :

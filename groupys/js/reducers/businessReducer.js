@@ -7,8 +7,19 @@
 const initialState = {businesses:[],categories:[]};
 
 import store from 'react-native-simple-store';
-
+import { REHYDRATE } from 'redux-persist/constants'
 export default function business(state = initialState, action) {
+
+    if (action.type === REHYDRATE){
+
+        // retrive stored data for reducer callApi
+        const savedData = action.payload || initialState;
+
+        return {
+            ...state, ...savedData.businesses
+        };
+    }
+
     console.log(action.type);
     switch (action.type) {
 

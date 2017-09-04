@@ -32,7 +32,7 @@ import UserPermittedRoles from './components/premitedUsers/index'
 import GenericComments from './components/comment/comments'
 import  ChangePassword from './components/changePassword/index'
 import BusinessProfile from './components/business/profile/index'
-import BusinessFollow from './components/business/follow/index'
+import BusinessFollow from './components/business/follow/follow_container'
 import Businesses from './components/business/index'
 // var PushNotification = require('react-native-push-notification');
 //

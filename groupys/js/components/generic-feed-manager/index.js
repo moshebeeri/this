@@ -21,9 +21,6 @@ import * as feedsAction from "../../actions/feeds";
     }
 
 
-     componentWillMount(){
-        this.props.api.fetchFeeds();
-    }
 
 
 

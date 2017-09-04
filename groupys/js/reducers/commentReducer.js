@@ -9,10 +9,19 @@
  */
 const initialState = {comments:[]};
 import store from 'react-native-simple-store';
-
+import { REHYDRATE } from 'redux-persist/constants'
 
 export default function comment(state = initialState, action) {
     console.log(action.type);
+    if (action.type === REHYDRATE){
+
+        // retrive stored data for reducer callApi
+        const savedData = action.payload || initialState;
+
+        return {
+            ...state, ...savedData.comments
+        };
+    }
     let currentState = {...state};
     switch (action.type) {
 
