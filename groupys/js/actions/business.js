@@ -4,7 +4,9 @@
 
 import BusinessApi from "../api/business"
 let businessApi = new BusinessApi();
-import store from 'react-native-simple-store';
+
+import * as actions from '../reducers/reducerActions';
+
 async function getAll(dispatch){
     try {
        let response = await businessApi.getAll();
@@ -25,24 +27,6 @@ async function getAll(dispatch){
 
 }
 
-async function getAllFromStore(dispatch){
-    try {
-        let response = await store.get('businesses');
-        if(response) {
-
-            dispatch({
-                type: 'GET_BUSINESS',
-                businesses: response,
-
-            });
-        }
-
-
-    }catch (error){
-        console.log(error);
-    }
-
-}
 
 async function getBusinessCategories(dispatch,gid) {
     try {
@@ -64,6 +48,58 @@ async function getBusinessCategories(dispatch,gid) {
     }
 }
 
+async function dispatchSearchBusiness(dispatch,business){
+    dispatch({ type: actions.SHOW_SEARCH_SPIN, searching: true })
+    dispatch({ type: actions.SHOW_CAMERA, cameraOn: false })
+    let response = await businessApi.searchBusiness(business)
+    dispatch({ type: actions.SEARCH_BUSINESS, businesses: response })
+    dispatch({ type: actions.SHOW_SEARCH_SPIN, searching: false })
+
+}
+
+
+
+async function dispatchFollowByQrcode(dispatch,barcode){
+    dispatch({ type: actions.SHOW_SEARCH_SPIN, searching: true })
+    dispatch({ type: actions.SHOW_CAMERA, cameraOn: false })
+
+    if(barcode.type && barcode.type == 'QR_CODE'){
+        let data = JSON.parse(barcode.data);
+        if(data.code) {
+            let response =  await businessApi.searchBusinessByCode(data.code);
+            if(response && response.assignment  && response.assignment.business ) {
+                dispatch({ type: actions.SEARCH_BUSINESS, businesses: [response.assignment.business] })
+
+            }else{
+                dispatch({ type: actions.SEARCH_BUSINESS, businesses: [] })
+
+            }
+        }
+    }
+    dispatch({ type: actions.SHOW_SEARCH_SPIN, searching: false })
+}
+
+
+export function searchBusiness(business){
+    return function (dispatch, getState){
+        dispatch|(dispatchSearchBusiness(dispatch,business));
+    }
+}
+
+export function followByQrCode(barcode){
+    return function (dispatch, getState){
+        dispatch|(dispatchFollowByQrcode(dispatch,barcode));
+    }
+}
+
+export function showCamera(){
+    return function (dispatch, getState){
+        dispatch({ type: actions.SHOW_CAMERA, cameraOn: true })
+
+    }
+}
+
+
 
 export function fetchBusiness(){
     return function (dispatch, getState){
@@ -71,12 +107,9 @@ export function fetchBusiness(){
     }
 
 }
-export function fetchBusinessFromStore(){
-    return function (dispatch, getState){
-        dispatch|(getAllFromStore(dispatch));
-    }
-
-}
+ export function followBusiness(bussinesId){
+     businessApi.followBusiness(bussinesId);
+ }
 
 
 export function fetchBusinessCategories(gid){

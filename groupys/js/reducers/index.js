@@ -7,19 +7,25 @@ import businesses from "./businessReducer";
 import groups from "./groupReducer";
 import promotions from './promotionReducer';
 import products from './productReducer';
+import follow_businesses from './followBusinessReducer'
 import user from './UserReducer';
 import comments from './commentReducer';
 import notification from './notificationReducer';
+import lastState from "./lastState";
+import { reducer as form } from 'redux-form/immutable' // <--- immutable import
+
 export default function getRootReducer() {
 
     return combineReducers({
         feeds: feeds,
         businesses: businesses,
+        follow_businesses:follow_businesses,
         groups:groups,
         promotions: promotions,
         products:products,
         user:user,
         notification:notification,
-        comments:comments
+        comments:comments,
+        form
     });
 }

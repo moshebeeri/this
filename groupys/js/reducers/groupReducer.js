@@ -11,9 +11,20 @@ const initialState = {groups:[]};
 
 
 import store from 'react-native-simple-store';
+import { REHYDRATE } from 'redux-persist/constants'
 
 export default function group(state = initialState, action) {
     console.log(action.type);
+    if (action.type === REHYDRATE){
+
+        // retrive stored data for reducer callApi
+        const savedData = action.payload || initialState;
+
+        return {
+            ...state, ...savedData.groups
+        };
+    }
+
     let currentState = {...state};
     switch (action.type) {
 

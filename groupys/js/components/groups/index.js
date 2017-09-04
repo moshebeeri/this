@@ -19,7 +19,7 @@ import { bindActionCreators } from "redux";
     constructor(props) {
         super(props);
         this.props.fetchUsersFollowers();
-        this.props.fetchGroupsFromStore();
+
         console.log('renderrrr')
     }
 

@@ -9,10 +9,20 @@
  */
 const initialState = {products:[],categories:[]};
 import store from 'react-native-simple-store';
+import { REHYDRATE } from 'redux-persist/constants'
 
 
 export default function products(state = initialState, action) {
     console.log(action.type);
+    if (action.type === REHYDRATE){
+
+        // retrive stored data for reducer callApi
+        const savedData = action.payload || initialState;
+
+        return {
+            ...state, ...savedData.products
+        };
+    }
     switch (action.type) {
 
         case 'GET_PRODUCTS' :

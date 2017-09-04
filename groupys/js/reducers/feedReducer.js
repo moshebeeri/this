@@ -8,21 +8,27 @@ const initialState = {feeds:[],savedfeeds:[],savedShowTopLoader:false,nextLoad:f
 
 export const GET_FEED = 'GET_FEEDS'
 import store from 'react-native-simple-store';
-
+import { REHYDRATE } from 'redux-persist/constants'
 export default function feeds(state = initialState, action) {
     console.log(action.type);
+    if (action.type === REHYDRATE){
+
+        // retrive stored data for reducer callApi
+        const savedData = action.payload || initialState;
+
+        return {
+            ...state, ...savedData.feeds
+        };
+    }
 
     switch (action.type) {
 
         case 'GET_FEEDS' :
             if(action.feeds && action.feeds.length > 0) {
                 let feeds = filterFeed(action.feeds);
-                store.save('feeds', feeds)
-
-
                 return {
                     ...state,
-                    feeds: action.feeds,
+                    feeds: feeds,
                     showTopLoader: action.showTopLoader,
                     loadingDone: true,
                     nextLoad: false,
@@ -36,43 +42,19 @@ export default function feeds(state = initialState, action) {
                 }
             }
 
-        case 'GET_FEEDS_FROM_STORE' :
-            if(action.feeds.length > 0){
-                let feeds = filterFeed(action.feeds);
-                return {
-                    ...state,
-                    feeds : feeds,
-                    loadingDone: true,
-                    nextLoad:false,
-                    showTopLoader :false,
 
-                };
-            }
-           return {
-                ...state,
-                feeds : action.feeds,
-
-
-            };
 
 
         case 'GET_GROUP_FEEDS' :
 
             let feed = {...state};
             if(action.feeds && action.feeds.length > 0) {
-                store.save('groups' + action.groupid, action.feeds)
-                feed['groups' + action.groupid] = action.feeds;
+               feed['groups' + action.groupid] = action.feeds;
             }
             feed['showTopLoader' +action.groupid ] = action.showTopLoader;
             feed['grouploadingDone'+ action.groupid] = true;
             return feed;
-        case 'GET_GROUP_FEEDS_FROM_STORE' :
 
-            let storeFeed = {...state};
-            storeFeed['groups'+ action.groupid] = action.feeds;
-            storeFeed['grouploadingDone' + action.groupid] = true;
-
-            return storeFeed;
 
         case 'GROUP_FEEDS_LOAD_DONE' :
             let givenState = {...state};
@@ -87,21 +69,7 @@ export default function feeds(state = initialState, action) {
                 savedShowTopLoader : action.showTopLoader,
                 savedloadingDone: true,
             };
-        case 'GET_SAVED_FEEDS_FROM_STORE':
-            if(action.feeds.length > 0){
-                return {
-                    ...state,
-                    savedfeeds : action.feeds,
-                    savedloadingDone: true,
 
-                };
-            }
-            return {
-                ...state,
-                savedfeeds : action.feeds,
-
-
-            };
 
         case 'SHOW_TOP_LOADER' :
             return {
@@ -127,7 +95,6 @@ export default function feeds(state = initialState, action) {
             let feedState= {...state};
             let updatedFeeds = updateFeeds(feedState,action.feed);
             updatedFeeds = filterFeed(updatedFeeds);
-            store.save('feeds',updatedFeeds)
             return {
                 ...state,
                 feeds : updatedFeeds,
@@ -139,14 +106,12 @@ export default function feeds(state = initialState, action) {
             let updatedGroupFeeds = updateGroupFeeds(feedGroupState,action.feed,action.group);
             updatedGroupFeeds = filterFeed(updatedGroupFeeds);
             feedGroupState['groups'+ action.group._id] =updatedGroupFeeds;
-            store.save('groups'+ action.group._id,updatedGroupFeeds)
-            return feedGroupState;
+             return feedGroupState;
         case 'DIRECT_ADD_GROUP_FEED':
             let feedDirectGroupState= {...state};
             let updatedDirectGroupFeeds = addGroupFeeds(feedDirectGroupState,action.feed,action.group);
             updatedDirectGroupFeeds = filterFeed(updatedDirectGroupFeeds);
             feedDirectGroupState['groups'+ action.group._id] =updatedDirectGroupFeeds;
-            store.save('groups'+ action.group._id,updatedDirectGroupFeeds)
             return feedDirectGroupState;
 
         case 'FEED_LOADING':
