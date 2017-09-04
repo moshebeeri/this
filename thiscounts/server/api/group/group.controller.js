@@ -13,6 +13,7 @@ const utils = require('../../components/utils').createUtils();
 const MongodbSearch = require('../../components/mongo-search');
 const qrcodeController = require('../qrcode/qrcode.controller');
 const onAction = require('../../components/on-action');
+const feed = require('../../components/feed-tools');
 
 exports.search = MongodbSearch.create(Group);
 
@@ -478,7 +479,9 @@ exports.following_groups = function (req, res) {
     `MATCH (g:group {_id:'${group}'})<-[r:FOLLOW]-(g:group) RETURN g._id as _id`,
     '', skip, limit, function (err, groups) {
       if (err) return handleError(res, err);
-      return res.status(200).json(groups);
+      get_groups_state(groups, req.user._id, function (err, groups) {
+        return res.status(200).json(groups);
+      });
     });
 };
 
@@ -494,6 +497,11 @@ exports.following_users = function (req, res) {
       return res.status(200).json(users);
     });
 };
+
+function get_groups_state(groups, userId, callback){
+  feed.generate_state(groups, userId, feed.group_state, callback)
+}
+
 
 exports.user_follow = function (req, res) {
   let skip = req.params.skip;
@@ -517,12 +525,13 @@ exports.user_follow = function (req, res) {
         .populate('preview.message_activity')
         .populate('preview.instance_activity')
         .exec(function (err, groups) {
-
-        if (err) return handleError(res, err);
-        groups.forEach(group => {
-          group.touched = id2touch[group._id].touched;
-          group.role = id2touch[group._id].role;
-        });
+          if (err) return handleError(res, err);
+          get_groups_state(groups, req.user._id, function (err, groups) {
+            groups.forEach(group => {
+              group.touched = id2touch[group._id].touched;
+              group.role = id2touch[group._id].role;
+            });
+          });
         return res.status(200).json(groups);
     });
   });

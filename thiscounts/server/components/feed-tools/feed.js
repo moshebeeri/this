@@ -7,6 +7,7 @@ const utils = require('../utils').createUtils();
 const logger = require('../logger').createLogger();
 const graphTools = require('../graph-tools');
 const graphModel = graphTools.createGraphModel('user');
+const SortedArray = require('sorted-array');
 
 
 exports.generate = function(msg) {
@@ -194,12 +195,16 @@ function social_state(user_id, item_id, callback) {
     });
 }
 
-exports.promotion_state = function(user_id, promotion, callback) {
+function promotion_state(user_id, promotion, callback) {
   social_state(user_id, promotion._id, function(err, social_state){
     if(err) {return callback(err, null);}
     promotion.social_state = social_state;
     callback(null, promotion);
   });
+}
+
+exports.promotion_state = function(user_id, promotion, callback) {
+  return promotion_state(user_id, promotion, callback);
 };
 
 function instance_state(user_id, instance, callback){
@@ -242,6 +247,24 @@ function business_state(user_id, business, callback) {
   });
 }
 
+exports.business_state = function(user_id, business, callback) {
+  return business_state(user_id, business, callback);
+};
+
+function group_state(user_id, group, callback) {
+  social_state(user_id, group._id, function(err, social_state) {
+    if (err) {
+      return callback(err, null);
+    }
+    group.social_state = social_state;
+    callback(null, group);
+  });
+}
+
+exports.group_state = function(user_id, group, callback) {
+  return group_state(user_id, group, callback);
+};
+
 function mall_state(user_id, mall, callback) {
   social_state(user_id, mall._id, function(err, social_state) {
     if (err) {
@@ -276,7 +299,7 @@ function update_state(feed, callback) {
   async.parallel({
       promotion: function (callback) {
         if (utils.defined(activity.promotion))
-          this.promotion_state(entity, activity.promotion,  callback);
+          promotion_state(entity, activity.promotion,  callback);
         else
           callback(null, null);
       },
@@ -316,6 +339,12 @@ function update_state(feed, callback) {
         else
           callback(null, null);
       },
+      group: function (callback) {
+        if (utils.defined(activity.group))
+          group_state(entity, activity.group, callback);
+        else
+          callback(null, null);
+      },
       actor_user: function (callback) {
         if (utils.defined(activity.actor_user))
           user_state(entity, activity.actor_user, callback);
@@ -337,6 +366,12 @@ function update_state(feed, callback) {
       actor_chain: function (callback) {
         if (utils.defined(activity.actor_chain))
           chain_state(entity, activity.actor_chain, callback);
+        else
+          callback(null, null);
+      },
+      actor_group: function (callback) {
+        if (utils.defined(activity.actor_group))
+          group_state(entity, activity.actor_group, callback);
         else
           callback(null, null);
       }
@@ -370,22 +405,22 @@ function update_state(feed, callback) {
     });
 }
 
-//const populate_all = async.compose(pupulate( { path: 'activity.actor_user', model: 'User' }, feeds), add1);
-//async.parallel([
-//  { path: 'activity.promotion'      , model: 'Promotion'    },
-//  { path: 'activity.user'           , model: 'User'         },
-//  { path: 'activity.business'       , model: 'Business'     },
-//  { path: 'activity.mall'           , model: 'Mall'         },
-//  { path: 'activity.chain'          , model: 'SoppingChain' },
-//  { path: 'activity.actor_user'     , model: 'User'         },
-//  { path: 'activity.actor_business' , model: 'Business'     },
-//  { path: 'activity.actor_mall'     , model: 'Mall'         },
-//  { path: 'activity.actor_chain'    , model: 'SoppingChain' }
-//];
-
-//const options = {path: 'activity.actor_user', model: 'User'};
-//Feed.populate(feeds, options, function (err, feeds) {
-//  return res.status(200).json(feeds);
-//});
-//populate: { path: 'promotion user business mall chain actor_user actor_business actor_mall actor_chain' }
+function createFeedStateFunction(stated, userId, state_func) {
+  return function(item, callback) {
+    state_func(userId, item, function(err, withState){
+      if(err) return callback(err);
+      stated.insert(withState);
+      callback(null, withState)
+    })
+  }
+}
+exports.generate_state = function(items, userId, state_func, callback){
+  let stated = new SortedArray([], function(a,b){
+    return b._id - a._id; //descending order
+  });
+  async.each(items, createFeedStateFunction(stated, userId, state_func), function (err) {
+    if (err) return console.log(err);
+    return callback(null, stated.array);
+  });
+};
 
