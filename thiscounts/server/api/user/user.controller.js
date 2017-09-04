@@ -1,30 +1,26 @@
 'use strict';
 
-let _ = require('lodash');
-let mongoose = require('mongoose');
-let async = require('async');
-let User = require('./user.model');
-let Business = require('../business/business.model');
-let ShoppingChain = require('../shoppingChain/shoppingChain.model');
-let Mall = require('../mall/mall.model');
-let Group = require('../group/group.model');
+const _ = require('lodash');
+const mongoose = require('mongoose');
+const async = require('async');
+const User = require('./user.model');
+const Business = require('../business/business.model');
+const ShoppingChain = require('../shoppingChain/shoppingChain.model');
+const Mall = require('../mall/mall.model');
+const Group = require('../group/group.model');
+const PhoneNumber = require('../phone_number/phone_number.model');
+const config = require('../../config/environment');
+const jwt = require('jsonwebtoken');
+const twilio = require('twilio')(config.twilio.accountSid, config.twilio.authToken);
+const utils = require('../../components/utils').createUtils();
+const randomstring = require('randomstring');
+const logger = require('../../components/logger').createLogger();
+const graphTools = require('../../components/graph-tools');
+const graphModel = graphTools.createGraphModel('user');
 
-let PhoneNumber = require('../phone_number/phone_number.model');
-let passport = require('passport');
-let config = require('../../config/environment');
-let jwt = require('jsonwebtoken');
-let twilio = require('twilio')(config.twilio.accountSid, config.twilio.authToken);
-let util = require('util');
-
-let utils = require('../../components/utils').createUtils();
-let randomstring = require('randomstring');
-
-let logger = require('../../components/logger').createLogger();
-let graphTools = require('../../components/graph-tools');
-let graphModel = graphTools.createGraphModel('user');
-
-let activity = require('../../components/activity').createActivity();
-let MongodbSearch = require('../../components/mongo-search');
+const activity = require('../../components/activity').createActivity();
+const MongodbSearch = require('../../components/mongo-search');
+const Enum = require('enum');
 
 
 let validationError = function (res, err) {
@@ -517,7 +513,7 @@ exports.me = function (req, res, next) {
 
 exports.search = MongodbSearch.create(User);
 
-let Roles = new Enum({'Admin': 100, 'Manager': 50, 'Seller': 10}, { ignoreCase: true });
+let Roles = new Enum({'OWNS': 200, 'Admin': 100, 'Manager': 50, 'Seller': 10}, { ignoreCase: true });
 
 exports.roles = function (req, res) {
   res.status(200).json(Roles);

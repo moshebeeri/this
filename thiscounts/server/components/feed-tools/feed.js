@@ -194,13 +194,13 @@ function social_state(user_id, item_id, callback) {
     });
 }
 
-function promotion_state(user_id, promotion, callback) {
+exports.promotion_state = function(user_id, promotion, callback) {
   social_state(user_id, promotion._id, function(err, social_state){
     if(err) {return callback(err, null);}
     promotion.social_state = social_state;
     callback(null, promotion);
   });
-}
+};
 
 function instance_state(user_id, instance, callback){
   social_state(user_id, instance._id, function(err, social_state) {
@@ -276,7 +276,7 @@ function update_state(feed, callback) {
   async.parallel({
       promotion: function (callback) {
         if (utils.defined(activity.promotion))
-          promotion_state(entity, activity.promotion,  callback);
+          this.promotion_state(entity, activity.promotion,  callback);
         else
           callback(null, null);
       },

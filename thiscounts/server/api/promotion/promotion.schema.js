@@ -59,13 +59,12 @@ let PromotionSchemaObject = {
   },
   on_action:{
     active: {type: Boolean, default: false},
+    proximity: {type: Number, default: 5, min: [0, 'Too short'], max: [5, 'Too long']},
     type: {
       type: String,
       enum: [
-        'FOLLOW_BUSINESS',
-        'FOLLOW_SHOPPING_CHAIN',
-        'FOLLOW_MALL',
-        'FOLLOW_GROUP'
+        'FOLLOW_ENTITY',
+        'PROXIMITY'
       ]
     },
     entity :{
@@ -105,8 +104,6 @@ let PromotionSchemaObject = {
   } ,
   created: {type: Date, default: Date.now},
   gid: {type: Number, index: true},
-  realize_gid: Number,
-  saved: Date,
 
   report: {type: Boolean, default: false},
   system_report: {type: Boolean, default: false},
@@ -124,16 +121,6 @@ let PromotionSchemaObject = {
   description:String,
   start: { type : Date, default: Date.now },
   end: { type: Date, default: new Date(+new Date() + 14*24*60*60*1000) },
-  expireAt: {
-    type: Date
-    /**validate: [ function(v) {
-      return (v - new Date()) > 60000*(3600*24*14 - 1);
-    }, 'Cannot expire less then 14 days in the future.' ],
-     default: function() {
-      // 14 days from now
-      return new Date(new Date().valueOf() + 60000*3600*24*14);
-    }**/
-  },
 
   social: {
     type: String,

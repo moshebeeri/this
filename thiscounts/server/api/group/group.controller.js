@@ -1,20 +1,18 @@
 'use strict';
 
-let _ = require('lodash');
-let Group = require('./group.model');
-let User = require('../user/user.model');
-let Product = require('../product/product.model');
-let Notification = require('../notification/notification.model');
-let Feed = require('../feed/feed.model');
+const _ = require('lodash');
+const Group = require('./group.model');
+const User = require('../user/user.model');
+const Product = require('../product/product.model');
+const Notifications = require('../../components/notification');
 
-let graphTools = require('../../components/graph-tools');
-let graphModel = graphTools.createGraphModel('group');
-let activity = require('../../components/activity').createActivity();
-let logger = require('../../components/logger').createLogger();
-let utils = require('../../components/utils').createUtils();
-const async = require('async');
-let MongodbSearch = require('../../components/mongo-search');
+const graphTools = require('../../components/graph-tools');
+const graphModel = graphTools.createGraphModel('group');
+const activity = require('../../components/activity').createActivity();
+const utils = require('../../components/utils').createUtils();
+const MongodbSearch = require('../../components/mongo-search');
 const qrcodeController = require('../qrcode/qrcode.controller');
+const onAction = require('../../components/on-action');
 
 exports.search = MongodbSearch.create(Group);
 
@@ -113,6 +111,14 @@ function group_follow_business_activity(following, followed) {
   });
 }
 
+function notifyOnAction(group) {
+  Notifications.notify( {
+    note: 'ADD_GROUP_FOLLOW_ON_ACTION',
+    group: group.id,
+    actor_user: group.creator
+  },[group.creator])
+}
+
 // Creates a new group in the DB.
 exports.create = function (req, res) {
   let group = req.body;
@@ -143,6 +149,7 @@ exports.create = function (req, res) {
           graphModel.relate_ids(group.entity.business, 'BUSINESS_GROUP', group._id);
         }
         group_activity(group, 'create');
+        notifyOnAction(group);
       });
       return res.status(201).json(group);
     });
@@ -266,6 +273,8 @@ function user_follow_group(user_id, group, callback) {
       console.error(err);
     }
     user_follow_group_activity(group, user_id);
+    onAction.follow(user_id, group._id);
+
     if (typeof callback === 'function')
       callback(null, group);
   });
@@ -537,13 +546,7 @@ function sendGroupNotification(actor_user, audience, group_id, type) {
     group: group_id,
     actor_user: actor_user
   };
-
-  audience.forEach(to => {
-    note.to = to;
-    Notification.create(note, function (err, notification) {
-      //pns.push(notification)
-    });
-  });
+  Notifications.notify(note, audience);
 }
 
 exports.ask_join_group = function (req, res) {

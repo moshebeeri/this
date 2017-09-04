@@ -1,12 +1,9 @@
 'use strict';
 
 const _ = require('lodash');
-const mongoose = require('mongoose');
-const logger = require('../logger').createLogger();
 const graphTools = require('../graph-tools');
 const instanceGraphModel = graphTools.createGraphModel('instance');
 const utils = require('../utils').createUtils();
-const activity = require('../activity').createActivity();
 const spatial = require('../spatial').createSpatial();
 const distributor = require('../../components/distributor');
 const InstanceSchema = require('../../api/instance/instance.model');
@@ -36,18 +33,6 @@ Instances.createAutomaticPromotionInstances =
 
   };
 
-function minMax(value, value2) {
-  if (value < value2) {
-    return {
-      min: value,
-      max: value2
-    }
-  }
-  return {
-    min: value2,
-    max: value
-  }
-}
 
 function createPercentInstances(promotion) {
   let instances = [];
@@ -65,7 +50,7 @@ function createPercentInstances(promotion) {
     return instances;
   }
   else if (p.variation === 'RANGE') {
-    const minMax = minMax(p.values[0], p.values[1]);
+    let minMax = utils.minMax(p.values[0], p.values[1]);
     let spreads = distributor.distributePromotions(minMax.min, minMax.max, 5, p.quantity, p.variation);
     spreads.forEach((spread) => {
       let instance = createInstance(promotion, spread.value, spread.quantity);
@@ -93,7 +78,7 @@ function createPunchCardInstances(promotion) {
     return instances;
   }
   else if (p.variation === 'RANGE') {
-    const minMax = minMax(p.values[0].number_of_punches, p.values[1].number_of_punches);
+    let minMax = utils.minMax(p.values[0].number_of_punches, p.values[1].number_of_punches);
     let spreads = distributor.distributePromotions(minMax.min, minMax.max, 1, p.quantity, p.variation);
     spreads.forEach((spread) => {
       let value = {
@@ -386,6 +371,45 @@ Instances.createPromotionInstances =
     return instances;
   };
 
+Instances.getPromotionValue =
+  Instances.prototype.getPromotionValue = function (promotion) {
+  switch (promotion.type) {
+    case 'PERCENT':
+      return promotion.percent;
+    case 'GIFT':
+      return promotion.gift;
+    case 'X+Y':
+      return promotion.x_plus_y;
+    case 'X+N%OFF':
+      return promotion.x_plus_n_percent_off;
+    case 'X_FOR_Y':
+      return promotion.x_for_y;
+    case 'INCREASING':
+      return promotion.increasing;
+    case 'DOUBLING':
+      return promotion.doubling;
+    case 'GROW':
+      return promotion.grow;
+    case 'PREPAY_DISCOUNT':
+      return promotion.prepay_discount;
+    case 'REDUCED_AMOUNT':
+      return promotion.reduced_amount;
+    case 'PUNCH_CARD':
+      return promotion.punch_card;
+    case 'CASH_BACK':
+      return promotion.cash_back;
+    case 'EARLY_BOOKING':
+      return promotion.early_booking;
+    case 'HAPPY_HOUR':
+      return promotion.happy_hour;
+    case 'MORE_THAN': return promotion.more_than;
+    default:
+      throw new Error("unsupported promotion type");
+
+
+  }
+};
+
 function to_graph(instance) {
   let value = JSON.parse(JSON.stringify(getValue(instance)));
   let ret = {
@@ -429,8 +453,8 @@ function storeInstances(instances, callback) {
   });
 }
 
-Instances.cratePromotionInstances =
-  Instances.prototype.cratePromotionInstances = function (promotion, callback) {
+Instances.createPromotionInstances =
+  Instances.prototype.createPromotionInstances = function (promotion, callback) {
     let instances = [];
     if (isAutomatic(promotion))
       instances = this.createAutomaticPromotionInstances(promotion);
@@ -439,6 +463,17 @@ Instances.cratePromotionInstances =
     storeInstances(instances, function (err, instances) {
       if (err) return callback(err);
       callback(null, instances);
+    });
+  };
+
+Instances.createSingleInstance =
+  Instances.prototype.createSingleInstance = function (promotion, callback) {
+    if(this.getPromotionValue(promotion).variation !== 'SINGLE' )
+      return callback(new Error('createSingleInstance can only generate instance for value variation of Single'));
+    let instances = this.createPromotionInstances(promotion);
+    storeInstances(instances, function (err, instances) {
+      if (err) return callback(err);
+      callback(null, instances[0]);
     });
   };
 

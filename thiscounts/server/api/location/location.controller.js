@@ -1,11 +1,12 @@
 'use strict';
 
-let _ = require('lodash');
-let Location = require('./location.model');
-let logger = require('../../components/logger').createLogger();
-let spatial = require('../../components/spatial').createSpatial();
-let graphTools = require('../../components/graph-tools');
-let graphModel = graphTools.createGraphModel('location');
+const _ = require('lodash');
+const Location = require('./location.model');
+const logger = require('../../components/logger').createLogger();
+const spatial = require('../../components/spatial').createSpatial();
+const graphTools = require('../../components/graph-tools');
+const graphModel = graphTools.createGraphModel('location');
+const proximity = require('../../components/proximity');
 
 
 // Get list of locations
@@ -27,10 +28,14 @@ exports.show = function(req, res) {
 
 // Creates a new location in the DB.
 exports.create = function(req, res) {
-  let userId = req.user._id;
+  let userId = req.body.userId = req.user._id;
+  let locations = req.body.locations;
+  if(locations.length === 0 )
+    return res.status(404).send('locations list is empty');
+
   Location.create(req.body, function(err, location) {
     if(err) { return handleError(res, err); }
-    req.body.locations.forEach(function(location){
+    locations.forEach(function(location){
       graphModel.save({
         lat: location.lat,
         lon: location.lng,
@@ -43,6 +48,9 @@ exports.create = function(req, res) {
           else logger.info('object added to layer ' + result)
         });
       });
+    });
+    proximity.reportLastLocation(userId, locations[locations.length-1], function (err) {
+      if(err) console.error(err);
     });
     return res.status(201).json(location);
   });

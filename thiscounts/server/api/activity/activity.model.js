@@ -7,7 +7,7 @@ const autopopulate = require('mongoose-autopopulate');
 let ActivitySchema = new Schema({
   timestamp: {type: Date, default: Date.now},
   ids: [{type: Schema.ObjectId}],
-  sharable: {type: Boolean, default: true},
+  sharable: {type: Boolean, default: false},
 
   promotion: {type: Schema.ObjectId, ref: 'Promotion', autopopulate: true },
   instance: {type: Schema.ObjectId, ref: 'Instance', autopopulate: true },
@@ -25,7 +25,12 @@ let ActivitySchema = new Schema({
   actor_mall: {type: Schema.ObjectId, ref: 'Mall', autopopulate: true },
   actor_chain: {type: Schema.ObjectId, ref: 'ShoppingChain', autopopulate: true },
   actor_group: {type: Schema.ObjectId, ref: 'Group', autopopulate: true },
-
+  location : {
+    lng : Number,
+    lat : Number,
+    type: {type: String},
+    coordinates: []
+  },
   action: {type: String, default: ''}, //ex: has replied to:, or started following:
   message: {type: String, default: ''}
 
