@@ -36,7 +36,9 @@ exports.show = function (req, res) {
     if (!group) {
       return res.status(404).send('no group');
     }
-    return res.status(200).json(group);
+    get_groups_state([group], req.user._id, function (err, groups) {
+      return res.status(200).json(groups[0]);
+    });
   });
 };
 
@@ -75,7 +77,7 @@ function user_follow_group_activity(group, user) {
 
 function sendActivity(act, callback) {
   activity.activity(act, function (err, activity) {
-    if (err) return callback(err)
+    if (err) return callback(err);
     callback(null, activity)
   });
 
