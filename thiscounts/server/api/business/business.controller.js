@@ -15,7 +15,11 @@ const activity = require('../../components/activity').createActivity();
 const group_controller = require('../group/group.controller');
 const MongodbSearch = require('../../components/mongo-search');
 const qrcodeController = require('../qrcode/qrcode.controller');
+const feed = require('../../components/feed-tools');
 
+function get_businesses_state(businesses, userId, callback){
+  feed.generate_state(businesses, userId, feed.business_state, callback)
+}
 
 exports.search = MongodbSearch.create(Business);
 
@@ -56,7 +60,11 @@ exports.show = function (req, res) {
     if (!business) {
       return res.status(404).send('Not Found');
     }
-    return res.json(business);
+
+    get_businesses_state([business], req.user._id, function (err, businesses) {
+    if (err) { return handleError(res, err);}
+      return res.status(200).json(businesses[0]);
+    })
   });
 };
 
@@ -77,14 +85,18 @@ exports.mine = function (req, res) {
       .sort({_id: 'desc'})
       .exec(function (err, businesses) {
       if (err) return handleError(res, err);
-      let info = [];
-      businesses.forEach(business => {
-        info.push({
-          business: business,
-          role: userRoleById[business._id]
+      get_businesses_state(businesses, req.user._id, function (err, businesses) {
+        if (err) return handleError(res, err);
+
+        let info = [];
+        businesses.forEach(business => {
+          info.push({
+            business: business,
+            role: userRoleById[business._id]
+          });
         });
-      });
-      return res.status(200).json(info);
+        return res.status(200).json(info);
+      })
     });
   })
 };
