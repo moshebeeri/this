@@ -6,11 +6,11 @@
  */
 
 const noPic = require('../../images/client_1.png');
-import store from 'react-native-simple-store';
+
 class FeedConverter
 {
 
-    createFeed(feed,contacsMap,phoneUser) {
+    createFeed(feed) {
         let response = {};
         if (feed.activity.business) {
             if(!feed.activity.actor_user){
@@ -18,10 +18,9 @@ class FeedConverter
             }
 
 
-            let name = feed.activity.actor_user.phone_number;
-            let contact = contacsMap.get(feed.activity.actor_user.phone_number);
-            if (contact) {
-                name = contact.givenName + ' ' + contact.familyName;
+            let name = feed.activity.actor_user.name;
+            if(!name){
+                name = feed.activity.actor_user.phone_number;
             }
             if (feed.activity.business.pictures.length > 0) {
                 response = {
@@ -82,10 +81,7 @@ class FeedConverter
             }
 
             let name = user.phone_number;
-            let contact = contacsMap.get(user.phone_number);
-            if (contact) {
-                name = contact.givenName + ' ' + contact.familyName;
-            }
+
             if (user.name) {
                 name = user.name;
             }
@@ -108,11 +104,11 @@ class FeedConverter
             }else {
                 response.logo = noPic;
             }
-            if(phoneUser.phone_number == user.phone_number ) {
-                response.userMessage = true;
-            }else{
-                response.userMessage = false;
-            }
+            // if(phoneUser.phone_number == user.phone_number ) {
+            //     response.userMessage = true;
+            // }else{
+            //     response.userMessage = false;
+            // }
 
             response.name = name;
             if(feed.activity.action == 'group_follow'){

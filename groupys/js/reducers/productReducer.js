@@ -7,10 +7,10 @@
 /**
  * Created by stan229 on 5/27/16.
  */
-const initialState = {products:[],categories:[]};
+const initialState = {products:{},categories:[]};
 import store from 'react-native-simple-store';
 import { REHYDRATE } from 'redux-persist/constants'
-
+import * as actions from './reducerActions';
 
 export default function products(state = initialState, action) {
     console.log(action.type);
@@ -23,8 +23,14 @@ export default function products(state = initialState, action) {
             ...state, ...savedData.products
         };
     }
-    switch (action.type) {
 
+     let productsState = {...state};
+    switch (action.type) {
+        case actions.UPSERT_PRODUCTS:
+            let currentProducts =productsState.products;
+
+            currentProducts[action.item._id] = action.item;
+            return productsState;
         case 'GET_PRODUCTS' :
             return {
                 ...state,

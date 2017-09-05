@@ -127,7 +127,7 @@ export default class GenericFeedItem extends Component {
 
 
         if(gestureState.moveY < 300){
-            this.props.selectApi.fetchTopList(this.props.item.id,true)
+            this.props.fetchTopList(this.props.item.fid)
         }
         return false;
     }

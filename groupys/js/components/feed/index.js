@@ -9,51 +9,63 @@ import GenericFeedItem from '../generic-feed-manager/generic-feed'
 
 import { bindActionCreators } from "redux";
 import { connect } from 'react-redux';
-import * as feedsAction from "../../actions/feeds";
+import * as feedsAction from "../../actions/feedsMain";
 import FeedApi from '../../api/feed'
+import * as assemblers from '../../actions/collectionAssembler';
+
+import  FeedUiConverter from '../../api/feed-ui-converter'
+let feedUiConverter = new FeedUiConverter();
 let feedApi = new FeedApi();
 class Feed extends Component {
 
       constructor(props) {
         super(props);
-         this.props.fetchUsers();
-         this.props.fetchUsersFollowers();
+         // this.props.fetchUsers();
+         // this.props.fetchUsersFollowers();
 
       }
 
 
-     async getAll(direction,id){
-        let feed = await feedApi.getAll(direction,id);
-      return feed;
-    }
 
-    fetchFeeds(){
-        this.props.fetchFeeds('GET_FEEDS',this.props.feeds.feeds,this);
-
-    }
-    async fetchTop(id) {
-        await this.props.showTopLoader();
-        await this.props.fetchTop('GET_FEEDS',this.props.feeds.feeds,id,this);
-
-    }
-
-    updateFeed(feed){
-        this.props.updateHomeFeed(feed);
-    }
-
-    nextLoad(){
-        this.props.nextLoad();
-    }
-
-    fetchSaved(){
-
+    clone(obj){
+       return JSON.parse(JSON.stringify(obj));
     }
 
 
     render() {
+        const { navigation,state,statePromotion,stateBusinesses ,stateInstances,stateActivities,stateUsers,actions } = this.props;
 
+        let promotions = this.clone(statePromotion);
+        let businesses = this.clone(stateBusinesses);
+        let instances = this.clone(stateInstances);
+        let activities = this.clone(stateActivities);
+        let users = this.clone(stateUsers);
+
+        let collections = {promotions,businesses,instances,users,activities}
+
+        let feedsUi = [];
+        if(!_.isEmpty(state.feeds)) {
+            let feedsList = state.feeds;
+            let feedArray = Object.keys(feedsList).map(key=>this.clone(feedsList[key]))
+            let assembledFeeds = feedArray.map(function (feed) {
+                return assemblers.assembler(feed,collections);
+            })
+            feedsUi = assembledFeeds.map(feed => feedUiConverter.createFeed(feed));
+
+        }
         return (
-            <GenericFeedManager navigation={this.props.navigation} nextLoad = {this.props.feeds.nextLoad}loadingDone = {this.props.feeds.loadingDone} showTopLoader={this.props.feeds.showTopLoader} userFollowers= {this.props.user.followers} feeds={this.props.feeds.feeds} api={this} title='Feeds' ItemDetail={GenericFeedItem}></GenericFeedManager>
+            <GenericFeedManager
+                navigation={navigation}
+
+                loadingDone = {state.loadingDone}
+                showTopLoader={state.showTopLoader}
+                userFollowers= {stateUsers.followers}
+                feeds={feedsUi}
+                actions={actions}
+                title='Feeds'
+                ItemDetail={GenericFeedItem}>
+
+            </GenericFeedManager>
 
         );
     }
@@ -64,10 +76,19 @@ class Feed extends Component {
 
 export default connect(
     state => ({
-        feeds: state.feeds,
-        user: state.user
+        allstore:state,
+        state: state.feeds,
+        stateUsers: state.user.user,
+        statePromotion:state.promotions.promotions,
+        stateBusinesses:state.businesses.businesses,
+        stateInstances:state.instances.instances,
+        stateActivities:state.activities.activities,
+
     }),
-    dispatch => bindActionCreators(feedsAction, dispatch)
+
+    (dispatch) => ({
+        actions: bindActionCreators(feedsAction, dispatch)
+    })
 )(Feed);
 
 

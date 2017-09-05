@@ -24,15 +24,14 @@ import * as feedsAction from "../../actions/feeds";
 
 
 
-      async fetchTopList(id,showTimer){
-         this.props.api.fetchTop(id)
+      async fetchTopList(id){
 
+          if(id == this.props.feeds[0].fid) {
+              this.props.actions.fetchTop(id)
+          }
     }
 
 
-        updateFeed(feed){
-          this.props.api.updateFeed(feed);
-        }
 
 
 
@@ -47,21 +46,21 @@ import * as feedsAction from "../../actions/feeds";
         return dataSource.cloneWithRows(this.props.feeds);
     }
 
-    endEvent(event){
-        this.props.api.nextLoad();
-        this.props.api.fetchFeeds();
-    }
+
     render() {
-      //  let loader = this.state.showLoader?<View><Spinner color='red' /></View>:null
-        let topLoader = this.props.showTopLoader?<View><Spinner color='red' /></View>:null
-        if(!this.props.loadingDone){
+        const {navigation,loadingDone, showTopLoader,feeds ,userFollowers,group,ItemDetail,actions} = this.props;
+
+
+        //  let loader = this.state.showLoader?<View><Spinner color='red' /></View>:null
+        let topLoader = showTopLoader?<View><Spinner color='red' /></View>:null
+        if(!loadingDone){
             return <View><Spinner color='red' /></View>;
         }
         let spining = undefined;
-
-        if(this.props.nextLoad){
-            spining = <View><Spinner color='red' /></View>;
-        }
+        //
+        // if(nextLoad){
+        //     spining = <View><Spinner color='red' /></View>;
+        // }
 
         return (
 
@@ -76,9 +75,9 @@ import * as feedsAction from "../../actions/feeds";
                         scrollRenderAheadDistance={100}
                         pageSize={13}
                         renderRow={(item) =>
-                            <this.props.ItemDetail userFollowers={this.props.userFollowers} group = {this.props.group}navigation={this.props.navigation} item={item} selectApi={this}  />
+                            <ItemDetail userFollowers={userFollowers} group = {group}navigation={navigation} item={item} fetchTopList={this.fetchTopList.bind(this)}selectApi={actions}  />
                         }
-                        onEndReached={(event)=>this.endEvent(event)}
+                        onEndReached={(event)=> actions.setNextFeeds(feeds)}
                         enableEmptySections={true}
                     />
                     {spining}

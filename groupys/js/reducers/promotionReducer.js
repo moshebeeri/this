@@ -10,10 +10,10 @@
 /**
  * Created by stan229 on 5/27/16.
  */
-const initialState = {promotions:[]};
+const initialState = {promotions:{}};
 import store from 'react-native-simple-store';
 import { REHYDRATE } from 'redux-persist/constants'
-
+import * as actions from './reducerActions';
 
 export default function promotion(state = initialState, action) {
     console.log(action.type);
@@ -26,8 +26,14 @@ export default function promotion(state = initialState, action) {
             ...state, ...savedData.promotions
         };
     }
-    switch (action.type) {
 
+    let promotionsState = {...state};
+    switch (action.type) {
+        case actions.UPSERT_PROMOTION:
+            let currentPromotions =promotionsState.promotions;
+
+            currentPromotions[action.item._id] = action.item;
+            return promotionsState;
         case 'GET_PROMOTIONS' :
 
             store.save('promotions'+ action.businessId,action.promotions)

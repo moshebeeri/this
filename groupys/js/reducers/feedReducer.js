@@ -4,11 +4,13 @@
 /**
  * Created by stan229 on 5/27/16.
  */
-const initialState = {feeds:[],savedfeeds:[],savedShowTopLoader:false,nextLoad:false,showTopLoader:false};
+const initialState = {feeds:{},savedfeeds:[],savedShowTopLoader:false,nextLoad:false,showTopLoader:false};
 
 export const GET_FEED = 'GET_FEEDS'
 import store from 'react-native-simple-store';
 import { REHYDRATE } from 'redux-persist/constants'
+
+import * as actions from './reducerActions';
 export default function feeds(state = initialState, action) {
     console.log(action.type);
     if (action.type === REHYDRATE){
@@ -17,39 +19,44 @@ export default function feeds(state = initialState, action) {
         const savedData = action.payload || initialState;
 
         return {
-            ...state, ...savedData.feeds
+            ...state,
+            ...savedData.feeds,
+            loadingDone:true,
+            showTopLoader:false
         };
     }
-
+    let feedstate = {...state};
     switch (action.type) {
 
-        case 'GET_FEEDS' :
-            if(action.feeds && action.feeds.length > 0) {
-                let feeds = filterFeed(action.feeds);
-                return {
-                    ...state,
-                    feeds: feeds,
-                    showTopLoader: action.showTopLoader,
-                    loadingDone: true,
-                    nextLoad: false,
-                }
-            }else {
-                return {
-                    ...state,
-                    showTopLoader: action.showTopLoader,
-                    loadingDone: true,
-                    nextLoad: false,
-                }
-            }
 
 
+        case actions.UPSERT_FEEDS:
+            let currentFeeds = feedstate.feeds;
 
+            currentFeeds[action.item._id] = action.item;
+            feedstate.feeds = currentFeeds;
+            return feedstate;
+        case actions.FEED_LOADING_DONE:
+            return {
+                ...state,
+                loadingDone : action.loadingDone
+            };
+        case actions.FEED_SHOW_TOP_LOADER:
+            return {
+                ...state,
+                showTopLoader : action.showTopLoader
+            };
+        case 'SAVED_FEED_LOADING_DONE':
+            return {
+                ...state,
+                savedloadingDone : true
+            };
 
         case 'GET_GROUP_FEEDS' :
 
             let feed = {...state};
             if(action.feeds && action.feeds.length > 0) {
-               feed['groups' + action.groupid] = action.feeds;
+                feed['groups' + action.groupid] = action.feeds;
             }
             feed['showTopLoader' +action.groupid ] = action.showTopLoader;
             feed['grouploadingDone'+ action.groupid] = true;
@@ -71,16 +78,7 @@ export default function feeds(state = initialState, action) {
             };
 
 
-        case 'SHOW_TOP_LOADER' :
-            return {
-                ...state,
-                showTopLoader : true
-            };
-        case 'HIDE_TOP_LOADER':
-            return {
-                ...state,
-                showTopLoader : false
-            };
+
         case 'SHOW_SAVED_TOP_LOADER' :
             return {
                 ...state,
@@ -106,7 +104,7 @@ export default function feeds(state = initialState, action) {
             let updatedGroupFeeds = updateGroupFeeds(feedGroupState,action.feed,action.group);
             updatedGroupFeeds = filterFeed(updatedGroupFeeds);
             feedGroupState['groups'+ action.group._id] =updatedGroupFeeds;
-             return feedGroupState;
+            return feedGroupState;
         case 'DIRECT_ADD_GROUP_FEED':
             let feedDirectGroupState= {...state};
             let updatedDirectGroupFeeds = addGroupFeeds(feedDirectGroupState,action.feed,action.group);
@@ -118,16 +116,6 @@ export default function feeds(state = initialState, action) {
             return {
                 ...state,
                 nextLoad : true
-            };
-        case 'FEED_LOADING_DONE':
-            return {
-                ...state,
-                loadingDone : true
-            };
-        case 'SAVED_FEED_LOADING_DONE':
-            return {
-                ...state,
-                savedloadingDone : true
             };
         default:
             return state;

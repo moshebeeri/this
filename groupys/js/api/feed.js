@@ -58,18 +58,8 @@ class FeedApi {
 
                 timer.logTime(from,new Date(),'feeds','/')
 
-                let contacsMap = new Map();
 
-                let normalizeFuncrion = this.clean_phone_number.bind(this);
-                if(contacts) {
-                    contacts.forEach(function (element) {
-                        contacsMap.set(normalizeFuncrion(element.phoneNumbers[0].number), element);
-                    });
-                }
-                let feeds = responseData.map(feed => feedUiConverter.createFeed(feed,contacsMap,user)).filter(function(x){
-                    return x != undefined;
-                });
-                resolve(feeds);
+                resolve(responseData);
             }
             catch (error) {
 

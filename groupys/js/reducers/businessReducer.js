@@ -4,10 +4,11 @@
 /**
  * Created by stan229 on 5/27/16.
  */
-const initialState = {businesses:[],categories:[]};
+const initialState = {businesses:{},categories:[]};
 
 import store from 'react-native-simple-store';
 import { REHYDRATE } from 'redux-persist/constants'
+import * as actions from './reducerActions';
 export default function business(state = initialState, action) {
 
     if (action.type === REHYDRATE){
@@ -19,10 +20,14 @@ export default function business(state = initialState, action) {
             ...state, ...savedData.businesses
         };
     }
-
+    let businessesState = {...state};
     console.log(action.type);
     switch (action.type) {
+        case actions.UPSERT_BUSINESS:
+            let currentbusinesses = businessesState.businesses;
 
+            currentbusinesses[action.item._id] = action.item;
+            return businessesState;
         case 'GET_BUSINESS':
             store.save('businesses', action.businesses);
             return {

@@ -65,11 +65,15 @@ export default class GenericListGroupView extends Component {
 
         let group = this.props.item;
         if(group.pictures && group.pictures.length > 0) {
-            image =  <Thumbnail large  square source={{uri: group.pictures[0].pictures[3]}} />
+            if(group.pictures[0].pictures[3]) {
+                image = <Thumbnail large square source={{uri: group.pictures[0].pictures[3]}}/>
+            }
 
         }else{
             if(group.entity && group.entity.business ){
-                image =  <Thumbnail large  square source={{uri: group.entity.business.pictures[0].pictures[3]}} />
+                if(group.entity.business.pictures[0].pictures[3]) {
+                    image = <Thumbnail large square source={{uri: group.entity.business.pictures[0].pictures[3]}}/>
+                }
 
 
             }
@@ -122,8 +126,11 @@ export default class GenericListGroupView extends Component {
             let  promotinoTitle = <Text note numberOfLines={2} style={styles.group_members}>{promotion.itemTitle}</Text>
             let  promotionTime = <Text note
                                   style={styles.dateFont}>{dateUtils.messageFormater(this.props.item.preview.instance_activity.timestamp)}</Text>
-            let   promotionImage = <Thumbnail medium source={{uri: promotion.banner.uri}}/>
+            let promotionImage = undefined;
+            if(promotion.banner && promotion.banner.uri) {
+                promotionImage = <Thumbnail medium source={{uri: promotion.banner.uri}}/>
 
+            }
             return <View style={styles.group_promotion_container}>
                 <View style={styles.group_image}>
                     <Text style={styles.latest_text}>Last promotion</Text>
