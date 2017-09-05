@@ -75,7 +75,7 @@ import * as feedsAction from "../../actions/feeds";
                         scrollRenderAheadDistance={100}
                         pageSize={13}
                         renderRow={(item) =>
-                            <ItemDetail userFollowers={userFollowers} group = {group}navigation={navigation} item={item} fetchTopList={this.fetchTopList.bind(this)}selectApi={actions}  />
+                            <ItemDetail userFollowers={userFollowers} group = {group}navigation={navigation} item={item} fetchTopList={this.fetchTopList.bind(this)} actions={actions}  />
                         }
                         onEndReached={(event)=> actions.setNextFeeds(feeds)}
                         enableEmptySections={true}

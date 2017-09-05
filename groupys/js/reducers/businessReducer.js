@@ -28,6 +28,24 @@ export default function business(state = initialState, action) {
 
             currentbusinesses[action.item._id] = action.item;
             return businessesState;
+        case actions.LIKE:
+            let item = businessesState.businesses[action.id]
+            if(item){
+                item.social_state.like = true;
+                item.social_state.likes =  item.social_state.likes + 1;
+                return businessesState;
+            }else{
+                return state;
+            }
+        case actions.UNLIKE:
+            let unlikeItem = businessesState.businesses[action.id]
+            if(unlikeItem){
+                unlikeItem.social_state.like = false;
+                unlikeItem.social_state.likes =  unlikeItem.social_state.likes - 1;
+                return businessesState;
+            }else{
+                return state;
+            }
         case 'GET_BUSINESS':
             store.save('businesses', action.businesses);
             return {

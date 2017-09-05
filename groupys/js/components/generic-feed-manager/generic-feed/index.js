@@ -133,13 +133,13 @@ export default class GenericFeedItem extends Component {
     }
 
         render() {
+            const {navigation,item,actions} = this.props;
+
+
             let feed = undefined;
-            let item = this.props.item;
-            if(item.content){
-                item = item.content;
-            }
-            let like = this.like.bind(this);
-            let unlike = this.unlike.bind(this);
+
+            let like = actions.like;
+            let unlike = actions.unlike;
             let showUsers = this.showUsers.bind(this);
             let save = this.save.bind(this);
             let comment = this.comment.bind(this);

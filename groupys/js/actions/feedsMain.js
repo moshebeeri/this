@@ -188,15 +188,23 @@ export function setNextFeeds(feeds){
     }
 }
 
-export function like(feedId){
+export function like(id){
     return async function (dispatch, getState){
-        await userApi.like(this.props.item.id);
+        dispatch({
+            type: actions.LIKE,
+            id:id
+        });
+        await userApi.like(id);
     }
 }
 
-export function unlike(feedId) {
+export function unlike(id) {
     return async function (dispatch, getState) {
-        await userApi.unlike(this.props.item.id);
+        dispatch({
+            type: actions.UNLIKE,
+            id:id
+        });
+        await userApi.unlike(id);
     }
 }
 
