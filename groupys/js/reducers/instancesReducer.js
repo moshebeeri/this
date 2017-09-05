@@ -46,6 +46,14 @@ export default function instances(state = initialState, action) {
             }else{
                 return state;
             }
+        case actions.SAVE:
+            let sabeItem = currentState.instances[action.id]
+            if(sabeItem){
+                sabeItem.social_state.saved = true;
+                return currentState;
+            }else{
+                return state;
+            }
 
         default:
             return state;

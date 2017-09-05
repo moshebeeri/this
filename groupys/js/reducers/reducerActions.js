@@ -5,6 +5,7 @@
 //global
 export const LIKE = 'LIKE'
 export const UNLIKE = 'UNLIKE'
+export const SAVE = 'SAVE'
 //business follow
 export const SEARCH_BUSINESS = 'SEARCH_BUSINESS';
 export const SHOW_CAMERA = 'SHOW_CAMERA';

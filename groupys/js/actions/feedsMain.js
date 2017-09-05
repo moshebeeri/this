@@ -8,6 +8,8 @@ let feedApi = new FeedApi();
 
 import UserApi from "../api/user"
 let userApi = new UserApi();
+import PtomotionApi from "../api/promotion"
+let promotionApi = new PtomotionApi();
 import * as actions from '../reducers/reducerActions';
 import * as assemblers from './collectionAssembler';
 async function fetchFeedsFromServer(feeds,dispatch){
@@ -209,9 +211,13 @@ export function unlike(id) {
 }
 
 
-export function saveFeed(feedId) {
+export function saveFeed(id) {
     return async function (dispatch, getState) {
-        await promotionApi.save(item.id);
+        dispatch({
+            type: actions.SAVE,
+            id:id
+        });
+        await promotionApi.save(id);
     }
 }
 export function nextLoad(){

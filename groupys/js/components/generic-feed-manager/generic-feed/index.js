@@ -141,7 +141,7 @@ export default class GenericFeedItem extends Component {
             let like = actions.like;
             let unlike = actions.unlike;
             let showUsers = this.showUsers.bind(this);
-            let save = this.save.bind(this);
+            let save = actions.saveFeed;
             let comment = this.comment.bind(this);
 
 
