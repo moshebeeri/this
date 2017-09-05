@@ -70,7 +70,7 @@ export default class FeedPromotion extends Component {
 
         let feedAction =  <View   style={styles.promotion_buttonView}>
 
-            <TouchableHighlight style={{}} onPress={save}>
+            <TouchableHighlight style={{}} onPress={() => save(item.id)}>
 
 
                 <Text style={styles.promotion_buttonText}>Save</Text>
@@ -123,7 +123,7 @@ export default class FeedPromotion extends Component {
             let saveStyle ={
                 flex:-1,justifyContent:'center',marginLeft:20 ,flexDirection: 'row',height: 40,width:100, backgroundColor: item.promotionColor,
             };
-            saveIcon = <Button  style={saveStyle} onPress={save}>
+            saveIcon = <Button  style={saveStyle}onPress={() => save(item.id)}>
 
 
                 <Text>save</Text>
