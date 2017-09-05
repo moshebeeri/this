@@ -5,6 +5,7 @@ let controller = require('./offer.controller.js');
 
 let router = express.Router();
 
+router.get('/test', controller.test);
 router.get('/', controller.index);
 router.get('/:id', controller.show);
 router.post('/', controller.create);

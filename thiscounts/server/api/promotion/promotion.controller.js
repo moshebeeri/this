@@ -18,7 +18,6 @@ const spatial = require('../../components/spatial').createSpatial();
 const instance = require('../../components/instance');
 const MongodbSearch = require('../../components/mongo-search');
 const feed = require('../../components/feed-tools');
-const SortedArray = require('sorted-array');
 
 exports.search = MongodbSearch.create(Promotion);
 
@@ -422,24 +421,8 @@ exports.campaign_promotions = function (req, res) {
 };
 
 
-function createFeedPromotionStateFunction(statedPromotion, userId) {
-  return function storeInstance(promotion, callback) {
-    feed.promotion_state(userId, promotion, function(err, withState){
-      if(err) return callback(err);
-      statedPromotion.insert(withState);
-      callback(null, withState)
-    })
-  }
-}
-
-function get_promotions_state(promotions, callback){
-  let statedPromotions = new SortedArray([], function(a,b){
-    return b._id - a._id; //descending order
-  });
-  async.each(promotions, createFeedPromotionStateFunction(statedPromotions), function (err) {
-    if (err) return console.log(err);
-    return callback(null, statedPromotions.array);
-  });
+function get_promotions_state(promotions, userId, callback){
+  feed.generate_state(promotions, userId, feed.promotion_state, callback)
 }
 
 exports.business_promotions = function (req, res) {
@@ -462,13 +445,13 @@ exports.business_promotions = function (req, res) {
 };
 
 exports.user_business = function (req, res) {
-  let userID = req.user._id;
+  let userId = req.user._id;
 
   promotionGraphModel.query_objects(Promotion,
-    `MATCH (u:user {_id:'${userID}'})-[r:ROLE{name:"OWNS"}]->(b:business)<-[]-(p:promotion) RETURN p._id as _id`,
+    `MATCH (u:user {_id:'${userId}'})-[r:ROLE{name:"OWNS"}]->(b:business)<-[]-(p:promotion) RETURN p._id as _id`,
     'order by p.created DESC', 0, 1000, function (err, promotions) {
       if (err) return handleError(res, err);
-      get_promotions_state(promotions, function (err, promotions) {
+      get_promotions_state(promotions, userId, function (err, promotions) {
         if (err) {return handleError(res, err)}
         return res.status(200).json(promotions);
       });
