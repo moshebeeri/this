@@ -108,14 +108,23 @@ export default class FeedPromotion extends Component {
 
 
         </Button>
-
+        let shares = new String(item.social.shares);
         let shareICon = <Button transparent style={styles.promotion_iconView} onPress={showUsers}>
 
             <Icon2 style={styles.promotion_comment}  size={30} name="share-google"/>
-            <Text>0</Text>
+            <Text>{shares}</Text>
 
 
         </Button>
+        if(item.social.share){
+            shareICon = <Button transparent style={styles.promotion_iconView} onPress={showUsers}>
+
+                <Icon2 style={styles.promotion_share}  size={30} name="share-google"/>
+                <Text>{shares}</Text>
+
+
+            </Button>
+        }
 
         let saveIcon = undefined;
 

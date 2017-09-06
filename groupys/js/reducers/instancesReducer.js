@@ -46,6 +46,16 @@ export default function instances(state = initialState, action) {
             }else{
                 return state;
             }
+        case actions.SHARE:
+            let shareItem = currentState.instances[action.id];
+            if(shareItem){
+                shareItem.social_state.share = true;
+                shareItem.social_state.shares =  shareItem.social_state.shares + action.shares;
+                return currentState;
+            }else{
+                return state;
+            }
+
         case actions.SAVE:
             let sabeItem = currentState.instances[action.id]
             if(sabeItem){

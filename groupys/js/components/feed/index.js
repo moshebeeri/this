@@ -20,8 +20,8 @@ class Feed extends Component {
 
       constructor(props) {
         super(props);
-         // this.props.fetchUsers();
-         // this.props.fetchUsersFollowers();
+          this.props.actions.setUserFollows();
+
 
       }
 
@@ -33,7 +33,7 @@ class Feed extends Component {
 
 
     render() {
-        const { navigation,state,statePromotion,stateBusinesses ,stateInstances,stateActivities,stateUsers,actions } = this.props;
+        const { navigation,state,statePromotion,userFollower,stateBusinesses ,stateInstances,stateActivities,stateUsers,actions } = this.props;
 
         let promotions = this.clone(statePromotion);
         let businesses = this.clone(stateBusinesses);
@@ -59,7 +59,7 @@ class Feed extends Component {
 
                 loadingDone = {state.loadingDone}
                 showTopLoader={state.showTopLoader}
-                userFollowers= {stateUsers.followers}
+                userFollowers= {userFollower}
                 feeds={feedsUi}
                 actions={actions}
                 title='Feeds'
@@ -79,6 +79,7 @@ export default connect(
         allstore:state,
         state: state.feeds,
         stateUsers: state.user.user,
+        userFollower:state.user.followers,
         statePromotion:state.promotions.promotions,
         stateBusinesses:state.businesses.businesses,
         stateInstances:state.instances.instances,

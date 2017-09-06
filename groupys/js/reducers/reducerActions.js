@@ -3,9 +3,10 @@
  */
 
 //global
-export const LIKE = 'LIKE'
-export const UNLIKE = 'UNLIKE'
-export const SAVE = 'SAVE'
+export const LIKE = 'LIKE';
+export const UNLIKE = 'UNLIKE';
+export const SAVE = 'SAVE';
+export const SHARE = 'SHARE';
 //business follow
 export const SEARCH_BUSINESS = 'SEARCH_BUSINESS';
 export const SHOW_CAMERA = 'SHOW_CAMERA';
@@ -37,6 +38,7 @@ export const UPSERT_GROUP = 'UPSERTgroup';
 
 //user
 export const UPSERT_USER = 'UPSERTuser';
+export const USER_FOLLOW = 'USER_FOLLOW'
 
 
 

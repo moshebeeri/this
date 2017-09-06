@@ -37,7 +37,7 @@ export default function user(state = initialState, action) {
                 user : action.user,
             };
 
-        case 'GET_USER_FOLLOWERS':
+        case actions.USER_FOLLOW:
             return {
                 ...state,
                 followers : action.followers,

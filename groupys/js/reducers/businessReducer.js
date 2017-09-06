@@ -46,6 +46,15 @@ export default function business(state = initialState, action) {
             }else{
                 return state;
             }
+        case actions.SHARE:
+            let shareItem = businessesState.businesses[action.id];
+            if(shareItem){
+                shareItem.social_state.share = true;
+                shareItem.social_state.shares =  shareItem.social_state.shares + action.shares;
+                return businessesState;
+            }else{
+                return state;
+            }
         case 'GET_BUSINESS':
             store.save('businesses', action.businesses);
             return {

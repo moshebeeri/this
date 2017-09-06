@@ -10,6 +10,8 @@ import UserApi from "../api/user"
 let userApi = new UserApi();
 import PtomotionApi from "../api/promotion"
 let promotionApi = new PtomotionApi();
+import ActivityApi from "../api/activity"
+let activityApi = new ActivityApi();
 import * as actions from '../reducers/reducerActions';
 import * as assemblers from './collectionAssembler';
 async function fetchFeedsFromServer(feeds,dispatch){
@@ -220,6 +222,33 @@ export function saveFeed(id) {
         await promotionApi.save(id);
     }
 }
+
+export function setUserFollows() {
+    return async function (dispatch, getState) {
+
+        let response = await userApi.getUserFollowers();
+        dispatch({
+            type: actions.USER_FOLLOW,
+            followers:response
+        });
+    }
+}
+export function shareActivity(id,activityId,users) {
+    return async function (dispatch, getState) {
+
+        users.forEach(function (user) {
+             activityApi.shareActivity(user,activityId)
+        })
+        dispatch({
+            type: actions.SHARE,
+            id:id,
+            shares:users.length
+        });
+    }
+}
+
+
+
 export function nextLoad(){
     return function (dispatch, getState) {
         dispatch({

@@ -247,11 +247,17 @@ class FeedConverter
                     activityId: feed.activity._id,
                     realized: instance.social_state.realized,
                     use: instance.social_state.use,
+                    share: instance.social_state.share,
+                    shares: instance.social_state.shares
                 };
                 responseFeed.showsave = !instance.social_state.saved && !instance.social_state.realized;
 
             }
 
+            responseFeed.shareable  = true;
+            if(instance.shareable){
+                responseFeed.shareable  = false;
+            }
             responseFeed.endDate = date.toDateString();
 
            responseFeed.name = promotion.name;

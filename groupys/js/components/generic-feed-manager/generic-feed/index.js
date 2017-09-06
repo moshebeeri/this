@@ -114,14 +114,9 @@ export default class GenericFeedItem extends Component {
 
     }
     async selectUsers(users){
-        let activityId = this.props.item.activityId;
+        let activityId = this.props.item.social.activityId;
+        this.props.actions.shareActivity( this.props.item.id,activityId,users)
 
-        if(activityId) {
-            users.forEach(async function (user) {
-                await activityApi.shareActivity(user,activityId)
-            })
-
-        }
     }
     onMove(evt, gestureState){
 
@@ -133,7 +128,7 @@ export default class GenericFeedItem extends Component {
     }
 
         render() {
-            const {navigation,item,actions} = this.props;
+            const {item,actions} = this.props;
 
 
             let feed = undefined;
