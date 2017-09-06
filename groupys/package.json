@@ -50,6 +50,7 @@
     "redux-persist": "^4.9.1",
     "redux-thunk": "^2.2.0",
     "remote-redux-devtools": "^0.5.7",
+    "reselect": "^3.0.1",
     "symbol-observable": "^1.0.4",
     "util": "^0.10.3"
   },

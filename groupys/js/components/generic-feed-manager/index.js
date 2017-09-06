@@ -52,11 +52,11 @@ import * as feedsAction from "../../actions/feeds";
 
 
         //  let loader = this.state.showLoader?<View><Spinner color='red' /></View>:null
-        let topLoader = showTopLoader?<View><Spinner color='red' /></View>:null
+        const topLoader = showTopLoader?<View><Spinner color='red' /></View>:null
         if(!loadingDone){
             return <View><Spinner color='red' /></View>;
         }
-        let spining = undefined;
+        const spining = undefined;
         //
         // if(nextLoad){
         //     spining = <View><Spinner color='red' /></View>;

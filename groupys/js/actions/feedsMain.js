@@ -202,15 +202,15 @@ export function like(id){
     }
 }
 
-export function unlike(id) {
+export const unlike = id => {
     return async function (dispatch, getState) {
+        await userApi.unlike(id);
         dispatch({
             type: actions.UNLIKE,
             id:id
         });
-        await userApi.unlike(id);
     }
-}
+};
 
 
 export function saveFeed(id) {

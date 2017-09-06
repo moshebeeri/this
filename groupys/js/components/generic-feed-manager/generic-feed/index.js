@@ -4,22 +4,7 @@ import {connect} from 'react-redux';
 import {actions} from 'react-native-navigation-redux-helpers';
 import { Container, Content, Text, InputGroup, Input,Thumbnail,Button,Picker,Right,Item,Left,Header,Footer,Body, View,Card,CardItem } from 'native-base';
 
-import PromotionApi from '../../../api/promotion'
-let promotionApi = new PromotionApi();
 
-import LinearGradient from 'react-native-linear-gradient';
-import styles from './styles'
-import Icon from 'react-native-vector-icons/FontAwesome';
-import Icon2 from 'react-native-vector-icons/EvilIcons';
-import Icon3 from 'react-native-vector-icons/MaterialIcons';
-import Icon4 from 'react-native-vector-icons/Entypo';
-
-import  UserApi from '../../../api/user'
-
-let userApi = new UserApi();
-
-import AcrivityApi from "../../../api/activity"
-let activityApi = new AcrivityApi();
 
 import FeedMessage from './feed-components/feedMessage'
 import FeedPromotion from './feed-components/feedPromotion'
@@ -37,11 +22,6 @@ export default class GenericFeedItem extends Component {
 
     constructor(props) {
         super(props);
-        this.state = {
-            zone:{}
-        }
-
-
     }
 
 
@@ -108,12 +88,8 @@ export default class GenericFeedItem extends Component {
 
             })
 
-
-        //TODO add comments screen
-
-
     }
-    async selectUsers(users){
+    selectUsers(users){
         let activityId = this.props.item.social.activityId;
         this.props.actions.shareActivity( this.props.item.id,activityId,users)
 
@@ -129,78 +105,41 @@ export default class GenericFeedItem extends Component {
 
         render() {
             const {item,actions} = this.props;
-
-
-            let feed = undefined;
-
-            let like = actions.like;
-            let unlike = actions.unlike;
-            let showUsers = this.showUsers.bind(this);
-            let save = actions.saveFeed;
-            let comment = this.comment.bind(this);
+            const showUsers = this.showUsers.bind(this);
+            const comment = this.comment.bind(this);
 
 
             switch (item.itemType){
                 case 'PROMOTION':
-                    feed = <FeedPromotion comment= {comment} navigation={this.props.navigation} item={item} like={like}  unlike={unlike} showUsers={showUsers} save={save}    />
-                    break;
+                    return  this.createFeedView(<FeedPromotion comment= {comment} navigation={this.props.navigation} item={item} like={actions.like}  unlike={actions.unlike} showUsers={showUsers} save={actions.saveFeed}    />)
                 case 'MESSAGE':
-                    feed = <FeedMessage navigation={this.props.navigation} item={item} />
-                    break
+                    return  this.createFeedView(<FeedMessage navigation={this.props.navigation} item={item} />)
                 case 'WELCOME':
-                    feed = <FeedWelcome navigation={this.props.navigation} item={item} />
-                    break
-
+                    return  this.createFeedView(<FeedWelcome navigation={this.props.navigation} item={item} />)
                 default:
-                    feed = <FeedBusiness navigation={this.props.navigation} item={item} comment= {comment} like={like}  unlike={unlike} showUsers={showUsers} save={save} _panResponder={this._panResponder} />
-                    break;
-            }
-
-            if(feed) {
-
-                return <View  {...this._panResponder.panHandlers} >
-                    {feed}
-                </View>
-            }
-            return <View></View>
-        }
-
-
-
-
-
-
-        like(){
-            this.props.item.social.like = true;
-            this.props.item.social.numberLikes = this.props.item.social.numberLikes + 1;
-            userApi.like( this.props.item.id);
-            this.props.selectApi.updateFeed( this.props.item);
-        }
-
-        unlike(){
-            this.props.item.social.like = false;
-            this.props.item.social.numberLikes = this.props.item.social.numberLikes - 1;
-
-            userApi.unlike(this.props.item.id);
-            this.props.selectApi.updateFeed( this.props.item);
-        }
-
-        async saveFeed(item){
-            try {
-                await promotionApi.save(item.id);
-                this.props.item.social.saved = true;
-                this.props.item.showsave = false;
-                this.props.selectApi.updateFeed( this.props.item);
-            }catch (error){
-                console.log('failed to save');
+                    return  this.createFeedView(<FeedBusiness navigation={this.props.navigation} item={item} comment= {comment} like={actions.like}  unlike={actions.unlike} showUsers={showUsers} save={actions.saveFeed} _panResponder={this._panResponder} />)
 
             }
+
+
         }
 
-    save(){
+    createFeedView(item){
+        if(feed) {
 
-       this.saveFeed(this.props.item)
+            return <View  {...this._panResponder.panHandlers} >
+                {item}
+            </View>
+        }
+        return <View></View>
     }
+
+
+
+
+
+
+
 
 }
 

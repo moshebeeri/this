@@ -10,12 +10,14 @@ import GenericFeedItem from '../generic-feed-manager/generic-feed'
 import { bindActionCreators } from "redux";
 import { connect } from 'react-redux';
 import * as feedsAction from "../../actions/feedsMain";
-import FeedApi from '../../api/feed'
-import * as assemblers from '../../actions/collectionAssembler';
 
-import  FeedUiConverter from '../../api/feed-ui-converter'
-let feedUiConverter = new FeedUiConverter();
-let feedApi = new FeedApi();
+import { getFeeds } from './feedSelector'
+
+
+import { createSelector } from 'reselect'
+
+
+
 class Feed extends Component {
 
       constructor(props) {
@@ -27,40 +29,19 @@ class Feed extends Component {
 
 
 
-    clone(obj){
-       return JSON.parse(JSON.stringify(obj));
-    }
+
 
 
     render() {
-        const { navigation,state,statePromotion,userFollower,stateBusinesses ,stateInstances,stateActivities,stateUsers,actions } = this.props;
-
-        let promotions = this.clone(statePromotion);
-        let businesses = this.clone(stateBusinesses);
-        let instances = this.clone(stateInstances);
-        let activities = this.clone(stateActivities);
-        let users = this.clone(stateUsers);
-
-        let collections = {promotions,businesses,instances,users,activities}
-
-        let feedsUi = [];
-        if(!_.isEmpty(state.feeds)) {
-            let feedsList = state.feeds;
-            let feedArray = Object.keys(feedsList).map(key=>this.clone(feedsList[key]))
-            let assembledFeeds = feedArray.map(function (feed) {
-                return assemblers.assembler(feed,collections);
-            })
-            feedsUi = assembledFeeds.map(feed => feedUiConverter.createFeed(feed));
-
-        }
+        const { navigation,feedState,feeds,userFollower,actions } = this.props;
         return (
             <GenericFeedManager
                 navigation={navigation}
 
-                loadingDone = {state.loadingDone}
-                showTopLoader={state.showTopLoader}
+                loadingDone = {feedState.loadingDone}
+                showTopLoader={feedState.showTopLoader}
                 userFollowers= {userFollower}
-                feeds={feedsUi}
+                feeds={feeds}
                 actions={actions}
                 title='Feeds'
                 ItemDetail={GenericFeedItem}>
@@ -74,17 +55,17 @@ class Feed extends Component {
 
 }
 
+const mapStateToProps = state => {
+    return {
+        feeds: getFeeds(state)
+    }
+}
+
 export default connect(
     state => ({
-        allstore:state,
-        state: state.feeds,
-        stateUsers: state.user.user,
+        feedState:state.feeds,
         userFollower:state.user.followers,
-        statePromotion:state.promotions.promotions,
-        stateBusinesses:state.businesses.businesses,
-        stateInstances:state.instances.instances,
-        stateActivities:state.activities.activities,
-
+        mapStateToProps
     }),
 
     (dispatch) => ({
