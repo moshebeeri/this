@@ -24,9 +24,14 @@ const Mall = require('../mall/mall.model');
 const Category = require('../category/category.model');
 const CardType = require('../cardType/cardType.model');
 const base64 = require('file-base64');
+const vision = require('@google-cloud/vision');
 
+const visionClient = vision({
+  projectId: 'this-f2f45',
+  keyFilename: './keys/this-vision.json'
+});
 
-let client = createClient();
+const client = createClient();
 
 function createClient() {
   return new Upload(config.aws.bucketName, {
@@ -37,16 +42,13 @@ function createClient() {
       accessKeyId: config.aws.key,
       secretAccessKey: config.aws.secret
     },
-
     cleanup: {
       versions: true,
       original: true
     },
-
     original: {
       awsImageAcl: 'private'
     },
-
     versions: [{
       format: 'jpg',
       suffix: '-orig',
@@ -96,6 +98,12 @@ function handle_image(req, res, type) {
       if (err) {
         return handleError(res, err);
       }
+      // visionClient.safeSearchDetection({source: {imageUri: versions[1]}}).then(response => {
+      //   // doThingsWith(response);
+      // }).catch(err => {
+      //   console.error(err);
+      // });
+
       updateImageVersions(versions, req.params.id, meta_data, type, function (err, updated) {
         if (err) return handleError(res, err);
         return res.status(201).json(updated);
@@ -158,7 +166,12 @@ function base64_handle_image(req, res, type) {
 
 
 function updateImageVersions(version, id, meta_data, type, callback) {
-
+  function saveCallback(err, updated) {
+    if (err) {
+      return callback(err, null);
+    }
+    return callback(null, updated);
+  }
   async.parallel({
       user: function (callback) {
         User.findById(id, callback);
@@ -193,7 +206,6 @@ function updateImageVersions(version, id, meta_data, type, callback) {
       if (err) {
         return console.log(err);
       } else {
-
         let pictures = [];
         version.forEach(function (version) {
           pictures.push(version.url);
@@ -211,13 +223,7 @@ function updateImageVersions(version, id, meta_data, type, callback) {
               date: Date.now(),
               order: 0
             });
-
-            updated.save(function (err, updated) {
-              if (err) {
-                return callback(err, null);
-              }
-              return callback(null, updated);
-            });
+            updated.save(saveCallback);
           }
         }
       }
@@ -278,7 +284,7 @@ function delete_picture_storage(picture){
   //url - formatted as https://s3.amazonaws.com/thiscounts/images/Af/FI/Cw-orig.jpeg
   let prefix_str = "https://s3.amazonaws.com/thiscounts/";
   picture.pictures.forEach((url)=>{
-    let object = url.slice(prefix_str.length, str.length);
+    let object = url.slice(prefix_str.length, prefix_str.length);
     objects.push(object);
   });
 
