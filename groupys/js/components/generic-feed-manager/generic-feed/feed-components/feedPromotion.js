@@ -42,141 +42,18 @@ export default class FeedPromotion extends Component {
     }
 
     createPromotion(item,save,like,unlike,showUsers,comment){
-        let styles = stylesPortrate
-        if(StyleUtils.isLandscape()){
-            styles = stylesLandscape;
-        }
+        const styles = this.createPromotionStyle();
+        const colorStyle = this.createColorStyle(item)
+        const promotion = <Text style={colorStyle}>{item.promotion}</Text>
+        const buisnessLogo = this.createBusinessLog(item);
+        const likeIcon = this.createLikeComponent(item,styles,like,unlike);
+        const commentICon = this.createCommentComponent(styles, comment);
+        const shareICon = this.createShareComponent(styles, showUsers, item);
+        const saveIcon = this.createSaveButton(item, save);
+        const image = this.createImageComponent(item,styles);
+        const container =  this.createContainerStyle(item);
 
-        let promotion = undefined;
-        let colorStyle = {
-
-            color: item.promotionColor,
-
-            fontFamily:'Roboto-Regular' ,marginLeft:10,marginTop:4,fontSize:16
-        }
-
-
-        promotion = <Text style={colorStyle}>{item.promotion}</Text>
-
-        let buisnessLogo = undefined;
-        if(item.businessLogo){
-            buisnessLogo =  <TouchableOpacity onPress={this.showBussines.bind(this)}>
-                <View>
-                <Thumbnail  square={true} size={40} source={{uri: item.businessLogo}} />
-                </View>
-            </TouchableOpacity>
-
-        }
-
-        let feedAction =  <View   style={styles.promotion_buttonView}>
-
-            <TouchableHighlight style={{}} onPress={save}>
-
-
-                <Text style={styles.promotion_buttonText}>Save</Text>
-
-
-
-            </TouchableHighlight>
-
-
-
-        </View>
-
-        let likes = new String(item.social.numberLikes);
-        let likeIcon = <Button transparent style={styles.promotion_iconView} onPress={like}>
-
-            <Icon style={styles.promotion_unlike}  size={25} name="heart"/>
-            <Text>{likes}</Text>
-
-        </Button>
-        if (item.social && item.social.like == true) {
-            likeIcon = <Button transparent style={styles.promotion_iconView} onPress={unlike}>
-
-
-                <Icon  style={styles.promotion_like} size={25} name="heart"/>
-                <Text>{likes}</Text>
-
-            </Button>
-
-
-        }
-        let commentICon = <Button transparent style={styles.promotion_iconView} onPress={comment}>
-
-            <Icon2 style={styles.promotion_comment}  size={30} name="comment"/>
-            <Text>0</Text>
-
-
-        </Button>
-
-        let shareICon = <Button transparent style={styles.promotion_iconView} onPress={showUsers}>
-
-            <Icon2 style={styles.promotion_comment}  size={30} name="share-google"/>
-            <Text>0</Text>
-
-
-        </Button>
-
-        let saveIcon = undefined;
-
-        if(item.showsave) {
-            let saveStyle ={
-                flex:-1,justifyContent:'center',marginLeft:20 ,flexDirection: 'row',height: 40,width:100, backgroundColor: item.promotionColor,
-            };
-            saveIcon = <Button  style={saveStyle} onPress={save}>
-
-
-                <Text>save</Text>
-
-
-            </Button>
-        }else{
-            let saveStyle ={
-                flex:-1,justifyContent:'center',marginLeft:20 ,flexDirection: 'row',height: 40,width:100, backgroundColor: 'gray',
-            };
-            saveIcon = <Button  style={saveStyle} >
-
-
-                <Text>saved</Text>
-
-
-            </Button>
-        }
-
-        let image = undefined;
-        let container ={
-            flex: 1,
-            height: 45 *vh,
-            width: width ,
-            overflow: 'hidden',
-            backgroundColor:'#b7b7b7',
-            // backgroundColor:'#FFF',
-            alignItems: 'center',
-            flexDirection: 'column',
-        }
-        if(item.banner){
-            image = <View style={styles.promotion_image_view}>
-
-            <Image resizeMode= "stretch" style={styles.promotion_image} source={{uri: item.banner.uri}}>
-
-            </Image>
-            </View>
-            container = {
-                flex: 1,
-                height: 81 *vh,
-                width: width ,
-                overflow: 'hidden',
-                backgroundColor:'#b7b7b7',
-                // backgroundColor:'#FFF',
-                alignItems: 'center',
-                flexDirection: 'column',
-            }
-        }
-
-
-
-
-        let result =
+        const result =
             <View style={container}>
                 <View style={styles.promotion_card}>
                     <View style={styles.promotion_upperContainer}>
@@ -225,6 +102,158 @@ export default class FeedPromotion extends Component {
             </View>
 
         return result;
+    }
+
+    createColorStyle(item) {
+        return {
+
+            color: item.promotionColor,
+
+            fontFamily: 'Roboto-Regular', marginLeft: 10, marginTop: 4, fontSize: 16
+        };
+    }
+
+    createContainerStyle(item) {
+        if (item.banner) {
+
+           return   {
+                flex: 1,
+                height: 81 * vh,
+                width: width,
+                overflow: 'hidden',
+                backgroundColor: '#b7b7b7',
+                // backgroundColor:'#FFF',
+                alignItems: 'center',
+                flexDirection: 'column',
+            }
+        }
+        return  {
+            flex: 1,
+            height: 45 * vh,
+            width: width,
+            overflow: 'hidden',
+            backgroundColor: '#b7b7b7',
+            // backgroundColor:'#FFF',
+            alignItems: 'center',
+            flexDirection: 'column',
+        };
+    }
+
+    createImageComponent(item,styles){
+        if(item.banner) {
+            return <View style={styles.promotion_image_view}>
+
+                <Image resizeMode="stretch" style={styles.promotion_image} source={{uri: item.banner.uri}}>
+
+                </Image>
+            </View>
+        }
+        return undefined;
+    }
+
+    createSaveButton(item, save) {
+
+        if (item.showsave) {
+            const saveStyle = {
+                flex: -1,
+                justifyContent: 'center',
+                marginLeft: 20,
+                flexDirection: 'row',
+                height: 40,
+                width: 100,
+                backgroundColor: item.promotionColor,
+            };
+            return <Button style={saveStyle} onPress={() => save(item.id)}>
+
+
+                <Text>save</Text>
+
+
+            </Button>
+        }
+        const saveStyle = {
+            flex: -1,
+            justifyContent: 'center',
+            marginLeft: 20,
+            flexDirection: 'row',
+            height: 40,
+            width: 100,
+            backgroundColor: 'gray',
+        };
+
+
+        return  <Button style={saveStyle}>
+
+
+            <Text>saved</Text>
+
+
+        </Button>;
+    }
+
+    createShareComponent(styles, showUsers, item) {
+        const shares = new String(item.social.shares);
+        if (item.social.share) {
+            return <Button transparent style={styles.promotion_iconView} onPress={showUsers}>
+
+                <Icon2 style={styles.promotion_share} size={30} name="share-google"/>
+                <Text>{shares}</Text>
+
+
+            </Button>
+        }
+        return <Button transparent style={styles.promotion_iconView} onPress={showUsers}>
+
+            <Icon2 style={styles.promotion_comment} size={30} name="share-google"/>
+            <Text>{shares}</Text>
+        </Button>;
+    }
+
+    createCommentComponent(styles, comment) {
+        return <Button transparent style={styles.promotion_iconView} onPress={comment}>
+            <Icon2 style={styles.promotion_comment} size={30} name="comment"/>
+            <Text>0</Text>
+        </Button>;
+    }
+
+    createPromotionStyle() {
+        if (StyleUtils.isLandscape()) {
+            return  stylesLandscape;
+        }
+        return stylesPortrate;
+    }
+
+    createLikeComponent(item,styles,like,unlike){
+        const likes = new String(item.social.numberLikes);
+        if (item.social && item.social.like == true) {
+            return <Button transparent style={styles.promotion_iconView} onPress={() => unlike(item.id)}>
+
+
+                <Icon  style={styles.promotion_like} size={25} name="heart"/>
+                <Text>{likes}</Text>
+
+            </Button>
+
+
+        }
+        return <Button transparent style={styles.promotion_iconView} onPress={() => like(item.id)}>
+
+            <Icon style={styles.promotion_unlike}  size={25} name="heart"/>
+            <Text>{likes}</Text>
+
+        </Button>
+
+    }
+    createBusinessLog(item){
+        if(item.businessLogo){
+           return <TouchableOpacity onPress={this.showBussines.bind(this)}>
+                <View>
+                    <Thumbnail  square={true} size={40} source={{uri: item.businessLogo}} />
+                </View>
+            </TouchableOpacity>
+
+        }
+        return undefined;
     }
 
 

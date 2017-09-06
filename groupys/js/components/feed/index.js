@@ -9,51 +9,44 @@ import GenericFeedItem from '../generic-feed-manager/generic-feed'
 
 import { bindActionCreators } from "redux";
 import { connect } from 'react-redux';
-import * as feedsAction from "../../actions/feeds";
-import FeedApi from '../../api/feed'
-let feedApi = new FeedApi();
+import * as feedsAction from "../../actions/feedsMain";
+
+import { getFeeds } from './feedSelector'
+
+
+import { createSelector } from 'reselect'
+
+
+
 class Feed extends Component {
 
       constructor(props) {
         super(props);
-         this.props.fetchUsers();
-         this.props.fetchUsersFollowers();
+          this.props.actions.setUserFollows();
+
 
       }
 
 
-     async getAll(direction,id){
-        let feed = await feedApi.getAll(direction,id);
-      return feed;
-    }
 
-    fetchFeeds(){
-        this.props.fetchFeeds('GET_FEEDS',this.props.feeds.feeds,this);
 
-    }
-    async fetchTop(id) {
-        await this.props.showTopLoader();
-        await this.props.fetchTop('GET_FEEDS',this.props.feeds.feeds,id,this);
-
-    }
-
-    updateFeed(feed){
-        this.props.updateHomeFeed(feed);
-    }
-
-    nextLoad(){
-        this.props.nextLoad();
-    }
-
-    fetchSaved(){
-
-    }
 
 
     render() {
-
+        const { navigation,feedState,feeds,userFollower,actions } = this.props;
         return (
-            <GenericFeedManager navigation={this.props.navigation} nextLoad = {this.props.feeds.nextLoad}loadingDone = {this.props.feeds.loadingDone} showTopLoader={this.props.feeds.showTopLoader} userFollowers= {this.props.user.followers} feeds={this.props.feeds.feeds} api={this} title='Feeds' ItemDetail={GenericFeedItem}></GenericFeedManager>
+            <GenericFeedManager
+                navigation={navigation}
+
+                loadingDone = {feedState.loadingDone}
+                showTopLoader={feedState.showTopLoader}
+                userFollowers= {userFollower}
+                feeds={feeds}
+                actions={actions}
+                title='Feeds'
+                ItemDetail={GenericFeedItem}>
+
+            </GenericFeedManager>
 
         );
     }
@@ -62,12 +55,22 @@ class Feed extends Component {
 
 }
 
+const mapStateToProps = state => {
+    return {
+        feeds: getFeeds(state)
+    }
+}
+
 export default connect(
     state => ({
-        feeds: state.feeds,
-        user: state.user
+        feedState:state.feeds,
+        userFollower:state.user.followers,
+        mapStateToProps
     }),
-    dispatch => bindActionCreators(feedsAction, dispatch)
+
+    (dispatch) => ({
+        actions: bindActionCreators(feedsAction, dispatch)
+    })
 )(Feed);
 
 

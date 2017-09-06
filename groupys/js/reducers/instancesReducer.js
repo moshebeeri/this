@@ -4,12 +4,12 @@
 /**
  * Created by stan229 on 5/27/16.
  */
-const initialState = {businesses:{},categories:[]};
+const initialState = {instances:{}};
 
 import store from 'react-native-simple-store';
 import { REHYDRATE } from 'redux-persist/constants'
 import * as actions from './reducerActions';
-export default function business(state = initialState, action) {
+export default function instances(state = initialState, action) {
 
     if (action.type === REHYDRATE){
 
@@ -17,58 +17,53 @@ export default function business(state = initialState, action) {
         const savedData = action.payload || initialState;
 
         return {
-            ...state, ...savedData.businesses
+            ...state, ...savedData.instances
         };
     }
-    let businessesState = {...state};
+    let currentState = {...state};
     console.log(action.type);
     switch (action.type) {
-        case actions.UPSERT_BUSINESS:
-            let currentbusinesses = businessesState.businesses;
+        case actions.UPSERT_INSTANCE:
+            let currentInstances= currentState.instances;
 
-            currentbusinesses[action.item._id] = action.item;
-            return businessesState;
+            currentInstances[action.item._id] = action.item;
+            return currentState;
         case actions.LIKE:
-            let item = businessesState.businesses[action.id]
+            let item = currentState.instances[action.id]
             if(item){
                 item.social_state.like = true;
                 item.social_state.likes =  item.social_state.likes + 1;
-                return businessesState;
+                return currentState;
             }else{
                 return state;
             }
         case actions.UNLIKE:
-            let unlikeItem = businessesState.businesses[action.id]
+            let unlikeItem = currentState.instances[action.id]
             if(unlikeItem){
                 unlikeItem.social_state.like = false;
                 unlikeItem.social_state.likes =  unlikeItem.social_state.likes - 1;
-                return businessesState;
+                return currentState;
             }else{
                 return state;
             }
         case actions.SHARE:
-            let shareItem = businessesState.businesses[action.id];
+            let shareItem = currentState.instances[action.id];
             if(shareItem){
                 shareItem.social_state.share = true;
                 shareItem.social_state.shares =  shareItem.social_state.shares + action.shares;
-                return businessesState;
+                return currentState;
             }else{
                 return state;
             }
-        case 'GET_BUSINESS':
-            store.save('businesses', action.businesses);
-            return {
-                ...state,
-                businesses : action.businesses,
-            };
 
-
-
-        case 'GET_BUSINESS_CATEGORIES' :
-            let categoriesState = {...state};
-            categoriesState['categories'+ action.language + action.catId] = action.categories;
-
-            return categoriesState;
+        case actions.SAVE:
+            let sabeItem = currentState.instances[action.id]
+            if(sabeItem){
+                sabeItem.social_state.saved = true;
+                return currentState;
+            }else{
+                return state;
+            }
 
         default:
             return state;

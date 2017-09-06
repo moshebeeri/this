@@ -7,11 +7,19 @@ import thunk from "redux-thunk";
 import {AsyncStorage} from 'react-native'
 import getRootReducer from "./reducers";
 import {persistStore, autoRehydrate} from 'redux-persist'
+import { createLogger } from 'redux-logger'
+
+const logger = createLogger({
+
+    // ...options
+});
 
 const store = createStore(
     getRootReducer(),
     undefined,
     applyMiddleware(thunk),
+    //TODO only in developer
+    applyMiddleware(logger),
     autoRehydrate()
 );
 persistStore(store ,{storage: AsyncStorage});

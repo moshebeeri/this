@@ -7,12 +7,12 @@
 /**
  * Created by stan229 on 5/27/16.
  */
-const initialState = {groups:[]};
+const initialState = {groups:{}};
 
 
 import store from 'react-native-simple-store';
 import { REHYDRATE } from 'redux-persist/constants'
-
+import * as actions from './reducerActions';
 export default function group(state = initialState, action) {
     console.log(action.type);
     if (action.type === REHYDRATE){
@@ -27,7 +27,11 @@ export default function group(state = initialState, action) {
 
     let currentState = {...state};
     switch (action.type) {
+        case actions.UPSERT_GROUP:
+            let currentGroups = currentState.groups;
 
+            currentGroups[action.item._id] = action.item;
+            return currentState
         case 'GET_GROUPS' :
             store.save('groups',action.groups)
 

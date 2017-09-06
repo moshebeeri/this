@@ -11,6 +11,8 @@ import follow_businesses from './followBusinessReducer'
 import user from './UserReducer';
 import comments from './commentReducer';
 import notification from './notificationReducer';
+import instances from './instancesReducer';
+import activities from './activitiesReducer';
 import lastState from "./lastState";
 import { reducer as form } from 'redux-form/immutable' // <--- immutable import
 
@@ -26,6 +28,8 @@ export default function getRootReducer() {
         user:user,
         notification:notification,
         comments:comments,
+        instances:instances,
+        activities:activities,
         form
     });
 }

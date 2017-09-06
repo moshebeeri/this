@@ -48,14 +48,14 @@ export default class FeedBusiness extends Component {
 
             likes = new String(item.social.numberLikes);
         }
-        let likeIcon = <Button transparent style={styles.promotion_iconView} onPress={like}>
+        let likeIcon = <Button transparent style={styles.promotion_iconView} onPress={() => like(item.id)}>
 
             <Icon style={styles.promotion_unlike}  size={25} name="heart"/>
             <Text>{likes}</Text>
 
         </Button>
         if (item.social && item.social.like == true) {
-            likeIcon = <Button transparent style={styles.promotion_iconView} onPress={unlike}>
+            likeIcon = <Button transparent style={styles.promotion_iconView} onPress={() => unlike(item.id)}>
 
 
                 <Icon  style={styles.promotion_like} size={25} name="heart"/>
