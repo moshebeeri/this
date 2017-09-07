@@ -25,8 +25,7 @@ export function login(phone,password,navigation){
                     token:response.token
                 });
                 dispatch({
-                    type: actions.LOGIN_FAILED,
-                    message:'bad credentials'
+                    type: actions.LOGIN_SUCSESS,
                 });
                 let user = await userApi.getUser(response.token)
                 dispatch({
@@ -48,15 +47,71 @@ export function login(phone,password,navigation){
     }
 
 }
+export function signup(phone,password,navigation){
+    return async function (dispatch){
+        try {
+            let response = await loginApi.signup(phone, password);
+            if(response.token) {
+
+                dispatch({
+                    type: actions.SAVE_USER_TOKEN,
+                    token:response.token
+                });
+                dispatch({
+                    type: actions.SIGNUP_SUCSESS,
+                });
+
+                let user = await userApi.getUser(response.token)
+                dispatch({
+                    type: actions.SET_USER,
+                    user:user
+                });
+                this.props.navigation.dispatch(resetAction);
+                this.props.navigation.navigate('register');
+            }else{
+                dispatch({
+                    type: actions.SIGNUP_FAILED,
+                    message:'invalid phone number'
+                });
+            }
+        } catch (error){
+            //todo dispatch offline
+        }
+
+    }
+
+}
 
 
-export function focus(focus) {
+export function focusLoginForm(focus) {
     return function (dispatch,) {
         if(focus == 'password'){
             dispatch({
                 type: actions.LOGIN_FOCUS_PASSWORD,
             });
         }
+
+    }
+}
+
+export function focusSignupForm(focus) {
+    return function (dispatch,) {
+        if(focus == 'phone'){
+            dispatch({
+                type: actions.SIGNUP_FOCUS_PHONE,
+            });
+        }
+        if(focus == 'password'){
+            dispatch({
+                type: actions.SIGNUP_FOCUS_PASSWORD,
+            });
+        }
+        if(focus == 'lastName'){
+            dispatch({
+                type: actions.SIGNUP_FOCUS_LASTNAME,
+            });
+        }
+
 
     }
 }
@@ -69,6 +124,7 @@ export function forgetPassword(phoneNumber) {
 
     }
 }
+
 
 
 

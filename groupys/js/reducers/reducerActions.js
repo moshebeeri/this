@@ -9,14 +9,19 @@ export const UNLIKE = 'UNLIKE';
 export const SAVE = 'SAVE';
 export const SHARE = 'SHARE';
 
+//user signup
+export const SIGNUP_FAILED = 'SIGNUP_FAILED';
+export const SIGNUP_SUCSESS = 'SIGNUP_SUCSESS';
+export const SIGNUP_FOCUS_LASTNAME = 'SIGNUP_FOCUS_LASTNAME';
+export const SIGNUP_FOCUS_PASSWORD = 'LOGIN_FOCUS_PASSWORD';
+export const SIGNUP_FOCUS_PHONE = 'SIGNUP_FOCUS_PHONE';
+
 //user login
 export const LOGIN_FAILED = 'LOGIN_FAILED';
 export const LOGIN_SUCSESS = 'LOGIN_SUCSESS';
 export const LOGIN_FOCUS_PASSWORD = 'LOGIN_FOCUS_PASSWORD';
-
-
-
 export const LOGIN_FOCUSED_FIELD = 'LOGIN_FOCUSED_FIELD'
+
 //main tab
 export const APP_CHANGE_TAB ='CHANGE_TAB'
 export const APP_SHOW_ADD_FAB ='CHANGE_TAB'

@@ -7,48 +7,59 @@
 /**
  * Created by stan229 on 5/27/16.
  */
-const initialState = {failedMessage:'',focusPhone:true,focusPassword:false};
+const initialState = {failedMessage:'',focusName:true,focusLastname:false,focusPhone:false,focusPassword:false};
 
 import * as actions from './../reducerActions';
 import { REHYDRATE } from 'redux-persist/constants'
 
-export default function loginForm(state = initialState, action) {
+export default function signupForm(state = initialState, action) {
+    console.log(action.type);
 
     switch (action.type) {
 
-        case actions.LOGIN_FAILED :
+        case actions.SIGNUP_FAILED :
             return {
                 ...state,
 
                 failedMessage : action.failedMessage,
             };
-        case actions.LOGIN_SUCSESS :
+        case actions.SIGNUP_SUCSESS :
             return {
                 ...state,
 
                 failedMessage : '',
             };
-        case actions.LOGIN_FOCUS_PASSWORD :
+        case actions.SIGNUP_FOCUS_LASTNAME :
+            return {
+                ...state,
+
+                focusPassword : false,
+                focusPhone:false,
+                focusName:false,
+                focusLastname:true,
+
+            };
+        case actions.SIGNUP_FOCUS_PASSWORD :
             return {
                 ...state,
 
                 focusPassword : true,
                 focusPhone:false,
+                focusName:false,
+                focusLastname:false,
+
             };
-        case actions.FOCUS_ :
+        case actions.SIGNUP_FOCUS_PHONE :
             return {
                 ...state,
 
-                focusPassword : true,
-                focusPhone:false,
+                focusPassword : false,
+                focusPhone:true,
+                focusName:false,
+                focusLastname:false,
+
             };
 
-        case actions.LOGIN_FOCUSED_FIELD :
-            return {
-                ...state,
-
-                focus : action.foucs,
-            };
 
 
         default:

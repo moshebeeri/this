@@ -39,7 +39,7 @@ import LinearGradient from 'react-native-linear-gradient';
   }
 
     focusNextField(nextField) {
-        this.props.actions.focus(nextField)
+        this.props.actions.focusLoginForm(nextField)
     }
 
 
