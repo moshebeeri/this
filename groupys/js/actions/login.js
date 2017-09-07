@@ -66,8 +66,8 @@ export function signup(phone,password,navigation){
                     type: actions.SET_USER,
                     user:user
                 });
-                this.props.navigation.dispatch(resetAction);
-                this.props.navigation.navigate('register');
+
+               navigation.navigate('register');
             }else{
                 dispatch({
                     type: actions.SIGNUP_FAILED,
@@ -116,6 +116,30 @@ export function focusSignupForm(focus) {
     }
 }
 
+export function verifyCode(code,navigation,resetAction){
+    return async function (dispatch,) {
+        try{
+            let response = await loginApi.verifyCode(code);
+            if (response.token) {
+                dispatch({
+                    type: actions.REGISTER_CODE_SUCSSES,
+                });
+                navigation.dispatch(resetAction);
+                navigation.navigate('home');
+
+            } else {
+                dispatch({
+                    type: actions.REGISTER_CODE_INVALID,
+                    message:'invalid validation code'
+                });
+
+            }
+        }catch(error) {
+       //todo dispatch no netwoerk event
+         }
+
+    }
+}
 export function forgetPassword(phoneNumber) {
     return function (dispatch,) {
         if(phoneNumber) {

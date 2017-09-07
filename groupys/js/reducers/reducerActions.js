@@ -8,6 +8,9 @@ export const LIKE = 'LIKE';
 export const UNLIKE = 'UNLIKE';
 export const SAVE = 'SAVE';
 export const SHARE = 'SHARE';
+//user registration
+export const REGISTER_CODE_INVALID = 'REGISTER_CODE_INVALID';
+export const REGISTER_CODE_SUCSSES='REGISTER_CODE_SUCSSES';
 
 //user signup
 export const SIGNUP_FAILED = 'SIGNUP_FAILED';

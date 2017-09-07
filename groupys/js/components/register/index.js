@@ -7,25 +7,17 @@ const {width, height} = Dimensions.get('window')
 
 import LinearGradient from 'react-native-linear-gradient';
 
-import login from './signup-theme';
+
 import styles from './styles';
 
-const {
-    replaceAt,
-} = actions;
-
 const logo = require('../../../images/logo.png');
-import LoginApi from '../../api/login'
-let loginApi = new LoginApi()
-import { NavigationActions } from 'react-navigation'
-const resetAction = NavigationActions.reset({
-    index: 0,
-    actions: [
-        NavigationActions.navigate({ routeName: 'home'})
-    ]
-});
 
-export default class Register extends Component {
+import { NavigationActions } from 'react-navigation'
+import { bindActionCreators } from "redux";
+
+import * as loginAction from "../../actions/login";
+
+class Register extends Component {
 
     static navigationOptions = {
         header:null
@@ -35,65 +27,25 @@ export default class Register extends Component {
         super(props);
 
         this.state = {
-
-            scroll: false,
-            cca2: 'US',
             code: "",
-            error: '',
-            validationMessage: ''
         };
     }
 
 
 
-    replaceRoute(route) {
-        if(route == 'home'){
-            this.props.navigation.dispatch(resetAction);
-            return;
-        }
-
-        this.props.navigation.navigate(route);
-    }
 
 
-    async validateCode(){
-        try{
-            await this.setState({
-                error:''
-            })
-            let response = await loginApi.verifyCode(this.state.code);
-            if (response.token) {
-
-                this.replaceRoute('home');
-            } else {
-                this.replaceRoute('Login');
-            }
-
-            }catch(error) {
-                this.setState({
-                    error:'Code is not valid',
-                    code: ""
-                })
-        }
-
+     validateCode(){
+        this.props.actions.verifyCode(this.state.code,this.props.navigation,resetAction)
     }
 
 
     render() {
-        let message = undefined;
-        if(this.state.validationMessage){
-            message = <Text style={{ backgroundColor:'transparent',padding: 10, fontSize: 16, color: 'red'}}>
-                {this.state.validationMessage}
-            </Text>
-        }
+        const { message } = this.props;
 
-        let errorMessage = undefined;
-        if(this.state.error){
-            errorMessage = <View style={{  backgroundColor:'transparent',flexDirection: 'row',color: 'red', justifyContent: 'center',marginBottom:0 }}>
-                <Text> {this.state.error}</Text>
-            </View>
+        const errorMessage = this.createMessage(message);
 
-        }
+
         return (
             <LinearGradient
 
@@ -118,7 +70,6 @@ export default class Register extends Component {
                                     <Input  value={this.state.name} blurOnSubmit={true} returnKeyType='done' ref="1" onSubmitEditing={this.validateCode.bind(this)} onChangeText={(code) => this.setState({code})} placeholder='Validation Code' />
                                 </Item>
 
-                            {message}
                             {errorMessage}
                             <View style={{height:40,justifyContent: 'center', alignItems: 'center',width:width/2 + 120}}>
 
@@ -144,4 +95,26 @@ export default class Register extends Component {
 
         );
     }
+
+    createMessage(message) {
+
+        if (message) {
+            return <Text style={{backgroundColor: 'transparent', padding: 10, fontSize: 16, color: 'red'}}>
+                {this.state.validationMessage}
+            </Text>
+        }
+        return undefined;
+    }
+
+
 }
+
+export default connect(
+    state => ({
+        message: state.registerForm.message,
+
+    }),
+    (dispatch) => ({
+        actions: bindActionCreators(loginAction, dispatch)
+    })
+)(Register);

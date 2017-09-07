@@ -3,16 +3,15 @@ import {Image, Platform,KeyboardAvoidingView,Dimensions,TouchableOpacity} from '
 import {connect} from 'react-redux';
 import {actions} from 'react-native-navigation-redux-helpers';
 import {Container, Content, Text, InputGroup, Input, Button, Icon, View,Item} from 'native-base';
-import store from 'react-native-simple-store';
+
 const {width, height} = Dimensions.get('window')
 import styles from './styles';
 
 import LinearGradient from 'react-native-linear-gradient';
 
-const {
-    replaceAt,
-} = actions;
+import { bindActionCreators } from "redux";
 
+import * as loginAction from "../../actions/login";
 const logo = require('../../../images/logo.png');
 
  class Signup extends Component {
