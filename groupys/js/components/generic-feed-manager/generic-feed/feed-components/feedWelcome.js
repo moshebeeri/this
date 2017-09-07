@@ -9,21 +9,7 @@ import {Image ,Platform,PanResponder,TouchableHighlight } from 'react-native';
 import {connect} from 'react-redux';
 import {actions} from 'react-native-navigation-redux-helpers';
 import { Container, Content, Text, InputGroup, Input,Thumbnail,Button,Picker,Right,Item,Left,Header,Footer,Body, View,Card,CardItem } from 'native-base';
-
-
-
-import Icon from 'react-native-vector-icons/FontAwesome';
-import Icon2 from 'react-native-vector-icons/EvilIcons';
-import Icon3 from 'react-native-vector-icons/MaterialIcons';
-import LinearGradient from 'react-native-linear-gradient';
-
-
-import Icon4 from 'react-native-vector-icons/Entypo';
-
-import stylesPortrate from './styles'
-import stylesLandscape from './styles_lendscape'
-import StyleUtils from '../../../../utils/styleUtils'
-
+import * as componentCreator from "./feedCommonView";
 export default class FeedWelcome extends Component {
 
 
@@ -36,16 +22,8 @@ export default class FeedWelcome extends Component {
 
 
     createWelcome(item){
-        let styles = stylesPortrate
-        if(StyleUtils.isLandscape()){
-            styles = stylesLandscape;
-        }
-
-
-
-
-
-        let result =
+        const styles =  componentCreator.createStyle();
+        const result =
             <View style={styles.Welcome_container}>
                 <View style={styles.promotion_card}>
                     <View style={styles.welcome_upperContainer}>

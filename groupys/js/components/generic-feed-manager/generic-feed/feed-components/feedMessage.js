@@ -24,29 +24,16 @@ export default class FeedMessage extends Component {
     }
 
     createMessage(item){
-        let image =  <Thumbnail  medium    source={item.logo}/>
+        const image =  <Thumbnail  medium    source={item.logo}/>
 
-        let containerStyle = {
+        const containerStyle = {
             margin:5,
             alignItems:'flex-start',
             backgroundColor:'#ebebeb',
         };
 
-        let messageStyle = {
-
-
-
-            flexDirection: 'column',
-
-
-        };
-        let messageTime = undefined;
-        if(item.date) {
-            messageTime = <Text note
-                                style={styles.dateFont}>{dateUtils.messageFormater(item.date)}</Text>
-
-        }
-        let messageContainer = <View style={styles.message_component}>
+        const messageTime = this.createMessageTime(item);
+        const messageContainer = <View style={styles.message_component}>
             {image}
             <View style={styles.messageName}>
                 <Text style={{  fontWeight: 'bold'}}>{item.name}</Text>
@@ -66,6 +53,16 @@ export default class FeedMessage extends Component {
         return <View style = {containerStyle}>
             {messageContainer}
         </View>
+    }
+
+    createMessageTime(item) {
+
+        if (item.date) {
+           return <Text note
+                                style={styles.dateFont}>{dateUtils.messageFormater(item.date)}</Text>
+
+        }
+        return undefined;
     }
 }
 

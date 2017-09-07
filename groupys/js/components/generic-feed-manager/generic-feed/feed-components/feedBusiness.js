@@ -8,19 +8,13 @@ import {actions} from 'react-native-navigation-redux-helpers';
 import { Container, Content, Text, InputGroup, Input,Thumbnail,Button,Picker,Right,Item,Left,Header,Footer,Body, View,Card,CardItem } from 'native-base';
 
 
-
-import Icon from 'react-native-vector-icons/FontAwesome';
-import Icon2 from 'react-native-vector-icons/EvilIcons';
 import Icon3 from 'react-native-vector-icons/MaterialIcons';
-import LinearGradient from 'react-native-linear-gradient';
 
-
-import Icon4 from 'react-native-vector-icons/Entypo';
 
 import stylesPortrate from './styles'
 import stylesLandscape from './styles_lendscape'
 import StyleUtils from '../../../../utils/styleUtils'
-
+import * as componentCreator from "./feedCommonView";
 export default class FeedBusiness extends Component {
 
 
@@ -33,57 +27,16 @@ export default class FeedBusiness extends Component {
 
 
     createBussines(item,like,unlike,showUsers,comment){
-        let styles = stylesPortrate
-        if(StyleUtils.isLandscape()){
-            styles = stylesLandscape;
-        }
 
         if(!item.name){
             return <View></View>;
         }
+        const styles =  componentCreator.createStyle();
+        const likeIcon = componentCreator.createLikeButton(item, styles, like, unlike);
+        const commentICon = componentCreator.createCommentButton(styles, comment,item)
+        const shareICon = componentCreator.createShareButton(styles, showUsers, item);
 
-        let likes = 0;
-
-        if(item.social) {
-
-            likes = new String(item.social.numberLikes);
-        }
-        let likeIcon = <Button transparent style={styles.promotion_iconView} onPress={() => like(item.id)}>
-
-            <Icon style={styles.promotion_unlike}  size={25} name="heart"/>
-            <Text>{likes}</Text>
-
-        </Button>
-        if (item.social && item.social.like == true) {
-            likeIcon = <Button transparent style={styles.promotion_iconView} onPress={() => unlike(item.id)}>
-
-
-                <Icon  style={styles.promotion_like} size={25} name="heart"/>
-                <Text>{likes}</Text>
-
-            </Button>
-
-
-        }
-        let commentICon = <Button transparent style={styles.promotion_iconView} onPress={comment}>
-
-            <Icon2 style={styles.promotion_comment}  size={30} name="comment"/>
-            <Text>0</Text>
-
-
-        </Button>
-
-        let shareICon = <Button transparent style={styles.promotion_iconView} onPress={showUsers}>
-
-            <Icon2 style={styles.promotion_comment}  size={30} name="share-google"/>
-            <Text>0</Text>
-
-
-        </Button>
-
-
-
-        let result =
+        const result =
             <View style={styles.bussiness_container}>
                 <View style={styles.promotion_card}>
                     <View style={styles.bussiness_upperContainer}>
@@ -128,5 +81,15 @@ export default class FeedBusiness extends Component {
             </View>
 
         return result;
+    }
+
+
+
+    getStyle() {
+
+        if (StyleUtils.isLandscape()) {
+            return stylesLandscape;
+        }
+        return stylesPortrate;
     }
 }

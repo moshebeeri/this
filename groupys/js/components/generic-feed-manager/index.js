@@ -8,7 +8,7 @@ import SGListView from 'react-native-sglistview';
 import BackgroundTimer from 'react-native-background-timer';
 import { bindActionCreators } from "redux";
 
-import * as feedsAction from "../../actions/feeds";
+
 
  export default class GenericFeedManager extends Component {
 

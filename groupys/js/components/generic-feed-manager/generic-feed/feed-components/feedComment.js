@@ -23,55 +23,21 @@ export default class FeedComment extends Component {
     }
 
     createMessage(item){
-        let image =  <Thumbnail  square   source={item.logo}/>
+        const image =  <Thumbnail  square   source={item.logo}/>
+        const containerStyle=   this.createContainerStyle(item);
+        const messageStyle = this.createMessageStyle(item);
+        const messageContainer = this.createMessageContainer(image, item, messageStyle)
 
-        let containerStyle = {
-            margin:10,
-            alignItems:'flex-start',
 
-        };
-
-        let messageStyle = {
-            backgroundColor:'#e7e7e7',
-            borderTopRightRadius:20,
-            borderBottomRightRadius:20,
-            borderBottomLeftRadius:20,
-            padding:10,
-            flex: 0.6,
-            flexDirection: 'column',
-            maxWidth:200
-
-        };
-
-        let messageContainer = <View style={styles.messageContainer}>
-            {image}
-            <View style={styles.messageName}>
-                <Text>{item.name}</Text>
-                <View style={messageStyle}>
-                    <Text>{item.description}</Text>
-                </View>
-            </View>
-
+        return <View style = {containerStyle}>
+            {messageContainer}
         </View>
+    }
+
+    createMessageContainer(image, item, messageStyle) {
 
         if(item.userMessage){
-            containerStyle = {
-                margin:10,
-                alignItems:'flex-end',
-
-            };
-            messageStyle = {
-                backgroundColor:'#26bac4',
-                borderTopLeftRadius:20,
-                borderBottomRightRadius:20,
-                borderBottomLeftRadius:20,
-                padding:10,
-                flexDirection: 'column',
-                flex: 0.6,
-                maxWidth:200
-            };
-
-            messageContainer =  <View style={styles.messageContainer}>
+            return <View style={styles.messageContainer}>
 
                 <View style={styles.messageName}>
                     <View style={{alignItems:'flex-end',height:30}}>
@@ -89,9 +55,60 @@ export default class FeedComment extends Component {
             </View>
 
         }
-        return <View style = {containerStyle}>
-            {messageContainer}
-        </View>
+        return <View style={styles.messageContainer}>
+            {image}
+            <View style={styles.messageName}>
+                <Text>{item.name}</Text>
+                <View style={messageStyle}>
+                    <Text>{item.description}</Text>
+                </View>
+            </View>
+
+        </View>;
+    }
+
+    createContainerStyle(item) {
+        if(item.userMessage){
+            return   {
+                margin:10,
+                alignItems:'flex-end',
+
+            };
+        }
+
+        return {
+            margin: 10,
+            alignItems: 'flex-start',
+
+        };;
+    }
+
+    createMessageStyle(item) {
+        if(item.userMessage){
+            return  {
+                backgroundColor:'#26bac4',
+                borderTopLeftRadius:20,
+                borderBottomRightRadius:20,
+                borderBottomLeftRadius:20,
+                padding:10,
+                flexDirection: 'column',
+                flex: 0.6,
+                maxWidth:200
+            };
+
+        }
+        return {
+            backgroundColor: '#e7e7e7',
+            borderTopRightRadius: 20,
+            borderBottomRightRadius: 20,
+            borderBottomLeftRadius: 20,
+            padding: 10,
+            flex: 0.6,
+            flexDirection: 'column',
+            maxWidth: 200
+
+        };
+
     }
 }
 

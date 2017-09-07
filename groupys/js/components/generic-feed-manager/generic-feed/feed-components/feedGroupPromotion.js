@@ -17,7 +17,7 @@ import Icon2 from 'react-native-vector-icons/EvilIcons';
 import Icon3 from 'react-native-vector-icons/MaterialIcons';
 
 import styles from './styles'
-
+import * as componentCreator from "./feedCommonView";
 
 export default class FeedGroupPromotion extends Component {
 
@@ -31,8 +31,8 @@ export default class FeedGroupPromotion extends Component {
 
     createPromotion(item,save,like,unlike,showUsers){
 
-        let promotion = undefined;
-        let colorStyle = {
+        const styles  = componentCreator.createStyle();
+        const colorStyle = {
 
             color: item.promotionColor,
 
@@ -40,90 +40,18 @@ export default class FeedGroupPromotion extends Component {
         }
 
 
-        promotion = <Text style={colorStyle}>{item.promotion}</Text>
-
-        let buisnessLogo = undefined;
-        if(item.businessLogo){
-            buisnessLogo =  <Thumbnail  square={true} size={50} source={{uri: item.businessLogo}} />
-
-        }
-
-        let feedAction =  <View   style={styles.promotion_buttonView}>
-
-            <TouchableHighlight style={{}} onPress={save}>
+        const promotion = <Text style={colorStyle}>{item.promotion}</Text>
 
 
-                <Text style={styles.promotion_buttonText}>Save</Text>
+        const buisnessLogo = componentCreator.createBusinessLog(item);
+        const likeIcon = componentCreator.createLikeButton(item,styles,like,unlike);
+        const commentICon = componentCreator.createCommentButton(styles, comment);
+        const shareICon = componentCreator.createShareButton(styles, showUsers, item);
+        const saveIcon = componentCreator.createSaveButton(item, save);
 
 
 
-            </TouchableHighlight>
-
-
-
-        </View>
-
-        let likes = new String(item.social.numberLikes);
-        let likeIcon = <Button transparent style={styles.promotion_unlike} onPress={like}>
-
-            <Icon style={styles.promotion_like}  size={25} name="heart"/>
-            <Text>{likes}</Text>
-
-        </Button>
-        if (item.social && item.social.like == true) {
-            likeIcon = <Button transparent style={styles.promotion_iconView} onPress={unlike}>
-
-
-                <Icon  style={styles.promotion_like} size={25} name="heart"/>
-                <Text>{likes}</Text>
-
-            </Button>
-
-
-        }
-        let commentICon = <Button transparent style={styles.promotion_iconView} onPress={like}>
-
-            <Icon2 style={styles.promotion_comment}  size={30} name="comment"/>
-            <Text>0</Text>
-
-
-        </Button>
-
-        let shareICon = <Button transparent style={styles.promotion_iconView} onPress={showUsers}>
-
-            <Icon2 style={styles.promotion_comment}  size={30} name="share-google"/>
-            <Text>0</Text>
-
-
-        </Button>
-
-        let saveIcon = undefined;
-
-        if(item.showsave) {
-            let saveStyle ={
-                flex:-1,justifyContent:'center',marginLeft:20 ,flexDirection: 'row',height: 40,width:100, backgroundColor: item.promotionColor,
-            };
-            saveIcon = <Button  style={saveStyle} onPress={save}>
-
-
-                <Text>save</Text>
-
-
-            </Button>
-        }else{
-            let saveStyle ={
-                flex:-1,justifyContent:'center',marginLeft:20 ,flexDirection: 'row',height: 40,width:100, backgroundColor: 'gray',
-            };
-            saveIcon = <Button  style={saveStyle} >
-
-
-                <Text>saved</Text>
-
-
-            </Button>
-        }
-
-        let result =
+        const result =
             <View style={styles.promotion_container}>
                 <View style={styles.promotion_card}>
                     <View style={styles.promotion_upperContainer}>
