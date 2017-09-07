@@ -91,7 +91,7 @@ export default class GenericFeedItem extends Component {
     }
     selectUsers(users){
         let activityId = this.props.item.social.activityId;
-        this.props.actions.shareActivity( this.props.item.id,activityId,users)
+        this.props.actions.shareActivity( this.props.item.id,activityId,users,this.props.token)
 
     }
     onMove(evt, gestureState){
@@ -104,20 +104,20 @@ export default class GenericFeedItem extends Component {
     }
 
         render() {
-            const {item,actions} = this.props;
+            const {item,actions,token} = this.props;
             const showUsers = this.showUsers.bind(this);
             const comment = this.comment.bind(this);
 
 
             switch (item.itemType){
                 case 'PROMOTION':
-                    return  this.createFeedView(<FeedPromotion comment= {comment} navigation={this.props.navigation} item={item} like={actions.like}  unlike={actions.unlike} showUsers={showUsers} save={actions.saveFeed}    />)
+                    return  this.createFeedView(<FeedPromotion token = {token} comment= {comment} navigation={this.props.navigation} item={item} like={actions.like}  unlike={actions.unlike} showUsers={showUsers} save={actions.saveFeed}    />)
                 case 'MESSAGE':
-                    return  this.createFeedView(<FeedMessage navigation={this.props.navigation} item={item} />)
+                    return  this.createFeedView(<FeedMessage token = {token} navigation={this.props.navigation} item={item} />)
                 case 'WELCOME':
-                    return  this.createFeedView(<FeedWelcome navigation={this.props.navigation} item={item} />)
+                    return  this.createFeedView(<FeedWelcome token = {token} navigation={this.props.navigation} item={item} />)
                 default:
-                    return  this.createFeedView(<FeedBusiness navigation={this.props.navigation} item={item} comment= {comment} like={actions.like}  unlike={actions.unlike} showUsers={showUsers} save={actions.saveFeed} _panResponder={this._panResponder} />)
+                    return  this.createFeedView(<FeedBusiness token = {token}  navigation={this.props.navigation} item={item} comment= {comment} like={actions.like}  unlike={actions.unlike} showUsers={showUsers} save={actions.saveFeed} _panResponder={this._panResponder} />)
 
             }
 

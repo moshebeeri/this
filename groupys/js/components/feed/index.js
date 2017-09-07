@@ -22,7 +22,8 @@ class Feed extends Component {
 
       constructor(props) {
         super(props);
-          this.props.actions.setUserFollows();
+          const { token } = this.props;
+          this.props.actions.setUserFollows(token);
 
 
       }
@@ -33,7 +34,7 @@ class Feed extends Component {
 
 
     render() {
-        const { navigation,feedState,feeds,userFollower,actions } = this.props;
+        const { navigation,feedState,feeds,userFollower,actions,token } = this.props;
         return (
             <GenericFeedManager
                 navigation={navigation}
@@ -43,6 +44,7 @@ class Feed extends Component {
                 userFollowers= {userFollower}
                 feeds={feeds}
                 actions={actions}
+                token={token}
                 title='Feeds'
                 ItemDetail={GenericFeedItem}>
 
@@ -64,6 +66,7 @@ const mapStateToProps = state => {
 export default connect(
     state => ({
         feedState:state.feeds,
+        token:user.token,
         userFollower:state.user.followers,
         mapStateToProps
     }),

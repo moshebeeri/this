@@ -32,7 +32,7 @@ class LoginApi
                 }
 
                 let responseData = await response.json();
-                store.save('token', responseData.token);
+
                 resolve(responseData);
             }
             catch (error) {
@@ -117,7 +117,7 @@ class LoginApi
 
     }
 
-    recoverPassword(phoneNumber,callingCode) {
+    recoverPassword(phoneNumber) {
 
         let normalizedPhone = this.clean_phone_number(phoneNumber);
 

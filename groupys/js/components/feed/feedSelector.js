@@ -13,7 +13,7 @@ export const getFeeds = createSelector( state => {
 
     const collections = {activities:state.activities.activities,
             promotions:state.promotions.promotions,
-            user: state.user.user,
+            user: state.user.users,
             businesses:state.businesses.businesses,
             instances:state.instances.instances};
 

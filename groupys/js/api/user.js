@@ -7,13 +7,12 @@ import Timer from './LogTimer'
 let timer = new Timer();
 class UserApi
 {
-    getUser() {
+    getUser(token) {
         return new Promise(async(resolve, reject) => {
             try {
                 let from = new Date();
 
-                let token = await store.get('token');
-                console.log(token);
+
                 if(token) {
                     const response = await fetch(`${server_host}/api/users/me/`, {
                         method: 'GET',
@@ -52,10 +51,9 @@ class UserApi
     }
 
 
-    getUserFollowers() {
+    getUserFollowers(token) {
         return new Promise(async(resolve, reject) => {
             try {
-                let token = await store.get('token');
                 let from = new Date();
 
                 const response = await fetch(`${server_host}/api/profiles/follow/followers/0/1000`, {

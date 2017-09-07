@@ -14,16 +14,16 @@ import ActivityApi from "../api/activity"
 let activityApi = new ActivityApi();
 import * as actions from '../reducers/reducerActions';
 import * as assemblers from './collectionAssembler';
-async function fetchFeedsFromServer(feeds,dispatch){
+async function fetchFeedsFromServer(feeds,dispatch,token,user){
     try {
 
         let response = null;
         if( _.isEmpty(feeds)){
-            response =  await feedApi.getAll('down','start');
+            response =  await feedApi.getAll('down','start',token,user);
         }else{
             let keys = Object.keys(feeds)
             let id = keys[keys.length-1]
-            response =  await feedApi.getAll('down',id);
+            response =  await feedApi.getAll('down',id,token,user);
         }
 
         if(!response)
@@ -169,8 +169,8 @@ async function getAll(dispatch){
 
 }
 
-export function setNextFeeds(feeds){
-    return async function (dispatch, getState){
+export function setNextFeeds(feeds,token,user){
+    return async function (dispatch){
         let showLoadingDone = false;
         if( _.isEmpty(feeds)) {
             dispatch({
@@ -181,7 +181,7 @@ export function setNextFeeds(feeds){
             });
             showLoadingDone = true;
         }
-        await fetchFeedsFromServer(feeds,dispatch)
+        await fetchFeedsFromServer(feeds,dispatch,token,user)
         if(showLoadingDone) {
             dispatch({
                 type: actions.FEED_LOADING_DONE,
@@ -223,21 +223,21 @@ export function saveFeed(id) {
     }
 }
 
-export function setUserFollows() {
+export function setUserFollows(token) {
     return async function (dispatch, getState) {
 
-        let response = await userApi.getUserFollowers();
+        let response = await userApi.getUserFollowers(token);
         dispatch({
             type: actions.USER_FOLLOW,
             followers:response
         });
     }
 }
-export function shareActivity(id,activityId,users) {
+export function shareActivity(id,activityId,users,token) {
     return async function (dispatch, getState) {
 
         users.forEach(function (user) {
-             activityApi.shareActivity(user,activityId)
+             activityApi.shareActivity(user,activityId,token)
         })
         dispatch({
             type: actions.SHARE,

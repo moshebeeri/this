@@ -27,7 +27,7 @@ import { bindActionCreators } from "redux";
       async fetchTopList(id){
 
           if(id == this.props.feeds[0].fid) {
-              this.props.actions.fetchTop(id)
+              this.props.actions.fetchTop(id,this.props.token)
           }
     }
 
@@ -48,7 +48,7 @@ import { bindActionCreators } from "redux";
 
 
     render() {
-        const {navigation,loadingDone, showTopLoader,feeds ,userFollowers,group,ItemDetail,actions} = this.props;
+        const {navigation,loadingDone, showTopLoader,feeds,token ,userFollowers,group,ItemDetail,actions} = this.props;
 
 
         //  let loader = this.state.showLoader?<View><Spinner color='red' /></View>:null
@@ -77,7 +77,7 @@ import { bindActionCreators } from "redux";
                         renderRow={(item) =>
                             <ItemDetail userFollowers={userFollowers} group = {group}navigation={navigation} item={item} fetchTopList={this.fetchTopList.bind(this)} actions={actions}  />
                         }
-                        onEndReached={(event)=> actions.setNextFeeds(feeds)}
+                        onEndReached={(event)=> actions.setNextFeeds(feeds,token)}
                         enableEmptySections={true}
                     />
                     {spining}

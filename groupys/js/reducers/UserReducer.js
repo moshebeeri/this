@@ -7,7 +7,7 @@
 /**
  * Created by stan229 on 5/27/16.
  */
-const initialState = {user:{},followers:[]};
+const initialState = {users:{},followers:[],user:undefined};
 import { REHYDRATE } from 'redux-persist/constants'
 import * as actions from './reducerActions';
 
@@ -21,17 +21,17 @@ export default function user(state = initialState, action) {
         const savedData = action.payload || initialState;
 
         return {
-            ...state, ...savedData.user
+            ...state, ...savedData.users
         };
     }
     let userState = {...state};
     switch (action.type) {
         case actions.UPSERT_USER:
-            let currentUsers =userState.user;
+            let currentUsers =userState.users;
 
             currentUsers[action.item._id] = action.item;
             return userState;
-        case 'GET_USER' :
+        case  actions.SET_USER:
             return {
                 ...state,
                 user : action.user,
