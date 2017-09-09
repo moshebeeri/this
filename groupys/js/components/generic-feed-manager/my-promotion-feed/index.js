@@ -29,10 +29,6 @@ export default class MyPromotionFeedItem extends Component {
     constructor(props) {
 
         super(props);
-        this.state = {
-            zone:{}
-        }
-
 
     }
 
@@ -79,8 +75,8 @@ export default class MyPromotionFeedItem extends Component {
     }
 
         render() {
-            let feed = undefined;
-            feed = this.createPromotion(this.props.item);
+
+            const feed = this.createPromotion(this.props.item);
 
             return feed;
         }
@@ -104,13 +100,10 @@ export default class MyPromotionFeedItem extends Component {
 
 
     createPromotion(item){
-        let styles = stylesPortrate
-        if(StyleUtils.isLandscape()){
-            styles = stylesLandscape;
-        }
+        const styles = this.createStyle();
 
-        let promotion = undefined;
-        let colorStyle = {
+
+        const colorStyle = {
 
             color: item.promotionColor,
 
@@ -118,18 +111,14 @@ export default class MyPromotionFeedItem extends Component {
         }
 
 
-        promotion = <Text style={colorStyle}>{item.promotion}</Text>
+        const promotion = <Text style={colorStyle}>{item.promotion}</Text>
 
-        let buisnessLogo = undefined;
-        if(item.businessLogo){
-            buisnessLogo =  <Thumbnail  square={true} size={50} source={{uri: item.businessLogo}} />
+        const buisnessLogo = this.createBusinessLogi(item);
 
-        }
-
-        let reddemStyle ={
+        const reddemStyle ={
             flex:-1,justifyContent:'center',marginLeft:0 ,flexDirection: 'row',height: 40,width:width/2, backgroundColor: item.promotionColor,
         };
-        let postStyle ={
+        const postStyle ={
             flex:-1,justifyContent:'center',marginLeft:0 ,flexDirection: 'row',height: 40,width:width/2, backgroundColor: '#363636',
         };
 
@@ -187,6 +176,22 @@ export default class MyPromotionFeedItem extends Component {
 
 
         return result;
+    }
+
+    createBusinessLogi(item) {
+
+        if (item.businessLogo) {
+            return <Thumbnail square={true} size={50} source={{uri: item.businessLogo}}/>
+
+        }
+        return undefined;
+    }
+
+    createStyle() {
+        if (StyleUtils.isLandscape()) {
+            return stylesLandscape;
+        }
+        return stylesPortrate;
     }
 
 

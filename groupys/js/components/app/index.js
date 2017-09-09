@@ -9,29 +9,25 @@ import Icon2 from 'react-native-vector-icons/Ionicons';
 
 import GeneralComponentHeader from '../header/index';
 
-import Business from '../business/index';
+
 import Feeds from '../feed/index'
 import MydPromotions from '../my-promotions/index'
 import Notification from '../notifications/index'
 import Groups from '../groups/index'
 
-import LocationApi from '../../api/location'
-import UserApi from '../../api/user'
-import ContactApi from '../../api/contacts'
+
 import BackgroundTimer from 'react-native-background-timer';
 
 const promotions =  require('../../../images/promotion.png');
 const save =  require('../../../images/save.png');
 const groups =  require('../../../images/groups.png');
 
-let locationApi = new LocationApi();
-let contactApi = new ContactApi();
-let userApi = new UserApi();
+
 import StyleUtils from '../../utils/styleUtils'
 import codePush from "react-native-code-push";
 
 import SideBar from '../drawer/index';
-//var PushNotification = require('react-native-push-notification');
+
 const warch = navigator.geolocation.watchPosition((position) => {
         var lastPosition = JSON.stringify(position);
         locationApi.sendLocation(position.coords.longitude,position.coords.latitude,position.timestamp,position.coords.speed);
@@ -56,11 +52,10 @@ let updateDialogOption = {
 }
 
 
-import LoginUtils from '../../utils/login_utils'
-let lu = new LoginUtils();
-import { bindActionCreators } from "redux";
 
-import * as userAction from "../../actions/user";
+import { bindActionCreators } from "redux";
+import { isAuthenticated } from './appSelector'
+import * as mainAction from "../../actions/mainTab";
 
  class ApplicationManager extends Component {
     static navigationOptions = {
@@ -73,31 +68,10 @@ import * as userAction from "../../actions/user";
      constructor(props) {
 
         super(props)
-
-        let initialPage = 0;
-
-
-        this.state = {
-
-            error: '',
-            validationMessage: '',
-            token: '',
-            userId: '',
-            ready: true,
-            addComponent: '',
-            rowsView: [],
-            initialPage: initialPage,
-            index: initialPage,
-            drawerState:'',
-            start:true,
-
-        }
-
-         // userApi.getUser();
          this.state = {
              orientation: StyleUtils.isPortrait() ? 'portrait' : 'landscape',
              devicetype: StyleUtils.isTablet() ? 'tablet' : 'phone'
-         };
+         }
 
          // Event Listener for orientation changes
          Dimensions.addEventListener('change', () => {
@@ -105,8 +79,8 @@ import * as userAction from "../../actions/user";
 
              this.setState({
                  orientation: StyleUtils.isPortrait() ? 'portrait' : 'landscape'
-             });
-         });
+             })
+         })
 
     }
     replaceRoute(route) {
@@ -114,50 +88,11 @@ import * as userAction from "../../actions/user";
         this.props.navigation.navigate(route);
     }
 
-    async calc_login_status() {
-        return new Promise(async(resolve, reject) => {
-
-            try {
-                const token = await lu.getToken();
-                if (!token) {
-                    this.replaceRoute('login');
-                    return resolve(true);
-                }
-            }catch(error){
-                this.replaceRoute('login');
-                return resolve(true);
-            }
-            return resolve(true);
-
-        })
-    }
 
 
-    onChangeTab(ref){
-         let component = 'home';
-         switch (ref.i){
-             case 0:
-
-                 break;
-             case 1:
-
-                 break;
-             case 2:
-                 component ='AddGroups'
-                 break;
-             case 3:
-                 component ='addBusiness'
-                 break;
-
-
-         }
-
-
-         this.setState({
-             addComponent: component,
-             index : ref.i,
-         });
-
+    onChangeTab(tab){
+        this.props.mainAction.changeTab(tab)
+        this.props.mainAction.showFab(this.showAction(tab.i))
     }
 
 
@@ -188,18 +123,13 @@ import * as userAction from "../../actions/user";
         }
 
     }
-    async componentWillMount() {
-        await this.calc_login_status();
 
-        this.setState({start:false});
-
+    componentWillMount() {
+        if (!this.props.isAuthenticated){
+            this.replaceRoute('login');
+         }
     }
 
-   async headerAction(compoenet, index){
-       this.setState({
-            addComponent:compoenet,
-        })
-    }
 
 
 
@@ -211,11 +141,11 @@ import * as userAction from "../../actions/user";
         this._drawer._root.close();
     }
     componentDidMount(){
-         codePush.sync({updateDialog: updateDialogOption})
-        ;
+         codePush.sync({updateDialog: updateDialogOption});
     }
 
     render() {
+        const { selectedTab,showAdd } = this.props;
 
         closeDrawer = () => {
             this.drawer._root.close()
@@ -223,23 +153,9 @@ import * as userAction from "../../actions/user";
         openDrawer = () => {
             this.drawer._root.open()
         };
-        let showAction = this.showAction(this.state.index);
-        let index = this.state.initialPage;
-        let fav= undefined;
-        if(showAction){
-            fav =
-                <Fab
 
-                    direction="right"
-                    active={false}
-                    containerStyle={{ marginLeft: 10 }}
-                    style={{ backgroundColor: "#e65100" }}
-                    position="bottomRight"
-                    onPress={() => this.navigateToAdd()}>
-                    <Icon size={20} name="plus" />
 
-                </Fab>
-        }
+        const fav = this.createFabAction(showAdd);
 
             return (
 
@@ -248,10 +164,10 @@ import * as userAction from "../../actions/user";
                 content={<SideBar navigation={this.props.navigation}/>}
                 onClose={() => closeDrawer} >
                         <Container>
-                            <GeneralComponentHeader openDrawer= {openDrawer} navigate={this.props.navigation.navigate} showAction={showAction} current='home'
+                            <GeneralComponentHeader openDrawer= {openDrawer} navigate={this.props.navigation.navigate} showAction={showAdd} current='home'
                                                     to={this.state.addComponent}/>
 
-                <Tabs tabBarUnderlineStyle={ {backgroundColor: '#2db6c8'} } initialPage={index} onChangeTab={this.onChangeTab.bind(this)} style={{backgroundColor: '#fff',}}>
+                <Tabs tabBarUnderlineStyle={ {backgroundColor: '#2db6c8'} } initialPage={selectedTab} onChangeTab={this.onChangeTab.bind(this)} style={{backgroundColor: '#fff',}}>
                     <Tab heading={ <TabHeading style={{ backgroundColor: "white" }}><Image style={{tintColor:'#2db6c8',marginLeft:0,width:35,height:35}} source={promotions}/></TabHeading>}>
                         <Feeds index={0}  navigation={this.props.navigation} navigateAction={this.headerAction.bind(this)}/>
                     </Tab>
@@ -281,14 +197,42 @@ import * as userAction from "../../actions/user";
 
 
     }
-}
 
+     createFabAction(showAction) {
+
+         if (showAction) {
+             return <Fab
+
+                     direction="right"
+                     active={false}
+                     containerStyle={{marginLeft: 10}}
+                     style={{backgroundColor: "#e65100"}}
+                     position="bottomRight"
+                     onPress={() => this.navigateToAdd()}>
+                     <Icon size={20} name="plus"/>
+
+                 </Fab>
+         }
+         return undefined;
+     }
+ }
+
+
+
+const mapStateToProps = state => {
+    return {
+        isAuthenticated: isAuthenticated(state)
+    }
+}
 export default connect(
     state => ({
-        businesses: state.businesses
+        selectedTab: state.mainTab.selectedTab,
+        showAdd:state.mainTab.showAdd,
+        mapStateToProps,
     }),
-
-    dispatch => bindActionCreators(userAction, dispatch)
+    (dispatch) => ({
+        actions: bindActionCreators(mainAction, dispatch)
+    })
 )(ApplicationManager);
 
 

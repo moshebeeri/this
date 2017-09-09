@@ -8,12 +8,12 @@ import Timer from './LogTimer'
 let timer = new Timer();
 class ActivityApi
 {
-    shareActivity(user,activity) {
+    shareActivity(user,activity,token) {
         return new Promise(async(resolve, reject) => {
 
             try {
                 let from = new Date();
-                let token = await store.get('token');
+
                 const response = await fetch(`${server_host}/api/activities/share/` +activity + '/' + user._id, {
                     method: 'GET',
                     headers: {

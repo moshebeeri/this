@@ -8,7 +8,7 @@ import SGListView from 'react-native-sglistview';
 import BackgroundTimer from 'react-native-background-timer';
 import { bindActionCreators } from "redux";
 
-import * as feedsAction from "../../actions/feeds";
+
 
  export default class GenericFeedManager extends Component {
 
@@ -27,7 +27,7 @@ import * as feedsAction from "../../actions/feeds";
       async fetchTopList(id){
 
           if(id == this.props.feeds[0].fid) {
-              this.props.actions.fetchTop(id)
+              this.props.actions.fetchTop(id,this.props.token)
           }
     }
 
@@ -48,7 +48,7 @@ import * as feedsAction from "../../actions/feeds";
 
 
     render() {
-        const {navigation,loadingDone, showTopLoader,feeds ,userFollowers,group,ItemDetail,actions} = this.props;
+        const {navigation,loadingDone, showTopLoader,feeds,token ,userFollowers,group,ItemDetail,actions} = this.props;
 
 
         //  let loader = this.state.showLoader?<View><Spinner color='red' /></View>:null
@@ -77,7 +77,7 @@ import * as feedsAction from "../../actions/feeds";
                         renderRow={(item) =>
                             <ItemDetail userFollowers={userFollowers} group = {group}navigation={navigation} item={item} fetchTopList={this.fetchTopList.bind(this)} actions={actions}  />
                         }
-                        onEndReached={(event)=> actions.setNextFeeds(feeds)}
+                        onEndReached={(event)=> actions.setNextFeeds(feeds,token)}
                         enableEmptySections={true}
                     />
                     {spining}

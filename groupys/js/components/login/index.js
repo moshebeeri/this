@@ -5,39 +5,24 @@ import { Image, Platform,TouchableHighlight,KeyboardAvoidingView,Dimensions,Touc
 import { connect } from 'react-redux';
 import { actions } from 'react-native-navigation-redux-helpers';
 import { Container, Content, Text, InputGroup, Input, Button, Icon, View,Item } from 'native-base';
-import PhoneInput from 'react-native-phone-input'
-import CountryPicker from 'react-native-country-picker-modal'
 
-import store from 'react-native-simple-store';
-
+import { bindActionCreators } from "redux";
+import { connect } from 'react-redux';
+import * as loginAction from "../../actions/login";
 
 const logo = require('../../../images/logo.png');
-import login from './login-theme';
-import styles from './styles';
-import LoginApi from '../../api/login'
-import ContactApi from '../../api/contacts'
-import LoginUtils from '../../utils/login_utils'
-import UserApi from '../../api/user'
-let loginApi = new LoginApi();
-let userApi = new UserApi();
-let contactApi = new ContactApi();
 
-let lu = new LoginUtils();
+import styles from './styles';
+
+
 
 const global = require('../../conf/global');
-let calc_login = true;
-import { NavigationActions } from 'react-navigation'
-const resetAction = NavigationActions.reset({
-    index: 0,
-    actions: [
-        NavigationActions.navigate({ routeName: 'home'})
-    ]
-});
+
 const {width, height} = Dimensions.get('window')
 import LinearGradient from 'react-native-linear-gradient';
 
 
-export default  class Login extends Component {
+ class Login extends Component {
     static navigationOptions = {
         header:null
     };
@@ -47,104 +32,40 @@ export default  class Login extends Component {
 
       this.state = {
         phone_number: '',
-      password: '',
-      token: false,
-      scroll: false,
-        cca2: 'ISR',
-        callingCode: "",
-        validationMessage: '',
-      error:''
+        password: '',
+
     };
 
   }
 
     focusNextField(nextField) {
-
-        this.refs[nextField]._root.focus()
-
+        this.props.actions.focusLoginForm(nextField)
     }
 
 
 
   ///sss
-  async login() {
-
-      this.setState ({error: ''});
-      try {
-          let phone = this.state.phoneNumber;
-          let response = await loginApi.login(phone, this.state.password);
-          if(response.token ){
-              await userApi.getUser();
-              contactApi.syncContacts();
-              this.replaceRoute('home');
-          }
-
-      }catch (error){
-          this.setState({
-              error: error.error
-          })
-      }
+   login() {
+      this.props.actions.login(this.state.phoneNumber,this.state.password,this.props.navigation)
 
   }
-    onPressFlag() {
-        this.refs.countryPicker.openModal();
 
-    }
-
-    calc_login_status() {
-        return new Promise(async(resolve, reject) => {
-            await userApi.getUser();
-            const _id = await store.get('user_id');
-            if (!_id) {
-
-                this.replaceRoute('Login');
-                return resolve(true);
-            }
-            try {
-                const token = await lu.getToken();
-                if (token) {
-                    contactApi.syncContacts();
-                    await userApi.getUser();
-                    this.replaceRoute('home');
-                    return resolve(true);
-                }
-            }catch(error){
-
-                return resolve(true);
-            }
-            return resolve(true);
-
-        })
-    }
-
-    componentWillMount() {
-
-        this.calc_login_status();
-
-
-    }
-    componentDidMount() {
-
-    }
 
 
 
 
 
     replaceRoute(route) {
-        if(route == 'home'){
-            this.props.navigation.dispatch(resetAction);
-            return;
-        }
-
         this.props.navigation.navigate(route);
-    // this.props.replaceAt('login', { key: route }, this.props.navigation.key);
-}
+
+    }
     forgetPassowrd(){
-      loginApi.recoverPassword(this.state.phoneNumber,'')
+        this.props.actions.forgetPassword(this.state.password)
+
     }
 
     render() {
+        const { focusPassword,focusPhone,failedMessage } = this.props;
 
         return (
 
@@ -177,13 +98,13 @@ export default  class Login extends Component {
                            </View>
 
                            <Item style={styles.phoneTextInput} regular >
-                               <Input  keyboardType = 'numeric' value={this.state.name} blurOnSubmit={true} returnKeyType='next' ref="1" onSubmitEditing={this.focusNextField.bind(this,"2")} onChangeText={(phoneNumber) => this.setState({phoneNumber})} placeholder='Phone Number' />
+                               <Input  autofocus={focusPhone}keyboardType = 'numeric' value={this.state.name} blurOnSubmit={true} returnKeyType='next'  onSubmitEditing={this.focusNextField.bind(this,"password")} onChangeText={(phoneNumber) => this.setState({phoneNumber})} placeholder='Phone Number' />
                            </Item>
 
                            <Item style={styles.passwordTextInput} regular >
 
                                <Input
-                                   ref='2'
+                                   autofocus={focusPassword}
                                    returnKeyType='done'
                                    placeholder="Password"
                                    placeholderTextColor='#444'
@@ -199,11 +120,9 @@ export default  class Login extends Component {
                                <Text onPress={() => this.replaceRoute('Signup')} style={styles.signgupText} >Sign Up</Text>
                             </View>
                            <Text style={{backgroundColor:'transparent',padding: 10, fontSize: 16, color: 'red'}}>
-                               {this.state.validationMessage}
+                               {failedMessage}
                            </Text>
-                           <View style={{ backgroundColor:'transparent',flexDirection: 'row',color: 'red', justifyContent: 'center',marginBottom:10 }}>
-                               <Text> {this.state.error}</Text>
-                           </View>
+
                            <View style={{height:40,justifyContent: 'center', alignItems: 'center',width:width/2 + 120}}>
 
                                <TouchableOpacity  onPress={() => this.login()}  style={{ width:100,height:30,borderRadius:10,backgroundColor:'skyblue',margin:3, flexDirection: 'row',  justifyContent: 'center',alignItems: 'center', } } regular>
@@ -236,6 +155,20 @@ export default  class Login extends Component {
         );
     }
 
+
+
 }
+
+export default connect(
+    state => ({
+        focusPassword: state.loginForm.focusPassword,
+        focusPhone:state.loginForm.focusPhone,
+        failedMessage:state.loginForm.failedMessage,
+
+    }),
+    (dispatch) => ({
+        actions: bindActionCreators(loginAction, dispatch)
+    })
+)(Login);
 
 

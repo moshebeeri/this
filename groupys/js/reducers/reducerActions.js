@@ -3,10 +3,37 @@
  */
 
 //global
+//TODO change to action bt type
 export const LIKE = 'LIKE';
 export const UNLIKE = 'UNLIKE';
 export const SAVE = 'SAVE';
 export const SHARE = 'SHARE';
+//user registration
+export const REGISTER_CODE_INVALID = 'REGISTER_CODE_INVALID';
+export const REGISTER_CODE_SUCSSES='REGISTER_CODE_SUCSSES';
+
+//user signup
+export const SIGNUP_FAILED = 'SIGNUP_FAILED';
+export const SIGNUP_SUCSESS = 'SIGNUP_SUCSESS';
+export const SIGNUP_FOCUS_LASTNAME = 'SIGNUP_FOCUS_LASTNAME';
+export const SIGNUP_FOCUS_PASSWORD = 'LOGIN_FOCUS_PASSWORD';
+export const SIGNUP_FOCUS_PHONE = 'SIGNUP_FOCUS_PHONE';
+
+//user login
+export const LOGIN_FAILED = 'LOGIN_FAILED';
+export const LOGIN_SUCSESS = 'LOGIN_SUCSESS';
+export const LOGIN_FOCUS_PASSWORD = 'LOGIN_FOCUS_PASSWORD';
+export const LOGIN_FOCUSED_FIELD = 'LOGIN_FOCUSED_FIELD'
+
+//main tab
+export const APP_CHANGE_TAB ='CHANGE_TAB'
+export const APP_SHOW_ADD_FAB ='CHANGE_TAB'
+
+//authentication
+
+export const SAVE_USER_TOKEN = 'SAVE_USER_TOKEN'
+export const SAVE_APP_USER = 'SAVE_APP_USER'
+
 //business follow
 export const SEARCH_BUSINESS = 'SEARCH_BUSINESS';
 export const SHOW_CAMERA = 'SHOW_CAMERA';
@@ -38,6 +65,7 @@ export const UPSERT_GROUP = 'UPSERTgroup';
 
 //user
 export const UPSERT_USER = 'UPSERTuser';
+export const SET_USER = 'SET_USER'
 export const USER_FOLLOW = 'USER_FOLLOW'
 
 

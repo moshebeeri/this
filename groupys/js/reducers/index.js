@@ -13,7 +13,10 @@ import comments from './commentReducer';
 import notification from './notificationReducer';
 import instances from './instancesReducer';
 import activities from './activitiesReducer';
-import lastState from "./lastState";
+import authentication from './authenticationReducer';
+import mainTab from './form/mainAppReducer';
+import loginForm from './form/loginReducer'
+import registerForm from './form/registerReducer'
 import { reducer as form } from 'redux-form/immutable' // <--- immutable import
 
 export default function getRootReducer() {
@@ -29,7 +32,11 @@ export default function getRootReducer() {
         notification:notification,
         comments:comments,
         instances:instances,
+        mainTab:mainTab,
         activities:activities,
+        authentication:authentication,
+        loginForm:loginForm,
+        registerForm:registerForm,
         form
     });
 }

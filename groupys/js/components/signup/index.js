@@ -3,19 +3,18 @@ import {Image, Platform,KeyboardAvoidingView,Dimensions,TouchableOpacity} from '
 import {connect} from 'react-redux';
 import {actions} from 'react-native-navigation-redux-helpers';
 import {Container, Content, Text, InputGroup, Input, Button, Icon, View,Item} from 'native-base';
-import store from 'react-native-simple-store';
+
 const {width, height} = Dimensions.get('window')
 import styles from './styles';
 
 import LinearGradient from 'react-native-linear-gradient';
 
-const {
-    replaceAt,
-} = actions;
+import { bindActionCreators } from "redux";
 
+import * as loginAction from "../../actions/login";
 const logo = require('../../../images/logo.png');
 
-export default class Signup extends Component {
+ class Signup extends Component {
 
     static navigationOptions = {
         header:null
@@ -44,88 +43,18 @@ export default class Signup extends Component {
         this.props.navigation.navigate(route);
     }
 
-    signup() {
-        this.setState({
-            validationMessage: ''
-        });
-        if (this.state.phoneNumber) {
-            this.callServerSignupAndRedirect();
-            return;
-        }
 
-        this.setState({
-            validationMessage: 'Invalid Number'
-        })
-    }
-
-    normalizePhoneNumber(phone,countryCode){
-
-        let newPhone = phone.toString().substring(phone.indexOf(countryCode.toString()) + countryCode.toString().length);
-        return newPhone;
-    }
-    clean_phone_number(number){
-        // remove all non digits, and then remove 0 if it is the first digit
-        return number.replace(/\D/g, '').replace(/^0/,'')
-    };
-
-    async callServerSignupAndRedirect() {
-        let phoneNumber = '+972' + this.state.phoneNumber;
-        let normalizedPhone = this.normalizePhoneNumber(phoneNumber,'+972');
-        let cleanPhone = this.clean_phone_number(normalizedPhone);
-        fetch(`${server_host}/api/users`, {
-            method: 'POST',
-            headers: {
-                'Accept': 'application/json, text/plain, */*',
-                'Content-Type': 'application/json;charset=utf-8',
-            },
-            body: JSON.stringify({
-                country_code: '+972',
-                phone_number: cleanPhone,
-                email:  '972' + cleanPhone + "@low.la",
-                password: this.state.password,
-                name: this.state.name +' ' + this.state.lastname,
-
-
-
-            })
-        }).then((response) => response.json())
-            .then((responseData) => {
-                if (responseData.token) {
-                    store.save('token', responseData.token);
-                    this.replaceRoute('Register');
-                } else {
-                    this.replaceRoute('Login');
-                }
-
-            }).catch(function (error) {
-
-            console.log('There has been a problem with your fetch operation: ' + error.message);
-            this.replaceRoute('Login');
-        });
-    }
     focusNextField(nextField) {
 
-        this.refs[nextField]._root.focus()
+        this.props.actions.focusSignupForm(nextField)
 
     }
 
 
     render() {
+        const { focusPassword,focusPhone,failedMessage,focusName,focusLastname } = this.props;
+        const message= this.createMessage(failedMessage);
 
-        let message = undefined;
-        if(this.state.validationMessage){
-            message = <Text style={{ backgroundColor:'transparent',padding: 10, fontSize: 16, color: 'red'}}>
-                {this.state.validationMessage}
-            </Text>
-        }
-
-        let errorMessage = undefined;
-        if(this.state.error){
-            errorMessage = <View style={{  backgroundColor:'transparent',flexDirection: 'row',color: 'red', justifyContent: 'center',marginBottom:0 }}>
-                <Text> {this.state.error}</Text>
-            </View>
-
-        }
         return (
             <LinearGradient
 
@@ -154,22 +83,23 @@ export default class Signup extends Component {
                             </View>
                             <View style={styles.nameContainer}>
                                 <Item style={styles.nameTextInput} regular >
-                                    <Input  value={this.state.name} blurOnSubmit={true} returnKeyType='next' ref="1" onSubmitEditing={this.focusNextField.bind(this,"2")} onChangeText={(name) => this.setState({name})} placeholder='Name' />
+                                    <Input   autofocus={focusName} value={this.state.name} blurOnSubmit={true} returnKeyType='next' ref="1" onSubmitEditing={this.focusNextField.bind(this,"2")} onChangeText={(name) => this.setState({name})} placeholder='Name' />
                                 </Item>
                                 <Item style={styles.lastnameTextInput} regular >
-                                    <Input  value={this.state.lastname} blurOnSubmit={true} returnKeyType='next' ref="2" onSubmitEditing={this.focusNextField.bind(this,"3")} onChangeText={(lastname) => this.setState({lastname})} placeholder='Last Name' />
+                                    <Input  autofocus={focusLastname} value={this.state.lastname} blurOnSubmit={true} returnKeyType='next' ref="2" onSubmitEditing={this.focusNextField.bind(this,"3")} onChangeText={(lastname) => this.setState({lastname})} placeholder='Last Name' />
                                 </Item>
                             </View>
 
 
                             <Item style={styles.phoneTextInput} regular >
-                                <Input  keyboardType = 'numeric' value={this.state.phoneNumber} blurOnSubmit={true} returnKeyType='next' ref="3" onSubmitEditing={this.focusNextField.bind(this,"5")} onChangeText={(phoneNumber) => this.setState({phoneNumber})} placeholder='Phone Number' />
+                                <Input  autofocus={focusPhone}  keyboardType = 'numeric' value={this.state.phoneNumber} blurOnSubmit={true} returnKeyType='next' ref="3" onSubmitEditing={this.focusNextField.bind(this,"5")} onChangeText={(phoneNumber) => this.setState({phoneNumber})} placeholder='Phone Number' />
                             </Item>
 
                             <Item style={styles.passwordTextInput} regular >
 
                                 <Input
                                     ref='5'
+                                    autofocus={focusPassword}
                                     returnKeyType='done'
                                     placeholder="Password"
                                     placeholderTextColor='#444'
@@ -184,7 +114,7 @@ export default class Signup extends Component {
                                 <Text style={styles.forgetText}>or sign up using </Text>
                              </View>
                             {message}
-                            {errorMessage}
+
                             <View style={{height:40,justifyContent: 'center', alignItems: 'center',width:width/2 + 120}}>
 
                                 <TouchableOpacity  onPress={() => this.signup()}  style={{ width:100,height:30,borderRadius:10,backgroundColor:'skyblue',margin:3, flexDirection: 'row',  justifyContent: 'center',alignItems: 'center', } } regular>
@@ -217,5 +147,30 @@ export default class Signup extends Component {
 
         );
     }
+
+    createMessage(message) {
+        if(message){
+            return <Text style={{backgroundColor: 'transparent', padding: 10, fontSize: 16, color: 'red'}}>
+                {message}
+            </Text>
+        }
+
+        return undefined;
+    }
 }
+
+
+export default connect(
+    state => ({
+        focusPassword: state.signupForm.focusPassword,
+        focusPhone:state.signupForm.focusPhone,
+        failedMessage:state.signupForm.failedMessage,
+        focusLastname:state.signupForm.focusLastname,
+        focusName:state.signupForm.focusName,
+    }),
+    (dispatch) => ({
+        actions: bindActionCreators(loginAction, dispatch)
+    })
+)(Signup);
+
 

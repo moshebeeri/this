@@ -21,7 +21,7 @@ import Icon3 from 'react-native-vector-icons/MaterialIcons';
 import stylesPortrate from './styles'
 import stylesLandscape from './styles_lendscape'
 import StyleUtils from '../../../../utils/styleUtils'
-
+import * as componentCreator from "./feedCommonView";
 export default class FeedPromotion extends Component {
 
     constructor() {
@@ -45,11 +45,11 @@ export default class FeedPromotion extends Component {
         const styles = this.createPromotionStyle();
         const colorStyle = this.createColorStyle(item)
         const promotion = <Text style={colorStyle}>{item.promotion}</Text>
-        const buisnessLogo = this.createBusinessLog(item);
-        const likeIcon = this.createLikeComponent(item,styles,like,unlike);
-        const commentICon = this.createCommentComponent(styles, comment);
-        const shareICon = this.createShareComponent(styles, showUsers, item);
-        const saveIcon = this.createSaveButton(item, save);
+        const buisnessLogo = componentCreator.createBusinessLog(item);
+        const likeIcon = componentCreator.createLikeButton(item,styles,like,unlike);
+        const commentICon = componentCreator.createCommentButton(styles, comment);
+        const shareICon = componentCreator.createShareButton(styles, showUsers, item);
+        const saveIcon = componentCreator.createSaveButton(item, save);
         const image = this.createImageComponent(item,styles);
         const container =  this.createContainerStyle(item);
 
@@ -151,109 +151,12 @@ export default class FeedPromotion extends Component {
         return undefined;
     }
 
-    createSaveButton(item, save) {
-
-        if (item.showsave) {
-            const saveStyle = {
-                flex: -1,
-                justifyContent: 'center',
-                marginLeft: 20,
-                flexDirection: 'row',
-                height: 40,
-                width: 100,
-                backgroundColor: item.promotionColor,
-            };
-            return <Button style={saveStyle} onPress={() => save(item.id)}>
-
-
-                <Text>save</Text>
-
-
-            </Button>
-        }
-        const saveStyle = {
-            flex: -1,
-            justifyContent: 'center',
-            marginLeft: 20,
-            flexDirection: 'row',
-            height: 40,
-            width: 100,
-            backgroundColor: 'gray',
-        };
-
-
-        return  <Button style={saveStyle}>
-
-
-            <Text>saved</Text>
-
-
-        </Button>;
-    }
-
-    createShareComponent(styles, showUsers, item) {
-        const shares = new String(item.social.shares);
-        if (item.social.share) {
-            return <Button transparent style={styles.promotion_iconView} onPress={showUsers}>
-
-                <Icon2 style={styles.promotion_share} size={30} name="share-google"/>
-                <Text>{shares}</Text>
-
-
-            </Button>
-        }
-        return <Button transparent style={styles.promotion_iconView} onPress={showUsers}>
-
-            <Icon2 style={styles.promotion_comment} size={30} name="share-google"/>
-            <Text>{shares}</Text>
-        </Button>;
-    }
-
-    createCommentComponent(styles, comment) {
-        return <Button transparent style={styles.promotion_iconView} onPress={comment}>
-            <Icon2 style={styles.promotion_comment} size={30} name="comment"/>
-            <Text>0</Text>
-        </Button>;
-    }
 
     createPromotionStyle() {
         if (StyleUtils.isLandscape()) {
             return  stylesLandscape;
         }
         return stylesPortrate;
-    }
-
-    createLikeComponent(item,styles,like,unlike){
-        const likes = new String(item.social.numberLikes);
-        if (item.social && item.social.like == true) {
-            return <Button transparent style={styles.promotion_iconView} onPress={() => unlike(item.id)}>
-
-
-                <Icon  style={styles.promotion_like} size={25} name="heart"/>
-                <Text>{likes}</Text>
-
-            </Button>
-
-
-        }
-        return <Button transparent style={styles.promotion_iconView} onPress={() => like(item.id)}>
-
-            <Icon style={styles.promotion_unlike}  size={25} name="heart"/>
-            <Text>{likes}</Text>
-
-        </Button>
-
-    }
-    createBusinessLog(item){
-        if(item.businessLogo){
-           return <TouchableOpacity onPress={this.showBussines.bind(this)}>
-                <View>
-                    <Thumbnail  square={true} size={40} source={{uri: item.businessLogo}} />
-                </View>
-            </TouchableOpacity>
-
-        }
-        return undefined;
     }
 
 

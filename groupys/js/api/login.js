@@ -32,7 +32,7 @@ class LoginApi
                 }
 
                 let responseData = await response.json();
-                store.save('token', responseData.token);
+
                 resolve(responseData);
             }
             catch (error) {
@@ -45,8 +45,15 @@ class LoginApi
 
     }
 
-    signup(phoneNumber,normalizedPhone, password,callingCode) {
-        let normalizePhoneNumber = this.clean_phone_number(phoneNumber);
+    normalizePhoneNumber(phone,countryCode){
+
+    let newPhone = phone.toString().substring(phone.indexOf(countryCode.toString()) + countryCode.toString().length);
+    return newPhone;
+}
+    signup(phoneNumber, password) {
+        let phoneNumber = '+972' + phoneNumber;
+        let normalizedPhone = normalizePhoneNumber(phoneNumber,'+972');
+        let cleanPhone = this.clean_phone_number(normalizedPhone);
         return new Promise(async(resolve, reject) => {
             try {
 
@@ -57,9 +64,9 @@ class LoginApi
                         'Content-Type': 'application/json;charset=utf-8',
                     },
                     body: JSON.stringify({
-                        country_code: callingCode,
-                        phone_number: normalizePhoneNumber,
-                        email: normalizePhoneNumber + "@low.la",
+                        country_code: '+972',
+                        phone_number: cleanPhone,
+                        email:  '972' + cleanPhone + "@low.la",
                         password: password,
                     })
                 });
@@ -117,7 +124,7 @@ class LoginApi
 
     }
 
-    recoverPassword(phoneNumber,callingCode) {
+    recoverPassword(phoneNumber) {
 
         let normalizedPhone = this.clean_phone_number(phoneNumber);
 
