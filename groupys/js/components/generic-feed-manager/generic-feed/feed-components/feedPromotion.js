@@ -45,7 +45,7 @@ export default class FeedPromotion extends Component {
         const styles = this.createPromotionStyle();
         const colorStyle = this.createColorStyle(item)
         const promotion = <Text style={colorStyle}>{item.promotion}</Text>
-        const buisnessLogo = componentCreator.createBusinessLog(item);
+        const buisnessLogo = componentCreator.createBusinessLog(item,this.showBussines.bind(this));
         const likeIcon = componentCreator.createLikeButton(item,styles,like,unlike);
         const commentICon = componentCreator.createCommentButton(styles, comment);
         const shareICon = componentCreator.createShareButton(styles, showUsers, item);

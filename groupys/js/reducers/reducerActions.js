@@ -8,6 +8,9 @@ export const LIKE = 'LIKE';
 export const UNLIKE = 'UNLIKE';
 export const SAVE = 'SAVE';
 export const SHARE = 'SHARE';
+// user change password
+
+export const CHANGE_PASSWORD_FAILED ='CHANGE_PASSWORD_FAILED'
 //user registration
 export const REGISTER_CODE_INVALID = 'REGISTER_CODE_INVALID';
 export const REGISTER_CODE_SUCSSES='REGISTER_CODE_SUCSSES';
@@ -73,3 +76,6 @@ export const USER_FOLLOW = 'USER_FOLLOW'
 //activity
 export const UPSERT_ACTIVITY= 'UPSERTactivity';
 
+//network
+export const NETWORK_IS_OFFLINE = 'NETWORK_IS_OFFLINE';
+export const NETWORK_IS_ONLINE = 'NETWORK_IS_ONLINE';

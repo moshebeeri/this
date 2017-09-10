@@ -32,8 +32,8 @@ export function login(phone,password,navigation){
                     type: actions.SET_USER,
                     user:user
                 });
-                this.props.navigation.dispatch(resetAction);
-                this.props.navigation.navigate('home');
+                navigation.dispatch(resetAction);
+                navigation.navigate('home');
             }else{
                 dispatch({
                     type: actions.LOGIN_FAILED,
@@ -41,7 +41,9 @@ export function login(phone,password,navigation){
                 });
             }
         } catch (error){
-            //todo dispatch offline
+            dispatch({
+                type: actions.NETWORK_IS_OFFLINE,
+            });
         }
 
     }
@@ -75,7 +77,9 @@ export function signup(phone,password,navigation){
                 });
             }
         } catch (error){
-            //todo dispatch offline
+            dispatch({
+                type: actions.NETWORK_IS_OFFLINE,
+            });
         }
 
     }
@@ -149,6 +153,31 @@ export function forgetPassword(phoneNumber) {
     }
 }
 
+
+export function changePassword(currentPassword,newPassword,user,token,navigation) {
+    return async function (dispatch,) {
+        try {
+            let response = await loginApi.changePassword(currentPassword, newPassword, user._id, token)
+            if (response == true) {
+
+                navigation.goBack();
+            } else {
+                dispatch({
+                    type: actions.CHANGE_PASSWORD_FAILED,
+                    message: 'Change password failed'
+                });
+            }
+
+
+        } catch (response) {
+            dispatch({
+                type: actions.CHANGE_PASSWORD_FAILED,
+                message: 'Failed to Authenticate Current Password'
+            });
+
+        }
+    }
+}
 
 
 

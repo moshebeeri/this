@@ -121,7 +121,8 @@ class ChangePassword extends Component {
 
 export default connect(
     state => ({
-        user: state.user
+        user: state.user,
+        token:state.authentication.token
     }),
     dispatch => bindActionCreators(userAction, dispatch)
 )(ChangePassword);

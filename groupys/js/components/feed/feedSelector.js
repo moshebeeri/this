@@ -9,18 +9,30 @@ import * as assemblers from '../../actions/collectionAssembler';
 import  FeedUiConverter from '../../api/feed-ui-converter'
 
 let feedUiConverter = new FeedUiConverter();
-export const getFeeds = createSelector( state => {
 
-    const collections = {activities:state.activities.activities,
-            promotions:state.promotions.promotions,
-            user: state.user.users,
-            businesses:state.businesses.businesses,
-            instances:state.instances.instances};
+
+
+const getActivities = (state) => state.activities.activities
+const getPromotions = (state) => state.promotions.promotions
+const getUser = (state) => state.user.users
+const getBusinesses = (state) => state.businesses.businesses
+const getInstances = (state) => state.instances.instances
+const getStateFeeds = (state) => state.feeds.feeds
+const getStaate = (state) => state
+
+
+export const getFeeds = createSelector(  [ getActivities,getPromotions,getUser,getBusinesses,getInstances,getStateFeeds,getStaate],
+    (activities,promotions,user,businesses,instances,feeds,allstate) => {
+    const collections = {activities:activities,
+            promotions:promotions,
+            user: user,
+            businesses:businesses,
+            instances:instances};
 
 
     let feedsUi = [];
-    if (!_.isEmpty(state.feeds.feeds)) {
-        let feedsList = state.feeds;
+    if (!_.isEmpty(feeds)) {
+        let feedsList = feeds;
         let feedArray = Object.keys(feedsList).map(key => feedsList[key])
         let assembledFeeds = feedArray.map(function (feed) {
             return assemblers.assembler(feed, collections);

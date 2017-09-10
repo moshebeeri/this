@@ -7,7 +7,7 @@
 /**
  * Created by stan229 on 5/27/16.
  */
-const initialState = {token:'',user:undefined};
+const initialState = {authentication:'',token:'',user:undefined};
 
 import * as actions from './reducerActions';
 import { REHYDRATE } from 'redux-persist/constants'

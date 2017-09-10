@@ -61,6 +61,7 @@ export function createSaveButton(item, save) {
 
 
     </Button>;
+
 }
 
 export function createShareButton(styles, showUsers, item) {
@@ -116,9 +117,9 @@ export function createLikeButton(item,styles,like,unlike){
     </Button>
 
 }
-export function createBusinessLog(item){
+export function createBusinessLog(item,showBussines){
     if(item.businessLogo){
-        return <TouchableOpacity onPress={this.showBussines.bind(this)}>
+        return <TouchableOpacity onPress={showBussines}>
             <View>
                 <Thumbnail  square={true} size={40} source={{uri: item.businessLogo}} />
             </View>

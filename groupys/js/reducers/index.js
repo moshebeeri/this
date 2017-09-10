@@ -17,6 +17,7 @@ import authentication from './authenticationReducer';
 import mainTab from './form/mainAppReducer';
 import loginForm from './form/loginReducer'
 import registerForm from './form/registerReducer'
+import network from './networkReducer'
 import { reducer as form } from 'redux-form/immutable' // <--- immutable import
 
 export default function getRootReducer() {
@@ -37,6 +38,7 @@ export default function getRootReducer() {
         authentication:authentication,
         loginForm:loginForm,
         registerForm:registerForm,
+        network:network,
         form
     });
 }

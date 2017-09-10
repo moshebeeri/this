@@ -125,7 +125,7 @@ export default class GenericFeedItem extends Component {
         }
 
     createFeedView(item){
-        if(feed) {
+        if(item) {
 
             return <View  {...this._panResponder.panHandlers} >
                 {item}

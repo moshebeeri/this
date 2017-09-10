@@ -3,13 +3,17 @@
  */
 import { createSelector } from 'reselect'
 
-export const isAuthenticated = createSelector( state => {
-    const token = state.authentication.token;
+const getAuthentication = (state) => state.authentication
 
-    //Maybe check token validation from server or re-login
-    if(token){
-        return true;
+export const isAuthenticated = createSelector(
+    [ getAuthentication],
+    (authentication) => {
+        const token = authentication.token;
+
+        //Maybe check token validation from server or re-login
+        if(token){
+            return true;
+        }
+        return false;
     }
-    return false;
-
-})
+)
