@@ -96,10 +96,10 @@ export function createStyle() {
     return stylesPortrate;
 }
 
-export function createLikeButton(item,styles,like,unlike){
+export function createLikeButton(item,styles,like,unlike,token){
     const likes = new String(item.social.numberLikes);
     if (item.social && item.social.like == true) {
-        return <Button transparent style={styles.promotion_iconView} onPress={() => unlike(item.id)}>
+        return <Button transparent style={styles.promotion_iconView} onPress={() => unlike(item.id,token)}>
 
 
             <Icon  style={styles.promotion_like} size={25} name="heart"/>
@@ -109,7 +109,7 @@ export function createLikeButton(item,styles,like,unlike){
 
 
     }
-    return <Button transparent style={styles.promotion_iconView} onPress={() => like(item.id)}>
+    return <Button transparent style={styles.promotion_iconView} onPress={() => like(item.id,token)}>
 
         <Icon style={styles.promotion_unlike}  size={25} name="heart"/>
         <Text>{likes}</Text>

@@ -249,13 +249,12 @@ class PromotionApi
 
     }
 
-    getAllByBusinessId(id) {
+    getAllByBusinessId(id,token) {
         return new Promise(async(resolve, reject) => {
 
             try {
                 let from = new Date();
 
-                let token = await store.get('token');
                 const response = await fetch(`${server_host}/api/promotions/list/by/business/`+ id, {
                     method: 'GET',
                     headers: {

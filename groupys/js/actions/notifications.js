@@ -9,12 +9,11 @@ import NotificationApi from "../api/notification"
 import GroupsApi from "../api/groups"
 let groupsApi = new GroupsApi();
 let notificationApi = new NotificationApi();
-import store from 'react-native-simple-store';
 
 
-async function getAll(dispatch){
+async function getAll(dispatch,token,user){
     try {
-        let response = await notificationApi.getAll();
+        let response = await notificationApi.getAll(token,user);
         if(response.length > 0) {
 
             dispatch({
@@ -31,28 +30,12 @@ async function getAll(dispatch){
 
 }
 
-async function getAllFromStore(dispatch){
+
+
+
+async function getAllGroups(dispatch,token){
     try {
-        let response = await store.get('notification');
-        if(response) {
-
-            dispatch({
-                type: 'GET_NOTIFICATION',
-                notification: response,
-
-            });
-        }
-
-
-    }catch (error){
-        console.log(error);
-    }
-
-}
-
-async function getAllGroups(dispatch){
-    try {
-        let response = await groupsApi.getAll();
+        let response = await groupsApi.getAll(token);
         if(response.length > 0) {
 
             dispatch({
@@ -71,19 +54,18 @@ async function getAllGroups(dispatch){
 
 export function fetchNotification(){
     return function (dispatch, getState){
-        dispatch|(getAll(dispatch));
+        const token = getState().authentication.token
+        const user = getState().authentication.user
+        dispatch|(getAll(dispatch,token,user));
     }
 
 }
-export function fetchStoreNotification(){
-    return function (dispatch, getState){
-        dispatch|(getAllFromStore(dispatch));
-    }
 
-}
 export function fetchGroups(){
     return function (dispatch, getState){
-        dispatch|(getAllGroups(dispatch));
+        const token = getState().authentication.token
+
+        dispatch|(getAllGroups(dispatch,token));
     }
 
 }

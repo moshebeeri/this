@@ -7,12 +7,11 @@
 
 import ProdictApi from "../api/product"
 let productApi = new ProdictApi();
-import store from 'react-native-simple-store';
 
 
-async function getAll(dispatch){
+async function getAll(dispatch,token){
     try {
-        let response = await productApi.getAll();
+        let response = await productApi.getAll(token);
         if(response.length > 0) {
 
             dispatch({
@@ -29,9 +28,9 @@ async function getAll(dispatch){
 
 }
 
-async function getAllByBusinessId(dispatch,id) {
+async function getAllByBusinessId(dispatch,id,token) {
     try {
-        let response = await productApi.findByBusinessId(id);
+        let response = await productApi.findByBusinessId(id,token);
         if (response.length > 0) {
 
             dispatch({
@@ -49,29 +48,11 @@ async function getAllByBusinessId(dispatch,id) {
 }
 
 
-async function getAllFromStoreByBusinessId(dispatch,id) {
-    try {
-        let response = await store.get('products'+id);
-        if (response) {
-
-            dispatch({
-                type: 'GET_BUSINESS_PRODUCTS',
-                products: response,
-                businessId:id
-
-            });
-        }
-
-
-    } catch (error) {
-        console.log(error);
-    }
-}
-async function getProductCategories(dispatch,gid) {
+async function getProductCategories(dispatch,gid,token) {
 
     try {
         if(gid) {
-            let response = await productApi.getProductCategories(gid)
+            let response = await productApi.getProductCategories(gid,token)
             if (response) {
 
                 dispatch({
@@ -91,28 +72,27 @@ async function getProductCategories(dispatch,gid) {
 
 export function fetchProducts(){
     return function (dispatch, getState){
-        dispatch|(getAll(dispatch));
+        const token = getState().authentication.token
+
+        dispatch|(getAll(dispatch,token));
     }
 
 }
 
 export function fetchProductsByBusiness(businessId){
     return function (dispatch, getState){
-        dispatch|(getAllByBusinessId(dispatch,businessId));
+        const token = getState().authentication.token
+        dispatch|(getAllByBusinessId(dispatch,businessId,token));
     }
 
 }
 
-export function fetchFromStoreProductsByBusiness(businessId){
-    return function (dispatch, getState){
-        dispatch|(getAllFromStoreByBusinessId(dispatch,businessId));
-    }
 
-}
 
 export function fetchProductCategories(gid){
     return function (dispatch, getState){
-        dispatch|(getProductCategories(dispatch,gid));
+        const token = getState().authentication.token
+        dispatch|(getProductCategories(dispatch,gid,token));
     }
 
 }

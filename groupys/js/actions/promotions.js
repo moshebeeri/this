@@ -13,9 +13,9 @@ import ProductApi from "../api/product"
 let promotionApi = new PromotionsApi();
 let productApi = new ProductApi();
 import store from 'react-native-simple-store';
-async function getAll(dispatch,id){
+async function getAll(dispatch,id,token){
     try {
-        let response = await promotionApi.getAllByBusinessId(id);
+        let response = await promotionApi.getAllByBusinessId(id,token);
         if(response.length > 0) {
 
             dispatch({
@@ -33,9 +33,9 @@ async function getAll(dispatch,id){
 
 }
 
-async function getAllProducts(dispatch,id){
+async function getAllProducts(dispatch,id,token){
     try {
-        let response = await productApi.findByBusinessId(id);
+        let response = await productApi.findByBusinessId(id,token);
         if(response.length > 0) {
 
             dispatch({
@@ -53,42 +53,20 @@ async function getAllProducts(dispatch,id){
 
 }
 
-async function getFromStorePromotions(dispatch,id){
-    try {
-        let response = await store.get('promotions'+id);
-        if(response) {
-
-            dispatch({
-                type: 'GET_PROMOTIONS',
-                products: response,
-                businessId: id
-
-            });
-        }
-
-
-    }catch (error){
-        console.log(error);
-    }
-
-}
 
 export function fetchPromotions(id){
     return function (dispatch, getState){
-        dispatch|(getAll(dispatch,id));
+        const token = getState().authentication.token
+        dispatch|(getAll(dispatch,id,token));
     }
 
 }
 
-export function fetchFromStorePromotions(id){
-    return function (dispatch, getState){
-        dispatch|(getFromStorePromotions(dispatch,id));
-    }
 
-}
 export function fetchProducts(id){
     return function (dispatch, getState){
-        dispatch|(getAllProducts(dispatch,id));
+        const token = getState().authentication.token
+        dispatch|(getAllProducts(dispatch,id,token));
     }
 
 }

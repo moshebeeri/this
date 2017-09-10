@@ -148,13 +148,12 @@ class GroupsApi
         })
 
     }
-    getAll() {
+    getAll(token) {
         return new Promise(async(resolve, reject) => {
 
             try {
                 let from = new Date();
 
-                let token = await store.get('token');
                 const response = await fetch(`${server_host}/api/groups/user/follow/0/100`, {
                     method: 'GET',
                     headers: {
@@ -184,13 +183,13 @@ class GroupsApi
 
     }
 
-    getByBusinessId(bid) {
+    getByBusinessId(bid,token) {
         return new Promise(async(resolve, reject) => {
 
             try {
                 let from = new Date();
 
-                let token = await store.get('token');
+
                 const response = await fetch(`${server_host}/api/groups/user/follow/0/100`, {
                     method: 'GET',
                     headers: {

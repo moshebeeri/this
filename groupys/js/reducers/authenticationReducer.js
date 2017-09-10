@@ -20,7 +20,9 @@ export default function authentication(state = initialState, action) {
         const savedData = action.payload || initialState;
 
         return {
-            ...state, ...savedData.authentication
+            ...state,
+            token : savedData.authentication.token,
+            user : savedData.authentication.user,
         };
     }
     switch (action.type) {

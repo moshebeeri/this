@@ -11,13 +11,12 @@ import Timer from './LogTimer'
 let timer = new Timer();
 class NotificationApi
 {
-    getAll() {
+    getAll(token,user) {
         return new Promise(async(resolve, reject) => {
 
             try {
                 let from = new Date();
-                let token = await store.get('token');
-                let user = await store.get('user');
+
                 const response = await fetch(`${server_host}/api/notifications/` +user._id + '/' + 0 +'/'+100, {
                     method: 'GET',
                     headers: {

@@ -23,14 +23,15 @@ class Feed extends Component {
       constructor(props) {
         super(props);
           const { token } = this.props;
-          this.props.actions.setUserFollows(token);
 
 
       }
 
 
 
-
+    componentWillMount(){
+        this.props.actions.setUserFollows();
+    }
 
 
     render() {

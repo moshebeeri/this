@@ -13,7 +13,7 @@ const logo = require('../../../images/logo.png');
 
 import styles from './styles';
 
-
+import { isAuthenticated } from '../app/appSelector'
 
 const global = require('../../conf/global');
 
@@ -43,7 +43,13 @@ import LinearGradient from 'react-native-linear-gradient';
 
      }
 
+     componentWillUpdate() {
+         const { isAuthenticated } = this.props;
 
+         if (isAuthenticated){
+             this.replaceRoute('home');
+         }
+     }
 
      ///sss
    login() {
@@ -66,7 +72,7 @@ import LinearGradient from 'react-native-linear-gradient';
     }
 
     render() {
-        const { focusPassword,focusPhone,failedMessage } = this.props;
+        const { focusPassword,focusPhone,failedMessage,isAuthenticated ,allstate} = this.props;
 
 
         return (
@@ -167,7 +173,8 @@ export default connect(
         focusPassword: state.loginForm.focusPassword,
         focusPhone:state.loginForm.focusPhone,
         failedMessage:state.loginForm.failedMessage,
-
+        allstate:state,
+        isAuthenticated: isAuthenticated(state),
     }),
     (dispatch) => ({
         actions: bindActionCreators(loginAction, dispatch)
