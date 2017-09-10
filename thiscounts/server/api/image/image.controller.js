@@ -28,7 +28,7 @@ const vision = require('@google-cloud/vision');
 
 const visionClient = vision({
   projectId: 'this-f2f45',
-  keyFilename: './keys/this-vision.json'
+  keyFilename: './server/api/image/keys/this-vision.json'
 });
 
 const client = createClient();
@@ -80,6 +80,17 @@ exports.logo = function (req, res) {
   return handle_image(req, res, 'logo');
 };
 
+function checkSafeSearch(annotation, callback) {
+  function isVaulates(category){
+    return category === 'Possible' || category === 'Likely' || category === 'Very Likely'
+  }
+  if(isVaulates(annotation.adult)) return callback(new Error(`${annotation.adult} to be adult image`));
+  if(isVaulates(annotation.spoof)) return callback(new Error(`${annotation.spoof} to be spoof image`));
+  if(isVaulates(annotation.violence)) return callback(new Error(`${annotation.adult} to be violence image`));
+  if(isVaulates(annotation.medical)) return callback(new Error(`${annotation.medical} to be medical image`));
+  return callback(null);
+}
+
 function handle_image(req, res, type) {
   //let meta_data = req.headers.meta;
   let meta_data = {};
@@ -95,18 +106,18 @@ function handle_image(req, res, type) {
   });
   form.on('file', function (name, file) {
     client.upload(file.path, {/*path: key*/}, function (err, versions, meta) {
-      if (err) {
-        return handleError(res, err);
-      }
-      // visionClient.safeSearchDetection({source: {imageUri: versions[1]}}).then(response => {
-      //   // doThingsWith(response);
-      // }).catch(err => {
-      //   console.error(err);
-      // });
-
-      updateImageVersions(versions, req.params.id, meta_data, type, function (err, updated) {
-        if (err) return handleError(res, err);
-        return res.status(201).json(updated);
+      if (err) {return handleError(res, err);}
+      visionClient.safeSearchDetection({source: {imageUri: versions[1].url}}).then(response => {
+        if (err) {return handleError(res, err);}
+        checkSafeSearch(response[0].safeSearchAnnotation, function (err) {
+          if (err) {return res.status(400).send(err.message);}
+          updateImageVersions(versions, req.params.id, meta_data, type, function (err, updated) {
+            if (err) return handleError(res, err);
+            return res.status(201).json(updated);
+          });
+        });
+      }).catch(err => {
+        console.error(err);
       });
     });
 
@@ -165,7 +176,7 @@ function base64_handle_image(req, res, type) {
 }
 
 
-function updateImageVersions(version, id, meta_data, type, callback) {
+function updateImageVersions(versions, id, meta_data, type, callback) {
   function saveCallback(err, updated) {
     if (err) {
       return callback(err, null);
@@ -207,7 +218,7 @@ function updateImageVersions(version, id, meta_data, type, callback) {
         return console.log(err);
       } else {
         let pictures = [];
-        version.forEach(function (version) {
+        versions.forEach(function (version) {
           pictures.push(version.url);
         });
         // we aim for one match only - hence return after first iteration
