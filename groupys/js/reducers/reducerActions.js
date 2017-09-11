@@ -67,6 +67,7 @@ export const UPSERT_INSTANCE = 'UPSERTinstance';
 
 //groups
 export const UPSERT_GROUP = 'UPSERTgroup';
+export const ACCEPT_GROUP_INVATATION = 'ACCEPT_GROUP_INVATATION';
 
 //user
 export const UPSERT_USER = 'UPSERTuser';
@@ -81,3 +82,8 @@ export const UPSERT_ACTIVITY= 'UPSERTactivity';
 //network
 export const NETWORK_IS_OFFLINE = 'NETWORK_IS_OFFLINE';
 export const NETWORK_IS_ONLINE = 'NETWORK_IS_ONLINE';
+
+//Notifcation screen
+export const SET_NOTIFICATION = 'SET_NOTIFICATION';
+export const READ_NOTIFICATION = 'READ_NOTIFICATION';
+export const EXECUTE_NOTIFICATION_ACTION = 'EXECUTE_NOTIFICATION_ACTION'
