@@ -6,6 +6,7 @@ let auth = require('../../auth/auth.service');
 
 let router = express.Router();
 
+router.get('/translate/:to', controller.translate);
 router.get('/work/:function', controller.work);
 router.get('/product/:lang/:parent', controller.product);
 router.get('/business/:lang/:parent', controller.business);
