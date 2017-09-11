@@ -2,6 +2,7 @@
 import UserApi from "../api/user"
 let userApi = new UserApi();
 
+import * as actions from '../reducers/reducerActions';
 async function getUser(dispatch,token){
     try {
         let user = await userApi.getUser(token);
@@ -26,7 +27,7 @@ async function getUserFollowers(dispatch,token){
         let users = await userApi.getUserFollowers(token);
 
         dispatch({
-            type: 'GET_USER_FOLLOWERS',
+            type: actions.USER_FOLLOW,
             followers: users
 
         });

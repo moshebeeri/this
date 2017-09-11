@@ -59,7 +59,7 @@ let updateDialogOption = {
 
 
 import { bindActionCreators } from "redux";
-import { isAuthenticated,showAddAction } from './appSelector'
+import { isAuthenticated,showAddAction,addComponent } from './appSelector'
 import * as mainAction from "../../actions/mainTab";
 import { createSelector } from 'reselect'
  class ApplicationManager extends Component {
@@ -102,7 +102,7 @@ import { createSelector } from 'reselect'
     }
 
      navigateToAdd(){
-        this.replaceRoute(this.state.addComponent);
+        this.replaceRoute(this.props.addComponent);
      }
 
     openDrawer() {
@@ -197,6 +197,7 @@ const mapStateToProps = (state) => {
         isAuthenticated: isAuthenticated(state),
         selectedTab: state.mainTab.selectedTab,
         showAdd: showAddAction(state),
+        addComponent:addComponent(state)
     }
 }
 

@@ -14,18 +14,12 @@ import {Container, Content, Text, InputGroup, Input, Button, Icon, View,Header,I
 import store from 'react-native-simple-store';
 
 
-
+import {getMyBusinesses} from './groupAddSelector'
 
 
 import ImagePicker from 'react-native-image-crop-picker';
 import SelectUsersComponent from '../selectUser';
 
-import UserApi from '../../../api/user'
-
-let userApi = new UserApi();
-
-import GroupApi from "../../../api/groups"
-let groupApi = new GroupApi();
 
 const groupPolicy = [
     {
@@ -72,9 +66,11 @@ const groupPostPolicy = [
 
 
 import * as groupsAction from "../../../actions/groups";
+import * as businessesAction from "../../../actions/business";
+import * as userAction from "../../../actions/user";
 import { bindActionCreators } from "redux";
 
-class AddGroup extends Component {
+ class AddGroup extends Component {
 
     constructor(props) {
         super(props);
@@ -99,7 +95,6 @@ class AddGroup extends Component {
 
         };
 
-        this.props.fetchBusinesses();
     }
 
     selectBusiness(value){
@@ -111,22 +106,12 @@ class AddGroup extends Component {
     }
 
 
-    async componentWillMount(){
-        try {
-
-           if(this.props.businesses.businesses.length > 0 ) {
-                this.setState({
-                    business: this.props.businesses.businesses[0]
-                })
-            }
-
-        }catch (error){
-            console.log(error);
-        }
+     componentWillMount(){
+        const{businessActions,userActions} = this.props;
+         businessActions.setMyBusinesses();
+         userActions.fetchUsersFollowers();
 
     }
-
-
 
 
 
@@ -143,53 +128,49 @@ class AddGroup extends Component {
     }
 
     async saveFormData(){
-        let group = {};
-        if(this.state.groupType == 'USERS'){
-            let userId = await store.get('user_id');
-            group = {
-                name : this.state.name,
-                description : this.state.info,
-                entity_type: this.state.groupType,
-                add_policy: this.state.groupPolocy,
-                image:this.state.image,
-                groupUsers:this.state.selectedUsers,
-                post_policy:'ANYONE',
-                entity: {
-                    user: userId
-                }
-            };
-        }else{
-            if(this.state.groupType == 'BUSINESS'){
-                group = {
-                    name : this.state.name,
-                    description : this.state.info,
-                    entity_type: this.state.groupType,
-                    add_policy: this.state.groupPolocy,
-                    image:this.state.image,
-                    groupUsers:this.state.selectedUsers,
-                    entity: {
-                        business:this.state.business
-                    },
-                    post_policy:'MANAGERS'
-
-                };
-            }
-        }
-
-
-        try{
-            let result = await groupApi.createGroup(group,this.addToList.bind(this));
-
-            this.replaceRoute('home');
-        }catch (e){
-            console.log('failed adding group');
-        }
+        const {actions} = this.props;
+        const group = this.createGroupFromState();
+        this.replaceRoute('home');
+        actions.createGroup(group);
 
      }
 
-     addToList(responseData){
-         this.props.fetchGroups();
+     createGroupFromState() {
+         const {user} = this.props;
+
+         if (this.state.groupType == 'USERS') {
+           return {
+                 name: this.state.name,
+                 description: this.state.info,
+                 entity_type: this.state.groupType,
+                 add_policy: this.state.groupPolocy,
+                 image: this.state.image,
+                 groupUsers: this.state.selectedUsers,
+                 post_policy: 'ANYONE',
+                 entity: {
+                     user: user._id
+                 }
+             };
+         }
+
+        return {
+             name: this.state.name,
+             description: this.state.info,
+             entity_type: this.state.groupType,
+             add_policy: this.state.groupPolocy,
+             image: this.state.image,
+             groupUsers: this.state.selectedUsers,
+             entity: {
+                 business: this.state.business
+             },
+             post_policy: 'MANAGERS'
+
+         };
+
+
      }
+
+
 
 
 
@@ -211,12 +192,10 @@ class AddGroup extends Component {
         })
     }
 
-    formFailed(error){
-        console.log('failed');
-    }
+
     async pickFromCamera() {
         try {
-            let image = await ImagePicker.openCamera({
+            const image = await ImagePicker.openCamera({
                 cropping: true,
                 compressImageQuality: 1,
                 compressVideoPreset: 'MediumQuality',
@@ -235,7 +214,7 @@ class AddGroup extends Component {
 
     async pickPicture() {
         try {
-            let image = await ImagePicker.openPicker({
+            const image = await ImagePicker.openPicker({
                 cropping: true,
                 compressImageQuality: 1,
                 compressVideoPreset: 'MediumQuality',
@@ -251,95 +230,23 @@ class AddGroup extends Component {
         }
     }
 
-    showUsers(show){
-        let users = this.props.user.followers;
-        if(users) {
+    showUsers(){
+        const {userFollowers} =this.props;
+        if(userFollowers.length > 0 ) {
             this.props.navigation.navigate('SelectUsersComponent', {
-                users: users,
+                users: userFollowers,
                 selectUsers: this.selectUsers.bind(this)
             })
         }
 
     }
     render() {
-
-
-        let image ;
-        if(this.state.path){
-            image =  <Image
-                            style={{width: 50, height: 50}}
-                            source={{uri: this.state.path}}
-                        />
-
-        }
-
-        let users;
-        if(this.state.selectedUsers){
-            users = <Text> {this.state.selectedUsers.length}  selected </Text>
-        }
-
-
-        let addPolicyTag = <Picker
-            iosHeader="Group Policy"
-            mode="dropdown"
-            style={{ flex:1}}
-            selectedValue={this.state.groupPolocy}
-            onValueChange={this.selectGroupPolocy.bind(this)}
-        >
-
-            {
-
-
-                groupPolicy.map((s, i) => {
-                    return <Item
-                        key={i}
-                        value={s.value}
-                        label={s.label}/>
-                }) }
-        </Picker>
-
-        let groupTypeTag = <Picker
-            iosHeader="Group Type"
-            mode="dropdown"
-            style={{ flex:1}}
-            selectedValue={this.state.groupType}
-            itemStyle={ {flexDirection: 'row',marginTop:10 }}
-            onValueChange={this.selectGroupType.bind(this)}
-        >
-
-            {
-
-
-                groupType.map((s, i) => {
-                    return <Item
-                        key={i}
-                        value={s.value}
-                        label={s.label}/>
-                }) }
-        </Picker>
-        let BusinessPiker = undefined;
-
-        if(this.state.groupType == 'BUSINESS' ){
-            BusinessPiker = <Picker
-                iosHeader="Select Business"
-                mode="dropdown"
-                style={{ flex:1}}
-                selectedValue={this.state.business}
-                itemStyle={ {flexDirection: 'row',marginTop:4 }}
-                onValueChange={this.selectBusiness.bind(this)}>
-
-                {
-
-
-                    this.props.businesses.businesses.map((s, i) => {
-                        return <Item
-                            key={i}
-                            value={s.business._id}
-                            label={s.business.name} />
-                    }) }
-            </Picker>
-
-        }
+        const{businesses} = this.props;
+        const image = this.createImage(this.state.path);
+        const users = this.createUserTag(this.state.selectedUsers);
+        const addPolicyTag = this.createPolicyTag();
+        const groupTypeTag =  this.createGroupTypePiker();
+        const BusinessPiker = this.createBusinessPicker(this.state.groupType,businesses);
 
         return (
             <Container style={{margin:10,backgroundColor: '#fff'}}>
@@ -405,17 +312,117 @@ class AddGroup extends Component {
         );
     }
 
+     createGroupTypePiker() {
+         const groupTypeTag = <Picker
+             iosHeader="Group Type"
+             mode="dropdown"
+             style={{flex: 1}}
+             selectedValue={this.state.groupType}
+             itemStyle={ {flexDirection: 'row', marginTop: 10}}
+             onValueChange={this.selectGroupType.bind(this)}
+         >
+
+             {
+
+
+                 groupType.map((s, i) => {
+                     return <Item
+                         key={i}
+                         value={s.value}
+                         label={s.label}/>
+                 }) }
+         </Picker>
+         return groupTypeTag;
+     }
+
+     createPolicyTag() {
+         const addPolicyTag = <Picker
+             iosHeader="Group Policy"
+             mode="dropdown"
+             style={{flex: 1}}
+             selectedValue={this.state.groupPolocy}
+             onValueChange={this.selectGroupPolocy.bind(this)}
+         >
+
+             {
+
+
+                 groupPolicy.map((s, i) => {
+                     return <Item
+                         key={i}
+                         value={s.value}
+                         label={s.label}/>
+                 }) }
+         </Picker>
+         return addPolicyTag;
+     }
+
+     createUserTag(selectedUsers) {
+
+         if (selectedUsers) {
+            return <Text> {this.state.selectedUsers.length} selected </Text>
+         }
+         return undefined;
+     }
+
+    createBusinessPicker(groupType,businesses) {
+
+        if (groupType == 'BUSINESS' && businesses) {
+            const rows =  businesses.map((s, i) => {
+                return <Item
+                    key={i}
+                    value={s._id}
+                    label={s.name}/>
+            })
+
+            return <Picker
+                iosHeader="Select Business"
+                mode="dropdown"
+                style={{flex: 1}}
+                selectedValue={this.state.business}
+                itemStyle={ {flexDirection: 'row', marginTop: 4}}
+                onValueChange={this.selectBusiness.bind(this)}>
+
+                {rows}
+
+
+
+            </Picker>
+
+        }
+        return undefined;
+    }
+
+    createImage(imagePath) {
+
+
+        if (imagePath) {
+            return <Image
+                style={{width: 50, height: 50}}
+                source={{uri: this.state.path}}
+            />
+
+        }
+        return undefined;
+    }
+
 
 }
-
-
-
 export default connect(
     state => ({
-        businesses: state.businesses,
-        user: state.user,
+
+        businesses:getMyBusinesses(state),
+        user:state.authentication.user,
+        userFollowers:state.user.followers,
     }),
-    dispatch => bindActionCreators(groupsAction, dispatch)
+    (dispatch) => ({
+        actions: bindActionCreators(groupsAction, dispatch),
+        businessActions: bindActionCreators(businessesAction, dispatch),
+        userActions: bindActionCreators(userAction, dispatch),
+    })
 )(AddGroup);
+
+
+
 
 

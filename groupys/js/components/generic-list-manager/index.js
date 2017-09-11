@@ -18,31 +18,6 @@ class GenericListManager extends Component {
     }
 
 
-    async deleteProduct(index){
-
-        try {
-            await this.props.api.delete(index);
-            let response = await this.props.api.getAll();
-            this.setState({
-                rowsView: response
-            })
-
-        }catch (error){
-            console.log(error);
-        }
-    }
-
-
-
-
-
-    componentWillMount(){
-
-
-
-
-    }
-
     render() {
         const { rows,ItemDetail,actions,update} = this.props;
 

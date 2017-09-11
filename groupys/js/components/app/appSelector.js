@@ -23,21 +23,29 @@ export const showAddAction = createSelector(
     {
         let index = mainTab.selectedTab;
         switch (index){
-            case 0:
-                return false;
-            case 1:
-                return false;
             case 2:
                 return true;
-            case 3:
+           default:
                 return false;
-            case 4:
-                return true;
-            case 5:
-                return true;
 
         }
 
-        return false;
+
+    }
+)
+
+export const addComponent = createSelector(
+    [ getMainTab],  function(mainTab)
+    {
+        let index = mainTab.selectedTab;
+        switch (index){
+            case 2:
+                return 'AddGroups';
+            default:
+                return undefined;
+
+        }
+
+
     }
 )

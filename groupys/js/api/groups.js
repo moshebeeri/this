@@ -17,14 +17,12 @@ import Timer from './LogTimer'
 let timer = new Timer();
 class GroupsApi
 {
-    createGroup(group,callbackFunction) {
+    createGroup(group,callbackFunction,token) {
         return new Promise(async(resolve, reject) => {
 
             try {
                 let from = new Date();
 
-                let token = await store.get('token');
-                let userId = await store.get('user_id');
                 const response = await fetch(`${server_host}/api/groups/`, {
                     method: 'POST',
                     headers: {

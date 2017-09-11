@@ -105,11 +105,19 @@ export function showCamera(){
 
 
 
-export function fetchBusiness(){
-    return function (dispatch, getState){
+export function setMyBusinesses(){
+    return async function (dispatch, getState){
         const token = getState().authentication.token
 
-        dispatch|(getAll(dispatch,token));
+        let businesses = await businessApi.getAll(token);
+        businesses.forEach(function (business) {
+            dispatch({
+                type: actions.UPSERT_MY_BUSINESS,
+                item: business
+
+            });
+        })
+
     }
 
 }

@@ -122,4 +122,20 @@ export function touch(groupid){
 
     }
 }
+export function createGroup(group){
+
+    return  async function (dispatch, getState){
+        const token = getState().authentication.token
+        await groupsApi.createGroup(group,uploadGroupPic,token);
+        getAll(dispatch,token);
+    }
+}
+
+function uploadGroupPic(){
+    return  function (dispatch, getState){
+         const token = getState().authentication.token
+         getAll(dispatch,token);
+
+    }
+}
 
