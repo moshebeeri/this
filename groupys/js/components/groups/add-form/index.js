@@ -382,7 +382,10 @@ import { bindActionCreators } from "redux";
                 selectedValue={this.state.business}
                 itemStyle={ {flexDirection: 'row', marginTop: 4}}
                 onValueChange={this.selectBusiness.bind(this)}>
-
+                <Item
+                    key={555}
+                    value={''}
+                    label={"Selecet Business"}/>
                 {rows}
 
 
