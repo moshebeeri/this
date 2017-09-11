@@ -18,6 +18,20 @@ export const isAuthenticated = createSelector(
         return false;
     }
 )
+
+export const showCompoenent = createSelector(
+    [ getAuthentication], function(authentication)
+    {
+        const token = authentication.token
+
+        if(token){
+            return true;
+        }
+
+        return false;
+    }
+)
+
 export const showAddAction = createSelector(
     [ getMainTab],  function(mainTab)
     {

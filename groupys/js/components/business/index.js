@@ -29,25 +29,7 @@ import { bindActionCreators } from "redux";
     }
 
 
-    async getAll(){
-       return  this.props.fetchBusiness();
-    }
-    async fetchApi(pageOffset,pageSize ) {
-        let businesses = this.props.api.props.fetchBusiness.bind(this);
 
-
-        return new Promise(async function(resolve, reject) {
-            let response =  await  businesses();
-            resolve(response);
-        });
-
-
-    }
-
-    async componentWillMount(){
-        this.props.navigateAction('addBusiness',this.props.index)
-
-    }
 
     render() {
 

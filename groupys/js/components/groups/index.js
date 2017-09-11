@@ -39,7 +39,7 @@ import { bindActionCreators } from "redux";
         this.props.actions.fetchGroups();
     }
     render() {
-        const { update,groups,navigation,actions} = this.props;
+        const { update,groups,navigation,actions,groupsState} = this.props;
 
 
         return (
@@ -54,6 +54,7 @@ import { bindActionCreators } from "redux";
 
 export default connect(
     state => ({
+        groupsState:state.groups,
         groups: getGroups(state),
         update: state.groups.update
     }),

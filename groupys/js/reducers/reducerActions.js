@@ -55,7 +55,7 @@ export const FEED_SHOW_TOP_LOADER = 'SHOW_TOP_LOADER';
 
 //business
 export const UPSERT_BUSINESS = 'UPSERTbusiness';
-
+export const UPSERT_MY_BUSINESS = 'UPSERT_MY_BUSINESS';
 //promotions
 export const UPSERT_PROMOTION = 'UPSERTpromotion';
 //products

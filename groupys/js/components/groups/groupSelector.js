@@ -8,7 +8,7 @@ import { createSelector } from 'reselect'
 
 
 
-const getStateGroups = (state) => state.groups.groups
+const getStateGroups = (state) => state.groups
 
 
 
@@ -16,8 +16,8 @@ export const getGroups = createSelector(  [getStateGroups ],
     (groups) => {
 
 
-        if (!_.isEmpty(groups)) {
-            return  Object.keys(groups).map(key => groups[key])
+        if (!_.isEmpty(groups.groups)) {
+            return  Object.keys(groups.groups).map(key => groups.groups[key])
 
         }
         return new Array();
