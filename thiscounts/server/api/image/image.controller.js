@@ -28,7 +28,7 @@ const vision = require('@google-cloud/vision');
 
 const visionClient = vision({
   projectId: 'this-f2f45',
-  keyFilename: './server/api/image/keys/this-vision.json'
+  keyFilename: './server/config/keys/this-vision.json'
 });
 
 const client = createClient();

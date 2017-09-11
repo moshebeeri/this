@@ -23,11 +23,15 @@ exports.sendToDevice = function(registrationToken, payload){
     });
 
 };
-exports.pnsUserDevices = function(notification){
+
+function pnsUserDevices(notification){
   //pns.push(notification)
   console.log('pnsUserDevices');
-};
+}
 
+exports.pnsUserDevices = function(notification){
+  pnsUserDevices(notification)
+};
 // let note = {
 //   note: type,
 //   group: group_id,

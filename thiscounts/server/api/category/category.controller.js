@@ -12,7 +12,13 @@ const ProductRootCategory = graphTools.createGraphModel('ProductRootCategory');
 const ProductTopCategory = graphTools.createGraphModel('ProductTopCategory');
 const ProductCategory = graphTools.createGraphModel('ProductCategory');
 const EBayProductCategories = require('./data/product.category.ebay');
-const TestProductCategories = require('./data/product.category.test');
+const translate = require('@google-cloud/translate');
+
+var Translate = translate({
+  projectId: 'this-f2f45',
+  keyFilename: './server/config/keys/this-vision.json'
+});
+
 
 function createProductCategoryRoot(callback) {
   ProductCategory.save({name: 'ProductRootCategory'}, callback)
@@ -275,6 +281,13 @@ function drop_uniqueness(req, res){
   BusinessCategory.db().constraints.uniqueness.drop('BusinessCategory', 'PayPalId', callback);
   return res.status(200).json('ok');
 }
+
+exports.translate = function (req, res) {
+  Translate.translate('Hello', req.params.to, function(err, translation) {
+    if(err) console.log(err.message);
+    return res.status(200).send(translation);
+  });
+};
 
 exports.work = function (req, res) {
   switch(req.params.function){
