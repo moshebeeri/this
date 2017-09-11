@@ -44,38 +44,23 @@ class GenericListManager extends Component {
     }
 
     render() {
-        const { navigation,listDate,itemRenderer,actions,addComponent,api} = this.props;
-
-        if(listDate.length > 0) {
-
-
-
-            return (
-
-                <Content  style={{  backgroundColor: '#d7d7d7'}}>
-
-                    <FlatList
-                        data={listDate}
-
-                        onEndReached={actions.onEndReached}
-                        renderItem={itemRenderer}
-                    />
-
-                </Content>
-
-            );
-        }
-
-
+        const { rows,ItemDetail,actions,update} = this.props;
 
         return (
 
-                <Content  style={{  backgroundColor: '#d7d7d7'}}>
+            <Content  style={{  backgroundColor: '#d7d7d7'}}>
 
+                <FlatList
+                    data={rows}
+                    onEndReached={actions.onEndReached}
+                    renderItem={ItemDetail}
+                    extraData={update}
+                />
 
-                </Content>
+            </Content>
 
         );
+
     }
 }
 

@@ -30,6 +30,10 @@ export function login(phone,password,navigation){
                 let user = await userApi.getUser(response.token)
                 store.save("user_id",user._id)
                 dispatch({
+                    type: actions.SAVE_APP_USER,
+                    user:user
+                });
+                dispatch({
                     type: actions.SET_USER,
                     user:user
                 });

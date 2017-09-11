@@ -11,7 +11,7 @@ import UserApi from "../api/user"
 let userApi = new UserApi();
 import store from 'react-native-simple-store';
 
-
+import * as actions from '../reducers/reducerActions';
 async function getAll(dispatch,token){
     try {
         let response = await groupsApi.getAll(token);
@@ -96,4 +96,20 @@ export function fetchUsersFollowers(){
 
 }
 
+export function acceptInvatation(group){
+    return async function (dispatch, getState){
+        const token = getState().authentication.token
+        await groupsApi.acceptInvatation(group,token)
+        let groups =  await groupsApi.getAll(token);
+        groups.forEach(function (group) {
+            dispatch({
+                type: actions.UPSERT_GROUP,
+                item: group
+
+            });
+        })
+
+
+    }
+}
 
