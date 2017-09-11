@@ -7,7 +7,7 @@
 /**
  * Created by stan229 on 5/27/16.
  */
-const initialState = {groups:{}};
+const initialState = {groups:{},update:false};
 
 
 import store from 'react-native-simple-store';
@@ -24,21 +24,19 @@ export default function group(state = initialState, action) {
             ...state, ...savedData.groups
         };
     }
+    let imutableState ={...state};
+    let currentGroups= imutableState.groups;
 
-    let currentState = {...state};
+
     switch (action.type) {
+
+
+
         case actions.UPSERT_GROUP:
-            let currentGroups = currentState.groups;
 
-            currentGroups[action.item._id] = action.item;
-            return currentState
-        case 'GET_GROUPS' :
-            store.save('groups',action.groups)
-
-            return {
-                ...state,
-                groups : action.groups,
-            };
+            currentGroups[action.group._id] = action.group;
+            imutableState.update = !imutableState.update;
+            return imutableState
 
         case 'GET_GROUPS_BUSINESS' :
 

@@ -16,12 +16,14 @@ async function getAll(dispatch,token){
     try {
         let response = await groupsApi.getAll(token);
         if(response.length > 0) {
+            response.forEach(function (group) {
+                dispatch({
+                    type: actions.UPSERT_GROUP,
+                    group: group,
 
-            dispatch({
-                type: 'GET_GROUPS',
-                groups: response,
+                });
+            })
 
-            });
         }
 
 
@@ -109,6 +111,14 @@ export function acceptInvatation(group){
             });
         })
 
+
+    }
+}
+export function touch(groupid){
+
+    return  function (dispatch, getState){
+        const token = getState().authentication.token
+         groupsApi.touch(groupid,token);
 
     }
 }

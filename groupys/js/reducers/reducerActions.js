@@ -67,7 +67,8 @@ export const UPSERT_INSTANCE = 'UPSERTinstance';
 
 //groups
 export const UPSERT_GROUP = 'UPSERTgroup';
-export const ACCEPT_GROUP_INVATATION = 'ACCEPT_GROUP_INVATATION';
+export const SET_GROUPS = 'SET_GROUPS';
+
 
 //user
 export const UPSERT_USER = 'UPSERTuser';

@@ -9,7 +9,7 @@ import GenericListGroupView from '../generic-list-manager/generic-list-group-vie
 import GenericListManager from '../generic-list-manager/index'
 
 
-
+import {getGroups} from './groupSelector'
 import * as groupsAction from "../../actions/groups";
 import { bindActionCreators } from "redux";
 
@@ -18,48 +18,48 @@ import { bindActionCreators } from "redux";
 
     constructor(props) {
         super(props);
-        this.props.fetchUsersFollowers();
-
-        console.log('renderrrr')
-    }
-
-
-    fetchApi(pageOffset,pageSize ) {
-
-        let fetchGroups = this.props.api.props.fetchGroups.bind(this);
-
-        return new Promise(async function(resolve, reject) {
-            let response =  await  fetchGroups();
-            resolve(response);
-        });
-
 
     }
+     onPressItem(item){
+         const {actions,navigation} = this.props;
+         actions.touch(item.group._id);
+         navigation.navigate('GroupFeed',{group:item.group,role:item.role});
+     }
 
+
+
+    renderItem(item){
+       return <GenericListGroupView
+            onPressItem={this.onPressItem.bind(this)}
+            item={item}
+        />
+
+    }
     componentWillMount(){
-        this.props.fetchGroups();
+        this.props.actions.fetchGroups();
     }
     render() {
-        console.log('renderrrr')
+        const { update,groups,navigation,actions} = this.props;
+
 
         return (
-           <GenericListManager rows={this.props.groups.groups} navigation = {this.props.navigation} title="Groups" component="home" addComponent="AddGroups" api={this}
-                               ItemDetail = {GenericListGroupView}/>
+           <GenericListManager rows={groups} navigation = {navigation} actions={actions}  update={update}
+                               ItemDetail = {this.renderItem.bind(this)}/>
         );
     }
 
-    componentDidMount(){
-        console.log('didmount')
-    }
+
 }
 
 
 export default connect(
     state => ({
-        groups: state.groups
+        groups: getGroups(state),
+        update: state.groups.update
     }),
-
-    dispatch => bindActionCreators(groupsAction, dispatch)
+    (dispatch) => ({
+        actions: bindActionCreators(groupsAction, dispatch),
+    })
 )(Group);
 
 
