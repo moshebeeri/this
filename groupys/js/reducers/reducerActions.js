@@ -47,6 +47,8 @@ export const SHOW_SEARCH_SPIN = 'SHOW_SEARCH_SPIN';
 
 export const GET_FEEDS = 'GET_FEEDS';
 export const UPSERT_FEEDS = 'UPSERT_FEEDS';
+export const FEED_LIKE = 'FEED_LIKE';
+export const FEED_UNLIKE = 'FEED_LIKE';
 export const FEED_LOADING_DONE = 'FEED_LOADING_DONE';
 export const FEED_SHOW_TOP_LOADER = 'SHOW_TOP_LOADER';
 

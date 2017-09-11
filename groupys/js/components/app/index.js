@@ -35,7 +35,7 @@ import SideBar from '../drawer/index';
 
 const warch = navigator.geolocation.watchPosition((position) => {
         var lastPosition = JSON.stringify(position);
-       // locationApi.sendLocation(position.coords.longitude,position.coords.latitude,position.timestamp,position.coords.speed);
+        locationApi.sendLocation(position.coords.longitude,position.coords.latitude,position.timestamp,position.coords.speed);
 
     },
     (error) => alert(JSON.stringify(error)),
@@ -43,10 +43,10 @@ const warch = navigator.geolocation.watchPosition((position) => {
 );
 
 const timer = BackgroundTimer.setInterval(() =>{
-    // console.log('sync contacts')
+
     // // this will be executed every 200 ms
     // // even when app is the the background
-    // contactApi.syncContacts();
+     contactApi.syncContacts();
 
 
 
@@ -59,16 +59,13 @@ let updateDialogOption = {
 
 
 import { bindActionCreators } from "redux";
-import { isAuthenticated } from './appSelector'
+import { isAuthenticated,showAddAction } from './appSelector'
 import * as mainAction from "../../actions/mainTab";
 import { createSelector } from 'reselect'
  class ApplicationManager extends Component {
     static navigationOptions = {
         header:null
     };
-
-
-
 
      constructor(props) {
 
@@ -101,43 +98,12 @@ import { createSelector } from 'reselect'
      }
 
     onChangeTab(tab){
-        this.props.mainAction.changeTab(tab)
-        this.props.mainAction.showFab(this.showAction(tab.i))
+        this.props.actions.changeTab(tab)
     }
-
-
-
-
-
 
      navigateToAdd(){
         this.replaceRoute(this.state.addComponent);
      }
-
-
-    showAction(index){
-        switch (index){
-            case 0:
-                return false;
-            case 1:
-                return false;
-            case 2:
-                return true;
-            case 3:
-                return false;
-            case 4:
-                return true;
-            case 5:
-                return true;
-
-        }
-
-    }
-
-
-
-
-
 
     openDrawer() {
         this._drawer._root.open();
@@ -151,9 +117,9 @@ import { createSelector } from 'reselect'
     }
 
     render() {
-        const { selectedTab,showAdd ,isAuthenticated} = this.props;
+        const { selectedTab,showAdd } = this.props;
 
-
+        //TODO find another way to change the drawer close/open
         closeDrawer = () => {
             this.drawer._root.close()
         };
@@ -230,7 +196,7 @@ const mapStateToProps = (state) => {
     return {
         isAuthenticated: isAuthenticated(state),
         selectedTab: state.mainTab.selectedTab,
-        showAdd: state.mainTab.showAdd,
+        showAdd: showAddAction(state),
     }
 }
 

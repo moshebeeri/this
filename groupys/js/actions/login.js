@@ -28,6 +28,7 @@ export function login(phone,password,navigation){
                     type: actions.LOGIN_SUCSESS,
                 });
                 let user = await userApi.getUser(response.token)
+                store.save("user_id",user._id)
                 dispatch({
                     type: actions.SET_USER,
                     user:user
