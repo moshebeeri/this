@@ -31,8 +31,6 @@ class UserApi
                     let responseData = await response.json();
                     timer.logTime(from,new Date(),'users','me')
 
-                    store.save('user_id', responseData._id);
-                    store.save('user', responseData);
 
                     resolve(responseData);
                 }else{
@@ -122,10 +120,10 @@ class UserApi
     };
 
 
-    like(id){
+    like(id,token){
         return new Promise(async(resolve, reject) => {
             try {
-                let token = await store.get('token');
+
                 let from = new Date();
 
                 const response = await fetch(`${server_host}/api/users/like/`+id, {
@@ -154,12 +152,12 @@ class UserApi
             }
         })
     }
-    unlike(id){
+    unlike(id,token){
         return new Promise(async(resolve, reject) => {
             try {
                 let from = new Date();
 
-                let token = await store.get('token');
+
                 const response = await fetch(`${server_host}/api/users/like/`+id, {
                     method: 'DELETE',
                     headers: {
@@ -286,10 +284,9 @@ class UserApi
     }
 
 
-    getBusinessUsers(business) {
+    getBusinessUsers(business,token) {
         return new Promise(async(resolve, reject) => {
             try {
-                let token = await store.get('token');
                 let from = new Date();
                 const response = await fetch(`${server_host}/api/users/roles/` +business + '/' +0+  '/'+ 100 , {
                     method: 'GET',

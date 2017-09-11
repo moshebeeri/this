@@ -1,20 +1,19 @@
 
 import React, { Component } from 'react';
-import { Image, Platform,TouchableHighlight,KeyboardAvoidingView,Dimensions,TouchableOpacity} from 'react-native';
+import { Image, Platform,TouchableHighlight,KeyboardAvoidingView,TextInput,Dimensions,TouchableOpacity} from 'react-native';
 
 import { connect } from 'react-redux';
 import { actions } from 'react-native-navigation-redux-helpers';
 import { Container, Content, Text, InputGroup, Input, Button, Icon, View,Item } from 'native-base';
 
 import { bindActionCreators } from "redux";
-import { connect } from 'react-redux';
 import * as loginAction from "../../actions/login";
 
 const logo = require('../../../images/logo.png');
 
 import styles from './styles';
 
-
+import { isAuthenticated } from '../app/appSelector'
 
 const global = require('../../conf/global');
 
@@ -38,13 +37,21 @@ import LinearGradient from 'react-native-linear-gradient';
 
   }
 
-    focusNextField(nextField) {
-        this.props.actions.focusLoginForm(nextField)
-    }
+     focusNextField(nextField) {
 
+         this.refs[nextField]._root.focus()
 
+     }
 
-  ///sss
+     async componentWillUpdate() {
+         const isVerified  = await this.props.isAuthenticated;
+
+         if (isVerified){
+             this.replaceRoute('home');
+         }
+     }
+
+     ///sss
    login() {
       this.props.actions.login(this.state.phoneNumber,this.state.password,this.props.navigation)
 
@@ -65,7 +72,8 @@ import LinearGradient from 'react-native-linear-gradient';
     }
 
     render() {
-        const { focusPassword,focusPhone,failedMessage } = this.props;
+        const { focusPassword,focusPhone,failedMessage,isAuthenticated ,allstate} = this.props;
+
 
         return (
 
@@ -98,13 +106,14 @@ import LinearGradient from 'react-native-linear-gradient';
                            </View>
 
                            <Item style={styles.phoneTextInput} regular >
-                               <Input  autofocus={focusPhone}keyboardType = 'numeric' value={this.state.name} blurOnSubmit={true} returnKeyType='next'  onSubmitEditing={this.focusNextField.bind(this,"password")} onChangeText={(phoneNumber) => this.setState({phoneNumber})} placeholder='Phone Number' />
+                               <Input  focus={focusPhone}keyboardType = 'phone-pad' value={this.state.name} blurOnSubmit={true} returnKeyType='next'  onSubmitEditing={this.focusNextField.bind(this,"password")} onChangeText={(phoneNumber) => this.setState({phoneNumber})} placeholder='Phone Number' />
                            </Item>
 
                            <Item style={styles.passwordTextInput} regular >
 
                                <Input
-                                   autofocus={focusPassword}
+                                   focus={focusPassword}
+                                   ref='password'
                                    returnKeyType='done'
                                    placeholder="Password"
                                    placeholderTextColor='#444'
@@ -164,7 +173,8 @@ export default connect(
         focusPassword: state.loginForm.focusPassword,
         focusPhone:state.loginForm.focusPhone,
         failedMessage:state.loginForm.failedMessage,
-
+        allstate:state,
+        isAuthenticated: isAuthenticated(state),
     }),
     (dispatch) => ({
         actions: bindActionCreators(loginAction, dispatch)

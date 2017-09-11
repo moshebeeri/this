@@ -61,6 +61,7 @@ export function createSaveButton(item, save) {
 
 
     </Button>;
+
 }
 
 export function createShareButton(styles, showUsers, item) {
@@ -95,10 +96,10 @@ export function createStyle() {
     return stylesPortrate;
 }
 
-export function createLikeButton(item,styles,like,unlike){
+export function createLikeButton(item,styles,like,unlike,token){
     const likes = new String(item.social.numberLikes);
     if (item.social && item.social.like == true) {
-        return <Button transparent style={styles.promotion_iconView} onPress={() => unlike(item.id)}>
+        return <Button transparent style={styles.promotion_iconView} onPress={() => unlike(item.id,token)}>
 
 
             <Icon  style={styles.promotion_like} size={25} name="heart"/>
@@ -108,7 +109,7 @@ export function createLikeButton(item,styles,like,unlike){
 
 
     }
-    return <Button transparent style={styles.promotion_iconView} onPress={() => like(item.id)}>
+    return <Button transparent style={styles.promotion_iconView} onPress={() => like(item.id,token)}>
 
         <Icon style={styles.promotion_unlike}  size={25} name="heart"/>
         <Text>{likes}</Text>
@@ -116,9 +117,9 @@ export function createLikeButton(item,styles,like,unlike){
     </Button>
 
 }
-export function createBusinessLog(item){
+export function createBusinessLog(item,showBussines){
     if(item.businessLogo){
-        return <TouchableOpacity onPress={this.showBussines.bind(this)}>
+        return <TouchableOpacity onPress={showBussines}>
             <View>
                 <Thumbnail  square={true} size={40} source={{uri: item.businessLogo}} />
             </View>

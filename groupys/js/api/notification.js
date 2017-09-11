@@ -11,14 +11,13 @@ import Timer from './LogTimer'
 let timer = new Timer();
 class NotificationApi
 {
-    getAll() {
+    getAll(token,user,skip,limit) {
         return new Promise(async(resolve, reject) => {
 
             try {
                 let from = new Date();
-                let token = await store.get('token');
-                let user = await store.get('user');
-                const response = await fetch(`${server_host}/api/notifications/` +user._id + '/' + 0 +'/'+100, {
+
+                const response = await fetch(`${server_host}/api/notifications/` +user._id + '/' + skip +'/'+limit, {
                     method: 'GET',
                     headers: {
                         'Accept': 'application/json, text/plain, */*',
@@ -49,50 +48,12 @@ class NotificationApi
 
     }
 
-    acceptInvatation(group) {
+
+    readNotification(token,notification_id) {
         return new Promise(async(resolve, reject) => {
 
             try {
                 let from = new Date();
-                let token = await store.get('token');
-                let user = await store.get('user');
-                const response = await fetch(`${server_host}/api/groups/invite/approve/` +group._id, {
-                    method: 'GET',
-                    headers: {
-                        'Accept': 'application/json, text/plain, */*',
-                        'Content-Type': 'application/json;charset=utf-8',
-                        'Authorization': 'Bearer ' + token
-
-                    }
-
-                })
-                if (response.status == '401') {
-                    reject(response);
-                    return;
-                }
-
-                let responseData = await response.json();
-                timer.logTime(from,new Date(),'groups','nvite/approve')
-                resolve(responseData);
-
-
-            }
-            catch (error) {
-
-                console.log('There has been a problem with your fetch operation: ' + error.message);
-                reject(error);
-            }
-        })
-
-
-    }
-
-    readNotification(notification_id) {
-        return new Promise(async(resolve, reject) => {
-
-            try {
-                let from = new Date();
-                let token = await store.get('token');
 
                 const response = await fetch(`${server_host}/api/notifications/read/` +notification_id, {
                     method: 'GET',
@@ -125,12 +86,11 @@ class NotificationApi
 
     }
 
-    doNotificationAction(notification_id) {
+    doNotificationAction(token,notification_id) {
         return new Promise(async(resolve, reject) => {
 
             try {
                 let from = new Date();
-                let token = await store.get('token');
 
                 const response = await fetch(`${server_host}/api/notifications/action/` +notification_id, {
                     method: 'GET',

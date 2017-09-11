@@ -19,7 +19,7 @@ const fieldName2CollectionName = {
     'promotion': 'promotion',
     'instance': 'instance',
     'product': 'product',
-     'business': 'business',
+    'business': 'business',
     'activity': 'activity',
     'actor_business':'business',
 };
@@ -30,8 +30,8 @@ const nameToCollections = {
     'business':'businesses',
     'activity':'activities',
     'instance':'instances',
-    'actor_user':'users',
-    'user':'users',
+    'actor_user':'user',
+    'user':'user',
 
 
 }
@@ -55,33 +55,34 @@ function dataGetCollection(collections,collection){
     return collections[collection];
 }
 
-export function disassembler(obj,dispatch){
+export function imutableObject(obj){
+    return{
+        ...obj
+    }
+}
+export function disassembler(input,dispatch){
+    let obj = imutableObject(input)
+    Object.keys(obj).forEach(key => {
+        let collection = collectionName(key);
+        if(!collection || typeof obj[key] !== 'object') return;
+        if(![obj[key]._id]) return ;
+        let objKey = obj[key];
+        obj[key] = obj[key]._id;
+        disassembler(objKey,dispatch)
+        dataSetCollection(dispatch,collection,objKey);
 
-    return obj.map((o) => {
-         Object.keys(o).forEach(key => {
-            let collection = collectionName(key);
-            if(!collection || typeof o[key] !== 'object') return;
-            if(![o[key]._id]) return ;
-            let objKey = o[key];
-             o[key] = o[key]._id;
-            disassembler(objKey,dispatch)
-            dataSetCollection(dispatch,collection,objKey);
-
-        }); ;
-    })
-
-
+    });
+    return obj;
 }
 
-
-// change to imutable function and move to selector
-export function assembler(obj,collections){
-   let result =  obj.map(o => Object.keys(o).forEach(key => {
+export function assembler(input,collections){
+    let obj = imutableObject(input)
+    Object.keys(obj).forEach(key => {
         let collection = nameToCollection(key);
         if(!collection) return ;
-        o[key] = dataGetCollection(collections,collection)[o[key]];
-        if(!o[key]) return;
-        assembler(o[key],collections);
-    }))
-    return result;
+        obj[key] = dataGetCollection(collections,collection)[obj[key]];
+        if(!obj[key]) return;
+        assembler(obj[key],collections);
+    });
+    return obj;
 }

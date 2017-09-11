@@ -4,7 +4,7 @@
 /**
  * Created by stan229 on 5/27/16.
  */
-const initialState = {businesses:{},categories:[]};
+const initialState = {businesses:{},categories:[],myBusinesses:{}};
 
 import store from 'react-native-simple-store';
 import { REHYDRATE } from 'redux-persist/constants'
@@ -27,6 +27,11 @@ export default function business(state = initialState, action) {
             let currentbusinesses = businessesState.businesses;
 
             currentbusinesses[action.item._id] = action.item;
+            return businessesState;
+        case actions.UPSERT_MY_BUSINESS:
+            let myCurrentbusinesses = businessesState.myBusinesses;
+
+            myCurrentbusinesses[action.item.business._id] = action.item.business;
             return businessesState;
         case actions.LIKE:
             let item = businessesState.businesses[action.id]
@@ -55,12 +60,7 @@ export default function business(state = initialState, action) {
             }else{
                 return state;
             }
-        case 'GET_BUSINESS':
-            store.save('businesses', action.businesses);
-            return {
-                ...state,
-                businesses : action.businesses,
-            };
+
 
 
 

@@ -10,39 +10,32 @@ import GenericListManager from '../generic-list-manager/index'
 
 
 import * as notificationAction from "../../actions/notifications";
-
+import * as groupActions from "../../actions/groups";
 import { bindActionCreators } from "redux";
 class Notification extends Component {
 
 
     constructor(props) {
         super(props);
-        this.props.fetchStoreNotification();
-
+    }
+    componentWillMount(){
+        const { actions} = this.props;
+        actions.onEndReached();
     }
 
+    renderItem(item){
+        const { groupActions,actions} = this.props;
 
-    fetchApi(pageOffset,pageSize ) {
-
-        let fetchNotification = this.props.api.props.fetchNotification.bind(this);
-
-
-        return new Promise(async function(resolve, reject) {
-            let response =  await  fetchNotification();
-            resolve(response);
-        });
+        return <NotificationListView item={item} actions={actions} groupActions={groupActions}/>
     }
-
 
     render() {
-        let notification = undefined;
-        if(this.props.notification) {
-            notification = this.props.notification.notification;
-        }
+
+        const { notification,navigation,actions} = this.props;
 
         return (
-          <GenericListManager navigation ={this.props.navigation} rows={notification} title="Products" component="home" addComponent="AddProduct" api={this}
-                                   ItemDetail = {NotificationListView}/>
+          <GenericListManager navigation={navigation} rows={notification.notification}  actions={actions}
+                              update = {notification.update} ItemDetail ={this.renderItem.bind(this)}/>
 
 
         );
@@ -54,5 +47,8 @@ export default connect(
         notification: state.notification
     }),
 
-    dispatch => bindActionCreators(notificationAction, dispatch)
+    (dispatch) => ({
+        actions: bindActionCreators(notificationAction, dispatch),
+        groupActions: bindActionCreators(groupActions, dispatch)
+    })
 )(Notification);

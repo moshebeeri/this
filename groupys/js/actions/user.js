@@ -1,21 +1,11 @@
-/**
- * Created by roilandshut on 27/06/2017.
- */
-/**
- * Created by roilandshut on 13/06/2017.
- */
-/**
- * Created by roilandshut on 13/06/2017.
- */
-/**
- * Created by roilandshut on 12/06/2017.
- */
+
 import UserApi from "../api/user"
 let userApi = new UserApi();
 
-async function getUser(dispatch){
+import * as actions from '../reducers/reducerActions';
+async function getUser(dispatch,token){
     try {
-        let user = await userApi.getUser();
+        let user = await userApi.getUser(token);
 
             dispatch({
                 type: 'GET_USER',
@@ -32,12 +22,12 @@ async function getUser(dispatch){
 }
 
 
-async function getUserFollowers(dispatch){
+async function getUserFollowers(dispatch,token){
     try {
-        let users = await userApi.getUserFollowers();
+        let users = await userApi.getUserFollowers(token);
 
         dispatch({
-            type: 'GET_USER_FOLLOWERS',
+            type: actions.USER_FOLLOW,
             followers: users
 
         });
@@ -50,9 +40,9 @@ async function getUserFollowers(dispatch){
 
 }
 
-async function getBusinssUsers(dispatch,business){
+async function getBusinssUsers(dispatch,business,token){
     try {
-        let users = await userApi.getBusinessUsers(business);
+        let users = await userApi.getBusinessUsers(business,token);
 
         dispatch({
             type: 'GET_USER_BUSINESS',
@@ -71,21 +61,26 @@ async function getBusinssUsers(dispatch,business){
 
 export function fetchUsers(){
     return function (dispatch, getState){
-        dispatch|(getUser(dispatch,));
+        const token = getState().authentication.token
+
+        dispatch|(getUser(dispatch,token));
     }
 
 }
 
 export function fetchUsersFollowers(){
     return function (dispatch, getState){
-        dispatch|(getUserFollowers(dispatch,));
+        const token = getState().authentication.token
+
+        dispatch|(getUserFollowers(dispatch,token));
     }
 
 }
 
 export function fetchUsersBusiness(business){
     return function (dispatch, getState){
-        dispatch|(getBusinssUsers(dispatch,business));
+        const token = getState().authentication.token
+        dispatch|(getBusinssUsers(dispatch,business,token));
     }
 
 }

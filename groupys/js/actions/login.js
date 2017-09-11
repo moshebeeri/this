@@ -5,7 +5,7 @@ import LoginApi from "../api/login"
 let loginApi = new LoginApi();
 import UserApi from "../api/user"
 let userApi = new UserApi();
-
+import store from 'react-native-simple-store';
 import { NavigationActions } from 'react-navigation'
 const resetAction = NavigationActions.reset({
     index: 0,
@@ -19,7 +19,7 @@ export function login(phone,password,navigation){
         try {
             let response = await loginApi.login(phone, password);
             if(response.token) {
-
+                store.save("token",response.token)
                 dispatch({
                     type: actions.SAVE_USER_TOKEN,
                     token:response.token
@@ -28,12 +28,17 @@ export function login(phone,password,navigation){
                     type: actions.LOGIN_SUCSESS,
                 });
                 let user = await userApi.getUser(response.token)
+                store.save("user_id",user._id)
+                dispatch({
+                    type: actions.SAVE_APP_USER,
+                    user:user
+                });
                 dispatch({
                     type: actions.SET_USER,
                     user:user
                 });
-                this.props.navigation.dispatch(resetAction);
-                this.props.navigation.navigate('home');
+                navigation.dispatch(resetAction);
+                navigation.navigate('home');
             }else{
                 dispatch({
                     type: actions.LOGIN_FAILED,
@@ -41,7 +46,9 @@ export function login(phone,password,navigation){
                 });
             }
         } catch (error){
-            //todo dispatch offline
+            dispatch({
+                type: actions.NETWORK_IS_OFFLINE,
+            });
         }
 
     }
@@ -75,7 +82,9 @@ export function signup(phone,password,navigation){
                 });
             }
         } catch (error){
-            //todo dispatch offline
+            dispatch({
+                type: actions.NETWORK_IS_OFFLINE,
+            });
         }
 
     }
@@ -149,6 +158,31 @@ export function forgetPassword(phoneNumber) {
     }
 }
 
+
+export function changePassword(currentPassword,newPassword,user,token,navigation) {
+    return async function (dispatch,) {
+        try {
+            let response = await loginApi.changePassword(currentPassword, newPassword, user._id, token)
+            if (response == true) {
+
+                navigation.goBack();
+            } else {
+                dispatch({
+                    type: actions.CHANGE_PASSWORD_FAILED,
+                    message: 'Change password failed'
+                });
+            }
+
+
+        } catch (response) {
+            dispatch({
+                type: actions.CHANGE_PASSWORD_FAILED,
+                message: 'Failed to Authenticate Current Password'
+            });
+
+        }
+    }
+}
 
 
 

@@ -19,24 +19,15 @@ class FeedApi {
     };
 
 
-    getAll(direction,id, userId) {
+    getAll(direction,id, token,user) {
         return new Promise(async(resolve, reject) => {
 
             try {
                 let from = new Date();
 
-                let token = await store.get('token');
-                let user = await store.get('user');
-                if(!userId){
-                    userId = await store.get('user_id');
-                    if(!userId){
-                       let user = await userApi.getUser();
-                       userId = user._id;
-                    }
-                }
+                let userId = user._id;
 
-                let contacts = await store.get("all-contacts");
-                contacts = JSON.parse(contacts);
+
                 const response = await fetch(`${server_host}/api/feeds/`+id+`/`+ direction +`/` +userId , {
                     method: 'GET',
                     headers: {

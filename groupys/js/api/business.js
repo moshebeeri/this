@@ -1,16 +1,16 @@
-import store from 'react-native-simple-store';
+
 
 import Timer from './LogTimer'
 
 let timer = new Timer();
 class BusinessApi
 {
-   getAll() {
+   getAll(token) {
         return new Promise(async(resolve, reject) => {
 
             try {
                 let from = new Date();
-                let token = await store.get('token');
+
                 const response = await fetch(`${server_host}/api/businesses/list/mine`, {
                     method: 'GET',
                     headers: {
@@ -45,7 +45,7 @@ class BusinessApi
 
 
 
-    getBusinessCategories(gid)
+    getBusinessCategories(gid,token)
     {
 
         return new Promise(async(resolve, reject) => {
@@ -53,7 +53,7 @@ class BusinessApi
             try {
                 let from = new Date();
 
-                let token = await store.get('token');
+
                 const response = await fetch(`${server_host}/api/categories/business/en/` +gid, {
                     method: 'GET',
                     headers: {
@@ -82,7 +82,7 @@ class BusinessApi
 
     }
 
-    followBusiness(businessId){
+    followBusiness(businessId,token){
         return new Promise(async(resolve, reject) => {
 
             try {
@@ -116,13 +116,13 @@ class BusinessApi
     })
     }
 
-    checkAddress(bussiness){
+    checkAddress(bussiness,token){
         return new Promise(async(resolve, reject) => {
 
             try {
                 let from = new Date();
 
-                let token = await store.get('token');
+
                 const response = await fetch(`${server_host}/api/businesses/checkAddress/`, {
                     method: 'POST',
                     headers: {
@@ -159,7 +159,7 @@ class BusinessApi
     }
 
 
-    searchBusiness(search)
+    searchBusiness(search,token)
     {
 
         return new Promise(async(resolve, reject) => {
@@ -167,7 +167,7 @@ class BusinessApi
             try {
                 let from = new Date();
 
-                let token = await store.get('token');
+
                 const response = await fetch(`${server_host}/api/businesses/search/0/100/` +search, {
                     method: 'GET',
                     headers: {
@@ -196,7 +196,7 @@ class BusinessApi
 
     }
 
-    searchBusinessByCode(qrCode)
+    searchBusinessByCode(qrCode,token)
     {
 
         return new Promise(async(resolve, reject) => {
@@ -204,7 +204,7 @@ class BusinessApi
             try {
                 let from = new Date();
 
-                let token = await store.get('token');
+
                 const response = await fetch(`${server_host}/api/qrcodes/find/` +qrCode, {
                     method: 'GET',
                     headers: {

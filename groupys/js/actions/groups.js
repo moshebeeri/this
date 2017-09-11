@@ -11,17 +11,19 @@ import UserApi from "../api/user"
 let userApi = new UserApi();
 import store from 'react-native-simple-store';
 
-
-async function getAll(dispatch){
+import * as actions from '../reducers/reducerActions';
+async function getAll(dispatch,token){
     try {
-        let response = await groupsApi.getAll();
+        let response = await groupsApi.getAll(token);
         if(response.length > 0) {
+            response.forEach(function (group) {
+                dispatch({
+                    type: actions.UPSERT_GROUP,
+                    group: group,
 
-            dispatch({
-                type: 'GET_GROUPS',
-                groups: response,
+                });
+            })
 
-            });
         }
 
 
@@ -31,27 +33,10 @@ async function getAll(dispatch){
 
 }
 
-async function getGroupsFromStore(dispatch){
-    try {
-        let response = await store.get('groups');
-        if(response) {
 
-            dispatch({
-                type: 'GET_GROUPS',
-                groups: response,
-
-            });
-        }
-
-
-    }catch (error){
-        console.log(error);
-    }
-
-}
 async function getByBusinessId(dispatch,bid){
     try {
-        let response = await groupsApi.getByBusinessId(bid);
+        let response = await groupsApi.getByBusinessId(bid,token);
         if(response.length > 0) {
 
             dispatch({
@@ -68,28 +53,11 @@ async function getByBusinessId(dispatch,bid){
 
 }
 
-async function getBusinessFromStore(dispatch){
+
+
+async function getUserFollowers(dispatch,token){
     try {
-        let response = await store.get('businesses');
-        if(response) {
-
-            dispatch({
-                type: 'GET_BUSINESS',
-                businesses: response,
-
-            });
-        }
-
-
-    }catch (error){
-        console.log(error);
-    }
-
-}
-
-async function getUserFollowers(dispatch){
-    try {
-        let users = await userApi.getUserFollowers();
+        let users = await userApi.getUserFollowers(token);
 
         dispatch({
             type: 'GET_USER_FOLLOWERS',
@@ -107,35 +75,67 @@ async function getUserFollowers(dispatch){
 
 export function fetchGroups(){
     return function (dispatch, getState){
-        dispatch|(getAll(dispatch));
+        const token = getState().authentication.token
+        dispatch|(getAll(dispatch,token));
     }
 
 }
 
-export function fetchBusinesses(){
-    return function (dispatch, getState){
-        dispatch|(getBusinessFromStore(dispatch));
-    }
 
-}
 export function fetchBusinessGroups(bid){
     return function (dispatch, getState){
-        dispatch|(getByBusinessId(dispatch,bid));
+        const token = getState().authentication.token
+        dispatch|(getByBusinessId(dispatch,bid,token));
     }
 
 }
 
 export function fetchUsersFollowers(){
     return function (dispatch, getState){
-        dispatch|(getUserFollowers(dispatch,));
+        const token = getState().authentication.token
+        dispatch|(getUserFollowers(dispatch,token));
     }
 
 }
 
-export function fetchGroupsFromStore(){
-    return function (dispatch, getState){
-        dispatch|(getGroupsFromStore(dispatch,));
-    }
+export function acceptInvatation(group){
+    return async function (dispatch, getState){
+        const token = getState().authentication.token
+        await groupsApi.acceptInvatation(group,token)
+        let groups =  await groupsApi.getAll(token);
+        groups.forEach(function (group) {
+            dispatch({
+                type: actions.UPSERT_GROUP,
+                item: group
 
+            });
+        })
+
+
+    }
+}
+export function touch(groupid){
+
+    return  function (dispatch, getState){
+        const token = getState().authentication.token
+         groupsApi.touch(groupid,token);
+
+    }
+}
+export function createGroup(group){
+
+    return  async function (dispatch, getState){
+        const token = getState().authentication.token
+        await groupsApi.createGroup(group,uploadGroupPic,token);
+        getAll(dispatch,token);
+    }
+}
+
+function uploadGroupPic(){
+    return  function (dispatch, getState){
+         const token = getState().authentication.token
+         getAll(dispatch,token);
+
+    }
 }
 

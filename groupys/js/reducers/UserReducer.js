@@ -21,7 +21,7 @@ export default function user(state = initialState, action) {
         const savedData = action.payload || initialState;
 
         return {
-            ...state, ...savedData.users
+            ...state, ...savedData.user
         };
     }
     let userState = {...state};
@@ -38,7 +38,7 @@ export default function user(state = initialState, action) {
             };
 
         case actions.USER_FOLLOW:
-            return {
+            return{
                 ...state,
                 followers : action.followers,
             };

@@ -4,13 +4,12 @@ import Timer from './LogTimer'
 let timer = new Timer();
 class ProductsApi
 {
-    getAll() {
+    getAll(token) {
         return new Promise(async(resolve, reject) => {
 
             try {
                 let from = new Date();
 
-                let token = await store.get('token');
                 const response = await fetch(`${server_host}/api/products/0/10`, {
                     method: 'GET',
                     headers: {
@@ -40,13 +39,13 @@ class ProductsApi
 
 
     }
-    findByBusinessId(id){
+    findByBusinessId(id,token){
         return new Promise(async(resolve, reject) => {
 
             try {
                 let from = new Date();
 
-                let token = await store.get('token');
+
                 const response = await fetch(`${server_host}/api/products/find/by/business/${id}`, {
                     method: 'GET',
                     headers: {
@@ -75,7 +74,7 @@ class ProductsApi
 
 
 
-    getProductCategories(gid)
+    getProductCategories(gid,token)
     {
 
         return new Promise(async(resolve, reject) => {
@@ -83,7 +82,6 @@ class ProductsApi
             try {
                 let from = new Date();
 
-                let token = await store.get('token');
                 const response = await fetch(`${server_host}/api/categories/product/en/` +gid, {
                     method: 'GET',
                     headers: {

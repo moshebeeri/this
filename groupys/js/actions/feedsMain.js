@@ -23,7 +23,7 @@ async function fetchFeedsFromServer(feeds,dispatch,token,user){
         }else{
             let keys = Object.keys(feeds)
             let id = keys[keys.length-1]
-            response =  await feedApi.getAll('down',id,token,user);
+            response =  await feedApi.getAll('down',feeds[id].fid,token,user);
         }
 
         if(!response)
@@ -55,10 +55,10 @@ async function fetchFeedsFromServer(feeds,dispatch,token,user){
 
 
 
-async function fetchTopList(id,dispatch){
+async function fetchTopList(id,token,user,dispatch){
     try {
 
-        let response  =  await feedApi.getAll('up',id);
+        let response  =  await feedApi.getAll('up',id,token,user);
         if(!response)
             return;
 
@@ -85,14 +85,14 @@ async function fetchTopList(id,dispatch){
 
 
 
-export function fetchTop(id){
+export function fetchTop(id,token,user){
     return async function (dispatch, getState){
         await dispatch({
             type: actions.FEED_SHOW_TOP_LOADER,
             showTopLoader: true,
 
         });
-        await fetchTopList(id,dispatch);
+        await fetchTopList(id,token,user,dispatch);
         await dispatch({
             type: actions.FEED_SHOW_TOP_LOADER,
             showTopLoader: false,
@@ -194,17 +194,19 @@ export function setNextFeeds(feeds,token,user){
 
 export function like(id){
     return async function (dispatch, getState){
+        const token = getState().authentication.token
         dispatch({
             type: actions.LIKE,
             id:id
         });
-        await userApi.like(id);
+        await userApi.like(id,token);
     }
 }
 
-export const unlike = id => {
+export const unlike = (id) => {
     return async function (dispatch, getState) {
-        await userApi.unlike(id);
+        const token = getState().authentication.token
+        await userApi.unlike(id,token);
         dispatch({
             type: actions.UNLIKE,
             id:id
@@ -223,14 +225,21 @@ export function saveFeed(id) {
     }
 }
 
-export function setUserFollows(token) {
+export function setUserFollows() {
     return async function (dispatch, getState) {
 
-        let response = await userApi.getUserFollowers(token);
-        dispatch({
-            type: actions.USER_FOLLOW,
-            followers:response
-        });
+        try {
+           const token = getState().authentication.token
+            let response = await userApi.getUserFollowers(token);
+            dispatch({
+                type: actions.USER_FOLLOW,
+                followers: response
+            });
+        }catch (error){
+            dispatch({
+                type: actions.NETWORK_IS_OFFLINE,
+            });
+        }
     }
 }
 export function shareActivity(id,activityId,users,token) {

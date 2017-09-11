@@ -50,8 +50,8 @@ class LoginApi
     let newPhone = phone.toString().substring(phone.indexOf(countryCode.toString()) + countryCode.toString().length);
     return newPhone;
 }
-    signup(phoneNumber, password) {
-        let phoneNumber = '+972' + phoneNumber;
+    signup(phone, password) {
+        let phoneNumber = '+972' + phone;
         let normalizedPhone = normalizePhoneNumber(phoneNumber,'+972');
         let cleanPhone = this.clean_phone_number(normalizedPhone);
         return new Promise(async(resolve, reject) => {
@@ -157,12 +157,11 @@ class LoginApi
 
     }
 
-    changePassword(oldPassword,newPassowrd,userId) {
+    changePassword(oldPassword,newPassowrd,userId,token) {
 
 
         return new Promise(async(resolve, reject) => {
             try {
-                let token = await store.get('token');
 
                 const response = await fetch(`${server_host}/api/users/`+userId+ `/password/` , {
                     method: 'PUT',

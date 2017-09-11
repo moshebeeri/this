@@ -48,6 +48,7 @@ export default function feeds(state = initialState, action) {
                 showTopLoader : action.showTopLoader
             };
 
+
         default:
             return state;
     }

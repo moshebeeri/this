@@ -98,7 +98,7 @@ export default class GenericFeedItem extends Component {
 
 
         if(gestureState.moveY < 300){
-            this.props.fetchTopList(this.props.item.fid)
+            this.props.fetchTopList(this.props.item.fid,this.props.token,this.props.user)
         }
         return false;
     }
@@ -125,7 +125,7 @@ export default class GenericFeedItem extends Component {
         }
 
     createFeedView(item){
-        if(feed) {
+        if(item) {
 
             return <View  {...this._panResponder.panHandlers} >
                 {item}

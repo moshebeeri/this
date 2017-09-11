@@ -8,6 +8,9 @@ export const LIKE = 'LIKE';
 export const UNLIKE = 'UNLIKE';
 export const SAVE = 'SAVE';
 export const SHARE = 'SHARE';
+// user change password
+
+export const CHANGE_PASSWORD_FAILED ='CHANGE_PASSWORD_FAILED'
 //user registration
 export const REGISTER_CODE_INVALID = 'REGISTER_CODE_INVALID';
 export const REGISTER_CODE_SUCSSES='REGISTER_CODE_SUCSSES';
@@ -44,6 +47,8 @@ export const SHOW_SEARCH_SPIN = 'SHOW_SEARCH_SPIN';
 
 export const GET_FEEDS = 'GET_FEEDS';
 export const UPSERT_FEEDS = 'UPSERT_FEEDS';
+export const FEED_LIKE = 'FEED_LIKE';
+export const FEED_UNLIKE = 'FEED_LIKE';
 export const FEED_LOADING_DONE = 'FEED_LOADING_DONE';
 export const FEED_SHOW_TOP_LOADER = 'SHOW_TOP_LOADER';
 
@@ -62,6 +67,8 @@ export const UPSERT_INSTANCE = 'UPSERTinstance';
 
 //groups
 export const UPSERT_GROUP = 'UPSERTgroup';
+export const SET_GROUPS = 'SET_GROUPS';
+
 
 //user
 export const UPSERT_USER = 'UPSERTuser';
@@ -73,3 +80,11 @@ export const USER_FOLLOW = 'USER_FOLLOW'
 //activity
 export const UPSERT_ACTIVITY= 'UPSERTactivity';
 
+//network
+export const NETWORK_IS_OFFLINE = 'NETWORK_IS_OFFLINE';
+export const NETWORK_IS_ONLINE = 'NETWORK_IS_ONLINE';
+
+//Notifcation screen
+export const SET_NOTIFICATION = 'SET_NOTIFICATION';
+export const READ_NOTIFICATION = 'READ_NOTIFICATION';
+export const EXECUTE_NOTIFICATION_ACTION = 'EXECUTE_NOTIFICATION_ACTION'

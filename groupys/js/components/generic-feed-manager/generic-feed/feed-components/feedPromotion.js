@@ -31,9 +31,6 @@ export default class FeedPromotion extends Component {
     }
 
 
-    render(){
-        return this.createPromotion(this.props.item,this.props.save,this.props.like,this.props.unlike,this.props.showUsers,this.props.comment);
-    }
 
     showBussines(){
         this.props.navigation.navigate("businessProfile",{ bussiness:this.props.item.business});
@@ -41,12 +38,13 @@ export default class FeedPromotion extends Component {
 
     }
 
-    createPromotion(item,save,like,unlike,showUsers,comment){
+    render(){
+        const {item,save,like,unlike,showUsers,comment,token} = this.props;
         const styles = this.createPromotionStyle();
         const colorStyle = this.createColorStyle(item)
         const promotion = <Text style={colorStyle}>{item.promotion}</Text>
-        const buisnessLogo = componentCreator.createBusinessLog(item);
-        const likeIcon = componentCreator.createLikeButton(item,styles,like,unlike);
+        const buisnessLogo = componentCreator.createBusinessLog(item,this.showBussines.bind(this));
+        const likeIcon = componentCreator.createLikeButton(item,styles,like,unlike,token);
         const commentICon = componentCreator.createCommentButton(styles, comment);
         const shareICon = componentCreator.createShareButton(styles, showUsers, item);
         const saveIcon = componentCreator.createSaveButton(item, save);

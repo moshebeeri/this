@@ -17,14 +17,12 @@ import Timer from './LogTimer'
 let timer = new Timer();
 class GroupsApi
 {
-    createGroup(group,callbackFunction) {
+    createGroup(group,callbackFunction,token) {
         return new Promise(async(resolve, reject) => {
 
             try {
                 let from = new Date();
 
-                let token = await store.get('token');
-                let userId = await store.get('user_id');
                 const response = await fetch(`${server_host}/api/groups/`, {
                     method: 'POST',
                     headers: {
@@ -148,13 +146,48 @@ class GroupsApi
         })
 
     }
-    getAll() {
+
+    acceptInvatation(group,token) {
         return new Promise(async(resolve, reject) => {
 
             try {
                 let from = new Date();
 
-                let token = await store.get('token');
+                const response = await fetch(`${server_host}/api/groups/invite/approve/` +group._id, {
+                    method: 'GET',
+                    headers: {
+                        'Accept': 'application/json, text/plain, */*',
+                        'Content-Type': 'application/json;charset=utf-8',
+                        'Authorization': 'Bearer ' + token
+
+                    }
+
+                })
+                if (response.status == '401') {
+                    reject(response);
+                    return;
+                }
+
+                resolve(true);
+
+
+            }
+            catch (error) {
+
+                console.log('There has been a problem with your fetch operation: ' + error.message);
+                reject(error);
+            }
+        })
+
+
+    }
+
+    getAll(token) {
+        return new Promise(async(resolve, reject) => {
+
+            try {
+                let from = new Date();
+
                 const response = await fetch(`${server_host}/api/groups/user/follow/0/100`, {
                     method: 'GET',
                     headers: {
@@ -184,13 +217,13 @@ class GroupsApi
 
     }
 
-    getByBusinessId(bid) {
+    getByBusinessId(bid,token) {
         return new Promise(async(resolve, reject) => {
 
             try {
                 let from = new Date();
 
-                let token = await store.get('token');
+
                 const response = await fetch(`${server_host}/api/groups/user/follow/0/100`, {
                     method: 'GET',
                     headers: {
@@ -220,13 +253,13 @@ class GroupsApi
 
     }
 
-    touch(groupid) {
+    touch(groupid,token) {
         return new Promise(async(resolve, reject) => {
 
             try {
                 let from = new Date();
 
-                let token = await store.get('token');
+
                 const response = await fetch(`${server_host}/api/groups/touch/${groupid}`, {
                     method: 'GET',
                     headers: {

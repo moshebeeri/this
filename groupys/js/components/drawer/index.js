@@ -26,9 +26,9 @@ let entityUtils = new EntityUtils();
 import * as userAction from "../../actions/user";
 
 
-import UserApi from '../../api/user'
+
 import login from './drwaer-theme';
-let userApi = new UserApi()
+
 class ProfileDrawer extends Component {
 
     static navigationOptions = {
@@ -53,10 +53,12 @@ class ProfileDrawer extends Component {
     }
 
     async componentWillMount(){
-        let user = await userApi.getUser();
-        this.setState({
-            phoneNumber:user.country_code + '-' + user.phone_number
-        });
+        const user = this.props.user
+        if(user) {
+            this.setState({
+                phoneNumber: user.country_code + '-' + user.phone_number
+            });
+        }
 
 
     }
@@ -105,10 +107,10 @@ class ProfileDrawer extends Component {
             });
 
             let user = {
-                name:this.props.user.user.name,
-                _id: this.props.user.user._id,
+                name:this.props.user.name,
+                _id: this.props.user._id,
                 image: {uri: image.path, width: image.width, height: image.height, mime: image.mime},
-                phone_number:this.props.user.user.phone_number,
+                phone_number:this.props.user.phone_number,
             }
             entityUtils.update('users',user,this.state.token,this.formSuccess.bind(this),this.formFailed.bind(this),'');
 
@@ -126,11 +128,11 @@ class ProfileDrawer extends Component {
 
     render() {
         let source = noPic;
-        if(this.props.user.user){
-            if( this.props.user.user.pictures && this.props.user.user.pictures.length > 0){
+        if(this.props.user){
+            if( this.props.user.pictures && this.props.user.pictures.length > 0){
 
                 source = {
-                    uri:this.props.user.user.pictures[this.props.user.user.pictures.length -1].pictures[3]
+                    uri:this.props.user.pictures[this.props.user.pictures.length -1].pictures[3]
                 }
 
             }
@@ -186,7 +188,7 @@ class ProfileDrawer extends Component {
 
 export default connect(
     state => ({
-        user: state.user
+        user: state.authentication.user
     }),
     dispatch => bindActionCreators(userAction, dispatch)
 

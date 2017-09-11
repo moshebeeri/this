@@ -7,7 +7,7 @@
 /**
  * Created by stan229 on 5/27/16.
  */
-const initialState = {token:'',user:undefined};
+const initialState = {authentication:'',token:'',init:false,user:undefined};
 
 import * as actions from './reducerActions';
 import { REHYDRATE } from 'redux-persist/constants'
@@ -19,9 +19,20 @@ export default function authentication(state = initialState, action) {
         // retrive stored data for reducer callApi
         const savedData = action.payload || initialState;
 
-        return {
-            ...state, ...savedData.authentication
-        };
+        if(savedData.authentication) {
+            return {
+                ...state,
+                token: savedData.authentication.token,
+                user: savedData.authentication.user,
+                init: true,
+            };
+        }else{
+            return {
+                ...state,
+                init: true,
+            };
+        }
+
     }
     switch (action.type) {
 

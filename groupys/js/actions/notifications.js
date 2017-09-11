@@ -7,84 +7,56 @@
 
 import NotificationApi from "../api/notification"
 import GroupsApi from "../api/groups"
-let groupsApi = new GroupsApi();
+
 let notificationApi = new NotificationApi();
-import store from 'react-native-simple-store';
 
 
-async function getAll(dispatch){
-    try {
-        let response = await notificationApi.getAll();
-        if(response.length > 0) {
+import * as actions from '../reducers/reducerActions';
 
-            dispatch({
-                type: 'GET_NOTIFICATION',
-                notification: response,
 
-            });
+
+
+
+export function onEndReached(){
+    return async function (dispatch, getState){
+        const token = getState().authentication.token
+        const user = getState().authentication.user
+        const notifications = getState().notification.notification
+        let skip = 0;
+        if(notifications){
+            skip = notifications.length + 1;
         }
+        let response = await notificationApi.getAll(token,user,skip,10);
+        dispatch({
+            type: actions.SET_NOTIFICATION,
+            notifications: response,
 
-
-    }catch (error){
-        console.log(error);
+        });
     }
 
 }
+export function readNotification(notificationId){
+    return  function (dispatch, getState){
+        const token = getState().authentication.token
+        notificationApi.readNotification(token,notificationId);
+        dispatch({
+            type: actions.READ_NOTIFICATION,
+            id: notificationId,
 
-async function getAllFromStore(dispatch){
-    try {
-        let response = await store.get('notification');
-        if(response) {
-
-            dispatch({
-                type: 'GET_NOTIFICATION',
-                notification: response,
-
-            });
-        }
-
-
-    }catch (error){
-        console.log(error);
+        });
     }
-
 }
 
-async function getAllGroups(dispatch){
-    try {
-        let response = await groupsApi.getAll();
-        if(response.length > 0) {
+export function doNotification(notificationId){
+    return  function (dispatch, getState){
+        const token = getState().authentication.token
+        notificationApi.doNotificationAction(token,notificationId);
+        dispatch({
+            type: actions.EXECUTE_NOTIFICATION_ACTION,
+            id: notificationId,
 
-            dispatch({
-                type: 'GET_GROUPS',
-                groups: response,
-
-            });
-        }
-
-
-    }catch (error){
-        console.log(error);
+        });
     }
-
 }
 
-export function fetchNotification(){
-    return function (dispatch, getState){
-        dispatch|(getAll(dispatch));
-    }
-
-}
-export function fetchStoreNotification(){
-    return function (dispatch, getState){
-        dispatch|(getAllFromStore(dispatch));
-    }
-
-}
-export function fetchGroups(){
-    return function (dispatch, getState){
-        dispatch|(getAllGroups(dispatch));
-    }
-
-}
 

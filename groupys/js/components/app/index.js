@@ -21,6 +21,11 @@ import BackgroundTimer from 'react-native-background-timer';
 const promotions =  require('../../../images/promotion.png');
 const save =  require('../../../images/save.png');
 const groups =  require('../../../images/groups.png');
+import LocationApi from '../../api/location'
+import ContactApi from '../../api/contacts'
+
+let locationApi = new LocationApi();
+let contactApi = new ContactApi();
 
 
 import StyleUtils from '../../utils/styleUtils'
@@ -38,10 +43,10 @@ const warch = navigator.geolocation.watchPosition((position) => {
 );
 
 const timer = BackgroundTimer.setInterval(() =>{
-    console.log('sync contacts')
-    // this will be executed every 200 ms
-    // even when app is the the background
-    contactApi.syncContacts();
+
+    // // this will be executed every 200 ms
+    // // even when app is the the background
+     contactApi.syncContacts();
 
 
 
@@ -54,16 +59,13 @@ let updateDialogOption = {
 
 
 import { bindActionCreators } from "redux";
-import { isAuthenticated } from './appSelector'
+import { isAuthenticated,showAddAction,addComponent } from './appSelector'
 import * as mainAction from "../../actions/mainTab";
-
+import { createSelector } from 'reselect'
  class ApplicationManager extends Component {
     static navigationOptions = {
         header:null
     };
-
-
-
 
      constructor(props) {
 
@@ -88,50 +90,20 @@ import * as mainAction from "../../actions/mainTab";
         this.props.navigation.navigate(route);
     }
 
-
-
-    onChangeTab(tab){
-        this.props.mainAction.changeTab(tab)
-        this.props.mainAction.showFab(this.showAction(tab.i))
-    }
-
-
-
-
-
-
-     navigateToAdd(){
-        this.replaceRoute(this.state.addComponent);
+     async componentWillMount() {
+         const isVerified = await this.props.isAuthenticated
+         if (!isVerified){
+             this.replaceRoute('login');
+         }
      }
 
-
-    showAction(index){
-        switch (index){
-            case 0:
-                return false;
-            case 1:
-                return false;
-            case 2:
-                return true;
-            case 3:
-                return false;
-            case 4:
-                return true;
-            case 5:
-                return true;
-
-        }
-
+    onChangeTab(tab){
+        this.props.actions.changeTab(tab)
     }
 
-    componentWillMount() {
-        if (!this.props.isAuthenticated){
-            this.replaceRoute('login');
-         }
-    }
-
-
-
+     navigateToAdd(){
+        this.replaceRoute(this.props.addComponent);
+     }
 
     openDrawer() {
         this._drawer._root.open();
@@ -147,6 +119,7 @@ import * as mainAction from "../../actions/mainTab";
     render() {
         const { selectedTab,showAdd } = this.props;
 
+        //TODO find another way to change the drawer close/open
         closeDrawer = () => {
             this.drawer._root.close()
         };
@@ -169,21 +142,21 @@ import * as mainAction from "../../actions/mainTab";
 
                 <Tabs tabBarUnderlineStyle={ {backgroundColor: '#2db6c8'} } initialPage={selectedTab} onChangeTab={this.onChangeTab.bind(this)} style={{backgroundColor: '#fff',}}>
                     <Tab heading={ <TabHeading style={{ backgroundColor: "white" }}><Image style={{tintColor:'#2db6c8',marginLeft:0,width:35,height:35}} source={promotions}/></TabHeading>}>
-                        <Feeds index={0}  navigation={this.props.navigation} navigateAction={this.headerAction.bind(this)}/>
+                        <Feeds index={0}  navigation={this.props.navigation} />
                     </Tab>
                     <Tab heading={ <TabHeading style={{ backgroundColor: "white" }}><Image style={{tintColor:'#2db6c8',marginLeft:0,width:25,height:25}} source={save}/></TabHeading>}>
-                        <MydPromotions  navigation={this.props.navigation}  index={1} navigateAction={this.headerAction.bind(this)}/>
+                        <MydPromotions  navigation={this.props.navigation}  index={1}/>
                     </Tab>
 
                     <Tab
                         heading={ <TabHeading style={{ backgroundColor: "white" }}><Image style={{tintColor:'#2db6c8',marginLeft:0,width:55,height:55}} source={groups}/></TabHeading>}>
                         <Groups navigation={this.props.navigation} index={2}
-                                navigateAction={this.headerAction.bind(this)}/>
+                               />
                     </Tab>
 
                     <Tab
                         heading={ <TabHeading style={{ width:15,backgroundColor: "white" }}><Icon2 style={{color: '#2db6c8', fontSize: 30,}}name="md-notifications"/></TabHeading>}>
-                         <Notification navigation={this.props.navigation} index={3} navigateAction={this.headerAction.bind(this)}></Notification>
+                         <Notification navigation={this.props.navigation} index={3} ></Notification>
                     </Tab>
 
 
@@ -219,17 +192,18 @@ import * as mainAction from "../../actions/mainTab";
 
 
 
-const mapStateToProps = state => {
+const mapStateToProps = (state) => {
     return {
-        isAuthenticated: isAuthenticated(state)
+        isAuthenticated: isAuthenticated(state),
+        selectedTab: state.mainTab.selectedTab,
+        showAdd: showAddAction(state),
+        addComponent:addComponent(state)
     }
 }
+
+
 export default connect(
-    state => ({
-        selectedTab: state.mainTab.selectedTab,
-        showAdd:state.mainTab.showAdd,
-        mapStateToProps,
-    }),
+    mapStateToProps,
     (dispatch) => ({
         actions: bindActionCreators(mainAction, dispatch)
     })

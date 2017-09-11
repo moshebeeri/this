@@ -120,7 +120,7 @@ class CommentApi {
 
     }
 
-    getComment(entities){
+    getComment(entities,token){
 
             return new Promise(async(resolve, reject) => {
 
@@ -129,7 +129,7 @@ class CommentApi {
                     let request =  {};
                     request.entities = entities;
 
-                    let token = await store.get('token');
+
                     const response = await fetch(`${server_host}/api/comments/find/`+0+'/' +100, {
                         method: 'POST',
                         headers: {
@@ -164,7 +164,7 @@ class CommentApi {
 
     }
 
-    getGroupComments(group) {
+    getGroupComments(group,token) {
         return new Promise(async(resolve, reject) => {
 
             try {
@@ -177,7 +177,7 @@ class CommentApi {
                 };
 
 
-                let token = await store.get('token');
+
                 const response = await fetch(`${server_host}/api/comments/conversed/instance/`+0+'/' +100, {
                     method: 'POST',
                     headers: {
@@ -216,7 +216,7 @@ class CommentApi {
 
 
     }
-    getInstanceGroupComments(group,instance,size) {
+    getInstanceGroupComments(group,instance,size,token) {
         return new Promise(async(resolve, reject) => {
 
             try {
@@ -229,7 +229,7 @@ class CommentApi {
                 };
 
 
-                let token = await store.get('token');
+
                 const response = await fetch(`${server_host}/api/comments/find/`+size +'/' +10, {
                     method: 'POST',
                     headers: {

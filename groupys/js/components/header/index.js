@@ -11,8 +11,7 @@ const  vh = height/100
 import styles from './styles';
 // import Icon from 'react-native-vector-icons/Ionicons';
 
-import ContactApi from '../../api/contacts'
-let contactApi = new ContactApi();
+
 import {
     Menu,
     MenuOptions,
@@ -35,7 +34,7 @@ export default class GeneralComponentHeader extends Component {
 
 
     refreshContact(){
-        contactApi.syncContacts();
+        //contactApi.syncContacts();
     }
 
     realize(){
