@@ -93,7 +93,12 @@ import { createSelector } from 'reselect'
         this.props.navigation.navigate(route);
     }
 
-
+     async componentWillMount() {
+         const isVerified = await this.props.isAuthenticated
+         if (!isVerified){
+             this.replaceRoute('login');
+         }
+     }
 
     onChangeTab(tab){
         this.props.mainAction.changeTab(tab)
@@ -129,11 +134,7 @@ import { createSelector } from 'reselect'
 
     }
 
-    componentWillMount() {
-        if (!this.props.isAuthenticated){
-            this.replaceRoute('login');
-         }
-    }
+
 
 
 
@@ -151,9 +152,7 @@ import { createSelector } from 'reselect'
 
     render() {
         const { selectedTab,showAdd ,isAuthenticated} = this.props;
-        if(!isAuthenticated){
-            return <View></View>
-        }
+
 
         closeDrawer = () => {
             this.drawer._root.close()

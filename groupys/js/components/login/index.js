@@ -43,10 +43,10 @@ import LinearGradient from 'react-native-linear-gradient';
 
      }
 
-     componentWillUpdate() {
-         const { isAuthenticated } = this.props;
+     async componentWillUpdate() {
+         const isVerified  = await this.props.isAuthenticated;
 
-         if (isAuthenticated){
+         if (isVerified){
              this.replaceRoute('home');
          }
      }

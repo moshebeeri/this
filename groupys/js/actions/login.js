@@ -5,7 +5,7 @@ import LoginApi from "../api/login"
 let loginApi = new LoginApi();
 import UserApi from "../api/user"
 let userApi = new UserApi();
-
+import store from 'react-native-simple-store';
 import { NavigationActions } from 'react-navigation'
 const resetAction = NavigationActions.reset({
     index: 0,
@@ -19,7 +19,7 @@ export function login(phone,password,navigation){
         try {
             let response = await loginApi.login(phone, password);
             if(response.token) {
-
+                store.save("token",response.token)
                 dispatch({
                     type: actions.SAVE_USER_TOKEN,
                     token:response.token

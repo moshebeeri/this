@@ -72,9 +72,11 @@ import Businesses from './components/business/index'
 import { MenuContext } from 'react-native-popup-menu';
 
 const AppNavigator = StackNavigator({
-        home: { screen: ApplicationManager },
+    home: { screen: ApplicationManager },
+    login: { screen: Login },
+
         businesses:{screen:ApplicationBusinessManager},
-        login: { screen: Login },
+
         addBusiness: { screen: AddBusiness },
         addPromotions:{screen:AddPromotions},
         editPromotion:{screen:EditPromotions},

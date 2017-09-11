@@ -30,7 +30,7 @@ class Feed extends Component {
 
 
     componentWillMount(){
-        this.props.actions.setUserFollows();
+      //  this.props.actions.setUserFollows();
     }
 
 
