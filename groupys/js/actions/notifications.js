@@ -7,66 +7,56 @@
 
 import NotificationApi from "../api/notification"
 import GroupsApi from "../api/groups"
-let groupsApi = new GroupsApi();
+
 let notificationApi = new NotificationApi();
 
 
-async function getAll(dispatch,token,user){
-    try {
-        let response = await notificationApi.getAll(token,user);
-        if(response.length > 0) {
-
-            dispatch({
-                type: 'GET_NOTIFICATION',
-                notification: response,
-
-            });
-        }
-
-
-    }catch (error){
-        console.log(error);
-    }
-
-}
+import * as actions from '../reducers/reducerActions';
 
 
 
 
-async function getAllGroups(dispatch,token){
-    try {
-        let response = await groupsApi.getAll(token);
-        if(response.length > 0) {
 
-            dispatch({
-                type: 'GET_GROUPS',
-                groups: response,
-
-            });
-        }
-
-
-    }catch (error){
-        console.log(error);
-    }
-
-}
-
-export function fetchNotification(){
-    return function (dispatch, getState){
+export function onEndReached(){
+    return async function (dispatch, getState){
         const token = getState().authentication.token
         const user = getState().authentication.user
-        dispatch|(getAll(dispatch,token,user));
+        const notifications = getState().notification.notification
+        let skip = 0;
+        if(notifications){
+            skip = notifications.length + 1;
+        }
+        let response = await notificationApi.getAll(token,user,skip,10);
+        dispatch({
+            type: actions.SET_NOTIFICATION,
+            notifications: response,
+
+        });
     }
 
 }
-
-export function fetchGroups(){
-    return function (dispatch, getState){
+export function readNotification(notificationId){
+    return  function (dispatch, getState){
         const token = getState().authentication.token
+        notificationApi.readNotification(token,notificationId);
+        dispatch({
+            type: actions.READ_NOTIFICATION,
+            id: notificationId,
 
-        dispatch|(getAllGroups(dispatch,token));
+        });
     }
-
 }
+
+export function doNotification(notificationId){
+    return  function (dispatch, getState){
+        const token = getState().authentication.token
+        notificationApi.doNotificationAction(token,notificationId);
+        dispatch({
+            type: actions.EXECUTE_NOTIFICATION_ACTION,
+            id: notificationId,
+
+        });
+    }
+}
+
 
