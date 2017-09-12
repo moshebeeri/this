@@ -35,3 +35,15 @@ export const getMyBusinessesItems= createSelector(  [getStateMyBusinesses ],
         return new Array();
 
     })
+
+export const getBusinessUsers = createSelector(  [getStateMyBusinesses ],
+    (businesses) => {
+
+
+        if (!_.isEmpty(businesses.businessesUsers)) {
+            return  businesses.businessesUsers;
+
+        }
+        return new Map();
+
+    })

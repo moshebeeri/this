@@ -42,10 +42,7 @@ export default function user(state = initialState, action) {
                 ...state,
                 followers : action.followers,
             };
-        case 'GET_USER_BUSINESS':
 
-            extendedState['business'+ action.businessId] = action.businessUsers;
-            return extendedState;
         default:
             return state;
     }

@@ -3,33 +3,20 @@ import {Image, Platform} from 'react-native';
 import {connect} from 'react-redux';
 import {actions} from 'react-native-navigation-redux-helpers';
 import {Container, Content, Text,Fab, InputGroup, Input, Button, View,Header} from 'native-base';
-import GenericFeedManager from '../generic-feed-manager/index';
 import Icon from 'react-native-vector-icons/EvilIcons';
-import GenericListView from '../generic-list-manager/generic-list-view/index'
 
 import * as usersAction from "../../actions/user";
 import UserRoleView from './UserRoleView'
-import UserApi from '../../api/user'
-let userApi = new UserApi();
+import * as businessAction from "../../actions/business";
 import { bindActionCreators } from "redux";
-
+import {getBusinessUsers} from '../../selectors/businessesSelector'
+import GenericListManager from '../generic-list-manager/index'
  class UserPermittedRoles extends Component {
 
 
 
     constructor(props) {
         super(props);
-        this.state = {
-
-            error: '',
-            validationMessage: '',
-            token: '',
-            userId: '',
-            rowsView: [],
-            promotions:{}
-        }
-        ;
-
 
 
     }
@@ -37,32 +24,34 @@ import { bindActionCreators } from "redux";
 
 
 
-     fetchFeeds(){
-         this.props.fetchUsersBusiness(this.props.navigation.state.params.business._id);
+     componentWillMount(){
+         const { navigation} = this.props;
+         const business = navigation.state.params.business._id;
 
-        }
-     fetchTop(id){
-
+         this.props.actions.setBusinessUsers(business);
      }
 
+     renderItem(item){
 
-     nextLoad(){
-        return false;
+         return <UserRoleView
+                item={item.item}
+                index = {item.index}
+                />
      }
+
 
      navigateToAdd(){
          this.props.navigation.navigate("addPremitedUsers",{business:this.props.navigation.state.params.business});
      }
 
     render() {
-        let rows = this.props.user['business'+this.props.navigation.state.params.business._id];
-        if(!rows){
-            rows = [];
-        }
+        const { users,navigation,actions,update} = this.props;
+        const business = navigation.state.params.business._id;
 
         return (
             <Container>
-            <GenericFeedManager  navigation = {this.props.navigation} loadingDone={true}feeds={rows} nextLoad={false} title="Bussines Users" api={this} ItemDetail={UserRoleView}/>
+                <GenericListManager rows={users[business]} navigation = {navigation} actions={actions}  update={update}
+                                    onEndReached={actions.setBusinessUsers} ItemDetail = {this.renderItem.bind(this)}/>
 
                 <Fab
 
@@ -83,10 +72,13 @@ import { bindActionCreators } from "redux";
 
 export default connect(
     state => ({
-        user: state.user
+        users: getBusinessUsers(state),
+        update:state.businesses.update
     }),
+    (dispatch) => ({
+        actions: bindActionCreators(businessAction, dispatch),
 
-    dispatch => bindActionCreators(usersAction, dispatch)
+    })
 )(UserPermittedRoles);
 
 

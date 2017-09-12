@@ -19,7 +19,8 @@ class GenericListManager extends Component {
 
 
     render() {
-        const { rows,ItemDetail,actions,update} = this.props;
+        const { rows,ItemDetail,actions,update,onEndReached} = this.props;
+        const onEndActions = this.getOnEndAction(actions,onEndReached)
 
         return (
 
@@ -27,7 +28,7 @@ class GenericListManager extends Component {
 
                 <FlatList
                     data={rows}
-                    onEndReached={actions.onEndReached}
+                    onEndReached={onEndActions}
                     renderItem={ItemDetail}
                     extraData={update}
                 />
@@ -37,6 +38,14 @@ class GenericListManager extends Component {
         );
 
     }
+    getOnEndAction(actions,onEndReached){
+        if(onEndReached){
+            return onEndReached;
+        }
+        return actions.onEndReached
+    }
+
+
 }
 
 export default connect(
