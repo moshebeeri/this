@@ -59,7 +59,7 @@ let updateDialogOption = {
 
 
 import { bindActionCreators } from "redux";
-import { isAuthenticated,showAddAction,addComponent,showCompoenent } from './appSelector'
+import { isAuthenticated,showAddAction,addComponent,showCompoenent } from '../../selectors/appSelector'
 import * as mainAction from "../../actions/mainTab";
 import { createSelector } from 'reselect'
  class ApplicationManager extends Component {

@@ -17,6 +17,18 @@ export const getMyBusinesses= createSelector(  [getStateMyBusinesses ],
 
 
         if (!_.isEmpty(businesses.myBusinesses)) {
+            return  Object.keys(businesses.myBusinesses).map(key => businesses.myBusinesses[key].business)
+
+        }
+        return new Array();
+
+    })
+
+export const getMyBusinessesItems= createSelector(  [getStateMyBusinesses ],
+    (businesses) => {
+
+
+        if (!_.isEmpty(businesses.myBusinesses)) {
             return  Object.keys(businesses.myBusinesses).map(key => businesses.myBusinesses[key])
 
         }

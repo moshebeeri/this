@@ -14,7 +14,7 @@ import {Container, Content, Text, InputGroup, Input, Button, Icon, View,Header,I
 import store from 'react-native-simple-store';
 
 
-import {getMyBusinesses} from './groupAddSelector'
+import {getMyBusinesses} from '../../../selectors/businessesSelector'
 
 
 import ImagePicker from 'react-native-image-crop-picker';

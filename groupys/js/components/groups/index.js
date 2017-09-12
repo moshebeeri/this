@@ -9,7 +9,7 @@ import GenericListGroupView from '../generic-list-manager/generic-list-group-vie
 import GenericListManager from '../generic-list-manager/index'
 
 
-import {getGroups} from './groupSelector'
+import {getGroups} from '../../selectors/groupSelector'
 import * as groupsAction from "../../actions/groups";
 import { bindActionCreators } from "redux";
 
@@ -31,7 +31,8 @@ import { bindActionCreators } from "redux";
     renderItem(item){
        return <GenericListGroupView
             onPressItem={this.onPressItem.bind(this)}
-            item={item}
+            item={item.item}
+            index = {item.index}
         />
 
     }
@@ -39,7 +40,7 @@ import { bindActionCreators } from "redux";
         this.props.actions.fetchGroups();
     }
     render() {
-        const { update,groups,navigation,actions,groupsState} = this.props;
+        const { update,groups,navigation,actions} = this.props;
 
 
         return (
@@ -54,7 +55,6 @@ import { bindActionCreators } from "redux";
 
 export default connect(
     state => ({
-        groupsState:state.groups,
         groups: getGroups(state),
         update: state.groups.update
     }),

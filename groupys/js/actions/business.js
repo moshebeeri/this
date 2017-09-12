@@ -105,7 +105,7 @@ export function showCamera(){
 
 
 
-export function setMyBusinesses(){
+export function onEndReached(){
     return async function (dispatch, getState){
         const token = getState().authentication.token
 

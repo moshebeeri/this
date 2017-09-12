@@ -11,7 +11,7 @@ import { bindActionCreators } from "redux";
 import { connect } from 'react-redux';
 import * as feedsAction from "../../actions/feedsMain";
 
-import { getFeeds } from './feedSelector'
+import { getFeeds } from '../../selectors/feedSelector'
 
 
 import { createSelector } from 'reselect'

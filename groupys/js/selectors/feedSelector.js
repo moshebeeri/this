@@ -5,8 +5,8 @@
 
 import { createSelector } from 'reselect'
 
-import * as assemblers from '../../actions/collectionAssembler';
-import  FeedUiConverter from '../../api/feed-ui-converter'
+import * as assemblers from '../actions/collectionAssembler';
+import  FeedUiConverter from '../api/feed-ui-converter'
 
 let feedUiConverter = new FeedUiConverter();
 
