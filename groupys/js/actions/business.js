@@ -6,6 +6,8 @@ import BusinessApi from "../api/business"
 let businessApi = new BusinessApi();
 import UserApi from "../api/user"
 let userApi = new UserApi();
+import  ProductApi from "../api/product"
+let productApi = new ProductApi();
 
 import * as actions from '../reducers/reducerActions';
 
@@ -150,6 +152,30 @@ export function setBusinessUsers(businessId){
             dispatch({
                 type: actions.SET_USER_BUSINESS,
                 businessUsers: users,
+                businessId:businessId
+
+            });
+
+
+
+        }catch (error){
+            //TODO dispacth network offline
+            console.log(error);
+        }
+    }
+
+}
+
+export function setBusinessProducts(businessId){
+    return async function (dispatch, getState){
+        const token = getState().authentication.token
+
+        try {
+            let products = await productApi.findByBusinessId(businessId,token);
+
+            dispatch({
+                type: actions.SET_PRODUCT_BUSINESS,
+                businessProducts: products,
                 businessId:businessId
 
             });
