@@ -7,27 +7,11 @@
 
 import ProdictApi from "../api/product"
 let productApi = new ProdictApi();
+import EntityUtils from "../utils/createEntity";
 
+let entityUtils = new EntityUtils();
 
-async function getAll(dispatch,token){
-    try {
-        let response = await productApi.getAll(token);
-        if(response.length > 0) {
-
-            dispatch({
-                type: 'GET_PRODUCTS',
-                products: response,
-
-            });
-        }
-
-
-    }catch (error){
-        console.log(error);
-    }
-
-}
-
+import * as actions from '../reducers/reducerActions';
 async function getAllByBusinessId(dispatch,id,token) {
     try {
         let response = await productApi.findByBusinessId(id,token);
@@ -56,7 +40,7 @@ async function getProductCategories(dispatch,gid,token) {
             if (response) {
 
                 dispatch({
-                    type: 'GET_PRODUCT_CATEGORIES',
+                    type: actions.SET_PRODUCT_CATEGORIES,
                     categories: response,
                     language: 'en',
                     catId: gid
@@ -89,10 +73,32 @@ export function fetchProductsByBusiness(businessId){
 
 
 
-export function fetchProductCategories(gid){
+export function setProductCategories(gid){
     return function (dispatch, getState){
         const token = getState().authentication.token
         dispatch|(getProductCategories(dispatch,gid,token));
     }
 
 }
+
+export function saveProduct(product,saveSucsees,saveFailed){
+    return function (dispatch, getState){
+        const token = getState().authentication.token
+        const user = getState().authentication.user
+        entityUtils.create('products',product,token,saveSucsees,saveFailed,user._id);
+
+    }
+}
+
+export function updateProduct(product,itemId,saveSucsees,saveFailed){
+    return function (dispatch, getState){
+        const token = getState().authentication.token
+
+        entityUtils.update('products',product,token,saveSucsees,saveFailed,itemId);
+
+    }
+}
+
+
+
+

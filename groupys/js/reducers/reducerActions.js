@@ -71,6 +71,7 @@ export const SET_PRODUCT_BUSINESS ='SET_PRODUCT_BUSINESS'
 export const UPSERT_PROMOTION = 'UPSERTpromotion';
 //products
 export const UPSERT_PRODUCTS = 'UPSERTproduct';
+export const SET_PRODUCT_CATEGORIES = 'GET_PRODUCT_CATEGORIES'
 
 //instances
 export const UPSERT_INSTANCE = 'UPSERTinstance';
