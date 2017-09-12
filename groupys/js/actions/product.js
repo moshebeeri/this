@@ -90,7 +90,7 @@ export function saveProduct(product,saveSucsees,saveFailed){
     }
 }
 
-export function updateProduct(product,itemId,saveSucsees,saveFailed){
+export function updateProduct(product,saveSucsees,saveFailed,itemId){
     return function (dispatch, getState){
         const token = getState().authentication.token
 

@@ -31,14 +31,7 @@ class AddProduct extends Component {
         if(props.navigation.state.params && props.navigation.state.params.item) {
             let item = props.navigation.state.params.item;
 
-            let getCategories = props.fetchProductCategories.bind(this);
-            item.category.forEach(function (cat) {
-                let categories = props.products['categoriesen' + cat];
-                if(!categories ) {
-                    getCategories(cat);
-                }
 
-            })
             this.state = {
                 name:item.name,
                 image:'',
@@ -46,7 +39,7 @@ class AddProduct extends Component {
                 info : item.info,
                 retail_price: item.retail_price.toString(),
                 token:'',
-                categories:item.category,
+                categories:JSON.parse("[" + item.category + "]"),
                 time:milliseconds,
 
             };
@@ -89,10 +82,12 @@ class AddProduct extends Component {
     }
 
     createProduct() {
+        const{navigation} = this.props;
+
         return {
             name: this.state.name,
             image: this.state.image,
-            business: this.props.navigation.state.params.business._id,
+            business: this.getBusinessId(navigation),
             info: this.state.info,
             retail_price: this.state.retail_price,
             category: this.state.categories,
@@ -124,6 +119,7 @@ class AddProduct extends Component {
     }
 
     updateFormData(){
+        this.replaceRoute('home');
         const{actions,navigation} = this.props;
         const product = this.createProduct();
         actions.updateProduct(product,this.formSuccess.bind(this),this.formFailed.bind(this),navigation.state.params.item._id)

@@ -32,10 +32,12 @@ class Product extends Component {
     }
 
     renderItem(item){
+        const { navigation} = this.props;
         return <GenericListView
             item={item.item}
             index ={item.index}
             addform ={"AddProduct"}
+            navigation={navigation}
         />
 
 
