@@ -7,7 +7,7 @@
 /**
  * Created by stan229 on 5/27/16.
  */
-const initialState = {groups:{},update:false};
+const initialState = {groups:{},groupFeeds:{},update:false,loadingDone:{},showTopLoader:{}};
 
 
 import store from 'react-native-simple-store';
@@ -37,6 +37,25 @@ export default function group(state = initialState, action) {
             currentGroups[action.group._id] = action.group;
             imutableState.update = !imutableState.update;
             return imutableState
+
+        case actions.UPSERT_GROUP_FEEDS:
+            let currentGroupFeeds = imutableState.groupFeeds;
+            if(!currentGroupFeeds[action.groupId]){
+                currentGroupFeeds[action.groupId] = {};
+            }
+            currentGroupFeeds[action.groupId][action.groupFeed._id] = action.groupFeed;
+            imutableState.update = !imutableState.update;
+            return imutableState
+
+        case actions.GROUP_FEED_LOADING_DONE:
+            let loadingDone = imutableState.loadingDone
+            loadingDone[action.groupId] = action.loadingDone;
+            return imutableState;
+
+        case actions.GROUP_FEED_SHOWTOPLOADER:
+            let topLoader = imutableState.showTopLoader
+            topLoader[action.groupId] = action.showTopLoader;
+            return imutableState;
 
         case 'GET_GROUPS_BUSINESS' :
 

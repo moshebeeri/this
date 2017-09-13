@@ -33,6 +33,7 @@ import { bindActionCreators } from "redux";
             onPressItem={this.onPressItem.bind(this,item.item)}
             item={item.item}
             index = {item.index}
+            key={item.index}
         />
 
     }

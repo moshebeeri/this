@@ -7,7 +7,11 @@
 
 import GroupsApi from "../api/groups"
 let groupsApi = new GroupsApi();
+
+import FeedApi from "../api/feed"
+let feedApi = new FeedApi();
 import UserApi from "../api/user"
+
 let userApi = new UserApi();
 import store from 'react-native-simple-store';
 
@@ -139,3 +143,58 @@ function uploadGroupPic(){
     }
 }
 
+
+export function setNextFeeds(feeds,token,group){
+
+    return  async function (dispatch, getState){
+        const token = getState().authentication.token
+        let showLoadingDone = false;
+        if( _.isEmpty(feeds)) {
+            dispatch({
+                type: actions.GROUP_FEED_LOADING_DONE,
+                loadingDone: false,
+                groupId:group._id,
+
+            });
+            showLoadingDone = true;
+        }
+        try {
+
+            let response = null;
+            if( _.isEmpty(feeds)){
+                response =  await feedApi.getAll('down','start',token,group);
+            }else{
+                let filteredFeeds = feeds.filter(function (feed) {
+                            return feed.id != '100'
+
+                        })
+                let keys = Object.keys(filteredFeeds)
+                let id = keys[keys.length-1]
+                response =  await feedApi.getAll('down',filteredFeeds[id].fid,token,group);
+            }
+
+            if(response){
+                response.forEach(item => dispatch({
+                    type: actions.UPSERT_GROUP_FEEDS,
+                    groupId:group._id,
+                    groupFeed:item
+                }))
+
+            }
+
+
+
+        }catch (error){
+            console.log('error')
+        }
+
+        if(showLoadingDone) {
+            dispatch({
+                type: actions.GROUP_FEED_LOADING_DONE,
+                loadingDone: true,
+                groupId:group._id,
+
+            });
+        }
+    }
+}

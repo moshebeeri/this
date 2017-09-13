@@ -48,7 +48,7 @@ import { bindActionCreators } from "redux";
 
 
     render() {
-        const {navigation,loadingDone, showTopLoader,feeds,token ,userFollowers,group,ItemDetail,actions,user} = this.props;
+        const {navigation,loadingDone, showTopLoader,feeds,token ,userFollowers,group,ItemDetail,actions,entity} = this.props;
 
 
         //  let loader = this.state.showLoader?<View><Spinner color='red' /></View>:null
@@ -75,9 +75,9 @@ import { bindActionCreators } from "redux";
                         scrollRenderAheadDistance={100}
                         pageSize={13}
                         renderRow={(item) =>
-                            <ItemDetail user={user} token={token} userFollowers={userFollowers} group = {group}navigation={navigation} item={item} fetchTopList={this.fetchTopList.bind(this)} actions={actions}  />
+                            <ItemDetail user={entity} token={token} userFollowers={userFollowers} group = {group}navigation={navigation} item={item} fetchTopList={this.fetchTopList.bind(this)} actions={actions}  />
                         }
-                        onEndReached={(event)=> actions.setNextFeeds(feeds,token,user)}
+                        onEndReached={(event)=> actions.setNextFeeds(feeds,token,entity)}
                         enableEmptySections={true}
                     />
                     {spining}

@@ -26,9 +26,7 @@ class Feed extends Component {
 
 
 
-    componentWillMount(){
-      //  this.props.actions.setUserFollows();
-    }
+
 
 
     render() {
@@ -43,7 +41,7 @@ class Feed extends Component {
                 feeds={feeds}
                 actions={actions}
                 token={token}
-                user={user}
+                entity={user}
                 title='Feeds'
                 ItemDetail={GenericFeedItem}>
 

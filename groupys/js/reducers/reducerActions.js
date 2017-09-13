@@ -80,7 +80,9 @@ export const UPSERT_INSTANCE = 'UPSERTinstance';
 //groups
 export const UPSERT_GROUP = 'UPSERTgroup';
 export const SET_GROUPS = 'SET_GROUPS';
-
+export const UPSERT_GROUP_FEEDS = 'UPSERT_GROUP_FEEDS';
+export const GROUP_FEED_LOADING_DONE = 'GROUP_FEED_LOADING_DONE';
+export const GROUP_FEED_SHOWTOPLOADER = 'GROUP_FEED_SHOWTOPLOADER';
 
 //user
 export const UPSERT_USER = 'UPSERTuser';
