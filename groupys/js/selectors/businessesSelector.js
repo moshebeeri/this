@@ -59,3 +59,17 @@ export const getBusinessProducts = createSelector(  [getStateMyBusinesses ],
         return new Map();
 
     })
+
+
+export const getBusinessPromotions = createSelector(  [getStateMyBusinesses ],
+    (businesses) => {
+
+
+        if (!_.isEmpty(businesses.businessesPromotions)) {
+            return  businesses.businessesPromotions;
+
+        }
+        return new Map();
+
+    })
+

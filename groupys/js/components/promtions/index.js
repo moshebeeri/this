@@ -22,7 +22,8 @@ import {
 import Icon4 from 'react-native-vector-icons/SimpleLineIcons';
 let promotionApi = new PromotionApi();
 import * as promotionsAction from "../../actions/promotions";
-
+import * as businessAction from "../../actions/business";
+import {getBusinessPromotions} from '../../selectors/businessesSelector'
 import { bindActionCreators } from "redux";
 
  class Promotions extends Component {
@@ -31,39 +32,28 @@ import { bindActionCreators } from "redux";
      };
     constructor(props) {
         super(props);
-        this.state = {
-
-            error: '',
-            validationMessage: '',
-            token: '',
-            userId: '',
-            rowsView: [],
-            promotions:{}
-        }
-        ;
-        let id = this.props.navigation.state.params.business._id;
-
-        this.props.fetchFromStorePromotions(id)
 
     }
      back(){
          this.props.navigation.goBack();
      }
 
+     componentWillMount(){
+         this.setBusinessPromotions();
+     }
 
+     setBusinessPromotions() {
+         const {actions, navigation} = this.props;
+         const business = navigation.state.params.business._id;
 
-    fetchApi(pageOffset,pageSize ) {
-        let id = this.props.api.props.navigation.state.params.business._id;
-       this.props.api.props.fetchPromotions(id);
-        let response = this.props.api.props.promotions['promotions' + id];
-
-
-        return new Promise(async function(resolve, reject) {
-            resolve(response);
-        });
-
-    }
-
+         actions.setBusinessPromotions(business);
+     }
+     renderItem(item){
+         return <PromotionListItem
+                item ={item.item}
+                index={item.index}
+                />
+     }
 
      navigateToAdd(){
 
@@ -75,30 +65,12 @@ import { bindActionCreators } from "redux";
      }
 
     render() {
+        const{navigation,promotions,actions,update} = this.props;
+        const menuAction = this.createMenuTag()
+        const back = this.createBackButtonTag()
 
-        let menuAction = <Menu>
-            <MenuTrigger >
-                <Icon4 style={{fontSize: 25, color: "#2db6c8"}} name="options-vertical"/>
-            </MenuTrigger>
-            <MenuOptions>
+        const businessId = navigation.state.params.business._id;
 
-
-                <MenuOption onSelect={this.onBoardingPromotion.bind(this)}>
-                    <Text>On Boarding Promotions</Text>
-                </MenuOption>
-
-            </MenuOptions>
-        </Menu>
-        let back = <Button transparent style={{ }} onPress={()=> this.back()}>
-            <Icon3 active color={"#2db6c8"} size={20} name="ios-arrow-back" />
-
-        </Button>
-
-        let businessId = this.props.navigation.state.params.business._id;
-        let promotions = undefined;
-        if(this.props.promotions) {
-            promotions = this.props.promotions['promotions' + businessId];
-        }
 
         return (
             <Container style={{backgroundColor:'#b7b7b7'}}>
@@ -107,10 +79,10 @@ import { bindActionCreators } from "redux";
                         <Text style={{fontSize:20,color:"#2db6c8"}}>Promotions</Text>
                         {menuAction}
                     </View>
+                <GenericListManager rows={promotions[businessId]} navigation = {navigation} actions={actions}  update={update}
+                                    onEndReached={this.setBusinessPromotions.bind(this)} ItemDetail = {this.renderItem.bind(this)}/>
 
-            <GenericListManager navigation = {this.props.navigation} rows={promotions} title="Promotion" component="home" addComponent="editPromotion" api={this}
-                                ItemDetail={PromotionListItem}/>
-                <Fab
+                     <Fab
 
             direction="right"
             active={false}
@@ -124,15 +96,42 @@ import { bindActionCreators } from "redux";
             </Container>
         );
     }
-}
+
+     createBackButtonTag() {
+         return <Button transparent style={{}} onPress={() => this.back()}>
+             <Icon3 active color={"#2db6c8"} size={20} name="ios-arrow-back"/>
+
+         </Button>;
+     }
+
+     createMenuTag() {
+         return <Menu>
+             <MenuTrigger >
+                 <Icon4 style={{fontSize: 25, color: "#2db6c8"}} name="options-vertical"/>
+             </MenuTrigger>
+             <MenuOptions>
+
+
+                 <MenuOption onSelect={this.onBoardingPromotion.bind(this)}>
+                     <Text>On Boarding Promotions</Text>
+                 </MenuOption>
+
+             </MenuOptions>
+         </Menu>;
+     }
+ }
 
 
 export default connect(
     state => ({
-        promotions: state.promotions
+        promotions: getBusinessPromotions(state),
+        update:state.businesses.update
     }),
 
-    dispatch => bindActionCreators(promotionsAction, dispatch)
+    (dispatch) => ({
+        actions: bindActionCreators(businessAction, dispatch),
+
+    })
 )(Promotions);
 
 

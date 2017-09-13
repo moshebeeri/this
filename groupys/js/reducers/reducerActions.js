@@ -66,7 +66,7 @@ export const UPSERT_BUSINESS = 'UPSERTbusiness';
 export const UPSERT_MY_BUSINESS = 'UPSERT_MY_BUSINESS';
 export const SET_USER_BUSINESS ='SET_USER_BUSINESS'
 export const SET_PRODUCT_BUSINESS ='SET_PRODUCT_BUSINESS'
-
+export const SET_PROMOTION_BUSINESS ='SET_PROMOTION_BUSINESS'
 //promotions
 export const UPSERT_PROMOTION = 'UPSERTpromotion';
 //products

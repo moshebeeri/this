@@ -59,7 +59,7 @@ export default class GenericListGroupView extends Component {
 
 
 
-        const  row = <TouchableHighlight key={index} onPress={onPressItem}  >
+        const  row = <TouchableOpacity key={index} onPress={onPressItem}  >
                     <View style = {conainerStyle}>
                     <View style = {styles.group_description}>
                         <View style = {styles.group_image}>
@@ -76,7 +76,7 @@ export default class GenericListGroupView extends Component {
                         {promotion}
 
                  </View>
-                </TouchableHighlight>
+                </TouchableOpacity>
 
 
         return ( row

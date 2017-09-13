@@ -205,7 +205,7 @@ class GroupFeed extends Component {
     }
     render() {
 
-        let body = this.createGroupFeeds();
+       // let body = this.createGroupFeeds();
         let promotionStyle = styles.נpromotionButtonOn;
         let textPromotionStyle = styles.group_text_on;
         let textChatStyle = styles.group_text_off;
@@ -240,7 +240,7 @@ class GroupFeed extends Component {
 
             </View>
 
-            {body}
+
         </Container>
 
 

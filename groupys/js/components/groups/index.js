@@ -22,15 +22,15 @@ import { bindActionCreators } from "redux";
     }
      onPressItem(item){
          const {actions,navigation} = this.props;
-         actions.touch(item.group._id);
-         navigation.navigate('GroupFeed',{group:item.group,role:item.role});
+         actions.touch(item._id);
+         navigation.navigate('GroupFeed',{group:item,role:'admin'});
      }
 
 
 
     renderItem(item){
        return <GenericListGroupView
-            onPressItem={this.onPressItem.bind(this)}
+            onPressItem={this.onPressItem.bind(this,item.item)}
             item={item.item}
             index = {item.index}
         />

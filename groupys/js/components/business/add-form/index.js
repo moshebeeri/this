@@ -108,13 +108,9 @@ import Autocomplete from 'react-native-autocomplete-input';
 
             };
         }
-        let stateFunc = this.setState.bind(this);
-        store.get('token').then(storeToken => {
-            stateFunc({
-                    token: storeToken
-                }
-            );
-        });
+
+
+
 
     }
 

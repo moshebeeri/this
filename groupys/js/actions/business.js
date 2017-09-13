@@ -8,6 +8,8 @@ import UserApi from "../api/user"
 let userApi = new UserApi();
 import  ProductApi from "../api/product"
 let productApi = new ProductApi();
+import  PromotionApi from "../api/promotion"
+let promotionApi = new PromotionApi();
 
 import * as actions from '../reducers/reducerActions';
 
@@ -176,6 +178,30 @@ export function setBusinessProducts(businessId){
             dispatch({
                 type: actions.SET_PRODUCT_BUSINESS,
                 businessProducts: products,
+                businessId:businessId
+
+            });
+
+
+
+        }catch (error){
+            //TODO dispacth network offline
+            console.log(error);
+        }
+    }
+
+}
+
+export function setBusinessPromotions(businessId){
+    return async function (dispatch, getState){
+        const token = getState().authentication.token
+
+        try {
+            let promotions = await promotionApi.getAllByBusinessId(businessId,token);
+
+            dispatch({
+                type: actions.SET_PROMOTION_BUSINESS,
+                businessesPromotions: promotions,
                 businessId:businessId
 
             });

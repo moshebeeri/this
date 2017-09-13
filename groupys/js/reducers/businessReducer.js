@@ -4,7 +4,7 @@
 /**
  * Created by stan229 on 5/27/16.
  */
-const initialState = {businesses:{},categories:[],myBusinesses:{},businessesUsers:{},businessesProducts:{},update:false};
+const initialState = {businesses:{},categories:[],myBusinesses:{},businessesUsers:{},businessesProducts:{},businessesPromotions:{},update:false};
 
 import store from 'react-native-simple-store';
 import { REHYDRATE } from 'redux-persist/constants'
@@ -81,6 +81,12 @@ export default function business(state = initialState, action) {
             businessesState.update = !businessesState.update
 
             businessesProducts[action.businessId] = action.businessProducts;
+            return businessesState;
+        case actions.SET_PROMOTION_BUSINESS:
+            let businessesPromotions = businessesState.businessesPromotions;
+            businessesState.update = !businessesState.update
+
+            businessesPromotions[action.businessId] = action.businessesPromotions;
             return businessesState;
         default:
             return state;

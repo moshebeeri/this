@@ -108,7 +108,7 @@ import { bindActionCreators } from "redux";
 
      componentWillMount(){
         const{businessActions,userActions} = this.props;
-         businessActions.setMyBusinesses();
+         businessActions.setBusinessUsers();
          userActions.fetchUsersFollowers();
 
     }
