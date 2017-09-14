@@ -173,8 +173,12 @@ async function getAll(dispatch){
 
 }
 
-export function setNextFeeds(feeds,token,user){
-    return async function (dispatch){
+export function setNextFeeds(feeds){
+    return async function (dispatch,getState){
+        const token = getState().authentication.token
+        const user = getState().authentication.user
+        if(!user)
+            return
         let showLoadingDone = false;
         if( _.isEmpty(feeds)) {
             dispatch({
@@ -184,6 +188,19 @@ export function setNextFeeds(feeds,token,user){
 
             });
             showLoadingDone = true;
+        }
+        if(feeds && feeds.length > 0) {
+            let keys = Object.keys(feeds)
+            let id = keys[keys.length - 1]
+
+            if(id == getState().feeds.lastfeed)
+                return;
+
+            dispatch({
+                type: actions.LAST_FEED_DOWN,
+                id: id,
+
+            });
         }
         await fetchFeedsFromServer(feeds,dispatch,token,user)
         if(showLoadingDone) {

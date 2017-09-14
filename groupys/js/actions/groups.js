@@ -167,6 +167,23 @@ export function setNextFeeds(feeds,token,group){
 
                 let keys = Object.keys(feeds)
                 let id = keys[keys.length-1]
+
+                if(feeds[id].id == getState().groups.lastFeed[group._id])
+                    return;
+
+                // make sure we call the server for the same group max 1 time in 10 seconds period
+                if(getState().groups.lastFeedTime[[group._id]]){
+                    let currentTimeInMils = new Date().getTime();
+                    if(currentTimeInMils - getState().groups.lastFeedTime[[group._id]] < 10000){
+                        return
+                    }
+                }
+                dispatch({
+                    type: actions.GROUP_LAST_FEED_DOWN,
+                    id: feeds[id].id ,
+                    groupId:group._id,
+                });
+
                 response =  await feedApi.getAll('down',feeds[id].id,token,group);
             }
 
@@ -273,11 +290,8 @@ export function setFeeds(group,feeds) {
     return async function (dispatch, getState) {
         const token = getState().authentication.token
         const clientMessages = getState().groups.clientMessages[group._id];
-        let id = feeds[0].id;
-        if(clientMessages  ){
-            id = getFeedTopId(feeds,clientMessages)
-        }
-        await fetchTopList(id,token,group,dispatch)
+        let id = getNextFeedId(feeds, clientMessages)
+        await fetchTopList(id, token, group, dispatch)
     }
 }
 
@@ -291,6 +305,21 @@ export function getFeedTopId(feeds,clientMessages){
 
 
 }
+  function getNextFeedId(feeds, clientMessages) {
+    let id = feeds[0].id;
+    if(!id){
+        let index=1;
+        while(!feeds[index].id || index >feeds.length ){
+            index++
+        }
+        id = feeds[index].id;
+    }
+    if (clientMessages) {
+        id = getFeedTopId(feeds, clientMessages)
+    }
+
+    return id;
+};
 export function fetchTop(feeds,token,group) {
 
     return async function (dispatch, getState) {
@@ -304,10 +333,8 @@ export function fetchTop(feeds,token,group) {
             showTopLoader:true,
         });
         const clientMessages = getState().groups.clientMessages[group._id];
-        let id = feeds[0].id;
-        if(clientMessages  ){
-            id = getFeedTopId(feeds,clientMessages)
-        }
+        let id = getNextFeedId(feeds, clientMessages);
+
         await fetchTopList(id,token,group,dispatch)
         dispatch({
             type: actions.GROUP_FEED_SHOWTOPLOADER,

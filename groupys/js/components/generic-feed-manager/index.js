@@ -1,11 +1,10 @@
 import React, {Component} from 'react';
-import {Image, Platform,ListView} from 'react-native';
+import {Image, Platform,ListView,FlatList} from 'react-native';
 import {connect} from 'react-redux';
 import {actions} from 'react-native-navigation-redux-helpers';
 import {Container, Content, Text,Title, InputGroup,
     Input, Button, Icon, View,Header, Body, Right, ListItem,Tabs,Tab,Spinner, TabHeading,Thumbnail,Left} from 'native-base';
-import SGListView from 'react-native-sglistview';
-import BackgroundTimer from 'react-native-background-timer';
+
 import { bindActionCreators } from "redux";
 
 
@@ -33,22 +32,25 @@ import { bindActionCreators } from "redux";
 
 
 
+    renderItem(item){
+        const {navigation,token ,userFollowers,group,ItemDetail,actions,entity} = this.props;
 
 
+        return <ItemDetail
+            user={entity}
+            token={token}
+            userFollowers={userFollowers}
+            group = {group}
+            navigation={navigation}
+            item={item.item}
+            fetchTopList={this.fetchTopList.bind(this)}
+            actions={actions}  />
 
-
-     getDataSource() {
-
-        const dataSource = new ListView.DataSource(
-            { rowHasChanged: (r1, r2) => r1.id !== r2.id });
-
-
-        return dataSource.cloneWithRows(this.props.feeds);
     }
 
 
     render() {
-        const {navigation,loadingDone, showTopLoader,feeds,token ,userFollowers,group,ItemDetail,actions,entity} = this.props;
+        const {navigation,loadingDone, showTopLoader,feeds,token ,userFollowers,group,ItemDetail,actions,entity,update} = this.props;
 
 
         //  let loader = this.state.showLoader?<View><Spinner color='red' /></View>:null
@@ -66,20 +68,13 @@ import { bindActionCreators } from "redux";
 
                 <Content  removeClippedSubviews={true} style={{  backgroundColor: '#e7e7e7'} } >
                     {topLoader}
-                    <SGListView
-                        dataSource={this.getDataSource() } //data source
-                        ref={'listview'}
-                        initialListSize={13}
-                        stickyHeaderIndices={[]}
-                        onEndReachedThreshold={100}
-                        scrollRenderAheadDistance={100}
-                        pageSize={13}
-                        renderRow={(item) =>
-                            <ItemDetail user={entity} token={token} userFollowers={userFollowers} group = {group}navigation={navigation} item={item} fetchTopList={this.fetchTopList.bind(this)} actions={actions}  />
-                        }
-                        onEndReached={(event)=> actions.setNextFeeds(feeds,token,entity)}
-                        enableEmptySections={true}
+                    <FlatList
+                        data={feeds}
+                        onEndReached={actions.setNextFeeds(feeds,token,entity)}
+                        renderItem={this.renderItem.bind(this)}
+                        extraData={update}
                     />
+
                     {spining}
 
                 </Content>

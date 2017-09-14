@@ -49,6 +49,9 @@ class GroupFeed extends Component {
 
     componentWillMount(){
         BackHandler.addEventListener('hardwareBackPress', this.handleBack.bind(this));
+        const { navigation,feeds} = this.props;
+        const group = navigation.state.params.group;
+        this.props.actions.setFeeds(group,feeds[group._id]);
 
 
     }
@@ -58,11 +61,6 @@ class GroupFeed extends Component {
     }
 
 
-    componentWillMount(){
-        const { navigation,feeds} = this.props;
-        const group = navigation.state.params.group;
-        this.props.actions.setFeeds(group,feeds[group._id]);
-    }
 
 
 

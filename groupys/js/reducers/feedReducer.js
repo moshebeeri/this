@@ -4,7 +4,7 @@
 /**
  * Created by stan229 on 5/27/16.
  */
-const initialState = {feeds:{},feedView:[],savedfeeds:[],savedShowTopLoader:false,nextLoad:false,showTopLoader:false};
+const initialState = {feeds:{},feedView:[],savedfeeds:[],savedShowTopLoader:false,nextLoad:false,showTopLoader:false,update:false,lastfeed:undefined};
 
 export const GET_FEED = 'GET_FEEDS'
 import store from 'react-native-simple-store';
@@ -29,6 +29,10 @@ export default function feeds(state = initialState, action) {
     switch (action.type) {
 
 
+        case actions.LAST_FEED_DOWN:
+             feedstate.lastfeed = action.id
+
+            return feedstate;
 
         case actions.UPSERT_FEEDS:
             let currentFeeds = feedstate.feeds;

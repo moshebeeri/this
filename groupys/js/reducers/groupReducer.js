@@ -7,7 +7,16 @@
 /**
  * Created by stan229 on 5/27/16.
  */
-const initialState = {groups:{},groupFeedOrder:{},groupFeeds:{},update:false,loadingDone:{},showTopLoader:{},clientMessages:{}};
+const initialState = {groups:{},
+    groupFeedOrder:{},
+    groupFeeds:{},
+    update:false,
+    loadingDone:{},
+    showTopLoader:{},
+    clientMessages:{},
+    lastFeed:{},
+    lastFeedTime:{}
+    };
 
 
 import store from 'react-native-simple-store';
@@ -87,6 +96,12 @@ export default function group(state = initialState, action) {
             imutableState.clientMessages[action.groupId] = new Array();
 
             return imutableState;
+        case actions.GROUP_LAST_FEED_DOWN:
+
+            imutableState.lastFeed[action.groupId] = action.id
+            imutableState.lastFeedTime[action.groupId] = new Date().getTime();
+            return imutableState;
+
 
         case 'GET_GROUPS_BUSINESS' :
 
