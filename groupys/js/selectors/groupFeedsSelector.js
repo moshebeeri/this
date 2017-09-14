@@ -23,17 +23,23 @@ const getStateFeeds = (state) => state.groups
 
 export const getFeeds = createSelector(  [ getStateFeeds],
     (groups) => {
-
+        let feedsOrder = groups.groupFeedOrder
         let feeds = groups.groupFeeds;
+        let clientMessage = groups.clientMessages
         let feedsUi = new Map();
         if (!_.isEmpty(feeds)) {
-            let feedsList = feeds;
-            Object.keys(feedsList).forEach(function (key) {
-                let groupFeeds = feedsList[key]
-                let groupFeedsArray = Object.keys(groupFeeds).map(key => groupFeeds[key])
-                let feeds = groupFeedsArray.map(feed => feedUiConverter.createFeed(feed));
+            Object.keys(feedsOrder).forEach(function (groupId) {
+                let groupFeeds = feedsOrder[groupId]
+                let groupFeedsArray = groupFeeds.map(feedId => feeds[groupId][feedId])
+                if(clientMessage && clientMessage[groupId] &&  clientMessage[groupId].length > 0) {
+                    clientMessage[groupId].forEach(feed =>  groupFeedsArray.unshift(feed))
 
-                feedsUi[key] = feeds;
+                }
+
+
+               const newFeedsList = groupFeedsArray.map(feed => feedUiConverter.createFeed(feed));
+
+                feedsUi[groupId] = newFeedsList;
 
             })
 

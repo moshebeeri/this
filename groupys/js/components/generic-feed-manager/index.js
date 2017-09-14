@@ -27,7 +27,7 @@ import { bindActionCreators } from "redux";
       async fetchTopList(id){
 
           if(id == this.props.feeds[0].fid) {
-              this.props.actions.fetchTop(id,this.props.token,this.props.user)
+              this.props.actions.fetchTop(this.props.feeds,this.props.token,this.props.entity)
           }
     }
 

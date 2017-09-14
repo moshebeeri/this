@@ -164,18 +164,15 @@ export function setNextFeeds(feeds,token,group){
             if( _.isEmpty(feeds)){
                 response =  await feedApi.getAll('down','start',token,group);
             }else{
-                let filteredFeeds = feeds.filter(function (feed) {
-                            return feed.id != '100'
 
-                        })
-                let keys = Object.keys(filteredFeeds)
+                let keys = Object.keys(feeds)
                 let id = keys[keys.length-1]
-                response =  await feedApi.getAll('down',filteredFeeds[id].fid,token,group);
+                response =  await feedApi.getAll('down',feeds[id].id,token,group);
             }
 
-            if(response){
+            if(response && response.length > 0 ){
                 response.forEach(item => dispatch({
-                    type: actions.UPSERT_GROUP_FEEDS,
+                    type: actions.UPSERT_GROUP_FEEDS_BOTTOM,
                     groupId:group._id,
                     groupFeed:item
                 }))
@@ -196,5 +193,128 @@ export function setNextFeeds(feeds,token,group){
 
             });
         }
+
+
     }
 }
+export function sendMessage(groupId,message) {
+
+    return async function (dispatch, getState) {
+        const token = getState().authentication.token
+        const user = getState().authentication.user
+
+        let messageItem = createMessage(message,user)
+        dispatch({
+            type: actions.GROUP_ADD_MESSAGE,
+            groupId:groupId,
+            message:messageItem
+
+        });
+        try {
+            groupsApi.meesage(groupId,message,token)
+        }catch (error){
+            //TODO dispatch network failed event
+        }
+
+    }
+}
+
+function createMessage(message,user) {
+    return {
+        activity: {
+            actor_user: user,
+            message: message,
+            action: 'group_message',
+            timestamp: new Date().toLocaleString(),
+        },
+        _id: Math.random(),
+
+    }
+}
+
+
+async function fetchTopList(id,token,group,dispatch){
+    try {
+
+        let response  =  await feedApi.getAll('up',id,token,group);
+        if(!response)
+            return;
+
+        if(response.length == 0){
+            return;
+        }
+
+        response.forEach(item => dispatch({
+            type: actions.UPSERT_GROUP_FEEDS_TOP,
+            groupId:group._id,
+            groupFeed:item
+        }))
+        dispatch({
+            type: actions.GROUP_CLEAN_MESSAGES,
+            groupId:group._id,
+
+        });
+
+
+
+
+    }catch (error){
+        console.log(error);
+    }
+
+}
+
+export function setFeeds(group,feeds) {
+
+    if( _.isEmpty(feeds)) {
+        return setNextFeeds(feeds,undefined,group)
+    }
+
+    return async function (dispatch, getState) {
+        const token = getState().authentication.token
+        const clientMessages = getState().groups.clientMessages[group._id];
+        let id = feeds[0].id;
+        if(clientMessages  ){
+            id = getFeedTopId(feeds,clientMessages)
+        }
+        await fetchTopList(id,token,group,dispatch)
+    }
+}
+
+export function getFeedTopId(feeds,clientMessages){
+    let index = 0;
+    let clientIds = clientMessages.map(message =>message._id );
+    while (clientIds.includes(feeds[index].id)){
+        index++;
+    }
+     return feeds[index].id
+
+
+}
+export function fetchTop(feeds,token,group) {
+
+    return async function (dispatch, getState) {
+        const token = getState().authentication.token
+        if(getState().groups.showTopLoader[group._id]){
+            return;
+        }
+        dispatch({
+            type: actions.GROUP_FEED_SHOWTOPLOADER,
+            groupId:group._id,
+            showTopLoader:true,
+        });
+        const clientMessages = getState().groups.clientMessages[group._id];
+        let id = feeds[0].id;
+        if(clientMessages  ){
+            id = getFeedTopId(feeds,clientMessages)
+        }
+        await fetchTopList(id,token,group,dispatch)
+        dispatch({
+            type: actions.GROUP_FEED_SHOWTOPLOADER,
+            groupId:group._id,
+            showTopLoader:false,
+        });
+    }
+}
+
+

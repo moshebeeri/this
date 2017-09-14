@@ -47,9 +47,6 @@ class GroupFeed extends Component {
 
 
 
-
-
-
     componentWillMount(){
         BackHandler.addEventListener('hardwareBackPress', this.handleBack.bind(this));
 
@@ -57,64 +54,36 @@ class GroupFeed extends Component {
     }
 
     handleBack(){
-        this.props.fetchGroups();
+        this.props.actions.fetchGroups();
     }
 
 
     componentWillMount(){
         const { navigation,feeds} = this.props;
         const group = navigation.state.params.group;
-        this.props.actions.setNextFeeds(feeds[group._id],undefined,group);
+        this.props.actions.setFeeds(group,feeds[group._id]);
     }
 
 
 
 
+
     async _onPressButton(){
-        let groupid = this.props.navigation.state.params.group._id;
-
-
+        const { navigation,actions} = this.props;
+        let groupid = navigation.state.params.group._id;
         let message = this.state.messsage;
         if(message) {
+            actions.sendMessage(groupid,message)
             this.setState({
                 messsage: '',
                 showEmoji: false,
                 iconEmoji: 'emoji-neutral'
             })
 
-            let featchTop =false;
-            let groupFeeds = 'groups'+ groupid;
-            let feeds = this.props.feeds[groupFeeds];
-
-            if(feeds){
-                feeds = feeds.filter(function (feed) {
-                    return feed.id != '100'
-
-                })
-            }
-            if(feeds && feeds.length >0) {
-                featchTop = true;
-            }
-
-            await this.addDirectMessage(message);
-            await groupApi.meesage(groupid, message);
-            if(featchTop){
-                await this.fetchTop(0);
-            }else{
-                await this.fetchFeeds();
-            }
         }
 
-
-
     }
 
-    async addDirectMessage(message){
-        let user = await store.get('user');
-        let messageInstance = uiTools.createMessage(user,message);
-        await this.props.directAddMessage(this.props.navigation.state.params.group,messageInstance)
-
-    }
     handlePick(emoji) {
       let message = this.state.messsage;
 
@@ -143,9 +112,6 @@ class GroupFeed extends Component {
         }
     }
 
-    updateFeed(feed){
-        this.props.updateGroupFeed(feed,this.props.navigation.state.params.group);
-    }
     hideEmoji(){
         this.setState({
             showEmoji:false,
@@ -166,9 +132,7 @@ class GroupFeed extends Component {
         })
     }
 
-    nextLoad(){
 
-    }
     render() {
 
         let body = this.createGroupFeeds();

@@ -85,14 +85,18 @@ async function fetchTopList(id,token,user,dispatch){
 
 
 
-export function fetchTop(id,token,user){
+export function fetchTop(feeds,token,user){
+
     return async function (dispatch, getState){
+        if(getState().feeds.showTopLoader){
+            return;
+        }
         await dispatch({
             type: actions.FEED_SHOW_TOP_LOADER,
             showTopLoader: true,
 
         });
-        await fetchTopList(id,token,user,dispatch);
+        await fetchTopList(feeds[0].id,token,user,dispatch);
         await dispatch({
             type: actions.FEED_SHOW_TOP_LOADER,
             showTopLoader: false,

@@ -289,13 +289,12 @@ class GroupsApi
 
     }
 
-    meesage(groupid,message) {
+    meesage(groupid,message,token) {
         return new Promise(async(resolve, reject) => {
 
             try {
                 let from = new Date();
 
-                let token = await store.get('token');
                 let json = {
                     message: message
                 }
