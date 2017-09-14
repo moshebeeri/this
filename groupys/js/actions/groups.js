@@ -252,7 +252,9 @@ function createMessage(message,user) {
 
 async function fetchTopList(id,token,group,dispatch){
     try {
-
+        if(!id){
+            return;
+        }
         let response  =  await feedApi.getAll('up',id,token,group);
         if(!response)
             return;
