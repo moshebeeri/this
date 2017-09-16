@@ -55,7 +55,7 @@ class ApplicationBusinessManager extends Component {
 
 
      navigateToAdd(){
-        this.replaceRoute(this.state.addComponent);
+        this.replaceRoute('addBusiness');
      }
 
 
