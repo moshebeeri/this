@@ -196,8 +196,8 @@ class CommentsComponent extends Component {
             }
             arrowIcon = "chevron-small-up";
 
-            commentsView =
-                <GenericFeedManager navigation={this.props.navigation} loadingDone = {this.props.comments['LoadingDone' + this.props.group._id]+ this.getInstance().id} showTopTimer={false} feeds={feeds} api={this} title='comments' ItemDetail={GenericFeedItem}></GenericFeedManager>
+            // commentsView =
+            //     <GenericFeedManager navigation={this.props.navigation} loadingDone = {this.props.comments['LoadingDone' + this.props.group._id]+ this.getInstance().id} showTopTimer={false} feeds={feeds} api={this} title='comments' ItemDetail={GenericFeedItem}></GenericFeedManager>
 
             showMessageInput =  <View style={styles.message_container}>
                 <View style={ {backgroundColor:'white',  flexDirection: 'row'}}>

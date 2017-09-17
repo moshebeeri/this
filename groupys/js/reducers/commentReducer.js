@@ -7,10 +7,10 @@
 /**
  * Created by stan229 on 5/27/16.
  */
-const initialState = {comments:[]};
-import store from 'react-native-simple-store';
-import { REHYDRATE } from 'redux-persist/constants'
+const initialState = {comments:[],groupComments:{},groupCommentsOrder:[],loadingDone:{},showTopLoader:{},update:false,lastCall:{}};
 
+import { REHYDRATE } from 'redux-persist/constants'
+import * as actions from './reducerActions';
 export default function comment(state = initialState, action) {
     console.log(action.type);
     if (action.type === REHYDRATE){
@@ -27,31 +27,36 @@ export default function comment(state = initialState, action) {
 
 
 
-        case 'GET_INSTANCE_GROUP_COMMENTS' :
 
-            currentState['comment'+ action.gid + action.instanceId] = action.comments;
-            store.save('comment'+ action.gid + action.instanceId,action.comments)
-            currentState['LoadingDone'+ action.gid + action.instanceId] = true;
+
+        case actions.UPSERT_GROUP_COMMENT :
+            let currentGroupComments = currentState.groupComments;
+            if(!currentGroupComments[action.gid]){
+                currentGroupComments[action.gid] ={}
+            }
+
+            currentGroupComments[action.gid][ action.item._id] = action.item;
+
+            if(! currentState.groupCommentsOrder[action.gid]){
+                currentState.groupCommentsOrder[action.gid] = new Array();
+             }
+
+            if (currentState.groupCommentsOrder[action.gid].includes(action.item._id)) {
+                return state
+            }
+
+            currentState.groupCommentsOrder[action.gid].push(action.item._id);
+            currentState.update=!currentState.update;
             return currentState;
-
-
-        case 'GET_GROUP_COMMENTS' :
-
-
-            currentState['comment'+ action.gid ] = action.groupcomments;
-            store.save('comment'+ action.gid ,action.groupcomments)
-
-            currentState['LoadingDone'+ action.gid ] = true;
+        case actions.GROUP_COMMENT_LOADING_DONE:
+            currentState.loadingDone[action.gid] =  action.loadingDone;
             return currentState;
-        case 'GET_COMMENTS' :
-
-
-            currentState['comment'+ action.id ] = action.comments;
-            store.save('comment'+ action.id ,action.groupcomments)
-
-            currentState['LoadingDone'+ action.id ] = true;
+        case actions.GROUP_COMMENT_LAST_CALL:
+            currentState.lastCall[action.gid] =  action.lastCall;
             return currentState;
-
+        case actions.GROUP_COMMENT_SHOW_TOP_LOADER:
+            currentState.showTopLoader[action.gid] =  action.showTopLoader;
+            return currentState;
         case 'UPDATE_COMMENTS' :
 
 
@@ -63,7 +68,6 @@ export default function comment(state = initialState, action) {
 
             comments.push(action.comment);
             currentState['comment'+ action.id ] = comments
-            store.save('comment'+ action.id ,comments)
 
             currentState['LoadingDone'+ action.id ] = true;
             return currentState;
@@ -78,7 +82,6 @@ export default function comment(state = initialState, action) {
 
             instanceComments.push(action.comment);
             currentState['comment'+ action.gid + action.instanceId ] = instanceComments
-            store.save('comment'+ action.gid + action.instanceId,instanceComments)
 
             return currentState;
 

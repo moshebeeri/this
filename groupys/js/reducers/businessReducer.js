@@ -6,7 +6,7 @@
  */
 const initialState = {businesses:{},categories:[],myBusinesses:{},businessesUsers:{},businessesProducts:{},businessesPromotions:{},update:false};
 
-import store from 'react-native-simple-store';
+
 import { REHYDRATE } from 'redux-persist/constants'
 import * as actions from './reducerActions';
 export default function business(state = initialState, action) {

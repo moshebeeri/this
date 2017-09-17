@@ -5,7 +5,7 @@ import { Image,TextInput, Dimensions,Platform,View,ListView,Keyboard,TouchableNa
 import { connect } from 'react-redux';
 import { actions } from 'react-native-navigation-redux-helpers';
 import { Container,Footer,Icon,Button,Text,Input ,Thumbnail} from 'native-base';
-import GroupFeedHeader from './groupFeedHeader'
+
 const {width, height} = Dimensions.get('window')
 const   vw = width/100;
 const  vh = height/100
@@ -17,9 +17,9 @@ import styles from './styles'
 import Icon2 from 'react-native-vector-icons/Entypo';
 import CommentApi from '../../../api/commet'
 import NestedScrollView from 'react-native-nested-scrollview';
+import { getFeeds } from '../../../selectors/commentsSelector'
 
 
-let commentApi = new CommentApi();
 import { bindActionCreators } from "redux";
 
 import * as commentAction from "../../../actions/comments";
@@ -37,21 +37,13 @@ class instancesComment extends Component {
 
 
     componentWillMount(){
-        this.fetchFeeds();
-    }
-    fetchFeeds(){
-        let groupid = this.props.group._id;
-        this.props.fetchGroupComments(groupid);
+        const {comments,group,actions} = this.props;
+
+        actions.setNextFeeds(comments,undefined,group);
 
     }
-    fetchTop(id){
-        let groupid = this.props.group._id;
-        this.props.fetchGroupComments(groupid);
-    }
 
-    nextLoad(){
 
-    }
 
     createComponent(feed){
         return <AndroidCommentsComponenet key={feed.id} navigation={this.props.navigation}
@@ -61,58 +53,68 @@ class instancesComment extends Component {
 
     }
 
+    renderItem(item){
+        const{navigation} = this.props
 
+        return <CommentsComponenet navigation={navigation} item={item.item} index = {item.index}/>
+    }
 
     render() {
-        let groupid = this.props.group._id;
-        let feeds = this.props.comments['comment'+ groupid];
-        if(feeds && feeds.length > 0) {
-            feeds = feeds.sort(function (a, b) {
-                let date1 = new Date( a.date);
-                let date2 = new Date(b.date);
-                return date1 - date2;
 
-            })
-        }
-        let loadingDone = this.props.comments['LoadingDone' + groupid];
+        const { group,comments,navigation,actions,update,loadingDone,showTopLoader,allState} = this.props;
 
-        if(loadingDone && feeds.length >0){
-            if(Platform.OS == 'android'){
-                let body = feeds.map(feed => this.createComponent(feed))
+          {/*if(Platform.OS == 'android'){*/}
+                {/*let body = feeds.map(feed => this.createComponent(feed))*/}
 
-                return <NestedScrollView  >
+                {/*return <NestedScrollView  >*/}
 
-                        {body}
+                        {/*{body}*/}
 
-                </NestedScrollView>
-
-            }
-
-            return   <GenericFeedManager
-                group ={this.props.group}
-                navigation={this.props.navigation}
-                loadingDone = {loadingDone}
-                showTopTimer={false}
-                feeds={feeds}
-                api={this}
-                title='comments'
-                ItemDetail={CommentsComponenet}></GenericFeedManager>
-
+            //     </NestedScrollView>
+            //
+            // }
+        if(!comments[group._id]){
+            return    <GenericFeedManager feeds={new Array()}
+                                          entity={group}
+                                          navigation = {navigation}
+                                          actions={actions}
+                                          update={update}
+                                          showTopLoader = {showTopLoader[group._id]}
+                                          loadingDone={loadingDone[group._id]}
+                                          ItemDetail = {this.renderItem.bind(this)}/>
 
         }
-        return   <View style={styles.inputContainer}>
+
+        return    <GenericFeedManager feeds={comments[group._id]}
+                                      entity={group}
+                                      navigation = {navigation}
+                                      actions={actions}
+                                      update={update}
+                                      showTopLoader = {showTopLoader[group._id]}
+                                      loadingDone={loadingDone[group._id]}
+                                      ItemDetail = {this.renderItem.bind(this)}/>
 
 
-        </View>
+
+
+
+
     }
 
 }
 
 export default connect(
     state => ({
-        comments: state.comments
+        comments: getFeeds(state),
+        allState:state,
+        loadingDone:state.comments.loadingDone,
+        showTopLoader:state.comments.showTopLoader,
+        update:state.comments.update
     }),
-    dispatch => bindActionCreators(commentAction, dispatch)
+    (dispatch) => ({
+        actions: bindActionCreators(commentAction, dispatch)
+    })
+
 )(instancesComment);
 
 

@@ -8,7 +8,8 @@
 import CommentsApi from "../api/commet"
 let commentsApi = new CommentsApi();
 
-import store from 'react-native-simple-store';
+
+import * as actions from '../reducers/reducerActions';
 
 async function getInstanceGroupComments(dispatch,group,instance,size,token){
     try {
@@ -34,7 +35,7 @@ async function getInstanceGroupComments(dispatch,group,instance,size,token){
 
 async function getGroupComments(dispatch,group,token){
     try {
-        let response = await commentsApi.getGroupComments(group,token);
+        let response = await commentsApi.getGroupComments(group,token,0,100);
         if(response.length > 0) {
 
             dispatch({
@@ -134,4 +135,75 @@ export function fetchGroupComments( group){
         dispatch|(getGroupComments(dispatch,group,token));
     }
 
+}
+
+export function fetchTop( group){
+    return function (dispatch){
+        const token = getState().authentication.token
+
+    }
+
+}
+export function setNextFeeds(comments,token,group){
+    return async function (dispatch,getState){
+        const token = getState().authentication.token
+        const user = getState().authentication.user
+        if(!user)
+            return
+
+        if(getState().comments.lastCall[group._id]){
+            if(new Date().getTime() - getState().comments.lastCall[group._id].getTime() < 10000){
+                return;
+            }
+        }
+        let showLoadingDone = false;
+        if( _.isEmpty(comments)) {
+            dispatch({
+                type: actions.GROUP_COMMENT_LOADING_DONE,
+                loadingDone: false,
+                gid:group._id
+
+            });
+            showLoadingDone = true;
+        }
+        let response = undefined
+        if( _.isEmpty(comments)) {
+            response = await commentsApi.getGroupComments(group,token,0,10);
+        }else{
+            response = await commentsApi.getGroupComments(group,token,comments.length,comments.length + 10);
+
+
+        }
+        dispatch({
+            type: actions.GROUP_COMMENT_LAST_CALL,
+            lastCall: new Date(),
+            gid:group._id
+
+        });
+        if(response.length == 0){
+            if(showLoadingDone) {
+                dispatch({
+                    type: actions.GROUP_COMMENT_LOADING_DONE,
+                    loadingDone: true,
+                    gid:group._id
+
+                });
+            }
+            return;
+        }
+
+        response.forEach(item => dispatch({
+            type: actions.UPSERT_GROUP_COMMENT,
+            item:item,
+            gid:group._id,
+        }))
+        if(showLoadingDone) {
+            dispatch({
+                type: actions.GROUP_COMMENT_LOADING_DONE,
+                loadingDone: true,
+                gid:group._id
+
+            });
+        }
+    }
 }
