@@ -13,7 +13,7 @@ const logo = require('../../../images/logo.png');
 
 import styles from './styles';
 
-import { isAuthenticated } from '../app/appSelector'
+import { isAuthenticated } from '../../selectors/appSelector'
 
 const global = require('../../conf/global');
 

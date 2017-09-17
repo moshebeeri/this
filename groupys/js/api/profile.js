@@ -44,14 +44,14 @@ class ProfileApi {
                 let responseData = await response.json();
                 timer.logTime(fromDate,new Date(),'profiles','instances/saved')
 
-                let feeds = new Array();
-                if(responseData.length > 0) {
-                    feeds = responseData.map(feed => feedUiConverter.createSavedPomotion(feed)).filter(function(x){
-                        return x != undefined;
-                    });
-
-                }
-                resolve(feeds);
+                // let feeds = new Array();
+                // if(responseData.length > 0) {
+                //     feeds = responseData.map(feed => feedUiConverter.createSavedPomotion(feed)).filter(function(x){
+                //         return x != undefined;
+                //     });
+                //
+                // }
+                resolve(responseData);
             }
             catch (error) {
 

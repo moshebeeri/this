@@ -40,24 +40,7 @@ async function getUserFollowers(dispatch,token){
 
 }
 
-async function getBusinssUsers(dispatch,business,token){
-    try {
-        let users = await userApi.getBusinessUsers(business,token);
 
-        dispatch({
-            type: 'GET_USER_BUSINESS',
-            businessUsers: users,
-            businessId:business
-
-        });
-
-
-
-    }catch (error){
-        console.log(error);
-    }
-
-}
 
 export function fetchUsers(){
     return function (dispatch, getState){

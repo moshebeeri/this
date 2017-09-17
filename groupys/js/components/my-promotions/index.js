@@ -9,59 +9,73 @@ import GenericFeedManager from '../generic-feed-manager/index'
 import MyPromotionFeedItem from '../generic-feed-manager/my-promotion-feed'
 
 
-import ProfileApi from '../../api/profile'
-let profileApi = new ProfileApi();
 
 import { bindActionCreators } from "redux";
+import { getFeeds } from '../../selectors/myPromotionsSelector'
 
-import * as feedsAction from "../../actions/feeds";
+import * as promotionAction from "../../actions/myPromotions";
 import { connect } from 'react-redux';
 class MyPromotions extends Component {
 
       constructor(props) {
         super(props);
-        this.props.fetchSavedFeedsFromStore();
-
       }
 
 
-     async getAll(direction,id){
-          let feed = new Array();
-          if(id == 'start' || direction=='up'){
-               feed = await profileApi.fetch(0,100);
-          }
-      return feed;
-    }
 
 
-    fetchFeeds(){
-        this.props.fetchFeeds('GET_SAVED_FEEDS',this.props.feeds.savedfeeds,this);
-    }
-    fetchTop(id){
-        this.props.showSavedTopLoader();
-        this.props.fetchTop('GET_SAVED_FEEDS',this.props.feeds.savedfeeds,id,this);
-    }
+    renderItem(item){
+        const { navigation } = this.props;
 
-
-    nextLoad(){
-
+        return <MyPromotionFeedItem
+            item={item.item}
+            index = {item.index}
+            navigation={navigation}
+        />
     }
 
     render() {
+        const { navigation,feeds,userFollower,actions,token,loadingDone,showTopLoader,user } = this.props;
 
         return (
 
 
-            <GenericFeedManager navigation={this.props.navigation} loadingDone = {this.props.feeds.savedloadingDone} showTopTimer={this.props.feeds.savedShowTopLoader} feeds={this.props.feeds.savedfeeds} api={this} title='Feeds' ItemDetail={MyPromotionFeedItem}></GenericFeedManager>
+            // <GenericFeedManager navigation={this.props.navigation} loadingDone = {this.props.feeds.savedloadingDone} showTopTimer={this.props.feeds.savedShowTopLoader} feeds={this.props.feeds.savedfeeds} api={this} title='Feeds' ItemDetail={MyPromotionFeedItem}></GenericFeedManager>
+            <GenericFeedManager
+                navigation={navigation}
+
+                loadingDone = {loadingDone}
+                showTopLoader={showTopLoader}
+                userFollowers= {userFollower}
+                feeds={feeds}
+                actions={actions}
+                token={token}
+                entity={user}
+                title='Feeds'
+                ItemDetail={MyPromotionFeedItem}>
+
+            </GenericFeedManager>
 
         );
     }
 
 }
-export default connect(
-    state => ({
-        feeds: state.feeds
-    }),
-    dispatch => bindActionCreators(feedsAction, dispatch)
-)(MyPromotions);
+const mapStateToProps = state => {
+    return {
+        userFollower:state.user.followers,
+        user:state.user.user,
+        feeds: getFeeds(state),
+        showTopLoader:state.myPromotions.showTopLoader,
+        loadingDone:state.myPromotions.loadingDone,
+        myPromotions:state.myPromotions
+    }
+}
 
+export default connect(
+    mapStateToProps,
+
+
+    (dispatch) => ({
+        actions: bindActionCreators(promotionAction, dispatch)
+    })
+)(MyPromotions);

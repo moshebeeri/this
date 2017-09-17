@@ -10,47 +10,58 @@ import GenericListManager from '../generic-list-manager/index'
 
 import Icon from 'react-native-vector-icons/EvilIcons';
 
-import * as productsAction from "../../actions/product";
-
+import * as businessAction from "../../actions/business";
+import {getBusinessProducts} from '../../selectors/businessesSelector'
 import { bindActionCreators } from "redux";
 class Product extends Component {
 
 
     constructor(props) {
         super(props);
-        let id = this.props.navigation.state.params.business._id;
-        this.props.fetchFromStoreProductsByBusiness(id);
+     }
+
+    componentWillMount(){
+         this.setBusinessProducts();
+    }
+
+    setBusinessProducts() {
+        const {actions, navigation} = this.props;
+        const business = navigation.state.params.business._id;
+
+        actions.setBusinessProducts(business);
+    }
+
+    renderItem(item){
+        const { navigation} = this.props;
+        return <GenericListView
+            item={item.item}
+            index ={item.index}
+            addform ={"AddProduct"}
+            navigation={navigation}
+        />
+
+
+
     }
 
 
-    fetchApi(pageOffset,pageSize ) {
-        let id = this.props.api.props.navigation.state.params.business._id;
 
-        this.props.api.props.fetchProductsByBusiness(id);
-
-        let response = this.props.api.props.products['products' + id];
-
-        return new Promise(async function(resolve, reject) {
-            resolve(response);
-        });
-    }
 
     navigateToAdd(){
 
         this.props.navigation.navigate("AddProduct",{business:this.props.navigation.state.params.business});
     }
     render() {
-        let businessId = this.props.navigation.state.params.business._id;
-        let products = undefined;
-        if(this.props.products) {
-             products = this.props.products['products' + businessId];
-        }
+        const { products,navigation,actions,update} = this.props;
+        const business = navigation.state.params.business._id;
+
+
 
         return (
             <Container style={{flex:-1}}>
-           <GenericListManager navigation ={this.props.navigation} rows={products} title="Products" component="home" addComponent="AddProduct" api={this}
-                                   ItemDetail = {GenericListView}/>
-               <Fab
+                <GenericListManager rows={products[business]} navigation = {navigation} actions={actions}  update={update}
+                                    onEndReached={this.setBusinessProducts.bind(this)} ItemDetail = {this.renderItem.bind(this)}/>
+                <Fab
 
                     direction="right"
                     active={false}
@@ -68,8 +79,13 @@ class Product extends Component {
 
 export default connect(
     state => ({
-        products: state.products
+        products: getBusinessProducts(state),
+        update:state.businesses.update
+
     }),
 
-    dispatch => bindActionCreators(productsAction, dispatch)
+    (dispatch) => ({
+        actions: bindActionCreators(businessAction, dispatch),
+
+    })
 )(Product);

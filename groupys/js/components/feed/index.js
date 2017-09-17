@@ -11,7 +11,7 @@ import { bindActionCreators } from "redux";
 import { connect } from 'react-redux';
 import * as feedsAction from "../../actions/feedsMain";
 
-import { getFeeds } from './feedSelector'
+import { getFeeds } from '../../selectors/feedSelector'
 
 
 import { createSelector } from 'reselect'
@@ -22,20 +22,15 @@ class Feed extends Component {
 
       constructor(props) {
         super(props);
-          const { token } = this.props;
-
-
       }
 
 
 
-    componentWillMount(){
-      //  this.props.actions.setUserFollows();
-    }
+
 
 
     render() {
-        const { navigation,feedState,feeds,userFollower,actions,token ,user,allstate} = this.props;
+        const { navigation,feedState,feeds,userFollower,actions,token ,user} = this.props;
         return (
             <GenericFeedManager
                 navigation={navigation}
@@ -46,7 +41,7 @@ class Feed extends Component {
                 feeds={feeds}
                 actions={actions}
                 token={token}
-                user={user}
+                entity={user}
                 title='Feeds'
                 ItemDetail={GenericFeedItem}>
 
@@ -65,8 +60,7 @@ const mapStateToProps = state => {
         token:state.authentication.token,
         userFollower:state.user.followers,
         user:state.user.user,
-        feeds: getFeeds(state),
-        allstate:state
+        feeds: getFeeds(state)
     }
 }
 

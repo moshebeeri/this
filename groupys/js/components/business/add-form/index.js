@@ -108,13 +108,9 @@ import Autocomplete from 'react-native-autocomplete-input';
 
             };
         }
-        let stateFunc = this.setState.bind(this);
-        store.get('token').then(storeToken => {
-            stateFunc({
-                    token: storeToken
-                }
-            );
-        });
+
+
+
 
     }
 
@@ -494,7 +490,7 @@ import Autocomplete from 'react-native-autocomplete-input';
 
         let addressOptions = undefined;
 
-        if(this.state.locations.length > 0 ){
+        if(this.state.locations && this.state.locations.length > 0 ){
             let locationFunction = this.chooseAddress.bind(this);
             addressOptions = this.state.locations.map(function (address) {
                return  <TouchableOpacity   style={{height:30,borderTopWidth:0.5,backgroundColor:'white'}}  onPress={() => locationFunction(address)}  regular>

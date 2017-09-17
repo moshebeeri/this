@@ -59,7 +59,7 @@ let updateDialogOption = {
 
 
 import { bindActionCreators } from "redux";
-import { isAuthenticated,showAddAction,addComponent } from './appSelector'
+import { isAuthenticated,showAddAction,addComponent,showCompoenent } from '../../selectors/appSelector'
 import * as mainAction from "../../actions/mainTab";
 import { createSelector } from 'reselect'
  class ApplicationManager extends Component {
@@ -117,8 +117,11 @@ import { createSelector } from 'reselect'
     }
 
     render() {
-        const { selectedTab,showAdd } = this.props;
+        const { selectedTab,showAdd,showComponent } = this.props;
 
+        if(!showComponent){
+            return <View></View>
+        }
         //TODO find another way to change the drawer close/open
         closeDrawer = () => {
             this.drawer._root.close()
@@ -194,10 +197,13 @@ import { createSelector } from 'reselect'
 
 const mapStateToProps = (state) => {
     return {
+
+        state:state,
         isAuthenticated: isAuthenticated(state),
         selectedTab: state.mainTab.selectedTab,
         showAdd: showAddAction(state),
-        addComponent:addComponent(state)
+        addComponent:addComponent(state),
+        showComponent:showCompoenent(state)
     }
 }
 

@@ -12,15 +12,14 @@ import {connect} from 'react-redux';
 import {actions} from 'react-native-navigation-redux-helpers';
 import {Container, Content, Text, InputGroup, Input, Button, Icon, View,Header,Item,Picker,Footer} from 'native-base';
 
-import EntityUtils from "../../../utils/createEntity";
 
-let entityUtils = new EntityUtils();
 import ImagePicker from 'react-native-image-crop-picker';
 
-import Autocomplete from 'react-native-autocomplete-input';
+
 
 import * as productsAction from "../../../actions/product";
-import store from 'react-native-simple-store';
+import * as businessAction from "../../../actions/business";
+
 import { bindActionCreators } from "redux";
 class AddProduct extends Component {
 
@@ -28,18 +27,11 @@ class AddProduct extends Component {
 
     constructor(props) {
         super(props);
-        var milliseconds = (new Date).getTime();
+        const milliseconds = (new Date).getTime();
         if(props.navigation.state.params && props.navigation.state.params.item) {
             let item = props.navigation.state.params.item;
 
-            let getCategories = props.fetchProductCategories.bind(this);
-            item.category.forEach(function (cat) {
-                let categories = props.products['categoriesen' + cat];
-                if(!categories ) {
-                    getCategories(cat);
-                }
 
-            })
             this.state = {
                 name:item.name,
                 image:'',
@@ -47,7 +39,7 @@ class AddProduct extends Component {
                 info : item.info,
                 retail_price: item.retail_price.toString(),
                 token:'',
-                categories:item.category,
+                categories:JSON.parse("[" + item.category + "]"),
                 time:milliseconds,
 
             };
@@ -64,15 +56,9 @@ class AddProduct extends Component {
 
             };
         }
-        let stateFunc = this.setState.bind(this);
-        this.props.fetchProductCategories("root");
+        props.actions.setProductCategories("root");
 
-        store.get('token').then(storeToken => {
-            stateFunc({
-                    token: storeToken
-                }
-            );
-        });
+
     }
 
 
@@ -88,30 +74,41 @@ class AddProduct extends Component {
 
 
     saveFormData(){
+        this.replaceRoute('home');
+        const{actions} = this.props;
+        const product = this.createProduct();
+        actions.saveProduct(product,this.formSuccess.bind(this),this.formFailed.bind(this))
 
-        let product = {
-            name:this.state.name,
-            image:this.state.image,
-            business: this.props.navigation.state.params.business._id,
-            info : this.state.info,
+    }
+
+    createProduct() {
+        const{navigation} = this.props;
+
+        return {
+            name: this.state.name,
+            image: this.state.image,
+            business: this.getBusinessId(navigation),
+            info: this.state.info,
             retail_price: this.state.retail_price,
             category: this.state.categories,
 
 
-
         }
-        entityUtils.create('products',product,this.state.token,this.formSuccess.bind(this),this.formFailed.bind(this),this.state.userId);
+
     }
 
     formSuccess(response){
-        let businessId = undefined;
-        if(this.props.navigation.state.params.item){
-            businessId = this.props.navigation.state.params.item.business
-        }else{
-            businessId = this.props.navigation.state.params.business._id;
-        }
-        this.props.fetchProductsByBusiness(businessId);
-        this.replaceRoute('home');
+
+        const{businessAction,navigation} = this.props;
+        const businessId = this.getBusinessId(navigation);
+        businessAction.setBusinessProducts(businessId);
+
+    }
+
+    getBusinessId(navigation) {
+        if (navigation.state.params.item) {
+            return navigation.state.params.item.business
+        }return navigation.state.params.business._id;
     }
 
 
@@ -122,25 +119,17 @@ class AddProduct extends Component {
     }
 
     updateFormData(){
-
-        let product = {
-            name:this.state.name,
-            image:this.state.image,
-            business: this.props.navigation.state.params.item.business,
-            info : this.state.info,
-            retail_price: this.state.retail_price,
-            category: this.state.categories,
-
-
-
-
-        }
-        entityUtils.update('products',product,this.state.token,this.formSuccess.bind(this),this.formFailed.bind(this),this.props.navigation.state.params.item._id);
-    }
+        this.replaceRoute('home');
+        const{actions,navigation} = this.props;
+        const product = this.createProduct();
+        actions.updateProduct(product,this.formSuccess.bind(this),this.formFailed.bind(this),navigation.state.params.item._id)
+     }
 
     formFailed(error){
+        //TODO send netwwork failed event
         console.log('failed');
     }
+
     async pickFromCamera() {
         try {
             let image = await ImagePicker.openCamera({
@@ -180,6 +169,7 @@ class AddProduct extends Component {
     }
 
     setCategory(index,category){
+        const{actions} = this.props;
         var milliseconds = (new Date).getTime();
 
         if(milliseconds-this.state.time  < 1000 ){
@@ -203,7 +193,7 @@ class AddProduct extends Component {
         let reduxxCategories = this.props.products['categoriesen' + category];
         if(!reduxxCategories ) {
 
-            this.props.fetchProductCategories(category);
+            actions.setProductCategories(category);
         }
        this.setState({
            categories: categpries
@@ -215,8 +205,8 @@ class AddProduct extends Component {
 
 
     createPickers() {
-           let categories = this.props.products['categoriesenroot'];
-        let rootOicker = undefined;
+        const categories = this.props.products['categoriesenroot'];
+        let rootPiker = undefined;
            if(categories) {
                let categoriesWIthBlank = new Array();
                categories.forEach(function (cat) {
@@ -228,7 +218,7 @@ class AddProduct extends Component {
                        en:""
                    }
                })
-                rootOicker = <Picker
+               rootPiker = <Picker
                    iosHeader="Sub type"
                    mode="dropdown"
                    style={{flex: 1}}
@@ -247,10 +237,10 @@ class AddProduct extends Component {
                </Picker>
            }
 
-        let props = this.props;
-        let stateCategories = this.state.categories;
-        let setCategoryFunction = this.setCategory.bind(this);
-        let pickers =  this.state.categories.map(function (gid,i) {
+        const props = this.props;
+        const stateCategories = this.state.categories;
+        const setCategoryFunction = this.setCategory.bind(this);
+        const pickers =  this.state.categories.map(function (gid,i) {
             let categories = props.products['categoriesen' + gid];
             if(categories && categories.length > 0){
                 let categoriesWIthBlank = new Array();
@@ -284,40 +274,15 @@ class AddProduct extends Component {
             }
             return undefined;
         })
-      return <View>{rootOicker}{pickers}</View>
+      return <View>{rootPiker}{pickers}</View>
 
     }
-    componentDidMount(){
-        console.log("mountx")
-    }
+
     render() {
-
-        let image ;
-        if(this.state.path){
-            image =  <Image
-                            style={{width: 50, height: 50}}
-                            source={{uri: this.state.path}}
-                        />
-
-
-        }
-
-
-
-        let saveButton =  <Button transparent
-                                  onPress={this.saveFormData.bind(this)}
-        >
-            <Text>Add Product</Text>
-        </Button>
-        if(this.props.navigation.state.params && this.props.navigation.state.params.item){
-            saveButton = <Button transparent
-                                 onPress={this.updateFormData.bind(this)}
-            >
-                <Text>Update Product</Text>
-            </Button>
-
-        }
-        let pickers = this.createPickers();
+        const{navigation} = this.props;
+        const image = this.createImageTag();
+        const saveButton = this.createSaveButtonTag(navigation.state.params.item);
+        const pickers = this.createPickers();
 
 
 
@@ -372,15 +337,49 @@ class AddProduct extends Component {
             </Container>
         );
     }
+
+    createImageTag() {
+
+        if (this.state.path) {
+            return <Image
+                style={{width: 50, height: 50}}
+                source={{uri: this.state.path}}
+            />
+
+
+        }
+        return undefined;
+    }
+
+    createSaveButtonTag(item) {
+
+        if (item) {
+           return <Button transparent
+                                 onPress={this.updateFormData.bind(this)}
+            >
+                <Text>Update Product</Text>
+            </Button>
+
+        }
+        return <Button transparent
+                       onPress={this.saveFormData.bind(this)}
+        >
+            <Text>Add Product</Text>
+        </Button>;
+    }
 }
 
 
 export default connect(
     state => ({
         products: state.products,
-        businesses: state.businesses
+
     }),
 
-    dispatch => bindActionCreators(productsAction, dispatch)
+    (dispatch) => ({
+        actions: bindActionCreators(productsAction, dispatch),
+        businessAction: bindActionCreators(businessAction, dispatch),
+
+    })
 )(AddProduct);
 

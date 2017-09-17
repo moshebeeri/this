@@ -9,6 +9,8 @@ import GenericListManager from '../generic-list-manager/index';
 import BusinessListView from './business-list-view/index'
 
 import * as businessAction from "../../actions/business";
+import {getMyBusinessesItems} from '../../selectors/businessesSelector'
+
 import { bindActionCreators } from "redux";
 
  class Business extends Component {
@@ -17,7 +19,7 @@ import { bindActionCreators } from "redux";
 
     constructor(props) {
         super(props);
-        this.props.fetchBusinessCategories('root');
+        this.props.actions.fetchBusinessCategories('root');
 
         this.state = {
             refresh: '',
@@ -27,41 +29,41 @@ import { bindActionCreators } from "redux";
 
 
     }
+     renderItem(item) {
+         const { navigation} = this.props;
 
+         return <BusinessListView
+             item={item.item}
+             index={item.index}
+             navigation ={navigation}
+         />
 
-    async getAll(){
-       return  this.props.fetchBusiness();
-    }
-    async fetchApi(pageOffset,pageSize ) {
-        let businesses = this.props.api.props.fetchBusiness.bind(this);
+     }
 
-
-        return new Promise(async function(resolve, reject) {
-            let response =  await  businesses();
-            resolve(response);
-        });
-
-
-    }
-
-    async componentWillMount(){
-        this.props.navigateAction('addBusiness',this.props.index)
-
-    }
+     componentWillMount(){
+         this.props.actions.onEndReached();
+     }
 
     render() {
 
 
+        const { update,businesses,navigation,actions} = this.props;
+
+
         return (
-            <GenericListManager navigation = {this.props.navigation} rows={this.props.businesses.businesses} title="Business" component="home" addComponent="addBusiness" api={this}
-                                ItemDetail={BusinessListView}/>
+            <GenericListManager rows={businesses} navigation = {navigation} actions={actions}  update={update}
+                                ItemDetail = {this.renderItem.bind(this)}/>
         );
     }
 }
 
 export default connect(
     state => ({
-        businesses: state.businesses
+        update:state.businesses.update,
+        businesses:getMyBusinessesItems(state),
     }),
-    dispatch => bindActionCreators(businessAction, dispatch)
+    (dispatch) => ({
+        actions: bindActionCreators(businessAction, dispatch),
+
+    })
 )(Business);

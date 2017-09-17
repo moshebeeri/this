@@ -12,12 +12,12 @@ import GenericFeedManager from '../../generic-feed-manager/index'
 import GenericFeedItem from '../../generic-feed-manager/generic-feed'
 import styles from './styles'
 import Icon2 from 'react-native-vector-icons/Entypo';
-import FeedApi from '../../../api/feed'
-let feedApi = new FeedApi();
+
 import store from 'react-native-simple-store';
 import { bindActionCreators } from "redux";
 
-import * as feedsAction from "../../../actions/feeds";
+
+import * as groupAction from "../../../actions/groups";
 import UiTools from '../../../api/feed-ui-converter'
 let uiTools = new UiTools();
 import GroupApi from "../../../api/groups"
@@ -25,6 +25,7 @@ let groupApi = new GroupApi();
 import EmojiPicker from 'react-native-emoji-picker-panel'
 
 import InstanceComment from './instancesComment';
+import { getFeeds } from '../../../selectors/groupFeedsSelector'
 class GroupFeed extends Component {
     static navigationOptions = ({ navigation }) => ({
         header:   <GroupFeedHeader navigation = {navigation} role = {navigation.state.params.role} item={navigation.state.params.group}/>
@@ -41,114 +42,46 @@ class GroupFeed extends Component {
 
       };
       this.handlePick = this.handlePick.bind(this);
-        this.props.fetchGroupFeedsFromStore(this.props.navigation.state.params.group._id);
 
   }
 
 
 
-
-
-
     componentWillMount(){
         BackHandler.addEventListener('hardwareBackPress', this.handleBack.bind(this));
+        const { navigation,feeds} = this.props;
+        const group = navigation.state.params.group;
+        this.props.actions.setFeeds(group,feeds[group._id]);
 
-        this.fetchFeeds();
+
     }
 
     handleBack(){
-        this.props.fetchGroups();
-    }
-
-
-     async getAll(direction,id){
-
-      let feed = await feedApi.getAll(direction,id,this.props.navigation.state.params.group._id);
-      return feed;
+        this.props.actions.fetchGroups();
     }
 
 
 
-    fetchFeeds(){
-         let groupid = this.props.navigation.state.params.group._id;
-         let groupFeeds = 'groups'+ groupid;
 
-        let feeds = this.props.feeds[groupFeeds];
-        if(feeds){
-            feeds = feeds.filter(function (feed) {
-                return feed.id != '100'
 
-            })
-        }
-         if(feeds && feeds.length > 0 ){
-             this.props.fetchGroupFeeds(groupid, 'GET_GROUP_FEEDS', feeds, this);
 
-         }else {
-             this.props.fetchGroupFeeds(groupid, 'GET_GROUP_FEEDS', new Array(), this);
-         }
-    }
-    fetchTop(id){
-        let groupid = this.props.navigation.state.params.group._id;
-        let groupFeeds = 'groups'+ groupid;
-        if(this.props.feeds[groupFeeds] && this.props.feeds[groupFeeds].length >0) {
-            let feeds = this.props.feeds[groupFeeds];
-            if(feeds){
-                feeds = feeds.filter(function (feed) {
-                    return feed.id != '100'
-
-                })
-            }
-
-            this.props.fetchGroupTop(groupid, 'GET_GROUP_FEEDS', feeds, feeds[0].id, this);
-
-        }
-    }
 
     async _onPressButton(){
-        let groupid = this.props.navigation.state.params.group._id;
-
-
+        const { navigation,actions} = this.props;
+        let groupid = navigation.state.params.group._id;
         let message = this.state.messsage;
         if(message) {
+            actions.sendMessage(groupid,message)
             this.setState({
                 messsage: '',
                 showEmoji: false,
                 iconEmoji: 'emoji-neutral'
             })
 
-            let featchTop =false;
-            let groupFeeds = 'groups'+ groupid;
-            let feeds = this.props.feeds[groupFeeds];
-
-            if(feeds){
-                feeds = feeds.filter(function (feed) {
-                    return feed.id != '100'
-
-                })
-            }
-            if(feeds && feeds.length >0) {
-                featchTop = true;
-            }
-
-            await this.addDirectMessage(message);
-            await groupApi.meesage(groupid, message);
-            if(featchTop){
-                await this.fetchTop(0);
-            }else{
-                await this.fetchFeeds();
-            }
         }
 
-
-
     }
 
-    async addDirectMessage(message){
-        let user = await store.get('user');
-        let messageInstance = uiTools.createMessage(user,message);
-        await this.props.directAddMessage(this.props.navigation.state.params.group,messageInstance)
-
-    }
     handlePick(emoji) {
       let message = this.state.messsage;
 
@@ -177,9 +110,6 @@ class GroupFeed extends Component {
         }
     }
 
-    updateFeed(feed){
-        this.props.updateGroupFeed(feed,this.props.navigation.state.params.group);
-    }
     hideEmoji(){
         this.setState({
             showEmoji:false,
@@ -200,9 +130,7 @@ class GroupFeed extends Component {
         })
     }
 
-    nextLoad(){
 
-    }
     render() {
 
         let body = this.createGroupFeeds();
@@ -239,8 +167,8 @@ class GroupFeed extends Component {
 
 
             </View>
-
             {body}
+
         </Container>
 
 
@@ -250,20 +178,25 @@ class GroupFeed extends Component {
 
 
     createGroupFeeds(){
-        let feeds = this.props.feeds['groups'+this.props.navigation.state.params.group._id];
-        if(!feeds){
-            feeds = [];
-        }
+        const { navigation,feeds,userFollower,actions,token,loadingDone,showTopLoader } = this.props;
 
 
-        let showTop = this.props.feeds['showTopLoader'+this.props.navigation.state.params.group._id];
-        if(!showTop){
-            showTop = false;
-
-
-        }
+        const group = navigation.state.params.group;
         return  <View style={styles.inputContainer}>
-            <GenericFeedManager group ={this.props.navigation.state.params.group} navigation={this.props.navigation} loadingDone = {this.props.feeds['grouploadingDone' + this.props.navigation.state.params.group._id]} showTopTimer={showTop} feeds={feeds} api={this} title='Feeds' ItemDetail={GenericFeedItem}></GenericFeedManager>
+            <GenericFeedManager
+                navigation={navigation}
+
+                loadingDone = {loadingDone[group._id]}
+                showTopLoader={showTopLoader[group._id]}
+                userFollowers= {userFollower}
+                feeds={feeds[group._id]}
+                actions={actions}
+                token={token}
+                entity={group}
+                title='Feeds'
+                ItemDetail={GenericFeedItem}>
+
+            </GenericFeedManager>
 
             <View style={styles.itemborder}>
                 <View style={ {backgroundColor:'white',  flexDirection: 'row'}}>
@@ -290,9 +223,15 @@ class GroupFeed extends Component {
 
 export default connect(
     state => ({
-        feeds: state.feeds
+        token:state.authentication.token,
+        userFollower:state.user.followers,
+        feeds: getFeeds(state),
+        showTopLoader:state.groups.showTopLoader,
+        loadingDone:state.groups.loadingDone,
     }),
-    dispatch => bindActionCreators(feedsAction, dispatch)
+    (dispatch) => ({
+        actions: bindActionCreators(groupAction, dispatch)
+    })
 )(GroupFeed);
 
 

@@ -43,8 +43,7 @@ class CommentsComponent extends Component {
         };
         this.handlePick = this.handlePick.bind(this);
 
-        this.props.fetchStoreInstanceGroupComments(this.props.group._id,this.getInstance().id)
-    }
+     }
 
     async addDirectMessage(message){
         let user = await store.get('user');
@@ -53,36 +52,29 @@ class CommentsComponent extends Component {
 
     }
 
-    fetchFeeds(){
-        let item = this.getInstance();
-        let feeds = this.props.comments['comment'+this.props.group._id+ item.id];
-        if(!feeds){
-            feeds = [];
-        }
-        this.props.fetchInstanceGroupComments(this.props.group._id,this.getInstance().id,feeds.length)
-
-    }
-    fetchTop(id){
-        let item = this.getInstance();
-        let feeds = this.props.comments['comment'+this.props.group._id+ item.id];
-        if(!feeds){
-            feeds = [];
-        }
-        this.props.fetchInstanceGroupComments(this.props.group._id,this.getInstance().id,feeds.length)
-    }
+    // fetchFeeds(){
+    //     let item = this.getInstance();
+    //     let feeds = this.props.comments['comment'+this.props.group._id+ item.id];
+    //     if(!feeds){
+    //         feeds = [];
+    //     }
+    //     this.props.fetchInstanceGroupComments(this.props.group._id,this.getInstance().id,feeds.length)
+    //
+    // }
+    // fetchTop(id){
+    //     let item = this.getInstance();
+    //     let feeds = this.props.comments['comment'+this.props.group._id+ item.id];
+    //     if(!feeds){
+    //         feeds = [];
+    //     }
+    //     this.props.fetchInstanceGroupComments(this.props.group._id,this.getInstance().id,feeds.length)
+    // }
 
 
     componentWillMount(){
-        //     this.props.fetchInstanceGroupComments(this.props.navigation.state.params.group._id,this.props.navigation.state.params.instance.id)
     }
 
 
-
-    async getAll(direction,id){
-        //
-        // let feed = await feedApi.getAll(direction,id,this.props.navigation.state.params.group._id);
-        // return feed;
-    }
 
 
 
@@ -121,9 +113,7 @@ class CommentsComponent extends Component {
         })
     }
 
-    nextLoad(){
 
-    }
 
     getInstance(){
         if(this.props.instance){
@@ -178,10 +168,10 @@ class CommentsComponent extends Component {
 
         promotionType = <Text style={colorStyle}>{item.promotion}</Text>
 
-        let feeds = this.props.comments['comment'+this.props.group._id+ item.id];
-        if(!feeds){
-            feeds = [];
-        }
+        // let feeds = this.props.comments['comment'+this.props.group._id+ item.id];
+        // if(!feeds){
+        //     feeds = [];
+        // }
 
         let arrowIcon = "chevron-small-down";
         let commentsView = undefined;
@@ -196,8 +186,8 @@ class CommentsComponent extends Component {
             }
             arrowIcon = "chevron-small-up";
 
-            commentsView =
-                <GenericFeedManager navigation={this.props.navigation} loadingDone = {this.props.comments['LoadingDone' + this.props.group._id]+ this.getInstance().id} showTopTimer={false} feeds={feeds} api={this} title='comments' ItemDetail={GenericFeedItem}></GenericFeedManager>
+            // commentsView =
+            //     <GenericFeedManager navigation={this.props.navigation} loadingDone = {this.props.comments['LoadingDone' + this.props.group._id]+ this.getInstance().id} showTopTimer={false} feeds={feeds} api={this} title='comments' ItemDetail={GenericFeedItem}></GenericFeedManager>
 
             showMessageInput =  <View style={styles.message_container}>
                 <View style={ {backgroundColor:'white',  flexDirection: 'row'}}>

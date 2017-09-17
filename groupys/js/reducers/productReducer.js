@@ -31,13 +31,8 @@ export default function products(state = initialState, action) {
 
             currentProducts[action.item._id] = action.item;
             return productsState;
-        case 'GET_PRODUCTS' :
-            return {
-                ...state,
-                products : action.products,
-            };
 
-        case 'GET_PRODUCT_CATEGORIES' :
+        case actions.SET_PRODUCT_CATEGORIES :
             let categoriesState = {...state};
             categoriesState['categories'+ action.language + action.catId] = action.categories;
 

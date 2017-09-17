@@ -41,13 +41,13 @@ export default class GenericListGroupView extends Component {
     // }
 
     render() {
-        const {item,onPressItem} = this.props;
+        const {item,onPressItem,index} = this.props;
         const styles = this.createStyle();
 
 
-        const image = this.createImage(item.item)
-        const promotion = this.createPromotion(styles,item.item);
-        const message = this.createMessage(styles,item.item);
+        const image = this.createImage(item)
+        const promotion = this.createPromotion(styles,item);
+        const message = this.createMessage(styles,item);
         const height = this.calcHeight(promotion,message);
         const conainerStyle = {  width :width  ,
             height: vh*height,
@@ -59,14 +59,15 @@ export default class GenericListGroupView extends Component {
 
 
 
-        const  row = <TouchableHighlight key={item.item._id}onPress={onPressItem}  >
+        const  row = <View key={index}>
+                <TouchableOpacity key={index} onPress={onPressItem}  >
                     <View style = {conainerStyle}>
                     <View style = {styles.group_description}>
                         <View style = {styles.group_image}>
                         {image}
                         </View>
                         <View style={styles.group_name}>
-                        <Text  style={styles.group_name_text}>{item.item.name}</Text>
+                        <Text  style={styles.group_name_text}>{item.name}</Text>
 
                         </View>
 
@@ -76,8 +77,8 @@ export default class GenericListGroupView extends Component {
                         {promotion}
 
                  </View>
-                </TouchableHighlight>
-
+                </TouchableOpacity>
+        </View>
 
         return ( row
 

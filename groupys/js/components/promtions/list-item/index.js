@@ -33,14 +33,11 @@ export default class PromotionListView extends Component {
     }
 
     createPromotion(promotionItem){
-        let item = feedUiConverter.createPromotionAttributes(promotionItem,promotionItem.type)
-        let styles = stylesPortrate
-        if(StyleUtils.isLandscape()){
-            styles = stylesLandscape;
-        }
+        const item = feedUiConverter.createPromotionAttributes(promotionItem,promotionItem.type)
+        const styles = this.createStyle();
 
-        let promotion = undefined;
-        let colorStyle = {
+
+        const colorStyle = {
 
             color: item.promotionColor,
 
@@ -48,20 +45,16 @@ export default class PromotionListView extends Component {
         }
 
 
-        promotion = <Text style={colorStyle}>{item.promotion}</Text>
-
-        let image = undefined;
-        if(item.banner){
-              image =  <Image resizeMode= "cover" style={styles.promotion_image} source={{uri: item.banner.uri}}></Image>
-        }
-        let editButton =  <Button small  style={{borderColor:'white',backgroundColor:'white',height:55,width:60,marginLeft:10}}onPress={this.showProduct.bind(this,this.props,this.props.item)}>
+        const promotion = <Text style={colorStyle}>{item.promotion}</Text>
+        const image = this.createImageTag(item, styles);
+        const editButton =  <Button small  style={{borderColor:'white',backgroundColor:'white',height:55,width:60,marginLeft:10}}onPress={this.showProduct.bind(this,this.props,this.props.item)}>
             <Icon3   size={20}  style={styles.productIcon} name="edit" />
 
 
         </Button>
 
 
-        let result =
+        const result =
             <View style={styles.promotion_container}>
                 <View style={styles.promotion_card}>
 
@@ -100,6 +93,22 @@ export default class PromotionListView extends Component {
             </View>
 
         return result;
+    }
+
+    createImageTag(item, styles) {
+
+        if (item.banner) {
+            return <Image resizeMode="cover" style={styles.promotion_image} source={{uri: item.banner.uri}}></Image>
+        }
+        return undefined;
+    }
+
+    createStyle() {
+
+        if (StyleUtils.isLandscape()) {
+            return stylesLandscape;
+        }
+        return stylesPortrate;
     }
 
 }

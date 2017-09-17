@@ -4,6 +4,12 @@
 
 import BusinessApi from "../api/business"
 let businessApi = new BusinessApi();
+import UserApi from "../api/user"
+let userApi = new UserApi();
+import  ProductApi from "../api/product"
+let productApi = new ProductApi();
+import  PromotionApi from "../api/promotion"
+let promotionApi = new PromotionApi();
 
 import * as actions from '../reducers/reducerActions';
 
@@ -26,7 +32,6 @@ async function getAll(dispatch,token){
     }
 
 }
-
 
 async function getBusinessCategories(dispatch,gid,token) {
     try {
@@ -105,7 +110,7 @@ export function showCamera(){
 
 
 
-export function setMyBusinesses(){
+export function onEndReached(){
     return async function (dispatch, getState){
         const token = getState().authentication.token
 
@@ -136,6 +141,77 @@ export function fetchBusinessCategories(gid){
         const token = getState().authentication.token
 
         dispatch|(getBusinessCategories(dispatch,gid,token));
+    }
+
+}
+export function setBusinessUsers(businessId){
+    return async function (dispatch, getState){
+        const token = getState().authentication.token
+
+        try {
+            let users = await userApi.getBusinessUsers(businessId,token);
+
+            dispatch({
+                type: actions.SET_USER_BUSINESS,
+                businessUsers: users,
+                businessId:businessId
+
+            });
+
+
+
+        }catch (error){
+            //TODO dispacth network offline
+            console.log(error);
+        }
+    }
+
+}
+
+export function setBusinessProducts(businessId){
+    return async function (dispatch, getState){
+        const token = getState().authentication.token
+
+        try {
+            let products = await productApi.findByBusinessId(businessId,token);
+
+            dispatch({
+                type: actions.SET_PRODUCT_BUSINESS,
+                businessProducts: products,
+                businessId:businessId
+
+            });
+
+
+
+        }catch (error){
+            //TODO dispacth network offline
+            console.log(error);
+        }
+    }
+
+}
+
+export function setBusinessPromotions(businessId){
+    return async function (dispatch, getState){
+        const token = getState().authentication.token
+
+        try {
+            let promotions = await promotionApi.getAllByBusinessId(businessId,token);
+
+            dispatch({
+                type: actions.SET_PROMOTION_BUSINESS,
+                businessesPromotions: promotions,
+                businessId:businessId
+
+            });
+
+
+
+        }catch (error){
+            //TODO dispacth network offline
+            console.log(error);
+        }
     }
 
 }

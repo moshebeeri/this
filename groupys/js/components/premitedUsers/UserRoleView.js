@@ -31,7 +31,7 @@ const rolesTypes =
 export default class UserRoleView extends Component {
 
 
-    createUserView(user,role){
+    createUserView(user,role,index){
 
         let pic =   <Thumbnail square size={80} source={noPic} />
         if(user && user.pictures && user.pictures.length > 0){
@@ -42,7 +42,7 @@ export default class UserRoleView extends Component {
         }
 
         let roleView  = <Text style = {{margin:10}}>{rolesTypes[role]}</Text>
-        return <View style = {styles.list_user_view}>
+        return <View key ={index} style = {styles.list_user_view}>
             {pic}
             <Text  style = {{margin:10}}>{user.name}</Text>
             {roleView}
@@ -50,7 +50,7 @@ export default class UserRoleView extends Component {
     }
 
     render(){
-
-        return this.createUserView(this.props.item.user,this.props.item.role)
+        const{item,index} = this.props;
+        return this.createUserView(item.user,item.role,index)
     }
 }

@@ -7,7 +7,11 @@
 
 import GroupsApi from "../api/groups"
 let groupsApi = new GroupsApi();
+
+import FeedApi from "../api/feed"
+let feedApi = new FeedApi();
 import UserApi from "../api/user"
+
 let userApi = new UserApi();
 import store from 'react-native-simple-store';
 
@@ -138,4 +142,208 @@ function uploadGroupPic(){
 
     }
 }
+
+
+export function setNextFeeds(feeds,token,group){
+
+    return  async function (dispatch, getState){
+        const token = getState().authentication.token
+        let showLoadingDone = false;
+        if( _.isEmpty(feeds)) {
+            dispatch({
+                type: actions.GROUP_FEED_LOADING_DONE,
+                loadingDone: false,
+                groupId:group._id,
+
+            });
+            showLoadingDone = true;
+        }
+        try {
+
+            let response = null;
+            if( _.isEmpty(feeds)){
+                response =  await feedApi.getAll('down','start',token,group);
+            }else{
+
+                let keys = Object.keys(feeds)
+                let id = keys[keys.length-1]
+
+                if(feeds[id].id == getState().groups.lastFeed[group._id])
+                    return;
+
+                // make sure we call the server for the same group max 1 time in 10 seconds period
+                if(getState().groups.lastFeedTime[[group._id]]){
+                    let currentTimeInMils = new Date().getTime();
+                    if(currentTimeInMils - getState().groups.lastFeedTime[[group._id]] < 10000){
+                        return
+                    }
+                }
+                dispatch({
+                    type: actions.GROUP_LAST_FEED_DOWN,
+                    id: feeds[id].id ,
+                    groupId:group._id,
+                });
+
+                response =  await feedApi.getAll('down',feeds[id].id,token,group);
+            }
+
+            if(response && response.length > 0 ){
+                response.forEach(item => dispatch({
+                    type: actions.UPSERT_GROUP_FEEDS_BOTTOM,
+                    groupId:group._id,
+                    groupFeed:item
+                }))
+
+            }
+
+
+
+        }catch (error){
+            console.log('error')
+        }
+
+        if(showLoadingDone) {
+            dispatch({
+                type: actions.GROUP_FEED_LOADING_DONE,
+                loadingDone: true,
+                groupId:group._id,
+
+            });
+        }
+
+
+    }
+}
+export function sendMessage(groupId,message) {
+
+    return async function (dispatch, getState) {
+        const token = getState().authentication.token
+        const user = getState().authentication.user
+
+        let messageItem = createMessage(message,user)
+        dispatch({
+            type: actions.GROUP_ADD_MESSAGE,
+            groupId:groupId,
+            message:messageItem
+
+        });
+        try {
+            groupsApi.meesage(groupId,message,token)
+        }catch (error){
+            //TODO dispatch network failed event
+        }
+
+    }
+}
+
+function createMessage(message,user) {
+    return {
+        activity: {
+            actor_user: user,
+            message: message,
+            action: 'group_message',
+            timestamp: new Date().toLocaleString(),
+        },
+        _id: Math.random(),
+
+    }
+}
+
+
+async function fetchTopList(id,token,group,dispatch){
+    try {
+        if(!id){
+            return;
+        }
+        let response  =  await feedApi.getAll('up',id,token,group);
+        if(!response)
+            return;
+
+        if(response.length == 0){
+            return;
+        }
+
+        response.forEach(item => dispatch({
+            type: actions.UPSERT_GROUP_FEEDS_TOP,
+            groupId:group._id,
+            groupFeed:item
+        }))
+        dispatch({
+            type: actions.GROUP_CLEAN_MESSAGES,
+            groupId:group._id,
+
+        });
+
+
+
+
+    }catch (error){
+        console.log(error);
+    }
+
+}
+
+export function setFeeds(group,feeds) {
+
+    if( _.isEmpty(feeds)) {
+        return setNextFeeds(feeds,undefined,group)
+    }
+
+    return async function (dispatch, getState) {
+        const token = getState().authentication.token
+        const clientMessages = getState().groups.clientMessages[group._id];
+        let id = getNextFeedId(feeds, clientMessages)
+        await fetchTopList(id, token, group, dispatch)
+    }
+}
+
+export function getFeedTopId(feeds,clientMessages){
+    let index = 0;
+    let clientIds = clientMessages.map(message =>message._id );
+    while (clientIds.includes(feeds[index].id)){
+        index++;
+    }
+     return feeds[index].id
+
+
+}
+  function getNextFeedId(feeds, clientMessages) {
+    let id = feeds[0].id;
+    if(!id){
+        let index=1;
+        while(!feeds[index].id || index >feeds.length ){
+            index++
+        }
+        id = feeds[index].id;
+    }
+    if (clientMessages) {
+        id = getFeedTopId(feeds, clientMessages)
+    }
+
+    return id;
+};
+export function fetchTop(feeds,token,group) {
+
+    return async function (dispatch, getState) {
+        const token = getState().authentication.token
+        if(getState().groups.showTopLoader[group._id]){
+            return;
+        }
+        dispatch({
+            type: actions.GROUP_FEED_SHOWTOPLOADER,
+            groupId:group._id,
+            showTopLoader:true,
+        });
+        const clientMessages = getState().groups.clientMessages[group._id];
+        let id = getNextFeedId(feeds, clientMessages);
+
+        await fetchTopList(id,token,group,dispatch)
+        dispatch({
+            type: actions.GROUP_FEED_SHOWTOPLOADER,
+            groupId:group._id,
+            showTopLoader:false,
+        });
+    }
+}
+
 

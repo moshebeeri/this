@@ -4,9 +4,9 @@
 /**
  * Created by stan229 on 5/27/16.
  */
-const initialState = {businesses:{},categories:[],myBusinesses:{}};
+const initialState = {businesses:{},categories:[],myBusinesses:{},businessesUsers:{},businessesProducts:{},businessesPromotions:{},update:false};
 
-import store from 'react-native-simple-store';
+
 import { REHYDRATE } from 'redux-persist/constants'
 import * as actions from './reducerActions';
 export default function business(state = initialState, action) {
@@ -25,13 +25,14 @@ export default function business(state = initialState, action) {
     switch (action.type) {
         case actions.UPSERT_BUSINESS:
             let currentbusinesses = businessesState.businesses;
-
+            businessesState.update = !businessesState.update
             currentbusinesses[action.item._id] = action.item;
             return businessesState;
         case actions.UPSERT_MY_BUSINESS:
             let myCurrentbusinesses = businessesState.myBusinesses;
+            businessesState.update = !businessesState.update
+            myCurrentbusinesses[action.item.business._id] = action.item;
 
-            myCurrentbusinesses[action.item.business._id] = action.item.business;
             return businessesState;
         case actions.LIKE:
             let item = businessesState.businesses[action.id]
@@ -69,7 +70,24 @@ export default function business(state = initialState, action) {
             categoriesState['categories'+ action.language + action.catId] = action.categories;
 
             return categoriesState;
+        case actions.SET_USER_BUSINESS:
+            let businessesUsers = businessesState.businessesUsers;
+            businessesState.update = !businessesState.update
 
+            businessesUsers[action.businessId] = action.businessUsers;
+            return businessesState;
+        case actions.SET_PRODUCT_BUSINESS:
+            let businessesProducts = businessesState.businessesProducts;
+            businessesState.update = !businessesState.update
+
+            businessesProducts[action.businessId] = action.businessProducts;
+            return businessesState;
+        case actions.SET_PROMOTION_BUSINESS:
+            let businessesPromotions = businessesState.businessesPromotions;
+            businessesState.update = !businessesState.update
+
+            businessesPromotions[action.businessId] = action.businessesPromotions;
+            return businessesState;
         default:
             return state;
     }

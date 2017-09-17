@@ -7,8 +7,7 @@ import { actions } from 'react-native-navigation-redux-helpers';
 import { Container,Footer,Icon,Button,Text,Input ,Thumbnail} from 'native-base';
 import GroupFeedHeader from './groupFeedHeader'
 
-import GenericFeedManager from '../../generic-feed-manager/index'
-import GenericFeedItem from '../../generic-feed-manager/generic-feed'
+
 import CommentsComponenet from './commentsComponent';
 
 import styles from './styles'

@@ -164,21 +164,21 @@ class CommentApi {
 
     }
 
-    getGroupComments(group,token) {
+    getGroupComments(group,token,skip,limit) {
         return new Promise(async(resolve, reject) => {
 
             try {
                 let from = new Date();
                 let request = {
                     entities: [
-                        {group:group},
+                        {group:group._id},
 
                     ]
                 };
 
 
 
-                const response = await fetch(`${server_host}/api/comments/conversed/instance/`+0+'/' +100, {
+                const response = await fetch(`${server_host}/api/comments/conversed/instance/`+skip+'/' +limit, {
                     method: 'POST',
                     headers: {
                         'Accept': 'application/json, text/plain, */*',
@@ -197,14 +197,7 @@ class CommentApi {
                 }
 
                 let responseData = await response.json();
-                let feeds = new Array();
-                if(responseData.length > 0) {
-                    feeds = responseData.map(feed => feedUiConverter.createPromontionInstance(feed)).filter(function(x){
-                        return x != undefined;
-                    });
-
-                }
-                resolve(feeds);
+                resolve(responseData);
 
             }
             catch (error) {

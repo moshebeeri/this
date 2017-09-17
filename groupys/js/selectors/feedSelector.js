@@ -5,8 +5,8 @@
 
 import { createSelector } from 'reselect'
 
-import * as assemblers from '../../actions/collectionAssembler';
-import  FeedUiConverter from '../../api/feed-ui-converter'
+import * as assemblers from '../actions/collectionAssembler';
+import  FeedUiConverter from '../api/feed-ui-converter'
 
 let feedUiConverter = new FeedUiConverter();
 
@@ -31,7 +31,7 @@ export const getFeeds = createSelector(  [ getActivities,getPromotions,getUser,g
 
 
     let feedsUi = [];
-    if (!_.isEmpty(feeds)) {
+    if (!_.isEmpty(feeds) && !_.isEmpty(instances) && !_.isEmpty(businesses)  && !_.isEmpty(user) && !_.isEmpty(activities)) {
         let feedsList = feeds;
         let feedArray = Object.keys(feedsList).map(key => feedsList[key])
         let assembledFeeds = feedArray.map(function (feed) {

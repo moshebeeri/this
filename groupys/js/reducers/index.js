@@ -17,7 +17,9 @@ import authentication from './authenticationReducer';
 import mainTab from './form/mainAppReducer';
 import loginForm from './form/loginReducer'
 import registerForm from './form/registerReducer'
+import userRole from './form/userRoleReducer'
 import network from './networkReducer'
+import myPromotions from './MyPromotionsReducer'
 import { reducer as form } from 'redux-form/immutable' // <--- immutable import
 
 export default function getRootReducer() {
@@ -30,6 +32,7 @@ export default function getRootReducer() {
         promotions: promotions,
         products:products,
         user:user,
+        userRole:userRole,
         notification:notification,
         comments:comments,
         instances:instances,
@@ -39,6 +42,7 @@ export default function getRootReducer() {
         loginForm:loginForm,
         registerForm:registerForm,
         network:network,
+        myPromotions:myPromotions,
         form
     });
 }

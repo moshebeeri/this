@@ -4,14 +4,13 @@
 /**
  * Created by stan229 on 5/27/16.
  */
-const initialState = {feeds:{},feedView:[],savedfeeds:[],savedShowTopLoader:false,nextLoad:false,showTopLoader:false,update:false,lastfeed:undefined};
+const initialState = {feeds:{},feedOrder:[],showTopLoader:false,update:false,lastfeed:undefined};
 
-export const GET_FEED = 'GET_FEEDS'
-import store from 'react-native-simple-store';
+
 import { REHYDRATE } from 'redux-persist/constants'
 
 import * as actions from './reducerActions';
-export default function feeds(state = initialState, action) {
+export default function myPromotions(state = initialState, action) {
     console.log(action.type);
     if (action.type === REHYDRATE){
 
@@ -20,7 +19,7 @@ export default function feeds(state = initialState, action) {
 
         return {
             ...state,
-            ...savedData.feeds,
+            ...savedData.myPromotions,
             loadingDone:true,
             showTopLoader:false
         };
@@ -29,24 +28,28 @@ export default function feeds(state = initialState, action) {
     switch (action.type) {
 
 
-        case actions.LAST_FEED_DOWN:
-             feedstate.lastfeed = action.id
+        case actions.SAVED_LAST_FEED_DOWN:
+            feedstate.lastfeed = action.id
 
             return feedstate;
 
-        case actions.UPSERT_FEEDS:
+        case actions.UPSERT_SAVED_FEEDS:
+
             let currentFeeds = feedstate.feeds;
 
-            currentFeeds[action.item._id] = action.item;
-            feedstate.feedView.push(action.item);
-            feedstate.feeds = currentFeeds;
+            currentFeeds[action.item.instance._id] = action.item;
+            if (feedstate.feedOrder.includes(action.item.instance._id)) {
+                return state
+            }
+
+            feedstate.feedOrder.push(action.item.instance._id);
             return feedstate;
-        case actions.FEED_LOADING_DONE:
+        case actions.SAVED_FEED_LOADING_DONE:
             return {
                 ...state,
                 loadingDone : action.loadingDone
             };
-        case actions.FEED_SHOW_TOP_LOADER:
+        case actions.SAVED_FEED_SHOW_TOP_LOADER:
             return {
                 ...state,
                 showTopLoader : action.showTopLoader
@@ -61,11 +64,11 @@ export default function feeds(state = initialState, action) {
 
 function updateFeeds(feedState,feed) {
 
-   return feedState.feeds.map(function (item) {
-       if(item.id == feed.id){
-           return feed;
-       }
-       return item;
+    return feedState.feeds.map(function (item) {
+        if(item.id == feed.id){
+            return feed;
+        }
+        return item;
     })
 
 }

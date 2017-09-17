@@ -9,7 +9,7 @@ import GenericListGroupView from '../generic-list-manager/generic-list-group-vie
 import GenericListManager from '../generic-list-manager/index'
 
 
-import {getGroups} from './groupSelector'
+import {getGroups} from '../../selectors/groupSelector'
 import * as groupsAction from "../../actions/groups";
 import { bindActionCreators } from "redux";
 
@@ -22,16 +22,18 @@ import { bindActionCreators } from "redux";
     }
      onPressItem(item){
          const {actions,navigation} = this.props;
-         actions.touch(item.group._id);
-         navigation.navigate('GroupFeed',{group:item.group,role:item.role});
+         actions.touch(item._id);
+         navigation.navigate('GroupFeed',{group:item,role:'admin'});
      }
 
 
 
     renderItem(item){
        return <GenericListGroupView
-            onPressItem={this.onPressItem.bind(this)}
-            item={item}
+            onPressItem={this.onPressItem.bind(this,item.item)}
+            item={item.item}
+            index = {item.index}
+            key={item.index}
         />
 
     }

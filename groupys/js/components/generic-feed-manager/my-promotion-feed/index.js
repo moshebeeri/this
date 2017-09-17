@@ -34,45 +34,13 @@ export default class MyPromotionFeedItem extends Component {
 
 
     componentWillMount() {
-        const getDirectionAndColor = ({ moveX, moveY, dx, dy}) => {
-            const height = dx;
-            const width= dy;
-            const draggedDown = dy > 30;
-            const draggedUp = dy < -30;
-            const draggedLeft = dx < -30;
-            const draggedRight = dx > 30;
-            const isRed = moveY < 90 && moveY > 40 && moveX > 0 && moveX < width;
-            const isBlue = moveY > (height - 50) && moveX > 0 && moveX < width;
-            let dragDirection = '';
-            if (draggedDown || draggedUp) {
-                if (draggedDown) dragDirection += 'dragged down '
-                if (draggedUp) dragDirection +=  'dragged up ';
-            }
-            if (draggedLeft || draggedRight) {
-                if (draggedLeft) dragDirection += 'dragged left '
-                if (draggedRight) dragDirection +=  'dragged right ';
-            }
-            if (isRed) return `red ${dragDirection}`
-            if (isBlue) return `blue ${dragDirection}`
-            if (dragDirection) return dragDirection;
-        }
 
-        this._panResponder = PanResponder.create({
-             onMoveShouldSetPanResponder:(evt, gestureState) => this.onMove(evt, gestureState),
-
-        });
     }
 
     realize(){
-        this.props.selectApi.props.api.props.navigation.navigate('realizePromotion',{item:this.props.item})
+        this.props.navigation.navigate('realizePromotion',{item:this.props.item})
     }
 
-    onMove(evt, gestureState){
-        if(gestureState.moveY < 300){
-            this.props.selectApi.fetchTopList(this.props.item.id,true)
-        }
-        return false;
-    }
 
         render() {
 

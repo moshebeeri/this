@@ -23,13 +23,10 @@ import EntityUtils from "../../../utils/createEntity";
 let entityUtils = new EntityUtils();
 
 import styles from './styles'
-import * as userAction from "../../../actions/user";
+import * as userRoleAction from "../../../actions/userRole";
 import {connect} from 'react-redux';
 import { bindActionCreators } from "redux";
-import Autocomplete from 'react-native-autocomplete-input';
 
-import UserApi from '../../../api/user'
-let userApi = new UserApi()
 const rolesTypes = [
     {
         value:'',
@@ -70,7 +67,7 @@ const rolesTypes = [
     }
 
      componentWillMount(){
-
+         this.props.actions.clearForm()
 
      }
 
@@ -101,129 +98,47 @@ const rolesTypes = [
 
     saveFormData(){
        this.save();
-        this.props.navigation.goBack();
 
 
     }
-    async save(){
-        if(this.state.user) {
-            await userApi.removeUserRole(this.state.user,this.props.navigation.state.params.business._id);
-            await userApi.setUserRole(this.state.user,this.props.navigation.state.params.business._id,this.state.userRole);
-            this.props.fetchUsersBusiness(this.props.navigation.state.params.business._id);
-
+     save(){
+        const {actions,user,role,navigation} =  this.props;
+        const businessId = navigation.state.params.business._id;
+        if(user) {
+            actions.saveRole(user,businessId,role)
+            navigation.goBack();
         }
 
-    }
-
-
-     updateFormData(){
-        if(this.state.user) {
-            userApi.setUserRole(this.state.user,this.state.userRole,this.props.navigation.state.params.business._id);
-        }
-     }
-
-     formSuccess(response){
-        this.props.fetchBusiness();
 
     }
 
-    formFailed(error){
-        console.log('failed');
-    }
+
 
 
     setUserRoles(role){
-        this.setState({
-            userRole: role
-        })
+        const {actions} =  this.props;
+        actions.setRole(role)
+
     }
 
      searchUser(){
-       this.setState({
-           showSpinner:true,
-           showMessage:false
-       });
-       this.search();
-
-     }
-
-     async search(){
-         let user =  await userApi.getUserByPhone(this.state.phoneNumber)
-         if(user ) {
-             this.setState({
-                 user:user._id,
-                 fullUser:user
-             })
-         }else{
-             this.setState({
-                 user:'',
-                 fullUser:undefined,
-                 showMessage:true,
-                 message:"User not found",
-             })
-         }
-         this.setState({
-             showSpinner:false,
-
-         })
+         const {actions} =  this.props;
+         actions.search(this.state.phoneNumber);
 
      }
 
 
-     createUserView(){
 
-         let pic =   <Thumbnail square size={80} source={noPic} />
-         if(this.state.fullUser && this.state.fullUser.pictures && this.state.fullUser.pictures.length > 0){
 
-                 let path = this.state.fullUser.pictures[this.state.fullUser.pictures.length -1].pictures[0];
-
-             pic = <Thumbnail square size={80} source={{uri: path} }/>
-         }
-         return <View style = {styles.user_view}>
-             {pic}
-             <Text  style = {{margin:10}}>{this.state.fullUser.name}</Text>
-
-         </View>
-     }
 
     render() {
+        const {showSpinner,showMessage,role,fullUser,message} =  this.props;
+        const roles = this.createUserRollPicker(role);
+        const spinner =this.createSpinnerTag(showSpinner);
+        const userMessage = this.createMessageTag(showMessage,message);
+        const userView = this.createUserView(fullUser);
+        const saveButton =  this.createSaveButtonTag()
 
-        let roles = <Picker
-
-            placeholder ="Select User Role"
-            mode="dropdown"
-            style={styles.picker}
-            selectedValue={this.state.userRole}
-            onValueChange={this.setUserRoles.bind(this)}>
-
-            {
-
-
-                rolesTypes.map((s, j) => {
-                    return <Item
-                        key={j}
-                        value={s.value}
-                        label={s.label}/>
-                }) }
-
-        </Picker>
-        let spinner = undefined;
-        if(this.state.showSpinner){
-            spinner = <View><Spinner color='red' /></View>;
-        }
-        let userMessage = undefined;
-        if(this.state.showMessage){
-            userMessage =  <View><Text>{this.state.message}</Text></View>
-        }
-
-        let userView = undefined;
-        if(this.state.fullUser){
-            userView = this.createUserView();
-        }
-        let saveButton =  <Button style={{backgroundColor:'#2db6c8'}}
-                                  onPress={this.saveFormData.bind(this)}>
-            <Text>Add User Role</Text>
-        </Button>
         return <View style={styles.premtied_usesrs_container}>
             <Item style={{ margin:3,backgroundColor:'white' } } regular >
                 <Input keyboardType = 'numeric' value={this.state.phoneNumber}  blurOnSubmit={true} returnKeyType='done' ref="3"  onSubmitEditing={this.searchUser.bind(this,"4")}  onChangeText={(phoneNumber) => this.setState({phoneNumber})} placeholder='User Phone' />
@@ -245,11 +160,89 @@ const rolesTypes = [
         </View>
 
     }
-}
+
+     createSaveButtonTag() {
+         return <Button style={{backgroundColor: '#2db6c8'}}
+                        onPress={this.saveFormData.bind(this)}>
+             <Text>Add User Role</Text>
+         </Button>;
+     }
+
+     createMessageTag(showMessage,message) {
+
+         if (showMessage) {
+             return  <View><Text>{message}</Text></View>
+         }
+         return undefined;
+     }
+
+     createUserView(user){
+         if(user){
+             const pic = this.createUserPic(user);
+             return <View style = {styles.user_view}>
+                 {pic}
+                 <Text  style = {{margin:10}}>{user.name}</Text>
+
+             </View>
+         }
+         return undefined
+
+     }
+
+     createUserPic(user) {
+
+         if (user.pictures && user.pictures.length > 0) {
+
+             const path = user.pictures[user.pictures.length - 1].pictures[0];
+
+             return <Thumbnail square size={80} source={{uri: path} }/>
+         }
+         return <Thumbnail square size={80} source={noPic}/>;
+     }
+
+     createUserRollPicker(role) {
+        return <Picker
+
+             placeholder="Select User Role"
+             mode="dropdown"
+             style={styles.picker}
+             selectedValue={role}
+             onValueChange={this.setUserRoles.bind(this)}>
+
+             {
+
+
+                 rolesTypes.map((s, j) => {
+                     return <Item
+                         key={j}
+                         value={s.value}
+                         label={s.label}/>
+                 }) }
+
+         </Picker>
+
+     }
+
+     createSpinnerTag(showSpinner) {
+         if (showSpinner) {
+            return <View><Spinner color='red'/></View>;
+         }
+         return undefined;
+     }
+ }
 
 export default connect(
     state => ({
-        users: state.users
+        userRole: state.userRole,
+        showSpinner:state.userRole.showSpinner,
+        showMessage:state.userRole.showMessage,
+        fullUser:state.userRole.fullUser,
+        user:state.userRole.user,
+        message:state.userRole.message,
+        role:state.userRole.role,
     }),
-    dispatch => bindActionCreators(userAction, dispatch)
+    (dispatch) => ({
+        actions: bindActionCreators(userRoleAction, dispatch),
+
+    })
 )(AddPermittedUser);
