@@ -20,6 +20,9 @@ import registerForm from './form/registerReducer'
 import userRole from './form/userRoleReducer'
 import network from './networkReducer'
 import myPromotions from './MyPromotionsReducer'
+import commentInstances from './commenInstancesReducer'
+
+
 import { reducer as form } from 'redux-form/immutable' // <--- immutable import
 
 export default function getRootReducer() {
@@ -43,6 +46,7 @@ export default function getRootReducer() {
         registerForm:registerForm,
         network:network,
         myPromotions:myPromotions,
+        commentInstances:commentInstances,
         form
     });
 }

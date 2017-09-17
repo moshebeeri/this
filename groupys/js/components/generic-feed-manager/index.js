@@ -50,7 +50,7 @@ import { bindActionCreators } from "redux";
 
 
     render() {
-        const {navigation,loadingDone, showTopLoader,feeds,token ,userFollowers,group,ItemDetail,actions,entity,update} = this.props;
+        const {navigation,loadingDone, showTopLoader,feeds,token ,userFollowers,group,ItemDetail,actions,entity,update,setNextFeeds} = this.props;
 
 
         //  let loader = this.state.showLoader?<View><Spinner color='red' /></View>:null
@@ -63,6 +63,24 @@ import { bindActionCreators } from "redux";
         // if(nextLoad){
         //     spining = <View><Spinner color='red' /></View>;
         // }
+        if(setNextFeeds){
+            return (
+
+                <Content  removeClippedSubviews={true} style={{  backgroundColor: '#e7e7e7'} } >
+                    {topLoader}
+                    <FlatList
+                        data={feeds}
+                        onEndReached={setNextFeeds}
+                        renderItem={this.renderItem.bind(this)}
+                        extraData={update}
+                    />
+
+                    {spining}
+
+                </Content>
+
+            );
+        }
 
         return (
 

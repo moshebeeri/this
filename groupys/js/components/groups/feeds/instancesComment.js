@@ -54,9 +54,9 @@ class instancesComment extends Component {
     }
 
     renderItem(item){
-        const{navigation} = this.props
+        const{navigation ,group} = this.props
 
-        return <CommentsComponenet navigation={navigation} item={item.item} index = {item.index}/>
+        return <CommentsComponenet navigation={navigation} group = {group} item={item.item} index = {item.index}/>
     }
 
     render() {
@@ -106,7 +106,6 @@ class instancesComment extends Component {
 export default connect(
     state => ({
         comments: getFeeds(state),
-        allState:state,
         loadingDone:state.comments.loadingDone,
         showTopLoader:state.comments.showTopLoader,
         update:state.comments.update

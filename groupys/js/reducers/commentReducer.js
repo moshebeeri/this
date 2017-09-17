@@ -23,11 +23,8 @@ export default function comment(state = initialState, action) {
         };
     }
     let currentState = {...state};
+
     switch (action.type) {
-
-
-
-
 
         case actions.UPSERT_GROUP_COMMENT :
             let currentGroupComments = currentState.groupComments;
@@ -57,33 +54,7 @@ export default function comment(state = initialState, action) {
         case actions.GROUP_COMMENT_SHOW_TOP_LOADER:
             currentState.showTopLoader[action.gid] =  action.showTopLoader;
             return currentState;
-        case 'UPDATE_COMMENTS' :
 
-
-            let comments = currentState['comment'+ action.id ];
-
-            if(!comments || (comments && comments.length ==0)){
-                comments = new Array();
-            }
-
-            comments.push(action.comment);
-            currentState['comment'+ action.id ] = comments
-
-            currentState['LoadingDone'+ action.id ] = true;
-            return currentState;
-        case 'UPDATE_INSTANCE_COMMENTS' :
-
-
-            let instanceComments = currentState['comment'+ action.gid + action.instanceId]
-
-            if(!instanceComments || (instanceComments && instanceComments.length ==0)){
-                instanceComments = new Array();
-            }
-
-            instanceComments.push(action.comment);
-            currentState['comment'+ action.gid + action.instanceId ] = instanceComments
-
-            return currentState;
 
         default:
             return state;

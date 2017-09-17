@@ -20,8 +20,8 @@ let uiTools = new UiTools();
 let commentApi = new CommentApi();
 import { bindActionCreators } from "redux";
 
-import * as commentAction from "../../../actions/comments";
-
+import * as commentGroupAction from "../../../actions/commentsGroup";
+import { getFeeds } from '../../../selectors/commentInstancesSelector'
 import EmojiPicker from 'react-native-emoji-picker-panel'
 import store from 'react-native-simple-store';
 class CommentsComponent extends Component {
@@ -52,26 +52,13 @@ class CommentsComponent extends Component {
 
     }
 
-    // fetchFeeds(){
-    //     let item = this.getInstance();
-    //     let feeds = this.props.comments['comment'+this.props.group._id+ item.id];
-    //     if(!feeds){
-    //         feeds = [];
-    //     }
-    //     this.props.fetchInstanceGroupComments(this.props.group._id,this.getInstance().id,feeds.length)
-    //
-    // }
-    // fetchTop(id){
-    //     let item = this.getInstance();
-    //     let feeds = this.props.comments['comment'+this.props.group._id+ item.id];
-    //     if(!feeds){
-    //         feeds = [];
-    //     }
-    //     this.props.fetchInstanceGroupComments(this.props.group._id,this.getInstance().id,feeds.length)
-    // }
 
 
     componentWillMount(){
+        const {comments,group,actions,item} = this.props;
+
+        actions.setNextFeeds({},group,item);
+
     }
 
 
@@ -151,14 +138,9 @@ class CommentsComponent extends Component {
         })
     }
     render() {
-        let item = this.getInstance();
-        let promotion = undefined;
-        if(item.banner){
-            promotion =  <Thumbnail  square={true} size={50} source={{uri: item.banner.uri}} />
-
-        }
-        let promotionType = undefined;
-        let colorStyle = {
+        const item = this.getInstance();
+        const promotion = this.getBannerComponent(item);
+        const colorStyle = {
 
             color: item.promotionColor,
 
@@ -166,50 +148,13 @@ class CommentsComponent extends Component {
         }
 
 
-        promotionType = <Text style={colorStyle}>{item.promotion}</Text>
-
-        // let feeds = this.props.comments['comment'+this.props.group._id+ item.id];
-        // if(!feeds){
-        //     feeds = [];
-        // }
-
-        let arrowIcon = "chevron-small-down";
-        let commentsView = undefined;
-        let showMessageInput = undefined;
-        let showEmoji = undefined;
-        let style = {
-            height:vh*15,backgroundColor:'#ebebeb'
-        }
-        if(this.state.showComment){
-            style = {
-                height:vh*77,backgroundColor:'red'
-            }
-            arrowIcon = "chevron-small-up";
-
-            // commentsView =
-            //     <GenericFeedManager navigation={this.props.navigation} loadingDone = {this.props.comments['LoadingDone' + this.props.group._id]+ this.getInstance().id} showTopTimer={false} feeds={feeds} api={this} title='comments' ItemDetail={GenericFeedItem}></GenericFeedManager>
-
-            showMessageInput =  <View style={styles.message_container}>
-                <View style={ {backgroundColor:'white',  flexDirection: 'row'}}>
-                    <Button   onPress={() => this._onPressButton()} style={styles.icon} transparent>
-
-                        <Icon style={{fontSize:35,color:"#2db6c8"}} name='send' />
-                    </Button>
-                    <Input style={{width:300}} value={this.state.messsage}  onFocus={this.hideEmoji.bind(this)} blurOnSubmit={true} returnKeyType='done' ref="3"  onSubmitEditing={this._onPressButton.bind(this)} onChangeText={(messsage) => this.setState({messsage})} placeholder='write text' />
-
-
-                    <Button   onPress={() => this.showEmoji()} style={styles.icon} transparent>
-
-                        <Icon2 style={{fontSize:35,color:"#2db6c8"}} name={this.state.iconEmoji} />
-                    </Button>
-
-                </View>
-
-            </View>
-
-            showEmoji = <EmojiPicker stylw={{height:100}}visible={this.state.showEmoji}  onEmojiSelected={this.handlePick} />
-
-        }
+        const promotionType = <Text style={colorStyle}>{item.promotion}</Text>
+        const showComment = this.state.showComment;
+        const arrowIcon =  this.getArrowComponent(showComment);
+        const commentsView = this.createCommentView(showComment);
+        const showMessageInput = this.createMessageComponent(showComment);
+        const showEmoji = this.createEmojiComponent(showComment,this.state.showEmoji);
+        const style = this.createStyle(showComment);
 
 
 
@@ -243,13 +188,114 @@ class CommentsComponent extends Component {
         );
     }
 
+    createStyle(showComment) {
+        if(showComment){
+            return {
+                height:vh*77,backgroundColor:'#ebebeb'
+            }
+        }
+
+        return  {
+            height: vh * 15, backgroundColor: '#ebebeb'
+        };
+    }
+
+    createEmojiComponent(showComment,showEmoji) {
+        if(showComment){
+            return   <EmojiPicker stylw={{height:100}}visible={showEmoji}  onEmojiSelected={this.handlePick} />
+
+        }
+
+        return undefined;
+    }
+
+    createMessageComponent(showComment) {
+        if(showComment){
+            return <View style={styles.message_container}>
+                <View style={ {backgroundColor:'white',  flexDirection: 'row'}}>
+                    <Button   onPress={() => this._onPressButton()} style={styles.icon} transparent>
+
+                        <Icon style={{fontSize:35,color:"#2db6c8"}} name='send' />
+                    </Button>
+                    <Input style={{width:300}} value={this.state.messsage}  onFocus={this.hideEmoji.bind(this)} blurOnSubmit={true} returnKeyType='done' ref="3"  onSubmitEditing={this._onPressButton.bind(this)} onChangeText={(messsage) => this.setState({messsage})} placeholder='write text' />
+
+
+                    <Button   onPress={() => this.showEmoji()} style={styles.icon} transparent>
+
+                        <Icon2 style={{fontSize:35,color:"#2db6c8"}} name={this.state.iconEmoji} />
+                    </Button>
+
+                </View>
+
+            </View>
+        }
+
+        return undefined;
+    }
+
+    nextCommentPage(){
+        const{actions,group,item}= this.props;
+        actions.setNextFeeds(feeds[group._id][item.id],group,item)
+
+    }
+
+    createCommentView(showComment) {
+        if(showComment){
+            const { navigation,feeds,userFollower,actions,token,loadingDone,showTopLoader ,group,item} = this.props;
+
+
+            return    <GenericFeedManager
+                navigation={navigation}
+
+                loadingDone = {loadingDone[group._id][item.id]}
+                showTopLoader={false}
+                userFollowers= {userFollower}
+                feeds={feeds[group._id][item.id]}
+                setNextFeeds={this.nextCommentPage.bind(this)}
+                actions={actions}
+                token={token}
+                entity={item}
+                title='Feeds'
+                ItemDetail={GenericFeedItem}>
+
+            </GenericFeedManager>
+
+        }
+
+        return undefined;
+    }
+
+    getArrowComponent(showComment) {
+        if(showComment){
+            return "chevron-small-up";
+
+        }
+
+        return "chevron-small-down";;
+    }
+
+    getBannerComponent(item) {
+
+        if (item.banner) {
+            return <Thumbnail square={true} size={50} source={{uri: item.banner.uri}}/>
+
+        }
+        return undefined;
+    }
+
 }
 
 export default connect(
     state => ({
-        comments: state.comments
+        token:state.authentication.token,
+        userFollower:state.user.followers,
+        feeds: getFeeds(state),
+        showTopLoader:state.commentInstances.showTopLoader,
+        loadingDone:state.commentInstances.groupLoadingDone,
     }),
-    dispatch => bindActionCreators(commentAction, dispatch)
+    (dispatch) => ({
+        actions: bindActionCreators(commentGroupAction, dispatch)
+    })
 )(CommentsComponent);
 
 

@@ -242,11 +242,9 @@ class CommentApi {
                 }
 
                 let responseData = await response.json();
-                let feeds = responseData.map(message => this.createFeed(message)).filter(function(x){
-                    return x != undefined;
-                });  timer.logTime(from,new Date(),'comments','/skip/limit')
+               timer.logTime(from,new Date(),'comments','/skip/limit')
 
-                resolve(feeds);
+                resolve(responseData);
             }
             catch (error) {
 
@@ -257,40 +255,7 @@ class CommentApi {
 
 
     }
-    createFeed(message){
 
-        let user = message.user;
-
-        let name = user.phone_number;
-
-        if (user.name) {
-            name = user.name;
-        }
-
-        let response = {
-            id: message._id,
-
-            actor: user._id,
-            showSocial: false,
-            description: message.message,
-
-        }
-        if (user.pictures && user.pictures.length > 0) {
-
-            response.logo = {
-                uri: user.pictures[user.pictures.length - 1].pictures[0]
-            }
-
-        }else {
-            response.logo = noPic;
-        }
-
-
-        response.name = name;
-
-        response.itemType = 'MESSAGE';
-        return response;
-    }
 }
 
 export default CommentApi;
