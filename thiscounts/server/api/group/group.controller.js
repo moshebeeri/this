@@ -126,7 +126,6 @@ function notifyOnAction(group) {
 exports.create = function (req, res) {
   let group = req.body;
   group.creator = req.user._id;
-  group.creator = req.user._id;
   group.admins = [req.user._id];
   Group.create(group, function (err, group) {
     if (err) {
@@ -142,7 +141,7 @@ exports.create = function (req, res) {
       group.save();
       graphModel.reflect(group, to_graph(group), function (err) {
         if (err) {
-          return handleError(res, err);
+          return handleError(res, err);``
         }
         graphModel.relate_ids(group._id, 'CREATED_BY', req.user._id);
         graphModel.relate_ids(req.user._id, 'FOLLOW', group._id);

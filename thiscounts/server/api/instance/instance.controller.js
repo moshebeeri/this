@@ -113,24 +113,75 @@ exports.available = function (req, res) {
       });
     });
 };
-
-function initializePunchCard(instance, user_id, callback) {
-  let data = `{
-                number_of_punches: ${instance.punch_card.number_of_punches},
-                days:${instance.punch_card.days}, 
-                product:${instance.punch_card.product},
-                punches: []
-              }`;
-  const query = ` MATCH (:instance { _id:'${instance._id}'})<-[r:SAVED]-(:user{ _id: '${user_id}'})
-                  SET i.punch_card = ${data} return instance`;
-
-  graphModel.query(query, callback);
+let SavedInstanceController = require('../savedInstance/savedInstance.controller');
+function initializeIncreasing(instance) {
+  return {
+    from: instance.increasing.from,
+    to: instance.increasing.to,
+    days_eligible: instance.increasing.days_eligible,
+  };
+}
+function initializeDoubling(instance) {
+  return {
+    value: instance.doubling.value,
+  };
+}
+function initializeGrow(instance) {
+  return {
+    value: instance.doubling.value,
+  };
+}
+function initializePrepayDiscount(instance) {
+  return {
+    value: instance.prepay_discount.value,
+    eligible_from: instance.prepay_discount.eligible_from,
+    eligible_to: instance.prepay_discount.eligible_to,
+    prepay: instance.prepay_discount.prepay
+  };
+}
+function initializePunchCard(instance) {
+  return {
+    redeemTimes: [],
+    product: instance.punch_card.product,
+    number_of_punches: instance.punch_card.number_of_punches,
+    days: instance.punch_card.days,
+  };
+}
+function initializeCashBack(instance) {
+  return {
+    pay: instance.cash_back.number_of_punches,
+    back: instance.cash_back.days,
+  };
+}
+function initializeEarlyBooking(instance) {
+  return {
+    percent: instance.cash_back.number_of_punches,
+    booking_before: instance.cash_back.days,
+  };
 }
 
-function handleSavedInstanceTypeLogic(instance, callback) {
-  if(instance.type === 'PUNCH_CARD'){
-    return initializePunchCard(instance, callback)
+function handleSavedInstance(instance, user_id, callback) {
+  let savedInstance = {
+    user: user_id,
+    instance: instance._id,
+    type: instance.type
+  };
+  if(instance.type === 'INCREASING'){
+    savedInstance.savedData.increasing = initializeIncreasing(instance)
+  } else if(instance.type === 'DOUBLING'){
+    savedInstance.savedData.doubling = initializeDoubling(instance)
+  } else if(instance.type === 'GROW'){
+    savedInstance.savedData.grow = initializeGrow(instance)
+  } else if(instance.type === 'PREPAY_DISCOUNT'){
+    savedInstance.savedData.prepay_discount = initializePrepayDiscount(instance)
+  } else if(instance.type === 'PUNCH_CARD'){
+    savedInstance.savedData.punch_card = initializePunchCard(instance)
+  } else if(instance.type === 'CASH_BACK'){
+    savedInstance.savedData.cash_back = initializeCashBack(instance)
+  } else if(instance.type === 'EARLY_BOOKING'){
+    savedInstance.savedData.early_booking = initializeEarlyBooking(instance)
   }
+  SavedInstanceController.createSavedInstance(savedInstance, callback)
 }
 
 //'/save/:id'
@@ -167,7 +218,7 @@ exports.save = function (req, res) {
             instance.save_time = save_time;
             graphModel.query(`MATCH (i:instance { _id:'${req.params.id}'}) SET i.quantity=i.quantity-1`, function (err) {
               if (err) return handleError(res, err);
-              handleSavedInstanceTypeLogic(instance, function (err, instance) {
+              handleSavedInstance(instance, req.user._id, function (err, instance) {
                 if (err) return handleError(res, err);
                 return res.status(200).json(instance);
               });
