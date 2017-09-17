@@ -171,7 +171,7 @@ class CommentApi {
                 let from = new Date();
                 let request = {
                     entities: [
-                        {group:group},
+                        {group:group._id},
 
                     ]
                 };

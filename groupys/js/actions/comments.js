@@ -152,7 +152,7 @@ export function setNextFeeds(comments,token,group){
             return
 
         if(getState().comments.lastCall[group._id]){
-            if(new Date().getTime() - getState().comments.lastCall[group._id].getTime() < 10000){
+            if(new Date().getTime() - new Date(getState().comments.lastCall[group._id]).getTime() < 10000){
                 return;
             }
         }
@@ -167,10 +167,10 @@ export function setNextFeeds(comments,token,group){
             showLoadingDone = true;
         }
         let response = undefined
-        if( _.isEmpty(comments)) {
+        if( comments && comments.length > 0) {
             response = await commentsApi.getGroupComments(group,token,0,10);
         }else{
-            response = await commentsApi.getGroupComments(group,token,comments.length,comments.length + 10);
+            response = await commentsApi.getGroupComments(group,token,comments[group._id].length,comments[group._id].length + 10);
 
 
         }
@@ -180,30 +180,23 @@ export function setNextFeeds(comments,token,group){
             gid:group._id
 
         });
-        if(response.length == 0){
-            if(showLoadingDone) {
-                dispatch({
-                    type: actions.GROUP_COMMENT_LOADING_DONE,
-                    loadingDone: true,
-                    gid:group._id
-
-                });
-            }
-            return;
-        }
-
-        response.forEach(item => dispatch({
-            type: actions.UPSERT_GROUP_COMMENT,
-            item:item,
-            gid:group._id,
-        }))
-        if(showLoadingDone) {
             dispatch({
                 type: actions.GROUP_COMMENT_LOADING_DONE,
                 loadingDone: true,
                 gid:group._id
 
             });
+
+
+
+        if(response.length > 0) {
+
+            response.forEach(item => dispatch({
+                type: actions.UPSERT_GROUP_COMMENT,
+                item: item,
+                gid: group._id,
+            }))
         }
+
     }
 }

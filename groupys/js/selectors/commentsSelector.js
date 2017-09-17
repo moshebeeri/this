@@ -30,8 +30,8 @@ export const getFeeds = createSelector(  [ getStateFeeds],
             Object.keys(feedsOrder).forEach(function (groupId) {
 
 
-                if (!_.isEmpty(feedsOrder[groupId])) {
-                    Object.keys(feedsOrder[groupId]).forEach(function (feedId) {
+                if (feedsOrder[groupId] && feedsOrder[groupId].length > 0) {
+                   feedsOrder[groupId].forEach(function (feedId) {
                         if(!response[groupId]){
                             response[groupId] = new Array();
                         }

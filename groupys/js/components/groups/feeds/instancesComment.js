@@ -39,7 +39,7 @@ class instancesComment extends Component {
     componentWillMount(){
         const {comments,group,actions} = this.props;
 
-        actions.setNextFeeds(comments,undefined,group);
+        actions.setNextFeeds(comments[group._id],undefined,group);
 
     }
 

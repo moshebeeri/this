@@ -7,7 +7,7 @@
 /**
  * Created by stan229 on 5/27/16.
  */
-const initialState = {comments:[],groupComments:{},groupCommentsOrder:[],loadingDone:{},showTopLoader:{},update:false,lastCall:{}};
+const initialState = {comments:[],groupComments:{},groupCommentsOrder:{},loadingDone:{},showTopLoader:{},update:false,lastCall:{}};
 
 import { REHYDRATE } from 'redux-persist/constants'
 import * as actions from './reducerActions';
