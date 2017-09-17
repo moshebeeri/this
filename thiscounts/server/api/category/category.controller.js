@@ -14,7 +14,7 @@ const ProductCategory = graphTools.createGraphModel('ProductCategory');
 const EBayProductCategories = require('./data/product.category.ebay');
 const translate = require('@google-cloud/translate');
 
-var Translate = translate({
+const Translate = translate({
   projectId: 'this-f2f45',
   keyFilename: './server/config/keys/this-vision.json'
 });
@@ -283,9 +283,19 @@ function drop_uniqueness(req, res){
 }
 
 exports.translate = function (req, res) {
-  Translate.translate('Hello', req.params.to, function(err, translation) {
-    if(err) console.log(err.message);
-    return res.status(200).send(translation);
+  // Translate.translate('Hello', req.params.to, function(err, translation) {
+  //   if(err) console.log(err.message);
+  //   return res.status(200).send(translation);
+  // });
+
+  const cursor = Category.find({}).cursor();
+  cursor.eachAsync(category => {
+    Translate.translate(category.name, req.params.to, function(err, translation) {
+      if(err) console.log(err.message);
+      console.log(`${category.name} translation to ${category.name} id ${translation}`);
+      category.translations[req.params.to] = translation;
+      category.save();
+    });
   });
 };
 
