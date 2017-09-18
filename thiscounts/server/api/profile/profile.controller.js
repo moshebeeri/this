@@ -151,7 +151,8 @@ function populatePromotionEntity(instances, callback) {
 }
 
 function instances_by_relation_async(rel, user_id, paginate, callback) {
-  let query = `MATCH (u:user{_id:'${user_id}' })-[rel:${rel}]->(instance:instance) return rel,instance ORDER BY rel.timestamp DESC
+  let query = `MATCH (u:user{_id:'${user_id}' })-[rel:${rel}]->(savedInstance:SavedInstance)-[sf:SAVE_OF]->(instance:instance) 
+  return rel,savedInstance, instance ORDER BY rel.timestamp DESC
                     skip ${paginate.skip} limit ${paginate.limit}`;
   graphModel.query(query, function (err, g_instances) {
     if (err) {
@@ -185,28 +186,6 @@ function instances_by_relation(rel, req, res) {
     return res.status(200).json(ret);
 
   });
-  // let query = `MATCH (u:user{_id:'${req.user._id}' })-[rel:${rel}]->(instance:instance) return rel,instance ORDER BY rel.timestamp DESC
-  //                   skip ${paginate.skip} limit ${paginate.limit}`;
-  // graphModel.query(query, function (err, g_instances) {
-  //   if (err) {
-  //     return handleError(res, err)
-  //   }
-  //   //let _ids = g_instances.map(instance => instance.i._id);
-  //   let _ids_map = g_instances.reduce(function (map, obj) {
-  //     map[obj.instance._id] = obj;
-  //     return map;
-  //   }, {});
-  //
-  //   Instance.find({}).where('_id').in(Object.keys(_ids_map)).populate('promotion').exec(function (err, instances) {
-  //     if (err) {
-  //       callback(err, null)
-  //     }
-  //     let ret = instances.map(function (instance) {
-  //       return {instance: instance, graph: _ids_map[instance._id]}
-  //     });
-  //     return res.status(200).json(ret);
-  //   });
-  // });
 }
 
 exports.saved_instances = function (req, res) {

@@ -413,7 +413,7 @@ exports.campaign_promotions = function (req, res) {
       if (!promotions) {
         return res.send(404);
       }
-      get_promotions_state(promotions, function (err, promotions) {
+      get_promotions_state(promotions, userID, function (err, promotions) {
         if (err) {return handleError(res, err)}
         return res.status(200).json(promotions);
       });
@@ -427,6 +427,7 @@ function get_promotions_state(promotions, userId, callback){
 
 exports.business_promotions = function (req, res) {
   let businessID = req.params.business_id;
+  let userId = req.user._id;
 
   promotionGraphModel.query_objects(Promotion,
     `MATCH (b:business {_id:'${businessID}'})<-[:BUSINESS_PROMOTION]-(p:promotion) RETURN p._id as _id`,
@@ -437,7 +438,7 @@ exports.business_promotions = function (req, res) {
       if (!promotions) {
         return res.send(404);
       }
-      get_promotions_state(promotions, function (err, promotions) {
+      get_promotions_state(promotions, userId, function (err, promotions) {
         if (err) {return handleError(res, err)}
         return res.status(200).json(promotions);
       });

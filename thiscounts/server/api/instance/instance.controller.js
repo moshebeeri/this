@@ -160,7 +160,7 @@ function initializeEarlyBooking(instance) {
   };
 }
 
-function handleSavedInstance(instance, user_id, callback) {
+function createSavedInstance(instance, user_id, callback) {
   let savedInstance = {
     user: user_id,
     instance: instance._id,
@@ -184,47 +184,63 @@ function handleSavedInstance(instance, user_id, callback) {
   SavedInstanceController.createSavedInstance(savedInstance, callback)
 }
 
+function relateSavedInstance(userId, savedInstance, instance, callback){
+  let realize_code = randomstring.generate({length: 10, charset: 'alphanumeric'});
+  let save_time = new Date();
+  instance.realize_code = realize_code;
+  instance.save_time = save_time;
+
+  graphModel.relate_ids(userId, 'SAVED', savedInstance._id, `{code: '${realize_code}',timestamp: '${save_time}'}`, function (err) {
+    if (err) {return callback(err)}
+    graphModel.relate_ids(savedInstance._id, 'SAVE_OF', instance._id, `timestamp: '${save_time}'}`, function (err) {
+      if (err) {return callback(err)}
+      return callback(null, instance);
+    });
+  });
+}
+
+function saveInstance(req, res, instance) {
+  graphModel.query(`MATCH (i:instance { _id:'${req.params.id}'}) return i.quantity as quantity`, function (err, results) {
+    if (err) {return handleError(res, err);}
+    if (results.length !== 1 && results[0].quantity < 1) {
+      return res.status(400).send('Run out of instances');
+    }
+    createSavedInstance(instance, req.user._id, function (err, savedInstance) {
+      if (err) return handleError(res, err);
+      relateSavedInstance(req.user._id, savedInstance, instance, function(err, instance){
+          if (err) return handleError(res, err);
+        graphModel.query(`MATCH (i:instance { _id:'${req.params.id}'}) SET i.quantity=i.quantity-1`, function (err) {
+          if (err) return handleError(res, err);
+          return res.status(200).json(instance);
+        });
+      });
+    });
+  });
+}
+
+function isUniqueInstance(status) {
+  status.forEach( s => {
+    if(s.type === 'PUNCH_CARD' && s.status === 'REALIZED')
+      return true;
+  });
+  return false;
+}
+
 //'/save/:id'
 exports.save = function (req, res) {
   Instance
     .findById(req.params.id)
     .exec(function (err, instance) {
-      if (err) {
-        return handleError(res, err);
-      }
-      if (!instance) {
-        return res.send(404);
-      }
-      const query = `MATCH (:instance { _id:'${req.params.id}'})<-[r:REALIZED|:SAVED]-(:user{ _id: '${req.user._id}'}) return r`;
-      graphModel.query(query, function (err, realize) {
-        if (err) {
-          return handleError(res, err);
+      if (err) {return handleError(res, err)}
+      if (!instance) {return res.send(404)}
+      const query = `MATCH (i:instance { _id:'${req.params.id}'})<-[sf:SAVE_OF]-(si:SavedInstance)<-[r:REALIZED|:SAVED]-(:user{ _id: '${req.user._id}'}) 
+                      return type(r) as status, i.type as type`;
+      graphModel.query(query, function (err, status) {
+        if (err) {return handleError(res, err);}
+        if (isUniqueInstance(status)) {
+          return res.status(500).send(`Can not save instance type of ${status[0].type}, in case it was used or redeemed`);
         }
-        if (realize.length > 0) {
-          return res.status(500).send('Instance already realized or saved');
-        }
-        graphModel.query(`MATCH (i:instance { _id:'${req.params.id}'}) return i.quantity as quantity`, function (err, results) {
-          if (err) {
-            return handleError(res, err);
-          }
-          if (results.length !== 1 && results[0].quantity < 1) {
-            return res.status(400).send('Run out of instances');
-          }
-          let realize_code = randomstring.generate({length: 10, charset: 'alphanumeric'});
-          let save_time = new Date();
-          graphModel.relate_ids(req.user._id, 'SAVED', instance._id, `{code: '${realize_code}',timestamp: '${save_time}'}`, function (err) {
-            if (err) return handleError(res, err);
-            instance.realize_code = realize_code;
-            instance.save_time = save_time;
-            graphModel.query(`MATCH (i:instance { _id:'${req.params.id}'}) SET i.quantity=i.quantity-1`, function (err) {
-              if (err) return handleError(res, err);
-              handleSavedInstance(instance, req.user._id, function (err, instance) {
-                if (err) return handleError(res, err);
-                return res.status(200).json(instance);
-              });
-            });
-          });
-        });
+        return saveInstance(req, res, instance);
       });
     });
 };
@@ -240,7 +256,7 @@ exports.unsave = function (req, res) {
       if (!instance) {
         return res.send(404);
       }
-      const query = `MATCH (i:instance { _id:'${req.params.id}'})<-[r:SAVED]-(:user{ _id: '${req.user._id}'}) SET i.quantity=i.quantity+1 delete r`;
+      const query = `MATCH (i:instance { _id:'${req.params.id}'})<-[sf:SAVE_OF]-(si:SavedInstance{instance_id:${req.params.id})<-[r:SAVED]-(:user{ _id: '${req.user._id}'}) SET i.quantity=i.quantity+1 delete r`;
       graphModel.query(query, function (err) {
         if (err) {
           return handleError(res, err);
@@ -278,8 +294,8 @@ function updateInstanceById(user_id, instance_id, callback) {
 //'/realize/:realize_code'
 //TODO: add validation of authenticated user and sale_point_code
 exports.realize = function (req, res) {
-  const query = `MATCH (promotion:promotion)<-[:INSTANCE_OF]-(instance:instance)<-[rel:SAVED{code: '${req.params.code}'}]-(user:user) 
-                return promotion,instance,rel,user`;
+  const query = `MATCH (promotion:promotion)<-[:INSTANCE_OF]-(instance:instance)<-[sf:SAVE_OF]-(savedInstance:SavedInstance)<-[rel:SAVED{code: '${req.params.code}'}]-(user:user) 
+                return promotion,instance, savedInstance, rel,user`;
   graphModel.query(query, function (err, objects) {
     if (err) return handleError(res, err);
     if (objects.length === 0)
@@ -290,14 +306,15 @@ exports.realize = function (req, res) {
 
     let promotion = objects[0].promotion;
     let instance = objects[0].instance;
+    let savedInstance = objects[0].savedInstance;
     let rel = objects[0].rel;
     let user = objects[0].user;
 
     function realize_instance() {
-      graphModel.relate_ids(user._id, 'REALIZED', instance._id, `{code: '${rel.properties.code}', timestamp: '${ new Date()}'}`,
+      graphModel.relate_ids(user._id, 'REALIZED', savedInstance._id, `{code: '${rel.properties.code}', timestamp: '${ new Date()}'}`,
         function (err) {
           if (err) return handleError(res, err);
-          graphModel.unrelate_ids(user._id, 'SAVED', instance._id, function (err) {
+          graphModel.unrelate_ids(user._id, 'SAVED', savedInstance._id, function (err) {
             if (err) return handleError(res, err);
             updateInstanceById(user._id, instance._id, function (err, mongodb_instance) {
               if (err) return handleError(res, err);
@@ -323,7 +340,8 @@ exports.realize = function (req, res) {
 };
 
 exports.realized = function (req, res) {
-  const query = `MATCH (instance:instance)<-[rel:REALIZED{code: '${req.params.code}'}]-(user:user) return instance,rel,user`;
+  const query = `MATCH (instance:instance)<-[sf:SAVE_OF]-(savedInstance:SavedInstance)<-[rel:REALIZED{code: '${req.params.code}'}]-(user:user) 
+                return instance,savedInstance,rel,user`;
   graphModel.query(query, function (err, objects) {
     if (err) return handleError(res, err);
     if (objects.length === 0)
@@ -386,14 +404,14 @@ exports.punch = function (req, res) {
       if (err) {return handleError(res, err); }
       if (!instance) {return res.send(404);}
 
-      const query = `MATCH (:instance { _id:'${req.params.id}'})<-[r:REALIZED|:SAVED]-(:user{ _id: '${req.user._id}'}) return r`;
+      const query = `MATCH (:instance { _id:'${req.params.id}'})<-[sf:SAVE_OF]-(savedInstance:SavedInstance{type:'PUNCH_CARD'})<-[r:SAVED]-(:user{ _id: '${req.user._id}'}) 
+                      return savedInstance`;
       graphModel.query(query, function (err, realize) {
         if (err) {return handleError(res, err);}
         if (realize.length > 0) {
-          return res.status(500).send('Instance already realized or saved');
+          return res.status(500).send('Expecting exactly not redeemed punch card');
         }
-        graphModel.query(`MATCH (i:instance { _id:'${req.params.id}'}) return i.quantity as quantity`, function (err, results) {
-        });
+        
       });
     });
 };
