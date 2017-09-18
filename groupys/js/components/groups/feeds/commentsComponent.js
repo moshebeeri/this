@@ -45,19 +45,13 @@ class CommentsComponent extends Component {
 
      }
 
-    async addDirectMessage(message){
-        let user = await store.get('user');
-        let messageInstance = uiTools.createMessage(user,message);
-        await this.props.updateInstanceEntityComments(this.props.group._id,this.getInstance().id,messageInstance)
-
-    }
 
 
 
     componentWillMount(){
         const {comments,group,actions,item} = this.props;
 
-        actions.setNextFeeds({},group,item);
+        actions.fetchTopComments(group,item);
 
     }
 
@@ -114,21 +108,15 @@ class CommentsComponent extends Component {
     }
 
    async _onPressButton(){
-        let user = store.get('user');
-       let item = this.getInstance();
-       let feeds = this.props.comments['comment'+this.props.group._id+ item.id];
-       if(!feeds){
-           feeds = [];
-       }
-       let message = this.state.messsage;
-       await this.addDirectMessage(message);
+       const {group,actions,item} = this.props;
 
+       let message = this.state.messsage;
+       if(message) {
+           actions.sendMessage(group._id, item.id, message);
+       }
        this.setState({
            messsage:'',
        })
-       commentApi.createComment(this.props.group._id, this.getInstance().id,message,feeds.length)
-
-
 
     }
     showComments(){
@@ -255,6 +243,7 @@ class CommentsComponent extends Component {
                 actions={actions}
                 token={token}
                 entity={item}
+                group={group}
                 title='Feeds'
                 ItemDetail={GenericFeedItem}>
 

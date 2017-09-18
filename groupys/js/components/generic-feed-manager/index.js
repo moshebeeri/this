@@ -24,9 +24,10 @@ import { bindActionCreators } from "redux";
 
 
       async fetchTopList(id){
+          const {token ,feeds,group,actions,entity} = this.props;
 
           if(id == this.props.feeds[0].fid) {
-              this.props.actions.fetchTop(this.props.feeds,this.props.token,this.props.entity)
+             actions.fetchTop(feeds,token,entity,group)
           }
     }
 

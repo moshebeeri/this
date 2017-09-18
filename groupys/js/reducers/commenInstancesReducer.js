@@ -7,7 +7,7 @@
 /**
  * Created by stan229 on 5/27/16.
  */
-const initialState = {comments:[],groupComments:{},groupCommentsOrder:{},groupLoadingDone:{},groupShowTopLoader:{},update:false,groupLastCall:{}};
+const initialState = {comments:[],clientMessages:{},groupComments:{},groupCommentsOrder:{},groupLoadingDone:{},groupShowTopLoader:{},update:false,groupLastCall:{}};
 
 import { REHYDRATE } from 'redux-persist/constants'
 import * as actions from './reducerActions';
@@ -23,6 +23,7 @@ export default function commentInstances(state = initialState, action) {
         };
     }
     let currentState = {...state};
+    let clientMessage = currentState.clientMessages
 
     switch (action.type) {
 
@@ -51,6 +52,32 @@ export default function commentInstances(state = initialState, action) {
             currentState.groupCommentsOrder[action.gid][action.instanceId].push(action.item._id);
             currentState.update=!currentState.update;
             return currentState;
+
+        case actions.UPSERT_GROUP_INSTANCE_TOP_COMMENT :
+            let groupsComment = currentState.groupComments;
+            if(!groupsComment[action.gid]){
+                groupsComment[action.gid] ={}
+            }
+            if(!groupsComment[action.gid][action.instanceId]) {
+                groupsComment[action.gid][action.instanceId] = {}
+            }
+
+            groupsComment[action.gid][action.instanceId][ action.item._id] = action.item;
+
+            if(! currentState.groupCommentsOrder[action.gid]){
+                currentState.groupCommentsOrder[action.gid] = {};
+            }
+
+            if(! currentState.groupCommentsOrder[action.gid][action.instanceId]) {
+                currentState.groupCommentsOrder[action.gid][action.instanceId] = new Array();
+            }
+            if (currentState.groupCommentsOrder[action.gid][action.instanceId].includes(action.item._id)) {
+                return state
+            }
+
+            currentState.groupCommentsOrder[action.gid][action.instanceId].unshift(action.item._id);
+            currentState.update=!currentState.update;
+            return currentState;
         case actions.GROUP_COMMENT_INSTANCE_LOADING_DONE:
             if(! currentState.groupLoadingDone[action.gid]){
                 currentState.groupLoadingDone[action.gid] = {};
@@ -73,6 +100,22 @@ export default function commentInstances(state = initialState, action) {
             currentState.groupShowTopLoader[action.gid][action.instanceId]=  action.showTopLoader;
             return currentState;
 
+        case actions.GROUP_COMMENT_INSTANCE_ADD_MESSAGE:
+            if( !clientMessage[action.groupId]){
+                clientMessage[action.groupId] ={};
+            }
+            if( !clientMessage[action.groupId][action.instanceId]){
+                clientMessage[action.groupId][action.instanceId] = new Array();
+            }
+            clientMessage[action.groupId][action.instanceId].push(action.message);
+            return currentState;
+        case actions.GROUP_COMMENT_INSTANCE_CLEAR_MESSAGE:
+            if( !clientMessage[action.groupId]){
+                clientMessage[action.groupId] ={};
+            }
+            clientMessage[action.groupId][action.instanceId] = new Array();
+
+            return currentState;
 
         default:
             return state;

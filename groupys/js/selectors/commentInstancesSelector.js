@@ -25,6 +25,8 @@ export const getFeeds = createSelector(  [ getStateFeeds],
     (commentInstances) => {
         let feedsOrder = commentInstances.groupCommentsOrder
         let feeds = commentInstances.groupComments;
+        let clientMessages = commentInstances.clientMessages;
+
         let response = {}
         if (!_.isEmpty(feedsOrder)) {
             Object.keys(feedsOrder).forEach(function (groupId) {
@@ -40,9 +42,14 @@ export const getFeeds = createSelector(  [ getStateFeeds],
                                     response[groupId][instanceId] = new Array();
                                 }
 
-                                response[groupId][instanceId].push(createFeed(feeds[groupId][instanceId][feedId]));
+
+                                response[groupId][instanceId].push(createFeed(feeds[groupId][instanceId][feedId]))
 
                             })
+                        }
+
+                        if(clientMessages &&clientMessages[groupId] && clientMessages[groupId][instanceId] ){
+                            clientMessages[groupId][instanceId].forEach(feed =>   response[groupId][instanceId].unshift(feedUiConverter.createFeed(feed)))
                         }
 
 
@@ -58,8 +65,15 @@ export const getFeeds = createSelector(  [ getStateFeeds],
 
     })
 function createFeed(message){
+    let user = undefined
+    if(message.activity){
+        user = message.activity.actor_user;
+        message = message.activity;
+    }else{
+        user= message.user;
+    }
 
-    let user = message.user;
+
 
     let name = user.phone_number;
 

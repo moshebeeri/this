@@ -18,7 +18,7 @@ class CommentApi {
 
 
 
-    createComment(group,instance,comment){
+    createComment(group,instance,comment,token){
 
         return new Promise(async(resolve, reject) => {
 
@@ -36,7 +36,7 @@ class CommentApi {
 
 
 
-                let token = await store.get('token');
+
                 const response = await fetch(`${server_host}/api/comments/`, {
                     method: 'POST',
                     headers: {
