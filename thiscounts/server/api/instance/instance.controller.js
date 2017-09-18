@@ -113,6 +113,76 @@ exports.available = function (req, res) {
       });
     });
 };
+let SavedInstanceController = require('../savedInstance/savedInstance.controller');
+function initializeIncreasing(instance) {
+  return {
+    from: instance.increasing.from,
+    to: instance.increasing.to,
+    days_eligible: instance.increasing.days_eligible,
+  };
+}
+function initializeDoubling(instance) {
+  return {
+    value: instance.doubling.value,
+  };
+}
+function initializeGrow(instance) {
+  return {
+    value: instance.doubling.value,
+  };
+}
+function initializePrepayDiscount(instance) {
+  return {
+    value: instance.prepay_discount.value,
+    eligible_from: instance.prepay_discount.eligible_from,
+    eligible_to: instance.prepay_discount.eligible_to,
+    prepay: instance.prepay_discount.prepay
+  };
+}
+function initializePunchCard(instance) {
+  return {
+    redeemTimes: [],
+    product: instance.punch_card.product,
+    number_of_punches: instance.punch_card.number_of_punches,
+    days: instance.punch_card.days,
+  };
+}
+function initializeCashBack(instance) {
+  return {
+    pay: instance.cash_back.number_of_punches,
+    back: instance.cash_back.days,
+  };
+}
+function initializeEarlyBooking(instance) {
+  return {
+    percent: instance.cash_back.number_of_punches,
+    booking_before: instance.cash_back.days,
+  };
+}
+
+function handleSavedInstance(instance, user_id, callback) {
+  let savedInstance = {
+    user: user_id,
+    instance: instance._id,
+    type: instance.type
+  };
+  if(instance.type === 'INCREASING'){
+    savedInstance.savedData.increasing = initializeIncreasing(instance)
+  } else if(instance.type === 'DOUBLING'){
+    savedInstance.savedData.doubling = initializeDoubling(instance)
+  } else if(instance.type === 'GROW'){
+    savedInstance.savedData.grow = initializeGrow(instance)
+  } else if(instance.type === 'PREPAY_DISCOUNT'){
+    savedInstance.savedData.prepay_discount = initializePrepayDiscount(instance)
+  } else if(instance.type === 'PUNCH_CARD'){
+    savedInstance.savedData.punch_card = initializePunchCard(instance)
+  } else if(instance.type === 'CASH_BACK'){
+    savedInstance.savedData.cash_back = initializeCashBack(instance)
+  } else if(instance.type === 'EARLY_BOOKING'){
+    savedInstance.savedData.early_booking = initializeEarlyBooking(instance)
+  }
+  SavedInstanceController.createSavedInstance(savedInstance, callback)
+}
 
 //'/save/:id'
 exports.save = function (req, res) {
@@ -148,7 +218,10 @@ exports.save = function (req, res) {
             instance.save_time = save_time;
             graphModel.query(`MATCH (i:instance { _id:'${req.params.id}'}) SET i.quantity=i.quantity-1`, function (err) {
               if (err) return handleError(res, err);
-              return res.status(200).json(instance);
+              handleSavedInstance(instance, req.user._id, function (err, instance) {
+                if (err) return handleError(res, err);
+                return res.status(200).json(instance);
+              });
             });
           });
         });
@@ -259,6 +332,70 @@ exports.realized = function (req, res) {
     if (objects.length === 1)
       return res.status(200).send(objects[0]);
   });
+};
+
+exports.realize_punch = function (req, res) {
+  const query = `MATCH (promotion:promotion)<-[:INSTANCE_OF]-(instance:instance)<-[rel:SAVED{code: '${req.params.code}'}]-(user:user) 
+                return promotion,instance,rel,user`;
+  graphModel.query(query, function (err, objects) {
+    if (err) return handleError(res, err);
+    if (objects.length === 0)
+      return res.status(404).send(`realize code mismatch`);
+
+    if (objects.length > 1)
+      return res.status(500).send('multiple instances found');
+
+    let promotion = objects[0].promotion;
+    let instance = objects[0].instance;
+    let rel = objects[0].rel;
+    let user = objects[0].user;
+
+    function realize_instance() {
+      graphModel.relate_ids(user._id, 'REALIZED', instance._id, `{code: '${rel.properties.code}', timestamp: '${ new Date()}'}`,
+        function (err) {
+          if (err) return handleError(res, err);
+          graphModel.unrelate_ids(user._id, 'SAVED', instance._id, function (err) {
+            if (err) return handleError(res, err);
+            updateInstanceById(user._id, instance._id, function (err, mongodb_instance) {
+              if (err) return handleError(res, err);
+              return res.status(200).json({g_instance: instance, instance: mongodb_instance});
+            });
+          })
+        })
+    }
+    if(promotion.validate_barcode) {
+      graphModel.query(`MATCH (pn:promotion)-[:PRODUCT]->(pt:product)-[:BARCODE]->(barcode:barcode) where id(pn)=${promotion.id} return barcode`,
+        function (err, barcodes) {
+          if (err) return handleError(res, err);
+          if (barcodes.length !== 1)
+            return res.status(403).send('non or multiple barcode found');
+          if(barcodes[0].code !== req.params.barcode)
+            return res.status(403).send('required barcode mismatch');
+          return realize_instance();
+        });
+    }else{
+      return realize_instance();
+    }
+  });
+};
+
+exports.punch = function (req, res) {
+  Instance
+    .findById(req.params.id)
+    .exec(function (err, instance) {
+      if (err) {return handleError(res, err); }
+      if (!instance) {return res.send(404);}
+
+      const query = `MATCH (:instance { _id:'${req.params.id}'})<-[r:REALIZED|:SAVED]-(:user{ _id: '${req.user._id}'}) return r`;
+      graphModel.query(query, function (err, realize) {
+        if (err) {return handleError(res, err);}
+        if (realize.length > 0) {
+          return res.status(500).send('Instance already realized or saved');
+        }
+        graphModel.query(`MATCH (i:instance { _id:'${req.params.id}'}) return i.quantity as quantity`, function (err, results) {
+        });
+      });
+    });
 };
 
 exports.qrcode = function (req, res) {

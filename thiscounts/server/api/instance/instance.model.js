@@ -6,6 +6,7 @@ const autopopulate = require('mongoose-autopopulate');
 
 let InstanceSchema = new Schema({
   social_state : {},
+  savedInstance:{},
   promotion: {type: Schema.ObjectId, ref: 'Promotion', index: true, required: true, autopopulate: true},
   gid: {type: Number, index: true},
   type: {type: String, index: true, required: true},
