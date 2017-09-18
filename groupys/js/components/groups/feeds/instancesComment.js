@@ -10,12 +10,9 @@ const {width, height} = Dimensions.get('window')
 const   vw = width/100;
 const  vh = height/100
 import GenericFeedManager from '../../generic-feed-manager/index'
-import GenericFeedItem from '../../generic-feed-manager/generic-feed'
+
 import CommentsComponenet from './commentsComponent';
-import AndroidCommentsComponenet from './andoridCommentsComponent';
-import styles from './styles'
-import Icon2 from 'react-native-vector-icons/Entypo';
-import CommentApi from '../../../api/commet'
+
 import NestedScrollView from 'react-native-nested-scrollview';
 import { getFeeds } from '../../../selectors/commentsSelector'
 
@@ -24,7 +21,7 @@ import { bindActionCreators } from "redux";
 
 import * as commentAction from "../../../actions/comments";
 
-import EmojiPicker from 'react-native-emoji-picker-panel'
+
 class instancesComment extends Component {
 
     constructor(props) {
