@@ -56,23 +56,31 @@ class instancesComment extends Component {
     renderItem(item){
         const{navigation ,group} = this.props
 
-        return <CommentsComponenet navigation={navigation} group = {group} item={item.item} index = {item.index}/>
+        return <CommentsComponenet key={item.id}navigation={navigation} group = {group} item={item} index = {item.index}/>
     }
 
     render() {
 
         const { group,comments,navigation,actions,update,loadingDone,showTopLoader,allState} = this.props;
 
-          {/*if(Platform.OS == 'android'){*/}
-                {/*let body = feeds.map(feed => this.createComponent(feed))*/}
+          if(Platform.OS == 'android') {
+              if (comments[group._id]) {
+                  const body = comments[group._id].map(feed => this.renderItem(feed))
 
-                {/*return <NestedScrollView  >*/}
+                  return <NestedScrollView  >
 
-                        {/*{body}*/}
+                      {body}
+                  </NestedScrollView>
 
-            //     </NestedScrollView>
-            //
-            // }
+              }else{
+                  return <NestedScrollView  >
+
+
+
+                  </NestedScrollView>
+
+              }
+          }
         if(!comments[group._id]){
             return    <GenericFeedManager feeds={new Array()}
                                           entity={group}

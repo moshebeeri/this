@@ -19,7 +19,7 @@ import UiTools from '../../../api/feed-ui-converter'
 let uiTools = new UiTools();
 let commentApi = new CommentApi();
 import { bindActionCreators } from "redux";
-
+import NestedScrollView from 'react-native-nested-scrollview';
 import * as commentGroupAction from "../../../actions/commentsGroup";
 import { getFeeds } from '../../../selectors/commentInstancesSelector'
 import EmojiPicker from 'react-native-emoji-picker-panel'
@@ -49,7 +49,8 @@ class CommentsComponent extends Component {
 
 
     componentWillMount(){
-        const {comments,group,actions,item} = this.props;
+        const item = this.getInstance();
+        const {comments,group,actions} = this.props;
 
         actions.fetchTopComments(group,item);
 
@@ -108,7 +109,9 @@ class CommentsComponent extends Component {
     }
 
    async _onPressButton(){
-       const {group,actions,item} = this.props;
+       const item = this.getInstance();
+
+       const {group,actions} = this.props;
 
        let message = this.state.messsage;
        if(message) {
@@ -139,7 +142,7 @@ class CommentsComponent extends Component {
         const promotionType = <Text style={colorStyle}>{item.promotion}</Text>
         const showComment = this.state.showComment;
         const arrowIcon =  this.getArrowComponent(showComment);
-        const commentsView = this.createCommentView(showComment);
+        const commentsView = this.createCommentView(showComment,item);
         const showMessageInput = this.createMessageComponent(showComment);
         const showEmoji = this.createEmojiComponent(showComment,this.state.showEmoji);
         const style = this.createStyle(showComment);
@@ -227,9 +230,13 @@ class CommentsComponent extends Component {
 
     }
 
-    createCommentView(showComment) {
+    createCommentView(showComment,item) {
+        const { navigation,feeds,userFollower,actions,token,loadingDone,showTopLoader ,group} = this.props;
+
+        if(Platform.OS == 'android'){
+            return this.createAndroidScroller(feeds[group._id][item.id],30)
+        }
         if(showComment){
-            const { navigation,feeds,userFollower,actions,token,loadingDone,showTopLoader ,group,item} = this.props;
 
 
             return    <GenericFeedManager
@@ -272,6 +279,40 @@ class CommentsComponent extends Component {
         return undefined;
     }
 
+    createAndroidScroller(feeds,size){
+
+        let body = feeds.map(feed => this.renderItem(feed))
+        return <NestedScrollView style={{height:vh*size}}>{body}</NestedScrollView>
+
+
+    }
+
+
+
+    renderItem(item){
+        const {navigation,token ,userFollowers,group,actions,entity} = this.props;
+
+
+        return <GenericFeedItem
+            key={item.id}
+            user={entity}
+            token={token}
+            userFollowers={userFollowers}
+            group = {group}
+            navigation={navigation}
+            item={item}
+            fetchTopList={this.fetchTopList.bind(this)}
+            actions={actions}  />
+
+    }
+    async fetchTopList(id){
+        const item = this.getInstance();
+        const {token ,feeds,group,actions} = this.props;
+
+        if(id == feeds[group._id][item.id][0].fid) {
+            actions.fetchTop(feeds,token,item,group)
+        }
+    }
 }
 
 export default connect(

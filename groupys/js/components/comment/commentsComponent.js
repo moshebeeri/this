@@ -42,8 +42,6 @@ class CommentsComponent extends Component {
         };
         this.handlePick = this.handlePick.bind(this);
 
-        this.props.fetchStoreEntityComments(this.props.entities,this.props.generalId)
-
     }
 
 

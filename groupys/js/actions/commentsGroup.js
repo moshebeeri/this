@@ -32,6 +32,13 @@ export function fetchTopComments( group,instance){
             }
 
         }
+        dispatch({
+            type: actions.GROUP_COMMENT_INSTANCE_LAST_CALL,
+            lastCall: new Date(),
+            gid:group._id,
+            instanceId:instance.id
+
+        });
 
         let response = await commentsApi.getInstanceGroupComments(group._id, instance.id, 0, token);
         dispatch({
@@ -57,13 +64,7 @@ export function fetchTopComments( group,instance){
                 instanceId:instance.id
             }))
 
-            dispatch({
-                type: actions.GROUP_COMMENT_INSTANCE_LAST_CALL,
-                lastCall: new Date(),
-                gid:group._id,
-                instanceId:instance.id
 
-            });
         }
 
 

@@ -193,6 +193,7 @@ class GroupFeed extends Component {
                 actions={actions}
                 token={token}
                 entity={group}
+                group={group}
                 title='Feeds'
                 ItemDetail={GenericFeedItem}>
 
