@@ -71,7 +71,7 @@ class CommentApi {
 
     }
 
-    createGlobalComment(entities,comment){
+    createGlobalComment(entities,comment,token){
 
         return new Promise(async(resolve, reject) => {
 
@@ -85,7 +85,7 @@ class CommentApi {
 
 
                 request.entities = entities
-                let token = await store.get('token');
+
                 const response = await fetch(`${server_host}/api/comments/`, {
                     method: 'POST',
                     headers: {
@@ -120,7 +120,7 @@ class CommentApi {
 
     }
 
-    getComment(entities,token){
+    getComment(entities,token,skip){
 
             return new Promise(async(resolve, reject) => {
 
@@ -130,7 +130,7 @@ class CommentApi {
                     request.entities = entities;
 
 
-                    const response = await fetch(`${server_host}/api/comments/find/`+0+'/' +100, {
+                    const response = await fetch(`${server_host}/api/comments/find/`+skip+'/' +10, {
                         method: 'POST',
                         headers: {
                             'Accept': 'application/json, text/plain, */*',
@@ -149,11 +149,9 @@ class CommentApi {
                     }
 
                     let responseData = await response.json();
-                    let feeds = responseData.map(message => this.createFeed(message)).filter(function(x){
-                        return x != undefined;
-                    });  timer.logTime(from,new Date(),'comments','/skip/limit')
+                   timer.logTime(from,new Date(),'comments','/skip/limit')
 
-                    resolve(feeds);
+                    resolve(responseData);
                 }
                 catch (error) {
 

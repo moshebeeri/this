@@ -1,27 +1,24 @@
 
 import React, { Component } from 'react';
-import { Image,TextInput, Platform,View,Keyboard,TouchableNativeFeedback,TouchableOpacity,KeyboardAvoidingView} from 'react-native';
+import { Image,TextInput, Dimensions,Platform,View,Keyboard,TouchableNativeFeedback,TouchableOpacity,KeyboardAvoidingView} from 'react-native';
 
 import { connect } from 'react-redux';
 import { actions } from 'react-native-navigation-redux-helpers';
 import { Container,Footer,Icon,Button,Text,Input ,Thumbnail} from 'native-base';
 
+const {width, height} = Dimensions.get('window')
+const   vw = width/100;
+const  vh = height/100
 import GenericFeedManager from '../generic-feed-manager/index'
 import GenericFeedItem from '../generic-feed-manager/generic-feed'
 import styles from './styles'
 import Icon2 from 'react-native-vector-icons/Entypo';
-import CommentApi from '../../api/commet'
 
-let commentApi = new CommentApi();
 import { bindActionCreators } from "redux";
-
-import * as commentAction from "../../actions/comments";
-
+import NestedScrollView from 'react-native-nested-scrollview';
+import * as commentEntitiesAction from "../../actions/commentsEntities";
+import { getFeeds } from '../../selectors/commentsEntitiesSelector'
 import EmojiPicker from 'react-native-emoji-picker-panel'
-
-import UiTools from '../../api/feed-ui-converter'
-let uiTools = new UiTools();
-import store from 'react-native-simple-store';
 
 class CommentsComponent extends Component {
 
@@ -46,44 +43,16 @@ class CommentsComponent extends Component {
 
 
 
-    fetchFeeds(){
-
-        this.props.fetchEntityComments(this.props.entities,this.props.generalId)
-
-    }
-    fetchTop(id){
-        this.props.fetchEntityComments(this.props.entities,this.props.generalId)
-    }
-
 
     componentWillMount(){
-        this.keyboardDidShowListener = Keyboard.addListener('keyboardDidShow', this._keyboardDidShow.bind(this));
-        this.keyboardDidHideListener = Keyboard.addListener('keyboardDidHide', this._keyboardDidHide.bind(this));
+        const item = this.getInstance();
+        const {navigation,actions} = this.props;
 
-    }
-    componentWillUnmount () {
-        this.keyboardDidShowListener.remove();
-        this.keyboardDidHideListener.remove();
-    }
+        actions.fetchTopComments(item.entities,item.generalId);
 
-    _keyboardDidShow () {
-        this.setState({
-            resizeCommenrs : true
-        })
-    }
-
-    _keyboardDidHide () {
-        this.setState({
-            resizeCommenrs : false
-        })
     }
 
 
-    async getAll(direction,id){
-        //
-        // let feed = await feedApi.getAll(direction,id,this.props.navigation.state.params.group._id);
-        // return feed;
-    }
 
 
 
@@ -122,9 +91,7 @@ class CommentsComponent extends Component {
         })
     }
 
-    nextLoad(){
 
-    }
 
     getInstance(){
         if(this.props.instance){
@@ -137,24 +104,18 @@ class CommentsComponent extends Component {
         return this.props.item;
     }
 
-    async addDirectMessage(message){
-        let user = await store.get('user');
-        let messageInstance = uiTools.createMessage(user,message);
-        await this.props.updateEntityComments(this.props.generalId,messageInstance)
+    async _onPressButton(){
+        const item = this.getInstance();
 
-    }
+        const {group,actions} = this.props;
 
-   async _onPressButton(){
         let message = this.state.messsage;
-       await this.addDirectMessage(message);
-       this.setState({
-           messsage:'',
-       })
-       await commentApi.createGlobalComment(this.props.entities,message)
-
-
-
-       this.props.fetchEntityComments(this.props.entities,this.props.generalId)
+        if(message) {
+            actions.sendMessage(item.entities,item.generalId, message);
+        }
+        this.setState({
+            messsage:'',
+        })
 
     }
     showComments(){
@@ -164,14 +125,9 @@ class CommentsComponent extends Component {
         })
     }
     render() {
-        let item = this.getInstance();
-        let promotion = undefined;
-        if(item.banner){
-            promotion =  <Thumbnail  square={true} size={50} source={{uri: item.banner.uri}} />
-
-        }
-        let promotionType = undefined;
-        let colorStyle = {
+        const item = this.getInstance();
+        const promotion = this.getBannerComponent(item);
+        const colorStyle = {
 
             color: item.promotionColor,
 
@@ -179,57 +135,13 @@ class CommentsComponent extends Component {
         }
 
 
-        promotionType = <Text style={colorStyle}>{item.promotion}</Text>
-
-        let feeds = this.props.comments['comment'+this.props.generalId];
-        if(!feeds){
-            feeds = [];
-        }
-
-        let arrowIcon = "chevron-small-down";
-        let commentsView = undefined;
-        let showMessageInput = undefined;
-        let showEmoji = undefined;
-        let style = {
-            height:90,backgroundColor:'#ebebeb'
-        }
-
-        if(this.state.showComment){
-            style = {
-                height:550,backgroundColor:'#ebebeb'
-            }
-
-            if(this.state.resizeCommenrs){
-                style = {
-                    height:300,backgroundColor:'#ebebeb'
-                }
-            }
-            arrowIcon = "chevron-small-up";
-
-            commentsView =
-                <GenericFeedManager navigation={this.props.navigation} loadingDone = {this.props.comments['LoadingDone' + this.props.generalId] } showTopTimer={false} feeds={feeds} api={this} title='comments' ItemDetail={GenericFeedItem}></GenericFeedManager>
-
-            showMessageInput =  <View behavior={'position'} style={styles.message_container}>
-                <View style={ {backgroundColor:'white',  flexDirection: 'row'}}>
-                    <Button   onPress={() => this._onPressButton()} style={styles.icon} transparent>
-
-                        <Icon style={{fontSize:35,color:"#2db6c8"}} name='send' />
-                    </Button>
-                    <Input style={{width:300}} value={this.state.messsage}  onFocus={this.hideEmoji.bind(this)} blurOnSubmit={true} returnKeyType='done' ref="3"  onSubmitEditing={this._onPressButton.bind(this)} onChangeText={(messsage) => this.setState({messsage})} placeholder='write text' />
-
-
-                    <Button   onPress={() => this.showEmoji()} style={styles.icon} transparent>
-
-                        <Icon2 style={{fontSize:35,color:"#2db6c8"}} name={this.state.iconEmoji} />
-                    </Button>
-
-                </View>
-
-            </View>
-
-            showEmoji = <EmojiPicker stylw={{height:100}}visible={this.state.showEmoji}  onEmojiSelected={this.handlePick} />
-
-        }
+        const promotionType = <Text style={colorStyle}>{item.promotion}</Text>
+        const showComment = this.state.showComment;
+        const arrowIcon =  this.getArrowComponent(showComment);
+        const commentsView = this.createCommentView(showComment,item);
+        const showMessageInput = this.createMessageComponent(showComment);
+        const showEmoji = this.createEmojiComponent(showComment,this.state.showEmoji);
+        const style = this.createStyle(showComment);
 
 
 
@@ -246,7 +158,12 @@ class CommentsComponent extends Component {
                         <Text style={styles.promotion_type}>{item.itemTitle}</Text>
 
                     </View>
+                    <View style={styles.comment_colapse}>
+                        <Button   onPress={() => this.showComments()} style={styles.icon} transparent>
 
+                            <Icon2 style={{fontSize:35,color:"#dadada"}} name={arrowIcon}/>
+                        </Button>
+                    </View>
                 </View>
                 {commentsView}
                 {showMessageInput}
@@ -258,13 +175,160 @@ class CommentsComponent extends Component {
         );
     }
 
+    createStyle(showComment) {
+        if(showComment){
+            return {
+                height:vh*77,backgroundColor:'#ebebeb'
+            }
+        }
+
+        return  {
+            height: vh * 15, backgroundColor: '#ebebeb'
+        };
+    }
+
+    createEmojiComponent(showComment,showEmoji) {
+        if(showComment){
+            return   <EmojiPicker stylw={{height:100}}visible={showEmoji}  onEmojiSelected={this.handlePick} />
+
+        }
+
+        return undefined;
+    }
+
+    createMessageComponent(showComment) {
+        if(showComment){
+            return <View style={styles.message_container}>
+                <View style={ {backgroundColor:'white',  flexDirection: 'row'}}>
+                    <Button   onPress={() => this._onPressButton()} style={styles.icon} transparent>
+
+                        <Icon style={{fontSize:35,color:"#2db6c8"}} name='send' />
+                    </Button>
+                    <Input style={{width:300}} value={this.state.messsage}  onFocus={this.hideEmoji.bind(this)} blurOnSubmit={true} returnKeyType='done' ref="3"  onSubmitEditing={this._onPressButton.bind(this)} onChangeText={(messsage) => this.setState({messsage})} placeholder='write text' />
+
+
+                    <Button   onPress={() => this.showEmoji()} style={styles.icon} transparent>
+
+                        <Icon2 style={{fontSize:35,color:"#2db6c8"}} name={this.state.iconEmoji} />
+                    </Button>
+
+                </View>
+
+            </View>
+        }
+
+        return undefined;
+    }
+
+    nextCommentPage(){
+        const item = this.getInstance();
+
+        const{actions,group}= this.props;
+
+        actions.setNextFeeds(feeds[item.generalId],item.entities,item.generalId)
+
+    }
+
+    createCommentView(showComment,item) {
+        const { navigation,feeds,userFollower,actions,token,loadingDone,showTopLoader ,group} = this.props;
+
+        if(Platform.OS == 'android'){
+            return this.createAndroidScroller(feeds[item.generalId],30)
+        }
+        if(showComment){
+
+
+            return    <GenericFeedManager
+                navigation={navigation}
+
+                loadingDone = {loadingDone[group._id][item.id]}
+                showTopLoader={false}
+                userFollowers= {userFollower}
+                feeds={feeds[group._id][item.id]}
+                setNextFeeds={this.nextCommentPage.bind(this)}
+                actions={actions}
+                token={token}
+                entity={item}
+                group={group}
+                title='Feeds'
+                ItemDetail={GenericFeedItem}>
+
+            </GenericFeedManager>
+
+        }
+
+        return undefined;
+    }
+
+    getArrowComponent(showComment) {
+        if(showComment){
+            return "chevron-small-up";
+
+        }
+
+        return "chevron-small-down";;
+    }
+
+    getBannerComponent(item) {
+
+        if (item.banner) {
+            return <Thumbnail square={true} size={50} source={{uri: item.banner.uri}}/>
+
+        }
+        return undefined;
+    }
+
+    createAndroidScroller(feeds,size){
+        if(feeds && feeds.length > 0) {
+            let body = feeds.map(feed => this.renderItem(feed))
+            return <NestedScrollView style={{height: vh * size}}>{body}</NestedScrollView>
+        }else{
+            return <NestedScrollView style={{height: vh * size}}></NestedScrollView>
+
+        }
+
+
+    }
+
+
+
+    renderItem(item){
+        const {navigation,token ,userFollowers,group,actions,entity} = this.props;
+
+
+        return <GenericFeedItem
+            key={item.id}
+            user={entity}
+            token={token}
+            userFollowers={userFollowers}
+            group = {group}
+            navigation={navigation}
+            item={item}
+            fetchTopList={this.fetchTopList.bind(this)}
+            actions={actions}  />
+
+    }
+    async fetchTopList(id){
+        const item = this.getInstance();
+        const {token ,feeds,group,actions} = this.props;
+
+        if(id == feeds[item.generalId][0].fid) {
+            actions.fetchTop(feeds[item.generalId],token, item.entities,item.generalId)
+        }
+    }
 }
 
 export default connect(
     state => ({
-        comments: state.comments
+        token:state.authentication.token,
+        userFollower:state.user.followers,
+        feeds: getFeeds(state),
+        showTopLoader:state.commentInstances.showTopLoader,
+        loadingDone:state.commentInstances.groupLoadingDone,
     }),
-    dispatch => bindActionCreators(commentAction, dispatch)
+    (dispatch) => ({
+        actions: bindActionCreators(commentEntitiesAction, dispatch)
+    })
 )(CommentsComponent);
 
 
