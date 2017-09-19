@@ -419,7 +419,7 @@ exports.generate_state = function(items, userId, state_func, callback){
     return b._id - a._id; //descending order
   });
   async.each(items, createFeedStateFunction(stated, userId, state_func), function (err) {
-    if (err) return console.log(err);
+    if (err) callback(err);
     return callback(null, stated.array);
   });
 };

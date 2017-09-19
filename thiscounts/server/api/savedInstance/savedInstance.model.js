@@ -2,6 +2,7 @@
 
 let mongoose = require('mongoose'),
     Schema = mongoose.Schema;
+const autopopulate = require('mongoose-autopopulate');
 
 const savedDataTypes = [
   'INCREASING',
@@ -15,51 +16,60 @@ const savedDataTypes = [
 
 let SavedInstanceSchema = new Schema({
   gid: { type: Number, index: true},
-  created: {type: Date, default: Date.now()},
-  user: {type: Schema.ObjectId, ref: 'User', required: true},
-  instance: {type: Schema.ObjectId, ref: 'Instance', required: true},
+  created: {type: Date},
+  user: {type: Schema.ObjectId, ref: 'User', required: true, autopopulate: true },
+  instance: {type: Schema.ObjectId, ref: 'Instance', required: true, autopopulate: true },
   type: {type: String, required: true},
   savedDataType: {type: String, enum: savedDataTypes},
   savedData: {
     increasing: {
-      redeemTime: {type: Date, default: Date.now()},
+      firstRedeemTime: {type: Date},
+      secondRedeemTime: {type: Date},
       from: Number,
       to: Number,
       days_eligible: Number,
     },
     doubling: {
-      redeemTime: {type: Date, default: Date.now()},
+      firstRedeemTime: {type: Date},
+      secondRedeemTime: {type: Date},
       value: Number,
     },
     grow: {
-      redeemTime: {type: Date, default: Date.now()},
+      firstRedeemTime: {type: Date},
+      secondRedeemTime: {type: Date},
       value: Number,
     },
     prepay_discount: {
-      redeemTime: {type: Date, default: Date.now()},
+      firstRedeemTime: {type: Date},
+      secondRedeemTime: {type: Date},
       value: Number,
       eligible_from: {type: Date},
       eligible_to: {type: Date},
       prepay: Number,
     },
      punch_card: {
-      redeemTimes: [{type: Date, default: Date.now()}],
+      won: {type: Boolean, default: false},
+      redeemTimes: [{type: Date}],
       product: {type: Schema.ObjectId, ref: 'Product'},
       number_of_punches: Number,
       days: Number,
     },
     cash_back: {
-      redeemTime: {type: Date, default: Date.now()},
+      redeemTime: {type: Date},
       pay: Number,
       back: Number
     },
     early_booking: {
-      redeemTime: {type: Date, default: Date.now()},
+      redeemTime: {type: Date},
       percent: Number,
       booking_before: Date
+    },
+    other:{
+      redeemTime: {type: Date},
     }
   }
 
 });
+SavedInstanceSchema.plugin(autopopulate);
 
 module.exports = mongoose.model('SavedInstance', SavedInstanceSchema);
