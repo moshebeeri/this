@@ -55,34 +55,44 @@ function dataGetCollection(collections,collection){
     return collections[collection];
 }
 
-export function imutableObject(obj){
+export function immutableObject(obj){
     return{
         ...obj
     }
 }
 export function disassembler(input,dispatch){
-    let obj = imutableObject(input)
+    let obj = immutableObject(input);
     Object.keys(obj).forEach(key => {
         let collection = collectionName(key);
-        if(!collection || typeof obj[key] !== 'object') return;
-        if(![obj[key]._id]) return ;
-        let objKey = obj[key];
-        obj[key] = obj[key]._id;
-        disassembler(objKey,dispatch)
-        dataSetCollection(dispatch,collection,objKey);
-
+        if( obj[key] && typeof obj[key] === 'object'){
+            if(!obj[key]._id ) {
+                obj[key] = disassembler(obj[key], dispatch);
+            }else if(collection){
+                let objKey = obj[key];
+                obj[key] = obj[key]._id;
+                objKey = disassembler(objKey, dispatch);
+                dataSetCollection(dispatch,collection,objKey);
+            }
+        }
     });
     return obj;
+
 }
 
 export function assembler(input,collections){
-    let obj = imutableObject(input)
+    let obj = immutableObject(input);
     Object.keys(obj).forEach(key => {
         let collection = nameToCollection(key);
-        if(!collection) return ;
-        obj[key] = dataGetCollection(collections,collection)[obj[key]];
-        if(!obj[key]) return;
-        assembler(obj[key],collections);
+        if(!collection){
+            if(obj[key] && typeof obj[key] === 'object')
+                obj[key] = assembler(obj[key],collections);
+        } else {
+            obj[key] = dataGetCollection(collections, collection)[obj[key]];
+            if (!obj[key]) return;
+            console.log(key);
+            obj[key] = assembler(obj[key], collections);
+        }
     });
     return obj;
+
 }

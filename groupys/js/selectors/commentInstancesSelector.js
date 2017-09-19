@@ -38,7 +38,7 @@ export const getFeeds = createSelector(  [ getStateFeeds],
                                 if (!response[groupId]) {
                                     response[groupId] = {};
                                 }
-                                if(!response[groupId][instanceId]){
+                                if (!response[groupId][instanceId]) {
                                     response[groupId][instanceId] = new Array();
                                 }
 
@@ -47,19 +47,24 @@ export const getFeeds = createSelector(  [ getStateFeeds],
 
                             })
                         }
-
-                        if(clientMessages &&clientMessages[groupId] && clientMessages[groupId][instanceId] ){
-                            clientMessages[groupId][instanceId].forEach(feed =>   response[groupId][instanceId].unshift(feedUiConverter.createFeed(feed)))
-                        }
-
-
                     })
+
+
                 }
 
 
             })
+        }
 
+        if (!_.isEmpty(clientMessages)) {
+            Object.keys(clientMessages).forEach(function (groupId) {
+                if (!_.isEmpty(clientMessages[groupId])) {
+                    Object.keys(clientMessages[groupId]).forEach(function (instanceId) {
+                        clientMessages[groupId][instanceId].forEach(feed => response[groupId][instanceId].unshift(feedUiConverter.createFeed(feed)))
 
+                    });
+                }
+            });
         }
         return response;
 
