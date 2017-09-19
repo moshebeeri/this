@@ -23,6 +23,9 @@ function entity_validator(v) {
 
 
 const GroupSchema = new Schema({
+  social_state: {},
+  touched: {},
+  role: {},
   name: String,
   gid: {type: Number, index: true},
   description: String,
