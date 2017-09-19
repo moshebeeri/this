@@ -168,9 +168,10 @@ export function setNextFeeds(comments,token,group){
         }
         let response = undefined
         if( comments && comments.length > 0) {
-            response = await commentsApi.getGroupComments(group,token,0,10);
-        }else{
             response = await commentsApi.getGroupComments(group,token,comments[group._id].length,comments[group._id].length + 10);
+
+         }else{
+            response = await commentsApi.getGroupComments(group,token,0,10);
 
 
         }

@@ -22,7 +22,7 @@ class FeedConverter
             if(!name){
                 name = feed.activity.actor_user.phone_number;
             }
-            if (feed.activity.business.pictures.length > 0) {
+            if (feed.activity.business.pictures && feed.activity.business.pictures[0]) {
                 response = {
                     id: feed.activity.business._id,
                     fid: feed._id,
@@ -263,7 +263,7 @@ class FeedConverter
            responseFeed.name = promotion.name;
             responseFeed.description = promotion.description;
             responseFeed.showSocial = true;
-            if (promotion.pictures.length > 0) {
+            if (promotion.pictures  && promotion.pictures[0]) {
                 responseFeed.banner = {
                     uri: promotion.pictures[0].pictures[1]
                 };
@@ -314,7 +314,7 @@ class FeedConverter
 
             }
 
-            if (promotion.entity && promotion.entity.business && promotion.entity.business.pictures.length > 0) {
+            if (promotion.entity && promotion.entity.business && promotion.entity.business.pictures  &&  promotion.entity.business.pictures[0]) {
                 responseFeed.businessLogo = promotion.entity.business.pictures[0].pictures[3];
                 responseFeed.businessName = promotion.entity.business.name;
                 responseFeed.businessAddress = promotion.entity.business.city + ' ' + promotion.entity.business.address;
