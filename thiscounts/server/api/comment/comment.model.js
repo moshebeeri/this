@@ -2,11 +2,12 @@
 
 let mongoose = require('mongoose'),
     Schema = mongoose.Schema;
+const utils = require('../../components/utils').createUtils();
 const autopopulate = require('mongoose-autopopulate');
 
 let CommentSchema = new Schema({
   gid: { type: Number, index: true},
-  user: {type: Schema.ObjectId, ref: 'User', index: true, autopopulate: true, required: true},
+  user: {type: Schema.ObjectId, ref: 'User', index: true, autopopulate: utils.userAutopopulateOptions, required: true},
   message: String,
   pictures: [],
   entities: {
