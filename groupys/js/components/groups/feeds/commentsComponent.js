@@ -280,9 +280,11 @@ class CommentsComponent extends Component {
     }
 
     createAndroidScroller(feeds,size){
-
-        let body = feeds.map(feed => this.renderItem(feed))
-        return <NestedScrollView style={{height:vh*size}}>{body}</NestedScrollView>
+        if(feeds) {
+            let body = feeds.map(feed => this.renderItem(feed))
+            return <NestedScrollView style={{height: vh * size}}>{body}</NestedScrollView>
+        }
+        return <NestedScrollView style={{height: vh * size}}></NestedScrollView>
 
 
     }

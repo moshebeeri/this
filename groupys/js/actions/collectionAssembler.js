@@ -44,7 +44,6 @@ function nameToCollection(key) {return nameToCollections[key];}
 
 function dataSetCollection(dispacth,collection,object){
     let actionType = 'UPSERT'+collection;
-    console.log(actionType)
     dispacth({
         type: actionType,
         item: object,
@@ -89,7 +88,6 @@ export function assembler(input,collections){
         } else {
             obj[key] = dataGetCollection(collections, collection)[obj[key]];
             if (!obj[key]) return;
-            console.log(key);
             obj[key] = assembler(obj[key], collections);
         }
     });
