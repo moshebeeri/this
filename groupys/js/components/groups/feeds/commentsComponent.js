@@ -233,9 +233,17 @@ class CommentsComponent extends Component {
     createCommentView(showComment,item) {
         const { navigation,feeds,userFollower,actions,token,loadingDone,showTopLoader ,group} = this.props;
 
+        if(!feeds[group._id]){
+            return undefined;
+        }
+        if(!feeds[group._id][item.id]){
+            return undefined;
+        }
         if(Platform.OS == 'android'){
             return this.createAndroidScroller(feeds[group._id][item.id],30)
         }
+
+
         if(showComment){
 
 

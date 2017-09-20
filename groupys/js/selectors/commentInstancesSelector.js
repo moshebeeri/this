@@ -60,6 +60,12 @@ export const getFeeds = createSelector(  [ getStateFeeds],
             Object.keys(clientMessages).forEach(function (groupId) {
                 if (!_.isEmpty(clientMessages[groupId])) {
                     Object.keys(clientMessages[groupId]).forEach(function (instanceId) {
+                        if (!response[groupId]) {
+                            response[groupId] = {};
+                        }
+                        if (!response[groupId][instanceId]) {
+                            response[groupId][instanceId] = new Array();
+                        }
                         clientMessages[groupId][instanceId].forEach(feed => response[groupId][instanceId].unshift(feedUiConverter.createFeed(feed)))
 
                     });
