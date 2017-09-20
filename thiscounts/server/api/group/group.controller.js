@@ -115,11 +115,11 @@ function group_follow_business_activity(following, followed) {
 }
 
 function notifyOnAction(group) {
-  Notifications.notify( {
+  Notifications.notify({
     note: 'ADD_GROUP_FOLLOW_ON_ACTION',
     group: group.id,
     actor_user: group.creator
-  },[group.creator])
+  }, [group.creator])
 }
 
 // Creates a new group in the DB.
@@ -141,7 +141,8 @@ exports.create = function (req, res) {
       group.save();
       graphModel.reflect(group, to_graph(group), function (err) {
         if (err) {
-          return handleError(res, err);``
+          return handleError(res, err);
+          ``
         }
         graphModel.relate_ids(group._id, 'CREATED_BY', req.user._id);
         graphModel.relate_ids(req.user._id, 'FOLLOW', group._id);
@@ -499,7 +500,7 @@ exports.following_users = function (req, res) {
     });
 };
 
-function get_groups_state(groups, userId, callback){
+function get_groups_state(groups, userId, callback) {
   feed.generate_state(groups, userId, feed.group_state, callback)
 }
 
@@ -511,7 +512,7 @@ exports.user_follow = function (req, res) {
                         OPTIONAL MATCH (u)-[role:ROLE]->(:business)-[:DEFAULT_GROUP|BUSINESS_GROUP]->(g)
                         RETURN g._id as _id, r.timestamp as touched, role.name AS role`;
   graphModel.query_ids(query,
-    'order by r.timestamp desc', skip, limit, function(err, gObjects) {
+    'order by r.timestamp desc', skip, limit, function (err, gObjects) {
       let _ids = [];
       let id2touch = {};
 
@@ -520,7 +521,6 @@ exports.user_follow = function (req, res) {
         id2touch[gObject._id] = {touched: gObject.touched, role: gObject.role}
       });
       if (err) return handleError(res, err);
-
       Group.find({})
         .where('_id').in(_ids)
         .populate('preview.message_activity')
@@ -532,10 +532,11 @@ exports.user_follow = function (req, res) {
               group.touched = id2touch[group._id].touched;
               group.role = id2touch[group._id].role;
             });
+            console.log(JSON.stringify(groups));
+           return res.status(200).json(groups);
           });
-        return res.status(200).json(groups);
+        });
     });
-  });
 };
 
 exports.user_products = function (req, res) {
@@ -564,25 +565,25 @@ exports.ask_join_group = function (req, res) {
   let group = req.params.group;
   let query = `MATCH (u:user {_id:'${userId}'})-[r:ASK_JOIN_GROUP|FOLLOW|GROUP_ADMIN]->(g:group{_id:"${group}"}) return r, type(r) as type`;
   graphModel.query(query, function (err, rs) {
-    if(err) return handleError(res, err);
-    if(rs.length > 0)
+    if (err) return handleError(res, err);
+    if (rs.length > 0)
       return res.status(201).json(rs);
     Group.findById(group, function (err, group) {
       if (err) return handleError(res, err);
       if (!group) return res.status(404).send('no group');
-      if(group.add_policy === 'OPEN')
+      if (group.add_policy === 'OPEN')
         user_follow_group(userId, group, function (err) {
           if (err) return handleError(res, err);
           return res.status(200).json(group);
         });
 
-      if(group.add_policy !== 'REQUEST')
+      if (group.add_policy !== 'REQUEST')
         return res.status(404).send('group.add_policy miss match');
 
       let create = `MATCH (g:group{_id:'${group}'})
                     CREATE (u:user{_id:'${userId}'})-[a:ASK_JOIN_GROUP]->(g)`;
       graphModel.query(create, function (err) {
-        if(err) return handleError(res, err);
+        if (err) return handleError(res, err);
         sendGroupNotification(userId, group.admins, group._id, 'ask_join');
         return res.status(200).json(group);
       })
@@ -598,10 +599,10 @@ exports.approve_join_group = function (req, res) {
   Group.findById(group, function (err, group) {
     if (err) return handleError(res, err);
     if (!group) return res.status(404).send('no group');
-    if(!group.admins.includes(userId))
+    if (!group.admins.includes(userId))
       return res.status(401).send('unauthorized');
-    user_follow_group(userId, group, function(err){
-      if(err) return handleError(res, err);
+    user_follow_group(userId, group, function (err) {
+      if (err) return handleError(res, err);
       graphModel.unrelate_ids(user, 'ASK_JOIN_GROUP', group);
       sendGroupNotification(userId, [user], group._id, 'approve_join');
       return res.status(200).json(group);
@@ -614,11 +615,11 @@ exports.invite_group = function (req, res) {
   let group = req.params.group;
   let user = req.params.user;
 
-  function invite(){
+  function invite() {
     let create = `MATCH (g:group{_id:"${group}"}), (u:user {_id:'${user}'})
                   CREATE UNIQUE (u)-[:INVITE_GROUP]->(g)`;
     graphModel.query(create, function (err) {
-      if(err) return handleError(res, err);
+      if (err) return handleError(res, err);
       sendGroupNotification(userId, [user], group, 'ask_invite');
       return res.status(200).json(group);
     })
@@ -627,9 +628,9 @@ exports.invite_group = function (req, res) {
   Group.findById(group, function (err, group) {
     if (err) return handleError(res, err);
     if (!group) return res.status(404).send('no group');
-    if(group.admins.indexOf(userId) > -1)
+    if (group.admins.indexOf(userId) > -1)
       return invite();
-    else if(group.add_policy === 'MEMBER_INVITE' ){
+    else if (group.add_policy === 'MEMBER_INVITE') {
       let query = `MATCH (u:user {_id:'${userId}'})-[r:FOLLOW]->(g:group{_id:"${group}"}) return r`;
       graphModel.query(query, function (err, rs) {
         if (err) return handleError(res, err);
@@ -637,7 +638,7 @@ exports.invite_group = function (req, res) {
           return res.status(404).send('user can not invite');
         return invite();
       })
-    }else{
+    } else {
       return res.status(401).send('unauthorized');
     }
   });
@@ -649,11 +650,11 @@ exports.approve_invite_group = function (req, res) {
 
   let query = `MATCH (u:user {_id:'${userId}'})-[r:INVITE_GROUP]->(g:group{_id:"${group}"}) return r, type(r) as type`;
   graphModel.query(query, function (err, rs) {
-    if(err) return handleError(res, err);
-    if(rs.length === 0)
+    if (err) return handleError(res, err);
+    if (rs.length === 0)
       return res.status(404).send('user not invited');
-    user_follow_group(userId, {_id:group}, function(err){
-      if(err) return handleError(res, err);
+    user_follow_group(userId, {_id: group}, function (err) {
+      if (err) return handleError(res, err);
       graphModel.unrelate_ids(userId, 'INVITE_GROUP', group);
       sendGroupNotification(userId, [userId], group, 'approve_invite');
       return res.status(200).json(group);

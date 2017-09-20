@@ -15,7 +15,6 @@ router.get('/available/:id', auth.isAuthenticated(), controller.available);
 router.get('/realize/:code', auth.isAuthenticated(), controller.realize);
 router.get('/realized/:code', auth.isAuthenticated(), controller.realized);
 
-router.get('/realize/punch/:id', auth.isAuthenticated(), controller.realize_punch);
 router.get('/punch/:id', auth.isAuthenticated(), controller.punch);
 
 router.get('/', auth.hasRole('admin'), controller.index);

@@ -23,6 +23,9 @@ function entity_validator(v) {
 
 
 const GroupSchema = new Schema({
+  social_state: {},
+  touched: {},
+  role: {},
   name: String,
   gid: {type: Number, index: true},
   description: String,
@@ -35,7 +38,7 @@ const GroupSchema = new Schema({
     instance_activity: {type: Schema.ObjectId, ref: 'Activity'},
   },
   entity: {
-    user: {type: Schema.ObjectId, ref: 'User', autopopulate: true},
+    user: {type: Schema.ObjectId, ref: 'User', autopopulate: utils.userAutopopulateOptions},
     business: {type: Schema.ObjectId, ref: 'Business', autopopulate: true},
     shopping_chain: {type: Schema.ObjectId, ref: 'ShoppingChain', autopopulate: true},
     mall: {type: Schema.ObjectId, ref: 'Mall', autopopulate: true},
