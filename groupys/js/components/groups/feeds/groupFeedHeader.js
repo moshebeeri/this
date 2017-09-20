@@ -118,7 +118,7 @@ import { bindActionCreators } from "redux";
 
         let groupInvite = undefined;
         let addPromotionMenu = undefined;
-        if(this.props.role == "owner" || this.props.role == "OWNS"||this.props.role == "Admin" || this.props.role == "Manager"  ){
+        if(group.role  &&(group.role == "owner" || group.role == "OWNS"||group.role == "Admin" || group.role == "Manager"  )){
 
             addPromotionMenu =  <MenuOption onSelect={this.addPromotion.bind(this)}>
                 <Text>Add Promotion</Text>

@@ -21,6 +21,8 @@ const fieldName2CollectionName = {
     'product': 'product',
     'business': 'business',
     'activity': 'activity',
+    'message_activity':'activity',
+
     'actor_business':'business',
 };
 

@@ -22,15 +22,15 @@ const getStaate = (state) => state
 
 
 export const getFeeds = createSelector(  [ getActivities,getPromotions,getUser,getBusinesses,getInstances,getStateFeeds,getStaate],
-    (activities,promotions,user,businesses,instances,feeds,allstate) => {
-    const collections = {activities:activities,
-            promotions:promotions,
-            user: user,
-            businesses:businesses,
-            instances:instances};
+          (activities,promotions,user,businesses,instances,feeds,allstate) => {
+            const collections = {activities:activities,
+                promotions:promotions,
+                user: user,
+                businesses:businesses,
+                instances:instances};
 
 
-    let feedsUi = [];
+            let feedsUi = [];
     if (!_.isEmpty(feeds) && !_.isEmpty(instances) && !_.isEmpty(businesses)  && !_.isEmpty(user) && !_.isEmpty(activities)) {
         let feedsList = feeds;
         let feedArray = Object.keys(feedsList).map(key => feedsList[key])

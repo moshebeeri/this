@@ -13,8 +13,7 @@ let feedApi = new FeedApi();
 import UserApi from "../api/user"
 
 let userApi = new UserApi();
-import store from 'react-native-simple-store';
-
+import * as assemblers from './collectionAssembler';
 import * as actions from '../reducers/reducerActions';
 async function getAll(dispatch,token){
     try {
@@ -186,9 +185,16 @@ export function setNextFeeds(feeds,token,group){
 
                 response =  await feedApi.getAll('down',feeds[id].id,token,group);
             }
+            let disassemblerItems = response.map(item => {
+                if(item.activity && (item.activity.action =='group_message' || item.activity.action == 'group_follow')){
+                    return item;
+                }
+                return assemblers.disassembler(item, dispatch)
 
-            if(response && response.length > 0 ){
-                response.forEach(item => dispatch({
+            })
+
+            if(disassemblerItems && disassemblerItems.length > 0 ){
+                disassemblerItems.forEach(item => dispatch({
                     type: actions.UPSERT_GROUP_FEEDS_BOTTOM,
                     groupId:group._id,
                     groupFeed:item
@@ -263,7 +269,16 @@ async function fetchTopList(id,token,group,dispatch){
             return;
         }
 
-        response.forEach(item => dispatch({
+        let disassemblerItems = response.map(item => {
+            if(item.activity && (item.activity.action =='group_message' || item.activity.action == 'group_follow')){
+                return item;
+            }
+            return assemblers.disassembler(item, dispatch)
+
+        })
+
+
+        disassemblerItems.forEach(item => dispatch({
             type: actions.UPSERT_GROUP_FEEDS_TOP,
             groupId:group._id,
             groupFeed:item
@@ -347,3 +362,24 @@ export function fetchTop(feeds,token,group) {
 }
 
 
+export function like(id){
+    return async function (dispatch, getState){
+        const token = getState().authentication.token
+        dispatch({
+            type: actions.LIKE,
+            id:id
+        });
+        await userApi.like(id,token);
+    }
+}
+
+export const unlike = (id) => {
+    return async function (dispatch, getState) {
+        const token = getState().authentication.token
+        await userApi.unlike(id,token);
+        dispatch({
+            type: actions.UNLIKE,
+            id:id
+        });
+    }
+};
