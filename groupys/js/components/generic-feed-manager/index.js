@@ -74,6 +74,7 @@ import { bindActionCreators } from "redux";
                         onEndReached={setNextFeeds}
                         renderItem={this.renderItem.bind(this)}
                         extraData={update}
+                        keyExtractor={(item, index) => index}
                     />
 
                     {spining}

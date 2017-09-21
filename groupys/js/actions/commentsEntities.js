@@ -101,6 +101,7 @@ function createMessage(message,user) {
         },
         _id: Math.random(),
 
+
     }
 }
 export function setNextFeeds(comments,entities,generalId){

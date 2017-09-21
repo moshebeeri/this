@@ -17,7 +17,11 @@ export const getMyBusinesses= createSelector(  [getStateMyBusinesses ],
 
 
         if (!_.isEmpty(businesses.myBusinesses)) {
-            return  Object.keys(businesses.myBusinesses).map(key => businesses.myBusinesses[key].business)
+            return  Object.keys(businesses.myBusinesses).map(key => {
+                let response = businesses.myBusinesses[key].business
+                response.key = key
+                return response;
+            })
 
         }
         return new Array();
@@ -29,7 +33,11 @@ export const getMyBusinessesItems= createSelector(  [getStateMyBusinesses ],
 
 
         if (!_.isEmpty(businesses.myBusinesses)) {
-            return  Object.keys(businesses.myBusinesses).map(key => businesses.myBusinesses[key])
+            return  Object.keys(businesses.myBusinesses).map(key => {
+                let response = businesses.myBusinesses[key]
+                response.key = key
+                return response;
+            })
 
         }
         return new Array();
@@ -54,6 +62,7 @@ export const getBusinessProducts = createSelector(  [getStateMyBusinesses ],
 
         if (!_.isEmpty(businesses.businessesProducts)) {
             return  businesses.businessesProducts;
+            ;
 
         }
         return new Map();

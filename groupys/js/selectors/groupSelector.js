@@ -17,7 +17,11 @@ export const getGroups = createSelector(  [getStateGroups ],
 
 
         if (!_.isEmpty(groups.groups)) {
-            return  Object.keys(groups.groups).map(key => groups.groups[key])
+            return  Object.keys(groups.groups).map(key =>{
+                let response = groups.groups[key]
+                response.key = key
+                return response;
+            })
 
         }
         return new Array();

@@ -26,6 +26,7 @@ class FeedConverter
                 response = {
                     id: feed.activity.business._id,
                     fid: feed._id,
+                    key: feed._id,
                     social: {
                         like: feed.activity.actor_user.social_state.like,
                         numberLikes: feed.activity.actor_user.social_state.likes,
@@ -44,7 +45,7 @@ class FeedConverter
 
                 response = {
                     id: feed.activity.business._id,
-                    fid: feed._id,
+                    fid: feed._id,  key: feed._id,
                     social: {
                         like: feed.activity.actor_user.social_state.like,
                         numberLikes: feed.activity.actor_user.social_state.likes,
@@ -70,6 +71,7 @@ class FeedConverter
                 itemType : 'WELCOME',
                 id: feed._id,
                 fid: feed._id,
+                key: feed._id,
             }
         }
 
@@ -89,6 +91,7 @@ class FeedConverter
             response = {
                 id: feed._id,
                 fid: feed._id,
+                key: feed._id,
                 actor: user._id,
                 showSocial: false,
                 description: feed.activity.message,
@@ -134,6 +137,7 @@ class FeedConverter
 
             responseFeed.id = instance._id;
             responseFeed.fid = instance.gid;
+            responseFeed.key = instance.gid;
 
            responseFeed.name = instance.promotion.name;
             responseFeed.description = instance.promotion.description;
@@ -232,7 +236,7 @@ class FeedConverter
             let date = new Date(promotion.end);
             responseFeed.id = instance._id;
             responseFeed.fid = feed._id;
-
+            responseFeed.key =  feed._id,
             responseFeed.generalId = promotion._id;
             responseFeed.entities = [{ promotion:promotion._id}];
 

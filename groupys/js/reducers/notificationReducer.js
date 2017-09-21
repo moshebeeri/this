@@ -29,6 +29,7 @@ export default function notification(state = initialState, action) {
         case actions.SET_NOTIFICATION :
             if(action.notifications.length > 0){
                 action.notifications.forEach(notification =>{
+                    notification.key = notification._id
 
                     currentNotifications.push(notification)} )
 

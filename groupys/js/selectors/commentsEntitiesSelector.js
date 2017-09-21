@@ -86,7 +86,7 @@ function createFeed(message){
 
     let response = {
         id: message._id,
-
+        key:  message._id,
         actor: user._id,
         showSocial: false,
         description: message.message,
