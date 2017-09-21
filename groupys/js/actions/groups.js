@@ -11,6 +11,8 @@ let groupsApi = new GroupsApi();
 import FeedApi from "../api/feed"
 let feedApi = new FeedApi();
 import UserApi from "../api/user"
+import PtomotionApi from "../api/promotion"
+let promotionApi = new PtomotionApi();
 
 let userApi = new UserApi();
 import * as assemblers from './collectionAssembler';
@@ -383,3 +385,13 @@ export const unlike = (id) => {
         });
     }
 };
+
+export function saveFeed(id) {
+    return async function (dispatch, getState) {
+        dispatch({
+            type: actions.SAVE,
+            id:id
+        });
+        await promotionApi.save(id);
+    }
+}
