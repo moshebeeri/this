@@ -13,7 +13,8 @@ let feedApi = new FeedApi();
 import UserApi from "../api/user"
 import PtomotionApi from "../api/promotion"
 let promotionApi = new PtomotionApi();
-
+import ActivityApi from "../api/activity"
+let activityApi = new ActivityApi();
 let userApi = new UserApi();
 import * as assemblers from './collectionAssembler';
 import * as actions from '../reducers/reducerActions';
@@ -393,5 +394,19 @@ export function saveFeed(id) {
             id:id
         });
         await promotionApi.save(id);
+    }
+}
+
+export function shareActivity(id,activityId,users,token) {
+    return async function (dispatch, getState) {
+
+        users.forEach(function (user) {
+            activityApi.shareActivity(user,activityId,token)
+        })
+        dispatch({
+            type: actions.SHARE,
+            id:id,
+            shares:users.length
+        });
     }
 }

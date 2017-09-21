@@ -12,7 +12,7 @@ import { connect } from 'react-redux';
 import * as feedsAction from "../../actions/feedsMain";
 
 import { getFeeds } from '../../selectors/feedSelector'
-
+import * as userAction from "../../actions/user";
 
 import { createSelector } from 'reselect'
 
@@ -23,7 +23,11 @@ class Feed extends Component {
       constructor(props) {
         super(props);
       }
+     componentWillMount() {
 
+
+        this.props.userActions.fetchUsersFollowers();
+    }
 
 
 
@@ -69,7 +73,8 @@ export default connect(
 
 
     (dispatch) => ({
-        actions: bindActionCreators(feedsAction, dispatch)
+        actions: bindActionCreators(feedsAction, dispatch),
+        userActions: bindActionCreators(userAction, dispatch)
     })
 )(Feed);
 

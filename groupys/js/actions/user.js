@@ -45,8 +45,9 @@ async function getUserFollowers(dispatch,token){
 export function fetchUsers(){
     return function (dispatch, getState){
         const token = getState().authentication.token
-
-        dispatch|(getUser(dispatch,token));
+        if(token) {
+            dispatch | (getUser(dispatch, token));
+        }
     }
 
 }
@@ -54,8 +55,9 @@ export function fetchUsers(){
 export function fetchUsersFollowers(){
     return function (dispatch, getState){
         const token = getState().authentication.token
-
-        dispatch|(getUserFollowers(dispatch,token));
+        if(token) {
+            dispatch | (getUserFollowers(dispatch, token));
+        }
     }
 
 }

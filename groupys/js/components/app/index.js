@@ -61,6 +61,7 @@ let updateDialogOption = {
 import { bindActionCreators } from "redux";
 import { isAuthenticated,showAddAction,addComponent,showCompoenent } from '../../selectors/appSelector'
 import * as mainAction from "../../actions/mainTab";
+import * as userAction from "../../actions/user";
 import { createSelector } from 'reselect'
  class ApplicationManager extends Component {
     static navigationOptions = {
@@ -95,6 +96,8 @@ import { createSelector } from 'reselect'
          if (!isVerified){
              this.replaceRoute('login');
          }
+
+         this.props.userActions.fetchUsersFollowers();
      }
 
     onChangeTab(tab){
@@ -211,7 +214,8 @@ const mapStateToProps = (state) => {
 export default connect(
     mapStateToProps,
     (dispatch) => ({
-        actions: bindActionCreators(mainAction, dispatch)
+        actions: bindActionCreators(mainAction, dispatch),
+        userActions: bindActionCreators(userAction, dispatch)
     })
 )(ApplicationManager);
 
