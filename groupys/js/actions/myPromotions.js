@@ -25,9 +25,9 @@ export function setNextFeeds(feeds){
         }
         let response = undefined
         if(feeds && feeds.length > 0) {
-            response =  await profileApi.fetch(feeds.length,feeds.length + 10)
+            response =  await profileApi.fetch(token,feeds.length,feeds.length + 10)
         }else{
-            response  = await profileApi.fetch(0,10);
+            response  = await profileApi.fetch(token,0,10);
 
         }
         if(response.length == 0){
@@ -45,5 +45,27 @@ export function setNextFeeds(feeds){
 
             });
         }
+    }
+}
+
+export function fetchTop(){
+    return async function (dispatch,getState){
+        const token = getState().authentication.token
+        const user = getState().authentication.user
+        if(!user)
+            return
+
+        let  response  = await profileApi.fetch(token,0,10);
+
+
+        if(response.length == 0){
+            return;
+        }
+
+        response.forEach(item => dispatch({
+            type: actions.FETCH_TOP_SAVED_FEEDS,
+            item:item
+        }))
+
     }
 }

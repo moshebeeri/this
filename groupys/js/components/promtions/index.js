@@ -52,6 +52,7 @@ import { bindActionCreators } from "redux";
          return <PromotionListItem
                 item ={item.item}
                 index={item.index}
+                navigation={this.props.navigation}
                 />
      }
 

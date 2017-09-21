@@ -24,7 +24,7 @@ export default class PromotionListView extends Component {
 
     showProduct(props,item){
 
-        this.props.navigation.navigate(this.props.addform,{item:item});
+        this.props.navigation.navigate('editPromotion',{item:item});
     }
 
     render() {

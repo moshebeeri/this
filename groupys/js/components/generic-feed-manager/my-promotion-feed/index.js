@@ -33,7 +33,38 @@ export default class MyPromotionFeedItem extends Component {
     }
 
 
-    componentWillMount() {
+    async componentWillMount() {
+
+        const getDirectionAndColor = ({ moveX, moveY, dx, dy}) => {
+            const height = dx;
+            const width= dy;
+            const draggedDown = dy > 30;
+            const draggedUp = dy < -30;
+            const draggedLeft = dx < -30;
+            const draggedRight = dx > 30;
+            const isRed = moveY < 90 && moveY > 40 && moveX > 0 && moveX < width;
+            const isBlue = moveY > (height - 50) && moveX > 0 && moveX < width;
+            let dragDirection = '';
+            if (draggedDown || draggedUp) {
+                if (draggedDown) dragDirection += 'dragged down '
+                if (draggedUp) dragDirection +=  'dragged up ';
+            }
+            if (draggedLeft || draggedRight) {
+                if (draggedLeft) dragDirection += 'dragged left '
+                if (draggedRight) dragDirection +=  'dragged right ';
+            }
+            if (isRed) return `red ${dragDirection}`
+            if (isBlue) return `blue ${dragDirection}`
+            if (dragDirection) return dragDirection;
+        }
+
+
+        this._panResponder = PanResponder.create({
+            onMoveShouldSetPanResponder:(evt, gestureState) => this.onMove(evt, gestureState),
+
+        });
+
+
 
     }
 
@@ -65,6 +96,14 @@ export default class MyPromotionFeedItem extends Component {
 
 
     }
+    onMove(evt, gestureState){
+
+
+        if(gestureState.moveY < 300){
+            this.props.fetchTopList(this.props.item.fid,this.props.token,this.props.user)
+        }
+        return false;
+    }
 
 
     createPromotion(item){
@@ -92,6 +131,7 @@ export default class MyPromotionFeedItem extends Component {
 
 
         let result =
+            <View  {...this._panResponder.panHandlers} >
             <View style={styles.promotion_container}>
                 <View style={styles.promotion_card}>
                     <View style={styles.promotion_upperContainer}>
@@ -141,7 +181,7 @@ export default class MyPromotionFeedItem extends Component {
                     </View>
             </View>
             </View>
-
+            </View>
 
         return result;
     }

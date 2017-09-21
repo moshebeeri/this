@@ -17,13 +17,12 @@ class ProfileApi {
     };
 
 
-    fetch(from, to) {
+    fetch(token,from, to) {
         return new Promise(async(resolve, reject) => {
 
             try {
                 let fromDate = new Date();
 
-                let token = await store.get('token');
                   const response = await fetch(`${server_host}/api/profiles/instances/saved/` + from + `/` + to + `/`, {
                     method: 'GET',
                     headers: {

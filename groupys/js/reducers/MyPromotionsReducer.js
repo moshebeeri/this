@@ -25,6 +25,8 @@ export default function myPromotions(state = initialState, action) {
         };
     }
     let feedstate = {...state};
+    let currentFeeds = feedstate.feeds;
+
     switch (action.type) {
 
 
@@ -33,9 +35,18 @@ export default function myPromotions(state = initialState, action) {
 
             return feedstate;
 
+        case actions.FETCH_TOP_SAVED_FEEDS:
+
+
+            currentFeeds[action.item.instance._id] = action.item;
+            if (feedstate.feedOrder.includes(action.item.instance._id)) {
+                return state
+            }
+
+            feedstate.feedOrder.unshift(action.item.instance._id);
+            return feedstate;
         case actions.UPSERT_SAVED_FEEDS:
 
-            let currentFeeds = feedstate.feeds;
 
             currentFeeds[action.item.instance._id] = action.item;
             if (feedstate.feedOrder.includes(action.item.instance._id)) {
