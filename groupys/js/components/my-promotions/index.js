@@ -38,9 +38,6 @@ class MyPromotions extends Component {
         const { navigation,feeds,userFollower,actions,token,loadingDone,showTopLoader,user } = this.props;
 
         return (
-
-
-            // <GenericFeedManager navigation={this.props.navigation} loadingDone = {this.props.feeds.savedloadingDone} showTopTimer={this.props.feeds.savedShowTopLoader} feeds={this.props.feeds.savedfeeds} api={this} title='Feeds' ItemDetail={MyPromotionFeedItem}></GenericFeedManager>
             <GenericFeedManager
                 navigation={navigation}
 

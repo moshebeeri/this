@@ -54,7 +54,6 @@ import { bindActionCreators } from "redux";
         const {navigation,loadingDone, showTopLoader,feeds,token ,userFollowers,group,ItemDetail,actions,entity,update,setNextFeeds} = this.props;
 
 
-        //  let loader = this.state.showLoader?<View><Spinner color='red' /></View>:null
         const topLoader = showTopLoader?<View><Spinner color='red' /></View>:null
         if(!loadingDone){
             return <View><Spinner color='red' /></View>;

@@ -4,7 +4,7 @@
 /**
  * Created by stan229 on 5/27/16.
  */
-const initialState = {feeds:{},feedOrder:[],showTopLoader:false,update:false,lastfeed:undefined};
+const initialState = {feeds:{},feedOrder:[],showTopLoader:false,update:false,lastfeed:undefined,lastCall:{}};
 
 
 import { REHYDRATE } from 'redux-persist/constants'
@@ -34,7 +34,9 @@ export default function myPromotions(state = initialState, action) {
             feedstate.lastfeed = action.id
 
             return feedstate;
-
+        case actions.SAVED_FEED_LAST_CALL:
+            feedstate.lastCall=  action.lastCall;
+            return feedstate;
         case actions.FETCH_TOP_SAVED_FEEDS:
 
 
