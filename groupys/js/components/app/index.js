@@ -1,7 +1,7 @@
 import React, {Component} from 'react';
 import {Image, Platform,StyleSheetm,Dimensions} from 'react-native';
 import {connect} from 'react-redux';
-import {actions} from 'react-native-navigation-redux-helpers';
+
 import {Container, Content, Text,Title, InputGroup,
     Input, Button, View,Header, Body, Right, ListItem,Tabs,Tab, TabHeading,Thumbnail,Left,Drawer,Fab} from 'native-base';
 import Icon from 'react-native-vector-icons/EvilIcons';
@@ -26,12 +26,13 @@ import ContactApi from '../../api/contacts'
 
 let locationApi = new LocationApi();
 let contactApi = new ContactApi();
-
-
+import getStore from "../../store";
+const store = getStore();
 import StyleUtils from '../../utils/styleUtils'
 import codePush from "react-native-code-push";
 
 import SideBar from '../drawer/index';
+import * as actions from '../../reducers/reducerActions';
 
 const warch = navigator.geolocation.watchPosition((position) => {
         var lastPosition = JSON.stringify(position);
@@ -43,11 +44,18 @@ const warch = navigator.geolocation.watchPosition((position) => {
 );
 
 const timer = BackgroundTimer.setInterval(() =>{
-
-    // // this will be executed every 200 ms
-    // // even when app is the the background
-     contactApi.syncContacts();
-
+   try {
+        contactApi.syncContacts();
+        if (store.getState().network.offline) {
+            store.dispatch({
+                type: actions.NETWORK_IS_ONLINE,
+            })
+        }
+    }catch (error){
+        store.dispatch({
+            type: actions.NETWORK_IS_OFFLINE,
+        })
+    }
 
 
 }, 60000);

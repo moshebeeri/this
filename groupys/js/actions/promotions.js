@@ -27,8 +27,10 @@ async function getAll(dispatch,id,token){
         }
 
 
-    }catch (error){
-        console.log(error);
+    } catch (error) {
+        dispatch({
+            type: actions.NETWORK_IS_OFFLINE,
+        });
     }
 
 }
@@ -47,8 +49,10 @@ async function getAllProducts(dispatch,id,token){
         }
 
 
-    }catch (error){
-        console.log(error);
+    } catch (error) {
+        dispatch({
+            type: actions.NETWORK_IS_OFFLINE,
+        });
     }
 
 }

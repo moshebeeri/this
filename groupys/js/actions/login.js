@@ -143,16 +143,24 @@ export function verifyCode(code,navigation,resetAction){
                 });
 
             }
-        }catch(error) {
-       //todo dispatch no netwoerk event
-         }
+        } catch (error) {
+            dispatch({
+                type: actions.NETWORK_IS_OFFLINE,
+            });
+        }
 
     }
 }
 export function forgetPassword(phoneNumber) {
     return function (dispatch,) {
-        if(phoneNumber) {
-            loginApi.recoverPassword(phoneNumber)
+        try {
+            if (phoneNumber) {
+                loginApi.recoverPassword(phoneNumber)
+            }
+        } catch (error) {
+            dispatch({
+                type: actions.NETWORK_IS_OFFLINE,
+            });
         }
 
     }

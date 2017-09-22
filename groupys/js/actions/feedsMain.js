@@ -45,10 +45,11 @@ async function fetchFeedsFromServer(feeds,dispatch,token,user){
         ;
 
 
-    }catch (error){
-        console.log('error')
+    } catch (error) {
+        dispatch({
+            type: actions.NETWORK_IS_OFFLINE,
+        });
     }
-
 
 
 }
@@ -74,10 +75,11 @@ async function fetchTopList(id,token,user,dispatch){
 
 
 
-    }catch (error){
-        console.log(error);
+    } catch (error) {
+        dispatch({
+            type: actions.NETWORK_IS_OFFLINE,
+        });
     }
-
 }
 
 
@@ -88,20 +90,26 @@ async function fetchTopList(id,token,user,dispatch){
 export function fetchTop(feeds,token,user){
 
     return async function (dispatch, getState){
-        if(getState().feeds.showTopLoader){
-            return;
+        try {
+            if (getState().feeds.showTopLoader) {
+                return;
+            }
+            await dispatch({
+                type: actions.FEED_SHOW_TOP_LOADER,
+                showTopLoader: true,
+
+            });
+            await fetchTopList(feeds[0].id, token, user, dispatch);
+            await dispatch({
+                type: actions.FEED_SHOW_TOP_LOADER,
+                showTopLoader: false,
+
+            });
+        } catch (error) {
+            dispatch({
+                type: actions.NETWORK_IS_OFFLINE,
+            });
         }
-        await dispatch({
-            type: actions.FEED_SHOW_TOP_LOADER,
-            showTopLoader: true,
-
-        });
-        await fetchTopList(feeds[0].id,token,user,dispatch);
-        await dispatch({
-            type: actions.FEED_SHOW_TOP_LOADER,
-            showTopLoader: false,
-
-        });
     }
 
 }
@@ -122,8 +130,10 @@ async function getUserFollowers(dispatch){
 
 
 
-    }catch (error){
-        console.log(error);
+    } catch (error) {
+        dispatch({
+            type: actions.NETWORK_IS_OFFLINE,
+        });
     }
 
 }
@@ -167,8 +177,10 @@ async function getAll(dispatch){
         }
 
 
-    }catch (error){
-        console.log(error);
+    } catch (error) {
+        dispatch({
+            type: actions.NETWORK_IS_OFFLINE,
+        });
     }
 
 }
@@ -215,34 +227,52 @@ export function setNextFeeds(feeds){
 
 export function like(id){
     return async function (dispatch, getState){
-        const token = getState().authentication.token
-        dispatch({
-            type: actions.LIKE,
-            id:id
-        });
-        await userApi.like(id,token);
+        try {
+            const token = getState().authentication.token
+            dispatch({
+                type: actions.LIKE,
+                id: id
+            });
+            await userApi.like(id, token);
+        } catch (error) {
+            dispatch({
+                type: actions.NETWORK_IS_OFFLINE,
+            });
+        }
     }
 }
 
 export const unlike = (id) => {
     return async function (dispatch, getState) {
-        const token = getState().authentication.token
-        await userApi.unlike(id,token);
-        dispatch({
-            type: actions.UNLIKE,
-            id:id
-        });
+        try {
+            const token = getState().authentication.token
+            await userApi.unlike(id, token);
+            dispatch({
+                type: actions.UNLIKE,
+                id: id
+            });
+        } catch (error) {
+            dispatch({
+                type: actions.NETWORK_IS_OFFLINE,
+            });
+        }
     }
 };
 
 
 export function saveFeed(id) {
     return async function (dispatch, getState) {
-        dispatch({
-            type: actions.SAVE,
-            id:id
-        });
-        await promotionApi.save(id);
+        try {
+            dispatch({
+                type: actions.SAVE,
+                id: id
+            });
+            await promotionApi.save(id);
+        } catch (error) {
+            dispatch({
+                type: actions.NETWORK_IS_OFFLINE,
+            });
+        }
     }
 }
 
@@ -265,15 +295,20 @@ export function setUserFollows() {
 }
 export function shareActivity(id,activityId,users,token) {
     return async function (dispatch, getState) {
-
-        users.forEach(function (user) {
-             activityApi.shareActivity(user,activityId,token)
-        })
-        dispatch({
-            type: actions.SHARE,
-            id:id,
-            shares:users.length
-        });
+        try {
+            users.forEach(function (user) {
+                activityApi.shareActivity(user, activityId, token)
+            })
+            dispatch({
+                type: actions.SHARE,
+                id: id,
+                shares: users.length
+            });
+        } catch (error) {
+            dispatch({
+                type: actions.NETWORK_IS_OFFLINE,
+            });
+        }
     }
 }
 

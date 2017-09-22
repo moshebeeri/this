@@ -22,6 +22,7 @@ export function fetchTopComments( entities,generalId){
 
 
     return async function (dispatch,getState){
+        try{
         const token = getState().authentication.token
         if(getState().entityComments.lastCall[generalId]){
 
@@ -62,6 +63,11 @@ export function fetchTopComments( entities,generalId){
 
 
         }
+        } catch (error) {
+            dispatch({
+                type: actions.NETWORK_IS_OFFLINE,
+            });
+        }
 
 
     }
@@ -71,13 +77,16 @@ export function fetchTopComments( entities,generalId){
 export function sendMessage(entities,generalId,message) {
 
     return async function (dispatch, getState) {
+
         const token = getState().authentication.token
         const user = getState().authentication.user
         try {
             commentsApi.createGlobalComment(entities,message,token)
 
-        }catch (error){
-            //TODO dispatch network failed event
+        } catch (error) {
+            dispatch({
+                type: actions.NETWORK_IS_OFFLINE,
+            });
         }
 
         let messageItem = createMessage(message,user)
@@ -106,57 +115,60 @@ function createMessage(message,user) {
 }
 export function setNextFeeds(comments,entities,generalId){
     return async function (dispatch,getState){
-        const token = getState().authentication.token
-        const user = getState().authentication.user
-        if(!user)
-            return
+        try {
+            const token = getState().authentication.token
+            const user = getState().authentication.user
+            if (!user)
+                return
 
-        if(getState().entityComments.lastCall[generalId]){
+            if (getState().entityComments.lastCall[generalId]) {
 
-            if(new Date().getTime() - new Date(getState().entityComments.lastCall[generalId]).getTime() < 10000){
+                if (new Date().getTime() - new Date(getState().entityComments.lastCall[generalId]).getTime() < 10000) {
 
 
-                return;
+                    return;
+                }
+
+            }
+            let showLoadingDone = false;
+
+
+            let response = undefined
+            if (comments && comments.length > 0) {
+                response = await commentsApi.getComment(entities, token, comments.length);
+            } else {
+                response = await commentsApi.getComment(entities, token, 0);
             }
 
-        }
-        let showLoadingDone = false;
-
-
-        let response = undefined
-        if( comments && comments.length > 0) {
-            response = await commentsApi.getComment(entities,token,comments.length);
-        }else {
-            response = await commentsApi.getComment(entities,token,0);
-        }
-
-
-        dispatch({
-            type: actions.ENTITIES_COMMENT_LOADING_DONE,
-            loadingDone: true,
-            generalId: generalId
-
-
-        });
-
-
-
-
-
-        if(response.length > 0) {
-
-            response.forEach(item => dispatch({
-                type: actions.UPSERT_ENTITIES_COMMENT,
-                item: item,
-                generalId: generalId,
-
-            }))
 
             dispatch({
-                type: actions.ENTITIES_COMMENT_LAST_CALL,
-                lastCall: new Date(),
-                generalId:generalId,
+                type: actions.ENTITIES_COMMENT_LOADING_DONE,
+                loadingDone: true,
+                generalId: generalId
 
+
+            });
+
+
+            if (response.length > 0) {
+
+                response.forEach(item => dispatch({
+                    type: actions.UPSERT_ENTITIES_COMMENT,
+                    item: item,
+                    generalId: generalId,
+
+                }))
+
+                dispatch({
+                    type: actions.ENTITIES_COMMENT_LAST_CALL,
+                    lastCall: new Date(),
+                    generalId: generalId,
+
+                });
+            }
+        } catch (error) {
+            dispatch({
+                type: actions.NETWORK_IS_OFFLINE,
             });
         }
 

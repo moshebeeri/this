@@ -14,7 +14,7 @@ const logger = createLogger({
     // ...options
 });
 
-const store = createStore(
+export const store = createStore(
     getRootReducer(),
     undefined,
     applyMiddleware(thunk),

@@ -15,8 +15,10 @@ async function getUser(dispatch,token){
 
 
 
-    }catch (error){
-        console.log(error);
+    } catch (error) {
+        dispatch({
+            type: actions.NETWORK_IS_OFFLINE,
+        });
     }
 
 }
@@ -34,8 +36,10 @@ async function getUserFollowers(dispatch,token){
 
 
 
-    }catch (error){
-        console.log(error);
+    } catch (error) {
+        dispatch({
+            type: actions.NETWORK_IS_OFFLINE,
+        });
     }
 
 }

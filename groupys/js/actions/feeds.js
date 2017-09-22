@@ -55,8 +55,10 @@ async function fetchList(action,feeds,api,dispatch,groupid){
         dispatchDone(dispatch,action,groupid);
 
 
-    }catch (error){
-       console.log('error')
+    } catch (error) {
+        dispatch({
+            type: actions.NETWORK_IS_OFFLINE,
+        });
     }
 
 

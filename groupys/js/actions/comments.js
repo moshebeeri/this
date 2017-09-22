@@ -27,8 +27,10 @@ async function getInstanceGroupComments(dispatch,group,instance,size,token){
         }
 
 
-    }catch (error){
-        console.log(error);
+    } catch (error) {
+        dispatch({
+            type: actions.NETWORK_IS_OFFLINE,
+        });
     }
 
 }
@@ -49,8 +51,10 @@ async function getGroupComments(dispatch,group,token){
         }
 
 
-    }catch (error){
-        console.log(error);
+    } catch (error) {
+        dispatch({
+            type: actions.NETWORK_IS_OFFLINE,
+        });
     }
 
 }
@@ -72,10 +76,11 @@ async function getEntityComments(dispatch,entities,id,token){
 
 
 
-    }catch (error){
-        console.log(error);
+    } catch (error) {
+        dispatch({
+            type: actions.NETWORK_IS_OFFLINE,
+        });
     }
-
 }
 
 
@@ -146,6 +151,7 @@ export function fetchTop( group){
 }
 export function setNextFeeds(comments,token,group){
     return async function (dispatch,getState){
+        try{
         const token = getState().authentication.token
         const user = getState().authentication.user
         if(!user)
@@ -198,6 +204,11 @@ export function setNextFeeds(comments,token,group){
                 gid: group._id,
             }))
         }
+    } catch (error) {
+        dispatch({
+            type: actions.NETWORK_IS_OFFLINE,
+        });
+    }
 
     }
 }

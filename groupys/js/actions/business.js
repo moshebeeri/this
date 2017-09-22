@@ -28,7 +28,9 @@ async function getAll(dispatch,token){
 
 
     }catch (error){
-        console.log(error);
+        dispatch({
+            type: actions.NETWORK_IS_OFFLINE,
+        });
     }
 
 }
@@ -49,39 +51,53 @@ async function getBusinessCategories(dispatch,gid,token) {
 
 
     } catch (error) {
-        console.log(error);
+        dispatch({
+            type: actions.NETWORK_IS_OFFLINE,
+        });
     }
 }
 
 async function dispatchSearchBusiness(dispatch,business,token){
-    dispatch({ type: actions.SHOW_SEARCH_SPIN, searching: true })
-    dispatch({ type: actions.SHOW_CAMERA, cameraOn: false })
-    let response = await businessApi.searchBusiness(business,token)
-    dispatch({ type: actions.SEARCH_BUSINESS, businesses: response })
-    dispatch({ type: actions.SHOW_SEARCH_SPIN, searching: false })
+    try {
+        dispatch({ type: actions.SHOW_SEARCH_SPIN, searching: true })
+        dispatch({ type: actions.SHOW_CAMERA, cameraOn: false })
+        let response = await businessApi.searchBusiness(business,token)
+        dispatch({ type: actions.SEARCH_BUSINESS, businesses: response })
+        dispatch({ type: actions.SHOW_SEARCH_SPIN, searching: false })
+    } catch (error) {
+        dispatch({
+            type: actions.NETWORK_IS_OFFLINE,
+        });
+}
 
 }
 
 
 
-async function dispatchFollowByQrcode(dispatch,barcode,token){
-    dispatch({ type: actions.SHOW_SEARCH_SPIN, searching: true })
-    dispatch({ type: actions.SHOW_CAMERA, cameraOn: false })
+async function dispatchFollowByQrcode(dispatch,barcode,token) {
+    try {
+        dispatch({type: actions.SHOW_SEARCH_SPIN, searching: true})
+        dispatch({type: actions.SHOW_CAMERA, cameraOn: false})
 
-    if(barcode.type && barcode.type == 'QR_CODE'){
-        let data = JSON.parse(barcode.data);
-        if(data.code) {
-            let response =  await businessApi.searchBusinessByCode(data.code,token);
-            if(response && response.assignment  && response.assignment.business ) {
-                dispatch({ type: actions.SEARCH_BUSINESS, businesses: [response.assignment.business] })
+        if (barcode.type && barcode.type == 'QR_CODE') {
+            let data = JSON.parse(barcode.data);
+            if (data.code) {
+                let response = await businessApi.searchBusinessByCode(data.code, token);
+                if (response && response.assignment && response.assignment.business) {
+                    dispatch({type: actions.SEARCH_BUSINESS, businesses: [response.assignment.business]})
 
-            }else{
-                dispatch({ type: actions.SEARCH_BUSINESS, businesses: [] })
+                } else {
+                    dispatch({type: actions.SEARCH_BUSINESS, businesses: []})
 
+                }
             }
         }
+        dispatch({type: actions.SHOW_SEARCH_SPIN, searching: false})
+    } catch (error) {
+        dispatch({
+            type: actions.NETWORK_IS_OFFLINE,
+        });
     }
-    dispatch({ type: actions.SHOW_SEARCH_SPIN, searching: false })
 }
 
 
@@ -113,24 +129,39 @@ export function showCamera(){
 export function onEndReached(){
     return async function (dispatch, getState){
         const token = getState().authentication.token
+        try {
+            let businesses = await businessApi.getAll(token);
+            businesses.forEach(function (business) {
+                dispatch({
+                    type: actions.UPSERT_MY_BUSINESS,
+                    item: business
 
-        let businesses = await businessApi.getAll(token);
-        businesses.forEach(function (business) {
+                });
+            })
+
+        } catch (error) {
             dispatch({
-                type: actions.UPSERT_MY_BUSINESS,
-                item: business
-
+                type: actions.NETWORK_IS_OFFLINE,
             });
-        })
+        }
 
     }
+
 
 }
  export function followBusiness(bussinesId){
      return function (dispatch, getState){
-         const token = getState().authentication.token
+         try {
 
-         businessApi.followBusiness(bussinesId,token);
+             const token = getState().authentication.token
+
+              businessApi.followBusiness(bussinesId,token);
+         } catch (error) {
+             dispatch({
+                 type: actions.NETWORK_IS_OFFLINE,
+             });
+         }
+
      }
 
  }
@@ -160,9 +191,10 @@ export function setBusinessUsers(businessId){
 
 
 
-        }catch (error){
-            //TODO dispacth network offline
-            console.log(error);
+        } catch (error) {
+            dispatch({
+                type: actions.NETWORK_IS_OFFLINE,
+            });
         }
     }
 
@@ -184,9 +216,10 @@ export function setBusinessProducts(businessId){
 
 
 
-        }catch (error){
-            //TODO dispacth network offline
-            console.log(error);
+        } catch (error) {
+            dispatch({
+                type: actions.NETWORK_IS_OFFLINE,
+            });
         }
     }
 
@@ -208,9 +241,10 @@ export function setBusinessPromotions(businessId){
 
 
 
-        }catch (error){
-            //TODO dispacth network offline
-            console.log(error);
+        } catch (error) {
+            dispatch({
+                type: actions.NETWORK_IS_OFFLINE,
+            });
         }
     }
 

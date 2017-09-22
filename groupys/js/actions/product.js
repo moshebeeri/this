@@ -27,7 +27,9 @@ async function getAllByBusinessId(dispatch,id,token) {
 
 
     } catch (error) {
-        console.log(error);
+        dispatch({
+            type: actions.NETWORK_IS_OFFLINE,
+        });
     }
 }
 
@@ -50,7 +52,9 @@ async function getProductCategories(dispatch,gid,token) {
             }
         }
     } catch (error) {
-        console.log(error);
+        dispatch({
+            type: actions.NETWORK_IS_OFFLINE,
+        });
     }
 }
 
@@ -83,18 +87,30 @@ export function setProductCategories(gid){
 
 export function saveProduct(product,saveSucsees,saveFailed){
     return function (dispatch, getState){
-        const token = getState().authentication.token
-        const user = getState().authentication.user
-        entityUtils.create('products',product,token,saveSucsees,saveFailed,user._id);
+        try {
+            const token = getState().authentication.token
+            const user = getState().authentication.user
+            entityUtils.create('products', product, token, saveSucsees, saveFailed, user._id);
+        } catch (error) {
+            dispatch({
+                type: actions.NETWORK_IS_OFFLINE,
+            });
+        }
 
     }
 }
 
 export function updateProduct(product,saveSucsees,saveFailed,itemId){
     return function (dispatch, getState){
-        const token = getState().authentication.token
+        try {
+            const token = getState().authentication.token
 
-        entityUtils.update('products',product,token,saveSucsees,saveFailed,itemId);
+            entityUtils.update('products', product, token, saveSucsees, saveFailed, itemId);
+        } catch (error) {
+            dispatch({
+                type: actions.NETWORK_IS_OFFLINE,
+            });
+        }
 
     }
 }

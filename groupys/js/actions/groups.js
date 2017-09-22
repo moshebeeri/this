@@ -33,8 +33,10 @@ async function getAll(dispatch,token){
         }
 
 
-    }catch (error){
-        console.log(error);
+    } catch (error) {
+        dispatch({
+            type: actions.NETWORK_IS_OFFLINE,
+        });
     }
 
 }
@@ -53,8 +55,10 @@ async function getByBusinessId(dispatch,bid){
         }
 
 
-    }catch (error){
-        console.log(error);
+    } catch (error) {
+        dispatch({
+            type: actions.NETWORK_IS_OFFLINE,
+        });
     }
 
 }
@@ -73,8 +77,10 @@ async function getUserFollowers(dispatch,token){
 
 
 
-    }catch (error){
-        console.log(error);
+    } catch (error) {
+        dispatch({
+            type: actions.NETWORK_IS_OFFLINE,
+        });
     }
 
 }
@@ -106,16 +112,22 @@ export function fetchUsersFollowers(){
 
 export function acceptInvatation(group){
     return async function (dispatch, getState){
-        const token = getState().authentication.token
-        await groupsApi.acceptInvatation(group,token)
-        let groups =  await groupsApi.getAll(token);
-        groups.forEach(function (group) {
-            dispatch({
-                type: actions.UPSERT_GROUP,
-                item: group
+        try {
+            const token = getState().authentication.token
+            await groupsApi.acceptInvatation(group, token)
+            let groups = await groupsApi.getAll(token);
+            groups.forEach(function (group) {
+                dispatch({
+                    type: actions.UPSERT_GROUP,
+                    item: group
 
-            });
-        })
+                });
+            })
+        } catch (error) {
+        dispatch({
+            type: actions.NETWORK_IS_OFFLINE,
+        });
+    }
 
 
     }
@@ -123,17 +135,30 @@ export function acceptInvatation(group){
 export function touch(groupid){
 
     return  function (dispatch, getState){
-        const token = getState().authentication.token
-         groupsApi.touch(groupid,token);
+        try {
+            const token = getState().authentication.token
+            groupsApi.touch(groupid, token);
+      } catch (error) {
+            dispatch({
+            type: actions.NETWORK_IS_OFFLINE,
+            });
+    }
 
     }
 }
 export function createGroup(group){
 
     return  async function (dispatch, getState){
-        const token = getState().authentication.token
-        await groupsApi.createGroup(group,uploadGroupPic,token);
-        getAll(dispatch,token);
+        try {
+            const token = getState().authentication.token
+            await groupsApi.createGroup(group, uploadGroupPic, token);
+            getAll(dispatch, token);
+
+        } catch (error) {
+            dispatch({
+                type: actions.NETWORK_IS_OFFLINE,
+            });
+        }
     }
 }
 
@@ -207,8 +232,10 @@ export function setNextFeeds(feeds,token,group){
 
 
 
-        }catch (error){
-            console.log('error')
+        } catch (error) {
+            dispatch({
+                type: actions.NETWORK_IS_OFFLINE,
+            });
         }
 
         if(showLoadingDone) {
@@ -238,8 +265,10 @@ export function sendMessage(groupId,message) {
         });
         try {
             groupsApi.meesage(groupId,message,token)
-        }catch (error){
-            //TODO dispatch network failed event
+        } catch (error) {
+            dispatch({
+                type: actions.NETWORK_IS_OFFLINE,
+            });
         }
 
     }
@@ -264,6 +293,7 @@ async function fetchTopList(id,token,group,dispatch){
         if(!id){
             return;
         }
+
         let response  =  await feedApi.getAll('up',id,token,group);
         if(!response)
             return;
@@ -295,8 +325,10 @@ async function fetchTopList(id,token,group,dispatch){
 
 
 
-    }catch (error){
-        console.log(error);
+    } catch (error) {
+        dispatch({
+            type: actions.NETWORK_IS_OFFLINE,
+        });
     }
 
 }
@@ -367,46 +399,69 @@ export function fetchTop(feeds,token,group) {
 
 export function like(id){
     return async function (dispatch, getState){
-        const token = getState().authentication.token
-        dispatch({
-            type: actions.LIKE,
-            id:id
-        });
-        await userApi.like(id,token);
+        try {
+            const token = getState().authentication.token
+            dispatch({
+                type: actions.LIKE,
+                id: id
+            });
+            await userApi.like(id, token);
+        } catch (error) {
+            dispatch({
+                type: actions.NETWORK_IS_OFFLINE,
+            });
+        }
     }
 }
 
 export const unlike = (id) => {
     return async function (dispatch, getState) {
-        const token = getState().authentication.token
-        await userApi.unlike(id,token);
-        dispatch({
-            type: actions.UNLIKE,
-            id:id
-        });
+        try {
+            const token = getState().authentication.token
+            await userApi.unlike(id, token);
+            dispatch({
+                type: actions.UNLIKE,
+                id: id
+            });
+        } catch (error) {
+            dispatch({
+                type: actions.NETWORK_IS_OFFLINE,
+            });
+        }
     }
 };
 
 export function saveFeed(id) {
     return async function (dispatch, getState) {
-        dispatch({
-            type: actions.SAVE,
-            id:id
-        });
-        await promotionApi.save(id);
+        try {
+            dispatch({
+                type: actions.SAVE,
+                id: id
+            });
+            await promotionApi.save(id);
+        } catch (error) {
+            dispatch({
+                type: actions.NETWORK_IS_OFFLINE,
+            });
+        }
     }
 }
 
 export function shareActivity(id,activityId,users,token) {
     return async function (dispatch, getState) {
-
+    try {
         users.forEach(function (user) {
-            activityApi.shareActivity(user,activityId,token)
+            activityApi.shareActivity(user, activityId, token)
         })
         dispatch({
             type: actions.SHARE,
-            id:id,
-            shares:users.length
+            id: id,
+            shares: users.length
         });
+    } catch (error) {
+        dispatch({
+            type: actions.NETWORK_IS_OFFLINE,
+        });
+    }
     }
 }
