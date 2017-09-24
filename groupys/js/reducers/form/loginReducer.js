@@ -20,7 +20,7 @@ export default function loginForm(state = initialState, action) {
             return {
                 ...state,
 
-                failedMessage : action.failedMessage,
+                failedMessage : action.message,
             };
         case actions.LOGIN_SUCSESS :
             return {

@@ -27,7 +27,7 @@ class LoginApi
                     })
                 })
                 if (response.status == '401') {
-                    reject({error: 'Login Failed Validation'});
+                    resolve ({});
                     return;
                 }
 

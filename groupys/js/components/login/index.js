@@ -72,7 +72,7 @@ import LinearGradient from 'react-native-linear-gradient';
     }
 
     render() {
-        const { focusPassword,focusPhone,failedMessage,isAuthenticated ,allstate} = this.props;
+        const { focusPassword,focusPhone,failedMessage,isAuthenticated ,loginstate} = this.props;
 
 
         return (
@@ -173,7 +173,7 @@ export default connect(
         focusPassword: state.loginForm.focusPassword,
         focusPhone:state.loginForm.focusPhone,
         failedMessage:state.loginForm.failedMessage,
-        allstate:state,
+        loginstate:state.loginForm,
         isAuthenticated: isAuthenticated(state),
     }),
     (dispatch) => ({

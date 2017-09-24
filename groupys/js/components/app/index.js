@@ -8,13 +8,10 @@ import Icon from 'react-native-vector-icons/EvilIcons';
 import Icon2 from 'react-native-vector-icons/Ionicons';
 
 import GeneralComponentHeader from '../header/index';
-
-
 import Feeds from '../feed/index'
 import MydPromotions from '../my-promotions/index'
 import Notification from '../notifications/index'
 import Groups from '../groups/index'
-
 
 import BackgroundTimer from 'react-native-background-timer';
 
@@ -33,19 +30,41 @@ import codePush from "react-native-code-push";
 
 import SideBar from '../drawer/index';
 import * as actions from '../../reducers/reducerActions';
+import { bindActionCreators } from "redux";
+import { isAuthenticated,showAddAction,addComponent,showCompoenent } from '../../selectors/appSelector'
+import * as mainAction from "../../actions/mainTab";
+import * as userAction from "../../actions/user";
+import { createSelector } from 'reselect'
 
+
+
+const updateDialogOption = {
+    updateTitle:"update"
+}
+
+////////// background jobs schedulers ////////////////////////
 const warch = navigator.geolocation.watchPosition((position) => {
-        var lastPosition = JSON.stringify(position);
-        locationApi.sendLocation(position.coords.longitude,position.coords.latitude,position.timestamp,position.coords.speed);
+        try {
+            if (store.getState().authentication.token) {
+
+                locationApi.sendLocation(position.coords.longitude, position.coords.latitude, position.timestamp, position.coords.speed);
+            }
+        }catch (error){
+            store.dispatch({
+                type: actions.NETWORK_IS_OFFLINE,
+            })
+        }
 
     },
-    (error) => alert(JSON.stringify(error)),
     {enableHighAccuracy: true, timeout: 20000, maximumAge: 1000,distanceFilter:100}
 );
 
 const timer = BackgroundTimer.setInterval(() =>{
-   try {
-        contactApi.syncContacts();
+    try {
+        if( store.getState().authentication.token) {
+            contactApi.syncContacts();
+        }
+
         if (store.getState().network.offline) {
             store.dispatch({
                 type: actions.NETWORK_IS_ONLINE,
@@ -60,17 +79,8 @@ const timer = BackgroundTimer.setInterval(() =>{
 
 }, 60000);
 
-let updateDialogOption = {
-    updateTitle:"update"
-}
 
-
-
-import { bindActionCreators } from "redux";
-import { isAuthenticated,showAddAction,addComponent,showCompoenent } from '../../selectors/appSelector'
-import * as mainAction from "../../actions/mainTab";
-import * as userAction from "../../actions/user";
-import { createSelector } from 'reselect'
+/////////////////////////////////////////////////
  class ApplicationManager extends Component {
     static navigationOptions = {
         header:null
