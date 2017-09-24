@@ -403,33 +403,6 @@ function update_state(feed, callback) {
 
       callback(null, feed)
     });
-    // function (err, states) {
-    //   if(err){ return callback(err, null) }
-    //   if (states.promotion)
-    //     activity.promotion.social_state = states.promotion;
-    //   if (states.instance)
-    //     activity.instance.social_state = states.instance;
-    //   if (states.product)
-    //     activity.product.social_state = states.product;
-    //   if (states.user)
-    //     activity.user.social_state = states.user;
-    //   if (states.business)
-    //     activity.business.social_state = states.business;
-    //   if (states.mall)
-    //     activity.mall.social_state = states.mall;
-    //   if (states.chain)
-    //     activity.chain.social_state = states.chain;
-    //   if (states.actor_user)
-    //     activity.actor_user.social_state = states.actor_user;
-    //   if (states.actor_business)
-    //     activity.actor_business.social_state = states.actor_business;
-    //   if (states.actor_mall)
-    //     activity.actor_mall.social_state = states.actor_mall;
-    //   if (states.actor_chain)
-    //     activity.actor_chain.social_state = states.actor_chain;
-    //
-    //   callback(null, feed)
-    // });
 }
 
 function createFeedStateFunction(stated, userId, state_func) {
