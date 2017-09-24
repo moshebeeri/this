@@ -38,7 +38,7 @@ const GroupSchema = new Schema({
     instance_activity: {type: Schema.ObjectId, ref: 'Activity'},
   },
   entity: {
-    user: {type: Schema.ObjectId, ref: 'User', autopopulate: utils.userAutopopulateOptions},
+    user: {type: Schema.ObjectId, ref: 'User', autopopulate: true},
     business: {type: Schema.ObjectId, ref: 'Business', autopopulate: true},
     shopping_chain: {type: Schema.ObjectId, ref: 'ShoppingChain', autopopulate: true},
     mall: {type: Schema.ObjectId, ref: 'Mall', autopopulate: true},

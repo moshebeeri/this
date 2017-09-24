@@ -15,13 +15,13 @@ let ActivitySchema = new Schema({
   product: {type: Schema.ObjectId, ref: 'Product', autopopulate: true },
   group: {type: Schema.ObjectId, ref: 'Group', autopopulate: true },
 
-  user: {type: Schema.ObjectId, ref: 'User', autopopulate: utils.userAutopopulateOptions },
+  user: {type: Schema.ObjectId, ref: 'User', autopopulate: true },
   business: {type: Schema.ObjectId, ref: 'Business', autopopulate: true },
   mall: {type: Schema.ObjectId, ref: 'Mall', autopopulate: true },
   chain: {type: Schema.ObjectId, ref: 'ShoppingChain', autopopulate: true },
   activity: {type: Schema.ObjectId, ref: 'Activity', autopopulate: true },
 
-  actor_user: {type: Schema.ObjectId, ref: 'User', autopopulate: utils.userAutopopulateOptions },
+  actor_user: {type: Schema.ObjectId, ref: 'User', autopopulate: true },
   actor_business: {type: Schema.ObjectId, ref: 'Business', autopopulate: true },
   actor_mall: {type: Schema.ObjectId, ref: 'Mall', autopopulate: true },
   actor_chain: {type: Schema.ObjectId, ref: 'ShoppingChain', autopopulate: true },

@@ -45,13 +45,13 @@ exports.feed = function (req, res) {
   query_builder = Feed.find({entity: entity_id}).sort({activity: 'desc'}).limit(15);
 
   if (from_id === 'start') {
+    console.log("here2");
     return feedTools.fetch_feed(userId, query_builder, Feed, res);
   }
   if (req.params.scroll === 'up')
     query_builder = query_builder.where('_id').gt(from_id);
   else if (req.params.scroll === 'down')
     query_builder = query_builder.where('_id').lt(from_id);
-
   return feedTools.fetch_feed(userId, query_builder, Feed, res);
 };
 

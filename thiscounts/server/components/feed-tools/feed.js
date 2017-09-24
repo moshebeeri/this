@@ -287,7 +287,7 @@ function chain_state(user_id, chain, callback) {
 
 function update_states(feeds, callback) {
   async.each(feeds, update_state, function(err){
-    if(err) callback(err, null);
+    if(err) {callback(err, null)}
     else callback(null, feeds)
   });
 
