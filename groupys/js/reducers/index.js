@@ -22,6 +22,7 @@ import network from './networkReducer'
 import myPromotions from './MyPromotionsReducer'
 import commentInstances from './commenInstancesReducer'
 import entityComments from './commentEntityReducer'
+import contacts from './contactReducer'
 
 import { reducer as form } from 'redux-form/immutable' // <--- immutable import
 
@@ -48,6 +49,7 @@ export default function getRootReducer() {
         myPromotions:myPromotions,
         entityComments:entityComments,
         commentInstances:commentInstances,
+        contacts:contacts,
         form
     });
 }
