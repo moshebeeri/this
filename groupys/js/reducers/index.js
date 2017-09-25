@@ -17,6 +17,7 @@ import authentication from './authenticationReducer';
 import mainTab from './form/mainAppReducer';
 import loginForm from './form/loginReducer'
 import registerForm from './form/registerReducer'
+import signupForm from './form/signupReducer'
 import userRole from './form/userRoleReducer'
 import network from './networkReducer'
 import myPromotions from './MyPromotionsReducer'
@@ -46,6 +47,7 @@ export default function getRootReducer() {
         loginForm:loginForm,
         registerForm:registerForm,
         network:network,
+        signupForm:signupForm,
         myPromotions:myPromotions,
         entityComments:entityComments,
         commentInstances:commentInstances,

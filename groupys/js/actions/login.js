@@ -74,7 +74,7 @@ export function signup(phone,password,navigation){
                     user:user
                 });
 
-               navigation.navigate('register');
+               navigation.navigate('Register');
             }else{
                 dispatch({
                     type: actions.SIGNUP_FAILED,
