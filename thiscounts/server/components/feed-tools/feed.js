@@ -287,7 +287,7 @@ function chain_state(user_id, chain, callback) {
 
 function update_states(feeds, callback) {
   async.each(feeds, update_state, function(err){
-    if(err) callback(err, null);
+    if(err) {callback(err, null)}
     else callback(null, feeds)
   });
 
@@ -379,27 +379,27 @@ function update_state(feed, callback) {
     function (err, states) {
       if(err){ return callback(err, null) }
       if (states.promotion)
-        activity.promotion.social_state = states.promotion;
+        activity.promotion = states.promotion;
       if (states.instance)
-        activity.instance.social_state = states.instance;
+        activity.instance = states.instance;
       if (states.product)
-        activity.product.social_state = states.product;
+        activity.product = states.product;
       if (states.user)
-        activity.user.social_state = states.user;
+        activity.user = states.user;
       if (states.business)
-        activity.business.social_state = states.business;
+        activity.business = states.business;
       if (states.mall)
-        activity.mall.social_state = states.mall;
+        activity.mall = states.mall;
       if (states.chain)
-        activity.chain.social_state = states.chain;
+        activity.chain = states.chain;
       if (states.actor_user)
-        activity.actor_user.social_state = states.actor_user;
+        activity.actor_user = states.actor_user;
       if (states.actor_business)
-        activity.actor_business.social_state = states.actor_business;
+        activity.actor_business = states.actor_business;
       if (states.actor_mall)
-        activity.actor_mall.social_state = states.actor_mall;
+        activity.actor_mall = states.actor_mall;
       if (states.actor_chain)
-        activity.actor_chain.social_state = states.actor_chain;
+        activity.actor_chain = states.actor_chain;
 
       callback(null, feed)
     });

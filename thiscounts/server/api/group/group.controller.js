@@ -115,7 +115,7 @@ function group_follow_business_activity(following, followed) {
 }
 
 function notifyOnAction(group) {
-  Notifications.notify({
+  Notifications.notify( {
     note: 'ADD_GROUP_FOLLOW_ON_ACTION',
     group: group.id,
     actor_user: group.creator
@@ -142,7 +142,6 @@ exports.create = function (req, res) {
       graphModel.reflect(group, to_graph(group), function (err) {
         if (err) {
           return handleError(res, err);
-          ``
         }
         graphModel.relate_ids(group._id, 'CREATED_BY', req.user._id);
         graphModel.relate_ids(req.user._id, 'FOLLOW', group._id);
@@ -532,7 +531,6 @@ exports.user_follow = function (req, res) {
               group.touched = id2touch[group._id].touched;
               group.role = id2touch[group._id].role;
             });
-            console.log(JSON.stringify(groups));
            return res.status(200).json(groups);
           });
         });

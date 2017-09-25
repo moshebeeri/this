@@ -123,8 +123,9 @@ Utils.prototype.minMax = function (value, value2) {
     max: value
   }
 };
+
 Utils.prototype.userAutopopulateOptions = function(){
-  return { select: '-sms_code -role -gid -__v -firebase -hashedPassword -provider -salt -facebook -twitter - google -github' }
+  return { select: '-sms_code -role -gid -__v -firebase -hashedPassword -provider -salt -facebook -twitter -google -github' }
 
 };
 module.exports = Utils;

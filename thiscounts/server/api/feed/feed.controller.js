@@ -51,7 +51,6 @@ exports.feed = function (req, res) {
     query_builder = query_builder.where('_id').gt(from_id);
   else if (req.params.scroll === 'down')
     query_builder = query_builder.where('_id').lt(from_id);
-
   return feedTools.fetch_feed(userId, query_builder, Feed, res);
 };
 
