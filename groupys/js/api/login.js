@@ -47,12 +47,13 @@ class LoginApi
 
     normalizePhoneNumber(phone,countryCode){
 
-    let newPhone = phone.toString().substring(phone.indexOf(countryCode.toString()) + countryCode.toString().length);
-    return newPhone;
-}
+        let newPhone = phone.toString().substring(phone.indexOf(countryCode.toString()) + countryCode.toString().length);
+        return newPhone;
+    }
+
     signup(phone, password) {
         let phoneNumber = '+972' + phone;
-        let normalizedPhone = normalizePhoneNumber(phoneNumber,'+972');
+        let normalizedPhone = this.normalizePhoneNumber(phoneNumber,'+972');
         let cleanPhone = this.clean_phone_number(normalizedPhone);
         return new Promise(async(resolve, reject) => {
             try {

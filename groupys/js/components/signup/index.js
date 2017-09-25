@@ -43,16 +43,20 @@ const logo = require('../../../images/logo.png');
         this.props.navigation.navigate(route);
     }
 
+     signup(){
+         this.props.actions.signup(this.state.phoneNumber,this.state.password,this.props.navigation)
+
+     }
 
     focusNextField(nextField) {
 
-        this.props.actions.focusSignupForm(nextField)
+        this.refs[nextField]._root.focus()
 
     }
 
 
     render() {
-        const { focusPassword,focusPhone,failedMessage,focusName,focusLastname } = this.props;
+        const { failedMessage,focusName,focusLastname } = this.props;
         const message= this.createMessage(failedMessage);
 
         return (
@@ -83,23 +87,22 @@ const logo = require('../../../images/logo.png');
                             </View>
                             <View style={styles.nameContainer}>
                                 <Item style={styles.nameTextInput} regular >
-                                    <Input   autofocus={focusName} value={this.state.name} blurOnSubmit={true} returnKeyType='next' ref="1" onSubmitEditing={this.focusNextField.bind(this,"2")} onChangeText={(name) => this.setState({name})} placeholder='Name' />
+                                    <Input  value={this.state.name} blurOnSubmit={true} returnKeyType='next' ref="1" onSubmitEditing={this.focusNextField.bind(this,"2")} onChangeText={(name) => this.setState({name})} placeholder='Name' />
                                 </Item>
                                 <Item style={styles.lastnameTextInput} regular >
-                                    <Input  autofocus={focusLastname} value={this.state.lastname} blurOnSubmit={true} returnKeyType='next' ref="2" onSubmitEditing={this.focusNextField.bind(this,"3")} onChangeText={(lastname) => this.setState({lastname})} placeholder='Last Name' />
+                                    <Input value={this.state.lastname} blurOnSubmit={true} returnKeyType='next' ref="2" onSubmitEditing={this.focusNextField.bind(this,"3")} onChangeText={(lastname) => this.setState({lastname})} placeholder='Last Name' />
                                 </Item>
                             </View>
 
 
                             <Item style={styles.phoneTextInput} regular >
-                                <Input  autofocus={focusPhone}  keyboardType = 'numeric' value={this.state.phoneNumber} blurOnSubmit={true} returnKeyType='next' ref="3" onSubmitEditing={this.focusNextField.bind(this,"5")} onChangeText={(phoneNumber) => this.setState({phoneNumber})} placeholder='Phone Number' />
+                                <Input   keyboardType = 'numeric' value={this.state.phoneNumber} blurOnSubmit={true} returnKeyType='next' ref="3" onSubmitEditing={this.focusNextField.bind(this,"5")} onChangeText={(phoneNumber) => this.setState({phoneNumber})} placeholder='Phone Number' />
                             </Item>
 
                             <Item style={styles.passwordTextInput} regular >
 
                                 <Input
                                     ref='5'
-                                    autofocus={focusPassword}
                                     returnKeyType='done'
                                     placeholder="Password"
                                     placeholderTextColor='#444'
