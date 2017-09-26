@@ -81,13 +81,13 @@ exports.logo = function (req, res) {
 };
 
 function checkSafeSearch(annotation, callback) {
-  function isVaulates(category){
+  function violates(category){
     return category === 'Possible' || category === 'Likely' || category === 'Very Likely'
   }
-  if(isVaulates(annotation.adult)) return callback(new Error(`${annotation.adult} to be adult image`));
-  if(isVaulates(annotation.spoof)) return callback(new Error(`${annotation.spoof} to be spoof image`));
-  if(isVaulates(annotation.violence)) return callback(new Error(`${annotation.adult} to be violence image`));
-  if(isVaulates(annotation.medical)) return callback(new Error(`${annotation.medical} to be medical image`));
+  if(violates(annotation.adult)) return callback(new Error(`${annotation.adult} to be adult image`));
+  if(violates(annotation.spoof)) return callback(new Error(`${annotation.spoof} to be spoof image`));
+  if(violates(annotation.violence)) return callback(new Error(`${annotation.adult} to be violence image`));
+  if(violates(annotation.medical)) return callback(new Error(`${annotation.medical} to be medical image`));
   return callback(null);
 }
 
