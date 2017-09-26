@@ -16,6 +16,12 @@ import { NavigationActions } from 'react-navigation'
 import { bindActionCreators } from "redux";
 
 import * as loginAction from "../../actions/login";
+const resetAction = NavigationActions.reset({
+    index: 0,
+    actions: [
+        NavigationActions.navigate({ routeName: 'home'})
+    ]
+});
 
 class Register extends Component {
 

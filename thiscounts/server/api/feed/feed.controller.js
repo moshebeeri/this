@@ -45,7 +45,6 @@ exports.feed = function (req, res) {
   query_builder = Feed.find({entity: entity_id}).sort({activity: 'desc'}).limit(15);
 
   if (from_id === 'start') {
-    console.log("here2");
     return feedTools.fetch_feed(userId, query_builder, Feed, res);
   }
   if (req.params.scroll === 'up')

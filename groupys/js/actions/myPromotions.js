@@ -25,7 +25,7 @@ export function setNextFeeds(feeds){
 
             }
             let showLoadingDone = false;
-            if (_.isEmpty(feeds)) {
+            if (_.isEmpty(feeds) && !getState().myPromotions.loadingDone) {
                 dispatch({
                     type: actions.SAVED_FEED_LOADING_DONE,
                     loadingDone: false,
@@ -41,6 +41,14 @@ export function setNextFeeds(feeds){
                 response = await profileApi.fetch(token, 0, 10);
 
             }
+            if (showLoadingDone  && !getState().myPromotions.loadingDone) {
+                dispatch({
+                    type: actions.SAVED_FEED_LOADING_DONE,
+                    loadingDone: true,
+
+                });
+            }
+
             if (response.length == 0) {
                 return;
             }
@@ -49,13 +57,7 @@ export function setNextFeeds(feeds){
                 type: actions.UPSERT_SAVED_FEEDS,
                 item: item
             }))
-            if (showLoadingDone) {
-                dispatch({
-                    type: actions.SAVED_FEED_LOADING_DONE,
-                    loadingDone: true,
 
-                });
-            }
         } catch (error) {
             dispatch({
                 type: actions.NETWORK_IS_OFFLINE,

@@ -3,7 +3,7 @@
 let _ = require('lodash');
 let SavedInstance = require('./savedInstance.model.js');
 let graphTools = require('../../components/graph-tools');
-let graphModel = graphTools.createGraphModel('savedInstance');
+let graphModel = graphTools.createGraphModel('SavedInstance');
 
 
 // Get list of savedInstances
@@ -31,9 +31,10 @@ exports.show = function (req, res) {
 
 function toGraph(savedInstance) {
   return {
+    _id: savedInstance._id,
     created: savedInstance.created,
     user: savedInstance.user,
-    instance_id: savedInstance.instance._id,
+    instance_id: savedInstance.instance,
     type: savedInstance.type
   }
 }

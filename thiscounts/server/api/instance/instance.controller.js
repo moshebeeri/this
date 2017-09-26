@@ -202,7 +202,7 @@ function relateSavedInstance(userId, savedInstance, instance, callback) {
     if (err) {
       return callback(err)
     }
-    graphModel.relate_ids(savedInstance._id, 'SAVE_OF', instance._id, `timestamp: '${save_time}'}`, function (err) {
+    graphModel.relate_ids(savedInstance._id, 'SAVE_OF', instance._id, `{timestamp: '${save_time}'}`, function (err) {
       if (err) {
         return callback(err)
       }
