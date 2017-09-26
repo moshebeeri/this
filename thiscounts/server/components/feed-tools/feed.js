@@ -26,111 +26,12 @@ exports.fetch_feed = function(userId, query_builder, Model, res) {
     // .populate({path: 'activity'})
     .exec(function (err, feeds) {
       if (err) return handleError(res, err);
-      update_states(feeds, function(err, feeds){
+      update_states(userId, feeds, function(err, feeds){
           if (err) {return res.status(500).json(err);}
           return res.status(200).json(feeds);
         });
       });
 };
-
-
-
-
-exports.fetch_feed_slow = function(userId, query_builder, Model, res) {
-  //http://stackoverflow.com/questions/19222520/populate-nested-array-in-mongoose
-  query_builder
-    .populate({path: 'user',
-                select: '-salt -hashedPassword -gid -role -__v -email -phone_number -sms_verified -sms_code -provider'})
-    .populate({path: 'activity'})
-    .exec(function (err, feeds) {
-      if (err) {
-        return handleError(res, err);
-      }
-
-      function populate_promotion(feeds, callback) {
-        Model.populate(feeds, {path: 'activity.promotion', model: 'Promotion'}, callback);
-      }
-
-      function populate_instance(feeds, callback) {
-        Model.populate(feeds, {path: 'activity.instance', model: 'Instance'}, callback);
-      }
-
-      function populate_product(feeds, callback) {
-        Model.populate(feeds, {path: 'activity.product', model: 'Product'}, callback);
-      }
-
-      function populate_user(feeds, callback) {
-        Model.populate(feeds, {
-          path: 'activity.user',
-          select: '-salt -hashedPassword -gid -role -__v -email -sms_verified -sms_code -provider',
-          model: 'User'
-        }, callback);
-      }
-
-      function populate_business(feeds, callback) {
-        Model.populate(feeds, {path: 'activity.business', model: 'Business'}, callback);
-      }
-
-      function populate_mall(feeds, callback) {
-        Model.populate(feeds, {path: 'activity.mall', model: 'Mall'}, callback);
-      }
-
-      function populate_chain(feeds, callback) {
-        Model.populate(feeds, {path: 'activity.chain', model: 'ShoppingChain'}, callback);
-      }
-
-      function populate_actor_user(feeds, callback) {
-        Model.populate(feeds, {
-          path: 'activity.actor_user',
-          select: '-salt -hashedPassword -gid -role -__v -email -sms_verified -sms_code -provider',
-          model: 'User'
-        }, function(err, actor_user){
-          if(err) return callback(err);
-          graphModel.query_ids_relation(userId, 'FOLLOW', actor_user._id, 'nick', function(err, nick){
-            if(err || !utils.defined(nick)) {
-              actor_user.name = actor_user.phone;
-            }
-            actor_user.name = nick;
-            callback(null,actor_user);
-          });
-        });
-      }
-
-      function populate_actor_business(feeds, callback) {
-        Model.populate(feeds, {path: 'activity.actor_business', model: 'Business'}, callback);
-      }
-
-      function populate_actor_mall(feeds, callback) {
-        Model.populate(feeds, {path: 'activity.actor_mall', model: 'Mall'}, callback);
-      }
-
-      function populate_actor_chain(feeds, callback) {
-        Model.populate(feeds, {path: 'activity.actor_chain', model: 'ShoppingChain'}, callback);
-      }
-
-      async.waterfall([
-        async.apply(populate_promotion, feeds),
-        populate_instance       ,
-        populate_product        ,
-        populate_user           ,
-        populate_business       ,
-        populate_mall           ,
-        populate_chain          ,
-        populate_actor_user     ,
-        populate_actor_business ,
-        populate_actor_mall     ,
-        populate_actor_chain
-
-      ], function (err, feeds) {
-        if (err) {return res.status(500).json(err);}
-        update_states(feeds, function(err, feeds){
-          if (err) {return res.status(500).json(err);}
-          return res.status(200).json(feeds);
-        });
-      });
-    });
-};
-
 
 //see http://www.markhneedham.com/blog/2013/02/24/neo4jcypher-combining-count-and-collect-in-one-query/
 //WOW !!! MATCH (me{_id:'56bb06e0875e4eca72774728'})-[f:FOLLOW]->(followers) with distinct(followers) limit 2 return collect(followers), count(followers)
@@ -285,7 +186,9 @@ function chain_state(user_id, chain, callback) {
   });
 }
 
-function update_states(feeds, callback) {
+//create_update
+
+function update_states(userId, feeds, callback) {
   async.each(feeds, update_state, function(err){
     if(err) {callback(err, null)}
     else callback(null, feeds)
