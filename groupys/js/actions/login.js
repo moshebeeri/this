@@ -54,10 +54,10 @@ export function login(phone,password,navigation){
     }
 
 }
-export function signup(phone,password,navigation){
+export function signup(phone,password,firstName,lastName,navigation){
     return async function (dispatch){
         try {
-            let response = await loginApi.signup(phone, password);
+            let response = await loginApi.signup(phone, password,firstName,lastName);
             if(response.token) {
 
                 dispatch({

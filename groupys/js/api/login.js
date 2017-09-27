@@ -51,7 +51,7 @@ class LoginApi
         return newPhone;
     }
 
-    signup(phone, password) {
+    signup(phone, password,firstName,lastName) {
         let phoneNumber = '+972' + phone;
         let normalizedPhone = this.normalizePhoneNumber(phoneNumber,'+972');
         let cleanPhone = this.clean_phone_number(normalizedPhone);
@@ -66,6 +66,7 @@ class LoginApi
                     },
                     body: JSON.stringify({
                         country_code: '+972',
+                        name:firstName + ' ' + lastName,
                         phone_number: cleanPhone,
                         email:  '972' + cleanPhone + "@low.la",
                         password: password,

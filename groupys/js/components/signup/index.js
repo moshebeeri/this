@@ -44,7 +44,7 @@ const logo = require('../../../images/logo.png');
     }
 
      signup(){
-         this.props.actions.signup(this.state.phoneNumber,this.state.password,this.props.navigation)
+         this.props.actions.signup(this.state.phoneNumber,this.state.password,this.state.name,this.state.lastname,this.props.navigation)
 
      }
 
