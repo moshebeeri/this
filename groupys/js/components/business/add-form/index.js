@@ -336,7 +336,7 @@ import Autocomplete from 'react-native-autocomplete-input';
      }
 
      formSuccess(response){
-        this.props.fetchBusiness();
+        this.props.onEndReached();
 
     }
 

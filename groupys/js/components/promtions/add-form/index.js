@@ -27,7 +27,7 @@ import PromotionApi from "../../../api/promotion"
 let promotionApi = new PromotionApi();
 import ProductApi from "../../../api/product"
 let productApi = new ProductApi();
-
+import * as businessAction from "../../../actions/business";
 import PercentComponent from "./percent/index"
 
 import PunchCardComponent from "./punch-card/index"
@@ -150,7 +150,7 @@ import {DeviceEventEmitter} from 'react-native'
         }
 
         let businessId = this.getBusinessId();
-        this.props.fetchProducts(businessId);
+        this.props.actions.fetchProducts(businessId);
 
 
     }
@@ -230,8 +230,9 @@ import {DeviceEventEmitter} from 'react-native'
        let promotion = this.createPromotionFromState();
 
        try {
-            let response = await promotionApi.createPromotion(promotion,this.addToList.bind(this));
-            this.replaceRoute();
+           this.replaceRoute();
+           promotionApi.createPromotion(promotion,this.addToList.bind(this));
+
         }catch (error){
             console.log(error);
             this.replaceRoute();
@@ -243,8 +244,9 @@ import {DeviceEventEmitter} from 'react-native'
          let promotion = this.createPromotionFromState();
 
          try {
-             let response = await promotionApi.updatePromotion(promotion,this.addToList.bind(this),this.props.navigation.state.params.item._id);
              this.replaceRoute();
+             promotionApi.updatePromotion(promotion,this.addToList.bind(this),this.props.navigation.state.params.item._id);
+
          }catch (error){
              console.log(error);
              this.replaceRoute();
@@ -253,7 +255,7 @@ import {DeviceEventEmitter} from 'react-native'
 
      addToList(responseData){
         let businessId = this.getBusinessId();
-       this.props.fetchPromotions(businessId);
+       this.props.bussinesActions.setBusinessPromotions(businessId);
     }
 
     getBusinessId(){
@@ -792,6 +794,10 @@ export default connect(
         products: state.products,
 
     }),
+    (dispatch) => ({
+        bussinesActions : bindActionCreators(businessAction, dispatch),
+        actions: bindActionCreators(promotionsAction, dispatch)
 
-    dispatch => bindActionCreators(promotionsAction, dispatch)
+    })
+
 )(AddPromotion);
