@@ -55,6 +55,7 @@ export const SHOW_SEARCH_SPIN = 'SHOW_SEARCH_SPIN';
 
 export const GET_FEEDS = 'GET_FEEDS';
 export const UPSERT_FEEDS = 'UPSERT_FEEDS';
+export const UPSERT_FEEDS_TOP = 'UPSERT_FEEDS_TOP';
 export const FEED_LIKE = 'FEED_LIKE';
 export const FEED_UNLIKE = 'FEED_LIKE';
 export const FEED_LOADING_DONE = 'FEED_LOADING_DONE';

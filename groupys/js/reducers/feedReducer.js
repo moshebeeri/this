@@ -26,6 +26,8 @@ export default function feeds(state = initialState, action) {
         };
     }
     let feedstate = {...state};
+    let currentFeeds = feedstate.feeds;
+
     switch (action.type) {
 
 
@@ -35,10 +37,20 @@ export default function feeds(state = initialState, action) {
             return feedstate;
 
         case actions.UPSERT_FEEDS:
-            let currentFeeds = feedstate.feeds;
 
             currentFeeds[action.item._id] = action.item;
-            feedstate.feedView.push(action.item);
+            if (!feedstate.feedView.includes(action.item._id)) {
+                feedstate.feedView.push(action.item._id);
+            }
+
+            feedstate.feeds = currentFeeds;
+            return feedstate;
+        case actions.UPSERT_FEEDS_TOP:
+
+            currentFeeds[action.item._id] = action.item;
+            if (!feedstate.feedView.includes(action.item._id)) {
+                feedstate.feedView.unshift(action.item._id);
+            }
             feedstate.feeds = currentFeeds;
             return feedstate;
         case actions.FEED_LOADING_DONE:

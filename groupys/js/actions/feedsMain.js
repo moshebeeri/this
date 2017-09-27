@@ -69,7 +69,7 @@ async function fetchTopList(id,token,user,dispatch){
         let disassemblerItems = response.map(item => assemblers.disassembler(item,dispatch))
 
         disassemblerItems.forEach(item => dispatch({
-            type: actions.UPSERT_FEEDS,
+            type: actions.UPSERT_FEEDS_TOP,
             item:item
         }))
 
@@ -202,10 +202,11 @@ export function setNextFeeds(feeds){
             showLoadingDone = true;
         }
         if(feeds && feeds.length > 0) {
-            let keys = Object.keys(feeds)
-            let id = keys[keys.length - 1]
+            let length =  getState().feeds.feedView.length
 
-            if(id == getState().feeds.lastfeed)
+            let id = getState().feeds.feedView[length - 1]
+
+            if(id === getState().feeds.lastfeed)
                 return;
 
             dispatch({
