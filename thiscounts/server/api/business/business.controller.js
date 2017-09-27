@@ -147,6 +147,8 @@ function create_business_default_group(business) {
     post_policy: 'MANAGERS',
   }, function (err, group) {
     if (err) return console.error(err.message);
+    graphModel.owner_followers_follow_default_group(business.creator);
+
     console.log(`default group created successfully ${JSON.stringify(group)}`)
   });
 }
@@ -243,11 +245,15 @@ exports.create = function (req, res) {
 };
 
 function notifyOnAction(business) {
-  Notifications.notify( {
-    note: 'ADD_BUSINESS_FOLLOW_ON_ACTION',
-    group: business.id,
-    actor_user: business.creator
-  },[business.creator])
+  try {
+    Notifications.notify({
+      note: 'ADD_BUSINESS_FOLLOW_ON_ACTION',
+      group: business.id,
+      actor_user: business.creator
+    }, [business.creator])
+  }catch(err){
+    console.error(err)
+  }
 }
 
 // Updates an existing business in the DB.

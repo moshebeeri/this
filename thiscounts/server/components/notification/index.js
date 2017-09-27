@@ -42,7 +42,7 @@ exports.notify = function(note, audience){
     note.to = to;
     Notification.create(note, function (err, notification) {
       if(err) return console.err(err);
-      this.pnsUserDevices(notification)
+      pnsUserDevices(notification)
     });
   });
 };
