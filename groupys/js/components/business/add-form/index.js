@@ -212,7 +212,7 @@ import Autocomplete from 'react-native-autocomplete-input';
          this.setState({
              addressValidation:''
          })
-         let response = await businessApi.checkAddress(this.state)
+         let response = await businessApi.checkAddress(this.state,this.props.token)
          if(!response.valid){
             this.setState({
                 addressValidation:response.message
@@ -323,7 +323,7 @@ import Autocomplete from 'react-native-autocomplete-input';
 
          }
         this.replaceRoute('home');
-        entityUtils.create('businesses',this.state,this.state.token,this.formSuccess.bind(this),this.formFailed.bind(this),this.state.userId);
+        entityUtils.create('businesses',this.state,this.props.token,this.formSuccess.bind(this),this.formFailed.bind(this),this.state.userId);
 
     }
 
@@ -331,12 +331,12 @@ import Autocomplete from 'react-native-autocomplete-input';
      updateFormData(){
 
          this.replaceRoute('home');
-         entityUtils.update('businesses',this.state,this.state.token,this.formSuccess.bind(this),this.formFailed.bind(this),this.props.navigation.state.params.item._id);
+         entityUtils.update('businesses',this.state,this.props.token,this.formSuccess.bind(this),this.formFailed.bind(this),this.props.navigation.state.params.item._id);
 
      }
 
      formSuccess(response){
-        this.props.fetchBusiness();
+        this.props.onEndReached();
 
     }
 
@@ -584,7 +584,8 @@ import Autocomplete from 'react-native-autocomplete-input';
 
 export default connect(
     state => ({
-        businesses: state.businesses
+        businesses: state.businesses,
+        token:state.authentication.token
     }),
     dispatch => bindActionCreators(businessAction, dispatch)
 )(AddBusiness);
