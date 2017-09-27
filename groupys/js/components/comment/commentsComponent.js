@@ -59,7 +59,6 @@ class CommentsComponent extends Component {
 
     handlePick(emoji) {
         let message = this.state.messsage;
-        this.fetchFeeds();
         this.setState({
             messsage: message + emoji ,
         });
