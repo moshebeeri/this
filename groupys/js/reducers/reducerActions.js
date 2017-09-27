@@ -99,6 +99,10 @@ export const GROUP_FEED_SHOWTOPLOADER = 'GROUP_FEED_SHOWTOPLOADER';
 export const UPSERT_USER = 'UPSERTuser';
 export const SET_USER = 'SET_USER'
 export const USER_FOLLOW = 'USER_FOLLOW'
+export const USER_SELECT = 'USER_SELECT'
+export const USER_SELECT_RESET = 'USER_SELECT_RESET'
+export const USER_UNSELECT = 'USER_UNSELECT'
+
 
 
 

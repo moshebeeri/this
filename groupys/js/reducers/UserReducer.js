@@ -7,7 +7,7 @@
 /**
  * Created by stan229 on 5/27/16.
  */
-const initialState = {users:{},followers:[],user:undefined};
+const initialState = {selectedUsers:[],users:{},followers:[],user:undefined};
 import { REHYDRATE } from 'redux-persist/constants'
 import * as actions from './reducerActions';
 
@@ -43,7 +43,19 @@ export default function user(state = initialState, action) {
                 followers : action.followers,
             };
 
+        case actions.USER_SELECT:
+            userState.selectedUsers.push(action.user)
+            return userState;
+        case actions.USER_UNSELECT:
+            userState.selectedUsers = userState.selectedUsers.splice(action.userIndex, 1);
+            return userState;
+        case actions.USER_SELECT_RESET:
+            return{
+                ...state,
+                selectedUsers : new Array(),
+            };
         default:
+
             return state;
     }
 };/**
