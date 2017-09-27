@@ -176,7 +176,7 @@ export function setNextFeeds(feeds,token,group){
     return  async function (dispatch, getState){
         const token = getState().authentication.token
         let showLoadingDone = false;
-        if( _.isEmpty(feeds)) {
+        if( _.isEmpty(feeds) && !getState().groups.loadingDone[group._id]) {
             dispatch({
                 type: actions.GROUP_FEED_LOADING_DONE,
                 loadingDone: false,
@@ -238,7 +238,7 @@ export function setNextFeeds(feeds,token,group){
             });
         }
 
-        if(showLoadingDone) {
+        if(showLoadingDone && !getState().groups.loadingDone[group._id]) {
             dispatch({
                 type: actions.GROUP_FEED_LOADING_DONE,
                 loadingDone: true,
