@@ -63,7 +63,14 @@ const timer = BackgroundTimer.setInterval(() =>{
     try {
         if (store.getState().contacts.lastUpdate) {
 
-            if (new Date().getTime() - new Date(store.getState().contacts.lastUpdate).getTime() < 1800000) {
+            //sync every 30 min
+            // if (new Date().getTime() - new Date(store.getState().contacts.lastUpdate).getTime() < 1800000) {
+            //
+            //
+            //     return;
+            // }
+            //sync every 1 min
+            if (new Date().getTime() - new Date(store.getState().contacts.lastUpdate).getTime() < 60000) {
 
 
                 return;

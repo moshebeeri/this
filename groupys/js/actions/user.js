@@ -28,6 +28,16 @@ async function getUserFollowers(dispatch,token){
     try {
         let users = await userApi.getUserFollowers(token);
 
+        if(users.length > 0) {
+            users.forEach(async function(user){
+                let fullUser = await  userApi.getUserById(token,user._id);
+                dispatch({
+                    type: actions.UPSERT_USER,
+                    item: fullUser
+
+                });
+            })
+        }
         dispatch({
             type: actions.USER_FOLLOW,
             followers: users

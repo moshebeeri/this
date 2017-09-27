@@ -48,6 +48,47 @@ class UserApi
 
     }
 
+    getUserById(token,id) {
+        return new Promise(async(resolve, reject) => {
+            try {
+                let from = new Date();
+
+
+                if(token) {
+                    const response = await fetch(`${server_host}/api/users/`+ id, {
+                        method: 'GET',
+                        headers: {
+                            'Accept': 'application/json, text/plain, */*',
+                            'Content-Type': 'application/json;charset=utf-8',
+                            'Authorization': 'Bearer ' + token,
+                        }
+
+                    })
+                    if (response.status == '401') {
+                        reject(error);
+                        return;
+                    }
+
+                    let responseData = await response.json();
+                    timer.logTime(from,new Date(),'users','me')
+
+
+                    resolve(responseData);
+                }else{
+                    reject('no token');
+                }
+
+            }
+            catch (error) {
+
+                console.log('There has been a problem with your fetch operation: ' + error.message);
+                reject(error);
+            }
+        })
+
+
+    }
+
 
     getUserFollowers(token) {
         return new Promise(async(resolve, reject) => {

@@ -9,19 +9,19 @@ import {Container, Content, Text, InputGroup, Input, Button,Body ,Icon,Left,
 
 import {actions} from 'react-native-navigation-redux-helpers';
 
+import {getUserFollowesr} from '../../../selectors/userSelector'
 
-
-export default class SelectUsersComponent extends Component {
+class SelectUsersComponent extends Component {
 
     constructor(props) {
         super(props);
 
-        let selectCheckBox = this.props.navigation.state.params.users.map(function (user) {
+        let selectCheckBox = this.props.userFollower.map(function (user) {
             return false
         });
         this.state = {
 
-            users:this.props.navigation.state.params.users,
+
             selectCheckBox: selectCheckBox
 
 
@@ -30,6 +30,7 @@ export default class SelectUsersComponent extends Component {
 
     }
     selectCheckBox(index){
+        const{userFollower}  = this.props;
         let selectCheckBoxes = this.state.selectCheckBox;
         selectCheckBoxes[index] = !this.state.selectCheckBox[index];
 
@@ -39,10 +40,11 @@ export default class SelectUsersComponent extends Component {
     }
 
     saveFormData(){
+        const{userFollower}  = this.props;
         let selectedUsers = new Array();
 
         let selectedBool = this.state.selectCheckBox;
-        this.state.users.forEach(function (user,i) {
+        userFollower.forEach(function (user,i) {
             if(selectedBool[i + 1]) {
                 selectedUsers.push(user);
             }
@@ -56,15 +58,18 @@ export default class SelectUsersComponent extends Component {
 
 
     render() {
-        let index = 0;
-        let productsRows = this.state.users.map((r, i) => {
-            index++;
+        const{userFollower}  = this.props;
 
-            if(r.picture){
-                return <ListItem key={index} onPress={this.selectCheckBox.bind(this,index)} thumbnail>
+        let index = 0;
+        let productsRows = userFollower.map((r, i) => {
+            index++;
+            if(r.pictures && r.pictures.length > 0){
+
+            let path = r.pictures[r.pictures.length -1].pictures[0];
+            return <ListItem key={index} onPress={this.selectCheckBox.bind(this,index)} thumbnail>
                   <Left>
 
-                      <Thumbnail square size={80} source={{uri: r.picture}} />
+                      <Thumbnail  size={80} source={{uri: path}} />
                   </Left>
                   <Body>
                   <Text>{r.name}</Text>
@@ -96,10 +101,12 @@ export default class SelectUsersComponent extends Component {
 
                   { productsRows }
 
-              </Content>
-                <Footer>
 
-                    <Button transparent
+
+
+              </Content>
+                <Footer   style={{  backgroundColor: '#fff'}}>
+                    <Button style={{backgroundColor:'#2db6c8'}}
                             onPress={this.saveFormData.bind(this)}
                     >
                         <Text>Select Users</Text>
@@ -110,5 +117,20 @@ export default class SelectUsersComponent extends Component {
 
         );
   }
+
+
 }
+const mapStateToProps = state => {
+    return {
+
+        userFollower:getUserFollowesr(state),
+
+    }
+}
+
+export default connect(
+    mapStateToProps,
+)(SelectUsersComponent);
+
+
 
