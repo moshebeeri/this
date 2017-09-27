@@ -7,11 +7,18 @@ async function getUser(dispatch,token){
     try {
         let user = await userApi.getUser(token);
 
-            dispatch({
-                type: 'GET_USER',
-                user: user
+        dispatch({
+            type: actions.UPSERT_USER,
+            item: user
 
-            });
+        })
+        dispatch({
+            type: actions.SET_USER,
+            user: user
+
+        })
+
+
 
 
 

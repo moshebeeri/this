@@ -43,13 +43,7 @@ class ProfileDrawer extends Component {
 
         };
 
-        let stateFunc = this.setState.bind(this);
-        store.get('token').then(storeToken => {
-            stateFunc({
-                    token: storeToken
-                }
-            );
-        });
+
     }
 
     async componentWillMount(){
@@ -112,7 +106,7 @@ class ProfileDrawer extends Component {
                 image: {uri: image.path, width: image.width, height: image.height, mime: image.mime},
                 phone_number:this.props.user.phone_number,
             }
-            entityUtils.update('users',user,this.state.token,this.formSuccess.bind(this),this.formFailed.bind(this),'');
+            entityUtils.update('users',user,this.props.token,this.formSuccess.bind(this),this.formFailed.bind(this),'');
 
         }catch (e){
             console.log(e);
@@ -120,7 +114,7 @@ class ProfileDrawer extends Component {
     }
 
     formSuccess(){
-        this.props.fetchUsers();
+        this.props.actions.fetchUsers();
     }
     formFailed(){
 
@@ -188,8 +182,12 @@ class ProfileDrawer extends Component {
 
 export default connect(
     state => ({
-        user: state.authentication.user
+        user: state.user.user,
+        token:state.authentication.token
     }),
-    dispatch => bindActionCreators(userAction, dispatch)
+    (dispatch) => ({
+        actions: bindActionCreators(userAction, dispatch),
+
+    })
 
 )(ProfileDrawer);

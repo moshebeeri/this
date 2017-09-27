@@ -212,7 +212,7 @@ import Autocomplete from 'react-native-autocomplete-input';
          this.setState({
              addressValidation:''
          })
-         let response = await businessApi.checkAddress(this.state)
+         let response = await businessApi.checkAddress(this.state,this.props.token)
          if(!response.valid){
             this.setState({
                 addressValidation:response.message
@@ -584,7 +584,8 @@ import Autocomplete from 'react-native-autocomplete-input';
 
 export default connect(
     state => ({
-        businesses: state.businesses
+        businesses: state.businesses,
+        token:authentication.token
     }),
     dispatch => bindActionCreators(businessAction, dispatch)
 )(AddBusiness);
