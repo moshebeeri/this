@@ -19,6 +19,7 @@ module.exports = function(app) {
   app.use('/api/phone_numbers', require('./api/phone_number'));
   app.use('/api/phonebooks', require('./api/phonebook'));
   app.use('/api/images', require('./api/image'));
+  app.use('/api/videos', require('./api/video'));
   app.use('/api/campaigns', require('./api/campaign'));
   app.use('/api/cardTypes', require('./api/cardType'));
   app.use('/api/shoppingChains', require('./api/shoppingChain'));
