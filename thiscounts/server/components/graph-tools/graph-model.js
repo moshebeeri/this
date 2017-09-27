@@ -201,7 +201,6 @@ GraphModel.prototype.follow_user_by_phone_number = function follow_user_by_phone
 };
 
 /***
- *
  * @param owner_id
  * @param follower_id - optional, if not set then will connect all follower operation that may be costly
  */
@@ -215,6 +214,27 @@ GraphModel.prototype.owner_followers_follow_business = function owner_followers_
   let query = `MATCH (u:user ${userFilter})-[:FOLLOW]->(owner:user { _id:'${owner_id}' })-[:ROLE{name:"OWNS"}]->(b:business{type:'SMALL_BUSINESS'})
   OPTIONAL MATCH (u:user)-[:FOLLOW]->(owner:user { _id:'${owner_id}' })-[:ROLE{name:"OWNS"}]->(b:business{type:'PERSONAL_SERVICE'})
   CREATE UNIQUE (u)-[r:FOLLOW]->(b)` ;
+  if (utils.defined(callback)) {
+    db.query(query, callback);
+  } else {
+    db.query(query, function (err) {
+      if (err) {
+        logger.error(err.message);
+      }
+    });
+  }
+};
+
+GraphModel.prototype.owner_followers_follow_default_group = function owner_followers_follow_default_group(owner_id, follower_id, callback){
+  if(typeof follower_id === 'function'){
+    callback = follower_id;
+    follower_id = null;
+  }
+  let userFilter = utils.undefined(follower_id)? '' : `{ _id:'${follower_id}'}`;
+
+  let query = `MATCH (u:user ${userFilter})-[:FOLLOW]->(owner:user { _id:'${owner_id}' })-[:ROLE{name:"OWNS"}]->(b:business{type:'SMALL_BUSINESS'})-[:DEFAULT_GROUP]->(g)
+  OPTIONAL MATCH (u:user)-[:FOLLOW]->(owner:user { _id:'${owner_id}' })-[:ROLE{name:"OWNS"}]->(b:business{type:'PERSONAL_SERVICE'})-[:DEFAULT_GROUP]->(g)
+  CREATE UNIQUE (u)-[r:FOLLOW]->(g)` ;
   if (utils.defined(callback)) {
     db.query(query, callback);
   } else {
