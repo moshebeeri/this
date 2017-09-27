@@ -148,6 +148,10 @@ function business_state(user_id, business, callback) {
   });
 }
 
+exports.user_state = function(user_id, user, callback) {
+  return user_state(user_id, user, callback);
+};
+
 exports.business_state = function(user_id, business, callback) {
   return business_state(user_id, business, callback);
 };

@@ -358,7 +358,10 @@ exports.show = function (req, res, next) {
     function (err, user) {
       if (err) return next(err);
       if (!user) return res.status(401).send('Unauthorized');
-      res.status(200).json(user);
+      feed.user_state(req.user._id, user, function (err, user) {
+        if (err) return next(err);
+        res.status(200).json(user);
+      })
   });
 };
 
@@ -371,7 +374,10 @@ exports.showByPhone = function (req, res, next) {
     function (err, user) {
       if (err) return next(err);
       if (!user) return res.status(401).send('Unauthorized');
-      res.status(200).json(user);
+      feed.user_state(req.user._id, user, function (err, user) {
+        if (err) return next(err);
+        res.status(200).json(user);
+      })
   });
 };
 
