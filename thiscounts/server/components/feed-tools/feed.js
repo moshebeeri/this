@@ -317,6 +317,11 @@ function createFeedStateFunction(stated, userId, state_func) {
     })
   }
 }
+
+exports.get_items_state = function(items, userId, stateFunc, callback){
+  this.generate_state(items, userId, stateFunc, callback)
+};
+
 exports.generate_state = function(items, userId, state_func, callback){
   let stated = new SortedArray([], function(a,b){
     return b._id - a._id; //descending order

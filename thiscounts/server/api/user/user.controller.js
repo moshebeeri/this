@@ -21,7 +21,7 @@ const graphModel = graphTools.createGraphModel('user');
 const activity = require('../../components/activity').createActivity();
 const MongodbSearch = require('../../components/mongo-search');
 const Enum = require('enum');
-
+const feed = require('../../components/feed-tools');
 
 let validationError = function (res, err) {
   let firstKey = getKey(err.errors);
@@ -354,10 +354,11 @@ exports.login = function (req, res, next) {
 exports.show = function (req, res, next) {
   let userId = req.params.id;
 
-  User.findById(userId, '-salt -hashedPassword -sms_code', function (err, user) {
-    if (err) return next(err);
-    if (!user) return res.status(401).send('Unauthorized');
-    res.status(200).json(user.profile);
+  User.findById(userId, '-salt -hashedPassword -sms_code -firebase -provider -facebook -twitter -google -github',
+    function (err, user) {
+      if (err) return next(err);
+      if (!user) return res.status(401).send('Unauthorized');
+      res.status(200).json(user);
   });
 };
 
@@ -366,10 +367,11 @@ exports.show = function (req, res, next) {
  */
 exports.showByPhone = function (req, res, next) {
   let userPhoneNumber = req.params.phone_number;
-  User.findOne({phone_number: userPhoneNumber}, function (err, user) {
-    if (err) return next(err);
-    if (!user) return res.status(401).send('Unauthorized');
-    res.status(200).json(user.profile);
+  User.findOne({phone_number: userPhoneNumber}, '-salt -hashedPassword -sms_code -firebase -provider -facebook -twitter -google -github',
+    function (err, user) {
+      if (err) return next(err);
+      if (!user) return res.status(401).send('Unauthorized');
+      res.status(200).json(user);
   });
 };
 
