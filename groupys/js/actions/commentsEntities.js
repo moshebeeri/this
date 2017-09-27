@@ -79,7 +79,7 @@ export function sendMessage(entities,generalId,message) {
     return async function (dispatch, getState) {
 
         const token = getState().authentication.token
-        const user = getState().authentication.user
+        const user = getState().user.user
         try {
             commentsApi.createGlobalComment(entities,message,token)
 
@@ -117,7 +117,7 @@ export function setNextFeeds(comments,entities,generalId){
     return async function (dispatch,getState){
         try {
             const token = getState().authentication.token
-            const user = getState().authentication.user
+            const user = getState().user.user
             if (!user)
                 return
 

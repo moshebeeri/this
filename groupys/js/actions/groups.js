@@ -254,7 +254,7 @@ export function sendMessage(groupId,message) {
 
     return async function (dispatch, getState) {
         const token = getState().authentication.token
-        const user = getState().authentication.user
+        const user = getState().user.user
 
         let messageItem = createMessage(message,user)
         dispatch({

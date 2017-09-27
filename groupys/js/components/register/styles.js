@@ -148,4 +148,7 @@ module.exports = {
 
 
     },
+    avoidView:{
+        alignItems: 'center',
+    },
 };

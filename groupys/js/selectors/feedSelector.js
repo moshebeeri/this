@@ -31,13 +31,18 @@ export const getFeeds = createSelector(  [ getActivities,getPromotions,getUser,g
 
 
             let feedsUi = [];
-    if (!_.isEmpty(feeds) && !_.isEmpty(instances) && !_.isEmpty(businesses)  && !_.isEmpty(user) && !_.isEmpty(activities)) {
-        let feedsList = feeds;
-        let feedArray = Object.keys(feedsList).map(key => feedsList[key])
-        let assembledFeeds = feedArray.map(function (feed) {
-            return assemblers.assembler(feed, collections);
-        })
-        feedsUi = assembledFeeds.map(feed => feedUiConverter.createFeed(feed));
+    if (!_.isEmpty(feeds)) {
+        try {
+            let feedsList = feeds;
+            let feedArray = Object.keys(feedsList).map(key => feedsList[key])
+            let assembledFeeds = feedArray.map(function (feed) {
+                return assemblers.assembler(feed, collections);
+            })
+            feedsUi = assembledFeeds.map(feed => feedUiConverter.createFeed(feed));
+        }catch (error){
+
+            return feedsUi;
+        }
 
     }
     return feedsUi;

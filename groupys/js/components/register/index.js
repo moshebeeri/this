@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import {Image, Platform,TouchableOpacity,Dimensions} from 'react-native';
+import {Image, Platform,TouchableOpacity,KeyboardAvoidingView,Dimensions} from 'react-native';
 import {connect} from 'react-redux';
 import {actions} from 'react-native-navigation-redux-helpers';
 import {Container, Content, Text, InputGroup, Input, Button, Icon, View,Item} from 'native-base';
@@ -62,6 +62,7 @@ class Register extends Component {
 
 
                 <View style={styles.inputContainer}>
+                    <KeyboardAvoidingView behavior={'position'} style={styles.avoidView}>
 
                     <View >
                         <View style={styles.thiscountsContainer}>
@@ -89,6 +90,7 @@ class Register extends Component {
                         </View>
 
                     </View>
+                    </KeyboardAvoidingView>
 
 
 

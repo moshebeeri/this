@@ -83,7 +83,7 @@ export function sendMessage(groupId,instanceId,message) {
     return async function (dispatch, getState) {
         try {
             const token = getState().authentication.token
-            const user = getState().authentication.user
+            const user = getState().user.user
             try {
                 commentsApi.createComment(groupId, instanceId, message, token)
 
@@ -124,7 +124,7 @@ export function setNextFeeds(comments,group,instance) {
     return async function (dispatch, getState) {
         try {
             const token = getState().authentication.token
-            const user = getState().authentication.user
+            const user = getState().user.user
             if (!user)
                 return
 

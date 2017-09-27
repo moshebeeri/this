@@ -21,7 +21,7 @@ export function onEndReached(){
     return async function (dispatch, getState){
         try {
             const token = getState().authentication.token
-            const user = getState().authentication.user
+            const user = getState().user.user
             const notifications = getState().notification.notification
             let skip = 0;
             if (notifications) {

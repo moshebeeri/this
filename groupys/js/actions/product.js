@@ -89,7 +89,7 @@ export function saveProduct(product,saveSucsees,saveFailed){
     return function (dispatch, getState){
         try {
             const token = getState().authentication.token
-            const user = getState().authentication.user
+            const user = getState().user.user
             entityUtils.create('products', product, token, saveSucsees, saveFailed, user._id);
         } catch (error) {
             dispatch({

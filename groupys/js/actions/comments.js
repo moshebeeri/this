@@ -153,7 +153,7 @@ export function setNextFeeds(comments,token,group){
     return async function (dispatch,getState){
         try{
         const token = getState().authentication.token
-        const user = getState().authentication.user
+        const user = getState().user.user
         if(!user)
             return
 

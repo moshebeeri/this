@@ -11,7 +11,7 @@ export function setNextFeeds(feeds){
     return async function (dispatch,getState){
         try {
             const token = getState().authentication.token
-            const user = getState().authentication.user
+            const user = getState().user.user
             if (!user)
                 return
 
@@ -70,7 +70,7 @@ export function fetchTop(){
     return async function (dispatch,getState){
         try {
             const token = getState().authentication.token
-            const user = getState().authentication.user
+            const user = getState().user.user
             if (!user)
                 return
             if (getState().myPromotions.lastCall) {

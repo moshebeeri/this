@@ -188,11 +188,11 @@ async function getAll(dispatch){
 export function setNextFeeds(feeds){
     return async function (dispatch,getState){
         const token = getState().authentication.token
-        const user = getState().authentication.user
+        const user = getState().user.user
         if(!user)
             return
         let showLoadingDone = false;
-        if( _.isEmpty(feeds)) {
+        if( _.isEmpty(feeds) && !getState().feeds.loadingDone)  {
             dispatch({
                 type: actions.FEED_LOADING_DONE,
                 loadingDone: false,
@@ -215,7 +215,7 @@ export function setNextFeeds(feeds){
             });
         }
         await fetchFeedsFromServer(feeds,dispatch,token,user)
-        if(showLoadingDone) {
+        if(showLoadingDone && !getState().feeds.loadingDone) {
             dispatch({
                 type: actions.FEED_LOADING_DONE,
                 loadingDone: true,
