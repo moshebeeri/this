@@ -7,10 +7,10 @@ import {Container, Content, Text, InputGroup, Input, Button,Body ,Icon,Left,
     View,Header,Item,Footer,Picker,ListItem,Right,Thumbnail,CheckBox} from 'native-base';
 
 
-import {actions} from 'react-native-navigation-redux-helpers';
 
 import {getUserFollowesr} from '../../../selectors/userSelector'
-
+import { bindActionCreators } from "redux";
+import * as selectUserAction from "../../../actions/selectUsers";
 class SelectUsersComponent extends Component {
 
     constructor(props) {
@@ -29,8 +29,8 @@ class SelectUsersComponent extends Component {
 
 
     }
-    selectCheckBox(index){
-        const{userFollower}  = this.props;
+    selectCheckBox(index,user){
+        const{userFollower,actions}  = this.props;
         let selectCheckBoxes = this.state.selectCheckBox;
         selectCheckBoxes[index] = !this.state.selectCheckBox[index];
 
@@ -66,32 +66,33 @@ class SelectUsersComponent extends Component {
             if(r.pictures && r.pictures.length > 0){
 
             let path = r.pictures[r.pictures.length -1].pictures[0];
-            return <ListItem key={index} onPress={this.selectCheckBox.bind(this,index)} thumbnail>
+            return <ListItem key={index} onPress={this.selectCheckBox.bind(this,index,r)} thumbnail>
                   <Left>
 
                       <Thumbnail  size={80} source={{uri: path}} />
                   </Left>
                   <Body>
                   <Text>{r.name}</Text>
-                  <Text note>{r.phone}</Text>
+                  <Text note>{r.phone_number}</Text>
+
                   </Body>
                   <Right>
 
-                      <CheckBox  onPress={this.selectCheckBox.bind(this,index)} checked={this.state.selectCheckBox[index]} />
+                      <CheckBox  onPress={this.selectCheckBox.bind(this,index,r)} checked={this.state.selectCheckBox[index]} />
                   </Right>
                 </ListItem>
             }
-            return <ListItem key={index} onPress={this.selectCheckBox.bind(this,index)}  thumbnail style={{  backgroundColor: '#fff'}}>
+            return <ListItem key={index} onPress={this.selectCheckBox.bind(this,index,r)}  thumbnail style={{  backgroundColor: '#fff'}}>
               <Left>
                   <Thumbnail square size={80} source={require('../../../../images/client_1.png')} />
               </Left>
               <Body>
 
               <Text>{r.name}</Text>
-              <Text note>{r.phone}</Text>
+              <Text note>{r.phone_number}</Text>
               </Body>
               <Right>
-                  <CheckBox onPress={this.selectCheckBox.bind(this,index)} checked={this.state.selectCheckBox[index]} />
+                  <CheckBox onPress={this.selectCheckBox.bind(this,index,r)} checked={this.state.selectCheckBox[index]} />
               </Right>
             </ListItem>
         });
@@ -130,6 +131,9 @@ const mapStateToProps = state => {
 
 export default connect(
     mapStateToProps,
+    (dispatch) => ({
+        actions: bindActionCreators(selectUserAction, dispatch),
+    })
 )(SelectUsersComponent);
 
 

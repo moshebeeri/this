@@ -2,20 +2,20 @@
 import * as actions from '../reducers/reducerActions';
 
 
-export function selectUser(index){
+export function selectUser(user){
     return function (dispatch){
         dispatch({
             type: actions.USER_SELECT,
-            userIndex:user
+            user:user
         });
     }
 
 }
-export function unselectUser(index){
+export function unselectUser(user){
     return function (dispatch){
         dispatch({
             type: actions.USER_UNSELECT,
-            userIndex:index
+            user:user
         });
     }
 

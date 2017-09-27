@@ -47,7 +47,7 @@ export default function user(state = initialState, action) {
             userState.selectedUsers.push(action.user)
             return userState;
         case actions.USER_UNSELECT:
-            userState.selectedUsers = userState.selectedUsers.splice(action.userIndex, 1);
+
             return userState;
         case actions.USER_SELECT_RESET:
             return{
