@@ -167,10 +167,10 @@ function instances_by_relation_async(rel, user_id, paginate, callback) {
 
     SavedInstance.find({}).where('_id')
       .in(Object.keys(_ids_map))
-      .exec(function (err, instances) {
+      .exec(function (err, savedInstances) {
       if (err) {callback(err)}
-      let ret = instances.map(function (instance) {
-        return {instance: instance, graph: _ids_map[instance._id]}
+      let ret = savedInstances.map(function (savedInstance) {
+        return {savedInstance: savedInstance, graph: _ids_map[savedInstance._id]}
       });
       return callback(null, ret);
     })
