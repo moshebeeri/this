@@ -17,35 +17,7 @@ class FeedConverter {
             }
         }
         if (feed.activity.action === 'group_message' || feed.activity.action === 'group_follow') {
-            let user = feed.activity.actor_user;
-            if (!user) {
-                user = feed.activity.user;
-            }
-            let name = user.phone_number;
-            if (user.name) {
-                name = user.name;
-            }
-            response = {
-                id: feed._id,
-                fid: feed._id,
-                key: feed._id,
-                actor: user._id,
-                showSocial: false,
-                description: feed.activity.message,
-                date: feed.activity.timestamp
-            };
-            if (user.pictures && user.pictures.length > 0) {
-                response.logo = {
-                    uri: user.pictures[user.pictures.length - 1].pictures[0]
-                }
-            } else {
-                response.logo = noPic;
-            }
-            response.name = name;
-            if (feed.activity.action === 'group_follow') {
-                response.description = "jonied the group";
-            }
-            response.itemType = 'MESSAGE';
+            response = this.createMessageUi(feed);
         }
         if (feed.activity.action === 'instance' || feed.activity.action === 'eligible') {
             return this.createPromontionInstance(feed);
@@ -53,7 +25,41 @@ class FeedConverter {
         return response;
     }
 
-    static createBusinessUo(feed) {
+     createMessageUi(feed) {
+        let response;
+        let user = feed.activity.actor_user;
+        if (!user) {
+            user = feed.activity.user;
+        }
+        let name = user.phone_number;
+        if (user.name) {
+            name = user.name;
+        }
+        response = {
+            id: feed._id,
+            fid: feed._id,
+            key: feed._id,
+            actor: user._id,
+            showSocial: false,
+            description: feed.activity.message,
+            date: feed.activity.timestamp
+        };
+        if (user.pictures && user.pictures.length > 0) {
+            response.logo = {
+                uri: user.pictures[user.pictures.length - 1].pictures[0]
+            }
+        } else {
+            response.logo = noPic;
+        }
+        response.name = name;
+        if (feed.activity.action === 'group_follow') {
+            response.description = "jonied the group";
+        }
+        response.itemType = 'MESSAGE';
+        return response;
+    }
+
+    createBusinessUo(feed) {
         let response = {};
         if (!feed.activity.actor_user) {
             return undefined;
@@ -174,14 +180,14 @@ class FeedConverter {
         return responseFeed;
     }
 
-    static getInstance(feed) {
+     getInstance(feed) {
         if (feed.activity) {
             return feed.activity.instance;
         }
         return feed;
     }
 
-    static getPromotion(feed) {
+     getPromotion(feed) {
         if (feed.activity) {
             return feed.activity.promotion;
         }
@@ -279,7 +285,7 @@ class FeedConverter {
         return responseFeed;
     }
 
-    static createPromotionAttributes(promotion, type) {
+     createPromotionAttributes(promotion, type) {
         let response = {};
         response.name = promotion.name;
         response.description = promotion.description;
@@ -340,7 +346,7 @@ class FeedConverter {
         return response
     }
 
-    static createMessage(user, message) {
+     createMessage(user, message) {
         let currentTime = new Date().toLocaleString();
         let response = {
             id: 100,
