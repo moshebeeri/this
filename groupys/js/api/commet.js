@@ -1,63 +1,33 @@
-/**
- * Created by roilandshut on 23/07/2017.
- */
-/**
- * Created by roilandshut on 26/03/2017.
- */
-/**
- * Created by roilandshut on 26/03/2017.
- */
-import store from 'react-native-simple-store';
-import Timer from './LogTimer'
-
+import Timer from "./LogTimer";
 let timer = new Timer();
-const noPic = require('../../images/client_1.png');
-import  FeedUiConverter from './feed-ui-converter'
-let feedUiConverter = new FeedUiConverter();
 class CommentApi {
-
-
-
-    createComment(group,instance,comment,token){
-
+    createComment(group, instance, comment, token) {
         return new Promise(async(resolve, reject) => {
-
             try {
                 let from = new Date();
                 let request = {
-
                     entities: [
-                            {group:group},
-                            {instance:instance},
-                            ]
+                        {group: group},
+                        {instance: instance},
+                    ]
                     ,
-                        message:comment
-                    };
-
-
-
-
+                    message: comment
+                };
                 const response = await fetch(`${server_host}/api/comments/`, {
                     method: 'POST',
                     headers: {
                         'Accept': 'application/json, text/plain, */*',
                         'Content-Type': 'application/json;charset=utf-8',
                         'Authorization': 'Bearer ' + token
-
                     },
                     body: JSON.stringify(request)
-
-                })
-
-
+                });
                 if (response.status == '401') {
                     reject(response);
                     return;
                 }
-
                 let responseData = await response.json();
-                timer.logTime(from,new Date(),'comments','/')
-
+                timer.logTime(from, new Date(), 'comments', '/');
                 resolve(responseData);
             }
             catch (error) {
@@ -66,47 +36,31 @@ class CommentApi {
                 reject(error);
             }
         });
-
-
-
     }
 
-    createGlobalComment(entities,comment,token){
-
+    createGlobalComment(entities, comment, token) {
         return new Promise(async(resolve, reject) => {
-
             try {
                 let from = new Date();
                 let request = {
-
-
-                    message:comment
+                    message: comment
                 };
-
-
-                request.entities = entities
-
+                request.entities = entities;
                 const response = await fetch(`${server_host}/api/comments/`, {
                     method: 'POST',
                     headers: {
                         'Accept': 'application/json, text/plain, */*',
                         'Content-Type': 'application/json;charset=utf-8',
                         'Authorization': 'Bearer ' + token
-
                     },
                     body: JSON.stringify(request)
-
-                })
-
-
+                });
                 if (response.status == '401') {
                     reject(response);
                     return;
                 }
-
                 let responseData = await response.json();
-                timer.logTime(from,new Date(),'comments','/')
-
+                timer.logTime(from, new Date(), 'comments', '/');
                 resolve(responseData);
             }
             catch (error) {
@@ -115,88 +69,30 @@ class CommentApi {
                 reject(error);
             }
         });
-
-
-
     }
 
-    getComment(entities,token,skip){
-
-            return new Promise(async(resolve, reject) => {
-
-                try {
-                    let from = new Date();
-                    let request =  {};
-                    request.entities = entities;
-
-
-                    const response = await fetch(`${server_host}/api/comments/find/`+skip+'/' +10, {
-                        method: 'POST',
-                        headers: {
-                            'Accept': 'application/json, text/plain, */*',
-                            'Content-Type': 'application/json;charset=utf-8',
-                            'Authorization': 'Bearer ' + token
-
-                        },
-                        body: JSON.stringify(request)
-
-                    })
-
-
-                    if (response.status == '401') {
-                        reject(response);
-                        return;
-                    }
-
-                    let responseData = await response.json();
-                   timer.logTime(from,new Date(),'comments','/skip/limit')
-
-                    resolve(responseData);
-                }
-                catch (error) {
-
-                    // console.log('There has been a problem with your fetch operation: ' + error.message);
-                    reject(error);
-                }
-            });
-
-    }
-
-    getGroupComments(group,token,skip,limit) {
+    getComment(entities, token, skip) {
         return new Promise(async(resolve, reject) => {
-
             try {
                 let from = new Date();
-                let request = {
-                    entities: [
-                        {group:group._id},
-
-                    ]
-                };
-
-
-
-                const response = await fetch(`${server_host}/api/comments/conversed/instance/`+skip+'/' +limit, {
+                let request = {};
+                request.entities = entities;
+                const response = await fetch(`${server_host}/api/comments/find/` + skip + '/' + 10, {
                     method: 'POST',
                     headers: {
                         'Accept': 'application/json, text/plain, */*',
                         'Content-Type': 'application/json;charset=utf-8',
                         'Authorization': 'Bearer ' + token
-
                     },
                     body: JSON.stringify(request)
-
-                })
-
-
+                });
                 if (response.status == '401') {
                     reject(response);
                     return;
                 }
-
                 let responseData = await response.json();
+                timer.logTime(from, new Date(), 'comments', '/skip/limit');
                 resolve(responseData);
-
             }
             catch (error) {
 
@@ -204,44 +100,32 @@ class CommentApi {
                 reject(error);
             }
         });
-
-
     }
-    getInstanceGroupComments(group,instance,size,token) {
-        return new Promise(async(resolve, reject) => {
 
+    getGroupComments(group, token, skip, limit) {
+        return new Promise(async(resolve, reject) => {
             try {
                 let from = new Date();
                 let request = {
                     entities: [
-                        {group:group},
-                        {instance:instance},
+                        {group: group._id},
                     ]
                 };
-
-
-
-                const response = await fetch(`${server_host}/api/comments/find/`+size +'/' +10, {
+                const response = await fetch(`${server_host}/api/comments/conversed/instance/` + skip + '/' + limit, {
                     method: 'POST',
                     headers: {
                         'Accept': 'application/json, text/plain, */*',
                         'Content-Type': 'application/json;charset=utf-8',
                         'Authorization': 'Bearer ' + token
-
                     },
                     body: JSON.stringify(request)
-
                 })
-
-
                 if (response.status == '401') {
                     reject(response);
                     return;
                 }
-
+                timer.logTime(from, new Date(), 'comments', 'api/comments/conversed/instance');
                 let responseData = await response.json();
-               timer.logTime(from,new Date(),'comments','/skip/limit')
-
                 resolve(responseData);
             }
             catch (error) {
@@ -250,10 +134,39 @@ class CommentApi {
                 reject(error);
             }
         });
-
-
     }
 
+    getInstanceGroupComments(group, instance, size, token) {
+        return new Promise(async(resolve, reject) => {
+            try {
+                let from = new Date();
+                let request = {
+                    entities: [
+                        {group: group},
+                        {instance: instance},
+                    ]
+                };
+                const response = await fetch(`${server_host}/api/comments/find/` + size + '/' + 10, {
+                    method: 'POST',
+                    headers: {
+                        'Accept': 'application/json, text/plain, */*',
+                        'Content-Type': 'application/json;charset=utf-8',
+                        'Authorization': 'Bearer ' + token
+                    },
+                    body: JSON.stringify(request)
+                });
+                if (response.status == '401') {
+                    reject(response);
+                    return;
+                }
+                let responseData = await response.json();
+                timer.logTime(from, new Date(), 'comments', '/skip/limit');
+                resolve(responseData);
+            }
+            catch (error) {
+                reject(error);
+            }
+        });
+    }
 }
-
 export default CommentApi;
