@@ -1,49 +1,36 @@
-
-import React, { Component } from 'react';
-import { Image, Platform} from 'react-native';
-
-import { actions } from 'react-native-navigation-redux-helpers';
-import { Container, Content, Text, InputGroup, Input,Thumbnail,Button,Picker,Right,Item, Left,Icon,Header,Footer,Body, View,Card,CardItem } from 'native-base';
-import GenericFeedManager from '../generic-feed-manager/index'
-import GenericFeedItem from '../generic-feed-manager/generic-feed'
-
-import { bindActionCreators } from "redux";
-import { connect } from 'react-redux';
+import React, {Component} from "react";
+import {Image, Platform} from "react-native";
+import {actions} from "react-native-navigation-redux-helpers";
+import GenericFeedManager from "../generic-feed-manager/index";
+import GenericFeedItem from "../generic-feed-manager/generic-feed";
+import {bindActionCreators} from "redux";
+import {connect} from "react-redux";
 import * as feedsAction from "../../actions/feedsMain";
-
-import { getFeeds } from '../../selectors/feedSelector'
+import {getFeeds} from "../../selectors/feedSelector";
 import * as userAction from "../../actions/user";
-
-import { createSelector } from 'reselect'
-
-
-
+import {createSelector} from "reselect";
 class Feed extends Component {
-
-      constructor(props) {
+    constructor(props) {
         super(props);
-      }
-     componentWillMount() {
-         const { feeds,actions} = this.props;
-
-        // actions.setNextFeeds(feeds)
-
-        this.props.userActions.fetchUsersFollowers();
     }
 
-
-
-
+    componentWillMount() {
+        const {feeds, actions, feedState} = this.props;
+        if (feedState.firstTime) {
+            actions.setNextFeeds(feeds);
+            this.props.userActions.fetchUsersFollowers();
+        }
+    }
 
     render() {
-        const { navigation,feedState,feeds,userFollower,actions,token ,user} = this.props;
+        const {navigation, feedState, feeds, userFollower, actions, token, user} = this.props;
         return (
             <GenericFeedManager
                 navigation={navigation}
 
-                loadingDone = {feedState.loadingDone}
+                loadingDone={feedState.loadingDone}
                 showTopLoader={feedState.showTopLoader}
-                userFollowers= {userFollower}
+                userFollowers={userFollower}
                 feeds={feeds}
                 actions={actions}
                 token={token}
@@ -55,25 +42,18 @@ class Feed extends Component {
 
         );
     }
-
-
-
 }
-
 const mapStateToProps = state => {
     return {
-        feedState:state.feeds,
-        token:state.authentication.token,
-        userFollower:state.user.followers,
-        user:state.user.user,
+        feedState: state.feeds,
+        token: state.authentication.token,
+        userFollower: state.user.followers,
+        user: state.user.user,
         feeds: getFeeds(state)
     }
 }
-
 export default connect(
     mapStateToProps,
-
-
     (dispatch) => ({
         actions: bindActionCreators(feedsAction, dispatch),
         userActions: bindActionCreators(userAction, dispatch)

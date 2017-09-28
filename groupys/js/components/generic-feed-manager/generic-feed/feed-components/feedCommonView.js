@@ -65,6 +65,9 @@ export function createSaveButton(item, save) {
 }
 
 export function createShareButton(styles, showUsers, item) {
+    if(!item.social){
+        return undefined;
+    }
     const shares = new String(item.social.shares);
     if (item.social.share) {
         return <Button transparent style={styles.promotion_iconView} onPress={showUsers}>
@@ -97,6 +100,9 @@ export function createStyle() {
 }
 
 export function createLikeButton(item,styles,like,unlike,token){
+    if(!item.social){
+        return undefined;
+    }
     const likes = new String(item.social.numberLikes);
     if (item.social && item.social.like == true) {
         return <Button transparent style={styles.promotion_iconView} onPress={() => unlike(item.id,token)}>

@@ -1,95 +1,64 @@
 /**
  * Created by roilandshut on 08/06/2017.
  */
-
-
-import FeedApi from "../api/feed"
+import FeedApi from "../api/feed";
+import UserApi from "../api/user";
+import PtomotionApi from "../api/promotion";
+import ActivityApi from "../api/activity";
+import * as actions from "../reducers/reducerActions";
+import * as assemblers from "./collectionAssembler";
 let feedApi = new FeedApi();
-
-import UserApi from "../api/user"
 let userApi = new UserApi();
-import PtomotionApi from "../api/promotion"
 let promotionApi = new PtomotionApi();
-import ActivityApi from "../api/activity"
 let activityApi = new ActivityApi();
-import * as actions from '../reducers/reducerActions';
-import * as assemblers from './collectionAssembler';
-async function fetchFeedsFromServer(feeds,dispatch,token,user){
+async function fetchFeedsFromServer(feeds, dispatch, token, user) {
     try {
-
         let response = null;
-        if( _.isEmpty(feeds)){
-            response =  await feedApi.getAll('down','start',token,user);
-        }else{
+        if (_.isEmpty(feeds)) {
+            response = await feedApi.getAll('down', 'start', token, user);
+        } else {
             let keys = Object.keys(feeds)
-            let id = keys[keys.length-1]
-            response =  await feedApi.getAll('down',feeds[id].fid,token,user);
+            let id = keys[keys.length - 1]
+            response = await feedApi.getAll('down', feeds[id].fid, token, user);
         }
-
-        if(!response)
+        if (!response)
             return;
-
-        if(response.length == 0){
+        if (response.length == 0) {
             return;
         }
-
-        let disassemblerItems = response.map(item => assemblers.disassembler(item,dispatch))
-
-        disassemblerItems.forEach(item => dispatch({
-            type: actions.UPSERT_FEEDS,
-            item:item
-        }))
-
-
-
+        let disassemblerItems = response.map(item => assemblers.disassembler(item, dispatch))
+        dispatch({
+            type: actions.UPSERT_FEEDS_ITEMS,
+            items: disassemblerItems
+        });
         ;
-
-
     } catch (error) {
         dispatch({
             type: actions.NETWORK_IS_OFFLINE,
         });
     }
-
-
 }
-
-
-
-async function fetchTopList(id,token,user,dispatch){
+async function fetchTopList(id, token, user, dispatch) {
     try {
-
-        let response  =  await feedApi.getAll('up',id,token,user);
-        if(!response)
+        let response = await feedApi.getAll('up', id, token, user);
+        if (!response)
             return;
-
-        if(response.length == 0){
+        if (response.length == 0) {
             return;
         }
-        let disassemblerItems = response.map(item => assemblers.disassembler(item,dispatch))
-
+        let disassemblerItems = response.map(item => assemblers.disassembler(item, dispatch))
         disassemblerItems.forEach(item => dispatch({
             type: actions.UPSERT_FEEDS_TOP,
-            item:item
+            item: item
         }))
-
-
-
     } catch (error) {
         dispatch({
             type: actions.NETWORK_IS_OFFLINE,
         });
     }
 }
-
-
-
-
-
-
-export function fetchTop(feeds,token,user){
-
-    return async function (dispatch, getState){
+export function fetchTop(feeds, token, user) {
+    return async function (dispatch, getState) {
         try {
             if (getState().feeds.showTopLoader) {
                 return;
@@ -97,13 +66,11 @@ export function fetchTop(feeds,token,user){
             await dispatch({
                 type: actions.FEED_SHOW_TOP_LOADER,
                 showTopLoader: true,
-
             });
             await fetchTopList(feeds[0].id, token, user, dispatch);
             await dispatch({
                 type: actions.FEED_SHOW_TOP_LOADER,
                 showTopLoader: false,
-
             });
         } catch (error) {
             dispatch({
@@ -111,34 +78,20 @@ export function fetchTop(feeds,token,user){
             });
         }
     }
-
 }
-
-
-
-
-
-async function getUserFollowers(dispatch){
+async function getUserFollowers(dispatch) {
     try {
         let users = await userApi.getUserFollowers();
-
         dispatch({
             type: 'GET_USER_FOLLOWERS',
             followers: users
-
         });
-
-
-
     } catch (error) {
         dispatch({
             type: actions.NETWORK_IS_OFFLINE,
         });
     }
-
 }
-
-
 export function updateHomeFeed(feed) {
     return function (dispatch, getState) {
         dispatch({
@@ -147,87 +100,68 @@ export function updateHomeFeed(feed) {
         });
     }
 }
-
-
-export function fetchUsers(){
-    return function (dispatch, getState){
-        dispatch|(getUser(dispatch,));
+export function fetchUsers() {
+    return function (dispatch, getState) {
+        dispatch | (getUser(dispatch,));
     }
-
 }
-export function fetchUsersFollowers(){
-    return function (dispatch, getState){
-        dispatch|(getUserFollowers(dispatch,));
+export function fetchUsersFollowers() {
+    return function (dispatch, getState) {
+        dispatch | (getUserFollowers(dispatch,));
     }
-
 }
-
-
-
-async function getAll(dispatch){
+async function getAll(dispatch) {
     try {
         let response = await groupsApi.getAll();
-        if(response.length > 0) {
-
+        if (response.length > 0) {
             dispatch({
                 type: 'GET_GROUPS',
                 groups: response,
-
             });
         }
-
-
     } catch (error) {
         dispatch({
             type: actions.NETWORK_IS_OFFLINE,
         });
     }
-
 }
-
-export function setNextFeeds(feeds){
-    return async function (dispatch,getState){
+export function setNextFeeds(feeds) {
+    return async function (dispatch, getState) {
         const token = getState().authentication.token
         const user = getState().user.user
-        if(!user)
+        if (!user)
             return
         let showLoadingDone = false;
-        if( _.isEmpty(feeds) && !getState().feeds.loadingDone)  {
+        if (_.isEmpty(feeds) && getState().feeds.firstTime) {
             dispatch({
-                type: actions.FEED_LOADING_DONE,
-                loadingDone: false,
-
-
+                type: actions.FIRST_TIME_FEED,
             });
+            console.log('first time feeds');
+            await fetchFeedsFromServer(feeds, dispatch, token, user)
             showLoadingDone = true;
         }
-        if(feeds && feeds.length > 0) {
-            let length =  getState().feeds.feedView.length
-
+        if (feeds && feeds.length > 0) {
+            let length = getState().feeds.feedView.length
             let id = getState().feeds.feedView[length - 1]
-
-            if(id === getState().feeds.lastfeed)
-                return;
-
-            dispatch({
-                type: actions.LAST_FEED_DOWN,
-                id: id,
-
-            });
+            if (id !== getState().feeds.lastfeed) {
+                console.log('second time feeds');
+                dispatch({
+                    type: actions.LAST_FEED_DOWN,
+                    id: id,
+                });
+                await fetchFeedsFromServer(feeds, dispatch, token, user)
+            }
         }
-        await fetchFeedsFromServer(feeds,dispatch,token,user)
-        if(showLoadingDone && !getState().feeds.loadingDone) {
+        if (showLoadingDone && !getState().feeds.loadingDone) {
             dispatch({
                 type: actions.FEED_LOADING_DONE,
                 loadingDone: true,
-
             });
         }
     }
 }
-
-export function like(id){
-    return async function (dispatch, getState){
+export function like(id) {
+    return async function (dispatch, getState) {
         try {
             const token = getState().authentication.token
             dispatch({
@@ -242,7 +176,6 @@ export function like(id){
         }
     }
 }
-
 export const unlike = (id) => {
     return async function (dispatch, getState) {
         try {
@@ -259,8 +192,6 @@ export const unlike = (id) => {
         }
     }
 };
-
-
 export function saveFeed(id) {
     return async function (dispatch, getState) {
         try {
@@ -276,25 +207,23 @@ export function saveFeed(id) {
         }
     }
 }
-
 export function setUserFollows() {
     return async function (dispatch, getState) {
-
         try {
-           const token = getState().authentication.token
+            const token = getState().authentication.token
             let response = await userApi.getUserFollowers(token);
             dispatch({
                 type: actions.USER_FOLLOW,
                 followers: response
             });
-        }catch (error){
+        } catch (error) {
             dispatch({
                 type: actions.NETWORK_IS_OFFLINE,
             });
         }
     }
 }
-export function shareActivity(id,activityId,users,token) {
+export function shareActivity(id, activityId, users, token) {
     return async function (dispatch, getState) {
         try {
             users.forEach(function (user) {
@@ -312,16 +241,12 @@ export function shareActivity(id,activityId,users,token) {
         }
     }
 }
-
-
-
-export function nextLoad(){
+export function nextLoad() {
     return function (dispatch, getState) {
         dispatch({
             type: 'FEED_LOADING',
         });
     }
-
 }
 
 

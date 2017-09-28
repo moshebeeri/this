@@ -68,17 +68,29 @@ class FeedConverter {
         if (!name) {
             name = feed.activity.actor_user.phone_number;
         }
+
+        let socialState = {
+            like: false,
+            numberLikes: 0,
+            follow: 0,
+            shares: 0,
+            share: false,
+        }
+        if(feed.activity.business.social_state){
+            socialState = {
+                like: feed.activity.business.social_state.like,
+                numberLikes: feed.activity.business.social_state.likes,
+                follow: feed.activity.business.social_state.follow,
+                shares: feed.activity.business.social_state.shares,
+                share: feed.activity.business.social_state.share,
+            }
+        }
         if (feed.activity.business.pictures && feed.activity.business.pictures[0]) {
             response = {
                 id: feed.activity.business._id,
                 fid: feed._id,
                 key: feed._id,
-                social: {
-                    like: feed.activity.actor_user.social_state.like,
-                    numberLikes: feed.activity.actor_user.social_state.likes,
-                    follow: feed.activity.actor_user.social_state.follow,
-                    shares: feed.activity.actor_user.social_state.shares
-                },
+                social:socialState,
                 actor: feed.activity.actor_user._id,
                 itemTitle: name + ' ' + feed.activity.action,
                 name: feed.activity.business.name,
@@ -92,12 +104,7 @@ class FeedConverter {
             response = {
                 id: feed.activity.business._id,
                 fid: feed._id, key: feed._id,
-                social: {
-                    like: feed.activity.actor_user.social_state.like,
-                    numberLikes: feed.activity.actor_user.social_state.likes,
-                    follow: feed.activity.actor_user.social_state.follow,
-                    shares: feed.activity.actor_user.social_state.shares
-                },
+                social:socialState,
                 name: feed.activity.business.name,
                 actor: feed.activity.actor_user._id,
                 itemTitle: name + ' ' + feed.activity.action,

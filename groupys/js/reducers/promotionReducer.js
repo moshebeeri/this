@@ -31,6 +31,12 @@ export default function promotion(state = initialState, action) {
     switch (action.type) {
         case actions.UPSERT_PROMOTION:
             let currentPromotions =promotionsState.promotions;
+            if(action.item.social_state || !currentPromotions[action.item._id]){
+                currentPromotions[action.item._id] = action.item;
+            }else{
+                action.item.social_state = currentPromotions[action.item._id].social_state;
+                currentPromotions[action.item._id] = action.item;
+            }
 
             currentPromotions[action.item._id] = action.item;
             return promotionsState;
