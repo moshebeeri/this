@@ -89,7 +89,6 @@ GraphModel.prototype.unrelate = function unrelate(from, name, to){
   });
 };
 
-
 //see http://stackoverflow.com/questions/24097031/cypher-returning-boolean-after-checking-whether-relationship-exist-between-two-n
 GraphModel.prototype.is_related_ids = function relate(from, name, to, callback){
   let query = util.format("MATCH (me{_id:'%s'})-[f:%s]->(follower{_id:'%s'}) return sign(count(f)) as exists", from, name, to);
@@ -99,6 +98,32 @@ GraphModel.prototype.is_related_ids = function relate(from, name, to, callback){
   });
 };
 
+GraphModel.prototype.is_related_saved_instance = function(user_id, rel, instance_id, callback) {
+  let query = `MATCH (u:user{_id:'${user_id}' })-[rel:${rel}]->(savedInstance:SavedInstance)-[sf:SAVE_OF]->(instance:instance{_id:'${instance_id}'}) 
+  return sign(count(savedInstance)) as exists`;
+  db.query(query, function(err, result) {
+    if (err) { return callback(err) }
+    callback(null, result[0].exists !== 0)
+  });
+};
+/**
+*
+ let query = util.format("MATCH ()-[f:%s]->({_id:'%s'}) return count(f) as count",
+ name, to);
+ db.query(query, function(err, result) {
+    if (err) { return callback(err) }
+    callback(null, result[0].count)
+  });
+*
+**/
+GraphModel.prototype.saved_instance_rel_count = function(item_id, rel, callback){
+  let query = `MATCH (u:user)-[rel:${rel}]->(savedInstance:SavedInstance)-[sf:SAVE_OF]->(instance:instance{_id:'${item_id}'}) 
+  return count(savedInstance) as count`;
+  db.query(query, function(err, result) {
+    if (err) { return callback(err) }
+    callback(null, result[0].count)
+  });
+};
 
 //"MATCH (me{_id:'%s'})-[f:%s]->(follower{_id:'%s'}) return sign(count(f))",
 GraphModel.prototype.sample_count_ids = function sample_count_ids(from, name, limit, callback){

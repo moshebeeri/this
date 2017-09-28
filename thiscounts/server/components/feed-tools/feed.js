@@ -34,47 +34,29 @@ exports.fetch_feed = function(userId, query_builder, Model, res) {
 };
 
 //see http://www.markhneedham.com/blog/2013/02/24/neo4jcypher-combining-count-and-collect-in-one-query/
-//WOW !!! MATCH (me{_id:'56bb06e0875e4eca72774728'})-[f:FOLLOW]->(followers) with distinct(followers) limit 2 return collect(followers), count(followers)
 function social_state(user_id, item_id, callback) {
-  //http://stackoverflow.com/questions/24097031/cypher-returning-boolean-after-checking-whether-relationship-exist-between-two-n
-  //MATCH (n:Node {id: {parameter1}})-[r:someType]-(m:Node {id: {parameter2}}) RETURN SIGN(COUNT(r))
-
-  //query = util.format("MATCH (p {_id: '%s'})-[:FOLLOW]->(followers) return COLLECT(followers) as followers, COUNT(followers) as followers_count",item_id);
-  //query = util.format("MATCH (p {_id: '%s'})-[:SHARED]->(items) return COLLECT(followers) as followers, COUNT(items) as items",item_id);
-  //query = util.format("MATCH (u {_id: '%s'})-[:OWNS]->(biz) return biz.name as name, biz._id as _id, ",item_id);
-
-//see http://stackoverflow.com/questions/13408111/neo4j-cypher-using-limit-and-collect-or-using-limit-twice-in-the-same-query
-//  q="   START me=node:node_auto_index(UserIdentifier='USER0')                                   \
-//        MATCH me-[rels:FOLLOWS*0..1]-myfriend-[:POSTED*]-statusupdates<-[r?:LIKE]-likers         \
-//        WITH distinct likers                                                                     \
-//      // you can also order by something here, if you want.                                      \
-//        LIMIT 6                                                                                  \
-//        START me=node:node_auto_index(UserIdentifier='USER0')                                    \
-//      // at this point, likers is already bound, so it's limited to the 6                        \
-//        MATCH me-[rels:FOLLOWS*0..1]-myfriend-[:POSTED*]-statusupdates<-[r?:LIKE]-likers         \
-//        RETURN distinct statusupdates, likers, myfriend                                          \
-//        ORDER BY statusupdates.postTime                                                          \
-//        LIMIT 25;"
 
   async.parallel({
+      saved: function (callback) {
+        graphModel.is_related_saved_instance(user_id, 'SAVED', item_id, callback);
+      },
+      realized: function (callback) {
+        graphModel.is_related_saved_instance(user_id, 'REALIZED', item_id, callback);
+      },
       like: function (callback) {
         graphModel.is_related_ids(user_id, 'LIKE', item_id, callback);
       },
       share: function (callback) {
         graphModel.is_related_ids(user_id, 'SHARE', item_id, callback);
       },
-      saved: function (callback) {
-        graphModel.is_related_ids(user_id, 'SAVED', item_id, callback);
-      },
-      realized: function (callback) {
-        graphModel.is_related_ids(user_id, 'REALIZED', item_id, callback);
-      },
       follow: function (callback) {
         graphModel.is_related_ids(user_id, 'FOLLOW', item_id, callback);
       },
-      use: function (callback) {
-        //TODO: check instance (promotion)<-[INSTANCE]-(instance)<-[USE]-(user)
-        graphModel.is_related_ids(user_id, 'USE', item_id, callback);
+      saves: function (callback) {
+        graphModel.saved_instance_rel_count(item_id, 'SAVED', callback);
+      },
+      realizes: function (callback) {
+        graphModel.saved_instance_rel_count(item_id, 'REALIZED', callback);
       },
       likes: function (callback) {
         graphModel.count_in_rel_id('LIKE', item_id, callback);
@@ -82,9 +64,10 @@ function social_state(user_id, item_id, callback) {
       shares: function (callback) {
         graphModel.count_in_rel_id('SHARE', item_id, callback);
       },
-      usages: function (callback) {
-        graphModel.count_in_rel_id('USE', item_id, callback);
-      }
+      followers: function (callback) {
+        graphModel.count_in_rel_id('FOLLOW', item_id, callback);
+      },
+
     },
     function (err, state) {
       if (err) {

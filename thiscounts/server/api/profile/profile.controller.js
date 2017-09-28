@@ -11,6 +11,8 @@ let User = require('../user/user.model');
 let Card = require('../card/card.model');
 let Business = require('../business/business.model');
 let Instance = require('../instance/instance.model');
+let SavedInstance = require('../savedInstance/savedInstance.model');
+
 let graphTools = require('../../components/graph-tools');
 let graphModel = graphTools.createGraphModel('promotion');
 
@@ -159,26 +161,23 @@ function instances_by_relation_async(rel, user_id, paginate, callback) {
       return callback(err)
     }
     let _ids_map = g_instances.reduce(function (map, obj) {
-      map[obj.instance._id] = obj;
+      map[obj.savedInstance._id] = obj;
       return map;
     }, {});
 
-    Instance.find({}).where('_id')
+    SavedInstance.find({}).where('_id')
       .in(Object.keys(_ids_map))
-      .populate('promotion')
       .exec(function (err, instances) {
-      if (err) {
-        callback(err)
-      }
-      populatePromotionEntity(instances, function (err, instances) {
-        let ret = instances.map(function (instance) {
-          return {instance: instance, graph: _ids_map[instance._id]}
-        });
-        return callback(null, ret);
-      })
-    });
+      if (err) {callback(err)}
+      let ret = instances.map(function (instance) {
+        return {instance: instance, graph: _ids_map[instance._id]}
+      });
+      return callback(null, ret);
+    })
   });
 }
+//populatePromotionEntity(instances, function (err, instances) {
+//});
 
 function instances_by_relation(rel, req, res) {
   instances_by_relation_async(rel, req.user._id, utils.to_paginate(req), function (err, ret) {
