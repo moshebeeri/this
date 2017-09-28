@@ -390,6 +390,7 @@ exports.realize = function (req, res) {
                  return promotion,instance,rel,user, savedInstance`;
 
   // const query = `MATCH (promotion:promotion)<-[:INSTANCE_OF]-(instance:instance)<-[sf:SAVE_OF]-(savedInstance:SavedInstance)<-[rel:SAVED{code: '${req.params.code}'}]-(user:user)
+  // const query = `MATCH (promotion:promotion)<-[:INSTANCE_OF]-(instance:instance)<-[sf:SAVE_OF]-(savedInstance:SavedInstance)<-[rel:SAVED{code: '${req.params.code}'}]-(user:user)
   //               return promotion,instance, savedInstance, rel,user`;
   graphModel.query(query, function (err, objects) {
     if (err) return handleError(res, err);
@@ -475,7 +476,7 @@ exports.punch = function (req, res) {
 };
 
 exports.qrcode = function (req, res) {
-  const query = `MATCH (instance:instance{_id:"${req.params.id}"})<-[rel:SAVED]-(user:user{_id:"${req.user._id}"}) return rel.code`;
+  const query = `MATCH (savedInstance:SavedInstance{_id:"${req.params.id}"})<-[rel:SAVED]-(user:user{_id:"${req.user._id}"}) return rel.code`;
   graphModel.query(query, function (err, codes) {
     if (err) return handleError(res, err);
     if (codes.length === 0)
