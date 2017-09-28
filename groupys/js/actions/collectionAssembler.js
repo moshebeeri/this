@@ -1,92 +1,71 @@
-/**
- * Created by roilandshut on 04/09/2017.
- */
-
-
-
-
-
-const dataSet = {
-
-};
-
+const dataSet = {};
 const fieldName2CollectionName = {
     'actor_user': 'user',
     'user': 'user',
     'actor_group': 'group',
     'group': 'group',
-
     'promotion': 'promotion',
     'instance': 'instance',
     'product': 'product',
     'business': 'business',
     'activity': 'activity',
-    'message_activity':'activity',
-
-    'actor_business':'business',
+    'message_activity': 'activity',
+    'actor_business': 'business',
 };
-
 const nameToCollections = {
-    'promotion':'promotions',
-    'actor_business':'businesses',
-    'business':'businesses',
-    'activity':'activities',
-    'instance':'instances',
-    'actor_user':'user',
-    'user':'user',
-
-
+    'promotion': 'promotions',
+    'actor_business': 'businesses',
+    'business': 'businesses',
+    'activity': 'activities',
+    'instance': 'instances',
+    'actor_user': 'user',
+    'user': 'user',
+};
+function collectionName(key) {
+    return fieldName2CollectionName[key];
 }
-
-
-
-function collectionName(key) {return fieldName2CollectionName[key];}
-function nameToCollection(key) {return nameToCollections[key];}
-
-
-function dataSetCollection(dispacth,collection,object){
-    let actionType = 'UPSERT'+collection;
+function nameToCollection(key) {
+    return nameToCollections[key];
+}
+function dataSetCollection(dispacth, collection, object) {
+    let actionType = 'UPSERT' + collection;
     dispacth({
         type: actionType,
         item: object,
     });
 }
-
-function dataGetCollection(collections,collection){
+function dataGetCollection(collections, collection) {
     return collections[collection];
 }
-
-export function immutableObject(obj){
-    return{
+export function immutableObject(obj) {
+    return {
         ...obj
     }
 }
-export function disassembler(input,dispatch){
+export function disassembler(input, dispatch) {
     let obj = immutableObject(input);
     Object.keys(obj).forEach(key => {
         let collection = collectionName(key);
-        if( obj[key] && typeof obj[key] === 'object'){
-            if(!obj[key]._id ) {
+        if (obj[key] && typeof obj[key] === 'object') {
+            if (!obj[key]._id) {
                 obj[key] = disassembler(obj[key], dispatch);
-            }else if(collection){
+            } else if (collection) {
                 let objKey = obj[key];
                 obj[key] = obj[key]._id;
                 objKey = disassembler(objKey, dispatch);
-                dataSetCollection(dispatch,collection,objKey);
+                dataSetCollection(dispatch, collection, objKey);
             }
         }
     });
     return obj;
-
 }
-
-export function assembler(input,collections){
+export function assembler(input, collections) {
     let obj = immutableObject(input);
     Object.keys(obj).forEach(key => {
         let collection = nameToCollection(key);
-        if(!collection){
-            if(obj[key] && typeof obj[key] === 'object')
-                obj[key] = assembler(obj[key],collections);
+        if (!collection) {
+            if (obj[key] && typeof obj[key] === 'object')
+                obj[key] = assembler(obj[key], collections);
         } else {
             obj[key] = dataGetCollection(collections, collection)[obj[key]];
             if (!obj[key]) return;
@@ -94,5 +73,4 @@ export function assembler(input,collections){
         }
     });
     return obj;
-
 }

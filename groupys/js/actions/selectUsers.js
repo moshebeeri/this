@@ -1,31 +1,24 @@
-
-import * as actions from '../reducers/reducerActions';
-
-
-export function selectUser(user){
-    return function (dispatch){
+import * as actions from "../reducers/reducerActions";
+export function selectUser(user) {
+    return function (dispatch) {
         dispatch({
             type: actions.USER_SELECT,
-            user:user
+            user: user
         });
     }
-
 }
-export function unselectUser(user){
-    return function (dispatch){
+export function unselectUser(user) {
+    return function (dispatch) {
         dispatch({
             type: actions.USER_UNSELECT,
-            user:user
+            user: user
         });
     }
-
 }
-
-export function resetForm(){
-    return function (dispatch){
+export function resetForm() {
+    return function (dispatch) {
         dispatch({
             type: actions.USER_SELECT_RESET,
         });
     }
-
 }

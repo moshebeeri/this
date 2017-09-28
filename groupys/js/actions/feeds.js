@@ -1,73 +1,54 @@
 /**
  * Created by roilandshut on 08/06/2017.
  */
-
-import GroupsApi from "../api/groups"
+import GroupsApi from "../api/groups";
+import UserApi from "../api/user";
+import store from "react-native-simple-store";
 let groupsApi = new GroupsApi();
-
-import UserApi from "../api/user"
 let userApi = new UserApi();
-import store from 'react-native-simple-store';
-
-async function fetchList(action,feeds,api,dispatch,groupid){
+async function fetchList(action, feeds, api, dispatch, groupid) {
     try {
-
         let response = null;
-        if(feeds.length == 0 ){
-            response =  await api.getAll('down','start');
-        }else{
-            response =  await api.getAll('down',feeds[feeds.length-1].id);
+        if (feeds.length == 0) {
+            response = await api.getAll('down', 'start');
+        } else {
+            response = await api.getAll('down', feeds[feeds.length - 1].id);
         }
-
-        if(!response){
-            dispatchDone(dispatch,action,groupid);
+        if (!response) {
+            dispatchDone(dispatch, action, groupid);
             return
         }
-
-
-        if(response.length > 0 && feeds.length > 0) {
-            feeds =  addToRows(feeds,response, false);
-
-        }else{
+        if (response.length > 0 && feeds.length > 0) {
+            feeds = addToRows(feeds, response, false);
+        } else {
             feeds = response;
         }
-
-        if( feeds.length > 0) {
-            console.log(feeds);
-            if(groupid){
+        if (feeds.length > 0) {
+            if (groupid) {
                 dispatch({
                     type: action,
                     feeds: feeds,
                     showTopLoader: false,
-                    groupid:groupid
+                    groupid: groupid
                 });
-            }else {
+            } else {
                 dispatch({
                     type: action,
                     feeds: feeds,
                     showTopLoader: false
                 });
             }
-
             return;
         }
-
-        dispatchDone(dispatch,action,groupid);
-
-
+        dispatchDone(dispatch, action, groupid);
     } catch (error) {
         dispatch({
             type: actions.NETWORK_IS_OFFLINE,
         });
     }
-
-
-
 }
-
-function dispatchDone(dispatch,action,groupid){
-
-    switch (action){
+function dispatchDone(dispatch, action, groupid) {
+    switch (action) {
         case 'GET_FEEDS':
             dispatch({
                 type: 'FEED_LOADING_DONE',
@@ -81,82 +62,61 @@ function dispatchDone(dispatch,action,groupid){
         case 'GET_GROUP_FEEDS':
             dispatch({
                 type: 'GROUP_FEEDS_LOAD_DONE',
-                groupid:groupid
+                groupid: groupid
             });
             break;
     }
-
-
 }
-
-async function getFeedsFromStore(dispatch){
+async function getFeedsFromStore(dispatch) {
     try {
         let response = await store.get('feeds');
-        if(response){
-
+        if (response) {
             dispatch({
                 type: 'GET_FEEDS_FROM_STORE',
                 feeds: response,
-
             });
         }
-
-
-    }catch (error){
+    } catch (error) {
         console.log(error);
     }
 }
-
-async function getSavedFeedsFromStore(dispatch){
+async function getSavedFeedsFromStore(dispatch) {
     try {
         let response = await store.get('savedFeeds');
-        if(response) {
-
+        if (response) {
             dispatch({
                 type: 'GET_SAVED_FEEDS_FROM_STORE',
                 feeds: response,
-
             });
         }
-
-
-    }catch (error){
+    } catch (error) {
         console.log(error);
     }
 }
-
-async function getGroupFeedsFromStore(dispatch,group){
+async function getGroupFeedsFromStore(dispatch, group) {
     try {
-        let response = await store.get('groups'+ group);
-        if(response) {
-
+        let response = await store.get('groups' + group);
+        if (response) {
             dispatch({
                 type: 'GET_GROUP_FEEDS_FROM_STORE',
-                groupid:group,
+                groupid: group,
                 feeds: response,
-
             });
         }
-
-
-    }catch (error){
+    } catch (error) {
         console.log(error);
     }
 }
-
-function addToRows(feeds,response,top){
+function addToRows(feeds, response, top) {
     let currentRows = feeds;
     let newFeeds = response.filter(function (feed) {
         let filtered = currentRows.filter(function (currentFeed) {
-            if(currentFeed.id == feed.id){
-                return true;
-            }
-            return false;
+            return currentFeed.id === feed.id;
 
         })
         return filtered.length == 0;
-    })
-    if(newFeeds.length > 0) {
+    });
+    if (newFeeds.length > 0) {
         if (top) {
             currentRows = newFeeds.concat(feeds);
         } else {
@@ -164,240 +124,183 @@ function addToRows(feeds,response,top){
         }
     }
     return currentRows;
-
 }
-
-async function fetchTopList(action,feeds,id,api,dispatch,groupid){
+async function fetchTopList(action, feeds, id, api, dispatch, groupid) {
     try {
-        if(feeds && feeds.length > 0 ) {
+        if (feeds && feeds.length > 0) {
             feeds = feeds.filter(function (feed) {
                 return feed.id
-
-            })
+            });
             if (id == feeds[0].id) {
-
                 let response = await api.getAll('up', feeds[0].fid);
-                if(response.length > 0) {
-                    feeds = addToRows(feeds,response, true);
+                if (response.length > 0) {
+                    feeds = addToRows(feeds, response, true);
                     dispatch({
                         type: action,
                         feeds: feeds,
                         showTopLoader: false,
-                        groupid:groupid
+                        groupid: groupid
                     });
-                }else{
+                } else {
                     dispatch({
                         type: action,
                         feeds: {},
                         showTopLoader: false,
-                        groupid:groupid
+                        groupid: groupid
                     });
                 }
             }
-
         }
-
-    }catch (error){
+    } catch (error) {
         console.log(error);
     }
-
 }
-
-export function fetchFeedsFromStore(){
-    return function (dispatch, getState){
-        dispatch|(getFeedsFromStore(dispatch));
+export function fetchFeedsFromStore() {
+    return function (dispatch) {
+        dispatch(getFeedsFromStore(dispatch));
     }
-
 }
-
-export function fetchSavedFeedsFromStore(){
-    return function (dispatch, getState){
-        dispatch|(getSavedFeedsFromStore(dispatch));
+export function fetchSavedFeedsFromStore() {
+    return function (dispatch) {
+        dispatch(getSavedFeedsFromStore(dispatch));
     }
-
 }
-
-
-export function fetchFeeds(action,feeds,api){
-    return function (dispatch, getState){
-        dispatch|(fetchList(action,feeds,api,dispatch,null));
+export function fetchFeeds(action, feeds, api) {
+    return function (dispatch) {
+        dispatch(fetchList(action, feeds, api, dispatch, null));
     }
-
 }
-export function fetchTop(action,feeds,id,api){
-    return function (dispatch, getState){
-        dispatch|(fetchTopList(action,feeds,id,api,dispatch,null));
+export function fetchTop(action, feeds, id, api) {
+    return function (dispatch) {
+        dispatch(fetchTopList(action, feeds, id, api, dispatch, null));
     }
-
 }
-
-export function fetchGroupFeeds(groupid,action,feeds,api){
-    return function (dispatch, getState){
-        dispatch|(fetchList(action,feeds,api,dispatch,groupid));
+export function fetchGroupFeeds(groupid, action, feeds, api) {
+    return function (dispatch) {
+        dispatch(fetchList(action, feeds, api, dispatch, groupid));
     }
-
 }
-
-export function fetchGroupFeedsFromStore(groupid){
-    return function (dispatch, getState){
-        dispatch|(getGroupFeedsFromStore(dispatch,groupid));
+export function fetchGroupFeedsFromStore(groupid) {
+    return function (dispatch) {
+        dispatch(getGroupFeedsFromStore(dispatch, groupid));
     }
-
 }
-export function fetchGroupTop(groupid,action,feeds,id,api){
-    return function (dispatch, getState){
-        dispatch|(fetchTopList(action,feeds,id,api,dispatch,groupid));
+export function fetchGroupTop(groupid, action, feeds, id, api) {
+    return function (dispatch) {
+        dispatch(fetchTopList(action, feeds, id, api, dispatch, groupid));
     }
-
 }
-
-export function showTopLoader(){
-    return function (dispatch, getState){
+export function showTopLoader() {
+    return function (dispatch) {
         dispatch({
-            type:'SHOW_TOP_LOADER'
+            type: 'SHOW_TOP_LOADER'
         });
     }
-
 }
-
-export function hideTopLoader(){
-    return function (dispatch, getState){
+export function hideTopLoader() {
+    return function (dispatch) {
         dispatch({
-            type:'HIDE_TOP_LOADER'
+            type: 'HIDE_TOP_LOADER'
         });
     }
-
 }
-
-export function showSavedTopLoader(){
-    return function (dispatch, getState){
+export function showSavedTopLoader() {
+    return function (dispatch) {
         dispatch({
-            type:'SHOW_SAVED_TOP_LOADER'
+            type: 'SHOW_SAVED_TOP_LOADER'
         });
     }
-
 }
-
 export function showGroupTopLoader(groupid) {
-    return function (dispatch, getState) {
+    return function (dispatch) {
         dispatch({
             type: 'SHOW_GROUP_TOP_LOADER',
             groupid: groupid
         });
     }
 }
-
-async function getUserFollowers(dispatch){
+async function getUserFollowers(dispatch) {
     try {
         let users = await userApi.getUserFollowers();
-
         dispatch({
             type: 'GET_USER_FOLLOWERS',
             followers: users
-
         });
-
-
-
-    }catch (error){
+    } catch (error) {
         console.log(error);
     }
-
 }
-
-async function getUser(dispatch){
+async function getUser(dispatch) {
     try {
         let user = await userApi.getUser();
-
         dispatch({
             type: 'GET_USER',
             user: user
-
         });
-
-
-
-    }catch (error){
+    } catch (error) {
         console.log(error);
     }
-
 }
-
-
 export function updateHomeFeed(feed) {
-    return function (dispatch, getState) {
+    return function (dispatch) {
         dispatch({
             type: 'UPDATE_HOME_FEED',
             feed: feed
         });
     }
 }
-
-export function updateGroupFeed(feed,group) {
-    return function (dispatch, getState) {
+export function updateGroupFeed(feed, group) {
+    return function (dispatch) {
         dispatch({
             type: 'UPDATE_GROUP_FEED',
             feed: feed,
-            group:group
+            group: group
         });
     }
 }
-
-export function fetchUsers(){
-    return function (dispatch, getState){
-        dispatch|(getUser(dispatch,));
+export function fetchUsers() {
+    return function (dispatch) {
+        dispatch(getUser(dispatch,));
     }
-
 }
-export function fetchUsersFollowers(){
-    return function (dispatch, getState){
-        dispatch|(getUserFollowers(dispatch,));
+export function fetchUsersFollowers() {
+    return function (dispatch) {
+        dispatch(getUserFollowers(dispatch,));
     }
-
 }
-export function nextLoad(){
-    return function (dispatch, getState) {
+export function nextLoad() {
+    return function (dispatch) {
         dispatch({
             type: 'FEED_LOADING',
         });
     }
-
 }
-
-export function fetchGroups(){
-    return function (dispatch, getState){
-        dispatch|(getAll(dispatch));
+export function fetchGroups() {
+    return function (dispatch) {
+        dispatch(getAll(dispatch));
     }
-
 }
-
-export function directAddMessage(group, message){
-    return function (dispatch, getState){
-
+export function directAddMessage(group, message) {
+    return function (dispatch) {
         dispatch({
             type: 'DIRECT_ADD_GROUP_FEED',
             feed: message,
-            group:group
+            group: group
         });
     }
 }
-async function getAll(dispatch){
+async function getAll(dispatch) {
     try {
         let response = await groupsApi.getAll();
-        if(response.length > 0) {
-
+        if (response.length > 0) {
             dispatch({
                 type: 'GET_GROUPS',
                 groups: response,
-
             });
         }
-
-
-    }catch (error){
+    } catch (error) {
         console.log(error);
     }
-
 }
 
 
