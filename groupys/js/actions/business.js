@@ -78,13 +78,13 @@ async function dispatchFollowByQrcode(dispatch, barcode, token) {
 export function searchBusiness(business) {
     return function (dispatch, getState) {
         const token = getState().authentication.token;
-        dispatch | (dispatchSearchBusiness(dispatch, business, token));
+        dispatchSearchBusiness(dispatch, business, token);
     }
 }
 export function followByQrCode(barcode) {
     return function (dispatch, getState) {
         const token = getState().authentication.token;
-        dispatch | (dispatchFollowByQrcode(dispatch, barcode, token));
+       dispatchFollowByQrcode(dispatch, barcode, token);
     }
 }
 export function showCamera() {
@@ -125,7 +125,7 @@ export function followBusiness(bussinesId) {
 export function fetchBusinessCategories(gid) {
     return function (dispatch, getState) {
         const token = getState().authentication.token;
-        dispatch | (getBusinessCategories(dispatch, gid, token));
+        getBusinessCategories(dispatch, gid, token);
     }
 }
 export function setBusinessUsers(businessId) {
