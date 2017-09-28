@@ -189,15 +189,15 @@ class FeedConverter {
     }
 
     createPromontionInstance(feed) {
-        let instance = this.getInstance(feed)
+        let instance = this.getInstance(feed);
         let promotion = this.getPromotion(feed);
         let responseFeed = {};
         try {
             let date = new Date(promotion.end);
             responseFeed.id = instance._id;
             responseFeed.fid = feed._id;
-            responseFeed.key = feed._id,
-                responseFeed.generalId = promotion._id;
+            responseFeed.key = feed._id;
+            responseFeed.generalId = promotion._id;
             responseFeed.entities = [{promotion: promotion._id}];
             if (instance.social_state) {
                 responseFeed.social = {
