@@ -79,9 +79,9 @@ export function fetchTop(feeds, token, user) {
         }
     }
 }
-async function getUserFollowers(dispatch) {
+async function getUserFollowers(dispatch,token) {
     try {
-        let users = await userApi.getUserFollowers();
+        let users = await userApi.getUserFollowers(token);
         dispatch({
             type: 'GET_USER_FOLLOWERS',
             followers: users
@@ -92,39 +92,15 @@ async function getUserFollowers(dispatch) {
         });
     }
 }
-export function updateHomeFeed(feed) {
-    return function (dispatch, getState) {
-        dispatch({
-            type: 'UPDATE_HOME_FEED',
-            feed: feed
-        });
-    }
-}
-export function fetchUsers() {
-    return function (dispatch, getState) {
-        dispatch | (getUser(dispatch,));
-    }
-}
+
+
 export function fetchUsersFollowers() {
     return function (dispatch, getState) {
-        dispatch | (getUserFollowers(dispatch,));
+        const token = getState().authentication.token;
+        getUserFollowers(dispatch,token)
     }
 }
-async function getAll(dispatch) {
-    try {
-        let response = await groupsApi.getAll();
-        if (response.length > 0) {
-            dispatch({
-                type: 'GET_GROUPS',
-                groups: response,
-            });
-        }
-    } catch (error) {
-        dispatch({
-            type: actions.NETWORK_IS_OFFLINE,
-        });
-    }
-}
+
 export function setNextFeeds(feeds) {
     return async function (dispatch, getState) {
         const token = getState().authentication.token

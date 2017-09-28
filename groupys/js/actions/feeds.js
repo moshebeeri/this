@@ -187,7 +187,7 @@ export function fetchGroupFeedsFromStore(groupid) {
 }
 export function fetchGroupTop(groupid, action, feeds, id, api) {
     return function (dispatch) {
-        dispatch(fetchTopList(action, feeds, id, api, dispatch, groupid));
+        fetchTopList(action, feeds, id, api, dispatch, groupid);
     }
 }
 export function showTopLoader() {
@@ -277,7 +277,7 @@ export function nextLoad() {
 }
 export function fetchGroups() {
     return function (dispatch) {
-        dispatch(getAll(dispatch));
+        getAll(dispatch);
     }
 }
 export function directAddMessage(group, message) {

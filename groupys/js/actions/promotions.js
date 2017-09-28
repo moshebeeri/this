@@ -37,12 +37,12 @@ async function getAllProducts(dispatch, id, token) {
 export function fetchPromotions(id) {
     return function (dispatch, getState) {
         const token = getState().authentication.token;
-        dispatch(getAll(dispatch, id, token));
+        getAll(dispatch, id, token);
     }
 }
 export function fetchProducts(id) {
     return function (dispatch, getState) {
         const token = getState().authentication.token;
-        dispatch(getAllProducts(dispatch, id, token));
+        getAllProducts(dispatch, id, token);
     }
 }
