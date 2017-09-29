@@ -5,6 +5,7 @@ import PtomotionApi from "../api/promotion";
 import ActivityApi from "../api/activity";
 import * as assemblers from "./collectionAssembler";
 import * as actions from "../reducers/reducerActions";
+import CollectionDispatcher from "./collectionDispatcher";
 let groupsApi = new GroupsApi();
 let feedApi = new FeedApi();
 let promotionApi = new PtomotionApi();
@@ -159,13 +160,15 @@ export function setNextFeeds(feeds, token, group) {
                 });
                 response = await feedApi.getAll('down', feeds[id].id, token, group);
             }
+            let collectionDispatcher = new CollectionDispatcher();
             let disassemblerItems = response.map(item => {
                 if (item.activity && (item.activity.action == 'group_message' || item.activity.action == 'group_follow')) {
                     return item;
                 }
-                return assemblers.disassembler(item, dispatch)
+                return assemblers.disassembler(item, collectionDispatcher)
             });
             if (disassemblerItems && disassemblerItems.length > 0) {
+                collectionDispatcher.dispatchEvents(dispatch)
                 disassemblerItems.forEach(item => dispatch({
                     type: actions.UPSERT_GROUP_FEEDS_BOTTOM,
                     groupId: group._id,
@@ -227,12 +230,14 @@ async function fetchTopList(id, token, group, dispatch) {
         if (response.length == 0) {
             return;
         }
+        let collectionDispatcher = new CollectionDispatcher();
         let disassemblerItems = response.map(item => {
             if (item.activity && (item.activity.action == 'group_message' || item.activity.action == 'group_follow')) {
                 return item;
             }
-            return assemblers.disassembler(item, dispatch)
+            return assemblers.disassembler(item, collectionDispatcher)
         });
+        collectionDispatcher.dispatchEvents(dispatch)
         disassemblerItems.forEach(item => dispatch({
             type: actions.UPSERT_GROUP_FEEDS_TOP,
             groupId: group._id,

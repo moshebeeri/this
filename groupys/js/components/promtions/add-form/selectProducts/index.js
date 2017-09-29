@@ -78,7 +78,7 @@ import * as promotionsAction from "../../../../actions/promotions";
                     </Body>
                     <Right>
                         <Button transparent
-                                onPress={() => this.props.selectProduct(r)}
+                                onPress={() => this.selectProduct(r)}
                         >
                             <Text>Select</Text>
                         </Button>

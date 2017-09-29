@@ -7,6 +7,7 @@ import PtomotionApi from "../api/promotion";
 import ActivityApi from "../api/activity";
 import * as actions from "../reducers/reducerActions";
 import * as assemblers from "./collectionAssembler";
+import CollectionDispatcher from "./collectionDispatcher";
 let feedApi = new FeedApi();
 let userApi = new UserApi();
 let promotionApi = new PtomotionApi();
@@ -26,12 +27,13 @@ async function fetchFeedsFromServer(feeds, dispatch, token, user) {
         if (response.length == 0) {
             return;
         }
-        let disassemblerItems = response.map(item => assemblers.disassembler(item, dispatch))
+        let collectionDispatcher = new CollectionDispatcher();
+        let disassemblerItems = response.map(item => assemblers.disassembler(item, collectionDispatcher))
+        collectionDispatcher.dispatchEvents(dispatch)
         dispatch({
             type: actions.UPSERT_FEEDS_ITEMS,
             items: disassemblerItems
         });
-        ;
     } catch (error) {
         dispatch({
             type: actions.NETWORK_IS_OFFLINE,
@@ -46,7 +48,9 @@ async function fetchTopList(id, token, user, dispatch) {
         if (response.length == 0) {
             return;
         }
-        let disassemblerItems = response.map(item => assemblers.disassembler(item, dispatch))
+        let collectionDispatcher = new CollectionDispatcher();
+        let disassemblerItems = response.map(item => assemblers.disassembler(item, collectionDispatcher));
+        collectionDispatcher.dispatchEvents(dispatch)
         disassemblerItems.forEach(item => dispatch({
             type: actions.UPSERT_FEEDS_TOP,
             item: item
@@ -79,7 +83,7 @@ export function fetchTop(feeds, token, user) {
         }
     }
 }
-async function getUserFollowers(dispatch,token) {
+async function getUserFollowers(dispatch, token) {
     try {
         let users = await userApi.getUserFollowers(token);
         dispatch({
@@ -92,15 +96,12 @@ async function getUserFollowers(dispatch,token) {
         });
     }
 }
-
-
 export function fetchUsersFollowers() {
     return function (dispatch, getState) {
         const token = getState().authentication.token;
-        getUserFollowers(dispatch,token)
+        getUserFollowers(dispatch, token)
     }
 }
-
 export function setNextFeeds(feeds) {
     return async function (dispatch, getState) {
         const token = getState().authentication.token

@@ -10,45 +10,38 @@
 /**
  * Created by stan229 on 5/27/16.
  */
-const initialState = {promotions:{}};
-import store from 'react-native-simple-store';
-import { REHYDRATE } from 'redux-persist/constants'
-import * as actions from './reducerActions';
-
+const initialState = {promotions: {}};
+import store from "react-native-simple-store";
+import {REHYDRATE} from "redux-persist/constants";
+import * as actions from "./reducerActions";
 export default function promotion(state = initialState, action) {
     console.log(action.type);
-    if (action.type === REHYDRATE){
+    if (action.type === REHYDRATE) {
 
         // retrive stored data for reducer callApi
         const savedData = action.payload || initialState;
-
         return {
             ...state, ...savedData.promotions
         };
     }
-
     let promotionsState = {...state};
     switch (action.type) {
         case actions.UPSERT_PROMOTION:
-            let currentPromotions =promotionsState.promotions;
-            if(action.item.social_state || !currentPromotions[action.item._id]){
-                currentPromotions[action.item._id] = action.item;
-            }else{
-                action.item.social_state = currentPromotions[action.item._id].social_state;
-                currentPromotions[action.item._id] = action.item;
-            }
-
-            currentPromotions[action.item._id] = action.item;
+            let currentPromotions = promotionsState.promotions;
+            action.item.forEach(eventItem => {
+                if (eventItem.social_state) {
+                    currentPromotions[eventItem._id] = eventItem;
+                } else {
+                    eventItem.social_state = currentPromotions[eventItem._id].social_state;
+                    currentPromotions[eventItem._id] = eventItem;
+                }
+            });
             return promotionsState;
         case 'GET_PROMOTIONS' :
-
-            store.save('promotions'+ action.businessId,action.promotions)
+            store.save('promotions' + action.businessId, action.promotions)
             let currentState = {...state};
-            currentState['promotions'+ action.businessId] = action.promotions;
-
+            currentState['promotions' + action.businessId] = action.promotions;
             return currentState;
-
-
         default:
             return state;
     }

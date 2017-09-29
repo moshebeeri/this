@@ -2,11 +2,8 @@ import * as actions from "../reducers/reducerActions";
 import LoginApi from "../api/login";
 import UserApi from "../api/user";
 import {NavigationActions} from "react-navigation";
-import store from 'react-native-simple-store';
-
-import ContactApi from '../api/contacts'
-
-
+import store from "react-native-simple-store";
+import ContactApi from "../api/contacts";
 let contactApi = new ContactApi();
 let loginApi = new LoginApi();
 let userApi = new UserApi();

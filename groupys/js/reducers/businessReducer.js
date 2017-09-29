@@ -24,12 +24,14 @@ export default function business(state = initialState, action) {
             let currentbusinesses = businessesState.businesses;
             businessesState.update = !businessesState.update;
             //not all the time we get the business social state in this case we need to make sure we take the social state from the last business
-            if (action.item.social_state) {
-                currentbusinesses[action.item._id] = action.item;
-            } else {
-                action.item.social_state = currentbusinesses[action.item._id].social_state;
-                currentbusinesses[action.item._id] = action.item;
-            }
+            action.item.forEach(eventItem => {
+                if (eventItem.social_state) {
+                    currentbusinesses[eventItem._id] = eventItem;
+                } else {
+                    eventItem.social_state = currentbusinesses[eventItem._id].social_state;
+                    currentbusinesses[eventItem._id] = eventItem;
+                }
+            });
             return businessesState;
         case actions.UPSERT_MY_BUSINESS:
             let myCurrentbusinesses = businessesState.myBusinesses;

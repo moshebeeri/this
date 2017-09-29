@@ -29,7 +29,7 @@ function nameToCollection(key) {
 }
 function dataSetCollection(dispacth, collection, object) {
     let actionType = 'UPSERT' + collection;
-    dispacth({
+    dispacth.dispatch({
         type: actionType,
         item: object,
     });
