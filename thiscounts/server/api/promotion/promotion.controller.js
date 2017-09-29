@@ -145,7 +145,7 @@ function applyToFollowing(promotion, instances) {
 }
 
 function handlePromotionPostCreate(promotion, callback) {
-  function relatePromotion(promotion) {
+  function relatePromotion(promotion, callback) {
     const params = {end: promotion.end};
     let db = promotionGraphModel.db();
     async.parallel({

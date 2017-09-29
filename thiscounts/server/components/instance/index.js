@@ -288,8 +288,8 @@ function getValue(instance) {
   }
 }
 
-Instances.createPromotionInstances =
-  Instances.prototype.createPromotionInstances = function (promotion) {
+Instances.createInstances =
+  Instances.prototype.createInstances = function (promotion) {
     let instances = [];
     switch (promotion.type) {
       case 'PERCENT': {
@@ -459,7 +459,7 @@ Instances.createPromotionInstances =
     if (isAutomatic(promotion))
       instances = this.createAutomaticPromotionInstances(promotion);
     else
-      instances = this.createPromotionInstances(promotion);
+      instances = this.createInstances(promotion);
     storeInstances(instances, function (err, instances) {
       if (err) return callback(err);
       callback(null, instances);
@@ -470,7 +470,7 @@ Instances.createSingleInstance =
   Instances.prototype.createSingleInstance = function (promotion, callback) {
     if(this.getPromotionValue(promotion).variation !== 'SINGLE' )
       return callback(new Error('createSingleInstance can only generate instance for value variation of Single'));
-    let instances = this.createPromotionInstances(promotion);
+    let instances = this.createInstances(promotion);
     storeInstances(instances, function (err, instances) {
       if (err) return callback(err);
       callback(null, instances[0]);
