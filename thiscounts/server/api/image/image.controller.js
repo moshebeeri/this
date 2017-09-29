@@ -8,7 +8,6 @@ const aws = require('aws-sdk');
 const config = require('../../config/environment');
 const randomstring = require("randomstring");
 const s3 = new aws.S3();
-const folder = 'images';
 const multiparty = require('multiparty');
 
 const fs = require('fs');
@@ -84,10 +83,14 @@ function checkSafeSearch(annotation, callback) {
   function violates(category){
     return category === 'Possible' || category === 'Likely' || category === 'Very Likely'
   }
-  if(violates(annotation.adult)) return callback(new Error(`${annotation.adult} to be adult image`));
-  if(violates(annotation.spoof)) return callback(new Error(`${annotation.spoof} to be spoof image`));
-  if(violates(annotation.violence)) return callback(new Error(`${annotation.adult} to be violence image`));
-  if(violates(annotation.medical)) return callback(new Error(`${annotation.medical} to be medical image`));
+  if(annotation) {
+    if (violates(annotation.adult)) return callback(new Error(`${annotation.adult} to be adult image`));
+    if (violates(annotation.spoof)) return callback(new Error(`${annotation.spoof} to be spoof image`));
+    if (violates(annotation.violence)) return callback(new Error(`${annotation.adult} to be violence image`));
+    if (violates(annotation.medical)) return callback(new Error(`${annotation.medical} to be medical image`));
+  }else{
+    console.error('checkSafeSearch annotation is null');
+  }
   return callback(null);
 }
 
