@@ -18,6 +18,7 @@ const nameToCollections = {
     'business': 'businesses',
     'activity': 'activities',
     'instance': 'instances',
+    'product': 'products',
     'actor_user': 'user',
     'user': 'user',
 };

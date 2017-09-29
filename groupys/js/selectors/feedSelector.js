@@ -10,15 +10,17 @@ const getPromotions = (state) => state.promotions;
 const getUser = (state) => state.user;
 const getBusinesses = (state) => state.businesses;
 const getInstances = (state) => state.instances;
+const getProducts = (state) => state.products;
 const getStateFeeds = (state) => state.feeds;
-export const getFeeds = createSelector([getActivities, getPromotions, getUser, getBusinesses, getInstances, getStateFeeds],
-    (activities, promotions, user, businesses, instances, feeds) => {
+export const getFeeds = createSelector([getActivities, getPromotions, getUser, getBusinesses, getInstances,getProducts, getStateFeeds],
+    (activities, promotions, user, businesses, instances,products, feeds) => {
         const collections = {
             activities: activities.activities,
             promotions: promotions.promotions,
             user: user.users,
             businesses: businesses.businesses,
-            instances: instances.instances
+            instances: instances.instances,
+            products:products.products
         };
         let feedsUi = [];
         let feedsOrder = feeds.feedView;
