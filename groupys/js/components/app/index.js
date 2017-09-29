@@ -61,31 +61,10 @@ const warch = navigator.geolocation.watchPosition((position) => {
 
 const timer = BackgroundTimer.setInterval(() =>{
     try {
-        if (store.getState().contacts.lastUpdate) {
 
-            //sync every 30 min
-            // if (new Date().getTime() - new Date(store.getState().contacts.lastUpdate).getTime() < 1800000) {
-            //
-            //
-            //     return;
-            // }
-            //sync every 1 min
-            if (new Date().getTime() - new Date(store.getState().contacts.lastUpdate).getTime() < 60000) {
-
-
-                return;
-            }
-
-        }
-        if( store.getState().authentication.token) {
+        if( store.getState().authentication.token)  {
             contactApi.syncContacts();
         }
-        store.dispatch({
-            type: actions.LAST_CONTACT_SYNC,
-            lastUpdate:new Date()
-
-
-        })
         if (store.getState().network.offline) {
             store.dispatch({
                 type: actions.NETWORK_IS_ONLINE,
