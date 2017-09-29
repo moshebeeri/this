@@ -8,7 +8,6 @@ const aws = require('aws-sdk');
 const config = require('../../config/environment');
 const randomstring = require("randomstring");
 const s3 = new aws.S3();
-const folder = 'images';
 const multiparty = require('multiparty');
 
 const fs = require('fs');
