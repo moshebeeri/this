@@ -41,19 +41,19 @@ async function getProductCategories(dispatch, gid, token) {
 export function fetchProducts() {
     return function (dispatch, getState) {
         const token = getState().authentication.token;
-        dispatch(getAll(dispatch, token));
+        getAll(dispatch, token);
     }
 }
 export function fetchProductsByBusiness(businessId) {
     return function (dispatch, getState) {
         const token = getState().authentication.token;
-        dispatch(getAllByBusinessId(dispatch, businessId, token));
+        getAllByBusinessId(dispatch, businessId, token);
     }
 }
 export function setProductCategories(gid) {
     return function (dispatch, getState) {
         const token = getState().authentication.token;
-        dispatch(getProductCategories(dispatch, gid, token));
+        getProductCategories(dispatch, gid, token);
     }
 }
 export function saveProduct(product, saveSucsees, saveFailed) {

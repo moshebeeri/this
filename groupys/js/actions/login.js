@@ -2,6 +2,12 @@ import * as actions from "../reducers/reducerActions";
 import LoginApi from "../api/login";
 import UserApi from "../api/user";
 import {NavigationActions} from "react-navigation";
+import store from 'react-native-simple-store';
+
+import ContactApi from '../api/contacts'
+
+
+let contactApi = new ContactApi();
 let loginApi = new LoginApi();
 let userApi = new UserApi();
 const resetAction = NavigationActions.reset({
@@ -15,6 +21,7 @@ export function login(phone, password, navigation) {
         try {
             let response = await loginApi.login(phone, password);
             if (response.token) {
+                await store.save("token",response.token)
                 dispatch({
                     type: actions.SAVE_USER_TOKEN,
                     token: response.token
@@ -23,10 +30,12 @@ export function login(phone, password, navigation) {
                     type: actions.LOGIN_SUCSESS,
                 });
                 let user = await userApi.getUser(response.token);
+                await  store.save("user_id",user._id)
                 dispatch({
                     type: actions.SAVE_APP_USER,
                     user: user
                 });
+                contactApi.syncContacts();
                 dispatch({
                     type: actions.SET_USER,
                     user: user
@@ -51,6 +60,8 @@ export function signup(phone, password, firstName, lastName, navigation) {
         try {
             let response = await loginApi.signup(phone, password, firstName, lastName);
             if (response.token) {
+                await store.save("token",response.token)
+
                 dispatch({
                     type: actions.SAVE_USER_TOKEN,
                     token: response.token
@@ -59,10 +70,13 @@ export function signup(phone, password, firstName, lastName, navigation) {
                     type: actions.SIGNUP_SUCSESS,
                 });
                 let user = await userApi.getUser(response.token);
+                await store.save("user_id",user._id);
                 dispatch({
                     type: actions.SET_USER,
                     user: user
                 });
+
+                contactApi.syncContacts();
                 navigation.navigate('Register');
             } else {
                 dispatch({

@@ -51,13 +51,13 @@ async function getEntityComments(dispatch, entities, id, token) {
 export function fetchInstanceGroupComments(group, instance, size) {
     return function (dispatch) {
         const token = getState().authentication.token;
-        dispatch(getInstanceGroupComments(dispatch, group, instance, size, token));
+       getInstanceGroupComments(dispatch, group, instance, size, token);
     }
 }
 export function fetchEntityComments(entities, id) {
     return function (dispatch) {
         const token = getState().authentication.token;
-        dispatch(getEntityComments(dispatch, entities, id, token));
+      getEntityComments(dispatch, entities, id, token);
     }
 }
 export function updateEntityComments(id, comment) {

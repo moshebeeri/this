@@ -59,19 +59,19 @@ async function getUserFollowers(dispatch, token) {
 export function fetchGroups() {
     return function (dispatch, getState) {
         const token = getState().authentication.token;
-        dispatch(getAll(dispatch, token));
+        getAll(dispatch, token);
     }
 }
 export function fetchBusinessGroups(bid) {
     return function (dispatch, getState) {
         const token = getState().authentication.token;
-        dispatch(getByBusinessId(dispatch, bid, token));
+        getByBusinessId(dispatch, bid, token);
     }
 }
 export function fetchUsersFollowers() {
     return function (dispatch, getState) {
         const token = getState().authentication.token;
-        dispatch(getUserFollowers(dispatch, token));
+        getUserFollowers(dispatch, token);
     }
 }
 export function acceptInvatation(group) {

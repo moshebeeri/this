@@ -44,7 +44,7 @@ export function fetchUsers() {
     return function (dispatch, getState) {
         const token = getState().authentication.token
         if (token) {
-            dispatch(getUser(dispatch, token));
+            getUser(dispatch, token);
         }
     }
 }
@@ -52,13 +52,13 @@ export function fetchUsersFollowers() {
     return function (dispatch, getState) {
         const token = getState().authentication.token
         if (token) {
-            dispatch(getUserFollowers(dispatch, token));
+           getUserFollowers(dispatch, token);
         }
     }
 }
 export function fetchUsersBusiness(business) {
     return function (dispatch, getState) {
         const token = getState().authentication.token
-        dispatch(getBusinssUsers(dispatch, business, token));
+        getBusinssUsers(dispatch, business, token);
     }
 }

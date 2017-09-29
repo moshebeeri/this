@@ -83,6 +83,10 @@ export function fetchTop() {
             dispatch({
                 type: actions.NETWORK_IS_OFFLINE,
             });
+            dispatch({
+                type: actions.SAVED_FEED_SHOW_TOP_LOADER,
+                showTopLoader: false,
+            });
         }
     }
 }

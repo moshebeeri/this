@@ -118,13 +118,13 @@ class FeedConverter {
         return response;
     }
 
-    createSavedPomotion(feed) {
+    createSavedPomotion(feed,id) {
         let instance = feed.instance;
         let responseFeed = {};
         try {
-            responseFeed.id = instance._id;
-            responseFeed.fid = instance.gid;
-            responseFeed.key = instance.gid;
+            responseFeed.id = id;
+            responseFeed.fid = id;
+            responseFeed.key = id;
             responseFeed.name = instance.promotion.name;
             responseFeed.description = instance.promotion.description;
             let date = new Date(instance.promotion.end);
