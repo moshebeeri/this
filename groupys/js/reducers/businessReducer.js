@@ -25,7 +25,7 @@ export default function business(state = initialState, action) {
             businessesState.update = !businessesState.update;
             //not all the time we get the business social state in this case we need to make sure we take the social state from the last business
             action.item.forEach(eventItem => {
-                if (eventItem.social_state) {
+                if (eventItem.social_state || !currentbusinesses[eventItem._id]) {
                     currentbusinesses[eventItem._id] = eventItem;
                 } else {
                     eventItem.social_state = currentbusinesses[eventItem._id].social_state;

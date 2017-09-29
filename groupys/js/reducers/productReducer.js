@@ -1,5 +1,4 @@
 const initialState = {products: {}, categories: []};
-import store from "react-native-simple-store";
 import {REHYDRATE} from "redux-persist/constants";
 import * as actions from "./reducerActions";
 export default function products(state = initialState, action) {

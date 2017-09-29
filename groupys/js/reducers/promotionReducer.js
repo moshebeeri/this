@@ -29,7 +29,7 @@ export default function promotion(state = initialState, action) {
         case actions.UPSERT_PROMOTION:
             let currentPromotions = promotionsState.promotions;
             action.item.forEach(eventItem => {
-                if (eventItem.social_state) {
+                if (eventItem.social_state || !currentPromotions[eventItem._id]) {
                     currentPromotions[eventItem._id] = eventItem;
                 } else {
                     eventItem.social_state = currentPromotions[eventItem._id].social_state;

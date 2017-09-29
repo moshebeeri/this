@@ -49,8 +49,8 @@ export const getFeeds = createSelector(  [ getActivities,getPromotions,getUser,g
                 }
 
 
-               const newFeedsList = assembledFeeds.map(feed => feedUiConverter.createFeed(feed));
-
+               let newFeedsList = assembledFeeds.map(feed => feedUiConverter.createFeed(feed));
+                newFeedsList = newFeedsList.filter(feed =>feed.id);
                 feedsUi[groupId] = newFeedsList;
 
             })
