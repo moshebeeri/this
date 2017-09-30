@@ -15,9 +15,7 @@ import {Container, Content, Text, Picker, Input, Button, Icon, View, Item, Foote
 import {bindActionCreators} from "redux";
 import * as promotionsAction from "../../../actions/promotions";
 import ImagePicker from "react-native-image-crop-picker";
-import BusinessApi from "../../../api/business";
 import PromotionApi from "../../../api/promotion";
-import ProductApi from "../../../api/product";
 import * as businessAction from "../../../actions/business";
 import PercentComponent from "./percent/index";
 import PunchCardComponent from "./punch-card/index";
@@ -29,10 +27,8 @@ import HappyHourComponent from "./happyHour/index";
 import DatePicker from "react-native-datepicker";
 import Icon3 from "react-native-vector-icons/Ionicons";
 import styles from "./styles";
-var createEntity = require("../../../utils/createEntity");
-let businessApi = new BusinessApi();
+let createEntity = require("../../../utils/createEntity");
 let promotionApi = new PromotionApi();
-let productApi = new ProductApi();
 const types = [
         {
             value: '',
