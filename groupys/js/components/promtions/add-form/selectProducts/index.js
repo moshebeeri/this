@@ -1,52 +1,32 @@
-
-import React, { Component } from 'react';
-import { connect } from 'react-redux';
-import { Platform,Provider
-} from 'react-native'
-import {Container, Content, Text, InputGroup, Input, Button,Body,Fab ,Icon,Left,
-    View,Header,Item,Footer,Picker,ListItem,Right,Thumbnail} from 'native-base';
-
-
-import { bindActionCreators } from "redux";
-
+import React, {Component} from "react";
+import {connect} from "react-redux";
+import {Platform, Provider} from "react-native";
+import {Container, Content, Text, Button, Body, Fab, Icon, Left, ListItem, Right, Thumbnail} from "native-base";
+import {bindActionCreators} from "redux";
 import * as promotionsAction from "../../../../actions/promotions";
-
- class SelectProductsComponent extends Component {
-
-
+class SelectProductsComponent extends Component {
     constructor(props) {
         super(props);
 
-        this.state = {
-
-            productList:props.products,
-
-        };
-    }
-    navigateToAdd(){
-
-        this.props.navigation.navigate("AddProduct",{business:{_id:this.props.navigation.state.params.businessId}});
     }
 
-    selectProduct(product){
+    navigateToAdd() {
+        this.props.navigation.navigate("AddProduct", {business: {_id: this.props.navigation.state.params.businessId}});
+    }
+
+    selectProduct(product) {
         this.props.navigation.state.params.selectProduct(product)
         this.props.navigation.goBack();
     }
 
-
     render() {
+        const {businesses} = this.props;
         let index = 0;
         let productsRows = undefined
-        let products=undefined;
-        if(this.props.products) {
-            products = this.props.products['products' + this.props.navigation.state.params.businessId];
-        }
-
-        if(products && products.length > 0) {
-
-            productsRows =  products.map((r, i) => {
+        const products = businesses.businessesProducts[this.props.navigation.state.params.businessId];
+        if (products && products.length > 0) {
+            productsRows = products.map((r, i) => {
                 index++;
-
                 if (r.pictures.length > 0) {
                     return <ListItem key={index} thumbnail>
                         <Left>
@@ -89,38 +69,34 @@ import * as promotionsAction from "../../../../actions/promotions";
         return (
 
             <Container>
-              <Content  style={{  backgroundColor: '#fff'}}>
+                <Content style={{backgroundColor: '#fff'}}>
 
 
+                    { productsRows }
 
-
-                  { productsRows }
-
-              </Content>
+                </Content>
                 <Fab
 
                     direction="right"
                     active={false}
-                    containerStyle={{ marginLeft: 10 }}
-                    style={{ backgroundColor: "#ff6400" }}
+                    containerStyle={{marginLeft: 10}}
+                    style={{backgroundColor: "#ff6400"}}
                     position="bottomRight"
                     onPress={() => this.navigateToAdd()}>
-                    <Icon size={20} name="ios-add" />
+                    <Icon size={20} name="ios-add"/>
 
                 </Fab>
             </Container>
 
 
         );
-  }
+    }
 }
-
 export default connect(
     state => ({
         promotions: state.promotions,
         products: state.products,
-
+        businesses: state.businesses,
     }),
-
     dispatch => bindActionCreators(promotionsAction, dispatch)
 )(SelectProductsComponent);

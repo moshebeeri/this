@@ -23,10 +23,6 @@ export default function products(state = initialState, action) {
             let categoriesState = {...state};
             categoriesState['categories' + action.language + action.catId] = action.categories;
             return categoriesState;
-        case 'GET_BUSINESS_PRODUCTS' :
-            let currentState = {...state};
-            currentState['products' + action.businessId] = action.products;
-            return currentState;
         default:
             return state;
     }

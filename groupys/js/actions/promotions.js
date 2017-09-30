@@ -1,5 +1,6 @@
 import PromotionsApi from "../api/promotion";
 import ProductApi from "../api/product";
+import * as actions from "../reducers/reducerActions";
 let promotionApi = new PromotionsApi();
 let productApi = new ProductApi();
 async function getAll(dispatch, id, token) {
@@ -23,8 +24,8 @@ async function getAllProducts(dispatch, id, token) {
         let response = await productApi.findByBusinessId(id, token);
         if (response.length > 0) {
             dispatch({
-                type: 'GET_BUSINESS_PRODUCTS',
-                products: response,
+                type: actions.SET_PRODUCT_BUSINESS,
+                businessProducts: response,
                 businessId: id
             });
         }
