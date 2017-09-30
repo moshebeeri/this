@@ -18,6 +18,7 @@ const nameToCollections = {
     'business': 'businesses',
     'activity': 'activities',
     'instance': 'instances',
+    'product': 'products',
     'actor_user': 'user',
     'user': 'user',
 };
@@ -29,7 +30,7 @@ function nameToCollection(key) {
 }
 function dataSetCollection(dispacth, collection, object) {
     let actionType = 'UPSERT' + collection;
-    dispacth({
+    dispacth.dispatch({
         type: actionType,
         item: object,
     });

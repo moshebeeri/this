@@ -9,7 +9,6 @@ const initialState = {
     lastFeed: {},
     lastFeedTime: {}
 };
-import store from "react-native-simple-store";
 import {REHYDRATE} from "redux-persist/constants";
 import * as actions from "./reducerActions";
 export default function group(state = initialState, action) {
@@ -31,7 +30,7 @@ export default function group(state = initialState, action) {
         case actions.UPSERT_GROUP_FEEDS_BOTTOM:
             if (!imutableState.groupFeeds[action.groupId]) {
                 imutableState.groupFeeds[action.groupId] = {};
-                imutableState.groupFeedOrder[action.groupId] =[];
+                imutableState.groupFeedOrder[action.groupId] = [];
             }
             imutableState.groupFeeds[action.groupId][action.groupFeed._id] = action.groupFeed;
             if (!imutableState.groupFeedOrder[action.groupId].includes(action.groupFeed._id)) {
@@ -66,16 +65,15 @@ export default function group(state = initialState, action) {
             clientMessage[action.groupId].unshift(action.message);
             return imutableState;
         case actions.GROUP_CLEAN_MESSAGES:
-            imutableState.clientMessages[action.groupId] =[];
+            imutableState.clientMessages[action.groupId] = [];
             return imutableState;
         case actions.GROUP_LAST_FEED_DOWN:
             imutableState.lastFeed[action.groupId] = action.id;
             imutableState.lastFeedTime[action.groupId] = new Date().getTime();
             return imutableState;
         case 'GET_GROUPS_BUSINESS' :
-            currentState['groups' + action.bid] = action.groups;
-            store.save('groups' + action.bid, action.groups);
-            return currentState;
+            imutableState['groups' + action.bid] = action.groups;
+            return imutableState;
         default:
             return state;
     }

@@ -5,7 +5,7 @@ async function getUser(dispatch, token) {
     try {
         let user = await userApi.getUser(token);
         dispatch({
-            type: actions.UPSERT_USER,
+            type: actions.UPSERT_SINGLE_USER,
             item: user
         })
         dispatch({
@@ -25,7 +25,7 @@ async function getUserFollowers(dispatch, token) {
             users.forEach(async function (user) {
                 let fullUser = await  userApi.getUserById(token, user._id);
                 dispatch({
-                    type: actions.UPSERT_USER,
+                    type: actions.UPSERT_SINGLE_USER,
                     item: fullUser
                 });
             })

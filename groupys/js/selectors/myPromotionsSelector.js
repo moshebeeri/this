@@ -9,7 +9,7 @@ export const getFeeds = createSelector([getStateFeeds],
         let response = [];
         if (!_.isEmpty(feedsOrder)) {
             let feedArray = feedsOrder.map(feedId => feeds[feedId])
-            response = feedArray.map(feed => feedUiConverter.createSavedPomotion(feed.instance, feed.instance._id));
+            response = feedArray.map(feed => feedUiConverter.createSavedPomotion(feed.savedInstance, feed.savedInstance._id));
         }
         return response;
     });
