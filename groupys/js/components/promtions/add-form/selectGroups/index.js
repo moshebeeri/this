@@ -48,7 +48,7 @@ class SelectGroupsComponent extends Component {
         if (this.props.groups && this.props.groups['groups' + this.props.navigation.state.params.bid]) {
             productsRows = this.props.groups['groups' + this.props.navigation.state.params.bid].map((r, i) => {
                 index++;
-                let group = r.group;
+                let group = r;
                 let image = undefined;
                 if (group.pictures && group.pictures.length > 0) {
                     image = <Thumbnail square size={50} source={{uri: group.pictures[0].pictures[3]}}/>

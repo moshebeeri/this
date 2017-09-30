@@ -28,7 +28,7 @@ async function getAll(dispatch, token) {
         });
     }
 }
-async function getByBusinessId(dispatch, bid) {
+async function getByBusinessId(dispatch, bid,token) {
     try {
         let response = await groupsApi.getByBusinessId(bid, token);
         if (response.length > 0) {
