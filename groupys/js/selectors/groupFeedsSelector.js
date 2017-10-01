@@ -25,24 +25,36 @@ export const getFeeds = createSelector([getActivities, getPromotions, getUser, g
         let feedsOrder = groups.groupFeedOrder;
         let feeds = groups.groupFeeds;
         let clientMessage = groups.clientMessages;
+
         let feedsUi = new Map();
         if (!_.isEmpty(feeds)) {
             Object.keys(feedsOrder).forEach(function (groupId) {
+                let assembledFeeds = [];
                 let groupFeeds = feedsOrder[groupId];
                 let groupFeedsArray = groupFeeds.map(feedId => feeds[groupId][feedId])
-                let assembledFeeds = groupFeedsArray.map(function (feed) {
+                assembledFeeds = groupFeedsArray.map(function (feed) {
                     if (feed.activity && (feed.activity.action == 'group_message' || feed.activity.action == 'group_follow')) {
                         return feed;
                     }
                     return assemblers.assembler(feed, collections);
-                })
-                if (clientMessage && clientMessage[groupId] && clientMessage[groupId].length > 0) {
-                    clientMessage[groupId].forEach(feed => assembledFeeds.unshift(feed))
-                }
+                });
+
                 let newFeedsList = assembledFeeds.map(feed => feedUiConverter.createFeed(feed));
                 newFeedsList = newFeedsList.filter(feed => feed.id);
                 feedsUi[groupId] = newFeedsList;
             })
+        }
+
+        if (!_.isEmpty(clientMessage)) {
+            Object.keys(clientMessage).forEach(function (groupId) {
+                let clientMessageFeeds = []
+                clientMessage[groupId].forEach(feed => clientMessageFeeds.unshift(feedUiConverter.createFeed(feed)));
+                if(feedsUi[groupId]){
+                    feedsUi[groupId] = feedsUi[groupId].concat(clientMessageFeeds);
+                }else {
+                    feedsUi[groupId] = clientMessageFeeds;
+                }
+            });
         }
         return feedsUi;
     })

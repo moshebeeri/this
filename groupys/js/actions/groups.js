@@ -266,7 +266,7 @@ export function setFeeds(group, feeds) {
 }
 export function getFeedTopId(feeds, clientMessages) {
     let index = 0;
-    let clientIds = clientMessages.map(message => message._id);
+    let clientIds = clientMessages.map(message => message.id);
     while (clientIds.includes(feeds[index].id)) {
         index++;
     }
