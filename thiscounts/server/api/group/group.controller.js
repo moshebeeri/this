@@ -64,6 +64,7 @@ function group_activity(group, action) {
   else if (group.entity_type === 'MALL')
     act.actor_mall = group.creator;
   sendActivity(act);
+  sendActivity(act);
 }
 
 function user_follow_group_activity(group, user) {
@@ -77,8 +78,12 @@ function user_follow_group_activity(group, user) {
 
 function sendActivity(act, callback) {
   activity.activity(act, function (err, activity) {
-    if (err) return callback(err);
-    callback(null, activity)
+    if(callback) {
+      if (err) return callback(err);
+      callback(null, activity)
+    }else{
+      if(err) console.error(err);
+    }
   });
 
 }
@@ -243,9 +248,35 @@ exports.message = function (req, res) {
   });
 };
 
+exports.small_business_candidates = function (req, res) {
+  let groupId = req.params.group;
+  let query = `MATCH (candidate:user)-[:FOLLOW]->(user:user{_id:'${req.user._id}'})-[role:ROLE{name:'OWNS'}]->(b:business)
+               WHERE NOT (candidate)-[f:FOLLOW]->(g:group) AND NOT (candidate)-[f:UNFOLLOW]->(g)
+               AND NOT (candidate)-[f:INVITE_GROUP]->(g) 
+               AND g._id = '${groupId}' 
+               return candidate._id as _id`;
+  graphModel.query_objects(User, query, function (err) {
+    if (err) console.error(err.message);
+    return res.status(200);
+  });
+};
+
+exports.business_candidates = function (req, res) {
+  let groupId = req.params.group;
+  let businessId = req.params.business;
+  let query = `MATCH (candidate:user)-[:FOLLOW]->(b:business{_id:'${businessId}'})
+               WHERE NOT (candidate)-[f:FOLLOW]->(g:group) AND NOT (candidate)-[f:UNFOLLOW]->(g)
+               AND NOT (candidate)-[f:INVITE_GROUP]->(g) 
+               AND g._id = '${groupId}' 
+               return candidate._id as _id`;
+  graphModel.query_objects(User, query, function (err) {
+    if (err) console.error(err.message);
+    return res.status(200);
+  });
+};
+
 exports.touch = function (req, res) {
   let query = `match (u:user{_id:'${req.user._id}'})-[r:FOLLOW]->(g:group{_id:'${req.params.group_id}'}) set r.timestamp=timestamp()`;
-  console.log(query);
   graphModel.query(query, function (err) {
     if (err) console.error(err.message);
   });
@@ -429,7 +460,7 @@ exports.groups_following_business = function (req, res) {
   let skip = req.params.skip;
   let limit = req.params.limit;
 
-  let query = `MATCH (g:group)-[:FOLLOW]->(b:business{_id:"${req.params.business}"}) RETURN g._id as _id`;
+  let query = `MATCH (g:group)-[r:FOLLOW]->(b:business{_id:"${req.params.business}"}) RETURN g._id as _id`;
   graphModel.query_objects(Group, query, 'order by r.timestamp desc', skip, limit, function (err, groups) {
     if (err) return handleError(res, err);
     return res.status(200).json(groups);
@@ -644,5 +675,6 @@ exports.approve_invite_group = function (req, res) {
 };
 
 function handleError(res, err) {
+  console.error(err);
   return res.status(500).send(err);
 }

@@ -423,30 +423,3 @@ GraphModel.prototype.query = function query(query, callback){
 };
 
 module.exports = GraphModel;
-
-
-// logger.info("g_object:" (JSON.stringify(g_object))
-// object.gid = g_object.id;
-// logger.info(this.class_name +": object.gid=" + object.gid);
-// object.save(function (err) {
-//   if (err) callback(err, object);
-//   callback(null, object);
-
-
-// Creates a new promotion in the DB.
-// exports.create = function(req, res) {
-//   Promotion.create(req.body, function(err, promotion) {
-//     logger.info("Promotion.created : " + promotion._id);
-//     if(err) { return handleError(res, err); }
-//     logger.info("JSON.stringify=" + JSON.stringify(promotion, ["creator","name", "_id"]));
-//     PromotionGraph.save(JSON.stringify(promotion), function(err, gpromotion) {
-//         if(err) { return res.end(err.message); } //handleError(res, err); }
-//         promotion.gid = gpromotion.id;
-//         logger.info("promotion.gid=" + promotion.gid);
-//         promotion.save(function (err) {
-//           if (err) { return handleError(res, err); }
-//           return res.json(200, promotion);
-//       });
-//     });
-//   });
-// };
