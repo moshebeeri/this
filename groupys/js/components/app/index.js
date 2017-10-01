@@ -97,7 +97,6 @@ class ApplicationManager extends Component {
         if (!isVerified) {
             this.props.navigation.dispatch(resetAction);
         }
-        this.props.userActions.fetchUsersFollowers();
     }
 
     onChangeTab(tab) {
