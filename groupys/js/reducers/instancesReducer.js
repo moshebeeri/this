@@ -20,7 +20,9 @@ export default function instances(state = initialState, action) {
     switch (action.type) {
         case actions.UPSERT_INSTANCE:
             let currentInstances = currentState.instances;
-            currentInstances[action.item._id] = action.item;
+            action.item.forEach(eventItem => {
+                currentInstances[eventItem._id] = eventItem;
+            });
             return currentState;
         case actions.LIKE:
             let item = currentState.instances[action.id];

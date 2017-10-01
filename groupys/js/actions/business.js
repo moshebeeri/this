@@ -84,7 +84,7 @@ export function searchBusiness(business) {
 export function followByQrCode(barcode) {
     return function (dispatch, getState) {
         const token = getState().authentication.token;
-       dispatchFollowByQrcode(dispatch, barcode, token);
+        dispatchFollowByQrcode(dispatch, barcode, token);
     }
 }
 export function showCamera() {

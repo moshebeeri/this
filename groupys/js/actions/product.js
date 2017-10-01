@@ -8,8 +8,8 @@ async function getAllByBusinessId(dispatch, id, token) {
         let response = await productApi.findByBusinessId(id, token);
         if (response.length > 0) {
             dispatch({
-                type: 'GET_BUSINESS_PRODUCTS',
-                products: response,
+                type:actions.SET_PRODUCT_BUSINESS,
+                businessProducts: response,
                 businessId: id
             });
         }

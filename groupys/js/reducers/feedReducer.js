@@ -32,16 +32,18 @@ export default function feeds(state = initialState, action) {
             return feedstate;
         case actions.UPSERT_FEEDS:
             currentFeeds[action.item._id] = action.item;
-            if (!feedstate.feedView.includes(action.item._id)) {
+            if (action.item && action.item._id && !feedstate.feedView.includes(action.item._id)) {
                 feedstate.feedView.push(action.item._id);
             }
             feedstate.feeds = currentFeeds;
             return feedstate;
         case actions.UPSERT_FEEDS_ITEMS:
             action.items.forEach(item => {
-                currentFeeds[item._id] = item;
-                if (!feedstate.feedView.includes(item._id)) {
-                    feedstate.feedView.push(item._id);
+                if(item && item._id) {
+                    currentFeeds[item._id] = item;
+                    if (!feedstate.feedView.includes(item._id)) {
+                        feedstate.feedView.push(item._id);
+                    }
                 }
             });
             feedstate.feeds = currentFeeds;

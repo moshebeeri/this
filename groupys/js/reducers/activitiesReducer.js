@@ -15,8 +15,10 @@ export default function activities(state = initialState, action) {
     switch (action.type) {
         case actions.UPSERT_ACTIVITY:
             let currentActivities = activityState.activities;
-            currentActivities[action.item._id] = action.item;
-            return activityState;
+            action.item.forEach(eventItem => {
+                currentActivities[eventItem._id] = eventItem;
+            });
+           return activityState;
         default:
             return state;
     }
