@@ -289,7 +289,7 @@ function user_follow_group(user_id, group, callback) {
       console.error(err);
     }
     user_follow_group_activity(group, user_id);
-    onAction.follow(user_id, group._id);
+    onAction.follow(user_id, group._id, (err) => {if(err) console.error(err)});
 
     if (typeof callback === 'function')
       callback(null, group);
