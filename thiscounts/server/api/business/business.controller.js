@@ -4,6 +4,7 @@ const _ = require('lodash');
 const Business = require('./business.model');
 const logger = require('../../components/logger').createLogger();
 const User = require('../user/user.model');
+const Group = require('../group/group.model');
 const Notifications = require('../../components/notification');
 const onAction = require('../../components/on-action');
 const graphTools = require('../../components/graph-tools');
@@ -111,6 +112,14 @@ function business_follow_activity(follower, business) {
   });
 }
 
+/*
+let businessID = req.params.business_id;
+let userId = req.user._id;
+
+promotionGraphModel.
+*/
+
+
 exports.follow = function (req, res) {
   let userId = req.user._id;
   let businessId = req.params.business;
@@ -130,6 +139,34 @@ exports.follow = function (req, res) {
     });
   })
 };
+
+exports.following_users = function (req, res) {
+  let businessId = req.params.business;
+  let paginate = utils.to_paginate(req);
+  let query = `MATCH (user:user)-[f:FOLLOW]->(b:business{_id:"${businessId}"}) RETURN user._id as _id`;
+  graphModel.query_objects(User, query,
+    'order by _id DESC', paginate.skip, paginate.limit, function(err, users) {
+      if (err) {
+        return handleError(res, err)
+      }
+      if (!users) {return res.send(404)}
+      return res.status(200).json(users);
+    });
+};
+
+exports.following_groups = function (req, res) {
+    let businessId = req.params.business;
+    let paginate = utils.to_paginate(req);
+    let query = `MATCH (group:group)-[f:FOLLOW]->(b:business{_id:"${businessId}"}) RETURN group._id as _id`;
+    graphModel.query_objects(Group, query,
+      'order by _id DESC', paginate.skip, paginate.limit, function(err, groups) {
+        if (err) {
+          return handleError(res, err)
+        }
+        if (!groups) {return res.send(404)}
+        return res.status(200).json(groups);
+      });
+  };
 
 function defined(obj) {
   return utils.defined(obj);

@@ -17,5 +17,7 @@ router.patch('/:id', auth.isAuthenticated(), controller.update);
 router.delete('/:id', auth.hasRole('admin'), controller.destroy);
 router.get('/list/mine', auth.isAuthenticated(), controller.mine);
 router.get('/follow/:business', auth.isAuthenticated(), controller.follow);
+router.get('/following/users/:business/:skip/:limit', auth.isAuthenticated(), controller.following_users);
+router.get('/following/groups/:business/:skip/:limit', auth.isAuthenticated(), controller.following_groups);
 
 module.exports = router;
