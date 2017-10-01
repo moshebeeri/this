@@ -4,6 +4,7 @@ const _ = require('lodash');
 const Business = require('./business.model');
 const logger = require('../../components/logger').createLogger();
 const User = require('../user/user.model');
+const Group = require('../group/group.model');
 const Notifications = require('../../components/notification');
 const onAction = require('../../components/on-action');
 const graphTools = require('../../components/graph-tools');
@@ -17,7 +18,7 @@ const MongodbSearch = require('../../components/mongo-search');
 const qrcodeController = require('../qrcode/qrcode.controller');
 const feed = require('../../components/feed-tools');
 
-function get_businesses_state(businesses, userId, callback){
+function get_businesses_state(businesses, userId, callback) {
   feed.generate_state(businesses, userId, feed.business_state, callback)
 }
 
@@ -43,11 +44,11 @@ exports.address2 = function (req, res) {
 
 // Get list of businesses
 exports.index = function (req, res) {
-  Business.find(function (err, businesss) {
+  Business.find(function (err, businesses) {
     if (err) {
       return handleError(res, err);
     }
-    return res.status(200).json(businesss);
+    return res.status(200).json(businesses);
   });
 };
 
@@ -62,7 +63,9 @@ exports.show = function (req, res) {
     }
 
     get_businesses_state([business], req.user._id, function (err, businesses) {
-    if (err) { return handleError(res, err);}
+      if (err) {
+        return handleError(res, err);
+      }
       return res.status(200).json(businesses[0]);
     })
   });
@@ -84,20 +87,20 @@ exports.mine = function (req, res) {
     Business.find({}).where('_id').in(_ids)
       .sort({_id: 'desc'})
       .exec(function (err, businesses) {
-      if (err) return handleError(res, err);
-      get_businesses_state(businesses, req.user._id, function (err, businesses) {
         if (err) return handleError(res, err);
+        get_businesses_state(businesses, req.user._id, function (err, businesses) {
+          if (err) return handleError(res, err);
 
-        let info = [];
-        businesses.forEach(business => {
-          info.push({
-            business: business,
-            role: userRoleById[business._id]
+          let info = [];
+          businesses.forEach(business => {
+            info.push({
+              business: business,
+              role: userRoleById[business._id]
+            });
           });
-        });
-        return res.status(200).json(info);
-      })
-    });
+          return res.status(200).json(info);
+        })
+      });
   })
 };
 
@@ -111,24 +114,94 @@ function business_follow_activity(follower, business) {
   });
 }
 
-exports.follow = function (req, res) {
-  let userId = req.user._id;
-  let businessId = req.params.business;
+function follow(userId, businessId, callback) {
   let query = `MATCH (user:user{_id:"${userId}"})-[f:FOLLOW]->(b:business{_id:"${businessId}"}) return count(f)`;
   graphModel.query(query, function (err, count) {
-    if(err) return handleError(res, err);
-    if(count>0) return handleError(res, new Error('user already follows'));
+    if (err) return callback(err);
+    if (count > 0) return callback(new Error('user already follows'));
     graphModel.relate_ids(userId, 'FOLLOW', businessId, function (err) {
       business_follow_activity(userId, businessId);
       let query = `MATCH (b:business{_id:"${businessId}"})-[d:DEFAULT_GROUP]->(g:group) 
                     CREATE UNIQUE (user:user{_id:"${userId}"})-[f:FOLLOW]->(g)`;
       graphModel.query(query, function (err) {
-      if (err) return handleError(res, err);
-      onAction.follow(userId, businessId);
-      return res.status(200);
+        if (err) return callback(err);
+        onAction.follow(userId, businessId);
       })
-    });
+    })
   })
+}
+
+exports.follow = function (req, res) {
+  let userId = req.user._id;
+  let businessId = req.params.business;
+  follow(userId, businessId, function (err) {
+    if (err) return handleError(res, err);
+    return res.status(200);
+  })
+};
+
+exports.following_users = function (req, res) {
+  let businessId = req.params.business;
+  let paginate = utils.to_paginate(req);
+  let query = `MATCH (user:user)-[f:FOLLOW]->(b:business{_id:"${businessId}"}) RETURN user._id as _id`;
+  graphModel.query_objects(User, query,
+    'order by _id DESC', paginate.skip, paginate.limit, function (err, users) {
+      if (err) {
+        return handleError(res, err)
+      }
+      if (!users) {
+        return res.send(404)
+      }
+      return res.status(200).json(users);
+    });
+};
+
+exports.following_groups = function (req, res) {
+  let businessId = req.params.business;
+  let paginate = utils.to_paginate(req);
+  let query = `MATCH (group:group)-[f:FOLLOW]->(b:business{_id:"${businessId}"}) RETURN group._id as _id`;
+  graphModel.query_objects(Group, query,
+    'order by _id DESC', paginate.skip, paginate.limit, function (err, groups) {
+      if (err) {
+        return handleError(res, err)
+      }
+      if (!groups) {
+        return res.send(404)
+      }
+      return res.status(200).json(groups);
+    });
+};
+
+exports.users_following_default_group = function (req, res) {
+  let businessId = req.params.business;
+  let paginate = utils.to_paginate(req);
+  let query = `MATCH (user:user)-[:FOLLOW]->(:group)<-[:DEFAULT_GROUP]-(b:business{_id:"${businessId}"}) RETURN user._id as _id`;
+  graphModel.query_objects(User, query,
+    'order by _id DESC', paginate.skip, paginate.limit, function (err, users) {
+      if (err) {
+        return handleError(res, err)
+      }
+      if (!users) {
+        return res.send(404)
+      }
+      return res.status(200).json(users);
+    });
+};
+
+exports.groups_following_default_group = function (req, res) {
+  let businessId = req.params.business;
+  let paginate = utils.to_paginate(req);
+  let query = `MATCH (groups:group)-[:FOLLOW]->(:group)<-[:DEFAULT_GROUP]-(b:business{_id:"${businessId}"}) RETURN groups._id as _id`;
+  graphModel.query_objects(Group, query,
+    'order by _id DESC', paginate.skip, paginate.limit, function (err, groups) {
+      if (err) {
+        return handleError(res, err)
+      }
+      if (!groups) {
+        return res.send(404)
+      }
+      return res.status(200).json(groups);
+    });
 };
 
 function defined(obj) {
@@ -148,7 +221,7 @@ function create_business_default_group(business) {
   }, function (err, group) {
     if (err) return console.error(err.message);
     graphModel.owner_followers_follow_default_group(business.creator);
-
+    follow(business.creator, business._id);
     console.log(`default group created successfully ${JSON.stringify(group)}`)
   });
 }
@@ -207,12 +280,12 @@ exports.create = function (req, res) {
           }, function (err, business) {
 
             if (err) return handleError(res, err);
-            if(business.type === 'PERSONAL_SERVICES' ||  business.type ===  'SMALL_BUSINESS'){
+            if (business.type === 'PERSONAL_SERVICES' || business.type === 'SMALL_BUSINESS') {
               let grunt_query = `MATCH (user:user{_id:"${user._id}"}), (entity{_id:"${business._id}"})
                      CREATE (user)-[role:ROLE{name:"OWNS"}]->(entity)`;
 
-              graphModel.query(grunt_query, function(err){
-                if(err) console.log(err);
+              graphModel.query(grunt_query, function (err) {
+                if (err) console.log(err);
                 graphModel.owner_followers_follow_business(user._id);
               });
             }
@@ -251,7 +324,7 @@ function notifyOnAction(business) {
       group: business.id,
       actor_user: business.creator
     }, [business.creator])
-  }catch(err){
+  } catch (err) {
     console.error(err)
   }
 }
