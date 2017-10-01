@@ -168,7 +168,7 @@ class GroupsApi {
         return new Promise(async(resolve, reject) => {
             try {
                 let from = new Date();
-                const response = await fetch(`${server_host}/api/groups/user/follow/0/100`, {
+                const response = await fetch(`${server_host}/api/groups/following/` + bid +`/0/100`, {
                     method: 'GET',
                     headers: {
                         'Accept': 'application/json, text/plain, */*',

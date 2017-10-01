@@ -21,15 +21,6 @@ async function getUser(dispatch, token) {
 async function getUserFollowers(dispatch, token) {
     try {
         let users = await userApi.getUserFollowers(token);
-        if (users.length > 0) {
-            users.forEach(async function (user) {
-                let fullUser = await  userApi.getUserById(token, user._id);
-                dispatch({
-                    type: actions.UPSERT_SINGLE_USER,
-                    item: fullUser
-                });
-            })
-        }
         dispatch({
             type: actions.USER_FOLLOW,
             followers: users
@@ -52,7 +43,7 @@ export function fetchUsersFollowers() {
     return function (dispatch, getState) {
         const token = getState().authentication.token
         if (token) {
-           getUserFollowers(dispatch, token);
+            getUserFollowers(dispatch, token);
         }
     }
 }

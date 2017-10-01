@@ -189,10 +189,12 @@ module.exports = {
     promotion_image:{
         flex: 1,
         alignSelf: 'stretch',
+        width: undefined,
+        height: undefined
 
     },
     promotion_image_view:{
-        height: vh*36, width: width
+        width: width,height: vh*36,
     },
     promotion_upperContainer: {
 

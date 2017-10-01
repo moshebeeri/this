@@ -141,8 +141,7 @@ export default class FeedPromotion extends Component {
         if(item.banner) {
             return <View style={styles.promotion_image_view}>
 
-                <Image resizeMode="stretch" style={styles.promotion_image} source={{uri: item.banner.uri}}>
-
+                <Image resizeMode="cover" style={styles.promotion_image} source={{uri: item.banner.uri}}>
                 </Image>
             </View>
         }
