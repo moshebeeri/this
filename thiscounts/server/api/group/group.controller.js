@@ -230,24 +230,6 @@ exports.destroy = function (req, res) {
   });
 };
 
-// offer to group.
-//router.post('/offer/:group', auth.isAuthenticated(), controller.offer);
-// exports.offer = function (req, res) {
-//   let offer = req.body;
-//   Group.findById(req.params.group, function (err, group) {
-//     if (err) {
-//       return handleError(res, err);
-//     }
-//     if (!group) {
-//       return res.status(404).send('no group');
-//     }
-//     graphModel.relate_ids(group._id, 'OFFER', offer._id);
-//     group_offer_activity(group, offer);
-//     return res.status(200).json(group);
-//   });
-// };
-
-//router.post('/message/:group', auth.isAuthenticated(), controller.message);
 exports.message = function (req, res) {
   Group.findById(req.params.group, function (err, group) {
     if (err) {
@@ -263,6 +245,7 @@ exports.message = function (req, res) {
 
 exports.touch = function (req, res) {
   let query = `match (u:user{_id:'${req.user._id}'})-[r:FOLLOW]->(g:group{_id:'${req.params.group_id}'}) set r.timestamp=timestamp()`;
+  console.log(query);
   graphModel.query(query, function (err) {
     if (err) console.error(err.message);
   });

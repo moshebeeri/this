@@ -114,23 +114,29 @@ function business_follow_activity(follower, business) {
   });
 }
 
-exports.follow = function (req, res) {
-  let userId = req.user._id;
-  let businessId = req.params.business;
+function follow(userId, businessId, callback) {
   let query = `MATCH (user:user{_id:"${userId}"})-[f:FOLLOW]->(b:business{_id:"${businessId}"}) return count(f)`;
   graphModel.query(query, function (err, count) {
-    if (err) return handleError(res, err);
-    if (count > 0) return handleError(res, new Error('user already follows'));
+    if (err) return callback(err);
+    if (count > 0) return callback(new Error('user already follows'));
     graphModel.relate_ids(userId, 'FOLLOW', businessId, function (err) {
       business_follow_activity(userId, businessId);
       let query = `MATCH (b:business{_id:"${businessId}"})-[d:DEFAULT_GROUP]->(g:group) 
                     CREATE UNIQUE (user:user{_id:"${userId}"})-[f:FOLLOW]->(g)`;
       graphModel.query(query, function (err) {
-        if (err) return handleError(res, err);
+        if (err) return callback(err);
         onAction.follow(userId, businessId);
-        return res.status(200);
       })
-    });
+    })
+  })
+}
+
+exports.follow = function (req, res) {
+  let userId = req.user._id;
+  let businessId = req.params.business;
+  follow(userId, businessId, function (err) {
+    if (err) return handleError(res, err);
+    return res.status(200);
   })
 };
 
@@ -215,7 +221,7 @@ function create_business_default_group(business) {
   }, function (err, group) {
     if (err) return console.error(err.message);
     graphModel.owner_followers_follow_default_group(business.creator);
-
+    follow(business.creator, business._id);
     console.log(`default group created successfully ${JSON.stringify(group)}`)
   });
 }
