@@ -67,15 +67,12 @@ function createPunchCardInstances(promotion) {
   const p = promotion.punch_card;
 
   if (p.variation === 'SINGLE') {
-    let instance = createInstance(promotion, p.values[0], p.quantity, p.variation);
-    instance.value = null;
-    instance.value.punch_card = instance.value.toObject();
+    let instance = createInstance(promotion, {punch_card: p.values[0]}, p.quantity, p.variation);
     return [instance]
   }
   else if (p.variation === 'VALUES') {
     p.values.forEach(value => {
-      let instance = createInstance(promotion, value, value.quantity, p.variation);
-      instance.value.punch_card = instance.value;
+      let instance = createInstance(promotion, {punch_card: value}, value.quantity, p.variation);
       instances.push(instance);
     });
     return instances;
@@ -430,19 +427,17 @@ function to_graph(instance) {
 function createStoreInstanceFunction(instances) {
   return function storeInstance(instance, callback) {
     InstanceSchema.create(instance, function (err, instance) {
-      instance.populate('promotion', function (err, instance) {
+      if (err) return callback(err);
+      instanceGraphModel.reflect(instance, to_graph(instance.toObject()), function (err, instance) {
         if (err) return callback(err);
-        instanceGraphModel.reflect(instance, to_graph(instance), function (err, instance) {
+        instanceGraphModel.relate_ids(instance._id, 'INSTANCE_OF', instance.promotion._id, function (err) {
           if (err) return callback(err);
-          instanceGraphModel.relate_ids(instance._id, 'INSTANCE_OF', instance.promotion._id, function (err) {
+          spatial.add2index(instance.gid, function (err) {
             if (err) return callback(err);
-            spatial.add2index(instance.gid, function (err) {
-              if (err) return callback(err);
-              instances.push(instance);
-              callback(null, instance)
-            });
+            instances.push(instance);
+            callback(null, instance)
           });
-        })
+        });
       })
     })
   }
@@ -459,6 +454,7 @@ function storeInstances(instances, callback) {
 
 Instances.createPromotionInstances =
   Instances.prototype.createPromotionInstances = function (promotion, callback) {
+    promotion = promotion.toObject();
     let instances = [];
     if (isAutomatic(promotion))
       instances = this.createAutomaticPromotionInstances(promotion);

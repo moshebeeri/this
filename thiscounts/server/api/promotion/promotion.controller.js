@@ -268,6 +268,7 @@ function create_promotion(promotion, callback) {
 
 exports.create = function (req, res) {
   let promotion = req.body;
+  console.log(JSON.stringify(promotion));
   promotion.creator = req.user._id;
   create_promotion(promotion, function (err, promotion) {
     if (err) return handleError(res, err);
