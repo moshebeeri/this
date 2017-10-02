@@ -53,6 +53,7 @@ let InstanceSchema = new Schema({
     },
     grow: {
       value: Number,
+      by: Number,
       value_type: {type: String, enum: ['PERCENT', 'QUANTITY']}
     },
     prepay_discount: {

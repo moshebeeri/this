@@ -192,8 +192,12 @@ function createSavedInstance(instance, user_id, callback) {
   SavedInstanceController.createSavedInstance(savedInstance, callback)
 }
 
+function createRealizationCode() {
+  return randomstring.generate({length: 10, charset: 'alphanumeric'});
+}
+
 function relateSavedInstance(userId, savedInstance, instance, callback) {
-  let realize_code = randomstring.generate({length: 10, charset: 'alphanumeric'});
+  let realize_code = createRealizationCode();
   let save_time = new Date();
   instance.realize_code = realize_code;
   instance.save_time = save_time;
@@ -286,7 +290,7 @@ exports.unsave = function (req, res) {
     })
 };
 
-function updateInstanceById(user_id, instance_id, callback) {
+function createRealizeMongodbReport(user_id, instance_id, callback) {
   Realize.create({
     user: user_id,
     instance: instance_id
@@ -312,73 +316,230 @@ function updateInstanceById(user_id, instance_id, callback) {
   });
 }
 
-function firstSecondRedeemTimeLogic(obj) {
-  if(obj.firstRedeemTime && obj.secondRedeemTime)
-    throw new Error('first and second redeem time already set');
+function firstSecondRedeemTimeLogic(obj, callback) {
+  if (obj.firstRedeemTime && obj.secondRedeemTime)
+    return callback(new Error('first and second redeem time already set'));
   if (!obj.firstRedeemTime)
     obj.firstRedeemTime = Date.now();
   else
     obj.secondRedeemTime = Date.now();
-  return obj;
+  return callback(null, obj);
 }
-function redeemTimeLogic(obj) {
-  if(obj.redeemTime)
-    throw new Error('redeem time already set');
+
+function redeemTimeLogic(obj, callback) {
+  if (obj.redeemTime)
+    return callback( new Error('redeem time already set'));
   obj.redeemTime = Date.now();
-  return obj;
+  return callback(null, obj);
 }
 
-function punchCardRedeemLogic(punch_card) {
-  if(punch_card.won) throw new Error('punch card already market as won');
-  if(punch_card.redeemTimes.length >= punch_card.number_of_punches ) throw new Error('punch card already won by number of punches');
-  punch_card.redeemTimes.push(Date.now());
-  punch_card.redeemTimes.won = true;
-  return punch_card;
-}
+function redeemPunchCard(saved, callback) {
+  let punch_card = saved.savedData.punch_card;
 
-function updateSavedInstanceRealized(saved, callback) {
-  try {
-    let type = saved.instance.type;
-    if (type === 'INCREASING') {
-      saved.savedData.increasing = firstSecondRedeemTimeLogic(saved.savedData.increasing);
-    } else if (type === 'DOUBLING') {
-      saved.savedData.doubling = firstSecondRedeemTimeLogic(saved.savedData.doubling)
-    } else if (type === 'GROW') {
-      saved.savedData.grow = firstSecondRedeemTimeLogic(saved.savedData.grow);
-    } else if (type === 'PREPAY_DISCOUNT') {
-      saved.savedData.prepay_discount = firstSecondRedeemTimeLogic(saved.savedData.prepay_discount);
-    } else if (type === 'PUNCH_CARD') {
-      saved.savedData.punch_card = punchCardRedeemLogic(saved.savedData.punch_card);
-    } else if (type === 'CASH_BACK') {
-      saved.savedData.cash_back = redeemTimeLogic(saved.savedData.cash_back);
-    } else if (type === 'EARLY_BOOKING') {
-      saved.savedData.early_booking = redeemTimeLogic(saved.savedData.early_booking);
-    } else
-      saved.savedData.other = redeemTimeLogic(saved.savedData.other);
-  }catch(err){
-    return callback(err)
+  function punch(saved, callback) {
+    const query = `MATCH (:instance)<-[sf:SAVE_OF]-(saved:SavedInstance)<-[r:SAVED]-(:user{ _id: '${saved.user._id}'})
+                      where saved._id = '${saved._id}' and saved.type = 'PUNCH_CARD'
+                      return savedInstance`;
+    graphModel.query(query, function (err, savedInstances) {
+      if (err) {
+        return callback(err);
+      }
+      if (savedInstances.length !== 1) {
+        return callback(new Error(`Expecting exactly one not yet redeemed punch card found ${savedInstances.length}`));
+      }
+      const query = `MATCH (:instance)<-[sf:SAVE_OF]-(saved:SavedInstance)<-[r:SAVED]-(:user{ _id: '${saved.user._id}'})
+                      where saved._id = '${saved._id}' and saved.type = 'PUNCH_CARD'
+                      set r.code =${createRealizationCode()}`;
+      graphModel.query(query, function (err, savedInstances) {
+
+      })
+    })
   }
-  return saved.save(callback)
+
+  if (punch_card.won) return callback(new Error('punch card already market as won'));
+  else if (punch_card.redeemTimes.length >= punch_card.number_of_punches) return callback(new Error('punch card already won by number of punches'));
+  else if (punch_card.redeemTimes.length === punch_card.number_of_punches - 1) {
+    punch_card.redeemTimes.push(Date.now());
+    punch_card.redeemTimes.won = true;
+    saved.save(function (err, savedInstance) {
+      if (err) return callback(err);
+      return callback(null, {
+        terminate: true,
+        savedInstance: savedInstance
+      })
+    })
+
+  }
+  else if (punch_card.redeemTimes.length < punch_card.number_of_punches - 1) {
+    punch(saved, function (err) {
+      if (err) return callback(err);
+      punch_card.redeemTimes.push(Date.now());
+      saved.save(function (err, savedInstance) {
+        if (err) return callback(err);
+        return callback(null, {
+          terminate: false,
+          savedInstance: savedInstance
+        })
+      })
+    })
+  }
+}
+
+function redeemSavedInstance(saved, callback) {
+  redeemTimeLogic(saved.savedData.other, function (err, other) {
+    if (err) return callback(err);
+    saved.savedData.other = other;
+    if (err) return callback(err);
+    saved.save(function (err, saved) {
+      if (err) return callback(err);
+      return callback(null, {
+        terminate: true,
+        savedInstance: saved
+      })
+    })
+  })
+}
+
+function redeemIncreasing(saved, callback) {
+  firstSecondRedeemTimeLogic(saved.savedData.increasing, function(err, increasing){
+    if (err) return callback(err);
+    saved.savedData.increasing = increasing;
+    saved.save(function (err, saved) {
+      if (err) return callback(err);
+      return callback(null, {
+        terminate: increasing.firstRedeemTime && increasing.secondRedeemTime,
+        savedInstance: saved
+      })
+    })
+  })
+}
+
+function redeemDoubling(saved, callback) {
+  firstSecondRedeemTimeLogic(saved.savedData.doubling, function(err, doubling){
+    if (err) return callback(err);
+    saved.savedData.doubling = doubling;
+    if(doubling.firstRedeemTime && doubling.secondRedeemTime)
+      saved.savedData.doubling.value = 2 * saved.savedData.doubling.value;
+    saved.save(function (err, saved) {
+      if (err) return callback(err);
+      return callback(null, {
+        terminate: doubling.firstRedeemTime && doubling.secondRedeemTime,
+        savedInstance: saved
+      })
+    })
+  })
+}
+
+function redeemGrow(saved, callback) {
+  firstSecondRedeemTimeLogic(saved.savedData.grow, function(err, grow){
+    if (err) return callback(err);
+    saved.savedData.grow = grow;
+    if(grow.firstRedeemTime && !grow.secondRedeemTime)
+      saved.savedData.grow.value = grow.value + grow.by;
+    saved.save(function (err, saved) {
+      if (err) return callback(err);
+      return callback(null, {
+        terminate: grow.firstRedeemTime && grow.secondRedeemTime,
+        savedInstance: saved
+      })
+    })
+  })
+}
+
+function redeemPrepayDiscount(saved, callback) {
+  firstSecondRedeemTimeLogic(saved.savedData.prepay, function(err, prepay){
+    if (err) return callback(err);
+    saved.savedData.prepay = prepay;
+
+    saved.save(function (err, saved) {
+      if(err) callback(err);
+      if( (prepay.firstRedeemTime && prepay.secondRedeemTime) &&
+        !(prepay.firstRedeemTime <= Date.now() && Date.now() <= prepay.secondRedeemTime )){
+        if (err) return callback(new Error('redeem time out of range'));
+      }
+      return callback(null, {
+        terminate: prepay.firstRedeemTime && prepay.secondRedeemTime,
+        savedInstance: saved
+      })
+    })
+  })
+
+}
+
+function redeemCashBack(saved, callback) {
+  redeemTimeLogic(saved.savedData.cash_back, function (err, cash_back) {
+    if (err) return callback(err);
+    saved.savedData.cash_back = cash_back;
+    if (err) return callback(err);
+    saved.save(function (err, saved) {
+      if (err) return callback(err);
+      return callback(null, {
+        terminate: true,
+        savedInstance: saved
+      })
+    })
+  })
+}
+
+function redeemEarlyBooking(saved, callback) {
+  redeemTimeLogic(saved.savedData.early_booking, function (err, early_booking) {
+    if (err) return callback(err);
+    saved.savedData.early_booking = early_booking;
+    if (err) return callback(err);
+    saved.save(function (err, saved) {
+      if (err) return callback(err);
+      return callback(null, {
+        terminate: true,
+        savedInstance: saved
+      })
+    })
+  })
+}
+
+function handleRealizeBySavedInstanceType(saved, callback) {
+  let type = saved.instance.type;
+  switch (type) {
+    case 'INCREASING':
+      return redeemIncreasing(saved, callback);
+    case 'DOUBLING':
+      return redeemDoubling(saved, callback);
+    case 'GROW':
+      return redeemGrow(saved, callback);
+    case 'PREPAY_DISCOUNT':
+      return redeemPrepayDiscount(saved, callback);
+    case 'PUNCH_CARD':
+      return redeemPunchCard(saved, callback);
+    case 'CASH_BACK':
+      return redeemCashBack(saved, callback);
+    case 'EARLY_BOOKING':
+      return redeemEarlyBooking(saved, callback);
+    default:
+      return redeemSavedInstance(saved, callback);
+  }
 }
 
 function realizeSavedInstance(user, savedInstance, rel, res) {
   SavedInstance.findById(savedInstance._id).exec(function (err, saved) {
     if (err) return handleError(res, err);
     if (!saved) return handleError(res, new Error('no saved Instance found'));
-    updateSavedInstanceRealized(saved, function (err, savedInstance) {
-      if (err) return handleError(res, err);
-      graphModel.relate_ids(user._id, 'REALIZED', savedInstance._id, `{code: '${rel.properties.code}', timestamp: '${ new Date()}'}`,
-        function (err) {
+    handleRealizeBySavedInstanceType(saved, function (err, status) {
+      let terminate = status.terminate;
+      let savedInstance = status.savedInstance;
+      if (terminate) {
+        graphModel.relate_ids(user._id, 'REALIZED', savedInstance._id, `{code: '${rel.properties.code}', timestamp: '${ new Date()}'}`, function (err) {
           if (err) return handleError(res, err);
           graphModel.unrelate_ids(user._id, 'SAVED', savedInstance._id, function (err) {
             if (err) return handleError(res, err);
-            updateInstanceById(user._id, savedInstance.instance._id, function (err, instance) {
+            createRealizeMongodbReport(user._id, savedInstance.instance._id, function (err, instance) {
               if (err) return handleError(res, err);
               savedInstance.instance = instance;
               return res.status(200).json({savedInstance});
             });
           })
         })
+      }else{
+        return res.status(200).json({savedInstance});
+      }
     });
   });
 }
@@ -389,9 +550,6 @@ exports.realize = function (req, res) {
                  where saved._id = '${req.params.id}' and saved.type = 'PUNCH_CARD' and user._id='${req.user._id}'
                  return promotion,instance,rel,user, savedInstance`;
 
-  // const query = `MATCH (promotion:promotion)<-[:INSTANCE_OF]-(instance:instance)<-[sf:SAVE_OF]-(savedInstance:SavedInstance)<-[rel:SAVED{code: '${req.params.code}'}]-(user:user)
-  // const query = `MATCH (promotion:promotion)<-[:INSTANCE_OF]-(instance:instance)<-[sf:SAVE_OF]-(savedInstance:SavedInstance)<-[rel:SAVED{code: '${req.params.code}'}]-(user:user)
-  //               return promotion,instance, savedInstance, rel,user`;
   graphModel.query(query, function (err, objects) {
     if (err) return handleError(res, err);
     if (objects.length === 0)
@@ -412,7 +570,7 @@ exports.realize = function (req, res) {
           if (err) return handleError(res, err);
           if (barcodes.length !== 1)
             return res.status(403).send('non or multiple barcode found');
-          if (barcodes[0].code !== req.params.barcode)
+          if (barcodes[0].barcode !== req.params.barcode)
             return res.status(403).send('required barcode mismatch');
           return realizeSavedInstance(user, savedInstance, rel, res, instance);
         });
@@ -433,46 +591,6 @@ exports.realized = function (req, res) {
     if (objects.length === 1)
       return res.status(200).send(objects[0]);
   });
-};
-
-exports.punch = function (req, res) {
-  SavedInstance
-    .findById(req.params.id)
-    .exec(function (err, savedInstance) {
-      if (err) {
-        return handleError(res, err);
-      }
-      if (!savedInstance) {
-        return res.send(404);
-      }
-
-      const query = `MATCH (:instance)<-[sf:SAVE_OF]-(saved:SavedInstance)<-[r:SAVED]-(:user{ _id: '${req.user._id}'})
-                      where saved._id = '${req.params.id}' and saved.type = 'PUNCH_CARD'
-                      return savedInstance, r.code as code`;
-      graphModel.query(query, function (err, savedInstances) {
-        if (err) {
-          return handleError(res, err);
-        }
-        if (savedInstances.length !== 1) {
-          return res.status(500).send(`Expecting exactly one not yet redeemed punch card found ${savedInstances.length}`);
-        }
-        if (savedInstance.redeemTimes.length >= savedInstance.number_of_punches)
-          return res.status(500).send(`redeemTimes.length >= number_of_punches`);
-        if (savedInstance.redeemTimes.length === savedInstance.number_of_punches - 1)
-          return res.status(200).json({
-            last_punch: true,
-            code: savedInstances[0].code,
-            savedInstance: savedInstance
-          });
-        savedInstance.redeemTimes.push(Date.now());
-        savedInstance.save(function (err, savedInstance) {
-          if (err) {
-            return handleError(res, err);
-          }
-          return res.status(200).json(savedInstance)
-        })
-      });
-    });
 };
 
 exports.qrcode = function (req, res) {

@@ -199,14 +199,14 @@ let PromotionSchemaObject = {
     }]
   },
 
-  //????
   grow: {
     variation: {type: String, enum: Variations},
     quantity: Number,
     value_type: {type: String, enum: ['PERCENT', 'QUANTITY']},
     values: [{
       quantity: Number,
-      value: Number
+      value: Number,
+      by: Number
     }]
   },
 

@@ -169,6 +169,7 @@ function createGrowInstances(promotion) {
   if (p.variation === 'SINGLE') {
     let instance = createInstance(promotion, {
       value: p.values[0].value,
+      by: p.values[0].by,
       values_type: p.values[0].values_type
     }, p.quantity, p.variation);
     return [instance]

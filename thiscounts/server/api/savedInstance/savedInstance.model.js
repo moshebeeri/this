@@ -39,6 +39,7 @@ let SavedInstanceSchema = new Schema({
       firstRedeemTime: {type: Date},
       secondRedeemTime: {type: Date},
       value: Number,
+      by: Number,
     },
     prepay_discount: {
       firstRedeemTime: {type: Date},
