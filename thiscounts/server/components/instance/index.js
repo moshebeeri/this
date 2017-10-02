@@ -68,11 +68,14 @@ function createPunchCardInstances(promotion) {
 
   if (p.variation === 'SINGLE') {
     let instance = createInstance(promotion, p.values[0], p.quantity, p.variation);
+    instance.value = null;
+    instance.value.punch_card = instance.value.toObject();
     return [instance]
   }
   else if (p.variation === 'VALUES') {
     p.values.forEach(value => {
       let instance = createInstance(promotion, value, value.quantity, p.variation);
+      instance.value.punch_card = instance.value;
       instances.push(instance);
     });
     return instances;
@@ -169,6 +172,7 @@ function createGrowInstances(promotion) {
   if (p.variation === 'SINGLE') {
     let instance = createInstance(promotion, {
       value: p.values[0].value,
+      by: p.values[0].value,
       values_type: p.values[0].values_type
     }, p.quantity, p.variation);
     return [instance]
@@ -411,7 +415,7 @@ Instances.getPromotionValue =
 };
 
 function to_graph(instance) {
-  let value = JSON.parse(JSON.stringify(getValue(instance)));
+  let value = getValue(instance);
   let ret = {
     _id: instance._id,
     quantity: instance.quantity,
