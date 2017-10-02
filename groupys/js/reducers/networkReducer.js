@@ -1,4 +1,4 @@
-const initialState = {offline: {false}};
+const initialState = {offline: false};
 import * as actions from "./reducerActions";
 export default function network(state = initialState, action) {
     switch (action.type) {

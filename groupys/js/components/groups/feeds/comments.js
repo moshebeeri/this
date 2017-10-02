@@ -7,7 +7,8 @@ import {
     Keyboard,
     TouchableNativeFeedback,
     TouchableOpacity,
-    KeyboardAvoidingView
+    KeyboardAvoidingView,
+    KeyboardAwareScrollView
 } from "react-native";
 import {connect} from "react-redux";
 import {actions} from "react-native-navigation-redux-helpers";
@@ -28,14 +29,14 @@ class Comments extends Component {
     }
 
     render() {
-        return <View  style={styles.inputContainer}>
+        return <KeyboardAwareScrollView  style={styles.inputContainer}>
 
 
             <CommentsComponenet navigation={this.props.navigation}
                                 instance={this.props.navigation.state.params.instance}
                                 group={this.props.navigation.state.params.group}
                                 showComments={true}/>
-        </View>
+        </KeyboardAwareScrollView>
     }
 }
 export default connect(
