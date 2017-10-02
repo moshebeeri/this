@@ -7,6 +7,8 @@ const graphModel = require('../graph-tools').createGraphModel('promotion');
 const Instance = require('../instance');
 
 exports.follow = function(userId, entityId, callback){
+  if(!callback) callback = (err) => {if(err) console.error(err)};
+
   let query = `MATCH (e{_id:'${entityId}'})-[action:ON_ACTION]->(p:promotion) 
                WHERE action.type = 'FOLLOW' and action.end <= timestamp()
                return p._id as promotionId, type(e) as entity_type`;
