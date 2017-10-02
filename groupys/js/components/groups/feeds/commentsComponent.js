@@ -42,6 +42,7 @@ class CommentsComponent extends Component {
             showEmoji: false,
             iconEmoji: 'emoji-neutral',
             componentHight: 400,
+            keyboardSize:0,
             keyboardOn: false
         };
         this.handlePick = this.handlePick.bind(this);
@@ -55,9 +56,11 @@ class CommentsComponent extends Component {
         actions.fetchTopComments(group, item);
     }
 
-    _keyboardDidShow() {
+    _keyboardDidShow(e) {
+        let newSize =height - e.endCoordinates.height
         this.setState({
-            keyboardOn: true
+            keyboardOn: true,
+            keyboardSize:newSize
         })
     }
 
@@ -137,11 +140,12 @@ class CommentsComponent extends Component {
         const promotionType = <Text style={colorStyle}>{item.promotion}</Text>
         const showComment = this.state.showComment;
         const keboardOn = this.state.keyboardOn;
+        const sizeKeyboard = this.state.keyboardSize;
         const arrowIcon = this.getArrowComponent(showComment);
         const commentsView = this.createCommentView(showComment, item, keboardOn);
         const showMessageInput = this.createMessageComponent(showComment);
         const showEmoji = this.createEmojiComponent(showComment, this.state.showEmoji);
-        const style = this.createStyle(showComment, keboardOn);
+        const style = this.createStyle(showComment, keboardOn,sizeKeyboard);
         return (
             <View style={style}>
                 <View style={styles.comments_promotions}>
@@ -171,11 +175,11 @@ class CommentsComponent extends Component {
         );
     }
 
-    createStyle(showComment, keboardOn) {
+    createStyle(showComment, keboardOn,keyboardSize) {
         if (showComment) {
             if (keboardOn) {
                 return {
-                    height: vh * 45, backgroundColor: '#ebebeb'
+                    height: keyboardSize - 100, backgroundColor: '#ebebeb'
                 }
             }
             return {

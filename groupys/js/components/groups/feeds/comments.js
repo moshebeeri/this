@@ -7,7 +7,8 @@ import {
     Keyboard,
     TouchableNativeFeedback,
     TouchableOpacity,
-    KeyboardAvoidingView
+    KeyboardAvoidingView,
+    KeyboardAwareScrollView
 } from "react-native";
 import {connect} from "react-redux";
 import {actions} from "react-native-navigation-redux-helpers";
