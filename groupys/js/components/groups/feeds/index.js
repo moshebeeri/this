@@ -1,31 +1,31 @@
-
-import React, { Component } from 'react';
-import { Image,TextInput, Platform,View,Keyboard,TouchableNativeFeedback,TouchableOpacity,BackHandler} from 'react-native';
-
-import { connect } from 'react-redux';
-import { actions } from 'react-native-navigation-redux-helpers';
-import { Container,Footer,Icon,Button,Text,Input } from 'native-base';
-import GroupFeedHeader from './groupFeedHeader'
-
-
-import GenericFeedManager from '../../generic-feed-manager/index'
-import GenericFeedItem from '../../generic-feed-manager/generic-feed'
-import styles from './styles'
-import Icon2 from 'react-native-vector-icons/Entypo';
-
-import store from 'react-native-simple-store';
-import { bindActionCreators } from "redux";
-
-
+import React, {Component} from "react";
+import {
+    Image,
+    TextInput,
+    Platform,
+    View,
+    Keyboard,
+    TouchableNativeFeedback,
+    TouchableOpacity,
+    BackHandler
+} from "react-native";
+import {connect} from "react-redux";
+import {actions} from "react-native-navigation-redux-helpers";
+import {Container, Icon, Button, Text, Input} from "native-base";
+import GroupFeedHeader from "./groupFeedHeader";
+import GenericFeedManager from "../../generic-feed-manager/index";
+import GenericFeedItem from "../../generic-feed-manager/generic-feed";
+import styles from "./styles";
+import Icon2 from "react-native-vector-icons/Entypo";
+import {bindActionCreators} from "redux";
 import * as groupAction from "../../../actions/groups";
-import UiTools from '../../../api/feed-ui-converter'
+import UiTools from "../../../api/feed-ui-converter";
+import GroupApi from "../../../api/groups";
+import EmojiPicker from "react-native-emoji-picker-panel";
+import InstanceComment from "./instancesComment";
+import {getFeeds} from "../../../selectors/groupFeedsSelector";
 let uiTools = new UiTools();
-import GroupApi from "../../../api/groups"
 let groupApi = new GroupApi();
-import EmojiPicker from 'react-native-emoji-picker-panel'
-
-import InstanceComment from './instancesComment';
-import { getFeeds } from '../../../selectors/groupFeedsSelector'
 class GroupFeed extends Component {
     static navigationOptions = ({ navigation }) => ({
         header:   <GroupFeedHeader navigation = {navigation} role = {navigation.state.params.role} item={navigation.state.params.group}/>
