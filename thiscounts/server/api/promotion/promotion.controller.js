@@ -95,7 +95,8 @@ function applyToGroups(promotion, instances){
       groups.forEach(group =>{
         Group.findById(group, function (err, group) {
           if (err) return console.error(err); //return callback(err);
-          instance_group_activity(instance, group);
+          if(group)
+            instance_group_activity(instance, group);
         })
       })
     }
