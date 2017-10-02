@@ -29,14 +29,14 @@ class Comments extends Component {
     }
 
     render() {
-        return <KeyboardAwareScrollView  style={styles.inputContainer}>
+        return <View  style={styles.inputContainer}>
 
 
             <CommentsComponenet navigation={this.props.navigation}
                                 instance={this.props.navigation.state.params.instance}
                                 group={this.props.navigation.state.params.group}
                                 showComments={true}/>
-        </KeyboardAwareScrollView>
+        </View>
     }
 }
 export default connect(

@@ -38,14 +38,34 @@ class CommentsComponent extends Component {
             showEmoji: false,
             iconEmoji: 'emoji-neutral',
             componentHight: 400,
+            keyboardOn:false,
+            keyboardSize:0
+
         };
         this.handlePick = this.handlePick.bind(this);
     }
 
     componentWillMount() {
         const item = this.getInstance();
+        this.keyboardDidShowListener = Keyboard.addListener('keyboardDidShow', this._keyboardDidShow.bind(this));
+        this.keyboardDidHideListener = Keyboard.addListener('keyboardDidHide', this._keyboardDidHide.bind(this));
+
         const {navigation, actions} = this.props;
         actions.fetchTopComments(item.entities, item.generalId);
+    }
+
+    _keyboardDidShow(e) {
+        let newSize =height - e.endCoordinates.height
+        this.setState({
+            keyboardOn: true,
+            keyboardSize:newSize
+        })
+    }
+
+    _keyboardDidHide() {
+        this.setState({
+            keyboardOn: false
+        })
     }
 
     handlePick(emoji) {
@@ -120,7 +140,7 @@ class CommentsComponent extends Component {
         const commentsView = this.createCommentView(showComment, item);
         const showMessageInput = this.createMessageComponent(showComment);
         const showEmoji = this.createEmojiComponent(showComment, this.state.showEmoji);
-        const style = this.createStyle(showComment);
+        const style = this.createStyle(showComment,this.state.keyboardOn,this.state.keyboardSize);
         return (
             <View style={style}>
                 <View style={styles.comments_promotions}>
@@ -150,17 +170,21 @@ class CommentsComponent extends Component {
         );
     }
 
-    createStyle(showComment) {
+    createStyle(showComment, keboardOn,keyboardSize) {
         if (showComment) {
+            if (keboardOn) {
+                return {
+                    height: keyboardSize - 100, backgroundColor: '#ebebeb'
+                }
+            }
             return {
-                height: vh * 77, backgroundColor: '#ebebeb'
+                height: vh * 80, backgroundColor: '#ebebeb'
             }
         }
         return {
             height: vh * 15, backgroundColor: '#ebebeb'
         };
     }
-
     createEmojiComponent(showComment, showEmoji) {
         if (showComment) {
             return <EmojiPicker stylw={{height: 100}} visible={showEmoji} onEmojiSelected={this.handlePick}/>
