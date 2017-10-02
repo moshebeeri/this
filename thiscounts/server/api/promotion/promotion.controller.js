@@ -47,6 +47,7 @@ exports.show = function (req, res) {
 function to_graph(promotion) {
   return {
     _id: promotion._id,
+    name: promotion.name,
     lat: promotion.location.lat,
     lon: promotion.location.lng,
     created: promotion.created,

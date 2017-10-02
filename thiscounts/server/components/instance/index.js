@@ -430,7 +430,7 @@ function createStoreInstanceFunction(instances) {
       if (err) return callback(err);
       instanceGraphModel.reflect(instance, to_graph(instance.toObject()), function (err, instance) {
         if (err) return callback(err);
-        instanceGraphModel.relate_ids(instance._id, 'INSTANCE_OF', instance.promotion._id, function (err) {
+        instanceGraphModel.relate_ids(instance._id, 'INSTANCE_OF', instance.promotion, function (err) {
           if (err) return callback(err);
           spatial.add2index(instance.gid, function (err) {
             if (err) return callback(err);
