@@ -19,7 +19,7 @@ import LinearGradient from "react-native-linear-gradient";
 const logo = require('../../../images/logo.png');
 const global = require('../../conf/global');
 const {width, height} = Dimensions.get('window');
-class Login extends Component {
+class ForgetPassword extends Component {
     static navigationOptions = {
         header: null
     };
@@ -32,32 +32,21 @@ class Login extends Component {
         };
     }
 
-    focusNextField(nextField) {
-        this.refs[nextField]._root.focus()
-    }
 
-    async componentWillUpdate() {
-        const isVerified = await this.props.isAuthenticated;
-        if (isVerified) {
-            this.replaceRoute('home');
-        }
-    }
-
-    ///sss
-    login() {
-        this.props.actions.login(this.state.phoneNumber, this.state.password, this.props.navigation)
-    }
 
     replaceRoute(route) {
         this.props.navigation.navigate(route);
     }
 
     forgetPassowrd() {
-        this.replaceRoute('forgetPassword');
+        if(this.state.phoneNumber) {
+            this.props.actions.forgetPassword(this.state.phoneNumber)
+        }
+        this.props.navigation.goBack();
     }
 
     render() {
-        const {focusPassword, focusPhone, failedMessage, isAuthenticated, loginstate} = this.props;
+        const { failedMessage} = this.props;
         return (
 
             <LinearGradient
@@ -86,38 +75,18 @@ class Login extends Component {
                         }}>
 
                             <View style={{height: 60, justifyContent: 'flex-end', width: width / 2 + 120}}>
-                                <Text style={styles.signginText}>sign in</Text>
+                                <Text style={styles.signginText}>Upon request SMS will be sent with a temporary password</Text>
                             </View>
 
                             <Item style={styles.phoneTextInput} regular>
-                                <Input focus={focusPhone} keyboardType='phone-pad' value={this.state.name}
+                                <Input focus={true} keyboardType='phone-pad' value={this.state.name}
                                        blurOnSubmit={true} returnKeyType='next'
-                                       onSubmitEditing={this.focusNextField.bind(this, "password")}
+                                       onSubmitEditing={this.forgetPassowrd.bind(this)}
                                        onChangeText={(phoneNumber) => this.setState({phoneNumber})}
                                        placeholder='Phone Number'/>
                             </Item>
 
-                            <Item style={styles.passwordTextInput} regular>
 
-                                <Input
-                                    focus={focusPassword}
-                                    ref='password'
-                                    returnKeyType='done'
-                                    placeholder="Password"
-                                    placeholderTextColor='#444'
-                                    defaultValue=""
-                                    secureTextEntry
-                                    onChangeText={password => this.setState({password})}
-                                    onSubmitEditing={this.login.bind(this)}
-                                />
-                            </Item>
-
-                            <View style={styles.signup_container}>
-                                <Text onPress={this.forgetPassowrd.bind(this)} style={styles.forgetText}>Forgot
-                                    Password</Text>
-                                <Text onPress={() => this.replaceRoute('Signup')} style={styles.signgupText}>Sign
-                                    Up</Text>
-                            </View>
                             <Text style={{backgroundColor: 'transparent', padding: 10, fontSize: 16, color: 'red'}}>
                                 {failedMessage}
                             </Text>
@@ -129,7 +98,7 @@ class Login extends Component {
                                 width: width / 2 + 120
                             }}>
 
-                                <TouchableOpacity onPress={() => this.login()} style={{
+                                <TouchableOpacity onPress={() => this.forgetPassowrd()} style={{
                                     width: 100,
                                     height: 30,
                                     borderRadius: 10,
@@ -140,7 +109,8 @@ class Login extends Component {
                                     alignItems: 'center',
                                 } } regular>
 
-                                    <Text style={{color: 'white', fontStyle: 'normal', fontSize: 15}}>LOGIN</Text>
+                                    <Text style={{color: 'white', fontStyle: 'normal', fontSize: 15}}>SEND
+                                        SMS</Text>
 
                                 </TouchableOpacity>
                             </View>
@@ -171,15 +141,11 @@ class Login extends Component {
 }
 export default connect(
     state => ({
-        focusPassword: state.loginForm.focusPassword,
-        focusPhone: state.loginForm.focusPhone,
-        failedMessage: state.loginForm.failedMessage,
-        loginstate: state.loginForm,
         isAuthenticated: isAuthenticated(state),
     }),
     (dispatch) => ({
         actions: bindActionCreators(loginAction, dispatch)
     })
-)(Login);
+)(ForgetPassword);
 
 
