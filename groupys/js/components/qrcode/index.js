@@ -46,7 +46,7 @@ export default class Qrcode extends Component {
     async realize() {
         if (this.state.qrcode) {
             try {
-                let response = await promotionApi.realizePromotion(this.props.navigation.state.params.qrcode.code)
+                let response = await promotionApi.realizePromotion(this.state.qrcode)
                 let realizedMessage = 'Promotion ' + response.instance.promotion.name + ' realized';
                 this.setState({
                     realizedMessage: realizedMessage,
