@@ -61,7 +61,7 @@ const types = [
         },
         {
             value: 'PUNCH_CARD',
-            label: 'Punch Catd'
+            label: 'Punch Card'
         }
     ]
     //15% off for purchases more than 1000$ OR buy iphone for 600$ and get 50% off for earphones
