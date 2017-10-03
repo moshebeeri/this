@@ -314,7 +314,6 @@ class AddPromotion extends Component {
             promotion.punch_card.quantity = Number(this.state.quantity);
             promotion.punch_card.values = {
                 number_of_punches: Number(this.state.punch_card.values.number_of_punches),
-                product: this.state.giftProduct,
             };
         }
         return promotion;
