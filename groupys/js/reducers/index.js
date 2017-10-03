@@ -24,7 +24,7 @@ import myPromotions from './MyPromotionsReducer'
 import commentInstances from './commenInstancesReducer'
 import entityComments from './commentEntityReducer'
 import contacts from './contactReducer'
-
+import changePasswordForm from './form/changePasswordReducer'
 
 export default function getRootReducer() {
 
@@ -50,6 +50,7 @@ export default function getRootReducer() {
         myPromotions:myPromotions,
         entityComments:entityComments,
         commentInstances:commentInstances,
-        contacts:contacts
+        contacts:contacts,
+        changePasswordForm:changePasswordForm
     });
 }

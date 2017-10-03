@@ -116,14 +116,13 @@ class LoginApi {
                     }
                 });
                 if (response.status === '401') {
-                    reject({error: 'Signup Failed Validation'});
+                    resolve({error: 'Signup Failed Validation'});
                     return;
                 }
                 let responseData = await response.json();
                 resolve(responseData);
             }
             catch (error) {
-                console.log('There has been a problem with your fetch operation: ' + error.message);
                 reject({error: 'signup Failed '});
             }
         })
@@ -144,14 +143,15 @@ class LoginApi {
                         newPassword: newPassowrd,
                     })
                 });
-                if (response.status == '200') {
-                    resolve(true);
+                if (response.status === 200) {
+                    resolve({response:true});
+                    return;
                 }
-                reject({error: 'Old Passowrd Validation failed'});
+                resolve({error: 'Old Passowrd Validation failed',
+                    response:false });
             }
             catch (error) {
-                console.log('There has been a problem with your fetch operation: ' + error.message);
-                reject({error: 'signup Failed '});
+                reject({error: 'failed to change password '});
             }
         })
     }
