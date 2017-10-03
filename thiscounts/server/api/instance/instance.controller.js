@@ -341,7 +341,7 @@ function redeemPunchCard(saved, callback) {
   function punch(saved, callback) {
     const query = `MATCH (:instance)<-[sf:SAVE_OF]-(saved:SavedInstance)<-[r:SAVED]-(:user{ _id: '${saved.user._id}'})
                       where saved._id = '${saved._id}' and saved.type = 'PUNCH_CARD'
-                      return savedInstance`;
+                      return saved`;
     graphModel.query(query, function (err, savedInstances) {
       if (err) {
         return callback(err);
@@ -351,10 +351,8 @@ function redeemPunchCard(saved, callback) {
       }
       const query = `MATCH (:instance)<-[sf:SAVE_OF]-(saved:SavedInstance)<-[r:SAVED]-(:user{ _id: '${saved.user._id}'})
                       where saved._id = '${saved._id}' and saved.type = 'PUNCH_CARD'
-                      set r.code =${createRealizationCode()}`;
-      graphModel.query(query, function (err, savedInstances) {
-
-      })
+                      set r.code = '${createRealizationCode()}'`;
+      graphModel.query(query, callback)
     })
   }
 
