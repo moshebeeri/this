@@ -1,23 +1,21 @@
 import React, {Component} from "react";
-import {Platform, TextInput} from "react-native";
 import {
+    Button,
     Container,
     Content,
-    Text,
-    InputGroup,
-    Input,
-    Button,
-    Body,
-    Icon,
-    Left,
-    View,
-    Header,
-    Item,
     Footer,
-    Picker,
+    Header,
+    Icon,
+    Input,
+    InputGroup,
+    Item,
+    Left,
     ListItem,
+    Picker,
     Right,
-    Thumbnail
+    Text,
+    Thumbnail,
+    View
 } from "native-base";
 
 export default class PunchCardComponent extends Component {
@@ -35,14 +33,6 @@ export default class PunchCardComponent extends Component {
         this.props.setState(
             {
                 product: product
-            }
-        )
-    }
-
-    selectProduct(product) {
-        this.props.setState(
-            {
-                giftProduct: product
             }
         )
     }
@@ -111,15 +101,14 @@ export default class PunchCardComponent extends Component {
     }
 
     render() {
-        let selectProductButton = this.createSelectProductButton();
-        let punchProduct = this.createSelectBuyProductButton();
+        const punchProduct = this.createSelectBuyProductButton();
         return <View>
             {punchProduct}
             <Item style={{margin: 3}} regular>
                 <Input keyboardType='numeric' onChangeText={(value) => this.setPunchCard(value)}
                        placeholder='Number of Punches'/>
             </Item>
-            {selectProductButton}
+
         </View>
     }
 }
