@@ -69,14 +69,12 @@ function createPunchCardInstances(promotion) {
   if (p.variation === 'SINGLE') {
     let instance = createInstance(promotion, {punch_card: p.values[0]}, p.quantity, p.variation);
     promotion.punch_card.product = promotion.condition.product;
-    promotion.punch_card.gift = promotion.values[0].product;
     return [instance]
   }
   else if (p.variation === 'VALUES') {
     p.values.forEach(value => {
       let instance = createInstance(promotion, {punch_card: value}, value.quantity, p.variation);
       promotion.punch_card.product = promotion.condition.product;
-      promotion.punch_card.gift = promotion.values[0].product;
       instances.push(instance);
     });
     return instances;
@@ -89,7 +87,6 @@ function createPunchCardInstances(promotion) {
         number_of_punches: spread.value,
         days: p.values[0].days,
         product: promotion.condition.product,
-        gift: promotion.values[0].product
       };
       let instance = createInstance(promotion, value, spread.quantity);
       instances.push(instance);

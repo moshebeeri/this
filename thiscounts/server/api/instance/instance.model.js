@@ -69,7 +69,6 @@ let InstanceSchema = new Schema({
     },
     punch_card: {
       product: {type: Schema.ObjectId, ref: 'Product'},
-      gift: {type: Schema.ObjectId, ref: 'Product'},
       number_of_punches: Number,
       days: Number,
     },
