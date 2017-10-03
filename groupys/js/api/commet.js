@@ -1,8 +1,10 @@
 import Timer from "./LogTimer";
+
 let timer = new Timer();
+
 class CommentApi {
     createComment(group, instance, comment, token) {
-        return new Promise(async(resolve, reject) => {
+        return new Promise(async (resolve, reject) => {
             try {
                 let from = new Date();
                 let request = {
@@ -39,7 +41,7 @@ class CommentApi {
     }
 
     createGlobalComment(entities, comment, token) {
-        return new Promise(async(resolve, reject) => {
+        return new Promise(async (resolve, reject) => {
             try {
                 let from = new Date();
                 let request = {
@@ -72,7 +74,7 @@ class CommentApi {
     }
 
     getComment(entities, token, skip) {
-        return new Promise(async(resolve, reject) => {
+        return new Promise(async (resolve, reject) => {
             try {
                 let from = new Date();
                 let request = {};
@@ -103,7 +105,7 @@ class CommentApi {
     }
 
     getGroupComments(group, token, skip, limit) {
-        return new Promise(async(resolve, reject) => {
+        return new Promise(async (resolve, reject) => {
             try {
                 let from = new Date();
                 let request = {
@@ -137,7 +139,7 @@ class CommentApi {
     }
 
     getInstanceGroupComments(group, instance, size, token) {
-        return new Promise(async(resolve, reject) => {
+        return new Promise(async (resolve, reject) => {
             try {
                 let from = new Date();
                 let request = {
@@ -169,4 +171,5 @@ class CommentApi {
         });
     }
 }
+
 export default CommentApi;

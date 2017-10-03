@@ -68,6 +68,7 @@ import BusinessFollow from "./components/business/follow/follow_container";
 // });
 import {MenuContext} from "react-native-popup-menu";
 import getStore from "./store";
+
 const AppNavigator = StackNavigator({
         home: {screen: ApplicationManager},
         login: {screen: Login},
@@ -98,6 +99,7 @@ const AppNavigator = StackNavigator({
         businessFollow: {screen: BusinessFollow}
     }
 );
+
 class AppWithNavigationState extends Component {
     render() {
         return (
@@ -109,11 +111,12 @@ class AppWithNavigationState extends Component {
         );
     }
 }
+
 const store = getStore();
 export default function GROUPIES() {
     return (
         <Provider store={store}>
-            <AppWithNavigationState />
+            <AppWithNavigationState/>
         </Provider>
     );
 }

@@ -1,6 +1,7 @@
 const initialState = {notification: [], update: false};
 import {REHYDRATE} from "redux-persist/constants";
 import * as actions from "./reducerActions";
+
 export default function notification(state = initialState, action) {
     console.log(action.type);
     if (action.type === REHYDRATE) {

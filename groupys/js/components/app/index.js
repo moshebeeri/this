@@ -23,6 +23,7 @@ import * as mainAction from "../../actions/mainTab";
 import * as userAction from "../../actions/user";
 import {createSelector} from "reselect";
 import {NavigationActions} from "react-navigation";
+
 const promotions = require('../../../images/promotion.png');
 const save = require('../../../images/save.png');
 const groups = require('../../../images/groups.png');
@@ -68,6 +69,7 @@ const timer = BackgroundTimer.setInterval(() => {
         })
     }
 }, 60000);
+
 /////////////////////////////////////////////////
 class ApplicationManager extends Component {
     static navigationOptions = {
@@ -145,21 +147,21 @@ class ApplicationManager extends Component {
                                             showAction={showAdd} current='home'
                                             to={this.state.addComponent}/>
 
-                    <Tabs tabBarUnderlineStyle={ {backgroundColor: '#2db6c8'} } initialPage={selectedTab}
+                    <Tabs tabBarUnderlineStyle={{backgroundColor: '#2db6c8'}} initialPage={selectedTab}
                           onChangeTab={this.onChangeTab.bind(this)} style={{backgroundColor: '#fff',}}>
-                        <Tab heading={ <TabHeading style={{backgroundColor: "white"}}><Image
+                        <Tab heading={<TabHeading style={{backgroundColor: "white"}}><Image
                             style={{tintColor: '#2db6c8', marginLeft: 0, width: 35, height: 35}}
                             source={promotions}/></TabHeading>}>
                             <Feeds index={0} navigation={this.props.navigation}/>
                         </Tab>
-                        <Tab heading={ <TabHeading style={{backgroundColor: "white"}}><Image
+                        <Tab heading={<TabHeading style={{backgroundColor: "white"}}><Image
                             style={{tintColor: '#2db6c8', marginLeft: 0, width: 25, height: 25}}
                             source={save}/></TabHeading>}>
                             <MydPromotions navigation={this.props.navigation} index={1}/>
                         </Tab>
 
                         <Tab
-                            heading={ <TabHeading style={{backgroundColor: "white"}}><Image
+                            heading={<TabHeading style={{backgroundColor: "white"}}><Image
                                 style={{tintColor: '#2db6c8', marginLeft: 0, width: 55, height: 55}}
                                 source={groups}/></TabHeading>}>
                             <Groups navigation={this.props.navigation} index={2}
@@ -167,7 +169,7 @@ class ApplicationManager extends Component {
                         </Tab>
 
                         <Tab
-                            heading={ <TabHeading style={{width: 15, backgroundColor: "white"}}><Icon2
+                            heading={<TabHeading style={{width: 15, backgroundColor: "white"}}><Icon2
                                 style={{color: '#2db6c8', fontSize: 30,}} name="md-notifications"/></TabHeading>}>
                             <Notification navigation={this.props.navigation} index={3}></Notification>
                         </Tab>
@@ -197,6 +199,7 @@ class ApplicationManager extends Component {
         return undefined;
     }
 }
+
 const mapStateToProps = (state) => {
     return {
         state: state,

@@ -1,6 +1,7 @@
 const initialState = {feeds: {}, feedOrder: [], showTopLoader: false, update: false, lastfeed: undefined, lastCall: {}};
 import {REHYDRATE} from "redux-persist/constants";
 import * as actions from "./reducerActions";
+
 export default function myPromotions(state = initialState, action) {
     console.log(action.type);
     if (action.type === REHYDRATE) {

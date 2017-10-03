@@ -4,6 +4,7 @@ import UserApi from "../api/user";
 import {NavigationActions} from "react-navigation";
 import store from "react-native-simple-store";
 import ContactApi from "../api/contacts";
+
 let contactApi = new ContactApi();
 let loginApi = new LoginApi();
 let userApi = new UserApi();
@@ -13,12 +14,13 @@ const resetAction = NavigationActions.reset({
         NavigationActions.navigate({routeName: 'home'})
     ]
 });
+
 export function login(phone, password, navigation) {
     return async function (dispatch) {
         try {
             let response = await loginApi.login(phone, password);
             if (response.token) {
-                await store.save("token",response.token)
+                await store.save("token", response.token)
                 dispatch({
                     type: actions.SAVE_USER_TOKEN,
                     token: response.token
@@ -27,7 +29,7 @@ export function login(phone, password, navigation) {
                     type: actions.LOGIN_SUCSESS,
                 });
                 let user = await userApi.getUser(response.token);
-                await  store.save("user_id",user._id)
+                await  store.save("user_id", user._id)
                 dispatch({
                     type: actions.SAVE_APP_USER,
                     user: user
@@ -52,13 +54,13 @@ export function login(phone, password, navigation) {
         }
     }
 }
+
 export function signup(phone, password, firstName, lastName, navigation) {
     return async function (dispatch) {
         try {
             let response = await loginApi.signup(phone, password, firstName, lastName);
             if (response.token) {
-                await store.save("token",response.token)
-
+                await store.save("token", response.token)
                 dispatch({
                     type: actions.SAVE_USER_TOKEN,
                     token: response.token
@@ -67,12 +69,11 @@ export function signup(phone, password, firstName, lastName, navigation) {
                     type: actions.SIGNUP_SUCSESS,
                 });
                 let user = await userApi.getUser(response.token);
-                await store.save("user_id",user._id);
+                await store.save("user_id", user._id);
                 dispatch({
                     type: actions.SET_USER,
                     user: user
                 });
-
                 contactApi.syncContacts();
                 navigation.navigate('Register');
             } else {
@@ -88,6 +89,7 @@ export function signup(phone, password, firstName, lastName, navigation) {
         }
     }
 }
+
 export function focusLoginForm(focus) {
     return function (dispatch,) {
         if (focus == 'password') {
@@ -97,6 +99,7 @@ export function focusLoginForm(focus) {
         }
     }
 }
+
 export function focusSignupForm(focus) {
     return function (dispatch,) {
         if (focus == 'phone') {
@@ -116,6 +119,7 @@ export function focusSignupForm(focus) {
         }
     }
 }
+
 export function verifyCode(code, navigation, resetAction) {
     return async function (dispatch,) {
         try {
@@ -139,6 +143,7 @@ export function verifyCode(code, navigation, resetAction) {
         }
     }
 }
+
 export function forgetPassword(phoneNumber) {
     return function (dispatch,) {
         try {
@@ -152,6 +157,7 @@ export function forgetPassword(phoneNumber) {
         }
     }
 }
+
 export function changePassword(currentPassword, newPassword, user, token, navigation) {
     return async function (dispatch,) {
         try {

@@ -16,9 +16,11 @@ import * as loginAction from "../../actions/login";
 import styles from "./styles";
 import {isAuthenticated} from "../../selectors/appSelector";
 import LinearGradient from "react-native-linear-gradient";
+
 const logo = require('../../../images/logo.png');
 const global = require('../../conf/global');
 const {width, height} = Dimensions.get('window');
+
 class Login extends Component {
     static navigationOptions = {
         header: null
@@ -138,7 +140,7 @@ class Login extends Component {
                                     flexDirection: 'row',
                                     justifyContent: 'center',
                                     alignItems: 'center',
-                                } } regular>
+                                }} regular>
 
                                     <Text style={{color: 'white', fontStyle: 'normal', fontSize: 15}}>LOGIN</Text>
 
@@ -169,6 +171,7 @@ class Login extends Component {
         );
     }
 }
+
 export default connect(
     state => ({
         focusPassword: state.loginForm.focusPassword,

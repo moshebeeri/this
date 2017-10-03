@@ -4,10 +4,10 @@ import {Platform, Provider} from "react-native";
 import {Container, Content, Text, Button, Body, Fab, Icon, Left, ListItem, Right, Thumbnail} from "native-base";
 import {bindActionCreators} from "redux";
 import * as promotionsAction from "../../../../actions/promotions";
+
 class SelectProductsComponent extends Component {
     constructor(props) {
         super(props);
-
     }
 
     navigateToAdd() {
@@ -72,7 +72,7 @@ class SelectProductsComponent extends Component {
                 <Content style={{backgroundColor: '#fff'}}>
 
 
-                    { productsRows }
+                    {productsRows}
 
                 </Content>
                 <Fab
@@ -92,6 +92,7 @@ class SelectProductsComponent extends Component {
         );
     }
 }
+
 export default connect(
     state => ({
         promotions: state.promotions,

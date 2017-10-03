@@ -4,8 +4,10 @@
 import GroupsApi from "../api/groups";
 import UserApi from "../api/user";
 import store from "react-native-simple-store";
+
 let groupsApi = new GroupsApi();
 let userApi = new UserApi();
+
 async function fetchList(action, feeds, api, dispatch, groupid) {
     try {
         let response = null;
@@ -47,6 +49,7 @@ async function fetchList(action, feeds, api, dispatch, groupid) {
         });
     }
 }
+
 function dispatchDone(dispatch, action, groupid) {
     switch (action) {
         case 'GET_FEEDS':
@@ -67,6 +70,7 @@ function dispatchDone(dispatch, action, groupid) {
             break;
     }
 }
+
 async function getFeedsFromStore(dispatch) {
     try {
         let response = await store.get('feeds');
@@ -80,6 +84,7 @@ async function getFeedsFromStore(dispatch) {
         console.log(error);
     }
 }
+
 async function getSavedFeedsFromStore(dispatch) {
     try {
         let response = await store.get('savedFeeds');
@@ -93,6 +98,7 @@ async function getSavedFeedsFromStore(dispatch) {
         console.log(error);
     }
 }
+
 async function getGroupFeedsFromStore(dispatch, group) {
     try {
         let response = await store.get('groups' + group);
@@ -107,12 +113,12 @@ async function getGroupFeedsFromStore(dispatch, group) {
         console.log(error);
     }
 }
+
 function addToRows(feeds, response, top) {
     let currentRows = feeds;
     let newFeeds = response.filter(function (feed) {
         let filtered = currentRows.filter(function (currentFeed) {
             return currentFeed.id === feed.id;
-
         })
         return filtered.length == 0;
     });
@@ -125,6 +131,7 @@ function addToRows(feeds, response, top) {
     }
     return currentRows;
 }
+
 async function fetchTopList(action, feeds, id, api, dispatch, groupid) {
     try {
         if (feeds && feeds.length > 0) {
@@ -155,41 +162,49 @@ async function fetchTopList(action, feeds, id, api, dispatch, groupid) {
         console.log(error);
     }
 }
+
 export function fetchFeedsFromStore() {
     return function (dispatch) {
         dispatch(getFeedsFromStore(dispatch));
     }
 }
+
 export function fetchSavedFeedsFromStore() {
     return function (dispatch) {
         dispatch(getSavedFeedsFromStore(dispatch));
     }
 }
+
 export function fetchFeeds(action, feeds, api) {
     return function (dispatch) {
         dispatch(fetchList(action, feeds, api, dispatch, null));
     }
 }
+
 export function fetchTop(action, feeds, id, api) {
     return function (dispatch) {
         dispatch(fetchTopList(action, feeds, id, api, dispatch, null));
     }
 }
+
 export function fetchGroupFeeds(groupid, action, feeds, api) {
     return function (dispatch) {
         dispatch(fetchList(action, feeds, api, dispatch, groupid));
     }
 }
+
 export function fetchGroupFeedsFromStore(groupid) {
     return function (dispatch) {
         dispatch(getGroupFeedsFromStore(dispatch, groupid));
     }
 }
+
 export function fetchGroupTop(groupid, action, feeds, id, api) {
     return function (dispatch) {
         fetchTopList(action, feeds, id, api, dispatch, groupid);
     }
 }
+
 export function showTopLoader() {
     return function (dispatch) {
         dispatch({
@@ -197,6 +212,7 @@ export function showTopLoader() {
         });
     }
 }
+
 export function hideTopLoader() {
     return function (dispatch) {
         dispatch({
@@ -204,6 +220,7 @@ export function hideTopLoader() {
         });
     }
 }
+
 export function showSavedTopLoader() {
     return function (dispatch) {
         dispatch({
@@ -211,6 +228,7 @@ export function showSavedTopLoader() {
         });
     }
 }
+
 export function showGroupTopLoader(groupid) {
     return function (dispatch) {
         dispatch({
@@ -219,6 +237,7 @@ export function showGroupTopLoader(groupid) {
         });
     }
 }
+
 async function getUserFollowers(dispatch) {
     try {
         let users = await userApi.getUserFollowers();
@@ -230,6 +249,7 @@ async function getUserFollowers(dispatch) {
         console.log(error);
     }
 }
+
 async function getUser(dispatch) {
     try {
         let user = await userApi.getUser();
@@ -241,6 +261,7 @@ async function getUser(dispatch) {
         console.log(error);
     }
 }
+
 export function updateHomeFeed(feed) {
     return function (dispatch) {
         dispatch({
@@ -249,6 +270,7 @@ export function updateHomeFeed(feed) {
         });
     }
 }
+
 export function updateGroupFeed(feed, group) {
     return function (dispatch) {
         dispatch({
@@ -258,16 +280,19 @@ export function updateGroupFeed(feed, group) {
         });
     }
 }
+
 export function fetchUsers() {
     return function (dispatch) {
         dispatch(getUser(dispatch,));
     }
 }
+
 export function fetchUsersFollowers() {
     return function (dispatch) {
         dispatch(getUserFollowers(dispatch,));
     }
 }
+
 export function nextLoad() {
     return function (dispatch) {
         dispatch({
@@ -275,11 +300,13 @@ export function nextLoad() {
         });
     }
 }
+
 export function fetchGroups() {
     return function (dispatch) {
         getAll(dispatch);
     }
 }
+
 export function directAddMessage(group, message) {
     return function (dispatch) {
         dispatch({
@@ -289,6 +316,7 @@ export function directAddMessage(group, message) {
         });
     }
 }
+
 async function getAll(dispatch) {
     try {
         let response = await groupsApi.getAll();

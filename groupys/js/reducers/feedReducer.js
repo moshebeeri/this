@@ -10,6 +10,7 @@ const initialState = {
 };
 import {REHYDRATE} from "redux-persist/constants";
 import * as actions from "./reducerActions";
+
 export default function feeds(state = initialState, action) {
     if (action.type === REHYDRATE) {
 
@@ -39,7 +40,7 @@ export default function feeds(state = initialState, action) {
             return feedstate;
         case actions.UPSERT_FEEDS_ITEMS:
             action.items.forEach(item => {
-                if(item && item._id) {
+                if (item && item._id) {
                     currentFeeds[item._id] = item;
                     if (!feedstate.feedView.includes(item._id)) {
                         feedstate.feedView.push(item._id);

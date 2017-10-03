@@ -9,6 +9,7 @@ import * as feedsAction from "../../actions/feedsMain";
 import {getFeeds} from "../../selectors/feedSelector";
 import * as userAction from "../../actions/user";
 import {createSelector} from "reselect";
+
 class Feed extends Component {
     constructor(props) {
         super(props);
@@ -43,6 +44,7 @@ class Feed extends Component {
         );
     }
 }
+
 const mapStateToProps = state => {
     return {
         feedState: state.feeds,

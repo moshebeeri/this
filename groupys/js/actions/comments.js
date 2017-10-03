@@ -1,6 +1,8 @@
 import CommentsApi from "../api/commet";
 import * as actions from "../reducers/reducerActions";
+
 let commentsApi = new CommentsApi();
+
 async function getInstanceGroupComments(dispatch, group, instance, size, token) {
     try {
         let response = await commentsApi.getInstanceGroupComments(group, instance, size, token);
@@ -18,6 +20,7 @@ async function getInstanceGroupComments(dispatch, group, instance, size, token) 
         });
     }
 }
+
 async function getGroupComments(dispatch, group, token) {
     try {
         let response = await commentsApi.getGroupComments(group, token, 0, 100);
@@ -34,6 +37,7 @@ async function getGroupComments(dispatch, group, token) {
         });
     }
 }
+
 async function getEntityComments(dispatch, entities, id, token) {
     try {
         let response = await commentsApi.getComment(entities, token);
@@ -48,18 +52,21 @@ async function getEntityComments(dispatch, entities, id, token) {
         });
     }
 }
+
 export function fetchInstanceGroupComments(group, instance, size) {
     return function (dispatch) {
         const token = getState().authentication.token;
-       getInstanceGroupComments(dispatch, group, instance, size, token);
+        getInstanceGroupComments(dispatch, group, instance, size, token);
     }
 }
+
 export function fetchEntityComments(entities, id) {
     return function (dispatch) {
         const token = getState().authentication.token;
-      getEntityComments(dispatch, entities, id, token);
+        getEntityComments(dispatch, entities, id, token);
     }
 }
+
 export function updateEntityComments(id, comment) {
     return function (dispatch) {
         dispatch({
@@ -69,6 +76,7 @@ export function updateEntityComments(id, comment) {
         });
     }
 }
+
 export function updateInstanceEntityComments(group, instance, comment) {
     return function (dispatch) {
         dispatch({
@@ -79,12 +87,14 @@ export function updateInstanceEntityComments(group, instance, comment) {
         });
     }
 }
+
 export function fetchGroupComments(group) {
     return function (dispatch) {
         const token = getState().authentication.token;
         dispatch(getGroupComments(dispatch, group, token));
     }
 }
+
 export function setNextFeeds(comments, token, group) {
     return async function (dispatch, getState) {
         try {

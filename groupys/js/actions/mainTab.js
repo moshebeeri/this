@@ -1,4 +1,5 @@
 import * as actions from "../reducers/reducerActions";
+
 export function changeTab(newTab) {
     return function (dispatch, getState) {
         dispatch({
@@ -7,6 +8,7 @@ export function changeTab(newTab) {
         });
     }
 }
+
 export function showFab(showAdd) {
     return function (dispatch, getState) {
         dispatch({

@@ -1,19 +1,16 @@
 /**
  * Created by roilandshut on 08/06/2017.
  */
-import { createStore, applyMiddleware } from "redux";
-
+import {createStore, applyMiddleware} from "redux";
 import thunk from "redux-thunk";
 import {AsyncStorage} from 'react-native'
 import getRootReducer from "./reducers";
 import {persistStore, autoRehydrate} from 'redux-persist'
-import { createLogger } from 'redux-logger'
+import {createLogger} from 'redux-logger'
 
 const logger = createLogger({
-
     // ...options
 });
-
 export const store = createStore(
     getRootReducer(),
     undefined,
@@ -22,10 +19,7 @@ export const store = createStore(
     applyMiddleware(logger),
     autoRehydrate()
 );
-persistStore(store ,{storage: AsyncStorage});
-
+persistStore(store, {storage: AsyncStorage});
 export default function getStore() {
-
-
     return store;
 }

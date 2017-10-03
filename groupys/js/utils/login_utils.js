@@ -1,10 +1,8 @@
 import store from 'react-native-simple-store';
 
-
 class LoginUtils {
-
     login(email, password) {
-        return new Promise(async(resolve, reject) => {
+        return new Promise(async (resolve, reject) => {
             try {
                 const response = await fetch(`${server_host}/auth/local`, {
                     method: 'POST',
@@ -30,11 +28,11 @@ class LoginUtils {
     }
 
     stringToMail(normalizedPhone) {
-        return normalizedPhone+`@${DOMAIN}`
+        return normalizedPhone + `@${DOMAIN}`
     }
 
     signup(countryCode, mobile, email, password) {
-        return new Promise(async(resolve, reject) => {
+        return new Promise(async (resolve, reject) => {
             try {
                 console.log(`${server_host}/api/users`);
                 let body = {
@@ -55,7 +53,6 @@ class LoginUtils {
                 const responseData = await response.json();
                 await store.save('token', responseData.token);
                 resolve(responseData.token);
-
             } catch (error) {
                 console.log('There has been a problem with your fetch operation: ' + error.message);
                 reject(error)
@@ -63,10 +60,8 @@ class LoginUtils {
         });
     }
 
-
-
     getUser(token) {
-        return new Promise(async(resolve, reject) => {
+        return new Promise(async (resolve, reject) => {
             try {
                 const response = await fetch(`${server_host}/api/users/me/`, {
                     method: 'GET',
@@ -78,9 +73,8 @@ class LoginUtils {
                 const responseData = await response.json();
                 console.log(JSON.stringify(responseData));
                 await store.save('user_id', responseData._id);
-                console.log('user_id: '+ responseData._id);
+                console.log('user_id: ' + responseData._id);
                 resolve(responseData._id);
-
             } catch (error) {
                 console.log('There has been a problem with your fetch operation: ' + error.message);
                 reject(error);
@@ -89,10 +83,10 @@ class LoginUtils {
     }
 
     getToken() {
-        return new Promise(async(resolve, reject) => {
+        return new Promise(async (resolve, reject) => {
             try {
                 const token = await store.get('token');
-                if(!token)
+                if (!token)
                     reject(null);
                 const me = await fetch(`${server_host}/api/users/me/`, {
                     method: 'GET',
@@ -101,12 +95,12 @@ class LoginUtils {
                         'Authorization': 'Bearer ' + token,
                     }
                 });
-                if(me.status === 401) {
+                if (me.status === 401) {
                     console.log('token expired');
-                    try{
+                    try {
                         const token = await this.refreshToken();
                         resolve(token);
-                    }catch (error) {
+                    } catch (error) {
                         reject(error);
                     }
                 }
@@ -115,14 +109,13 @@ class LoginUtils {
                 reject(error);
             }
         });
-
     }
 
     async refreshToken() {
-        return new Promise(async(resolve, reject) => {
+        return new Promise(async (resolve, reject) => {
             try {
-                    reject('login')
-            }catch(error){
+                reject('login')
+            } catch (error) {
                 console.log(error);
                 reject(error)
             }
@@ -138,4 +131,5 @@ class LoginUtils {
         store.delete('recover_account');
     }
 }
+
 export default LoginUtils;

@@ -10,6 +10,7 @@
 const initialState = {selectedUsers: [], users: {}, followers: [], user: undefined};
 import {REHYDRATE} from "redux-persist/constants";
 import * as actions from "./reducerActions";
+
 export default function user(state = initialState, action) {
     console.log(action.type);
     let extendedState = {...state};

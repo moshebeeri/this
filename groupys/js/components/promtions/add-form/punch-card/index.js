@@ -19,6 +19,7 @@ import {
     Right,
     Thumbnail
 } from "native-base";
+
 export default class PunchCardComponent extends Component {
     constructor(props) {
         super(props);
@@ -114,7 +115,7 @@ export default class PunchCardComponent extends Component {
         let punchProduct = this.createSelectBuyProductButton();
         return <View>
             {punchProduct}
-            <Item style={{margin: 3} } regular>
+            <Item style={{margin: 3}} regular>
                 <Input keyboardType='numeric' onChangeText={(value) => this.setPunchCard(value)}
                        placeholder='Number of Punches'/>
             </Item>

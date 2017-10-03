@@ -1,9 +1,7 @@
 import loginTheme from './general-theme';
 
 const React = require('react-native');
-
 const {StyleSheet, Platform} = React;
-
 module.exports = {
     shadow: {
         flex: 1,
@@ -31,13 +29,11 @@ module.exports = {
         marginBottom: (Platform.OS === 'ios') ? 10 : 0,
         marginTop: (Platform.OS === 'ios') ? -10 : 0,
     },
-
     signUpHereText: {
         fontSize: 14,
         textDecorationLine: 'underline',
         color: '#00F',
     },
-
     login: {
         marginBottom: 10,
         alignSelf: 'center',

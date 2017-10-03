@@ -1,6 +1,7 @@
 import React, {Component} from "react";
 import {Image, Platform, TouchableOpacity, Dimensions} from "react-native";
 import {Text, Button, View, Thumbnail} from "native-base";
+
 const covefr = require('../../../../images/cover2.png');
 const {width, height} = Dimensions.get('window')
 const vw = width / 100;

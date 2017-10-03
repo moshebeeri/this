@@ -6,11 +6,13 @@ import ActivityApi from "../api/activity";
 import * as assemblers from "./collectionAssembler";
 import * as actions from "../reducers/reducerActions";
 import CollectionDispatcher from "./collectionDispatcher";
+
 let groupsApi = new GroupsApi();
 let feedApi = new FeedApi();
 let promotionApi = new PtomotionApi();
 let activityApi = new ActivityApi();
 let userApi = new UserApi();
+
 async function getAll(dispatch, token) {
     try {
         let response = await groupsApi.getAll(token);
@@ -28,7 +30,8 @@ async function getAll(dispatch, token) {
         });
     }
 }
-async function getByBusinessId(dispatch, bid,token) {
+
+async function getByBusinessId(dispatch, bid, token) {
     try {
         let response = await groupsApi.getByBusinessId(bid, token);
         if (response.length > 0) {
@@ -44,6 +47,7 @@ async function getByBusinessId(dispatch, bid,token) {
         });
     }
 }
+
 async function getUserFollowers(dispatch, token) {
     try {
         let users = await userApi.getUserFollowers(token);
@@ -57,24 +61,28 @@ async function getUserFollowers(dispatch, token) {
         });
     }
 }
+
 export function fetchGroups() {
     return function (dispatch, getState) {
         const token = getState().authentication.token;
         getAll(dispatch, token);
     }
 }
+
 export function fetchBusinessGroups(bid) {
     return function (dispatch, getState) {
         const token = getState().authentication.token;
         getByBusinessId(dispatch, bid, token);
     }
 }
+
 export function fetchUsersFollowers() {
     return function (dispatch, getState) {
         const token = getState().authentication.token;
         getUserFollowers(dispatch, token);
     }
 }
+
 export function acceptInvatation(group) {
     return async function (dispatch, getState) {
         try {
@@ -94,6 +102,7 @@ export function acceptInvatation(group) {
         }
     }
 }
+
 export function touch(groupid) {
     return function (dispatch, getState) {
         try {
@@ -106,6 +115,7 @@ export function touch(groupid) {
         }
     }
 }
+
 export function createGroup(group) {
     return async function (dispatch, getState) {
         try {
@@ -119,12 +129,14 @@ export function createGroup(group) {
         }
     }
 }
+
 function uploadGroupPic() {
     return function (dispatch, getState) {
         const token = getState().authentication.token;
         getAll(dispatch, token);
     }
 }
+
 export function setNextFeeds(feeds, token, group) {
     return async function (dispatch, getState) {
         const token = getState().authentication.token;
@@ -189,6 +201,7 @@ export function setNextFeeds(feeds, token, group) {
         }
     }
 }
+
 export function sendMessage(groupId, message) {
     return async function (dispatch, getState) {
         const token = getState().authentication.token;
@@ -208,6 +221,7 @@ export function sendMessage(groupId, message) {
         }
     }
 }
+
 function createMessage(message, user) {
     return {
         activity: {
@@ -219,6 +233,7 @@ function createMessage(message, user) {
         _id: Math.random(),
     }
 }
+
 async function fetchTopList(id, token, group, dispatch) {
     try {
         if (!id) {
@@ -253,6 +268,7 @@ async function fetchTopList(id, token, group, dispatch) {
         });
     }
 }
+
 export function setFeeds(group, feeds) {
     if (_.isEmpty(feeds)) {
         return setNextFeeds(feeds, undefined, group)
@@ -264,6 +280,7 @@ export function setFeeds(group, feeds) {
         await fetchTopList(id, token, group, dispatch)
     }
 }
+
 export function getFeedTopId(feeds, clientMessages) {
     let index = 0;
     let clientIds = clientMessages.map(message => message.id);
@@ -272,6 +289,7 @@ export function getFeedTopId(feeds, clientMessages) {
     }
     return feeds[index].id
 }
+
 function getNextFeedId(feeds, clientMessages) {
     let id = feeds[0].id;
     if (!id) {
@@ -286,6 +304,7 @@ function getNextFeedId(feeds, clientMessages) {
     }
     return id;
 }
+
 export function fetchTop(feeds, token, group) {
     return async function (dispatch, getState) {
         const token = getState().authentication.token;
@@ -307,6 +326,7 @@ export function fetchTop(feeds, token, group) {
         });
     }
 }
+
 export function like(id) {
     return async function (dispatch, getState) {
         try {
@@ -323,6 +343,7 @@ export function like(id) {
         }
     }
 }
+
 export const unlike = (id) => {
     return async function (dispatch, getState) {
         try {
@@ -339,6 +360,7 @@ export const unlike = (id) => {
         }
     }
 };
+
 export function saveFeed(id) {
     return async function (dispatch) {
         try {
@@ -354,6 +376,7 @@ export function saveFeed(id) {
         }
     }
 }
+
 export function shareActivity(id, activityId, users, token) {
     return async function (dispatch) {
         try {

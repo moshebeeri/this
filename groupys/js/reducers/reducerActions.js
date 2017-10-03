@@ -89,7 +89,6 @@ export const USER_FOLLOW = 'USER_FOLLOW';
 export const USER_SELECT = 'USER_SELECT';
 export const USER_SELECT_RESET = 'USER_SELECT_RESET';
 export const USER_UNSELECT = 'USER_UNSELECT';
-
 //activity
 export const UPSERT_ACTIVITY = 'UPSERTactivity';
 //network

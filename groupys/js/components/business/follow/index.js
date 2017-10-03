@@ -5,6 +5,7 @@ import BusinessApi from "../../../api/business";
 import Icon3 from "react-native-vector-icons/Ionicons";
 import Camera from "react-native-camera";
 import styles from "./styles";
+
 const qrcode = require('../../../../images/qr-code.png');
 const scan = require('../../../../images/scan.png');
 let businessApi = new BusinessApi();
@@ -82,7 +83,7 @@ export default class BusinessFollow extends Component {
                         <Text style={{width: 100, marginLeft: 10}}>{businees.name}</Text>
                         <View
                             style={{marginLeft: 20, flex: -1, flexDirection: 'row', width: 180, alignItems: 'center',}}>
-                            <TouchableOpacity onPress={() => followBusiness(businees._id)} style={followStyle } regular>
+                            <TouchableOpacity onPress={() => followBusiness(businees._id)} style={followStyle} regular>
 
                                 <Text style={{color: 'white', fontStyle: 'normal', fontSize: 15}}>Follow </Text>
 
@@ -121,7 +122,7 @@ export default class BusinessFollow extends Component {
                     </TouchableOpacity>
 
                     <TouchableOpacity onPress={() => showCamera()}
-                                      style={{marginRight: 5, flexDirection: 'row', alignItems: 'center',} } regular>
+                                      style={{marginRight: 5, flexDirection: 'row', alignItems: 'center',}} regular>
                         <Image style={{marginLeft: 10, width: 20, height: 20}} source={qrcode}/>
 
 

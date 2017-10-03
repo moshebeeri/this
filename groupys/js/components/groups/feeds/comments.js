@@ -18,7 +18,9 @@ import styles from "./styles";
 import CommentApi from "../../../api/commet";
 import {bindActionCreators} from "redux";
 import * as commentAction from "../../../actions/comments";
+
 let commentApi = new CommentApi();
+
 class Comments extends Component {
     static navigationOptions = ({navigation}) => ({
         header: <GroupFeedHeader navigation={navigation} item={navigation.state.params.group}/>
@@ -29,7 +31,7 @@ class Comments extends Component {
     }
 
     render() {
-        return <View  style={styles.inputContainer}>
+        return <View style={styles.inputContainer}>
 
 
             <CommentsComponenet navigation={this.props.navigation}
@@ -39,6 +41,7 @@ class Comments extends Component {
         </View>
     }
 }
+
 export default connect(
     state => ({
         comments: state.comments

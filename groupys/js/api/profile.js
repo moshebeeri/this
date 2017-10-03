@@ -5,7 +5,9 @@
  * Created by roilandshut on 26/03/2017.
  */
 import Timer from "./LogTimer";
+
 let timer = new Timer();
+
 class ProfileApi {
     clean_phone_number(number) {
         // remove all non digits, and then remove 0 if it is the first digit
@@ -13,7 +15,7 @@ class ProfileApi {
     };
 
     fetch(token, from, to) {
-        return new Promise(async(resolve, reject) => {
+        return new Promise(async (resolve, reject) => {
             try {
                 let fromDate = new Date();
                 const response = await fetch(`${server_host}/api/profiles/instances/saved/` + from + `/` + to + `/`, {
@@ -38,4 +40,5 @@ class ProfileApi {
         });
     }
 }
+
 export default ProfileApi;

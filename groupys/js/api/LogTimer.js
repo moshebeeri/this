@@ -4,4 +4,5 @@ class LogTimer {
         console.log(entity + ' Api: ' + api + ' took: ' + totalTime + ' milliseconds')
     }
 }
+
 export default LogTimer;

@@ -1,6 +1,7 @@
 const initialState = {activities: {}};
 import {REHYDRATE} from "redux-persist/constants";
 import * as actions from "./reducerActions";
+
 export default function activities(state = initialState, action) {
     if (action.type === REHYDRATE) {
 
@@ -18,7 +19,7 @@ export default function activities(state = initialState, action) {
             action.item.forEach(eventItem => {
                 currentActivities[eventItem._id] = eventItem;
             });
-           return activityState;
+            return activityState;
         default:
             return state;
     }

@@ -1,18 +1,14 @@
-
-
 import loginTheme from './add-promotions-theme';
 
 const React = require('react-native');
-
-const { StyleSheet, Platform } = React;
-
+const {StyleSheet, Platform} = React;
 module.exports = {
-  shadow: {
-    flex: 1,
-    width: 330,
-    height: 330,
-    backgroundColor: 'transparent',
-  },
+    shadow: {
+        flex: 1,
+        width: 330,
+        height: 330,
+        backgroundColor: 'transparent',
+    },
     AddContainer: {
         paddingHorizontal: 20,
         marginTop: 40,
@@ -21,76 +17,68 @@ module.exports = {
         paddingBottom: 10,
         flexDirection: 'row',
         justifyContent: 'flex-start'
-    } ,
-  inputContainer: {
-    paddingHorizontal: 20,
-    marginTop: -120,
-    borderBottomWidth: 1,
-    borderBottomColor: 'rgba(255, 255, 255, 0.2)',
-    paddingBottom: 20,
-  },
-  forgot: {
-    alignSelf: 'flex-end',
-    marginBottom: (Platform.OS === 'ios') ? 10 : 0,
-    marginTop: (Platform.OS === 'ios') ? -10 : 0,
-  },
+    },
+    inputContainer: {
+        paddingHorizontal: 20,
+        marginTop: -120,
+        borderBottomWidth: 1,
+        borderBottomColor: 'rgba(255, 255, 255, 0.2)',
+        paddingBottom: 20,
+    },
+    forgot: {
+        alignSelf: 'flex-end',
+        marginBottom: (Platform.OS === 'ios') ? 10 : 0,
+        marginTop: (Platform.OS === 'ios') ? -10 : 0,
+    },
     addButton: {
-    marginBottom: 10,
-    alignSelf: 'center',
-    backgroundColor: loginTheme.darkenButton,
-    paddingHorizontal: 40,
-  },
-  logoButton: {
-    paddingHorizontal: 50,
-    borderRadius: 4,
-    height: 40,
-    padding: 4,
-      backgroundColor: 'transparent'
-  },
-  transparentButton: {
-    padding: 0,
-    alignItems: 'flex-start',
-  },
+        marginBottom: 10,
+        alignSelf: 'center',
+        backgroundColor: loginTheme.darkenButton,
+        paddingHorizontal: 40,
+    },
+    logoButton: {
+        paddingHorizontal: 50,
+        borderRadius: 4,
+        height: 40,
+        padding: 4,
+        backgroundColor: 'transparent'
+    },
+    transparentButton: {
+        padding: 0,
+        alignItems: 'flex-start',
+    },
     container: {
         flex: 0,
         justifyContent: 'flex-start',
         alignItems: 'flex-start',
-
-
         marginRight: 10
     },
     baseText: {
         fontFamily: 'Cochin',
     },
     titleText: {
-        marginLeft:10,
+        marginLeft: 10,
         fontSize: 10,
         fontWeight: 'bold',
-        textAlign:  "left",
+        textAlign: "left",
         width: 50
     },
     row: {
-        marginTop:5,
+        marginTop: 5,
         flexDirection: 'row'
-
     },
-
-    input:{
-
+    input: {
         height: 20,
         width: 200,
         borderColor: 'gray',
         borderWidth: 1
     },
     btnClickContain: {
-
         flexDirection: 'row',
         justifyContent: 'center',
-        width:   20,
+        width: 20,
         height: 20,
-
         borderRadius: 5,
-
     },
     btnContainer: {
         flex: 1,
@@ -121,28 +109,23 @@ module.exports = {
         marginTop: 64,
         marginBottom: 64,
     },
-
     centerText: {
         flex: 1,
         fontSize: 18,
         padding: 32,
         color: '#777',
     },
-
     textBold: {
         fontWeight: '500',
         color: '#000',
     },
-
     buttonText: {
         fontSize: 21,
         color: 'rgb(0,122,255)',
     },
-
     buttonTouchable: {
         padding: 16,
     },
-
     attachButton: {
         paddingHorizontal: 50,
         borderRadius: 4,
@@ -156,14 +139,13 @@ module.exports = {
         backgroundColor: loginTheme.darkenButton,
         paddingHorizontal: 40,
     },
-    follow_search:{
-        height:50,
-        backgroundColor:'white',
+    follow_search: {
+        height: 50,
+        backgroundColor: 'white',
         flexDirection: 'row',
         alignItems: 'center',
-        marginBottom:5,
-        borderWidth:0.3,
+        marginBottom: 5,
+        borderWidth: 0.3,
         justifyContent: 'space-between',
     },
-
 };

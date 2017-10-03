@@ -11,6 +11,7 @@ const initialState = {
 };
 import {REHYDRATE} from "redux-persist/constants";
 import * as actions from "./reducerActions";
+
 export default function group(state = initialState, action) {
     if (action.type === REHYDRATE) {
 

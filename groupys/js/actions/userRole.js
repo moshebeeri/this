@@ -1,6 +1,8 @@
 import * as actions from "../reducers/reducerActions";
 import UserApi from "../api/user";
+
 let userApi = new UserApi();
+
 export function saveRole(user, businessId, userRole) {
     return async function (dispatch, getState) {
         try {
@@ -29,6 +31,7 @@ export function saveRole(user, businessId, userRole) {
         }
     }
 }
+
 export function search(phoneNumber) {
     return async function (dispatch) {
         try {
@@ -66,6 +69,7 @@ export function search(phoneNumber) {
         }
     }
 }
+
 export function setRole(role) {
     return function (dispatch) {
         dispatch({
@@ -74,6 +78,7 @@ export function setRole(role) {
         });
     }
 }
+
 export function showSpinner(show) {
     return function (dispatch) {
         dispatch({
@@ -82,6 +87,7 @@ export function showSpinner(show) {
         });
     }
 }
+
 export function showMessage(showMessage, message) {
     return function (dispatch) {
         dispatch({
@@ -91,6 +97,7 @@ export function showMessage(showMessage, message) {
         });
     }
 }
+
 export function clearForm() {
     return function (dispatch) {
         dispatch({

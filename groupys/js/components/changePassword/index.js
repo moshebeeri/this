@@ -42,7 +42,6 @@ class ChangePassword extends Component {
         actions.resetPasswordForm();
     }
 
-
     focusNextField(nextField) {
         this.refs[nextField]._root.focus()
     }

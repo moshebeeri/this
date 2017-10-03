@@ -1,8 +1,10 @@
 import Timer from "./LogTimer";
+
 let timer = new Timer();
+
 class NotificationApi {
     getAll(token, user, skip, limit) {
-        return new Promise(async(resolve, reject) => {
+        return new Promise(async (resolve, reject) => {
             try {
                 let from = new Date();
                 const response = await fetch(`${server_host}/api/notifications/` + user._id + '/' + skip + '/' + limit, {
@@ -28,7 +30,7 @@ class NotificationApi {
     }
 
     readNotification(token, notification_id) {
-        return new Promise(async(resolve, reject) => {
+        return new Promise(async (resolve, reject) => {
             try {
                 let from = new Date();
                 const response = await fetch(`${server_host}/api/notifications/read/` + notification_id, {
@@ -54,7 +56,7 @@ class NotificationApi {
     }
 
     doNotificationAction(token, notification_id) {
-        return new Promise(async(resolve, reject) => {
+        return new Promise(async (resolve, reject) => {
             try {
                 let from = new Date();
                 const response = await fetch(`${server_host}/api/notifications/action/` + notification_id, {
@@ -79,4 +81,5 @@ class NotificationApi {
         })
     }
 }
+
 export default NotificationApi;

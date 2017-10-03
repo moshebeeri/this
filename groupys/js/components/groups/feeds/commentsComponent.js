@@ -24,11 +24,13 @@ import NestedScrollView from "react-native-nested-scrollview";
 import * as commentGroupAction from "../../../actions/commentsGroup";
 import {getFeeds} from "../../../selectors/commentInstancesSelector";
 import EmojiPicker from "react-native-emoji-picker-panel";
+
 const {width, height} = Dimensions.get('window')
 const vw = width / 100;
 const vh = height / 100
 let uiTools = new UiTools();
 let commentApi = new CommentApi();
+
 class CommentsComponent extends Component {
     constructor(props) {
         super(props);
@@ -42,7 +44,7 @@ class CommentsComponent extends Component {
             showEmoji: false,
             iconEmoji: 'emoji-neutral',
             componentHight: 400,
-            keyboardSize:0,
+            keyboardSize: 0,
             keyboardOn: false
         };
         this.handlePick = this.handlePick.bind(this);
@@ -57,10 +59,10 @@ class CommentsComponent extends Component {
     }
 
     _keyboardDidShow(e) {
-        let newSize =height - e.endCoordinates.height
+        let newSize = height - e.endCoordinates.height
         this.setState({
             keyboardOn: true,
-            keyboardSize:newSize
+            keyboardSize: newSize
         })
     }
 
@@ -145,7 +147,7 @@ class CommentsComponent extends Component {
         const commentsView = this.createCommentView(showComment, item, keboardOn);
         const showMessageInput = this.createMessageComponent(showComment);
         const showEmoji = this.createEmojiComponent(showComment, this.state.showEmoji);
-        const style = this.createStyle(showComment, keboardOn,sizeKeyboard);
+        const style = this.createStyle(showComment, keboardOn, sizeKeyboard);
         return (
             <View style={style}>
                 <View style={styles.comments_promotions}>
@@ -175,7 +177,7 @@ class CommentsComponent extends Component {
         );
     }
 
-    createStyle(showComment, keboardOn,keyboardSize) {
+    createStyle(showComment, keboardOn, keyboardSize) {
         if (showComment) {
             if (keboardOn) {
                 return {
@@ -201,7 +203,7 @@ class CommentsComponent extends Component {
     createMessageComponent(showComment) {
         if (showComment) {
             return <View style={styles.message_container}>
-                <View style={ {backgroundColor: 'white', flexDirection: 'row'}}>
+                <View style={{backgroundColor: 'white', flexDirection: 'row'}}>
                     <Button onPress={() => this._onPressButton()} style={styles.icon} transparent>
 
                         <Icon style={{fontSize: 35, color: "#2db6c8"}} name='send'/>
@@ -225,7 +227,7 @@ class CommentsComponent extends Component {
     }
 
     nextCommentPage() {
-        const {actions, group, item}= this.props;
+        const {actions, group, item} = this.props;
         actions.setNextFeeds(feeds[group._id][item.id], group, item)
     }
 
@@ -306,6 +308,7 @@ class CommentsComponent extends Component {
         }
     }
 }
+
 export default connect(
     state => ({
         token: state.authentication.token,

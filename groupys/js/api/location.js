@@ -1,7 +1,8 @@
 import store from "react-native-simple-store";
+
 class LocationApi {
     sendLocation(lng, lat, time, speed) {
-        return new Promise(async(resolve, reject) => {
+        return new Promise(async (resolve, reject) => {
             try {
                 let token = await store.get('token');
                 let request = {
@@ -35,4 +36,5 @@ class LocationApi {
         })
     }
 }
+
 export default LocationApi;

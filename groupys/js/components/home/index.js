@@ -2,16 +2,13 @@ import React, {Component} from 'react';
 import {Platform, View, Text} from 'react-native';
 import {connect} from 'react-redux';
 import {Container, Header, Tabs, Tab} from 'native-base';
-
 import {openDrawer} from '../../actions/drawer';
-
 import HeaderContent from './../homeHeader';
 import TabHome from './tabHome';
 import TabOffer from './tabOffer';
 import theme from '../../themes/base-theme';
 
 class Home extends Component {  // eslint-disable-line
-
     static propTypes = {
         openDrawer: React.PropTypes.func,
         navigation: React.PropTypes.shape({
@@ -31,9 +28,9 @@ class Home extends Component {  // eslint-disable-line
                         justifyContent: 'space-between',
                     }}
                 >
-                    <HeaderContent />
+                    <HeaderContent/>
                 </Header>
-                <View >
+                <View>
                     <Text>HOME</Text>
                     <Text>HOME</Text>
                 </View>
@@ -46,15 +43,15 @@ class Home extends Component {  // eslint-disable-line
         return (
             <Container theme={theme}>
                 <Header hasTabs
-                    style={{
-                        flexDirection: 'column',
-                        height: 50,
-                        elevation: 0,
-                        paddingTop: (Platform.OS === 'ios') ? 20 : 3,
-                        justifyContent: 'space-between',
-                    }}
+                        style={{
+                            flexDirection: 'column',
+                            height: 50,
+                            elevation: 0,
+                            paddingTop: (Platform.OS === 'ios') ? 20 : 3,
+                            justifyContent: 'space-between',
+                        }}
                 >
-                    <HeaderContent />
+                    <HeaderContent/>
                 </Header>
 
                 <Tabs>
@@ -75,5 +72,4 @@ function bindAction(dispatch) {
 const mapStateToProps = state => ({
     navigation: state.cardNavigation,
 });
-
 export default connect(mapStateToProps, bindAction)(Home);

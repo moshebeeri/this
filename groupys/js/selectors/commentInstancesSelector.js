@@ -1,17 +1,11 @@
 /**
  * Created by roilandshut on 06/09/2017.
  */
-
-
-import { createSelector } from 'reselect'
-
+import {createSelector} from 'reselect'
 import * as assemblers from '../actions/collectionAssembler';
-import  FeedUiConverter from '../api/feed-ui-converter'
+import FeedUiConverter from '../api/feed-ui-converter'
 
 let feedUiConverter = new FeedUiConverter();
-
-
-
 // const getActivities = (state) => state.activities.activities
 // const getPromotions = (state) => state.promotions.promotions
 // const getUser = (state) => state.user.users
@@ -19,18 +13,14 @@ let feedUiConverter = new FeedUiConverter();
 // const getInstances = (state) => state.instances.instances
 const getStateFeeds = (state) => state.commentInstances
 // const getStaate = (state) => state
-
-
-export const getFeeds = createSelector(  [ getStateFeeds],
+export const getFeeds = createSelector([getStateFeeds],
     (commentInstances) => {
         let feedsOrder = commentInstances.groupCommentsOrder
         let feeds = commentInstances.groupComments;
         let clientMessages = commentInstances.clientMessages;
-
         let response = {}
         if (!_.isEmpty(feedsOrder)) {
             Object.keys(feedsOrder).forEach(function (groupId) {
-
                 if (!_.isEmpty(feedsOrder[groupId])) {
                     Object.keys(feedsOrder[groupId]).forEach(function (instanceId) {
                         if (feedsOrder[groupId][instanceId] && feedsOrder[groupId][instanceId].length > 0) {
@@ -41,21 +31,13 @@ export const getFeeds = createSelector(  [ getStateFeeds],
                                 if (!response[groupId][instanceId]) {
                                     response[groupId][instanceId] = new Array();
                                 }
-
-
                                 response[groupId][instanceId].push(createFeed(feeds[groupId][instanceId][feedId]))
-
                             })
                         }
                     })
-
-
                 }
-
-
             })
         }
-
         if (!_.isEmpty(clientMessages)) {
             Object.keys(clientMessages).forEach(function (groupId) {
                 if (!_.isEmpty(clientMessages[groupId])) {
@@ -67,52 +49,39 @@ export const getFeeds = createSelector(  [ getStateFeeds],
                             response[groupId][instanceId] = new Array();
                         }
                         clientMessages[groupId][instanceId].forEach(feed => response[groupId][instanceId].unshift(feedUiConverter.createFeed(feed)))
-
                     });
                 }
             });
         }
         return response;
-
     })
-function createFeed(message){
+
+function createFeed(message) {
     let user = undefined
-    if(message.activity){
+    if (message.activity) {
         user = message.activity.actor_user;
         message = message.activity;
-    }else{
-        user= message.user;
+    } else {
+        user = message.user;
     }
-
-
-
     let name = user.phone_number;
-
     if (user.name) {
         name = user.name;
     }
-
     let response = {
         id: message._id,
-
         actor: user._id,
         showSocial: false,
         description: message.message,
-
     }
     if (user.pictures && user.pictures.length > 0) {
-
         response.logo = {
             uri: user.pictures[user.pictures.length - 1].pictures[0]
         }
-
-    }else {
+    } else {
         response.logo = noPic;
     }
-
-
     response.name = name;
-
     response.itemType = 'MESSAGE';
     return response;
 }

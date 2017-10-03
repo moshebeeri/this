@@ -1,9 +1,7 @@
 import loginTheme from '../components/login/login-theme';
 
 const React = require('react-native');
-
 const {StyleSheet, Platform} = React;
-
 module.exports = {
     shadow: {
         flex: 1,
@@ -59,6 +57,4 @@ module.exports = {
         top: (Platform.OS === 'ios') ? 4 : 0,
         backgroundColor: 'transparent',
     },
-
-
 };

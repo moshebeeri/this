@@ -22,9 +22,11 @@ import NestedScrollView from "react-native-nested-scrollview";
 import * as commentEntitiesAction from "../../actions/commentsEntities";
 import {getFeeds} from "../../selectors/commentsEntitiesSelector";
 import EmojiPicker from "react-native-emoji-picker-panel";
+
 const {width, height} = Dimensions.get('window')
 const vw = width / 100;
 const vh = height / 100
+
 class CommentsComponent extends Component {
     constructor(props) {
         super(props);
@@ -38,9 +40,8 @@ class CommentsComponent extends Component {
             showEmoji: false,
             iconEmoji: 'emoji-neutral',
             componentHight: 400,
-            keyboardOn:false,
-            keyboardSize:0
-
+            keyboardOn: false,
+            keyboardSize: 0
         };
         this.handlePick = this.handlePick.bind(this);
     }
@@ -49,16 +50,15 @@ class CommentsComponent extends Component {
         const item = this.getInstance();
         this.keyboardDidShowListener = Keyboard.addListener('keyboardDidShow', this._keyboardDidShow.bind(this));
         this.keyboardDidHideListener = Keyboard.addListener('keyboardDidHide', this._keyboardDidHide.bind(this));
-
         const {navigation, actions} = this.props;
         actions.fetchTopComments(item.entities, item.generalId);
     }
 
     _keyboardDidShow(e) {
-        let newSize =height - e.endCoordinates.height
+        let newSize = height - e.endCoordinates.height
         this.setState({
             keyboardOn: true,
-            keyboardSize:newSize
+            keyboardSize: newSize
         })
     }
 
@@ -140,7 +140,7 @@ class CommentsComponent extends Component {
         const commentsView = this.createCommentView(showComment, item);
         const showMessageInput = this.createMessageComponent(showComment);
         const showEmoji = this.createEmojiComponent(showComment, this.state.showEmoji);
-        const style = this.createStyle(showComment,this.state.keyboardOn,this.state.keyboardSize);
+        const style = this.createStyle(showComment, this.state.keyboardOn, this.state.keyboardSize);
         return (
             <View style={style}>
                 <View style={styles.comments_promotions}>
@@ -170,7 +170,7 @@ class CommentsComponent extends Component {
         );
     }
 
-    createStyle(showComment, keboardOn,keyboardSize) {
+    createStyle(showComment, keboardOn, keyboardSize) {
         if (showComment) {
             if (keboardOn) {
                 return {
@@ -185,6 +185,7 @@ class CommentsComponent extends Component {
             height: vh * 15, backgroundColor: '#ebebeb'
         };
     }
+
     createEmojiComponent(showComment, showEmoji) {
         if (showComment) {
             return <EmojiPicker stylw={{height: 100}} visible={showEmoji} onEmojiSelected={this.handlePick}/>
@@ -195,7 +196,7 @@ class CommentsComponent extends Component {
     createMessageComponent(showComment) {
         if (showComment) {
             return <View style={styles.message_container}>
-                <View style={ {backgroundColor: 'white', flexDirection: 'row'}}>
+                <View style={{backgroundColor: 'white', flexDirection: 'row'}}>
                     <Button onPress={() => this._onPressButton()} style={styles.icon} transparent>
 
                         <Icon style={{fontSize: 35, color: "#2db6c8"}} name='send'/>
@@ -220,7 +221,7 @@ class CommentsComponent extends Component {
 
     nextCommentPage() {
         const item = this.getInstance();
-        const {actions, group}= this.props;
+        const {actions, group} = this.props;
         actions.setNextFeeds(feeds[item.generalId], item.entities, item.generalId)
     }
 
@@ -296,6 +297,7 @@ class CommentsComponent extends Component {
         }
     }
 }
+
 export default connect(
     state => ({
         token: state.authentication.token,

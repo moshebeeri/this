@@ -4,56 +4,48 @@
 /**
  * Created by roilandshut on 19/07/2017.
  */
-import React, { Component } from 'react';
-import { Image,TextInput, Platform,View} from 'react-native';
-
-import { connect } from 'react-redux';
-import { actions } from 'react-native-navigation-redux-helpers';
-import { Container,Footer,Icon,Button,Thumbnail,Text } from 'native-base';
+import React, {Component} from 'react';
+import {Image, TextInput, Platform, View} from 'react-native';
+import {connect} from 'react-redux';
+import {actions} from 'react-native-navigation-redux-helpers';
+import {Container, Footer, Icon, Button, Thumbnail, Text} from 'native-base';
 import styles from './styles'
 
-
 export default class FeedComment extends Component {
-
-
-
-
-    render(){
+    render() {
         return this.createMessage(this.props.item)
     }
 
-    createMessage(item){
-        const image =  <Thumbnail  square   source={item.logo}/>
-        const containerStyle=   this.createContainerStyle(item);
+    createMessage(item) {
+        const image = <Thumbnail square source={item.logo}/>
+        const containerStyle = this.createContainerStyle(item);
         const messageStyle = this.createMessageStyle(item);
         const messageContainer = this.createMessageContainer(image, item, messageStyle)
-
-
-        return <View style = {containerStyle}>
+        return <View style={containerStyle}>
             {messageContainer}
         </View>
     }
 
     createMessageContainer(image, item, messageStyle) {
-
-        if(item.userMessage){
+        if (item.userMessage) {
             return <View style={styles.messageContainer}>
 
                 <View style={styles.messageName}>
-                    <View style={{alignItems:'flex-end',height:30}}>
+                    <View style={{alignItems: 'flex-end', height: 30}}>
                         <Text>{item.name}</Text>
                     </View>
                     <View style={messageStyle}>
-                        <Text  numberOfLines={5} style={{fontSize: 16,
+                        <Text numberOfLines={5} style={{
+                            fontSize: 16,
                             flex: 0.4,
                             color: 'white',
                             textAlign: 'center',
-                            flexWrap: 'wrap',marginLeft:10}}>{item.description}</Text>
+                            flexWrap: 'wrap', marginLeft: 10
+                        }}>{item.description}</Text>
                     </View>
                 </View>
                 {image}
             </View>
-
         }
         return <View style={styles.messageContainer}>
             {image}
@@ -68,34 +60,31 @@ export default class FeedComment extends Component {
     }
 
     createContainerStyle(item) {
-        if(item.userMessage){
-            return   {
-                margin:10,
-                alignItems:'flex-end',
-
+        if (item.userMessage) {
+            return {
+                margin: 10,
+                alignItems: 'flex-end',
             };
         }
-
         return {
             margin: 10,
             alignItems: 'flex-start',
-
-        };;
+        };
+        ;
     }
 
     createMessageStyle(item) {
-        if(item.userMessage){
-            return  {
-                backgroundColor:'#26bac4',
-                borderTopLeftRadius:20,
-                borderBottomRightRadius:20,
-                borderBottomLeftRadius:20,
-                padding:10,
+        if (item.userMessage) {
+            return {
+                backgroundColor: '#26bac4',
+                borderTopLeftRadius: 20,
+                borderBottomRightRadius: 20,
+                borderBottomLeftRadius: 20,
+                padding: 10,
                 flexDirection: 'column',
                 flex: 0.6,
-                maxWidth:200
+                maxWidth: 200
             };
-
         }
         return {
             backgroundColor: '#e7e7e7',
@@ -106,9 +95,7 @@ export default class FeedComment extends Component {
             flex: 0.6,
             flexDirection: 'column',
             maxWidth: 200
-
         };
-
     }
 }
 

@@ -1,10 +1,8 @@
 const React = require('react-native');
-
-const { StyleSheet, Dimensions,Platform } = React;
-
+const {StyleSheet, Dimensions, Platform} = React;
 module.exports = {
-  header: {
-    width: Dimensions.get('window').width,
-    marginLeft: (Platform.OS === 'ios') ? undefined : -15
-  },
+    header: {
+        width: Dimensions.get('window').width,
+        marginLeft: (Platform.OS === 'ios') ? undefined : -15
+    },
 };

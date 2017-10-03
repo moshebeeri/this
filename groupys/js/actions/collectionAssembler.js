@@ -22,12 +22,15 @@ const nameToCollections = {
     'actor_user': 'user',
     'user': 'user',
 };
+
 function collectionName(key) {
     return fieldName2CollectionName[key];
 }
+
 function nameToCollection(key) {
     return nameToCollections[key];
 }
+
 function dataSetCollection(dispacth, collection, object) {
     let actionType = 'UPSERT' + collection;
     dispacth.dispatch({
@@ -35,14 +38,17 @@ function dataSetCollection(dispacth, collection, object) {
         item: object,
     });
 }
+
 function dataGetCollection(collections, collection) {
     return collections[collection];
 }
+
 export function immutableObject(obj) {
     return {
         ...obj
     }
 }
+
 export function disassembler(input, dispatch) {
     let obj = immutableObject(input);
     Object.keys(obj).forEach(key => {
@@ -60,6 +66,7 @@ export function disassembler(input, dispatch) {
     });
     return obj;
 }
+
 export function assembler(input, collections) {
     let obj = immutableObject(input);
     Object.keys(obj).forEach(key => {

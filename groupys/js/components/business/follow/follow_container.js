@@ -1,17 +1,15 @@
 /**
  * Created by roilandshut on 04/09/2017.
  */
-
 import React, {Component} from 'react';
 import {bindActionCreators} from 'redux';
-import { connect } from 'react-redux';
-
+import {connect} from 'react-redux';
 import * as businessAction from "../../../actions/business";
-
 import FollowView from './index'
-class BusinessFollow extends Component{
+
+class BusinessFollow extends Component {
     static navigationOptions = {
-        header:null
+        header: null
     };
 
     constructor(props) {
@@ -19,7 +17,7 @@ class BusinessFollow extends Component{
     }
 
     render() {
-        const { navigation,state, actions } = this.props;
+        const {navigation, state, actions} = this.props;
         return (
             <FollowView
                 cameraOn={state.cameraOn}
@@ -29,9 +27,6 @@ class BusinessFollow extends Component{
                 {...actions} />
         );
     }
-
-
-
 }
 
 export default connect(state => ({

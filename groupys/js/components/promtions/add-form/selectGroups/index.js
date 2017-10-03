@@ -4,6 +4,7 @@ import {Platform, Provider} from "react-native";
 import {Container, Content, Text, Button, Body, Left, Footer, ListItem, Right, Thumbnail, CheckBox} from "native-base";
 import * as groupsAction from "../../../../actions/groups";
 import {bindActionCreators} from "redux";
+
 class SelectGroupsComponent extends Component {
     constructor(props) {
         super(props);
@@ -98,7 +99,7 @@ class SelectGroupsComponent extends Component {
                 <Content style={{backgroundColor: '#fff'}}>
 
 
-                    { productsRows }
+                    {productsRows}
 
                 </Content>
                 <Footer style={{backgroundColor: '#fff'}}>
@@ -115,6 +116,7 @@ class SelectGroupsComponent extends Component {
         );
     }
 }
+
 export default connect(
     state => ({
         groups: state.groups,

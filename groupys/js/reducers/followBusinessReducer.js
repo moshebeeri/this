@@ -1,5 +1,6 @@
 const initialState = {businesses: [], cameraOn: false, searching: false};
 import * as actions from "./reducerActions";
+
 export default function business(state = initialState, action) {
     switch (action.type) {
         case actions.SEARCH_BUSINESS:

@@ -1,6 +1,7 @@
 const initialState = {authentication: '', token: '', init: false, user: undefined};
 import * as actions from "./reducerActions";
 import {REHYDRATE} from "redux-persist/constants";
+
 export default function authentication(state = initialState, action) {
     if (action.type === REHYDRATE) {
 

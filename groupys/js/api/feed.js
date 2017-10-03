@@ -2,7 +2,9 @@
  * Created by roilandshut on 25/04/2017.
  */
 import Timer from "./LogTimer";
+
 let timer = new Timer();
+
 class FeedApi {
     clean_phone_number(number) {
         // remove all non digits, and then remove 0 if it is the first digit
@@ -10,7 +12,7 @@ class FeedApi {
     };
 
     getAll(direction, id, token, user) {
-        return new Promise(async(resolve, reject) => {
+        return new Promise(async (resolve, reject) => {
             try {
                 let from = new Date();
                 let userId = user._id;
@@ -36,4 +38,5 @@ class FeedApi {
         })
     }
 }
+
 export default FeedApi;

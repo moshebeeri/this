@@ -21,9 +21,11 @@ import NestedScrollView from "react-native-nested-scrollview";
 import {getFeeds} from "../../../selectors/commentsSelector";
 import {bindActionCreators} from "redux";
 import * as commentAction from "../../../actions/comments";
+
 const {width, height} = Dimensions.get('window')
 const vw = width / 100;
 const vh = height / 100
+
 class instancesComment extends Component {
     constructor(props) {
         super(props);
@@ -44,12 +46,12 @@ class instancesComment extends Component {
         if (Platform.OS == 'android') {
             if (comments[group._id]) {
                 const body = comments[group._id].map(feed => this.renderItem(feed))
-                return <NestedScrollView  >
+                return <NestedScrollView>
 
                     {body}
                 </NestedScrollView>
             } else {
-                return <NestedScrollView  >
+                return <NestedScrollView>
 
 
                 </NestedScrollView>
@@ -75,6 +77,7 @@ class instancesComment extends Component {
                                    ItemDetail={this.renderItem.bind(this)}/>
     }
 }
+
 export default connect(
     state => ({
         comments: getFeeds(state),

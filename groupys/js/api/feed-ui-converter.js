@@ -1,4 +1,5 @@
 const noPic = require('../../images/client_1.png');
+
 class FeedConverter {
     createFeed(feed) {
         let response = {};
@@ -25,7 +26,7 @@ class FeedConverter {
         return response;
     }
 
-     createMessageUi(feed) {
+    createMessageUi(feed) {
         let response;
         let user = feed.activity.actor_user;
         if (!user) {
@@ -68,7 +69,6 @@ class FeedConverter {
         if (!name) {
             name = feed.activity.actor_user.phone_number;
         }
-
         let socialState = {
             like: false,
             numberLikes: 0,
@@ -76,7 +76,7 @@ class FeedConverter {
             shares: 0,
             share: false,
         }
-        if(feed.activity.business.social_state){
+        if (feed.activity.business.social_state) {
             socialState = {
                 like: feed.activity.business.social_state.like,
                 numberLikes: feed.activity.business.social_state.likes,
@@ -90,7 +90,7 @@ class FeedConverter {
                 id: feed.activity.business._id,
                 fid: feed._id,
                 key: feed._id,
-                social:socialState,
+                social: socialState,
                 actor: feed.activity.actor_user._id,
                 itemTitle: name + ' ' + feed.activity.action,
                 name: feed.activity.business.name,
@@ -104,7 +104,7 @@ class FeedConverter {
             response = {
                 id: feed.activity.business._id,
                 fid: feed._id, key: feed._id,
-                social:socialState,
+                social: socialState,
                 name: feed.activity.business.name,
                 actor: feed.activity.actor_user._id,
                 itemTitle: name + ' ' + feed.activity.action,
@@ -118,7 +118,7 @@ class FeedConverter {
         return response;
     }
 
-    createSavedPomotion(feed,id) {
+    createSavedPomotion(feed, id) {
         let instance = feed.instance;
         let responseFeed = {};
         try {
@@ -187,14 +187,14 @@ class FeedConverter {
         return responseFeed;
     }
 
-     getInstance(feed) {
+    getInstance(feed) {
         if (feed.activity) {
             return feed.activity.instance;
         }
         return feed;
     }
 
-     getPromotion(feed) {
+    getPromotion(feed) {
         if (feed.activity) {
             return feed.activity.promotion;
         }
@@ -292,7 +292,7 @@ class FeedConverter {
         return responseFeed;
     }
 
-     createPromotionAttributes(promotion, type) {
+    createPromotionAttributes(promotion, type) {
         let response = {};
         response.name = promotion.name;
         response.description = promotion.description;
@@ -353,7 +353,7 @@ class FeedConverter {
         return response
     }
 
-     createMessage(user, message) {
+    createMessage(user, message) {
         let currentTime = new Date().toLocaleString();
         let response = {
             id: 100,
@@ -376,4 +376,5 @@ class FeedConverter {
         return response;
     }
 }
+
 export default FeedConverter;

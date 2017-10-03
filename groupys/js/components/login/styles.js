@@ -1,18 +1,13 @@
 import loginTheme from './login-theme';
 
 const React = require('react-native');
-
-const { StyleSheet, Platform, Dimensions } = React;
-
+const {StyleSheet, Platform, Dimensions} = React;
 const {width, height} = Dimensions.get('window')
-
 module.exports = {
-
     inputContainer: {
-        flex:-1,
-        height:height,
-        width:width,
-
+        flex: -1,
+        height: height,
+        width: width,
     },
     forgotButton: {
         alignSelf: 'flex-end',
@@ -27,58 +22,47 @@ module.exports = {
         marginBottom: (Platform.OS === 'ios') ? 10 : 0,
         marginTop: (Platform.OS === 'ios') ? -10 : 0,
     },
-
     signUpHereText: {
         fontSize: 14,
         textDecorationLine: 'underline',
         color: '#00F',
-
     },
-    thiscountsContainer:{
+    thiscountsContainer: {
         height: 150,
-        marginTop:height / 7,
-        justifyContent:'center',
-        backgroundColor:'transparent',
+        marginTop: height / 7,
+        justifyContent: 'center',
+        backgroundColor: 'transparent',
         flexDirection: 'column',
-
         alignItems: 'center',
-
     },
-    this:{
-       // fontFamily:'BackToBlack',
+    this: {
+        // fontFamily:'BackToBlack',
         fontSize: 60,
-        color:'white',
-        backgroundColor:'transparent'
-
-
+        color: 'white',
+        backgroundColor: 'transparent'
     },
-
-    phoneTextInput:{
-       marginTop:5,backgroundColor:'white', height:50,width:width/2 + 120 } ,
-    passwordTextInput:{
-        marginTop:10,backgroundColor:'white', height:50,width:width/2 + 120 } ,
-
-    signup_container:{
-        width:width/2 + 120,
-        justifyContent:'space-between',
+    phoneTextInput: {
+        marginTop: 5, backgroundColor: 'white', height: 50, width: width / 2 + 120
+    },
+    passwordTextInput: {
+        marginTop: 10, backgroundColor: 'white', height: 50, width: width / 2 + 120
+    },
+    signup_container: {
+        width: width / 2 + 120,
+        justifyContent: 'space-between',
         flexDirection: 'row',
-
     },
-    thiscount:{
-        fontFamily:'BackToBlack',
+    thiscount: {
+        fontFamily: 'BackToBlack',
         fontSize: 60,
-        marginTop:-20,
-        color:'white',
-
-
+        marginTop: -20,
+        color: 'white',
     },
-    signginText:{
-        fontFamily:'Roboto-Regular',
+    signginText: {
+        fontFamily: 'Roboto-Regular',
         fontSize: 16,
-        color:'white',
-        backgroundColor:'transparent',
-
-
+        color: 'white',
+        backgroundColor: 'transparent',
     },
     login: {
         marginBottom: 10,
@@ -91,7 +75,7 @@ module.exports = {
         borderRadius: 4,
         height: 40,
         padding: 4,
-        backgroundColor:'transparent',
+        backgroundColor: 'transparent',
     },
     logoGoogle: {
         backgroundColor: '#b63a48',
@@ -111,22 +95,19 @@ module.exports = {
         padding: 0,
         alignItems: 'flex-start',
     },
-    signgupText:{
-        fontFamily:'Roboto-Regular',
+    signgupText: {
+        fontFamily: 'Roboto-Regular',
         fontSize: 16,
-        color:'white',
-        marginLeft:100,
-        textDecorationLine:'underline',
-        backgroundColor:'transparent'
-
+        color: 'white',
+        marginLeft: 100,
+        textDecorationLine: 'underline',
+        backgroundColor: 'transparent'
     },
-    forgetText:{
-        fontFamily:'Roboto-Regular',
+    forgetText: {
+        fontFamily: 'Roboto-Regular',
         fontSize: 16,
-        color:'white',
-        backgroundColor:'transparent',
-        textDecorationLine:'underline'
-
-
+        color: 'white',
+        backgroundColor: 'transparent',
+        textDecorationLine: 'underline'
     },
 };

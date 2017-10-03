@@ -1,9 +1,12 @@
 import CommentsApi from "../api/commet";
 import * as actions from "../reducers/reducerActions";
+
 let commentsApi = new CommentsApi();
+
 export function fetchTop(feeds, token, entity, group) {
     return fetchTopComments(group, entity);
 }
+
 export function fetchTopComments(group, instance) {
     return async function (dispatch, getState) {
         try {
@@ -46,6 +49,7 @@ export function fetchTopComments(group, instance) {
         }
     }
 }
+
 export function sendMessage(groupId, instanceId, message) {
     return async function (dispatch, getState) {
         try {
@@ -70,6 +74,7 @@ export function sendMessage(groupId, instanceId, message) {
         }
     }
 }
+
 function createMessage(message, user) {
     return {
         activity: {
@@ -81,6 +86,7 @@ function createMessage(message, user) {
         _id: Math.random(),
     }
 }
+
 export function setNextFeeds(comments, group, instance) {
     return async function (dispatch, getState) {
         try {
@@ -93,7 +99,6 @@ export function setNextFeeds(comments, group, instance) {
                     return;
                 }
             }
-
             let response;
             if (comments && comments.length > 0) {
                 response = await commentsApi.getInstanceGroupComments(group._id, instance.id, comments.length, token);

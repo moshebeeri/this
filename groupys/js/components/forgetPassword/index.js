@@ -16,9 +16,11 @@ import * as loginAction from "../../actions/login";
 import styles from "./styles";
 import {isAuthenticated} from "../../selectors/appSelector";
 import LinearGradient from "react-native-linear-gradient";
+
 const logo = require('../../../images/logo.png');
 const global = require('../../conf/global');
 const {width, height} = Dimensions.get('window');
+
 class ForgetPassword extends Component {
     static navigationOptions = {
         header: null
@@ -32,21 +34,19 @@ class ForgetPassword extends Component {
         };
     }
 
-
-
     replaceRoute(route) {
         this.props.navigation.navigate(route);
     }
 
     forgetPassowrd() {
-        if(this.state.phoneNumber) {
+        if (this.state.phoneNumber) {
             this.props.actions.forgetPassword(this.state.phoneNumber)
         }
         this.props.navigation.goBack();
     }
 
     render() {
-        const { failedMessage} = this.props;
+        const {failedMessage} = this.props;
         return (
 
             <LinearGradient
@@ -75,7 +75,8 @@ class ForgetPassword extends Component {
                         }}>
 
                             <View style={{height: 60, justifyContent: 'flex-end', width: width / 2 + 120}}>
-                                <Text style={styles.signginText}>Upon request SMS will be sent with a temporary password</Text>
+                                <Text style={styles.signginText}>Upon request SMS will be sent with a temporary
+                                    password</Text>
                             </View>
 
                             <Item style={styles.phoneTextInput} regular>
@@ -107,7 +108,7 @@ class ForgetPassword extends Component {
                                     flexDirection: 'row',
                                     justifyContent: 'center',
                                     alignItems: 'center',
-                                } } regular>
+                                }} regular>
 
                                     <Text style={{color: 'white', fontStyle: 'normal', fontSize: 15}}>SEND
                                         SMS</Text>
@@ -139,6 +140,7 @@ class ForgetPassword extends Component {
         );
     }
 }
+
 export default connect(
     state => ({
         isAuthenticated: isAuthenticated(state),

@@ -8,10 +8,12 @@ import ActivityApi from "../api/activity";
 import * as actions from "../reducers/reducerActions";
 import * as assemblers from "./collectionAssembler";
 import CollectionDispatcher from "./collectionDispatcher";
+
 let feedApi = new FeedApi();
 let userApi = new UserApi();
 let promotionApi = new PtomotionApi();
 let activityApi = new ActivityApi();
+
 async function fetchFeedsFromServer(feeds, dispatch, token, user) {
     try {
         let response = null;
@@ -40,6 +42,7 @@ async function fetchFeedsFromServer(feeds, dispatch, token, user) {
         });
     }
 }
+
 async function fetchTopList(id, token, user, dispatch) {
     try {
         let response = await feedApi.getAll('up', id, token, user);
@@ -61,6 +64,7 @@ async function fetchTopList(id, token, user, dispatch) {
         });
     }
 }
+
 export function fetchTop(feeds, token, user) {
     return async function (dispatch, getState) {
         try {
@@ -83,6 +87,7 @@ export function fetchTop(feeds, token, user) {
         }
     }
 }
+
 async function getUserFollowers(dispatch, token) {
     try {
         let users = await userApi.getUserFollowers(token);
@@ -96,12 +101,14 @@ async function getUserFollowers(dispatch, token) {
         });
     }
 }
+
 export function fetchUsersFollowers() {
     return function (dispatch, getState) {
         const token = getState().authentication.token;
         getUserFollowers(dispatch, token)
     }
 }
+
 export function setNextFeeds(feeds) {
     return async function (dispatch, getState) {
         const token = getState().authentication.token
@@ -137,6 +144,7 @@ export function setNextFeeds(feeds) {
         }
     }
 }
+
 export function like(id) {
     return async function (dispatch, getState) {
         try {
@@ -153,6 +161,7 @@ export function like(id) {
         }
     }
 }
+
 export const unlike = (id) => {
     return async function (dispatch, getState) {
         try {
@@ -169,6 +178,7 @@ export const unlike = (id) => {
         }
     }
 };
+
 export function saveFeed(id) {
     return async function (dispatch, getState) {
         try {
@@ -184,6 +194,7 @@ export function saveFeed(id) {
         }
     }
 }
+
 export function setUserFollows() {
     return async function (dispatch, getState) {
         try {
@@ -200,6 +211,7 @@ export function setUserFollows() {
         }
     }
 }
+
 export function shareActivity(id, activityId, users, token) {
     return async function (dispatch, getState) {
         try {
@@ -218,6 +230,7 @@ export function shareActivity(id, activityId, users, token) {
         }
     }
 }
+
 export function nextLoad() {
     return function (dispatch, getState) {
         dispatch({

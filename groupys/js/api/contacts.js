@@ -4,6 +4,7 @@
 
 let Contacts = require('react-native-contacts');
 let store = require('react-native-simple-store');
+
 class ContactsApi {
     async addAllContacts(token, userId) {
         Contacts.getAll((err, contacts) => {
@@ -77,7 +78,7 @@ class ContactsApi {
     }
 
     async syncContacts() {
-        return new Promise(async(resolve, reject) => {
+        return new Promise(async (resolve, reject) => {
             let contacts = await store.get('all-contacts');
             if (contacts) {
                 contacts = JSON.parse(contacts);
@@ -101,4 +102,5 @@ class ContactsApi {
         })
     }
 }
+
 export default ContactsApi;

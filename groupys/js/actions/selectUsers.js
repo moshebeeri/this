@@ -1,4 +1,5 @@
 import * as actions from "../reducers/reducerActions";
+
 export function selectUser(user) {
     return function (dispatch) {
         dispatch({
@@ -7,6 +8,7 @@ export function selectUser(user) {
         });
     }
 }
+
 export function unselectUser(user) {
     return function (dispatch) {
         dispatch({
@@ -15,6 +17,7 @@ export function unselectUser(user) {
         });
     }
 }
+
 export function resetForm() {
     return function (dispatch) {
         dispatch({

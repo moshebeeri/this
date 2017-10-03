@@ -17,4 +17,5 @@ class CollectionDispatcher {
         })
     }
 }
+
 export default CollectionDispatcher;

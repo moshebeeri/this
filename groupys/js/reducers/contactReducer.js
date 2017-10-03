@@ -1,6 +1,7 @@
 const initialState = {contacts: '', lastUpdate: undefined};
 import * as actions from "./reducerActions";
 import {REHYDRATE} from "redux-persist/constants";
+
 export default function contacts(state = initialState, action) {
     if (action.type === REHYDRATE) {
 

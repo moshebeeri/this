@@ -3,10 +3,12 @@
  */
 import store from "react-native-simple-store";
 import Timer from "./LogTimer";
+
 let timer = new Timer();
+
 class UserApi {
     getUser(token) {
-        return new Promise(async(resolve, reject) => {
+        return new Promise(async (resolve, reject) => {
             try {
                 let from = new Date();
                 if (token) {
@@ -37,7 +39,7 @@ class UserApi {
     }
 
     getUserById(token, id) {
-        return new Promise(async(resolve, reject) => {
+        return new Promise(async (resolve, reject) => {
             try {
                 let from = new Date();
                 if (token) {
@@ -68,7 +70,7 @@ class UserApi {
     }
 
     getUserFollowers(token) {
-        return new Promise(async(resolve, reject) => {
+        return new Promise(async (resolve, reject) => {
             try {
                 let from = new Date();
                 const response = await fetch(`${server_host}/api/profiles/follow/followers/0/1000`, {
@@ -95,7 +97,7 @@ class UserApi {
     }
 
     async getFullContacts(contactPhones) {
-        return new Promise(async(resolve, reject) => {
+        return new Promise(async (resolve, reject) => {
             let contacsMap = new Map();
             let contacts = await store.get('all-contacts');
             contacts = JSON.parse(contacts);
@@ -129,7 +131,7 @@ class UserApi {
     };
 
     like(id, token) {
-        return new Promise(async(resolve, reject) => {
+        return new Promise(async (resolve, reject) => {
             try {
                 let from = new Date();
                 const response = await fetch(`${server_host}/api/users/like/` + id, {
@@ -156,7 +158,7 @@ class UserApi {
     }
 
     unlike(id, token) {
-        return new Promise(async(resolve, reject) => {
+        return new Promise(async (resolve, reject) => {
             try {
                 let from = new Date();
                 const response = await fetch(`${server_host}/api/users/like/` + id, {
@@ -183,7 +185,7 @@ class UserApi {
     }
 
     getUserByPhone(phone) {
-        return new Promise(async(resolve, reject) => {
+        return new Promise(async (resolve, reject) => {
             try {
                 let token = await store.get('token');
                 let from = new Date();
@@ -212,7 +214,7 @@ class UserApi {
     }
 
     setUserRole(user, business, role) {
-        return new Promise(async(resolve, reject) => {
+        return new Promise(async (resolve, reject) => {
             try {
                 let token = await store.get('token');
                 let from = new Date();
@@ -240,7 +242,7 @@ class UserApi {
     }
 
     removeUserRole(user, business) {
-        return new Promise(async(resolve, reject) => {
+        return new Promise(async (resolve, reject) => {
             try {
                 let token = await store.get('token');
                 let from = new Date();
@@ -268,7 +270,7 @@ class UserApi {
     }
 
     getBusinessUsers(business, token) {
-        return new Promise(async(resolve, reject) => {
+        return new Promise(async (resolve, reject) => {
             try {
                 let from = new Date();
                 const response = await fetch(`${server_host}/api/users/roles/` + business + '/' + 0 + '/' + 100, {
@@ -294,4 +296,5 @@ class UserApi {
         })
     }
 }
+
 export default UserApi;

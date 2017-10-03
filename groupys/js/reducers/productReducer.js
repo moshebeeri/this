@@ -1,6 +1,7 @@
 const initialState = {products: {}, categories: []};
 import {REHYDRATE} from "redux-persist/constants";
 import * as actions from "./reducerActions";
+
 export default function products(state = initialState, action) {
     console.log(action.type);
     if (action.type === REHYDRATE) {

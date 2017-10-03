@@ -4,6 +4,7 @@
 import {createSelector} from "reselect";
 import * as assemblers from "../actions/collectionAssembler";
 import FeedUiConverter from "../api/feed-ui-converter";
+
 let feedUiConverter = new FeedUiConverter();
 const getActivities = (state) => state.activities;
 const getPromotions = (state) => state.promotions;
@@ -13,19 +14,18 @@ const getInstances = (state) => state.instances;
 const getProducts = (state) => state.products;
 const getStateFeeds = (state) => state.groups;
 export const getFeeds = createSelector([getActivities, getPromotions, getUser, getBusinesses, getInstances, getProducts, getStateFeeds],
-    (activities, promotions, user, businesses, instances,products, groups) => {
+    (activities, promotions, user, businesses, instances, products, groups) => {
         const collections = {
             activities: activities.activities,
             promotions: promotions.promotions,
             user: user,
             businesses: businesses.businesses,
-            products:products.products,
+            products: products.products,
             instances: instances.instances
         };
         let feedsOrder = groups.groupFeedOrder;
         let feeds = groups.groupFeeds;
         let clientMessage = groups.clientMessages;
-
         let feedsUi = new Map();
         if (!_.isEmpty(feeds)) {
             Object.keys(feedsOrder).forEach(function (groupId) {
@@ -38,20 +38,18 @@ export const getFeeds = createSelector([getActivities, getPromotions, getUser, g
                     }
                     return assemblers.assembler(feed, collections);
                 });
-
                 let newFeedsList = assembledFeeds.map(feed => feedUiConverter.createFeed(feed));
                 newFeedsList = newFeedsList.filter(feed => feed.id);
                 feedsUi[groupId] = newFeedsList;
             })
         }
-
         if (!_.isEmpty(clientMessage)) {
             Object.keys(clientMessage).forEach(function (groupId) {
                 let clientMessageFeeds = []
                 clientMessage[groupId].forEach(feed => clientMessageFeeds.unshift(feedUiConverter.createFeed(feed)));
-                if(feedsUi[groupId]){
+                if (feedsUi[groupId]) {
                     feedsUi[groupId] = feedsUi[groupId].concat(clientMessageFeeds);
-                }else {
+                } else {
                     feedsUi[groupId] = clientMessageFeeds;
                 }
             });

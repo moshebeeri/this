@@ -17,6 +17,7 @@ import * as businessAction from "../../../actions/business";
 import * as promotionsAction from "../../../actions/promotions";
 import PromotionApi from "../../../api/promotion";
 import DatePicker from "react-native-datepicker";
+
 var createEntity = require("../../../utils/createEntity");
 let promotionApi = new PromotionApi();
 const Distribution = [
@@ -33,6 +34,7 @@ const Distribution = [
         label: 'Business Followers'
     }
 ];
+
 class EditPromotion extends Component {
     constructor(props) {
         super(props);
@@ -218,18 +220,18 @@ class EditPromotion extends Component {
                         <Text style={{marginLeft: 5}}>You can increase the quantity of promotions Or extend the due
                             date</Text>
 
-                        <Item style={{margin: 3} } regular>
+                        <Item style={{margin: 3}} regular>
                             <Input blurOnSubmit={true} returnKeyType='next' ref="1"
                                    onSubmitEditing={this.focusNextField.bind(this, "2")} value={this.state.item.name}
                                    onChangeText={(name) => this.setState({name})}
                                    placeholder='Name'/>
                         </Item>
-                        <Item style={{margin: 3} } regular>
+                        <Item style={{margin: 3}} regular>
                             <Input blurOnSubmit={true} returnKeyType='done' ref="2" value={this.state.info}
                                    onChangeText={(info) => this.setState({info})}
                                    placeholder='Description'/>
                         </Item>
-                        <Item style={{margin: 3} } regular>
+                        <Item style={{margin: 3}} regular>
                             <DatePicker
                                 style={{width: 200}}
                                 date={this.state.end}
@@ -246,7 +248,7 @@ class EditPromotion extends Component {
                                 }}
                             />
                         </Item>
-                        <Item style={{margin: 3} } regular>
+                        <Item style={{margin: 3}} regular>
                             <Input keyboardType='numeric' value={this.state.quantity}
                                    onChangeText={(value) => this.setQuantity(value)} placeholder='Increase Quantity'/>
                         </Item>
@@ -260,6 +262,7 @@ class EditPromotion extends Component {
         );
     }
 }
+
 export default connect(
     state => ({
         promotions: state.promotions,

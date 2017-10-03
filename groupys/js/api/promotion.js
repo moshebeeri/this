@@ -7,11 +7,13 @@
 import store from "react-native-simple-store";
 import EntityUtils from "../utils/createEntity";
 import Timer from "./LogTimer";
+
 let entityUtils = new EntityUtils();
 let timer = new Timer();
+
 class PromotionApi {
     createPromotion(promotion, callbackFunction) {
-        return new Promise(async(resolve, reject) => {
+        return new Promise(async (resolve, reject) => {
             try {
                 let from = new Date();
                 let token = await store.get('token');
@@ -45,7 +47,7 @@ class PromotionApi {
     }
 
     updatePromotion(promotion, callbackFunction, id) {
-        return new Promise(async(resolve, reject) => {
+        return new Promise(async (resolve, reject) => {
             try {
                 let token = await store.get('token');
                 let from = new Date();
@@ -75,7 +77,7 @@ class PromotionApi {
     }
 
     save(id) {
-        return new Promise(async(resolve, reject) => {
+        return new Promise(async (resolve, reject) => {
             try {
                 let from = new Date();
                 let token = await store.get('token');
@@ -103,7 +105,7 @@ class PromotionApi {
     }
 
     realizePromotion(code) {
-        return new Promise(async(resolve, reject) => {
+        return new Promise(async (resolve, reject) => {
             try {
                 let from = new Date();
                 let token = await store.get('token');
@@ -131,7 +133,7 @@ class PromotionApi {
     }
 
     getPromotionQrcode(id) {
-        return new Promise(async(resolve, reject) => {
+        return new Promise(async (resolve, reject) => {
             try {
                 let from = new Date();
                 let token = await store.get('token');
@@ -159,7 +161,7 @@ class PromotionApi {
     }
 
     getAll() {
-        return new Promise(async(resolve, reject) => {
+        return new Promise(async (resolve, reject) => {
             try {
                 let from = new Date();
                 let token = await store.get('token');
@@ -187,7 +189,7 @@ class PromotionApi {
     }
 
     getAllByBusinessId(id, token) {
-        return new Promise(async(resolve, reject) => {
+        return new Promise(async (resolve, reject) => {
             try {
                 let from = new Date();
                 const response = await fetch(`${server_host}/api/promotions/list/by/business/` + id, {
@@ -213,4 +215,5 @@ class PromotionApi {
         })
     }
 }
+
 export default PromotionApi;

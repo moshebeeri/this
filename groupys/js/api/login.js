@@ -1,4 +1,5 @@
 import store from "react-native-simple-store";
+
 class LoginApi {
     clean_phone_number(number) {
         // remove all non digits, and then remove 0 if it is the first digit
@@ -8,7 +9,7 @@ class LoginApi {
     login(phoneNumber, password) {
         let normalizePhoneNumber = this.clean_phone_number(phoneNumber);
         let email = '972' + normalizePhoneNumber + "@low.la";
-        return new Promise(async(resolve, reject) => {
+        return new Promise(async (resolve, reject) => {
             try {
                 const response = await fetch(`${server_host}/auth/local`, {
                     method: 'POST',
@@ -44,7 +45,7 @@ class LoginApi {
         let phoneNumber = '+972' + phone;
         let normalizedPhone = this.normalizePhoneNumber(phoneNumber, '+972');
         let cleanPhone = this.clean_phone_number(normalizedPhone);
-        return new Promise(async(resolve, reject) => {
+        return new Promise(async (resolve, reject) => {
             try {
                 const response = await fetch(`${server_host}/api/users`, {
                     method: 'POST',
@@ -76,7 +77,7 @@ class LoginApi {
     }
 
     verifyCode(code) {
-        return new Promise(async(resolve, reject) => {
+        return new Promise(async (resolve, reject) => {
             try {
                 let token = await store.get('token');
                 const response = await fetch(`${server_host}/api/users/verification/` + code, {
@@ -106,7 +107,7 @@ class LoginApi {
 
     recoverPassword(phoneNumber) {
         let normalizedPhone = this.clean_phone_number(phoneNumber);
-        return new Promise(async(resolve, reject) => {
+        return new Promise(async (resolve, reject) => {
             try {
                 const response = await fetch(`${server_host}/api/users/password/` + normalizedPhone, {
                     method: 'GET',
@@ -129,7 +130,7 @@ class LoginApi {
     }
 
     changePassword(oldPassword, newPassowrd, userId, token) {
-        return new Promise(async(resolve, reject) => {
+        return new Promise(async (resolve, reject) => {
             try {
                 const response = await fetch(`${server_host}/api/users/` + userId + `/password/`, {
                     method: 'PUT',
@@ -144,11 +145,13 @@ class LoginApi {
                     })
                 });
                 if (response.status === 200) {
-                    resolve({response:true});
+                    resolve({response: true});
                     return;
                 }
-                resolve({error: 'Old Passowrd Validation failed',
-                    response:false });
+                resolve({
+                    error: 'Old Passowrd Validation failed',
+                    response: false
+                });
             }
             catch (error) {
                 reject({error: 'failed to change password '});
@@ -156,4 +159,5 @@ class LoginApi {
         })
     }
 }
+
 export default LoginApi;

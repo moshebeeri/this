@@ -1,6 +1,8 @@
 import NotificationApi from "../api/notification";
 import * as actions from "../reducers/reducerActions";
+
 let notificationApi = new NotificationApi();
+
 export function onEndReached() {
     return async function (dispatch, getState) {
         try {
@@ -23,6 +25,7 @@ export function onEndReached() {
         }
     }
 }
+
 export function readNotification(notificationId) {
     return function (dispatch, getState) {
         try {
@@ -39,6 +42,7 @@ export function readNotification(notificationId) {
         }
     }
 }
+
 export function doNotification(notificationId) {
     return function (dispatch, getState) {
         try {

@@ -1,8 +1,9 @@
 import store from "react-native-simple-store";
+
 class GeneralApi {
     submitREqeust(api, jsonRequest) {
         let json = JSON.parse(jsonRequest);
-        return new Promise(async(resolve, reject) => {
+        return new Promise(async (resolve, reject) => {
             try {
                 let token = await store.get('token');
                 let userId = await store.get('user_id');
@@ -30,4 +31,5 @@ class GeneralApi {
         })
     }
 }
+
 export default GeneralApi;

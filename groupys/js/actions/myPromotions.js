@@ -1,6 +1,8 @@
 import ProfilenApi from "../api/profile";
 import * as actions from "../reducers/reducerActions";
+
 let profileApi = new ProfilenApi();
+
 export function setNextFeeds(feeds) {
     return async function (dispatch, getState) {
         try {
@@ -47,6 +49,7 @@ export function setNextFeeds(feeds) {
         }
     }
 }
+
 export function fetchTop() {
     return async function (dispatch, getState) {
         try {

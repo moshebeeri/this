@@ -6,10 +6,12 @@ import UserApi from "../api/user";
 import ProductApi from "../api/product";
 import PromotionApi from "../api/promotion";
 import * as actions from "../reducers/reducerActions";
+
 let businessApi = new BusinessApi();
 let userApi = new UserApi();
 let productApi = new ProductApi();
 let promotionApi = new PromotionApi();
+
 async function getAll(dispatch, token) {
     try {
         let response = await businessApi.getAll(token);
@@ -25,6 +27,7 @@ async function getAll(dispatch, token) {
         });
     }
 }
+
 async function getBusinessCategories(dispatch, gid, token) {
     try {
         let response = await businessApi.getBusinessCategories(gid, token);
@@ -40,6 +43,7 @@ async function getBusinessCategories(dispatch, gid, token) {
         });
     }
 }
+
 async function dispatchSearchBusiness(dispatch, business, token) {
     try {
         dispatch({type: actions.SHOW_SEARCH_SPIN, searching: true});
@@ -53,6 +57,7 @@ async function dispatchSearchBusiness(dispatch, business, token) {
         });
     }
 }
+
 async function dispatchFollowByQrcode(dispatch, barcode, token) {
     try {
         dispatch({type: actions.SHOW_SEARCH_SPIN, searching: true});
@@ -75,23 +80,27 @@ async function dispatchFollowByQrcode(dispatch, barcode, token) {
         });
     }
 }
+
 export function searchBusiness(business) {
     return function (dispatch, getState) {
         const token = getState().authentication.token;
         dispatchSearchBusiness(dispatch, business, token);
     }
 }
+
 export function followByQrCode(barcode) {
     return function (dispatch, getState) {
         const token = getState().authentication.token;
         dispatchFollowByQrcode(dispatch, barcode, token);
     }
 }
+
 export function showCamera() {
     return function (dispatch, getState) {
         dispatch({type: actions.SHOW_CAMERA, cameraOn: true})
     }
 }
+
 export function onEndReached() {
     return async function (dispatch, getState) {
         const token = getState().authentication.token;
@@ -110,6 +119,7 @@ export function onEndReached() {
         }
     }
 }
+
 export function followBusiness(bussinesId) {
     return function (dispatch, getState) {
         try {
@@ -122,12 +132,14 @@ export function followBusiness(bussinesId) {
         }
     }
 }
+
 export function fetchBusinessCategories(gid) {
     return function (dispatch, getState) {
         const token = getState().authentication.token;
         getBusinessCategories(dispatch, gid, token);
     }
 }
+
 export function setBusinessUsers(businessId) {
     return async function (dispatch, getState) {
         const token = getState().authentication.token;
@@ -145,6 +157,7 @@ export function setBusinessUsers(businessId) {
         }
     }
 }
+
 export function setBusinessProducts(businessId) {
     return async function (dispatch, getState) {
         const token = getState().authentication.token;
@@ -162,6 +175,7 @@ export function setBusinessProducts(businessId) {
         }
     }
 }
+
 export function setBusinessPromotions(businessId) {
     return async function (dispatch, getState) {
         const token = getState().authentication.token;

@@ -1,8 +1,10 @@
 import Timer from "./LogTimer";
+
 let timer = new Timer();
+
 class BusinessApi {
     getAll(token) {
-        return new Promise(async(resolve, reject) => {
+        return new Promise(async (resolve, reject) => {
             try {
                 let from = new Date();
                 const response = await fetch(`${server_host}/api/businesses/list/mine`, {
@@ -29,7 +31,7 @@ class BusinessApi {
     }
 
     getBusinessCategories(gid, token) {
-        return new Promise(async(resolve, reject) => {
+        return new Promise(async (resolve, reject) => {
             try {
                 let from = new Date();
                 const response = await fetch(`${server_host}/api/categories/business/en/` + gid, {
@@ -56,7 +58,7 @@ class BusinessApi {
     }
 
     followBusiness(businessId, token) {
-        return new Promise(async(resolve, reject) => {
+        return new Promise(async (resolve, reject) => {
             try {
                 let from = new Date();
                 let token = await store.get('token');
@@ -84,7 +86,7 @@ class BusinessApi {
     }
 
     checkAddress(bussiness, token) {
-        return new Promise(async(resolve, reject) => {
+        return new Promise(async (resolve, reject) => {
             try {
                 let from = new Date();
                 const response = await fetch(`${server_host}/api/businesses/checkAddress/`, {
@@ -117,7 +119,7 @@ class BusinessApi {
     }
 
     searchBusiness(search, token) {
-        return new Promise(async(resolve, reject) => {
+        return new Promise(async (resolve, reject) => {
             try {
                 let from = new Date();
                 const response = await fetch(`${server_host}/api/businesses/search/0/100/` + search, {
@@ -144,7 +146,7 @@ class BusinessApi {
     }
 
     searchBusinessByCode(qrCode, token) {
-        return new Promise(async(resolve, reject) => {
+        return new Promise(async (resolve, reject) => {
             try {
                 let from = new Date();
                 const response = await fetch(`${server_host}/api/qrcodes/find/` + qrCode, {
@@ -170,4 +172,5 @@ class BusinessApi {
         })
     }
 }
+
 export default BusinessApi;

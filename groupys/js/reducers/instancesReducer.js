@@ -7,6 +7,7 @@
 const initialState = {instances: {}};
 import {REHYDRATE} from "redux-persist/constants";
 import * as actions from "./reducerActions";
+
 export default function instances(state = initialState, action) {
     if (action.type === REHYDRATE) {
 

@@ -1,7 +1,7 @@
 /**
  * Created by stan229 on 5/27/16.
  */
-import { combineReducers } from "redux";
+import {combineReducers} from "redux";
 import feeds from "./feedReducer";
 import businesses from "./businessReducer";
 import groups from "./groupReducer";
@@ -27,30 +27,29 @@ import contacts from './contactReducer'
 import changePasswordForm from './form/changePasswordReducer'
 
 export default function getRootReducer() {
-
     return combineReducers({
         feeds: feeds,
         businesses: businesses,
-        follow_businesses:follow_businesses,
-        groups:groups,
+        follow_businesses: follow_businesses,
+        groups: groups,
         promotions: promotions,
-        products:products,
-        user:user,
-        userRole:userRole,
-        notification:notification,
-        comments:comments,
-        instances:instances,
-        mainTab:mainTab,
-        activities:activities,
-        authentication:authentication,
-        loginForm:loginForm,
-        registerForm:registerForm,
-        network:network,
-        signupForm:signupForm,
-        myPromotions:myPromotions,
-        entityComments:entityComments,
-        commentInstances:commentInstances,
-        contacts:contacts,
-        changePasswordForm:changePasswordForm
+        products: products,
+        user: user,
+        userRole: userRole,
+        notification: notification,
+        comments: comments,
+        instances: instances,
+        mainTab: mainTab,
+        activities: activities,
+        authentication: authentication,
+        loginForm: loginForm,
+        registerForm: registerForm,
+        network: network,
+        signupForm: signupForm,
+        myPromotions: myPromotions,
+        entityComments: entityComments,
+        commentInstances: commentInstances,
+        contacts: contacts,
+        changePasswordForm: changePasswordForm
     });
 }

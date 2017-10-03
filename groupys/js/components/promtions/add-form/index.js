@@ -27,6 +27,7 @@ import HappyHourComponent from "./happyHour/index";
 import DatePicker from "react-native-datepicker";
 import Icon3 from "react-native-vector-icons/Ionicons";
 import styles from "./styles";
+
 let createEntity = require("../../../utils/createEntity");
 let promotionApi = new PromotionApi();
 const types = [
@@ -64,7 +65,7 @@ const types = [
         }
     ]
     //15% off for purchases more than 1000$ OR buy iphone for 600$ and get 50% off for earphones
-    ;
+;
 const Distribution = [
     {
         value: '',
@@ -79,6 +80,7 @@ const Distribution = [
         label: 'Business Followers'
     }
 ];
+
 class AddPromotion extends Component {
     static navigationOptions = {
         header: null
@@ -507,14 +509,12 @@ class AddPromotion extends Component {
             >
 
                 {
-
-
                     Distribution.map((s, i) => {
                         return <Item
                             key={i}
                             value={s.value}
                             label={s.label}/>
-                    }) }
+                    })}
             </Picker>
             let button = undefined;
             if (this.state.distribution == 'GROUP') {
@@ -561,14 +561,12 @@ class AddPromotion extends Component {
         >
 
             {
-
-
                 types.map((s, i) => {
                     return <Item
                         key={i}
                         value={s.value}
                         label={s.label}/>
-                }) }
+                })}
         </Picker>
         let image = undefined;
         if (this.state.path) {
@@ -609,18 +607,18 @@ class AddPromotion extends Component {
                         {typePikkerTag}
 
 
-                        <Item style={{margin: 3} } regular>
+                        <Item style={{margin: 3}} regular>
                             <Input blurOnSubmit={true} returnKeyType='next' ref="1"
                                    onSubmitEditing={this.focusNextField.bind(this, "2")}
                                    value={this.state.promotion.name} onChangeText={(name) => this.setState({name})}
                                    placeholder='Name'/>
                         </Item>
-                        <Item style={{margin: 3} } regular>
+                        <Item style={{margin: 3}} regular>
                             <Input blurOnSubmit={true} returnKeyType='done' ref="2" value={this.state.promotion.info}
                                    onChangeText={(info) => this.setState({info})}
                                    placeholder='Description'/>
                         </Item>
-                        <Item style={{margin: 3} } regular>
+                        <Item style={{margin: 3}} regular>
                             <DatePicker
                                 style={{width: 200}}
                                 date={this.state.end}
@@ -637,12 +635,12 @@ class AddPromotion extends Component {
                                 }}
                             />
                         </Item>
-                        <Item style={{margin: 3} } regular>
+                        <Item style={{margin: 3}} regular>
                             <Input keyboardType='numeric' onChangeText={(value) => this.setQuantity(value)}
                                    placeholder='Quantity'/>
                         </Item>
 
-                        <Item style={{margin: 3} } regular>
+                        <Item style={{margin: 3}} regular>
 
                             <Button iconRight transparent onPress={() => this.pickPicture()}>
                                 <Text style={{fontStyle: 'normal', fontSize: 10}}>Pick </Text>
@@ -667,6 +665,7 @@ class AddPromotion extends Component {
         );
     }
 }
+
 export default connect(
     state => ({
         promotions: state.promotions,

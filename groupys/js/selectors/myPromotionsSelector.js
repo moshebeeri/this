@@ -1,5 +1,6 @@
 import {createSelector} from "reselect";
 import FeedUiConverter from "../api/feed-ui-converter";
+
 let feedUiConverter = new FeedUiConverter();
 const getStateFeeds = (state) => state.myPromotions
 export const getFeeds = createSelector([getStateFeeds],
