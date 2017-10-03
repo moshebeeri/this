@@ -103,6 +103,18 @@ exports.destroy = function (req, res) {
   });
 };
 
+exports.qrcode = function (req, res) {
+  const query = `MATCH (:user{_id:'${req.user._id}'})-[:ROLE]-(:business)-[r]-(:promotion)<-[:INSTANCE_OF]-(:instance)<-[:SAVE_OF]-(savedInstance:SavedInstance)<-[rel:SAVED{code: '${req.params.code}'}]-(user:user) 
+                return savedInstance._id as _id`;
+
+  graphModel.query_objects(SavedInstance, query,
+    '', 0, 1, function (err, savedInstances) {
+      if(err) { return handleError(res, err); }
+      if(savedInstances.length > 1) { return handleError(res, new Error('multi instances save on same code')); }
+      return res.status(200).json(savedInstances[0]);
+    })
+};
+
 function handleError(res, err) {
   return res.send(500, err);
 }

@@ -68,11 +68,15 @@ function createPunchCardInstances(promotion) {
 
   if (p.variation === 'SINGLE') {
     let instance = createInstance(promotion, {punch_card: p.values[0]}, p.quantity, p.variation);
+    promotion.punch_card.product = promotion.condition.product;
+    promotion.punch_card.gift = promotion.values[0].product;
     return [instance]
   }
   else if (p.variation === 'VALUES') {
     p.values.forEach(value => {
       let instance = createInstance(promotion, {punch_card: value}, value.quantity, p.variation);
+      promotion.punch_card.product = promotion.condition.product;
+      promotion.punch_card.gift = promotion.values[0].product;
       instances.push(instance);
     });
     return instances;
@@ -83,7 +87,9 @@ function createPunchCardInstances(promotion) {
     spreads.forEach((spread) => {
       let value = {
         number_of_punches: spread.value,
-        days: p.values[0].days
+        days: p.values[0].days,
+        product: promotion.condition.product,
+        gift: promotion.values[0].product
       };
       let instance = createInstance(promotion, value, spread.quantity);
       instances.push(instance);
@@ -412,7 +418,7 @@ Instances.getPromotionValue =
 };
 
 function to_graph(instance) {
-  let value = getValue(instance);
+  let value = JSON.parse(JSON.stringify(getValue(instance)));
   let ret = {
     _id: instance._id,
     quantity: instance.quantity,
@@ -420,24 +426,25 @@ function to_graph(instance) {
     lat: instance.location.lat,
     lon: instance.location.lng
   };
-
   return _.merge(ret, value);
 }
 
 function createStoreInstanceFunction(instances) {
   return function storeInstance(instance, callback) {
     InstanceSchema.create(instance, function (err, instance) {
-      if (err) return callback(err);
-      instanceGraphModel.reflect(instance, to_graph(instance.toObject()), function (err, instance) {
+      instance.populate('promotion', function (err, instance) {
         if (err) return callback(err);
-        instanceGraphModel.relate_ids(instance._id, 'INSTANCE_OF', instance.promotion, function (err) {
+        instanceGraphModel.reflect(instance, to_graph(instance), function (err, instance) {
           if (err) return callback(err);
-          spatial.add2index(instance.gid, function (err) {
+          instanceGraphModel.relate_ids(instance._id, 'INSTANCE_OF', instance.promotion._id, function (err) {
             if (err) return callback(err);
-            instances.push(instance);
-            callback(null, instance)
+            spatial.add2index(instance.gid, function (err) {
+              if (err) return callback(err);
+              instances.push(instance);
+              callback(null, instance)
+            });
           });
-        });
+        })
       })
     })
   }

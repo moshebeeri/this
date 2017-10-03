@@ -118,53 +118,53 @@ let SavedInstanceController = require('../savedInstance/savedInstance.controller
 
 function initializeIncreasing(instance) {
   return {
-    from: instance.increasing.from,
-    to: instance.increasing.to,
-    days_eligible: instance.increasing.days_eligible,
+    from: instance.value.increasing.from,
+    to: instance.value.increasing.to,
+    days_eligible: instance.value.increasing.days_eligible,
   };
 }
 
 function initializeDoubling(instance) {
   return {
-    value: instance.doubling.value,
+    value: instance.value.doubling.value,
   };
 }
 
 function initializeGrow(instance) {
   return {
-    value: instance.grow.value,
+    value: instance.value.grow.value,
   };
 }
 
 function initializePrepayDiscount(instance) {
   return {
-    value: instance.prepay_discount.value,
-    eligible_from: instance.prepay_discount.eligible_from,
-    eligible_to: instance.prepay_discount.eligible_to,
-    prepay: instance.prepay_discount.prepay
+    value: instance.value.prepay_discount.value,
+    eligible_from: instance.value.prepay_discount.eligible_from,
+    eligible_to: instance.value.prepay_discount.eligible_to,
+    prepay: instance.value.prepay_discount.prepay
   };
 }
 
 function initializePunchCard(instance) {
   return {
     redeemTimes: [],
-    product: instance.punch_card.product,
-    number_of_punches: instance.punch_card.number_of_punches,
-    days: instance.punch_card.days,
+    product: instance.value.punch_card.product,
+    number_of_punches: instance.value.punch_card.number_of_punches,
+    days: instance.value.punch_card.days,
   };
 }
 
 function initializeCashBack(instance) {
   return {
-    pay: instance.cash_back.pay,
-    back: instance.cash_back.days,
+    pay: instance.value.cash_back.pay,
+    back: instance.value.cash_back.days,
   };
 }
 
 function initializeEarlyBooking(instance) {
   return {
-    percent: instance.early_booking.percent,
-    booking_before: instance.early_booking.days,
+    percent: instance.value.early_booking.percent,
+    booking_before: instance.value.early_booking.days,
   };
 }
 
@@ -172,8 +172,10 @@ function createSavedInstance(instance, user_id, callback) {
   let savedInstance = {
     user: user_id,
     instance: instance._id,
-    type: instance.type
+    type: instance.type,
+    savedData: {}
   };
+
   if (instance.type === 'INCREASING') {
     savedInstance.savedData.increasing = initializeIncreasing(instance)
   } else if (instance.type === 'DOUBLING') {
@@ -546,10 +548,8 @@ function realizeSavedInstance(user, savedInstance, rel, res) {
 
 //TODO: validate sale_point_code
 exports.realize = function (req, res) {
-  const query = `MATCH (promotion:promotion)<-[:INSTANCE_OF]-(instance:instance)<-[sf:SAVE_OF]-(saved:SavedInstance)<-[rel:SAVED{code: '${req.params.code}'}]-(user:user})
-                 where saved._id = '${req.params.id}' and saved.type = 'PUNCH_CARD' and user._id='${req.user._id}'
-                 return promotion,instance,rel,user, savedInstance`;
-
+  const query = `MATCH (promotion:promotion)<-[:INSTANCE_OF]-(instance:instance)<-[sf:SAVE_OF]-(savedInstance:SavedInstance)<-[rel:SAVED{code: '${req.params.code}'}]-(user:user) 
+                return promotion,instance, savedInstance, rel,user`;
   graphModel.query(query, function (err, objects) {
     if (err) return handleError(res, err);
     if (objects.length === 0)
