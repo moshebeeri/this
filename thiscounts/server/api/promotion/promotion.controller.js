@@ -47,6 +47,7 @@ exports.show = function (req, res) {
 function to_graph(promotion) {
   return {
     _id: promotion._id,
+    name: promotion.name,
     lat: promotion.location.lat,
     lon: promotion.location.lng,
     created: promotion.created,
@@ -268,6 +269,7 @@ function create_promotion(promotion, callback) {
 
 exports.create = function (req, res) {
   let promotion = req.body;
+  console.log(JSON.stringify(promotion));
   promotion.creator = req.user._id;
   create_promotion(promotion, function (err, promotion) {
     if (err) return handleError(res, err);
