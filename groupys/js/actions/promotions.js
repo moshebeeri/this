@@ -52,3 +52,47 @@ export function fetchProducts(id) {
         getAllProducts(dispatch, id, token);
     }
 }
+
+export function realizePromotion(code) {
+    return async function (dispatch, getState) {
+        const token = getState().authentication.token;
+        try {
+            await promotionApi.realizePromotion(code, token)
+            dispatch({
+                type: actions.SCAN_QRCODE_CLEAR,
+
+            });
+        }catch (error){
+            dispatch({
+                type: actions.NETWORK_IS_OFFLINE,
+            });
+        }
+    }
+}
+
+export function setPromotionDescription(code) {
+    return async function (dispatch, getState) {
+        const token = getState().authentication.token;
+        try {
+            let instance = await promotionApi.getPromotionInstance(code, token)
+            dispatch({
+                type: actions.SCAN_QRCODE_INSTANCE,
+                instance: instance
+            });
+        }catch (error){
+            dispatch({
+                type: actions.NETWORK_IS_OFFLINE,
+            });
+        }
+    }
+}
+
+
+export function clearRealizationForm() {
+    return function (dispatch) {
+        dispatch({
+            type: actions.SCAN_QRCODE_CLEAR,
+
+        });
+    }
+}

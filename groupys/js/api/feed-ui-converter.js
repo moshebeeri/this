@@ -118,7 +118,7 @@ class FeedConverter {
         return response;
     }
 
-    createSavedPomotion(feed, id) {
+    createSavedPomotion(feed, id,extraData) {
         let instance = feed.instance;
         let responseFeed = {};
         try {
@@ -162,9 +162,15 @@ class FeedConverter {
                     responseFeed.promotionColor = '#66ff1a';
                     break;
                 case "PUNCH_CARD":
-                    responseFeed.itemTitle = '';
-                    responseFeed.promotion = 'PUNCH CARD';
-                    responseFeed.promotionColor = '#d279a6';
+                    if(extraData || extraData ===0){
+                        responseFeed.itemTitle = 'Number of punches ' + extraData + ' / ' + instance.promotion.punch_card.values[0].number_of_punches;
+                        responseFeed.promotion = 'PUNCH CARD';
+                        responseFeed.promotionColor = '#d279a6';
+                    }else {
+                        responseFeed.itemTitle = 'Number of punches '  + instance.promotion.punch_card.values[0].number_of_punches;
+                        responseFeed.promotion = 'PUNCH CARD';
+                        responseFeed.promotionColor = '#d279a6';
+                    }
                     break;
                 default:
                     responseFeed.itemTitle = instance.type + " NOT SUPPORTED";
@@ -267,9 +273,11 @@ class FeedConverter {
                     responseFeed.promotionColor = '#66ff1a';
                     break;
                 case "PUNCH_CARD":
-                    responseFeed.itemTitle = '';
+
+                    responseFeed.itemTitle = 'Number of punches '  + promotion.punch_card.values[0].number_of_punches;
                     responseFeed.promotion = 'PUNCH CARD';
                     responseFeed.promotionColor = '#d279a6';
+
                     break;
                 default:
                     responseFeed.itemTitle = instance.type + " NOT SUPPORTED";
