@@ -154,9 +154,9 @@ exports.create = function (req, res) {
         if (group.entity_type === 'BUSINESS' && utils.defined(group.entity.business)) {
           graphModel.relate_ids(group._id, 'FOLLOW', group.entity.business);
           graphModel.relate_ids(group.entity.business, 'BUSINESS_GROUP', group._id);
+          notifyOnAction(group);
         }
         group_activity(group, 'create');
-        notifyOnAction(group);
       });
       return res.status(201).json(group);
     });

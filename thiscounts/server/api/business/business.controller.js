@@ -321,7 +321,7 @@ function notifyOnAction(business) {
   try {
     Notifications.notify({
       note: 'ADD_BUSINESS_FOLLOW_ON_ACTION',
-      group: business.id,
+      business: business.id,
       actor_user: business.creator
     }, [business.creator])
   } catch (err) {
