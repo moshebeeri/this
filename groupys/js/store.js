@@ -1,11 +1,11 @@
 /**
  * Created by roilandshut on 08/06/2017.
  */
-import {createStore, applyMiddleware} from "redux";
+import {applyMiddleware, createStore} from "redux";
 import thunk from "redux-thunk";
 import {AsyncStorage} from 'react-native'
 import getRootReducer from "./reducers";
-import {persistStore, autoRehydrate} from 'redux-persist'
+import {autoRehydrate, persistStore} from 'redux-persist'
 import {createLogger} from 'redux-logger'
 
 const logger = createLogger({

@@ -36,8 +36,8 @@ class Notification extends Component {
     }
 
     renderItem(item) {
-        const {groupActions, actions} = this.props;
-        return <NotificationListView item={item} actions={actions} groupActions={groupActions}/>
+        const {groupActions, actions,navigation} = this.props;
+        return <NotificationListView navigation={navigation} item={item} actions={actions} groupActions={groupActions}/>
     }
 
     render() {

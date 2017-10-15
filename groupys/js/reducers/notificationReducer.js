@@ -45,6 +45,7 @@ export default function notification(state = initialState, action) {
             });
             if (notification.length > 0) {
                 notification[0].action = true;
+                notificationRead[0].read = true;
             }
             return {
                 ...state,
