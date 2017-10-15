@@ -8,6 +8,11 @@ export const LIKE = 'LIKE';
 export const UNLIKE = 'UNLIKE';
 export const SAVE = 'SAVE';
 export const SHARE = 'SHARE';
+//scan qr code from
+export const SCAN_QRCODE_INSTANCE = 'SCAN_QRCODE_INSTANCE';
+export const SCAN_QRCODE_CLEAR = 'SCAN_QRCODE_CLEAR';
+
+
 // user change password
 export const CHANGE_PASSWORD_FAILED = 'CHANGE_PASSWORD_FAILED';
 export const CHANGE_PASSWORD_CLEAR = 'CHANGE_PASSWORD_CLEAR';

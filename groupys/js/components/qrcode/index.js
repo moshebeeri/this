@@ -1,16 +1,15 @@
 import React, {Component} from 'react';
-import {Image, Platform} from 'react-native';
 import {connect} from 'react-redux';
-import {actions} from 'react-native-navigation-redux-helpers';
-import {Container, Content, Text, InputGroup, Input, Button, Icon, View, Header, Footer} from 'native-base';
-import theme from './qccode-theme';
+import {Button, Container, Content, Footer, Header, Icon, Input, InputGroup, Text, View} from 'native-base';
 import styles from './styles';
-import store from 'react-native-simple-store';
+import * as promotionAction from "../../actions/promotions";
 import Camera from 'react-native-camera';
-import PromotionApi from '../../api/promotion'
 
-let promotionApi = new PromotionApi()
-export default class Qrcode extends Component {
+import {getInstance} from "../../selectors/form/scanQrcodeSelector";
+import {bindActionCreators} from "redux";
+import PromotionView from './promotionView/index';
+
+class Qrcode extends Component {
     static propTypes = {
         replaceAt: React.PropTypes.func,
         navigation: React.PropTypes.shape({
@@ -32,51 +31,55 @@ export default class Qrcode extends Component {
         ;
     }
 
+    componentWillMount() {
+        const {actions} = this.props;
+        actions.clearRealizationForm();
+    }
+
     onBarCodeRead(data) {
+        const {actions} = this.props;
         let qrcode = JSON.parse(data.data);
         if (!this.state.isRealized) {
             this.setState({
-                qrcode: qrcode,
                 isRealized: false,
-                realizedMessage: ''
+                realizedMessage: '',
+                qrcode: qrcode.code
             })
+            actions.setPromotionDescription(qrcode.code);
         }
     }
 
-    async realize() {
+    realize() {
+        const {actions} = this.props;
         if (this.state.qrcode) {
-            try {
-                let response = await promotionApi.realizePromotion(this.state.qrcode)
-                let realizedMessage = 'Promotion ' + response.instance.promotion.name + ' realized';
-                this.setState({
-                    realizedMessage: realizedMessage,
-                    isRealized: false,
-                    qrcode: ''
-                })
-            } catch (error) {
-                let realizedMessage = 'Promotion was realized'
-                this.setState({
-                    realizedMessage: realizedMessage,
-                    isRealized: false,
-                    qrcode: ''
-                })
-            }
-        } else {
+            actions.realizePromotion(this.state.qrcode);
             this.setState({
-                realizedMessage: '',
                 isRealized: false,
                 qrcode: ''
-            })
+            });
         }
     }
 
     render() {
-        let showButton = undefined;
-        if (this.state.qrcode) {
-            showButton = <Button transparent title='Ok'
-                                 onPress={() => this.realize()}>
-                <Text> Realize </Text>
-            </Button>
+        const {instance} = this.props;
+        if (instance) {
+            return (
+
+                <Container>
+
+                    <Content>
+
+                        <PromotionView item={instance}/>
+
+                    </Content>
+                    <Footer style={{backgroundColor: '#fff'}}>
+                        <Button transparent title='Ok'
+                                onPress={() => this.realize()}>
+                            <Text> Accept Promotion </Text>
+                        </Button>
+                    </Footer>
+                </Container>
+            );
         }
         return (
 
@@ -98,13 +101,22 @@ export default class Qrcode extends Component {
 
                 </Content>
                 <Footer style={{backgroundColor: '#fff'}}>
-                    {showButton}
+                    <Text>Scanning Code</Text>
                 </Footer>
             </Container>
         );
     }
 }
 
+export default connect(
+    state => ({
+        scanQrcodeForm: state.scanQrcodeForm,
+        instance: getInstance(state),
+    }),
+    (dispatch) => ({
+        actions: bindActionCreators(promotionAction, dispatch)
+    })
+)(Qrcode);
 
 
 

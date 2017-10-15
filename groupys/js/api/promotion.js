@@ -104,11 +104,10 @@ class PromotionApi {
         })
     }
 
-    realizePromotion(code) {
+    realizePromotion(code,token) {
         return new Promise(async (resolve, reject) => {
             try {
                 let from = new Date();
-                let token = await store.get('token');
                 const response = await fetch(`${server_host}/api/instances/realize/` + code, {
                     method: 'GET',
                     headers: {
@@ -132,6 +131,41 @@ class PromotionApi {
         })
     }
 
+    getPromotionInstance(code,token) {
+        return new Promise(async (resolve, reject) => {
+            try {
+                let from = new Date();
+                const response = await fetch(`${server_host}/api/savedInstances/qrcode/` + code, {
+                    method: 'GET',
+                    headers: {
+                        'Accept': 'application/json, text/plain, */*',
+                        'Content-Type': 'application/json;charset=utf-8',
+                        'Authorization': 'Bearer ' + token
+                    }
+                });
+                console.log('after call')
+                if (response.status === 401) {
+                    reject(response);
+                    return;
+                }
+                console.log('check status ')
+             //   timer.logTime(from, new Date(), 'instances', 'realize');
+                try {
+                    let responseData = await response.json();
+                    resolve(responseData);
+                }catch (error){
+                    console.log(error);
+                    reject(response);
+                }
+
+
+            }
+            catch (error) {
+                console.log('There has been a problem with your fetch operation: ');
+                reject('failed');
+            }
+        })
+    }
     getPromotionQrcode(id) {
         return new Promise(async (resolve, reject) => {
             try {
@@ -145,7 +179,7 @@ class PromotionApi {
                         'Authorization': 'Bearer ' + token
                     }
                 });
-                if (response.status == '401') {
+                if (response.status === 401) {
                     reject(response);
                     return;
                 }
