@@ -1,30 +1,21 @@
 import React, {Component} from 'react';
-import {connect} from 'react-redux';
-import {Platform, Dimensions} from 'react-native';
-import {View, Button, InputGroup, Tabs, Tab, TabHeading, Input, Text, Header} from 'native-base';
+import {Dimensions} from 'react-native';
+import {Button, Header, Input, InputGroup, Tab, TabHeading, Tabs, Text, View} from 'native-base';
 import {actions} from 'react-native-navigation-redux-helpers';
+import {Menu, MenuOption, MenuOptions, MenuTrigger,} from 'react-native-popup-menu';
+import Icon from 'react-native-vector-icons/Ionicons';
+import Icon2 from 'react-native-vector-icons/SimpleLineIcons';
+import * as notificationAction from "../../actions/notifications";
+import {connect} from 'react-redux';
+import {bindActionCreators} from "redux";
 
 const {width, height} = Dimensions.get('window')
 const vw = width / 100;
 const vh = height / 100
-import styles from './styles';
-// import Icon from 'react-native-vector-icons/Ionicons';
-import {
-    Menu,
-    MenuOptions,
-    MenuOption,
-    MenuTrigger,
-} from 'react-native-popup-menu';
-import Icon from 'react-native-vector-icons/Ionicons';
-import Icon2 from 'react-native-vector-icons/SimpleLineIcons';
 
-export default class GeneralComponentHeader extends Component {
+class GeneralComponentHeader extends Component {
     constructor(props) {
         super(props);
-    }
-
-    refreshContact() {
-        //contactApi.syncContacts();
     }
 
     realize() {
@@ -41,6 +32,10 @@ export default class GeneralComponentHeader extends Component {
 
     onBoardingPromotion() {
         this.props.navigate("businessFollow");
+    }
+
+    getNotification() {
+        this.props.actions.setTopNotification();
     }
 
     render() {
@@ -63,13 +58,13 @@ export default class GeneralComponentHeader extends Component {
                 <MenuOption onSelect={this.onBoardingPromotion.bind(this)}>
                     <Text>On Boarding Promotions</Text>
                 </MenuOption>
+                <MenuOption onSelect={this.getNotification.bind(this)}>
+                    <Text>Refresh Notification</Text>
+                </MenuOption>
 
             </MenuOptions>
         </Menu>
         return (
-
-
-
             <View style={{
                 height: vh * 7, flexDirection: 'row', alignItems: 'center', backgroundColor: 'white',
                 justifyContent: 'space-between',
@@ -89,16 +84,16 @@ export default class GeneralComponentHeader extends Component {
                     {menuAction}
                 </View>
             </View>
-
-
-
-
-
-
-
-
         );
     }
 }
 
+export default connect(
+    state => ({
+        notification: state.notification
+    }),
+    (dispatch) => ({
+        actions: bindActionCreators(notificationAction, dispatch)
+    })
+)(GeneralComponentHeader);
 

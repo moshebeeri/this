@@ -1,4 +1,4 @@
-const initialState = {notification: [], update: false};
+const initialState = {notification: [],notificationId:[], update: false};
 import {REHYDRATE} from "redux-persist/constants";
 import * as actions from "./reducerActions";
 
@@ -14,12 +14,32 @@ export default function notification(state = initialState, action) {
     }
     let imutableState = {...state};
     let currentNotifications = imutableState.notification;
+    let currentNotificationsIds = imutableState.notificationId;
     switch (action.type) {
         case actions.SET_NOTIFICATION :
             if (action.notifications.length > 0) {
                 action.notifications.forEach(notification => {
+                    if(!currentNotificationsIds.includes(notification._id)) {
+                        notification.key = notification._id;
+                        currentNotificationsIds.push(notification._id);
+                        currentNotifications.push(notification)
+                    }
+                });
+                return {
+                    ...state,
+                    notification: currentNotifications,
+                };
+            }
+            return state;
+        case actions.SET_TOP_NOTIFICATION :
+            if (action.notifications.length > 0) {
+                action.notifications.reverse().forEach(notification => {
                     notification.key = notification._id;
-                    currentNotifications.push(notification)
+                    if(!currentNotificationsIds.includes(notification._id)) {
+                        notification.key = notification._id;
+                        currentNotificationsIds.push(notification._id);
+                        currentNotifications.unshift(notification)
+                    }
                 });
                 return {
                     ...state,

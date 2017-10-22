@@ -26,6 +26,25 @@ export function onEndReached() {
     }
 }
 
+export function setTopNotification() {
+    return async function (dispatch, getState) {
+        try {
+            const token = getState().authentication.token;
+            const user = getState().user.user;
+
+            let response = await notificationApi.getAll(token, user, 0, 10);
+            dispatch({
+                type: actions.SET_TOP_NOTIFICATION,
+                notifications: response,
+            });
+        } catch (error) {
+            dispatch({
+                type: actions.NETWORK_IS_OFFLINE,
+            });
+        }
+    }
+}
+
 export function readNotification(notificationId) {
     return function (dispatch, getState) {
         try {
