@@ -1,23 +1,20 @@
 import React, {Component} from 'react';
-import {Image, Platform} from 'react-native';
 import {connect} from 'react-redux';
 import {actions} from 'react-native-navigation-redux-helpers';
 import {
+    Button,
     Container,
     Content,
     Fab,
-    Text,
-    Title,
-    InputGroup,
-    Input,
-    Button,
-    View,
     Header,
-    Body,
-    Right,
+    Input,
+    InputGroup,
+    Left,
     ListItem,
+    Right,
     Thumbnail,
-    Left
+    Title,
+    View
 } from 'native-base';
 import NotificationListView from './list-view/index'
 import GenericListManager from '../generic-list-manager/index'
