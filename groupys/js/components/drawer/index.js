@@ -1,12 +1,13 @@
 import React, {Component} from 'react';
-import {Image, Platform, TouchableOpacity} from 'react-native';
-import {Container, Content, Text, InputGroup, Input, Button, View, Item} from 'native-base';
-import Icon2 from 'react-native-vector-icons/SimpleLineIcons';
-import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
+import {Image, TouchableOpacity} from 'react-native';
+import {Button, Container, Content, Input, InputGroup, Item, Text, View} from 'native-base';
 import ImagePicker from 'react-native-image-crop-picker';
 import styles from './styles';
 import {connect} from 'react-redux';
 import {bindActionCreators} from "redux";
+import EntityUtils from "../../utils/createEntity";
+import Icon from 'react-native-vector-icons/Ionicons';
+import * as userAction from "../../actions/user";
 
 const logo = require('../../../images/logo.png');
 const cover = require('../../../images/cover-default.png');
@@ -16,12 +17,7 @@ const briefcase = require('../../../images/briefcase.png');
 const qrcode = require('../../../images/qr-code.png');
 const settings = require('../../../images/settings-work-tool.png');
 const changePassword = require('../../../images/change-password-img.png');
-import EntityUtils from "../../utils/createEntity";
-import store from 'react-native-simple-store';
-
 let entityUtils = new EntityUtils();
-import * as userAction from "../../actions/user";
-import login from './drwaer-theme';
 
 class ProfileDrawer extends Component {
     static navigationOptions = {
@@ -107,51 +103,98 @@ class ProfileDrawer extends Component {
         }
         return (
             <Container>
-                <Content theme={login} style={{backgroundColor: '#fff'}}>
+                <Content style={{backgroundColor: '#fff'}}>
 
+                    <View style={{height: 48,flex: 1,justifyContent: 'flex-end',flexDirection: 'row'}}>
+                        <Button transparent style={{}} onPress={() => this.props.closeDrawer()}>
+                            <Icon active color={"#FF9046"} size={20} name="ios-arrow-back"/>
 
-                    <Image style={styles.image} source={cover}>
+                        </Button>
+                    </View>
+                    <View style={styles.image}>
+                        <View style={{width: 180, marginLeft: 20, marginTop: 40, alignItems: 'flex-start'}}>
+                            <Text numberOfLines={2} style={{
+                                color: '#fff',
+                                fontStyle: 'normal',
+                                fontSize: 35,
+                            }}>{this.props.user.name}</Text>
+                            <Text numberOfLines={2} style={{
+                                color: '#fff',
+                                fontStyle: 'normal',
+                                fontSize: 18,
+                            }}>+972 {this.props.user.phone_number}</Text>
+                        </View>
                         <TouchableOpacity style={styles.thumbnail} onPress={() => this.pickPicture()}>
 
                             <Image style={styles.thumbnail_image} source={source}/>
                         </TouchableOpacity>
-                    </Image>
+                    </View>
 
-                    <TouchableOpacity onPress={() => this.showBusinesses()}
-                                      style={{margin: 3, flexDirection: 'row', alignItems: 'center',}} regular>
-                        <Image style={{marginLeft: 10, width: 30, height: 30}} source={briefcase}/>
-                        <Text
-                            style={{padding: 20, color: '#67ccf8', fontStyle: 'normal', fontSize: 15}}>Businees </Text>
+                    <View style={{
+
+                        flexDirection: 'row',
+                        justifyContent: 'space-between',
+
+                    }}>
+
+                        <TouchableOpacity onPress={() => this.showBusinesses()}
+                                          style={{marginLeft:10,marginTop: 10, flexDirection: 'column', alignItems: 'center',}} regular>
+                            <Image style={{tintColor: '#FF9046', width: 30, height: 30}} source={briefcase}/>
+                            <Text
+                                style={{
+                                    padding: 20,
+                                    color: '#FF9046',
+                                    fontStyle: 'normal',
+                                    fontSize: 16
+                                }}>Businees </Text>
 
 
-                    </TouchableOpacity>
+                        </TouchableOpacity>
+                        <View style={{marginLeft:11,width:1 ,backgroundColor:'#E0E0E0'}}></View>
+                        <TouchableOpacity onPress={() => this.showPromotionScaning()}
+                                          style={{
 
-                    <TouchableOpacity onPress={() => this.showPromotionScaning()}
-                                      style={{margin: 3, flexDirection: 'row', alignItems: 'center',}} regular>
-                        <Image style={{marginLeft: 10, width: 30, height: 30}} source={qrcode}/>
+                                              flex: 1,
+                                              marginTop: 10,
+                                              flexDirection: 'column',
+                                              alignItems: 'center',
+                                          }}
+                                          regular>
+                            <Image style={{tintColor: '#FF9046', width: 30, height: 30}} source={qrcode}/>
 
-                        <Text style={{padding: 20, color: '#67ccf8', fontStyle: 'normal', fontSize: 15}}>Scan
-                            Promotion</Text>
+                            <Text style={{padding: 20, color: '#FF9046', fontStyle: 'normal', fontSize: 15}}>Scan
+                                Promotion</Text>
 
 
-                    </TouchableOpacity>
-                    <TouchableOpacity onPress={() => this.showUserProfile()}
-                                      style={{margin: 3, flexDirection: 'row', alignItems: 'center',}} regular>
-                        <Image style={{marginLeft: 10, width: 30, height: 30}} source={settings}/>
+                        </TouchableOpacity>
+                    </View>
+                    <View style={{   borderColor:'#E0E0E0',borderWidth: 1, flexDirection: 'row', justifyContent: 'space-between',}}>
 
-                        <Text
-                            style={{padding: 20, color: '#67ccf8', fontStyle: 'normal', fontSize: 15}}>Settings </Text>
+                        <TouchableOpacity onPress={() => this.showUserProfile()}
+                                          style={{marginLeft:10,marginTop: 10, flexDirection: 'column', alignItems: 'center',}} regular>
+                            <Image style={{tintColor: '#FF9046', width: 30, height: 30}}
+                                   source={settings}/>
 
-                    </TouchableOpacity>
+                            <Text
+                                style={{
+                                    padding: 20,
+                                    color: '#FF9046',
+                                    fontStyle: 'normal',
+                                    fontSize: 16
+                                }}>Settings </Text>
 
-                    <TouchableOpacity onPress={() => this.changePassword()}
-                                      style={{margin: 3, flexDirection: 'row', alignItems: 'center',}} regular>
-                        <Image style={{marginLeft: 10, width: 30, height: 30}} source={changePassword}/>
+                        </TouchableOpacity>
+                        <View style={{marginLeft:15,width:1 ,backgroundColor:'#E0E0E0'}}></View>
+                        <TouchableOpacity onPress={() => this.changePassword()}
+                                          style={{marginTop: 10, flexDirection: 'column', alignItems: 'center',}} regular>
+                            <Image style={{tintColor: '#FF9046', width: 30, height: 30}}
+                                   source={changePassword}/>
 
-                        <Text style={{padding: 20, color: '#67ccf8', fontStyle: 'normal', fontSize: 15}}>Change
-                            Password </Text>
+                            <Text style={{padding: 20, color: '#FF9046', fontStyle: 'normal', fontSize: 16}}>Change
+                                Password </Text>
 
-                    </TouchableOpacity>
+                        </TouchableOpacity>
+                    </View>
 
 
                 </Content>

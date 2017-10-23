@@ -140,7 +140,7 @@ class ApplicationManager extends Component {
                 ref={(ref) => {
                     this.drawer = ref;
                 }}
-                content={<SideBar navigation={this.props.navigation}/>}
+                content={<SideBar closeDrawer={closeDrawer}navigation={this.props.navigation}/>}
                 onClose={() => closeDrawer}>
                 <Container>
                     <GeneralComponentHeader openDrawer={openDrawer} navigate={this.props.navigation.navigate}
