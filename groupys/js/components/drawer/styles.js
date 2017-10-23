@@ -69,8 +69,7 @@ module.exports = {
         backgroundColor: '#FF9046',
         flexDirection: 'row',
 
-        height: deviceHeight / 3,
+        height: 152,
         width: deviceWidth,
-
     },
 };

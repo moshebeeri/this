@@ -37,10 +37,22 @@ const isTablet = () => {
  */
 const isPhone = () => {
     return !isTablet();
-}
+};
+const toTitleCase = (str) => {
+    return str.replace(/\w\S*/g, function(txt){return txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase();});
+};
+
+const parseUserPhoneNumber = (user) => {
+    if(!user)
+        return '';
+   return `+${user.country_code}-${user.phone_number}`
+};
+
 export default {
     isPortrait,
     isLandscape,
     isTablet,
-    isPhone
+    isPhone,
+    toTitleCase,
+    parseUserPhoneNumber
 };
