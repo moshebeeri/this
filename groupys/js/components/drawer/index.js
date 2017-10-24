@@ -115,14 +115,14 @@ class ProfileDrawer extends Component {
                     </View>
                     {/*form header*/}
                     <View style={styles.image}>
-                        <View style={{width: 180, marginLeft: 20, marginTop: 0, alignItems: 'flex-start'}}>
+                        <View style={{width:185, marginLeft: 20, marginTop: 0, alignItems: 'flex-start'}}>
                             <Text numberOfLines={2} style={{
                                 color: '#fff',
                                 lineHeight:32,
                                 height: 70,
                                 fontFamily: 'Roboto-Regular',
                                 marginTop: 33,
-                                width: 102,
+
                                 fontStyle: 'normal',
                                 fontSize: 32,
                             }}>{name}</Text>
@@ -131,6 +131,8 @@ class ProfileDrawer extends Component {
                                 marginTop: 7,
                                 fontStyle: 'normal',
                                 fontSize: 16,
+
+
                             }}>{phoneNumber}</Text>
                         </View>
                         <TouchableOpacity style={styles.thumbnail} onPress={() => this.pickPicture()}>
