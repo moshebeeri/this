@@ -3,18 +3,10 @@ import {Dimensions, View} from 'react-native';
 import {Icon, Input, Text} from 'native-base';
 import styles from './styles';
 
-const {width, height} = Dimensions.get('window')
-export default class TextInputField extends Component {
+const {width, height} = Dimensions.get('window');
+export default class TextInput extends Component {
     constructor(props) {
         super(props);
-    }
-
-    createManatoryIcon(isMandatory) {
-        if (isMandatory) {
-            return <Icon style={{left: width - 35, top: 20, position: 'absolute', color: 'red', fontSize: 12}}
-                         name='star'/>
-        }
-        return undefined;
     }
 
     focus() {
@@ -35,9 +27,9 @@ export default class TextInputField extends Component {
         return true;
     }
 
+
     render() {
         const {field, placeholder, value, onChangeText, onSubmitEditing, returnKeyType, refNext, isMandatory} = this.props;
-        const mandatoryIcon = this.createManatoryIcon(isMandatory);
         return <View style={styles.textInputContainer}>
             <Text style={styles.textInputTextStyle}>{field}</Text>
             <View style={styles.textInputComponentLayout}>
@@ -45,7 +37,7 @@ export default class TextInputField extends Component {
                        ref={refNext}
                        onSubmitEditing={onSubmitEditing}
                        onChangeText={onChangeText} placeholder={placeholder}/>
-                {mandatoryIcon}
+                {isMandatory && <Icon style={{left: width - 35, top: 20, position: 'absolute', color: 'red', fontSize: 12}} name='star'/>}
             </View>
         </View>
     }

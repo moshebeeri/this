@@ -1,6 +1,7 @@
 const React = require('react-native');
 const {Dimensions} = React;
 const {width, height} = Dimensions.get('window');
+
 module.exports = {
     textInputContainer: {
         flexDirection: 'column',

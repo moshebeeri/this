@@ -65,10 +65,8 @@ module.exports = {
         height: 85,
     },
     image: {
-
         backgroundColor: '#FF9046',
         flexDirection: 'row',
-
         height: 152,
         width: deviceWidth,
     },
