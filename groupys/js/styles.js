@@ -12,7 +12,7 @@ const {Platform, Dimensions} = React;
 // Setting a default background color for all View components.
 const customViewProps = {
     style: {
-        backgroundColor: 'white'
+        //backgroundColor: 'white'
     }
 };
 
@@ -32,27 +32,26 @@ const customTextInputProps = {
 const customTextProps = {
     style: {
         fontSize: 16,
-        fontFamily: Platform.OS === 'ios' ? 'HelveticaNeue' : 'Roboto',
-        color: 'black'
+        fontFamily: Platform.OS === 'ios' ? 'HelveticaNeue' : 'Roboto-Regular',
     }
 };
 
 // Makes every image resize mode cover by default.
 const customImageProps = {
-    resizeMode: 'cover'
+    // resizeMode: 'cover'
 };
 
 // Adds a bigger hit box for all TouchableOpacity's.
 const customTouchableOpacityProps = {
-    hitSlop: { top: 15, right: 15, left: 15, bottom: 15 }
+    // hitSlop: { top: 15, right: 15, left: 15, bottom: 15 }
 };
 
 export default function setCustomStyles(){
-    setCustomView(customViewProps);
-    setCustomTextInput(customTextInputProps);
     setCustomText(customTextProps);
-    setCustomImage(customImageProps);
-    setCustomTouchableOpacity(customTouchableOpacityProps);
+    // setCustomView(customViewProps);
+    // setCustomTextInput(customTextInputProps);
+    // setCustomImage(customImageProps);
+    // setCustomTouchableOpacity(customTouchableOpacityProps);
 }
 
 
