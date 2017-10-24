@@ -37,17 +37,11 @@ export default class TextInputField extends Component {
 
     render() {
         const {field, placeholder, value, onChangeText, onSubmitEditing, returnKeyType, refNext, isMandatory} = this.props;
-        const mandatoryIcon = this.createManatoryIcon(isMandatory)
-        return <View style={styles.text_input_layout}>
-            <Text style={{
-                color: '#3A3A3A',
-                fontFamily: 'Roboto-Regular',
-                fontSize: 16,
-                marginLeft: 5,
-                flex: 2,
-            }}>{field}</Text>
-            <View style={{flexDirection: 'row',}}>
-                <Input style={{backgroundColor: 'white', flex: 1.5}} value={value} returnKeyType={returnKeyType}
+        const mandatoryIcon = this.createManatoryIcon(isMandatory);
+        return <View style={styles.textInputContainer}>
+            <Text style={styles.textInputTextStyle}>{field}</Text>
+            <View style={styles.textInputComponentLayout}>
+                <Input style={styles.textInputComponentStyle} value={value} returnKeyType={returnKeyType}
                        ref={refNext}
                        onSubmitEditing={onSubmitEditing}
                        onChangeText={onChangeText} placeholder={placeholder}/>
