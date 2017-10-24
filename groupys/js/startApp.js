@@ -68,6 +68,9 @@ import BusinessFollow from "./components/business/follow/follow_container";
 // });
 import {MenuContext} from "react-native-popup-menu";
 import getStore from "./store";
+import setCustomStyles from './styles'
+
+setCustomStyles();
 
 const AppNavigator = StackNavigator({
         home: {screen: ApplicationManager},
@@ -104,9 +107,7 @@ class AppWithNavigationState extends Component {
     render() {
         return (
             <MenuContext>
-                <AppNavigator
-
-                />
+                <AppNavigator/>
             </MenuContext>
         );
     }

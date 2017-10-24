@@ -115,14 +115,13 @@ class ProfileDrawer extends Component {
                     </View>
                     {/*form header*/}
                     <View style={styles.image}>
-                        <View style={{width:185, marginLeft: 20, marginTop: 0, alignItems: 'flex-start'}}>
+                        <View style={{width:185, marginLeft: 20, marginTop: 0, alignItems: 'flex-start', backgroundColor: '#FF9046'}}>
                             <Text numberOfLines={2} style={{
                                 color: '#fff',
                                 lineHeight:32,
-                                height: 70,
+                                width: 120,
                                 fontFamily: 'Roboto-Regular',
                                 marginTop: 33,
-
                                 fontStyle: 'normal',
                                 fontSize: 32,
                             }}>{name}</Text>
