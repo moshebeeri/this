@@ -3,7 +3,19 @@ const {Dimensions} = React;
 const {width, height} = Dimensions.get('window');
 module.exports = {
     picker: {
-        margin: 3, height: 50, width: width - 18, backgroundColor: 'white'
+        margin: 3, height: 50, width: width - 25, backgroundColor: 'white'
+    },
+    pickerTitleContainer:{
+        flexDirection: 'row',
+        justifyContent: 'flex-start',
+    },
+    pickerTextStyle: {
+        color: '#3A3A3A',
+        fontFamily: 'Roboto-Regular',
+        fontSize: 16,
+        marginLeft: 10,
+        marginBottom:5,
+
     },
 };
 

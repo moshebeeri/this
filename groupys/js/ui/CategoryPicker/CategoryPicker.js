@@ -1,6 +1,6 @@
 import React, {Component} from 'react';
 import {Text, View} from 'react-native';
-import {Button, Input,Picker,Item} from 'native-base';
+import {Button, Icon, Input, Item, Picker} from 'native-base';
 import styles from './styles';
 
 export default class CategoryPicker extends Component {
@@ -14,8 +14,11 @@ export default class CategoryPicker extends Component {
     }
 
     render() {
-        const{categories,selectedCategories,setCategory} = this.props;
-        let root = categories['categoriesenroot'];
+        const {categories, selectedCategories, setCategory, isMandatory} = this.props;
+        if (!categories['en']) {
+            return <View/>
+        }
+        let root = categories['en']['root'];
         let rootOicker = undefined;
         if (root) {
             let categoriesWIthBlank = new Array();
@@ -33,8 +36,8 @@ export default class CategoryPicker extends Component {
                 mode="dropdown"
                 placeholder="Select Category"
                 style={styles.picker}
-                selectedValue={this.state.categories[0]}
-                onValueChange={this.setCategory.bind(this, 0)}>
+                selectedValue={selectedCategories[0]}
+                onValueChange={(category) => setCategory(0, category)}>
 
                 {
                     categoriesWIthBlank.map((s, i) => {
@@ -45,9 +48,8 @@ export default class CategoryPicker extends Component {
                     })}
             </Picker>
         }
-
         let pickers = selectedCategories.map(function (gid, i) {
-            let subCategories = categories['categoriesen' + gid];
+            let subCategories = categories['en'][gid];
             if (subCategories && subCategories.length > 0) {
                 let categoriesWIthBlank = new Array();
                 subCategories.forEach(function (cat) {
@@ -66,7 +68,7 @@ export default class CategoryPicker extends Component {
                     mode="dropdown"
                     style={styles.picker}
                     selectedValue={selectedCategories[i + 1]}
-                    onValueChange={setCategory.bind(this, i + 1)}>
+                    onValueChange={(category) => setCategory(i + 1, category)}>
 
                     {
                         categoriesWIthBlank.map((s, j) => {
@@ -79,9 +81,14 @@ export default class CategoryPicker extends Component {
             }
             return undefined;
         })
-        return <View>{rootOicker}{pickers}</View>
+        return <View>
+            <View style={styles.pickerTitleContainer}>
+                <Text style={styles.pickerTextStyle}>Category</Text>
+                {isMandatory && <Icon style={{margin: 5, color: 'red', fontSize: 12}} name='star'/>}
+            </View>
+
+            {rootOicker}{pickers}
+        </View>
     }
-
-
 }
 
