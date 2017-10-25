@@ -20,6 +20,16 @@ module.exports = {
         borderRadius:2,
         fontSize:16,
     },
+    textInputInvalidComponentStyle: {
+        backgroundColor: 'white',
+        alignSelf: 'stretch',
+        flex: 1,
+        padding: 10,
+        borderRadius:2,
+        fontSize:16,
+        borderWidth:1,
+        borderColor:'red'
+    },
     textInputTitleContainer:{
         flexDirection: 'row',
         justifyContent: 'flex-start',
