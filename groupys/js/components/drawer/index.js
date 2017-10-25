@@ -6,9 +6,9 @@ import styles from './styles';
 import {connect} from 'react-redux';
 import {bindActionCreators} from "redux";
 import EntityUtils from "../../utils/createEntity";
-import Icon from 'react-native-vector-icons/Ionicons';
 import * as userAction from "../../actions/user";
 import StyleUtils from "../../utils/styleUtils";
+import {CloseDrawer} from "../../ui/index";
 
 const logo = require('../../../images/logo.png');
 const cover = require('../../../images/cover-default.png');
@@ -109,9 +109,7 @@ class ProfileDrawer extends Component {
                 <Content style={{backgroundColor: '#F2F2F2'}}>
                     {/*Header style*/}
                     <View style={{height: 55, flex: 1, justifyContent: 'flex-end',flexDirection: 'row'}}>
-                        <Button transparent style={{}} onPress={() => this.props.closeDrawer()}>
-                            <Icon active color={"#FF9046"} size={20} name="ios-arrow-back"/>
-                        </Button>
+                        <CloseDrawer active color={"#FF9046"} size={20} onPress={() => this.props.closeDrawer()}/>
                     </View>
                     {/*form header*/}
                     <View style={styles.image}>
