@@ -4,7 +4,6 @@ import CategoryPicker from './CategoryPicker/CategoryPicker'
 import CloseDrawer from './CloseDrawer/CloseDrawer'
 
 export {
-    TextInput,
     ImagePicker,
     CategoryPicker,
     TextInput,
