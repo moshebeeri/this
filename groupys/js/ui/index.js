@@ -6,7 +6,7 @@ import CloseDrawer from './CloseDrawer/CloseDrawer'
 export {
     TextInput,
     ImagePicker,
-    CategoryPicker
+    CategoryPicker,
     TextInput,
     CloseDrawer
 }
