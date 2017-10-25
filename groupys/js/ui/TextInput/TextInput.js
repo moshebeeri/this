@@ -21,11 +21,19 @@ export default class TextInputField extends Component {
         const {isMandatory, value, validateContent} = this.props;
         if (isMandatory) {
             if (!value) {
+                this.setState({
+                    invalid: true
+                })
                 return false
             }
         }
         if (validateContent) {
-            return validateContent(value)
+            if(!validateContent(value)){
+                this.setState({
+                    invalid: true
+                })
+                return false
+            }
         }
         return true;
     }
@@ -40,7 +48,9 @@ export default class TextInputField extends Component {
                 return;
             }
         }
-        onSubmitEditing();
+        if(onSubmitEditing) {
+            onSubmitEditing();
+        }
     }
 
     onChange(text) {

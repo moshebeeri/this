@@ -11,9 +11,16 @@ module.exports = {
         flexDirection: 'row',
         alignItems: 'flex-start'
     },
+    formHeaderSubmitButoon: {
+        flex: 1,
+        height: vh * 7,
+        justifyContent: 'flex-end',
+        flexDirection: 'row',
+        alignItems: 'flex-end'
+    },
     formHeadrTitleStyle: {
         color: "white",
-        flex: 2,
+        flex: 1,
         fontSize: 16,
         backgroundColor: 'transparent'
     }

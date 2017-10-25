@@ -32,7 +32,7 @@ async function getBusinessCategories(dispatch, gid, token) {
     try {
         let response = await businessApi.getBusinessCategories(gid, token);
         dispatch({
-            type: 'GET_BUSINESS_CATEGORIES',
+            type:  actions.SET_BUSINESS_CATEGORIES,
             categories: response,
             language: 'en',
             catId: gid
