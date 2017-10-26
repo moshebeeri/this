@@ -5,6 +5,9 @@ module.exports = {
     picker: {
         margin: 3, height: 50, width: width - 25, backgroundColor: 'white'
     },
+    pickerInvalid: {
+        margin: 3, height: 50, width: width - 25, backgroundColor: 'red',borderWidth:1,borderColor:'red'
+    },
     pickerTitleContainer:{
         flexDirection: 'row',
         justifyContent: 'flex-start',

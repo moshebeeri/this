@@ -1,34 +1,23 @@
 import React, {Component} from 'react';
-import {
-    Platform,
-    AppRegistry,
-    NavigatorIOS,
-    TextInput,
-    View,
-    Image,
-    ScrollView,
-    TouchableOpacity,
-    KeyboardAvoidingView,
-    TouchableHighlight,
-    Keyboard
-} from 'react-native';
-import {Container, Content, Item, Form, Picker, Input, Footer, Button, Text, Icon, Fab} from 'native-base';
-import store from 'react-native-simple-store';
+import {Image, ScrollView, View} from 'react-native';
+import {Button, Container, Content, Fab, Footer, Form, Icon, Input, Item, Picker, Text} from 'native-base';
 import EntityUtils from "../../../utils/createEntity";
-
-let entityUtils = new EntityUtils();
-import ImagePicker from 'react-native-image-crop-picker';
 import styles from './styles'
 import * as businessAction from "../../../actions/business";
 import {connect} from 'react-redux';
 import {bindActionCreators} from "redux";
-import Icon2 from 'react-native-vector-icons/Entypo';
 import BusinessApi from '../../../api/business'
+import {CategoryPicker, DynamicMessage, FormHeader, ImagePicker, TextInput} from '../../../ui/index';
+import FormUtils from "../../../utils/fromUtils";
 
+let entityUtils = new EntityUtils();
 let businessApi = new BusinessApi();
-import Autocomplete from 'react-native-autocomplete-input';
 
 class AddBusiness extends Component {
+    static navigationOptions = ({navigation}) => ({
+        header: null
+    });
+
     constructor(props) {
         super(props);
         if (props.navigation.state.params && props.navigation.state.params.item) {
@@ -68,6 +57,7 @@ class AddBusiness extends Component {
                 active: false,
                 showSave: true,
                 addressValidation: '',
+                coverImage: '',
                 valid: true,
             };
         } else {
@@ -100,28 +90,6 @@ class AddBusiness extends Component {
         }
     }
 
-    componentWillMount() {
-        this.keyboardDidShowListener = Keyboard.addListener('keyboardDidShow', this._keyboardDidShow.bind(this));
-        this.keyboardDidHideListener = Keyboard.addListener('keyboardDidHide', this._keyboardDidHide.bind(this));
-    }
-
-    componentWillUnmount() {
-        this.keyboardDidShowListener.remove();
-        this.keyboardDidHideListener.remove();
-    }
-
-    _keyboardDidShow() {
-        this.setState({
-            showSave: false
-        })
-    }
-
-    _keyboardDidHide() {
-        this.setState({
-            showSave: true
-        })
-    }
-
     replaceRoute(route) {
         this.props.navigation.goBack();
     }
@@ -130,7 +98,7 @@ class AddBusiness extends Component {
         if (nextField == '6') {
             this.checkAddress()
         }
-        this.refs[nextField]._root.focus()
+        this.refs[nextField].focus()
     }
 
     selectType(value) {
@@ -158,7 +126,7 @@ class AddBusiness extends Component {
             categpries = newCategories
             categpries.push(category);
         }
-        let reduxxCategories = this.props.businesses['categoriesen' + category];
+        let reduxxCategories = this.props.categories['en'][category];
         if (!reduxxCategories) {
             this.props.fetchBusinessCategories(category);
         }
@@ -180,9 +148,15 @@ class AddBusiness extends Component {
 
     async checkAddress() {
         this.setState({
-            addressValidation: ''
+            addressValidation: '',
+            locations: {}
         })
-        let response = await businessApi.checkAddress(this.state, this.props.token)
+        let address = {
+            city: this.state.city,
+            address: this.state.address,
+            country: 'israel',
+        }
+        let response = await businessApi.checkAddress(address, this.props.token)
         if (!response.valid) {
             this.setState({
                 addressValidation: response.message
@@ -207,84 +181,11 @@ class AddBusiness extends Component {
         return true;
     }
 
-    createPickers() {
-        let categories = this.props.businesses['categoriesenroot'];
-        let rootOicker = undefined;
-        if (categories) {
-            let categoriesWIthBlank = new Array();
-            categories.forEach(function (cat) {
-                categoriesWIthBlank.push(cat);
-            })
-            categoriesWIthBlank.unshift({
-                gid: "",
-                translations: {
-                    en: "Select Category"
-                }
-            })
-            rootOicker = <Picker
-
-                mode="dropdown"
-                placeholder="Select Category"
-                style={styles.picker}
-                selectedValue={this.state.categories[0]}
-                onValueChange={this.setCategory.bind(this, 0)}>
-
-                {
-                    categoriesWIthBlank.map((s, i) => {
-                        return <Item
-                            key={i}
-                            value={s.gid}
-                            label={s.translations.en}/>
-                    })}
-            </Picker>
-        }
-        let props = this.props;
-        let stateCategories = this.state.categories;
-        let setCategoryFunction = this.setCategory.bind(this);
-        let pickers = this.state.categories.map(function (gid, i) {
-            let categories = props.businesses['categoriesen' + gid];
-            if (categories && categories.length > 0) {
-                let categoriesWIthBlank = new Array();
-                categories.forEach(function (cat) {
-                    categoriesWIthBlank.push(cat);
-                })
-                categoriesWIthBlank.unshift({
-                    gid: "",
-                    translations: {
-                        en: "Select Sub Category"
-                    }
-                })
-                return <Picker
-                    key={i}
-
-                    placeholder="Select Category"
-                    mode="dropdown"
-                    style={styles.picker}
-                    selectedValue={stateCategories[i + 1]}
-                    onValueChange={setCategoryFunction.bind(this, i + 1)}>
-
-                    {
-                        categoriesWIthBlank.map((s, j) => {
-                            return <Item
-                                key={j}
-                                value={s.gid}
-                                label={s.translations.en}/>
-                        })}
-                </Picker>
-            }
-            return undefined;
-        })
-        return <View>{rootOicker}{pickers}</View>
-    }
-
     async saveFormData() {
-        if (!this.state.valid) {
-            let response = await this.checkAddress();
-            if (!response)
-                return;
+        if (this.validateForm()) {
+            this.replaceRoute('home');
+            entityUtils.create('businesses', this.state, this.props.token, this.formSuccess.bind(this), this.formFailed.bind(this), this.state.userId);
         }
-        this.replaceRoute('home');
-        entityUtils.create('businesses', this.state, this.props.token, this.formSuccess.bind(this), this.formFailed.bind(this), this.state.userId);
     }
 
     updateFormData() {
@@ -300,58 +201,29 @@ class AddBusiness extends Component {
         console.log('failed');
     }
 
-    async pickFromCamera() {
-        try {
-            let image = await ImagePicker.openCamera({
-                cropping: true,
-                width: 2000,
-                height: 2000,
-                compressImageQuality: 1,
-                compressVideoPreset: 'MediumQuality',
-            });
-            this.setState({
-                image: {uri: image.path, width: image.width, height: image.height, mime: image.mime},
-                images: null,
-                path: image.path
-            });
-        } catch (e) {
-            console.log(e);
-        }
+    setImage(image) {
+        this.setState({
+            image: {uri: image.path, width: image.width, height: image.height, mime: image.mime},
+            path: image.path
+        });
     }
 
-    async pickPicture() {
-        try {
-            let image = await ImagePicker.openPicker({
-                cropping: true,
-                width: 2000,
-                height: 2000,
-                compressImageQuality: 1,
-                compressVideoPreset: 'MediumQuality',
-            });
-            this.setState({
-                image: {uri: image.path, width: image.width, height: image.height, mime: image.mime},
-                images: null,
-                path: image.path
-            });
-        } catch (e) {
-            console.log(e);
-        }
+    setCoverImage(image) {
+        this.setState({
+            coverImage: {uri: image.path, width: image.width, height: image.height, mime: image.mime},
+            coverPath: image.path
+        });
     }
 
     validateForm() {
-        if (!this.state.name) {
-            return false;
-        }
-        if (!this.state.city) {
-            return false;
-        }
-        if (!this.state.address) {
-            return false;
-        }
-        if (!this.state.tax_id) {
-            return false;
-        }
-        return true
+        let result = true;
+        Object.keys(this.refs).forEach(key => {
+            let item = this.refs[key];
+            if (!item.isValid()) {
+                result = false;
+            }
+        });
+        return result
     }
 
     chooseAddress(address) {
@@ -384,8 +256,15 @@ class AddBusiness extends Component {
         return true;
     }
 
+    locationToString(location) {
+        return location.formatted_address;
+    }
+
+    validateAddress() {
+        return !(this.state.locations && this.state.locations.length > 0)
+    }
+
     render() {
-        let pickers = this.createPickers();
         let image;
         if (this.state.path) {
             image = <Image
@@ -393,29 +272,12 @@ class AddBusiness extends Component {
                 source={{uri: this.state.path}}
             />
         }
-        let saveButton = <Button style={{backgroundColor: '#2db6c8'}}
-                                 onPress={this.saveFormData.bind(this)}>
-            <Text>Add Business</Text>
-        </Button>
-        if (this.props.navigation.state.params && this.props.navigation.state.params.item) {
-            saveButton = <Button style={{backgroundColor: '#2db6c8'}}
-                                 onPress={this.updateFormData.bind(this)}
-            >
-                <Text>Update Business</Text>
-            </Button>
-        }
-        let buttonView = undefined
-        if (!this.validateForm()) {
-            saveButton = <Button disabled={true} style={{backgroundColor: 'gray'}}
-            >
-                <Text>Add Business</Text>
-            </Button>
-        }
-        if (this.state.showSave) {
-            buttonView = <Item style={{marginBottom: 15}} regular>
-
-                {saveButton}
-            </Item>
+        let coverImage;
+        if (this.state.coverImage) {
+            coverImage = <Image
+                style={{width: 120, height: 120}}
+                source={{uri: this.state.coverImage.path}}
+            />
         }
         let addressMessage = undefined;
         if (this.state.addressValidation) {
@@ -423,100 +285,91 @@ class AddBusiness extends Component {
         }
         let addressOptions = undefined;
         if (this.state.locations && this.state.locations.length > 0) {
-            let locationFunction = this.chooseAddress.bind(this);
-            addressOptions = this.state.locations.map(function (address) {
-                return <TouchableOpacity style={{height: 30, borderTopWidth: 0.5, backgroundColor: 'white'}}
-                                         onPress={() => locationFunction(address)} regular>
-
-                    <Text style={{
-                        marginLeft: 10,
-                        color: 'black',
-                        fontStyle: 'normal',
-                        fontSize: 18
-                    }}>{address.formatted_address}</Text>
-
-                </TouchableOpacity>
-            })
+            addressOptions =
+                <DynamicMessage messagesObject={this.state.locations} messageToString={this.locationToString.bind(this)}
+                                onMessage={this.chooseAddress.bind(this)}/>
         }
         return (
-
-
             <View style={styles.business_container}>
+                <FormHeader showBack submitForm={this.saveFormData.bind(this)} navigation={this.props.navigation}
+                            title={"Add Business"} bgc="#FA8559"/>
+                <ScrollView contentContainerStyle={{
+                    justifyContent: 'center',
+                    alignItems: 'center',
+                }} style={styles.contentContainer}>
+                    <View style={styles.business_upper_container}>
+                        <View style={styles.cmeraLogoContainer}>
+                            <View style={styles.business_upper_image_container}>
+                                {image}
+
+                                <ImagePicker show={image} color='black' pickFromCamera
+                                             setImage={this.setImage.bind(this)}/>
+                                <Text>Logo</Text>
 
 
-                <View style={styles.business_upper_container}>
-                    <View style={styles.business_upper_image_container}>
-
-                        {image}
-                        <View style={{marginLeft: 10, marginTop: 60}}>
-                            <Button iconRight transparent onPress={() => this.pickFromCamera()}>
-                                <Icon name='camera'/>
-
-                            </Button>
-
+                            </View>
+                            <View style={styles.addCoverContainer}>
+                                <ImagePicker show={coverImage} color='white' pickFromCamera
+                                             setImage={this.setCoverImage.bind(this)}/>
+                                <Text style={styles.addCoverText}>Add a cover photo</Text>
+                            </View>
                         </View>
-                        <View style={{marginLeft: 0, marginTop: 60}}>
 
-                            <Button iconRight transparent onPress={() => this.pickPicture()}>
-                                <Icon2 name='attachment'/>
-
-                            </Button>
+                        <View style={styles.inputTextLayour}>
+                            <TextInput fieldColor='white' field='Bussines Name' value={this.state.name}
+                                       returnKeyType='next' ref="1" refNext="1"
+                                       onSubmitEditing={this.focusNextField.bind(this, "2")}
+                                       onChangeText={(name) => this.setState({name})} isMandatory={true}/>
                         </View>
+
                     </View>
-                    <View style={styles.business_upper_name_container}>
-                        <Item style={{marginBottom: 6, backgroundColor: 'white'}} regular>
-                            <Input value={this.state.name} blurOnSubmit={true} returnKeyType='next' ref="1"
-                                   onSubmitEditing={this.focusNextField.bind(this, "2")}
-                                   onChangeText={(name) => this.setState({name})} placeholder='Bussines Name'/>
-                            <Icon style={{color: 'red', fontSize: 12}} name='star'/>
+
+                    <View style={styles.inputTextLayour}>
+                        <CategoryPicker ref={"picker"} isMandatory categories={this.props.categories}
+                                        selectedCategories={this.state.categories}
+                                        setCategory={this.setCategory.bind(this)}/>
+                    </View>
+                    <View style={styles.inputTextLayour}>
 
 
-                        </Item>
-                        <Item style={{backgroundColor: 'white'}} regular>
-                            <Input value={this.state.email} blurOnSubmit={true} returnKeyType='next' ref="2"
+                        <TextInput field='Email' value={this.state.email} returnKeyType='next' ref="2" refNext="2"
                                    onSubmitEditing={this.focusNextField.bind(this, "3")}
-                                   onChangeText={(email) => this.setState({email})} placeholder='Email'/>
-                        </Item>
+                                   validateContent={FormUtils.validateEmail}
+                                   onChangeText={(email) => this.setState({email})} isMandatory={true}/>
                     </View>
-                </View>
-                <ScrollView contentContainerStyle={styles.contentContainer}>
+                    <View style={styles.inputTextLayour}>
 
-                    <KeyboardAvoidingView behavior={'position'} style={styles.avoidView}>
-
-
-                        {pickers}
-                        <Item style={styles.buttom_items} regular>
-                            <Input value={this.state.website} blurOnSubmit={true} returnKeyType='next' ref="3"
+                        <TextInput field='Website' value={this.state.website} returnKeyType='next' ref="3" refNext="3"
                                    onSubmitEditing={this.focusNextField.bind(this, "4")}
-                                   onChangeText={(website) => this.setState({website})} placeholder='Website'/>
+                                   validateContent={FormUtils.validateWebsite}
+                                   onChangeText={(website) => this.setState({website})} isMandatory={false}/>
+                    </View>
+                    <View style={styles.inputTextLayour}>
 
-                        </Item>
-
-                        <Item style={styles.buttom_items} regular>
-                            <Input value={this.state.city} blurOnSubmit={true} returnKeyType='next' ref="4"
+                        <TextInput field='City' value={this.state.city} returnKeyType='next' ref="4" refNext="4"
                                    onSubmitEditing={this.focusNextField.bind(this, "5")}
-                                   onChangeText={(city) => this.setState({city})} placeholder='City'/>
-                            <Icon style={{color: 'red', fontSize: 12}} name='star'/>
-                        </Item>
-                        <Item style={styles.buttom_items} regular>
-                            <Input value={this.state.address} blurOnSubmit={true} returnKeyType='next' ref="5"
+                                   validateContent={this.validateAddress.bind(this)}
+                                   onChangeText={(city) => this.setState({city})} isMandatory={true}/>
+                    </View>
+                    <View style={styles.inputTextLayour}>
+
+                        <TextInput field='Addresss' value={this.state.address} returnKeyType='next' ref="5" refNext="5"
                                    onSubmitEditing={this.focusNextField.bind(this, "6")}
-                                   onChangeText={(address) => this.setState({address})} placeholder='Addresss'/>
-                            <Icon style={{color: 'red', fontSize: 12}} name='star'/>
-                        </Item>
-                        {addressMessage}
-                        {addressOptions}
-                        <Item style={styles.buttom_items} regular>
-                            <Input value={this.state.tax_id} blurOnSubmit={true} returnKeyType='done' ref="6"
-                                   onChangeText={(tax_id) => this.setState({tax_id})} placeholder='Tax ID'/>
-                            <Icon style={{color: 'red', fontSize: 12}} name='star'/>
-                        </Item>
+                                   validateContent={this.validateAddress.bind(this)}
+                                   onChangeText={(address) => this.setState({address})} isMandatory={true}/>
+                    </View>
 
+                    {addressMessage}
+                    {addressOptions}
+                    <View style={styles.inputTextLayour}>
 
-                    </KeyboardAvoidingView>
+                        <TextInput field='Tax ID' value={this.state.tax_id} returnKeyType='done' ref="6" refNext="6"
+                                   onChangeText={(tax_id) => this.setState({tax_id})} isMandatory={true}/>
+                    </View>
+
 
                 </ScrollView>
-                {buttonView}
+
 
             </View>
 
@@ -530,6 +383,7 @@ class AddBusiness extends Component {
 export default connect(
     state => ({
         businesses: state.businesses,
+        categories: state.businesses.categories,
         token: state.authentication.token
     }),
     dispatch => bindActionCreators(businessAction, dispatch)

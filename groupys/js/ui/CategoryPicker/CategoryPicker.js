@@ -6,6 +6,9 @@ import styles from './styles';
 export default class CategoryPicker extends Component {
     constructor(props) {
         super(props);
+        this.state ={
+            invalid :false,
+        }
     }
 
     focus() {
@@ -13,10 +16,46 @@ export default class CategoryPicker extends Component {
         this.refs[refNext].focus()
     }
 
+    isValid() {
+        const {isMandatory, selectedCategories, validateContent} = this.props;
+        this.setState({
+            invalid: false
+        })
+        if (isMandatory) {
+            if (!selectedCategories || selectedCategories.length === 0) {
+                this.setState({
+                    invalid: true
+                })
+                return false
+            }
+        }
+        if (validateContent) {
+            if(!validateContent(value)){
+                this.setState({
+                    invalid: true
+                })
+                return false
+            }
+        }
+        return true;
+    }
+
+    setCategory(index,category){
+        const { setCategory} = this.props;
+        this.setState({
+            invalid: false
+        })
+        setCategory(index, category)
+    }
+
     render() {
-        const {categories, selectedCategories, setCategory, isMandatory} = this.props;
+        const {categories, selectedCategories, isMandatory} = this.props;
         if (!categories['en']) {
             return <View/>
+        }
+        let pickerStyle = styles.picker;
+        if(this.state.invalid){
+            pickerStyle = styles.pickerInvalid;
         }
         let root = categories['en']['root'];
         let rootOicker = undefined;
@@ -35,9 +74,9 @@ export default class CategoryPicker extends Component {
 
                 mode="dropdown"
                 placeholder="Select Category"
-                style={styles.picker}
+                style={pickerStyle}
                 selectedValue={selectedCategories[0]}
-                onValueChange={(category) => setCategory(0, category)}>
+                onValueChange={(category) => this.setCategory(0, category)}>
 
                 {
                     categoriesWIthBlank.map((s, i) => {
@@ -48,6 +87,8 @@ export default class CategoryPicker extends Component {
                     })}
             </Picker>
         }
+        let selectCategoryFunction = this.setCategory.bind(this);
+
         let pickers = selectedCategories.map(function (gid, i) {
             let subCategories = categories['en'][gid];
             if (subCategories && subCategories.length > 0) {
@@ -66,9 +107,9 @@ export default class CategoryPicker extends Component {
 
                     placeholder="Select Category"
                     mode="dropdown"
-                    style={styles.picker}
+                    style={pickerStyle}
                     selectedValue={selectedCategories[i + 1]}
-                    onValueChange={(category) => setCategory(i + 1, category)}>
+                    onValueChange={(category) => selectCategoryFunction(i + 1, category)}>
 
                     {
                         categoriesWIthBlank.map((s, j) => {
@@ -81,6 +122,8 @@ export default class CategoryPicker extends Component {
             }
             return undefined;
         })
+
+
         return <View>
             <View style={styles.pickerTitleContainer}>
                 <Text style={styles.pickerTextStyle}>Category</Text>
