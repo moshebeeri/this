@@ -8,6 +8,10 @@ import ImagePicker from 'react-native-image-crop-picker'
 export default class ImagePickerComponent extends Component {
     constructor(props) {
         super(props);
+        this.state= {
+            value:false,
+            invalid: false
+        }
     }
 
     focus() {
@@ -15,6 +19,20 @@ export default class ImagePickerComponent extends Component {
         this.refs[refNext].focus()
     }
 
+    isValid(){
+        const { mandatory} = this.props;
+
+        if(mandatory){
+
+            if(!this.state.value){
+                this.setState({
+                    invalid: true
+                })
+                return false;
+            }
+        }
+        return true;
+    }
     async pickFromCamera() {
         const {setImage} = this.props;
         try {
@@ -25,6 +43,10 @@ export default class ImagePickerComponent extends Component {
                 compressImageQuality: 1,
                 compressVideoPreset: 'MediumQuality',
             });
+            this.setState({
+                value:true,
+                invalid: false
+            })
             setImage(image)
         } catch (e) {
             console.log(e);
@@ -41,6 +63,10 @@ export default class ImagePickerComponent extends Component {
                 compressImageQuality: 1,
                 compressVideoPreset: 'MediumQuality',
             });
+            this.setState({
+                value:true,
+                invalid: false
+            })
             setImage(image)
         } catch (e) {
             console.log(e);
@@ -48,17 +74,23 @@ export default class ImagePickerComponent extends Component {
     }
 
     render() {
-        const {show, color} = this.props;
+        const { color,image} = this.props;
         let cameraColor = '#003d99';
         if (color) {
             cameraColor = color;
         }
-        if (show) {
-            return <View/>;
+
+        let trigger = <Icon size={35} color={cameraColor} name='camera'/>;
+        if(image){
+            trigger = image;
+        }
+
+        if(this.state.invalid){
+            trigger = <Icon size={35} color={'red'} name='camera'/>;
         }
         return <Menu>
             <MenuTrigger>
-                <Icon size={35} color={cameraColor} name='camera'/>
+                {trigger}
             </MenuTrigger>
             <MenuOptions>
 

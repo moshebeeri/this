@@ -181,25 +181,38 @@ class AddBusiness extends Component {
         return true;
     }
 
-    async saveFormData() {
+    saveFormData() {
         if (this.validateForm()) {
             this.replaceRoute('home');
-            entityUtils.create('businesses', this.state, this.props.token, this.formSuccess.bind(this), this.formFailed.bind(this), this.state.userId);
+            this.props.saveBusiness(this.createBusiness());
         }
     }
 
+
+    createBusiness(){
+        return {
+            address: this.state.address,
+            category: this.state.category,
+            subcategory: this.state.subcategory,
+            city:this.state.city,
+            country:this.state.country,
+            image:this.state.coverImage,
+            email:this.state.email,
+            location: this.state.location,
+            name:this.state.name,
+            tax_id:this.state.tax_id,
+            type:this.state.type,
+            website:this.state.website,
+            logoImage:this.state.image,
+        }
+
+    }
     updateFormData() {
         this.replaceRoute('home');
-        entityUtils.update('businesses', this.state, this.props.token, this.formSuccess.bind(this), this.formFailed.bind(this), this.props.navigation.state.params.item._id);
+        this.props.updateBusiness(this.createBusiness());
     }
 
-    formSuccess(response) {
-        this.props.onEndReached();
-    }
 
-    formFailed(error) {
-        console.log('failed');
-    }
 
     setImage(image) {
         this.setState({
@@ -264,21 +277,47 @@ class AddBusiness extends Component {
         return !(this.state.locations && this.state.locations.length > 0)
     }
 
-    render() {
-        let image;
+    createImageComponent() {
         if (this.state.path) {
-            image = <Image
-                style={{width: 120, height: 120}}
-                source={{uri: this.state.path}}
-            />
+            return <View style={styles.business_upper_image_container}>
+                <ImagePicker  ref={"logoImage"}  mandatory image= {<Image style={{width: 120, height: 120}} source={{uri: this.state.path}}/>}
+                              color='black' pickFromCamera
+                              setImage={this.setImage.bind(this)}/>
+
+            </View>
+        } else {
+            return <View style={styles.business_upper_image_container}>
+
+                <ImagePicker ref={"logoImage"} mandatory color='black' pickFromCamera
+                             setImage={this.setImage.bind(this)}/>
+                <Text>Logo</Text>
+
+            </View>
         }
-        let coverImage;
+    }
+
+    createCoverImageComponnent(){
         if (this.state.coverImage) {
-            coverImage = <Image
-                style={{width: 120, height: 120}}
-                source={{uri: this.state.coverImage.path}}
+            let  coverImage = <Image
+                style={{width: 200,borderWidth:1, borderColor:'white',height: 110}}
+                source={{uri: this.state.coverImage.uri}}
             />
+
+            return <View style={styles.addCoverContainer}>
+                <ImagePicker ref={"coverImage"} mandatory image={coverImage} color='white' pickFromCamera
+                             setImage={this.setCoverImage.bind(this)}/>
+            </View>
+
         }
+        return <View style={styles.addCoverNoImageContainer}>
+            <ImagePicker ref={"coverImage"} mandatory color='white' pickFromCamera
+                         setImage={this.setCoverImage.bind(this)}/>
+            <Text style={styles.addCoverText}>Add a cover photo</Text>
+        </View>
+    }
+
+    render() {
+
         let addressMessage = undefined;
         if (this.state.addressValidation) {
             addressMessage = <Text style={{marginLeft: 10, color: 'red'}}>{this.state.addressValidation}</Text>
@@ -299,20 +338,8 @@ class AddBusiness extends Component {
                 }} style={styles.contentContainer}>
                     <View style={styles.business_upper_container}>
                         <View style={styles.cmeraLogoContainer}>
-                            <View style={styles.business_upper_image_container}>
-                                {image}
-
-                                <ImagePicker show={image} color='black' pickFromCamera
-                                             setImage={this.setImage.bind(this)}/>
-                                <Text>Logo</Text>
-
-
-                            </View>
-                            <View style={styles.addCoverContainer}>
-                                <ImagePicker show={coverImage} color='white' pickFromCamera
-                                             setImage={this.setCoverImage.bind(this)}/>
-                                <Text style={styles.addCoverText}>Add a cover photo</Text>
-                            </View>
+                            {this.createImageComponent()}
+                            {this.createCoverImageComponnent()}
                         </View>
 
                         <View style={styles.inputTextLayour}>
@@ -375,8 +402,8 @@ class AddBusiness extends Component {
 
 
 
-
-        );
+        )
+            ;
     }
 }
 
