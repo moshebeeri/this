@@ -54,7 +54,7 @@ export default class NotificationListView extends Component {
         if (group.pictures && group.pictures.length > 0) {
             return <Thumbnail source={{uri: group.pictures[0].pictures[3]}}/>
         } else {
-            if (group.entity && group.entity.business) {
+            if (group.entity && group.entity.business && group.entity.business.pictures && group.entity.business.pictures.length > 0 ) {
                 return <Thumbnail source={{uri: group.entity.business.pictures[0].pictures[3]}}/>
             }
         }

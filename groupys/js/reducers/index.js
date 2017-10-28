@@ -26,6 +26,7 @@ import entityComments from './commentEntityReducer'
 import contacts from './contactReducer'
 import changePasswordForm from './form/changePasswordReducer'
 import scanQrcodeForm from './form/scanQrcodeReducer'
+import addressForm from './form/addressReducer'
 export default function getRootReducer() {
     return combineReducers({
         feeds: feeds,
@@ -51,6 +52,7 @@ export default function getRootReducer() {
         commentInstances: commentInstances,
         contacts: contacts,
         changePasswordForm: changePasswordForm,
-        scanQrcodeForm:scanQrcodeForm
+        scanQrcodeForm:scanQrcodeForm,
+        addressForm:addressForm
     });
 }
