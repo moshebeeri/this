@@ -107,38 +107,38 @@ class EntityUtils {
         })
     }
 
-    saveEntity(entityData, entityApi, json, token, callbackFunction, errorCallBack, userId) {
-        fetch(`${server_host}/api/` + entityApi, {
-                method: 'POST',
-                headers: {
-                    'Accept': 'application/json, text/plain, */*',
-                    'Content-Type': 'application/json;charset=utf-8',
-                    'Authorization': 'Bearer ' + token,
-                },
-                body: json
-            }
-        ).then((response) => response.json())
-            .then((responseData) => {
-                if (entityData.image || entityData.logo) {
-                    if (entityData.image) {
-                        this.doUpload(entityData.image.uri, entityData.image.mime, token, callbackFunction, entityApi, responseData);
-                    }
-                    if (entityData.logoImage) {
-                        this.doLogoUpload(entityData.logoImage.uri, entityData.logoImage.mime, token, callbackFunction, entityApi, responseData);
-                    }
-                    return;
-                }
-                callbackFunction(responseData);
-            }).catch(function (error) {
-            console.log('There has been a problem with your fetch operation: ' + error.message);
-            errorCallBack(error);
-        });
-    }
+    // saveEntity(entityData, entityApi, json, token, callbackFunction, errorCallBack, userId) {
+    //     fetch(`${server_host}/api/` + entityApi, {
+    //             method: 'POST',
+    //             headers: {
+    //                 'Accept': 'application/json, text/plain, */*',
+    //                 'Content-Type': 'application/json;charset=utf-8',
+    //                 'Authorization': 'Bearer ' + token,
+    //             },
+    //             body: json
+    //         }
+    //     ).then((response) => response.json())
+    //         .then((responseData) => {
+    //             if (entityData.image || entityData.logo) {
+    //                 if (entityData.image) {
+    //                     this.doUpload(entityData.image.uri, entityData.image.mime, token, callbackFunction, entityApi, responseData);
+    //                 }
+    //                 if (entityData.logoImage) {
+    //                     this.doLogoUpload(entityData.logoImage.uri, entityData.logoImage.mime, token, callbackFunction, entityApi, responseData);
+    //                 }
+    //                 return;
+    //             }
+    //             callbackFunction(responseData);
+    //         }).catch(function (error) {
+    //         console.log('There has been a problem with your fetch operation: ' + error.message);
+    //         errorCallBack(error);
+    //     });
+    // }
 
     create(entityApi, entityData, token, callbackFunction, errorCallBack, userId) {
         //let entity = transformJson(entityData);
         let json = JSON.stringify(entityData);
-        this.saveEntity(entityData, entityApi, json, token, callbackFunction, errorCallBack, userId);
+        return this.updateEntity(entityData, entityApi, json, token);
     }
 
     doLogg(){
@@ -149,7 +149,7 @@ class EntityUtils {
         return new Promise(async (resolve, reject) => {
             try {
 
-                if (entityData._id) {
+                if (entityData && entityData._id) {
                     const response = await fetch(`${server_host}/api/` + entityApi + '/' + entityData._id, {
                         method: 'PUT',
                         headers: {
@@ -174,12 +174,16 @@ class EntityUtils {
                     }
 
                     if (entityData.image && entityData.image.uri && entityData.image.mime) {
-                        this.doUpload(entityData.image.uri, entityData.image.mime, token, callbackFunction, entityApi, responseData);
+                        this.doUpload(entityData.image.uri, entityData.image.mime, token, this.doLogg.bind(this), entityApi, responseData);
+                    }
+                    if(callbackFunction){
+                        callbackFunction(responseData)
                     }
                     resolve(responseData);
+
                 } else {
                     const response = await fetch(`${server_host}/api/` + entityApi + '/', {
-                        method: 'PUT',
+                        method: 'POST',
                         headers: {
                             'Accept': 'application/json, text/plain, */*',
                             'Content-Type': 'application/json;charset=utf-8',
@@ -195,8 +199,20 @@ class EntityUtils {
                         reject(response);
                         return;
                     }
+
+
                     let responseData = await response.json();
+
+                    if (entityData.logoImage) {
+                        this.doLogoUpload(entityData.logoImage.uri, entityData.logoImage.mime, token, this.doLogg.bind(this), entityApi, responseData);
+                    }
+
+                    if (entityData.image && entityData.image.uri && entityData.image.mime) {
+                        this.doUpload(entityData.image.uri, entityData.image.mime, token,  this.doLogg.bind(this), entityApi, responseData);
+                    }
+
                     resolve(responseData);
+
                 }
             }
             catch (error) {

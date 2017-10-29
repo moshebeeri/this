@@ -205,11 +205,18 @@ function saveBusinessFailed() {
 }
 
 export function saveBusiness(business) {
-    return function (dispatch, getState) {
+    return async function (dispatch, getState) {
         try {
             const token = getState().authentication.token;
             const user = getState().user.user;
-            entityUtils.create('businesses', business, token, onEndReached, saveBusinessFailed, user._id);
+            await entityUtils.create('businesses', business, token, undefined, undefined, user._id);
+            let businesses = await businessApi.getAll(token);
+            businesses.forEach(function (business) {
+                dispatch({
+                    type: actions.UPSERT_MY_BUSINESS,
+                    item: business
+                });
+            })
         } catch (error) {
             dispatch({
                 type: actions.NETWORK_IS_OFFLINE,

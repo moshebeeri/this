@@ -105,11 +105,7 @@ class AddBusiness extends Component {
     }
 
     createBusiness() {
-        let entityId = ''
-       if(this.state.item){
-           entityId = this.state.item._id;
-       }
-        return {
+        let business =  {
             address: this.state.address,
             category: this.state.category,
             subcategory: this.state.subcategory,
@@ -123,8 +119,11 @@ class AddBusiness extends Component {
             type: this.state.type,
             website: this.state.website,
             logoImage: this.state.image,
-            _id:entityId,
+        };
+        if(this.state.item){
+            business._id = this.state.item._id;
         }
+        return business;
     }
 
     updateFormData() {
