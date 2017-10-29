@@ -1,13 +1,17 @@
 import React, {Component} from 'react';
 import {Text, View} from 'react-native';
-import {Button, Icon, Input, Item, Picker} from 'native-base';
+import {Button, Icon, Input, Item, Picker,Spinner} from 'native-base';
 import styles from './styles';
+import * as categoriesAction from "../../actions/categories";
+import {connect} from 'react-redux';
+import {bindActionCreators} from "redux";
 
-export default class CategoryPicker extends Component {
+class CategoryPicker extends Component {
     constructor(props) {
         super(props);
         this.state ={
             invalid :false,
+            selectedCategories:[""]
         }
     }
 
@@ -16,13 +20,41 @@ export default class CategoryPicker extends Component {
         this.refs[refNext].focus()
     }
 
+    setCategory(index, category) {
+        const {setFormCategories, categories,setCategoriesApi} = this.props;
+        this.setState({
+            invalid: false
+        })
+        if (!category) {
+            return;
+        }
+
+        if (this.state.selectedCategories.length <= index) {
+            this.state.selectedCategories.push(category);
+            this.state.selectedCategories.push("");
+        } else {
+            let newCategories = new Array();
+            for (i = 0; i + 1 <= index; i++) {
+                newCategories.push(this.state.selectedCategories[i]);
+            }
+            this.state.selectedCategories = newCategories
+            this.state.selectedCategories.push(category);
+            this.state.selectedCategories.push("");
+        }
+        let reduxxCategories = categories['en'][category];
+        if (!reduxxCategories) {
+            this.props.actions.fetchCategories(category,setCategoriesApi);
+        }
+        setFormCategories(this.state.selectedCategories);
+
+    }
     isValid() {
-        const {isMandatory, selectedCategories, validateContent} = this.props;
+        const {isMandatory, validateContent} = this.props;
         this.setState({
             invalid: false
         })
         if (isMandatory) {
-            if (!selectedCategories || selectedCategories.length === 0) {
+            if (!this.state.selectedCategories || this.state.selectedCategories.length === 0) {
                 this.setState({
                     invalid: true
                 })
@@ -40,16 +72,9 @@ export default class CategoryPicker extends Component {
         return true;
     }
 
-    setCategory(index,category){
-        const { setCategory} = this.props;
-        this.setState({
-            invalid: false
-        })
-        setCategory(index, category)
-    }
 
     render() {
-        const {categories, selectedCategories, isMandatory} = this.props;
+        const {categories, isMandatory,categoriesForm} = this.props;
         if (!categories['en']) {
             return <View/>
         }
@@ -61,6 +86,7 @@ export default class CategoryPicker extends Component {
         let rootOicker = undefined;
         if (root) {
             let categoriesWIthBlank = new Array();
+
             root.forEach(function (cat) {
                 categoriesWIthBlank.push(cat);
             })
@@ -75,7 +101,7 @@ export default class CategoryPicker extends Component {
                 mode="dropdown"
                 placeholder="Select Category"
                 style={pickerStyle}
-                selectedValue={selectedCategories[0]}
+                selectedValue={this.state.selectedCategories[0]}
                 onValueChange={(category) => this.setCategory(0, category)}>
 
                 {
@@ -88,8 +114,8 @@ export default class CategoryPicker extends Component {
             </Picker>
         }
         let selectCategoryFunction = this.setCategory.bind(this);
-
-        let pickers = selectedCategories.map(function (gid, i) {
+        let stateCategories = this.state.selectedCategories
+        let pickers = this.state.selectedCategories.map(function (gid, i) {
             let subCategories = categories['en'][gid];
             if (subCategories && subCategories.length > 0) {
                 let categoriesWIthBlank = new Array();
@@ -108,7 +134,7 @@ export default class CategoryPicker extends Component {
                     placeholder="Select Category"
                     mode="dropdown"
                     style={pickerStyle}
-                    selectedValue={selectedCategories[i + 1]}
+                    selectedValue={stateCategories[i + 1]}
                     onValueChange={(category) => selectCategoryFunction(i + 1, category)}>
 
                     {
@@ -123,6 +149,11 @@ export default class CategoryPicker extends Component {
             return undefined;
         })
 
+        let spinner = undefined
+        if(categoriesForm.categoriesFetching){
+            spinner =  <Spinner/>;
+        }
+
 
         return <View>
             <View style={styles.pickerTitleContainer}>
@@ -131,7 +162,18 @@ export default class CategoryPicker extends Component {
             </View>
 
             {rootOicker}{pickers}
+            {spinner}
         </View>
     }
 }
+
+export default connect(
+    state => ({
+        categoriesForm: state.categoriesForm
+    }),
+    (dispatch) => ({
+        actions: bindActionCreators(categoriesAction, dispatch),
+    }), null, {withRef: true}
+)(CategoryPicker);
+
 

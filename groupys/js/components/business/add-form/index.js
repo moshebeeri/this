@@ -5,11 +5,8 @@ import styles from './styles'
 import * as businessAction from "../../../actions/business";
 import {connect} from 'react-redux';
 import {bindActionCreators} from "redux";
-import BusinessApi from '../../../api/business'
-import {AddressInput, CategoryPicker, DynamicMessage, FormHeader, ImagePicker, TextInput} from '../../../ui/index';
+import {AddressInput, CategoryPicker, FormHeader, ImagePicker, TextInput} from '../../../ui/index';
 import FormUtils from "../../../utils/fromUtils";
-
-let businessApi = new BusinessApi();
 
 class AddBusiness extends Component {
     static navigationOptions = ({navigation}) => ({
@@ -93,58 +90,19 @@ class AddBusiness extends Component {
     }
 
     focusNextField(nextField) {
-        if(this.refs[nextField].wrappedInstance){
+        if (this.refs[nextField].wrappedInstance) {
             this.refs[nextField].wrappedInstance.focus()
         }
-        if(this.refs[nextField].focus){
+        if (this.refs[nextField].focus) {
             this.refs[nextField].focus()
         }
-
     }
 
-    selectType(value) {
+    setCategory(categories) {
         this.setState({
-            type: value
+            category: categories[0],
+            subcategory: categories[1]
         })
-    }
-
-    setCategory(index, category) {
-        var milliseconds = (new Date).getTime();
-        if (milliseconds - this.state.time < 1000) {
-            return;
-        }
-        if (!category) {
-            return;
-        }
-        let categpries = this.state.categories;
-        if (categpries.length <= index) {
-            categpries.push(category);
-        } else {
-            let newCategories = new Array();
-            for (i = 0; i + 1 <= index; i++) {
-                newCategories.push(categpries[i]);
-            }
-            categpries = newCategories
-            categpries.push(category);
-        }
-        let reduxxCategories = this.props.categories['en'][category];
-        if (!reduxxCategories) {
-            this.props.fetchBusinessCategories(category);
-        }
-        this.setState({
-            categories: categpries
-        })
-        if (categpries.length == 1) {
-            this.setState({
-                category: categpries[0]
-            })
-        }
-        if (categpries.length == 2) {
-            this.setState({
-                category: categpries[0],
-                subcategory: categpries[1]
-            })
-        }
     }
 
     saveFormData() {
@@ -178,6 +136,12 @@ class AddBusiness extends Component {
     }
 
     updateLocation(location) {
+        this.setState({
+            location: location.location,
+            city: location.city,
+            address: location.address,
+            country: location.country,
+        })
     }
 
     setImage(image) {
@@ -197,9 +161,8 @@ class AddBusiness extends Component {
     validateForm() {
         let result = true;
         Object.keys(this.refs).forEach(key => {
-
             let item = this.refs[key];
-            if(this.refs[key].wrappedInstance){
+            if (this.refs[key].wrappedInstance) {
                 item = this.refs[key].wrappedInstance;
             }
             if (!item.isValid()) {
@@ -248,16 +211,6 @@ class AddBusiness extends Component {
     }
 
     render() {
-        let addressMessage = undefined;
-        if (this.state.addressValidation) {
-            addressMessage = <Text style={{marginLeft: 10, color: 'red'}}>{this.state.addressValidation}</Text>
-        }
-        let addressOptions = undefined;
-        if (this.state.locations && this.state.locations.length > 0) {
-            addressOptions =
-                <DynamicMessage messagesObject={this.state.locations} messageToString={this.locationToString.bind(this)}
-                                onMessage={this.chooseAddress.bind(this)}/>
-        }
         return (
             <View style={styles.business_container}>
                 <FormHeader showBack submitForm={this.saveFormData.bind(this)} navigation={this.props.navigation}
@@ -283,8 +236,8 @@ class AddBusiness extends Component {
 
                     <View style={styles.inputTextLayour}>
                         <CategoryPicker ref={"picker"} isMandatory categories={this.props.categories}
-                                        selectedCategories={this.state.categories}
-                                        setCategory={this.setCategory.bind(this)}/>
+                                        setFormCategories={this.setCategory.bind(this)}
+                                        setCategoriesApi={this.props.fetchBusinessCategories}/>
                     </View>
                     <View style={styles.inputTextLayour}>
 

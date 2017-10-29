@@ -33,7 +33,7 @@ class AddressInput extends Component {
         let result = true;
         Object.keys(this.refs).forEach(key => {
             let item = this.refs[key];
-            if (item.isValid()) {
+            if (!item.isValid()) {
                 result = false;
             }
         });
@@ -74,6 +74,7 @@ class AddressInput extends Component {
             valid: true,
         })
         this.props.actions.addressChoose();
+        this.setSubmut();
     }
 
     locationToString(location) {
@@ -89,9 +90,11 @@ class AddressInput extends Component {
 
     onSubmit() {
         this.checkAddress();
+        this.setSubmut();
+
     }
 
-    submitForm() {
+    setSubmut(){
         const {onSubmitEditing, addressForm} = this.props;
         let address = {
             location: addressForm.location,
@@ -103,12 +106,8 @@ class AddressInput extends Component {
             onSubmitEditing(address);
         }
     }
-
     render() {
         const {isMandatory, addressForm, refNext} = this.props;
-        if (addressForm.submitable) {
-            this.submitForm();
-        }
         return <View>
             <View style={styles.inputTextLayour}>
                 <View style={{flexDirection: "row"}}>
