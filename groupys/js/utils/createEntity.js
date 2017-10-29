@@ -43,6 +43,41 @@ class EntityUtils {
             })
         }
     }
+    doLogoUpload(imagePath, imageMime, token, callbackFunction, entityApi, responseData) {
+        let files = [
+            {
+                name: imagePath + '___' + responseData._id,
+                filename: imagePath + '___' + responseData._id,
+                filepath: imagePath,  // image from camera roll/assets library
+                filetype: imageMime,
+            }
+        ];
+        let getEntity = this.getEntity.bind(this);
+        if (RNUploader) {
+            let opts = {
+                url: `${server_host}/api/images/logo/` + responseData._id,
+                files: files,
+                method: 'POST',                             // optional: POST or PUT
+                headers: {'Accept': 'application/json', 'Authorization': 'Bearer ' + token},  // optional
+                params: {},                   // optional
+            };
+            RNUploader.upload(opts, (err, response) => {
+                getEntity(entityApi, responseData._id, callbackFunction)
+            });
+        } else {
+            let option2 = {
+                uploadUrl: `${server_host}/api/images/logo/` + responseData._id,
+                files: files,
+                method: 'POST',                             // optional: POST or PUT
+                headers: {'Accept': 'application/json', 'Authorization': 'Bearer ' + token},  // optional
+                fields: {}
+                // optional
+            };
+            FILeUploader.upload(option2, function (err, result) {
+                getEntity(entityApi, responseData._id, callbackFunction)
+            })
+        }
+    }
 
     getEntity(entityApi, entityId, callbackFunction) {
         return new Promise(async (resolve, reject) => {
@@ -83,10 +118,16 @@ class EntityUtils {
             }
         ).then((response) => response.json())
             .then((responseData) => {
-                if (entityData.image) {
-                    this.doUpload(entityData.image.uri, entityData.image.mime, token, callbackFunction, entityApi, responseData);
-                    return
+                if(entityData.image || entityData.logo) {
+                    if (entityData.image) {
+                        this.doUpload(entityData.image.uri, entityData.image.mime, token, callbackFunction, entityApi, responseData);
+                    }
+                    if (entityData.logoImage) {
+                        this.doLogoUpload(entityData.logoImage.uri, entityData.logoImage.mime, token, callbackFunction, entityApi, responseData);
+                    }
+                    return;
                 }
+
                 callbackFunction(responseData);
             }).catch(function (error) {
             console.log('There has been a problem with your fetch operation: ' + error.message);

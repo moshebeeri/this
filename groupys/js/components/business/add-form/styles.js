@@ -27,7 +27,13 @@ module.exports = {
         flexDirection: 'row',
         justifyContent: 'center',
         alignItems: 'center',
-        margin:15,
+        marginTop: 10,
+    },
+    addCoverNoImageContainer: {
+        flexDirection: 'row',
+        justifyContent: 'center',
+        alignItems: 'center',
+        margin: 15,
     },
     addCoverText: {
         color: 'white', margin: 5, fontSize: 16
@@ -55,6 +61,14 @@ module.exports = {
         shadowRadius: 2,
         marginLeft: 10,
         backgroundColor: 'white'
+    },
+    businessCoverPhotoContainer: {
+        width: width ,
+        height: 50,
+
+        alignItems: 'center',
+        justifyContent: 'center',
+        backgroundColor: 'red'
     },
     business_upper_name_container: {
         width: width / 3 + 80,

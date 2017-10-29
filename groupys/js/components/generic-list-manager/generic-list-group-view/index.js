@@ -141,7 +141,7 @@ export default class GenericListGroupView extends Component {
             }
         } else {
             if (group.entity && group.entity.business) {
-                if (group.entity.business.pictures[0].pictures[3]) {
+                if (group.entity.business.pictures && group.entity.business.pictures[0] && group.entity.business.pictures[0].pictures[3]) {
                     return <Thumbnail large square source={{uri: group.entity.business.pictures[0].pictures[3]}}/>
                 }
             }

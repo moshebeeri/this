@@ -62,7 +62,7 @@ export default class TextInputField extends Component {
     }
 
     render() {
-        const {fieldColor, field, placeholder, value, onChangeText, onSubmitEditing, returnKeyType, refNext, isMandatory} = this.props;
+        const {fieldColor, field, placeholder, value, returnKeyType, refNext, isMandatory} = this.props;
         let textStyle = styles.textInputTextStyle;
         let mandtoryIconColor = 'red';
         if (fieldColor === 'white') {
@@ -73,10 +73,15 @@ export default class TextInputField extends Component {
         if (this.state.invalid) {
             textInputStyle = styles.textInputInvalidComponentStyle;
         }
-        return <View style={styles.textInputContainer}>
+
+        let containerStyle = styles.textInputNoFiledContainer;
+        if(field){
+            containerStyle = styles.textInputContainer;
+        }
+        return <View style={containerStyle}>
             <View style={styles.textInputTitleContainer}>
                 <Text style={textStyle}>{field}</Text>
-                {isMandatory && <Icon style={{margin: 5, color: mandtoryIconColor, fontSize: 12}} name='star'/>}
+                {field && isMandatory && <Icon style={{margin: 5, color: mandtoryIconColor, fontSize: 12}} name='star'/>}
 
             </View>
             <View style={styles.textInputComponentLayout}>

@@ -9,6 +9,13 @@ module.exports = {
        minWidth:width - 20,
         height: 75,
     },
+    textInputNoFiledContainer: {
+        flexDirection: 'column',
+        justifyContent: 'center',
+
+        minWidth:width - 20,
+        height: 55,
+    },
     textInputComponentLayout: {
         flexDirection: 'row'
     },

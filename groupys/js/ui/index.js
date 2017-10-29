@@ -5,7 +5,7 @@ import CloseDrawer from './CloseDrawer/CloseDrawer'
 import SubmitButton from './SubmitButton/SubmitButton'
 import FormHeader from './FormHeader/FormHeader'
 import DynamicMessage from './DynamicMessage/DynamicMessage';
-
+import AddressInput from './AddressInput/AddressInput';
 export {
     ImagePicker,
     CategoryPicker,
@@ -13,5 +13,6 @@ export {
     CloseDrawer,
     SubmitButton,
     FormHeader,
-    DynamicMessage
+    DynamicMessage,
+    AddressInput
 }
