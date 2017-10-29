@@ -25,6 +25,16 @@ class AddressInput extends Component {
         this.refs["city"].focus()
     }
 
+
+    componentWillMount() {
+        const{country,city,address} = this.props;
+        this.setState({
+            country:country,
+            city:city,
+            address:address,
+        })
+    }
+
     focusNextField(nextField) {
         this.refs[nextField].focus()
     }
@@ -107,7 +117,8 @@ class AddressInput extends Component {
         }
     }
     render() {
-        const {isMandatory, addressForm, refNext} = this.props;
+        const {isMandatory, addressForm,refNext} = this.props;
+
         return <View>
             <View style={styles.inputTextLayour}>
                 <View style={{flexDirection: "row"}}>

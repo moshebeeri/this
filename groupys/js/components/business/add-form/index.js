@@ -34,34 +34,30 @@ class AddBusiness extends Component {
                 address: item.address,
                 email: item.email,
                 website: item.website,
-                country: 'israel',
+                country: item.country,
                 city: item.city,
+                updateMode:true,
                 state: '',
-                path: '',
-                image: picture,
+                path: item.logo,
                 type: item.type,
                 images: '',
                 tax_id: item.tax_id,
                 formID: '12345',
-                userId: '',
-                token: '',
+                item:item,
                 category: category,
                 subcategory: subcategory,
                 categories: [Number(category), Number(subcategory)],
                 formData: {},
-                active: false,
-                showSave: true,
-                addressValidation: '',
-                coverImage: '',
-                valid: true,
+                coverImage: {uri:picture},
             };
         } else {
             this.state = {
+                updateMode:false,
                 name: '',
                 address: '',
                 email: '',
                 website: '',
-                country: 'israel',
+                country: 'Israel',
                 city: '',
                 state: '',
                 path: '',
@@ -71,16 +67,12 @@ class AddBusiness extends Component {
                 tax_id: '',
                 formID: '12345',
                 userId: '',
-                token: '',
                 category: '',
                 subcategory: '',
                 categories: [],
                 formData: {},
-                active: false,
-                showSave: true,
                 locations: {},
-                location: {},
-                valid: false,
+                location: {}
             };
         }
     }
@@ -113,6 +105,10 @@ class AddBusiness extends Component {
     }
 
     createBusiness() {
+        let entityId = ''
+       if(this.state.item){
+           entityId = this.state.item._id;
+       }
         return {
             address: this.state.address,
             category: this.state.category,
@@ -127,12 +123,15 @@ class AddBusiness extends Component {
             type: this.state.type,
             website: this.state.website,
             logoImage: this.state.image,
+            _id:entityId,
         }
     }
 
     updateFormData() {
-        this.replaceRoute('home');
-        this.props.updateBusiness(this.createBusiness());
+        if (this.validateForm()) {
+            this.replaceRoute('home');
+            this.props.updateBusiness(this.createBusiness());
+        }
     }
 
     updateLocation(location) {
@@ -211,9 +210,13 @@ class AddBusiness extends Component {
     }
 
     render() {
+        let savveOperation = this.saveFormData.bind(this);
+        if(this.state.updateMode){
+            savveOperation = this.updateFormData.bind(this);
+        }
         return (
             <View style={styles.business_container}>
-                <FormHeader showBack submitForm={this.saveFormData.bind(this)} navigation={this.props.navigation}
+                <FormHeader showBack submitForm={savveOperation} navigation={this.props.navigation}
                             title={"Add Business"} bgc="#FA8559"/>
                 <ScrollView contentContainerStyle={{
                     justifyContent: 'center',
@@ -236,6 +239,7 @@ class AddBusiness extends Component {
 
                     <View style={styles.inputTextLayour}>
                         <CategoryPicker ref={"picker"} isMandatory categories={this.props.categories}
+                                        selectedCategories={this.state.categories}
                                         setFormCategories={this.setCategory.bind(this)}
                                         setCategoriesApi={this.props.fetchBusinessCategories}/>
                     </View>
@@ -254,7 +258,8 @@ class AddBusiness extends Component {
                                    validateContent={FormUtils.validateWebsite}
                                    onChangeText={(website) => this.setState({website})} isMandatory={false}/>
                     </View>
-                    <AddressInput refNext="5" ref="5" isMandatory onSubmitEditing={this.updateLocation.bind(this)}/>
+                    <AddressInput city={this.state.city} address={this.state.address} country={this.state.country}
+                                  refNext="5" ref="5" isMandatory onSubmitEditing={this.updateLocation.bind(this)}/>
 
                     <View style={styles.inputTextLayour}>
 

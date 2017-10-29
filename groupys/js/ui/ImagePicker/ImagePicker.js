@@ -20,11 +20,11 @@ export default class ImagePickerComponent extends Component {
     }
 
     isValid(){
-        const { mandatory} = this.props;
+        const { mandatory,image} = this.props;
 
         if(mandatory){
 
-            if(!this.state.value){
+            if(!this.state.value && !image){
                 this.setState({
                     invalid: true
                 })

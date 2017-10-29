@@ -20,6 +20,19 @@ class CategoryPicker extends Component {
         this.refs[refNext].focus()
     }
 
+    componentWillMount() {
+        const{selectedCategories} = this.props;
+        if(selectedCategories) {
+            let setCategoryFunc = this.setCategory.bind(this);
+            let index = 0;
+            selectedCategories.forEach(category => {
+                setCategoryFunc(index,category)
+                index = index +1;
+            });
+
+        }
+    }
+
     setCategory(index, category) {
         const {setFormCategories, categories,setCategoriesApi} = this.props;
         this.setState({

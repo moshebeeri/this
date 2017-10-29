@@ -43,6 +43,7 @@ class EntityUtils {
             })
         }
     }
+
     doLogoUpload(imagePath, imageMime, token, callbackFunction, entityApi, responseData) {
         let files = [
             {
@@ -118,7 +119,7 @@ class EntityUtils {
             }
         ).then((response) => response.json())
             .then((responseData) => {
-                if(entityData.image || entityData.logo) {
+                if (entityData.image || entityData.logo) {
                     if (entityData.image) {
                         this.doUpload(entityData.image.uri, entityData.image.mime, token, callbackFunction, entityApi, responseData);
                     }
@@ -127,7 +128,6 @@ class EntityUtils {
                     }
                     return;
                 }
-
                 callbackFunction(responseData);
             }).catch(function (error) {
             console.log('There has been a problem with your fetch operation: ' + error.message);
@@ -141,55 +141,75 @@ class EntityUtils {
         this.saveEntity(entityData, entityApi, json, token, callbackFunction, errorCallBack, userId);
     }
 
-    updateEntity(entityData, entityApi, json, token, callbackFunction, errorCallBack, entityId) {
-        if (entityId) {
-            fetch(`${server_host}/api/` + entityApi + '/' + entityId, {
-                    method: 'PUT',
-                    headers: {
-                        'Accept': 'application/json, text/plain, */*',
-                        'Content-Type': 'application/json;charset=utf-8',
-                        'Authorization': 'Bearer ' + token,
-                    },
-                    body: json
-                }
-            ).then((response) => response.json())
-                .then((responseData) => {
-                    callbackFunction(responseData);
-                }).catch(function (error) {
-                console.log('There has been a problem with your fetch operation: ');
-                errorCallBack(error);
-            });
-        } else {
-            fetch(`${server_host}/api/` + entityApi, {
-                    method: 'PUT',
-                    headers: {
-                        'Accept': 'application/json, text/plain, */*',
-                        'Content-Type': 'application/json;charset=utf-8',
-                        'Authorization': 'Bearer ' + token,
-                    },
-                    body: json
-                }
-            ).then((response) => {
-                if (entityData.image) {
-                    this.doUpload(entityData.image.uri, entityData.image.mime, token, callbackFunction, entityApi, entityData);
-                    return
-                }
-                if (response.status == '200') {
-                    callbackFunction('sucsses');
+    doLogg(){
+
+    }
+
+    updateEntity(entityData, entityApi, json, token) {
+        return new Promise(async (resolve, reject) => {
+            try {
+
+                if (entityData._id) {
+                    const response = await fetch(`${server_host}/api/` + entityApi + '/' + entityData._id, {
+                        method: 'PUT',
+                        headers: {
+                            'Accept': 'application/json, text/plain, */*',
+                            'Content-Type': 'application/json;charset=utf-8',
+                            'Authorization': 'Bearer ' + token,
+                        },
+                        body: json
+                    });
+                    if (response.status === 401) {
+                        reject(response);
+                        return;
+                    }
+                    if (response.status === 500) {
+                        reject(response);
+                        return;
+                    }
+                    let responseData = await response.json();
+
+                    if (entityData.logoImage) {
+                        this.doLogoUpload(entityData.logoImage.uri, entityData.logoImage.mime, token, this.doLogg.bind(this), entityApi, responseData);
+                    }
+
+                    if (entityData.image && entityData.image.uri && entityData.image.mime) {
+                        this.doUpload(entityData.image.uri, entityData.image.mime, token, callbackFunction, entityApi, responseData);
+                    }
+                    resolve(responseData);
                 } else {
-                    errorCallBack('failure')
+                    const response = await fetch(`${server_host}/api/` + entityApi + '/', {
+                        method: 'PUT',
+                        headers: {
+                            'Accept': 'application/json, text/plain, */*',
+                            'Content-Type': 'application/json;charset=utf-8',
+                            'Authorization': 'Bearer ' + token,
+                        },
+                        body: json
+                    });
+                    if (response.status === 401) {
+                        reject(response);
+                        return;
+                    }
+                    if (response.status === 500) {
+                        reject(response);
+                        return;
+                    }
+                    let responseData = await response.json();
+                    resolve(responseData);
                 }
-            }).catch(function (error) {
-                console.log('There has been a problem with your fetch operation: ');
-                errorCallBack(error);
-            });
-        }
+            }
+            catch (error) {
+                console.log('There has been a problem with your fetch operation: ' + error.message);
+                reject(error);
+            }
+        })
     }
 
     update(entityApi, entityData, token, callbackFunction, errorCallBack, entityId) {
         //let entity = transformJson(entityData);
         let json = JSON.stringify(entityData);
-        this.updateEntity(entityData, entityApi, json, token, callbackFunction, errorCallBack, entityId);
+        return this.updateEntity(entityData, entityApi, json, token);
     }
 }
 

@@ -197,9 +197,11 @@ export function setBusinessPromotions(businessId) {
 }
 
 function saveBusinessFailed() {
-    dispatch({
-        type: actions.NETWORK_IS_OFFLINE,
-    });
+    return  function (dispatch) {
+        dispatch({
+            type: actions.NETWORK_IS_OFFLINE,
+        });
+    }
 }
 
 export function saveBusiness(business) {
@@ -217,11 +219,18 @@ export function saveBusiness(business) {
 }
 
 export function updateBusiness(business) {
-    return function (dispatch, getState) {
+    return async function (dispatch, getState) {
         try {
             const token = getState().authentication.token;
-            const user = getState().user.user;
-            entityUtils.update('businesses', business, token,  onEndReached, saveBusinessFailed, user._id);
+            await entityUtils.update('businesses', business, token, business._id);
+            let businesses = await businessApi.getAll(token);
+            businesses.forEach(function (business) {
+                dispatch({
+                    type: actions.UPSERT_MY_BUSINESS,
+                    item: business
+                });
+            })
+
         } catch (error) {
             dispatch({
                 type: actions.NETWORK_IS_OFFLINE,
