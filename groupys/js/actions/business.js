@@ -6,11 +6,13 @@ import UserApi from "../api/user";
 import ProductApi from "../api/product";
 import PromotionApi from "../api/promotion";
 import * as actions from "../reducers/reducerActions";
+import EntityUtils from "../utils/createEntity";
 
 let businessApi = new BusinessApi();
 let userApi = new UserApi();
 let productApi = new ProductApi();
 let promotionApi = new PromotionApi();
+let entityUtils = new EntityUtils();
 
 async function getAll(dispatch, token) {
     try {
@@ -32,7 +34,7 @@ async function getBusinessCategories(dispatch, gid, token) {
     try {
         let response = await businessApi.getBusinessCategories(gid, token);
         dispatch({
-            type: 'GET_BUSINESS_CATEGORIES',
+            type: actions.SET_BUSINESS_CATEGORIES,
             categories: response,
             language: 'en',
             catId: gid
@@ -186,6 +188,56 @@ export function setBusinessPromotions(businessId) {
                 businessesPromotions: promotions,
                 businessId: businessId
             });
+        } catch (error) {
+            dispatch({
+                type: actions.NETWORK_IS_OFFLINE,
+            });
+        }
+    }
+}
+
+function saveBusinessFailed() {
+    return  function (dispatch) {
+        dispatch({
+            type: actions.NETWORK_IS_OFFLINE,
+        });
+    }
+}
+
+export function saveBusiness(business) {
+    return async function (dispatch, getState) {
+        try {
+            const token = getState().authentication.token;
+            const user = getState().user.user;
+            await entityUtils.create('businesses', business, token, undefined, undefined, user._id);
+            let businesses = await businessApi.getAll(token);
+            businesses.forEach(function (business) {
+                dispatch({
+                    type: actions.UPSERT_MY_BUSINESS,
+                    item: business
+                });
+            })
+        } catch (error) {
+            dispatch({
+                type: actions.NETWORK_IS_OFFLINE,
+            });
+        }
+    }
+}
+
+export function updateBusiness(business) {
+    return async function (dispatch, getState) {
+        try {
+            const token = getState().authentication.token;
+            await entityUtils.update('businesses', business, token, business._id);
+            let businesses = await businessApi.getAll(token);
+            businesses.forEach(function (business) {
+                dispatch({
+                    type: actions.UPSERT_MY_BUSINESS,
+                    item: business
+                });
+            })
+
         } catch (error) {
             dispatch({
                 type: actions.NETWORK_IS_OFFLINE,

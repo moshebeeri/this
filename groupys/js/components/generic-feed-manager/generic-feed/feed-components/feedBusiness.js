@@ -43,6 +43,7 @@ export default class FeedBusiness extends Component {
         const likeIcon = componentCreator.createLikeButton(item, styles, like, unlike);
         const commentICon = componentCreator.createCommentButton(styles, comment, item)
         const shareICon = componentCreator.createShareButton(styles, showUsers, item);
+        const imageBusiness = this.createBusinessImage(item,styles);
         const result =
             <View style={styles.bussiness_container}>
                 <View style={styles.promotion_card}>
@@ -59,11 +60,7 @@ export default class FeedBusiness extends Component {
 
                         </View>
                     </View>
-                    <View style={styles.promotion_image_view}>
 
-                        <Image resizeMode="cover" style={styles.promotion_image} source={{uri: item.banner.uri}}>
-                        </Image>
-                    </View>
 
                     <View style={styles.business_buttomUpperContainer}>
                         <View style={styles.promotion_buttom_description}>
@@ -87,6 +84,20 @@ export default class FeedBusiness extends Component {
                 </View>
             </View>
         return result;
+
+
+
+    }
+
+    createBusinessImage(item,styles){
+        if(item.banner && item.banner.uri) {
+            return <View style={styles.promotion_image_view}>
+
+                <Image resizeMode="cover" style={styles.promotion_image} source={{uri: item.banner.uri}}>
+                </Image>
+            </View>
+        }
+        return undefined;
     }
 
     getStyle() {

@@ -66,9 +66,14 @@ export default function business(state = initialState, action) {
             } else {
                 return state;
             }
-        case 'GET_BUSINESS_CATEGORIES' :
+        case actions.SET_BUSINESS_CATEGORIES :
             let categoriesState = {...state};
-            categoriesState['categories' + action.language + action.catId] = action.categories;
+
+            categoriesState.categories.language
+            if(!categoriesState.categories[action.language]){
+                categoriesState.categories[action.language] = {};
+            }
+            categoriesState.categories[action.language][action.catId] = action.categories;
             return categoriesState;
         case actions.SET_USER_BUSINESS:
             let businessesUsers = businessesState.businessesUsers;
