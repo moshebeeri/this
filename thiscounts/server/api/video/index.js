@@ -6,7 +6,7 @@ let auth = require('../../auth/auth.service');
 
 let router = express.Router();
 
-router.post('/', auth.isAuthenticated(), controller.upload);
+router.post('/', /*auth.isAuthenticated(),*/ controller.upload);
 
 // router.get('/test', controller.test);
 // router.get('/', controller.index);
