@@ -3,7 +3,7 @@ import {REHYDRATE} from "redux-persist/constants";
 import * as actions from "./reducerActions";
 
 export default function products(state = initialState, action) {
-    console.log(action.type);
+
     if (action.type === REHYDRATE) {
 
         // retrive stored data for reducer callApi
@@ -22,7 +22,10 @@ export default function products(state = initialState, action) {
             return productsState;
         case actions.SET_PRODUCT_CATEGORIES :
             let categoriesState = {...state};
-            categoriesState['categories' + action.language + action.catId] = action.categories;
+            if(!categoriesState.categories[action.language]){
+                categoriesState.categories[action.language] = {};
+            }
+            categoriesState.categories[action.language][action.catId] = action.categories;
             return categoriesState;
         default:
             return state;

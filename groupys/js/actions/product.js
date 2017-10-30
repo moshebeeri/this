@@ -63,12 +63,17 @@ export function setProductCategories(gid) {
     }
 }
 
-export function saveProduct(product, saveSucsees, saveFailed) {
-    return function (dispatch, getState) {
+export function saveProduct(product,businessId) {
+    return async function (dispatch, getState) {
         try {
             const token = getState().authentication.token;
-            const user = getState().user.user;
-            entityUtils.create('products', product, token, saveSucsees, saveFailed, user._id);
+            await entityUtils.create('products', product, token);
+            let products = await productApi.findByBusinessId(businessId, token);
+            dispatch({
+                type: actions.SET_PRODUCT_BUSINESS,
+                businessProducts: products,
+                businessId: businessId
+            });
         } catch (error) {
             dispatch({
                 type: actions.NETWORK_IS_OFFLINE,
@@ -77,18 +82,6 @@ export function saveProduct(product, saveSucsees, saveFailed) {
     }
 }
 
-export function updateProduct(product, saveSucsees, saveFailed, itemId) {
-    return function (dispatch, getState) {
-        try {
-            const token = getState().authentication.token;
-            entityUtils.update('products', product, token, saveSucsees, saveFailed, itemId);
-        } catch (error) {
-            dispatch({
-                type: actions.NETWORK_IS_OFFLINE,
-            });
-        }
-    }
-}
 
 
 

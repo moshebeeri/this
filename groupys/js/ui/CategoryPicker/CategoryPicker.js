@@ -54,6 +54,9 @@ class CategoryPicker extends Component {
             this.state.selectedCategories.push(category);
             this.state.selectedCategories.push("");
         }
+        if(!categories['en']){
+            return;
+        }
         let reduxxCategories = categories['en'][category];
         if (!reduxxCategories) {
             this.props.actions.fetchCategories(category,setCategoriesApi);

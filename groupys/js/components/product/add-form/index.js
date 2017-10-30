@@ -1,59 +1,64 @@
 import React, {Component} from 'react';
-import {
-    Platform,
-    AppRegistry,
-    NavigatorIOS,
-    TextInput,
-    Image,
-    TouchableOpacity,
-    TouchableHighlight
-} from 'react-native';
+import {Image, ScrollView,Dimensions} from 'react-native';
 import {connect} from 'react-redux';
-import {actions} from 'react-native-navigation-redux-helpers';
 import {
+    Button,
     Container,
     Content,
-    Text,
-    InputGroup,
-    Input,
-    Button,
-    Icon,
-    View,
+    Footer,
     Header,
+    Icon,
+    Input,
+    InputGroup,
     Item,
     Picker,
-    Footer
+    Text,
+    View
 } from 'native-base';
-import ImagePicker from 'react-native-image-crop-picker';
+const {width, height} = Dimensions.get('window')
 import * as productsAction from "../../../actions/product";
 import * as businessAction from "../../../actions/business";
 import {bindActionCreators} from "redux";
+import styles from './styles'
+import {CategoryPicker, FormHeader, ImagePicker, TextInput} from '../../../ui/index';
 
 class AddProduct extends Component {
+    static navigationOptions = ({navigation}) => ({
+        header: null
+    });
+
     constructor(props) {
         super(props);
-        const milliseconds = (new Date).getTime();
         if (props.navigation.state.params && props.navigation.state.params.item) {
             let item = props.navigation.state.params.item;
+            let picture = undefined;
+            if (item.pictures.length > 0 && item.pictures[0].pictures[1]) {
+                picture = item.pictures[0].pictures[1]
+            }
+            let categories = item.category.split(',');
+            if (categories.length > 0) {
+                categories = categories.filter(catString => catString).map(catString => parseInt(catString));
+            }
             this.state = {
                 name: item.name,
-                image: '',
+                coverImage: {path: picture},
                 business: item.business,
                 info: item.info,
                 retail_price: item.retail_price.toString(),
                 token: '',
-                categories: JSON.parse("[" + item.category + "]"),
-                time: milliseconds,
+                item: item,
+                updateMode: true,
+                categories: categories
             };
         } else {
             this.state = {
                 name: '',
-                image: '',
+                coverImage: '',
                 info: '',
                 retail_price: '',
                 token: '',
                 categories: [],
-                time: milliseconds,
+                updateMode: false,
             };
         }
         props.actions.setProductCategories("root");
@@ -64,28 +69,27 @@ class AddProduct extends Component {
     }
 
     saveFormData() {
+        const {navigation, actions} = this.props;
         this.replaceRoute('home');
-        const {actions} = this.props;
         const product = this.createProduct();
-        actions.saveProduct(product, this.formSuccess.bind(this), this.formFailed.bind(this))
+        const businessId = this.getBusinessId(navigation);
+        actions.saveProduct(product, businessId)
     }
 
     createProduct() {
         const {navigation} = this.props;
-        return {
+        let product = {
             name: this.state.name,
-            image: this.state.image,
+            image: this.state.coverImage,
             business: this.getBusinessId(navigation),
             info: this.state.info,
             retail_price: this.state.retail_price,
             category: this.state.categories,
         }
-    }
-
-    formSuccess(response) {
-        const {businessAction, navigation} = this.props;
-        const businessId = this.getBusinessId(navigation);
-        businessAction.setBusinessProducts(businessId);
+        if (this.state.item) {
+            product._id = this.state.item._id;
+        }
+        return product;
     }
 
     getBusinessId(navigation) {
@@ -96,232 +100,103 @@ class AddProduct extends Component {
     }
 
     focusNextField(nextField) {
-        this.refs[nextField]._root.focus()
-    }
-
-    updateFormData() {
-        this.replaceRoute('home');
-        const {actions, navigation} = this.props;
-        const product = this.createProduct();
-        actions.updateProduct(product, this.formSuccess.bind(this), this.formFailed.bind(this), navigation.state.params.item._id)
-    }
-
-    formFailed(error) {
-        //TODO send netwwork failed event
-        console.log('failed');
-    }
-
-    async pickFromCamera() {
-        try {
-            let image = await ImagePicker.openCamera({
-                cropping: true,
-                compressImageQuality: 1,
-                compressVideoPreset: 'MediumQuality',
-                width: 2000,
-                height: 2000,
-            });
-            this.setState({
-                image: {uri: image.path, width: image.width, height: image.height, mime: image.mime},
-                images: null,
-                path: image.path
-            });
-        } catch (e) {
-            console.log(e);
+        if (this.refs[nextField].wrappedInstance) {
+            this.refs[nextField].wrappedInstance.focus()
+        }
+        if (this.refs[nextField].focus) {
+            this.refs[nextField].focus()
         }
     }
 
-    async pickPicture() {
-        try {
-            let image = await ImagePicker.openPicker({
-                cropping: true,
-                compressImageQuality: 1,
-                compressVideoPreset: 'MediumQuality',
-                width: 2000,
-                height: 2000,
-            });
-            this.setState({
-                image: {uri: image.path, width: image.width, height: image.height, mime: image.mime},
-                images: null,
-                path: image.path
-            });
-        } catch (e) {
-            console.log(e);
-        }
+    setCategory(categories) {
+        this.setState({categories: categories});
     }
 
-    setCategory(index, category) {
-        const {actions} = this.props;
-        var milliseconds = (new Date).getTime();
-        if (milliseconds - this.state.time < 1000) {
-            return;
-        }
-        if (!category) {
-            return;
-        }
-        let categpries = this.state.categories;
-        if (categpries.length <= index) {
-            categpries.push(category);
-        } else {
-            let newCategories = new Array();
-            for (i = 0; i + 1 <= index; i++) {
-                newCategories.push(categpries[i]);
-            }
-            categpries = newCategories
-            categpries.push(category);
-        }
-        let reduxxCategories = this.props.products['categoriesen' + category];
-        if (!reduxxCategories) {
-            actions.setProductCategories(category);
-        }
+    setCoverImage(image) {
         this.setState({
-            categories: categpries
+            coverImage: image
         })
     }
 
-    createPickers() {
-        const categories = this.props.products['categoriesenroot'];
-        let rootPiker = undefined;
-        if (categories) {
-            let categoriesWIthBlank = new Array();
-            categories.forEach(function (cat) {
-                categoriesWIthBlank.push(cat);
-            })
-            categoriesWIthBlank.unshift({
-                gid: "",
-                translations: {
-                    en: ""
-                }
-            })
-            rootPiker = <Picker
-                iosHeader="Sub type"
-                mode="dropdown"
-                style={{flex: 1}}
-                selectedValue={this.state.categories[0]}
-                onValueChange={this.setCategory.bind(this, 0)}>
+    createCoverImageComponnent() {
+        if (this.state.coverImage) {
+            let coverImage = <Image
+                style={{ width:width -10, height: 210,borderWidth:1,borderColor:'white'}}
+                source={{uri: this.state.coverImage.path}}
+            >
 
-                {
-                    categoriesWIthBlank.map((s, i) => {
-                        return <Item
-                            key={i}
-                            value={s.gid}
-                            label={s.translations.en}/>
-                    })}
-            </Picker>
+            </Image>
+            return <View style={styles.product_upper_container}>
+                <View style={styles.cmeraLogoContainer}>
+
+                    <View style={styles.addCoverContainer}>
+                        <ImagePicker ref={"coverImage"} mandatory image={coverImage} color='white' pickFromCamera
+                                     setImage={this.setCoverImage.bind(this)}/>
+                    </View>
+                </View>
+            </View>
         }
-        const props = this.props;
-        const stateCategories = this.state.categories;
-        const setCategoryFunction = this.setCategory.bind(this);
-        const pickers = this.state.categories.map(function (gid, i) {
-            let categories = props.products['categoriesen' + gid];
-            if (categories && categories.length > 0) {
-                let categoriesWIthBlank = new Array();
-                categories.forEach(function (cat) {
-                    categoriesWIthBlank.push(cat);
-                })
-                categoriesWIthBlank.unshift({
-                    gid: "",
-                    translations: {
-                        en: ""
-                    }
-                })
-                return <Picker
-                    key={i}
-                    iosHeader="Sub type"
-                    mode="dropdown"
-                    style={{flex: 1}}
-                    selectedValue={stateCategories[i + 1]}
-                    onValueChange={setCategoryFunction.bind(this, i + 1)}>
+        return <View style={styles.product_upper_container}>
+            <View style={styles.cmeraLogoContainer}>
 
-                    {
-                        categoriesWIthBlank.map((s, j) => {
-                            return <Item
-                                key={j}
-                                value={s.gid}
-                                label={s.translations.en}/>
-                        })}
-                </Picker>
-            }
-            return undefined;
-        })
-        return <View>{rootPiker}{pickers}</View>
+                <View style={styles.addCoverNoImageContainer}>
+                    <ImagePicker ref={"coverImage"} mandatory color='white' pickFromCamera
+                                 setImage={this.setCoverImage.bind(this)}/>
+                    <Text style={styles.addCoverText}>Add a cover photo</Text>
+                </View>
+            </View>
+
+        </View>
     }
 
     render() {
-        const {navigation} = this.props;
-        const image = this.createImageTag();
-        const saveButton = this.createSaveButtonTag(navigation.state.params.item);
-        const pickers = this.createPickers();
         return (
-            <Container>
+            <View style={styles.product_container}>
+                <FormHeader showBack submitForm={this.saveFormData.bind(this)} navigation={this.props.navigation}
+                            title={"Add Product"} bgc="#FA8559"/>
+                <ScrollView contentContainerStyle={{
+                    justifyContent: 'center',
+                    alignItems: 'center',
+                }} style={styles.contentContainer}>
 
-                <Content style={{margin: 10, backgroundColor: '#fff'}}>
-                    {pickers}
-                    <Item style={{margin: 3}} regular>
-                        <Input value={this.state.name} blurOnSubmit={true} returnKeyType='next' ref="1"
-                               onSubmitEditing={this.focusNextField.bind(this, "2")}
-                               onChangeText={(name) => this.setState({name})} placeholder='Name'/>
-                    </Item>
-                    <Item style={{margin: 3}} regular>
-                        <Input value={this.state.info} blurOnSubmit={true} returnKeyType='next' ref="2"
-                               onSubmitEditing={this.focusNextField.bind(this, "3")}
-                               onChangeText={(info) => this.setState({info})} placeholder='Description'/>
-                    </Item>
+                    {this.createCoverImageComponnent()}
 
+                    <View style={styles.inputTextLayour}>
+                        <TextInput field='Product Name' value={this.state.name}
+                                   returnKeyType='next' ref="1" refNext="1"
+                                   onSubmitEditing={this.focusNextField.bind(this, "2")}
+                                   onChangeText={(name) => this.setState({name})} isMandatory={true}/>
+                    </View>
 
-                    <Item style={{margin: 3}} regular>
-                        <Input value={this.state.retail_price} blurOnSubmit={true} returnKeyType='done' ref="3"
-                               onChangeText={(retail_price) => this.setState({retail_price})} placeholder='Price'/>
-                    </Item>
-
-
-                    <Item style={{margin: 3}} regular>
-                        <Button iconRight transparent onPress={() => this.pickPicture()}>
-                            <Text style={{fontStyle: 'normal', fontSize: 10}}>Pick </Text>
-                            <Icon name='camera'/>
-                        </Button>
+                    <View style={styles.inputTextLayour}>
+                        <CategoryPicker ref={"picker"} isMandatory categories={this.props.products.categories}
+                                        selectedCategories={this.state.categories}
+                                        setFormCategories={this.setCategory.bind(this)}
+                                        setCategoriesApi={this.props.actions.setProductCategories}/>
+                    </View>
+                    <View style={styles.inputTextLayour}>
 
 
-                        <Button iconRight transparent onPress={() => this.pickFromCamera()}>
-                            <Text style={{fontStyle: 'normal', fontSize: 10}}>take </Text>
-                            <Icon name='camera'/>
-                        </Button>
+                        <TextInput field='Description' value={this.state.info} returnKeyType='next' ref="2" refNext="2"
+                                   onSubmitEditing={this.focusNextField.bind(this, "6")}
 
-                        {image}
-                    </Item>
+                                   onChangeText={(info) => this.setState({info})}/>
+                    </View>
+
+                    <View style={styles.inputTextLayour}>
+
+                        <TextInput field='Price' value={this.state.retail_price} returnKeyType='done' ref="6"
+                                   refNext="6"
+                                   keyboardType="numeric" placeholder="Price in shekels"
+                                   onChangeText={(retail_price) => this.setState({retail_price})} isMandatory={true}/>
+                    </View>
 
 
-                </Content>
-                <Footer style={{backgroundColor: '#fff'}}>
-                    {saveButton}
+                </ScrollView>
 
-                </Footer>
-            </Container>
+
+            </View>
         );
-    }
-
-    createImageTag() {
-        if (this.state.path) {
-            return <Image
-                style={{width: 50, height: 50}}
-                source={{uri: this.state.path}}
-            />
-        }
-        return undefined;
-    }
-
-    createSaveButtonTag(item) {
-        if (item) {
-            return <Button transparent
-                           onPress={this.updateFormData.bind(this)}
-            >
-                <Text>Update Product</Text>
-            </Button>
-        }
-        return <Button transparent
-                       onPress={this.saveFormData.bind(this)}
-        >
-            <Text>Add Product</Text>
-        </Button>;
     }
 }
 

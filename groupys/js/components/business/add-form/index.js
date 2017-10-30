@@ -227,13 +227,14 @@ class AddBusiness extends Component {
                             {this.createCoverImageComponnent()}
                         </View>
 
-                        <View style={styles.inputTextLayour}>
-                            <TextInput fieldColor='white' field='Bussines Name' value={this.state.name}
-                                       returnKeyType='next' ref="1" refNext="1"
-                                       onSubmitEditing={this.focusNextField.bind(this, "2")}
-                                       onChangeText={(name) => this.setState({name})} isMandatory={true}/>
-                        </View>
 
+
+                    </View>
+                    <View style={styles.inputTextLayour}>
+                        <TextInput  field='Bussines Name' value={this.state.name}
+                                   returnKeyType='next' ref="1" refNext="1"
+                                   onSubmitEditing={this.focusNextField.bind(this, "2")}
+                                   onChangeText={(name) => this.setState({name})} isMandatory={true}/>
                     </View>
 
                     <View style={styles.inputTextLayour}>
