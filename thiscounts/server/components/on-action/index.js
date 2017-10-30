@@ -11,7 +11,7 @@ exports.follow = function(userId, entityId, callback){
 
   let query = `MATCH (e{_id:'${entityId}'})-[action:ON_ACTION]->(p:promotion) 
                WHERE action.type = 'FOLLOW' and action.end <= timestamp()
-               return p._id as promotionId, type(e) as entity_type`;
+               return p._id as promotionId, labels(e) as entity_type`;
   graphModel.query(query, function(err, actions){
     if(err) return callback(err);
     actions.forEach( action => {
@@ -25,7 +25,7 @@ exports.follow = function(userId, entityId, callback){
             ids: [userId],
             action: "eligible_on_activity_follow"
           };
-          act['actor' + action.entity_type] = entityId;
+          act['actor_' + action.entity_type[0]] = entityId;
           activity.create(act);
         })
       })
