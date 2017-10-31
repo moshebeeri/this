@@ -3,6 +3,7 @@ package com.groupys;
 import android.app.Application;
 
 import com.facebook.react.ReactApplication;
+import com.brentvatne.react.ReactVideoPackage;
 import com.babisoft.ReactNativeLocalization.ReactNativeLocalizationPackage;
 import com.mohtada.nestedscrollview.ReactNestedScrollViewPackage;
 import com.BV.LinearGradient.LinearGradientPackage;
@@ -44,6 +45,7 @@ public class MainApplication extends Application implements ReactApplication {
     protected List<ReactPackage> getPackages() {
       return Arrays.<ReactPackage>asList(
           new MainReactPackage(),
+            new ReactVideoPackage(),
             new ReactNativeLocalizationPackage(),
             new ReactNestedScrollViewPackage(),
             new LinearGradientPackage(),
