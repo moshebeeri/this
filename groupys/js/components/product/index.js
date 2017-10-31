@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import {Image, Platform} from 'react-native';
+import {Image, Platform,TouchableOpacity} from 'react-native';
 import {connect} from 'react-redux';
 import {actions} from 'react-native-navigation-redux-helpers';
 import {
@@ -25,7 +25,8 @@ import Icon from 'react-native-vector-icons/EvilIcons';
 import * as businessAction from "../../actions/business";
 import {getBusinessProducts} from '../../selectors/businessesSelector'
 import {bindActionCreators} from "redux";
-
+import Icon2 from 'react-native-vector-icons/MaterialCommunityIcons';
+import styles from './styles'
 class Product extends Component {
     constructor(props) {
         super(props);
@@ -36,8 +37,7 @@ class Product extends Component {
     }
 
     setBusinessProducts() {
-        const {actions, navigation} = this.props;
-        const business = navigation.state.params.business._id;
+        const {actions, navigation,business} = this.props;
         actions.setBusinessProducts(business);
     }
 
@@ -52,28 +52,27 @@ class Product extends Component {
     }
 
     navigateToAdd() {
-        this.props.navigation.navigate("AddProduct", {business: this.props.navigation.state.params.business});
+        const { navigation,business} = this.props;
+
+       navigation.navigate("AddProduct", {business: business});
     }
 
     render() {
-        const {products, navigation, actions, update} = this.props;
-        const business = navigation.state.params.business._id;
+        const {products, navigation, actions, update,business} = this.props;
+        const businessId = business._id;
         return (
             <Container style={{flex: -1}}>
-                <GenericListManager rows={products[business]} navigation={navigation} actions={actions} update={update}
+                <View style={styles.addProductContainer}>
+                    <TouchableOpacity style={styles.addProductButton}
+                                      onPress={this.navigateToAdd.bind(this)}>
+                        <Icon2 active color={"#FA8559"} size={18} name="plus"/>
+                        <Text style={styles.addProductTextStyle}>Add product</Text>
+                    </TouchableOpacity>
+                </View>
+                <GenericListManager rows={products[businessId]} navigation={navigation} actions={actions} update={update}
                                     onEndReached={this.setBusinessProducts.bind(this)}
                                     ItemDetail={this.renderItem.bind(this)}/>
-                <Fab
 
-                    direction="right"
-                    active={false}
-                    containerStyle={{marginLeft: 10}}
-                    style={{backgroundColor: "#ff6400"}}
-                    position="bottomRight"
-                    onPress={() => this.navigateToAdd()}>
-                    <Icon size={20} name="plus"/>
-
-                </Fab>
             </Container>
         );
     }

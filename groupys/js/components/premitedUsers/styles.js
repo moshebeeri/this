@@ -2,6 +2,23 @@ const React = require('react-native');
 const {StyleSheet, Dimensions, Platform} = React;
 const {width, height} = Dimensions.get('window')
 module.exports = {
+    addProductContainer:{
+        height:40,
+        marginTop:3,
+        flexDirection: 'row',
+        justifyContent: 'flex-end',
+    },
+    addProductButton:{
+        marginTop:10,
+        width:140,
+        flexDirection: 'row',
+    },
+    addProductTextStyle:{
+        color: '#ff6400',
+        marginRight:5,
+        marginLeft:10,
+        fontSize:14
+    },
     shadow: {
         flex: 1,
         width: 330,

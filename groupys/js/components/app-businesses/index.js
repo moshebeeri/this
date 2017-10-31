@@ -11,6 +11,8 @@ import Business from '../business/index';
 import SideBar from '../drawer/index';
 import {bindActionCreators} from "redux";
 import * as businessAction from "../../actions/business";
+import { FormHeader} from '../../ui/index';
+import Icon2 from 'react-native-vector-icons/MaterialCommunityIcons';
 
 class ApplicationBusinessManager extends Component {
     static navigationOptions = {
@@ -19,9 +21,7 @@ class ApplicationBusinessManager extends Component {
 
     constructor(props) {
         super(props)
-        this.state = {
-            drawerState: '',
-        }
+
     }
 
     replaceRoute(route) {
@@ -32,45 +32,10 @@ class ApplicationBusinessManager extends Component {
         this.replaceRoute('addBusiness');
     }
 
-    componentWillMount() {
-    }
 
-    async headerAction(compoenet, index) {
-        this.setState({
-            addComponent: compoenet,
-        })
-    }
-
-    openDrawer() {
-        this._drawer._root.open();
-    }
-
-    closeDrawer() {
-        this._drawer._root.close();
-    }
-
-    componentDidMount() {
-    }
 
     render() {
-        closeDrawer = () => {
-            this.drawer._root.close()
-        };
-        openDrawer = () => {
-            this.drawer._root.open()
-        };
-        const fav =
-            <Fab
 
-                direction="right"
-                active={false}
-                containerStyle={{marginLeft: 10}}
-                style={{backgroundColor: "#ff6400"}}
-                position="bottomRight"
-                onPress={() => this.navigateToAdd()}>
-                <Icon size={20} name="add"/>
-
-            </Fab>
         return (
 
             <Drawer
@@ -81,15 +46,16 @@ class ApplicationBusinessManager extends Component {
                 onClose={() => closeDrawer}>
 
                 <Container>
-                    <GeneralComponentHeader showBack={true} openDrawer={openDrawer} navigation={this.props.navigation}
-                                            navigate={this.props.navigation.navigate} showAction={true} current='home'
-                                            to={this.state.addComponent}/>
+                    <FormHeader showBack submitForm={this.navigateToAdd.bind(this)} navigation={this.props.navigation}
+                                title={"My Businesses"} bgc="white"
+                                submitIcon={<Icon2 active color={"#FA8559"} size={25} name="plus"/>}
+                                titleColor="#FA8559" backIconColor="#FA8559"/>
 
                     <Business navigation={this.props.navigation} ndex={1}
-                              navigateAction={this.headerAction.bind(this)}/>
+                              />
 
 
-                    {fav}
+
                 </Container>
             </Drawer>
         );

@@ -14,6 +14,24 @@ module.exports = {
     follow_search_field: {
         marginRight: 20, backgroundColor: 'white'
     },
+    addProductContainer:{
+        height:40,
+        marginTop:3,
+        flexDirection: 'row',
+        justifyContent: 'flex-end',
+        backgroundColor:'white',
+    },
+    addProductButton:{
+        marginTop:10,
+        width:130,
+        flexDirection: 'row',
+    },
+    addProductTextStyle:{
+        color: '#ff6400',
+        marginRight:5,
+        marginLeft:10,
+        fontSize:14
+    },
     shadow: {
         flex: 1,
         width: 330,
