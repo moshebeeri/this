@@ -1,6 +1,6 @@
 import React, {Component} from 'react';
 import {connect} from 'react-redux';
-import {Header, Item, ListItem, Picker, Right, Thumbnail, View} from 'native-base';
+import {Header, Item, ListItem, Picker, Right, Thumbnail, View,Spinner} from 'native-base';
 import BusinessListView from './business-list-view/index'
 import * as businessAction from "../../actions/business";
 import {getMyBusinessesItems} from '../../selectors/businessesSelector'
@@ -25,19 +25,7 @@ class Business extends Component {
 
     componentWillMount() {
         this.props.actions.onEndReached();
-        if (this.props.businesses) {
-            this.setState({
-                refresh: '',
-                selectedBusiness: this.props.businesses[0]
-            });
-        } else {
-            this.setState({
-                refresh: '',
-                selectedBusiness: [{
-                    business: {_id: ''}
-                }]
-            });
-        }
+
     }
 
     selectBusiness(businessId) {
@@ -45,9 +33,8 @@ class Business extends Component {
         if (businesses) {
             let selected = businesses.filter(business => business.business._id === businessId);
             if (selected && selected.length === 1) {
-                this.setState({
-                    selectedBusiness: selected[0]
-                })
+                this.props.actions.selectBusiness(selected[0])
+
                 this.props.actions.setBusinessProducts(businessId);
                 this.props.actions.setBusinessPromotions(businessId);
                 this.props.actions.setBusinessUsers(businessId);
@@ -56,21 +43,34 @@ class Business extends Component {
         }
     }
 
-    createBusinessLogo() {
-        if (this.state.selectedBusiness.business.logo) {
-            return <Thumbnail small square source={{uri: this.state.selectedBusiness.business.logo}}/>
+    createBusinessLogo(selectedBusiness) {
+       if (selectedBusiness && selectedBusiness.business.logo) {
+            return <Thumbnail small square source={{uri: selectedBusiness.business.logo}}/>
         } else {
             return <Thumbnail source={require('../../../images/client_1.png')}/>
         }
     }
 
     render() {
-        const {businesses, navigation} = this.props;
+        const {businesses, navigation,businessLoading,selectedBusiness} = this.props;
+        if(businessLoading && businesses.length === 0){
+            return <Spinner/>
+        }
+        if(!businessLoading && businesses.length === 0){
+            return <View></View>
+        }
+
+        let businessWasSelected = selectedBusiness;
+        if(!businessWasSelected && businesses.length > 0){
+            businessWasSelected = businesses[0];
+
+        }
+
         return (
             <View style={styles.listBusinessesContainer}>
                 <View style={styles.businessPiker}>
                     <View style={styles.businessTopLogo}>
-                        {this.createBusinessLogo()}
+                        {this.createBusinessLogo(businessWasSelected)}
                     </View>
                     <View style={styles.businessPikkerComponent}>
                         <Picker
@@ -78,7 +78,7 @@ class Business extends Component {
                             mode="dropdown"
                             placeholder="Select Business"
                             style={styles.pickerStyle}
-                            selectedValue={this.state.selectedBusiness.business._id}
+                            selectedValue={businessWasSelected.business._id}
                             onValueChange={(busines) => this.selectBusiness(busines)}>
 
                             {
@@ -102,7 +102,7 @@ class Business extends Component {
                 </View>
                 <View style={styles.businessDetailsContainer}>
                     <BusinessListView
-                        item={this.state.selectedBusiness}
+                        item={businessWasSelected}
                         index={0}
                         navigation={navigation}
                     />
@@ -114,6 +114,8 @@ class Business extends Component {
 
 export default connect(
     state => ({
+        businessLoading:state.businesses.loading,
+        selectedBusiness:state.businesses.selectedBusiness,
         update: state.businesses.update,
         businesses: getMyBusinessesItems(state),
     }),

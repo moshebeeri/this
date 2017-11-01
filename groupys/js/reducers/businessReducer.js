@@ -5,7 +5,9 @@ const initialState = {
     businessesUsers: {},
     businessesProducts: {},
     businessesPromotions: {},
-    update: false
+    loading:true,
+    update: false,
+    selectedBusiness:undefined,
 };
 import {REHYDRATE} from "redux-persist/constants";
 import * as actions from "./reducerActions";
@@ -90,6 +92,22 @@ export default function business(state = initialState, action) {
             businessesState.update = !businessesState.update;
             businessesPromotions[action.businessId] = action.businessesPromotions;
             return businessesState;
+        case actions.BUSSINESS_LOADING:
+            return {
+                ...state,
+                loading: true,
+            };
+
+        case actions.SELECT_BUSINESS:
+            return {
+                ...state,
+                selectedBusiness: action.selectedBusiness,
+            };
+        case actions.BUSSINESS_LOADING_DONE:
+            return {
+                ...state,
+                loading: false,
+            };
         default:
             return state;
     }

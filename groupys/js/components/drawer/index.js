@@ -1,14 +1,15 @@
 import React, {Component} from 'react';
-import {Image, TouchableOpacity, StyleSheet} from 'react-native';
+import {Image, TouchableOpacity} from 'react-native';
 import {Button, Container, Content, Input, InputGroup, Item, Text, View} from 'native-base';
 import ImagePicker from 'react-native-image-crop-picker';
 import styles from './styles';
 import {connect} from 'react-redux';
 import {bindActionCreators} from "redux";
 import EntityUtils from "../../utils/createEntity";
+import Icon from 'react-native-vector-icons/Ionicons';
 import * as userAction from "../../actions/user";
 import StyleUtils from "../../utils/styleUtils";
-import {CloseDrawer} from "../../ui/index";
+
 const logo = require('../../../images/logo.png');
 const cover = require('../../../images/cover-default.png');
 const profile = require('../../../images/profile-default.png');
@@ -17,12 +18,7 @@ const briefcase = require('../../../images/briefcase.png');
 const qrcode = require('../../../images/qr-code.png');
 const settings = require('../../../images/settings-work-tool.png');
 const changePassword = require('../../../images/change-password-img.png');
-import Video from 'react-native-video';
-
 let entityUtils = new EntityUtils();
-import Icon from 'react-native-vector-icons/FontAwesome';
-
-import strings from "../../i18n/i18n"
 
 class ProfileDrawer extends Component {
     static navigationOptions = {
@@ -97,18 +93,7 @@ class ProfileDrawer extends Component {
     formFailed() {
     }
 
-
     render() {
-        let styles = StyleSheet.create({
-            backgroundVideo: {
-                position: 'absolute',
-                top: 0,
-                left: 0,
-                bottom: 0,
-                right: 0,
-            },
-        });
-
         let source = noPic;
         if (this.props.user) {
             if (this.props.user.pictures && this.props.user.pictures.length > 0) {
@@ -124,7 +109,9 @@ class ProfileDrawer extends Component {
                 <Content style={{backgroundColor: '#F2F2F2'}}>
                     {/*Header style*/}
                     <View style={{height: 55, flex: 1, justifyContent: 'flex-end',flexDirection: 'row'}}>
-                        <CloseDrawer active color={"#FF9046"} size={20} onPress={() => this.props.closeDrawer()}/>
+                        <Button transparent style={{}} onPress={() => this.props.closeDrawer()}>
+                            <Icon active color={"#FF9046"} size={20} name="ios-arrow-back"/>
+                        </Button>
                     </View>
                     {/*form header*/}
                     <View style={styles.image}>
@@ -143,18 +130,9 @@ class ProfileDrawer extends Component {
                                 marginTop: 7,
                                 fontStyle: 'normal',
                                 fontSize: 16,
-                            }}>{phoneNumber}</Text>
-                            <View style={{width:320,height:180,backgroundColor:'blue'}}>
-                                <Video
-                                    rate={1} volume={1} muted={true}
-                                    resizeMode="cover" repeat={true} key="video1"
-                                    paused={false}
-                                    style={styles.backgroundVideo}
-                                   /*source={require('../../../images/ArchitectVideo.mp4')}*/
-                                    source={{uri:'https://archive.org/download/VideoSample-Video3/ArchitectVideo_512kb.mp4'}}
-                                />
-                            </View>
 
+
+                            }}>{phoneNumber}</Text>
                         </View>
                         <TouchableOpacity style={styles.thumbnail} onPress={() => this.pickPicture()}>
 
@@ -177,7 +155,7 @@ class ProfileDrawer extends Component {
                                         color: '#FF9046',
                                         fontStyle: 'normal',
                                         fontSize: 16
-                                    }}>{strings.businesses}</Text>
+                                    }}>Businees</Text>
                             </TouchableOpacity>
                         </View>
                         <View style={{flex:1, flexDirection: 'row'}}>
@@ -189,8 +167,8 @@ class ProfileDrawer extends Component {
                                               }}
                                               regular>
                                 <Image style={{tintColor: '#FF9046', marginTop: 21, width: 30, height: 30}} source={qrcode}/>
-                                <Text style={{marginTop: 10, color: '#FF9046', fontStyle: 'normal', fontSize: 15
-                                }}>{strings.scanPromotion}</Text>
+                                <Text style={{marginTop: 10, color: '#FF9046', fontStyle: 'normal', fontSize: 15}}>Scan
+                                    Promotion</Text>
                             </TouchableOpacity>
                         </View>
                     </View>
@@ -213,20 +191,23 @@ class ProfileDrawer extends Component {
                                         color: '#FF9046',
                                         fontStyle: 'normal',
                                         fontSize: 16
-                                    }}>{strings.settings}</Text>
+                                    }}>Settings </Text>
 
                             </TouchableOpacity>
                         </View>
                         <View style={{flex:1, flexDirection: 'row'}}>
                             <TouchableOpacity onPress={() => this.changePassword()}
                                               style={{flex:1, flexDirection: 'column', alignItems: 'center'}} regular>
-                                <Icon style={{marginTop: 21, marginBottom:-6}} color="#FF9046" size={36} name="lock"/>
+                                <Image style={{tintColor: '#FF9046', marginTop: 21, width: 30, height: 30}}
+                                       source={changePassword}/>
+
                                 <Text style={{
                                     marginTop: 10,
                                     color: '#FF9046',
                                     fontStyle: 'normal',
                                     fontSize: 16
-                                }}>{strings.changePassword} </Text>
+                                }}>Change
+                                    Password </Text>
 
                             </TouchableOpacity>
                         </View>

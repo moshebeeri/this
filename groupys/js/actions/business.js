@@ -106,6 +106,10 @@ export function showCamera() {
 export function onEndReached() {
     return async function (dispatch, getState) {
         const token = getState().authentication.token;
+        dispatch({
+            type: actions.BUSSINESS_LOADING,
+
+        });
         try {
             let businesses = await businessApi.getAll(token);
             businesses.forEach(function (business) {
@@ -119,6 +123,19 @@ export function onEndReached() {
                 type: actions.NETWORK_IS_OFFLINE,
             });
         }
+        dispatch({
+            type: actions.BUSSINESS_LOADING_DONE,
+
+        });
+    }
+}
+
+export function selectBusiness(business) {
+    return function (dispatch,) {
+        dispatch({
+            type: actions.SELECT_BUSINESS,
+            selectedBusiness:business
+        });
     }
 }
 

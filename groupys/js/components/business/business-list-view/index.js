@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import {Dimensions, Image, TouchableOpacity} from 'react-native';
+import {Dimensions, Image, TouchableOpacity,Animated} from 'react-native';
 import {
     Button,
     Card,
@@ -36,9 +36,17 @@ const vh = height / 100
 const vmin = Math.min(vw, vh);
 const vmax = Math.max(vw, vh);
 const premissions = require('../../../../images/permissions.png');
+const HEADER_MAX_HEIGHT = 240;
+const HEADER_MIN_HEIGHT = 60;
+const HEADER_SCROLL_DISTANCE = HEADER_MAX_HEIGHT- HEADER_MIN_HEIGHT;
+
+
 export default class BusinessListView extends Component {
     constructor(props) {
         super(props);
+        this.state = {
+            scrollY: new Animated.Value(0),
+        };
     }
 
     showBusiness(p) {
@@ -59,14 +67,22 @@ export default class BusinessListView extends Component {
         const {item, index} = this.props;
         const banner = this.createBannerTag(item);
         const editButton = this.createEditTag(item);
+        const headerHeight = this.state.scrollY.interpolate({
+            inputRange: [0, HEADER_SCROLL_DISTANCE],
+            outputRange: [HEADER_MAX_HEIGHT, HEADER_MIN_HEIGHT],
+            extrapolate: 'clamp',
+        });
         let selectedTab = 0;
         return ( <View key={index} style={{marginTop: 1, width: width, height: height, backgroundColor: '#eaeaea'}}>
-                <View style={{
+                <Animated.View style={{
                     flex: -1,
                     backgroundColor: 'white',
                     flexDirection: 'row',
                     justifyContent: 'space-between',
                     alignItems: 'center',
+                    overflow: 'hidden',
+                    height: headerHeight
+
                 }}>
                     <View style={{flexDirection: 'row', alignItems: 'center'}}>
                         {banner}
@@ -77,7 +93,7 @@ export default class BusinessListView extends Component {
                         {editButton}
                     </View>
 
-                </View>
+                </Animated.View>
 
 
                 <Tabs tabBarUnderlineStyle={{backgroundColor: '#ff6400'}}
