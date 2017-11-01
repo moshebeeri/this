@@ -7,6 +7,7 @@ import FormHeader from './FormHeader/FormHeader'
 import DynamicMessage from './DynamicMessage/DynamicMessage';
 import AddressInput from './AddressInput/AddressInput';
 import Video from './Video/Video';
+import Spinner from './Spinner/Spinner'
 export {
     ImagePicker,
     CategoryPicker,
@@ -16,5 +17,6 @@ export {
     FormHeader,
     DynamicMessage,
     AddressInput,
-    Video
+    Video,
+    Spinner
 }

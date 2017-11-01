@@ -8,6 +8,7 @@ const initialState = {
     loading:true,
     update: false,
     selectedBusiness:undefined,
+    savingForm:false,
 };
 import {REHYDRATE} from "redux-persist/constants";
 import * as actions from "./reducerActions";
@@ -107,6 +108,16 @@ export default function business(state = initialState, action) {
             return {
                 ...state,
                 loading: false,
+            };
+        case actions.SAVING_BUSINESS:
+            return {
+                ...state,
+                savingForm: true,
+            };
+        case actions.SAVING_BUSINESS_DONE:
+            return {
+                ...state,
+                savingForm: false,
             };
         default:
             return state;

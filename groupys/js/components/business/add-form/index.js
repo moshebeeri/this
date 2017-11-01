@@ -5,7 +5,7 @@ import styles from './styles'
 import * as businessAction from "../../../actions/business";
 import {connect} from 'react-redux';
 import {bindActionCreators} from "redux";
-import {AddressInput, CategoryPicker, FormHeader, ImagePicker, TextInput} from '../../../ui/index';
+import {AddressInput, CategoryPicker, FormHeader, ImagePicker, TextInput,Spinner} from '../../../ui/index';
 import FormUtils from "../../../utils/fromUtils";
 const {width, height} = Dimensions.get('window')
 class AddBusiness extends Component {
@@ -77,9 +77,6 @@ class AddBusiness extends Component {
         }
     }
 
-    replaceRoute(route) {
-        this.props.navigation.goBack();
-    }
 
     focusNextField(nextField) {
         if (this.refs[nextField].wrappedInstance) {
@@ -99,8 +96,8 @@ class AddBusiness extends Component {
 
     saveFormData() {
         if (this.validateForm()) {
-            this.replaceRoute('home');
-            this.props.saveBusiness(this.createBusiness());
+
+            this.props.saveBusiness(this.createBusiness(),this.props.navigation);
         }
     }
 
@@ -128,8 +125,8 @@ class AddBusiness extends Component {
 
     updateFormData() {
         if (this.validateForm()) {
-            this.replaceRoute('home');
-            this.props.updateBusiness(this.createBusiness());
+            ;
+            this.props.updateBusiness(this.createBusiness(),this.props.navigation);
         }
     }
 
@@ -190,6 +187,8 @@ class AddBusiness extends Component {
         }
     }
 
+
+
     createCoverImageComponnent() {
         if (this.state.coverImage) {
             let coverImage = <Image
@@ -218,19 +217,22 @@ class AddBusiness extends Component {
         }
         return (
             <View style={styles.business_container}>
-                <FormHeader showBack submitForm={savveOperation} navigation={this.props.navigation}
+
+                <FormHeader disableAction={this.props.saving} showBack submitForm={savveOperation} navigation={this.props.navigation}
                             title={"Add Business"} bgc="#FA8559"/>
+
                 <ScrollView contentContainerStyle={{
                     justifyContent: 'center',
                     alignItems: 'center',
                 }} style={styles.contentContainer}>
+
                     <View style={styles.business_upper_container}>
                         <View style={styles.cmeraLogoContainer}>
 
                             {this.createCoverImageComponnent()}
                         </View>
 
-
+                        {this.props.saving && <Spinner/>}
 
                     </View>
                     <View style={styles.inputTextLayour}>
@@ -283,7 +285,8 @@ export default connect(
     state => ({
         businesses: state.businesses,
         categories: state.businesses.categories,
-        token: state.authentication.token
+        token: state.authentication.token,
+        saving:state.businesses.savingForm
     }),
     dispatch => bindActionCreators(businessAction, dispatch)
 )(AddBusiness);

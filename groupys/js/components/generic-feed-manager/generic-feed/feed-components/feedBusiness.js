@@ -61,7 +61,7 @@ export default class FeedBusiness extends Component {
                         </View>
                     </View>
 
-
+                    {imageBusiness}
                     <View style={styles.business_buttomUpperContainer}>
                         <View style={styles.promotion_buttom_description}>
 

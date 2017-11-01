@@ -221,9 +221,12 @@ function saveBusinessFailed() {
     }
 }
 
-export function saveBusiness(business) {
+export function saveBusiness(business,navigation) {
     return async function (dispatch, getState) {
         try {
+            dispatch({
+                type: actions.SAVING_BUSINESS,
+            });
             const token = getState().authentication.token;
             const user = getState().user.user;
             await entityUtils.create('businesses', business, token, undefined, undefined, user._id);
@@ -234,6 +237,11 @@ export function saveBusiness(business) {
                     item: business
                 });
             })
+            dispatch({
+                type: actions.SAVING_BUSINESS_DONE,
+            });
+            navigation.goBack();
+
         } catch (error) {
             dispatch({
                 type: actions.NETWORK_IS_OFFLINE,
@@ -242,9 +250,12 @@ export function saveBusiness(business) {
     }
 }
 
-export function updateBusiness(business) {
+export function updateBusiness(business,navigation) {
     return async function (dispatch, getState) {
         try {
+            dispatch({
+                type: actions.SAVING_BUSINESS,
+            });
             const token = getState().authentication.token;
             await entityUtils.update('businesses', business, token, business._id);
             let businesses = await businessApi.getAll(token);
@@ -254,6 +265,10 @@ export function updateBusiness(business) {
                     item: business
                 });
             })
+            dispatch({
+                type: actions.SAVING_BUSINESS_DONE,
+            });
+            navigation.goBack();
 
         } catch (error) {
             dispatch({

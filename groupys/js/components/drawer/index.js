@@ -120,16 +120,7 @@ class ProfileDrawer extends Component {
             <Container>
                 <Content style={{backgroundColor: '#F2F2F2'}}>
                     {/*Header style*/}
-                    <View style={{width:300,height:200,backgroundColor:'blue'}}>
-                        <Video
-                            rate={1} volume={1} muted={true}
-                            resizeMode="cover" repeat={true} key="video1"
-                            paused={false}
-                            style={styles.backgroundVideo}
-                            /*source={require('../../../images/ArchitectVideo.mp4')}*/
-                            source={{uri:'https://archive.org/download/VideoSample-Video3/ArchitectVideo_512kb.mp4'}}
-                        />
-                    </View>
+
                     <View style={{height: 55, flex: 1, justifyContent: 'flex-end',flexDirection: 'row'}}>
                         <CloseDrawer active color={"#FF9046"} size={20} onPress={() => this.props.closeDrawer()}/>
                     </View>
