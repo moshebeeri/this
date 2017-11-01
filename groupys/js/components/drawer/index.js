@@ -8,7 +8,7 @@ import {bindActionCreators} from "redux";
 import EntityUtils from "../../utils/createEntity";
 import * as userAction from "../../actions/user";
 import StyleUtils from "../../utils/styleUtils";
-import {CloseDrawer} from "../../ui/index";
+import {CloseDrawer,Video} from "../../ui/index";
 const logo = require('../../../images/logo.png');
 const cover = require('../../../images/cover-default.png');
 const profile = require('../../../images/profile-default.png');
@@ -120,6 +120,16 @@ class ProfileDrawer extends Component {
             <Container>
                 <Content style={{backgroundColor: '#F2F2F2'}}>
                     {/*Header style*/}
+                    <View style={{width:500,height:400,backgroundColor:'blue'}}>
+                        <Video
+                            rate={1} volume={1} muted={true}
+                            resizeMode="cover" repeat={true} key="video1"
+                            paused={false}
+                            style={styles.backgroundVideo}
+                            /*source={require('../../../images/ArchitectVideo.mp4')}*/
+                            source={{uri:'https://archive.org/download/VideoSample-Video3/ArchitectVideo_512kb.mp4'}}
+                        />
+                    </View>
                     <View style={{height: 55, flex: 1, justifyContent: 'flex-end',flexDirection: 'row'}}>
                         <CloseDrawer active color={"#FF9046"} size={20} onPress={() => this.props.closeDrawer()}/>
                     </View>
@@ -141,16 +151,7 @@ class ProfileDrawer extends Component {
                                 fontStyle: 'normal',
                                 fontSize: 16,
                             }}>{phoneNumber}</Text>
-                            <View style={{width:320,height:180,backgroundColor:'blue'}}>
-                                <Video
-                                    rate={1} volume={1} muted={true}
-                                    resizeMode="cover" repeat={true} key="video1"
-                                    paused={false}
-                                    style={styles.backgroundVideo}
-                                   /*source={require('../../../images/ArchitectVideo.mp4')}*/
-                                    source={{uri:'https://archive.org/download/VideoSample-Video3/ArchitectVideo_512kb.mp4'}}
-                                />
-                            </View>
+
 
                         </View>
                         <TouchableOpacity style={styles.thumbnail} onPress={() => this.pickPicture()}>
