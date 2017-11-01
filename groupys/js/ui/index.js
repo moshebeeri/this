@@ -6,6 +6,7 @@ import SubmitButton from './SubmitButton/SubmitButton'
 import FormHeader from './FormHeader/FormHeader'
 import DynamicMessage from './DynamicMessage/DynamicMessage';
 import AddressInput from './AddressInput/AddressInput';
+import Video from './Video/Video';
 export {
     ImagePicker,
     CategoryPicker,
@@ -14,5 +15,6 @@ export {
     SubmitButton,
     FormHeader,
     DynamicMessage,
-    AddressInput
+    AddressInput,
+    Video
 }
