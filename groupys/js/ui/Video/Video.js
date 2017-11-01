@@ -2,7 +2,7 @@ import React, {Component} from 'react';
 import VisibilitySensor from 'react-visibility-sensor';
 import {TouchableOpacity, StyleSheet, Text} from 'react-native';
 
-const RNVideo = require('react-native-video');
+import Video from 'react-native-video';
 let styles = StyleSheet.create({
     backgroundVideo: {
         position: 'absolute',
@@ -13,7 +13,7 @@ let styles = StyleSheet.create({
     },
 });
 
-export default class Video extends Component {
+export default class RNVideo extends Component {
     constructor(props) {
         super(props);
         this.state = {
@@ -51,22 +51,16 @@ export default class Video extends Component {
                                   onPress={this.onPress}
                                   style={{backgroundColor:'red'}}>
                     <Text>{this.state.paused? 'paused' : 'playing'}</Text>
-{/*
-                    <RNVideo
-                        ref={(ref) => {
-                            this.state.rnVideoRef = ref
-                        }}
-                        rate={this.state.rate}
-                        volume={this.state.volume}
-                        muted={this.state.muted}
-                        resizeMode={this.state.resizeMode}
-                        repeat={this.state.repeat}
-                        key={this.props.key}
-                        paused={this.state.paused}
-                        style={styles.backgroundVideo}
-                        source={this.props.source}
+
+                    <Video
+                        style={{backgroundColor:'blue'}}
+                        width={320}
+                        height={180}
+                        rate={1} volume={1} muted={true}
+                        resizeMode="cover" repeat={true} key="video1"
+                        paused={false}
+                        source={{uri:'https://dhs9y2fxkp0xy.cloudfront.net/videos/small.mp4'}}
                     />
-*/}
                 </TouchableOpacity>
             </VisibilitySensor>
         )
