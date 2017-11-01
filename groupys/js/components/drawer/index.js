@@ -120,7 +120,7 @@ class ProfileDrawer extends Component {
             <Container>
                 <Content style={{backgroundColor: '#F2F2F2'}}>
                     {/*Header style*/}
-                    <View style={{width:500,height:400,backgroundColor:'blue'}}>
+                    <View style={{width:300,height:200,backgroundColor:'blue'}}>
                         <Video
                             rate={1} volume={1} muted={true}
                             resizeMode="cover" repeat={true} key="video1"
