@@ -1,80 +1,97 @@
 import React, {Component} from 'react';
-import {Image, Platform} from 'react-native';
+import {TouchableOpacity,ScrollView,View} from 'react-native';
 import {connect} from 'react-redux';
 import {actions} from 'react-native-navigation-redux-helpers';
 import {
+    Button,
     Container,
     Content,
     Fab,
-    Text,
-    Title,
-    InputGroup,
-    Input,
-    Button,
-    View,
     Header,
-    Body,
-    Right,
+    Input,
+    InputGroup,
+    Left,
     ListItem,
+    Right,
+    Text,
     Thumbnail,
-    Left
+    Title,
+
 } from 'native-base';
-import GenericListView from '../generic-list-manager/generic-list-view/index'
 import GenericListManager from '../generic-list-manager/index'
-import Icon from 'react-native-vector-icons/EvilIcons';
 import * as businessAction from "../../actions/business";
 import {getBusinessProducts} from '../../selectors/businessesSelector'
 import {bindActionCreators} from "redux";
+import Icon2 from 'react-native-vector-icons/MaterialCommunityIcons';
+import styles from './styles'
+import RowUtils from "../../utils/rowUtils";
 
 class Product extends Component {
     constructor(props) {
         super(props);
     }
 
-    componentWillMount() {
-        this.setBusinessProducts();
-    }
+
 
     setBusinessProducts() {
-        const {actions, navigation} = this.props;
-        const business = navigation.state.params.business._id;
-        actions.setBusinessProducts(business);
+        const {actions, navigation, business} = this.props;
+        actions.setBusinessProducts(business._id);
     }
 
     renderItem(item) {
         const {navigation} = this.props;
-        return <GenericListView
-            item={item.item}
-            index={item.index}
-            addform={"AddProduct"}
-            navigation={navigation}
-        />
+        let row = item.map(item => {return this.createItemView(item)} )
+        return <View key={item[0]._id} style={{flexDirection:'row'}}>{row}</View>
+
     }
 
-    navigateToAdd() {
-        this.props.navigation.navigate("AddProduct", {business: this.props.navigation.state.params.business});
+
+    createItemView(item){
+        if (item.pictures && item.pictures.length > 0) {
+            return <TouchableOpacity key={item._id} style={{width:70, height:70}} onPress={this.navigateToEdit.bind(this,item)}>
+                <Thumbnail square medium source={{uri: item.pictures[0].pictures[3]}}/>
+            </TouchableOpacity>
+        }
+        return <TouchableOpacity key={item._id} style={{width:70, height:70}} onPress={this.navigateToEdit.bind(this,item)}>
+            <Thumbnail square medium size={150} source={require('../../../images/client_1.png')}/>
+        </TouchableOpacity>
     }
+    navigateToAdd() {
+        const {navigation, business} = this.props;
+        navigation.navigate("AddProduct", {business: business});
+    }
+
+    navigateToEdit(item) {
+        const {navigation, business} = this.props;
+        navigation.navigate("AddProduct", {item: item});
+    }
+
+
 
     render() {
-        const {products, navigation, actions, update} = this.props;
-        const business = navigation.state.params.business._id;
+        const {products, navigation, actions, update, business} = this.props;
+        const businessId = business._id;
+        let rows = undefined;
+        if(products[businessId]){
+            rows =  RowUtils.splitToArrayRows(products[businessId],5)
+            rows = rows.map(row => {return this.renderItem(row)})
+        }
+
         return (
-            <Container style={{flex: -1}}>
-                <GenericListManager rows={products[business]} navigation={navigation} actions={actions} update={update}
-                                    onEndReached={this.setBusinessProducts.bind(this)}
-                                    ItemDetail={this.renderItem.bind(this)}/>
-                <Fab
+            <View style={{flex: -1}}>
+                <View style={styles.addProductContainer}>
+                    <TouchableOpacity style={styles.addProductButton}
+                                      onPress={this.navigateToAdd.bind(this)}>
+                        <Icon2 active color={"#FA8559"} size={18} name="plus"/>
+                        <Text style={styles.addProductTextStyle}>Add product</Text>
+                    </TouchableOpacity>
+                </View>
 
-                    direction="right"
-                    active={false}
-                    containerStyle={{marginLeft: 10}}
-                    style={{backgroundColor: "#ff6400"}}
-                    position="bottomRight"
-                    onPress={() => this.navigateToAdd()}>
-                    <Icon size={20} name="plus"/>
+                <ScrollView>
+                    {rows}
+                </ScrollView>
 
-                </Fab>
-            </Container>
+            </View>
         );
     }
 }

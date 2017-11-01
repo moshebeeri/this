@@ -19,7 +19,7 @@ async function getAll(dispatch, token) {
         if (response.length > 0) {
             response.forEach(function (group) {
                 dispatch({
-                    type: actions.UPSERT_GROUP,
+                    type: actions.UPSERT_SINGLE_GROUP,
                     group: group,
                 });
             })
@@ -91,8 +91,8 @@ export function acceptInvatation(group) {
             let groups = await groupsApi.getAll(token);
             groups.forEach(function (group) {
                 dispatch({
-                    type: actions.UPSERT_GROUP,
-                    item: group
+                    type: actions.UPSERT_SINGLE_GROUP,
+                    group: group
                 });
             })
         } catch (error) {

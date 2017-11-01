@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import {Image, ScrollView, View} from 'react-native';
+import {Image, ScrollView, View,Dimensions} from 'react-native';
 import {Button, Container, Content, Fab, Footer, Form, Icon, Input, Item, Picker, Text} from 'native-base';
 import styles from './styles'
 import * as businessAction from "../../../actions/business";
@@ -7,7 +7,7 @@ import {connect} from 'react-redux';
 import {bindActionCreators} from "redux";
 import {AddressInput, CategoryPicker, FormHeader, ImagePicker, TextInput} from '../../../ui/index';
 import FormUtils from "../../../utils/fromUtils";
-
+const {width, height} = Dimensions.get('window')
 class AddBusiness extends Component {
     static navigationOptions = ({navigation}) => ({
         header: null
@@ -174,7 +174,7 @@ class AddBusiness extends Component {
         if (this.state.path) {
             return <View style={styles.business_upper_image_container}>
                 <ImagePicker ref={"logoImage"} mandatory
-                             image={<Image style={{width: 120, height: 120}} source={{uri: this.state.path}}/>}
+                             image={<Image style={{width: 111, height: 105}} source={{uri: this.state.path}}/>}
                              color='black' pickFromCamera
                              setImage={this.setImage.bind(this)}/>
 
@@ -193,15 +193,18 @@ class AddBusiness extends Component {
     createCoverImageComponnent() {
         if (this.state.coverImage) {
             let coverImage = <Image
-                style={{width: 200, borderWidth: 1, borderColor: 'white', height: 110}}
+                style={{width:width -10, height: 210,borderWidth:1,borderColor:'white'}}
                 source={{uri: this.state.coverImage.uri}}
-            />
+            >
+                {this.createImageComponent()}
+            </Image>
             return <View style={styles.addCoverContainer}>
                 <ImagePicker ref={"coverImage"} mandatory image={coverImage} color='white' pickFromCamera
                              setImage={this.setCoverImage.bind(this)}/>
             </View>
         }
         return <View style={styles.addCoverNoImageContainer}>
+            {this.createImageComponent()}
             <ImagePicker ref={"coverImage"} mandatory color='white' pickFromCamera
                          setImage={this.setCoverImage.bind(this)}/>
             <Text style={styles.addCoverText}>Add a cover photo</Text>
@@ -223,7 +226,7 @@ class AddBusiness extends Component {
                 }} style={styles.contentContainer}>
                     <View style={styles.business_upper_container}>
                         <View style={styles.cmeraLogoContainer}>
-                            {this.createImageComponent()}
+
                             {this.createCoverImageComponnent()}
                         </View>
 

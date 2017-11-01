@@ -1,4 +1,4 @@
-const initialState = {
+ const initialState = {
     groups: {},
     groupFeedOrder: {},
     groupFeeds: {},
@@ -24,10 +24,16 @@ export default function group(state = initialState, action) {
     let imutableState = {...state};
     let currentGroups = imutableState.groups;
     switch (action.type) {
-        case actions.UPSERT_GROUP:
+        case actions.UPSERT_SINGLE_GROUP:
             currentGroups[action.group._id] = action.group;
             imutableState.update = !imutableState.update;
             return imutableState;
+        case actions.UPSERT_GROUP:
+           action.item.forEach(eventItem => {
+                currentGroups[eventItem._id] = eventItem;
+            });
+            return imutableState;
+
         case actions.UPSERT_GROUP_FEEDS_BOTTOM:
             if (!imutableState.groupFeeds[action.groupId]) {
                 imutableState.groupFeeds[action.groupId] = {};

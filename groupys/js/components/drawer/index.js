@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import {Image, TouchableOpacity} from 'react-native';
+import {Image, TouchableOpacity, StyleSheet} from 'react-native';
 import {Button, Container, Content, Input, InputGroup, Item, Text, View} from 'native-base';
 import ImagePicker from 'react-native-image-crop-picker';
 import styles from './styles';
@@ -8,7 +8,7 @@ import {bindActionCreators} from "redux";
 import EntityUtils from "../../utils/createEntity";
 import * as userAction from "../../actions/user";
 import StyleUtils from "../../utils/styleUtils";
-import {CloseDrawer, Video} from "../../ui/index";
+import {CloseDrawer} from "../../ui/index";
 const logo = require('../../../images/logo.png');
 const cover = require('../../../images/cover-default.png');
 const profile = require('../../../images/profile-default.png');
@@ -17,8 +17,6 @@ const briefcase = require('../../../images/briefcase.png');
 const qrcode = require('../../../images/qr-code.png');
 const settings = require('../../../images/settings-work-tool.png');
 const changePassword = require('../../../images/change-password-img.png');
-//import Video from 'react-native-video';
-
 let entityUtils = new EntityUtils();
 import Icon from 'react-native-vector-icons/FontAwesome';
 
@@ -143,31 +141,16 @@ class ProfileDrawer extends Component {
                                 fontStyle: 'normal',
                                 fontSize: 16,
                             }}>{phoneNumber}</Text>
-
-                            <Video
-                                style={{backgroundColor:'blue'}}
-                                width={320}
-                                height={180}
-                                rate={1} volume={1} muted={true}
-                                resizeMode="cover" repeat={true} key="video1"
-                                paused={false}
-                                source={{uri:'https://dhs9y2fxkp0xy.cloudfront.net/videos/small.mp4'}}
-                            />
-
-{/*
                             <View style={{width:320,height:180,backgroundColor:'blue'}}>
                                 <Video
                                     rate={1} volume={1} muted={true}
                                     resizeMode="cover" repeat={true} key="video1"
                                     paused={false}
                                     style={styles.backgroundVideo}
-                                   source={require('../../../images/ArchitectVideo.mp4')}
-                                   source={{uri:'https://archive.org/download/VideoSample-Video3/ArchitectVideo_512kb.mp4'}}
-                                   source={{uri:'https://dhs9y2fxkp0xy.cloudfront.net/videos/small.mp4'}}
+                                   /*source={require('../../../images/ArchitectVideo.mp4')}*/
+                                    source={{uri:'https://archive.org/download/VideoSample-Video3/ArchitectVideo_512kb.mp4'}}
                                 />
                             </View>
-*/}
-
 
                         </View>
                         <TouchableOpacity style={styles.thumbnail} onPress={() => this.pickPicture()}>

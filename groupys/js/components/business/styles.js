@@ -1,8 +1,36 @@
 import loginTheme from './business-theme';
 
 const React = require('react-native');
-const {StyleSheet, Platform} = React;
+const {StyleSheet, Platform,Dimensions} = React;
+
+
+const {width, height} = Dimensions.get('window');
 module.exports = {
+    listBusinessesContainer: {
+        flex: 1,
+        backgroundColor:'white'
+    },
+    businessPiker: {
+        flexDirection: 'row',
+        alignItems: 'center',
+        justifyContent: 'center',
+        height: 60,
+        margin:10
+    },
+    pickerStyle: {
+        margin: 3, height: 50, width: width - 60, backgroundColor: 'white'
+    },
+    businessDetailsContainer:{
+        width:width,
+        flex:3
+    },
+    businessTopLogo:{
+        padding:10,
+        flex:1
+    },
+    businessPikkerComponent:{
+        flex:5
+    },
     shadow: {
         flex: 1,
         width: 330,
@@ -20,7 +48,6 @@ module.exports = {
             {scaleX: 1}
         ],
         backgroundColor: '#fff',
-        borderRadius: 10,
         flexDirection: 'row',
         justifyContent: 'flex-start',
     },

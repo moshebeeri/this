@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import {Image, Platform} from 'react-native';
+import {Image, Platform,TouchableOpacity} from 'react-native';
 import {connect} from 'react-redux';
 import {actions} from 'react-native-navigation-redux-helpers';
 import {Container, Content, Text, Fab, InputGroup, Input, Button, View, Item, Header} from 'native-base';
@@ -17,7 +17,7 @@ import {
     MenuTrigger,
 } from 'react-native-popup-menu';
 import Icon4 from 'react-native-vector-icons/SimpleLineIcons';
-
+import Icon5 from 'react-native-vector-icons/MaterialCommunityIcons';
 let promotionApi = new PromotionApi();
 import * as promotionsAction from "../../actions/promotions";
 import * as businessAction from "../../actions/business";
@@ -42,9 +42,8 @@ class Promotions extends Component {
     }
 
     setBusinessPromotions() {
-        const {actions, navigation} = this.props;
-        const business = navigation.state.params.business._id;
-        actions.setBusinessPromotions(business);
+        const {actions, navigation,business} = this.props;
+        actions.setBusinessPromotions( business._id);
     }
 
     renderItem(item) {
@@ -56,44 +55,39 @@ class Promotions extends Component {
     }
 
     navigateToAdd() {
-        this.props.navigation.navigate("addPromotions", {business: this.props.navigation.state.params.business});
+        const {business} = this.props;
+        this.props.navigation.navigate("addPromotions", {business: business});
     }
 
     onBoardingPromotion() {
+        const {business} = this.props;
+
         this.props.navigation.navigate("addPromotions", {
             onBoardType: 'BUSINESS',
-            business: this.props.navigation.state.params.business
+            business: business
         });
     }
 
     render() {
-        const {navigation, promotions, actions, update} = this.props;
+        const {navigation, promotions, actions, update,business} = this.props;
         const menuAction = this.createMenuTag()
         const back = this.createBackButtonTag()
-        const businessId = navigation.state.params.business._id;
+        const businessId = business._id;
         return (
             <Container style={{backgroundColor: '#b7b7b7'}}>
-                <View style={styles.follow_search} regular>
-                    {back}
-                    <Text style={{fontSize: 20, color: "#2db6c8"}}>Promotions</Text>
-                    {menuAction}
+                <View style={styles.addProductContainer}>
+                    <TouchableOpacity style={styles.addProductButton}
+                                      onPress={this.navigateToAdd.bind(this)}>
+                        <Icon5 active color={"#FA8559"} size={18} name="plus"/>
+                        <Text style={styles.addProductTextStyle}>Add promotion</Text>
+                    </TouchableOpacity>
                 </View>
                 <GenericListManager rows={promotions[businessId]} navigation={navigation} actions={actions}
                                     update={update}
                                     onEndReached={this.setBusinessPromotions.bind(this)}
                                     ItemDetail={this.renderItem.bind(this)}/>
 
-                <Fab
 
-                    direction="right"
-                    active={false}
-                    containerStyle={{marginLeft: 10}}
-                    style={{backgroundColor: "#ff6400"}}
-                    position="bottomRight"
-                    onPress={() => this.navigateToAdd()}>
-                    <Icon size={20} name="plus"/>
-
-                </Fab>
             </Container>
         );
     }

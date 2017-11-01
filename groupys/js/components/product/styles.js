@@ -9,13 +9,29 @@ module.exports = {
         height: 330,
         backgroundColor: 'transparent',
     },
+    addProductContainer:{
+        height:40,
+        marginTop:3,
+        flexDirection: 'row',
+        justifyContent: 'flex-end',
+    },
+    addProductButton:{
+        marginTop:10,
+        width:120,
+        flexDirection: 'row',
+    },
+    addProductTextStyle:{
+        color: '#ff6400',
+        marginRight:5,
+        marginLeft:10,
+        fontSize:14
+    },
     AddContainer: {
         paddingHorizontal: 20,
         marginTop: 40,
         borderBottomWidth: 1,
         borderBottomColor: 'rgba(255, 255, 255, 0.2)',
         paddingBottom: 10,
-        borderRadius: 1,
         transform: [
             {scaleX: 1}
         ],

@@ -81,11 +81,19 @@ class GroupFeedHeader extends Component {
         }
         let userId = this.state.userId;
         let isGroupAdmin = false;
-        group.admins.forEach(function (adminId) {
-            if (userId == adminId) {
-                isGroupAdmin = true;
-            }
-        });
+        if(Array.isArray(group.admins)) {
+            group.admins.forEach(function (adminId) {
+                if (userId == adminId) {
+                    isGroupAdmin = true;
+                }
+            });
+        }else{
+            Object.keys(group.admins).forEach(key => {
+                if (userId == group.admins[key]) {
+                    isGroupAdmin = true;
+                }
+            });
+        }
         return isGroupAdmin;
     }
 
@@ -95,7 +103,7 @@ class GroupFeedHeader extends Component {
         if (this.props.item.pictures && this.props.item.pictures.length > 0) {
             image = <Thumbnail square source={{uri: this.props.item.pictures[0].pictures[3]}}/>
         } else {
-            if (group.entity && group.entity.business) {
+            if (group.entity && group.entity.business &&  group.entity.business.pictures) {
                 image = <Thumbnail square source={{uri: group.entity.business.pictures[0].pictures[3]}}/>
             }
         }

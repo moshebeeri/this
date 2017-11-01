@@ -2,10 +2,21 @@ const React = require('react-native');
 const {StyleSheet, Dimensions, Platform} = React;
 const {width, height} = Dimensions.get('window')
 module.exports = {
+    editButtonConntainer: {
+        margin:5,width: 40, height: 40, opacity: 0.65,backgroundColor: 'white', alignItems: 'center', justifyContent: 'center'
+    },
     productIcon: {
-        marginLeft: 1,
-        marginRight: 3,
         fontSize: 25,
+        color: 'black',
+    },
+    bannerImageContainer:{
+        flex: -1,
+        alignSelf: 'center',
+        alignItems:'flex-end',
+        height: 250,
+
+        width: width,
+        borderWidth: 1,
     },
     imageTopText: {
         textShadowOffset: {width: 1, height: 1},
@@ -21,6 +32,18 @@ module.exports = {
         marginBottom: 10,
         color: 'white',
         fontSize: 15
+    },
+    tabHeadingStyle:{
+        flexDirection:"row",
+        justifyContent: 'space-between',
+
+    },
+    tabTextStyle:{
+        color: '#ff6400',
+        marginRight:10,
+        marginLeft:10,
+        fontSize:14
+
     },
     container: {
         flex: 1,

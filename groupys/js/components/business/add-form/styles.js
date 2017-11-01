@@ -21,13 +21,15 @@ module.exports = {
     cmeraLogoContainer: {
         width: width,
         flexDirection: 'row',
-        justifyContent: 'flex-start',
+        alignItems: 'center',
+        justifyContent: 'center',
     },
     addCoverContainer: {
         flexDirection: 'row',
         justifyContent: 'center',
         alignItems: 'center',
         marginTop: 10,
+        marginBottom:10,
     },
     addCoverNoImageContainer: {
         flexDirection: 'row',
@@ -48,6 +50,7 @@ module.exports = {
         width: width / 3,
         height: 110,
         marginTop: 10,
+        marginBottom: 60,
         alignItems: 'center',
         justifyContent: 'center',
         marginRight: 12,
