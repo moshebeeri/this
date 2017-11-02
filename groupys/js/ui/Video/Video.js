@@ -1,6 +1,6 @@
 import React, {Component} from 'react';
 import VisibilitySensor from 'react-visibility-sensor';
-import {TouchableOpacity, StyleSheet, Text} from 'react-native';
+import {TouchableOpacity, StyleSheet, Text, View} from 'react-native';
 
 import Video from 'react-native-video';
 let styles = StyleSheet.create({
@@ -27,43 +27,60 @@ export default class RNVideo extends Component {
            height     : this.value(props.height, 240),
            rnVideoRef : null
         };
-
+        console.log(JSON.stringify(this.state));
+        //this.onPress = this.onPress.bind(this);
     }
 
     value(property, valueIfUndefined){
         return (property === null || typeof property === 'undefined') ? valueIfUndefined : property
     }
 
-    visible(isVisible) {
+    onVisibilityChanged(isVisible) {
         console.log('Element is now %s', isVisible ? 'visible' : 'hidden');
-        this.state.paused = !isVisible;
+        console.log(JSON.stringify(this.state));
+        this.setState({paused: !isVisible});
+
     }
 
-    onPress() {
-        this.state.paused = !this.state.paused;
+    onPress(state) {
+        //console.log(JSON.stringify(state));
+        this.setState({paused: !this.state.paused});
     }
 
     render() {
         return (
-            <VisibilitySensor onChange={this.visible}>
-                <TouchableOpacity width={this.state.width}
-                                  height={this.state.height}
-                                  onPress={this.onPress}
-                                  style={{backgroundColor:'red'}}>
-                    <Text>{this.state.paused? 'paused' : 'playing'}</Text>
-
-                    <Video
-                        style={{backgroundColor:'blue'}}
-                        width={320}
-                        height={180}
-                        rate={1} volume={1} muted={true}
-                        resizeMode="cover" repeat={true} key="video1"
-                        paused={false}
-                        source={{uri:'https://dhs9y2fxkp0xy.cloudfront.net/videos/small.mp4'}}
-                    />
-                </TouchableOpacity>
-            </VisibilitySensor>
+            <View style={{width:320,height:180,backgroundColor:'blue'}}>
+            <Video
+                rate={1} volume={1} muted={true}
+                resizeMode="cover" repeat={true} key="video1"
+                paused={false}
+                style={styles.backgroundVideo}
+                source={{uri:'https://archive.org/download/VideoSample-Video3/ArchitectVideo_512kb.mp4'}}
+            />
+            </View>
         )
     }
 }
 
+/*
+        <VisibilitySensor onChange={this.onVisibilityChanged}>
+                <TouchableOpacity onPress={this.onPress}
+                                  style={{width:320, height:180, backgroundColor:'red'}}>
+                    <Text>{this.state.paused? 'paused' : 'playing'}</Text>
+                </TouchableOpacity>
+            </VisibilitySensor>
+            <RNVideo
+                        ref={(ref) => {
+                            this.state.rnVideoRef = ref
+                        }}
+                        rate={this.state.rate}
+                        volume={this.state.volume}
+                        muted={this.state.muted}
+                        resizeMode={this.state.resizeMode}
+                        repeat={this.state.repeat}
+                        key={this.props.key}
+                        paused={this.state.paused}
+                        style={styles.backgroundVideo}
+                        source={this.props.source}
+                    />
+*/
