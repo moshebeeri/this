@@ -6,7 +6,7 @@ module.exports = {
         alignItems:'center',
         justifyContent: 'center',
         width:width,
-        height:height,
+        height:230,
         opacity:0.8,
         flex: 1,
 

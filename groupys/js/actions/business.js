@@ -237,6 +237,13 @@ export function saveBusiness(business,navigation) {
                     item: business
                 });
             })
+            let selectedBusiness = businesses.filter(newBusiness => {
+                newBusiness.business.name === business.name
+            });
+            dispatch({
+                type: actions.SELECT_BUSINESS,
+                selectedBusiness:selectedBusiness[0]
+            });
             dispatch({
                 type: actions.SAVING_BUSINESS_DONE,
             });
@@ -264,7 +271,8 @@ export function updateBusiness(business,navigation) {
                     type: actions.UPSERT_MY_BUSINESS,
                     item: business
                 });
-            })
+            });
+
             dispatch({
                 type: actions.SAVING_BUSINESS_DONE,
             });
