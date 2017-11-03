@@ -1,12 +1,8 @@
 import React, {Component} from "react";
-import {
-    View,
-    Image,
-    ScrollView,
-} from "react-native";
+import {Image, ScrollView, View,} from "react-native";
 import {connect} from "react-redux";
 import {actions} from "react-native-navigation-redux-helpers";
-import {Container, Content, Text, Picker, Input, Button, Icon, Item, Footer} from "native-base";
+import {Button, Container, Content, Footer, Icon, Input, Item, Picker, Text} from "native-base";
 import {bindActionCreators} from "redux";
 import * as promotionsAction from "../../../actions/promotions";
 import PromotionApi from "../../../api/promotion";
@@ -18,9 +14,8 @@ import XPlusYOffComponent from "./xGetYwithPrecentage/index";
 import XForYComponent from "./xForY/index";
 import ReduceAmountComponent from "./reduceAmount/index";
 import HappyHourComponent from "./happyHour/index";
-import Icon3 from "react-native-vector-icons/Ionicons";
 import styles from "./styles";
-import { FormHeader, ImagePicker, TextInput,Spinner,SimplePicker,SelectButton,DatePicker} from '../../../ui/index';
+import {DatePicker, FormHeader, ImagePicker, SelectButton, SimplePicker, Spinner, TextInput} from '../../../ui/index';
 
 let promotionApi = new PromotionApi();
 const types = [
@@ -60,7 +55,6 @@ const types = [
     //15% off for purchases more than 1000$ OR buy iphone for 600$ and get 50% off for earphones
 ;
 const Distribution = [
-
     {
         value: 'GROUP',
         label: 'Business Groups'
@@ -165,8 +159,6 @@ class AddPromotion extends Component {
             console.log(error);
         }
     }
-
-
 
     replaceRoute() {
         this.props.navigation.goBack();
@@ -447,8 +439,7 @@ class AddPromotion extends Component {
             }
         }
         if (discountForm) {
-            result =  discountForm
-
+            result = discountForm
         }
         return result;
     }
@@ -487,28 +478,36 @@ class AddPromotion extends Component {
     createDistributionForm() {
         let result = undefined;
         if (this.state.choose_distribution) {
-            let distribution =   <View style={styles.inputTextLayour}>
-                <SimplePicker list={Distribution} itemTitle="Distribution Type" defaultHeader="Choose Distribution" isMandatory  onValueSelected={this.selectDistributionType.bind(this)}/>
+            let distribution = <View style={styles.inputTextLayour}>
+                <SimplePicker list={Distribution} itemTitle="Distribution Type" defaultHeader="Choose Distribution"
+                              isMandatory onValueSelected={this.selectDistributionType.bind(this)}/>
             </View>
             let button = undefined;
+            let selectedGroup = undefined;
             if (this.state.distribution == 'GROUP') {
-                let selectedGroup = undefined;
                 if (this.state.groups) {
-                    selectedGroup = <Text style={{color:'#FA8559',marginLeft:8,marginRight:8}}>{this.state.groups.length}  selected</Text>
+                    selectedGroup =
+                        <Text style={{color: '#FA8559', marginLeft: 8, marginRight: 8}}>{this.state.groups.length}
+                            selected</Text>
                 }
-                button = <View style={{flexDirection:'row' ,alignItems:'center'}}>
+                button = <View style={{flexDirection: 'row', alignItems: 'center'}}>
                     <SelectButton title="Select Groups" action={this.showGroups.bind(this)}/>
-                    {selectedGroup}
+
                 </View>
-
-
             }
-            result = <View >
+            result = <View>
                 <View style={styles.inputTextLayour}>
-                    <Text style={{color:'#FA8559',marginLeft:8,marginRight:8}}>Distribution</Text>
+                    <Text style={{color: '#FA8559', marginLeft: 8, marginRight: 8}}>Distribution</Text>
                 </View>
-                {distribution}
-                {button}
+                <View style={{flexDirection: 'row',justifyContent:'flex-start', alignItems: 'center'}}>
+                    <View style={{flex:2}}>
+                    {distribution}
+                    </View>
+                    <View style={{flex:1,marginTop:30,marginLeft:20,marginRight:20}}>
+                        {button}
+                    </View>
+                </View>
+                {selectedGroup}
 
             </View>
         }
@@ -536,7 +535,6 @@ class AddPromotion extends Component {
         if (this.props.navigation.state.params.group) {
             distributionForm = undefined;
         }
-
         let header = "Add Promotion";
         if (this.props.navigation.state.params.onBoardType) {
             switch (this.props.navigation.state.params.onBoardType) {
@@ -552,29 +550,32 @@ class AddPromotion extends Component {
                 <ScrollView contentContainerStyle={{
                     justifyContent: 'center',
                     alignItems: 'center',
-                }} >
+                }}>
 
                     {this.createCoverImageComponnent()}
                     <View style={styles.inputTextLayour}>
-                        <Text style={{color:'#FA8559',marginLeft:8,marginRight:8}}>Details</Text>
+                        <Text style={{color: '#FA8559', marginLeft: 8, marginRight: 8}}>Details</Text>
                     </View>
                     <View style={styles.inputTextLayour}>
-                        <SimplePicker list={types} itemTitle="Promotion Type" defaultHeader="Choose Type" isMandatory  onValueSelected={this.selectPromotionType.bind(this)}/>
+                        <SimplePicker list={types} itemTitle="Promotion Type" defaultHeader="Choose Type" isMandatory
+                                      onValueSelected={this.selectPromotionType.bind(this)}/>
                     </View>
                     <View style={styles.inputTextLayour}>
-                        <Text style={{color:'#FA8559',marginLeft:8,marginRight:8}}>General</Text>
+                        <Text style={{color: '#FA8559', marginLeft: 8, marginRight: 8}}>General</Text>
                     </View>
                     <View style={styles.inputTextMediumLayout}>
-                        <View style={{flex:1,marginRight:10}}>
+                        <View style={{flex: 1, marginRight: 10}}>
                             <TextInput field='Quantity' value={this.state.quantity}
                                        returnKeyType='next' ref="2" refNext="2"
                                        onSubmitEditing={this.focusNextField.bind(this, "3")}
                                        onChangeText={(quantity) => this.setState({quantity})} isMandatory={true}/>
                         </View>
-                        <View style={{flex:3, marginLeft:5}}>
+                        <View style={{flex: 3, marginLeft: 5}}>
                             <DatePicker field='Exparation Date' value={this.state.end}
-                                       returnKeyType='next' ref="3" refNext="3"
-                                        onChangeDate={(date) => {this.setState({end: date})}} isMandatory={true}/>
+                                        returnKeyType='next' ref="3" refNext="3"
+                                        onChangeDate={(date) => {
+                                            this.setState({end: date})
+                                        }} isMandatory={true}/>
                         </View>
                     </View>
                     <View style={styles.inputTextLayour}>
@@ -588,82 +589,14 @@ class AddPromotion extends Component {
                 </ScrollView>
             </View>
         );
-
-        {/*<Container>*/}
-
-        {/*<Content style={{backgroundColor: '#fff'}}>*/}
-        {/*<View style={styles.follow_search} regular>*/}
-        {/*{back}*/}
-        {/*<Text style={{fontSize: 20, color: "#2db6c8"}}>{header}</Text>*/}
-        {/*<View></View>*/}
-        {/*</View>*/}
-        {/*<View style={{margin: 10, borderWidth: 3, borderRadius: 10, backgroundColor: '#fff'}}>*/}
-
-        {/*{typePikkerTag}*/}
-
-
-        {/*<Item style={{margin: 3}} regular>*/}
-        {/*<Input blurOnSubmit={true} returnKeyType='next' ref="1"*/}
-        {/*onSubmitEditing={this.focusNextField.bind(this, "2")}*/}
-        {/*value={this.state.promotion.name} onChangeText={(name) => this.setState({name})}*/}
-        {/*placeholder='Name'/>*/}
-        {/*</Item>*/}
-        {/*<Item style={{margin: 3}} regular>*/}
-        {/*<Input blurOnSubmit={true} returnKeyType='done' ref="2" value={this.state.promotion.info}*/}
-        {/*onChangeText={(info) => this.setState({info})}*/}
-        {/*placeholder='Description'/>*/}
-        {/*</Item>*/}
-        {/*<Item style={{margin: 3}} regular>*/}
-        {/*<DatePicker*/}
-        {/*style={{width: 200}}*/}
-        {/*date={this.state.end}*/}
-        {/*mode="date"*/}
-        {/*placeholder="Promotion End Date"*/}
-        {/*format="YYYY-MM-DD"*/}
-        {/*minDate="2016-05-01"*/}
-        {/*maxDate="2020-06-01"*/}
-        {/*confirmBtnText="Confirm"*/}
-        {/*cancelBtnText="Cancel"*/}
-
-        {/*onDateChange={(date) => {*/}
-        {/*this.setState({end: date})*/}
-        {/*}}*/}
-        {/*/>*/}
-        {/*</Item>*/}
-        {/*<Item style={{margin: 3}} regular>*/}
-        {/*<Input keyboardType='numeric' onChangeText={(value) => this.setQuantity(value)}*/}
-        {/*placeholder='Quantity'/>*/}
-        {/*</Item>*/}
-
-        {/*<Item style={{margin: 3}} regular>*/}
-
-        {/*<Button iconRight transparent onPress={() => this.pickPicture()}>*/}
-        {/*<Text style={{fontStyle: 'normal', fontSize: 10}}>Pick </Text>*/}
-        {/*<Icon name='camera'/>*/}
-        {/*</Button>*/}
-
-
-        {/*<Button iconRight transparent onPress={() => this.pickFromCamera()}>*/}
-        {/*<Text style={{fontStyle: 'normal', fontSize: 10}}>take </Text>*/}
-        {/*<Icon name='camera'/>*/}
-        {/*</Button>*/}
-
-        {/*{image}*/}
-        {/*</Item>*/}
-        {/*</View>*/}
-        {/*{conditionForm}*/}
-        {/*{distributionForm}*/}
-
-        {/*</Content>*/}
-        {/*{submitButton}*/}
-        {/*</Container>*/}
-        // );
     }
-    setCoverImage(image){
+
+    setCoverImage(image) {
         this.setState({
-            coverImage:image
+            coverImage: image
         })
     }
+
     focusNextField(nextField) {
         if (this.refs[nextField] && this.refs[nextField].wrappedInstance) {
             this.refs[nextField].wrappedInstance.focus()
@@ -674,13 +607,13 @@ class AddPromotion extends Component {
     }
 
     createCoverImageComponnent() {
-        const{saving} = this.props;
+        const {saving} = this.props;
         if (this.state.coverImage) {
             let coverImage = <Image
-                style={{ width:width -10, height: 210,borderWidth:1,borderColor:'white'}}
+                style={{width: width - 10, height: 210, borderWidth: 1, borderColor: 'white'}}
                 source={{uri: this.state.coverImage.path}}
             >
-                { saving && <Spinner/>}
+                {saving && <Spinner/>}
             </Image>
             return <View style={styles.product_upper_container}>
 
@@ -695,7 +628,7 @@ class AddPromotion extends Component {
             </View>
         }
         return <View style={styles.product_upper_container}>
-            { saving && <Spinner/>}
+            {saving && <Spinner/>}
             <View style={styles.cmeraLogoContainer}>
 
                 <View style={styles.addCoverNoImageContainer}>
@@ -721,7 +654,6 @@ class AddPromotion extends Component {
         });
         return result
     }
-
 }
 
 export default connect(
