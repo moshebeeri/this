@@ -8,6 +8,9 @@ import DynamicMessage from './DynamicMessage/DynamicMessage';
 import AddressInput from './AddressInput/AddressInput';
 import Video from './Video/Video';
 import Spinner from './Spinner/Spinner'
+import SimplePicker from './SimplePicker/SimplePicker'
+import SelectButton from './SelectButton/SelectButton'
+import DatePicker from './DatePicker/DatePicker'
 export {
     ImagePicker,
     CategoryPicker,
@@ -18,5 +21,8 @@ export {
     DynamicMessage,
     AddressInput,
     Video,
-    Spinner
+    Spinner,
+    SimplePicker,
+    SelectButton,
+    DatePicker
 }
