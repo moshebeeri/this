@@ -1,58 +1,58 @@
 'use strict';
 
 let _ = require('lodash');
-let Merchant = require('./merchant.model');
+let Post = require('./post.model');
 let graphTools = require('../../components/graph-tools');
 let graphModel = graphTools.createGraphModel('mall');
 
-// Get list of merchants
+// Get list of posts
 exports.index = function(req, res) {
-  Merchant.find(function (err, merchants) {
+  Post.find(function (err, posts) {
     if(err) { return handleError(res, err); }
-    return res.status(200).send(merchants);
+    return res.status(200).send(posts);
   });
 };
 
-// Get a single merchant
+// Get a single post
 exports.show = function(req, res) {
-  Merchant.findById(req.params.id, function (err, merchant) {
+  Post.findById(req.params.id, function (err, post) {
     if(err) { return handleError(res, err); }
-    if(!merchant) { return res.send(404); }
-    return res.status(200).send(merchant);
+    if(!post) { return res.send(404); }
+    return res.status(200).send(post);
   });
 };
 
-// Creates a new merchant in the DB.
+// Creates a new post in the DB.
 exports.create = function(req, res) {
-  Merchant.create(req.body, function(err, merchant) {
+  Post.create(req.body, function(err, post) {
     if(err) { return handleError(res, err); }
-    graphModel.reflect(merchant, {_id: merchant._id}, function (err) {
+    graphModel.reflect(post, {_id: post._id}, function (err) {
       if (err) { return handleError(res, err); }
     });
-    return res.status(201).send(merchant);
+    return res.status(201).send(post);
   });
 };
 
-// Updates an existing merchant in the DB.
+// Updates an existing post in the DB.
 exports.update = function(req, res) {
   if(req.body._id) { delete req.body._id; }
-  Merchant.findById(req.params.id, function (err, merchant) {
+  Post.findById(req.params.id, function (err, post) {
     if (err) { return handleError(res, err); }
-    if(!merchant) { return res.send(404); }
-    let updated = _.merge(merchant, req.body);
+    if(!post) { return res.send(404); }
+    let updated = _.merge(post, req.body);
     updated.save(function (err) {
       if (err) { return handleError(res, err); }
-      return res.status(200).send(merchant);
+      return res.status(200).send(post);
     });
   });
 };
 
-// Deletes a merchant from the DB.
+// Deletes a post from the DB.
 exports.destroy = function(req, res) {
-  Merchant.findById(req.params.id, function (err, merchant) {
+  Post.findById(req.params.id, function (err, post) {
     if(err) { return handleError(res, err); }
-    if(!merchant) { return res.send(404); }
-    merchant.remove(function(err) {
+    if(!post) { return res.send(404); }
+    post.remove(function(err) {
       if(err) { return handleError(res, err); }
       return res.status(204);
     });

@@ -1,7 +1,7 @@
 'use strict';
 
 let express = require('express');
-let controller = require('./merchant.controller');
+let controller = require('./post.controller');
 let auth = require('../../auth/auth.service');
 
 let router = express.Router();

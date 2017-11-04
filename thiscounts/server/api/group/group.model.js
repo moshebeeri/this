@@ -74,7 +74,8 @@ const GroupSchema = new Schema({
       'MANAGERS'
     ]
   },
-  pictures: []
+  pictures: [],
+  video: String
 });
 GroupSchema.index({name: 'text', description: 'text'});
 GroupSchema.plugin(autopopulate);
