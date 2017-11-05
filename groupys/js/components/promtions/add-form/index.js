@@ -476,42 +476,40 @@ class AddPromotion extends Component {
     }
 
     createDistributionForm() {
-        let result = undefined;
-        if (this.state.choose_distribution) {
-            let distribution = <View style={styles.inputTextLayour}>
-                <SimplePicker list={Distribution} itemTitle="Distribution Type" defaultHeader="Choose Distribution"
-                              isMandatory onValueSelected={this.selectDistributionType.bind(this)}/>
-            </View>
-            let button = undefined;
-            let selectedGroup = undefined;
-            if (this.state.distribution == 'GROUP') {
-                if (this.state.groups) {
-                    selectedGroup =
-                        <Text style={{color: '#FA8559', marginLeft: 8, marginRight: 8}}>{this.state.groups.length}
-                            selected</Text>
-                }
-                button = <View style={{flexDirection: 'row', alignItems: 'center'}}>
-                    <SelectButton title="Select Groups" action={this.showGroups.bind(this)}/>
 
-                </View>
+        let distribution = <View style={styles.inputTextLayour}>
+            <SimplePicker list={Distribution} itemTitle="Distribution Type" defaultHeader="Choose Distribution"
+                          isMandatory onValueSelected={this.selectDistributionType.bind(this)}/>
+        </View>
+        let button = undefined;
+        let selectedGroup = undefined;
+        if (this.state.distribution == 'GROUP') {
+            if (this.state.groups) {
+                selectedGroup =
+                    <Text style={{color: '#FA8559', marginLeft: 8, marginRight: 8}}>{this.state.groups.length}
+                        selected</Text>
             }
-            result = <View>
-                <View style={styles.inputTextLayour}>
-                    <Text style={{color: '#FA8559', marginLeft: 8, marginRight: 8}}>Distribution</Text>
-                </View>
-                <View style={{flexDirection: 'row',justifyContent:'flex-start', alignItems: 'center'}}>
-                    <View style={{flex:2}}>
-                    {distribution}
-                    </View>
-                    <View style={{flex:1,marginTop:30,marginLeft:20,marginRight:20}}>
-                        {button}
-                    </View>
-                </View>
-                {selectedGroup}
+            button = <View style={{flexDirection: 'row', alignItems: 'center'}}>
+                <SelectButton title="Select Groups" action={this.showGroups.bind(this)}/>
 
             </View>
         }
-        return result
+
+        return <View>
+            <View style={styles.inputTextLayour}>
+                <Text style={{color: '#FA8559', marginLeft: 8, marginRight: 8}}>Distribution</Text>
+            </View>
+            <View style={{flexDirection: 'row', justifyContent: 'flex-start', alignItems: 'center'}}>
+                <View style={{flex: 2}}>
+                    {distribution}
+                </View>
+                <View style={{flex: 1, marginTop: 30, marginLeft: 20, marginRight: 20}}>
+                    {button}
+                </View>
+            </View>
+            {selectedGroup}
+
+        </View>
     }
 
     createSubmitButton() {

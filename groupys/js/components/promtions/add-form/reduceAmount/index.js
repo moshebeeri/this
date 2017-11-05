@@ -1,12 +1,12 @@
 import React, {Component} from 'react';
-import {connect} from 'react-redux';
 import {
-    Platform, TextInput
+    Platform,View,Text
 } from 'react-native'
-import {
-    Container, Content, Text, InputGroup, Input, Button, Body, Icon, Left,
-    View, Header, Item, Footer, Picker, ListItem, Right, Thumbnail
-} from 'native-base';
+
+
+import styles from './styles'
+import {SelectButton, SimplePicker, TextInput} from '../../../../ui/index';
+
 
 export default class ReduceAmountComponent extends Component {
     constructor(props) {
@@ -57,15 +57,33 @@ export default class ReduceAmountComponent extends Component {
     }
 
     render() {
+        let pay = '';
+        if (this.props.state.reduced_amount && this.props.state.reduced_amount.values) {
+            pay = this.props.state.reduced_amount.values.pay;
+        }
+        let price = '';
+        if (this.props.state.reduced_amount && this.props.state.reduced_amount.values) {
+            price = this.props.state.reduced_amount.values.price;
+        }
         return <View>
+            <View style={styles.inputTextLayour}>
+                <Text style={{color: '#FA8559', marginLeft: 8, marginRight: 8}}>Buy $ Pay only $</Text>
+            </View>
+            <View style={{flexDirection:'row',justifyContent:'center',alignItems:'center'}}>
 
-            <Item style={{margin: 3}} regular>
-                <Input keyboardType='numeric' onChangeText={(value) => this.setBuy(value)} placeholder='Buy $'/>
-            </Item>
-
-            <Item style={{margin: 3}} regular>
-                <Input keyboardType='numeric' onChangeText={(value) => this.setPay(value)} placeholder='Pay $'/>
-            </Item>
+                <View style={styles.inputPrecenComponent}>
+                    <TextInput field='Buy $' value={price}
+                               returnKeyType='next' ref="2" refNext="2"
+                               keyboardType='numeric'
+                               onChangeText={(value) => this.setBuy({value})} isMandatory={true}/>
+                </View>
+                <View style={styles.inputPrecenComponent}>
+                    <TextInput field='Pay $' value={pay}
+                               returnKeyType='next' ref="2" refNext="2"
+                               keyboardType='numeric'
+                               onChangeText={(value) => this.setPay({value})} isMandatory={true}/>
+                </View>
+            </View>
 
 
         </View>
