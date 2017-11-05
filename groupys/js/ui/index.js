@@ -11,6 +11,8 @@ import Spinner from './Spinner/Spinner'
 import SimplePicker from './SimplePicker/SimplePicker'
 import SelectButton from './SelectButton/SelectButton'
 import DatePicker from './DatePicker/DatePicker'
+import TimePicker from './TimePicker/DatePicker'
+import WeekDaysPicker from './WeekDaysPicker/WeekDaysPicker'
 export {
     ImagePicker,
     CategoryPicker,
@@ -24,5 +26,7 @@ export {
     Spinner,
     SimplePicker,
     SelectButton,
-    DatePicker
+    DatePicker,
+    TimePicker,
+    WeekDaysPicker
 }

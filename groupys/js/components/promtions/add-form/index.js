@@ -1,5 +1,5 @@
 import React, {Component} from "react";
-import {Image, ScrollView, View,} from "react-native";
+import {Image, ScrollView, View,Dimensions} from "react-native";
 import {connect} from "react-redux";
 import {actions} from "react-native-navigation-redux-helpers";
 import {Button, Container, Content, Footer, Icon, Input, Item, Picker, Text} from "native-base";
@@ -16,7 +16,7 @@ import ReduceAmountComponent from "./reduceAmount/index";
 import HappyHourComponent from "./happyHour/index";
 import styles from "./styles";
 import {DatePicker, FormHeader, ImagePicker, SelectButton, SimplePicker, Spinner, TextInput} from '../../../ui/index';
-
+const {width, height} = Dimensions.get('window')
 let promotionApi = new PromotionApi();
 const types = [
         {
