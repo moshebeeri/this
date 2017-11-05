@@ -59,14 +59,14 @@ export default class SimplePicker extends Component {
                 onValueChange={this.selectPromotionType.bind(this)}
             >
                 <Item
-                    key={0}
+                    key={999}
                     value={''}
                     label={defaultHeader}/>
 
                 {
                     list.map((s, i) => {
                         return <Item
-                            key={i + 1}
+                            key={i}
                             value={s.value}
                             label={s.label}/>
                     })}

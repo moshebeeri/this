@@ -20,9 +20,10 @@ import {DatePicker, FormHeader, ImagePicker, SelectButton, SimplePicker, Spinner
 let promotionApi = new PromotionApi();
 const types = [
         {
-            value: '',
-            label: 'Choose Promotion'
+            value: 'PUNCH_CARD',
+            label: 'Punch Card'
         },
+
         {
             value: 'HAPPY_HOUR',
             label: 'Happy Hour'
@@ -47,10 +48,7 @@ const types = [
             value: 'X+N%OFF',
             label: 'Buy X Get Y With % Off'
         },
-        {
-            value: 'PUNCH_CARD',
-            label: 'Punch Card'
-        }
+
     ]
     //15% off for purchases more than 1000$ OR buy iphone for 600$ and get 50% off for earphones
 ;

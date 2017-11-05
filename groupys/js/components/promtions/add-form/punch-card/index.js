@@ -1,22 +1,12 @@
-import React, {Component} from "react";
+import React, {Component} from 'react';
 import {
-    Button,
-    Container,
-    Content,
-    Footer,
-    Header,
-    Icon,
-    Input,
-    InputGroup,
-    Item,
-    Left,
-    ListItem,
-    Picker,
-    Right,
-    Text,
-    Thumbnail,
-    View
-} from "native-base";
+    Platform,View,Text
+} from 'react-native'
+
+
+import styles from './styles'
+import {SelectButton, SimplePicker, TextInput} from '../../../../ui/index';
+
 
 export default class PunchCardComponent extends Component {
     constructor(props) {
@@ -37,16 +27,6 @@ export default class PunchCardComponent extends Component {
         )
     }
 
-    showProducts() {
-        let products = this.props.api.getProducts();
-        let selectProductFunction = this.selectProduct.bind(this);
-        let businessId = this.props.api.getBusinessId();
-        this.props.navigation.navigate("SelectProductsComponent", {
-            products: products,
-            selectProduct: selectProductFunction,
-            businessId: businessId
-        })
-    }
 
     setPunchCard(value) {
         if (value) {
@@ -70,44 +50,28 @@ export default class PunchCardComponent extends Component {
         })
     }
 
-    createSelectBuyProductButton() {
-        let result = undefined;
-        let productName = undefined;
-        if (this.props.state.prodict) {
-            productName = <Text> {this.props.state.product.name}</Text>
-        }
-        let button = <Item><Button transparent onPress={() => this.showBuyProducts(true)}>
-            <Text>Select Punch Product</Text>
-        </Button>
-            {productName}
-        </Item>
-        result = <View>{button}</View>
-        return result;
-    }
-
-    createSelectProductButton() {
-        let result = undefined;
-        let productName = undefined;
-        if (this.props.state.giftProduct) {
-            productName = <Text> {this.props.state.giftProduct.name}</Text>
-        }
-        let button = <Item><Button transparent onPress={() => this.showProducts(true)}>
-            <Text>Select Gift</Text>
-        </Button>
-            {productName}
-        </Item>
-        result = <View>{button}</View>
-        return result;
-    }
 
     render() {
-        const punchProduct = this.createSelectBuyProductButton();
+        let numberOfPunches = '';
+        if(this.props.state.punch_card && this.props.state.punch_card.values && this.props.state.punch_card.values.number_of_punches){
+            numberOfPunches = this.props.state.punch_card.values.number_of_punches;
+        }
         return <View>
-            {punchProduct}
-            <Item style={{margin: 3}} regular>
-                <Input keyboardType='numeric' onChangeText={(value) => this.setPunchCard(value)}
-                       placeholder='Number of Punches'/>
-            </Item>
+
+            <View style={styles.inputTextLayour}>
+                <Text style={{color: '#FA8559', marginLeft: 8, marginRight: 8}}>Punch Card</Text>
+            </View>
+            <View style={{flexDirection:'row',justifyContent:'center',alignItems:'center'}}>
+                <View style={{flex:1.7,marginTop:25}}><SelectButton title="Select Product" action={this.showBuyProducts.bind(this, true)}/></View>
+
+                <View style={styles.inputPrecenComponent}>
+                    <TextInput field='Number of Punches' value={numberOfPunches}
+                               returnKeyType='next' ref="2" refNext="2"
+                               keyboardType='numeric'
+                               onChangeText={(value) => this.setPunchCard({value})} isMandatory={true}/>
+                </View>
+
+            </View>
 
         </View>
     }
