@@ -20,16 +20,16 @@ const s3Stream = require('s3-upload-stream')(new AWS.S3({
 
 // Handle uploading file to Amazon S3.
 // Uses the multipart file upload API.
-function uploadS3 (readStream, key) {
+function uploadS3 (readStream, key, callback) {
   const upload = s3Stream.upload({
     Bucket: 'thiscounts',
-    ContentType: "binary/octet-stream",
+    ContentType: 'video/mp4',
     Key: 'videos/' + key
   });
 
   // Handle errors.
   upload.on('error', function (err) {
-    console.log(err);
+    callback(err);
   });
 
   // Handle progress.
@@ -39,42 +39,82 @@ function uploadS3 (readStream, key) {
 
   // Handle upload completion.
   upload.on('uploaded', function (details) {
-    console.log(details);
+    console.log('uploadS3 uploaded');
+    callback();
   });
 
   // Pipe the Readable stream to the s3-upload-stream module.
   readStream.pipe(upload);
 }
 
+exports.upload = function(req, res){
+  // Create an Busyboy instance passing the HTTP Request headers.
+  var busboy = new Busboy({ headers: req.headers });
 
+  // Listen for event when Busboy finds a file to stream.
+  busboy.on('file', function (fieldname, file, filename, encoding, mimetype) {
+
+    // Handle uploading file to Amazon S3.
+    // We are passing 'file' which is a ReadableStream,
+    // 'filename' which is the name of the file
+    // and a callback function to handle success/error.
+    uploadS3(file, filename, function (err) {
+      if (err) {
+        res.statusCode = 500;
+        res.end(err);
+      } else {
+        res.statusCode = 200;
+        res.end('ok');
+      }
+    });
+  });
+
+  // Pipe the HTTP Request into Busboy.
+  req.pipe(busboy);
+
+};
+
+
+const path = require('path');
+const os = require('os');
+const fs = require('fs');
 // https://github.com/mscdex/busboy
 // https://github.com/nathanpeck/s3-upload-stream
-exports.upload = function(req, res) {
+exports.uploadLocalFile = function(req, res) {
   // Create an Busyboy instance passing the HTTP Request headers.
   const busboy = new Busboy({ headers: req.headers });
   // Listen for event when Busboy finds a file to stream.
+  let saveTo;
+  let the_fieldname;
   busboy.on('file', function (fieldname, file, filename, encoding, mimetype) {
-    const upload = s3Stream.upload({
-      Bucket: 'thiscounts',
-      ContentType: "binary/octet-stream",
-      Key: 'videos/' + filename
-    });
+    saveTo = path.join(os.tmpDir(), path.basename(fieldname));
+    the_fieldname = fieldname;
+    console.log(`saving to ${saveTo}`);
+    file.pipe(fs.createWriteStream(saveTo));
 
-    // Handle errors.
-    upload.on('error', function (err) {
-      console.log(err);
-    });
+    /*    const upload = s3Stream.upload({
+          Bucket: 'thiscounts',
+          ContentType: "binary/octet-stream",
+          Key: 'videos/' + filename
+        });
 
-    // Handle progress.
-    upload.on('part', function (details) {
-      console.log(inspect(details));
-    });
+        // Handle errors.
+        upload.on('error', function (err) {
+          console.log(err);
+        });
 
-    // Handle upload completion.
-    upload.on('uploaded', function (details) {
-      console.log(details);
-    });
-    file.pipe(upload)
+        // Handle progress.
+        upload.on('part', function (details) {
+          console.log(inspect(details));
+        });
+
+        // Handle upload completion.
+        upload.on('uploaded', function (details) {
+          console.log(details);
+          res.statusCode = 200;
+          res.end('ok');
+        });
+        file.pipe(upload)*/
     // Handle uploading file to Amazon S3.
     // We are passing 'file' which is a ReadableStream,
     // 'filename' which is the name of the file
@@ -90,6 +130,25 @@ exports.upload = function(req, res) {
     //   }
     // });
   });
+  busboy.on('finish', function() {
+    console.log(`busboy.on('finish') ${saveTo} ${the_fieldname}`);
+    uploadS3(fs.createReadStream(saveTo), the_fieldname, function (err) {
+      if (err) {
+        res.statusCode = 500;
+        res.end(err);
+      } else {
+        //TODO: start ElasticTranscoder
+        res.statusCode = 200;
+        res.end('ok');
+      }
+    })
+    //res.writeHead(200, { 'Connection': 'close' });
+    //res.end("That's all folks!");
+    // res.statusCode = 200;
+    // res.end('OK');
+
+  });
+
   // Pipe the HTTP Request into Busboy.
   req.pipe(busboy);
 };
