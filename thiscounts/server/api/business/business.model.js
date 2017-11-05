@@ -49,7 +49,8 @@ let BusinessSchema = new Schema({
     email: String
   },
   logo: String,
-  pictures: []
+  pictures: [],
+  video: String
 });
 // db.businesses.ensureIndex({
 //   name: 'text',

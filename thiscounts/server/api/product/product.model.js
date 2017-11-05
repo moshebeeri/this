@@ -16,6 +16,7 @@ let ProductSchema = new Schema({
   retail_price: Number,
   category: {type: String, required: true},
   pictures: [],
+  video: String,
   active: Boolean
 });
 

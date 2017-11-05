@@ -9,6 +9,7 @@ let ShoppingChainSchema = new Schema({
   gid: { type: Number, index: true},
   logo: String,
   pictures : [],
+  video: String,
   info: String,
   active: Boolean
 });

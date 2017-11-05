@@ -9,7 +9,7 @@ let graphModel = graphTools.createGraphModel('mall');
 exports.index = function(req, res) {
   Merchant.find(function (err, merchants) {
     if(err) { return handleError(res, err); }
-    return res.json(200, merchants);
+    return res.status(200).send(merchants);
   });
 };
 
@@ -18,7 +18,7 @@ exports.show = function(req, res) {
   Merchant.findById(req.params.id, function (err, merchant) {
     if(err) { return handleError(res, err); }
     if(!merchant) { return res.send(404); }
-    return res.json(merchant);
+    return res.status(200).send(merchant);
   });
 };
 
@@ -29,7 +29,7 @@ exports.create = function(req, res) {
     graphModel.reflect(merchant, {_id: merchant._id}, function (err) {
       if (err) { return handleError(res, err); }
     });
-    return res.json(201, merchant);
+    return res.status(201).send(merchant);
   });
 };
 
@@ -42,7 +42,7 @@ exports.update = function(req, res) {
     let updated = _.merge(merchant, req.body);
     updated.save(function (err) {
       if (err) { return handleError(res, err); }
-      return res.json(200, merchant);
+      return res.status(200).send(merchant);
     });
   });
 };
@@ -54,11 +54,11 @@ exports.destroy = function(req, res) {
     if(!merchant) { return res.send(404); }
     merchant.remove(function(err) {
       if(err) { return handleError(res, err); }
-      return res.send(204);
+      return res.status(204);
     });
   });
 };
 
 function handleError(res, err) {
-  return res.send(500, err);
+  return res.status(500).send(err);
 }
