@@ -1,20 +1,10 @@
 import React, {Component} from "react";
-import {
-    Platform,
-    AppRegistry,
-    NavigatorIOS,
-    TextInput,
-    Image,
-    TouchableOpacity,
-    TouchableHighlight,
-    DeviceEventEmitter
-} from "react-native";
+import {Dimensions, Image, ScrollView, View} from "react-native";
 import {connect} from "react-redux";
 import {actions} from "react-native-navigation-redux-helpers";
-import {Container, Content, Text, Picker, Input, Button, Icon, View, Item, Footer} from "native-base";
+import {Button, Container, Content, Footer, Icon, Input, Item, Picker, Text} from "native-base";
 import {bindActionCreators} from "redux";
 import * as promotionsAction from "../../../actions/promotions";
-import ImagePicker from "react-native-image-crop-picker";
 import PromotionApi from "../../../api/promotion";
 import * as businessAction from "../../../actions/business";
 import PercentComponent from "./percent/index";
@@ -24,16 +14,15 @@ import XPlusYOffComponent from "./xGetYwithPrecentage/index";
 import XForYComponent from "./xForY/index";
 import ReduceAmountComponent from "./reduceAmount/index";
 import HappyHourComponent from "./happyHour/index";
-import DatePicker from "react-native-datepicker";
-import Icon3 from "react-native-vector-icons/Ionicons";
 import styles from "./styles";
+import {DatePicker, FormHeader, ImagePicker, SelectButton, SimplePicker, Spinner, TextInput} from '../../../ui/index';
 
-let createEntity = require("../../../utils/createEntity");
+const {width, height} = Dimensions.get('window')
 let promotionApi = new PromotionApi();
 const types = [
         {
-            value: '',
-            label: 'Choose Promotion'
+            value: 'PUNCH_CARD',
+            label: 'Punch Card'
         },
         {
             value: 'HAPPY_HOUR',
@@ -59,18 +48,10 @@ const types = [
             value: 'X+N%OFF',
             label: 'Buy X Get Y With % Off'
         },
-        {
-            value: 'PUNCH_CARD',
-            label: 'Punch Card'
-        }
     ]
     //15% off for purchases more than 1000$ OR buy iphone for 600$ and get 50% off for earphones
 ;
 const Distribution = [
-    {
-        value: '',
-        label: 'Choose Distribution'
-    },
     {
         value: 'GROUP',
         label: 'Business Groups'
@@ -133,6 +114,7 @@ class AddPromotion extends Component {
     }
 
     async componentWillMount() {
+        this.props.actions.resetForm();
         try {
             if (this.props.navigation.state.params && this.props.navigation.state.params.item) {
                 let item = this.props.navigation.state.params.item;
@@ -176,39 +158,17 @@ class AddPromotion extends Component {
         }
     }
 
-    focusNextField(nextField) {
-        this.refs[nextField]._root.focus()
-    }
-
     replaceRoute() {
         this.props.navigation.goBack();
     }
 
     async saveFormData() {
-        let promotion = this.createPromotionFromState();
-        try {
-            this.replaceRoute();
-            promotionApi.createPromotion(promotion, this.addToList.bind(this));
-        } catch (error) {
-            console.log(error);
-            this.replaceRoute();
+        const {actions, navigation} = this.props;
+        if (this.validateForm()) {
+            let promotion = this.createPromotionFromState();
+            let businessId = this.getBusinessId();
+            actions.savePromotion(promotion, businessId, navigation)
         }
-    }
-
-    async updateFormData() {
-        let promotion = this.createPromotionFromState();
-        try {
-            this.replaceRoute();
-            promotionApi.updatePromotion(promotion, this.addToList.bind(this), this.props.navigation.state.params.item._id);
-        } catch (error) {
-            console.log(error);
-            this.replaceRoute();
-        }
-    }
-
-    addToList(responseData) {
-        let businessId = this.getBusinessId();
-        this.props.bussinesActions.setBusinessPromotions(businessId);
     }
 
     getBusinessId() {
@@ -230,7 +190,6 @@ class AddPromotion extends Component {
             start: this.state.start,
             end: this.state.end,
             description: this.state.info,
-            path: this.state.path,
             name: this.state.name,
         };
         if (this.props.navigation.state.params.onBoardType) {
@@ -346,63 +305,9 @@ class AddPromotion extends Component {
         })
     }
 
-    async pickFromCamera() {
-        try {
-            let image = await ImagePicker.openCamera({
-                width: 2000,
-                height: 2000,
-                cropping: true,
-                compressImageQuality: 1,
-                compressVideoPreset: 'MediumQuality',
-            });
-            this.setState({
-                image: {uri: image.path, width: image.width, height: image.height, mime: image.mime},
-                images: null,
-                path: image.path
-            });
-        } catch (e) {
-            console.log(e);
-        }
-    }
-
     setQuantity(quantity) {
         this.setState({
             quantity: quantity
-        })
-    }
-
-    async pickPicture() {
-        try {
-            let image = await ImagePicker.openPicker({
-                width: 2000,
-                height: 2000,
-                cropping: true,
-                compressImageQuality: 1,
-                compressVideoPreset: 'MediumQuality',
-            });
-            this.setState({
-                image: {uri: image.path, width: image.width, height: image.height, mime: image.mime},
-                images: null,
-                path: image.path
-            });
-        } catch (e) {
-            console.log(e);
-        }
-    }
-
-    showProducts(boolean) {
-        if (!this.props.products) {
-            return;
-        }
-        let products = this.getProducts();
-        if (!products) {
-            return;
-        }
-        if (products.length == 0) {
-            return;
-        }
-        this.setState({
-            showProductsList: boolean
         })
     }
 
@@ -429,39 +334,42 @@ class AddPromotion extends Component {
             switch (this.state.type) {
                 case 'PERCENT':
                     discountForm = <PercentComponent navigation={this.props.navigation} api={this} state={this.state}
-                                                     setState={this.setState.bind(this)}/>
+                                                     ref={"precent"} setState={this.setState.bind(this)}/>
                     break;
                 case 'PUNCH_CARD':
                     discountForm = <PunchCardComponent navigation={this.props.navigation} api={this} state={this.state}
-                                                       setState={this.setState.bind(this)}/>
+                                                       ref={"PUNCH_CARD"} setState={this.setState.bind(this)}/>
                     break;
                 case 'X+Y':
-                    discountForm = <XPlusYComponent navigation={this.props.navigation} api={this} state={this.state}
-                                                    setState={this.setState.bind(this)}/>
+                    discountForm =
+                        <XPlusYComponent ref={"X+Y"} navigation={this.props.navigation} api={this} state={this.state}
+                                         setState={this.setState.bind(this)}/>
                     break;
                 case 'X+N%OFF':
-                    discountForm = <XPlusYOffComponent navigation={this.props.navigation} api={this} state={this.state}
+                    discountForm = <XPlusYOffComponent ref={"X+N%OFF"} navigation={this.props.navigation} api={this}
+                                                       state={this.state}
                                                        setState={this.setState.bind(this)}/>
                     break;
                 case 'X_FOR_Y':
-                    discountForm = <XForYComponent navigation={this.props.navigation} api={this} state={this.state}
-                                                   setState={this.setState.bind(this)}/>
+                    discountForm =
+                        <XForYComponent ref={"X_FOR_Y"} navigation={this.props.navigation} api={this} state={this.state}
+                                        setState={this.setState.bind(this)}/>
                     break;
                 case 'REDUCED_AMOUNT':
                     discountForm =
-                        <ReduceAmountComponent navigation={this.props.navigation} api={this} state={this.state}
+                        <ReduceAmountComponent ref={"REDUCED_AMOUNT"} navigation={this.props.navigation} api={this}
+                                               state={this.state}
                                                setState={this.setState.bind(this)}/>
                     break;
                 case 'HAPPY_HOUR':
-                    discountForm = <HappyHourComponent navigation={this.props.navigation} api={this} state={this.state}
+                    discountForm = <HappyHourComponent ref={"HAPPY_HOUR"} navigation={this.props.navigation} api={this}
+                                                       state={this.state}
                                                        setState={this.setState.bind(this)}/>
                     break;
             }
         }
         if (discountForm) {
-            result = <View style={{margin: 10, borderWidth: 3, borderRadius: 10, backgroundColor: '#fff'}}>
-                {discountForm}
-            </View>
+            result = discountForm
         }
         return result;
     }
@@ -498,91 +406,47 @@ class AddPromotion extends Component {
     }
 
     createDistributionForm() {
-        let result = undefined;
-        if (this.state.choose_distribution) {
-            let distribution = <Picker
-                iosHeader="Discount"
-                mode="dropdown"
-                selectedValue={this.state.distribution}
-                onValueChange={this.selectDistributionType.bind(this)}
-            >
-
-                {
-                    Distribution.map((s, i) => {
-                        return <Item
-                            key={i}
-                            value={s.value}
-                            label={s.label}/>
-                    })}
-            </Picker>
-            let button = undefined;
-            if (this.state.distribution == 'GROUP') {
-                let selectedGroup = undefined;
-                if (this.state.groups) {
-                    selectedGroup = <Text>{this.state.groups.length} are selected</Text>
-                }
-                button = <Item><Button transparent onPress={() => this.showGroups()}>
-                    <Text>Select Groups </Text>
-                </Button>
-                    {selectedGroup}
-                </Item>
+        let distribution = <View style={styles.inputTextLayour}>
+            <SimplePicker ref="TyoePicker" list={Distribution} itemTitle="Distribution Type"
+                          defaultHeader="Choose Distribution"
+                          isMandatory onValueSelected={this.selectDistributionType.bind(this)}/>
+        </View>
+        let button = undefined;
+        let selectedGroup = undefined;
+        if (this.state.distribution == 'GROUP') {
+            if (this.state.groups) {
+                selectedGroup =
+                    <Text style={{color: '#FA8559', marginLeft: 8, marginRight: 8}}>{this.state.groups.length}
+                        selected</Text>
             }
-            result = <View style={{margin: 10, borderWidth: 3, borderRadius: 10, backgroundColor: '#fff'}}>
-                {distribution}
-                {button}
+            button = <View style={{flexDirection: 'row', alignItems: 'center'}}>
+                <SelectButton title="Select Groups" action={this.showGroups.bind(this)}/>
 
             </View>
         }
-        return result
-    }
+        return <View>
+            <View style={styles.inputTextLayour}>
+                <Text style={{color: '#FA8559', marginLeft: 8, marginRight: 8}}>Distribution</Text>
+            </View>
+            <View style={{flexDirection: 'row', justifyContent: 'flex-start', alignItems: 'center'}}>
+                <View style={{flex: 2}}>
+                    {distribution}
+                </View>
+                <View style={{flex: 1, marginTop: 30, marginLeft: 20, marginRight: 20}}>
+                    {button}
+                </View>
+            </View>
+            {selectedGroup}
 
-    createSubmitButton() {
-        let result = undefined;
-        if (this.state.show_save) {
-            let submitButton = <Button transparent
-                                       onPress={this.saveFormData.bind(this)}>
-                <Text>Add Promotion</Text>
-            </Button>
-            result = <Footer style={{backgroundColor: '#fff'}}>
-
-                {submitButton}
-            </Footer>
-        }
-        return result;
+        </View>
     }
 
     render() {
-        let typePikkerTag = <Picker
-            iosHeader="Discount"
-            mode="dropdown"
-            selectedValue={this.state.type}
-            onValueChange={this.selectPromotionType.bind(this)}
-        >
-
-            {
-                types.map((s, i) => {
-                    return <Item
-                        key={i}
-                        value={s.value}
-                        label={s.label}/>
-                })}
-        </Picker>
-        let image = undefined;
-        if (this.state.path) {
-            image = <Image
-                style={{width: 50, height: 50}}
-                source={{uri: this.state.path}}
-            />
-        }
         let conditionForm = this.createDiscountConditionForm();
         let distributionForm = this.createDistributionForm();
         if (this.props.navigation.state.params.group) {
             distributionForm = undefined;
         }
-        let back = <Button transparent style={{}} onPress={() => this.back()}>
-            <Icon3 active color={"#2db6c8"} size={20} name="ios-arrow-back"/>
-
-        </Button>
         let header = "Add Promotion";
         if (this.props.navigation.state.params.onBoardType) {
             switch (this.props.navigation.state.params.onBoardType) {
@@ -591,83 +455,132 @@ class AddPromotion extends Component {
                     break;
             }
         }
-        let submitButton = this.createSubmitButton();
         return (
-            <Container>
+            <View style={styles.product_container}>
+                <FormHeader showBack submitForm={this.saveFormData.bind(this)} navigation={this.props.navigation}
+                            title={header} bgc="#FA8559"/>
+                <ScrollView contentContainerStyle={{
+                    justifyContent: 'center',
+                    alignItems: 'center',
+                }}>
 
-                <Content style={{backgroundColor: '#fff'}}>
-                    <View style={styles.follow_search} regular>
-                        {back}
-                        <Text style={{fontSize: 20, color: "#2db6c8"}}>{header}</Text>
-                        <View></View>
+                    {this.createCoverImageComponnent()}
+                    <View style={styles.inputTextLayour}>
+                        <Text style={{color: '#FA8559', marginLeft: 8, marginRight: 8}}>Details</Text>
                     </View>
-                    <View style={{margin: 10, borderWidth: 3, borderRadius: 10, backgroundColor: '#fff'}}>
-
-                        {typePikkerTag}
-
-
-                        <Item style={{margin: 3}} regular>
-                            <Input blurOnSubmit={true} returnKeyType='next' ref="1"
-                                   onSubmitEditing={this.focusNextField.bind(this, "2")}
-                                   value={this.state.promotion.name} onChangeText={(name) => this.setState({name})}
-                                   placeholder='Name'/>
-                        </Item>
-                        <Item style={{margin: 3}} regular>
-                            <Input blurOnSubmit={true} returnKeyType='done' ref="2" value={this.state.promotion.info}
-                                   onChangeText={(info) => this.setState({info})}
-                                   placeholder='Description'/>
-                        </Item>
-                        <Item style={{margin: 3}} regular>
-                            <DatePicker
-                                style={{width: 200}}
-                                date={this.state.end}
-                                mode="date"
-                                placeholder="Promotion End Date"
-                                format="YYYY-MM-DD"
-                                minDate="2016-05-01"
-                                maxDate="2020-06-01"
-                                confirmBtnText="Confirm"
-                                cancelBtnText="Cancel"
-
-                                onDateChange={(date) => {
-                                    this.setState({end: date})
-                                }}
-                            />
-                        </Item>
-                        <Item style={{margin: 3}} regular>
-                            <Input keyboardType='numeric' onChangeText={(value) => this.setQuantity(value)}
-                                   placeholder='Quantity'/>
-                        </Item>
-
-                        <Item style={{margin: 3}} regular>
-
-                            <Button iconRight transparent onPress={() => this.pickPicture()}>
-                                <Text style={{fontStyle: 'normal', fontSize: 10}}>Pick </Text>
-                                <Icon name='camera'/>
-                            </Button>
-
-
-                            <Button iconRight transparent onPress={() => this.pickFromCamera()}>
-                                <Text style={{fontStyle: 'normal', fontSize: 10}}>take </Text>
-                                <Icon name='camera'/>
-                            </Button>
-
-                            {image}
-                        </Item>
+                    <View style={styles.inputTextLayour}>
+                        <SimplePicker ref="promotionType" list={types} itemTitle="Promotion Type"
+                                      defaultHeader="Choose Type" isMandatory
+                                      onValueSelected={this.selectPromotionType.bind(this)}/>
                     </View>
+                    <View style={styles.inputTextLayour}>
+                        <Text style={{color: '#FA8559', marginLeft: 8, marginRight: 8}}>General</Text>
+                    </View>
+                    <View style={styles.inputTextMediumLayout}>
+                        <View style={{flex: 1, marginRight: 10}}>
+                            <TextInput field='Quantity' value={this.state.quantity}
+                                       returnKeyType='next' ref="2" refNext="2"
+                                       onSubmitEditing={this.focusNextField.bind(this, "3")}
+                                       onChangeText={(quantity) => this.setState({quantity})} isMandatory={true}/>
+                        </View>
+                        <View style={{flex: 3, marginLeft: 5}}>
+                            <DatePicker field='Exparation Date' value={this.state.end}
+                                        returnKeyType='next' ref="3" refNext="3"
+                                        onChangeDate={(date) => {
+                                            this.setState({end: date})
+                                        }} isMandatory={true}/>
+                        </View>
+                    </View>
+
+                    <View style={styles.inputTextLayour}>
+                        <TextInput field='Name' value={this.state.name}
+                                   returnKeyType='next' ref="4" refNext="4"
+                                   onSubmitEditing={this.focusNextField.bind(this, "5")}
+                                   onChangeText={(name) => this.setState({name})} isMandatory={true}/>
+                    </View>
+                    <View style={styles.inputTextLayour}>
+                        <TextInput field='Description' value={this.state.info}
+                                   returnKeyType='next' ref="5" refNext="5"
+                                   onSubmitEditing={this.focusNextField.bind(this, "5")}
+                                   onChangeText={(info) => this.setState({info})} isMandatory={true}/>
+                    </View>
+
                     {conditionForm}
                     {distributionForm}
-
-                </Content>
-                {submitButton}
-            </Container>
+                </ScrollView>
+            </View>
         );
+    }
+
+    setCoverImage(image) {
+        this.setState({
+            image: image
+        })
+    }
+
+    focusNextField(nextField) {
+        if (this.refs[nextField] && this.refs[nextField].wrappedInstance) {
+            this.refs[nextField].wrappedInstance.focus()
+        }
+        if (this.refs[nextField] && this.refs[nextField].focus) {
+            this.refs[nextField].focus()
+        }
+    }
+
+    createCoverImageComponnent() {
+        const {saving} = this.props;
+        if (this.state.image) {
+            let coverImage = <Image
+                style={{width: width - 10, height: 210, borderWidth: 1, borderColor: 'white'}}
+                source={{uri: this.state.image.path}}
+            >
+                {saving && <Spinner/>}
+            </Image>
+            return <View style={styles.product_upper_container}>
+
+                <View style={styles.cmeraLogoContainer}>
+
+                    <View style={styles.addCoverContainer}>
+
+                        <ImagePicker ref={"coverImage"} mandatory image={coverImage} color='white' pickFromCamera
+                                     setImage={this.setCoverImage.bind(this)}/>
+                    </View>
+                </View>
+            </View>
+        }
+        return <View style={styles.product_upper_container}>
+            {saving && <Spinner/>}
+            <View style={styles.cmeraLogoContainer}>
+
+                <View style={styles.addCoverNoImageContainer}>
+                    <ImagePicker ref={"coverImage"} mandatory color='white' pickFromCamera
+                                 setImage={this.setCoverImage.bind(this)}/>
+                    <Text style={styles.addCoverText}>Add a cover photo</Text>
+                </View>
+            </View>
+
+        </View>
+    }
+
+    validateForm() {
+        let result = true;
+        Object.keys(this.refs).forEach(key => {
+            let item = this.refs[key];
+            if (this.refs[key].wrappedInstance) {
+                item = this.refs[key].wrappedInstance;
+            }
+            if (!item.isValid()) {
+                result = false;
+            }
+        });
+        return result
     }
 }
 
 export default connect(
     state => ({
         promotions: state.promotions,
+        saving: state.promotions.savingForm,
         products: state.products,
     }),
     (dispatch) => ({

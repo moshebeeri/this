@@ -1,4 +1,4 @@
-const initialState = {products: {}, categories: []};
+const initialState = {products: {}, categories: [],savingForm:false};
 import {REHYDRATE} from "redux-persist/constants";
 import * as actions from "./reducerActions";
 
@@ -27,6 +27,16 @@ export default function products(state = initialState, action) {
             }
             categoriesState.categories[action.language][action.catId] = action.categories;
             return categoriesState;
+        case actions.PRODUCT_SAVING:
+            return {
+                ...state,
+                savingForm: true,
+            };
+        case actions.PRODUCT_SAVING_DONE:
+            return {
+                ...state,
+                savingForm: false,
+            };
         default:
             return state;
     }

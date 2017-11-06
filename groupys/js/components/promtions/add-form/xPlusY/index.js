@@ -1,12 +1,12 @@
 import React, {Component} from 'react';
 import {connect} from 'react-redux';
 import {
-    Platform, TextInput
+    Platform,View,Text
 } from 'react-native'
-import {
-    Container, Content, Text, InputGroup, Input, Button, Body, Icon, Left,
-    View, Header, Item, Footer, Picker, ListItem, Right, Thumbnail
-} from 'native-base';
+
+
+import styles from './styles'
+import {SelectButton, SimplePicker, TextInput} from '../../../../ui/index';
 
 export default class XPlusYComponent extends Component {
     constructor(props) {
@@ -45,6 +45,20 @@ export default class XPlusYComponent extends Component {
             businessId: businessId
         })
     }
+    isValid() {
+        let result = true;
+        Object.keys(this.refs).forEach(key => {
+            let item = this.refs[key];
+            if (this.refs[key].wrappedInstance) {
+                item = this.refs[key].wrappedInstance;
+            }
+            if (!item.isValid()) {
+                result = false;
+            }
+        });
+        return result
+    }
+
 
     showBuyProducts() {
         let products = this.props.api.getProducts();
@@ -94,51 +108,70 @@ export default class XPlusYComponent extends Component {
         }
     }
 
-    createSelectProductButton() {
-        let result = undefined;
-        let productName = undefined;
-        if (this.props.state.giftProduct) {
-            productName = <Text> {this.props.state.giftProduct.name}</Text>
+
+    createProductView() {
+        if(this.props.state.product) {
+            let productName = this.props.state.product.name
+            return <View style={styles.inputTextLayour}>
+                <Text style={{color: '#FA8559', marginLeft: 8, marginRight: 8}}>Promotion on: {productName}</Text>
+            </View>
         }
-        let button = <Item><Button transparent onPress={() => this.showProducts(true)}>
-            <Text>Select Gift</Text>
-        </Button>
-            {productName}
-        </Item>
-        result = <View>{button}</View>
-        return result;
+        return undefined
+
     }
 
-    createSelectBuyProductButton() {
-        let result = undefined;
-        let productName = undefined;
-        if (this.props.state.product) {
-            productName = <Text> {this.props.state.product.name}</Text>
+
+    createProductGiftView() {
+        if(this.props.state.giftProduct) {
+            let productName = this.props.state.giftProduct.name
+            return <View style={styles.inputTextLayour}>
+                <Text style={{color: '#FA8559', marginLeft: 8, marginRight: 8}}>Gift: {productName}</Text>
+            </View>
         }
-        let button = <Item><Button transparent onPress={() => this.showBuyProducts(true)}>
-            <Text>Select Buy Product</Text>
-        </Button>
-            {productName}
-        </Item>
-        result = <View>{button}</View>
-        return result;
+        return undefined
+
     }
 
     render() {
-        let selectBuyProductButton = this.createSelectBuyProductButton();
-        let selectProductButton = this.createSelectProductButton();
+
+        let productGiftView = this.createProductGiftView();
+        let productView = this.createProductView()
+        let buyValue = undefined;
+        if(this.props.state.x_plus_y && this.props.state.x_plus_y.values){
+            buyValue = this.props.state.x_plus_y.values.buy;
+        }
+
+        let eligibleValue = undefined;
+        if(this.props.state.x_plus_y && this.props.state.x_plus_y.values){
+            eligibleValue = this.props.state.x_plus_y.values.eligible;
+        }
         return <View>
 
-            <Item style={{margin: 3}} regular>
-                <Input keyboardType='numeric' onChangeText={(value) => this.setBuy(value)} placeholder='Buy Amount'/>
-            </Item>
-            {selectBuyProductButton}
-            <Item style={{margin: 3}} regular>
-                <Input keyboardType='numeric' onChangeText={(value) => this.setEligible(value)}
-                       placeholder='Number of Gifts'/>
-            </Item>
-            {selectProductButton}
+            <View style={styles.inputTextLayour}>
+                <Text style={{color: '#FA8559', marginLeft: 8, marginRight: 8}}>X Plus Y</Text>
+            </View>
+            <View style={{flexDirection:'row',justifyContent:'center',alignItems:'center'}}>
+            <View style={styles.inputPrecenComponent}>
+                <TextInput field='Buy Amount' value={buyValue}
+                           returnKeyType='next' ref="Buy Amount" refNext="Buy Amount"
+                           keyboardType='numeric'
+                           onChangeText={(value) => this.setBuy(value)} isMandatory={true}/>
+            </View>
+            <View style={{flex:1.7,marginTop:25}}><SelectButton ref="xplusyselectProduct" isMandatory selectedValue={this.props.state.product} title="Select Product" action={this.showBuyProducts.bind(this, true)}/></View>
 
+            </View>
+            {productView}
+            <View style={{flexDirection:'row',justifyContent:'center',alignItems:'center'}}>
+            <View style={styles.inputPrecenComponent}>
+                <TextInput field='Number of Gifts' value={eligibleValue}
+                           returnKeyType='next' ref="Number of Gifts" refNext="Number of Gifts"
+                           keyboardType='numeric'
+                           onChangeText={(value) => this.setEligible(value)} isMandatory={true}/>
+            </View>
+            <View style={{flex:1.7,marginTop:25}}><SelectButton ref="xplusyselectOmProduct" isMandatory selectedValue={this.props.state.giftProduct} title="Select Gift" action={this.showProducts.bind(this, true)}/></View>
+
+            </View>
+            {productGiftView}
 
         </View>
     }

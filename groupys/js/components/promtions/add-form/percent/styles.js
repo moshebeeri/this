@@ -1,5 +1,6 @@
 const React = require('react-native');
-const {StyleSheet, Dimensions, Platform} = React;
+const {Dimensions, Platform} = React;
+const {width, height} = Dimensions.get('window')
 module.exports = {
     header: {
         width: Dimensions.get('window').width,
@@ -7,5 +8,21 @@ module.exports = {
     },
     button: {
         backgroundColor: 'transparent'
-    }
+    },
+    inputTextLayour: {
+        marginTop: 4, padding: 3,
+        width: width - 15
+    },
+
+    inputPrecenComponent: {
+
+        marginRight:5,
+        width: 90
+    },
+
+    inputRetailComponent: {
+        marginRight:5,
+        marginLeft:5,
+        width: 115
+    },
 };

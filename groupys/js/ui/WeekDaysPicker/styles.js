@@ -7,7 +7,7 @@ module.exports = {
         justifyContent: 'center',
 
 
-        height: 75,
+        height: 250,
     },
     textInputNoFiledContainer: {
         flexDirection: 'column',
@@ -16,8 +16,25 @@ module.exports = {
 
         height: 55,
     },
+    checkboxContainerStyle:{
+        marginTop:3,
+
+    },
     textInputComponentLayout: {
-        flexDirection: 'row'
+
+
+        width:width -20,
+        flexDirection:'row',
+        backgroundColor:'white'
+    },
+    textInputComponentInvalidLayout: {
+
+
+        width:width -20,
+        flexDirection:'row',
+        backgroundColor:'white',
+        borderWidth:1,
+        borderColor: 'red'
     },
     textInputComponentStyle: {
         backgroundColor: 'white',

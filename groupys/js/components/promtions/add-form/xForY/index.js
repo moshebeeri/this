@@ -1,12 +1,7 @@
 import React, {Component} from 'react';
-import {connect} from 'react-redux';
-import {
-    Platform, TextInput
-} from 'react-native'
-import {
-    Container, Content, Text, InputGroup, Input, Button, Body, Icon, Left,
-    View, Header, Item, Footer, Picker, ListItem, Right, Thumbnail
-} from 'native-base';
+import {Text, View} from 'react-native'
+import styles from './styles'
+import {SelectButton, TextInput} from '../../../../ui/index';
 
 export default class XForYComponent extends Component {
     constructor(props) {
@@ -37,6 +32,19 @@ export default class XForYComponent extends Component {
             selectProduct: selectProductFunction,
             businessId: businessId
         })
+    }
+    isValid() {
+        let result = true;
+        Object.keys(this.refs).forEach(key => {
+            let item = this.refs[key];
+            if (this.refs[key].wrappedInstance) {
+                item = this.refs[key].wrappedInstance;
+            }
+            if (!item.isValid()) {
+                result = false;
+            }
+        });
+        return result
     }
 
     setBuyAmount(value) {
@@ -76,34 +84,49 @@ export default class XForYComponent extends Component {
         }
     }
 
-    createSelectBuyProductButton() {
-        let result = undefined;
-        let productName = undefined;
-        if (this.props.state.buyProduct) {
-            productName = <Text> {this.props.state.buyProduct.name}</Text>
+    createProductView() {
+        if (this.props.state.product) {
+            let productName = this.props.state.product.name
+            return <View style={styles.inputTextLayour}>
+                <Text style={{color: '#FA8559', marginLeft: 8, marginRight: 8}}>Promotion on: {productName}</Text>
+            </View>
         }
-        let button = <Item><Button transparent onPress={() => this.showBuyProducts(true)}>
-            <Text>Select Buy Product</Text>
-        </Button>
-            {productName}
-        </Item>
-        result = <View>{button}</View>
-        return result;
+        return undefined
     }
 
     render() {
-        let selectBuyProductButton = this.createSelectBuyProductButton();
+        let product = this.createProductView();
+        let pay = '';
+        if (this.props.state.x_for_y && this.props.state.x_for_y.values && this.props.state.x_for_y.values.pay) {
+            pay = this.props.state.x_for_y.values.pay;
+        }
+        let eligible = '';
+        if (this.props.state.x_for_y && this.props.state.x_for_y.values && this.props.state.x_for_y.values.eligible) {
+            eligible = this.props.state.x_for_y.values.eligible;
+        }
         return <View>
+            <View style={styles.inputTextLayour}>
+                <Text style={{color: '#FA8559', marginLeft: 8, marginRight: 8}}>Buy X Products For $</Text>
+            </View>
 
-            <Item style={{margin: 3}} regular>
-                <Input keyboardType='numeric' onChangeText={(value) => this.setBuyAmount(value)}
-                       placeholder='Buy Amount'/>
-            </Item>
-            {selectBuyProductButton}
-            <Item style={{margin: 3}} regular>
-                <Input keyboardType='numeric' onChangeText={(value) => this.setPay(value)} placeholder='Pay $'/>
-            </Item>
+            <View style={{flexDirection: 'row', justifyContent: 'center', alignItems: 'center'}}>
+                <View style={{flex: 1.7, marginTop: 25}}><SelectButton ref="xplusySelectProduct" selectedValue={this.props.state.product}isMandatory title="Select Product"
+                                                                       action={this.showBuyProducts.bind(this, true)}/></View>
 
+                <View style={styles.inputPrecenComponent}>
+                    <TextInput field='Buy Amount' value={eligible}
+                               returnKeyType='next' ref="Buy Amount" refNext="Buy Amount"
+                               keyboardType='numeric'
+                               onChangeText={(value) => this.setBuyAmount(value)} isMandatory={true}/>
+                </View>
+                <View style={styles.inputPrecenComponent}>
+                    <TextInput field='Pay $' value={pay}
+                               returnKeyType='next' ref="Pay $" refNext="Pay $"
+                               keyboardType='numeric'
+                               onChangeText={(value) => this.setPay(value)} isMandatory={true}/>
+                </View>
+            </View>
+            {product}
 
         </View>
     }

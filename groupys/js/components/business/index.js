@@ -45,7 +45,7 @@ class Business extends Component {
 
     createBusinessLogo(selectedBusiness) {
        if (selectedBusiness && selectedBusiness.business.logo) {
-            return <Thumbnail small square source={{uri: selectedBusiness.business.logo}}/>
+            return <Thumbnail medium square source={{uri: selectedBusiness.business.logo}}/>
         } else {
             return <Thumbnail source={require('../../../images/client_1.png')}/>
         }

@@ -12,11 +12,10 @@ let entityUtils = new EntityUtils();
 let timer = new Timer();
 
 class PromotionApi {
-    createPromotion(promotion, callbackFunction) {
+    createPromotion(promotion, token) {
         return new Promise(async (resolve, reject) => {
             try {
                 let from = new Date();
-                let token = await store.get('token');
                 const response = await fetch(`${server_host}/api/promotions/campaign`, {
                     method: 'POST',
                     headers: {
@@ -33,9 +32,7 @@ class PromotionApi {
                 let responseData = await response.json();
                 timer.logTime(from, new Date(), 'promotions', 'campaign');
                 if (promotion.image) {
-                    entityUtils.doUpload(promotion.image.uri, promotion.image.mime, token, callbackFunction, 'promotions', responseData.promotions[0]);
-                } else {
-                    callbackFunction(responseData);
+                    entityUtils.doUpload(promotion.image.uri, promotion.image.mime, token, this.doLog.bind(this), 'promotions', responseData.promotions[0]);
                 }
                 resolve(responseData);
             }
@@ -44,6 +41,10 @@ class PromotionApi {
                 reject('failed');
             }
         })
+    }
+
+    doLog(){
+
     }
 
     updatePromotion(promotion, callbackFunction, id) {

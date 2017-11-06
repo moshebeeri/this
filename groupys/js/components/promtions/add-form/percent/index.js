@@ -1,18 +1,9 @@
 import React, {Component} from 'react';
-import {connect} from 'react-redux';
-import {
-    Platform, TextInput
-} from 'react-native'
-import {
-    Container, Content, Text, InputGroup, Input, Button, Body, Icon, Left,
-    View, Header, Item, Footer, Picker, ListItem, Right, Thumbnail
-} from 'native-base';
-
+import {Text, View} from 'react-native'
+import styles from './styles'
+import {SelectButton, SimplePicker, TextInput} from '../../../../ui/index';
+import FormUtils from "../../../../utils/fromUtils";
 ;const Discouint_on = [
-    {
-        value: '',
-        label: 'Promotion On'
-    },
     {
         value: 'GLOBAL',
         label: 'Global Discount'
@@ -49,6 +40,19 @@ export default class PercentComponent extends Component {
                 }
             )
         }
+    }
+    isValid() {
+        let result = true;
+        Object.keys(this.refs).forEach(key => {
+            let item = this.refs[key];
+            if (this.refs[key].wrappedInstance) {
+                item = this.refs[key].wrappedInstance;
+            }
+            if (!item.isValid()) {
+                result = false;
+            }
+        });
+        return result
     }
 
     setRetailPrice(value) {
@@ -110,62 +114,60 @@ export default class PercentComponent extends Component {
 
     createSelectProductButton() {
         let result = undefined;
-        if (this.props.state.discount_on == 'PRODUCT') {
-            let productName = undefined;
-            if (this.props.state.product) {
-                productName = <Text> {this.props.state.product.name}</Text>
-            }
-            let button = <Item><Button transparent onPress={() => this.showProducts(true)}>
-                <Text>Select Product </Text>
-            </Button>
-                {productName}
-            </Item>
-            let retailPrice = <Item style={{margin: 3}} regular>
-                <Input keyboardType='numeric' onChangeText={(value) => this.setRetailPrice(value)}
-                       placeholder='Retail Price'/>
-
-            </Item>;
-            result = <View>{retailPrice}{button}</View>
+        if (this.props.state.discount_on === 'PRODUCT') {
+            let button = <View style={{marginTop:25}}><SelectButton isMandatory ref="precentSelectProduct"selectedValue={this.props.state.product} title="Select Product" action={this.showProducts.bind(this, true)}/></View>
+            let retailPrice =
+                <View style={styles.inputRetailComponent}>
+                    <TextInput field='Retail Price' value={this.props.state.percent.retail_price}
+                               returnKeyType='next' ref="retail" refNext="retail"
+                               keyboardType='numeric'
+                               onChangeText={(value) => this.setRetailPrice(value)} isMandatory={true}/>
+                </View>
+            let discount = <View style={styles.inputPrecenComponent}>
+                <TextInput field='Discount' value={this.props.state.percent.percent}
+                           returnKeyType='next' ref="discount" refNext="discount"
+                           keyboardType='numeric'
+                           placeholder="%"
+                           validateContent={FormUtils.validatePercent}
+                           onChangeText={(value) => this.setPercent(value)} isMandatory={true}/>
+            </View>
+            return <View style={{flexDirection: 'row'}}>{button}{retailPrice}{discount}</View>
+        }
+        if (this.props.state.discount_on === 'GLOBAL') {
+            return <View style={styles.inputTextLayour}>
+                <TextInput field='% Off' value={this.props.state.percent.percent}
+                           returnKeyType='next' ref="off" refNext="off"
+                           keyboardType='numeric'
+                           validateContent={FormUtils.validatePercent}
+                           onChangeText={(value) => this.setPercent(value)} isMandatory={true}/>
+            </View>
         }
         return result;
     }
 
-    render() {
-        let defaultvalue = undefined;
-        if (this.props.state.total_discount) {
-            let total = Number(this.props.state.total_discount);
-            let totalDiscount = this.props.state.amount * this.props.state.retail_price - total;
-            let fixedPercentence = (totalDiscount / (this.props.state.amount * this.props.state.retail_price)) * 100
-            defaultvalue = fixedPercentence.toString();
-        } else {
-            if (this.props.state.percent.percent) {
-                defaultvalue = this.props.state.percent.percent.toString();
-            }
+    createProductView() {
+        if(this.props.state.product) {
+            let productName = this.props.state.product.name
+            return <View style={styles.inputTextLayour}>
+                <Text style={{color: '#FA8559', marginLeft: 8, marginRight: 8}}>Discount On: {productName}</Text>
+            </View>
         }
-        let selectProductButton = this.createSelectProductButton();
-        let typePikkerTag = <Picker
-            iosHeader="Discount"
-            mode="dropdown"
-            selectedValue={this.props.state.discount_on}
-            onValueChange={this.selectPromotionType.bind(this)}
-        >
+        return undefined
 
-            {
-                Discouint_on.map((s, i) => {
-                    return <Item
-                        key={i}
-                        value={s.value}
-                        label={s.label}/>
-                })}
-        </Picker>
+    }
+
+    render() {
+        let promotionOn = this.createSelectProductButton();
         return <View>
-            {typePikkerTag}
-            <Item style={{margin: 3}} regular>
-                <Input keyboardType='numeric' onChangeText={(value) => this.setPercent(value)} placeholder='% Off'/>
-            </Item>
-
-            {selectProductButton}
-
+            <View style={styles.inputTextLayour}>
+                <Text style={{color: '#FA8559', marginLeft: 8, marginRight: 8}}>Percent Discount</Text>
+            </View>
+            <View style={styles.inputTextLayour}>
+                <SimplePicker ref="PromotionOn"list={Discouint_on} itemTitle="Promotion On" defaultHeader="Choose Type" isMandatory
+                              onValueSelected={this.selectPromotionType.bind(this)}/>
+            </View>
+            {promotionOn}
+            {this.createProductView()}
 
         </View>
     }

@@ -18,7 +18,10 @@ export default class FormHeader extends Component {
     }
 
     submitForm() {
-        const {submitForm} = this.props;
+        const {submitForm,disableAction} = this.props;
+        if(disableAction){
+            return
+        }
         submitForm()
     }
 

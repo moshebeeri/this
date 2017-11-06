@@ -20,7 +20,7 @@ import * as productsAction from "../../../actions/product";
 import * as businessAction from "../../../actions/business";
 import {bindActionCreators} from "redux";
 import styles from './styles'
-import {CategoryPicker, FormHeader, ImagePicker, TextInput} from '../../../ui/index';
+import {CategoryPicker, FormHeader, ImagePicker, TextInput,Spinner} from '../../../ui/index';
 
 class AddProduct extends Component {
     static navigationOptions = ({navigation}) => ({
@@ -68,12 +68,29 @@ class AddProduct extends Component {
         this.props.navigation.goBack();
     }
 
+    validateForm() {
+        let result = true;
+        Object.keys(this.refs).forEach(key => {
+            let item = this.refs[key];
+            if (this.refs[key].wrappedInstance) {
+                item = this.refs[key].wrappedInstance;
+            }
+            if (!item.isValid()) {
+                result = false;
+            }
+        });
+        return result
+    }
+
     saveFormData() {
-        const {navigation, actions} = this.props;
-        this.replaceRoute('home');
+        const {navigation, actions,saving} = this.props;
+        if(saving && !this.validateForm()){
+            return
+        }
+
         const product = this.createProduct();
         const businessId = this.getBusinessId(navigation);
-        actions.saveProduct(product, businessId)
+        actions.saveProduct(product, businessId,navigation)
     }
 
     createProduct() {
@@ -119,17 +136,20 @@ class AddProduct extends Component {
     }
 
     createCoverImageComponnent() {
+        const{saving} = this.props;
         if (this.state.coverImage) {
             let coverImage = <Image
                 style={{ width:width -10, height: 210,borderWidth:1,borderColor:'white'}}
                 source={{uri: this.state.coverImage.path}}
             >
-
+                { saving && <Spinner/>}
             </Image>
             return <View style={styles.product_upper_container}>
+
                 <View style={styles.cmeraLogoContainer}>
 
                     <View style={styles.addCoverContainer}>
+
                         <ImagePicker ref={"coverImage"} mandatory image={coverImage} color='white' pickFromCamera
                                      setImage={this.setCoverImage.bind(this)}/>
                     </View>
@@ -137,6 +157,7 @@ class AddProduct extends Component {
             </View>
         }
         return <View style={styles.product_upper_container}>
+            { saving && <Spinner/>}
             <View style={styles.cmeraLogoContainer}>
 
                 <View style={styles.addCoverNoImageContainer}>
@@ -150,6 +171,7 @@ class AddProduct extends Component {
     }
 
     render() {
+
         return (
             <View style={styles.product_container}>
                 <FormHeader showBack submitForm={this.saveFormData.bind(this)} navigation={this.props.navigation}
@@ -203,6 +225,7 @@ class AddProduct extends Component {
 export default connect(
     state => ({
         products: state.products,
+        saving: state.products.savingForm
     }),
     (dispatch) => ({
         actions: bindActionCreators(productsAction, dispatch),
