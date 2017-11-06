@@ -10,7 +10,7 @@
 /**
  * Created by stan229 on 5/27/16.
  */
-const initialState = {promotions: {}};
+const initialState = {promotions: {},savingForm:false};
 import store from "react-native-simple-store";
 import {REHYDRATE} from "redux-persist/constants";
 import * as actions from "./reducerActions";
@@ -26,9 +26,10 @@ export default function promotion(state = initialState, action) {
         };
     }
     let promotionsState = {...state};
+    let currentPromotions = promotionsState.promotions;
+
     switch (action.type) {
         case actions.UPSERT_PROMOTION:
-            let currentPromotions = promotionsState.promotions;
             action.item.forEach(eventItem => {
                 if (eventItem.social_state || !currentPromotions[eventItem._id]) {
                     currentPromotions[eventItem._id] = eventItem;
@@ -38,10 +39,24 @@ export default function promotion(state = initialState, action) {
                 }
             });
             return promotionsState;
-        case 'GET_PROMOTIONS' :
-            store.save('promotions' + action.businessId, action.promotions)
+        case actions.PROMOTION_SAVING:
+            return {
+                ...state,
+                savingForm: true,
+            };
+        case actions.PROMOTION_SAVING_DONE:
+            return {
+                ...state,
+                savingForm: true,
+            };
+        case actions.PROMOTION_RESET:
+            return {
+                ...state,
+                savingForm: false,
+            };
+        case actions.SAVE_PROMOTIONS :
             let currentState = {...state};
-            currentState['promotions' + action.businessId] = action.promotions;
+            currentPromotions[action.businessId] = action.promotions;
             return currentState;
         default:
             return state;

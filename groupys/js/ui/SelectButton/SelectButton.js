@@ -8,7 +8,8 @@ export default class SelectButton extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            type: ''
+            type: '',
+            valid:true,
         }
     }
 
@@ -18,12 +19,29 @@ export default class SelectButton extends Component {
         this.refs[refNext].focus()
     }
 
+    isValid(){
+        const{selectedValue,isMandatory} = this.props;
+        if(isMandatory){
+            if(!selectedValue){
+                this.setState({valid:false});
+                return false;
+            }
+        }
+
+        return true;
+    }
+
 
     render() {
         const {title, action,} = this.props;
-
-        return <TouchableOpacity style={styles.buttonStyle} onPress={action}>
-                    <Text style={styles.buttonTextStyle}>{title}</Text>
+        let buttonStyle = styles.buttonStyle;
+        let textStyle = styles.buttonTextStyle;
+        if(!this.state.valid){
+            buttonStyle = styles.buttonStyleInvalid;
+            textStyle = styles.buttonTextStyleInvalid;
+        }
+        return <TouchableOpacity style={buttonStyle} onPress={action}>
+                    <Text style={textStyle}>{title}</Text>
         </TouchableOpacity>
     }
 }

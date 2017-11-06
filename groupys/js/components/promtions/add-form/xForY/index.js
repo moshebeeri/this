@@ -33,6 +33,19 @@ export default class XForYComponent extends Component {
             businessId: businessId
         })
     }
+    isValid() {
+        let result = true;
+        Object.keys(this.refs).forEach(key => {
+            let item = this.refs[key];
+            if (this.refs[key].wrappedInstance) {
+                item = this.refs[key].wrappedInstance;
+            }
+            if (!item.isValid()) {
+                result = false;
+            }
+        });
+        return result
+    }
 
     setBuyAmount(value) {
         if (value) {
@@ -104,13 +117,13 @@ export default class XForYComponent extends Component {
                     <TextInput field='Buy Amount' value={eligible}
                                returnKeyType='next' ref="2" refNext="2"
                                keyboardType='numeric'
-                               onChangeText={(value) => this.setBuyAmount({value})} isMandatory={true}/>
+                               onChangeText={(value) => this.setBuyAmount(value)} isMandatory={true}/>
                 </View>
                 <View style={styles.inputPrecenComponent}>
                     <TextInput field='Pay $' value={pay}
                                returnKeyType='next' ref="2" refNext="2"
                                keyboardType='numeric'
-                               onChangeText={(value) => this.setPay({value})} isMandatory={true}/>
+                               onChangeText={(value) => this.setPay(value)} isMandatory={true}/>
                 </View>
             </View>
             {product}

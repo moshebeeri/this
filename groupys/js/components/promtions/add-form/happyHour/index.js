@@ -20,6 +20,19 @@ export default class HappyHourComponent extends Component {
             }
         )
     }
+    isValid() {
+        let result = true;
+        Object.keys(this.refs).forEach(key => {
+            let item = this.refs[key];
+            if (this.refs[key].wrappedInstance) {
+                item = this.refs[key].wrappedInstance;
+            }
+            if (!item.isValid()) {
+                result = false;
+            }
+        });
+        return result
+    }
 
     showProducts() {
         let products = this.props.api.getProducts();
@@ -170,7 +183,7 @@ export default class HappyHourComponent extends Component {
                     <TextInput field='Pay $' value={pay}
                                returnKeyType='next' ref="2" refNext="2"
                                keyboardType='numeric'
-                               onChangeText={(value) => this.setPay({value})} isMandatory={true}/>
+                               onChangeText={(value) => this.setPay(value)} isMandatory={true}/>
                 </View>
 
             </View>
@@ -181,13 +194,13 @@ export default class HappyHourComponent extends Component {
                 <View style={styles.inputPrecenComponent}>
                     <TimePicker field='From Hour' value={from}
                                 returnKeyType='next' ref="3" refNext="3"
-                                onChangeDate={(value) => this.setFrom({value})} isMandatory={true}/>
+                                onChangeDate={(value) => this.setFrom(value)} isMandatory={true}/>
 
                 </View>
                 <View style={styles.inputPrecenComponent}>
                     <TimePicker field='To Hour' value={until}
                                 returnKeyType='next' ref="3" refNext="3"
-                                onChangeDate={(value) => this.setUntil({value})} isMandatory={true}/>
+                                onChangeDate={(value) => this.setUntil(value)} isMandatory={true}/>
 
                 </View>
             </View>
@@ -197,7 +210,7 @@ export default class HappyHourComponent extends Component {
                 <View style={styles.inputPrecenComponent}>
                     <WeekDaysPicker field='Days of Week'
                                 ref="2" refNext="2"
-                               onChangeSelected={(value) => this.setDays({value})} isMandatory={true}/>
+                               onChangeSelected={(value) => this.setDays(value)} isMandatory={true}/>
                 </View>
 
 

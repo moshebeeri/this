@@ -13,8 +13,23 @@ module.exports = {
         alignItems:'center',
         justifyContent:'center'
     },
+    buttonStyleInvalid: {
+        borderColor: 'red',
+        borderWidth:1,
+        backgroundColor:'white',
+        height:52,
+        width:120,
+        marginLeft:5,
+        marginRight:5,
+        alignItems:'center',
+        justifyContent:'center'
+    },
     buttonTextStyle:{
         color:'#FA8559',
+        fontSize:16
+    },
+    buttonTextStyleInvalid:{
+        color:'red',
         fontSize:16
     }
 

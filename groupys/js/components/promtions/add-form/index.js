@@ -115,6 +115,7 @@ class AddPromotion extends Component {
     }
 
     async componentWillMount() {
+        this.props.actions.resetForm();
         try {
             if (this.props.navigation.state.params && this.props.navigation.state.params.item) {
                 let item = this.props.navigation.state.params.item;
@@ -163,31 +164,16 @@ class AddPromotion extends Component {
     }
 
     async saveFormData() {
-        let promotion = this.createPromotionFromState();
-        try {
-            this.replaceRoute();
-            promotionApi.createPromotion(promotion, this.addToList.bind(this));
-        } catch (error) {
-            console.log(error);
-            this.replaceRoute();
+        const {actions,navigation} = this.props;
+        if(this.validateForm()) {
+            let promotion = this.createPromotionFromState();
+            let businessId = this.getBusinessId();
+            actions.savePromotion(promotion, businessId, navigation)
         }
     }
 
-    async updateFormData() {
-        let promotion = this.createPromotionFromState();
-        try {
-            this.replaceRoute();
-            promotionApi.updatePromotion(promotion, this.addToList.bind(this), this.props.navigation.state.params.item._id);
-        } catch (error) {
-            console.log(error);
-            this.replaceRoute();
-        }
-    }
 
-    addToList(responseData) {
-        let businessId = this.getBusinessId();
-        this.props.bussinesActions.setBusinessPromotions(businessId);
-    }
+
 
     getBusinessId() {
         let businessId = undefined;
@@ -208,7 +194,6 @@ class AddPromotion extends Component {
             start: this.state.start,
             end: this.state.end,
             description: this.state.info,
-            path: this.state.path,
             name: this.state.name,
         };
         if (this.props.navigation.state.params.onBoardType) {
@@ -324,24 +309,6 @@ class AddPromotion extends Component {
         })
     }
 
-    async pickFromCamera() {
-        try {
-            let image = await ImagePicker.openCamera({
-                width: 2000,
-                height: 2000,
-                cropping: true,
-                compressImageQuality: 1,
-                compressVideoPreset: 'MediumQuality',
-            });
-            this.setState({
-                image: {uri: image.path, width: image.width, height: image.height, mime: image.mime},
-                images: null,
-                path: image.path
-            });
-        } catch (e) {
-            console.log(e);
-        }
-    }
 
     setQuantity(quantity) {
         this.setState({
@@ -349,40 +316,7 @@ class AddPromotion extends Component {
         })
     }
 
-    async pickPicture() {
-        try {
-            let image = await ImagePicker.openPicker({
-                width: 2000,
-                height: 2000,
-                cropping: true,
-                compressImageQuality: 1,
-                compressVideoPreset: 'MediumQuality',
-            });
-            this.setState({
-                image: {uri: image.path, width: image.width, height: image.height, mime: image.mime},
-                images: null,
-                path: image.path
-            });
-        } catch (e) {
-            console.log(e);
-        }
-    }
 
-    showProducts(boolean) {
-        if (!this.props.products) {
-            return;
-        }
-        let products = this.getProducts();
-        if (!products) {
-            return;
-        }
-        if (products.length == 0) {
-            return;
-        }
-        this.setState({
-            showProductsList: boolean
-        })
-    }
 
     getProducts() {
         let products = undefined;
@@ -407,7 +341,7 @@ class AddPromotion extends Component {
             switch (this.state.type) {
                 case 'PERCENT':
                     discountForm = <PercentComponent navigation={this.props.navigation} api={this} state={this.state}
-                                                     setState={this.setState.bind(this)}/>
+                                                    ref={"precent"} setState={this.setState.bind(this)}/>
                     break;
                 case 'PUNCH_CARD':
                     discountForm = <PunchCardComponent navigation={this.props.navigation} api={this} state={this.state}
@@ -476,7 +410,7 @@ class AddPromotion extends Component {
     createDistributionForm() {
 
         let distribution = <View style={styles.inputTextLayour}>
-            <SimplePicker list={Distribution} itemTitle="Distribution Type" defaultHeader="Choose Distribution"
+            <SimplePicker ref="TyoePicker"list={Distribution} itemTitle="Distribution Type" defaultHeader="Choose Distribution"
                           isMandatory onValueSelected={this.selectDistributionType.bind(this)}/>
         </View>
         let button = undefined;
@@ -510,20 +444,7 @@ class AddPromotion extends Component {
         </View>
     }
 
-    createSubmitButton() {
-        let result = undefined;
-        if (this.state.show_save) {
-            let submitButton = <Button transparent
-                                       onPress={this.saveFormData.bind(this)}>
-                <Text>Add Promotion</Text>
-            </Button>
-            result = <Footer style={{backgroundColor: '#fff'}}>
 
-                {submitButton}
-            </Footer>
-        }
-        return result;
-    }
 
     render() {
         let conditionForm = this.createDiscountConditionForm();
@@ -553,7 +474,7 @@ class AddPromotion extends Component {
                         <Text style={{color: '#FA8559', marginLeft: 8, marginRight: 8}}>Details</Text>
                     </View>
                     <View style={styles.inputTextLayour}>
-                        <SimplePicker list={types} itemTitle="Promotion Type" defaultHeader="Choose Type" isMandatory
+                        <SimplePicker ref="promotionType" list={types} itemTitle="Promotion Type" defaultHeader="Choose Type" isMandatory
                                       onValueSelected={this.selectPromotionType.bind(this)}/>
                     </View>
                     <View style={styles.inputTextLayour}>
@@ -574,12 +495,20 @@ class AddPromotion extends Component {
                                         }} isMandatory={true}/>
                         </View>
                     </View>
+
+                    <View style={styles.inputTextLayour}>
+                        <TextInput field='Name' value={this.state.name}
+                                   returnKeyType='next' ref="4" refNext="4"
+                                   onSubmitEditing={this.focusNextField.bind(this, "5")}
+                                   onChangeText={(name) => this.setState({name})} isMandatory={true}/>
+                    </View>
                     <View style={styles.inputTextLayour}>
                         <TextInput field='Description' value={this.state.info}
-                                   returnKeyType='next' ref="4" refNext="4"
+                                   returnKeyType='next' ref="5" refNext="5"
                                    onSubmitEditing={this.focusNextField.bind(this, "5")}
                                    onChangeText={(info) => this.setState({info})} isMandatory={true}/>
                     </View>
+
                     {conditionForm}
                     {distributionForm}
                 </ScrollView>
@@ -589,7 +518,7 @@ class AddPromotion extends Component {
 
     setCoverImage(image) {
         this.setState({
-            coverImage: image
+            image: image
         })
     }
 
@@ -604,10 +533,10 @@ class AddPromotion extends Component {
 
     createCoverImageComponnent() {
         const {saving} = this.props;
-        if (this.state.coverImage) {
+        if (this.state.image) {
             let coverImage = <Image
                 style={{width: width - 10, height: 210, borderWidth: 1, borderColor: 'white'}}
-                source={{uri: this.state.coverImage.path}}
+                source={{uri: this.state.image.path}}
             >
                 {saving && <Spinner/>}
             </Image>
@@ -655,6 +584,7 @@ class AddPromotion extends Component {
 export default connect(
     state => ({
         promotions: state.promotions,
+        saving:state.promotions.savingForm,
         products: state.products,
     }),
     (dispatch) => ({

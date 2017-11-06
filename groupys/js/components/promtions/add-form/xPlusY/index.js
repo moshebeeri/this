@@ -45,6 +45,20 @@ export default class XPlusYComponent extends Component {
             businessId: businessId
         })
     }
+    isValid() {
+        let result = true;
+        Object.keys(this.refs).forEach(key => {
+            let item = this.refs[key];
+            if (this.refs[key].wrappedInstance) {
+                item = this.refs[key].wrappedInstance;
+            }
+            if (!item.isValid()) {
+                result = false;
+            }
+        });
+        return result
+    }
+
 
     showBuyProducts() {
         let products = this.props.api.getProducts();
@@ -141,7 +155,7 @@ export default class XPlusYComponent extends Component {
                 <TextInput field='Buy Amount' value={buyValue}
                            returnKeyType='next' ref="2" refNext="2"
                            keyboardType='numeric'
-                           onChangeText={(value) => this.setBuy({value})} isMandatory={true}/>
+                           onChangeText={(value) => this.setBuy(value)} isMandatory={true}/>
             </View>
             <View style={{flex:1.7,marginTop:25}}><SelectButton title="Select Product" action={this.showBuyProducts.bind(this, true)}/></View>
 
@@ -152,7 +166,7 @@ export default class XPlusYComponent extends Component {
                 <TextInput field='Number of Gifts' value={eligibleValue}
                            returnKeyType='next' ref="2" refNext="2"
                            keyboardType='numeric'
-                           onChangeText={(value) => this.setEligible({value})} isMandatory={true}/>
+                           onChangeText={(value) => this.setEligible(value)} isMandatory={true}/>
             </View>
             <View style={{flex:1.7,marginTop:25}}><SelectButton title="Select Gift" action={this.showProducts.bind(this, true)}/></View>
 

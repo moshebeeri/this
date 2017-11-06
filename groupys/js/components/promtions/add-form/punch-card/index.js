@@ -27,6 +27,19 @@ export default class PunchCardComponent extends Component {
         )
     }
 
+    isValid() {
+        let result = true;
+        Object.keys(this.refs).forEach(key => {
+            let item = this.refs[key];
+            if (this.refs[key].wrappedInstance) {
+                item = this.refs[key].wrappedInstance;
+            }
+            if (!item.isValid()) {
+                result = false;
+            }
+        });
+        return result
+    }
 
     setPunchCard(value) {
         if (value) {
@@ -68,7 +81,7 @@ export default class PunchCardComponent extends Component {
                     <TextInput field='Number of Punches' value={numberOfPunches}
                                returnKeyType='next' ref="2" refNext="2"
                                keyboardType='numeric'
-                               onChangeText={(value) => this.setPunchCard({value})} isMandatory={true}/>
+                               onChangeText={(value) => this.setPunchCard(value)} isMandatory={true}/>
                 </View>
 
             </View>

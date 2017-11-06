@@ -19,6 +19,19 @@ export default class ReduceAmountComponent extends Component {
             }
         )
     }
+    isValid() {
+        let result = true;
+        Object.keys(this.refs).forEach(key => {
+            let item = this.refs[key];
+            if (this.refs[key].wrappedInstance) {
+                item = this.refs[key].wrappedInstance;
+            }
+            if (!item.isValid()) {
+                result = false;
+            }
+        });
+        return result
+    }
 
     setPay(value) {
         if (value) {
@@ -75,13 +88,13 @@ export default class ReduceAmountComponent extends Component {
                     <TextInput field='Buy $' value={price}
                                returnKeyType='next' ref="2" refNext="2"
                                keyboardType='numeric'
-                               onChangeText={(value) => this.setBuy({value})} isMandatory={true}/>
+                               onChangeText={(value) => this.setBuy(value)} isMandatory={true}/>
                 </View>
                 <View style={styles.inputPrecenComponent}>
                     <TextInput field='Pay $' value={pay}
                                returnKeyType='next' ref="2" refNext="2"
                                keyboardType='numeric'
-                               onChangeText={(value) => this.setPay({value})} isMandatory={true}/>
+                               onChangeText={(value) => this.setPay(value)} isMandatory={true}/>
                 </View>
             </View>
 
