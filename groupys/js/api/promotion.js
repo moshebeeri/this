@@ -26,7 +26,7 @@ class PromotionApi {
                     },
                     body: JSON.stringify(promotion)
                 });
-                if (response.status == '401') {
+                if (response.status ==='401') {
                     reject(response);
                     return;
                 }
@@ -60,7 +60,7 @@ class PromotionApi {
                     },
                     body: JSON.stringify(promotion)
                 });
-                if (response.status == '401') {
+                if (response.status ==='401') {
                     reject(response);
                     return;
                 }
@@ -89,7 +89,7 @@ class PromotionApi {
                         'Authorization': 'Bearer ' + token
                     }
                 });
-                if (response.status == '401') {
+                if (response.status ==='401') {
                     reject(response);
                     return;
                 }
@@ -116,7 +116,7 @@ class PromotionApi {
                         'Authorization': 'Bearer ' + token
                     }
                 });
-                if (response.status == '401') {
+                if (response.status ==='401') {
                     reject(response);
                     return;
                 }
@@ -207,7 +207,7 @@ class PromotionApi {
                         'Authorization': 'Bearer ' + token
                     }
                 });
-                if (response.status == '401') {
+                if (response.status ==='401') {
                     reject(response);
                     return;
                 }
@@ -234,7 +234,7 @@ class PromotionApi {
                         'Authorization': 'Bearer ' + token
                     }
                 });
-                if (response.status == '401') {
+                if (response.status ==='401') {
                     reject(response);
                     return;
                 }

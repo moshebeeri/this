@@ -23,7 +23,7 @@ class LocationApi {
                     },
                     body: JSON.stringify(request)
                 });
-                if (response.status == '401') {
+                if (response.status ==='401') {
                     reject(response);
                     return;
                 }
