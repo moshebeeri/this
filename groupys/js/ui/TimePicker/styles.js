@@ -25,7 +25,7 @@ module.exports = {
         flex: 1,
         padding: 10,
         borderRadius:2,
-        fontSize:16,
+
     },
     textInputInvalidComponentStyle: {
         backgroundColor: 'white',
@@ -33,7 +33,7 @@ module.exports = {
         flex: 1,
         padding: 10,
         borderRadius:2,
-        fontSize:16,
+
         borderWidth:1,
         borderColor:'red'
     },
