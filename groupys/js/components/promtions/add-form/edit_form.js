@@ -42,6 +42,10 @@ class EditPromotion extends Component {
         }
     }
 
+    static navigationOptions = {
+        header: null
+    };
+
     focusNextField(nextField) {
         this.refs[nextField]._root.focus()
     }
@@ -183,7 +187,7 @@ class EditPromotion extends Component {
 
             <View style={styles.product_container}>
                 <FormHeader showBack submitForm={this.updateFormData.bind(this)} navigation={this.props.navigation}
-                            title={header} bgc="#FA8559"/>
+                            title={"Update Promotion"} bgc="#FA8559"/>
                 <ScrollView contentContainerStyle={{
                     justifyContent: 'center',
                     alignItems: 'center',
@@ -195,16 +199,11 @@ class EditPromotion extends Component {
                             date</Text>
                     </View>
                     <View style={styles.inputTextLayour}>
-                        <SimplePicker ref="promotionType" list={types} itemTitle="Promotion Type"
-                                      defaultHeader="Choose Type" isMandatory
-                                      onValueSelected={this.selectPromotionType.bind(this)}/>
-                    </View>
-                    <View style={styles.inputTextLayour}>
                         <Text style={{color: '#FA8559', marginLeft: 8, marginRight: 8}}>General</Text>
                     </View>
                     <View style={styles.inputTextMediumLayout}>
                         <View style={{flex: 1, marginRight: 10}}>
-                            <TextInput field='Increase Quantit' value={this.state.quantity}
+                            <TextInput field='Increase Quantity' value={this.state.quantity}
                                        keyboardType='numeric'
                                        returnKeyType='next' ref="2" refNext="2"
                                        onSubmitEditing={this.focusNextField.bind(this, "4")}
