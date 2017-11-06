@@ -29,6 +29,6 @@ export {
     SelectButton,
     DatePicker,
     TimePicker,
-    WeekDaysPicker
+    WeekDaysPicker,
     RNVideo
 }
