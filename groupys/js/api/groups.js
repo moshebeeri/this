@@ -28,7 +28,7 @@ class GroupsApi {
                     },
                     body: JSON.stringify(group)
                 });
-                if (response.status == '401' || response.status == '500') {
+                if (response.status ==='401' || response.status ==='500') {
                     reject(response);
                     return;
                 }
@@ -71,7 +71,7 @@ class GroupsApi {
                         'Authorization': 'Bearer ' + token
                     },
                 });
-                if (response.status == '401' || response.status == '500') {
+                if (response.status ==='401' || response.status ==='500') {
                     reject(response);
                     return;
                 }
@@ -99,7 +99,7 @@ class GroupsApi {
                         'Authorization': 'Bearer ' + token
                     },
                 });
-                if (response.status == '401' || response.status == '500') {
+                if (response.status ==='401' || response.status ==='500') {
                     reject(response);
                     return;
                 }
@@ -126,7 +126,7 @@ class GroupsApi {
                         'Authorization': 'Bearer ' + token
                     }
                 });
-                if (response.status == '401') {
+                if (response.status ==='401') {
                     reject(response);
                     return;
                 }
@@ -151,7 +151,7 @@ class GroupsApi {
                         'Authorization': 'Bearer ' + token
                     }
                 });
-                if (response.status == '401') {
+                if (response.status ==='401') {
                     reject(response);
                     return;
                 }
@@ -178,7 +178,7 @@ class GroupsApi {
                         'Authorization': 'Bearer ' + token
                     }
                 });
-                if (response.status == '401') {
+                if (response.status ==='401') {
                     reject(response);
                     return;
                 }
@@ -205,7 +205,7 @@ class GroupsApi {
                         'Authorization': 'Bearer ' + token
                     }
                 });
-                if (response.status == '401') {
+                if (response.status ==='401') {
                     reject(response);
                     return;
                 }
@@ -235,7 +235,7 @@ class GroupsApi {
                     },
                     body: JSON.stringify(json)
                 });
-                if (response.status == '401') {
+                if (response.status ==='401') {
                     reject(response);
                     return;
                 }

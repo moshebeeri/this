@@ -17,7 +17,7 @@ class GeneralApi {
                     },
                     body: JSON.stringify(json)
                 });
-                if (response.status == '401' || response.status == '400') {
+                if (response.status ==='401' || response.status ==='400') {
                     reject(response);
                     return;
                 }

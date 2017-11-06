@@ -20,12 +20,12 @@ class UserApi {
                             'Authorization': 'Bearer ' + token,
                         }
                     })
-                    if (response.status == '401') {
+                    if (response.status === '401') {
                         reject(error);
                         return;
                     }
                     let responseData = await response.json();
-                    timer.logTime(from, new Date(), 'users', 'me')
+                    timer.logTime(from, new Date(), 'users', 'me');
                     resolve(responseData);
                 } else {
                     reject('no token');
@@ -51,12 +51,12 @@ class UserApi {
                             'Authorization': 'Bearer ' + token,
                         }
                     })
-                    if (response.status == '401') {
+                    if (response.status === '401') {
                         reject(error);
                         return;
                     }
                     let responseData = await response.json();
-                    timer.logTime(from, new Date(), 'users', 'me')
+                    timer.logTime(from, new Date(), 'users', 'me');
                     resolve(responseData);
                 } else {
                     reject('no token');
@@ -81,7 +81,7 @@ class UserApi {
                         'Authorization': 'Bearer ' + token,
                     }
                 })
-                if (response.status == '401') {
+                if (response.status === '401') {
                     reject(error);
                     return;
                 }
@@ -142,12 +142,12 @@ class UserApi {
                         'Authorization': 'Bearer ' + token,
                     }
                 })
-                if (response.status == '401') {
+                if (response.status === '401') {
                     reject(error);
                     return;
                 }
                 let responseData = await response.json();
-                timer.logTime(from, new Date(), 'users', 'like')
+                timer.logTime(from, new Date(), 'users', 'like');
                 resolve(responseData);
             }
             catch (error) {
@@ -169,12 +169,12 @@ class UserApi {
                         'Authorization': 'Bearer ' + token,
                     }
                 })
-                if (response.status == '401') {
+                if (response.status === '401') {
                     reject(error);
                     return;
                 }
                 let responseData = await response.json();
-                timer.logTime(from, new Date(), 'users', 'unlike')
+                timer.logTime(from, new Date(), 'users', 'unlike');
                 resolve(responseData);
             }
             catch (error) {
@@ -189,7 +189,7 @@ class UserApi {
             try {
                 let token = await store.get('token');
                 let from = new Date();
-                let phoneNumber = this.clean_phone_number(phone)
+                let phoneNumber = this.clean_phone_number(phone);
                 const response = await fetch(`${server_host}/api/users/get/user/by/phone/` + 972 + '/' + phoneNumber, {
                     method: 'GET',
                     headers: {
@@ -198,7 +198,7 @@ class UserApi {
                         'Authorization': 'Bearer ' + token,
                     }
                 })
-                if (response.status == '401') {
+                if (response.status === '401') {
                     reject(error);
                     return;
                 }
@@ -225,13 +225,13 @@ class UserApi {
                         'Content-Type': 'application/json;charset=utf-8',
                         'Authorization': 'Bearer ' + token,
                     }
-                })
-                if (response.status == '401') {
+                });
+                if (response.status === '401') {
                     reject(error);
                     return;
                 }
                 let responseData = await response.json();
-                timer.logTime(from, new Date(), 'users', 'get/user/by/phone/')
+                timer.logTime(from, new Date(), 'users', 'get/user/by/phone/');
                 resolve(responseData);
             }
             catch (error) {
@@ -254,12 +254,12 @@ class UserApi {
                         'Authorization': 'Bearer ' + token,
                     }
                 })
-                if (response.status == '401') {
+                if (response.status === '401') {
                     reject(error);
                     return;
                 }
                 let responseData = await response.json();
-                timer.logTime(from, new Date(), 'users', 'get/user/by/phone/')
+                timer.logTime(from, new Date(), 'users', 'get/user/by/phone/');
                 resolve(responseData);
             }
             catch (error) {
@@ -280,13 +280,13 @@ class UserApi {
                         'Content-Type': 'application/json;charset=utf-8',
                         'Authorization': 'Bearer ' + token,
                     }
-                })
-                if (response.status == '401') {
+                });
+                if (response.status === '401') {
                     reject(error);
                     return;
                 }
                 let responseData = await response.json();
-                timer.logTime(from, new Date(), 'users', 'get/user/by/phone/')
+                timer.logTime(from, new Date(), 'users', 'get/user/by/phone/');
                 resolve(responseData);
             }
             catch (error) {

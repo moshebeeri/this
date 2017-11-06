@@ -22,7 +22,7 @@ class LoginApi {
                         password: password,
                     })
                 });
-                if (response.status == '401') {
+                if (response.status ==='401') {
                     resolve({});
                     return;
                 }
@@ -89,7 +89,7 @@ class LoginApi {
                     }
                 });
                 console.log(response);
-                if (response.status == '401') {
+                if (response.status ==='401') {
                     reject({error: 'Signup Failed Validation'});
                     return;
                 }
