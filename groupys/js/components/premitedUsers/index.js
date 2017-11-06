@@ -18,8 +18,8 @@ class UserPermittedRoles extends Component {
     }
 
     componentWillMount() {
-        const {navigation,business} = this.props;
-        this.props.actions.setBusinessUsers(business);
+        const {navigation} = this.props;
+        this.props.actions.setBusinessUsers(navigation.state.params.business);
     }
 
     renderItem(item) {
@@ -30,14 +30,14 @@ class UserPermittedRoles extends Component {
     }
 
     navigateToAdd() {
-        const {business} = this.props;
+        const {navigation} = this.props;
 
-        this.props.navigation.navigate("addPremitedUsers", {business: business});
+        this.props.navigation.navigate("addPremitedUsers", {business: navigation.state.params.business});
     }
 
     render() {
-        const {users, navigation, actions,update,business} = this.props;
-
+        const {users, navigation, actions,update} = this.props;
+       let business = navigation.state.params.business
         return (
             <Container>
                 <View style={styles.addProductContainer}>

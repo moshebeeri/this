@@ -34,8 +34,8 @@ class Product extends Component {
 
 
     setBusinessProducts() {
-        const {actions, navigation, business} = this.props;
-        actions.setBusinessProducts(business._id);
+        const {actions, navigation} = this.props;
+        actions.setBusinessProducts(navigation.state.params.business._id);
     }
 
     renderItem(item) {
@@ -57,8 +57,8 @@ class Product extends Component {
         </TouchableOpacity>
     }
     navigateToAdd() {
-        const {navigation, business} = this.props;
-        navigation.navigate("AddProduct", {business: business});
+        const {navigation} = this.props;
+        navigation.navigate("AddProduct", {business: navigation.state.params.business});
     }
 
     navigateToEdit(item) {
@@ -69,8 +69,8 @@ class Product extends Component {
 
 
     render() {
-        const {products, navigation, actions, update, business} = this.props;
-        const businessId = business._id;
+        const {products, navigation, actions, update} = this.props;
+        const businessId = navigation.state.params.business._id;
         let rows = undefined;
         if(products[businessId]){
             rows =  RowUtils.splitToArrayRows(products[businessId],5)
