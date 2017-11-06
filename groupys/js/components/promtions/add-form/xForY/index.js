@@ -117,6 +117,7 @@ export default class XForYComponent extends Component {
                     <TextInput field='Buy Amount' value={eligible}
                                returnKeyType='next' ref="Buy Amount" refNext="Buy Amount"
                                keyboardType='numeric'
+                               onSubmitEditing={this.focusNextField.bind(this, "Pay $")}
                                onChangeText={(value) => this.setBuyAmount(value)} isMandatory={true}/>
                 </View>
                 <View style={styles.inputPrecenComponent}>
@@ -129,6 +130,15 @@ export default class XForYComponent extends Component {
             {product}
 
         </View>
+    }
+
+    focusNextField(nextField) {
+        if (this.refs[nextField] && this.refs[nextField].wrappedInstance) {
+            this.refs[nextField].wrappedInstance.focus()
+        }
+        if (this.refs[nextField] && this.refs[nextField].focus) {
+            this.refs[nextField].focus()
+        }
     }
 }
 

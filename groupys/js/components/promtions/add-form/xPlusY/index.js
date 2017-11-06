@@ -155,6 +155,7 @@ export default class XPlusYComponent extends Component {
                 <TextInput field='Buy Amount' value={buyValue}
                            returnKeyType='next' ref="Buy Amount" refNext="Buy Amount"
                            keyboardType='numeric'
+                           onSubmitEditing={this.focusNextField.bind(this, "Number of Gifts")}
                            onChangeText={(value) => this.setBuy(value)} isMandatory={true}/>
             </View>
             <View style={{flex:1.7,marginTop:25}}><SelectButton ref="xplusyselectProduct" isMandatory selectedValue={this.props.state.product} title="Select Product" action={this.showBuyProducts.bind(this, true)}/></View>
@@ -174,6 +175,14 @@ export default class XPlusYComponent extends Component {
             {productGiftView}
 
         </View>
+    }
+    focusNextField(nextField) {
+        if (this.refs[nextField] && this.refs[nextField].wrappedInstance) {
+            this.refs[nextField].wrappedInstance.focus()
+        }
+        if (this.refs[nextField] && this.refs[nextField].focus) {
+            this.refs[nextField].focus()
+        }
     }
 }
 

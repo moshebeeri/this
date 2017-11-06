@@ -479,8 +479,9 @@ class AddPromotion extends Component {
                     <View style={styles.inputTextMediumLayout}>
                         <View style={{flex: 1, marginRight: 10}}>
                             <TextInput field='Quantity' value={this.state.quantity}
+                                       keyboardType='numeric'
                                        returnKeyType='next' ref="2" refNext="2"
-                                       onSubmitEditing={this.focusNextField.bind(this, "3")}
+                                       onSubmitEditing={this.focusNextField.bind(this, "4")}
                                        onChangeText={(quantity) => this.setState({quantity})} isMandatory={true}/>
                         </View>
                         <View style={{flex: 3, marginLeft: 5}}>

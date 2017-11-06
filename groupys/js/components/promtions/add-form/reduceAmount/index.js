@@ -86,13 +86,14 @@ export default class ReduceAmountComponent extends Component {
 
                 <View style={styles.inputPrecenComponent}>
                     <TextInput field='Buy $' value={price}
-                               returnKeyType='next' ref="Buy $" refNext="2"
+                               returnKeyType='next' ref="Buy $" refNext="Buy $"
                                keyboardType='numeric'
+                               onSubmitEditing={this.focusNextField.bind(this, "Pay $")}
                                onChangeText={(value) => this.setBuy(value)} isMandatory={true}/>
                 </View>
                 <View style={styles.inputPrecenComponent}>
                     <TextInput field='Pay $' value={pay}
-                               returnKeyType='next' ref="Pay $" refNext="2"
+                               returnKeyType='next' ref="Pay $" refNext="Pay $"
                                keyboardType='numeric'
                                onChangeText={(value) => this.setPay(value)} isMandatory={true}/>
                 </View>
@@ -101,5 +102,16 @@ export default class ReduceAmountComponent extends Component {
 
         </View>
     }
+
+
+    focusNextField(nextField) {
+        if (this.refs[nextField] && this.refs[nextField].wrappedInstance) {
+            this.refs[nextField].wrappedInstance.focus()
+        }
+        if (this.refs[nextField] && this.refs[nextField].focus) {
+            this.refs[nextField].focus()
+        }
+    }
+
 }
 
