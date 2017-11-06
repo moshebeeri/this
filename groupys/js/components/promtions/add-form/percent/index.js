@@ -2,7 +2,7 @@ import React, {Component} from 'react';
 import {Text, View} from 'react-native'
 import styles from './styles'
 import {SelectButton, SimplePicker, TextInput} from '../../../../ui/index';
-
+import FormUtils from "../../../../utils/fromUtils";
 ;const Discouint_on = [
     {
         value: 'GLOBAL',
@@ -128,6 +128,7 @@ export default class PercentComponent extends Component {
                            returnKeyType='next' ref="discount" refNext="discount"
                            keyboardType='numeric'
                            placeholder="%"
+                           validateContent={FormUtils.validatePercent}
                            onChangeText={(value) => this.setPercent(value)} isMandatory={true}/>
             </View>
             return <View style={{flexDirection: 'row'}}>{button}{retailPrice}{discount}</View>
@@ -137,6 +138,7 @@ export default class PercentComponent extends Component {
                 <TextInput field='% Off' value={this.props.state.percent.percent}
                            returnKeyType='next' ref="off" refNext="off"
                            keyboardType='numeric'
+                           validateContent={FormUtils.validatePercent}
                            onChangeText={(value) => this.setPercent(value)} isMandatory={true}/>
             </View>
         }

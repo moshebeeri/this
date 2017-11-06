@@ -3,7 +3,7 @@ import {
     Platform,View,Text
 } from 'react-native'
 
-
+import FormUtils from "../../../../utils/fromUtils";
 import styles from './styles'
 import {SelectButton, SimplePicker, TextInput} from '../../../../ui/index';
 
@@ -161,6 +161,7 @@ export default class XPlusYOffComponent extends Component {
                     <TextInput field='% Off' value={discount}
                                returnKeyType='next' ref="2" refNext="2"
                                keyboardType='numeric'
+                               validateContent={FormUtils.validatePercent}
                                onChangeText={(value) => this.setOff(value)} isMandatory={true}/>
                 </View>
 

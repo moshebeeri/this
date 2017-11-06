@@ -2,7 +2,7 @@ import React, {Component} from 'react';
 import {
     Platform,View,Text
 } from 'react-native'
-
+import FormUtils from "../../../../utils/fromUtils";
 
 import styles from './styles'
 import {SelectButton, SimplePicker, TextInput} from '../../../../ui/index';
@@ -81,6 +81,7 @@ export default class PunchCardComponent extends Component {
                     <TextInput field='Number of Punches' value={numberOfPunches}
                                returnKeyType='next' ref="2" refNext="2"
                                keyboardType='numeric'
+                               validateContent={FormUtils.validatePuches()}
                                onChangeText={(value) => this.setPunchCard(value)} isMandatory={true}/>
                 </View>
 
