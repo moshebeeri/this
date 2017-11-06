@@ -6,12 +6,14 @@ let auth = require('../../auth/auth.service');
 
 let router = express.Router();
 
-router.get('/translate/:to', controller.translate);
-router.get('/work/:function', controller.work);
-router.get('/product/:lang/:parent', controller.product);
-router.get('/business/:lang/:parent', controller.business);
-router.post('/add/product/:parent', controller.add_product);
-router.post('/add/business/:parent', controller.add_business);
+router.get('/by/id/:lang/:id', auth.isAuthenticated(), controller.categoryById);
+router.get('/translate/:to', auth.isAuthenticated(), controller.translate);
+router.get('/work/:function', auth.isAuthenticated(), controller.work);
+router.get('/product/:lang/:parent', auth.isAuthenticated(), controller.product);
+router.get('/business/:lang/:parent', auth.isAuthenticated(), controller.business);
+router.post('/add/product/:parent', auth.isAuthenticated(), controller.add_product);
+router.post('/add/business/:parent', auth.isAuthenticated(), controller.add_business);
+
 router.get('/', auth.hasRole('admin'), controller.index);
 router.get('/:id', auth.hasRole('admin'), controller.show);
 router.post('/', auth.hasRole('admin'), controller.create);

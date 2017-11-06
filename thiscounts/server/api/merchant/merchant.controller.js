@@ -3,7 +3,7 @@
 let _ = require('lodash');
 let Merchant = require('./merchant.model');
 let graphTools = require('../../components/graph-tools');
-let graphModel = graphTools.createGraphModel('mall');
+let graphModel = graphTools.createGraphModel('merchant');
 
 // Get list of merchants
 exports.index = function(req, res) {

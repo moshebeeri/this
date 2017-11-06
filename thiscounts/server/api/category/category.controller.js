@@ -368,6 +368,14 @@ exports.product = function (req, res) {
   })
 };
 
+exports.categoryById = function (req, res) {
+  Category.findById(req.params.id)
+    .select(`gid isLeaf translations.${req.params.lang} -_id`)
+    .exec(function (err, categories) {
+      return res.status(200).json(categories);
+    })
+};
+
 // Get list of categories
 exports.index = function (req, res) {
   Category.find(function (err, categories) {
