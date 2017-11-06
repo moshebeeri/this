@@ -117,8 +117,8 @@ export function savePromotion(promotion,businessId,navigation) {
             let response = await promotionApi.getAllByBusinessId(businessId, token);
             if (response.length > 0) {
                 dispatch({
-                    type: actions.SAVE_PROMOTIONS,
-                    promotions: response,
+                    type: actions.SET_PROMOTION_BUSINESS,
+                    businessesPromotions: response,
                     businessId: businessId
                 });
             }

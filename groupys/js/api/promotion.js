@@ -32,7 +32,11 @@ class PromotionApi {
                 let responseData = await response.json();
                 timer.logTime(from, new Date(), 'promotions', 'campaign');
                 if (promotion.image) {
-                    entityUtils.doUpload(promotion.image.uri, promotion.image.mime, token, this.doLog.bind(this), 'promotions', responseData.promotions[0]);
+                    let imagePath = promotion.image.uri;
+                    if(!imagePath){
+                        imagePath = promotion.image.path;
+                    }
+                    entityUtils.doUpload(imagePath, promotion.image.mime, token, this.doLog.bind(this), 'promotions', responseData.promotions[0]);
                 }
                 resolve(responseData);
             }

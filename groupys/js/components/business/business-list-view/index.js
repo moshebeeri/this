@@ -52,6 +52,16 @@ export default class BusinessListView extends Component {
         navigation.navigate("userPermittedRoles", {business: item.business});
     }
 
+    showProducts() {
+        const {item, navigation} = this.props;
+        navigation.navigate("Products", {business: item.business});
+    }
+
+    showPromotions() {
+        const {item, navigation} = this.props;
+        navigation.navigate("Promotions", {business: item.business});
+    }
+
     onChangeTab(tab) {
     }
 
@@ -59,7 +69,8 @@ export default class BusinessListView extends Component {
         const {item, index} = this.props;
         const banner = this.createBannerTag(item);
         const editButton = this.createEditTag(item);
-        let selectedTab = 0;
+        const promotionButton = this.createPromotionsTag(item);
+        const premissionsButton = this.createPremissionsTag(item);
         return ( <View key={index} style={{marginTop: 1, width: width, height: height, backgroundColor: '#eaeaea'}}>
                 <View style={{
                     flex: -1,
@@ -79,47 +90,36 @@ export default class BusinessListView extends Component {
 
                 </View>
 
-
-                <Tabs tabBarUnderlineStyle={{backgroundColor: '#ff6400'}}
-                      onChangeTab={this.onChangeTab.bind(this)} style={{backgroundColor: '#fff',}}>
-                    <Tab heading={<TabHeading style={{backgroundColor: "white"}}>
-                        <View style={styles.tabHeadingStyle}>
-                            <Image
-                                style={{tintColor: '#ff6400', marginLeft: 0, width: 20, height: 20}}
-                                source={promotions}/>
-                            <Text style={styles.tabTextStyle}>Promotions</Text>
-                        </View>
-                    </TabHeading>}>
-
-                        <Promotions  navigation={this.props.navigation} business={item.business}></Promotions>
-                    </Tab>
-                    <Tab heading={<TabHeading style={{backgroundColor: "white"}}>
-                        <View style={styles.tabHeadingStyle}>
-                            <Image
-                                style={{tintColor: '#ff6400', marginLeft: 0, width: 20, height: 20}}
-                                source={products}/>
-                            <Text style={styles.tabTextStyle}>Products</Text>
-                        </View>
-                    </TabHeading>}>
-                        <Products navigation={this.props.navigation} business={item.business}></Products>
-                    </Tab>
-
-                    <Tab
-                        heading={<TabHeading style={{backgroundColor: "white"}}>
-                            <View style={styles.tabHeadingStyle}>
-                                <Image
-                                    style={{tintColor: '#ff6400', marginLeft: 0, width: 20, height: 20}}
-                                    source={premissions}/>
-                                <Text style={styles.tabTextStyle}>Permissions</Text>
-                            </View>
-                        </TabHeading>}>
-                        <View>
-                            <PremitedUsers navigation={this.props.navigation} business={item.business}/>
-                        </View>
-                    </Tab>
+                <View style={{borderTopWidth: 2, borderColor: '#eaeaea', backgroundColor: 'white'}}
+                      key={this.props.index}>
 
 
-                </Tabs>
+                    <View style={{
+                        height: vh * 6, flexDirection: 'row', alignItems: 'center',
+                        justifyContent: 'space-between',
+                    }}>
+                        {premissionsButton}
+
+
+                        <TouchableOpacity onPress={() => this.showProducts()}
+                                          style={{margin: 3, flexDirection: 'row', alignItems: 'center',}} regular>
+                            <Image style={{tintColor: '#ff6400', marginLeft: 10, width: vh * 3, height: vh * 4}}
+                                   source={products}/>
+
+                            <Text style={{
+                                marginLeft: 5,
+                                color: 'black',
+                                fontStyle: 'normal',
+                                fontSize: 13
+                            }}>Products </Text>
+
+                        </TouchableOpacity>
+
+                        {promotionButton}
+
+
+                    </View>
+                </View>
 
 
             </View>
@@ -158,6 +158,35 @@ export default class BusinessListView extends Component {
         </Image>
     }
 
+    createPremissionsTag(item) {
+        if (item.role == 'OWNS' || item.role == 'Admin' || item.role == 'Manager') {
+            return <TouchableOpacity onPress={() => this.showUsersRoles()}
+                                     style={{margin: 3, flexDirection: 'row', alignItems: 'center',}}
+                                     regular>
+                <Image style={{tintColor: '#ff6400', marginLeft: 10, width: vh * 4, height: vh * 4}}
+                       source={premissions}/>
+
+                <Text style={{marginLeft: 5, color: 'black', fontStyle: 'normal', fontSize: 13}}>Permissions </Text>
+
+            </TouchableOpacity>
+        }
+        return undefined;
+    }
+
+    createPromotionsTag(item) {
+        if (item.role == 'OWNS' || item.role == 'Admin' || item.role == 'Manager') {
+            return <TouchableOpacity onPress={() => this.showPromotions()}
+                                     style={{margin: 3, flexDirection: 'row', alignItems: 'center',}}
+                                     regular>
+                <Image style={{tintColor: '#ff6400', marginLeft: 10, width: vh * 4, height: vh * 4}}
+                       source={promotions}/>
+
+                <Text style={{marginLeft: 5, color: 'black', fontStyle: 'normal', fontSize: 13}}>Promotions </Text>
+
+            </TouchableOpacity>
+        }
+        return undefined;
+    }
     render() {
         return this.createView();
     }
