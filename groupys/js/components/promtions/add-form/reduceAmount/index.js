@@ -86,13 +86,13 @@ export default class ReduceAmountComponent extends Component {
 
                 <View style={styles.inputPrecenComponent}>
                     <TextInput field='Buy $' value={price}
-                               returnKeyType='next' ref="2" refNext="2"
+                               returnKeyType='next' ref="Buy $" refNext="2"
                                keyboardType='numeric'
                                onChangeText={(value) => this.setBuy(value)} isMandatory={true}/>
                 </View>
                 <View style={styles.inputPrecenComponent}>
                     <TextInput field='Pay $' value={pay}
-                               returnKeyType='next' ref="2" refNext="2"
+                               returnKeyType='next' ref="Pay $" refNext="2"
                                keyboardType='numeric'
                                onChangeText={(value) => this.setPay(value)} isMandatory={true}/>
                 </View>

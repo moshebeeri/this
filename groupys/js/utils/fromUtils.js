@@ -14,9 +14,37 @@ const validateWebsite = (website) => {
     return re.test(website);
 };
 
+const validatePuches = (number) => {
+    if(number > 10){
+        return false;
+    }
+    if(number === 0){
+        return false;
+    }
+
+    if(number < 0){
+        return false;
+    }
+    return true;
+};
+const validatePercent = (number) => {
+    if(number > 100){
+        return false;
+    }
+    if(number === 0){
+        return false;
+    }
+
+    if(number < 0){
+        return false;
+    }
+    return true;
+};
+
 
 
 export default {
     validateEmail,
-    validateWebsite
+    validateWebsite,
+    validatePuches,validatePercent
 };

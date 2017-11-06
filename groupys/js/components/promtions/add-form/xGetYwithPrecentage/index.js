@@ -150,12 +150,12 @@ export default class XPlusYOffComponent extends Component {
             </View>
             <View style={{flexDirection:'row',justifyContent:'center',alignItems:'center'}}>
 
-                <View style={{flex:1.7,marginTop:25}}><SelectButton title="Select Product" action={this.showBuyProducts.bind(this, true)}/></View>
+                <View style={{flex:1.7,marginTop:25}}><SelectButton ref="xgetyselectProduct" isMandatory selectedValue={this.props.state.product} title="Select Product" action={this.showBuyProducts.bind(this, true)}/></View>
 
             </View>
             {productView}
             <View style={{flexDirection:'row',justifyContent:'center',alignItems:'center'}}>
-                <View style={{flex:1.7,marginTop:25}}><SelectButton title="Select On" action={this.showProducts.bind(this, true)}/></View>
+                <View style={{flex:1.7,marginTop:25}}><SelectButton ref="xgetyselectOmProduct" isMandatory selectedValue={this.props.state.giftProduct}title="Select On" action={this.showProducts.bind(this, true)}/></View>
 
                 <View style={styles.inputPrecenComponent}>
                     <TextInput field='% Off' value={discount}

@@ -153,22 +153,22 @@ export default class XPlusYComponent extends Component {
             <View style={{flexDirection:'row',justifyContent:'center',alignItems:'center'}}>
             <View style={styles.inputPrecenComponent}>
                 <TextInput field='Buy Amount' value={buyValue}
-                           returnKeyType='next' ref="2" refNext="2"
+                           returnKeyType='next' ref="Buy Amount" refNext="Buy Amount"
                            keyboardType='numeric'
                            onChangeText={(value) => this.setBuy(value)} isMandatory={true}/>
             </View>
-            <View style={{flex:1.7,marginTop:25}}><SelectButton title="Select Product" action={this.showBuyProducts.bind(this, true)}/></View>
+            <View style={{flex:1.7,marginTop:25}}><SelectButton ref="xplusyselectProduct" isMandatory selectedValue={this.props.state.product} title="Select Product" action={this.showBuyProducts.bind(this, true)}/></View>
 
             </View>
             {productView}
             <View style={{flexDirection:'row',justifyContent:'center',alignItems:'center'}}>
             <View style={styles.inputPrecenComponent}>
                 <TextInput field='Number of Gifts' value={eligibleValue}
-                           returnKeyType='next' ref="2" refNext="2"
+                           returnKeyType='next' ref="Number of Gifts" refNext="Number of Gifts"
                            keyboardType='numeric'
                            onChangeText={(value) => this.setEligible(value)} isMandatory={true}/>
             </View>
-            <View style={{flex:1.7,marginTop:25}}><SelectButton title="Select Gift" action={this.showProducts.bind(this, true)}/></View>
+            <View style={{flex:1.7,marginTop:25}}><SelectButton ref="xplusyselectOmProduct" isMandatory selectedValue={this.props.state.giftProduct} title="Select Gift" action={this.showProducts.bind(this, true)}/></View>
 
             </View>
             {productGiftView}

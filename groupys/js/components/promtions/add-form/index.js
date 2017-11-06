@@ -1,5 +1,5 @@
 import React, {Component} from "react";
-import {Image, ScrollView, View,Dimensions} from "react-native";
+import {Dimensions, Image, ScrollView, View} from "react-native";
 import {connect} from "react-redux";
 import {actions} from "react-native-navigation-redux-helpers";
 import {Button, Container, Content, Footer, Icon, Input, Item, Picker, Text} from "native-base";
@@ -16,6 +16,7 @@ import ReduceAmountComponent from "./reduceAmount/index";
 import HappyHourComponent from "./happyHour/index";
 import styles from "./styles";
 import {DatePicker, FormHeader, ImagePicker, SelectButton, SimplePicker, Spinner, TextInput} from '../../../ui/index';
+
 const {width, height} = Dimensions.get('window')
 let promotionApi = new PromotionApi();
 const types = [
@@ -23,7 +24,6 @@ const types = [
             value: 'PUNCH_CARD',
             label: 'Punch Card'
         },
-
         {
             value: 'HAPPY_HOUR',
             label: 'Happy Hour'
@@ -48,7 +48,6 @@ const types = [
             value: 'X+N%OFF',
             label: 'Buy X Get Y With % Off'
         },
-
     ]
     //15% off for purchases more than 1000$ OR buy iphone for 600$ and get 50% off for earphones
 ;
@@ -164,16 +163,13 @@ class AddPromotion extends Component {
     }
 
     async saveFormData() {
-        const {actions,navigation} = this.props;
-        if(this.validateForm()) {
+        const {actions, navigation} = this.props;
+        if (this.validateForm()) {
             let promotion = this.createPromotionFromState();
             let businessId = this.getBusinessId();
             actions.savePromotion(promotion, businessId, navigation)
         }
     }
-
-
-
 
     getBusinessId() {
         let businessId = undefined;
@@ -309,14 +305,11 @@ class AddPromotion extends Component {
         })
     }
 
-
     setQuantity(quantity) {
         this.setState({
             quantity: quantity
         })
     }
-
-
 
     getProducts() {
         let products = undefined;
@@ -341,31 +334,36 @@ class AddPromotion extends Component {
             switch (this.state.type) {
                 case 'PERCENT':
                     discountForm = <PercentComponent navigation={this.props.navigation} api={this} state={this.state}
-                                                    ref={"precent"} setState={this.setState.bind(this)}/>
+                                                     ref={"precent"} setState={this.setState.bind(this)}/>
                     break;
                 case 'PUNCH_CARD':
                     discountForm = <PunchCardComponent navigation={this.props.navigation} api={this} state={this.state}
-                                                       setState={this.setState.bind(this)}/>
+                                                       ref={"PUNCH_CARD"} setState={this.setState.bind(this)}/>
                     break;
                 case 'X+Y':
-                    discountForm = <XPlusYComponent navigation={this.props.navigation} api={this} state={this.state}
-                                                    setState={this.setState.bind(this)}/>
+                    discountForm =
+                        <XPlusYComponent ref={"X+Y"} navigation={this.props.navigation} api={this} state={this.state}
+                                         setState={this.setState.bind(this)}/>
                     break;
                 case 'X+N%OFF':
-                    discountForm = <XPlusYOffComponent navigation={this.props.navigation} api={this} state={this.state}
+                    discountForm = <XPlusYOffComponent ref={"X+N%OFF"} navigation={this.props.navigation} api={this}
+                                                       state={this.state}
                                                        setState={this.setState.bind(this)}/>
                     break;
                 case 'X_FOR_Y':
-                    discountForm = <XForYComponent navigation={this.props.navigation} api={this} state={this.state}
-                                                   setState={this.setState.bind(this)}/>
+                    discountForm =
+                        <XForYComponent ref={"X_FOR_Y"} navigation={this.props.navigation} api={this} state={this.state}
+                                        setState={this.setState.bind(this)}/>
                     break;
                 case 'REDUCED_AMOUNT':
                     discountForm =
-                        <ReduceAmountComponent navigation={this.props.navigation} api={this} state={this.state}
+                        <ReduceAmountComponent ref={"REDUCED_AMOUNT"} navigation={this.props.navigation} api={this}
+                                               state={this.state}
                                                setState={this.setState.bind(this)}/>
                     break;
                 case 'HAPPY_HOUR':
-                    discountForm = <HappyHourComponent navigation={this.props.navigation} api={this} state={this.state}
+                    discountForm = <HappyHourComponent ref={"HAPPY_HOUR"} navigation={this.props.navigation} api={this}
+                                                       state={this.state}
                                                        setState={this.setState.bind(this)}/>
                     break;
             }
@@ -408,9 +406,9 @@ class AddPromotion extends Component {
     }
 
     createDistributionForm() {
-
         let distribution = <View style={styles.inputTextLayour}>
-            <SimplePicker ref="TyoePicker"list={Distribution} itemTitle="Distribution Type" defaultHeader="Choose Distribution"
+            <SimplePicker ref="TyoePicker" list={Distribution} itemTitle="Distribution Type"
+                          defaultHeader="Choose Distribution"
                           isMandatory onValueSelected={this.selectDistributionType.bind(this)}/>
         </View>
         let button = undefined;
@@ -426,7 +424,6 @@ class AddPromotion extends Component {
 
             </View>
         }
-
         return <View>
             <View style={styles.inputTextLayour}>
                 <Text style={{color: '#FA8559', marginLeft: 8, marginRight: 8}}>Distribution</Text>
@@ -443,8 +440,6 @@ class AddPromotion extends Component {
 
         </View>
     }
-
-
 
     render() {
         let conditionForm = this.createDiscountConditionForm();
@@ -474,7 +469,8 @@ class AddPromotion extends Component {
                         <Text style={{color: '#FA8559', marginLeft: 8, marginRight: 8}}>Details</Text>
                     </View>
                     <View style={styles.inputTextLayour}>
-                        <SimplePicker ref="promotionType" list={types} itemTitle="Promotion Type" defaultHeader="Choose Type" isMandatory
+                        <SimplePicker ref="promotionType" list={types} itemTitle="Promotion Type"
+                                      defaultHeader="Choose Type" isMandatory
                                       onValueSelected={this.selectPromotionType.bind(this)}/>
                     </View>
                     <View style={styles.inputTextLayour}>
@@ -584,7 +580,7 @@ class AddPromotion extends Component {
 export default connect(
     state => ({
         promotions: state.promotions,
-        saving:state.promotions.savingForm,
+        saving: state.promotions.savingForm,
         products: state.products,
     }),
     (dispatch) => ({

@@ -110,18 +110,18 @@ export default class XForYComponent extends Component {
             </View>
 
             <View style={{flexDirection: 'row', justifyContent: 'center', alignItems: 'center'}}>
-                <View style={{flex: 1.7, marginTop: 25}}><SelectButton title="Select Product"
+                <View style={{flex: 1.7, marginTop: 25}}><SelectButton ref="xplusySelectProduct" selectedValue={this.props.state.product}isMandatory title="Select Product"
                                                                        action={this.showBuyProducts.bind(this, true)}/></View>
 
                 <View style={styles.inputPrecenComponent}>
                     <TextInput field='Buy Amount' value={eligible}
-                               returnKeyType='next' ref="2" refNext="2"
+                               returnKeyType='next' ref="Buy Amount" refNext="Buy Amount"
                                keyboardType='numeric'
                                onChangeText={(value) => this.setBuyAmount(value)} isMandatory={true}/>
                 </View>
                 <View style={styles.inputPrecenComponent}>
                     <TextInput field='Pay $' value={pay}
-                               returnKeyType='next' ref="2" refNext="2"
+                               returnKeyType='next' ref="Pay $" refNext="Pay $"
                                keyboardType='numeric'
                                onChangeText={(value) => this.setPay(value)} isMandatory={true}/>
                 </View>

@@ -23,9 +23,18 @@ module.exports = {
     textInputComponentLayout: {
 
 
-        width:width,
+        width:width -20,
         flexDirection:'row',
         backgroundColor:'white'
+    },
+    textInputComponentInvalidLayout: {
+
+
+        width:width -20,
+        flexDirection:'row',
+        backgroundColor:'white',
+        borderWidth:1,
+        borderColor: 'red'
     },
     textInputComponentStyle: {
         backgroundColor: 'white',
