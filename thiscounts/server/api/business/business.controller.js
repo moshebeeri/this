@@ -221,7 +221,6 @@ function create_business_default_group(business) {
   }, function (err, group) {
     if (err) return console.error(err.message);
     graphModel.owner_followers_follow_default_group(business.creator);
-    follow(business.creator, business._id);
     console.log(`default group created successfully ${JSON.stringify(group)}`)
   });
 }

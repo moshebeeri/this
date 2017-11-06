@@ -67,7 +67,7 @@ function handleProximityActions(userId, location, callback) {
                         entity._id as entity, labels(entity) as labels
                 ORDER BY d ASC
                 skip ${skip} limit ${limit}`;
-  console.log(query);
+  //console.log(query);
   graphModel.query(query, function (err, eligibles) {
     if (err) return callback(err);
     return callback(null, eligibles);

@@ -20,7 +20,20 @@ const changePassword = require('../../../images/change-password-img.png');
 let entityUtils = new EntityUtils();
 import Icon from 'react-native-vector-icons/FontAwesome';
 
+import Video from 'react-native-video'
+import {CloseDrawer, RNVideo} from "../../ui/index";
+
 import strings from "../../i18n/i18n"
+
+let videoStyles = StyleSheet.create({
+    backgroundVideo: {
+        position: 'absolute',
+        top: 0,
+        left: 0,
+        bottom: 0,
+        right: 0,
+    },
+});
 
 class ProfileDrawer extends Component {
     static navigationOptions = {
@@ -120,7 +133,12 @@ class ProfileDrawer extends Component {
             <Container>
                 <Content style={{backgroundColor: '#F2F2F2'}}>
                     {/*Header style*/}
-
+                    <RNVideo
+                        width={320}
+                        height={180}
+                        paused={false}
+                        source={{uri:'https://archive.org/download/VideoSample-Video3/ArchitectVideo_512kb.mp4'}}
+                    />
                     <View style={{height: 55, flex: 1, justifyContent: 'flex-end',flexDirection: 'row'}}>
                         <CloseDrawer active color={"#FF9046"} size={20} onPress={() => this.props.closeDrawer()}/>
                     </View>

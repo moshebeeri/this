@@ -20,6 +20,7 @@ const Product = require('../product/product.model');
 const Group = require('../group/group.model');
 const Promotion = require('../promotion/promotion.model');
 const Mall = require('../mall/mall.model');
+const Post = require('../post/post.model');
 const Category = require('../category/category.model');
 const CardType = require('../cardType/cardType.model');
 const base64 = require('file-base64');
@@ -208,6 +209,9 @@ function updateImageVersions(versions, id, meta_data, type, callback) {
       mall: function (callback) {
         Mall.findById(id, callback);
       },
+      post: function (callback) {
+        Post.findById(id, callback);
+      },
       category: function (callback) {
         Category.findById(id, callback);
       },
@@ -267,6 +271,9 @@ function find_object(id, callback) {
       mall: function (callback) {
         Mall.findById(id, callback);
       },
+      post: function (callback) {
+        Post.findById(id, callback);
+      },
       category: function (callback) {
         Category.findById(id, callback);
       },
@@ -284,6 +291,7 @@ function find_object(id, callback) {
           return callback(null, updated);
         }
       }
+      return callback(null, null);
     })
 }
 
@@ -318,6 +326,7 @@ function delete_picture_storage(picture){
 exports.order = function (req, res) {
   find_object(req.params.id, function (err, object) {
     if (err) return handleError(res, err);
+    if(!object) return res.status(404);
 
     object.pictures.forEach(function (pic) {
       if (pic.date === req.params.date) {
@@ -334,6 +343,8 @@ exports.order = function (req, res) {
 exports.delete = function (req, res) {
   find_object(req.params.id, function (err, object) {
     if (err) return handleError(res, err);
+    if(!object) return res.status(404);
+
     object.pictures = object.pictures.filter((pic) => pic.date !== req.params.date);
     delete_picture_storage(object.pictures.filter((pic) => pic.date === req.params.date));
     object.save();

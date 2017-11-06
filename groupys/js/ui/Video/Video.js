@@ -3,15 +3,6 @@ import VisibilitySensor from 'react-visibility-sensor';
 import {TouchableOpacity, StyleSheet, Text} from 'react-native';
 
 import Video from 'react-native-video';
-let styles = StyleSheet.create({
-    backgroundVideo: {
-        position: 'absolute',
-        top: 0,
-        left: 0,
-        bottom: 0,
-        right: 0,
-    },
-});
 
 export default class RNVideo extends Component {
     constructor(props) {
@@ -24,7 +15,7 @@ export default class RNVideo extends Component {
            volume     : this.value(props.volume, 1),
            resizeMode : this.value(props.resizeMode, 'cover'),
            width      : this.value(props.width, 320),
-           height     : this.value(props.height, 240),
+           height     : this.value(props.height, 180),
            rnVideoRef : null
         };
 
@@ -36,34 +27,54 @@ export default class RNVideo extends Component {
 
     visible(isVisible) {
         console.log('Element is now %s', isVisible ? 'visible' : 'hidden');
-        this.state.paused = !isVisible;
+        this.setState( {paused: !isVisible});
     }
 
     onPress() {
-        this.state.paused = !this.state.paused;
+        this.setState( {paused: !this.state.paused});
+        console.log(`onPress this.state.paused=${this.state.paused}`);
     }
 
     render() {
+        console.log(`render this.state.paused=${this.state.paused}`);
         return (
-            <VisibilitySensor onChange={this.visible}>
+            <VisibilitySensor onChange={this.visible.bind(this)}>
                 <TouchableOpacity width={this.state.width}
                                   height={this.state.height}
-                                  onPress={this.onPress}
+                                  onPress={this.onPress.bind(this)}
                                   style={{backgroundColor:'red'}}>
-                    <Text>{this.state.paused? 'paused' : 'playing'}</Text>
+                    {/*<Text>{this.state.paused? 'paused' : 'playing'}</Text>*/}
+                    <Video
+                        ref={(ref) => {
+                            this.state.rnVideoRef = ref
+                        }}
+                        width={this.state.width}
+                        height={this.state.height}
+                        rate={this.state.rate}
+                        volume={this.state.volume}
+                        muted={this.state.muted}
+                        resizeMode={this.state.resizeMode}
+                        repeat={this.state.repeat}
+                        key={this.props.key}
+                        paused={this.state.paused}
+                        style={{backgroundColor:'transparent'}}
+                        source={this.props.source}
+                    />
 
+                </TouchableOpacity>
+            </VisibilitySensor>
+        )
+    }
+}
+/*
                     <Video
                         style={{backgroundColor:'blue'}}
                         width={320}
                         height={180}
                         rate={1} volume={1} muted={true}
                         resizeMode="cover" repeat={true} key="video1"
-                        paused={false}
+                        paused={this.state.paused}
                         source={{uri:'https://dhs9y2fxkp0xy.cloudfront.net/videos/small.mp4'}}
                     />
-                </TouchableOpacity>
-            </VisibilitySensor>
-        )
-    }
-}
 
+ */

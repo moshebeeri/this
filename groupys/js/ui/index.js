@@ -13,6 +13,7 @@ import SelectButton from './SelectButton/SelectButton'
 import DatePicker from './DatePicker/DatePicker'
 import TimePicker from './TimePicker/DatePicker'
 import WeekDaysPicker from './WeekDaysPicker/WeekDaysPicker'
+import RNVideo from './Video/Video';
 export {
     ImagePicker,
     CategoryPicker,
@@ -29,4 +30,5 @@ export {
     DatePicker,
     TimePicker,
     WeekDaysPicker
+    RNVideo
 }

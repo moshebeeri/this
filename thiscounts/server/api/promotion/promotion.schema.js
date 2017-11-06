@@ -53,6 +53,7 @@ let PromotionSchemaObject = {
   },
   name: {type: String, required: true},
   pictures : [],
+  video: String,
   type: {
     type: String,
     enum: promotionTypes
@@ -101,7 +102,7 @@ let PromotionSchemaObject = {
     business: {type: Schema.ObjectId, ref: 'Business', autopopulate: true},
     shopping_chain: {type: Schema.ObjectId, ref: 'ShoppingChain', autopopulate: true},
     mall: {type: Schema.ObjectId, ref: 'Mall', autopopulate: true},
-  } ,
+  },
   created: {type: Date, default: Date.now},
   gid: {type: Number, index: true},
 
