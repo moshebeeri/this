@@ -8,7 +8,6 @@ import {bindActionCreators} from "redux";
 import EntityUtils from "../../utils/createEntity";
 import * as userAction from "../../actions/user";
 import StyleUtils from "../../utils/styleUtils";
-import {CloseDrawer,Video} from "../../ui/index";
 const logo = require('../../../images/logo.png');
 const cover = require('../../../images/cover-default.png');
 const profile = require('../../../images/profile-default.png');
@@ -20,7 +19,7 @@ const changePassword = require('../../../images/change-password-img.png');
 let entityUtils = new EntityUtils();
 import Icon from 'react-native-vector-icons/FontAwesome';
 
-import Video from 'react-native-video'
+
 import {CloseDrawer, RNVideo} from "../../ui/index";
 
 import strings from "../../i18n/i18n"
