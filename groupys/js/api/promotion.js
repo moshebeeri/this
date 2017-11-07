@@ -51,7 +51,7 @@ class PromotionApi {
 
     }
 
-    updatePromotion(promotion, callbackFunction, id) {
+    updatePromotion(promotion, id) {
         return new Promise(async (resolve, reject) => {
             try {
                 let token = await store.get('token');
@@ -71,7 +71,6 @@ class PromotionApi {
                 }
                 timer.logTime(from, new Date(), 'promotions', 'update');
                 let responseData = await response.json();
-                callbackFunction(responseData);
                 resolve(responseData);
             }
             catch (error) {

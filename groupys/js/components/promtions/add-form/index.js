@@ -163,7 +163,10 @@ class AddPromotion extends Component {
     }
 
     async saveFormData() {
-        const {actions, navigation} = this.props;
+        const {actions, navigation,saving} = this.props;
+        if(saving){
+            return;
+        }
         if (this.validateForm()) {
             let promotion = this.createPromotionFromState();
             let businessId = this.getBusinessId();

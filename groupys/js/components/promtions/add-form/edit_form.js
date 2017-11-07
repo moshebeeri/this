@@ -1,5 +1,5 @@
 import React, {Component} from "react";
-import {Image, ScrollView, View} from "react-native";
+import {ScrollView, View} from "react-native";
 import {connect} from "react-redux";
 import {actions} from "react-native-navigation-redux-helpers";
 import {Button, Container, Content, Footer, Icon, Input, Item, Picker, Text} from "native-base";
@@ -8,7 +8,7 @@ import * as promotionsAction from "../../../actions/promotions";
 import PromotionApi from "../../../api/promotion";
 import * as businessAction from "../../../actions/business";
 import styles from "./styles";
-import {DatePicker, FormHeader, SimplePicker, TextInput} from '../../../ui/index';
+import {DatePicker, FormHeader, Spinner, TextInput} from '../../../ui/index';
 
 var createEntity = require("../../../utils/createEntity");
 let promotionApi = new PromotionApi();
@@ -42,45 +42,31 @@ class EditPromotion extends Component {
         }
     }
 
+    componentWillMount() {
+        this.props.actions.resetForm();
+    }
+
     static navigationOptions = {
         header: null
     };
-
-    focusNextField(nextField) {
-        this.refs[nextField]._root.focus()
-    }
 
     replaceRoute() {
         this.props.navigation.goBack();
     }
 
     async updateFormData() {
-        let promotion = this.state.item;
-        this.setState({
-            errorMessage: ''
-        })
-        if (this.validate(promotion)) {
-            try {
-                promotion = this.updateQuantity(promotion)
-                promotion.name = this.state.name;
-                promotion.end = this.state.end;
-                promotion.description = this.state.info;
-                let response = await promotionApi.updatePromotion(promotion, this.addToList.bind(this), this.props.navigation.state.params.item._id);
-                this.replaceRoute();
-            } catch (error) {
-                console.log(error);
-                this.replaceRoute();
-            }
-        } else {
-            this.setState({
-                errorMessage: 'Failed validation, quantity must be greater then old, end date must be greater then old '
-            })
+        const {actions, navigation, saving} = this.props;
+        if (saving) {
+            return;
         }
-    }
-
-    addToList(responseData) {
-        let businessId = this.getBusinessId();
-        this.props.bussinesActions.setBusinessPromotions(businessId);
+        let promotion = this.state.item;
+        if (this.validateForm()) {
+            promotion = this.updateQuantity(promotion)
+            promotion.name = this.state.name;
+            promotion.end = this.state.end;
+            promotion.description = this.state.info;
+            actions.updatePromotion(promotion, this.getBusinessId(), navigation, navigation.state.params.item._id);
+        }
     }
 
     validateDate(promotion) {
@@ -100,15 +86,6 @@ class EditPromotion extends Component {
         return false;
     }
 
-    validate(promotion) {
-        if (!this.validateDate(promotion)) {
-            return false;
-        }
-        if (!this.validateQuantity(promotion)) {
-            return false;
-        }
-        return true;
-    }
 
     setQuantity(quantity) {
         this.setState({
@@ -181,8 +158,20 @@ class EditPromotion extends Component {
         return parseInt(quantity);
     }
 
+    focusNextField(nextField) {
+        if (this.refs[nextField] && this.refs[nextField].wrappedInstance) {
+            this.refs[nextField].wrappedInstance.focus()
+        }
+        if (this.refs[nextField] && this.refs[nextField].focus) {
+            this.refs[nextField].focus()
+        }
+    }
 
     render() {
+        const {saving} = this.props;
+        let promotion = this.state.item;
+        let dateValidation = !this.validateDate(promotion);
+        let quantatyValidation = !this.validateQuantity(promotion);
         return (
 
             <View style={styles.product_container}>
@@ -195,8 +184,10 @@ class EditPromotion extends Component {
 
 
                     <View style={styles.inputTextLayour}>
-                        <Text style={{color: '#FA8559', marginLeft: 8, marginRight: 8}}>You can increase the quantity of promotions Or extend the due
+                        <Text style={{color: '#FA8559', marginLeft: 8, marginRight: 8}}>You can increase the quantity of
+                            promotions Or extend the due
                             date</Text>
+
                     </View>
                     <View style={styles.inputTextLayour}>
                         <Text style={{color: '#FA8559', marginLeft: 8, marginRight: 8}}>General</Text>
@@ -205,6 +196,7 @@ class EditPromotion extends Component {
                         <View style={{flex: 1, marginRight: 10}}>
                             <TextInput field='Increase Quantity' value={this.state.quantity}
                                        keyboardType='numeric'
+                                       invalid={quantatyValidation}
                                        returnKeyType='next' ref="2" refNext="2"
                                        onSubmitEditing={this.focusNextField.bind(this, "4")}
                                        onChangeText={(quantity) => this.setState({quantity})} isMandatory={true}/>
@@ -212,6 +204,7 @@ class EditPromotion extends Component {
                         <View style={{flex: 3, marginLeft: 5}}>
                             <DatePicker field='Exparation Date' value={this.state.end}
                                         returnKeyType='next' ref="3" refNext="3"
+                                        invalid={dateValidation}
                                         onChangeDate={(date) => {
                                             this.setState({end: date})
                                         }} isMandatory={true}/>
@@ -227,21 +220,36 @@ class EditPromotion extends Component {
                     <View style={styles.inputTextLayour}>
                         <TextInput field='Description' value={this.state.info}
                                    returnKeyType='next' ref="5" refNext="5"
+
                                    onSubmitEditing={this.focusNextField.bind(this, "5")}
                                    onChangeText={(info) => this.setState({info})} isMandatory={true}/>
                     </View>
 
-
                 </ScrollView>
+                {saving && <Spinner height={500}/>}
             </View>
         );
+    }
 
+    validateForm() {
+        let result = true;
+        Object.keys(this.refs).forEach(key => {
+            let item = this.refs[key];
+            if (this.refs[key].wrappedInstance) {
+                item = this.refs[key].wrappedInstance;
+            }
+            if (!item.isValid()) {
+                result = false;
+            }
+        });
+        return result
     }
 }
 
 export default connect(
     state => ({
         promotions: state.promotions,
+        saving: state.promotions.savingForm,
         products: state.products,
     }),
     (dispatch) => ({
