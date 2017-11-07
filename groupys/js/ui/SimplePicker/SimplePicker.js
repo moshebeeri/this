@@ -39,7 +39,11 @@ export default class SimplePicker extends Component {
     }
 
     render() {
-        const {list, itemTitle, defaultHeader, isMandatory} = this.props;
+        const {list, itemTitle, defaultHeader, isMandatory,defaultValue} = this.props;
+        let value = this.state.type;
+        if(!value){
+            value = defaultValue;
+        }
         let pickerStyle = styles.picker;
         if (this.state.invalid) {
             pickerStyle = styles.pickerInvalid;
@@ -55,7 +59,7 @@ export default class SimplePicker extends Component {
                 iosHeader={itemTitle}
                 mode="dropdown"
                 style={pickerStyle}
-                selectedValue={this.state.type}
+                selectedValue={value}
                 onValueChange={this.selectPromotionType.bind(this)}
             >
                 <Item

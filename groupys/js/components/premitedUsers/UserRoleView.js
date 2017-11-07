@@ -45,14 +45,15 @@ export default class UserRoleView extends Component {
                 <Text >{user.name} - <Text>{roleView}</Text></Text>
             </View>
             <View style={{flex:0.5,justifyContent:'center'}}>
-                <EditButton onPress={this.editPremission.bind(this,user)}/>
+                <EditButton onPress={this.editPremission.bind(this,user,rolesTypes[role])}/>
             </View>
 
         </View>
     }
 
-    editPremission(user){
-
+    editPremission(user,role){
+        const{navigation,business} = this.props;
+        navigation.navigate("addPremitedUsers", {role:role,user:user,business: business});
     }
 
     render() {

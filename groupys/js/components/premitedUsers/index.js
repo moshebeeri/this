@@ -24,9 +24,12 @@ class UserPermittedRoles extends Component {
     }
 
     renderItem(item) {
+        const {navigation} = this.props;
         return <UserRoleView
             item={item.item}
             index={item.index}
+            navigation={navigation}
+            business = {navigation.state.params.business}
         />
     }
 
