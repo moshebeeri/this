@@ -131,9 +131,7 @@ exports.upload = function (req, res) {
 
       // Handle errors.
       upload.on('error', function (err) {
-        console.log(err);
-        res.statusCode = 500;
-        res.end(err);
+        return handleError(res, err);
       });
 
       // Handle progress.
@@ -235,5 +233,5 @@ exports.destroy = function (req, res) {
 };
 
 function handleError(res, err) {
-  return res.send(500, err);
+  return res.status(500).send(err);
 }

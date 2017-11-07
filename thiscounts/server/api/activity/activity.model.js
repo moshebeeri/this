@@ -10,6 +10,7 @@ let ActivitySchema = new Schema({
   ids: [{type: Schema.ObjectId}],
   sharable: {type: Boolean, default: false},
 
+  post: {type: Schema.ObjectId, ref: 'Post', autopopulate: true },
   promotion: {type: Schema.ObjectId, ref: 'Promotion', autopopulate: true },
   instance: {type: Schema.ObjectId, ref: 'Instance', autopopulate: true },
   product: {type: Schema.ObjectId, ref: 'Product', autopopulate: true },
