@@ -10,7 +10,12 @@ export default class MySpinner extends Component {
     }
 
     render() {
-        const {height} = this.props;
+        const {height,simple} = this.props;
+        if(simple) {
+            return <View>
+                <Spinner color='#FA8559'></Spinner>
+            </View>
+        }
         let viewStyle = styles.spinnerContainer;
         if (height) {
             viewStyle = {

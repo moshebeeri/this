@@ -11,13 +11,13 @@ const initialState = {
     selectedUser: '',
     showSpinner: false,
     showMessage: false,
+    saving:false,
     message: '',
     user: '',
     fullUser: undefined,
     role: ''
 };
 import * as actions from './../reducerActions';
-import {REHYDRATE} from 'redux-persist/constants'
 
 export default function userRole(state = initialState, action) {
     switch (action.type) {
@@ -30,7 +30,8 @@ export default function userRole(state = initialState, action) {
                 showMessage: false,
                 user: '',
                 fullUser: undefined,
-                role: ''
+                role: '',
+                saving:false,
             };
         case actions.USER_ROLE_SHOW_SPINNER :
             return {
@@ -48,6 +49,16 @@ export default function userRole(state = initialState, action) {
                 ...state,
                 user: action.user,
                 fullUser: action.fullUser,
+            };
+        case actions.USER_ROLE_SAVING :
+            return {
+                ...state,
+               saving:true,
+            };
+        case actions.USER_ROLE_SAVING_DONE :
+            return {
+                ...state,
+                saving:false,
             };
         case actions.USER_SET_ROLE :
             return {
