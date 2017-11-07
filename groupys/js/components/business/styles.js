@@ -8,7 +8,8 @@ const {width, height} = Dimensions.get('window');
 module.exports = {
     listBusinessesContainer: {
         flex: 1,
-        backgroundColor:'white'
+        backgroundColor:'red',
+        height: height,
     },
     businessPiker: {
         flexDirection: 'row',

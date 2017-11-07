@@ -1,5 +1,4 @@
 import React, {Component} from 'react';
-import {TouchableOpacity,ScrollView,View} from 'react-native';
 import {connect} from 'react-redux';
 import {actions} from 'react-native-navigation-redux-helpers';
 import {
@@ -13,25 +12,25 @@ import {
     Left,
     ListItem,
     Right,
-    Text,
     Thumbnail,
     Title,
-
 } from 'native-base';
 import GenericListManager from '../generic-list-manager/index'
 import * as businessAction from "../../actions/business";
 import {getBusinessProducts} from '../../selectors/businessesSelector'
 import {bindActionCreators} from "redux";
-import Icon2 from 'react-native-vector-icons/MaterialCommunityIcons';
-import styles from './styles'
-import RowUtils from "../../utils/rowUtils";
+import Icon5 from 'react-native-vector-icons/MaterialCommunityIcons';
+import {FormHeader} from '../../ui/index';
+import ProductListView from './listView/index'
 
 class Product extends Component {
+    static navigationOptions = {
+        header: null
+    };
+
     constructor(props) {
         super(props);
     }
-
-
 
     setBusinessProducts() {
         const {actions, navigation} = this.props;
@@ -40,58 +39,30 @@ class Product extends Component {
 
     renderItem(item) {
         const {navigation} = this.props;
-        let row = item.map(item => {return this.createItemView(item)} )
-        return <View key={item[0]._id} style={{flexDirection:'row'}}>{row}</View>
-
+        return <ProductListView item={item.item} index={item.index} navigation={navigation}/>
     }
 
-
-    createItemView(item){
-        if (item.pictures && item.pictures.length > 0) {
-            return <TouchableOpacity key={item._id} style={{width:70, height:70}} onPress={this.navigateToEdit.bind(this,item)}>
-                <Thumbnail square medium source={{uri: item.pictures[0].pictures[3]}}/>
-            </TouchableOpacity>
-        }
-        return <TouchableOpacity key={item._id} style={{width:70, height:70}} onPress={this.navigateToEdit.bind(this,item)}>
-            <Thumbnail square medium size={150} source={require('../../../images/client_1.png')}/>
-        </TouchableOpacity>
-    }
     navigateToAdd() {
         const {navigation} = this.props;
         navigation.navigate("AddProduct", {business: navigation.state.params.business});
     }
 
-    navigateToEdit(item) {
-        const {navigation, business} = this.props;
-        navigation.navigate("AddProduct", {item: item});
-    }
-
-
-
     render() {
         const {products, navigation, actions, update} = this.props;
         const businessId = navigation.state.params.business._id;
-        let rows = undefined;
-        if(products[businessId]){
-            rows =  RowUtils.splitToArrayRows(products[businessId],5)
-            rows = rows.map(row => {return this.renderItem(row)})
-        }
-
         return (
-            <View style={{flex: -1}}>
-                <View style={styles.addProductContainer}>
-                    <TouchableOpacity style={styles.addProductButton}
-                                      onPress={this.navigateToAdd.bind(this)}>
-                        <Icon2 active color={"#FA8559"} size={18} name="plus"/>
-                        <Text style={styles.addProductTextStyle}>Add product</Text>
-                    </TouchableOpacity>
-                </View>
+            <Container style={{flex: -1}}>
+                <FormHeader showBack submitForm={this.navigateToAdd.bind(this)} navigation={this.props.navigation}
+                            title={"Add Product"} bgc="white"
+                            submitIcon={<Icon5 active color={"#FA8559"} size={25} name="plus"/>}
+                            titleColor="#FA8559" backIconColor="#FA8559"/>
 
-                <ScrollView>
-                    {rows}
-                </ScrollView>
+                <GenericListManager rows={products[businessId]} navigation={navigation} actions={actions}
+                                    update={update}
+                                    onEndReached={this.setBusinessProducts.bind(this)}
+                                    ItemDetail={this.renderItem.bind(this)}/>
 
-            </View>
+            </Container>
         );
     }
 }

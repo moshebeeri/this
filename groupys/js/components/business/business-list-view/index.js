@@ -24,8 +24,6 @@ import Icon2 from 'react-native-vector-icons/MaterialIcons';
 import styles from './styles'
 import Promotions from '../../promtions/index'
 import Products from '../../product/index'
-import PremitedUsers from '../../premitedUsers/index'
-
 
 const covefr = require('../../../../images/cover2.png');
 const promotions = require('../../../../images/promotion.png');
@@ -46,7 +44,6 @@ export default class BusinessListView extends Component {
         navigation.navigate("addBusiness", {item: item.business});
     }
 
-
     showUsersRoles() {
         const {item, navigation} = this.props;
         navigation.navigate("userPermittedRoles", {business: item.business});
@@ -62,7 +59,12 @@ export default class BusinessListView extends Component {
         navigation.navigate("Promotions", {business: item.business});
     }
 
-    onChangeTab(tab) {
+    createBusinessLogo(selectedBusiness) {
+        if (selectedBusiness && selectedBusiness.business.logo) {
+            return <Thumbnail medium square source={{uri: selectedBusiness.business.logo}}/>
+        } else {
+            return <Thumbnail source={require('../../../../images/client_1.png')}/>
+        }
     }
 
     createView() {
@@ -71,71 +73,78 @@ export default class BusinessListView extends Component {
         const editButton = this.createEditTag(item);
         const promotionButton = this.createPromotionsTag(item);
         const premissionsButton = this.createPremissionsTag(item);
-        return ( <View key={index} style={{marginTop: 1, width: width, height: height, backgroundColor: '#eaeaea'}}>
-                <View style={{
-                    flex: -1,
-                    backgroundColor: 'white',
-                    flexDirection: 'row',
-                    justifyContent: 'space-between',
-                    alignItems: 'center',
-                }}>
-                    <View style={{flexDirection: 'row', alignItems: 'center'}}>
-                        {banner}
-
-
+        return ( <View>
+                <View style={styles.businessPiker}>
+                    <View style={styles.businessTopLogo}>
+                        {this.createBusinessLogo(item)}
+                    </View>
+                    <View style={styles.businessPikkerComponent}>
+                        <Text>{item.business.name}</Text>
                     </View>
                     <View style={{flex: -1, flexDirection: 'row', alignItems: 'center',}}>
                         {editButton}
                     </View>
-
                 </View>
-
-                <View style={{borderTopWidth: 2, borderColor: '#eaeaea', backgroundColor: 'white'}}
-                      key={this.props.index}>
-
-
+                <View key={index} style={{marginTop: 1, backgroundColor: '#eaeaea'}}>
                     <View style={{
-                        height: vh * 6, flexDirection: 'row', alignItems: 'center',
+                        flex: -1,
+                        backgroundColor: 'white',
+                        flexDirection: 'row',
                         justifyContent: 'space-between',
+                        alignItems: 'center',
                     }}>
-                        {premissionsButton}
+                        <View style={{flexDirection: 'row', alignItems: 'center'}}>
+                            {banner}
 
 
-                        <TouchableOpacity onPress={() => this.showProducts()}
-                                          style={{margin: 3, flexDirection: 'row', alignItems: 'center',}} regular>
-                            <Image style={{tintColor: '#ff6400', marginLeft: 10, width: vh * 3, height: vh * 4}}
-                                   source={products}/>
-
-                            <Text style={{
-                                marginLeft: 5,
-                                color: 'black',
-                                fontStyle: 'normal',
-                                fontSize: 13
-                            }}>Products </Text>
-
-                        </TouchableOpacity>
-
-                        {promotionButton}
+                        </View>
 
 
                     </View>
+
+                    <View style={{borderTopWidth: 2, borderColor: '#eaeaea', backgroundColor: 'white'}}
+                          key={this.props.index}>
+
+
+                        <View style={{
+                            height: vh * 6, flexDirection: 'row', alignItems: 'center',
+                            justifyContent: 'space-between',
+                        }}>
+                            {premissionsButton}
+
+
+                            <TouchableOpacity onPress={() => this.showProducts()}
+                                              style={{margin: 3, flexDirection: 'row', alignItems: 'center',}} regular>
+                                <Image style={{tintColor: '#ff6400', marginLeft: 10, width: vh * 3, height: vh * 4}}
+                                       source={products}/>
+
+                                <Text style={{
+                                    marginLeft: 5,
+                                    color: '#ff6400',
+                                    fontStyle: 'normal',
+                                    fontSize: 13
+                                }}>Products</Text>
+
+                            </TouchableOpacity>
+
+                            {promotionButton}
+
+
+                        </View>
+                    </View>
+
+
                 </View>
-
-
             </View>
         );
     }
 
-
-
     createEditTag(item) {
         if (item.role == 'OWNS') {
-            return <Button small style={{backgroundColor: 'white', height: 50, width: 60, marginLeft: 10}}
-                           onPress={this.showBusiness.bind(this, this.props, item)}>
+            return   <TouchableOpacity style={styles.editButtonConntainer}
+                                       onPress={this.showBusiness.bind(this, this.props, item)}>
                 <Icon2 size={20} style={styles.productIcon} name="edit"/>
-
-
-            </Button>
+            </TouchableOpacity>
         }
         return undefined;
     }
@@ -144,10 +153,7 @@ export default class BusinessListView extends Component {
         if (item.business.pictures && item.business.pictures.length > 0) {
             return <View style={{}}><Image style={styles.bannerImageContainer} resizeMode="cover"
                                            source={{uri: item.business.pictures[0].pictures[0]}}>
-                <TouchableOpacity style={styles.editButtonConntainer}
-                                  onPress={this.showBusiness.bind(this, this.props, item)}>
-                    <Icon2 size={20} style={styles.productIcon} name="edit"/>
-                </TouchableOpacity>
+
             </Image>
 
             </View>
@@ -166,7 +172,7 @@ export default class BusinessListView extends Component {
                 <Image style={{tintColor: '#ff6400', marginLeft: 10, width: vh * 4, height: vh * 4}}
                        source={premissions}/>
 
-                <Text style={{marginLeft: 5, color: 'black', fontStyle: 'normal', fontSize: 13}}>Permissions </Text>
+                <Text style={{marginLeft: 5, color: '#ff6400', fontStyle: 'normal', fontSize: 13}}>Permissions </Text>
 
             </TouchableOpacity>
         }
@@ -181,12 +187,13 @@ export default class BusinessListView extends Component {
                 <Image style={{tintColor: '#ff6400', marginLeft: 10, width: vh * 4, height: vh * 4}}
                        source={promotions}/>
 
-                <Text style={{marginLeft: 5, color: 'black', fontStyle: 'normal', fontSize: 13}}>Promotions </Text>
+                <Text style={{marginLeft: 5, color: '#ff6400', fontStyle: 'normal', fontSize: 13}}>Promotions </Text>
 
             </TouchableOpacity>
         }
         return undefined;
     }
+
     render() {
         return this.createView();
     }
