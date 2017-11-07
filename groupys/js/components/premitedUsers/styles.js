@@ -2,22 +2,22 @@ const React = require('react-native');
 const {StyleSheet, Dimensions, Platform} = React;
 const {width, height} = Dimensions.get('window')
 module.exports = {
-    addProductContainer:{
-        height:40,
-        marginTop:3,
+    addProductContainer: {
+        height: 40,
+        marginTop: 3,
         flexDirection: 'row',
         justifyContent: 'flex-end',
     },
-    addProductButton:{
-        marginTop:10,
-        width:140,
+    addProductButton: {
+        marginTop: 10,
+        width: 140,
         flexDirection: 'row',
     },
-    addProductTextStyle:{
+    addProductTextStyle: {
         color: '#ff6400',
-        marginRight:5,
-        marginLeft:10,
-        fontSize:14
+        marginRight: 5,
+        marginLeft: 10,
+        fontSize: 14
     },
     shadow: {
         flex: 1,
@@ -64,7 +64,10 @@ module.exports = {
     },
     list_user_view: {
         backgroundColor: 'white', flexDirection: 'row',
-        width: width - 10, margin: 5,
+        flex: 1,
+        borderBottomWidth: 0.3,
+        borderColor: '#e6e6e6',
+        padding: 2,
         height: 60,
     },
 };
