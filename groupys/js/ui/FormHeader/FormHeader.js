@@ -29,11 +29,13 @@ export default class FormHeader extends Component {
         if(titleColor){
             return{
                 color: titleColor,
-                flex: 1,
+
+
                 fontSize: 16,
                 backgroundColor: 'transparent'
             }
         }
+
 
         return styles.formHeadrTitleStyle;
     }
@@ -65,7 +67,11 @@ export default class FormHeader extends Component {
                 <View style={styles.formHeaderBackButoon}>
                     {back}
                 </View>
+                <View style={{  flex: 5, justifyContent:'center',
+                    alignItems:'center',}}>
                 <Text transparent style={titleStyle}>{title}</Text>
+                </View>
+
                 <View style={styles.formHeaderSubmitButoon}>
                     <Button transparent style={{justifyContent: 'center',alignItems: 'center'}} onPress={() => this.submitForm()}>
                         {icon}

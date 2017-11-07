@@ -1,21 +1,22 @@
 import React, {Component} from 'react';
-import {Image, Platform,TouchableOpacity} from 'react-native';
 import {connect} from 'react-redux';
 import {actions} from 'react-native-navigation-redux-helpers';
-import {Container, Content, Text, Fab, InputGroup, Input, Button, View, Header} from 'native-base';
-import Icon from 'react-native-vector-icons/EvilIcons';
-import * as usersAction from "../../actions/user";
+import {Button, Container, Content, Fab, Header, Input, InputGroup, View} from 'native-base';
 import UserRoleView from './UserRoleView'
 import * as businessAction from "../../actions/business";
 import {bindActionCreators} from "redux";
 import {getBusinessUsers} from '../../selectors/businessesSelector'
 import GenericListManager from '../generic-list-manager/index'
-import Icon2 from 'react-native-vector-icons/MaterialCommunityIcons';
-import styles from './styles'
+import Icon5 from 'react-native-vector-icons/MaterialCommunityIcons';
+import {FormHeader} from '../../ui/index';
 class UserPermittedRoles extends Component {
     constructor(props) {
         super(props);
     }
+
+    static navigationOptions = {
+        header: null
+    };
 
     componentWillMount() {
         const {navigation} = this.props;
@@ -40,13 +41,11 @@ class UserPermittedRoles extends Component {
        let business = navigation.state.params.business
         return (
             <Container>
-                <View style={styles.addProductContainer}>
-                    <TouchableOpacity style={styles.addProductButton}
-                                      onPress={this.navigateToAdd.bind(this)}>
-                        <Icon2 active color={"#FA8559"} size={18} name="plus"/>
-                        <Text style={styles.addProductTextStyle}>Add Permission</Text>
-                    </TouchableOpacity>
-                </View>
+                <FormHeader showBack submitForm={this.navigateToAdd.bind(this)} navigation={this.props.navigation}
+                            title={"Add User Permission"} bgc="white"
+                            submitIcon={<Icon5 active color={"#FA8559"} size={25} name="plus"/>}
+                            titleColor="#FA8559" backIconColor="#FA8559"/>
+
                 <GenericListManager rows={users[business._id]} navigation={navigation} actions={actions} update={update}
                                     onEndReached={actions.setBusinessUsers} ItemDetail={this.renderItem.bind(this)}/>
 
