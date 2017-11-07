@@ -4,6 +4,7 @@ import {Icon, Thumbnail,} from 'native-base';
 import {View,Text,TouchableOpacity} from 'react-native';
 import styles from './styles'
 import Icon2 from 'react-native-vector-icons/MaterialIcons';
+import {EditButton} from '../../../ui/index';
 
 const ILS = '₪';
 export default class ProductListView extends Component {
@@ -27,10 +28,7 @@ export default class ProductListView extends Component {
     }
 
     createEditTag(item) {
-        return <TouchableOpacity style={styles.editButtonConntainer}
-                                 onPress={this.navigateToEdit.bind(this, item)}>
-            <Icon2 size={20} style={styles.productIcon} name="edit"/>
-        </TouchableOpacity>
+        return <EditButton onPress={this.navigateToEdit.bind(this, item)}/>
     }
 
     render() {

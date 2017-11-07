@@ -19,7 +19,7 @@ import {
     Text,
     Thumbnail
 } from 'native-base';
-
+import {EditButton} from '../../ui/index';
 const noPic = require('../../../images/client_1.png');
 const rolesTypes =
     {
@@ -44,8 +44,15 @@ export default class UserRoleView extends Component {
             <View style={{justifyContent:'center',alignItems:'flex-start',flex:3}}>
                 <Text >{user.name} - <Text>{roleView}</Text></Text>
             </View>
+            <View style={{flex:0.5,justifyContent:'center'}}>
+                <EditButton onPress={this.editPremission.bind(this,user)}/>
+            </View>
 
         </View>
+    }
+
+    editPremission(user){
+
     }
 
     render() {

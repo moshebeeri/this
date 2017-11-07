@@ -25,7 +25,7 @@ import styles from './styles'
 import Promotions from '../../promtions/index'
 import Products from '../../product/index'
 
-const covefr = require('../../../../images/cover2.png');
+
 const promotions = require('../../../../images/promotion.png');
 const products = require('../../../../images/barcode.png');
 const {width, height} = Dimensions.get('window')
@@ -34,6 +34,7 @@ const vh = height / 100
 const vmin = Math.min(vw, vh);
 const vmax = Math.max(vw, vh);
 const premissions = require('../../../../images/permissions.png');
+import {EditButton} from '../../../ui/index';
 export default class BusinessListView extends Component {
     constructor(props) {
         super(props);
@@ -81,7 +82,7 @@ export default class BusinessListView extends Component {
                     <View style={styles.businessPikkerComponent}>
                         <Text>{item.business.name}</Text>
                     </View>
-                    <View style={{flex: -1, flexDirection: 'row', alignItems: 'center',}}>
+                    <View style={{flex: 0.6, flexDirection: 'row', alignItems: 'center',}}>
                         {editButton}
                     </View>
                 </View>
@@ -141,10 +142,8 @@ export default class BusinessListView extends Component {
 
     createEditTag(item) {
         if (item.role == 'OWNS') {
-            return   <TouchableOpacity style={styles.editButtonConntainer}
-                                       onPress={this.showBusiness.bind(this, this.props, item)}>
-                <Icon2 size={20} style={styles.productIcon} name="edit"/>
-            </TouchableOpacity>
+            return <EditButton  onPress={this.showBusiness.bind(this, this.props, item)}/>
+
         }
         return undefined;
     }
