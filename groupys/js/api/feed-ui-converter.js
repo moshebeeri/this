@@ -118,7 +118,7 @@ class FeedConverter {
         return response;
     }
 
-    createSavedPomotion(feed, id,extraData) {
+    createSavedPomotion(feed, id, extraData) {
         let instance = feed.instance;
         let responseFeed = {};
         try {
@@ -162,12 +162,12 @@ class FeedConverter {
                     responseFeed.promotionColor = '#66ff1a';
                     break;
                 case "PUNCH_CARD":
-                    if(extraData || extraData ===0){
+                    if (extraData || extraData === 0) {
                         responseFeed.itemTitle = 'Number of punches ' + extraData + ' / ' + instance.promotion.punch_card.values[0].number_of_punches;
                         responseFeed.promotion = 'PUNCH CARD';
                         responseFeed.promotionColor = '#d279a6';
-                    }else {
-                        responseFeed.itemTitle = 'Number of punches '  + instance.promotion.punch_card.values[0].number_of_punches;
+                    } else {
+                        responseFeed.itemTitle = 'Number of punches ' + instance.promotion.punch_card.values[0].number_of_punches;
                         responseFeed.promotion = 'PUNCH CARD';
                         responseFeed.promotionColor = '#d279a6';
                     }
@@ -268,16 +268,18 @@ class FeedConverter {
                     responseFeed.promotionColor = '#ff66b3';
                     break;
                 case "X+Y":
-                    responseFeed.itemTitle = 'Buy ' + promotion.x_plus_y.values[0].buy + " " + promotion.condition.product.name + " Get " + promotion.x_plus_y.values[0].eligible + " " + promotion.x_plus_y.values[0].product.name;
+                    if (promotion.x_plus_y.values[0].product) {
+                        responseFeed.itemTitle = 'Buy ' + promotion.x_plus_y.values[0].buy + " " + promotion.condition.product.name + " Get " + promotion.x_plus_y.values[0].eligible + " " + promotion.x_plus_y.values[0].product.name;
+                    } else {
+                        responseFeed.itemTitle = 'Buy ' + promotion.x_plus_y.values[0].buy + " " + promotion.condition.product.name + " Get " + promotion.x_plus_y.values[0].eligible + " " + promotion.condition.product.name;
+                    }
                     responseFeed.promotion = 'X+Y';
                     responseFeed.promotionColor = '#66ff1a';
                     break;
                 case "PUNCH_CARD":
-
-                    responseFeed.itemTitle = 'Number of punches '  + promotion.punch_card.values[0].number_of_punches;
+                    responseFeed.itemTitle = 'Number of punches ' + promotion.punch_card.values[0].number_of_punches;
                     responseFeed.promotion = 'PUNCH CARD';
                     responseFeed.promotionColor = '#d279a6';
-
                     break;
                 default:
                     responseFeed.itemTitle = instance.type + " NOT SUPPORTED";
@@ -342,31 +344,34 @@ class FeedConverter {
                 response.promotionColor = '#ff66b3';
                 response.promotionTitle = 'Buy X For Y';
                 response.promotionValue = promotion.x_for_y.values[0].pay;
-                    response.promotionTerm = 'Buy ' + promotion.x_for_y.values[0].eligible + " " + promotion.condition.product.name + " Pay only " + promotion.x_for_y.values[0].pay;
-                response.quantity =  promotion.x_for_y.quantity;
+                response.promotionTerm = 'Buy ' + promotion.x_for_y.values[0].eligible + " " + promotion.condition.product.name + " Pay only " + promotion.x_for_y.values[0].pay;
+                response.quantity = promotion.x_for_y.quantity;
                 break;
             case "X+N%OFF":
                 response.itemTitle = 'Buy ' + promotion.condition.product.name + " Get " + promotion.x_plus_n_percent_off.values[0].product.name + " with " + promotion.x_plus_n_percent_off.values[0].eligible + " %Off";
                 response.promotion = 'X+N%OFFf';
                 response.promotionColor = '#ff66b3';
-                response.quantity = 'Total ' + promotion.x_plus_n_percent_off.quantity;
+                response.quantity = promotion.x_plus_n_percent_off.quantity;
+                response.promotionTitle = 'Buy X get Y with Discount';
+                response.promotionValue = promotion.x_plus_n_percent_off.values[0].eligible;
+                response.promotionTerm = 'Buy ' + promotion.condition.product.name + " Get " + promotion.x_plus_n_percent_off.values[0].product.name + " with " + promotion.x_plus_n_percent_off.values[0].eligible + " %Off";
+
                 break;
             case "X+Y":
                 response.itemTitle = 'Buy ' + promotion.x_plus_y.values[0].buy + " " + promotion.condition.product.name + " Get " + promotion.x_plus_y.values[0].eligible + " " + promotion.x_plus_y.values[0].product.name;
                 response.promotion = 'X+Y';
                 response.promotionTitle = 'Buy X get Y';
                 response.promotionTerm = 'Buy ' + promotion.x_plus_y.values[0].buy + " " + promotion.condition.product.name + " Get " + promotion.x_plus_y.values[0].eligible + " " + promotion.x_plus_y.values[0].product.name + ' free';
-                response.promotionValue = promotion.x_plus_y.values[0].buy +  ' + ' + promotion.x_plus_y.values[0].eligible;
+                response.promotionValue = promotion.x_plus_y.values[0].buy + ' + ' + promotion.x_plus_y.values[0].eligible;
                 response.promotionColor = '#66ff1a';
                 response.quantity = promotion.x_plus_y.quantity;
-
                 break;
             case "PUNCH_CARD":
                 let punches = promotion.punch_card.values[0].number_of_punches
                 response.itemTitle = '';
-                response.promotionTitle="Punch Card "+ punches + " Slots";
+                response.promotionTitle = "Punch Card " + punches + " Slots";
                 response.punches = punches;
-                response.quantity =  promotion.punch_card.values[0].quantity;
+                response.quantity = promotion.punch_card.values[0].quantity;
                 response.promotion = 'PUNCH CARD';
                 response.promotionColor = '#d279a6';
                 break;

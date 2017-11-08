@@ -20,9 +20,8 @@ import stylesPortrate from './styles'
 import stylesLandscape from './styles_landscape'
 import FeedUiConverter from '../../../api/feed-ui-converter'
 import StyleUtils from '../../../utils/styleUtils'
-import Icon3 from 'react-native-vector-icons/MaterialIcons';
 import FormUtils from "../../../utils/fromUtils";
-import {SubmitButton,SocialState,PunchView} from '../../../ui/index';
+import {PunchView, SocialState, SubmitButton} from '../../../ui/index';
 
 const ILS = '₪';
 let feedUiConverter = new FeedUiConverter();
@@ -39,7 +38,7 @@ export default class PromotionListView extends Component {
         return this.createPromotion(this.props.item);
     }
 
-    createImageTage(item,styles) {
+    createImageTage(item, styles) {
         if (item.banner) {
             return <View style={styles.promotionImageContainer}>
                 <Image resizeMode="cover" style={styles.promotion_image} source={{uri: item.banner.uri}}></Image>
@@ -49,12 +48,12 @@ export default class PromotionListView extends Component {
     }
 
     createPromotion(promotionItem) {
-        const{location} = this.props;
+        const {location} = this.props;
         const item = feedUiConverter.createPromotionAttributes(promotionItem, promotionItem.type)
         const styles = this.createStyle();
         const result =
-            <View style={styles.promotion_container}>
-                {this.createImageTage(item,styles)}
+            <View key={promotionItem._id}style={styles.promotion_container}>
+                {this.createImageTage(item, styles)}
 
                 <View style={styles.promotion_card}>
 
@@ -65,35 +64,40 @@ export default class PromotionListView extends Component {
                     <View style={styles.promotionDetailsContainer}>
                         <View style={styles.promotionLoctionContainer}>
                             <View><Text style={styles.detailsTitleText}>Location</Text></View>
-                            <View><Text style={styles.detailsText}>{FormUtils.getDistanceFromLatLonInKm(location.lat,location.long,promotionItem.location.lat,promotionItem.location.lng)} km away</Text></View>
+                            <View><Text
+                                style={styles.detailsText}>{FormUtils.getDistanceFromLatLonInKm(location.lat, location.long, promotionItem.location.lat, promotionItem.location.lng)}
+                                km away</Text></View>
                         </View>
                         <View style={styles.expireDateContainer}>
                             <View><Text style={styles.detailsTitleText}>Expire</Text></View>
                             <View><Text style={styles.detailsText}>{item.endDate}</Text></View>
                         </View>
                         <View style={styles.editButtonContainer}>
-                            <SubmitButton title="EDIT" color="#e65100" onPress={this.showProduct.bind(this, this.props, this.props.item)} />
+                            <SubmitButton title="EDIT" color="#e65100"
+                                          onPress={this.showProduct.bind(this, this.props, this.props.item)}/>
                         </View>
                     </View>
-                   <SocialState disabled shares={promotionItem.social_state.shares} likes={promotionItem.social_state.likes} comments={0}/>
+                    <SocialState disabled shares={promotionItem.social_state.shares}
+                                 likes={promotionItem.social_state.likes} comments={0}/>
                     <View style={styles.promotionAnalyticsContainer}>
                         <View style={styles.promotionAnalyticsAttribute}>
-                            <Text style={styles.promotion_addressText}>Total  <Text note>{item.quantity} </Text></Text>
+                            <Text style={styles.promotion_addressText}>Total <Text note>{item.quantity} </Text></Text>
 
                         </View>
                         <View style={styles.promotionAnalyticsAttribute}>
 
-                        <Text style={styles.promotion_addressText} >Saved  <Text  note>{promotionItem.social_state.saves}</Text></Text>
+                            <Text style={styles.promotion_addressText}>Saved <Text
+                                note>{promotionItem.social_state.saves}</Text></Text>
 
                         </View>
                         <View style={styles.promotionAnalyticsAttribute}>
 
-                             <Text style={styles.promotion_addressText}>Used  <Text  note>{promotionItem.social_state.realizes}</Text></Text>
+                            <Text style={styles.promotion_addressText}>Used <Text
+                                note>{promotionItem.social_state.realizes}</Text></Text>
 
                         </View>
 
                     </View>
-
 
 
                 </View>
@@ -147,8 +151,17 @@ export default class PromotionListView extends Component {
                 </View>;
             case "X+N%OFF":
                 return <View style={styles.promotionHeader}>
-
-
+                    <View style={styles.promotionValue}>
+                        <Text style={styles.titleValue}>{promotion.promotionValue}%</Text>
+                    </View>
+                    <View style={styles.promotiontDescription}>
+                        <View>
+                            <Text style={styles.titleText}>{promotion.promotionTitle}</Text>
+                        </View>
+                        <View>
+                            <Text style={styles.promotionTermlTextStyle}>{promotion.promotionTerm}</Text>
+                        </View>
+                    </View>
                 </View>;
             case "X+Y":
                 return <View style={styles.promotionHeader}>

@@ -81,8 +81,8 @@ export default class XPlusYOffComponent extends Component {
     }
 
     createProductView() {
-        if(this.props.state.buyProduct) {
-            let productName = this.props.state.buyProduct.name
+        if(this.props.state.product) {
+            let productName = this.props.state.product.name
             return <View style={styles.inputTextLayour}>
                 <Text style={{color: '#FA8559', marginLeft: 8, marginRight: 8}}>Promotion on: {productName}</Text>
             </View>
@@ -101,36 +101,6 @@ export default class XPlusYOffComponent extends Component {
         }
         return undefined
 
-    }
-
-    createSelectProductButton() {
-        let result = undefined;
-        let productName = undefined;
-        if (this.props.state.giftProduct) {
-            productName = <Text> {this.props.state.giftProduct.name}</Text>
-        }
-        let button = <Item><Button transparent onPress={() => this.showProducts(true)}>
-            <Text>Select Product </Text>
-        </Button>
-            {productName}
-        </Item>
-        result = <View>{button}</View>
-        return result;
-    }
-
-    createSelectBuyProductButton() {
-        let result = undefined;
-        let productName = undefined;
-        if (this.props.state.buyProduct) {
-            productName = <Text> {this.props.state.buyProduct.name}</Text>
-        }
-        let button = <Item><Button transparent onPress={() => this.showBuyProducts(true)}>
-            <Text>Select Buy Product</Text>
-        </Button>
-            {productName}
-        </Item>
-        result = <View>{button}</View>
-        return result;
     }
 
     render() {
