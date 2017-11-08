@@ -20,12 +20,12 @@ export default class PunchView extends Component {
     createPunches(number){
         let row =[];
         for (i = 0; i < number; i++) {
-            row.push(this.createPunch());
+            row.push(this.createPunch(i));
         }
         return row
     }
 
-    createPunch(){
-        return <View style={styles.punch}></View>
+    createPunch(index){
+        return <View key={index}style={styles.punch}></View>
     }
 }
