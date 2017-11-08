@@ -80,7 +80,8 @@ export default class BusinessListView extends Component {
                         {this.createBusinessLogo(item)}
                     </View>
                     <View style={styles.businessPikkerComponent}>
-                        <Text>{item.business.name}</Text>
+                        <Text style={styles.businessNameText}>{item.business.name}</Text>
+                        <Text style={styles.businessCategoryText}>{item.categoryTitle}.</Text>
                     </View>
                     <View style={{flex: 0.6, flexDirection: 'row', alignItems: 'center',}}>
                         {editButton}
