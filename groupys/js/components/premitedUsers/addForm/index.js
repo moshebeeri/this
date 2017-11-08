@@ -1,48 +1,17 @@
 import React, {Component} from 'react';
-import {
-    Platform,
-    AppRegistry,
-    NavigatorIOS,
-    TextInput,
-    View,
-    Image,
-    ScrollView,
-    TouchableOpacity,
-    KeyboardAvoidingView,
-    TouchableHighlight
-} from 'react-native';
-import {
-    Container,
-    Content,
-    Item,
-    Form,
-    Picker,
-    Input,
-    Footer,
-    Button,
-    Text,
-    Icon,
-    Fab,
-    Spinner,
-    Thumbnail
-} from 'native-base';
-import store from 'react-native-simple-store';
+import {View} from 'react-native';
+import {Button, Container, Content, Fab, Footer, Form, Icon, Input, Item, Picker, Text, Thumbnail} from 'native-base';
 import Icon2 from 'react-native-vector-icons/MaterialIcons';
-
-const noPic = require('../../../../images/client_1.png');
 import EntityUtils from "../../../utils/createEntity";
-
-let entityUtils = new EntityUtils();
 import styles from './styles'
 import * as userRoleAction from "../../../actions/userRole";
 import {connect} from 'react-redux';
 import {bindActionCreators} from "redux";
+import {FormHeader, SimplePicker, Spinner, TextInput} from '../../../ui/index';
 
+const noPic = require('../../../../images/client_1.png');
+let entityUtils = new EntityUtils();
 const rolesTypes = [
-    {
-        value: '',
-        label: 'Choose Role'
-    },
     {
         value: 'Owner',
         label: 'Owner'
@@ -66,11 +35,26 @@ class AddPermittedUser extends Component {
         super(props);
         this.state = {
             userRole: '',
-            user: ''
+            user: '',
+            searchUser: true,
+            defaultRole:'',
         }
     }
 
+    static navigationOptions = ({navigation}) => ({
+        header: null
+    });
+
     componentWillMount() {
+        const {navigation} = this.props;
+        if (navigation.state && navigation.state.params && navigation.state.params.user) {
+            this.setState({
+                user: navigation.state.params.user,
+                searchUser: false,
+                defaultRole:navigation.state.params.role,
+            });
+
+        }
         this.props.actions.clearForm()
     }
 
@@ -93,11 +77,19 @@ class AddPermittedUser extends Component {
     }
 
     save() {
-        const {actions, user, role, navigation} = this.props;
+        const {actions, user, role, navigation, saving} = this.props;
+        if (saving) {
+            return;
+        }
+
         const businessId = navigation.state.params.business._id;
-        if (user) {
-            actions.saveRole(user, businessId, role)
-            navigation.goBack();
+        if (this.validateForm()) {
+            if(user){
+                actions.saveRole(user, businessId, role, navigation)
+            }else{
+                actions.saveRole(navigation.state.params.user, businessId, role, navigation)
+            }
+
         }
     }
 
@@ -111,42 +103,63 @@ class AddPermittedUser extends Component {
         actions.search(this.state.phoneNumber);
     }
 
+    validateForm() {
+        let result = true;
+        Object.keys(this.refs).forEach(key => {
+            let item = this.refs[key];
+            if (this.refs[key].wrappedInstance) {
+                item = this.refs[key].wrappedInstance;
+            }
+            if (!item.isValid()) {
+                result = false;
+            }
+        });
+        return result
+    }
+
+    createSearchUser() {
+        if (!this.state.searchUser) {
+            return <View></View>
+        }
+        return <View style={styles.inputTextLayour}>
+
+            <TextInput field='User Phone Number' value={this.state.phoneNumber}
+                       returnKeyType='next' ref="1" refNext="1"
+                       keyboardType='numeric'
+                       placeholder="in your contacts"
+                       onSubmitEditing={this.searchUser.bind(this)}
+                       onChangeText={(phoneNumber) => this.setState({phoneNumber})} isMandatory={true}/>
+            <Button style={{position: 'absolute', right: 5, top: 25}} large transparent
+                    onPress={() => this.searchUser()}>
+                <Icon2 size={40} style={styles.productIcon} name="search"/>
+
+            </Button>
+
+        </View>
+    }
+
     render() {
-        const {showSpinner, showMessage, role, fullUser, message} = this.props;
+        const {showSpinner, showMessage, role, fullUser, message, saving} = this.props;
         const roles = this.createUserRollPicker(role);
         const spinner = this.createSpinnerTag(showSpinner);
         const userMessage = this.createMessageTag(showMessage, message);
         const userView = this.createUserView(fullUser);
-        const saveButton = this.createSaveButtonTag()
+        const searchUser = this.createSearchUser();
+        let title = "Add User Role";
+        if (!this.state.searchUser) {
+            title = "Update User Role";
+        }
         return <View style={styles.premtied_usesrs_container}>
-            <Item style={{margin: 3, backgroundColor: 'white'}} regular>
-                <Input keyboardType='numeric' value={this.state.phoneNumber} blurOnSubmit={true} returnKeyType='done'
-                       ref="3" onSubmitEditing={this.searchUser.bind(this, "4")}
-                       onChangeText={(phoneNumber) => this.setState({phoneNumber})} placeholder='User Phone'/>
-                <Button style={{width: 65, marginLeft: 0, marginRight: 10}} large transparent
-                        onPress={() => this.searchUser()}>
-                    <Icon2 size={40} style={styles.productIcon} name="search"/>
+            <FormHeader showBack submitForm={this.saveFormData.bind(this)} navigation={this.props.navigation}
+                        title={title} bgc="#FA8559"/>
 
-                </Button>
-
-            </Item>
+            {searchUser}
             {spinner}
             {userMessage}
             {userView}
             {roles}
-
-            <Item style={{margin: 15}} regular>
-
-                {saveButton}
-            </Item>
+            {saving && <Spinner/>}
         </View>
-    }
-
-    createSaveButtonTag() {
-        return <Button style={{backgroundColor: '#2db6c8'}}
-                       onPress={this.saveFormData.bind(this)}>
-            <Text>Add User Role</Text>
-        </Button>;
     }
 
     createMessageTag(showMessage, message) {
@@ -157,6 +170,10 @@ class AddPermittedUser extends Component {
     }
 
     createUserView(user) {
+        const {navigation} = this.props;
+        if (navigation.state && navigation.state.params && navigation.state.params.user) {
+            user = navigation.state.params.user;
+        }
         if (user) {
             const pic = this.createUserPic(user);
             return <View style={styles.user_view}>
@@ -177,28 +194,16 @@ class AddPermittedUser extends Component {
     }
 
     createUserRollPicker(role) {
-        return <Picker
 
-            placeholder="Select User Role"
-            mode="dropdown"
-            style={styles.picker}
-            selectedValue={role}
-            onValueChange={this.setUserRoles.bind(this)}>
-
-            {
-                rolesTypes.map((s, j) => {
-                    return <Item
-                        key={j}
-                        value={s.value}
-                        label={s.label}/>
-                })}
-
-        </Picker>
+        return <SimplePicker ref="promotionType" list={rolesTypes} itemTitle="Managment Role"
+                             defaultHeader="Choose Role" isMandatory
+                             defaultValue={this.state.defaultRole}
+                             onValueSelected={this.setUserRoles.bind(this)}/>
     }
 
     createSpinnerTag(showSpinner) {
         if (showSpinner) {
-            return <View><Spinner color='red'/></View>;
+            return <Spinner simple color='red'/>;
         }
         return undefined;
     }
@@ -213,6 +218,7 @@ export default connect(
         user: state.userRole.user,
         message: state.userRole.message,
         role: state.userRole.role,
+        saving: state.userRole.saving,
     }),
     (dispatch) => ({
         actions: bindActionCreators(userRoleAction, dispatch),

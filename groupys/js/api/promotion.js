@@ -32,7 +32,11 @@ class PromotionApi {
                 let responseData = await response.json();
                 timer.logTime(from, new Date(), 'promotions', 'campaign');
                 if (promotion.image) {
-                    entityUtils.doUpload(promotion.image.uri, promotion.image.mime, token, this.doLog.bind(this), 'promotions', responseData.promotions[0]);
+                    let imagePath = promotion.image.uri;
+                    if(!imagePath){
+                        imagePath = promotion.image.path;
+                    }
+                    entityUtils.doUpload(imagePath, promotion.image.mime, token, this.doLog.bind(this), 'promotions', responseData.promotions[0]);
                 }
                 resolve(responseData);
             }
@@ -47,7 +51,7 @@ class PromotionApi {
 
     }
 
-    updatePromotion(promotion, callbackFunction, id) {
+    updatePromotion(promotion, id) {
         return new Promise(async (resolve, reject) => {
             try {
                 let token = await store.get('token');
@@ -67,7 +71,6 @@ class PromotionApi {
                 }
                 timer.logTime(from, new Date(), 'promotions', 'update');
                 let responseData = await response.json();
-                callbackFunction(responseData);
                 resolve(responseData);
             }
             catch (error) {

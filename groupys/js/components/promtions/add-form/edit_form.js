@@ -1,22 +1,14 @@
 import React, {Component} from "react";
-import {
-    Platform,
-    AppRegistry,
-    NavigatorIOS,
-    TextInput,
-    Image,
-    TouchableOpacity,
-    TouchableHighlight,
-    DeviceEventEmitter
-} from "react-native";
+import {ScrollView, View} from "react-native";
 import {connect} from "react-redux";
 import {actions} from "react-native-navigation-redux-helpers";
-import {Container, Content, Text, Input, Button, View, Item, Footer} from "native-base";
+import {Button, Container, Content, Footer, Icon, Input, Item, Picker, Text} from "native-base";
 import {bindActionCreators} from "redux";
-import * as businessAction from "../../../actions/business";
 import * as promotionsAction from "../../../actions/promotions";
 import PromotionApi from "../../../api/promotion";
-import DatePicker from "react-native-datepicker";
+import * as businessAction from "../../../actions/business";
+import styles from "./styles";
+import {DatePicker, FormHeader, Spinner, TextInput} from '../../../ui/index';
 
 var createEntity = require("../../../utils/createEntity");
 let promotionApi = new PromotionApi();
@@ -50,41 +42,31 @@ class EditPromotion extends Component {
         }
     }
 
-    focusNextField(nextField) {
-        this.refs[nextField]._root.focus()
+    componentWillMount() {
+        this.props.actions.resetForm();
     }
+
+    static navigationOptions = {
+        header: null
+    };
 
     replaceRoute() {
         this.props.navigation.goBack();
     }
 
     async updateFormData() {
-        let promotion = this.state.item;
-        this.setState({
-            errorMessage: ''
-        })
-        if (this.validate(promotion)) {
-            try {
-                promotion = this.updateQuantity(promotion)
-                promotion.name = this.state.name;
-                promotion.end = this.state.end;
-                promotion.description = this.state.info;
-                let response = await promotionApi.updatePromotion(promotion, this.addToList.bind(this), this.props.navigation.state.params.item._id);
-                this.replaceRoute();
-            } catch (error) {
-                console.log(error);
-                this.replaceRoute();
-            }
-        } else {
-            this.setState({
-                errorMessage: 'Failed validation, quantity must be greater then old, end date must be greater then old '
-            })
+        const {actions, navigation, saving} = this.props;
+        if (saving) {
+            return;
         }
-    }
-
-    addToList(responseData) {
-        let businessId = this.getBusinessId();
-        this.props.bussinesActions.setBusinessPromotions(businessId);
+        let promotion = this.state.item;
+        if (this.validateForm()) {
+            promotion = this.updateQuantity(promotion)
+            promotion.name = this.state.name;
+            promotion.end = this.state.end;
+            promotion.description = this.state.info;
+            actions.updatePromotion(promotion, this.getBusinessId(), navigation, navigation.state.params.item._id);
+        }
     }
 
     validateDate(promotion) {
@@ -104,15 +86,6 @@ class EditPromotion extends Component {
         return false;
     }
 
-    validate(promotion) {
-        if (!this.validateDate(promotion)) {
-            return false;
-        }
-        if (!this.validateQuantity(promotion)) {
-            return false;
-        }
-        return true;
-    }
 
     setQuantity(quantity) {
         this.setState({
@@ -185,87 +158,98 @@ class EditPromotion extends Component {
         return parseInt(quantity);
     }
 
-    createSubmitButton() {
-        let submitButton = <Button transparent
-                                   onPress={this.updateFormData.bind(this)}>
-            <Text>Update Promotion</Text>
-        </Button>
-        result = <Footer style={{backgroundColor: '#fff'}}>
-
-            {submitButton}
-        </Footer>
-        return result;
+    focusNextField(nextField) {
+        if (this.refs[nextField] && this.refs[nextField].wrappedInstance) {
+            this.refs[nextField].wrappedInstance.focus()
+        }
+        if (this.refs[nextField] && this.refs[nextField].focus) {
+            this.refs[nextField].focus()
+        }
     }
 
     render() {
-        let image = undefined;
-        if (this.state.path) {
-            image = <Image
-                style={{width: 50, height: 50}}
-                source={{uri: this.state.path}}
-            />
-        }
-        let errorMessage = undefined;
-        if (this.state.errorMessage) {
-            errorMessage = <Text style={{marginLeft: 5, color: 'red'}}>{this.state.errorMessage}</Text>
-        }
-        let submitButton = this.createSubmitButton();
+        const {saving} = this.props;
+        let promotion = this.state.item;
+        let dateValidation = !this.validateDate(promotion);
+        let quantatyValidation = !this.validateQuantity(promotion);
         return (
-            <Container>
 
-                <Content style={{margin: 10, backgroundColor: '#fff'}}>
+            <View style={styles.product_container}>
+                <FormHeader showBack submitForm={this.updateFormData.bind(this)} navigation={this.props.navigation}
+                            title={"Update Promotion"} bgc="#FA8559"/>
+                <ScrollView contentContainerStyle={{
+                    justifyContent: 'center',
+                    alignItems: 'center',
+                }}>
 
-                    <View style={{margin: 10, borderWidth: 3, borderRadius: 10, backgroundColor: '#fff'}}>
 
-                        <Text style={{marginLeft: 5}}>You can increase the quantity of promotions Or extend the due
+                    <View style={styles.inputTextLayour}>
+                        <Text style={{color: '#FA8559', marginLeft: 8, marginRight: 8}}>You can increase the quantity of
+                            promotions Or extend the due
                             date</Text>
 
-                        <Item style={{margin: 3}} regular>
-                            <Input blurOnSubmit={true} returnKeyType='next' ref="1"
-                                   onSubmitEditing={this.focusNextField.bind(this, "2")} value={this.state.item.name}
-                                   onChangeText={(name) => this.setState({name})}
-                                   placeholder='Name'/>
-                        </Item>
-                        <Item style={{margin: 3}} regular>
-                            <Input blurOnSubmit={true} returnKeyType='done' ref="2" value={this.state.info}
-                                   onChangeText={(info) => this.setState({info})}
-                                   placeholder='Description'/>
-                        </Item>
-                        <Item style={{margin: 3}} regular>
-                            <DatePicker
-                                style={{width: 200}}
-                                date={this.state.end}
-                                mode="date"
-                                placeholder="Promotion End Date"
-                                format="YYYY-MM-DD"
-                                minDate="2016-05-01"
-                                maxDate="2020-06-01"
-                                confirmBtnText="Confirm"
-                                cancelBtnText="Cancel"
-
-                                onDateChange={(date) => {
-                                    this.setState({end: date})
-                                }}
-                            />
-                        </Item>
-                        <Item style={{margin: 3}} regular>
-                            <Input keyboardType='numeric' value={this.state.quantity}
-                                   onChangeText={(value) => this.setQuantity(value)} placeholder='Increase Quantity'/>
-                        </Item>
-                        {errorMessage}
-
+                    </View>
+                    <View style={styles.inputTextLayour}>
+                        <Text style={{color: '#FA8559', marginLeft: 8, marginRight: 8}}>General</Text>
+                    </View>
+                    <View style={styles.inputTextMediumLayout}>
+                        <View style={{flex: 1, marginRight: 10}}>
+                            <TextInput field='Increase Quantity' value={this.state.quantity}
+                                       keyboardType='numeric'
+                                       invalid={quantatyValidation}
+                                       returnKeyType='next' ref="2" refNext="2"
+                                       onSubmitEditing={this.focusNextField.bind(this, "4")}
+                                       onChangeText={(quantity) => this.setState({quantity})} isMandatory={true}/>
+                        </View>
+                        <View style={{flex: 3, marginLeft: 5}}>
+                            <DatePicker field='Exparation Date' value={this.state.end}
+                                        returnKeyType='next' ref="3" refNext="3"
+                                        invalid={dateValidation}
+                                        onChangeDate={(date) => {
+                                            this.setState({end: date})
+                                        }} isMandatory={true}/>
+                        </View>
                     </View>
 
-                </Content>
-                {submitButton}
-            </Container>
+                    <View style={styles.inputTextLayour}>
+                        <TextInput field='Name' value={this.state.name}
+                                   returnKeyType='next' ref="4" refNext="4"
+                                   onSubmitEditing={this.focusNextField.bind(this, "5")}
+                                   onChangeText={(name) => this.setState({name})} isMandatory={true}/>
+                    </View>
+                    <View style={styles.inputTextLayour}>
+                        <TextInput field='Description' value={this.state.info}
+                                   returnKeyType='next' ref="5" refNext="5"
+
+                                   onSubmitEditing={this.focusNextField.bind(this, "5")}
+                                   onChangeText={(info) => this.setState({info})} isMandatory={true}/>
+                    </View>
+
+                </ScrollView>
+                {saving && <Spinner height={500}/>}
+            </View>
         );
+    }
+
+    validateForm() {
+        let result = true;
+        Object.keys(this.refs).forEach(key => {
+            let item = this.refs[key];
+            if (this.refs[key].wrappedInstance) {
+                item = this.refs[key].wrappedInstance;
+            }
+            if (!item.isValid()) {
+                result = false;
+            }
+        });
+        return result
     }
 }
 
 export default connect(
     state => ({
         promotions: state.promotions,
+        saving: state.promotions.savingForm,
         products: state.products,
     }),
     (dispatch) => ({

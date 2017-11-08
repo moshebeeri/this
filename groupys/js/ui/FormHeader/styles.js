@@ -20,7 +20,6 @@ module.exports = {
     },
     formHeadrTitleStyle: {
         color: "white",
-        flex: 1,
         fontSize: 16,
         backgroundColor: 'transparent'
     }

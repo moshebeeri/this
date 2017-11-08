@@ -117,8 +117,36 @@ export function savePromotion(promotion,businessId,navigation) {
             let response = await promotionApi.getAllByBusinessId(businessId, token);
             if (response.length > 0) {
                 dispatch({
-                    type: actions.SAVE_PROMOTIONS,
-                    promotions: response,
+                    type: actions.SET_PROMOTION_BUSINESS,
+                    businessesPromotions: response,
+                    businessId: businessId
+                });
+            }
+            dispatch({
+                type: actions.PROMOTION_SAVING_DONE,
+            });
+            navigation.goBack();
+        } catch (error) {
+            dispatch({
+                type: actions.NETWORK_IS_OFFLINE,
+            });
+        }
+    }
+}
+
+export function updatePromotion(promotion,businessId,navigation,itemId) {
+    return async function (dispatch, getState) {
+        try {
+            dispatch({
+                type: actions.PROMOTION_SAVING,
+            });
+            const token = getState().authentication.token;
+            await promotionApi.updatePromotion(promotion, itemId);
+            let response = await promotionApi.getAllByBusinessId(businessId, token);
+            if (response.length > 0) {
+                dispatch({
+                    type: actions.SET_PROMOTION_BUSINESS,
+                    businessesPromotions: response,
                     businessId: businessId
                 });
             }

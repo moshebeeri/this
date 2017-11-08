@@ -1,12 +1,13 @@
 import React, {Component} from 'react';
 import {connect} from 'react-redux';
-import {Header, Item, ListItem, Picker, Right, Thumbnail, View,Spinner} from 'native-base';
+import {Header, Item, ListItem, Picker, Right, Thumbnail, View,Spinner,Container} from 'native-base';
 import BusinessListView from './business-list-view/index'
 import * as businessAction from "../../actions/business";
 import {getMyBusinessesItems} from '../../selectors/businessesSelector'
 import {bindActionCreators} from "redux";
 import Icon3 from 'react-native-vector-icons/FontAwesome';
 import styles from './styles';
+import GenericListManager from '../generic-list-manager/index';
 
 class Business extends Component {
     constructor(props) {
@@ -43,16 +44,10 @@ class Business extends Component {
         }
     }
 
-    createBusinessLogo(selectedBusiness) {
-       if (selectedBusiness && selectedBusiness.business.logo) {
-            return <Thumbnail medium square source={{uri: selectedBusiness.business.logo}}/>
-        } else {
-            return <Thumbnail source={require('../../../images/client_1.png')}/>
-        }
-    }
+
 
     render() {
-        const {businesses, navigation,businessLoading,selectedBusiness} = this.props;
+        const {businesses, navigation,businessLoading,update,actions} = this.props;
         if(businessLoading && businesses.length === 0){
             return <Spinner/>
         }
@@ -60,54 +55,15 @@ class Business extends Component {
             return <View></View>
         }
 
-        let businessWasSelected = selectedBusiness;
-        if(!businessWasSelected && businesses.length > 0){
-            businessWasSelected = businesses[0];
-
-        }
 
         return (
-            <View style={styles.listBusinessesContainer}>
-                <View style={styles.businessPiker}>
-                    <View style={styles.businessTopLogo}>
-                        {this.createBusinessLogo(businessWasSelected)}
-                    </View>
-                    <View style={styles.businessPikkerComponent}>
-                        <Picker
+            <Container style={{backgroundColor: '#b7b7b7'}}>
 
-                            mode="dropdown"
-                            placeholder="Select Business"
-                            style={styles.pickerStyle}
-                            selectedValue={businessWasSelected.business._id}
-                            onValueChange={(busines) => this.selectBusiness(busines)}>
 
-                            {
-                                businesses.map((s, i) => {
-                                    return <Item
-                                        key={i}
-                                        value={s.business._id}
-                                        label={s.business.name}/>
-                                })}
-                        </Picker>
-                        <Icon3 style={{
-                            top: 10,
-                            right: 15,
-                            position: 'absolute',
-                            fontWeight: 'bold',
-                            fontSize: 25,
-                            color: 'gray'
-                        }} name="chevron-down"/>
+                <GenericListManager rows={businesses} navigation={navigation} actions={actions} update={update}
+                                    ItemDetail={this.renderItem.bind(this)}/>
 
-                    </View>
-                </View>
-                <View style={styles.businessDetailsContainer}>
-                    <BusinessListView
-                        item={businessWasSelected}
-                        index={0}
-                        navigation={navigation}
-                    />
-                </View>
-            </View>
+            </Container>
         );
     }
 }

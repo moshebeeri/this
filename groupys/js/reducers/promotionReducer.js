@@ -47,7 +47,7 @@ export default function promotion(state = initialState, action) {
         case actions.PROMOTION_SAVING_DONE:
             return {
                 ...state,
-                savingForm: true,
+                savingForm: false,
             };
         case actions.PROMOTION_RESET:
             return {

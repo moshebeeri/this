@@ -1,33 +1,30 @@
 import React, {Component} from 'react';
-import {Image, Platform} from 'react-native';
-import {connect} from 'react-redux';
+import {Image} from 'react-native';
 import {actions} from 'react-native-navigation-redux-helpers';
 import {
+    Button,
     Container,
     Content,
-    Text,
-    Title,
-    InputGroup,
-    Input,
-    Button,
-    View,
     Header,
-    Body,
-    Right,
+    Input,
+    InputGroup,
+    Left,
     ListItem,
+    Right,
+    Text,
     Thumbnail,
-    Left
+    Title,
+    View
 } from 'native-base';
 import stylesPortrate from './styles'
 import stylesLandscape from './styles_landscape'
 import FeedUiConverter from '../../../api/feed-ui-converter'
 import StyleUtils from '../../../utils/styleUtils'
+import FormUtils from "../../../utils/fromUtils";
+import {PunchView, SocialState, SubmitButton} from '../../../ui/index';
 
+const ILS = '₪';
 let feedUiConverter = new FeedUiConverter();
-import Icon from 'react-native-vector-icons/Ionicons';
-import Icon2 from 'react-native-vector-icons/EvilIcons';
-import Icon3 from 'react-native-vector-icons/MaterialIcons';
-
 export default class PromotionListView extends Component {
     constructor(props) {
         super(props);
@@ -41,63 +38,158 @@ export default class PromotionListView extends Component {
         return this.createPromotion(this.props.item);
     }
 
+    createImageTage(item, styles) {
+        if (item.banner) {
+            return <View style={styles.promotionImageContainer}>
+                <Image resizeMode="cover" style={styles.promotion_image} source={{uri: item.banner.uri}}></Image>
+            </View>
+        }
+        return <View/>
+    }
+
     createPromotion(promotionItem) {
+        const {location} = this.props;
         const item = feedUiConverter.createPromotionAttributes(promotionItem, promotionItem.type)
         const styles = this.createStyle();
-        const colorStyle = {
-            color: item.promotionColor,
-            fontFamily: 'Roboto-Regular', marginLeft: 10, marginTop: 4, fontSize: 16
-        }
-        const promotion = <Text style={colorStyle}>{item.promotion}</Text>
-        const image = this.createImageTag(item, styles);
-        const editButton = <Button small style={{
-            borderColor: 'white',
-            backgroundColor: 'white',
-            height: 55,
-            width: 60,
-            marginLeft: 10
-        }} onPress={this.showProduct.bind(this, this.props, this.props.item)}>
-            <Icon3 size={20} style={styles.productIcon} name="edit"/>
-
-
-        </Button>
         const result =
-            <View style={styles.promotion_container}>
+            <View key={promotionItem._id}style={styles.promotion_container}>
+                {this.createImageTage(item, styles)}
+
                 <View style={styles.promotion_card}>
 
-                    <View style={styles.promotion_nameContainer}>
-                        <View>
-                            <Text style={styles.promotion_name}>{item.name}</Text>
-                            <Text style={styles.promotion_desc}>{item.description}</Text>
-                        </View>
-                        {editButton}
+                    {this.createPromotionHeader(item, promotionItem.type, styles)}
+                    <View style={styles.promotionInformation}>
+                        <Text style={styles.promotionInfoTextI}>{item.name} - {item.description}</Text>
                     </View>
-
-                    <View style={styles.promotion_buttomUpperContainer}>
-                        <View style={{marginLeft: 5, marginTop: 5, alignItems: 'center',}}>
-                            {image}
+                    <View style={styles.promotionDetailsContainer}>
+                        <View style={styles.promotionLoctionContainer}>
+                            <View><Text style={styles.detailsTitleText}>Location</Text></View>
+                            <View><Text
+                                style={styles.detailsText}>{FormUtils.getDistanceFromLatLonInKm(location.lat, location.long, promotionItem.location.lat, promotionItem.location.lng)}
+                                km away</Text></View>
                         </View>
-                        <View style={styles.promotion_buttom_description}>
-                            {promotion}
-                            <Text style={styles.promotion_type}>{item.itemTitle}</Text>
-                            <View style={styles.promotion_buttom_location}>
-                                <Icon style={styles.promotion_location} size={25} name="md-analytics"/>
-                                <View style={{flexDirection: 'column',}}>
-                                    <Text style={styles.promotion_addressText} note>{item.quantity} </Text>
-
-                                    <Text style={styles.promotion_addressText} note>Saved 0</Text>
-                                    <Text style={styles.promotion_addressText} note>Redemed 0 </Text>
-                                </View>
-
-                            </View>
+                        <View style={styles.expireDateContainer}>
+                            <View><Text style={styles.detailsTitleText}>Expire</Text></View>
+                            <View><Text style={styles.detailsText}>{item.endDate}</Text></View>
+                        </View>
+                        <View style={styles.editButtonContainer}>
+                            <SubmitButton title="EDIT" color="#e65100"
+                                          onPress={this.showProduct.bind(this, this.props, this.props.item)}/>
+                        </View>
+                    </View>
+                    <SocialState disabled shares={promotionItem.social_state.shares}
+                                 likes={promotionItem.social_state.likes} comments={0}/>
+                    <View style={styles.promotionAnalyticsContainer}>
+                        <View style={styles.promotionAnalyticsAttribute}>
+                            <Text style={styles.promotion_addressText}>Total <Text note>{item.quantity} </Text></Text>
 
                         </View>
+                        <View style={styles.promotionAnalyticsAttribute}>
+
+                            <Text style={styles.promotion_addressText}>Saved <Text
+                                note>{promotionItem.social_state.saves}</Text></Text>
+
+                        </View>
+                        <View style={styles.promotionAnalyticsAttribute}>
+
+                            <Text style={styles.promotion_addressText}>Used <Text
+                                note>{promotionItem.social_state.realizes}</Text></Text>
+
+                        </View>
+
                     </View>
 
 
                 </View>
             </View>
         return result;
+    }
+
+    createPromotionHeader(promotion, type, styles) {
+        switch (type) {
+            case "REDUCED_AMOUNT":
+                return <View style={styles.promotionHeader}>
+                    <View style={styles.promotionValue}>
+                        <Text style={styles.titleValue}>{ILS}{promotion.promotionValue}</Text>
+                    </View>
+                    <View style={styles.promotiontDescription}>
+                        <View>
+                            <Text style={styles.titleText}>{promotion.promotionTitle}</Text>
+                        </View>
+                        <View>
+                            <Text style={styles.promotionTermlTextStyle}>{promotion.promotionTerm}</Text>
+                        </View>
+                    </View>
+                </View>;
+            case "PERCENT":
+                return <View style={styles.promotionHeader}>
+                    <View style={styles.promotionValue}>
+                        <Text style={styles.titleValue}>{promotion.promotionValue}%</Text>
+                    </View>
+                    <View style={styles.promotiontDescription}>
+                        <View>
+                            <Text style={styles.titleText}>{promotion.promotionTitle}</Text>
+                        </View>
+                        <View>
+                            <Text style={styles.promotionTermlTextStyle}>{promotion.promotionTerm}</Text>
+                        </View>
+                    </View>
+                </View>;
+            case "X_FOR_Y":
+                return <View style={styles.promotionHeader}>
+                    <View style={styles.promotionValue}>
+                        <Text style={styles.titleValue}>{ILS}{promotion.promotionValue}</Text>
+                    </View>
+                    <View style={styles.promotiontDescription}>
+                        <View>
+                            <Text style={styles.titleText}>{promotion.promotionTitle}</Text>
+                        </View>
+                        <View>
+                            <Text style={styles.promotionTermlTextStyle}>{promotion.promotionTerm}</Text>
+                        </View>
+                    </View>
+                </View>;
+            case "X+N%OFF":
+                return <View style={styles.promotionHeader}>
+                    <View style={styles.promotionValue}>
+                        <Text style={styles.titleValue}>{promotion.promotionValue}%</Text>
+                    </View>
+                    <View style={styles.promotiontDescription}>
+                        <View>
+                            <Text style={styles.titleText}>{promotion.promotionTitle}</Text>
+                        </View>
+                        <View>
+                            <Text style={styles.promotionTermlTextStyle}>{promotion.promotionTerm}</Text>
+                        </View>
+                    </View>
+                </View>;
+            case "X+Y":
+                return <View style={styles.promotionHeader}>
+                    <View style={styles.promotionValue}>
+                        <Text style={styles.XplusYtitleValue}>{promotion.promotionValue}</Text>
+                    </View>
+                    <View style={styles.promotiontDescription}>
+                        <View>
+                            <Text style={styles.titleText}>{promotion.promotionTitle}</Text>
+                        </View>
+                        <View>
+                            <Text style={styles.promotionTermlTextStyle}>{promotion.promotionTerm}</Text>
+                        </View>
+                    </View>
+                </View>;
+            case "PUNCH_CARD":
+                return <View style={styles.promotionPunchHeader}>
+                    <View style={styles.promotionPunchValue}>
+                        <Text style={styles.puncCardtitleValue}>{promotion.promotionTitle}</Text>
+                    </View>
+                    <PunchView numberOfPunches={promotion.punches}/>
+                </View>;
+            default:
+                return <View style={styles.promotionHeader}>
+
+
+                </View>;
+        }
     }
 
     createImageTag(item, styles) {

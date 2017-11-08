@@ -3,13 +3,16 @@ import UserApi from "../api/user";
 
 let userApi = new UserApi();
 
-export function saveRole(user, businessId, userRole) {
+export function saveRole(user, businessId, userRole, navigation) {
     return async function (dispatch, getState) {
         try {
             const token = getState().authentication.token
             dispatch({
                 type: actions.USER_ROLE_SHOW_SPINNER,
                 show: false,
+            });
+            dispatch({
+                type: actions.USER_ROLE_SAVING,
             });
             dispatch({
                 type: actions.USER_ROLE_SHOW_MESSAGE,
@@ -24,6 +27,10 @@ export function saveRole(user, businessId, userRole) {
                 businessUsers: users,
                 businessId: businessId
             });
+            dispatch({
+                type: actions.USER_ROLE_SAVING_DONE,
+            });
+            navigation.goBack();
         } catch (error) {
             dispatch({
                 type: actions.NETWORK_IS_OFFLINE,

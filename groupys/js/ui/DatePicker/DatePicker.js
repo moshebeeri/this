@@ -19,7 +19,13 @@ export default class DatePickerField extends Component {
     }
 
     isValid() {
-        const {isMandatory, value, validateContent} = this.props;
+        const {isMandatory, value, validateContent,invalid} = this.props;
+        if(invalid){
+            this.setState({
+                invalid: true
+            })
+            return false
+        }
         if (isMandatory) {
             if (!value) {
                 this.setState({

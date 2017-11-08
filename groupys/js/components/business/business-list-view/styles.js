@@ -5,6 +5,24 @@ module.exports = {
     editButtonConntainer: {
         margin:5,width: 40, height: 40, opacity: 0.65,backgroundColor: 'white', alignItems: 'center', justifyContent: 'center'
     },
+    businessPiker: {
+        flexDirection: 'row',
+        alignItems: 'center',
+        justifyContent: 'center',
+        backgroundColor:'white',
+        height: 80,
+        marginTop:5,
+    },
+    pickerStyle: {
+        margin: 3, height: 50, width: width - 60, backgroundColor: 'white'
+    },
+    businessTopLogo:{
+        padding:10,
+        flex:1
+    },
+    businessPikkerComponent:{
+        flex:3
+    },
     productIcon: {
         fontSize: 25,
         color: 'black',
