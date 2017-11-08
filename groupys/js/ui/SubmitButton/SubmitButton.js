@@ -22,7 +22,7 @@ export default class SubmitButton extends Component {
             textColor = 'white';
 
         }
-        return  <Button disabled={disabled} style={{borderRadius: 20,backgroundColor:bgc}}
+        return  <Button disabled={disabled} style={{width:100,alignItems:'center', justifyContent:'center',borderRadius: 20,backgroundColor:bgc}}
                         onPress={onPress}>
             <Text style={{color:textColor}}>{title}</Text>
         </Button>

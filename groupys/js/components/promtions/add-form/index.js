@@ -163,8 +163,8 @@ class AddPromotion extends Component {
     }
 
     async saveFormData() {
-        const {actions, navigation,saving} = this.props;
-        if(saving){
+        const {actions, navigation, saving} = this.props;
+        if (saving) {
             return;
         }
         if (this.validateForm()) {

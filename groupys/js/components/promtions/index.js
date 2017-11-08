@@ -42,9 +42,12 @@ class Promotions extends Component {
     }
 
     renderItem(item) {
+        const {location} = this.props;
+
         return <PromotionListItem
             item={item.item}
             index={item.index}
+            location={location}
             navigation={this.props.navigation}
         />
     }
@@ -110,7 +113,8 @@ class Promotions extends Component {
 export default connect(
     state => ({
         promotions: getBusinessPromotions(state),
-        update: state.businesses.update
+        update: state.businesses.update,
+        location:state.phone.currentLocation
     }),
     (dispatch) => ({
         actions: bindActionCreators(businessAction, dispatch),

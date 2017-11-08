@@ -15,6 +15,7 @@ import TimePicker from './TimePicker/DatePicker'
 import WeekDaysPicker from './WeekDaysPicker/WeekDaysPicker'
 import RNVideo from './Video/Video';
 import EditButton from './EditButton/EditButton'
+import SocialState from './SocialState/SocialState';
 export {
     ImagePicker,
     CategoryPicker,
@@ -32,5 +33,6 @@ export {
     TimePicker,
     WeekDaysPicker,
     RNVideo,
-    EditButton
+    EditButton,
+    SocialState
 }

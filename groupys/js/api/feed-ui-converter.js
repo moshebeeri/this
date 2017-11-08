@@ -310,7 +310,7 @@ class FeedConverter {
             };
         }
         let date = new Date(promotion.end);
-        response.endDate = date.toDateString();
+        response.endDate = date.toLocaleDateString();
         response.businessAddress = promotion.entity.business.city + ' ' + promotion.entity.business.address;
         switch (type) {
             case "REDUCED_AMOUNT":
@@ -322,12 +322,16 @@ class FeedConverter {
             case "PERCENT":
                 if (promotion.condition.product) {
                     response.itemTitle = "Get " + promotion.condition.product.name + " with " + promotion.percent.values[0] + ' % Off ';
+                    response.promotionTerm = "Get " + promotion.condition.product.name + " with " + promotion.percent.values[0] + ' % Off ';
                 } else {
                     response.itemTitle = "Get " + promotion.percent.values[0] + ' % Off ';
+                    response.promotionTerm = "No terms"
                 }
                 response.promotion = 'PERCENT';
+                response.promotionValue = promotion.percent.values[0];
+                response.promotionTitle = 'Discount';
                 response.promotionColor = '#df80ff';
-                response.quantity = 'Total ' + promotion.percent.quantity;
+                response.quantity = promotion.percent.quantity;
                 break;
             case "X_FOR_Y":
                 response.itemTitle = 'Buy ' + promotion.x_for_y.values[0].eligible + " " + promotion.condition.product.name + " Pay only " + promotion.x_for_y.values[0].pay;
