@@ -1,0 +1,31 @@
+const React = require('react-native');
+const {Dimensions} = React;
+const {width, height} = Dimensions.get('window');
+module.exports = {
+    punch: {
+        width:20,
+        height: 20,
+        backgroundColor:'white',
+        borderRadius:20,
+        borderWidth:1,
+        borderColor:'#ff6400',
+        marginRight:5,
+        marginLeft:5,
+
+
+    },
+    container:{
+        flexDirection:'row',
+        height: 30,
+        width:width,
+        alignItems:'center',
+
+
+    }
+
+};
+
+
+
+
+

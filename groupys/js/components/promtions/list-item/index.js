@@ -22,7 +22,7 @@ import FeedUiConverter from '../../../api/feed-ui-converter'
 import StyleUtils from '../../../utils/styleUtils'
 import Icon3 from 'react-native-vector-icons/MaterialIcons';
 import FormUtils from "../../../utils/fromUtils";
-import {SubmitButton,SocialState} from '../../../ui/index';
+import {SubmitButton,SocialState,PunchView} from '../../../ui/index';
 
 const ILS = '₪';
 let feedUiConverter = new FeedUiConverter();
@@ -60,7 +60,7 @@ export default class PromotionListView extends Component {
 
                     {this.createPromotionHeader(item, promotionItem.type, styles)}
                     <View style={styles.promotionInformation}>
-                        <Text style={styles.promotionInfoTextI}>{item.name} {item.description}</Text>
+                        <Text style={styles.promotionInfoTextI}>{item.name} - {item.description}</Text>
                     </View>
                     <View style={styles.promotionDetailsContainer}>
                         <View style={styles.promotionLoctionContainer}>
@@ -105,8 +105,17 @@ export default class PromotionListView extends Component {
         switch (type) {
             case "REDUCED_AMOUNT":
                 return <View style={styles.promotionHeader}>
-
-
+                    <View style={styles.promotionValue}>
+                        <Text style={styles.titleValue}>{ILS}{promotion.promotionValue}</Text>
+                    </View>
+                    <View style={styles.promotiontDescription}>
+                        <View>
+                            <Text style={styles.titleText}>{promotion.promotionTitle}</Text>
+                        </View>
+                        <View>
+                            <Text style={styles.promotionTermlTextStyle}>{promotion.promotionTerm}</Text>
+                        </View>
+                    </View>
                 </View>;
             case "PERCENT":
                 return <View style={styles.promotionHeader}>
@@ -134,13 +143,24 @@ export default class PromotionListView extends Component {
                 </View>;
             case "X+Y":
                 return <View style={styles.promotionHeader}>
-
-
+                    <View style={styles.promotionValue}>
+                        <Text style={styles.XplusYtitleValue}>{promotion.promotionValue}</Text>
+                    </View>
+                    <View style={styles.promotiontDescription}>
+                        <View>
+                            <Text style={styles.titleText}>{promotion.promotionTitle}</Text>
+                        </View>
+                        <View>
+                            <Text style={styles.promotionTermlTextStyle}>{promotion.promotionTerm}</Text>
+                        </View>
+                    </View>
                 </View>;
             case "PUNCH_CARD":
-                return <View style={styles.promotionHeader}>
-
-
+                return <View style={styles.promotionPunchHeader}>
+                    <View style={styles.promotionPunchValue}>
+                        <Text style={styles.puncCardtitleValue}>{promotion.promotionTitle}</Text>
+                    </View>
+                    <PunchView numberOfPunches={promotion.punches}/>
                 </View>;
             default:
                 return <View style={styles.promotionHeader}>

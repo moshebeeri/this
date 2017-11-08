@@ -63,12 +63,21 @@ export default class PunchCardComponent extends Component {
         })
     }
 
-
+    createProductView() {
+        if (this.props.state.product) {
+            let productName = this.props.state.product.name
+            return <View style={styles.inputTextLayour}>
+                <Text style={{color: '#FA8559', marginLeft: 8, marginRight: 8}}>Promotion on: {productName}</Text>
+            </View>
+        }
+        return undefined
+    }
     render() {
         let numberOfPunches = '';
         if(this.props.state.punch_card && this.props.state.punch_card.values && this.props.state.punch_card.values.number_of_punches){
             numberOfPunches = this.props.state.punch_card.values.number_of_punches;
         }
+
         return <View>
 
             <View style={styles.inputTextLayour}>
@@ -81,11 +90,13 @@ export default class PunchCardComponent extends Component {
                     <TextInput field='Number of Punches' value={numberOfPunches}
                                returnKeyType='next' ref="2" refNext="2"
                                keyboardType='numeric'
-                               validateContent={FormUtils.validatePuches()}
+                               validateContent={FormUtils.validatePuches}
                                onChangeText={(value) => this.setPunchCard(value)} isMandatory={true}/>
                 </View>
 
+
             </View>
+            {this.createProductView()}
 
         </View>
     }

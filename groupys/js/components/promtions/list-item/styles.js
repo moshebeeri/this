@@ -5,8 +5,9 @@ module.exports = {
 
     promotion_container:{
         borderWidth:1,
-        borderColor:'#e6e6e6',
-        backgroundColor:'white'
+        borderColor:'black',
+        backgroundColor:'white',
+        borderTopWidth:2,
     },
     promotionHeader:{
         backgroundColor:'white',
@@ -17,11 +18,27 @@ module.exports = {
 
         flexDirection: 'row',
     },
+    promotionPunchHeader:{
+        backgroundColor:'white',
+        flex:3,
+        width: width,
+        alignItems:'flex-start',
+        justifyContent:'center',
+
+
+    },
     promotionValue:{
         flex:1,
         margin:5,
         alignItems:'flex-start',
         justifyContent:'center',
+    },
+    promotionPunchValue:{
+        flex:1,
+        margin:5,
+
+        alignItems:'flex-start',
+        justifyContent:'flex-start',
     },
     promotiontDescription:{
         flex:3.5,
@@ -34,6 +51,14 @@ module.exports = {
     },
     titleValue:{
         fontSize:40,
+        color:'#e65100'
+    },
+    XplusYtitleValue:{
+        fontSize:30,
+        color:'#e65100'
+    },
+    puncCardtitleValue:{
+        fontSize:16,
         color:'#e65100'
     },
     promotionImageContainer:{

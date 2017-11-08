@@ -315,9 +315,12 @@ class FeedConverter {
         switch (type) {
             case "REDUCED_AMOUNT":
                 response.itemTitle = "Buy For " + promotion.reduced_amount.values[0].price + ' Pay Only ' + promotion.reduced_amount.values[0].pay;
+                response.promotionTerm = "Purchase " + promotion.reduced_amount.values[0].price;
                 response.promotion = 'REDUCED AMOUNT';
+                response.promotionTitle = 'Reduce Amount';
                 response.promotionColor = '#e65100';
-                response.quantity = 'Total ' + promotion.reduced_amount.quantity;
+                response.quantity = promotion.reduced_amount.quantity;
+                response.promotionValue = promotion.reduced_amount.values[0].pay;
                 break;
             case "PERCENT":
                 if (promotion.condition.product) {
@@ -348,11 +351,18 @@ class FeedConverter {
             case "X+Y":
                 response.itemTitle = 'Buy ' + promotion.x_plus_y.values[0].buy + " " + promotion.condition.product.name + " Get " + promotion.x_plus_y.values[0].eligible + " " + promotion.x_plus_y.values[0].product.name;
                 response.promotion = 'X+Y';
+                response.promotionTitle = 'Buy X get Y';
+                response.promotionTerm = 'Buy ' + promotion.x_plus_y.values[0].buy + " " + promotion.condition.product.name + " Get " + promotion.x_plus_y.values[0].eligible + " " + promotion.x_plus_y.values[0].product.name + ' free';
+                response.promotionValue = promotion.x_plus_y.values[0].buy +  ' + ' + promotion.x_plus_y.values[0].eligible;
                 response.promotionColor = '#66ff1a';
                 response.quantity = 'Total ' + promotion.x_plus_y.quantity;
                 break;
             case "PUNCH_CARD":
+                let punches = promotion.punch_card.values[0].number_of_punches
                 response.itemTitle = '';
+                response.promotionTitle="Punch Card "+ punches + " Slots";
+                response.punches = punches;
+                response.quantity =  promotion.punch_card.values[0].quantity;
                 response.promotion = 'PUNCH CARD';
                 response.promotionColor = '#d279a6';
                 break;

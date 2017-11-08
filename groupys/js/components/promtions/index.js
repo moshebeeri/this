@@ -72,7 +72,7 @@ class Promotions extends Component {
         return (
             <Container style={{backgroundColor: '#b7b7b7'}}>
                 <FormHeader showBack submitForm={this.navigateToAdd.bind(this)} navigation={this.props.navigation}
-                            title={"Add Promotions"} bgc="white"
+                            title={"My Promotions"} bgc="white"
                             submitIcon={<Icon5 active color={"#FA8559"} size={25} name="plus"/>}
                             titleColor="#FA8559" backIconColor="#FA8559"/>
 
