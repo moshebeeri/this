@@ -340,7 +340,10 @@ class FeedConverter {
                 response.itemTitle = 'Buy ' + promotion.x_for_y.values[0].eligible + " " + promotion.condition.product.name + " Pay only " + promotion.x_for_y.values[0].pay;
                 response.promotion = 'X FOR Y';
                 response.promotionColor = '#ff66b3';
-                response.quantity = 'Total ' + promotion.x_for_y.quantity;
+                response.promotionTitle = 'Buy X For Y';
+                response.promotionValue = promotion.x_for_y.values[0].pay;
+                    response.promotionTerm = 'Buy ' + promotion.x_for_y.values[0].eligible + " " + promotion.condition.product.name + " Pay only " + promotion.x_for_y.values[0].pay;
+                response.quantity =  promotion.x_for_y.quantity;
                 break;
             case "X+N%OFF":
                 response.itemTitle = 'Buy ' + promotion.condition.product.name + " Get " + promotion.x_plus_n_percent_off.values[0].product.name + " with " + promotion.x_plus_n_percent_off.values[0].eligible + " %Off";
@@ -355,7 +358,8 @@ class FeedConverter {
                 response.promotionTerm = 'Buy ' + promotion.x_plus_y.values[0].buy + " " + promotion.condition.product.name + " Get " + promotion.x_plus_y.values[0].eligible + " " + promotion.x_plus_y.values[0].product.name + ' free';
                 response.promotionValue = promotion.x_plus_y.values[0].buy +  ' + ' + promotion.x_plus_y.values[0].eligible;
                 response.promotionColor = '#66ff1a';
-                response.quantity = 'Total ' + promotion.x_plus_y.quantity;
+                response.quantity = promotion.x_plus_y.quantity;
+
                 break;
             case "PUNCH_CARD":
                 let punches = promotion.punch_card.values[0].number_of_punches

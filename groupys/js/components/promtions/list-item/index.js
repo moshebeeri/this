@@ -133,8 +133,17 @@ export default class PromotionListView extends Component {
                 </View>;
             case "X_FOR_Y":
                 return <View style={styles.promotionHeader}>
-
-
+                    <View style={styles.promotionValue}>
+                        <Text style={styles.titleValue}>{ILS}{promotion.promotionValue}</Text>
+                    </View>
+                    <View style={styles.promotiontDescription}>
+                        <View>
+                            <Text style={styles.titleText}>{promotion.promotionTitle}</Text>
+                        </View>
+                        <View>
+                            <Text style={styles.promotionTermlTextStyle}>{promotion.promotionTerm}</Text>
+                        </View>
+                    </View>
                 </View>;
             case "X+N%OFF":
                 return <View style={styles.promotionHeader}>
