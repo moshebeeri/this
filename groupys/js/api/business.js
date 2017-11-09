@@ -20,6 +20,12 @@ class BusinessApi {
                     return;
                 }
                 let responseData = await response.json();
+
+                responseData =  await Promise.all(responseData.map(async (item) => {
+                    item.categoryTitle = await this.getSubCategory(token,item.business.subcategory);
+                    return item;
+                }));
+
                 timer.logTime(from, new Date(), 'businesses', 'list/mine');
                 resolve(responseData);
             }
@@ -29,6 +35,34 @@ class BusinessApi {
             }
         })
     }
+
+    getSubCategory(token,categoryId) {
+        return new Promise(async (resolve, reject) => {
+            try {
+                let from = new Date();
+                const response = await fetch(`${server_host}/api/categories/by/id/en/`+ categoryId, {
+                    method: 'GET',
+                    headers: {
+                        'Accept': 'application/json, text/plain, */*',
+                        'Content-Type': 'application/json;charset=utf-8',
+                        'Authorization': 'Bearer ' + token
+                    }
+                });
+                if (response.status ==='401') {
+                    reject(response);
+                    return;
+                }
+                let responseData = await response.json();
+                timer.logTime(from, new Date(), 'businesses', 'list/mine');
+                resolve(responseData[0].translations.en);
+            }
+            catch (error) {
+                console.log('There has been a problem with your fetch operation: ' + error.message);
+                reject(error);
+            }
+        })
+    }
+
 
     getBusinessCategories(gid, token) {
         return new Promise(async (resolve, reject) => {

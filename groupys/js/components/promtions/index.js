@@ -47,6 +47,7 @@ class Promotions extends Component {
         return <PromotionListItem
             item={item.item}
             index={item.index}
+            key={item.item._id}
             location={location}
             navigation={this.props.navigation}
         />

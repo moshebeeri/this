@@ -83,12 +83,13 @@ module.exports = {
         height: undefined
     },
     promotionInfoTextI:{
-        fonstSize:20,
+        fontSize:16,
         marginLeft:5,
         marginRight:5,
+
     },
     promotionTermlTextStyle:{
-        color:'#b3b3b3'
+        color:'#839192',
     },
     promotionDetailsContainer:{
         flexDirection:'row',
@@ -112,7 +113,7 @@ module.exports = {
         marginLeft:5,
         marginRight:5,
 
-        color:'#b3b3b3',
+        color:'#839192',
         fontSize:14
     },
     detailsText:{

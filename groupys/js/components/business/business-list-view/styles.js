@@ -23,6 +23,12 @@ module.exports = {
     businessPikkerComponent:{
         flex:3
     },
+    businessNameText:{
+        color: '#ff6400',
+    },
+    businessCategoryText:{
+        color:'#839192',
+    },
     productIcon: {
         fontSize: 25,
         color: 'black',
