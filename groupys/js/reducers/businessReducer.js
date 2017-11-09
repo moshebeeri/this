@@ -5,10 +5,10 @@ const initialState = {
     businessesUsers: {},
     businessesProducts: {},
     businessesPromotions: {},
-    loading:true,
+    loading: true,
     update: false,
-    selectedBusiness:undefined,
-    savingForm:false,
+    selectedBusiness: undefined,
+    savingForm: false,
 };
 import {REHYDRATE} from "redux-persist/constants";
 import * as actions from "./reducerActions";
@@ -40,7 +40,9 @@ export default function business(state = initialState, action) {
         case actions.UPSERT_MY_BUSINESS:
             let myCurrentbusinesses = businessesState.myBusinesses;
             businessesState.update = !businessesState.update;
-            myCurrentbusinesses[action.item.business._id] = action.item;
+            action.item.forEach(eventItem => {
+                currentbusinesses[eventItem._id] = eventItem;
+            });
             return businessesState;
         case actions.LIKE:
             let item = businessesState.businesses[action.id];
@@ -71,9 +73,8 @@ export default function business(state = initialState, action) {
             }
         case actions.SET_BUSINESS_CATEGORIES :
             let categoriesState = {...state};
-
             categoriesState.categories.language
-            if(!categoriesState.categories[action.language]){
+            if (!categoriesState.categories[action.language]) {
                 categoriesState.categories[action.language] = {};
             }
             categoriesState.categories[action.language][action.catId] = action.categories;
@@ -91,14 +92,39 @@ export default function business(state = initialState, action) {
         case actions.SET_PROMOTION_BUSINESS:
             let businessesPromotions = businessesState.businessesPromotions;
             businessesState.update = !businessesState.update;
-            businessesPromotions[action.businessId] = action.businessesPromotions;
+
+            if(businessesPromotions[action.businessId]){
+
+                if(action.businessesPromotions && action.businessesPromotions.length > 0){
+                    action.businessesPromotions.forEach(promotion => {
+                        let update = false;
+                        let updaeIndex = 0;
+                        businessesPromotions[action.businessId].forEach((currentPromotion,index) =>{
+                            if(currentPromotion._id === promotion._id){
+                                updaeIndex = index;
+                                update = true;
+                            }
+
+                        } );
+
+                        if(update){
+                            businessesPromotions[action.businessId][updaeIndex] = promotion;
+                        }else{
+                            businessesPromotions[action.businessId].push(promotion);
+                        }
+                    })
+                }
+
+
+            }else {
+                businessesPromotions[action.businessId] = action.businessesPromotions;
+            }
             return businessesState;
         case actions.BUSSINESS_LOADING:
             return {
                 ...state,
                 loading: true,
             };
-
         case actions.SELECT_BUSINESS:
             return {
                 ...state,

@@ -5,6 +5,7 @@ import Icon from 'react-native-vector-icons/FontAwesome';
 import Icon2 from 'react-native-vector-icons/EvilIcons';
 import styles from './styles'
 
+
 export default class SocialState extends Component {
     constructor(props) {
         super(props);
@@ -35,37 +36,37 @@ export default class SocialState extends Component {
          const {comments, disabled,onPressComment} = this.props;
          if(disabled){
              return <View transparent style={styles.promotion_iconView} >
-                 <Icon2 style={styles.promotion_comment} size={30} name="comment"/>
-                 <Text>{comments}</Text>
+                 <Icon2 style={styles.promotion_comment} size={25} name="comment"/>
+                 <Text style={styles.socialTextColor}>{comments}</Text>
              </View>;
          }
 
          return <Button transparent style={styles.promotion_iconView} onPress={onPressComment}>
-            <Icon2 style={styles.promotion_comment} size={30} name="comment"/>
-            <Text>{comments}</Text>
+            <Icon2 style={styles.promotion_comment} size={25} name="comment"/>
+            <Text style={styles.socialTextColor}>{comments}</Text>
         </Button>;
     }
     createLikeButton() {
         const {like,likes, disabled,onPressUnLike, onPressLike} = this.props;
         if(disabled){
             return <View transparent style={styles.promotion_iconView}>
-                <Icon style={styles.promotion_like} size={25} name="heart"/>
-                <Text>{likes}</Text>
+                <Icon style={styles.promotion_like} size={20} name="heart"/>
+                <Text style={styles.socialTextColor}>{likes}</Text>
             </View>
         }
         if (like) {
             return <Button transparent style={styles.promotion_iconView} onPress={onPressUnLike}>
 
 
-                <Icon style={styles.promotion_like} size={25} name="heart"/>
-                <Text>{likes}</Text>
+                <Icon style={styles.promotion_like} size={20} name="heart"/>
+                <Text style={styles.socialTextColor}>{likes}</Text>
 
             </Button>
         }
         return <Button transparent style={styles.promotion_iconView} onPress={onPressLike}>
 
             <Icon style={styles.promotion_unlike} size={25} name="heart"/>
-            <Text>{likes}</Text>
+            <Text style={styles.socialTextColor}>{likes}</Text>
 
         </Button>
     }
@@ -76,8 +77,8 @@ export default class SocialState extends Component {
         if(disabled){
             return <View transparent style={styles.promotion_iconView} >
 
-                <Icon2 style={styles.promotion_share} size={30} name="share-google"/>
-                <Text>{shares}</Text>
+                <Icon2 style={styles.promotion_share} size={25} name="share-google"/>
+                <Text style={styles.socialTextColor}>{shares}</Text>
 
             </View>
         }
@@ -85,16 +86,16 @@ export default class SocialState extends Component {
         if (share) {
             return <Button transparent style={styles.promotion_iconView} onPress={shareAction}>
 
-                <Icon2 style={styles.promotion_share} size={30} name="share-google"/>
-                <Text>{shares}</Text>
+                <Icon2 style={styles.promotion_share} size={25} name="share-google"/>
+                <Text style={styles.socialTextColor}>{shares}</Text>
 
 
             </Button>
         }
         return <Button transparent style={styles.promotion_iconView} onPress={shareAction}>
 
-            <Icon2 style={styles.promotion_comment} size={30} name="share-google"/>
-            <Text>{shares}</Text>
+            <Icon2 style={styles.promotion_comment} size={25} name="share-google"/>
+            <Text style={styles.socialTextColor}>{shares}</Text>
         </Button>;
     }
 }

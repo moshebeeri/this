@@ -371,7 +371,7 @@ class FeedConverter {
                 response.itemTitle = '';
                 response.promotionTitle = "Punch Card " + punches + " Slots";
                 response.punches = punches;
-                response.quantity = promotion.punch_card.values[0].quantity;
+                response.quantity = promotion.punch_card.quantity;
                 response.promotion = 'PUNCH CARD';
                 response.promotionColor = '#d279a6';
                 break;
