@@ -50,12 +50,12 @@ export default class PromotionListView extends Component {
     createPromotion(promotionItem) {
         const {location} = this.props;
         const item = feedUiConverter.createPromotionAttributes(promotionItem, promotionItem.type)
-        if(!item){
+        if (!item) {
             return <View></View>
         }
         const styles = this.createStyle();
         const result =
-            <View key={promotionItem._id}style={styles.promotion_container}>
+            <View key={promotionItem._id} style={styles.promotion_container}>
                 {this.createImageTage(item, styles)}
 
                 <View style={styles.promotion_card}>
@@ -82,20 +82,20 @@ export default class PromotionListView extends Component {
                     </View>
                     <View style={styles.promotionAnalyticsContainer}>
                         <View style={styles.promotionAnalyticsAttribute}>
-                            <Text >TOTAL </Text>
+                            <Text>TOTAL </Text>
                             <Text style={styles.promotion_addressText} note>{item.quantity} </Text>
 
                         </View>
                         <View style={styles.promotionAnalyticsAttribute}>
 
-                            <Text >SAVED</Text>
+                            <Text>SAVED</Text>
                             <Text style={styles.promotion_addressText}
-                                note>{promotionItem.social_state.saves}</Text>
+                                  note>{promotionItem.social_state.saves}</Text>
 
                         </View>
                         <View style={styles.promotionAnalyticsAttribute}>
 
-                            <Text >USED</Text>
+                            <Text>USED</Text>
                             <Text style={styles.promotion_addressText} note>{promotionItem.social_state.realizes}</Text>
 
                         </View>
@@ -103,7 +103,8 @@ export default class PromotionListView extends Component {
                     </View>
 
                     <SocialState disabled shares={promotionItem.social_state.shares}
-                                 likes={promotionItem.social_state.likes} comments={0}/>
+                                 likes={promotionItem.social_state.likes}
+                                 comments={promotionItem.social_state.comments}/>
 
 
                 </View>

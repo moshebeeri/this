@@ -39,7 +39,7 @@ export default class ImagePickerComponent extends Component {
             let image = await ImagePicker.openCamera({
                 cropping: true,
                 width: 2000,
-                height: 2000,
+                height: 1400,
                 compressImageQuality: 1,
                 compressVideoPreset: 'MediumQuality',
             });
@@ -59,7 +59,8 @@ export default class ImagePickerComponent extends Component {
             let image = await ImagePicker.openPicker({
                 cropping: true,
                 width: 2000,
-                height: 2000,
+                height: 1400
+                ,
                 compressImageQuality: 1,
                 compressVideoPreset: 'MediumQuality',
             });
