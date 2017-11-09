@@ -33,6 +33,8 @@ exports.fetch_feed = function(userId, query_builder, Model, res) {
       });
 };
 
+//MATCH (n:comment)<-[r:COMMENTED]-(p) RETURN n,p
+
 //see http://www.markhneedham.com/blog/2013/02/24/neo4jcypher-combining-count-and-collect-in-one-query/
 function social_state(user_id, item_id, callback) {
 
@@ -67,7 +69,9 @@ function social_state(user_id, item_id, callback) {
       followers: function (callback) {
         graphModel.count_in_rel_id('FOLLOW', item_id, callback);
       },
-
+      comments: function (callback) {
+        graphModel.count_in_though(item_id, 'COMMENTED', 'INSTANCE_OF', callback);
+      },
     },
     function (err, state) {
       if (err) {
