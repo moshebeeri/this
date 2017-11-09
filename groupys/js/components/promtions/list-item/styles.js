@@ -134,12 +134,16 @@ module.exports = {
     },
     promotionAnalyticsAttribute:{
         flex:1,
-        flexDirection:'row',
+        flexDirection:'column',
         justifyContent:'center',
         alignItems:'center',
 
     },
     promotion_addressText:{
-        color:'#e65100'
+        color:'#e65100',
+        fontSize:20
+    },
+    promotion_card:{
+       margin:5
     }
 };

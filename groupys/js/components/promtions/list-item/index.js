@@ -77,27 +77,30 @@ export default class PromotionListView extends Component {
                                           onPress={this.showProduct.bind(this, this.props, this.props.item)}/>
                         </View>
                     </View>
-                    <SocialState disabled shares={promotionItem.social_state.shares}
-                                 likes={promotionItem.social_state.likes} comments={0}/>
                     <View style={styles.promotionAnalyticsContainer}>
                         <View style={styles.promotionAnalyticsAttribute}>
-                            <Text style={styles.promotion_addressText}>Total <Text note>{item.quantity} </Text></Text>
+                            <Text >TOTAL </Text>
+                            <Text style={styles.promotion_addressText} note>{item.quantity} </Text>
 
                         </View>
                         <View style={styles.promotionAnalyticsAttribute}>
 
-                            <Text style={styles.promotion_addressText}>Saved <Text
-                                note>{promotionItem.social_state.saves}</Text></Text>
+                            <Text >SAVED</Text>
+                            <Text style={styles.promotion_addressText}
+                                note>{promotionItem.social_state.saves}</Text>
 
                         </View>
                         <View style={styles.promotionAnalyticsAttribute}>
 
-                            <Text style={styles.promotion_addressText}>Used <Text
-                                note>{promotionItem.social_state.realizes}</Text></Text>
+                            <Text >USED</Text>
+                            <Text style={styles.promotion_addressText} note>{promotionItem.social_state.realizes}</Text>
 
                         </View>
 
                     </View>
+
+                    <SocialState disabled shares={promotionItem.social_state.shares}
+                                 likes={promotionItem.social_state.likes} comments={0}/>
 
 
                 </View>

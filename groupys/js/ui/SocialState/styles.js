@@ -18,19 +18,28 @@ module.exports = {
     },
     promotion_like:{
         marginRight:5,
-        marginLeft:5
+        marginLeft:5,
+        color:'#e19c73'
     },
     promotion_comment:{
         marginRight:5,
-        marginLeft:5
+        marginLeft:5,
+
+        color:'#e19c73'
     },
     promotion_unlike:{
         marginRight:5,
-        marginLeft:5
+        marginLeft:5,
+
+        color:'#e19c73'
     },
     promotion_share:{
         marginRight:5,
-        marginLeft:5
+        marginLeft:5,
+        color:'#e19c73'
+    },
+    socialTextColor:{
+        color:'#898989'
     }
 };
 
