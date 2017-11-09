@@ -20,7 +20,7 @@ class UserPermittedRoles extends Component {
 
     componentWillMount() {
         const {navigation} = this.props;
-        this.props.actions.setBusinessUsers(navigation.state.params.business);
+        this.props.actions.setBusinessUsers(navigation.state.params.business._id);
     }
 
     renderItem(item) {
