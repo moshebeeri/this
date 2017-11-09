@@ -10,6 +10,7 @@ export default class TimePickerField extends Component {
         super(props);
         this.state = {
             invalid: false,
+
         }
     }
 
@@ -19,9 +20,9 @@ export default class TimePickerField extends Component {
     }
 
     isValid() {
-        const {isMandatory, value, validateContent} = this.props;
+        const {isMandatory, validateContent} = this.props;
         if (isMandatory) {
-            if (!value) {
+            if (!this.state.selectedValue) {
                 this.setState({
                     invalid: true
                 })
@@ -29,7 +30,7 @@ export default class TimePickerField extends Component {
             }
         }
         if (validateContent) {
-            if(!validateContent(value)){
+            if(!validateContent()){
                 this.setState({
                     invalid: true
                 })
@@ -39,25 +40,12 @@ export default class TimePickerField extends Component {
         return true;
     }
 
-    onSubmit() {
-        const {onSubmitEditing, validateContent, value} = this.props;
-        if (validateContent) {
-            if (!validateContent(value)) {
-                this.setState({
-                    invalid: true
-                })
-                return;
-            }
-        }
-        if(onSubmitEditing) {
-            onSubmitEditing();
-        }
-    }
 
     onChange(date) {
         const {onChangeDate} = this.props;
         this.setState({
-            invalid: false
+            invalid: false,
+            selectedValue:date
         })
         onChangeDate(date);
     }
@@ -89,7 +77,7 @@ export default class TimePickerField extends Component {
             <View style={styles.textInputComponentLayout}>
                 <DatePicker
                     ref={refNext}
-                    date={value}
+                    date={this.state.selectedValue}
                     style={textInputStyle}
                     mode="time"
                     placeholder={placeholder}

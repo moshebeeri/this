@@ -7,10 +7,13 @@ import {
 import styles from './styles'
 import {SelectButton, SimplePicker, TextInput,TimePicker,WeekDaysPicker} from '../../../../ui/index';
 
-
+import FormUtils from "../../../../utils/fromUtils";
 export default class HappyHourComponent extends Component {
     constructor(props) {
         super(props);
+        this.state = {
+            numberOfHours:'',
+        }
     }
 
     selectProduct(product) {
@@ -88,7 +91,7 @@ export default class HappyHourComponent extends Component {
                 happy_hour: {
                     values: {
                         pay: pay,
-                        from: value.value,
+                        from: FormUtils.getSecondSinceMidnight(value),
                         until:until,
                         days:days
                     }
@@ -109,17 +112,23 @@ export default class HappyHourComponent extends Component {
                 days = this.props.state.happy_hour.values.days;
 
             }
+            let until = value * 60 * 60 ;
             this.props.setState({
                 choose_distribution: true,
                 happy_hour: {
                     values: {
                         pay: pay,
                         from: from,
-                        until:value.value,
+                        until:until,
                         days:days
                     }
-                }
+                },
+
             })
+
+            this.setState({
+                numberOfHours:value
+            });
         }
     }
     setDays(value) {
@@ -134,6 +143,7 @@ export default class HappyHourComponent extends Component {
                 until = this.props.state.happy_hour.values.until;
 
             }
+            let days = value.map(day => parseInt(day.value));
             this.props.setState({
                 choose_distribution: true,
                 happy_hour: {
@@ -141,7 +151,7 @@ export default class HappyHourComponent extends Component {
                         pay: pay,
                         from: from,
                         until:until,
-                        days:value
+                        days:days
                     }
                 }
             })
@@ -159,18 +169,21 @@ export default class HappyHourComponent extends Component {
         return undefined
     }
 
+
+    validateFrom(){
+        if(!this.props.state.happy_hour.values.from){
+            return false;
+        }
+        return true;
+    }
+
     render() {
         let product = this.createProductView();
         let pay = '';
-        let from = '';
-        let until = '';
-        let days = '';
 
         if (this.props.state.happy_hour && this.props.state.happy_hour.values) {
             pay = this.props.state.happy_hour.values.pay;
-            from = this.props.state.happy_hour.values.from;
-            until = this.props.state.happy_hour.values.until;
-            days = this.props.state.happy_hour.values.days;
+
         }
         return <View>
             <View style={styles.inputTextLayour}>
@@ -192,15 +205,17 @@ export default class HappyHourComponent extends Component {
             <View style={{flexDirection:'row',marginTop:5,marginBottom:5,justifyContent:'center',alignItems:'center'}}>
 
                 <View style={styles.inputPrecenComponent}>
-                    <TimePicker field='From Hour' value={from}
+                    <TimePicker field='From Hour'
+                                validateContent={this.validateFrom.bind(this)}
                                 returnKeyType='next' ref="From Hour" refNext="3"
                                 onChangeDate={(value) => this.setFrom(value)} isMandatory={true}/>
 
                 </View>
                 <View style={styles.inputPrecenComponent}>
-                    <TimePicker field='To Hour' value={until}
-                                returnKeyType='next' ref="To Hour" refNext="3"
-                                onChangeDate={(value) => this.setUntil(value)} isMandatory={true}/>
+                    <TextInput field='Number Of Hours' value={this.state.numberOfHours}
+                               returnKeyType='next' ref="off" refNext="off"
+                               keyboardType='numeric'
+                               onChangeText={(value) => this.setUntil(value)} isMandatory={true}/>
 
                 </View>
             </View>
@@ -210,7 +225,7 @@ export default class HappyHourComponent extends Component {
                 <View style={styles.inputPrecenComponent}>
                     <WeekDaysPicker field='Days of Week'
                                 ref="Days of Week" refNext="Days of Week"
-                               onChangeSelected={(value) => this.setDays(value)} isMandatory={true}/>
+                                    onChangeSelected={(value) => this.setDays(value)} isMandatory={true}/>
                 </View>
 
 

@@ -1,5 +1,5 @@
 const noPic = require('../../images/client_1.png');
-
+import FormUtils from "../utils/fromUtils";
 class FeedConverter {
     createFeed(feed) {
         let response = {};
@@ -209,6 +209,9 @@ class FeedConverter {
 
     createPromontionInstance(feed) {
         let instance = this.getInstance(feed);
+        if(!instance){
+            return;
+        }
         let promotion = this.getPromotion(feed);
         let responseFeed = {};
         try {
@@ -366,6 +369,21 @@ class FeedConverter {
                 response.promotionColor = '#66ff1a';
                 response.quantity = promotion.x_plus_y.quantity;
                 break;
+            case "HAPPY_HOUR":
+                if( promotion.happy_hour && promotion.happy_hour.values && promotion.happy_hour.values.length > 0){
+                    response.itemTitle = '';
+                    response.promotionTitle = "Happy Hour";
+                    response.promotionTerm = "Every "   + FormUtils.convertDaysNumToString(promotion.happy_hour.values[0].days) + " happy hour from " +
+                        FormUtils.secondsFromMidnightToString(promotion.happy_hour.values[0].from) + " until "+FormUtils.secondsFromMidnightToString(promotion.happy_hour.values[0].from + promotion.happy_hour.values[0].until) +
+                        " get special price for " + promotion.condition.product.name
+                    response.promotionValue = promotion.happy_hour.values[0].pay;
+                    response.quantity = promotion.happy_hour.quantity;
+                    response.promotion = 'HAPPY HOUR';
+                    response.promotionColor = '#d279a6';
+                }else{
+                    return undefined;
+                }
+                break;
             case "PUNCH_CARD":
                 let punches = promotion.punch_card.values[0].number_of_punches
                 response.itemTitle = '';
@@ -376,9 +394,7 @@ class FeedConverter {
                 response.promotionColor = '#d279a6';
                 break;
             default:
-                response.itemTitle = instance.type + " NOT SUPPORTED";
-                response.promotion = instance.type;
-                response.promotionColor = 'black';
+               return undefined;
                 break;
         }
         return response

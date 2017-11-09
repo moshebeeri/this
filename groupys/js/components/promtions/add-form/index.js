@@ -278,6 +278,18 @@ class AddPromotion extends Component {
                 number_of_punches: Number(this.state.punch_card.values.number_of_punches),
             };
         }
+        if (this.state.type == 'HAPPY_HOUR') {
+            promotion.happy_hour = {};
+            promotion.happy_hour.variation = 'SINGLE';
+            promotion.happy_hour.quantity = Number(this.state.quantity);
+            promotion.happy_hour.values = {
+                pay: Number(this.state.happy_hour.values.pay),
+                until:this.state.happy_hour.values.until,
+                days:this.state.happy_hour.values.days,
+                from:this.state.happy_hour.values.from,
+            };
+
+        }
         return promotion;
     }
 

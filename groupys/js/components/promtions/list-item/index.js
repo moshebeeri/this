@@ -50,6 +50,9 @@ export default class PromotionListView extends Component {
     createPromotion(promotionItem) {
         const {location} = this.props;
         const item = feedUiConverter.createPromotionAttributes(promotionItem, promotionItem.type)
+        if(!item){
+            return <View></View>
+        }
         const styles = this.createStyle();
         const result =
             <View key={promotionItem._id}style={styles.promotion_container}>
@@ -156,6 +159,20 @@ export default class PromotionListView extends Component {
                 return <View style={styles.promotionHeader}>
                     <View style={styles.promotionValue}>
                         <Text style={styles.titleValue}>{promotion.promotionValue}%</Text>
+                    </View>
+                    <View style={styles.promotiontDescription}>
+                        <View>
+                            <Text style={styles.titleText}>{promotion.promotionTitle}</Text>
+                        </View>
+                        <View>
+                            <Text style={styles.promotionTermlTextStyle}>{promotion.promotionTerm}</Text>
+                        </View>
+                    </View>
+                </View>;
+            case "HAPPY_HOUR":
+                return <View style={styles.promotionHeader}>
+                    <View style={styles.promotionValue}>
+                        <Text style={styles.titleValue}>{ILS}{promotion.promotionValue}</Text>
                     </View>
                     <View style={styles.promotiontDescription}>
                         <View>
