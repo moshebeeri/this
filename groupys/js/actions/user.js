@@ -88,6 +88,42 @@ export function changePassword(oldPassword, newPassword, navigation) {
     }
 }
 
+export function updateUser(newUser, navigation) {
+    return async function (dispatch, getState) {
+        const token = getState().authentication.token;
+        const user = getState().user.user;
+        try {
+            dispatch({
+                type: actions.SAVING_USER,
+            });
+            console.log('updating user')
+            await userApi.saveUserDetails(newUser,user._id,token,dispatch);
+            let updatedUser = await userApi.getUser(token);
+            dispatch({
+                type: actions.UPSERT_SINGLE_USER,
+                item: updatedUser
+            });
+            dispatch({
+                type: actions.SET_USER,
+                user: updatedUser
+            });
+            if(navigation) {
+                navigation.goBack();
+            }
+            dispatch({
+                type: actions.SAVING_USER_DONE,
+            });
+        } catch (error) {
+            dispatch({
+                type: actions.NETWORK_IS_OFFLINE,
+            });
+        }
+    }
+}
+
+
+
+
 export function resetPasswordForm() {
     return function (dispatch) {
         dispatch({

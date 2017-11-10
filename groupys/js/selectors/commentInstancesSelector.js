@@ -4,6 +4,7 @@
 import {createSelector} from 'reselect'
 import * as assemblers from '../actions/collectionAssembler';
 import FeedUiConverter from '../api/feed-ui-converter'
+const noPic = require('../../images/client_1.png');
 
 let feedUiConverter = new FeedUiConverter();
 // const getActivities = (state) => state.activities.activities

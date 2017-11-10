@@ -34,12 +34,20 @@ export default class ImagePickerComponent extends Component {
         return true;
     }
     async pickFromCamera() {
-        const {setImage} = this.props;
+        const {setImage,imageWidth,imageHeight} = this.props;
+        let width = 2000;
+        if(imageWidth){
+            width = imageWidth;
+        };
+        let height = 2000;
+        if(imageWidth){
+            height = imageHeight;
+        };
         try {
             let image = await ImagePicker.openCamera({
                 cropping: true,
-                width: 2000,
-                height: 1400,
+                width: width,
+                height: height,
                 compressImageQuality: 1,
                 compressVideoPreset: 'MediumQuality',
             });
@@ -54,12 +62,20 @@ export default class ImagePickerComponent extends Component {
     }
 
     async pickPicture() {
-        const {setImage} = this.props;
+        const {setImage,imageWidth,imageHeight} = this.props;
+        let width = 2000;
+        if(imageWidth){
+            width = imageWidth;
+        };
+        let height = 2000;
+        if(imageWidth){
+            height = imageHeight;
+        };
         try {
             let image = await ImagePicker.openPicker({
                 cropping: true,
-                width: 2000,
-                height: 1400
+                width: width,
+                height: height
                 ,
                 compressImageQuality: 1,
                 compressVideoPreset: 'MediumQuality',
@@ -86,7 +102,7 @@ export default class ImagePickerComponent extends Component {
             trigger = image;
         }
 
-        if(this.state.invalid){
+        if(this.state.invalid && !image){
             trigger = <Icon size={35} color={'red'} name='camera'/>;
         }
         return <Menu>

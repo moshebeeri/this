@@ -1,13 +1,17 @@
 import React, {Component} from 'react';
-import {Image, TouchableOpacity, StyleSheet} from 'react-native';
+import {Image, StyleSheet, TouchableOpacity} from 'react-native';
 import {Button, Container, Content, Input, InputGroup, Item, Text, View} from 'native-base';
-import ImagePicker from 'react-native-image-crop-picker';
 import styles from './styles';
 import {connect} from 'react-redux';
 import {bindActionCreators} from "redux";
 import EntityUtils from "../../utils/createEntity";
 import * as userAction from "../../actions/user";
 import StyleUtils from "../../utils/styleUtils";
+import Icon from 'react-native-vector-icons/FontAwesome';
+import {CloseDrawer} from "../../ui/index";
+import strings from "../../i18n/i18n"
+import {ImagePicker} from '../../ui/index';
+
 const logo = require('../../../images/logo.png');
 const cover = require('../../../images/cover-default.png');
 const profile = require('../../../images/profile-default.png');
@@ -15,15 +19,7 @@ const noPic = require('../../../images/client_1.png');
 const briefcase = require('../../../images/briefcase.png');
 const qrcode = require('../../../images/qr-code.png');
 const settings = require('../../../images/settings-work-tool.png');
-const changePassword = require('../../../images/change-password-img.png');
 let entityUtils = new EntityUtils();
-import Icon from 'react-native-vector-icons/FontAwesome';
-
-
-import {CloseDrawer, RNVideo} from "../../ui/index";
-
-import strings from "../../i18n/i18n"
-
 let videoStyles = StyleSheet.create({
     backgroundVideo: {
         position: 'absolute',
@@ -55,6 +51,14 @@ class ProfileDrawer extends Component {
         }
     }
 
+    setImage(image){
+        const{actions,user} = this.props;
+        let updatedUser = user;
+        updatedUser.image = image;
+        this.setState({image:image});
+        actions.updateUser(updatedUser,undefined);
+
+    }
     replaceRoute(route) {
         this.props.navigation.navigate(route);
     }
@@ -75,48 +79,6 @@ class ProfileDrawer extends Component {
         this.replaceRoute('businesses');
     }
 
-    showPromotions() {
-        this.replaceRoute('home');
-    }
-
-    async pickPicture() {
-        try {
-            let image = await ImagePicker.openPicker({
-                cropping: true,
-                width: 2000,
-                height: 2000,
-                compressImageQuality: 1,
-                compressVideoPreset: 'MediumQuality',
-            });
-            let user = {
-                name: this.props.user.name,
-                _id: this.props.user._id,
-                image: {uri: image.path, width: image.width, height: image.height, mime: image.mime},
-                phone_number: this.props.user.phone_number,
-            };
-            entityUtils.update('users', user, this.props.token, this.formSuccess.bind(this), this.formFailed.bind(this), '');
-        } catch (e) {
-            console.log(e);
-        }
-    }
-
-    formSuccess() {
-        this.props.actions.fetchUsers();
-    }
-
-    formFailed() {
-    }
-
-    // let styles = StyleSheet.create({
-    //     backgroundVideo: {
-    //         position: 'absolute',
-    //         top: 0,
-    //         left: 0,
-    //         bottom: 0,
-    //         right: 0,
-    //     },
-    // });
-
     render() {
         let source = noPic;
         if (this.props.user) {
@@ -126,27 +88,35 @@ class ProfileDrawer extends Component {
                 }
             }
         }
-        let name = StyleUtils.toTitleCase(this.props.user? this.props.user.name : 'name');
+        if(this.state.image){
+            source = {
+                uri: this.state.image.path
+            }
+        }
+        let name = StyleUtils.toTitleCase(this.props.user ? this.props.user.name : 'name');
         let phoneNumber = StyleUtils.parseUserPhoneNumber(this.props.user);
+        let userImage = <Image style={{width:80,height:80,borderRadius:40,}}source={source}/>;
         return (
             <Container>
                 <Content style={{backgroundColor: '#F2F2F2'}}>
                     {/*Header style*/}
-                    <RNVideo
-                        width={320}
-                        height={180}
-                        paused={false}
-                        source={{uri:'https://archive.org/download/VideoSample-Video3/ArchitectVideo_512kb.mp4'}}
-                    />
-                    <View style={{height: 55, flex: 1, justifyContent: 'flex-end',flexDirection: 'row'}}>
+
+
+                    <View style={{height: 55, flex: 1, justifyContent: 'flex-end', flexDirection: 'row'}}>
                         <CloseDrawer active color={"#FF9046"} size={20} onPress={() => this.props.closeDrawer()}/>
                     </View>
                     {/*form header*/}
                     <View style={styles.image}>
-                        <View style={{width:185, marginLeft: 20, marginTop: 0, alignItems: 'flex-start', backgroundColor: '#FF9046'}}>
+                        <View style={{
+                            width: 185,
+                            marginLeft: 20,
+                            marginTop: 0,
+                            alignItems: 'flex-start',
+                            backgroundColor: '#FF9046'
+                        }}>
                             <Text numberOfLines={2} style={{
                                 color: '#fff',
-                                lineHeight:32,
+                                lineHeight: 32,
                                 width: 120,
                                 fontFamily: 'Roboto-Regular',
                                 marginTop: 33,
@@ -162,10 +132,13 @@ class ProfileDrawer extends Component {
 
 
                         </View>
-                        <TouchableOpacity style={styles.thumbnail} onPress={() => this.pickPicture()}>
+                        <View style={styles.thumbnail}>
 
-                            <Image style={styles.thumbnail_image} source={source}/>
-                        </TouchableOpacity>
+                             <ImagePicker imageWidth={3000} imageHeight={3000} image={userImage} setImage={this.setImage.bind(this)}/>
+
+                        </View>
+
+
                     </View>
                     {/*button grid*/}
                     <View style={{
@@ -173,10 +146,11 @@ class ProfileDrawer extends Component {
                         justifyContent: 'space-between',
                         height: 100
                     }}>
-                        <View style={{flex:1, flexDirection: 'row', borderRightWidth:1, borderColor: '#E5E5E5'}}>
+                        <View style={{flex: 1, flexDirection: 'row', borderRightWidth: 1, borderColor: '#E5E5E5'}}>
                             <TouchableOpacity onPress={() => this.showBusinesses()}
-                                              style={{flex:1, flexDirection: 'column', alignItems: 'center'}} regular>
-                                <Image style={{tintColor: '#FF9046', marginTop: 21, width: 30, height: 30}} source={briefcase}/>
+                                              style={{flex: 1, flexDirection: 'column', alignItems: 'center'}} regular>
+                                <Image style={{tintColor: '#FF9046', marginTop: 21, width: 30, height: 30}}
+                                       source={briefcase}/>
                                 <Text
                                     style={{
                                         marginTop: 10,
@@ -186,7 +160,7 @@ class ProfileDrawer extends Component {
                                     }}>{strings.businesses}</Text>
                             </TouchableOpacity>
                         </View>
-                        <View style={{flex:1, flexDirection: 'row'}}>
+                        <View style={{flex: 1, flexDirection: 'row'}}>
                             <TouchableOpacity onPress={() => this.showPromotionScaning()}
                                               style={{
                                                   flex: 1,
@@ -194,8 +168,10 @@ class ProfileDrawer extends Component {
                                                   alignItems: 'center',
                                               }}
                                               regular>
-                                <Image style={{tintColor: '#FF9046', marginTop: 21, width: 30, height: 30}} source={qrcode}/>
-                                <Text style={{marginTop: 10, color: '#FF9046', fontStyle: 'normal', fontSize: 15
+                                <Image style={{tintColor: '#FF9046', marginTop: 21, width: 30, height: 30}}
+                                       source={qrcode}/>
+                                <Text style={{
+                                    marginTop: 10, color: '#FF9046', fontStyle: 'normal', fontSize: 15
                                 }}>{strings.scanPromotion}</Text>
                             </TouchableOpacity>
                         </View>
@@ -204,12 +180,12 @@ class ProfileDrawer extends Component {
                         flexDirection: 'row',
                         justifyContent: 'space-between',
                         height: 100,
-                        borderWidth:1,
+                        borderWidth: 1,
                         borderColor: '#E5E5E5'
                     }}>
-                        <View style={{flex:1, flexDirection: 'row', borderRightWidth:1, borderColor: '#E5E5E5'}}>
+                        <View style={{flex: 1, flexDirection: 'row', borderRightWidth: 1, borderColor: '#E5E5E5'}}>
                             <TouchableOpacity onPress={() => this.showUserProfile()}
-                                              style={{flex:1, flexDirection: 'column', alignItems: 'center'}} regular>
+                                              style={{flex: 1, flexDirection: 'column', alignItems: 'center'}} regular>
                                 <Image style={{tintColor: '#FF9046', marginTop: 21, width: 30, height: 30}}
                                        source={settings}/>
 
@@ -223,10 +199,10 @@ class ProfileDrawer extends Component {
 
                             </TouchableOpacity>
                         </View>
-                        <View style={{flex:1, flexDirection: 'row'}}>
+                        <View style={{flex: 1, flexDirection: 'row'}}>
                             <TouchableOpacity onPress={() => this.changePassword()}
-                                              style={{flex:1, flexDirection: 'column', alignItems: 'center'}} regular>
-                                <Icon style={{marginTop: 21, marginBottom:-6}} color="#FF9046" size={36} name="lock"/>
+                                              style={{flex: 1, flexDirection: 'column', alignItems: 'center'}} regular>
+                                <Icon style={{marginTop: 21, marginBottom: -6}} color="#FF9046" size={36} name="lock"/>
                                 <Text style={{
                                     marginTop: 10,
                                     color: '#FF9046',

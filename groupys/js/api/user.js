@@ -3,7 +3,9 @@
  */
 import store from "react-native-simple-store";
 import Timer from "./LogTimer";
-
+import * as actions from "../reducers/reducerActions";
+import EntityUtils from "../utils/createEntity";
+let entityUtils = new EntityUtils();
 let timer = new Timer();
 
 class UserApi {
@@ -295,6 +297,63 @@ class UserApi {
             }
         })
     }
+
+    saveUserDetails(user, id,token,dispatch) {
+        return new Promise(async (resolve, reject) => {
+            try {
+                console.log('start updating')
+               let from = new Date();
+                const response = await fetch(`${server_host}/api/users/`, {
+                    method: 'PUT',
+                    headers: {
+                        'Accept': 'application/json, text/plain, */*',
+                        'Content-Type': 'application/json;charset=utf-8',
+                        'Authorization': 'Bearer ' + token
+                    },
+                    body: JSON.stringify(user)
+                });
+                if (response.status ===401) {
+                    reject(response);
+                    return;
+                }
+
+                console.log('we are here')
+
+                timer.logTime(from, new Date(), 'user', 'update');
+                if (user.image) {
+                    let imagePath = user.image.uri;
+                    if(!imagePath){
+                        imagePath = user.image.path;
+                    }
+                    entityUtils.doUpload(imagePath, user.image.mime, token, this.setUser.bind(this,dispatch,token), 'users', user);
+                }
+                resolve(true);
+            }
+            catch (error) {
+                console.log('There has been a problem with your fetch operation: ');
+                reject('failed');
+            }
+        })
+    }
+
+   async setUser(dispatch,token){
+       try{
+          let user = await this.getUser(token);
+           dispatch({
+               type: actions.UPSERT_SINGLE_USER,
+               item: user
+           })
+           dispatch({
+               type: actions.SET_USER,
+               user: user
+           })
+       }catch (error){
+           dispatch({
+               type: actions.NETWORK_IS_OFFLINE,
+           });
+       }
+    }
+
 }
 
 export default UserApi;

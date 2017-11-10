@@ -7,13 +7,11 @@
 /**
  * Created by stan229 on 5/27/16.
  */
-const initialState = {selectedUsers: [], users: {}, followers: [], user: undefined};
+const initialState = {selectedUsers: [], users: {}, followers: [], user: undefined, saving: false};
 import {REHYDRATE} from "redux-persist/constants";
 import * as actions from "./reducerActions";
 
 export default function user(state = initialState, action) {
-    console.log(action.type);
-    let extendedState = {...state};
     if (action.type === REHYDRATE) {
 
         // retrive stored data for reducer callApi
@@ -48,10 +46,21 @@ export default function user(state = initialState, action) {
             return userState;
         case actions.USER_UNSELECT:
             return userState;
+        case actions.SAVING_USER:
+            return {
+                ...state,
+                saving: true,
+            };
+        case actions.SAVING_USER_DONE:
+            return {
+                ...state,
+                saving: false,
+            };
         case actions.USER_SELECT_RESET:
             return {
                 ...state,
                 selectedUsers: new Array(),
+                saving: false,
             };
         default:
             return state;
