@@ -153,7 +153,25 @@ GraphModel.prototype.count_in_rel_id = function count_in_rel(name, to, callback)
     callback(null, result[0].count)
   });
 };
-
+/**
+ * @param to _id of the item
+ * @param rel the relation queering
+ * @param rel_between optional internal relation, if *1..x keep x low
+ * @param callback returns count
+ *
+ * MATCH (p{_id:'59f999d90f8fe084572f2407'})<-[direct_comments:COMMENTED]-()
+ * OPTIONAL MATCH (p)<-[:INSTANCE_OF]-()<-[indirect_comments:COMMENTED]-()
+ * return count(direct_comments)+count(indirect_comments) as count
+ */
+GraphModel.prototype.count_in_though = function count_in_rel(to, rel, rel_between, callback) {
+  let query =   `MATCH (p{_id:'${to}'})<-[direct:${rel}]-()
+                  OPTIONAL MATCH (p)<-[:${rel_between}]-()<-[indirect:${rel}]-()
+                  return count(direct)+count(indirect) as count`;
+  db.query(query, function(err, result) {
+    if (err) { return callback(err) }
+    callback(null, result[0].count)
+  });
+};
 
 /***
  * @param from
