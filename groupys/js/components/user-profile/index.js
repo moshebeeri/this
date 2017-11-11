@@ -1,41 +1,36 @@
 import React, {Component} from 'react';
-import {Image, Platform,View} from 'react-native';
+import {Image, View} from 'react-native';
 import {actions} from 'react-native-navigation-redux-helpers';
 import {
+    Button,
+    Card,
+    CardItem,
     Container,
     Content,
-    Text,
     Fab,
-    InputGroup,
+    Footer,
+    Header,
     Input,
-    Thumbnail,
-    Button,
-    Picker,
-    Right,
+    InputGroup,
     Item,
     Left,
-    Header,
-    Footer,
-    Body,
-
-    Card,
-    CardItem
+    Picker,
+    Right,
+    Thumbnail
 } from 'native-base';
-import Icon from 'react-native-vector-icons/EvilIcons';
 import styles from './styles'
 import {bindActionCreators} from "redux";
 import {connect} from 'react-redux';
 import * as userAction from "../../actions/user";
-import {CategoryPicker, FormHeader, ImagePicker, TextInput,Spinner} from '../../ui/index';
+import {FormHeader, ImagePicker, Spinner, TextInput} from '../../ui/index';
 
 const noPic = require('../../../images/client_1.png');
-
-
 
 class UserProfile extends Component {
     static navigationOptions = ({navigation}) => ({
         header: null
     });
+
     constructor(props) {
         super(props);
         this.state = {
@@ -46,7 +41,6 @@ class UserProfile extends Component {
             path: '',
             token: ''
         }
-
     }
 
     async componentWillMount() {
@@ -60,6 +54,7 @@ class UserProfile extends Component {
             phone_number: this.props.user.user.phone_number,
         })
     }
+
     validateForm() {
         let result = true;
         Object.keys(this.refs).forEach(key => {
@@ -75,7 +70,7 @@ class UserProfile extends Component {
     }
 
     save() {
-        if(this.validateForm()) {
+        if (this.validateForm()) {
             let user = {
                 name: this.state.name,
                 _id: this.props.user.user._id,
@@ -86,8 +81,8 @@ class UserProfile extends Component {
         }
     }
 
-    setImage(image){
-        this.setState({image:image});
+    setImage(image) {
+        this.setState({image: image});
     }
 
     focusNextField(nextField) {
@@ -100,30 +95,24 @@ class UserProfile extends Component {
     }
 
     render() {
-        let image = <Image style={{
-                flex: 1,
-                width: 50,
-                height: 50,
-
-                resizeMode: 'contain'
-            }} source={noPic}/>
-
+        let source = noPic;
         if (this.state.path) {
-            image = <Image style={{
-                alignSelf: 'center',
-                height: 100,
-                width: 100,
-                borderRadius:70,
-            }} resizeMode="cover" source={{uri: this.state.path}}>
-            </Image>
+            source = {
+                uri: this.state.path
+            }
         }
-
-
-        if(this.state.image){
-            image = this.state.image ;
+        if (this.state.image) {
+            source = {
+                uri: this.state.image.path
+            }
         }
-
-
+        const image = <Image style={{
+            alignSelf: 'center',
+            height: 100,
+            width: 100,
+            borderRadius: 70,
+        }} resizeMode="cover" source={source}>
+        </Image>
         return (
 
             <View style={styles.settingsContainer}>
@@ -132,7 +121,8 @@ class UserProfile extends Component {
 
                 <View style={styles.thumbnail}>
 
-                    <ImagePicker imageWidth={3000} imageHeight={3000} image={image} setImage={this.setImage.bind(this)}/>
+                    <ImagePicker imageWidth={3000} imageHeight={3000} image={image}
+                                 setImage={this.setImage.bind(this)}/>
 
                 </View>
                 <View>
@@ -141,12 +131,12 @@ class UserProfile extends Component {
                         <TextInput field='User Name' value={this.state.name}
                                    returnKeyType='done' ref="1" refNext="1"
 
-                                   onChangeText={(name) => this.setState({name})} />
+                                   onChangeText={(name) => this.setState({name})}/>
                     </View>
                     <View style={styles.inputTextLayour}>
                         <TextInput field='User Phone' value={this.state.phone_number} disabled
                                    returnKeyType='done' ref="2" refNext="2"
-                                   onChangeText={(phone_number) => this.setState({phone_number})} />
+                                   onChangeText={(phone_number) => this.setState({phone_number})}/>
                     </View>
                     {this.props.saving && <Spinner/>}
                 </View>
@@ -159,7 +149,7 @@ class UserProfile extends Component {
 export default connect(
     state => ({
         user: state.user,
-        saving:state.user.saving
+        saving: state.user.saving
     }),
     dispatch => bindActionCreators(userAction, dispatch)
 )(UserProfile);
