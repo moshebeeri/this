@@ -27,6 +27,15 @@ module.exports = {
         borderRadius:2,
         fontSize:16,
     },
+
+    textInputDisavledComponentStyle: {
+        backgroundColor: '#CACFD2',
+
+        flex: 1,
+        padding: 10,
+        borderRadius:2,
+
+    },
     textInputInvalidComponentStyle: {
         backgroundColor: 'white',
         alignSelf: 'stretch',

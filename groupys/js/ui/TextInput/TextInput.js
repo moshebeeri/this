@@ -68,7 +68,7 @@ export default class TextInputField extends Component {
     }
 
     render() {
-        const {fieldColor, field, placeholder, value, returnKeyType, refNext, isMandatory,keyboardType} = this.props;
+        const {fieldColor, field, placeholder, value, returnKeyType, refNext, isMandatory,keyboardType,disabled} = this.props;
         let textStyle = styles.textInputTextStyle;
         let mandtoryIconColor = 'red';
         if (fieldColor === 'white') {
@@ -84,6 +84,16 @@ export default class TextInputField extends Component {
         if(field){
             containerStyle = styles.textInputContainer;
         }
+        let inputField =  <TextInput style={textInputStyle} value={value} returnKeyType={returnKeyType}
+                                     ref={refNext} underlineColorAndroid='transparent' disabled
+                                     keyboardType={keyboardType}
+                                     onSubmitEditing={this.onSubmit.bind(this)}
+                                     onChangeText={this.onChange.bind(this)} placeholder={placeholder}/>
+        if(disabled){
+            inputField = <View style={styles.textInputDisavledComponentStyle}>
+                <Text>{value}</Text>
+            </View>
+        }
 
         return <View style={containerStyle}>
             <View style={styles.textInputTitleContainer}>
@@ -92,11 +102,7 @@ export default class TextInputField extends Component {
 
             </View>
             <View style={styles.textInputComponentLayout}>
-                <TextInput style={textInputStyle} value={value} returnKeyType={returnKeyType}
-                           ref={refNext} underlineColorAndroid='transparent'
-                           keyboardType={keyboardType}
-                           onSubmitEditing={this.onSubmit.bind(this)}
-                           onChangeText={this.onChange.bind(this)} placeholder={placeholder}/>
+                {inputField}
             </View>
         </View>
     }
