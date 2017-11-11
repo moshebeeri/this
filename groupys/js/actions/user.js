@@ -67,7 +67,13 @@ export function changePassword(oldPassword, newPassword, navigation) {
         const token = getState().authentication.token
         const user = getState().user.user
         try {
-            let response = await loginApi.changePassword(oldPassword, newPassword, user._id, token)
+            dispatch({
+                type: actions.SAVING_USER,
+            });
+            let response = await loginApi.changePassword(oldPassword, newPassword, user._id, token);
+            dispatch({
+                type: actions.SAVING_USER_DONE,
+            });
             if (response.response === true) {
                 navigation.goBack();
             } else {

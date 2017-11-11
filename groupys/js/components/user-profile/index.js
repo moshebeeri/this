@@ -70,6 +70,10 @@ class UserProfile extends Component {
     }
 
     save() {
+        if(this.props.saving){
+            return;
+        }
+
         if (this.validateForm()) {
             let user = {
                 name: this.state.name,
