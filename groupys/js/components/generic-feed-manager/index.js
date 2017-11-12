@@ -40,10 +40,7 @@ export default class GenericFeedManager extends Component {
             return <View><Spinner color='red'/></View>;
         }
         const spining = undefined;
-        //
-        // if(nextLoad){
-        //     spining = <View><Spinner color='red' /></View>;
-        // }
+
         if (setNextFeeds) {
             return (
 

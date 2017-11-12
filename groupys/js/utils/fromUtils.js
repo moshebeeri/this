@@ -62,7 +62,15 @@ const getSecondSinceMidnight= (hour) => {
 };
 
 const convertDaysNumToString= (days) => {
-    return days.map(day => getDay(day));
+    if(Array.isArray(days)) {
+        return days.map(day => getDay(day));
+    }else{
+        let daysString=[];
+        Object.keys(days).forEach(day => {
+            daysString.push(getDay(days[day]))
+        });
+        return daysString;
+    }
 };
 
 const secondsFromMidnightToString= (seconds)=> {

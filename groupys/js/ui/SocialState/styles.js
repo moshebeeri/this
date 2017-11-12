@@ -16,28 +16,40 @@ module.exports = {
         justifyContent: 'center',
         flex:1
     },
+    promotion_iconView:{
+        flexDirection: 'row',
+        justifyContent: 'center',
+        flex:1
+    },
     promotion_like:{
         marginRight:5,
         marginLeft:5,
         color:'#e19c73'
     },
-    promotion_comment:{
+    promotionLikeActive:{
+        marginRight:5,
+        marginLeft:5,
+        color:'red'
+    },
+    promotionBusiness:{
         marginRight:5,
         marginLeft:5,
 
         color:'#e19c73'
     },
-    promotion_unlike:{
+    promotionShareActive:{
         marginRight:5,
         marginLeft:5,
 
-        color:'#e19c73'
+        color:'blue'
     },
-    promotion_share:{
+    promotionFeed:{
         marginRight:5,
         marginLeft:5,
-        color:'#e19c73'
+
+        color:'#2db6c8'
     },
+
     socialTextColor:{
         color:'#898989'
     }

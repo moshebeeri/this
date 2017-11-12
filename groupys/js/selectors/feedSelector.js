@@ -32,6 +32,7 @@ export const getFeeds = createSelector([getActivities, getPromotions, getUser, g
                     return assemblers.assembler(feed, collections);
                 });
                 feedsUi = assembledFeeds.map(feed => feedUiConverter.createFeed(feed));
+                feedsUi = feedsUi.filter(feed => feed);
                 feedsUi = feedsUi.filter(filter => filter.id);
             } catch (error) {
                 return feedsUi;

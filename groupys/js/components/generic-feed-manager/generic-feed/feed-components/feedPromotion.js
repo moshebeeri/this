@@ -2,41 +2,40 @@
  * Created by roilandshut on 23/07/2017.
  */
 import React, {Component} from 'react';
-import {Image, Platform, PanResponder, TouchableHighlight, TouchableOpacity, Dimensions} from 'react-native';
-import {connect} from 'react-redux';
+import {Dimensions, Image} from 'react-native';
 import {actions} from 'react-native-navigation-redux-helpers';
 import {
+    Button,
+    Card,
+    CardItem,
     Container,
     Content,
-    Text,
-    InputGroup,
+    Footer,
+    Header,
     Input,
-    Thumbnail,
-    Button,
-    Picker,
-    Right,
+    InputGroup,
     Item,
     Left,
-    Header,
-    Footer,
-    Body,
-    View,
-    Card,
-    CardItem
+    Picker,
+    Right,
+    Text,
+    Thumbnail,
+    View
 } from 'native-base';
-
-const {width, height} = Dimensions.get('window')
-const vw = width / 100;
-const vh = height / 100
-const vmin = Math.min(vw, vh);
-const vmax = Math.max(vw, vh);
-import Icon from 'react-native-vector-icons/FontAwesome';
 import Icon2 from 'react-native-vector-icons/EvilIcons';
 import Icon3 from 'react-native-vector-icons/MaterialIcons';
 import stylesPortrate from './styles'
 import stylesLandscape from './styles_lendscape'
 import StyleUtils from '../../../../utils/styleUtils'
 import * as componentCreator from "./feedCommonView";
+import { Spinner, SocialState} from '../../../../ui/index';
+
+const {width, height} = Dimensions.get('window')
+const vw = width / 100;
+const vh = height / 100
+const vmin = Math.min(vw, vh);
+const vmax = Math.max(vw, vh)
+
 
 export default class FeedPromotion extends Component {
     constructor() {
@@ -53,9 +52,6 @@ export default class FeedPromotion extends Component {
         const colorStyle = this.createColorStyle(item)
         const promotion = <Text style={colorStyle}>{item.promotion}</Text>
         const buisnessLogo = componentCreator.createBusinessLog(item, this.showBussines.bind(this));
-        const likeIcon = componentCreator.createLikeButton(item, styles, like, unlike, token);
-        const commentICon = componentCreator.createCommentButton(styles, comment);
-        const shareICon = componentCreator.createShareButton(styles, showUsers, item);
         const saveIcon = componentCreator.createSaveButton(item, save);
         const image = this.createImageComponent(item, styles);
         const container = this.createContainerStyle(item);
@@ -99,10 +95,10 @@ export default class FeedPromotion extends Component {
 
 
                     <View style={styles.promotion_bottomContainer}>
-                        {likeIcon}
-                        {commentICon}
-                        {shareICon}
-                        {saveIcon}
+
+                       <SocialState feed comments={item.social.comments} onPressComment={comment}
+                                    like={item.social.like} likes={item.social.numberLikes} onPressUnLike={() => unlike(item.id, token)} onPressLike={() => like(item.id, token)}
+                                    share={item.social.share} shares={item.social.shares} shareAction={showUsers}/>
                     </View>
                 </View>
             </View>

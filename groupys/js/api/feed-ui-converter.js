@@ -1,5 +1,6 @@
 const noPic = require('../../images/client_1.png');
 import FormUtils from "../utils/fromUtils";
+
 class FeedConverter {
     createFeed(feed) {
         let response = {};
@@ -152,9 +153,13 @@ class FeedConverter {
                     responseFeed.promotionColor = '#ff66b3';
                     break;
                 case "X+N%OFF":
-                    responseFeed.itemTitle = 'Buy ' + instance.promotion.condition.product.name + " Get " + instance.promotion.x_plus_n_percent_off.values[0].product.name + " with " + instance.promotion.x_plus_n_percent_off.values[0].eligible + " %Off";
-                    responseFeed.promotion = 'X+N%OFF';
-                    responseFeed.promotionColor = '#ff66b3';
+                    if(instance.promotion.x_plus_n_percent_off.values &&instance.promotion.x_plus_n_percent_off.values[0] && instance.promotion.x_plus_n_percent_off.values[0].product ) {
+                        responseFeed.itemTitle = 'Buy ' + instance.promotion.condition.product.name + " Get " + instance.promotion.x_plus_n_percent_off.values[0].product.name + " with " + instance.promotion.x_plus_n_percent_off.values[0].eligible + " %Off";
+                        responseFeed.promotion = 'X+N%OFF';
+                        responseFeed.promotionColor = '#ff66b3';
+                    }else{
+                       return undefined;
+                    }
                     break;
                 case "X+Y":
                     responseFeed.itemTitle = 'Buy ' + instance.promotion.x_plus_y.values[0].buy + " " + instance.promotion.condition.product.name + " Get " + instance.promotion.x_plus_y.values[0].eligible + " " + instance.promotion.x_plus_y.values[0].product.name;
@@ -209,7 +214,7 @@ class FeedConverter {
 
     createPromontionInstance(feed) {
         let instance = this.getInstance(feed);
-        if(!instance){
+        if (!instance) {
             return;
         }
         let promotion = this.getPromotion(feed);
@@ -231,7 +236,8 @@ class FeedConverter {
                     realized: instance.social_state.realized,
                     use: instance.social_state.use,
                     share: instance.social_state.share,
-                    shares: instance.social_state.shares
+                    shares: instance.social_state.shares,
+                    comments: instance.social_state.comments
                 };
                 responseFeed.showsave = !instance.social_state.saved && !instance.social_state.realized;
             }
@@ -266,9 +272,13 @@ class FeedConverter {
                     responseFeed.promotionColor = '#ff66b3';
                     break;
                 case "X+N%OFF":
-                    responseFeed.itemTitle = 'Buy ' + promotion.condition.product.name + " Get " + promotion.x_plus_n_percent_off.values[0].product.name + " with " + promotion.x_plus_n_percent_off.values[0].eligible + " %Off";
-                    responseFeed.promotion = 'X+N%OFFf';
-                    responseFeed.promotionColor = '#ff66b3';
+                    if(instance.promotion.x_plus_n_percent_off.values &&instance.promotion.x_plus_n_percent_off.values[0] && instance.promotion.x_plus_n_percent_off.values[0].product ) {
+                        responseFeed.itemTitle = 'Buy ' + promotion.condition.product.name + " Get " + promotion.x_plus_n_percent_off.values[0].product.name + " with " + promotion.x_plus_n_percent_off.values[0].eligible + " %Off";
+                        responseFeed.promotion = 'X+N%OFFf';
+                        responseFeed.promotionColor = '#ff66b3';
+                    }else{
+                        return undefined;
+                    }
                     break;
                 case "X+Y":
                     if (promotion.x_plus_y.values[0].product) {
@@ -283,6 +293,17 @@ class FeedConverter {
                     responseFeed.itemTitle = 'Number of punches ' + promotion.punch_card.values[0].number_of_punches;
                     responseFeed.promotion = 'PUNCH CARD';
                     responseFeed.promotionColor = '#d279a6';
+                    break;
+                case "HAPPY_HOUR":
+                    if (promotion.happy_hour && promotion.happy_hour.values) {
+                        responseFeed.itemTitle = "Every " + FormUtils.convertDaysNumToString(promotion.happy_hour.values[0].days) + " happy hour from " +
+                            FormUtils.secondsFromMidnightToString(promotion.happy_hour.values[0].from) + " until " + FormUtils.secondsFromMidnightToString(promotion.happy_hour.values[0].from + promotion.happy_hour.values[0].until) +
+                            " get special price for " + promotion.condition.product.name
+                        responseFeed.promotion = 'HAPPY_HOUR';
+                        responseFeed.promotionColor = '#d279a6';
+                    }else{
+                        return undefined;
+                    }
                     break;
                 default:
                     responseFeed.itemTitle = instance.type + " NOT SUPPORTED";
@@ -358,7 +379,6 @@ class FeedConverter {
                 response.promotionTitle = 'Buy X get Y with Discount';
                 response.promotionValue = promotion.x_plus_n_percent_off.values[0].eligible;
                 response.promotionTerm = 'Buy ' + promotion.condition.product.name + " Get " + promotion.x_plus_n_percent_off.values[0].product.name + " with " + promotion.x_plus_n_percent_off.values[0].eligible + " %Off";
-
                 break;
             case "X+Y":
                 response.itemTitle = 'Buy ' + promotion.x_plus_y.values[0].buy + " " + promotion.condition.product.name + " Get " + promotion.x_plus_y.values[0].eligible + " " + promotion.x_plus_y.values[0].product.name;
@@ -370,17 +390,17 @@ class FeedConverter {
                 response.quantity = promotion.x_plus_y.quantity;
                 break;
             case "HAPPY_HOUR":
-                if( promotion.happy_hour && promotion.happy_hour.values && promotion.happy_hour.values.length > 0){
+                if (promotion.happy_hour && promotion.happy_hour.values && promotion.happy_hour.values.length > 0) {
                     response.itemTitle = '';
                     response.promotionTitle = "Happy Hour";
-                    response.promotionTerm = "Every "   + FormUtils.convertDaysNumToString(promotion.happy_hour.values[0].days) + " happy hour from " +
-                        FormUtils.secondsFromMidnightToString(promotion.happy_hour.values[0].from) + " until "+FormUtils.secondsFromMidnightToString(promotion.happy_hour.values[0].from + promotion.happy_hour.values[0].until) +
+                    response.promotionTerm = "Every " + FormUtils.convertDaysNumToString(promotion.happy_hour.values[0].days) + " happy hour from " +
+                        FormUtils.secondsFromMidnightToString(promotion.happy_hour.values[0].from) + " until " + FormUtils.secondsFromMidnightToString(promotion.happy_hour.values[0].from + promotion.happy_hour.values[0].until) +
                         " get special price for " + promotion.condition.product.name
                     response.promotionValue = promotion.happy_hour.values[0].pay;
                     response.quantity = promotion.happy_hour.quantity;
                     response.promotion = 'HAPPY HOUR';
                     response.promotionColor = '#d279a6';
-                }else{
+                } else {
                     return undefined;
                 }
                 break;
@@ -394,7 +414,7 @@ class FeedConverter {
                 response.promotionColor = '#d279a6';
                 break;
             default:
-               return undefined;
+                return undefined;
                 break;
         }
         return response

@@ -33,24 +33,32 @@ export default class SocialState extends Component {
     }
 
      createCommentButton() {
-         const {comments, disabled,onPressComment} = this.props;
+         const {comments, disabled,onPressComment,feed} = this.props;
+         let componentStyle = styles.promotionBusiness;
+         if(feed) {
+             componentStyle = styles.promotionFeed;
+         }
          if(disabled){
              return <View transparent style={styles.promotion_iconView} >
-                 <Icon2 style={styles.promotion_comment} size={25} name="comment"/>
+                 <Icon2 style={componentStyle} size={25} name="comment"/>
                  <Text style={styles.socialTextColor}>{comments}</Text>
              </View>;
          }
 
          return <Button transparent style={styles.promotion_iconView} onPress={onPressComment}>
-            <Icon2 style={styles.promotion_comment} size={25} name="comment"/>
+            <Icon2 style={componentStyle} size={25} name="comment"/>
             <Text style={styles.socialTextColor}>{comments}</Text>
         </Button>;
     }
     createLikeButton() {
-        const {like,likes, disabled,onPressUnLike, onPressLike} = this.props;
+        const {like,likes, disabled,onPressUnLike, onPressLike,feed} = this.props;
+        let componentStyle = styles.promotionBusiness;
+        if(feed) {
+            componentStyle = styles.promotionFeed;
+        }
         if(disabled){
             return <View transparent style={styles.promotion_iconView}>
-                <Icon style={styles.promotion_like} size={20} name="heart"/>
+                <Icon style={componentStyle} size={20} name="heart"/>
                 <Text style={styles.socialTextColor}>{likes}</Text>
             </View>
         }
@@ -58,26 +66,29 @@ export default class SocialState extends Component {
             return <Button transparent style={styles.promotion_iconView} onPress={onPressUnLike}>
 
 
-                <Icon style={styles.promotion_like} size={20} name="heart"/>
+                <Icon style={styles.promotionLikeActive} size={20} name="heart"/>
                 <Text style={styles.socialTextColor}>{likes}</Text>
 
             </Button>
         }
         return <Button transparent style={styles.promotion_iconView} onPress={onPressLike}>
 
-            <Icon style={styles.promotion_unlike} size={25} name="heart"/>
+            <Icon style={componentStyle} size={20} name="heart"/>
             <Text style={styles.socialTextColor}>{likes}</Text>
 
         </Button>
     }
 
     createShareButton() {
-        const {share,shares, disabled,shareAction,} = this.props;
-
+        const {share,shares, disabled,shareAction,feed} = this.props;
+        let componentStyle = styles.promotionBusiness;
+        if(feed) {
+            componentStyle = styles.promotionFeed;
+        }
         if(disabled){
             return <View transparent style={styles.promotion_iconView} >
 
-                <Icon2 style={styles.promotion_share} size={25} name="share-google"/>
+                <Icon2 style={componentStyle} size={25} name="share-google"/>
                 <Text style={styles.socialTextColor}>{shares}</Text>
 
             </View>
@@ -86,7 +97,7 @@ export default class SocialState extends Component {
         if (share) {
             return <Button transparent style={styles.promotion_iconView} onPress={shareAction}>
 
-                <Icon2 style={styles.promotion_share} size={25} name="share-google"/>
+                <Icon2 style={styles.promotionShareActive} size={25} name="share-google"/>
                 <Text style={styles.socialTextColor}>{shares}</Text>
 
 
@@ -94,7 +105,7 @@ export default class SocialState extends Component {
         }
         return <Button transparent style={styles.promotion_iconView} onPress={shareAction}>
 
-            <Icon2 style={styles.promotion_comment} size={25} name="share-google"/>
+            <Icon2 style={componentStyle} size={25} name="share-google"/>
             <Text style={styles.socialTextColor}>{shares}</Text>
         </Button>;
     }
