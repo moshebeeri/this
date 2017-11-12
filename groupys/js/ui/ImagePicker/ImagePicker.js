@@ -39,7 +39,7 @@ export default class ImagePickerComponent extends Component {
         if(imageWidth){
             width = imageWidth;
         };
-        let height = 2000;
+        let height = 1400;
         if(imageWidth){
             height = imageHeight;
         };
@@ -67,7 +67,7 @@ export default class ImagePickerComponent extends Component {
         if(imageWidth){
             width = imageWidth;
         };
-        let height = 2000;
+        let height = 1400;
         if(imageWidth){
             height = imageHeight;
         };
