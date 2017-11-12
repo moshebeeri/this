@@ -24,7 +24,7 @@ class Feed extends Component {
     }
 
     render() {
-        const {navigation, feedState, feeds, userFollower, actions, token, user} = this.props;
+        const {navigation, feedState, feeds, userFollower, actions, token, user,location} = this.props;
         return (
             <GenericFeedManager
                 navigation={navigation}
@@ -36,6 +36,7 @@ class Feed extends Component {
                 actions={actions}
                 token={token}
                 entity={user}
+                location={location}
                 title='Feeds'
                 ItemDetail={GenericFeedItem}>
 
@@ -51,7 +52,8 @@ const mapStateToProps = state => {
         token: state.authentication.token,
         userFollower: state.user.followers,
         user: state.user.user,
-        feeds: getFeeds(state)
+        feeds: getFeeds(state),
+        location:state.phone.currentLocation
     }
 }
 export default connect(

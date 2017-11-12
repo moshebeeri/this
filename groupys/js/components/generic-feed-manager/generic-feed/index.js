@@ -97,12 +97,12 @@ export default class GenericFeedItem extends Component {
     }
 
     render() {
-        const {item, actions, token} = this.props;
+        const {item, actions, token,location} = this.props;
         const showUsers = this.showUsers.bind(this);
         const comment = this.comment.bind(this);
         switch (item.itemType) {
             case 'PROMOTION':
-                return this.createFeedView(<FeedPromotion token={token} comment={comment}
+                return this.createFeedView(<FeedPromotion token={token} comment={comment}  location={location}
                                                           navigation={this.props.navigation} item={item}
                                                           like={actions.like} unlike={actions.unlike}
                                                           showUsers={showUsers} save={actions.saveFeed}/>)

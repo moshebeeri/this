@@ -17,6 +17,7 @@ import RNVideo from './Video/Video';
 import EditButton from './EditButton/EditButton'
 import SocialState from './SocialState/SocialState';
 import PunchView from './punchView/PunchView'
+import PromotionSeperator from './promotionSeperator/PromotionSeperator'
 export {
     ImagePicker,
     CategoryPicker,
@@ -36,5 +37,6 @@ export {
     RNVideo,
     EditButton,
     SocialState,
-    PunchView
+    PunchView,
+    PromotionSeperator
 }

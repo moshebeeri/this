@@ -22,21 +22,18 @@ import {
     Thumbnail,
     View
 } from 'native-base';
-import Icon2 from 'react-native-vector-icons/EvilIcons';
-import Icon3 from 'react-native-vector-icons/MaterialIcons';
 import stylesPortrate from './styles'
 import stylesLandscape from './styles_lendscape'
 import StyleUtils from '../../../../utils/styleUtils'
 import * as componentCreator from "./feedCommonView";
-import { Spinner, SocialState} from '../../../../ui/index';
+import {SocialState, SubmitButton,PromotionSeperator} from '../../../../ui/index';
+import FormUtils from "../../../../utils/fromUtils";
 
 const {width, height} = Dimensions.get('window')
 const vw = width / 100;
 const vh = height / 100
 const vmin = Math.min(vw, vh);
 const vmax = Math.max(vw, vh)
-
-
 export default class FeedPromotion extends Component {
     constructor() {
         super();
@@ -47,14 +44,16 @@ export default class FeedPromotion extends Component {
     }
 
     render() {
-        const {item, save, like, unlike, showUsers, comment, token} = this.props;
+        const {item, save, like, unlike, showUsers, comment, token, location} = this.props;
         const styles = this.createPromotionStyle();
         const colorStyle = this.createColorStyle(item)
-        const promotion = <Text style={colorStyle}>{item.promotion}</Text>
         const buisnessLogo = componentCreator.createBusinessLog(item, this.showBussines.bind(this));
-        const saveIcon = componentCreator.createSaveButton(item, save);
         const image = this.createImageComponent(item, styles);
         const container = this.createContainerStyle(item);
+        let claimDisabled = true;
+        if (item.showsave) {
+            claimDisabled = false
+        }
         const result =
             <View style={container}>
                 <View style={styles.promotion_card}>
@@ -77,28 +76,34 @@ export default class FeedPromotion extends Component {
                     {image}
 
 
-                    <View style={styles.promotion_buttomUpperContainer}>
-                        <View style={styles.promotion_buttom_description}>
-                            {promotion}
-                            <Text style={styles.promotion_type}>{item.itemTitle}</Text>
-                            <View style={styles.promotion_buttom_location}>
-                                <Icon2 style={styles.promotion_location} size={25} name="clock"/>
-                                <Text style={styles.promotion_addressText} note>{item.endDate} </Text>
-
-                            </View>
-                            <View style={styles.promotion_buttom_location}>
-                                <Icon3 style={styles.promotion_location} size={25} name="location-on"/>
-                                <Text style={styles.promotion_addressText} note>{item.businessAddress} </Text>
-                            </View>
+                    <View style={styles.promotiosSeperator}>
+                        <PromotionSeperator/>
+                    </View>
+                    <View style={styles.promotionDetailsContainer}>
+                        <View style={styles.promotionLoctionContainer}>
+                            <View><Text style={styles.detailsTitleText}>Location</Text></View>
+                            <View><Text
+                                style={styles.detailsText}>{FormUtils.getDistanceFromLatLonInKm(location.lat, location.long, item.location.lat, item.location.lng)}
+                                km away</Text></View>
+                        </View>
+                        <View style={styles.expireDateContainer}>
+                            <View><Text style={styles.detailsTitleText}>Expire</Text></View>
+                            <View><Text style={styles.detailsText}>{item.endDate}</Text></View>
+                        </View>
+                        <View style={styles.editButtonContainer}>
+                            <SubmitButton title="CLAIM" color={'#2db6c8'}
+                                          disabled={claimDisabled} onPress={() => save(item.id)}/>
                         </View>
                     </View>
 
 
                     <View style={styles.promotion_bottomContainer}>
 
-                       <SocialState feed comments={item.social.comments} onPressComment={comment}
-                                    like={item.social.like} likes={item.social.numberLikes} onPressUnLike={() => unlike(item.id, token)} onPressLike={() => like(item.id, token)}
-                                    share={item.social.share} shares={item.social.shares} shareAction={showUsers}/>
+                        <SocialState feed comments={item.social.comments} onPressComment={comment}
+                                     like={item.social.like} likes={item.social.numberLikes}
+                                     onPressUnLike={() => unlike(item.id, token)}
+                                     onPressLike={() => like(item.id, token)}
+                                     share={item.social.share} shares={item.social.shares} shareAction={showUsers}/>
                     </View>
                 </View>
             </View>

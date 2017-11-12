@@ -129,7 +129,7 @@ class FeedConverter {
             responseFeed.name = instance.promotion.name;
             responseFeed.description = instance.promotion.description;
             let date = new Date(instance.promotion.end);
-            responseFeed.endDate = date.toDateString();
+            responseFeed.endDate = date.toLocaleDateString();
             responseFeed.generalId = instance.promotion._id;
             responseFeed.entities = [{promotion: instance.promotion._id}];
             switch (instance.type) {
@@ -224,6 +224,7 @@ class FeedConverter {
             responseFeed.id = instance._id;
             responseFeed.fid = feed._id;
             responseFeed.key = feed._id;
+            responseFeed.location = instance.location;
             responseFeed.generalId = promotion._id;
             responseFeed.entities = [{promotion: promotion._id}];
             if (instance.social_state) {
@@ -242,7 +243,7 @@ class FeedConverter {
                 responseFeed.showsave = !instance.social_state.saved && !instance.social_state.realized;
             }
             responseFeed.shareable = !instance.shareable;
-            responseFeed.endDate = date.toDateString();
+            responseFeed.endDate = date.toLocaleDateString();
             responseFeed.name = promotion.name;
             responseFeed.description = promotion.description;
             responseFeed.showSocial = true;

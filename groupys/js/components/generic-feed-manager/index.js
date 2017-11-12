@@ -21,10 +21,11 @@ export default class GenericFeedManager extends Component {
     }
 
     renderItem(item) {
-        const {navigation, token, userFollowers, group, ItemDetail, actions, entity} = this.props;
+        const {navigation, token, userFollowers, group, ItemDetail, actions, entity,location} = this.props;
         return <ItemDetail
             user={entity}
             token={token}
+            location={location}
             userFollowers={userFollowers}
             group={group}
             navigation={navigation}

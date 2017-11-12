@@ -245,7 +245,7 @@ module.exports = {
     },
     promotion_bottomContainer: {
         backgroundColor: 'white',
-        width: width,
+        width: width - 15,
         alignItems: 'center',
         justifyContent: 'space-between',
         height: vh * 6,
@@ -253,6 +253,16 @@ module.exports = {
         marginTop: 0,
         borderWidth: 1,
         borderColor: '#e0e0eb',
+    },
+    promotiosSeperator: {
+        backgroundColor: 'white',
+        width: width - 15,
+        height:20,
+        alignItems:'center',
+        justifyContent:'center'
+
+
+
     },
     promotion_like: {
         marginLeft: 10,
@@ -322,5 +332,40 @@ module.exports = {
     message_container: {
         width: vw * 45,
         justifyContent: 'flex-start',
-    }
+    },
+    promotionDetailsContainer:{
+        flexDirection:'row',
+        backgroundColor:'white',
+        height:55,
+        width: width- 15,
+        alignItems:'center',
+        justifyContent:'center',
+    },
+    promotionLoctionContainer:{
+        alignItems:'flex-start',
+
+        flex:2.5,
+    },
+    detailsTitleText:{
+        marginLeft:5,
+        marginRight:5,
+
+        color:'#839192',
+        fontSize:14
+    },
+    detailsText:{
+        marginLeft:5,
+        marginRight:5,
+        justifyContent:'center',
+        alignItems:'center',
+
+    },
+    expireDateContainer:{
+        alignItems:'flex-start',
+
+        flex:3,
+    },
+    editButtonContainer:{
+        flex:2.4,
+    },
 };
