@@ -273,6 +273,13 @@ module.exports = {
         justifyContent:'center',
         width:width - 15,
     },
+    promotionDetails:{
+        flex:1.6,
+        backgroundColor:'white',
+        alignItems:'flex-start',
+        justifyContent:'center',
+        width:width - 15,
+    },
     promotion_like: {
         marginLeft: 10,
         marginRight: 10,

@@ -12,16 +12,25 @@ export default class PromotionHeader extends Component {
 
 
     render() {
-        const{type,titleValue,titleText,term} = this.props;
+        const{type,titleValue,titleText,term,feed} = this.props;
+        
+        let titleValueStyle = styles.titleValue;
+        let titleTextStyle = styles.titleText;
+        let XplusYtitleValueStyle = styles.XplusYtitleValue;
+        if(feed){
+            titleValueStyle = styles.titleValueFeed;
+            titleTextStyle = styles.titleTextFeed;
+            XplusYtitleValueStyle = styles.XplusYtitleValueFeed
+         }
         switch (type) {
             case "REDUCED_AMOUNT":
                 return <View style={styles.promotionHeader}>
                     <View style={styles.promotionValue}>
-                        <Text style={styles.titleValue}>{ILS}{titleValue}</Text>
+                        <Text style={titleValueStyle}>{ILS}{titleValue}</Text>
                     </View>
                     <View style={styles.promotiontDescription}>
                         <View>
-                            <Text style={styles.titleText}>{titleText}</Text>
+                            <Text style={titleTextStyle}>{titleText}</Text>
                         </View>
                         <View>
                             <Text style={styles.promotionTermlTextStyle}>{term}</Text>
@@ -31,11 +40,11 @@ export default class PromotionHeader extends Component {
             case "PERCENT":
                 return <View style={styles.promotionHeader}>
                     <View style={styles.promotionValue}>
-                        <Text style={styles.titleValue}>{titleValue}%</Text>
+                        <Text style={titleValueStyle}>{titleValue}%</Text>
                     </View>
                     <View style={styles.promotiontDescription}>
                         <View>
-                            <Text style={styles.titleText}>{titleText}</Text>
+                            <Text style={titleTextStyle}>{titleText}</Text>
                         </View>
                         <View>
                             <Text style={styles.promotionTermlTextStyle}>{term}</Text>
@@ -45,11 +54,11 @@ export default class PromotionHeader extends Component {
             case "X_FOR_Y":
                 return <View style={styles.promotionHeader}>
                     <View style={styles.promotionValue}>
-                        <Text style={styles.titleValue}>{ILS}{titleValue}</Text>
+                        <Text style={titleValueStyle}>{ILS}{titleValue}</Text>
                     </View>
                     <View style={styles.promotiontDescription}>
                         <View>
-                            <Text style={styles.titleText}>{titleText}</Text>
+                            <Text style={titleTextStyle}>{titleText}</Text>
                         </View>
                         <View>
                             <Text style={styles.promotionTermlTextStyle}>{term}</Text>
@@ -59,11 +68,11 @@ export default class PromotionHeader extends Component {
             case "X+N%OFF":
                 return <View style={styles.promotionHeader}>
                     <View style={styles.promotionValue}>
-                        <Text style={styles.titleValue}>{titleValue}%</Text>
+                        <Text style={titleValueStyle}>{titleValue}%</Text>
                     </View>
                     <View style={styles.promotiontDescription}>
                         <View>
-                            <Text style={styles.titleText}>{titleText}</Text>
+                            <Text style={titleTextStyle}>{titleText}</Text>
                         </View>
                         <View>
                             <Text style={styles.promotionTermlTextStyle}>{term}</Text>
@@ -73,11 +82,11 @@ export default class PromotionHeader extends Component {
             case "HAPPY_HOUR":
                 return <View style={styles.promotionHeader}>
                     <View style={styles.promotionValue}>
-                        <Text style={styles.titleValue}>{ILS}{titleValue}</Text>
+                        <Text style={titleValueStyle}>{ILS}{titleValue}</Text>
                     </View>
                     <View style={styles.promotiontDescription}>
                         <View>
-                            <Text style={styles.titleText}>{titleText}</Text>
+                            <Text style={titleTextStyle}>{titleText}</Text>
                         </View>
                         <View>
                             <Text style={styles.promotionTermlTextStyle}>{term}</Text>
@@ -87,11 +96,11 @@ export default class PromotionHeader extends Component {
             case "X+Y":
                 return <View style={styles.promotionHeader}>
                     <View style={styles.promotionValue}>
-                        <Text style={styles.XplusYtitleValue}>{titleValue}</Text>
+                        <Text style={XplusYtitleValueStyle}>{titleValue}</Text>
                     </View>
                     <View style={styles.promotiontDescription}>
                         <View>
-                            <Text style={styles.titleText}>{titleText}</Text>
+                            <Text style={titleTextStyle}>{titleText}</Text>
                         </View>
                         <View>
                             <Text style={styles.promotionTermlTextStyle}>{term}</Text>

@@ -30,7 +30,7 @@ module.exports = {
     promotionValue:{
         flex:1,
         margin:5,
-        alignItems:'flex-start',
+        alignItems:'center',
         justifyContent:'center',
     },
     promotionPunchValue:{
@@ -60,6 +60,22 @@ module.exports = {
     puncCardtitleValue:{
         fontSize:16,
         color:'#e65100'
+    },
+    titleTextFeed:{
+        fontSize:20,
+        color:'#2db6c8'
+    },
+    titleValueFeed:{
+        fontSize:40,
+        color:'#2db6c8'
+    },
+    XplusYtitleValueFeed:{
+        fontSize:30,
+        color:'#2db6c8'
+    },
+    puncCardtitleValueFeed:{
+        fontSize:16,
+        color:'#2db6c8'
     },
     promotionImageContainer:{
         width: width,

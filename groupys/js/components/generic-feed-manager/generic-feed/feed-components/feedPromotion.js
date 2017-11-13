@@ -71,13 +71,17 @@ export default class FeedPromotion extends Component {
                     {image}
 
 
+
+                    <View style={styles.promotiosDescription}>
+                        <PromotionHeader type={item.promotion}  feed titleText={item.promotionTitle} titleValue={item.promotionValue} term={item.promotionTerm}/>
+                    </View>
+                    <View style={styles.promotionDetails}>
+                        <Text style={{marginRight:10,marginLeft:10,fontSize:18}}>{item.name} - {item.description}</Text>
+                    </View>
                     <View style={styles.promotiosSeperator}>
                         <PromotionSeperator/>
                     </View>
 
-                    <View style={styles.promotiosDescription}>
-                        <PromotionHeader type={item.promotion} titleText={item.promotionTitle} titleValue={item.promotionValue} term={item.promotionTerm}/>
-                    </View>
                     <View style={styles.promotionDetailsContainer}>
                         <View style={styles.promotionLoctionContainer}>
                             <View><Text style={styles.detailsTitleText}>Location</Text></View>
