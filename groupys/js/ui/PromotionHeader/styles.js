@@ -21,7 +21,7 @@ module.exports = {
     promotionPunchHeader:{
         backgroundColor:'white',
         flex:3,
-        width: width,
+        width: width -15,
         alignItems:'flex-start',
         justifyContent:'center',
 

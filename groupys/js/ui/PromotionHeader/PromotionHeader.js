@@ -2,6 +2,7 @@ import React, {Component} from 'react';
 import {View,Text} from 'react-native';
 import {Button, Icon, Input} from 'native-base';
 import styles from './styles';
+import {PunchView} from '../index'
 const ILS = '₪';
 export default class PromotionHeader extends Component {
     constructor(props) {
@@ -17,10 +18,12 @@ export default class PromotionHeader extends Component {
         let titleValueStyle = styles.titleValue;
         let titleTextStyle = styles.titleText;
         let XplusYtitleValueStyle = styles.XplusYtitleValue;
+        let puncCardtitleValue= styles.puncCardtitleValue;
         if(feed){
             titleValueStyle = styles.titleValueFeed;
             titleTextStyle = styles.titleTextFeed;
-            XplusYtitleValueStyle = styles.XplusYtitleValueFeed
+            XplusYtitleValueStyle = styles.XplusYtitleValueFeed;
+            puncCardtitleValue = styles.puncCardtitleValueFeed;
          }
         switch (type) {
             case "REDUCED_AMOUNT":
@@ -110,9 +113,9 @@ export default class PromotionHeader extends Component {
             case "PUNCH_CARD":
                 return <View style={styles.promotionPunchHeader}>
                     <View style={styles.promotionPunchValue}>
-                        <Text style={styles.puncCardtitleValue}>{titleText}</Text>
+                        <Text style={puncCardtitleValue}>{titleText}</Text>
                     </View>
-                    <PunchView numberOfPunches={promotion.punches}/>
+                    <PunchView feed numberOfPunches={term}/>
                 </View>;
             default:
                 return <View style={styles.promotionHeader}>

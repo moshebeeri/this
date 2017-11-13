@@ -320,19 +320,20 @@ class FeedConverter {
                             " get special price for " + promotion.condition.product.name
                         responseFeed.promotionValue = promotion.happy_hour.values[0].pay;
                         responseFeed.quantity = promotion.happy_hour.quantity;
-                        responseFeed.promotion = 'HAPPY HOUR';
+                        responseFeed.promotion = 'HAPPY_HOUR';
                         responseFeed.promotionColor = '#d279a6';
                     } else {
                         return undefined;
                     }
                     break;
                 case "PUNCH_CARD":
-                    let punches = promotion.punch_card.values[0].number_of_punches
+                    let punches = promotion.punch_card.values[0].number_of_punches;
+                    responseFeed.promotionTerm =punches;
                     responseFeed.itemTitle = '';
                     responseFeed.promotionTitle = "Punch Card " + punches + " Slots";
                     responseFeed.punches = punches;
                     responseFeed.quantity = promotion.punch_card.quantity;
-                    responseFeed.promotion = 'PUNCH CARD';
+                    responseFeed.promotion = 'PUNCH_CARD';
                     responseFeed.promotionColor = '#d279a6';
                     break;
                 default:
