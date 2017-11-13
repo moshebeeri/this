@@ -257,8 +257,8 @@ class FeedConverter {
             switch (instance.type) {
                 case "REDUCED_AMOUNT":
                     responseFeed.itemTitle = "Buy For " + promotion.reduced_amount.values[0].price + ' Pay Only ' + promotion.reduced_amount.values[0].pay;
-                    responseFeed.promotionTerm = "Purchase " + promotion.reduced_amount.values[0].price;
-                    responseFeed.promotion = 'REDUCED AMOUNT';
+                    responseFeed.promotionTerm = "Purchase " + promotion.reduced_amount.values[0].price + " Pay only " +  promotion.reduced_amount.values[0].pay;
+                    responseFeed.promotion = 'REDUCED_AMOUNT';
                     responseFeed.promotionTitle = 'Reduce Amount';
                     responseFeed.promotionColor = '#e65100';
                     responseFeed.quantity = promotion.reduced_amount.quantity;

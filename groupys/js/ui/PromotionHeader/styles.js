@@ -66,7 +66,7 @@ module.exports = {
         color:'#2db6c8'
     },
     titleValueFeed:{
-        fontSize:40,
+        fontSize:35,
         color:'#2db6c8'
     },
     XplusYtitleValueFeed:{
