@@ -26,7 +26,7 @@ import stylesPortrate from './styles'
 import stylesLandscape from './styles_lendscape'
 import StyleUtils from '../../../../utils/styleUtils'
 import * as componentCreator from "./feedCommonView";
-import {SocialState, SubmitButton,PromotionSeperator} from '../../../../ui/index';
+import {SocialState, SubmitButton,PromotionSeperator,PromotionHeader} from '../../../../ui/index';
 import FormUtils from "../../../../utils/fromUtils";
 
 const {width, height} = Dimensions.get('window')
@@ -62,22 +62,21 @@ export default class FeedPromotion extends Component {
                             {buisnessLogo}
                             <View style={{flexDirection: 'column'}}>
                                 <Text style={styles.promotion_nameText} note>{item.businessName} </Text>
-                                <Text style={styles.promotion_addressText} note>{item.businessAddress} </Text>
+                                <Text style={styles.promotion_addressText} note>{item.business.categoryTitle}</Text>
                             </View>
                         </View>
 
-                        <View style={styles.promotion_description}>
 
-                            <Text style={styles.promotion_text_description}>{item.name}</Text>
-                            <Text style={styles.promotion_text_description}>{item.description}</Text>
-
-                        </View>
                     </View>
                     {image}
 
 
                     <View style={styles.promotiosSeperator}>
                         <PromotionSeperator/>
+                    </View>
+
+                    <View style={styles.promotiosDescription}>
+                        <PromotionHeader type={item.promotion} titleText={item.promotionTitle} titleValue={item.promotionValue} term={item.promotionTerm}/>
                     </View>
                     <View style={styles.promotionDetailsContainer}>
                         <View style={styles.promotionLoctionContainer}>

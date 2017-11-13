@@ -112,12 +112,11 @@ export function onEndReached() {
         });
         try {
             let businesses = await businessApi.getAll(token);
-            businesses.forEach(function (business) {
-                dispatch({
-                    type: actions.UPSERT_MY_BUSINESS,
-                    item: business
-                });
-            })
+            dispatch({
+                type: actions.UPSERT_MY_BUSINESS,
+                item: businesses
+            });
+
         } catch (error) {
             dispatch({
                 type: actions.NETWORK_IS_OFFLINE,
@@ -231,12 +230,11 @@ export function saveBusiness(business,navigation) {
             const user = getState().user.user;
             await entityUtils.create('businesses', business, token, undefined, undefined, user._id);
             let businesses = await businessApi.getAll(token);
-            businesses.forEach(function (business) {
-                dispatch({
-                    type: actions.UPSERT_MY_BUSINESS,
-                    item: business
-                });
-            })
+
+            dispatch({
+                type: actions.UPSERT_MY_BUSINESS,
+                item: businesses
+            });
             let selectedBusiness = businesses.filter(newBusiness => {
                 newBusiness.business.name === business.name
             });
@@ -266,11 +264,10 @@ export function updateBusiness(business,navigation) {
             const token = getState().authentication.token;
             await entityUtils.update('businesses', business, token, business._id);
             let businesses = await businessApi.getAll(token);
-            businesses.forEach(function (business) {
-                dispatch({
-                    type: actions.UPSERT_MY_BUSINESS,
-                    item: business
-                });
+
+            dispatch({
+                type: actions.UPSERT_MY_BUSINESS,
+                item: businesses
             });
 
             dispatch({

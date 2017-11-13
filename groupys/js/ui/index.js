@@ -18,6 +18,7 @@ import EditButton from './EditButton/EditButton'
 import SocialState from './SocialState/SocialState';
 import PunchView from './punchView/PunchView'
 import PromotionSeperator from './promotionSeperator/PromotionSeperator'
+import PromotionHeader from './PromotionHeader/PromotionHeader'
 export {
     ImagePicker,
     CategoryPicker,
@@ -38,5 +39,6 @@ export {
     EditButton,
     SocialState,
     PunchView,
-    PromotionSeperator
+    PromotionSeperator,
+    PromotionHeader
 }

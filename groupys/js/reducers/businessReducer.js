@@ -29,19 +29,24 @@ export default function business(state = initialState, action) {
             businessesState.update = !businessesState.update;
             //not all the time we get the business social state in this case we need to make sure we take the social state from the last business
             action.item.forEach(eventItem => {
+                let categoryTitle = eventItem.categoryTitle;
+                if (!categoryTitle && currentbusinesses[eventItem._id])  {
+                    categoryTitle = currentbusinesses[eventItem._id].categoryTitle;
+                }
                 if (eventItem.social_state || !currentbusinesses[eventItem._id]) {
                     currentbusinesses[eventItem._id] = eventItem;
                 } else {
                     eventItem.social_state = currentbusinesses[eventItem._id].social_state;
                     currentbusinesses[eventItem._id] = eventItem;
                 }
+                currentbusinesses[eventItem._id].categoryTitle = categoryTitle;
             });
             return businessesState;
         case actions.UPSERT_MY_BUSINESS:
             let myCurrentbusinesses = businessesState.myBusinesses;
             businessesState.update = !businessesState.update;
             action.item.forEach(eventItem => {
-                currentbusinesses[eventItem._id] = eventItem;
+                myCurrentbusinesses[eventItem.business._id] = eventItem;
             });
             return businessesState;
         case actions.LIKE:
@@ -92,31 +97,25 @@ export default function business(state = initialState, action) {
         case actions.SET_PROMOTION_BUSINESS:
             let businessesPromotions = businessesState.businessesPromotions;
             businessesState.update = !businessesState.update;
-
-            if(businessesPromotions[action.businessId]){
-
-                if(action.businessesPromotions && action.businessesPromotions.length > 0){
+            if (businessesPromotions[action.businessId]) {
+                if (action.businessesPromotions && action.businessesPromotions.length > 0) {
                     action.businessesPromotions.forEach(promotion => {
                         let update = false;
                         let updaeIndex = 0;
-                        businessesPromotions[action.businessId].forEach((currentPromotion,index) =>{
-                            if(currentPromotion._id === promotion._id){
+                        businessesPromotions[action.businessId].forEach((currentPromotion, index) => {
+                            if (currentPromotion._id === promotion._id) {
                                 updaeIndex = index;
                                 update = true;
                             }
-
-                        } );
-
-                        if(update){
+                        });
+                        if (update) {
                             businessesPromotions[action.businessId][updaeIndex] = promotion;
-                        }else{
+                        } else {
                             businessesPromotions[action.businessId].push(promotion);
                         }
                     })
                 }
-
-
-            }else {
+            } else {
                 businessesPromotions[action.businessId] = action.businessesPromotions;
             }
             return businessesState;

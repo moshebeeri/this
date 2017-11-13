@@ -3,6 +3,7 @@
  */
 import FeedApi from "../api/feed";
 import UserApi from "../api/user";
+import BusinessApi from "../api/business";
 import PtomotionApi from "../api/promotion";
 import ActivityApi from "../api/activity";
 import * as actions from "../reducers/reducerActions";
@@ -13,6 +14,7 @@ let feedApi = new FeedApi();
 let userApi = new UserApi();
 let promotionApi = new PtomotionApi();
 let activityApi = new ActivityApi();
+let businessApi = new BusinessApi();
 
 async function fetchFeedsFromServer(feeds, dispatch, token, user) {
     try {
@@ -20,18 +22,18 @@ async function fetchFeedsFromServer(feeds, dispatch, token, user) {
         if (_.isEmpty(feeds)) {
             response = await feedApi.getAll('down', 'start', token, user);
         } else {
-            let keys = Object.keys(feeds)
-            let id = keys[keys.length - 1]
+            let keys = Object.keys(feeds);
+            let id = keys[keys.length - 1];
             response = await feedApi.getAll('down', feeds[id].fid, token, user);
         }
         if (!response)
             return;
-        if (response.length == 0) {
+        if (response.length === 0) {
             return;
         }
         let collectionDispatcher = new CollectionDispatcher();
-        let disassemblerItems = response.map(item => assemblers.disassembler(item, collectionDispatcher))
-        collectionDispatcher.dispatchEvents(dispatch)
+        let disassemblerItems = response.map(item => assemblers.disassembler(item, collectionDispatcher));
+        collectionDispatcher.dispatchEvents(dispatch, updateBusinessCategory, token);
         dispatch({
             type: actions.UPSERT_FEEDS_ITEMS,
             items: disassemblerItems
@@ -48,12 +50,12 @@ async function fetchTopList(id, token, user, dispatch) {
         let response = await feedApi.getAll('up', id, token, user);
         if (!response)
             return;
-        if (response.length == 0) {
+        if (response.length === 0) {
             return;
         }
         let collectionDispatcher = new CollectionDispatcher();
         let disassemblerItems = response.map(item => assemblers.disassembler(item, collectionDispatcher));
-        collectionDispatcher.dispatchEvents(dispatch)
+        collectionDispatcher.dispatchEvents(dispatch, updateBusinessCategory, token);
         disassemblerItems.forEach(item => dispatch({
             type: actions.UPSERT_FEEDS_TOP,
             item: item
@@ -62,6 +64,33 @@ async function fetchTopList(id, token, user, dispatch) {
         dispatch({
             type: actions.NETWORK_IS_OFFLINE,
         });
+    }
+}
+
+async function updateBusinessCategory(token, businesses, dispatch) {
+    try {
+        let businessIds = [];
+        let filterBusiness = businesses.filter(business => {
+            if (businessIds.includes(business._id)) {
+                return false;
+            }
+            businessIds.push(business._id);
+            return true;
+        });
+        if (filterBusiness && filterBusiness.length > 0) {
+            let updatedBusinesses = await Promise.all(filterBusiness.map(async (item) => {
+                item.categoryTitle = await businessApi.getSubCategory(token, item.subcategory);
+                return item;
+            }));
+            dispatch({
+                type: actions.UPSERT_BUSINESS,
+                item: updatedBusinesses
+            });
+        }
+    } catch (error) {
+        dispatch({
+            type: actions.NETWORK_IS_OFFLINE,
+        })
     }
 }
 

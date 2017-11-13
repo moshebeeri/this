@@ -23,8 +23,6 @@ export default class SocialState extends Component {
 
 
     render() {
-        const {} = this.props;
-
         return <View style={styles.socialContainer}>
             {this.createLikeButton()}
             {this.createCommentButton()}
@@ -73,7 +71,7 @@ export default class SocialState extends Component {
         }
         return <Button transparent style={styles.promotion_iconView} onPress={onPressLike}>
 
-            <Icon style={componentStyle} size={20} name="heart"/>
+            <Icon style={componentStyle} size={25} name="heart"/>
             <Text style={styles.socialTextColor}>{likes}</Text>
 
         </Button>

@@ -23,6 +23,10 @@ const nameToCollections = {
     'user': 'user',
 };
 
+const excludeKeys = ['values'];
+
+
+
 function collectionName(key) {
     return fieldName2CollectionName[key];
 }
@@ -72,11 +76,11 @@ export function assembler(input, collections) {
     Object.keys(obj).forEach(key => {
         let collection = nameToCollection(key);
         if (!collection) {
-            if (obj[key] && typeof obj[key] === 'object')
+            if (obj[key] && typeof obj[key] === 'object' && !excludeKeys.includes(key) )
                 obj[key] = assembler(obj[key], collections);
         } else {
             obj[key] = dataGetCollection(collections, collection)[obj[key]];
-            if (!obj[key]) return;
+            if (!obj[key]) return obj;
             obj[key] = assembler(obj[key], collections);
         }
     });
