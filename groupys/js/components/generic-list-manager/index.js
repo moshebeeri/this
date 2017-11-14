@@ -29,7 +29,7 @@ class GenericListManager extends Component {
 
     render() {
         const {rows, ItemDetail, actions, update, onEndReached} = this.props;
-        const onEndActions = this.getOnEndAction(actions, onEndReached)
+        const onEndActions = this.getOnEndAction(actions, onEndReached);
         return (
 
             <Content style={{backgroundColor: '#b7b7b7'}}>
