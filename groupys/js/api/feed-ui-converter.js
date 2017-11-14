@@ -78,13 +78,7 @@ class FeedConverter {
             share: false,
         }
         if (feed.activity.business.social_state) {
-            socialState = {
-                like: feed.activity.business.social_state.like,
-                numberLikes: feed.activity.business.social_state.likes,
-                follow: feed.activity.business.social_state.follow,
-                shares: feed.activity.business.social_state.shares,
-                share: feed.activity.business.social_state.share,
-            }
+            socialState = feed.activity.business.social_state;
         }
         if (feed.activity.business.pictures && feed.activity.business.pictures[0]) {
             response = {

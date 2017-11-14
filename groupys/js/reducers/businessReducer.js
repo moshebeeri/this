@@ -30,7 +30,7 @@ export default function business(state = initialState, action) {
             //not all the time we get the business social state in this case we need to make sure we take the social state from the last business
             action.item.forEach(eventItem => {
                 let categoryTitle = eventItem.categoryTitle;
-                if (!categoryTitle && currentbusinesses[eventItem._id])  {
+                if (!categoryTitle && currentbusinesses[eventItem._id]) {
                     categoryTitle = currentbusinesses[eventItem._id].categoryTitle;
                 }
                 if (eventItem.social_state || !currentbusinesses[eventItem._id]) {
@@ -54,6 +54,13 @@ export default function business(state = initialState, action) {
             if (item) {
                 item.social_state.like = true;
                 item.social_state.likes = item.social_state.likes + 1;
+                return businessesState;
+            } else {
+                return state;
+            }
+        case actions.FEED_UPDATE_SOCIAL_STATE:
+            if (businessesState.businesses[action.id]) {
+                businessesState.businesses[action.id].social_state = action.social_state;
                 return businessesState;
             } else {
                 return state;

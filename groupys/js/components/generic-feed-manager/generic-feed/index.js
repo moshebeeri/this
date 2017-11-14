@@ -109,7 +109,7 @@ export default class GenericFeedItem extends Component {
             case 'WELCOME':
                 return this.createFeedView(<FeedWelcome token={token} navigation={this.props.navigation} item={item}/>)
             default:
-                return this.createFeedView(<FeedBusiness location={location} token={token}
+                return this.createFeedView(<FeedBusiness location={location} token={token} refresh={actions.refresh}
                                                          navigation={this.props.navigation} item={item}
                                                          comment={comment} like={actions.like} unlike={actions.unlike}
                                                          showUsers={showUsers} save={actions.saveFeed}
