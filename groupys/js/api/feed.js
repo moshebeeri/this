@@ -37,6 +37,32 @@ class FeedApi {
             }
         })
     }
+
+    getFeedSocialState(id,token) {
+        return new Promise(async (resolve, reject) => {
+            try {
+                let from = new Date();
+                const response = await fetch(`${server_host}/api/feeds/social_state/` + id, {
+                    method: 'GET',
+                    headers: {
+                        'Accept': 'application/json, text/plain, */*',
+                        'Content-Type': 'application/json;charset=utf-8',
+                        'Authorization': 'Bearer ' + token
+                    }
+                });
+                if (response.status ==='401') {
+                    reject(response);
+                    return;
+                }
+                let responseData = await response.json();
+                timer.logTime(from, new Date(), 'feeds', '/');
+                resolve(responseData);
+            }
+            catch (error) {
+                reject(error);
+            }
+        })
+    }
 }
 
 export default FeedApi;

@@ -1,25 +1,22 @@
 import React, {Component} from 'react';
-import {Image, Platform, PanResponder, TouchableHighlight} from 'react-native';
-import {connect} from 'react-redux';
+import {PanResponder} from 'react-native';
 import {actions} from 'react-native-navigation-redux-helpers';
 import {
+    Button,
+    Card,
+    CardItem,
     Container,
     Content,
-    Text,
-    InputGroup,
+    Footer,
+    Header,
     Input,
-    Thumbnail,
-    Button,
-    Picker,
-    Right,
+    InputGroup,
     Item,
     Left,
-    Header,
-    Footer,
-    Body,
-    View,
-    Card,
-    CardItem
+    Picker,
+    Right,
+    Thumbnail,
+    View
 } from 'native-base';
 import FeedMessage from './feed-components/feedMessage'
 import FeedPromotion from './feed-components/feedPromotion'
@@ -97,12 +94,13 @@ export default class GenericFeedItem extends Component {
     }
 
     render() {
-        const {item, actions, token,location} = this.props;
+        const {item, actions, token, location} = this.props;
         const showUsers = this.showUsers.bind(this);
         const comment = this.comment.bind(this);
         switch (item.itemType) {
             case 'PROMOTION':
-                return this.createFeedView(<FeedPromotion token={token} comment={comment}  location={location}
+                return this.createFeedView(<FeedPromotion refresh={actions.refresh} token={token} comment={comment}
+                                                          location={location}
                                                           navigation={this.props.navigation} item={item}
                                                           like={actions.like} unlike={actions.unlike}
                                                           showUsers={showUsers} save={actions.saveFeed}/>)
@@ -111,7 +109,8 @@ export default class GenericFeedItem extends Component {
             case 'WELCOME':
                 return this.createFeedView(<FeedWelcome token={token} navigation={this.props.navigation} item={item}/>)
             default:
-                return this.createFeedView(<FeedBusiness location={location} token={token} navigation={this.props.navigation} item={item}
+                return this.createFeedView(<FeedBusiness location={location} token={token}
+                                                         navigation={this.props.navigation} item={item}
                                                          comment={comment} like={actions.like} unlike={actions.unlike}
                                                          showUsers={showUsers} save={actions.saveFeed}
                                                          _panResponder={this._panResponder}/>)

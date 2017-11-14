@@ -55,8 +55,6 @@ class InViewPort extends React.PureComponent {
         this.interval = clearInterval(this.interval)
     }
 
-
-
     check = () => {
         const el = this.myview;
         if (!el) { return }
@@ -84,7 +82,6 @@ class InViewPort extends React.PureComponent {
             this.state.rectBottom !== 0 && this.state.rectTop >= 0 && this.state.rectBottom <= window.height &&
             this.state.rectWidth > 0 && this.state.rectWidth <= window.width
         );
-
 
         // notify the parent when the value changes
         if (this.lastValue !== isVisible) {

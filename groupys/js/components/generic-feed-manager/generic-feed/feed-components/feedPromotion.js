@@ -3,6 +3,7 @@
  */
 import React, {Component} from 'react';
 import {Dimensions, Image} from 'react-native';
+import InViewPort from '../../../../utils/inviewport'
 import {actions} from 'react-native-navigation-redux-helpers';
 import {
     Button,
@@ -43,8 +44,9 @@ export default class FeedPromotion extends Component {
         this.props.navigation.navigate("businessProfile", {bussiness: this.props.item.business});
     }
 
+
     render() {
-        const {item, save, like, unlike, showUsers, comment, token, location} = this.props;
+        const {refresh,item, save, like, unlike, showUsers, comment, token, location} = this.props;
         const styles = this.createPromotionStyle();
         const colorStyle = this.createColorStyle(item)
         const buisnessLogo = componentCreator.createBusinessLog(item, this.showBussines.bind(this));
@@ -55,7 +57,7 @@ export default class FeedPromotion extends Component {
             claimDisabled = false
         }
         const result =
-            <View style={container}>
+            <InViewPort  onChange={() => refresh(item.id)} style={container}>
                 <View style={styles.promotion_card}>
                     <View style={styles.promotion_upperContainer}>
                         <View style={styles.logo_view}>
@@ -109,7 +111,7 @@ export default class FeedPromotion extends Component {
                                      share={item.social.share} shares={item.social.shares} shareAction={showUsers}/>
                     </View>
                 </View>
-            </View>
+            </InViewPort>
         return result;
     }
 

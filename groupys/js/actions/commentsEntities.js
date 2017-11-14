@@ -1,7 +1,9 @@
 import CommentsApi from "../api/commet";
+import FeedApi from "../api/feed";
 import * as actions from "../reducers/reducerActions";
 
 let commentsApi = new CommentsApi();
+let feedApi = new FeedApi();
 
 export function fetchTop(feeds, token, entities, generalId) {
     return fetchTopComments(entities, generalId);
@@ -51,18 +53,18 @@ export function sendMessage(entities, generalId, message) {
         const token = getState().authentication.token;
         const user = getState().user.user;
         try {
-            commentsApi.createGlobalComment(entities, message, token)
+            await commentsApi.createGlobalComment(entities, message, token)
+            let messageItem = createMessage(message, user);
+            dispatch({
+                type: actions.ENTITIES_COMMENT_INSTANCE_ADD_MESSAGE,
+                generalId: generalId,
+                message: messageItem
+            });
         } catch (error) {
             dispatch({
                 type: actions.NETWORK_IS_OFFLINE,
             });
         }
-        let messageItem = createMessage(message, user);
-        dispatch({
-            type: actions.ENTITIES_COMMENT_INSTANCE_ADD_MESSAGE,
-            generalId: generalId,
-            message: messageItem
-        });
     }
 }
 

@@ -1,5 +1,4 @@
 import React, {Component} from "react";
-import {Image, Platform} from "react-native";
 import {actions} from "react-native-navigation-redux-helpers";
 import GenericFeedManager from "../generic-feed-manager/index";
 import GenericFeedItem from "../generic-feed-manager/generic-feed";
@@ -24,7 +23,7 @@ class Feed extends Component {
     }
 
     render() {
-        const {navigation, feedState, feeds, userFollower, actions, token, user,location} = this.props;
+        const {navigation, feedState, feeds, userFollower, actions, token, user, location} = this.props;
         return (
             <GenericFeedManager
                 navigation={navigation}
@@ -53,7 +52,8 @@ const mapStateToProps = state => {
         userFollower: state.user.followers,
         user: state.user.user,
         feeds: getFeeds(state),
-        location:state.phone.currentLocation
+        promoptions: state.promotions,
+        location: state.phone.currentLocation
     }
 }
 export default connect(

@@ -191,6 +191,25 @@ export function like(id) {
     }
 }
 
+export function refresh(id) {
+    return async function (dispatch, getState) {
+        try {
+            const token = getState().authentication.token
+            let response = await feedApi.getFeedSocialState(id, token);
+            dispatch({
+                type: actions.FEED_UPDATE_SOCIAL_STATE,
+                social_state: response,
+                id: id
+            });
+            // await userApi.like(id, token);
+        } catch (error) {
+            dispatch({
+                type: actions.NETWORK_IS_OFFLINE,
+            });
+        }
+    }
+}
+
 export const unlike = (id) => {
     return async function (dispatch, getState) {
         try {

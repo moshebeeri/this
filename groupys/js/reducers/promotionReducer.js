@@ -10,8 +10,7 @@
 /**
  * Created by stan229 on 5/27/16.
  */
-const initialState = {promotions: {},savingForm:false};
-import store from "react-native-simple-store";
+const initialState = {promotions: {}, savingForm: false};
 import {REHYDRATE} from "redux-persist/constants";
 import * as actions from "./reducerActions";
 
@@ -27,7 +26,6 @@ export default function promotion(state = initialState, action) {
     }
     let promotionsState = {...state};
     let currentPromotions = promotionsState.promotions;
-
     switch (action.type) {
         case actions.UPSERT_PROMOTION:
             action.item.forEach(eventItem => {
@@ -39,11 +37,35 @@ export default function promotion(state = initialState, action) {
                 }
             });
             return promotionsState;
+        case actions.FEED_UPDATE_SOCIAL_STATE:
+            if (currentPromotions[action.id]) {
+                currentPromotions[action.id].social_state = action.social_state;
+            }
+            promotionsState.promotions = currentPromotions;
+            return promotionsState;
         case actions.PROMOTION_SAVING:
             return {
                 ...state,
                 savingForm: true,
             };
+        case actions.LIKE:
+            let item = currentPromotions[action.id];
+            if (item) {
+                item.social_state.like = true;
+                item.social_state.likes = item.social_state.likes + 1;
+                return currentPromotions;
+            } else {
+                return state;
+            }
+        case actions.UNLIKE:
+            let unlikeItem = currentPromotions[action.id];
+            if (unlikeItem) {
+                unlikeItem.social_state.like = false;
+                unlikeItem.social_state.likes = unlikeItem.social_state.likes - 1;
+                return currentPromotions;
+            } else {
+                return state;
+            }
         case actions.PROMOTION_SAVING_DONE:
             return {
                 ...state,
