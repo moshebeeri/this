@@ -21,6 +21,8 @@ import GenericListManager from '../generic-list-manager/index'
 import * as notificationAction from "../../actions/notifications";
 import * as groupActions from "../../actions/groups";
 import {bindActionCreators} from "redux";
+import YouTube from 'react-native-youtube'
+import {Video} from "../../ui/index";
 
 class Notification extends Component {
     constructor(props) {
@@ -40,14 +42,38 @@ class Notification extends Component {
     render() {
         const {notification, navigation, actions} = this.props;
         return (
-            <GenericListManager navigation={navigation} rows={notification.notification} actions={actions}
-                                update={notification.update} ItemDetail={this.renderItem.bind(this)}/>
+            <View>
+                <Video
+                    source="YOUTUBE"
+                    width={300}
+                    paused={true}
+                    videoId={'tc4gfaoaa9A'}
+                />
+
+
+                <GenericListManager navigation={navigation} rows={notification.notification} actions={actions}
+                                    update={notification.update} ItemDetail={this.renderItem.bind(this)}/>
+            </View>
 
 
         );
     }
 }
-
+/*
+                   <YouTube
+                    videoId="BY6VntTmtIo"   // The YouTube video ID
+                    play={true}             // control playback of video with true/false
+                    fullscreen={false}       // control whether the video should play in fullscreen or inline
+                    loop={false}             // control whether the video should loop when ended
+//
+//                    onReady={e => this.setState({ isReady: true })}
+//                    onChangeState={e => this.setState({ status: e.state })}
+//                    onChangeQuality={e => this.setState({ quality: e.quality })}
+//                    onError={e => this.setState({ error: e.error })}
+//
+style={{ alignSelf: 'stretch', height: 300 }}
+/>
+* */
 export default connect(
     state => ({
         notification: state.notification

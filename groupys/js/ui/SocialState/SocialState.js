@@ -23,7 +23,7 @@ export default class SocialState extends Component {
 
 
     render() {
-        const {} = this.props;
+        //const {} = this.props;
 
         return <View style={styles.socialContainer}>
             {this.createLikeButton()}
