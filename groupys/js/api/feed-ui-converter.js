@@ -116,6 +116,11 @@ class FeedConverter {
         response.generalId = feed.activity.business._id;
         response.entities = [{business: feed.activity.business._id}];
         response.itemType = 'BUSINESS';
+        response.businessLogo = feed.activity.business.logo;
+        response.bussinessCategory = feed.activity.business.categoryTitle;
+        response.businessName = feed.activity.business.name;
+        response.location = feed.activity.business.location;
+
         return response;
     }
 

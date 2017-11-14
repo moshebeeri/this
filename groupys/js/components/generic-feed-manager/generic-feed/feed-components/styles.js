@@ -242,8 +242,7 @@ module.exports = {
     },
     business_buttomUpperContainer: {
         backgroundColor: 'white',
-        width: width,
-        height: vh * 12,
+        width: width -15,
         flexDirection: 'row',
         marginTop: 0,
     },
