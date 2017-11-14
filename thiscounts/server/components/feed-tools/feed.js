@@ -157,6 +157,15 @@ exports.group_state = function(user_id, group, callback) {
   return group_state(user_id, group, callback);
 };
 
+exports.getSocialState = function(userId, entityId, callback) {
+  social_state(userId, entityId, function(err, social_state) {
+    if (err) {
+      return callback(err, null);
+    }
+    return callback(null, social_state);
+  });
+};
+
 function mall_state(user_id, mall, callback) {
   social_state(user_id, mall._id, function(err, social_state) {
     if (err) {

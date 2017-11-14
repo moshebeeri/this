@@ -54,7 +54,17 @@ exports.feed = function (req, res) {
   return feedTools.fetch_feed(userId, query_builder, Feed, res);
 };
 
+exports.social_state = function (req, res) {
+  let userId = req.user._id;
+  let entityId = req.params.entityId;
 
+  feedTools.getSocialState(userId, entityId, function(err, socialState){
+    if (err) {
+      return handleError(res, err);
+    }
+    return res.status(200).json(socialState);
+  })
+};
 
 //[
 //  {feed_id, top_id},

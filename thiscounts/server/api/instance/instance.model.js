@@ -27,7 +27,7 @@ let InstanceSchema = new Schema({
     percent: {type: Number, min: 1, max: 100},
 
     gift: {
-      product: {type: Schema.ObjectId, ref: 'Product'},
+      product: {type: Schema.ObjectId, ref: 'Product', autopopulate: true},
       retail_price: {type: Number},
     },
     x_plus_y: {
@@ -36,6 +36,7 @@ let InstanceSchema = new Schema({
     },
     x_plus_n_percent_off: {
       buy: Number,
+      product: {type: Schema.ObjectId, ref: 'Product', autopopulate: true},
       eligible: Number,
     },
     x_for_y: {
@@ -68,7 +69,7 @@ let InstanceSchema = new Schema({
       price: Number
     },
     punch_card: {
-      product: {type: Schema.ObjectId, ref: 'Product'},
+      product: {type: Schema.ObjectId, ref: 'Product', autopopulate: true},
       number_of_punches: Number,
       days: Number,
     },
@@ -81,7 +82,7 @@ let InstanceSchema = new Schema({
       booking_before: Date
     },
     happy_hour: {
-      product : {type: Schema.ObjectId, ref: 'Product'},
+      product: {type: Schema.ObjectId, ref: 'Product', autopopulate: true},
       pay     : Number,
       days    : Number,
       from    : Number, // seconds from midnight
@@ -90,7 +91,7 @@ let InstanceSchema = new Schema({
     more_than: {
       value_type: {type: String, enum: ['PERCENT', 'QUANTITY']},
       more_than : Number,
-      product   : {type: Schema.ObjectId, ref: 'Product'},
+      product   : {type: Schema.ObjectId, ref: 'Product', autopopulate: true},
       value     : Number,
     }
   }
