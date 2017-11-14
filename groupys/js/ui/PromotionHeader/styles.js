@@ -11,7 +11,7 @@ module.exports = {
     },
     promotionHeader:{
         backgroundColor:'white',
-        flex:3,
+        flex:1,
         width: width -15,
         alignItems:'center',
         justifyContent:'center',
@@ -29,7 +29,7 @@ module.exports = {
     },
     promotionValue:{
         flex:1,
-        margin:5,
+
         alignItems:'center',
         justifyContent:'center',
     },
@@ -41,7 +41,14 @@ module.exports = {
         justifyContent:'flex-start',
     },
     promotiontDescription:{
-        flex:3.5,
+        flex:3,
+        margin:4,
+        alignItems:'flex-start',
+        justifyContent:'center',
+    },
+    promotiontHappyDescription:{
+        flex:3,
+        margin:4,
         alignItems:'flex-start',
         justifyContent:'center',
     },
@@ -65,8 +72,15 @@ module.exports = {
         fontSize:20,
         color:'#2db6c8'
     },
+    titleHappyTextFeed:{
+        fontSize:15,
+        color:'#2db6c8'
+    },
     titleValueFeed:{
-        fontSize:35,
+        fontSize:30,
+        textAlignVertical: "center",
+        textAlign: "center",
+
         color:'#2db6c8'
     },
     XplusYtitleValueFeed:{
@@ -74,7 +88,7 @@ module.exports = {
         color:'#2db6c8'
     },
     puncCardtitleValueFeed:{
-        fontSize:16,
+
         color:'#2db6c8'
     },
     promotionImageContainer:{
@@ -106,6 +120,9 @@ module.exports = {
     },
     promotionTermlTextStyle:{
         color:'#839192',
+        fontSize:13,
+        textAlignVertical: "center",
+
     },
     promotionDetailsContainer:{
         flexDirection:'row',

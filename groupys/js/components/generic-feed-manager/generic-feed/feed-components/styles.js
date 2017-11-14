@@ -268,7 +268,7 @@ module.exports = {
 
     },
     promotiosDescription: {
-        flex:2,
+        flex:2.5 ,
         alignItems:'center',
         justifyContent:'center',
         width:width - 15,
