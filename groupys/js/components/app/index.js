@@ -1,7 +1,7 @@
 import React, {Component} from "react";
-import {Image, Platform, StyleSheetm, Dimensions} from "react-native";
+import {Dimensions, Image, StyleSheetm} from "react-native";
 import {connect} from "react-redux";
-import {Container, View, Tabs, Tab, TabHeading, Drawer, Fab} from "native-base";
+import {Container, Drawer, Fab, Tab, TabHeading, Tabs, View} from "native-base";
 import Icon from "react-native-vector-icons/EvilIcons";
 import Icon2 from "react-native-vector-icons/Ionicons";
 import GeneralComponentHeader from "../header/index";
@@ -18,7 +18,7 @@ import codePush from "react-native-code-push";
 import SideBar from "../drawer/index";
 import * as actions from "../../reducers/reducerActions";
 import {bindActionCreators} from "redux";
-import {isAuthenticated, showAddAction, addComponent, showCompoenent} from "../../selectors/appSelector";
+import {addComponent, isAuthenticated, showAddAction, showCompoenent} from "../../selectors/appSelector";
 import * as mainAction from "../../actions/mainTab";
 import * as userAction from "../../actions/user";
 import {createSelector} from "reselect";
@@ -47,7 +47,7 @@ const warch = navigator.geolocation.watchPosition((position) => {
             }
             store.dispatch({
                 type: actions.SET_LOCATION,
-                currentLocation:{lat:position.coords.latitude,long:position.coords.longitude}
+                currentLocation: {lat: position.coords.latitude, long: position.coords.longitude}
             })
         } catch (error) {
             store.dispatch({
@@ -144,7 +144,7 @@ class ApplicationManager extends Component {
                 ref={(ref) => {
                     this.drawer = ref;
                 }}
-                content={<SideBar closeDrawer={closeDrawer}navigation={this.props.navigation}/>}
+                content={<SideBar closeDrawer={closeDrawer} navigation={this.props.navigation}/>}
                 onClose={() => closeDrawer}>
                 <Container>
                     <GeneralComponentHeader openDrawer={openDrawer} navigate={this.props.navigation.navigate}

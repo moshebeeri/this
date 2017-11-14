@@ -6,7 +6,8 @@ const initialState = {
     savedfeeds: [],
     showTopLoader: false,
     update: false,
-    lastfeed: undefined
+    lastfeed: undefined,
+    maxFeeds:10,
 };
 import {REHYDRATE} from "redux-persist/constants";
 import * as actions from "./reducerActions";
@@ -56,6 +57,7 @@ export default function feeds(state = initialState, action) {
             }
             feedstate.feeds = currentFeeds;
             return feedstate;
+
         case actions.FEED_LOADING_DONE:
             return {
                 ...state,

@@ -34,6 +34,13 @@ export default function instances(state = initialState, action) {
             } else {
                 return state;
             }
+        case actions.FEED_UPDATE_SOCIAL_STATE:
+            if (currentState.instances[action.id]) {
+                currentState.instances[action.id].social_state = action.social_state;
+                return currentState;
+            } else {
+                return state;
+            }
         case actions.UNLIKE:
             let unlikeItem = currentState.instances[action.id];
             if (unlikeItem) {

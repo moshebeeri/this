@@ -120,7 +120,6 @@ class FeedConverter {
         response.bussinessCategory = feed.activity.business.categoryTitle;
         response.businessName = feed.activity.business.name;
         response.location = feed.activity.business.location;
-
         return response;
     }
 
@@ -232,8 +231,8 @@ class FeedConverter {
             responseFeed.fid = feed._id;
             responseFeed.key = feed._id;
             responseFeed.location = instance.location;
-            responseFeed.generalId = promotion._id;
-            responseFeed.entities = [{promotion: promotion._id}];
+            responseFeed.generalId = instance._id;
+            responseFeed.entities = [{instance: instance._id}];
             if (instance.social_state) {
                 responseFeed.social = {
                     like: instance.social_state.like,
@@ -262,7 +261,7 @@ class FeedConverter {
             switch (instance.type) {
                 case "REDUCED_AMOUNT":
                     responseFeed.itemTitle = "Buy For " + promotion.reduced_amount.values[0].price + ' Pay Only ' + promotion.reduced_amount.values[0].pay;
-                    responseFeed.promotionTerm = "Purchase " + promotion.reduced_amount.values[0].price + " Pay only " +  promotion.reduced_amount.values[0].pay;
+                    responseFeed.promotionTerm = "Purchase " + promotion.reduced_amount.values[0].price + " Pay only " + promotion.reduced_amount.values[0].pay;
                     responseFeed.promotion = 'REDUCED_AMOUNT';
                     responseFeed.promotionTitle = 'Reduce Amount';
                     responseFeed.promotionColor = '#e65100';
@@ -333,7 +332,7 @@ class FeedConverter {
                     break;
                 case "PUNCH_CARD":
                     let punches = promotion.punch_card.values[0].number_of_punches;
-                    responseFeed.promotionTerm =punches;
+                    responseFeed.promotionTerm = punches;
                     responseFeed.itemTitle = '';
                     responseFeed.promotionTitle = "Punch Card " + punches + " Slots";
                     responseFeed.punches = punches;

@@ -13,7 +13,7 @@ class InViewPort extends React.PureComponent {
 
     static defaultProps = {
         active: true,
-        delay: 100,
+        delay: 500,
     };
 
     constructor(props) {
