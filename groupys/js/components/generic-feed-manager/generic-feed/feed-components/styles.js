@@ -242,8 +242,7 @@ module.exports = {
     },
     business_buttomUpperContainer: {
         backgroundColor: 'white',
-        width: width,
-        height: vh * 12,
+        width: width -15,
         flexDirection: 'row',
         marginTop: 0,
     },
@@ -268,7 +267,7 @@ module.exports = {
 
     },
     promotiosDescription: {
-        flex:2,
+        flex:2.5 ,
         alignItems:'center',
         justifyContent:'center',
         width:width - 15,

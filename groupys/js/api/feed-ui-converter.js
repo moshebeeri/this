@@ -116,6 +116,11 @@ class FeedConverter {
         response.generalId = feed.activity.business._id;
         response.entities = [{business: feed.activity.business._id}];
         response.itemType = 'BUSINESS';
+        response.businessLogo = feed.activity.business.logo;
+        response.bussinessCategory = feed.activity.business.categoryTitle;
+        response.businessName = feed.activity.business.name;
+        response.location = feed.activity.business.location;
+
         return response;
     }
 
@@ -280,7 +285,7 @@ class FeedConverter {
                     break;
                 case "X_FOR_Y":
                     responseFeed.itemTitle = 'Buy ' + promotion.x_for_y.values[0].eligible + " " + promotion.condition.product.name + " Pay only " + promotion.x_for_y.values[0].pay;
-                    responseFeed.promotion = 'X FOR Y';
+                    responseFeed.promotion = 'X_FOR_Y';
                     responseFeed.promotionColor = '#ff66b3';
                     responseFeed.promotionTitle = 'Buy X For Y';
                     responseFeed.promotionValue = promotion.x_for_y.values[0].pay;
@@ -291,7 +296,7 @@ class FeedConverter {
                     if (promotion.x_plus_n_percent_off.values[0].product) {
                         responseFeed.itemTitle = 'Buy ' + promotion.condition.product.name + " Get " + promotion.x_plus_n_percent_off.values[0].product.name + " with " + promotion.x_plus_n_percent_off.values[0].eligible + " %Off";
                     }
-                    responseFeed.promotion = 'X+N%OFFf';
+                    responseFeed.promotion = 'X+N%OFF';
                     responseFeed.promotionColor = '#ff66b3';
                     responseFeed.quantity = promotion.x_plus_n_percent_off.quantity;
                     responseFeed.promotionTitle = 'Buy X get Y with Discount';
@@ -312,11 +317,11 @@ class FeedConverter {
                     responseFeed.quantity = promotion.x_plus_y.quantity;
                     break;
                 case "HAPPY_HOUR":
-                    if (promotion.happy_hour && promotion.happy_hour.values && promotion.happy_hour.values.length > 0) {
+                    if (promotion.happy_hour && promotion.happy_hour.values) {
                         responseFeed.itemTitle = '';
                         responseFeed.promotionTitle = "Happy Hour";
                         responseFeed.promotionTerm = "Every " + FormUtils.convertDaysNumToString(promotion.happy_hour.values[0].days) + " happy hour from " +
-                            FormUtils.secondsFromMidnightToString(promotion.happy_hour.values[0].from) + " until " + FormUtils.secondsFromMidnightToString(promotion.happy_hour.values[0].from + promotion.happy_hour.values[0].until) +
+                            FormUtils.secondsFromMidnightToString(promotion.happy_hour.values[0].from) + "-" + FormUtils.secondsFromMidnightToString(promotion.happy_hour.values[0].from + promotion.happy_hour.values[0].until) +
                             " get special price for " + promotion.condition.product.name
                         responseFeed.promotionValue = promotion.happy_hour.values[0].pay;
                         responseFeed.quantity = promotion.happy_hour.quantity;

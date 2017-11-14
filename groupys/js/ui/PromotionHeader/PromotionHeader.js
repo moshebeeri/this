@@ -29,91 +29,91 @@ export default class PromotionHeader extends Component {
             case "REDUCED_AMOUNT":
                 return <View style={styles.promotionHeader}>
                     <View style={styles.promotionValue}>
-                        <Text style={titleValueStyle}>{ILS}{titleValue}</Text>
+                        <Text adjustsFontSizeToFit style={titleValueStyle}>{ILS}{titleValue}</Text>
                     </View>
                     <View style={styles.promotiontDescription}>
                         <View>
-                            <Text style={titleTextStyle}>{titleText}</Text>
+                            <Text adjustsFontSizeToFit style={titleTextStyle}>{titleText}</Text>
                         </View>
                         <View>
-                            <Text style={styles.promotionTermlTextStyle}>{term}</Text>
+                            <Text adjustsFontSizeToFit style={styles.promotionTermlTextStyle}>{term}</Text>
                         </View>
                     </View>
                 </View>;
             case "PERCENT":
                 return <View style={styles.promotionHeader}>
                     <View style={styles.promotionValue}>
-                        <Text style={titleValueStyle}>{titleValue}%</Text>
+                        <Text adjustsFontSizeToFit style={titleValueStyle}>{titleValue}%</Text>
                     </View>
                     <View style={styles.promotiontDescription}>
                         <View>
-                            <Text style={titleTextStyle}>{titleText}</Text>
+                            <Text adjustsFontSizeToFit style={titleTextStyle}>{titleText}</Text>
                         </View>
                         <View>
-                            <Text style={styles.promotionTermlTextStyle}>{term}</Text>
+                            <Text adjustsFontSizeToFit style={styles.promotionTermlTextStyle}>{term}</Text>
                         </View>
                     </View>
                 </View>;
             case "X_FOR_Y":
                 return <View style={styles.promotionHeader}>
                     <View style={styles.promotionValue}>
-                        <Text style={titleValueStyle}>{ILS}{titleValue}</Text>
+                        <Text adjustsFontSizeToFit style={titleValueStyle}>{ILS}{titleValue}</Text>
                     </View>
                     <View style={styles.promotiontDescription}>
                         <View>
-                            <Text style={titleTextStyle}>{titleText}</Text>
+                            <Text adjustsFontSizeToFit style={titleTextStyle}>{titleText}</Text>
                         </View>
                         <View>
-                            <Text style={styles.promotionTermlTextStyle}>{term}</Text>
+                            <Text adjustsFontSizeToFit style={styles.promotionTermlTextStyle}>{term}</Text>
                         </View>
                     </View>
                 </View>;
             case "X+N%OFF":
                 return <View style={styles.promotionHeader}>
                     <View style={styles.promotionValue}>
-                        <Text style={titleValueStyle}>{titleValue}%</Text>
+                        <Text adjustsFontSizeToFit style={titleValueStyle}>{titleValue}%</Text>
                     </View>
                     <View style={styles.promotiontDescription}>
                         <View>
-                            <Text style={titleTextStyle}>{titleText}</Text>
+                            <Text adjustsFontSizeToFit style={titleTextStyle}>{titleText}</Text>
                         </View>
                         <View>
-                            <Text style={styles.promotionTermlTextStyle}>{term}</Text>
+                            <Text adjustsFontSizeToFit style={styles.promotionTermlTextStyle}>{term}</Text>
                         </View>
                     </View>
                 </View>;
             case "HAPPY_HOUR":
                 return <View style={styles.promotionHeader}>
                     <View style={styles.promotionValue}>
-                        <Text style={titleValueStyle}>{ILS}{titleValue}</Text>
+                        <Text numberOfLines={1} allowFontScaling={true} adjustsFontSizeToFit  style={titleValueStyle}>{ILS}{titleValue}</Text>
                     </View>
-                    <View style={styles.promotiontDescription}>
-                        <View>
-                            <Text style={titleTextStyle}>{titleText}</Text>
+                    <View style={styles.promotiontHappyDescription}>
+                        <View style={{flex:0.4}}>
+                            <Text allowFontScaling={true} adjustsFontSizeToFit ={true}  style={styles.titleHappyTextFeed}>{titleText}</Text>
                         </View>
-                        <View>
-                            <Text style={styles.promotionTermlTextStyle}>{term}</Text>
+                        <View View style={{flex:1}}>
+                            <Text allowFontScaling={true} adjustsFontSizeToFit ={true} numberOfLines={3} style={styles.promotionTermlTextStyle}>{term}</Text>
                         </View>
                     </View>
                 </View>;
             case "X+Y":
                 return <View style={styles.promotionHeader}>
                     <View style={styles.promotionValue}>
-                        <Text style={XplusYtitleValueStyle}>{titleValue}</Text>
+                        <Text  allowFontScaling={true} adjustsFontSizeToFit style={XplusYtitleValueStyle}>{titleValue}</Text>
                     </View>
                     <View style={styles.promotiontDescription}>
                         <View>
-                            <Text style={titleTextStyle}>{titleText}</Text>
+                            <Text adjustsFontSizeToFit style={titleTextStyle}>{titleText}</Text>
                         </View>
                         <View>
-                            <Text style={styles.promotionTermlTextStyle}>{term}</Text>
+                            <Text adjustsFontSizeToFit style={styles.promotionTermlTextStyle}>{term}</Text>
                         </View>
                     </View>
                 </View>;
             case "PUNCH_CARD":
                 return <View style={styles.promotionPunchHeader}>
                     <View style={styles.promotionPunchValue}>
-                        <Text style={puncCardtitleValue}>{titleText}</Text>
+                        <Text adjustsFontSizeToFit style={puncCardtitleValue}>{titleText}</Text>
                     </View>
                     <PunchView feed numberOfPunches={term}/>
                 </View>;
