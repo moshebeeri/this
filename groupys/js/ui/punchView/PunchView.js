@@ -25,7 +25,13 @@ export default class PunchView extends Component {
         return row
     }
 
+
+
     createPunch(index){
-        return <View key={index}style={styles.punch}></View>
+        let style = styles.punch;
+        if(this.props.feed) {
+            style = styles.punchFeed;
+        }
+        return <View key={index}style={style}></View>
     }
 }

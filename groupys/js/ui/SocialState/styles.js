@@ -6,8 +6,6 @@ module.exports = {
         flexDirection: 'row',
         justifyContent: 'center',
         alignItems:'center',
-        borderTopWidth:0.3,
-        borderColor:'#b3b3b3',
         minWidth:width,
         height: 40,
     },
