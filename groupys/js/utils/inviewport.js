@@ -13,7 +13,8 @@ class InViewPort extends React.PureComponent {
 
     static defaultProps = {
         active: true,
-        delay: 500,
+        delay: 100,
+        partialVisibility: false
     };
 
     constructor(props) {
@@ -37,7 +38,7 @@ class InViewPort extends React.PureComponent {
     componentWillReceiveProps(nextProps) {
         if(nextProps.active !== this.props.active){
             if (nextProps.active) {
-                this.lastValue = null
+                this.lastValue = null;
                 this.startWatching()
             } else {
                 this.stopWatching()
@@ -62,9 +63,22 @@ class InViewPort extends React.PureComponent {
                 rectTop: pageY,
                 rectBottom: pageY + height,
                 rectWidth: pageX + width,
+                //added for partial support
+                rectLeft: pageX,
+                rectRight: pageX + width,
             })
         });
-        const isVisible = (
+        const containmentRect = {
+            top: 0,
+            left: 0,
+            bottom: window.height,
+            right: window.width
+        };
+
+        let isVisible = this.props.partialVisibility? (
+            this.state.rectTop <= containmentRect.bottom && this.state.rectBottom >= containmentRect.top &&
+            rect.left <= containmentRect.right && this.state.right >= containmentRect.left
+            ) : (
             this.state.rectBottom !== 0 && this.state.rectTop >= 0 && this.state.rectBottom <= window.height &&
             this.state.rectWidth > 0 && this.state.rectWidth <= window.width
         );
