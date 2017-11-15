@@ -9,8 +9,9 @@ module.exports = {
     },
     inputContainer: {
         flex: 1,
-        height: height,
-        width: width,
+        backgroundColor: '#bfbfbf',
+        alignItems:'center',
+        justifyContent:'center'
     },
     item: {
         backgroundColor: 'white',
@@ -127,8 +128,10 @@ module.exports = {
     comments_promotions: {
         padding: 0,
         margin: 10,
-        backgroundColor: '#ffffff',
+        flex:1,
+        backgroundColor: 'white',
         flexDirection: 'row',
+
     },
     comments_logo: {
         marginLeft: 10

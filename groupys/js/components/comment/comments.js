@@ -20,6 +20,7 @@ let commentApi = new CommentApi();
 import {bindActionCreators} from "redux";
 import * as commentAction from "../../actions/comments";
 import EmojiPicker from 'react-native-emoji-picker-panel'
+import {BusinessHeader, MessageBox, PromotionHeader} from '../../ui/index';
 
 class GenericComments extends Component {
     static navigationOptions = {
@@ -30,8 +31,31 @@ class GenericComments extends Component {
         super(props);
     }
 
+    getInstance() {
+        if (this.props.instance) {
+            return this.props.instance;
+        }
+        if (this.props.navigation.state.params.instance) {
+            return this.props.navigation.state.params.instance;
+        }
+        return this.props.item;
+    }
+
+    getBusiness(item) {
+        if (item.business) {
+            return item.business
+        }
+        return item;
+    }
+
     render() {
+        const item = this.getInstance();
+        const business = this.getBusiness(item);
+
         return <View behavior={'position'} style={styles.inputContainer}>
+            <BusinessHeader showBack navigation={this.props.navigation} business={business}
+                            categoryTitle={business.categoryTitle} businessLogo={item.businessLogo}
+                            businessName={item.businessName}/>
 
 
             <CommentsComponenet navigation={this.props.navigation}

@@ -1,28 +1,17 @@
 import React, {Component} from "react";
-import {
-    Image,
-    TextInput,
-    Dimensions,
-    Platform,
-    View,
-    Keyboard,
-    TouchableNativeFeedback,
-    TouchableOpacity,
-    KeyboardAvoidingView
-} from "react-native";
+import {Dimensions, Platform, View} from "react-native";
 import {connect} from "react-redux";
 import {actions} from "react-native-navigation-redux-helpers";
-import {Icon, Button, Text, Input, Thumbnail} from "native-base";
+import {Button, Icon, Input, Thumbnail} from "native-base";
 import GenericFeedManager from "../generic-feed-manager/index";
 import GenericFeedItem from "../generic-feed-manager/generic-feed";
 import styles from "./styles";
-import Icon2 from "react-native-vector-icons/Entypo";
 import {bindActionCreators} from "redux";
 import NestedScrollView from "react-native-nested-scrollview";
 import * as commentEntitiesAction from "../../actions/commentsEntities";
 import {getFeeds} from "../../selectors/commentsEntitiesSelector";
-import EmojiPicker from "react-native-emoji-picker-panel";
-import {BusinessHeader,MessageBox} from '../../ui/index';
+import {BusinessHeader, MessageBox, PromotionHeader} from '../../ui/index';
+
 const {width, height} = Dimensions.get('window')
 const vw = width / 100;
 const vh = height / 100
@@ -30,73 +19,15 @@ const vh = height / 100
 class CommentsComponent extends Component {
     constructor(props) {
         super(props);
-        let showComment = false;
-        if (props.showComments) {
-            showComment = true;
-        }
         this.state = {
             messsage: '',
-            showComment: showComment,
-            showEmoji: false,
-            iconEmoji: 'emoji-neutral',
-            componentHight: 400,
-            keyboardOn: false,
-            keyboardSize: 0
         };
-        this.handlePick = this.handlePick.bind(this);
     }
-
 
     componentWillMount() {
         const item = this.getInstance();
-        this.keyboardDidShowListener = Keyboard.addListener('keyboardDidShow', this._keyboardDidShow.bind(this));
-        this.keyboardDidHideListener = Keyboard.addListener('keyboardDidHide', this._keyboardDidHide.bind(this));
         const {navigation, actions} = this.props;
         actions.fetchTopComments(item.entities, item.generalId);
-    }
-
-    _keyboardDidShow(e) {
-        let newSize = height - e.endCoordinates.height
-        this.setState({
-            keyboardOn: true,
-            keyboardSize: newSize
-        })
-    }
-
-    _keyboardDidHide() {
-        this.setState({
-            keyboardOn: false
-        })
-    }
-
-    handlePick(emoji) {
-        let message = this.state.messsage;
-        this.setState({
-            messsage: message + emoji,
-        });
-    }
-
-    showEmoji() {
-        let show = !this.state.showEmoji;
-        if (show) {
-            this.setState({
-                showEmoji: show,
-                iconEmoji: "keyboard"
-            })
-        } else {
-            Keyboard.dismiss();
-            this.setState({
-                showEmoji: show,
-                iconEmoji: "emoji-neutral"
-            })
-        }
-    }
-
-    hideEmoji() {
-        this.setState({
-            showEmoji: false,
-            iconEmoji: 'emoji-neutral'
-        })
     }
 
     getInstance() {
@@ -109,8 +40,6 @@ class CommentsComponent extends Component {
         return this.props.item;
     }
 
-
-
     _onPressButton(message) {
         const item = this.getInstance();
         const {group, actions} = this.props;
@@ -119,107 +48,49 @@ class CommentsComponent extends Component {
         }
     }
 
-
-    showComments() {
-        let show = !this.state.showComment;
-        this.setState({
-            showComment: show
-        })
+    getBusiness(item) {
+        if (item.business) {
+            return item.business
+        }
+        return item;
     }
 
     render() {
         const item = this.getInstance();
-        const promotion = this.getBannerComponent(item);
-        const colorStyle = {
-            color: item.promotionColor,
-            fontFamily: 'Roboto-Regular', marginLeft: 10, marginTop: 4, fontSize: 16
+
+        let promotionHeader ;
+        if(item.promotion) {
+             promotionHeader = <View style={styles.comments_promotions}>
+                <PromotionHeader type={item.promotion} feed titleText={item.promotionTitle}
+                                 titleValue={item.promotionValue} term={item.promotionTerm}/>
+
+
+            </View>;
         }
-        const promotionType = <Text style={colorStyle}>{item.promotion}</Text>
-        const showComment = this.state.showComment;
-
-        const arrowIcon = this.getArrowComponent(showComment);
-        const commentsView = this.createCommentView(showComment, item);
-        const showMessageInput = this.createMessageComponent(showComment);
-        const showEmoji = this.createEmojiComponent(showComment, this.state.showEmoji);
-        const style = this.createStyle(showComment, this.state.keyboardOn, this.state.keyboardSize);
+        const commentsView = this.createCommentView(true, item);
         return (
-            <View style={style}>
-                <View>
-                    <BusinessHeader showBack navigation={this.props.navigation} business={item.business}  categoryTitle={item.business.categoryTitle} businessLogo={item.businessLogo} businessName={item.businessName} />
-                </View>
-                <View style={styles.comments_promotions}>
-                    <View style={styles.comments_promotions}>
-                        {promotion}
-                    </View>
-                    <View style={styles.comment_description_container}>
-                        <Text style={styles.promotion_text_description}>{item.name}</Text>
-                        {promotionType}
-                        <Text style={styles.promotion_type}>{item.itemTitle}</Text>
+            <View style={{
+                width: width - 15,
+                marginTop:5,
+                marginBottom:5,
+                 backgroundColor: 'white',
+                flex:1,
+            }}>
+                {promotionHeader}
+                <View style={{flex:9}}>
 
+                    <View  style={{flex:10}}>
+                    {commentsView}
                     </View>
-                    <View style={styles.comment_colapse}>
-                        <Button onPress={() => this.showComments()} style={styles.icon} transparent>
-
-                            <Icon2 style={{fontSize: 35, color: "#dadada"}} name={arrowIcon}/>
-                        </Button>
+                    <View >
+                        <MessageBox onPress={this._onPressButton.bind(this)}/>
                     </View>
                 </View>
-                {commentsView}
-                <MessageBox onPress={this._onPressButton.bind(this)} />
             </View>
 
 
 
         );
-    }
-
-    createStyle(showComment, keboardOn, keyboardSize) {
-        if (showComment) {
-            if (keboardOn) {
-                return {
-                    flex:1, backgroundColor: '#ebebeb'
-                }
-            }
-            return {
-                flex:1, backgroundColor: '#ebebeb'
-            }
-        }
-        return {
-            flex:1, backgroundColor: '#ebebeb'
-        };
-    }
-
-    createEmojiComponent(showComment, showEmoji) {
-        if (showComment) {
-            return <EmojiPicker stylw={{height: 100}} visible={showEmoji} onEmojiSelected={this.handlePick}/>
-        }
-        return undefined;
-    }
-
-    createMessageComponent(showComment) {
-        if (showComment) {
-            return <View style={styles.message_container}>
-                <View style={{backgroundColor: 'white', flexDirection: 'row'}}>
-                    <Button onPress={() => this._onPressButton()} style={styles.icon} transparent>
-
-                        <Icon style={{fontSize: 35, color: "#2db6c8"}} name='send'/>
-                    </Button>
-                    <Input style={{width: 300}} value={this.state.messsage} onFocus={this.hideEmoji.bind(this)}
-                           blurOnSubmit={true} returnKeyType='done' ref="3"
-                           onSubmitEditing={this._onPressButton.bind(this)}
-                           onChangeText={(messsage) => this.setState({messsage})} placeholder='write text'/>
-
-
-                    <Button onPress={() => this.showEmoji()} style={styles.icon} transparent>
-
-                        <Icon2 style={{fontSize: 35, color: "#2db6c8"}} name={this.state.iconEmoji}/>
-                    </Button>
-
-                </View>
-
-            </View>
-        }
-        return undefined;
     }
 
     nextCommentPage() {
@@ -250,21 +121,6 @@ class CommentsComponent extends Component {
                 ItemDetail={GenericFeedItem}>
 
             </GenericFeedManager>
-        }
-        return undefined;
-    }
-
-    getArrowComponent(showComment) {
-        if (showComment) {
-            return "chevron-small-up";
-        }
-        return "chevron-small-down";
-        ;
-    }
-
-    getBannerComponent(item) {
-        if (item.banner) {
-            return <Thumbnail square={true} size={50} source={{uri: item.banner.uri}}/>
         }
         return undefined;
     }
