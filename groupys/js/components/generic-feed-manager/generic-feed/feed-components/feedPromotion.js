@@ -57,7 +57,7 @@ export default class FeedPromotion extends Component {
             claimDisabled = false
         }
         const result =
-            <InViewPort  onChange={() => refresh(item.id)} style={container}>
+            <InViewPort  onChange={() => refresh(item.id,item.social)} style={container}>
                 <View style={styles.promotion_card}>
                     <View style={styles.promotion_upperContainer}>
                         <View style={styles.logo_view}>
@@ -105,7 +105,7 @@ export default class FeedPromotion extends Component {
                     <View style={styles.promotion_bottomContainer}>
 
                         <SocialState feed comments={item.social.comments} onPressComment={comment}
-                                     like={item.social.like} likes={item.social.numberLikes}
+                                     like={item.social.like} likes={item.social.likes}
                                      onPressUnLike={() => unlike(item.id, token)}
                                      onPressLike={() => like(item.id, token)}
                                      share={item.social.share} shares={item.social.shares} shareAction={showUsers}/>

@@ -19,6 +19,8 @@ import SocialState from './SocialState/SocialState';
 import PunchView from './punchView/PunchView'
 import PromotionSeperator from './promotionSeperator/PromotionSeperator'
 import PromotionHeader from './PromotionHeader/PromotionHeader'
+import BusinessHeader from './BusinessHeader/BusinessHeader'
+import MessageBox from './MessageBox/MessageBox'
 export {
     ImagePicker,
     CategoryPicker,
@@ -40,5 +42,7 @@ export {
     SocialState,
     PunchView,
     PromotionSeperator,
-    PromotionHeader
+    PromotionHeader,
+    BusinessHeader,
+    MessageBox
 }

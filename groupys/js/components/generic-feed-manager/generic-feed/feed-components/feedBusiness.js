@@ -49,7 +49,7 @@ export default class FeedBusiness extends Component {
         const styles = componentCreator.createStyle();
         const imageBusiness = this.createBusinessImage(item, styles);
         const result =
-            <InViewPort onChange={() => refresh(item.id)} style={styles.bussiness_container}>
+            <InViewPort onChange={() => refresh(item.id,item.social)} style={styles.bussiness_container}>
                 <View style={styles.promotion_card}>
                     <View style={styles.promotion_upperContainer}>
                         <View style={styles.logo_view}>
@@ -57,7 +57,7 @@ export default class FeedBusiness extends Component {
                             <View style={{flex: 1, flexDirection: 'column'}}>
                                 <Text style={styles.promotion_nameText} note>{item.businessName} </Text>
                                 <Text numberOfLines={1} style={styles.promotion_addressText}
-                                      note>{item.bussinessCategory}</Text>
+                                      note>{item.categoryTitle}</Text>
                             </View>
                         </View>
 

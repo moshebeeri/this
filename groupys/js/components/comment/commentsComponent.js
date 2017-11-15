@@ -22,7 +22,7 @@ import NestedScrollView from "react-native-nested-scrollview";
 import * as commentEntitiesAction from "../../actions/commentsEntities";
 import {getFeeds} from "../../selectors/commentsEntitiesSelector";
 import EmojiPicker from "react-native-emoji-picker-panel";
-
+import {BusinessHeader,MessageBox} from '../../ui/index';
 const {width, height} = Dimensions.get('window')
 const vw = width / 100;
 const vh = height / 100
@@ -45,6 +45,7 @@ class CommentsComponent extends Component {
         };
         this.handlePick = this.handlePick.bind(this);
     }
+
 
     componentWillMount() {
         const item = this.getInstance();
@@ -108,17 +109,16 @@ class CommentsComponent extends Component {
         return this.props.item;
     }
 
-    _onPressButton() {
+
+
+    _onPressButton(message) {
         const item = this.getInstance();
         const {group, actions} = this.props;
-        let message = this.state.messsage;
         if (message) {
             actions.sendMessage(item.entities, item.generalId, message);
         }
-        this.setState({
-            messsage: '',
-        })
     }
+
 
     showComments() {
         let show = !this.state.showComment;
@@ -136,6 +136,7 @@ class CommentsComponent extends Component {
         }
         const promotionType = <Text style={colorStyle}>{item.promotion}</Text>
         const showComment = this.state.showComment;
+
         const arrowIcon = this.getArrowComponent(showComment);
         const commentsView = this.createCommentView(showComment, item);
         const showMessageInput = this.createMessageComponent(showComment);
@@ -143,6 +144,9 @@ class CommentsComponent extends Component {
         const style = this.createStyle(showComment, this.state.keyboardOn, this.state.keyboardSize);
         return (
             <View style={style}>
+                <View>
+                    <BusinessHeader showBack navigation={this.props.navigation} business={item.business}  categoryTitle={item.business.categoryTitle} businessLogo={item.businessLogo} businessName={item.businessName} />
+                </View>
                 <View style={styles.comments_promotions}>
                     <View style={styles.comments_promotions}>
                         {promotion}
@@ -161,8 +165,7 @@ class CommentsComponent extends Component {
                     </View>
                 </View>
                 {commentsView}
-                {showMessageInput}
-                {showEmoji}
+                <MessageBox onPress={this._onPressButton.bind(this)} />
             </View>
 
 
@@ -174,15 +177,15 @@ class CommentsComponent extends Component {
         if (showComment) {
             if (keboardOn) {
                 return {
-                    height: keyboardSize - 100, backgroundColor: '#ebebeb'
+                    flex:1, backgroundColor: '#ebebeb'
                 }
             }
             return {
-                height: vh * 80, backgroundColor: '#ebebeb'
+                flex:1, backgroundColor: '#ebebeb'
             }
         }
         return {
-            height: vh * 15, backgroundColor: '#ebebeb'
+            flex:1, backgroundColor: '#ebebeb'
         };
     }
 

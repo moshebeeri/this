@@ -22,6 +22,10 @@ import * as commentAction from "../../actions/comments";
 import EmojiPicker from 'react-native-emoji-picker-panel'
 
 class GenericComments extends Component {
+    static navigationOptions = {
+        header: null
+    };
+
     constructor(props) {
         super(props);
     }

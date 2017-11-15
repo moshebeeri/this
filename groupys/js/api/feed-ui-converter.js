@@ -111,7 +111,7 @@ class FeedConverter {
         response.entities = [{business: feed.activity.business._id}];
         response.itemType = 'BUSINESS';
         response.businessLogo = feed.activity.business.logo;
-        response.bussinessCategory = feed.activity.business.categoryTitle;
+        response.categoryTitle = feed.activity.business.categoryTitle;
         response.businessName = feed.activity.business.name;
         response.location = feed.activity.business.location;
         return response;
@@ -228,18 +228,7 @@ class FeedConverter {
             responseFeed.generalId = instance._id;
             responseFeed.entities = [{instance: instance._id}];
             if (instance.social_state) {
-                responseFeed.social = {
-                    like: instance.social_state.like,
-                    numberLikes: instance.social_state.likes,
-                    follow: instance.social_state.follow,
-                    saved: instance.social_state.saved,
-                    activityId: feed.activity._id,
-                    realized: instance.social_state.realized,
-                    use: instance.social_state.use,
-                    share: instance.social_state.share,
-                    shares: instance.social_state.shares,
-                    comments: instance.social_state.comments
-                };
+                responseFeed.social = instance.social_state
                 responseFeed.showsave = !instance.social_state.saved && !instance.social_state.realized;
             }
             responseFeed.shareable = !instance.shareable;

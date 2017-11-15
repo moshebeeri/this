@@ -191,11 +191,18 @@ export function like(id) {
     }
 }
 
-export function refresh(id) {
+export function refresh(id, currentSocialState) {
     return async function (dispatch, getState) {
         try {
             const token = getState().authentication.token
             let response = await feedApi.getFeedSocialState(id, token);
+            if (response) {
+                if (response.likes === currentSocialState.likes &&
+                    response.shares === currentSocialState.shares &&
+                    response.comments === currentSocialState.comments) {
+                    return;
+                }
+            }
             dispatch({
                 type: actions.FEED_UPDATE_SOCIAL_STATE,
                 social_state: response,
