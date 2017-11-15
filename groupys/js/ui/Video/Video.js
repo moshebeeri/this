@@ -68,6 +68,7 @@ export default class RNVideo extends Component {
                             />
                             : this.state.source === 'YOUTUBE' ?
                             <YouTube
+                                apiKey="AIzaSyACe_Cci4drnZovD8xjJOdrsIOQwyWSyCg"
                                 videoId={this.state.videoId}
                                 play={!this.state.paused}
                                 fullscreen={false}
