@@ -8,6 +8,7 @@ const Business = require('../business/business.model');
 const ShoppingChain = require('../shoppingChain/shoppingChain.model');
 const Mall = require('../mall/mall.model');
 const Group = require('../group/group.model');
+const Instance = require('../instance/instance.model');
 const PhoneNumber = require('../phone_number/phone_number.model');
 const config = require('../../config/environment');
 const jwt = require('jsonwebtoken');
@@ -93,6 +94,20 @@ exports.like = function (req, res) {
   graphModel.relate_ids(userId, 'LIKE', req.params.id, function (err) {
     if(err) return handleError(res, err);
     generate_follow(userId, req.params.id);
+
+    async.parallel({
+        instance: function (callback) {
+          Instance.findById(req.params.id, callback);
+        }
+      },
+      function (err, results) {
+        if(err) return console.log(err);
+        if( results.instance ) {
+          graphModel.relate_ids(userId, 'LIKE', results.instance.promotion._id, function (err) {
+          })
+        }
+      });
+
   });
   return res.json(200, "like called for object " + req.params.id + " and user " + userId);
 };

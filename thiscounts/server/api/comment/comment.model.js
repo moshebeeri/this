@@ -8,6 +8,7 @@ const autopopulate = require('mongoose-autopopulate');
 let CommentSchema = new Schema({
   gid: { type: Number, index: true},
   user: {type: Schema.ObjectId, ref: 'User', index: true, autopopulate: utils.userAutopopulateOptions, required: true},
+  created: {type: Date, default: Date.now},
   message: String,
   pictures: [],
   entities: {
