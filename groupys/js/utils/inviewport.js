@@ -13,7 +13,7 @@ class InViewPort extends React.PureComponent {
 
     static defaultProps = {
         active: true,
-        delay: 100,
+        delay: 400,
         partialVisibility: false
     };
 
@@ -77,7 +77,7 @@ class InViewPort extends React.PureComponent {
 
         let isVisible = this.props.partialVisibility? (
             this.state.rectTop <= containmentRect.bottom && this.state.rectBottom >= containmentRect.top &&
-            rect.left <= containmentRect.right && this.state.right >= containmentRect.left
+            this.state.left <= containmentRect.right && this.state.right >= containmentRect.left
             ) : (
             this.state.rectBottom !== 0 && this.state.rectTop >= 0 && this.state.rectBottom <= window.height &&
             this.state.rectWidth > 0 && this.state.rectWidth <= window.width
