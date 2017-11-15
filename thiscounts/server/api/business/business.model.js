@@ -50,7 +50,7 @@ let BusinessSchema = new Schema({
   },
   logo: String,
   pictures: [],
-  video: String
+  video: {}
 });
 // db.businesses.ensureIndex({
 //   name: 'text',

@@ -53,7 +53,7 @@ let PromotionSchemaObject = {
   },
   name: {type: String, required: true},
   pictures : [],
-  video: String,
+  video: {},
   type: {
     type: String,
     enum: promotionTypes
