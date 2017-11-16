@@ -60,6 +60,7 @@ function createFeed(message) {
         actor: user._id,
         showSocial: false,
         description: message.message,
+        date:message.created,
     }
     if (user.pictures && user.pictures.length > 0) {
         response.logo = {
