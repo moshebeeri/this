@@ -22,7 +22,7 @@ let BusinessSchema = new Schema({
   email: {type: String, index: true, required: true},
   website: String,
   creator: {type: Schema.ObjectId, index: true, ref: 'User', required: true},
-  created: {type: Date, default: Date.now},
+  created: {type: Date, default: Date.now, required: true},
   info: String,
 
   default_group: {type: Schema.ObjectId, index: true, ref: 'Group'},

@@ -24,6 +24,8 @@ exports.show = function(req, res) {
 
 // Creates a new realize in the DB.
 exports.create = function(req, res) {
+  let realize = req.body;
+  realize.created = Date.now();
   Realize.create(req.body, function(err, realize) {
     if(err) { return handleError(res, err); }
     graphModel.reflect(realize, function (err) {

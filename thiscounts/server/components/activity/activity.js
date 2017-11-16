@@ -79,6 +79,7 @@ Activity.prototype.activity = function activity(act, callback) {
 };
 
 Activity.prototype.create = function create(act, callback) {
+  act.timestamp = Date.now();
   this.activity(act, function (err, activity) {
     if(callback){
       if (err) callback(err);
@@ -89,6 +90,7 @@ Activity.prototype.create = function create(act, callback) {
 };
 
 function activity_impl(act, callback) {
+  act.timestamp = Date.now();
   ActivitySchema.create(act, function (err, activity) {
     if (err) {
       callback(err, null);

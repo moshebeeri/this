@@ -14,7 +14,7 @@ let InviteSchema = new Schema({
   offers: [{type: Schema.ObjectId, ref: 'Offer', required: true}],
   invited_users: [{type: Schema.ObjectId, ref: 'User', required: true}],
   invited_groups: [{type: Schema.ObjectId, ref: 'Group', required: true}],
-  start: { type : Date, default: Date.now },
+  start: { type : Date, required: true },
   end: Date,
   expireAt: {
     type: Date,

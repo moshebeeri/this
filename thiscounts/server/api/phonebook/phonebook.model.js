@@ -5,7 +5,7 @@ let mongoose = require('mongoose'),
 
 let PhonebookSchema = new Schema({
   phonebook : [],
-  updated: { type : Date, default: Date.now }
+  updated: { type : Date, required: true }
 });
 
 module.exports = mongoose.model('Phonebook', PhonebookSchema);

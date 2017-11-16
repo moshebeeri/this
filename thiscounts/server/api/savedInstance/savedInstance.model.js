@@ -17,7 +17,7 @@ const savedDataTypes = [
 
 let SavedInstanceSchema = new Schema({
   gid: { type: Number, index: true},
-  created: {type: Date},
+  created: {type: Date, required: true},
   user: {type: Schema.ObjectId, ref: 'User', required: true, autopopulate: utils.userAutopopulateOptions },
   instance: {type: Schema.ObjectId, ref: 'Instance', required: true, autopopulate: true },
   type: {type: String, required: true},

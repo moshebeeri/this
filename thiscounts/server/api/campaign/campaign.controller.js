@@ -36,14 +36,15 @@ exports.create_campaign = function(campaign, callback) {
 // Creates a new campaign in the DB.
 exports.create = function(req, res) {
   req.body.creator = req.user._id;
+  req.body.created = Date.now();
   this.create_campaign(req.body, function(err, campaign) {
     if(err) { return handleError(res, err); }
     graphModel.reflect(campaign, to_graph(campaign), function (err) {
       if (err) { return handleError(res, err); }
     });
     graphModel.relate_ids(req.body["business_id"], 'BUSINESS_CAMPAIGN', campaign._id );
-    req.body["type"] = 'PERCENT';
-    req.body["campaign_id"] = campaign._id;
+    req.body.type = 'PERCENT';
+    req.body.campaign_id = campaign._id;
     Promotion.create(req, res);
     //return res.status(201).json(campaign);
   });

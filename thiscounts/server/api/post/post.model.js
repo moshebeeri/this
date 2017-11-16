@@ -9,7 +9,7 @@ let PostSchema = new Schema({
   title: String,
   gid: {type: Number, index: true},
   creator: {type: Schema.ObjectId, ref: 'User', autopopulate: utils.userAutopopulateOptions},
-  created: {type: Date, default: Date.now},
+  created: {type: Date, required: true},
   behalf: {
     user: {type: Schema.ObjectId, ref: 'User', autopopulate: utils.userAutopopulateOptions},
     group: {type: Schema.ObjectId, ref: 'Group', autopopulate: true},

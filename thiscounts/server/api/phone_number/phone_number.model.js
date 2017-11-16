@@ -10,7 +10,7 @@ let PhoneNumberSchema = new Schema({
     user : {type: Schema.ObjectId, ref: 'User', require: true, index: true},
     nick : String
   }],
-  updated: { type : Date, default: Date.now }
+  updated: { type : Date, required: true }
 });
 
 module.exports = mongoose.model('PhoneNumber', PhoneNumberSchema);

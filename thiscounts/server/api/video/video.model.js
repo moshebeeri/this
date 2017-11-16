@@ -4,10 +4,29 @@ let mongoose = require('mongoose'),
     Schema = mongoose.Schema;
 
 let VideoSchema = new Schema({
-  name: String,
-  gid: { type: Number, index: true},
+  title: String,
   creator: {type: Schema.ObjectId, ref: 'User', required: true},
-  promotion: {type: Schema.ObjectId, ref: 'Promotion', required: true}
+  created: {type: Date, required: true},
+  type: {
+    type: String,
+    enum: [
+      'THIS',
+      'YOUTUBE'
+    ],
+    required: true
+  },
+  url: {
+    type: String,
+    required: true
+  },
 });
+VideoSchema
+  .virtual('videoId')
+  .get(function() {
+    return {
+      'name': this.name,
+      'role': this.role
+    };
+  });
 
 module.exports = mongoose.model('Video', VideoSchema);

@@ -29,7 +29,7 @@ const GroupSchema = new Schema({
   name: String,
   gid: {type: Number, index: true},
   description: String,
-  created: {type: Date, default: Date.now},
+  created: {type: Date, required: true},
   creator: {type: Schema.ObjectId, ref: 'User', required: true},
   admins: [{type: Schema.ObjectId, ref: 'User', index: true}],
   qrcode: {type: Schema.ObjectId, ref:'QRCode'},
