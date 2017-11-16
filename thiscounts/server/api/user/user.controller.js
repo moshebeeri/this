@@ -185,7 +185,7 @@ function send_sms_message(phone_number, message) {
  */
 exports.create = function (req, res, next) {
   let newUser = new User(req.body);
-
+  newUser.created = Date.now();
   newUser.provider = 'local';
   newUser.role = 'user';
   if (config.sms_verification) {

@@ -11,6 +11,7 @@ let UserSchema = new Schema({
   gid: { type: Number, index: true},
   phone_number: { type: String, index: true, unique : true, required : true},
   country_code: { type: Number, required : true },
+  created: { type: Date, required : true },
   pictures: [],
   video: {},
   email: { type: String, lowercase: true, index: true, unique : false, required : false},
@@ -71,7 +72,6 @@ UserSchema
 /**
  * Validations
  */
-
 // Validate empty email
 UserSchema
   .path('email')

@@ -59,7 +59,9 @@ exports.show = function(req, res) {
 
 // Creates a new post in the DB.
 exports.create = function(req, res) {
-  Post.create(req.body, function(err, post) {
+  let post = req.body;
+  post.created = Date.now();
+  Post.create(post, function(err, post) {
     if(err) { return handleError(res, err); }
     // graphModel.reflect(post, {_id: post._id}, function (err) {
     //   if (err) { return handleError(res, err); }

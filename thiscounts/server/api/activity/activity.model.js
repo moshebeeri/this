@@ -6,7 +6,7 @@ const utils = require('../../components/utils').createUtils();
 const autopopulate = require('mongoose-autopopulate');
 
 let ActivitySchema = new Schema({
-  timestamp: {type: Date, default: Date.now},
+  timestamp: {type: Date, default: Date.now, required: true},
   ids: [{type: Schema.ObjectId}],
   sharable: {type: Boolean, default: false},
 

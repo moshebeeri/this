@@ -34,7 +34,9 @@ exports.show = function(req, res) {
 
 // Creates a new notification in the DB.
 exports.create = function(req, res) {
-  Notification.create(req.body, function(err, notification) {
+  let notification = req.body;
+  notification.timestamp = Date.now();
+  Notification.create(notification, function(err, notification) {
     if(err) { return handleError(res, err); }
     return res.json(201, notification);
   });

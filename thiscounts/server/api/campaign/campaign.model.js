@@ -24,7 +24,7 @@ let CampaignPreferencesSchema = new Schema({
 
 let CampaignSchema = new Schema({
   creator: {type: Schema.ObjectId, ref: 'User', required: true},
-  created: {type: Date, default: Date.now},
+  created: {type: Date, default: Date.now, required: true},
   name: {type: String, required: true},
   gid: { type: Number, index: true},
   info: String,

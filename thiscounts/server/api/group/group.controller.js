@@ -131,6 +131,7 @@ function notifyOnAction(group) {
 exports.create = function (req, res) {
   let group = req.body;
   group.creator = req.user._id;
+  group.created = Date.now();
   group.admins = [req.user._id];
   Group.create(group, function (err, group) {
     if (err) {
@@ -567,7 +568,8 @@ function sendGroupNotification(actor_user, audience, group_id, type) {
   let note = {
     note: type,
     group: group_id,
-    actor_user: actor_user
+    actor_user: actor_user,
+    timestamp: Date.now()
   };
   Notifications.notify(note, audience);
 }

@@ -55,6 +55,7 @@ exports.create = function(req, res) {
   let entities = extract_ids(comment.entities);
   comment.user = req.user._id;
   comment.entities = list2object(comment.entities);
+  comment.created = Date.now();
   Comment.create(comment, function(err, comment) {
     if(err) { return handleError(res, err); }
     graphModel.reflect(comment, {
@@ -113,6 +114,7 @@ exports.find = function(req, res) {
     `ORDER BY e${entities.length-1}._id DESC`,
     req.params.skip, req.params.limit, function (err, comments) {
       if(err) { return handleError(res, err); }
+      console.log(JSON.stringify(comments));
       return res.status(200).json(comments);
   })
 };

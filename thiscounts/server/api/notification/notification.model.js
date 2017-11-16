@@ -9,7 +9,7 @@ let NotificationSchema = new Schema({
   read: {type: Boolean, default: false},
   action: {type: Boolean, default: false},
   to: {type: Schema.ObjectId, ref: 'User', required: true, index: true},
-  timestamp: {type: Date, default: Date.now},
+  timestamp: {type: Date, required: true},
 
   promotion: {type: Schema.ObjectId, ref: 'Promotion', autopopulate: true },
   instance: {type: Schema.ObjectId, ref: 'Instance', autopopulate: true },

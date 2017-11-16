@@ -213,6 +213,7 @@ function create_business_default_group(business) {
     name: business.name,
     description: business.name + ' default group',
     creator: business.creator,
+    created: Date.now(),
     admins: [business.creator],
     entity: {business: business._id},
     entity_type: 'BUSINESS',
@@ -247,6 +248,8 @@ exports.create = function (req, res) {
     if (err) return res.status(401).send(err.message);
     if (!user) return res.status(401).send('Unauthorized');
     body_business.creator = userId;
+    body_business.created = Date.now();
+
     location.address_location(body_business, function (err, data) {
       if (err) {
         if (err.code >= 400) return res.status(err.code).send(err.message);
@@ -321,7 +324,8 @@ function notifyOnAction(business) {
     Notifications.notify({
       note: 'ADD_BUSINESS_FOLLOW_ON_ACTION',
       business: business.id,
-      actor_user: business.creator
+      actor_user: business.creator,
+      timestamp: Date.now()
     }, [business.creator])
   } catch (err) {
     console.error(err)

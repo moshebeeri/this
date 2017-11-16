@@ -103,7 +103,7 @@ let PromotionSchemaObject = {
     shopping_chain: {type: Schema.ObjectId, ref: 'ShoppingChain', autopopulate: true},
     mall: {type: Schema.ObjectId, ref: 'Mall', autopopulate: true},
   },
-  created: {type: Date, default: Date.now},
+  created: {type: Date, required: true},
   gid: {type: Number, index: true},
 
   report: {type: Boolean, default: false},

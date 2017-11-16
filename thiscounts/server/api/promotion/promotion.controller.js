@@ -255,6 +255,7 @@ function handlePromotionPostCreate(promotion, callback) {
 }
 
 function create_promotion(promotion, callback) {
+  promotion.created = Date.now();
   set_promotion_location(promotion, function (err, promotion) {
     if (err) return callback(err, null);
     Promotion.create(promotion, function (err, promotion) {
