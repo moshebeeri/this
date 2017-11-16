@@ -91,10 +91,10 @@ function getActivityEntityId(sharedActivity){
 }
 
 exports.share = function (req, res) {
-  Activity.findById(req.params.id, function (err, sharedActivity) {
+  Activity.findById(req.params.activity, function (err, sharedActivity) {
     if (err) { return handleError(res, err);}
     if (!sharedActivity) {return res.send(404);}
-    if(sharedActivity.sharable === false) { return handleError(res, new Error('activity is not sharable'));}
+    //if(sharedActivity.sharable === false) { return handleError(res, new Error('activity is not sharable'));}
     let act = {
       activity: req.params.activity,
       ids: [req.params.user],
@@ -110,5 +110,5 @@ exports.share = function (req, res) {
 };
 
 function handleError(res, err) {
-  return res.send(500, err);
+  return res.status(500).send(err);
 }

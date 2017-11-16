@@ -2,6 +2,7 @@
 
 let mongoose = require('mongoose'),
     Schema = mongoose.Schema;
+const autopopulate = require('mongoose-autopopulate');
 
 let ProductSchema = new Schema({
   social_state : {},
@@ -16,9 +17,10 @@ let ProductSchema = new Schema({
   retail_price: Number,
   category: {type: String, required: true},
   pictures: [],
-  video: {},
+  video: {type: Schema.ObjectId, ref: 'Video', autopopulate: true},
   active: Boolean
 });
+ProductSchema.plugin(autopopulate);
 
 ProductSchema.index({
   name: 'text',

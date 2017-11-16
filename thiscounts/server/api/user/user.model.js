@@ -4,6 +4,7 @@ let mongoose = require('mongoose');
 let Schema = mongoose.Schema;
 let crypto = require('crypto');
 let authTypes = ['github', 'twitter', 'facebook', 'google'];
+const autopopulate = require('mongoose-autopopulate');
 
 let UserSchema = new Schema({
   social_state : {},
@@ -13,7 +14,7 @@ let UserSchema = new Schema({
   country_code: { type: Number, required : true },
   created: { type: Date, required : true },
   pictures: [],
-  video: {},
+  video: {type: Schema.ObjectId, ref: 'Video', autopopulate: true},
   email: { type: String, lowercase: true, index: true, unique : false, required : false},
   sms_code: String,
   sms_verified: Boolean,
@@ -32,6 +33,7 @@ let UserSchema = new Schema({
   google: {},
   github: {}
 });
+UserSchema.plugin(autopopulate);
 
 UserSchema.index({name: 'text', phone_number: 'text', email: 'text'});
 

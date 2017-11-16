@@ -2,6 +2,7 @@
 
 let mongoose = require('mongoose'),
   Schema = mongoose.Schema;
+const autopopulate = require('mongoose-autopopulate');
 
 let BusinessSchema = new Schema({
   social_state: {},
@@ -22,7 +23,7 @@ let BusinessSchema = new Schema({
   email: {type: String, index: true, required: true},
   website: String,
   creator: {type: Schema.ObjectId, index: true, ref: 'User', required: true},
-  created: {type: Date, default: Date.now, required: true},
+  created: {type: Date, required: true},
   info: String,
 
   default_group: {type: Schema.ObjectId, index: true, ref: 'Group'},
@@ -50,18 +51,10 @@ let BusinessSchema = new Schema({
   },
   logo: String,
   pictures: [],
-  video: {}
+  video: {type: Schema.ObjectId, ref: 'Video', autopopulate: true}
 });
-// db.businesses.ensureIndex({
-//   name: 'text',
-//   description: 'text',
-//   address: 'text',
-//   address2: 'text',
-//   city: 'text',
-//   state: 'text',
-//   website: 'text',
-//   info: 'text'
-// });
+BusinessSchema.plugin(autopopulate);
+
 BusinessSchema.index({
   name: 'text',
   description: 'text',

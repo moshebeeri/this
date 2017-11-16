@@ -23,7 +23,7 @@ let PostSchema = new Schema({
   },
   text: String,
   pictures:[],
-  video: {}
+  video: {type: Schema.ObjectId, ref: 'Video', autopopulate: true}
 });
 PostSchema.plugin(autopopulate);
 module.exports = mongoose.model('Post', PostSchema);
