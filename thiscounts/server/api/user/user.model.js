@@ -13,7 +13,7 @@ let UserSchema = new Schema({
   country_code: { type: Number, required : true },
   created: { type: Date, required : true },
   pictures: [],
-  video: String,
+  video: {},
   email: { type: String, lowercase: true, index: true, unique : false, required : false},
   sms_code: String,
   sms_verified: Boolean,

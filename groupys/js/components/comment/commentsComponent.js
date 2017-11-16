@@ -10,7 +10,7 @@ import {bindActionCreators} from "redux";
 import NestedScrollView from "react-native-nested-scrollview";
 import * as commentEntitiesAction from "../../actions/commentsEntities";
 import {getFeeds} from "../../selectors/commentsEntitiesSelector";
-import {BusinessHeader, MessageBox, PromotionHeader} from '../../ui/index';
+import {BusinessHeader, MessageBox, PromotionHeader,ChatMessage} from '../../ui/index';
 
 const {width, height} = Dimensions.get('window')
 const vw = width / 100;
@@ -105,6 +105,14 @@ class CommentsComponent extends Component {
             return this.createAndroidScroller(feeds[item.generalId], 30)
         }
         if (showComment) {
+            let isUser = item.actor === user._id;
+            let messageItem = {
+                name: item.name,
+                avetar:item.logo,
+                message:item.description,
+                date:item.date,
+                isUser:isUser,
+            };
             return <GenericFeedManager
                 navigation={navigation}
 
@@ -115,10 +123,10 @@ class CommentsComponent extends Component {
                 setNextFeeds={this.nextCommentPage.bind(this)}
                 actions={actions}
                 token={token}
-                entity={item}
+                entity={messageItem}
                 group={group}
                 title='Feeds'
-                ItemDetail={GenericFeedItem}>
+                ItemDetail={ChatMessage}>
 
             </GenericFeedManager>
         }
@@ -135,17 +143,18 @@ class CommentsComponent extends Component {
     }
 
     renderItem(item) {
-        const {navigation, token, userFollowers, group, actions, entity} = this.props;
-        return <GenericFeedItem
-            key={item.id}
-            user={entity}
-            token={token}
-            userFollowers={userFollowers}
-            group={group}
-            navigation={navigation}
-            item={item}
-            fetchTopList={this.fetchTopList.bind(this)}
-            actions={actions}/>
+        const{user} = this.props;
+        let isUser = item.actor === user._id;
+        let messageItem = {
+            name: item.name,
+            avetar:item.logo,
+            message:item.description,
+            date:item.date,
+            isUser:isUser
+
+        };
+        return <ChatMessage key={item.id}
+           item={messageItem}/>
     }
 
     async fetchTopList(id) {
@@ -161,6 +170,7 @@ export default connect(
     state => ({
         token: state.authentication.token,
         userFollower: state.user.followers,
+        user:state.user.user,
         feeds: getFeeds(state),
         showTopLoader: state.commentInstances.showTopLoader,
         loadingDone: state.commentInstances.groupLoadingDone,

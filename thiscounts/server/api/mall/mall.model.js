@@ -12,7 +12,7 @@ let MallSchema = new Schema({
   gid: { type: Number, index: true},
   logo: String,
   pictures: [],
-  video: String,
+  video: {},
   location : {
     lng : Number,
     lat : Number,

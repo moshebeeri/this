@@ -21,6 +21,7 @@ import PromotionSeperator from './promotionSeperator/PromotionSeperator'
 import PromotionHeader from './PromotionHeader/PromotionHeader'
 import BusinessHeader from './BusinessHeader/BusinessHeader'
 import MessageBox from './MessageBox/MessageBox'
+import ChatMessage from './ChatMessage/ChatMessage'
 export {
     ImagePicker,
     CategoryPicker,
@@ -44,5 +45,6 @@ export {
     PromotionSeperator,
     PromotionHeader,
     BusinessHeader,
-    MessageBox
+    MessageBox,
+    ChatMessage
 }
