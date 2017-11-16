@@ -23,10 +23,11 @@ let VideoSchema = new Schema({
 VideoSchema
   .virtual('videoId')
   .get(function() {
-    return {
-      'name': this.name,
-      'role': this.role
-    };
+    if(this.url.search("youtu.be"))
+      return this.url.substr("https://youtu.be/".length);
+    else if(this.url.search("youtube.com"))
+      return this.url.substr("https://www.youtube.com/watch?v=".length);
+    return null;
   });
 
 module.exports = mongoose.model('Video', VideoSchema);
