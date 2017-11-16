@@ -37,7 +37,7 @@ export default class FeedBusiness extends Component {
     }
 
     showBussines() {
-        this.props.navigation.navigate("businessProfile", {bussiness: this.props.item.business});
+        this.props.navigation.navigate("businessProfile", {bussiness: this.props.item});
     }
 
     createBussines(item, like, unlike, showUsers, comment) {

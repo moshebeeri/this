@@ -3,6 +3,9 @@ import { View,Text,TouchableOpacity} from 'react-native';
 import {Button} from 'native-base';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import Icon2 from 'react-native-vector-icons/EvilIcons';
+import Icon3 from 'react-native-vector-icons/Entypo';
+
+
 import styles from './styles'
 
 
@@ -86,7 +89,7 @@ export default class SocialState extends Component {
         if(disabled){
             return <View transparent style={styles.promotion_iconView} >
 
-                <Icon2 style={componentStyle} size={25} name="share-google"/>
+                <Icon3 style={componentStyle} size={25} name="share"/>
                 <Text style={styles.socialTextColor}>{shares}</Text>
 
             </View>
@@ -95,7 +98,7 @@ export default class SocialState extends Component {
         if (share) {
             return <Button transparent style={styles.promotion_iconView} onPress={shareAction}>
 
-                <Icon2 style={styles.promotionShareActive} size={25} name="share-google"/>
+                <Icon3 style={styles.promotionShareActive} size={25} name="share"/>
                 <Text style={styles.socialTextColor}>{shares}</Text>
 
 
@@ -103,7 +106,7 @@ export default class SocialState extends Component {
         }
         return <Button transparent style={styles.promotion_iconView} onPress={shareAction}>
 
-            <Icon2 style={componentStyle} size={25} name="share-google"/>
+            <Icon3 style={componentStyle} size={25} name="share"/>
             <Text style={styles.socialTextColor}>{shares}</Text>
         </Button>;
     }

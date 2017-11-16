@@ -89,6 +89,10 @@ class FeedConverter {
                 actor: feed.activity.actor_user._id,
                 itemTitle: name + ' ' + feed.activity.action,
                 name: feed.activity.business.name,
+                address : feed.activity.business.address,
+                website : feed.activity.business.website,
+                email : feed.activity.business.email,
+                city:feed.activity.business.city,
                 businessAddress: feed.activity.business.city + ' ' + feed.activity.business.address,
                 banner: {
                     uri: feed.activity.business.pictures[0].pictures[0]
@@ -99,6 +103,13 @@ class FeedConverter {
             response = {
                 id: feed.activity.business._id,
                 fid: feed._id, key: feed._id,
+                city : feed.activity.business.city,
+
+                address : feed.activity.business.address,
+                website : feed.activity.business.website,
+                email : feed.activity.business.email,
+
+
                 social: socialState,
                 name: feed.activity.business.name,
                 actor: feed.activity.actor_user._id,
@@ -110,6 +121,7 @@ class FeedConverter {
         response.generalId = feed.activity.business._id;
         response.entities = [{business: feed.activity.business._id}];
         response.itemType = 'BUSINESS';
+
         response.businessLogo = feed.activity.business.logo;
         response.categoryTitle = feed.activity.business.categoryTitle;
         response.businessName = feed.activity.business.name;

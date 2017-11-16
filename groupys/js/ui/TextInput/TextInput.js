@@ -91,9 +91,15 @@ export default class TextInputField extends Component {
                                      onSubmitEditing={this.onSubmit.bind(this)}
                                      onChangeText={this.onChange.bind(this)} placeholder={placeholder}/>
         if(disabled){
-            inputField = <View style={styles.textInputDisavledComponentStyle}>
-                <Text>{value}</Text>
-            </View>
+            if(value) {
+                inputField = <View style={styles.textInputDisavledComponentStyle}>
+                    <Text>{value}</Text>
+                </View>
+            }else{
+                inputField = <View style={styles.textInputDisavledComponentStyle}>
+                    <Text>{placeholder}</Text>
+                </View>
+            }
         }
 
         return <View style={containerStyle}>
