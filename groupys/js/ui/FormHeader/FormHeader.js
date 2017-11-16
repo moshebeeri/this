@@ -40,7 +40,7 @@ export default class FormHeader extends Component {
         return styles.formHeadrTitleStyle;
     }
     render() {
-        const {showBack, title, bgc, submitIcon,titleColor,backIconColor} = this.props;
+        const {submitForm, showBack, title, bgc, submitIcon,titleColor,backIconColor} = this.props;
         let icon = <Icon2 active color={"white"} size={25} name={"check"}/>
         if (submitIcon) {
             icon = submitIcon;
@@ -59,6 +59,7 @@ export default class FormHeader extends Component {
         }
         let titleStyle = this.createTitleStyle(titleColor);
 
+
         return (
             <View style={{
                 height: vh * 7, flexDirection: 'row', alignItems: 'center', backgroundColor: bgc,
@@ -72,10 +73,12 @@ export default class FormHeader extends Component {
                 <Text transparent style={titleStyle}>{title}</Text>
                 </View>
 
-                <View style={styles.formHeaderSubmitButoon}>
+                 <View style={styles.formHeaderSubmitButoon}>
+                     {submitForm &&
                     <Button transparent style={{justifyContent: 'center',alignItems: 'center'}} onPress={() => this.submitForm()}>
                         {icon}
                     </Button>
+                     }
                 </View>
             </View>
         );
