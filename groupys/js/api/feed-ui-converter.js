@@ -229,6 +229,7 @@ class FeedConverter {
             responseFeed.entities = [{instance: instance._id}];
             if (instance.social_state) {
                 responseFeed.social = instance.social_state
+                responseFeed.social.activityId = feed.activity._id;
                 responseFeed.showsave = !instance.social_state.saved && !instance.social_state.realized;
             }
             responseFeed.shareable = !instance.shareable;
