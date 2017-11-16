@@ -5,9 +5,10 @@ import moment from 'moment';
 
 class DateUtils {
     messageFormater(itemDate) {
+        let time=  "Thu Nov 16 08:44:36 2017";
         let date = new Date(itemDate);
         if (this.isToday(date)) {
-            return moment(date).format('HH:m');
+            return moment(date).format('HH:mm');
         }
         if (this.isThisWeek(date)) {
             return moment(date).format('dddd');
@@ -23,6 +24,8 @@ class DateUtils {
         var now = moment();
         var input = moment(date);
         return (now.isoWeek() == input.isoWeek());
+
+
     }
 }
 
