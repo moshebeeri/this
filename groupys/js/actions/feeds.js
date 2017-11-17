@@ -11,7 +11,7 @@ let userApi = new UserApi();
 async function fetchList(action, feeds, api, dispatch, groupid) {
     try {
         let response = null;
-        if (feeds.length == 0) {
+        if (feeds.length === 0) {
             response = await api.getAll('down', 'start');
         } else {
             response = await api.getAll('down', feeds[feeds.length - 1].id);
@@ -119,8 +119,8 @@ function addToRows(feeds, response, top) {
     let newFeeds = response.filter(function (feed) {
         let filtered = currentRows.filter(function (currentFeed) {
             return currentFeed.id === feed.id;
-        })
-        return filtered.length == 0;
+        });
+        return filtered.length === 0;
     });
     if (newFeeds.length > 0) {
         if (top) {
@@ -138,7 +138,7 @@ async function fetchTopList(action, feeds, id, api, dispatch, groupid) {
             feeds = feeds.filter(function (feed) {
                 return feed.id
             });
-            if (id == feeds[0].id) {
+            if (id === feeds[0].id) {
                 let response = await api.getAll('up', feeds[0].fid);
                 if (response.length > 0) {
                     feeds = addToRows(feeds, response, true);

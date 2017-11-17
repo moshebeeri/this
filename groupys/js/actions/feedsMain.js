@@ -140,22 +140,22 @@ export function fetchUsersFollowers() {
 
 export function setNextFeeds(feeds) {
     return async function (dispatch, getState) {
-        const token = getState().authentication.token
-        const user = getState().user.user
+        const token = getState().authentication.token;
+        const user = getState().user.user;
         if (!user)
-            return
+            return;
         let showLoadingDone = false;
         if (_.isEmpty(feeds) && getState().feeds.firstTime) {
             dispatch({
                 type: actions.FIRST_TIME_FEED,
             });
             console.log('first time feeds');
-            await fetchFeedsFromServer(feeds, dispatch, token, user)
+            await fetchFeedsFromServer(feeds, dispatch, token, user);
             showLoadingDone = true;
         }
         if (feeds && feeds.length > 0) {
-            let length = getState().feeds.feedView.length
-            let id = getState().feeds.feedView[length - 1]
+            let length = getState().feeds.feedView.length;
+            let id = getState().feeds.feedView[length - 1];
             if (id !== getState().feeds.lastfeed) {
                 console.log('second time feeds');
                 dispatch({
@@ -177,7 +177,7 @@ export function setNextFeeds(feeds) {
 export function like(id) {
     return async function (dispatch, getState) {
         try {
-            const token = getState().authentication.token
+            const token = getState().authentication.token;
             dispatch({
                 type: actions.LIKE,
                 id: id
@@ -194,7 +194,7 @@ export function like(id) {
 export function refresh(id, currentSocialState) {
     return async function (dispatch, getState) {
         try {
-            const token = getState().authentication.token
+            const token = getState().authentication.token;
             let response = await feedApi.getFeedSocialState(id, token);
             if (response) {
                 if (response.likes === currentSocialState.likes &&
@@ -220,7 +220,7 @@ export function refresh(id, currentSocialState) {
 export const unlike = (id) => {
     return async function (dispatch, getState) {
         try {
-            const token = getState().authentication.token
+            const token = getState().authentication.token;
             await userApi.unlike(id, token);
             dispatch({
                 type: actions.UNLIKE,
@@ -253,7 +253,7 @@ export function saveFeed(id) {
 export function setUserFollows() {
     return async function (dispatch, getState) {
         try {
-            const token = getState().authentication.token
+            const token = getState().authentication.token;
             let response = await userApi.getUserFollowers(token);
             dispatch({
                 type: actions.USER_FOLLOW,
@@ -272,7 +272,7 @@ export function shareActivity(id, activityId, users, token) {
         try {
             users.forEach(function (user) {
                 activityApi.shareActivity(user, activityId, token)
-            })
+            });
             dispatch({
                 type: actions.SHARE,
                 id: id,

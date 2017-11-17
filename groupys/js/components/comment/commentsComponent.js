@@ -101,7 +101,7 @@ class CommentsComponent extends Component {
 
     createCommentView(showComment, item) {
         const {navigation, feeds, userFollower, actions, token, loadingDone, showTopLoader, group} = this.props;
-        if (Platform.OS == 'android') {
+        if (Platform.OS === 'android') {
             return this.createAndroidScroller(feeds[item.generalId], 30)
         }
         if (showComment) {
@@ -160,7 +160,7 @@ class CommentsComponent extends Component {
     async fetchTopList(id) {
         const item = this.getInstance();
         const {token, feeds, group, actions} = this.props;
-        if (id == feeds[item.generalId][0].fid) {
+        if (id === feeds[item.generalId][0].fid) {
             actions.fetchTop(feeds[item.generalId], token, item.entities, item.generalId)
         }
     }

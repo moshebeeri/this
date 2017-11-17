@@ -239,7 +239,7 @@ class CommentsComponent extends Component {
         if (!feeds[group._id][item.id]) {
             return undefined;
         }
-        if (Platform.OS == 'android') {
+        if (Platform.OS === 'android') {
             return this.createAndroidScroller(feeds[group._id][item.id], 5)
         }
         if (showComment) {
@@ -303,7 +303,7 @@ class CommentsComponent extends Component {
     async fetchTopList(id) {
         const item = this.getInstance();
         const {token, feeds, group, actions} = this.props;
-        if (id == feeds[group._id][item.id][0].fid) {
+        if (id === feeds[group._id][item.id][0].fid) {
             actions.fetchTop(feeds, token, item, group)
         }
     }

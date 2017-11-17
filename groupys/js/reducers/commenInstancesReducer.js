@@ -70,7 +70,7 @@ export default function commentInstances(state = initialState, action) {
             if (!currentState.groupLoadingDone[action.gid]) {
                 currentState.groupLoadingDone[action.gid] = {};
             }
-            if (currentState.groupLoadingDone[action.gid][action.instanceId] == action.loadingDone) {
+            if (currentState.groupLoadingDone[action.gid][action.instanceId] === action.loadingDone) {
                 return state;
             }
             currentState.groupLoadingDone[action.gid][action.instanceId] = action.loadingDone;

@@ -10,7 +10,7 @@ export function fetchTop(feeds, token, entity, group) {
 export function fetchTopComments(group, instance) {
     return async function (dispatch, getState) {
         try {
-            const token = getState().authentication.token
+            const token = getState().authentication.token;
             if (getState().commentInstances.groupLastCall[group._id] && getState().commentInstances.groupLastCall[group._id][instance.id]) {
                 if (new Date().getTime() - new Date(getState().commentInstances.groupLastCall[group._id][instance.id]).getTime() < 10000) {
                     return;

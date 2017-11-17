@@ -113,7 +113,7 @@ export function createLikeButton(item, styles, like, unlike, token) {
         return undefined;
     }
     const likes = new String(item.social.numberLikes);
-    if (item.social && item.social.like == true) {
+    if (item.social && item.social.like === true) {
         return <Button transparent style={styles.promotion_iconView} onPress={() => unlike(item.id, token)}>
 
 

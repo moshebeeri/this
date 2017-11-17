@@ -64,7 +64,7 @@ async function dispatchFollowByQrcode(dispatch, barcode, token) {
     try {
         dispatch({type: actions.SHOW_SEARCH_SPIN, searching: true});
         dispatch({type: actions.SHOW_CAMERA, cameraOn: false});
-        if (barcode.type && barcode.type == 'QR_CODE') {
+        if (barcode.type && barcode.type === 'QR_CODE') {
             let data = JSON.parse(barcode.data);
             if (data.code) {
                 let response = await businessApi.searchBusinessByCode(data.code, token);
@@ -236,7 +236,7 @@ export function saveBusiness(business,navigation) {
                 item: businesses
             });
             let selectedBusiness = businesses.filter(newBusiness => {
-                newBusiness.business.name === business.name
+                newBusiness.business.name = business.name
             });
             dispatch({
                 type: actions.SELECT_BUSINESS,

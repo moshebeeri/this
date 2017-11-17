@@ -156,7 +156,7 @@ export function setNextFeeds(feeds, token, group) {
             } else {
                 let keys = Object.keys(feeds);
                 let id = keys[keys.length - 1];
-                if (feeds[id].id == getState().groups.lastFeed[group._id])
+                if (feeds[id].id === getState().groups.lastFeed[group._id])
                     return;
                 // make sure we call the server for the same group max 1 time in 10 seconds period
                 if (getState().groups.lastFeedTime[[group._id]]) {
@@ -174,13 +174,13 @@ export function setNextFeeds(feeds, token, group) {
             }
             let collectionDispatcher = new CollectionDispatcher();
             let disassemblerItems = response.map(item => {
-                if (item.activity && (item.activity.action == 'group_message' || item.activity.action == 'group_follow')) {
+                if (item.activity && (item.activity.action === 'group_message' || item.activity.action === 'group_follow')) {
                     return item;
                 }
                 return assemblers.disassembler(item, collectionDispatcher)
             });
             if (disassemblerItems && disassemblerItems.length > 0) {
-                collectionDispatcher.dispatchEvents(dispatch)
+                collectionDispatcher.dispatchEvents(dispatch);
                 disassemblerItems.forEach(item => dispatch({
                     type: actions.UPSERT_GROUP_FEEDS_BOTTOM,
                     groupId: group._id,
@@ -242,12 +242,12 @@ async function fetchTopList(id, token, group, dispatch) {
         let response = await feedApi.getAll('up', id, token, group);
         if (!response)
             return;
-        if (response.length == 0) {
+        if (response.length === 0) {
             return;
         }
         let collectionDispatcher = new CollectionDispatcher();
         let disassemblerItems = response.map(item => {
-            if (item.activity && (item.activity.action == 'group_message' || item.activity.action == 'group_follow')) {
+            if (item.activity && (item.activity.action === 'group_message' || item.activity.action === 'group_follow')) {
                 return item;
             }
             return assemblers.disassembler(item, collectionDispatcher)

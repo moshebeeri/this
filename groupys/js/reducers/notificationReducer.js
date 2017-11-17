@@ -49,7 +49,7 @@ export default function notification(state = initialState, action) {
             return state;
         case actions.READ_NOTIFICATION:
             let notificationRead = currentNotifications.filter(function (notification) {
-                return notification._id == action.id
+                return notification._id === action.id
             });
             if (notificationRead.length > 0) {
                 notificationRead[0].read = true;
@@ -61,7 +61,7 @@ export default function notification(state = initialState, action) {
             };
         case actions.EXECUTE_NOTIFICATION_ACTION:
             let notification = currentNotifications.filter(function (notification) {
-                return notification._id == action.id
+                return notification._id === action.id
             });
             if (notification.length > 0) {
                 notification[0].action = true;

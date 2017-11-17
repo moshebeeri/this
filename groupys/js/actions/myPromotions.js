@@ -35,7 +35,7 @@ export function setNextFeeds(feeds) {
                     loadingDone: true,
                 });
             }
-            if (response.length == 0) {
+            if (response.length === 0) {
                 return;
             }
             response.forEach(item => dispatch({
@@ -71,7 +71,7 @@ export function fetchTop() {
                 type: actions.SAVED_FEED_SHOW_TOP_LOADER,
                 showTopLoader: true,
             });
-            if (response.length == 0) {
+            if (response.length === 0) {
                 return;
             }
             response.forEach(item => dispatch({

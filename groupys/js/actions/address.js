@@ -1,6 +1,7 @@
 import * as actions from "../reducers/reducerActions";
 import BusinessApi from '../api/business'
 let businessApi = new BusinessApi();
+
 export function validateAddress(address) {
     return async function (dispatch, getState) {
         const token = getState().authentication.token;
@@ -8,7 +9,7 @@ export function validateAddress(address) {
             type: actions.ADDRESS_VALADATING,
 
         });
-        let response = await businessApi.checkAddress(address, token)
+        let response = await businessApi.checkAddress(address, token);
         dispatch({
             type: actions.ADDRESS_VALADATING_DONE,
 
@@ -37,7 +38,6 @@ export function validateAddress(address) {
                 lng: response.lng
             }
         });
-
     }
 }
 

@@ -43,7 +43,7 @@ class instancesComment extends Component {
 
     render() {
         const {group, comments, navigation, actions, update, loadingDone, showTopLoader, allState} = this.props;
-        if (Platform.OS == 'android') {
+        if (Platform.OS === 'android') {
             if (comments[group._id]) {
                 const body = comments[group._id].map(feed => this.renderItem(feed))
                 return <NestedScrollView>
