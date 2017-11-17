@@ -40,17 +40,17 @@ export default class GenericFeedItem extends Component {
             const isBlue = moveY > (height - 50) && moveX > 0 && moveX < width;
             let dragDirection = '';
             if (draggedDown || draggedUp) {
-                if (draggedDown) dragDirection += 'dragged down '
+                if (draggedDown) dragDirection += 'dragged down ';
                 if (draggedUp) dragDirection += 'dragged up ';
             }
             if (draggedLeft || draggedRight) {
-                if (draggedLeft) dragDirection += 'dragged left '
+                if (draggedLeft) dragDirection += 'dragged left ';
                 if (draggedRight) dragDirection += 'dragged right ';
             }
-            if (isRed) return `red ${dragDirection}`
-            if (isBlue) return `blue ${dragDirection}`
+            if (isRed) return `red ${dragDirection}`;
+            if (isBlue) return `blue ${dragDirection}`;
             if (dragDirection) return dragDirection;
-        }
+        };
         this._panResponder = PanResponder.create({
             onMoveShouldSetPanResponder: (evt, gestureState) => this.onMove(evt, gestureState),
         });
@@ -71,7 +71,7 @@ export default class GenericFeedItem extends Component {
             this.props.navigation.navigate('InstanceGroupComments', {
                 group: this.props.group,
                 instance: this.props.item,
-            })
+            });
             return;
         }
         this.props.navigation.navigate('genericComments', {
@@ -123,7 +123,7 @@ export default class GenericFeedItem extends Component {
                 {item}
             </View>
         }
-        return <View></View>
+        return <View>{null}</View>
     }
 }
 

@@ -55,7 +55,8 @@ const mapStateToProps = state => {
         promoptions: state.promotions,
         location: state.phone.currentLocation
     }
-}
+};
+
 export default connect(
     mapStateToProps,
     (dispatch) => ({

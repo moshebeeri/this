@@ -25,7 +25,7 @@ import {getGroups} from '../../selectors/groupSelector'
 import * as groupsAction from "../../actions/groups";
 import {bindActionCreators} from "redux";
 
-class Group extends Component {
+class Groups extends Component {
     constructor(props) {
         super(props);
     }
@@ -66,7 +66,7 @@ export default connect(
     (dispatch) => ({
         actions: bindActionCreators(groupsAction, dispatch),
     })
-)(Group);
+)(Groups);
 
 
 
