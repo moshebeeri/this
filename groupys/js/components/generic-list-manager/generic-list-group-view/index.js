@@ -108,7 +108,7 @@ export default class GenericListGroupView extends Component {
 
     createPromotion(styles, item) {
         if (item.preview && item.preview.instance_activity) {
-            let promotion = uiConverter.createPromontionInstance(item.preview.instance_activity.instance);
+            let promotion = uiConverter.createPromotionInstance(item.preview.instance_activity.instance);
             let lastPromotion = <Text note style={styles.group_members}>{promotion.promotion}:</Text>
             let promotinoTitle = <Text note numberOfLines={2} style={styles.group_members}>{promotion.itemTitle}</Text>
             let promotionTime = <Text note

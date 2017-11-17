@@ -103,11 +103,11 @@ export default class GenericFeedItem extends Component {
                                                           location={location}
                                                           navigation={this.props.navigation} item={item}
                                                           like={actions.like} unlike={actions.unlike}
-                                                          showUsers={showUsers} save={actions.saveFeed}/>)
+                                                          showUsers={showUsers} save={actions.saveFeed}/>);
             case 'MESSAGE':
-                return this.createFeedView(<FeedMessage token={token} navigation={this.props.navigation} item={item}/>)
+                return this.createFeedView(<FeedMessage token={token} navigation={this.props.navigation} item={item}/>);
             case 'WELCOME':
-                return this.createFeedView(<FeedWelcome token={token} navigation={this.props.navigation} item={item}/>)
+                return this.createFeedView(<FeedWelcome token={token} navigation={this.props.navigation} item={item}/>);
             default:
                 return this.createFeedView(<FeedBusiness location={location} token={token} refresh={actions.refresh}
                                                          navigation={this.props.navigation} item={item}

@@ -30,17 +30,17 @@ import * as componentCreator from "./feedCommonView";
 import {SocialState, SubmitButton,PromotionSeperator,PromotionHeader} from '../../../../ui/index';
 import FormUtils from "../../../../utils/fromUtils";
 
-const {width, height} = Dimensions.get('window')
+const {width, height} = Dimensions.get('window');
 const vw = width / 100;
-const vh = height / 100
+const vh = height / 100;
 const vmin = Math.min(vw, vh);
-const vmax = Math.max(vw, vh)
+const vmax = Math.max(vw, vh);
 export default class FeedPromotion extends Component {
     constructor() {
         super();
     }
 
-    showBussines() {
+    showBusiness() {
         this.props.navigation.navigate("businessProfile", {bussiness: this.props.item.business});
     }
 
@@ -48,9 +48,9 @@ export default class FeedPromotion extends Component {
     render() {
         const {refresh,item, save, like, unlike, showUsers, comment, token, location} = this.props;
         const styles = this.createPromotionStyle();
-        const colorStyle = this.createColorStyle(item)
-        const buisnessLogo = componentCreator.createBusinessLog(item, this.showBussines.bind(this));
-        const image = this.createImageComponent(item, styles);
+        const colorStyle = this.createColorStyle(item);
+        const buisnessLogo = componentCreator.createBusinessLog(item, this.showBusiness.bind(this));
+        const image = FeedPromotion.createImageComponent(item, styles);
         const container = this.createContainerStyle(item);
         let claimDisabled = true;
         if (item.showsave) {
@@ -111,18 +111,18 @@ export default class FeedPromotion extends Component {
                                      share={item.social.share} shares={item.social.shares} shareAction={showUsers}/>
                     </View>
                 </View>
-            </InViewPort>
+            </InViewPort>;
         return result;
     }
 
-    createColorStyle(item) {
+    static createColorStyle(item) {
         return {
             color: item.promotionColor,
             fontFamily: 'Roboto-Regular', marginLeft: 10, marginTop: 4, fontSize: 16
         };
     }
 
-    createContainerStyle(item) {
+    static createContainerStyle(item) {
         if (item.banner) {
             return {
                 flex: 1,
@@ -147,7 +147,7 @@ export default class FeedPromotion extends Component {
         };
     }
 
-    createImageComponent(item, styles) {
+    static createImageComponent(item, styles) {
         if (item.banner) {
             return <View style={styles.promotion_image_view}>
 
@@ -158,7 +158,7 @@ export default class FeedPromotion extends Component {
         return undefined;
     }
 
-    createPromotionStyle() {
+    static createPromotionStyle() {
         if (StyleUtils.isLandscape()) {
             return stylesLandscape;
         }
