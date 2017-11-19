@@ -81,15 +81,15 @@ export default class SocialState extends Component {
     }
 
     createShareButton() {
-        const {share,shares, disabled,shareAction,feed} = this.props;
+        const {share,shares, disabled,shareAction,feed,shareDisabled} = this.props;
         let componentStyle = styles.promotionBusiness;
         if(feed) {
             componentStyle = styles.promotionFeed;
         }
-        if(disabled){
+        if(disabled || shareDisabled){
             return <View transparent style={styles.promotion_iconView} >
 
-                <Icon3 style={componentStyle} size={25} name="share"/>
+                <Icon3 style={styles.promotionDisabledFeed} size={25} name="share"/>
                 <Text style={styles.socialTextColor}>{shares}</Text>
 
             </View>

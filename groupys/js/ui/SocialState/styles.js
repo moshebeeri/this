@@ -48,6 +48,13 @@ module.exports = {
         color:'#2db6c8'
     },
 
+    promotionDisabledFeed:{
+        marginRight:5,
+        marginLeft:5,
+
+        color:'#cccccc'
+    },
+
     socialTextColor:{
         color:'#898989'
     }
