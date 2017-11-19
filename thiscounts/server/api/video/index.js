@@ -6,7 +6,8 @@ let auth = require('../../auth/auth.service');
 
 let router = express.Router();
 
-router.post('/:id', /*auth.isAuthenticated(),*/ controller.upload);
+router.post('/:id', auth.isAuthenticated(), controller.upload);
+router.post('/youtube/:id/:youtube', auth.isAuthenticated(), controller.youtube);
 
 // router.get('/test', controller.test);
 // router.get('/', controller.index);

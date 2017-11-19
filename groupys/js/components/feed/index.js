@@ -57,7 +57,8 @@ const mapStateToProps = state => {
         feeds: getFeeds(state),
         location: state.phone.currentLocation
     }
-}
+};
+
 export default connect(
     mapStateToProps,
     (dispatch) => ({

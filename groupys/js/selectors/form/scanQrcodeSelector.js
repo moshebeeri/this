@@ -15,6 +15,6 @@ export const getInstance = createSelector([getQrcodeInstance],
                 break;
 
         }
-        let promotion = feedUiConverter.createSavedPomotion(qrcode.instance,0,extraData);
+        let promotion = feedUiConverter.createSavedPromotion(qrcode.instance,0,extraData);
         return promotion;
     })

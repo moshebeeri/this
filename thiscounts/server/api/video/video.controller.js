@@ -21,6 +21,7 @@ const CardType = require('../cardType/cardType.model');
 const async = require('async');
 const randomstring = require('randomstring');
 
+const distributionBaseURL = 'http://dhs9y2fxkp0xy.cloudfront.net/';
 
 function findVideoObject(id, callback) {
   async.parallel({
@@ -141,10 +142,21 @@ exports.upload = function (req, res) {
 
       // Handle upload completion.
       upload.on('uploaded', function (details) {
-        console.log(details);
-        object.video = details.key;
-        object.save();
-        res.status(200).json(details)
+        Video.create({
+          creator: req.user.id,
+          created: Date.now(),
+          type: 'THIS',
+          url: distributionBaseURL + details.key
+        }, function (err, video) {
+          if (err) {
+            return handleError(res, err);
+          }
+          object.video = video;
+          object.save(function (err) {
+              if (err) { return handleError(res, err); }
+              res.status(200).json(video)
+            });
+        });
       });
       file.pipe(upload)
     });
@@ -152,6 +164,32 @@ exports.upload = function (req, res) {
     req.pipe(busboy);
   });
 
+};
+
+exports.youtube = function (req, res) {
+  findVideoObject(req.params.id, function (err, object) {
+    if (err) {
+      return handleError(res, err);
+    }
+    if (!object) {
+      return res.send(404);
+    }
+    Video.create({
+      creator: req.user.id,
+      created: Date.now(),
+      type: 'YOUTUBE',
+      url: req.params.youtube
+    }, function (err, video) {
+      if (err) {
+        return handleError(res, err);
+      }
+      object.video = video;
+      object.save(function (err) {
+        if (err) { return handleError(res, err); }
+        res.status(200).json(video)
+      });
+    });
+  });
 };
 
 // Get list of videos

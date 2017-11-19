@@ -35,7 +35,7 @@ class OSAuthUtils {
             //await TouchId.verify("123123123123");
             Alert.alert('verify succeeded')
         } catch (e) {
-            if (e.code == '-3') {
+            if (e.code === '-3') {
                 //fallback button is pressed
                 Alert.alert('errorCode: ' + e.code + ' verify failed, user wants to ' + title)
             }

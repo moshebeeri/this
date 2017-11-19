@@ -23,7 +23,7 @@ class DateUtils {
     isThisWeek(date) {
         var now = moment();
         var input = moment(date);
-        return (now.isoWeek() == input.isoWeek());
+        return (now.isoWeek() === input.isoWeek());
 
 
     }

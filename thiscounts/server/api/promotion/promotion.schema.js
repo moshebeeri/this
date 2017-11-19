@@ -53,7 +53,7 @@ let PromotionSchemaObject = {
   },
   name: {type: String, required: true},
   pictures : [],
-  video: {},
+  video: {type: Schema.ObjectId, ref: 'Video', autopopulate: true},
   type: {
     type: String,
     enum: promotionTypes

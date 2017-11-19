@@ -22,7 +22,7 @@ class FeedConverter {
             response = this.createMessageUi(feed);
         }
         if (feed.activity.action === 'instance' || feed.activity.action === 'eligible') {
-            return this.createPromontionInstance(feed);
+            return this.createPromotionInstance(feed);
         }
         if (feed.activity.action === 'share') {
             return this.createShared(feed);;
@@ -94,7 +94,7 @@ class FeedConverter {
             follow: 0,
             shares: 0,
             share: false,
-        }
+        };
         if (feed.activity.business.social_state) {
             socialState = feed.activity.business.social_state;
         }
@@ -143,7 +143,7 @@ class FeedConverter {
         return response;
     }
 
-    createSavedPomotion(feed, id, extraData) {
+    createSavedPromotion(feed, id, extraData) {
         let instance = feed.instance;
         let responseFeed = {};
         try {
@@ -214,7 +214,7 @@ class FeedConverter {
                 responseFeed.businessAddress = instance.promotion.entity.business.city + ' ' + instance.promotion.entity.business.address;
             } else {
                 responseFeed.businessName = instance.promotion.entity.business.name;
-                responseFeed.businessAddress = finstance.promotion.entity.business.city + ' ' + instance.promotion.entity.business.address;
+                responseFeed.businessAddress = instance.promotion.entity.business.city + ' ' + instance.promotion.entity.business.address;
                 responseFeed.categoryTitle = instance.promotion.entity.business.categoryTitle;
             }
             responseFeed.itemType = 'PROMOTION';
@@ -238,7 +238,7 @@ class FeedConverter {
         return feed.promotion;
     }
 
-    createPromontionInstance(feed) {
+    createPromotionInstance(feed) {
         let instance = this.getInstance(feed);
         if (!instance) {
             return;
@@ -418,7 +418,7 @@ class FeedConverter {
                 break;
             case "X+N%OFF":
                 response.itemTitle = 'Buy ' + promotion.condition.product.name + " Get " + promotion.x_plus_n_percent_off.values[0].product.name + " with " + promotion.x_plus_n_percent_off.values[0].eligible + " %Off";
-                response.promotion = 'X+N%OFFf';
+                response.promotion = 'X+N%OFF';
                 response.promotionColor = '#ff66b3';
                 response.quantity = promotion.x_plus_n_percent_off.quantity;
                 response.promotionTitle = 'Buy X get Y with Discount';
@@ -440,7 +440,7 @@ class FeedConverter {
                     response.promotionTitle = "Happy Hour";
                     response.promotionTerm = "Every " + FormUtils.convertDaysNumToString(promotion.happy_hour.values[0].days) + " happy hour from " +
                         FormUtils.secondsFromMidnightToString(promotion.happy_hour.values[0].from) + " until " + FormUtils.secondsFromMidnightToString(promotion.happy_hour.values[0].from + promotion.happy_hour.values[0].until) +
-                        " get special price for " + promotion.condition.product.name
+                        " get special price for " + promotion.condition.product.name;
                     response.promotionValue = promotion.happy_hour.values[0].pay;
                     response.quantity = promotion.happy_hour.quantity;
                     response.promotion = 'HAPPY HOUR';
@@ -450,7 +450,7 @@ class FeedConverter {
                 }
                 break;
             case "PUNCH_CARD":
-                let punches = promotion.punch_card.values[0].number_of_punches
+                let punches = promotion.punch_card.values[0].number_of_punches;
                 response.itemTitle = '';
                 response.promotionTitle = "Punch Card " + punches + " Slots";
                 response.punches = punches;

@@ -127,7 +127,7 @@ class AddPromotion extends Component {
                     name: item.name,
                     info: item.description
                 });
-                if (item.type == 'PERCENT') {
+                if (item.type === 'PERCENT') {
                     await   this.setState({
                         percent: {
                             percent: item.percent.values[0]
@@ -212,19 +212,19 @@ class AddPromotion extends Component {
         promotion.entity = {};
         promotion.condition = {};
         promotion.distribution = {};
-        if (this.state.discount_on == 'GLOBAL') {
+        if (this.state.discount_on === 'GLOBAL') {
             promotion.condition.business = businessId;
             promotion.entity.business = businessId;
         } else {
             promotion.entity.business = businessId;
             promotion.condition.product = this.state.product;
         }
-        if (this.state.distribution == 'GROUP') {
+        if (this.state.distribution === 'GROUP') {
             promotion.distribution.groups = this.state.groups;
         } else {
             promotion.distribution.business = businessId;
         }
-        if (this.state.type == 'PERCENT') {
+        if (this.state.type === 'PERCENT') {
             promotion.percent = {};
             promotion.percent.variation = 'SINGLE';
             promotion.percent.values = [this.state.percent.percent]
@@ -233,7 +233,7 @@ class AddPromotion extends Component {
                 promotion.retail_price = Number(this.state.percent.retail_price)
             }
         }
-        if (this.state.type == 'REDUCED_AMOUNT') {
+        if (this.state.type === 'REDUCED_AMOUNT') {
             promotion.reduced_amount = {};
             promotion.reduced_amount.variation = 'SINGLE';
             promotion.reduced_amount.quantity = Number(this.state.quantity)
@@ -242,7 +242,7 @@ class AddPromotion extends Component {
                 pay: Number(this.state.reduced_amount.values.pay),
             }]
         }
-        if (this.state.type == 'X_FOR_Y') {
+        if (this.state.type === 'X_FOR_Y') {
             promotion.x_for_y = {};
             promotion.x_for_y.variation = 'SINGLE';
             promotion.x_for_y.quantity = Number(this.state.quantity)
@@ -251,7 +251,7 @@ class AddPromotion extends Component {
                 pay: Number(this.state.x_for_y.values.pay),
             }]
         }
-        if (this.state.type == 'X+N%OFF') {
+        if (this.state.type === 'X+N%OFF') {
             promotion.x_plus_n_percent_off = {};
             promotion.x_plus_n_percent_off.variation = 'SINGLE';
             promotion.x_plus_n_percent_off.quantity = Number(this.state.quantity);
@@ -260,7 +260,7 @@ class AddPromotion extends Component {
                 product: this.state.giftProduct,
             }];
         }
-        if (this.state.type == 'X+Y') {
+        if (this.state.type === 'X+Y') {
             promotion.x_plus_y = {};
             promotion.x_plus_y.variation = 'SINGLE';
             promotion.x_plus_y.quantity = Number(this.state.quantity);
@@ -270,7 +270,7 @@ class AddPromotion extends Component {
                 product: this.state.giftProduct,
             }];
         }
-        if (this.state.type == 'PUNCH_CARD') {
+        if (this.state.type === 'PUNCH_CARD') {
             promotion.punch_card = {};
             promotion.punch_card.variation = 'SINGLE';
             promotion.punch_card.quantity = Number(this.state.quantity);
@@ -278,7 +278,7 @@ class AddPromotion extends Component {
                 number_of_punches: Number(this.state.punch_card.values.number_of_punches),
             };
         }
-        if (this.state.type == 'HAPPY_HOUR') {
+        if (this.state.type === 'HAPPY_HOUR') {
             promotion.happy_hour = {};
             promotion.happy_hour.variation = 'SINGLE';
             promotion.happy_hour.quantity = Number(this.state.quantity);
@@ -390,7 +390,7 @@ class AddPromotion extends Component {
     }
 
     selectDistributionType(type) {
-        if (type == 'PERSONAL') {
+        if (type === 'PERSONAL') {
             this.setState({
                 distribution: type,
                 show_save: true,
@@ -428,7 +428,7 @@ class AddPromotion extends Component {
         </View>
         let button = undefined;
         let selectedGroup = undefined;
-        if (this.state.distribution == 'GROUP') {
+        if (this.state.distribution === 'GROUP') {
             if (this.state.groups) {
                 selectedGroup =
                     <Text style={{color: '#FA8559', marginLeft: 8, marginRight: 8}}>{this.state.groups.length}

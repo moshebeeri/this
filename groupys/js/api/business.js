@@ -103,12 +103,12 @@ class BusinessApi {
                         'Content-Type': 'application/json;charset=utf-8',
                         'Authorization': 'Bearer ' + token
                     }
-                })
+                });
                 if (response.status ==='401') {
                     reject(response);
                     return;
                 }
-                timer.logTime(from, new Date(), '/businesses/search', 'business/en')
+                timer.logTime(from, new Date(), '/businesses/search', 'business/en');
                 let responseData = await response.json();
                 resolve(responseData);
             }
@@ -131,16 +131,16 @@ class BusinessApi {
                         'Authorization': 'Bearer ' + token
                     },
                     body: JSON.stringify(bussiness)
-                })
+                });
                 if (parseInt(response.status) >= 400) {
                     let response = {
                         message: 'Address not found',
                         valid: false
-                    }
+                    };
                     resolve(response);
                     return;
                 }
-                timer.logTime(from, new Date(), '/businesses/', 'checkAddress')
+                timer.logTime(from, new Date(), '/businesses/', 'checkAddress');
                 let responseData = await response.json();
                 responseData.valid = true;
                 resolve(responseData);
@@ -163,12 +163,12 @@ class BusinessApi {
                         'Content-Type': 'application/json;charset=utf-8',
                         'Authorization': 'Bearer ' + token
                     }
-                })
+                });
                 if (response.status ==='401') {
                     reject(response);
                     return;
                 }
-                timer.logTime(from, new Date(), '/businesses/search', 'business/en')
+                timer.logTime(from, new Date(), '/businesses/search', 'business/en');
                 let responseData = await response.json();
                 resolve(responseData);
             }
@@ -190,12 +190,12 @@ class BusinessApi {
                         'Content-Type': 'application/json;charset=utf-8',
                         'Authorization': 'Bearer ' + token
                     }
-                })
+                });
                 if (response.status ==='401') {
                     reject(response);
                     return;
                 }
-                timer.logTime(from, new Date(), '/businesses/search', 'business/en')
+                timer.logTime(from, new Date(), '/businesses/search', 'business/en');
                 let responseData = await response.json();
                 resolve(responseData);
             }

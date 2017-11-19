@@ -25,7 +25,7 @@ export const getFeeds = createSelector([getStateFeeds],
                         if (!response[groupId]) {
                             response[groupId] = new Array();
                         }
-                        response[groupId].push(feedUiConverter.createPromontionInstance(feeds[groupId][feedId]));
+                        response[groupId].push(feedUiConverter.createPromotionInstance(feeds[groupId][feedId]));
                     })
                 }
             })

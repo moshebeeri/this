@@ -124,7 +124,7 @@ class AddGroup extends Component {
 
     createGroupFromState() {
         const {user} = this.props;
-        if (this.state.groupType == 'USERS') {
+        if (this.state.groupType === 'USERS') {
             return {
                 name: this.state.name,
                 description: this.state.info,
@@ -334,7 +334,7 @@ class AddGroup extends Component {
     }
 
     createBusinessPicker(groupType, businesses) {
-        if (groupType == 'BUSINESS' && businesses) {
+        if (groupType === 'BUSINESS' && businesses) {
             const rows = businesses.map((s, i) => {
                 return <Item
                     key={i}

@@ -75,7 +75,7 @@ const GroupSchema = new Schema({
     ]
   },
   pictures: [],
-  video: {}
+  video: {type: Schema.ObjectId, ref: 'Video', autopopulate: true}
 });
 GroupSchema.index({name: 'text', description: 'text'});
 GroupSchema.plugin(autopopulate);

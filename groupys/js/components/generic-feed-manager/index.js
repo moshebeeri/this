@@ -36,7 +36,7 @@ export default class GenericFeedManager extends Component {
 
     render() {
         const {navigation, loadingDone, showTopLoader, feeds, token, userFollowers, group, ItemDetail, actions, entity, update, setNextFeeds} = this.props;
-        const topLoader = showTopLoader ? <View><Spinner color='red'/></View> : null
+        const topLoader = showTopLoader ? <View><Spinner color='red'/></View> : null;
         if (!loadingDone) {
             return <View><Spinner color='red'/></View>;
         }

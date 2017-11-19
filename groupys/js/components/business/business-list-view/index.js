@@ -142,7 +142,7 @@ export default class BusinessListView extends Component {
     }
 
     createEditTag(item) {
-        if (item.role == 'OWNS') {
+        if (item.role === 'OWNS') {
             return <EditButton  onPress={this.showBusiness.bind(this, this.props, item)}/>
 
         }
@@ -165,7 +165,7 @@ export default class BusinessListView extends Component {
     }
 
     createPremissionsTag(item) {
-        if (item.role == 'OWNS' || item.role == 'Admin' || item.role == 'Manager') {
+        if (item.role === 'OWNS' || item.role === 'Admin' || item.role === 'Manager') {
             return <TouchableOpacity onPress={() => this.showUsersRoles()}
                                      style={{margin: 3, flexDirection: 'row', alignItems: 'center',}}
                                      regular>
@@ -180,7 +180,7 @@ export default class BusinessListView extends Component {
     }
 
     createPromotionsTag(item) {
-        if (item.role == 'OWNS' || item.role == 'Admin' || item.role == 'Manager') {
+        if (item.role === 'OWNS' || item.role === 'Admin' || item.role === 'Manager') {
             return <TouchableOpacity onPress={() => this.showPromotions()}
                                      style={{margin: 3, flexDirection: 'row', alignItems: 'center',}}
                                      regular>
