@@ -46,7 +46,8 @@ export default class FeedPromotion extends Component {
 
 
     render() {
-        const {refresh,item, save, like, unlike, showUsers, comment, token, location} = this.props;
+        const {refresh,item, save, shared,like, unlike, showUsers, comment, token, location} = this.props;
+
         const styles = this.createPromotionStyle();
         const colorStyle = this.createColorStyle(item)
         const buisnessLogo = componentCreator.createBusinessLog(item, this.showBussines.bind(this));
@@ -56,11 +57,17 @@ export default class FeedPromotion extends Component {
         if (item.showsave) {
             claimDisabled = false
         }
+        let promotionUpperContainer = styles.promotion_upperContainer;
+        let logtyle = styles.logo_view;
+        if(shared){
+            promotionUpperContainer = styles.promotioSharedUpperContainer;
+            logtyle = styles.logoSharedview;
+        }
         const result =
             <InViewPort  onChange={() => refresh(item.id,item.social)} style={container}>
                 <View style={styles.promotion_card}>
-                    <View style={styles.promotion_upperContainer}>
-                        <View style={styles.logo_view}>
+                    <View style={promotionUpperContainer}>
+                        <View style={logtyle}>
                             {buisnessLogo}
                             <View style={{flexDirection: 'column'}}>
                                 <Text style={styles.promotion_nameText} note>{item.businessName} </Text>
@@ -80,11 +87,11 @@ export default class FeedPromotion extends Component {
                     <View style={styles.promotionDetails}>
                         <Text style={{marginRight:10,marginLeft:10,fontSize:18}}>{item.name} - {item.description}</Text>
                     </View>
-                    <View style={styles.promotiosSeperator}>
+                    {!shared && <View style={styles.promotiosSeperator}>
                         <PromotionSeperator/>
-                    </View>
+                    </View>}
 
-                    <View style={styles.promotionDetailsContainer}>
+                    {!shared && <View style={styles.promotionDetailsContainer}>
                         <View style={styles.promotionLoctionContainer}>
                             <View><Text style={styles.detailsTitleText}>Location</Text></View>
                             <View><Text
@@ -99,16 +106,16 @@ export default class FeedPromotion extends Component {
                             <SubmitButton title="CLAIM" color={'#2db6c8'}
                                           disabled={claimDisabled} onPress={() => save(item.id)}/>
                         </View>
-                    </View>
+                    </View>}
 
 
                     <View style={styles.promotion_bottomContainer}>
 
-                        <SocialState feed comments={item.social.comments} onPressComment={comment}
+                        {item.social && <SocialState feed comments={item.social.comments} onPressComment={comment}
                                      like={item.social.like} likes={item.social.likes}
                                      onPressUnLike={() => unlike(item.id, token)}
                                      onPressLike={() => like(item.id, token)}
-                                     share={item.social.share} shares={item.social.shares} shareAction={showUsers}/>
+                                     share={item.social.share} shares={item.social.shares} shareAction={showUsers}/>}
                     </View>
                 </View>
             </InViewPort>
@@ -123,7 +130,21 @@ export default class FeedPromotion extends Component {
     }
 
     createContainerStyle(item) {
+        const{shared}  = this.props;
+
         if (item.banner) {
+            if(shared){
+                return {
+                    flex: 1,
+
+                    width: width,
+                    overflow: 'hidden',
+                    backgroundColor: '#b7b7b7',
+                    // backgroundColor:'#FFF',
+                    alignItems: 'center',
+                    flexDirection: 'column',
+                }
+            }
             return {
                 flex: 1,
                 height: 81 * vh,

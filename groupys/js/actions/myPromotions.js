@@ -38,10 +38,10 @@ export function setNextFeeds(feeds) {
             if (response.length == 0) {
                 return;
             }
-            response.forEach(item => dispatch({
+           dispatch({
                 type: actions.UPSERT_SAVED_FEEDS,
-                item: item
-            }))
+                item: response
+            });
         } catch (error) {
             dispatch({
                 type: actions.NETWORK_IS_OFFLINE,
@@ -74,10 +74,10 @@ export function fetchTop() {
             if (response.length == 0) {
                 return;
             }
-            response.forEach(item => dispatch({
+            dispatch({
                 type: actions.FETCH_TOP_SAVED_FEEDS,
-                item: item
-            }));
+                item: response
+            });
             dispatch({
                 type: actions.SAVED_FEED_SHOW_TOP_LOADER,
                 showTopLoader: false,

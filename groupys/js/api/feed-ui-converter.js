@@ -24,8 +24,26 @@ class FeedConverter {
         if (feed.activity.action === 'instance' || feed.activity.action === 'eligible') {
             return this.createPromontionInstance(feed);
         }
+        if (feed.activity.action === 'share') {
+            return this.createShared(feed);;
+        }
         return response;
     }
+    createShared(feed){
+        let response = {}
+        let sharedFeed= {
+            activity:feed.activity.activity,
+            _id:feed.activity.activity._id
+        }
+
+        response.shardeActivity = this.createFeed(sharedFeed);
+        response.user = feed.activity.actor_user;
+        response.itemType = 'SHARE';
+        response.shared = response.shardeActivity.itemType;
+        response.id =  response.shardeActivity.id;
+        return response;
+    }
+
 
     createMessageUi(feed) {
         let response;
@@ -89,10 +107,10 @@ class FeedConverter {
                 actor: feed.activity.actor_user._id,
                 itemTitle: name + ' ' + feed.activity.action,
                 name: feed.activity.business.name,
-                address : feed.activity.business.address,
-                website : feed.activity.business.website,
-                email : feed.activity.business.email,
-                city:feed.activity.business.city,
+                address: feed.activity.business.address,
+                website: feed.activity.business.website,
+                email: feed.activity.business.email,
+                city: feed.activity.business.city,
                 businessAddress: feed.activity.business.city + ' ' + feed.activity.business.address,
                 banner: {
                     uri: feed.activity.business.pictures[0].pictures[0]
@@ -103,13 +121,10 @@ class FeedConverter {
             response = {
                 id: feed.activity.business._id,
                 fid: feed._id, key: feed._id,
-                city : feed.activity.business.city,
-
-                address : feed.activity.business.address,
-                website : feed.activity.business.website,
-                email : feed.activity.business.email,
-
-
+                city: feed.activity.business.city,
+                address: feed.activity.business.address,
+                website: feed.activity.business.website,
+                email: feed.activity.business.email,
                 social: socialState,
                 name: feed.activity.business.name,
                 actor: feed.activity.actor_user._id,
@@ -121,7 +136,6 @@ class FeedConverter {
         response.generalId = feed.activity.business._id;
         response.entities = [{business: feed.activity.business._id}];
         response.itemType = 'BUSINESS';
-
         response.businessLogo = feed.activity.business.logo;
         response.categoryTitle = feed.activity.business.categoryTitle;
         response.businessName = feed.activity.business.name;

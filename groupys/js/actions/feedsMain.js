@@ -194,7 +194,10 @@ export function like(id) {
 export function refresh(id, currentSocialState) {
     return async function (dispatch, getState) {
         try {
-            const token = getState().authentication.token
+            const token = getState().authentication.token;
+            if(new Date().getTime() - getState().feeds.upTime < 360000){
+                return;
+            }
             let response = await feedApi.getFeedSocialState(id, token);
             if (response) {
                 if (response.likes === currentSocialState.likes &&

@@ -8,6 +8,8 @@ const initialState = {
     update: false,
     lastfeed: undefined,
     maxFeeds:10,
+    updated:false,
+    upTime:new Date().getTime()
 };
 import {REHYDRATE} from "redux-persist/constants";
 import * as actions from "./reducerActions";
@@ -20,12 +22,24 @@ export default function feeds(state = initialState, action) {
         return {
             ...state,
             ...savedData.feeds,
-            showTopLoader: false
+            showTopLoader: false,
+            upTime:new Date().getTime()
         };
     }
     let feedstate = {...state};
     let currentFeeds = feedstate.feeds;
     switch (action.type) {
+
+        case actions.FEED_UPDATE_SOCIAL_STATE:
+        case actions.LIKE:
+        case actions.UNLIKE:
+        case actions.SAVE:
+        case actions.SHARE:
+
+            return {
+                ...state,
+                updated:!feedstate.updated,
+            };
         case actions.FIRST_TIME_FEED:
             feedstate.firstTime = false;
             return feedstate;
@@ -47,6 +61,7 @@ export default function feeds(state = initialState, action) {
                         feedstate.feedView.push(item._id);
                     }
                 }
+                feedstate.updated = !feedstate.updated;
             });
             feedstate.feeds = currentFeeds;
             return feedstate;
