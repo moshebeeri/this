@@ -42,7 +42,7 @@ export default class FeedShared extends Component {
         const container = this.createContainerStyle(item);
         return (<View style={container}>
                 <View style={{width:width-15,flex:1,justifyContent:'center',alignItems:'flex-start',backgroundColor:'white'}}>
-                 <Text style={{margin:5}}>Moshe has Shared with you</Text>
+                 <Text style={{margin:5}}>{item.user.name} has Shared with you</Text>
                 </View>
                 <View style={{flex:10}}>
                 {this.createSharedActivity(item)}

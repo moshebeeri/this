@@ -59,9 +59,14 @@ export default class FeedPromotion extends Component {
         }
         let promotionUpperContainer = styles.promotion_upperContainer;
         let logtyle = styles.logo_view;
+        let promotaionDesc = styles.promotiosDescription;
+        let promotionDetalis = styles.promotionDetails;
+
         if(shared){
             promotionUpperContainer = styles.promotioSharedUpperContainer;
             logtyle = styles.logoSharedview;
+            promotaionDesc = styles.promotiosShareDescription;
+             promotionDetalis = styles.promotionShareDetails;
         }
         const result =
             <InViewPort  onChange={() => refresh(item.id,item.social)} style={container}>
@@ -80,12 +85,13 @@ export default class FeedPromotion extends Component {
                     {image}
 
 
-
-                    <View style={styles.promotiosDescription}>
-                        <PromotionHeader type={item.promotion}  feed titleText={item.promotionTitle} titleValue={item.promotionValue} term={item.promotionTerm}/>
-                    </View>
-                    <View style={styles.promotionDetails}>
-                        <Text style={{marginRight:10,marginLeft:10,fontSize:18}}>{item.name} - {item.description}</Text>
+                    <View style={{flex:3.7,width:width-15,backgroundColor:'white'}}>
+                        <View style={promotaionDesc}>
+                            <PromotionHeader type={item.promotion}  feed titleText={item.promotionTitle} titleValue={item.promotionValue} term={item.promotionTerm}/>
+                        </View>
+                        <View style={promotionDetalis}>
+                            <Text style={{marginRight:10,marginLeft:10,fontSize:18}}>{item.name} - {item.description}</Text>
+                        </View>
                     </View>
                     {!shared && <View style={styles.promotiosSeperator}>
                         <PromotionSeperator/>

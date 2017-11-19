@@ -208,6 +208,7 @@ module.exports = {
         flexDirection: 'row',
         margin:15,
         borderTopWidth:1,
+        borderColor:'#cccccc',
         borderLeftWidth:1,
 
 
@@ -286,7 +287,16 @@ module.exports = {
 
     },
     promotiosDescription: {
-        flex:2.5 ,
+        flex:3 ,
+        alignItems:'center',
+        justifyContent:'center',
+        width:width - 15,
+    },
+    promotiosShareDescription: {
+        flex:4 ,
+      borderColor:'#cccccc',
+        borderLeftWidth:1,
+        marginLeft:15,
         alignItems:'center',
         justifyContent:'center',
         width:width - 15,
@@ -297,6 +307,17 @@ module.exports = {
         alignItems:'flex-start',
         justifyContent:'center',
         width:width - 15,
+    },
+    promotionShareDetails:{
+        flex:1.6,
+        borderColor:'#cccccc',
+        backgroundColor:'white',
+        alignItems:'flex-start',
+        justifyContent:'center',
+        width:width - 15,
+        marginLeft:15,
+        borderBottomWidth:1,
+        borderLeftWidth:1,
     },
     promotion_like: {
         marginLeft: 10,

@@ -33,7 +33,7 @@ class FeedConverter {
         let response = {}
         let sharedFeed= {
             activity:feed.activity.activity,
-            _id:feed.activity.activity._id
+            _id:feed.activity.activity.instance._id
         }
 
         response.shardeActivity = this.createFeed(sharedFeed);
