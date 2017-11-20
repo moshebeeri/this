@@ -155,7 +155,7 @@ class GroupFeed extends Component {
     }
 
     createGroupFeeds() {
-        const {navigation, feeds, userFollower, actions, token, loadingDone, showTopLoader} = this.props;
+        const {navigation, feeds, userFollower, actions, token, loadingDone,location, showTopLoader} = this.props;
         const group = navigation.state.params.group;
         return <View style={styles.inputContainer}>
             <GenericFeedManager
@@ -169,6 +169,7 @@ class GroupFeed extends Component {
                 token={token}
                 entity={group}
                 group={group}
+                location={location}
                 title='Feeds'
                 ItemDetail={GenericFeedItem}>
 
@@ -205,6 +206,7 @@ export default connect(
         feeds: getFeeds(state),
         showTopLoader: state.groups.showTopLoader,
         loadingDone: state.groups.loadingDone,
+        location: state.phone.currentLocation
     }),
     (dispatch) => ({
         actions: bindActionCreators(groupAction, dispatch)

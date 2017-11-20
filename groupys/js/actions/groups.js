@@ -395,3 +395,32 @@ export function shareActivity(id, activityId, users, token) {
         }
     }
 }
+
+export function refresh(id, currentSocialState) {
+    return async function (dispatch, getState) {
+        try {
+            const token = getState().authentication.token;
+            if(new Date().getTime() - getState().feeds.upTime < 360000){
+                return;
+            }
+            let response = await feedApi.getFeedSocialState(id, token);
+            if (response) {
+                if (response.likes === currentSocialState.likes &&
+                    response.shares === currentSocialState.shares &&
+                    response.comments === currentSocialState.comments) {
+                    return;
+                }
+            }
+            dispatch({
+                type: actions.GROUP_UPDATE_SOCIAL_STATE,
+                social_state: response,
+                id: id
+            });
+            // await userApi.like(id, token);
+        } catch (error) {
+            dispatch({
+                type: actions.NETWORK_IS_OFFLINE,
+            });
+        }
+    }
+}

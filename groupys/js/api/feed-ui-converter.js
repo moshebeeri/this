@@ -250,6 +250,7 @@ class FeedConverter {
             responseFeed.id = instance._id;
             responseFeed.fid = feed._id;
             responseFeed.key = feed._id;
+            responseFeed.promotionEntity = promotion;
             responseFeed.location = instance.location;
             responseFeed.generalId = instance._id;
             responseFeed.entities = [{instance: instance._id}];
@@ -380,6 +381,7 @@ class FeedConverter {
                 uri: promotion.pictures[0].pictures[1]
             };
         }
+        response.promotionEntity = promotion;
         let date = new Date(promotion.end);
         response.endDate = date.toLocaleDateString();
         response.businessAddress = promotion.entity.business.city + ' ' + promotion.entity.business.address;

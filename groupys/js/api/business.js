@@ -95,7 +95,6 @@ class BusinessApi {
         return new Promise(async (resolve, reject) => {
             try {
                 let from = new Date();
-                let token = await store.get('token');
                 const response = await fetch(`${server_host}/api/businesses/follow/` + businessId, {
                     method: 'GET',
                     headers: {

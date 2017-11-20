@@ -42,13 +42,8 @@ class Notification extends Component {
     render() {
         const {notification, navigation, actions} = this.props;
         return (
-            <View>
-                <Video
-                    source="YOUTUBE"
-                    width={300}
-                    paused={true}
-                    videoId={'tc4gfaoaa9A'}
-                />
+            <View style={{flex:1}}>
+
 
 
                 <GenericListManager navigation={navigation} rows={notification.notification} actions={actions}

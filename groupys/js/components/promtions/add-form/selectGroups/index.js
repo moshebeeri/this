@@ -8,7 +8,6 @@ import {bindActionCreators} from "redux";
 class SelectGroupsComponent extends Component {
     constructor(props) {
         super(props);
-        props.fetchBusinessGroups(props.navigation.state.params.bid)
         let selectCheckBox = new Array();
         for (i = 0; i < 100; i++) {
             selectCheckBox.push(false);
@@ -18,6 +17,10 @@ class SelectGroupsComponent extends Component {
         };
     }
 
+    componentWillMount(){
+        this.props.fetchBusinessGroups(this.props.navigation.state.params.bid)
+
+    }
     selectGroup(group) {
         this.props.navigation.state.params.selectGroup(product)
         this.props.navigation.goBack();
