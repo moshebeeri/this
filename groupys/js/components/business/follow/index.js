@@ -1,14 +1,13 @@
 import React, {Component} from "react";
-import {Image, Platform, TouchableOpacity} from "react-native";
-import {Text, Input, Spinner, Button, View, Item} from "native-base";
-import BusinessApi from "../../../api/business";
+import {Image, TouchableOpacity} from "react-native";
+import {Button, Input, Item, Spinner, Text, View} from "native-base";
 import Icon3 from "react-native-vector-icons/Ionicons";
 import Camera from "react-native-camera";
 import styles from "./styles";
+import {BusinessHeader} from '../../../ui/index';
 
 const qrcode = require('../../../../images/qr-code.png');
 const scan = require('../../../../images/scan.png');
-let businessApi = new BusinessApi();
 export default class BusinessFollow extends Component {
     static navigationOptions = {
         header: null
@@ -26,40 +25,21 @@ export default class BusinessFollow extends Component {
     }
 
     createView() {
-        const {cameraOn, searching, businesses, searchBusiness, followByQrCode, followBusiness, showCamera} = this.props;
+        const {cameraOn, searching, businesses, searchBusiness, followByQrCode, followBusiness,groupFollowBusiness,group, showCamera} = this.props;
         let back = <Button transparent style={{}} onPress={() => this.back()}>
             <Icon3 active color={"#2db6c8"} size={20} name="ios-arrow-back"/>
 
         </Button>
+
+
         let spin = undefined;
         if (searching) {
             spin = <View><Spinner color='red'/></View>;
         }
+        let navigation = this.props.navigation;
         let rows = undefined;
         if (businesses && businesses.length > 0) {
             rows = businesses.map(function (businees) {
-                let banner = undefined;
-                if (businees.pictures && businees.pictures.length > 0) {
-                    banner = <View style={{padding: 10}}><Image style={{
-                        flex: -1,
-                        alignSelf: 'center',
-                        height: 70,
-                        width: 70,
-                        marginLeft: 10,
-                        borderWidth: 1,
-                        borderRadius: 80
-                    }} resizeMode="cover" source={{uri: businees.pictures[0].pictures[0]}}>
-
-
-                    </Image>
-
-                    </View>
-                } else {
-                    banner = <Image
-                        style={{padding: 0, flex: -1, height: 300}}
-                        source={require('../../../../images/client_1.png')}>
-                    </Image>
-                }
                 let followStyle = {
                     flex: -1,
                     justifyContent: 'center',
@@ -70,6 +50,19 @@ export default class BusinessFollow extends Component {
                     width: 200,
                     backgroundColor: '#e65100',
                 };
+                let followComponent = <TouchableOpacity onPress={() => followBusiness(businees._id,navigation)} style={followStyle} regular>
+
+                    <Text style={{color: 'white', fontStyle: 'normal', fontSize: 15}}>Follow </Text>
+
+                </TouchableOpacity>;
+
+                if(group){
+                    followComponent =  <TouchableOpacity onPress={() => groupFollowBusiness(group._id,businees._id,navigation)} style={followStyle} regular>
+
+                        <Text style={{color: 'white', fontStyle: 'normal', fontSize: 15}}>Follow </Text>
+
+                    </TouchableOpacity>;
+                }
                 return <View key={businees._id} style={{padding: 5, backgroundColor: '#eaeaea'}}>
                     <View style={{
                         flex: -1,
@@ -78,16 +71,16 @@ export default class BusinessFollow extends Component {
                         flexDirection: 'row',
                         alignItems: 'center',
                     }}>
-                        {banner}
+                        <View>
+                            <BusinessHeader navigation={navigation} business={businees}
+                                            businessLogo={businees.logo}
+                                            businessName={businees.name}/>
+                        </View>
 
                         <Text style={{width: 100, marginLeft: 10}}>{businees.name}</Text>
                         <View
                             style={{marginLeft: 20, flex: -1, flexDirection: 'row', width: 180, alignItems: 'center',}}>
-                            <TouchableOpacity onPress={() => followBusiness(businees._id)} style={followStyle} regular>
-
-                                <Text style={{color: 'white', fontStyle: 'normal', fontSize: 15}}>Follow </Text>
-
-                            </TouchableOpacity>
+                            {followComponent}
                         </View>
 
                     </View>

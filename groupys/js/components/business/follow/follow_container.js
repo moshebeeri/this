@@ -16,14 +16,24 @@ class BusinessFollow extends Component {
         super(props);
     }
 
+    componentWillMount(){
+        const { actions} = this.props;
+        actions.resetFollowForm();
+
+    }
     render() {
         const {navigation, state, actions} = this.props;
+        let group;
+        if(navigation.state && navigation.state.params){
+            group = navigation.state.params.group;
+        }
         return (
             <FollowView
                 cameraOn={state.cameraOn}
                 searching={state.searching}
                 businesses={state.businesses}
                 navigation={navigation}
+                group={group}
                 {...actions} />
         );
     }

@@ -46,6 +46,7 @@ export const SAVE_APP_USER = 'SAVE_APP_USER';
 export const SEARCH_BUSINESS = 'SEARCH_BUSINESS';
 export const SHOW_CAMERA = 'SHOW_CAMERA';
 export const SHOW_SEARCH_SPIN = 'SHOW_SEARCH_SPIN';
+export const RESET_FOLLOW_FORM ='RESET_FOLLOW_FORM';
 //feeds
 export const GET_FEEDS = 'GET_FEEDS';
 export const FIRST_TIME_FEED = 'FIRST_TIME_FEED';

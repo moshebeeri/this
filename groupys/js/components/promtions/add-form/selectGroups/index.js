@@ -22,7 +22,7 @@ class SelectGroupsComponent extends Component {
 
     }
     selectGroup(group) {
-        this.props.navigation.state.params.selectGroup(product)
+        this.props.navigation.state.params.selectGroup(group)
         this.props.navigation.goBack();
     }
 
@@ -39,7 +39,7 @@ class SelectGroupsComponent extends Component {
         let selectedBool = this.state.selectCheckBox;
         this.props.groups['groups' + this.props.navigation.state.params.bid].forEach(function (group, i) {
             if (selectedBool[i + 1]) {
-                selectedGroups.push(group.group);
+                selectedGroups.push(group);
             }
         })
         this.props.navigation.state.params.selectGroup(selectedGroups)
