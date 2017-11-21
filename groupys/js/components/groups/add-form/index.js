@@ -1,33 +1,15 @@
 import React, {Component} from 'react';
-import {
-    Platform,
-    AppRegistry,
-    NavigatorIOS,
-    TextInput,
-    Image,
-    TouchableOpacity,
-    TouchableHighlight
-} from 'react-native';
+import {Image, ScrollView, Text, View,Dimensions} from 'react-native';
 import {connect} from 'react-redux';
-import {actions} from 'react-native-navigation-redux-helpers';
-import {
-    Container,
-    Content,
-    Text,
-    InputGroup,
-    Input,
-    Button,
-    Icon,
-    View,
-    Header,
-    Item,
-    Picker,
-    Footer
-} from 'native-base';
-import store from 'react-native-simple-store';
+import styles from './styles'
 import {getMyBusinesses} from '../../../selectors/businessesSelector'
-import ImagePicker from 'react-native-image-crop-picker';
 import SelectUsersComponent from '../selectUser';
+import {FormHeader, ImagePicker, SelectButton, SimplePicker, Spinner, TextInput} from '../../../ui/index';
+import * as groupsAction from "../../../actions/groups";
+import * as businessesAction from "../../../actions/business";
+import * as userAction from "../../../actions/user";
+import {bindActionCreators} from "redux";
+const {width, height} = Dimensions.get('window')
 
 const groupPolicy = [
     {
@@ -67,19 +49,18 @@ const groupPostPolicy = [
         label: 'Managers'
     }
 ]
-import * as groupsAction from "../../../actions/groups";
-import * as businessesAction from "../../../actions/business";
-import * as userAction from "../../../actions/user";
-import {bindActionCreators} from "redux";
 
 class AddGroup extends Component {
+    static navigationOptions = ({navigation}) => ({
+        header: null
+    });
+
     constructor(props) {
         super(props);
         this.state = {
             name: null,
             info: null,
             showUsers: false,
-            image: '',
             images: '',
             users: [],
             selectedUsers: null,
@@ -117,9 +98,24 @@ class AddGroup extends Component {
 
     async saveFormData() {
         const {actions} = this.props;
-        const group = this.createGroupFromState();
-        this.replaceRoute('home');
-        actions.createGroup(group);
+        if (this.validateForm()) {
+            const group = this.createGroupFromState();
+            actions.createGroup(group, this.props.navigation);
+        }
+    }
+
+    validateForm() {
+        let result = true;
+        Object.keys(this.refs).forEach(key => {
+            let item = this.refs[key];
+            if (this.refs[key].wrappedInstance) {
+                item = this.refs[key].wrappedInstance;
+            }
+            if (!item.isValid()) {
+                result = false;
+            }
+        });
+        return result
     }
 
     createGroupFromState() {
@@ -153,7 +149,12 @@ class AddGroup extends Component {
     }
 
     focusNextField(nextField) {
-        this.refs[nextField]._root.focus()
+        if (this.refs[nextField].wrappedInstance) {
+            this.refs[nextField].wrappedInstance.focus()
+        }
+        if (this.refs[nextField].focus) {
+            this.refs[nextField].focus()
+        }
     }
 
     async selectGroupPolocy(value) {
@@ -168,43 +169,6 @@ class AddGroup extends Component {
         })
     }
 
-    async pickFromCamera() {
-        try {
-            const image = await ImagePicker.openCamera({
-                cropping: true,
-                compressImageQuality: 1,
-                compressVideoPreset: 'MediumQuality',
-                width: 2000,
-                height: 2000,
-            });
-            this.setState({
-                image: {uri: image.path, width: image.width, height: image.height, mime: image.mime},
-                images: null,
-                path: image.path
-            });
-        } catch (e) {
-            console.log(e);
-        }
-    }
-
-    async pickPicture() {
-        try {
-            const image = await ImagePicker.openPicker({
-                cropping: true,
-                compressImageQuality: 1,
-                compressVideoPreset: 'MediumQuality',
-                width: 2000,
-                height: 2000,
-            });
-            this.setState({
-                image: {uri: image.path, width: image.width, height: image.height, mime: image.mime},
-                path: image.path
-            });
-        } catch (e) {
-            console.log(e);
-        }
-    }
-
     showUsers() {
         const {userFollowers} = this.props;
         if (userFollowers.length > 0) {
@@ -215,157 +179,109 @@ class AddGroup extends Component {
         }
     }
 
+    setCoverImage(image) {
+        this.setState({image: image});
+    }
+
+    createCoverImageComponnent() {
+        const {saving} = this.props;
+        if (this.state.image) {
+            let coverImage = <Image
+                style={{width: width - 10, height: 210, borderWidth: 1, borderColor: 'white'}}
+                source={{uri: this.state.image.path}}
+            >
+                {saving && <Spinner/>}
+            </Image>
+            return <View style={styles.product_upper_container}>
+
+                <View style={styles.cmeraLogoContainer}>
+
+                    <View style={styles.addCoverContainer}>
+
+                        <ImagePicker ref={"coverImage"} mandatory image={coverImage} color='white' pickFromCamera
+                                     setImage={this.setCoverImage.bind(this)}/>
+                    </View>
+                </View>
+            </View>
+        }
+        return <View style={styles.product_upper_container}>
+            {saving && <Spinner/>}
+            <View style={styles.cmeraLogoContainer}>
+
+                <View style={styles.addCoverNoImageContainer}>
+                    <ImagePicker ref={"coverImage"} mandatory color='white' pickFromCamera
+                                 setImage={this.setCoverImage.bind(this)}/>
+                    <Text style={styles.addCoverText}>Add a cover photo</Text>
+                </View>
+            </View>
+
+        </View>
+    }
+
     render() {
         const {businesses} = this.props;
-        const image = this.createImage(this.state.path);
-        const users = this.createUserTag(this.state.selectedUsers);
-        const addPolicyTag = this.createPolicyTag();
-        const groupTypeTag = this.createGroupTypePiker();
         const BusinessPiker = this.createBusinessPicker(this.state.groupType, businesses);
         return (
-            <Container style={{margin: 10, backgroundColor: '#fff'}}>
+            <View style={styles.product_container}>
+                <FormHeader showBack submitForm={this.saveFormData.bind(this)} navigation={this.props.navigation}
+                            title={"Add Group"} bgc="#2db6c8"/>
+                <ScrollView contentContainerStyle={{
+                    justifyContent: 'center',
+                    alignItems: 'center',
+                }} style={styles.contentContainer}>
 
 
-                <Content style={{backgroundColor: '#fff'}}>
-                    <Item style={{margin: 3}} regular>
-                        {addPolicyTag}
-                    </Item>
-                    <Item style={{margin: 3}} regular>
-                        {groupTypeTag}
-                    </Item>
-                    <Item style={{margin: 3}} regular>
-                        {BusinessPiker}
-                    </Item>
+                    {this.createCoverImageComponnent()}
+                    <SimplePicker ref="groupPolicyType" list={groupPolicy} itemTitle="Group Policy"
+                                  defaultHeader="Choose Type" isMandatory
+                                  onValueSelected={this.selectGroupPolocy.bind(this)}/>
+                    <SimplePicker ref="groupType" list={groupType} itemTitle="Group Type"
+                                  defaultHeader="Choose Type" isMandatory
+                                  onValueSelected={this.selectGroupType.bind(this)}/>
+
+                    {BusinessPiker}
+                    <View style={styles.inputTextLayour}>
+                        <TextInput field='Group Name' value={this.state.name}
+                                   returnKeyType='next' ref="1" refNext="1"
+                                   onSubmitEditing={this.focusNextField.bind(this, "2")}
+                                   onChangeText={(name) => this.setState({name})} isMandatory={true}/>
+                    </View>
+
+                    <View style={styles.inputTextLayour}>
 
 
-                    <Item style={{margin: 3}} regular>
-                        <Input value={this.state.name} blurOnSubmit={true} returnKeyType='next' ref="1"
-                               onSubmitEditing={this.focusNextField.bind(this, "2")}
-                               onChangeText={(name) => this.setState({name})} placeholder='Name'/>
-                    </Item>
-                    <Item style={{margin: 3}} regular>
-                        <Input value={this.state.info} blurO
-                               nSubmit={true} returnKeyType='done' ref="2"
-                               onChangeText={(info) => this.setState({info})} placeholder='Description'/>
-                    </Item>
-                    <Item style={{margin: 3}} regular>
-                        <Button transparent onPress={() => this.showUsers(true)}>
-                            <Text>Select Users </Text>
-                        </Button>
-                        {users}
-                    </Item>
-
-                    <Item style={{margin: 3}} regular>
-
-                        <Button iconRight transparent onPress={() => this.pickPicture()}>
-                            <Text style={{fontStyle: 'normal', fontSize: 10}}>Pick </Text>
-                            <Icon name='camera'/>
-                        </Button>
+                        <TextInput field='Description' value={this.state.info} returnKeyType='next' ref="2" refNext="2"
 
 
-                        <Button iconRight transparent onPress={() => this.pickFromCamera()}>
-                            <Text style={{fontStyle: 'normal', fontSize: 10}}>take </Text>
-                            <Icon name='camera'/>
-                        </Button>
+                                   onChangeText={(info) => this.setState({info})}/>
+                    </View>
+                    <View style={styles.groupSelectUserContainer}>
+                        <SelectButton
+                            client ref="selectUsers" selectedValue={this.state.selectedUsers} isMandatory
+                            title="Members"
+                            action={this.showUsers.bind(this, true)}/>
+                        {this.state.selectedUsers && <Text> Selected Members: {this.state.selectedUsers.length}</Text>}
 
-                        {image}
-                    </Item>
-
-                </Content>
-                <Footer style={{backgroundColor: '#fff'}}>
+                    </View>
+                </ScrollView>
 
 
-                    <Button transparent
-                            onPress={this.saveFormData.bind(this)}
-                    >
-                        <Text>Add Group</Text>
-                    </Button>
-                </Footer>
-            </Container>
+            </View>
         );
     }
 
-    createGroupTypePiker() {
-        const groupTypeTag = <Picker
-            iosHeader="Group Type"
-            mode="dropdown"
-            style={{flex: 1}}
-            selectedValue={this.state.groupType}
-            itemStyle={{flexDirection: 'row', marginTop: 10}}
-            onValueChange={this.selectGroupType.bind(this)}
-        >
-
-            {
-                groupType.map((s, i) => {
-                    return <Item
-                        key={i}
-                        value={s.value}
-                        label={s.label}/>
-                })}
-        </Picker>
-        return groupTypeTag;
-    }
-
-    createPolicyTag() {
-        const addPolicyTag = <Picker
-            iosHeader="Group Policy"
-            mode="dropdown"
-            style={{flex: 1}}
-            selectedValue={this.state.groupPolocy}
-            onValueChange={this.selectGroupPolocy.bind(this)}
-        >
-
-            {
-                groupPolicy.map((s, i) => {
-                    return <Item
-                        key={i}
-                        value={s.value}
-                        label={s.label}/>
-                })}
-        </Picker>
-        return addPolicyTag;
-    }
-
-    createUserTag(selectedUsers) {
-        if (selectedUsers) {
-            return <Text> {this.state.selectedUsers.length} selected </Text>
-        }
-        return undefined;
-    }
 
     createBusinessPicker(groupType, businesses) {
         if (groupType === 'BUSINESS' && businesses) {
             const rows = businesses.map((s, i) => {
-                return <Item
-                    key={i}
-                    value={s._id}
-                    label={s.name}/>
-            })
-            return <Picker
-                iosHeader="Select Business"
-                mode="dropdown"
-                style={{flex: 1}}
-                selectedValue={this.state.business}
-                itemStyle={{flexDirection: 'row', marginTop: 4}}
-                onValueChange={this.selectBusiness.bind(this)}>
-                <Item
-                    key={555}
-                    value={''}
-                    label={"Selecet Business"}/>
-                {rows}
-
-
-            </Picker>
-        }
-        return undefined;
-    }
-
-    createImage(imagePath) {
-        if (imagePath) {
-            return <Image
-                style={{width: 50, height: 50}}
-                source={{uri: this.state.path}}
-            />
+                return {
+                    value: s._id,
+                    label: s.name
+                }
+            });
+            return <SimplePicker ref="BusineesList" list={rows} itemTitle="Businees"
+                                 defaultHeader="Choose Businees" isMandatory
+                                 onValueSelected={this.selectBusiness.bind(this)}/>
         }
         return undefined;
     }
@@ -376,6 +292,7 @@ export default connect(
         businesses: getMyBusinesses(state),
         user: state.authentication.user,
         userFollowers: state.user.followers,
+        saving: state.groups.saving
     }),
     (dispatch) => ({
         actions: bindActionCreators(groupsAction, dispatch),

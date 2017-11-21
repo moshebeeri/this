@@ -1,4 +1,4 @@
- const initialState = {
+const initialState = {
     groups: {},
     groupFeedOrder: {},
     groupFeeds: {},
@@ -7,7 +7,8 @@
     showTopLoader: {},
     clientMessages: {},
     lastFeed: {},
-    lastFeedTime: {}
+    lastFeedTime: {},
+    saving: false
 };
 import {REHYDRATE} from "redux-persist/constants";
 import * as actions from "./reducerActions";
@@ -19,6 +20,7 @@ export default function group(state = initialState, action) {
         const savedData = action.payload || initialState;
         return {
             ...state, ...savedData.groups
+            ,saving: false
         };
     }
     let imutableState = {...state};
@@ -29,11 +31,10 @@ export default function group(state = initialState, action) {
             imutableState.update = !imutableState.update;
             return imutableState;
         case actions.UPSERT_GROUP:
-           action.item.forEach(eventItem => {
+            action.item.forEach(eventItem => {
                 currentGroups[eventItem._id] = eventItem;
             });
             return imutableState;
-
         case actions.UPSERT_GROUP_FEEDS_BOTTOM:
             if (!imutableState.groupFeeds[action.groupId]) {
                 imutableState.groupFeeds[action.groupId] = {};
@@ -81,6 +82,16 @@ export default function group(state = initialState, action) {
         case 'GET_GROUPS_BUSINESS' :
             imutableState['groups' + action.bid] = action.groups;
             return imutableState;
+        case actions.GROUP_SAVING:
+            return {
+                ...state,
+                saving: true,
+            };
+        case actions.GROUP_SAVING_DONE:
+            return {
+                ...state,
+                saving: false,
+            };
         default:
             return state;
     }

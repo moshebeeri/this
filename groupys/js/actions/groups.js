@@ -116,12 +116,19 @@ export function touch(groupid) {
     }
 }
 
-export function createGroup(group) {
+export function createGroup(group,navigation) {
     return async function (dispatch, getState) {
         try {
+            dispatch({
+                type: actions.GROUP_SAVING,
+            });
             const token = getState().authentication.token;
             await groupsApi.createGroup(group, uploadGroupPic, token);
-            getAll(dispatch, token);
+            await getAll(dispatch, token);
+            dispatch({
+                type: actions.GROUP_SAVING_DONE,
+            });
+            navigation.goBack();
         } catch (error) {
             dispatch({
                 type: actions.NETWORK_IS_OFFLINE,

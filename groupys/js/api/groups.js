@@ -38,7 +38,7 @@ class GroupsApi {
                     this.addUsersToGroup(group, responseData);
                 }
                 if (group.image) {
-                    entityUtils.doUpload(group.image.uri, group.image.mime, token, callbackFunction, 'groups', responseData);
+                    entityUtils.doUpload(group.image.path, group.image.mime, token, callbackFunction, 'groups', responseData);
                 } else {
                     callbackFunction(responseData);
                 }
