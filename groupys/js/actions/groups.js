@@ -17,12 +17,10 @@ async function getAll(dispatch, token) {
     try {
         let response = await groupsApi.getAll(token);
         if (response.length > 0) {
-            response.forEach(function (group) {
                 dispatch({
-                    type: actions.UPSERT_SINGLE_GROUP,
-                    group: group,
+                    type: actions.UPSERT_GROUP,
+                    item: response,
                 });
-            })
         }
     } catch (error) {
         dispatch({
@@ -116,7 +114,7 @@ export function touch(groupid) {
     }
 }
 
-export function createGroup(group,navigation) {
+export function createGroup(group, navigation) {
     return async function (dispatch, getState) {
         try {
             dispatch({
@@ -188,11 +186,11 @@ export function setNextFeeds(feeds, token, group) {
             });
             if (disassemblerItems && disassemblerItems.length > 0) {
                 collectionDispatcher.dispatchEvents(dispatch);
-                disassemblerItems.forEach(item => dispatch({
+                dispatch({
                     type: actions.UPSERT_GROUP_FEEDS_BOTTOM,
                     groupId: group._id,
-                    groupFeed: item
-                }))
+                    groupFeed: disassemblerItems
+                })
             }
         } catch (error) {
             dispatch({
@@ -260,15 +258,12 @@ async function fetchTopList(id, token, group, dispatch) {
             return assemblers.disassembler(item, collectionDispatcher)
         });
         collectionDispatcher.dispatchEvents(dispatch)
-        disassemblerItems.forEach(item => dispatch({
+        dispatch({
             type: actions.UPSERT_GROUP_FEEDS_TOP,
             groupId: group._id,
-            groupFeed: item
-        }));
-        dispatch({
-            type: actions.GROUP_CLEAN_MESSAGES,
-            groupId: group._id,
+            groupFeed: disassemblerItems
         });
+
     } catch (error) {
         dispatch({
             type: actions.NETWORK_IS_OFFLINE,
@@ -282,35 +277,12 @@ export function setFeeds(group, feeds) {
     }
     return async function (dispatch, getState) {
         const token = getState().authentication.token;
-        const clientMessages = getState().groups.clientMessages[group._id];
-        let id = getNextFeedId(feeds, clientMessages);
-        await fetchTopList(id, token, group, dispatch)
+        await fetchTopList(feeds[0].id, token, group, dispatch)
     }
 }
 
-export function getFeedTopId(feeds, clientMessages) {
-    let index = 0;
-    let clientIds = clientMessages.map(message => message.id);
-    while (clientIds.includes(feeds[index].id)) {
-        index++;
-    }
-    return feeds[index].id
-}
 
-function getNextFeedId(feeds, clientMessages) {
-    let id = feeds[0].id;
-    if (!id) {
-        let index = 1;
-        while (!feeds[index].id || index > feeds.length) {
-            index++
-        }
-        id = feeds[index].id;
-    }
-    if (clientMessages) {
-        id = getFeedTopId(feeds, clientMessages)
-    }
-    return id;
-}
+
 
 export function fetchTop(feeds, token, group) {
     return async function (dispatch, getState) {
@@ -323,9 +295,7 @@ export function fetchTop(feeds, token, group) {
             groupId: group._id,
             showTopLoader: true,
         });
-        const clientMessages = getState().groups.clientMessages[group._id];
-        let id = getNextFeedId(feeds, clientMessages);
-        await fetchTopList(id, token, group, dispatch);
+        await fetchTopList(feeds[0].id, token, group, dispatch);
         dispatch({
             type: actions.GROUP_FEED_SHOWTOPLOADER,
             groupId: group._id,
@@ -407,7 +377,7 @@ export function refresh(id, currentSocialState) {
     return async function (dispatch, getState) {
         try {
             const token = getState().authentication.token;
-            if(new Date().getTime() - getState().feeds.upTime < 360000){
+            if (new Date().getTime() - getState().feeds.upTime < 360000) {
                 return;
             }
             let response = await feedApi.getFeedSocialState(id, token);

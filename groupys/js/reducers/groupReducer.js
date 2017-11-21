@@ -5,7 +5,6 @@ const initialState = {
     update: false,
     loadingDone: {},
     showTopLoader: {},
-    clientMessages: {},
     lastFeed: {},
     lastFeedTime: {},
     saving: false
@@ -20,7 +19,7 @@ export default function group(state = initialState, action) {
         const savedData = action.payload || initialState;
         return {
             ...state, ...savedData.groups
-            ,saving: false
+            , saving: false,showTopLoader: {}
         };
     }
     let imutableState = {...state};
@@ -36,25 +35,29 @@ export default function group(state = initialState, action) {
             });
             return imutableState;
         case actions.UPSERT_GROUP_FEEDS_BOTTOM:
-            if (!imutableState.groupFeeds[action.groupId]) {
-                imutableState.groupFeeds[action.groupId] = {};
-                imutableState.groupFeedOrder[action.groupId] = [];
-            }
-            imutableState.groupFeeds[action.groupId][action.groupFeed._id] = action.groupFeed;
-            if (!imutableState.groupFeedOrder[action.groupId].includes(action.groupFeed._id)) {
-                imutableState.groupFeedOrder[action.groupId].push(action.groupFeed._id);
-            }
+            action.groupFeed.forEach(item => {
+                if (!imutableState.groupFeeds[action.groupId]) {
+                    imutableState.groupFeeds[action.groupId] = {};
+                    imutableState.groupFeedOrder[action.groupId] = [];
+                }
+                imutableState.groupFeeds[action.groupId][item._id] = item;
+                if (!imutableState.groupFeedOrder[action.groupId].includes(item._id)) {
+                    imutableState.groupFeedOrder[action.groupId].push(item._id);
+                }
+            });
             imutableState.update = !imutableState.update;
             return imutableState;
         case actions.UPSERT_GROUP_FEEDS_TOP:
-            if (!imutableState.groupFeeds[action.groupId]) {
-                imutableState.groupFeeds[action.groupId] = {};
-                imutableState.groupFeedOrder[action.groupId] = [];
-            }
-            imutableState.groupFeeds[action.groupId][action.groupFeed._id] = action.groupFeed;
-            if (!imutableState.groupFeedOrder[action.groupId].includes(action.groupFeed._id)) {
-                imutableState.groupFeedOrder[action.groupId].unshift(action.groupFeed._id);
-            }
+            action.groupFeed.forEach(item => {
+                if (!imutableState.groupFeeds[action.groupId]) {
+                    imutableState.groupFeeds[action.groupId] = {};
+                    imutableState.groupFeedOrder[action.groupId] = [];
+                }
+                imutableState.groupFeeds[action.groupId][item._id] = item;
+                if (!imutableState.groupFeedOrder[action.groupId].includes(item._id)) {
+                    imutableState.groupFeedOrder[action.groupId].unshift(item._id);
+                }
+            });
             imutableState.update = !imutableState.update;
             return imutableState;
         case actions.GROUP_FEED_LOADING_DONE:
@@ -65,16 +68,7 @@ export default function group(state = initialState, action) {
             let topLoader = imutableState.showTopLoader;
             topLoader[action.groupId] = action.showTopLoader;
             return imutableState;
-        case actions.GROUP_ADD_MESSAGE:
-            let clientMessage = imutableState.clientMessages;
-            if (!clientMessage[action.groupId]) {
-                clientMessage[action.groupId] = [];
-            }
-            clientMessage[action.groupId].unshift(action.message);
-            return imutableState;
-        case actions.GROUP_CLEAN_MESSAGES:
-            imutableState.clientMessages[action.groupId] = [];
-            return imutableState;
+
         case actions.GROUP_LAST_FEED_DOWN:
             imutableState.lastFeed[action.groupId] = action.id;
             imutableState.lastFeedTime[action.groupId] = new Date().getTime();

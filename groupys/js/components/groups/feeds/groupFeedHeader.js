@@ -9,7 +9,7 @@ import {Container, Footer, Icon, Button, Thumbnail, Text} from 'native-base';
 import styles from './styles'
 import store from 'react-native-simple-store';
 import GroupApi from "../../../api/groups"
-
+import {GroupHeader, PromotionHeaderSnippet} from '../../../ui/index';
 let groupApi = new GroupApi();
 import {
     Menu,
@@ -133,15 +133,11 @@ class GroupFeedHeader extends Component {
         return <View style={styles.headerContainer}>
             <View style={styles.imageStyle}>
                 <Button transparent onPress={this.navigateBack.bind(this)}>
-                    <Icon style={{fontSize: 35, color: "#2db6c8"}} name="arrow-back"/>
+                    <Icon style={{fontSize: 25, color: "#2db6c8"}} name="arrow-back"/>
                 </Button>
             </View>
-            <View style={styles.imageStyle}>
-                {image}
-            </View>
-            <View style={styles.group_title}>
-                <Text style={styles.group_name_text}>{group.name}</Text>
-                <Text style={styles.group_members}>{group.description}</Text>
+            <View style={{flex:10}}>
+           <GroupHeader group={group}/>
             </View>
             <View style={styles.group_actions}>
                 {groupInvite}

@@ -3,7 +3,7 @@ import {Text, View} from 'react-native';
 import {Button, Thumbnail} from 'native-base';
 import styles from './styles'
 
-export default class BusinessHeader extends Component {
+export default class GroupHeader extends Component {
     constructor(props) {
         super(props);
     }

@@ -131,12 +131,12 @@ class GroupFeed extends Component {
 
                 <View style={styles.headerTabContainer}>
                     <View style={styles.headerTabInnerContainer}>
-                        <TouchableOpacity onPress={this.selectPromotions.bind(this)}>
+                        <TouchableOpacity style={{flex:1}}onPress={this.selectPromotions.bind(this)}>
                             <View style={promotionStyle}>
                                 <Text style={textPromotionStyle}>Posts</Text>
                             </View>
                         </TouchableOpacity>
-                        <TouchableOpacity onPress={this.selectChat.bind(this)}>
+                        <TouchableOpacity  style={{flex:1}}onPress={this.selectChat.bind(this)}>
                             <View style={chatStyle}>
                                 <Text style={textChatStyle}>Promotions</Text>
                             </View>
@@ -175,26 +175,7 @@ class GroupFeed extends Component {
 
             </GenericFeedManager>
 
-            <View style={styles.itemborder}>
-                <View style={{backgroundColor: 'white', flexDirection: 'row'}}>
-                    <Button onPress={() => this._onPressButton()} style={styles.icon} transparent>
 
-                        <Icon style={{fontSize: 35, color: "#2db6c8"}} name='send'/>
-                    </Button>
-                    <Input value={this.state.messsage} onFocus={this.hideEmoji.bind(this)} blurOnSubmit={true}
-                           returnKeyType='done' ref="3" onSubmitEditing={this._onPressButton.bind(this)}
-                           onChangeText={(messsage) => this.setState({messsage})} placeholder='write text'/>
-
-
-                    <Button onPress={() => this.showEmoji()} style={styles.icon} transparent>
-
-                        <Icon2 style={{fontSize: 35, color: "#2db6c8"}} name={this.state.iconEmoji}/>
-                    </Button>
-
-                </View>
-
-            </View>
-            <EmojiPicker stylw={{height: 100}} visible={this.state.showEmoji} onEmojiSelected={this.handlePick}/>
         </View>
     }
 }
