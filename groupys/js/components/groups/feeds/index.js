@@ -56,19 +56,7 @@ class GroupFeed extends Component {
         this.props.actions.fetchGroups();
     }
 
-    async _onPressButton() {
-        const {navigation, actions} = this.props;
-        let groupid = navigation.state.params.group._id;
-        let message = this.state.messsage;
-        if (message) {
-            actions.sendMessage(groupid, message)
-            this.setState({
-                messsage: '',
-                showEmoji: false,
-                iconEmoji: 'emoji-neutral'
-            })
-        }
-    }
+
 
     handlePick(emoji) {
         let message = this.state.messsage;
@@ -77,28 +65,7 @@ class GroupFeed extends Component {
         });
     }
 
-    showEmoji() {
-        let show = !this.state.showEmoji;
-        if (show) {
-            this.setState({
-                showEmoji: show,
-                iconEmoji: "keyboard"
-            })
-        } else {
-            Keyboard.dismiss();
-            this.setState({
-                showEmoji: show,
-                iconEmoji: "emoji-neutral"
-            })
-        }
-    }
 
-    hideEmoji() {
-        this.setState({
-            showEmoji: false,
-            iconEmoji: 'emoji-neutral'
-        })
-    }
 
     selectPromotions() {
         this.setState({
@@ -138,7 +105,7 @@ class GroupFeed extends Component {
                         </TouchableOpacity>
                         <TouchableOpacity  style={{flex:1}}onPress={this.selectChat.bind(this)}>
                             <View style={chatStyle}>
-                                <Text style={textChatStyle}>Promotions</Text>
+                                <Text style={textChatStyle}>Chat</Text>
                             </View>
                         </TouchableOpacity>
                     </View>

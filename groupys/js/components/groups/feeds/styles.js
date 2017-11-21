@@ -13,8 +13,8 @@ module.exports = {
     },
     inputContainer: {
         flex: 1,
-        height: height,
-        width: width,
+        justifyContent: 'center',
+        alignItems: 'center',
     },
     item: {
         backgroundColor: 'white',
@@ -122,14 +122,14 @@ module.exports = {
         marginLeft: 0,
         marginTop: 5,
         fontSize: 18,
-        color: '#595959'
+
     },
     group_text_on: {
         fontFamily: (Platform.OS === 'ios') ? 'Roboto' : 'Roboto',
         marginLeft: 0,
         marginTop: 5,
         fontSize: 18,
-
+        color: '#99A3A4'
     },
     comments_promotions: {
         padding: 0,

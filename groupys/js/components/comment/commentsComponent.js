@@ -4,13 +4,12 @@ import {connect} from "react-redux";
 import {actions} from "react-native-navigation-redux-helpers";
 import {Button, Icon, Input, Thumbnail} from "native-base";
 import GenericFeedManager from "../generic-feed-manager/index";
-import GenericFeedItem from "../generic-feed-manager/generic-feed";
 import styles from "./styles";
 import {bindActionCreators} from "redux";
 import NestedScrollView from "react-native-nested-scrollview";
 import * as commentEntitiesAction from "../../actions/commentsEntities";
 import {getFeeds} from "../../selectors/commentsEntitiesSelector";
-import {BusinessHeader, MessageBox, PromotionHeader,ChatMessage} from '../../ui/index';
+import {ChatMessage, MessageBox, PromotionHeader} from '../../ui/index';
 
 const {width, height} = Dimensions.get('window')
 const vw = width / 100;
@@ -26,8 +25,12 @@ class CommentsComponent extends Component {
 
     componentWillMount() {
         const item = this.getInstance();
-        const {navigation, actions} = this.props;
-        actions.fetchTopComments(item.entities, item.generalId);
+        const {group, actions} = this.props;
+        if (group) {
+            actions.fetchTopComments(group, item);
+        } else {
+            actions.fetchTopComments(item.entities, item.generalId);
+        }
     }
 
     getInstance() {
@@ -43,8 +46,12 @@ class CommentsComponent extends Component {
     _onPressButton(message) {
         const item = this.getInstance();
         const {group, actions} = this.props;
-        if (message) {
-            actions.sendMessage(item.entities, item.generalId, message);
+        if (group && message) {
+            actions.sendMessage(group._id, item.id, message);
+        } else {
+            if (message) {
+                actions.sendMessage(item.entities, item.generalId, message);
+            }
         }
     }
 
@@ -57,10 +64,9 @@ class CommentsComponent extends Component {
 
     render() {
         const item = this.getInstance();
-
-        let promotionHeader ;
-        if(item.promotion) {
-             promotionHeader = <View style={styles.comments_promotions}>
+        let promotionHeader;
+        if (item.promotion) {
+            promotionHeader = <View style={styles.comments_promotions}>
                 <PromotionHeader type={item.promotion} feed titleText={item.promotionTitle}
                                  titleValue={item.promotionValue} term={item.promotionTerm}/>
 
@@ -71,18 +77,18 @@ class CommentsComponent extends Component {
         return (
             <View style={{
                 width: width - 15,
-                marginTop:5,
-                marginBottom:5,
-                 backgroundColor: 'white',
-                flex:1,
+                marginTop: 5,
+                marginBottom: 5,
+                backgroundColor: 'white',
+                flex: 1,
             }}>
                 {promotionHeader}
-                <View style={{flex:9}}>
+                <View style={{flex: 9}}>
 
-                    <View  style={{flex:10}}>
-                    {commentsView}
+                    <View style={{flex: 10}}>
+                        {commentsView}
                     </View>
-                    <View >
+                    <View>
                         <MessageBox onPress={this._onPressButton.bind(this)}/>
                     </View>
                 </View>
@@ -108,10 +114,10 @@ class CommentsComponent extends Component {
             let isUser = item.actor === user._id;
             let messageItem = {
                 name: item.name,
-                avetar:item.logo,
-                message:item.description,
-                date:item.date,
-                isUser:isUser,
+                avetar: item.logo,
+                message: item.description,
+                date: item.date,
+                isUser: isUser,
             };
             return <GenericFeedManager
                 navigation={navigation}
@@ -143,18 +149,17 @@ class CommentsComponent extends Component {
     }
 
     renderItem(item) {
-        const{user} = this.props;
+        const {user} = this.props;
         let isUser = item.actor === user._id;
         let messageItem = {
             name: item.name,
-            avetar:item.logo,
-            message:item.description,
-            date:item.date,
-            isUser:isUser
-
+            avetar: item.logo,
+            message: item.description,
+            date: item.date,
+            isUser: isUser
         };
         return <ChatMessage key={item.id}
-           item={messageItem}/>
+                            item={messageItem}/>
     }
 
     async fetchTopList(id) {
@@ -170,7 +175,7 @@ export default connect(
     state => ({
         token: state.authentication.token,
         userFollower: state.user.followers,
-        user:state.user.user,
+        user: state.user.user,
         feeds: getFeeds(state),
         showTopLoader: state.commentInstances.showTopLoader,
         loadingDone: state.commentInstances.groupLoadingDone,
