@@ -140,7 +140,7 @@ class CommentsComponent extends Component {
     }
 
     createAndroidScroller(feeds, size) {
-        if (feeds) {
+        if (feeds && feeds.length > 0) {
             let body = feeds.map(feed => this.renderItem(feed))
             return <NestedScrollView style={{height: vh * size}}>{body}</NestedScrollView>
         } else {

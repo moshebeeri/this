@@ -1,27 +1,16 @@
 import React, {Component} from "react";
-import {
-    Image,
-    TextInput,
-    Platform,
-    View,
-    Keyboard,
-    TouchableNativeFeedback,
-    TouchableOpacity,
-    BackHandler
-} from "react-native";
+import {BackHandler, View} from "react-native";
 import {connect} from "react-redux";
+import {Button, Container, Icon, Input, Tab, TabHeading, Tabs, Text} from "native-base";
 import {actions} from "react-native-navigation-redux-helpers";
-import {Container, Icon, Button, Text, Input} from "native-base";
 import GroupFeedHeader from "./groupFeedHeader";
 import GenericFeedManager from "../../generic-feed-manager/index";
 import GenericFeedItem from "../../generic-feed-manager/generic-feed";
 import styles from "./styles";
-import Icon2 from "react-native-vector-icons/Entypo";
 import {bindActionCreators} from "redux";
 import * as groupAction from "../../../actions/groups";
 import UiTools from "../../../api/feed-ui-converter";
 import GroupApi from "../../../api/groups";
-import EmojiPicker from "react-native-emoji-picker-panel";
 import InstanceComment from "./instancesComment";
 import {getFeeds} from "../../../selectors/groupFeedsSelector";
 
@@ -56,8 +45,6 @@ class GroupFeed extends Component {
         this.props.actions.fetchGroups();
     }
 
-
-
     handlePick(emoji) {
         let message = this.state.messsage;
         this.setState({
@@ -65,54 +52,47 @@ class GroupFeed extends Component {
         });
     }
 
-
-
     selectPromotions() {
         this.setState({
             showChat: false
         })
     }
 
-    selectChat() {
+    changeTab() {
         this.setState({
-            showChat: true
+            showChat: !this.state.showChat
         })
     }
 
     render() {
-        let body = this.createGroupFeeds();
-        let promotionStyle = styles.נpromotionButtonOn;
         let textPromotionStyle = styles.group_text_on;
         let textChatStyle = styles.group_text_off;
-        let chatStyle = styles.נchatButtonOFf
+
         if (this.state.showChat) {
-            body =
-                <InstanceComment navigation={this.props.navigation} group={this.props.navigation.state.params.group}/>
-            promotionStyle = styles.promotionButtonOff;
-            chatStyle = styles.chatButtonOn
+
             textPromotionStyle = styles.group_text_off;
             textChatStyle = styles.group_text_on;
         }
         return (
             <Container style={{backgroundColor: '#ebebeb'}}>
 
-                <View style={styles.headerTabContainer}>
-                    <View style={styles.headerTabInnerContainer}>
-                        <TouchableOpacity style={{flex:1}}onPress={this.selectPromotions.bind(this)}>
-                            <View style={promotionStyle}>
-                                <Text style={textPromotionStyle}>Posts</Text>
-                            </View>
-                        </TouchableOpacity>
-                        <TouchableOpacity  style={{flex:1}}onPress={this.selectChat.bind(this)}>
-                            <View style={chatStyle}>
-                                <Text style={textChatStyle}>Chat</Text>
-                            </View>
-                        </TouchableOpacity>
-                    </View>
+                <Tabs onChangeTab={this.changeTab.bind(this)}tabBarUnderlineStyle={{backgroundColor: '#2db6c8'}}
+                      style={{backgroundColor: '#fff',}}>
+                    <Tab heading={<TabHeading style={{
+                        justifyContent: 'center',
+                        alignItems: 'center',
+                        backgroundColor: "white"
+                    }}><Text style={textPromotionStyle}>Posts</Text></TabHeading>}>
+                        {this.createGroupFeeds()}
+                    </Tab>
+                    <Tab heading={<TabHeading
+                        style={{justifyContent: 'center', alignItems: 'center', backgroundColor: "white"}}>
+                        <Text  style={textChatStyle}>Chat</Text></TabHeading>}>
+                        <InstanceComment navigation={this.props.navigation}
+                                         group={this.props.navigation.state.params.group}/>
+                    </Tab>
 
-
-                </View>
-                {body}
+                </Tabs>
 
             </Container>
 
@@ -122,7 +102,7 @@ class GroupFeed extends Component {
     }
 
     createGroupFeeds() {
-        const {navigation, feeds, userFollower, actions, token, loadingDone,location, showTopLoader} = this.props;
+        const {navigation, feeds, userFollower, actions, token, loadingDone, location, showTopLoader} = this.props;
         const group = navigation.state.params.group;
         return <View style={styles.inputContainer}>
             <GenericFeedManager

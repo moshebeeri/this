@@ -122,7 +122,7 @@ module.exports = {
         marginLeft: 0,
         marginTop: 5,
         fontSize: 18,
-
+        color: 'black'
     },
     group_text_on: {
         fontFamily: (Platform.OS === 'ios') ? 'Roboto' : 'Roboto',

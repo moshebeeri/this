@@ -389,7 +389,7 @@ export function refresh(id, currentSocialState) {
                 }
             }
             dispatch({
-                type: actions.GROUP_UPDATE_SOCIAL_STATE,
+                type: actions.FEED_UPDATE_SOCIAL_STATE,
                 social_state: response,
                 id: id
             });
