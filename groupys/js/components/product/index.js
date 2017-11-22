@@ -14,6 +14,7 @@ import {
     Right,
     Thumbnail,
     Title,
+    Spinner
 } from 'native-base';
 import GenericListManager from '../generic-list-manager/index'
 import * as businessAction from "../../actions/business";
@@ -32,6 +33,9 @@ class Product extends Component {
         super(props);
     }
 
+    componentWillMount() {
+        this.setBusinessProducts();
+    }
     setBusinessProducts() {
         const {actions, navigation} = this.props;
         actions.setBusinessProducts(navigation.state.params.business._id);
@@ -48,7 +52,7 @@ class Product extends Component {
     }
 
     render() {
-        const {products, navigation, actions, update} = this.props;
+        const {products, navigation, actions, update,productsLoading} = this.props;
         const businessId = navigation.state.params.business._id;
         return (
             <Container style={{flex: -1}}>
@@ -56,7 +60,7 @@ class Product extends Component {
                             title={"Add Product"} bgc="white"
                             submitIcon={<Icon5 active color={"#FA8559"} size={25} name="plus"/>}
                             titleColor="#FA8559" backIconColor="#FA8559"/>
-
+                { !productsLoading[businessId] && <Spinner/>}
                 <GenericListManager rows={products[businessId]} navigation={navigation} actions={actions}
                                     update={update}
                                     onEndReached={this.setBusinessProducts.bind(this)}
@@ -70,7 +74,9 @@ class Product extends Component {
 export default connect(
     state => ({
         products: getBusinessProducts(state),
-        update: state.businesses.update
+        update: state.businesses.update,
+        productsLoading:state.products.loadingDone,
+        productsChange:state.products
     }),
     (dispatch) => ({
         actions: bindActionCreators(businessAction, dispatch),

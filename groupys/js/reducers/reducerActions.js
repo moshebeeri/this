@@ -90,6 +90,7 @@ export const UPSERT_PRODUCTS = 'UPSERTproduct';
 export const SET_PRODUCT_CATEGORIES = 'GET_PRODUCT_CATEGORIES';
 export const PRODUCT_SAVING = 'PRODUCT_SAVING';
 export const PRODUCT_SAVING_DONE = 'PRODUCT_SAVING_DONE';
+export const PRODUCT_LOADING_DONE = 'PRODUCT_LOADING_DONE';
 //instances
 export const UPSERT_INSTANCE = 'UPSERTinstance';
 //groups

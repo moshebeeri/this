@@ -199,6 +199,12 @@ export function setBusinessProducts(businessId) {
                 businessProducts: products,
                 businessId: businessId
             });
+            if(!getState().products.loadingDone[businessId]) {
+                dispatch({
+                    type: actions.PRODUCT_LOADING_DONE,
+                    businessId: businessId
+                });
+            }
         } catch (error) {
             dispatch({
                 type: actions.NETWORK_IS_OFFLINE,
