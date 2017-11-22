@@ -72,6 +72,7 @@ module.exports = {
         color:'#e65100'
     },
     titleTextFeed:{
+        marginTop:5,
         fontSize:15,
         color:'#2db6c8'
     },
@@ -80,6 +81,7 @@ module.exports = {
         color:'#2db6c8'
     },
     titleValueFeed:{
+        marginLeft:5,
         fontSize:30,
         textAlignVertical: "center",
         textAlign: "center",

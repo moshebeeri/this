@@ -65,7 +65,7 @@ export default class GenericListGroupView extends Component {
                     <GroupHeader group={item}/>
 
                     {showBusinessHeader && promotionItem &&
-                    <View style={{marginLeft:5,flex:1,alignItems:'flex-start',justifyContent:'flex-start'}}>
+                    <View style={{marginLeft:10,flex:1,alignItems:'flex-start',justifyContent:'flex-start'}}>
                         <BusinessHeader small navigation={this.props.navigation} business={promotionItem.business}
                                         businessLogo={promotionItem.businessLogo}
                                         businessName={promotionItem.businessName}/>
