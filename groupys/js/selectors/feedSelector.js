@@ -4,24 +4,20 @@
 import {createSelector} from "reselect";
 import * as assemblers from "../actions/collectionAssembler";
 import FeedUiConverter from "../api/feed-ui-converter";
-
+import getStore from "../store";
 let feedUiConverter = new FeedUiConverter();
-const getActivities = (state) => state.activities;
-const getPromotions = (state) => state.promotions;
-const getUser = (state) => state.user;
-const getBusinesses = (state) => state.businesses;
-const getInstances = (state) => state.instances;
-const getProducts = (state) => state.products;
+
 const getStateFeeds = (state) => state.feeds;
-export const getFeeds = createSelector([getActivities, getPromotions, getUser, getBusinesses, getInstances, getProducts, getStateFeeds],
-    (activities, promotions, user, businesses, instances, products, feeds) => {
+const store = getStore();
+export const getFeeds = createSelector([ getStateFeeds],
+    (feeds) => {
         const collections = {
-            activities: activities.activities,
-            promotions: promotions.promotions,
-            user: user.users,
-            businesses: businesses.businesses,
-            instances: instances.instances,
-            products: products.products
+            activities: store.getState().activities.activities,
+            promotions: store.getState().promotions.promotions,
+            user: store.getState().user.users,
+            businesses: store.getState().businesses.businesses,
+            instances: store.getState().instances.instances,
+            products: store.getState().products.products
         };
         let feedsUi = [];
         let feedsOrder = feeds.feedView;

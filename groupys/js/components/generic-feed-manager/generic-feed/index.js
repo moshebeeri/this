@@ -20,6 +20,7 @@ import {
 } from 'native-base';
 import FeedMessage from './feed-components/feedMessage'
 import FeedPromotion from './feed-components/feedPromotion'
+import FeedShared from './feed-components/feedShared'
 import FeedBusiness from './feed-components/feedBusiness'
 import FeedWelcome from './feed-components/feedWelcome'
 
@@ -80,6 +81,20 @@ export default class GenericFeedItem extends Component {
             entities: this.props.item.entities,
         })
     }
+    commentShare() {
+        if (this.props.group) {
+            this.props.navigation.navigate('InstanceGroupComments', {
+                group: this.props.group,
+                instance: this.props.item.shardeActivity,
+            })
+            return;
+        }
+        this.props.navigation.navigate('genericComments', {
+            instance: this.props.item.shardeActivity,
+            generalId: this.props.item.generalId,
+            entities: this.props.item.entities,
+        })
+    }
 
     selectUsers(users) {
         let activityId = this.props.item.social.activityId;
@@ -104,6 +119,13 @@ export default class GenericFeedItem extends Component {
                                                           navigation={this.props.navigation} item={item}
                                                           like={actions.like} unlike={actions.unlike}
                                                           showUsers={showUsers} save={actions.saveFeed}/>)
+            case 'SHARE':
+                return this.createFeedView(<FeedShared refresh={actions.refresh} token={token} comment={this.commentShare.bind(this)}
+                                                          location={location}
+                                                          navigation={this.props.navigation} item={item}
+                                                          like={actions.like} unlike={actions.unlike}
+                                                          showUsers={showUsers} />)
+
             case 'MESSAGE':
                 return this.createFeedView(<FeedMessage token={token} navigation={this.props.navigation} item={item}/>)
             case 'WELCOME':

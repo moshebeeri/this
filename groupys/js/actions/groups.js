@@ -17,12 +17,10 @@ async function getAll(dispatch, token) {
     try {
         let response = await groupsApi.getAll(token);
         if (response.length > 0) {
-            response.forEach(function (group) {
                 dispatch({
-                    type: actions.UPSERT_SINGLE_GROUP,
-                    group: group,
+                    type: actions.UPSERT_GROUP,
+                    item: response,
                 });
-            })
         }
     } catch (error) {
         dispatch({
@@ -116,12 +114,19 @@ export function touch(groupid) {
     }
 }
 
-export function createGroup(group) {
+export function createGroup(group, navigation) {
     return async function (dispatch, getState) {
         try {
+            dispatch({
+                type: actions.GROUP_SAVING,
+            });
             const token = getState().authentication.token;
             await groupsApi.createGroup(group, uploadGroupPic, token);
-            getAll(dispatch, token);
+            await getAll(dispatch, token);
+            dispatch({
+                type: actions.GROUP_SAVING_DONE,
+            });
+            navigation.goBack();
         } catch (error) {
             dispatch({
                 type: actions.NETWORK_IS_OFFLINE,
@@ -156,7 +161,7 @@ export function setNextFeeds(feeds, token, group) {
             } else {
                 let keys = Object.keys(feeds);
                 let id = keys[keys.length - 1];
-                if (feeds[id].id == getState().groups.lastFeed[group._id])
+                if (feeds[id].id === getState().groups.lastFeed[group._id])
                     return;
                 // make sure we call the server for the same group max 1 time in 10 seconds period
                 if (getState().groups.lastFeedTime[[group._id]]) {
@@ -174,18 +179,18 @@ export function setNextFeeds(feeds, token, group) {
             }
             let collectionDispatcher = new CollectionDispatcher();
             let disassemblerItems = response.map(item => {
-                if (item.activity && (item.activity.action == 'group_message' || item.activity.action == 'group_follow')) {
+                if (item.activity && (item.activity.action === 'group_message' || item.activity.action === 'group_follow')) {
                     return item;
                 }
                 return assemblers.disassembler(item, collectionDispatcher)
             });
             if (disassemblerItems && disassemblerItems.length > 0) {
-                collectionDispatcher.dispatchEvents(dispatch)
-                disassemblerItems.forEach(item => dispatch({
+                collectionDispatcher.dispatchEvents(dispatch);
+                dispatch({
                     type: actions.UPSERT_GROUP_FEEDS_BOTTOM,
                     groupId: group._id,
-                    groupFeed: item
-                }))
+                    groupFeed: disassemblerItems
+                })
             }
         } catch (error) {
             dispatch({
@@ -242,26 +247,23 @@ async function fetchTopList(id, token, group, dispatch) {
         let response = await feedApi.getAll('up', id, token, group);
         if (!response)
             return;
-        if (response.length == 0) {
+        if (response.length === 0) {
             return;
         }
         let collectionDispatcher = new CollectionDispatcher();
         let disassemblerItems = response.map(item => {
-            if (item.activity && (item.activity.action == 'group_message' || item.activity.action == 'group_follow')) {
+            if (item.activity && (item.activity.action === 'group_message' || item.activity.action === 'group_follow')) {
                 return item;
             }
             return assemblers.disassembler(item, collectionDispatcher)
         });
         collectionDispatcher.dispatchEvents(dispatch)
-        disassemblerItems.forEach(item => dispatch({
+        dispatch({
             type: actions.UPSERT_GROUP_FEEDS_TOP,
             groupId: group._id,
-            groupFeed: item
-        }));
-        dispatch({
-            type: actions.GROUP_CLEAN_MESSAGES,
-            groupId: group._id,
+            groupFeed: disassemblerItems
         });
+
     } catch (error) {
         dispatch({
             type: actions.NETWORK_IS_OFFLINE,
@@ -275,35 +277,12 @@ export function setFeeds(group, feeds) {
     }
     return async function (dispatch, getState) {
         const token = getState().authentication.token;
-        const clientMessages = getState().groups.clientMessages[group._id];
-        let id = getNextFeedId(feeds, clientMessages);
-        await fetchTopList(id, token, group, dispatch)
+        await fetchTopList(feeds[0].id, token, group, dispatch)
     }
 }
 
-export function getFeedTopId(feeds, clientMessages) {
-    let index = 0;
-    let clientIds = clientMessages.map(message => message.id);
-    while (clientIds.includes(feeds[index].id)) {
-        index++;
-    }
-    return feeds[index].id
-}
 
-function getNextFeedId(feeds, clientMessages) {
-    let id = feeds[0].id;
-    if (!id) {
-        let index = 1;
-        while (!feeds[index].id || index > feeds.length) {
-            index++
-        }
-        id = feeds[index].id;
-    }
-    if (clientMessages) {
-        id = getFeedTopId(feeds, clientMessages)
-    }
-    return id;
-}
+
 
 export function fetchTop(feeds, token, group) {
     return async function (dispatch, getState) {
@@ -316,9 +295,7 @@ export function fetchTop(feeds, token, group) {
             groupId: group._id,
             showTopLoader: true,
         });
-        const clientMessages = getState().groups.clientMessages[group._id];
-        let id = getNextFeedId(feeds, clientMessages);
-        await fetchTopList(id, token, group, dispatch);
+        await fetchTopList(feeds[0].id, token, group, dispatch);
         dispatch({
             type: actions.GROUP_FEED_SHOWTOPLOADER,
             groupId: group._id,
@@ -388,6 +365,35 @@ export function shareActivity(id, activityId, users, token) {
                 id: id,
                 shares: users.length
             });
+        } catch (error) {
+            dispatch({
+                type: actions.NETWORK_IS_OFFLINE,
+            });
+        }
+    }
+}
+
+export function refresh(id, currentSocialState) {
+    return async function (dispatch, getState) {
+        try {
+            const token = getState().authentication.token;
+            if (new Date().getTime() - getState().feeds.upTime < 360000) {
+                return;
+            }
+            let response = await feedApi.getFeedSocialState(id, token);
+            if (response) {
+                if (response.likes === currentSocialState.likes &&
+                    response.shares === currentSocialState.shares &&
+                    response.comments === currentSocialState.comments) {
+                    return;
+                }
+            }
+            dispatch({
+                type: actions.FEED_UPDATE_SOCIAL_STATE,
+                social_state: response,
+                id: id
+            });
+            // await userApi.like(id, token);
         } catch (error) {
             dispatch({
                 type: actions.NETWORK_IS_OFFLINE,

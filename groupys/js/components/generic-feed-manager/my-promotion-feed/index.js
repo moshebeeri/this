@@ -92,7 +92,7 @@ export default class MyPromotionFeedItem extends Component {
 
     onMove(evt, gestureState) {
         if (gestureState.moveY < 300) {
-            this.props.fetchTopList(this.props.item.fid, this.props.token, this.props.user)
+        //    this.props.fetchTopList(this.props.item.fid, this.props.token, this.props.user)
         }
         return false;
     }

@@ -1,4 +1,4 @@
- /**
+/**
  * Created by roilandshut on 12/06/2017.
  */
 import BusinessApi from "../api/business";
@@ -64,7 +64,7 @@ async function dispatchFollowByQrcode(dispatch, barcode, token) {
     try {
         dispatch({type: actions.SHOW_SEARCH_SPIN, searching: true});
         dispatch({type: actions.SHOW_CAMERA, cameraOn: false});
-        if (barcode.type && barcode.type == 'QR_CODE') {
+        if (barcode.type && barcode.type === 'QR_CODE') {
             let data = JSON.parse(barcode.data);
             if (data.code) {
                 let response = await businessApi.searchBusinessByCode(data.code, token);
@@ -108,7 +108,6 @@ export function onEndReached() {
         const token = getState().authentication.token;
         dispatch({
             type: actions.BUSSINESS_LOADING,
-
         });
         try {
             let businesses = await businessApi.getAll(token);
@@ -116,7 +115,6 @@ export function onEndReached() {
                 type: actions.UPSERT_MY_BUSINESS,
                 item: businesses
             });
-
         } catch (error) {
             dispatch({
                 type: actions.NETWORK_IS_OFFLINE,
@@ -124,7 +122,6 @@ export function onEndReached() {
         }
         dispatch({
             type: actions.BUSSINESS_LOADING_DONE,
-
         });
     }
 }
@@ -133,16 +130,17 @@ export function selectBusiness(business) {
     return function (dispatch,) {
         dispatch({
             type: actions.SELECT_BUSINESS,
-            selectedBusiness:business
+            selectedBusiness: business
         });
     }
 }
 
 export function followBusiness(bussinesId) {
-    return function (dispatch, getState) {
+    return async function (dispatch, getState) {
         try {
             const token = getState().authentication.token;
-            businessApi.followBusiness(bussinesId, token);
+            await businessApi.followBusiness(bussinesId, token);
+            navigation.goBack();
         } catch (error) {
             dispatch({
                 type: actions.NETWORK_IS_OFFLINE,
@@ -150,6 +148,21 @@ export function followBusiness(bussinesId) {
         }
     }
 }
+export function groupFollowBusiness(groupid,bussinesId,navigation) {
+    return async function (dispatch, getState) {
+        try {
+            const token = getState().authentication.token;
+            await businessApi.groupFollowBusiness(groupid,bussinesId, token);
+            navigation.goBack();
+        } catch (error) {
+            dispatch({
+                type: actions.NETWORK_IS_OFFLINE,
+            });
+        }
+    }
+}
+
+
 
 export function fetchBusinessCategories(gid) {
     return function (dispatch, getState) {
@@ -213,14 +226,14 @@ export function setBusinessPromotions(businessId) {
 }
 
 function saveBusinessFailed() {
-    return  function (dispatch) {
+    return function (dispatch) {
         dispatch({
             type: actions.NETWORK_IS_OFFLINE,
         });
     }
 }
 
-export function saveBusiness(business,navigation) {
+export function saveBusiness(business, navigation) {
     return async function (dispatch, getState) {
         try {
             dispatch({
@@ -230,23 +243,21 @@ export function saveBusiness(business,navigation) {
             const user = getState().user.user;
             await entityUtils.create('businesses', business, token, undefined, undefined, user._id);
             let businesses = await businessApi.getAll(token);
-
             dispatch({
                 type: actions.UPSERT_MY_BUSINESS,
                 item: businesses
             });
             let selectedBusiness = businesses.filter(newBusiness => {
-                newBusiness.business.name === business.name
+                newBusiness.business.name = business.name
             });
             dispatch({
                 type: actions.SELECT_BUSINESS,
-                selectedBusiness:selectedBusiness[0]
+                selectedBusiness: selectedBusiness[0]
             });
             dispatch({
                 type: actions.SAVING_BUSINESS_DONE,
             });
             navigation.goBack();
-
         } catch (error) {
             dispatch({
                 type: actions.NETWORK_IS_OFFLINE,
@@ -255,7 +266,7 @@ export function saveBusiness(business,navigation) {
     }
 }
 
-export function updateBusiness(business,navigation) {
+export function updateBusiness(business, navigation) {
     return async function (dispatch, getState) {
         try {
             dispatch({
@@ -264,21 +275,26 @@ export function updateBusiness(business,navigation) {
             const token = getState().authentication.token;
             await entityUtils.update('businesses', business, token, business._id);
             let businesses = await businessApi.getAll(token);
-
             dispatch({
                 type: actions.UPSERT_MY_BUSINESS,
                 item: businesses
             });
-
             dispatch({
                 type: actions.SAVING_BUSINESS_DONE,
             });
             navigation.goBack();
-
         } catch (error) {
             dispatch({
                 type: actions.NETWORK_IS_OFFLINE,
             });
         }
+    }
+}
+
+export function resetFollowForm() {
+    return async function (dispatch,) {
+        dispatch({
+            type: actions.RESET_FOLLOW_FORM,
+        });
     }
 }

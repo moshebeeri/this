@@ -13,8 +13,8 @@ module.exports = {
     },
     inputContainer: {
         flex: 1,
-        height: height,
-        width: width,
+        justifyContent: 'center',
+        alignItems: 'center',
     },
     item: {
         backgroundColor: 'white',
@@ -31,10 +31,12 @@ module.exports = {
         flexDirection: 'row',
         width: width,
         height: vh * 10,
-        backgroundColor: '#fff'
+        backgroundColor: '#fff',
+        justifyContent:'center',
+        alignItems:'center'
     },
     imageStyle: {
-        marginTop: 7
+       flex:2,
     },
     invite_to_group: {
         marginTop: 7,
@@ -62,70 +64,72 @@ module.exports = {
     headerTabContainer: {
         height: vh * 8,
         width: width,
-        backgroundColor: '#d7d7d7',
+        backgroundColor: '#b7b7b7',
         flexDirection: 'column',
         alignItems: 'center',
     },
     headerTabInnerContainer: {
         flexDirection: 'row',
+        alignItems:'center',
+        justifyContent:'center',
+        height: vh * 8,
+        width:width - 15,
+        backgroundColor: '#b7b7b7',
     },
     נpromotionButtonOn: {
-        height: 40,
-        width: 120,
-        marginTop: 5,
-        backgroundColor: '#2db6c8',
+        height: 45,
+        flex:1,
+
+        backgroundColor: 'white',
         borderWidth: 2,
         borderColor: '#bfbfbf',
-        borderTopLeftRadius: 20,
-        borderBottomLeftRadius: 20,
-        alignItems: 'center',
+        alignItems:'center',
+        justifyContent:'center',
     },
     promotionButtonOff: {
-        height: 40,
-        width: 120,
-        marginTop: 5,
-        backgroundColor: '#d7d7d7',
+        height: 45,
+        flex:1,
+
+        backgroundColor: '#E5E7E9',
         borderWidth: 2,
         borderColor: '#bfbfbf',
-        borderTopLeftRadius: 20,
-        borderBottomLeftRadius: 20,
-        alignItems: 'center',
+        alignItems:'center',
+        justifyContent:'center',
     },
     chatButtonOn: {
-        height: 40,
-        width: 120,
-        marginTop: 5,
+        height: 45,
+        flex:1,
+
         borderWidth: 2,
-        backgroundColor: '#2db6c8',
+        backgroundColor: 'white',
         borderColor: '#bfbfbf',
-        borderTopRightRadius: 20,
-        borderBottomRightRadius: 20,
-        alignItems: 'center',
+        alignItems:'center',
+        justifyContent:'center',
     },
     נchatButtonOFf: {
-        height: 40,
-        width: 120,
-        marginTop: 5,
+        height: 45,
+        flex:1,
+
         borderWidth: 2,
-        backgroundColor: '#d7d7d7',
+        backgroundColor: '#E5E7E9',
         borderColor: '#bfbfbf',
-        borderTopRightRadius: 20,
-        borderBottomRightRadius: 20,
-        alignItems: 'center',
+
+        alignItems:'center',
+        justifyContent:'center',
     },
     group_text_off: {
         fontFamily: (Platform.OS === 'ios') ? 'Roboto' : 'Roboto',
         marginLeft: 0,
         marginTop: 5,
         fontSize: 18,
-        color: '#595959'
+        color: 'black'
     },
     group_text_on: {
         fontFamily: (Platform.OS === 'ios') ? 'Roboto' : 'Roboto',
         marginLeft: 0,
         marginTop: 5,
         fontSize: 18,
-        color: 'white'
+        color: '#99A3A4'
     },
     comments_promotions: {
         padding: 0,
@@ -155,7 +159,7 @@ module.exports = {
     },
     group_actions: {
         flexDirection: 'column',
-        marginLeft: 10,
+        flex:1,
         justifyContent: 'center',
         alignItems: 'center',
     },

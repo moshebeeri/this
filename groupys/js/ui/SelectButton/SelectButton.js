@@ -33,9 +33,15 @@ export default class SelectButton extends Component {
 
 
     render() {
-        const {title, action,} = this.props;
+        const {title, action,client} = this.props;
         let buttonStyle = styles.buttonStyle;
         let textStyle = styles.buttonTextStyle;
+
+        if(client){
+             buttonStyle = styles.buttonClientStyle;
+             textStyle = styles.buttonClientTextStyle;
+
+        }
         if(!this.state.valid){
             buttonStyle = styles.buttonStyleInvalid;
             textStyle = styles.buttonTextStyleInvalid;

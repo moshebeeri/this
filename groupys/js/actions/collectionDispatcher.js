@@ -17,7 +17,9 @@ class CollectionDispatcher {
                 item: this.events[eventType],
             });
             if(eventType === actions.UPSERT_BUSINESS){
-                updateFunc(token,this.events[eventType],dispatch)
+                if(updateFunc) {
+                    updateFunc(token, this.events[eventType], dispatch)
+                }
             }
         })
     }

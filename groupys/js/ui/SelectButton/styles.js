@@ -13,6 +13,17 @@ module.exports = {
         alignItems:'center',
         justifyContent:'center'
     },
+    buttonClientStyle: {
+        borderColor: '#2db6c8',
+        borderWidth:1,
+        backgroundColor:'white',
+        height:52,
+        width:120,
+        marginLeft:5,
+        marginRight:5,
+        alignItems:'center',
+        justifyContent:'center'
+    },
     buttonStyleInvalid: {
         borderColor: 'red',
         borderWidth:1,
@@ -26,6 +37,10 @@ module.exports = {
     },
     buttonTextStyle:{
         color:'#FA8559',
+        fontSize:16
+    },
+    buttonClientTextStyle:{
+        color:'#2db6c8',
         fontSize:16
     },
     buttonTextStyleInvalid:{

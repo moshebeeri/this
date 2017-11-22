@@ -33,7 +33,7 @@ export const getFeeds = createSelector([getActivities, getPromotions, getUser, g
                 let groupFeeds = feedsOrder[groupId];
                 let groupFeedsArray = groupFeeds.map(feedId => feeds[groupId][feedId])
                 assembledFeeds = groupFeedsArray.map(function (feed) {
-                    if (feed.activity && (feed.activity.action == 'group_message' || feed.activity.action == 'group_follow')) {
+                    if (feed.activity && (feed.activity.action === 'group_message' || feed.activity.action === 'group_follow')) {
                         return feed;
                     }
                     return assemblers.assembler(feed, collections);

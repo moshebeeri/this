@@ -25,19 +25,34 @@ export default function myPromotions(state = initialState, action) {
             feedstate.lastCall = action.lastCall;
             return feedstate;
         case actions.FETCH_TOP_SAVED_FEEDS:
-            currentFeeds[action.item.savedInstance._id] = action.item;
-            if (feedstate.feedOrder.includes(action.item.savedInstance._id)) {
-                return state
+            if(action.item){
+                action.item.forEach(item =>{
+                    currentFeeds[item.savedInstance._id] = item;
+                    if (!feedstate.feedOrder.includes(item.savedInstance._id)) {
+                        feedstate.feedOrder.unshift(item.savedInstance._id);
+                    }
+
+                });
+
+                return feedstate
             }
-            feedstate.feedOrder.unshift(action.item.savedInstance._id);
-            return feedstate;
+            return state;
+
         case actions.UPSERT_SAVED_FEEDS:
-            currentFeeds[action.item.savedInstance._id] = action.item;
-            if (feedstate.feedOrder.includes(action.item.savedInstance._id)) {
-                return state
+            if(action.item){
+                action.item.forEach(item =>{
+                    currentFeeds[item.savedInstance._id] = item;
+                    if (!feedstate.feedOrder.includes(item.savedInstance._id)) {
+                        feedstate.feedOrder.push(item.savedInstance._id);
+                    }
+
+                });
+                feedstate.lastCall = new Date();
+
+                return feedstate
             }
-            feedstate.feedOrder.push(action.item.savedInstance._id);
-            return feedstate;
+
+            return state;
         case actions.SAVED_FEED_LOADING_DONE:
             return {
                 ...state,

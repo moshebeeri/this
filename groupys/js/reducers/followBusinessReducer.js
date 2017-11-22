@@ -18,6 +18,18 @@ export default function business(state = initialState, action) {
                 ...state,
                 searching: action.searching,
             };
+
+
+        case actions.RESET_FOLLOW_FORM :
+            return {
+                ...state,
+                searching:false,
+                cameraOn:false,
+                businesses:[]
+            };
+
+
+
         default:
             return state;
     }

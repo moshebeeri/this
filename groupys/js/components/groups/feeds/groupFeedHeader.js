@@ -9,7 +9,7 @@ import {Container, Footer, Icon, Button, Thumbnail, Text} from 'native-base';
 import styles from './styles'
 import store from 'react-native-simple-store';
 import GroupApi from "../../../api/groups"
-
+import {GroupHeader, PromotionHeaderSnippet} from '../../../ui/index';
 let groupApi = new GroupApi();
 import {
     Menu,
@@ -76,20 +76,20 @@ class GroupFeedHeader extends Component {
         if (!group.admins) {
             return false;
         }
-        if (group.admins.length == 0) {
+        if (group.admins.length === 0) {
             return false;
         }
         let userId = this.state.userId;
         let isGroupAdmin = false;
         if(Array.isArray(group.admins)) {
             group.admins.forEach(function (adminId) {
-                if (userId == adminId) {
+                if (userId === adminId) {
                     isGroupAdmin = true;
                 }
             });
         }else{
             Object.keys(group.admins).forEach(key => {
-                if (userId == group.admins[key]) {
+                if (userId === group.admins[key]) {
                     isGroupAdmin = true;
                 }
             });
@@ -109,7 +109,7 @@ class GroupFeedHeader extends Component {
         }
         let groupInvite = undefined;
         let addPromotionMenu = undefined;
-        if (group.role && (group.role == "owner" || group.role == "OWNS" || group.role == "Admin" || group.role == "Manager"  )) {
+        if (group.role && (group.role === "owner" || group.role === "OWNS" || group.role === "Admin" || group.role === "Manager"  )) {
             addPromotionMenu = <MenuOption onSelect={this.addPromotion.bind(this)}>
                 <Text>Add Promotion</Text>
             </MenuOption>
@@ -133,15 +133,11 @@ class GroupFeedHeader extends Component {
         return <View style={styles.headerContainer}>
             <View style={styles.imageStyle}>
                 <Button transparent onPress={this.navigateBack.bind(this)}>
-                    <Icon style={{fontSize: 35, color: "#2db6c8"}} name="arrow-back"/>
+                    <Icon style={{fontSize: 25, color: "#2db6c8"}} name="arrow-back"/>
                 </Button>
             </View>
-            <View style={styles.imageStyle}>
-                {image}
-            </View>
-            <View style={styles.group_title}>
-                <Text style={styles.group_name_text}>{group.name}</Text>
-                <Text style={styles.group_members}>{group.description}</Text>
+            <View style={{flex:10}}>
+           <GroupHeader group={group}/>
             </View>
             <View style={styles.group_actions}>
                 {groupInvite}

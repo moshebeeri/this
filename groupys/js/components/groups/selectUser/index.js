@@ -10,8 +10,11 @@ import {
 import {getUserFollowesr} from '../../../selectors/userSelector'
 import {bindActionCreators} from "redux";
 import * as selectUserAction from "../../../actions/selectUsers";
-
+import {FormHeader, TextInput} from '../../../ui/index';
 class SelectUsersComponent extends Component {
+    static navigationOptions = ({navigation}) => ({
+        header: null
+    });
     constructor(props) {
         super(props);
         let selectCheckBox = this.props.userFollower.map(function (user) {
@@ -88,17 +91,14 @@ class SelectUsersComponent extends Component {
                 <Content style={{backgroundColor: '#fff'}}>
 
 
+                    <FormHeader showBack navigation={this.props.navigation}
+                                submitForm={this.saveFormData.bind(this)}title={"Select Users"} bgc="#2db6c8"/>
+
                     {productsRows}
 
 
                 </Content>
-                <Footer style={{backgroundColor: '#fff'}}>
-                    <Button style={{backgroundColor: '#2db6c8'}}
-                            onPress={this.saveFormData.bind(this)}
-                    >
-                        <Text>Select Users</Text>
-                    </Button>
-                </Footer>
+
             </Container>
 
 

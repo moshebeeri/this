@@ -21,19 +21,17 @@ module.exports = {
         justifyContent: 'flex-start',
     },
     group_message_container: {
-        width: width - 10,
-        marginTop: 1,
-        height: vh * 14,
+        margin:10,
+        borderTopWidth:0.25,
         flexDirection: 'row',
-        borderWidth: 0.2,
+        alignItems:'center',
+        justifyContent:'center',
         borderColor: 'gray',
-        justifyContent: 'space-between',
+
     },
     group_promotion_container: {
-        width: width - 10,
-        height: vh * 14,
+
         flexDirection: 'row',
-        borderWidth: 0.2,
         borderColor: 'gray',
         justifyContent: 'space-between',
     },
@@ -60,9 +58,8 @@ module.exports = {
         borderTopWidth: 1,
     },
     group_image: {
-        marginTop: 10,
-        marginLeft: 10,
-        width: vw * 25,
+       flex:0.5,
+        justifyContent:'center',
     },
     group_name: {
         marginTop: 10,
@@ -70,8 +67,7 @@ module.exports = {
         height: vh * 11,
     },
     message_container: {
-        width: vw * 66,
-        height: vh * 13,
+        flex:3
     },
     group_name_text: {
         fontFamily: 'Roboto-Regular', fontWeight: 'bold', marginLeft: 10, marginTop: 0, fontSize: 24, color: 'black'

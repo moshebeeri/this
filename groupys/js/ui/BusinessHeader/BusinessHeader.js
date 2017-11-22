@@ -15,8 +15,15 @@ export default class BusinessHeader extends Component {
     }
 
     createBusinessLog() {
-        const {businessLogo} = this.props;
+        const {businessLogo,small} = this.props;
         if (businessLogo) {
+            if(small){
+                return <TouchableOpacity style={{margin:5}} onPress={this.showBussines.bind(this)}>
+                    <View>
+                        <Thumbnail small square={true} size={40} source={{uri: businessLogo}}/>
+                    </View>
+                </TouchableOpacity>
+            }
             return <TouchableOpacity style={{margin:5}} onPress={this.showBussines.bind(this)}>
                 <View>
                     <Thumbnail square={true} size={40} source={{uri: businessLogo}}/>
@@ -44,10 +51,10 @@ export default class BusinessHeader extends Component {
                 {back}
             </View>
             {this.createBusinessLog()}
-            <View style={{flex: 1, flexDirection: 'column'}}>
+            <View style={{flex: 1, flexDirection: 'column',justifyContent:'center'}}>
                 <Text style={styles.businessNameText} note>{businessName}</Text>
-                <Text numberOfLines={1} style={styles.businessAddressText}
-                      note>{categoryTitle}</Text>
+                {categoryTitle && <Text numberOfLines={1} style={styles.businessAddressText}
+                      note>{categoryTitle}</Text>}
             </View>
         </View>
     }

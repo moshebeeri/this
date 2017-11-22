@@ -95,7 +95,6 @@ class BusinessApi {
         return new Promise(async (resolve, reject) => {
             try {
                 let from = new Date();
-                let token = await store.get('token');
                 const response = await fetch(`${server_host}/api/businesses/follow/` + businessId, {
                     method: 'GET',
                     headers: {
@@ -103,17 +102,43 @@ class BusinessApi {
                         'Content-Type': 'application/json;charset=utf-8',
                         'Authorization': 'Bearer ' + token
                     }
-                })
+                });
                 if (response.status ==='401') {
                     reject(response);
                     return;
                 }
-                timer.logTime(from, new Date(), '/businesses/search', 'business/en')
+                timer.logTime(from, new Date(), '/businesses/search', 'business/en');
                 let responseData = await response.json();
                 resolve(responseData);
             }
             catch (error) {
                 console.log('There has been a problem with your fetch operation: ' + error.message);
+                reject(error);
+            }
+        })
+    }
+    groupFollowBusiness(groupId,businessId, token) {
+        return new Promise(async (resolve, reject) => {
+            try {
+                let from = new Date();
+                const response = await fetch(`${server_host}/api/groups/follow/` + groupId+'/'+ businessId, {
+                    method: 'GET',
+                    headers: {
+                        'Accept': 'application/json, text/plain, */*',
+                        'Content-Type': 'application/json;charset=utf-8',
+                        'Authorization': 'Bearer ' + token
+                    }
+                });
+                if (response.status ==='401') {
+                    reject(response);
+                    return;
+                }
+                timer.logTime(from, new Date(), '/groups/', 'follow');
+                let responseData = await response.json();
+                resolve(responseData);
+            }
+            catch (error) {
+                console.log('There has been a problem with your fetch operation: ');
                 reject(error);
             }
         })
@@ -131,16 +156,16 @@ class BusinessApi {
                         'Authorization': 'Bearer ' + token
                     },
                     body: JSON.stringify(bussiness)
-                })
+                });
                 if (parseInt(response.status) >= 400) {
                     let response = {
                         message: 'Address not found',
                         valid: false
-                    }
+                    };
                     resolve(response);
                     return;
                 }
-                timer.logTime(from, new Date(), '/businesses/', 'checkAddress')
+                timer.logTime(from, new Date(), '/businesses/', 'checkAddress');
                 let responseData = await response.json();
                 responseData.valid = true;
                 resolve(responseData);
@@ -163,12 +188,12 @@ class BusinessApi {
                         'Content-Type': 'application/json;charset=utf-8',
                         'Authorization': 'Bearer ' + token
                     }
-                })
+                });
                 if (response.status ==='401') {
                     reject(response);
                     return;
                 }
-                timer.logTime(from, new Date(), '/businesses/search', 'business/en')
+                timer.logTime(from, new Date(), '/businesses/search', 'business/en');
                 let responseData = await response.json();
                 resolve(responseData);
             }
@@ -190,12 +215,12 @@ class BusinessApi {
                         'Content-Type': 'application/json;charset=utf-8',
                         'Authorization': 'Bearer ' + token
                     }
-                })
+                });
                 if (response.status ==='401') {
                     reject(response);
                     return;
                 }
-                timer.logTime(from, new Date(), '/businesses/search', 'business/en')
+                timer.logTime(from, new Date(), '/businesses/search', 'business/en');
                 let responseData = await response.json();
                 resolve(responseData);
             }

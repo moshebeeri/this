@@ -25,7 +25,7 @@ import {getGroups} from '../../selectors/groupSelector'
 import * as groupsAction from "../../actions/groups";
 import {bindActionCreators} from "redux";
 
-class Group extends Component {
+class Groups extends Component {
     constructor(props) {
         super(props);
     }
@@ -37,9 +37,11 @@ class Group extends Component {
     }
 
     renderItem(item) {
+        const { navigation} = this.props;
         return <GenericListGroupView
             onPressItem={this.onPressItem.bind(this, item.item)}
             item={item.item}
+            navigation={navigation}
             index={item.index}
             key={item.index}
         />
@@ -66,7 +68,7 @@ export default connect(
     (dispatch) => ({
         actions: bindActionCreators(groupsAction, dispatch),
     })
-)(Group);
+)(Groups);
 
 
 

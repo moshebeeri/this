@@ -55,7 +55,7 @@ class FeedApi {
                     return;
                 }
                 let responseData = await response.json();
-                timer.logTime(from, new Date(), 'feeds', '/');
+                timer.logTime(from, new Date(), 'feeds', '/social_state');
                 resolve(responseData);
             }
             catch (error) {

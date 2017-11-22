@@ -22,6 +22,8 @@ import PromotionHeader from './PromotionHeader/PromotionHeader'
 import BusinessHeader from './BusinessHeader/BusinessHeader'
 import MessageBox from './MessageBox/MessageBox'
 import ChatMessage from './ChatMessage/ChatMessage'
+import GroupHeader from './GroupHeader/GroupHeader'
+import PromotionHeaderSnippet from './PromotionHeaderSnippet/PromotionHeaderSnippet'
 export {
     ImagePicker,
     CategoryPicker,
@@ -46,5 +48,7 @@ export {
     PromotionHeader,
     BusinessHeader,
     MessageBox,
-    ChatMessage
+    ChatMessage,
+    GroupHeader,
+    PromotionHeaderSnippet
 }

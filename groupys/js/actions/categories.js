@@ -7,7 +7,7 @@ export function fetchCategories(gid,categoryApi) {
             type: actions.CATEGORIES_FETCHING,
 
         });
-        let response = await categoryApi(gid)
+        let response = await categoryApi(gid);
         dispatch({
             type: actions.CATEGORIES_FETCHING_DONE,
 

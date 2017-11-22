@@ -92,7 +92,7 @@ export function signup(phone, password, firstName, lastName, navigation) {
 
 export function focusLoginForm(focus) {
     return function (dispatch,) {
-        if (focus == 'password') {
+        if (focus === 'password') {
             dispatch({
                 type: actions.LOGIN_FOCUS_PASSWORD,
             });
@@ -102,17 +102,17 @@ export function focusLoginForm(focus) {
 
 export function focusSignupForm(focus) {
     return function (dispatch,) {
-        if (focus == 'phone') {
+        if (focus === 'phone') {
             dispatch({
                 type: actions.SIGNUP_FOCUS_PHONE,
             });
         }
-        if (focus == 'password') {
+        if (focus === 'password') {
             dispatch({
                 type: actions.SIGNUP_FOCUS_PASSWORD,
             });
         }
-        if (focus == 'lastName') {
+        if (focus === 'lastName') {
             dispatch({
                 type: actions.SIGNUP_FOCUS_LASTNAME,
             });
@@ -162,7 +162,7 @@ export function changePassword(currentPassword, newPassword, user, token, naviga
     return async function (dispatch,) {
         try {
             let response = await loginApi.changePassword(currentPassword, newPassword, user._id, token);
-            if (response == true) {
+            if (response === true) {
                 navigation.goBack();
             } else {
                 dispatch({

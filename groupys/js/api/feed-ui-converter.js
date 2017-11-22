@@ -22,10 +22,28 @@ class FeedConverter {
             response = this.createMessageUi(feed);
         }
         if (feed.activity.action === 'instance' || feed.activity.action === 'eligible') {
-            return this.createPromontionInstance(feed);
+            return this.createPromotionInstance(feed);
+        }
+        if (feed.activity.action === 'share') {
+            return this.createShared(feed);;
         }
         return response;
     }
+    createShared(feed){
+        let response = {}
+        let sharedFeed= {
+            activity:feed.activity.activity,
+            _id:feed.activity.activity.instance._id
+        }
+
+        response.shardeActivity = this.createFeed(sharedFeed);
+        response.user = feed.activity.actor_user;
+        response.itemType = 'SHARE';
+        response.shared = response.shardeActivity.itemType;
+        response.id =  response.shardeActivity.id;
+        return response;
+    }
+
 
     createMessageUi(feed) {
         let response;
@@ -76,7 +94,7 @@ class FeedConverter {
             follow: 0,
             shares: 0,
             share: false,
-        }
+        };
         if (feed.activity.business.social_state) {
             socialState = feed.activity.business.social_state;
         }
@@ -89,10 +107,10 @@ class FeedConverter {
                 actor: feed.activity.actor_user._id,
                 itemTitle: name + ' ' + feed.activity.action,
                 name: feed.activity.business.name,
-                address : feed.activity.business.address,
-                website : feed.activity.business.website,
-                email : feed.activity.business.email,
-                city:feed.activity.business.city,
+                address: feed.activity.business.address,
+                website: feed.activity.business.website,
+                email: feed.activity.business.email,
+                city: feed.activity.business.city,
                 businessAddress: feed.activity.business.city + ' ' + feed.activity.business.address,
                 banner: {
                     uri: feed.activity.business.pictures[0].pictures[0]
@@ -103,13 +121,10 @@ class FeedConverter {
             response = {
                 id: feed.activity.business._id,
                 fid: feed._id, key: feed._id,
-                city : feed.activity.business.city,
-
-                address : feed.activity.business.address,
-                website : feed.activity.business.website,
-                email : feed.activity.business.email,
-
-
+                city: feed.activity.business.city,
+                address: feed.activity.business.address,
+                website: feed.activity.business.website,
+                email: feed.activity.business.email,
                 social: socialState,
                 name: feed.activity.business.name,
                 actor: feed.activity.actor_user._id,
@@ -121,7 +136,6 @@ class FeedConverter {
         response.generalId = feed.activity.business._id;
         response.entities = [{business: feed.activity.business._id}];
         response.itemType = 'BUSINESS';
-
         response.businessLogo = feed.activity.business.logo;
         response.categoryTitle = feed.activity.business.categoryTitle;
         response.businessName = feed.activity.business.name;
@@ -129,7 +143,7 @@ class FeedConverter {
         return response;
     }
 
-    createSavedPomotion(feed, id, extraData) {
+    createSavedPromotion(feed, id, extraData) {
         let instance = feed.instance;
         let responseFeed = {};
         try {
@@ -200,7 +214,7 @@ class FeedConverter {
                 responseFeed.businessAddress = instance.promotion.entity.business.city + ' ' + instance.promotion.entity.business.address;
             } else {
                 responseFeed.businessName = instance.promotion.entity.business.name;
-                responseFeed.businessAddress = finstance.promotion.entity.business.city + ' ' + instance.promotion.entity.business.address;
+                responseFeed.businessAddress = instance.promotion.entity.business.city + ' ' + instance.promotion.entity.business.address;
                 responseFeed.categoryTitle = instance.promotion.entity.business.categoryTitle;
             }
             responseFeed.itemType = 'PROMOTION';
@@ -224,7 +238,7 @@ class FeedConverter {
         return feed.promotion;
     }
 
-    createPromontionInstance(feed) {
+    createPromotionInstance(feed) {
         let instance = this.getInstance(feed);
         if (!instance) {
             return;
@@ -236,6 +250,7 @@ class FeedConverter {
             responseFeed.id = instance._id;
             responseFeed.fid = feed._id;
             responseFeed.key = feed._id;
+            responseFeed.promotionEntity = promotion;
             responseFeed.location = instance.location;
             responseFeed.generalId = instance._id;
             responseFeed.entities = [{instance: instance._id}];
@@ -366,6 +381,7 @@ class FeedConverter {
                 uri: promotion.pictures[0].pictures[1]
             };
         }
+        response.promotionEntity = promotion;
         let date = new Date(promotion.end);
         response.endDate = date.toLocaleDateString();
         response.businessAddress = promotion.entity.business.city + ' ' + promotion.entity.business.address;
@@ -404,7 +420,7 @@ class FeedConverter {
                 break;
             case "X+N%OFF":
                 response.itemTitle = 'Buy ' + promotion.condition.product.name + " Get " + promotion.x_plus_n_percent_off.values[0].product.name + " with " + promotion.x_plus_n_percent_off.values[0].eligible + " %Off";
-                response.promotion = 'X+N%OFFf';
+                response.promotion = 'X+N%OFF';
                 response.promotionColor = '#ff66b3';
                 response.quantity = promotion.x_plus_n_percent_off.quantity;
                 response.promotionTitle = 'Buy X get Y with Discount';
@@ -426,7 +442,7 @@ class FeedConverter {
                     response.promotionTitle = "Happy Hour";
                     response.promotionTerm = "Every " + FormUtils.convertDaysNumToString(promotion.happy_hour.values[0].days) + " happy hour from " +
                         FormUtils.secondsFromMidnightToString(promotion.happy_hour.values[0].from) + " until " + FormUtils.secondsFromMidnightToString(promotion.happy_hour.values[0].from + promotion.happy_hour.values[0].until) +
-                        " get special price for " + promotion.condition.product.name
+                        " get special price for " + promotion.condition.product.name;
                     response.promotionValue = promotion.happy_hour.values[0].pay;
                     response.quantity = promotion.happy_hour.quantity;
                     response.promotion = 'HAPPY HOUR';
@@ -436,7 +452,7 @@ class FeedConverter {
                 }
                 break;
             case "PUNCH_CARD":
-                let punches = promotion.punch_card.values[0].number_of_punches
+                let punches = promotion.punch_card.values[0].number_of_punches;
                 response.itemTitle = '';
                 response.promotionTitle = "Punch Card " + punches + " Slots";
                 response.punches = punches;

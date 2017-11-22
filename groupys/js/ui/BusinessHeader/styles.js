@@ -13,19 +13,15 @@ module.exports = {
     businessNameText: {
         fontFamily: 'Roboto-Black',
         fontWeight: 'bold',
-        marginRight: 20,
-        marginLeft: 10,
-        marginTop: 5,
-        marginBottom: 5,
-        color: 'black',
-        fontSize: 18
+
+        marginLeft:5,
+        fontSize: 18,
+
     },
     businessAddressText: {
         fontFamily: 'Roboto-Regular',
-        marginRight: 20,
-        marginLeft: 10,
-        marginTop: 0,
-        marginBottom: 5,
+
+        marginLeft:5,
         color: 'gray',
         fontSize: 16
     },

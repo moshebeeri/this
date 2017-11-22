@@ -15,21 +15,21 @@ class Feed extends Component {
     }
 
     componentWillMount() {
-        const {feeds, actions, feedState} = this.props;
-        if (feedState.firstTime) {
+        const {feeds, actions, firstTime} = this.props;
+        if (firstTime) {
             actions.setNextFeeds(feeds);
             this.props.userActions.fetchUsersFollowers();
         }
     }
 
     render() {
-        const {navigation, feedState, feeds, userFollower, actions, token, user, location} = this.props;
+        const {navigation, loadingDone, showTopLoader,feeds, userFollower, actions, token, user, location} = this.props;
         return (
             <GenericFeedManager
                 navigation={navigation}
 
-                loadingDone={feedState.loadingDone}
-                showTopLoader={feedState.showTopLoader}
+                loadingDone={loadingDone}
+                showTopLoader={showTopLoader}
                 userFollowers={userFollower}
                 feeds={feeds}
                 actions={actions}
@@ -47,15 +47,18 @@ class Feed extends Component {
 
 const mapStateToProps = state => {
     return {
-        feedState: state.feeds,
+        loadingDone:state.feeds.loadingDone,
+        firstTime:state.feeds.firstTime,
+        updated: state.feeds.updated,
         token: state.authentication.token,
+        showTopLoader:state.feeds.showTopLoader,
         userFollower: state.user.followers,
         user: state.user.user,
         feeds: getFeeds(state),
-        promoptions: state.promotions,
         location: state.phone.currentLocation
     }
-}
+};
+
 export default connect(
     mapStateToProps,
     (dispatch) => ({
