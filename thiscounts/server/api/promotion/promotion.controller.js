@@ -90,9 +90,11 @@ exports.test_me = function (req, res) {
 };
 
 function applyToGroups(promotion, instances){
+  console.log(JSON.stringify(instances, null, 2));
   instances.forEach(instance => {
     let groups;
     if (instance && promotion && (groups = promotion.distribution.groups)) {
+      //TODO: improve by querying once
       groups.forEach(group =>{
         Group.findById(group, function (err, group) {
           if (err) return console.error(err); //return callback(err);
