@@ -82,13 +82,13 @@ export default class FeedPromotion extends Component {
                     {image}
 
 
-                    <View style={{flex: 3.7, width: width - 15, backgroundColor: 'white'}}>
+                    <View style={{  height:120,width: width - 15, backgroundColor: 'white'}}>
                         <View style={promotaionDesc}>
                             <PromotionHeader type={item.promotion} feed titleText={item.promotionTitle}
                                              titleValue={item.promotionValue} term={item.promotionTerm}/>
                         </View>
                         <View style={promotionDetalis}>
-                            <Text style={{marginRight: 10, marginLeft: 10, fontSize: 18}}>{item.name}
+                            <Text numberOfLines={2} style={{marginRight: 10, marginLeft: 10, fontSize: 18}}>{item.name}
                                 - {item.description}</Text>
                         </View>
                     </View>

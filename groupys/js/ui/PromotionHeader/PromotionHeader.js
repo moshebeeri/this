@@ -88,10 +88,10 @@ export default class PromotionHeader extends Component {
                         <Text numberOfLines={1} allowFontScaling={true} adjustsFontSizeToFit  style={titleValueStyle}>{ILS}{titleValue}</Text>
                     </View>
                     <View style={styles.promotiontHappyDescription}>
-                        <View style={{flex:0.4}}>
+                        <View >
                             <Text allowFontScaling={true} adjustsFontSizeToFit ={true}  style={styles.titleHappyTextFeed}>{titleText}</Text>
                         </View>
-                        <View View style={{flex:1}}>
+                        <View >
                             <Text allowFontScaling={true} adjustsFontSizeToFit ={true} numberOfLines={3} style={styles.promotionTermlTextStyle}>{term}</Text>
                         </View>
                     </View>
