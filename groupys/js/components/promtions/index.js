@@ -2,7 +2,7 @@ import React, {Component} from 'react';
 import {TouchableOpacity} from 'react-native';
 import {connect} from 'react-redux';
 import {actions} from 'react-native-navigation-redux-helpers';
-import {Button, Container, Content, Fab, Header, Input, InputGroup, Item, Text, View} from 'native-base';
+import {Button, Container, Content, Fab, Header, Input, InputGroup, Item, Text, View,Spinner} from 'native-base';
 import GenericListManager from '../generic-list-manager/index';
 import Icon2 from 'react-native-vector-icons/EvilIcons';
 import PromotionListItem from './list-item/index'
@@ -68,19 +68,20 @@ class Promotions extends Component {
     }
 
     render() {
-        const {navigation, promotions, actions, update,business} = this.props;
+        const {navigation, promotions, actions, update,promotionsLoading} = this.props;
         const businessId = navigation.state.params.business._id;
+
         return (
             <Container style={{backgroundColor: '#b7b7b7'}}>
                 <FormHeader showBack submitForm={this.navigateToAdd.bind(this)} navigation={this.props.navigation}
                             title={"My Promotions"} bgc="white"
                             submitIcon={<Icon5 active color={"#FA8559"} size={25} name="plus"/>}
                             titleColor="#FA8559" backIconColor="#FA8559"/>
-
-                <GenericListManager rows={promotions[businessId]} navigation={navigation} actions={actions}
+                { !promotionsLoading[businessId] && <Spinner/>}
+                {promotions[businessId] && promotions[businessId].length >0 && <GenericListManager rows={promotions[businessId]} navigation={navigation} actions={actions}
                                     update={update}
                                     onEndReached={this.setBusinessPromotions.bind(this)}
-                                    ItemDetail={this.renderItem.bind(this)}/>
+                                    ItemDetail={this.renderItem.bind(this)}/>}
 
 
             </Container>
@@ -115,7 +116,9 @@ export default connect(
     state => ({
         promotions: getBusinessPromotions(state),
         update: state.businesses.update,
-        location:state.phone.currentLocation
+        location:state.phone.currentLocation,
+        promotionsLoading:state.promotions.loadingDone,
+        promotionsChange:state.promotions
     }),
     (dispatch) => ({
         actions: bindActionCreators(businessAction, dispatch),

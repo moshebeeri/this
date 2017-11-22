@@ -6,7 +6,7 @@ let promotionApi = new PromotionsApi();
 let productApi = new ProductApi();
 let entityUtils = new EntityUtils();
 
-async function getAll(dispatch, id, token) {
+async function getAll(dispatch, id, token,loading) {
     try {
         let response = await promotionApi.getAllByBusinessId(id, token);
         if (response.length > 0) {
@@ -16,6 +16,11 @@ async function getAll(dispatch, id, token) {
                 businessId: id
             });
         }
+        if(loading) {
+            dispatch({
+                type: actions.PROMOTION_LOADING_DONE,
+            });
+        }
     } catch (error) {
         dispatch({
             type: actions.NETWORK_IS_OFFLINE,
@@ -23,7 +28,7 @@ async function getAll(dispatch, id, token) {
     }
 }
 
-async function getAllProducts(dispatch, id, token) {
+async function getAllProducts(dispatch, id, token,loading) {
     try {
         let response = await productApi.findByBusinessId(id, token);
         if (response.length > 0) {
@@ -33,6 +38,7 @@ async function getAllProducts(dispatch, id, token) {
                 businessId: id
             });
         }
+
     } catch (error) {
         dispatch({
             type: actions.NETWORK_IS_OFFLINE,
@@ -43,7 +49,8 @@ async function getAllProducts(dispatch, id, token) {
 export function fetchPromotions(id) {
     return function (dispatch, getState) {
         const token = getState().authentication.token;
-        getAll(dispatch, id, token);
+        const loading = getState().promotions.loading;
+        getAll(dispatch, id, token,loading);
     }
 }
 

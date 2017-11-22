@@ -217,6 +217,12 @@ export function setBusinessPromotions(businessId) {
                 businessesPromotions: promotions,
                 businessId: businessId
             });
+            if(!getState().promotions.loadingDone[businessId]) {
+                dispatch({
+                    type: actions.PROMOTION_LOADING_DONE,
+                    businessId: businessId
+                });
+            }
         } catch (error) {
             dispatch({
                 type: actions.NETWORK_IS_OFFLINE,
