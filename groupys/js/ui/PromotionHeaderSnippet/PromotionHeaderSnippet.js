@@ -18,8 +18,7 @@ export default class PromotionHeaderSnippet extends Component {
         if (business) {
             titleValueStyle = styles.titleValueFeed;
             titleTextStyle = styles.titleTextFeed;
-            XplusYtitleValueStyle = styles.XplusYtitleValueFeed;
-            puncCardtitleValue = styles.puncCardtitleValueFeed;
+
         }
         switch (type) {
             case "REDUCED_AMOUNT":

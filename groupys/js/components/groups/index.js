@@ -37,9 +37,11 @@ class Groups extends Component {
     }
 
     renderItem(item) {
+        const { navigation} = this.props;
         return <GenericListGroupView
             onPressItem={this.onPressItem.bind(this, item.item)}
             item={item.item}
+            navigation={navigation}
             index={item.index}
             key={item.index}
         />

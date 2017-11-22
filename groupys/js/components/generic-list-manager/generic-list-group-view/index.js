@@ -24,6 +24,8 @@ import StyleUtils from '../../../utils/styleUtils'
 import DateUtils from '../../../utils/dateUtils';
 import UiConverter from '../../../api/feed-ui-converter'
 import {GroupHeader, PromotionHeaderSnippet} from '../../../ui/index';
+import BusinessHeader from "../../../ui/BusinessHeader/BusinessHeader";
+
 const {width, height} = Dimensions.get('window')
 const vw = width / 100;
 const vh = height / 100
@@ -35,15 +37,24 @@ export default class GenericListGroupView extends Component {
         super(props);
     }
 
+    isBusiness(groupType) {
+        switch (groupType) {
+            case 'BUSINESS':
+                return false;
+            default:
+                return true;
+        }
+    }
+
     render() {
         const {item, onPressItem, index} = this.props;
         const styles = this.createStyle();
+        let promotionItem = this.createPromotionItem(item);
+        let showBusinessHeader = this.isBusiness(item.entity_type)
 
-        const promotion = this.createPromotion(styles, item);
+        const promotion = this.createPromotion(styles, promotionItem,showBusinessHeader);
         const message = this.createMessage(styles, item);
-        const height = this.calcHeight(promotion, message);
         const conainerStyle = {
-
             alignItems: 'center',
             marginBottom: 4,
             backgroundColor: 'white'
@@ -53,7 +64,13 @@ export default class GenericListGroupView extends Component {
                 <View style={conainerStyle}>
                     <GroupHeader group={item}/>
 
-
+                    {showBusinessHeader && promotionItem &&
+                    <View style={{marginLeft:5,flex:1,alignItems:'flex-start',justifyContent:'flex-start'}}>
+                        <BusinessHeader small navigation={this.props.navigation} business={promotionItem.business}
+                                        businessLogo={promotionItem.businessLogo}
+                                        businessName={promotionItem.businessName}/>
+                    </View>
+                    }
                     {promotion}
                     {message}
                 </View>
@@ -81,26 +98,26 @@ export default class GenericListGroupView extends Component {
         return 29;
     }
 
-    createPromotion(styles, item) {
+    createPromotionItem(item) {
         if (item.preview && item.preview.instance_activity) {
-            let promotion = uiConverter.createPromotionInstance(item.preview.instance_activity.instance);
-            let lastPromotion = <Text note style={styles.group_members}>{promotion.promotion}:</Text>
-            let promotinoTitle = <Text note numberOfLines={2} style={styles.group_members}>{promotion.itemTitle}</Text>
-            let promotionTime = <Text note
-                                      style={styles.dateFont}>{dateUtils.messageFormater(item.preview.instance_activity.timestamp)}</Text>
-            let promotionImage = undefined;
-            if (promotion.banner && promotion.banner.uri) {
-                promotionImage = <Thumbnail medium source={{uri: promotion.banner.uri}}/>
-            }
+            return uiConverter.createPromotionInstance(item.preview.instance_activity.instance);
+        }
+        return undefined;
+    }
+
+    createPromotion(styles, promotion,showBusinessHeader) {
+        if (promotion) {
             return <View style={styles.group_promotion_container}>
-                <PromotionHeaderSnippet promotion={promotion}type={promotion.promotion} feed titleText={promotion.promotionTitle}
-                                 titleValue={promotion.promotionValue} term={promotion.promotionTerm}/>
+
+                <PromotionHeaderSnippet business={showBusinessHeader} promotion={promotion} type={promotion.promotion}
+                                        feed titleText={promotion.promotionTitle}
+                                        titleValue={promotion.promotionValue} term={promotion.promotionTerm}/>
+
 
             </View>
         }
         return undefined;
     }
-
 
     createMessage(styles, item) {
         if (item.preview && item.preview.message_activity) {
@@ -118,7 +135,7 @@ export default class GenericListGroupView extends Component {
             return <View style={styles.group_message_container}>
 
                 <View style={styles.group_image}>
-                   {userImage}
+                    {userImage}
                 </View>
                 <View style={styles.message_container}>
                     <View>
