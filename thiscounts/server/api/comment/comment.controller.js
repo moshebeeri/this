@@ -64,10 +64,10 @@ exports.create = function(req, res) {
       if (err) { return handleError(res, err); }
       let params = `{comment_id:"${comment._id}"}`;
 
-      graphModel.relate_ids(req.user._id, 'COMMENTED', entities[0] , params);
+      graphModel.relate_ids(req.user._id, 'COMMENTED', entities[0], params);
       for(let i = 0; i < entities.length; i++) {
         if(i === entities.length-1)
-          graphModel.relate_ids(entities[i], 'COMMENTED', comment._id , params);
+          graphModel.relate_ids(entities[i], 'COMMENTED', comment._id, params);
         else
           graphModel.relate_ids(entities[i], 'COMMENTED', entities[i+1], params);
       }
@@ -114,9 +114,21 @@ exports.find = function(req, res) {
     `ORDER BY e${entities.length-1}._id DESC`,
     req.params.skip, req.params.limit, function (err, comments) {
       if(err) { return handleError(res, err); }
-      console.log(JSON.stringify(comments));
       return res.status(200).json(comments);
   })
+};
+
+// match (u:user)-[:COMMENTED]-(g:group{_id:"59f98c2d188c39245676df87"})-[:COMMENTED]-(e)-[:COMMENTED]-(c:comment)
+// return distinct u,g,c,labels(e) order by c._id desc
+exports.group_chat = function(req, res) {
+  let query = ` match (u:user)-[:COMMENTED]-(g:group{_id:"${req.params.group}"})-[:COMMENTED]-(e)-[:COMMENTED]-(c:comment)
+                return distinct c._id as _id`;
+  graphModel.query_objects(Comment, query,
+    `order by c._id desc`,
+    req.params.skip, req.params.limit, function (err, comments) {
+      if(err) { return handleError(res, err); }
+      return res.status(200).json(comments);
+    })
 };
 
 function getSchema(type) {
