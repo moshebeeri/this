@@ -19,7 +19,8 @@ let CommentSchema = new Schema({
     mall                : {type: Schema.ObjectId, ref: 'Mall', index: true, autopopulate: true},
     product             : {type: Schema.ObjectId, ref: 'Product', index: true, autopopulate: true},
     promotion           : {type: Schema.ObjectId, ref: 'Promotion', index: true, autopopulate: true},
-    instance            : {type: Schema.ObjectId, ref: 'Instance', index: true, autopopulate: true}
+    instance            : {type: Schema.ObjectId, ref: 'Instance', index: true, autopopulate: true},
+    post                : {type: Schema.ObjectId, ref: 'Post', index: true, autopopulate: true}
   }
 });
 CommentSchema.plugin(autopopulate);
