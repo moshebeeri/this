@@ -10,7 +10,7 @@
 /**
  * Created by stan229 on 5/27/16.
  */
-const initialState = {promotions: {}, savingForm: false};
+const initialState = {promotions: {}, savingForm: false,loadingDone:{}};
 import {REHYDRATE} from "redux-persist/constants";
 import * as actions from "./reducerActions";
 
@@ -76,6 +76,10 @@ export default function promotion(state = initialState, action) {
                 ...state,
                 savingForm: false,
             };
+        case actions.PROMOTION_LOADING_DONE:
+            promotionsState.loadingDone[action.businessId] = true
+            return promotionsState;
+
         case actions.SAVE_PROMOTIONS :
             let currentState = {...state};
             currentPromotions[action.businessId] = action.promotions;
