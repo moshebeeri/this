@@ -133,8 +133,7 @@ module.exports = {
     },
     comments_promotions: {
         padding: 0,
-        margin: 10,
-        backgroundColor: '#ffffff',
+        backgroundColor: 'white',
         flexDirection: 'row',
     },
     comments_logo: {
