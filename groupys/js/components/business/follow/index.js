@@ -2,7 +2,7 @@ import React, {Component} from "react";
 import {Image, TouchableOpacity} from "react-native";
 import {Button, Input, Item, Spinner, Text, View} from "native-base";
 import Icon3 from "react-native-vector-icons/Ionicons";
-//import Camera from "react-native-camera";
+import Camera from "react-native-camera";
 import styles from "./styles";
 import {BusinessHeader} from '../../../ui/index';
 
@@ -89,16 +89,16 @@ export default class BusinessFollow extends Component {
         }
         let camera = undefined
         if (cameraOn) {
-            // camera = <View style={styles.payment_camera_container}><Camera
-            //     ref={(cam) => {
-            //         this.camera = cam;
-            //     }}
-            //     onBarCodeRead={followByQrCode}
-            //     style={styles.payment_camera}
-            //     aspect={Camera.constants.Aspect.fill}>
-            // </Camera>
-            //     <Text>Please Scan Code</Text>
-            // </View>
+            camera = <View style={styles.payment_camera_container}><Camera
+                ref={(cam) => {
+                    this.camera = cam;
+                }}
+                onBarCodeRead={followByQrCode}
+                style={styles.payment_camera}
+                aspect={Camera.constants.Aspect.fill}>
+            </Camera>
+                <Text>Please Scan Code</Text>
+            </View>
         }
         return ( <View style={styles.follow_container}>
                 <Item style={styles.follow_search} regular>
