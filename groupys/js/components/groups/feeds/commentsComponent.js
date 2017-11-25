@@ -101,8 +101,8 @@ class CommentsComponent extends Component {
 
     nextCommentPage() {
         const item = this.getInstance();
-        const {actions, group} = this.props;
-        actions.setNextFeeds(feeds[item.generalId], item.entities, item.generalId)
+        const {actions, group,feeds} = this.props;
+        actions.setNextFeeds(feeds[group._id][item.id],group, item)
     }
 
     createCommentView(showComment, item) {
@@ -112,17 +112,10 @@ class CommentsComponent extends Component {
         }
 
         if (showComment) {
-            let isUser = item.actor === user._id;
-            let messageItem = {
-                name: item.name,
-                avetar: item.logo,
-                message: item.description,
-                date: item.date,
-                isUser: isUser,
-            };
+
             return <GenericFeedManager
                 navigation={navigation}
-
+                color='white'
                 loadingDone={loadingDone[group._id][item.id]}
                 showTopLoader={false}
                 userFollowers={userFollower}
@@ -130,10 +123,9 @@ class CommentsComponent extends Component {
                 setNextFeeds={this.nextCommentPage.bind(this)}
                 actions={actions}
                 token={token}
-                entity={messageItem}
                 group={group}
                 title='Feeds'
-                ItemDetail={ChatMessage}>
+                ItemDetail={this.renderItem.bind(this)}>
 
             </GenericFeedManager>
         }
@@ -142,7 +134,8 @@ class CommentsComponent extends Component {
 
 
 
-    renderItem(item) {
+    renderItem(renderItem) {
+        let item = renderItem.item;
         const {user} = this.props;
         let isUser = item.actor === user._id;
         let messageItem = {
