@@ -1,10 +1,10 @@
 import React, {Component} from 'react';
-import {Image, Platform, ListView, FlatList} from 'react-native';
+import {Image, Platform, ListView,TouchableOpacity, FlatList,View} from 'react-native';
 import {connect} from 'react-redux';
 import {actions} from 'react-native-navigation-redux-helpers';
 import {
     Container, Content, Text, Title, InputGroup,
-    Input, Button, Icon, View, Header, Body, Right, ListItem, Tabs, Tab, Spinner, TabHeading, Thumbnail, Left
+    Input, Button, Icon,  Header, Body, Right, ListItem, Tabs, Tab, Spinner, TabHeading, Thumbnail, Left
 } from 'native-base';
 import {bindActionCreators} from "redux";
 
@@ -19,7 +19,11 @@ export default class GenericFeedManager extends Component {
             actions.fetchTop(feeds, token, entity, group)
         }
     }
-
+    _renderItem(item) {
+        return <View>
+            <Text> what + {item.item.value}</Text>
+        </View>
+    }
     renderItem(item) {
         const {navigation, token, userFollowers, group, ItemDetail, actions, entity,location} = this.props;
         return <ItemDetail
@@ -33,50 +37,79 @@ export default class GenericFeedManager extends Component {
             fetchTopList={this.fetchTopList.bind(this)}
             actions={actions}/>
     }
+    onEndReach(){
+        const {feeds, token,  actions, entity, } = this.props;
+        actions.setNextFeeds(feeds, token, entity)
+    }
 
     render() {
-        const {navigation, loadingDone, showTopLoader, feeds, token,  actions, entity, update, setNextFeeds} = this.props;
+        const {navigation, loadingDone, showTopLoader, feeds, token,  actions, entity, update, setNextFeeds,color} = this.props;
         const topLoader = showTopLoader ? <View><Spinner color='red'/></View> : null;
         if (!loadingDone) {
             return <View><Spinner color='red'/></View>;
         }
         const spining = undefined;
+        let backgroundColor = '#e7e7e7';
+        if(color){
+            backgroundColor = color;
+        }
 
         if (setNextFeeds) {
             return (
 
-                <Content removeClippedSubviews={true} style={{backgroundColor: '#e7e7e7'}}>
+                <View  style={{backgroundColor: backgroundColor}}>
                     {topLoader}
+
                     <FlatList
+
                         data={feeds}
+                        ref='flatList'
                         onEndReached={setNextFeeds}
                         renderItem={this.renderItem.bind(this)}
                         extraData={update}
                         keyExtractor={(item, index) => index}
+
                     />
 
                     {spining}
 
-                </Content>
+                </View>
 
             );
         }
         return (
 
-            <Content removeClippedSubviews={true} style={{backgroundColor: '#e7e7e7'}}>
+            <View  style={{backgroundColor: backgroundColor}}>
                 {topLoader}
                 <FlatList
+                    ref='flatList'
                     data={feeds}
-                    onEndReached={actions.setNextFeeds(feeds, token, entity)}
+                    onEndReached={this.onEndReach.bind(this)}
                     renderItem={this.renderItem.bind(this)}
                     extraData={update}
+
                 />
 
                 {spining}
 
-            </Content>
+            </View>
 
         );
+    }
+
+    componentDidMount(){
+        const{scrolToEnd,feeds} = this.props;
+        if(scrolToEnd) {
+            if(this.refs && this.refs.flatList ) {
+                this.refs.flatList.scrollToEnd({animated: false});
+            }
+        }
+    }
+
+    goToEnd() {
+        if (this.refs && this.refs.flatList) {
+            this.refs.flatList.scrollToEnd({animated: false});
+        }
     }
 }
 

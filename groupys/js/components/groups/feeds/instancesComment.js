@@ -21,6 +21,7 @@ class instancesComment extends Component {
     componentWillMount() {
         const {comments, group, actions} = this.props;
         this.setNextFeed();
+
     }
 
     setNextFeed(){
@@ -32,6 +33,7 @@ class instancesComment extends Component {
         } else {
             actions.setNextFeeds(comments[group._id], group);
         }
+
     }
 
     _onPressButton(message) {
@@ -84,6 +86,7 @@ class instancesComment extends Component {
         return <View style={{flex:1}}>
             <View style={{flex:1}}>
                 <GenericFeedManager feeds={comments[group._id]}
+                                    scrolToEnd
                                     entity={group}
                                     navigation={navigation}
                                     setNextFeeds={this.setNextFeed.bind(this)}

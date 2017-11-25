@@ -8,7 +8,7 @@ import styles from "./styles";
 import CommentApi from "../../../api/commet";
 import UiTools from "../../../api/feed-ui-converter";
 import {bindActionCreators} from "redux";
-import NestedScrollView from "react-native-nested-scrollview";
+
 import * as commentGroupAction from "../../../actions/instanceGroupComments";
 import {getFeeds} from "../../../selectors/commentInstancesSelector";
 import {ChatMessage, MessageBox, PromotionHeader} from '../../../ui/index';
@@ -106,13 +106,11 @@ class CommentsComponent extends Component {
     }
 
     createCommentView(showComment, item) {
-        const {navigation, feeds, userFollower, actions, token, loadingDone, showTopLoader, group} = this.props;
+        const {navigation, feeds, userFollower, actions, token, loadingDone, showTopLoader, group,user} = this.props;
         if(!feeds[group._id]){
             return <View></View>
         }
-        if (Platform.OS === 'android') {
-            return this.createAndroidScroller(feeds[group._id][item.id], 5)
-        }
+
         if (showComment) {
             let isUser = item.actor === user._id;
             let messageItem = {
@@ -142,14 +140,7 @@ class CommentsComponent extends Component {
         return undefined;
     }
 
-    createAndroidScroller(feeds, size) {
-        if (feeds && feeds.length > 0) {
-            let body = feeds.map(feed => this.renderItem(feed))
-            return <NestedScrollView style={{height: vh * size}}>{body}</NestedScrollView>
-        } else {
-            return <NestedScrollView style={{height: vh * size}}></NestedScrollView>
-        }
-    }
+
 
     renderItem(item) {
         const {user} = this.props;

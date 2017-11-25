@@ -6,7 +6,7 @@ import {Button, Icon, Input, Thumbnail} from "native-base";
 import GenericFeedManager from "../generic-feed-manager/index";
 import styles from "./styles";
 import {bindActionCreators} from "redux";
-import NestedScrollView from "react-native-nested-scrollview";
+
 import * as commentEntitiesAction from "../../actions/commentsEntities";
 import {getFeeds} from "../../selectors/commentsEntitiesSelector";
 import {ChatMessage, MessageBox, PromotionHeader} from '../../ui/index';
@@ -101,54 +101,37 @@ class CommentsComponent extends Component {
 
     nextCommentPage() {
         const item = this.getInstance();
-        const {actions, group} = this.props;
+        const {actions,feeds} = this.props;
         actions.setNextFeeds(feeds[item.generalId], item.entities, item.generalId)
     }
 
     createCommentView(showComment, item) {
-        const {navigation, feeds, userFollower, actions, token, loadingDone, showTopLoader, group} = this.props;
-        if (Platform.OS === 'android') {
-            return this.createAndroidScroller(feeds[item.generalId], 30)
-        }
+        const {navigation, feeds, userFollower, actions, token, loadingDone,user} = this.props;
+
         if (showComment) {
-            let isUser = item.actor === user._id;
-            let messageItem = {
-                name: item.name,
-                avetar: item.logo,
-                message: item.description,
-                date: item.date,
-                isUser: isUser,
-            };
+
             return <GenericFeedManager
                 navigation={navigation}
-
-                loadingDone={loadingDone[group._id][item.id]}
+                color='white'
+                loadingDone={loadingDone[item.generalId]}
                 showTopLoader={false}
                 userFollowers={userFollower}
-                feeds={feeds[group._id][item.id]}
+                feeds={feeds[item.generalId]}
                 setNextFeeds={this.nextCommentPage.bind(this)}
                 actions={actions}
                 token={token}
-                entity={messageItem}
-                group={group}
                 title='Feeds'
-                ItemDetail={ChatMessage}>
+                ItemDetail={this.renderItem.bind(this)}>
 
             </GenericFeedManager>
         }
         return undefined;
     }
 
-    createAndroidScroller(feeds, size) {
-        if (feeds && feeds.length > 0) {
-            let body = feeds.map(feed => this.renderItem(feed))
-            return <NestedScrollView style={{height: vh * size}}>{body}</NestedScrollView>
-        } else {
-            return <NestedScrollView style={{height: vh * size}}></NestedScrollView>
-        }
-    }
 
-    renderItem(item) {
+
+    renderItem(renderItem) {
+        let item = renderItem.item;
         const {user} = this.props;
         let isUser = item.actor === user._id;
         let messageItem = {
@@ -177,8 +160,8 @@ export default connect(
         userFollower: state.user.followers,
         user: state.user.user,
         feeds: getFeeds(state),
-        showTopLoader: state.commentInstances.showTopLoader,
-        loadingDone: state.commentInstances.groupLoadingDone,
+        showTopLoader: state.entityComments.showTopLoader,
+        loadingDone: state.entityComments.loadingDone,
     }),
     (dispatch) => ({
         actions: bindActionCreators(commentEntitiesAction, dispatch)

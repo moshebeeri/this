@@ -11,7 +11,7 @@ export default class CloseDrawer extends Component {
 
     render() {
         let arrowName = I18nManager.isRTL ? "ios-arrow-forward" : "ios-arrow-back";
-        return <Button transparent onPress={() => this.props.onPress()}>
+        return <Button style={{marginLeft:5,marginRight:5}} transparent onPress={() => this.props.onPress()}>
                     <Icon active={this.props.active} color={this.props.color} size={this.props.size} name={arrowName}/>
                </Button>
     }

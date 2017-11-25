@@ -2,8 +2,9 @@ import React, {Component} from 'react';
 import {Dimensions, Keyboard, TextInput, View} from 'react-native';
 import Icon2 from "react-native-vector-icons/Entypo";
 import {Button, Icon, Input} from 'native-base';
-import EmojiPicker from "react-native-emoji-picker-panel";
+import EmojiPicker from "../emojiPicker/emojiPicker"
 import styles from './styles'
+
 
 const {width, height} = Dimensions.get('window')
 export default class MessageBox extends Component {
@@ -97,7 +98,7 @@ export default class MessageBox extends Component {
         return (
             <View style={style}>
                 <View style={{
-                    flex: 0.26,
+                    flex: 1,
                     alignItems: 'center',
                     justifyContent: 'center',
                     backgroundColor: 'white',
@@ -124,7 +125,8 @@ export default class MessageBox extends Component {
                 </View>
 
 
-                <EmojiPicker visible={this.state.showEmoji} onEmojiSelected={this.handlePick.bind(this)}/>
+
+                {this.state.showEmoji &&  <EmojiPicker onEmojiSelect={this.handlePick.bind(this)}/>}
 
 
             </View>

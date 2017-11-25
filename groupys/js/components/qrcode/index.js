@@ -3,19 +3,14 @@ import {connect} from 'react-redux';
 import {Button, Container, Content, Footer, Header, Icon, Input, InputGroup, Text, View} from 'native-base';
 import styles from './styles';
 import * as promotionAction from "../../actions/promotions";
-import Camera from 'react-native-camera';
+// import Camera from 'react-native-camera';
 
 import {getInstance} from "../../selectors/form/scanQrcodeSelector";
 import {bindActionCreators} from "redux";
 import PromotionView from './promotionView/index';
 
 class Qrcode extends Component {
-    static propTypes = {
-        replaceAt: React.PropTypes.func,
-        navigation: React.PropTypes.shape({
-            key: React.PropTypes.string,
-        }),
-    };
+
 
     constructor(props) {
         super(props);
@@ -88,16 +83,16 @@ class Qrcode extends Component {
                 <Content>
 
 
-                    <Camera
-                        ref={(cam) => {
-                            this.camera = cam;
-                        }}
-                        onBarCodeRead={this.onBarCodeRead.bind(this)}
-                        style={styles.preview}
-                        aspect={Camera.constants.Aspect.fill}>
-                        <Text style={styles.imageButtomText}>{this.state.realizedMessage}</Text>
+                    {/*<Camera*/}
+                        {/*ref={(cam) => {*/}
+                            {/*this.camera = cam;*/}
+                        {/*}}*/}
+                        {/*onBarCodeRead={this.onBarCodeRead.bind(this)}*/}
+                        {/*style={styles.preview}*/}
+                        {/*aspect={Camera.constants.Aspect.fill}>*/}
+                        {/*<Text style={styles.imageButtomText}>{this.state.realizedMessage}</Text>*/}
 
-                    </Camera>
+                    {/*</Camera>*/}
 
                 </Content>
                 <Footer style={{backgroundColor: '#fff'}}>

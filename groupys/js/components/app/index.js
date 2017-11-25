@@ -1,8 +1,8 @@
 import React, {Component} from "react";
 import {Dimensions, Image, StyleSheetm} from "react-native";
 import {connect} from "react-redux";
-import {Container, Drawer, Fab, Tab, TabHeading, Tabs, View} from "native-base";
-import Icon from "react-native-vector-icons/EvilIcons";
+    import {Container, Drawer, Fab, Tab, TabHeading, Tabs, View,Icon} from "native-base";
+
 import Icon2 from "react-native-vector-icons/Ionicons";
 import Icon5 from 'react-native-vector-icons/MaterialCommunityIcons';
 import GeneralComponentHeader from "../header/index";
@@ -148,6 +148,7 @@ class ApplicationManager extends Component {
                 content={<SideBar closeDrawer={closeDrawer} navigation={this.props.navigation}/>}
                 onClose={() => closeDrawer}>
                 <Container>
+
                     <GeneralComponentHeader openDrawer={openDrawer} navigate={this.props.navigation.navigate}
                                             showAction={showAdd} current='home'
                                             to={this.state.addComponent}/>

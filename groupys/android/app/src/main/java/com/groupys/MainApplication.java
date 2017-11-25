@@ -6,7 +6,6 @@ import com.facebook.react.ReactApplication;
 import com.inprogress.reactnativeyoutube.ReactNativeYouTube;
 import com.brentvatne.react.ReactVideoPackage;
 import com.babisoft.ReactNativeLocalization.ReactNativeLocalizationPackage;
-import com.mohtada.nestedscrollview.ReactNestedScrollViewPackage;
 import com.BV.LinearGradient.LinearGradientPackage;
 import com.microsoft.codepush.react.CodePush;
 
@@ -49,7 +48,6 @@ public class MainApplication extends Application implements ReactApplication {
             new ReactNativeYouTube(),
             new ReactVideoPackage(),
             new ReactNativeLocalizationPackage(),
-            new ReactNestedScrollViewPackage(),
             new LinearGradientPackage(),
             new CodePush(getResources().getString(R.string.reactNativeCodePush_androidDeploymentKey), getApplicationContext(), BuildConfig.DEBUG),
             new BackgroundTimerPackage(),
