@@ -1,4 +1,4 @@
-const initialState = {feeds: {}, feedOrder: [], showTopLoader: false, update: false, lastfeed: undefined, lastCall: {}};
+const initialState = {feeds: {}, feedOrder: [], showTopLoader: false, update: false, lastfeed: undefined, lastCall: {},firstTime:true};
 import {REHYDRATE} from "redux-persist/constants";
 import * as actions from "./reducerActions";
 
@@ -53,6 +53,11 @@ export default function myPromotions(state = initialState, action) {
             }
 
             return state;
+        case actions.SAVE_PROMOTION_FIRST_TIME_FEED:
+            return {
+                ...state,
+                firstTime: false
+            };
         case actions.SAVED_FEED_LOADING_DONE:
             return {
                 ...state,

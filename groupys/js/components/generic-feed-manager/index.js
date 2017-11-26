@@ -42,7 +42,6 @@ export default class GenericFeedManager extends Component {
     onEndReach(){
         const {feeds, token,  actions, entity, } = this.props;
         actions.setNextFeeds(feeds, token, entity);
-        this.goToEnd();
     }
 
     render() {
@@ -105,11 +104,7 @@ export default class GenericFeedManager extends Component {
 
 
 
-    goToEnd() {
-        if (this.refs && this.refs.flatList) {
-            this.refs.flatList.scrollToEnd({animated: false});
-        }
-    }
+
 }
 
 

@@ -41,6 +41,14 @@ class MyPromotions extends Component {
         />
     }
 
+    componentWillMount() {
+        const {feeds, actions, firstTime} = this.props;
+        if (firstTime) {
+            actions.setNextFeeds(feeds);
+
+        }
+    }
+
     render() {
         const {navigation, feeds, userFollower, actions, token, loadingDone, showTopLoader, user} = this.props;
         return (
@@ -70,7 +78,8 @@ const mapStateToProps = state => {
         feeds: getFeeds(state),
         showTopLoader: state.myPromotions.showTopLoader,
         loadingDone: state.myPromotions.loadingDone,
-        myPromotions: state.myPromotions
+        myPromotions: state.myPromotions,
+        firstTime:state.myPromotions.firstTime,
     }
 }
 export default connect(
