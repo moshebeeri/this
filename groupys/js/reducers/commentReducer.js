@@ -35,7 +35,7 @@ export default function comment(state = initialState, action) {
                     currentState.groupCommentsOrder[action.gid] = [];
                 }
                 if (!currentState.groupCommentsOrder[action.gid].includes(comment._id)) {
-                    currentState.groupCommentsOrder[action.gid].unshift(comment._id);
+                    currentState.groupCommentsOrder[action.gid].push(comment._id);
                 }
             });
             currentState.update = !currentState.update;
@@ -52,7 +52,7 @@ export default function comment(state = initialState, action) {
                     currentState.groupCommentsOrder[action.gid] = [];
                 }
                 if (!currentState.groupCommentsOrder[action.gid].includes(comment._id)) {
-                    currentState.groupCommentsOrder[action.gid].push(comment._id);
+                    currentState.groupCommentsOrder[action.gid].unshift(comment._id);
                 }
             });
             currentState.lastInstanceId = groupsComment[action.gid][currentState.groupCommentsOrder[action.gid]

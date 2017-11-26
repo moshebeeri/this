@@ -19,6 +19,8 @@ export default class GenericFeedManager extends Component {
             actions.fetchTop(feeds, token, entity, group)
         }
     }
+
+
     _renderItem(item) {
         return <View>
             <Text> what + {item.item.value}</Text>
@@ -39,11 +41,12 @@ export default class GenericFeedManager extends Component {
     }
     onEndReach(){
         const {feeds, token,  actions, entity, } = this.props;
-        actions.setNextFeeds(feeds, token, entity)
+        actions.setNextFeeds(feeds, token, entity);
+        this.goToEnd();
     }
 
     render() {
-        const {navigation, loadingDone, showTopLoader, feeds, token,  actions, entity, update, setNextFeeds,color} = this.props;
+        const { loadingDone, showTopLoader, feeds ,update, setNextFeeds,color} = this.props;
         const topLoader = showTopLoader ? <View><Spinner color='red'/></View> : null;
         if (!loadingDone) {
             return <View><Spinner color='red'/></View>;
@@ -61,13 +64,14 @@ export default class GenericFeedManager extends Component {
                     {topLoader}
 
                     <FlatList
-
+                        inverted
                         data={feeds}
                         ref='flatList'
                         onEndReached={setNextFeeds}
                         renderItem={this.renderItem.bind(this)}
                         extraData={update}
                         keyExtractor={(item, index) => index}
+
 
                     />
 
@@ -97,14 +101,9 @@ export default class GenericFeedManager extends Component {
         );
     }
 
-    componentDidMount(){
-        const{scrolToEnd,feeds} = this.props;
-        if(scrolToEnd) {
-            if(this.refs && this.refs.flatList ) {
-                this.refs.flatList.scrollToEnd({animated: false});
-            }
-        }
-    }
+
+
+
 
     goToEnd() {
         if (this.refs && this.refs.flatList) {
