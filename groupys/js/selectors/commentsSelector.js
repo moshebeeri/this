@@ -18,15 +18,17 @@ export const getFeeds = createSelector([getStateFeeds],
                     response[groupId] = new Array();
                 }
                 if (feedsOrder[groupId] && feedsOrder[groupId].length > 0) {
-                    let lastGroupInstance = feeds[groupId][feedsOrder[groupId][0]].entities.instance;
-                    response[groupId].push({instance: feedUiConverter.createPromotionInstance(lastGroupInstance)});
+                    let lastGroupInstance =  feeds[groupId][feedsOrder[groupId][0]].entities.instance;
+
                     feedsOrder[groupId].forEach(function (feedId) {
                         if (feeds[groupId][feedId].entities.instance &&
                             feeds[groupId][feedId].entities.instance._id !== lastGroupInstance._id) {
-                            lastGroupInstance = feeds[groupId][feedId].entities.instance;
                             response[groupId].push({instance: feedUiConverter.createPromotionInstance(lastGroupInstance)});
+                            lastGroupInstance = feeds[groupId][feedId].entities.instance;
+
                         }
                         response[groupId].push({message: createFeed(feeds[groupId][feedId])});
+
                     })
                 }
             })
@@ -39,7 +41,7 @@ export const getFeeds = createSelector([getStateFeeds],
                     }
                     clientComments[groupId].forEach(feed => {
 
-                            response[groupId].push({message: createFeed(feed)})
+                            response[groupId].unshift({message: createFeed(feed)})
                         }
                     )
                 }
