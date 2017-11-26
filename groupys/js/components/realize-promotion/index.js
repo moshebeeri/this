@@ -1,7 +1,7 @@
 import React, {Component} from 'react';
 import {connect} from 'react-redux';
 import {
-    View,
+
     Container,
     Button,
     Text,
@@ -15,12 +15,16 @@ import {
     Card,
     CardItem
 } from 'native-base';
-import {Image} from 'react-native';
+import {Image,View,Dimensions} from 'react-native';
 import styles from './style';
 import PromotionApi from '../../api/promotion'
-
+import {PromotionHeader, PromotionSeperator,BusinessHeader} from '../../ui/index';
+const deviceHeight = Dimensions.get('window').width;
 let promotionApi = new PromotionApi()
 export default class RealizePromotion extends Component {
+    static navigationOptions = {
+        header: null
+    };
     constructor(props) {
         super(props);
         this.state = {
@@ -46,34 +50,37 @@ export default class RealizePromotion extends Component {
     render() {
         let item = this.props.navigation.state.params.item;
         return (
-            <Container>
-                <Content style={{backgroundColor: '#fff'}}>
 
+                    <View style={{flex:1,justifyContent:'center',alignItems:'center'}}>
+                        <BusinessHeader showBack navigation={this.props.navigation} business={item.business}
+                                        categoryTitle={item.categoryTitle} businessLogo={item.businessLogo}
+                                        businessName={item.businessName}/>
 
-                    <Card>
-                        <CardItem>
-                            <Text style={{
-                                fontWeight: 'bold',
-                                marginLeft: 20,
-                                marginTop: 20,
-                                fontSize: 25,
-                                color: 'black'
-                            }}>{item.itemTitle}</Text>
-                        </CardItem>
-                        <CardItem style={styles.camera}>
+                        <View style={{marginTop:5,flex:2,justifyContent:'center',alignItems:'center',width:deviceHeight-30,backgroundColor:'blue'}}>
+
+                            <PromotionHeader columnStyle type={item.promotion} feed titleText={item.promotionTitle}
+                                             titleValue={item.promotionValue} term={item.promotionTerm}/>
+
+                        </View>
+                        <View style={{flex:0.2,width:deviceHeight-30,height:20,}}>
+
+                            <PromotionSeperator narrowWidth={30}/>
+                        </View>
+                        <View  style={{marginBottom:5,flex:4,width:deviceHeight-30,backgroundColor:'white',justifyContent:'center',alignItems:'center'}}>
+                            <Text>LET AN AUTHORIZED EMPLOYEE</Text>
+                            <Text>SCAN THIS QR CODE</Text>
                             <Image style={{
                                 width: 300,
                                 height: 300,
                                 resizeMode: Image.resizeMode.contain,
-                                borderWidth: 1,
-                                borderColor: 'red'
+
                             }} source={{uri: this.state.image.qrcode}}/>
 
-                        </CardItem>
-                    </Card>
-                </Content>
+                        </View>
+                    </View>
 
-            </Container>
+
+
         );
     }
 }
