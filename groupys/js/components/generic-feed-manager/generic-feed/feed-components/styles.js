@@ -391,7 +391,7 @@ module.exports = {
     promotionDetailsContainer:{
         flexDirection:'row',
         backgroundColor:'white',
-        flex:2,
+        flex:3,
         width: width- 15,
         alignItems:'center',
         justifyContent:'center',

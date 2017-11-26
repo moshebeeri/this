@@ -45,7 +45,7 @@ export default class FeedPromotion extends Component {
     }
 
     render() {
-        const {refresh, item, save, shared, like, unlike, showUsers, comment, token, location} = this.props;
+        const {refresh, item, save, shared, like, unlike, showUsers, comment, token, location,hideSocial,realize} = this.props;
         const styles = this.createPromotionStyle();
         const colorStyle = this.createColorStyle(item)
         const buisnessLogo = componentCreator.createBusinessLog(item, this.showBussines.bind(this));
@@ -65,6 +65,10 @@ export default class FeedPromotion extends Component {
             promotaionDesc = styles.promotiosShareDescription;
             promotionDetalis = styles.promotionShareDetails;
         }
+        let categoruTitle = item.categoryTitle;
+        if(item.business){
+            categoruTitle = item.business.categoryTitle;
+        }
         const result =
             <InViewPort onChange={() => refresh(item.id, item.social)} style={container}>
                 <View style={styles.promotion_card}>
@@ -73,7 +77,7 @@ export default class FeedPromotion extends Component {
                             {buisnessLogo}
                             <View style={{flexDirection: 'column'}}>
                                 <Text style={styles.promotion_nameText} note>{item.businessName} </Text>
-                                <Text style={styles.promotion_addressText} note>{item.business.categoryTitle}</Text>
+                                <Text style={styles.promotion_addressText} note>{categoruTitle}</Text>
                             </View>
                         </View>
 
@@ -101,20 +105,24 @@ export default class FeedPromotion extends Component {
                             <View><Text style={styles.detailsTitleText}>Location</Text></View>
                             <View><Text
                                 style={styles.detailsText}>{FormUtils.getDistanceFromLatLonInKm(location.lat, location.long, item.location.lat, item.location.lng)}
-                                km away</Text></View>
+                                km </Text></View>
                         </View>
                         <View style={styles.expireDateContainer}>
                             <View><Text style={styles.detailsTitleText}>Expire</Text></View>
                             <View><Text style={styles.detailsText}>{item.endDate}</Text></View>
                         </View>
-                        <View style={styles.editButtonContainer}>
+                        {save && <View style={styles.editButtonContainer}>
                             <SubmitButton title="CLAIM" color={'#2db6c8'}
                                           disabled={claimDisabled} onPress={() => save(item.id)}/>
-                        </View>
+                        </View>}
+                        {realize && <View style={styles.editButtonContainer}>
+                            <SubmitButton title="REALIZE" color={'#2db6c8'}
+                                           onPress={realize}/>
+                        </View>}
                     </View>}
 
 
-                    <View style={styles.promotion_bottomContainer}>
+                    {!hideSocial && <View style={styles.promotion_bottomContainer}>
 
                         {item.social && <SocialState feed comments={item.social.comments} onPressComment={comment}
                                                      like={item.social.like} likes={item.social.likes}
@@ -123,7 +131,7 @@ export default class FeedPromotion extends Component {
                                                      shareDisabled={shared}
                                                      share={item.social.share} shares={item.social.shares}
                                                      shareAction={showUsers}/>}
-                    </View>
+                    </View>}
                 </View>
             </InViewPort>
         return result;
