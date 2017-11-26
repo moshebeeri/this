@@ -55,7 +55,7 @@ class MyPromotions extends Component {
 
     componentWillMount() {
         const {feeds, actions, firstTime} = this.props;
-        if (firstTime) {
+        if (firstTime || feeds.length ===0) {
             actions.setNextFeeds(feeds);
 
         }

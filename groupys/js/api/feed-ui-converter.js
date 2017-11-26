@@ -163,6 +163,9 @@ class FeedConverter {
                     uri: promotion.pictures[0].pictures[1]
                 };
             }
+            if (promotion.entity && promotion.entity.business) {
+                responseFeed.business = promotion.entity.business;
+            }
             switch (instance.type) {
                 case "REDUCED_AMOUNT":
                     responseFeed.itemTitle = "Buy For " + promotion.reduced_amount.values[0].price + ' Pay Only ' + promotion.reduced_amount.values[0].pay;
