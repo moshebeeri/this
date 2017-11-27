@@ -120,12 +120,12 @@ export default class GenericListGroupView extends Component {
     }
 
     createMessage(styles, item) {
-        if (item.preview && item.preview.message_activity) {
-            let user = item.preview.message_activity.user;
+        if (item.preview && item.preview.comment) {
+            let user = item.preview.comment.user;
             let lastMessage = <Text numberOfLines={3} note
-                                    style={styles.group_members}>{item.preview.message_activity.message}</Text>
+                                    style={styles.group_members}>{item.preview.comment.message}</Text>
             let messageTime = <Text note
-                                    style={styles.dateFont}>{dateUtils.messageFormater(item.preview.message_activity.timestamp)}</Text>
+                                    style={styles.dateFont}>{dateUtils.messageFormater(item.preview.comment.timestamp)}</Text>
             let userImage = undefined;
             if (user.pictures && user.pictures.length > 0) {
                 userImage = <Thumbnail small source={{uri: user.pictures[user.pictures.length - 1].pictures[3]}}/>
