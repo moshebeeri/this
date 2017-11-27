@@ -44,12 +44,12 @@ function findQRCodeByCode(code, callback){
   })
 }
 
-// Get a single card
+// Get a single qrcode
 exports.show = function(req, res) {
-  QRCode.find({code: req.params.code}, function (err, card) {
+  QRCode.find({code: req.params.code}, function (err, code) {
     if(err) { return handleError(res, err); }
-    if(!card) { return res.send(404); }
-    return res.json(card);
+    if(!code) { return res.send(404); }
+    return res.json(code);
   });
 };
 
@@ -103,7 +103,21 @@ exports.code = function(req, res) {
   });
 };
 
-exports.image = function(req, res) {
+exports.image_id = function(req, res) {
+  QRCode.findById(req.params.id, function (err, qrcode) {
+    if(err) { return handleError(res, err); }
+    QRCodeImg.toDataURL(JSON.stringify({
+      code: qrcode.code
+    }), qr_opt, function (err, url) {
+      if (err) {return res.status(500).send(err);}
+      return res.status(200).json({
+        qrcode: url
+      });
+    })
+  });
+};
+
+exports.image_code = function(req, res) {
   QRCodeImg.toDataURL(JSON.stringify({
     t:'g',
     code: req.params.code

@@ -9,9 +9,10 @@ let router = express.Router();
 //TODO: change to auth.hasRole('admin') for production
 router.get('/allocate/:quantity', auth.isAuthenticated(), controller.allocate);
 
+router.get('/image/id/:id', /*auth.isAuthenticated(),*/ controller.image_id);
 router.get('/find/:code', auth.isAuthenticated(), controller.code);
 router.post('/assign/:code', auth.isAuthenticated(), controller.assign);
 router.post('/allocateOneAndAssign', auth.isAuthenticated(), controller.allocateOneAndAssign);
-router.get('/image/:code', /*auth.isAuthenticated(),*/ controller.image);
+router.get('/image/code/:code', auth.isAuthenticated(), controller.image_code);
 
 module.exports = router;
