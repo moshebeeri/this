@@ -7,42 +7,31 @@ export function fetchTop(feeds, token, entity, group) {
     return fetchTopComments(group, entity);
 }
 
-export function fetchTopComments(group, instance) {
+export function fetchTopComments(group) {
     return async function (dispatch, getState) {
         try {
             const token = getState().authentication.token;
-            if (getState().commentInstances.groupLastCall[group._id] && getState().commentInstances.groupLastCall[group._id][instance.id]) {
-                if (new Date().getTime() - new Date(getState().commentInstances.groupLastCall[group._id][instance.id]).getTime() < 10000) {
-                    return;
-                }
-            }
-            dispatch({
-                type: actions.GROUP_COMMENT_INSTANCE_LAST_CALL,
-                lastCall: new Date(),
-                gid: group._id,
-                instanceId: instance.id
-            });
-            let response = await commentsApi.getInstanceGroupComments(group._id, instance.id, 0, token);
-            dispatch({
-                type: actions.GROUP_COMMENT_INSTANCE_LOADING_DONE,
-                loadingDone: true,
-                gid: group._id,
-                instanceId: instance.id
-            });
-            dispatch({
-                type: actions.GROUP_COMMENT_INSTANCE_CLEAR_MESSAGE,
-                groupId: group._id,
-                instanceId: instance.id
-            });
-            if (response.length > 0) {
-                response.forEach(item => dispatch({
-                    type: actions.UPSERT_GROUP_INSTANCE_TOP_COMMENT,
-                    item: item,
+            let response = await commentsApi.getGroupComments(group, token, 0, 10);
+            if (!getState().comments.loadingDone[group._id]) {
+                dispatch({
+                    type: actions.GROUP_COMMENT_LOADING_DONE,
+                    loadingDone: true,
                     gid: group._id,
-                    instanceId: instance.id
-                }))
+                });
+            }
+            if (response.length > 0) {
+                dispatch({
+                    type: actions.UPSERT_GROUP_TOP_COMMENT,
+                    item: response,
+                    gid: group._id,
+                });
+                dispatch({
+                    type: actions.GROUP_COMMENT_CLEAR_MESSAGE,
+                    groupId: group._id,
+                });
             }
         } catch (error) {
+
             dispatch({
                 type: actions.NETWORK_IS_OFFLINE,
             });
@@ -50,23 +39,19 @@ export function fetchTopComments(group, instance) {
     }
 }
 
-export function sendMessage(groupId, instanceId, message) {
+export function sendMessage(groupId, message) {
     return async function (dispatch, getState) {
         try {
             const token = getState().authentication.token;
             const user = getState().user.user;
-            try {
-                commentsApi.createComment(groupId, instanceId, message, token)
-            } catch (error) {
-                //TODO dispatch network failed event
-            }
+            const instanceId = getState().comments.lastInstanceId;
             let messageItem = createMessage(message, user);
             dispatch({
-                type: actions.GROUP_COMMENT_INSTANCE_ADD_MESSAGE,
-                instanceId: instanceId,
+                type: actions.GROUP_COMMENT_ADD_MESSAGE,
                 groupId: groupId,
                 message: messageItem
             });
+            commentsApi.createComment(groupId, instanceId, message, token)
         } catch (error) {
             dispatch({
                 type: actions.NETWORK_IS_OFFLINE,
@@ -87,42 +72,40 @@ function createMessage(message, user) {
     }
 }
 
-export function setNextFeeds(comments, group, instance) {
+export function setNextFeeds(comments, group) {
     return async function (dispatch, getState) {
         try {
             const token = getState().authentication.token;
             const user = getState().user.user;
             if (!user)
                 return;
-            if (getState().commentInstances.groupLastCall[group._id] && getState().commentInstances.groupLastCall[group._id][instance.id]) {
-                if (new Date().getTime() - new Date(getState().commentInstances.groupLastCall[group._id][instance.id]).getTime() < 10000) {
-                    return;
-                }
-            }
+
             let response;
+
             if (comments && comments.length > 0) {
-                response = await commentsApi.getInstanceGroupComments(group._id, instance.id, comments.length, token);
+                response = await commentsApi.getGroupComments(group, token, comments.length, comments.length + 10);
             } else {
-                response = await commentsApi.getInstanceGroupComments(group._id, instance.id, 0, token);
+                response = await commentsApi.getGroupComments(group, token, 0, 10);
             }
-            dispatch({
-                type: actions.GROUP_COMMENT_INSTANCE_LOADING_DONE,
-                loadingDone: true,
-                gid: group._id,
-                instanceId: instance.id
-            });
-            if (response.length > 0) {
-                response.forEach(item => dispatch({
-                    type: actions.UPSERT_GROUP_INSTANCE_COMMENT,
-                    item: item,
-                    gid: group._id,
-                    instanceId: instance.id
-                }));
+
+            if (!getState().comments.loadingDone[group._id]) {
                 dispatch({
-                    type: actions.GROUP_COMMENT_INSTANCE_LAST_CALL,
+                    type: actions.GROUP_COMMENT_LOADING_DONE,
+                    loadingDone: true,
+                    gid: group._id,
+                });
+            }
+            if (response.length > 0) {
+
+                dispatch({
+                    type: actions.UPSERT_GROUP_COMMENT,
+                    item: response,
+                    gid: group._id,
+                });
+                dispatch({
+                    type: actions.GROUP_COMMENT_LAST_CALL,
                     lastCall: new Date(),
                     gid: group._id,
-                    instanceId: instance.id
                 });
             }
         } catch (error) {

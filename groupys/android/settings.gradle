@@ -1,12 +1,12 @@
 rootProject.name = 'groupys'
+include ':react-native-camera'
+project(':react-native-camera').projectDir = new File(rootProject.projectDir, '../node_modules/react-native-camera/android')
 include ':react-native-youtube'
 project(':react-native-youtube').projectDir = new File(rootProject.projectDir, '../node_modules/react-native-youtube/android')
 include ':react-native-video'
 project(':react-native-video').projectDir = new File(rootProject.projectDir, '../node_modules/react-native-video/android')
 include ':react-native-localization'
 project(':react-native-localization').projectDir = new File(rootProject.projectDir, '../node_modules/react-native-localization/android')
-include ':react-native-nested-scrollview'
-project(':react-native-nested-scrollview').projectDir = new File(rootProject.projectDir, '../node_modules/react-native-nested-scrollview/android')
 include ':react-native-linear-gradient'
 project(':react-native-linear-gradient').projectDir = new File(rootProject.projectDir, '../node_modules/react-native-linear-gradient/android')
 include ':react-native-code-push'
@@ -19,8 +19,6 @@ include ':react-native-contacts'
 project(':react-native-contacts').projectDir = new File(rootProject.projectDir, '../node_modules/react-native-contacts/android')
 include ':react-native-fileupload'
 project(':react-native-fileupload').projectDir = new File(rootProject.projectDir, '../node_modules/react-native-fileupload/android')
-include ':react-native-camera'
-project(':react-native-camera').projectDir = new File(rootProject.projectDir, '../node_modules/react-native-camera/android')
 include ':react-native-image-crop-picker'
 project(':react-native-image-crop-picker').projectDir = new File(rootProject.projectDir, '../node_modules/react-native-image-crop-picker/android')
 include ':react-native-vector-icons'

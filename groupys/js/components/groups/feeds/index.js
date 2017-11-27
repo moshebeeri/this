@@ -13,7 +13,7 @@ import UiTools from "../../../api/feed-ui-converter";
 import GroupApi from "../../../api/groups";
 import InstanceComment from "./instancesComment";
 import {getFeeds} from "../../../selectors/groupFeedsSelector";
-
+import * as commentAction from "../../../actions/commentsGroup";
 let uiTools = new UiTools();
 let groupApi = new GroupApi();
 
@@ -59,9 +59,15 @@ class GroupFeed extends Component {
     }
 
     changeTab() {
+        const {navigation,commentGroupAction} = this.props;
+        const group = navigation.state.params.group;
         this.setState({
             showChat: !this.state.showChat
         })
+
+        if(!this.state.showChat){
+            commentGroupAction.fetchTopComments(group)
+        }
     }
 
     render() {
@@ -137,7 +143,8 @@ export default connect(
         location: state.phone.currentLocation
     }),
     (dispatch) => ({
-        actions: bindActionCreators(groupAction, dispatch)
+        actions: bindActionCreators(groupAction, dispatch),
+        commentGroupAction: bindActionCreators(commentAction, dispatch)
     })
 )(GroupFeed);
 

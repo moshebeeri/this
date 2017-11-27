@@ -153,12 +153,12 @@ module.exports = {
         backgroundColor: 'white',
         width: height - 20,
         borderRadius: 2,
-        height: 120,
+
         flexDirection: 'column'
     },
     bussiness_upperContainer: {
         backgroundColor: 'white',
-        width: height - 20,
+        width: height - 15,
         borderRadius: 2,
         height: 50,
         flexDirection: 'column'
@@ -248,6 +248,7 @@ module.exports = {
     },
     promotion_addressText: {
         fontFamily: 'Roboto-Regular',
+        flex: 1,
         marginRight: 20,
         marginLeft: 10,
         marginTop: 0,

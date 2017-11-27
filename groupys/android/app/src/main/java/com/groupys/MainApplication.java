@@ -3,10 +3,10 @@ package com.groupys;
 import android.app.Application;
 
 import com.facebook.react.ReactApplication;
+import com.lwansbrough.RCTCamera.RCTCameraPackage;
 import com.inprogress.reactnativeyoutube.ReactNativeYouTube;
 import com.brentvatne.react.ReactVideoPackage;
 import com.babisoft.ReactNativeLocalization.ReactNativeLocalizationPackage;
-import com.mohtada.nestedscrollview.ReactNestedScrollViewPackage;
 import com.BV.LinearGradient.LinearGradientPackage;
 import com.microsoft.codepush.react.CodePush;
 
@@ -14,7 +14,6 @@ import com.ocetnik.timer.BackgroundTimerPackage;
 import com.farmisen.react_native_file_uploader.RCTFileUploaderPackage;
 import com.rt2zz.reactnativecontacts.ReactNativeContacts;
 import com.yoloci.fileupload.FileUploadPackage;
-import com.lwansbrough.RCTCamera.RCTCameraPackage;
 import com.reactnative.ivpusic.imagepicker.PickerPackage;
 import com.oblador.vectoricons.VectorIconsPackage;
 import com.facebook.react.ReactInstanceManager;
@@ -46,17 +45,16 @@ public class MainApplication extends Application implements ReactApplication {
     protected List<ReactPackage> getPackages() {
       return Arrays.<ReactPackage>asList(
           new MainReactPackage(),
+            new RCTCameraPackage(),
             new ReactNativeYouTube(),
             new ReactVideoPackage(),
             new ReactNativeLocalizationPackage(),
-            new ReactNestedScrollViewPackage(),
             new LinearGradientPackage(),
             new CodePush(getResources().getString(R.string.reactNativeCodePush_androidDeploymentKey), getApplicationContext(), BuildConfig.DEBUG),
             new BackgroundTimerPackage(),
             new RCTFileUploaderPackage(),
             new ReactNativeContacts(),
             new FileUploadPackage(),
-            new RCTCameraPackage(),
             new PickerPackage(),
             new VectorIconsPackage()
       );

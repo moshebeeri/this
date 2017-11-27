@@ -41,7 +41,7 @@ export const getFeeds = createSelector([getStateFeeds],
         }
         if (!_.isEmpty(clientMessages)) {
             Object.keys(clientMessages).forEach(function (groupId) {
-                if (!_.isEmpty(clientMessages[groupId])) {
+                if (clientMessages[groupId]) {
                     Object.keys(clientMessages[groupId]).forEach(function (instanceId) {
                         if (!response[groupId]) {
                             response[groupId] = {};

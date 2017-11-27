@@ -41,7 +41,7 @@ export default class BusinessHeader extends Component {
         const {categoryTitle, businessName,showBack} = this.props;
         let back = undefined;
         if (showBack) {
-            back = <Button transparent style={{}} onPress={() => this.back()}>
+            back = <Button transparent style={{marginLeft:10,marginRight:10}} onPress={() => this.back()}>
                 <Icon active size={25} name="ios-arrow-back"/>
 
             </Button>

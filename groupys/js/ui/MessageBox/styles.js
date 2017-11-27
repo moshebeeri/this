@@ -4,10 +4,10 @@ const {width, height} = Dimensions.get('window')
 module.exports = {
     textInputTextStyleWhite: {
         color: 'black',
-        flex:6,
+        flex:2.9,
         fontFamily: 'Roboto-Regular',
-        fontSize: 16,
-        marginLeft: 10,
+        fontSize: 18,
+
 
     },
     itemborder: {

@@ -52,7 +52,7 @@ export default class FormHeader extends Component {
 
         let back = undefined;
         if (showBack) {
-            back = <Button transparent style={{}} onPress={() => this.back()}>
+            back = <Button transparent style={{marginLeft:5,marginRight:5}} onPress={() => this.back()}>
                 <Icon active color={iconColor} size={25} name="ios-arrow-back"/>
 
             </Button>

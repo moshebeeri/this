@@ -41,7 +41,7 @@ class GeneralComponentHeader extends Component {
     render() {
         let back = undefined;
         if (this.props.showBack) {
-            back = <Button transparent style={{}} onPress={() => this.back()}>
+            back = <Button transparent style={{marginLeft:5,marginRight:5}} onPress={() => this.back()}>
                 <Icon active color={"#2db6c8"} size={20} name="ios-arrow-back"/>
 
             </Button>
@@ -71,7 +71,7 @@ class GeneralComponentHeader extends Component {
             }}>
                 <View style={{height: vh * 7, flexDirection: 'row', alignItems: 'flex-start'}}>
                     {back}
-                    <Button transparent style={{}} onPress={this.props.openDrawer}>
+                    <Button transparent style={{marginLeft:5,marginRight:5}} onPress={this.props.openDrawer}>
                         <Icon2 active color={"#2db6c8"} size={20} name="menu"/>
 
                     </Button>

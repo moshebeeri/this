@@ -73,6 +73,7 @@ class CommentApi {
         });
     }
 
+
     getComment(entities, token, skip) {
         return new Promise(async (resolve, reject) => {
             try {
@@ -108,25 +109,19 @@ class CommentApi {
         return new Promise(async (resolve, reject) => {
             try {
                 let from = new Date();
-                let request = {
-                    entities: [
-                        {group: group._id},
-                    ]
-                };
-                const response = await fetch(`${server_host}/api/comments/conversed/instance/` + skip + '/' + limit, {
+                const response = await fetch(`${server_host}/api/comments/group/chat/`+group._id+'/' + skip + '/' + limit, {
                     method: 'POST',
                     headers: {
                         'Accept': 'application/json, text/plain, */*',
                         'Content-Type': 'application/json;charset=utf-8',
                         'Authorization': 'Bearer ' + token
                     },
-                    body: JSON.stringify(request)
                 })
                 if (response.status ==='401') {
                     reject(response);
                     return;
                 }
-                timer.logTime(from, new Date(), 'comments', 'api/comments/conversed/instance');
+                timer.logTime(from, new Date(), 'comments', 'api/comments/group/chat/');
                 let responseData = await response.json();
                 resolve(responseData);
             }

@@ -162,13 +162,13 @@ module.exports = {
         height: undefined
     },
     promotion_image_view: {
-        width: width, height:235
+        width: width, flex:9
     },
     promotion_upperContainer: {
         backgroundColor: 'white',
         width: width -15,
         borderRadius: 2,
-
+        flex:3,
 
         justifyContent:'center',
         flexDirection: 'column'
@@ -271,7 +271,7 @@ module.exports = {
         width: width - 15,
         alignItems: 'center',
         justifyContent: 'center',
-
+        flex:1.5,
         flexDirection: 'row',
 
 
@@ -279,7 +279,7 @@ module.exports = {
     promotiosSeperator: {
         backgroundColor: 'white',
         width: width - 15,
-        height:10,
+        flex:0.5,
         alignItems:'center',
         justifyContent:'center'
 
@@ -287,14 +287,14 @@ module.exports = {
 
     },
     promotiosDescription: {
-        height:70,
+        flex:3 ,
         alignItems:'center',
         justifyContent:'center',
         width:width - 15,
     },
     promotiosShareDescription: {
         flex:4 ,
-      borderColor:'#cccccc',
+        borderColor:'#cccccc',
         borderLeftWidth:1,
         marginLeft:15,
         alignItems:'center',
@@ -302,8 +302,8 @@ module.exports = {
         width:width - 15,
     },
     promotionDetails:{
-
-
+        flex:1.6,
+        backgroundColor:'white',
         alignItems:'flex-start',
         justifyContent:'center',
         width:width - 15,
@@ -391,7 +391,7 @@ module.exports = {
     promotionDetailsContainer:{
         flexDirection:'row',
         backgroundColor:'white',
-
+        flex:3,
         width: width- 15,
         alignItems:'center',
         justifyContent:'center',
@@ -411,6 +411,7 @@ module.exports = {
     detailsText:{
         marginLeft:5,
         marginRight:5,
+
         justifyContent:'center',
         alignItems:'center',
 

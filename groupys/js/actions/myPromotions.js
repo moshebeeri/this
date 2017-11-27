@@ -15,6 +15,11 @@ export function setNextFeeds(feeds) {
                     return;
                 }
             }
+            if (_.isEmpty(feeds) && getState().myPromotions.firstTime) {
+                dispatch({
+                    type: actions.SAVE_PROMOTION_FIRST_TIME_FEED,
+                });
+            }
             let showLoadingDone = false;
             if (_.isEmpty(feeds) && !getState().myPromotions.loadingDone) {
                 dispatch({
@@ -38,7 +43,7 @@ export function setNextFeeds(feeds) {
             if (response.length === 0) {
                 return;
             }
-           dispatch({
+            dispatch({
                 type: actions.UPSERT_SAVED_FEEDS,
                 item: response
             });

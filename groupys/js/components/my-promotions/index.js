@@ -26,19 +26,39 @@ import {bindActionCreators} from "redux";
 import {getFeeds} from '../../selectors/myPromotionsSelector'
 import * as promotionAction from "../../actions/myPromotions";
 import {connect} from 'react-redux';
-
+import FeedPromotion from '../generic-feed-manager/generic-feed/feed-components/feedPromotion'
 class MyPromotions extends Component {
     constructor(props) {
         super(props);
     }
 
     renderItem(item) {
-        const {navigation} = this.props;
-        return <MyPromotionFeedItem
-            item={item.item}
-            index={item.index}
-            navigation={navigation}
-        />
+        const {navigation,location,actions} = this.props;
+        // return <MyPromotionFeedItem
+        //     item={item.item}
+        //     index={item.index}
+        //     navigation={navigation}
+        // />
+        return <FeedPromotion refresh={this.refresh.bind(this)}
+                                                  location={location}
+                                                  navigation={navigation} item={item.item}
+                                                realize={this.realize.bind(this,item.item)}
+                                                />
+
+    }
+    refresh(){
+
+    }
+    realize(item) {
+        this.props.navigation.navigate('realizePromotion', {item: item})
+    }
+
+    componentWillMount() {
+        const {feeds, actions, firstTime} = this.props;
+        if (firstTime || feeds.length ===0) {
+            actions.setNextFeeds(feeds);
+
+        }
     }
 
     render() {
@@ -55,7 +75,7 @@ class MyPromotions extends Component {
                 token={token}
                 entity={user}
                 title='Feeds'
-                ItemDetail={MyPromotionFeedItem}>
+                ItemDetail={this.renderItem.bind(this)}>
 
             </GenericFeedManager>
 
@@ -70,7 +90,9 @@ const mapStateToProps = state => {
         feeds: getFeeds(state),
         showTopLoader: state.myPromotions.showTopLoader,
         loadingDone: state.myPromotions.loadingDone,
-        myPromotions: state.myPromotions
+        myPromotions: state.myPromotions,
+        firstTime:state.myPromotions.firstTime,
+        location: state.phone.currentLocation
     }
 }
 export default connect(

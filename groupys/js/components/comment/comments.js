@@ -19,7 +19,7 @@ import CommentApi from '../../api/commet'
 let commentApi = new CommentApi();
 import {bindActionCreators} from "redux";
 import * as commentAction from "../../actions/comments";
-import EmojiPicker from 'react-native-emoji-picker-panel'
+
 import {BusinessHeader, MessageBox, PromotionHeader} from '../../ui/index';
 
 class GenericComments extends Component {

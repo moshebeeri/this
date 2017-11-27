@@ -67,7 +67,7 @@ import com.android.build.OutputFile
 
 apply from: "../../node_modules/react-native/react.gradle"
 apply from: "../../node_modules/react-native-code-push/android/codepush.gradle"
-
+apply from: "../../node_modules/react-native-vector-icons/fonts.gradle"
 /**
  * Set this to true to create two separate APKs instead of one:
  *   - An APK that only works on ARM devices
@@ -138,17 +138,16 @@ android {
 }
 
 dependencies {
+    compile project(':react-native-camera')
     compile project(':react-native-youtube')
     compile project(':react-native-video')
     compile project(':react-native-localization')
-    compile project(':react-native-nested-scrollview')
     compile project(':react-native-linear-gradient')
     compile project(':react-native-code-push')
     compile project(':react-native-background-timer')
     compile project(':react-native-file-uploader')
     compile project(':react-native-contacts')
     compile project(':react-native-fileupload')
-    compile project(':react-native-camera')
     compile project(':react-native-image-crop-picker')
     compile project(':react-native-vector-icons')
     compile fileTree(dir: "libs", include: ["*.jar"])

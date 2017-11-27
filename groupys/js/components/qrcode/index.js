@@ -10,12 +10,7 @@ import {bindActionCreators} from "redux";
 import PromotionView from './promotionView/index';
 
 class Qrcode extends Component {
-    static propTypes = {
-        replaceAt: React.PropTypes.func,
-        navigation: React.PropTypes.shape({
-            key: React.PropTypes.string,
-        }),
-    };
+
 
     constructor(props) {
         super(props);

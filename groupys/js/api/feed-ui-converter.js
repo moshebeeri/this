@@ -145,61 +145,108 @@ class FeedConverter {
 
     createSavedPromotion(feed, id, extraData) {
         let instance = feed.instance;
+        let promotion =instance.promotion;
         let responseFeed = {};
         try {
             responseFeed.id = id;
             responseFeed.fid = id;
             responseFeed.key = id;
+            responseFeed.location = instance.location;
             responseFeed.name = instance.promotion.name;
             responseFeed.description = instance.promotion.description;
             let date = new Date(instance.promotion.end);
             responseFeed.endDate = date.toLocaleDateString();
             responseFeed.generalId = instance.promotion._id;
             responseFeed.entities = [{promotion: instance.promotion._id}];
+            if (promotion.pictures && promotion.pictures[0]) {
+                responseFeed.banner = {
+                    uri: promotion.pictures[0].pictures[1]
+                };
+            }
+            if (promotion.entity && promotion.entity.business) {
+                responseFeed.business = promotion.entity.business;
+            }
             switch (instance.type) {
                 case "REDUCED_AMOUNT":
-                    responseFeed.itemTitle = "Buy For " + instance.promotion.reduced_amount.values[0].price + ' Pay Only ' + instance.promotion.reduced_amount.values[0].pay;
-                    responseFeed.promotion = 'REDUCE AMOUNT';
+                    responseFeed.itemTitle = "Buy For " + promotion.reduced_amount.values[0].price + ' Pay Only ' + promotion.reduced_amount.values[0].pay;
+                    responseFeed.promotionTerm = "Purchase " + promotion.reduced_amount.values[0].price + " Pay only " + promotion.reduced_amount.values[0].pay;
+                    responseFeed.promotion = 'REDUCED_AMOUNT';
+                    responseFeed.promotionTitle = 'Reduce Amount';
                     responseFeed.promotionColor = '#e65100';
+                    responseFeed.quantity = promotion.reduced_amount.quantity;
+                    responseFeed.promotionValue = promotion.reduced_amount.values[0].pay;
                     break;
                 case "PERCENT":
-                    if (instance.promotion.condition.product) {
-                        responseFeed.itemTitle = "Get " + instance.promotion.condition.product.name + " with " + instance.promotion.percent.values[0] + ' % Off ';
+                    if (promotion.condition.product) {
+                        responseFeed.itemTitle = "Get " + promotion.condition.product.name + " with " + promotion.percent.values[0] + ' % Off ';
+                        responseFeed.promotionTerm = "Get " + promotion.condition.product.name + " with " + promotion.percent.values[0] + ' % Off ';
                     } else {
-                        responseFeed.itemTitle = "Get " + instance.promotion.percent.values[0] + ' % Off ';
+                        responseFeed.itemTitle = "Get " + promotion.percent.values[0] + ' % Off ';
+                        responseFeed.promotionTerm = "No terms"
                     }
-                    responseFeed.promotion = 'PRECENT';
+                    responseFeed.promotion = 'PERCENT';
+                    responseFeed.promotionValue = promotion.percent.values[0];
+                    responseFeed.promotionTitle = 'Discount';
                     responseFeed.promotionColor = '#df80ff';
+                    responseFeed.quantity = promotion.percent.quantity;
                     break;
                 case "X_FOR_Y":
-                    responseFeed.itemTitle = 'Buy ' + instance.promotion.x_for_y.values[0].eligible + " " + instance.promotion.condition.product.name + " Pay only " + instance.promotion.x_for_y.values[0].pay;
+                    responseFeed.itemTitle = 'Buy ' + promotion.x_for_y.values[0].eligible + " " + promotion.condition.product.name + " Pay only " + promotion.x_for_y.values[0].pay;
                     responseFeed.promotion = 'X_FOR_Y';
                     responseFeed.promotionColor = '#ff66b3';
+                    responseFeed.promotionTitle = 'Buy X For Y';
+                    responseFeed.promotionValue = promotion.x_for_y.values[0].pay;
+                    responseFeed.promotionTerm = 'Buy ' + promotion.x_for_y.values[0].eligible + " " + promotion.condition.product.name + " Pay only " + promotion.x_for_y.values[0].pay;
+                    responseFeed.quantity = promotion.x_for_y.quantity;
                     break;
                 case "X+N%OFF":
-                    if (instance.promotion.x_plus_n_percent_off.values && instance.promotion.x_plus_n_percent_off.values[0] && instance.promotion.x_plus_n_percent_off.values[0].product) {
-                        responseFeed.itemTitle = 'Buy ' + instance.promotion.condition.product.name + " Get " + instance.promotion.x_plus_n_percent_off.values[0].product.name + " with " + instance.promotion.x_plus_n_percent_off.values[0].eligible + " %Off";
-                        responseFeed.promotion = 'X+N%OFF';
-                        responseFeed.promotionColor = '#ff66b3';
+                    if (promotion.x_plus_n_percent_off.values[0].product) {
+                        responseFeed.itemTitle = 'Buy ' + promotion.condition.product.name + " Get " + promotion.x_plus_n_percent_off.values[0].product.name + " with " + promotion.x_plus_n_percent_off.values[0].eligible + " %Off";
+                    }
+                    responseFeed.promotion = 'X+N%OFF';
+                    responseFeed.promotionColor = '#ff66b3';
+                    responseFeed.quantity = promotion.x_plus_n_percent_off.quantity;
+                    responseFeed.promotionTitle = 'Buy X get Y with Discount';
+                    responseFeed.promotionValue = promotion.x_plus_n_percent_off.values[0].eligible;
+                    if (promotion.x_plus_n_percent_off.values[0].product) {
+                        responseFeed.promotionTerm = 'Buy ' + promotion.condition.product.name + " Get " + promotion.x_plus_n_percent_off.values[0].product.name + " with " + promotion.x_plus_n_percent_off.values[0].eligible + " %Off";
+                    }
+                    break;
+                case "X+Y":
+                    if (promotion.x_plus_y.values[0].product) {
+                        responseFeed.itemTitle = 'Buy ' + promotion.x_plus_y.values[0].buy + " " + promotion.condition.product.name + " Get " + promotion.x_plus_y.values[0].eligible + " " + promotion.x_plus_y.values[0].product.name;
+                        responseFeed.promotionTerm = 'Buy ' + promotion.x_plus_y.values[0].buy + " " + promotion.condition.product.name + " Get " + promotion.x_plus_y.values[0].eligible + " " + promotion.x_plus_y.values[0].product.name + ' free';
+                    }
+                    responseFeed.promotion = 'X+Y';
+                    responseFeed.promotionTitle = 'Buy X get Y';
+                    responseFeed.promotionValue = promotion.x_plus_y.values[0].buy + ' + ' + promotion.x_plus_y.values[0].eligible;
+                    responseFeed.promotionColor = '#66ff1a';
+                    responseFeed.quantity = promotion.x_plus_y.quantity;
+                    break;
+                case "HAPPY_HOUR":
+                    if (promotion.happy_hour && promotion.happy_hour.values) {
+                        responseFeed.itemTitle = '';
+                        responseFeed.promotionTitle = "Happy Hour";
+                        responseFeed.promotionTerm = "Every " + FormUtils.convertDaysNumToString(promotion.happy_hour.values[0].days) + " happy hour from " +
+                            FormUtils.secondsFromMidnightToString(promotion.happy_hour.values[0].from) + "-" + FormUtils.secondsFromMidnightToString(promotion.happy_hour.values[0].from + promotion.happy_hour.values[0].until) +
+                            " get special price for " + promotion.condition.product.name
+                        responseFeed.promotionValue = promotion.happy_hour.values[0].pay;
+                        responseFeed.quantity = promotion.happy_hour.quantity;
+                        responseFeed.promotion = 'HAPPY_HOUR';
+                        responseFeed.promotionColor = '#d279a6';
                     } else {
                         return undefined;
                     }
                     break;
-                case "X+Y":
-                    responseFeed.itemTitle = 'Buy ' + instance.promotion.x_plus_y.values[0].buy + " " + instance.promotion.condition.product.name + " Get " + instance.promotion.x_plus_y.values[0].eligible + " " + instance.promotion.x_plus_y.values[0].product.name;
-                    responseFeed.promotion = 'X+Y';
-                    responseFeed.promotionColor = '#66ff1a';
-                    break;
                 case "PUNCH_CARD":
-                    if (extraData || extraData === 0) {
-                        responseFeed.itemTitle = 'Number of punches ' + extraData + ' / ' + instance.promotion.punch_card.values[0].number_of_punches;
-                        responseFeed.promotion = 'PUNCH CARD';
-                        responseFeed.promotionColor = '#d279a6';
-                    } else {
-                        responseFeed.itemTitle = 'Number of punches ' + instance.promotion.punch_card.values[0].number_of_punches;
-                        responseFeed.promotion = 'PUNCH CARD';
-                        responseFeed.promotionColor = '#d279a6';
-                    }
+                    let punches = promotion.punch_card.values[0].number_of_punches;
+                    responseFeed.promotionTerm = punches;
+                    responseFeed.itemTitle = '';
+                    responseFeed.promotionTitle = "Punch Card " + punches + " Slots";
+                    responseFeed.punches = punches;
+                    responseFeed.quantity = promotion.punch_card.quantity;
+                    responseFeed.promotion = 'PUNCH_CARD';
+                    responseFeed.promotionColor = '#d279a6';
                     break;
                 default:
                     responseFeed.itemTitle = instance.type + " NOT SUPPORTED";
