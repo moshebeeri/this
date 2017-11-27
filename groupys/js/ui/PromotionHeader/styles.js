@@ -18,6 +18,15 @@ module.exports = {
 
         flexDirection: 'row',
     },
+    promotionHeaderColumn:{
+        backgroundColor:'white',
+        flex:1,
+        width: width -15,
+        alignItems:'center',
+        justifyContent:'center',
+
+
+    },
     promotionPunchHeader:{
         backgroundColor:'white',
         flex:3,
@@ -33,6 +42,12 @@ module.exports = {
         alignItems:'center',
         justifyContent:'center',
     },
+    promotionColumnValue:{
+
+
+        alignItems:'center',
+        justifyContent:'center',
+    },
     promotionPunchValue:{
         flex:1,
         margin:5,
@@ -43,6 +58,11 @@ module.exports = {
     promotiontDescription:{
         flex:3,
         margin:4,
+        alignItems:'flex-start',
+        justifyContent:'center',
+    },
+    promotiontColumnDescription:{
+
         alignItems:'flex-start',
         justifyContent:'center',
     },
@@ -72,12 +92,23 @@ module.exports = {
         fontSize:20,
         color:'#2db6c8'
     },
+    titleTextColumnFeed:{
+        fontSize:25,
+        color:'#2db6c8'
+    },
     titleHappyTextFeed:{
         fontSize:15,
         color:'#2db6c8'
     },
     titleValueFeed:{
         fontSize:30,
+        textAlignVertical: "center",
+        textAlign: "center",
+
+        color:'#2db6c8'
+    },
+    titleValueColumnFeed:{
+        fontSize:50,
         textAlignVertical: "center",
         textAlign: "center",
 

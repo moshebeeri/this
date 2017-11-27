@@ -11,8 +11,24 @@ export default class PromotionSeperator extends Component {
     }
 
     render() {
-        const {height, simple} = this.props;
-        return <View style={styles.seperatorContainer}>
+        const {height, simple,narrowWidth} = this.props;
+        let defaultNarrow = 15;
+        if(narrowWidth){
+            defaultNarrow = narrowWidth;
+        }
+        let seperatorContainer = {
+            alignItems:'center',
+                justifyContent: 'space-between',
+
+                height:20,
+                flexDirection:'row',
+                flex: 1,
+                width:width - defaultNarrow,
+
+                backgroundColor:'white',
+                position: 'absolute',
+        }
+        return <View style={seperatorContainer}>
             <View style={{flex: 1, justifyContent: 'flex-start', alignItems: 'flex-start'}}>
                 <Triangle right/>
             </View>

@@ -9,7 +9,7 @@ module.exports = {
         height:20,
         flexDirection:'row',
         flex: 1,
-        width:width - 15,
+        width:width - 30,
 
         backgroundColor:'white',
         position: 'absolute',
