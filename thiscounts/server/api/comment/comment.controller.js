@@ -49,6 +49,15 @@ function extract_ids(list){
   return ret;
 }
 
+function saveCommentToGroup(comment) {
+  Group.findById(comment.entities.group).exec(function(err, group){
+    if(err) { return console.log(err); }
+    if(!group) { return console.log(`could not find group ${comment.entities.group} saveCommentToGroup`); }
+    group.preview.comment = comment._id;
+    group.save();
+  })
+}
+
 // Creates a new comment.
 exports.create = function(req, res) {
   let comment = req.body;
@@ -58,6 +67,9 @@ exports.create = function(req, res) {
   comment.created = Date.now();
   Comment.create(comment, function(err, comment) {
     if(err) { return handleError(res, err); }
+    if(comment.entities && comment.entities.group){
+      saveCommentToGroup(comment);
+    }
     graphModel.reflect(comment, {
       _id: comment._id
     },function (err, comment) {

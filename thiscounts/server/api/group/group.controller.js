@@ -537,6 +537,7 @@ exports.user_follow = function (req, res) {
       if (err) return handleError(res, err);
       Group.find({})
         .where('_id').in(_ids)
+        .populate('preview.comment')
         .populate('preview.message_activity')
         .populate('preview.instance_activity')
         .exec(function (err, groups) {
