@@ -167,19 +167,29 @@ class AddBusiness extends Component {
         return result
     }
 
-    createImageComponent() {
+    createImageComponent(coverPic) {
         if (this.state.path) {
-            return <View style={styles.business_upper_image_container}>
-                <ImagePicker ref={"logoImage"} mandatory
-                             image={<Image style={{width: 111, height: 105}} source={{uri: this.state.path}}/>}
-                             color='black' pickFromCamera
-                             setImage={this.setImage.bind(this)}/>
+            if(coverPic) {
+                return <View style={styles.business_upper_image_container}>
+                    <ImagePicker  logo ref={"logoImage"} mandatory
+                                 image={<Image style={{width: 111, height: 105}} source={{uri: this.state.path}}/>}
+                                 color='black' pickFromCamera
+                                 setImage={this.setImage.bind(this)}/>
 
-            </View>
+                </View>
+            }else{
+                return <View style={styles.business_no_pic_upper_image_container}>
+                    <ImagePicker logo ref={"logoImage"} mandatory
+                                 image={<Image style={{width: 111, height: 105}} source={{uri: this.state.path}}/>}
+                                 color='black' pickFromCamera
+                                 setImage={this.setImage.bind(this)}/>
+
+                </View>
+            }
         } else {
-            return <View style={styles.business_upper_image_container}>
+            return <View style={styles.business_no_pic_upper_image_container}>
 
-                <ImagePicker ref={"logoImage"} mandatory color='black' pickFromCamera
+                <ImagePicker logo ref={"logoImage"} mandatory color='black' pickFromCamera
                              setImage={this.setImage.bind(this)}/>
                 <Text>Logo</Text>
 
@@ -191,19 +201,22 @@ class AddBusiness extends Component {
 
     createCoverImageComponnent() {
         if (this.state.coverImage) {
-            let coverImage = <Image
+            let coverImage = <View>
+                <Image
                 style={{width:width -10, height: 210,borderWidth:1,borderColor:'white'}}
                 source={{uri: this.state.coverImage.uri}}
             >
-                {this.createImageComponent()}
+
             </Image>
+                {this.createImageComponent(true)}
+            </View>
             return <View style={styles.addCoverContainer}>
                 <ImagePicker ref={"coverImage"} mandatory image={coverImage} color='white' pickFromCamera
                              setImage={this.setCoverImage.bind(this)}/>
             </View>
         }
         return <View style={styles.addCoverNoImageContainer}>
-            {this.createImageComponent()}
+            {this.createImageComponent(false)}
             <ImagePicker ref={"coverImage"} mandatory color='white' pickFromCamera
                          setImage={this.setCoverImage.bind(this)}/>
             <Text style={styles.addCoverText}>Add a cover photo</Text>
