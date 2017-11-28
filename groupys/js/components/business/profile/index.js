@@ -21,20 +21,30 @@ import {
 } from 'native-base';
 import styles from './styles'
 import {FormHeader, TextInput} from '../../../ui/index';
+import * as businessAction from "../../../actions/business";
+import {connect} from 'react-redux';
+import {bindActionCreators} from "redux";
 
 const {width, height} = Dimensions.get('window')
 const vw = width / 100;
 const vh = height / 100
-const vmin = Math.min(vw, vh);
-const vmax = Math.max(vw, vh);
-const premissions = require('../../../../images/permissions.png');
-export default class BusinessProfile extends Component {
+
+class BusinessProfile extends Component {
     static navigationOptions = ({navigation}) => ({
         header: null
     });
 
     constructor(props) {
         super(props);
+    }
+
+    componentWillMount() {
+        const{businesses} = this.props
+        let business = businesses[this.props.navigation.state.params.bussiness._id];
+
+        if (!business.qrcodeSource) {
+            this.props.setBusinessQrCode(business)
+        }
     }
 
     createBusinessLogo(selectedBusiness) {
@@ -48,7 +58,8 @@ export default class BusinessProfile extends Component {
     }
 
     render() {
-        let business = this.props.navigation.state.params.bussiness;
+        const{businesses} = this.props
+        let business = businesses[this.props.navigation.state.params.bussiness._id];
         let address = business.city + ' ' + business.address
         const banner = this.createBannerTag(business);
         return ( <View>
@@ -59,6 +70,7 @@ export default class BusinessProfile extends Component {
                 <View style={styles.businessPiker}>
                     <View style={styles.businessTopLogo}>
                         {this.createBusinessLogo(business)}
+
                     </View>
                     <View style={styles.businessPikkerComponent}>
                         <Text style={styles.businessNameText}>{business.name}</Text>
@@ -74,10 +86,13 @@ export default class BusinessProfile extends Component {
                         justifyContent: 'space-between',
                         alignItems: 'center',
                     }}>
-                        <View style={{flexDirection: 'row', alignItems: 'center'}}>
+                        <View style={{ alignItems: 'center'}}>
                             {banner}
 
+                            {business.qrcodeSource && <Image style={{position:'absolute',top:150,right:20,width:80,height:80}} resizeMode="cover"
+                                                             source={{uri: business.qrcodeSource}}>
 
+                            </Image> }
                         </View>
 
 
@@ -87,17 +102,17 @@ export default class BusinessProfile extends Component {
                 </View>
                 <View style={{alignItems: 'center', justifyContent: 'center'}}>
 
-                       <View style={styles.inputFullTextLayour}>
-                            <TextInput placeholder={'No Website'} field='Website' value={business.website} disabled
+                    <View style={styles.inputFullTextLayour}>
+                        <TextInput placeholder={'No Website'} field='Website' value={business.website} disabled
 
 
-                            />
-                        </View>
-                        <View style={styles.inputFullTextLayour}>
-                            <TextInput placeholder={'No Email'} field='Email' value={business.email} disabled
+                        />
+                    </View>
+                    <View style={styles.inputFullTextLayour}>
+                        <TextInput placeholder={'No Email'} field='Email' value={business.email} disabled
 
-                            />
-                        </View>
+                        />
+                    </View>
 
 
                     <View style={styles.inputFullTextLayour}>
@@ -133,4 +148,9 @@ export default class BusinessProfile extends Component {
         </Image>
     }
 }
-
+export default connect(
+    state => ({
+        businesses: state.businesses.businesses,
+    }),
+    dispatch => bindActionCreators(businessAction, dispatch)
+)(BusinessProfile);

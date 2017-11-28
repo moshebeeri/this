@@ -24,6 +24,7 @@ import MessageBox from './MessageBox/MessageBox'
 import ChatMessage from './ChatMessage/ChatMessage'
 import GroupHeader from './GroupHeader/GroupHeader'
 import PromotionHeaderSnippet from './PromotionHeaderSnippet/PromotionHeaderSnippet'
+import QrScanner from './QrScanner/QrScannerContainer'
 export {
     ImagePicker,
     CategoryPicker,
@@ -50,5 +51,6 @@ export {
     MessageBox,
     ChatMessage,
     GroupHeader,
-    PromotionHeaderSnippet
+    PromotionHeaderSnippet,
+    QrScanner
 }

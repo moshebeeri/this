@@ -1,29 +1,19 @@
 import React, {Component} from 'react';
 import {connect} from 'react-redux';
-import {Button, Container, Content, Footer, Header, Icon, Input, InputGroup, Text, View} from 'native-base';
-import styles from './styles';
+import {View} from 'react-native';
+import {Button, Container, Content, Footer, Header, Icon, Input, InputGroup} from 'native-base';
 import * as promotionAction from "../../actions/promotions";
-import Camera from 'react-native-camera';
-
-import {getInstance} from "../../selectors/form/scanQrcodeSelector";
 import {bindActionCreators} from "redux";
-import PromotionView from './promotionView/index';
+import {QrScanner,FormHeader} from '../../ui/index'
 
 class Qrcode extends Component {
-
+    static navigationOptions = ({navigation}) => ({
+        header: null
+    });
 
     constructor(props) {
         super(props);
-        this.state = {
-            error: '',
-            validationMessage: '',
-            token: '',
-            userId: '',
-            isRealized: false,
-            qrCode: '',
-            realizedMessage: ''
-        }
-        ;
+
     }
 
     componentWillMount() {
@@ -31,82 +21,31 @@ class Qrcode extends Component {
         actions.clearRealizationForm();
     }
 
-    onBarCodeRead(data) {
-        const {actions} = this.props;
-        let qrcode = JSON.parse(data.data);
-        if (!this.state.isRealized) {
-            this.setState({
-                isRealized: false,
-                realizedMessage: '',
-                qrcode: qrcode.code
-            })
-            actions.setPromotionDescription(qrcode.code);
-        }
-    }
 
-    realize() {
-        const {actions} = this.props;
-        if (this.state.qrcode) {
-            actions.realizePromotion(this.state.qrcode);
-            this.setState({
-                isRealized: false,
-                qrcode: ''
-            });
-        }
-    }
+
+
 
     render() {
-        const {instance} = this.props;
-        if (instance) {
-            return (
-
-                <Container>
-
-                    <Content>
-
-                        <PromotionView item={instance}/>
-
-                    </Content>
-                    <Footer style={{backgroundColor: '#fff'}}>
-                        <Button transparent title='Ok'
-                                onPress={() => this.realize()}>
-                            <Text> Accept Promotion </Text>
-                        </Button>
-                    </Footer>
-                </Container>
-            );
+        const {navigation} = this.props;
+        let group
+        if(navigation.state.params && navigation.state.params.group){
+            group = navigation.state.params.group;
         }
-        return (
-
-            <Container>
-
-                <Content>
-
-
-                    <Camera
-                        ref={(cam) => {
-                            this.camera = cam;
-                        }}
-                        onBarCodeRead={this.onBarCodeRead.bind(this)}
-                        style={styles.preview}
-                        aspect={Camera.constants.Aspect.fill}>
-                        <Text style={styles.imageButtomText}>{this.state.realizedMessage}</Text>
-
-                    </Camera>
-
-                </Content>
-                <Footer style={{backgroundColor: '#fff'}}>
-                    <Text>Scanning Code</Text>
-                </Footer>
-            </Container>
-        );
+        return <View style={{flex: 1, backgroundColor:'#b7b7b7'}}>
+            <View style={{flex:2,marginBottom:10}}>
+            <FormHeader showBack navigation={navigation}
+                        title={"QR Scanner"} bgc="#2db6c8"/>
+            </View>
+            <View style={{flex:5,alignItems:'center',justifyContent:'center'}}>
+            <QrScanner group={group} navigation={navigation}/>
+            </View>
+        </View>
     }
 }
 
 export default connect(
     state => ({
         scanQrcodeForm: state.scanQrcodeForm,
-        instance: getInstance(state),
     }),
     (dispatch) => ({
         actions: bindActionCreators(promotionAction, dispatch)

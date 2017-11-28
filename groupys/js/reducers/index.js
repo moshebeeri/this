@@ -28,6 +28,7 @@ import changePasswordForm from './form/changePasswordReducer'
 import scanQrcodeForm from './form/scanQrcodeReducer'
 import addressForm from './form/addressReducer'
 import categoriesForm from './form/categoriesReducer'
+import scannerForm from './form/scannerReducer'
 import phone from './phoneReducer'
 export default function getRootReducer() {
     return combineReducers({
@@ -57,6 +58,7 @@ export default function getRootReducer() {
         scanQrcodeForm:scanQrcodeForm,
         addressForm:addressForm,
         categoriesForm:categoriesForm,
-        phone:phone
+        phone:phone,
+        scannerForm:scannerForm
     });
 }

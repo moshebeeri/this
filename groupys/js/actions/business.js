@@ -148,11 +148,12 @@ export function followBusiness(bussinesId) {
         }
     }
 }
-export function groupFollowBusiness(groupid,bussinesId,navigation) {
+
+export function groupFollowBusiness(groupid, bussinesId, navigation) {
     return async function (dispatch, getState) {
         try {
             const token = getState().authentication.token;
-            await businessApi.groupFollowBusiness(groupid,bussinesId, token);
+            await businessApi.groupFollowBusiness(groupid, bussinesId, token);
             navigation.goBack();
         } catch (error) {
             dispatch({
@@ -161,8 +162,6 @@ export function groupFollowBusiness(groupid,bussinesId,navigation) {
         }
     }
 }
-
-
 
 export function fetchBusinessCategories(gid) {
     return function (dispatch, getState) {
@@ -199,7 +198,7 @@ export function setBusinessProducts(businessId) {
                 businessProducts: products,
                 businessId: businessId
             });
-            if(!getState().products.loadingDone[businessId]) {
+            if (!getState().products.loadingDone[businessId]) {
                 dispatch({
                     type: actions.PRODUCT_LOADING_DONE,
                     businessId: businessId
@@ -223,7 +222,7 @@ export function setBusinessPromotions(businessId) {
                 businessesPromotions: promotions,
                 businessId: businessId
             });
-            if(!getState().promotions.loadingDone[businessId]) {
+            if (!getState().promotions.loadingDone[businessId]) {
                 dispatch({
                     type: actions.PROMOTION_LOADING_DONE,
                     businessId: businessId
@@ -308,5 +307,23 @@ export function resetFollowForm() {
         dispatch({
             type: actions.RESET_FOLLOW_FORM,
         });
+    }
+}
+
+export function setBusinessQrCode(business) {
+    return async function (dispatch, getState) {
+        try {
+            const token = getState().authentication.token;
+            let response = await businessApi.getBusinessQrCodeImage(business.qrcode, token);
+            dispatch({
+                type: actions.UPSERT_BUSINESS_QRCODE,
+                business:business,
+                qrcodeSource: response.qrcode
+            });
+        } catch (error) {
+            dispatch({
+                type: actions.NETWORK_IS_OFFLINE,
+            });
+        }
     }
 }

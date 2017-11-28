@@ -96,11 +96,11 @@ export default class FeedPromotion extends Component {
                                 - {item.description}</Text>
                         </View>
                     </View>
-                    {!shared && <View style={styles.promotiosSeperator}>
+                    {!shared && location&& <View style={styles.promotiosSeperator}>
                         <PromotionSeperator/>
                     </View>}
 
-                    {!shared && <View style={styles.promotionDetailsContainer}>
+                    {!shared && location && <View style={styles.promotionDetailsContainer}>
                         <View style={styles.promotionLoctionContainer}>
                             <View><Text style={styles.detailsTitleText}>Location</Text></View>
                             <View><Text

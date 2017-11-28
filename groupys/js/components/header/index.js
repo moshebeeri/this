@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import {Dimensions} from 'react-native';
+import {Dimensions,TouchableOpacity,Image} from 'react-native';
 import {Button, Header, Input, InputGroup, Tab, TabHeading, Tabs, Text, View} from 'native-base';
 import {actions} from 'react-native-navigation-redux-helpers';
 import {Menu, MenuOption, MenuOptions, MenuTrigger,} from 'react-native-popup-menu';
@@ -13,6 +13,7 @@ const {width, height} = Dimensions.get('window')
 const vw = width / 100;
 const vh = height / 100
 
+const qrcode = require('../../../images/qr-code.png');
 class GeneralComponentHeader extends Component {
     constructor(props) {
         super(props);
@@ -25,6 +26,10 @@ class GeneralComponentHeader extends Component {
     back() {
         this.props.navigation.goBack();
     }
+    showPromotionScaning() {
+        this.props.navigate('ReadQrCode');
+    }
+
 
     followBusiness() {
         this.props.navigate("businessFollow");
@@ -77,10 +82,22 @@ class GeneralComponentHeader extends Component {
                     </Button>
                 </View>
 
-                <Text transparent style={{color: "#2db6c8", backgroundColor: 'transparent'}}>ThisCounts</Text>
+                <Text transparent style={{color: "#2db6c8", backgroundColor: 'transparent'}}>THIS</Text>
                 <View style={{
-                    justifyContent: 'flex-start', height: vh * 5,
+                   height: vh * 6, flexDirection:'row',justifyContent: 'center',  alignItems:'center'
                 }}>
+                    <TouchableOpacity onPress={() => this.showPromotionScaning()}
+                                      style={{
+                                          width: 30, height: 30,
+                                          flexDirection: 'column',
+                                          alignItems: 'center',
+
+                                      }}
+                                      regular>
+                        <Image resizeMode="cover" style={{ tintColor: '#2db6c8', marginTop:3,width: 25, height: 25}}
+                               source={qrcode}/>
+
+                    </TouchableOpacity>
                     {menuAction}
                 </View>
             </View>

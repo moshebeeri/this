@@ -20,6 +20,12 @@ export default class BusinessFollow extends Component {
         }
     }
 
+    showScanner() {
+        const {group} = this.props;
+
+        this.props.navigation.navigate('ReadQrCode',{group:group});
+    }
+
     back() {
         this.props.navigation.goBack();
     }
@@ -114,7 +120,7 @@ export default class BusinessFollow extends Component {
 
                     </TouchableOpacity>
 
-                    <TouchableOpacity onPress={() => showCamera()}
+                    <TouchableOpacity onPress={() => this.showScanner()}
                                       style={{marginRight: 5, flexDirection: 'row', alignItems: 'center',}} regular>
                         <Image style={{marginLeft: 10, width: 20, height: 20}} source={qrcode}/>
 
