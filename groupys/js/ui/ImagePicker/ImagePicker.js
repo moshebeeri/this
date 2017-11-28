@@ -34,15 +34,19 @@ export default class ImagePickerComponent extends Component {
         return true;
     }
     async pickFromCamera() {
-        const {setImage,imageWidth,imageHeight} = this.props;
+        const {setImage,imageWidth,imageHeight,logo} = this.props;
         let width = 2000;
         if(imageWidth){
             width = imageWidth;
-        };
+        }
+
         let height = 1400;
         if(imageWidth){
             height = imageHeight;
-        };
+        }
+        if(logo){
+            height = 2000;
+        }
         try {
             let image = await ImagePicker.openCamera({
                 cropping: true,
@@ -62,15 +66,18 @@ export default class ImagePickerComponent extends Component {
     }
 
     async pickPicture() {
-        const {setImage,imageWidth,imageHeight} = this.props;
+        const {setImage,imageWidth,imageHeight,logo} = this.props;
         let width = 2000;
         if(imageWidth){
             width = imageWidth;
-        };
+        }
         let height = 1400;
         if(imageWidth){
             height = imageHeight;
-        };
+        }
+        if(logo){
+            height = 2000;
+        }
         try {
             let image = await ImagePicker.openPicker({
                 cropping: true,
