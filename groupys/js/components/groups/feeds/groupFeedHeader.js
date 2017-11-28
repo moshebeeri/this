@@ -2,7 +2,7 @@
  * Created by roilandshut on 19/07/2017.
  */
 import React, {Component} from 'react';
-import {Image, TextInput, Platform, View} from 'react-native';
+import {Image, TextInput, Platform, View,TouchableOpacity} from 'react-native';
 import {connect} from 'react-redux';
 import {actions} from 'react-native-navigation-redux-helpers';
 import {Container, Footer, Icon, Button, Thumbnail, Text} from 'native-base';
@@ -10,6 +10,7 @@ import styles from './styles'
 import store from 'react-native-simple-store';
 import GroupApi from "../../../api/groups"
 import {GroupHeader, PromotionHeaderSnippet} from '../../../ui/index';
+const qrcode = require('../../../../images/qr-code.png');
 let groupApi = new GroupApi();
 import {
     Menu,
@@ -38,6 +39,10 @@ class GroupFeedHeader extends Component {
         this.props.fetchGroups();
     }
 
+    showScanner() {
+        let group = this.props.item;
+        this.props.navigation.navigate('ReadQrCode',{group:group});
+    }
     navigateBack() {
         this.handleBack();
         this.props.navigation.goBack();
@@ -140,6 +145,18 @@ class GroupFeedHeader extends Component {
            <GroupHeader group={group}/>
             </View>
             <View style={styles.group_actions}>
+                <TouchableOpacity onPress={() => this.showScanner()}
+                                  style={{
+                                      width: 30, height: 30,
+                                      flexDirection: 'column',
+                                      alignItems: 'center',
+
+                                  }}
+                                  regular>
+                    <Image resizeMode="cover" style={{ tintColor: '#2db6c8', marginTop:3,width: 25, height: 25}}
+                           source={qrcode}/>
+
+                </TouchableOpacity>
                 {groupInvite}
             </View>
         </View>

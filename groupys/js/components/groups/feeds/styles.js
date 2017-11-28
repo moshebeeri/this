@@ -157,9 +157,11 @@ module.exports = {
         flex: -1,
     },
     group_actions: {
-        flexDirection: 'column',
-        flex:1,
+        flexDirection: 'row',
+        flex:2,
+        marginBottom:15,
+
         justifyContent: 'center',
-        alignItems: 'center',
+
     },
 };
