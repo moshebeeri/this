@@ -287,7 +287,7 @@ module.exports = {
 
     },
     promotiosDescription: {
-        flex:3 ,
+        flex:2,
         alignItems:'center',
         justifyContent:'center',
         width:width - 15,
@@ -302,7 +302,7 @@ module.exports = {
         width:width - 15,
     },
     promotionDetails:{
-        flex:1.6,
+        flex:1.7,
         backgroundColor:'white',
         alignItems:'flex-start',
         justifyContent:'center',

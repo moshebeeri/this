@@ -2,7 +2,7 @@
  * Created by roilandshut on 23/07/2017.
  */
 import React, {Component} from 'react';
-import {Dimensions, Image} from 'react-native';
+import {Dimensions, Image,Platform} from 'react-native';
 import InViewPort from '../../../../utils/inviewport'
 import {actions} from 'react-native-navigation-redux-helpers';
 import {
@@ -69,6 +69,11 @@ export default class FeedPromotion extends Component {
         if(item.business){
             categoruTitle = item.business.categoryTitle;
         }
+
+        let headeerSize = 130;
+        if( (Platform.OS === 'ios')){
+            headeerSize = 100;
+        }
         const result =
             <InViewPort onChange={() => refresh(item.id, item.social)} style={container}>
                 <View style={styles.promotion_card}>
@@ -86,7 +91,7 @@ export default class FeedPromotion extends Component {
                     {image}
 
 
-                    <View style={{  height:120,width: width - 15, backgroundColor: 'white'}}>
+                    <View style={{  height:headeerSize,width: width - 15, backgroundColor: 'white'}}>
                         <View style={promotaionDesc}>
                             <PromotionHeader type={item.promotion} feed titleText={item.promotionTitle}
                                              titleValue={item.promotionValue} term={item.promotionTerm}/>

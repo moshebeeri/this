@@ -10,11 +10,9 @@ module.exports = {
         borderTopWidth:2,
     },
     promotionHeader:{
-        backgroundColor:'white',
+
         flex:1,
         width: width -15,
-        alignItems:'center',
-        justifyContent:'center',
 
         flexDirection: 'row',
     },
@@ -31,16 +29,15 @@ module.exports = {
         backgroundColor:'white',
         flex:3,
         width: width -15,
-        alignItems:'flex-start',
-        justifyContent:'center',
+
 
 
     },
     promotionValue:{
         flex:1,
 
-        alignItems:'center',
-        justifyContent:'center',
+        justifyContent:'flex-start',
+
     },
     promotionColumnValue:{
 
@@ -52,14 +49,14 @@ module.exports = {
         flex:1,
         margin:5,
 
-        alignItems:'flex-start',
-        justifyContent:'flex-start',
+
     },
     promotiontDescription:{
         flex:3,
         margin:4,
-        alignItems:'flex-start',
-        justifyContent:'center',
+
+
+
     },
     promotiontColumnDescription:{
 
@@ -69,8 +66,7 @@ module.exports = {
     promotiontHappyDescription:{
         flex:3,
         margin:4,
-        alignItems:'flex-start',
-        justifyContent:'center',
+
     },
     titleText:{
         fontSize:20,
@@ -89,20 +85,29 @@ module.exports = {
         color:'#e65100'
     },
     titleTextFeed:{
+
+        flex:1,
         fontSize:20,
         color:'#2db6c8'
     },
     titleTextColumnFeed:{
+
+        flex:1,
         fontSize:25,
         color:'#2db6c8'
     },
     titleHappyTextFeed:{
+
+        flex:1,
         fontSize:15,
         color:'#2db6c8'
     },
     titleValueFeed:{
+
+        flex:1,
         fontSize:30,
-        textAlignVertical: "center",
+
+
         textAlign: "center",
 
         color:'#2db6c8'
@@ -119,7 +124,8 @@ module.exports = {
         color:'#2db6c8'
     },
     puncCardtitleValueFeed:{
-
+        flex:1,
+        fontSize:25,
         color:'#2db6c8'
     },
     promotionImageContainer:{
@@ -151,8 +157,11 @@ module.exports = {
     },
     promotionTermlTextStyle:{
         color:'#839192',
+        flex:1,
+
+
         fontSize:13,
-        textAlignVertical: "center",
+
 
     },
     promotionDetailsContainer:{

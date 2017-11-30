@@ -43,10 +43,10 @@ export default class PromotionHeader extends Component {
                         <Text adjustsFontSizeToFit style={titleValueStyle}>{ILS}{titleValue}</Text>
                     </View>
                     <View style={promotiontDescription}>
-                        <View>
+                        <View style={{flex:1}}>
                             <Text adjustsFontSizeToFit style={titleTextStyle}>{titleText}</Text>
                         </View>
-                        <View>
+                        <View style={{flex:1}}>
                             <Text adjustsFontSizeToFit style={styles.promotionTermlTextStyle}>{term}</Text>
                         </View>
                     </View>
@@ -57,10 +57,10 @@ export default class PromotionHeader extends Component {
                         <Text adjustsFontSizeToFit style={titleValueStyle}>{titleValue}%</Text>
                     </View>
                     <View style={promotiontDescription}>
-                        <View>
+                        <View style={{flex:1}}>
                             <Text adjustsFontSizeToFit style={titleTextStyle}>{titleText}</Text>
                         </View>
-                        <View>
+                        <View style={{flex:1}}>
                             <Text adjustsFontSizeToFit style={styles.promotionTermlTextStyle}>{term}</Text>
                         </View>
                     </View>
@@ -71,10 +71,10 @@ export default class PromotionHeader extends Component {
                         <Text adjustsFontSizeToFit style={titleValueStyle}>{ILS}{titleValue}</Text>
                     </View>
                     <View style={promotiontDescription}>
-                        <View>
+                        <View style={{flex:1}}>
                             <Text adjustsFontSizeToFit style={titleTextStyle}>{titleText}</Text>
                         </View>
-                        <View>
+                        <View style={{flex:1}}>
                             <Text adjustsFontSizeToFit style={styles.promotionTermlTextStyle}>{term}</Text>
                         </View>
                     </View>
@@ -85,10 +85,10 @@ export default class PromotionHeader extends Component {
                         <Text adjustsFontSizeToFit style={titleValueStyle}>{titleValue}%</Text>
                     </View>
                     <View style={promotiontDescription}>
-                        <View>
+                        <View style={{flex:1}}>
                             <Text adjustsFontSizeToFit style={titleTextStyle}>{titleText}</Text>
                         </View>
-                        <View>
+                        <View style={{flex:1}}>
                             <Text adjustsFontSizeToFit style={styles.promotionTermlTextStyle}>{term}</Text>
                         </View>
                     </View>
@@ -99,10 +99,10 @@ export default class PromotionHeader extends Component {
                         <Text numberOfLines={1} allowFontScaling={true} adjustsFontSizeToFit  style={titleValueStyle}>{ILS}{titleValue}</Text>
                     </View>
                     <View style={styles.promotiontHappyDescription}>
-                        <View >
+                        <View style={{flex:1}}>
                             <Text allowFontScaling={true} adjustsFontSizeToFit ={true}  style={styles.titleHappyTextFeed}>{titleText}</Text>
                         </View>
-                        <View >
+                        <View style={{flex:1}}>
                             <Text allowFontScaling={true} adjustsFontSizeToFit ={true} numberOfLines={3} style={styles.promotionTermlTextStyle}>{term}</Text>
                         </View>
                     </View>
@@ -110,13 +110,13 @@ export default class PromotionHeader extends Component {
             case "X+Y":
                 return <View style={promotionHeader}>
                     <View style={promotionValue}>
-                        <Text  allowFontScaling={true} adjustsFontSizeToFit style={XplusYtitleValueStyle}>{titleValue}</Text>
+                        <Text  allowFontScaling={true} adjustsFontSizeToFit style={titleValueStyle}>{titleValue}</Text>
                     </View>
                     <View style={promotiontDescription}>
-                        <View>
+                        <View style={{flex:1}}>
                             <Text adjustsFontSizeToFit style={titleTextStyle}>{titleText}</Text>
                         </View>
-                        <View>
+                        <View style={{flex:1}}>
                             <Text adjustsFontSizeToFit style={styles.promotionTermlTextStyle}>{term}</Text>
                         </View>
                     </View>
