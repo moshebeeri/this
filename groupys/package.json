@@ -17,6 +17,7 @@
     "react-native": "^0.50.4",
     "react-native-autocomplete-input": "^3.3.0",
     "react-native-background-timer": "^1.0.0",
+    "react-native-background-upload": "^4.1.0",
     "react-native-camera": "https://github.com/lwansbrough/react-native-camera.git",
     "react-native-card-view": "0.0.3",
     "react-native-check-box": "^1.0.4",
