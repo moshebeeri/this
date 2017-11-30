@@ -140,6 +140,7 @@ class FeedConverter {
         response.categoryTitle = feed.activity.business.categoryTitle;
         response.businessName = feed.activity.business.name;
         response.location = feed.activity.business.location;
+        response.business = feed.activity.business;
         return response;
     }
 
