@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import {Image, View} from 'react-native';
+import {Image, View,Platform} from 'react-native';
 import {actions} from 'react-native-navigation-redux-helpers';
 import {
     Button,
@@ -110,11 +110,16 @@ class UserProfile extends Component {
                 uri: this.state.image.path
             }
         }
+
+        let borderRaduis = 70;
+        if( (Platform.OS === 'ios')){
+            borderRaduis = 48;
+        }
         const image = <Image style={{
             alignSelf: 'center',
             height: 100,
             width: 100,
-            borderRadius: 70,
+            borderRadius: borderRaduis,
         }} resizeMode="cover" source={source}>
         </Image>
         return (

@@ -6,17 +6,19 @@ const vh = height / 100
 module.exports = {
     formHeaderBackButoon: {
         flex: 1,
-        height: vh * 7,
+
+        height:  (Platform.OS === 'ios') ? vh * 6 : vh * 7,
         justifyContent: 'flex-start',
         flexDirection: 'row',
-        alignItems: 'flex-start'
+        alignItems: 'center'
     },
     formHeaderSubmitButoon: {
         flex: 1,
-        height: vh * 7,
+        height:  (Platform.OS === 'ios') ? vh * 6 : vh * 7,
+        paddingRight:(Platform.OS === 'ios') ? 7 : 0,
         justifyContent: 'flex-end',
         flexDirection: 'row',
-        alignItems: 'flex-end'
+        alignItems: 'center'
     },
     formHeadrTitleStyle: {
         color: "white",
