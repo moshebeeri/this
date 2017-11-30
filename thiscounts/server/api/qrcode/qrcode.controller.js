@@ -106,6 +106,7 @@ exports.code = function(req, res) {
 exports.image_id = function(req, res) {
   QRCode.findById(req.params.id, function (err, qrcode) {
     if(err) { return handleError(res, err); }
+    if(!qrcode) { res.status(404).send(`qrcode _id ${req.params.id} could not be found`); }
     QRCodeImg.toDataURL(JSON.stringify({
       code: qrcode.code
     }), qr_opt, function (err, url) {

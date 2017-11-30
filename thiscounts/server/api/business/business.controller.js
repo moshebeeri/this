@@ -115,11 +115,13 @@ function business_follow_activity(follower, business) {
 }
 
 function follow(userId, businessId, callback) {
-  let query = `MATCH (user:user{_id:"${userId}"})-[f:FOLLOW]->(b:business{_id:"${businessId}"}) return count(f)`;
-  graphModel.query(query, function (err, count) {
+  let query = `MATCH (user:user{_id:"${userId}"})-[f:FOLLOW]->(b:business{_id:"${businessId}"}) return count(f) as count`;
+  graphModel.query(query, function (err, results) {
     if (err) return callback(err);
+    let count = results[0].count;
     if (count > 0) return callback(new Error('user already follows'));
     graphModel.relate_ids(userId, 'FOLLOW', businessId, function (err) {
+      if(err) return callback(err);
       business_follow_activity(userId, businessId);
       let query = `MATCH (b:business{_id:"${businessId}"})-[d:DEFAULT_GROUP]->(g:group) 
                     CREATE UNIQUE (user:user{_id:"${userId}"})-[f:FOLLOW]->(g)`;
