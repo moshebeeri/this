@@ -1,6 +1,9 @@
+const React = require('react-native');
+const { Platform,} = React;
 const NativeModules = require('NativeModules');
 const RNUploader = NativeModules.RNUploader;
 const FILeUploader = NativeModules.FileUpload;
+import Upload from 'react-native-background-upload'
 import store from 'react-native-simple-store';
 
 class EntityUtils {
@@ -18,7 +21,7 @@ class EntityUtils {
             }
         ];
         let getEntity = this.getEntity.bind(this);
-        if (RNUploader) {
+        if (Platform.OS === 'ios') {
             let opts = {
                 url: `${server_host}/api/images/` + responseData._id,
                 files: files,
@@ -26,9 +29,18 @@ class EntityUtils {
                 headers: {'Accept': 'application/json', 'Authorization': 'Bearer ' + token},  // optional
                 params: {},                   // optional
             };
-            RNUploader.upload(opts, (err, response) => {
+            Upload.startUpload(opts).then((uploadId)=>{
+                Upload.addListener('error', uploadId, (data) => {
+                    getEntity(entityApi, responseData._id, callbackFunction)
+                })
+                Upload.addListener('completed', uploadId, (data) => {
+                    getEntity(entityApi, responseData._id, callbackFunction)
+                })
+            }).catch((err) =>{
                 getEntity(entityApi, responseData._id, callbackFunction)
-            });
+            })
+
+            ;
         } else {
             let option2 = {
                 uploadUrl: `${server_host}/api/images/` + responseData._id,
@@ -54,7 +66,7 @@ class EntityUtils {
             }
         ];
         let getEntity = this.getEntity.bind(this);
-        if (RNUploader) {
+        if (Platform.OS === 'ios') {
             let opts = {
                 url: `${server_host}/api/images/logo/` + responseData._id,
                 files: files,
@@ -62,9 +74,16 @@ class EntityUtils {
                 headers: {'Accept': 'application/json', 'Authorization': 'Bearer ' + token},  // optional
                 params: {},                   // optional
             };
-            RNUploader.upload(opts, (err, response) => {
+            Upload.startUpload(opts).then((uploadId)=>{
+                Upload.addListener('error', uploadId, (data) => {
+                    getEntity(entityApi, responseData._id, callbackFunction)
+                })
+                Upload.addListener('completed', uploadId, (data) => {
+                    getEntity(entityApi, responseData._id, callbackFunction)
+                })
+            }).catch((err) =>{
                 getEntity(entityApi, responseData._id, callbackFunction)
-            });
+            })
         } else {
             let option2 = {
                 uploadUrl: `${server_host}/api/images/logo/` + responseData._id,

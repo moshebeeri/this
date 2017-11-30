@@ -11,7 +11,7 @@ module.exports = {
         backgroundColor:'white',
     },
     businessNameText: {
-        fontFamily: 'Roboto-Black',
+        fontFamily: 'Roboto-Regular',
 
         marginRight: 20,
         marginLeft: 10,

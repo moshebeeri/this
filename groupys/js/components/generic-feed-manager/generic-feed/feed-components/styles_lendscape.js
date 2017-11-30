@@ -257,7 +257,7 @@ module.exports = {
         fontSize: 16
     },
     promotion_nameText: {
-        fontFamily: 'Roboto-Black',
+        fontFamily: 'Roboto-Regular',
         fontWeight: 'bold',
         marginRight: 20,
         marginLeft: 10,

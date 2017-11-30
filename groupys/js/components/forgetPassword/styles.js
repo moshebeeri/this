@@ -51,7 +51,7 @@ module.exports = {
         flexDirection: 'row',
     },
     thiscount: {
-        fontFamily: 'BackToBlack',
+        fontFamily:(Platform.OS === 'ios') ? 'Roboto-Regular' : 'BackToBlack',
         fontSize: 60,
         marginTop: -20,
         color: 'white',

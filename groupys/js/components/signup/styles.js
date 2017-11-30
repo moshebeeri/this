@@ -34,7 +34,7 @@ module.exports = {
         alignItems: 'center',
     },
     this: {
-        fontFamily: (Platform.OS === 'ios') ? 'BackToBlack' : 'BackToBlack',
+        fontFamily:(Platform.OS === 'ios') ? 'Roboto-Regular' : 'BackToBlack',
         fontSize: 60,
         height: 100,
         color: 'white',
