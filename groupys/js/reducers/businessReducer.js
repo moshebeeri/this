@@ -23,9 +23,11 @@ export default function business(state = initialState, action) {
         };
     }
     let businessesState = {...state};
+    let myCurrentbusinesses = businessesState.myBusinesses;
+    let currentbusinesses = businessesState.businesses;
     switch (action.type) {
         case actions.UPSERT_BUSINESS:
-            let currentbusinesses = businessesState.businesses;
+
             businessesState.update = !businessesState.update;
             //not all the time we get the business social state in this case we need to make sure we take the social state from the last business
             action.item.forEach(eventItem => {
@@ -33,22 +35,33 @@ export default function business(state = initialState, action) {
                 if (!categoryTitle && currentbusinesses[eventItem._id]) {
                     categoryTitle = currentbusinesses[eventItem._id].categoryTitle;
                 }
+                let qrSource = currentbusinesses[eventItem._id].qrcodeSource;
                 if (eventItem.social_state || !currentbusinesses[eventItem._id]) {
                     currentbusinesses[eventItem._id] = eventItem;
                 } else {
                     eventItem.social_state = currentbusinesses[eventItem._id].social_state;
+
                     currentbusinesses[eventItem._id] = eventItem;
                 }
+                currentbusinesses[eventItem._id].qrcodeSource = qrSource;
                 currentbusinesses[eventItem._id].categoryTitle = categoryTitle;
             });
             return businessesState;
         case actions.UPSERT_MY_BUSINESS:
-            let myCurrentbusinesses = businessesState.myBusinesses;
+             myCurrentbusinesses = businessesState.myBusinesses;
             businessesState.update = !businessesState.update;
             action.item.forEach(eventItem => {
                 myCurrentbusinesses[eventItem.business._id] = eventItem;
             });
             return businessesState;
+        case actions.UPSERT_BUSINESS_QRCODE:
+
+            businessesState.update = !businessesState.update;
+
+            currentbusinesses[action.business._id].qrcodeSource =  action.qrcodeSource;
+
+            return businessesState;
+
         case actions.LIKE:
             let item = businessesState.businesses[action.id];
             if (item) {

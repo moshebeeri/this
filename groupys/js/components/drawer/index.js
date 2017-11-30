@@ -161,18 +161,16 @@ class ProfileDrawer extends Component {
                             </TouchableOpacity>
                         </View>
                         <View style={{flex: 1, flexDirection: 'row'}}>
-                            <TouchableOpacity onPress={() => this.showPromotionScaning()}
-                                              style={{
-                                                  flex: 1,
-                                                  flexDirection: 'column',
-                                                  alignItems: 'center',
-                                              }}
-                                              regular>
-                                <Image style={{tintColor: '#FF9046', marginTop: 21, width: 30, height: 30}}
-                                       source={qrcode}/>
+                            <TouchableOpacity onPress={() => this.changePassword()}
+                                              style={{flex: 1, flexDirection: 'column', alignItems: 'center'}} regular>
+                                <Icon style={{marginTop: 21, marginBottom: -6}} color="#FF9046" size={36} name="lock"/>
                                 <Text style={{
-                                    marginTop: 10, color: '#FF9046', fontStyle: 'normal', fontSize: 15
-                                }}>{strings.scanPromotion}</Text>
+                                    marginTop: 10,
+                                    color: '#FF9046',
+                                    fontStyle: 'normal',
+                                    fontSize: 16
+                                }}>{strings.changePassword} </Text>
+
                             </TouchableOpacity>
                         </View>
                     </View>
@@ -200,17 +198,7 @@ class ProfileDrawer extends Component {
                             </TouchableOpacity>
                         </View>
                         <View style={{flex: 1, flexDirection: 'row'}}>
-                            <TouchableOpacity onPress={() => this.changePassword()}
-                                              style={{flex: 1, flexDirection: 'column', alignItems: 'center'}} regular>
-                                <Icon style={{marginTop: 21, marginBottom: -6}} color="#FF9046" size={36} name="lock"/>
-                                <Text style={{
-                                    marginTop: 10,
-                                    color: '#FF9046',
-                                    fontStyle: 'normal',
-                                    fontSize: 16
-                                }}>{strings.changePassword} </Text>
 
-                            </TouchableOpacity>
                         </View>
                     </View>
                 </Content>
