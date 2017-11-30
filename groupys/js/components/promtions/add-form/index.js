@@ -550,7 +550,7 @@ class AddPromotion extends Component {
                 style={{width: width - 10, height: 210, borderWidth: 1, borderColor: 'white'}}
                 source={{uri: this.state.image.path}}
             >
-                {saving && <Spinner/>}
+
             </Image>
             return <View style={styles.product_upper_container}>
 
@@ -560,6 +560,7 @@ class AddPromotion extends Component {
 
                         <ImagePicker ref={"coverImage"} mandatory image={coverImage} color='white' pickFromCamera
                                      setImage={this.setCoverImage.bind(this)}/>
+                        {saving && <Spinner/>}
                     </View>
                 </View>
             </View>

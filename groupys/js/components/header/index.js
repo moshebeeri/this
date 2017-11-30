@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import {Dimensions,TouchableOpacity,Image} from 'react-native';
+import {Dimensions,TouchableOpacity,Image,Platform} from 'react-native';
 import {Button, Header, Input, InputGroup, Tab, TabHeading, Tabs, Text, View} from 'native-base';
 import {actions} from 'react-native-navigation-redux-helpers';
 import {Menu, MenuOption, MenuOptions, MenuTrigger,} from 'react-native-popup-menu';
@@ -45,6 +45,10 @@ class GeneralComponentHeader extends Component {
 
     render() {
         let back = undefined;
+        let headerHeight = vh *7;
+        if (Platform.OS === 'ios') {
+            headerHeight = vh *9;
+        }
         if (this.props.showBack) {
             back = <Button transparent style={{marginLeft:5,marginRight:5}} onPress={() => this.back()}>
                 <Icon active color={"#2db6c8"} size={20} name="ios-arrow-back"/>
@@ -71,7 +75,7 @@ class GeneralComponentHeader extends Component {
         </Menu>
         return (
             <View style={{
-                height: vh * 7, flexDirection: 'row', alignItems: 'center', backgroundColor: 'white',
+                height: headerHeight, flexDirection: 'row', alignItems: 'center', backgroundColor: 'white',
                 justifyContent: 'space-between',
             }}>
                 <View style={{height: vh * 7, flexDirection: 'row', alignItems: 'flex-start'}}>
