@@ -1,5 +1,6 @@
 import React, {Component} from 'react';
 import {connect} from 'react-redux';
+import {Platform, TouchableOpacity} from 'react-native';
 import {actions} from 'react-native-navigation-redux-helpers';
 import {
     Button,
@@ -22,6 +23,7 @@ import {getBusinessProducts} from '../../selectors/businessesSelector'
 import {bindActionCreators} from "redux";
 import Icon5 from 'react-native-vector-icons/MaterialCommunityIcons';
 import {FormHeader} from '../../ui/index';
+import Icon3 from 'react-native-vector-icons/Ionicons';
 import ProductListView from './listView/index'
 
 class Product extends Component {
@@ -54,11 +56,15 @@ class Product extends Component {
     render() {
         const {products, navigation, actions, update,productsLoading} = this.props;
         const businessId = navigation.state.params.business._id;
+        let icon = <Icon5 active color={"#FA8559"} size={25} name="plus"/>
+        if (Platform.OS === 'ios') {
+            icon = <Icon3 active color={"#FA8559"} size={25} name="ios-add"/>;
+        }
         return (
             <Container style={{flex: -1}}>
                 <FormHeader showBack submitForm={this.navigateToAdd.bind(this)} navigation={this.props.navigation}
                             title={"Add Product"} bgc="white"
-                            submitIcon={<Icon5 active color={"#FA8559"} size={25} name="plus"/>}
+                            submitIcon={icon}
                             titleColor="#FA8559" backIconColor="#FA8559"/>
                 { !productsLoading[businessId] && <Spinner/>}
                 <GenericListManager rows={products[businessId]} navigation={navigation} actions={actions}
