@@ -2,7 +2,7 @@
  * Created by roilandshut on 19/07/2017.
  */
 import React, {Component} from 'react';
-import {Image, TextInput, Platform, View,TouchableOpacity} from 'react-native';
+import {Image, TextInput, Platform, View,TouchableOpacity,Dimensions} from 'react-native';
 import {connect} from 'react-redux';
 import {actions} from 'react-native-navigation-redux-helpers';
 import {Container, Footer, Icon, Button, Thumbnail, Text} from 'native-base';
@@ -10,6 +10,8 @@ import styles from './styles'
 import store from 'react-native-simple-store';
 import GroupApi from "../../../api/groups"
 import {GroupHeader, PromotionHeaderSnippet} from '../../../ui/index';
+const {width, height} = Dimensions.get('window')
+const vh = height / 100
 const qrcode = require('../../../../images/qr-code.png');
 let groupApi = new GroupApi();
 import {
@@ -103,6 +105,21 @@ class GroupFeedHeader extends Component {
     }
 
     render() {
+        let headerHeight = {   flexDirection: 'row',
+            width: width,
+            height: vh * 10,
+            backgroundColor: '#fff',
+            justifyContent:'center',
+            alignItems:'center'};
+
+        if (Platform.OS === 'ios') {
+            headerHeight = {   flexDirection: 'row',
+                width: width,
+                height: vh * 12,
+                backgroundColor: '#fff',
+                justifyContent:'center',
+                alignItems:'center'};
+        }
         let group = this.props.item;
         let image = <Thumbnail square source={require('../../../../images/client_1.png')}/>
         if (this.props.item.pictures && this.props.item.pictures.length > 0) {
@@ -135,7 +152,7 @@ class GroupFeedHeader extends Component {
                 </MenuOptions>
             </Menu>
         }
-        return <View style={styles.headerContainer}>
+        return <View style={headerHeight}>
             <View style={styles.imageStyle}>
                 <Button transparent onPress={this.navigateBack.bind(this)}>
                     <Icon style={{fontSize: 25, color: "#2db6c8"}} name="arrow-back"/>

@@ -20,6 +20,26 @@ module.exports = {
         marginBottom:5,
 
     },
+    modalView: {
+        width: width - 20,
+        height: 40,
+
+        justifyContent: 'center',
+        alignItems: 'flex-start',
+        padding: 10,
+        backgroundColor:'white',
+
+
+        paddingLeft: 12,
+        paddingTop: 0,
+        paddingBottom: 0,
+    },
+    modalViewStyle: {
+        width: width - 20,
+        height: 40,
+        justifyContent: 'center',
+        alignItems: 'flex-start',
+    }
 };
 
 

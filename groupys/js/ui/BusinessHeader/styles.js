@@ -9,6 +9,7 @@ module.exports = {
     logo_view: {
         flexDirection: 'row',
         backgroundColor:'white',
+        marginTop: (Platform.OS === 'ios') ? 20 : 0,
     },
     businessNameText: {
         fontFamily: 'Roboto-Regular',
