@@ -135,11 +135,11 @@ export function selectBusiness(business) {
     }
 }
 
-export function followBusiness(bussinesId) {
+export function followBusiness(businessId) {
     return async function (dispatch, getState) {
         try {
             const token = getState().authentication.token;
-            await businessApi.followBusiness(bussinesId, token);
+            await businessApi.followBusiness(businessId, token);
             navigation.goBack();
         } catch (error) {
             dispatch({
@@ -149,11 +149,11 @@ export function followBusiness(bussinesId) {
     }
 }
 
-export function groupFollowBusiness(groupid, bussinesId, navigation) {
+export function groupFollowBusiness(groupid, businessId, navigation) {
     return async function (dispatch, getState) {
         try {
             const token = getState().authentication.token;
-            await businessApi.groupFollowBusiness(groupid, bussinesId, token);
+            await businessApi.groupFollowBusiness(groupid, businessId, token);
             navigation.goBack();
         } catch (error) {
             dispatch({

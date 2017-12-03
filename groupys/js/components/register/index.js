@@ -52,13 +52,13 @@ class Register extends Component {
                     <KeyboardAvoidingView behavior={'position'} style={styles.avoidView}>
 
                         <View>
-                            <View style={styles.thiscountsContainer}>
+                            <View style={styles.thisContainer}>
                                 <Text style={styles.this}>This</Text>
                                 <Text style={styles.thiscount}>Counts</Text>
                             </View>
                             <View style={styles.mainContainer}>
 
-                                <Text style={styles.signginText}>We have sent you a SMS</Text>
+                                <Text style={styles.signInText}>We have sent you a SMS</Text>
                                 <Text style={styles.decritpionLine2}>with a validation code!</Text>
                                 <Item style={styles.nameTextInput} regular>
                                     <Input value={this.state.name} blurOnSubmit={true} returnKeyType='done' ref="1"

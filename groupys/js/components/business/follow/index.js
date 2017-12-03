@@ -5,9 +5,12 @@ import Icon3 from "react-native-vector-icons/Ionicons";
 import Camera from "react-native-camera";
 import styles from "./styles";
 import {BusinessHeader} from '../../../ui/index';
+import strings from '../../../i18n/i18n';
 
 const qrcode = require('../../../../images/qr-code.png');
 const scan = require('../../../../images/scan.png');
+
+
 export default class BusinessFollow extends Component {
     static navigationOptions = {
         header: null
@@ -58,14 +61,14 @@ export default class BusinessFollow extends Component {
                 };
                 let followComponent = <TouchableOpacity onPress={() => followBusiness(businees._id,navigation)} style={followStyle} regular>
 
-                    <Text style={{color: 'white', fontStyle: 'normal', fontSize: 15}}>Follow </Text>
+                    <Text style={{color: 'white', fontStyle: 'normal', fontSize: 15}}>strings.Follow</Text>
 
                 </TouchableOpacity>;
 
                 if(group){
                     followComponent =  <TouchableOpacity onPress={() => groupFollowBusiness(group._id,businees._id,navigation)} style={followStyle} regular>
 
-                        <Text style={{color: 'white', fontStyle: 'normal', fontSize: 15}}>Follow </Text>
+                        <Text style={{color: 'white', fontStyle: 'normal', fontSize: 15}}>strings.Follow</Text>
 
                     </TouchableOpacity>;
                 }
@@ -93,7 +96,7 @@ export default class BusinessFollow extends Component {
                 </View>
             })
         }
-        let camera = undefined
+        let camera = undefined;
         if (cameraOn) {
             camera = <View style={styles.payment_camera_container}><Camera
                 ref={(cam) => {
@@ -103,7 +106,7 @@ export default class BusinessFollow extends Component {
                 style={styles.payment_camera}
                 aspect={Camera.constants.Aspect.fill}>
             </Camera>
-                <Text>Please Scan Code</Text>
+                <Text>strings.PleaseScanCode</Text>
             </View>
         }
         return ( <View style={styles.follow_container}>

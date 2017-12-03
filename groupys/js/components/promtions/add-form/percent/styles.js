@@ -9,7 +9,7 @@ module.exports = {
     button: {
         backgroundColor: 'transparent'
     },
-    inputTextLayour: {
+    inputTextLayout: {
         marginTop: 4, padding: 3,
         width: width - 15
     },

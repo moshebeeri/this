@@ -9,22 +9,22 @@ export default class BusinessHeader extends Component {
         super(props);
     }
 
-    showBussines() {
+    showBusiness() {
         const{navigation,business} = this.props;
-        navigation.navigate("businessProfile", {bussiness: business});
+        navigation.navigate("businessProfile", {businesses: business});
     }
 
     createBusinessLog() {
         const {businessLogo,small} = this.props;
         if (businessLogo) {
             if(small){
-                return <TouchableOpacity style={{margin:5}} onPress={this.showBussines.bind(this)}>
+                return <TouchableOpacity style={{margin:5}} onPress={this.showBusiness.bind(this)}>
                     <View>
                         <Thumbnail small square={true} size={40} source={{uri: businessLogo}}/>
                     </View>
                 </TouchableOpacity>
             }
-            return <TouchableOpacity style={{margin:5}} onPress={this.showBussines.bind(this)}>
+            return <TouchableOpacity style={{margin:5}} onPress={this.showBusiness.bind(this)}>
                 <View>
                     <Thumbnail square={true} size={40} source={{uri: businessLogo}}/>
                 </View>

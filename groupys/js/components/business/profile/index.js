@@ -40,7 +40,7 @@ class BusinessProfile extends Component {
 
     componentWillMount() {
         const{businesses} = this.props
-        let business = businesses[this.props.navigation.state.params.bussiness._id];
+        let business = businesses[this.props.navigation.state.params.businesses._id];
 
         if (!business.qrcodeSource) {
             this.props.setBusinessQrCode(business)
@@ -59,7 +59,7 @@ class BusinessProfile extends Component {
 
     render() {
         const{businesses} = this.props
-        let business = businesses[this.props.navigation.state.params.bussiness._id];
+        let business = businesses[this.props.navigation.state.params.businesses._id];
         let address = business.city + ' ' + business.address
         const banner = this.createBannerTag(business);
         return ( <View>
@@ -67,14 +67,14 @@ class BusinessProfile extends Component {
                 <FormHeader showBack navigation={this.props.navigation}
                             title={"Business"} bgc="#2db6c8"/>
 
-                <View style={styles.businessPiker}>
+                <View style={styles.businessPicker}>
                     <View style={styles.businessTopLogo}>
                         {this.createBusinessLogo(business)}
 
                     </View>
-                    <View style={styles.businessPikkerComponent}>
+                    <View style={styles.businessPickerComponent}>
                         <Text style={styles.businessNameText}>{business.name}</Text>
-                        <Text style={styles.businessCategoryText}>{business.categoryTitle}.</Text>
+                        <Text style={styles.businessCategoryText}>{business.categoryTitle}</Text>
                     </View>
 
                 </View>
@@ -102,20 +102,20 @@ class BusinessProfile extends Component {
                 </View>
                 <View style={{alignItems: 'center', justifyContent: 'center'}}>
 
-                    <View style={styles.inputFullTextLayour}>
+                    <View style={styles.inputFullTextLayout}>
                         <TextInput placeholder={'No Website'} field='Website' value={business.website} disabled
 
 
                         />
                     </View>
-                    <View style={styles.inputFullTextLayour}>
+                    <View style={styles.inputFullTextLayout}>
                         <TextInput placeholder={'No Email'} field='Email' value={business.email} disabled
 
                         />
                     </View>
 
 
-                    <View style={styles.inputFullTextLayour}>
+                    <View style={styles.inputFullTextLayout}>
                         <TextInput field='Address' value={address} disabled
 
                         />

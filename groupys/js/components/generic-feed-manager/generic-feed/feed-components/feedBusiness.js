@@ -33,27 +33,27 @@ import FormUtils from "../../../../utils/fromUtils";
 
 export default class FeedBusiness extends Component {
     render() {
-        return this.createBussines(this.props.item, this.props.like, this.props.unlike, this.props.showUsers, this.props.comment)
+        return this.createBusiness(this.props.item, this.props.like, this.props.unlike, this.props.showUsers, this.props.comment)
     }
 
-    showBussines() {
-        this.props.navigation.navigate("businessProfile", {bussiness: this.props.item.business});
+    showBusiness() {
+        this.props.navigation.navigate("businessProfile", {businesses: this.props.item.business});
     }
 
-    createBussines(item, like, unlike, showUsers, comment) {
+    createBusiness(item, like, unlike, showUsers, comment) {
         const {location, refresh} = this.props;
         if (!item.name) {
             return <View></View>;
         }
-        const buisnessLogo = componentCreator.createBusinessLog(item, this.showBussines.bind(this));
+        const businessLogo = componentCreator.createBusinessLog(item, this.showBusiness.bind(this));
         const styles = componentCreator.createStyle();
         const imageBusiness = this.createBusinessImage(item, styles);
         const result =
-            <InViewPort onChange={() => refresh(item.id,item.social)} style={styles.bussiness_container}>
+            <InViewPort onChange={() => refresh(item.id,item.social)} style={styles.businesses_container}>
                 <View style={styles.promotion_card}>
                     <View style={styles.promotion_upperContainer}>
                         <View style={styles.logo_view}>
-                            {buisnessLogo}
+                            {businessLogo}
                             <View style={{flex: 1, flexDirection: 'column'}}>
                                 <Text style={styles.promotion_nameText} note>{item.businessName} </Text>
                                 <Text numberOfLines={1} style={styles.promotion_addressText}
@@ -65,19 +65,18 @@ export default class FeedBusiness extends Component {
                     </View>
 
                     {imageBusiness}
-                    <View style={styles.business_buttomUpperContainer}>
-                        <View style={styles.promotion_buttom_description}>
+                    <View style={styles.business_bottomUpperContainer}>
+                        <View style={styles.promotion_bottom_description}>
 
                             <Text style={styles.promotion_type}>{item.itemTitle}</Text>
 
-                            <View style={styles.promotion_buttom_location}>
+                            <View style={styles.promotion_bottom_location}>
                                 <Icon3 style={styles.promotion_location} size={25} name="location-on"/>
                                 <View>
                                     <Text style={styles.promotion_addressText} note>{item.businessAddress} </Text>
-
-                                    <Text
-                                        style={styles.detailsText}>{FormUtils.getDistanceFromLatLonInKm(location.lat, location.long, item.location.lat, item.location.lng)}
-                                        - km away</Text>
+                                    <Text style={styles.detailsText}>
+                                        {FormUtils.getDistanceString(location.lat, location.long, item.location.lat, item.location.lng)}
+                                    </Text>
                                 </View>
                             </View>
                         </View>
@@ -94,7 +93,7 @@ export default class FeedBusiness extends Component {
 
                     </View>
                 </View>
-            </InViewPort>
+            </InViewPort>;
         return result;
     }
 

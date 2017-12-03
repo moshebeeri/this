@@ -159,7 +159,7 @@ class ProfileDrawer extends Component {
                                         color: '#FF9046',
                                         fontStyle: 'normal',
                                         fontSize: 16
-                                    }}>{strings.businesses}</Text>
+                                    }}>{strings.Businesses}</Text>
                             </TouchableOpacity>
                         </View>
                         <View style={{flex: 1, flexDirection: 'row'}}>
@@ -171,7 +171,7 @@ class ProfileDrawer extends Component {
                                     color: '#FF9046',
                                     fontStyle: 'normal',
                                     fontSize: 16
-                                }}>{strings.changePassword} </Text>
+                                }}>{strings.ChangePassword} </Text>
 
                             </TouchableOpacity>
                         </View>
@@ -195,7 +195,7 @@ class ProfileDrawer extends Component {
                                         color: '#FF9046',
                                         fontStyle: 'normal',
                                         fontSize: 16
-                                    }}>{strings.settings}</Text>
+                                    }}>{strings.Settings}</Text>
 
                             </TouchableOpacity>
                         </View>

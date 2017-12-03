@@ -26,12 +26,13 @@ import FeedMessage from './feedMessage'
 import FeedPromotion from './feedPromotion'
 import FeedBusiness from './feedBusiness'
 import FeedWelcome from './feedWelcome'
+import strings from "../../../../i18n/i18n"
 
-const {width, height} = Dimensions.get('window')
+const {width, height} = Dimensions.get('window');
 const vw = width / 100;
-const vh = height / 100
+const vh = height / 100;
 const vmin = Math.min(vw, vh);
-const vmax = Math.max(vw, vh)
+const vmax = Math.max(vw, vh);
 export default class FeedShared extends Component {
     constructor() {
         super();
@@ -42,7 +43,7 @@ export default class FeedShared extends Component {
         const container = this.createContainerStyle(item);
         return (<View style={container}>
                 <View style={{width:width-15,flex:1,justifyContent:'center',alignItems:'flex-start',backgroundColor:'white'}}>
-                 <Text style={{margin:5}}>{item.user.name} has Shared with you</Text>
+                 <Text style={{margin:5}}>{item.user.name} {strings.Shared}</Text>
                 </View>
                 <View style={{flex:10}}>
                 {this.createSharedActivity(item)}

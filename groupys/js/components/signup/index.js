@@ -58,7 +58,7 @@ class Signup extends Component {
                 <View style={styles.inputContainer}>
 
                     <KeyboardAvoidingView behavior={'position'} style={styles.avoidView}>
-                        <View style={styles.thiscountsContainer}>
+                        <View style={styles.thisContainer}>
                             <Text style={styles.this}>This</Text>
                             <Text style={styles.thiscount}>Counts</Text>
                         </View>
@@ -70,7 +70,7 @@ class Signup extends Component {
                         }}>
                             <View style={{height: 50, justifyContent: 'flex-end', width: width / 2 + 120}}>
 
-                                <Text style={styles.signginText}>sign up</Text>
+                                <Text style={styles.signInText}>sign up</Text>
                             </View>
                             <View style={styles.nameContainer}>
                                 <Item style={styles.nameTextInput} regular>

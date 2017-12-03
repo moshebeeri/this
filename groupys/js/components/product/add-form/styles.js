@@ -35,11 +35,11 @@ module.exports = {
     addCoverText: {
         color: 'white', margin: 5, fontSize: 16
     },
-    inputTextLayour: {
+    inputTextLayout: {
         marginTop: 4, padding: 3,
         width: width - 15
     },
-    inputTextLayourImage: {
+    inputTextLayoutImage: {
         marginBottom: 10, padding: 3,
         width: width - 15
     },

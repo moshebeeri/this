@@ -47,13 +47,11 @@ export function createSaveButton(item, save) {
             width: 100,
             backgroundColor: item.promotionColor,
         };
-        return <Button style={saveStyle} onPress={() => save(item.id)}>
-
-
-            <Text>save</Text>
-
-
-        </Button>
+        return (
+            <Button style={saveStyle} onPress={() => save(item.id)}>
+                <Text>Strings.Save</Text>
+            </Button>
+        )
     }
     const saveStyle = {
         flex: -1,
@@ -67,7 +65,7 @@ export function createSaveButton(item, save) {
     return <Button style={saveStyle}>
 
 
-        <Text>saved</Text>
+        <Text>strings.saved</Text>
 
 
     </Button>;
@@ -130,9 +128,9 @@ export function createLikeButton(item, styles, like, unlike, token) {
     </Button>
 }
 
-export function createBusinessLog(item, showBussines) {
+export function createBusinessLog(item, showBusiness) {
     if (item.businessLogo) {
-        return <TouchableOpacity onPress={showBussines}>
+        return <TouchableOpacity onPress={showBusiness}>
             <View>
                 <Thumbnail square={true} size={40} source={{uri: item.businessLogo}}/>
             </View>

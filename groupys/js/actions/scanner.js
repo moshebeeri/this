@@ -79,12 +79,12 @@ export function resetForm() {
     }
 }
 
-export function followBusiness(bussinesId) {
+export function followBusiness(businessId) {
     return async function (dispatch, getState) {
         try {
             dispatch({type: actions.SCANNER_RESET});
             const token = getState().authentication.token;
-            await businessApi.followBusiness(bussinesId, token);
+            await businessApi.followBusiness(businessId, token);
        } catch (error) {
             dispatch({
                 type: actions.NETWORK_IS_OFFLINE,
@@ -93,12 +93,12 @@ export function followBusiness(bussinesId) {
     }
 }
 
-export function groupFollowBusiness(groupid, bussinesId) {
+export function groupFollowBusiness(groupid, businessId) {
     return async function (dispatch, getState) {
         try {
             dispatch({type: actions.SCANNER_RESET});
             const token = getState().authentication.token;
-            await businessApi.groupFollowBusiness(groupid, bussinesId, token);
+            await businessApi.groupFollowBusiness(groupid, businessId, token);
          } catch (error) {
             dispatch({
                 type: actions.NETWORK_IS_OFFLINE,

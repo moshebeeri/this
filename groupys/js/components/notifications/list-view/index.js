@@ -89,12 +89,12 @@ export default class NotificationListView extends Component {
         }
     }
 
-    getAction(viewItem, actionStyle, reddemStyle) {
+    getAction(viewItem, actionStyle, redeemStyle) {
         if (viewItem.action) {
             return undefined;
         }
         return <View style={actionStyle}>
-            <Button style={reddemStyle} onPress={this.accept.bind(this)}>
+            <Button style={redeemStyle} onPress={this.accept.bind(this)}>
                 <Text style={{fontWeight: 'bold', color: '#e65100'}}>Accept</Text>
             </Button>
         </View>
@@ -102,12 +102,12 @@ export default class NotificationListView extends Component {
 
     getAction
 
-    getPromotionAction(viewItem, actionStyle, reddemStyle) {
+    getPromotionAction(viewItem, actionStyle, redeemStyle) {
         if (viewItem.action) {
             return undefined;
         }
         return <View style={actionStyle}>
-            <Button style={reddemStyle} onPress={this.create.bind(this,viewItem.group)}>
+            <Button style={redeemStyle} onPress={this.create.bind(this,viewItem.group)}>
                 <Text style={{fontWeight: 'bold', color: '#e65100'}}>Create</Text>
             </Button>
         </View>
@@ -118,7 +118,7 @@ export default class NotificationListView extends Component {
         const group = viewItem.group;
         const user = viewItem.actor_user;
         const image = this.extractGroupImage(group);
-        const reddemStyle = {
+        const redeemStyle = {
             flex: -1,
             justifyContent: 'center',
             marginLeft: width / 4,
@@ -131,7 +131,7 @@ export default class NotificationListView extends Component {
         };
         const backgroundColor = this.getNotificationColor(viewItem);
         const actionStyle = this.getActionStyle(viewItem);
-        const action = this.getAction(viewItem, actionStyle, reddemStyle);
+        const action = this.getAction(viewItem, actionStyle, redeemStyle);
         const nameWidth = viewItem.group.name.length * 10;
         return (
             <View style={{padding: 5, backgroundColor: '#eaeaea'}} regular>
@@ -164,7 +164,7 @@ export default class NotificationListView extends Component {
         const viewItem = item.item;
         const group = viewItem.group;
         const user = viewItem.actor_user;
-        const reddemStyle = {
+        const redeemStyle = {
             flex: -1,
             justifyContent: 'center',
             marginLeft: width / 4,
@@ -178,7 +178,7 @@ export default class NotificationListView extends Component {
         const image = this.extractGroupImage(group);
         const backgroundColor = this.getNotificationColor(viewItem);
         const actionStyle = this.getActionStyle(viewItem);
-        const action = this.getPromotionAction(viewItem, actionStyle, reddemStyle);
+        const action = this.getPromotionAction(viewItem, actionStyle, redeemStyle);
         const nameWidth = viewItem.group.name.length * 10;
         return (
             <View style={{padding: 5, backgroundColor: '#eaeaea'}} regular>

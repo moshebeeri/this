@@ -421,7 +421,7 @@ class AddPromotion extends Component {
     }
 
     createDistributionForm() {
-        let distribution = <View style={styles.inputTextLayour}>
+        let distribution = <View style={styles.inputTextLayout}>
             <SimplePicker ref="TyoePicker" list={Distribution} itemTitle="Distribution Type"
                           defaultHeader="Choose Distribution"
                           isMandatory onValueSelected={this.selectDistributionType.bind(this)}/>
@@ -440,7 +440,7 @@ class AddPromotion extends Component {
             </View>
         }
         return <View>
-            <View style={styles.inputTextLayour}>
+            <View style={styles.inputTextLayout}>
                 <Text style={{color: '#FA8559', marginLeft: 8, marginRight: 8}}>Distribution</Text>
             </View>
             <View style={{flexDirection: 'row', justifyContent: 'flex-start', alignItems: 'center'}}>
@@ -480,15 +480,15 @@ class AddPromotion extends Component {
                 }}>
 
                     {this.createCoverImageComponnent()}
-                    <View style={styles.inputTextLayour}>
+                    <View style={styles.inputTextLayout}>
                         <Text style={{color: '#FA8559', marginLeft: 8, marginRight: 8}}>Details</Text>
                     </View>
-                    <View style={styles.inputTextLayour}>
+                    <View style={styles.inputTextLayout}>
                         <SimplePicker ref="promotionType" list={types} itemTitle="Promotion Type"
                                       defaultHeader="Choose Type" isMandatory
                                       onValueSelected={this.selectPromotionType.bind(this)}/>
                     </View>
-                    <View style={styles.inputTextLayour}>
+                    <View style={styles.inputTextLayout}>
                         <Text style={{color: '#FA8559', marginLeft: 8, marginRight: 8}}>General</Text>
                     </View>
                     <View style={styles.inputTextMediumLayout}>
@@ -508,13 +508,13 @@ class AddPromotion extends Component {
                         </View>
                     </View>
 
-                    <View style={styles.inputTextLayour}>
+                    <View style={styles.inputTextLayout}>
                         <TextInput field='Name' value={this.state.name}
                                    returnKeyType='next' ref="4" refNext="4"
                                    onSubmitEditing={this.focusNextField.bind(this, "5")}
                                    onChangeText={(name) => this.setState({name})} isMandatory={true}/>
                     </View>
-                    <View style={styles.inputTextLayour}>
+                    <View style={styles.inputTextLayout}>
                         <TextInput field='Description' value={this.state.info}
                                    returnKeyType='next' ref="5" refNext="5"
                                    onSubmitEditing={this.focusNextField.bind(this, "5")}
@@ -601,7 +601,7 @@ export default connect(
         products: state.products,
     }),
     (dispatch) => ({
-        bussinesActions: bindActionCreators(businessAction, dispatch),
+        businessActions: bindActionCreators(businessAction, dispatch),
         actions: bindActionCreators(promotionsAction, dispatch)
     })
 )(AddPromotion);

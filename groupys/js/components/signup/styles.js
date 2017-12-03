@@ -25,7 +25,7 @@ module.exports = {
         textDecorationLine: 'underline',
         color: '#00F',
     },
-    thiscountsContainer: {
+    thisContainer: {
         height: 150,
         marginTop: 100,
         justifyContent: 'center',
@@ -71,7 +71,7 @@ module.exports = {
         color: 'white',
         marginTop: -40,
     },
-    signginText: {
+    signInText: {
         fontFamily: (Platform.OS === 'ios') ? 'Roboto' : 'Roboto-Regular',
         fontSize: 16,
         color: 'white',

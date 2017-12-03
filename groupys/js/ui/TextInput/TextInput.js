@@ -70,10 +70,10 @@ export default class TextInputField extends Component {
     render() {
         const {fieldColor, field, placeholder, value, returnKeyType, refNext, isMandatory,keyboardType,disabled,secureTextEntry} = this.props;
         let textStyle = styles.textInputTextStyle;
-        let mandtoryIconColor = 'red';
+        let mandatoryIconColor = 'red';
         if (fieldColor === 'white') {
             textStyle = styles.textInputTextStyleWhite;
-            mandtoryIconColor = 'black';
+            mandatoryIconColor = 'black';
         }
         let textInputStyle = styles.textInputComponentStyle;
         if (this.state.invalid) {
@@ -92,11 +92,11 @@ export default class TextInputField extends Component {
                                      onChangeText={this.onChange.bind(this)} placeholder={placeholder}/>
         if(disabled){
             if(value) {
-                inputField = <View style={styles.textInputDisavledComponentStyle}>
+                inputField = <View style={styles.textInputDisabledComponentStyle}>
                     <Text>{value}</Text>
                 </View>
             }else{
-                inputField = <View style={styles.textInputDisavledComponentStyle}>
+                inputField = <View style={styles.textInputDisabledComponentStyle}>
                     <Text>{placeholder}</Text>
                 </View>
             }
@@ -105,7 +105,7 @@ export default class TextInputField extends Component {
         return <View style={containerStyle}>
             <View style={styles.textInputTitleContainer}>
                 <Text style={textStyle}>{field}</Text>
-                {field && isMandatory && <Icon style={{margin: 5, color: mandtoryIconColor, fontSize: 12}} name='star'/>}
+                {field && isMandatory && <Icon style={{margin: 5, color: mandatoryIconColor, fontSize: 12}} name='star'/>}
 
             </View>
             <View style={styles.textInputComponentLayout}>

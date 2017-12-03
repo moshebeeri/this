@@ -177,7 +177,7 @@ class ApplicationManager extends Component {
                         <Tab
                             heading={<TabHeading style={{justifyContent:'center',alignItems:'center', backgroundColor: "white"}}><Icon2
                                 style={{color: '#2db6c8', fontSize: 30,}} name="md-notifications"/></TabHeading>}>
-                            <Notification navigation={this.props.navigation} index={3}></Notification>
+                            <Notification navigation={this.props.navigation} index={3}/>
                         </Tab>
 
 

@@ -121,7 +121,7 @@ class AddPermittedUser extends Component {
         if (!this.state.searchUser) {
             return <View></View>
         }
-        return <View style={styles.inputTextLayour}>
+        return <View style={styles.inputTextLayout}>
 
             <TextInput field='User Phone Number' value={this.state.phoneNumber}
                        returnKeyType='next' ref="1" refNext="1"

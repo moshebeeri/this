@@ -26,9 +26,9 @@ import UiConverter from '../../../api/feed-ui-converter'
 import {GroupHeader, PromotionHeaderSnippet} from '../../../ui/index';
 import BusinessHeader from "../../../ui/BusinessHeader/BusinessHeader";
 
-const {width, height} = Dimensions.get('window')
+const {width, height} = Dimensions.get('window');
 const vw = width / 100;
-const vh = height / 100
+const vh = height / 100;
 let groupApi = new GroupApi();
 let dateUtils = new DateUtils();
 let uiConverter = new UiConverter();
@@ -50,18 +50,18 @@ export default class GenericListGroupView extends Component {
         const {item, onPressItem, index} = this.props;
         const styles = this.createStyle();
         let promotionItem = this.createPromotionItem(item);
-        let showBusinessHeader = this.isBusiness(item.entity_type)
+        let showBusinessHeader = this.isBusiness(item.entity_type);
 
         const promotion = this.createPromotion(styles, promotionItem,showBusinessHeader);
         const message = this.createMessage(styles, item);
-        const conainerStyle = {
+        const containerStyle = {
             alignItems: 'center',
             marginBottom: 4,
             backgroundColor: 'white'
         };
         const row = <View key={index}>
             <TouchableOpacity key={index} onPress={onPressItem}>
-                <View style={conainerStyle}>
+                <View style={containerStyle}>
                     <GroupHeader group={item}/>
 
                     {showBusinessHeader && promotionItem &&

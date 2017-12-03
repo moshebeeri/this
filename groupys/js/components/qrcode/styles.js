@@ -65,7 +65,7 @@ module.exports = {
         padding: 10,
         margin: 40
     },
-    imageButtomText: {
+    imageBottomText: {
         textShadowOffset: {width: 1, height: 1},
         textShadowColor: 'black', fontWeight: 'bold', marginLeft: 20, marginTop: 5, color: 'white', fontSize: 15
     },

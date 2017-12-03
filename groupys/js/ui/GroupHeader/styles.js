@@ -41,7 +41,7 @@ module.exports = {
     editButtonConntainer: {
         margin:5,width: 40, height: 40, opacity: 0.65,backgroundColor: 'white', alignItems: 'center', justifyContent: 'center'
     },
-    businessPiker: {
+    businessPicker: {
         flexDirection: 'row',
         alignItems: 'center',
         justifyContent: 'center',
@@ -55,7 +55,7 @@ module.exports = {
         padding:10,
         flex:1
     },
-    businessPikkerComponent:{
+    businessPickerComponent:{
         flex:7
     },
     businessGroupText:{
@@ -82,7 +82,7 @@ module.exports = {
         textShadowColor: 'black',
         fontWeight: 'bold', marginLeft: 20, marginTop: -100, fontSize: 25, color: 'white'
     },
-    imageButtomText: {
+    imageBottomText: {
         textShadowOffset: {width: 1, height: 1},
         textShadowColor: 'black',
         fontWeight: 'bold',

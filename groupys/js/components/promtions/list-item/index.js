@@ -68,7 +68,7 @@ export default class PromotionListView extends Component {
                         <View style={styles.promotionLoctionContainer}>
                             <View><Text style={styles.detailsTitleText}>Location</Text></View>
                             <View><Text
-                                style={styles.detailsText}>{FormUtils.getDistanceFromLatLonInKm(location.lat, location.long, promotionItem.location.lat, promotionItem.location.lng)}  km</Text></View>
+                                style={styles.detailsText}>{FormUtils.getDistanceString(location.lat, location.long, promotionItem.location.lat, promotionItem.location.lng)}</Text></View>
                         </View>
                         <View style={styles.expireDateContainer}>
                             <View><Text style={styles.detailsTitleText}>Expire</Text></View>
@@ -226,4 +226,3 @@ export default class PromotionListView extends Component {
         return stylesPortrate;
     }
 }
-

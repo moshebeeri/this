@@ -162,7 +162,7 @@ export default class HappyHourComponent extends Component {
     createProductView() {
         if (this.props.state.product) {
             let productName = this.props.state.product.name
-            return <View style={styles.inputTextLayour}>
+            return <View style={styles.inputTextLayout}>
                 <Text style={{color: '#FA8559', marginLeft: 8, marginRight: 8}}>Promotion on: {productName}</Text>
             </View>
         }
@@ -186,7 +186,7 @@ export default class HappyHourComponent extends Component {
 
         }
         return <View>
-            <View style={styles.inputTextLayour}>
+            <View style={styles.inputTextLayout}>
                 <Text style={{color: '#FA8559', marginLeft: 8, marginRight: 8}}>Happy Hour</Text>
             </View>
             <View style={{flexDirection:'row',justifyContent:'center',alignItems:'center'}}>

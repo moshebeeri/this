@@ -180,12 +180,12 @@ module.exports = {
         flex: 4,
         width: width,
     },
-    buttom_items: {
+    bottom_items: {
         margin: 3,
         backgroundColor: 'white',
         width: width - 18
     },
-    inputTextLayour: {
+    inputTextLayout: {
         marginTop: 4, padding: 3,
         width: width - 15
     }

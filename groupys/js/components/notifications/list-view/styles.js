@@ -12,7 +12,7 @@ module.exports = {
         textShadowColor: 'black',
         fontWeight: 'bold', marginLeft: 20, marginTop: -100, fontSize: 25, color: 'white'
     },
-    imageButtomText: {
+    imageBottomText: {
         textShadowOffset: {width: 1, height: 1},
         textShadowColor: 'black',
         fontWeight: 'bold',

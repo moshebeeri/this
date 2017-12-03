@@ -99,28 +99,28 @@ class ChangePassword extends Component {
 
                 <View>
 
-                    <View style={styles.inputTextLayour}>
+                    <View style={styles.inputTextLayout}>
                         <TextInput field='Current Password' value={this.state.currentPassword}
                                    returnKeyType='next' ref="1" refNext="1" secureTextEntry
                                    isMandatory
                                    onSubmitEditing={this.focusNextField.bind(this, "2")}
                                    onChangeText={(currentPassword) => this.setState({currentPassword})}/>
                     </View>
-                    <View style={styles.inputTextLayour}>
+                    <View style={styles.inputTextLayout}>
                         <TextInput field='New Password' value={this.state.newPassword}
                                    returnKeyType='next' ref="2" refNext="2" secureTextEntry
                                    isMandatory
                                    onSubmitEditing={this.focusNextField.bind(this, "3")}
                                    onChangeText={(newPassword) => this.setState({newPassword})}/>
                     </View>
-                    <View style={styles.inputTextLayour}>
+                    <View style={styles.inputTextLayout}>
                         <TextInput field='Confirm Password' value={this.state.confirmPassword}
                                    returnKeyType='done' ref="3" refNext="3" secureTextEntry
                                    onSubmitEditing={this.changePassword.bind(this)}
                                    isMandatory
                                    onChangeText={(confirmPassword) => this.setState({confirmPassword})}/>
                     </View>
-                    <View style={styles.inputTextLayour}>
+                    <View style={styles.inputTextLayout}>
                         {message}
                     </View>
                     {saving && <Spinner/>}
