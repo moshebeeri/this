@@ -27,9 +27,9 @@ export default class SimplePicker extends Component {
             return s.value;
         })
         this.setState({
-            type: options[value],
+            type: options[value -1],
         })
-        onValueSelected(options[value])
+        onValueSelected(options[value -1])
     }
 
     showDropDownn() {
@@ -59,13 +59,18 @@ export default class SimplePicker extends Component {
         let options = list.map((s) => {
             return s.label;
         })
+        let pickerStyle=styles.modalView;
+        if (this.state.invalid) {
+            pickerStyle = styles.modalViewInvalid;
+        }
+        options.unshift(defaultValue);
         return <View>
             <View style={styles.pickerTitleContainer}>
                 <Text style={styles.pickerTextStyle}>{itemTitle}</Text>
                 {isMandatory && <Icon style={{margin: 5, color: 'red', fontSize: 12}} name='star'/>}
             </View>
 
-            <TouchableOpacity onPress={() => this.showDropDownn()} style={styles.modalView}>
+            <TouchableOpacity onPress={() => this.showDropDownn()} style={pickerStyle}>
                 <ModalDropdown ref={'dropDown'}
                                style={styles.modalViewStyle}
                                options={options}

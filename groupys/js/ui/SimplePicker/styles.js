@@ -34,6 +34,21 @@ module.exports = {
         paddingTop: 0,
         paddingBottom: 0,
     },
+    modalViewInvalid: {
+        width: width - 20,
+        height: 40,
+
+        justifyContent: 'center',
+        alignItems: 'flex-start',
+        padding: 10,
+        backgroundColor:'white',
+        borderWidth:1,
+        borderColor:'red',
+
+        paddingLeft: 12,
+        paddingTop: 0,
+        paddingBottom: 0,
+    },
     modalViewStyle: {
         width: width - 20,
         height: 40,
