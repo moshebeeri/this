@@ -67,7 +67,7 @@ module.exports = {
         marginLeft: 10,
         backgroundColor: 'white'
     },
-    business_no_pic_upper_image_container: {
+    business_no_pic_no_cover_upper_image_container: {
         width: width / 3,
         height: 110,
         marginTop: 10,
@@ -76,6 +76,26 @@ module.exports = {
         justifyContent: 'center',
         marginRight: 12,
 
+        borderWidth: 2,
+        borderRadius: 2,
+        borderColor: '#ddd',
+        borderBottomWidth: 0,
+        shadowColor: '#000',
+        shadowOffset: {width: 20, height: 10},
+        shadowOpacity: 0.5,
+        shadowRadius: 2,
+        marginLeft: 10,
+        backgroundColor: 'white'
+    },
+    business_no_pic_upper_image_container: {
+        width: width / 3,
+        height: 110,
+        marginTop: 10,
+        marginBottom: 60,
+        alignItems: 'center',
+        justifyContent: 'center',
+        marginRight: 12,
+        position:'absolute',
         borderWidth: 2,
         borderRadius: 2,
         borderColor: '#ddd',

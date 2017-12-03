@@ -178,7 +178,7 @@ class AddBusiness extends Component {
 
                 </View>
             }else{
-                return <View style={styles.business_no_pic_upper_image_container}>
+                return <View style={styles.business_no_pic_no_cover_upper_image_container}>
                     <ImagePicker logo ref={"logoImage"} mandatory
                                  image={<Image style={{width: 111, height: 105}} source={{uri: this.state.path}}/>}
                                  color='black' pickFromCamera
@@ -187,13 +187,23 @@ class AddBusiness extends Component {
                 </View>
             }
         } else {
-            return <View style={styles.business_no_pic_upper_image_container}>
+            if(coverPic) {
+                return <View style={styles.business_no_pic_upper_image_container}>
 
-                <ImagePicker logo ref={"logoImage"} mandatory color='black' pickFromCamera
-                             setImage={this.setImage.bind(this)}/>
-                <Text>Logo</Text>
+                    <ImagePicker logo ref={"logoImage"} mandatory color='black' pickFromCamera
+                                 setImage={this.setImage.bind(this)}/>
+                    <Text>Logo</Text>
 
-            </View>
+                </View>
+            }else {
+                return <View style={styles.business_no_pic_no_cover_upper_image_container}>
+
+                    <ImagePicker logo ref={"logoImage"} mandatory color='black' pickFromCamera
+                                 setImage={this.setImage.bind(this)}/>
+                    <Text>Logo</Text>
+
+                </View>
+            }
         }
     }
 
