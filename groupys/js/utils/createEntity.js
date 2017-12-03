@@ -24,10 +24,12 @@ class EntityUtils {
         if (Platform.OS === 'ios') {
             let opts = {
                 url: `${server_host}/api/images/` + responseData._id,
-                files: files,
-                method: 'POST',                             // optional: POST or PUT
+                path: 'file:' + imagePath,
+                method: 'POST',
                 headers: {'Accept': 'application/json', 'Authorization': 'Bearer ' + token},  // optional
-                params: {},                   // optional
+                params: {},
+                field: 'uploaded_media',
+                type: 'multipart'// optional
             };
             Upload.startUpload(opts).then((uploadId)=>{
                 Upload.addListener('error', uploadId, (data) => {
@@ -45,7 +47,8 @@ class EntityUtils {
             let option2 = {
                 uploadUrl: `${server_host}/api/images/` + responseData._id,
                 files: files,
-                method: 'POST',                             // optional: POST or PUT
+                method: 'POST',
+                type: 'raw',// optional: POST or PUT
                 headers: {'Accept': 'application/json', 'Authorization': 'Bearer ' + token},  // optional
                 fields: {}
                 // optional
@@ -69,10 +72,12 @@ class EntityUtils {
         if (Platform.OS === 'ios') {
             let opts = {
                 url: `${server_host}/api/images/logo/` + responseData._id,
-                files: files,
+                path: 'file:' + imagePath,
                 method: 'POST',                             // optional: POST or PUT
                 headers: {'Accept': 'application/json', 'Authorization': 'Bearer ' + token},  // optional
-                params: {},                   // optional
+                params: {},
+                field: 'uploaded_media',
+                type: 'multipart'// optional
             };
             Upload.startUpload(opts).then((uploadId)=>{
                 Upload.addListener('error', uploadId, (data) => {
