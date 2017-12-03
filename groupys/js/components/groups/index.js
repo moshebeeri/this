@@ -51,7 +51,7 @@ class Groups extends Component {
         />
     }
     navigateToAdd(){
-
+        this.props.navigation.navigate('AddGroups')
     }
     componentWillMount() {
         this.props.actions.fetchGroups();
