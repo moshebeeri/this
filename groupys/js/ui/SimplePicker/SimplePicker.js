@@ -54,6 +54,11 @@ export default class SimplePicker extends Component {
         return true;
     }
 
+    renderRow(value){
+
+        return <View><Text style={{paddingLeft:10,paddingRight:10,fontSize:14}}>{value}</Text></View>
+
+    }
     createIosRender() {
         const {list, itemTitle, defaultHeader, isMandatory, defaultValue} = this.props;
         let options = list.map((s) => {
@@ -64,6 +69,8 @@ export default class SimplePicker extends Component {
             pickerStyle = styles.modalViewInvalid;
         }
         options.unshift(defaultValue);
+
+
         return <View>
             <View style={styles.pickerTitleContainer}>
                 <Text style={styles.pickerTextStyle}>{itemTitle}</Text>
@@ -76,7 +83,8 @@ export default class SimplePicker extends Component {
                                options={options}
                                textStyle={{fontSize: 20}}
                                onSelect={this.selectIos.bind(this)}
-                               defaultValue={options[0]}
+                               renderRow = {this.renderRow.bind(this)}
+                               // defaultValue={options[0]}
                                showsVerticalScrollIndicator={true}
                 />
                 <Icon3 style={{right: 10, position: 'absolute', fontSize: 25, color: "black"}} name="chevron-down"/>

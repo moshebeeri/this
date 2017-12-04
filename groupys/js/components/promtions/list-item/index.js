@@ -25,6 +25,7 @@ import {PunchView, SocialState, SubmitButton} from '../../../ui/index';
 
 const ILS = '₪';
 let feedUiConverter = new FeedUiConverter();
+import strings from "../../../i18n/i18n"
 export default class PromotionListView extends Component {
     constructor(props) {
         super(props);
@@ -66,35 +67,35 @@ export default class PromotionListView extends Component {
                     </View>
                     <View style={styles.promotionDetailsContainer}>
                         <View style={styles.promotionLoctionContainer}>
-                            <View><Text style={styles.detailsTitleText}>Location</Text></View>
+                            <View><Text style={styles.detailsTitleText}>{strings.Location}</Text></View>
                             <View><Text
                                 style={styles.detailsText}>{FormUtils.getDistanceString(location.lat, location.long, promotionItem.location.lat, promotionItem.location.lng)}</Text></View>
                         </View>
                         <View style={styles.expireDateContainer}>
-                            <View><Text style={styles.detailsTitleText}>Expire</Text></View>
+                            <View><Text style={styles.detailsTitleText}>{strings.Expire}</Text></View>
                             <View><Text style={styles.detailsText}>{item.endDate}</Text></View>
                         </View>
                         <View style={styles.editButtonContainer}>
-                            <SubmitButton title="EDIT" color="#e65100"
+                            <SubmitButton title={strings.Edit.toUpperCase()} color="#e65100"
                                           onPress={this.showProduct.bind(this, this.props, this.props.item)}/>
                         </View>
                     </View>
                     <View style={styles.promotionAnalyticsContainer}>
                         <View style={styles.promotionAnalyticsAttribute}>
-                            <Text>TOTAL </Text>
+                            <Text>{strings.Total.toUpperCase()} </Text>
                             <Text style={styles.promotion_addressText} note>{item.quantity} </Text>
 
                         </View>
                         <View style={styles.promotionAnalyticsAttribute}>
 
-                            <Text>SAVED</Text>
+                            <Text>{strings.Saved.toUpperCase()}</Text>
                             <Text style={styles.promotion_addressText}
                                   note>{promotionItem.social_state.saves}</Text>
 
                         </View>
                         <View style={styles.promotionAnalyticsAttribute}>
 
-                            <Text>USED</Text>
+                            <Text>{strings.Used.toUpperCase()}</Text>
                             <Text style={styles.promotion_addressText} note>{promotionItem.social_state.realizes}</Text>
 
                         </View>

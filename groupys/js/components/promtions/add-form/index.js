@@ -16,37 +16,38 @@ import ReduceAmountComponent from "./reduceAmount/index";
 import HappyHourComponent from "./happyHour/index";
 import styles from "./styles";
 import {DatePicker, FormHeader, ImagePicker, SelectButton, SimplePicker, Spinner, TextInput} from '../../../ui/index';
-
+import strings from "../../../i18n/i18n"
 const {width, height} = Dimensions.get('window')
 let promotionApi = new PromotionApi();
 const types = [
         {
             value: 'PUNCH_CARD',
-            label: 'Punch Card'
+            label: strings.PunchCard
         },
         {
             value: 'HAPPY_HOUR',
-            label: 'Happy Hour'
+            label: strings.HappyHour
         },
         {
             value: 'PERCENT',
-            label: '% Off'
-        },
-        {
-            value: 'REDUCED_AMOUNT',
-            label: 'Buy $ Pay $'
+            label: strings.PercentageOff
         },
         {
             value: 'X+Y',
-            label: 'Buy X Get Y'
+            label:  strings.XPlusY
         },
         {
+            value: 'REDUCED_AMOUNT',
+            label: strings.ReduceAmount
+        },
+
+        {
             value: 'X_FOR_Y',
-            label: 'Buy X Pay $'
+            label:  strings.XForY
         },
         {
             value: 'X+N%OFF',
-            label: 'Buy X Get Y With % Off'
+            label:  strings.XPlusYOff
         },
     ]
     //15% off for purchases more than 1000$ OR buy iphone for 600$ and get 50% off for earphones
@@ -54,11 +55,11 @@ const types = [
 const Distribution = [
     {
         value: 'GROUP',
-        label: 'Business Groups'
+        label: strings.BusinessGroups
     },
     {
         value: 'PERSONAL',
-        label: 'Business Followers'
+        label: strings.BusinessFollowers
     }
 ];
 
@@ -422,8 +423,8 @@ class AddPromotion extends Component {
 
     createDistributionForm() {
         let distribution = <View style={styles.inputTextLayout}>
-            <SimplePicker ref="TyoePicker" list={Distribution} itemTitle="Distribution Type"
-                          defaultHeader="Choose Distribution"
+            <SimplePicker ref="TyoePicker" list={Distribution} itemTitle={strings.DistributionType}
+                          defaultHeader={strings.ChooseDistribution}
                           isMandatory onValueSelected={this.selectDistributionType.bind(this)}/>
         </View>
         let button = undefined;
@@ -435,7 +436,7 @@ class AddPromotion extends Component {
                         selected</Text>
             }
             button = <View style={{flexDirection: 'row', alignItems: 'center'}}>
-                <SelectButton title="Select Groups" action={this.showGroups.bind(this)}/>
+                <SelectButton title={strings.SelectGroups} action={this.showGroups.bind(this)}/>
 
             </View>
         }
@@ -462,11 +463,11 @@ class AddPromotion extends Component {
         if (this.props.navigation.state.params.group) {
             distributionForm = undefined;
         }
-        let header = "Add Promotion";
+        let header = strings.AddPromotion;
         if (this.props.navigation.state.params.onBoardType) {
             switch (this.props.navigation.state.params.onBoardType) {
                 case 'BUSINESS':
-                    header = "Add On Boarding Promotion"
+                    header = strings.AddOnBoardingPromotion
                     break;
             }
         }
@@ -484,7 +485,7 @@ class AddPromotion extends Component {
                         <Text style={{color: '#FA8559', marginLeft: 8, marginRight: 8}}>Details</Text>
                     </View>
                     <View style={styles.inputTextLayout}>
-                        <SimplePicker ref="promotionType" list={types} itemTitle="Promotion Type"
+                        <SimplePicker ref="promotionType" list={types} itemTitle={strings.PromotionType}
                                       defaultHeader="Choose Type" isMandatory
                                       onValueSelected={this.selectPromotionType.bind(this)}/>
                     </View>
@@ -493,14 +494,14 @@ class AddPromotion extends Component {
                     </View>
                     <View style={styles.inputTextMediumLayout}>
                         <View style={{flex: 1, marginRight: 10}}>
-                            <TextInput field='Quantity' value={this.state.quantity}
+                            <TextInput field={strings.Quantity} value={this.state.quantity}
                                        keyboardType='numeric'
                                        returnKeyType='next' ref="2" refNext="2"
                                        onSubmitEditing={this.focusNextField.bind(this, "4")}
                                        onChangeText={(quantity) => this.setState({quantity})} isMandatory={true}/>
                         </View>
                         <View style={{flex: 3, marginLeft: 5}}>
-                            <DatePicker field='Exparation Date' value={this.state.end}
+                            <DatePicker field={strings.ExpirationDate} value={this.state.end}
                                         returnKeyType='next' ref="3" refNext="3"
                                         onChangeDate={(date) => {
                                             this.setState({end: date})
@@ -509,13 +510,13 @@ class AddPromotion extends Component {
                     </View>
 
                     <View style={styles.inputTextLayout}>
-                        <TextInput field='Name' value={this.state.name}
+                        <TextInput field={strings.Name} value={this.state.name}
                                    returnKeyType='next' ref="4" refNext="4"
                                    onSubmitEditing={this.focusNextField.bind(this, "5")}
                                    onChangeText={(name) => this.setState({name})} isMandatory={true}/>
                     </View>
                     <View style={styles.inputTextLayout}>
-                        <TextInput field='Description' value={this.state.info}
+                        <TextInput field={strings.Description} value={this.state.info}
                                    returnKeyType='next' ref="5" refNext="5"
                                    onSubmitEditing={this.focusNextField.bind(this, "5")}
                                    onChangeText={(info) => this.setState({info})} isMandatory={true}/>
