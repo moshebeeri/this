@@ -65,7 +65,7 @@ export default class NotificationListView extends Component {
         if (viewItem.read) {
             return 'white';
         }
-        return '#fef8e0'
+        return '#d3f9ff'
     }
 
     getActionStyle(viewItem) {
@@ -80,7 +80,7 @@ export default class NotificationListView extends Component {
             }
         }
         return {
-            backgroundColor: '#fef8e0',
+            backgroundColor: '#d3f9ff',
             width: width,
             height: 50,
             justifyContent: 'center',
@@ -95,7 +95,7 @@ export default class NotificationListView extends Component {
         }
         return <View style={actionStyle}>
             <Button style={redeemStyle} onPress={this.accept.bind(this)}>
-                <Text style={{fontWeight: 'bold', color: '#e65100'}}>Accept</Text>
+                <Text style={{fontWeight: 'bold', color: '#2db6c8'}}>Accept</Text>
             </Button>
         </View>
     }
@@ -108,7 +108,7 @@ export default class NotificationListView extends Component {
         }
         return <View style={actionStyle}>
             <Button style={redeemStyle} onPress={this.create.bind(this,viewItem.group)}>
-                <Text style={{fontWeight: 'bold', color: '#e65100'}}>Create</Text>
+                <Text style={{fontWeight: 'bold', color: '#2db6c8'}}>Create</Text>
             </Button>
         </View>
     }
@@ -127,7 +127,7 @@ export default class NotificationListView extends Component {
             height: 40,
             width: width / 2,
             backgroundColor: 'white',
-            borderColor: '#e65100',
+            borderColor: '#2db6c8',
         };
         const backgroundColor = this.getNotificationColor(viewItem);
         const actionStyle = this.getActionStyle(viewItem);
@@ -173,7 +173,7 @@ export default class NotificationListView extends Component {
             height: 40,
             width: width / 2,
             backgroundColor: 'white',
-            borderColor: '#e65100',
+            borderColor: '#2db6c8',
         };
         const image = this.extractGroupImage(group);
         const backgroundColor = this.getNotificationColor(viewItem);
