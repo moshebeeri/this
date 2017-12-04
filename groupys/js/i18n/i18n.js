@@ -71,9 +71,13 @@ let strings = new LocalizedStrings({
         Promotionon: 'Promotion on',
         Gift: 'Gift',
         BuyAmount: 'Buy Amount',
+        PayAmount: 'Pay $'
         NumberofGifts: 'Number of Gifts',
-        SelectProduct:'Select Product',
-        SelectGift: 'Select Gift'
+        SelectProduct: 'Select Product',
+        SelectGift: 'Select Gift',
+        SelectOn: 'Select On',
+        Discounton: 'Discount on',
+        BuyProductsFor: 'Buy X Products For $',
     },
     en: {
         Promotion: "Promotion",

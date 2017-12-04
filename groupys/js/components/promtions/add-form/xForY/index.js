@@ -2,7 +2,7 @@ import React, {Component} from 'react';
 import {Text, View} from 'react-native'
 import styles from './styles'
 import {SelectButton, TextInput} from '../../../../ui/index';
-
+import strings from "../../../../i18n/i18n"
 export default class XForYComponent extends Component {
     constructor(props) {
         super(props);
@@ -106,22 +106,22 @@ export default class XForYComponent extends Component {
         }
         return <View>
             <View style={styles.inputTextLayout}>
-                <Text style={{color: '#FA8559', marginLeft: 8, marginRight: 8}}>Buy X Products For $</Text>
+                <Text style={{color: '#FA8559', marginLeft: 8, marginRight: 8}}>{strings.BuyProductsFor}</Text>
             </View>
 
             <View style={{flexDirection: 'row', justifyContent: 'center', alignItems: 'center'}}>
-                <View style={{flex: 1.7, marginTop: 25}}><SelectButton ref="xplusySelectProduct" selectedValue={this.props.state.product}isMandatory title="Select Product"
+                <View style={{flex: 1.7, marginTop: 25}}><SelectButton ref="xplusySelectProduct" selectedValue={this.props.state.product}isMandatory title={strings.SelectProduct}
                                                                        action={this.showBuyProducts.bind(this, true)}/></View>
 
                 <View style={styles.inputPrecenComponent}>
-                    <TextInput field='Buy Amount' value={eligible}
+                    <TextInput field={strings.BuyAmount} value={eligible}
                                returnKeyType='next' ref="Buy Amount" refNext="Buy Amount"
                                keyboardType='numeric'
                                onSubmitEditing={this.focusNextField.bind(this, "Pay $")}
                                onChangeText={(value) => this.setBuyAmount(value)} isMandatory={true}/>
                 </View>
                 <View style={styles.inputPrecenComponent}>
-                    <TextInput field='Pay $' value={pay}
+                    <TextInput field={strings.PayAmount} value={pay}
                                returnKeyType='next' ref="Pay $" refNext="Pay $"
                                keyboardType='numeric'
                                onChangeText={(value) => this.setPay(value)} isMandatory={true}/>

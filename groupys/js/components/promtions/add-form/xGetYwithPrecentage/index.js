@@ -1,11 +1,9 @@
 import React, {Component} from 'react';
-import {
-    Platform,View,Text
-} from 'react-native'
-
+import {Platform, Text, View} from 'react-native'
 import FormUtils from "../../../../utils/fromUtils";
 import styles from './styles'
-import {SelectButton, SimplePicker, TextInput} from '../../../../ui/index';
+import {SelectButton, TextInput} from '../../../../ui/index';
+import strings from "../../../../i18n/i18n"
 
 export default class XPlusYOffComponent extends Component {
     constructor(props) {
@@ -25,6 +23,7 @@ export default class XPlusYOffComponent extends Component {
             }
         )
     }
+
     isValid() {
         let result = true;
         Object.keys(this.refs).forEach(key => {
@@ -81,54 +80,60 @@ export default class XPlusYOffComponent extends Component {
     }
 
     createProductView() {
-        if(this.props.state.product) {
+        if (this.props.state.product) {
             let productName = this.props.state.product.name
             return <View style={styles.inputTextLayout}>
-                <Text style={{color: '#FA8559', marginLeft: 8, marginRight: 8}}>Promotion on: {productName}</Text>
+                <Text style={{
+                    color: '#FA8559',
+                    marginLeft: 8,
+                    marginRight: 8
+                }}>{strings.Promotionon}: {productName}</Text>
             </View>
         }
         return undefined
-
     }
 
-
     createProductGiftView() {
-        if(this.props.state.giftProduct) {
+        if (this.props.state.giftProduct) {
             let productName = this.props.state.giftProduct.name
             return <View style={styles.inputTextLayout}>
-                <Text style={{color: '#FA8559', marginLeft: 8, marginRight: 8}}>Discount on: {productName}</Text>
+                <Text
+                    style={{color: '#FA8559', marginLeft: 8, marginRight: 8}}>{strings.Discounton}: {productName}</Text>
             </View>
         }
         return undefined
-
     }
 
     render() {
         let productGiftView = this.createProductGiftView();
         let productView = this.createProductView()
-
         let discount = ''
-        if(this.props.state.x_plus_n_percent_off && this.props.state.x_plus_n_percent_off.eligible){
+        if (this.props.state.x_plus_n_percent_off && this.props.state.x_plus_n_percent_off.eligible) {
             discount = this.props.state.x_plus_n_percent_off.eligible;
         }
         return <View>
 
 
-
             <View style={styles.inputTextLayout}>
-                <Text style={{color: '#FA8559', marginLeft: 8, marginRight: 8}}>Buy X Get Y With % Off</Text>
+                <Text style={{color: '#FA8559', marginLeft: 8, marginRight: 8}}>{strings.XPlusYOff}</Text>
             </View>
-            <View style={{flexDirection:'row',justifyContent:'center',alignItems:'center'}}>
+            <View style={{flexDirection: 'row', justifyContent: 'center', alignItems: 'center'}}>
 
-                <View style={{flex:1.7,marginTop:25}}><SelectButton ref="xgetyselectProduct" isMandatory selectedValue={this.props.state.product} title="Select Product" action={this.showBuyProducts.bind(this, true)}/></View>
+                <View style={{flex: 1.7, marginTop: 25}}><SelectButton ref="xgetyselectProduct" isMandatory
+                                                                       selectedValue={this.props.state.product}
+                                                                       title={strings.SelectProduct}
+                                                                       action={this.showBuyProducts.bind(this, true)}/></View>
 
             </View>
             {productView}
-            <View style={{flexDirection:'row',justifyContent:'center',alignItems:'center'}}>
-                <View style={{flex:1.7,marginTop:25}}><SelectButton ref="xgetyselectOmProduct" isMandatory selectedValue={this.props.state.giftProduct}title="Select On" action={this.showProducts.bind(this, true)}/></View>
+            <View style={{flexDirection: 'row', justifyContent: 'center', alignItems: 'center'}}>
+                <View style={{flex: 1.7, marginTop: 25}}><SelectButton ref="xgetyselectOmProduct" isMandatory
+                                                                       selectedValue={this.props.state.giftProduct}
+                                                                       title={strings.SelectOn}
+                                                                       action={this.showProducts.bind(this, true)}/></View>
 
                 <View style={styles.inputPrecenComponent}>
-                    <TextInput field='% Off' value={discount}
+                    <TextInput field={strings.PercentageOff} value={discount}
                                returnKeyType='next' ref="2" refNext="2"
                                keyboardType='numeric'
                                validateContent={FormUtils.validatePercent}
