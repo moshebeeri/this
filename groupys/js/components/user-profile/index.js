@@ -23,7 +23,7 @@ import {bindActionCreators} from "redux";
 import {connect} from 'react-redux';
 import * as userAction from "../../actions/user";
 import {FormHeader, ImagePicker, Spinner, TextInput} from '../../ui/index';
-
+import strings from "../../i18n/i18n"
 const noPic = require('../../../images/client_1.png');
 
 class UserProfile extends Component {
@@ -126,7 +126,7 @@ class UserProfile extends Component {
 
             <View style={styles.settingsContainer}>
                 <FormHeader showBack submitForm={this.save.bind(this)} navigation={this.props.navigation}
-                            title={"User Settings"} bgc="#FA8559"/>
+                            title={strings.UserSettings} bgc="#FA8559"/>
 
                 <View style={styles.thumbnail}>
 
@@ -137,13 +137,13 @@ class UserProfile extends Component {
                 <View>
 
                     <View style={styles.inputTextLayout}>
-                        <TextInput field='User Name' value={this.state.name}
+                        <TextInput field={strings.UserName}value={this.state.name}
                                    returnKeyType='done' ref="1" refNext="1"
 
                                    onChangeText={(name) => this.setState({name})}/>
                     </View>
                     <View style={styles.inputTextLayout}>
-                        <TextInput field='User Phone' value={this.state.phone_number} disabled
+                        <TextInput field={strings.UserPhone}value={this.state.phone_number} disabled
                                    returnKeyType='done' ref="2" refNext="2"
                                    onChangeText={(phone_number) => this.setState({phone_number})}/>
                     </View>

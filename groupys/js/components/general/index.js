@@ -146,7 +146,7 @@ class General extends Component {
                     <Button transparent
                             onPress={this.sendRequest.bind(this)}
                     >
-                        <Text>strings.PostRequest</Text>
+                        <Text>{strings.PostRequest}</Text>
                     </Button>
                 </Footer>
             </Container>

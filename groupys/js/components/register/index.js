@@ -12,7 +12,7 @@ const logo = require('../../../images/logo.png');
 import {NavigationActions} from 'react-navigation'
 import {bindActionCreators} from "redux";
 import * as loginAction from "../../actions/login";
-
+import strings from "../../i18n/i18n"
 const resetAction = NavigationActions.reset({
     index: 0,
     actions: [
@@ -53,18 +53,18 @@ class Register extends Component {
 
                         <View>
                             <View style={styles.thisContainer}>
-                                <Text style={styles.this}>This</Text>
-                                <Text style={styles.thiscount}>Counts</Text>
+                                <Text style={styles.this}>{strings.THIS}</Text>
+
                             </View>
                             <View style={styles.mainContainer}>
 
-                                <Text style={styles.signInText}>We have sent you a SMS</Text>
-                                <Text style={styles.decritpionLine2}>with a validation code!</Text>
+                                <Text style={styles.signInText}>{strings.SmsMessagePart1}</Text>
+                                <Text style={styles.decritpionLine2}>{strings.SmsMessagePart2}</Text>
                                 <Item style={styles.nameTextInput} regular>
                                     <Input value={this.state.name} blurOnSubmit={true} returnKeyType='done' ref="1"
                                            onSubmitEditing={this.validateCode.bind(this)}
                                            onChangeText={(code) => this.setState({code})}
-                                           placeholder='Validation Code'/>
+                                           placeholder={strings.ValidationCode}/>
                                 </Item>
 
                                 {errorMessage}
@@ -87,7 +87,7 @@ class Register extends Component {
                                     }} regular>
 
                                         <Text
-                                            style={{color: 'white', fontStyle: 'normal', fontSize: 15}}>VALIDATE</Text>
+                                            style={{color: 'white', fontStyle: 'normal', fontSize: 15}}>{strings.Validate}.toUpperCase()</Text>
 
                                     </TouchableOpacity>
                                 </View>
