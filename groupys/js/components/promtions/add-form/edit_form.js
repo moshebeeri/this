@@ -5,28 +5,10 @@ import {actions} from "react-native-navigation-redux-helpers";
 import {Button, Container, Content, Footer, Icon, Input, Item, Picker, Text} from "native-base";
 import {bindActionCreators} from "redux";
 import * as promotionsAction from "../../../actions/promotions";
-import PromotionApi from "../../../api/promotion";
 import * as businessAction from "../../../actions/business";
 import styles from "./styles";
 import {DatePicker, FormHeader, Spinner, TextInput} from '../../../ui/index';
-
-var createEntity = require("../../../utils/createEntity");
-let promotionApi = new PromotionApi();
-const Distribution = [
-    {
-        value: '',
-        label: 'Choose Distribution'
-    },
-    {
-        value: 'GROUP',
-        label: 'Business Groups'
-    },
-    {
-        value: 'PERSONAL',
-        label: 'Business Followers'
-    }
-];
-
+import strings from "../../../i18n/i18n"
 class EditPromotion extends Component {
     constructor(props) {
         super(props);
@@ -85,7 +67,6 @@ class EditPromotion extends Component {
         }
         return false;
     }
-
 
     setQuantity(quantity) {
         this.setState({
@@ -176,7 +157,7 @@ class EditPromotion extends Component {
 
             <View style={styles.product_container}>
                 <FormHeader showBack submitForm={this.updateFormData.bind(this)} navigation={this.props.navigation}
-                            title={"Update Promotion"} bgc="#FA8559"/>
+                            title={strings.UpdatePromotion} bgc="#FA8559"/>
                 <ScrollView contentContainerStyle={{
                     justifyContent: 'center',
                     alignItems: 'center',
@@ -184,17 +165,15 @@ class EditPromotion extends Component {
 
 
                     <View style={styles.inputTextLayout}>
-                        <Text style={{color: '#FA8559', marginLeft: 8, marginRight: 8}}>You can increase the quantity of
-                            promotions Or extend the due
-                            date</Text>
+                        <Text style={{color: '#FA8559', marginLeft: 8, marginRight: 8}}>{strings.EditPromotionMessage}</Text>
 
                     </View>
                     <View style={styles.inputTextLayout}>
-                        <Text style={{color: '#FA8559', marginLeft: 8, marginRight: 8}}>General</Text>
+                        <Text style={{color: '#FA8559', marginLeft: 8, marginRight: 8}}>{strings.General}</Text>
                     </View>
                     <View style={styles.inputTextMediumLayout}>
                         <View style={{flex: 1, marginRight: 10}}>
-                            <TextInput field='Increase Quantity' value={this.state.quantity}
+                            <TextInput field={strings.IncreaseQuantity} value={this.state.quantity}
                                        keyboardType='numeric'
                                        invalid={quantatyValidation}
                                        returnKeyType='next' ref="2" refNext="2"
@@ -202,7 +181,7 @@ class EditPromotion extends Component {
                                        onChangeText={(quantity) => this.setState({quantity})} isMandatory={true}/>
                         </View>
                         <View style={{flex: 3, marginLeft: 5}}>
-                            <DatePicker field='Exparation Date' value={this.state.end}
+                            <DatePicker field={strings.ExpirationDate} value={this.state.end}
                                         returnKeyType='next' ref="3" refNext="3"
                                         invalid={dateValidation}
                                         onChangeDate={(date) => {
@@ -212,13 +191,13 @@ class EditPromotion extends Component {
                     </View>
 
                     <View style={styles.inputTextLayout}>
-                        <TextInput field='Name' value={this.state.name}
+                        <TextInput field={strings.Name} value={this.state.name}
                                    returnKeyType='next' ref="4" refNext="4"
                                    onSubmitEditing={this.focusNextField.bind(this, "5")}
                                    onChangeText={(name) => this.setState({name})} isMandatory={true}/>
                     </View>
                     <View style={styles.inputTextLayout}>
-                        <TextInput field='Description' value={this.state.info}
+                        <TextInput field={strings.Description} value={this.state.info}
                                    returnKeyType='next' ref="5" refNext="5"
 
                                    onSubmitEditing={this.focusNextField.bind(this, "5")}

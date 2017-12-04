@@ -7,6 +7,7 @@ import {
 
 import styles from './styles'
 import {SelectButton, SimplePicker, TextInput} from '../../../../ui/index';
+import strings from "../../../../i18n/i18n"
 
 export default class XPlusYComponent extends Component {
     constructor(props) {
@@ -113,7 +114,7 @@ export default class XPlusYComponent extends Component {
         if(this.props.state.product) {
             let productName = this.props.state.product.name
             return <View style={styles.inputTextLayout}>
-                <Text style={{color: '#FA8559', marginLeft: 8, marginRight: 8}}>Promotion on: {productName}</Text>
+                <Text style={{color: '#FA8559', marginLeft: 8, marginRight: 8}}>{strings.Promotionon}: {productName}</Text>
             </View>
         }
         return undefined
@@ -125,7 +126,7 @@ export default class XPlusYComponent extends Component {
         if(this.props.state.giftProduct) {
             let productName = this.props.state.giftProduct.name
             return <View style={styles.inputTextLayout}>
-                <Text style={{color: '#FA8559', marginLeft: 8, marginRight: 8}}>Gift: {productName}</Text>
+                <Text style={{color: '#FA8559', marginLeft: 8, marginRight: 8}}>{strings.Gift}: {productName}</Text>
             </View>
         }
         return undefined
@@ -152,24 +153,24 @@ export default class XPlusYComponent extends Component {
             </View>
             <View style={{flexDirection:'row',justifyContent:'center',alignItems:'center'}}>
             <View style={styles.inputPrecenComponent}>
-                <TextInput field='Buy Amount' value={buyValue}
+                <TextInput field={strings.BuyAmount} value={buyValue}
                            returnKeyType='next' ref="Buy Amount" refNext="Buy Amount"
                            keyboardType='numeric'
                            onSubmitEditing={this.focusNextField.bind(this, "Number of Gifts")}
                            onChangeText={(value) => this.setBuy(value)} isMandatory={true}/>
             </View>
-            <View style={{flex:1.7,marginTop:25}}><SelectButton ref="xplusyselectProduct" isMandatory selectedValue={this.props.state.product} title="Select Product" action={this.showBuyProducts.bind(this, true)}/></View>
+            <View style={{flex:1.7,marginTop:25}}><SelectButton ref="xplusyselectProduct" isMandatory selectedValue={this.props.state.product} title={strings.SelectProduct} action={this.showBuyProducts.bind(this, true)}/></View>
 
             </View>
             {productView}
             <View style={{flexDirection:'row',justifyContent:'center',alignItems:'center'}}>
             <View style={styles.inputPrecenComponent}>
-                <TextInput field='Number of Gifts' value={eligibleValue}
+                <TextInput field={strings.NumberofGifts} value={eligibleValue}
                            returnKeyType='next' ref="Number of Gifts" refNext="Number of Gifts"
                            keyboardType='numeric'
                            onChangeText={(value) => this.setEligible(value)} isMandatory={true}/>
             </View>
-            <View style={{flex:1.7,marginTop:25}}><SelectButton ref="xplusyselectOmProduct" isMandatory selectedValue={this.props.state.giftProduct} title="Select Gift" action={this.showProducts.bind(this, true)}/></View>
+            <View style={{flex:1.7,marginTop:25}}><SelectButton ref="xplusyselectOmProduct" isMandatory selectedValue={this.props.state.giftProduct} title={strings.SelectGift} action={this.showProducts.bind(this, true)}/></View>
 
             </View>
             {productGiftView}

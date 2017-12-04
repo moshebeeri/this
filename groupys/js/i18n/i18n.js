@@ -64,6 +64,16 @@ let strings = new LocalizedStrings({
         ExpirationDate: 'Expiration Date',
         Name: 'Name',
         Description: 'Description',
+        UpdatePromotion: 'Update Promotion',
+        EditPromotionMessage: 'You can increase the quantity of promotions Or extend the due date',
+        General: 'General',
+        IncreaseQuantity: 'Increase Quantity',
+        Promotionon: 'Promotion on',
+        Gift: 'Gift',
+        BuyAmount: 'Buy Amount',
+        NumberofGifts: 'Number of Gifts',
+        SelectProduct:'Select Product',
+        SelectGift: 'Select Gift'
     },
     en: {
         Promotion: "Promotion",
