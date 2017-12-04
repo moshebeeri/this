@@ -128,7 +128,7 @@ export default class BusinessListView extends Component {
                                     color: '#ff6400',
                                     fontStyle: 'normal',
                                     fontSize: 13
-                                }}>strings.Products</Text>
+                                }}>{strings.Products}</Text>
 
                             </TouchableOpacity>
 
@@ -175,7 +175,7 @@ export default class BusinessListView extends Component {
                 <Image style={{tintColor: '#ff6400', marginLeft: 10, width: vh * 4, height: vh * 4}}
                        source={permissions}/>
 
-                <Text style={{marginLeft: 5, color: '#ff6400', fontStyle: 'normal', fontSize: 13}}>strings.Permissions </Text>
+                <Text style={{marginLeft: 5, color: '#ff6400', fontStyle: 'normal', fontSize: 13}}>{strings.Permissions}</Text>
 
             </TouchableOpacity>
         }
@@ -190,7 +190,7 @@ export default class BusinessListView extends Component {
                 <Image style={{tintColor: '#ff6400', marginLeft: 10, width: vh * 4, height: vh * 4}}
                        source={promotions}/>
 
-                <Text style={{marginLeft: 5, color: '#ff6400', fontStyle: 'normal', fontSize: 13}}>strings.Promotions </Text>
+                <Text style={{marginLeft: 5, color: '#ff6400', fontStyle: 'normal', fontSize: 13}}>{strings.Promotions}</Text>
 
             </TouchableOpacity>
         }

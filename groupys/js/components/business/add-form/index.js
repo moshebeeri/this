@@ -1,13 +1,12 @@
 import React, {Component} from 'react';
-import {Image, ScrollView, View, Dimensions} from 'react-native';
+import {Dimensions, Image, ScrollView, View} from 'react-native';
 import {Button, Container, Content, Fab, Footer, Form, Icon, Input, Item, Picker, Text} from 'native-base';
 import styles from './styles'
 import * as businessAction from "../../../actions/business";
 import {connect} from 'react-redux';
 import {bindActionCreators} from "redux";
-import {AddressInput, CategoryPicker, FormHeader, ImagePicker, TextInput, Spinner} from '../../../ui/index';
+import {AddressInput, CategoryPicker, FormHeader, ImagePicker, Spinner, TextInput} from '../../../ui/index';
 import FormUtils from "../../../utils/fromUtils";
-import strings from '../../../i18n/i18n';
 
 const {width, height} = Dimensions.get('window');
 
@@ -80,7 +79,6 @@ class AddBusiness extends Component {
         }
     }
 
-
     focusNextField(nextField) {
         if (this.refs[nextField].wrappedInstance) {
             this.refs[nextField].wrappedInstance.focus()
@@ -99,7 +97,6 @@ class AddBusiness extends Component {
 
     saveFormData() {
         if (this.validateForm()) {
-
             this.props.saveBusiness(this.createBusiness(), this.props.navigation);
         }
     }
@@ -209,7 +206,6 @@ class AddBusiness extends Component {
             }
         }
     }
-
 
     createCoverImageComponent() {
         if (this.state.coverImage) {

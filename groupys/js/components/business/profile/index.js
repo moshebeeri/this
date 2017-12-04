@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import {Dimensions, Image, View} from 'react-native';
+import {Dimensions, Image, View,TouchableOpacity} from 'react-native';
 import {
     Button,
     Card,
@@ -36,6 +36,11 @@ class BusinessProfile extends Component {
 
     constructor(props) {
         super(props);
+        this.state={
+            codeStyle:{width:80,height:80},
+            codeContainerStyle:{position:'absolute',top:150,right:20},
+            codeFullSize:false,
+        }
     }
 
     componentWillMount() {
@@ -55,6 +60,23 @@ class BusinessProfile extends Component {
             return <Thumbnail medium square source={{uri: selectedBusiness.businessLogo}}/>
         }
         return <Thumbnail source={require('../../../../images/client_1.png')}/>
+    }
+
+    changeQrLook(){
+        if(this.state.codeFullSize){
+            this.setState({
+                codeStyle:{width:80,height:80},
+                codeContainerStyle:{position:'absolute',top:150,right:20},
+                codeFullSize:false,
+            })
+        }else{
+            this.setState({
+                codeStyle:{width:250,height:250},
+                codeContainerStyle:{position:'absolute',top:0,right:70},
+                codeFullSize:true,
+            })
+        }
+
     }
 
     render() {
@@ -89,10 +111,12 @@ class BusinessProfile extends Component {
                         <View style={{ alignItems: 'center'}}>
                             {banner}
 
-                            {business.qrcodeSource && <Image style={{position:'absolute',top:150,right:20,width:80,height:80}} resizeMode="cover"
+                            {business.qrcodeSource &&  <TouchableOpacity onPress={() => this.changeQrLook()}style={this.state.codeContainerStyle}><Image  style={this.state.codeStyle} resizeMode="cover"
                                                              source={{uri: business.qrcodeSource}}>
 
-                            </Image> }
+                            </Image>
+                            </TouchableOpacity>
+                            }
                         </View>
 
 

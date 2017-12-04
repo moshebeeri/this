@@ -4,6 +4,7 @@ let strings = new LocalizedStrings({
     "en-US": {
         THIS:           "THIS",
         Promotion:      "Promotion",
+        Promotions:     "Promotions",
         ScanPromotion:  "Scan Promotion",
         Business:       "Business",
         Businesses:     "Businesses",
