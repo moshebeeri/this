@@ -1,9 +1,8 @@
 import React, {Component} from 'react';
 import {actions} from 'react-native-navigation-redux-helpers';
 import {Icon, Thumbnail,} from 'native-base';
-import {View,Text,TouchableOpacity} from 'react-native';
+import {Text, TouchableOpacity, View} from 'react-native';
 import styles from './styles'
-import Icon2 from 'react-native-vector-icons/MaterialIcons';
 import {EditButton} from '../../../ui/index';
 
 const ILS = '₪';
@@ -11,8 +10,6 @@ export default class ProductListView extends Component {
     constructor(props) {
         super(props);
     }
-
-
 
     createImage(item) {
         if (item.pictures && item.pictures.length > 0) {
@@ -32,7 +29,7 @@ export default class ProductListView extends Component {
     }
 
     render() {
-        const {item,index} = this.props;
+        const {item, index} = this.props;
         return <View key={index} style={styles.productContainer}>
             <View style={styles.productImageContainer}>
                 {this.createImage(item)}
@@ -42,7 +39,7 @@ export default class ProductListView extends Component {
                     <Text>{item.name} - <Text>{item.info}</Text></Text>
                 </View>
                 <View style={styles.productPriceContainer}>
-                    <Text style={styles.retailTextStyle}note>{ILS}{item.retail_price}</Text>
+                    <Text style={styles.retailTextStyle} note>{ILS}{item.retail_price}</Text>
                 </View>
 
             </View>

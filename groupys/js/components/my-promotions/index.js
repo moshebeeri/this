@@ -31,7 +31,7 @@ class MyPromotions extends Component {
     }
 
     renderItem(item) {
-        const {navigation, location } = this.props;
+        const {navigation, location} = this.props;
         return <FeedPromotion refresh={this.refresh.bind(this)}
                               location={location}
                               navigation={navigation} item={item.item}

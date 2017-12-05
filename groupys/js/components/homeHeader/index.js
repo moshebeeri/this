@@ -1,10 +1,9 @@
 import React, {Component} from 'react';
 import {connect} from 'react-redux';
 import {Image} from 'react-native';
-import {Icon, View, Button, InputGroup, Input} from 'native-base';
+import {Button, Icon, Input, InputGroup, View} from 'native-base';
 import {openDrawer} from '../../actions/drawer';
 import navigateTo from '../../actions/sideBarNav';
-import theme from '../../themes/base-theme';
 import styles from './styles';
 
 class Header extends Component {

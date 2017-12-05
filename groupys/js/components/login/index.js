@@ -1,24 +1,23 @@
 import React, {Component} from "react";
 import {
-    Image,
-    Platform,
-    TouchableHighlight,
-    KeyboardAvoidingView,
-    TextInput,
     Dimensions,
+    Image,
+    KeyboardAvoidingView,
+    Platform,
+    TextInput,
+    TouchableHighlight,
     TouchableOpacity
 } from "react-native";
 import {connect} from "react-redux";
 import {actions} from "react-native-navigation-redux-helpers";
-import {Text, Input, Button, Icon, View, Item} from "native-base";
+import {Button, Icon, Input, Item, Text, View} from "native-base";
 import {bindActionCreators} from "redux";
 import * as loginAction from "../../actions/login";
 import styles from "./styles";
 import {isAuthenticated} from "../../selectors/appSelector";
 import LinearGradient from "react-native-linear-gradient";
+import strings from "../../i18n/i18n"
 
-const logo = require('../../../images/logo.png');
-const global = require('../../conf/global');
 const {width, height} = Dimensions.get('window');
 
 class Login extends Component {
@@ -88,7 +87,7 @@ class Login extends Component {
                         }}>
 
                             <View style={{height: 60, justifyContent: 'flex-end', width: width / 2 + 120}}>
-                                <Text style={styles.signInText}>sign in</Text>
+                                <Text style={styles.signInText}>{strings.signin}</Text>
                             </View>
 
                             <Item style={styles.phoneTextInput} regular>
@@ -96,7 +95,7 @@ class Login extends Component {
                                        blurOnSubmit={true} returnKeyType='next'
                                        onSubmitEditing={this.focusNextField.bind(this, "password")}
                                        onChangeText={(phoneNumber) => this.setState({phoneNumber})}
-                                       placeholder='Phone Number'/>
+                                       placeholder={strings.PhoneNumber}/>
                             </Item>
 
                             <Item style={styles.passwordTextInput} regular>
@@ -105,7 +104,7 @@ class Login extends Component {
                                     focus={focusPassword}
                                     ref='password'
                                     returnKeyType='done'
-                                    placeholder="Password"
+                                    placeholder={strings.Password}
                                     placeholderTextColor='#444'
                                     defaultValue=""
                                     secureTextEntry
@@ -115,10 +114,10 @@ class Login extends Component {
                             </Item>
 
                             <View style={styles.signup_container}>
-                                <Text onPress={this.forgetPassword.bind(this)} style={styles.forgetText}>Forgot
-                                    Password</Text>
-                                <Text onPress={() => this.replaceRoute('Signup')} style={styles.signgupText}>Sign
-                                    Up</Text>
+                                <Text onPress={this.forgetPassword.bind(this)}
+                                      style={styles.forgetText}>{strings.ForgotPassword}</Text>
+                                <Text onPress={() => this.replaceRoute('Signup')}
+                                      style={styles.signgupText}>{strings.SignUp}</Text>
                             </View>
                             <Text style={{backgroundColor: 'transparent', padding: 10, fontSize: 16, color: 'red'}}>
                                 {failedMessage}
@@ -142,24 +141,15 @@ class Login extends Component {
                                     alignItems: 'center',
                                 }} regular>
 
-                                    <Text style={{color: 'white', fontStyle: 'normal', fontSize: 15}}>LOGIN</Text>
+                                    <Text style={{
+                                        color: 'white',
+                                        fontStyle: 'normal',
+                                        fontSize: 15
+                                    }}>{strings.Login.toUpperCase()}</Text>
 
                                 </TouchableOpacity>
                             </View>
-                            <View style={{
-                                backgroundColor: 'transparent',
-                                width: width / 2 + 120,
-                                flexDirection: 'row',
-                                justifyContent: 'space-between',
-                                paddingVertical: 20
-                            }}>
-                                <Button style={styles.logoFacebook}>
-                                    <Icon name="logo-facebook"/>
-                                </Button>
-                                <Button style={styles.logoGoogle}>
-                                    <Icon name="logo-google"/>
-                                </Button>
-                            </View>
+
                         </View>
                     </View>
                 </KeyboardAvoidingView>

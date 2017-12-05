@@ -9,6 +9,7 @@ import {getBusinessUsers} from '../../selectors/businessesSelector'
 import GenericListManager from '../generic-list-manager/index'
 import Icon5 from 'react-native-vector-icons/MaterialCommunityIcons';
 import {FormHeader} from '../../ui/index';
+import strings from "../../i18n/i18n"
 class UserPermittedRoles extends Component {
     constructor(props) {
         super(props);
@@ -45,7 +46,7 @@ class UserPermittedRoles extends Component {
         return (
             <Container>
                 <FormHeader showBack submitForm={this.navigateToAdd.bind(this)} navigation={this.props.navigation}
-                            title={"Add User Permission"} bgc="white"
+                            title={strings.AddUserPermission} bgc="white"
                             submitIcon={<Icon5 active color={"#FA8559"} size={25} name="plus"/>}
                             titleColor="#FA8559" backIconColor="#FA8559"/>
 

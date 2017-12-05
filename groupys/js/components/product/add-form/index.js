@@ -21,6 +21,7 @@ import * as businessAction from "../../../actions/business";
 import {bindActionCreators} from "redux";
 import styles from './styles'
 import {CategoryPicker, FormHeader, ImagePicker, TextInput,Spinner} from '../../../ui/index';
+import strings from "../../../i18n/i18n"
 
 class AddProduct extends Component {
     static navigationOptions = ({navigation}) => ({
@@ -176,7 +177,7 @@ class AddProduct extends Component {
         return (
             <View style={styles.product_container}>
                 <FormHeader showBack submitForm={this.saveFormData.bind(this)} navigation={this.props.navigation}
-                            title={"Add Product"} bgc="#FA8559"/>
+                            title={strings.AddProduct} bgc="#FA8559"/>
                 <ScrollView contentContainerStyle={{
                     justifyContent: 'center',
                     alignItems: 'center',
@@ -185,7 +186,7 @@ class AddProduct extends Component {
                     {this.createCoverImageComponnent()}
 
                     <View style={styles.inputTextLayout}>
-                        <TextInput field='Product Name' value={this.state.name}
+                        <TextInput field={strings.ProductName} value={this.state.name}
                                    returnKeyType='next' ref="1" refNext="1"
                                    onSubmitEditing={this.focusNextField.bind(this, "2")}
                                    onChangeText={(name) => this.setState({name})} isMandatory={true}/>
@@ -200,7 +201,7 @@ class AddProduct extends Component {
                     <View style={styles.inputTextLayout}>
 
 
-                        <TextInput field='Description' value={this.state.info} returnKeyType='next' ref="2" refNext="2"
+                        <TextInput field={strings.Description} value={this.state.info} returnKeyType='next' ref="2" refNext="2"
                                    onSubmitEditing={this.focusNextField.bind(this, "6")}
 
                                    onChangeText={(info) => this.setState({info})}/>
@@ -208,7 +209,7 @@ class AddProduct extends Component {
 
                     <View style={styles.inputTextLayout}>
 
-                        <TextInput field='Price' value={this.state.retail_price} returnKeyType='done' ref="6"
+                        <TextInput field={strings.Price} value={this.state.retail_price} returnKeyType='done' ref="6"
                                    refNext="6"
                                    keyboardType="numeric" placeholder="Price in shekels"
                                    onChangeText={(retail_price) => this.setState({retail_price})} isMandatory={true}/>

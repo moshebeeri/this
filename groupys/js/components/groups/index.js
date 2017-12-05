@@ -3,24 +3,21 @@ import {Image, Platform} from 'react-native';
 import {connect} from 'react-redux';
 import {actions} from 'react-native-navigation-redux-helpers';
 import {
-    Fab,
+    Button,
     Container,
     Content,
-    Text,
-    Title,
-    InputGroup,
-    Input,
-    Button,
-    Icon,
-    View,
+    Fab,
     Header,
-    Body,
-    Right,
+    Icon,
+    Input,
+    InputGroup,
+    Left,
     ListItem,
+    Right,
     Thumbnail,
-    Left
+    Title,
+    View
 } from 'native-base';
-
 import Icon2 from "react-native-vector-icons/Ionicons";
 import Icon5 from 'react-native-vector-icons/MaterialCommunityIcons';
 import GenericListGroupView from '../generic-list-manager/generic-list-group-view/index'
@@ -41,7 +38,7 @@ class Groups extends Component {
     }
 
     renderItem(item) {
-        const { navigation} = this.props;
+        const {navigation} = this.props;
         return <GenericListGroupView
             onPressItem={this.onPressItem.bind(this, item.item)}
             item={item.item}
@@ -50,9 +47,11 @@ class Groups extends Component {
             key={item.index}
         />
     }
-    navigateToAdd(){
+
+    navigateToAdd() {
         this.props.navigation.navigate('AddGroups')
     }
+
     componentWillMount() {
         this.props.actions.fetchGroups();
     }
@@ -64,9 +63,9 @@ class Groups extends Component {
             icon = <Icon2 active size={40} name="ios-add"/>;
         }
         return (
-            <View style={{flex:1}}>
-            <GenericListManager rows={groups} navigation={navigation} actions={actions} update={update}
-                                ItemDetail={this.renderItem.bind(this)}/>
+            <View style={{flex: 1}}>
+                <GenericListManager rows={groups} navigation={navigation} actions={actions} update={update}
+                                    ItemDetail={this.renderItem.bind(this)}/>
                 <Fab
 
                     direction="right"

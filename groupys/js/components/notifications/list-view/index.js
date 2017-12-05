@@ -2,11 +2,11 @@ import React, {Component} from "react";
 import {Dimensions, TouchableOpacity} from "react-native";
 import {Button, Text, Thumbnail, View} from "native-base";
 import * as notification from "./notofications";
+import strings from "../../../i18n/i18n"
 
-const covefr = require('../../../../images/cover2.png');
 const {width, height} = Dimensions.get('window')
 const vw = width / 100;
-const vh = height / 100
+const vh = height / 100;
 export default class NotificationListView extends Component {
     constructor(props) {
         super(props);
@@ -23,10 +23,9 @@ export default class NotificationListView extends Component {
         const {item, actions} = this.props;
         const viewItem = item.item;
         actions.doNotification(viewItem._id)
-        if(group.entity.business) {
+        if (group.entity.business) {
             this.props.navigation.navigate("addPromotions", {business: group.entity.business, group: group});
         }
-
     }
 
     read(notification_id) {
@@ -54,7 +53,7 @@ export default class NotificationListView extends Component {
         if (group.pictures && group.pictures.length > 0) {
             return <Thumbnail source={{uri: group.pictures[0].pictures[3]}}/>
         } else {
-            if (group.entity && group.entity.business && group.entity.business.pictures && group.entity.business.pictures.length > 0 ) {
+            if (group.entity && group.entity.business && group.entity.business.pictures && group.entity.business.pictures.length > 0) {
                 return <Thumbnail source={{uri: group.entity.business.pictures[0].pictures[3]}}/>
             }
         }
@@ -107,7 +106,7 @@ export default class NotificationListView extends Component {
             return undefined;
         }
         return <View style={actionStyle}>
-            <Button style={redeemStyle} onPress={this.create.bind(this,viewItem.group)}>
+            <Button style={redeemStyle} onPress={this.create.bind(this, viewItem.group)}>
                 <Text style={{fontWeight: 'bold', color: '#2db6c8'}}>Create</Text>
             </Button>
         </View>
@@ -145,7 +144,7 @@ export default class NotificationListView extends Component {
                     <View style={{flexDirection: 'column', width: width - 50, height: vh * 10}}>
                         <View style={{flexDirection: 'row'}}>
                             <Text style={{fontWeight: 'bold', marginLeft: vw * 4}}>{user.name}</Text>
-                            <Text style={{height: vh * 4}}> invites you to join group </Text>
+                            <Text style={{height: vh * 4}}>{strings.InvitesYouToJoinGroup}</Text>
                         </View>
                         <Text style={{
                             marginLeft: vw * 3,
@@ -191,8 +190,8 @@ export default class NotificationListView extends Component {
                     {image}
                     <View style={{flexDirection: 'column', marginLeft: 5, width: width - 50, height: vh * 10}}>
                         <View style={{flexDirection: 'row'}}>
-                            <Text numberOfLines={2} style={{width: vw * 75, height: vh * 7}}>Create a promotion for
-                                everyone who joins group
+                            <Text numberOfLines={2}
+                                  style={{width: vw * 75, height: vh * 7}}>{strings.CreatePromotionForEveryoneGroup}
                                 <Text style={{
                                     marginLeft: vw * 3,
                                     fontWeight: 'bold',
