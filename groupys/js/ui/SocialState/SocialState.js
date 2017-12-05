@@ -1,29 +1,23 @@
 import React, {Component} from 'react';
-import { View,Text,TouchableOpacity} from 'react-native';
+import {Text, TouchableOpacity, View} from 'react-native';
 import {Button} from 'native-base';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import Icon2 from 'react-native-vector-icons/EvilIcons';
 import Icon3 from 'react-native-vector-icons/Entypo';
-
-
 import styles from './styles'
-
 
 export default class SocialState extends Component {
     constructor(props) {
         super(props);
         this.state = {
             type: '',
-            valid:true,
+            valid: true,
         }
     }
 
-
-
-    isValid(){
+    isValid() {
         return true;
     }
-
 
     render() {
         return <View style={styles.socialContainer}>
@@ -33,31 +27,31 @@ export default class SocialState extends Component {
         </View>
     }
 
-     createCommentButton() {
-         const {comments, disabled,onPressComment,feed} = this.props;
-         let componentStyle = styles.promotionBusiness;
-         if(feed) {
-             componentStyle = styles.promotionFeed;
-         }
-         if(disabled){
-             return <View transparent style={styles.promotion_iconView} >
-                 <Icon2 style={componentStyle} size={25} name="comment"/>
-                 <Text style={styles.socialTextColor}>{comments}</Text>
-             </View>;
-         }
-
-         return <Button transparent style={styles.promotion_iconView} onPress={onPressComment}>
+    createCommentButton() {
+        const {comments, disabled, onPressComment, feed} = this.props;
+        let componentStyle = styles.promotionBusiness;
+        if (feed) {
+            componentStyle = styles.promotionFeed;
+        }
+        if (disabled) {
+            return <View transparent style={styles.promotion_iconView}>
+                <Icon2 style={componentStyle} size={25} name="comment"/>
+                <Text style={styles.socialTextColor}>{comments}</Text>
+            </View>;
+        }
+        return <Button transparent style={styles.promotion_iconView} onPress={onPressComment}>
             <Icon2 style={componentStyle} size={25} name="comment"/>
             <Text style={styles.socialTextColor}>{comments}</Text>
         </Button>;
     }
+
     createLikeButton() {
-        const {like,likes, disabled,onPressUnLike, onPressLike,feed} = this.props;
+        const {like, likes, disabled, onPressUnLike, onPressLike, feed} = this.props;
         let componentStyle = styles.promotionBusiness;
-        if(feed) {
+        if (feed) {
             componentStyle = styles.promotionFeed;
         }
-        if(disabled){
+        if (disabled) {
             return <View transparent style={styles.promotion_iconView}>
                 <Icon style={componentStyle} size={20} name="heart"/>
                 <Text style={styles.socialTextColor}>{likes}</Text>
@@ -81,20 +75,19 @@ export default class SocialState extends Component {
     }
 
     createShareButton() {
-        const {share,shares, disabled,shareAction,feed,shareDisabled} = this.props;
+        const {share, shares, disabled, shareAction, feed, shareDisabled} = this.props;
         let componentStyle = styles.promotionBusiness;
-        if(feed) {
+        if (feed) {
             componentStyle = styles.promotionFeed;
         }
-        if(disabled || shareDisabled){
-            return <View transparent style={styles.promotion_iconView} >
+        if (disabled || shareDisabled) {
+            return <View transparent style={styles.promotion_iconView}>
 
                 <Icon3 style={styles.promotionDisabledFeed} size={25} name="share"/>
                 <Text style={styles.socialTextColor}>{shares}</Text>
 
             </View>
         }
-
         if (share) {
             return <Button transparent style={styles.promotion_iconView} onPress={shareAction}>
 

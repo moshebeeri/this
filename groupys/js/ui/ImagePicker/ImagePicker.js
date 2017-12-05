@@ -4,7 +4,7 @@ import {Button, Input} from 'native-base';
 import {Menu, MenuOption, MenuOptions, MenuTrigger,} from 'react-native-popup-menu';
 import Icon from 'react-native-vector-icons/Entypo';
 import ImagePicker from 'react-native-image-crop-picker'
-
+import strings from "../../i18n/i18n"
 export default class ImagePickerComponent extends Component {
     constructor(props) {
         super(props);
@@ -119,10 +119,10 @@ export default class ImagePickerComponent extends Component {
             <MenuOptions>
 
                 <MenuOption onSelect={this.pickFromCamera.bind(this)}>
-                    <Text>Take Pictures</Text>
+                    <Text>{strings.TakePictures}</Text>
                 </MenuOption>
                 <MenuOption onSelect={this.pickPicture.bind(this)}>
-                    <Text>Pick From Photos</Text>
+                    <Text>{strings.PickFromPhotos}</Text>
                 </MenuOption>
 
             </MenuOptions>

@@ -21,24 +21,20 @@ class instancesComment extends Component {
     componentWillMount() {
         const {comments, group, actions} = this.props;
         this.setNextFeed();
-
     }
 
-    setNextFeed(){
-
+    setNextFeed() {
         const {comments, group, actions} = this.props;
-
         if (comments[group._id]) {
             actions.setNextFeeds(comments[group._id].filter(comment => comment.message), group);
         } else {
             actions.setNextFeeds(comments[group._id], group);
         }
-
     }
 
     _onPressButton(message) {
-        const { group, actions} = this.props;
-        actions.sendMessage(group._id,message)
+        const {group, actions} = this.props;
+        actions.sendMessage(group._id, message)
     }
 
     renderItem(renderItem) {
@@ -70,21 +66,21 @@ class instancesComment extends Component {
         if (!comments[group._id]) {
             return <View>
 
-                    <GenericFeedManager feeds={new Array()}
-                                        entity={group}
-                                        setNextFeeds={this.setNextFeed.bind(this)}
-                                        navigation={navigation}
-                                        actions={actions}
-                                        update={update}
-                                        showTopLoader={showTopLoader[group._id]}
-                                        loadingDone={loadingDone[group._id]}
-                                        ItemDetail={this.renderItem.bind(this)}/>
+                <GenericFeedManager feeds={new Array()}
+                                    entity={group}
+                                    setNextFeeds={this.setNextFeed.bind(this)}
+                                    navigation={navigation}
+                                    actions={actions}
+                                    update={update}
+                                    showTopLoader={showTopLoader[group._id]}
+                                    loadingDone={loadingDone[group._id]}
+                                    ItemDetail={this.renderItem.bind(this)}/>
 
 
             </View>
         }
-        return <View style={{flex:1}}>
-            <View style={{flex:1}}>
+        return <View style={{flex: 1}}>
+            <View style={{flex: 1}}>
                 <GenericFeedManager feeds={comments[group._id]}
                                     scrolToEnd
                                     entity={group}

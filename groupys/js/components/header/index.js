@@ -14,6 +14,8 @@ const vw = width / 100;
 const vh = height / 100
 
 const qrcode = require('../../../images/qr-code.png');
+import strings from "../../i18n/i18n"
+
 class GeneralComponentHeader extends Component {
     constructor(props) {
         super(props);
@@ -62,13 +64,13 @@ class GeneralComponentHeader extends Component {
             <MenuOptions>
 
                 <MenuOption onSelect={this.followBusiness.bind(this)}>
-                    <Text>Follow Business</Text>
+                    <Text>{strings.FollowBusiness}</Text>
                 </MenuOption>
                 <MenuOption onSelect={this.onBoardingPromotion.bind(this)}>
-                    <Text>On Boarding Promotions</Text>
+                    <Text>{strings.OnBoardingPromotions}</Text>
                 </MenuOption>
                 <MenuOption onSelect={this.getNotification.bind(this)}>
-                    <Text>Refresh Notification</Text>
+                    <Text>Refresh Notification REMOVE</Text>
                 </MenuOption>
 
             </MenuOptions>

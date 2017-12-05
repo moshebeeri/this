@@ -22,7 +22,7 @@
     "react-native-card-view": "0.0.3",
     "react-native-check-box": "^1.0.4",
     "react-native-code-push": "^5.2.0-beta",
-    "react-native-contacts": "^1.0.5",
+    "react-native-contacts": "^2.0.0",
     "react-native-country-picker-modal": "^0.2.10",
     "react-native-datepicker": "^1.4.5",
     "react-native-drawer": "^2.3.0",

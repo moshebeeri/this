@@ -1,11 +1,11 @@
 import React, {Component} from 'react';
-import {Image, ScrollView, View, Dimensions} from 'react-native';
+import {Dimensions, Image, ScrollView, View} from 'react-native';
 import {Button, Container, Content, Fab, Footer, Form, Icon, Input, Item, Picker, Text} from 'native-base';
 import styles from './styles'
 import * as businessAction from "../../../actions/business";
 import {connect} from 'react-redux';
 import {bindActionCreators} from "redux";
-import {AddressInput, CategoryPicker, FormHeader, ImagePicker, TextInput, Spinner} from '../../../ui/index';
+import {AddressInput, CategoryPicker, FormHeader, ImagePicker, Spinner, TextInput} from '../../../ui/index';
 import FormUtils from "../../../utils/fromUtils";
 import strings from '../../../i18n/i18n';
 
@@ -80,7 +80,6 @@ class AddBusiness extends Component {
         }
     }
 
-
     focusNextField(nextField) {
         if (this.refs[nextField].wrappedInstance) {
             this.refs[nextField].wrappedInstance.focus()
@@ -99,7 +98,6 @@ class AddBusiness extends Component {
 
     saveFormData() {
         if (this.validateForm()) {
-
             this.props.saveBusiness(this.createBusiness(), this.props.navigation);
         }
     }
@@ -210,7 +208,6 @@ class AddBusiness extends Component {
         }
     }
 
-
     createCoverImageComponent() {
         if (this.state.coverImage) {
             let coverImage =
@@ -248,7 +245,7 @@ class AddBusiness extends Component {
 
                 <FormHeader disableAction={this.props.saving} showBack submitForm={savveOperation}
                             navigation={this.props.navigation}
-                            title={"Add Business"} bgc="#FA8559"/>
+                            title={strings.AddBusiness} bgc="#FA8559"/>
 
                 <ScrollView contentContainerStyle={{
                     justifyContent: 'center',
@@ -265,7 +262,7 @@ class AddBusiness extends Component {
 
                     </View>
                     <View style={styles.inputTextLayout}>
-                        <TextInput field='Business Name' value={this.state.name}
+                        <TextInput field={strings.BusinessName} value={this.state.name}
                                    returnKeyType='next' ref="1" refNext="1"
                                    onSubmitEditing={this.focusNextField.bind(this, "2")}
                                    onChangeText={(name) => this.setState({name})} isMandatory={true}/>
@@ -280,14 +277,16 @@ class AddBusiness extends Component {
                     <View style={styles.inputTextLayout}>
 
 
-                        <TextInput field='Email' value={this.state.email} returnKeyType='next' ref="2" refNext="2"
+                        <TextInput field={strings.Email} value={this.state.email} returnKeyType='next' ref="2"
+                                   refNext="2"
                                    onSubmitEditing={this.focusNextField.bind(this, "3")}
                                    validateContent={FormUtils.validateEmail}
                                    onChangeText={(email) => this.setState({email})} isMandatory={true}/>
                     </View>
                     <View style={styles.inputTextLayout}>
 
-                        <TextInput field='Website' value={this.state.website} returnKeyType='next' ref="3" refNext="3"
+                        <TextInput field={strings.Website} value={this.state.website} returnKeyType='next' ref="3"
+                                   refNext="3"
                                    onSubmitEditing={this.focusNextField.bind(this, "5")}
                                    validateContent={FormUtils.validateWebsite}
                                    onChangeText={(website) => this.setState({website})} isMandatory={false}/>
@@ -297,7 +296,8 @@ class AddBusiness extends Component {
 
                     <View style={styles.inputTextLayout}>
 
-                        <TextInput field='Tax ID' value={this.state.tax_id} returnKeyType='done' ref="6" refNext="6"
+                        <TextInput field={strings.TaxID} value={this.state.tax_id} returnKeyType='done' ref="6"
+                                   refNext="6"
                                    onChangeText={(tax_id) => this.setState({tax_id})} isMandatory={true}/>
                     </View>
 

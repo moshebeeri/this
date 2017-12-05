@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import {Dimensions, Image, View} from 'react-native';
+import {Dimensions, Image, TouchableOpacity, View} from 'react-native';
 import {
     Button,
     Card,
@@ -24,6 +24,7 @@ import {FormHeader, TextInput} from '../../../ui/index';
 import * as businessAction from "../../../actions/business";
 import {connect} from 'react-redux';
 import {bindActionCreators} from "redux";
+import strings from "../../../i18n/i18n"
 
 const {width, height} = Dimensions.get('window')
 const vw = width / 100;
@@ -36,12 +37,16 @@ class BusinessProfile extends Component {
 
     constructor(props) {
         super(props);
+        this.state = {
+            codeStyle: {width: 80, height: 80},
+            codeContainerStyle: {position: 'absolute', top: 150, right: 20},
+            codeFullSize: false,
+        }
     }
 
     componentWillMount() {
-        const{businesses} = this.props
+        const {businesses} = this.props
         let business = businesses[this.props.navigation.state.params.businesses._id];
-
         if (!business.qrcodeSource) {
             this.props.setBusinessQrCode(business)
         }
@@ -57,8 +62,24 @@ class BusinessProfile extends Component {
         return <Thumbnail source={require('../../../../images/client_1.png')}/>
     }
 
+    changeQrLook() {
+        if (this.state.codeFullSize) {
+            this.setState({
+                codeStyle: {width: 80, height: 80},
+                codeContainerStyle: {position: 'absolute', top: 150, right: 20},
+                codeFullSize: false,
+            })
+        } else {
+            this.setState({
+                codeStyle: {width: 250, height: 250},
+                codeContainerStyle: {position: 'absolute', top: 0, right: 70},
+                codeFullSize: true,
+            })
+        }
+    }
+
     render() {
-        const{businesses} = this.props
+        const {businesses} = this.props
         let business = businesses[this.props.navigation.state.params.businesses._id];
         let address = business.city + ' ' + business.address
         const banner = this.createBannerTag(business);
@@ -86,13 +107,17 @@ class BusinessProfile extends Component {
                         justifyContent: 'space-between',
                         alignItems: 'center',
                     }}>
-                        <View style={{ alignItems: 'center'}}>
+                        <View style={{alignItems: 'center'}}>
                             {banner}
 
-                            {business.qrcodeSource && <Image style={{position:'absolute',top:150,right:20,width:80,height:80}} resizeMode="cover"
-                                                             source={{uri: business.qrcodeSource}}>
+                            {business.qrcodeSource &&
+                            <TouchableOpacity onPress={() => this.changeQrLook()} style={this.state.codeContainerStyle}><Image
+                                style={this.state.codeStyle} resizeMode="cover"
+                                source={{uri: business.qrcodeSource}}>
 
-                            </Image> }
+                            </Image>
+                            </TouchableOpacity>
+                            }
                         </View>
 
 
@@ -103,20 +128,20 @@ class BusinessProfile extends Component {
                 <View style={{alignItems: 'center', justifyContent: 'center'}}>
 
                     <View style={styles.inputFullTextLayout}>
-                        <TextInput placeholder={'No Website'} field='Website' value={business.website} disabled
+                        <TextInput placeholder={'No Website'} field={strings.Website} value={business.website} disabled
 
 
                         />
                     </View>
                     <View style={styles.inputFullTextLayout}>
-                        <TextInput placeholder={'No Email'} field='Email' value={business.email} disabled
+                        <TextInput placeholder={'No Email'} field={strings.Email} value={business.email} disabled
 
                         />
                     </View>
 
 
                     <View style={styles.inputFullTextLayout}>
-                        <TextInput field='Address' value={address} disabled
+                        <TextInput field={strings.Address} value={address} disabled
 
                         />
                     </View>
@@ -148,6 +173,7 @@ class BusinessProfile extends Component {
         </Image>
     }
 }
+
 export default connect(
     state => ({
         businesses: state.businesses.businesses,

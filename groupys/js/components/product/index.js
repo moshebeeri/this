@@ -13,9 +13,9 @@ import {
     Left,
     ListItem,
     Right,
+    Spinner,
     Thumbnail,
-    Title,
-    Spinner
+    Title
 } from 'native-base';
 import GenericListManager from '../generic-list-manager/index'
 import * as businessAction from "../../actions/business";
@@ -25,6 +25,7 @@ import Icon5 from 'react-native-vector-icons/MaterialCommunityIcons';
 import {FormHeader} from '../../ui/index';
 import Icon3 from 'react-native-vector-icons/Ionicons';
 import ProductListView from './listView/index'
+import strings from "../../i18n/i18n"
 
 class Product extends Component {
     static navigationOptions = {
@@ -38,6 +39,7 @@ class Product extends Component {
     componentWillMount() {
         this.setBusinessProducts();
     }
+
     setBusinessProducts() {
         const {actions, navigation} = this.props;
         actions.setBusinessProducts(navigation.state.params.business._id);
@@ -54,7 +56,7 @@ class Product extends Component {
     }
 
     render() {
-        const {products, navigation, actions, update,productsLoading} = this.props;
+        const {products, navigation, actions, update, productsLoading} = this.props;
         const businessId = navigation.state.params.business._id;
         let icon = <Icon5 active color={"#FA8559"} size={25} name="plus"/>
         if (Platform.OS === 'ios') {
@@ -63,10 +65,10 @@ class Product extends Component {
         return (
             <Container style={{flex: -1}}>
                 <FormHeader showBack submitForm={this.navigateToAdd.bind(this)} navigation={this.props.navigation}
-                            title={"Add Product"} bgc="white"
+                            title={strings.AddProduct} bgc="white"
                             submitIcon={icon}
                             titleColor="#FA8559" backIconColor="#FA8559"/>
-                { !productsLoading[businessId] && <Spinner/>}
+                {!productsLoading[businessId] && <Spinner/>}
                 <GenericListManager rows={products[businessId]} navigation={navigation} actions={actions}
                                     update={update}
                                     onEndReached={this.setBusinessProducts.bind(this)}
@@ -81,8 +83,8 @@ export default connect(
     state => ({
         products: getBusinessProducts(state),
         update: state.businesses.update,
-        productsLoading:state.products.loadingDone,
-        productsChange:state.products
+        productsLoading: state.products.loadingDone,
+        productsChange: state.products
     }),
     (dispatch) => ({
         actions: bindActionCreators(businessAction, dispatch),

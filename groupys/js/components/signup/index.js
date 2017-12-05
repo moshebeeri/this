@@ -9,7 +9,7 @@ import styles from './styles';
 import LinearGradient from 'react-native-linear-gradient';
 import {bindActionCreators} from "redux";
 import * as loginAction from "../../actions/login";
-
+import strings from "../../i18n/i18n"
 const logo = require('../../../images/logo.png');
 
 class Signup extends Component {
@@ -59,8 +59,7 @@ class Signup extends Component {
 
                     <KeyboardAvoidingView behavior={'position'} style={styles.avoidView}>
                         <View style={styles.thisContainer}>
-                            <Text style={styles.this}>This</Text>
-                            <Text style={styles.thiscount}>Counts</Text>
+                            <Text style={styles.this}>{strings.THIS}</Text>
                         </View>
                         <View style={{
                             width: width,
@@ -70,7 +69,7 @@ class Signup extends Component {
                         }}>
                             <View style={{height: 50, justifyContent: 'flex-end', width: width / 2 + 120}}>
 
-                                <Text style={styles.signInText}>sign up</Text>
+                                <Text style={styles.signInText}>{strings.SignUp}</Text>
                             </View>
                             <View style={styles.nameContainer}>
                                 <Item style={styles.nameTextInput} regular>
@@ -92,7 +91,7 @@ class Signup extends Component {
                                        returnKeyType='next' ref="3"
                                        onSubmitEditing={this.focusNextField.bind(this, "5")}
                                        onChangeText={(phoneNumber) => this.setState({phoneNumber})}
-                                       placeholder='Phone Number'/>
+                                       placeholder={strings.PhoneNumber}/>
                             </Item>
 
                             <Item style={styles.passwordTextInput} regular>
@@ -100,7 +99,7 @@ class Signup extends Component {
                                 <Input
                                     ref='5'
                                     returnKeyType='done'
-                                    placeholder="Password"
+                                    placeholder={strings.Password}
                                     placeholderTextColor='#444'
                                     defaultValue=""
                                     secureTextEntry
@@ -109,9 +108,6 @@ class Signup extends Component {
                                 />
                             </Item>
 
-                            <View style={styles.signup_container}>
-                                <Text style={styles.forgetText}>or sign up using </Text>
-                            </View>
                             {message}
 
                             <View style={{
@@ -132,23 +128,11 @@ class Signup extends Component {
                                     alignItems: 'center',
                                 }} regular>
 
-                                    <Text style={{color: 'white', fontStyle: 'normal', fontSize: 15}}>SINGUP</Text>
+                                    <Text style={{color: 'white', fontStyle: 'normal', fontSize: 15}}>{strings.SignUp}.toUpperCase()</Text>
 
                                 </TouchableOpacity>
                             </View>
-                            <View style={{
-                                backgroundColor: 'transparent',
-                                width: width / 2 + 120,
-                                flexDirection: 'row',
-                                justifyContent: 'space-between'
-                            }}>
-                                <Button style={styles.logoFacebook}>
-                                    <Icon name="logo-facebook"/>
-                                </Button>
-                                <Button style={styles.logoGoogle}>
-                                    <Icon name="logo-google"/>
-                                </Button>
-                            </View>
+
                         </View>
 
                     </KeyboardAvoidingView>

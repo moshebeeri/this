@@ -2,31 +2,30 @@ import React, {Component} from 'react';
 import {View} from 'react-native';
 import {Button, Container, Content, Fab, Footer, Form, Icon, Input, Item, Picker, Text, Thumbnail} from 'native-base';
 import Icon2 from 'react-native-vector-icons/MaterialIcons';
-import EntityUtils from "../../../utils/createEntity";
 import styles from './styles'
 import * as userRoleAction from "../../../actions/userRole";
 import {connect} from 'react-redux';
 import {bindActionCreators} from "redux";
 import {FormHeader, SimplePicker, Spinner, TextInput} from '../../../ui/index';
+import strings from "../../../i18n/i18n"
 
 const noPic = require('../../../../images/client_1.png');
-let entityUtils = new EntityUtils();
 const rolesTypes = [
     {
         value: 'Owner',
-        label: 'Owner'
+        label: strings.Owner
     },
     {
         value: 'Admin',
-        label: 'Admin'
+        label: strings.Admin
     },
     {
         value: 'Manager',
-        label: 'Manager'
+        label: strings.Manager
     },
     {
         value: 'Seller',
-        label: 'Seller'
+        label: strings.Seller
     },
 ]
 
@@ -37,7 +36,7 @@ class AddPermittedUser extends Component {
             userRole: '',
             user: '',
             searchUser: true,
-            defaultRole:'',
+            defaultRole: '',
         }
     }
 
@@ -51,9 +50,8 @@ class AddPermittedUser extends Component {
             this.setState({
                 user: navigation.state.params.user,
                 searchUser: false,
-                defaultRole:navigation.state.params.role,
+                defaultRole: navigation.state.params.role,
             });
-
         }
         this.props.actions.clearForm()
     }
@@ -81,15 +79,13 @@ class AddPermittedUser extends Component {
         if (saving) {
             return;
         }
-
         const businessId = navigation.state.params.business._id;
         if (this.validateForm()) {
-            if(user){
+            if (user) {
                 actions.saveRole(user, businessId, role, navigation)
-            }else{
+            } else {
                 actions.saveRole(navigation.state.params.user, businessId, role, navigation)
             }
-
         }
     }
 
@@ -123,7 +119,7 @@ class AddPermittedUser extends Component {
         }
         return <View style={styles.inputTextLayout}>
 
-            <TextInput field='User Phone Number' value={this.state.phoneNumber}
+            <TextInput field={strings.UserPhoneNumber} value={this.state.phoneNumber}
                        returnKeyType='next' ref="1" refNext="1"
                        keyboardType='numeric'
                        placeholder="in your contacts"
@@ -145,9 +141,9 @@ class AddPermittedUser extends Component {
         const userMessage = this.createMessageTag(showMessage, message);
         const userView = this.createUserView(fullUser);
         const searchUser = this.createSearchUser();
-        let title = "Add User Role";
+        let title = strings.AddUserRole;
         if (!this.state.searchUser) {
-            title = "Update User Role";
+            title = strings.UpdateUserRole;
         }
         return <View style={styles.premtied_usesrs_container}>
             <FormHeader showBack submitForm={this.saveFormData.bind(this)} navigation={this.props.navigation}
@@ -194,8 +190,7 @@ class AddPermittedUser extends Component {
     }
 
     createUserRollPicker(role) {
-
-        return <SimplePicker ref="promotionType" list={rolesTypes} itemTitle="Managment Role"
+        return <SimplePicker ref="promotionType" list={rolesTypes} itemTitle={strings.ManagementRole}
                              defaultHeader="Choose Role" isMandatory
                              defaultValue={this.state.defaultRole}
                              onValueSelected={this.setUserRoles.bind(this)}/>

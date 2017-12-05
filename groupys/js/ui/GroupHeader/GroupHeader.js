@@ -2,6 +2,7 @@ import React, {Component} from 'react';
 import {Text, View} from 'react-native';
 import {Button, Thumbnail} from 'native-base';
 import styles from './styles'
+import strings from "../../i18n/i18n"
 
 export default class GroupHeader extends Component {
     constructor(props) {
@@ -81,7 +82,7 @@ export default class GroupHeader extends Component {
                 </View>
                 <View style={{flexDirection: 'row'}}>
                     <Text style={this.createStyle(group.entity_type)}>{this.createTitle(group.entity_type)} | </Text>
-                    <Text>{group.social_state.followers} Members </Text>
+                    <Text>{group.social_state.followers} {strings.Members} </Text>
                 </View>
             </View>
             </View>

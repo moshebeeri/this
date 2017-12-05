@@ -1,25 +1,22 @@
 import React, {Component} from "react";
 import {
     Image,
-    TextInput,
-    Platform,
-    View,
     Keyboard,
+    KeyboardAvoidingView,
+    KeyboardAwareScrollView,
+    Platform,
+    TextInput,
     TouchableNativeFeedback,
     TouchableOpacity,
-    KeyboardAvoidingView,
-    KeyboardAwareScrollView
+    View
 } from "react-native";
 import {connect} from "react-redux";
 import {actions} from "react-native-navigation-redux-helpers";
 import GroupFeedHeader from "./groupFeedHeader";
 import CommentsComponenet from "./commentsComponent";
 import styles from "./styles";
-import CommentApi from "../../../api/commet";
 import {bindActionCreators} from "redux";
 import * as commentAction from "../../../actions/comments";
-
-let commentApi = new CommentApi();
 
 class Comments extends Component {
     static navigationOptions = ({navigation}) => ({

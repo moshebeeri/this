@@ -5,7 +5,7 @@ import {Button, Container, Content, Footer, Header, Icon, Input, InputGroup} fro
 import * as promotionAction from "../../actions/promotions";
 import {bindActionCreators} from "redux";
 import {QrScanner,FormHeader} from '../../ui/index'
-
+import strings from "../../i18n/i18n"
 class Qrcode extends Component {
     static navigationOptions = ({navigation}) => ({
         header: null
@@ -34,7 +34,7 @@ class Qrcode extends Component {
         return <View style={{flex: 1, backgroundColor:'#b7b7b7'}}>
             <View style={{flex:2,marginBottom:10}}>
             <FormHeader showBack navigation={navigation}
-                        title={"QR Scanner"} bgc="#2db6c8"/>
+                        title={strings.QrScanner} bgc="#2db6c8"/>
             </View>
             <View style={{flex:5,alignItems:'center',justifyContent:'center'}}>
             <QrScanner group={group} navigation={navigation}/>

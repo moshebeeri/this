@@ -4,7 +4,7 @@ import Icon2 from "react-native-vector-icons/Entypo";
 import {Button, Icon, Input} from 'native-base';
 import EmojiPicker from "../emojiPicker/emojiPicker"
 import styles from './styles'
-
+import strings from "../../i18n/i18n"
 
 const {width, height} = Dimensions.get('window')
 export default class MessageBox extends Component {
@@ -116,7 +116,7 @@ export default class MessageBox extends Component {
                                ref={'messageBox'}
                                onSubmitEditing={this._onPressButton.bind(this)}
                                underlineColorAndroid='transparent'
-                               onChangeText={(message) => this.setState({message})} placeholder='Message'/>
+                               onChangeText={(message) => this.setState({message})} placeholder={strings.Message}/>
 
 
                     <Button onPress={() => this._onPressButton()} style={styles.icon} transparent>

@@ -9,13 +9,10 @@ import GenericFeedItem from "../../generic-feed-manager/generic-feed";
 import styles from "./styles";
 import {bindActionCreators} from "redux";
 import * as groupAction from "../../../actions/groups";
-import UiTools from "../../../api/feed-ui-converter";
-import GroupApi from "../../../api/groups";
 import InstanceComment from "./instancesComment";
 import {getFeeds} from "../../../selectors/groupFeedsSelector";
 import * as commentAction from "../../../actions/commentsGroup";
-let uiTools = new UiTools();
-let groupApi = new GroupApi();
+import strings from "../../../i18n/i18n"
 
 class GroupFeed extends Component {
     static navigationOptions = ({navigation}) => ({
@@ -59,13 +56,12 @@ class GroupFeed extends Component {
     }
 
     changeTab() {
-        const {navigation,commentGroupAction} = this.props;
+        const {navigation, commentGroupAction} = this.props;
         const group = navigation.state.params.group;
         this.setState({
             showChat: !this.state.showChat
         })
-
-        if(!this.state.showChat){
+        if (!this.state.showChat) {
             commentGroupAction.fetchTopComments(group)
         }
     }
@@ -73,27 +69,25 @@ class GroupFeed extends Component {
     render() {
         let textPromotionStyle = styles.group_text_on;
         let textChatStyle = styles.group_text_off;
-
         if (this.state.showChat) {
-
             textPromotionStyle = styles.group_text_off;
             textChatStyle = styles.group_text_on;
         }
         return (
             <Container style={{backgroundColor: '#ebebeb'}}>
 
-                <Tabs onChangeTab={this.changeTab.bind(this)}tabBarUnderlineStyle={{backgroundColor: '#2db6c8'}}
+                <Tabs onChangeTab={this.changeTab.bind(this)} tabBarUnderlineStyle={{backgroundColor: '#2db6c8'}}
                       style={{backgroundColor: '#fff',}}>
                     <Tab heading={<TabHeading style={{
                         justifyContent: 'center',
                         alignItems: 'center',
                         backgroundColor: "white"
-                    }}><Text style={textPromotionStyle}>Posts</Text></TabHeading>}>
+                    }}><Text style={textPromotionStyle}>{strings.Posts}</Text></TabHeading>}>
                         {this.createGroupFeeds()}
                     </Tab>
                     <Tab heading={<TabHeading
                         style={{justifyContent: 'center', alignItems: 'center', backgroundColor: "white"}}>
-                        <Text  style={textChatStyle}>Chat</Text></TabHeading>}>
+                        <Text style={textChatStyle}>{strings.Chat}</Text></TabHeading>}>
                         <InstanceComment navigation={this.props.navigation}
                                          group={this.props.navigation.state.params.group}/>
                     </Tab>

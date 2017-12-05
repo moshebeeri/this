@@ -4,30 +4,15 @@ import {Button, Container, Content, Input, InputGroup, Item, Text, View} from 'n
 import styles from './styles';
 import {connect} from 'react-redux';
 import {bindActionCreators} from "redux";
-import EntityUtils from "../../utils/createEntity";
 import * as userAction from "../../actions/user";
 import StyleUtils from "../../utils/styleUtils";
 import Icon from 'react-native-vector-icons/FontAwesome';
 import {CloseDrawer, ImagePicker} from "../../ui/index";
 import strings from "../../i18n/i18n"
 
-const logo = require('../../../images/logo.png');
-const cover = require('../../../images/cover-default.png');
-const profile = require('../../../images/profile-default.png');
 const noPic = require('../../../images/client_1.png');
 const briefcase = require('../../../images/briefcase.png');
-const qrcode = require('../../../images/qr-code.png');
 const settings = require('../../../images/settings-work-tool.png');
-let entityUtils = new EntityUtils();
-let videoStyles = StyleSheet.create({
-    backgroundVideo: {
-        position: 'absolute',
-        top: 0,
-        left: 0,
-        bottom: 0,
-        right: 0,
-    },
-});
 
 class ProfileDrawer extends Component {
     static navigationOptions = {

@@ -21,8 +21,6 @@ import GenericListManager from '../generic-list-manager/index'
 import * as notificationAction from "../../actions/notifications";
 import * as groupActions from "../../actions/groups";
 import {bindActionCreators} from "redux";
-import YouTube from 'react-native-youtube'
-import {Video} from "../../ui/index";
 
 class Notification extends Component {
     constructor(props) {
@@ -35,15 +33,14 @@ class Notification extends Component {
     }
 
     renderItem(item) {
-        const {groupActions, actions,navigation} = this.props;
+        const {groupActions, actions, navigation} = this.props;
         return <NotificationListView navigation={navigation} item={item} actions={actions} groupActions={groupActions}/>
     }
 
     render() {
         const {notification, navigation, actions} = this.props;
         return (
-            <View style={{flex:1}}>
-
+            <View style={{flex: 1}}>
 
 
                 <GenericListManager navigation={navigation} rows={notification.notification} actions={actions}
@@ -54,6 +51,7 @@ class Notification extends Component {
         );
     }
 }
+
 /*
                    <YouTube
                     videoId="BY6VntTmtIo"   // The YouTube video ID

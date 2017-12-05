@@ -13,7 +13,7 @@ import * as businessAction from "../../actions/business";
 import {getBusinessPromotions} from '../../selectors/businessesSelector'
 import {bindActionCreators} from "redux";
 import {FormHeader} from '../../ui/index';
-
+import strings from "../../i18n/i18n"
 class Promotions extends Component {
     static navigationOptions = {
         header: null
@@ -70,7 +70,7 @@ class Promotions extends Component {
         return (
             <Container style={{backgroundColor: '#b7b7b7'}}>
                 <FormHeader showBack submitForm={this.navigateToAdd.bind(this)} navigation={this.props.navigation}
-                            title={"My Promotions"} bgc="white"
+                            title={strings.MyPromotions} bgc="white"
                             submitIcon={icon}
                             titleColor="#FA8559" backIconColor="#FA8559"/>
                 {!promotionsLoading[businessId] && <Spinner/>}
@@ -101,7 +101,7 @@ class Promotions extends Component {
 
 
                 <MenuOption onSelect={this.onBoardingPromotion.bind(this)}>
-                    <Text>On Boarding Promotions</Text>
+                    <Text>{strings.OnBoardingPromotion}</Text>
                 </MenuOption>
 
             </MenuOptions>

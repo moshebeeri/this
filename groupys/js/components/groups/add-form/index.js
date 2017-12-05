@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import {Image, ScrollView, Text, View,Dimensions} from 'react-native';
+import {Dimensions, Image, ScrollView, Text, View} from 'react-native';
 import {connect} from 'react-redux';
 import styles from './styles'
 import {getMyBusinesses} from '../../../selectors/businessesSelector'
@@ -9,44 +9,27 @@ import * as groupsAction from "../../../actions/groups";
 import * as businessesAction from "../../../actions/business";
 import * as userAction from "../../../actions/user";
 import {bindActionCreators} from "redux";
-const {width, height} = Dimensions.get('window')
+import strings from "../../../i18n/i18n"
 
+const {width, height} = Dimensions.get('window')
 const groupPolicy = [
     {
         value: 'OPEN',
-        label: 'Group is Open'
+        label: strings.GroupIsOpen
     },
     {
         value: 'CLOSED',
-        label: 'Group is closed'
+        label: strings.GroupIsClosed
     }
 ]
 const groupType = [
     {
         value: 'USERS',
-        label: 'User Group'
+        label: strings.UserGroup
     },
     {
         value: 'BUSINESS',
-        label: 'Business Group'
-    }
-]
-const groupPostPolicy = [
-    {
-        value: 'ANYONE',
-        label: 'Anyone'
-    },
-    {
-        value: 'MEMBERS',
-        label: 'Membersp'
-    },
-    {
-        value: 'ADMINS',
-        label: 'Admins'
-    },
-    {
-        value: 'MANAGERS',
-        label: 'Managers'
+        label: strings.BusinessGroup
     }
 ]
 
@@ -224,7 +207,7 @@ class AddGroup extends Component {
         return (
             <View style={styles.product_container}>
                 <FormHeader showBack submitForm={this.saveFormData.bind(this)} navigation={this.props.navigation}
-                            title={"Add Group"} bgc="#2db6c8"/>
+                            title={strings.AddGroup} bgc="#2db6c8"/>
                 <ScrollView contentContainerStyle={{
                     justifyContent: 'center',
                     alignItems: 'center',
@@ -232,16 +215,16 @@ class AddGroup extends Component {
 
 
                     {this.createCoverImageComponnent()}
-                    <SimplePicker ref="groupPolicyType" list={groupPolicy} itemTitle="Group Policy"
-                                  defaultHeader="Choose Type" isMandatory
+                    <SimplePicker ref="groupPolicyType" list={groupPolicy} itemTitle={strings.GroupPolicy}
+                                  defaultHeader={strings.ChooseType} isMandatory
                                   onValueSelected={this.selectGroupPolocy.bind(this)}/>
-                    <SimplePicker ref="groupType" list={groupType} itemTitle="Group Type"
-                                  defaultHeader="Choose Type" isMandatory
+                    <SimplePicker ref="groupType" list={groupType} itemTitle={strings.GroupType}
+                                  defaultHeader={strings.ChooseType} isMandatory
                                   onValueSelected={this.selectGroupType.bind(this)}/>
 
                     {BusinessPiker}
                     <View style={styles.inputTextLayour}>
-                        <TextInput field='Group Name' value={this.state.name}
+                        <TextInput field={strings.GroupName} value={this.state.name}
                                    returnKeyType='next' ref="1" refNext="1"
                                    onSubmitEditing={this.focusNextField.bind(this, "2")}
                                    onChangeText={(name) => this.setState({name})} isMandatory={true}/>
@@ -250,7 +233,8 @@ class AddGroup extends Component {
                     <View style={styles.inputTextLayour}>
 
 
-                        <TextInput field='Description' value={this.state.info} returnKeyType='next' ref="2" refNext="2"
+                        <TextInput field={strings.Description} value={this.state.info} returnKeyType='next' ref="2"
+                                   refNext="2"
 
 
                                    onChangeText={(info) => this.setState({info})}/>
@@ -260,7 +244,8 @@ class AddGroup extends Component {
                             client ref="selectUsers" selectedValue={this.state.selectedUsers} isMandatory
                             title="Members"
                             action={this.showUsers.bind(this, true)}/>
-                        {this.state.selectedUsers && <Text> Selected Members: {this.state.selectedUsers.length}</Text>}
+                        {this.state.selectedUsers &&
+                        <Text> {strings.SelectedMembers}: {this.state.selectedUsers.length}</Text>}
 
                     </View>
                 </ScrollView>
@@ -269,7 +254,6 @@ class AddGroup extends Component {
             </View>
         );
     }
-
 
     createBusinessPicker(groupType, businesses) {
         if (groupType === 'BUSINESS' && businesses) {
@@ -280,7 +264,7 @@ class AddGroup extends Component {
                 }
             });
             return <SimplePicker ref="BusineesList" list={rows} itemTitle="Businees"
-                                 defaultHeader="Choose Businees" isMandatory
+                                 defaultHeader={strings.ChooseBusiness} isMandatory
                                  onValueSelected={this.selectBusiness.bind(this)}/>
         }
         return undefined;

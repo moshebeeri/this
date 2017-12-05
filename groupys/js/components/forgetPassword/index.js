@@ -1,16 +1,16 @@
 import React, {Component} from "react";
 import {
-    Image,
-    Platform,
-    TouchableHighlight,
-    KeyboardAvoidingView,
-    TextInput,
     Dimensions,
+    Image,
+    KeyboardAvoidingView,
+    Platform,
+    TextInput,
+    TouchableHighlight,
     TouchableOpacity
 } from "react-native";
 import {connect} from "react-redux";
 import {actions} from "react-native-navigation-redux-helpers";
-import {Text, Input, Button, Icon, View, Item} from "native-base";
+import {Button, Icon, Input, Item, Text, View} from "native-base";
 import {bindActionCreators} from "redux";
 import * as loginAction from "../../actions/login";
 import styles from "./styles";
@@ -18,8 +18,6 @@ import {isAuthenticated} from "../../selectors/appSelector";
 import LinearGradient from "react-native-linear-gradient";
 import strings from "../../i18n/i18n"
 
-const logo = require('../../../images/logo.png');
-const global = require('../../conf/global');
 const {width, height} = Dimensions.get('window');
 
 class ForgetPassword extends Component {
@@ -75,7 +73,7 @@ class ForgetPassword extends Component {
                         }}>
 
                             <View style={{height: 60, justifyContent: 'flex-end', width: width / 2 + 120}}>
-                                <Text style={styles.signInText}>strings.PasswordRecoverySMSNotificationMessage</Text>
+                                <Text style={styles.signInText}>{strings.PasswordRecoverySMSNotificationMessage}</Text>
                             </View>
 
                             <Item style={styles.phoneTextInput} regular>
@@ -83,7 +81,7 @@ class ForgetPassword extends Component {
                                        blurOnSubmit={true} returnKeyType='next'
                                        onSubmitEditing={this.forgetPassword.bind(this)}
                                        onChangeText={(phoneNumber) => this.setState({phoneNumber})}
-                                       placeholder='Phone Number'/>
+                                       placeholder={strings.PhoneNumber}/>
                             </Item>
 
 
@@ -109,24 +107,15 @@ class ForgetPassword extends Component {
                                     alignItems: 'center',
                                 }} regular>
 
-                                    <Text style={{color: 'white', fontStyle: 'normal', fontSize: 15}}>strings.SendSMS</Text>
+                                    <Text style={{
+                                        color: 'white',
+                                        fontStyle: 'normal',
+                                        fontSize: 15
+                                    }}>{strings.SendSMS}</Text>
 
                                 </TouchableOpacity>
                             </View>
-                            <View style={{
-                                backgroundColor: 'transparent',
-                                width: width / 2 + 120,
-                                flexDirection: 'row',
-                                justifyContent: 'space-between',
-                                paddingVertical: 20
-                            }}>
-                                <Button style={styles.logoFacebook}>
-                                    <Icon name="logo-facebook"/>
-                                </Button>
-                                <Button style={styles.logoGoogle}>
-                                    <Icon name="logo-google"/>
-                                </Button>
-                            </View>
+
                         </View>
 
                     </View>
