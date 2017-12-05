@@ -6,7 +6,7 @@ import {
 
 import styles from './styles'
 import {SelectButton, SimplePicker, TextInput} from '../../../../ui/index';
-
+import strings from "../../../../i18n/i18n"
 
 export default class ReduceAmountComponent extends Component {
     constructor(props) {
@@ -80,19 +80,19 @@ export default class ReduceAmountComponent extends Component {
         }
         return <View>
             <View style={styles.inputTextLayout}>
-                <Text style={{color: '#FA8559', marginLeft: 8, marginRight: 8}}>Buy $ Pay only $</Text>
+                <Text style={{color: '#FA8559', marginLeft: 8, marginRight: 8}}>{strings.BuyPayOnly}</Text>
             </View>
             <View style={{flexDirection:'row',justifyContent:'center',alignItems:'center'}}>
 
                 <View style={styles.inputPrecenComponent}>
-                    <TextInput field='Buy $' value={price}
+                    <TextInput field={strings.Buy}value={price}
                                returnKeyType='next' ref="Buy $" refNext="Buy $"
                                keyboardType='numeric'
                                onSubmitEditing={this.focusNextField.bind(this, "Pay $")}
                                onChangeText={(value) => this.setBuy(value)} isMandatory={true}/>
                 </View>
                 <View style={styles.inputPrecenComponent}>
-                    <TextInput field='Pay $' value={pay}
+                    <TextInput field={strings.Pay} value={pay}
                                returnKeyType='next' ref="Pay $" refNext="Pay $"
                                keyboardType='numeric'
                                onChangeText={(value) => this.setPay(value)} isMandatory={true}/>

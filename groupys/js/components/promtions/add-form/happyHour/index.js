@@ -8,6 +8,7 @@ import styles from './styles'
 import {SelectButton, SimplePicker, TextInput,TimePicker,WeekDaysPicker} from '../../../../ui/index';
 
 import FormUtils from "../../../../utils/fromUtils";
+import strings from "../../../../i18n/i18n"
 export default class HappyHourComponent extends Component {
     constructor(props) {
         super(props);
@@ -190,10 +191,10 @@ export default class HappyHourComponent extends Component {
                 <Text style={{color: '#FA8559', marginLeft: 8, marginRight: 8}}>Happy Hour</Text>
             </View>
             <View style={{flexDirection:'row',justifyContent:'center',alignItems:'center'}}>
-                <View style={{flex:1.7,marginTop:25}}><SelectButton isMandatory ref="precentSelectProduct" selectedValue={this.props.state.product} title="Select Product" action={this.showProducts.bind(this, true)}/></View>
+                <View style={{flex:1.7,marginTop:25}}><SelectButton isMandatory ref="precentSelectProduct" selectedValue={this.props.state.product} title={strings.SelectProduct} action={this.showProducts.bind(this, true)}/></View>
 
                 <View style={styles.inputPrecenComponent}>
-                    <TextInput field='Pay $' value={pay}
+                    <TextInput field={strings.Pay} value={pay}
                                returnKeyType='next' ref="Pay $" refNext="2"
                                keyboardType='numeric'
                                onChangeText={(value) => this.setPay(value)} isMandatory={true}/>
@@ -205,14 +206,14 @@ export default class HappyHourComponent extends Component {
             <View style={{flexDirection:'row',marginTop:5,marginBottom:5,justifyContent:'center',alignItems:'center'}}>
 
                 <View style={styles.inputPrecenComponent}>
-                    <TimePicker field='From Hour'
+                    <TimePicker field={strings.FromHour}
                                 validateContent={this.validateFrom.bind(this)}
                                 returnKeyType='next' ref="From Hour" refNext="3"
                                 onChangeDate={(value) => this.setFrom(value)} isMandatory={true}/>
 
                 </View>
                 <View style={styles.inputPrecenComponent}>
-                    <TextInput field='Number Of Hours' value={this.state.numberOfHours}
+                    <TextInput field={strings.NumberOfHours} value={this.state.numberOfHours}
                                returnKeyType='next' ref="off" refNext="off"
                                keyboardType='numeric'
                                onChangeText={(value) => this.setUntil(value)} isMandatory={true}/>
@@ -223,7 +224,7 @@ export default class HappyHourComponent extends Component {
 
 
                 <View style={styles.inputPrecenComponent}>
-                    <WeekDaysPicker field='Days of Week'
+                    <WeekDaysPicker field={strings.DaysOfWeek}
                                 ref="Days of Week" refNext="Days of Week"
                                     onChangeSelected={(value) => this.setDays(value)} isMandatory={true}/>
                 </View>

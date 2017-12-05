@@ -4,7 +4,7 @@ import {Platform, Provider} from "react-native";
 import {Container, Content, Text, Button, Body, Left, Footer, ListItem, Right, Thumbnail, CheckBox} from "native-base";
 import * as groupsAction from "../../../../actions/groups";
 import {bindActionCreators} from "redux";
-
+import strings from "../../../../i18n/i18n"
 class SelectGroupsComponent extends Component {
     constructor(props) {
         super(props);
@@ -110,7 +110,7 @@ class SelectGroupsComponent extends Component {
                     <Button transparent
                             onPress={this.saveFormData.bind(this)}
                     >
-                        <Text>Select Groups</Text>
+                        <Text>{strings.SelectGroups}</Text>
                     </Button>
                 </Footer>
             </Container>

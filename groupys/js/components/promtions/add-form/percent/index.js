@@ -3,14 +3,15 @@ import {Text, View} from 'react-native'
 import styles from './styles'
 import {SelectButton, SimplePicker, TextInput} from '../../../../ui/index';
 import FormUtils from "../../../../utils/fromUtils";
+import strings from "../../../../i18n/i18n"
 ;const Discouint_on = [
     {
         value: 'GLOBAL',
-        label: 'Global Discount'
+        label: strings.GlobalDiscount
     },
     {
         value: 'PRODUCT',
-        label: 'Product Discount'
+        label: strings.ProductDiscount
     }
 ];
 export default class PercentComponent extends Component {
@@ -118,13 +119,13 @@ export default class PercentComponent extends Component {
             let button = <View style={{marginTop:25}}><SelectButton isMandatory ref="precentSelectProduct"selectedValue={this.props.state.product} title="Select Product" action={this.showProducts.bind(this, true)}/></View>
             let retailPrice =
                 <View style={styles.inputRetailComponent}>
-                    <TextInput field='Retail Price' value={this.props.state.percent.retail_price}
+                    <TextInput field={strings.RetailPrice} value={this.props.state.percent.retail_price}
                                returnKeyType='next' ref="retail" refNext="retail"
                                keyboardType='numeric'
                                onChangeText={(value) => this.setRetailPrice(value)} isMandatory={true}/>
                 </View>
             let discount = <View style={styles.inputPrecenComponent}>
-                <TextInput field='Discount' value={this.props.state.percent.percent}
+                <TextInput field={strings.Discount} value={this.props.state.percent.percent}
                            returnKeyType='next' ref="discount" refNext="discount"
                            keyboardType='numeric'
                            placeholder="%"
@@ -135,7 +136,7 @@ export default class PercentComponent extends Component {
         }
         if (this.props.state.discount_on === 'GLOBAL') {
             return <View style={styles.inputTextLayout}>
-                <TextInput field='% Off' value={this.props.state.percent.percent}
+                <TextInput field={strings.PercentageOff}value={this.props.state.percent.percent}
                            returnKeyType='next' ref="off" refNext="off"
                            keyboardType='numeric'
                            validateContent={FormUtils.validatePercent}
@@ -160,10 +161,10 @@ export default class PercentComponent extends Component {
         let promotionOn = this.createSelectProductButton();
         return <View>
             <View style={styles.inputTextLayout}>
-                <Text style={{color: '#FA8559', marginLeft: 8, marginRight: 8}}>Percent Discount</Text>
+                <Text style={{color: '#FA8559', marginLeft: 8, marginRight: 8}}>{strings.PercentDiscount}</Text>
             </View>
             <View style={styles.inputTextLayout}>
-                <SimplePicker ref="PromotionOn"list={Discouint_on} itemTitle="Promotion On" defaultHeader="Choose Type" isMandatory
+                <SimplePicker ref="PromotionOn"list={Discouint_on} itemTitle={strings.Promotionon} defaultHeader="Choose Type" isMandatory
                               onValueSelected={this.selectPromotionType.bind(this)}/>
             </View>
             {promotionOn}
