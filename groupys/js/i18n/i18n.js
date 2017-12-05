@@ -135,8 +135,17 @@ let strings = new LocalizedStrings({
         SearchBusiness: 'Search Business',
         AddBusiness: 'Add Business',
         BusinessName: 'Business Name',
-        TaxID: 'Tax ID'
-
+        TaxID: 'Tax ID',
+        MyBusinesses: 'My Businesses',
+        Country: 'Country',
+        City: 'City',
+        SelectCategory: 'Select Category',
+        Members: 'Members',
+        TakePictures: 'Take Pictures',
+        PickFromPhotos: 'Pick From Photos',
+        Message: 'Message',
+        Confirm: 'Confirm',
+        Cancel: 'Cancel',
     },
     en: {
         Promotion: "Promotion",

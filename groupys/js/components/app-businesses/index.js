@@ -3,17 +3,32 @@ import {Image, Platform, StyleSheet} from 'react-native';
 import {connect} from 'react-redux';
 import {actions} from 'react-native-navigation-redux-helpers';
 import {
-    Container, Content, Text, Title, InputGroup,
-    Input, Button, View, Header, Body, Right, ListItem, Tabs, Tab, TabHeading, Thumbnail, Left, Drawer, Fab
+    Button,
+    Container,
+    Content,
+    Drawer,
+    Fab,
+    Header,
+    Input,
+    InputGroup,
+    Left,
+    ListItem,
+    Right,
+    Tab,
+    TabHeading,
+    Tabs,
+    Thumbnail,
+    Title,
+    View
 } from 'native-base';
-import GeneralComponentHeader from '../header/index';
 import Business from '../business/index';
 import SideBar from '../drawer/index';
 import {bindActionCreators} from "redux";
 import * as businessAction from "../../actions/business";
-import { FormHeader} from '../../ui/index';
+import {FormHeader} from '../../ui/index';
 import Icon from 'react-native-vector-icons/Ionicons';
 import Icon2 from 'react-native-vector-icons/MaterialCommunityIcons';
+import strings from "../../i18n/i18n"
 
 class ApplicationBusinessManager extends Component {
     static navigationOptions = {
@@ -52,7 +67,7 @@ class ApplicationBusinessManager extends Component {
 
                 <Container>
                     <FormHeader showBack submitForm={this.navigateToAdd.bind(this)} navigation={this.props.navigation}
-                                title={"My Businesses"} bgc="white"
+                                title={strings.MyBusinesses} bgc="white"
                                 submitIcon={icon}
                                 titleColor="#FA8559" backIconColor="#FA8559"/>
 

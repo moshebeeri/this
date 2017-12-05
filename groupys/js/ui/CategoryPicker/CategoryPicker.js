@@ -5,7 +5,7 @@ import styles from './styles';
 import * as categoriesAction from "../../actions/categories";
 import {connect} from 'react-redux';
 import {bindActionCreators} from "redux";
-
+import strings from "../../i18n/i18n"
 class CategoryPicker extends Component {
     constructor(props) {
         super(props);
@@ -115,7 +115,7 @@ class CategoryPicker extends Component {
             rootOicker = <Picker
 
                 mode="dropdown"
-                placeholder="Select Category"
+                placeholder={strings.SelectCategory}
                 style={pickerStyle}
                 selectedValue={this.state.selectedCategories[0]}
                 onValueChange={(category) => this.setCategory(0, category)}>
@@ -147,7 +147,7 @@ class CategoryPicker extends Component {
                 return <Picker
                     key={i}
 
-                    placeholder="Select Category"
+                    placeholder={strings.SelectCategory}
                     mode="dropdown"
                     style={pickerStyle}
                     selectedValue={stateCategories[i + 1]}

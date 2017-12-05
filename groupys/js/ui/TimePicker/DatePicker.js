@@ -3,7 +3,7 @@ import {Dimensions, TextInput, View} from 'react-native';
 import {Icon, Input, Text} from 'native-base';
 import styles from './styles';
 import DatePicker from "react-native-datepicker";
-
+import strings from "../../i18n/i18n"
 const {width, height} = Dimensions.get('window');
 export default class TimePickerField extends Component {
     constructor(props) {
@@ -81,8 +81,8 @@ export default class TimePickerField extends Component {
                     style={textInputStyle}
                     mode="time"
                     placeholder={placeholder}
-                    confirmBtnText="Confirm"
-                    cancelBtnText="Cancel"
+                    confirmBtnText={strings.Confirm}
+                    cancelBtnText={strings.Cancel}
                     onDateChange={this.onChange.bind(this)}
                 />
 

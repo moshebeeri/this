@@ -6,7 +6,7 @@ import styles from "./styles";
 import {BusinessHeader,SubmitButton} from '../../ui/index';
 const {width, height} = Dimensions.get('window')
 import FeedPromotion from '../../components/generic-feed-manager/generic-feed/feed-components/feedPromotion'
-
+import strings from "../../i18n/i18n"
 export default class BusinessFollow extends Component {
     static navigationOptions = {
         header: null
@@ -38,13 +38,13 @@ export default class BusinessFollow extends Component {
                 backgroundColor: '#e65100',
             };
             followComponent =   <View>
-                    <SubmitButton color={'#2db6c8'} title={'FOLLOW'} onPress={() => followBusiness(business._id, navigation)}/>
+                    <SubmitButton color={'#2db6c8'} title={strings.Follow.toUpperCase()} onPress={() => followBusiness(business._id, navigation)}/>
                 </View>
 
             if (group) {
                 followComponent =
                     <View>
-                        <SubmitButton color={'#2db6c8'} title={'FOLLOW'} onPress={() => groupFollowBusiness(group._id, business._id, navigation)}/>
+                        <SubmitButton color={'#2db6c8'} title={strings.Follow.toUpperCase()} onPress={() => groupFollowBusiness(group._id, business._id, navigation)}/>
                     </View>
 
             }
@@ -93,7 +93,7 @@ export default class BusinessFollow extends Component {
                     </View>
                     <View style={{flex:1, alignItems:'center' }}>
                         <View>
-                        <SubmitButton color={'#2db6c8'} title={'CONFIRM'} onPress={() => realizePromotion(code)}/>
+                        <SubmitButton color={'#2db6c8'} title={strings.Confirm.toUpperCase()} onPress={() => realizePromotion(code)}/>
                         </View>
                     </View>
                 </View>

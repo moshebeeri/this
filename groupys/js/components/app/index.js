@@ -1,10 +1,8 @@
 import React, {Component} from "react";
-import {Dimensions, Image, StyleSheetm,Platform} from "react-native";
+import {Dimensions, Image, Platform, StyleSheetm} from "react-native";
 import {connect} from "react-redux";
-    import {Container, Drawer, Fab, Tab, TabHeading, Tabs, View,Icon} from "native-base";
-
+import {Container, Drawer, Fab, Icon, Tab, TabHeading, Tabs, View} from "native-base";
 import Icon2 from "react-native-vector-icons/Ionicons";
-import Icon5 from 'react-native-vector-icons/MaterialCommunityIcons';
 import GeneralComponentHeader from "../header/index";
 import Feeds from "../feed/index";
 import MydPromotions from "../my-promotions/index";
@@ -138,7 +136,6 @@ class ApplicationManager extends Component {
         openDrawer = () => {
             this.drawer._root.open()
         };
-
         return (
 
             <Drawer
@@ -155,19 +152,25 @@ class ApplicationManager extends Component {
 
                     <Tabs tabBarUnderlineStyle={{backgroundColor: '#2db6c8'}} initialPage={selectedTab}
                           onChangeTab={this.onChangeTab.bind(this)} style={{backgroundColor: '#fff',}}>
-                        <Tab heading={<TabHeading style={{justifyContent:'center',alignItems:'center',backgroundColor: "white"}}><Image
+                        <Tab heading={<TabHeading
+                            style={{justifyContent: 'center', alignItems: 'center', backgroundColor: "white"}}><Image
                             style={{tintColor: '#2db6c8', marginLeft: 0, width: 35, height: 35}}
                             source={promotions}/></TabHeading>}>
                             <Feeds index={0} navigation={this.props.navigation}/>
                         </Tab>
-                        <Tab heading={<TabHeading style={{justifyContent:'center',alignItems:'center',backgroundColor: "white"}}><Image
+                        <Tab heading={<TabHeading
+                            style={{justifyContent: 'center', alignItems: 'center', backgroundColor: "white"}}><Image
                             style={{tintColor: '#2db6c8', marginLeft: 0, width: 25, height: 25}}
                             source={save}/></TabHeading>}>
                             <MydPromotions navigation={this.props.navigation} index={1}/>
                         </Tab>
 
                         <Tab
-                            heading={<TabHeading style={{justifyContent:'center',alignItems:'center',backgroundColor: "white"}}><Image
+                            heading={<TabHeading style={{
+                                justifyContent: 'center',
+                                alignItems: 'center',
+                                backgroundColor: "white"
+                            }}><Image
                                 style={{tintColor: '#2db6c8', marginLeft: 0, width: 45, height: 45}}
                                 source={groups}/></TabHeading>}>
                             <Groups navigation={this.props.navigation} index={2}
@@ -175,7 +178,11 @@ class ApplicationManager extends Component {
                         </Tab>
 
                         <Tab
-                            heading={<TabHeading style={{justifyContent:'center',alignItems:'center', backgroundColor: "white"}}><Icon2
+                            heading={<TabHeading style={{
+                                justifyContent: 'center',
+                                alignItems: 'center',
+                                backgroundColor: "white"
+                            }}><Icon2
                                 style={{color: '#2db6c8', fontSize: 30,}} name="md-notifications"/></TabHeading>}>
                             <Notification navigation={this.props.navigation} index={3}/>
                         </Tab>
@@ -186,7 +193,6 @@ class ApplicationManager extends Component {
             </Drawer>
         );
     }
-
 }
 
 const mapStateToProps = (state) => {

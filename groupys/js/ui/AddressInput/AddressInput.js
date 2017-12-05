@@ -6,6 +6,7 @@ import {DynamicMessage, TextInput} from '../index';
 import {connect} from 'react-redux';
 import {bindActionCreators} from "redux";
 import * as addressAction from "../../actions/address";
+import strings from "../../i18n/i18n"
 
 class AddressInput extends Component {
     constructor(props) {
@@ -25,13 +26,12 @@ class AddressInput extends Component {
         this.refs["city"].focus()
     }
 
-
     componentWillMount() {
-        const{country,city,address} = this.props;
+        const {country, city, address} = this.props;
         this.setState({
-            country:country,
-            city:city,
-            address:address,
+            country: country,
+            city: city,
+            address: address,
         })
     }
 
@@ -101,10 +101,9 @@ class AddressInput extends Component {
     onSubmit() {
         this.checkAddress();
         this.setSubmut();
-
     }
 
-    setSubmut(){
+    setSubmut() {
         const {onSubmitEditing, addressForm} = this.props;
         let address = {
             location: addressForm.location,
@@ -116,9 +115,9 @@ class AddressInput extends Component {
             onSubmitEditing(address);
         }
     }
-    render() {
-        const {isMandatory, addressForm,refNext} = this.props;
 
+    render() {
+        const {isMandatory, addressForm, refNext} = this.props;
         return <View>
             <View style={styles.inputTextLayout}>
                 <View style={{flexDirection: "row"}}>
@@ -126,18 +125,21 @@ class AddressInput extends Component {
                     {isMandatory && <Icon style={{margin: 5, color: 'red', fontSize: 12}} name='star'/>}
                 </View>
                 <View>
-                    <TextInput placeholder='Country' value={this.state.country} returnKeyType='next' ref={refNext}
+                    <TextInput placeholder={strings.Country} value={this.state.country} returnKeyType='next'
+                               ref={refNext}
                                refNext={refNext}
                                onSubmitEditing={this.focusNextField.bind(this, "city")}
                                validateContent={this.validateAddress.bind(this)}
                                onChangeText={(country) => this.setState({country})} isMandatory={isMandatory}/>
 
-                    <TextInput placeholder='City' value={this.state.city} returnKeyType='next' ref="city" refNext="city"
+                    <TextInput placeholder={strings.City} value={this.state.city} returnKeyType='next' ref="city"
+                               refNext="city"
                                onSubmitEditing={this.focusNextField.bind(this, "address")}
                                validateContent={this.validateAddress.bind(this)}
                                onChangeText={(city) => this.setState({city})} isMandatory={isMandatory}/>
 
-                    <TextInput placeholder='Addresss' value={this.state.address} returnKeyType='next' ref="address"
+                    <TextInput placeholder={strings.Address} value={this.state.address} returnKeyType='next'
+                               ref="address"
                                refNext="address"
                                onSubmitEditing={this.onSubmit.bind(this)}
                                validateContent={this.validateAddress.bind(this)}
