@@ -53,11 +53,11 @@ export default class GroupHeader extends Component {
         if(business) {
             switch (groupType) {
                 case 'USERS':
-                    return <View style={styles.businessPiker}>
+                    return <View style={styles.businessPicker}>
                         <View style={styles.businessTopLogo}>
                             {this.createBusinessLogo(business)}
                         </View>
-                        <View style={styles.businessPikkerComponent}>
+                        <View style={styles.businessPickerComponent}>
                             <Text style={styles.businessNameText}>{business.name}</Text>
                         </View>
 

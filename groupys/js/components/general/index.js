@@ -24,8 +24,9 @@ const {
 import login from './general-theme';
 import GeneralApi from '../../api/general'
 import GeneralComponentHeader from '../header/index';
+import strings from "../../i18n/i18n"
 
-let generalApi = new GeneralApi()
+let generalApi = new GeneralApi();
 const types = [
     {
         value: 'Business',
@@ -98,7 +99,7 @@ class General extends Component {
     }
 
     render() {
-        let apiPikker = <Picker
+        let apiPicker = <Picker
             iosHeader="Select API"
             mode="dropdown"
             selectedValue={this.state.api}
@@ -111,7 +112,7 @@ class General extends Component {
                         value={s.value}
                         label={s.label}/>
                 })}
-        </Picker>
+        </Picker>;
         return (
             <Container>
                 <Header
@@ -128,7 +129,7 @@ class General extends Component {
 
                 <Content style={{backgroundColor: '#fff'}}>
                     <Item underline>
-                        {apiPikker}
+                        {apiPicker}
                     </Item>
                     <Item underline>
                         <Input multiline style={{height: 300}} onChangeText={(json) => this.setState({json})}
@@ -145,7 +146,7 @@ class General extends Component {
                     <Button transparent
                             onPress={this.sendRequest.bind(this)}
                     >
-                        <Text>Post Request</Text>
+                        <Text>strings.PostRequest</Text>
                     </Button>
                 </Footer>
             </Container>

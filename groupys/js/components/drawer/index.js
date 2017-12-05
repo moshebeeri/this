@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import {Image, StyleSheet, TouchableOpacity} from 'react-native';
+import {Image, Platform, StyleSheet, TouchableOpacity} from 'react-native';
 import {Button, Container, Content, Input, InputGroup, Item, Text, View} from 'native-base';
 import styles from './styles';
 import {connect} from 'react-redux';
@@ -8,9 +8,8 @@ import EntityUtils from "../../utils/createEntity";
 import * as userAction from "../../actions/user";
 import StyleUtils from "../../utils/styleUtils";
 import Icon from 'react-native-vector-icons/FontAwesome';
-import {CloseDrawer} from "../../ui/index";
+import {CloseDrawer, ImagePicker} from "../../ui/index";
 import strings from "../../i18n/i18n"
-import {ImagePicker} from '../../ui/index';
 
 const logo = require('../../../images/logo.png');
 const cover = require('../../../images/cover-default.png');
@@ -51,14 +50,14 @@ class ProfileDrawer extends Component {
         }
     }
 
-    setImage(image){
-        const{actions,user} = this.props;
+    setImage(image) {
+        const {actions, user} = this.props;
         let updatedUser = user;
         updatedUser.image = image;
-        this.setState({image:image});
-        actions.updateUser(updatedUser,undefined);
-
+        this.setState({image: image});
+        actions.updateUser(updatedUser, undefined);
     }
+
     replaceRoute(route) {
         this.props.navigation.navigate(route);
     }
@@ -88,19 +87,21 @@ class ProfileDrawer extends Component {
                 }
             }
         }
-        if(this.state.image){
+        if (this.state.image) {
             source = {
                 uri: this.state.image.path
             }
         }
         let name = StyleUtils.toTitleCase(this.props.user ? this.props.user.name : 'name');
         let phoneNumber = StyleUtils.parseUserPhoneNumber(this.props.user);
-        let userImage = <Image style={{width:80,height:80,borderRadius:40,}}source={source}/>;
+        let borderRadiusSize = 40;
+        if (Platform.OS === 'ios') {
+            borderRadiusSize = 35;
+        }
+        let userImage = <Image style={{width: 80, height: 80, borderRadius: borderRadiusSize,}} source={source}/>;
         return (
             <Container>
                 <Content style={{backgroundColor: '#F2F2F2'}}>
-                    {/*Header style*/}
-
 
                     <View style={{height: 55, flex: 1, justifyContent: 'flex-end', flexDirection: 'row'}}>
                         <CloseDrawer active color={"#FF9046"} size={20} onPress={() => this.props.closeDrawer()}/>
@@ -134,7 +135,8 @@ class ProfileDrawer extends Component {
                         </View>
                         <View style={styles.thumbnail}>
 
-                             <ImagePicker imageWidth={3000} imageHeight={3000} image={userImage} setImage={this.setImage.bind(this)}/>
+                            <ImagePicker imageWidth={3000} imageHeight={3000} image={userImage}
+                                         setImage={this.setImage.bind(this)}/>
 
                         </View>
 
@@ -157,7 +159,7 @@ class ProfileDrawer extends Component {
                                         color: '#FF9046',
                                         fontStyle: 'normal',
                                         fontSize: 16
-                                    }}>{strings.businesses}</Text>
+                                    }}>{strings.Businesses}</Text>
                             </TouchableOpacity>
                         </View>
                         <View style={{flex: 1, flexDirection: 'row'}}>
@@ -169,7 +171,7 @@ class ProfileDrawer extends Component {
                                     color: '#FF9046',
                                     fontStyle: 'normal',
                                     fontSize: 16
-                                }}>{strings.changePassword} </Text>
+                                }}>{strings.ChangePassword} </Text>
 
                             </TouchableOpacity>
                         </View>
@@ -193,7 +195,7 @@ class ProfileDrawer extends Component {
                                         color: '#FF9046',
                                         fontStyle: 'normal',
                                         fontSize: 16
-                                    }}>{strings.settings}</Text>
+                                    }}>{strings.Settings}</Text>
 
                             </TouchableOpacity>
                         </View>

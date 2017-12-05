@@ -183,13 +183,13 @@ class EditPromotion extends Component {
                 }}>
 
 
-                    <View style={styles.inputTextLayour}>
+                    <View style={styles.inputTextLayout}>
                         <Text style={{color: '#FA8559', marginLeft: 8, marginRight: 8}}>You can increase the quantity of
                             promotions Or extend the due
                             date</Text>
 
                     </View>
-                    <View style={styles.inputTextLayour}>
+                    <View style={styles.inputTextLayout}>
                         <Text style={{color: '#FA8559', marginLeft: 8, marginRight: 8}}>General</Text>
                     </View>
                     <View style={styles.inputTextMediumLayout}>
@@ -211,13 +211,13 @@ class EditPromotion extends Component {
                         </View>
                     </View>
 
-                    <View style={styles.inputTextLayour}>
+                    <View style={styles.inputTextLayout}>
                         <TextInput field='Name' value={this.state.name}
                                    returnKeyType='next' ref="4" refNext="4"
                                    onSubmitEditing={this.focusNextField.bind(this, "5")}
                                    onChangeText={(name) => this.setState({name})} isMandatory={true}/>
                     </View>
-                    <View style={styles.inputTextLayour}>
+                    <View style={styles.inputTextLayout}>
                         <TextInput field='Description' value={this.state.info}
                                    returnKeyType='next' ref="5" refNext="5"
 
@@ -253,7 +253,7 @@ export default connect(
         products: state.products,
     }),
     (dispatch) => ({
-        bussinesActions: bindActionCreators(businessAction, dispatch),
+        businessActions: bindActionCreators(businessAction, dispatch),
         actions: bindActionCreators(promotionsAction, dispatch)
     })
 )(EditPromotion);

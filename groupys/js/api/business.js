@@ -144,7 +144,7 @@ class BusinessApi {
         })
     }
 
-    checkAddress(bussiness, token) {
+    checkAddress(businesses, token) {
         return new Promise(async (resolve, reject) => {
             try {
                 let from = new Date();
@@ -155,7 +155,7 @@ class BusinessApi {
                         'Content-Type': 'application/json;charset=utf-8',
                         'Authorization': 'Bearer ' + token
                     },
-                    body: JSON.stringify(bussiness)
+                    body: JSON.stringify(businesses)
                 });
                 if (parseInt(response.status) >= 400) {
                     let response = {

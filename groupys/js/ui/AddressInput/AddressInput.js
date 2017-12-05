@@ -120,7 +120,7 @@ class AddressInput extends Component {
         const {isMandatory, addressForm,refNext} = this.props;
 
         return <View>
-            <View style={styles.inputTextLayour}>
+            <View style={styles.inputTextLayout}>
                 <View style={{flexDirection: "row"}}>
                     <Text style={styles.textInputTextStyle}>Location</Text>
                     {isMandatory && <Icon style={{margin: 5, color: 'red', fontSize: 12}} name='star'/>}

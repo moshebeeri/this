@@ -79,7 +79,7 @@ export default class ReduceAmountComponent extends Component {
             price = this.props.state.reduced_amount.values.price;
         }
         return <View>
-            <View style={styles.inputTextLayour}>
+            <View style={styles.inputTextLayout}>
                 <Text style={{color: '#FA8559', marginLeft: 8, marginRight: 8}}>Buy $ Pay only $</Text>
             </View>
             <View style={{flexDirection:'row',justifyContent:'center',alignItems:'center'}}>

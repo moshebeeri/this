@@ -4,10 +4,10 @@ const {width, height} = Dimensions.get('window')
 module.exports = {
 
     promotion_container:{
-        borderWidth:1,
-        borderColor:'black',
+        borderWidth:5,
+        borderColor:'#e7e7e7',
         backgroundColor:'white',
-        borderTopWidth:2,
+        borderTopWidth:5,
     },
     promotionHeader:{
         backgroundColor:'white',
@@ -125,11 +125,11 @@ module.exports = {
     },
     promotionAnalyticsContainer:{
         flexDirection:'row',
-        width:width,
+        width:width ,
         height:55,
         justifyContent:'center',
         alignItems:'center',
-        borderTopWidth:0.3,
+        borderTopWidth:1,
         borderColor:'#b3b3b3',
     },
     promotionAnalyticsAttribute:{

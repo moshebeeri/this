@@ -134,7 +134,7 @@ export default class PercentComponent extends Component {
             return <View style={{flexDirection: 'row'}}>{button}{retailPrice}{discount}</View>
         }
         if (this.props.state.discount_on === 'GLOBAL') {
-            return <View style={styles.inputTextLayour}>
+            return <View style={styles.inputTextLayout}>
                 <TextInput field='% Off' value={this.props.state.percent.percent}
                            returnKeyType='next' ref="off" refNext="off"
                            keyboardType='numeric'
@@ -148,7 +148,7 @@ export default class PercentComponent extends Component {
     createProductView() {
         if(this.props.state.product) {
             let productName = this.props.state.product.name
-            return <View style={styles.inputTextLayour}>
+            return <View style={styles.inputTextLayout}>
                 <Text style={{color: '#FA8559', marginLeft: 8, marginRight: 8}}>Discount On: {productName}</Text>
             </View>
         }
@@ -159,10 +159,10 @@ export default class PercentComponent extends Component {
     render() {
         let promotionOn = this.createSelectProductButton();
         return <View>
-            <View style={styles.inputTextLayour}>
+            <View style={styles.inputTextLayout}>
                 <Text style={{color: '#FA8559', marginLeft: 8, marginRight: 8}}>Percent Discount</Text>
             </View>
-            <View style={styles.inputTextLayour}>
+            <View style={styles.inputTextLayout}>
                 <SimplePicker ref="PromotionOn"list={Discouint_on} itemTitle="Promotion On" defaultHeader="Choose Type" isMandatory
                               onValueSelected={this.selectPromotionType.bind(this)}/>
             </View>

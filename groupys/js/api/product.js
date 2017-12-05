@@ -15,13 +15,13 @@ class ProductsApi {
                         'Content-Type': 'application/json;charset=utf-8',
                         'Authorization': 'Bearer ' + token
                     }
-                })
+                });
                 if (response.status ==='401') {
                     reject(response);
                     return;
                 }
                 let responseData = await response.json();
-                timer.logTime(from, new Date(), 'products', '/')
+                timer.logTime(from, new Date(), 'products', '/');
                 resolve(responseData);
             }
             catch (error) {
@@ -42,12 +42,12 @@ class ProductsApi {
                         'Content-Type': 'application/json;charset=utf-8',
                         'Authorization': 'Bearer ' + token
                     }
-                })
+                });
                 if (response.status ==='401') {
                     reject(response);
                     return;
                 }
-                timer.logTime(from, new Date(), 'products', 'find/by/business')
+                timer.logTime(from, new Date(), 'products', 'find/by/business');
                 let responseData = await response.json();
                 resolve(responseData);
             }

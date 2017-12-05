@@ -4,7 +4,7 @@ import {connect} from 'react-redux';
 import {actions} from 'react-native-navigation-redux-helpers';
 import {
     Container, Content, Text, Title, InputGroup,
-    Input, Button, Icon, View, Header, Body, Right, ListItem, Tabs, Tab, TabHeading, Thumbnail, Left, Drawer, Fab
+    Input, Button, View, Header, Body, Right, ListItem, Tabs, Tab, TabHeading, Thumbnail, Left, Drawer, Fab
 } from 'native-base';
 import GeneralComponentHeader from '../header/index';
 import Business from '../business/index';
@@ -12,6 +12,7 @@ import SideBar from '../drawer/index';
 import {bindActionCreators} from "redux";
 import * as businessAction from "../../actions/business";
 import { FormHeader} from '../../ui/index';
+import Icon from 'react-native-vector-icons/Ionicons';
 import Icon2 from 'react-native-vector-icons/MaterialCommunityIcons';
 
 class ApplicationBusinessManager extends Component {
@@ -35,6 +36,10 @@ class ApplicationBusinessManager extends Component {
 
 
     render() {
+        let icon = <Icon2 active color={"#FA8559"} size={25} name="plus"/>
+        if (Platform.OS === 'ios') {
+            icon = <Icon active color={"#FA8559"} size={25} name="ios-add"/>;
+        }
 
         return (
 
@@ -48,7 +53,7 @@ class ApplicationBusinessManager extends Component {
                 <Container>
                     <FormHeader showBack submitForm={this.navigateToAdd.bind(this)} navigation={this.props.navigation}
                                 title={"My Businesses"} bgc="white"
-                                submitIcon={<Icon2 active color={"#FA8559"} size={25} name="plus"/>}
+                                submitIcon={icon}
                                 titleColor="#FA8559" backIconColor="#FA8559"/>
 
                     <Business navigation={this.props.navigation} ndex={1}

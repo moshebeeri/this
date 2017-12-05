@@ -325,7 +325,7 @@ function notifyOnAction(business) {
   try {
     Notifications.notify({
       note: 'ADD_BUSINESS_FOLLOW_ON_ACTION',
-      business: business.id,
+      business: business._id,
       actor_user: business.creator,
       timestamp: Date.now()
     }, [business.creator])

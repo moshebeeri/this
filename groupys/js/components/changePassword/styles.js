@@ -2,11 +2,11 @@ const React = require('react-native');
 const {Dimensions, Platform} = React;
 const {width, height} = Dimensions.get('window')
 module.exports = {
-    inputTextLayour: {
+    inputTextLayout: {
         marginTop: 4, padding: 3,
         width: width - 15
     },
-    inputTextLayourImage: {
+    inputTextLayoutImage: {
         marginBottom: 10, padding: 3,
         width: width - 15
     },

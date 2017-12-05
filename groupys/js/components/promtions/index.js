@@ -1,23 +1,18 @@
 import React, {Component} from 'react';
-import {TouchableOpacity} from 'react-native';
+import {Platform, TouchableOpacity} from 'react-native';
 import {connect} from 'react-redux';
 import {actions} from 'react-native-navigation-redux-helpers';
-import {Button, Container, Content, Fab, Header, Input, InputGroup, Item, Text, View,Spinner} from 'native-base';
+import {Button, Container, Content, Fab, Header, Input, InputGroup, Item, Spinner, Text, View} from 'native-base';
 import GenericListManager from '../generic-list-manager/index';
-import Icon2 from 'react-native-vector-icons/EvilIcons';
 import PromotionListItem from './list-item/index'
-import PromotionApi from "../../api/promotion"
-import styles from './styles'
 import Icon3 from 'react-native-vector-icons/Ionicons';
 import {Menu, MenuOption, MenuOptions, MenuTrigger,} from 'react-native-popup-menu';
 import Icon4 from 'react-native-vector-icons/SimpleLineIcons';
 import Icon5 from 'react-native-vector-icons/MaterialCommunityIcons';
-
 import * as businessAction from "../../actions/business";
 import {getBusinessPromotions} from '../../selectors/businessesSelector'
 import {bindActionCreators} from "redux";
-import { FormHeader} from '../../ui/index';
-
+import {FormHeader} from '../../ui/index';
 
 class Promotions extends Component {
     static navigationOptions = {
@@ -38,12 +33,11 @@ class Promotions extends Component {
 
     setBusinessPromotions() {
         const {actions, navigation} = this.props;
-        actions.setBusinessPromotions( navigation.state.params.business._id);
+        actions.setBusinessPromotions(navigation.state.params.business._id);
     }
 
     renderItem(item) {
         const {location} = this.props;
-
         return <PromotionListItem
             item={item.item}
             index={item.index}
@@ -60,7 +54,6 @@ class Promotions extends Component {
 
     onBoardingPromotion() {
         const {business} = this.props;
-
         this.props.navigation.navigate("addPromotions", {
             onBoardType: 'BUSINESS',
             business: business
@@ -68,17 +61,21 @@ class Promotions extends Component {
     }
 
     render() {
-        const {navigation, promotions, actions, update,promotionsLoading} = this.props;
+        const {navigation, promotions, actions, update, promotionsLoading} = this.props;
         const businessId = navigation.state.params.business._id;
-
+        let icon = <Icon5 active color={"#FA8559"} size={25} name="plus"/>
+        if (Platform.OS === 'ios') {
+            icon = <Icon3 active color={"#FA8559"} size={25} name="ios-add"/>;
+        }
         return (
             <Container style={{backgroundColor: '#b7b7b7'}}>
                 <FormHeader showBack submitForm={this.navigateToAdd.bind(this)} navigation={this.props.navigation}
                             title={"My Promotions"} bgc="white"
-                            submitIcon={<Icon5 active color={"#FA8559"} size={25} name="plus"/>}
+                            submitIcon={icon}
                             titleColor="#FA8559" backIconColor="#FA8559"/>
-                { !promotionsLoading[businessId] && <Spinner/>}
-                {promotions[businessId] && promotions[businessId].length >0 && <GenericListManager rows={promotions[businessId]} navigation={navigation} actions={actions}
+                {!promotionsLoading[businessId] && <Spinner/>}
+                {promotions[businessId] && promotions[businessId].length > 0 &&
+                <GenericListManager rows={promotions[businessId]} navigation={navigation} actions={actions}
                                     update={update}
                                     onEndReached={this.setBusinessPromotions.bind(this)}
                                     ItemDetail={this.renderItem.bind(this)}/>}
@@ -116,9 +113,9 @@ export default connect(
     state => ({
         promotions: getBusinessPromotions(state),
         update: state.businesses.update,
-        location:state.phone.currentLocation,
-        promotionsLoading:state.promotions.loadingDone,
-        promotionsChange:state.promotions
+        location: state.phone.currentLocation,
+        promotionsLoading: state.promotions.loadingDone,
+        promotionsChange: state.promotions
     }),
     (dispatch) => ({
         actions: bindActionCreators(businessAction, dispatch),

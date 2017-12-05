@@ -18,7 +18,7 @@ import {
 import {Image,View,Dimensions} from 'react-native';
 import styles from './style';
 import PromotionApi from '../../api/promotion'
-import {PromotionHeader, PromotionSeperator,BusinessHeader} from '../../ui/index';
+import {PromotionColumnHeader, PromotionSeperator,BusinessHeader} from '../../ui/index';
 const deviceHeight = Dimensions.get('window').width;
 let promotionApi = new PromotionApi()
 export default class RealizePromotion extends Component {
@@ -56,12 +56,13 @@ export default class RealizePromotion extends Component {
                                         categoryTitle={item.categoryTitle} businessLogo={item.businessLogo}
                                         businessName={item.businessName}/>
 
-                        <View style={{marginTop:5,flex:2,justifyContent:'center',alignItems:'center',width:deviceHeight-30,backgroundColor:'blue'}}>
 
-                            <PromotionHeader columnStyle type={item.promotion} feed titleText={item.promotionTitle}
+
+
+                            <PromotionColumnHeader columnStyle type={item.promotion} feed titleText={item.promotionTitle}
                                              titleValue={item.promotionValue} term={item.promotionTerm}/>
 
-                        </View>
+
                         <View style={{flex:0.2,width:deviceHeight-30,height:20,}}>
 
                             <PromotionSeperator narrowWidth={30}/>

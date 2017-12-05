@@ -142,7 +142,7 @@ class AddProduct extends Component {
                 style={{ width:width -10, height: 210,borderWidth:1,borderColor:'white'}}
                 source={{uri: this.state.coverImage.path}}
             >
-                { saving && <Spinner/>}
+
             </Image>
             return <View style={styles.product_upper_container}>
 
@@ -152,6 +152,7 @@ class AddProduct extends Component {
 
                         <ImagePicker ref={"coverImage"} mandatory image={coverImage} color='white' pickFromCamera
                                      setImage={this.setCoverImage.bind(this)}/>
+                        { saving && <Spinner/>}
                     </View>
                 </View>
             </View>
@@ -183,20 +184,20 @@ class AddProduct extends Component {
 
                     {this.createCoverImageComponnent()}
 
-                    <View style={styles.inputTextLayour}>
+                    <View style={styles.inputTextLayout}>
                         <TextInput field='Product Name' value={this.state.name}
                                    returnKeyType='next' ref="1" refNext="1"
                                    onSubmitEditing={this.focusNextField.bind(this, "2")}
                                    onChangeText={(name) => this.setState({name})} isMandatory={true}/>
                     </View>
 
-                    <View style={styles.inputTextLayour}>
+                    <View style={styles.inputTextLayout}>
                         <CategoryPicker ref={"picker"} isMandatory categories={this.props.products.categories}
                                         selectedCategories={this.state.categories}
                                         setFormCategories={this.setCategory.bind(this)}
                                         setCategoriesApi={this.props.actions.setProductCategories}/>
                     </View>
-                    <View style={styles.inputTextLayour}>
+                    <View style={styles.inputTextLayout}>
 
 
                         <TextInput field='Description' value={this.state.info} returnKeyType='next' ref="2" refNext="2"
@@ -205,7 +206,7 @@ class AddProduct extends Component {
                                    onChangeText={(info) => this.setState({info})}/>
                     </View>
 
-                    <View style={styles.inputTextLayour}>
+                    <View style={styles.inputTextLayout}>
 
                         <TextInput field='Price' value={this.state.retail_price} returnKeyType='done' ref="6"
                                    refNext="6"

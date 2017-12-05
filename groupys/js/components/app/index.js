@@ -1,5 +1,5 @@
 import React, {Component} from "react";
-import {Dimensions, Image, StyleSheetm} from "react-native";
+import {Dimensions, Image, StyleSheetm,Platform} from "react-native";
 import {connect} from "react-redux";
     import {Container, Drawer, Fab, Tab, TabHeading, Tabs, View,Icon} from "native-base";
 
@@ -107,7 +107,7 @@ class ApplicationManager extends Component {
     }
 
     onChangeTab(tab) {
-        this.props.actions.changeTab(tab)
+        //this.props.actions.changeTab(tab)
     }
 
     navigateToAdd() {
@@ -138,7 +138,7 @@ class ApplicationManager extends Component {
         openDrawer = () => {
             this.drawer._root.open()
         };
-        const fav = this.createFabAction(showAdd);
+
         return (
 
             <Drawer
@@ -168,42 +168,25 @@ class ApplicationManager extends Component {
 
                         <Tab
                             heading={<TabHeading style={{justifyContent:'center',alignItems:'center',backgroundColor: "white"}}><Image
-                                style={{tintColor: '#2db6c8', marginLeft: 0, width: 55, height: 55}}
+                                style={{tintColor: '#2db6c8', marginLeft: 0, width: 45, height: 45}}
                                 source={groups}/></TabHeading>}>
                             <Groups navigation={this.props.navigation} index={2}
                             />
                         </Tab>
 
                         <Tab
-                            heading={<TabHeading style={{justifyContent:'center',alignItems:'center',width: 15, backgroundColor: "white"}}><Icon2
+                            heading={<TabHeading style={{justifyContent:'center',alignItems:'center', backgroundColor: "white"}}><Icon2
                                 style={{color: '#2db6c8', fontSize: 30,}} name="md-notifications"/></TabHeading>}>
-                            <Notification navigation={this.props.navigation} index={3}></Notification>
+                            <Notification navigation={this.props.navigation} index={3}/>
                         </Tab>
 
 
                     </Tabs>
-                    {fav}
                 </Container>
             </Drawer>
         );
     }
 
-    createFabAction(showAction) {
-        if (showAction) {
-            return <Fab
-
-                direction="right"
-                active={false}
-                containerStyle={{marginLeft: 10}}
-                style={{backgroundColor: "#2db6c8"}}
-                position="bottomRight"
-                onPress={() => this.navigateToAdd()}>
-                <Icon5 size={20} name="plus"/>
-
-            </Fab>
-        }
-        return undefined;
-    }
 }
 
 const mapStateToProps = (state) => {

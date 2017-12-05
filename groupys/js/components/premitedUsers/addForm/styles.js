@@ -98,7 +98,7 @@ module.exports = {
         marginRight: 10,
         paddingLeft: 10
     },
-    inputTextLayour: {
+    inputTextLayout: {
         marginTop: 4, padding: 3,
         width: width - 15
     }

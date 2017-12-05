@@ -56,7 +56,7 @@ module.exports = {
         textShadowColor: 'black',
         fontWeight: 'bold', marginLeft: 20, marginTop: 5, fontSize: 20, color: 'white'
     },
-    imageButtomText: {
+    imageBottomText: {
         textShadowOffset: {width: 1, height: 1},
         textShadowColor: 'black',
         fontWeight: 'bold',
@@ -126,7 +126,7 @@ module.exports = {
         alignItems: 'center',
         flexDirection: 'column',
     },
-    bussiness_container: {
+    businesses_container: {
         flex: 1,
         height: vh * 61,
         width: width,
@@ -183,7 +183,7 @@ module.exports = {
         justifyContent:'center',
         flexDirection: 'column'
     },
-    bussiness_upperContainer: {
+    businesses_upperContainer: {
         backgroundColor: 'white',
         width: width,
         borderRadius: 2,
@@ -219,12 +219,12 @@ module.exports = {
         height: 20 * vh,
         marginTop: 2
     },
-    promotion_buttom_description: {
+    promotion_bottom_description: {
         flexDirection: 'column',
         marginLeft: 10,
         marginTop: 2
     },
-    promotion_buttom_location: {
+    promotion_bottom_location: {
         flexDirection: 'row',
         marginTop: 5
     },
@@ -253,14 +253,14 @@ module.exports = {
     promotion_iconView: {
         flex: -1, justifyContent: 'center', flexDirection: 'row', height: 40, width: 100
     },
-    promotion_buttomUpperContainer: {
+    promotion_bottomUpperContainer: {
         backgroundColor: 'white',
         width: width,
         height: 20 * vh,
         flexDirection: 'row',
         marginTop: 0,
     },
-    business_buttomUpperContainer: {
+    business_bottomUpperContainer: {
         backgroundColor: 'white',
         width: width -15,
         flexDirection: 'row',
@@ -276,7 +276,7 @@ module.exports = {
 
 
     },
-    promotiosSeperator: {
+    promotionsSeparator: {
         backgroundColor: 'white',
         width: width - 15,
         flex:0.5,
@@ -287,7 +287,7 @@ module.exports = {
 
     },
     promotiosDescription: {
-        flex:3 ,
+        flex:2,
         alignItems:'center',
         justifyContent:'center',
         width:width - 15,
@@ -302,7 +302,7 @@ module.exports = {
         width:width - 15,
     },
     promotionDetails:{
-        flex:1.6,
+        flex:1.7,
         backgroundColor:'white',
         alignItems:'flex-start',
         justifyContent:'center',
@@ -351,7 +351,7 @@ module.exports = {
         fontSize: 16
     },
     promotion_nameText: {
-        fontFamily: 'Roboto-Black',
+        fontFamily: 'Roboto-Regular',
         fontWeight: 'bold',
         marginRight: 20,
         marginLeft: 10,

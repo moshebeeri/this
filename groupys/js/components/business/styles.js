@@ -11,7 +11,7 @@ module.exports = {
         backgroundColor:'red',
         height: height,
     },
-    businessPiker: {
+    businessPicker: {
         flexDirection: 'row',
         alignItems: 'center',
         justifyContent: 'center',
@@ -29,7 +29,7 @@ module.exports = {
         padding:10,
         flex:1
     },
-    businessPikkerComponent:{
+    businessPickerComponent:{
         flex:5
     },
     shadow: {

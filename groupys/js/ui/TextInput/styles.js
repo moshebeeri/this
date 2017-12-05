@@ -28,7 +28,7 @@ module.exports = {
         fontSize:16,
     },
 
-    textInputDisavledComponentStyle: {
+    textInputDisabledComponentStyle: {
         backgroundColor: '#CACFD2',
 
         flex: 1,

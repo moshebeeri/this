@@ -52,7 +52,7 @@ module.exports = {
         textShadowColor: 'black',
         fontWeight: 'bold', marginLeft: 20, marginTop: 5, fontSize: 20, color: 'white'
     },
-    imageButtomText: {
+    imageBottomText: {
         textShadowOffset: {width: 1, height: 1},
         textShadowColor: 'black',
         fontWeight: 'bold',
@@ -149,12 +149,12 @@ module.exports = {
         marginLeft: 10,
         marginTop: 2
     },
-    promotion_buttom_description: {
+    promotion_bottom_description: {
         flexDirection: 'column',
         marginLeft: 10,
         marginTop: 2
     },
-    promotion_buttom_location: {
+    promotion_bottom_location: {
         flexDirection: 'row',
         marginTop: 5
     },
@@ -183,7 +183,7 @@ module.exports = {
     promotion_iconView: {
         flex: -1, justifyContent: 'center', flexDirection: 'row', height: 40, width: 100
     },
-    promotion_buttomUpperContainer: {
+    promotion_bottomUpperContainer: {
         backgroundColor: 'white',
         width: height - 20,
         height: 120,
@@ -236,7 +236,7 @@ module.exports = {
         fontSize: 16
     },
     promotion_nameText: {
-        fontFamily: 'Roboto-Black',
+        fontFamily: 'Roboto-Regular',
         fontWeight: 'bold',
         marginRight: 20,
         marginLeft: 10,

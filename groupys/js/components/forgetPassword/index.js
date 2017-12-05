@@ -16,6 +16,7 @@ import * as loginAction from "../../actions/login";
 import styles from "./styles";
 import {isAuthenticated} from "../../selectors/appSelector";
 import LinearGradient from "react-native-linear-gradient";
+import strings from "../../i18n/i18n"
 
 const logo = require('../../../images/logo.png');
 const global = require('../../conf/global');
@@ -38,7 +39,7 @@ class ForgetPassword extends Component {
         this.props.navigation.navigate(route);
     }
 
-    forgetPassowrd() {
+    forgetPassword() {
         if (this.state.phoneNumber) {
             this.props.actions.forgetPassword(this.state.phoneNumber)
         }
@@ -64,9 +65,8 @@ class ForgetPassword extends Component {
                         alignItems: 'center',
                     }}>
 
-                        <View style={styles.thiscountsContainer}>
-                            <Text style={styles.this}>This</Text>
-                            <Text style={styles.thiscount}>Counts</Text>
+                        <View style={styles.thisContainer}>
+                            <Text style={styles.this}>strings.THIS</Text>
                         </View>
                         <View style={{
                             flexDirection: 'column',
@@ -75,14 +75,13 @@ class ForgetPassword extends Component {
                         }}>
 
                             <View style={{height: 60, justifyContent: 'flex-end', width: width / 2 + 120}}>
-                                <Text style={styles.signginText}>Upon request SMS will be sent with a temporary
-                                    password</Text>
+                                <Text style={styles.signInText}>strings.PasswordRecoverySMSNotificationMessage</Text>
                             </View>
 
                             <Item style={styles.phoneTextInput} regular>
                                 <Input focus={true} keyboardType='phone-pad' value={this.state.name}
                                        blurOnSubmit={true} returnKeyType='next'
-                                       onSubmitEditing={this.forgetPassowrd.bind(this)}
+                                       onSubmitEditing={this.forgetPassword.bind(this)}
                                        onChangeText={(phoneNumber) => this.setState({phoneNumber})}
                                        placeholder='Phone Number'/>
                             </Item>
@@ -99,7 +98,7 @@ class ForgetPassword extends Component {
                                 width: width / 2 + 120
                             }}>
 
-                                <TouchableOpacity onPress={() => this.forgetPassowrd()} style={{
+                                <TouchableOpacity onPress={() => this.forgetPassword()} style={{
                                     width: 100,
                                     height: 30,
                                     borderRadius: 10,
@@ -110,8 +109,7 @@ class ForgetPassword extends Component {
                                     alignItems: 'center',
                                 }} regular>
 
-                                    <Text style={{color: 'white', fontStyle: 'normal', fontSize: 15}}>SEND
-                                        SMS</Text>
+                                    <Text style={{color: 'white', fontStyle: 'normal', fontSize: 15}}>strings.SendSMS</Text>
 
                                 </TouchableOpacity>
                             </View>

@@ -2,7 +2,7 @@
  * Created by roilandshut on 23/07/2017.
  */
 import React, {Component} from 'react';
-import {Dimensions, Image} from 'react-native';
+import {Dimensions, Image,Platform} from 'react-native';
 import InViewPort from '../../../../utils/inviewport'
 import {actions} from 'react-native-navigation-redux-helpers';
 import {
@@ -29,26 +29,27 @@ import StyleUtils from '../../../../utils/styleUtils'
 import * as componentCreator from "./feedCommonView";
 import {PromotionHeader, PromotionSeperator, SocialState, SubmitButton} from '../../../../ui/index';
 import FormUtils from "../../../../utils/fromUtils";
+import strings from "../../../../i18n/i18n"
 
-const {width, height} = Dimensions.get('window')
+const {width, height} = Dimensions.get('window');
 const vw = width / 100;
-const vh = height / 100
+const vh = height / 100;
 const vmin = Math.min(vw, vh);
-const vmax = Math.max(vw, vh)
+const vmax = Math.max(vw, vh);
 export default class FeedPromotion extends Component {
     constructor() {
         super();
     }
 
-    showBussines() {
-        this.props.navigation.navigate("businessProfile", {bussiness: this.props.item.business});
+    showBusiness() {
+        this.props.navigation.navigate("businessProfile", {businesses: this.props.item.business});
     }
 
     render() {
         const {refresh, item, save, shared, like, unlike, showUsers, comment, token, location,hideSocial,realize} = this.props;
         const styles = this.createPromotionStyle();
         const colorStyle = this.createColorStyle(item)
-        const buisnessLogo = componentCreator.createBusinessLog(item, this.showBussines.bind(this));
+        const buisnessLogo = componentCreator.createBusinessLog(item, this.showBusiness.bind(this));
         const image = this.createImageComponent(item, styles);
         const container = this.createContainerStyle(item);
         let claimDisabled = true;
@@ -69,6 +70,11 @@ export default class FeedPromotion extends Component {
         if(item.business){
             categoruTitle = item.business.categoryTitle;
         }
+
+        let headeerSize = 130;
+        if( (Platform.OS === 'ios')){
+            headeerSize = 100;
+        }
         const result =
             <InViewPort onChange={() => refresh(item.id, item.social)} style={container}>
                 <View style={styles.promotion_card}>
@@ -86,7 +92,7 @@ export default class FeedPromotion extends Component {
                     {image}
 
 
-                    <View style={{  height:120,width: width - 15, backgroundColor: 'white'}}>
+                    <View style={{  height:headeerSize,width: width - 15, backgroundColor: 'white'}}>
                         <View style={promotaionDesc}>
                             <PromotionHeader type={item.promotion} feed titleText={item.promotionTitle}
                                              titleValue={item.promotionValue} term={item.promotionTerm}/>
@@ -96,29 +102,32 @@ export default class FeedPromotion extends Component {
                                 - {item.description}</Text>
                         </View>
                     </View>
-                    {!shared && location&& <View style={styles.promotiosSeperator}>
+                    {!shared && location&& <View style={styles.promotionsSeparator}>
                         <PromotionSeperator/>
                     </View>}
 
                     {!shared && location && <View style={styles.promotionDetailsContainer}>
                         <View style={styles.promotionLoctionContainer}>
-                            <View><Text style={styles.detailsTitleText}>Location</Text></View>
+                            <View><Text style={styles.detailsTitleText}>strings.Location</Text></View>
                             <View><Text
-                                style={styles.detailsText}>{FormUtils.getDistanceFromLatLonInKm(location.lat, location.long, item.location.lat, item.location.lng)}
-                                km </Text></View>
+                                style={styles.detailsText}>{FormUtils.getDistanceString(location.lat, location.long, item.location.lat, item.location.lng)}</Text></View>
                         </View>
                         <View style={styles.expireDateContainer}>
-                            <View><Text style={styles.detailsTitleText}>Expire</Text></View>
+                            <View><Text style={styles.detailsTitleText}>strings.Expire</Text></View>
                             <View><Text style={styles.detailsText}>{item.endDate}</Text></View>
                         </View>
-                        {save && <View style={styles.editButtonContainer}>
-                            <SubmitButton title="CLAIM" color={'#2db6c8'}
+                        {   save &&
+                        <View style={styles.editButtonContainer}>
+                            <SubmitButton title={strings.Claim.toUpperCase()} color={'#2db6c8'}
                                           disabled={claimDisabled} onPress={() => save(item.id)}/>
-                        </View>}
-                        {realize && <View style={styles.editButtonContainer}>
-                            <SubmitButton title="REALIZE" color={'#2db6c8'}
+                        </View>
+                        }
+                        {   realize &&
+                        <View style={styles.editButtonContainer}>
+                            <SubmitButton title={strings.Realize.toUpperCase()} color={'#2db6c8'}
                                            onPress={realize}/>
-                        </View>}
+                        </View>
+                        }
                     </View>}
 
 
@@ -133,7 +142,7 @@ export default class FeedPromotion extends Component {
                                                      shareAction={showUsers}/>}
                     </View>}
                 </View>
-            </InViewPort>
+            </InViewPort>;
         return result;
     }
 

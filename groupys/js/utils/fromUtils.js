@@ -33,7 +33,7 @@ const validatePercent = (number) => {
     }
     return true;
 };
-const getDistanceFromLatLonInKm = (lat1, lon1, lat2, lon2) => {
+const getDistanceString = (lat1, lon1, lat2, lon2) => {
     let R = 6371; // Radius of the earth in km
     let dLat = deg2rad(lat2 - lat1);  // deg2rad below
     let dLon = deg2rad(lon2 - lon1);
@@ -44,7 +44,7 @@ const getDistanceFromLatLonInKm = (lat1, lon1, lat2, lon2) => {
     ;
     let c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
     let d = R * c; // Distance in km
-    return d.toFixed(1);
+    return `${d.toFixed(1)} km` ; //TODO: Change units according to locale
 };
 const getSecondSinceMidnight = (hour) => {
     let currentDate = parseTime(hour);
@@ -153,7 +153,7 @@ export default {
     validateEmail,
     validateWebsite,
     validatePuches, validatePercent,
-    getDistanceFromLatLonInKm,
+    getDistanceString,
     getSecondSinceMidnight,
     convertDaysNumToString,
     secondsFromMidnightToString

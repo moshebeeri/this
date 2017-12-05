@@ -35,7 +35,10 @@ export default function business(state = initialState, action) {
                 if (!categoryTitle && currentbusinesses[eventItem._id]) {
                     categoryTitle = currentbusinesses[eventItem._id].categoryTitle;
                 }
-                let qrSource = currentbusinesses[eventItem._id].qrcodeSource;
+                let qrSource;
+                if (currentbusinesses[eventItem._id]) {
+                    qrSource = currentbusinesses[eventItem._id].qrcodeSource;
+                }
                 if (eventItem.social_state || !currentbusinesses[eventItem._id]) {
                     currentbusinesses[eventItem._id] = eventItem;
                 } else {

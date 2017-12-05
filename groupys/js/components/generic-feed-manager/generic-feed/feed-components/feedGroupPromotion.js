@@ -73,15 +73,15 @@ export default class FeedGroupPromotion extends Component {
                     <Image resizeMode="cover" style={styles.promotion_image} source={{uri: item.banner.uri}}>
                     </Image>
 
-                    <View style={styles.promotion_buttomUpperContainer}>
-                        <View style={styles.promotion_buttom_description}>
+                    <View style={styles.promotion_bottomUpperContainer}>
+                        <View style={styles.promotion_bottom_description}>
                             {promotion}
                             <Text style={styles.promotion_type}>{item.itemTitle}</Text>
-                            <View style={styles.promotion_buttom_location}>
+                            <View style={styles.promotion_bottom_location}>
                                 <Icon2 style={styles.promotion_location} size={25} name="clock"/>
 
                             </View>
-                            <View style={styles.promotion_buttom_location}>
+                            <View style={styles.promotion_bottom_location}>
                                 <Icon3 style={styles.promotion_location} size={25} name="location-on"/>
                                 <Text style={styles.promotion_addressText} note>{item.businessAddress} </Text>
                             </View>

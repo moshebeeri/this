@@ -54,7 +54,7 @@ class Login extends Component {
         this.props.navigation.navigate(route);
     }
 
-    forgetPassowrd() {
+    forgetPassword() {
         this.replaceRoute('forgetPassword');
     }
 
@@ -77,7 +77,7 @@ class Login extends Component {
                         alignItems: 'center',
                     }}>
 
-                        <View style={styles.thiscountsContainer}>
+                        <View style={styles.thisContainer}>
                             <Text style={styles.this}>This</Text>
                             <Text style={styles.thiscount}>Counts</Text>
                         </View>
@@ -88,7 +88,7 @@ class Login extends Component {
                         }}>
 
                             <View style={{height: 60, justifyContent: 'flex-end', width: width / 2 + 120}}>
-                                <Text style={styles.signginText}>sign in</Text>
+                                <Text style={styles.signInText}>sign in</Text>
                             </View>
 
                             <Item style={styles.phoneTextInput} regular>
@@ -115,7 +115,7 @@ class Login extends Component {
                             </Item>
 
                             <View style={styles.signup_container}>
-                                <Text onPress={this.forgetPassowrd.bind(this)} style={styles.forgetText}>Forgot
+                                <Text onPress={this.forgetPassword.bind(this)} style={styles.forgetText}>Forgot
                                     Password</Text>
                                 <Text onPress={() => this.replaceRoute('Signup')} style={styles.signgupText}>Sign
                                     Up</Text>

@@ -44,11 +44,8 @@ module.exports = {
         left: 180,
         top: 40,
 
-        shadowColor: '#000',
-        shadowOffset: {width: 2, height: 2},
-        shadowOpacity: 0.4,
-        shadowRadius: 1,
-        borderRadius: 50,
+        borderRadius: (Platform.OS === 'ios') ? 80 : 50,
+
         width: 85,
         height: 85,
     },

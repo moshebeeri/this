@@ -67,7 +67,7 @@ module.exports = {
         color: '#e65100'
     },
     titleTextFeed: {
-        flex: 1,
+
         fontSize: 20,
         color: '#2db6c8'
     },
@@ -84,7 +84,7 @@ module.exports = {
         color: '#2db6c8'
     },
     titleValueFeed: {
-        flex: 1,
+        flex:1,
         fontSize: 30,
         textAlign: "center",
         color: '#2db6c8'
@@ -133,7 +133,7 @@ module.exports = {
     },
     promotionTermlTextStyle: {
         color: '#839192',
-        flex: 1,
+
         fontSize: 13,
     },
     promotionColumnTermlTextStyle: {

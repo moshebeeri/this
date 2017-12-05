@@ -2,31 +2,51 @@ import LocalizedStrings from 'react-native-localization';
 
 let strings = new LocalizedStrings({
     "en-US": {
-        promotion:      "Promotion",
-        scanPromotion:  "Scan Promotion",
-        business:       "Business",
-        businesses:     "Businesses",
-        settings:       "Settings",
-        changePassword: "Change Password"
+        THIS:           "THIS",
+        Promotion:      "Promotion",
+        ScanPromotion:  "Scan Promotion",
+        Business:       "Business",
+        Businesses:     "Businesses",
+        Settings:       "Settings",
+        ChangePassword: "Change Password",
+        AddACoverPhoto: "Add a cover photo",
+        Products:       "Products",
+        Permissions:    "Permissions",
+        Follow:         "Follow",
+        PleaseScanCode: "Please Scan Code",
+        PasswordRecoverySMSNotificationMessage: "Upon request SMS will be sent with a temporary password",
+        SendSMS: "Send SMS",
+        PostRequest: "Post Request",
+        Save: "Save",
+        Saved: "Saved",
+        Location:"Location",
+        Expire: "Expire",
+        Claim: "Claim",
+        Realize: "Realize",
+        Shared: "Shared",
+        ViewPost: "View Post",
+        Redeem: "Redeem"
+
+
     },
     en: {
-        promotion:  "Promotion",
-        scanPromotion:  "Scan Promotion",
-        business:   "Business",
-        businesses: "Businesses",
-        settings:       "Settings",
-        changePassword: "Change Password"
+        Promotion:  "Promotion",
+        ScanPromotion:  "Scan Promotion",
+        Business:   "Business",
+        Businesses: "Businesses",
+        Settings:       "Settings",
+        ChangePassword: "Change Password"
     },
     he: {
-        promotion:  "הנחה",
-        scanPromotion:  "סריקת הנחה",
-        business:   "עסק",
-        businesses: "עסקים",
+        Promotion:  "הנחה",
+        ScanPromotion:  "סריקת הנחה",
+        Business:   "עסק",
+        Businesses: "עסקים",
     },
     it: {
-        promotion: "Promozione",
-        business:   "Affari",
-        businesses: "Imprese",
+        Promotion: "Promozione",
+        Business:   "Affari",
+        Businesses: "Imprese",
     }
 });
 export default strings;
