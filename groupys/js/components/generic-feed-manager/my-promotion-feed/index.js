@@ -1,45 +1,34 @@
 import React, {Component} from 'react';
 import {Image, PanResponder, TouchableHighlight} from 'react-native';
-import {connect} from 'react-redux';
 import {actions} from 'react-native-navigation-redux-helpers';
 import {
+    Button,
+    Card,
+    CardItem,
     Container,
     Content,
-    Text,
-    InputGroup,
+    Footer,
+    Header,
     Input,
-    Thumbnail,
-    Button,
-    Picker,
-    Right,
+    InputGroup,
     Item,
     Left,
-    Header,
-    Footer,
-    Body,
-    View,
-    Card,
-    CardItem
+    Picker,
+    Right,
+    Text,
+    Thumbnail,
+    View
 } from 'native-base';
-import UserApi from '../../../api/user'
 import strings from "../../../i18n/i18n"
-
-let userApi = new UserApi();
-import PromotionApi from '../../../api/promotion'
-
-let promotionApi = new PromotionApi();
 import Icon2 from 'react-native-vector-icons/EvilIcons';
 import Icon3 from 'react-native-vector-icons/MaterialIcons';
-import Icon from 'react-native-vector-icons/FontAwesome';
-import Icon4 from 'react-native-vector-icons/Entypo';
-
-const ReactNative = require('react-native');
-const {StyleSheet, Platform, Dimensions} = ReactNative;
-const {width, height} = Dimensions.get('window');
 import stylesPortrate from './styles'
 import stylesLandscape from './styles_landscape'
 import StyleUtils from '../../../utils/styleUtils'
 
+const ReactNative = require('react-native');
+const {StyleSheet, Platform, Dimensions} = ReactNative;
+const {width, height} = Dimensions.get('window');
 export default class MyPromotionFeedItem extends Component {
     constructor(props) {
         super(props);
@@ -93,7 +82,7 @@ export default class MyPromotionFeedItem extends Component {
 
     onMove(evt, gestureState) {
         if (gestureState.moveY < 300) {
-        //    this.props.fetchTopList(this.props.item.fid, this.props.token, this.props.user)
+            //    this.props.fetchTopList(this.props.item.fid, this.props.token, this.props.user)
         }
         return false;
     }

@@ -24,7 +24,7 @@ import {connect} from 'react-redux';
 import * as userAction from "../../actions/user";
 import styles from './styles'
 import {FormHeader, Spinner, TextInput} from '../../ui/index';
-
+import strings from "../../i18n/i18n"
 class ChangePassword extends Component {
     static navigationOptions = ({navigation}) => ({
         header: null
@@ -72,7 +72,7 @@ class ChangePassword extends Component {
         if (this.validateForm()) {
             if (this.state.confirmPassword !== this.state.newPassword) {
                 this.setState({
-                    validationMessage: 'New password is different from confirm password',
+                    validationMessage: strings.PasswordValidationMessage,
                     showMessage: true
                 })
                 return;
@@ -95,26 +95,26 @@ class ChangePassword extends Component {
         const message = this.createMessage(changeForm);
         return (<View>
                 <FormHeader showBack submitForm={this.changePassword.bind(this)} navigation={this.props.navigation}
-                            title={"User Change Password"} bgc="#FA8559"/>
+                            title={strings.UserChangePassword} bgc="#FA8559"/>
 
                 <View>
 
                     <View style={styles.inputTextLayout}>
-                        <TextInput field='Current Password' value={this.state.currentPassword}
+                        <TextInput field={strings.CurrentPassword} value={this.state.currentPassword}
                                    returnKeyType='next' ref="1" refNext="1" secureTextEntry
                                    isMandatory
                                    onSubmitEditing={this.focusNextField.bind(this, "2")}
                                    onChangeText={(currentPassword) => this.setState({currentPassword})}/>
                     </View>
                     <View style={styles.inputTextLayout}>
-                        <TextInput field='New Password' value={this.state.newPassword}
+                        <TextInput field={strings.NewPassword} value={this.state.newPassword}
                                    returnKeyType='next' ref="2" refNext="2" secureTextEntry
                                    isMandatory
                                    onSubmitEditing={this.focusNextField.bind(this, "3")}
                                    onChangeText={(newPassword) => this.setState({newPassword})}/>
                     </View>
                     <View style={styles.inputTextLayout}>
-                        <TextInput field='Confirm Password' value={this.state.confirmPassword}
+                        <TextInput field={strings.ConfirmPassword} value={this.state.confirmPassword}
                                    returnKeyType='done' ref="3" refNext="3" secureTextEntry
                                    onSubmitEditing={this.changePassword.bind(this)}
                                    isMandatory

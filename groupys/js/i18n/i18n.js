@@ -123,7 +123,20 @@ let strings = new LocalizedStrings({
         GroupType: 'Group Type',
         GroupName: 'Group Name',
         SelectedMembers: 'Selected Members',
-        ChooseBusiness: 'Choose Business'
+        ChooseBusiness: 'Choose Business',
+        PasswordValidationMessage: 'New password is different from confirm password',
+        UserChangePassword: 'User Change Password',
+        CurrentPassword: 'Current Password',
+        NewPassword: 'New Password',
+        ConfirmPassword: 'Confirm Password',
+        Website: 'Website',
+        Email: 'Email',
+        Address: 'Address',
+        SearchBusiness: 'Search Business',
+        AddBusiness: 'Add Business',
+        BusinessName: 'Business Name',
+        TaxID: 'Tax ID'
+
     },
     en: {
         Promotion: "Promotion",

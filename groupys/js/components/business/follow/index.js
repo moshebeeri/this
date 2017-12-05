@@ -9,8 +9,6 @@ import strings from '../../../i18n/i18n';
 
 const qrcode = require('../../../../images/qr-code.png');
 const scan = require('../../../../images/scan.png');
-
-
 export default class BusinessFollow extends Component {
     static navigationOptions = {
         header: null
@@ -25,8 +23,7 @@ export default class BusinessFollow extends Component {
 
     showScanner() {
         const {group} = this.props;
-
-        this.props.navigation.navigate('ReadQrCode',{group:group});
+        this.props.navigation.navigate('ReadQrCode', {group: group});
     }
 
     back() {
@@ -34,13 +31,11 @@ export default class BusinessFollow extends Component {
     }
 
     createView() {
-        const {cameraOn, searching, businesses, searchBusiness, followByQrCode, followBusiness,groupFollowBusiness,group, showCamera} = this.props;
+        const {cameraOn, searching, businesses, searchBusiness, followByQrCode, followBusiness, groupFollowBusiness, group, showCamera} = this.props;
         let back = <Button transparent style={{}} onPress={() => this.back()}>
             <Icon3 active color={"#2db6c8"} size={20} name="ios-arrow-back"/>
 
         </Button>
-
-
         let spin = undefined;
         if (searching) {
             spin = <View><Spinner color='red'/></View>;
@@ -59,18 +54,20 @@ export default class BusinessFollow extends Component {
                     width: 200,
                     backgroundColor: '#e65100',
                 };
-                let followComponent = <TouchableOpacity onPress={() => followBusiness(businees._id,navigation)} style={followStyle} regular>
+                let followComponent = <TouchableOpacity onPress={() => followBusiness(businees._id, navigation)}
+                                                        style={followStyle} regular>
 
-                    <Text style={{color: 'white', fontStyle: 'normal', fontSize: 15}}>strings.Follow</Text>
+                    <Text style={{color: 'white', fontStyle: 'normal', fontSize: 15}}>{strings.Follow}</Text>
 
                 </TouchableOpacity>;
+                if (group) {
+                    followComponent =
+                        <TouchableOpacity onPress={() => groupFollowBusiness(group._id, businees._id, navigation)}
+                                          style={followStyle} regular>
 
-                if(group){
-                    followComponent =  <TouchableOpacity onPress={() => groupFollowBusiness(group._id,businees._id,navigation)} style={followStyle} regular>
+                            <Text style={{color: 'white', fontStyle: 'normal', fontSize: 15}}>{strings.Follow}</Text>
 
-                        <Text style={{color: 'white', fontStyle: 'normal', fontSize: 15}}>strings.Follow</Text>
-
-                    </TouchableOpacity>;
+                        </TouchableOpacity>;
                 }
                 return <View key={businees._id} style={{padding: 5, backgroundColor: '#eaeaea'}}>
                     <View style={{
@@ -115,7 +112,7 @@ export default class BusinessFollow extends Component {
                     <Input style={styles.follow_search_field} value={this.state.searchText}
                            onSubmitEditing={() => searchBusiness(this.state.searchText)} blurOnSubmit={true}
                            returnKeyType='search' ref="1" onChangeText={(searchText) => this.setState({searchText})}
-                           placeholder='Search Business'/>
+                           placeholder={strings.SearchBusiness}/>
                     <TouchableOpacity onPress={() => searchBusiness(this.state.searchText)}
                                       style={{marginRight: 5, flexDirection: 'row', alignItems: 'center',}} regular>
                         <Image style={{marginLeft: 10, width: 20, height: 20}} source={scan}/>

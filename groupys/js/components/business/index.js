@@ -1,12 +1,10 @@
 import React, {Component} from 'react';
 import {connect} from 'react-redux';
-import {Header, Item, ListItem, Picker, Right, Thumbnail, View,Spinner,Container} from 'native-base';
+import {Container, Header, Item, ListItem, Picker, Right, Spinner, Thumbnail, View} from 'native-base';
 import BusinessListView from './business-list-view/index'
 import * as businessAction from "../../actions/business";
 import {getMyBusinessesItems} from '../../selectors/businessesSelector'
 import {bindActionCreators} from "redux";
-import Icon3 from 'react-native-vector-icons/FontAwesome';
-import styles from './styles';
 import GenericListManager from '../generic-list-manager/index';
 
 class Business extends Component {
@@ -26,7 +24,6 @@ class Business extends Component {
 
     componentWillMount() {
         this.props.actions.onEndReached();
-
     }
 
     selectBusiness(businessId) {
@@ -35,27 +32,21 @@ class Business extends Component {
             let selected = businesses.filter(business => business.business._id === businessId);
             if (selected && selected.length === 1) {
                 this.props.actions.selectBusiness(selected[0])
-
                 this.props.actions.setBusinessProducts(businessId);
                 this.props.actions.setBusinessPromotions(businessId);
                 this.props.actions.setBusinessUsers(businessId);
-
             }
         }
     }
 
-
-
     render() {
-        const {businesses, navigation,businessLoading,update,actions} = this.props;
-        if(businessLoading && businesses.length === 0){
+        const {businesses, navigation, businessLoading, update, actions} = this.props;
+        if (businessLoading && businesses.length === 0) {
             return <Spinner/>
         }
-        if(!businessLoading && businesses.length === 0){
+        if (!businessLoading && businesses.length === 0) {
             return <View></View>
         }
-
-
         return (
             <Container style={{backgroundColor: '#b7b7b7'}}>
 
@@ -70,8 +61,8 @@ class Business extends Component {
 
 export default connect(
     state => ({
-        businessLoading:state.businesses.loading,
-        selectedBusiness:state.businesses.selectedBusiness,
+        businessLoading: state.businesses.loading,
+        selectedBusiness: state.businesses.selectedBusiness,
         update: state.businesses.update,
         businesses: getMyBusinessesItems(state),
     }),
