@@ -14,6 +14,10 @@ const noPic = require('../../../images/client_1.png');
 const briefcase = require('../../../images/briefcase.png');
 const settings = require('../../../images/settings-work-tool.png');
 
+// import pageSync from "../../refresh/refresher"
+//
+// pageSync.check();
+
 class ProfileDrawer extends Component {
     static navigationOptions = {
         header: null
