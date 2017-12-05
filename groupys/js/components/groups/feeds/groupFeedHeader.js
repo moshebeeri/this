@@ -23,6 +23,7 @@ import {
 import * as groupsAction from "../../../actions/groups";
 import Icon2 from 'react-native-vector-icons/SimpleLineIcons';
 import {bindActionCreators} from "redux";
+import strings from "../../../i18n/i18n"
 
 class GroupFeedHeader extends Component {
     constructor(props) {
@@ -133,7 +134,7 @@ class GroupFeedHeader extends Component {
         let addPromotionMenu = undefined;
         if (group.role && (group.role === "owner" || group.role === "OWNS" || group.role === "Admin" || group.role === "Manager"  )) {
             addPromotionMenu = <MenuOption onSelect={this.addPromotion.bind(this)}>
-                <Text>Add Promotion</Text>
+                <Text>{strings.AddPromotion}</Text>
             </MenuOption>
         }
         if (this.isGroupAdmin(group)) {
@@ -143,10 +144,10 @@ class GroupFeedHeader extends Component {
                 </MenuTrigger>
                 <MenuOptions>
                     <MenuOption onSelect={this.showUsers.bind(this)}>
-                        <Text>Invite</Text>
+                        <Text>{strings.Invite}</Text>
                     </MenuOption>
                     <MenuOption onSelect={this.followBusiness.bind(this)}>
-                        <Text>Follow Business</Text>
+                        <Text>{strings.FollowBusiness}</Text>
                     </MenuOption>
                     {addPromotionMenu}
                 </MenuOptions>

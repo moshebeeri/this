@@ -108,9 +108,22 @@ let strings = new LocalizedStrings({
         Login: 'Login',
         ForgotPassword: 'Forgot Password',
         FollowBusiness: 'Follow Business',
-        OnBoardingPromotions: 'On Boarding Promotions'
-
-
+        OnBoardingPromotions: 'On Boarding Promotions',
+        SelectUsers: 'Select Users',
+        Posts: 'Posts',
+        Chat: 'Chat',
+        Invite: 'Invite',
+        GroupIsOpen: 'Group Is Open',
+        GroupIsClosed: 'Group Is Closed',
+        UserGroup: 'User Group',
+        BusinessGroup: 'Business Group',
+        AddGroup: 'Add Group',
+        GroupPolicy: 'Group Policy',
+        ChooseType: 'Choose Type',
+        GroupType: 'Group Type',
+        GroupName: 'Group Name',
+        SelectedMembers: 'Selected Members',
+        ChooseBusiness: 'Choose Business'
     },
     en: {
         Promotion: "Promotion",

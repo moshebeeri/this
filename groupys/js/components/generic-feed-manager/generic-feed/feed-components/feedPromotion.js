@@ -108,12 +108,12 @@ export default class FeedPromotion extends Component {
 
                     {!shared && location && <View style={styles.promotionDetailsContainer}>
                         <View style={styles.promotionLoctionContainer}>
-                            <View><Text style={styles.detailsTitleText}>strings.Location</Text></View>
+                            <View><Text style={styles.detailsTitleText}>{strings.Location}</Text></View>
                             <View><Text
                                 style={styles.detailsText}>{FormUtils.getDistanceString(location.lat, location.long, item.location.lat, item.location.lng)}</Text></View>
                         </View>
                         <View style={styles.expireDateContainer}>
-                            <View><Text style={styles.detailsTitleText}>strings.Expire</Text></View>
+                            <View><Text style={styles.detailsTitleText}>{strings.Expire}</Text></View>
                             <View><Text style={styles.detailsText}>{item.endDate}</Text></View>
                         </View>
                         {   save &&

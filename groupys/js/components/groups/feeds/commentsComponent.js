@@ -5,19 +5,12 @@ import {actions} from "react-native-navigation-redux-helpers";
 import {Button, Icon, Input, Thumbnail} from "native-base";
 import GenericFeedManager from "../../generic-feed-manager/index";
 import styles from "./styles";
-import CommentApi from "../../../api/commet";
-import UiTools from "../../../api/feed-ui-converter";
 import {bindActionCreators} from "redux";
-
 import * as commentGroupAction from "../../../actions/instanceGroupComments";
 import {getFeeds} from "../../../selectors/commentInstancesSelector";
 import {ChatMessage, MessageBox, PromotionHeader} from '../../../ui/index';
 
 const {width, height} = Dimensions.get('window')
-const vw = width / 100;
-const vh = height / 100
-let uiTools = new UiTools();
-let commentApi = new CommentApi();
 
 class CommentsComponent extends Component {
     constructor(props) {
@@ -35,7 +28,6 @@ class CommentsComponent extends Component {
         }
     }
 
-
     getInstance() {
         if (this.props.instance) {
             return this.props.instance;
@@ -52,7 +44,6 @@ class CommentsComponent extends Component {
         if (group && message) {
             actions.sendMessage(group._id, item.id, message);
         }
-
     }
 
     getBusiness(item) {
@@ -101,18 +92,16 @@ class CommentsComponent extends Component {
 
     nextCommentPage() {
         const item = this.getInstance();
-        const {actions, group,feeds} = this.props;
-        actions.setNextFeeds(feeds[group._id][item.id],group, item)
+        const {actions, group, feeds} = this.props;
+        actions.setNextFeeds(feeds[group._id][item.id], group, item)
     }
 
     createCommentView(showComment, item) {
-        const {navigation, feeds, userFollower, actions, token, loadingDone, showTopLoader, group,user} = this.props;
-        if(!feeds[group._id]){
+        const {navigation, feeds, userFollower, actions, token, loadingDone, showTopLoader, group, user} = this.props;
+        if (!feeds[group._id]) {
             return <View></View>
         }
-
         if (showComment) {
-
             return <GenericFeedManager
                 navigation={navigation}
                 color='white'
@@ -131,8 +120,6 @@ class CommentsComponent extends Component {
         }
         return undefined;
     }
-
-
 
     renderItem(renderItem) {
         let item = renderItem.item;

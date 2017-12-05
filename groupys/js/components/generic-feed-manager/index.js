@@ -1,12 +1,24 @@
 import React, {Component} from 'react';
-import {Image, Platform, ListView,TouchableOpacity, FlatList,View} from 'react-native';
-import {connect} from 'react-redux';
+import {FlatList, Image, ListView, Platform, TouchableOpacity, View} from 'react-native';
 import {actions} from 'react-native-navigation-redux-helpers';
 import {
-    Container, Content, Text, Title, InputGroup,
-    Input, Button, Icon,  Header, Body, Right, ListItem, Tabs, Tab, Spinner, TabHeading, Thumbnail, Left
+    Button,
+    Container,
+    Content,
+    Header,
+    Icon,
+    Input,
+    InputGroup,
+    Left,
+    ListItem,
+    Right,
+    Spinner,
+    Tab,
+    TabHeading,
+    Tabs,
+    Thumbnail,
+    Title
 } from 'native-base';
-import {bindActionCreators} from "redux";
 
 export default class GenericFeedManager extends Component {
     constructor(props) {
@@ -20,14 +32,8 @@ export default class GenericFeedManager extends Component {
         }
     }
 
-
-    _renderItem(item) {
-        return <View>
-            <Text> what + {item.item.value}</Text>
-        </View>
-    }
     renderItem(item) {
-        const {navigation, token, userFollowers, group, ItemDetail, actions, entity,location} = this.props;
+        const {navigation, token, userFollowers, group, ItemDetail, actions, entity, location} = this.props;
         return <ItemDetail
             user={entity}
             token={token}
@@ -39,27 +45,27 @@ export default class GenericFeedManager extends Component {
             fetchTopList={this.fetchTopList.bind(this)}
             actions={actions}/>
     }
-    onEndReach(){
-        const {feeds, token,  actions, entity, } = this.props;
+
+    onEndReach() {
+        const {feeds, token, actions, entity,} = this.props;
         actions.setNextFeeds(feeds, token, entity);
     }
 
     render() {
-        const { loadingDone, showTopLoader, feeds ,update, setNextFeeds,color} = this.props;
+        const {loadingDone, showTopLoader, feeds, update, setNextFeeds, color} = this.props;
         const topLoader = showTopLoader ? <View><Spinner color='red'/></View> : null;
         if (!loadingDone) {
             return <View><Spinner color='red'/></View>;
         }
         const spining = undefined;
         let backgroundColor = '#e7e7e7';
-        if(color){
+        if (color) {
             backgroundColor = color;
         }
-
         if (setNextFeeds) {
             return (
 
-                <View  style={{backgroundColor: backgroundColor}}>
+                <View style={{backgroundColor: backgroundColor}}>
                     {topLoader}
 
                     <FlatList
@@ -82,7 +88,7 @@ export default class GenericFeedManager extends Component {
         }
         return (
 
-            <View  style={{backgroundColor: backgroundColor}}>
+            <View style={{backgroundColor: backgroundColor}}>
                 {topLoader}
                 <FlatList
                     ref='flatList'
@@ -99,12 +105,6 @@ export default class GenericFeedManager extends Component {
 
         );
     }
-
-
-
-
-
-
 }
 
 

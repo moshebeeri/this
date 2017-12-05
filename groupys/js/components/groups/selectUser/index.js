@@ -11,6 +11,7 @@ import {getUserFollowesr} from '../../../selectors/userSelector'
 import {bindActionCreators} from "redux";
 import * as selectUserAction from "../../../actions/selectUsers";
 import {FormHeader, TextInput} from '../../../ui/index';
+import strings from "../../../i18n/i18n"
 class SelectUsersComponent extends Component {
     static navigationOptions = ({navigation}) => ({
         header: null
@@ -92,7 +93,7 @@ class SelectUsersComponent extends Component {
 
 
                     <FormHeader showBack navigation={this.props.navigation}
-                                submitForm={this.saveFormData.bind(this)}title={"Select Users"} bgc="#2db6c8"/>
+                                submitForm={this.saveFormData.bind(this)}title={strings.SelectUsers} bgc="#2db6c8"/>
 
                     {productsRows}
 

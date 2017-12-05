@@ -51,8 +51,7 @@ export default class GenericListGroupView extends Component {
         const styles = this.createStyle();
         let promotionItem = this.createPromotionItem(item);
         let showBusinessHeader = this.isBusiness(item.entity_type);
-
-        const promotion = this.createPromotion(styles, promotionItem,showBusinessHeader);
+        const promotion = this.createPromotion(styles, promotionItem, showBusinessHeader);
         const message = this.createMessage(styles, item);
         const containerStyle = {
             alignItems: 'center',
@@ -65,7 +64,7 @@ export default class GenericListGroupView extends Component {
                     <GroupHeader group={item}/>
 
                     {showBusinessHeader && promotionItem &&
-                    <View style={{marginLeft:10,flex:1,alignItems:'flex-start',justifyContent:'flex-start'}}>
+                    <View style={{marginLeft: 10, flex: 1, alignItems: 'flex-start', justifyContent: 'flex-start'}}>
                         <BusinessHeader small navigation={this.props.navigation} business={promotionItem.business}
                                         businessLogo={promotionItem.businessLogo}
                                         businessName={promotionItem.businessName}/>
@@ -105,7 +104,7 @@ export default class GenericListGroupView extends Component {
         return undefined;
     }
 
-    createPromotion(styles, promotion,showBusinessHeader) {
+    createPromotion(styles, promotion, showBusinessHeader) {
         if (promotion) {
             return <View style={styles.group_promotion_container}>
 
