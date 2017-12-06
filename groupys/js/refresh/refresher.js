@@ -4,18 +4,20 @@
 class PageSync{
 
     constructor() {
-        this.constantTimeRefresher = new PageSync.RefreshPolicy('constantTimeRefresher', 1000);
-        this.stdAverageRefresh = new PageSync.AveragePolicy('stdAverageRefresh', 10, 5000);
-
         this.pages = {
         };
-        //this.createPage('pageA', this.constantTimeRefresher);
+
+        this.constantTimeRefresher = new PageSync.RefreshPolicy('constantTimeRefresher', 1000);
+        this.stdAverageRefresh = new PageSync.AveragePolicy('stdAverageRefresh', 10, 5000);
+        this.offlineRefresh = new PageSync.OfflinePolicy('offlinePolicy', 1000);
+
+        this.createPage('pageA', this.constantTimeRefresher);
         this.createPage('pageB', this.stdAverageRefresh, () => {
             console.log('I am pageB stdAverageRefresh refresher function')
         });
-        //this.createPage('pageC', this.stdAverageRefresh);
-        //this.createPage('pageD', this.stdAverageRefresh);
-
+        this.createPage('pageC', this.offlineRefresh, () => {
+            console.log('I am pageB stdAverageRefresh refresher function')
+        });
     }
 
     constantTimeRefresher(){return this.constantTimeRefresher}
@@ -23,7 +25,8 @@ class PageSync{
 
     createConstantTimeRefresher(name, millis){new PageSync.RefreshPolicy(name, millis)}
     createStdAverageRefresh(name, historyLength, maxMillis){new PageSync.AveragePolicy(name, historyLength, maxMillis)}
-    
+    createOfflineRefresh(name, startMillis){new PageSync.OfflinePolicy(name, startMillis)}
+
     createPage(name, policy, refresher) {
         this.pages[name] =  new PageSync.Page(name, policy, refresher);
     };
@@ -71,30 +74,32 @@ PageSync.RefreshPolicy = class {
     }
 
     shouldRefresh(page){
-        return Date.now() - this.lastVisit > this.millis
+        return Date.now() > this.millis + this.lastVisit
     }
 };
 
 PageSync.AveragePolicy = class extends PageSync.RefreshPolicy{
-    constructor(name, historyLength, millisBetweenSync) {
+    constructor(name, historyLength, millisBetweenSync, lastRefresh) {
         super(name, millisBetweenSync);
         this.historyLength = historyLength;
+        if(lastRefresh)
+            this.lastRefresh = lastRefresh;
+        else
+            this.lastRefresh = Date.now();
         this.history = [];
     }
 
     visited(){
-        this.lastVisit = Date.now();
-        //console.log(`AveragePolicy visited ${this.historyLength} ${this.history.length}`)
-        this.history.push(this.lastVisit);
+        this.history.push(this.lastVisit = Date.now());
         if(this.historyLength < this.history.length)
             this.history.shift();
-        //console.log(this.history);
     }
 
     shouldRefresh(page){
         //console.log(`AveragePolicy shouldRefresh ${this.history.length} ${Date.now() - this.lastVisit} > ${this.millis}`)
-        if((Date.now() - this.lastVisit) > this.millis){
+        if(Date.now() > this.millis + this.lastRefresh){
             console.log(`AveragePolicy shouldRefresh by max time`);
+            this.lastRefresh = Date.now();
             return true;
         }
         let prev;
@@ -110,14 +115,37 @@ PageSync.AveragePolicy = class extends PageSync.RefreshPolicy{
         });
         const average = sum/i;
 
-        if( this.lastVisit + average < this.lastVisit + this.millis){
+        if(Date.now() > average + this.lastRefresh){
             console.log(`AveragePolicy shouldRefresh by average`);
+            this.lastRefresh = Date.now();
             return true;
         }
 
         return false;
     }
 };
+
+PageSync.OfflinePolicy = class extends PageSync.RefreshPolicy {
+    constructor(name, incrementFactor, startMillis) {
+        super(name, startMillis);
+        this.incrementFactor = incrementFactor;
+        this.currentDelta = startMillis;
+    }
+
+    visited() {
+        this.lastVisit = Date.now();
+        this.currentDelta = this.millis;
+    }
+
+    shouldRefresh(page) {
+        if(this.lastVisit + this.currentDelta > Date.now()){
+            this.currentDelta *= this.incrementFactor;
+            return true;
+        }
+        return false;
+    }
+};
+
 let pageSync = new PageSync();
 
 export default pageSync;
