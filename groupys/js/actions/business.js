@@ -19,8 +19,8 @@ async function getAll(dispatch, token) {
         let response = await businessApi.getAll(token);
         if (response.length > 0) {
             dispatch({
-                type: 'GET_BUSINESS',
-                businesses: response,
+                type: actions.UPSERT_MY_BUSINESS,
+                item: businesses
             });
         }
     } catch (error) {
@@ -236,6 +236,15 @@ export function setBusinessPromotions(businessId) {
     }
 }
 
+async function updateBusinessPromotions(businessId, token, dispatch) {
+    let promotions = await promotionApi.getAllByBusinessId(businessId, token);
+    dispatch({
+        type: actions.SET_PROMOTION_BUSINESS,
+        businessesPromotions: promotions,
+        businessId: businessId
+    });
+}
+
 function saveBusinessFailed() {
     return function (dispatch) {
         dispatch({
@@ -317,7 +326,7 @@ export function setBusinessQrCode(business) {
             let response = await businessApi.getBusinessQrCodeImage(business.qrcode, token);
             dispatch({
                 type: actions.UPSERT_BUSINESS_QRCODE,
-                business:business,
+                business: business,
                 qrcodeSource: response.qrcode
             });
         } catch (error) {
@@ -326,4 +335,9 @@ export function setBusinessQrCode(business) {
             });
         }
     }
+}
+
+export default {
+    getAll,
+    updateBusinessPromotions
 }

@@ -53,7 +53,10 @@ class Groups extends Component {
     }
 
     componentWillMount() {
-        this.props.actions.fetchGroups();
+        const { groups} = this.props;
+        if(!groups || groups.length === 0) {
+            this.props.actions.fetchGroups();
+        }
     }
 
     render() {

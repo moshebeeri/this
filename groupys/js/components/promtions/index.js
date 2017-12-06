@@ -13,6 +13,8 @@ import * as businessAction from "../../actions/business";
 import {getBusinessPromotions} from '../../selectors/businessesSelector'
 import {bindActionCreators} from "redux";
 import {FormHeader} from '../../ui/index';
+import PageRefresher from '../../refresh/pageRefresher'
+
 import strings from "../../i18n/i18n"
 class Promotions extends Component {
     static navigationOptions = {
@@ -28,7 +30,14 @@ class Promotions extends Component {
     }
 
     componentWillMount() {
-        this.setBusinessPromotions();
+        const {navigation, promotions, actions, update, promotionsLoading} = this.props;
+        const businessId = navigation.state.params.business._id;
+        if(promotions && !promotions[businessId]) {
+            PageRefresher.addBusinessPromotion(businessId);
+            this.setBusinessPromotions();
+        }
+
+        PageRefresher.visitedPromotions(businessId);
     }
 
     setBusinessPromotions() {
@@ -77,7 +86,7 @@ class Promotions extends Component {
                 {promotions[businessId] && promotions[businessId].length > 0 &&
                 <GenericListManager rows={promotions[businessId]} navigation={navigation} actions={actions}
                                     update={update}
-                                    onEndReached={this.setBusinessPromotions.bind(this)}
+                                    noRefresh
                                     ItemDetail={this.renderItem.bind(this)}/>}
 
 

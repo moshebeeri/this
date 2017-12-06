@@ -50,8 +50,8 @@ export default class GroupHeader extends Component {
         }
     }
 
-    createBusinessView(business,groupType) {
-        if(business) {
+    createBusinessView(business, groupType) {
+        if (business) {
             switch (groupType) {
                 case 'USERS':
                     return <View style={styles.businessPicker}>
@@ -69,23 +69,27 @@ export default class GroupHeader extends Component {
     }
 
     render() {
-        const {group} = this.props;
-        return <View>
-            <View  style={styles.groupHeader}>
-            <View style={styles.groupImage}>
-                {this.createImage(group)}
+        const {group,noColor} = this.props;
+        let containerStyle = {backgroundColor:'#DDEEFF'};
+        if(noColor){
+            containerStyle = {};
+        }
+        return <View style={containerStyle}>
+            <View style={styles.groupHeader}>
+                <View style={styles.groupImage}>
+                    {this.createImage(group)}
 
-            </View>
-            <View style={styles.groupName}>
-                <View style={{flexDirection: 'row'}}>
-                    <Text style={this.createStyle(group.entity_type)}>{this.createTitle(group.entity_type)} | </Text>
-                    <Text>{group.social_state.followers} {strings.Members} </Text>
                 </View>
-                <View>
-                    <Text style={styles.groupNameText}>{group.name}</Text>
-                </View>
+                <View style={styles.groupName}>
+                    <View style={{flexDirection: 'row'}}>
+                        <Text style={this.createStyle(group.entity_type)}>{this.createTitle(group.entity_type)} | </Text>
+                        <Text>{group.social_state.followers} {strings.Members} </Text>
+                    </View>
+                    <View>
+                        <Text style={styles.groupNameText}>{group.name}</Text>
+                    </View>
 
-            </View>
+                </View>
             </View>
 
         </View>
