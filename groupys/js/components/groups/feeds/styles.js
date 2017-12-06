@@ -36,7 +36,11 @@ module.exports = {
         alignItems:'center'
     },
     imageStyle: {
-       flex:2,
+       flex:1.4,
+        justifyContent:'center',
+        alignItems:'center',
+
+
     },
     invite_to_group: {
         marginTop: 7,
@@ -158,7 +162,7 @@ module.exports = {
     },
     group_actions: {
         flexDirection: 'row',
-        flex:2,
+        flex:1.8,
         marginBottom:15,
 
         justifyContent: 'center',
