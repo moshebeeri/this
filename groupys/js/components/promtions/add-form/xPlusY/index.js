@@ -114,7 +114,7 @@ export default class XPlusYComponent extends Component {
         if(this.props.state.product) {
             let productName = this.props.state.product.name
             return <View style={styles.inputTextLayout}>
-                <Text style={{color: '#FA8559', marginLeft: 8, marginRight: 8}}>{strings.Promotionon}: {productName}</Text>
+                <Text style={{color: '#FA8559', marginLeft: 8, marginRight: 8}}>{strings.PromotionOn}: {productName}</Text>
             </View>
         }
         return undefined
@@ -165,7 +165,7 @@ export default class XPlusYComponent extends Component {
             {productView}
             <View style={{flexDirection:'row',justifyContent:'center',alignItems:'center'}}>
             <View style={styles.inputPrecenComponent}>
-                <TextInput field={strings.NumberofGifts} value={eligibleValue}
+                <TextInput field={strings.NumberOfGifts} value={eligibleValue}
                            returnKeyType='next' ref="Number of Gifts" refNext="Number of Gifts"
                            keyboardType='numeric'
                            onChangeText={(value) => this.setEligible(value)} isMandatory={true}/>

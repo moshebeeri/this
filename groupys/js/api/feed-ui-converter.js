@@ -193,12 +193,12 @@ class FeedConverter {
                     responseFeed.quantity = promotion.percent.quantity;
                     break;
                 case "X_FOR_Y":
-                    responseFeed.itemTitle = strings.XforYTitlePattern.formatUnicorn(promotion.x_for_y.values[0].eligible , promotion.condition.product.name , promotion.x_for_y.values[0].pay);
+                    responseFeed.itemTitle = strings.XForYTitlePattern.formatUnicorn(promotion.x_for_y.values[0].eligible , promotion.condition.product.name , promotion.x_for_y.values[0].pay);
                     responseFeed.promotion = 'X_FOR_Y';
                     responseFeed.promotionColor = '#ff66b3';
-                    responseFeed.promotionTitle = strings.XforYTitle;
+                    responseFeed.promotionTitle = strings.XForYTitle;
                     responseFeed.promotionValue = promotion.x_for_y.values[0].pay;
-                    responseFeed.promotionTerm = strings.XforYTitlePattern.formatUnicorn(promotion.x_for_y.values[0].eligible , promotion.condition.product.name , promotion.x_for_y.values[0].pay);
+                    responseFeed.promotionTerm = strings.XForYTitlePattern.formatUnicorn(promotion.x_for_y.values[0].eligible , promotion.condition.product.name , promotion.x_for_y.values[0].pay);
                     responseFeed.quantity = promotion.x_for_y.quantity;
                     break;
                 case "X+N%OFF":
@@ -343,12 +343,12 @@ class FeedConverter {
                     responseFeed.quantity = promotion.percent.quantity;
                     break;
                 case "X_FOR_Y":
-                    responseFeed.itemTitle = strings.XforYTitlePattern.formatUnicorn(promotion.x_for_y.values[0].eligible , promotion.condition.product.name , promotion.x_for_y.values[0].pay);
+                    responseFeed.itemTitle = strings.XForYTitlePattern.formatUnicorn(promotion.x_for_y.values[0].eligible , promotion.condition.product.name , promotion.x_for_y.values[0].pay);
                     responseFeed.promotion = 'X_FOR_Y';
                     responseFeed.promotionColor = '#ff66b3';
-                    responseFeed.promotionTitle = strings.XforYTitle;
+                    responseFeed.promotionTitle = strings.XForYTitle;
                     responseFeed.promotionValue = promotion.x_for_y.values[0].pay;
-                    responseFeed.promotionTerm = strings.XforYTitlePattern.formatUnicorn(promotion.x_for_y.values[0].eligible , promotion.condition.product.name , promotion.x_for_y.values[0].pay);
+                    responseFeed.promotionTerm = strings.XForYTitlePattern.formatUnicorn(promotion.x_for_y.values[0].eligible , promotion.condition.product.name , promotion.x_for_y.values[0].pay);
                     responseFeed.quantity = promotion.x_for_y.quantity;
                     break;
                 case "X+N%OFF":
@@ -459,12 +459,12 @@ class FeedConverter {
                 response.quantity = promotion.percent.quantity;
                 break;
             case "X_FOR_Y":
-                response.itemTitle = strings.XforYTitlePattern.formatUnicorn(promotion.x_for_y.values[0].eligible , promotion.condition.product.name , promotion.x_for_y.values[0].pay);
+                response.itemTitle = strings.XForYTitlePattern.formatUnicorn(promotion.x_for_y.values[0].eligible , promotion.condition.product.name , promotion.x_for_y.values[0].pay);
                 response.promotion = 'X_FOR_Y';
                 response.promotionColor = '#ff66b3';
-                response.promotionTitle = strings.XforYTitle;
+                response.promotionTitle = strings.XForYTitle;
                 response.promotionValue = promotion.x_for_y.values[0].pay;
-                response.promotionTerm = strings.XforYTitlePattern.formatUnicorn(promotion.x_for_y.values[0].eligible , promotion.condition.product.name , promotion.x_for_y.values[0].pay);
+                response.promotionTerm = strings.XForYTitlePattern.formatUnicorn(promotion.x_for_y.values[0].eligible , promotion.condition.product.name , promotion.x_for_y.values[0].pay);
                 response.quantity = promotion.x_for_y.quantity;
                 break;
             case "X+N%OFF":

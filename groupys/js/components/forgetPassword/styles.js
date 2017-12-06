@@ -56,7 +56,7 @@ module.exports = {
         marginTop: -20,
         color: 'white',
     },
-    signInText: {
+    SignUpText: {
         fontFamily: 'Roboto-Regular',
         fontSize: 16,
         color: 'white',

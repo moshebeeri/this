@@ -71,7 +71,7 @@ module.exports = {
         color: 'white',
         marginTop: -40,
     },
-    signInText: {
+    SignUpText: {
         fontFamily: (Platform.OS === 'ios') ? 'Roboto' : 'Roboto-Regular',
         fontSize: 16,
         color: 'white',

@@ -164,7 +164,7 @@ export default class PercentComponent extends Component {
                 <Text style={{color: '#FA8559', marginLeft: 8, marginRight: 8}}>{strings.PercentDiscount}</Text>
             </View>
             <View style={styles.inputTextLayout}>
-                <SimplePicker ref="PromotionOn"list={Discouint_on} itemTitle={strings.Promotionon} defaultHeader="Choose Type" isMandatory
+                <SimplePicker ref="PromotionOn"list={Discouint_on} itemTitle={strings.PromotionOn} defaultHeader="Choose Type" isMandatory
                               onValueSelected={this.selectPromotionType.bind(this)}/>
             </View>
             {promotionOn}

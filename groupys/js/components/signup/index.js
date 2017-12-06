@@ -69,7 +69,7 @@ class Signup extends Component {
                         }}>
                             <View style={{height: 50, justifyContent: 'flex-end', width: width / 2 + 120}}>
 
-                                <Text style={styles.signInText}>{strings.SignUp}</Text>
+                                <Text style={styles.SignUpText}>{strings.SignUp}</Text>
                             </View>
                             <View style={styles.nameContainer}>
                                 <Item style={styles.nameTextInput} regular>
