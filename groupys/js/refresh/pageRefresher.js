@@ -7,7 +7,17 @@ class PageRefresher{
 
 
     constructor() {
-        pageSync.createPage('feed',pageSync.stdAverageRefresh,this.setMainFeedRefresh.bind(this));
+
+        let feedSyncTimePolicy = pageSync.createStdAverageRefresh('feed',10,5000);
+        pageSync.createPage('feed', feedSyncTimePolicy,() => {
+            console.log('refreshing feed !!!!');
+        });
+        // pageSync.createPage('feed2',pageSync.createStdAverageRefresh('feed2',10,5000), () => {
+        //     console.log('feed2 refreshing feed !!!!');
+        // });
+        // pageSync.createPage('feed3',pageSync.createStdAverageRefresh('feed3',10,5000),() => {
+        //     console.log('feed3 refreshing feed !!!!');
+        // });
     }
 
 
@@ -20,7 +30,7 @@ class PageRefresher{
                 feedAction.fetchTopList(id, token, user, store.dispatch);
             }
         }catch (error){
-            connsole.log('failed');
+            console.log('failed');
         }
     }
 
