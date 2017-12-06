@@ -4,12 +4,12 @@
 class PageSync{
 
     constructor() {
-        this.chatRefresher = new PageSync.RefreshPolicy('chatRefresher', 1000);
+        this.constantTimeRefresher = new PageSync.RefreshPolicy('constantTimeRefresher', 1000);
         this.stdAverageRefresh = new PageSync.AveragePolicy('stdAverageRefresh', 10, 5000);
 
         this.pages = {
         };
-        //this.createPage('pageA', this.chatRefresher);
+        //this.createPage('pageA', this.constantTimeRefresher);
         this.createPage('pageB', this.stdAverageRefresh, () => {
             console.log('I am pageB stdAverageRefresh refresher function')
         });
@@ -18,10 +18,10 @@ class PageSync{
 
     }
 
-    chatRefresher(){return this.chatRefresher}
+    constantTimeRefresher(){return this.constantTimeRefresher}
     stdAverageRefresh(){return this.stdAverageRefresh}
 
-    createChatRefresher(name, millis){new PageSync.RefreshPolicy(name, millis)}
+    createConstantTimeRefresher(name, millis){new PageSync.RefreshPolicy(name, millis)}
     createStdAverageRefresh(name, historyLength, maxMillis){new PageSync.AveragePolicy(name, historyLength, maxMillis)}
     
     createPage(name, policy, refresher) {
@@ -85,10 +85,10 @@ PageSync.AveragePolicy = class extends PageSync.RefreshPolicy{
     visited(){
         this.lastVisit = Date.now();
         //console.log(`AveragePolicy visited ${this.historyLength} ${this.history.length}`)
-        this.history.push(Date.now());
+        this.history.push(this.lastVisit);
         if(this.historyLength < this.history.length)
             this.history.shift();
-        console.log(this.history);
+        //console.log(this.history);
     }
 
     shouldRefresh(page){
