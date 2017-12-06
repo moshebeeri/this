@@ -144,7 +144,7 @@ class GroupFeedHeader extends Component {
 
         if (this.isGroupAdmin(group)) {
             groupInvite = <Menu>
-                <MenuTrigger>
+                <MenuTrigger customStyles={{alignItems:'center',justifyContent:'center'}}>
                     <Icon2 style={{fontSize: 25, color: "#2db6c8"}} name="options-vertical"/>
                 </MenuTrigger>
                 <MenuOptions>
@@ -173,6 +173,7 @@ class GroupFeedHeader extends Component {
                                       width: 30, height: 30,
                                       flexDirection: 'column',
                                       alignItems: 'center',
+                                      justifyContent:'center',
 
                                   }}
                                   regular>
