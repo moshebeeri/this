@@ -11,21 +11,21 @@ class PageSync{
         this.stdAverageRefresh = new PageSync.AveragePolicy('stdAverageRefresh', 10, 5000);
         this.offlineRefresh = new PageSync.OfflinePolicy('offlinePolicy', 1000);
 
-        this.createPage('pageA', this.constantTimeRefresher);
-        this.createPage('pageB', this.stdAverageRefresh, () => {
-            console.log('I am pageB stdAverageRefresh refresher function')
-        });
-        this.createPage('pageC', this.offlineRefresh, () => {
-            console.log('I am pageB stdAverageRefresh refresher function')
-        });
+        // this.createPage('pageA', this.constantTimeRefresher);
+        // this.createPage('pageB', this.stdAverageRefresh, () => {
+        //     console.log('I am pageB stdAverageRefresh refresher function')
+        // });
+        // this.createPage('pageC', this.offlineRefresh, () => {
+        //     console.log('I am pageB stdAverageRefresh refresher function')
+        // });
     }
 
     constantTimeRefresher(){return this.constantTimeRefresher}
     stdAverageRefresh(){return this.stdAverageRefresh}
 
-    createConstantTimeRefresher(name, millis){new PageSync.RefreshPolicy(name, millis)}
-    createStdAverageRefresh(name, historyLength, maxMillis){new PageSync.AveragePolicy(name, historyLength, maxMillis)}
-    createOfflineRefresh(name, startMillis){new PageSync.OfflinePolicy(name, startMillis)}
+    createConstantTimeRefresher(name, millis){return new PageSync.RefreshPolicy(name, millis)}
+    createStdAverageRefresh(name, historyLength, maxMillis){return new PageSync.AveragePolicy(name, historyLength, maxMillis)}
+    createOfflineRefresh(name, startMillis){return new PageSync.OfflinePolicy(name, startMillis)}
 
     createPage(name, policy, refresher) {
         this.pages[name] =  new PageSync.Page(name, policy, refresher);
@@ -50,13 +50,13 @@ PageSync.Page = class {
     }
 
     visited(){
-        console.log(`${this.name} visited at ${new Date().toISOString()}`);
+       // console.log(`${this.name} visited at ${new Date().toISOString()}`);
         this.policy.visited();
     }
 
     check(){
         let shouldRefresh = this.policy.shouldRefresh();
-        console.log(`${this.name} check ${new Date().toISOString()} result ${shouldRefresh}`);
+      //  console.log(`${this.name} check ${new Date().toISOString()} result ${shouldRefresh}`);
         if(shouldRefresh && this.refresher)
             this.refresher()
             

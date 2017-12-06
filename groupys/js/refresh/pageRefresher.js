@@ -8,16 +8,8 @@ class PageRefresher{
 
     constructor() {
 
-        let feedSyncTimePolicy = pageSync.createStdAverageRefresh('feed',10,5000);
-        pageSync.createPage('feed', feedSyncTimePolicy,() => {
-            console.log('refreshing feed !!!!');
-        });
-        // pageSync.createPage('feed2',pageSync.createStdAverageRefresh('feed2',10,5000), () => {
-        //     console.log('feed2 refreshing feed !!!!');
-        // });
-        // pageSync.createPage('feed3',pageSync.createStdAverageRefresh('feed3',10,5000),() => {
-        //     console.log('feed3 refreshing feed !!!!');
-        // });
+        pageSync.createPage('feed',  pageSync.createStdAverageRefresh('feed',10,60000),this.setMainFeedRefresh.bind(this));
+
     }
 
 
