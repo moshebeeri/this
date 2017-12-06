@@ -87,7 +87,7 @@ export default class XPlusYOffComponent extends Component {
                     color: '#FA8559',
                     marginLeft: 8,
                     marginRight: 8
-                }}>{strings.Promotionon}: {productName}</Text>
+                }}>{strings.PromotionOn}: {productName}</Text>
             </View>
         }
         return undefined
@@ -95,10 +95,10 @@ export default class XPlusYOffComponent extends Component {
 
     createProductGiftView() {
         if (this.props.state.giftProduct) {
-            let productName = this.props.state.giftProduct.name
+            let productName = this.props.state.giftProduct.name;
             return <View style={styles.inputTextLayout}>
                 <Text
-                    style={{color: '#FA8559', marginLeft: 8, marginRight: 8}}>{strings.Discounton}: {productName}</Text>
+                    style={{color: '#FA8559', marginLeft: 8, marginRight: 8}}>{strings.DiscountOn}: {productName}</Text>
             </View>
         }
         return undefined
@@ -106,7 +106,7 @@ export default class XPlusYOffComponent extends Component {
 
     render() {
         let productGiftView = this.createProductGiftView();
-        let productView = this.createProductView()
+        let productView = this.createProductView();
         let discount = ''
         if (this.props.state.x_plus_n_percent_off && this.props.state.x_plus_n_percent_off.eligible) {
             discount = this.props.state.x_plus_n_percent_off.eligible;

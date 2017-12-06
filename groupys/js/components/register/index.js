@@ -58,7 +58,7 @@ class Register extends Component {
                             </View>
                             <View style={styles.mainContainer}>
 
-                                <Text style={styles.signInText}>{strings.SmsMessagePart1}</Text>
+                                <Text style={styles.SignUpText}>{strings.SmsMessagePart1}</Text>
                                 <Text style={styles.decritpionLine2}>{strings.SmsMessagePart2}</Text>
                                 <Item style={styles.nameTextInput} regular>
                                     <Input value={this.state.name} blurOnSubmit={true} returnKeyType='done' ref="1"
