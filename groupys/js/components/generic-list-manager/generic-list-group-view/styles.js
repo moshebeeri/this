@@ -22,7 +22,7 @@ module.exports = {
     },
     group_message_container: {
         margin:10,
-        borderTopWidth:0.25,
+
         flexDirection: 'row',
         alignItems:'center',
         justifyContent:'center',
@@ -33,6 +33,9 @@ module.exports = {
 
         flexDirection: 'row',
         borderColor: 'gray',
+        borderRadius:2,
+        margin:2,
+        borderWidth:1,
         justifyContent: 'space-between',
     },
     group_content: {

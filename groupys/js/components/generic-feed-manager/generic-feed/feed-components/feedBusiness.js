@@ -49,7 +49,7 @@ export default class FeedBusiness extends Component {
         const styles = componentCreator.createStyle();
         const imageBusiness = this.createBusinessImage(item, styles);
         const result =
-            <InViewPort onChange={() => refresh(item.id,item.social)} style={styles.businesses_container}>
+            <View style={styles.businesses_container}>
                 <View style={styles.promotion_card}>
                     <View style={styles.promotion_upperContainer}>
                         <View style={styles.logo_view}>
@@ -93,7 +93,7 @@ export default class FeedBusiness extends Component {
 
                     </View>
                 </View>
-            </InViewPort>;
+            </View>;
         return result;
     }
 

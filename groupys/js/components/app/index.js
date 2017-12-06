@@ -13,7 +13,6 @@ import LocationApi from "../../api/location";
 import ContactApi from "../../api/contacts";
 import getStore from "../../store";
 import StyleUtils from "../../utils/styleUtils";
-import codePush from "react-native-code-push";
 import SideBar from "../drawer/index";
 import * as actions from "../../reducers/reducerActions";
 import {bindActionCreators} from "redux";
@@ -22,6 +21,9 @@ import * as mainAction from "../../actions/mainTab";
 import * as userAction from "../../actions/user";
 import {createSelector} from "reselect";
 import {NavigationActions} from "react-navigation";
+import '../../conf/global';
+import pageSync from "../../refresh/refresher"
+import PageRefresher from '../../refresh/pageRefresher'
 
 const promotions = require('../../../images/promotion.png');
 const save = require('../../../images/save.png');
@@ -58,6 +60,7 @@ const warch = navigator.geolocation.watchPosition((position) => {
 );
 const timer = BackgroundTimer.setInterval(() => {
     try {
+        pageSync.check();
         if (store.getState().authentication.token) {
             contactApi.syncContacts();
         }
@@ -72,6 +75,15 @@ const timer = BackgroundTimer.setInterval(() => {
         })
     }
 }, 60000);
+const refresher = BackgroundTimer.setInterval(() => {
+    try {
+        pageSync.check();
+    } catch (error) {
+        store.dispatch({
+            type: actions.NETWORK_IS_OFFLINE,
+        })
+    }
+}, 1000);
 
 /////////////////////////////////////////////////
 class ApplicationManager extends Component {
@@ -105,6 +117,9 @@ class ApplicationManager extends Component {
     }
 
     onChangeTab(tab) {
+        if (tab.i === 0) {
+            PageRefresher.visitedFeed();
+        }
         //this.props.actions.changeTab(tab)
     }
 
@@ -121,7 +136,7 @@ class ApplicationManager extends Component {
     }
 
     componentDidMount() {
-        codePush.sync({updateDialog: updateDialogOption});
+        //  codePush.sync({updateDialog: updateDialogOption});
     }
 
     render() {

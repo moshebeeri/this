@@ -14,7 +14,7 @@ import DateUtils from '../../utils/dateUtils'
 let dateUtils = new DateUtils();
 export default class ChatMessage extends Component {
     render() {
-        const {item} = this.props;
+        const {item,wide} = this.props;
         const image = <Thumbnail small source={item.avetar}/>
         const containerStyle = {
             marginTop: 10,
@@ -22,6 +22,10 @@ export default class ChatMessage extends Component {
             backgroundColor: 'white',
         };
         const messageTime = this.createMessageTime(item.date);
+        let styleContainer = styles.messageUserName;
+        if(wide){
+            styleContainer = styles.messageWideUserName;
+        }
         if (item.isUser) {
             return <View style={containerStyle}>
             <View style={styles.messageUsercomponent}>
@@ -46,7 +50,7 @@ export default class ChatMessage extends Component {
                     </View>
                 </View>
                 <View>
-                <View style={styles.messageUserName}>
+                <View style={styleContainer}>
                     <Text style={styles.messageNameText}>{item.name}</Text>
                     <View style={styles.message_container}>
                         <Text numberOfLines={3} style={styles.messageText}>{item.message}</Text>

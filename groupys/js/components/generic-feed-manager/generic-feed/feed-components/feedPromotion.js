@@ -76,7 +76,7 @@ export default class FeedPromotion extends Component {
             headeerSize = 100;
         }
         const result =
-            <InViewPort onChange={() => refresh(item.id, item.social)} style={container}>
+            <View style={container}>
                 <View style={styles.promotion_card}>
                     <View style={promotionUpperContainer}>
                         <View style={logtyle}>
@@ -142,7 +142,7 @@ export default class FeedPromotion extends Component {
                                                      shareAction={showUsers}/>}
                     </View>}
                 </View>
-            </InViewPort>;
+            </View>;
         return result;
     }
 

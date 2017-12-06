@@ -15,6 +15,7 @@ module.exports = {
         width: width -15,
         alignItems:'center',
         justifyContent:'center',
+        padding:5,
 
         flexDirection: 'row',
     },

@@ -18,6 +18,7 @@ module.exports = {
         justifyContent: 'flex-start',
         alignItems:'flex-start',
 
+
     },
     messageUserName: {
         flexDirection: 'column',
@@ -26,6 +27,15 @@ module.exports = {
         borderBottomRightRadius:50,
 
         maxWidth:width  -100,
+        backgroundColor:'#0699dc',
+    },
+    messageWideUserName: {
+        flexDirection: 'column',
+        borderBottomLeftRadius:15,
+        borderTopRightRadius:50,
+        borderBottomRightRadius:50,
+
+        width:width  -60,
         backgroundColor:'#0699dc',
     },
     messageName: {

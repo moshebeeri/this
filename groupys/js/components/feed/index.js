@@ -7,6 +7,7 @@ import {connect} from "react-redux";
 import * as feedsAction from "../../actions/feedsMain";
 import {getFeeds} from "../../selectors/feedSelector";
 import * as userAction from "../../actions/user";
+
 import {createSelector} from "reselect";
 
 class Feed extends Component {
@@ -20,6 +21,7 @@ class Feed extends Component {
             actions.setNextFeeds(feeds);
             this.props.userActions.fetchUsersFollowers();
         }
+
     }
 
     render() {

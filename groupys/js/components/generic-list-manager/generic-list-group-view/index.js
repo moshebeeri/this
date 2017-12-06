@@ -23,7 +23,7 @@ import stylesLandscape from './styles_landscape'
 import StyleUtils from '../../../utils/styleUtils'
 import DateUtils from '../../../utils/dateUtils';
 import UiConverter from '../../../api/feed-ui-converter'
-import {GroupHeader, PromotionHeaderSnippet} from '../../../ui/index';
+import {GroupHeader, PromotionHeaderSnippet,ChatMessage} from '../../../ui/index';
 import BusinessHeader from "../../../ui/BusinessHeader/BusinessHeader";
 
 const {width, height} = Dimensions.get('window');
@@ -121,27 +121,36 @@ export default class GenericListGroupView extends Component {
     createMessage(styles, item) {
         if (item.preview && item.preview.comment) {
             let user = item.preview.comment.user;
-            let lastMessage = <Text numberOfLines={3} note
-                                    style={styles.group_members}>{item.preview.comment.message}</Text>
-            let messageTime = <Text note
-                                    style={styles.dateFont}>{dateUtils.messageFormater(item.preview.comment.timestamp)}</Text>
+
+            let itemChat
             let userImage = undefined;
             if (user.pictures && user.pictures.length > 0) {
-                userImage = <Thumbnail small source={{uri: user.pictures[user.pictures.length - 1].pictures[3]}}/>
+                itemChat = {
+                    date:item.preview.comment.timestamp,
+                    message: item.preview.comment.message,
+                    isUser:true,
+                    avetar: {uri: user.pictures[user.pictures.length - 1].pictures[3]},
+                    name:user.name
+
+                }
             } else {
-                userImage = <Thumbnail small source={require('../../../../images/client_1.png')}/>
+                itemChat = {
+                    date:item.preview.comment.timestamp,
+                    isUser:true,
+                    message: item.preview.comment.message,
+                    avetar: require('../../../../images/client_1.png'),
+                    name:user.name
+
+                }
             }
+
             return <View style={styles.group_message_container}>
 
-                <View style={styles.group_image}>
-                    {userImage}
-                </View>
-                <View style={styles.message_container}>
-                    <View>
-                        <Text style={{fontWeight: 'bold'}}>{user.name}</Text>
-                    </View>
 
-                    {lastMessage}
+                <View style={styles.message_container}>
+
+
+                   <ChatMessage  wide item={itemChat}/>
 
                 </View>
 

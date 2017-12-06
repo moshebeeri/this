@@ -31,6 +31,7 @@ import GenericComments from "./components/comment/comments";
 import ChangePassword from "./components/changePassword/index";
 import BusinessProfile from "./components/business/profile/index";
 import BusinessFollow from "./components/business/follow/follow_container";
+import './conf/global';
 // var PushNotification = require('react-native-push-notification');
 //
 // PushNotification.configure({

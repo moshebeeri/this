@@ -35,11 +35,13 @@ class GroupFeed extends Component {
         BackHandler.addEventListener('hardwareBackPress', this.handleBack.bind(this));
         const {navigation, feeds} = this.props;
         const group = navigation.state.params.group;
-        this.props.actions.setFeeds(group, feeds[group._id]);
+        if(!feeds[group._id]||(feeds[group._id] && feeds[group._id].length === 0)) {
+             this.props.actions.setFeeds(group, feeds[group._id]);
+        }
     }
 
     handleBack() {
-        this.props.actions.fetchGroups();
+        //this.props.actions.fetchGroups();
     }
 
     handlePick(emoji) {

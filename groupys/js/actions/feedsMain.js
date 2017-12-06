@@ -45,7 +45,7 @@ async function fetchFeedsFromServer(feeds, dispatch, token, user) {
     }
 }
 
-async function fetchTopList(id, token, user, dispatch) {
+ async function fetchTopList(id, token, user, dispatch) {
     try {
         let response = await feedApi.getAll('up', id, token, user);
         if (!response)
@@ -296,6 +296,17 @@ export function nextLoad() {
         });
     }
 }
+
+export default {
+    nextLoad,
+    fetchTopList,
+    shareActivity,
+    setUserFollows,
+    saveFeed,
+    unlike,
+    like,
+
+};
 
 
 

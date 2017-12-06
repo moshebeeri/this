@@ -5,7 +5,7 @@ class PageSync{
 
     constructor() {
         this.chatRefresher = new PageSync.RefreshPolicy('chatRefresher', 1000);
-        this.stdAverageRefresh = new PageSync.AveragePolicy('stdAverageRefresh', 10, 5000);
+        this.stdAverageRefresh = new PageSync.AveragePolicy('stdAverageRefresh', 10, 60000);
 
         this.pages = {
         };
