@@ -120,6 +120,9 @@ class ApplicationManager extends Component {
         if (tab.i === 0) {
             PageRefresher.visitedFeed();
         }
+        if (tab.i === 2) {
+            PageRefresher.visitedGroups();
+        }
         //this.props.actions.changeTab(tab)
     }
 

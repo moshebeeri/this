@@ -160,7 +160,7 @@ class GroupFeedHeader extends Component {
                 </Button>
             </View>
             <View style={{flex:10}}>
-           <GroupHeader group={group}/>
+           <GroupHeader noColor group={group}/>
             </View>
             <View style={styles.group_actions}>
                 <TouchableOpacity onPress={() => this.showScanner()}

@@ -226,7 +226,7 @@ class FeedConverter {
                     responseFeed.quantity = promotion.x_plus_y.quantity;
                     break;
                 case "HAPPY_HOUR":
-                    if (promotion.happy_hour && promotion.happy_hour.values) {
+                    if (promotion.happy_hour && promotion.happy_hour.values&& promotion.happy_hour.values[0]) {
                         responseFeed.itemTitle = '';
                         responseFeed.promotionTitle = strings.HappyHour;
                         responseFeed.promotionTerm = strings.HappyHourTerm.formatUnicorn(FormUtils.convertDaysNumToString(promotion.happy_hour.values[0].days),
@@ -492,7 +492,7 @@ class FeedConverter {
                 response.quantity = promotion.x_plus_y.quantity;
                 break;
             case "HAPPY_HOUR":
-                if (promotion.happy_hour && promotion.happy_hour.values) {
+                if (promotion.happy_hour && promotion.happy_hour.values &&  promotion.happy_hour.values[0]) {
                     response.itemTitle = '';
                     response.promotionTitle = strings.HappyHour;
                     response.promotionTerm = strings.HappyHourTerm.formatUnicorn(FormUtils.convertDaysNumToString(promotion.happy_hour.values[0].days),

@@ -1,25 +1,23 @@
 import React, {Component} from 'react';
-import {Image, Platform, FlatList} from 'react-native';
+import {FlatList, Image, Platform} from 'react-native';
 import {connect} from 'react-redux';
 import {actions} from 'react-native-navigation-redux-helpers';
 import {
+    Button,
     Container,
     Content,
-    Text,
-    Title,
     Fab,
-    InputGroup,
-    Input,
-    Button,
-    Icon,
-    View,
     Header,
-    Spinner,
-    Body,
-    Right,
+    Icon,
+    Input,
+    InputGroup,
+    Left,
     ListItem,
+    Right,
+    Spinner,
     Thumbnail,
-    Left
+    Title,
+    View
 } from 'native-base';
 
 class GenericListManager extends Component {
@@ -28,7 +26,20 @@ class GenericListManager extends Component {
     }
 
     render() {
-        const {rows, ItemDetail, actions, update, onEndReached} = this.props;
+        const {rows, ItemDetail, actions, update, onEndReached, noRefresh} = this.props;
+        if (noRefresh) {
+            return (
+                <Content style={{backgroundColor: '#b7b7b7'}}>
+
+                    <FlatList
+                        data={rows}
+                        renderItem={ItemDetail}
+                        extraData={update}
+                    />
+
+                </Content>
+            )
+        }
         const onEndActions = this.getOnEndAction(actions, onEndReached);
         return (
 

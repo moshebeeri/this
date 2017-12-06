@@ -30,6 +30,7 @@ module.exports = {
         flexDirection:'row',
         justifyContent:'flex-start',
         alignItems:"center",
+
         width:width-30
     },
     groupImage:{

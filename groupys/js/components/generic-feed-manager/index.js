@@ -28,7 +28,7 @@ export default class GenericFeedManager extends Component {
     async fetchTopList(id) {
         const {token, feeds, group, actions, entity} = this.props;
         if (id === this.props.feeds[0].fid) {
-            actions.fetchTop(feeds, token, entity, group)
+         //   actions.fetchTop(feeds, token, entity, group)
         }
     }
 

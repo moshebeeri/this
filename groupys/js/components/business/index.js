@@ -23,21 +23,13 @@ class Business extends Component {
     }
 
     componentWillMount() {
-        this.props.actions.onEndReached();
-    }
-
-    selectBusiness(businessId) {
         const {businesses} = this.props;
-        if (businesses) {
-            let selected = businesses.filter(business => business.business._id === businessId);
-            if (selected && selected.length === 1) {
-                this.props.actions.selectBusiness(selected[0])
-                this.props.actions.setBusinessProducts(businessId);
-                this.props.actions.setBusinessPromotions(businessId);
-                this.props.actions.setBusinessUsers(businessId);
-            }
+        if(!businesses || businesses.length === 0 ) {
+            this.props.actions.onEndReached();
         }
     }
+
+
 
     render() {
         const {businesses, navigation, businessLoading, update, actions} = this.props;
@@ -51,7 +43,7 @@ class Business extends Component {
             <Container style={{backgroundColor: '#b7b7b7'}}>
 
 
-                <GenericListManager rows={businesses} navigation={navigation} actions={actions} update={update}
+                <GenericListManager  noRefresh rows={businesses} navigation={navigation} actions={actions} update={update}
                                     ItemDetail={this.renderItem.bind(this)}/>
 
             </Container>
