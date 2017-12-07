@@ -38,6 +38,7 @@ class PageRefresher {
     addBusinessPromotion(businessId) {
         if (!visitedList.includes('promotion_' + businessId,)) {
             pageSync.createPage('promotion_' + businessId, pageSync.createStdAverageRefresh('promotion_' + businessId, 10, 60000), this.updatePromotion.bind(this, businessId));
+            visitedList.push('promotion_' + businessId);
         }
     }
 
@@ -58,6 +59,27 @@ class PageRefresher {
 
     visitedGroups() {
         pageSync.visited('groups')
+    }
+
+    createFeedSocialState(id){
+        if (!visitedList.includes('feed' + id,)) {
+            pageSync.createPage('feed' + id, pageSync.createStdAverageRefresh('feed' + id, 3, 7200000), this.updateSocialState.bind(this, id));
+            visitedList.push('feed' + id);
+        }
+    }
+
+    visitedFeedItem(id) {
+        if (visitedList.includes('feed' + id,)) {
+            console.log('visited updated' + id);
+            pageSync.visited('feed' + id)
+        }
+    }
+
+
+    updateSocialState(id){
+        console.log('refresh' + id);
+        let token = store.getState().authentication.token;
+        feedAction.refreshFeedSocialState(store.dispatch,token,id);
     }
 }
 

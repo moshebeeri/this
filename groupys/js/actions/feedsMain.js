@@ -220,6 +220,25 @@ export function refresh(id, currentSocialState) {
     }
 }
 
+
+async function refreshFeedSocialState (dispatch, token,id) {
+    try {
+
+        let response = await feedApi.getFeedSocialState(id, token);
+
+        dispatch({
+            type: actions.FEED_UPDATE_SOCIAL_STATE,
+            social_state: response,
+            id: id
+        });
+
+    } catch (error) {
+        dispatch({
+            type: actions.NETWORK_IS_OFFLINE,
+        });
+    }
+}
+
 export const unlike = (id) => {
     return async function (dispatch, getState) {
         try {
@@ -305,6 +324,7 @@ export default {
     saveFeed,
     unlike,
     like,
+    refreshFeedSocialState
 
 };
 

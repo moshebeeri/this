@@ -20,6 +20,24 @@ async function getAll(dispatch, token) {
         if (response.length > 0) {
             dispatch({
                 type: actions.UPSERT_MY_BUSINESS,
+                item: response
+            });
+        }
+    } catch (error) {
+        dispatch({
+            type: actions.NETWORK_IS_OFFLINE,
+        });
+    }
+}
+
+
+async function get(dispatch, token,id) {
+    try {
+        let response = await businessApi.get(token,id);
+        let businesses = [response];
+        if (response.length > 0) {
+            dispatch({
+                type: actions.UPSERT_BUSINESS,
                 item: businesses
             });
         }
@@ -167,6 +185,14 @@ export function fetchBusinessCategories(gid) {
     return function (dispatch, getState) {
         const token = getState().authentication.token;
         getBusinessCategories(dispatch, gid, token);
+    }
+}
+
+
+export function fetchBusiness(id) {
+    return function (dispatch, getState) {
+        const token = getState().authentication.token;
+        get(dispatch,  token,id);
     }
 }
 

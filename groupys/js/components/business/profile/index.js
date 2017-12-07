@@ -47,7 +47,10 @@ class BusinessProfile extends Component {
     componentWillMount() {
         const {businesses} = this.props
         let business = businesses[this.props.navigation.state.params.businesses._id];
-        if (!business.qrcodeSource) {
+        if(!business) {
+            business = this.props.navigation.state.params.businesses;
+        }
+        if (business && !business.qrcodeSource) {
             this.props.setBusinessQrCode(business)
         }
     }
@@ -81,6 +84,9 @@ class BusinessProfile extends Component {
     render() {
         const {businesses} = this.props
         let business = businesses[this.props.navigation.state.params.businesses._id];
+        if(!business) {
+            business = this.props.navigation.state.params.businesses;
+        }
         let address = business.city + ' ' + business.address
         const banner = this.createBannerTag(business);
         return ( <View>

@@ -30,6 +30,8 @@ import * as componentCreator from "./feedCommonView";
 import {PromotionHeader, PromotionSeperator, SocialState, SubmitButton} from '../../../../ui/index';
 import FormUtils from "../../../../utils/fromUtils";
 import strings from "../../../../i18n/i18n"
+import PageRefresher from '../../../../refresh/pageRefresher'
+
 
 const {width, height} = Dimensions.get('window');
 const vw = width / 100;
@@ -43,6 +45,19 @@ export default class FeedPromotion extends Component {
 
     showBusiness() {
         this.props.navigation.navigate("businessProfile", {businesses: this.props.item.business});
+    }
+
+    componentWillMount(){
+        const { item} = this.props;
+        PageRefresher.createFeedSocialState(item.id);
+
+
+    }
+    visited(){
+        const { item} = this.props;
+        console.log(item.id  + ' visited');
+        PageRefresher.visitedFeedItem(item.id);
+
     }
 
     render() {
@@ -76,7 +91,7 @@ export default class FeedPromotion extends Component {
             headeerSize = 100;
         }
         const result =
-            <View style={container}>
+            <InViewPort onChange={this.visited.bind(this)}style={container}>
                 <View style={styles.promotion_card}>
                     <View style={promotionUpperContainer}>
                         <View style={logtyle}>
@@ -142,7 +157,7 @@ export default class FeedPromotion extends Component {
                                                      shareAction={showUsers}/>}
                     </View>}
                 </View>
-            </View>;
+            </InViewPort>;
         return result;
     }
 
