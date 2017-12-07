@@ -30,6 +30,8 @@ import StyleUtils from '../../../../utils/styleUtils'
 import * as componentCreator from "./feedCommonView";
 import {SocialState} from '../../../../ui/index';
 import FormUtils from "../../../../utils/fromUtils";
+import PageRefresher from '../../../../refresh/pageRefresher'
+
 
 export default class FeedBusiness extends Component {
     render() {
@@ -40,6 +42,19 @@ export default class FeedBusiness extends Component {
         this.props.navigation.navigate("businessProfile", {businesses: this.props.item.business});
     }
 
+
+    componentWillMount(){
+        const { item} = this.props;
+        PageRefresher.createFeedSocialState(item.id);
+
+
+    }
+    visited(){
+        const { item} = this.props;
+        console.log(item.id  + ' visited');
+        PageRefresher.visitedFeedItem(item.id);
+
+    }
     createBusiness(item, like, unlike, showUsers, comment) {
         const {location, refresh} = this.props;
         if (!item.name) {
@@ -49,7 +64,8 @@ export default class FeedBusiness extends Component {
         const styles = componentCreator.createStyle();
         const imageBusiness = this.createBusinessImage(item, styles);
         const result =
-            <View style={styles.businesses_container}>
+
+            <InViewPort onChange={this.visited.bind(this)} style={styles.businesses_container}>
                 <View style={styles.promotion_card}>
                     <View style={styles.promotion_upperContainer}>
                         <View style={styles.logo_view}>
@@ -93,7 +109,7 @@ export default class FeedBusiness extends Component {
 
                     </View>
                 </View>
-            </View>;
+            </InViewPort>;
         return result;
     }
 

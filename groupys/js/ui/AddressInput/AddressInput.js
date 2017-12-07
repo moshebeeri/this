@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import {Text, View} from 'react-native';
+import {I18nManager, Text, View} from 'react-native';
 import {Icon, Input, Spinner} from 'native-base';
 import styles from './styles';
 import {DynamicMessage, TextInput} from '../index';
@@ -14,7 +14,7 @@ class AddressInput extends Component {
         this.state = {
             invalid: false,
             city: '',
-            country: 'Israel',
+            country: strings.Israel,
             address: '',
             locations: '',
             spinner: false,
@@ -120,9 +120,13 @@ class AddressInput extends Component {
         const {isMandatory, addressForm, refNext} = this.props;
         return <View>
             <View style={styles.inputTextLayout}>
-                <View style={{flexDirection: "row"}}>
-                    <Text style={styles.textInputTextStyle}>Location</Text>
-                    {isMandatory && <Icon style={{margin: 5, color: 'red', fontSize: 12}} name='star'/>}
+                <View style={{flexDirection: "row", justifyContent: I18nManager.isRTL ? 'flex-start' : 'flex-end'}}>
+                    {!I18nManager.isRTL && isMandatory &&
+                    <Icon style={{margin: 5, color: 'red', fontSize: 12}} name='star'/>}
+
+                    <Text style={styles.textInputTextStyle}>{strings.LocationAddress}</Text>
+                    {I18nManager.isRTL && isMandatory &&
+                    <Icon style={{margin: 5, color: 'red', fontSize: 12}} name='star'/>}
                 </View>
                 <View>
                     <TextInput placeholder={strings.Country} value={this.state.country} returnKeyType='next'
@@ -132,18 +136,50 @@ class AddressInput extends Component {
                                validateContent={this.validateAddress.bind(this)}
                                onChangeText={(country) => this.setState({country})} isMandatory={isMandatory}/>
 
+                    {I18nManager.isRTL &&
                     <TextInput placeholder={strings.City} value={this.state.city} returnKeyType='next' ref="city"
                                refNext="city"
                                onSubmitEditing={this.focusNextField.bind(this, "address")}
                                validateContent={this.validateAddress.bind(this)}
-                               onChangeText={(city) => this.setState({city})} isMandatory={isMandatory}/>
+                               onChangeText={(city) => this.setState({city})} isMandatory={isMandatory}/>}
 
-                    <TextInput placeholder={strings.Address} value={this.state.address} returnKeyType='next'
+                    {!I18nManager.isRTL &&
+                    <TextInput yle={{textAlign: 'right', justifyContent: 'flex-end', alignItems: 'flex-end', flex: 1}}
+                               value={this.state.city} returnKeyType='next' ref="city"
+                               refNext="city"
+                               onSubmitEditing={this.focusNextField.bind(this, "address")}
+                               validateContent={this.validateAddress.bind(this)}
+                               onChangeText={(city) => this.setState({city})} isMandatory={isMandatory}/>}
+                    {!this.state.city && !I18nManager.isRTL && <Text style={{
+                        backgroundColor: 'white',
+                        right: 10,
+                        color:'gray',
+                        top: 80,
+                        position: 'absolute'
+                    }}>{strings.City} </Text>}
+
+                    {I18nManager.isRTL && <TextInput
+                        placeholder={strings.Address} value={this.state.address} returnKeyType='next'
+                        ref="address"
+                        refNext="address"
+                        onSubmitEditing={this.onSubmit.bind(this)}
+                        validateContent={this.validateAddress.bind(this)}
+                        onChangeText={(address) => this.setState({address})} isMandatory={isMandatory}/>
+                    }
+                    {!I18nManager.isRTL && <TextInput style={{textAlign: 'right', justifyContent: 'flex-end', alignItems: 'flex-end', flex: 1}}
+                               value={this.state.address} returnKeyType='next'
                                ref="address"
                                refNext="address"
                                onSubmitEditing={this.onSubmit.bind(this)}
                                validateContent={this.validateAddress.bind(this)}
-                               onChangeText={(address) => this.setState({address})} isMandatory={isMandatory}/>
+                               onChangeText={(address) => this.setState({address})} isMandatory={isMandatory}/>}
+                    {!this.state.address && !I18nManager.isRTL && <Text style={{
+                        backgroundColor: 'white',
+                        right: 10,
+                        color:'gray',
+                        top: 135,
+                        position: 'absolute'
+                    }}>{strings.Address} </Text>}
                 </View>
             </View>
             {addressForm.validating && <Spinner/>}

@@ -2,7 +2,7 @@ import React, {Component} from 'react';
 import {Dimensions, TextInput, View} from 'react-native';
 import {Icon, Input, Text} from 'native-base';
 import styles from './styles';
-
+import { I18nManager } from 'react-native';
 const {width, height} = Dimensions.get('window');
 export default class TextInputField extends Component {
     constructor(props) {
@@ -104,8 +104,10 @@ export default class TextInputField extends Component {
 
         return <View style={containerStyle}>
             <View style={styles.textInputTitleContainer}>
+                {!I18nManager.isRTL  && field && isMandatory && <Icon style={{margin: 5, color: mandatoryIconColor, fontSize: 12}} name='star'/>}
+
                 <Text style={textStyle}>{field}</Text>
-                {field && isMandatory && <Icon style={{margin: 5, color: mandatoryIconColor, fontSize: 12}} name='star'/>}
+                {I18nManager.isRTL  && field && isMandatory && <Icon style={{margin: 5, color: mandatoryIconColor, fontSize: 12}} name='star'/>}
 
             </View>
             <View style={styles.textInputComponentLayout}>

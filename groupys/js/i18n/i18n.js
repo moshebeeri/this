@@ -20,6 +20,7 @@ let strings = new LocalizedStrings({
         PostRequest: "Post Request",
         Save: "Save",
         Saved: "Saved",
+        LocationAddress: 'Location',
         Location: "Location",
         Expire: "Expire",
         Claim: "Claim",
@@ -162,6 +163,11 @@ let strings = new LocalizedStrings({
         XYTitle: 'Buy X get Y',
         HappyHourTerm: 'Every {0} happy hour from  {1} - {2} {3} get special price for {4}',
         punchCardTerm: 'Punch Card {0} Slots',
+        Logo: 'logo',
+        SelectCategory: 'Select Category',
+        SelectSubCategory: 'Select Sub Category',
+        Category: 'Category',
+        Israel: 'Israel'
     },
     en: {
         Promotion: "Promotion",
@@ -332,9 +338,14 @@ let strings = new LocalizedStrings({
         XYTitle: 'קנה X קבל Y',
         HappyHourTerm: 'כל יום {0} Happy Hour מ {1} - {2} {3} קבל מחיר מיותד עבור {4}',
         punchCardTerm: 'כרטיס ניקוב, כל {0} אחד חינם',
+        Logo: 'לוגו',
+        SelectCategory: 'בחר קטגוריה',
+        SelectSubCategory: 'בחר תת קטגוריה',
+        Category: 'קטגוריה',
+        Email: 'כתובת מייל',
+        LocationAddress: 'כתובת',
+        Israel: 'ישראל'
     },
-
-
     it: {
         Promotion: "Promozione",
         Business: "Affari",
