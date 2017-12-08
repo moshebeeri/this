@@ -167,7 +167,10 @@ let strings = new LocalizedStrings({
         SelectCategory: 'Select Category',
         SelectSubCategory: 'Select Sub Category',
         Category: 'Category',
-        Israel: 'Israel'
+        Israel: 'Israel',
+        ChooseRole: 'Choose Role',
+        PleaseSelect: 'Please Select ...',
+        InYourContacts: 'In Your Contacts'
     },
     en: {
         Promotion: "Promotion",
@@ -344,7 +347,10 @@ let strings = new LocalizedStrings({
         Category: 'קטגוריה',
         Email: 'כתובת מייל',
         LocationAddress: 'כתובת',
-        Israel: 'ישראל'
+        Israel: 'ישראל',
+        ChooseRole: 'בחר הגדרת תפקיד',
+        PleaseSelect: 'בחר ...',
+        InYourContacts: 'טלפון מרשימת משתמשים'
     },
     it: {
         Promotion: "Promozione",

@@ -22,16 +22,17 @@ module.exports = {
     },
     textInputComponentStyle: {
         backgroundColor: 'white',
-
+        justifyContent:  I18nManager.isRTL ? 'flex-start' : 'flex-end',
         flex: 1,
         padding: 10,
         borderRadius:2,
         fontSize:16,
+        paddingLeft:  I18nManager.isRTL ? 10:50,
     },
 
     textInputDisabledComponentStyle: {
         backgroundColor: '#CACFD2',
-
+        justifyContent:  I18nManager.isRTL ? 'flex-start' : 'flex-end',
         flex: 1,
         padding: 10,
         borderRadius:2,
@@ -43,6 +44,7 @@ module.exports = {
         flex: 1,
         padding: 10,
         borderRadius:2,
+        justifyContent:  I18nManager.isRTL ? 'flex-start' : 'flex-end',
         fontSize:16,
         borderWidth:1,
         borderColor:'red'
@@ -55,13 +57,15 @@ module.exports = {
         color: '#3A3A3A',
         fontFamily: 'Roboto-Regular',
         fontSize: 16,
-        marginLeft: 10,
+        justifyContent:  I18nManager.isRTL ? 'flex-start' : 'flex-end',
+        marginLeft:  I18nManager.isRTL ? 10:0,
+        margiRight:  I18nManager.isRTL ? 0:10,
         marginBottom:5,
 
     },
     textInputTextStyleWhite: {
         color: 'white',
-
+        justifyContent:  I18nManager.isRTL ? 'flex-start' : 'flex-end',
         fontFamily: 'Roboto-Regular',
         fontSize: 16,
         marginLeft: 10,

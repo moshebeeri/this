@@ -90,6 +90,15 @@ export default class TextInputField extends Component {
                                      secureTextEntry={secureTextEntry}
                                      onSubmitEditing={this.onSubmit.bind(this)}
                                      onChangeText={this.onChange.bind(this)} placeholder={placeholder}/>
+        if(!I18nManager.isRTL){
+            inputField =  <TextInput style={textInputStyle} value={value} returnKeyType={returnKeyType}
+                                    ref={refNext} underlineColorAndroid='transparent' disabled
+                                    keyboardType={keyboardType}
+                                    secureTextEntry={secureTextEntry}
+                                    onSubmitEditing={this.onSubmit.bind(this)}
+                                    onChangeText={this.onChange.bind(this)} />
+
+        }
         if(disabled){
             if(value) {
                 inputField = <View style={styles.textInputDisabledComponentStyle}>
@@ -112,6 +121,7 @@ export default class TextInputField extends Component {
             </View>
             <View style={styles.textInputComponentLayout}>
                 {inputField}
+                {!value && !I18nManager.isRTL  && <Text style={{position:'absolute',height: 40, backgroundColor:'transparent',color:'gray',alignSelf:'center',justifyContent:'center',alignItems:'center',top:6,right:10}}>{placeholder}</Text>}
             </View>
         </View>
     }
