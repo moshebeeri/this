@@ -246,7 +246,7 @@ let strings = new LocalizedStrings({
         BusinessFollowers: 'עוקבים אחרי העסק',
         DistributionType: "סוג הפצה",
         ChooseDistribution: "בחר הפצה",
-        SelectGroups: "בחר קבוצה",
+        SelectGroups: "בחר קבוצות",
         AddPromotion: "הוסף הנחה",
         AddOnBoardingPromotion: "הוסף הנחת הצטרפות",
         PromotionType: "סוג הנחה",

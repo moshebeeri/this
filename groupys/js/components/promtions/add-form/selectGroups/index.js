@@ -5,6 +5,7 @@ import {Container, Content, Text, Button, Body, Left, Footer, ListItem, Right, T
 import * as groupsAction from "../../../../actions/groups";
 import {bindActionCreators} from "redux";
 import strings from "../../../../i18n/i18n"
+import {I18nManager} from 'react-native';
 class SelectGroupsComponent extends Component {
     constructor(props) {
         super(props);
@@ -65,33 +66,40 @@ class SelectGroupsComponent extends Component {
                 if (image) {
                     return <ListItem key={index} onPress={this.selectCheckBox.bind(this, index)} thumbnail>
                         <Left>
+                            {!I18nManager.isRTL &&<CheckBox onPress={this.selectCheckBox.bind(this, index)}
+                                                            checked={this.state.selectCheckBox[index]}/>}
 
-                            {image}
+                            {I18nManager.isRTL && image}
                         </Left>
-                        <Body>
+                        <Body  style={{ alignItems: I18nManager.isRTL ? 'flex-start' : 'flex-end', justifyContent: I18nManager.isRTL ? 'flex-start' : 'flex-end',}}>
                         <Text>{group.name}</Text>
 
                         </Body>
                         <Right>
-
-                            <CheckBox onPress={this.selectCheckBox.bind(this, index)}
-                                      checked={this.state.selectCheckBox[index]}/>
+                            {!I18nManager.isRTL && image}
+                            {I18nManager.isRTL &&<CheckBox onPress={this.selectCheckBox.bind(this, index)}
+                                                           checked={this.state.selectCheckBox[index]}/>}
                         </Right>
                     </ListItem>
                 }
                 return <ListItem key={index} onPress={this.selectCheckBox.bind(this, index)} thumbnail
                                  style={{backgroundColor: '#fff'}}>
                     <Left>
-                        <Thumbnail square size={80} source={require('../../../../../images/client_1.png')}/>
+                        {!I18nManager.isRTL &&<CheckBox onPress={this.selectCheckBox.bind(this, index)}
+                                                       checked={this.state.selectCheckBox[index]}/>}
+
+                        {I18nManager.isRTL &&<Thumbnail square size={80} source={require('../../../../../images/client_1.png')}/>}
                     </Left>
-                    <Body>
+                    <Body  style={{ alignItems: I18nManager.isRTL ? 'flex-start' : 'flex-end', justifyContent: I18nManager.isRTL ? 'flex-start' : 'flex-end',}}>
 
                     <Text>{group.name}</Text>
 
                     </Body>
                     <Right>
-                        <CheckBox onPress={this.selectCheckBox.bind(this, index)}
-                                  checked={this.state.selectCheckBox[index]}/>
+                        {I18nManager.isRTL &&<CheckBox onPress={this.selectCheckBox.bind(this, index)}
+                                  checked={this.state.selectCheckBox[index]}/>}
+                        {I18nManager.isRTL &&<Thumbnail square size={80} source={require('../../../../../images/client_1.png')}/>}
+
                     </Right>
                 </ListItem>
             });

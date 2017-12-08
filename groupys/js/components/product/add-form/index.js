@@ -165,7 +165,7 @@ class AddProduct extends Component {
                 <View style={styles.addCoverNoImageContainer}>
                     <ImagePicker ref={"coverImage"} mandatory color='white' pickFromCamera
                                  setImage={this.setCoverImage.bind(this)}/>
-                    <Text style={styles.addCoverText}>Add a cover photo</Text>
+                    <Text style={styles.addCoverText}>{strings.AddACoverPhoto}</Text>
                 </View>
             </View>
 
@@ -211,7 +211,7 @@ class AddProduct extends Component {
 
                         <TextInput field={strings.Price} value={this.state.retail_price} returnKeyType='done' ref="6"
                                    refNext="6"
-                                   keyboardType="numeric" placeholder="Price in shekels"
+                                   keyboardType="numeric"
                                    onChangeText={(retail_price) => this.setState({retail_price})} isMandatory={true}/>
                     </View>
 
