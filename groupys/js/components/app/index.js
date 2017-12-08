@@ -1,5 +1,5 @@
 import React, {Component} from "react";
-import {Dimensions, Image, Platform, StyleSheetm} from "react-native";
+import {Dimensions, Image, Platform, StyleSheetm,I18nManager} from "react-native";
 import {connect} from "react-redux";
 import {Container, Drawer, Fab, Icon, Tab, TabHeading, Tabs, View} from "native-base";
 import Icon2 from "react-native-vector-icons/Ionicons";
@@ -154,12 +154,18 @@ class ApplicationManager extends Component {
         openDrawer = () => {
             this.drawer._root.open()
         };
+        let openSide = 'right';
+        if(I18nManager.isRTL){
+            openSide ='left';
+        }
         return (
 
             <Drawer
                 ref={(ref) => {
                     this.drawer = ref;
                 }}
+
+                side={openSide}
                 content={<SideBar closeDrawer={closeDrawer} navigation={this.props.navigation}/>}
                 onClose={() => closeDrawer}>
                 <Container>

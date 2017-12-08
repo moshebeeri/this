@@ -15,6 +15,7 @@ const vh = height / 100
 
 const qrcode = require('../../../images/qr-code.png');
 import strings from "../../i18n/i18n"
+import { I18nManager } from 'react-native';
 
 class GeneralComponentHeader extends Component {
     constructor(props) {
@@ -80,33 +81,64 @@ class GeneralComponentHeader extends Component {
                 height: headerHeight, flexDirection: 'row', alignItems: 'center', backgroundColor: 'white',
                 justifyContent: 'space-between',
             }}>
-                <View style={{height: vh * 7, flexDirection: 'row', alignItems: 'flex-start'}}>
+                {I18nManager.isRTL && <View style={{height: vh * 7, flexDirection: 'row', alignItems: 'flex-start'}}>
                     {back}
-                    <Button transparent style={{marginLeft:5,marginRight:5}} onPress={this.props.openDrawer}>
+
+                    <Button transparent style={{marginLeft: 5, marginRight: 5}} onPress={this.props.openDrawer}>
                         <Icon2 active color={"#2db6c8"} size={20} name="menu"/>
 
                     </Button>
-                </View>
 
+                </View>
+                }
+                {!I18nManager.isRTL && <View style={{
+                    height: vh * 6, flexDirection: 'row', justifyContent: 'center', alignItems: 'center'
+                }}>
+                    {menuAction}
+                    <TouchableOpacity onPress={() => this.showPromotionScaning()}
+                                      style={{
+                                          width: 30, height: 30,
+                                          flexDirection: 'column',
+                                          alignItems: 'center',
+                                      }}
+                                      regular>
+                        <Image resizeMode="cover" style={{tintColor: '#2db6c8', marginTop: 3, width: 25, height: 25}}
+                               source={qrcode}/>
+
+                    </TouchableOpacity>
+
+                </View>
+                }
                 <Text transparent style={{color: "#2db6c8", backgroundColor: 'transparent'}}>THIS</Text>
-                <View style={{
-                   height: vh * 6, flexDirection:'row',justifyContent: 'center',  alignItems:'center'
+                {I18nManager.isRTL && <View style={{
+                    height: vh * 6, flexDirection: 'row', justifyContent: 'center', alignItems: 'center'
                 }}>
                     <TouchableOpacity onPress={() => this.showPromotionScaning()}
                                       style={{
                                           width: 30, height: 30,
                                           flexDirection: 'column',
                                           alignItems: 'center',
-
                                       }}
                                       regular>
-                        <Image resizeMode="cover" style={{ tintColor: '#2db6c8', marginTop:3,width: 25, height: 25}}
+                        <Image resizeMode="cover" style={{tintColor: '#2db6c8', marginTop: 3, width: 25, height: 25}}
                                source={qrcode}/>
 
                     </TouchableOpacity>
                     {menuAction}
                 </View>
+                }
+                {!I18nManager.isRTL && <View style={{height: vh * 7, flexDirection: 'row', alignItems: 'flex-start'}}>
+                    {back}
+
+                    <Button transparent style={{marginLeft: 5, marginRight: 5}} onPress={this.props.openDrawer}>
+                        <Icon2 active color={"#2db6c8"} size={20} name="menu"/>
+
+                    </Button>
+
+                </View>
+                }
             </View>
+
         );
     }
 }
