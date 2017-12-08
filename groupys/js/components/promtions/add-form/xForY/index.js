@@ -88,7 +88,7 @@ export default class XForYComponent extends Component {
         if (this.props.state.product) {
             let productName = this.props.state.product.name
             return <View style={styles.textLayout}>
-                <Text style={{color: '#FA8559', marginLeft: 8, marginRight: 8}}>Promotion on: {productName}</Text>
+                <Text style={{color: '#FA8559', marginLeft: 8, marginRight: 8}}>{strings.PromotionOn}: {productName}</Text>
             </View>
         }
         return undefined

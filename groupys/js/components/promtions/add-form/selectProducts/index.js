@@ -4,7 +4,8 @@ import {Platform, Provider} from "react-native";
 import {Container, Content, Text, Button, Body, Fab, Icon, Left, ListItem, Right, Thumbnail} from "native-base";
 import {bindActionCreators} from "redux";
 import * as promotionsAction from "../../../../actions/promotions";
-
+import strings from "../../../../i18n/i18n"
+import {I18nManager} from 'react-native';
 class SelectProductsComponent extends Component {
     constructor(props) {
         super(props);
@@ -30,38 +31,51 @@ class SelectProductsComponent extends Component {
                 if (r.pictures.length > 0) {
                     return <ListItem key={index} thumbnail>
                         <Left>
+                            {I18nManager.isRTL &&       <Thumbnail square size={80} source={{uri: r.pictures[0].pictures[3]}}/>}
+                            {!I18nManager.isRTL &&   <Button transparent
+                                                             onPress={() => this.selectProduct(r)}
+                            >
+                                <Text>{strings.Select}</Text>
+                            </Button>}
 
-                            <Thumbnail square size={80} source={{uri: r.pictures[0].pictures[3]}}/>
                         </Left>
-                        <Body>
-                        <Text>{r.name}</Text>
-                        <Text note>{r.info}</Text>
+                        <Body  style={{ alignItems: I18nManager.isRTL ? 'flex-start' : 'flex-end', justifyContent: I18nManager.isRTL ? 'flex-start' : 'flex-end',}}>
+                        <Text style={{ justifyContent: I18nManager.isRTL ? 'flex-start' : 'flex-end',}}>{r.name}</Text>
+                        <Text style={{ justifyContent: I18nManager.isRTL ? 'flex-start' : 'flex-end',}}note>{r.info}</Text>
                         </Body>
                         <Right>
+                            {!I18nManager.isRTL &&  <Thumbnail square size={80} source={{uri: r.pictures[0].pictures[3]}}/>}
 
-                            <Button transparent
-                                    onPress={() => this.selectProduct(r)}
+                            {I18nManager.isRTL &&   <Button transparent
+                                                            onPress={() => this.selectProduct(r)}
                             >
-                                <Text>Select</Text>
-                            </Button>
+                                <Text>{strings.Select}</Text>
+                            </Button>}
                         </Right>
                     </ListItem>
                 }
                 return <ListItem key={index} thumbnail style={{backgroundColor: '#fff'}}>
                     <Left>
-                        <Thumbnail square size={80} source={require('../../../../../images/client_1.png')}/>
+                        {I18nManager.isRTL && <Thumbnail square size={80} source={require('../../../../../images/client_1.png')}/>}
+                        {!I18nManager.isRTL &&   <Button transparent
+                                                        onPress={() => this.selectProduct(r)}
+                        >
+                            <Text>{strings.Select}</Text>
+                        </Button>}
                     </Left>
-                    <Body>
+                    <Body  style={{ alignItems: I18nManager.isRTL ? 'flex-start' : 'flex-end', justifyContent: I18nManager.isRTL ? 'flex-start' : 'flex-end',}}>
 
-                    <Text>{r.name}</Text>
-                    <Text note>{r.info}</Text>
+                    <Text style={{ justifyContent: I18nManager.isRTL ? 'flex-start' : 'flex-end',}}>{r.name}</Text>
+                    <Text style={{ justifyContent: I18nManager.isRTL ? 'flex-start' : 'flex-end',}}note>{r.info}</Text>
                     </Body>
                     <Right>
-                        <Button transparent
+                        {!I18nManager.isRTL && <Thumbnail square size={80} source={require('../../../../../images/client_1.png')}/>}
+
+                        {I18nManager.isRTL &&   <Button transparent
                                 onPress={() => this.selectProduct(r)}
                         >
-                            <Text>Select</Text>
-                        </Button>
+                            <Text>{strings.Select}</Text>
+                        </Button>}
                     </Right>
                 </ListItem>
             });

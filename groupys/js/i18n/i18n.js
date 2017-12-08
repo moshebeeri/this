@@ -174,6 +174,14 @@ let strings = new LocalizedStrings({
         Distribution: 'Distribution',
         Details: 'Details',
         General: 'General',
+        Select: 'Select',
+        Sunday: 'Sunday',
+        Monday: 'Monday',
+        Tuesday: 'Tuesday',
+        Wednesday: 'Wednesday',
+        Thursday: 'Thursday',
+        Friday: 'Friday',
+        Saturday: 'Saturday'
     },
     en: {
         Promotion: "Promotion",
@@ -249,7 +257,7 @@ let strings = new LocalizedStrings({
         EditPromotionMessage: 'רק שם ותיאור ההנחה ניתנים לשינוי',
         General: 'כללי',
         IncreaseQuantity: 'הגדל כמות',
-        PromotionOn: 'הנחה על',
+        PromotionOn: 'מבצע על',
         Gift: 'מתנה',
         BuyAmount: 'כמות רכש',
         PayAmount: 'שלם $',
@@ -358,7 +366,15 @@ let strings = new LocalizedStrings({
         PercentageOff: '% הנחה',
         Distribution: 'הפצה',
         Details: 'פרטים כלליים',
-        General: 'כללי'
+        General: 'כללי',
+        Select: 'בחר',
+        Sunday: 'ראשון',
+        Monday: 'שני',
+        Tuesday: 'שלישי',
+        Wednesday: 'רביעי',
+        Thursday: 'חמישי',
+        Friday: 'שישי',
+        Saturday: 'שבת'
     },
     it: {
         Promotion: "Promozione",
