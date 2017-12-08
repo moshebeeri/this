@@ -87,7 +87,7 @@ export default class XForYComponent extends Component {
     createProductView() {
         if (this.props.state.product) {
             let productName = this.props.state.product.name
-            return <View style={styles.inputTextLayout}>
+            return <View style={styles.textLayout}>
                 <Text style={{color: '#FA8559', marginLeft: 8, marginRight: 8}}>Promotion on: {productName}</Text>
             </View>
         }
@@ -105,7 +105,7 @@ export default class XForYComponent extends Component {
             eligible = this.props.state.x_for_y.values.eligible;
         }
         return <View>
-            <View style={styles.inputTextLayout}>
+            <View style={styles.textLayout}>
                 <Text style={{color: '#FA8559', marginLeft: 8, marginRight: 8}}>{strings.BuyProductsFor}</Text>
             </View>
 

@@ -148,8 +148,8 @@ export default class XPlusYComponent extends Component {
         }
         return <View>
 
-            <View style={styles.inputTextLayout}>
-                <Text style={{color: '#FA8559', marginLeft: 8, marginRight: 8}}>X Plus Y</Text>
+            <View style={styles.textLayout}>
+                <Text style={{color: '#FA8559', marginLeft: 8, marginRight: 8}}>{strings.XPlusY}</Text>
             </View>
             <View style={{flexDirection:'row',justifyContent:'center',alignItems:'center'}}>
             <View style={styles.inputPrecenComponent}>

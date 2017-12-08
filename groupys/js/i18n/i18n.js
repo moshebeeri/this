@@ -170,7 +170,10 @@ let strings = new LocalizedStrings({
         Israel: 'Israel',
         ChooseRole: 'Choose Role',
         PleaseSelect: 'Please Select ...',
-        InYourContacts: 'In Your Contacts'
+        InYourContacts: 'In Your Contacts',
+        Distribution: 'Distribution',
+        Details: 'Details',
+        General: 'General',
     },
     en: {
         Promotion: "Promotion",
@@ -350,7 +353,12 @@ let strings = new LocalizedStrings({
         Israel: 'ישראל',
         ChooseRole: 'בחר הגדרת תפקיד',
         PleaseSelect: 'בחר ...',
-        InYourContacts: 'טלפון מרשימת משתמשים'
+        InYourContacts: 'טלפון מרשימת משתמשים',
+        PunchCard: 'כרטיס ניקובים',
+        PercentageOff: '% הנחה',
+        Distribution: 'הפצה',
+        Details: 'פרטים כלליים',
+        General: 'כללי'
     },
     it: {
         Promotion: "Promozione",

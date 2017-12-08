@@ -441,8 +441,8 @@ class AddPromotion extends Component {
             </View>
         }
         return <View>
-            <View style={styles.inputTextLayout}>
-                <Text style={{color: '#FA8559', marginLeft: 8, marginRight: 8}}>Distribution</Text>
+            <View style={styles.textLayout}>
+                <Text style={{color: '#FA8559', marginLeft: 8, marginRight: 8}}>{strings.Distribution}</Text>
             </View>
             <View style={{flexDirection: 'row', justifyContent: 'flex-start', alignItems: 'center'}}>
                 <View style={{flex: 2}}>
@@ -481,16 +481,16 @@ class AddPromotion extends Component {
                 }}>
 
                     {this.createCoverImageComponnent()}
-                    <View style={styles.inputTextLayout}>
-                        <Text style={{color: '#FA8559', marginLeft: 8, marginRight: 8}}>Details</Text>
+                    <View style={styles.textLayout}>
+                        <Text style={{color: '#FA8559', marginLeft: 8, marginRight: 8}}>{strings.Details}</Text>
                     </View>
                     <View style={styles.inputTextLayout}>
                         <SimplePicker ref="promotionType" list={types} itemTitle={strings.PromotionType}
                                       defaultHeader="Choose Type" isMandatory
                                       onValueSelected={this.selectPromotionType.bind(this)}/>
                     </View>
-                    <View style={styles.inputTextLayout}>
-                        <Text style={{color: '#FA8559', marginLeft: 8, marginRight: 8}}>General</Text>
+                    <View style={styles.textLayout}>
+                        <Text style={{color: '#FA8559', marginLeft: 8, marginRight: 8}}>{strings.General}</Text>
                     </View>
                     <View style={styles.inputTextMediumLayout}>
                         <View style={{flex: 1, marginRight: 10}}>
@@ -573,7 +573,7 @@ class AddPromotion extends Component {
                 <View style={styles.addCoverNoImageContainer}>
                     <ImagePicker ref={"coverImage"} mandatory color='white' pickFromCamera
                                  setImage={this.setCoverImage.bind(this)}/>
-                    <Text style={styles.addCoverText}>Add a cover photo</Text>
+                    <Text style={styles.addCoverText}>{strings.AddACoverPhoto}</Text>
                 </View>
             </View>
 
