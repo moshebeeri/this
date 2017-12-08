@@ -181,7 +181,8 @@ let strings = new LocalizedStrings({
         Wednesday: 'Wednesday',
         Thursday: 'Thursday',
         Friday: 'Friday',
-        Saturday: 'Saturday'
+        Saturday: 'Saturday',
+        SelectedGroups: 'Number Selected Groups'
     },
     en: {
         Promotion: "Promotion",
@@ -374,7 +375,8 @@ let strings = new LocalizedStrings({
         Wednesday: 'רביעי',
         Thursday: 'חמישי',
         Friday: 'שישי',
-        Saturday: 'שבת'
+        Saturday: 'שבת',
+        SelectedGroups: 'כמות קבוצות שנבחרו'
     },
     it: {
         Promotion: "Promozione",
