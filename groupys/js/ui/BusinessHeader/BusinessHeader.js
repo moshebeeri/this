@@ -65,20 +65,16 @@ export default class BusinessHeader extends Component {
                 {back}
             </View>
 
-            {!I18nManager.isRTL  && showEdit &&  <View style={{flex: 0.2, justifyContent:'flex-end',flexDirection: 'row', alignItems: 'center',}}>
-                {editButton}
-            </View> }
-            { I18nManager.isRTL && this.createBusinessLog()}
+
+            {  this.createBusinessLog()}
             <View style={{flex: 1, flexDirection: 'column',justifyContent:'center'}}>
                 <Text style={nameTextStyle} note>{businessName}</Text>
                 {categoryTitle && <Text numberOfLines={1} style={styles.businessAddressText}
                       note>{categoryTitle}</Text>}
             </View>
-            {I18nManager.isRTL  && showEdit &&  <View style={{flex: 0.2, flexDirection: 'row', alignItems: 'center',}}>
+            {   showEdit &&  <View style={{flex: 0.2, flexDirection: 'row', alignItems: 'center',}}>
                 {editButton}
             </View> }
-
-            { !I18nManager.isRTL && this.createBusinessLog()}
 
 
         </View>

@@ -31,6 +31,7 @@ module.exports = {
         flex:1,
         margin:5,
         alignItems:'flex-start',
+        backgroundColor:'red',
         justifyContent:'center',
     },
     promotionPunchValue:{
@@ -55,6 +56,7 @@ module.exports = {
     },
     XplusYtitleValue:{
         fontSize:30,
+
         color:'#e65100'
     },
     puncCardtitleValue:{

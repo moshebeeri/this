@@ -12,7 +12,7 @@ module.exports = {
     },
     pickerTitleContainer: {
         flexDirection: 'row',
-        justifyContent: I18nManager.isRTL ? 'flex-start' : 'flex-end'
+        justifyContent: 'flex-start'
     },
     pickerTextStyle: {
         color: '#3A3A3A',
@@ -48,9 +48,9 @@ module.exports = {
     modalViewStyle: {
         width: width - 20,
         height: 40,
-        paddingRight: I18nManager.isRTL ? 0 : 50,
+       // paddingRight: I18nManager.isRTL ? 0 : 50,
         justifyContent: 'center',
-        alignItems: I18nManager.isRTL ? 'flex-start' : 'flex-end',
+        alignItems: 'flex-start'
     }
 };
 

@@ -24,7 +24,7 @@ import {NavigationActions} from "react-navigation";
 import '../../conf/global';
 import pageSync from "../../refresh/refresher"
 import PageRefresher from '../../refresh/pageRefresher'
-
+const I18n = require('react-native-i18n')
 const promotions = require('../../../images/promotion.png');
 const save = require('../../../images/save.png');
 const groups = require('../../../images/groups.png');
@@ -92,6 +92,7 @@ class ApplicationManager extends Component {
     };
 
     constructor(props) {
+
         super(props)
         this.state = {
             orientation: StyleUtils.isPortrait() ? 'portrait' : 'landscape',
@@ -103,6 +104,7 @@ class ApplicationManager extends Component {
                 orientation: StyleUtils.isPortrait() ? 'portrait' : 'landscape'
             })
         })
+        I18nManager.forceRTL(true)
     }
 
     replaceRoute(route) {
@@ -158,6 +160,7 @@ class ApplicationManager extends Component {
         if(I18nManager.isRTL){
             openSide ='left';
         }
+
         return (
 
             <Drawer

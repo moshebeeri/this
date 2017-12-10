@@ -4,10 +4,10 @@ const {width, height} = Dimensions.get('window');
 import { I18nManager } from 'react-native';
 module.exports = {
     picker: {
-        margin: 3, height: 50, width: width - 25, backgroundColor: 'white',justifyContent:  I18nManager.isRTL ? 'flex-start' : 'flex-end'
+        margin: 3, height: 50, width: width - 25, backgroundColor: 'white',justifyContent:   'flex-start'
     },
     pickerInvalid: {
-        margin: 3, height: 50, width: width - 25, backgroundColor: 'red',justifyContent:  I18nManager.isRTL ? 'flex-start' : 'flex-end',borderWidth:1,borderColor:'red'
+        margin: 3, height: 50, width: width - 25, backgroundColor: 'red',justifyContent:  'flex-start' ,borderWidth:1,borderColor:'red'
     },
     pickerTitleContainer:{
         flexDirection: 'row',

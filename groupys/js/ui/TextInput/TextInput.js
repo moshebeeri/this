@@ -113,15 +113,14 @@ export default class TextInputField extends Component {
 
         return <View style={containerStyle}>
             <View style={styles.textInputTitleContainer}>
-                {!I18nManager.isRTL  && field && isMandatory && <Icon style={{margin: 5, color: mandatoryIconColor, fontSize: 12}} name='star'/>}
 
                 <Text style={textStyle}>{field}</Text>
-                {I18nManager.isRTL  && field && isMandatory && <Icon style={{margin: 5, color: mandatoryIconColor, fontSize: 12}} name='star'/>}
+                {field && isMandatory && <Icon style={{margin: 5, color: mandatoryIconColor, fontSize: 12}} name='star'/>}
 
             </View>
             <View style={styles.textInputComponentLayout}>
                 {inputField}
-                {!value && !I18nManager.isRTL  && <Text style={{position:'absolute',height: 40, backgroundColor:'transparent',color:'gray',alignSelf:'center',justifyContent:'center',alignItems:'center',top:6,right:10}}>{placeholder}</Text>}
+                {!value && <Text style={{position:'absolute',height: 40, backgroundColor:'transparent',color:'gray',alignSelf:'center',justifyContent:'center',alignItems:'center',top:6,right:10}}>{placeholder}</Text>}
             </View>
         </View>
     }

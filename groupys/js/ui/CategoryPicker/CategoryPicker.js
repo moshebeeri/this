@@ -174,10 +174,9 @@ class CategoryPicker extends Component {
 
         return <View>
             <View style={styles.pickerTitleContainer}>
-                {!I18nManager.isRTL && isMandatory && <Icon style={{margin: 5, color: 'red', fontSize: 12}} name='star'/>}
 
                 <Text style={styles.pickerTextStyle}>{strings.Category}</Text>
-                {I18nManager.isRTL && isMandatory && <Icon style={{margin: 5, color: 'red', fontSize: 12}} name='star'/>}
+                { isMandatory && <Icon style={{margin: 5, color: 'red', fontSize: 12}} name='star'/>}
             </View>
 
             {rootOicker}{pickers}

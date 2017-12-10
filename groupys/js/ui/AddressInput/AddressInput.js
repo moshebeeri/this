@@ -121,11 +121,11 @@ class AddressInput extends Component {
         return <View>
             <View style={styles.inputTextLayout}>
                 <View style={{flexDirection: "row", justifyContent: I18nManager.isRTL ? 'flex-start' : 'flex-end'}}>
-                    {!I18nManager.isRTL && isMandatory &&
-                    <Icon style={{margin: 5, color: 'red', fontSize: 12}} name='star'/>}
+                    {/*{!I18nManager.isRTL && isMandatory &&*/}
+                    {/*<Icon style={{margin: 5, color: 'red', fontSize: 12}} name='star'/>}*/}
 
                     <Text style={styles.textInputTextStyle}>{strings.LocationAddress}</Text>
-                    {I18nManager.isRTL && isMandatory &&
+                    { isMandatory &&
                     <Icon style={{margin: 5, color: 'red', fontSize: 12}} name='star'/>}
                 </View>
                 <View>

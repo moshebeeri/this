@@ -1,6 +1,7 @@
 const React = require('react-native');
 const {StyleSheet, Platform, Dimensions} = React;
 const {width, height} = Dimensions.get('window')
+import {I18nManager} from 'react-native';
 module.exports = {
     promotion_container: {
         borderWidth: 1,
@@ -16,10 +17,8 @@ module.exports = {
     promotionHeaderColumn: {
         flex: 1,
         width: width - 30,
-        alignItems:'center',
-        justifyContent:'center',
-
-
+        alignItems: 'center',
+        justifyContent: 'center',
     },
     promotionPunchHeader: {
         backgroundColor: 'white',
@@ -28,20 +27,22 @@ module.exports = {
     },
     promotionValue: {
         flex: 1,
-        justifyContent: 'flex-start',
+        justifyContent: 'center',
     },
     promotionColumnValue: {
         flex: 1,
-
-
     },
     promotionPunchValue: {
         flex: 1,
         margin: 5,
+        alignItems:  'flex-start' ,
+        justifyContent: 'flex-start' ,
     },
     promotiontDescription: {
         flex: 3,
         margin: 4,
+        alignItems: 'flex-start',
+        justifyContent: 'flex-start' ,
     },
     promotiontColumnDescription: {
         flex: 1,
@@ -49,6 +50,8 @@ module.exports = {
     promotiontHappyDescription: {
         flex: 3,
         margin: 4,
+        justifyContent: I18nManager.isRTL ? 'flex-start' : 'flex-end',
+
     },
     titleText: {
         fontSize: 20,
@@ -56,7 +59,9 @@ module.exports = {
     },
     titleValue: {
         fontSize: 40,
-        color: '#e65100'
+        width: 100,
+        textAlign: "center",
+        color: '#e65100',
     },
     XplusYtitleValue: {
         fontSize: 30,
@@ -74,14 +79,17 @@ module.exports = {
     titleTextColumnFeed: {
         flex: 1,
         fontSize: 25,
-
         color: '#2db6c8',
-
+    },
+    titleFeedHappyTextFeed: {
+        flex: 1,
+        fontSize: 15,
+        color: '#2db6c8'
     },
     titleHappyTextFeed: {
         flex: 1,
         fontSize: 15,
-        color: '#2db6c8'
+        color: '#e65100'
     },
     titleValueFeed: {
         flex: 1,
@@ -91,10 +99,8 @@ module.exports = {
     },
     titleValueColumnFeed: {
         flex: 1,
-
         fontSize: 50,
         color: '#2db6c8',
-
     },
     XplusYtitleValueFeed: {
         fontSize: 30,
@@ -102,7 +108,7 @@ module.exports = {
     },
     puncCardtitleValueFeed: {
         flex: 1,
-        fontSize: 25,
+        fontSize: 14,
         color: '#2db6c8'
     },
     promotionImageContainer: {
@@ -135,13 +141,12 @@ module.exports = {
         color: '#839192',
         flex: 1,
         fontSize: 13,
+        alignItems:'flex-end'
     },
     promotionColumnTermlTextStyle: {
         color: '#839192',
         flex: 1,
         fontSize: 13,
-
-
     },
     promotionDetailsContainer: {
         flexDirection: 'row',

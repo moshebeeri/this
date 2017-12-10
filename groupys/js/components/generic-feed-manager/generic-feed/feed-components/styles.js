@@ -5,6 +5,8 @@ const vw = width / 100;
 const vh = height / 100
 const vmin = Math.min(vw, vh);
 const vmax = Math.max(vw, vh);
+import {I18nManager} from 'react-native';
+
 module.exports = {
     button: {
         width: vmin * 100,
@@ -151,8 +153,8 @@ module.exports = {
         flexDirection: 'column',
         backgroundColor: '#b7b7b7',
         width: width,
-        marginBottom:5,
-        flex:1,
+        marginBottom: 5,
+        flex: 1,
         borderRadius: 2,
     },
     promotion_image: {
@@ -162,25 +164,21 @@ module.exports = {
         height: undefined
     },
     promotion_image_view: {
-        width: width, flex:9
+        width: width, flex: 9
     },
     promotion_upperContainer: {
         backgroundColor: 'white',
-        width: width -15,
+        width: width - 15,
         borderRadius: 2,
-        flex:3,
-
-        justifyContent:'center',
+        flex: 3,
+        justifyContent: 'center',
         flexDirection: 'column'
     },
-
     promotioSharedUpperContainer: {
         backgroundColor: 'white',
-        width: width -15,
-
-        flex:3,
-
-        justifyContent:'center',
+        width: width - 15,
+        flex: 3,
+        justifyContent: 'center',
         flexDirection: 'column'
     },
     businesses_upperContainer: {
@@ -203,15 +201,12 @@ module.exports = {
         marginLeft: 10,
         marginTop: 7
     },
-
     logoSharedview: {
         flexDirection: 'row',
-        margin:15,
-        borderTopWidth:1,
-        borderColor:'#cccccc',
-        borderLeftWidth:1,
-
-
+        margin: 15,
+        borderTopWidth: 1,
+        borderColor: '#cccccc',
+        borderLeftWidth: 1,
     },
     promotion_description: {
         flexDirection: 'column',
@@ -262,7 +257,7 @@ module.exports = {
     },
     business_bottomUpperContainer: {
         backgroundColor: 'white',
-        width: width -15,
+        width: width - 15,
         flexDirection: 'row',
         marginTop: 0,
     },
@@ -271,53 +266,49 @@ module.exports = {
         width: width - 15,
         alignItems: 'center',
         justifyContent: 'center',
-        flex:1.5,
+        flex: 1.5,
         flexDirection: 'row',
-
-
     },
     promotionsSeparator: {
         backgroundColor: 'white',
         width: width - 15,
-        flex:0.5,
-        alignItems:'center',
-        justifyContent:'center'
-
-
-
+        flex: 0.5,
+        alignItems: 'center',
+        justifyContent: 'center'
     },
     promotiosDescription: {
-        flex:2,
-        alignItems:'center',
-        justifyContent:'center',
-        width:width - 15,
+        flex: 2,
+        alignItems: 'center',
+        justifyContent: 'center',
+        width: width - 15,
     },
     promotiosShareDescription: {
-        flex:4 ,
-        borderColor:'#cccccc',
-        borderLeftWidth:1,
-        marginLeft:15,
-        alignItems:'center',
-        justifyContent:'center',
-        width:width - 15,
+        flex: 4,
+        borderColor: '#cccccc',
+        borderLeftWidth: 1,
+        marginLeft: 15,
+        alignItems: 'center',
+        justifyContent: 'center',
+        width: width - 15,
     },
-    promotionDetails:{
-        flex:1.7,
-        backgroundColor:'white',
-        alignItems:'flex-start',
-        justifyContent:'center',
-        width:width - 15,
+    promotionDetails: {
+        flex: 1.7,
+        backgroundColor: 'white',
+        alignItems: 'flex-start',
+        // alignItems:'flex-start',
+        justifyContent: 'center',
+        width: width - 15,
     },
-    promotionShareDetails:{
-        flex:1.6,
-        borderColor:'#cccccc',
-        backgroundColor:'white',
-        alignItems:'flex-start',
-        justifyContent:'center',
-        width:width - 15,
-        marginLeft:15,
-        borderBottomWidth:1,
-        borderLeftWidth:1,
+    promotionShareDetails: {
+        flex: 1.6,
+        borderColor: '#cccccc',
+        backgroundColor: 'white',
+        alignItems: 'flex-start',
+        justifyContent: 'center',
+        width: width - 15,
+        marginLeft: 15,
+        borderBottomWidth: 1,
+        borderLeftWidth: 1,
     },
     promotion_like: {
         marginLeft: 10,
@@ -388,40 +379,36 @@ module.exports = {
         width: vw * 45,
         justifyContent: 'flex-start',
     },
-    promotionDetailsContainer:{
-        flexDirection:'row',
-        backgroundColor:'white',
-        flex:3,
-        width: width- 15,
-        alignItems:'center',
-        justifyContent:'center',
+    promotionDetailsContainer: {
+        flexDirection: 'row',
+        backgroundColor: 'white',
+        flex: 3,
+        width: width - 15,
+        alignItems: 'center',
+        justifyContent: 'center',
     },
-    promotionLoctionContainer:{
-        alignItems:'flex-start',
-
-        flex:2.5,
+    promotionLoctionContainer: {
+        alignItems: I18nManager.isRTL ? 'flex-start' : 'flex-end',
+        flex: 2.5,
     },
-    detailsTitleText:{
-        marginLeft:5,
-        marginRight:5,
-
-        color:'#839192',
-        fontSize:14
+    detailsTitleText: {
+        marginLeft: 5,
+        marginRight: 5,
+        color: '#839192',
+        fontSize: 14
     },
-    detailsText:{
-        marginLeft:5,
-        marginRight:5,
-
-        justifyContent:'center',
-        alignItems:'center',
-
+    detailsText: {
+        marginLeft: 5,
+        marginRight: 5,
+        justifyContent: 'center',
+        alignItems: 'center',
     },
-    expireDateContainer:{
-        alignItems:'flex-start',
-
-        flex:3,
+    expireDateContainer: {
+        alignItems: 'flex-start' ,
+        //marginRight: I18nManager.isRTL ? 0 : 20,
+        flex: 3,
     },
-    editButtonContainer:{
-        flex:2.4,
+    editButtonContainer: {
+        flex: 2.4,
     },
 };

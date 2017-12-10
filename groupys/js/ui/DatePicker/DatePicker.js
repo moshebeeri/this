@@ -89,10 +89,9 @@ export default class DatePickerField extends Component {
 
         return <View style={containerStyle}>
             <View style={styles.textInputTitleContainer}>
-                {!I18nManager.isRTL && field && isMandatory && <Icon style={{margin: 5, color: mandtoryIconColor, fontSize: 12}} name='star'/>}
 
                 <Text style={textStyle}>{field}</Text>
-                {I18nManager.isRTL && field && isMandatory && <Icon style={{margin: 5, color: mandtoryIconColor, fontSize: 12}} name='star'/>}
+                {field && isMandatory && <Icon style={{margin: 5, color: mandtoryIconColor, fontSize: 12}} name='star'/>}
 
             </View>
             <View style={styles.textInputComponentLayout}>

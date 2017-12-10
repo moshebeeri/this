@@ -2,7 +2,7 @@
  * Created by roilandshut on 23/07/2017.
  */
 import React, {Component} from 'react';
-import {Image} from 'react-native';
+import {Image,Dimensions} from 'react-native';
 import InViewPort from '../../../../utils/inviewport'
 import {actions} from 'react-native-navigation-redux-helpers';
 import {
@@ -28,11 +28,11 @@ import stylesPortrate from './styles'
 import stylesLandscape from './styles_lendscape'
 import StyleUtils from '../../../../utils/styleUtils'
 import * as componentCreator from "./feedCommonView";
-import {SocialState} from '../../../../ui/index';
+import {SocialState,BusinessHeader} from '../../../../ui/index';
 import FormUtils from "../../../../utils/fromUtils";
 import PageRefresher from '../../../../refresh/pageRefresher'
 
-
+const {width, height} = Dimensions.get('window')
 export default class FeedBusiness extends Component {
     render() {
         return this.createBusiness(this.props.item, this.props.like, this.props.unlike, this.props.showUsers, this.props.comment)
@@ -60,27 +60,20 @@ export default class FeedBusiness extends Component {
         if (!item.name) {
             return <View></View>;
         }
-        const businessLogo = componentCreator.createBusinessLog(item, this.showBusiness.bind(this));
         const styles = componentCreator.createStyle();
         const imageBusiness = this.createBusinessImage(item, styles);
         const result =
 
             <InViewPort onChange={this.visited.bind(this)} style={styles.businesses_container}>
                 <View style={styles.promotion_card}>
-                    <View style={styles.promotion_upperContainer}>
-                        <View style={styles.logo_view}>
-                            {businessLogo}
-                            <View style={{flex: 1, flexDirection: 'column'}}>
-                                <Text style={styles.promotion_nameText} note>{item.businessName} </Text>
-                                <Text numberOfLines={1} style={styles.promotion_addressText}
-                                      note>{item.categoryTitle}</Text>
-                            </View>
-                        </View>
-
-
+                    <View style={{width:width-15}}>
+                    <BusinessHeader  navigation={this.props.navigation} business={item.business}
+                                     categoryTitle={item.categoryTitle} businessLogo={item.businessLogo}
+                                     businessName={item.business.name} noMargin
+                    />
                     </View>
-
                     {imageBusiness}
+
                     <View style={styles.business_bottomUpperContainer}>
                         <View style={styles.promotion_bottom_description}>
 

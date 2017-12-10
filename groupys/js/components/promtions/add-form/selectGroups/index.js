@@ -71,7 +71,7 @@ class SelectGroupsComponent extends Component {
 
                             {I18nManager.isRTL && image}
                         </Left>
-                        <Body  style={{ alignItems: I18nManager.isRTL ? 'flex-start' : 'flex-end', justifyContent: I18nManager.isRTL ? 'flex-start' : 'flex-end',}}>
+                        <Body  style={{ alignItems: 'flex-start' , justifyContent: I18nManager.isRTL ? 'flex-start' : 'flex-end',}}>
                         <Text>{group.name}</Text>
 
                         </Body>
@@ -90,7 +90,7 @@ class SelectGroupsComponent extends Component {
 
                         {I18nManager.isRTL &&<Thumbnail square size={80} source={require('../../../../../images/client_1.png')}/>}
                     </Left>
-                    <Body  style={{ alignItems: I18nManager.isRTL ? 'flex-start' : 'flex-end', justifyContent: I18nManager.isRTL ? 'flex-start' : 'flex-end',}}>
+                    <Body  style={{ alignItems: 'flex-start', justifyContent: I18nManager.isRTL ? 'flex-start' : 'flex-end',}}>
 
                     <Text>{group.name}</Text>
 

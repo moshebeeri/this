@@ -446,15 +446,11 @@ class AddPromotion extends Component {
                 <Text style={{color: '#FA8559', marginLeft: 8, marginRight: 8}}>{strings.Distribution}</Text>
             </View>
             <View style={{flexDirection: 'row', justifyContent: 'flex-start', alignItems: 'center'}}>
-                {!I18nManager.isRTL && button &&
-                <View style={{position:'absolute',flex: 1, top: -25 }}>
-                    {button}
-                </View>
-                }
+
                 <View style={{flex: 2}}>
                     {distribution}
                 </View>
-                {I18nManager.isRTL && button &&
+                {button &&
                 <View style={{flex: 1, marginTop: 30, marginLeft: 20, marginRight: 20}}>
                     {button}
                 </View>

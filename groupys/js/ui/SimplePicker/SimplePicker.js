@@ -74,10 +74,9 @@ export default class SimplePicker extends Component {
 
         return <View>
             <View style={styles.pickerTitleContainer}>
-                {!I18nManager.isRTL && isMandatory && <Icon style={{margin: 5, color: 'red', fontSize: 12}} name='star'/>}
 
                 <Text style={styles.pickerTextStyle}>{itemTitle}</Text>
-                {I18nManager.isRTL && isMandatory && <Icon style={{margin: 5, color: 'red', fontSize: 12}} name='star'/>}
+                {isMandatory && <Icon style={{margin: 5, color: 'red', fontSize: 12}} name='star'/>}
             </View>
 
             <TouchableOpacity onPress={() => this.showDropDownn()} style={pickerStyle}>
@@ -109,9 +108,8 @@ export default class SimplePicker extends Component {
         }
         return <View>
             <View style={styles.pickerTitleContainer}>
-                {!I18nManager.isRTL && isMandatory && <Icon style={{margin: 5, color: 'red', fontSize: 12}} name='star'/>}
                 <Text style={styles.pickerTextStyle}>{itemTitle}</Text>
-                {I18nManager.isRTL && isMandatory && <Icon style={{margin: 5, color: 'red', fontSize: 12}} name='star'/>}
+                { isMandatory && <Icon style={{margin: 5, color: 'red', fontSize: 12}} name='star'/>}
             </View>
 
 

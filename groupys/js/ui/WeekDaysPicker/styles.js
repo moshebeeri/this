@@ -57,7 +57,7 @@ module.exports = {
     },
     textInputTitleContainer:{
         flexDirection: 'row',
-        justifyContent: I18nManager.isRTL ? 'flex-start' : 'flex-end',
+        justifyContent: 'flex-start'
     },
     textInputTextStyle: {
         color: '#3A3A3A',

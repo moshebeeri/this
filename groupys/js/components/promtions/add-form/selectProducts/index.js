@@ -39,9 +39,9 @@ class SelectProductsComponent extends Component {
                             </Button>}
 
                         </Left>
-                        <Body  style={{ alignItems: I18nManager.isRTL ? 'flex-start' : 'flex-end', justifyContent: I18nManager.isRTL ? 'flex-start' : 'flex-end',}}>
-                        <Text style={{ justifyContent: I18nManager.isRTL ? 'flex-start' : 'flex-end',}}>{r.name}</Text>
-                        <Text style={{ justifyContent: I18nManager.isRTL ? 'flex-start' : 'flex-end',}}note>{r.info}</Text>
+                        <Body  style={{ alignItems:  'flex-start' , justifyContent:  'flex-start' ,}}>
+                        <Text style={{ justifyContent: 'flex-start' ,}}>{r.name}</Text>
+                        <Text style={{ justifyContent: 'flex-start',}}note>{r.info}</Text>
                         </Body>
                         <Right>
                             {!I18nManager.isRTL &&  <Thumbnail square size={80} source={{uri: r.pictures[0].pictures[3]}}/>}
@@ -63,10 +63,10 @@ class SelectProductsComponent extends Component {
                             <Text>{strings.Select}</Text>
                         </Button>}
                     </Left>
-                    <Body  style={{ alignItems: I18nManager.isRTL ? 'flex-start' : 'flex-end', justifyContent: I18nManager.isRTL ? 'flex-start' : 'flex-end',}}>
+                    <Body  style={{ alignItems: 'flex-start', justifyContent: I18nManager.isRTL ? 'flex-start' : 'flex-end',}}>
 
-                    <Text style={{ justifyContent: I18nManager.isRTL ? 'flex-start' : 'flex-end',}}>{r.name}</Text>
-                    <Text style={{ justifyContent: I18nManager.isRTL ? 'flex-start' : 'flex-end',}}note>{r.info}</Text>
+                    <Text style={{ justifyContent:  'flex-start' ,}}>{r.name}</Text>
+                    <Text style={{ justifyContent: 'flex-start' }}note>{r.info}</Text>
                     </Body>
                     <Right>
                         {!I18nManager.isRTL && <Thumbnail square size={80} source={require('../../../../../images/client_1.png')}/>}

@@ -42,8 +42,8 @@ module.exports = {
     },
     textLayout: {
         marginTop: 4, padding: 3,
-        justifyContent: I18nManager.isRTL ? 'flex-start' : 'flex-end',
-        alignItems: I18nManager.isRTL ? 'flex-start' : 'flex-end',
+        justifyContent:  'flex-start' ,
+        alignItems: 'flex-start',
         width: width - 15
     },
     inputTextMediumLayout: {
