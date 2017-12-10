@@ -47,7 +47,9 @@ function createClient() {
       original: true
     },
     original: {
-      awsImageAcl: 'private'
+      awsImageAcl: 'private',
+      awsImageExpires: 31536000,
+      awsImageMaxAge: 31536000
     },
     versions: [{
       format: 'jpg',
