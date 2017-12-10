@@ -2,7 +2,7 @@ import React, {Component} from 'react';
 import {Dimensions, TextInput, View} from 'react-native';
 import {Icon, Input, Text} from 'native-base';
 import styles from './styles';
-
+import { I18nManager } from 'react-native';
 const {width, height} = Dimensions.get('window');
 export default class TextInputField extends Component {
     constructor(props) {
@@ -90,6 +90,15 @@ export default class TextInputField extends Component {
                                      secureTextEntry={secureTextEntry}
                                      onSubmitEditing={this.onSubmit.bind(this)}
                                      onChangeText={this.onChange.bind(this)} placeholder={placeholder}/>
+        if(!I18nManager.isRTL){
+            inputField =  <TextInput style={textInputStyle} value={value} returnKeyType={returnKeyType}
+                                    ref={refNext} underlineColorAndroid='transparent' disabled
+                                    keyboardType={keyboardType}
+                                    secureTextEntry={secureTextEntry}
+                                    onSubmitEditing={this.onSubmit.bind(this)}
+                                    onChangeText={this.onChange.bind(this)} />
+
+        }
         if(disabled){
             if(value) {
                 inputField = <View style={styles.textInputDisabledComponentStyle}>
@@ -104,12 +113,14 @@ export default class TextInputField extends Component {
 
         return <View style={containerStyle}>
             <View style={styles.textInputTitleContainer}>
+
                 <Text style={textStyle}>{field}</Text>
                 {field && isMandatory && <Icon style={{margin: 5, color: mandatoryIconColor, fontSize: 12}} name='star'/>}
 
             </View>
             <View style={styles.textInputComponentLayout}>
                 {inputField}
+                {!value && <Text style={{position:'absolute',height: 40, backgroundColor:'transparent',color:'gray',alignSelf:'center',justifyContent:'center',alignItems:'center',top:6,right:10}}>{placeholder}</Text>}
             </View>
         </View>
     }

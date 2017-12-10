@@ -8,7 +8,7 @@ import {connect} from 'react-redux';
 import {bindActionCreators} from "redux";
 import {FormHeader, SimplePicker, Spinner, TextInput} from '../../../ui/index';
 import strings from "../../../i18n/i18n"
-
+import { I18nManager } from 'react-native';
 const noPic = require('../../../../images/client_1.png');
 const rolesTypes = [
     {
@@ -122,14 +122,17 @@ class AddPermittedUser extends Component {
             <TextInput field={strings.UserPhoneNumber} value={this.state.phoneNumber}
                        returnKeyType='next' ref="1" refNext="1"
                        keyboardType='numeric'
-                       placeholder="in your contacts"
+                       placeholder={strings.InYourContacts}
                        onSubmitEditing={this.searchUser.bind(this)}
                        onChangeText={(phoneNumber) => this.setState({phoneNumber})} isMandatory={true}/>
-            <Button style={{position: 'absolute', right: 5, top: 25}} large transparent
-                    onPress={() => this.searchUser()}>
+
+
+              <Button style={{position: 'absolute', left: 5, top: 25}} large transparent
+                                           onPress={() => this.searchUser()}>
                 <Icon2 size={40} style={styles.productIcon} name="search"/>
 
             </Button>
+
 
         </View>
     }
@@ -191,8 +194,8 @@ class AddPermittedUser extends Component {
 
     createUserRollPicker(role) {
         return <SimplePicker ref="promotionType" list={rolesTypes} itemTitle={strings.ManagementRole}
-                             defaultHeader="Choose Role" isMandatory
-                             defaultValue={this.state.defaultRole}
+                             defaultHeader={strings.ChooseRole} isMandatory
+                            // defaultValue={this.state.defaultRole}
                              onValueSelected={this.setUserRoles.bind(this)}/>
     }
 

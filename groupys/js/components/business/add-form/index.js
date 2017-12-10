@@ -193,7 +193,7 @@ class AddBusiness extends Component {
 
                     <ImagePicker logo ref={"logoImage"} mandatory color='black' pickFromCamera
                                  setImage={this.setImage.bind(this)}/>
-                    <Text>strings.Logo</Text>
+                    <Text>{strings.Logo}</Text>
 
                 </View>
             } else {
@@ -201,7 +201,7 @@ class AddBusiness extends Component {
 
                     <ImagePicker logo ref={"logoImage"} mandatory color='black' pickFromCamera
                                  setImage={this.setImage.bind(this)}/>
-                    <Text>strings.Logo</Text>
+                    <Text>{strings.Logo}</Text>
 
                 </View>
             }
@@ -231,7 +231,7 @@ class AddBusiness extends Component {
                 {this.createImageComponent(false)}
                 <ImagePicker ref={"coverImage"} mandatory color='white' pickFromCamera
                              setImage={this.setCoverImage.bind(this)}/>
-                <Text style={styles.addCoverText}>strings.AddACoverPhoto</Text>
+                <Text style={styles.addCoverText}>{strings.AddACoverPhoto}</Text>
             </View>)
     }
 

@@ -5,6 +5,7 @@ import styles from './styles';
 import DatePicker from "react-native-datepicker";
 import strings from "../../i18n/i18n"
 const {width, height} = Dimensions.get('window');
+import { I18nManager } from 'react-native';
 export default class TimePickerField extends Component {
     constructor(props) {
         super(props);
@@ -70,8 +71,10 @@ export default class TimePickerField extends Component {
 
         return <View style={containerStyle}>
             <View style={styles.textInputTitleContainer}>
+                {!I18nManager.isRTL  &&field && isMandatory && <Icon style={{margin: 5, color: mandtoryIconColor, fontSize: 12}} name='star'/>}
+
                 <Text style={textStyle}>{field}</Text>
-                {field && isMandatory && <Icon style={{margin: 5, color: mandtoryIconColor, fontSize: 12}} name='star'/>}
+                {I18nManager.isRTL  &&field && isMandatory && <Icon style={{margin: 5, color: mandtoryIconColor, fontSize: 12}} name='star'/>}
 
             </View>
             <View style={styles.textInputComponentLayout}>

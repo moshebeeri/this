@@ -21,11 +21,11 @@ import stylesLandscape from './styles_landscape'
 import FeedUiConverter from '../../../api/feed-ui-converter'
 import StyleUtils from '../../../utils/styleUtils'
 import FormUtils from "../../../utils/fromUtils";
-import {PunchView, SocialState, SubmitButton} from '../../../ui/index';
+import {PromotionHeader, SocialState, SubmitButton} from '../../../ui/index';
+import strings from "../../../i18n/i18n"
 
 const ILS = '₪';
 let feedUiConverter = new FeedUiConverter();
-import strings from "../../../i18n/i18n"
 export default class PromotionListView extends Component {
     constructor(props) {
         super(props);
@@ -61,7 +61,10 @@ export default class PromotionListView extends Component {
 
                 <View style={styles.promotion_card}>
 
-                    {this.createPromotionHeader(item, promotionItem.type, styles)}
+                    <PromotionHeader type={promotionItem.type} titleText={item.promotionTitle}
+                                     titleValue={item.promotionValue} term={item.promotionTerm}/>
+
+
                     <View style={styles.promotionInformation}>
                         <Text style={styles.promotionInfoTextI}>{item.name} - {item.description}</Text>
                     </View>
@@ -110,107 +113,6 @@ export default class PromotionListView extends Component {
                 </View>
             </View>
         return result;
-    }
-
-    createPromotionHeader(promotion, type, styles) {
-        switch (type) {
-            case "REDUCED_AMOUNT":
-                return <View style={styles.promotionHeader}>
-                    <View style={styles.promotionValue}>
-                        <Text style={styles.titleValue}>{ILS}{promotion.promotionValue}</Text>
-                    </View>
-                    <View style={styles.promotiontDescription}>
-                        <View>
-                            <Text style={styles.titleText}>{promotion.promotionTitle}</Text>
-                        </View>
-                        <View>
-                            <Text style={styles.promotionTermlTextStyle}>{promotion.promotionTerm}</Text>
-                        </View>
-                    </View>
-                </View>;
-            case "PERCENT":
-                return <View style={styles.promotionHeader}>
-                    <View style={styles.promotionValue}>
-                        <Text style={styles.titleValue}>{promotion.promotionValue}%</Text>
-                    </View>
-                    <View style={styles.promotiontDescription}>
-                        <View>
-                            <Text style={styles.titleText}>{promotion.promotionTitle}</Text>
-                        </View>
-                        <View>
-                            <Text style={styles.promotionTermlTextStyle}>{promotion.promotionTerm}</Text>
-                        </View>
-                    </View>
-                </View>;
-            case "X_FOR_Y":
-                return <View style={styles.promotionHeader}>
-                    <View style={styles.promotionValue}>
-                        <Text style={styles.titleValue}>{ILS}{promotion.promotionValue}</Text>
-                    </View>
-                    <View style={styles.promotiontDescription}>
-                        <View>
-                            <Text style={styles.titleText}>{promotion.promotionTitle}</Text>
-                        </View>
-                        <View>
-                            <Text style={styles.promotionTermlTextStyle}>{promotion.promotionTerm}</Text>
-                        </View>
-                    </View>
-                </View>;
-            case "X+N%OFF":
-                return <View style={styles.promotionHeader}>
-                    <View style={styles.promotionValue}>
-                        <Text style={styles.titleValue}>{promotion.promotionValue}%</Text>
-                    </View>
-                    <View style={styles.promotiontDescription}>
-                        <View>
-                            <Text style={styles.titleText}>{promotion.promotionTitle}</Text>
-                        </View>
-                        <View>
-                            <Text style={styles.promotionTermlTextStyle}>{promotion.promotionTerm}</Text>
-                        </View>
-                    </View>
-                </View>;
-            case "HAPPY_HOUR":
-                return <View style={styles.promotionHeader}>
-                    <View style={styles.promotionValue}>
-                        <Text style={styles.titleValue}>{ILS}{promotion.promotionValue}</Text>
-                    </View>
-                    <View style={styles.promotiontDescription}>
-                        <View>
-                            <Text style={styles.titleText}>{promotion.promotionTitle}</Text>
-                        </View>
-                        <View>
-                            <Text style={styles.promotionTermlTextStyle}>{promotion.promotionTerm}</Text>
-                        </View>
-                    </View>
-                </View>;
-            case "X+Y":
-                return <View style={styles.promotionHeader}>
-                    <View style={styles.promotionValue}>
-                        <Text style={styles.XplusYtitleValue}>{promotion.promotionValue}</Text>
-                    </View>
-                    <View style={styles.promotiontDescription}>
-                        <View>
-                            <Text style={styles.titleText}>{promotion.promotionTitle}</Text>
-                        </View>
-                        <View>
-                            <Text style={styles.promotionTermlTextStyle}>{promotion.promotionTerm}</Text>
-                        </View>
-                    </View>
-                </View>;
-            case "PUNCH_CARD":
-                return <View style={styles.promotionPunchHeader}>
-                    <View style={styles.promotionPunchValue}>
-                        <Text style={styles.puncCardtitleValue}>{promotion.promotionTitle}</Text>
-                    </View>
-                    <PunchView numberOfPunches={promotion.punches}/>
-                </View>;
-            default:
-                return <View style={styles.promotionHeader}>
-
-
-                </View>;
-        }
     }
 
     createImageTag(item, styles) {

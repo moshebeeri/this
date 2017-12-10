@@ -36,6 +36,35 @@ class BusinessApi {
         })
     }
 
+    get(token,id) {
+        return new Promise(async (resolve, reject) => {
+            try {
+                let from = new Date();
+                const response = await fetch(`${server_host}/api/businesses/` +id, {
+                    method: 'GET',
+                    headers: {
+                        'Accept': 'application/json, text/plain, */*',
+                        'Content-Type': 'application/json;charset=utf-8',
+                        'Authorization': 'Bearer ' + token
+                    }
+                });
+                if (response.status ==='401') {
+                    reject(response);
+                    return;
+                }
+                let responseData = await response.json();
+
+
+                timer.logTime(from, new Date(), 'businesses', 'list/mine');
+                resolve(responseData);
+            }
+            catch (error) {
+                console.log('There has been a problem with your fetch operation: ' + error.message);
+                reject(error);
+            }
+        })
+    }
+
     getSubCategory(token,categoryId) {
         return new Promise(async (resolve, reject) => {
             try {

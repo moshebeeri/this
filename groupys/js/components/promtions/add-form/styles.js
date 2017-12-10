@@ -1,7 +1,8 @@
-
 const React = require('react-native');
 const {Dimensions, Platform} = React;
 const {width, height} = Dimensions.get('window')
+import {I18nManager} from 'react-native';
+
 module.exports = {
     product_container: {
         flex: 1,
@@ -37,6 +38,12 @@ module.exports = {
     },
     inputTextLayout: {
         marginTop: 4, padding: 3,
+        width: width - 15
+    },
+    textLayout: {
+        marginTop: 4, padding: 3,
+        justifyContent:  'flex-start' ,
+        alignItems: 'flex-start',
         width: width - 15
     },
     inputTextMediumLayout: {

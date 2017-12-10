@@ -82,7 +82,7 @@ export default class XPlusYOffComponent extends Component {
     createProductView() {
         if (this.props.state.product) {
             let productName = this.props.state.product.name
-            return <View style={styles.inputTextLayout}>
+            return <View style={styles.textLayout}>
                 <Text style={{
                     color: '#FA8559',
                     marginLeft: 8,
@@ -96,7 +96,7 @@ export default class XPlusYOffComponent extends Component {
     createProductGiftView() {
         if (this.props.state.giftProduct) {
             let productName = this.props.state.giftProduct.name;
-            return <View style={styles.inputTextLayout}>
+            return <View style={styles.textLayout}>
                 <Text
                     style={{color: '#FA8559', marginLeft: 8, marginRight: 8}}>{strings.DiscountOn}: {productName}</Text>
             </View>
@@ -114,7 +114,7 @@ export default class XPlusYOffComponent extends Component {
         return <View>
 
 
-            <View style={styles.inputTextLayout}>
+            <View style={styles.textLayout}>
                 <Text style={{color: '#FA8559', marginLeft: 8, marginRight: 8}}>{strings.XPlusYOff}</Text>
             </View>
             <View style={{flexDirection: 'row', justifyContent: 'center', alignItems: 'center'}}>

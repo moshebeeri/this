@@ -23,7 +23,7 @@ import {
 import styles from './styles'
 import Promotions from '../../promtions/index'
 import Products from '../../product/index'
-import {EditButton} from '../../../ui/index';
+import {EditButton,BusinessHeader} from '../../../ui/index';
 import strings from '../../../i18n/i18n';
 
 const promotions = require('../../../../images/promotion.png');
@@ -59,13 +59,6 @@ export default class BusinessListView extends Component {
         navigation.navigate("Promotions", {business: item.business});
     }
 
-    createBusinessLogo(selectedBusiness) {
-        if (selectedBusiness && selectedBusiness.business.logo) {
-            return <Thumbnail medium square source={{uri: selectedBusiness.business.logo}}/>
-        } else {
-            return <Thumbnail source={require('../../../../images/client_1.png')}/>
-        }
-    }
 
     createView() {
         const {item, index} = this.props;
@@ -74,18 +67,12 @@ export default class BusinessListView extends Component {
         const promotionButton = this.createPromotionsTag(item);
         const permissionsButton = this.createPermissionsTag(item);
         return ( <View>
-                <View style={styles.businessPicker}>
-                    <View style={styles.businessTopLogo}>
-                        {this.createBusinessLogo(item)}
-                    </View>
-                    <View style={styles.businessPickerComponent}>
-                        <Text style={styles.businessNameText}>{item.business.name}</Text>
-                        <Text style={styles.businessCategoryText}>{item.categoryTitle}.</Text>
-                    </View>
-                    <View style={{flex: 0.6, flexDirection: 'row', alignItems: 'center',}}>
-                        {editButton}
-                    </View>
-                </View>
+                <BusinessHeader color navigation={this.props.navigation} business={item.business}
+                                categoryTitle={item.categoryTitle} businessLogo={item.business.logo}
+                                businessName={item.business.name} noMargin
+                                editButton={editButton}/>
+
+
                 <View key={index} style={{marginTop: 1, backgroundColor: '#eaeaea'}}>
                     <View style={{
                         flex: -1,

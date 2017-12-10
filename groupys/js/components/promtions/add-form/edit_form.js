@@ -164,11 +164,11 @@ class EditPromotion extends Component {
                 }}>
 
 
-                    <View style={styles.inputTextLayout}>
+                    <View style={styles.textLayout}>
                         <Text style={{color: '#FA8559', marginLeft: 8, marginRight: 8}}>{strings.EditPromotionMessage}</Text>
 
                     </View>
-                    <View style={styles.inputTextLayout}>
+                    <View style={styles.textLayout}>
                         <Text style={{color: '#FA8559', marginLeft: 8, marginRight: 8}}>{strings.General}</Text>
                     </View>
                     <View style={styles.inputTextMediumLayout}>

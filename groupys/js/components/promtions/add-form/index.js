@@ -17,6 +17,7 @@ import HappyHourComponent from "./happyHour/index";
 import styles from "./styles";
 import {DatePicker, FormHeader, ImagePicker, SelectButton, SimplePicker, Spinner, TextInput} from '../../../ui/index';
 import strings from "../../../i18n/i18n"
+import {I18nManager} from 'react-native';
 const {width, height} = Dimensions.get('window')
 let promotionApi = new PromotionApi();
 const types = [
@@ -432,8 +433,8 @@ class AddPromotion extends Component {
         if (this.state.distribution === 'GROUP') {
             if (this.state.groups) {
                 selectedGroup =
-                    <Text style={{color: '#FA8559', marginLeft: 8, marginRight: 8}}>{this.state.groups.length}
-                        selected</Text>
+                    <Text style={{color: '#FA8559', marginLeft: 8, marginRight: 8}}>
+                        {strings.SelectedGroups}: {this.state.groups.length} </Text>
             }
             button = <View style={{flexDirection: 'row', alignItems: 'center'}}>
                 <SelectButton title={strings.SelectGroups} action={this.showGroups.bind(this)}/>
@@ -441,18 +442,23 @@ class AddPromotion extends Component {
             </View>
         }
         return <View>
-            <View style={styles.inputTextLayout}>
-                <Text style={{color: '#FA8559', marginLeft: 8, marginRight: 8}}>Distribution</Text>
+            <View style={styles.textLayout}>
+                <Text style={{color: '#FA8559', marginLeft: 8, marginRight: 8}}>{strings.Distribution}</Text>
             </View>
             <View style={{flexDirection: 'row', justifyContent: 'flex-start', alignItems: 'center'}}>
+
                 <View style={{flex: 2}}>
                     {distribution}
                 </View>
+                {button &&
                 <View style={{flex: 1, marginTop: 30, marginLeft: 20, marginRight: 20}}>
                     {button}
                 </View>
+                }
             </View>
+            <View style={styles.textLayout}>
             {selectedGroup}
+            </View>
 
         </View>
     }
@@ -481,16 +487,16 @@ class AddPromotion extends Component {
                 }}>
 
                     {this.createCoverImageComponnent()}
-                    <View style={styles.inputTextLayout}>
-                        <Text style={{color: '#FA8559', marginLeft: 8, marginRight: 8}}>Details</Text>
+                    <View style={styles.textLayout}>
+                        <Text style={{color: '#FA8559', marginLeft: 8, marginRight: 8}}>{strings.Details}</Text>
                     </View>
                     <View style={styles.inputTextLayout}>
                         <SimplePicker ref="promotionType" list={types} itemTitle={strings.PromotionType}
                                       defaultHeader="Choose Type" isMandatory
                                       onValueSelected={this.selectPromotionType.bind(this)}/>
                     </View>
-                    <View style={styles.inputTextLayout}>
-                        <Text style={{color: '#FA8559', marginLeft: 8, marginRight: 8}}>General</Text>
+                    <View style={styles.textLayout}>
+                        <Text style={{color: '#FA8559', marginLeft: 8, marginRight: 8}}>{strings.General}</Text>
                     </View>
                     <View style={styles.inputTextMediumLayout}>
                         <View style={{flex: 1, marginRight: 10}}>
@@ -573,7 +579,7 @@ class AddPromotion extends Component {
                 <View style={styles.addCoverNoImageContainer}>
                     <ImagePicker ref={"coverImage"} mandatory color='white' pickFromCamera
                                  setImage={this.setCoverImage.bind(this)}/>
-                    <Text style={styles.addCoverText}>Add a cover photo</Text>
+                    <Text style={styles.addCoverText}>{strings.AddACoverPhoto}</Text>
                 </View>
             </View>
 

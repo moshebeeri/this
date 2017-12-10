@@ -1,5 +1,5 @@
 import React, {Component} from "react";
-import {Dimensions, Image, Platform, StyleSheetm} from "react-native";
+import {Dimensions, Image, Platform, StyleSheetm,I18nManager} from "react-native";
 import {connect} from "react-redux";
 import {Container, Drawer, Fab, Icon, Tab, TabHeading, Tabs, View} from "native-base";
 import Icon2 from "react-native-vector-icons/Ionicons";
@@ -24,7 +24,7 @@ import {NavigationActions} from "react-navigation";
 import '../../conf/global';
 import pageSync from "../../refresh/refresher"
 import PageRefresher from '../../refresh/pageRefresher'
-
+const I18n = require('react-native-i18n')
 const promotions = require('../../../images/promotion.png');
 const save = require('../../../images/save.png');
 const groups = require('../../../images/groups.png');
@@ -92,6 +92,7 @@ class ApplicationManager extends Component {
     };
 
     constructor(props) {
+
         super(props)
         this.state = {
             orientation: StyleUtils.isPortrait() ? 'portrait' : 'landscape',
@@ -103,6 +104,7 @@ class ApplicationManager extends Component {
                 orientation: StyleUtils.isPortrait() ? 'portrait' : 'landscape'
             })
         })
+        I18nManager.forceRTL(true)
     }
 
     replaceRoute(route) {
@@ -154,12 +156,19 @@ class ApplicationManager extends Component {
         openDrawer = () => {
             this.drawer._root.open()
         };
+        let openSide = 'right';
+        if(I18nManager.isRTL){
+            openSide ='left';
+        }
+
         return (
 
             <Drawer
                 ref={(ref) => {
                     this.drawer = ref;
                 }}
+
+                side={openSide}
                 content={<SideBar closeDrawer={closeDrawer} navigation={this.props.navigation}/>}
                 onClose={() => closeDrawer}>
                 <Container>

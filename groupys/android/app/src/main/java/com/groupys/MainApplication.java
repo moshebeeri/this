@@ -3,6 +3,7 @@ package com.groupys;
 import android.app.Application;
 
 import com.facebook.react.ReactApplication;
+import com.AlexanderZaytsev.RNI18n.RNI18nPackage;
 import com.vydia.RNUploader.UploaderReactPackage;
 import com.lwansbrough.RCTCamera.RCTCameraPackage;
 import com.inprogress.reactnativeyoutube.ReactNativeYouTube;
@@ -46,6 +47,7 @@ public class MainApplication extends Application implements ReactApplication {
     protected List<ReactPackage> getPackages() {
       return Arrays.<ReactPackage>asList(
           new MainReactPackage(),
+            new RNI18nPackage(),
             new UploaderReactPackage(),
             new RCTCameraPackage(),
             new ReactNativeYouTube(),

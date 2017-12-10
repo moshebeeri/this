@@ -116,7 +116,7 @@ export default class PercentComponent extends Component {
     createSelectProductButton() {
         let result = undefined;
         if (this.props.state.discount_on === 'PRODUCT') {
-            let button = <View style={{marginTop:25}}><SelectButton isMandatory ref="precentSelectProduct"selectedValue={this.props.state.product} title="Select Product" action={this.showProducts.bind(this, true)}/></View>
+            let button = <View style={{marginTop:25}}><SelectButton isMandatory ref="precentSelectProduct"selectedValue={this.props.state.product} title={strings.SelectProduct} action={this.showProducts.bind(this, true)}/></View>
             let retailPrice =
                 <View style={styles.inputRetailComponent}>
                     <TextInput field={strings.RetailPrice} value={this.props.state.percent.retail_price}
@@ -149,8 +149,8 @@ export default class PercentComponent extends Component {
     createProductView() {
         if(this.props.state.product) {
             let productName = this.props.state.product.name
-            return <View style={styles.inputTextLayout}>
-                <Text style={{color: '#FA8559', marginLeft: 8, marginRight: 8}}>Discount On: {productName}</Text>
+            return <View style={styles.textLayout}>
+                <Text style={{color: '#FA8559', marginLeft: 8, marginRight: 8}}>{strings.DiscountOn}: {productName}</Text>
             </View>
         }
         return undefined
@@ -160,7 +160,7 @@ export default class PercentComponent extends Component {
     render() {
         let promotionOn = this.createSelectProductButton();
         return <View>
-            <View style={styles.inputTextLayout}>
+            <View style={styles.textLayout}>
                 <Text style={{color: '#FA8559', marginLeft: 8, marginRight: 8}}>{strings.PercentDiscount}</Text>
             </View>
             <View style={styles.inputTextLayout}>

@@ -105,19 +105,28 @@ PageSync.AveragePolicy = class extends PageSync.RefreshPolicy{
         let prev;
         let sum = 0;
         let i = 0;
+
+        if(this.history.length <  this.historyLength ){
+            return false;
+        }
+
         this.history.forEach(date => {
             if(!prev) {
                 prev = date;
             }else{
                 sum += date - prev;
+
                 i++;
             }
         });
-        const average = sum/i;
+
+
+        const average = sum /i ;
 
         if(Date.now() > average + this.lastRefresh){
             console.log(`AveragePolicy shouldRefresh by average`);
             this.lastRefresh = Date.now();
+            this.history.shift();
             return true;
         }
 

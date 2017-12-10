@@ -2,10 +2,10 @@
  * Created by roilandshut on 19/07/2017.
  */
 import React, {Component} from 'react';
-import {Image, TextInput, Platform, View,TouchableOpacity,Dimensions} from 'react-native';
+import {Image, TextInput, Platform, View,TouchableOpacity,Dimensions,I18nManager} from 'react-native';
 import {connect} from 'react-redux';
 import {actions} from 'react-native-navigation-redux-helpers';
-import {Container, Footer, Icon, Button, Thumbnail, Text} from 'native-base';
+import {Container, Footer, Button, Thumbnail, Text} from 'native-base';
 import styles from './styles'
 import store from 'react-native-simple-store';
 import GroupApi from "../../../api/groups"
@@ -22,6 +22,8 @@ import {
 } from 'react-native-popup-menu';
 import * as groupsAction from "../../../actions/groups";
 import Icon2 from 'react-native-vector-icons/SimpleLineIcons';
+import Icon from 'react-native-vector-icons/Ionicons';
+
 import {bindActionCreators} from "redux";
 import strings from "../../../i18n/i18n"
 
@@ -116,7 +118,7 @@ class GroupFeedHeader extends Component {
         if (Platform.OS === 'ios') {
             headerHeight = {   flexDirection: 'row',
                 width: width,
-                height: vh * 12,
+                height: vh * 13,
                 backgroundColor: '#fff',
                 justifyContent:'center',
                 alignItems:'center'};
@@ -137,9 +139,12 @@ class GroupFeedHeader extends Component {
                 <Text>{strings.AddPromotion}</Text>
             </MenuOption>
         }
+
+        let arrowName = I18nManager.isRTL ? "ios-arrow-forward" : "ios-arrow-back";
+
         if (this.isGroupAdmin(group)) {
             groupInvite = <Menu>
-                <MenuTrigger>
+                <MenuTrigger customStyles={{alignItems:'center',justifyContent:'center'}}>
                     <Icon2 style={{fontSize: 25, color: "#2db6c8"}} name="options-vertical"/>
                 </MenuTrigger>
                 <MenuOptions>
@@ -155,8 +160,8 @@ class GroupFeedHeader extends Component {
         }
         return <View style={headerHeight}>
             <View style={styles.imageStyle}>
-                <Button transparent onPress={this.navigateBack.bind(this)}>
-                    <Icon style={{fontSize: 25, color: "#2db6c8"}} name="arrow-back"/>
+                <Button style={{width:30,alignItems:'center',justifyContent:'center'}} transparent onPress={this.navigateBack.bind(this)}>
+                    <Icon style={{alignItems:'center',justifyContent:'center',fontSize: 20, color: "#2db6c8"}} name={arrowName}/>
                 </Button>
             </View>
             <View style={{flex:10}}>
@@ -168,6 +173,7 @@ class GroupFeedHeader extends Component {
                                       width: 30, height: 30,
                                       flexDirection: 'column',
                                       alignItems: 'center',
+                                      justifyContent:'center',
 
                                   }}
                                   regular>

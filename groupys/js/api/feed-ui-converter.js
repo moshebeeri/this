@@ -183,12 +183,12 @@ class FeedConverter {
                         responseFeed.itemTitle = strings.PercentWithTerm.formatUnicorn(promotion.condition.product.name , promotion.percent.values[0]);
                         responseFeed.promotionTerm = strings.PercentTermWithTerm.formatUnicorn(promotion.condition.product.name ,promotion.percent.values[0]);
                     } else {
-                        responseFeed.itemTitle = "Get " + promotion.percent.values[0] + ' % Off ';
+                        //responseFeed.itemTitle = "Get " + promotion.percent.values[0] + ' % Off ';
                         responseFeed.promotionTerm = strings.NoTerms
                     }
                     responseFeed.promotion = 'PERCENT';
                     responseFeed.promotionValue = promotion.percent.values[0];
-                    responseFeed.promotionTitle = 'Discount';
+                    responseFeed.promotionTitle = strings.Discount;
                     responseFeed.promotionColor = '#df80ff';
                     responseFeed.quantity = promotion.percent.quantity;
                     break;
@@ -338,7 +338,7 @@ class FeedConverter {
                     }
                     responseFeed.promotion = 'PERCENT';
                     responseFeed.promotionValue = promotion.percent.values[0];
-                    responseFeed.promotionTitle = 'Discount';
+                    responseFeed.promotionTitle = strings.Discount;
                     responseFeed.promotionColor = '#df80ff';
                     responseFeed.quantity = promotion.percent.quantity;
                     break;
@@ -454,7 +454,7 @@ class FeedConverter {
                 }
                 response.promotion = 'PERCENT';
                 response.promotionValue = promotion.percent.values[0];
-                response.promotionTitle = 'Discount';
+                response.promotionTitle = strings.Discount;
                 response.promotionColor = '#df80ff';
                 response.quantity = promotion.percent.quantity;
                 break;

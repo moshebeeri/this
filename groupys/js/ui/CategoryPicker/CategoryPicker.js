@@ -5,6 +5,7 @@ import styles from './styles';
 import * as categoriesAction from "../../actions/categories";
 import {connect} from 'react-redux';
 import {bindActionCreators} from "redux";
+import { I18nManager } from 'react-native';
 import strings from "../../i18n/i18n"
 class CategoryPicker extends Component {
     constructor(props) {
@@ -109,7 +110,7 @@ class CategoryPicker extends Component {
             categoriesWIthBlank.unshift({
                 gid: "",
                 translations: {
-                    en: "Select Category"
+                    en: strings.SelectCategory
                 }
             })
             rootOicker = <Picker
@@ -141,7 +142,7 @@ class CategoryPicker extends Component {
                 categoriesWIthBlank.unshift({
                     gid: "",
                     translations: {
-                        en: "Select Sub Category"
+                        en: strings.SelectSubCategory
                     }
                 })
                 return <Picker
@@ -173,8 +174,9 @@ class CategoryPicker extends Component {
 
         return <View>
             <View style={styles.pickerTitleContainer}>
-                <Text style={styles.pickerTextStyle}>Category</Text>
-                {isMandatory && <Icon style={{margin: 5, color: 'red', fontSize: 12}} name='star'/>}
+
+                <Text style={styles.pickerTextStyle}>{strings.Category}</Text>
+                { isMandatory && <Icon style={{margin: 5, color: 'red', fontSize: 12}} name='star'/>}
             </View>
 
             {rootOicker}{pickers}

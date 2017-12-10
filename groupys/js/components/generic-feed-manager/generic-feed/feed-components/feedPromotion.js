@@ -27,15 +27,18 @@ import stylesPortrate from './styles'
 import stylesLandscape from './styles_lendscape'
 import StyleUtils from '../../../../utils/styleUtils'
 import * as componentCreator from "./feedCommonView";
-import {PromotionHeader, PromotionSeperator, SocialState, SubmitButton} from '../../../../ui/index';
+import {PromotionHeader, PromotionSeperator, SocialState, SubmitButton,BusinessHeader} from '../../../../ui/index';
 import FormUtils from "../../../../utils/fromUtils";
 import strings from "../../../../i18n/i18n"
+import PageRefresher from '../../../../refresh/pageRefresher'
+
 
 const {width, height} = Dimensions.get('window');
 const vw = width / 100;
 const vh = height / 100;
 const vmin = Math.min(vw, vh);
 const vmax = Math.max(vw, vh);
+
 export default class FeedPromotion extends Component {
     constructor() {
         super();
@@ -43,6 +46,19 @@ export default class FeedPromotion extends Component {
 
     showBusiness() {
         this.props.navigation.navigate("businessProfile", {businesses: this.props.item.business});
+    }
+
+    componentWillMount(){
+        const { item} = this.props;
+        PageRefresher.createFeedSocialState(item.id);
+
+
+    }
+    visited(){
+        const { item} = this.props;
+        console.log(item.id  + ' visited');
+        PageRefresher.visitedFeedItem(item.id);
+
     }
 
     render() {
@@ -76,19 +92,17 @@ export default class FeedPromotion extends Component {
             headeerSize = 100;
         }
         const result =
-            <View style={container}>
+            <InViewPort onChange={this.visited.bind(this)}style={container}>
                 <View style={styles.promotion_card}>
-                    <View style={promotionUpperContainer}>
-                        <View style={logtyle}>
-                            {buisnessLogo}
-                            <View style={{flexDirection: 'column'}}>
-                                <Text style={styles.promotion_nameText} note>{item.businessName} </Text>
-                                <Text style={styles.promotion_addressText} note>{categoruTitle}</Text>
-                            </View>
-                        </View>
+                    <View style={{width:width-15}}>
 
-
+                    <BusinessHeader  navigation={this.props.navigation} business={item.business}
+                                    categoryTitle={categoruTitle} businessLogo={item.business.logo}
+                                    businessName={item.business.name} noMargin
+                                    />
                     </View>
+
+
                     {image}
 
 
@@ -142,7 +156,7 @@ export default class FeedPromotion extends Component {
                                                      shareAction={showUsers}/>}
                     </View>}
                 </View>
-            </View>;
+            </InViewPort>;
         return result;
     }
 

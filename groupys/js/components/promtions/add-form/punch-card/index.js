@@ -77,7 +77,7 @@ export default class PunchCardComponent extends Component {
         }
         return <View>
 
-            <View style={styles.inputTextLayout}>
+            <View style={styles.textLayout}>
                 <Text style={{color: '#FA8559', marginLeft: 8, marginRight: 8}}>{strings.PunchCard}</Text>
             </View>
             <View style={{flexDirection: 'row', justifyContent: 'center', alignItems: 'center'}}>

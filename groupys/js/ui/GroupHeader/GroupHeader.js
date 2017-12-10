@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import {Text, View} from 'react-native';
+import {Text, View,I18nManager} from 'react-native';
 import {Button, Thumbnail} from 'native-base';
 import styles from './styles'
 import strings from "../../i18n/i18n"
@@ -74,6 +74,7 @@ export default class GroupHeader extends Component {
         if(noColor){
             containerStyle = {};
         }
+
         return <View style={containerStyle}>
             <View style={styles.groupHeader}>
                 <View style={styles.groupImage}>

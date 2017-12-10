@@ -37,7 +37,7 @@ module.exports = {
 
     },
     groupName:{
-        margin:10,
+        margin:5,
     },
     editButtonConntainer: {
         margin:5,width: 40, height: 40, opacity: 0.65,backgroundColor: 'white', alignItems: 'center', justifyContent: 'center'

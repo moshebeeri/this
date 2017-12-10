@@ -13,6 +13,7 @@
 		00C302E91ABCBA2D00DB3ED1 /* libRCTNetwork.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 00C302DC1ABCB9D200DB3ED1 /* libRCTNetwork.a */; };
 		00C302EA1ABCBA2D00DB3ED1 /* libRCTVibration.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 00C302E41ABCB9EE00DB3ED1 /* libRCTVibration.a */; };
 		00E356F31AD99517003FC87E /* groupysTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 00E356F21AD99517003FC87E /* groupysTests.m */; };
+		01C059D13366413AB58A2C07 /* Feather.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 3DF0307AA17D44B28C1ACB67 /* Feather.ttf */; };
 		0218D7BA2D3342A880BD6D0C /* libReactNativeLocalization.a in Frameworks */ = {isa = PBXBuildFile; fileRef = E13B0E295E11469B8B8AE1A1 /* libReactNativeLocalization.a */; };
 		062D8F00CC914EB599F94009 /* YTPlayerView-iframe-player.html in Resources */ = {isa = PBXBuildFile; fileRef = 8B7D40108D3E49499124ED65 /* YTPlayerView-iframe-player.html */; };
 		1154A65C2DD84676A65B43A2 /* Octicons.ttf in Resources */ = {isa = PBXBuildFile; fileRef = DE2C37FD759641B3A7EC9F16 /* Octicons.ttf */; };
@@ -71,6 +72,7 @@
 		C3B85FFCEFDD441E878BEC0C /* Foundation.ttf in Resources */ = {isa = PBXBuildFile; fileRef = C8EA8642009A4A64959386D3 /* Foundation.ttf */; };
 		C7A1135924CA40F1AAEFB43D /* OFL.txt in Resources */ = {isa = PBXBuildFile; fileRef = 78091B93FD0649168E87CBD1 /* OFL.txt */; };
 		CEA2E72D025A4140BF617A23 /* Roboto-BoldItalic.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 1D0D443FF5BA4519B48A31ED /* Roboto-BoldItalic.ttf */; };
+		D0C377D66E2F440C9D3A268D /* libRNI18n.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 2BD67BCDF875422CBF9EAD4B /* libRNI18n.a */; };
 		D76A692D1D5748A19E81484C /* Roboto-Thin.ttf in Resources */ = {isa = PBXBuildFile; fileRef = A45471177EFD4CCBA523ADD0 /* Roboto-Thin.ttf */; };
 		DDB2A433AB7743D9AC6A7EEE /* Roboto-ThinItalic.ttf in Resources */ = {isa = PBXBuildFile; fileRef = D2A32D1514A24308963AD8DE /* Roboto-ThinItalic.ttf */; };
 		E6D8DDB7C1FF4D378E868BCC /* EvilIcons.ttf in Resources */ = {isa = PBXBuildFile; fileRef = C2557F8EBE084B738FB4FB78 /* EvilIcons.ttf */; };
@@ -421,6 +423,20 @@
 			remoteGlobalIDString = 58B5119B1A9E6C1200147676;
 			remoteInfo = RCTText;
 		};
+		F66680A71FDD755000C9E47C /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = DFAB2D151A20453D885CF712 /* RNI18n.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 134814201AA4EA6300B7C361;
+			remoteInfo = RNI18n;
+		};
+		F66680A91FDD755000C9E47C /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = DFAB2D151A20453D885CF712 /* RNI18n.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 6476C4051EEAA69700B10F51;
+			remoteInfo = "RNI18n-tvOS";
+		};
 		F69712AC1EF6BD6300F468A8 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = 33084B0925AC4DC5BDA82373 /* BVLinearGradient.xcodeproj */;
@@ -498,6 +514,7 @@
 		24515205FCD54CC7A48019A5 /* Roboto-MediumItalic.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "Roboto-MediumItalic.ttf"; path = "../fonts/Roboto-MediumItalic.ttf"; sourceTree = "<group>"; };
 		24F0C6B3E56648DEB17ACC5C /* FontAwesome.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = FontAwesome.ttf; path = "../node_modules/react-native-vector-icons/Fonts/FontAwesome.ttf"; sourceTree = "<group>"; };
 		29B04A56BC4B479EA82F2B5D /* Octicons.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = Octicons.ttf; path = "../node_modules/react-native-vector-icons/Fonts/Octicons.ttf"; sourceTree = "<group>"; };
+		2BD67BCDF875422CBF9EAD4B /* libRNI18n.a */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = archive.ar; path = libRNI18n.a; sourceTree = "<group>"; };
 		2C9FD78566EE4CCBAF7A9B57 /* libRCTCamera.a */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = archive.ar; path = libRCTCamera.a; sourceTree = "<group>"; };
 		2D02E47B1E0B4A5D006451C7 /* groupys-tvOS.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "groupys-tvOS.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		2D02E4901E0B4A5D006451C7 /* groupys-tvOSTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "groupys-tvOSTests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -507,6 +524,7 @@
 		325E232F504A4FCC810DFC8D /* Roboto-Black.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "Roboto-Black.ttf"; path = "../fonts/Roboto-Black.ttf"; sourceTree = "<group>"; };
 		33084B0925AC4DC5BDA82373 /* BVLinearGradient.xcodeproj */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = "wrapper.pb-project"; name = BVLinearGradient.xcodeproj; path = "../node_modules/react-native-linear-gradient/BVLinearGradient.xcodeproj"; sourceTree = "<group>"; };
 		382AB909D59C40C992E63B05 /* RCTVideo.xcodeproj */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = "wrapper.pb-project"; name = RCTVideo.xcodeproj; path = "../node_modules/react-native-video/ios/RCTVideo.xcodeproj"; sourceTree = "<group>"; };
+		3DF0307AA17D44B28C1ACB67 /* Feather.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = Feather.ttf; path = ../fonts/Feather.ttf; sourceTree = "<group>"; };
 		40AF3F887FFF49648B395461 /* MaterialCommunityIcons.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = MaterialCommunityIcons.ttf; path = "../node_modules/react-native-vector-icons/Fonts/MaterialCommunityIcons.ttf"; sourceTree = "<group>"; };
 		461B085D1E65C9C40081775B /* ImageCropPickerSDK */ = {isa = PBXFileReference; lastKnownFileType = folder; name = ImageCropPickerSDK; path = "../node_modules/react-native-image-crop-picker/ios/ImageCropPickerSDK"; sourceTree = "<group>"; };
 		461B085F1E65C9D50081775B /* RSKImageCropper.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = RSKImageCropper.framework; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -564,6 +582,7 @@
 		DA8ABBA0353C4AEA9AE5B22B /* libRNBackgroundTimer.a */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = archive.ar; path = libRNBackgroundTimer.a; sourceTree = "<group>"; };
 		DDC8DC017FE14E21A7B46E73 /* libz.tbd */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libz.tbd; path = usr/lib/libz.tbd; sourceTree = SDKROOT; };
 		DE2C37FD759641B3A7EC9F16 /* Octicons.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = Octicons.ttf; path = ../fonts/Octicons.ttf; sourceTree = "<group>"; };
+		DFAB2D151A20453D885CF712 /* RNI18n.xcodeproj */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = "wrapper.pb-project"; name = RNI18n.xcodeproj; path = "../node_modules/react-native-i18n/ios/RNI18n.xcodeproj"; sourceTree = "<group>"; };
 		E13B0E295E11469B8B8AE1A1 /* libReactNativeLocalization.a */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = archive.ar; path = libReactNativeLocalization.a; sourceTree = "<group>"; };
 		E326C43F43CE4C9E90C975C6 /* Entypo.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = Entypo.ttf; path = "../node_modules/native-base/Fonts/Entypo.ttf"; sourceTree = "<group>"; };
 		E3AADCE2DD744F21A22899AA /* RNVectorIcons.xcodeproj */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = "wrapper.pb-project"; name = RNVectorIcons.xcodeproj; path = "../node_modules/react-native-vector-icons/RNVectorIcons.xcodeproj"; sourceTree = "<group>"; };
@@ -631,6 +650,7 @@
 				B3EADD98A1D043E2A8FC0E5F /* libRCTVideo.a in Frameworks */,
 				B683F3B11A3B492CA0C8C8F8 /* libRCTYouTube.a in Frameworks */,
 				7C101115747B4B90BC3FD8AD /* libRCTCamera.a in Frameworks */,
+				D0C377D66E2F440C9D3A268D /* libRNI18n.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -804,6 +824,7 @@
 				B2B087BE1CA743E188A8644F /* libRCTVideo.a */,
 				E460D8F448E643638BC8E22E /* libRCTYouTube.a */,
 				2C9FD78566EE4CCBAF7A9B57 /* libRCTCamera.a */,
+				2BD67BCDF875422CBF9EAD4B /* libRNI18n.a */,
 			);
 			name = "Recovered References";
 			sourceTree = "<group>";
@@ -901,6 +922,7 @@
 				382AB909D59C40C992E63B05 /* RCTVideo.xcodeproj */,
 				0D09ABA83E30498882509649 /* RCTYouTube.xcodeproj */,
 				8475E30ECD684CD8BB602839 /* RCTCamera.xcodeproj */,
+				DFAB2D151A20453D885CF712 /* RNI18n.xcodeproj */,
 			);
 			name = Libraries;
 			sourceTree = "<group>";
@@ -1008,6 +1030,7 @@
 				5F95E35F1A2F407997CBF2D2 /* Roboto-ThinItalic.ttf */,
 				78091B93FD0649168E87CBD1 /* OFL.txt */,
 				8B7D40108D3E49499124ED65 /* YTPlayerView-iframe-player.html */,
+				3DF0307AA17D44B28C1ACB67 /* Feather.ttf */,
 			);
 			name = Resources;
 			sourceTree = "<group>";
@@ -1029,6 +1052,15 @@
 			);
 			name = Fonts;
 			path = "../node_modules/react-native-vector-icons/Fonts";
+			sourceTree = "<group>";
+		};
+		F66680A31FDD755000C9E47C /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				F66680A81FDD755000C9E47C /* libRNI18n.a */,
+				F66680AA1FDD755000C9E47C /* libRNI18n-tvOS.a */,
+			);
+			name = Products;
 			sourceTree = "<group>";
 		};
 		F69712A91EF6BD6300F468A8 /* Products */ = {
@@ -1268,6 +1300,10 @@
 				{
 					ProductGroup = F6B583431EB5A3A7008643C1 /* Products */;
 					ProjectRef = 9484CB2CFACB4883A2616F02 /* RNBackgroundTimer.xcodeproj */;
+				},
+				{
+					ProductGroup = F66680A31FDD755000C9E47C /* Products */;
+					ProjectRef = DFAB2D151A20453D885CF712 /* RNI18n.xcodeproj */;
 				},
 				{
 					ProductGroup = F6D774A51E62C34300B52027 /* Products */;
@@ -1600,6 +1636,20 @@
 			remoteRef = 832341B41AAA6A8300B99B32 /* PBXContainerItemProxy */;
 			sourceTree = BUILT_PRODUCTS_DIR;
 		};
+		F66680A81FDD755000C9E47C /* libRNI18n.a */ = {
+			isa = PBXReferenceProxy;
+			fileType = archive.ar;
+			path = libRNI18n.a;
+			remoteRef = F66680A71FDD755000C9E47C /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		F66680AA1FDD755000C9E47C /* libRNI18n-tvOS.a */ = {
+			isa = PBXReferenceProxy;
+			fileType = archive.ar;
+			path = "libRNI18n-tvOS.a";
+			remoteRef = F66680A91FDD755000C9E47C /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
 		F69712AD1EF6BD6300F468A8 /* libBVLinearGradient.a */ = {
 			isa = PBXReferenceProxy;
 			fileType = archive.ar;
@@ -1680,6 +1730,7 @@
 				C7A1135924CA40F1AAEFB43D /* OFL.txt in Resources */,
 				062D8F00CC914EB599F94009 /* YTPlayerView-iframe-player.html in Resources */,
 				F61A71151FD819CA0085E54F /* FontAwesome.ttf in Resources */,
+				01C059D13366413AB58A2C07 /* Feather.ttf in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1812,12 +1863,14 @@
 					"$(SRCROOT)/../node_modules/react-native-video/ios",
 					"$(SRCROOT)/../node_modules/react-native-youtube/**",
 					"$(SRCROOT)/../node_modules/react-native-camera/ios",
+					"$(SRCROOT)/../node_modules/react-native-i18n/ios",
 				);
 				INFOPLIST_FILE = groupysTests/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
+					"\"$(SRCROOT)/$(TARGET_NAME)\"",
 					"\"$(SRCROOT)/$(TARGET_NAME)\"",
 				);
 				OTHER_LDFLAGS = (
@@ -1844,12 +1897,14 @@
 					"$(SRCROOT)/../node_modules/react-native-video/ios",
 					"$(SRCROOT)/../node_modules/react-native-youtube/**",
 					"$(SRCROOT)/../node_modules/react-native-camera/ios",
+					"$(SRCROOT)/../node_modules/react-native-i18n/ios",
 				);
 				INFOPLIST_FILE = groupysTests/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
+					"\"$(SRCROOT)/$(TARGET_NAME)\"",
 					"\"$(SRCROOT)/$(TARGET_NAME)\"",
 				);
 				OTHER_LDFLAGS = (
@@ -1879,6 +1934,7 @@
 					"$(SRCROOT)/../node_modules/react-native-youtube/**",
 					"$(SRCROOT)/../node_modules/react-native-camera/ios",
 					"$(SRCROOT)/../node_modules/react-native-code-push/ios",
+					"$(SRCROOT)/../node_modules/react-native-i18n/ios",
 				);
 				"HEADER_SEARCH_PATHS[arch=*]" = (
 					"$(inherited)",
@@ -1921,6 +1977,7 @@
 					"$(SRCROOT)/../node_modules/react-native-video/ios",
 					"$(SRCROOT)/../node_modules/react-native-youtube/**",
 					"$(SRCROOT)/../node_modules/react-native-camera/ios",
+					"$(SRCROOT)/../node_modules/react-native-i18n/ios",
 				);
 				"HEADER_SEARCH_PATHS[arch=*]" = (
 					"$(inherited)",
@@ -1967,11 +2024,13 @@
 					"$(SRCROOT)/../node_modules/react-native-video/ios",
 					"$(SRCROOT)/../node_modules/react-native-youtube/**",
 					"$(SRCROOT)/../node_modules/react-native-camera/ios",
+					"$(SRCROOT)/../node_modules/react-native-i18n/ios",
 				);
 				INFOPLIST_FILE = "groupys-tvOS/Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
+					"\"$(SRCROOT)/$(TARGET_NAME)\"",
 					"\"$(SRCROOT)/$(TARGET_NAME)\"",
 				);
 				OTHER_LDFLAGS = (
@@ -2008,11 +2067,13 @@
 					"$(SRCROOT)/../node_modules/react-native-video/ios",
 					"$(SRCROOT)/../node_modules/react-native-youtube/**",
 					"$(SRCROOT)/../node_modules/react-native-camera/ios",
+					"$(SRCROOT)/../node_modules/react-native-i18n/ios",
 				);
 				INFOPLIST_FILE = "groupys-tvOS/Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
+					"\"$(SRCROOT)/$(TARGET_NAME)\"",
 					"\"$(SRCROOT)/$(TARGET_NAME)\"",
 				);
 				OTHER_LDFLAGS = (
@@ -2044,6 +2105,7 @@
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
 					"\"$(SRCROOT)/$(TARGET_NAME)\"",
+					"\"$(SRCROOT)/$(TARGET_NAME)\"",
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = "com.facebook.REACT.groupys-tvOSTests";
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -2069,6 +2131,7 @@
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
+					"\"$(SRCROOT)/$(TARGET_NAME)\"",
 					"\"$(SRCROOT)/$(TARGET_NAME)\"",
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = "com.facebook.REACT.groupys-tvOSTests";

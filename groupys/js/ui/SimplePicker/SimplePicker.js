@@ -4,7 +4,8 @@ import {Icon, Item, Picker, Spinner} from 'native-base';
 import ModalDropdown from 'react-native-modal-dropdown';
 import Icon3 from 'react-native-vector-icons/EvilIcons';
 import styles from './styles'
-
+import { I18nManager } from 'react-native';
+import strings from "../../i18n/i18n"
 export default class SimplePicker extends Component {
     constructor(props) {
         super(props);
@@ -56,7 +57,7 @@ export default class SimplePicker extends Component {
 
     renderRow(value){
 
-        return <View><Text style={{paddingLeft:10,paddingRight:10,fontSize:14}}>{value}</Text></View>
+        return <View style={{justifyContent:I18nManager.isRTL?'flex-start':'flex-end',alignItems: 'flex-end'}}><Text style={{paddingLeft:10,paddingRight:10,fontSize:14 }}>{value}</Text></View>
 
     }
     createIosRender() {
@@ -73,6 +74,7 @@ export default class SimplePicker extends Component {
 
         return <View>
             <View style={styles.pickerTitleContainer}>
+
                 <Text style={styles.pickerTextStyle}>{itemTitle}</Text>
                 {isMandatory && <Icon style={{margin: 5, color: 'red', fontSize: 12}} name='star'/>}
             </View>
@@ -81,9 +83,10 @@ export default class SimplePicker extends Component {
                 <ModalDropdown ref={'dropDown'}
                                style={styles.modalViewStyle}
                                options={options}
-                               textStyle={{fontSize: 20}}
+                               textStyle={{alignItems:'flex-start',fontSize: 20}}
                                onSelect={this.selectIos.bind(this)}
                                renderRow = {this.renderRow.bind(this)}
+                               defaultValue={strings.PleaseSelect}
                                // defaultValue={options[0]}
                                showsVerticalScrollIndicator={true}
                 />
@@ -106,7 +109,7 @@ export default class SimplePicker extends Component {
         return <View>
             <View style={styles.pickerTitleContainer}>
                 <Text style={styles.pickerTextStyle}>{itemTitle}</Text>
-                {isMandatory && <Icon style={{margin: 5, color: 'red', fontSize: 12}} name='star'/>}
+                { isMandatory && <Icon style={{margin: 5, color: 'red', fontSize: 12}} name='star'/>}
             </View>
 
 

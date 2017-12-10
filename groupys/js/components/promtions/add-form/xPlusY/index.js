@@ -113,7 +113,7 @@ export default class XPlusYComponent extends Component {
     createProductView() {
         if(this.props.state.product) {
             let productName = this.props.state.product.name
-            return <View style={styles.inputTextLayout}>
+            return <View style={styles.textLayout}>
                 <Text style={{color: '#FA8559', marginLeft: 8, marginRight: 8}}>{strings.PromotionOn}: {productName}</Text>
             </View>
         }
@@ -125,7 +125,7 @@ export default class XPlusYComponent extends Component {
     createProductGiftView() {
         if(this.props.state.giftProduct) {
             let productName = this.props.state.giftProduct.name
-            return <View style={styles.inputTextLayout}>
+            return <View style={styles.textLayout}>
                 <Text style={{color: '#FA8559', marginLeft: 8, marginRight: 8}}>{strings.Gift}: {productName}</Text>
             </View>
         }
@@ -148,8 +148,8 @@ export default class XPlusYComponent extends Component {
         }
         return <View>
 
-            <View style={styles.inputTextLayout}>
-                <Text style={{color: '#FA8559', marginLeft: 8, marginRight: 8}}>X Plus Y</Text>
+            <View style={styles.textLayout}>
+                <Text style={{color: '#FA8559', marginLeft: 8, marginRight: 8}}>{strings.XPlusY}</Text>
             </View>
             <View style={{flexDirection:'row',justifyContent:'center',alignItems:'center'}}>
             <View style={styles.inputPrecenComponent}>

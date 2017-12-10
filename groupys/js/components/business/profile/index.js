@@ -20,7 +20,7 @@ import {
     Title,
 } from 'native-base';
 import styles from './styles'
-import {FormHeader, TextInput} from '../../../ui/index';
+import {FormHeader, TextInput,BusinessHeader} from '../../../ui/index';
 import * as businessAction from "../../../actions/business";
 import {connect} from 'react-redux';
 import {bindActionCreators} from "redux";
@@ -47,7 +47,10 @@ class BusinessProfile extends Component {
     componentWillMount() {
         const {businesses} = this.props
         let business = businesses[this.props.navigation.state.params.businesses._id];
-        if (!business.qrcodeSource) {
+        if(!business) {
+            business = this.props.navigation.state.params.businesses;
+        }
+        if (business && !business.qrcodeSource) {
             this.props.setBusinessQrCode(business)
         }
     }
@@ -81,24 +84,19 @@ class BusinessProfile extends Component {
     render() {
         const {businesses} = this.props
         let business = businesses[this.props.navigation.state.params.businesses._id];
+        if(!business) {
+            business = this.props.navigation.state.params.businesses;
+        }
         let address = business.city + ' ' + business.address
         const banner = this.createBannerTag(business);
         return ( <View>
 
                 <FormHeader showBack navigation={this.props.navigation}
-                            title={"Business"} bgc="#2db6c8"/>
-
-                <View style={styles.businessPicker}>
-                    <View style={styles.businessTopLogo}>
-                        {this.createBusinessLogo(business)}
-
-                    </View>
-                    <View style={styles.businessPickerComponent}>
-                        <Text style={styles.businessNameText}>{business.name}</Text>
-                        <Text style={styles.businessCategoryText}>{business.categoryTitle}</Text>
-                    </View>
-
-                </View>
+                            title={strings.Business} bgc="#2db6c8"/>
+                <BusinessHeader  navigation={this.props.navigation} business={business}
+                                 categoryTitle={business.categoryTitle} businessLogo={business.logo}
+                                 businessName={business.name} noMargin
+                />
                 <View style={{marginTop: 1, backgroundColor: '#eaeaea'}}>
                     <View style={{
                         flex: -1,

@@ -1,6 +1,7 @@
 const React = require('react-native');
 const {Dimensions} = React;
 const {width, height} = Dimensions.get('window');
+import { I18nManager } from 'react-native';
 module.exports = {
     textInputContainer: {
         flexDirection: 'column',
