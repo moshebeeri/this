@@ -6,7 +6,7 @@ let utils = require('../../components/utils').createUtils();
 const autopopulate = require('mongoose-autopopulate');
 
 let PostSchema = new Schema({
-  title: String,
+  title: {type: String, required: true},
   gid: {type: Number, index: true},
   creator: {type: Schema.ObjectId, ref: 'User', autopopulate: utils.userAutopopulateOptions},
   created: {type: Date, required: true},
@@ -16,10 +16,6 @@ let PostSchema = new Schema({
     business: {type: Schema.ObjectId, ref: 'Business', autopopulate: true},
     mall: {type: Schema.ObjectId, ref: 'Mall', autopopulate: true},
     chain: {type: Schema.ObjectId, ref: 'ShoppingChain', autopopulate: true},
-  },
-  feed:{
-    user: {type: Schema.ObjectId, ref: 'User', autopopulate: utils.userAutopopulateOptions},
-    group: {type: Schema.ObjectId, ref: 'Group', autopopulate: true},
   },
   text: String,
   pictures:[],

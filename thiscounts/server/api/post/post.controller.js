@@ -14,40 +14,6 @@ exports.index = function(req, res) {
   });
 };
 
-// Publish post
-/**
- * @param req
-  body should contain only one of:
-    actor_user
-    actor_business
-    actor_mall
-    actor_chain
-    actor_group
-
- */
-exports.publish = function(req, res) {
-  let actor = req.body;
-  if(Object.keys(actor).length !== 1)
-    return res.status(400).send('expecting only one actor');
-
-  Post.findById(req.params.id, function (err, post) {
-    if(err) { return handleError(res, err); }
-    if(!post) { return res.send(404); }
-    activity.activity({
-      actor_user      : actor.actor_user    ,
-      actor_business  : actor.actor_business,
-      actor_mall      : actor.actor_mall    ,
-      actor_chain     : actor.actor_chain   ,
-      actor_group     : actor.actor_group   ,
-      post: post._id,
-      action: 'post'
-    }, function (err) {
-      if (err) console.error(err.message)
-    });
-    return res.status(200).send(post);
-  });
-};
-
 // Get a single post
 exports.show = function(req, res) {
   Post.findById(req.params.id, function (err, post) {
@@ -60,13 +26,25 @@ exports.show = function(req, res) {
 // Creates a new post in the DB.
 exports.create = function(req, res) {
   let post = req.body;
+  post.creator = req.user._id;
   post.created = Date.now();
   Post.create(post, function(err, post) {
     if(err) { return handleError(res, err); }
-    // graphModel.reflect(post, {_id: post._id}, function (err) {
-    //   if (err) { return handleError(res, err); }
-    // });
-    return res.status(201).send(post);
+    graphModel.reflect(post, {_id: post._id}, function (err) {
+      if (err) { return handleError(res, err); }
+      activity.activity({
+        actor_user      : post.behalf.user    ,
+        actor_business  : post.behalf.business,
+        actor_mall      : post.behalf.mall    ,
+        actor_chain     : post.behalf.chain   ,
+        actor_group     : post.behalf.group   ,
+        post: post._id,
+        action: 'post'
+      }, function (err) {
+        if(err) { return handleError(res, err); }
+        return res.status(201).send(post);
+      });
+    });
   });
 };
 
@@ -76,6 +54,7 @@ exports.update = function(req, res) {
   Post.findById(req.params.id, function (err, post) {
     if (err) { return handleError(res, err); }
     if(!post) { return res.send(404); }
+    if(post.creator._id !== req.user._id) { return res.send(401); }
     let updated = _.merge(post, req.body);
     updated.save(function (err) {
       if (err) { return handleError(res, err); }
@@ -89,6 +68,7 @@ exports.destroy = function(req, res) {
   Post.findById(req.params.id, function (err, post) {
     if(err) { return handleError(res, err); }
     if(!post) { return res.send(404); }
+    if(post.creator._id !== req.user._id) { return res.send(401); }
     post.remove(function(err) {
       if(err) { return handleError(res, err); }
       return res.status(204);
