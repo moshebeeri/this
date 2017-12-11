@@ -29,6 +29,7 @@ module.exports = function(app) {
   app.use('/api/businesses', require('./api/business'));
   app.use('/api/explores', require('./api/explore'));
   app.use('/api/feeds', require('./api/feed'));
+  app.use('/api/posts', require('./api/post'));
   app.use('/api/profiles', require('./api/profile'));
   app.use('/api/cards', require('./api/card'));
   app.use('/api/notifications', require('./api/notification'));
