@@ -1,3 +1,5 @@
+//for list of locales please refer to the following link:
+// https://gist.github.com/ndbroadbent/588fefab8e0f1b459fcec8181b41b39c
 import LocalizedStrings from 'react-native-localization';
 import enUS from './enUS';
 import fr from './fr';
