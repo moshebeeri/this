@@ -293,12 +293,12 @@ exports.translate = function (req, res) {
   cursor.eachAsync(category => {
     Translate.translate(category.name, req.params.to, function(err, translation) {
       if(err) console.log(err.message);
-      console.log(`${category.name} translation to ${category.name} is ${translation}`);
+      console.log(`${category.name} translation to ${req.params.to} is ${translation}`);
       category.translations[req.params.to] = translation;
-      category.save();
+      //category.save();
+      return res.status(200).send(`translation to ${req.params.to} has started`);
     });
   });
-  return res.status(200).send(`translation to ${req.params.to} has started`);
 };
 
 exports.work = function (req, res) {
