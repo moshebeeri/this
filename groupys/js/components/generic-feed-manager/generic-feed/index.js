@@ -23,7 +23,7 @@ import FeedPromotion from './feed-components/feedPromotion'
 import FeedShared from './feed-components/feedShared'
 import FeedBusiness from './feed-components/feedBusiness'
 import FeedWelcome from './feed-components/feedWelcome'
-
+import FeedPost from './feed-components/feedPost'
 export default class GenericFeedItem extends Component {
     constructor(props) {
         super(props);
@@ -128,7 +128,11 @@ export default class GenericFeedItem extends Component {
 
             case 'MESSAGE':
                 return this.createFeedView(<FeedMessage token={token} navigation={this.props.navigation} item={item}/>)
+            case'POST':
+                return this.createFeedView(<FeedPost token={token} navigation={this.props.navigation} item={item}/>)
+
             case 'WELCOME':
+
                 return this.createFeedView(<FeedWelcome token={token} navigation={this.props.navigation} item={item}/>)
             default:
                 return this.createFeedView(<FeedBusiness location={location} token={token} refresh={actions.refresh}

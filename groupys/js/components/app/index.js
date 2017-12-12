@@ -104,7 +104,7 @@ class ApplicationManager extends Component {
                 orientation: StyleUtils.isPortrait() ? 'portrait' : 'landscape'
             })
         })
-        I18nManager.forceRTL(true)
+
     }
 
     replaceRoute(route) {
@@ -156,10 +156,10 @@ class ApplicationManager extends Component {
         openDrawer = () => {
             this.drawer._root.open()
         };
-        let openSide = 'right';
-        if(I18nManager.isRTL){
-            openSide ='left';
-        }
+        // let openSide = 'right';
+        // if(I18nManager.isRTL){
+        //     openSide ='left';
+        // }
 
         return (
 
@@ -168,7 +168,7 @@ class ApplicationManager extends Component {
                     this.drawer = ref;
                 }}
 
-                side={openSide}
+
                 content={<SideBar closeDrawer={closeDrawer} navigation={this.props.navigation}/>}
                 onClose={() => closeDrawer}>
                 <Container>

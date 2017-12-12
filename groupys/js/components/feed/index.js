@@ -7,8 +7,10 @@ import {connect} from "react-redux";
 import * as feedsAction from "../../actions/feedsMain";
 import {getFeeds} from "../../selectors/feedSelector";
 import * as userAction from "../../actions/user";
-
+import Icon2 from "react-native-vector-icons/Ionicons";
 import {createSelector} from "reselect";
+import {View,I18nManager} from 'react-native';
+import {Fab,} from 'native-base';
 
 class Feed extends Component {
     constructor(props) {
@@ -21,27 +23,46 @@ class Feed extends Component {
             actions.setNextFeeds(feeds);
             this.props.userActions.fetchUsersFollowers();
         }
+    }
 
+    navigateToAdd() {
+        this.props.navigation.navigate('PostForm')
     }
 
     render() {
-        const {navigation, loadingDone, showTopLoader,feeds, userFollower, actions, token, user, location} = this.props;
+        const {navigation, loadingDone, showTopLoader, feeds, userFollower, actions, token, user, location} = this.props;
+        let icon = <Icon2 active size={40} name="md-create"/>;
+
         return (
-            <GenericFeedManager
-                navigation={navigation}
+            <View style={{flex: 1}}>
 
-                loadingDone={loadingDone}
-                showTopLoader={showTopLoader}
-                userFollowers={userFollower}
-                feeds={feeds}
-                actions={actions}
-                token={token}
-                entity={user}
-                location={location}
-                title='Feeds'
-                ItemDetail={GenericFeedItem}>
+                <GenericFeedManager
+                    navigation={navigation}
 
-            </GenericFeedManager>
+                    loadingDone={loadingDone}
+                    showTopLoader={showTopLoader}
+                    userFollowers={userFollower}
+                    feeds={feeds}
+                    actions={actions}
+                    token={token}
+                    entity={user}
+                    location={location}
+                    title='Feeds'
+                    ItemDetail={GenericFeedItem}>
+
+                </GenericFeedManager>
+                <Fab
+
+                    direction="right"
+                    active={false}
+                    containerStyle={{marginLeft: 10}}
+                    style={{backgroundColor: "#2db6c8"}}
+                    position="bottomRight"
+                    onPress={() => this.navigateToAdd()}>
+                    {icon}
+
+                </Fab>
+            </View>
 
         );
     }

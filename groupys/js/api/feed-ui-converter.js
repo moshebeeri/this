@@ -2,12 +2,34 @@ const noPic = require('../../images/client_1.png');
 import FormUtils from "../utils/fromUtils";
 import strings from "../i18n/i18n"
 
-
 class FeedConverter {
     createFeed(feed) {
         let response = {};
         if (feed.activity.business) {
             response = this.createBusinessUo(feed);
+        }
+        if (feed.activity.post) {
+            let responseFeed = {
+                itemType: 'POST',
+                feed: feed,
+                id:feed.activity.post._id
+
+            }
+            if (feed.activity.post.pictures && feed.activity.post.pictures[0]) {
+                responseFeed.banner = {
+                    uri: feed.activity.post.pictures[0].pictures[1]
+                };
+            }
+            if (feed.activity.actor_user.pictures && Object.keys(feed.activity.actor_user.pictures).length > 0) {
+                responseFeed.avetar = {
+                    uri: feed.activity.actor_user.pictures[Object.keys(feed.activity.actor_user.pictures).length - 1].pictures[3]
+                }
+            }else{
+                responseFeed.avetar = noPic
+
+            }
+            responseFeed.name = feed.activity.actor_user.name
+            return  responseFeed;
         }
         if (feed.activity.action === 'welcome') {
             response = {
@@ -26,25 +48,25 @@ class FeedConverter {
             return this.createPromotionInstance(feed);
         }
         if (feed.activity.action === 'share') {
-            return this.createShared(feed);;
+            return this.createShared(feed);
+            ;
         }
         return response;
     }
-    createShared(feed){
-        let response = {}
-        let sharedFeed= {
-            activity:feed.activity.activity,
-            _id:feed.activity.activity.instance._id
-        }
 
+    createShared(feed) {
+        let response = {}
+        let sharedFeed = {
+            activity: feed.activity.activity,
+            _id: feed.activity.activity.instance._id
+        }
         response.shardeActivity = this.createFeed(sharedFeed);
         response.user = feed.activity.actor_user;
         response.itemType = 'SHARE';
         response.shared = response.shardeActivity.itemType;
-        response.id =  response.shardeActivity.id;
+        response.id = response.shardeActivity.id;
         return response;
     }
-
 
     createMessageUi(feed) {
         let response;
@@ -147,7 +169,7 @@ class FeedConverter {
 
     createSavedPromotion(feed, id, extraData) {
         let instance = feed.instance;
-        let promotion =instance.promotion;
+        let promotion = instance.promotion;
         let responseFeed = {};
         try {
             responseFeed.id = id;
@@ -170,8 +192,8 @@ class FeedConverter {
             }
             switch (instance.type) {
                 case "REDUCED_AMOUNT":
-                    responseFeed.itemTitle = strings.ReduceAmountTitle.formatUnicorn( promotion.reduced_amount.values[0].price , promotion.reduced_amount.values[0].pay);
-                    responseFeed.promotionTerm = strings.ReduceAmountTerms.formatUnicorn(promotion.reduced_amount.values[0].price ,promotion.reduced_amount.values[0].pay);
+                    responseFeed.itemTitle = strings.ReduceAmountTitle.formatUnicorn(promotion.reduced_amount.values[0].price, promotion.reduced_amount.values[0].pay);
+                    responseFeed.promotionTerm = strings.ReduceAmountTerms.formatUnicorn(promotion.reduced_amount.values[0].price, promotion.reduced_amount.values[0].pay);
                     responseFeed.promotion = 'REDUCED_AMOUNT';
                     responseFeed.promotionTitle = strings.ReduceAmountPromotionTitle;
                     responseFeed.promotionColor = '#e65100';
@@ -180,8 +202,8 @@ class FeedConverter {
                     break;
                 case "PERCENT":
                     if (promotion.condition.product) {
-                        responseFeed.itemTitle = strings.PercentWithTerm.formatUnicorn(promotion.condition.product.name , promotion.percent.values[0]);
-                        responseFeed.promotionTerm = strings.PercentTermWithTerm.formatUnicorn(promotion.condition.product.name ,promotion.percent.values[0]);
+                        responseFeed.itemTitle = strings.PercentWithTerm.formatUnicorn(promotion.condition.product.name, promotion.percent.values[0]);
+                        responseFeed.promotionTerm = strings.PercentTermWithTerm.formatUnicorn(promotion.condition.product.name, promotion.percent.values[0]);
                     } else {
                         //responseFeed.itemTitle = "Get " + promotion.percent.values[0] + ' % Off ';
                         responseFeed.promotionTerm = strings.NoTerms
@@ -193,25 +215,25 @@ class FeedConverter {
                     responseFeed.quantity = promotion.percent.quantity;
                     break;
                 case "X_FOR_Y":
-                    responseFeed.itemTitle = strings.XForYTitlePattern.formatUnicorn(promotion.x_for_y.values[0].eligible , promotion.condition.product.name , promotion.x_for_y.values[0].pay);
+                    responseFeed.itemTitle = strings.XForYTitlePattern.formatUnicorn(promotion.x_for_y.values[0].eligible, promotion.condition.product.name, promotion.x_for_y.values[0].pay);
                     responseFeed.promotion = 'X_FOR_Y';
                     responseFeed.promotionColor = '#ff66b3';
                     responseFeed.promotionTitle = strings.XForYTitle;
                     responseFeed.promotionValue = promotion.x_for_y.values[0].pay;
-                    responseFeed.promotionTerm = strings.XForYTitlePattern.formatUnicorn(promotion.x_for_y.values[0].eligible , promotion.condition.product.name , promotion.x_for_y.values[0].pay);
+                    responseFeed.promotionTerm = strings.XForYTitlePattern.formatUnicorn(promotion.x_for_y.values[0].eligible, promotion.condition.product.name, promotion.x_for_y.values[0].pay);
                     responseFeed.quantity = promotion.x_for_y.quantity;
                     break;
                 case "X+N%OFF":
                     if (promotion.x_plus_n_percent_off.values[0].product) {
-                        responseFeed.itemTitle =strings.XNOFFTitlePattern.formatUnicorn(promotion.condition.product.name ,promotion.x_plus_n_percent_off.values[0].product.name ,promotion.x_plus_n_percent_off.values[0].eligible);
+                        responseFeed.itemTitle = strings.XNOFFTitlePattern.formatUnicorn(promotion.condition.product.name, promotion.x_plus_n_percent_off.values[0].product.name, promotion.x_plus_n_percent_off.values[0].eligible);
                     }
                     responseFeed.promotion = 'X+N%OFF';
                     responseFeed.promotionColor = '#ff66b3';
                     responseFeed.quantity = promotion.x_plus_n_percent_off.quantity;
-                    responseFeed.promotionTitle =  strings.XNOFFTitle;
+                    responseFeed.promotionTitle = strings.XNOFFTitle;
                     responseFeed.promotionValue = promotion.x_plus_n_percent_off.values[0].eligible;
                     if (promotion.x_plus_n_percent_off.values[0].product) {
-                        responseFeed.promotionTerm =strings.XNOFFTitlePattern.formatUnicorn(promotion.condition.product.name ,promotion.x_plus_n_percent_off.values[0].product.name ,promotion.x_plus_n_percent_off.values[0].eligible);
+                        responseFeed.promotionTerm = strings.XNOFFTitlePattern.formatUnicorn(promotion.condition.product.name, promotion.x_plus_n_percent_off.values[0].product.name, promotion.x_plus_n_percent_off.values[0].eligible);
                     }
                     break;
                 case "X+Y":
@@ -226,11 +248,11 @@ class FeedConverter {
                     responseFeed.quantity = promotion.x_plus_y.quantity;
                     break;
                 case "HAPPY_HOUR":
-                    if (promotion.happy_hour && promotion.happy_hour.values&& promotion.happy_hour.values[0]) {
+                    if (promotion.happy_hour && promotion.happy_hour.values && promotion.happy_hour.values[0]) {
                         responseFeed.itemTitle = '';
                         responseFeed.promotionTitle = strings.HappyHour;
                         responseFeed.promotionTerm = strings.HappyHourTerm.formatUnicorn(FormUtils.convertDaysNumToString(promotion.happy_hour.values[0].days),
-                            FormUtils.secondsFromMidnightToString(promotion.happy_hour.values[0].from), FormUtils.secondsFromMidnightToString(promotion.happy_hour.values[0].from + promotion.happy_hour.values[0].until) ,
+                            FormUtils.secondsFromMidnightToString(promotion.happy_hour.values[0].from), FormUtils.secondsFromMidnightToString(promotion.happy_hour.values[0].from + promotion.happy_hour.values[0].until),
                             promotion.condition.product.name);
                         responseFeed.promotionValue = promotion.happy_hour.values[0].pay;
                         responseFeed.quantity = promotion.happy_hour.quantity;
@@ -320,8 +342,8 @@ class FeedConverter {
             }
             switch (instance.type) {
                 case "REDUCED_AMOUNT":
-                    responseFeed.itemTitle = strings.ReduceAmountTitle.formatUnicorn( promotion.reduced_amount.values[0].price , promotion.reduced_amount.values[0].pay);
-                    responseFeed.promotionTerm = strings.ReduceAmountTerms.formatUnicorn(promotion.reduced_amount.values[0].price ,promotion.reduced_amount.values[0].pay);
+                    responseFeed.itemTitle = strings.ReduceAmountTitle.formatUnicorn(promotion.reduced_amount.values[0].price, promotion.reduced_amount.values[0].pay);
+                    responseFeed.promotionTerm = strings.ReduceAmountTerms.formatUnicorn(promotion.reduced_amount.values[0].price, promotion.reduced_amount.values[0].pay);
                     responseFeed.promotion = 'REDUCED_AMOUNT';
                     responseFeed.promotionTitle = strings.ReduceAmountPromotionTitle;
                     responseFeed.promotionColor = '#e65100';
@@ -330,8 +352,8 @@ class FeedConverter {
                     break;
                 case "PERCENT":
                     if (promotion.condition.product) {
-                        responseFeed.itemTitle = strings.PercentWithTerm.formatUnicorn(promotion.condition.product.name , promotion.percent.values[0]);
-                        responseFeed.promotionTerm = strings.PercentTermWithTerm.formatUnicorn(promotion.condition.product.name ,promotion.percent.values[0]);
+                        responseFeed.itemTitle = strings.PercentWithTerm.formatUnicorn(promotion.condition.product.name, promotion.percent.values[0]);
+                        responseFeed.promotionTerm = strings.PercentTermWithTerm.formatUnicorn(promotion.condition.product.name, promotion.percent.values[0]);
                     } else {
                         responseFeed.itemTitle = "Get " + promotion.percent.values[0] + ' % Off ';
                         responseFeed.promotionTerm = strings.NoTerms
@@ -343,25 +365,25 @@ class FeedConverter {
                     responseFeed.quantity = promotion.percent.quantity;
                     break;
                 case "X_FOR_Y":
-                    responseFeed.itemTitle = strings.XForYTitlePattern.formatUnicorn(promotion.x_for_y.values[0].eligible , promotion.condition.product.name , promotion.x_for_y.values[0].pay);
+                    responseFeed.itemTitle = strings.XForYTitlePattern.formatUnicorn(promotion.x_for_y.values[0].eligible, promotion.condition.product.name, promotion.x_for_y.values[0].pay);
                     responseFeed.promotion = 'X_FOR_Y';
                     responseFeed.promotionColor = '#ff66b3';
                     responseFeed.promotionTitle = strings.XForYTitle;
                     responseFeed.promotionValue = promotion.x_for_y.values[0].pay;
-                    responseFeed.promotionTerm = strings.XForYTitlePattern.formatUnicorn(promotion.x_for_y.values[0].eligible , promotion.condition.product.name , promotion.x_for_y.values[0].pay);
+                    responseFeed.promotionTerm = strings.XForYTitlePattern.formatUnicorn(promotion.x_for_y.values[0].eligible, promotion.condition.product.name, promotion.x_for_y.values[0].pay);
                     responseFeed.quantity = promotion.x_for_y.quantity;
                     break;
                 case "X+N%OFF":
                     if (promotion.x_plus_n_percent_off.values[0].product) {
-                        responseFeed.itemTitle =strings.XNOFFTitlePattern.formatUnicorn(promotion.condition.product.name ,promotion.x_plus_n_percent_off.values[0].product.name ,promotion.x_plus_n_percent_off.values[0].eligible);
+                        responseFeed.itemTitle = strings.XNOFFTitlePattern.formatUnicorn(promotion.condition.product.name, promotion.x_plus_n_percent_off.values[0].product.name, promotion.x_plus_n_percent_off.values[0].eligible);
                     }
                     responseFeed.promotion = 'X+N%OFF';
                     responseFeed.promotionColor = '#ff66b3';
                     responseFeed.quantity = promotion.x_plus_n_percent_off.quantity;
-                    responseFeed.promotionTitle =  strings.XNOFFTitle;
+                    responseFeed.promotionTitle = strings.XNOFFTitle;
                     responseFeed.promotionValue = promotion.x_plus_n_percent_off.values[0].eligible;
                     if (promotion.x_plus_n_percent_off.values[0].product) {
-                        responseFeed.promotionTerm =strings.XNOFFTitlePattern.formatUnicorn(promotion.condition.product.name ,promotion.x_plus_n_percent_off.values[0].product.name ,promotion.x_plus_n_percent_off.values[0].eligible);
+                        responseFeed.promotionTerm = strings.XNOFFTitlePattern.formatUnicorn(promotion.condition.product.name, promotion.x_plus_n_percent_off.values[0].product.name, promotion.x_plus_n_percent_off.values[0].eligible);
                     }
                     break;
                 case "X+Y":
@@ -380,7 +402,7 @@ class FeedConverter {
                         responseFeed.itemTitle = '';
                         responseFeed.promotionTitle = strings.HappyHour;
                         responseFeed.promotionTerm = strings.HappyHourTerm.formatUnicorn(FormUtils.convertDaysNumToString(promotion.happy_hour.values[0].days),
-                            FormUtils.secondsFromMidnightToString(promotion.happy_hour.values[0].from), FormUtils.secondsFromMidnightToString(promotion.happy_hour.values[0].from + promotion.happy_hour.values[0].until) ,
+                            FormUtils.secondsFromMidnightToString(promotion.happy_hour.values[0].from), FormUtils.secondsFromMidnightToString(promotion.happy_hour.values[0].from + promotion.happy_hour.values[0].until),
                             promotion.condition.product.name);
                         responseFeed.promotionValue = promotion.happy_hour.values[0].pay;
                         responseFeed.quantity = promotion.happy_hour.quantity;
@@ -436,8 +458,8 @@ class FeedConverter {
         response.businessAddress = promotion.entity.business.city + ' ' + promotion.entity.business.address;
         switch (type) {
             case "REDUCED_AMOUNT":
-                response.itemTitle = strings.ReduceAmountTitle.formatUnicorn( promotion.reduced_amount.values[0].price , promotion.reduced_amount.values[0].pay);
-                response.promotionTerm = strings.ReduceAmountTerms.formatUnicorn(promotion.reduced_amount.values[0].price ,promotion.reduced_amount.values[0].pay);
+                response.itemTitle = strings.ReduceAmountTitle.formatUnicorn(promotion.reduced_amount.values[0].price, promotion.reduced_amount.values[0].pay);
+                response.promotionTerm = strings.ReduceAmountTerms.formatUnicorn(promotion.reduced_amount.values[0].price, promotion.reduced_amount.values[0].pay);
                 response.promotion = 'REDUCED_AMOUNT';
                 response.promotionTitle = strings.ReduceAmountPromotionTitle;
                 response.promotionColor = '#e65100';
@@ -446,8 +468,8 @@ class FeedConverter {
                 break;
             case "PERCENT":
                 if (promotion.condition.product) {
-                    response.itemTitle = strings.PercentWithTerm.formatUnicorn(promotion.condition.product.name , promotion.percent.values[0]);
-                    response.promotionTerm = strings.PercentTermWithTerm.formatUnicorn(promotion.condition.product.name ,promotion.percent.values[0]);
+                    response.itemTitle = strings.PercentWithTerm.formatUnicorn(promotion.condition.product.name, promotion.percent.values[0]);
+                    response.promotionTerm = strings.PercentTermWithTerm.formatUnicorn(promotion.condition.product.name, promotion.percent.values[0]);
                 } else {
                     response.itemTitle = "Get " + promotion.percent.values[0] + ' % Off ';
                     response.promotionTerm = strings.NoTerms
@@ -459,25 +481,25 @@ class FeedConverter {
                 response.quantity = promotion.percent.quantity;
                 break;
             case "X_FOR_Y":
-                response.itemTitle = strings.XForYTitlePattern.formatUnicorn(promotion.x_for_y.values[0].eligible , promotion.condition.product.name , promotion.x_for_y.values[0].pay);
+                response.itemTitle = strings.XForYTitlePattern.formatUnicorn(promotion.x_for_y.values[0].eligible, promotion.condition.product.name, promotion.x_for_y.values[0].pay);
                 response.promotion = 'X_FOR_Y';
                 response.promotionColor = '#ff66b3';
                 response.promotionTitle = strings.XForYTitle;
                 response.promotionValue = promotion.x_for_y.values[0].pay;
-                response.promotionTerm = strings.XForYTitlePattern.formatUnicorn(promotion.x_for_y.values[0].eligible , promotion.condition.product.name , promotion.x_for_y.values[0].pay);
+                response.promotionTerm = strings.XForYTitlePattern.formatUnicorn(promotion.x_for_y.values[0].eligible, promotion.condition.product.name, promotion.x_for_y.values[0].pay);
                 response.quantity = promotion.x_for_y.quantity;
                 break;
             case "X+N%OFF":
                 if (promotion.x_plus_n_percent_off.values[0].product) {
-                    response.itemTitle =strings.XNOFFTitlePattern.formatUnicorn(promotion.condition.product.name ,promotion.x_plus_n_percent_off.values[0].product.name ,promotion.x_plus_n_percent_off.values[0].eligible);
+                    response.itemTitle = strings.XNOFFTitlePattern.formatUnicorn(promotion.condition.product.name, promotion.x_plus_n_percent_off.values[0].product.name, promotion.x_plus_n_percent_off.values[0].eligible);
                 }
                 response.promotion = 'X+N%OFF';
                 response.promotionColor = '#ff66b3';
                 response.quantity = promotion.x_plus_n_percent_off.quantity;
-                response.promotionTitle =  strings.XNOFFTitle;
+                response.promotionTitle = strings.XNOFFTitle;
                 response.promotionValue = promotion.x_plus_n_percent_off.values[0].eligible;
                 if (promotion.x_plus_n_percent_off.values[0].product) {
-                    response.promotionTerm =strings.XNOFFTitlePattern.formatUnicorn(promotion.condition.product.name ,promotion.x_plus_n_percent_off.values[0].product.name ,promotion.x_plus_n_percent_off.values[0].eligible);
+                    response.promotionTerm = strings.XNOFFTitlePattern.formatUnicorn(promotion.condition.product.name, promotion.x_plus_n_percent_off.values[0].product.name, promotion.x_plus_n_percent_off.values[0].eligible);
                 }
                 break;
             case "X+Y":
@@ -492,11 +514,11 @@ class FeedConverter {
                 response.quantity = promotion.x_plus_y.quantity;
                 break;
             case "HAPPY_HOUR":
-                if (promotion.happy_hour && promotion.happy_hour.values &&  promotion.happy_hour.values[0]) {
+                if (promotion.happy_hour && promotion.happy_hour.values && promotion.happy_hour.values[0]) {
                     response.itemTitle = '';
                     response.promotionTitle = strings.HappyHour;
                     response.promotionTerm = strings.HappyHourTerm.formatUnicorn(FormUtils.convertDaysNumToString(promotion.happy_hour.values[0].days),
-                        FormUtils.secondsFromMidnightToString(promotion.happy_hour.values[0].from), FormUtils.secondsFromMidnightToString(promotion.happy_hour.values[0].from + promotion.happy_hour.values[0].until) ,
+                        FormUtils.secondsFromMidnightToString(promotion.happy_hour.values[0].from), FormUtils.secondsFromMidnightToString(promotion.happy_hour.values[0].from + promotion.happy_hour.values[0].until),
                         promotion.condition.product.name);
                     response.promotionValue = promotion.happy_hour.values[0].pay;
                     response.quantity = promotion.happy_hour.quantity;

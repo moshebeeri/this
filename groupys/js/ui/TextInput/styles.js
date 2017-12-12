@@ -8,7 +8,15 @@ module.exports = {
         justifyContent: 'center',
 
 
-        height: 75,
+        height: 70,
+    },
+
+    textAreaContainer: {
+        flexDirection: 'column',
+        justifyContent: 'center',
+
+
+        height: 150,
     },
     textInputNoFiledContainer: {
         flexDirection: 'column',
@@ -18,7 +26,8 @@ module.exports = {
         height: 55,
     },
     textInputComponentLayout: {
-        flexDirection: 'row'
+        flexDirection: 'row',
+        flex:1,
     },
     textInputComponentStyle: {
         backgroundColor: 'white',
@@ -27,7 +36,7 @@ module.exports = {
         padding: 10,
         borderRadius:2,
         fontSize:16,
-        paddingLeft:  I18nManager.isRTL ? 10:50,
+
     },
 
     textInputDisabledComponentStyle: {
