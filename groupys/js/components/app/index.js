@@ -25,9 +25,10 @@ import '../../conf/global';
 import pageSync from "../../refresh/refresher"
 import PageRefresher from '../../refresh/pageRefresher'
 const I18n = require('react-native-i18n')
-const promotions = require('../../../images/promotion.png');
-const save = require('../../../images/save.png');
-const groups = require('../../../images/groups.png');
+const promotions = require('../../../images/Feeds.png');
+const save = require('../../../images/savedPromotions.png');
+const groups = require('../../../images/GroupsIcon.png');
+const notification = require('../../../images/notification.png');
 let locationApi = new LocationApi();
 let contactApi = new ContactApi();
 const store = getStore();
@@ -104,7 +105,7 @@ class ApplicationManager extends Component {
                 orientation: StyleUtils.isPortrait() ? 'portrait' : 'landscape'
             })
         })
-        I18nManager.forceRTL(true)
+
     }
 
     replaceRoute(route) {
@@ -156,10 +157,10 @@ class ApplicationManager extends Component {
         openDrawer = () => {
             this.drawer._root.open()
         };
-        let openSide = 'right';
-        if(I18nManager.isRTL){
-            openSide ='left';
-        }
+        // let openSide = 'right';
+        // if(I18nManager.isRTL){
+        //     openSide ='left';
+        // }
 
         return (
 
@@ -168,7 +169,7 @@ class ApplicationManager extends Component {
                     this.drawer = ref;
                 }}
 
-                side={openSide}
+
                 content={<SideBar closeDrawer={closeDrawer} navigation={this.props.navigation}/>}
                 onClose={() => closeDrawer}>
                 <Container>
@@ -181,13 +182,13 @@ class ApplicationManager extends Component {
                           onChangeTab={this.onChangeTab.bind(this)} style={{backgroundColor: '#fff',}}>
                         <Tab heading={<TabHeading
                             style={{justifyContent: 'center', alignItems: 'center', backgroundColor: "white"}}><Image
-                            style={{tintColor: '#2db6c8', marginLeft: 0, width: 35, height: 35}}
+                            style={{tintColor: '#2db6c8', marginLeft: 0, width: 30, height: 30}}
                             source={promotions}/></TabHeading>}>
                             <Feeds index={0} navigation={this.props.navigation}/>
                         </Tab>
                         <Tab heading={<TabHeading
                             style={{justifyContent: 'center', alignItems: 'center', backgroundColor: "white"}}><Image
-                            style={{tintColor: '#2db6c8', marginLeft: 0, width: 25, height: 25}}
+                            style={{tintColor: '#2db6c8', marginLeft: 0, width: 30, height: 30}}
                             source={save}/></TabHeading>}>
                             <MydPromotions navigation={this.props.navigation} index={1}/>
                         </Tab>
@@ -198,19 +199,21 @@ class ApplicationManager extends Component {
                                 alignItems: 'center',
                                 backgroundColor: "white"
                             }}><Image
-                                style={{tintColor: '#2db6c8', marginLeft: 0, width: 45, height: 45}}
+                                style={{tintColor: '#2db6c8', marginLeft: 0, width: 30, height: 30}}
                                 source={groups}/></TabHeading>}>
                             <Groups navigation={this.props.navigation} index={2}
                             />
                         </Tab>
+
 
                         <Tab
                             heading={<TabHeading style={{
                                 justifyContent: 'center',
                                 alignItems: 'center',
                                 backgroundColor: "white"
-                            }}><Icon2
-                                style={{color: '#2db6c8', fontSize: 30,}} name="md-notifications"/></TabHeading>}>
+                            }}><Image
+                                style={{tintColor: '#2db6c8', marginLeft: 0, width: 30, height: 30}}
+                                source={notification}/></TabHeading>}>
                             <Notification navigation={this.props.navigation} index={3}/>
                         </Tab>
 

@@ -30,6 +30,7 @@ import UserPermittedRoles from "./components/premitedUsers/index";
 import GenericComments from "./components/comment/comments";
 import ChangePassword from "./components/changePassword/index";
 import BusinessProfile from "./components/business/profile/index";
+import PostForm from "./components/post/index";
 import BusinessFollow from "./components/business/follow/follow_container";
 import './conf/global';
 // var PushNotification = require('react-native-push-notification');
@@ -72,7 +73,6 @@ import getStore from "./store";
 import setCustomStyles from './styles'
 
 setCustomStyles();
-
 const AppNavigator = StackNavigator({
         home: {screen: ApplicationManager},
         login: {screen: Login},
@@ -100,7 +100,8 @@ const AppNavigator = StackNavigator({
         genericComments: {screen: GenericComments},
         changePassword: {screen: ChangePassword},
         businessProfile: {screen: BusinessProfile},
-        businessFollow: {screen: BusinessFollow}
+        businessFollow: {screen: BusinessFollow},
+        PostForm: {screen: PostForm},
     }
 );
 

@@ -68,7 +68,7 @@ export default class TextInputField extends Component {
     }
 
     render() {
-        const {fieldColor, field, placeholder, value, returnKeyType, refNext, isMandatory,keyboardType,disabled,secureTextEntry} = this.props;
+        const {fieldColor, field, placeholder, value, returnKeyType, refNext, isMandatory,keyboardType,disabled,secureTextEntry,multiline,numberOfLines} = this.props;
         let textStyle = styles.textInputTextStyle;
         let mandatoryIconColor = 'red';
         if (fieldColor === 'white') {
@@ -84,16 +84,24 @@ export default class TextInputField extends Component {
         if(field){
             containerStyle = styles.textInputContainer;
         }
+
+        if(numberOfLines){
+            containerStyle = styles.textAreaContainer;
+        }
         let inputField =  <TextInput style={textInputStyle} value={value} returnKeyType={returnKeyType}
                                      ref={refNext} underlineColorAndroid='transparent' disabled
                                      keyboardType={keyboardType}
                                      secureTextEntry={secureTextEntry}
+                                     numberOfLines={numberOfLines}
+                                     multiline={multiline}
                                      onSubmitEditing={this.onSubmit.bind(this)}
                                      onChangeText={this.onChange.bind(this)} placeholder={placeholder}/>
         if(!I18nManager.isRTL){
             inputField =  <TextInput style={textInputStyle} value={value} returnKeyType={returnKeyType}
                                     ref={refNext} underlineColorAndroid='transparent' disabled
                                     keyboardType={keyboardType}
+                                     multiline={multiline}
+                                     numberOfLines={numberOfLines}
                                     secureTextEntry={secureTextEntry}
                                     onSubmitEditing={this.onSubmit.bind(this)}
                                     onChangeText={this.onChange.bind(this)} />

@@ -47,6 +47,7 @@ class GeneralComponentHeader extends Component {
     }
 
     render() {
+
         let back = undefined;
         let headerHeight = vh *7;
         if (Platform.OS === 'ios') {

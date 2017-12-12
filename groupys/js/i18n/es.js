@@ -178,7 +178,8 @@ Wednesday                                     : "Miércoles",
 Thursday                                      : "Jueves",
 Friday                                        : "Viernes",
 Saturday                                      : "Sábado",
-SelectedGroups                                : "Número de grupos seleccionados"
+SelectedGroups                                : "Número de grupos seleccionados",
+
 };
 
 export default es;

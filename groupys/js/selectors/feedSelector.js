@@ -15,6 +15,7 @@ export const getFeeds = createSelector([ getStateFeeds],
             activities: store.getState().activities.activities,
             promotions: store.getState().promotions.promotions,
             user: store.getState().user.users,
+            posts:store.getState().postForm.posts,
             businesses: store.getState().businesses.businesses,
             instances: store.getState().instances.instances,
             products: store.getState().products.products

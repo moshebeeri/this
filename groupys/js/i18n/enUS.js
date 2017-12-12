@@ -178,7 +178,11 @@ Wednesday                                     : "Wednesday",
 Thursday                                      : "Thursday",
 Friday                                        : "Friday",
 Saturday                                      : "Saturday",
-SelectedGroups                                : "Number Of Selected Groups"
+SelectedGroups                                : "Number Of Selected Groups",
+AddPost                                       : "Add Post",  //Todo translate
+AddPictureOrVideo                             : "Add Picture Or Video", //Todo translate
+Title                                         : "Title",//Todo translate
+Post                                          : "Post",//Todo translate
 };
 
 export default enUS;
