@@ -282,6 +282,7 @@ function drop_uniqueness(req, res){
   return res.status(200).json('ok');
 }
 
+//https://cloud.google.com/translate/docs/languages
 exports.translate = function (req, res) {
   // Translate.translate('Hello', req.params.to, function(err, translation) {
   //   if(err) console.log(err.message);
@@ -292,11 +293,12 @@ exports.translate = function (req, res) {
   cursor.eachAsync(category => {
     Translate.translate(category.name, req.params.to, function(err, translation) {
       if(err) console.log(err.message);
-      console.log(`${category.name} translation to ${category.name} id ${translation}`);
+      console.log(`${category.name} translation to ${category.name} is ${translation}`);
       category.translations[req.params.to] = translation;
       category.save();
     });
   });
+  return res.status(200).send(`translation to ${req.params.to} has started`);
 };
 
 exports.work = function (req, res) {
