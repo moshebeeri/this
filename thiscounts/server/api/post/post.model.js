@@ -18,6 +18,7 @@ let PostSchema = new Schema({
     chain: {type: Schema.ObjectId, ref: 'ShoppingChain', autopopulate: true},
   },
   text: String,
+  url: String,
   pictures:[],
   video: {type: Schema.ObjectId, ref: 'Video', autopopulate: true}
 });

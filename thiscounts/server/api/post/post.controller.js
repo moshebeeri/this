@@ -25,6 +25,7 @@ exports.show = function(req, res) {
 
 // Creates a new post in the DB.
 exports.create = function(req, res) {
+  console.log('create post????');
   let post = req.body;
   post.creator = req.user._id;
   post.created = Date.now();
@@ -39,7 +40,8 @@ exports.create = function(req, res) {
         actor_chain     : post.behalf.chain   ,
         actor_group     : post.behalf.group   ,
         post: post._id,
-        action: 'post'
+        action: 'post',
+        audience: ['SELF', 'FOLLOWERS']
       }, function (err) {
         if(err) { return handleError(res, err); }
         return res.status(201).send(post);

@@ -105,6 +105,20 @@ function instance_state(user_id, instance, callback){
   })
 }
 
+exports.post_state = function(user_id, post, callback) {
+  return post_state(user_id, post, callback);
+};
+
+function post_state(user_id, post, callback){
+  social_state(user_id, post._id, function(err, social_state) {
+    if (err) {
+      return callback(err, null);
+    }
+    post.social_state = social_state;
+    callback(null, post);
+  })
+}
+
 function product_state(user_id, product, callback) {
   social_state(user_id, product._id, function(err, social_state) {
     if (err) {
@@ -210,6 +224,12 @@ function createUserUpdateStateFunction(userId) {
         instance: function (callback) {
           if (utils.defined(activity.instance))
             instance_state(userId, activity.instance, callback);
+          else
+            callback(null, null);
+        },
+        post: function (callback) {
+          if (utils.defined(activity.instance))
+            post_state(userId, activity.instance, callback);
           else
             callback(null, null);
         },
