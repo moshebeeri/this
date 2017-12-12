@@ -33,7 +33,7 @@ exports.create = function(req, res) {
     if(err) { return handleError(res, err); }
     graphModel.reflect(post, {_id: post._id}, function (err) {
       if (err) { return handleError(res, err); }
-      activity.activity({
+      const act = {
         actor_user      : post.behalf.user    ,
         actor_business  : post.behalf.business,
         actor_mall      : post.behalf.mall    ,
@@ -41,8 +41,14 @@ exports.create = function(req, res) {
         actor_group     : post.behalf.group   ,
         post: post._id,
         action: 'post',
-        audience: ['SELF', 'FOLLOWERS']
-      }, function (err) {
+      };
+
+      if(act.actor_user)
+        act.audience =['SELF', 'FOLLOWERS'];
+      else if(act.actor_group)
+        act.ids = [act.actor_group];
+
+      activity.activity(act, function (err) {
         if(err) { return handleError(res, err); }
         return res.status(201).send(post);
       });
