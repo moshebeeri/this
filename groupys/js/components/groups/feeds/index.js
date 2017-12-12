@@ -1,7 +1,7 @@
 import React, {Component} from "react";
 import {BackHandler, View} from "react-native";
 import {connect} from "react-redux";
-import {Button, Container, Icon, Input, Tab, TabHeading, Tabs, Text} from "native-base";
+import {Button, Container, Icon, Input, Tab, TabHeading, Tabs, Text,Fab} from "native-base";
 import {actions} from "react-native-navigation-redux-helpers";
 import GroupFeedHeader from "./groupFeedHeader";
 import GenericFeedManager from "../../generic-feed-manager/index";
@@ -55,6 +55,10 @@ class GroupFeed extends Component {
         this.setState({
             showChat: false
         })
+    }
+    navigateToAdd(){
+        const group = navigation.state.params.group;
+        this.props.navigation.navigate('PostForm',{group:group})
     }
 
     changeTab() {
@@ -123,7 +127,17 @@ class GroupFeed extends Component {
                 ItemDetail={GenericFeedItem}>
 
             </GenericFeedManager>
+            <Fab
 
+                direction="right"
+                active={false}
+                containerStyle={{marginLeft: 10}}
+                style={{backgroundColor: "#2db6c8"}}
+                position="bottomRight"
+                onPress={() => this.navigateToAdd()}>
+                {icon}
+
+            </Fab>
 
         </View>
     }
