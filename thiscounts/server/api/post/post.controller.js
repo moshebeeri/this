@@ -25,7 +25,6 @@ exports.show = function(req, res) {
 
 // Creates a new post in the DB.
 exports.create = function(req, res) {
-  console.log('create post????');
   let post = req.body;
   post.creator = req.user._id;
   post.created = Date.now();

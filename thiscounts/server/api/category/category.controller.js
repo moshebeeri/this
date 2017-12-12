@@ -13,6 +13,7 @@ const ProductTopCategory = graphTools.createGraphModel('ProductTopCategory');
 const ProductCategory = graphTools.createGraphModel('ProductCategory');
 const EBayProductCategories = require('./data/product.category.ebay');
 const translate = require('@google-cloud/translate');
+const limit = require("simple-rate-limiter");
 
 const Translate = translate({
   projectId: 'this-f2f45',
@@ -283,22 +284,27 @@ function drop_uniqueness(req, res){
 }
 
 //https://cloud.google.com/translate/docs/languages
+// Translate.translate(category.name, req.params.to, function(err, translation) {
+//   if(err) console.log(err.message);
+//   console.log(`${category.name} translation to ${req.params.to} is ${translation}`);
+//   category.translations[req.params.to] = translation;
+//   category.save();
+// });
 exports.translate = function (req, res) {
-  // Translate.translate('Hello', req.params.to, function(err, translation) {
-  //   if(err) console.log(err.message);
-  //   return res.status(200).send(translation);
-  // });
+  const callTranslateApi = limit(function(category_name, callback) {
+    Translate.translate(category_name, req.params.to, callback);
+  }).to(10).per(1000);
 
   const cursor = Category.find({}).cursor();
   cursor.eachAsync(category => {
-    Translate.translate(category.name, req.params.to, function(err, translation) {
+    callTranslateApi(category.name, function(err, translation) {
       if(err) console.log(err.message);
       console.log(`${category.name} translation to ${req.params.to} is ${translation}`);
       category.translations[req.params.to] = translation;
       //category.save();
-      return res.status(200).send(`translation to ${req.params.to} has started`);
     });
   });
+  return res.status(200).send(`translation to ${req.params.to} has started`);
 };
 
 exports.work = function (req, res) {
