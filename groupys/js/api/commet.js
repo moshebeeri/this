@@ -11,6 +11,7 @@ class CommentApi {
                     entities: [
                         {group: group},
                         {instance: instance},
+                        {post: instance},
                     ]
                     ,
                     message: comment
@@ -24,7 +25,7 @@ class CommentApi {
                     },
                     body: JSON.stringify(request)
                 });
-                if (response.status ==='401') {
+                if (response.status === '401') {
                     reject(response);
                     return;
                 }
@@ -57,7 +58,7 @@ class CommentApi {
                     },
                     body: JSON.stringify(request)
                 });
-                if (response.status ==='401') {
+                if (response.status === '401') {
                     reject(response);
                     return;
                 }
@@ -72,7 +73,6 @@ class CommentApi {
             }
         });
     }
-
 
     getComment(entities, token, skip) {
         return new Promise(async (resolve, reject) => {
@@ -89,7 +89,7 @@ class CommentApi {
                     },
                     body: JSON.stringify(request)
                 });
-                if (response.status ==='401') {
+                if (response.status === '401') {
                     reject(response);
                     return;
                 }
@@ -109,7 +109,7 @@ class CommentApi {
         return new Promise(async (resolve, reject) => {
             try {
                 let from = new Date();
-                const response = await fetch(`${server_host}/api/comments/group/chat/`+group._id+'/' + skip + '/' + limit, {
+                const response = await fetch(`${server_host}/api/comments/group/chat/` + group._id + '/' + skip + '/' + limit, {
                     method: 'POST',
                     headers: {
                         'Accept': 'application/json, text/plain, */*',
@@ -117,7 +117,7 @@ class CommentApi {
                         'Authorization': 'Bearer ' + token
                     },
                 })
-                if (response.status ==='401') {
+                if (response.status === '401') {
                     reject(response);
                     return;
                 }
@@ -152,7 +152,7 @@ class CommentApi {
                     },
                     body: JSON.stringify(request)
                 });
-                if (response.status ==='401') {
+                if (response.status === '401') {
                     reject(response);
                     return;
                 }

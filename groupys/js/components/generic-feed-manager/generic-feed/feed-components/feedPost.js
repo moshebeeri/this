@@ -81,6 +81,7 @@ export default class FeedPromotion extends Component {
                         </View>
                         <View style={{paddingLeft:20,justifyContent:'center'}}>
                             <Text>{item.name}</Text>
+                            <Text>{item.feed.activity.post.title}</Text>
                         </View>
 
                     </View>

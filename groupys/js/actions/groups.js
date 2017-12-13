@@ -239,7 +239,7 @@ function createMessage(message, user) {
     }
 }
 
-async function fetchTopList(id, token, group, dispatch) {
+ async function fetchTopList(id, token, group, dispatch) {
     try {
         if (!id) {
             return;
@@ -404,5 +404,6 @@ export function refresh(id, currentSocialState) {
 
 export default {
     getAll,
+    fetchTopList
 
 };

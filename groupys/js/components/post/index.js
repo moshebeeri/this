@@ -2,14 +2,12 @@ import React, {Component} from 'react';
 import {Dimensions, Image, ScrollView, Text, View} from 'react-native';
 import {connect} from 'react-redux';
 import styles from './styles'
-import {FormHeader, ImagePicker, SelectButton, SimplePicker, Spinner, TextInput} from '../../ui/index';
+import {FormHeader, ImagePicker, Spinner, TextInput} from '../../ui/index';
 import * as postAction from "../../actions/posts";
-
 import {bindActionCreators} from "redux";
 import strings from "../../i18n/i18n"
 
 const {width, height} = Dimensions.get('window')
-
 
 class AddPost extends Component {
     static navigationOptions = ({navigation}) => ({
@@ -30,12 +28,10 @@ class AddPost extends Component {
             path: '',
             image: '',
             business: '',
-            post:'',
+            post: '',
             services: []
         };
     }
-
-
 
     componentWillMount() {
         const {actions} = this.props;
@@ -46,13 +42,15 @@ class AddPost extends Component {
         this.props.navigation.goBack();
     }
 
-
-
     async saveFormData() {
-        const {actions} = this.props;
+        const {actions,navigation} = this.props;
         if (this.validateForm()) {
             const post = this.createPostFromState();
-            actions.createPost(post, this.props.navigation);
+            if (navigation.state.params && navigation.state.params.group) {
+                actions.createGroupPost(post, this.props.navigation,navigation.state.params.group);
+            }else {
+                actions.createPost(post, this.props.navigation,);
+            }
         }
     }
 
@@ -71,15 +69,24 @@ class AddPost extends Component {
     }
 
     createPostFromState() {
-        const {user}= this.props;
+        const {user, navigation} = this.props;
+        if (navigation.state.params && navigation.state.params.group) {
+            return {
+                title: this.state.title,
+                text: this.state.post,
+                image: this.state.image,
+                behalf: {
+                    group: navigation.state.params.group
+                }
+            }
+        }
         return {
             title: this.state.title,
             text: this.state.post,
             image: this.state.image,
-            behalf:{
+            behalf: {
                 user: user
             }
-
         };
     }
 
@@ -91,8 +98,6 @@ class AddPost extends Component {
             this.refs[nextField].focus()
         }
     }
-
-
 
     showUsers() {
         const {userFollowers} = this.props;
@@ -123,7 +128,7 @@ class AddPost extends Component {
 
                     <View style={styles.addCoverContainer}>
 
-                        <ImagePicker ref={"coverImage"}  image={coverImage} color='white' pickFromCamera
+                        <ImagePicker ref={"coverImage"} image={coverImage} color='white' pickFromCamera
                                      setImage={this.setCoverImage.bind(this)}/>
                     </View>
                     {saving && <Spinner/>}
@@ -135,7 +140,7 @@ class AddPost extends Component {
             <View style={styles.cmeraLogoContainer}>
 
                 <View style={styles.addCoverNoImageContainer}>
-                    <ImagePicker ref={"coverImage"}  color='white' pickFromCamera
+                    <ImagePicker ref={"coverImage"} color='white' pickFromCamera
                                  setImage={this.setCoverImage.bind(this)}/>
                     <Text style={styles.addCoverText}>{strings.AddPictureOrVideo}</Text>
                 </View>
@@ -145,7 +150,7 @@ class AddPost extends Component {
     }
 
     render() {
-       return (
+        return (
             <View style={styles.product_container}>
                 <FormHeader showBack submitForm={this.saveFormData.bind(this)} navigation={this.props.navigation}
                             title={strings.AddPost} bgc="#2db6c8"/>
@@ -176,8 +181,6 @@ class AddPost extends Component {
             </View>
         );
     }
-
-
 }
 
 export default connect(
@@ -187,7 +190,6 @@ export default connect(
     }),
     (dispatch) => ({
         actions: bindActionCreators(postAction, dispatch),
-
     })
 )(AddPost);
 

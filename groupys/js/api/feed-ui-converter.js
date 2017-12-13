@@ -12,26 +12,40 @@ class FeedConverter {
             let responseFeed = {
                 itemType: 'POST',
                 feed: feed,
-                id:feed.activity.post._id
-
+                id: feed.activity.post._id,
+                generalId: feed.activity.post._id,
+                entities: [{post: feed.activity.post._id}],
             }
             if (feed.activity.post.pictures && feed.activity.post.pictures[0]) {
                 responseFeed.banner = {
                     uri: feed.activity.post.pictures[0].pictures[1]
                 };
             }
-            if (feed.activity.actor_user.pictures && Object.keys(feed.activity.actor_user.pictures).length > 0) {
-                responseFeed.avetar = {
-                    uri: feed.activity.actor_user.pictures[Object.keys(feed.activity.actor_user.pictures).length - 1].pictures[3]
-                }
-            }else{
-                responseFeed.avetar = noPic
-
+            if (feed.activity.post.social_state){
+                responseFeed.social = feed.activity.post.social_state;
+                responseFeed.social.activityId = feed.activity._id;
             }
-            responseFeed.name = feed.activity.actor_user.name
-            return  responseFeed;
+            let user = feed.activity.actor_user;
+            if (!user) {
+                user = feed.activity.post.creator;
+            }
+            if (user && user.pictures && Object.keys(user.pictures).length > 0) {
+                responseFeed.avetar = {
+                    uri: user.pictures[Object.keys(user.pictures).length - 1].pictures[3]
+                }
+            }
+            else {
+                responseFeed.avetar = noPic
+            }
+            responseFeed.name = user.name
+            return responseFeed;
         }
-        if (feed.activity.action === 'welcome') {
+        if (feed
+                .activity
+                .action
+            ===
+            'welcome'
+        ) {
             response = {
                 name: feed.activity.user.name,
                 message: strings.WelcomeMessage,
@@ -54,6 +68,37 @@ class FeedConverter {
         return response;
     }
 
+
+    createPost(post){
+        let responseFeed = {
+            itemType: 'POST',
+            id: post._id,
+            generalId: post._id,
+            entities: [{post: post._id}],
+        }
+        if (post.pictures && post.pictures[0]) {
+            responseFeed.banner = {
+                uri: post.pictures[0].pictures[1]
+            };
+        }
+        if (post.social_state){
+            responseFeed.social = post.social_state;
+
+        }
+        responseFeed.title =  post.title;
+        let user = post.creator;
+
+        if (user && user.pictures && Object.keys(user.pictures).length > 0) {
+            responseFeed.avetar = {
+                uri: user.pictures[Object.keys(user.pictures).length - 1].pictures[3]
+            }
+        }
+        else {
+            responseFeed.avetar = noPic
+        }
+        responseFeed.name = user.name
+        return responseFeed;
+    }
     createShared(feed) {
         let response = {}
         let sharedFeed = {
@@ -315,6 +360,9 @@ class FeedConverter {
             return;
         }
         let promotion = this.getPromotion(feed);
+        if (!promotion) {
+            return;
+        }
         let responseFeed = {};
         try {
             let date = new Date(promotion.end);
