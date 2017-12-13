@@ -25,6 +25,9 @@ import {
 import FeedMessage from './feedMessage'
 import FeedPromotion from './feedPromotion'
 import FeedBusiness from './feedBusiness'
+import FeedPost from './feedPost'
+
+
 import FeedWelcome from './feedWelcome'
 import strings from "../../../../i18n/i18n"
 
@@ -89,6 +92,12 @@ export default class FeedShared extends Component {
             case 'MESSAGE':
                 return this.createFeedView(<FeedMessage shared token={token} navigation={this.props.navigation}
                                                         item={item.shardeActivity}/>)
+
+
+            case'POST':
+                return this.createFeedView(<FeedPost shared token={token} navigation={this.props.navigation} item={item.shardeActivity} like={actions.like} unlike={actions.unlike}
+                                                     showUsers={showUsers} comment={comment}/>)
+
             default:
                 return this.createFeedView(<FeedBusiness shared location={location} token={token} refresh={refresh}
                                                          navigation={this.props.navigation}

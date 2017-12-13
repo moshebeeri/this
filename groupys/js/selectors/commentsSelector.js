@@ -18,35 +18,25 @@ export const getFeeds = createSelector([getStateFeeds],
                     response[groupId] = new Array();
                 }
                 if (feedsOrder[groupId] && feedsOrder[groupId].length > 0) {
-                    let lastGroupInstance =  feeds[groupId][feedsOrder[groupId][0]].entities.instance;
-                    let isInstance= true;
-                    if(!lastGroupInstance){
-                        lastGroupInstance = feeds[groupId][feedsOrder[groupId][0]].entities.post
-                        isInstance = false;
-                    }
-                    
-
-
+                    let lastGroupInstance = feeds[groupId][feedsOrder[groupId][0]].entities.instance;
+                    let lastPost = feeds[groupId][feedsOrder[groupId][0]].entities.post;
                     feedsOrder[groupId].forEach(function (feedId) {
-                        if (  feeds[groupId][feedId].entities.instance &&
-                            feeds[groupId][feedId].entities.instance._id !== lastGroupInstance._id) {
-
-                            if(isInstance) {
+                        if (( lastGroupInstance && feeds[groupId][feedId].entities.instance &&
+                                feeds[groupId][feedId].entities.instance._id !== lastGroupInstance._id) ||
+                            (lastPost && feeds[groupId][feedId].entities.post &&
+                                feeds[groupId][feedId].entities.post._id !== lastPost._id) || (
+                                lastGroupInstance && feeds[groupId][feedId].entities.post
+                            )
+                            || (lastPost && feeds[groupId][feedId].entities.instance)) {
+                            if (lastGroupInstance) {
                                 response[groupId].push({instance: feedUiConverter.createPromotionInstance(lastGroupInstance)});
-                            }else{
-                                response[groupId].push({instance: feedUiConverter.createPost(lastGroupInstance)});
-
+                            } else {
+                                response[groupId].push({instance: feedUiConverter.createPost(lastPost)});
                             }
                             lastGroupInstance = feeds[groupId][feedId].entities.instance;
-                            isInstance = false;
-                            if(!lastGroupInstance){
-                                isInstance = true;
-                                lastGroupInstance = feeds[groupId][feedsOrder[groupId][0]].entities.post;
-                            }
-
+                            lastPost = feeds[groupId][feedId].entities.post;
                         }
                         response[groupId].push({message: createFeed(feeds[groupId][feedId])});
-
                     })
                 }
             })
@@ -58,7 +48,6 @@ export const getFeeds = createSelector([getStateFeeds],
                         response[groupId] = [];
                     }
                     clientComments[groupId].forEach(feed => {
-
                             response[groupId].unshift({message: createFeed(feed)})
                         }
                     )

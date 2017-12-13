@@ -99,7 +99,7 @@ export default class FeedPromotion extends Component {
                     </View>
 
 
-                    <View style={styles.promotion_bottomContainer}>
+                    {!shared && <View style={styles.promotion_bottomContainer}>
 
                         {item.social && <SocialState feed comments={item.social.comments} onPressComment={comment}
                                                      like={item.social.like} likes={item.social.likes}
@@ -108,7 +108,7 @@ export default class FeedPromotion extends Component {
                                                      shareDisabled={shared}
                                                      share={item.social.share} shares={item.social.shares}
                                                      shareAction={showUsers}/>}
-                    </View>
+                    </View>}
                 </View>
             </InViewPort>;
         return result;

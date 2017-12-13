@@ -103,8 +103,17 @@ class FeedConverter {
         let response = {}
         let sharedFeed = {
             activity: feed.activity.activity,
-            _id: feed.activity.activity.instance._id
+
+
         }
+        if(feed.activity.activity.instance) {
+            sharedFeed._id = feed.activity.activity.instance._id;
+        }
+        if(feed.activity.activity.post) {
+            sharedFeed._id = feed.activity.activity.post._id;
+        }
+
+
         response.shardeActivity = this.createFeed(sharedFeed);
         response.user = feed.activity.actor_user;
         response.itemType = 'SHARE';
