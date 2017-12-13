@@ -228,8 +228,8 @@ function createUserUpdateStateFunction(userId) {
             callback(null, null);
         },
         post: function (callback) {
-          if (utils.defined(activity.instance))
-            post_state(userId, activity.instance, callback);
+          if (utils.defined(activity.post))
+            post_state(userId, activity.post, callback);
           else
             callback(null, null);
         },

@@ -7,7 +7,7 @@ let auth = require('../../auth/auth.service');
 let router = express.Router();
 
 router.get('/by/id/:lang/:id', auth.isAuthenticated(), controller.categoryById);
-router.get('/translate/:to', auth.isAuthenticated(), controller.translate);
+router.get('/translate/:to'/*, auth.isAuthenticated()*/, controller.translate);
 router.get('/work/:function', auth.isAuthenticated(), controller.work);
 router.get('/product/:lang/:parent', auth.isAuthenticated(), controller.product);
 router.get('/business/:lang/:parent', auth.isAuthenticated(), controller.business);

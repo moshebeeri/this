@@ -13,6 +13,7 @@ const ProductTopCategory = graphTools.createGraphModel('ProductTopCategory');
 const ProductCategory = graphTools.createGraphModel('ProductCategory');
 const EBayProductCategories = require('./data/product.category.ebay');
 const translate = require('@google-cloud/translate');
+const limit = require("simple-rate-limiter");
 
 const Translate = translate({
   projectId: 'this-f2f45',
@@ -219,20 +220,20 @@ function add_categories(type, categories, parent) {
                   where id(parent)=${parent.id}
                   CREATE (sub:${typeName}{name:"${name}"})-[:CATEGORY]->(parent)
                   RETURN sub`;
-      ProductCategory.query(query, function (err, category) {
-        if(err) return console.log(err);
-      })
+    ProductCategory.query(query, function (err, category) {
+      if(err) return console.log(err);
+    })
   })
 }
 
 
 
 function csv_load_product_categories(req, res) {
-    let query = ` MATCH (parent:ProductCategory{name:"ProductRootCategory"})
+  let query = ` MATCH (parent:ProductCategory{name:"ProductRootCategory"})
                   CREATE (sub:ProductCategory{name:"Groceries"})-[:CATEGORY]->(parent)
                   RETURN sub`;
 
-    ProductCategory.query(query, function (err, sub) {
+  ProductCategory.query(query, function (err, sub) {
     if(err) return handleError(res, err);
     const csv = require('csvtojson');
     let top = {};
@@ -282,21 +283,72 @@ function drop_uniqueness(req, res){
   return res.status(200).json('ok');
 }
 
+//https://cloud.google.com/translate/docs/languages
+// Translate.translate(category.name, req.params.to, function(err, translation) {
+//   if(err) console.log(err.message);
+//   console.log(`${category.name} translation to ${req.params.to} is ${translation}`);
+//   category.translations[req.params.to] = translation;
+//   category.save();
+// });
 exports.translate = function (req, res) {
-  // Translate.translate('Hello', req.params.to, function(err, translation) {
-  //   if(err) console.log(err.message);
-  //   return res.status(200).send(translation);
-  // });
+
+  const callTranslateApi = limit(function(category_name, callback) {
+    Translate.translate(category_name, req.params.to, callback);
+    //callback(null, req.params.to + '_' + category_name)
+  }).to(20).per(1000);
+
+
+  /*  Category.find({}).skip(0).limit(100)
+      .exec ( (err, categories) => {
+        categories.forEach(category => {
+          callTranslateApi(category.name, function (err, translation) {
+            if (err) return console.log(err.message);
+            let translations = category.translations;
+            console.log(Object.keys(translations));
+            let newTranslations = {
+            };
+            Object.keys(translations).forEach(key => {
+              newTranslations[key] = translations[key];
+            });
+            newTranslations[req.params.to] = translation;
+
+            category.translations = newTranslations;
+            category.save(function (err, category) {
+              Category.findById(category._id).exec( (err, c) =>{
+                console.log(c);
+                });
+              // if (err) return console.log(err.message);
+              // console.log(`saving ${category.name} translation to ${req.params.to} is ${translation}`);
+            });
+          })
+        });
+      });*/
+
 
   const cursor = Category.find({}).cursor();
   cursor.eachAsync(category => {
-    Translate.translate(category.name, req.params.to, function(err, translation) {
-      if(err) console.log(err.message);
-      console.log(`${category.name} translation to ${category.name} id ${translation}`);
-      category.translations[req.params.to] = translation;
-      category.save();
+    callTranslateApi(category.name, function(err, translation) {
+      if (err) return console.log(err.message);
+      let translations = category.translations;
+      let newTranslations = {};
+      Object.keys(translations).forEach(key => {
+        newTranslations[key] = translations[key];
+      });
+      newTranslations[req.params.to] = translation;
+      category.translations = newTranslations;
+
+      category.save(function (err, category) {
+        // Category.findById(category._id).exec( (err, c) =>{
+        //   console.log(c);
+        //   });
+        if (err) return console.log(err.message);
+        console.log(JSON.stringify(category.translations));
+        //console.log(`saving ${category.name} translation to ${req.params.to} is ${translation}`);
+      });
     });
   });
+
+  return res.status(200).send(`translation to ${req.params.to} has started`);
 };
 
 exports.work = function (req, res) {
