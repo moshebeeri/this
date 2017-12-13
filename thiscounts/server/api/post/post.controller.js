@@ -2,6 +2,7 @@
 
 let _ = require('lodash');
 let Post = require('./post.model');
+let Group = require('../group/group.model');
 let graphTools = require('../../components/graph-tools');
 let graphModel = graphTools.createGraphModel('post');
 const activity = require('../../components/activity').createActivity();
@@ -23,15 +24,45 @@ exports.show = function(req, res) {
   });
 };
 
+function getActorId(post){
+  if( post.behalf.user      ) return post.behalf.user    ;
+  if( post.behalf.business  ) return post.behalf.business;
+  if( post.behalf.mall      ) return post.behalf.mall    ;
+  if( post.behalf.chain     ) return post.behalf.chain   ;
+  if( post.behalf.group     ) return post.behalf.group   ;
+  return null;
+}
+
+function handlePostCreation(post) {
+  if(!post || !post.creator || !post.creator._id || !post._id)
+    return console.log(`handlePostCreation param post invalid: ${JSON.stringify(post)})`);
+
+  graphModel.relate_ids(post.creator._id, 'POSTED_BY', post._id);
+  graphModel.relate_ids(post._id, 'POSTED_ON', getActorId(post));
+
+  if(post.behalf.group) {
+    Group.findById(post.behalf.group).exec(function (err, group) {
+      group.preview = {
+        post: post._id
+      };
+      group.save()
+    })
+  }
+}
+
 // Creates a new post in the DB.
 exports.create = function(req, res) {
   let post = req.body;
+  if(!getActorId(post))
+    return handleError(res, new Error('no actor (behalf) present'));
+
   post.creator = req.user._id;
   post.created = Date.now();
   Post.create(post, function(err, post) {
     if(err) { return handleError(res, err); }
     graphModel.reflect(post, {_id: post._id}, function (err) {
       if (err) { return handleError(res, err); }
+      handlePostCreation(post);
       const act = {
         actor_user      : post.behalf.user    ,
         actor_business  : post.behalf.business,

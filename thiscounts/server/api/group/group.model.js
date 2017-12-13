@@ -34,6 +34,7 @@ const GroupSchema = new Schema({
   admins: [{type: Schema.ObjectId, ref: 'User', index: true}],
   qrcode: {type: Schema.ObjectId, ref:'QRCode'},
   preview: {
+    post: {type: Schema.ObjectId, ref: 'Post'},
     comment: {type: Schema.ObjectId, ref: 'Comment'},
     message_activity: {type: Schema.ObjectId, ref: 'Activity'},
     instance_activity: {type: Schema.ObjectId, ref: 'Activity'},

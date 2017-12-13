@@ -293,15 +293,15 @@ function drop_uniqueness(req, res){
 exports.translate = function (req, res) {
   const callTranslateApi = limit(function(category_name, callback) {
     Translate.translate(category_name, req.params.to, callback);
-  }).to(10).per(1000);
+  }).to(50).per(1000);
 
   const cursor = Category.find({}).cursor();
   cursor.eachAsync(category => {
     callTranslateApi(category.name, function(err, translation) {
-      if(err) console.log(err.message);
+      if(err) return console.log(err.message);
       console.log(`${category.name} translation to ${req.params.to} is ${translation}`);
       category.translations[req.params.to] = translation;
-      //category.save();
+      category.save();
     });
   });
   return res.status(200).send(`translation to ${req.params.to} has started`);
