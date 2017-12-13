@@ -55,11 +55,8 @@ export function sendMessage(groupId, instanceId, message) {
         try {
             const token = getState().authentication.token;
             const user = getState().user.user;
-            try {
-                commentsApi.createComment(groupId, instanceId, message, token)
-            } catch (error) {
-                //TODO dispatch network failed event
-            }
+            commentsApi.createComment(groupId, instanceId, message, token)
+
             let messageItem = createMessage(message, user);
             dispatch({
                 type: actions.GROUP_COMMENT_INSTANCE_ADD_MESSAGE,
@@ -104,7 +101,7 @@ export function setNextFeeds(comments, group, instance) {
                 response = await commentsApi.getInstanceGroupComments(group._id, instance.id, comments.length, token);
             } else {
                 response = await commentsApi.getInstanceGroupComments(group._id, instance.id, 0, token);
-            }
+            } feeds[groupId][feedsOrder[groupId][0]]
             dispatch({
                 type: actions.GROUP_COMMENT_INSTANCE_LOADING_DONE,
                 loadingDone: true,

@@ -19,12 +19,30 @@ export const getFeeds = createSelector([getStateFeeds],
                 }
                 if (feedsOrder[groupId] && feedsOrder[groupId].length > 0) {
                     let lastGroupInstance =  feeds[groupId][feedsOrder[groupId][0]].entities.instance;
+                    let isInstance= true;
+                    if(!lastGroupInstance){
+                        lastGroupInstance = feeds[groupId][feedsOrder[groupId][0]].entities.post
+                        isInstance = false;
+                    }
+                    
+
 
                     feedsOrder[groupId].forEach(function (feedId) {
-                        if (feeds[groupId][feedId].entities.instance &&
+                        if (  feeds[groupId][feedId].entities.instance &&
                             feeds[groupId][feedId].entities.instance._id !== lastGroupInstance._id) {
-                            response[groupId].push({instance: feedUiConverter.createPromotionInstance(lastGroupInstance)});
+
+                            if(isInstance) {
+                                response[groupId].push({instance: feedUiConverter.createPromotionInstance(lastGroupInstance)});
+                            }else{
+                                response[groupId].push({instance: feedUiConverter.createPost(lastGroupInstance)});
+
+                            }
                             lastGroupInstance = feeds[groupId][feedId].entities.instance;
+                            isInstance = false;
+                            if(!lastGroupInstance){
+                                isInstance = true;
+                                lastGroupInstance = feeds[groupId][feedsOrder[groupId][0]].entities.post;
+                            }
 
                         }
                         response[groupId].push({message: createFeed(feeds[groupId][feedId])});

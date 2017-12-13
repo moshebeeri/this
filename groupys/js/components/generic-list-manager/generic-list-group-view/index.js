@@ -98,7 +98,7 @@ export default class GenericListGroupView extends Component {
     }
 
     createPromotionItem(item) {
-        if (item.preview && item.preview.instance_activity) {
+        if (item.preview && item.preview.instance_activity && item.preview.instance_activity.instance && item.preview.instance_activity.instance.promotion ) {
             return uiConverter.createPromotionInstance(item.preview.instance_activity.instance);
         }
         return undefined;
@@ -124,7 +124,7 @@ export default class GenericListGroupView extends Component {
 
             let itemChat
             let userImage = undefined;
-            if (user.pictures && user.pictures.length > 0) {
+            if (user && user.pictures && user.pictures.length > 0) {
                 itemChat = {
                     date:item.preview.comment.timestamp,
                     message: item.preview.comment.message,
@@ -134,12 +134,16 @@ export default class GenericListGroupView extends Component {
 
                 }
             } else {
+                let name
+                if(user){
+                    name = user.name;
+                }
                 itemChat = {
                     date:item.preview.comment.timestamp,
                     isUser:true,
                     message: item.preview.comment.message,
                     avetar: require('../../../../images/client_1.png'),
-                    name:user.name
+                    name:name
 
                 }
             }

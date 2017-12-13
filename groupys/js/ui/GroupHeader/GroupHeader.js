@@ -84,7 +84,7 @@ export default class GroupHeader extends Component {
                 <View style={styles.groupName}>
                     <View style={{flexDirection: 'row'}}>
                         <Text style={this.createStyle(group.entity_type)}>{this.createTitle(group.entity_type)} | </Text>
-                        <Text>{group.social_state.followers} {strings.Members} </Text>
+                        {group.social_state &&  <Text>{group.social_state.followers} {strings.Members} </Text>}
                     </View>
                     <View>
                         <Text style={styles.groupNameText}>{group.name}</Text>

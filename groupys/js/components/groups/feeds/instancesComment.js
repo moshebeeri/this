@@ -1,5 +1,5 @@
 import React, {Component} from "react";
-import {Dimensions, View} from "react-native";
+import {Dimensions, View,Text} from "react-native";
 import {connect} from "react-redux";
 import {actions} from "react-native-navigation-redux-helpers";
 import GenericFeedManager from "../../generic-feed-manager/index";
@@ -8,11 +8,11 @@ import {bindActionCreators} from "redux";
 import * as commentAction from "../../../actions/commentsGroup";
 import styles from './styles'
 import {ChatMessage, MessageBox, PromotionHeader} from '../../../ui/index';
-
+import {Thumbnail} from 'native-base';
 const {width, height} = Dimensions.get('window')
 const vw = width / 100;
 const vh = height / 100
-
+import strings from '../../../i18n/i18n';
 class instancesComment extends Component {
     constructor(props) {
         super(props);
@@ -55,8 +55,22 @@ class instancesComment extends Component {
             </View>
         } else {
             return <View style={styles.comments_promotions}>
-                <PromotionHeader type={item.instance.promotion} feed titleText={item.instance.promotionTitle}
-                                 titleValue={item.instance.promotionValue} term={item.instance.promotionTerm}/>
+                {item.instance.promotion && <PromotionHeader type={item.instance.promotion} feed titleText={item.instance.promotionTitle}
+                                 titleValue={item.instance.promotionValue} term={item.instance.promotionTerm}/>}
+
+                {item.instance.avetar &&
+                <View style={{flexDirection: 'row',margin:4, borderRadius:10,backgroundColor: "#c9edf2", height:60, width: width -15}}>
+
+                    <View style={{paddingLeft: 10, justifyContent: 'center'}}>
+                        <Thumbnail small source={item.instance.avetar}/>
+                    </View>
+                    <View style={{paddingLeft: 20, justifyContent: 'center'}}>
+                        <Text>{item.instance.name} {strings.Posted} </Text>
+                        <Text>{item.instance.title}</Text>
+                    </View>
+                </View>
+                }
+
             </View>
         }
     }

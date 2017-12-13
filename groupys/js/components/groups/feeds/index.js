@@ -1,7 +1,7 @@
 import React, {Component} from "react";
 import {BackHandler, View} from "react-native";
 import {connect} from "react-redux";
-import {Button, Container, Icon, Input, Tab, TabHeading, Tabs, Text,Fab} from "native-base";
+import {Button, Container, Fab, Icon, Input, Tab, TabHeading, Tabs, Text} from "native-base";
 import {actions} from "react-native-navigation-redux-helpers";
 import GroupFeedHeader from "./groupFeedHeader";
 import GenericFeedManager from "../../generic-feed-manager/index";
@@ -13,7 +13,8 @@ import InstanceComment from "./instancesComment";
 import {getFeeds} from "../../../selectors/groupFeedsSelector";
 import * as commentAction from "../../../actions/commentsGroup";
 import strings from "../../../i18n/i18n"
-
+import Icon2 from "react-native-vector-icons/Ionicons";
+import PageRefresher from '../../../refresh/pageRefresher'
 class GroupFeed extends Component {
     static navigationOptions = ({navigation}) => ({
         header: <GroupFeedHeader navigation={navigation} role={navigation.state.params.role}
@@ -35,8 +36,10 @@ class GroupFeed extends Component {
         BackHandler.addEventListener('hardwareBackPress', this.handleBack.bind(this));
         const {navigation, feeds} = this.props;
         const group = navigation.state.params.group;
-        if(!feeds[group._id]||(feeds[group._id] && feeds[group._id].length === 0)) {
-             this.props.actions.setFeeds(group, feeds[group._id]);
+        PageRefresher.addGroupsFeed(group._id);
+        PageRefresher.visitedGroupFeeds(group._id);
+        if (!feeds[group._id] || (feeds[group._id] && feeds[group._id].length === 0)) {
+            this.props.actions.setFeeds(group, feeds[group._id]);
         }
     }
 
@@ -56,9 +59,10 @@ class GroupFeed extends Component {
             showChat: false
         })
     }
-    navigateToAdd(){
-        const group = navigation.state.params.group;
-        this.props.navigation.navigate('PostForm',{group:group})
+
+    navigateToAdd() {
+        const group = this.props.navigation.state.params.group;
+        this.props.navigation.navigate('PostForm', {group: group})
     }
 
     changeTab() {
@@ -69,6 +73,20 @@ class GroupFeed extends Component {
         })
         if (!this.state.showChat) {
             commentGroupAction.fetchTopComments(group)
+        }
+    }
+
+    allowPost(group) {
+        switch (group.entity_type) {
+            case 'USERS':
+                return true;
+            case 'BUSINESS':
+                if (group.role && (group.role === "owner" || group.role === "OWNS" || group.role === "Admin" )) {
+                    return true;
+                }
+                return false;
+            default:
+                return false;
         }
     }
 
@@ -108,8 +126,9 @@ class GroupFeed extends Component {
     }
 
     createGroupFeeds() {
-        const {navigation, feeds, userFollower, actions, token, loadingDone, location, showTopLoader} = this.props;
+        const {navigation, feeds, userFollower, actions, token, loadingDone, location, showTopLoader,postUpdated} = this.props;
         const group = navigation.state.params.group;
+        const icon = <Icon2 active size={40} name="md-create"/>;
         return <View style={styles.inputContainer}>
             <GenericFeedManager
                 navigation={navigation}
@@ -127,7 +146,7 @@ class GroupFeed extends Component {
                 ItemDetail={GenericFeedItem}>
 
             </GenericFeedManager>
-            <Fab
+            {this.allowPost(group) && <Fab
 
                 direction="right"
                 active={false}
@@ -137,7 +156,7 @@ class GroupFeed extends Component {
                 onPress={() => this.navigateToAdd()}>
                 {icon}
 
-            </Fab>
+            </Fab>}
 
         </View>
     }
@@ -150,6 +169,7 @@ export default connect(
         feeds: getFeeds(state),
         showTopLoader: state.groups.showTopLoader,
         loadingDone: state.groups.loadingDone,
+        postUpdated: state.postForm,
         location: state.phone.currentLocation
     }),
     (dispatch) => ({

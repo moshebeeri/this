@@ -5,6 +5,7 @@
 	};
 	objectVersion = 46;
 	objects = {
+
 /* Begin PBXBuildFile section */
 		00C302E51ABCBA2D00DB3ED1 /* libRCTActionSheet.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 00C302AC1ABCB8CE00DB3ED1 /* libRCTActionSheet.a */; };
 		00C302E71ABCBA2D00DB3ED1 /* libRCTGeolocation.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 00C302BA1ABCB90400DB3ED1 /* libRCTGeolocation.a */; };
@@ -72,6 +73,7 @@
 		C7A1135924CA40F1AAEFB43D /* OFL.txt in Resources */ = {isa = PBXBuildFile; fileRef = 78091B93FD0649168E87CBD1 /* OFL.txt */; };
 		CEA2E72D025A4140BF617A23 /* Roboto-BoldItalic.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 1D0D443FF5BA4519B48A31ED /* Roboto-BoldItalic.ttf */; };
 		D0C377D66E2F440C9D3A268D /* libRNI18n.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 2BD67BCDF875422CBF9EAD4B /* libRNI18n.a */; };
+		D34863DA6DFE4654B36A8D1A /* libVydiaRNFileUploader.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 6AA1E1B596F34745BD2A1E4C /* libVydiaRNFileUploader.a */; };
 		D76A692D1D5748A19E81484C /* Roboto-Thin.ttf in Resources */ = {isa = PBXBuildFile; fileRef = A45471177EFD4CCBA523ADD0 /* Roboto-Thin.ttf */; };
 		DDB2A433AB7743D9AC6A7EEE /* Roboto-ThinItalic.ttf in Resources */ = {isa = PBXBuildFile; fileRef = D2A32D1514A24308963AD8DE /* Roboto-ThinItalic.ttf */; };
 		E6D8DDB7C1FF4D378E868BCC /* EvilIcons.ttf in Resources */ = {isa = PBXBuildFile; fileRef = C2557F8EBE084B738FB4FB78 /* EvilIcons.ttf */; };
@@ -90,7 +92,6 @@
 		F61A71181FD819CA0085E54F /* SimpleLineIcons.ttf in Resources */ = {isa = PBXBuildFile; fileRef = F61A710D1FD819CA0085E54F /* SimpleLineIcons.ttf */; };
 		F61A71191FD819CA0085E54F /* MaterialIcons.ttf in Resources */ = {isa = PBXBuildFile; fileRef = F61A710E1FD819CA0085E54F /* MaterialIcons.ttf */; };
 		FC374070ADCC4D88B578987D /* Roboto-LightItalic.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 705D27FA1D2D4EC3A94E7ECF /* Roboto-LightItalic.ttf */; };
-		D34863DA6DFE4654B36A8D1A /* libVydiaRNFileUploader.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 6AA1E1B596F34745BD2A1E4C /* libVydiaRNFileUploader.a */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -423,6 +424,27 @@
 			remoteGlobalIDString = 58B5119B1A9E6C1200147676;
 			remoteInfo = RCTText;
 		};
+		F60962261FE0F15B00337F22 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 1251BCED34974A7EBCA0EB3E /* VydiaRNFileUploader.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 014A3B5C1C6CF33500B6D375;
+			remoteInfo = VydiaRNFileUploader;
+		};
+		F609622B1FE0F15B00337F22 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 6B8215CDC3B34BB2AC70F3CE /* RNUploader.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 134814201AA4EA6300B7C361;
+			remoteInfo = RNUploader;
+		};
+		F60962301FE0F15B00337F22 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = E4AB0B236CE244C3903C5E15 /* RCTFileUploader.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 8A0D99841C3D65E500DD5E9B;
+			remoteInfo = RCTFileUploader;
+		};
 		F66680A71FDD755000C9E47C /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = DFAB2D151A20453D885CF712 /* RNI18n.xcodeproj */;
@@ -496,6 +518,7 @@
 		089D5B47DCB9498DA0D28822 /* FontAwesome.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = FontAwesome.ttf; path = "../node_modules/native-base/Fonts/FontAwesome.ttf"; sourceTree = "<group>"; };
 		0D09ABA83E30498882509649 /* RCTYouTube.xcodeproj */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = "wrapper.pb-project"; name = RCTYouTube.xcodeproj; path = "../node_modules/react-native-youtube/RCTYouTube.xcodeproj"; sourceTree = "<group>"; };
 		10E153B5050741029DA69462 /* Roboto-MediumItalic.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "Roboto-MediumItalic.ttf"; path = "../node_modules/react-native-vector-icons/Fonts/Roboto-MediumItalic.ttf"; sourceTree = "<group>"; };
+		1251BCED34974A7EBCA0EB3E /* VydiaRNFileUploader.xcodeproj */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = "wrapper.pb-project"; name = VydiaRNFileUploader.xcodeproj; path = "../node_modules/react-native-background-upload/ios/VydiaRNFileUploader.xcodeproj"; sourceTree = "<group>"; };
 		12A03DB6D41E4634B1E1CAB8 /* EvilIcons.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = EvilIcons.ttf; path = "../node_modules/react-native-vector-icons/Fonts/EvilIcons.ttf"; sourceTree = "<group>"; };
 		139105B61AF99BAD00B5F7CC /* RCTSettings.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = RCTSettings.xcodeproj; path = "../node_modules/react-native/Libraries/Settings/RCTSettings.xcodeproj"; sourceTree = "<group>"; };
 		139FDEE61B06529A00C62182 /* RCTWebSocket.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = RCTWebSocket.xcodeproj; path = "../node_modules/react-native/Libraries/WebSocket/RCTWebSocket.xcodeproj"; sourceTree = "<group>"; };
@@ -539,8 +562,10 @@
 		5F95E35F1A2F407997CBF2D2 /* Roboto-ThinItalic.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "Roboto-ThinItalic.ttf"; path = "../node_modules/react-native-vector-icons/Fonts/Roboto-ThinItalic.ttf"; sourceTree = "<group>"; };
 		658CD5DA7B5342FAA4617133 /* Roboto-BlackItalic.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "Roboto-BlackItalic.ttf"; path = "../node_modules/react-native-vector-icons/Fonts/Roboto-BlackItalic.ttf"; sourceTree = "<group>"; };
 		687215630F5C4C14B91B8784 /* Roboto-Italic.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "Roboto-Italic.ttf"; path = "../node_modules/react-native-vector-icons/Fonts/Roboto-Italic.ttf"; sourceTree = "<group>"; };
+		6AA1E1B596F34745BD2A1E4C /* libVydiaRNFileUploader.a */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = archive.ar; path = libVydiaRNFileUploader.a; sourceTree = "<group>"; };
 		6B051936915149109DB759D4 /* Roboto-Medium.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "Roboto-Medium.ttf"; path = "../node_modules/react-native-vector-icons/Fonts/Roboto-Medium.ttf"; sourceTree = "<group>"; };
 		6B1FFEE865EF4470A0E4C772 /* MaterialIcons.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = MaterialIcons.ttf; path = "../node_modules/react-native-vector-icons/Fonts/MaterialIcons.ttf"; sourceTree = "<group>"; };
+		6B8215CDC3B34BB2AC70F3CE /* RNUploader.xcodeproj */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = "wrapper.pb-project"; name = RNUploader.xcodeproj; path = "../node_modules/react-native-uploader/RNUploader/RNUploader.xcodeproj"; sourceTree = "<group>"; };
 		6F8DB0CF9B1045A59A8A31F2 /* Zocial.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = Zocial.ttf; path = ../fonts/Zocial.ttf; sourceTree = "<group>"; };
 		70415FA4DE7947F6BCCE5AA6 /* SimpleLineIcons.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = SimpleLineIcons.ttf; path = "../node_modules/native-base/Fonts/SimpleLineIcons.ttf"; sourceTree = "<group>"; };
 		705D27FA1D2D4EC3A94E7ECF /* Roboto-LightItalic.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "Roboto-LightItalic.ttf"; path = "../fonts/Roboto-LightItalic.ttf"; sourceTree = "<group>"; };
@@ -587,6 +612,7 @@
 		E326C43F43CE4C9E90C975C6 /* Entypo.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = Entypo.ttf; path = "../node_modules/native-base/Fonts/Entypo.ttf"; sourceTree = "<group>"; };
 		E3AADCE2DD744F21A22899AA /* RNVectorIcons.xcodeproj */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = "wrapper.pb-project"; name = RNVectorIcons.xcodeproj; path = "../node_modules/react-native-vector-icons/RNVectorIcons.xcodeproj"; sourceTree = "<group>"; };
 		E460D8F448E643638BC8E22E /* libRCTYouTube.a */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = archive.ar; path = libRCTYouTube.a; sourceTree = "<group>"; };
+		E4AB0B236CE244C3903C5E15 /* RCTFileUploader.xcodeproj */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = "wrapper.pb-project"; name = RCTFileUploader.xcodeproj; path = "../node_modules/react-native-file-uploader/ios/RCTFileUploader.xcodeproj"; sourceTree = "<group>"; };
 		E643E75489D74C368CDF2B0C /* libRNUploader.a */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = archive.ar; path = libRNUploader.a; sourceTree = "<group>"; };
 		E94585FAD56C46938EC7063D /* Entypo.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = Entypo.ttf; path = ../fonts/Entypo.ttf; sourceTree = "<group>"; };
 		EBCEAD23CC84434EBFAA8F18 /* SimpleLineIcons.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = SimpleLineIcons.ttf; path = "../node_modules/react-native-vector-icons/Fonts/SimpleLineIcons.ttf"; sourceTree = "<group>"; };
@@ -609,10 +635,6 @@
 		FB09AC3304C44134A8E84907 /* Octicons.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = Octicons.ttf; path = "../node_modules/native-base/Fonts/Octicons.ttf"; sourceTree = "<group>"; };
 		FC88FA213C224ABD9C249168 /* Roboto-Bold.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "Roboto-Bold.ttf"; path = "../node_modules/react-native-vector-icons/Fonts/Roboto-Bold.ttf"; sourceTree = "<group>"; };
 		FF16B6C5283B44D49334CC3C /* Roboto-Thin.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "Roboto-Thin.ttf"; path = "../node_modules/react-native-vector-icons/Fonts/Roboto-Thin.ttf"; sourceTree = "<group>"; };
-		1251BCED34974A7EBCA0EB3E /* VydiaRNFileUploader.xcodeproj */ = {isa = PBXFileReference; name = "VydiaRNFileUploader.xcodeproj"; path = "../node_modules/react-native-background-upload/ios/VydiaRNFileUploader.xcodeproj"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = wrapper.pb-project; explicitFileType = undefined; includeInIndex = 0; };
-		6AA1E1B596F34745BD2A1E4C /* libVydiaRNFileUploader.a */ = {isa = PBXFileReference; name = "libVydiaRNFileUploader.a"; path = "libVydiaRNFileUploader.a"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = archive.ar; explicitFileType = undefined; includeInIndex = 0; };
-		E4AB0B236CE244C3903C5E15 /* RCTFileUploader.xcodeproj */ = {isa = PBXFileReference; name = "RCTFileUploader.xcodeproj"; path = "../node_modules/react-native-file-uploader/ios/RCTFileUploader.xcodeproj"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = wrapper.pb-project; explicitFileType = undefined; includeInIndex = 0; };
-		6B8215CDC3B34BB2AC70F3CE /* RNUploader.xcodeproj */ = {isa = PBXFileReference; name = "RNUploader.xcodeproj"; path = "../node_modules/react-native-uploader/RNUploader/RNUploader.xcodeproj"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = wrapper.pb-project; explicitFileType = undefined; includeInIndex = 0; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -830,6 +852,7 @@
 				E460D8F448E643638BC8E22E /* libRCTYouTube.a */,
 				2C9FD78566EE4CCBAF7A9B57 /* libRCTCamera.a */,
 				2BD67BCDF875422CBF9EAD4B /* libRNI18n.a */,
+				6AA1E1B596F34745BD2A1E4C /* libVydiaRNFileUploader.a */,
 			);
 			name = "Recovered References";
 			sourceTree = "<group>";
@@ -1043,6 +1066,30 @@
 			name = Resources;
 			sourceTree = "<group>";
 		};
+		F60962231FE0F15B00337F22 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				F60962271FE0F15B00337F22 /* libVydiaRNFileUploader.a */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		F60962281FE0F15B00337F22 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				F609622C1FE0F15B00337F22 /* libRNUploader.a */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		F609622D1FE0F15B00337F22 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				F60962311FE0F15B00337F22 /* libRCTFileUploader.a */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
 		F61A71031FD819CA0085E54F /* Fonts */ = {
 			isa = PBXGroup;
 			children = (
@@ -1254,6 +1301,10 @@
 					ProjectRef = 4688120B1E914D9A0040997E /* RCTContacts.xcodeproj */;
 				},
 				{
+					ProductGroup = F609622D1FE0F15B00337F22 /* Products */;
+					ProjectRef = E4AB0B236CE244C3903C5E15 /* RCTFileUploader.xcodeproj */;
+				},
+				{
 					ProductGroup = 00C302B61ABCB90400DB3ED1 /* Products */;
 					ProjectRef = 00C302B51ABCB90400DB3ED1 /* RCTGeolocation.xcodeproj */;
 				},
@@ -1314,8 +1365,16 @@
 					ProjectRef = DFAB2D151A20453D885CF712 /* RNI18n.xcodeproj */;
 				},
 				{
+					ProductGroup = F60962281FE0F15B00337F22 /* Products */;
+					ProjectRef = 6B8215CDC3B34BB2AC70F3CE /* RNUploader.xcodeproj */;
+				},
+				{
 					ProductGroup = F6D774A51E62C34300B52027 /* Products */;
 					ProjectRef = E3AADCE2DD744F21A22899AA /* RNVectorIcons.xcodeproj */;
+				},
+				{
+					ProductGroup = F60962231FE0F15B00337F22 /* Products */;
+					ProjectRef = 1251BCED34974A7EBCA0EB3E /* VydiaRNFileUploader.xcodeproj */;
 				},
 			);
 			projectRoot = "";
@@ -1642,6 +1701,27 @@
 			fileType = archive.ar;
 			path = libRCTText.a;
 			remoteRef = 832341B41AAA6A8300B99B32 /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		F60962271FE0F15B00337F22 /* libVydiaRNFileUploader.a */ = {
+			isa = PBXReferenceProxy;
+			fileType = archive.ar;
+			path = libVydiaRNFileUploader.a;
+			remoteRef = F60962261FE0F15B00337F22 /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		F609622C1FE0F15B00337F22 /* libRNUploader.a */ = {
+			isa = PBXReferenceProxy;
+			fileType = archive.ar;
+			path = libRNUploader.a;
+			remoteRef = F609622B1FE0F15B00337F22 /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		F60962311FE0F15B00337F22 /* libRCTFileUploader.a */ = {
+			isa = PBXReferenceProxy;
+			fileType = archive.ar;
+			path = libRCTFileUploader.a;
+			remoteRef = F60962301FE0F15B00337F22 /* PBXContainerItemProxy */;
 			sourceTree = BUILT_PRODUCTS_DIR;
 		};
 		F66680A81FDD755000C9E47C /* libRNI18n.a */ = {
