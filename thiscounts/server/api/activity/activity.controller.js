@@ -87,6 +87,7 @@ function getActivityEntityId(sharedActivity){
   if( sharedActivity.business     ) return  sharedActivity.business._id ;
   if( sharedActivity.mall         ) return  sharedActivity.mall    ._id ;
   if( sharedActivity.chain        ) return  sharedActivity.chain   ._id ;
+  if( sharedActivity.post         ) return  sharedActivity.post    ._id ;
   if( sharedActivity.activity     ) return  sharedActivity.activity._id ;
 }
 
