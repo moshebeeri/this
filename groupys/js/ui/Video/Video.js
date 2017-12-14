@@ -1,10 +1,29 @@
 import React, {Component} from 'react';
 import InViewPort from '../../utils/inviewport'
-import {TouchableOpacity,View} from 'react-native';
+import {TouchableOpacity,View,StyleSheet,WebView} from 'react-native';
 import Video from 'react-native-video';
 import YouTube from 'react-native-youtube'
+const style = {
+    padding: StyleSheet.hairlineWidth,
+    width : 300,
+    height:200,
+    backgroundColor: 'orange',
+}
 
+const App = () => (
+    <YouTube
+        apiKey="AIzaSyACe_Cci4drnZovD8xjJOdrsIOQwyWSyCg"
+        play
+        controls={2}
+        fs
+        hidden={false}
+        videoId="hrbI08iulzA"
+        style={style}
+    />
+)
 export default class RNVideo extends Component {
+
+
     constructor(props) {
         super(props);
         this.state = {
@@ -42,15 +61,15 @@ export default class RNVideo extends Component {
     render() {
         console.log(`render this.state.paused=${this.state.paused}`);
         return (
-            <View>
-
+            <View style={{width:this.state.width,height:this.state.height}}>
+                {
+                    this.state.source === 'THIS' &&
                 <TouchableOpacity
                     width={this.state.width}
                     height={this.state.height}
                     onPress={this.onPress.bind(this)}
                     style={{}}>
-                    {
-                        this.state.source === 'THIS' ?
+
                             <Video
                                 ref={(ref) => {
                                     this.state.rnVideoRef = ref
@@ -67,28 +86,12 @@ export default class RNVideo extends Component {
                                 style={{backgroundColor: 'transparent'}}
                                 source={this.state.url}
                             />
-                            : this.state.source === 'YOUTUBE' ?
-                            <YouTube
-                                apiKey="AIzaSyACe_Cci4drnZovD8xjJOdrsIOQwyWSyCg"
-                                videoId={this.state.videoId}
-                                play={!this.state.paused}
-                                fullscreen={false}
-                                showFullscreenButton={false}
-                                loop={false}
-                                controls={0}
-                                showinfo={false}
-                                /*
-                                    onReady={e => this.setState({ isReady: true })}
-                                    onChangeState={e => this.setState({ status: e.state })}
-                                    onChangeQuality={e => this.setState({ quality: e.quality })}
-                                    onError={e => this.setState({ error: e.error })}
-                                */
-                                style={{alignSelf: 'stretch', height: this.state.height}}
-                            />
-                            : null
-                    }
+
+
                     {/*<Text>{this.state.paused? 'paused' : 'playing'}</Text>*/}
-                </TouchableOpacity>
+                </TouchableOpacity> }
+                {this.state.source === 'YOUTUBE'&& <WebView style={{width:this.state.width,height:this.state.height}}source={{ uri: `https://www.youtube.com/embed/${this.state.videoId}?version=3&autoplay=1&showinfo=0&controls=0&modestbranding=1&fs=1&rel=0` }} />}
+
             </View>
         )
     }

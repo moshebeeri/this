@@ -6,7 +6,7 @@ import {FormHeader, ImagePicker, Spinner, TextInput, Video} from '../../ui/index
 import * as postAction from "../../actions/posts";
 import {bindActionCreators} from "redux";
 import strings from "../../i18n/i18n"
-
+import FormUtils from "../../utils/fromUtils";
 const {width, height} = Dimensions.get('window')
 
 class AddPost extends Component {
@@ -85,6 +85,7 @@ class AddPost extends Component {
             text: this.state.post,
             image: this.state.image,
             uploadVideo: this.state.video,
+            url:this.state.youTubeUrl,
             behalf: {
                 user: user
             }
@@ -130,6 +131,19 @@ class AddPost extends Component {
         }
         if (this.state.video) {
             item = <Video url={this.state.video.path} muted={false} paused={false}></Video>
+        }
+
+        if(this.state.youTubeUrl  && FormUtils.youtube_parser(this.state.youTubeUrl)){
+            return <View style={styles.product_upper_container}>
+
+                <View style={styles.cmeraLogoContainer}>
+
+                    <View style={styles.addCoverContainer}>
+                         <Video videoId={FormUtils.youtube_parser(this.state.youTubeUrl)} source={'YOUTUBE'} url={this.state.youTubeUrl} muted={false} paused={false}></Video>
+                    </View>
+                    {saving && <Spinner/>}
+                </View>
+            </View>
         }
         if (item) {
             return <View style={styles.product_upper_container}>
@@ -179,11 +193,19 @@ class AddPost extends Component {
                     </View>
                     <View style={styles.inputTextLayour}>
                         <TextInput field={strings.Post} value={this.state.post}
-                                   returnKeyType='done' ref="2" refNext="2"
+                                   returnKeyType='next' ref="2" refNext="2"
                                    multiline={true}
                                    numberOfLines={4}
-
+                                   onSubmitEditing={this.focusNextField.bind(this, "3")}
                                    onChangeText={(post) => this.setState({post})} isMandatory={false}/>
+                    </View>
+                    <View style={styles.inputTextLayour}>
+                        <TextInput field={strings.YouTubeUrl} value={this.state.youTubeUrl}
+                                   returnKeyType='done' ref="3" refNext="3"
+                                   multiline={true}
+                                   numberOfLines={4}
+                                   validateContent={FormUtils.validateYouTube}
+                                   onChangeText={(youTubeUrl) => this.setState({youTubeUrl})} isMandatory={false}/>
                     </View>
                 </ScrollView>
 

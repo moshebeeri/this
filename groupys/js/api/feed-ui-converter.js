@@ -2,6 +2,7 @@ const noPic = require('../../images/client_1.png');
 import FormUtils from "../utils/fromUtils";
 import strings from "../i18n/i18n"
 
+
 class FeedConverter {
     createFeed(feed) {
         let response = {};
@@ -55,7 +56,10 @@ class FeedConverter {
         if (feed.activity.post.video) {
             responseFeed.video = feed.activity.post.video.url;
         }
+        if (feed.activity.post.url && FormUtils.youtube_parser(feed.activity.post.url)) {
+            responseFeed.videoId = FormUtils.youtube_parser(feed.activity.post.url)
 
+        }
         if (feed.activity.post.social_state){
             responseFeed.social = feed.activity.post.social_state;
             responseFeed.social.activityId = feed.activity._id;
@@ -93,9 +97,19 @@ class FeedConverter {
             responseFeed.social = post.social_state;
 
         }
+
+        if (post.video) {
+            responseFeed.video = feed.activity.post.video.url;
+        }
+        if (post.url && FormUtils.youtube_parser(feed.activity.post.url)) {
+            responseFeed.videoId = FormUtils.youtube_parser(feed.activity.post.url)
+
+        }
         responseFeed.title =  post.title;
         let user = post.creator;
-
+        if (post.social_state){
+            responseFeed.social = post.social_state;
+        }
         if (user && user.pictures && Object.keys(user.pictures).length > 0) {
             responseFeed.avetar = {
                 uri: user.pictures[Object.keys(user.pictures).length - 1].pictures[3]

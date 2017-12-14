@@ -85,9 +85,7 @@ export default class TextInputField extends Component {
             containerStyle = styles.textInputContainer;
         }
 
-        if(numberOfLines){
-            containerStyle = styles.textAreaContainer;
-        }
+
         let inputField =  <TextInput style={textInputStyle} value={value} returnKeyType={returnKeyType}
                                      ref={refNext} underlineColorAndroid='transparent' disabled
                                      keyboardType={keyboardType}

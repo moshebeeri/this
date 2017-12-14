@@ -94,6 +94,7 @@ export default class FeedPromotion extends Component {
 
                     {image}
                     {item.video && <Video ref={item.id} width={width} muted={false} url={item.video}/> }
+                    {item.videoId && <Video source={'YOUTUBE'} ref={item.id} width={width} muted={false} videoId={item.videoId}/> }
 
                     <View style={{flex:2, width: width - 15, backgroundColor: 'white'}}>
 
@@ -152,7 +153,7 @@ export default class FeedPromotion extends Component {
             }
         }
 
-        if( item.video){
+        if( item.video || item.videoId){
             if (shared) {
                 return {
                     flex: 1,

@@ -184,7 +184,8 @@ AddPictureOrVideo                             : "Add Picture Or Video", //Todo t
 Title                                         : "Title",//Todo translate
 Post                                          : "Post",//Todo translate
 Posted                                        : "Posted",//todo translate
-PickVideo                                     : "Pick Video From Camera" //todo translate
+PickVideo                                     : "Pick Video From Camera", //todo translate
+YouTubeUrl                                    : "YouTube Url", //todo translate
 };
 
 export default enUS;

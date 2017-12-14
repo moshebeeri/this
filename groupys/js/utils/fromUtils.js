@@ -1,4 +1,3 @@
-
 String.prototype.formatUnicorn = String.prototype.formatUnicorn ||
     function () {
         "use strict";
@@ -9,15 +8,12 @@ String.prototype.formatUnicorn = String.prototype.formatUnicorn ||
             var args = ("string" === t || "number" === t) ?
                 Array.prototype.slice.call(arguments)
                 : arguments[0];
-
             for (key in args) {
                 str = str.replace(new RegExp("\\{" + key + "\\}", "gi"), args[key]);
             }
         }
-
         return str;
     };
-
 const validateEmail = (email) => {
     let re = /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
     return re.test(email);
@@ -29,6 +25,23 @@ const validateWebsite = (website) => {
     let re = /^(http[s]?:\/\/){0,1}(www\.){0,1}[a-zA-Z0-9\.\-]+\.[a-zA-Z]{2,5}[\.]{0,1}/;
     return re.test(website);
 };
+const validateYouTube = (url) => {
+    if (!url) {
+        return true;
+    }
+    let regExp = /^.*(youtu.be\/|v\/|u\/\w\/|embed\/|watch\?v=|\&v=|\?v=)([^#\&\?]*).*/;
+    let match = url.match(regExp);
+    if (match && match[2].length == 11) {
+        return true;
+    }
+    return false;
+};
+
+function youtube_parser(url){
+    let regExp = /^.*((youtu.be\/)|(v\/)|(\/u\/\w\/)|(embed\/)|(watch\?))\??v?=?([^#\&\?]*).*/;
+    let match = url.match(regExp);
+    return (match&&match[7].length==11)? match[7] : false;
+}
 const validatePuches = (number) => {
     if (number > 10) {
         return false;
@@ -41,7 +54,6 @@ const validatePuches = (number) => {
     }
     return true;
 };
-
 const validatePercent = (number) => {
     if (number > 100) {
         return false;
@@ -65,7 +77,7 @@ const getDistanceString = (lat1, lon1, lat2, lon2) => {
     ;
     let c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
     let d = R * c; // Distance in km
-    return `${d.toFixed(1)} km` ; //TODO: Change units according to locale
+    return `${d.toFixed(1)} km`; //TODO: Change units according to locale
 };
 const getSecondSinceMidnight = (hour) => {
     let currentDate = parseTime(hour);
@@ -80,7 +92,8 @@ const convertDaysNumToString = (days) => {
         Object.keys(days).forEach(day => {
             dayArray.push(days[day])
         });
-        return reduceToBetween(dayArray);;
+        return reduceToBetween(dayArray);
+        ;
     }
 };
 const secondsFromMidnightToString = (seconds) => {
@@ -105,23 +118,23 @@ function reduceToBetween(days) {
     days.forEach(day => {
         if (reduce[index] && reduce[index][indexReduce] + 1 === day) {
             reduce[index].push(day)
-            indexReduce = indexReduce +1;
+            indexReduce = indexReduce + 1;
         } else {
             indexReduce = 0;
-            if( reduce[index]){
-                index = index +1;
+            if (reduce[index]) {
+                index = index + 1;
                 reduce[index] = [];
-            }else {
+            } else {
                 reduce[index] = [];
             }
             reduce[index].push(day);
         }
     })
     return reduce.map(array => {
-        if(array.length === 1){
+        if (array.length === 1) {
             return getDay(array[0])
-        }else{
-            return getDay(array[0]) + '-' + getDay(array[array.length -1])
+        } else {
+            return getDay(array[0]) + '-' + getDay(array[array.length - 1])
         }
     })
 }
@@ -171,12 +184,13 @@ function deg2rad(deg) {
 }
 
 export default {
-
     validateEmail,
     validateWebsite,
+    validateYouTube,
     validatePuches, validatePercent,
     getDistanceString,
     getSecondSinceMidnight,
     convertDaysNumToString,
-    secondsFromMidnightToString
+    secondsFromMidnightToString,
+    youtube_parser
 };
