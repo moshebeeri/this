@@ -26,6 +26,7 @@ import GroupHeader from './GroupHeader/GroupHeader'
 import PromotionHeaderSnippet from './PromotionHeaderSnippet/PromotionHeaderSnippet'
 import QrScanner from './QrScanner/QrScannerContainer'
 import PromotionColumnHeader from './PromotionnColumnHeader/PromotionColumnHeader'
+import ScrolTabView from './Tabs/index'
 
 export {
     ImagePicker,
@@ -55,5 +56,6 @@ export {
     GroupHeader,
     PromotionHeaderSnippet,
     QrScanner,
-    PromotionColumnHeader
+    PromotionColumnHeader,
+    ScrolTabView
 }

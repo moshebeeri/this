@@ -1,11 +1,10 @@
 import React, {Component} from "react";
-import {BackHandler, View} from "react-native";
+import {BackHandler, View,I18nManager,Platform} from "react-native";
 import {connect} from "react-redux";
 import {Button, Container, Fab, Icon, Input, Tab, TabHeading, Tabs, Text} from "native-base";
 import {actions} from "react-native-navigation-redux-helpers";
 import GroupFeedHeader from "./groupFeedHeader";
-import GenericFeedManager from "../../generic-feed-manager/index";
-import GenericFeedItem from "../../generic-feed-manager/generic-feed";
+
 import styles from "./styles";
 import {bindActionCreators} from "redux";
 import * as groupAction from "../../../actions/groups";
@@ -13,8 +12,10 @@ import InstanceComment from "./instancesComment";
 import {getFeeds} from "../../../selectors/groupFeedsSelector";
 import * as commentAction from "../../../actions/commentsGroup";
 import strings from "../../../i18n/i18n"
-import Icon2 from "react-native-vector-icons/Ionicons";
+
 import PageRefresher from '../../../refresh/pageRefresher'
+import {ScrolTabView} from '../../../ui/index'
+import GroupFeedComponent from './groupsFeeds'
 class GroupFeed extends Component {
     static navigationOptions = ({navigation}) => ({
         header: <GroupFeedHeader navigation={navigation} role={navigation.state.params.role}
@@ -100,23 +101,24 @@ class GroupFeed extends Component {
         return (
             <Container style={{backgroundColor: '#ebebeb'}}>
 
-                <Tabs onChangeTab={this.changeTab.bind(this)} tabBarUnderlineStyle={{backgroundColor: '#2db6c8'}}
-                      style={{backgroundColor: '#fff',}}>
-                    <Tab heading={<TabHeading style={{
-                        justifyContent: 'center',
-                        alignItems: 'center',
-                        backgroundColor: "white"
-                    }}><Text style={textPromotionStyle}>{strings.Posts}</Text></TabHeading>}>
-                        {this.createGroupFeeds()}
-                    </Tab>
-                    <Tab heading={<TabHeading
-                        style={{justifyContent: 'center', alignItems: 'center', backgroundColor: "white"}}>
-                        <Text style={textChatStyle}>{strings.Chat}</Text></TabHeading>}>
-                        <InstanceComment navigation={this.props.navigation}
-                                         group={this.props.navigation.state.params.group}/>
-                    </Tab>
 
-                </Tabs>
+                { I18nManager.isRTL && (Platform.OS==='android') ?  <ScrolTabView  initialPage={1} onChangeTab={this.changeTab.bind(this)} tabBarBackgroundColor='white'
+                                                                                   tabBarUnderlineStyle={{backgroundColor: '#2db6c8'}}>
+                         <InstanceComment tabLabel={strings.Posts} navigation={this.props.navigation}
+                                         group={this.props.navigation.state.params.group}/>
+                       <GroupFeedComponent tabLabel={strings.Chat} navigation={this.props.navigation}
+                                  group={this.props.navigation.state.params.group}/>
+                    </ScrolTabView> :
+                    <ScrolTabView  initialPage={0} onChangeTab={this.changeTab.bind(this)} tabBarBackgroundColor='white'
+                                   tabBarUnderlineStyle={{backgroundColor: '#2db6c8'}}>
+                        <GroupFeedComponent tabLabel={strings.Posts} navigation={this.props.navigation}
+                                   group={this.props.navigation.state.params.group}/>
+
+                        <InstanceComment tabLabel={strings.Chat} navigation={this.props.navigation}
+                                         group={this.props.navigation.state.params.group}/>
+
+                    </ScrolTabView>
+                }
 
             </Container>
 
@@ -125,41 +127,8 @@ class GroupFeed extends Component {
         );
     }
 
-    createGroupFeeds() {
-        const {navigation, feeds, userFollower, actions, token, loadingDone, location, showTopLoader,postUpdated} = this.props;
-        const group = navigation.state.params.group;
-        const icon = <Icon2 active size={40} name="md-create"/>;
-        return <View style={styles.inputContainer}>
-            <GenericFeedManager
-                navigation={navigation}
 
-                loadingDone={loadingDone[group._id]}
-                showTopLoader={showTopLoader[group._id]}
-                userFollowers={userFollower}
-                feeds={feeds[group._id]}
-                actions={actions}
-                token={token}
-                entity={group}
-                group={group}
-                location={location}
-                title='Feeds'
-                ItemDetail={GenericFeedItem}>
 
-            </GenericFeedManager>
-            {this.allowPost(group) && <Fab
-
-                direction="right"
-                active={false}
-                containerStyle={{marginLeft: 10}}
-                style={{backgroundColor: "#2db6c8"}}
-                position="bottomRight"
-                onPress={() => this.navigateToAdd()}>
-                {icon}
-
-            </Fab>}
-
-        </View>
-    }
 }
 
 export default connect(

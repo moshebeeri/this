@@ -43,6 +43,7 @@
     "react-native-phone-input": "^0.1.6",
     "react-native-popup": "^0.6.1",
     "react-native-popup-menu": "^0.8.0",
+    "react-native-scrollable-tab-view": "^0.8.0",
     "react-native-select-multiple": "^1.1.3",
     "react-native-sglistview": "^0.3.10",
     "react-native-simple-store": "^1.1.0",

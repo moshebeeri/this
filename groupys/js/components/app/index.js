@@ -1,8 +1,7 @@
 import React, {Component} from "react";
-import {Dimensions, Image, Platform, StyleSheetm,I18nManager} from "react-native";
+import {Dimensions, I18nManager, Image, Platform, StyleSheetm,Text} from "react-native";
 import {connect} from "react-redux";
 import {Container, Drawer, Fab, Icon, Tab, TabHeading, Tabs, View} from "native-base";
-import Icon2 from "react-native-vector-icons/Ionicons";
 import GeneralComponentHeader from "../header/index";
 import Feeds from "../feed/index";
 import MydPromotions from "../my-promotions/index";
@@ -24,12 +23,12 @@ import {NavigationActions} from "react-navigation";
 import '../../conf/global';
 import pageSync from "../../refresh/refresher"
 import PageRefresher from '../../refresh/pageRefresher'
+import {ScrolTabView} from '../../ui/index'
+
 const I18n = require('react-native-i18n')
-const promotions = require('../../../images/Feeds.png');
-const save = require('../../../images/savedPromotions.png');
-const groups = require('../../../images/GroupsIcon.png');
-const notification = require('../../../images/notification.png');
+
 let locationApi = new LocationApi();
+
 let contactApi = new ContactApi();
 const store = getStore();
 const updateDialogOption = {
@@ -93,7 +92,6 @@ class ApplicationManager extends Component {
     };
 
     constructor(props) {
-
         super(props)
         this.state = {
             orientation: StyleUtils.isPortrait() ? 'portrait' : 'landscape',
@@ -105,7 +103,6 @@ class ApplicationManager extends Component {
                 orientation: StyleUtils.isPortrait() ? 'portrait' : 'landscape'
             })
         })
-
     }
 
     replaceRoute(route) {
@@ -145,6 +142,15 @@ class ApplicationManager extends Component {
         //  codePush.sync({updateDialog: updateDialogOption});
     }
 
+    renderTabeBar(props) {
+        switch (props.activeTab) {
+            default:
+                return <View ref={'tabs'}> <Text>bla</Text>
+
+                </View>
+        }
+    }
+
     render() {
         const {selectedTab, showAdd, showComponent} = this.props;
         if (!showComponent) {
@@ -161,7 +167,6 @@ class ApplicationManager extends Component {
         // if(I18nManager.isRTL){
         //     openSide ='left';
         // }
-
         return (
 
             <Drawer
@@ -178,47 +183,28 @@ class ApplicationManager extends Component {
                                             showAction={showAdd} current='home'
                                             to={this.state.addComponent}/>
 
-                    <Tabs tabBarUnderlineStyle={{backgroundColor: '#2db6c8'}} initialPage={selectedTab}
-                          onChangeTab={this.onChangeTab.bind(this)} style={{backgroundColor: '#fff',}}>
-                        <Tab heading={<TabHeading
-                            style={{justifyContent: 'center', alignItems: 'center', backgroundColor: "white"}}><Image
-                            style={{tintColor: '#2db6c8', marginLeft: 0, width: 30, height: 30}}
-                            source={promotions}/></TabHeading>}>
-                            <Feeds index={0} navigation={this.props.navigation}/>
-                        </Tab>
-                        <Tab heading={<TabHeading
-                            style={{justifyContent: 'center', alignItems: 'center', backgroundColor: "white"}}><Image
-                            style={{tintColor: '#2db6c8', marginLeft: 0, width: 30, height: 30}}
-                            source={save}/></TabHeading>}>
-                            <MydPromotions navigation={this.props.navigation} index={1}/>
-                        </Tab>
-
-                        <Tab
-                            heading={<TabHeading style={{
-                                justifyContent: 'center',
-                                alignItems: 'center',
-                                backgroundColor: "white"
-                            }}><Image
-                                style={{tintColor: '#2db6c8', marginLeft: 0, width: 30, height: 30}}
-                                source={groups}/></TabHeading>}>
-                            <Groups navigation={this.props.navigation} index={2}
-                            />
-                        </Tab>
+                    { I18nManager.isRTL && (Platform.OS==='android') ?  <ScrolTabView  initialPage={3} onChangeTab={this.onChangeTab.bind(this)} tabBarBackgroundColor='white'
+                                       tabBarUnderlineStyle={{backgroundColor: '#2db6c8'}}>
+                        <Notification tabLabel="promotions"  navigation={this.props.navigation} index={3}/>
+                        <Groups tabLabel="save" navigation={this.props.navigation} index={2}/>
+                        <MydPromotions tabLabel="groups" navigation={this.props.navigation} index={1}/>
+                        <Feeds tabLabel="notification" index={0} navigation={this.props.navigation}/>
 
 
-                        <Tab
-                            heading={<TabHeading style={{
-                                justifyContent: 'center',
-                                alignItems: 'center',
-                                backgroundColor: "white"
-                            }}><Image
-                                style={{tintColor: '#2db6c8', marginLeft: 0, width: 30, height: 30}}
-                                source={notification}/></TabHeading>}>
-                            <Notification navigation={this.props.navigation} index={3}/>
-                        </Tab>
+                    </ScrolTabView> :
+                        <ScrolTabView  initialPage={0} onChangeTab={this.onChangeTab.bind(this)} tabBarBackgroundColor='white'
+                                       tabBarUnderlineStyle={{backgroundColor: '#2db6c8'}}>
+                            <Feeds tabLabel="promotions" index={0} navigation={this.props.navigation}/>
+                            <MydPromotions tabLabel="save" navigation={this.props.navigation} index={1}/>
+                            <Groups tabLabel="groups" navigation={this.props.navigation} index={2}/>
+                            <Notification tabLabel="notification"  navigation={this.props.navigation} index={3}/>
 
 
-                    </Tabs>
+                        </ScrolTabView>
+                    }
+
+
+
                 </Container>
             </Drawer>
         );
