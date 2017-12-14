@@ -142,11 +142,13 @@ exports.upload = function (req, res) {
 
       // Handle upload completion.
       upload.on('uploaded', function (details) {
+        console.log(inspect(details));
+
         Video.create({
           creator: req.user.id,
           created: Date.now(),
           type: 'THIS',
-          url: distributionBaseURL + details.key
+          url: distributionBaseURL + details.Key
         }, function (err, video) {
           if (err) {
             return handleError(res, err);

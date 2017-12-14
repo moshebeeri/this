@@ -1,3 +1,4 @@
+// https://github.com/yamill/react-native-inviewport/
 import React from 'react'
 import { View, Dimensions } from 'react-native'
 import PropTypes from 'prop-types'
@@ -58,7 +59,7 @@ class InViewPort extends React.PureComponent {
     check = () => {
         const el = this.myview;
         if (!el) { return }
-        const rect = el.measure((ox, oy, width, height, pageX, pageY) => {
+        el.measure((ox, oy, width, height, pageX, pageY) => {
             this.setState({
                 rectTop: pageY,
                 rectBottom: pageY + height,
@@ -90,6 +91,26 @@ class InViewPort extends React.PureComponent {
         }
     };
 
+    check_orig = () => {
+        const el = this.refs.myview;
+        el.measure((ox, oy, width, height, pageX, pageY) => {
+            this.setState({
+                rectTop: pageY,
+                rectBottom: pageY + height,
+                rectWidth: pageX + width,
+            })
+        });
+        const isVisible = (
+            this.state.rectBottom !== 0 && this.state.rectTop >= 0 && this.state.rectBottom <= window.height &&
+            this.state.rectWidth > 0 && this.state.rectWidth <= window.width
+        );
+
+        // notify the parent when the value changes
+        if (this.lastValue !== isVisible) {
+            this.lastValue = isVisible;
+            this.props.onChange(isVisible);
+        }
+    };
     render() {
         return (
             <View ref={component => this.myview = component} {...this.props} onLayout={() => this.onLayout()}>
