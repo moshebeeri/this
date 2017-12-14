@@ -2,7 +2,7 @@ import React, {Component} from 'react';
 import {Dimensions, Image, ScrollView, Text, View} from 'react-native';
 import {connect} from 'react-redux';
 import styles from './styles'
-import {FormHeader, ImagePicker, Spinner, TextInput} from '../../ui/index';
+import {FormHeader, ImagePicker, Spinner, TextInput, Video} from '../../ui/index';
 import * as postAction from "../../actions/posts";
 import {bindActionCreators} from "redux";
 import strings from "../../i18n/i18n"
@@ -43,12 +43,12 @@ class AddPost extends Component {
     }
 
     async saveFormData() {
-        const {actions,navigation} = this.props;
+        const {actions, navigation} = this.props;
         if (this.validateForm()) {
             const post = this.createPostFromState();
             if (navigation.state.params && navigation.state.params.group) {
-                actions.createGroupPost(post, this.props.navigation,navigation.state.params.group);
-            }else {
+                actions.createGroupPost(post, this.props.navigation, navigation.state.params.group);
+            } else {
                 actions.createPost(post, this.props.navigation,);
             }
         }
@@ -84,6 +84,7 @@ class AddPost extends Component {
             title: this.state.title,
             text: this.state.post,
             image: this.state.image,
+            uploadVideo: this.state.video,
             behalf: {
                 user: user
             }
@@ -113,23 +114,32 @@ class AddPost extends Component {
         this.setState({image: image});
     }
 
+    setVideo(video) {
+        this.setState({video: video});
+    }
+
     createCoverImageComponnent() {
         const {saving} = this.props;
+        let item;
         if (this.state.image) {
-            let coverImage = <Image
+            item = <Image
                 style={{width: width - 10, height: 210, borderWidth: 1, borderColor: 'white'}}
                 source={{uri: this.state.image.path}}
             >
-
             </Image>
+        }
+        if (this.state.video) {
+            item = <Video url={this.state.video.path} muted={false} paused={false}></Video>
+        }
+        if (item) {
             return <View style={styles.product_upper_container}>
 
                 <View style={styles.cmeraLogoContainer}>
 
                     <View style={styles.addCoverContainer}>
 
-                        <ImagePicker ref={"coverImage"} image={coverImage} color='white' pickFromCamera
-                                     setImage={this.setCoverImage.bind(this)}/>
+                        <ImagePicker video ref={"coverImage"} image={item} color='white' pickFromCamera
+                                     setVideo={this.setVideo.bind(this)} setImage={this.setCoverImage.bind(this)}/>
                     </View>
                     {saving && <Spinner/>}
                 </View>
@@ -140,8 +150,8 @@ class AddPost extends Component {
             <View style={styles.cmeraLogoContainer}>
 
                 <View style={styles.addCoverNoImageContainer}>
-                    <ImagePicker ref={"coverImage"} color='white' pickFromCamera
-                                 setImage={this.setCoverImage.bind(this)}/>
+                    <ImagePicker video ref={"coverImage"} color='white' pickFromCamera
+                                 setVideo={this.setVideo.bind(this)} setImage={this.setCoverImage.bind(this)}/>
                     <Text style={styles.addCoverText}>{strings.AddPictureOrVideo}</Text>
                 </View>
             </View>

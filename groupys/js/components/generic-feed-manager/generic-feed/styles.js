@@ -199,6 +199,7 @@ module.exports = {
         borderWidth: 1,
         borderColor: '#e0e0eb',
     },
+
     promotion_like: {
         marginLeft: 10,
         marginRight: 10,

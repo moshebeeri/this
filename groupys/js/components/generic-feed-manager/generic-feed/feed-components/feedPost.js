@@ -27,7 +27,7 @@ import stylesPortrate from './styles'
 import stylesLandscape from './styles_lendscape'
 import StyleUtils from '../../../../utils/styleUtils'
 import * as componentCreator from "./feedCommonView";
-import {SocialState} from '../../../../ui/index';
+import {SocialState,Video} from '../../../../ui/index';
 import PageRefresher from '../../../../refresh/pageRefresher'
 
 const {width, height} = Dimensions.get('window');
@@ -49,10 +49,15 @@ export default class FeedPromotion extends Component {
         PageRefresher.createFeedSocialState(item.id);
     }
 
-    visited() {
+    visited(visible) {
         const {item} = this.props;
-        console.log(item.id + ' visited');
-        PageRefresher.visitedFeedItem(item.id);
+
+        if(this.refs[item.id]){
+            this.refs[item.id].visible(visible);
+        }
+        if(visible) {
+             PageRefresher.visitedFeedItem(item.id);
+        }
     }
 
     render() {
@@ -75,9 +80,9 @@ export default class FeedPromotion extends Component {
         const result =
             <InViewPort onChange={this.visited.bind(this)} style={container}>
                 <View style={styles.promotion_card}>
-                    <View style={{flexDirection:'row',backgroundColor:'white',flex:2,width: width - 15}}>
+                    <View style={{flexDirection:'row',backgroundColor:'white',height:60,width: width - 15}}>
                         <View style={{paddingLeft:10,justifyContent:'center'}}>
-                        <Thumbnail small source={item.avetar}/>
+                        <Thumbnail  square meduim source={item.avetar}/>
                         </View>
                         <View style={{paddingLeft:20,justifyContent:'center'}}>
                             <Text>{item.name}</Text>
@@ -88,7 +93,7 @@ export default class FeedPromotion extends Component {
 
 
                     {image}
-
+                    {item.video && <Video ref={item.id} width={width} muted={false} url={item.video}/> }
 
                     <View style={{flex:2, width: width - 15, backgroundColor: 'white'}}>
 
@@ -138,6 +143,30 @@ export default class FeedPromotion extends Component {
             return {
                 flex: 1,
                 height: 81 * vh,
+                width: width,
+                overflow: 'hidden',
+                backgroundColor: '#b7b7b7',
+                // backgroundColor:'#FFF',
+                alignItems: 'center',
+                flexDirection: 'column',
+            }
+        }
+
+        if( item.video){
+            if (shared) {
+                return {
+                    flex: 1,
+                    width: width,
+                    overflow: 'hidden',
+                    backgroundColor: '#b7b7b7',
+                    // backgroundColor:'#FFF',
+                    alignItems: 'center',
+                    flexDirection: 'column',
+                }
+            }
+            return {
+                flex: 1,
+                height: 60 * vh,
                 width: width,
                 overflow: 'hidden',
                 backgroundColor: '#b7b7b7',

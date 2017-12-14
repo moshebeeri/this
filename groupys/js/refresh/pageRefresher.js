@@ -83,7 +83,7 @@ class PageRefresher {
 
     createFeedSocialState(id){
         if (!visitedList.includes('feed' + id,)) {
-            pageSync.createPage('feed' + id, pageSync.createStdAverageRefresh('feed' + id, 5, 7200000), this.updateSocialState.bind(this, id));
+            pageSync.createPage('feed' + id, pageSync.createStdAverageRefresh('feed' + id, 2, 7200000), this.updateSocialState.bind(this, id));
             visitedList.push('feed' + id);
         }
     }

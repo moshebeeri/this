@@ -5,11 +5,12 @@ import {Menu, MenuOption, MenuOptions, MenuTrigger,} from 'react-native-popup-me
 import Icon from 'react-native-vector-icons/Entypo';
 import ImagePicker from 'react-native-image-crop-picker'
 import strings from "../../i18n/i18n"
+
 export default class ImagePickerComponent extends Component {
     constructor(props) {
         super(props);
-        this.state= {
-            value:false,
+        this.state = {
+            value: false,
             invalid: false
         }
     }
@@ -19,12 +20,10 @@ export default class ImagePickerComponent extends Component {
         this.refs[refNext].focus()
     }
 
-    isValid(){
-        const { mandatory,image} = this.props;
-
-        if(mandatory){
-
-            if(!this.state.value && !image){
+    isValid() {
+        const {mandatory, image} = this.props;
+        if (mandatory) {
+            if (!this.state.value && !image) {
                 this.setState({
                     invalid: true
                 })
@@ -33,18 +32,18 @@ export default class ImagePickerComponent extends Component {
         }
         return true;
     }
+
     async pickFromCamera() {
-        const {setImage,imageWidth,imageHeight,logo} = this.props;
+        const {setImage, imageWidth, imageHeight, logo} = this.props;
         let width = 2000;
-        if(imageWidth){
+        if (imageWidth) {
             width = imageWidth;
         }
-
         let height = 1400;
-        if(imageWidth){
+        if (imageWidth) {
             height = imageHeight;
         }
-        if(logo){
+        if (logo) {
             height = 2000;
         }
         try {
@@ -56,7 +55,7 @@ export default class ImagePickerComponent extends Component {
                 compressVideoPreset: 'MediumQuality',
             });
             this.setState({
-                value:true,
+                value: true,
                 invalid: false
             })
             setImage(image)
@@ -65,17 +64,29 @@ export default class ImagePickerComponent extends Component {
         }
     }
 
+    async pickVideo() {
+        const {setVideo} = this.props;
+        try {
+            let video = await ImagePicker.openPicker({
+                mediaType: "video",
+            });
+            setVideo(video);
+        } catch (e) {
+            console.log(e);
+        }
+    }
+
     async pickPicture() {
-        const {setImage,imageWidth,imageHeight,logo} = this.props;
+        const {setImage, imageWidth, imageHeight, logo} = this.props;
         let width = 2000;
-        if(imageWidth){
+        if (imageWidth) {
             width = imageWidth;
         }
         let height = 1400;
-        if(imageWidth){
+        if (imageWidth) {
             height = imageHeight;
         }
-        if(logo){
+        if (logo) {
             height = 2000;
         }
         try {
@@ -88,7 +99,7 @@ export default class ImagePickerComponent extends Component {
                 compressVideoPreset: 'MediumQuality',
             });
             this.setState({
-                value:true,
+                value: true,
                 invalid: false
             })
             setImage(image)
@@ -98,19 +109,23 @@ export default class ImagePickerComponent extends Component {
     }
 
     render() {
-        const { color,image} = this.props;
+        const {color, image, video} = this.props;
         let cameraColor = '#003d99';
         if (color) {
             cameraColor = color;
         }
-
         let trigger = <Icon size={35} color={cameraColor} name='camera'/>;
-        if(image){
+        if (image) {
             trigger = image;
         }
-
-        if(this.state.invalid && !image){
+        if (this.state.invalid && !image) {
             trigger = <Icon size={35} color={'red'} name='camera'/>;
+        }
+        let videoPickerOption;
+        if (video) {
+            videoPickerOption = <MenuOption onSelect={this.pickVideo.bind(this)}>
+                <Text>{strings.PickVideo}</Text>
+            </MenuOption>
         }
         return <Menu>
             <MenuTrigger>
@@ -124,6 +139,7 @@ export default class ImagePickerComponent extends Component {
                 <MenuOption onSelect={this.pickPicture.bind(this)}>
                     <Text>{strings.PickFromPhotos}</Text>
                 </MenuOption>
+                {videoPickerOption}
 
             </MenuOptions>
         </Menu>;

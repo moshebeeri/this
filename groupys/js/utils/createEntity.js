@@ -59,6 +59,54 @@ class EntityUtils {
         }
     }
 
+    doVideoUpload(path, imageMime, token, callbackFunction, entityApi, responseData) {
+        let files = [
+            {
+                name: path + '___' + responseData._id,
+                filename: path + '___' + responseData._id,
+                filepath: path,  // image from camera roll/assets library
+                filetype: imageMime,
+            }
+        ];
+        let getEntity = this.getEntity.bind(this);
+        if (Platform.OS === 'ios') {
+            let opts = {
+                url: `${server_host}/api/videos/` + responseData._id,
+                path: 'file:' + path,
+                method: 'POST',
+                headers: {'Accept': 'application/json', 'Authorization': 'Bearer ' + token},  // optional
+                params: {},
+                field: 'uploaded_media',
+                type: 'multipart'// optional
+            };
+            Upload.startUpload(opts).then((uploadId)=>{
+                Upload.addListener('error', uploadId, (data) => {
+                    getEntity(entityApi, responseData._id, callbackFunction)
+                })
+                Upload.addListener('completed', uploadId, (data) => {
+                    getEntity(entityApi, responseData._id, callbackFunction)
+                })
+            }).catch((err) =>{
+                getEntity(entityApi, responseData._id, callbackFunction)
+            })
+
+            ;
+        } else {
+            let option2 = {
+                uploadUrl: `${server_host}/api/videos/` + responseData._id,
+                files: files,
+                method: 'POST',
+                type: 'raw',// optional: POST or PUT
+                headers: {'Accept': 'application/json', 'Authorization': 'Bearer ' + token},  // optional
+                fields: {}
+                // optional
+            };
+            FILeUploader.upload(option2, function (err, result) {
+                getEntity(entityApi, responseData._id, callbackFunction)
+            })
+        }
+    }
+
     doLogoUpload(imagePath, imageMime, token, callbackFunction, entityApi, responseData) {
         let files = [
             {

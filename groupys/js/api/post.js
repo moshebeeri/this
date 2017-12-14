@@ -38,7 +38,12 @@ class PostApi {
                 if (post.image) {
                     entityUtils.doUpload(post.image.path, post.image.mime, token, callbackFunction, 'posts', responseData);
                 } else {
-                    callbackFunction(responseData);
+                    if (post.uploadVideo) {
+                        entityUtils.doVideoUpload(post.uploadVideo.path, post.uploadVideo.mime, token, callbackFunction, 'posts', responseData);
+
+                    }else {
+                        callbackFunction(responseData);
+                    }
                 }
                 resolve(responseData);
             }

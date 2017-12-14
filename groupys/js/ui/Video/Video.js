@@ -1,6 +1,6 @@
 import React, {Component} from 'react';
 import InViewPort from '../../utils/inviewport'
-import {TouchableOpacity} from 'react-native';
+import {TouchableOpacity,View} from 'react-native';
 import Video from 'react-native-video';
 import YouTube from 'react-native-youtube'
 
@@ -16,11 +16,12 @@ export default class RNVideo extends Component {
             resizeMode: this.value(props.resizeMode, 'cover'),
             width: this.value(props.width, 320),
             height: this.value(props.height, 180),
+            url: this.value({uri: props.url}),
+            ref: props.ref,
             rnVideoRef: null,
             // YouTube
             source: this.value(props.source, 'THIS'),
             videoId: this.value(props.videoId, null),
-
         };
     }
 
@@ -41,13 +42,13 @@ export default class RNVideo extends Component {
     render() {
         console.log(`render this.state.paused=${this.state.paused}`);
         return (
-            <InViewPort onChange={this.visible.bind(this)}
-                              partialVisibility={true}>
+            <View>
 
-                <TouchableOpacity width={this.state.width}
-                                  height={this.state.height}
-                                  onPress={this.onPress.bind(this)}
-                                  style={{backgroundColor: 'red'}}>
+                <TouchableOpacity
+                    width={this.state.width}
+                    height={this.state.height}
+                    onPress={this.onPress.bind(this)}
+                    style={{}}>
                     {
                         this.state.source === 'THIS' ?
                             <Video
@@ -64,7 +65,7 @@ export default class RNVideo extends Component {
                                 key={this.props.key}
                                 paused={this.state.paused}
                                 style={{backgroundColor: 'transparent'}}
-                                source={this.props.source}
+                                source={this.state.url}
                             />
                             : this.state.source === 'YOUTUBE' ?
                             <YouTube
@@ -88,7 +89,7 @@ export default class RNVideo extends Component {
                     }
                     {/*<Text>{this.state.paused? 'paused' : 'playing'}</Text>*/}
                 </TouchableOpacity>
-            </InViewPort>
+            </View>
         )
     }
 }

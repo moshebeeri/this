@@ -9,36 +9,7 @@ class FeedConverter {
             response = this.createBusinessUo(feed);
         }
         if (feed.activity.post) {
-            let responseFeed = {
-                itemType: 'POST',
-                feed: feed,
-                id: feed.activity.post._id,
-                generalId: feed.activity.post._id,
-                entities: [{post: feed.activity.post._id}],
-            }
-            if (feed.activity.post.pictures && feed.activity.post.pictures[0]) {
-                responseFeed.banner = {
-                    uri: feed.activity.post.pictures[0].pictures[1]
-                };
-            }
-            if (feed.activity.post.social_state){
-                responseFeed.social = feed.activity.post.social_state;
-                responseFeed.social.activityId = feed.activity._id;
-            }
-            let user = feed.activity.actor_user;
-            if (!user) {
-                user = feed.activity.post.creator;
-            }
-            if (user && user.pictures && Object.keys(user.pictures).length > 0) {
-                responseFeed.avetar = {
-                    uri: user.pictures[Object.keys(user.pictures).length - 1].pictures[3]
-                }
-            }
-            else {
-                responseFeed.avetar = noPic
-            }
-            responseFeed.name = user.name
-            return responseFeed;
+            return this.createActivityPost(feed);
         }
         if (feed
                 .activity
@@ -66,6 +37,43 @@ class FeedConverter {
             ;
         }
         return response;
+    }
+
+    createActivityPost(feed){
+        let responseFeed = {
+            itemType: 'POST',
+            feed: feed,
+            id: feed.activity.post._id,
+            generalId: feed.activity.post._id,
+            entities: [{post: feed.activity.post._id}],
+        }
+        if (feed.activity.post.pictures && feed.activity.post.pictures[0]) {
+            responseFeed.banner = {
+                uri: feed.activity.post.pictures[0].pictures[1]
+            };
+        }
+        if (feed.activity.post.video) {
+            responseFeed.video = feed.activity.post.video.url;
+        }
+
+        if (feed.activity.post.social_state){
+            responseFeed.social = feed.activity.post.social_state;
+            responseFeed.social.activityId = feed.activity._id;
+        }
+        let user = feed.activity.actor_user;
+        if (!user) {
+            user = feed.activity.post.creator;
+        }
+        if (user && user.pictures && Object.keys(user.pictures).length > 0) {
+            responseFeed.avetar = {
+                uri: user.pictures[Object.keys(user.pictures).length - 1].pictures[3]
+            }
+        }
+        else {
+            responseFeed.avetar = noPic
+        }
+        responseFeed.name = user.name
+        return responseFeed;
     }
 
 

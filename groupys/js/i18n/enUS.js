@@ -183,7 +183,8 @@ AddPost                                       : "Add Post",  //Todo translate
 AddPictureOrVideo                             : "Add Picture Or Video", //Todo translate
 Title                                         : "Title",//Todo translate
 Post                                          : "Post",//Todo translate
-Posted                                        : "Posted",
+Posted                                        : "Posted",//todo translate
+PickVideo                                     : "Pick Video From Camera" //todo translate
 };
 
 export default enUS;
