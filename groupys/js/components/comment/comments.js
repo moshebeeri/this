@@ -7,11 +7,14 @@ import {
     TextInput,
     TouchableNativeFeedback,
     TouchableOpacity,
+    I18nManager,
     View,Dimensions
 } from 'react-native';
 import {connect} from 'react-redux';
 import {actions} from 'react-native-navigation-redux-helpers';
-import {Button, Container, Footer, Icon, Input, Text, Thumbnail} from 'native-base';
+import {Button, Container, Footer, Input, Text, Thumbnail} from 'native-base';
+import Icon from 'react-native-vector-icons/Ionicons';
+
 import CommentsComponenet from './commentsComponent';
 import styles from './styles'
 import CommentApi from '../../api/commet'
@@ -54,6 +57,8 @@ class GenericComments extends Component {
 
     render() {
         const item = this.getInstance();
+        let arrowName = I18nManager.isRTL ? "ios-arrow-forward" : "ios-arrow-back";
+
         const business = this.getBusiness(item);
         return <View behavior={'position'} style={styles.inputContainer}>
             {item.businessName && <BusinessHeader showBack navigation={this.props.navigation} business={business}
@@ -62,10 +67,10 @@ class GenericComments extends Component {
                                                   businessName={item.businessName}/>}
             {item.feed && item.feed.activity && item.feed.activity.post &&
         <View style={{flexDirection: 'row', backgroundColor: 'white', height:60, width: width - 15}}>
-            <Button transparent style={{justifyContent:'center',alignItems:'center',marginTop:5,marginLeft:5,marginRight:5}} onPress={() => this.back()}>
-                <Icon active color={"#2db6c8"} size={20} name="ios-arrow-back"/>
+            <TouchableOpacity transparent style={{width:40,justifyContent:'center',alignItems:'flex-start',marginTop:5,marginLeft:5,marginRight:5}} onPress={() => this.back()}>
+                <Icon  color={"#2db6c8"} size={30} name={arrowName}/>
 
-            </Button>
+            </TouchableOpacity>
             <View style={{paddingLeft: 10, justifyContent: 'center'}}>
                 <Thumbnail small source={item.avetar}/>
             </View>

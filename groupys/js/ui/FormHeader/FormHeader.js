@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import {Dimensions, Platform} from 'react-native';
+import {Dimensions, Platform,I18nManager,TouchableOpacity} from 'react-native';
 import {Button, Header, Input, InputGroup, Tab, TabHeading, Tabs, Text, View} from 'native-base';
 import Icon from 'react-native-vector-icons/Ionicons';
 import Icon2 from 'react-native-vector-icons/Entypo';
@@ -51,12 +51,14 @@ export default class FormHeader extends Component {
         if (backIconColor) {
             iconColor = backIconColor;
         }
+        let arrowName = I18nManager.isRTL ? "ios-arrow-forward" : "ios-arrow-back";
+
         let back = undefined;
         if (showBack) {
-            back = <Button transparent style={{marginLeft: 5, marginRight: 5}} onPress={() => this.back()}>
-                <Icon active color={iconColor} size={25} name="ios-arrow-back"/>
+            back = <TouchableOpacity transparent style={{width:50,alignItems:'flex-start',justifyContent:'flex-start',marginLeft: 5, marginRight: 5}} onPress={() => this.back()}>
+                <Icon active color={iconColor} size={25} name={arrowName}/>
 
-            </Button>
+            </TouchableOpacity>
         }
         let titleStyle = this.createTitleStyle(titleColor);
         return (
@@ -76,10 +78,10 @@ export default class FormHeader extends Component {
 
                 <View style={styles.formHeaderSubmitButoon}>
                     {submitForm &&
-                    <Button transparent style={{justifyContent: 'center', alignItems: 'center'}}
+                    <TouchableOpacity transparent style={{width:50,alignItems:'flex-end',justifyContent:'flex-end'}}
                             onPress={() => this.submitForm()}>
                         {icon}
-                    </Button>
+                    </TouchableOpacity>
                     }
                 </View>
             </View>

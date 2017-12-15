@@ -39,10 +39,10 @@ export default class SocialState extends Component {
                 <Text style={styles.socialTextColor}>{comments}</Text>
             </View>;
         }
-        return <Button transparent style={styles.promotion_iconView} onPress={onPressComment}>
+        return <TouchableOpacity transparent style={styles.promotion_iconView} onPress={onPressComment}>
             <Icon2 style={componentStyle} size={25} name="comment"/>
             <Text style={styles.socialTextColor}>{comments}</Text>
-        </Button>;
+        </TouchableOpacity>;
     }
 
     createLikeButton() {
@@ -58,20 +58,20 @@ export default class SocialState extends Component {
             </View>
         }
         if (like) {
-            return <Button transparent style={styles.promotion_iconView} onPress={onPressUnLike}>
+            return <TouchableOpacity transparent style={styles.promotion_iconView} onPress={onPressUnLike}>
 
 
                 <Icon style={styles.promotionLikeActive} size={20} name="heart"/>
                 <Text style={styles.socialTextColor}>{likes}</Text>
 
-            </Button>
+            </TouchableOpacity>
         }
-        return <Button transparent style={styles.promotion_iconView} onPress={onPressLike}>
+        return <TouchableOpacity transparent style={styles.promotion_iconView} onPress={onPressLike}>
 
             <Icon style={componentStyle} size={20} name="heart"/>
             <Text style={styles.socialTextColor}>{likes}</Text>
 
-        </Button>
+        </TouchableOpacity>
     }
 
     createShareButton() {
@@ -89,19 +89,19 @@ export default class SocialState extends Component {
             </View>
         }
         if (share) {
-            return <Button transparent style={styles.promotion_iconView} onPress={shareAction}>
+            return <TouchableOpacity transparent style={styles.promotion_iconView} onPress={shareAction}>
 
                 <Icon3 style={styles.promotionShareActive} size={25} name="share"/>
                 <Text style={styles.socialTextColor}>{shares}</Text>
 
 
-            </Button>
+            </TouchableOpacity>
         }
-        return <Button transparent style={styles.promotion_iconView} onPress={shareAction}>
+        return <TouchableOpacity transparent style={styles.promotion_iconView} onPress={shareAction}>
 
             <Icon3 style={componentStyle} size={25} name="share"/>
             <Text style={styles.socialTextColor}>{shares}</Text>
-        </Button>;
+        </TouchableOpacity>;
     }
 }
 

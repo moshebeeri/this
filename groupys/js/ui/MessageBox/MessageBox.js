@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import {Dimensions, Keyboard, TextInput, View} from 'react-native';
+import {Dimensions, Keyboard, TextInput, View,TouchableOpacity} from 'react-native';
 import Icon2 from "react-native-vector-icons/Entypo";
 import {Button, Icon, Input} from 'native-base';
 import EmojiPicker from "../emojiPicker/emojiPicker"
@@ -104,10 +104,10 @@ export default class MessageBox extends Component {
                     backgroundColor: 'white',
                     flexDirection: 'row'
                 }}>
-                    <Button onPress={() => this.showEmoji()} style={styles.icon} transparent>
+                    <TouchableOpacity onPress={() => this.showEmoji()} style={styles.icon} transparent>
 
                         <Icon2 style={{fontSize: 35, color: "#2db6c8"}} name={this.state.iconEmoji}/>
-                    </Button>
+                    </TouchableOpacity>
 
 
                     <TextInput style={styles.textInputTextStyleWhite} value={this.state.message}
@@ -119,9 +119,9 @@ export default class MessageBox extends Component {
                                onChangeText={(message) => this.setState({message})} placeholder={strings.Message}/>
 
 
-                    <Button onPress={() => this._onPressButton()} style={styles.icon} transparent>
+                    <TouchableOpacity onPress={() => this._onPressButton()} style={styles.icon} transparent>
                         <Icon style={{fontSize: 35, color: "#2db6c8"}} name='send'/>
-                    </Button>
+                    </TouchableOpacity>
                 </View>
 
 

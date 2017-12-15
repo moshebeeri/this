@@ -52,13 +52,14 @@ export default class BusinessHeader extends Component {
         if(editButton){
             showEdit = true;
         }
+        let arrowName = I18nManager.isRTL ? "ios-arrow-forward" : "ios-arrow-back";
 
         let back = undefined;
         if (showBack) {
-            back = <Button transparent style={{marginLeft:10,marginRight:10}} onPress={() => this.back()}>
-                <Icon active size={25} name="ios-arrow-back"/>
+            back = <TouchableOpacity transparent style={{alignItems:'flex-start',justifyContent:'flex-start',width:40,marginLeft:10,marginRight:10}} onPress={() => this.back()}>
+                <Icon active  color={"#2db6c8"} size={30} name={arrowName}/>
 
-            </Button>
+            </TouchableOpacity>
         }
         return <View style={headerContainerStyle}>
             <View style={{alignItems:'center',justifyContent:'center'}}>

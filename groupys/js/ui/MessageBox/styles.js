@@ -30,6 +30,8 @@ module.exports = {
         borderColor: 'black',
         justifyContent: 'center',
         alignItems: 'center',
+
+        width:40,
         flex:1
     },
     headerContainer: {

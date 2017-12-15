@@ -1,6 +1,8 @@
 import React from 'react'
-import {ScrollView, Text, TouchableOpacity, View} from 'react-native'
+import {ScrollView, Text, TouchableOpacity, View,I18nManager,Platform} from 'react-native'
 import {Container, Drawer, Fab, Icon, Tab, TabHeading, Tabs} from "native-base";
+import {ScrolTabView} from '../index'
+import EmojiList from './emojiList';
 /* list of emoji's sourced from http://getemoji.com */
 const PEOPLE_EMOJIS = ['😀', '😃', '😄', '😁', '😆', '😅', '😂', '😇', '☺️', '😊', '🙂', '🙃', '😉', '😌', '😍', '😘', '😗', '😙', '😚', '😋', '😜', '😝', '😛', '🤑', '🤗', '🤓', '😎', '😏', '😒', '😞', '😔', '😟', '😕', '🙁', '☹️', '😣', '😖', '😫', '😩', '😤', '😠', '😡', '😶', '😐', '😑', '😯', '😦', '😧', '😮', '😲', '😵', '😳', '😱', '😨', '😰', '😢', '😥', '😭', '😓', '😪', '😴', '🙄', '🤔', '😬', '🤐', '😷', '🤒', '🤕', '😈', '👿', '👹', '👺', '💩', '👻', '💀', '☠️', '👽', '👾', '🤖', '🎃', '😺', '😸', '😹', '😻', '😼', '😽', '🙀', '😿', '😾', '👐', '🙌', '👏', '🙏', '👍', '👎', '👊', '✊', '✌️', '🤘', '👌', '👈', '👉', '👆', '👇', '☝️', '✋', '🖐', '🖖', '👋', '💪', '🖕', '✍️', '💅', '🖖', '💄', '💋', '👄', '👅', '👂', '👃', '👣', '👁', '👀', '👗', '👠', '👞', '👟', '👒', '🎩', '🎓', '👑', '⛑', '🎒', '👝', '👛', '👜', '💼', '👓', '🕶', '☂️']
 const ANIMALS_NATURE_EMOJIS = ['🐶', '🐱', '🐭', '🐹', '🐰', '🐻', '🐼', '🐨', '🐯', '🦁', '🐮', '🐷', '🐽', '🐸', '🐵', '🙊', '🙉', '🙊', '🐒', '🐔', '🐧', '🐦', '🐤', '🐣', '🐥', '🐺', '🐗', '🐴', '🦄', '🐝', '🐛', '🐌', '🐚', '🐞', '🐜', '🕷', '🕸', '🐢', '🐍', '🦂', '🦀', '🐙', '🐠', '🐟', '🐡', '🐬', '🐳', '🐋', '🐊', '🐆', '🐅', '🐃', '🐂', '🐄', '🐫', '🐘', '🐎', '🐖', '🐐', '🐏', '🐑', '🐕', '🐩', '🐈', '🐓', '🦃', '🕊', '🐇', '🐁', '🐀', '🐿', '🐾', '🐉', '🐲', '🌵', '🎄', '🌲', '🌳', '🌴', '🌱', '🌿', '☘️', '🍀', '🎍', '🎋', '🍃', '🍂', '🍁', '🍄', '🌾', '💐', '🌷', '🌹', '🥀', '🌻', '🌼', '🌸', '🌺', '🌎', '🌍', '🌏', '🌕', '🌖', '🌔', '🌚', '🌝', '🌞', '🌛', '🌜', '🌙', '💫', '⭐️', '🌟', '✨', '⚡️', '🔥', '💥', '☄️', '☀️', '🌤', '⛅️', '🌥', '🌦', '🌈', '☁️', '🌧', '⛈', '🌩', '🌨', '☃️', '⛄️', '❄️', '🌬', '💨', '🌪', '🌫', '🌊', '💧', '💦', '☔️']
@@ -26,78 +28,34 @@ export default class extends React.Component {
     render() {
         return (
             <View style={{flex: 5, padding: 10}}>
-                <Tabs tabBarUnderlineStyle={{backgroundColor: '#2db6c8'}} initialPage={0}
-                      style={{backgroundColor: '#fff',}}>
-                    <Tab heading={<TabHeading style={{
-                        justifyContent: 'center',
-                        alignItems: 'center',
-                        backgroundColor: "white"
-                    }}><Text style={{height: 35, fontSize: 30}}>😀</Text></TabHeading>}>
-                        {this.createEmojies(PEOPLE_EMOJIS)}
-                    </Tab>
-                    <Tab heading={<TabHeading style={{
-                        justifyContent: 'center',
-                        alignItems: 'center',
-                        backgroundColor: "white"
-                    }}><Text style={{height: 35, fontSize: 30}}>🐼</Text></TabHeading>}>
-                        {this.createEmojies(ANIMALS_NATURE_EMOJIS)}
-                    </Tab>
-                    <Tab heading={<TabHeading style={{
-                        justifyContent: 'center',
-                        alignItems: 'center',
-                        backgroundColor: "white"
-                    }}><Text style={{height: 35, fontSize: 30}}>🍏</Text></TabHeading>}>
-                        {this.createEmojies(FOOD_SPORTS_EMOJIS)}
-                    </Tab>
-                    <Tab heading={<TabHeading style={{
-                        justifyContent: 'center',
-                        alignItems: 'center',
-                        backgroundColor: "white"
-                    }}><Text style={{height: 35, fontSize: 30}}>🚘</Text></TabHeading>}>
-                        {this.createEmojies(TRAVEL_PLACES_EMOJIS)}
-                    </Tab>
-                    <Tab heading={<TabHeading style={{
-                        justifyContent: 'center',
-                        alignItems: 'center',
-                        backgroundColor: "white"
-                    }}><Text style={{height: 35, fontSize: 30}}>💎</Text></TabHeading>}>
-                        {this.createEmojies(OBJECTS_EMOJIS)}
-                    </Tab>
-                    <Tab heading={<TabHeading style={{
-                        justifyContent: 'center',
-                        alignItems: 'center',
-                        backgroundColor: "white"
-                    }}><Text style={{height: 35, fontSize: 30}} >❤</Text></TabHeading>}>
-                        {this.createEmojies(SYMBOLS_FLAGS_EMOJIS)}
-                    </Tab>
+
+                { I18nManager.isRTL && (Platform.OS==='android') ?   <ScrolTabView  initialPage={0} tabBarBackgroundColor='white'
+                                                                                    tabBarUnderlineStyle={{backgroundColor: '#2db6c8'}}>
+                        <EmojiList tabLabel="😀" emojis={SYMBOLS_FLAGS_EMOJIS} index={0} onEmojiSelect={this.onEmojiSelect.bind(this)}/>
+                        <EmojiList tabLabel="🐼" emojis={OBJECTS_EMOJIS } index={0} onEmojiSelect={this.onEmojiSelect.bind(this)}/>
+                        <EmojiList tabLabel="🍏" emojis={TRAVEL_PLACES_EMOJIS} index={0} onEmojiSelect={this.onEmojiSelect.bind(this)}/>
+                        <EmojiList tabLabel="🚘" emojis={FOOD_SPORTS_EMOJIS} index={0} onEmojiSelect={this.onEmojiSelect.bind(this)}/>
+                        <EmojiList tabLabel="💎" emojis={ANIMALS_NATURE_EMOJIS} index={0} onEmojiSelect={this.onEmojiSelect.bind(this)}/>
+                        <EmojiList tabLabel="❤" emojis={PEOPLE_EMOJIS} index={0} onEmojiSelect={this.onEmojiSelect.bind(this)}/>
 
 
-                </Tabs>
+                    </ScrolTabView> :
+
+                <ScrolTabView  initialPage={0} tabBarBackgroundColor='white'
+                               tabBarUnderlineStyle={{backgroundColor: '#2db6c8'}}>
+                    <EmojiList tabLabel="😀" emojis={PEOPLE_EMOJIS} index={0} onEmojiSelect={this.onEmojiSelect.bind(this)}/>
+                    <EmojiList tabLabel="🐼" emojis={ANIMALS_NATURE_EMOJIS} index={0} onEmojiSelect={this.onEmojiSelect.bind(this)}/>
+                    <EmojiList tabLabel="🍏" emojis={FOOD_SPORTS_EMOJIS} index={0} onEmojiSelect={this.onEmojiSelect.bind(this)}/>
+                    <EmojiList tabLabel="🚘" emojis={TRAVEL_PLACES_EMOJIS} index={0} onEmojiSelect={this.onEmojiSelect.bind(this)}/>
+                    <EmojiList tabLabel="💎" emojis={OBJECTS_EMOJIS} index={0} onEmojiSelect={this.onEmojiSelect.bind(this)}/>
+                    <EmojiList tabLabel="❤" emojis={SYMBOLS_FLAGS_EMOJIS} index={0} onEmojiSelect={this.onEmojiSelect.bind(this)}/>
+
+
+                </ScrolTabView>}
+
 
             </View>
         )
     }
 
-    createEmojies(emojis) {
-        return <ScrollView>
-            <View style={{flexDirection: 'row', alignSelf: 'stretch', flexWrap: 'wrap'}}>
-                {
-                    emojis.map((emoji, index) => (
-                        <TouchableOpacity style={{
-                            height: 40,
-                            flexDirection: 'row',
-                            justifyContent: 'center',
-                            alignItems: 'center'
-                        }}
-                                          key={index}
-                                          onPress={() => {
-                                              this.onEmojiSelect(emoji)
-                                          }}>
-                            <Text style={{height: 37, fontSize: 30}} key={index}>{emoji}</Text>
-                        </TouchableOpacity>
-                    ))
-                }
-            </View>
-        </ScrollView>
-    }
 }

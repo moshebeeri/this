@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import {Dimensions, View,TextInput,Text} from 'react-native';
+import {Dimensions, View,TextInput,Text,TouchableOpacity} from 'react-native';
 import {Icon, Input, Button} from 'native-base';
 import styles from './styles';
 
@@ -22,10 +22,10 @@ export default class SubmitButton extends Component {
             textColor = 'white';
 
         }
-        return  <Button disabled={disabled} style={{width:100,alignItems:'center', justifyContent:'center',borderRadius: 20,backgroundColor:bgc}}
+        return  <TouchableOpacity disabled={disabled} style={{height:40,width:100,alignItems:'center', justifyContent:'center',borderRadius: 20,backgroundColor:bgc}}
                         onPress={onPress}>
             <Text style={{color:textColor}}>{title}</Text>
-        </Button>
+        </TouchableOpacity>
 
     }
 }
