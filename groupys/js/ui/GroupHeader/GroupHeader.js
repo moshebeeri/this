@@ -70,7 +70,7 @@ export default class GroupHeader extends Component {
 
     render() {
         const {group,noColor} = this.props;
-        let containerStyle = {backgroundColor:'#DDEEFF'};
+        let containerStyle = {backgroundColor:'white'};
         if(noColor){
             containerStyle = {};
         }

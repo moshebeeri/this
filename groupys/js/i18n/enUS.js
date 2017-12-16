@@ -186,6 +186,12 @@ Post                                          : "Post",//Todo translate
 Posted                                        : "Posted",//todo translate
 PickVideo                                     : "Pick Video From Camera", //todo translate
 YouTubeUrl                                    : "YouTube Url", //todo translate
+DiscountShortDescription                      : "{0}% Off On {1}",
+XforYShortDescription                         : "Pay {0} for {1} {2}",
+HapyyHourShortDescription                     : "Pay only {0} on {1} During Happy Hour ",
+ReduceAmountShortDescription                  : "Buy {0} Pay Only {1} ",
+XForYPercentageOffShortDescription            : "Buy {0} Get {1} with {2}% Off",
+AllStore                                      : "All Store",
 };
 
 export default enUS;

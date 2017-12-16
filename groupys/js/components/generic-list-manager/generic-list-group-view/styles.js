@@ -21,7 +21,7 @@ module.exports = {
         justifyContent: 'flex-start',
     },
     group_message_container: {
-        margin: 2,
+        marginLeft:15,
         flexDirection: 'row',
         alignItems: 'center',
         justifyContent: 'center',
@@ -30,6 +30,8 @@ module.exports = {
     group_promotion_container: {
         flexDirection: 'row',
         justifyContent: 'space-between',
+        borderBottomWidth:1,
+        borderBottomColor:'gray'
     },
     group_content: {
         width: width - 10,
@@ -64,6 +66,8 @@ module.exports = {
     },
     message_container: {
         flex: 3,
+        alignItems:'center',
+        flexDirection:'row',
         paddingBottom:8,
     },
     group_name_text: {

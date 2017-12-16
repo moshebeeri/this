@@ -106,7 +106,7 @@ export default class GenericListGroupView extends Component {
 
     createPromotion(styles, promotion, showBusinessHeader) {
         if (promotion) {
-            return <View style={styles.group_promotion_container}>
+            return <View style={styles.message_container}>
 
                 <PromotionHeaderSnippet business={showBusinessHeader} promotion={promotion} type={promotion.promotion}
                                         feed titleText={promotion.promotionTitle}
@@ -147,15 +147,19 @@ export default class GenericListGroupView extends Component {
 
                 }
             }
+            const image = <Thumbnail small source={itemChat.avetar}/>
 
             return <View style={styles.group_message_container}>
 
 
                 <View style={styles.message_container}>
 
+                    {image}
 
-                   <ChatMessage  wide item={itemChat}/>
-
+                    <View style={{padding:2,alignItems:'flex-start'}}>
+                        <Text>{itemChat.name}</Text>
+                        <Text>{itemChat.message}</Text>
+                    </View>
                 </View>
 
             </View>
