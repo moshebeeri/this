@@ -192,6 +192,8 @@ HapyyHourShortDescription                     : "Pay only {0} on {1} During Happ
 ReduceAmountShortDescription                  : "Buy {0} Pay Only {1} ",
 XForYPercentageOffShortDescription            : "Buy {0} Get {1} with {2}% Off",
 AllStore                                      : "All Store",
+PublicGroup                                   : "Public Group",
+
 };
 
 export default enUS;

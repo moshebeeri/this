@@ -35,9 +35,9 @@ export default class GroupHeader extends Component {
     createTitle(groupType) {
         switch (groupType) {
             case 'USERS':
-                return 'Public Group';
+                return strings.PublicGroup;
             case 'BUSINESS':
-                return 'Business Group';
+                return strings.BusinessGroup;
         }
     }
 
@@ -83,7 +83,8 @@ export default class GroupHeader extends Component {
                 </View>
                 <View style={styles.groupName}>
                     <View style={{flexDirection: 'row'}}>
-                        <Text style={this.createStyle(group.entity_type)}>{this.createTitle(group.entity_type)} | </Text>
+                        <Text style={this.createStyle(group.entity_type)}>{this.createTitle(group.entity_type)}</Text>
+                        <Text> | </Text>
                         {group.social_state &&  <Text>{group.social_state.followers} {strings.Members} </Text>}
                     </View>
                     <View>
