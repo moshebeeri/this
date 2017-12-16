@@ -92,7 +92,7 @@ class ProfileDrawer extends Component {
             <Container>
                 <Content style={{backgroundColor: '#F2F2F2'}}>
 
-                    <View style={{height: 55, flex: 1, justifyContent: I18nManager.isRTL ? 'flex-end': 'flex-start', flexDirection: 'row'}}>
+                    <View style={{height: 55, flex: 1, alignItems:'center',justifyContent:  'flex-end', flexDirection: 'row'}}>
                         <CloseDrawer active color={"#FF9046"} size={30} onPress={() => this.props.closeDrawer()}/>
                     </View>
                     {/*form header*/}
