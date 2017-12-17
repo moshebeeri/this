@@ -83,7 +83,9 @@ class PageRefresher {
 
         if (store.getState().comments.groupCommentsOrder && store.getState().comments.groupCommentsOrder[groupId]
             && store.getState().comments.groupCommentsOrder[groupId].length > 0) {
-            groupComments.refreshComments(store.dispatch, token, {_id: groupId});
+
+            let user = store.getState().user.user;
+            groupComments.refreshComments(store.dispatch, token, {_id: groupId},user);
         }
     }
 

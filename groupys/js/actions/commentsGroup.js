@@ -39,7 +39,7 @@ export function fetchTopComments(group) {
     }
 }
 
-async function refreshComments(dispatch,token,group) {
+async function refreshComments(dispatch,token,group,user) {
     try {
 
         let response = await commentsApi.getGroupComments(group, token, 0, 10);
@@ -49,6 +49,7 @@ async function refreshComments(dispatch,token,group) {
                 type: actions.UPSERT_GROUP_TOP_COMMENT,
                 item: response,
                 gid: group._id,
+                user: user
             });
             dispatch({
                 type: actions.GROUP_COMMENT_CLEAR_MESSAGE,
