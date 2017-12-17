@@ -57,7 +57,7 @@ export default function comment(state = initialState, action) {
                 }
 
                 if (!currentState.groupCommentsOrder[action.gid].includes(comment._id)) {
-                    if(comment.user._is !== action.user._id) {
+                    if(comment.user._id !== action.user._id) {
                         currentState.groupUnreadComments[action.gid] = currentState.groupUnreadComments[action.gid] + 1;
                     }
                     currentState.groupCommentsOrder[action.gid].unshift(comment._id);
