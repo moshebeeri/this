@@ -39,6 +39,30 @@ export function fetchTopComments(group) {
     }
 }
 
+async function refreshComments(dispatch,token,group) {
+    try {
+
+        let response = await commentsApi.getGroupComments(group, token, 0, 10);
+
+        if (response.length > 0) {
+            dispatch({
+                type: actions.UPSERT_GROUP_TOP_COMMENT,
+                item: response,
+                gid: group._id,
+            });
+            dispatch({
+                type: actions.GROUP_COMMENT_CLEAR_MESSAGE,
+                groupId: group._id,
+            });
+        }
+    } catch (error) {
+
+        dispatch({
+            type: actions.NETWORK_IS_OFFLINE,
+        });
+    }
+}
+
 export function sendMessage(groupId, message) {
     return async function (dispatch, getState) {
         try {
@@ -72,6 +96,14 @@ function createMessage(message, user) {
     }
 }
 
+export function clearUnreadComments(group) {
+    return async function (dispatch) {
+        dispatch({
+            type: actions.CLEAR_GROUP_COMMENT_UNREAD,
+            gid: group._id,
+        });
+    }
+}
 export function setNextFeeds(comments, group) {
     return async function (dispatch, getState) {
         try {
@@ -115,3 +147,7 @@ export function setNextFeeds(comments, group) {
         }
     }
 }
+
+export default {
+    refreshComments
+};

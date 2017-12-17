@@ -29,7 +29,7 @@ class GenericListManager extends Component {
         const {rows, ItemDetail, actions, update, onEndReached, noRefresh} = this.props;
         if (noRefresh) {
             return (
-                <Content style={{backgroundColor: '#b7b7b7'}}>
+                <Content style={{backgroundColor: '#dddddd'}}>
 
                     <FlatList
                         data={rows}
@@ -43,7 +43,7 @@ class GenericListManager extends Component {
         const onEndActions = this.getOnEndAction(actions, onEndReached);
         return (
 
-            <Content style={{backgroundColor: '#b7b7b7'}}>
+            <Content style={{backgroundColor: '#dddddd'}}>
 
                 <FlatList
                     data={rows}

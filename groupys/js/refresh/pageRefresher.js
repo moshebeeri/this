@@ -2,6 +2,7 @@ import getStore from "../store";
 import feedAction from '../actions/feedsMain'
 import business from '../actions/business'
 import groups from '../actions/groups'
+import groupComments from '../actions/commentsGroup'
 import pageSync from './refresher';
 
 const store = getStore();
@@ -48,6 +49,15 @@ class PageRefresher {
         }
     }
 
+    upSertGroupsChat(groupsId) {
+        if (!visitedList.includes('chat' + groupsId,)) {
+            pageSync.createPage('chat' + groupsId, pageSync.createStdAverageRefresh('chat' + groupsId, 5, 60000), this.updateGroupChat.bind(this, groupsId));
+            visitedList.push('chat' + groupsId);
+        }else{
+            this.visitedGroupChat(groupsId);
+        }
+    }
+
     visitedPromotions(businessId) {
         if (visitedList.includes('promotion_' + businessId,)) {
             pageSync.visited('promotion_' + businessId)
@@ -68,6 +78,14 @@ class PageRefresher {
             groups.fetchTopList(store.getState().groups.groupFeedOrder[groupId][0], token, {_id: groupId}, store.dispatch);
         }
     }
+    updateGroupChat(groupId) {
+        let token = store.getState().authentication.token;
+
+        if (store.getState().comments.groupCommentsOrder && store.getState().comments.groupCommentsOrder[groupId]
+            && store.getState().comments.groupCommentsOrder[groupId].length > 0) {
+            groupComments.refreshComments(store.dispatch, token, {_id: groupId});
+        }
+    }
 
     visitedFeed() {
         pageSync.visited('feed')
@@ -79,6 +97,9 @@ class PageRefresher {
 
     visitedGroupFeeds(groupId) {
         pageSync.visited('feeds' +groupId)
+    }
+    visitedGroupChat(groupId) {
+        pageSync.visited('chat' +groupId)
     }
 
     createFeedSocialState(id){

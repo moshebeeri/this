@@ -21,11 +21,13 @@ module.exports = {
         justifyContent: 'flex-start',
     },
     group_message_container: {
-        marginLeft:15,
+
         flexDirection: 'row',
         alignItems: 'center',
         justifyContent: 'center',
         borderColor: 'gray',
+        borderTopWidth:1,
+        borderColor:'#cccccc'
     },
     group_promotion_container: {
         flexDirection: 'row',
@@ -66,9 +68,19 @@ module.exports = {
     },
     message_container: {
         flex: 3,
+        alignItems: 'center',
+        flexDirection: 'row',
+        paddingBottom: 8,
+        marginLeft:15,
+    },
+
+    message_container2: {
+        flex: 3,
         alignItems:'center',
         flexDirection:'row',
         paddingBottom:8,
+        borderTopWidth:1,
+        borderColor:'#cccccc'
     },
     group_name_text: {
         fontFamily: 'Roboto-Regular', fontWeight: 'bold', marginLeft: 10, marginTop: 0, fontSize: 24, color: 'black'

@@ -42,6 +42,8 @@ class GroupFeed extends Component {
         if (!feeds[group._id] || (feeds[group._id] && feeds[group._id].length === 0)) {
             this.props.actions.setFeeds(group, feeds[group._id]);
         }
+
+        this.props.actions.clearUnreadPosts(group);
     }
 
     handleBack() {
@@ -66,9 +68,13 @@ class GroupFeed extends Component {
         this.props.navigation.navigate('PostForm', {group: group})
     }
 
-    changeTab() {
+    changeTab(tab) {
         const {navigation, commentGroupAction} = this.props;
         const group = navigation.state.params.group;
+        if(tab.i === 1){
+            PageRefresher.upSertGroupsChat(group._id);
+            commentGroupAction.clearUnreadComments(group);
+        }
         this.setState({
             showChat: !this.state.showChat
         })

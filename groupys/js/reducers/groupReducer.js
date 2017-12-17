@@ -2,6 +2,7 @@ const initialState = {
     groups: {},
     groupFeedOrder: {},
     groupFeeds: {},
+    groupFeedsUnread:{},
     update: false,
     loadingDone: {},
     showTopLoader: {},
@@ -53,13 +54,25 @@ export default function group(state = initialState, action) {
                     imutableState.groupFeeds[action.groupId] = {};
                     imutableState.groupFeedOrder[action.groupId] = [];
                 }
+                if (!imutableState.groupFeedsUnread[action.groupId]) {
+                    imutableState.groupFeedsUnread[action.groupId] = 0;
+                }
                 imutableState.groupFeeds[action.groupId][item._id] = item;
+                imutableState.groupFeedsUnread[action.groupId] = imutableState.groupFeedsUnread[action.groupId] +1;
                 if (!imutableState.groupFeedOrder[action.groupId].includes(item._id)) {
                     imutableState.groupFeedOrder[action.groupId].unshift(item._id);
                 }
             });
             imutableState.update = !imutableState.update;
             return imutableState;
+
+        case actions.GROIP_CLEAR_UNREAD_POST:
+            if (imutableState.groupFeedsUnread[action.groupId]) {
+                imutableState.groupFeedsUnread[action.groupId] = 0;
+            }
+            return imutableState;
+
+
         case actions.GROUP_FEED_LOADING_DONE:
             let loadingDone = imutableState.loadingDone;
             loadingDone[action.groupId] = action.loadingDone;

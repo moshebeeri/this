@@ -23,7 +23,7 @@ import stylesLandscape from './styles_landscape'
 import StyleUtils from '../../../utils/styleUtils'
 import DateUtils from '../../../utils/dateUtils';
 import UiConverter from '../../../api/feed-ui-converter'
-import {GroupHeader, PromotionHeaderSnippet,ChatMessage} from '../../../ui/index';
+import {GroupHeader, PromotionHeaderSnippet} from '../../../ui/index';
 import BusinessHeader from "../../../ui/BusinessHeader/BusinessHeader";
 
 const {width, height} = Dimensions.get('window');
@@ -32,6 +32,8 @@ const vh = height / 100;
 let groupApi = new GroupApi();
 let dateUtils = new DateUtils();
 let uiConverter = new UiConverter();
+import strings from '../../../i18n/i18n';
+
 export default class GenericListGroupView extends Component {
     constructor(props) {
         super(props);
@@ -55,7 +57,7 @@ export default class GenericListGroupView extends Component {
         const message = this.createMessage(styles, item);
         const containerStyle = {
             alignItems: 'center',
-            marginBottom: 4,
+            marginBottom: 12,
             backgroundColor: 'white'
         };
         const row = <View key={index}>
@@ -63,15 +65,18 @@ export default class GenericListGroupView extends Component {
                 <View style={containerStyle}>
                     <GroupHeader group={item}/>
 
-                    {showBusinessHeader && promotionItem &&
-                    <View style={{marginLeft: 10, flex: 1, alignItems: 'flex-start', justifyContent: 'flex-start'}}>
-                        <BusinessHeader small navigation={this.props.navigation} business={promotionItem.business}
-                                        businessLogo={promotionItem.businessLogo}
-                                        businessName={promotionItem.businessName}/>
-                    </View>
-                    }
+
+
+
                     {promotion}
+                    {promotion && item.unreadFeeds>0 &&  <View style={{marginLeft: 30,width:width,justifyContent:'flex-start'}}>
+                        <Text style={{color:'#2db6c8',fontWeight:'bold'}}>{strings.UnReadPost.formatUnicorn(item.unreadFeeds)}</Text>
+                    </View>}
+
                     {message}
+                    {message &&  item.unreadMessages>0 && <View style={{marginLeft: 30,marginBottom:5,width:width,justifyContent:'flex-start'}}>
+                        <Text style={{color:'#25964e',fontWeight:'bold'}}>{strings.UnReadMessages.formatUnicorn(item.unreadMessages)}</Text>
+                    </View>}
                 </View>
             </TouchableOpacity>
         </View>
@@ -98,7 +103,7 @@ export default class GenericListGroupView extends Component {
     }
 
     createPromotionItem(item) {
-        if (item.preview && item.preview.instance_activity && item.preview.instance_activity.instance && item.preview.instance_activity.instance.promotion ) {
+        if (item.preview && item.preview.instance_activity && item.preview.instance_activity.instance && item.preview.instance_activity.instance.promotion) {
             return uiConverter.createPromotionInstance(item.preview.instance_activity.instance);
         }
         return undefined;
@@ -106,7 +111,7 @@ export default class GenericListGroupView extends Component {
 
     createPromotion(styles, promotion, showBusinessHeader) {
         if (promotion) {
-            return <View style={styles.message_container}>
+            return <View style={styles.message_container2}>
 
                 <PromotionHeaderSnippet business={showBusinessHeader} promotion={promotion} type={promotion.promotion}
                                         feed titleText={promotion.promotionTitle}
@@ -121,34 +126,30 @@ export default class GenericListGroupView extends Component {
     createMessage(styles, item) {
         if (item.preview && item.preview.comment) {
             let user = item.preview.comment.user;
-
             let itemChat
             let userImage = undefined;
             if (user && user.pictures && user.pictures.length > 0) {
                 itemChat = {
-                    date:item.preview.comment.timestamp,
+                    date: item.preview.comment.timestamp,
                     message: item.preview.comment.message,
-                    isUser:true,
+                    isUser: true,
                     avetar: {uri: user.pictures[user.pictures.length - 1].pictures[3]},
-                    name:user.name
-
+                    name: user.name
                 }
             } else {
                 let name
-                if(user){
+                if (user) {
                     name = user.name;
                 }
                 itemChat = {
-                    date:item.preview.comment.timestamp,
-                    isUser:true,
+                    date: item.preview.comment.timestamp,
+                    isUser: true,
                     message: item.preview.comment.message,
                     avetar: require('../../../../images/client_1.png'),
-                    name:name
-
+                    name: name
                 }
             }
             const image = <Thumbnail small source={itemChat.avetar}/>
-
             return <View style={styles.group_message_container}>
 
 
@@ -156,7 +157,7 @@ export default class GenericListGroupView extends Component {
 
                     {image}
 
-                    <View style={{padding:2,alignItems:'flex-start'}}>
+                    <View style={{padding: 2, alignItems: 'flex-start'}}>
                         <Text>{itemChat.name}</Text>
                         <Text>{itemChat.message}</Text>
                     </View>

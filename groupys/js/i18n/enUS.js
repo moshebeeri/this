@@ -193,6 +193,10 @@ ReduceAmountShortDescription                  : "Buy {0} Pay Only {1} ",
 XForYPercentageOffShortDescription            : "Buy {0} Get {1} with {2}% Off",
 AllStore                                      : "All Store",
 PublicGroup                                   : "Public Group",
+UnReadPost                                    : "Unread Posts: {0}",
+UnReadMessages                                : "Unread Messages: {0}",
+
+
 
 };
 

@@ -2,6 +2,7 @@ const initialState = {
     comments: [],
     groupComments: {},
     groupCommentsOrder: {},
+    groupUnreadComments:{},
     loadingDone: {},
     showTopLoader: {},
     clientMessages: {},
@@ -51,7 +52,12 @@ export default function comment(state = initialState, action) {
                 if (!currentState.groupCommentsOrder[action.gid]) {
                     currentState.groupCommentsOrder[action.gid] = [];
                 }
+                if (!currentState.groupUnreadComments[action.gid]) {
+                    currentState.groupUnreadComments[action.gid] = 0;
+                }
+
                 if (!currentState.groupCommentsOrder[action.gid].includes(comment._id)) {
+                    currentState.groupUnreadComments[action.gid] = currentState.groupUnreadComments[action.gid] +1;
                     currentState.groupCommentsOrder[action.gid].unshift(comment._id);
                 }
             });
@@ -59,6 +65,12 @@ export default function comment(state = initialState, action) {
                 [currentState.groupCommentsOrder[action.gid].length - 1]].entities.instance._id;
             currentState.update = !currentState.update;
             return currentState;
+        case actions.CLEAR_GROUP_COMMENT_UNREAD:
+            if (currentState.groupUnreadComments[action.gid]) {
+                currentState.groupUnreadComments[action.gid] = 0;
+            }
+            return currentState;
+
         case actions.GROUP_COMMENT_LOADING_DONE:
             currentState.loadingDone[action.gid] = action.loadingDone;
             return currentState;

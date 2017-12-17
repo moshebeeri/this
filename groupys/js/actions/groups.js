@@ -17,10 +17,10 @@ async function getAll(dispatch, token) {
     try {
         let response = await groupsApi.getAll(token);
         if (response.length > 0) {
-                dispatch({
-                    type: actions.UPSERT_GROUP,
-                    item: response,
-                });
+            dispatch({
+                type: actions.UPSERT_GROUP,
+                item: response,
+            });
         }
     } catch (error) {
         dispatch({
@@ -28,6 +28,17 @@ async function getAll(dispatch, token) {
         });
     }
 }
+
+export function clearUnreadPosts(group) {
+    return async function (dispatch) {
+        dispatch({
+            type: actions.GROIP_CLEAR_UNREAD_POST,
+            gid: group._id,
+        });
+    }
+}
+
+
 
 async function getByBusinessId(dispatch, bid, token) {
     try {
@@ -239,7 +250,7 @@ function createMessage(message, user) {
     }
 }
 
- async function fetchTopList(id, token, group, dispatch) {
+async function fetchTopList(id, token, group, dispatch) {
     try {
         if (!id) {
             return;
@@ -263,7 +274,6 @@ function createMessage(message, user) {
             groupId: group._id,
             groupFeed: disassemblerItems
         });
-
     } catch (error) {
         dispatch({
             type: actions.NETWORK_IS_OFFLINE,
@@ -280,9 +290,6 @@ export function setFeeds(group, feeds) {
         await fetchTopList(feeds[0].id, token, group, dispatch)
     }
 }
-
-
-
 
 export function fetchTop(feeds, token, group) {
     return async function (dispatch, getState) {
@@ -405,5 +412,4 @@ export function refresh(id, currentSocialState) {
 export default {
     getAll,
     fetchTopList
-
 };
