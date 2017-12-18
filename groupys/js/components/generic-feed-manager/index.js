@@ -65,7 +65,7 @@ export default class GenericFeedManager extends Component {
         if (setNextFeeds) {
             return (
 
-                <View style={{backgroundColor: '#cccccc'}}>
+                <View style={{backgroundColor: 'white'}}>
                     {topLoader}
 
                     <FlatList
