@@ -39,13 +39,14 @@ function handlePostCreation(post) {
 
   graphModel.relate_ids(post.creator._id, 'POSTED_BY', post._id);
   graphModel.relate_ids(post._id, 'POSTED_ON', getActorId(post));
-
+  console.log(`if(post.behalf.group) is ${post.behalf.group}`);
   if(post.behalf.group) {
     Group.findById(post.behalf.group).exec(function (err, group) {
       group.preview = {
         post: post._id
       };
-      group.save()
+      console.log(`saving group ${group}`);
+      group.save();
     })
   }
 }
