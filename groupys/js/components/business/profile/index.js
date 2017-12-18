@@ -93,7 +93,7 @@ class BusinessProfile extends Component {
 
                 <FormHeader showBack navigation={this.props.navigation}
                             title={strings.Business} bgc="#2db6c8"/>
-                <BusinessHeader  navigation={this.props.navigation} business={business}
+                <BusinessHeader noProfile navigation={this.props.navigation} business={business}
                                  categoryTitle={business.categoryTitle} businessLogo={business.logo}
                                  businessName={business.name} noMargin
                 />

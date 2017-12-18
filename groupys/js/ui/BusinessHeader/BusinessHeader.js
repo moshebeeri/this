@@ -15,8 +15,16 @@ export default class BusinessHeader extends Component {
     }
 
     createBusinessLog() {
-        const {businessLogo,small} = this.props;
+        const {businessLogo,small,noProfile} = this.props;
+
         if (businessLogo) {
+            if(noProfile){
+                return <View style={{margin:5}} >
+                    <View>
+                        <Thumbnail square={true} size={40} source={{uri: businessLogo}}/>
+                    </View>
+                </View>
+            }
             if(small){
                 return <TouchableOpacity style={{margin:5}} onPress={this.showBusiness.bind(this)}>
                     <View>
