@@ -411,7 +411,7 @@ module.exports = {
         justifyContent: 'center',
     },
     promotionLoctionContainer: {
-        alignItems: I18nManager.isRTL ? 'flex-start' : 'flex-end',
+        alignItems:  'flex-start',
         flex: 2.5,
     },
     detailsTitleText: {
