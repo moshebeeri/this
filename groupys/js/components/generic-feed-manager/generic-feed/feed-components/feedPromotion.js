@@ -148,7 +148,18 @@ export default class FeedPromotion extends Component {
                     </View>}
 
 
-                    {!hideSocial && <View style={styles.promotion_bottomContainer}>
+                    {!hideSocial && !shared && <View style={styles.promotion_bottomContainer}>
+
+                        {item.social && <SocialState feed comments={item.social.comments} onPressComment={comment}
+                                                     like={item.social.like} likes={item.social.likes}
+                                                     onPressUnLike={() => unlike(item.id, token)}
+                                                     onPressLike={() => like(item.id, token)}
+                                                     shareDisabled={shared}
+                                                     share={item.social.share} shares={item.social.shares}
+                                                     shareAction={showUsers}/>}
+                    </View>}
+
+                    {!hideSocial && shared && <View style={styles.promotion_shared_bottomContainer}>
 
                         {item.social && <SocialState feed comments={item.social.comments} onPressComment={comment}
                                                      like={item.social.like} likes={item.social.likes}
@@ -178,10 +189,11 @@ export default class FeedPromotion extends Component {
                     flex: 1,
                     width: width,
                     overflow: 'hidden',
-                    backgroundColor: '#b7b7b7',
+                    backgroundColor: '#cccccc',
                     // backgroundColor:'#FFF',
                     alignItems: 'center',
                     flexDirection: 'column',
+                    marginBottom:5,
                 }
             }
             return {
@@ -189,10 +201,11 @@ export default class FeedPromotion extends Component {
                 height: 81 * vh,
                 width: width,
                 overflow: 'hidden',
-                backgroundColor: '#b7b7b7',
+                backgroundColor: '#cccccc',
                 // backgroundColor:'#FFF',
                 alignItems: 'center',
                 flexDirection: 'column',
+                marginBottom:5,
             }
         }
         return {
@@ -200,10 +213,11 @@ export default class FeedPromotion extends Component {
             height: 45 * vh,
             width: width,
             overflow: 'hidden',
-            backgroundColor: '#b7b7b7',
+            backgroundColor: '#cccccc',
             // backgroundColor:'#FFF',
             alignItems: 'center',
             flexDirection: 'column',
+            marginBottom:5,
         };
     }
 

@@ -105,7 +105,7 @@ export default class FeedPromotion extends Component {
                     </View>
 
 
-                    {!shared && <View style={styles.promotion_bottomContainer}>
+                    {!shared && <View style={styles.post_bottomContainer}>
 
                         {item.social && <SocialState feed comments={item.social.comments} onPressComment={comment}
                                                      like={item.social.like} likes={item.social.likes}

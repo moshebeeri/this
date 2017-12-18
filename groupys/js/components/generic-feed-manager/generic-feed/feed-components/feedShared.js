@@ -45,8 +45,8 @@ export default class FeedShared extends Component {
         const {refresh, item, save, like, unlike, showUsers, comment, token, location} = this.props;
         const container = this.createContainerStyle(item);
         return (<View style={container}>
-                <View style={{width:width-15,flex:1,justifyContent:'center',alignItems:'flex-start',backgroundColor:'white'}}>
-                 <Text style={{margin:5}}>{item.user.name} {strings.Shared}</Text>
+                <View style={{borderColor:'#cccccc',borderBottomWidth:1,width:width-15,flex:1,justifyContent:'center',alignItems:'flex-start',backgroundColor:'white'}}>
+                 <Text style={{padding:5,backgroundColor:'white'}}>{item.user.name} {strings.Shared}</Text>
                 </View>
                 <View style={{flex:10}}>
                 {this.createSharedActivity(item)}
@@ -59,10 +59,10 @@ export default class FeedShared extends Component {
         if (item.banner) {
             return {
                 flex: 1,
-                height: 81 * vh,
+                height: 91 * vh,
                 width: width,
                 overflow: 'hidden',
-                backgroundColor: '#b7b7b7',
+                backgroundColor: '#cccccc',
                 // backgroundColor:'#FFF',
                 alignItems: 'center',
                 flexDirection: 'column',
@@ -74,7 +74,7 @@ export default class FeedShared extends Component {
 
             width: width,
             overflow: 'hidden',
-            backgroundColor: '#b7b7b7',
+            backgroundColor: '#cccccc',
             // backgroundColor:'#FFF',
             alignItems: 'center',
             flexDirection: 'column',
@@ -86,6 +86,7 @@ export default class FeedShared extends Component {
             case 'PROMOTION':
                 return this.createFeedView(<FeedPromotion shared refresh={refresh} token={token} comment={comment}
                                                           location={location}
+
                                                           navigation={this.props.navigation} item={item.shardeActivity}
                                                           like={like} unlike={unlike}
                                                           showUsers={showUsers}/>)
@@ -109,9 +110,9 @@ export default class FeedShared extends Component {
     }
     createFeedView(item) {
         if (item) {
-            return <View  >
-                {item}
-            </View>
+            return item
+
+
         }
         return <View></View>
     }

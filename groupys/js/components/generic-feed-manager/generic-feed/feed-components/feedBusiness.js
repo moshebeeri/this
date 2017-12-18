@@ -74,12 +74,15 @@ export default class FeedBusiness extends Component {
                                      businessName={item.business.name} noMargin
                     />
                     </View>
+                    <View style={{width:width-15,paddingBottom:5,backgroundColor:'white',justifyContent:'flex-start',alignItems:'flex-start'}}>
+                    <Text style={styles.promotion_type}>{item.itemTitle}</Text>
+                    </View>
+
                     {imageBusiness}
 
                     <View style={styles.business_bottomUpperContainer}>
                         <View style={styles.promotion_bottom_description}>
 
-                            <Text style={styles.promotion_type}>{item.itemTitle}</Text>
 
                             <View style={styles.promotion_bottom_location}>
                                 <Icon3 style={styles.promotion_location} size={25} name="location-on"/>

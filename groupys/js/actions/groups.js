@@ -250,7 +250,7 @@ function createMessage(message, user) {
     }
 }
 
-async function fetchTopList(id, token, group, dispatch) {
+async function fetchTopList(id, token, group, dispatch,user) {
     try {
         if (!id) {
             return;
@@ -269,11 +269,19 @@ async function fetchTopList(id, token, group, dispatch) {
             return assemblers.disassembler(item, collectionDispatcher)
         });
         collectionDispatcher.dispatchEvents(dispatch)
+
+
         dispatch({
             type: actions.UPSERT_GROUP_FEEDS_TOP,
             groupId: group._id,
-            groupFeed: disassemblerItems
+            groupFeed: disassemblerItems,
+            user:user
         });
+        dispatch({
+            type:actions.UPDATE_FEED_GROUP_UNREAD,
+            feeds:response,
+            user:user,
+        })
     } catch (error) {
         dispatch({
             type: actions.NETWORK_IS_OFFLINE,
@@ -287,7 +295,8 @@ export function setFeeds(group, feeds) {
     }
     return async function (dispatch, getState) {
         const token = getState().authentication.token;
-        await fetchTopList(feeds[0].id, token, group, dispatch)
+        const user = getState().user.user;
+        await fetchTopList(feeds[0].id, token, group, dispatch,user)
     }
 }
 
@@ -302,7 +311,8 @@ export function fetchTop(feeds, token, group) {
             groupId: group._id,
             showTopLoader: true,
         });
-        await fetchTopList(feeds[0].id, token, group, dispatch);
+        const user = getState().user.user;
+        await fetchTopList(feeds[0].id, token, group, dispatch,user);
         dispatch({
             type: actions.GROUP_FEED_SHOWTOPLOADER,
             groupId: group._id,

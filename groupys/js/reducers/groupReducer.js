@@ -2,7 +2,7 @@ const initialState = {
     groups: {},
     groupFeedOrder: {},
     groupFeeds: {},
-    groupFeedsUnread:{},
+    groupFeedsUnread: {},
     update: false,
     loadingDone: {},
     showTopLoader: {},
@@ -20,7 +20,7 @@ export default function group(state = initialState, action) {
         const savedData = action.payload || initialState;
         return {
             ...state, ...savedData.groups
-            , saving: false,showTopLoader: {}
+            , saving: false, showTopLoader: {}
         };
     }
     let imutableState = {...state};
@@ -32,7 +32,10 @@ export default function group(state = initialState, action) {
             return imutableState;
         case actions.UPSERT_GROUP:
             action.item.forEach(eventItem => {
-                currentGroups[eventItem._id] = eventItem;
+                if((eventItem.preview.comment && eventItem.preview.comment.created)  ||
+                    (eventItem.preview.instance_activity && eventItem.preview.instance_activity.action) ){
+                    currentGroups[eventItem._id] = eventItem;
+                }
             });
             return imutableState;
         case actions.UPSERT_GROUP_FEEDS_BOTTOM:
@@ -48,6 +51,17 @@ export default function group(state = initialState, action) {
             });
             imutableState.update = !imutableState.update;
             return imutableState;
+        case actions.UPDATE_FEED_GROUP_UNREAD:
+            action.feeds.forEach(item => {
+                    if (item.activity.post && item.activity.post.creator._id !== action.user._id) {
+                        imutableState.groupFeedsUnread[action.groupId] = imutableState.groupFeedsUnread[action.groupId] + 1;
+                    }
+                    if (item.activity.promotion && item.activity.promotion.creator && item.activity.promotion.creator._id !== action.user._id) {
+                        imutableState.groupFeedsUnread[action.groupId] = imutableState.groupFeedsUnread[action.groupId] + 1;
+                    }
+                }
+            );
+            return imutableState;
         case actions.UPSERT_GROUP_FEEDS_TOP:
             action.groupFeed.forEach(item => {
                 if (!imutableState.groupFeeds[action.groupId]) {
@@ -58,21 +72,17 @@ export default function group(state = initialState, action) {
                     imutableState.groupFeedsUnread[action.groupId] = 0;
                 }
                 imutableState.groupFeeds[action.groupId][item._id] = item;
-                imutableState.groupFeedsUnread[action.groupId] = imutableState.groupFeedsUnread[action.groupId] +1;
                 if (!imutableState.groupFeedOrder[action.groupId].includes(item._id)) {
                     imutableState.groupFeedOrder[action.groupId].unshift(item._id);
                 }
             });
             imutableState.update = !imutableState.update;
             return imutableState;
-
         case actions.GROIP_CLEAR_UNREAD_POST:
-            if (imutableState.groupFeedsUnread[action.groupId]) {
-                imutableState.groupFeedsUnread[action.groupId] = 0;
+            if (imutableState.groupFeedsUnread[action.gid]) {
+                imutableState.groupFeedsUnread[action.gid] = 0;
             }
             return imutableState;
-
-
         case actions.GROUP_FEED_LOADING_DONE:
             let loadingDone = imutableState.loadingDone;
             loadingDone[action.groupId] = action.loadingDone;
@@ -81,7 +91,6 @@ export default function group(state = initialState, action) {
             let topLoader = imutableState.showTopLoader;
             topLoader[action.groupId] = action.showTopLoader;
             return imutableState;
-
         case actions.GROUP_LAST_FEED_DOWN:
             imutableState.lastFeed[action.groupId] = action.id;
             imutableState.lastFeedTime[action.groupId] = new Date().getTime();

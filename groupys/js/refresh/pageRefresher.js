@@ -75,7 +75,8 @@ class PageRefresher {
 
         if (store.getState().groups.groupFeedOrder && store.getState().groups.groupFeedOrder[groupId]
             && store.getState().groups.groupFeedOrder[groupId].length > 0) {
-            groups.fetchTopList(store.getState().groups.groupFeedOrder[groupId][0], token, {_id: groupId}, store.dispatch);
+            let user = store.getState().user.user;
+            groups.fetchTopList(store.getState().groups.groupFeedOrder[groupId][0], token, {_id: groupId}, store.dispatch,user);
         }
     }
     updateGroupChat(groupId) {
