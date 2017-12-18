@@ -97,7 +97,7 @@ export default class FeedPromotion extends Component {
         const result =
             <InViewPort onChange={this.visited.bind(this)}style={container}>
                 <View style={styles.promotion_card}>
-                    <View style={{width:width-15}}>
+                    <View style={{backgroundColor:'#cccccc',width:width-15}}>
 
                     <BusinessHeader  navigation={this.props.navigation} business={item.business}
                                     categoryTitle={categoruTitle} businessLogo={item.business.logo}
@@ -193,7 +193,7 @@ export default class FeedPromotion extends Component {
                     // backgroundColor:'#FFF',
                     alignItems: 'center',
                     flexDirection: 'column',
-                    marginBottom:5,
+
                 }
             }
             return {
@@ -205,7 +205,7 @@ export default class FeedPromotion extends Component {
                 // backgroundColor:'#FFF',
                 alignItems: 'center',
                 flexDirection: 'column',
-                marginBottom:5,
+
             }
         }
         return {
