@@ -55,6 +55,8 @@ export default class GenericListGroupView extends Component {
         let showBusinessHeader = this.isBusiness(item.entity_type);
         const promotion = this.createPromotion(styles, promotionItem, showBusinessHeader);
         const message = this.createMessage(styles, item);
+        const post = this.createPost(styles,item);
+
         const containerStyle = {
             alignItems: 'center',
             marginBottom: 12,
@@ -69,6 +71,7 @@ export default class GenericListGroupView extends Component {
 
 
                     {promotion}
+                    {post}
                     {promotion && item.unreadFeeds>0 &&  <View style={{marginLeft: 30,width:width,justifyContent:'flex-start'}}>
                         <Text style={{color:'#2db6c8',fontWeight:'bold'}}>{strings.UnReadPost.formatUnicorn(item.unreadFeeds)}</Text>
                     </View>}
@@ -160,6 +163,54 @@ export default class GenericListGroupView extends Component {
                     <View style={{padding: 2, alignItems: 'flex-start'}}>
                         <Text>{itemChat.name}</Text>
                         <Text>{itemChat.message}</Text>
+                    </View>
+                </View>
+
+            </View>
+        }
+        return undefined;
+    }
+
+    createPost(styles, item) {
+        if (item.preview && item.preview.post) {
+            let user = item.preview.post.creator;
+            let post
+
+            if (user && user.pictures && user.pictures.length > 0) {
+                post = {
+                    date: item.preview.post.created,
+                    title: item.preview.post.title,
+                    message: item.preview.post.text,
+                    isUser: true,
+                    avetar: {uri: user.pictures[user.pictures.length - 1].pictures[3]},
+                    name: user.name
+                }
+            } else {
+                let name
+                if (user) {
+                    name = user.name;
+                }
+                post = {
+                    date: item.preview.comment.timestamp,
+                    isUser: true,
+                    message: item.preview.post.text,
+                    title: item.preview.post.title,
+                    avetar: require('../../../../images/client_1.png'),
+                    name: name
+                }
+            }
+            const image = <Thumbnail square small source={post.avetar}/>
+            return <View style={styles.group_message_container}>
+
+
+                <View style={styles.post_container}>
+                    <View style={{paddingTop:5}}>
+                     {image}
+                    </View>
+
+                    <View style={{padding: 5, alignItems: 'flex-start'}}>
+                        <Text>{post.name} {strings.Posted}</Text>
+                        <Text>{post.title} - {post.message}</Text>
                     </View>
                 </View>
 
