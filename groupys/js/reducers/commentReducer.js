@@ -57,7 +57,9 @@ export default function comment(state = initialState, action) {
                 }
 
                 if (!currentState.groupCommentsOrder[action.gid].includes(comment._id)) {
-                    currentState.groupUnreadComments[action.gid] = currentState.groupUnreadComments[action.gid] +1;
+                    if(comment.user._id !== action.user._id) {
+                        currentState.groupUnreadComments[action.gid] = currentState.groupUnreadComments[action.gid] + 1;
+                    }
                     currentState.groupCommentsOrder[action.gid].unshift(comment._id);
                 }
             });
