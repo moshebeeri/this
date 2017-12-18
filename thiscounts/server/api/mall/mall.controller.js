@@ -48,8 +48,8 @@ exports.create = function(req, res) {
       }, function (err) {
         if (err) {  return handleError(res, err); }
         spatial.add2index(mall.gid, function(err, result){
-          if(err) logger.error(err.message);
-          else logger.info('object added to layer ' + result)
+          if(err) return logger.error(err.message);
+          //else logger.info('object added to layer ' + result)
         });
 
       });

@@ -9,6 +9,7 @@ let PointOfSaleSchema = new Schema({
   description: String,
   active: Boolean,
   logo: String,
+  client:{},
   pictures: [],
 });
 

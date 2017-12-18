@@ -18,6 +18,7 @@ let CardTypeSchema = new Schema({
       'BRAND'
     ]
   },
+  client:{},
   pictures: []
 });
 
