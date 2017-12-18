@@ -176,7 +176,8 @@ Spatial.prototype.add = function add(gid, callback) {
     "node": "http://localhost:7474/db/data/node/" + gid
   });
   db.call(operation, function (err, result, response) {
-    if (!err) console.log('gid ' + gid + ' added to layer world');
+    if (err) console.error(`Spatial.prototype.add error: ${err.message}`);
+    //if (!err) console.log('gid ' + gid + ' added to layer world');
     callback(err, result);
   });
 };

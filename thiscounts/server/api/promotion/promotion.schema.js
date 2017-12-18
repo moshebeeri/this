@@ -52,6 +52,7 @@ let PromotionSchemaObject = {
     }],
   },
   name: {type: String, required: true},
+  client:{},
   pictures : [],
   video: {type: Schema.ObjectId, ref: 'Video', autopopulate: true},
   type: {

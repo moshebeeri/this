@@ -34,7 +34,7 @@ function getActorId(post){
 }
 
 function handlePostCreation(post) {
-  if(!post || !post.creator || !post.creator._id || !post._id)
+  if(!post || !post.creator || !post._id)
     return console.log(`handlePostCreation param post invalid: ${JSON.stringify(post)})`);
 
   graphModel.relate_ids(post.creator._id, 'POSTED_BY', post._id);

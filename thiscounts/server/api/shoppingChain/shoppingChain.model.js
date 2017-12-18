@@ -9,6 +9,7 @@ let ShoppingChainSchema = new Schema({
   name: String,
   gid: { type: Number, index: true},
   logo: String,
+  client:{},
   pictures : [],
   video: {type: Schema.ObjectId, ref: 'Video', autopopulate: true},
   info: String,

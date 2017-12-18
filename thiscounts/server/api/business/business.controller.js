@@ -301,8 +301,8 @@ exports.create = function (req, res) {
               graphModel.relate_ids(business._id, 'IN_MALL', business.mall);
 
             spatial.add2index(business.gid, function (err, result) {
-              if (err) logger.error(err.message);
-              else logger.info('object added to layer ' + result)
+              if (err) return logger.error(err.message);
+              //else logger.info('object added to layer ' + result)
             });
             activity.activity({
               business: business._id,

@@ -9,6 +9,7 @@ let BrandSchema = new Schema({
   description: String,
   active: Boolean,
   logo: String,
+  client:{},
   pictures: [],
 });
 BrandSchema.index({name: 'text', description: 'text'});

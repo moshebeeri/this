@@ -13,6 +13,7 @@ let UserSchema = new Schema({
   phone_number: { type: String, index: true, unique : true, required : true},
   country_code: { type: Number, required : true },
   created: { type: Date, required : true },
+  client:{},
   pictures: [],
   video: {type: Schema.ObjectId, ref: 'Video', autopopulate: true},
   email: { type: String, lowercase: true, index: true, unique : false, required : false},

@@ -44,8 +44,8 @@ exports.create = function(req, res) {
         userId: userId
       }, function(err, location){
         spatial.add2index(location.id, function(err, result){
-          if(err) logger.error(err.message);
-          else logger.info('object added to layer ' + result)
+          if(err) return logger.error(err.message);
+          //else logger.info('object added to layer ' + result)
         });
       });
     });
