@@ -12,7 +12,7 @@ let MallSchema = new Schema({
   name: String,
   gid: { type: Number, index: true},
   logo: String,
-  client:{},
+  client: {},
   pictures: [],
   video: {type: Schema.ObjectId, ref: 'Video', autopopulate: true},
   location : {

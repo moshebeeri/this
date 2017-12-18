@@ -10,7 +10,7 @@ let CommentSchema = new Schema({
   user: {type: Schema.ObjectId, ref: 'User', index: true, autopopulate: utils.userAutopopulateOptions, required: true},
   created: {type: Date, required: true},
   message: String,
-  client:{},
+  client: {},
   pictures: [],
   entities: {
     group               : {type: Schema.ObjectId, ref: 'Group', index: true, autopopulate: true},

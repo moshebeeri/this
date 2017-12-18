@@ -16,7 +16,7 @@ let ProductSchema = new Schema({
   business: {type: Schema.ObjectId, ref: 'Business', required: false},
   retail_price: Number,
   category: {type: String, required: true},
-  client:{},
+  client: {},
   pictures: [],
   video: {type: Schema.ObjectId, ref: 'Video', autopopulate: true},
 });

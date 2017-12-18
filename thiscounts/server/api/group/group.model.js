@@ -76,7 +76,7 @@ const GroupSchema = new Schema({
       'MANAGERS'
     ]
   },
-  client:{},
+  client: {},
   pictures: [],
   video: {type: Schema.ObjectId, ref: 'Video', autopopulate: true}
 });

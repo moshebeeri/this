@@ -20,7 +20,7 @@ let PostSchema = new Schema({
   },
   text: String,
   url: String,
-  client:{},
+  client: {},
   pictures: [],
   video: {type: Schema.ObjectId, ref: 'Video', autopopulate: true}
 });
