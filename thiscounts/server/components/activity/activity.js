@@ -104,14 +104,14 @@ function activity_impl(act, callback) {
       return callback(null, activity)
     }
 
-    if(act.audience && !_.includes(act.audience, 'FOLLOW')) {
+    if(act.audience && !_.includes(act.audience, 'FOLLOWERS')) {
       activity.audience = act.audience;
       update_feeds([], activity);
       return callback(null, activity)
     }
 
     if (activity.actor_user) {
-      effected_in_rel(activity.actor_user, "FOLLOW", function (err, effected) {
+      effected_in_rel(activity.actor_user, 'FOLLOW', function (err, effected) {
         if (err) {
           return callback(err, null);
         }
@@ -120,7 +120,7 @@ function activity_impl(act, callback) {
       });
     }
     else if (activity.actor_business) {
-      effected_in_rel(activity.actor_business, "FOLLOW", function (err, effected) {
+      effected_in_rel(activity.actor_business, 'FOLLOW', function (err, effected) {
         if (err) {
           return callback(err, null);
         }
@@ -129,7 +129,7 @@ function activity_impl(act, callback) {
       });
     }
     else if (activity.actor_mall) {
-      effected_in_rel(activity.actor_mall, "FOLLOW", function (err, effected) {
+      effected_in_rel(activity.actor_mall, 'FOLLOW', function (err, effected) {
         if (err) {
           return callback(err, null);
         }
@@ -138,7 +138,7 @@ function activity_impl(act, callback) {
       });
     }
     else if (activity.actor_chain) {
-      effected_in_rel(activity.actor_chain, "FOLLOW", function (err, effected) {
+      effected_in_rel(activity.actor_chain, 'FOLLOW', function (err, effected) {
         if (err) {
           return callback(err, null);
         }
@@ -147,7 +147,7 @@ function activity_impl(act, callback) {
       });
     }
     else if (activity.actor_group) {
-      effected_in_rel(activity.actor_group, "FOLLOW", function (err, effected) {
+      effected_in_rel(activity.actor_group, 'FOLLOW', function (err, effected) {
         if (err) {
           return callback(err, null);
         }
