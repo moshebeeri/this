@@ -37,6 +37,8 @@ const validateYouTube = (url) => {
     return false;
 };
 
+
+
 function youtube_parser(url){
     let regExp = /^.*((youtu.be\/)|(v\/)|(\/u\/\w\/)|(embed\/)|(watch\?))\??v?=?([^#\&\?]*).*/;
     let match = url.match(regExp);
@@ -179,8 +181,30 @@ function parseTime(text) {
     return d;
 }
 
+
 function deg2rad(deg) {
     return deg * (Math.PI / 180)
+}
+
+const I18n = require('react-native-i18n');
+const localeToApi = {
+
+    "en-US": 'en',
+    'en': 'en',
+    'he': 'iw',
+    'iw-IL':'iw' ,
+    'he-IL':'iw',
+}
+function getLocale(){
+    let locale = I18n.default.locale
+    let response =  localeToApi[locale];
+    if(!response){
+        return 'en';
+    }
+
+    return response;
+
+
 }
 
 export default {
@@ -192,5 +216,6 @@ export default {
     getSecondSinceMidnight,
     convertDaysNumToString,
     secondsFromMidnightToString,
-    youtube_parser
+    youtube_parser,
+    getLocale
 };

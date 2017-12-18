@@ -4,7 +4,7 @@ import * as actions from "../reducers/reducerActions";
 
 let productApi = new ProdictApi();
 let entityUtils = new EntityUtils();
-
+import FormUtils from "../utils/fromUtils";
 async function getAllByBusinessId(dispatch, id, token) {
     try {
         let response = await productApi.findByBusinessId(id, token);
@@ -30,7 +30,7 @@ async function getProductCategories(dispatch, gid, token) {
                 dispatch({
                     type: actions.SET_PRODUCT_CATEGORIES,
                     categories: response,
-                    language: 'en',
+                    language: FormUtils.getLocale(),
                     catId: gid
                 });
             }

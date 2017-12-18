@@ -1,7 +1,7 @@
 import Timer from "./LogTimer";
 
 let timer = new Timer();
-
+import FormUtils from "../utils/fromUtils";
 class BusinessApi {
     getAll(token) {
         return new Promise(async (resolve, reject) => {
@@ -68,8 +68,10 @@ class BusinessApi {
     getSubCategory(token,categoryId) {
         return new Promise(async (resolve, reject) => {
             try {
+                let locale = FormUtils.getLocale();
+
                 let from = new Date();
-                const response = await fetch(`${server_host}/api/categories/by/id/en/`+ categoryId, {
+                const response = await fetch(`${server_host}/api/categories/by/id/`+locale+'/'+ categoryId, {
                     method: 'GET',
                     headers: {
                         'Accept': 'application/json, text/plain, */*',
@@ -95,9 +97,11 @@ class BusinessApi {
 
     getBusinessCategories(gid, token) {
         return new Promise(async (resolve, reject) => {
+            let locale = FormUtils.getLocale();
+
             try {
                 let from = new Date();
-                const response = await fetch(`${server_host}/api/categories/business/en/` + gid, {
+                const response = await fetch(`${server_host}/api/categories/business/`+ locale + '/'  +  gid, {
                     method: 'GET',
                     headers: {
                         'Accept': 'application/json, text/plain, */*',

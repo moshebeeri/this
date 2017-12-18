@@ -6,6 +6,7 @@ import * as categoriesAction from "../../actions/categories";
 import {connect} from 'react-redux';
 import {bindActionCreators} from "redux";
 import { I18nManager } from 'react-native';
+import FormUtils from "../../utils/fromUtils";
 import strings from "../../i18n/i18n"
 class CategoryPicker extends Component {
     constructor(props) {
@@ -36,6 +37,7 @@ class CategoryPicker extends Component {
 
     setCategory(index, category) {
         const {setFormCategories, categories,setCategoriesApi} = this.props;
+        const locale = FormUtils.getLocale();
         this.setState({
             invalid: false
         })
@@ -55,10 +57,10 @@ class CategoryPicker extends Component {
             this.state.selectedCategories.push(category);
             this.state.selectedCategories.push("");
         }
-        if(!categories['en']){
+        if(!categories[locale]){
             return;
         }
-        let reduxxCategories = categories['en'][category];
+        let reduxxCategories = categories[locale][category];
         if (!reduxxCategories) {
             this.props.actions.fetchCategories(category,setCategoriesApi);
         }
@@ -92,14 +94,15 @@ class CategoryPicker extends Component {
 
     render() {
         const {categories, isMandatory,categoriesForm} = this.props;
-        if (!categories['en']) {
+        const locale = FormUtils.getLocale();
+        if (!categories[locale]) {
             return <View/>
         }
         let pickerStyle = styles.picker;
         if(this.state.invalid){
             pickerStyle = styles.pickerInvalid;
         }
-        let root = categories['en']['root'];
+        let root = categories[locale]['root'];
         let rootOicker = undefined;
         if (root) {
             let categoriesWIthBlank = new Array();
@@ -110,7 +113,8 @@ class CategoryPicker extends Component {
             categoriesWIthBlank.unshift({
                 gid: "",
                 translations: {
-                    en: strings.SelectCategory
+                    en: strings.SelectCategory,
+                    iw: strings.SelectCategory,
                 }
             })
             rootOicker = <Picker
@@ -126,14 +130,14 @@ class CategoryPicker extends Component {
                         return <Item
                             key={i}
                             value={s.gid}
-                            label={s.translations.en}/>
+                            label={s.translations[locale]}/>
                     })}
             </Picker>
         }
         let selectCategoryFunction = this.setCategory.bind(this);
         let stateCategories = this.state.selectedCategories
         let pickers = this.state.selectedCategories.map(function (gid, i) {
-            let subCategories = categories['en'][gid];
+            let subCategories = categories[locale][gid];
             if (subCategories && subCategories.length > 0) {
                 let categoriesWIthBlank = new Array();
                 subCategories.forEach(function (cat) {
@@ -142,7 +146,8 @@ class CategoryPicker extends Component {
                 categoriesWIthBlank.unshift({
                     gid: "",
                     translations: {
-                        en: strings.SelectSubCategory
+                        en: strings.SelectSubCategory,
+                        iw: strings.SelectSubCategory,
                     }
                 })
                 return <Picker
@@ -159,7 +164,7 @@ class CategoryPicker extends Component {
                             return <Item
                                 key={j}
                                 value={s.gid}
-                                label={s.translations.en}/>
+                                label={s.translations[locale]}/>
                         })}
                 </Picker>
             }

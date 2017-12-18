@@ -2,7 +2,7 @@ import React, {Component} from 'react';
 import {Image, Text, View} from 'react-native';
 import {Button, Icon, Input, Thumbnail} from 'native-base';
 import styles from './styles';
-import FormUtils from "../../utils/fromUtils";
+
 import strings from "../../i18n/i18n"
 
 const ILS = '₪';
