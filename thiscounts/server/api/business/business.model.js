@@ -50,7 +50,7 @@ let BusinessSchema = new Schema({
     email: String
   },
   logo: String,
-  client:{},
+  client: {},
   pictures: [],
   video: {type: Schema.ObjectId, ref: 'Video', autopopulate: true}
 });
