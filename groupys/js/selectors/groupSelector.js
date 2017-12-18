@@ -24,7 +24,17 @@ export const getGroups = createSelector([getStateGroups,getStateComments],
                 }
                 response.key = key
                 return response;
-            })
+            }).sort(function(a, b){
+                let aTouched = a.touched;
+                if(!a.touched){
+                    aTouched = 0;
+                }
+                let bTouched = b.touched;
+                if(!b.touched){
+                    bTouched = 0;
+                }
+                return bTouched - aTouched  ;
+            });
         }
         return new Array();
     })
