@@ -11,12 +11,12 @@ module.exports = {
     logo_view: {
         flexDirection: 'row',
         backgroundColor: 'white',
-        marginTop: (Platform.OS === 'ios') ? 20 : 0,
+        paddingTop: (Platform.OS === 'ios') ? 20 : 0,
     },
     logo_view_no_margin: {
         flexDirection: 'row',
         backgroundColor: 'white',
-        marginTop: (Platform.OS === 'ios') ? 5 : 5,
+       paddingTop: (Platform.OS === 'ios') ? 5 : 5,
     },
     businessNameText: {
         fontFamily: 'Roboto-Regular',

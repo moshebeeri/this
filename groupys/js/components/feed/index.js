@@ -34,7 +34,7 @@ class Feed extends Component {
         let icon = <Icon2 active size={40} name="md-create"/>;
 
         return (
-            <View style={{flex: 1}}>
+            <View style={{flex: 1,backgroundColor:'red'}}>
 
                 <GenericFeedManager
                     navigation={navigation}

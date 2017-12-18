@@ -123,17 +123,18 @@ module.exports = {
         height: 81 * vh,
         width: width,
         overflow: 'hidden',
-        backgroundColor: '#b7b7b7',
+        backgroundColor: 'red',
         // backgroundColor:'#FFF',
         alignItems: 'center',
         flexDirection: 'column',
+        marginBottom:5,
     },
     businesses_container: {
         flex: 1,
         height: vh * 61,
         width: width,
         overflow: 'hidden',
-        backgroundColor: '#b7b7b7',
+        backgroundColor: '#cccccc',
         // backgroundColor:'#FFF',
         alignItems: 'center',
         flexDirection: 'column',
@@ -143,7 +144,7 @@ module.exports = {
         height: 18 * vh,
         width: width,
         overflow: 'hidden',
-        backgroundColor: '#b7b7b7',
+        backgroundColor: '#cccccc',
         // backgroundColor:'#FFF',
         alignItems: 'center',
         flexDirection: 'column',
@@ -151,9 +152,9 @@ module.exports = {
     promotion_card: {
         alignItems: 'center',
         flexDirection: 'column',
-        backgroundColor: '#b7b7b7',
+        backgroundColor: '#cccccc',
         width: width,
-        marginBottom: 5,
+        marginBottom: 12,
         flex: 1,
         borderRadius: 2,
     },
@@ -266,8 +267,30 @@ module.exports = {
         width: width - 15,
         alignItems: 'center',
         justifyContent: 'center',
-        flex: 1.5,
+        flex: 2,
         flexDirection: 'row',
+        borderTopWidth:1,
+        borderColor:'#cccccc'
+    },
+    post_bottomContainer: {
+        backgroundColor: 'white',
+        width: width - 15,
+        alignItems: 'center',
+        justifyContent: 'center',
+        flex: 1,
+        flexDirection: 'row',
+        borderTopWidth:1,
+        borderColor:'#cccccc'
+    },
+    promotion_shared_bottomContainer: {
+        backgroundColor: 'white',
+        width: width - 15,
+        alignItems: 'center',
+        justifyContent: 'center',
+        flex: 2,
+        flexDirection: 'row',
+
+        borderColor:'#cccccc'
     },
     promotionsSeparator: {
         backgroundColor: 'white',
@@ -388,7 +411,7 @@ module.exports = {
         justifyContent: 'center',
     },
     promotionLoctionContainer: {
-        alignItems: I18nManager.isRTL ? 'flex-start' : 'flex-end',
+        alignItems:  'flex-start',
         flex: 2.5,
     },
     detailsTitleText: {

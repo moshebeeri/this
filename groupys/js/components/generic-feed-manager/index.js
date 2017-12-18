@@ -58,14 +58,14 @@ export default class GenericFeedManager extends Component {
             return <View><Spinner color='red'/></View>;
         }
         const spining = undefined;
-        let backgroundColor = '#e7e7e7';
+        let backgroundColor = '#cccccc';
         if (color) {
             backgroundColor = color;
         }
         if (setNextFeeds) {
             return (
 
-                <View style={{backgroundColor: backgroundColor}}>
+                <View style={{backgroundColor: '#cccccc'}}>
                     {topLoader}
 
                     <FlatList
