@@ -127,7 +127,7 @@ class AddPermittedUser extends Component {
                        onChangeText={(phoneNumber) => this.setState({phoneNumber})} isMandatory={true}/>
 
 
-              <Button style={{position: 'absolute', left: 5, top: 25}} large transparent
+              <Button style={{position: 'absolute', right: 5, top: 25}} large transparent
                                            onPress={() => this.searchUser()}>
                 <Icon2 size={40} style={styles.productIcon} name="search"/>
 
