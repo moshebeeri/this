@@ -13,6 +13,7 @@ let userApi = new UserApi();
 let productApi = new ProductApi();
 let promotionApi = new PromotionApi();
 let entityUtils = new EntityUtils();
+import FormUtils from "../utils/fromUtils";
 
 async function getAll(dispatch, token) {
     try {
@@ -54,7 +55,7 @@ async function getBusinessCategories(dispatch, gid, token) {
         dispatch({
             type: actions.SET_BUSINESS_CATEGORIES,
             categories: response,
-            language: 'en',
+            language: FormUtils.getLocale(),
             catId: gid
         });
     } catch (error) {

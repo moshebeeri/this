@@ -32,9 +32,13 @@ export default function group(state = initialState, action) {
             return imutableState;
         case actions.UPSERT_GROUP:
             action.item.forEach(eventItem => {
-                if((eventItem.preview.comment && eventItem.preview.comment.created)  ||
-                    (eventItem.preview.instance_activity && eventItem.preview.instance_activity.action) ){
+                if(!eventItem.preview){
                     currentGroups[eventItem._id] = eventItem;
+                }else {
+                    if ((eventItem.preview.comment && eventItem.preview.comment.created) ||(eventItem.preview.post && eventItem.preview.post.created) ||
+                        (eventItem.preview.instance_activity && eventItem.preview.instance_activity.action)) {
+                        currentGroups[eventItem._id] = eventItem;
+                    }
                 }
             });
             return imutableState;

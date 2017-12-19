@@ -21,19 +21,18 @@ module.exports = {
         justifyContent: 'flex-start',
     },
     group_message_container: {
-
         flexDirection: 'row',
         alignItems: 'center',
         justifyContent: 'center',
         borderColor: 'gray',
-        borderTopWidth:1,
-        borderColor:'#cccccc'
+        borderTopWidth: 1,
+        borderColor: '#cccccc'
     },
     group_promotion_container: {
         flexDirection: 'row',
         justifyContent: 'space-between',
-        borderBottomWidth:1,
-        borderBottomColor:'gray'
+        borderBottomWidth: 1,
+        borderBottomColor: 'gray'
     },
     group_content: {
         width: width - 10,
@@ -71,16 +70,26 @@ module.exports = {
         alignItems: 'center',
         flexDirection: 'row',
         paddingBottom: 8,
-        marginLeft:15,
+        marginLeft: 15,
     },
-
     message_container2: {
         flex: 3,
-        alignItems:'center',
-        flexDirection:'row',
-        paddingBottom:8,
-        borderTopWidth:1,
-        borderColor:'#cccccc'
+        alignItems: 'center',
+        flexDirection: 'row',
+        paddingBottom: 8,
+        borderTopWidth: 1,
+        borderColor: '#cccccc'
+    },
+    post_container: {
+        flex: 1,
+        height: 70,
+        alignItems: 'flex-start',
+        justifyContent: 'flex-start',
+        flexDirection: 'row',
+        paddingLeft: 15,
+        paddingTop: 5,
+        borderTopWidth: 1,
+        borderColor: '#cccccc'
     },
     group_name_text: {
         fontFamily: 'Roboto-Regular', fontWeight: 'bold', marginLeft: 10, marginTop: 0, fontSize: 24, color: 'black'

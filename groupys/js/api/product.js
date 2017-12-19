@@ -2,7 +2,7 @@ import store from 'react-native-simple-store';
 import Timer from './LogTimer'
 
 let timer = new Timer();
-
+import FormUtils from "../utils/fromUtils";
 class ProductsApi {
     getAll(token) {
         return new Promise(async (resolve, reject) => {
@@ -62,7 +62,8 @@ class ProductsApi {
         return new Promise(async (resolve, reject) => {
             try {
                 let from = new Date();
-                const response = await fetch(`${server_host}/api/categories/product/en/` + gid, {
+                let locale = FormUtils.getLocale();
+                const response = await fetch(`${server_host}/api/categories/product/` + locale+'/' + gid, {
                     method: 'GET',
                     headers: {
                         'Accept': 'application/json, text/plain, */*',

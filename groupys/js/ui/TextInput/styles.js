@@ -53,7 +53,7 @@ module.exports = {
         flex: 1,
         padding: 10,
         borderRadius:2,
-        justifyContent:  I18nManager.isRTL ? 'flex-start' : 'flex-start',
+        justifyContent: 'flex-start' ,
         fontSize:16,
         borderWidth:1,
         borderColor:'red'

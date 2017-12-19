@@ -1,5 +1,5 @@
 import React, {Component} from "react";
-import {Dimensions, I18nManager, Image, Platform, StyleSheetm,Text} from "react-native";
+import {Dimensions, I18nManager, Image, Platform, StyleSheetm, Text} from "react-native";
 import {connect} from "react-redux";
 import {Container, Drawer, Fab, Icon, Tab, TabHeading, Tabs, View} from "native-base";
 import GeneralComponentHeader from "../header/index";
@@ -25,10 +25,8 @@ import pageSync from "../../refresh/refresher"
 import PageRefresher from '../../refresh/pageRefresher'
 import {ScrolTabView} from '../../ui/index'
 
-const I18n = require('react-native-i18n')
 
 let locationApi = new LocationApi();
-
 let contactApi = new ContactApi();
 const store = getStore();
 const updateDialogOption = {
@@ -163,10 +161,8 @@ class ApplicationManager extends Component {
         openDrawer = () => {
             this.drawer._root.open()
         };
-        // let openSide = 'right';
-        // if(I18nManager.isRTL){
-        //     openSide ='left';
-        // }
+
+
         return (
 
             <Drawer
@@ -183,26 +179,28 @@ class ApplicationManager extends Component {
                                             showAction={showAdd} current='home'
                                             to={this.state.addComponent}/>
 
-                    { I18nManager.isRTL && (Platform.OS==='android') ?  <ScrolTabView  initialPage={3} onChangeTab={this.onChangeTab.bind(this)} tabBarBackgroundColor='white'
-                                       tabBarUnderlineStyle={{backgroundColor: '#2db6c8'}}>
-                        <Notification tabLabel="promotions"  navigation={this.props.navigation} index={3}/>
-                        <Groups tabLabel="save" navigation={this.props.navigation} index={2}/>
-                        <MydPromotions tabLabel="groups" navigation={this.props.navigation} index={1}/>
-                        <Feeds tabLabel="notification" index={0} navigation={this.props.navigation}/>
+                    {I18nManager.isRTL && (Platform.OS === 'android') ?
+                        <ScrolTabView initialPage={3} onChangeTab={this.onChangeTab.bind(this)}
+                                      tabBarBackgroundColor='white'
+                                      tabBarUnderlineStyle={{backgroundColor: '#2db6c8'}}>
+                            <Notification tabLabel="promotions" navigation={this.props.navigation} index={3}/>
+                            <Groups tabLabel="save" navigation={this.props.navigation} index={2}/>
+                            <MydPromotions tabLabel="groups" navigation={this.props.navigation} index={1}/>
+                            <Feeds tabLabel="notification" index={0} navigation={this.props.navigation}/>
 
 
-                    </ScrolTabView> :
-                        <ScrolTabView  initialPage={0} onChangeTab={this.onChangeTab.bind(this)} tabBarBackgroundColor='white'
-                                       tabBarUnderlineStyle={{backgroundColor: '#2db6c8'}}>
+                        </ScrolTabView> :
+                        <ScrolTabView initialPage={0} onChangeTab={this.onChangeTab.bind(this)}
+                                      tabBarBackgroundColor='white'
+                                      tabBarUnderlineStyle={{backgroundColor: '#2db6c8'}}>
                             <Feeds tabLabel="promotions" index={0} navigation={this.props.navigation}/>
                             <MydPromotions tabLabel="save" navigation={this.props.navigation} index={1}/>
                             <Groups tabLabel="groups" navigation={this.props.navigation} index={2}/>
-                            <Notification tabLabel="notification"  navigation={this.props.navigation} index={3}/>
+                            <Notification tabLabel="notification" navigation={this.props.navigation} index={3}/>
 
 
                         </ScrolTabView>
                     }
-
 
 
                 </Container>
