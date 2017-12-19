@@ -28,7 +28,7 @@
 #endif
 
   RCTRootView *rootView = [[RCTRootView alloc] initWithBundleURL:jsCodeLocation
-                                                      moduleName:@"groupys"
+                                                      moduleName:@"THIS"
                                                initialProperties:nil
                                                    launchOptions:launchOptions];
 
