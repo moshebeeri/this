@@ -10,7 +10,7 @@ import LinearGradient from 'react-native-linear-gradient';
 import {bindActionCreators} from "redux";
 import * as loginAction from "../../actions/login";
 import strings from "../../i18n/i18n"
-const logo = require('../../../images/logo.png');
+const thisLogo = require('../../../images/this-logo.png');
 
 class Signup extends Component {
     static navigationOptions = {
@@ -59,7 +59,8 @@ class Signup extends Component {
 
                     <KeyboardAvoidingView behavior={'position'} style={styles.avoidView}>
                         <View style={styles.thisContainer}>
-                            <Text style={styles.this}>{strings.THIS}</Text>
+                            <Image style={{position:'absolute',top:-175,width:150}} resizeMode='contain' source={thisLogo}/>
+                            <Text style={styles.this}>THIS</Text>
                         </View>
                         <View style={{
                             width: width,
@@ -128,7 +129,7 @@ class Signup extends Component {
                                     alignItems: 'center',
                                 }} regular>
 
-                                    <Text style={{color: 'white', fontStyle: 'normal', fontSize: 15}}>{strings.SignUp}.toUpperCase()</Text>
+                                    <Text style={{color: 'white', fontStyle: 'normal', fontSize: 15}}>{strings.SignUp.toUpperCase()}</Text>
 
                                 </TouchableOpacity>
                             </View>

@@ -26,20 +26,18 @@ module.exports = {
         color: '#00F',
     },
     thisContainer: {
-        height: 150,
-        marginTop: 100,
+        height: 250,
+        marginTop: height / 10,
         justifyContent: 'center',
         backgroundColor: 'transparent',
         flexDirection: 'column',
         alignItems: 'center',
     },
     this: {
-        fontFamily:(Platform.OS === 'ios') ? 'Roboto-Regular' : 'BackToBlack',
-        fontSize: 60,
-        height: 100,
+        marginTop:150,
+        fontSize: 50,
         color: 'white',
-        marginTop: -40,
-        backgroundColor: 'transparent',
+        backgroundColor: 'transparent'
     },
     phoneTextInput: {
         marginTop: 5, backgroundColor: 'white', height: 50, width: width / 2 + 120
