@@ -1,3 +1,5 @@
+import strings from "../i18n/i18n"
+
 String.prototype.formatUnicorn = String.prototype.formatUnicorn ||
     function () {
         "use strict";
@@ -37,13 +39,12 @@ const validateYouTube = (url) => {
     return false;
 };
 
-
-
-function youtube_parser(url){
+function youtube_parser(url) {
     let regExp = /^.*((youtu.be\/)|(v\/)|(\/u\/\w\/)|(embed\/)|(watch\?))\??v?=?([^#\&\?]*).*/;
     let match = url.match(regExp);
-    return (match&&match[7].length==11)? match[7] : false;
+    return (match && match[7].length == 11) ? match[7] : false;
 }
+
 const validatePuches = (number) => {
     if (number > 10) {
         return false;
@@ -143,25 +144,25 @@ function reduceToBetween(days) {
 
 function getDay(day) {
     if (day === 1) {
-        return "Sunday";
+        return strings.Sunday;
     }
     if (day === 2) {
-        return "Monday"
+        return strings.Monday
     }
     if (day === 3) {
-        return "Tuesday"
+        return strings.Tuesday
     }
     if (day === 4) {
-        return "Wednesday"
+        return strings.Wednesday
     }
     if (day === 5) {
-        return "Thursday"
+        return strings.Thursday
     }
     if (day === 6) {
-        return "Friday"
+        return strings.Friday
     }
     if (day === 7) {
-        return "Saturday"
+        return strings.Saturday
     }
 }
 
@@ -181,30 +182,26 @@ function parseTime(text) {
     return d;
 }
 
-
 function deg2rad(deg) {
     return deg * (Math.PI / 180)
 }
 
 const I18n = require('react-native-i18n');
 const localeToApi = {
-
     "en-US": 'en',
     'en': 'en',
     'he': 'iw',
-    'iw-IL':'iw' ,
-    'he-IL':'iw',
+    'iw-IL': 'iw',
+    'he-IL': 'iw',
 }
-function getLocale(){
+
+function getLocale() {
     let locale = I18n.default.locale
-    let response =  localeToApi[locale];
-    if(!response){
+    let response = localeToApi[locale];
+    if (!response) {
         return 'en';
     }
-
     return response;
-
-
 }
 
 export default {

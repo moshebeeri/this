@@ -2,6 +2,7 @@ const React = require('react-native');
 const {StyleSheet, Platform, Dimensions} = React;
 const {width, height} = Dimensions.get('window')
 import {I18nManager} from 'react-native';
+
 module.exports = {
     promotion_container: {
         borderWidth: 1,
@@ -28,6 +29,7 @@ module.exports = {
     promotionValue: {
         flex: 1,
         justifyContent: 'center',
+        alignItems: 'center',
     },
     promotionColumnValue: {
         flex: 1,
@@ -35,14 +37,15 @@ module.exports = {
     promotionPunchValue: {
         flex: 1,
         margin: 5,
-        alignItems:  'flex-start' ,
-        justifyContent: 'flex-start' ,
+        alignItems: 'flex-start',
+        justifyContent: 'flex-start',
     },
     promotiontDescription: {
         flex: 3,
         margin: 4,
+        paddingLeft: 5,
         alignItems: 'flex-start',
-        justifyContent: 'flex-start' ,
+        justifyContent: 'flex-start',
     },
     promotiontColumnDescription: {
         flex: 1,
@@ -50,8 +53,7 @@ module.exports = {
     promotiontHappyDescription: {
         flex: 3,
         margin: 4,
-        justifyContent: I18nManager.isRTL ? 'flex-start' : 'flex-end',
-
+        justifyContent: 'flex-start'
     },
     titleText: {
         fontSize: 20,
@@ -141,7 +143,7 @@ module.exports = {
         color: '#839192',
         flex: 1,
         fontSize: 13,
-        alignItems:'flex-end'
+        alignItems: 'flex-end'
     },
     promotionColumnTermlTextStyle: {
         color: '#839192',

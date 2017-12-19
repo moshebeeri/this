@@ -157,7 +157,7 @@ const il = {
     XNOFFTitle: 'קנה X קבל Y בהנחה',
     XYPattern: 'קנה {0} {1} קבל {2} {3} חינם',
     XYTitle: 'קנה X קבל Y',
-    HappyHourTerm: 'כל יום {0} Happy Hour מ {1} - {2} {3} קבל מחיר מיותד עבור {4}',
+    HappyHourTerm: 'כל יום {0} Happy Hour מ {1} - {2} קבל מחיר מיותד עבור {3}',
     punchCardTerm: 'כרטיס ניקוב, כל {0} אחד חינם',
     Logo: 'לוגו',
     SelectSubCategory: 'בחר תת קטגוריה',
