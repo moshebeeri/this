@@ -196,6 +196,7 @@ class AddPromotion extends Component {
             end: this.state.end,
             description: this.state.info,
             name: this.state.name,
+            client:{uploading:true}
         };
         if (this.props.navigation.state.params.onBoardType) {
             switch (this.props.navigation.state.params.onBoardType) {

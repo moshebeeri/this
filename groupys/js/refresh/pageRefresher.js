@@ -1,5 +1,6 @@
 import getStore from "../store";
 import feedAction from '../actions/feedsMain'
+import postAction from '../actions/posts'
 import business from '../actions/business'
 import groups from '../actions/groups'
 import groupComments from '../actions/commentsGroup'
@@ -112,12 +113,27 @@ class PageRefresher {
         }
     }
 
-    visitedFeedItem(id) {
-        if (visitedList.includes('feed' + id,)) {
-            console.log('visited updated' + id);
-            pageSync.visited('feed' + id)
+    visitedFeedItem(item) {
+        if (visitedList.includes('feed' + item.id,)) {
+            pageSync.visited('feed' + item.id)
+            this.checkRefreshFeedItem(item);
         }
     }
+
+    checkRefreshFeedItem(item){
+        if(item.uploading){
+            if(!item.banner && !item.video){
+                let token = store.getState().authentication.token;
+                switch (item.itemType){
+                    case 'POST':
+                        postAction.fetchPostById(item.id,token,store.dispatch)
+                        break;
+                }
+
+            }
+        }
+    }
+
 
 
     updateSocialState(id){

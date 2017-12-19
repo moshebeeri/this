@@ -54,6 +54,32 @@ class PostApi {
         })
     }
 
+    getPost(id,token) {
+        return new Promise(async (resolve, reject) => {
+            try {
+                let from = new Date();
+                const response = await fetch(`${server_host}/api/posts/` + id, {
+                    method: 'GET',
+                    headers: {
+                        'Accept': 'application/json, text/plain, */*',
+                        'Content-Type': 'application/json;charset=utf-8',
+                        'Authorization': 'Bearer ' + token
+                    }
+                });
+                if (response.status ==='401') {
+                    reject(response);
+                    return;
+                }
+                let responseData = await response.json();
+                timer.logTime(from, new Date(), 'posts', '/id');
+                resolve(responseData);
+            }
+            catch (error) {
+                reject(error);
+            }
+        })
+    }
+
 
 }
 

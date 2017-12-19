@@ -56,7 +56,7 @@ export default class FeedPromotion extends Component {
             this.refs[item.id].visible(visible);
         }
         if(visible) {
-             PageRefresher.visitedFeedItem(item.id);
+             PageRefresher.visitedFeedItem(item);
         }
     }
 
@@ -91,18 +91,18 @@ export default class FeedPromotion extends Component {
 
                     </View>
 
-
-                    {image}
-                    {item.video && <Video ref={item.id} width={width} muted={false} url={item.video}/> }
-                    {item.videoId && <Video source={'YOUTUBE'} ref={item.id} width={width} muted={false} videoId={item.videoId}/> }
-
-                    <View style={{flex:2, width: width - 15, backgroundColor: 'white'}}>
+                    <View style={{flex:2, width: width - 15,paddingBottom:10, backgroundColor: 'white'}}>
 
                         <View style={promotionDetalis}>
                             <Text numberOfLines={4}  style={{marginRight: 10, marginLeft: 10, fontSize: 18}}>{item.feed.activity.post.text}
                             </Text>
                         </View>
                     </View>
+                    {image}
+                    {item.video && <Video ref={item.id} width={width} muted={false} url={item.video}/> }
+                    {item.videoId && <Video source={'YOUTUBE'} ref={item.id} width={width} muted={false} videoId={item.videoId}/> }
+
+
 
 
                     {!shared && <View style={styles.post_bottomContainer}>

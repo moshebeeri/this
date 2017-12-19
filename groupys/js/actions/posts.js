@@ -64,3 +64,27 @@ function uploadPostPic() {
         PageRefresher.setMainFeedRefresh()
     }
 }
+
+async function fetchPostById(id, token, dispatch) {
+    try {
+        let response = await postApi.getPost(id, token);
+        if (!response)
+            return;
+        dispatch({
+            type: actions.UPSERT_POST,
+            item: [response]
+        });
+
+    } catch (error) {
+        dispatch({
+            type: actions.NETWORK_IS_OFFLINE,
+        });
+    }
+}
+
+export default {
+    fetchPostById,
+
+
+
+};

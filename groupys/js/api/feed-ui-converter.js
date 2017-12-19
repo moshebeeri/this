@@ -2,7 +2,6 @@ const noPic = require('../../images/client_1.png');
 import FormUtils from "../utils/fromUtils";
 import strings from "../i18n/i18n"
 
-
 class FeedConverter {
     createFeed(feed) {
         let response = {};
@@ -40,7 +39,7 @@ class FeedConverter {
         return response;
     }
 
-    createActivityPost(feed){
+    createActivityPost(feed) {
         let responseFeed = {
             itemType: 'POST',
             feed: feed,
@@ -58,9 +57,8 @@ class FeedConverter {
         }
         if (feed.activity.post.url && FormUtils.youtube_parser(feed.activity.post.url)) {
             responseFeed.videoId = FormUtils.youtube_parser(feed.activity.post.url)
-
         }
-        if (feed.activity.post.social_state){
+        if (feed.activity.post.social_state) {
             responseFeed.social = feed.activity.post.social_state;
             responseFeed.social.activityId = feed.activity._id;
         }
@@ -77,11 +75,13 @@ class FeedConverter {
             responseFeed.avetar = noPic
         }
         responseFeed.name = user.name
+        if(feed.activity.post.client) {
+            responseFeed.uploading = feed.activity.post.client.uploading;
+        }
         return responseFeed;
     }
 
-
-    createPost(post){
+    createPost(post) {
         let responseFeed = {
             itemType: 'POST',
             id: post._id,
@@ -93,21 +93,18 @@ class FeedConverter {
                 uri: post.pictures[0].pictures[1]
             };
         }
-        if (post.social_state){
+        if (post.social_state) {
             responseFeed.social = post.social_state;
-
         }
-
         if (post.video) {
             responseFeed.video = feed.activity.post.video.url;
         }
         if (post.url && FormUtils.youtube_parser(feed.activity.post.url)) {
             responseFeed.videoId = FormUtils.youtube_parser(feed.activity.post.url)
-
         }
-        responseFeed.title =  post.title;
+        responseFeed.title = post.title;
         let user = post.creator;
-        if (post.social_state){
+        if (post.social_state) {
             responseFeed.social = post.social_state;
         }
         if (user && user.pictures && Object.keys(user.pictures).length > 0) {
@@ -119,23 +116,25 @@ class FeedConverter {
             responseFeed.avetar = noPic
         }
         responseFeed.name = user.name
+        if(post.client) {
+            responseFeed.uploading = post.client.uploading
+        }else{
+            responseFeed.uploading = true;
+        }
         return responseFeed;
     }
+
     createShared(feed) {
         let response = {}
         let sharedFeed = {
             activity: feed.activity.activity,
-
-
         }
-        if(feed.activity.activity.instance) {
+        if (feed.activity.activity.instance) {
             sharedFeed._id = feed.activity.activity.instance._id;
         }
-        if(feed.activity.activity.post) {
+        if (feed.activity.activity.post) {
             sharedFeed._id = feed.activity.activity.post._id;
         }
-
-
         response.shardeActivity = this.createFeed(sharedFeed);
         response.user = feed.activity.actor_user;
         response.itemType = 'SHARE';
@@ -327,9 +326,11 @@ class FeedConverter {
                     if (promotion.happy_hour && promotion.happy_hour.values && promotion.happy_hour.values[0]) {
                         responseFeed.itemTitle = '';
                         responseFeed.promotionTitle = strings.HappyHour;
-                        responseFeed.promotionTerm = strings.HappyHourTerm.formatUnicorn(FormUtils.convertDaysNumToString(promotion.happy_hour.values[0].days),
-                            FormUtils.secondsFromMidnightToString(promotion.happy_hour.values[0].from), FormUtils.secondsFromMidnightToString(promotion.happy_hour.values[0].from + promotion.happy_hour.values[0].until),
-                            promotion.condition.product.name);
+                        let days = FormUtils.convertDaysNumToString(promotion.happy_hour.values[0].days);
+                        let fromHour = FormUtils.secondsFromMidnightToString(promotion.happy_hour.values[0].from);
+                        let tooHour = FormUtils.secondsFromMidnightToString(promotion.happy_hour.values[0].until);
+                        let productName = promotion.condition.product.name;
+                        responseFeed.promotionTerm = strings.HappyHourTerm.formatUnicorn(days[0], fromHour, tooHour, productName);
                         responseFeed.promotionValue = promotion.happy_hour.values[0].pay;
                         responseFeed.quantity = promotion.happy_hour.quantity;
                         responseFeed.promotion = 'HAPPY_HOUR';
@@ -403,6 +404,7 @@ class FeedConverter {
             responseFeed.promotionEntity = promotion;
             responseFeed.location = instance.location;
             responseFeed.generalId = instance._id;
+            responseFeed.uploading = true;
             responseFeed.entities = [{instance: instance._id}];
             if (instance.social_state) {
                 responseFeed.social = instance.social_state
@@ -480,9 +482,12 @@ class FeedConverter {
                     if (promotion.happy_hour && promotion.happy_hour.values) {
                         responseFeed.itemTitle = '';
                         responseFeed.promotionTitle = strings.HappyHour;
-                        responseFeed.promotionTerm = strings.HappyHourTerm.formatUnicorn(FormUtils.convertDaysNumToString(promotion.happy_hour.values[0].days),
-                            FormUtils.secondsFromMidnightToString(promotion.happy_hour.values[0].from), FormUtils.secondsFromMidnightToString(promotion.happy_hour.values[0].from + promotion.happy_hour.values[0].until),
-                            promotion.condition.product.name);
+                        let days = FormUtils.convertDaysNumToString(promotion.happy_hour.values[0].days);
+                        let fromHour = FormUtils.secondsFromMidnightToString(promotion.happy_hour.values[0].from);
+                        let tooHour = FormUtils.secondsFromMidnightToString(promotion.happy_hour.values[0].until);
+                        let productName = promotion.condition.product.name;
+                        responseFeed.promotionTerm = strings.HappyHourTerm.formatUnicorn(days[0], fromHour, tooHour, productName);
+                        responseFeed.promotionValue = promotion.happy_hour.values[0].pay;
                         responseFeed.promotionValue = promotion.happy_hour.values[0].pay;
                         responseFeed.quantity = promotion.happy_hour.quantity;
                         responseFeed.promotion = 'HAPPY_HOUR';
@@ -531,6 +536,7 @@ class FeedConverter {
                 uri: promotion.pictures[0].pictures[1]
             };
         }
+        response.uploading = true;
         response.promotionEntity = promotion;
         let date = new Date(promotion.end);
         response.endDate = date.toLocaleDateString();
@@ -596,9 +602,11 @@ class FeedConverter {
                 if (promotion.happy_hour && promotion.happy_hour.values && promotion.happy_hour.values[0]) {
                     response.itemTitle = '';
                     response.promotionTitle = strings.HappyHour;
-                    response.promotionTerm = strings.HappyHourTerm.formatUnicorn(FormUtils.convertDaysNumToString(promotion.happy_hour.values[0].days),
-                        FormUtils.secondsFromMidnightToString(promotion.happy_hour.values[0].from), FormUtils.secondsFromMidnightToString(promotion.happy_hour.values[0].from + promotion.happy_hour.values[0].until),
-                        promotion.condition.product.name);
+                    let days = FormUtils.convertDaysNumToString(promotion.happy_hour.values[0].days);
+                    let fromHour = FormUtils.secondsFromMidnightToString(promotion.happy_hour.values[0].from);
+                    let tooHour = FormUtils.secondsFromMidnightToString(promotion.happy_hour.values[0].until);
+                    let productName = promotion.condition.product.name;
+                    responseFeed.promotionTerm = strings.HappyHourTerm.formatUnicorn(days[0], fromHour, tooHour, productName);
                     response.promotionValue = promotion.happy_hour.values[0].pay;
                     response.quantity = promotion.happy_hour.quantity;
                     response.promotion = 'HAPPY_HOUR';

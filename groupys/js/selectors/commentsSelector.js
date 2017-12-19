@@ -3,7 +3,7 @@
  */
 import {createSelector} from 'reselect'
 import FeedUiConverter from '../api/feed-ui-converter'
-
+const noPic = require('../../images/client_1.png');
 let feedUiConverter = new FeedUiConverter();
 const getStateFeeds = (state) => state.comments
 export const getFeeds = createSelector([getStateFeeds],

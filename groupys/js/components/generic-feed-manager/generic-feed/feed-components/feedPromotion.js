@@ -59,7 +59,7 @@ export default class FeedPromotion extends Component {
 
         if(visible) {
             console.log(item.id  + ' visited');
-            PageRefresher.visitedFeedItem(item.id);
+            PageRefresher.visitedFeedItem(item);
         }
 
     }

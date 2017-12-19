@@ -67,6 +67,7 @@ async function fetchFeedsFromServer(feeds, dispatch, token, user) {
     }
 }
 
+
 async function updateBusinessCategory(token, businesses, dispatch) {
     try {
         let businessIds = [];
@@ -324,7 +325,8 @@ export default {
     saveFeed,
     unlike,
     like,
-    refreshFeedSocialState
+    refreshFeedSocialState,
+
 
 };
 
