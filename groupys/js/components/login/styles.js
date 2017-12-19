@@ -29,6 +29,8 @@ module.exports = {
     },
     thisContainer: {
         height: 250,
+        width:width,
+
         marginTop: height / 10,
         justifyContent: 'center',
         backgroundColor: 'transparent',

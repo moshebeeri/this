@@ -1,6 +1,7 @@
 import getStore from "../store";
 import feedAction from '../actions/feedsMain'
 import postAction from '../actions/posts'
+import promotionAction from '../actions/promotions'
 import business from '../actions/business'
 import groups from '../actions/groups'
 import groupComments from '../actions/commentsGroup'
@@ -127,6 +128,10 @@ class PageRefresher {
                 switch (item.itemType){
                     case 'POST':
                         postAction.fetchPostById(item.id,token,store.dispatch)
+                        break;
+                    case 'PROMOTION':
+                        promotionAction.fetchPromotionById(item.promotionEntity._id,token,store.dispatch)
+
                         break;
                 }
 

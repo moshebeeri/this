@@ -67,9 +67,7 @@ export default class FeedPromotion extends Component {
     render() {
         const {refresh, item, save, shared, like, unlike, showUsers, comment, token, location,hideSocial,realize} = this.props;
         const styles = this.createPromotionStyle();
-        const colorStyle = this.createColorStyle(item)
-        const buisnessLogo = componentCreator.createBusinessLog(item, this.showBusiness.bind(this));
-        const image = this.createImageComponent(item, styles);
+         const image = this.createImageComponent(item, styles);
         const container = this.createContainerStyle(item);
         let claimDisabled = true;
         if (item.showsave) {

@@ -28,6 +28,8 @@ async function getAll(dispatch, id, token,loading) {
     }
 }
 
+
+
 async function getAllProducts(dispatch, id, token,loading) {
     try {
         let response = await productApi.findByBusinessId(id, token);
@@ -167,4 +169,29 @@ export function updatePromotion(promotion,businessId,navigation,itemId) {
             });
         }
     }
+
+
 }
+
+
+async function fetchPromotionById(id, token, dispatch) {
+    try {
+        let response = await promotionApi.getPromotionById(id, token);
+        if (!response)
+            return;
+        dispatch({
+            type: actions.UPSERT_PROMOTION,
+            item: [response]
+        });
+
+    } catch (error) {
+        dispatch({
+            type: actions.NETWORK_IS_OFFLINE,
+        });
+    }
+}
+export default {
+    fetchPromotionById,
+
+
+};
