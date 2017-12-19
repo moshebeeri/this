@@ -75,6 +75,9 @@ class FeedConverter {
             responseFeed.avetar = noPic
         }
         responseFeed.name = user.name
+        if(feed.activity.post.client) {
+            responseFeed.uploading = feed.activity.post.client.uploading;
+        }
         return responseFeed;
     }
 
@@ -113,6 +116,11 @@ class FeedConverter {
             responseFeed.avetar = noPic
         }
         responseFeed.name = user.name
+        if(post.client) {
+            responseFeed.uploading = post.client.uploading
+        }else{
+            responseFeed.uploading = true;
+        }
         return responseFeed;
     }
 
@@ -396,6 +404,7 @@ class FeedConverter {
             responseFeed.promotionEntity = promotion;
             responseFeed.location = instance.location;
             responseFeed.generalId = instance._id;
+            responseFeed.uploading = true;
             responseFeed.entities = [{instance: instance._id}];
             if (instance.social_state) {
                 responseFeed.social = instance.social_state
@@ -527,6 +536,7 @@ class FeedConverter {
                 uri: promotion.pictures[0].pictures[1]
             };
         }
+        response.uploading = true;
         response.promotionEntity = promotion;
         let date = new Date(promotion.end);
         response.endDate = date.toLocaleDateString();

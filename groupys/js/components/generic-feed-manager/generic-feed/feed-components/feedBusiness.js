@@ -53,7 +53,7 @@ export default class FeedBusiness extends Component {
         const { item} = this.props;
         if(visible) {
             console.log(item.id + ' visited');
-            PageRefresher.visitedFeedItem(item.id);
+            PageRefresher.visitedFeedItem(item);
         }
 
     }
