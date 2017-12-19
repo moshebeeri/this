@@ -19,6 +19,7 @@ import LinearGradient from "react-native-linear-gradient";
 import strings from "../../i18n/i18n"
 
 const {width, height} = Dimensions.get('window');
+const thisLogo = require('../../../images/this-logo.png');
 
 class Login extends Component {
     static navigationOptions = {
@@ -44,7 +45,6 @@ class Login extends Component {
         }
     }
 
-    ///sss
     login() {
         this.props.actions.login(this.state.phoneNumber, this.state.password, this.props.navigation)
     }
@@ -76,9 +76,10 @@ class Login extends Component {
                         alignItems: 'center',
                     }}>
 
+
                         <View style={styles.thisContainer}>
-                            <Text style={styles.this}>This</Text>
-                            <Text style={styles.thiscount}>Counts</Text>
+                            <Image style={{position:'absolute',top:-175,width:150}} resizeMode='contain' source={thisLogo}/>
+                            <Text style={styles.this}>THIS</Text>
                         </View>
                         <View style={{
                             flexDirection: 'column',
@@ -87,7 +88,7 @@ class Login extends Component {
                         }}>
 
                             <View style={{height: 60, justifyContent: 'flex-end', width: width / 2 + 120}}>
-                                <Text style={styles.SignUpText}>{strings.SignUp}</Text>
+                                <Text style={styles.SignUpText}>{strings.SignIn}</Text>
                             </View>
 
                             <Item style={styles.phoneTextInput} regular>

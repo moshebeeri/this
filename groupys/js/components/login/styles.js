@@ -2,7 +2,7 @@ import loginTheme from './login-theme';
 
 const React = require('react-native');
 const {StyleSheet, Platform, Dimensions} = React;
-const {width, height} = Dimensions.get('window')
+const {width, height} = Dimensions.get('window');
 module.exports = {
     inputContainer: {
         flex: -1,
@@ -28,8 +28,8 @@ module.exports = {
         color: '#00F',
     },
     thisContainer: {
-        height: 150,
-        marginTop: height / 7,
+        height: 250,
+        marginTop: height / 10,
         justifyContent: 'center',
         backgroundColor: 'transparent',
         flexDirection: 'column',
@@ -37,7 +37,8 @@ module.exports = {
     },
     this: {
         // fontFamily:'BackToBlack',
-        fontSize: 60,
+        marginTop:150,
+        fontSize: 50,
         color: 'white',
         backgroundColor: 'transparent'
     },

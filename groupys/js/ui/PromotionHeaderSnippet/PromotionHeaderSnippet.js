@@ -45,7 +45,7 @@ export default class PromotionHeaderSnippet extends Component {
                     <Thumbnail square small source={{uri: promotion.banner.uri}}/>
                     <View style={{flex:1,justifyContent:'flex-start',marginLeft:5,alignItems:'flex-start'}}>
                         <Text>{promotion.business.name}</Text>
-                        <Text>{strings.XforYShortDescription.formatUnicorn(promotion.promotionEntity.x_for_y.values[0].pay,promotion.promotionEntity.x_for_y.values[0].eligible,promotion.promotionEntity.condition.product.name)}</Text>
+                        <Text>{strings.XForYShortDescription.formatUnicorn(promotion.promotionEntity.x_for_y.values[0].pay,promotion.promotionEntity.x_for_y.values[0].eligible,promotion.promotionEntity.condition.product.name)}</Text>
 
                     </View>
                 </View>
@@ -67,7 +67,7 @@ export default class PromotionHeaderSnippet extends Component {
                     <Thumbnail square small source={{uri: promotion.banner.uri}}/>
                     <View style={{flex:1,justifyContent:'flex-start',marginLeft:5,alignItems:'flex-start'}}>
                         <Text>{promotion.business.name}</Text>
-                        <Text>{strings.HapyyHourShortDescription.formatUnicorn(promotion.promotionEntity.happy_hour.values[0].pay,promotion.promotionEntity.condition.product.name)}</Text>
+                        <Text>{strings.HappyHourShortDescription.formatUnicorn(promotion.promotionEntity.happy_hour.values[0].pay,promotion.promotionEntity.condition.product.name)}</Text>
 
                     </View>
                 </View>

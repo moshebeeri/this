@@ -179,22 +179,24 @@ Thursday                                      : "Thursday",
 Friday                                        : "Friday",
 Saturday                                      : "Saturday",
 SelectedGroups                                : "Number Of Selected Groups",
-AddPost                                       : "Add Post",  //Todo translate
-AddPictureOrVideo                             : "Add Picture Or Video", //Todo translate
-Title                                         : "Title",//Todo translate
-Post                                          : "Post",//Todo translate
-Posted                                        : "Posted",//todo translate
-PickVideo                                     : "Pick Video From Camera", //todo translate
-YouTubeUrl                                    : "YouTube Url", //todo translate
+    //TODO: translate
+AddPost                                       : "Add Post",
+AddPictureOrVideo                             : "Add Picture Or Video",
+Title                                         : "Title",
+Post                                          : "Post",
+Posted                                        : "Posted",
+PickVideo                                     : "Pick Video From Camera",
+YouTubeUrl                                    : "YouTube Url",
 DiscountShortDescription                      : "{0}% Off On {1}",
-XforYShortDescription                         : "Pay {0} for {1} {2}",
-HapyyHourShortDescription                     : "Pay only {0} on {1} During Happy Hour ",
+XForYShortDescription                         : "Pay {0} for {1} {2}",
+HappyHourShortDescription                     : "Pay only {0} on {1} During Happy Hour ",
 ReduceAmountShortDescription                  : "Buy {0} Pay Only {1} ",
 XForYPercentageOffShortDescription            : "Buy {0} Get {1} with {2}% Off",
 AllStore                                      : "All Store",
 PublicGroup                                   : "Public Group",
 UnReadPost                                    : "Unread Posts: {0}",
 UnReadMessages                                : "Unread Messages: {0}",
+SignIn                                        : "Sign in",
 
 
 
