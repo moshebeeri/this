@@ -13,4 +13,4 @@ let codePushOptions = { checkFrequency: codePush.CheckFrequency.MANUAL };
 
 let app = codePush(codePushOptions)(App);
 
-AppRegistry.registerComponent('groupys', () => App);
+AppRegistry.registerComponent('THIS', () => App);
