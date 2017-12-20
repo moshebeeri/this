@@ -1,5 +1,6 @@
 import getStore from "../store";
 import feedAction from '../actions/feedsMain'
+import notificationAction from '../actions/notifications'
 import postAction from '../actions/posts'
 import promotionAction from '../actions/promotions'
 import business from '../actions/business'
@@ -15,10 +16,18 @@ class PageRefresher {
         pageSync.createPage('feed', pageSync.createStdAverageRefresh('feed', 10, 60000), this.setMainFeedRefresh.bind(this));
         pageSync.createPage('groups', pageSync.createStdAverageRefresh('groups', 10, 60000), this.updateGroups.bind(this));
         pageSync.createPage('businesses', pageSync.createStdAverageRefresh('businesses', 10, 360000), this.updateBusinesses.bind(this));
+        pageSync.createPage('notification', pageSync.createStdAverageRefresh('notification', 10, 60000), this.updateNotification.bind(this));
 
 
     }
 
+
+    updateNotification(){
+        let token = store.getState().authentication.token;
+        let user = store.getState().user.user;
+        let notifications = store.getState().notification.notification;
+        notificationAction.updateNotification(store.dispatch,token,user,notifications);
+    }
     updateGroups() {
         let token = store.getState().authentication.token;
         groups.getAll(store.dispatch, token);

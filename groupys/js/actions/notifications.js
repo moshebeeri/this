@@ -79,4 +79,27 @@ export function doNotification(notificationId) {
     }
 }
 
+ async function updateNotification(dispatch, token,user,notifications) {
+    try {
+        let skip = 0;
+        if (notifications.length > 10) {
+            skip = notifications.length + 1;
+        }
+        let response = await notificationApi.getAll(token, user, skip, 10);
+        dispatch({
+            type: actions.SET_NOTIFICATION,
+            notifications: response,
+        });
+    } catch (error) {
+        dispatch({
+            type: actions.NETWORK_IS_OFFLINE,
+        });
+    }
+}
+
+export default {
+    updateNotification
+}
+
+
 

@@ -606,7 +606,7 @@ class FeedConverter {
                     let fromHour = FormUtils.secondsFromMidnightToString(promotion.happy_hour.values[0].from);
                     let tooHour = FormUtils.secondsFromMidnightToString(promotion.happy_hour.values[0].until);
                     let productName = promotion.condition.product.name;
-                    responseFeed.promotionTerm = strings.HappyHourTerm.formatUnicorn(days[0], fromHour, tooHour, productName);
+                    response.promotionTerm = strings.HappyHourTerm.formatUnicorn(days[0], fromHour, tooHour, productName);
                     response.promotionValue = promotion.happy_hour.values[0].pay;
                     response.quantity = promotion.happy_hour.quantity;
                     response.promotion = 'HAPPY_HOUR';
