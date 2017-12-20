@@ -10,12 +10,13 @@ let feedUiConverter = new FeedUiConverter();
 const getStateFeeds = (state) => state.groups;
 const getPosts = (state) => state.postForm;
 const getInstance = (state) => state.instances;
+const getPromotion= (state) => state.promotions;
 const store = getStore();
-export const getFeeds = createSelector([  getStateFeeds,getPosts,getInstance],
-    (groups,post,instances) => {
+export const getFeeds = createSelector([  getStateFeeds,getPosts,getInstance,getPromotion],
+    (groups,post,instances,promotions) => {
         const collections = {
             activities: store.getState().activities.activities,
-            promotions: store.getState().promotions.promotions,
+            promotions: promotions.promotions,
             user: store.getState().user.users,
             posts:post.posts,
             businesses: store.getState().businesses.businesses,
