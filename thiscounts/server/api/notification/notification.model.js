@@ -13,7 +13,7 @@ let Action = [
 
 let NotificationSchema = new Schema({
   read: {type: Boolean, default: false},
-  action: {type: String, default: 'NONE'},
+  action: {type: String, enum: Action, default: 'NONE'},
   to: {type: Schema.ObjectId, ref: 'User', required: true, index: true},
   timestamp: {type: Date, required: true},
 
@@ -35,7 +35,8 @@ let NotificationSchema = new Schema({
   actor_group: {type: Schema.ObjectId, ref: 'Group', autopopulate: true },
 
   note: {type: String, default: ''},
-  actions: {type: String, enum: Action}
+  qrcode: {type: Schema.ObjectId, ref: 'QRCode', autopopulate: true},
+  available_actions: {type: String, enum: Action}
 });
 
 NotificationSchema.plugin(autopopulate);
