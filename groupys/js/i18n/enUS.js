@@ -102,6 +102,7 @@ UpdateUserRole                                : "Update User Role",
 ManagementRole                                : "Management Role",
 InvitesYouToJoinGroup                         : "invites you to join group",
 CreatePromotionForEveryoneGroup               : "Create a promotion for everyone who joins group",
+CreatePromotionForEveryoneBusiness            : "Create a promotion for everyone who follow your business",
 SignUp                                        : "Sign up",
 Login                                         : "Login",
 ForgotPassword                                : "Forgot Password",
@@ -197,6 +198,14 @@ PublicGroup                                   : "Public Group",
 UnReadPost                                    : "Unread Posts: {0}",
 UnReadMessages                                : "Unread Messages: {0}",
 SignIn                                        : "Sign in",
+Accept                                        : "Accept",
+Create                                        : "Create",
+
+
+
+
+
+
 
 
 

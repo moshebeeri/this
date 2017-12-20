@@ -39,10 +39,22 @@ const DefaultTabBar = createReactClass({
                 style={{tintColor: '#2db6c8', marginLeft: 0, width: 30, height: 30}}
                 source={promotions}/>
         }
-        if (name === 'notification') {
+        if (name.includes('notification')) {
+            let notifications = parseInt(name.substring('notification'.length + 1))
+            if(notifications > 0){
+                return <View>
+                    <Image
+                        style={{tintColor: '#2db6c8', marginLeft: 0, width: 30, height: 30}}
+                        source={notification}/>
+                    <View style={{position:'absolute',bottom:18,right:17,borderRadius:10,width:15,alignItems:'center',justifyContent:'center',backgroundColor:'#FA8559'}}>
+                    <Text style={{fontSize:12,fontWeight:'bold',color:'white'}} >{notifications}</Text>
+                    </View>
+                </View>
+            }
             return <Image
                 style={{tintColor: '#2db6c8', marginLeft: 0, width: 30, height: 30}}
                 source={notification}/>
+
         }
         if (name === 'groups') {
             return <Image

@@ -15,7 +15,7 @@ import StyleUtils from "../../utils/styleUtils";
 import SideBar from "../drawer/index";
 import * as actions from "../../reducers/reducerActions";
 import {bindActionCreators} from "redux";
-import {addComponent, isAuthenticated, showAddAction, showCompoenent} from "../../selectors/appSelector";
+import {addComponent, isAuthenticated, showAddAction, showCompoenent,countUnreadNotifications} from "../../selectors/appSelector";
 import * as mainAction from "../../actions/mainTab";
 import * as userAction from "../../actions/user";
 import {createSelector} from "reselect";
@@ -150,7 +150,7 @@ class ApplicationManager extends Component {
     }
 
     render() {
-        const {selectedTab, showAdd, showComponent} = this.props;
+        const {selectedTab, showAdd, showComponent,notifications} = this.props;
         if (!showComponent) {
             return <View></View>
         }
@@ -161,7 +161,7 @@ class ApplicationManager extends Component {
         openDrawer = () => {
             this.drawer._root.open()
         };
-
+        let notificationLabel = 'notification_' + notifications;
 
         return (
 
@@ -186,7 +186,7 @@ class ApplicationManager extends Component {
                             <Notification tabLabel="promotions" navigation={this.props.navigation} index={3}/>
                             <Groups tabLabel="save" navigation={this.props.navigation} index={2}/>
                             <MydPromotions tabLabel="groups" navigation={this.props.navigation} index={1}/>
-                            <Feeds tabLabel="notification" index={0} navigation={this.props.navigation}/>
+                            <Feeds tabLabel={notificationLabel} index={0} navigation={this.props.navigation}/>
 
 
                         </ScrolTabView> :
@@ -196,7 +196,7 @@ class ApplicationManager extends Component {
                             <Feeds tabLabel="promotions" index={0} navigation={this.props.navigation}/>
                             <MydPromotions tabLabel="save" navigation={this.props.navigation} index={1}/>
                             <Groups tabLabel="groups" navigation={this.props.navigation} index={2}/>
-                            <Notification tabLabel="notification" navigation={this.props.navigation} index={3}/>
+                            <Notification  tabLabel={notificationLabel} navigation={this.props.navigation} index={3}/>
 
 
                         </ScrolTabView>
@@ -214,6 +214,7 @@ const mapStateToProps = (state) => {
         state: state,
         isAuthenticated: isAuthenticated(state),
         selectedTab: state.mainTab.selectedTab,
+        notifications: countUnreadNotifications(state),
         showAdd: showAddAction(state),
         addComponent: addComponent(state),
         showComponent: showCompoenent(state)
