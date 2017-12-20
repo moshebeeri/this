@@ -2,6 +2,7 @@
 
 let _ = require('lodash');
 let Notification = require('./notification.model');
+const Notifications = require('../../components/notification');
 
 // Get list of notifications
 exports.find = function(req, res) {
@@ -68,12 +69,24 @@ exports.read = function(req, res) {
   });
 };
 
+exports.notify = function(req, res) {
+  Notifications.notify(req.body, [req.params.user]);
+  return res.status(200).json(req.body)
+};
+
+function handleNotificationAction(notification) {
+  console.log(`handleNotificationAction ${JSON.stringify(notification)}`);
+}
+
+
 exports.action = function(req, res) {
   Notification.findById(req.params.id, function (err, notification) {
     if (err) { return handleError(res, err); }
     if(!notification) { return res.send(404); }
     notification.read = true;
-    notification.action = true;
+    notification.action = req.params.type ? req.params.action : 'FOLLOW';
+    handleNotificationAction(notification);
+
     notification.save(function (err) {
       if (err) { return handleError(res, err); }
       return res.status(200).json(notification)

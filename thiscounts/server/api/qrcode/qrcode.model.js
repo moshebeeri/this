@@ -10,6 +10,12 @@ let QRCodeType = [
   'FOLLOW_GROUP'
 ];
 
+let Action = [
+  'INFO',
+  'FOLLOW',
+  'APPROVE'
+];
+
 let QRCodeSchema = new Schema({
   code: { type: String, required: true, index: true },
   type: {type: String, enum: QRCodeType},
@@ -21,6 +27,8 @@ let QRCodeSchema = new Schema({
     shopping_chain: {type: Schema.ObjectId, ref: 'ShoppingChain', autopopulate: true},
     mall: {type: Schema.ObjectId, ref: 'Mall', autopopulate: true},
   },
+  action: {type: String, enum: Action},
+  message: {}
 });
 
 QRCodeSchema.plugin(autopopulate);
