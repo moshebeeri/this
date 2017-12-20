@@ -6,6 +6,7 @@ import store from 'react-native-simple-store';
 
 const getAuthentication = (state) => state.authentication
 const getMainTab = (state) => state.mainTab
+const getNotifications = (state) => state.notification
 export const isAuthenticated = createSelector(
     [getAuthentication], async function (authentication) {
         let token = await store.get("token");
@@ -44,5 +45,18 @@ export const addComponent = createSelector(
             default:
                 return undefined;
         }
+    }
+)
+export const countUnreadNotifications = createSelector(
+    [getNotifications], function (notification) {
+        let result = 0;
+        if(notification.notification) {
+            notification.notification.forEach(notification => {
+                if (!notification.read) {
+                    result = result + 1;
+                }
+            });
+        }
+        return result;
     }
 )
