@@ -53,7 +53,11 @@ export const countUnreadNotifications = createSelector(
         if(notification.notification) {
             notification.notification.forEach(notification => {
                 if (!notification.read) {
-                    result = result + 1;
+                    if(notification.note === 'ADD_BUSINESS_FOLLOW_ON_ACTION' && !notification.business ){
+                       //Todo
+                    }else {
+                        result = result + 1;
+                    }
                 }
             });
         }
