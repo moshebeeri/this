@@ -8,6 +8,7 @@ const initialState = {
     update: false,
     lastfeed: undefined,
     maxFeeds:10,
+    nextBulkLoad:false,
     updated:false,
     upTime:new Date().getTime()
 };
@@ -82,6 +83,16 @@ export default function feeds(state = initialState, action) {
             return {
                 ...state,
                 showTopLoader: action.showTopLoader
+            };
+        case actions.FEEDS_GET_NEXT_BULK:
+            return {
+                ...state,
+                nextBulkLoad: true
+            };
+        case actions.FEEDS_GET_NEXT_BULK_DONE:
+            return {
+                ...state,
+                nextBulkLoad: false
             };
         default:
             return state;
