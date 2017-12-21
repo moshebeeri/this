@@ -156,14 +156,14 @@ exports.unfollow = function (req, res) {
 
 function send_sms_verification_code(user) {
   send_sms_message(user.phone_number,
-    "GROUPYS code " + user.sms_code
+    "THIS code " + user.sms_code
   );
 }
 
 
 function send_sms_new_password(phone_number, new_password) {
   send_sms_message(phone_number,
-    "GROUPYS new password " + new_password
+    "THIS new password " + new_password
   );
 }
 

@@ -41,7 +41,7 @@ exports.notify = function(note, audience){
   audience.forEach(to => {
     note.to = to;
     Notification.create(note, function (err, notification) {
-      if(err) return console.err(err);
+      if(err) return console.error(err);
       pnsUserDevices(notification)
     });
   });
