@@ -133,6 +133,26 @@ exports.image_code = function(req, res) {
   });
 };
 
+exports.allocateImage = function(req, res) {
+  allocate_one(req.user._id,  function (err, qrcode) {
+    if (err) {
+      return console.log(err)
+    }
+    QRCodeImg.toDataURL(JSON.stringify({
+      t: 'g',
+      code: qrcode.code
+    }), function (err, url) {
+      if (err) {
+        return res.status(500).send(err);
+      } else {
+        return res.status(200).json({
+          qrcode: url
+        });
+      }
+    });
+  })
+};
+
 function handleError(res, err) {
   return res.status(500).send(err);
 }
