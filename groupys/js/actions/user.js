@@ -130,10 +130,45 @@ export function updateUser(newUser, navigation) {
 
 
 
+
 export function resetPasswordForm() {
     return function (dispatch) {
         dispatch({
             type: actions.CHANGE_PASSWORD_CLEAR
         });
     }
+}
+
+
+ async function updateUserLocale(dispatch, token,user,locale) {
+    try {
+        if(!user.locale ||(user.locale  && user.locale!== locale)){
+            dispatch({
+                type: actions.SAVING_USER,
+            });
+            user.locale = locale;
+            await userApi.saveUserDetails(user, user._id, token, dispatch);
+            let updatedUser = await userApi.getUser(token);
+            dispatch({
+                type: actions.UPSERT_SINGLE_USER,
+                item: updatedUser
+            });
+            dispatch({
+                type: actions.SET_USER,
+                user: updatedUser
+            });
+            dispatch({
+                type: actions.SAVING_USER_DONE,
+            });
+        }
+
+    } catch (error) {
+        dispatch({
+            type: actions.NETWORK_IS_OFFLINE,
+        });
+    }
+}
+
+export default {
+    updateUserLocale
 }

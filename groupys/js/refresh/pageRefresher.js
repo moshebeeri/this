@@ -5,9 +5,10 @@ import postAction from '../actions/posts'
 import promotionAction from '../actions/promotions'
 import business from '../actions/business'
 import groups from '../actions/groups'
+import users from '../actions/user'
 import groupComments from '../actions/commentsGroup'
 import pageSync from './refresher';
-
+import FormUtils from "../utils/fromUtils";
 const store = getStore();
 let  visitedList = ['feed', 'groups', 'businesses'];
 class PageRefresher {
@@ -17,10 +18,16 @@ class PageRefresher {
         pageSync.createPage('groups', pageSync.createStdAverageRefresh('groups', 10, 60000), this.updateGroups.bind(this));
         pageSync.createPage('businesses', pageSync.createStdAverageRefresh('businesses', 10, 360000), this.updateBusinesses.bind(this));
         pageSync.createPage('notification', pageSync.createStdAverageRefresh('notification', 10, 60000), this.updateNotification.bind(this));
+        pageSync.createPage('user', pageSync.createStdAverageRefresh('user', 10, 60000), this.updateUser.bind(this));
 
 
     }
+    updateUser(){
+        let token = store.getState().authentication.token;
+        let user = store.getState().user.user;
+        users.updateUserLocale(store.dispatch,token,user,FormUtils.getLocale())
 
+    }
 
     updateNotification(){
         let token = store.getState().authentication.token;
