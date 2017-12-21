@@ -64,6 +64,7 @@ exports.assign = function(req, res) {
     if(err) { return handleError(res, err); }
     if(qrcode.assigned) {return res.status(304).json(qrcode)}
     qrcode.assignment = req.body.assignment;
+    qrcode.action = req.body.action;
     qrcode.type = req.type;
     qrcode.assigned = true;
     qrcode.save(function (err, qrcode) {
@@ -81,6 +82,7 @@ exports.createAndAssign = function(userId, data, callback){
     if(err) { return callback(err); }
     qrcode.assignment = data.assignment;
     qrcode.type = data.type;
+    qrcode.action = data.action;
     qrcode.assigned = true;
     qrcode.save(function (err, qrcode) {
       if(err) { return callback(err); }
