@@ -202,6 +202,8 @@ Accept                                        : "Accept",
 Create                                        : "Create",
 Approve                                       : "Approve",
 Decline                                       : "Decline",
+UnFollow                                      : "Un-follow Business ",
+
 
 
 

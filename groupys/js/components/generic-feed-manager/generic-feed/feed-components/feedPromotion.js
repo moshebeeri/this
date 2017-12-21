@@ -196,7 +196,7 @@ export default class FeedPromotion extends Component {
             }
             return {
                 flex: 1,
-                height: 81 * vh,
+                height: 90 * vh,
                 width: width,
                 overflow: 'hidden',
                 backgroundColor: '#cccccc',

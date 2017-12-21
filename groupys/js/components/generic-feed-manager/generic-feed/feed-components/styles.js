@@ -131,7 +131,7 @@ module.exports = {
     },
     businesses_container: {
         flex: 1,
-        height: vh * 61,
+        height: vh * 76,
         width: width,
         overflow: 'hidden',
         backgroundColor: '#cccccc',
@@ -161,11 +161,11 @@ module.exports = {
     promotion_image: {
         flex: 1,
         alignSelf: 'stretch',
-        width: undefined,
-        height: undefined
+        width: width,
+        height: 250,
     },
     promotion_image_view: {
-        width: width, flex: 9
+        width: width,  height: 250
     },
     promotion_upperContainer: {
         backgroundColor: 'white',
