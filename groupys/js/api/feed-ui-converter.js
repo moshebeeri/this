@@ -44,6 +44,7 @@ class FeedConverter {
             itemType: 'POST',
             feed: feed,
             id: feed.activity.post._id,
+            fid: feed._id,
             generalId: feed.activity.post._id,
             entities: [{post: feed.activity.post._id}],
         }
@@ -75,7 +76,7 @@ class FeedConverter {
             responseFeed.avetar = noPic
         }
         responseFeed.name = user.name
-        if(feed.activity.post.client) {
+        if (feed.activity.post.client) {
             responseFeed.uploading = feed.activity.post.client.uploading;
         }
         return responseFeed;
@@ -116,9 +117,9 @@ class FeedConverter {
             responseFeed.avetar = noPic
         }
         responseFeed.name = user.name
-        if(post.client) {
+        if (post.client) {
             responseFeed.uploading = post.client.uploading
-        }else{
+        } else {
             responseFeed.uploading = true;
         }
         return responseFeed;
@@ -138,6 +139,7 @@ class FeedConverter {
         response.shardeActivity = this.createFeed(sharedFeed);
         response.user = feed.activity.actor_user;
         response.itemType = 'SHARE';
+        response.fid = feed._id,
         response.shared = response.shardeActivity.itemType;
         response.id = response.shardeActivity.id;
         return response;

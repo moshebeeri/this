@@ -146,6 +146,14 @@ export function setNextFeeds(feeds) {
         if (!user)
             return
         let showLoadingDone = false;
+        if(getState().feeds.nextBulkLoad){
+            return;
+        }
+        if(feeds.length > 10) {
+            dispatch({
+                type: actions.FEEDS_GET_NEXT_BULK,
+            });
+        }
         if (_.isEmpty(feeds) && getState().feeds.firstTime) {
             dispatch({
                 type: actions.FIRST_TIME_FEED,
@@ -157,14 +165,12 @@ export function setNextFeeds(feeds) {
         if (feeds && feeds.length > 0) {
             let length = getState().feeds.feedView.length
             let id = getState().feeds.feedView[length - 1]
-            if (id !== getState().feeds.lastfeed) {
-                console.log('second time feeds');
-                dispatch({
-                    type: actions.LAST_FEED_DOWN,
-                    id: id,
-                });
-                await fetchFeedsFromServer(feeds, dispatch, token, user)
-            }
+            dispatch({
+                type: actions.LAST_FEED_DOWN,
+                id: id,
+            });
+            await fetchFeedsFromServer(feeds, dispatch, token, user)
+
         }
         if (showLoadingDone && !getState().feeds.loadingDone) {
             dispatch({
@@ -172,6 +178,10 @@ export function setNextFeeds(feeds) {
                 loadingDone: true,
             });
         }
+
+        dispatch({
+            type: actions.FEEDS_GET_NEXT_BULK_DONE,
+        });
     }
 }
 

@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import {FlatList, Image, ListView, Platform, TouchableOpacity, View} from 'react-native';
+import {FlatList, Image, ListView, Platform, TouchableOpacity, View,Dimensions} from 'react-native';
 import {actions} from 'react-native-navigation-redux-helpers';
 import {
     Button,
@@ -19,7 +19,7 @@ import {
     Thumbnail,
     Title
 } from 'native-base';
-
+const {width, height} = Dimensions.get('window')
 export default class GenericFeedManager extends Component {
     constructor(props) {
         super(props);
@@ -52,7 +52,7 @@ export default class GenericFeedManager extends Component {
     }
 
     render() {
-        const {loadingDone, showTopLoader, feeds, update, setNextFeeds, color} = this.props;
+        const {loadingDone, showTopLoader, feeds, update, setNextFeeds, color,nextBulkLoad} = this.props;
         const topLoader = showTopLoader ? <View><Spinner color='red'/></View> : null;
         if (!loadingDone) {
             return <View><Spinner color='red'/></View>;
@@ -79,8 +79,10 @@ export default class GenericFeedManager extends Component {
 
 
                     />
+                    {nextBulkLoad && !showTopLoader &&  <View style={ {bottom:0,width:width,backgroundColor:'#cccccc',position:'absolute'}}>
+                        <Spinner color='red'/>
+                    </View>}
 
-                    {spining}
 
                 </View>
 
@@ -90,6 +92,7 @@ export default class GenericFeedManager extends Component {
 
             <View style={{backgroundColor: backgroundColor}}>
                 {topLoader}
+
                 <FlatList
                     ref='flatList'
                     data={feeds}
@@ -99,7 +102,9 @@ export default class GenericFeedManager extends Component {
 
                 />
 
-                {spining}
+                {nextBulkLoad && !showTopLoader &&  <View style={ {bottom:0,width:width,backgroundColor:'#cccccc',position:'absolute'}}>
+                <Spinner color='red'/>
+                </View>}
 
             </View>
 

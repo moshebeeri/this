@@ -10,6 +10,7 @@ import * as userAction from "../../actions/user";
 import Icon2 from "react-native-vector-icons/Ionicons";
 import {createSelector} from "reselect";
 import {View,I18nManager} from 'react-native';
+
 import {Fab,} from 'native-base';
 
 class Feed extends Component {
@@ -30,7 +31,7 @@ class Feed extends Component {
     }
 
     render() {
-        const {navigation, loadingDone, showTopLoader, feeds, userFollower, actions, token, user, location} = this.props;
+        const {navigation, loadingDone, showTopLoader, feeds, userFollower, actions, token, user, location,nextBulkLoad} = this.props;
         let icon = <Icon2 active size={40} name="md-create"/>;
 
         return (
@@ -45,6 +46,7 @@ class Feed extends Component {
                     feeds={feeds}
                     actions={actions}
                     token={token}
+                    nextBulkLoad={nextBulkLoad}
                     entity={user}
                     location={location}
                     title='Feeds'
@@ -73,6 +75,7 @@ const mapStateToProps = state => {
         loadingDone:state.feeds.loadingDone,
         firstTime:state.feeds.firstTime,
         updated: state.feeds.updated,
+        nextBulkLoad: state.feeds.nextBulkLoad,
         token: state.authentication.token,
         showTopLoader:state.feeds.showTopLoader,
         userFollower: state.user.followers,
