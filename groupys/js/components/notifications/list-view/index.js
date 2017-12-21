@@ -19,6 +19,13 @@ export default class NotificationListView extends Component {
         actions.doNotification(viewItem._id)
     }
 
+    notify(notification){
+        const {item, actions} = this.props;
+        const viewItem = item.item;
+
+        actions.doNotification(viewItem._id,notification)
+    }
+
     create(group) {
         const {item, actions} = this.props;
         const viewItem = item.item;
@@ -32,7 +39,7 @@ export default class NotificationListView extends Component {
         const {item, actions} = this.props;
         const viewItem = item.item;
         actions.doNotification(viewItem._id)
-        this.props.navigation.navigate("addPromotions", {business: business,onBoardType:'BUSINESS'});
+        this.props.navigation.navigate("addPromotions", {business: business, onBoardType: 'BUSINESS'});
     }
 
     read(notification_id) {
@@ -53,9 +60,50 @@ export default class NotificationListView extends Component {
             case notification.ADD_BUSINESS_FOLLOW_ON_ACTION:
                 return this.createBusinessFollowOn(item);
             default:
-                const viewItem = item.item;
-                return <View><Text>new notification with code: {viewItem.id} And note:{viewItem.note} </Text></View>
+                return this.createGeneralAction(item);
         }
+    }
+
+    createGeneralAction(item) {
+        const viewItem = item.item;
+        const redeemStyle = {
+            flex: -1,
+            justifyContent: 'center',
+            alignItems:'center',
+            marginLeft: width / 4,
+            borderWidth: 1,
+            flexDirection: 'row',
+            height: 40,
+            width: width / 2,
+            backgroundColor: 'white',
+            borderColor: '#2db6c8',
+        };
+        const backgroundColor = this.getNotificationColor(viewItem);
+        const actionStyle = this.getActionStyle(viewItem);
+        const action = this.getAvalibaleActions(viewItem, actionStyle, redeemStyle);
+        return (
+            <View style={{padding: 5, alignItems:'center',justifyContent:'center',backgroundColor: '#eaeaea'}} regular>
+                <TouchableOpacity onPress={() => this.read(viewItem._id)} style={{
+                    flex: -1,
+                    backgroundColor: backgroundColor,
+                    flexDirection: 'row',
+                    alignItems: 'center',
+                }}>
+
+                    <View style={{flexDirection: 'column', marginLeft: 5, width: width , height: vh * 10}}>
+                        <View style={{width: width -20,flexDirection: 'row'}}>
+                            <Text numberOfLines={2}
+                                  style={{height: vh * 7}}>
+                                {viewItem.note}
+                            </Text>
+                        </View>
+                    </View>
+                </TouchableOpacity>
+                {action}
+            </View>
+
+
+        );
     }
 
     createBusinessFollowOn(item) {
@@ -134,51 +182,82 @@ export default class NotificationListView extends Component {
                 backgroundColor: 'white',
                 width: width,
                 height: vh * 9,
+                flexDirection:'row',
                 justifyContent: 'center',
                 alignItems: 'center',
-                flex: -1,
             }
         }
         return {
             backgroundColor: '#d3f9ff',
             width: width,
             height: 50,
+            flexDirection:'row',
             justifyContent: 'center',
             alignItems: 'center',
-            flex: -1,
+
         }
     }
 
+    getAvalibaleActions(viewItem, actionStyle, redeemStyle) {
+        if(viewItem.actionDone){
+            return undefined;
+        }
+        if(viewItem.available_actions){
+
+
+            switch (viewItem.available_actions){
+
+                case 'FOLLOW':
+                    return <View style={actionStyle}>
+                        <TouchableOpacity style={redeemStyle} onPress={this.notify.bind(this,'FOLLOW')}>
+                            <Text style={{alignItems:'center',justifyContent:'center',fontWeight: 'bold', color: '#2db6c8'}}>{strings.Follow}</Text>
+                        </TouchableOpacity>
+                    </View>
+                case 'APPROVE':
+                    return <View style={actionStyle}>
+                        <TouchableOpacity style={redeemStyle} onPress={this.notify.bind(this,'APPROVE')}>
+                            <Text style={{fontWeight: 'bold', color: '#2db6c8'}}>{strings.Approve}</Text>
+                        </TouchableOpacity>
+                        <TouchableOpacity style={redeemStyle} onPress={this.notify.bind(this,'DECLINE')}>
+                            <Text style={{fontWeight: 'bold', color: '#2db6c8'}}>{strings.Decline}</Text>
+                        </TouchableOpacity>
+                    </View>
+            }
+        }
+
+
+    }
+
     getAction(viewItem, actionStyle, redeemStyle) {
-        if (viewItem.action) {
+        if(viewItem.actionDone){
             return undefined;
         }
         return <View style={actionStyle}>
-            <Button style={redeemStyle} onPress={this.accept.bind(this)}>
+            <TouchableOpacity style={redeemStyle} onPress={this.accept.bind(this)}>
                 <Text style={{fontWeight: 'bold', color: '#2db6c8'}}>{strings.Accept}</Text>
-            </Button>
+            </TouchableOpacity>
         </View>
     }
 
     getPromotioBusinessnAction(viewItem, actionStyle, redeemStyle) {
-        if (viewItem.action) {
+        if(viewItem.actionDone){
             return undefined;
         }
         return <View style={actionStyle}>
-            <Button style={redeemStyle} onPress={this.createBusiness.bind(this, viewItem.business)}>
+            <TouchableOpacity style={redeemStyle} onPress={this.createBusiness.bind(this, viewItem.business)}>
                 <Text style={{fontWeight: 'bold', color: '#2db6c8'}}>{strings.Create}</Text>
-            </Button>
+            </TouchableOpacity>
         </View>
     }
 
     getPromotionAction(viewItem, actionStyle, redeemStyle) {
-        if (viewItem.action) {
+        if(viewItem.actionDone){
             return undefined;
         }
         return <View style={actionStyle}>
-            <Button style={redeemStyle} onPress={this.create.bind(this, viewItem.group)}>
+            <TouchableOpacity style={redeemStyle} onPress={this.create.bind(this, viewItem.group)}>
                 <Text style={{fontWeight: 'bold', color: '#2db6c8'}}>{strings.Create}</Text>
-            </Button>
+            </TouchableOpacity>
         </View>
     }
 

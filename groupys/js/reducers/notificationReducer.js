@@ -64,12 +64,12 @@ export default function notification(state = initialState, action) {
                 notification: currentNotifications,
             };
         case actions.EXECUTE_NOTIFICATION_ACTION:
-            let notification = currentNotifications.filter(function (notification) {
+            let executeNotifications = currentNotifications.filter(function (notification) {
                 return notification._id === action.id
             });
-            if (notification.length > 0) {
-                notification[0].action = true;
-                notificationRead[0].read = true;
+            if (executeNotifications && executeNotifications.length > 0) {
+                executeNotifications[0].actionDone = true;
+                executeNotifications[0].read = true;
             }
             return {
                 ...state,

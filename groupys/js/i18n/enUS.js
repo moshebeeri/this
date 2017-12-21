@@ -200,6 +200,10 @@ UnReadMessages                                : "Unread Messages: {0}",
 SignIn                                        : "Sign in",
 Accept                                        : "Accept",
 Create                                        : "Create",
+Approve                                       : "Approve",
+Decline                                       : "Decline",
+
+
 
 
 
