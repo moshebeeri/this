@@ -62,11 +62,11 @@ export function readNotification(notificationId) {
     }
 }
 
-export function doNotification(notificationId) {
+export function doNotification(notificationId,type) {
     return function (dispatch, getState) {
         try {
             const token = getState().authentication.token;
-            notificationApi.doNotificationAction(token, notificationId);
+            notificationApi.doNotificationAction(token, notificationId,type);
             dispatch({
                 type: actions.EXECUTE_NOTIFICATION_ACTION,
                 id: notificationId,
@@ -82,8 +82,8 @@ export function doNotification(notificationId) {
  async function updateNotification(dispatch, token,user,notifications) {
     try {
         let skip = 0;
-        if (notifications.length > 10) {
-            skip = notifications.length + 1;
+        if (notifications.length >= 10) {
+            skip = notifications.length  -1 ;
         }
         let response = await notificationApi.getAll(token, user, skip, 10);
         dispatch({

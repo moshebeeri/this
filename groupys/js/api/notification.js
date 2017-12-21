@@ -55,18 +55,30 @@ class NotificationApi {
         })
     }
 
-    doNotificationAction(token, notification_id) {
+    doNotificationAction(token, notification_id,type) {
         return new Promise(async (resolve, reject) => {
             try {
                 let from = new Date();
-                const response = await fetch(`${server_host}/api/notifications/action/` + notification_id, {
-                    method: 'GET',
-                    headers: {
-                        'Accept': 'application/json, text/plain, */*',
-                        'Content-Type': 'application/json;charset=utf-8',
-                        'Authorization': 'Bearer ' + token
-                    }
-                });
+                let response;
+                if(type) {
+                    response =  await fetch(`${server_host}/api/notifications/action/` + notification_id, {
+                        method: 'GET',
+                        headers: {
+                            'Accept': 'application/json, text/plain, */*',
+                            'Content-Type': 'application/json;charset=utf-8',
+                            'Authorization': 'Bearer ' + token
+                        }
+                    });
+                }else{
+                    response =  await fetch(`${server_host}/api/notifications/action/` + notification_id + '/' + type , {
+                        method: 'GET',
+                        headers: {
+                            'Accept': 'application/json, text/plain, */*',
+                            'Content-Type': 'application/json;charset=utf-8',
+                            'Authorization': 'Bearer ' + token
+                        }
+                    });
+                }
                 if (response.status ==='401') {
                     reject(response);
                     return;
