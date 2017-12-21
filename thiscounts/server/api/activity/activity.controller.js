@@ -126,6 +126,11 @@ exports.share = function (req, res) {
   });
 };
 
+exports.report = function (req, res) {
+  console.log(`got a report for ${req.params.id}`);
+  return res.status(200).send();
+};
+
 function handleError(res, err) {
   return res.status(500).send(err);
 }
