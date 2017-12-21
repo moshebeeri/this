@@ -145,9 +145,8 @@ exports.allocateImage = function(req, res) {
       if (err) {
         return res.status(500).send(err);
       } else {
-        return res.status(200).json({
-          qrcode: url
-        });
+        res.setHeader('content-type', 'text/html');
+        return res.status(200).send(`<html><body><img src="${url}"/></body></html>`);
       }
     });
   })

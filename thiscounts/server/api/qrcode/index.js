@@ -9,7 +9,7 @@ let router = express.Router();
 //TODO: change to auth.hasRole('admin') for production
 router.get('/allocate/:quantity', auth.isAuthenticated(), controller.allocate);
 
-router.get('/allocate/image', auth.isAuthenticated(), controller.allocateImage);
+router.get('/allocate/image', /*TODO: auth.isAuthenticated(),*/ controller.allocateImage);
 
 router.get('/image/id/:id', /*auth.isAuthenticated(),*/ controller.image_id);
 router.get('/find/:code', auth.isAuthenticated(), controller.code);
