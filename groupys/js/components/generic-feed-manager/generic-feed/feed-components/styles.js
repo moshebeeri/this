@@ -131,7 +131,7 @@ module.exports = {
     },
     businesses_container: {
         flex: 1,
-        height: vh * 71,
+        height: vh * 76,
         width: width,
         overflow: 'hidden',
         backgroundColor: '#cccccc',
