@@ -134,7 +134,7 @@ exports.image_code = function(req, res) {
 };
 
 exports.allocateImage = function(req, res) {
-  allocate_one(req.user._id,  function (err, qrcode) {
+  allocate_one(req.params.id,  function (err, qrcode) {
     if (err) {
       return console.log(err)
     }
