@@ -168,6 +168,20 @@ export function followBusiness(businessId) {
     }
 }
 
+export function unFollowBusiness(businessId) {
+    return async function (dispatch, getState) {
+        try {
+            const token = getState().authentication.token;
+            await businessApi.unFollowBusiness(businessId, token);
+
+        } catch (error) {
+            dispatch({
+                type: actions.NETWORK_IS_OFFLINE,
+            });
+        }
+    }
+}
+
 export function groupFollowBusiness(groupid, businessId, navigation) {
     return async function (dispatch, getState) {
         try {

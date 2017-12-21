@@ -1,10 +1,16 @@
 import React, {Component} from 'react';
 import {Text, TouchableOpacity, View} from 'react-native';
 import {Thumbnail,Button} from 'native-base';
+import {connect} from 'react-redux';
+import {bindActionCreators} from "redux";
 import Icon from 'react-native-vector-icons/Ionicons';
 import styles from './styles'
 import { I18nManager } from 'react-native';
-export default class BusinessHeader extends Component {
+import {Menu, MenuOption, MenuOptions, MenuTrigger,} from 'react-native-popup-menu';
+import * as businessActions from "../../actions/business";
+import Icon2 from 'react-native-vector-icons/SimpleLineIcons';
+import strings from "../../i18n/i18n"
+class BusinessHeader extends Component {
     constructor(props) {
         super(props);
     }
@@ -12,6 +18,11 @@ export default class BusinessHeader extends Component {
     showBusiness() {
         const{navigation,business} = this.props;
         navigation.navigate("businessProfile", {businesses: business});
+    }
+
+    unFollowBusiness(){
+        const {business}  = this.props;
+        this.props.actions.unFollowBusiness(business._id);
     }
 
     createBusinessLog() {
@@ -63,6 +74,18 @@ export default class BusinessHeader extends Component {
         let arrowName = I18nManager.isRTL ? "ios-arrow-forward" : "ios-arrow-back";
 
         let back = undefined;
+
+        let menuAction = <Menu>
+            <MenuTrigger placement="right">
+                <Icon2 style={{fontSize: 25}} name="options-vertical"/>
+            </MenuTrigger>
+            <MenuOptions>
+
+                <MenuOption onSelect={this.unFollowBusiness.bind(this)}>
+                    <Text>{strings.UnFollow}</Text>
+                </MenuOption>
+            </MenuOptions>
+        </Menu>
         if (showBack) {
             back = <TouchableOpacity transparent style={{alignItems:'flex-start',justifyContent:'flex-start',width:40,marginLeft:10,marginRight:10}} onPress={() => this.back()}>
                 <Icon active  color={"#2db6c8"} size={30} name={arrowName}/>
@@ -84,12 +107,20 @@ export default class BusinessHeader extends Component {
             {   showEdit &&  <View style={{flex: 0.2, flexDirection: 'row', alignItems: 'center',}}>
                 {editButton}
             </View> }
-
-
+            <View style={{alignItems:'center',justifyContent:'center'}}>
+                {menuAction}
+            </View>
         </View>
     }
 }
 
-
+export default connect(
+    state => ({
+        businesses: state.businesses,
+    }),
+    dispatch => ({
+        actions: bindActionCreators(businessActions, dispatch)
+    })
+)(BusinessHeader);
 
 

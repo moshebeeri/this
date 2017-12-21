@@ -196,7 +196,7 @@ export default class FeedPromotion extends Component {
             }
             return {
                 flex: 1,
-                height: 81 * vh,
+                height: 90 * vh,
                 width: width,
                 overflow: 'hidden',
                 backgroundColor: '#cccccc',
@@ -223,7 +223,7 @@ export default class FeedPromotion extends Component {
         if (item.banner) {
             return <View style={styles.promotion_image_view}>
 
-                <Image resizeMode="cover" style={styles.promotion_image} source={{uri: item.banner.uri}}>
+                <Image resizeMode="contain" style={styles.promotion_image} source={{uri: item.banner.uri}}>
                 </Image>
             </View>
         }
