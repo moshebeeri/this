@@ -70,6 +70,8 @@ exports.read = function(req, res) {
 };
 
 exports.notify = function(req, res) {
+  let notification = req.body;
+  notification.timestamp = Date.now();
   Notifications.notify(req.body, [req.params.user]);
   return res.status(200).json(req.body)
 };

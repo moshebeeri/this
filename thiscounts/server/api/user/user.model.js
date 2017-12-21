@@ -19,6 +19,7 @@ let UserSchema = new Schema({
   email: { type: String, lowercase: true, index: true, unique : false, required : false},
   sms_code: String,
   sms_verified: Boolean,
+  locale: String,
   role: {
     type: String,
     default: 'user'
