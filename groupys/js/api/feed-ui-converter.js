@@ -139,6 +139,7 @@ class FeedConverter {
         response.shardeActivity = this.createFeed(sharedFeed);
         response.user = feed.activity.actor_user;
         response.itemType = 'SHARE';
+        response.fid = feed._id,
         response.shared = response.shardeActivity.itemType;
         response.id = response.shardeActivity.id;
         return response;
