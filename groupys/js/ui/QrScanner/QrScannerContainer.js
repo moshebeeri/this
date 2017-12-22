@@ -23,12 +23,14 @@ class BusinessFollow extends Component {
     }
 
     render() {
-        const {state, actions, group, instance,navigation} = this.props;
+        const {state, actions, group,business, instance,navigation} = this.props;
         return (
             <QrScanner
                 cameraOn={state.cameraOn}
                 searching={state.searching}
                 business={state.business}
+                showAssigmentMessage ={state.showAssigmentMessage}
+                businessAssign ={business}
                 instance={instance}
                 code={state.code}
                 group={group}

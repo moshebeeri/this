@@ -5,6 +5,7 @@ const initialState = {
     searching: false,
     cameraOn: true,
     submitable:false,
+    showAssigmentMessage:false,
     code:'',
     location:'',
 
@@ -19,7 +20,7 @@ export default function scannerForm(state = initialState, action) {
                 ...state,
                 business: undefined,
                 instance:undefined,
-
+                showAssigmentMessage:false,
                 searching:false,
                 cameraOn:true,
                 code:''
@@ -38,6 +39,13 @@ export default function scannerForm(state = initialState, action) {
                 searching:false,
 
             };
+        case actions.SCANNER_SHOW_QRCODE_ASSIGMENT:
+            return {
+                ...state,
+                showAssigmentMessage:true,
+
+            };
+
         case actions.SCANNER_CODE:
             return {
                 ...state,

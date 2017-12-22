@@ -203,6 +203,7 @@ Create                                        : "Create",
 Approve                                       : "Approve",
 Decline                                       : "Decline",
 UnFollow                                      : "Un-follow Business ",
+assignQrCode                                  : "Assign QrCode ",
 
 
 

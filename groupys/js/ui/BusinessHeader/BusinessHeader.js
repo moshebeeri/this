@@ -52,12 +52,15 @@ class BusinessHeader extends Component {
         return undefined;
     }
 
-
+    assignQrCode(){
+        const {business}  = this.props;
+        this.props.navigation.navigate('ReadQrCode',{business:business})
+    }
     back() {
         this.props.navigation.goBack();
     }
     render() {
-        const {categoryTitle, color, businessName,showBack,noMargin,editButton} = this.props;
+        const {categoryTitle, color, businessName,showBack,noMargin,editButton,businessView} = this.props;
         let nameTextStyle = styles.businessNameText;
         if(color){
             nameTextStyle = styles.businessColorNameText;
@@ -86,6 +89,20 @@ class BusinessHeader extends Component {
                 </MenuOption>
             </MenuOptions>
         </Menu>
+
+        if(businessView) {
+            menuAction = <Menu>
+                <MenuTrigger placement="right">
+                    <Icon2 style={{fontSize: 25}} name="options-vertical"/>
+                </MenuTrigger>
+                <MenuOptions>
+
+                    <MenuOption onSelect={this.assignQrCode.bind(this)}>
+                        <Text>{strings.assignQrCode}</Text>
+                    </MenuOption>
+                </MenuOptions>
+            </Menu>
+        }
         if (showBack) {
             back = <TouchableOpacity transparent style={{alignItems:'flex-start',justifyContent:'flex-start',width:40,marginLeft:10,marginRight:10}} onPress={() => this.back()}>
                 <Icon active  color={"#2db6c8"} size={30} name={arrowName}/>
