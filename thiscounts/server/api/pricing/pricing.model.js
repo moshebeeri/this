@@ -20,6 +20,7 @@ let PricingSchema = new Schema({
     points: Number
   }],
   points: Number,
+  lastFreeTier: Date,
 });
 
 PricingSchema.plugin(autopopulate);

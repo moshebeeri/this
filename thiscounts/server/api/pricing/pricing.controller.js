@@ -5,8 +5,8 @@ let Pricing = require('./pricing.model');
 const async = require('async');
 const Business = require('../business/business.model');
 const ShoppingChain = require('../shoppingChain/shoppingChain.model');
-const Promotion = require('../promotion/promotion.model');
 const Mall = require('../mall/mall.model');
+const Brand = require('../brand/brand.model');
 
 function findEntity(id, callback) {
   async.parallel({
@@ -16,11 +16,11 @@ function findEntity(id, callback) {
       shoppingChain: function (callback) {
         ShoppingChain.findById(id, callback);
       },
-      promotion: function (callback) {
-        Promotion.findById(id, callback);
-      },
       mall: function (callback) {
         Mall.findById(id, callback);
+      },
+      brand: function (callback) {
+        Brand.findById(id, callback);
       },
     },
     function (err, results) {
@@ -37,6 +37,11 @@ function findEntity(id, callback) {
     })
 }
 
+function firstOfThisMonth(){
+  const now = Date.now();
+  new Date(now.getFullYear(), now.getMonth(), 1, 0, 0, 0, 0)
+}
+
 function entityPricing(entity, callback){
   if(entity.pricing)
     return callback(null, entity);
@@ -44,7 +49,8 @@ function entityPricing(entity, callback){
     freeTier:[],
     purchases: [],
     points: 0,
-  }, function(err, pricing) {
+    lastFreeTier: firstOfThisMonth()
+}, function(err, pricing) {
     entity.pricing = pricing;
     entity.save(callback);
   })
