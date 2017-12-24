@@ -6,6 +6,7 @@ const initialState = {
     cameraOn: true,
     submitable:false,
     showAssigmentMessage:false,
+    showAssigmentMessageFailed:false,
     code:'',
     location:'',
 
@@ -23,6 +24,7 @@ export default function scannerForm(state = initialState, action) {
                 showAssigmentMessage:false,
                 searching:false,
                 cameraOn:true,
+                showAssigmentMessageFailed:false,
                 code:''
             };
         case actions.SCANNER_SHOW_SEARCH_SPIN:
@@ -43,6 +45,13 @@ export default function scannerForm(state = initialState, action) {
             return {
                 ...state,
                 showAssigmentMessage:true,
+
+            };
+
+        case actions.SCANNER_SHOW_QRCODE_ASSIGMEN_FAILED:
+            return {
+                ...state,
+                showAssigmentMessageFailed:true,
 
             };
 
