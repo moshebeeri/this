@@ -186,7 +186,7 @@ exports.feedback = function (req, res) {
 exports.blocked = function (req, res) {
   Activity.findById(req.params.id, ['blocked'], function (err, blocked) {
     if (err) { return handleError(res, err); }
-    return res.status(200).send(blocked);
+    return res.status(200).json({blocked});
   })
 };
 
