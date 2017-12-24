@@ -2,7 +2,7 @@
 
 let _ = require('lodash');
 let async = require('async');
-let utils = require('../../components/utils').createUtils();
+const utils = require('../../components/utils').createUtils();
 
 let logger = require('../../components/logger').createLogger();
 // let graphTools = require('../../components/graph-tools');
