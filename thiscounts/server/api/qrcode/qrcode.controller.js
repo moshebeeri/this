@@ -62,9 +62,6 @@ exports.allocate = function(req, res) {
 exports.assign = function(req, res) {
   QRCode.find({code: req.params.code}, function (err, qrcode) {
     if(err) { return handleError(res, err); }
-    if(!qrcode) { return handleError(res, new Error(`code not found ${req.params.code}`)); }
-    console.log(`findQRCodeByCode assign ${JSON.stringify(qrcode)}`);
-
     if(qrcode.assigned) {return res.status(304).json(qrcode)}
     qrcode.assignment = req.body.assignment;
     qrcode.action = req.body.action;

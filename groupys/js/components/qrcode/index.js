@@ -31,13 +31,17 @@ class Qrcode extends Component {
         if(navigation.state.params && navigation.state.params.group){
             group = navigation.state.params.group;
         }
+        let business
+        if(navigation.state.params && navigation.state.params.business){
+            business = navigation.state.params.business;
+        }
         return <View style={{flex: 1, backgroundColor:'#b7b7b7'}}>
             <View style={{flex:2,marginBottom:10}}>
             <FormHeader showBack navigation={navigation}
                         title={strings.QrScanner} bgc="#2db6c8"/>
             </View>
             <View style={{flex:5,alignItems:'center',justifyContent:'center'}}>
-            <QrScanner group={group} navigation={navigation}/>
+            <QrScanner business={business} group={group} navigation={navigation}/>
             </View>
         </View>
     }

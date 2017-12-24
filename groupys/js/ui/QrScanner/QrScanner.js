@@ -19,12 +19,22 @@ export default class BusinessFollow extends Component {
         }
     }
 
+    scaneQrCode(scanCode) {
+        const{scanResult,businessAssign} = this.props
+        if(businessAssign){
+            scanResult(scanCode,businessAssign);
+        }else{
+            scanResult(scanCode)
+        }
+
+
+    }
     back() {
         this.props.navigation.goBack();
     }
 
     createView() {
-        const {navigation, code, cameraOn, searching, business, instance, group, followBusiness, groupFollowBusiness, scanResult, realizePromotion} = this.props;
+        const {showAssigmentMessage,navigation, code, cameraOn, searching, business, instance, group, followBusiness, groupFollowBusiness, scanResult, realizePromotion} = this.props;
         let followComponent = undefined;
         if (business) {
             let followStyle = {
@@ -49,13 +59,20 @@ export default class BusinessFollow extends Component {
 
             }
         }
+
+        if(showAssigmentMessage){
+            return <View style={styles.follow_container}>
+                <Text>Assignment of QrcCode succeeded</Text>u
+            </View>
+
+        }
         return ( <View style={styles.follow_container}>
 
                 {cameraOn && <View style={styles.payment_camera_container}><Camera
                     ref={(cam) => {
                         this.camera = cam;
                     }}
-                    onBarCodeRead={scanResult}
+                    onBarCodeRead={this.scaneQrCode.bind(this)}
                     style={styles.payment_camera}
                     aspect={Camera.constants.Aspect.fill}>
                 </Camera>
