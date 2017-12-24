@@ -34,7 +34,11 @@ let ActivitySchema = new Schema({
     coordinates: []
   },
   action: {type: String, default: ''}, //ex: has replied to:, or started following:
-  message: {type: String, default: ''}
+  message: {type: String, default: ''},
+
+  //Block reported
+  feedback: {},
+  blocked: Boolean,
 
 });
 ActivitySchema.plugin(autopopulate);

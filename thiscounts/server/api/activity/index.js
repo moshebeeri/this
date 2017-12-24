@@ -13,6 +13,7 @@ router.post('/', auth.hasRole('admin'), controller.create);
 router.put('/:id', auth.hasRole('admin'), controller.update);
 router.patch('/:id', auth.hasRole('admin'), controller.update);
 router.get('/share/:activity/:user', auth.isAuthenticated(), controller.share);
-router.get('/report/:id', auth.isAuthenticated(), controller.report);
+router.get('/feedback/:id/:type', auth.isAuthenticated(), controller.feedback);
+router.get('/blocked/:id/', auth.isAuthenticated(), controller.blocked);
 
 module.exports = router;

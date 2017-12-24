@@ -4,21 +4,21 @@
 
 'use strict';
 
-let Mall = require('./mall.model');
+let Translate = require('./translate.model');
 
 exports.register = function(socket) {
-  Mall.schema.post('save', function (doc) {
+  Translate.schema.post('save', function (doc) {
     onSave(socket, doc);
   });
-  Mall.schema.post('remove', function (doc) {
+  Translate.schema.post('remove', function (doc) {
     onRemove(socket, doc);
   });
 }
 
 function onSave(socket, doc, cb) {
-  socket.emit('mall:save', doc);
+  socket.emit('translate:save', doc);
 }
 
 function onRemove(socket, doc, cb) {
-  socket.emit('mall:remove', doc);
+  socket.emit('translate:remove', doc);
 }

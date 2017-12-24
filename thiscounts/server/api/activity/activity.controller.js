@@ -1,6 +1,7 @@
 'use strict';
 
 const _ = require('lodash');
+const Enum = require('enum');
 const Activity = require('./activity.model');
 let activityUtils = require('../../components/activity').createActivity();
 let graphTools = require('../../components/graph-tools');
@@ -126,9 +127,67 @@ exports.share = function (req, res) {
   });
 };
 
-exports.report = function (req, res) {
-  console.log(`got a report for ${req.params.id}`);
-  return res.status(200).send();
+let Feedback = new Enum(['Offensive', 'Nudity', 'Hate', 'Violence', 'Weapons'], { ignoreCase: true });
+
+function shouldBlock(activity) {
+  if(activity.blocked)
+    return true;
+  let count = 0;
+  let counts = {};
+  Object.keys(activity.feedback).forEach(type => {
+    let typeList = activity.feedback[type];
+    count += typeList.length;
+    counts[type] = typeList.length
+  });
+
+  function checkByType(counts) {
+    if(counts.Offensive && counts.Offensive > 10)
+      return true;
+    if(counts.Nudity && counts.Nudity > 10)
+      return true;
+    if(counts.Hate && counts.Hate > 10)
+      return true;
+    if(counts.Violence && counts.Violence > 10)
+      return true;
+    if(counts.Weapons && counts.Weapons > 10)
+      return true;
+
+    return false;
+  }
+
+  if(count>1)
+    return true;
+  else if(checkByType(counts))
+
+  return false;
+}
+
+function updateFeedback(activity, userId, type) {
+  let feedback = activity.feedback;
+  if(!feedback[type])
+    feedback[type] = [];
+  feedback[type].push(userId);
+  activity.feedback = feedback;
+  activity.blocked = shouldBlock(activity);
+  activity.save()
+}
+
+exports.feedback = function (req, res) {
+  if(!Feedback.get(req.params.type)) { return handleError(res, new Error('unsupported type')); }
+
+  Activity.findById(req.params.id, function (err, activity) {
+    if (err) { return handleError(res, err); }
+    if(!activity) { return res.status(404).send('Not Found'); }
+    updateFeedback(activity, req.params.id, req.params.type);
+    return res.status(200).send();
+  })
+};
+
+exports.blocked = function (req, res) {
+  Activity.findById(req.params.id, ['blocked'], function (err, blocked) {
+    if (err) { return handleError(res, err); }
+    return res.status(200).send(blocked);
+  })
 };
 
 function handleError(res, err) {
