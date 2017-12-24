@@ -65,7 +65,7 @@ export default class FeedPromotion extends Component {
     }
 
     render() {
-        const {refresh, item, save, shared, like, unlike, showUsers, comment, token, location,hideSocial,realize} = this.props;
+        const {refresh,showActions, item, save, shared, like, unlike, showUsers, comment, token, location,hideSocial,realize} = this.props;
         const styles = this.createPromotionStyle();
          const image = this.createImageComponent(item, styles);
         const container = this.createContainerStyle(item);
@@ -100,6 +100,7 @@ export default class FeedPromotion extends Component {
                     <BusinessHeader  navigation={this.props.navigation} business={item.business}
                                     categoryTitle={categoruTitle} businessLogo={item.business.logo}
                                     businessName={item.business.name} noMargin
+                                     id={item.activityId} showActions={showActions}
                                     />
                     </View>
 

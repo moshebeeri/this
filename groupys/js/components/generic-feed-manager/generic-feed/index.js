@@ -109,18 +109,18 @@ export default class GenericFeedItem extends Component {
     }
 
     render() {
-        const {item, actions, token, location} = this.props;
+        const {item, actions, token, location,showActions} = this.props;
         const showUsers = this.showUsers.bind(this);
         const comment = this.comment.bind(this);
         switch (item.itemType) {
             case 'PROMOTION':
-                return this.createFeedView(<FeedPromotion refresh={actions.refresh} token={token} comment={comment}
+                return this.createFeedView(<FeedPromotion showActions={showActions}  refresh={actions.refresh} token={token} comment={comment}
                                                           location={location}
                                                           navigation={this.props.navigation} item={item}
                                                           like={actions.like} unlike={actions.unlike}
                                                           showUsers={showUsers} save={actions.saveFeed}/>)
             case 'SHARE':
-                return this.createFeedView(<FeedShared refresh={actions.refresh} token={token} comment={this.commentShare.bind(this)}
+                return this.createFeedView(<FeedShared showActions={showActions}  refresh={actions.refresh} token={token} comment={this.commentShare.bind(this)}
                                                           location={location}
                                                           navigation={this.props.navigation} item={item}
                                                           like={actions.like} unlike={actions.unlike}
@@ -129,14 +129,14 @@ export default class GenericFeedItem extends Component {
             case 'MESSAGE':
                 return this.createFeedView(<FeedMessage token={token} navigation={this.props.navigation} item={item}/>)
             case'POST':
-                return this.createFeedView(<FeedPost token={token} navigation={this.props.navigation} item={item} like={actions.like} unlike={actions.unlike}
+                return this.createFeedView(<FeedPost showActions={showActions} token={token} navigation={this.props.navigation} item={item} like={actions.like} unlike={actions.unlike}
                                                      showUsers={showUsers} comment={comment}/>)
 
             case 'WELCOME':
 
                 return this.createFeedView(<FeedWelcome token={token} navigation={this.props.navigation} item={item}/>)
             default:
-                return this.createFeedView(<FeedBusiness location={location} token={token} refresh={actions.refresh}
+                return this.createFeedView(<FeedBusiness showActions={showActions}  location={location} token={token} refresh={actions.refresh}
                                                          navigation={this.props.navigation} item={item}
                                                          comment={comment} like={actions.like} unlike={actions.unlike}
                                                          showUsers={showUsers} save={actions.saveFeed}

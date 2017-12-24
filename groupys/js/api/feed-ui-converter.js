@@ -24,6 +24,7 @@ class FeedConverter {
                 id: feed._id,
                 fid: feed._id,
                 key: feed._id,
+                activityId: feed.activity._id,
             }
         }
         if (feed.activity.action === 'group_message' || feed.activity.action === 'group_follow') {
@@ -45,6 +46,7 @@ class FeedConverter {
             feed: feed,
             id: feed.activity.post._id,
             fid: feed._id,
+            activityId: feed.activity._id,
             generalId: feed.activity.post._id,
             entities: [{post: feed.activity.post._id}],
         }
@@ -140,8 +142,10 @@ class FeedConverter {
         response.user = feed.activity.actor_user;
         response.itemType = 'SHARE';
         response.fid = feed._id,
+
         response.shared = response.shardeActivity.itemType;
         response.id = response.shardeActivity.id;
+        response.activityId = feed.activity._id;
         return response;
     }
 
@@ -209,6 +213,7 @@ class FeedConverter {
                 name: feed.activity.business.name,
                 address: feed.activity.business.address,
                 website: feed.activity.business.website,
+                activityId: feed.activity._id,
                 email: feed.activity.business.email,
                 city: feed.activity.business.city,
                 businessAddress: feed.activity.business.city + ' ' + feed.activity.business.address,
@@ -225,6 +230,7 @@ class FeedConverter {
                 address: feed.activity.business.address,
                 website: feed.activity.business.website,
                 email: feed.activity.business.email,
+                activityId: feed.activity._id,
                 social: socialState,
                 name: feed.activity.business.name,
                 actor: feed.activity.actor_user._id,
@@ -403,6 +409,9 @@ class FeedConverter {
             responseFeed.id = instance._id;
             responseFeed.fid = feed._id;
             responseFeed.key = feed._id;
+            if(feed.activity) {
+                responseFeed.activityId = feed.activity._id;
+            }
             responseFeed.promotionEntity = promotion;
             responseFeed.location = instance.location;
             responseFeed.generalId = instance._id;

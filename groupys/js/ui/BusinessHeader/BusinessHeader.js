@@ -52,6 +52,10 @@ class BusinessHeader extends Component {
         return undefined;
     }
 
+    showFeedBack(){
+        const {showActions,id} = this.props;
+        showActions(true,id);
+    }
     assignQrCode(){
         const {business}  = this.props;
         this.props.navigation.navigate('ReadQrCode',{business:business})
@@ -60,7 +64,7 @@ class BusinessHeader extends Component {
         this.props.navigation.goBack();
     }
     render() {
-        const {categoryTitle, color, businessName,showBack,noMargin,editButton,businessView} = this.props;
+        const {showActions,categoryTitle, color, businessName,showBack,noMargin,editButton,businessView} = this.props;
         let nameTextStyle = styles.businessNameText;
         if(color){
             nameTextStyle = styles.businessColorNameText;
@@ -80,26 +84,30 @@ class BusinessHeader extends Component {
 
         let menuAction = <Menu>
             <MenuTrigger placement="right">
-                <Icon2 style={{fontSize: 25}} name="options-vertical"/>
+                <Icon2 style={{paddingLeft:10,fontSize: 25}} name="options"/>
             </MenuTrigger>
             <MenuOptions>
 
                 <MenuOption onSelect={this.unFollowBusiness.bind(this)}>
                     <Text>{strings.UnFollow}</Text>
                 </MenuOption>
+                {showActions && <MenuOption onSelect={this.showFeedBack.bind(this)}>
+                    <Text>{strings.reportActivity}</Text>
+                </MenuOption>}
             </MenuOptions>
         </Menu>
 
         if(businessView) {
             menuAction = <Menu>
                 <MenuTrigger placement="right">
-                    <Icon2 style={{fontSize: 25}} name="options-vertical"/>
+                    <Icon2 style={{paddingLeft:10,fontSize: 25}} name="options"/>
                 </MenuTrigger>
                 <MenuOptions>
 
                     <MenuOption onSelect={this.assignQrCode.bind(this)}>
                         <Text>{strings.assignQrCode}</Text>
                     </MenuOption>
+
                 </MenuOptions>
             </Menu>
         }
