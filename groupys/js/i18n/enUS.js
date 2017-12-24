@@ -204,7 +204,8 @@ Approve                                       : "Approve",
 Decline                                       : "Decline",
 UnFollow                                      : "Un-follow Business ",
 assignQrCode                                  : "Assign QrCode ",
-
+AssignmenofQrcCodesucceeded                   : "Assignment of QrcCode succeeded",
+AssignmenofQrcCodefailed                      : "Assignment of QrcCode failed"
 
 
 

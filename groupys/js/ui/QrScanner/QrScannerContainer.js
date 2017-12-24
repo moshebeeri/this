@@ -30,6 +30,7 @@ class BusinessFollow extends Component {
                 searching={state.searching}
                 business={state.business}
                 showAssigmentMessage ={state.showAssigmentMessage}
+                showAssigmentMessageFailed ={state.showAssigmentMessageFailed}
                 businessAssign ={business}
                 instance={instance}
                 code={state.code}
