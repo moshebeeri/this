@@ -6,14 +6,14 @@ const autopopulate = require('mongoose-autopopulate');
 
 let ShoppingChainSchema = new Schema({
   social_state : {},
+  pricing: {type: Schema.ObjectId, ref: 'Pricing', required: false},
   name: String,
+  description: String,
   gid: { type: Number, index: true},
   logo: String,
   client: {},
   pictures : [],
   video: {type: Schema.ObjectId, ref: 'Video', autopopulate: true},
-  info: String,
-  active: Boolean
 });
 ShoppingChainSchema.plugin(autopopulate);
 
