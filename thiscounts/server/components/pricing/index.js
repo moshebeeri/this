@@ -1,4 +1,5 @@
 'use strict';
+const PricingController = require('../../api/pricing/pricing.controller');
 
 function Pricing() {
 }
@@ -17,14 +18,27 @@ Pricing.chargeActivityDistribution =
     if (!payer)
       return callback(null, null);
     let pricing = payer.pricing;
-    const charge = {
-      activity: activity,
-      date: Date.now(),
-      points: activity.distributions
-    };
-    pricing.charges.push(charge);
-    pricing.points -= charge.points;
-    pricing.save(callback)
+
+    function doCharge(pricing) {
+      const charge = {
+        activity: activity,
+        date: Date.now(),
+        points: activity.distributions
+      };
+      pricing.charges.push(charge);
+      pricing.points -= charge.points;
+      pricing.save(callback)
+    }
+
+    if(pricing){
+      doCharge(pricing);
+    }else{
+      PricingController.createEntityPricing(payer, function (err, payer) {
+        if(err) return callback(err);
+        doCharge(payer.pricing);
+      })
+    }
+
   };
 
 Pricing.payerByInstance =

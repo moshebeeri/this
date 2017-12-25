@@ -355,7 +355,7 @@ function instance_group_activity(instance, group) {
   }, function(err, activity){
     group.preview.instance_activity = activity._id;
     group.save();
-    pricing.chargeActivityDistribution(pricing.payerByInstance(instance), activity);
+    pricing.chargeActivityDistribution(pricing.payerByGroup(group), activity);
   });
 }
 
