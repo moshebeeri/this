@@ -30,7 +30,9 @@ function getActivityActor(activity) {
 
 //pagination http://blog.mongodirector.com/fast-paging-with-mongodb/
 function update_feeds(effected, activity) {
+  activity.distributions = 0;
   if(!activity.audience || _.includes(activity.audience, 'FOLLOWERS')) {
+    activity.distributions += effected.length;
     effected.forEach(function (entity) {
       Feed.create({
         entity: entity._id,
@@ -43,6 +45,7 @@ function update_feeds(effected, activity) {
     });
   }
   if (_.includes(activity.audience, 'SELF')) {
+    activity.distributions += 1;
     Feed.create({
       entity: getActivityActor(activity),
       activity: activity._id
@@ -79,7 +82,6 @@ Activity.prototype.activity = function activity(act, callback) {
 };
 
 Activity.prototype.create = function create(act, callback) {
-  act.timestamp = Date.now();
   this.activity(act, function (err, activity) {
     if(callback){
       if (err) callback(err);
@@ -91,6 +93,11 @@ Activity.prototype.create = function create(act, callback) {
 
 function activity_impl(act, callback) {
   act.timestamp = Date.now();
+
+  function handleSuccess(activity) {
+    return activity.save(callback)
+  }
+
   ActivitySchema.create(act, function (err, activity) {
     if (err) {
       callback(err, null);
@@ -101,13 +108,13 @@ function activity_impl(act, callback) {
       let effected = [];
       activity.ids.forEach(_id => effected.push({_id:_id}));
       update_feeds(effected, activity);
-      return callback(null, activity)
+      return handleSuccess(activity)
     }
 
     if(act.audience && !_.includes(act.audience, 'FOLLOWERS')) {
       activity.audience = act.audience;
       update_feeds([], activity);
-      return callback(null, activity)
+      return handleSuccess(activity)
     }
 
     if (activity.actor_user) {
@@ -116,7 +123,7 @@ function activity_impl(act, callback) {
           return callback(err, null);
         }
         update_feeds(effected, activity);
-        callback(null, activity)
+        return handleSuccess(activity)
       });
     }
     else if (activity.actor_business) {
@@ -125,7 +132,7 @@ function activity_impl(act, callback) {
           return callback(err, null);
         }
         update_feeds(effected, activity);
-        callback(null, activity)
+        return handleSuccess(activity)
       });
     }
     else if (activity.actor_mall) {
@@ -134,7 +141,7 @@ function activity_impl(act, callback) {
           return callback(err, null);
         }
         update_feeds(effected, activity);
-        callback(null, activity)
+        return handleSuccess(activity)
       });
     }
     else if (activity.actor_chain) {
@@ -143,7 +150,7 @@ function activity_impl(act, callback) {
           return callback(err, null);
         }
         update_feeds(effected, activity);
-        callback(null, activity)
+        return handleSuccess(activity)
       });
     }
     else if (activity.actor_group) {
@@ -152,10 +159,11 @@ function activity_impl(act, callback) {
           return callback(err, null);
         }
         update_feeds(effected, activity);
-        callback(null, activity)
+        return handleSuccess(activity)
       });
     }
   });
+  return callback(new Error('Activity not distributed expected ids. audience or actor_*'));
 }
 
 Activity.prototype.action_activity = function action_activity(userId, itemId, action, callback) {
