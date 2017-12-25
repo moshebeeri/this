@@ -18,6 +18,8 @@ const spatial = require('../../components/spatial').createSpatial();
 const instance = require('../../components/instance');
 const MongodbSearch = require('../../components/mongo-search');
 const feed = require('../../components/feed-tools');
+const pricing = require('../../components/pricing');
+
 
 exports.search = MongodbSearch.create(Promotion);
 
@@ -90,14 +92,13 @@ exports.test_me = function (req, res) {
 };
 
 function applyToGroups(promotion, instances){
-  console.log(JSON.stringify(instances, null, 2));
   instances.forEach(instance => {
     let groups;
     if (instance && promotion && (groups = promotion.distribution.groups)) {
       //TODO: improve by querying once
       groups.forEach(group =>{
         Group.findById(group, function (err, group) {
-          if (err) return console.error(err); //return callback(err);
+          if (err) return console.error(err);
           if(group)
             instance_group_activity(instance, group);
         })
@@ -340,6 +341,7 @@ function user_instance_eligible_activity(userId, instance){
     };
     act.actor_business = instance.promotion.entity.business;
     activity.create(act);
+    pricing.chargeActivityDistribution(pricing.payerByInstance(instance), activity);
   }
 }
 
@@ -353,6 +355,7 @@ function instance_group_activity(instance, group) {
   }, function(err, activity){
     group.preview.instance_activity = activity._id;
     group.save();
+    pricing.chargeActivityDistribution(pricing.payerByInstance(instance), activity);
   });
 }
 
