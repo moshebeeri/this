@@ -1,7 +1,7 @@
+'use strict';
+
 const gaussian = require('gaussian');
 const ss = require('simple-statistics');
-
-'use strict';
 
 function Distributor() {
 }

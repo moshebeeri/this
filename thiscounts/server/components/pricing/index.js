@@ -1,11 +1,7 @@
 'use strict';
 
-let mongoose = require('mongoose'),
-    Schema = mongoose.Schema;
-const utils = require('../../components/utils').createUtils();
-const autopopulate = require('mongoose-autopopulate');
-
-
+/*
+*
 let PricingSchema = new Schema({
   charges: [{
     activity: {type: Schema.ObjectId, ref: 'Activity', autopopulate: true},
@@ -27,6 +23,15 @@ let PricingSchema = new Schema({
   points: Number,
   lastFreeTier: Date,
 });
+* */
+function Pricing() {
+}
 
-PricingSchema.plugin(autopopulate);
-module.exports = mongoose.model('Pricing', PricingSchema);
+
+Pricing.chargeActivityDistribution =
+  Pricing.prototype.chargeActivityDistribution = function (entity, activity) {
+    let pricing  = entity.pricing;
+  };
+
+module.exports = Pricing;
+
