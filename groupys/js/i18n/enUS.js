@@ -205,7 +205,18 @@ Decline                                       : "Decline",
 UnFollow                                      : "Un-follow Business ",
 assignQrCode                                  : "Assign QrCode ",
 AssignmenofQrcCodesucceeded                   : "Assignment of QrcCode succeeded",
-AssignmenofQrcCodefailed                      : "Assignment of QrcCode failed"
+AssignmenofQrcCodefailed                      : "Assignment of QrcCode failed",
+reportActivity                                : "Give Feedback",
+Offensive                                     : "Offensive",
+Nudity                                        : "Nudity",
+Hate                                          : "Hate",
+Violence                                      : "Violence",
+Weapons                                       : "Weapons",
+falseDeal                                     : "False Deal",
+
+
+
+
 
 
 

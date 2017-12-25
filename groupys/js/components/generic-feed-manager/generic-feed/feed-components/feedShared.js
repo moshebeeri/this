@@ -81,12 +81,12 @@ export default class FeedShared extends Component {
         };
     }
     createSharedActivity(item) {
-        const {refresh, like, unlike, showUsers, comment, token, location} = this.props;
+        const {refresh, like, unlike, showUsers, comment, token, location,showActions} = this.props;
         switch (item.shared) {
             case 'PROMOTION':
                 return this.createFeedView(<FeedPromotion shared refresh={refresh} token={token} comment={comment}
                                                           location={location}
-
+                                                          showActions={showActions}
                                                           navigation={this.props.navigation} item={item.shardeActivity}
                                                           like={like} unlike={unlike}
                                                           showUsers={showUsers}/>)
@@ -96,11 +96,12 @@ export default class FeedShared extends Component {
 
 
             case'POST':
-                return this.createFeedView(<FeedPost shared token={token} navigation={this.props.navigation} item={item.shardeActivity} like={actions.like} unlike={actions.unlike}
+                return this.createFeedView(<FeedPost  showActions={showActions}  shared token={token} navigation={this.props.navigation} item={item.shardeActivity} like={actions.like} unlike={actions.unlike}
                                                      showUsers={showUsers} comment={comment}/>)
 
             default:
                 return this.createFeedView(<FeedBusiness shared location={location} token={token} refresh={refresh}
+                                                         showActions={showActions}
                                                          navigation={this.props.navigation}
                                                          item={item.shardeActivity}
                                                          comment={comment} like={like} unlike={unlike}

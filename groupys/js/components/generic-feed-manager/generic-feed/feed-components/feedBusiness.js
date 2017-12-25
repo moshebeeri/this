@@ -58,7 +58,7 @@ export default class FeedBusiness extends Component {
 
     }
     createBusiness(item, like, unlike, showUsers, comment) {
-        const {location, refresh} = this.props;
+        const {location, refresh,showActions} = this.props;
         if (!item.name) {
             return <View></View>;
         }
@@ -72,6 +72,7 @@ export default class FeedBusiness extends Component {
                     <BusinessHeader  navigation={this.props.navigation} business={item.business}
                                      categoryTitle={item.categoryTitle} businessLogo={item.businessLogo}
                                      businessName={item.business.name} noMargin
+                                     id={item.activityId} showActions={showActions}
                     />
                     </View>
                     <View style={{width:width-15,paddingBottom:5,backgroundColor:'white',justifyContent:'flex-start',alignItems:'flex-start'}}>

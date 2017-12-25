@@ -5,7 +5,7 @@ let Product = require('./product.model');
 let graphTools = require('../../components/graph-tools');
 let graphModel = graphTools.createGraphModel('product');
 let barcodeGraphModel = graphTools.createGraphModel('barcode');
-let utils = require('../../components/utils').createUtils();
+const utils = require('../../components/utils').createUtils();
 let activity = require('../../components/activity').createActivity();
 let MongodbSearch = require('../../components/mongo-search');
 

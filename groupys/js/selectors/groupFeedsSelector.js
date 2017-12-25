@@ -40,6 +40,7 @@ export const getFeeds = createSelector([  getStateFeeds,getPosts,getInstance,get
                 });
                 let newFeedsList = assembledFeeds.map(feed => feedUiConverter.createFeed(feed));
                 newFeedsList = newFeedsList.filter(feed => feed.id);
+                newFeedsList = newFeedsList.filter(feed => !feed.blocked);
                 feedsUi[groupId] = newFeedsList;
             })
         }

@@ -2,11 +2,117 @@
 
 let _ = require('lodash');
 let Pricing = require('./pricing.model');
-let location = require('../../components/location').createLocation();
-let MongodbSearch = require('../../components/mongo-search');
+const async = require('async');
+const Business = require('../business/business.model');
+const ShoppingChain = require('../shoppingChain/shoppingChain.model');
+const Mall = require('../mall/mall.model');
+const Brand = require('../brand/brand.model');
 
+function findEntity(id, callback) {
+  async.parallel({
+      business: function (callback) {
+        Business.findById(id, callback);
+      },
+      shoppingChain: function (callback) {
+        ShoppingChain.findById(id, callback);
+      },
+      mall: function (callback) {
+        Mall.findById(id, callback);
+      },
+      brand: function (callback) {
+        Brand.findById(id, callback);
+      },
+    },
+    function (err, results) {
+      if (err)
+        return callback(err, null);
 
-exports.search = MongodbSearch.create(Pricing);
+      for (let key in results) {
+        let updated = results[key];
+        if (updated) {
+          return callback(null, updated);
+        }
+      }
+      return callback(null, null);
+    })
+}
+
+function firstOfThisMonth(){
+  const now = Date.now();
+  new Date(now.getFullYear(), now.getMonth(), 1, 0, 0, 0, 0)
+}
+
+function entityPricing(entity, callback){
+  if(entity.pricing)
+    return callback(null, entity);
+  Pricing.create({
+    freeTier:[],
+    purchases: [],
+    points: 0,
+    lastFreeTier: firstOfThisMonth()
+}, function(err, pricing) {
+    entity.pricing = pricing;
+    entity.save(callback);
+  })
+}
+
+exports.braintree = function(req, res) {
+  //payment received through braintree gateway
+  findEntity(req.params.id, function (err, entity) {
+    if(!entity) { return res.status(404).send('Not Found'); }
+    entityPricing(entity, function(err, entity) {
+      if (err) {
+        return handleError(res, err);
+      }
+      let pricing = entity.pricing;
+      if (!pricing.purchases) pricing.purchases = [];
+      if (!pricing.points) pricing.points = 0;
+
+      const purchasedPoints = {
+        user: req.user._id,
+        date: Date.now(),
+        payed: 1,
+        currency: '$',
+        points: 1000
+      };
+      pricing.purchases.push(purchasedPoints);
+      pricing.points += purchasedPoints.points;
+      pricing.save(function (err, entity) {
+        if (err) {
+          return handleError(res, err);
+        }
+        return res.status(200).json(entity.pricing);
+      });
+    })
+  })
+};
+
+exports.freeTier = function(req, res) {
+  findEntity(req.params.id, function (err, entity) {
+    if(!entity) { return res.status(404).send('Not Found'); }
+    entityPricing(entity, function(err, entity) {
+      if (err) {
+        return handleError(res, err);
+      }
+      let pricing = entity.pricing;
+      if (!pricing.freeTier) pricing.freeTier = [];
+      if (!pricing.points) pricing.points = 0;
+      const freePoints = {
+        user: req.user._id,
+        date: Date.now(),
+        points: 1000
+      };
+      pricing.freeTier.push(freePoints);
+      pricing.points += freePoints.points;
+      pricing.save(function (err, entity) {
+        if (err) {
+          return handleError(res, err);
+        }
+        return res.status(200).json(entity.pricing);
+      });
+    })
+  })
+};
 
 // Get list of pricings
 exports.index = function(req, res) {
@@ -27,9 +133,9 @@ exports.show = function(req, res) {
 
 // Creates a new pricing in the DB.
 exports.create = function(req, res) {
-  Pricing.create(req.body, function(err, invite) {
+  Pricing.create(req.body, function(err, pricing) {
     if(err) { return handleError(res, err); }
-    return res.json(201, invite);
+    return res.json(201, pricing);
   });
 };
 

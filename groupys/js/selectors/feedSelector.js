@@ -35,6 +35,8 @@ export const getFeeds = createSelector([ getStateFeeds,getStatePosts,getStateBus
                 feedsUi = assembledFeeds.map(feed => feedUiConverter.createFeed(feed));
                 feedsUi = feedsUi.filter(feed => feed);
                 feedsUi = feedsUi.filter(filter => filter.id);
+                feedsUi = feedsUi.filter(filter => !filter.blocked);
+
             } catch (error) {
                 return feedsUi;
             }

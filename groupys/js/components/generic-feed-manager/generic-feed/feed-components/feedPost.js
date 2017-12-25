@@ -27,7 +27,7 @@ import stylesPortrate from './styles'
 import stylesLandscape from './styles_lendscape'
 import StyleUtils from '../../../../utils/styleUtils'
 import * as componentCreator from "./feedCommonView";
-import {SocialState,Video} from '../../../../ui/index';
+import {SocialState,Video,ActivityReport} from '../../../../ui/index';
 import PageRefresher from '../../../../refresh/pageRefresher'
 
 const {width, height} = Dimensions.get('window');
@@ -35,7 +35,7 @@ const vw = width / 100;
 const vh = height / 100;
 const vmin = Math.min(vw, vh);
 const vmax = Math.max(vw, vh);
-export default class FeedPromotion extends Component {
+export default class FeedPost extends Component {
     constructor() {
         super();
     }
@@ -61,7 +61,7 @@ export default class FeedPromotion extends Component {
     }
 
     render() {
-        const {refresh, item, save, shared, like, unlike, showUsers, comment, token, location, hideSocial, realize} = this.props;
+        const {refresh, item, save, shared, like, unlike, showUsers, comment, token, showActions} = this.props;
         const styles = this.createPromotionStyle();
          const image = this.createImageComponent(item, styles);
         const container = this.createContainerStyle(item);
@@ -79,7 +79,9 @@ export default class FeedPromotion extends Component {
         }
         const result =
             <InViewPort onChange={this.visited.bind(this)} style={container}>
+
                 <View style={styles.promotion_card}>
+
                     <View style={{flexDirection:'row',backgroundColor:'white',height:60,width: width - 15}}>
                         <View style={{paddingLeft:10,justifyContent:'center'}}>
                         <Thumbnail  square meduim source={item.avetar}/>
@@ -88,7 +90,9 @@ export default class FeedPromotion extends Component {
                             <Text>{item.name}</Text>
                             <Text>{item.feed.activity.post.title}</Text>
                         </View>
-
+                        <View style={{flex:1,paddingRight:10,alignItems:'flex-end',justifyContent:'center'}}>
+                            <ActivityReport id={item.activityId} showActions={showActions}/>
+                        </View>
                     </View>
 
                     <View style={{flex:2, width: width - 15,paddingBottom:10, backgroundColor: 'white'}}>
@@ -115,6 +119,7 @@ export default class FeedPromotion extends Component {
                                                      share={item.social.share} shares={item.social.shares}
                                                      shareAction={showUsers}/>}
                     </View>}
+
                 </View>
             </InViewPort>;
         return result;

@@ -7,6 +7,7 @@ import {connect} from "react-redux";
 import * as feedsAction from "../../actions/feedsMain";
 import {getFeeds} from "../../selectors/feedSelector";
 import * as userAction from "../../actions/user";
+import * as activityAction from "../../actions/activity";
 import Icon2 from "react-native-vector-icons/Ionicons";
 import {createSelector} from "reselect";
 import {View,I18nManager} from 'react-native';
@@ -16,6 +17,9 @@ import {Fab,} from 'native-base';
 class Feed extends Component {
     constructor(props) {
         super(props);
+        this.state = {
+            showFab:true,
+        }
     }
 
     componentWillMount() {
@@ -29,9 +33,14 @@ class Feed extends Component {
     navigateToAdd() {
         this.props.navigation.navigate('PostForm')
     }
+    showFab(show){
+        this.setState({
+            showFab:show
+        })
+    }
 
     render() {
-        const {navigation, loadingDone, showTopLoader, feeds, userFollower, actions, token, user, location,nextBulkLoad} = this.props;
+        const {activityAction,navigation, loadingDone, showTopLoader, feeds, userFollower, actions, token, user, location,nextBulkLoad} = this.props;
         let icon = <Icon2 active size={40} name="md-create"/>;
 
         return (
@@ -49,11 +58,13 @@ class Feed extends Component {
                     nextBulkLoad={nextBulkLoad}
                     entity={user}
                     location={location}
+                    showFab={this.showFab.bind(this)}
+                    activityAction={activityAction}
                     title='Feeds'
                     ItemDetail={GenericFeedItem}>
 
                 </GenericFeedManager>
-                <Fab
+                {this.state.showFab  && <Fab
 
                     direction="right"
                     active={false}
@@ -63,7 +74,7 @@ class Feed extends Component {
                     onPress={() => this.navigateToAdd()}>
                     {icon}
 
-                </Fab>
+                </Fab>}
             </View>
 
         );
@@ -89,6 +100,7 @@ export default connect(
     mapStateToProps,
     (dispatch) => ({
         actions: bindActionCreators(feedsAction, dispatch),
+        activityAction: bindActionCreators(activityAction, dispatch),
         userActions: bindActionCreators(userAction, dispatch)
     })
 )(Feed);

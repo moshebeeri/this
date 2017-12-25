@@ -8,6 +8,7 @@ import * as groupAction from "../../../actions/groups";
 
 import {getFeeds} from "../../../selectors/groupFeedsSelector";
 import * as commentAction from "../../../actions/commentsGroup";
+import * as activityAction from "../../../actions/activity";
 import styles from './styles'
 import { Fab} from "native-base";
 import GenericFeedItem from "../../generic-feed-manager/generic-feed";
@@ -20,6 +21,7 @@ import strings from '../../../i18n/i18n';
 class GroupFeedComponent extends Component {
     constructor(props) {
         super(props);
+        this.state={showFab:true}
     }
 
     componentWillMount() {
@@ -43,10 +45,15 @@ class GroupFeedComponent extends Component {
         const group = this.props.navigation.state.params.group;
         this.props.navigation.navigate('PostForm', {group: group})
     }
+    showFab(show){
+        this.setState({
+            showFab:show
+        })
+    }
 
 
     render() {
-        const {navigation, group,feeds, userFollower, actions, token, loadingDone, location, showTopLoader,postUpdated} = this.props;
+        const {navigation, activityAction,group,feeds, userFollower, actions, token, loadingDone, location, showTopLoader,postUpdated} = this.props;
 
         const icon = <Icon2 active size={40} name="md-create"/>;
         return <View style={styles.inputContainer}>
@@ -62,11 +69,13 @@ class GroupFeedComponent extends Component {
                 entity={group}
                 group={group}
                 location={location}
+                showFab={this.showFab.bind(this)}
+                activityAction={activityAction}
                 title='Feeds'
                 ItemDetail={GenericFeedItem}>
 
             </GenericFeedManager>
-            {this.allowPost(group) && <Fab
+            {this.allowPost(group) && this.state.showFab && <Fab
 
                 direction="right"
                 active={false}
@@ -94,6 +103,7 @@ export default connect(
     }),
     (dispatch) => ({
         actions: bindActionCreators(groupAction, dispatch),
+        activityAction: bindActionCreators(activityAction, dispatch),
         commentGroupAction: bindActionCreators(commentAction, dispatch)
     })
 )(GroupFeedComponent);
