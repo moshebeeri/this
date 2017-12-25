@@ -6,7 +6,7 @@ let graphTools = require('../../components/graph-tools');
 let graphModel = graphTools.createGraphModel('test');
 let activity = require('../../components/activity').createActivity();
 let logger = require('../../components/logger').createLogger();
-let utils = require('../../components/utils').createUtils();
+const utils = require('../../components/utils').createUtils();
 
 // Get list of tests
 exports.index = function(req, res) {

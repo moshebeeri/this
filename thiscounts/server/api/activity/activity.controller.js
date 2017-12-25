@@ -127,7 +127,7 @@ exports.share = function (req, res) {
   });
 };
 
-let Feedback = new Enum(['Offensive', 'Nudity', 'Hate', 'Violence', 'Weapons'], { ignoreCase: true });
+let Feedback = new Enum(['Offensive', 'Nudity', 'FalseDeal', 'Hate', 'Violence', 'Weapons'], { ignoreCase: true });
 
 function shouldBlock(activity) {
   if(activity.blocked)
@@ -145,6 +145,8 @@ function shouldBlock(activity) {
       return true;
     if(counts.Nudity && counts.Nudity > 10)
       return true;
+    if(counts.Nudity && counts.FalseDeal > 100)
+      return true;
     if(counts.Hate && counts.Hate > 10)
       return true;
     if(counts.Violence && counts.Violence > 10)
@@ -155,21 +157,30 @@ function shouldBlock(activity) {
     return false;
   }
 
-  if(count>1)
+  if(count>50)
     return true;
   else if(checkByType(counts))
 
   return false;
 }
 
-function updateFeedback(activity, userId, type) {
+function updateFeedback(activity, userId, type, callback) {
+  if(!activity.feedback)
+    activity.feedback = {};
   let feedback = activity.feedback;
   if(!feedback[type])
     feedback[type] = [];
+
+  function userAlreadyReported(reporters, reporter) {
+    return reporters.includes(reporter)
+  }
+
+  if(userAlreadyReported(feedback[type], userId))
+    return callback(new Error('Type already reported by user'));
   feedback[type].push(userId);
   activity.feedback = feedback;
   activity.blocked = shouldBlock(activity);
-  activity.save()
+  activity.save(callback)
 }
 
 exports.feedback = function (req, res) {
@@ -178,15 +189,17 @@ exports.feedback = function (req, res) {
   Activity.findById(req.params.id, function (err, activity) {
     if (err) { return handleError(res, err); }
     if(!activity) { return res.status(404).send('Not Found'); }
-    updateFeedback(activity, req.params.id, req.params.type);
-    return res.status(200).send();
+    updateFeedback(activity, req.params.id, req.params.type, function (err, activity) {
+      if (err) { return handleError(res, err); }
+      return res.status(200).json(activity);
+    });
   })
 };
 
 exports.blocked = function (req, res) {
   Activity.findById(req.params.id, ['blocked'], function (err, blocked) {
     if (err) { return handleError(res, err); }
-    return res.status(200).send(blocked);
+    return res.status(200).json({blocked});
   })
 };
 

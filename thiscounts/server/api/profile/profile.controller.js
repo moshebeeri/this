@@ -4,7 +4,7 @@ let _ = require('lodash');
 let async = require('async');
 
 let util = require('util');
-let utils = require('../../components/utils').createUtils();
+const utils = require('../../components/utils').createUtils();
 
 let Profile = require('./profile.model');
 let User = require('../user/user.model');

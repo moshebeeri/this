@@ -5,12 +5,13 @@ let mongoose = require('mongoose'),
 
 let BrandSchema = new Schema({
   name: String,
+  pricing: {type: Schema.ObjectId, ref: 'Pricing', required: false},
   gid: { type: Number, index: true},
   description: String,
-  active: Boolean,
   logo: String,
   client: {},
   pictures: [],
+  video: {type: Schema.ObjectId, ref: 'Video', autopopulate: true}
 });
 BrandSchema.index({name: 'text', description: 'text'});
 

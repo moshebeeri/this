@@ -3,7 +3,7 @@
 const mongoose = require('mongoose'),
     Schema = mongoose.Schema;
 let _ = require('lodash');
-let utils = require('../../components/utils').createUtils();
+const utils = require('../../components/utils').createUtils();
 const autopopulate = require('mongoose-autopopulate');
 
 function entity_validator(v) {
