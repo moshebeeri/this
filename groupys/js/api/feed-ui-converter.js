@@ -47,6 +47,7 @@ class FeedConverter {
             id: feed.activity.post._id,
             fid: feed._id,
             activityId: feed.activity._id,
+            blocked : feed.activity.blocked,
             generalId: feed.activity.post._id,
             entities: [{post: feed.activity.post._id}],
         }
@@ -146,6 +147,7 @@ class FeedConverter {
         response.shared = response.shardeActivity.itemType;
         response.id = response.shardeActivity.id;
         response.activityId = feed.activity._id;
+        response.blocked = feed.activity.blocked;
         return response;
     }
 
@@ -411,6 +413,7 @@ class FeedConverter {
             responseFeed.key = feed._id;
             if(feed.activity) {
                 responseFeed.activityId = feed.activity._id;
+                responseFeed.blocked = feed.activity.blocked;
             }
             responseFeed.promotionEntity = promotion;
             responseFeed.location = instance.location;
