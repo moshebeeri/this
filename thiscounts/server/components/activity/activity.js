@@ -162,8 +162,8 @@ function activity_impl(act, callback) {
         return handleSuccess(activity)
       });
     }
+    return callback(new Error('Activity not distributed expected ids. audience or actor_*'));
   });
-  return callback(new Error('Activity not distributed expected ids. audience or actor_*'));
 }
 
 Activity.prototype.action_activity = function action_activity(userId, itemId, action, callback) {

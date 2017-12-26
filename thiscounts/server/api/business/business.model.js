@@ -6,7 +6,7 @@ const autopopulate = require('mongoose-autopopulate');
 //pricing free tier
 let BusinessSchema = new Schema({
   social_state: {},
-  pricing: {type: Schema.ObjectId, ref: 'Pricing', required: false},
+  pricing: {type: Schema.ObjectId, ref: 'Pricing', autopopulate: true},
   name: {type: String, index: true, required: true},
   gid: {type: Number, index: true},
   tax_id: {type: String, index: true, required: true},

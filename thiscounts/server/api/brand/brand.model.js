@@ -5,7 +5,7 @@ let mongoose = require('mongoose'),
 
 let BrandSchema = new Schema({
   name: String,
-  pricing: {type: Schema.ObjectId, ref: 'Pricing', required: false},
+  pricing: {type: Schema.ObjectId, ref: 'Pricing', autopopulate: true},
   gid: { type: Number, index: true},
   description: String,
   logo: String,

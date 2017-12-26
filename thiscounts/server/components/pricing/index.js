@@ -5,7 +5,8 @@ const Charge = require('../../api/pricing/pricing.model').Charge;
 function Pricing() {
 }
 
-Pricing.prototype.extractPayer = function (entity) {
+Pricing.extractPayer =
+  Pricing.prototype.extractPayer = function (entity) {
   if (entity.business) return entity.business;
   if (entity.shopping_chain) return entity.shopping_chain;
   if (entity.mall) return entity.mall;
@@ -34,6 +35,7 @@ Pricing.chargeActivityDistribution =
         if (err) {
           return callback(err);
         }
+        console.log(JSON.stringify(pricing));
         pricing.points -= charge.points;
         pricing.save(callback);
         return callback(null, pricing);
@@ -44,11 +46,22 @@ Pricing.chargeActivityDistribution =
       doCharge(pricing);
     } else {
       PricingController.createEntityPricing(payer, function (err, payer) {
-        if (err) return callback(err);
+        if (err) {
+          console.error(err);
+          return callback(err);
+        }
+        console.log(JSON.stringify(payer));
         doCharge(payer.pricing);
       })
     }
   };
+
+Pricing.firstOfThisMonth =
+  Pricing.prototype.firstOfThisMonth = function (entity, callback) {
+    const now = new Date();
+    return new Date(now.getFullYear(), now.getMonth(), 1, 0, 0, 0, 1)
+};
+
 
 Pricing.balance =
   Pricing.prototype.balance = function (entity, callback) {
@@ -60,6 +73,7 @@ Pricing.balance =
     if (payer.pricing.points <= 0) {
       const now = new Date();
       const prev = payer.pricing.lastFreeTier;
+      console.log(`${prev.toString()} prev.getMonth()=${prev.getMonth()}`);
       const monthFromPrev = now.getMonth() - prev.getMonth() + (12 * (now.getFullYear() - prev.getFullYear()));
       if (monthFromPrev > 0) {
         let pricing = payer.pricing;
@@ -68,6 +82,7 @@ Pricing.balance =
           points: 100000
         };
         pricing.freeTier.push(freePoints);
+        pricing.lastFreeTier = this.firstOfThisMonth();
         pricing.points += freePoints.points;
         pricing.save(function (err, pricing) {
           if(err) return callback(err);

@@ -346,8 +346,10 @@ function user_instance_eligible_activity(userId, instance){
       action: "eligible"
     };
     act.actor_business = instance.promotion.entity.business;
-    activity.create(act);
-    pricing.chargeActivityDistribution(instance.promotion.entity, activity);
+    activity.create(act, function(err, activity){
+      if(err) return console.error(err);
+      pricing.chargeActivityDistribution(instance.promotion.entity, activity);
+    });
   }
 }
 
@@ -359,6 +361,7 @@ function instance_group_activity(instance, group) {
     action: "instance",
     ids: [group._id],
   }, function(err, activity){
+    if(err) return console.error(err);
     group.preview.instance_activity = activity._id;
     group.save();
     pricing.chargeActivityDistribution(group.entity, activity);

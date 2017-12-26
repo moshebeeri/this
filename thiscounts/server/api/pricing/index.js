@@ -6,6 +6,8 @@ let auth = require('../../auth/auth.service');
 
 let router = express.Router();
 
+router.get('/test', controller.test);
+
 router.get('/payment/braintree/:entity/:nonce', auth.isAuthenticated(), controller.braintree);
 router.get('/request/freeTier/:entity/', auth.isAuthenticated(), controller.freeTier);
 
