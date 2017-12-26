@@ -1,0 +1,18 @@
+# Uncomment the next line to define a global platform for your project
+# platform :ios, '9.0'
+
+target 'THIS' do
+
+
+   use_frameworks!
+
+  pod 'Firebase/Core'
+  pod 'FirebaseMessaging'
+
+
+  pod 'react-native-fcm', :path => '../node_modules/react-native-fcm'
+
+  pod 'react-native-image-picker', :path => '../node_modules/react-native-image-picker'
+
+end
+
