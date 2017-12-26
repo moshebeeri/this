@@ -1,7 +1,7 @@
 import UserApi from "../api/user";
 import LoginAPI from "../api/login";
 import * as actions from "../reducers/reducerActions";
-
+import simpleStore from 'react-native-simple-store';
 let userApi = new UserApi();
 let loginApi = new LoginAPI();
 
@@ -12,6 +12,7 @@ async function getUser(dispatch, token) {
             type: actions.UPSERT_SINGLE_USER,
             item: user
         })
+        simpleStore.save('user',user);
         dispatch({
             type: actions.SET_USER,
             user: user
@@ -105,6 +106,7 @@ export function updateUser(newUser, navigation) {
             console.log('updating user')
             await userApi.saveUserDetails(newUser,user._id,token,dispatch);
             let updatedUser = await userApi.getUser(token);
+            simpleStore.save('user',updatedUser);
             dispatch({
                 type: actions.UPSERT_SINGLE_USER,
                 item: updatedUser
@@ -149,6 +151,39 @@ export function resetPasswordForm() {
             user.locale = locale;
             await userApi.saveUserDetails(user, user._id, token, dispatch);
             let updatedUser = await userApi.getUser(token);
+            simpleStore.save('user',updatedUser);
+            dispatch({
+                type: actions.UPSERT_SINGLE_USER,
+                item: updatedUser
+            });
+            dispatch({
+                type: actions.SET_USER,
+                user: updatedUser
+            });
+            dispatch({
+                type: actions.SAVING_USER_DONE,
+            });
+        }
+
+    } catch (error) {
+        dispatch({
+            type: actions.NETWORK_IS_OFFLINE,
+        });
+    }
+}
+
+async function updateUserToken(dispatch, token,user,fireBaseToken) {
+    try {
+        if(!user.firebase ||(user.firebase  && !user.firebase.tokens ) || (
+            user.firebase && user.firebase.tokens && user.firebase.tokens[0] !== fireBaseToken
+            )){
+            dispatch({
+                type: actions.SAVING_USER,
+            });
+            user.firebase = {tokens:[fireBaseToken]};
+            await userApi.saveUserDetails(user, user._id, token, dispatch);
+            let updatedUser = await userApi.getUser(token);
+            simpleStore.save('user',updatedUser);
             dispatch({
                 type: actions.UPSERT_SINGLE_USER,
                 item: updatedUser
@@ -170,5 +205,6 @@ export function resetPasswordForm() {
 }
 
 export default {
-    updateUserLocale
+    updateUserLocale,
+    updateUserToken
 }

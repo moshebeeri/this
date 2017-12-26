@@ -9,6 +9,7 @@ import users from '../actions/user'
 import groupComments from '../actions/commentsGroup'
 import pageSync from './refresher';
 import FormUtils from "../utils/fromUtils";
+import simpleStore from 'react-native-simple-store';
 const store = getStore();
 let  visitedList = ['feed', 'groups', 'businesses'];
 class PageRefresher {
@@ -26,6 +27,20 @@ class PageRefresher {
         let token = store.getState().authentication.token;
         let user = store.getState().user.user;
         users.updateUserLocale(store.dispatch,token,user,FormUtils.getLocale())
+
+    }
+
+   async updateUserFireBase(fireBaseToken){
+
+        let token = store.getState().authentication.token;
+        if(!token){
+             token = await simpleStore.get("token");
+        }
+        let user = store.getState().user.user;
+        if(!user){
+            user = await simpleStore.get("user");
+        }
+        users.updateUserToken(store.dispatch,token,user,fireBaseToken)
 
     }
 
