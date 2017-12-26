@@ -3,6 +3,9 @@ package com.groupys;
 import android.app.Application;
 
 import com.facebook.react.ReactApplication;
+import com.evollu.react.fcm.FIRMessagingPackage;
+import com.reactnative.ivpusic.imagepicker.PickerPackage;
+
 import com.AlexanderZaytsev.RNI18n.RNI18nPackage;
 import com.vydia.RNUploader.UploaderReactPackage;
 import com.lwansbrough.RCTCamera.RCTCameraPackage;
@@ -16,7 +19,7 @@ import com.ocetnik.timer.BackgroundTimerPackage;
 import com.farmisen.react_native_file_uploader.RCTFileUploaderPackage;
 import com.rt2zz.reactnativecontacts.ReactNativeContacts;
 import com.yoloci.fileupload.FileUploadPackage;
-import com.reactnative.ivpusic.imagepicker.PickerPackage;
+
 import com.oblador.vectoricons.VectorIconsPackage;
 import com.facebook.react.ReactInstanceManager;
 import com.facebook.react.ReactNativeHost;
@@ -47,6 +50,10 @@ public class MainApplication extends Application implements ReactApplication {
     protected List<ReactPackage> getPackages() {
       return Arrays.<ReactPackage>asList(
           new MainReactPackage(),
+            new FIRMessagingPackage(),
+            new PickerPackage(),
+
+
             new RNI18nPackage(),
             new UploaderReactPackage(),
             new RCTCameraPackage(),
@@ -59,7 +66,7 @@ public class MainApplication extends Application implements ReactApplication {
             new RCTFileUploaderPackage(),
             new ReactNativeContacts(),
             new FileUploadPackage(),
-            new PickerPackage(),
+
             new VectorIconsPackage()
       );
     }

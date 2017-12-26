@@ -3,6 +3,8 @@
     android:versionCode="1"
     android:versionName="1.0">
 
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
+    <uses-permission android:name="com.google.android.c2dm.permission.RECEIVE" />
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW"/>
     <uses-permission android:name="android.permission.READ_PROFILE" />
@@ -30,35 +32,26 @@
       android:icon="@mipmap/ic_launcher"
 
       android:theme="@style/AppTheme">
-        <receiver
-                android:name="com.google.android.gms.gcm.GcmReceiver"
-                android:exported="true"
-                android:permission="com.google.android.c2dm.permission.SEND" >
-            <intent-filter>
-                <action android:name="com.google.android.c2dm.intent.RECEIVE" />
-                <category android:name="${applicationId}" />
-            </intent-filter>
-        </receiver>
+           <service android:name="com.evollu.react.fcm.MessagingService" android:enabled="true" android:exported="true">
+             <intent-filter>
+               <action android:name="com.google.firebase.MESSAGING_EVENT"/>
+             </intent-filter>
+           </service>
 
-        <receiver android:name="com.dieam.reactnativepushnotification.modules.RNPushNotificationPublisher" />
-        <receiver android:name="com.dieam.reactnativepushnotification.modules.RNPushNotificationBootEventReceiver">
-            <intent-filter>
-                <action android:name="android.intent.action.BOOT_COMPLETED" />
-            </intent-filter>
-        </receiver>
-        <service android:name="com.dieam.reactnativepushnotification.modules.RNPushNotificationRegistrationService"/>
-        <service
-                android:name="com.dieam.reactnativepushnotification.modules.RNPushNotificationListenerService"
-                android:exported="false" >
-            <intent-filter>
-                <action android:name="com.google.android.c2dm.intent.RECEIVE" />
-            </intent-filter>
-        </service>
+           <service android:name="com.evollu.react.fcm.InstanceIdService" android:exported="false">
+             <intent-filter>
+               <action android:name="com.google.firebase.INSTANCE_ID_EVENT"/>
+             </intent-filter>
+           </service>
+
+
       <activity
         android:name=".MainActivity"
         android:label="THIS"
+        android:launchMode="singleTop"
         android:configChanges="keyboard|keyboardHidden|orientation|screenSize"
         android:windowSoftInputMode="adjustResize">
+
         <intent-filter>
             <action android:name="android.intent.action.MAIN" />
             <category android:name="android.intent.category.LAUNCHER" />
