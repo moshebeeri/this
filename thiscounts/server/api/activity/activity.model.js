@@ -7,6 +7,7 @@ const autopopulate = require('mongoose-autopopulate');
 
 let ActivitySchema = new Schema({
   timestamp: {type: Date, default: Date.now, required: true},
+  distributions: Number,
   ids: [{type: Schema.ObjectId}],
   sharable: {type: Boolean, default: false},
 

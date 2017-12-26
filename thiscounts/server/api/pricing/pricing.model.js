@@ -7,6 +7,11 @@ const autopopulate = require('mongoose-autopopulate');
 
 
 let PricingSchema = new Schema({
+  charges: [{
+    activity: {type: Schema.ObjectId, ref: 'Activity', autopopulate: true},
+    date: Date,
+    points: Number
+  }],
   freeTier:[{
     user: {type: Schema.ObjectId, ref: 'User', autopopulate: utils.userAutopopulateOptions},
     date: Date,

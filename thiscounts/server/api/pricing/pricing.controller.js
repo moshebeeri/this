@@ -56,6 +56,10 @@ function entityPricing(entity, callback){
   })
 }
 
+exports.createEntityPricing = function(entity, callback) {
+  return entityPricing(entity, callback);
+};
+
 exports.braintree = function(req, res) {
   //payment received through braintree gateway
   findEntity(req.params.id, function (err, entity) {
@@ -73,7 +77,7 @@ exports.braintree = function(req, res) {
         date: Date.now(),
         payed: 1,
         currency: '$',
-        points: 1000
+        points: 10000
       };
       pricing.purchases.push(purchasedPoints);
       pricing.points += purchasedPoints.points;
@@ -100,7 +104,7 @@ exports.freeTier = function(req, res) {
       const freePoints = {
         user: req.user._id,
         date: Date.now(),
-        points: 1000
+        points: 100000
       };
       pricing.freeTier.push(freePoints);
       pricing.points += freePoints.points;
@@ -114,7 +118,7 @@ exports.freeTier = function(req, res) {
   })
 };
 
-// Get list of pricings
+// Get list of pricing
 exports.index = function(req, res) {
   Pricing.find(function (err, pricings) {
     if(err) { return handleError(res, err); }

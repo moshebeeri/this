@@ -44,6 +44,7 @@ const GroupSchema = new Schema({
     business: {type: Schema.ObjectId, ref: 'Business', autopopulate: true},
     shopping_chain: {type: Schema.ObjectId, ref: 'ShoppingChain', autopopulate: true},
     mall: {type: Schema.ObjectId, ref: 'Mall', autopopulate: true},
+    brand: {type: Schema.ObjectId, ref: 'Brand', autopopulate: true},
   },
   entity_type: {
     type: String,

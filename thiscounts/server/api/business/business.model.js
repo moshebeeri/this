@@ -11,7 +11,7 @@ let BusinessSchema = new Schema({
   gid: {type: Number, index: true},
   tax_id: {type: String, index: true, required: true},
   shopping_chain: {type: Schema.ObjectId, ref: 'ShoppingChain', required: false},
-  mall: {type: Schema.ObjectId, ref: 'mall', required: false},
+  mall: {type: Schema.ObjectId, ref: 'Mall', required: false},
   description: String,
   address: {type: String, required: true},
   address2: String,
