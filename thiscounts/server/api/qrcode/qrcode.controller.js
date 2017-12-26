@@ -152,6 +152,7 @@ exports.image_id = function (req, res) {
     })
   });
 };
+
 exports.image_code = function (req, res) {
   QRCodeImg.toDataURL(JSON.stringify({
     t: 'g',
@@ -164,6 +165,7 @@ exports.image_code = function (req, res) {
     return res.status(200).send(`<html><body><img src="${url}"/></body></html>`);
   });
 };
+
 exports.allocateImage = function (req, res) {
   allocate_one(req.params.id, function (err, qrcode) {
     if (err) {

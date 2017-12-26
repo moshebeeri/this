@@ -100,13 +100,14 @@ function applyToGroups(promotion, instances){
         Group.findById(group, function (err, group) {
           if (err) return console.error(err);
           if(group)
-            instance_group_activity(instance, group);
+            pricing.balance(instance.promotion.entity, function (err) {
+              if(!err) instance_group_activity(instance, group);
+            })
         })
       })
     }
   });
 }
-
 
 function applyToFollowingGroups(promotion, instances) {
   instances.forEach(instance => {
@@ -119,7 +120,9 @@ function applyToFollowingGroups(promotion, instances) {
             groups_ids.forEach(_id => {
               Group.findById(_id, function (err, group) {
                 if (err) return console.error(err); //return callback(err);
-                instance_group_activity(instance, group);
+                pricing.balance(instance.promotion.entity, function (err) {
+                  if(!err) instance_group_activity(instance, group);
+                })
               })
             })
           })
@@ -138,7 +141,10 @@ function applyToFollowingUsers(promotion, instances, callback) {
     }, 30, 0, instance.quantity, function (err, results) {
       if (err) return console.error(err);
       results.forEach(user => {
-        user_instance_eligible_activity(user._id, instance);
+        pricing.balance(instance.promotion.entity, function (err) {
+          if(err) return callback(err);
+          user_instance_eligible_activity(user._id, instance);
+        })
       })
     });
   })
@@ -341,7 +347,7 @@ function user_instance_eligible_activity(userId, instance){
     };
     act.actor_business = instance.promotion.entity.business;
     activity.create(act);
-    pricing.chargeActivityDistribution(pricing.payerByInstance(instance), activity);
+    pricing.chargeActivityDistribution(instance.promotion.entity, activity);
   }
 }
 
@@ -355,7 +361,7 @@ function instance_group_activity(instance, group) {
   }, function(err, activity){
     group.preview.instance_activity = activity._id;
     group.save();
-    pricing.chargeActivityDistribution(pricing.payerByGroup(group), activity);
+    pricing.chargeActivityDistribution(group.entity, activity);
   });
 }
 

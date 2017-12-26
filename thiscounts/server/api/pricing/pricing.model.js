@@ -5,15 +5,8 @@ let mongoose = require('mongoose'),
 const utils = require('../../components/utils').createUtils();
 const autopopulate = require('mongoose-autopopulate');
 
-
 let PricingSchema = new Schema({
-  charges: [{
-    activity: {type: Schema.ObjectId, ref: 'Activity', autopopulate: true},
-    date: Date,
-    points: Number
-  }],
   freeTier:[{
-    user: {type: Schema.ObjectId, ref: 'User', autopopulate: utils.userAutopopulateOptions},
     date: Date,
     points: Number
   }],
@@ -28,5 +21,23 @@ let PricingSchema = new Schema({
   lastFreeTier: Date,
 });
 
+let ChargeSchema = new Schema({
+  entityId: {type: Schema.ObjectId, index: true},
+  activity: {type: Schema.ObjectId, ref: 'Activity', autopopulate: true},
+  entity: {
+    business: {type: Schema.ObjectId, ref: 'Business', autopopulate: true},
+    shopping_chain: {type: Schema.ObjectId, ref: 'ShoppingChain', autopopulate: true},
+    mall: {type: Schema.ObjectId, ref: 'Mall', autopopulate: true},
+    brand: {type: Schema.ObjectId, ref: 'Brand', autopopulate: true},
+  },
+  date: Date,
+  points: Number
+});
+
 PricingSchema.plugin(autopopulate);
-module.exports = mongoose.model('Pricing', PricingSchema);
+ChargeSchema.plugin(autopopulate);
+
+module.exports = {
+  Pricing: mongoose.model('Pricing', PricingSchema),
+  Charge: mongoose.model('Charge', ChargeSchema)
+};
