@@ -9,10 +9,12 @@
 
 #import "AppDelegate.h"
 #import <CodePush/CodePush.h>
-
+#import <Firebase.h>
 #import <React/RCTBundleURLProvider.h>
 #import <React/RCTRootView.h>
 #import <React/RCTI18nUtil.h>
+#import "RNFIRMessaging.h"
+
 
 @implementation AppDelegate
 
@@ -26,6 +28,8 @@
 #else
     jsCodeLocation = [CodePush bundleURL];
 #endif
+   [FIRApp configure];
+   [[UNUserNotificationCenter currentNotificationCenter] setDelegate:self];
 
   RCTRootView *rootView = [[RCTRootView alloc] initWithBundleURL:jsCodeLocation
                                                       moduleName:@"THIS"
@@ -41,5 +45,23 @@
   [self.window makeKeyAndVisible];
   return YES;
 }
+
+
+ - (void)userNotificationCenter:(UNUserNotificationCenter *)center willPresentNotification:(UNNotification *)notification withCompletionHandler:(void (^)(UNNotificationPresentationOptions))completionHandler
+ {
+   [RNFIRMessaging willPresentNotification:notification withCompletionHandler:completionHandler];
+ }
+
+ #if defined(__IPHONE_11_0)
+ - (void)userNotificationCenter:(UNUserNotificationCenter *)center didReceiveNotificationResponse:(UNNotificationResponse *)response withCompletionHandler:(void (^)(void))completionHandler
+ {
+   [RNFIRMessaging didReceiveNotificationResponse:response withCompletionHandler:completionHandler];
+ }
+ #else
+ - (void)userNotificationCenter:(UNUserNotificationCenter *)center didReceiveNotificationResponse:(UNNotificationResponse *)response withCompletionHandler:(void(^)())completionHandler
+ {
+   [RNFIRMessaging didReceiveNotificationResponse:response withCompletionHandler:completionHandler];
+ }
+ #endif
 
 @end
