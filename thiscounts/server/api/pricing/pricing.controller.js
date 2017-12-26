@@ -1,7 +1,7 @@
 'use strict';
 
 let _ = require('lodash');
-let Pricing = require('./pricing.model');
+let Pricing = require('./pricing.model').Pricing;
 const async = require('async');
 const Business = require('../business/business.model');
 const ShoppingChain = require('../shoppingChain/shoppingChain.model');
@@ -102,7 +102,6 @@ exports.freeTier = function(req, res) {
       if (!pricing.freeTier) pricing.freeTier = [];
       if (!pricing.points) pricing.points = 0;
       const freePoints = {
-        user: req.user._id,
         date: Date.now(),
         points: 100000
       };
