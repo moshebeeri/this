@@ -12,7 +12,7 @@ export default class PromotionSeperator extends Component {
 
     render() {
         const {height, simple,narrowWidth} = this.props;
-        let defaultNarrow = 15;
+        let defaultNarrow = 0;
         if(narrowWidth){
             defaultNarrow = narrowWidth;
         }
@@ -29,9 +29,7 @@ export default class PromotionSeperator extends Component {
                 position: 'absolute',
         }
         return <View style={seperatorContainer}>
-            <View style={{flex: 1, justifyContent: 'flex-start', alignItems: 'flex-start'}}>
-                <Triangle right/>
-            </View>
+
             <View style={{flex: 15, flexDirection: 'row', justifyContent: 'space-between', alignItems: 'flex-start'}}>
                 <View style={styles.roundView}/>
                 <View style={styles.roundView}/>
@@ -49,11 +47,9 @@ export default class PromotionSeperator extends Component {
                 <View style={styles.roundView}/>
                 <View style={styles.roundView}/>
                 <View style={styles.roundView}/>
+                <View style={styles.roundView}/>
             </View>
-            <View style={{flex: 1, flexDirection: 'row', justifyContent: 'flex-end',alignItems: 'flex-end'}}>
 
-                <Triangle/>
-            </View>
         </View>
     }
 }

@@ -82,7 +82,7 @@ export default class FeedPost extends Component {
 
                 <View style={styles.promotion_card}>
 
-                    <View style={{flexDirection:'row',backgroundColor:'white',height:60,width: width - 15}}>
+                    <View style={{flexDirection:'row',backgroundColor:'white',height:60,width: width}}>
                         <View style={{paddingLeft:10,justifyContent:'center'}}>
                         <Thumbnail  square meduim source={item.avetar}/>
                         </View>
@@ -95,7 +95,7 @@ export default class FeedPost extends Component {
                         </View>
                     </View>
 
-                    <View style={{flex:2, width: width - 15,paddingBottom:10, backgroundColor: 'white'}}>
+                    <View style={{flex:2, width: width,paddingBottom:10, backgroundColor: 'white'}}>
 
                         <View style={promotionDetalis}>
                             <Text numberOfLines={4}  style={{marginRight: 10, marginLeft: 10, fontSize: 18}}>{item.feed.activity.post.text}

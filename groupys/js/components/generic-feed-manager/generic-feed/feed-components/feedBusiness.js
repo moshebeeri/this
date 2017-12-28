@@ -68,14 +68,14 @@ export default class FeedBusiness extends Component {
 
             <InViewPort onChange={this.visited.bind(this)} style={styles.businesses_container}>
                 <View style={styles.promotion_card}>
-                    <View style={{width:width-15}}>
+                    <View style={{width:width}}>
                     <BusinessHeader  navigation={this.props.navigation} business={item.business}
                                      categoryTitle={item.categoryTitle} businessLogo={item.businessLogo}
                                      businessName={item.business.name} noMargin
                                      id={item.activityId} showActions={showActions}
                     />
                     </View>
-                    <View style={{width:width-15,paddingBottom:5,backgroundColor:'white',justifyContent:'flex-start',alignItems:'flex-start'}}>
+                    <View style={{width:width,paddingBottom:5,backgroundColor:'white',justifyContent:'flex-start',alignItems:'flex-start'}}>
                     <Text style={styles.promotion_type}>{item.itemTitle}</Text>
                     </View>
 
