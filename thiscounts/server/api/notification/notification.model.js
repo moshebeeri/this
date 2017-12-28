@@ -37,7 +37,31 @@ let NotificationSchema = new Schema({
 
   note: {type: String, default: ''},
   qrcode: {type: Schema.ObjectId, ref: 'QRCode', autopopulate: true},
-  available_actions: {type: String, enum: Action}
+  available_actions: {type: String, enum: Action},
+
+  payload:{
+    notification:{
+      badge: String,
+      title: String,
+      body: String,
+      bodyLocArgs: String,
+      bodyLocKey: String,
+      clickAction: String,
+      color: String,
+      icon: String,
+      sound: String,
+      tag: String,
+      titleLocArgs: String,
+      titleLocKey: String,
+    },
+    data:{
+
+    }
+  },
+  options: {
+    priority: {type: String, default: 'normal'},
+    timeToLive: {type: Number, default: 60 * 60 * 24},
+  }
 });
 
 NotificationSchema.plugin(autopopulate);

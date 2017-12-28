@@ -57,7 +57,7 @@ Pricing.chargeActivityDistribution =
   };
 
 Pricing.firstOfThisMonth =
-  Pricing.prototype.firstOfThisMonth = function (entity, callback) {
+  Pricing.prototype.firstOfThisMonth = function () {
     const now = new Date();
     return new Date(now.getFullYear(), now.getMonth(), 1, 0, 0, 0, 1)
 };
@@ -73,7 +73,7 @@ Pricing.balance =
     if (payer.pricing.points <= 0) {
       const now = new Date();
       const prev = payer.pricing.lastFreeTier;
-      console.log(`${prev.toString()} prev.getMonth()=${prev.getMonth()}`);
+
       const monthFromPrev = now.getMonth() - prev.getMonth() + (12 * (now.getFullYear() - prev.getFullYear()));
       if (monthFromPrev > 0) {
         let pricing = payer.pricing;
