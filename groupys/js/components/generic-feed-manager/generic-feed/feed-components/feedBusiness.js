@@ -82,12 +82,12 @@ export default class FeedBusiness extends Component {
                     {imageBusiness}
 
                     <View style={styles.business_bottomUpperContainer}>
-                        <View style={styles.promotion_bottom_description}>
+                        <View style={styles.businessLocationdescription}>
 
 
                             <View style={styles.promotion_bottom_location}>
                                 <Icon3 style={styles.promotion_location} size={25} name="location-on"/>
-                                <View>
+                                <View style={{flexDirection:'row'}}>
                                     <Text style={styles.promotion_addressText} note>{item.businessAddress} </Text>
                                     <Text style={styles.detailsText}>
                                         {FormUtils.getDistanceString(location.lat, location.long, item.location.lat, item.location.lng)}

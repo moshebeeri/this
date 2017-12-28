@@ -152,7 +152,7 @@ module.exports = {
     promotion_card: {
         alignItems: 'center',
         flexDirection: 'column',
-        backgroundColor: '#cccccc',
+        backgroundColor: 'white',
         width: width,
         marginBottom: 12,
         flex: 1,
@@ -217,6 +217,12 @@ module.exports = {
     },
     promotion_bottom_description: {
         flexDirection: 'column',
+        marginLeft: 10,
+        marginTop: 2
+    },
+
+    businessLocationdescription: {
+        flexDirection: 'row',
         marginLeft: 10,
         marginTop: 2
     },
@@ -328,10 +334,11 @@ module.exports = {
         backgroundColor: 'white',
         alignItems: 'flex-start',
         justifyContent: 'center',
+
         width: width - 15,
         marginLeft: 15,
-        borderBottomWidth: 1,
-        borderLeftWidth: 1,
+
+
     },
     promotion_like: {
         marginLeft: 10,

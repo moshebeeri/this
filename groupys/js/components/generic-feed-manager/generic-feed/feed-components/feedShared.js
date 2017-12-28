@@ -45,7 +45,7 @@ export default class FeedShared extends Component {
         const {refresh, item, save, like, unlike, showUsers, comment, token, location} = this.props;
         const container = this.createContainerStyle(item);
         return (<View style={container}>
-                <View style={{borderColor:'#cccccc',borderBottomWidth:1,width:width,flex:1,justifyContent:'center',alignItems:'flex-start',backgroundColor:'white'}}>
+                <View style={{borderColor:'#cccccc',width:width,flex:1,justifyContent:'center',alignItems:'flex-start',backgroundColor:'white'}}>
                  <Text style={{padding:5,backgroundColor:'white'}}>{item.user.name} {strings.Shared}</Text>
                 </View>
                 <View style={{flex:10}}>
