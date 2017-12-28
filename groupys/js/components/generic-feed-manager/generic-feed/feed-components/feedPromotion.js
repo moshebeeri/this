@@ -95,7 +95,7 @@ export default class FeedPromotion extends Component {
         const result =
             <InViewPort onChange={this.visited.bind(this)}style={container}>
                 <View style={styles.promotion_card}>
-                    <View style={{backgroundColor:'#cccccc',width:width-15}}>
+                    <View style={{backgroundColor:'#cccccc',width:width}}>
 
                     <BusinessHeader  navigation={this.props.navigation} business={item.business}
                                     categoryTitle={categoruTitle} businessLogo={item.business.logo}
@@ -108,7 +108,7 @@ export default class FeedPromotion extends Component {
                     {image}
 
 
-                    <View style={{  height:headeerSize,width: width - 15, backgroundColor: 'white'}}>
+                    <View style={{  height:headeerSize,width: width , backgroundColor: 'white'}}>
                         <View style={promotaionDesc}>
                             <PromotionHeader type={item.promotion} feed titleText={item.promotionTitle}
                                              titleValue={item.promotionValue} term={item.promotionTerm}/>
