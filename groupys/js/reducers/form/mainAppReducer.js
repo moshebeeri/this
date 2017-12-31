@@ -7,7 +7,7 @@
 /**
  * Created by stan229 on 5/27/16.
  */
-const initialState = {selectedTab: 0, showAdd: false,showPopup:false,instanceId:'',generalNotification:'',generalCode:''};
+const initialState = {selectedTab: 0, showAdd: false,showPopup:false,instanceId:'',notificationTitle:'',notificationId:'',notificationAction:''};
 import * as actions from './../reducerActions';
 import {REHYDRATE} from 'redux-persist/constants'
 
@@ -27,14 +27,17 @@ export default function mainTab(state = initialState, action) {
             return {
                 ...state,
                 showPopup: action.showPopup,
-                instanceId: action.instanceId
+                instanceId: action.instanceId,
+                notificationId: action.notificationId,
             };
         case actions.APP_SHOW_GENERAL_POPUP :
             return {
                 ...state,
                 showPopup: action.showPopup,
-                generalNotification: action.generalNotification,
-                generalCode: action.generalCode
+                notificationTitle: action.notificationTitle,
+                notificationId: action.notificationId,
+
+                notificationAction: action.notificationAction
             };
         default:
             return state;

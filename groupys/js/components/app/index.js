@@ -167,11 +167,19 @@ class ApplicationManager extends Component {
             PageRefresher.updateUserFireBase(token);
         });
         let notification = await  FCM.getInitialNotification();
-        if (notification && notification.instanceId) {
-            this.props.actions.showPromotionPopup(true, notification.instanceId);
+        // data: {
+        //     model: 'instance',
+        //         _id: '5a3668ea13c88202318fedcb',
+        //         notificationId: '5a3668ea13c88202318fedcb',
+        //         body: 'My Body',
+        //         title: 'My Title',
+        //         action: 'OK'
+        // },
+        if (notification && notification.model ==='instance') {
+            this.props.actions.showPromotionPopup( notification._id,notification.notificationId);
         }
-        if (notification && notification.genericMessage) {
-            this.props.actions.showGenericPopup(true, notification.genericMessage,notification.code);
+        if (notification && notification.title) {
+            this.props.actions.showGenericPopup( notification.title,notification.notificationId,notification.action);
         }
     }
 
@@ -211,7 +219,7 @@ class ApplicationManager extends Component {
     }
 
     render() {
-        const {selectedTab, showAdd, showComponent, notifications, item, location, showPopup, token,generalNotification} = this.props;
+        const {selectedTab, showAdd, showComponent, notifications, item, location, showPopup, token,notificationTitle,notificationAction} = this.props;
         if (!showComponent) {
             return <View></View>
         }
@@ -288,14 +296,14 @@ class ApplicationManager extends Component {
                                            location={location} hideSocial={true} showInPopup={true}
                                            navigation={this.props.navigation} item={item}/>
                         </View>}
-                        <View style={{flex: 1, width: width - 5, justifyContent: 'flex-start', alignItems: 'center'}}>
+                        {notificationTitle && <View style={{flex: 1, width: width - 5, justifyContent: 'flex-start', alignItems: 'center'}}>
                             <View style={{flex:1,justifyContent: 'center'}}>
-                            <Text>{generalNotification}</Text>
+                            <Text>{notificationTitle}</Text>
                             </View>
                             <View  style={{flex:1, paddingBottom:10,justifyContent: 'flex-end',}}>
-                             <SubmitButton color={'#2db6c8'} title={'APPROVE'} onPress={this.handleGenericNotification.bind(this)}/>
+                             <SubmitButton color={'#2db6c8'} title={notificationAction} onPress={this.handleGenericNotification.bind(this)}/>
                             </View>
-                        </View>
+                        </View>}
                         </View>}
 
                 </Container>
@@ -304,13 +312,16 @@ class ApplicationManager extends Component {
     }
 
     closePopup() {
-        this.props.actions.showPromotionPopup(false, '');
-        this.props.actions.showGenericPopup(false,'');
+        const {notificationId} = this.props;
+
+        this.props.actions.closePopup(notificationId);
 
     }
 
     handleGenericNotification(){
-        this.props.actions.showGenericPopup(false,'');
+        const {notificationAction,notificationId} = this.props;
+
+        this.props.actions.doNotification(notificationId,notificationAction);
         //Add generic API result
     }
 }
@@ -327,7 +338,9 @@ const mapStateToProps = (state) => {
         showComponent: showCompoenent(state),
         serFollower: state.user.followers,
         item: getPopUpInstance(state),
-        generalNotification: state.mainTab.generalNotification,
+        notificationAction : state.mainTab.notificationAction,
+        notificationTitle: state.mainTab.notificationTitle,
+        notificationId:state.mainTab.notificationId,
         location: state.phone.currentLocation,
         token: state.authentication.token,
     }
