@@ -166,6 +166,33 @@ class GroupsApi {
         })
     }
 
+    get(token,groupId) {
+        return new Promise(async (resolve, reject) => {
+            try {
+                let from = new Date();
+                const response = await fetch(`${server_host}/api/groups/` + groupId , {
+                    method: 'GET',
+                    headers: {
+                        'Accept': 'application/json, text/plain, */*',
+                        'Content-Type': 'application/json;charset=utf-8',
+                        'Authorization': 'Bearer ' + token
+                    }
+                });
+                if (response.status ==='401') {
+                    reject(response);
+                    return;
+                }
+                timer.logTime(from, new Date(), 'groups', '');
+                let responseData = await response.json();
+                resolve(responseData);
+            }
+            catch (error) {
+                console.log('There has been a problem with your fetch operation: ' + error.message);
+                reject(error);
+            }
+        })
+    }
+
     getByBusinessId(bid, token) {
         return new Promise(async (resolve, reject) => {
             try {

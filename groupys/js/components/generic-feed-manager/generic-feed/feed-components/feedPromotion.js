@@ -97,7 +97,7 @@ export default class FeedPromotion extends Component {
                 <View style={styles.promotion_card}>
                     <View style={{backgroundColor:'#cccccc',width:width}}>
 
-                    <BusinessHeader  avigation={this.props.navigation} business={item.business}
+                    <BusinessHeader  navigation={this.props.navigation} business={item.business}
                                     categoryTitle={categoruTitle} businessLogo={item.business.logo}
                                     businessName={item.business.name} noMargin
                                      id={item.activityId} showActions={showActions}

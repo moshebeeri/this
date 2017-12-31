@@ -3,10 +3,12 @@ import InstanceApi from "../api/instances";
 import CollectionDispatcher from "./collectionDispatcher";
 import * as assemblers from "./collectionAssembler";
 import NotificationApi from "../api/notification";
-
+import GoupApi from "../api/groups";
+import BusinessApi from "../api/business";
 let notificationApi = new NotificationApi();
 let instanceApi = new InstanceApi();
-
+let groupApi = new GoupApi();
+let businessApi= new BusinessApi();
 export function changeTab(newTab) {
     return function (dispatch, getState) {
         dispatch({
@@ -73,6 +75,59 @@ export function showGenericPopup( notificationTitle, notificationId, notificatio
 }
 
 
+export function showGroupPopup( groupId,notificationId,notificationTitle, notificationAction) {
+    return async function (dispatch,getState) {
+        try {
+            notificationApi.readNotification(notificationId);
+            let groups = getState().groups.groups;
+            let group  = groups[groupId];
+            if(!group){
+                const token = getState().authentication.token;
+                group = await groupApi.get(token,groupId);
+            }
+            dispatch({
+                type: actions.APP_SHOW_GENERAL_POPUP,
+                showPopup: true,
+                notificationTitle: notificationTitle,
+                notificationId: notificationId,
+                notificationAction: notificationAction,
+                notificationGroup: group,
+            });
+        } catch (error) {
+            dispatch({
+                type: actions.NETWORK_IS_OFFLINE,
+            });
+        }
+    }
+}
+
+export function showBusinessPopup( businessId,notificationId,notificationTitle, notificationAction) {
+    return async function (dispatch,getState) {
+        try {
+            notificationApi.readNotification(notificationId);
+            let businesses = getState().businesses.businesses;
+            let business  = businesses[businessId];
+            if(!business){
+                const token = getState().authentication.token;
+                business = await businessApi.get(token,businessId);
+            }
+            dispatch({
+                type: actions.APP_SHOW_GENERAL_POPUP,
+                showPopup: true,
+                notificationTitle: notificationTitle,
+                notificationId: notificationId,
+                notificationAction: notificationAction,
+                notificationBusiness: business,
+            });
+        } catch (error) {
+            dispatch({
+                type: actions.NETWORK_IS_OFFLINE,
+            });
+        }
+    }
+}
+
+
 export function closePopup(  notificationId) {
     return async function (dispatch) {
         try {
@@ -82,7 +137,9 @@ export function closePopup(  notificationId) {
                 showPopup: false,
                 notificationTitle: '',
                 notificationId: '',
-                notificationAction: ''
+                notificationAction: '',
+                notificationGroup:'',
+                notificationBusiness:''
             });
         } catch (error) {
             dispatch({
@@ -101,7 +158,9 @@ export function doNotification(  notificationId, notificationAction) {
                 showPopup: false,
                 notificationTitle: '',
                 notificationId: '',
-                notificationAction: ''
+                notificationAction: '',
+                notificationGroup:'',
+                notificationBusiness:''
             });
         } catch (error) {
             dispatch({

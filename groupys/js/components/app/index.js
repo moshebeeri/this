@@ -30,7 +30,7 @@ import {NavigationActions} from "react-navigation";
 import '../../conf/global';
 import pageSync from "../../refresh/refresher"
 import PageRefresher from '../../refresh/pageRefresher'
-import {ScrolTabView,SubmitButton} from '../../ui/index'
+import {BusinessHeader, GroupHeader, ScrolTabView, SubmitButton} from '../../ui/index'
 import FCM, {
     FCMEvent,
     NotificationType,
@@ -39,6 +39,7 @@ import FCM, {
 } from 'react-native-fcm';
 import Icon2 from 'react-native-vector-icons/Ionicons';
 import FeedPromotion from '../generic-feed-manager/generic-feed/feed-components/feedPromotion'
+import strings from "../../i18n/i18n"
 
 const {width, height} = Dimensions.get('window');
 let locationApi = new LocationApi();
@@ -167,19 +168,20 @@ class ApplicationManager extends Component {
             PageRefresher.updateUserFireBase(token);
         });
         let notification = await  FCM.getInitialNotification();
-        // data: {
-        //     model: 'instance',
-        //         _id: '5a3668ea13c88202318fedcb',
-        //         notificationId: '5a3668ea13c88202318fedcb',
-        //         body: 'My Body',
-        //         title: 'My Title',
-        //         action: 'OK'
-        // },
-        if (notification && notification.model ==='instance') {
-            this.props.actions.showPromotionPopup( notification._id,notification.notificationId);
+        if (notification && notification.model === 'instance') {
+            this.props.actions.showPromotionPopup(notification._id, notification.notificationId);
+            return;
+        }
+        if (notification && notification.model === 'group') {
+            this.props.actions.showGroupPopup(notification._id, notification.notificationId, notification.title, notification.action);
+            return;
+        }
+        if (notification && notification.model === 'business') {
+            this.props.actions.showBusinessPopup(notification._id, notification.notificationId, notification.title, notification.action);
+            return;
         }
         if (notification && notification.title) {
-            this.props.actions.showGenericPopup( notification.title,notification.notificationId,notification.action);
+            this.props.actions.showGenericPopup(notification.title, notification.notificationId, notification.action);
         }
     }
 
@@ -219,9 +221,19 @@ class ApplicationManager extends Component {
     }
 
     render() {
-        const {selectedTab, showAdd, showComponent, notifications, item, location, showPopup, token,notificationTitle,notificationAction} = this.props;
+        const {selectedTab, showAdd, showComponent, notifications, item, location, showPopup, token, notificationTitle, notificationAction, notificationGroup, notificationBusiness} = this.props;
         if (!showComponent) {
             return <View></View>
+        }
+        let notificationPopupHeight = 300;
+        let notificationnTopPadding = 150
+        if (item) {
+            notificationPopupHeight = 80
+            notificationnTopPadding = 30;
+        }
+        let notificationActionString
+        if (notificationAction) {
+            notificationActionString = this.translateNotificationAction(notificationAction)
         }
         //TODO find another way to change the drawer close/open
         closeDrawer = () => {
@@ -271,15 +283,15 @@ class ApplicationManager extends Component {
                     }
 
 
-                    {showPopup &&  <View style={{
+                    {showPopup && <View style={{
                         left: 2.5,
                         borderBottomWidth: 2,
                         borderTopWidth: 2,
                         borderColor: 'black',
-                        top: 30,
+                        top: notificationnTopPadding,
                         position: 'absolute',
                         width: width - 5,
-                        height: height - 80,
+                        height: height - notificationPopupHeight,
                         backgroundColor: 'white',
                         justifyContent: 'center',
                         alignItems: 'flex-start'
@@ -296,32 +308,51 @@ class ApplicationManager extends Component {
                                            location={location} hideSocial={true} showInPopup={true}
                                            navigation={this.props.navigation} item={item}/>
                         </View>}
-                        {notificationTitle && <View style={{flex: 1, width: width - 5, justifyContent: 'flex-start', alignItems: 'center'}}>
-                            <View style={{flex:1,justifyContent: 'center'}}>
-                            <Text>{notificationTitle}</Text>
+                        {notificationTitle &&
+                        <View style={{flex: 1, width: width - 5, justifyContent: 'flex-start', alignItems: 'center'}}>
+
+
+                            <View style={{flex: 1, alignItems: 'flex-start', justifyContent: 'flex-start'}}>
+                                {notificationGroup && <GroupHeader group={notificationGroup}/>}
+                                {notificationBusiness && <BusinessHeader noProfile business={notificationBusiness}
+                                                                         businessLogo={notificationBusiness.logo}
+                                                                         businessName={notificationBusiness.name}
+                                                                         noMargin
+                                                                         hideMenu
+                                                                         showActions={false}/>
+                                }
+                                <Text style={{paddingLeft:10,paddingTop: 10}}>{notificationTitle}</Text>
                             </View>
-                            <View  style={{flex:1, paddingBottom:10,justifyContent: 'flex-end',}}>
-                             <SubmitButton color={'#2db6c8'} title={notificationAction} onPress={this.handleGenericNotification.bind(this)}/>
-                            </View>
+                            {notificationActionString && <View style={{flex: 1, paddingBottom: 10, justifyContent: 'flex-end',}}>
+                                <SubmitButton color={'#2db6c8'} title={notificationActionString}
+                                              onPress={this.handleGenericNotification.bind(this)}/>
+                            </View>}
                         </View>}
-                        </View>}
+                    </View>}
 
                 </Container>
             </Drawer>
         );
     }
 
-    closePopup() {
-        const {notificationId} = this.props;
-
-        this.props.actions.closePopup(notificationId);
-
+    translateNotificationAction(action) {
+        if (action === 'APPROVE') {
+            return strings.Approve.toUpperCase();
+        }
+        if (action === 'FOLLOW') {
+            return strings.Follow.toUpperCase();;
+        }
+        return undefined;
     }
 
-    handleGenericNotification(){
-        const {notificationAction,notificationId} = this.props;
+    closePopup() {
+        const {notificationId} = this.props;
+        this.props.actions.closePopup(notificationId);
+    }
 
-        this.props.actions.doNotification(notificationId,notificationAction);
+    handleGenericNotification() {
+        const {notificationAction, notificationId} = this.props;
+        this.props.actions.doNotification(notificationId, notificationAction);
         //Add generic API result
     }
 }
@@ -338,9 +369,11 @@ const mapStateToProps = (state) => {
         showComponent: showCompoenent(state),
         serFollower: state.user.followers,
         item: getPopUpInstance(state),
-        notificationAction : state.mainTab.notificationAction,
+        notificationAction: state.mainTab.notificationAction,
         notificationTitle: state.mainTab.notificationTitle,
-        notificationId:state.mainTab.notificationId,
+        notificationId: state.mainTab.notificationId,
+        notificationGroup: state.mainTab.notificationGroup,
+        notificationBusiness: state.mainTab.notificationBusiness,
         location: state.phone.currentLocation,
         token: state.authentication.token,
     }

@@ -64,7 +64,7 @@ class BusinessHeader extends Component {
         this.props.navigation.goBack();
     }
     render() {
-        const {showActions,categoryTitle, color, businessName,showBack,noMargin,editButton,businessView} = this.props;
+        const {showActions,categoryTitle, color, businessName,showBack,noMargin,editButton,businessView,hideMenu} = this.props;
         let nameTextStyle = styles.businessNameText;
         if(color){
             nameTextStyle = styles.businessColorNameText;
@@ -133,7 +133,7 @@ class BusinessHeader extends Component {
                 {editButton}
             </View> }
             <View style={{padding:5,alignItems:'center',justifyContent:'center'}}>
-                {menuAction}
+                {!hideMenu &&  menuAction}
             </View>
         </View>
     }
