@@ -153,7 +153,7 @@ module.exports = {
         alignItems: 'center',
         flexDirection: 'column',
         backgroundColor: 'white',
-        width: width,
+        width: width ,
         marginBottom: 12,
         flex: 1,
         borderRadius: 2,

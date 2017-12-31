@@ -383,14 +383,14 @@ class FeedConverter {
     }
 
     getInstance(feed) {
-        if (feed.activity) {
+        if (feed.activity && feed.activity.instance) {
             return feed.activity.instance;
         }
         return feed;
     }
 
     getPromotion(feed) {
-        if (feed.activity) {
+        if (feed.activity && feed.activity.instance) {
             return feed.activity.promotion;
         }
         return feed.promotion;
