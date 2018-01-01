@@ -19,11 +19,10 @@ export default class NotificationListView extends Component {
         actions.doNotification(viewItem._id)
     }
 
-    notify(notification){
+    notify(notification) {
         const {item, actions} = this.props;
         const viewItem = item.item;
-
-        actions.doNotification(viewItem._id,notification)
+        actions.doNotification(viewItem._id, notification)
     }
 
     create(group) {
@@ -69,7 +68,7 @@ export default class NotificationListView extends Component {
         const redeemStyle = {
             flex: -1,
             justifyContent: 'center',
-            alignItems:'center',
+            alignItems: 'center',
             marginLeft: width / 4,
             borderWidth: 1,
             flexDirection: 'row',
@@ -78,11 +77,16 @@ export default class NotificationListView extends Component {
             backgroundColor: 'white',
             borderColor: '#2db6c8',
         };
+        let title = viewItem.note;
+        if (viewItem.title) {
+            title = viewItem.title;
+        }
         const backgroundColor = this.getNotificationColor(viewItem);
         const actionStyle = this.getActionStyle(viewItem);
         const action = this.getAvalibaleActions(viewItem, actionStyle, redeemStyle);
         return (
-            <View style={{padding: 5, alignItems:'center',justifyContent:'center',backgroundColor: '#eaeaea'}} regular>
+            <View style={{padding: 5, alignItems: 'center', justifyContent: 'center', backgroundColor: '#eaeaea'}}
+                  regular>
                 <TouchableOpacity onPress={() => this.read(viewItem._id)} style={{
                     flex: -1,
                     backgroundColor: backgroundColor,
@@ -90,11 +94,11 @@ export default class NotificationListView extends Component {
                     alignItems: 'center',
                 }}>
 
-                    <View style={{flexDirection: 'column', marginLeft: 5, width: width , height: vh * 10}}>
-                        <View style={{width: width -20,flexDirection: 'row'}}>
+                    <View style={{flexDirection: 'column', marginLeft: 5, width: width, height: vh * 10}}>
+                        <View style={{width: width - 20, flexDirection: 'row'}}>
                             <Text numberOfLines={2}
                                   style={{height: vh * 7}}>
-                                {viewItem.note}
+                                {title}
                             </Text>
                         </View>
                     </View>
@@ -182,7 +186,7 @@ export default class NotificationListView extends Component {
                 backgroundColor: 'white',
                 width: width,
                 height: vh * 9,
-                flexDirection:'row',
+                flexDirection: 'row',
                 justifyContent: 'center',
                 alignItems: 'center',
             }
@@ -191,45 +195,44 @@ export default class NotificationListView extends Component {
             backgroundColor: '#d3f9ff',
             width: width,
             height: 50,
-            flexDirection:'row',
+            flexDirection: 'row',
             justifyContent: 'center',
             alignItems: 'center',
-
         }
     }
 
     getAvalibaleActions(viewItem, actionStyle, redeemStyle) {
-        if(viewItem.actionDone){
+        if (viewItem.actionDone) {
             return undefined;
         }
-        if(viewItem.available_actions){
-
-
-            switch (viewItem.available_actions){
-
+        if (viewItem.available_actions) {
+            switch (viewItem.available_actions) {
                 case 'FOLLOW':
                     return <View style={actionStyle}>
-                        <TouchableOpacity style={redeemStyle} onPress={this.notify.bind(this,'FOLLOW')}>
-                            <Text style={{alignItems:'center',justifyContent:'center',fontWeight: 'bold', color: '#2db6c8'}}>{strings.Follow}</Text>
+                        <TouchableOpacity style={redeemStyle} onPress={this.notify.bind(this, 'FOLLOW')}>
+                            <Text style={{
+                                alignItems: 'center',
+                                justifyContent: 'center',
+                                fontWeight: 'bold',
+                                color: '#2db6c8'
+                            }}>{strings.Follow}</Text>
                         </TouchableOpacity>
                     </View>
                 case 'APPROVE':
                     return <View style={actionStyle}>
-                        <TouchableOpacity style={redeemStyle} onPress={this.notify.bind(this,'APPROVE')}>
+                        <TouchableOpacity style={redeemStyle} onPress={this.notify.bind(this, 'APPROVE')}>
                             <Text style={{fontWeight: 'bold', color: '#2db6c8'}}>{strings.Approve}</Text>
                         </TouchableOpacity>
-                        <TouchableOpacity style={redeemStyle} onPress={this.notify.bind(this,'DECLINE')}>
+                        <TouchableOpacity style={redeemStyle} onPress={this.notify.bind(this, 'DECLINE')}>
                             <Text style={{fontWeight: 'bold', color: '#2db6c8'}}>{strings.Decline}</Text>
                         </TouchableOpacity>
                     </View>
             }
         }
-
-
     }
 
     getAction(viewItem, actionStyle, redeemStyle) {
-        if(viewItem.actionDone){
+        if (viewItem.actionDone) {
             return undefined;
         }
         return <View style={actionStyle}>
@@ -240,7 +243,7 @@ export default class NotificationListView extends Component {
     }
 
     getPromotioBusinessnAction(viewItem, actionStyle, redeemStyle) {
-        if(viewItem.actionDone){
+        if (viewItem.actionDone) {
             return undefined;
         }
         return <View style={actionStyle}>
@@ -251,7 +254,7 @@ export default class NotificationListView extends Component {
     }
 
     getPromotionAction(viewItem, actionStyle, redeemStyle) {
-        if(viewItem.actionDone){
+        if (viewItem.actionDone) {
             return undefined;
         }
         return <View style={actionStyle}>

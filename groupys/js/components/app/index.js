@@ -1,7 +1,7 @@
 import React, {Component} from "react";
-import {Dimensions, I18nManager, Image, Platform, StyleSheetm, Text} from "react-native";
+import {Dimensions, I18nManager, Image, Platform, StyleSheetm, Text, TouchableOpacity, View} from "react-native";
 import {connect} from "react-redux";
-import {Container, Drawer, Fab, Icon, Tab, TabHeading, Tabs, View} from "native-base";
+import {Container, Drawer, Fab, Icon, Tab, TabHeading, Tabs} from "native-base";
 import GeneralComponentHeader from "../header/index";
 import Feeds from "../feed/index";
 import MydPromotions from "../my-promotions/index";
@@ -15,7 +15,14 @@ import StyleUtils from "../../utils/styleUtils";
 import SideBar from "../drawer/index";
 import * as actions from "../../reducers/reducerActions";
 import {bindActionCreators} from "redux";
-import {addComponent, isAuthenticated, showAddAction, showCompoenent,countUnreadNotifications} from "../../selectors/appSelector";
+import {
+    addComponent,
+    countUnreadNotifications,
+    getPopUpInstance,
+    isAuthenticated,
+    showAddAction,
+    showCompoenent
+} from "../../selectors/appSelector";
 import * as mainAction from "../../actions/mainTab";
 import * as userAction from "../../actions/user";
 import {createSelector} from "reselect";
@@ -23,10 +30,18 @@ import {NavigationActions} from "react-navigation";
 import '../../conf/global';
 import pageSync from "../../refresh/refresher"
 import PageRefresher from '../../refresh/pageRefresher'
-import {ScrolTabView} from '../../ui/index'
-import FCM, {FCMEvent, RemoteNotificationResult, WillPresentNotificationResult, NotificationType} from 'react-native-fcm';
+import {BusinessHeader, GroupHeader, ScrolTabView, SubmitButton} from '../../ui/index'
+import FCM, {
+    FCMEvent,
+    NotificationType,
+    RemoteNotificationResult,
+    WillPresentNotificationResult
+} from 'react-native-fcm';
+import Icon2 from 'react-native-vector-icons/Ionicons';
+import FeedPromotion from '../generic-feed-manager/generic-feed/feed-components/feedPromotion'
+import strings from "../../i18n/i18n"
 
-
+const {width, height} = Dimensions.get('window');
 let locationApi = new LocationApi();
 let contactApi = new ContactApi();
 const store = getStore();
@@ -39,26 +54,23 @@ const resetAction = NavigationActions.reset({
         NavigationActions.navigate({routeName: 'login'})
     ]
 });
-
 // this shall be called regardless of app state: running, background or not running. Won't be called when app is killed by user in iOS
 FCM.on(FCMEvent.Notification, async (notif) => {
     console.log(notif);
     // there are two parts of notif. notif.notification contains the notification payload, notif.data contains data payload
-    if(notif.local_notification){
+    if (notif.local_notification) {
         //this is a local notification
     }
-    if(notif.opened_from_tray){
+    if (notif.opened_from_tray) {
         //iOS: app is open/resumed because user clicked banner
         //Android: app is open/resumed because user clicked banner or tapped app icon
     }
-
-
-    if(Platform.OS ==='ios'){
+    if (Platform.OS === 'ios') {
         //optional
         //iOS requires developers to call completionHandler to end notification process. If you do not call it your background remote notifications could be throttled, to read more about it see https://developer.apple.com/documentation/uikit/uiapplicationdelegate/1623013-application.
         //This library handles it for you automatically with default behavior (for remote notification, finish with NoData; for WillPresent, finish depend on "show_in_foreground"). However if you want to return different result, follow the following code to override
         //notif._notificationType is available for iOS platfrom
-        switch(notif._notificationType){
+        switch (notif._notificationType) {
             case NotificationType.Remote:
                 notif.finish(RemoteNotificationResult.NewData) //other types available: RemoteNotificationResult.NewData, RemoteNotificationResult.ResultFailed
                 break;
@@ -73,7 +85,6 @@ FCM.on(FCMEvent.Notification, async (notif) => {
 });
 FCM.on(FCMEvent.RefreshToken, (token) => {
     PageRefresher.updateUserFireBase(token);
-
 })
 ////////// background jobs schedulers ////////////////////////
 const warch = navigator.geolocation.watchPosition((position) => {
@@ -140,41 +151,38 @@ class ApplicationManager extends Component {
         })
     }
 
-    componentDidMount() {
-
-    }
-
-
     replaceRoute(route) {
         this.props.navigation.navigate(route);
     }
 
     async componentWillMount() {
-
+        FCM.requestPermissions().then(
+            () =>
+                console.log('granted')).catch(() =>
+            console.log('notification permission rejected'));
         const isVerified = await this.props.isAuthenticated
         if (!isVerified) {
             this.props.navigation.dispatch(resetAction);
         }
-        // iOS: show permission prompt for the first call. later just check permission in user settings
-        // Android: check permission in user settings
-        FCM.requestPermissions().then(
-            ()=>
-                console.log('granted')).
-        catch(()=>
-             console.log('notification permission rejected'));
-
         FCM.getFCMToken().then(token => {
             PageRefresher.updateUserFireBase(token);
         });
-
-
-
-        // initial notification contains the notification that launchs the app. If user launchs app by clicking banner, the banner notification info will be here rather than through FCM.on event
-        // sometimes Android kills activity when app goes to background, and when resume it broadcasts notification before JS is run. You can use FCM.getInitialNotification() to capture those missed events.
-        // initial notification will be triggered all the time even when open app by icon so send some action identifier when you send notification
-        FCM.getInitialNotification().then(notif => {
-            console.log(notif)
-        });
+        let notification = await  FCM.getInitialNotification();
+        if (notification && notification.model === 'instance') {
+            this.props.actions.showPromotionPopup(notification._id, notification.notificationId);
+            return;
+        }
+        if (notification && notification.model === 'group') {
+            this.props.actions.showGroupPopup(notification._id, notification.notificationId, notification.title, notification.action);
+            return;
+        }
+        if (notification && notification.model === 'business') {
+            this.props.actions.showBusinessPopup(notification._id, notification.notificationId, notification.title, notification.action);
+            return;
+        }
+        if (notification && notification.title) {
+            this.props.actions.showGenericPopup(notification.title, notification.notificationId, notification.action);
+        }
     }
 
     onChangeTab(tab) {
@@ -213,9 +221,19 @@ class ApplicationManager extends Component {
     }
 
     render() {
-        const {selectedTab, showAdd, showComponent,notifications} = this.props;
+        const {selectedTab, showAdd, showComponent, notifications, item, location, showPopup, token, notificationTitle, notificationAction, notificationGroup, notificationBusiness} = this.props;
         if (!showComponent) {
             return <View></View>
+        }
+        let notificationPopupHeight = 300;
+        let notificationnTopPadding = 150
+        if (item) {
+            notificationPopupHeight = 80
+            notificationnTopPadding = 30;
+        }
+        let notificationActionString
+        if (notificationAction) {
+            notificationActionString = this.translateNotificationAction(notificationAction)
         }
         //TODO find another way to change the drawer close/open
         closeDrawer = () => {
@@ -225,7 +243,6 @@ class ApplicationManager extends Component {
             this.drawer._root.open()
         };
         let notificationLabel = 'notification_' + notifications;
-
         return (
 
             <Drawer
@@ -259,16 +276,84 @@ class ApplicationManager extends Component {
                             <Feeds tabLabel="promotions" index={0} navigation={this.props.navigation}/>
                             <MydPromotions tabLabel="save" navigation={this.props.navigation} index={1}/>
                             <Groups tabLabel="groups" navigation={this.props.navigation} index={2}/>
-                            <Notification  tabLabel={notificationLabel} navigation={this.props.navigation} index={3}/>
+                            <Notification tabLabel={notificationLabel} navigation={this.props.navigation} index={3}/>
 
 
                         </ScrolTabView>
                     }
 
 
+                    {showPopup && <View style={{
+                        left: 2.5,
+                        borderBottomWidth: 2,
+                        borderTopWidth: 2,
+                        borderColor: 'black',
+                        top: notificationnTopPadding,
+                        position: 'absolute',
+                        width: width - 5,
+                        height: height - notificationPopupHeight,
+                        backgroundColor: 'white',
+                        justifyContent: 'center',
+                        alignItems: 'flex-start'
+                    }}>
+                        <TouchableOpacity style={{paddingTop: 5, paddingLeft: 10, justifyContent: 'flex-end'}}
+                                          onPress={() => this.closePopup(false)}>
+                            <Icon2 style={{fontSize: 30}} name="ios-close-circle-outline"/>
+
+                        </TouchableOpacity>
+
+                        {item &&
+                        <View style={{flex: 1, width: width - 5, justifyContent: 'center', alignItems: 'center'}}>
+                            <FeedPromotion showActions={true} token={token}
+                                           location={location} hideSocial={true} showInPopup={true}
+                                           navigation={this.props.navigation} item={item}/>
+                        </View>}
+                        {notificationTitle &&
+                        <View style={{flex: 1, width: width - 5, justifyContent: 'flex-start', alignItems: 'center'}}>
+
+
+                            <View style={{flex: 1, alignItems: 'flex-start', justifyContent: 'flex-start'}}>
+                                {notificationGroup && <GroupHeader group={notificationGroup}/>}
+                                {notificationBusiness && <BusinessHeader noProfile business={notificationBusiness}
+                                                                         businessLogo={notificationBusiness.logo}
+                                                                         businessName={notificationBusiness.name}
+                                                                         noMargin
+                                                                         hideMenu
+                                                                         showActions={false}/>
+                                }
+                                <Text style={{paddingLeft:10,paddingTop: 10}}>{notificationTitle}</Text>
+                            </View>
+                            {notificationActionString && <View style={{flex: 1, paddingBottom: 10, justifyContent: 'flex-end',}}>
+                                <SubmitButton color={'#2db6c8'} title={notificationActionString}
+                                              onPress={this.handleGenericNotification.bind(this)}/>
+                            </View>}
+                        </View>}
+                    </View>}
+
                 </Container>
             </Drawer>
         );
+    }
+
+    translateNotificationAction(action) {
+        if (action === 'APPROVE') {
+            return strings.Approve.toUpperCase();
+        }
+        if (action === 'FOLLOW') {
+            return strings.Follow.toUpperCase();;
+        }
+        return undefined;
+    }
+
+    closePopup() {
+        const {notificationId} = this.props;
+        this.props.actions.closePopup(notificationId);
+    }
+
+    handleGenericNotification() {
+        const {notificationAction, notificationId} = this.props;
+        this.props.actions.doNotification(notificationId, notificationAction);
+        //Add generic API result
     }
 }
 
@@ -277,17 +362,27 @@ const mapStateToProps = (state) => {
         state: state,
         isAuthenticated: isAuthenticated(state),
         selectedTab: state.mainTab.selectedTab,
+        showPopup: state.mainTab.showPopup,
         notifications: countUnreadNotifications(state),
         showAdd: showAddAction(state),
         addComponent: addComponent(state),
-        showComponent: showCompoenent(state)
+        showComponent: showCompoenent(state),
+        serFollower: state.user.followers,
+        item: getPopUpInstance(state),
+        notificationAction: state.mainTab.notificationAction,
+        notificationTitle: state.mainTab.notificationTitle,
+        notificationId: state.mainTab.notificationId,
+        notificationGroup: state.mainTab.notificationGroup,
+        notificationBusiness: state.mainTab.notificationBusiness,
+        location: state.phone.currentLocation,
+        token: state.authentication.token,
     }
 }
 export default connect(
     mapStateToProps,
     (dispatch) => ({
         actions: bindActionCreators(mainAction, dispatch),
-        userActions: bindActionCreators(userAction, dispatch)
+        userActions: bindActionCreators(userAction, dispatch),
     })
 )(ApplicationManager);
 

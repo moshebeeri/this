@@ -92,7 +92,8 @@ const mapStateToProps = state => {
         userFollower: state.user.followers,
         user: state.user.user,
         feeds: getFeeds(state),
-        location: state.phone.currentLocation
+        location: state.phone.currentLocation,
+
     }
 };
 

@@ -39,6 +39,8 @@ export const USER_ROLE_SET_USER = 'USER_ROLE_SET_USER';
 //main tab
 export const APP_CHANGE_TAB = 'CHANGE_TAB';
 export const APP_SHOW_ADD_FAB = 'CHANGE_TAB';
+export const APP_SHOW_PROMOTION_POPUP = 'APP_SHOW_PROMOTION_POPUP';
+export const APP_SHOW_GENERAL_POPUP = 'APP_SHOW_GENERAL_POPUP';
 //authentication
 export const SAVE_USER_TOKEN = 'SAVE_USER_TOKEN';
 export const SAVE_APP_USER = 'SAVE_APP_USER';

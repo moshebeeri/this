@@ -2,7 +2,7 @@ package com.groupys;
 
 import com.facebook.react.ReactActivity;
 import com.yoloci.fileupload.FileUploadPackage;
-
+ import android.content.Intent;
 import android.app.Activity;
 
 public class MainActivity extends ReactActivity {
@@ -15,4 +15,13 @@ public class MainActivity extends ReactActivity {
     protected String getMainComponentName() {
         return "groupys";
     }
+
+     @Override
+       public void onNewIntent(Intent intent) {
+           super.onNewIntent(intent);
+           setIntent(intent);    //must store the new intent unless getIntent() will return the old one
+
+       }
+
+
 }

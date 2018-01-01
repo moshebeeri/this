@@ -65,7 +65,7 @@ export default class FeedPromotion extends Component {
     }
 
     render() {
-        const {refresh,showActions, item, save, shared, like, unlike, showUsers, comment, token, location,hideSocial,realize} = this.props;
+        const {showInPopup,showActions, item, save, shared, like, unlike, showUsers, comment, token, location,hideSocial,realize} = this.props;
         const styles = this.createPromotionStyle();
          const image = this.createImageComponent(item, styles);
         const container = this.createContainerStyle(item);
@@ -108,7 +108,7 @@ export default class FeedPromotion extends Component {
                     {image}
 
 
-                    <View style={{  height:headeerSize,width: width , backgroundColor: 'white'}}>
+                    <View style={{  height:headeerSize,width: width  , backgroundColor: 'white'}}>
                         <View style={promotaionDesc}>
                             <PromotionHeader type={item.promotion} feed titleText={item.promotionTitle}
                                              titleValue={item.promotionValue} term={item.promotionTerm}/>
@@ -181,7 +181,20 @@ export default class FeedPromotion extends Component {
     }
 
     createContainerStyle(item) {
-        const {shared} = this.props;
+        const {shared,showInPopup} = this.props;
+        if(showInPopup){
+            return {
+                flex: 1,
+                height: 90 * vh,
+                width: width -5,
+                overflow: 'hidden',
+                backgroundColor: 'white',
+                // backgroundColor:'#FFF',
+                alignItems: 'center',
+                flexDirection: 'column',
+
+            }
+        }
         if (item.banner) {
             if (shared) {
                 return {
@@ -195,6 +208,7 @@ export default class FeedPromotion extends Component {
 
                 }
             }
+
             return {
                 flex: 1,
                 height: 90 * vh,
@@ -206,6 +220,7 @@ export default class FeedPromotion extends Component {
                 flexDirection: 'column',
 
             }
+
         }
         return {
             flex: 1,

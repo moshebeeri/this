@@ -68,9 +68,12 @@ export default class FeedPost extends Component {
 
 
           let promotionDetalis = styles.promotionDetails;
+          let titleContainerStyle = {flexDirection:'row',backgroundColor:'white',height:80,width: width}
+          let postMessageContainerStyle= {flex:2, width: width,paddingBottom:10, backgroundColor: 'white'};
         if (shared) {
-
+            titleContainerStyle = {borderLeftWidth:1,borderTopWidth:1,borderColor:'#cccccc',marginLeft:10,flexDirection:'row',backgroundColor:'white',height:80,width: width}
             promotionDetalis = styles.promotionShareDetails;
+            postMessageContainerStyle= {borderLeftWidth:1,borderColor:'#cccccc',marginLeft:10,flex:2, width: width,paddingBottom:10, backgroundColor: 'white'};
         }
 
         let headeerSize = 80;
@@ -82,20 +85,20 @@ export default class FeedPost extends Component {
 
                 <View style={styles.promotion_card}>
 
-                    <View style={{flexDirection:'row',backgroundColor:'white',height:60,width: width}}>
-                        <View style={{paddingLeft:10,justifyContent:'center'}}>
+                    <View style={titleContainerStyle}>
+                        <View style={{paddingTop:5,paddingLeft:10,justifyContent:'flex-start'}}>
                         <Thumbnail  square meduim source={item.avetar}/>
                         </View>
-                        <View style={{paddingLeft:20,justifyContent:'center'}}>
+                        <View style={{paddingLeft:10,alignItems:'flex-start'}}>
                             <Text>{item.name}</Text>
-                            <Text>{item.feed.activity.post.title}</Text>
+                            <Text style={{width:240,alignItems:'flex-start'}}>{item.feed.activity.post.title}</Text>
                         </View>
                         <View style={{flex:1,paddingRight:10,alignItems:'flex-end',justifyContent:'center'}}>
                             <ActivityReport id={item.activityId} showActions={showActions}/>
                         </View>
                     </View>
 
-                    <View style={{flex:2, width: width,paddingBottom:10, backgroundColor: 'white'}}>
+                    <View style={postMessageContainerStyle}>
 
                         <View style={promotionDetalis}>
                             <Text numberOfLines={4}  style={{marginRight: 10, marginLeft: 10, fontSize: 18}}>{item.feed.activity.post.text}
