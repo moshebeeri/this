@@ -2,25 +2,25 @@ import React, {Component} from 'react';
 import InViewPort from '../../utils/inviewport'
 import {TouchableOpacity,View,StyleSheet,WebView} from 'react-native';
 import Video from 'react-native-video';
-import YouTube from 'react-native-youtube'
+//import YouTube from 'react-native-youtube'
 const style = {
     padding: StyleSheet.hairlineWidth,
     width : 300,
     height:200,
     backgroundColor: 'orange',
 }
-
-const App = () => (
-    <YouTube
-        apiKey="AIzaSyACe_Cci4drnZovD8xjJOdrsIOQwyWSyCg"
-        play
-        controls={2}
-        fs
-        hidden={false}
-        videoId="hrbI08iulzA"
-        style={style}
-    />
-)
+//
+// const App = () => (
+//     <YouTube
+//         apiKey="AIzaSyACe_Cci4drnZovD8xjJOdrsIOQwyWSyCg"
+//         play
+//         controls={2}
+//         fs
+//         hidden={false}
+//         videoId="hrbI08iulzA"
+//         style={style}
+//     />
+// )
 export default class RNVideo extends Component {
 
 

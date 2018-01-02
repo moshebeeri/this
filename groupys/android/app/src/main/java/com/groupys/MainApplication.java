@@ -3,13 +3,14 @@ package com.groupys;
 import android.app.Application;
 
 import com.facebook.react.ReactApplication;
+import com.pw.droplet.braintree.BraintreePackage;
 import com.evollu.react.fcm.FIRMessagingPackage;
 import com.reactnative.ivpusic.imagepicker.PickerPackage;
 
 import com.AlexanderZaytsev.RNI18n.RNI18nPackage;
 import com.vydia.RNUploader.UploaderReactPackage;
 import com.lwansbrough.RCTCamera.RCTCameraPackage;
-import com.inprogress.reactnativeyoutube.ReactNativeYouTube;
+//import com.inprogress.reactnativeyoutube.ReactNativeYouTube;
 import com.brentvatne.react.ReactVideoPackage;
 import com.babisoft.ReactNativeLocalization.ReactNativeLocalizationPackage;
 import com.BV.LinearGradient.LinearGradientPackage;
@@ -50,6 +51,7 @@ public class MainApplication extends Application implements ReactApplication {
     protected List<ReactPackage> getPackages() {
       return Arrays.<ReactPackage>asList(
           new MainReactPackage(),
+            new BraintreePackage(),
             new FIRMessagingPackage(),
             new PickerPackage(),
 
@@ -57,7 +59,7 @@ public class MainApplication extends Application implements ReactApplication {
             new RNI18nPackage(),
             new UploaderReactPackage(),
             new RCTCameraPackage(),
-            new ReactNativeYouTube(),
+           // new ReactNativeYouTube(),
             new ReactVideoPackage(),
             new ReactNativeLocalizationPackage(),
             new LinearGradientPackage(),

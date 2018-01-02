@@ -9,6 +9,7 @@
   },
   "dependencies": {
     "color": "^1.0.3",
+    "events": "^1.1.1",
     "impagination": "^1.0.0-alpha.3",
     "moment": "^2.18.1",
     "native-base": "^2.3.3",
@@ -19,6 +20,7 @@
     "react-native-autocomplete-input": "^3.3.0",
     "react-native-background-timer": "^1.0.0",
     "react-native-background-upload": "^4.1.0",
+    "react-native-braintree-xplat": "^4.0.0",
     "react-native-camera": "https://github.com/lwansbrough/react-native-camera.git",
     "react-native-card-view": "0.0.3",
     "react-native-check-box": "^1.0.4",
@@ -67,8 +69,7 @@
     "reselect": "^3.0.1",
     "styled-components": "^2.2.3",
     "symbol-observable": "^1.0.4",
-    "util": "^0.10.3",
-    "events": "^1.1.1"
+    "util": "^0.10.3"
   },
   "rnpm": {
     "assets": [
@@ -76,10 +77,10 @@
     ]
   },
   "devDependencies": {
-    "babel-jest": "19.0.0",
-    "babel-preset-react-native": "1.9.1",
-    "jest": "19.0.0",
-    "react-test-renderer": "15.4.2"
+    "babel-jest": "22.0.4",
+    "babel-preset-react-native": "4.0.0",
+    "jest": "22.0.4",
+    "react-test-renderer": "16.0.0"
   },
   "jest": {
     "preset": "react-native"
