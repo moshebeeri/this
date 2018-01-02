@@ -49,13 +49,11 @@ let all = {
       }
     }
   },
-
   facebook: {
     clientID:     process.env.FACEBOOK_ID || 'id',
     clientSecret: process.env.FACEBOOK_SECRET || 'secret',
     callbackURL:  (process.env.DOMAIN || '') + '/auth/facebook/callback'
   },
-
   twitter: {
     clientID:     process.env.TWITTER_ID || 'id',
     clientSecret: process.env.TWITTER_SECRET || 'secret',

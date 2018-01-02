@@ -31,6 +31,10 @@ module.exports = {
     key: 'AIzaSyACe_Cci4drnZovD8xjJOdrsIOQwyWSyCg',
 
   },
+  pricing:{
+    freeTier: 15000,
+    CPM: 2
+  },
   seedDB: true,
   //seedDB: false,
   initializeNeo4j: true,

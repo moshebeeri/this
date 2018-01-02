@@ -43,6 +43,10 @@ module.exports = {
     key: 'AIzaSyACe_Cci4drnZovD8xjJOdrsIOQwyWSyCg',
 
   },
+  pricing:{
+    freeTier: 15000,
+    CPM: 2
+  },
   initializeNeo4j: true,
   sms_verification: true
 };

@@ -1,4 +1,6 @@
 'use strict';
+const config = require('../../config/environment');
+
 const PricingController = require('../../api/pricing/pricing.controller');
 const Charge = require('../../api/pricing/pricing.model').Charge;
 
@@ -24,6 +26,21 @@ Pricing.chargeActivityDistribution =
       return callback(null, null);
     let pricing = payer.pricing;
 
+    function chargeCost(pricing, cost) {
+      if(pricing.freeTierPoints >= cost){
+        pricing.freeTierPoints -= cost;
+      }
+      else if(pricing.purchasedPoints + pricing.freeTierPoints > cost){
+        cost -= pricing.freeTierPoints;
+        pricing.freeTierPoints  = 0;
+        pricing.purchasedPoints -= cost;
+      } else {
+        cost -= pricing.freeTierPoints;
+        pricing.freeTierPoints -= cost;
+        pricing.freeTierPoints = 0;
+      }
+    }
+
     function doCharge(pricing) {
       Charge.create({
         entityId: entity._id,
@@ -36,7 +53,7 @@ Pricing.chargeActivityDistribution =
           return callback(err);
         }
         console.log(JSON.stringify(pricing));
-        pricing.points -= charge.points;
+        chargeCost(pricing, charge.points);
         pricing.save(callback);
         return callback(null, pricing);
       });
@@ -56,12 +73,33 @@ Pricing.chargeActivityDistribution =
     }
   };
 
-Pricing.firstOfThisMonth =
-  Pricing.prototype.firstOfThisMonth = function () {
+
+Pricing.prototype.firstOfThisMonth = function () {
     const now = new Date();
     return new Date(now.getFullYear(), now.getMonth(), 1, 0, 0, 0, 1)
 };
 
+Pricing.prototype.handleFreeTier = function(payer, callback) {
+  const now = new Date();
+  const prev = payer.pricing.lastFreeTier;
+  let pricing = payer.pricing;
+  const monthFromPrev = now.getMonth() - prev.getMonth() + (12 * (now.getFullYear() - prev.getFullYear()));
+  if (monthFromPrev > 0) {
+    const freePoints = {
+      date: Date.now(),
+      points: config.pricing.freeTier
+    };
+    pricing.freeTier.push(freePoints);
+    pricing.lastFreeTier = this.firstOfThisMonth();
+    pricing.freeTierPoints += freePoints.points;
+    pricing.save(function (err, pricing) {
+      if (err) return callback(err);
+      return callback(null, pricing.freeTierPoints);
+    });
+  } else {
+    return callback(null, pricing.freeTierPoints);
+  }
+};
 
 Pricing.balance =
   Pricing.prototype.balance = function (entity, callback) {
@@ -69,31 +107,15 @@ Pricing.balance =
 
     if(!payer) //user entity
       return callback(null, null);
-
-    if (payer.pricing.points <= 0) {
-      const now = new Date();
-      const prev = payer.pricing.lastFreeTier;
-
-      const monthFromPrev = now.getMonth() - prev.getMonth() + (12 * (now.getFullYear() - prev.getFullYear()));
-      if (monthFromPrev > 0) {
-        let pricing = payer.pricing;
-        const freePoints = {
-          date: Date.now(),
-          points: 100000
-        };
-        pricing.freeTier.push(freePoints);
-        pricing.lastFreeTier = this.firstOfThisMonth();
-        pricing.points += freePoints.points;
-        pricing.save(function (err, pricing) {
-          if(err) return callback(err);
-          return callback(null, pricing.points);
-        });
+    this.handleFreeTier(payer, function (err, freeTierPoints) {
+      if(err) return callback(err);
+      let points = freeTierPoints + payer.pricing.purchasedPoints;
+      if (points <= 0){
+        return callback(null, 'FALSE');
       }else{
-        return callback(new Error('no points left'), payer.pricing.points);
+        return callback(null, 'TRUE');
       }
-    }else{
-      return callback(null, payer.pricing.points);
-    }
+    });
   };
 
 module.exports = Pricing;

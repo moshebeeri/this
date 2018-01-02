@@ -8,6 +8,10 @@ let router = express.Router();
 
 router.get('/test', controller.test);
 
+router.get('/checkouts/new', controller.checkouts_new);
+router.get('/checkouts/:id', controller.checkouts_id);
+router.get('/checkouts', controller.checkouts);
+
 router.get('/payment/braintree/:entity/:nonce', auth.isAuthenticated(), controller.braintree);
 router.get('/request/freeTier/:entity/', auth.isAuthenticated(), controller.freeTier);
 
