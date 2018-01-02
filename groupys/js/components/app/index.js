@@ -55,13 +55,7 @@ const resetAction = NavigationActions.reset({
     ]
 });
 
-const BTClient = require('react-native-braintree-xplat');
 
-const options = {
-    bgColor: '#FFF',
-    tintColor: 'orange',
-    callToActionText: 'Save'
-}
 // this shall be called regardless of app state: running, background or not running. Won't be called when app is killed by user in iOS
 FCM.on(FCMEvent.Notification, async (notif) => {
     console.log(notif);
