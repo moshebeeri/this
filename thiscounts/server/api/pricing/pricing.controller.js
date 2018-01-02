@@ -220,6 +220,8 @@ exports.destroy = function (req, res) {
 };
 
 ////////////////////////////////////////////////
+//// see: https://github.com/braintree/braintree_express_example/blob/master/routes/index.js
+
 let braintree = require('braintree');
 let environment, gateway;
 
