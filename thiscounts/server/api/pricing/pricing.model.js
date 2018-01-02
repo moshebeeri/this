@@ -17,8 +17,9 @@ let PricingSchema = new Schema({
     currency: String,
     points: Number
   }],
-  points: Number,
-  lastFreeTier: Date,
+  freeTierPoints: Number,
+  purchasedPoints: Number,
+  lastFreeTier: Date
 });
 
 let ChargeSchema = new Schema({
@@ -30,8 +31,10 @@ let ChargeSchema = new Schema({
     mall: {type: Schema.ObjectId, ref: 'Mall', autopopulate: true},
     brand: {type: Schema.ObjectId, ref: 'Brand', autopopulate: true},
   },
-  date: Date,
-  points: Number
+  date: {type: Date, required: true},
+  totalPoints: {type: Number, required: true},
+  freeTierPoints: {type: Number},
+  purchasedPoints: {type: Number},
 });
 
 PricingSchema.plugin(autopopulate);

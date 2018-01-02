@@ -10,6 +10,7 @@ const Brand = require('../brand/brand.model');
 const Instance = require('../instance/instance.model');
 const activity = require('../../components/activity').createActivity();
 const pricing = require('../../components/pricing');
+const config = require('../../config/environment');
 
 exports.test = function (req, res) {
   Instance.findById("593da112e1977d1f651a4746", function (err, instance) {
@@ -69,10 +70,10 @@ function entityPricing(entity, callback) {
   Pricing.create({
     freeTier: [{
       date: Date.now(),
-      points: 100000
+      points: config.pricing.freeTier
     }],
     purchases: [],
-    points: 100000,
+    points: config.pricing.freeTier,
     lastFreeTier: pricing.firstOfThisMonth()
   }, function (err, pricing) {
     entity.pricing = pricing;
@@ -217,6 +218,134 @@ exports.destroy = function (req, res) {
     });
   });
 };
+
+////////////////////////////////////////////////
+let braintree = require('braintree');
+let environment, gateway;
+
+require('dotenv').load();
+environment = process.env.BT_ENVIRONMENT.charAt(0).toUpperCase() + process.env.BT_ENVIRONMENT.slice(1);
+
+gateway = braintree.connect({
+  environment: braintree.Environment[environment],
+  merchantId: process.env.BT_MERCHANT_ID,
+  publicKey: process.env.BT_PUBLIC_KEY,
+  privateKey: process.env.BT_PRIVATE_KEY
+});
+
+
+let TRANSACTION_SUCCESS_STATUSES = [
+  braintree.Transaction.Status.Authorizing,
+  braintree.Transaction.Status.Authorized,
+  braintree.Transaction.Status.Settled,
+  braintree.Transaction.Status.Settling,
+  braintree.Transaction.Status.SettlementConfirmed,
+  braintree.Transaction.Status.SettlementPending,
+  braintree.Transaction.Status.SubmittedForSettlement
+];
+
+
+function formatErrors(errors) {
+  let formattedErrors = '';
+
+  for (let i in errors) { // eslint-disable-line no-inner-declarations, vars-on-top
+    if (errors.hasOwnProperty(i)) {
+      formattedErrors += 'Error: ' + errors[i].code + ': ' + errors[i].message + '\n';
+    }
+  }
+  return formattedErrors;
+}
+
+function createResultObject(transaction) {
+  let result;
+  let status = transaction.status;
+
+  if (TRANSACTION_SUCCESS_STATUSES.indexOf(status) !== -1) {
+    result = {
+      header: 'Sweet Success!',
+      icon: 'success',
+      message: 'Your test transaction has been successfully processed. See the Braintree API response and try again.'
+    };
+  } else {
+    result = {
+      header: 'Transaction Failed',
+      icon: 'fail',
+      message: 'Your test transaction has a status of ' + status + '. See the Braintree API response and try again.'
+    };
+  }
+
+  return result;
+}
+
+// GET /checkouts/new
+exports.checkouts_new = function (req, res) {
+  gateway.clientToken.generate({}, function (err, response) {
+    res.render('checkouts/new', {clientToken: response.clientToken, messages: req.flash('error')});
+  });
+};
+
+// GET /checkouts/:id
+exports.checkouts_id = function (req, res) {
+  let result;
+  let transactionId = req.params.id;
+
+  gateway.transaction.find(transactionId, function (err, transaction) {
+    result = createResultObject(transaction);
+    res.render('checkouts/show', {transaction: transaction, result: result});
+  });
+};
+
+// POST /checkouts
+exports.checkouts = function (req, res) {
+  let transactionErrors;
+  let amount = req.body.amount; // In production you should not take amounts directly from clients
+  let nonce = req.body.payment_method_nonce;
+
+  gateway.transaction.sale({
+    amount: amount,
+    paymentMethodNonce: nonce,
+    options: {
+      submitForSettlement: true
+    }
+  }, function (err, result) {
+    if (result.success || result.transaction) {
+      res.redirect('checkouts/' + result.transaction.id);
+    } else {
+      transactionErrors = result.errors.deepErrors();
+      req.flash('error', {msg: formatErrors(transactionErrors)});
+      res.redirect('checkouts/new');
+    }
+  });
+};
+//////////////////////////
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 function handleError(res, err) {
   console.error(err);
