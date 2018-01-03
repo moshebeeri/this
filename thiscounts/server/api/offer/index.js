@@ -2,15 +2,15 @@
 
 let express = require('express');
 let controller = require('./offer.controller.js');
+let auth = require('../../auth/auth.service');
 
 let router = express.Router();
 
-router.get('/test', controller.test);
-router.get('/', controller.index);
-router.get('/:id', controller.show);
-router.post('/', controller.create);
-router.put('/:id', controller.update);
-router.patch('/:id', controller.update);
-router.delete('/:id', controller.destroy);
+router.get('/', auth.hasRole('admin'), controller.index);
+router.get('/:id', auth.isAuthenticated(), controller.show);
+router.post('/', auth.isAuthenticated(), controller.create);
+router.put('/:id', auth.isAuthenticated(), controller.update);
+router.patch('/:id', auth.isAuthenticated(), controller.update);
+router.delete('/:id', auth.hasRole('admin'), controller.destroy);
 
 module.exports = router;

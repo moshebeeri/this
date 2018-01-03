@@ -223,16 +223,16 @@ exports.destroy = function (req, res) {
 //// see: https://github.com/braintree/braintree_express_example/blob/master/routes/index.js
 
 let braintree = require('braintree');
-let environment, gateway;
+let gateway;
 
-require('dotenv').load();
-environment = process.env.BT_ENVIRONMENT.charAt(0).toUpperCase() + process.env.BT_ENVIRONMENT.slice(1);
+//require('dotenv').load(); process.env.BT_MERCHANT_ID;
+//environment = process.env.BT_ENVIRONMENT.charAt(0).toUpperCase() + process.env.BT_ENVIRONMENT.slice(1);
 
 gateway = braintree.connect({
-  environment: braintree.Environment[environment],
-  merchantId: process.env.BT_MERCHANT_ID,
-  publicKey: process.env.BT_PUBLIC_KEY,
-  privateKey: process.env.BT_PRIVATE_KEY
+  environment: braintree.Environment.Sandbox, //braintree.Environment['Sandbox']
+  merchantId: 'hhk8bks2bxdrp7jm',
+  publicKey: 'f7dt4jczwvx2vkxg',
+  privateKey: '265da49809261f3bbafe1ab8068cae62'
 });
 
 
@@ -282,7 +282,8 @@ function createResultObject(transaction) {
 // GET /checkouts/new
 exports.checkouts_new = function (req, res) {
   gateway.clientToken.generate({}, function (err, response) {
-    res.render('checkouts/new', {clientToken: response.clientToken, messages: req.flash('error')});
+    if(err) return handleError(res, err);
+    return res.status(200).json({clientToken: response.clientToken});
   });
 };
 
@@ -292,8 +293,11 @@ exports.checkouts_id = function (req, res) {
   let transactionId = req.params.id;
 
   gateway.transaction.find(transactionId, function (err, transaction) {
+    if(err) return handleError(res, err);
     result = createResultObject(transaction);
-    res.render('checkouts/show', {transaction: transaction, result: result});
+    console.log(JSON.stringify(transaction));
+    return res.status(200).json({transaction: transaction, result: result});
+
   });
 };
 
@@ -311,11 +315,11 @@ exports.checkouts = function (req, res) {
     }
   }, function (err, result) {
     if (result.success || result.transaction) {
-      res.redirect('checkouts/' + result.transaction.id);
+      res.redirect('' + result.transaction.id);
     } else {
       transactionErrors = result.errors.deepErrors();
-      req.flash('error', {msg: formatErrors(transactionErrors)});
-      res.redirect('checkouts/new');
+      //req.flash('error', {msg: formatErrors(transactionErrors)});
+      res.redirect('new');
     }
   });
 };
