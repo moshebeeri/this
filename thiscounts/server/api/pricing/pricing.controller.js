@@ -12,7 +12,7 @@ const activity = require('../../components/activity').createActivity();
 const pricing = require('../../components/pricing');
 const config = require('../../config/environment');
 
-exports.test = function (req, res) {
+/*exports.test = function (req, res) {
   Instance.findById("593da112e1977d1f651a4746", function (err, instance) {
       if (err) return handleError(res, err);
 
@@ -32,7 +32,7 @@ exports.test = function (req, res) {
         })
       });
     });
-};
+};*/
 
 
 function findEntity(id, callback) {
@@ -73,7 +73,8 @@ function entityPricing(entity, callback) {
       points: config.pricing.freeTier
     }],
     purchases: [],
-    points: config.pricing.freeTier,
+    freeTierPoints: config.pricing.freeTier,
+    purchasedPoints: 0,
     lastFreeTier: pricing.firstOfThisMonth()
   }, function (err, pricing) {
     entity.pricing = pricing;
@@ -85,6 +86,7 @@ exports.createEntityPricing = function (entity, callback) {
   return entityPricing(entity, callback);
 };
 
+/*
 exports.braintree = function (req, res) {
   //payment received through braintree gateway
   findEntity(req.params.id, function (err, entity) {
@@ -117,6 +119,7 @@ exports.braintree = function (req, res) {
     })
   })
 };
+*/
 
 exports.freeTier = function (req, res) {
   findEntity(req.params.id, function (err, entity) {
@@ -127,21 +130,7 @@ exports.freeTier = function (req, res) {
       if (err) {
         return handleError(res, err);
       }
-      let pricing = entity.pricing;
-      if (!pricing.freeTier) pricing.freeTier = [];
-      if (!pricing.points) pricing.points = 0;
-      const freePoints = {
-        date: Date.now(),
-        points: 100000
-      };
-      pricing.freeTier.push(freePoints);
-      pricing.points += freePoints.points;
-      pricing.save(function (err, entity) {
-        if (err) {
-          return handleError(res, err);
-        }
-        return res.status(200).json(entity.pricing);
-      });
+      return res.status(200).json(entity);
     })
   })
 };
