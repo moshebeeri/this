@@ -223,13 +223,13 @@ exports.destroy = function (req, res) {
 //// see: https://github.com/braintree/braintree_express_example/blob/master/routes/index.js
 
 let braintree = require('braintree');
-let environment, gateway;
+let gateway;
 
 //require('dotenv').load(); process.env.BT_MERCHANT_ID;
 //environment = process.env.BT_ENVIRONMENT.charAt(0).toUpperCase() + process.env.BT_ENVIRONMENT.slice(1);
 
 gateway = braintree.connect({
-  environment: 'Sandbox',
+  environment: braintree.Environment.Sandbox, //braintree.Environment['Sandbox']
   merchantId: 'hhk8bks2bxdrp7jm',
   publicKey: 'f7dt4jczwvx2vkxg',
   privateKey: '265da49809261f3bbafe1ab8068cae62'
