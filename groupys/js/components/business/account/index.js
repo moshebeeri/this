@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import {Dimensions, Image, ScrollView, TouchableOpacity, View,KeyboardAvoidingView} from 'react-native';
+import {Dimensions, Image, KeyboardAvoidingView, ScrollView, TouchableOpacity, View} from 'react-native';
 import {
     Button,
     Card,
@@ -47,23 +47,17 @@ class BusinessAccount extends Component {
             codeStyle: {width: 80, height: 80},
             codeContainerStyle: {position: 'absolute', top: 150, right: 20},
             codeFullSize: false,
-            amount:''
+            amount: ''
         }
     }
 
     async chargeAccount() {
         if (this.validateForm()) {
             try {
-                let amountString = this.state.amount + '$'
-                BTClient.setup('sandbox_pbn3tghz_bwxbpd5jhzd472t5');
-                let options = {
-                    bgColor: '#FFF',
-                    tintColor: 'orange',
-                    amount: amountString,
-                    callToActionText: 'For extra points'
-                }
-                let nonce = await BTClient.showPaymentViewController(options);
-                console.log(nonce);
+                this.props.doPaymentTransaction(this.state.amount);
+                this.setState({
+                    amount: ''
+                })
             } catch (error) {
                 console.log('failed ' + error)
             }
@@ -76,6 +70,7 @@ class BusinessAccount extends Component {
         if (!business) {
             business = this.props.navigation.state.params.businesses;
         }
+        this.props.resetPaymentForm();
         if (business && !business.qrcodeSource) {
             this.props.setBusinessQrCode(business)
         }
@@ -95,13 +90,17 @@ class BusinessAccount extends Component {
         return result
     }
 
-
-
     render() {
-        const {businesses} = this.props
+        const {businesses, paymentMessage} = this.props
         let business = businesses[this.props.navigation.state.params.businesses._id];
         if (!business) {
             business = this.props.navigation.state.params.businesses;
+        }
+        let message = undefined;
+        if (paymentMessage) {
+            message = <View style={{marginTop: 20, alignItems: 'center', justifyContent: 'center'}}>
+                <Text>{paymentMessage}</Text>
+            </View>
         }
         return ( <KeyboardAvoidingView>
 
@@ -114,8 +113,8 @@ class BusinessAccount extends Component {
 
                 <ScrollView>
                     <View style={{alignItems: 'center', justifyContent: 'center'}}>
-                        <View style={{marginTop:10}}>
-                        <Text>{strings.AccountBalance}</Text>
+                        <View style={{marginTop: 10}}>
+                            <Text>{strings.AccountBalance}</Text>
                         </View>
 
                         <View style={styles.inputFullTextLayout}>
@@ -125,14 +124,19 @@ class BusinessAccount extends Component {
 
                         </View>
                         <View style={styles.inputFullTextLayout}>
-                            <TextInput  ref="2" keyboardType={'numeric'}isMandatory placeholder={strings.PayPlaceholder} field={strings.PayAmount} value={this.state.amount}  onChangeText={(amount) => this.setState({amount})}
+                            <TextInput ref="2" keyboardType={'numeric'} isMandatory placeholder={strings.PayPlaceholder}
+                                       field={strings.PayAmount} value={this.state.amount}
+                                       onChangeText={(amount) => this.setState({amount})}
 
                             />
 
                         </View>
                         <View style={{marginTop: 20}}>
-                            <SubmitButton color='#FA8559' title={strings.ADDPOINTS} onPress={this.chargeAccount.bind(this)}/>
+                            <SubmitButton color='#FA8559' title={strings.ADDPOINTS}
+                                          onPress={this.chargeAccount.bind(this)}/>
                         </View>
+
+                        {message}
                     </View>
                 </ScrollView>
             </KeyboardAvoidingView>
@@ -166,6 +170,7 @@ class BusinessAccount extends Component {
 export default connect(
     state => ({
         businesses: state.businesses.businesses,
+        paymentMessage: state.businesses.paymentMessage
     }),
     dispatch => bindActionCreators(businessAction, dispatch)
 )(BusinessAccount);

@@ -4,16 +4,19 @@
 import BusinessApi from "../api/business";
 import UserApi from "../api/user";
 import ProductApi from "../api/product";
+import PricingApi from "../api/pricing";
 import PromotionApi from "../api/promotion";
 import * as actions from "../reducers/reducerActions";
 import EntityUtils from "../utils/createEntity";
+import FormUtils from "../utils/fromUtils";
 
+const BTClient = require('react-native-braintree-xplat');
 let businessApi = new BusinessApi();
 let userApi = new UserApi();
 let productApi = new ProductApi();
 let promotionApi = new PromotionApi();
 let entityUtils = new EntityUtils();
-import FormUtils from "../utils/fromUtils";
+let pricingApi = new PricingApi();
 
 async function getAll(dispatch, token) {
     try {
@@ -31,10 +34,9 @@ async function getAll(dispatch, token) {
     }
 }
 
-
-async function get(dispatch, token,id) {
+async function get(dispatch, token, id) {
     try {
-        let response = await businessApi.get(token,id);
+        let response = await businessApi.get(token, id);
         let businesses = [response];
         if (response.length > 0) {
             dispatch({
@@ -173,7 +175,6 @@ export function unFollowBusiness(businessId) {
         try {
             const token = getState().authentication.token;
             await businessApi.unFollowBusiness(businessId, token);
-
         } catch (error) {
             dispatch({
                 type: actions.NETWORK_IS_OFFLINE,
@@ -203,11 +204,10 @@ export function fetchBusinessCategories(gid) {
     }
 }
 
-
 export function fetchBusiness(id) {
     return function (dispatch, getState) {
         const token = getState().authentication.token;
-        get(dispatch,  token,id);
+        get(dispatch, token, id);
     }
 }
 
@@ -375,6 +375,60 @@ export function setBusinessQrCode(business) {
                 type: actions.NETWORK_IS_OFFLINE,
             });
         }
+    }
+}
+
+export function doPaymentTransaction(amount) {
+    return async function (dispatch, getState) {
+        try {
+            const token = getState().authentication.token;
+            dispatch({
+                type: actions.PAYMENT_SUCCSESS,
+                message: '',
+            });
+            let response = await pricingApi.checkoutNew(token);
+            BTClient.setup(response.clientToken);
+            let options = {
+                bgColor: '#FFF',
+                tintColor: 'orange',
+                amount: amount,
+                callToActionText: 'For extra points'
+            }
+            let nonce = await BTClient.showPaymentViewController(options);
+            let request = {
+                payment_method_nonce: nonce,
+                amount: amount
+            }
+            let paymentResponse = await pricingApi.checkoutRequest(request, token);
+            if (paymentResponse.result && paymentResponse.result.icon === 'success') {
+                dispatch({
+                    type: actions.PAYMENT_SUCCSESS,
+                    message: 'Payment Succeeded',
+                });
+            } else {
+                dispatch({
+                    type: actions.PAYMENT_SUCCSESS,
+                    message: 'Payment Failed',
+                });
+            }
+        } catch (error) {
+            dispatch({
+                type: actions.NETWORK_IS_OFFLINE,
+            });
+            dispatch({
+                type: actions.PAYMENT_SUCCSESS,
+                message: 'Payment Failed',
+            });
+        }
+    }
+}
+
+export function resetPaymentForm() {
+    return async function (dispatch) {
+        dispatch({
+            type: actions.PAYMENT_SUCCSESS,
+            message: '',
+        });
     }
 }
 
