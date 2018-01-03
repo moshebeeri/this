@@ -283,7 +283,7 @@ function createResultObject(transaction) {
 exports.checkouts_new = function (req, res) {
   gateway.clientToken.generate({}, function (err, response) {
     if(err) return handleError(res, err);
-    return res.status(200).json({clientToken: response.clientToken, messages: req.flash('error')});
+    return res.status(200).json({clientToken: response.clientToken});
   });
 };
 
@@ -295,6 +295,7 @@ exports.checkouts_id = function (req, res) {
   gateway.transaction.find(transactionId, function (err, transaction) {
     if(err) return handleError(res, err);
     result = createResultObject(transaction);
+    console.log(JSON.stringify(transaction));
     return res.status(200).json({transaction: transaction, result: result});
 
   });
@@ -314,11 +315,11 @@ exports.checkouts = function (req, res) {
     }
   }, function (err, result) {
     if (result.success || result.transaction) {
-      res.redirect('checkouts/' + result.transaction.id);
+      res.redirect('' + result.transaction.id);
     } else {
       transactionErrors = result.errors.deepErrors();
-      req.flash('error', {msg: formatErrors(transactionErrors)});
-      res.redirect('checkouts/new');
+      //req.flash('error', {msg: formatErrors(transactionErrors)});
+      res.redirect('new');
     }
   });
 };
