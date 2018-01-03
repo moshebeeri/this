@@ -105,7 +105,7 @@ CreatePromotionForEveryoneGroup               : "Create a promotion for everyone
 CreatePromotionForEveryoneBusiness            : "Create a promotion for everyone who follow your business",
 SignUp                                        : "Sign up",
 Login                                         : "Login",
-ForgotPassword                                : "Forgot Password",
+ForgotPassword                                : "Forgot Password?",
 FollowBusiness                                : "Follow Business",
 OnBoardingPromotions                          : "On Boarding Promotions",
 SelectUsers                                   : "Select Users",
