@@ -20,6 +20,11 @@ class BusinessHeader extends Component {
         navigation.navigate("businessProfile", {businesses: business});
     }
 
+    showBusinessAccountDetails() {
+        const{navigation,business} = this.props;
+        navigation.navigate("businessAccount", {businesses: business});
+    }
+
     unFollowBusiness(){
         const {business}  = this.props;
         this.props.actions.unFollowBusiness(business._id);
@@ -107,7 +112,9 @@ class BusinessHeader extends Component {
                     <MenuOption onSelect={this.assignQrCode.bind(this)}>
                         <Text>{strings.assignQrCode}</Text>
                     </MenuOption>
-
+                    <MenuOption onSelect={this.showBusinessAccountDetails.bind(this)}>
+                        <Text>{strings.accountDetail}</Text>
+                    </MenuOption>
                 </MenuOptions>
             </Menu>
         }

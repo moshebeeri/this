@@ -54,6 +54,8 @@ const resetAction = NavigationActions.reset({
         NavigationActions.navigate({routeName: 'login'})
     ]
 });
+
+
 // this shall be called regardless of app state: running, background or not running. Won't be called when app is killed by user in iOS
 FCM.on(FCMEvent.Notification, async (notif) => {
     console.log(notif);
@@ -160,6 +162,18 @@ class ApplicationManager extends Component {
             () =>
                 console.log('granted')).catch(() =>
             console.log('notification permission rejected'));
+        // try {
+        //     BTClient.setup('sandbox_52z5v3k9_bwxbpd5jhzd472t5')
+        //     BTClient.showPaymentViewController(options).then(function (nonce) {
+        //         //payment succeeded, pass nonce to server
+        //     })
+        //         .catch(function (err) {
+        //             //error handling
+        //         });
+        // }catch (error){
+        //     console.log('failed '+ error)
+        // }
+
         const isVerified = await this.props.isAuthenticated
         if (!isVerified) {
             this.props.navigation.dispatch(resetAction);

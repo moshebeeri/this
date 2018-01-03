@@ -9,6 +9,7 @@ const initialState = {
     update: false,
     selectedBusiness: undefined,
     savingForm: false,
+    paymentMessage: '',
 };
 import {REHYDRATE} from "redux-persist/constants";
 import * as actions from "./reducerActions";
@@ -167,6 +168,12 @@ export default function business(state = initialState, action) {
                 ...state,
                 savingForm: false,
             };
+        case actions.PAYMENT_SUCCSESS:
+            return {
+                ...state,
+                paymentMessage: action.message,
+            };
+
         default:
             return state;
     }

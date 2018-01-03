@@ -212,7 +212,12 @@ Nudity                                        : "Nudity",
 Hate                                          : "Hate",
 Violence                                      : "Violence",
 Weapons                                       : "Weapons",
+ADDPOINTS                                     : "ADD POINTS",
 falseDeal                                     : "False Deal",
+accountDetail                                 : 'Account Details',
+AccountBalance                                : 'Account Balance',
+Points                                        : 'Points',
+PayPlaceholder                                : '1$ = 10K points',
 
 
 

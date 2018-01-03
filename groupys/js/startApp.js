@@ -32,6 +32,7 @@ import ChangePassword from "./components/changePassword/index";
 import BusinessProfile from "./components/business/profile/index";
 import PostForm from "./components/post/index";
 import BusinessFollow from "./components/business/follow/follow_container";
+import BusinessAccount from "./components/business/account/index";
 import './conf/global';
 
 import {MenuContext} from "react-native-popup-menu";
@@ -70,6 +71,7 @@ const AppNavigator = StackNavigator({
         businessProfile: {screen: BusinessProfile},
         businessFollow: {screen: BusinessFollow},
         PostForm: {screen: PostForm},
+        businessAccount:{screen:BusinessAccount},
     }
 );
 
