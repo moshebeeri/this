@@ -7,9 +7,9 @@ let auth = require('../../auth/auth.service');
 let router = express.Router();
 
 //see https://github.com/braintree/braintree_express_example/blob/master/routes/index.js
-router.get('/checkouts/new', controller.checkouts_new);
-router.get('/checkouts/:id', controller.checkouts_id);
-router.post('/checkouts', controller.checkouts);
+router.get('/checkouts/new', auth.isAuthenticated(), controller.checkouts_new);
+router.get('/checkouts/:id', auth.isAuthenticated(), controller.checkouts_id);
+router.post('/checkouts', auth.isAuthenticated(), controller.checkouts);
 
 router.get('/create/pricing/:entity', auth.isAuthenticated(), controller.pricing);
 
