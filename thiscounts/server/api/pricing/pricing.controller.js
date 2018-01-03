@@ -282,7 +282,8 @@ function createResultObject(transaction) {
 // GET /checkouts/new
 exports.checkouts_new = function (req, res) {
   gateway.clientToken.generate({}, function (err, response) {
-    res.render('checkouts/new', {clientToken: response.clientToken, messages: req.flash('error')});
+    if(err) return handleError(res, err);
+    return res.status(200).json({clientToken: response.clientToken, messages: req.flash('error')});
   });
 };
 
@@ -292,8 +293,10 @@ exports.checkouts_id = function (req, res) {
   let transactionId = req.params.id;
 
   gateway.transaction.find(transactionId, function (err, transaction) {
+    if(err) return handleError(res, err);
     result = createResultObject(transaction);
-    res.render('checkouts/show', {transaction: transaction, result: result});
+    return res.status(200).json({transaction: transaction, result: result});
+
   });
 };
 

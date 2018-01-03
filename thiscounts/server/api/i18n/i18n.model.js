@@ -4,7 +4,7 @@ let mongoose = require('mongoose'),
     Schema = mongoose.Schema;
 
 let I18nSchema = new Schema({
-  md5: {type: String, required: true},
+  md5: {type: String, required: true, index: true},
   enUS: {type: String, required: true},
   translations:{}
 });
