@@ -121,7 +121,7 @@ exports.braintree = function (req, res) {
 };
 */
 
-exports.freeTier = function (req, res) {
+exports.pricing = function (req, res) {
   findEntity(req.params.id, function (err, entity) {
     if (!entity) {
       return res.status(404).send('Not Found');
