@@ -405,6 +405,11 @@ export function doPaymentTransaction(amount) {
                     type: actions.PAYMENT_SUCCSESS,
                     message: 'Payment Succeeded',
                 });
+                let businesses = await businessApi.getAll(token);
+                dispatch({
+                    type: actions.UPSERT_MY_BUSINESS,
+                    item: businesses
+                });
             } else {
                 dispatch({
                     type: actions.PAYMENT_SUCCSESS,
@@ -429,6 +434,31 @@ export function resetPaymentForm() {
             type: actions.PAYMENT_SUCCSESS,
             message: '',
         });
+    }
+}
+
+
+export function checkFreeTier(business) {
+    return async function (dispatch, getState) {
+        try {
+            dispatch({
+                type: actions.SAVING_BUSINESS,
+            });
+            const token = getState().authentication.token;
+            if(!business.pricing) {
+                await pricingApi.createBusinessPricing(business._id, token);
+                let businesses = await businessApi.getAll(token);
+                dispatch({
+                    type: actions.UPSERT_MY_BUSINESS,
+                    item: businesses
+                });
+            }
+
+        } catch (error) {
+            dispatch({
+                type: actions.NETWORK_IS_OFFLINE,
+            });
+        }
     }
 }
 

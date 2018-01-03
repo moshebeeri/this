@@ -216,7 +216,8 @@ ADDPOINTS                                     : "ADD POINTS",
 falseDeal                                     : "False Deal",
 accountDetail                                 : 'Account Details',
 AccountBalance                                : 'Account Balance',
-Points                                        : 'Points',
+Points                                        : 'Purchased Points',
+FreeTierPoints                                : 'Free Tier Points',
 PayPlaceholder                                : '1$ = 10K points',
 
 

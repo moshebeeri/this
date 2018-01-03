@@ -71,6 +71,7 @@ class BusinessAccount extends Component {
             business = this.props.navigation.state.params.businesses;
         }
         this.props.resetPaymentForm();
+        this.props.checkFreeTier(business);
         if (business && !business.qrcodeSource) {
             this.props.setBusinessQrCode(business)
         }
@@ -92,9 +93,18 @@ class BusinessAccount extends Component {
 
     render() {
         const {businesses, paymentMessage} = this.props
-        let business = businesses[this.props.navigation.state.params.businesses._id];
+        let business = businesses[this.props.navigation.state.params.businesses._id].business;
         if (!business) {
             business = this.props.navigation.state.params.businesses;
+        }
+
+        let freeTierPoints = '0';
+        let points = '0';
+        if(business.pricing){
+            freeTierPoints = business.pricing.freeTierPoints;
+            if(business.pricing.purchasedPoints) {
+                points = business.pricing.purchasedPoints;
+            }
         }
         let message = undefined;
         if (paymentMessage) {
@@ -116,13 +126,19 @@ class BusinessAccount extends Component {
                         <View style={{marginTop: 10}}>
                             <Text>{strings.AccountBalance}</Text>
                         </View>
-
                         <View style={styles.inputFullTextLayout}>
-                            <TextInput field={strings.Points} disabled value={'10,000'}
+                            <TextInput field={strings.FreeTierPoints} disabled value={freeTierPoints}
 
                             />
 
                         </View>
+                        <View style={styles.inputFullTextLayout}>
+                            <TextInput field={strings.Points} disabled value={points}
+
+                            />
+
+                        </View>
+
                         <View style={styles.inputFullTextLayout}>
                             <TextInput ref="2" keyboardType={'numeric'} isMandatory placeholder={strings.PayPlaceholder}
                                        field={strings.PayAmount} value={this.state.amount}
@@ -169,7 +185,7 @@ class BusinessAccount extends Component {
 
 export default connect(
     state => ({
-        businesses: state.businesses.businesses,
+        businesses: state.businesses.myBusinesses,
         paymentMessage: state.businesses.paymentMessage
     }),
     dispatch => bindActionCreators(businessAction, dispatch)
