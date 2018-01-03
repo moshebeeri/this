@@ -53,9 +53,14 @@ export default function business(state = initialState, action) {
             });
             return businessesState;
         case actions.UPSERT_MY_BUSINESS:
+            let businessesMap = {};
+
+            action.item.forEach(eventItem => {
+                businessesMap[eventItem.business._id] = eventItem;
+            });
             return {
                 ...state,
-                myBusinesses: action.item,
+                myBusinesses: businessesMap,
                 update: !businessesState.update,
             };
         case actions.UPSERT_BUSINESS_QRCODE:

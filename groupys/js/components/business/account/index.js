@@ -66,7 +66,8 @@ class BusinessAccount extends Component {
 
     componentWillMount() {
         const {businesses} = this.props
-        let business = businesses[this.props.navigation.state.params.businesses._id];
+        let business = businesses[this.props.navigation.state.params.businesses._id].business;
+
         if (!business) {
             business = this.props.navigation.state.params.businesses;
         }
