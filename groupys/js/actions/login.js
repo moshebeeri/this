@@ -18,9 +18,14 @@ const resetAction = NavigationActions.reset({
 export function login(phone, password, navigation) {
     return async function (dispatch) {
         try {
+            dispatch({
+                type: actions.LOGIN_PROCESS,
+                value: true
+            });
             let response = await loginApi.login(phone, password);
             if (response.token) {
                 await store.save("token", response.token)
+
                 dispatch({
                     type: actions.SAVE_USER_TOKEN,
                     token: response.token
@@ -40,6 +45,7 @@ export function login(phone, password, navigation) {
                     user: user
                 });
                 navigation.dispatch(resetAction);
+
                 navigation.navigate('home');
             } else {
                 dispatch({
@@ -47,7 +53,15 @@ export function login(phone, password, navigation) {
                     message: 'bad credentials'
                 });
             }
+            dispatch({
+                type: actions.LOGIN_PROCESS,
+                value: false
+            });
         } catch (error) {
+            dispatch({
+                type: actions.LOGIN_PROCESS,
+                value: false
+            });
             dispatch({
                 type: actions.NETWORK_IS_OFFLINE,
             });

@@ -44,6 +44,7 @@ export const APP_SHOW_GENERAL_POPUP = 'APP_SHOW_GENERAL_POPUP';
 //authentication
 export const SAVE_USER_TOKEN = 'SAVE_USER_TOKEN';
 export const SAVE_APP_USER = 'SAVE_APP_USER';
+export const LOGIN_PROCESS ='LOGIN_PROCESS';
 //business follow
 export const SEARCH_BUSINESS = 'SEARCH_BUSINESS';
 export const SHOW_CAMERA = 'SHOW_CAMERA';

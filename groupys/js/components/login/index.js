@@ -10,7 +10,7 @@ import {
 } from "react-native";
 import {connect} from "react-redux";
 import {actions} from "react-native-navigation-redux-helpers";
-import {Button, Icon, Input, Item, Text, View} from "native-base";
+import {Button, Icon, Input, Item, Text, View,Spinner} from "native-base";
 import {bindActionCreators} from "redux";
 import * as loginAction from "../../actions/login";
 import styles from "./styles";
@@ -59,7 +59,7 @@ class Login extends Component {
     }
 
     render() {
-        const {focusPassword, focusPhone, failedMessage, isAuthenticated, loginstate} = this.props;
+        const {focusPassword, focusPhone, failedMessage, doLogin} = this.props;
         return (
 
                 <KeyboardAvoidingView behavior={'position'} style={styles.inputContainer}>
@@ -149,6 +149,7 @@ class Login extends Component {
 
                                 </TouchableOpacity>
                             </View>
+                            {doLogin && <Spinner style={{position:'absolute',top:-15}}/>}
                             <View style={styles.signup_container}>
                                 <View style={{flexDirection:'row'}}>
                                     <Text style={{backgroundColor:'transparent',color:'white'}}> Dosen't have an account? </Text>
@@ -176,6 +177,7 @@ export default connect(
         focusPhone: state.loginForm.focusPhone,
         failedMessage: state.loginForm.failedMessage,
         loginstate: state.loginForm,
+        doLogin:state.loginForm.loginProcess,
         isAuthenticated: isAuthenticated(state),
     }),
     (dispatch) => ({
