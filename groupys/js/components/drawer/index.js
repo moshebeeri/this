@@ -90,7 +90,7 @@ class ProfileDrawer extends Component {
         let userImage = <Image style={{width: 120, height: 120, borderRadius: borderRadiusSize,}} source={source}/>;
         return (
 
-            <View style={{width:300,justifyContent:'flex-start',height:deviceHeight,opacity:0.9,backgroundColor: '#41aad9'}}>
+            <View style={{width:deviceWidth/5*4,justifyContent:'flex-start',height:deviceHeight,opacity:0.9,backgroundColor: '#41aad9'}}>
 
                 <View style={{
                     height: 55,
@@ -109,7 +109,7 @@ class ProfileDrawer extends Component {
 
 
                     </TouchableOpacity>
-                    <View style={{marginRight:15}}>
+                    <View style={{marginRight:20}}>
                     <CloseDrawer active color={'white'} size={30} onPress={() => this.props.closeDrawer()}/>
                     </View>
                 </View>
@@ -159,7 +159,7 @@ class ProfileDrawer extends Component {
 
                 {/*button grid*/}
 
-                    <View style={{ borderTopWidth:1,borderBottomWidth:1,marginTop:10,height:70,width:300,flexDirection: 'column', borderRightWidth: 1, borderColor: '#E5E5E5'}}>
+                    <View style={{ borderTopWidth:1,borderBottomWidth:1,marginTop:10,height:70,width:deviceWidth/5*4,flexDirection: 'column',  borderColor: '#E5E5E5'}}>
                         <TouchableOpacity onPress={() => this.showBusinesses()}
                                           style={{flex: 1, flexDirection: 'row', alignItems: 'center'}} regular>
                             <Image style={{tintColor: 'white', marginLeft: 20, width: 30, height: 30}}
@@ -174,7 +174,7 @@ class ProfileDrawer extends Component {
                                 }}>{strings.Businesses}</Text>
                         </TouchableOpacity>
                     </View>
-                    <View style={{height:70,width:300,borderBottomWidth:1,flexDirection: 'row',borderColor: '#E5E5E5'}}>
+                    <View style={{height:70,width:deviceWidth/5*4,borderBottomWidth:1,flexDirection: 'row',borderColor: '#E5E5E5'}}>
                         <TouchableOpacity onPress={() => this.changePassword()}
                                           style={{flex: 1, flexDirection: 'row', alignItems: 'center'}} regular>
                             <Icon style={{marginLeft: 20, marginBottom: -6}} color="white" size={36} name="lock"/>
