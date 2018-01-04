@@ -65,7 +65,7 @@ class Login extends Component {
                 <KeyboardAvoidingView behavior={'position'} style={styles.inputContainer}>
 
                     <View style={{position:'absolute',height:height,width:width}}>
-                        <Image style={{position:'absolute',height:height,width:width}} resizeMode='contain' source={bg}/>
+                        <Image style={{position:'absolute',height:height,width:width}} resizeMode='cover' source={bg}/>
 
                     </View>
                     <View style={{
@@ -85,7 +85,7 @@ class Login extends Component {
                             alignItems: 'center',
                         }}>
 
-                            <View style={{height: 30, justifyContent: 'flex-end', width: width / 2 + 120}}>
+                            <View style={{height: 5, justifyContent: 'flex-end', width: width / 2 + 120}}>
 
                             </View>
 

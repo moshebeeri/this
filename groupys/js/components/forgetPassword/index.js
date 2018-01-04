@@ -61,7 +61,7 @@ class ForgetPassword extends Component {
             <KeyboardAvoidingView behavior={'position'} style={styles.inputContainer}>
 
                 <View style={{position: 'absolute', height: height, width: width}}>
-                    <Image style={{position: 'absolute', height: height, width: width}} resizeMode='contain'
+                    <Image style={{position: 'absolute', height: height, width: width}} resizeMode='cover'
                            source={bg}/>
 
                 </View>

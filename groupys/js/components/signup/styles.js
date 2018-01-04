@@ -27,7 +27,7 @@ module.exports = {
     },
     thisContainer: {
         height: 250,
-        marginTop: height / 40,
+        marginTop: height / 60,
         justifyContent: 'center',
         backgroundColor: 'transparent',
         flexDirection: 'column',

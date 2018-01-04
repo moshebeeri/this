@@ -60,12 +60,12 @@ class Signup extends Component {
 
                 <View style={styles.inputContainer}>
                     <View style={{position:'absolute',height:height,width:width}}>
-                        <Image style={{position:'absolute',height:height,width:width}} resizeMode='contain' source={bg}/>
+                        <Image style={{position:'absolute',height:height,width:width}} resizeMode='cover' source={bg}/>
 
                     </View>
 
                     <KeyboardAvoidingView behavior={'position'} style={styles.avoidView}>
-                        <View style={{width:width,height:60,justifyContent:'center',backgroundColor:'transparent'}}>
+                        <View style={{width:width,height:50,justifyContent:'center',backgroundColor:'transparent'}}>
                             <TouchableOpacity transparent style={{width:50,alignItems:'flex-start',justifyContent:'flex-start',marginTop:5,marginLeft: 10, marginRight: 5}} onPress={() => this.back()}>
                                 <Icon active color={'white'} size={35} name={arrowName}/>
 
