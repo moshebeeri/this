@@ -219,6 +219,8 @@ AccountBalance                                : 'Account Balance',
 Points                                        : 'Purchased Points',
 FreeTierPoints                                : 'Free Tier Points',
 PayPlaceholder                                : '1$ = 10K points',
+FirstName                                     : "First Name",
+LastName                                      : "Last Name",
 
 
 

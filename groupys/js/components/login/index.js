@@ -36,7 +36,7 @@ class Login extends Component {
     }
 
     focusNextField(nextField) {
-        this.refs[nextField]._root.focus()
+        this.refs[nextField].focus()
     }
 
     async componentWillUpdate() {
@@ -96,7 +96,7 @@ class Login extends Component {
                                            underlineColorAndroid={'transparent'}
                                        onChangeText={(phoneNumber) => this.setState({phoneNumber})}
                                            placeholderTextColor={'white'}
-                                           style={{width:width-90,color:'white',borderColor:'white',height:50,fontSize:20,borderBottomWidth:1}}
+                                           style={{width:width / 2 + 120,color:'white',borderColor:'white',height:50,fontSize:20,borderBottomWidth:1}}
                                        placeholder={strings.PhoneNumber}/>
                             </View>
 
@@ -109,7 +109,7 @@ class Login extends Component {
                                     returnKeyType='done'
                                     defaultValue=""
                                     placeholderTextColor={'white'}
-                                    style={{width:width-90,color:'white',borderColor:'white',height:50,fontSize:20,borderBottomWidth:1}}
+                                    style={{width:width / 2 + 120,color:'white',borderColor:'white',height:50,fontSize:20,borderBottomWidth:1}}
                                     placeholder={strings.Password}
                                     secureTextEntry
                                     onChangeText={password => this.setState({password})}

@@ -99,7 +99,7 @@ class ForgetPassword extends Component {
                                        onChangeText={(phoneNumber) => this.setState({phoneNumber})}
                                        placeholderTextColor={'white'}
                                        style={{
-                                           width: width - 90,
+                                           width: width / 2 + 120,
                                            color: 'white',
                                            borderColor: 'white',
                                            height: 50,
