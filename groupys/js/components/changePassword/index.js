@@ -95,7 +95,7 @@ class ChangePassword extends Component {
         const message = this.createMessage(changeForm);
         return (<View>
                 <FormHeader showBack submitForm={this.changePassword.bind(this)} navigation={this.props.navigation}
-                            title={strings.UserChangePassword} bgc="#FA8559"/>
+                            title={strings.UserChangePassword} bgc="#2db6c8"/>
 
                 <View>
 
