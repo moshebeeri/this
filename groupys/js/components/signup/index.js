@@ -66,7 +66,7 @@ class Signup extends Component {
 
                     <KeyboardAvoidingView behavior={'position'} style={styles.avoidView}>
                         <View style={{width:width,height:60,justifyContent:'center',backgroundColor:'transparent'}}>
-                            <TouchableOpacity transparent style={{width:50,alignItems:'flex-start',justifyContent:'flex-start',marginLeft: 5, marginRight: 5}} onPress={() => this.back()}>
+                            <TouchableOpacity transparent style={{width:50,alignItems:'flex-start',justifyContent:'flex-start',marginTop:5,marginLeft: 10, marginRight: 5}} onPress={() => this.back()}>
                                 <Icon active color={'white'} size={35} name={arrowName}/>
 
                             </TouchableOpacity>

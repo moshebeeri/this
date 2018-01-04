@@ -26,25 +26,28 @@ module.exports = {
         color: '#00F',
     },
     thisContainer: {
-        height: 150,
-        marginTop: 100,
+        height: 250,
+        width:width,
+
+        marginTop: height / 10,
         justifyContent: 'center',
         backgroundColor: 'transparent',
         flexDirection: 'column',
         alignItems: 'center',
     },
     this: {
-        fontFamily:(Platform.OS === 'ios') ? 'Roboto-Regular' : 'BackToBlack',
-        fontSize: 60,
-        height: 100,
+        // fontFamily:'BackToBlack',
+        marginTop:150,
+        fontSize: 90,
         color: 'white',
-        backgroundColor: 'transparent',
+        fontWeight:'bold',
+        backgroundColor: 'transparent'
     },
     phoneTextInput: {
         marginLeft: 0, marginTop: 5, backgroundColor: 'white', height: 50, width: width - 10
     },
     nameTextInput: {
-        marginLeft: 0, marginTop: 5, backgroundColor: 'white', height: 50, width: width - 60
+        marginLeft: 0, marginTop: 5, backgroundColor: 'transparent', height: 50, width: width - 60
     },
     lastnameTextInput: {
         marginLeft: 10, marginTop: 5, backgroundColor: 'white', height: 50, width: width / 2 - 35
@@ -73,7 +76,7 @@ module.exports = {
         backgroundColor: 'transparent',
         color: 'white',
         marginLeft: 0,
-        marginTop: 40,
+        marginTop: 0,
     },
     decritpionLine2: {
         fontFamily: 'Roboto-Regular',
@@ -84,8 +87,10 @@ module.exports = {
         marginTop: 3,
     },
     mainContainer: {
-        flex: -1,
-        alignItems: 'center'
+
+        alignItems: 'center',
+        justifyContent:'center',
+
     },
     logoButton: {
         paddingHorizontal: 50,
