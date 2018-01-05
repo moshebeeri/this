@@ -28,6 +28,8 @@ import QrScanner from './QrScanner/QrScannerContainer'
 import PromotionColumnHeader from './PromotionnColumnHeader/PromotionColumnHeader'
 import ScrolTabView from './Tabs/index';
 import ActivityReport from './ActivityActions/ActivityActions';
+import BusinessList from './BusinessList/BusinessList';
+
 import BrainTreeWeb from './BrainTree/BrainTreeWeb'
 export {
     ImagePicker,
@@ -60,5 +62,6 @@ export {
     PromotionColumnHeader,
     ScrolTabView,
     ActivityReport,
-    BrainTreeWeb
+    BrainTreeWeb,
+    BusinessList
 }

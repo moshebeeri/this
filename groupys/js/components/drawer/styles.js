@@ -44,7 +44,7 @@ module.exports = {
         left: 90,
         top: 10,
 
-        borderRadius: (Platform.OS === 'ios') ? 80 : 50,
+        borderRadius: (Platform.OS === 'ios') ? 90 : 90,
 
         width: 120,
         height: 120,
@@ -57,7 +57,7 @@ module.exports = {
         shadowOffset: {width: 2, height: 2},
         shadowOpacity: 0.4,
         shadowRadius: 1,
-        borderRadius: 50,
+        borderRadius: 90,
         opacity:1,
         backgroundColor:'black',
         width: 120,

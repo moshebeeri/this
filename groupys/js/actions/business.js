@@ -111,6 +111,11 @@ export function searchBusiness(business) {
     }
 }
 
+export function showSearchForm(searchType,searchPlaceHolder) {
+    return function (dispatch) {
+        dispatch({type: actions.SEARCH_PARAMS, searchType: searchType,searchPlaceHolder:searchPlaceHolder})
+    }
+}
 export function followByQrCode(barcode) {
     return function (dispatch, getState) {
         const token = getState().authentication.token;
@@ -161,7 +166,8 @@ export function followBusiness(businessId) {
         try {
             const token = getState().authentication.token;
             await businessApi.followBusiness(businessId, token);
-            navigation.goBack();
+            dispatch({type: actions.RESET_FOLLOW_FORM})
+
         } catch (error) {
             dispatch({
                 type: actions.NETWORK_IS_OFFLINE,

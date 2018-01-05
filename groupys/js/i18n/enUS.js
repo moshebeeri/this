@@ -221,6 +221,12 @@ FreeTierPoints                                : 'Free Tier Points',
 PayPlaceholder                                : '1$ = 10K points',
 FirstName                                     : "First Name",
 LastName                                      : "Last Name",
+SearchGroups                                  : "Search Groups",
+Search                                        : "Search ...",
+NoResultsFound                                : "No Results Found",
+
+
+
 
 
 
