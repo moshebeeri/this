@@ -245,6 +245,31 @@ class GroupsApi {
             }
         })
     }
+    join(groupid, token) {
+        return new Promise(async (resolve, reject) => {
+            try {
+                let from = new Date();
+                const response = await fetch(`${server_host}/api/groups/join/${groupid}`, {
+                    method: 'GET',
+                    headers: {
+                        'Accept': 'application/json, text/plain, */*',
+                        'Content-Type': 'application/json;charset=utf-8',
+                        'Authorization': 'Bearer ' + token
+                    }
+                });
+                if (response.status ==='401') {
+                    reject(response);
+                    return;
+                }
+                timer.logTime(from, new Date(), 'groups', 'join');
+                resolve(true)
+            }
+            catch (error) {
+                console.log('There has been a problem with your fetch operation: ' + error.message);
+                reject(error);
+            }
+        })
+    }
 
     meesage(groupid, message, token) {
         return new Promise(async (resolve, reject) => {
@@ -272,6 +297,33 @@ class GroupsApi {
             catch (error) {
                 console.log('There has been a problem with your fetch operation');
                 reject('Failed to deliver message');
+            }
+        })
+    }
+
+    searchGroup(search, token) {
+        return new Promise(async (resolve, reject) => {
+            try {
+                let from = new Date();
+                const response = await fetch(`${server_host}/api/groups/search/0/100/` + search, {
+                    method: 'GET',
+                    headers: {
+                        'Accept': 'application/json, text/plain, */*',
+                        'Content-Type': 'application/json;charset=utf-8',
+                        'Authorization': 'Bearer ' + token
+                    }
+                });
+                if (response.status ==='401') {
+                    reject(response);
+                    return;
+                }
+                timer.logTime(from, new Date(), '/groups/search', 'groups');
+                let responseData = await response.json();
+                resolve(responseData);
+            }
+            catch (error) {
+                console.log('There has been a problem with your fetch operation: ' + error.message);
+                reject(error);
             }
         })
     }

@@ -1,4 +1,11 @@
-const initialState = {businesses: [], cameraOn: false, searching: false, showSearchResults: false,searchPlaceHolder:'',searchType:''};
+const initialState = {
+    businesses: [],
+    groups: [],
+    cameraOn: false,
+    searching: false,
+    howSearchResults: false,
+    searchPlaceHolder: '', searchType: ''
+};
 import * as actions from "./reducerActions";
 
 export default function business(state = initialState, action) {
@@ -8,6 +15,13 @@ export default function business(state = initialState, action) {
                 ...state,
                 businesses: action.businesses,
                 showSearchResults: true,
+            };
+        case actions.SEARCH_GROUPS:
+            return {
+                ...state,
+                groups: action.groups,
+                showSearchResults: true,
+                searching:false,
             };
         case actions.SHOW_CAMERA :
             return {
@@ -25,17 +39,16 @@ export default function business(state = initialState, action) {
                 searchType: action.searchType,
                 searchPlaceHolder: action.searchPlaceHolder,
             };
-
-
         case actions.RESET_FOLLOW_FORM :
             return {
                 ...state,
                 searching: false,
                 cameraOn: false,
                 showSearchResults: false,
-                searchType:'',
-                searchPlaceHolder:'',
-                businesses: []
+                searchType: '',
+                searchPlaceHolder: '',
+                businesses: [],
+                groups:[]
             };
         default:
             return state;

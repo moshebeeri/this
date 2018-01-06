@@ -29,7 +29,7 @@ import PromotionColumnHeader from './PromotionnColumnHeader/PromotionColumnHeade
 import ScrolTabView from './Tabs/index';
 import ActivityReport from './ActivityActions/ActivityActions';
 import BusinessList from './BusinessList/BusinessList';
-
+import GroupsList from './groupsList/GroupsList';
 import BrainTreeWeb from './BrainTree/BrainTreeWeb'
 export {
     ImagePicker,
@@ -63,5 +63,6 @@ export {
     ScrolTabView,
     ActivityReport,
     BrainTreeWeb,
-    BusinessList
+    BusinessList,
+    GroupsList
 }

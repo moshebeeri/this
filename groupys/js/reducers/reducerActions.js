@@ -47,6 +47,7 @@ export const SAVE_APP_USER = 'SAVE_APP_USER';
 export const LOGIN_PROCESS ='LOGIN_PROCESS';
 //business follow
 export const SEARCH_BUSINESS = 'SEARCH_BUSINESS';
+export const SEARCH_GROUPS= 'SEARCH_GROUPS';
 export const SHOW_CAMERA = 'SHOW_CAMERA';
 export const SHOW_SEARCH_SPIN = 'SHOW_SEARCH_SPIN';
 export const  SEARCH_PARAMS= 'SEARCH_PARAMS';

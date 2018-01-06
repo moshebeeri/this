@@ -7,6 +7,7 @@ import Icon from 'react-native-vector-icons/Ionicons';
 import Icon2 from 'react-native-vector-icons/SimpleLineIcons';
 import * as notificationAction from "../../actions/notifications";
 import * as businessAction from "../../actions/business";
+import * as groupsAction from "../../actions/groups";
 import {connect} from 'react-redux';
 import {bindActionCreators} from "redux";
 
@@ -43,7 +44,7 @@ class GeneralComponentHeader extends Component {
 
     }
     searchGroups() {
-        this.props.businessActions.showSearchForm('groups',strings.SearchBusiness);
+        this.props.businessActions.showSearchForm('groups',strings.SearchGroups);
 
     }
 
@@ -59,7 +60,11 @@ class GeneralComponentHeader extends Component {
 
     search(){
         let searchParams = this.state.searchText;
-        this.props.businessActions.searchBusiness(searchParams)
+        if(this.props.state.searchType==='business') {
+            this.props.businessActions.searchBusiness(searchParams)
+        }else{
+            this.props.groupsAction.searchGroup(searchParams)
+        }
         this.setState({
             searchText:''
         })
@@ -176,7 +181,8 @@ export default connect(
     }),
     (dispatch) => ({
         actions: bindActionCreators(notificationAction, dispatch),
-        businessActions: bindActionCreators(businessAction, dispatch)
+        businessActions: bindActionCreators(businessAction, dispatch),
+        groupsAction: bindActionCreators(groupsAction, dispatch),
     })
 
 )(GeneralComponentHeader);

@@ -26,6 +26,7 @@ import {
 import * as mainAction from "../../actions/mainTab";
 import * as userAction from "../../actions/user";
 import * as businessActions from "../../actions/business";
+import * as groupsActions from "../../actions/groups";
 
 
 import {createSelector} from "reselect";
@@ -33,7 +34,7 @@ import {NavigationActions} from "react-navigation";
 import '../../conf/global';
 import pageSync from "../../refresh/refresher"
 import PageRefresher from '../../refresh/pageRefresher'
-import {BusinessHeader, GroupHeader, ScrolTabView, SubmitButton,BusinessList} from '../../ui/index'
+import {BusinessHeader, GroupHeader, ScrolTabView, SubmitButton,BusinessList,GroupsList} from '../../ui/index'
 import FCM, {
     FCMEvent,
     NotificationType,
@@ -241,7 +242,7 @@ class ApplicationManager extends Component {
         const {selectedTab, showAdd, showComponent, notifications,
             item, location, showPopup, token, notificationTitle,
             notificationAction, notificationGroup, notificationBusiness,
-            showSearchResults,businesses,businessActions} = this.props;
+            showSearchResults,businesses,businessActions,groups,groupsActions} = this.props;
 
         if (!showComponent) {
             return <View></View>
@@ -303,10 +304,16 @@ class ApplicationManager extends Component {
                         </ScrolTabView>
                     }
 
-                    {showSearchResults && <View style={{ top:60,position: 'absolute',backgroundColor:'white',width: width }}>
+                    {showSearchResults && businesses &&  <View style={{ top:60,position: 'absolute',backgroundColor:'white',width: width }}>
 
                     <BusinessList businesses={businesses} followBusiness={businessActions.followBusiness}/>
                 </View>}
+
+
+                    {showSearchResults && groups &&  <View style={{ top:60,position: 'absolute',backgroundColor:'white',width: width }}>
+
+                        <GroupsList groups={groups} joinGroup={groupsActions.joinGroup}/>
+                    </View>}
                     {showPopup && <View style={{
                         left: 2.5,
                         borderBottomWidth: 2,
@@ -401,6 +408,7 @@ const mapStateToProps = (state) => {
         location: state.phone.currentLocation,
         token: state.authentication.token,
         businesses: state.follow_businesses.businesses,
+        groups: state.follow_businesses.groups,
         showSearchResults: state.follow_businesses.showSearchResults,
         businessesState: state.follow_businesses
     }
@@ -411,6 +419,7 @@ export default connect(
         actions: bindActionCreators(mainAction, dispatch),
         userActions: bindActionCreators(userAction, dispatch),
         businessActions: bindActionCreators(businessActions, dispatch),
+        groupsActions: bindActionCreators(groupsActions, dispatch),
     })
 )(ApplicationManager);
 
