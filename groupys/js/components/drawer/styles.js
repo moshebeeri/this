@@ -41,13 +41,13 @@ module.exports = {
     },
     thumbnail: {
         position: 'absolute',
-        left: 180,
-        top: 40,
+        left: 90,
+        top: 10,
 
-        borderRadius: (Platform.OS === 'ios') ? 80 : 50,
+        borderRadius: (Platform.OS === 'ios') ? 90 : 90,
 
-        width: 85,
-        height: 85,
+        width: 120,
+        height: 120,
     },
     thumbnail_image: {
         position: 'absolute',
@@ -57,14 +57,16 @@ module.exports = {
         shadowOffset: {width: 2, height: 2},
         shadowOpacity: 0.4,
         shadowRadius: 1,
-        borderRadius: 50,
-        width: 85,
-        height: 85,
+        borderRadius: 90,
+        opacity:1,
+        backgroundColor:'black',
+        width: 120,
+        height: 120,
     },
     image: {
-        backgroundColor: '#FF9046',
-        flexDirection: 'row',
+        backgroundColor: '#41aad9',
+        flexDirection: 'column',
         height: 152,
-        width: deviceWidth,
+        width: 300,
     },
 };

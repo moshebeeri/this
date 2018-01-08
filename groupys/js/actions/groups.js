@@ -418,6 +418,42 @@ export function refresh(id, currentSocialState) {
         }
     }
 }
+export function searchGroup(group) {
+    return function (dispatch, getState) {
+        const token = getState().authentication.token;
+        dispatchSearchGroups(dispatch, group, token);
+    }
+}
+
+
+async function dispatchSearchGroups(dispatch, business, token) {
+    try {
+        dispatch({type: actions.SHOW_SEARCH_SPIN, searching: true});
+
+        let response = await groupsApi.searchGroup(business, token);
+        dispatch({type: actions.SEARCH_GROUPS, groups: response});
+
+    } catch (error) {
+        dispatch({
+            type: actions.NETWORK_IS_OFFLINE,
+        });
+    }
+}
+
+export function joinGroup(groupId) {
+    return async function (dispatch, getState) {
+        try {
+            const token = getState().authentication.token;
+            await groupsApi.join(groupId, token);
+            dispatch({type: actions.RESET_FOLLOW_FORM})
+
+        } catch (error) {
+            dispatch({
+                type: actions.NETWORK_IS_OFFLINE,
+            });
+        }
+    }
+}
 
 export default {
     getAll,

@@ -126,7 +126,7 @@ class UserProfile extends Component {
 
             <View style={styles.settingsContainer}>
                 <FormHeader showBack submitForm={this.save.bind(this)} navigation={this.props.navigation}
-                            title={strings.UserSettings} bgc="#FA8559"/>
+                            title={strings.UserSettings} bgc="#2db6c8"/>
 
                 <View style={styles.thumbnail}>
 

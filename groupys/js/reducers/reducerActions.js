@@ -44,10 +44,14 @@ export const APP_SHOW_GENERAL_POPUP = 'APP_SHOW_GENERAL_POPUP';
 //authentication
 export const SAVE_USER_TOKEN = 'SAVE_USER_TOKEN';
 export const SAVE_APP_USER = 'SAVE_APP_USER';
+export const LOGIN_PROCESS ='LOGIN_PROCESS';
 //business follow
 export const SEARCH_BUSINESS = 'SEARCH_BUSINESS';
+export const SEARCH_GROUPS= 'SEARCH_GROUPS';
 export const SHOW_CAMERA = 'SHOW_CAMERA';
 export const SHOW_SEARCH_SPIN = 'SHOW_SEARCH_SPIN';
+export const  SEARCH_PARAMS= 'SEARCH_PARAMS';
+
 export const RESET_FOLLOW_FORM = 'RESET_FOLLOW_FORM';
 //feeds
 export const GET_FEEDS = 'GET_FEEDS';

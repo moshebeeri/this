@@ -7,7 +7,7 @@
 /**
  * Created by stan229 on 5/27/16.
  */
-const initialState = {failedMessage: '', focusPhone: true, focusPassword: false};
+const initialState = {failedMessage: '', focusPhone: true, focusPassword: false,loginProcess:false};
 import * as actions from './../reducerActions';
 import {REHYDRATE} from 'redux-persist/constants'
 
@@ -39,6 +39,11 @@ export default function loginForm(state = initialState, action) {
             return {
                 ...state,
                 focus: action.foucs,
+            };
+        case actions.LOGIN_PROCESS :
+            return {
+                ...state,
+                loginProcess: action.value,
             };
         default:
             return state;

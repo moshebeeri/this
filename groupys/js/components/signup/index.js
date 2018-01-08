@@ -1,8 +1,8 @@
 import React, {Component} from 'react';
-import {Image, Platform, KeyboardAvoidingView, Dimensions, TouchableOpacity} from 'react-native';
+import {Image, Platform, KeyboardAvoidingView, Dimensions, TouchableOpacity,TextInput,View,I18nManager} from 'react-native';
 import {connect} from 'react-redux';
 import {actions} from 'react-native-navigation-redux-helpers';
-import {Container, Content, Text, InputGroup, Input, Button, Icon, View, Item} from 'native-base';
+import {Container, Content, Text, InputGroup, Input, Button, Item} from 'native-base';
 
 const {width, height} = Dimensions.get('window')
 import styles from './styles';
@@ -11,7 +11,8 @@ import {bindActionCreators} from "redux";
 import * as loginAction from "../../actions/login";
 import strings from "../../i18n/i18n"
 const thisLogo = require('../../../images/this-logo.png');
-
+const bg = require('../../../images/bg.png');
+import Icon from 'react-native-vector-icons/Ionicons';
 class Signup extends Component {
     static navigationOptions = {
         header: null
@@ -38,28 +39,40 @@ class Signup extends Component {
     signup() {
         this.props.actions.signup(this.state.phoneNumber, this.state.password, this.state.name, this.state.lastname, this.props.navigation)
     }
+    back() {
+        this.props.navigation.goBack();
+    }
 
     focusNextField(nextField) {
-        this.refs[nextField]._root.focus()
+        this.refs[nextField].focus()
     }
 
     render() {
         const {failedMessage, focusName, focusLastname} = this.props;
         const message = this.createMessage(failedMessage);
+
+        let arrowName = I18nManager.isRTL ? "ios-arrow-forward" : "ios-arrow-back";
+        let inputFieldSize = 120;
+        if(Platform.OS){
+            inputFieldSize = 150;
+        }
         return (
-            <LinearGradient
-
-
-                colors={['#67ccf8', '#66cdcc']}
-                style={styles.inputContainer}
-            >
-
 
                 <View style={styles.inputContainer}>
+                    <View style={{position:'absolute',height:height,width:width}}>
+                        <Image style={{position:'absolute',height:height,width:width}} resizeMode='cover' source={bg}/>
+
+                    </View>
 
                     <KeyboardAvoidingView behavior={'position'} style={styles.avoidView}>
+                        <View style={{width:width,height:50,justifyContent:'center',backgroundColor:'transparent'}}>
+                            <TouchableOpacity transparent style={{width:50,alignItems:'flex-start',justifyContent:'flex-start',marginTop:5,marginLeft: 10, marginRight: 5}} onPress={() => this.back()}>
+                                <Icon active color={'white'} size={35} name={arrowName}/>
+
+                            </TouchableOpacity>
+                        </View>
                         <View style={styles.thisContainer}>
-                            <Image style={{position:'absolute',top:-175,width:150}} resizeMode='contain' source={thisLogo}/>
+                            <Image style={{position:'absolute',top:-175,width:140}} resizeMode='contain' source={thisLogo}/>
                             <Text style={styles.this}>THIS</Text>
                         </View>
                         <View style={{
@@ -68,70 +81,87 @@ class Signup extends Component {
                             justifyContent: 'center',
                             alignItems: 'center',
                         }}>
-                            <View style={{height: 50, justifyContent: 'flex-end', width: width / 2 + 120}}>
 
-                                <Text style={styles.SignUpText}>{strings.SignUp}</Text>
-                            </View>
-                            <View style={styles.nameContainer}>
-                                <Item style={styles.nameTextInput} regular>
-                                    <Input value={this.state.name} blurOnSubmit={true} returnKeyType='next' ref="1"
+                            <View style={styles.firstLastNameContainer}>
+                                <View style={styles.nameTextInput} regular>
+                                    <TextInput value={this.state.name} blurOnSubmit={true} returnKeyType='next' ref="1"
                                            onSubmitEditing={this.focusNextField.bind(this, "2")}
-                                           onChangeText={(name) => this.setState({name})} placeholder='Name'/>
-                                </Item>
-                                <Item style={styles.lastnameTextInput} regular>
-                                    <Input value={this.state.lastname} blurOnSubmit={true} returnKeyType='next' ref="2"
-                                           onSubmitEditing={this.focusNextField.bind(this, "3")}
-                                           onChangeText={(lastname) => this.setState({lastname})}
-                                           placeholder='Last Name'/>
-                                </Item>
+                                               style={{width:145,color:'white',borderColor:'white',height:50,fontSize:20,borderBottomWidth:1}}
+                                               underlineColorAndroid={'transparent'}
+                                               placeholderTextColor={'white'}
+                                               onChangeText={(name) => this.setState({name})} placeholder={strings.FirstName}/>
+                                </View>
+                                <View style={styles.lastnameTextInput} regular>
+                                    <TextInput value={this.state.lastname} blurOnSubmit={true} returnKeyType='next' ref="2"
+                                           onSubmitEditing={this.focusNextField.bind(this, "name")}
+                                               style={{width:145,color:'white',borderColor:'white',height:50,fontSize:20,borderBottomWidth:1}}
+                                               underlineColorAndroid={'transparent'}
+                                               placeholderTextColor={'white'}
+                                               onChangeText={(lastname) => this.setState({lastname})}
+                                           placeholder={strings.LastName}/>
+                                </View>
                             </View>
 
 
-                            <Item style={styles.phoneTextInput} regular>
-                                <Input keyboardType='numeric' value={this.state.phoneNumber} blurOnSubmit={true}
-                                       returnKeyType='next' ref="3"
-                                       onSubmitEditing={this.focusNextField.bind(this, "5")}
-                                       onChangeText={(phoneNumber) => this.setState({phoneNumber})}
-                                       placeholder={strings.PhoneNumber}/>
-                            </Item>
+                            <View style={styles.phoneTextInput} regular>
+                                <TextInput  keyboardType='phone-pad' value={this.state.phoneNumber}
+                                            ref='name'
+                                           blurOnSubmit={true} returnKeyType='next'
+                                           onSubmitEditing={this.focusNextField.bind(this, "password")}
+                                           underlineColorAndroid={'transparent'}
+                                           onChangeText={(phoneNumber) => this.setState({phoneNumber})}
+                                           placeholderTextColor={'white'}
+                                           style={{width:width / 2 + 120,color:'white',borderColor:'white',height:50,fontSize:20,borderBottomWidth:1}}
+                                           placeholder={strings.PhoneNumber}/>
+                            </View>
 
-                            <Item style={styles.passwordTextInput} regular>
+                            <View style={styles.passwordTextInput} regular>
 
-                                <Input
-                                    ref='5'
+                                <TextInput
+
+                                    ref='password'
+                                    underlineColorAndroid={'transparent'}
                                     returnKeyType='done'
-                                    placeholder={strings.Password}
-                                    placeholderTextColor='#444'
                                     defaultValue=""
+                                    value={this.state.password}
+                                    placeholderTextColor={'white'}
+                                    style={{width:width / 2 + 120,color:'white',borderColor:'white',height:50,fontSize:20,borderBottomWidth:1}}
+                                    placeholder={strings.Password}
                                     secureTextEntry
                                     onChangeText={password => this.setState({password})}
                                     onSubmitEditing={this.signup.bind(this)}
                                 />
-                            </Item>
+                            </View>
 
                             {message}
 
                             <View style={{
-                                height: 40,
+                                height: 50,
+                                marginTop:20,
                                 justifyContent: 'center',
                                 alignItems: 'center',
                                 width: width / 2 + 120
                             }}>
-
                                 <TouchableOpacity onPress={() => this.signup()} style={{
-                                    width: 100,
-                                    height: 30,
-                                    borderRadius: 10,
-                                    backgroundColor: 'skyblue',
+                                    width: width-90,
+                                    height: 50,
+                                    borderRadius: 30,
+                                    backgroundColor: 'white',
                                     margin: 3,
                                     flexDirection: 'row',
                                     justifyContent: 'center',
                                     alignItems: 'center',
                                 }} regular>
 
-                                    <Text style={{color: 'white', fontStyle: 'normal', fontSize: 15}}>{strings.SignUp.toUpperCase()}</Text>
+                                    <Text style={{
+                                        color: 'skyblue',
+                                        fontWeight:'bold',
+                                        fontStyle: 'normal',
+                                        fontSize: 20
+                                    }}>{strings.SignUp.toUpperCase()}</Text>
 
                                 </TouchableOpacity>
+
                             </View>
 
                         </View>
@@ -140,7 +170,7 @@ class Signup extends Component {
 
 
                 </View>
-            </LinearGradient>
+
 
 
         );

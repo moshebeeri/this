@@ -47,17 +47,22 @@ export default function business(state = initialState, action) {
 
                     currentbusinesses[eventItem._id] = eventItem;
                 }
+
                 currentbusinesses[eventItem._id].qrcodeSource = qrSource;
                 currentbusinesses[eventItem._id].categoryTitle = categoryTitle;
             });
             return businessesState;
         case actions.UPSERT_MY_BUSINESS:
-             myCurrentbusinesses = businessesState.myBusinesses;
-            businessesState.update = !businessesState.update;
+            let businessesMap = {};
+
             action.item.forEach(eventItem => {
-                myCurrentbusinesses[eventItem.business._id] = eventItem;
+                businessesMap[eventItem.business._id] = eventItem;
             });
-            return businessesState;
+            return {
+                ...state,
+                myBusinesses: businessesMap,
+                update: !businessesState.update,
+            };
         case actions.UPSERT_BUSINESS_QRCODE:
 
             businessesState.update = !businessesState.update;

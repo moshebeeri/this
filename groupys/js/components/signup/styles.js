@@ -27,30 +27,46 @@ module.exports = {
     },
     thisContainer: {
         height: 250,
-        marginTop: height / 10,
+        marginTop: height / 60,
         justifyContent: 'center',
         backgroundColor: 'transparent',
         flexDirection: 'column',
         alignItems: 'center',
     },
     this: {
+        // fontFamily:'BackToBlack',
         marginTop:150,
-        fontSize: 50,
+        fontSize: 90,
         color: 'white',
+        fontWeight:'bold',
         backgroundColor: 'transparent'
     },
     phoneTextInput: {
-        marginTop: 5, backgroundColor: 'white', height: 50, width: width / 2 + 120
+        marginTop: 5, backgroundColor: 'transparent', height: 60, width: width / 2 + 120,
+        justifyContent: 'center',
+        alignItems:'center',
+        flexDirection:'row'
     },
-    nameTextInput: {
-        marginTop: 5, backgroundColor: 'white', height: 50, width: width / 2 - 35
-    },
-    lastnameTextInput: {
-        marginTop: 5, backgroundColor: 'white', height: 50, width: width / 2 - 35
+    firstLastNameContainer: {
+        marginTop: 5, backgroundColor: 'transparent', height: 60, width: width / 2 + 120,
+        justifyContent: 'space-between',
+        alignItems:'center',
+        flexDirection:'row'
     },
     passwordTextInput: {
-        marginTop: 5, backgroundColor: 'white', height: 50, width: width / 2 + 120
+        marginTop: 10, backgroundColor: 'transparent', height: 50, width: width / 2 + 120,
+        justifyContent: 'center',
+        alignItems:'center',
     },
+    nameTextInput: {
+        marginTop: 5, backgroundColor: 'transparent', height: 50, width: 150,
+
+    },
+    lastnameTextInput: {
+        marginTop: 5, backgroundColor: 'transparent', height: 50, width:150,
+
+    },
+
     nameContainer: {
         width: width / 2 + 120,
         flexDirection: 'row',
@@ -117,5 +133,6 @@ module.exports = {
     },
     avoidView: {
         alignItems: 'center',
+
     },
 };

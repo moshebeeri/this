@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import {Image, Platform, StyleSheet, TouchableOpacity,I18nManager} from 'react-native';
+import {I18nManager, Image, Platform, StyleSheet, TouchableOpacity,Dimensions} from 'react-native';
 import {Button, Container, Content, Input, InputGroup, Item, Text, View} from 'native-base';
 import styles from './styles';
 import {connect} from 'react-redux';
@@ -13,11 +13,11 @@ import strings from "../../i18n/i18n"
 const noPic = require('../../../images/client_1.png');
 const briefcase = require('../../../images/briefcase.png');
 const settings = require('../../../images/settings-work-tool.png');
-
+const deviceHeight = Dimensions.get('window').height;
+const deviceWidth = Dimensions.get('window').width;
 // import pageSync from "../../refresh/refresher"
 //
 // pageSync.check();
-
 class ProfileDrawer extends Component {
     static navigationOptions = {
         header: null
@@ -83,117 +83,114 @@ class ProfileDrawer extends Component {
         }
         let name = StyleUtils.toTitleCase(this.props.user ? this.props.user.name : 'name');
         let phoneNumber = StyleUtils.parseUserPhoneNumber(this.props.user);
-        let borderRadiusSize = 40;
+        let borderRadiusSize = 50;
         if (Platform.OS === 'ios') {
-            borderRadiusSize = 35;
+            borderRadiusSize = 50;
         }
-        let userImage = <Image style={{width: 80, height: 80, borderRadius: borderRadiusSize,}} source={source}/>;
+        let userImage = <Image style={{width: 120, height: 120, borderRadius: borderRadiusSize,}} source={source}/>;
         return (
-            <Container>
-                <Content style={{backgroundColor: '#F2F2F2'}}>
 
-                    <View style={{height: 55, flex: 1, alignItems:'center',justifyContent:  'flex-end', flexDirection: 'row'}}>
-                        <CloseDrawer active color={"#FF9046"} size={30} onPress={() => this.props.closeDrawer()}/>
+            <View style={{width:deviceWidth/5*4,justifyContent:'flex-start',height:deviceHeight,opacity:0.9,backgroundColor: '#41aad9'}}>
+
+                <View style={{
+                    height: 55,
+
+                    alignItems: 'center',
+                    opacity:1,
+                    justifyContent: 'space-between',
+                    flexDirection: 'row',
+
+
+                }}>
+                    <TouchableOpacity onPress={() => this.showUserProfile()}
+                                      style={{marginLeft:15,width: 40, height: 30,flexDirection: 'column', alignItems: 'center'}} regular>
+                        <Image style={{tintColor: 'white', width: 30, height: 30}}
+                               source={settings}/>
+
+
+                    </TouchableOpacity>
+                    <View style={{marginRight:20}}>
+                    <CloseDrawer active color={'white'} size={30} onPress={() => this.props.closeDrawer()}/>
                     </View>
-                    {/*form header*/}
-                    <View style={styles.image}>
-                        <View style={{
-                            width: 185,
-                            marginLeft: 20,
-                            marginTop: 0,
-                            alignItems: 'flex-start',
-                            backgroundColor: '#FF9046'
-                        }}>
-                            <Text numberOfLines={2} style={{
-                                color: '#fff',
-                                lineHeight: 32,
-                                width: 120,
-                                fontFamily: 'Roboto-Regular',
-                                marginTop: 33,
-                                fontStyle: 'normal',
-                                fontSize: 32,
-                            }}>{name}</Text>
-                            <Text numberOfLines={2} style={{
-                                color: '#fff',
-                                marginTop: 7,
-                                fontStyle: 'normal',
-                                fontSize: 16,
-                            }}>{phoneNumber}</Text>
+                </View>
+                {/*form header*/}
 
+                <View style={styles.image}>
+                    <View style={styles.thumbnail}>
 
-                        </View>
-                        <View style={styles.thumbnail}>
-
-                            <ImagePicker imageWidth={3000} imageHeight={3000} image={userImage}
-                                         setImage={this.setImage.bind(this)}/>
-
-                        </View>
-
+                        <ImagePicker imageWidth={3000} imageHeight={3000} image={userImage}
+                                     setImage={this.setImage.bind(this)}/>
 
                     </View>
-                    {/*button grid*/}
-                    <View style={{
-                        flexDirection: 'row',
-                        justifyContent: 'space-between',
-                        height: 100
-                    }}>
-                        <View style={{flex: 1, flexDirection: 'row', borderRightWidth: 1, borderColor: '#E5E5E5'}}>
-                            <TouchableOpacity onPress={() => this.showBusinesses()}
-                                              style={{flex: 1, flexDirection: 'column', alignItems: 'center'}} regular>
-                                <Image style={{tintColor: '#FF9046', marginTop: 21, width: 30, height: 30}}
-                                       source={briefcase}/>
-                                <Text
-                                    style={{
-                                        marginTop: 10,
-                                        color: '#FF9046',
-                                        fontStyle: 'normal',
-                                        fontSize: 16
-                                    }}>{strings.Businesses}</Text>
-                            </TouchableOpacity>
-                        </View>
-                        <View style={{flex: 1, flexDirection: 'row'}}>
-                            <TouchableOpacity onPress={() => this.changePassword()}
-                                              style={{flex: 1, flexDirection: 'column', alignItems: 'center'}} regular>
-                                <Icon style={{marginTop: 21, marginBottom: -6}} color="#FF9046" size={36} name="lock"/>
-                                <Text style={{
-                                    marginTop: 10,
-                                    color: '#FF9046',
+
+
+
+                </View>
+                <View style={{
+
+
+                    marginTop: -10,
+
+                    alignItems: 'center',
+                    justifyContent:'center',
+                    opacity:1,
+                    height:70,
+
+
+                }}>
+                    <Text numberOfLines={2} style={{
+                        color: '#fff',
+                        lineHeight: 32,
+
+                        fontFamily: 'Roboto-Regular',
+                        marginTop: 5,
+                        fontStyle: 'normal',
+                        fontSize: 20,
+                    }}>{name}</Text>
+                    <Text numberOfLines={2} style={{
+                        color: '#fff',
+                        marginTop: 7,
+                        fontStyle: 'normal',
+                        fontSize: 16,
+                    }}>{phoneNumber}</Text>
+
+
+                </View>
+
+                {/*button grid*/}
+
+                    <View style={{ borderTopWidth:1,borderBottomWidth:1,marginTop:10,height:70,width:deviceWidth/5*4,flexDirection: 'column',  borderColor: '#E5E5E5'}}>
+                        <TouchableOpacity onPress={() => this.showBusinesses()}
+                                          style={{flex: 1, flexDirection: 'row', alignItems: 'center'}} regular>
+                            <Image style={{tintColor: 'white', marginLeft: 20, width: 30, height: 30}}
+                                   source={briefcase}/>
+                            <Text
+                                style={{
+
+                                    color: 'white',
                                     fontStyle: 'normal',
+                                    marginLeft:20,
                                     fontSize: 16
-                                }}>{strings.ChangePassword} </Text>
-
-                            </TouchableOpacity>
-                        </View>
+                                }}>{strings.Businesses}</Text>
+                        </TouchableOpacity>
                     </View>
-                    <View style={{
-                        flexDirection: 'row',
-                        justifyContent: 'space-between',
-                        height: 100,
-                        borderWidth: 1,
-                        borderColor: '#E5E5E5'
-                    }}>
-                        <View style={{flex: 1, flexDirection: 'row', borderRightWidth: 1, borderColor: '#E5E5E5'}}>
-                            <TouchableOpacity onPress={() => this.showUserProfile()}
-                                              style={{flex: 1, flexDirection: 'column', alignItems: 'center'}} regular>
-                                <Image style={{tintColor: '#FF9046', marginTop: 21, width: 30, height: 30}}
-                                       source={settings}/>
+                    <View style={{height:70,width:deviceWidth/5*4,borderBottomWidth:1,flexDirection: 'row',borderColor: '#E5E5E5'}}>
+                        <TouchableOpacity onPress={() => this.changePassword()}
+                                          style={{flex: 1, flexDirection: 'row', alignItems: 'center'}} regular>
+                            <Icon style={{marginLeft: 20, marginBottom: -6}} color="white" size={36} name="lock"/>
+                            <Text style={{
+                                marginLeft:22,
+                                color: 'white',
+                                fontStyle: 'normal',
+                                fontSize: 16
+                            }}>{strings.ChangePassword} </Text>
 
-                                <Text
-                                    style={{
-                                        marginTop: 10,
-                                        color: '#FF9046',
-                                        fontStyle: 'normal',
-                                        fontSize: 16
-                                    }}>{strings.Settings}</Text>
-
-                            </TouchableOpacity>
-                        </View>
-                        <View style={{flex: 1, flexDirection: 'row'}}>
-
-                        </View>
+                        </TouchableOpacity>
                     </View>
-                </Content>
-            </Container>
+
+
+            </View>
+
 
         );
     }

@@ -1,18 +1,20 @@
 import React, {Component} from 'react';
-import {Image, Platform, TouchableOpacity, KeyboardAvoidingView, Dimensions} from 'react-native';
+import {Dimensions, Image, KeyboardAvoidingView, Platform, TouchableOpacity,I18nManager,View,TextInput} from 'react-native';
 import {connect} from 'react-redux';
 import {actions} from 'react-native-navigation-redux-helpers';
-import {Container, Content, Text, InputGroup, Input, Button, Icon, View, Item} from 'native-base';
-
-const {width, height} = Dimensions.get('window')
-import LinearGradient from 'react-native-linear-gradient';
+import {Button, Container, Content, Input, InputGroup, Item, Text, } from 'native-base';
 import styles from './styles';
-
-const logo = require('../../../images/logo.png');
 import {NavigationActions} from 'react-navigation'
 import {bindActionCreators} from "redux";
 import * as loginAction from "../../actions/login";
 import strings from "../../i18n/i18n"
+
+const {width, height} = Dimensions.get('window')
+const logo = require('../../../images/logo.png')
+import Icon from 'react-native-vector-icons/Ionicons';
+const thisLogo = require('../../../images/this-logo.png');
+const bg = require('../../../images/bg.png');
+
 const resetAction = NavigationActions.reset({
     index: 0,
     actions: [
@@ -31,6 +33,9 @@ class Register extends Component {
             code: "",
         };
     }
+    back() {
+        this.props.navigation.goBack();
+    }
 
     validateCode() {
         this.props.actions.verifyCode(this.state.code, this.props.navigation, resetAction)
@@ -39,55 +44,83 @@ class Register extends Component {
     render() {
         const {message} = this.props;
         const errorMessage = this.createMessage(message);
+        let arrowName = I18nManager.isRTL ? "ios-arrow-forward" : "ios-arrow-back";
+
         return (
-            <LinearGradient
-
-
-                colors={['#67ccf8', '#66cdcc']}
-                style={styles.inputContainer}
-            >
 
 
                 <View style={styles.inputContainer}>
+                    <View style={{position: 'absolute', height: height, width: width}}>
+                        <Image style={{position: 'absolute', height: height, width: width}} resizeMode='cover'
+                               source={bg}/>
+
+                    </View>
+                    <View style={{width:width,height:60,justifyContent:'center',backgroundColor:'transparent'}}>
+                        <TouchableOpacity transparent style={{width:50,alignItems:'flex-start',justifyContent:'flex-start',marginTop:5,marginLeft: 10, marginRight: 5}} onPress={() => this.back()}>
+                            <Icon active color={'white'} size={35} name={arrowName}/>
+
+                        </TouchableOpacity>
+                    </View>
                     <KeyboardAvoidingView behavior={'position'} style={styles.avoidView}>
 
                         <View>
                             <View style={styles.thisContainer}>
-                                <Text style={styles.this}>{strings.THIS}</Text>
-
+                                <Image style={{position: 'absolute', top: -175, width: 140}} resizeMode='contain'
+                                       source={thisLogo}/>
+                                <Text style={styles.this}>THIS</Text>
                             </View>
                             <View style={styles.mainContainer}>
 
                                 <Text style={styles.SignUpText}>{strings.SmsMessagePart1}</Text>
                                 <Text style={styles.decritpionLine2}>{strings.SmsMessagePart2}</Text>
-                                <Item style={styles.nameTextInput} regular>
-                                    <Input value={this.state.name} blurOnSubmit={true} returnKeyType='done' ref="1"
-                                           onSubmitEditing={this.validateCode.bind(this)}
-                                           onChangeText={(code) => this.setState({code})}
-                                           placeholder={strings.ValidationCode}/>
-                                </Item>
 
+
+                                <View style={styles.nameTextInput} regular>
+                                    <TextInput keyboardType='phone-pad' value={this.state.code}
+                                               blurOnSubmit={true} returnKeyType='done'
+                                               onSubmitEditing={this.validateCode.bind(this)}
+                                               underlineColorAndroid={'transparent'}
+                                               onChangeText={(code) => this.setState({code})}
+                                               placeholderTextColor={'white'}
+                                               style={{
+                                                   width: width / 2 + 120,
+                                                   color: 'white',
+                                                   borderColor: 'white',
+                                                   height: 50,
+                                                   fontSize: 20,
+                                                   borderBottomWidth: 1
+                                               }}
+                                               placeholder={strings.ValidationCode}/>
+                                </View>
                                 {errorMessage}
                                 <View style={{
-                                    height: 40,
+                                    height: 50,
+                                    marginTop:20,
                                     justifyContent: 'center',
                                     alignItems: 'center',
                                     width: width / 2 + 120
                                 }}>
 
+
+
+
                                     <TouchableOpacity onPress={() => this.validateCode()} style={{
-                                        width: 100,
-                                        height: 30,
-                                        borderRadius: 10,
-                                        backgroundColor: 'skyblue',
+                                        width: width-90,
+                                        height: 50,
+                                        borderRadius: 30,
+                                        backgroundColor: 'white',
                                         margin: 3,
                                         flexDirection: 'row',
                                         justifyContent: 'center',
                                         alignItems: 'center',
                                     }} regular>
 
-                                        <Text
-                                            style={{color: 'white', fontStyle: 'normal', fontSize: 15}}>{strings.Validate}.toUpperCase()</Text>
+                                        <Text style={{
+                                            color: 'skyblue',
+                                            fontWeight:'bold',
+                                            fontStyle: 'normal',
+                                            fontSize: 20
+                                        }}>{strings.Validate.toUpperCase()}</Text>
 
                                     </TouchableOpacity>
                                 </View>
@@ -99,7 +132,7 @@ class Register extends Component {
 
 
                 </View>
-            </LinearGradient>
+
 
         );
     }

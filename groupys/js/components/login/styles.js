@@ -40,20 +40,28 @@ module.exports = {
     this: {
         // fontFamily:'BackToBlack',
         marginTop:150,
-        fontSize: 50,
+        fontSize: 90,
         color: 'white',
+        fontWeight:'bold',
         backgroundColor: 'transparent'
     },
     phoneTextInput: {
-        marginTop: 5, backgroundColor: 'white', height: 50, width: width / 2 + 120
+        marginTop: 5, backgroundColor: 'transparent', height: 50, width: width / 2 + 120,
+        justifyContent: 'center',
+        alignItems:'center',
     },
     passwordTextInput: {
-        marginTop: 10, backgroundColor: 'white', height: 50, width: width / 2 + 120
+        marginTop: 10, backgroundColor: 'transparent', height: 50, width: width / 2 + 120,
+        justifyContent: 'center',
+        alignItems:'center',
     },
     signup_container: {
         width: width / 2 + 120,
-        justifyContent: 'space-between',
-        flexDirection: 'row',
+        justifyContent: 'center',
+        alignItems:'center',
+        flexDirection: 'column',
+        marginTop:20,
+
     },
     thiscount: {
         fontFamily:(Platform.OS === 'ios') ? 'Roboto-Regular' : 'BackToBlack',
@@ -100,10 +108,10 @@ module.exports = {
     },
     signgupText: {
         fontFamily: 'Roboto-Regular',
-        fontSize: 16,
+        fontSize: 17,
         color: 'white',
-        marginLeft: 100,
-        textDecorationLine: 'underline',
+        marginLeft: 5,
+        fontWeight:'bold',
         backgroundColor: 'transparent'
     },
     forgetText: {
@@ -111,6 +119,6 @@ module.exports = {
         fontSize: 16,
         color: 'white',
         backgroundColor: 'transparent',
-        textDecorationLine: 'underline'
+        marginTop:10,
     },
 };

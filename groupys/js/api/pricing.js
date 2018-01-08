@@ -28,6 +28,32 @@ class PricingApi {
             }
         })
     }
+
+    createBusinessPricing(businessId, token) {
+        return new Promise(async (resolve, reject) => {
+            try {
+                let from = new Date();
+                const response = await fetch(`${server_host}/api/pricings/create/pricing/` + businessId,  {
+                    method: 'GET',
+                    headers: {
+                        'Accept': 'application/json, text/plain, */*',
+                        'Content-Type': 'application/json;charset=utf-8',
+                        'Authorization': 'Bearer ' + token
+                    }
+                });
+                if (response.status ==='401') {
+                    reject(response);
+                    return;
+                }
+                let responseData = await response.json();
+                timer.logTime(from, new Date(), 'pricing', 'ricing/checkouts/new');
+                resolve(responseData);
+            }
+            catch (error) {
+                reject(error);
+            }
+        })
+    }
     checkoutId(id ,token) {
         return new Promise(async (resolve, reject) => {
             try {

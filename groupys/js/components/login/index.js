@@ -10,7 +10,7 @@ import {
 } from "react-native";
 import {connect} from "react-redux";
 import {actions} from "react-native-navigation-redux-helpers";
-import {Button, Icon, Input, Item, Text, View} from "native-base";
+import {Button, Icon, Input, Item, Text, View,Spinner} from "native-base";
 import {bindActionCreators} from "redux";
 import * as loginAction from "../../actions/login";
 import styles from "./styles";
@@ -20,6 +20,7 @@ import strings from "../../i18n/i18n"
 
 const {width, height} = Dimensions.get('window');
 const thisLogo = require('../../../images/this-logo.png');
+const bg = require('../../../images/bg.png');
 
 class Login extends Component {
     static navigationOptions = {
@@ -35,7 +36,7 @@ class Login extends Component {
     }
 
     focusNextField(nextField) {
-        this.refs[nextField]._root.focus()
+        this.refs[nextField].focus()
     }
 
     async componentWillUpdate() {
@@ -58,18 +59,15 @@ class Login extends Component {
     }
 
     render() {
-        const {focusPassword, focusPhone, failedMessage, isAuthenticated, loginstate} = this.props;
+        const {focusPassword, focusPhone, failedMessage, doLogin} = this.props;
         return (
 
-            <LinearGradient
-
-
-                colors={['#67ccf8', '#66cdcc']}
-                style={styles.inputContainer}
-            >
                 <KeyboardAvoidingView behavior={'position'} style={styles.inputContainer}>
 
+                    <View style={{position:'absolute',height:height,width:width}}>
+                        <Image style={{position:'absolute',height:height,width:width}} resizeMode='cover' source={bg}/>
 
+                    </View>
                     <View style={{
                         flexDirection: 'column',
                         justifyContent: 'center',
@@ -78,7 +76,7 @@ class Login extends Component {
 
 
                         <View style={styles.thisContainer}>
-                            <Image style={{position:'absolute',top:-175,width:150}} resizeMode='contain' source={thisLogo}/>
+                            <Image style={{position:'absolute',top:-175,width:140}} resizeMode='contain' source={thisLogo}/>
                             <Text style={styles.this}>THIS</Text>
                         </View>
                         <View style={{
@@ -87,39 +85,39 @@ class Login extends Component {
                             alignItems: 'center',
                         }}>
 
-                            <View style={{height: 60, justifyContent: 'flex-end', width: width / 2 + 120}}>
-                                <Text style={styles.SignUpText}>{strings.SignIn}</Text>
+                            <View style={{height: 5, justifyContent: 'flex-end', width: width / 2 + 120}}>
+
                             </View>
 
-                            <Item style={styles.phoneTextInput} regular>
-                                <Input focus={focusPhone} keyboardType='phone-pad' value={this.state.name}
+                            <View style={styles.phoneTextInput} regular>
+                                <TextInput focus={focusPhone} keyboardType='phone-pad' value={this.state.name}
                                        blurOnSubmit={true} returnKeyType='next'
                                        onSubmitEditing={this.focusNextField.bind(this, "password")}
+                                           underlineColorAndroid={'transparent'}
                                        onChangeText={(phoneNumber) => this.setState({phoneNumber})}
+                                           placeholderTextColor={'white'}
+                                           style={{width:width / 2 + 120,color:'white',borderColor:'white',height:50,fontSize:20,borderBottomWidth:1}}
                                        placeholder={strings.PhoneNumber}/>
-                            </Item>
+                            </View>
 
-                            <Item style={styles.passwordTextInput} regular>
+                            <View style={styles.passwordTextInput} regular>
 
-                                <Input
+                                <TextInput
                                     focus={focusPassword}
                                     ref='password'
+                                    underlineColorAndroid={'transparent'}
                                     returnKeyType='done'
-                                    placeholder={strings.Password}
-                                    placeholderTextColor='#444'
                                     defaultValue=""
+                                    placeholderTextColor={'white'}
+                                    style={{width:width / 2 + 120,color:'white',borderColor:'white',height:50,fontSize:20,borderBottomWidth:1}}
+                                    placeholder={strings.Password}
                                     secureTextEntry
                                     onChangeText={password => this.setState({password})}
                                     onSubmitEditing={this.login.bind(this)}
                                 />
-                            </Item>
-
-                            <View style={styles.signup_container}>
-                                <Text onPress={this.forgetPassword.bind(this)}
-                                      style={styles.forgetText}>{strings.ForgotPassword}</Text>
-                                <Text onPress={() => this.replaceRoute('Signup')}
-                                      style={styles.signgupText}>{strings.SignUp}</Text>
                             </View>
+
+
                             <Text style={{backgroundColor: 'transparent', padding: 10, fontSize: 16, color: 'red'}}>
                                 {failedMessage}
                             </Text>
@@ -132,10 +130,10 @@ class Login extends Component {
                             }}>
 
                                 <TouchableOpacity onPress={() => this.login()} style={{
-                                    width: 100,
-                                    height: 30,
-                                    borderRadius: 10,
-                                    backgroundColor: 'skyblue',
+                                    width: width-90,
+                                    height: 50,
+                                    borderRadius: 30,
+                                    backgroundColor: 'white',
                                     margin: 3,
                                     flexDirection: 'row',
                                     justifyContent: 'center',
@@ -143,18 +141,31 @@ class Login extends Component {
                                 }} regular>
 
                                     <Text style={{
-                                        color: 'white',
+                                        color: 'skyblue',
+                                        fontWeight:'bold',
                                         fontStyle: 'normal',
-                                        fontSize: 15
+                                        fontSize: 20
                                     }}>{strings.Login.toUpperCase()}</Text>
 
                                 </TouchableOpacity>
                             </View>
+                            {doLogin && <Spinner style={{position:'absolute',top:-15}}/>}
+                            <View style={styles.signup_container}>
+                                <View style={{flexDirection:'row'}}>
+                                    <Text style={{backgroundColor:'transparent',color:'white'}}> Dosen't have an account? </Text>
+                                <Text onPress={() => this.replaceRoute('Signup')}
+                                      style={styles.signgupText}>{strings.SignUp}</Text>
+                                </View>
+                                <Text onPress={this.forgetPassword.bind(this)}
+                                      style={styles.forgetText}>{strings.ForgotPassword}</Text>
 
+                            </View>
                         </View>
+
                     </View>
+
                 </KeyboardAvoidingView>
-            </LinearGradient>
+
 
         );
     }
@@ -166,6 +177,7 @@ export default connect(
         focusPhone: state.loginForm.focusPhone,
         failedMessage: state.loginForm.failedMessage,
         loginstate: state.loginForm,
+        doLogin:state.loginForm.loginProcess,
         isAuthenticated: isAuthenticated(state),
     }),
     (dispatch) => ({
