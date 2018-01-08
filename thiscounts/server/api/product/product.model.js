@@ -7,6 +7,8 @@ const autopopulate = require('mongoose-autopopulate');
 let ProductSchema = new Schema({
   social_state : {},
   name: String,
+  url: String,
+  inAppOrder: {type:Boolean, default: false},
   barcode: String,
   SKU: String,
   price: Number,
@@ -16,6 +18,13 @@ let ProductSchema = new Schema({
   business: {type: Schema.ObjectId, ref: 'Business', required: false},
   retail_price: Number,
   category: {type: String, required: true},
+  variants:{
+    // E.G.
+    // gender: 'man',
+    // colors: ['black', 'pink', 'gold', 'navy'],
+    // selectedColor: 'gold',
+    // sizes: [{size:9, quantity:5}, {size:9.5, quantity:10}, {size:10, quantity:5}]
+  },
   client: {},
   pictures: [],
   video: {type: Schema.ObjectId, ref: 'Video', autopopulate: true},

@@ -24,6 +24,15 @@ function get_businesses_state(businesses, userId, callback) {
 
 exports.search = MongodbSearch.create(Business);
 
+
+exports.test_email = function (req, res) {
+  const email = require('../../components/email');
+  email.sendMail('', function (err) {
+    if(err) console.error(err);
+    return res.status(200);
+  });
+};
+
 exports.address2 = function (req, res) {
   location.address(req.body.address, function (err, data) {
     if (err) {
