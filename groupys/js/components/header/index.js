@@ -72,7 +72,7 @@ class GeneralComponentHeader extends Component {
 
 
     render() {
-        const {businessActions,state} = this.props;
+        const {businessActions,state,network} = this.props;
         let back = undefined;
         let headerHeight = vh *7;
         if (Platform.OS === 'ios') {
@@ -89,6 +89,10 @@ class GeneralComponentHeader extends Component {
 
         if(state.searchType){
             return (
+                <View>
+                    {network.offline &&  <View style={{width:width,height:20,justifyContent:'center',alignItems:'center',backgroundColor:'#f4ce42'}}>
+                        <Text style={{color:'gray'}}>Offline</Text>
+                    </View>}
                 <View style={{
                     height: headerHeight, flexDirection: 'row', alignItems: 'center', backgroundColor: 'white',
                     justifyContent: 'space-between',
@@ -111,6 +115,7 @@ class GeneralComponentHeader extends Component {
                     {state.searching && <Spinner style={{right:20,position:'absolute'}}/>}
 
                 </View>
+                </View>
             );
 
         }
@@ -131,10 +136,15 @@ class GeneralComponentHeader extends Component {
             </MenuOptions>
         </Menu>
         return (
+            <View>
+                {network.offline &&   <View style={{width:width,height:20,justifyContent:'center',alignItems:'center',backgroundColor:'#f4ce42'}}>
+                    <Text style={{color:'gray'}}>{strings.Offline}</Text>
+                </View>}
             <View style={{
                 height: headerHeight, flexDirection: 'row', alignItems: 'center', backgroundColor: 'white',
                 justifyContent: 'space-between',
             }}>
+
                 { <View style={{height: vh * 7, flexDirection: 'row', alignItems: 'flex-start'}}>
                     {back}
 
@@ -169,6 +179,7 @@ class GeneralComponentHeader extends Component {
                 }
 
             </View>
+            </View>
 
         );
     }
@@ -177,7 +188,8 @@ class GeneralComponentHeader extends Component {
 export default connect(
     state => ({
         notification: state.notification,
-        state: state.follow_businesses
+        state: state.follow_businesses,
+        network:state.network,
     }),
     (dispatch) => ({
         actions: bindActionCreators(notificationAction, dispatch),

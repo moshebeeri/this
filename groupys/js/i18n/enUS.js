@@ -227,6 +227,7 @@ NoResultsFound                                : "No Results Found",
 Join                                          : "Join",
 AssignBarcode                                 : "Assign Barcode",
 ScanBarcode                                   : "Scan Barcode",
+Offline                                       : "Offline",
 
 
 
