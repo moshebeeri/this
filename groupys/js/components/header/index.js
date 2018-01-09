@@ -89,7 +89,7 @@ class GeneralComponentHeader extends Component {
 
         if(state.searchType){
             return (
-                <View>
+                <View style={{width:width}}>
                     {network.offline &&  <View style={{width:width,height:20,justifyContent:'center',alignItems:'center',backgroundColor:'#f4ce42'}}>
                         <Text style={{color:'gray'}}>Offline</Text>
                     </View>}
@@ -136,7 +136,7 @@ class GeneralComponentHeader extends Component {
             </MenuOptions>
         </Menu>
         return (
-            <View>
+            <View style={{width:width}}>
                 {network.offline &&   <View style={{width:width,height:20,justifyContent:'center',alignItems:'center',backgroundColor:'#f4ce42'}}>
                     <Text style={{color:'gray'}}>{strings.Offline}</Text>
                 </View>}

@@ -31,7 +31,8 @@ import ActivityReport from './ActivityActions/ActivityActions';
 import BusinessList from './BusinessList/BusinessList';
 import GroupsList from './groupsList/GroupsList';
 import BrainTreeWeb from './BrainTree/BrainTreeWeb'
-import BarcodeScanner from './BarcodeScanner/BarcodeScanner'
+import BarcodeScanner from './BarcodeScanner/BarcodeScanner';
+import UrlPreview from './UrlPreview/UrlPreview'
 export {
     ImagePicker,
     CategoryPicker,
@@ -66,5 +67,6 @@ export {
     BrainTreeWeb,
     BusinessList,
     GroupsList,
-    BarcodeScanner
+    BarcodeScanner,
+    UrlPreview
 }

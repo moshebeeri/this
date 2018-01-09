@@ -70,7 +70,7 @@ class FormHeader extends Component {
         }
         let titleStyle = this.createTitleStyle(titleColor);
         return (
-            <View>
+            <View style={{width:width}}>
                 {network.offline &&   <View style={{width:width,height:20,justifyContent:'center',alignItems:'center',backgroundColor:'#f4ce42'}}>
                     <Text style={{color:'gray'}}>{strings.Offline}</Text>
                 </View>}
