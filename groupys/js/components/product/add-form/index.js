@@ -20,7 +20,7 @@ import * as productsAction from "../../../actions/product";
 import * as businessAction from "../../../actions/business";
 import {bindActionCreators} from "redux";
 import styles from './styles'
-import {CategoryPicker, FormHeader, ImagePicker, TextInput,Spinner} from '../../../ui/index';
+import {CategoryPicker, FormHeader, ImagePicker, TextInput,Spinner,BarcodeScanner} from '../../../ui/index';
 import strings from "../../../i18n/i18n"
 
 class AddProduct extends Component {
@@ -101,6 +101,7 @@ class AddProduct extends Component {
             image: this.state.coverImage,
             business: this.getBusinessId(navigation),
             info: this.state.info,
+            barcode: this.state.barcode,
             retail_price: this.state.retail_price,
             category: this.state.categories,
         }
@@ -125,7 +126,9 @@ class AddProduct extends Component {
             this.refs[nextField].focus()
         }
     }
-
+    handleCode(code){
+        this.setState({barcode:code.data})
+    }
     setCategory(categories) {
         this.setState({categories: categories});
     }
@@ -214,7 +217,9 @@ class AddProduct extends Component {
                                    keyboardType="numeric"
                                    onChangeText={(retail_price) => this.setState({retail_price})} isMandatory={true}/>
                     </View>
-
+                    <View style={styles.inputTextLayout}>
+                        <BarcodeScanner handleCode={this.handleCode.bind(this)}navigation={this.props.navigation}/>
+                    </View>
 
                 </ScrollView>
 

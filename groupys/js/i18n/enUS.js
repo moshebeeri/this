@@ -225,6 +225,11 @@ SearchGroups                                  : "Search Groups",
 Search                                        : "Search ...",
 NoResultsFound                                : "No Results Found",
 Join                                          : "Join",
+AssignBarcode                                 : "Assign Barcode",
+ScanBarcode                                   : "Scan Barcode",
+
+
+
 
 
 
