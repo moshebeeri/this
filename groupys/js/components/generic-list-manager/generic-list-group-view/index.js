@@ -49,7 +49,7 @@ export default class GenericListGroupView extends Component {
     }
 
     render() {
-        const {item, onPressItem, index} = this.props;
+        const {item, onPressItem, index,onPressMessageItem} = this.props;
         const styles = this.createStyle();
         let promotionItem = this.createPromotionItem(item);
         let showBusinessHeader = this.isBusiness(item.entity_type);
@@ -59,12 +59,12 @@ export default class GenericListGroupView extends Component {
 
         const containerStyle = {
             alignItems: 'center',
-            marginBottom: 12,
+
             backgroundColor: 'white'
         };
         const row = <View key={index}>
-            <TouchableOpacity key={index} onPress={onPressItem}>
-                <View style={containerStyle}>
+            <View style={{marginBottom:10}}>
+                <TouchableOpacity  key={index} onPress={onPressItem} style={containerStyle} >
                     <GroupHeader group={item}/>
 
 
@@ -76,12 +76,15 @@ export default class GenericListGroupView extends Component {
                         <Text style={{color:'#2db6c8',fontWeight:'bold'}}>{strings.UnReadPost.formatUnicorn(item.unreadFeeds)}</Text>
                     </View>}
 
-                    {message}
-                    {message &&  item.unreadMessages>0 && <View style={{marginLeft: 30,marginBottom:5,width:width,justifyContent:'flex-start'}}>
-                        <Text style={{color:'#25964e',fontWeight:'bold'}}>{strings.UnReadMessages.formatUnicorn(item.unreadMessages)}</Text>
-                    </View>}
-                </View>
-            </TouchableOpacity>
+
+                </TouchableOpacity>
+                <TouchableOpacity style={containerStyle} onPress={onPressMessageItem}>
+                {message}
+                {message &&  item.unreadMessages>0 && <View style={{marginLeft: 30,marginBottom:5,width:width,justifyContent:'flex-start'}}>
+                    <Text style={{color:'#25964e',fontWeight:'bold'}}>{strings.UnReadMessages.formatUnicorn(item.unreadMessages)}</Text>
+                </View>}
+                </TouchableOpacity>
+            </View>
         </View>
         return ( row
 

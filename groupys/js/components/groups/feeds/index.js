@@ -98,24 +98,32 @@ class GroupFeed extends Component {
     }
 
     render() {
-        let textPromotionStyle = styles.group_text_on;
-        let textChatStyle = styles.group_text_off;
-        if (this.state.showChat) {
-            textPromotionStyle = styles.group_text_off;
-            textChatStyle = styles.group_text_on;
+
+        let initPage =0;
+        if(this.props.navigation.state.params.chat){
+            initPage = 1;
         }
+        if(I18nManager.isRTL && (Platform.OS==='android')){
+            if(this.props.navigation.state.params.chat){
+                initPage =0;
+            }else {
+                initPage = 1;
+            }
+        }
+
+
         return (
             <Container style={{backgroundColor: '#ebebeb'}}>
 
 
-                { I18nManager.isRTL && (Platform.OS==='android') ?  <ScrolTabView  initialPage={1} onChangeTab={this.changeTab.bind(this)} tabBarBackgroundColor='white'
+                { I18nManager.isRTL && (Platform.OS==='android') ?  <ScrolTabView  initialPage={initPage} onChangeTab={this.changeTab.bind(this)} tabBarBackgroundColor='white'
                                                                                    tabBarUnderlineStyle={{backgroundColor: '#2db6c8'}}>
                          <InstanceComment tabLabel={strings.Posts} navigation={this.props.navigation}
                                          group={this.props.navigation.state.params.group}/>
                        <GroupFeedComponent tabLabel={strings.Chat} navigation={this.props.navigation}
                                   group={this.props.navigation.state.params.group}/>
                     </ScrolTabView> :
-                    <ScrolTabView  initialPage={0} onChangeTab={this.changeTab.bind(this)} tabBarBackgroundColor='white'
+                    <ScrolTabView  initialPage={initPage} onChangeTab={this.changeTab.bind(this)} tabBarBackgroundColor='white'
                                    tabBarUnderlineStyle={{backgroundColor: '#2db6c8'}}>
                         <GroupFeedComponent tabLabel={strings.Posts} navigation={this.props.navigation}
                                    group={this.props.navigation.state.params.group}/>
