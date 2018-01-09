@@ -27,7 +27,7 @@ import stylesPortrate from './styles'
 import stylesLandscape from './styles_lendscape'
 import StyleUtils from '../../../../utils/styleUtils'
 import * as componentCreator from "./feedCommonView";
-import {SocialState,Video,ActivityReport} from '../../../../ui/index';
+import {SocialState,Video,ActivityReport,UrlPreview} from '../../../../ui/index';
 import PageRefresher from '../../../../refresh/pageRefresher'
 
 const {width, height} = Dimensions.get('window');
@@ -97,7 +97,7 @@ export default class FeedPost extends Component {
                             <ActivityReport id={item.activityId} showActions={showActions}/>
                         </View>
                     </View>
-
+                    <UrlPreview text={item.feed.activity.post.text}/>
                     <View style={postMessageContainerStyle}>
 
                         <View style={promotionDetalis}>
@@ -105,6 +105,7 @@ export default class FeedPost extends Component {
                             </Text>
                         </View>
                     </View>
+
                     {image}
                     {item.video && <Video ref={item.id} width={width} muted={false} url={item.video}/> }
                     {item.videoId && <Video source={'YOUTUBE'} ref={item.id} width={width} muted={false} videoId={item.videoId}/> }
