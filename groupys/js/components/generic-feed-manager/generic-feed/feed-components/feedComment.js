@@ -5,12 +5,11 @@
  * Created by roilandshut on 19/07/2017.
  */
 import React, {Component} from 'react';
-import {Image, TextInput, Platform, View} from 'react-native';
-import {connect} from 'react-redux';
+import {Image, Platform, TextInput, View} from 'react-native';
 import {actions} from 'react-native-navigation-redux-helpers';
-import {Container, Footer, Icon, Button, Thumbnail, Text} from 'native-base';
+import {Button, Container, Footer, Icon, Text, Thumbnail} from 'native-base';
 import styles from './styles'
-
+import StyleUtils from '../../../../utils/styleUtils'
 export default class FeedComment extends Component {
     render() {
         return this.createMessage(this.props.item)
@@ -28,7 +27,7 @@ export default class FeedComment extends Component {
 
     createMessageContainer(image, item, messageStyle) {
         if (item.userMessage) {
-            return <View style={styles.messageContainer}>
+            return <View style={[styles.messageContainer, {width: StyleUtils.getWidth()}]}>
 
                 <View style={styles.messageName}>
                     <View style={{alignItems: 'flex-end', height: 30}}>
@@ -47,7 +46,7 @@ export default class FeedComment extends Component {
                 {image}
             </View>
         }
-        return <View style={styles.messageContainer}>
+        return <View style={[styles.messageContainer, {width: StyleUtils.getWidth()}]}>
             {image}
             <View style={styles.messageName}>
                 <Text>{item.name}</Text>

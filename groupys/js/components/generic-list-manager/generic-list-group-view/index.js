@@ -92,21 +92,11 @@ export default class GenericListGroupView extends Component {
     }
 
     createStyle() {
-        if (StyleUtils.isLandscape()) {
-            return stylesLandscape;
-        }
+
         return stylesPortrate;
     }
 
-    calcHeight(promotion, message) {
-        if (promotion && message) {
-            return 43;
-        }
-        if (!promotion && !message) {
-            return 15
-        }
-        return 29;
-    }
+
 
     createPromotionItem(item) {
         if (item.preview && item.preview.instance_activity && item.preview.instance_activity.instance && item.preview.instance_activity.instance.promotion) {

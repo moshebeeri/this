@@ -5,30 +5,28 @@
  * Created by roilandshut on 23/07/2017.
  */
 import React, {Component} from 'react';
-import {Image, Platform, PanResponder, TouchableHighlight} from 'react-native';
-import {connect} from 'react-redux';
+import {Image, PanResponder, Platform, TouchableHighlight} from 'react-native';
 import {actions} from 'react-native-navigation-redux-helpers';
 import {
+    Button,
+    Card,
+    CardItem,
     Container,
     Content,
-    Text,
-    InputGroup,
+    Footer,
+    Header,
     Input,
-    Thumbnail,
-    Button,
-    Picker,
-    Right,
+    InputGroup,
     Item,
     Left,
-    Header,
-    Footer,
-    Body,
-    View,
-    Card,
-    CardItem
+    Picker,
+    Right,
+    Text,
+    Thumbnail,
+    View
 } from 'native-base';
 import * as componentCreator from "./feedCommonView";
-
+import StyleUtils from '../../../../utils/styleUtils'
 export default class FeedWelcome extends Component {
     render() {
         return this.createWelcome(this.props.item)
@@ -37,8 +35,8 @@ export default class FeedWelcome extends Component {
     createWelcome(item) {
         const styles = componentCreator.createStyle();
         const result =
-            <View style={styles.Welcome_container}>
-                <View style={styles.promotion_card}>
+            <View  style={[styles.Welcome_container, {width: StyleUtils.getWidth()}]}>
+                <View  style={[styles.promotion_card, {width: StyleUtils.getWidth()}]}>
                     <View style={styles.welcome_upperContainer}>
                         <View style={styles.logo_view}>
 

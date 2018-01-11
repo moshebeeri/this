@@ -9,6 +9,8 @@ import * as businessAction from "../../../actions/business";
 import styles from "./styles";
 import {DatePicker, FormHeader, Spinner, TextInput} from '../../../ui/index';
 import strings from "../../../i18n/i18n"
+import StyleUtils from '../../../utils/styleUtils'
+
 class EditPromotion extends Component {
     constructor(props) {
         super(props);
@@ -154,8 +156,9 @@ class EditPromotion extends Component {
         let dateValidation = !this.validateDate(promotion);
         let quantatyValidation = !this.validateQuantity(promotion);
         return (
+            <View style={[styles.product_container, {width: StyleUtils.getWidth()}]}>
 
-            <View style={styles.product_container}>
+
                 <FormHeader showBack submitForm={this.updateFormData.bind(this)} navigation={this.props.navigation}
                             title={strings.UpdatePromotion} bgc="#FA8559"/>
                 <ScrollView contentContainerStyle={{
@@ -163,15 +166,18 @@ class EditPromotion extends Component {
                     alignItems: 'center',
                 }}>
 
-
-                    <View style={styles.textLayout}>
-                        <Text style={{color: '#FA8559', marginLeft: 8, marginRight: 8}}>{strings.EditPromotionMessage}</Text>
+                    <View style={[styles.textLayout, {width: StyleUtils.getWidth()}]}>
+                        <Text style={{
+                            color: '#FA8559',
+                            marginLeft: 8,
+                            marginRight: 8
+                        }}>{strings.EditPromotionMessage}</Text>
 
                     </View>
-                    <View style={styles.textLayout}>
+                    <View style={[styles.textLayout, {width: StyleUtils.getWidth()}]}>
                         <Text style={{color: '#FA8559', marginLeft: 8, marginRight: 8}}>{strings.General}</Text>
                     </View>
-                    <View style={styles.inputTextMediumLayout}>
+                    <View style={[styles.inputTextMediumLayout, {width: StyleUtils.getWidth()}]}>
                         <View style={{flex: 1, marginRight: 10}}>
                             <TextInput field={strings.IncreaseQuantity} value={this.state.quantity}
                                        keyboardType='numeric'
@@ -190,13 +196,13 @@ class EditPromotion extends Component {
                         </View>
                     </View>
 
-                    <View style={styles.inputTextLayout}>
+                    <View style={[styles.inputTextLayout, {width: StyleUtils.getWidth()}]}>
                         <TextInput field={strings.Name} value={this.state.name}
                                    returnKeyType='next' ref="4" refNext="4"
                                    onSubmitEditing={this.focusNextField.bind(this, "5")}
                                    onChangeText={(name) => this.setState({name})} isMandatory={true}/>
                     </View>
-                    <View style={styles.inputTextLayout}>
+                    <View style={[styles.inputTextLayout, {width: StyleUtils.getWidth()}]}>
                         <TextInput field={strings.Description} value={this.state.info}
                                    returnKeyType='next' ref="5" refNext="5"
 

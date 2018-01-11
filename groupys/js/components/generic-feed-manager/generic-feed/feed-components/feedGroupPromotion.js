@@ -5,32 +5,29 @@
  * Created by roilandshut on 23/07/2017.
  */
 import React, {Component} from 'react';
-import {Image, Platform, PanResponder, TouchableHighlight} from 'react-native';
-import {connect} from 'react-redux';
+import {Image, PanResponder, Platform, TouchableHighlight} from 'react-native';
 import {actions} from 'react-native-navigation-redux-helpers';
 import {
+    Button,
+    Card,
+    CardItem,
     Container,
     Content,
-    Text,
-    InputGroup,
+    Footer,
+    Header,
     Input,
-    Thumbnail,
-    Button,
-    Picker,
-    Right,
+    InputGroup,
     Item,
     Left,
-    Header,
-    Footer,
-    Body,
-    View,
-    Card,
-    CardItem
+    Picker,
+    Right,
+    Text,
+    Thumbnail,
+    View
 } from 'native-base';
-import Icon from 'react-native-vector-icons/FontAwesome';
 import Icon2 from 'react-native-vector-icons/EvilIcons';
 import Icon3 from 'react-native-vector-icons/MaterialIcons';
-import styles from './styles'
+import StyleUtils from '../../../../utils/styleUtils'
 import * as componentCreator from "./feedCommonView";
 
 export default class FeedGroupPromotion extends Component {
@@ -51,10 +48,10 @@ export default class FeedGroupPromotion extends Component {
         const shareICon = componentCreator.createShareButton(styles, showUsers, item);
         const saveIcon = componentCreator.createSaveButton(item, save);
         const result =
-            <View style={styles.promotion_container}>
-                <View style={styles.promotion_card}>
-                    <View style={styles.promotion_upperContainer}>
-                        <View style={styles.logo_view}>
+            <View style={[styles.promotion_container, {width: StyleUtils.getWidth()}]}>
+                <View style={[styles.promotion_card, {width: StyleUtils.getWidth()}]}>
+                    <View style={[styles.promotion_upperContainer, {width: StyleUtils.getWidth()}]}>
+                       <View style={styles.logo_view}>
                             {buisnessLogo}
                             <View style={{flexDirection: 'column'}}>
                                 <Text style={styles.promotion_nameText} note>{item.businessName} </Text>

@@ -2,7 +2,7 @@
  * Created by roilandshut on 22/08/2017.
  */
 import {Dimensions} from 'react-native';
-
+const {width, height} = Dimensions.get('window')
 /**
  *
  * @param {ScaledSize} dim the dimensions object
@@ -18,6 +18,20 @@ const isPortrait = () => {
     const dim = Dimensions.get('screen');
     return dim.height >= dim.width;
 };
+
+const getWidth = () => {
+    if(isPortrait()){
+        return width;
+    }
+    return height;
+}
+
+const getHeight = () => {
+    if(isPortrait()){
+        return height;
+    }
+    return width;
+}
 /**
  * Returns true of the screen is in landscape mode
  */
@@ -52,6 +66,8 @@ export default {
     isPortrait,
     isLandscape,
     isTablet,
+    getWidth,
+    getHeight,
     isPhone,
     toTitleCase,
     parseUserPhoneNumber

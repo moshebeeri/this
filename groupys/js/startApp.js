@@ -2,6 +2,7 @@
  * Created by roilandshut on 08/06/2017.
  */
 import React, {Component} from "react";
+import {Dimensions} from 'react-native';
 import {Provider} from "react-redux";
 import {StackNavigator} from "react-navigation";
 import ApplicationManager from "./components/app/index";
@@ -35,13 +36,11 @@ import BusinessFollow from "./components/business/follow/follow_container";
 import BusinessAccount from "./components/business/account/index";
 import BarcodeScannerComponent from "./ui/BarcodeScanner/BarcodeScannerComponent"
 import './conf/global';
-
+const store = getStore();
 import {MenuContext} from "react-native-popup-menu";
 import getStore from "./store";
 import setCustomStyles from './styles'
-import FCM, {FCMEvent, RemoteNotificationResult, WillPresentNotificationResult, NotificationType} from 'react-native-fcm';
-
-
+import * as actions from "./reducers/reducerActions";
 setCustomStyles();
 const AppNavigator = StackNavigator({
         home: {screen: ApplicationManager},
@@ -78,6 +77,18 @@ const AppNavigator = StackNavigator({
 );
 
 class AppWithNavigationState extends Component {
+    constructor(props) {
+        super(props);
+        Dimensions.addEventListener('change', () => {
+            store.dispatch({
+                type: actions.DIMENSIONS_CHANGED,
+            });
+
+
+            console.log('changed dimenssion');
+
+        })
+    }
     render() {
         return (
             <MenuContext>
@@ -89,7 +100,7 @@ class AppWithNavigationState extends Component {
 
 }
 
-const store = getStore();
+
 export default function GROUPIES() {
     return (
         <Provider store={store}>

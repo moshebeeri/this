@@ -1,4 +1,4 @@
-const initialState = {offline: false};
+const initialState = {offline: false, dimensionsChanged: false};
 import * as actions from "./reducerActions";
 
 export default function network(state = initialState, action) {
@@ -12,6 +12,12 @@ export default function network(state = initialState, action) {
             return {
                 ...state,
                 offline: true,
+            };
+        case  actions.DIMENSIONS_CHANGED:
+            let imutableState = {...state};
+            return {
+                ...state,
+                dimensionsChanged: !imutableState.dimensionsChanged,
             };
         default:
             return state;

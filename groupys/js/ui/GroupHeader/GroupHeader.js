@@ -1,8 +1,9 @@
 import React, {Component} from 'react';
-import {Text, View,I18nManager} from 'react-native';
+import {I18nManager, Text, View} from 'react-native';
 import {Button, Thumbnail} from 'native-base';
 import styles from './styles'
 import strings from "../../i18n/i18n"
+import StyleUtils from "../../utils/styleUtils";
 
 export default class GroupHeader extends Component {
     constructor(props) {
@@ -69,14 +70,13 @@ export default class GroupHeader extends Component {
     }
 
     render() {
-        const {group,noColor} = this.props;
-        let containerStyle = {backgroundColor:'white'};
-        if(noColor){
+        const {group, noColor} = this.props;
+        let containerStyle = {backgroundColor: 'white'};
+        if (noColor) {
             containerStyle = {};
         }
-
         return <View style={containerStyle}>
-            <View style={styles.groupHeader}>
+            <View style={[styles.groupHeader, {width: StyleUtils.getWidth()}]}>
                 <View style={styles.groupImage}>
                     {this.createImage(group)}
 
@@ -85,7 +85,7 @@ export default class GroupHeader extends Component {
                     <View style={{flexDirection: 'row'}}>
                         <Text style={this.createStyle(group.entity_type)}>{this.createTitle(group.entity_type)}</Text>
                         <Text> | </Text>
-                        {group.social_state &&  <Text>{group.social_state.followers} {strings.Members} </Text>}
+                        {group.social_state && <Text>{group.social_state.followers} {strings.Members} </Text>}
                     </View>
                     <View>
                         <Text style={styles.groupNameText}>{group.name}</Text>

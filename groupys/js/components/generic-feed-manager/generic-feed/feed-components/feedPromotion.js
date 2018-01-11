@@ -24,9 +24,9 @@ import {
     View
 } from 'native-base';
 import stylesPortrate from './styles'
-import stylesLandscape from './styles_lendscape'
+
 import StyleUtils from '../../../../utils/styleUtils'
-import * as componentCreator from "./feedCommonView";
+
 import {PromotionHeader, PromotionSeperator, SocialState, SubmitButton,BusinessHeader} from '../../../../ui/index';
 import FormUtils from "../../../../utils/fromUtils";
 import strings from "../../../../i18n/i18n"
@@ -34,19 +34,14 @@ import PageRefresher from '../../../../refresh/pageRefresher'
 
 
 const {width, height} = Dimensions.get('window');
-const vw = width / 100;
+
 const vh = height / 100;
-const vmin = Math.min(vw, vh);
-const vmax = Math.max(vw, vh);
 
 export default class FeedPromotion extends Component {
     constructor() {
         super();
     }
 
-    showBusiness() {
-        this.props.navigation.navigate("businessProfile", {businesses: this.props.item.business});
-    }
 
     componentWillMount(){
         const { item} = this.props;
@@ -93,9 +88,9 @@ export default class FeedPromotion extends Component {
             headeerSize = 100;
         }
         const result =
-            <InViewPort onChange={this.visited.bind(this)}style={container}>
-                <View style={styles.promotion_card}>
-                    <View style={{backgroundColor:'#cccccc',width:width}}>
+            <InViewPort onChange={this.visited.bind(this)} style={container}>
+                <View  style={[styles.promotion_card, {width: StyleUtils.getWidth()}]} >
+                  <View style={{backgroundColor:'#cccccc',width:StyleUtils.getWidth()}}>
 
                     <BusinessHeader  navigation={this.props.navigation} business={item.business}
                                     categoryTitle={categoruTitle} businessLogo={item.business.logo}
@@ -108,8 +103,8 @@ export default class FeedPromotion extends Component {
                     {image}
 
 
-                    <View style={{  height:headeerSize,width: width  , backgroundColor: 'white'}}>
-                        <View style={promotaionDesc}>
+                    <View style={{  height:headeerSize,width: StyleUtils.getWidth()  , backgroundColor: 'white'}}>
+                        <View style={[promotaionDesc,{width: StyleUtils.getWidth()}]} >
                             <PromotionHeader type={item.promotion} feed titleText={item.promotionTitle}
                                              titleValue={item.promotionValue} term={item.promotionTerm}/>
                         </View>
@@ -118,11 +113,11 @@ export default class FeedPromotion extends Component {
                                 - {item.description}</Text>
                         </View>
                     </View>
-                    {!shared && location&& <View style={styles.promotionsSeparator}>
+                    {!shared && location&& <View style={[styles.promotionsSeparator,{width: StyleUtils.getWidth()}]} >
                         <PromotionSeperator/>
                     </View>}
 
-                    {!shared && location && <View style={styles.promotionDetailsContainer}>
+                    {!shared && location && <View style={[styles.promotionDetailsContainer,{width: StyleUtils.getWidth()}]} >
                         <View style={styles.promotionLoctionContainer}>
                             <View><Text style={styles.detailsTitleText}>{strings.Location}</Text></View>
                             <View><Text
@@ -147,7 +142,7 @@ export default class FeedPromotion extends Component {
                     </View>}
 
 
-                    {!hideSocial && !shared && <View style={styles.promotion_bottomContainer}>
+                    {!hideSocial && !shared && <View style={[styles.promotion_bottomContainer,{width: StyleUtils.getWidth()}]} >
 
                         {item.social && <SocialState feed comments={item.social.comments} onPressComment={comment}
                                                      like={item.social.like} likes={item.social.likes}
@@ -186,7 +181,7 @@ export default class FeedPromotion extends Component {
             return {
                 flex: 1,
                 height: 90 * vh,
-                width: width -5,
+                width: StyleUtils.getWidth() -5,
                 overflow: 'hidden',
                 backgroundColor: 'white',
                 // backgroundColor:'#FFF',
@@ -199,7 +194,7 @@ export default class FeedPromotion extends Component {
             if (shared) {
                 return {
                     flex: 1,
-                    width: width,
+                    width: StyleUtils.getWidth(),
                     overflow: 'hidden',
                     backgroundColor: '#cccccc',
                     // backgroundColor:'#FFF',
@@ -211,8 +206,8 @@ export default class FeedPromotion extends Component {
 
             return {
                 flex: 1,
-                height: 90 * vh,
-                width: width,
+                height:  StyleUtils.isPortrait() ? 90 * vh: 90 * vh,
+                width: StyleUtils.getWidth(),
                 overflow: 'hidden',
                 backgroundColor: '#cccccc',
                 // backgroundColor:'#FFF',
@@ -225,7 +220,7 @@ export default class FeedPromotion extends Component {
         return {
             flex: 1,
             height: 45 * vh,
-            width: width,
+            width: StyleUtils.getWidth(),
             overflow: 'hidden',
             backgroundColor: '#cccccc',
             // backgroundColor:'#FFF',
@@ -237,9 +232,9 @@ export default class FeedPromotion extends Component {
 
     createImageComponent(item, styles) {
         if (item.banner) {
-            return <View style={styles.promotion_image_view}>
+            return <View  style={[styles.promotion_image_view,{width: StyleUtils.getWidth()}]}  >
 
-                <Image resizeMode="cover" style={styles.promotion_image} source={{uri: item.banner.uri}}>
+                <Image resizeMode="cover"  style={[styles.promotion_image,{width: StyleUtils.getWidth()}]}  source={{uri: item.banner.uri}}>
                 </Image>
             </View>
         }
@@ -247,9 +242,7 @@ export default class FeedPromotion extends Component {
     }
 
     createPromotionStyle() {
-        if (StyleUtils.isLandscape()) {
-            return stylesLandscape;
-        }
+
         return stylesPortrate;
     }
 }

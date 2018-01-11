@@ -11,7 +11,7 @@ import BackgroundTimer from "react-native-background-timer";
 import LocationApi from "../../api/location";
 import ContactApi from "../../api/contacts";
 import getStore from "../../store";
-import StyleUtils from "../../utils/styleUtils";
+
 import SideBar from "../drawer/index";
 import * as actions from "../../reducers/reducerActions";
 import {bindActionCreators} from "redux";
@@ -45,7 +45,9 @@ import Icon2 from 'react-native-vector-icons/Ionicons';
 import FeedPromotion from '../generic-feed-manager/generic-feed/feed-components/feedPromotion'
 import strings from "../../i18n/i18n"
 
-const {width, height} = Dimensions.get('window');
+import StyleUtils from "../../utils/styleUtils";
+const width = StyleUtils.getWidth();
+const height = StyleUtils.getHeight();
 let locationApi = new LocationApi();
 let contactApi = new ContactApi();
 const store = getStore();
@@ -149,12 +151,7 @@ class ApplicationManager extends Component {
             orientation: StyleUtils.isPortrait() ? 'portrait' : 'landscape',
             devicetype: StyleUtils.isTablet() ? 'tablet' : 'phone'
         }
-        // Event Listener for orientation changes
-        Dimensions.addEventListener('change', () => {
-            this.setState({
-                orientation: StyleUtils.isPortrait() ? 'portrait' : 'landscape'
-            })
-        })
+
     }
 
     replaceRoute(route) {

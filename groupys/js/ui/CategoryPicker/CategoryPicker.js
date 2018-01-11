@@ -8,6 +8,8 @@ import {bindActionCreators} from "redux";
 import { I18nManager } from 'react-native';
 import FormUtils from "../../utils/fromUtils";
 import strings from "../../i18n/i18n"
+import StyleUtils from "../../utils/styleUtils";
+
 class CategoryPicker extends Component {
     constructor(props) {
         super(props);
@@ -121,7 +123,8 @@ class CategoryPicker extends Component {
 
                 mode="dropdown"
                 placeholder={strings.SelectCategory}
-                style={pickerStyle}
+                style={[pickerStyle, {width: StyleUtils.getWidth() - 25}]}
+
                 selectedValue={this.state.selectedCategories[0]}
                 onValueChange={(category) => this.setCategory(0, category)}>
 
@@ -155,7 +158,7 @@ class CategoryPicker extends Component {
 
                     placeholder={strings.SelectCategory}
                     mode="dropdown"
-                    style={pickerStyle}
+                    style={[pickerStyle, {width: StyleUtils.getWidth() - 25}]}
                     selectedValue={stateCategories[i + 1]}
                     onValueChange={(category) => selectCategoryFunction(i + 1, category)}>
 

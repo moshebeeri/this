@@ -29,10 +29,9 @@ import strings from '../../../i18n/i18n';
 const promotions = require('../../../../images/promotion.png');
 const products = require('../../../../images/barcode.png');
 const {width, height} = Dimensions.get('window');
-const vw = width / 100;
+import StyleUtils from '../../../utils/styleUtils'
 const vh = height / 100;
-const vmin = Math.min(vw, vh);
-const vmax = Math.max(vw, vh);
+
 const permissions = require('../../../../images/permissions.png');
 export default class BusinessListView extends Component {
     constructor(props) {
@@ -136,7 +135,7 @@ export default class BusinessListView extends Component {
 
     createBannerTag(item) {
         if (item.business.pictures && item.business.pictures.length > 0) {
-            return <View style={{}}><Image style={styles.bannerImageContainer} resizeMode="cover"
+            return <View style={{}}><Image  style={[styles.bannerImageContainer, {width: StyleUtils.getWidth()}]}  resizeMode="cover"
                                            source={{uri: item.business.pictures[0].pictures[0]}}>
 
             </Image>

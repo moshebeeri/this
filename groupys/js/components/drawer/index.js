@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import {I18nManager, Image, Platform, StyleSheet, TouchableOpacity,Dimensions} from 'react-native';
+import {I18nManager, Image, Platform, StyleSheet, TouchableOpacity,Dimensions,ScrollView} from 'react-native';
 import {Button, Container, Content, Input, InputGroup, Item, Text, View} from 'native-base';
 import styles from './styles';
 import {connect} from 'react-redux';
@@ -89,7 +89,7 @@ class ProfileDrawer extends Component {
         }
         let userImage = <Image style={{width: 120, height: 120, borderRadius: borderRadiusSize,}} source={source}/>;
         return (
-
+            <ScrollView>
             <View style={{width:deviceWidth/5*4,justifyContent:'flex-start',height:deviceHeight,opacity:0.9,backgroundColor: '#41aad9'}}>
 
                 <View style={{
@@ -190,6 +190,7 @@ class ProfileDrawer extends Component {
 
 
             </View>
+            </ScrollView>
 
 
         );

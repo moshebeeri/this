@@ -17,14 +17,12 @@ import {
     View
 } from 'native-base';
 import stylesPortrate from './styles'
-import stylesLandscape from './styles_landscape'
 import FeedUiConverter from '../../../api/feed-ui-converter'
 import StyleUtils from '../../../utils/styleUtils'
 import FormUtils from "../../../utils/fromUtils";
 import {PromotionHeader, SocialState, SubmitButton} from '../../../ui/index';
 import strings from "../../../i18n/i18n"
 
-const ILS = '₪';
 let feedUiConverter = new FeedUiConverter();
 export default class PromotionListView extends Component {
     constructor(props) {
@@ -41,7 +39,8 @@ export default class PromotionListView extends Component {
 
     createImageTage(item, styles) {
         if (item.banner) {
-            return <View style={styles.promotionImageContainer}>
+            return <View style={[styles.promotionImageContainer, {width: StyleUtils.getWidth()}]}>
+
                 <Image resizeMode="cover" style={styles.promotion_image} source={{uri: item.banner.uri}}></Image>
             </View>
         }
@@ -56,16 +55,19 @@ export default class PromotionListView extends Component {
         }
         const styles = this.createStyle();
         const result =
-            <View key={promotionItem._id} style={styles.promotion_container}>
+            <View key={promotionItem._id} style={[styles.promotion_container, {width: StyleUtils.getWidth()}]}>
+
+
                 {this.createImageTage(item, styles)}
 
-                <View style={styles.promotion_card}>
+                <View style={[styles.promotion_card, {width: StyleUtils.getWidth()}]}>
 
                     <PromotionHeader type={promotionItem.type} titleText={item.promotionTitle}
                                      titleValue={item.promotionValue} term={item.promotionTerm}/>
 
+                    <View style={[styles.promotionInformation, {width: StyleUtils.getWidth()}]}>
 
-                    <View style={styles.promotionInformation}>
+
                         <Text style={styles.promotionInfoTextI}>{item.name} - {item.description}</Text>
                     </View>
                     <View style={styles.promotionDetailsContainer}>
@@ -83,7 +85,8 @@ export default class PromotionListView extends Component {
                                           onPress={this.showProduct.bind(this, this.props, this.props.item)}/>
                         </View>
                     </View>
-                    <View style={styles.promotionAnalyticsContainer}>
+                    <View style={[styles.promotionAnalyticsContainer, {width: StyleUtils.getWidth()}]}>
+
                         <View style={styles.promotionAnalyticsAttribute}>
                             <Text>{strings.Total.toUpperCase()} </Text>
                             <Text style={styles.promotion_addressText} note>{item.quantity} </Text>
@@ -123,9 +126,6 @@ export default class PromotionListView extends Component {
     }
 
     createStyle() {
-        if (StyleUtils.isLandscape()) {
-            return stylesLandscape;
-        }
         return stylesPortrate;
     }
 }

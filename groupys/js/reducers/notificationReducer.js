@@ -17,7 +17,7 @@ export default function notification(state = initialState, action) {
     let currentNotificationsIds = imutableState.notificationId;
     switch (action.type) {
         case actions.SET_NOTIFICATION :
-            if (action.notifications.length > 0) {
+            if (action.notifications && action.notifications.length > 0) {
                 action.notifications.forEach(notification => {
                     if(!currentNotificationsIds.includes(notification._id)) {
                         notification.key = notification._id;

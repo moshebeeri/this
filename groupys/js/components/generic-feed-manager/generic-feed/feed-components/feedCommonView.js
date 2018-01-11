@@ -100,9 +100,7 @@ export function createCommentButton(styles, comment, item) {
 }
 
 export function createStyle() {
-    if (StyleUtils.isLandscape()) {
-        return stylesLandscape;
-    }
+
     return stylesPortrate;
 }
 

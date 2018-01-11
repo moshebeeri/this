@@ -26,30 +26,32 @@ import FeedMessage from './feedMessage'
 import FeedPromotion from './feedPromotion'
 import FeedBusiness from './feedBusiness'
 import FeedPost from './feedPost'
-
-
-import FeedWelcome from './feedWelcome'
 import strings from "../../../../i18n/i18n"
+import StyleUtils from '../../../../utils/styleUtils'
 
-const {width, height} = Dimensions.get('window');
-const vw = width / 100;
+const {height} = Dimensions.get('window');
 const vh = height / 100;
-const vmin = Math.min(vw, vh);
-const vmax = Math.max(vw, vh);
 export default class FeedShared extends Component {
     constructor() {
         super();
     }
 
     render() {
-        const {refresh, item, save, like, unlike, showUsers, comment, token, location} = this.props;
+        const {item,} = this.props;
         const container = this.createContainerStyle(item);
         return (<View style={container}>
-                <View style={{borderColor:'#cccccc',width:width,flex:1,justifyContent:'center',alignItems:'flex-start',backgroundColor:'white'}}>
-                 <Text style={{padding:5,backgroundColor:'white'}}>{item.user.name} {strings.Shared}</Text>
+                <View style={{
+                    borderColor: '#cccccc',
+                    width: StyleUtils.getWidth(),
+                    flex: 1,
+                    justifyContent: 'center',
+                    alignItems: 'flex-start',
+                    backgroundColor: 'white'
+                }}>
+                    <Text style={{padding: 5, backgroundColor: 'white'}}>{item.user.name} {strings.Shared}</Text>
                 </View>
-                <View style={{flex:10}}>
-                {this.createSharedActivity(item)}
+                <View style={{flex: 10}}>
+                    {this.createSharedActivity(item)}
                 </View>
             </View>
         );
@@ -60,7 +62,7 @@ export default class FeedShared extends Component {
             return {
                 flex: 1,
                 height: 91 * vh,
-                width: width,
+                width: StyleUtils.getWidth(),
                 overflow: 'hidden',
                 backgroundColor: '#cccccc',
                 // backgroundColor:'#FFF',
@@ -68,20 +70,35 @@ export default class FeedShared extends Component {
                 flexDirection: 'column',
             }
         }
-        return {
-            flex: 1,
-            height: 71 * vh,
+        switch (item.shared) {
+            case 'PROMOTION':
+                return {
+                    flex: 1,
+                    height: 80 * vh,
+                    width: StyleUtils.getWidth(),
+                    overflow: 'hidden',
+                    backgroundColor: '#cccccc',
+                    // backgroundColor:'#FFF',
+                    alignItems: 'center',
+                    flexDirection: 'column',
+                };
+            case'POST':
+                return {
+                    flex: 1,
+                    height: 80 * vh,
+                    width: StyleUtils.getWidth(),
+                    overflow: 'hidden',
+                    backgroundColor: '#cccccc',
+                    // backgroundColor:'#FFF',
+                    alignItems: 'center',
+                    flexDirection: 'column',
+                };
+        }
 
-            width: width,
-            overflow: 'hidden',
-            backgroundColor: '#cccccc',
-            // backgroundColor:'#FFF',
-            alignItems: 'center',
-            flexDirection: 'column',
-        };
     }
+
     createSharedActivity(item) {
-        const {refresh, like, unlike, showUsers, comment, token, location,showActions} = this.props;
+        const {refresh, like, unlike, showUsers, comment, token, location, showActions} = this.props;
         switch (item.shared) {
             case 'PROMOTION':
                 return this.createFeedView(<FeedPromotion shared refresh={refresh} token={token} comment={comment}
@@ -93,12 +110,11 @@ export default class FeedShared extends Component {
             case 'MESSAGE':
                 return this.createFeedView(<FeedMessage shared token={token} navigation={this.props.navigation}
                                                         item={item.shardeActivity}/>)
-
-
             case'POST':
-                return this.createFeedView(<FeedPost  showActions={showActions}  shared token={token} navigation={this.props.navigation} item={item.shardeActivity} like={actions.like} unlike={actions.unlike}
+                return this.createFeedView(<FeedPost showActions={showActions} shared token={token}
+                                                     navigation={this.props.navigation} item={item.shardeActivity}
+                                                     like={actions.like} unlike={actions.unlike}
                                                      showUsers={showUsers} comment={comment}/>)
-
             default:
                 return this.createFeedView(<FeedBusiness shared location={location} token={token} refresh={refresh}
                                                          showActions={showActions}
@@ -109,15 +125,13 @@ export default class FeedShared extends Component {
                                                          _panResponder={this._panResponder}/>)
         }
     }
+
     createFeedView(item) {
         if (item) {
             return item
-
-
         }
         return <View></View>
     }
-
 }
 
 

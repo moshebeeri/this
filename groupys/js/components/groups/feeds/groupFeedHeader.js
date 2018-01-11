@@ -23,7 +23,7 @@ import {
 import * as groupsAction from "../../../actions/groups";
 import Icon2 from 'react-native-vector-icons/SimpleLineIcons';
 import Icon from 'react-native-vector-icons/Ionicons';
-
+import StyleUtils from '../../../utils/styleUtils'
 import {bindActionCreators} from "redux";
 import strings from "../../../i18n/i18n"
 
@@ -109,7 +109,7 @@ class GroupFeedHeader extends Component {
 
     render() {
         let headerHeight = {   flexDirection: 'row',
-            width: width,
+            width: StyleUtils.getWidth(),
             height: vh * 10,
             backgroundColor: '#fff',
             justifyContent:'center',
@@ -117,7 +117,7 @@ class GroupFeedHeader extends Component {
 
         if (Platform.OS === 'ios') {
             headerHeight = {   flexDirection: 'row',
-                width: width,
+                width: StyleUtils.getWidth(),
                 height: vh * 13,
                 backgroundColor: '#fff',
                 justifyContent:'center',

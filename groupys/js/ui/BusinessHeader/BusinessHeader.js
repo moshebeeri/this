@@ -10,6 +10,8 @@ import {Menu, MenuOption, MenuOptions, MenuTrigger,} from 'react-native-popup-me
 import * as businessActions from "../../actions/business";
 import Icon2 from 'react-native-vector-icons/SimpleLineIcons';
 import strings from "../../i18n/i18n"
+import StyleUtils from "../../utils/styleUtils";
+
 class BusinessHeader extends Component {
     constructor(props) {
         super(props);
@@ -124,7 +126,7 @@ class BusinessHeader extends Component {
 
             </TouchableOpacity>
         }
-        return <View style={headerContainerStyle}>
+        return <View style={[ headerContainerStyle, {width: StyleUtils.getWidth()}]}>
             <View style={{alignItems:'center',justifyContent:'center'}}>
                 {back}
             </View>

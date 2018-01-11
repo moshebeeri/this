@@ -17,6 +17,7 @@ import HappyHourComponent from "./happyHour/index";
 import styles from "./styles";
 import {DatePicker, FormHeader, ImagePicker, SelectButton, SimplePicker, Spinner, TextInput} from '../../../ui/index';
 import strings from "../../../i18n/i18n"
+import StyleUtils from '../../../utils/styleUtils'
 import {I18nManager} from 'react-native';
 const {width, height} = Dimensions.get('window')
 let promotionApi = new PromotionApi();
@@ -479,6 +480,7 @@ class AddPromotion extends Component {
             }
         }
         return (
+
             <View style={styles.product_container}>
                 <FormHeader showBack submitForm={this.saveFormData.bind(this)} navigation={this.props.navigation}
                             title={header} bgc="#FA8559"/>

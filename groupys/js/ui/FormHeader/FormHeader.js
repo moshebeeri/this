@@ -8,8 +8,9 @@ import strings from "../../i18n/i18n"
 import {connect} from 'react-redux';
 
 const {width, height} = Dimensions.get('window')
-const vw = width / 100;
+
 const vh = height / 100
+import StyleUtils from "../../utils/styleUtils";
 
 class FormHeader extends Component {
     constructor(props) {
@@ -44,7 +45,7 @@ class FormHeader extends Component {
         let icon = <Icon2 active color={"white"} size={25} name={'check'}/>
         let headerHeight = vh * 7;
         if (Platform.OS === 'ios') {
-            icon = <Icon active color={"white"} size={40} name={'ios-checkmark'}/>
+            icon = <Icon active color={"white"} size={30} name={'ios-checkmark'}/>
             headerHeight = vh * 9;
         }
         if (submitIcon) {
@@ -70,7 +71,7 @@ class FormHeader extends Component {
         }
         let titleStyle = this.createTitleStyle(titleColor);
         return (
-            <View style={{width:width}}>
+            <View style={{width:StyleUtils.getWidth()}}>
                 {network.offline &&   <View style={{width:width,height:20,justifyContent:'center',alignItems:'center',backgroundColor:'#f4ce42'}}>
                     <Text style={{color:'gray'}}>{strings.Offline}</Text>
                 </View>}
