@@ -10,6 +10,7 @@ import {bindActionCreators} from "redux";
 import * as commentEntitiesAction from "../../actions/commentsEntities";
 import {getFeeds} from "../../selectors/commentsEntitiesSelector";
 import {ChatMessage, MessageBox, PromotionHeader} from '../../ui/index';
+import StyleUtils from "../../utils/styleUtils";
 
 const {width, height} = Dimensions.get('window')
 const vw = width / 100;
@@ -66,7 +67,9 @@ class CommentsComponent extends Component {
         const item = this.getInstance();
         let promotionHeader;
         if (item.promotion) {
-            promotionHeader = <View style={styles.comments_promotions}>
+            promotionHeader =
+                <View style={[styles.comments_promotions, {width: StyleUtils.getWidth() - 15}]}>
+
                 <PromotionHeader type={item.promotion} feed titleText={item.promotionTitle}
                                  titleValue={item.promotionValue} term={item.promotionTerm}/>
 
@@ -76,7 +79,7 @@ class CommentsComponent extends Component {
         const commentsView = this.createCommentView(true, item);
         return (
             <View style={{
-                width: width - 15,
+                width: StyleUtils.getWidth() - 15,
                 marginTop: 5,
                 marginBottom: 5,
                 backgroundColor: 'white',

@@ -25,6 +25,8 @@ import * as userAction from "../../actions/user";
 import styles from './styles'
 import {FormHeader, Spinner, TextInput} from '../../ui/index';
 import strings from "../../i18n/i18n"
+import StyleUtils from "../../utils/styleUtils";
+
 class ChangePassword extends Component {
     static navigationOptions = ({navigation}) => ({
         header: null
@@ -91,7 +93,7 @@ class ChangePassword extends Component {
     }
 
     render() {
-        const { saving, changeForm} = this.props;
+        const {saving, changeForm} = this.props;
         const message = this.createMessage(changeForm);
         return (<View>
                 <FormHeader showBack submitForm={this.changePassword.bind(this)} navigation={this.props.navigation}
@@ -99,28 +101,29 @@ class ChangePassword extends Component {
 
                 <View>
 
-                    <View style={styles.inputTextLayout}>
+                    <View style={[styles.inputTextLayout, {width: StyleUtils.getWidth() - 15}]}>
+
                         <TextInput field={strings.CurrentPassword} value={this.state.currentPassword}
                                    returnKeyType='next' ref="1" refNext="1" secureTextEntry
                                    isMandatory
                                    onSubmitEditing={this.focusNextField.bind(this, "2")}
                                    onChangeText={(currentPassword) => this.setState({currentPassword})}/>
                     </View>
-                    <View style={styles.inputTextLayout}>
+                    <View style={[styles.inputTextLayout, {width: StyleUtils.getWidth() - 15}]}>
                         <TextInput field={strings.NewPassword} value={this.state.newPassword}
                                    returnKeyType='next' ref="2" refNext="2" secureTextEntry
                                    isMandatory
                                    onSubmitEditing={this.focusNextField.bind(this, "3")}
                                    onChangeText={(newPassword) => this.setState({newPassword})}/>
                     </View>
-                    <View style={styles.inputTextLayout}>
+                    <View style={[styles.inputTextLayout, {width: StyleUtils.getWidth() - 15}]}>
                         <TextInput field={strings.ConfirmPassword} value={this.state.confirmPassword}
                                    returnKeyType='done' ref="3" refNext="3" secureTextEntry
                                    onSubmitEditing={this.changePassword.bind(this)}
                                    isMandatory
                                    onChangeText={(confirmPassword) => this.setState({confirmPassword})}/>
                     </View>
-                    <View style={styles.inputTextLayout}>
+                    <View style={[styles.inputTextLayout, {width: StyleUtils.getWidth() - 15}]}>
                         {message}
                     </View>
                     {saving && <Spinner/>}

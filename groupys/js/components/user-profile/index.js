@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import {Image, View,Platform} from 'react-native';
+import {Image, Platform, View} from 'react-native';
 import {actions} from 'react-native-navigation-redux-helpers';
 import {
     Button,
@@ -24,6 +24,8 @@ import {connect} from 'react-redux';
 import * as userAction from "../../actions/user";
 import {FormHeader, ImagePicker, Spinner, TextInput} from '../../ui/index';
 import strings from "../../i18n/i18n"
+import StyleUtils from "../../utils/styleUtils";
+
 const noPic = require('../../../images/client_1.png');
 
 class UserProfile extends Component {
@@ -70,10 +72,9 @@ class UserProfile extends Component {
     }
 
     save() {
-        if(this.props.saving){
+        if (this.props.saving) {
             return;
         }
-
         if (this.validateForm()) {
             let user = {
                 name: this.state.name,
@@ -110,9 +111,8 @@ class UserProfile extends Component {
                 uri: this.state.image.path
             }
         }
-
         let borderRaduis = 70;
-        if( (Platform.OS === 'ios')){
+        if ((Platform.OS === 'ios')) {
             borderRaduis = 48;
         }
         const image = <Image style={{
@@ -124,11 +124,13 @@ class UserProfile extends Component {
         </Image>
         return (
 
-            <View style={styles.settingsContainer}>
+            <View style={[styles.settingsContainer, {width: StyleUtils.getWidth()}]}>
+
                 <FormHeader showBack submitForm={this.save.bind(this)} navigation={this.props.navigation}
                             title={strings.UserSettings} bgc="#2db6c8"/>
 
-                <View style={styles.thumbnail}>
+                <View style={[styles.thumbnail, {width: StyleUtils.getWidth()}]}>
+
 
                     <ImagePicker imageWidth={3000} imageHeight={3000} image={image}
                                  setImage={this.setImage.bind(this)}/>
@@ -136,14 +138,14 @@ class UserProfile extends Component {
                 </View>
                 <View>
 
-                    <View style={styles.inputTextLayout}>
-                        <TextInput field={strings.UserName}value={this.state.name}
+                    <View style={[styles.inputTextLayout, {width: StyleUtils.getWidth() - 15}]}>
+                        <TextInput field={strings.UserName} value={this.state.name}
                                    returnKeyType='done' ref="1" refNext="1"
 
                                    onChangeText={(name) => this.setState({name})}/>
                     </View>
-                    <View style={styles.inputTextLayout}>
-                        <TextInput field={strings.UserPhone}value={this.state.phone_number} disabled
+                    <View style={[styles.inputTextLayout, {width: StyleUtils.getWidth() - 15}]}>
+                        <TextInput field={strings.UserPhone} value={this.state.phone_number} disabled
                                    returnKeyType='done' ref="2" refNext="2"
                                    onChangeText={(phone_number) => this.setState({phone_number})}/>
                     </View>
