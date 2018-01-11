@@ -106,14 +106,14 @@ Pricing.balance =
     let payer = this.extractPayer(entity);
 
     if(!payer) //user entity
-      return callback(null, null);
+      return callback(null, true);
     this.handleFreeTier(payer, function (err, freeTierPoints) {
       if(err) return callback(err);
       let points = freeTierPoints + payer.pricing.purchasedPoints;
       if (points <= 0){
-        return callback(null, 'FALSE');
+        return callback(null, false);
       }else{
-        return callback(null, 'TRUE');
+        return callback(null, true);
       }
     });
   };
