@@ -3,6 +3,8 @@ import {Text, View} from 'react-native'
 import styles from './styles'
 import {SelectButton, TextInput} from '../../../../ui/index';
 import strings from "../../../../i18n/i18n"
+import StyleUtils from '../../../../utils/styleUtils';
+
 export default class XForYComponent extends Component {
     constructor(props) {
         super(props);
@@ -33,6 +35,7 @@ export default class XForYComponent extends Component {
             businessId: businessId
         })
     }
+
     isValid() {
         let result = true;
         Object.keys(this.refs).forEach(key => {
@@ -88,7 +91,11 @@ export default class XForYComponent extends Component {
         if (this.props.state.product) {
             let productName = this.props.state.product.name
             return <View style={styles.textLayout}>
-                <Text style={{color: '#FA8559', marginLeft: 8, marginRight: 8}}>{strings.PromotionOn}: {productName}</Text>
+                <Text style={{
+                    color: '#FA8559',
+                    marginLeft: 8,
+                    marginRight: 8
+                }}>{strings.PromotionOn}: {productName}</Text>
             </View>
         }
         return undefined
@@ -105,12 +112,14 @@ export default class XForYComponent extends Component {
             eligible = this.props.state.x_for_y.values.eligible;
         }
         return <View>
-            <View style={styles.textLayout}>
+            <View style={[styles.textLayout, {width: StyleUtils.getWidth() - 15}]}>
                 <Text style={{color: '#FA8559', marginLeft: 8, marginRight: 8}}>{strings.BuyProductsFor}</Text>
             </View>
 
             <View style={{flexDirection: 'row', justifyContent: 'center', alignItems: 'center'}}>
-                <View style={{flex: 1.7, marginTop: 25}}><SelectButton ref="xplusySelectProduct" selectedValue={this.props.state.product}isMandatory title={strings.SelectProduct}
+                <View style={{flex: 1.7, marginTop: 25}}><SelectButton ref="xplusySelectProduct"
+                                                                       selectedValue={this.props.state.product}
+                                                                       isMandatory title={strings.SelectProduct}
                                                                        action={this.showBuyProducts.bind(this, true)}/></View>
 
                 <View style={styles.inputPrecenComponent}>
