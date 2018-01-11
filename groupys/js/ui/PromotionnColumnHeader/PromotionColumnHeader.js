@@ -3,6 +3,7 @@ import {Dimensions, Text, View} from 'react-native';
 import {Button, Icon, Input} from 'native-base';
 import styles from './styles';
 import {PunchView} from '../index'
+import StyleUtils from "../../utils/styleUtils";
 
 const {width, height} = Dimensions.get('window')
 const ILS = '₪';
@@ -14,7 +15,6 @@ export default class PromotionColumnHeader extends Component {
     render() {
         const {type, titleValue, titleText, term} = this.props;
         switch (type) {
-
             case "PERCENT":
             case "X+N%OFF":
                 return <View style={{
@@ -22,7 +22,7 @@ export default class PromotionColumnHeader extends Component {
                     flex: 2,
                     justifyContent: 'center',
                     alignItems: 'center',
-                    width: width - 30,
+                    width: StyleUtils.getWidth() - 30,
                     backgroundColor: 'white'
                 }}>
 
@@ -33,18 +33,15 @@ export default class PromotionColumnHeader extends Component {
                     <Text style={styles.promotionTermlTextStyle}>{term}</Text>
 
                 </View>;
-
-
             case "HAPPY_HOUR":
             case "X_FOR_Y":
-
             case "REDUCED_AMOUNT":
                 return <View style={{
                     marginTop: 5,
                     flex: 2,
                     justifyContent: 'center',
                     alignItems: 'center',
-                    width: width - 30,
+                    width: StyleUtils.getWidth() - 30,
                     backgroundColor: 'white'
                 }}>
 
@@ -61,7 +58,7 @@ export default class PromotionColumnHeader extends Component {
                     flex: 2,
                     justifyContent: 'center',
                     alignItems: 'center',
-                    width: width - 30,
+                    width: StyleUtils.getWidth() - 30,
                     backgroundColor: 'white'
                 }}>
 
@@ -73,7 +70,7 @@ export default class PromotionColumnHeader extends Component {
 
                 </View>;
             case "PUNCH_CARD":
-                return <View style={styles.promotionPunchHeader}>
+                return <View style={[styles.promotionPunchHeader, {width: StyleUtils.getWidth() - 15}]}>
                     <View style={styles.promotionPunchValue}>
                         <Text style={styles.puncCardtitleValue}>{titleText}</Text>
                     </View>

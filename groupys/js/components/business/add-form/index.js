@@ -8,8 +8,7 @@ import {bindActionCreators} from "redux";
 import {AddressInput, CategoryPicker, FormHeader, ImagePicker, Spinner, TextInput} from '../../../ui/index';
 import FormUtils from "../../../utils/fromUtils";
 import strings from '../../../i18n/i18n';
-
-const {width, height} = Dimensions.get('window');
+import StyleUtils from "../../../utils/styleUtils";
 
 class AddBusiness extends Component {
     static navigationOptions = ({navigation}) => ({
@@ -213,7 +212,7 @@ class AddBusiness extends Component {
             let coverImage =
                 <View>
                     <Image
-                        style={{width: width - 10, height: 210, borderWidth: 1, borderColor: 'white'}}
+                        style={{width: StyleUtils.getWidth() - 10, height: 210, borderWidth: 1, borderColor: 'white'}}
                         source={{uri: this.state.coverImage.uri}}
                     >
 

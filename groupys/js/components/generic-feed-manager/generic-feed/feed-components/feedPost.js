@@ -23,25 +23,16 @@ import {
     Thumbnail,
     View
 } from 'native-base';
-import stylesPortrate from './styles'
 import stylesLandscape from './styles_lendscape'
 import StyleUtils from '../../../../utils/styleUtils'
-import * as componentCreator from "./feedCommonView";
-import {SocialState,Video,ActivityReport} from '../../../../ui/index';
+import {ActivityReport, SocialState, UrlPreview, Video} from '../../../../ui/index';
 import PageRefresher from '../../../../refresh/pageRefresher'
 
 const {width, height} = Dimensions.get('window');
-const vw = width / 100;
 const vh = height / 100;
-const vmin = Math.min(vw, vh);
-const vmax = Math.max(vw, vh);
 export default class FeedPost extends Component {
     constructor() {
         super();
-    }
-
-    showBusiness() {
-        this.props.navigation.navigate("businessProfile", {businesses: this.props.item.business});
     }
 
     componentWillMount() {
@@ -51,31 +42,55 @@ export default class FeedPost extends Component {
 
     visited(visible) {
         const {item} = this.props;
-
-        if(this.refs[item.id]){
+        if (this.refs[item.id]) {
             this.refs[item.id].visible(visible);
         }
-        if(visible) {
-             PageRefresher.visitedFeedItem(item);
+        if (visible) {
+            PageRefresher.visitedFeedItem(item);
         }
     }
 
     render() {
         const {refresh, item, save, shared, like, unlike, showUsers, comment, token, showActions} = this.props;
         const styles = this.createPromotionStyle();
-         const image = this.createImageComponent(item, styles);
+        const image = this.createImageComponent(item, styles);
         const container = this.createContainerStyle(item);
-
-
-          let promotionDetalis = styles.promotionDetails;
-          let titleContainerStyle = {flexDirection:'row',backgroundColor:'white',height:80,width: width}
-          let postMessageContainerStyle= {flex:2, width: width,paddingBottom:10, backgroundColor: 'white'};
-        if (shared) {
-            titleContainerStyle = {borderLeftWidth:1,borderTopWidth:1,borderColor:'#cccccc',marginLeft:10,flexDirection:'row',backgroundColor:'white',height:80,width: width}
-            promotionDetalis = styles.promotionShareDetails;
-            postMessageContainerStyle= {borderLeftWidth:1,borderColor:'#cccccc',marginLeft:10,flex:2, width: width,paddingBottom:10, backgroundColor: 'white'};
+        let promotionDetalis = styles.promotionDetails;
+        let titleContainerStyle = {
+            flexDirection: 'row',
+            backgroundColor: 'white',
+            height: 80,
+            width: StyleUtils.getWidth()
         }
-
+        let postMessageContainerStyle = {
+            height: 100,
+            width: StyleUtils.getWidth(),
+            paddingBottom: 10,
+            backgroundColor: 'white'
+        };
+        if (shared) {
+            titleContainerStyle = {
+                borderLeftWidth: 1,
+                borderTopWidth: 1,
+                borderColor: '#cccccc',
+                marginLeft: 10,
+                flexDirection: 'row',
+                backgroundColor: 'white',
+                height: 80,
+                width: StyleUtils.getWidth()
+            }
+            promotionDetalis = styles.promotionShareDetails;
+            postMessageContainerStyle = {
+                height: 100,
+                borderLeftWidth: 1,
+                borderColor: '#cccccc',
+                marginLeft: 10,
+                flex: 2,
+                width: StyleUtils.getWidth(),
+                paddingBottom: 10,
+                backgroundColor: 'white'
+            };
+        }
         let headeerSize = 80;
         if ((Platform.OS === 'ios')) {
             headeerSize = 50;
@@ -83,37 +98,45 @@ export default class FeedPost extends Component {
         const result =
             <InViewPort onChange={this.visited.bind(this)} style={container}>
 
-                <View style={styles.promotion_card}>
+                <View style={[styles.promotion_card, {backgroundColor:'white',width: StyleUtils.getWidth()}]}>
 
-                    <View style={titleContainerStyle}>
-                        <View style={{paddingTop:5,paddingLeft:10,justifyContent:'flex-start'}}>
-                        <Thumbnail  square meduim source={item.avetar}/>
+                    <View style={[titleContainerStyle, {width: StyleUtils.getWidth()}]}>
+                        <View style={{paddingTop: 5, paddingLeft: 10, justifyContent: 'flex-start'}}>
+                            <Thumbnail square meduim source={item.avetar}/>
                         </View>
-                        <View style={{paddingLeft:10,alignItems:'flex-start'}}>
+                        <View style={{paddingLeft: 10, alignItems: 'flex-start'}}>
                             <Text>{item.name}</Text>
-                            <Text style={{width:240,alignItems:'flex-start'}}>{item.feed.activity.post.title}</Text>
+                            <Text style={{width: 240, alignItems: 'flex-start'}}>{item.feed.activity.post.title}</Text>
                         </View>
-                        <View style={{flex:1,paddingRight:10,alignItems:'flex-end',justifyContent:'center'}}>
+                        <View style={{flex: 1, paddingRight: 10, alignItems: 'flex-end', justifyContent: 'center'}}>
                             <ActivityReport id={item.activityId} showActions={showActions}/>
                         </View>
                     </View>
-
+                    <UrlPreview text={item.feed.activity.post.text}/>
                     <View style={postMessageContainerStyle}>
 
-                        <View style={promotionDetalis}>
-                            <Text numberOfLines={4}  style={{marginRight: 10, marginLeft: 10, fontSize: 18}}>{item.feed.activity.post.text}
+                        <View style={[promotionDetalis, {width: StyleUtils.getWidth() - 15}]}>
+                            <Text numberOfLines={4}
+                                  style={{marginRight: 10, marginLeft: 10, fontSize: 18}}>{item.feed.activity.post.text}
                             </Text>
                         </View>
                     </View>
                     {image}
-                    {item.video && <Video ref={item.id} width={width} muted={false} url={item.video}/> }
-                    {item.videoId && <Video source={'YOUTUBE'} ref={item.id} width={width} muted={false} videoId={item.videoId}/> }
+                    {!shared && item.video &&
+                    <Video height={250} ref={item.id} width={StyleUtils.getWidth()} muted={false} url={item.video}/>}
+                    { !shared && item.videoId &&
+                    <Video height={250} source={'YOUTUBE'} ref={item.id} width={StyleUtils.getWidth()} muted={false}
+                           videoId={item.videoId}/>}
+                    { shared && item.videoId  && <View style={{marginTop:50}}>
+                    <Video height={250} source={'YOUTUBE'} ref={item.id} width={StyleUtils.getWidth()} muted={false}
+                           videoId={item.videoId}/>
+                    </View>}
 
-
-
-
-                    {!shared && <View style={styles.post_bottomContainer}>
-
+                     <View style={[styles.post_bottomContainer, {
+                        backgroundColor: 'white',
+                        height: 50,
+                        width: StyleUtils.getWidth()
+                    }]}>
                         {item.social && <SocialState feed comments={item.social.comments} onPressComment={comment}
                                                      like={item.social.like} likes={item.social.likes}
                                                      onPressUnLike={() => unlike(item.id, token)}
@@ -121,7 +144,8 @@ export default class FeedPost extends Component {
                                                      shareDisabled={shared}
                                                      share={item.social.share} shares={item.social.shares}
                                                      shareAction={showUsers}/>}
-                    </View>}
+                    </View>
+
 
                 </View>
             </InViewPort>;
@@ -141,44 +165,45 @@ export default class FeedPost extends Component {
             if (shared) {
                 return {
                     flex: 1,
-                    width: width,
+                    width: StyleUtils.getWidth(),
                     overflow: 'hidden',
-                    backgroundColor: '#b7b7b7',
-                    // backgroundColor:'#FFF',
+                    backgroundColor: 'white',
                     alignItems: 'center',
                     flexDirection: 'column',
                 }
             }
             return {
                 flex: 1,
-                height: 81 * vh,
-                width: width,
+                height: 77 * vh,
+                width: StyleUtils.getWidth(),
                 overflow: 'hidden',
-                backgroundColor: '#b7b7b7',
+                backgroundColor: 'white',
+                marginBottom: 10,
                 // backgroundColor:'#FFF',
                 alignItems: 'center',
                 flexDirection: 'column',
             }
         }
-
-        if( item.video || item.videoId){
+        if (item.video || item.videoId) {
             if (shared) {
                 return {
                     flex: 1,
-                    width: width,
+                    width: StyleUtils.getWidth(),
                     overflow: 'hidden',
-                    backgroundColor: '#b7b7b7',
+                    backgroundColor: 'white',
                     // backgroundColor:'#FFF',
+                    marginBottom: 10,
                     alignItems: 'center',
                     flexDirection: 'column',
                 }
             }
             return {
                 flex: 1,
-                height: 60 * vh,
-                width: width,
+                height: 77 * vh,
+                width: StyleUtils.getWidth(),
                 overflow: 'hidden',
-                backgroundColor: '#b7b7b7',
+                backgroundColor: 'white',
+                marginBottom: 10,
                 // backgroundColor:'#FFF',
                 alignItems: 'center',
                 flexDirection: 'column',
@@ -187,9 +212,10 @@ export default class FeedPost extends Component {
         return {
             flex: 1,
             height: 45 * vh,
-            width: width,
+            width: StyleUtils.getWidth(),
             overflow: 'hidden',
-            backgroundColor: '#b7b7b7',
+            backgroundColor: 'white',
+            marginBottom: 10,
             // backgroundColor:'#FFF',
             alignItems: 'center',
             flexDirection: 'column',
@@ -208,9 +234,6 @@ export default class FeedPost extends Component {
     }
 
     createPromotionStyle() {
-        if (StyleUtils.isLandscape()) {
-            return stylesLandscape;
-        }
-        return stylesPortrate;
+        return stylesLandscape;
     }
 }

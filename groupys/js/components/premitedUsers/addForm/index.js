@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import {View} from 'react-native';
+import {I18nManager, View} from 'react-native';
 import {Button, Container, Content, Fab, Footer, Form, Icon, Input, Item, Picker, Text, Thumbnail} from 'native-base';
 import Icon2 from 'react-native-vector-icons/MaterialIcons';
 import styles from './styles'
@@ -8,7 +8,8 @@ import {connect} from 'react-redux';
 import {bindActionCreators} from "redux";
 import {FormHeader, SimplePicker, Spinner, TextInput} from '../../../ui/index';
 import strings from "../../../i18n/i18n"
-import { I18nManager } from 'react-native';
+import StyleUtils from "../../../utils/styleUtils";
+
 const noPic = require('../../../../images/client_1.png');
 const rolesTypes = [
     {
@@ -117,7 +118,7 @@ class AddPermittedUser extends Component {
         if (!this.state.searchUser) {
             return <View></View>
         }
-        return <View style={styles.inputTextLayout}>
+        return  <View style={[styles.inputTextLayout, {width: StyleUtils.getWidth() - 15}]}>
 
             <TextInput field={strings.UserPhoneNumber} value={this.state.phoneNumber}
                        returnKeyType='next' ref="1" refNext="1"
@@ -127,8 +128,8 @@ class AddPermittedUser extends Component {
                        onChangeText={(phoneNumber) => this.setState({phoneNumber})} isMandatory={true}/>
 
 
-              <Button style={{position: 'absolute', right: 5, top: 25}} large transparent
-                                           onPress={() => this.searchUser()}>
+            <Button style={{position: 'absolute', right: 5, top: 25}} large transparent
+                    onPress={() => this.searchUser()}>
                 <Icon2 size={40} style={styles.productIcon} name="search"/>
 
             </Button>
@@ -148,7 +149,8 @@ class AddPermittedUser extends Component {
         if (!this.state.searchUser) {
             title = strings.UpdateUserRole;
         }
-        return <View style={styles.premtied_usesrs_container}>
+        return <View style={[styles.premtied_usesrs_container, {width: StyleUtils.getWidth()}]}>
+
             <FormHeader showBack submitForm={this.saveFormData.bind(this)} navigation={this.props.navigation}
                         title={title} bgc="#FA8559"/>
 
@@ -175,7 +177,7 @@ class AddPermittedUser extends Component {
         }
         if (user) {
             const pic = this.createUserPic(user);
-            return <View style={styles.user_view}>
+            return  <View style={[styles.user_view, {width: StyleUtils.getWidth() - 15}]}>
                 {pic}
                 <Text style={{margin: 10}}>{user.name}</Text>
 
@@ -195,7 +197,7 @@ class AddPermittedUser extends Component {
     createUserRollPicker(role) {
         return <SimplePicker ref="promotionType" list={rolesTypes} itemTitle={strings.ManagementRole}
                              defaultHeader={strings.ChooseRole} isMandatory
-                            // defaultValue={this.state.defaultRole}
+            // defaultValue={this.state.defaultRole}
                              onValueSelected={this.setUserRoles.bind(this)}/>
     }
 

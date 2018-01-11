@@ -1,12 +1,9 @@
 import React, {Component} from 'react';
-import {
-    Platform,View,Text
-} from 'react-native'
-
-
+import {Platform, Text, View} from 'react-native'
 import styles from './styles'
-import {SelectButton, SimplePicker, TextInput} from '../../../../ui/index';
+import {TextInput} from '../../../../ui/index';
 import strings from "../../../../i18n/i18n"
+import StyleUtils from '../../../../utils/styleUtils';
 
 export default class ReduceAmountComponent extends Component {
     constructor(props) {
@@ -19,6 +16,7 @@ export default class ReduceAmountComponent extends Component {
             }
         )
     }
+
     isValid() {
         let result = true;
         Object.keys(this.refs).forEach(key => {
@@ -79,13 +77,13 @@ export default class ReduceAmountComponent extends Component {
             price = this.props.state.reduced_amount.values.price;
         }
         return <View>
-            <View style={styles.textLayout}>
+            <View style={[styles.textLayout, {width: StyleUtils.getWidth() - 15}]}>
                 <Text style={{color: '#FA8559', marginLeft: 8, marginRight: 8}}>{strings.BuyPayOnly}</Text>
             </View>
-            <View style={{flexDirection:'row',justifyContent:'center',alignItems:'center'}}>
+            <View style={{flexDirection: 'row', justifyContent: 'center', alignItems: 'center'}}>
 
                 <View style={styles.inputPrecenComponent}>
-                    <TextInput field={strings.Buy}value={price}
+                    <TextInput field={strings.Buy} value={price}
                                returnKeyType='next' ref="Buy $" refNext="Buy $"
                                keyboardType='numeric'
                                onSubmitEditing={this.focusNextField.bind(this, "Pay $")}
@@ -103,7 +101,6 @@ export default class ReduceAmountComponent extends Component {
         </View>
     }
 
-
     focusNextField(nextField) {
         if (this.refs[nextField] && this.refs[nextField].wrappedInstance) {
             this.refs[nextField].wrappedInstance.focus()
@@ -112,6 +109,5 @@ export default class ReduceAmountComponent extends Component {
             this.refs[nextField].focus()
         }
     }
-
 }
 

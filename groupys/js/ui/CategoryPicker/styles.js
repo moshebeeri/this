@@ -11,7 +11,7 @@ module.exports = {
     },
     pickerTitleContainer:{
         flexDirection: 'row',
-        justifyContent:  I18nManager.isRTL ? 'flex-start' : 'flex-end'
+        justifyContent: 'flex-start'
     },
     pickerTextStyle: {
         color: '#3A3A3A',

@@ -1,12 +1,13 @@
 import React, {Component} from 'react';
-import {Dimensions, Keyboard, TextInput, View,TouchableOpacity} from 'react-native';
+import {Dimensions, Keyboard, TextInput, TouchableOpacity, View} from 'react-native';
 import Icon2 from "react-native-vector-icons/Entypo";
 import {Button, Icon, Input} from 'native-base';
 import EmojiPicker from "../emojiPicker/emojiPicker"
 import styles from './styles'
 import strings from "../../i18n/i18n"
+import StyleUtils from "../../utils/styleUtils";
 
-const {width, height} = Dimensions.get('window')
+const {height} = Dimensions.get('window')
 export default class MessageBox extends Component {
     constructor(props) {
         super(props);
@@ -44,18 +45,17 @@ export default class MessageBox extends Component {
     }
 
     _onPressButton() {
-
         const {onPress} = this.props;
         if (this.state.message) {
             Keyboard.dismiss();
-
             onPress(this.state.message);
             this.setState({
                 message: '',
-                showEmoji:false,
+                showEmoji: false,
             })
         }
     }
+
     focus() {
         this.refs['messageBox'].focus()
     }
@@ -86,12 +86,12 @@ export default class MessageBox extends Component {
 
     render() {
         let style = {
-            width: width,
+            width: StyleUtils.getWidth(),
             height: 50,
         }
-        if(this.state.showEmoji){
-             style = {
-                width: width,
+        if (this.state.showEmoji) {
+            style = {
+                width: StyleUtils.getWidth(),
                 height: 250,
             }
         }
@@ -125,8 +125,7 @@ export default class MessageBox extends Component {
                 </View>
 
 
-
-                {this.state.showEmoji &&  <EmojiPicker onEmojiSelect={this.handlePick.bind(this)}/>}
+                {this.state.showEmoji && <EmojiPicker onEmojiSelect={this.handlePick.bind(this)}/>}
 
 
             </View>

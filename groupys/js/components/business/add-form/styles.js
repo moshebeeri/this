@@ -1,6 +1,9 @@
 const React = require('react-native');
 const {Dimensions, Platform} = React;
-const {width, height} = Dimensions.get('window')
+import StyleUtils from "../../../utils/styleUtils";
+
+const width = StyleUtils.getWidth();
+const height = StyleUtils.getHeight();
 module.exports = {
     business_container: {
         flex: 1,
@@ -29,7 +32,7 @@ module.exports = {
         justifyContent: 'center',
         alignItems: 'center',
         marginTop: 10,
-        marginBottom:10,
+        marginBottom: 10,
     },
     addCoverNoImageContainer: {
         flexDirection: 'row',
@@ -54,8 +57,8 @@ module.exports = {
         alignItems: 'center',
         justifyContent: 'center',
         marginRight: 12,
-        position:'absolute',
-        top:5,
+        position: 'absolute',
+        top: 5,
         borderWidth: 2,
         borderRadius: 2,
         borderColor: '#ddd',
@@ -75,7 +78,6 @@ module.exports = {
         alignItems: 'center',
         justifyContent: 'center',
         marginRight: 12,
-
         borderWidth: 2,
         borderRadius: 2,
         borderColor: '#ddd',
@@ -95,7 +97,7 @@ module.exports = {
         alignItems: 'center',
         justifyContent: 'center',
         marginRight: 12,
-        position:'absolute',
+        position: 'absolute',
         borderWidth: 2,
         borderRadius: 2,
         borderColor: '#ddd',
@@ -108,9 +110,8 @@ module.exports = {
         backgroundColor: 'white'
     },
     businessCoverPhotoContainer: {
-        width: width ,
+        width: width,
         height: 50,
-
         alignItems: 'center',
         justifyContent: 'center',
         backgroundColor: 'red'

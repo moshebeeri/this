@@ -25,16 +25,7 @@ import * as businessAction from "../../../actions/business";
 import {connect} from 'react-redux';
 import {bindActionCreators} from "redux";
 import strings from "../../../i18n/i18n"
-
-const card = {
-    number: "4111111111111111",
-    expirationDate: "10/20", // or "10/2020" or any valid date
-    cvv: "400",
-}
-const {width, height} = Dimensions.get('window')
-const vw = width / 100;
-const vh = height / 100
-const BTClient = require('react-native-braintree-xplat');
+import StyleUtils from '../../../utils/styleUtils'
 
 class BusinessAccount extends Component {
     static navigationOptions = ({navigation}) => ({
@@ -67,7 +58,6 @@ class BusinessAccount extends Component {
     componentWillMount() {
         const {businesses} = this.props
         let business = businesses[this.props.navigation.state.params.businesses._id].business;
-
         if (!business) {
             business = this.props.navigation.state.params.businesses;
         }
@@ -98,12 +88,11 @@ class BusinessAccount extends Component {
         if (!business) {
             business = this.props.navigation.state.params.businesses;
         }
-
         let freeTierPoints = '0';
         let points = '0';
-        if(business.pricing){
+        if (business.pricing) {
             freeTierPoints = business.pricing.freeTierPoints;
-            if(business.pricing.purchasedPoints) {
+            if (business.pricing.purchasedPoints) {
                 points = business.pricing.purchasedPoints;
             }
         }
@@ -127,20 +116,21 @@ class BusinessAccount extends Component {
                         <View style={{marginTop: 10}}>
                             <Text>{strings.AccountBalance}</Text>
                         </View>
-                        <View style={styles.inputFullTextLayout}>
+                        <View style={[styles.inputFullTextLayout, {width: StyleUtils.getWidth() - 15}]}>
+
                             <TextInput field={strings.FreeTierPoints} disabled value={freeTierPoints}
 
                             />
 
                         </View>
-                        <View style={styles.inputFullTextLayout}>
+                        <View style={[styles.inputFullTextLayout, {width: StyleUtils.getWidth() - 15}]}>
                             <TextInput field={strings.Points} disabled value={points}
 
                             />
 
                         </View>
 
-                        <View style={styles.inputFullTextLayout}>
+                        <View style={[styles.inputFullTextLayout, {width: StyleUtils.getWidth() - 15}]}>
                             <TextInput ref="2" keyboardType={'numeric'} isMandatory placeholder={strings.PayPlaceholder}
                                        field={strings.PayAmount} value={this.state.amount}
                                        onChangeText={(amount) => this.setState({amount})}

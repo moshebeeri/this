@@ -3,7 +3,7 @@ import {Dimensions, View} from 'react-native';
 import {Spinner} from 'native-base';
 import styles from './styles';
 import Triangle from './Triangale'
-
+import StyleUtils from '../../utils/styleUtils'
 const {width, height} = Dimensions.get('window');
 export default class PromotionSeperator extends Component {
     constructor(props) {
@@ -23,7 +23,7 @@ export default class PromotionSeperator extends Component {
                 height:20,
                 flexDirection:'row',
                 flex: 1,
-                width:width - defaultNarrow,
+                width:StyleUtils.getWidth() - defaultNarrow,
 
                 backgroundColor:'white',
                 position: 'absolute',

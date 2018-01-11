@@ -3,7 +3,8 @@ import {Platform, Text, View} from 'react-native'
 import FormUtils from "../../../../utils/fromUtils";
 import styles from './styles'
 import {SelectButton, TextInput} from '../../../../ui/index';
-import strings from "../../../../i18n/i18n"
+import strings from "../../../../i18n/i18n";
+import StyleUtils from '../../../../utils/styleUtils';
 
 export default class XPlusYOffComponent extends Component {
     constructor(props) {
@@ -113,8 +114,9 @@ export default class XPlusYOffComponent extends Component {
         }
         return <View>
 
+            <View style={[styles.textLayout, {width: StyleUtils.getWidth() - 15}]}>
 
-            <View style={styles.textLayout}>
+
                 <Text style={{color: '#FA8559', marginLeft: 8, marginRight: 8}}>{strings.XPlusYOff}</Text>
             </View>
             <View style={{flexDirection: 'row', justifyContent: 'center', alignItems: 'center'}}>

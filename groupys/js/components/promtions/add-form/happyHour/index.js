@@ -9,6 +9,8 @@ import {SelectButton, SimplePicker, TextInput,TimePicker,WeekDaysPicker} from '.
 
 import FormUtils from "../../../../utils/fromUtils";
 import strings from "../../../../i18n/i18n"
+import StyleUtils from '../../../../utils/styleUtils'
+
 export default class HappyHourComponent extends Component {
     constructor(props) {
         super(props);
@@ -187,7 +189,8 @@ export default class HappyHourComponent extends Component {
 
         }
         return <View>
-            <View style={styles.textLayout}>
+            <View style={[styles.textLayout, {width: StyleUtils.getWidth() - 15}]}>
+
                 <Text style={{color: '#FA8559', marginLeft: 8, marginRight: 8}}>Happy Hour</Text>
             </View>
             <View style={{flexDirection:'row',justifyContent:'center',alignItems:'center'}}>

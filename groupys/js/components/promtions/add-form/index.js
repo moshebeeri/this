@@ -1,5 +1,5 @@
 import React, {Component} from "react";
-import {Dimensions, Image, ScrollView, View} from "react-native";
+import {Dimensions, I18nManager, Image, ScrollView, View} from "react-native";
 import {connect} from "react-redux";
 import {actions} from "react-native-navigation-redux-helpers";
 import {Button, Container, Content, Footer, Icon, Input, Item, Picker, Text} from "native-base";
@@ -17,7 +17,8 @@ import HappyHourComponent from "./happyHour/index";
 import styles from "./styles";
 import {DatePicker, FormHeader, ImagePicker, SelectButton, SimplePicker, Spinner, TextInput} from '../../../ui/index';
 import strings from "../../../i18n/i18n"
-import {I18nManager} from 'react-native';
+import StyleUtils from '../../../utils/styleUtils'
+
 const {width, height} = Dimensions.get('window')
 let promotionApi = new PromotionApi();
 const types = [
@@ -35,20 +36,19 @@ const types = [
         },
         {
             value: 'X+Y',
-            label:  strings.XPlusY
+            label: strings.XPlusY
         },
         {
             value: 'REDUCED_AMOUNT',
             label: strings.ReduceAmount
         },
-
         {
             value: 'X_FOR_Y',
-            label:  strings.XForY
+            label: strings.XForY
         },
         {
             value: 'X+N%OFF',
-            label:  strings.XPlusYOff
+            label: strings.XPlusYOff
         },
     ]
     //15% off for purchases more than 1000$ OR buy iphone for 600$ and get 50% off for earphones
@@ -196,7 +196,7 @@ class AddPromotion extends Component {
             end: this.state.end,
             description: this.state.info,
             name: this.state.name,
-            client:{uploading:true}
+            client: {uploading: true}
         };
         if (this.props.navigation.state.params.onBoardType) {
             switch (this.props.navigation.state.params.onBoardType) {
@@ -287,11 +287,10 @@ class AddPromotion extends Component {
             promotion.happy_hour.quantity = Number(this.state.quantity);
             promotion.happy_hour.values = {
                 pay: Number(this.state.happy_hour.values.pay),
-                until:this.state.happy_hour.values.until,
-                days:this.state.happy_hour.values.days,
-                from:this.state.happy_hour.values.from,
+                until: this.state.happy_hour.values.until,
+                days: this.state.happy_hour.values.days,
+                from: this.state.happy_hour.values.from,
             };
-
         }
         return promotion;
     }
@@ -424,7 +423,7 @@ class AddPromotion extends Component {
     }
 
     createDistributionForm() {
-        let distribution = <View style={styles.inputTextLayout}>
+        let distribution = <View style={[styles.inputTextLayout, {width: StyleUtils.getWidth() - 15}]}>
             <SimplePicker ref="TyoePicker" list={Distribution} itemTitle={strings.DistributionType}
                           defaultHeader={strings.ChooseDistribution}
                           isMandatory onValueSelected={this.selectDistributionType.bind(this)}/>
@@ -443,7 +442,7 @@ class AddPromotion extends Component {
             </View>
         }
         return <View>
-            <View style={styles.textLayout}>
+            <View style={[styles.textLayout, {width: StyleUtils.getWidth() - 15}]}>
                 <Text style={{color: '#FA8559', marginLeft: 8, marginRight: 8}}>{strings.Distribution}</Text>
             </View>
             <View style={{flexDirection: 'row', justifyContent: 'flex-start', alignItems: 'center'}}>
@@ -457,8 +456,8 @@ class AddPromotion extends Component {
                 </View>
                 }
             </View>
-            <View style={styles.textLayout}>
-            {selectedGroup}
+            <View style={[styles.textLayout, {width: StyleUtils.getWidth() - 15}]}>
+                {selectedGroup}
             </View>
 
         </View>
@@ -479,7 +478,8 @@ class AddPromotion extends Component {
             }
         }
         return (
-            <View style={styles.product_container}>
+            <View style={[styles.product_container, {width: StyleUtils.getWidth()}]}>
+
                 <FormHeader showBack submitForm={this.saveFormData.bind(this)} navigation={this.props.navigation}
                             title={header} bgc="#FA8559"/>
                 <ScrollView contentContainerStyle={{
@@ -488,18 +488,20 @@ class AddPromotion extends Component {
                 }}>
 
                     {this.createCoverImageComponnent()}
-                    <View style={styles.textLayout}>
+                    <View style={[styles.textLayout, {width: StyleUtils.getWidth() - 15}]}>
+
                         <Text style={{color: '#FA8559', marginLeft: 8, marginRight: 8}}>{strings.Details}</Text>
                     </View>
-                    <View style={styles.inputTextLayout}>
+                    <View style={[styles.inputTextLayout, {width: StyleUtils.getWidth() - 15}]}>
                         <SimplePicker ref="promotionType" list={types} itemTitle={strings.PromotionType}
                                       defaultHeader="Choose Type" isMandatory
                                       onValueSelected={this.selectPromotionType.bind(this)}/>
                     </View>
-                    <View style={styles.textLayout}>
+                    <View style={[styles.textLayout, {width: StyleUtils.getWidth() - 15}]}>
                         <Text style={{color: '#FA8559', marginLeft: 8, marginRight: 8}}>{strings.General}</Text>
                     </View>
-                    <View style={styles.inputTextMediumLayout}>
+                    <View style={[styles.inputTextMediumLayout, {width: StyleUtils.getWidth() - 15}]}>
+
                         <View style={{flex: 1, marginRight: 10}}>
                             <TextInput field={strings.Quantity} value={this.state.quantity}
                                        keyboardType='numeric'
@@ -515,14 +517,13 @@ class AddPromotion extends Component {
                                         }} isMandatory={true}/>
                         </View>
                     </View>
-
-                    <View style={styles.inputTextLayout}>
+                    <View style={[styles.inputTextLayout, {width: StyleUtils.getWidth() - 15}]}>
                         <TextInput field={strings.Name} value={this.state.name}
                                    returnKeyType='next' ref="4" refNext="4"
                                    onSubmitEditing={this.focusNextField.bind(this, "5")}
                                    onChangeText={(name) => this.setState({name})} isMandatory={true}/>
                     </View>
-                    <View style={styles.inputTextLayout}>
+                    <View style={[styles.inputTextLayout, {width: StyleUtils.getWidth() - 15}]}>
                         <TextInput field={strings.Description} value={this.state.info}
                                    returnKeyType='next' ref="5" refNext="5"
                                    onSubmitEditing={this.focusNextField.bind(this, "5")}
@@ -560,7 +561,8 @@ class AddPromotion extends Component {
             >
 
             </Image>
-            return <View style={styles.product_upper_container}>
+            return <View style={[styles.product_upper_container, {width: StyleUtils.getWidth()}]}>
+
 
                 <View style={styles.cmeraLogoContainer}>
 
@@ -573,7 +575,7 @@ class AddPromotion extends Component {
                 </View>
             </View>
         }
-        return <View style={styles.product_upper_container}>
+        return <View style={[styles.product_upper_container, {width: StyleUtils.getWidth()}]}>
             {saving && <Spinner/>}
             <View style={styles.cmeraLogoContainer}>
 

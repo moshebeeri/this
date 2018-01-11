@@ -18,7 +18,7 @@ module.exports = {
     inputPrecenComponent: {
 
         marginRight:5,
-        width: 90
+        flex:1.4
     },
 
     inputRetailComponent: {

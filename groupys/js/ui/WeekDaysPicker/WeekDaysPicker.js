@@ -1,10 +1,11 @@
 import React, {Component} from 'react';
-import {Dimensions, View} from 'react-native';
+import {Dimensions, I18nManager, View} from 'react-native';
 import {CheckBox, Icon, Input, Text} from 'native-base';
 import styles from './styles';
 import SelectMultiple from 'react-native-select-multiple'
 import strings from "../../i18n/i18n"
-import { I18nManager } from 'react-native';
+import StyleUtils from '../../utils/styleUtils'
+
 const days = [
     {label: strings.Sunday, value: '1'},
     {label: strings.Monday, value: '2'},
@@ -84,31 +85,32 @@ export default class WeekDaysPicker extends Component {
         if (field) {
             containerStyle = styles.textInputContainer;
         }
-        return <View style={containerStyle}>
-            <View style={styles.textInputTitleContainer}>
-                {!I18nManager.isRTL  && field && isMandatory &&
+        return <View style={[containerStyle, {width: StyleUtils.getWidth() - 15}]}>
+            <View style={[styles.textInputTitleContainer, {width: StyleUtils.getWidth() - 15}]}>
+
+                {!I18nManager.isRTL && field && isMandatory &&
                 <Icon style={{margin: 5, color: mandtoryIconColor, fontSize: 12}} name='star'/>}
 
                 <Text style={textStyle}>{field}</Text>
-                {I18nManager.isRTL  && field && isMandatory &&
+                {I18nManager.isRTL && field && isMandatory &&
                 <Icon style={{margin: 5, color: mandtoryIconColor, fontSize: 12}} name='star'/>}
 
             </View>
-            <View style={weekscontainerStyle}>
-                {I18nManager.isRTL  && <SelectMultiple
+            <View style={[weekscontainerStyle, {width: StyleUtils.getWidth() - 15}]}>
+                {I18nManager.isRTL && <SelectMultiple
                     items={days}
                     selectedItems={this.state.selectedDays}
                     onSelectionsChange={this.onChange.bind(this)}/>
                 }
                 <SelectMultiple
                     items={days2}
-                    rowStyle={{justifyContent:I18nManager.isRTL ? 'flex-start' : 'space-between'}}
+                    rowStyle={{justifyContent: I18nManager.isRTL ? 'flex-start' : 'space-between'}}
                     selectedItems={this.state.selectedDays}
                     onSelectionsChange={this.onChange.bind(this)}/>
-                {!I18nManager.isRTL  && <SelectMultiple
+                {!I18nManager.isRTL && <SelectMultiple
                     items={days}
-                    rowStyle={{justifyContent:'space-between'}}
-                    checkboxStyle={{justifyContent:'flex-start'}}
+                    rowStyle={{justifyContent: 'space-between'}}
+                    checkboxStyle={{justifyContent: 'flex-start'}}
                     selectedItems={this.state.selectedDays}
                     onSelectionsChange={this.onChange.bind(this)}/>
                 }

@@ -1,11 +1,13 @@
 import React, {Component} from 'react';
 import {Button, Card, CardItem, Container, Content, Footer, Icon, Input, Item, List, ListItem, Text} from 'native-base';
-import {Dimensions, Image, View} from 'react-native';
+import {Dimensions, Image, View,ScrollView} from 'react-native';
 import PromotionApi from '../../api/promotion'
 import {BusinessHeader, PromotionColumnHeader, PromotionSeperator} from '../../ui/index';
 import strings from "../../i18n/i18n"
 const deviceHeight = Dimensions.get('window').width;
 let promotionApi = new PromotionApi()
+import StyleUtils from "../../utils/styleUtils";
+
 export default class RealizePromotion extends Component {
     static navigationOptions = {
         header: null
@@ -36,7 +38,7 @@ export default class RealizePromotion extends Component {
     render() {
         let item = this.props.navigation.state.params.item;
         return (
-
+        <ScrollView>
             <View style={{flex: 1, justifyContent: 'center', alignItems: 'center'}}>
                 <BusinessHeader showBack navigation={this.props.navigation} business={item.business}
                                 categoryTitle={item.categoryTitle} businessLogo={item.businessLogo}
@@ -47,14 +49,14 @@ export default class RealizePromotion extends Component {
                                        titleValue={item.promotionValue} term={item.promotionTerm}/>
 
 
-                <View style={{flex: 0.2, width: deviceHeight - 30, height: 20,}}>
+                <View style={{flex: 0.2, width: StyleUtils.getWidth() - 30, height: 20,}}>
 
                     <PromotionSeperator narrowWidth={30}/>
                 </View>
                 <View style={{
                     marginBottom: 5,
                     flex: 4,
-                    width: deviceHeight - 30,
+                    width: StyleUtils.getWidth()  - 30,
                     backgroundColor: 'white',
                     justifyContent: 'center',
                     alignItems: 'center'
@@ -70,7 +72,7 @@ export default class RealizePromotion extends Component {
                 </View>
             </View>
 
-
+        </ScrollView>
 
         );
     }

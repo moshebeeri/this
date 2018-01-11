@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import {Image, ScrollView,Dimensions} from 'react-native';
+import {Dimensions, Image, ScrollView} from 'react-native';
 import {connect} from 'react-redux';
 import {
     Button,
@@ -15,13 +15,15 @@ import {
     Text,
     View
 } from 'native-base';
-const {width, height} = Dimensions.get('window')
 import * as productsAction from "../../../actions/product";
 import * as businessAction from "../../../actions/business";
 import {bindActionCreators} from "redux";
 import styles from './styles'
-import {CategoryPicker, FormHeader, ImagePicker, TextInput,Spinner} from '../../../ui/index';
+import {BarcodeScanner, CategoryPicker, FormHeader, ImagePicker, Spinner, TextInput} from '../../../ui/index';
 import strings from "../../../i18n/i18n"
+import StyleUtils from "../../../utils/styleUtils";
+
+const {width, height} = Dimensions.get('window')
 
 class AddProduct extends Component {
     static navigationOptions = ({navigation}) => ({
@@ -84,14 +86,13 @@ class AddProduct extends Component {
     }
 
     saveFormData() {
-        const {navigation, actions,saving} = this.props;
-        if(saving && !this.validateForm()){
+        const {navigation, actions, saving} = this.props;
+        if (saving && !this.validateForm()) {
             return
         }
-
         const product = this.createProduct();
         const businessId = this.getBusinessId(navigation);
-        actions.saveProduct(product, businessId,navigation)
+        actions.saveProduct(product, businessId, navigation)
     }
 
     createProduct() {
@@ -101,6 +102,7 @@ class AddProduct extends Component {
             image: this.state.coverImage,
             business: this.getBusinessId(navigation),
             info: this.state.info,
+            barcode: this.state.barcode,
             retail_price: this.state.retail_price,
             category: this.state.categories,
         }
@@ -126,6 +128,10 @@ class AddProduct extends Component {
         }
     }
 
+    handleCode(code) {
+        this.setState({barcode: code.data})
+    }
+
     setCategory(categories) {
         this.setState({categories: categories});
     }
@@ -137,15 +143,16 @@ class AddProduct extends Component {
     }
 
     createCoverImageComponnent() {
-        const{saving} = this.props;
+        const {saving} = this.props;
         if (this.state.coverImage) {
             let coverImage = <Image
-                style={{ width:width -10, height: 210,borderWidth:1,borderColor:'white'}}
+                style={{width: width - 10, height: 210, borderWidth: 1, borderColor: 'white'}}
                 source={{uri: this.state.coverImage.path}}
             >
 
             </Image>
-            return <View style={styles.product_upper_container}>
+            return <View style={[styles.product_upper_container, {width: StyleUtils.getWidth()}]}>
+
 
                 <View style={styles.cmeraLogoContainer}>
 
@@ -153,13 +160,13 @@ class AddProduct extends Component {
 
                         <ImagePicker ref={"coverImage"} mandatory image={coverImage} color='white' pickFromCamera
                                      setImage={this.setCoverImage.bind(this)}/>
-                        { saving && <Spinner/>}
+                        {saving && <Spinner/>}
                     </View>
                 </View>
             </View>
         }
-        return <View style={styles.product_upper_container}>
-            { saving && <Spinner/>}
+        return <View style={[styles.product_upper_container, {width: StyleUtils.getWidth()}]}>
+            {saving && <Spinner/>}
             <View style={styles.cmeraLogoContainer}>
 
                 <View style={styles.addCoverNoImageContainer}>
@@ -173,9 +180,9 @@ class AddProduct extends Component {
     }
 
     render() {
-
         return (
-            <View style={styles.product_container}>
+
+            <View style={[styles.product_container, {width: StyleUtils.getWidth()}]}>
                 <FormHeader showBack submitForm={this.saveFormData.bind(this)} navigation={this.props.navigation}
                             title={strings.AddProduct} bgc="#FA8559"/>
                 <ScrollView contentContainerStyle={{
@@ -185,29 +192,33 @@ class AddProduct extends Component {
 
                     {this.createCoverImageComponnent()}
 
-                    <View style={styles.inputTextLayout}>
+                    <View style={[styles.inputTextLayout, {width: StyleUtils.getWidth() - 15}]}>
                         <TextInput field={strings.ProductName} value={this.state.name}
                                    returnKeyType='next' ref="1" refNext="1"
                                    onSubmitEditing={this.focusNextField.bind(this, "2")}
                                    onChangeText={(name) => this.setState({name})} isMandatory={true}/>
                     </View>
 
-                    <View style={styles.inputTextLayout}>
+
+                    <View style={[styles.inputTextLayout, {width: StyleUtils.getWidth() - 15}]}>
                         <CategoryPicker ref={"picker"} isMandatory categories={this.props.products.categories}
                                         selectedCategories={this.state.categories}
                                         setFormCategories={this.setCategory.bind(this)}
                                         setCategoriesApi={this.props.actions.setProductCategories}/>
                     </View>
-                    <View style={styles.inputTextLayout}>
+
+                    <View style={[styles.inputTextLayout, {width: StyleUtils.getWidth() - 15}]}>
 
 
-                        <TextInput field={strings.Description} value={this.state.info} returnKeyType='next' ref="2" refNext="2"
+                        <TextInput field={strings.Description} value={this.state.info} returnKeyType='next' ref="2"
+                                   refNext="2"
                                    onSubmitEditing={this.focusNextField.bind(this, "6")}
 
                                    onChangeText={(info) => this.setState({info})}/>
                     </View>
 
-                    <View style={styles.inputTextLayout}>
+
+                    <View style={[styles.inputTextLayout, {width: StyleUtils.getWidth() - 15}]}>
 
                         <TextInput field={strings.Price} value={this.state.retail_price} returnKeyType='done' ref="6"
                                    refNext="6"
@@ -215,6 +226,9 @@ class AddProduct extends Component {
                                    onChangeText={(retail_price) => this.setState({retail_price})} isMandatory={true}/>
                     </View>
 
+                    <View style={[styles.inputTextLayout, {width: StyleUtils.getWidth() - 15}]}>
+                        <BarcodeScanner handleCode={this.handleCode.bind(this)} navigation={this.props.navigation}/>
+                    </View>
 
                 </ScrollView>
 

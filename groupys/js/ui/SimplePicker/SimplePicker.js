@@ -5,7 +5,9 @@ import ModalDropdown from 'react-native-modal-dropdown';
 import Icon3 from 'react-native-vector-icons/EvilIcons';
 import styles from './styles'
 import { I18nManager } from 'react-native';
-import strings from "../../i18n/i18n"
+import strings from "../../i18n/i18n";
+import StyleUtils from "../../utils/styleUtils";
+
 export default class SimplePicker extends Component {
     constructor(props) {
         super(props);
@@ -73,15 +75,16 @@ export default class SimplePicker extends Component {
 
 
         return <View>
-            <View style={styles.pickerTitleContainer}>
+            <View style={[styles.pickerTitleContainer, {width: StyleUtils.getWidth() - 15}]}>
 
                 <Text style={styles.pickerTextStyle}>{itemTitle}</Text>
                 {isMandatory && <Icon style={{margin: 5, color: 'red', fontSize: 12}} name='star'/>}
             </View>
 
-            <TouchableOpacity onPress={() => this.showDropDownn()} style={pickerStyle}>
+            <TouchableOpacity onPress={() => this.showDropDownn()}   style={[pickerStyle, {width: StyleUtils.getWidth() - 20}]}s>
                 <ModalDropdown ref={'dropDown'}
-                               style={styles.modalViewStyle}
+
+                               style={[styles.modalViewStyle, {width: StyleUtils.getWidth() - 20}]}
                                options={options}
                                textStyle={{alignItems:'flex-start',fontSize: 20}}
                                onSelect={this.selectIos.bind(this)}

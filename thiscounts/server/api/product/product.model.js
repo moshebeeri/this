@@ -10,6 +10,7 @@ let ProductSchema = new Schema({
   url: String,
   inAppOrder: {type:Boolean, default: false},
   barcode: String,
+  url:String,
   SKU: String,
   price: Number,
   gid: { type: Number, index: true},

@@ -7,6 +7,8 @@ import strings from "../../../i18n/i18n"
 const {width, height} = Dimensions.get('window')
 const vw = width / 100;
 const vh = height / 100;
+import StyleUtils from "../../../utils/styleUtils";
+
 export default class NotificationListView extends Component {
     constructor(props) {
         super(props);
@@ -69,11 +71,11 @@ export default class NotificationListView extends Component {
             flex: -1,
             justifyContent: 'center',
             alignItems: 'center',
-            marginLeft: width / 4,
+            marginLeft: StyleUtils.getWidth() / 4,
             borderWidth: 1,
             flexDirection: 'row',
             height: 40,
-            width: width / 2,
+            width: StyleUtils.getWidth()  / 2,
             backgroundColor: 'white',
             borderColor: '#2db6c8',
         };
@@ -94,8 +96,8 @@ export default class NotificationListView extends Component {
                     alignItems: 'center',
                 }}>
 
-                    <View style={{flexDirection: 'column', marginLeft: 5, width: width, height: vh * 10}}>
-                        <View style={{width: width - 20, flexDirection: 'row'}}>
+                    <View style={{flexDirection: 'column', marginLeft: 5, width: StyleUtils.getWidth() , height: vh * 10}}>
+                        <View style={{width: StyleUtils.getWidth()  - 20, flexDirection: 'row'}}>
                             <Text numberOfLines={2}
                                   style={{height: vh * 7}}>
                                 {title}
@@ -119,11 +121,11 @@ export default class NotificationListView extends Component {
         const redeemStyle = {
             flex: -1,
             justifyContent: 'center',
-            marginLeft: width / 4,
+            marginLeft: StyleUtils.getWidth()  / 4,
             borderWidth: 1,
             flexDirection: 'row',
             height: 40,
-            width: width / 2,
+            width: StyleUtils.getWidth()  / 2,
             backgroundColor: 'white',
             borderColor: '#2db6c8',
         };
@@ -141,7 +143,7 @@ export default class NotificationListView extends Component {
                     alignItems: 'center',
                 }}>
                     {image}
-                    <View style={{flexDirection: 'column', marginLeft: 5, width: width - 50, height: vh * 10}}>
+                    <View style={{flexDirection: 'column', marginLeft: 5, width: StyleUtils.getWidth()  - 50, height: vh * 10}}>
                         <View style={{flexDirection: 'row'}}>
                             <Text numberOfLines={2}
                                   style={{width: vw * 75, height: vh * 7}}>{strings.CreatePromotionForEveryoneBusiness}
@@ -184,7 +186,7 @@ export default class NotificationListView extends Component {
         if (viewItem.read) {
             return {
                 backgroundColor: 'white',
-                width: width,
+                width: StyleUtils.getWidth() ,
                 height: vh * 9,
                 flexDirection: 'row',
                 justifyContent: 'center',
@@ -193,7 +195,7 @@ export default class NotificationListView extends Component {
         }
         return {
             backgroundColor: '#d3f9ff',
-            width: width,
+            width: StyleUtils.getWidth() ,
             height: 50,
             flexDirection: 'row',
             justifyContent: 'center',
@@ -272,11 +274,11 @@ export default class NotificationListView extends Component {
         const redeemStyle = {
             flex: -1,
             justifyContent: 'center',
-            marginLeft: width / 4,
+            marginLeft: StyleUtils.getWidth()  / 4,
             borderWidth: 1,
             flexDirection: 'row',
             height: 40,
-            width: width / 2,
+            width: StyleUtils.getWidth()  / 2,
             backgroundColor: 'white',
             borderColor: '#2db6c8',
         };
@@ -293,7 +295,7 @@ export default class NotificationListView extends Component {
                     alignItems: 'center',
                 }}>
                     {image}
-                    <View style={{flexDirection: 'column', width: width - 50, height: vh * 10}}>
+                    <View style={{flexDirection: 'column', width: StyleUtils.getWidth()  - 50, height: vh * 10}}>
                         <View style={{flexDirection: 'row'}}>
                             <Text style={{fontWeight: 'bold', marginLeft: vw * 4}}>{user.name}</Text>
                             <Text style={{height: vh * 4}}>{strings.InvitesYouToJoinGroup}</Text>
@@ -318,11 +320,11 @@ export default class NotificationListView extends Component {
         const redeemStyle = {
             flex: -1,
             justifyContent: 'center',
-            marginLeft: width / 4,
+            marginLeft: StyleUtils.getWidth()  / 4,
             borderWidth: 1,
             flexDirection: 'row',
             height: 40,
-            width: width / 2,
+            width: StyleUtils.getWidth()  / 2,
             backgroundColor: 'white',
             borderColor: '#2db6c8',
         };
@@ -340,7 +342,7 @@ export default class NotificationListView extends Component {
                     alignItems: 'center',
                 }}>
                     {image}
-                    <View style={{flexDirection: 'column', marginLeft: 5, width: width - 50, height: vh * 10}}>
+                    <View style={{flexDirection: 'column', marginLeft: 5, width: StyleUtils.getWidth()  - 50, height: vh * 10}}>
                         <View style={{flexDirection: 'row'}}>
                             <Text numberOfLines={2}
                                   style={{width: vw * 75, height: vh * 7}}>{strings.CreatePromotionForEveryoneGroup}

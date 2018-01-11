@@ -2,7 +2,7 @@
  * Created by roilandshut on 23/07/2017.
  */
 import React, {Component} from 'react';
-import {Image,Dimensions} from 'react-native';
+import {Dimensions, Image} from 'react-native';
 import InViewPort from '../../../../utils/inviewport'
 import {actions} from 'react-native-navigation-redux-helpers';
 import {
@@ -24,70 +24,69 @@ import {
     View
 } from 'native-base';
 import Icon3 from 'react-native-vector-icons/MaterialIcons';
-import stylesPortrate from './styles'
-import stylesLandscape from './styles_lendscape'
 import StyleUtils from '../../../../utils/styleUtils'
 import * as componentCreator from "./feedCommonView";
-import {SocialState,BusinessHeader} from '../../../../ui/index';
+import {BusinessHeader, SocialState} from '../../../../ui/index';
 import FormUtils from "../../../../utils/fromUtils";
 import PageRefresher from '../../../../refresh/pageRefresher'
 
-const {width, height} = Dimensions.get('window')
 export default class FeedBusiness extends Component {
     render() {
         return this.createBusiness(this.props.item, this.props.like, this.props.unlike, this.props.showUsers, this.props.comment)
     }
 
-    showBusiness() {
-        this.props.navigation.navigate("businessProfile", {businesses: this.props.item.business});
-    }
 
 
-    componentWillMount(){
-        const { item} = this.props;
+    componentWillMount() {
+        const {item} = this.props;
         PageRefresher.createFeedSocialState(item.id);
-
-
     }
-    visited(visible){
-        const { item} = this.props;
-        if(visible) {
+
+    visited(visible) {
+        const {item} = this.props;
+        if (visible) {
             console.log(item.id + ' visited');
             PageRefresher.visitedFeedItem(item);
         }
-
     }
+
     createBusiness(item, like, unlike, showUsers, comment) {
-        const {location, refresh,showActions} = this.props;
+        const {location, refresh, showActions} = this.props;
         if (!item.name) {
             return <View></View>;
         }
         const styles = componentCreator.createStyle();
         const imageBusiness = this.createBusinessImage(item, styles);
         const result =
-
-            <InViewPort onChange={this.visited.bind(this)} style={styles.businesses_container}>
-                <View style={styles.promotion_card}>
-                    <View style={{width:width}}>
-                    <BusinessHeader  navigation={this.props.navigation} business={item.business}
-                                     categoryTitle={item.categoryTitle} businessLogo={item.businessLogo}
-                                     businessName={item.business.name} noMargin
-                                     id={item.activityId} showActions={showActions}
-                    />
+            <InViewPort onChange={this.visited.bind(this)}
+                        style={[styles.businesses_container, {width: StyleUtils.getWidth()}]}>
+                <View style={[styles.promotion_card, {width: StyleUtils.getWidth()}]}>
+                    <View style={{width: StyleUtils.getWidth()}}>
+                        <BusinessHeader navigation={this.props.navigation} business={item.business}
+                                        categoryTitle={item.categoryTitle} businessLogo={item.businessLogo}
+                                        businessName={item.business.name} noMargin
+                                        id={item.activityId} showActions={showActions}
+                        />
                     </View>
-                    <View style={{width:width,paddingBottom:5,backgroundColor:'white',justifyContent:'flex-start',alignItems:'flex-start'}}>
-                    <Text style={styles.promotion_type}>{item.itemTitle}</Text>
+                    <View style={{
+                        width: StyleUtils.getWidth(),
+                        paddingBottom: 5,
+                        backgroundColor: 'white',
+                        justifyContent: 'flex-start',
+                        alignItems: 'flex-start'
+                    }}>
+                        <Text style={styles.promotion_type}>{item.itemTitle}</Text>
                     </View>
 
                     {imageBusiness}
 
-                    <View style={styles.business_bottomUpperContainer}>
+                    <View style={[styles.business_bottomUpperContainer, {width: StyleUtils.getWidth()}]}>
                         <View style={styles.businessLocationdescription}>
 
 
                             <View style={styles.promotion_bottom_location}>
                                 <Icon3 style={styles.promotion_location} size={25} name="location-on"/>
-                                <View style={{flexDirection:'row'}}>
+                                <View style={{flexDirection: 'row'}}>
                                     <Text style={styles.promotion_addressText} note>{item.businessAddress} </Text>
                                     <Text style={styles.detailsText}>
                                         {FormUtils.getDistanceString(location.lat, location.long, item.location.lat, item.location.lng)}
@@ -98,7 +97,7 @@ export default class FeedBusiness extends Component {
                     </View>
 
 
-                    <View style={styles.promotion_bottomContainer}>
+                    <View style={[styles.promotion_bottomContainer, {width: StyleUtils.getWidth()}]}>
                         <SocialState feed comments={item.social.comments} onPressComment={comment}
                                      like={item.social.like} likes={item.social.likes}
                                      onPressUnLike={() => unlike(item.id)}
@@ -114,19 +113,13 @@ export default class FeedBusiness extends Component {
 
     createBusinessImage(item, styles) {
         if (item.banner && item.banner.uri) {
-            return <View style={styles.promotion_image_view}>
+            return <View style={[styles.promotion_image_view, {width: StyleUtils.getWidth()}]}>
 
-                <Image resizeMode="cover" style={styles.promotion_image} source={{uri: item.banner.uri}}>
+                <Image resizeMode="cover" style={[styles.promotion_image, {width: StyleUtils.getWidth()}]}
+                       source={{uri: item.banner.uri}}>
                 </Image>
             </View>
         }
         return undefined;
-    }
-
-    getStyle() {
-        if (StyleUtils.isLandscape()) {
-            return stylesLandscape;
-        }
-        return stylesPortrate;
     }
 }

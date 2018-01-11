@@ -279,7 +279,7 @@ module.exports = {
         borderColor:'#cccccc'
     },
     post_bottomContainer: {
-        backgroundColor: 'white',
+        backgroundColor: 'red',
         width: width,
         alignItems: 'center',
         justifyContent: 'center',

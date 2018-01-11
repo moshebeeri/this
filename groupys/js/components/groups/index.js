@@ -36,11 +36,17 @@ class Groups extends Component {
         actions.touch(item._id);
         navigation.navigate('GroupFeed', {group: item, role: 'admin'});
     }
+    onPressMessageItem(item) {
+        const {actions, navigation} = this.props;
+        actions.touch(item._id);
+        navigation.navigate('GroupFeed', {chat:true,group: item, role: 'admin'});
+    }
 
     renderItem(item) {
         const {navigation} = this.props;
         return <GenericListGroupView
             onPressItem={this.onPressItem.bind(this, item.item)}
+            onPressMessageItem = {this.onPressMessageItem.bind(this,item.item)}
             item={item.item}
             navigation={navigation}
             index={item.index}

@@ -1,10 +1,9 @@
 const React = require('react-native');
 const {StyleSheet, Platform, Dimensions} = React;
-const {width, height} = Dimensions.get('window')
-const vw = width / 100;
-const vh = height / 100
-const vmin = Math.min(vw, vh);
-const vmax = Math.max(vw, vh);
+
+import StyleUtils from "../../utils/styleUtils";
+
+
 import {I18nManager} from 'react-native';
 
 module.exports = {
@@ -12,11 +11,14 @@ module.exports = {
         flexDirection: 'row',
         backgroundColor: 'white',
         paddingTop: (Platform.OS === 'ios') ? 20 : 0,
+        width:StyleUtils.getWidth(),
+
     },
     logo_view_no_margin: {
         flexDirection: 'row',
         backgroundColor: 'white',
        paddingTop: (Platform.OS === 'ios') ? 5 : 5,
+        width:StyleUtils.getWidth(),
     },
     businessNameText: {
         fontFamily: 'Roboto-Regular',
