@@ -153,7 +153,7 @@ export default class FeedPromotion extends Component {
                                                      shareAction={showUsers}/>}
                     </View>}
 
-                    {!hideSocial && shared && <View style={styles.promotion_shared_bottomContainer}>
+                    {!hideSocial && shared &&  <View style={[styles.promotion_shared_bottomContainer,{width: StyleUtils.getWidth()}]} >
 
                         {item.social && <SocialState feed comments={item.social.comments} onPressComment={comment}
                                                      like={item.social.like} likes={item.social.likes}

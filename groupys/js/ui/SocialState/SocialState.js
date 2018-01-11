@@ -5,6 +5,7 @@ import Icon from 'react-native-vector-icons/FontAwesome';
 import Icon2 from 'react-native-vector-icons/EvilIcons';
 import Icon3 from 'react-native-vector-icons/Entypo';
 import styles from './styles'
+import StyleUtils from "../../utils/styleUtils";
 
 export default class SocialState extends Component {
     constructor(props) {
@@ -20,7 +21,8 @@ export default class SocialState extends Component {
     }
 
     render() {
-        return <View style={styles.socialContainer}>
+        return <View style={[styles.socialContainer, {width: StyleUtils.getWidth()}]}>
+
             {this.createLikeButton()}
             {this.createCommentButton()}
             {this.createShareButton()}
