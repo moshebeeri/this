@@ -23,6 +23,7 @@ import {
 import strings from "../../i18n/i18n"
 const {width, height} = Dimensions.get('window')
 import Icon2 from 'react-native-vector-icons/Ionicons';
+import StyleUtils from "../../utils/styleUtils";
 export default class GenericFeedManager extends Component {
     constructor(props) {
         super(props);
@@ -114,7 +115,7 @@ export default class GenericFeedManager extends Component {
                     {nextBulkLoad && !showTopLoader &&  <View style={ {bottom:0,width:width,backgroundColor:'#cccccc',position:'absolute'}}>
                         <Spinner color='red'/>
                     </View>}
-                    {this.state.showActions && <View style={{bottom:0,position:'absolute',width:width,height:150,backgroundColor:'white'}}>
+                    {this.state.showActions && <View style={{bottom:0,position:'absolute',width:StyleUtils.getWidth(),height:150,backgroundColor:'white'}}>
                         <View>
                             <View style={{flexDirection:'row',borderTopWidth:10,borderColor:'#cccccc' ,justifyContent:'flex-end',alignItems:'center',width:width}}>
                                 <View style={{flex:4,alignItems:'center',justifyContent:'center'}}>

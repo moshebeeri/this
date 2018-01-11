@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import {Dimensions, Image, TouchableOpacity, View} from 'react-native';
+import {Dimensions, Image, ScrollView, TouchableOpacity, View} from 'react-native';
 import {
     Button,
     Card,
@@ -15,16 +15,16 @@ import {
     Tab,
     TabHeading,
     Tabs,
-    Text,
     Thumbnail,
     Title,
 } from 'native-base';
 import styles from './styles'
-import {FormHeader, TextInput,BusinessHeader} from '../../../ui/index';
+import {BusinessHeader, FormHeader, TextInput} from '../../../ui/index';
 import * as businessAction from "../../../actions/business";
 import {connect} from 'react-redux';
 import {bindActionCreators} from "redux";
 import strings from "../../../i18n/i18n"
+import StyleUtils from "../../../utils/styleUtils";
 
 const {width, height} = Dimensions.get('window')
 const vw = width / 100;
@@ -47,7 +47,7 @@ class BusinessProfile extends Component {
     componentWillMount() {
         const {businesses} = this.props
         let business = businesses[this.props.navigation.state.params.businesses._id];
-        if(!business) {
+        if (!business) {
             business = this.props.navigation.state.params.businesses;
         }
         if (business && !business.qrcodeSource) {
@@ -84,82 +84,91 @@ class BusinessProfile extends Component {
     render() {
         const {businesses} = this.props
         let business = businesses[this.props.navigation.state.params.businesses._id];
-        if(!business) {
+        if (!business) {
             business = this.props.navigation.state.params.businesses;
         }
         let address = business.city + ' ' + business.address
         const banner = this.createBannerTag(business);
-        return ( <View>
+        return ( <ScrollView>
+                <View>
 
-                <FormHeader showBack navigation={this.props.navigation}
-                            title={strings.Business} bgc="#2db6c8"/>
-                <BusinessHeader noProfile navigation={this.props.navigation} business={business}
-                                 categoryTitle={business.categoryTitle} businessLogo={business.logo}
-                                 businessName={business.name} noMargin
-                />
-                <View style={{marginTop: 1, backgroundColor: '#eaeaea'}}>
-                    <View style={{
-                        flex: -1,
-                        backgroundColor: 'white',
-                        flexDirection: 'row',
-                        justifyContent: 'space-between',
-                        alignItems: 'center',
-                    }}>
-                        <View style={{alignItems: 'center'}}>
-                            {banner}
+                    <FormHeader showBack navigation={this.props.navigation}
+                                title={strings.Business} bgc="#2db6c8"/>
+                    <BusinessHeader noProfile navigation={this.props.navigation} business={business}
+                                    categoryTitle={business.categoryTitle} businessLogo={business.logo}
+                                    businessName={business.name} noMargin
+                    />
+                    <View style={{marginTop: 1, backgroundColor: '#eaeaea'}}>
+                        <View style={{
+                            flex: -1,
+                            backgroundColor: 'white',
+                            flexDirection: 'row',
+                            justifyContent: 'space-between',
+                            alignItems: 'center',
+                        }}>
+                            <View style={{alignItems: 'center'}}>
+                                {banner}
 
-                            {business.qrcodeSource &&
-                            <TouchableOpacity onPress={() => this.changeQrLook()} style={this.state.codeContainerStyle}><Image
-                                style={this.state.codeStyle} resizeMode="cover"
-                                source={{uri: business.qrcodeSource}}>
+                                {business.qrcodeSource &&
+                                <TouchableOpacity onPress={() => this.changeQrLook()}
+                                                  style={this.state.codeContainerStyle}><Image
+                                    style={this.state.codeStyle} resizeMode="cover"
+                                    source={{uri: business.qrcodeSource}}>
 
-                            </Image>
-                            </TouchableOpacity>
-                            }
+                                </Image>
+                                </TouchableOpacity>
+                                }
+                            </View>
+
+
                         </View>
 
 
                     </View>
+                    <View style={{alignItems: 'center', justifyContent: 'center'}}>
+
+                        <View style={[styles.inputFullTextLayout, {width: StyleUtils.getWidth() - 15}]}>
+                            <TextInput placeholder={'No Website'} field={strings.Website} value={business.website}
+                                       disabled
 
 
+                            />
+                        </View>
+                        <View style={[styles.inputFullTextLayout, {width: StyleUtils.getWidth() - 15}]}>
+                            <TextInput placeholder={'No Email'} field={strings.Email} value={business.email} disabled
+
+                            />
+                        </View>
+
+
+                        <View style={[styles.inputFullTextLayout, {width: StyleUtils.getWidth() - 15}]}>
+                            <TextInput field={strings.Address} value={address} disabled
+
+                            />
+                        </View>
+                    </View>
                 </View>
-                <View style={{alignItems: 'center', justifyContent: 'center'}}>
-
-                    <View style={styles.inputFullTextLayout}>
-                        <TextInput placeholder={'No Website'} field={strings.Website} value={business.website} disabled
-
-
-                        />
-                    </View>
-                    <View style={styles.inputFullTextLayout}>
-                        <TextInput placeholder={'No Email'} field={strings.Email} value={business.email} disabled
-
-                        />
-                    </View>
-
-
-                    <View style={styles.inputFullTextLayout}>
-                        <TextInput field={strings.Address} value={address} disabled
-
-                        />
-                    </View>
-                </View>
-            </View>
+            </ScrollView>
         );
     }
 
     createBannerTag(business) {
         if (business.pictures) {
-            return <View style={{}}><Image style={styles.bannerImageContainer} resizeMode="cover"
-                                           source={{uri: business.pictures[0].pictures[0]}}>
+            return <View style={{}}><Image
+                style={[styles.bannerImageContainer, {width: StyleUtils.getWidth()}]}
+
+                resizeMode="cover"
+                source={{uri: business.pictures[0].pictures[0]}}>
 
             </Image>
 
             </View>
         }
         if (business.banner) {
-            return <View style={{}}><Image style={styles.bannerImageContainer} resizeMode="cover"
-                                           source={business.banner}>
+            return <View style={{}}><Image
+                style={[styles.bannerImageContainer, {width: StyleUtils.getWidth()}]}
+                resizeMode="cover"
+                source={business.banner}>
 
             </Image>
 

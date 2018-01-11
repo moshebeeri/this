@@ -46,7 +46,7 @@ import FeedPromotion from '../generic-feed-manager/generic-feed/feed-components/
 import strings from "../../i18n/i18n"
 
 import StyleUtils from "../../utils/styleUtils";
-const width = StyleUtils.getWidth();
+
 const height = StyleUtils.getHeight();
 let locationApi = new LocationApi();
 let contactApi = new ContactApi();
@@ -301,13 +301,13 @@ class ApplicationManager extends Component {
                         </ScrolTabView>
                     }
 
-                    {showSearchResults && businesses &&  <View style={{ top:60,position: 'absolute',backgroundColor:'white',width: width }}>
+                    {showSearchResults && businesses &&  <View style={{ top:60,position: 'absolute',backgroundColor:'white',width: StyleUtils.getWidth()  }}>
 
                     <BusinessList businesses={businesses} followBusiness={businessActions.followBusiness}/>
                 </View>}
 
 
-                    {showSearchResults && groups &&  <View style={{ top:60,position: 'absolute',backgroundColor:'white',width: width }}>
+                    {showSearchResults && groups &&  <View style={{ top:60,position: 'absolute',backgroundColor:'white',width: StyleUtils.getWidth()  }}>
 
                         <GroupsList groups={groups} joinGroup={groupsActions.joinGroup}/>
                     </View>}
@@ -318,7 +318,7 @@ class ApplicationManager extends Component {
                         borderColor: 'black',
                         top: notificationnTopPadding,
                         position: 'absolute',
-                        width: width - 5,
+                        width: StyleUtils.getWidth()  - 5,
                         height: height - notificationPopupHeight,
                         backgroundColor: 'white',
                         justifyContent: 'center',
@@ -331,13 +331,13 @@ class ApplicationManager extends Component {
                         </TouchableOpacity>
 
                         {item &&
-                        <View style={{flex: 1, width: width - 5, justifyContent: 'center', alignItems: 'center'}}>
+                        <View style={{flex: 1, width: StyleUtils.getWidth()  - 5, justifyContent: 'center', alignItems: 'center'}}>
                             <FeedPromotion showActions={true} token={token}
                                            location={location} hideSocial={true} showInPopup={true}
                                            navigation={this.props.navigation} item={item}/>
                         </View>}
                         {notificationTitle &&
-                        <View style={{flex: 1, width: width - 5, justifyContent: 'flex-start', alignItems: 'center'}}>
+                        <View style={{flex: 1, width: StyleUtils.getWidth() - 5, justifyContent: 'flex-start', alignItems: 'center'}}>
 
 
                             <View style={{flex: 1, alignItems: 'flex-start', justifyContent: 'flex-start'}}>
