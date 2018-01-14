@@ -17,13 +17,13 @@ const group_controller = require('../group/group.controller');
 const MongodbSearch = require('../../components/mongo-search');
 const qrcodeController = require('../qrcode/qrcode.controller');
 const feed = require('../../components/feed-tools');
+const Role = require('../../components/role');
+
+exports.search = MongodbSearch.create(Business);
 
 function get_businesses_state(businesses, userId, callback) {
   feed.generate_state(businesses, userId, feed.business_state, callback)
 }
-
-exports.search = MongodbSearch.create(Business);
-
 
 exports.test_email = function (req, res) {
   const email = require('../../components/email');
@@ -255,12 +255,7 @@ exports.create = function (req, res) {
   let body_business = req.body;
   let userId = req.user._id;
 
-  User.findById(userId, '-salt -hashedPassword -sms_code', function (err, user) {
-    if (err) return res.status(401).send(err.message);
-    if (!user) return res.status(401).send('Unauthorized');
-    body_business.creator = userId;
-    body_business.created = Date.now();
-
+  function createBusiness(user) {
     location.address_location(body_business, function (err, data) {
       if (err) {
         if (err.code >= 400) return res.status(err.code).send(err.message);
@@ -326,6 +321,32 @@ exports.create = function (req, res) {
           });
         })
       });
+    });
+  }
+
+  function userMaxRole(userId, business, callback){
+    if(business.shopping_chain || business.mall){
+      let entityId = business.shopping_chain? business.shopping_chain : business.mall;
+      Role.getUserEntityRoles(userId, entityId, function(err, roles){
+        if(err) callback(err);
+        let maxRole =  roles.reduce(function(a, b) {
+          return Math.max(a, b);
+        });
+        return callback(null, maxRole);
+      })
+    }
+    return callback(null, Role.Roles.get('OWNS'));
+  }
+
+  User.findById(userId, '-salt -hashedPassword -sms_code', function (err, user) {
+    if (err) return res.status(401).send(err.message);
+    if (!user) return res.status(401).send('Unauthorized');
+    userMaxRole(user._id, body_business, function (err, role) {
+      if(err) return handleError(res, err);
+      if( role < Role.Roles.get('Admin') ) return res.status(401).send(`Insufficient permission level ${role}`);
+      body_business.creator = userId;
+      body_business.created = Date.now();
+      createBusiness(user);
     });
   });
 };

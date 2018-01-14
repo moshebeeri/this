@@ -231,7 +231,7 @@ exports.destroy = function (req, res) {
       if (err) {
         return handleError(res, err);
       }
-      return res.send(204);
+      return res.send(204).send();
     });
   });
 };
@@ -258,7 +258,7 @@ exports.small_business_candidates = function (req, res) {
                return candidate._id as _id`;
   graphModel.query_objects(User, query, function (err) {
     if (err) console.error(err.message);
-    return res.status(200);
+    return res.status(200).send();
   });
 };
 
@@ -272,7 +272,7 @@ exports.business_candidates = function (req, res) {
                return candidate._id as _id`;
   graphModel.query_objects(User, query, function (err) {
     if (err) console.error(err.message);
-    return res.status(200);
+    return res.status(200).send();
   });
 };
 
@@ -281,7 +281,7 @@ exports.touch = function (req, res) {
   graphModel.query(query, function (err) {
     if (err) console.error(err.message);
   });
-  return res.status(200);
+  return res.status(200).send();
 };
 
 function user_follow_group(user_id, group, callback) {
