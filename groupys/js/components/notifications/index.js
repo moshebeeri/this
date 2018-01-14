@@ -36,6 +36,12 @@ class Notification extends Component {
         const {groupActions, actions, navigation} = this.props;
         return <NotificationListView navigation={navigation} item={item} actions={actions} groupActions={groupActions}/>
     }
+    shouldComponentUpdate(){
+        if(this.props.currentScreen ==='home' && this.props.selectedTab === 3){
+            return true;
+        }
+        return false;
+    }
 
     render() {
         const {notification, navigation, actions} = this.props;
@@ -69,7 +75,9 @@ style={{ alignSelf: 'stretch', height: 300 }}
 * */
 export default connect(
     state => ({
-        notification: state.notification
+        notification: state.notification,
+        selectedTab:state.mainTab.selectedTab,
+        currentScreen:state.render.currentScreen,
     }),
     (dispatch) => ({
         actions: bindActionCreators(notificationAction, dispatch),

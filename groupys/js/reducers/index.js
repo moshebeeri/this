@@ -30,7 +30,8 @@ import addressForm from './form/addressReducer'
 import categoriesForm from './form/categoriesReducer'
 import scannerForm from './form/scannerReducer'
 import postForm from './form/postReducer';
-import phone from './phoneReducer'
+import phone from './phoneReducer';
+import render from './RenderReducer'
 export default function getRootReducer() {
     return combineReducers({
         feeds: feeds,
@@ -60,6 +61,7 @@ export default function getRootReducer() {
         addressForm:addressForm,
         categoriesForm:categoriesForm,
         phone:phone,
+        render:render,
         scannerForm:scannerForm,
         postForm:postForm
     });

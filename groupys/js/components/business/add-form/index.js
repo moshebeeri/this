@@ -307,6 +307,12 @@ class AddBusiness extends Component {
             </View>
         );
     }
+    shouldComponentUpdate(){
+        if(this.props.currentScreen ==='addBusiness' ){
+            return true;
+        }
+        return false;
+    }
 }
 
 export default connect(
@@ -314,7 +320,8 @@ export default connect(
         businesses: state.businesses,
         categories: state.businesses.categories,
         token: state.authentication.token,
-        saving: state.businesses.savingForm
+        saving: state.businesses.savingForm,
+        currentScreen:state.render.currentScreen,
     }),
     dispatch => bindActionCreators(businessAction, dispatch)
 )(AddBusiness);

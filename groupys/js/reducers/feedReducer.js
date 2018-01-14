@@ -10,7 +10,8 @@ const initialState = {
     maxFeeds:10,
     nextBulkLoad:false,
     updated:false,
-    upTime:new Date().getTime()
+    upTime:new Date().getTime(),
+    renderFeed: true,
 };
 import {REHYDRATE} from "redux-persist/constants";
 import * as actions from "./reducerActions";
@@ -40,6 +41,7 @@ export default function feeds(state = initialState, action) {
             return {
                 ...state,
                 updated:!feedstate.updated,
+                renderFeed:true,
             };
         case actions.FIRST_TIME_FEED:
             feedstate.firstTime = false;
@@ -53,6 +55,7 @@ export default function feeds(state = initialState, action) {
                 feedstate.feedView.push(action.item._id);
             }
             feedstate.feeds = currentFeeds;
+            feedstate.renderFeed = true;
             return feedstate;
         case actions.UPSERT_FEEDS_ITEMS:
             action.items.forEach(item => {
@@ -65,6 +68,7 @@ export default function feeds(state = initialState, action) {
                 feedstate.updated = !feedstate.updated;
             });
             feedstate.feeds = currentFeeds;
+            feedstate.renderFeed = true;
             return feedstate;
         case actions.UPSERT_FEEDS_TOP:
             currentFeeds[action.item._id] = action.item;
@@ -72,17 +76,20 @@ export default function feeds(state = initialState, action) {
                 feedstate.feedView.unshift(action.item._id);
             }
             feedstate.feeds = currentFeeds;
+            feedstate.renderFeed = true;
             return feedstate;
 
         case actions.FEED_LOADING_DONE:
             return {
                 ...state,
-                loadingDone: action.loadingDone
+                loadingDone: action.loadingDone,
+                renderFeed : true,
             };
         case actions.FEED_SHOW_TOP_LOADER:
             return {
                 ...state,
-                showTopLoader: action.showTopLoader
+                showTopLoader: action.showTopLoader,
+                renderFeed : true,
             };
         case actions.FEEDS_GET_NEXT_BULK:
             return {
@@ -93,6 +100,11 @@ export default function feeds(state = initialState, action) {
             return {
                 ...state,
                 nextBulkLoad: false
+            };
+        case actions.FEED_NO_RENDER:
+            return {
+                ...state,
+                renderFeed: false
             };
         default:
             return state;

@@ -42,6 +42,7 @@ export default class GenericFeedManager extends Component {
     renderItem(item) {
         const {navigation, token, userFollowers, group, ItemDetail, actions, entity, location} = this.props;
         return <ItemDetail
+            key={item.item.id}
             user={entity}
             token={token}
             location={location}

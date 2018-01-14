@@ -37,10 +37,18 @@ class BusinessFollow extends Component {
                 {...actions} />
         );
     }
+
+    shouldComponentUpdate() {
+        if (this.props.currentScreen === 'businessFollow') {
+            return true;
+        }
+        return false;
+    }
 }
 
 export default connect(state => ({
-        state: state.follow_businesses
+        state: state.follow_businesses,
+        currentScreen: state.render.currentScreen,
     }),
     (dispatch) => ({
         actions: bindActionCreators(businessAction, dispatch)

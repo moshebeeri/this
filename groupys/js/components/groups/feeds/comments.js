@@ -37,11 +37,19 @@ class Comments extends Component {
                                 showComments={true}/>
         </View>
     }
+
+    shouldComponentUpdate() {
+        if (this.props.currentScreen === 'InstanceGroupComments') {
+            return true;
+        }
+        return false;
+    }
 }
 
 export default connect(
     state => ({
-        comments: state.comments
+        comments: state.comments,
+        currentScreen: state.render.currentScreen,
     }),
     dispatch => bindActionCreators(commentAction, dispatch)
 )(Comments);

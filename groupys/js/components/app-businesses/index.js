@@ -48,7 +48,12 @@ class ApplicationBusinessManager extends Component {
         this.replaceRoute('addBusiness');
     }
 
-
+    shouldComponentUpdate(){
+        if(this.props.currentScreen ==='businesses' ){
+            return true;
+        }
+        return false;
+    }
 
     render() {
         let icon = <Icon2 active color={"#FA8559"} size={25} name="plus"/>
@@ -84,7 +89,8 @@ class ApplicationBusinessManager extends Component {
 
 export default connect(
     state => ({
-        businesses: state.businesses
+        businesses: state.businesses,
+        currentScreen:state.render.currentScreen,
     }),
     dispatch => bindActionCreators(businessAction, dispatch)
 )(ApplicationBusinessManager);

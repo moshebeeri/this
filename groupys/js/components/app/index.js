@@ -149,7 +149,8 @@ class ApplicationManager extends Component {
         super(props)
         this.state = {
             orientation: StyleUtils.isPortrait() ? 'portrait' : 'landscape',
-            devicetype: StyleUtils.isTablet() ? 'tablet' : 'phone'
+            devicetype: StyleUtils.isTablet() ? 'tablet' : 'phone',
+            activeTab:'feed'
         }
 
     }
@@ -159,21 +160,11 @@ class ApplicationManager extends Component {
     }
 
     async componentWillMount() {
+
         FCM.requestPermissions().then(
             () =>
                 console.log('granted')).catch(() =>
             console.log('notification permission rejected'));
-        // try {
-        //     BTClient.setup('sandbox_52z5v3k9_bwxbpd5jhzd472t5')
-        //     BTClient.showPaymentViewController(options).then(function (nonce) {
-        //         //payment succeeded, pass nonce to server
-        //     })
-        //         .catch(function (err) {
-        //             //error handling
-        //         });
-        // }catch (error){
-        //     console.log('failed '+ error)
-        // }
 
         const isVerified = await this.props.isAuthenticated
         if (!isVerified) {
@@ -203,11 +194,30 @@ class ApplicationManager extends Component {
     onChangeTab(tab) {
         if (tab.i === 0) {
             PageRefresher.visitedFeed();
+            this.setState({
+                activeTab:'feed'
+            })
         }
+        if (tab.i === 1 ){
+
+            this.setState({
+                activeTab:'savedPromotion'
+            })
+        }
+        //this.p
         if (tab.i === 2) {
             PageRefresher.visitedGroups();
+            this.setState({
+                activeTab:'groups'
+            })
         }
-        //this.props.actions.changeTab(tab)
+        if (tab.i === 3){
+
+            this.setState({
+                activeTab:'notification'
+            })
+        }
+        this.props.actions.changeTab(tab)
     }
 
     navigateToAdd() {
@@ -292,10 +302,10 @@ class ApplicationManager extends Component {
                         <ScrolTabView initialPage={0} onChangeTab={this.onChangeTab.bind(this)}
                                       tabBarBackgroundColor='white'
                                       tabBarUnderlineStyle={{backgroundColor: '#2db6c8'}}>
-                            <Feeds tabLabel="promotions" index={0} navigation={this.props.navigation}/>
-                            <MydPromotions tabLabel="save" navigation={this.props.navigation} index={1}/>
-                            <Groups tabLabel="groups" navigation={this.props.navigation} index={2}/>
-                            <Notification tabLabel={notificationLabel} navigation={this.props.navigation} index={3}/>
+                            <Feeds  activeTab={this.state.activeTab} tabLabel="promotions" index={0} navigation={this.props.navigation}/>
+                            <MydPromotions  activeTab={this.state.activeTab}  tabLabel="save" navigation={this.props.navigation} index={1}/>
+                            <Groups   activeTab={this.state.activeTab}  tabLabel="groups" navigation={this.props.navigation} index={2}/>
+                            <Notification   activeTab={this.state.activeTab}  tabLabel={notificationLabel} navigation={this.props.navigation} index={3}/>
 
 
                         </ScrolTabView>

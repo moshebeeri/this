@@ -39,7 +39,12 @@ class MyPromotions extends Component {
                               realize={this.realize.bind(this, item.item)}
         />
     }
-
+    shouldComponentUpdate(){
+        if(this.props.currentScreen ==='home' && this.props.selectedTab === 1){
+            return true;
+        }
+        return false;
+    }
     refresh() {
     }
 
@@ -85,7 +90,10 @@ const mapStateToProps = state => {
         loadingDone: state.myPromotions.loadingDone,
         myPromotions: state.myPromotions,
         firstTime: state.myPromotions.firstTime,
-        location: state.phone.currentLocation
+        location: state.phone.currentLocation,
+        selectedTab:state.mainTab.selectedTab,
+        currentScreen:state.render.currentScreen,
+
     }
 }
 export default connect(

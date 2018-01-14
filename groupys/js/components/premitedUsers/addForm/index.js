@@ -207,6 +207,13 @@ class AddPermittedUser extends Component {
         }
         return undefined;
     }
+
+    shouldComponentUpdate() {
+        if (this.props.currentScreen === 'addPremitedUsers') {
+            return true;
+        }
+        return false;
+    }
 }
 
 export default connect(
@@ -219,6 +226,7 @@ export default connect(
         message: state.userRole.message,
         role: state.userRole.role,
         saving: state.userRole.saving,
+        currentScreen: state.render.currentScreen,
     }),
     (dispatch) => ({
         actions: bindActionCreators(userRoleAction, dispatch),

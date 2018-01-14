@@ -116,6 +116,13 @@ class Promotions extends Component {
             </MenuOptions>
         </Menu>;
     }
+
+    shouldComponentUpdate() {
+        if (this.props.currentScreen === 'Promotions') {
+            return true;
+        }
+        return false;
+    }
 }
 
 export default connect(
@@ -124,7 +131,8 @@ export default connect(
         update: state.businesses.update,
         location: state.phone.currentLocation,
         promotionsLoading: state.promotions.loadingDone,
-        promotionsChange: state.promotions
+        promotionsChange: state.promotions,
+        currentScreen: state.render.currentScreen,
     }),
     (dispatch) => ({
         actions: bindActionCreators(businessAction, dispatch),

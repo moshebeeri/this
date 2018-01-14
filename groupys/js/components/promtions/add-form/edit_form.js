@@ -229,6 +229,12 @@ class EditPromotion extends Component {
         });
         return result
     }
+    shouldComponentUpdate(){
+        if(this.props.currentScreen ==='editPromotion' ){
+            return true;
+        }
+        return false;
+    }
 }
 
 export default connect(
@@ -236,6 +242,7 @@ export default connect(
         promotions: state.promotions,
         saving: state.promotions.savingForm,
         products: state.products,
+        currentScreen:state.render.currentScreen,
     }),
     (dispatch) => ({
         businessActions: bindActionCreators(businessAction, dispatch),

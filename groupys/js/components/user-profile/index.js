@@ -155,12 +155,20 @@ class UserProfile extends Component {
 
         );
     }
+
+    shouldComponentUpdate() {
+        if (this.props.currentScreen === 'UserProfile') {
+            return true;
+        }
+        return false;
+    }
 }
 
 export default connect(
     state => ({
         user: state.user,
-        saving: state.user.saving
+        saving: state.user.saving,
+        currentScreen: state.render.currentScreen,
     }),
     dispatch => bindActionCreators(userAction, dispatch)
 )(UserProfile);
