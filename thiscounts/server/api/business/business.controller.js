@@ -123,7 +123,22 @@ function business_follow_activity(follower, business) {
   });
 }
 
+/**
+  graphModel.relate_ids(business._id, 'BRANCH_OF', business.shopping_chain ShoppingChain);
+  graphModel.relate_ids(business._id, 'IN_MALL', business.mall);
+ */
 function follow(userId, businessId, callback) {
+
+  function followShoppingChain(userId, businessId) {
+    Business.findById(businessId)
+      .exec(function(err, business){
+        if(err) return console.error(err);
+        if(business.shopping_chain) {
+          return graphModel.relate_ids(userId, 'FOLLOW', businessId, callback)
+        }
+      })
+  }
+
   graphModel.is_related_ids(userId, 'FOLLOW', businessId, function (err, exist) {
     if (err) return callback(err);
     if (exist) return callback(new Error('user already follows'));
@@ -139,6 +154,8 @@ function follow(userId, businessId, callback) {
         graphModel.query(query, function (err) {
           if (err) return callback(err);
           onAction.follow(userId, businessId);
+          followShoppingChain(userId, businessId);
+          return callback(null)
         })
       });
     })
