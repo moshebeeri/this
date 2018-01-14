@@ -91,68 +91,76 @@ exports.test_me = function (req, res) {
   return res.status(201).json(spreads);
 };
 
-function applyToGroups(promotion, instances){
-  instances.forEach(instance => {
-    let groups;
-    if (instance && promotion && (groups = promotion.distribution.groups)) {
-      //TODO: improve by querying once
-      groups.forEach(group =>{
-        Group.findById(group, function (err, group) {
-          if (err) return console.error(err);
-          if(group)
-            pricing.balance(instance.promotion.entity, function (err) {
-              if(!err) instance_group_activity(instance, group);
-            })
-        })
+function applyToGroupList(groups_ids, instance, callback) {
+  Group.find({}).where('_id').in(groups_ids).exec(function (err, groups) {
+    if (err) return callback(err);
+    async.each(groups, (group, callback) => {
+      pricing.balance(instance.promotion.entity, function (err, positiveBalance) {
+        if (err) return callback(err);
+        if (!positiveBalance) return callback(new Error('HTTP_PAYMENT_REQUIRED'));
+        instance_group_activity(instance, group);
       })
-    }
-  });
+    }, callback);
+  })
 }
 
-function applyToFollowingGroups(promotion, instances) {
-  instances.forEach(instance => {
+function applyToGroups(promotion, instances, callback){
+  async.each(instances, (instance, callback) => {
+    let groups;
+    if (instance && promotion && (groups = promotion.distribution.groups)) {
+      return applyToGroupList(groups, instance, callback);
+    }
+  }, callback);
+}
+
+function applyToFollowingGroups(promotion, instances, callback) {
+  async.each(instances, (instance, callback) => {
     let business;
     if (instance && promotion && (business = promotion.entity.business)) {
       if (instance.variation === 'SINGLE') {
         let query = instanceGraphModel.related_type_id_dir_query(business._id, 'FOLLOW', 'group', 'in', 0, instance.quantity);
         instanceGraphModel.query(query, function (err, groups_ids) {
-          if (err) return console.error(err); //return callback(err);
-            groups_ids.forEach(_id => {
-              Group.findById(_id, function (err, group) {
-                if (err) return console.error(err); //return callback(err);
-                pricing.balance(instance.promotion.entity, function (err) {
-                  if(!err) instance_group_activity(instance, group);
-                })
-              })
-            })
-          })
+          if (err) return callback(err);
+          return applyToGroupList(groups_ids, instance, callback)
+        })
         }
       }
-  })
+  }, callback)
 }
 
 //see https://neo4j.com/blog/real-time-recommendation-engine-data-science/
 function applyToFollowingUsers(promotion, instances, callback) {
-  instances.forEach(instance => {
-    //instance_eligible_activity(instance);
+  async.each(instances, (instance, callback) => {
     spatial.userLocationWithinDistance({
       longitude: instance.location.lng,
       latitude: instance.location.lat
     }, 30, 0, instance.quantity, function (err, results) {
       if (err) return console.error(err);
       results.forEach(user => {
-        pricing.balance(instance.promotion.entity, function (err) {
-          if(err) return callback(err);
+        pricing.balance(instance.promotion.entity, function (err, positiveBalance) {
+          if (err) return callback(err);
+          if (!positiveBalance) return callback(new Error('HTTP_PAYMENT_REQUIRED'));
           user_instance_eligible_activity(user._id, instance);
         })
       })
     });
-  })
+  }, callback)
 }
 
-function applyToFollowing(promotion, instances) {
-  applyToFollowingGroups(promotion, instances);
-  applyToFollowingUsers(promotion, instances);
+function applyToFollowing(promotion, instances, callback) {
+  async.parallel({
+    groups: function (callback) {
+      applyToFollowingGroups(promotion, instances, callback);
+    },
+    users: function (callback) {
+      applyToFollowingUsers(promotion, instances, callback);
+    }
+  }, function (err, state) {
+    if (err) return callback(err, null);
+    callback(null, state);
+  })
+  // applyToFollowingGroups(promotion, instances);
+  // applyToFollowingUsers(promotion, instances);
 }
 
 function handlePromotionPostCreate(promotion, callback) {

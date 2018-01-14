@@ -1,11 +1,12 @@
 'use strict';
 
-let _ = require('lodash');
-let Post = require('./post.model');
-let Group = require('../group/group.model');
-let graphTools = require('../../components/graph-tools');
-let graphModel = graphTools.createGraphModel('post');
+const _ = require('lodash');
+const Post = require('./post.model');
+const Group = require('../group/group.model');
+const graphTools = require('../../components/graph-tools');
+const graphModel = graphTools.createGraphModel('post');
 const activity = require('../../components/activity').createActivity();
+const pricing = require('../../components/pricing');
 
 // Get list of posts
 exports.index = function(req, res) {
@@ -75,10 +76,17 @@ exports.create = function(req, res) {
       else if(act.actor_group)
         act.ids = [act.actor_group];
 
-      activity.activity(act, function (err) {
-        if(err) { return handleError(res, err); }
-        return res.status(201).send(post);
-      });
+      pricing.balance(post.behalf, function (err, positiveBalance) {
+        if (err) return handleError(res, err);
+        if (!positiveBalance) return res.status(402).send(post);
+        activity.activity(act, function (err) {
+          if (err) {
+            return handleError(res, err);
+          }
+          pricing.chargeActivityDistribution(post.behalf, activity);
+          return res.status(201).send(post);
+        });
+      })
     });
   });
 };
