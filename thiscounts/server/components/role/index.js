@@ -149,6 +149,16 @@ Role.getUserEntityRoles = function (userId, entityId, callback) {
   })
 };
 
+Role.getUserEntityRole = function(userId, entityId, callback) {
+  Role.getUserEntityRoles(userId, entityId, function (err, roles) {
+    if (err) return callback(err);
+    let maxRole = roles.reduce(function (a, b) {
+      return Math.max(a, b);
+    });
+    return callback(null, maxRole);
+  });
+};
+
 function handleError(res, err) {
   console.log(err);
   return res.status(500).send(err);

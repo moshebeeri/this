@@ -19,6 +19,7 @@ router.patch('/:id', auth.isAuthenticated(), controller.update);
 router.delete('/:id', auth.hasRole('admin'), controller.destroy);
 router.get('/list/mine', auth.isAuthenticated(), controller.mine);
 router.get('/follow/:business', auth.isAuthenticated(), controller.follow);
+router.delete('/follow/:business', auth.isAuthenticated(), controller.un_follow);
 router.get('/users/following/:business/:skip/:limit', auth.isAuthenticated(), controller.following_users);
 router.get('/groups/following/:business/:skip/:limit', auth.isAuthenticated(), controller.following_groups);
 router.get('/users/following/default/group/:business/:skip/:limit', auth.isAuthenticated(), controller.users_following_default_group);

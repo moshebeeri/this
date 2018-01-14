@@ -124,28 +124,54 @@ function business_follow_activity(follower, business) {
 }
 
 function follow(userId, businessId, callback) {
-  let query = `MATCH (user:user{_id:"${userId}"})-[f:FOLLOW]->(b:business{_id:"${businessId}"}) return count(f) as count`;
-  graphModel.query(query, function (err, results) {
+  graphModel.is_related_ids(userId, 'FOLLOW', businessId, function (err, exist) {
     if (err) return callback(err);
-    let count = results[0].count;
-    if (count > 0) return callback(new Error('user already follows'));
-    graphModel.relate_ids(userId, 'FOLLOW', businessId, function (err) {
-      if(err) return callback(err);
-      business_follow_activity(userId, businessId);
-      let query = `MATCH (b:business{_id:"${businessId}"})-[d:DEFAULT_GROUP]->(g:group) 
-                    CREATE UNIQUE (user:user{_id:"${userId}"})-[f:FOLLOW]->(g)`;
-      graphModel.query(query, function (err) {
+    if (exist) return callback(new Error('user already follows'));
+    graphModel.is_related_ids(userId, 'UN_FOLLOW', businessId, function (err, unFollowExist) {
+      if (err) return callback(err);
+      graphModel.relate_ids(userId, 'FOLLOW', businessId, function(err){
         if (err) return callback(err);
-        onAction.follow(userId, businessId);
-      })
+        if(unFollowExist) return callback(null);
+        //first time follow
+        business_follow_activity(userId, businessId);
+        let query = `MATCH (b:business{_id:"${businessId}"})-[d:DEFAULT_GROUP]->(g:group) 
+                    CREATE UNIQUE (user:user{_id:"${userId}"})-[f:FOLLOW]->(g)`;
+        graphModel.query(query, function (err) {
+          if (err) return callback(err);
+          onAction.follow(userId, businessId);
+        })
+      });
     })
-  })
+  });
 }
 
 exports.follow = function (req, res) {
   let userId = req.user._id;
   let businessId = req.params.business;
   follow(userId, businessId, function (err) {
+    if (err) return handleError(res, err);
+    return res.status(200);
+  })
+};
+
+function un_follow(userId, businessId, callback) {
+  graphModel.unrelate_ids(userId, 'FOLLOW', businessId, function (err) {
+    if (err) return callback(err);
+    graphModel.relate_ids(userId, 'UN_FOLLOW', businessId, function (err) {
+      if (err) return callback(err);
+      let query = `MATCH (user:user{_id:"${userId}"})-[f:FOLLOW]->(g:group)<-[d:DEFAULT_GROUP]-(b:business{_id:"${businessId}"}) delete f`;
+      graphModel.query(query, function (err) {
+        if (err) return callback(err);
+        return callback(null);
+      })
+    })
+  })
+}
+
+exports.un_follow = function (req, res) {
+  let userId = req.user._id;
+  let businessId = req.params.business;
+  un_follow(userId, businessId, function (err) {
     if (err) return handleError(res, err);
     return res.status(200);
   })
@@ -324,16 +350,10 @@ exports.create = function (req, res) {
     });
   }
 
-  function userMaxRole(userId, business, callback){
+  function userRole(userId, business, callback){
     if(business.shopping_chain || business.mall){
       let entityId = business.shopping_chain? business.shopping_chain : business.mall;
-      Role.getUserEntityRoles(userId, entityId, function(err, roles){
-        if(err) callback(err);
-        let maxRole =  roles.reduce(function(a, b) {
-          return Math.max(a, b);
-        });
-        return callback(null, maxRole);
-      })
+      return Role.getUserEntityRole(userId, entityId, callback);
     }
     return callback(null, Role.Roles.get('OWNS'));
   }
@@ -341,7 +361,7 @@ exports.create = function (req, res) {
   User.findById(userId, '-salt -hashedPassword -sms_code', function (err, user) {
     if (err) return res.status(401).send(err.message);
     if (!user) return res.status(401).send('Unauthorized');
-    userMaxRole(user._id, body_business, function (err, role) {
+    userRole(user._id, body_business, function (err, role) {
       if(err) return handleError(res, err);
       if( role < Role.Roles.get('Admin') ) return res.status(401).send(`Insufficient permission level ${role}`);
       body_business.creator = userId;
