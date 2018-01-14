@@ -65,6 +65,7 @@ export const FEED_LIKE = 'FEED_LIKE';
 export const FEED_UNLIKE = 'FEED_UNLIKE';
 export const FEED_LOADING_DONE = 'FEED_LOADING_DONE';
 export const FEED_SHOW_TOP_LOADER = 'SHOW_TOP_LOADER';
+export const FEED_NO_RENDER = 'FEED_NO_RENDER';
 export const LAST_FEED_DOWN = 'LAST_FEED_DOWN';
 export const FEED_UPDATE_SOCIAL_STATE = 'FEED_UPDATE_SOCIAL_STATE';
 //saved feeds
@@ -134,6 +135,9 @@ export const UPSERT_ACTIVITY = 'UPSERTactivity';
 //network
 export const NETWORK_IS_OFFLINE = 'NETWORK_IS_OFFLINE';
 export const NETWORK_IS_ONLINE = 'NETWORK_IS_ONLINE';
+//Render
+export const CURRENT_SCREEN = 'CURRENT_SCREEN';
+export const CURRENT_TAB = 'CURRENT_TAB';
 //Notifcation screen
 export const SET_NOTIFICATION = 'SET_NOTIFICATION';
 export const SET_TOP_NOTIFICATION = 'SET_TOP_NOTIFICATION';

@@ -57,12 +57,20 @@ class UserPermittedRoles extends Component {
             </Container>
         );
     }
+
+    shouldComponentUpdate() {
+        if (this.props.currentScreen === 'userPermittedRoles') {
+            return true;
+        }
+        return false;
+    }
 }
 
 export default connect(
     state => ({
         users: getBusinessUsers(state),
-        update: state.businesses.update
+        update: state.businesses.update,
+        currentScreen: state.render.currentScreen,
     }),
     (dispatch) => ({
         actions: bindActionCreators(businessAction, dispatch),

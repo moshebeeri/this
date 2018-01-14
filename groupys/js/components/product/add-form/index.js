@@ -236,12 +236,21 @@ class AddProduct extends Component {
             </View>
         );
     }
+
+
+    shouldComponentUpdate(){
+        if(this.props.currentScreen ==='AddProduct' ){
+            return true;
+        }
+        return false;
+    }
 }
 
 export default connect(
     state => ({
         products: state.products,
-        saving: state.products.savingForm
+        saving: state.products.savingForm,
+        currentScreen:state.render.currentScreen,
     }),
     (dispatch) => ({
         actions: bindActionCreators(productsAction, dispatch),

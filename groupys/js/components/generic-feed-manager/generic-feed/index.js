@@ -146,7 +146,7 @@ export default class GenericFeedItem extends Component {
 
     createFeedView(item) {
         if (item) {
-            return <View style={{ backgroundColor: '#cccccc'}} {...this._panResponder.panHandlers} >
+            return <View key={this.props.item.id} style={{ backgroundColor: '#cccccc'}} {...this._panResponder.panHandlers} >
                 {item}
             </View>
         }

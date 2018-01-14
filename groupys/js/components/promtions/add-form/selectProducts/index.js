@@ -105,6 +105,13 @@ class SelectProductsComponent extends Component {
 
         );
     }
+
+    shouldComponentUpdate() {
+        if (this.props.currentScreen === 'SelectProductsComponent') {
+            return true;
+        }
+        return false;
+    }
 }
 
 export default connect(
@@ -112,6 +119,7 @@ export default connect(
         promotions: state.promotions,
         products: state.products,
         businesses: state.businesses,
+        currentScreen: state.render.currentScreen,
     }),
     dispatch => bindActionCreators(promotionsAction, dispatch)
 )(SelectProductsComponent);

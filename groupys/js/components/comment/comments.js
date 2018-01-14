@@ -93,11 +93,19 @@ class GenericComments extends Component {
                                 showComments={true}/>
         </View>
     }
+
+    shouldComponentUpdate() {
+        if (this.props.currentScreen === 'genericComments') {
+            return true;
+        }
+        return false;
+    }
 }
 
 export default connect(
     state => ({
-        comments: state.comments
+        comments: state.comments,
+        currentScreen: state.render.currentScreen,
     }),
     dispatch => bindActionCreators(commentAction, dispatch)
 )(GenericComments);

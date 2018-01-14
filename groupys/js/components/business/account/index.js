@@ -172,12 +172,19 @@ class BusinessAccount extends Component {
             source={require('../../../../images/client_1.png')}>
         </Image>
     }
+    shouldComponentUpdate() {
+        if (this.props.currentScreen === 'businessAccount') {
+            return true;
+        }
+        return false;
+    }
 }
 
 export default connect(
     state => ({
         businesses: state.businesses.myBusinesses,
-        paymentMessage: state.businesses.paymentMessage
+        paymentMessage: state.businesses.paymentMessage,
+        currentScreen: state.render.currentScreen,
     }),
     dispatch => bindActionCreators(businessAction, dispatch)
 )(BusinessAccount);

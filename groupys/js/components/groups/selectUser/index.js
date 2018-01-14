@@ -105,11 +105,19 @@ class SelectUsersComponent extends Component {
 
         );
     }
+
+    shouldComponentUpdate(){
+        if(this.props.currentScreen ==='SelectUsersComponent' ){
+            return true;
+        }
+        return false;
+    }
 }
 
 const mapStateToProps = state => {
     return {
         userFollower: getUserFollowesr(state),
+        currentScreen:state.render.currentScreen,
     }
 }
 export default connect(

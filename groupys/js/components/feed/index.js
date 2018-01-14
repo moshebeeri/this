@@ -30,6 +30,13 @@ class Feed extends Component {
         }
     }
 
+
+    shouldComponentUpdate(){
+        if(this.props.currentScreen ==='home' && this.props.selectedTab === 0){
+               return true;
+        }
+        return false;
+    }
     navigateToAdd() {
         this.props.navigation.navigate('PostForm')
     }
@@ -86,6 +93,7 @@ const mapStateToProps = state => {
         loadingDone:state.feeds.loadingDone,
         firstTime:state.feeds.firstTime,
         updated: state.feeds.updated,
+        renderFeed: state.feeds.renderFeed,
         nextBulkLoad: state.feeds.nextBulkLoad,
         token: state.authentication.token,
         showTopLoader:state.feeds.showTopLoader,
@@ -93,6 +101,8 @@ const mapStateToProps = state => {
         user: state.user.user,
         feeds: getFeeds(state),
         location: state.phone.currentLocation,
+        selectedTab:state.mainTab.selectedTab,
+        currentScreen:state.render.currentScreen,
 
     }
 };

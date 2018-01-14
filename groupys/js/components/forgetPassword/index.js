@@ -49,6 +49,12 @@ class ForgetPassword extends Component {
         this.props.navigation.goBack();
     }
 
+    shouldComponentUpdate(){
+        if(this.props.currentScreen ==='forgetPassword' ){
+            return true;
+        }
+        return false;
+    }
     render() {
         const {failedMessage} = this.props;
 
@@ -161,6 +167,7 @@ class ForgetPassword extends Component {
 export default connect(
     state => ({
         isAuthenticated: isAuthenticated(state),
+        currentScreen:state.render.currentScreen,
     }),
     (dispatch) => ({
         actions: bindActionCreators(loginAction, dispatch)

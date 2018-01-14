@@ -77,6 +77,14 @@ class Product extends Component {
             </Container>
         );
     }
+
+
+    shouldComponentUpdate() {
+        if (this.props.currentScreen === 'Products') {
+            return true;
+        }
+        return false;
+    }
 }
 
 export default connect(
@@ -84,7 +92,8 @@ export default connect(
         products: getBusinessProducts(state),
         update: state.businesses.update,
         productsLoading: state.products.loadingDone,
-        productsChange: state.products
+        productsChange: state.products,
+        currentScreen: state.render.currentScreen,
     }),
     (dispatch) => ({
         actions: bindActionCreators(businessAction, dispatch),

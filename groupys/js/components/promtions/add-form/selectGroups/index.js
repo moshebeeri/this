@@ -126,11 +126,19 @@ class SelectGroupsComponent extends Component {
 
         );
     }
+
+    shouldComponentUpdate() {
+        if (this.props.currentScreen === 'SelectGroupsComponent') {
+            return true;
+        }
+        return false;
+    }
 }
 
 export default connect(
     state => ({
         groups: state.groups,
+        currentScreen: state.render.currentScreen,
     }),
     dispatch => bindActionCreators(groupsAction, dispatch)
 )(SelectGroupsComponent);

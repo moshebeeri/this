@@ -36,8 +36,8 @@ export default class RNVideo extends Component {
             width: this.value(props.width, 320),
             height: this.value(props.height, 180),
             url: this.value({uri: props.url}),
-            ref: props.ref,
-            rnVideoRef: null,
+            ref:  this.value(props.reference),
+            rnVideoRef: this.value(props.reference),
             // YouTube
             source: this.value(props.source, 'THIS'),
             videoId: this.value(props.videoId, null),

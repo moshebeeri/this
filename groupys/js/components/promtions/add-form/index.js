@@ -602,6 +602,13 @@ class AddPromotion extends Component {
         });
         return result
     }
+
+    shouldComponentUpdate(){
+        if(this.props.currentScreen ==='addPromotions' ){
+            return true;
+        }
+        return false;
+    }
 }
 
 export default connect(
@@ -609,6 +616,7 @@ export default connect(
         promotions: state.promotions,
         saving: state.promotions.savingForm,
         products: state.products,
+        currentScreen:state.render.currentScreen,
     }),
     (dispatch) => ({
         businessActions: bindActionCreators(businessAction, dispatch),

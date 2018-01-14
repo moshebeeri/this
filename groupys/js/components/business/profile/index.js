@@ -179,11 +179,19 @@ class BusinessProfile extends Component {
             source={require('../../../../images/client_1.png')}>
         </Image>
     }
+
+    shouldComponentUpdate() {
+        if (this.props.currentScreen === 'businessProfile') {
+            return true;
+        }
+        return false;
+    }
 }
 
 export default connect(
     state => ({
         businesses: state.businesses.businesses,
+        currentScreen: state.render.currentScreen,
     }),
     dispatch => bindActionCreators(businessAction, dispatch)
 )(BusinessProfile);

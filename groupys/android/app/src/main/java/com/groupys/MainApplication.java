@@ -63,7 +63,7 @@ public class MainApplication extends Application implements ReactApplication {
             new ReactVideoPackage(),
             new ReactNativeLocalizationPackage(),
             new LinearGradientPackage(),
-            new CodePush(getResources().getString(R.string.reactNativeCodePush_androidDeploymentKey), getApplicationContext(), BuildConfig.DEBUG),
+            new CodePush(BuildConfig.CODEPUSH_KEY, getApplicationContext(), BuildConfig.DEBUG), // Add/change this line.
             new BackgroundTimerPackage(),
             new RCTFileUploaderPackage(),
             new ReactNativeContacts(),

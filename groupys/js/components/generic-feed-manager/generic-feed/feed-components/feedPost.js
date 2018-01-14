@@ -123,12 +123,12 @@ export default class FeedPost extends Component {
                     </View>
                     {image}
                     {!shared && item.video &&
-                    <Video height={250} ref={item.id} width={StyleUtils.getWidth()} muted={false} url={item.video}/>}
+                    <Video height={250} reference={item.id} width={StyleUtils.getWidth()} muted={false} url={item.video}/>}
                     { !shared && item.videoId &&
-                    <Video height={250} source={'YOUTUBE'} ref={item.id} width={StyleUtils.getWidth()} muted={false}
+                    <Video height={250} source={'YOUTUBE'} reference={item.id} width={StyleUtils.getWidth()} muted={false}
                            videoId={item.videoId}/>}
                     { shared && item.videoId  && <View style={{marginTop:50}}>
-                    <Video height={250} source={'YOUTUBE'} ref={item.id} width={StyleUtils.getWidth()} muted={false}
+                    <Video height={250} source={'YOUTUBE'} reference={item.id} width={StyleUtils.getWidth()} muted={false}
                            videoId={item.videoId}/>
                     </View>}
 

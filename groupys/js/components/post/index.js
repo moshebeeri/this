@@ -222,12 +222,20 @@ class AddPost extends Component {
             </View>
         );
     }
+
+    shouldComponentUpdate() {
+        if (this.props.currentScreen === 'PostForm') {
+            return true;
+        }
+        return false;
+    }
 }
 
 export default connect(
     state => ({
         user: state.authentication.user,
-        saving: state.postForm.saving
+        saving: state.postForm.saving,
+        currentScreen: state.render.currentScreen,
     }),
     (dispatch) => ({
         actions: bindActionCreators(postAction, dispatch),

@@ -327,6 +327,14 @@ export function nextLoad() {
     }
 }
 
+export function stopReneder() {
+    return function (dispatch, getState) {
+        dispatch({
+            type: actions.FEED_NO_RENDER,
+        });
+    }
+}
+
 export default {
     nextLoad,
     fetchTopList,

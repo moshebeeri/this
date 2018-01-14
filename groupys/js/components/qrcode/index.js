@@ -43,11 +43,19 @@ class Qrcode extends Component {
             </View>
         </ScrollView>
     }
+
+    shouldComponentUpdate() {
+        if (this.props.currentScreen === 'ReadQrCode') {
+            return true;
+        }
+        return false;
+    }
 }
 
 export default connect(
     state => ({
         scanQrcodeForm: state.scanQrcodeForm,
+        currentScreen: state.render.currentScreen,
     }),
     (dispatch) => ({
         actions: bindActionCreators(promotionAction, dispatch)

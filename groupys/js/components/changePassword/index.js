@@ -148,12 +148,20 @@ class ChangePassword extends Component {
         }
         return undefined;
     }
+
+    shouldComponentUpdate() {
+        if (this.props.currentScreen === 'changePassword') {
+            return true;
+        }
+        return false;
+    }
 }
 
 export default connect(
     state => ({
         changeForm: state.changePasswordForm,
-        saving: state.user.saving
+        saving: state.user.saving,
+        currentScreen: state.render.currentScreen,
     }),
     (dispatch) => ({
         actions: bindActionCreators(userAction, dispatch)

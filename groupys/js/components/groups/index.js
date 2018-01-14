@@ -41,6 +41,12 @@ class Groups extends Component {
         actions.touch(item._id);
         navigation.navigate('GroupFeed', {chat:true,group: item, role: 'admin'});
     }
+    shouldComponentUpdate(){
+        if(this.props.currentScreen ==='home' && this.props.selectedTab === 2){
+            return true;
+        }
+        return false;
+    }
 
     renderItem(item) {
         const {navigation} = this.props;
@@ -94,7 +100,9 @@ class Groups extends Component {
 export default connect(
     state => ({
         groups: getGroups(state),
-        update: state.groups.update
+        update: state.groups.update,
+        selectedTab:state.mainTab.selectedTab,
+        currentScreen:state.render.currentScreen,
     }),
     (dispatch) => ({
         actions: bindActionCreators(groupsAction, dispatch),

@@ -270,6 +270,13 @@ class AddGroup extends Component {
         }
         return undefined;
     }
+
+    shouldComponentUpdate(){
+        if(this.props.currentScreen ==='AddGroups' ){
+            return true;
+        }
+        return false;
+    }
 }
 
 export default connect(
@@ -277,7 +284,8 @@ export default connect(
         businesses: getMyBusinesses(state),
         user: state.authentication.user,
         userFollowers: state.user.followers,
-        saving: state.groups.saving
+        saving: state.groups.saving,
+        currentScreen:state.render.currentScreen,
     }),
     (dispatch) => ({
         actions: bindActionCreators(groupsAction, dispatch),

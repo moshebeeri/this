@@ -33,6 +33,9 @@ export default function business(state = initialState, action) {
             //not all the time we get the business social state in this case we need to make sure we take the social state from the last business
             action.item.forEach(eventItem => {
                 let categoryTitle = eventItem.categoryTitle;
+                if(!currentbusinesses[eventItem._id]){
+                    currentbusinesses[eventItem._id] = eventItem;
+                }
                 if (!categoryTitle && currentbusinesses[eventItem._id]) {
                     categoryTitle = currentbusinesses[eventItem._id].categoryTitle;
                 }
@@ -66,8 +69,12 @@ export default function business(state = initialState, action) {
         case actions.UPSERT_BUSINESS_QRCODE:
 
             businessesState.update = !businessesState.update;
-
-            currentbusinesses[action.business._id].qrcodeSource =  action.qrcodeSource;
+            if( currentbusinesses[action.business._id]) {
+                currentbusinesses[action.business._id].qrcodeSource = action.qrcodeSource;
+            }else{
+                currentbusinesses[action.business._id] = action.business;
+                currentbusinesses[action.business._id].qrcodeSource = action.qrcodeSource;
+            }
 
             return businessesState;
 

@@ -75,7 +75,18 @@ const AppNavigator = StackNavigator({
         BarcodeScannerComponent:{screen:BarcodeScannerComponent},
     }
 );
-
+// gets the current screen from navigation state
+function getCurrentRouteName(navigationState) {
+    if (!navigationState) {
+        return null;
+    }
+    const route = navigationState.routes[navigationState.index];
+    // dive into nested navigators
+    if (route.routes) {
+        return getCurrentRouteName(route);
+    }
+    return route.routeName;
+}
 class AppWithNavigationState extends Component {
     constructor(props) {
         super(props);
@@ -89,10 +100,24 @@ class AppWithNavigationState extends Component {
 
         })
     }
+
+
+
     render() {
         return (
             <MenuContext>
-                <AppNavigator/>
+                <AppNavigator
+                    onNavigationStateChange={(prevState, currentState) => {
+                        const currentScreen = getCurrentRouteName(currentState);
+                        const prevScreen = getCurrentRouteName(prevState);
+                        store.dispatch({
+                            type:actions.CURRENT_SCREEN,
+                            screen:currentScreen
+                        })
+                        console.log(currentScreen)
+                        console.log(prevScreen)
+
+                    }}/>
             </MenuContext>
         );
     }
