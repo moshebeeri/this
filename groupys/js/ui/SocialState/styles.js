@@ -6,9 +6,9 @@ module.exports = {
         flexDirection: 'row',
         justifyContent: 'space-between',
         alignItems: 'flex-end',
-        minWidth: width,
         backgroundColor:'white',
-        height: 40,
+        marginTop:5,
+        marginBottom:5,
     },
     promotion_iconView: {
         marginRight:20,

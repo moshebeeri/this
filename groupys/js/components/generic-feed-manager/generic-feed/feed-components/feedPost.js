@@ -23,7 +23,7 @@ import {
     Thumbnail,
     View
 } from 'native-base';
-import stylesLandscape from './styles_lendscape'
+import stylesLandscape from './styles'
 import StyleUtils from '../../../../utils/styleUtils'
 import {ActivityReport, SocialState, UrlPreview, Video} from '../../../../ui/index';
 import PageRefresher from '../../../../refresh/pageRefresher'
@@ -77,7 +77,7 @@ export default class FeedPost extends Component {
             height: 80,
             width: StyleUtils.getWidth(),
             paddingBottom: 10,
-            backgroundColor: 'white'
+            backgroundColor: 'whute'
         };
         if (shared) {
             titleContainerStyle = {
@@ -92,7 +92,7 @@ export default class FeedPost extends Component {
             }
             promotionDetalis = styles.promotionShareDetails;
             postMessageContainerStyle = {
-                height: 80,
+
                 borderLeftWidth: 1,
                 borderColor: '#cccccc',
                 marginLeft: 10,
@@ -146,8 +146,6 @@ export default class FeedPost extends Component {
 
                     {item.social && <View style={[styles.post_bottomContainer, {
                         backgroundColor: 'white',
-                        height: 50,
-                        marginTop:5,
                         borderTopWidth:1,
                         borderColor:'#cccccc',
                         width: StyleUtils.getWidth()

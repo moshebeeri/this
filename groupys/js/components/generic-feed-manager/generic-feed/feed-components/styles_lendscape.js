@@ -227,7 +227,6 @@ module.exports = {
         width: height - 18,
         alignItems: 'center',
         justifyContent: 'space-between',
-        height: 40,
         flexDirection: 'row',
         marginTop: 0,
         borderWidth: 1,

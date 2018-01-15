@@ -90,15 +90,16 @@ export default class FeedPromotion extends Component {
                     {image}
 
 
-                    <View style={{flex:4, width: StyleUtils.getWidth(), backgroundColor: 'white'}}>
-                        <View style={[promotaionDesc, {width: StyleUtils.getWidth()}]}>
+                    <View style={{width: StyleUtils.getWidth(), backgroundColor: 'white'}}>
+                        <View style={[promotaionDesc, {backgroundColor:'white',width: StyleUtils.getWidth()}]}>
                             <PromotionHeader type={item.promotion} feed titleText={item.promotionTitle}
                                              titleValue={item.promotionValue} term={item.promotionTerm}/>
                         </View>
-                        <View style={promotionDetalis}>
-                            <Text numberOfLines={2} style={{marginRight: 10, marginLeft: 10, fontSize: 18}}>{item.name}
-                                - {item.description}</Text>
-                        </View>
+
+                    </View>
+                    <View style={ {marginBottom:10,alignItems:'center',justifyContent:'center',backgroundColor:'white',width: StyleUtils.getWidth()}}>
+                        <Text numberOfLines={2} style={{marginRight: 10, marginLeft: 10, fontSize: 18}}>{item.name}
+                            - {item.description}</Text>
                     </View>
                     {!shared && location && <View style={[styles.promotionsSeparator, {width: StyleUtils.getWidth()}]}>
                         <PromotionSeperator/>
@@ -173,8 +174,8 @@ export default class FeedPromotion extends Component {
             flex: 1,
             width: StyleUtils.getWidth(),
             overflow: 'hidden',
-            height: StyleUtils.isPortrait() ? 91 * vh : 91 * vh,
-            backgroundColor: 'white',
+
+            backgroundColor: 'pink',
             marginBottom: 10,
             alignItems: 'center',
             flexDirection: 'column',
