@@ -118,7 +118,7 @@ export default class FeedPromotion extends Component {
                         </View>
                         {save &&
                         <View style={styles.editButtonContainer}>
-                            <SubmitButton title={strings.Claim.toUpperCase()} color={'#2db6c8'}
+                            <SubmitButton disabledText={strings.Claimed.toUpperCase()} title={strings.Claim.toUpperCase()} color={'#2db6c8'}
                                           disabled={claimDisabled} onPress={() => save(item.id)}/>
                         </View>
                         }
