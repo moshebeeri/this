@@ -77,7 +77,7 @@ export default class FeedPost extends Component {
             height: 80,
             width: StyleUtils.getWidth(),
             paddingBottom: 10,
-            backgroundColor: 'whute'
+            backgroundColor: 'white'
         };
         if (shared) {
             titleContainerStyle = {
