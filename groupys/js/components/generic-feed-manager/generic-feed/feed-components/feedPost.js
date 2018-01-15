@@ -42,7 +42,8 @@ export default class FeedPost extends Component {
         const {item} = this.props;
         let containLink = await StyleUtils.containLink(item.feed.activity.post.text);
         this.setState({
-            containLink:containLink
+            containLink:containLink,
+            visible:false,
         })
         PageRefresher.createFeedSocialState(item.id);
     }
@@ -55,6 +56,9 @@ export default class FeedPost extends Component {
         if (visible) {
             PageRefresher.visitedFeedItem(item);
         }
+        this.setState({
+            visible:visible
+        })
     }
 
     render() {
@@ -130,7 +134,7 @@ export default class FeedPost extends Component {
                     </View>
                     {image}
                     { item.video &&
-                    <Video height={250} reference={item.id} width={StyleUtils.getWidth()} muted={false} url={item.video}/>}
+                    <Video height={250} ref={item.id} width={StyleUtils.getWidth()} muted={false} url={item.video}/>}
                     { !shared && item.videoId &&
                     <Video height={250} source={'YOUTUBE'} reference={item.id} width={StyleUtils.getWidth()} muted={false}
                            videoId={item.videoId}/>}
@@ -140,19 +144,19 @@ export default class FeedPost extends Component {
                            videoId={item.videoId}/>
                     }
 
-                     <View style={[styles.post_bottomContainer, {
+                    {item.social && <View style={[styles.post_bottomContainer, {
                         backgroundColor: 'white',
                         height: 50,
                         width: StyleUtils.getWidth()
                     }]}>
-                        {item.social && <SocialState feed comments={item.social.comments} onPressComment={comment}
+                        <SocialState feed comments={item.social.comments} onPressComment={comment}
                                                      like={item.social.like} likes={item.social.likes}
                                                      onPressUnLike={() => unlike(item.id, token)}
                                                      onPressLike={() => like(item.id, token)}
                                                      shareDisabled={shared}
                                                      share={item.social.share} shares={item.social.shares}
-                                                     shareAction={showUsers}/>}
-                    </View>
+                                                     shareAction={showUsers}/>
+                    </View>}
 
 
                 </View>
