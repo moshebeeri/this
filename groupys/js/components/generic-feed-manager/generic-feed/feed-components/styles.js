@@ -267,7 +267,8 @@ module.exports = {
         backgroundColor: 'white',
         width: width ,
         flexDirection: 'row',
-        marginTop: 0,
+       marginTop:5,
+        marginBottom:5,
     },
     promotion_bottomContainer: {
         backgroundColor: 'white',

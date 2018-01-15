@@ -4,21 +4,21 @@ const {width, height} = Dimensions.get('window');
 module.exports = {
     socialContainer: {
         flexDirection: 'row',
-        justifyContent: 'center',
-        alignItems: 'center',
+        justifyContent: 'space-between',
+        alignItems: 'flex-end',
         minWidth: width,
-
+        backgroundColor:'white',
         height: 40,
     },
     promotion_iconView: {
+        marginRight:20,
+        marginLeft:20,
+
         flexDirection: 'row',
         justifyContent: 'center',
-        flex: 1
-    },
-    promotion_iconView: {
-        flexDirection: 'row',
-        justifyContent: 'center',
-        flex: 1
+        alignItems:'center',
+        backgroundColor:'white',
+        height:30
     },
     promotion_like: {
         marginRight: 5,

@@ -33,8 +33,8 @@ const vh = height / 100;
 export default class FeedPost extends Component {
     constructor() {
         super();
-        this.state={
-            containLink:false
+        this.state = {
+            containLink: false
         }
     }
 
@@ -42,8 +42,8 @@ export default class FeedPost extends Component {
         const {item} = this.props;
         let containLink = await StyleUtils.containLink(item.feed.activity.post.text);
         this.setState({
-            containLink:containLink,
-            visible:false,
+            containLink: containLink,
+            visible: false,
         })
         PageRefresher.createFeedSocialState(item.id);
     }
@@ -57,7 +57,7 @@ export default class FeedPost extends Component {
             PageRefresher.visitedFeedItem(item);
         }
         this.setState({
-            visible:visible
+            visible: visible
         })
     }
 
@@ -96,7 +96,6 @@ export default class FeedPost extends Component {
                 borderLeftWidth: 1,
                 borderColor: '#cccccc',
                 marginLeft: 10,
-
                 width: StyleUtils.getWidth(),
                 paddingBottom: 10,
                 backgroundColor: 'white'
@@ -109,7 +108,7 @@ export default class FeedPost extends Component {
         const result =
             <InViewPort onChange={this.visited.bind(this)} style={container}>
 
-                <View style={[styles.promotion_card, {backgroundColor:'white',width: StyleUtils.getWidth()}]}>
+                <View style={[styles.promotion_card, {backgroundColor: 'white', width: StyleUtils.getWidth()}]}>
 
                     <View style={[titleContainerStyle, {width: StyleUtils.getWidth()}]}>
                         <View style={{paddingTop: 5, paddingLeft: 10, justifyContent: 'flex-start'}}>
@@ -124,19 +123,20 @@ export default class FeedPost extends Component {
                         </View>
                     </View>
                     <UrlPreview text={item.feed.activity.post.text}/>
-                    <View style={postMessageContainerStyle}>
+                    {!this.state.containLink && <View style={postMessageContainerStyle}>
 
                         <View style={[promotionDetalis, {width: StyleUtils.getWidth() - 15}]}>
                             <Text numberOfLines={4}
                                   style={{marginRight: 10, marginLeft: 10, fontSize: 18}}>{item.feed.activity.post.text}
                             </Text>
                         </View>
-                    </View>
+                    </View>}
                     {image}
-                    { item.video &&
+                    {item.video &&
                     <Video height={250} ref={item.id} width={StyleUtils.getWidth()} muted={false} url={item.video}/>}
-                    { !shared && item.videoId &&
-                    <Video height={250} source={'YOUTUBE'} reference={item.id} width={StyleUtils.getWidth()} muted={false}
+                    {!shared && item.videoId &&
+                    <Video height={250} source={'YOUTUBE'} reference={item.id} width={StyleUtils.getWidth()}
+                           muted={false}
                            videoId={item.videoId}/>}
                     {shared && item.videoId &&
                     <Video height={250} source={'YOUTUBE'} reference={item.id} width={StyleUtils.getWidth()}
@@ -147,15 +147,18 @@ export default class FeedPost extends Component {
                     {item.social && <View style={[styles.post_bottomContainer, {
                         backgroundColor: 'white',
                         height: 50,
+                        marginTop:5,
+                        borderTopWidth:1,
+                        borderColor:'#cccccc',
                         width: StyleUtils.getWidth()
                     }]}>
                         <SocialState feed comments={item.social.comments} onPressComment={comment}
-                                                     like={item.social.like} likes={item.social.likes}
-                                                     onPressUnLike={() => unlike(item.id, token)}
-                                                     onPressLike={() => like(item.id, token)}
-                                                     shareDisabled={shared}
-                                                     share={item.social.share} shares={item.social.shares}
-                                                     shareAction={showUsers}/>
+                                     like={item.social.like} likes={item.social.likes}
+                                     onPressUnLike={() => unlike(item.id, token)}
+                                     onPressLike={() => like(item.id, token)}
+                                     shareDisabled={shared}
+                                     share={item.social.share} shares={item.social.shares}
+                                     shareAction={showUsers}/>
                     </View>}
 
 
@@ -173,10 +176,9 @@ export default class FeedPost extends Component {
 
     createContainerStyle(item) {
         const {shared} = this.props;
-        let addHight  =0;
-        if(this.state.containLink){
+        let addHight = 0;
+        if (this.state.containLink) {
             addHight = 150;
-
         }
         return {
             flex: 1,
@@ -187,7 +189,6 @@ export default class FeedPost extends Component {
             flexDirection: 'column',
             marginBottom: 10,
         }
-
         // if (item.banner) {
         //     if (shared) {
         //         return {
