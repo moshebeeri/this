@@ -12,6 +12,9 @@ import {connect} from 'react-redux';
 import {bindActionCreators} from "redux";
 import strings from "../../i18n/i18n"
 import StyleUtils from "../../utils/styleUtils";
+const { height} = Dimensions.get('window')
+
+const vh = height / 100
 
 const qrcode = require('../../../images/qr-code.png');
 
@@ -65,7 +68,6 @@ class GeneralComponentHeader extends Component {
 
     render() {
         const {businessActions, state, network} = this.props;
-        let vh = StyleUtils.getHeight() / 100
         let back = undefined;
         let headerHeight = vh * 7;
         if (Platform.OS === 'ios') {
@@ -115,10 +117,11 @@ class GeneralComponentHeader extends Component {
                             color: "#888888",
                             marginLeft: 10,
                             marginRight: 40,
-                            marginTop: 10,
+                            marginTop: 5,
+
                             fontSize: 18,
                             width: StyleUtils.getWidth() - 100,
-                            height: headerHeight - 20
+                            height:40
                         }}
                                    underlineColorAndroid='transparent'
                                    value={this.state.searchText}

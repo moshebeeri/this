@@ -38,7 +38,7 @@ module.exports = {
     promotionShareActive: {
         marginRight: 5,
         marginLeft: 5,
-        color: 'blue'
+        color: '#068da5'
     },
     promotionFeed: {
         marginRight: 5,

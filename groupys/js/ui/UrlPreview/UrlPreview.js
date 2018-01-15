@@ -19,7 +19,6 @@ export default class UrlPreview extends Component {
         try {
             let data = await LinkPreview.getPreview(text);
             this.setState({urlFound:true,data:data})
-            console.log(data)
         }catch (error){
             this.setState({urlFound:false})
         }

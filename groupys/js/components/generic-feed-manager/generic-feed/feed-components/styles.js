@@ -131,13 +131,14 @@ module.exports = {
     },
     businesses_container: {
         flex: 1,
-        height: vh * 76,
-        width: width,
+
         overflow: 'hidden',
-        backgroundColor: '#cccccc',
+
+        backgroundColor: 'white',
         // backgroundColor:'#FFF',
         alignItems: 'center',
         flexDirection: 'column',
+        marginBottom:10,
     },
     Welcome_container: {
         flex: 1,
@@ -270,7 +271,6 @@ module.exports = {
     },
     promotion_bottomContainer: {
         backgroundColor: 'white',
-        width: width ,
         alignItems: 'center',
         justifyContent: 'center',
         flex: 2,

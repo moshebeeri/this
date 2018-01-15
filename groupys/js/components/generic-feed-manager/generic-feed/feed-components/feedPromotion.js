@@ -2,7 +2,7 @@
  * Created by roilandshut on 23/07/2017.
  */
 import React, {Component} from 'react';
-import {Dimensions, Image,Platform} from 'react-native';
+import {Dimensions, Image, Platform} from 'react-native';
 import InViewPort from '../../../../utils/inviewport'
 import {actions} from 'react-native-navigation-redux-helpers';
 import {
@@ -24,45 +24,36 @@ import {
     View
 } from 'native-base';
 import stylesPortrate from './styles'
-
 import StyleUtils from '../../../../utils/styleUtils'
-
-import {PromotionHeader, PromotionSeperator, SocialState, SubmitButton,BusinessHeader} from '../../../../ui/index';
+import {BusinessHeader, PromotionHeader, PromotionSeperator, SocialState, SubmitButton} from '../../../../ui/index';
 import FormUtils from "../../../../utils/fromUtils";
 import strings from "../../../../i18n/i18n"
 import PageRefresher from '../../../../refresh/pageRefresher'
 
-
 const {width, height} = Dimensions.get('window');
-
 const vh = height / 100;
-
 export default class FeedPromotion extends Component {
     constructor() {
         super();
     }
 
-
-    componentWillMount(){
-        const { item} = this.props;
+    componentWillMount() {
+        const {item} = this.props;
         PageRefresher.createFeedSocialState(item.id);
-
-
     }
-    visited(visible){
-        const { item} = this.props;
 
-        if(visible) {
-            console.log(item.id  + ' visited');
+    visited(visible) {
+        const {item} = this.props;
+        if (visible) {
+            console.log(item.id + ' visited');
             PageRefresher.visitedFeedItem(item);
         }
-
     }
 
     render() {
-        const {showInPopup,showActions, item, save, shared, like, unlike, showUsers, comment, token, location,hideSocial,realize} = this.props;
+        const {showInPopup, showActions, item, save, shared, like, unlike, showUsers, comment, token, location, hideSocial, realize} = this.props;
         const styles = this.createPromotionStyle();
-         const image = this.createImageComponent(item, styles);
+        const image = this.createImageComponent(item, styles);
         const container = this.createContainerStyle(item);
         let claimDisabled = true;
         if (item.showsave) {
@@ -79,32 +70,28 @@ export default class FeedPromotion extends Component {
             promotionDetalis = styles.promotionShareDetails;
         }
         let categoruTitle = item.categoryTitle;
-        if(item.business){
+        if (item.business) {
             categoruTitle = item.business.categoryTitle;
         }
 
-        let headeerSize = 130;
-        if( (Platform.OS === 'ios')){
-            headeerSize = 100;
-        }
         const result =
             <InViewPort onChange={this.visited.bind(this)} style={container}>
-                <View  style={[styles.promotion_card, {width: StyleUtils.getWidth()}]} >
-                  <View style={{backgroundColor:'#cccccc',width:StyleUtils.getWidth()}}>
+                <View style={[styles.promotion_card, {width: StyleUtils.getWidth()}]}>
+                    <View style={{ width: StyleUtils.getWidth()}}>
 
-                    <BusinessHeader  navigation={this.props.navigation} business={item.business}
-                                    categoryTitle={categoruTitle} businessLogo={item.business.logo}
-                                    businessName={item.business.name} noMargin
-                                     id={item.activityId} showActions={showActions}
-                                    />
+                        <BusinessHeader navigation={this.props.navigation} business={item.business}
+                                        categoryTitle={categoruTitle} businessLogo={item.business.logo}
+                                        businessName={item.business.name} noMargin
+                                        id={item.activityId} showActions={showActions}
+                        />
                     </View>
 
 
                     {image}
 
 
-                    <View style={{  height:headeerSize,width: StyleUtils.getWidth()  , backgroundColor: 'white'}}>
-                        <View style={[promotaionDesc,{width: StyleUtils.getWidth()}]} >
+                    <View style={{flex:4, width: StyleUtils.getWidth(), backgroundColor: 'white'}}>
+                        <View style={[promotaionDesc, {width: StyleUtils.getWidth()}]}>
                             <PromotionHeader type={item.promotion} feed titleText={item.promotionTitle}
                                              titleValue={item.promotionValue} term={item.promotionTerm}/>
                         </View>
@@ -113,11 +100,12 @@ export default class FeedPromotion extends Component {
                                 - {item.description}</Text>
                         </View>
                     </View>
-                    {!shared && location&& <View style={[styles.promotionsSeparator,{width: StyleUtils.getWidth()}]} >
+                    {!shared && location && <View style={[styles.promotionsSeparator, {width: StyleUtils.getWidth()}]}>
                         <PromotionSeperator/>
                     </View>}
 
-                    {!shared && location && <View style={[styles.promotionDetailsContainer,{width: StyleUtils.getWidth()}]} >
+                    {!shared && location &&
+                    <View style={[styles.promotionDetailsContainer, {width: StyleUtils.getWidth()}]}>
                         <View style={styles.promotionLoctionContainer}>
                             <View><Text style={styles.detailsTitleText}>{strings.Location}</Text></View>
                             <View><Text
@@ -127,22 +115,23 @@ export default class FeedPromotion extends Component {
                             <View><Text style={styles.detailsTitleText}>{strings.Expire}</Text></View>
                             <View><Text style={styles.detailsText}>{item.endDate}</Text></View>
                         </View>
-                        {   save &&
+                        {save &&
                         <View style={styles.editButtonContainer}>
                             <SubmitButton title={strings.Claim.toUpperCase()} color={'#2db6c8'}
                                           disabled={claimDisabled} onPress={() => save(item.id)}/>
                         </View>
                         }
-                        {   realize &&
+                        {realize &&
                         <View style={styles.editButtonContainer}>
                             <SubmitButton title={strings.Realize.toUpperCase()} color={'#2db6c8'}
-                                           onPress={realize}/>
+                                          onPress={realize}/>
                         </View>
                         }
                     </View>}
 
 
-                    {!hideSocial && !shared && <View style={[styles.promotion_bottomContainer,{width: StyleUtils.getWidth()}]} >
+                    {!hideSocial &&
+                    <View style={[styles.promotion_bottomContainer, {width: StyleUtils.getWidth()}]}>
 
                         {item.social && <SocialState feed comments={item.social.comments} onPressComment={comment}
                                                      like={item.social.like} likes={item.social.likes}
@@ -153,16 +142,7 @@ export default class FeedPromotion extends Component {
                                                      shareAction={showUsers}/>}
                     </View>}
 
-                    {!hideSocial && shared &&  <View style={[styles.promotion_shared_bottomContainer,{width: StyleUtils.getWidth()}]} >
 
-                        {item.social && <SocialState feed comments={item.social.comments} onPressComment={comment}
-                                                     like={item.social.like} likes={item.social.likes}
-                                                     onPressUnLike={() => unlike(item.id, token)}
-                                                     onPressLike={() => like(item.id, token)}
-                                                     shareDisabled={shared}
-                                                     share={item.social.share} shares={item.social.shares}
-                                                     shareAction={showUsers}/>}
-                    </View>}
                 </View>
             </InViewPort>;
         return result;
@@ -176,65 +156,37 @@ export default class FeedPromotion extends Component {
     }
 
     createContainerStyle(item) {
-        const {shared,showInPopup} = this.props;
-        if(showInPopup){
+        const {shared, showInPopup} = this.props;
+        if (showInPopup) {
             return {
                 flex: 1,
                 height: 90 * vh,
-                width: StyleUtils.getWidth() -5,
+                width: StyleUtils.getWidth() - 5,
                 overflow: 'hidden',
                 backgroundColor: 'white',
                 // backgroundColor:'#FFF',
                 alignItems: 'center',
                 flexDirection: 'column',
-
             }
-        }
-        if (item.banner) {
-            if (shared) {
-                return {
-                    flex: 1,
-                    width: StyleUtils.getWidth(),
-                    overflow: 'hidden',
-                    backgroundColor: '#cccccc',
-                    // backgroundColor:'#FFF',
-                    alignItems: 'center',
-                    flexDirection: 'column',
-
-                }
-            }
-
-            return {
-                flex: 1,
-                height:  StyleUtils.isPortrait() ? 90 * vh: 90 * vh,
-                width: StyleUtils.getWidth(),
-                overflow: 'hidden',
-                backgroundColor: '#cccccc',
-                // backgroundColor:'#FFF',
-                alignItems: 'center',
-                flexDirection: 'column',
-
-            }
-
         }
         return {
             flex: 1,
-            height: 45 * vh,
             width: StyleUtils.getWidth(),
             overflow: 'hidden',
-            backgroundColor: '#cccccc',
-            // backgroundColor:'#FFF',
+            height: StyleUtils.isPortrait() ? 91 * vh : 91 * vh,
+            backgroundColor: 'white',
+            marginBottom: 10,
             alignItems: 'center',
             flexDirection: 'column',
-            marginBottom:5,
-        };
+        }
     }
 
     createImageComponent(item, styles) {
         if (item.banner) {
-            return <View  style={[styles.promotion_image_view,{width: StyleUtils.getWidth()}]}  >
+            return <View style={[styles.promotion_image_view, {width: StyleUtils.getWidth()}]}>
 
-                <Image resizeMode="cover"  style={[styles.promotion_image,{width: StyleUtils.getWidth()}]}  source={{uri: item.banner.uri}}>
+                <Image resizeMode="cover" style={[styles.promotion_image, {width: StyleUtils.getWidth()}]}
+                       source={{uri: item.banner.uri}}>
                 </Image>
             </View>
         }
@@ -242,7 +194,6 @@ export default class FeedPromotion extends Component {
     }
 
     createPromotionStyle() {
-
         return stylesPortrate;
     }
 }

@@ -68,7 +68,7 @@ export default class RNVideo extends Component {
                     width={this.state.width}
                     height={this.state.height}
                     onPress={this.onPress.bind(this)}
-                    style={{}}>
+                    style={{backgroundColor:'gray'}}>
 
                             <Video
                                 ref={(ref) => {
