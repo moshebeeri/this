@@ -71,7 +71,7 @@ export default class GroupHeader extends Component {
 
     render() {
         const {group, noColor} = this.props;
-        let containerStyle = {backgroundColor: 'white'};
+        let containerStyle = {backgroundColor: 'white',marginTop:10,marginBottom:10,marginLeft:20};
         if (noColor) {
             containerStyle = {};
         }

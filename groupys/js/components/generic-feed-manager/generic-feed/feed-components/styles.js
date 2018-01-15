@@ -274,13 +274,13 @@ module.exports = {
         backgroundColor: 'white',
         alignItems: 'center',
         justifyContent: 'center',
-        flex: 2,
+
         flexDirection: 'row',
         borderTopWidth:1,
         borderColor:'#cccccc'
     },
     post_bottomContainer: {
-        backgroundColor: 'red',
+        backgroundColor: 'white',
         width: width,
         alignItems: 'center',
         justifyContent: 'center',
@@ -413,14 +413,16 @@ module.exports = {
     promotionDetailsContainer: {
         flexDirection: 'row',
         backgroundColor: 'white',
-        flex: 3,
-        width: width ,
+       marginTop:5,
+        marginBottom:10,
         alignItems: 'center',
-        justifyContent: 'center',
+        justifyContent: 'space-between',
     },
     promotionLoctionContainer: {
         alignItems:  'flex-start',
-        flex: 2.5,
+        backgroundColor:'white',
+        marginLeft:20,
+
     },
     detailsTitleText: {
         marginLeft: 5,
@@ -436,10 +438,14 @@ module.exports = {
     },
     expireDateContainer: {
         alignItems: 'flex-start' ,
-        //marginRight: I18nManager.isRTL ? 0 : 20,
-        flex: 3,
+        backgroundColor:'white',
+
     },
     editButtonContainer: {
-        flex: 2.4,
+        backgroundColor:'white',
+        alignItems:'center',
+        marginRight:20,
+        justifyContent:'center',
+
     },
 };
