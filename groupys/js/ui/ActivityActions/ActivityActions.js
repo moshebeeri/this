@@ -43,7 +43,7 @@ export default class ActivityActions extends Component {
 
         const menu = <Menu>
             <MenuTrigger>
-                <Icon2 style={{fontSize: 25}} name="options"/>
+                <Icon2 style={{fontSize: 15}} name="options"/>
             </MenuTrigger>
             <MenuOptions>
 

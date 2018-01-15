@@ -111,14 +111,14 @@ export default class FeedPost extends Component {
                 <View style={[styles.promotion_card, {backgroundColor: 'white', width: StyleUtils.getWidth()}]}>
 
                     <View style={[titleContainerStyle, {width: StyleUtils.getWidth()}]}>
-                        <View style={{paddingTop: 5, paddingLeft: 10, justifyContent: 'flex-start'}}>
+                        <View style={{marginTop: 10, paddingLeft: 10, justifyContent: 'flex-start'}}>
                             <Thumbnail square meduim source={item.avetar}/>
                         </View>
-                        <View style={{paddingLeft: 10, alignItems: 'flex-start'}}>
+                        <View style={{marginTop: 10, paddingLeft: 10, alignItems: 'flex-start'}}>
                             <Text>{item.name}</Text>
                             <Text style={{width: 240, alignItems: 'flex-start'}}>{item.feed.activity.post.title}</Text>
                         </View>
-                        <View style={{flex: 1, paddingRight: 10, alignItems: 'flex-end', justifyContent: 'center'}}>
+                        <View style={{marginTop: 10, flex: 1, paddingRight: 10, alignItems: 'flex-end', justifyContent: 'flex-start'}}>
                             <ActivityReport id={item.activityId} showActions={showActions}/>
                         </View>
                     </View>
