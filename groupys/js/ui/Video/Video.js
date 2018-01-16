@@ -61,14 +61,14 @@ export default class RNVideo extends Component {
     render() {
         console.log(`render this.state.paused=${this.state.paused}`);
         return (
-            <View style={{width:this.state.width,height:this.state.height}}>
+            <View ref={this.props.reference} style={{width:this.state.width,height:this.state.height}}>
                 {
                     this.state.source === 'THIS' &&
                 <TouchableOpacity
                     width={this.state.width}
                     height={this.state.height}
                     onPress={this.onPress.bind(this)}
-                    style={{}}>
+                    style={{backgroundColor:'gray'}}>
 
                             <Video
                                 ref={(ref) => {

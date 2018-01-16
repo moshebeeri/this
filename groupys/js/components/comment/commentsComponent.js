@@ -79,7 +79,7 @@ class CommentsComponent extends Component {
         const commentsView = this.createCommentView(true, item);
         return (
             <View style={{
-                width: StyleUtils.getWidth() - 15,
+                width: StyleUtils.getWidth(),
                 marginTop: 5,
                 marginBottom: 5,
                 backgroundColor: 'white',

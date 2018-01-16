@@ -58,42 +58,16 @@ export default class FeedShared extends Component {
     }
 
     createContainerStyle(item) {
-        if (item.banner) {
+
             return {
                 flex: 1,
-                height: 91 * vh,
                 width: StyleUtils.getWidth(),
                 overflow: 'hidden',
-                backgroundColor: '#cccccc',
-                // backgroundColor:'#FFF',
+                backgroundColor: 'white',
                 alignItems: 'center',
                 flexDirection: 'column',
+                marginBottom:10,
             }
-        }
-        switch (item.shared) {
-            case 'PROMOTION':
-                return {
-                    flex: 1,
-                    height: 80 * vh,
-                    width: StyleUtils.getWidth(),
-                    overflow: 'hidden',
-                    backgroundColor: '#cccccc',
-                    // backgroundColor:'#FFF',
-                    alignItems: 'center',
-                    flexDirection: 'column',
-                };
-            case'POST':
-                return {
-                    flex: 1,
-                    height: 80 * vh,
-                    width: StyleUtils.getWidth(),
-                    overflow: 'hidden',
-                    backgroundColor: '#cccccc',
-                    // backgroundColor:'#FFF',
-                    alignItems: 'center',
-                    flexDirection: 'column',
-                };
-        }
 
     }
 

@@ -4,21 +4,21 @@ const {width, height} = Dimensions.get('window');
 module.exports = {
     socialContainer: {
         flexDirection: 'row',
-        justifyContent: 'center',
-        alignItems: 'center',
-        minWidth: width,
+        justifyContent: 'space-between',
+        alignItems: 'flex-end',
+        backgroundColor:'white',
+        marginTop:5,
+        marginBottom:5,
+    },
+    promotion_iconView: {
+        marginRight:20,
+        marginLeft:20,
 
-        height: 40,
-    },
-    promotion_iconView: {
         flexDirection: 'row',
         justifyContent: 'center',
-        flex: 1
-    },
-    promotion_iconView: {
-        flexDirection: 'row',
-        justifyContent: 'center',
-        flex: 1
+        alignItems:'center',
+        backgroundColor:'white',
+        height:30
     },
     promotion_like: {
         marginRight: 5,
@@ -38,7 +38,7 @@ module.exports = {
     promotionShareActive: {
         marginRight: 5,
         marginLeft: 5,
-        color: 'blue'
+        color: '#068da5'
     },
     promotionFeed: {
         marginRight: 5,

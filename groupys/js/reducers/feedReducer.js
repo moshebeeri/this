@@ -25,6 +25,7 @@ export default function feeds(state = initialState, action) {
             ...state,
             ...savedData.feeds,
             showTopLoader: false,
+            nextBulkLoad:false,
             upTime:new Date().getTime()
         };
     }

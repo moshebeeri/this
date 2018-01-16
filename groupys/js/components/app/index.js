@@ -311,13 +311,13 @@ class ApplicationManager extends Component {
                         </ScrolTabView>
                     }
 
-                    {showSearchResults && businesses &&  <View style={{ top:60,position: 'absolute',backgroundColor:'white',width: StyleUtils.getWidth()  }}>
+                    {showSearchResults && businesses &&  <View style={{ top:45,position: 'absolute',backgroundColor:'white',width: StyleUtils.getWidth()  }}>
 
                     <BusinessList businesses={businesses} followBusiness={businessActions.followBusiness}/>
                 </View>}
 
 
-                    {showSearchResults && groups &&  <View style={{ top:60,position: 'absolute',backgroundColor:'white',width: StyleUtils.getWidth()  }}>
+                    {showSearchResults && groups &&  <View style={{ top:45,position: 'absolute',backgroundColor:'white',width: StyleUtils.getWidth()  }}>
 
                         <GroupsList groups={groups} joinGroup={groupsActions.joinGroup}/>
                     </View>}

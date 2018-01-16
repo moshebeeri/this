@@ -2,6 +2,7 @@
  * Created by roilandshut on 22/08/2017.
  */
 import {Dimensions} from 'react-native';
+import LinkPreview from 'react-native-link-preview';
 const {width, height} = Dimensions.get('window')
 /**
  *
@@ -19,6 +20,8 @@ const isPortrait = () => {
     return dim.height >= dim.width;
 };
 
+
+
 const getWidth = () => {
     if(isPortrait()){
         return width;
@@ -32,6 +35,15 @@ const getHeight = () => {
     }
     return width;
 }
+
+const containLink = async (text) => {
+    try {
+        await LinkPreview.getPreview(text);
+        return true;
+    }catch (error){
+       return false;
+    }
+};
 /**
  * Returns true of the screen is in landscape mode
  */
@@ -70,5 +82,6 @@ export default {
     getHeight,
     isPhone,
     toTitleCase,
-    parseUserPhoneNumber
+    parseUserPhoneNumber,
+    containLink
 };

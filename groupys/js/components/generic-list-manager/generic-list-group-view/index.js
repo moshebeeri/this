@@ -19,12 +19,10 @@ import {
 } from 'native-base';
 import GroupApi from "../../../api/groups"
 import stylesPortrate from './styles'
-import stylesLandscape from './styles_landscape'
-import StyleUtils from '../../../utils/styleUtils'
 import DateUtils from '../../../utils/dateUtils';
 import UiConverter from '../../../api/feed-ui-converter'
 import {GroupHeader, PromotionHeaderSnippet} from '../../../ui/index';
-import BusinessHeader from "../../../ui/BusinessHeader/BusinessHeader";
+import strings from '../../../i18n/i18n';
 
 const {width, height} = Dimensions.get('window');
 const vw = width / 100;
@@ -32,8 +30,6 @@ const vh = height / 100;
 let groupApi = new GroupApi();
 let dateUtils = new DateUtils();
 let uiConverter = new UiConverter();
-import strings from '../../../i18n/i18n';
-
 export default class GenericListGroupView extends Component {
     constructor(props) {
         super(props);
@@ -49,40 +45,44 @@ export default class GenericListGroupView extends Component {
     }
 
     render() {
-        const {item, onPressItem, index,onPressMessageItem} = this.props;
+        const {item, onPressItem, index, onPressMessageItem} = this.props;
         const styles = this.createStyle();
         let promotionItem = this.createPromotionItem(item);
         let showBusinessHeader = this.isBusiness(item.entity_type);
         const promotion = this.createPromotion(styles, promotionItem, showBusinessHeader);
         const message = this.createMessage(styles, item);
-        const post = this.createPost(styles,item);
-
+        const post = this.createPost(styles, item);
         const containerStyle = {
             alignItems: 'center',
-
             backgroundColor: 'white'
         };
         const row = <View key={index}>
-            <View style={{marginBottom:10}}>
-                <TouchableOpacity  key={index} onPress={onPressItem} style={containerStyle} >
+            <View style={{marginBottom: 10}}>
+                <TouchableOpacity key={index} onPress={onPressItem} style={containerStyle}>
                     <GroupHeader group={item}/>
-
-
 
 
                     {promotion}
                     {post}
-                    {promotion && item.unreadFeeds>0 &&  <View style={{marginLeft: 30,width:width,justifyContent:'flex-start'}}>
-                        <Text style={{color:'#2db6c8',fontWeight:'bold'}}>{strings.UnReadPost.formatUnicorn(item.unreadFeeds)}</Text>
+                    {promotion && item.unreadFeeds > 0 &&
+                    <View style={{marginLeft: 30, width: width, justifyContent: 'flex-start'}}>
+                        <Text style={{
+                            color: '#2db6c8',
+                            fontWeight: 'bold'
+                        }}>{strings.UnReadPost.formatUnicorn(item.unreadFeeds)}</Text>
                     </View>}
 
 
                 </TouchableOpacity>
                 <TouchableOpacity style={containerStyle} onPress={onPressMessageItem}>
-                {message}
-                {message &&  item.unreadMessages>0 && <View style={{marginLeft: 30,marginBottom:5,width:width,justifyContent:'flex-start'}}>
-                    <Text style={{color:'#25964e',fontWeight:'bold'}}>{strings.UnReadMessages.formatUnicorn(item.unreadMessages)}</Text>
-                </View>}
+                    {message}
+                    {message && item.unreadMessages > 0 &&
+                    <View style={{marginLeft: 30, marginBottom: 5, width: width, justifyContent: 'flex-start'}}>
+                        <Text style={{
+                            color: '#25964e',
+                            fontWeight: 'bold'
+                        }}>{strings.UnReadMessages.formatUnicorn(item.unreadMessages)}</Text>
+                    </View>}
                 </TouchableOpacity>
             </View>
         </View>
@@ -92,11 +92,8 @@ export default class GenericListGroupView extends Component {
     }
 
     createStyle() {
-
         return stylesPortrate;
     }
-
-
 
     createPromotionItem(item) {
         if (item.preview && item.preview.instance_activity && item.preview.instance_activity.instance && item.preview.instance_activity.instance.promotion) {
@@ -168,7 +165,6 @@ export default class GenericListGroupView extends Component {
         if (item.preview && item.preview.post) {
             let user = item.preview.post.creator;
             let post
-
             if (user && user.pictures && user.pictures.length > 0) {
                 post = {
                     date: item.preview.post.created,
@@ -197,8 +193,8 @@ export default class GenericListGroupView extends Component {
 
 
                 <View style={styles.post_container}>
-                    <View style={{paddingTop:5}}>
-                     {image}
+                    <View style={{paddingTop: 5}}>
+                        {image}
                     </View>
 
                     <View style={{padding: 5, alignItems: 'flex-start'}}>

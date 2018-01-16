@@ -91,7 +91,7 @@ class BusinessHeader extends Component {
 
         let menuAction = <Menu>
             <MenuTrigger placement="right">
-                <Icon2 style={{paddingLeft:10,fontSize: 25}} name="options"/>
+                <Icon2 style={{paddingLeft:10,fontSize: 15}} name="options"/>
             </MenuTrigger>
             <MenuOptions>
 
@@ -107,7 +107,7 @@ class BusinessHeader extends Component {
         if(businessView) {
             menuAction = <Menu>
                 <MenuTrigger placement="right">
-                    <Icon2 style={{paddingLeft:10,fontSize: 25}} name="options"/>
+                    <Icon2 style={{paddingLeft:10,fontSize: 15}} name="options"/>
                 </MenuTrigger>
                 <MenuOptions>
 
@@ -141,7 +141,7 @@ class BusinessHeader extends Component {
             {   showEdit &&  <View style={{flex: 0.2, flexDirection: 'row', alignItems: 'center',}}>
                 {editButton}
             </View> }
-            <View style={{padding:5,alignItems:'center',justifyContent:'center'}}>
+            <View style={{marginRight:10,padding:5,alignItems:'flex-start',justifyContent:'flex-start'}}>
                 {!hideMenu &&  menuAction}
             </View>
         </View>

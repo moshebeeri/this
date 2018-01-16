@@ -23,7 +23,7 @@ import {
     Thumbnail,
     View
 } from 'native-base';
-import stylesLandscape from './styles_lendscape'
+import stylesLandscape from './styles'
 import StyleUtils from '../../../../utils/styleUtils'
 import {ActivityReport, SocialState, UrlPreview, Video} from '../../../../ui/index';
 import PageRefresher from '../../../../refresh/pageRefresher'
@@ -33,10 +33,18 @@ const vh = height / 100;
 export default class FeedPost extends Component {
     constructor() {
         super();
+        this.state = {
+            containLink: false
+        }
     }
 
-    componentWillMount() {
+    async componentWillMount() {
         const {item} = this.props;
+        let containLink = await StyleUtils.containLink(item.feed.activity.post.text);
+        this.setState({
+            containLink: containLink,
+            visible: false,
+        })
         PageRefresher.createFeedSocialState(item.id);
     }
 
@@ -48,6 +56,9 @@ export default class FeedPost extends Component {
         if (visible) {
             PageRefresher.visitedFeedItem(item);
         }
+        this.setState({
+            visible: visible
+        })
     }
 
     render() {
@@ -63,7 +74,7 @@ export default class FeedPost extends Component {
             width: StyleUtils.getWidth()
         }
         let postMessageContainerStyle = {
-            height: 100,
+            height: 80,
             width: StyleUtils.getWidth(),
             paddingBottom: 10,
             backgroundColor: 'white'
@@ -81,11 +92,10 @@ export default class FeedPost extends Component {
             }
             promotionDetalis = styles.promotionShareDetails;
             postMessageContainerStyle = {
-                height: 100,
+
                 borderLeftWidth: 1,
                 borderColor: '#cccccc',
                 marginLeft: 10,
-                flex: 2,
                 width: StyleUtils.getWidth(),
                 paddingBottom: 10,
                 backgroundColor: 'white'
@@ -98,53 +108,56 @@ export default class FeedPost extends Component {
         const result =
             <InViewPort onChange={this.visited.bind(this)} style={container}>
 
-                <View style={[styles.promotion_card, {backgroundColor:'white',width: StyleUtils.getWidth()}]}>
+                <View style={[styles.promotion_card, {backgroundColor: 'white', width: StyleUtils.getWidth()}]}>
 
                     <View style={[titleContainerStyle, {width: StyleUtils.getWidth()}]}>
-                        <View style={{paddingTop: 5, paddingLeft: 10, justifyContent: 'flex-start'}}>
+                        <View style={{marginTop: 10, paddingLeft: 10, justifyContent: 'flex-start'}}>
                             <Thumbnail square meduim source={item.avetar}/>
                         </View>
-                        <View style={{paddingLeft: 10, alignItems: 'flex-start'}}>
+                        <View style={{marginTop: 10, paddingLeft: 10, alignItems: 'flex-start'}}>
                             <Text>{item.name}</Text>
                             <Text style={{width: 240, alignItems: 'flex-start'}}>{item.feed.activity.post.title}</Text>
                         </View>
-                        <View style={{flex: 1, paddingRight: 10, alignItems: 'flex-end', justifyContent: 'center'}}>
+                        <View style={{marginTop: 10, flex: 1, paddingRight: 10, alignItems: 'flex-end', justifyContent: 'flex-start'}}>
                             <ActivityReport id={item.activityId} showActions={showActions}/>
                         </View>
                     </View>
                     <UrlPreview text={item.feed.activity.post.text}/>
-                    <View style={postMessageContainerStyle}>
+                    {!this.state.containLink && <View style={postMessageContainerStyle}>
 
                         <View style={[promotionDetalis, {width: StyleUtils.getWidth() - 15}]}>
                             <Text numberOfLines={4}
                                   style={{marginRight: 10, marginLeft: 10, fontSize: 18}}>{item.feed.activity.post.text}
                             </Text>
                         </View>
-                    </View>
-                    {image}
-                    {!shared && item.video &&
-                    <Video height={250} reference={item.id} width={StyleUtils.getWidth()} muted={false} url={item.video}/>}
-                    { !shared && item.videoId &&
-                    <Video height={250} source={'YOUTUBE'} reference={item.id} width={StyleUtils.getWidth()} muted={false}
-                           videoId={item.videoId}/>}
-                    { shared && item.videoId  && <View style={{marginTop:50}}>
-                    <Video height={250} source={'YOUTUBE'} reference={item.id} width={StyleUtils.getWidth()} muted={false}
-                           videoId={item.videoId}/>
                     </View>}
+                    {image}
+                    {item.video &&
+                    <Video height={250} ref={item.id} width={StyleUtils.getWidth()} muted={false} url={item.video}/>}
+                    {!shared && item.videoId &&
+                    <Video height={250} source={'YOUTUBE'} reference={item.id} width={StyleUtils.getWidth()}
+                           muted={false}
+                           videoId={item.videoId}/>}
+                    {shared && item.videoId &&
+                    <Video height={250} source={'YOUTUBE'} reference={item.id} width={StyleUtils.getWidth()}
+                           muted={false}
+                           videoId={item.videoId}/>
+                    }
 
-                     <View style={[styles.post_bottomContainer, {
+                    {item.social && <View style={[styles.post_bottomContainer, {
                         backgroundColor: 'white',
-                        height: 50,
+                        borderTopWidth:1,
+                        borderColor:'#cccccc',
                         width: StyleUtils.getWidth()
                     }]}>
-                        {item.social && <SocialState feed comments={item.social.comments} onPressComment={comment}
-                                                     like={item.social.like} likes={item.social.likes}
-                                                     onPressUnLike={() => unlike(item.id, token)}
-                                                     onPressLike={() => like(item.id, token)}
-                                                     shareDisabled={shared}
-                                                     share={item.social.share} shares={item.social.shares}
-                                                     shareAction={showUsers}/>}
-                    </View>
+                        <SocialState feed comments={item.social.comments} onPressComment={comment}
+                                     like={item.social.like} likes={item.social.likes}
+                                     onPressUnLike={() => unlike(item.id, token)}
+                                     onPressLike={() => like(item.id, token)}
+                                     shareDisabled={shared}
+                                     share={item.social.share} shares={item.social.shares}
+                                     shareAction={showUsers}/>
+                    </View>}
 
 
                 </View>
@@ -161,65 +174,77 @@ export default class FeedPost extends Component {
 
     createContainerStyle(item) {
         const {shared} = this.props;
-        if (item.banner) {
-            if (shared) {
-                return {
-                    flex: 1,
-                    width: StyleUtils.getWidth(),
-                    overflow: 'hidden',
-                    backgroundColor: 'white',
-                    alignItems: 'center',
-                    flexDirection: 'column',
-                }
-            }
-            return {
-                flex: 1,
-                height: 77 * vh,
-                width: StyleUtils.getWidth(),
-                overflow: 'hidden',
-                backgroundColor: 'white',
-                marginBottom: 10,
-                // backgroundColor:'#FFF',
-                alignItems: 'center',
-                flexDirection: 'column',
-            }
-        }
-        if (item.video || item.videoId) {
-            if (shared) {
-                return {
-                    flex: 1,
-                    width: StyleUtils.getWidth(),
-                    overflow: 'hidden',
-                    backgroundColor: 'white',
-                    // backgroundColor:'#FFF',
-                    marginBottom: 10,
-                    alignItems: 'center',
-                    flexDirection: 'column',
-                }
-            }
-            return {
-                flex: 1,
-                height: 77 * vh,
-                width: StyleUtils.getWidth(),
-                overflow: 'hidden',
-                backgroundColor: 'white',
-                marginBottom: 10,
-                // backgroundColor:'#FFF',
-                alignItems: 'center',
-                flexDirection: 'column',
-            }
+        let addHight = 0;
+        if (this.state.containLink) {
+            addHight = 150;
         }
         return {
             flex: 1,
-            height: 45 * vh,
             width: StyleUtils.getWidth(),
             overflow: 'hidden',
             backgroundColor: 'white',
-            marginBottom: 10,
-            // backgroundColor:'#FFF',
             alignItems: 'center',
             flexDirection: 'column',
-        };
+            marginBottom: 10,
+        }
+        // if (item.banner) {
+        //     if (shared) {
+        //         return {
+        //             flex: 1,
+        //             width: StyleUtils.getWidth(),
+        //             overflow: 'hidden',
+        //             backgroundColor: 'white',
+        //             alignItems: 'center',
+        //             flexDirection: 'column',
+        //         }
+        //     }
+        //     return {
+        //         flex: 1,
+        //         height: 77 * vh+ addHight,
+        //         width: StyleUtils.getWidth(),
+        //         overflow: 'hidden',
+        //         backgroundColor: 'white',
+        //         marginBottom: 10,
+        //         // backgroundColor:'#FFF',
+        //         alignItems: 'center',
+        //         flexDirection: 'column',
+        //     }
+        // }
+        // if (item.video || item.videoId) {
+        //     if (shared) {
+        //         return {
+        //             width: StyleUtils.getWidth(),
+        //             overflow: 'hidden',
+        //             backgroundColor: 'yellow',
+        //             // backgroundColor:'#FFF',
+        //             marginBottom: 10,
+        //             alignItems: 'center',
+        //             flexDirection: 'column',
+        //         }
+        //     }
+        //     return {
+        //         flex: 1,
+        //         height: 77 * vh + addHight,
+        //         width: StyleUtils.getWidth(),
+        //         overflow: 'hidden',
+        //         backgroundColor: 'white',
+        //         marginBottom: 10,
+        //         // backgroundColor:'#FFF',
+        //         alignItems: 'center',
+        //         flexDirection: 'column',
+        //     }
+        // }
+        // return {
+        //     flex: 1,
+        //     height: 45 * vh + addHight,
+        //     width: StyleUtils.getWidth(),
+        //     overflow: 'hidden',
+        //     backgroundColor: 'white',
+        //     marginBottom: 10,
+        //     // backgroundColor:'#FFF',
+        //     alignItems: 'center',
+        //     flexDirection: 'column',
+        // };
     }
 
     createImageComponent(item, styles) {

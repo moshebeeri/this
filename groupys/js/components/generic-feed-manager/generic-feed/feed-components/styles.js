@@ -131,13 +131,14 @@ module.exports = {
     },
     businesses_container: {
         flex: 1,
-        height: vh * 76,
-        width: width,
+
         overflow: 'hidden',
-        backgroundColor: '#cccccc',
+
+        backgroundColor: 'white',
         // backgroundColor:'#FFF',
         alignItems: 'center',
         flexDirection: 'column',
+        marginBottom:10,
     },
     Welcome_container: {
         flex: 1,
@@ -154,7 +155,6 @@ module.exports = {
         flexDirection: 'column',
         backgroundColor: 'white',
         width: width ,
-        marginBottom: 12,
         flex: 1,
         borderRadius: 2,
     },
@@ -165,7 +165,7 @@ module.exports = {
         height: 250,
     },
     promotion_image_view: {
-        width: width,  height: 250
+        height: 250
     },
     promotion_upperContainer: {
         backgroundColor: 'white',
@@ -266,20 +266,20 @@ module.exports = {
         backgroundColor: 'white',
         width: width ,
         flexDirection: 'row',
-        marginTop: 0,
+       marginTop:5,
+        marginBottom:5,
     },
     promotion_bottomContainer: {
         backgroundColor: 'white',
-        width: width ,
         alignItems: 'center',
         justifyContent: 'center',
-        flex: 2,
+
         flexDirection: 'row',
         borderTopWidth:1,
         borderColor:'#cccccc'
     },
     post_bottomContainer: {
-        backgroundColor: 'red',
+        backgroundColor: 'white',
         width: width,
         alignItems: 'center',
         justifyContent: 'center',
@@ -299,9 +299,8 @@ module.exports = {
         borderColor:'#cccccc'
     },
     promotionsSeparator: {
+        height:10,
         backgroundColor: 'white',
-        width: width,
-        flex: 0.5,
         alignItems: 'center',
         justifyContent: 'center'
     },
@@ -321,12 +320,12 @@ module.exports = {
         width: width - 15,
     },
     promotionDetails: {
-        flex: 1.7,
+        marginBottom:5,
+
         backgroundColor: 'white',
         alignItems: 'flex-start',
-        // alignItems:'flex-start',
         justifyContent: 'center',
-        width: width - 15,
+
     },
     promotionShareDetails: {
         flex: 1.6,
@@ -412,14 +411,16 @@ module.exports = {
     promotionDetailsContainer: {
         flexDirection: 'row',
         backgroundColor: 'white',
-        flex: 3,
-        width: width ,
+       marginTop:10,
+        marginBottom:10,
         alignItems: 'center',
-        justifyContent: 'center',
+        justifyContent: 'space-between',
     },
     promotionLoctionContainer: {
         alignItems:  'flex-start',
-        flex: 2.5,
+        backgroundColor:'white',
+        marginLeft:20,
+
     },
     detailsTitleText: {
         marginLeft: 5,
@@ -435,10 +436,14 @@ module.exports = {
     },
     expireDateContainer: {
         alignItems: 'flex-start' ,
-        //marginRight: I18nManager.isRTL ? 0 : 20,
-        flex: 3,
+        backgroundColor:'white',
+
     },
     editButtonContainer: {
-        flex: 2.4,
+        backgroundColor:'white',
+        alignItems:'center',
+        marginRight:20,
+        justifyContent:'center',
+
     },
 };

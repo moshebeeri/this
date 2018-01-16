@@ -56,14 +56,14 @@ class GenericComments extends Component {
         const item = this.getInstance();
         let arrowName = I18nManager.isRTL ? "ios-arrow-forward" : "ios-arrow-back";
         const business = this.getBusiness(item);
-        return <View behavior={'position'} style={[styles.inputContainer, {width: StyleUtils.getWidth() - 15}]}>
+        return <View behavior={'position'} style={[styles.inputContainer, {width: StyleUtils.getWidth()}]}>
 
             {item.businessName && <BusinessHeader showBack navigation={this.props.navigation} business={business}
                                                   categoryTitle={business.categoryTitle}
                                                   businessLogo={item.businessLogo}
                                                   businessName={item.businessName}/>}
             {item.feed && item.feed.activity && item.feed.activity.post &&
-            <View style={{flexDirection: 'row', backgroundColor: 'white', height: 60, width: StyleUtils.getWidth() - 15}}>
+            <View style={{flexDirection: 'row', backgroundColor: 'white', height: 60, width: StyleUtils.getWidth() }}>
                 <TouchableOpacity transparent style={{
                     width: 40,
                     justifyContent: 'center',
