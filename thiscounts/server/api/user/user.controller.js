@@ -191,13 +191,7 @@ exports.create = function (req, res, next) {
   newUser.created = Date.now();
   newUser.provider = 'local';
   newUser.role = 'user';
-  if (config.sms_verification) {
-    newUser.sms_code = randomstring.generate({length: 4, charset: 'numeric'});
-    newUser.sms_verified = false;
-  } else {
-    newUser.sms_code = '';
-    newUser.sms_verified = true;
-  }
+  newUser.sms_code = randomstring.generate({length: 4, charset: 'numeric'});
   newUser.phone_number = utils.clean_phone_number(newUser.phone_number);
 
   User.findOne({phone_number: newUser.phone_number}, function (err, user) {
@@ -420,9 +414,6 @@ exports.recover_password = function (req, res) {
  * code verification
  */
 exports.verification = function (req, res) {
-  if (!config.sms_verification) {
-    return res.status(200).send('user verified');
-  }
   let code = req.params.code;
   let userId = req.user._id;
   if (req.body._id) {
@@ -435,7 +426,8 @@ exports.verification = function (req, res) {
     if (!user) {
       return res.status(404).send('Not Found');
     }
-    if (user.sms_code !== code) {
+
+    if (config.sms_verification && user.sms_code !== code) {
       return res.status(401).send('Code not match userId ' + userId + ' user code ' + user.sms_code + ' received ' + code);
     }
     user.sms_verified = true;
@@ -444,17 +436,25 @@ exports.verification = function (req, res) {
       if (err) {
         return handleError(res, err);
       }
-      mongoose.connection.db.collection('phonenumbers', function (err, numbers) {
-        console.log(`mongoose.connection.db.collection`);
-        if (err) return logger.error(err.message);
-        console.log(`numbers.update for ${user.phone_number} $set: owner:${user._id}`);
-        numbers.update({_id: user.phone_number, updated: Date.now()}, {$set: {owner: user._id}}, {upsert: true});
-        //if this users number exist in phonenumbers collection
-        //then all users (ids in contacts) should be followed by him
-        new_user_follow(user)
-
-      });
-      return res.status(200).send('user verified');
+      PhoneNumber.findByIdAndUpdate(user.phone_number,
+        {_id: user.phone_number, updated: Date.now(), owner: user._id},
+        {upsert: true, new: true, runValidators: true},
+        (err, number) => {
+          if(err) return handleError(res, err);
+          console.log(JSON.stringify(number));
+          new_user_follow(user);
+          return res.status(200).send('user verified');
+        }
+      );
+      // mongoose.connection.db.collection('phonenumbers', function (err, numbers) {
+      //   if (err) return logger.error(err.message);
+      //   console.log(`_id: ${user.phone_number}, updated: ${Date.now()}, {$set: {owner: ${user._id}}, {upsert: ${true}}`);
+      //   numbers.update({_id: user.phone_number, updated: Date.now()}, {$set: {owner: user._id}}, {upsert: true});
+      //   //if this users number exist in phonenumbers collection
+      //   //then all users (ids in contacts) should be followed by him
+      //   new_user_follow(user)
+      //
+      // });
     });
   });
 };
