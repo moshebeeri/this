@@ -152,6 +152,10 @@ export function focusSignupForm(focus) {
 export function verifyCode(code, navigation, resetAction) {
     return async function (dispatch,) {
         try {
+            dispatch({
+                type: actions.REGISTER_PROCESS,
+                value: true
+            });
             let response = await loginApi.verifyCode(code);
             if (response.token) {
                 dispatch({
@@ -165,9 +169,17 @@ export function verifyCode(code, navigation, resetAction) {
                     message: 'invalid validation code'
                 });
             }
+            dispatch({
+                type: actions.REGISTER_PROCESS,
+                value: false
+            });
         } catch (error) {
             dispatch({
                 type: actions.NETWORK_IS_OFFLINE,
+            });
+            dispatch({
+                type: actions.REGISTER_PROCESS,
+                value: false
             });
         }
     }
