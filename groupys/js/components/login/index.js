@@ -4,25 +4,24 @@ import {
     Image,
     KeyboardAvoidingView,
     Platform,
+    ScrollView,
     TextInput,
     TouchableHighlight,
-    TouchableOpacity,
-    ScrollView
+    TouchableOpacity
 } from "react-native";
 import {connect} from "react-redux";
 import {actions} from "react-native-navigation-redux-helpers";
-import {Button, Icon, Input, Item, Text, View,Spinner} from "native-base";
+import {Button, Icon, Input, Item, Spinner, Text, View} from "native-base";
 import {bindActionCreators} from "redux";
 import * as loginAction from "../../actions/login";
 import styles from "./styles";
 import {isAuthenticated} from "../../selectors/appSelector";
-import LinearGradient from "react-native-linear-gradient";
 import strings from "../../i18n/i18n"
+import StyleUtils from "../../utils/styleUtils";
 
 const {width, height} = Dimensions.get('window');
 const thisLogo = require('../../../images/this-logo.png');
 const bg = require('../../../images/bg.png');
-import StyleUtils from "../../utils/styleUtils";
 
 class Login extends Component {
     static navigationOptions = {
@@ -66,7 +65,7 @@ class Login extends Component {
             <ScrollView>
             <KeyboardAvoidingView  behavior={'position'} style={[styles.inputContainer, {width: StyleUtils.getWidth()}]}>
 
-                    <View style={{backgroundColor:'blue',position:'absolute',height:height,width:StyleUtils.getWidth()}}>
+                    <View style={{backgroundColor:'white',position:'absolute',height:height,width:StyleUtils.getWidth()}}>
                         <Image style={{position:'absolute',height:height,width:StyleUtils.getWidth()}}resizeMode='cover' source={bg}/>
 
                     </View>
