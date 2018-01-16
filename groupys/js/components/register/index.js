@@ -1,20 +1,30 @@
 import React, {Component} from 'react';
-import {Dimensions, Image, KeyboardAvoidingView, Platform, TouchableOpacity,I18nManager,View,TextInput} from 'react-native';
+import {
+    Dimensions,
+    I18nManager,
+    Image,
+    KeyboardAvoidingView,
+    Platform,
+    ScrollView,
+    TextInput,
+    TouchableOpacity,
+    View
+} from 'react-native';
 import {connect} from 'react-redux';
 import {actions} from 'react-native-navigation-redux-helpers';
-import {Button, Container, Content, Input, InputGroup, Item, Text, } from 'native-base';
+import {Button, Container, Content, Input, InputGroup, Item, Spinner, Text} from 'native-base';
 import styles from './styles';
 import {NavigationActions} from 'react-navigation'
 import {bindActionCreators} from "redux";
 import * as loginAction from "../../actions/login";
 import strings from "../../i18n/i18n"
+import Icon from 'react-native-vector-icons/Ionicons';
+import StyleUtils from "../../utils/styleUtils";
 
 const {width, height} = Dimensions.get('window')
 const logo = require('../../../images/logo.png')
-import Icon from 'react-native-vector-icons/Ionicons';
 const thisLogo = require('../../../images/this-logo.png');
 const bg = require('../../../images/bg.png');
-
 const resetAction = NavigationActions.reset({
     index: 0,
     actions: [
@@ -33,6 +43,7 @@ class Register extends Component {
             code: "",
         };
     }
+
     back() {
         this.props.navigation.goBack();
     }
@@ -42,26 +53,38 @@ class Register extends Component {
     }
 
     render() {
-        const {message} = this.props;
+        const {message, doRegister} = this.props;
         const errorMessage = this.createMessage(message);
         let arrowName = I18nManager.isRTL ? "ios-arrow-forward" : "ios-arrow-back";
-
         return (
-
+            <ScrollView>
 
                 <View style={styles.inputContainer}>
-                    <View style={{position: 'absolute', height: height, width: width}}>
-                        <Image style={{position: 'absolute', height: height, width: width}} resizeMode='cover'
-                               source={bg}/>
+                    <View style={{
+                        backgroundColor: 'white',
+                        position: 'absolute',
+                        height: height,
+                        width: StyleUtils.getWidth()
+                    }}>
+                        <Image style={{position: 'absolute', height: height, width: StyleUtils.getWidth()}}
+                               resizeMode='cover' source={bg}/>
 
                     </View>
-                    <View style={{width:width,height:60,justifyContent:'center',backgroundColor:'transparent'}}>
-                        <TouchableOpacity transparent style={{width:50,alignItems:'flex-start',justifyContent:'flex-start',marginTop:5,marginLeft: 10, marginRight: 5}} onPress={() => this.back()}>
+                    <View style={{width: width, height: 60, justifyContent: 'center', backgroundColor: 'transparent'}}>
+                        <TouchableOpacity transparent style={{
+                            width: 50,
+                            alignItems: 'flex-start',
+                            justifyContent: 'flex-start',
+                            marginTop: 5,
+                            marginLeft: 10,
+                            marginRight: 5
+                        }} onPress={() => this.back()}>
                             <Icon active color={'white'} size={35} name={arrowName}/>
 
                         </TouchableOpacity>
                     </View>
-                    <KeyboardAvoidingView behavior={'position'} style={styles.avoidView}>
+                    <KeyboardAvoidingView behavior={'position'}
+                                          style={[styles.avoidView, {width: StyleUtils.getWidth()}]}>
 
                         <View>
                             <View style={styles.thisContainer}>
@@ -92,20 +115,19 @@ class Register extends Component {
                                                }}
                                                placeholder={strings.ValidationCode}/>
                                 </View>
+
                                 {errorMessage}
                                 <View style={{
                                     height: 50,
-                                    marginTop:20,
+                                    marginTop: 20,
                                     justifyContent: 'center',
                                     alignItems: 'center',
                                     width: width / 2 + 120
                                 }}>
 
 
-
-
                                     <TouchableOpacity onPress={() => this.validateCode()} style={{
-                                        width: width-90,
+                                        width: width - 90,
                                         height: 50,
                                         borderRadius: 30,
                                         backgroundColor: 'white',
@@ -117,13 +139,14 @@ class Register extends Component {
 
                                         <Text style={{
                                             color: 'skyblue',
-                                            fontWeight:'bold',
+                                            fontWeight: 'bold',
                                             fontStyle: 'normal',
                                             fontSize: 20
                                         }}>{strings.Validate.toUpperCase()}</Text>
 
                                     </TouchableOpacity>
                                 </View>
+                                {doRegister && <Spinner style={{position: 'absolute', top: 40}}/>}
 
                             </View>
 
@@ -132,7 +155,7 @@ class Register extends Component {
 
 
                 </View>
-
+            </ScrollView>
 
         );
     }
@@ -150,6 +173,8 @@ class Register extends Component {
 export default connect(
     state => ({
         message: state.registerForm.message,
+        network: state.network,
+        doRegister: state.registerForm.registerProcess,
     }),
     (dispatch) => ({
         actions: bindActionCreators(loginAction, dispatch)
