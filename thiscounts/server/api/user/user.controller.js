@@ -30,7 +30,7 @@ exports.search = MongodbSearch.create(User);
 let validationError = function (res, err) {
   let firstKey = getKey(err.errors);
   if (firstKey !== undefined) {
-    return res.status(422).json(err.errors.firstKey.message);
+    return res.status(422).json(err.errors.firstKey ? err.errors.firstKey.message : err.message);
   }
   return res.status(422).json(err);
 };
