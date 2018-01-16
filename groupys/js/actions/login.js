@@ -72,6 +72,11 @@ export function login(phone, password, navigation) {
 export function signup(phone, password, firstName, lastName, navigation) {
     return async function (dispatch) {
         try {
+
+            dispatch({
+                type: actions.SIGNUP_PROCESS,
+                value: true
+            });
             let response = await loginApi.signup(phone, password, firstName, lastName);
             if (response.token) {
                 await store.save("token", response.token)
@@ -95,10 +100,20 @@ export function signup(phone, password, firstName, lastName, navigation) {
                     type: actions.SIGNUP_FAILED,
                     message: 'invalid phone number'
                 });
+
             }
+
+            dispatch({
+                type: actions.SIGNUP_PROCESS,
+                value: false
+            });
         } catch (error) {
             dispatch({
                 type: actions.NETWORK_IS_OFFLINE,
+            });
+            dispatch({
+                type: actions.SIGNUP_PROCESS,
+                value: false
             });
         }
     }

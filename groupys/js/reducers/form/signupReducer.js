@@ -12,7 +12,8 @@ const initialState = {
     focusName: true,
     focusLastname: false,
     focusPhone: false,
-    focusPassword: false
+    focusPassword: false,
+    signupProcess: false
 };
 import * as actions from './../reducerActions';
 import {REHYDRATE} from 'redux-persist/constants'
@@ -20,6 +21,13 @@ import {REHYDRATE} from 'redux-persist/constants'
 export default function signupForm(state = initialState, action) {
     console.log(action.type);
     switch (action.type) {
+
+
+        case actions.SIGNUP_PROCESS :
+            return {
+                ...state,
+                signupProcess: action.value,
+            };
         case actions.SIGNUP_FAILED :
             return {
                 ...state,
