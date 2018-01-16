@@ -60,7 +60,7 @@ export default function commentInstances(state = initialState, action) {
             if (!currentState.groupCommentsOrder[action.gid][action.instanceId]) {
                 currentState.groupCommentsOrder[action.gid][action.instanceId] = [];
             }
-            if (currentState.groupCommentsOrder[action.gid][action.instanceId].push(action.item._id)) {
+            if (currentState.groupCommentsOrder[action.gid][action.instanceId].includes(action.item._id)) {
                 return state
             }
             currentState.groupCommentsOrder[action.gid][action.instanceId].unshift(action.item._id);
