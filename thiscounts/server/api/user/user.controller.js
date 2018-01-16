@@ -276,7 +276,7 @@ exports.phonebook = function (req, res) {
       //For each phone number store the users that has it in their phonebook
       mongoose.connection.db.collection('phonenumbers', function (err, collection) {
         if (err) return logger.error(err.message);
-        phonebook.phonebook.forEach(function (contact, index, array) {
+        phonebook.phonebook.forEach(contact => {
           if (utils.defined(contact.normalized_number) && utils.defined(contact.name)) {
             collection.findAndModify(
               {_id: utils.clean_phone_number(contact.normalized_number)},
@@ -325,6 +325,7 @@ function new_user_follow(user) {
       PhoneNumber.create({
         _id: user.phone_number,
         owner: user._id,
+        updated: Date.now(),
         contacts: []
       }, function (err, phone_number) {
         if (err) console.log(err);
@@ -444,8 +445,10 @@ exports.verification = function (req, res) {
         return handleError(res, err);
       }
       mongoose.connection.db.collection('phonenumbers', function (err, numbers) {
+        console.log(`mongoose.connection.db.collection`);
         if (err) return logger.error(err.message);
-        //numbers.update({_id: user.phone_number}, {$set: {owner: user._id}}, {upsert: true});
+        console.log(`numbers.update for ${user.phone_number} $set: owner:${user._id}`);
+        numbers.update({_id: user.phone_number, updated: Date.now()}, {$set: {owner: user._id}}, {upsert: true});
         //if this users number exist in phonenumbers collection
         //then all users (ids in contacts) should be followed by him
         new_user_follow(user)

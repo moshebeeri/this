@@ -27,10 +27,14 @@ function get_businesses_state(businesses, userId, callback) {
 
 exports.test_email = function (req, res) {
   const email = require('../../components/email');
-  email.sendMail('', function (err) {
+  email.send('mars', 'moshe.beeri@gmail.com', {name: 'moshe'}, function (err) {
     if(err) console.error(err);
-    return res.status(200);
+    return res.status(200).send();
   });
+  // email.sendTest(function (err) {
+  //   if(err) console.error(err);
+  //   return res.status(200).send();
+  // });
 };
 
 exports.address2 = function (req, res) {
@@ -43,7 +47,7 @@ exports.address2 = function (req, res) {
       return res.status(400).send('No location under this address : ' + req.body.address);
 
     if (data.results.length > 1)
-      return res.status(400).send('Inconsistent address, google api find more then one location under this address : ' + req.body.address);
+      return res.status(400).send('Inconsistent address, google api find more then one location under this address: ' + req.body.address);
 
     logger.info("lat:" + data.results[0].geometry.location.lat);
     logger.info("lng:" + data.results[0].geometry.location.lng);
@@ -123,43 +127,34 @@ function business_follow_activity(follower, business) {
   });
 }
 
-/**
-  graphModel.relate_ids(business._id, 'BRANCH_OF', business.shopping_chain ShoppingChain);
-  graphModel.relate_ids(business._id, 'IN_MALL', business.mall);
- */
 function follow(userId, businessId, callback) {
-
-  function followShoppingChain(userId, businessId) {
-    Business.findById(businessId)
-      .exec(function(err, business){
-        if(err) return console.error(err);
-        if(business.shopping_chain) {
-          return graphModel.relate_ids(userId, 'FOLLOW', businessId, callback)
-        }
-      })
-  }
-
-  graphModel.is_related_ids(userId, 'FOLLOW', businessId, function (err, exist) {
-    if (err) return callback(err);
-    if (exist) return callback(new Error('user already follows'));
-    graphModel.is_related_ids(userId, 'UN_FOLLOW', businessId, function (err, unFollowExist) {
-      if (err) return callback(err);
-      graphModel.relate_ids(userId, 'FOLLOW', businessId, function(err){
+  Business.findById(businessId)
+    .exec(function(err, business){
+      if(err) return console.error(err);
+      graphModel.is_related_ids(userId, 'FOLLOW', businessId, function (err, exist) {
         if (err) return callback(err);
-        if(unFollowExist) return callback(null);
-        //first time follow
-        business_follow_activity(userId, businessId);
-        let query = `MATCH (b:business{_id:"${businessId}"})-[d:DEFAULT_GROUP]->(g:group) 
-                    CREATE UNIQUE (user:user{_id:"${userId}"})-[f:FOLLOW]->(g)`;
-        graphModel.query(query, function (err) {
+        if (exist) return callback(new Error('user already follows'));
+        graphModel.is_related_ids(userId, 'UN_FOLLOW', businessId, function (err, unFollowExist) {
           if (err) return callback(err);
-          onAction.follow(userId, businessId);
-          followShoppingChain(userId, businessId);
-          return callback(null)
+          graphModel.relate_ids(userId, 'FOLLOW', businessId, function(err){
+            if (err) return callback(err);
+            if(unFollowExist) return callback(null);
+            //first time follow
+            business_follow_activity(userId, businessId);
+            let query = `MATCH (b:business{_id:"${businessId}"})-[d:DEFAULT_GROUP]->(g:group) 
+                    CREATE UNIQUE (user:user{_id:"${userId}"})-[f:FOLLOW]->(g)`;
+            graphModel.query(query, function (err) {
+              if (err) return callback(err);
+              onAction.follow(userId, businessId);
+              if(business.shopping_chain) {
+                return graphModel.relate_ids(userId, 'FOLLOW', businessId, callback)
+              }
+              return callback(null)
+            })
+          });
         })
       });
-    })
-  });
+    });
 }
 
 exports.follow = function (req, res) {
@@ -167,7 +162,7 @@ exports.follow = function (req, res) {
   let businessId = req.params.business;
   follow(userId, businessId, function (err) {
     if (err) return handleError(res, err);
-    return res.status(200);
+    return res.status(200).send();
   })
 };
 
@@ -190,7 +185,7 @@ exports.un_follow = function (req, res) {
   let businessId = req.params.business;
   un_follow(userId, businessId, function (err) {
     if (err) return handleError(res, err);
-    return res.status(200);
+    return res.status(200).send();
   })
 };
 
