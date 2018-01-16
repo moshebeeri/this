@@ -1,3 +1,4 @@
+let c = `
 var collectionNames = db.getCollectionNames();
 for(var i = 0, len = collectionNames.length; i < len ; i++){
   var collectionName = collectionNames[i];
@@ -6,7 +7,10 @@ for(var i = 0, len = collectionNames.length; i < len ; i++){
     print(collectionName)
   }
 }
+`;
 
+let b = `
+use lowla-dev;
 var collectionNames = db.getCollectionNames();
 for(var i = 0, len = collectionNames.length; i < len ; i++){
     var collectionName = collectionNames[i];
@@ -15,6 +19,7 @@ for(var i = 0, len = collectionNames.length; i < len ; i++){
         db[collectionName].drop()
     }
 }
+`;
 let a = `
 match (u:user) optional match (u)-[r]-() delete u,r
 WITH count(*) as dummy

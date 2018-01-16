@@ -54,7 +54,7 @@ exports.destroy = function(req, res) {
     if(!merchant) { return res.send(404); }
     merchant.remove(function(err) {
       if(err) { return handleError(res, err); }
-      return res.status(204);
+      return res.status(204).send();
     });
   });
 };

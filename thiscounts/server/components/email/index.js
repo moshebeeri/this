@@ -2,6 +2,10 @@
 
 const config = require('../../config/environment');
 const nodemailer = require('nodemailer');
+const EmailTemplate = require('email-templates');
+var path = require('path');
+
+
 const transporter = nodemailer.createTransport({
   service: 'gmail',
   auth: {
@@ -13,8 +17,45 @@ const transporter = nodemailer.createTransport({
 function Email() {
 }
 
+Email.send = Email.prototype.send = function(template, to, locals, callback) {
+  console.log(path.join(__dirname, 'templates'));
+  let email =  new EmailTemplate({
+    views: { root: path.join(__dirname, 'templates') },
+    message: {
+      from: 'THIS@low.la',
+      // attachments: [
+      //   {
+      //     filename: 'THISLogo.png',
+      //     path: path.join(__dirname, 'resources'),
+      //     cid: 'THISLogo'
+      //   }
+      // ]
+    },
+    send: true,
+    transport: transporter,
+    juiceResources: {
+      preserveImportant: true,
+      webResources: {
+        relativeTo: path.join(__dirname, 'css')
+      }
+    }
+  });
+
+  email
+    .send({
+      template: template,
+      message: {
+        to: to
+      },
+      locals: locals
+    })
+    .then(console.log)
+    .catch(console.error);
+  callback(null)
+};
+
 Email.sendTest =
-  Email.prototype.sendTest = function (email, callback) {
+  Email.prototype.sendTest = function(callback) {
     //see https://medium.com/@manojsinghnegi/sending-an-email-using-nodemailer-gmail-7cfa0712a799
     const mailOptions = {
       from: 'THIS@low.la', // sender address

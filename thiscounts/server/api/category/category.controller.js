@@ -497,7 +497,7 @@ exports.add_product = function (req, res) {
       return res.status(200).json('ok');
     });
 
-  return res.status(201);
+  return res.status(201).send();
 };
 
 exports.add_business = function (req, res) {
@@ -528,7 +528,7 @@ exports.add_business = function (req, res) {
       });
       return res.status(200).json('ok');
     });
-  return res.status(201);
+  return res.status(201).send();
 };
 
 

@@ -35,7 +35,7 @@ exports.create = function(req, res) {
   location.address_location( mall, function(err, data) {
     if (err) {
       if (err.code >= 400) return res.status(err.code).send(err.message);
-      else if (err.code == 202) return res.status(202).json(data)
+      else if (err.code === 202) return res.status(202).json(data)
     }
     mall.location = spatial.geo_to_location(data);
     Mall.create(mall, function(err, mall) {
