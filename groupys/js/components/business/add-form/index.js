@@ -51,6 +51,7 @@ class AddBusiness extends Component {
                 categories: [Number(category), Number(subcategory)],
                 formData: {},
                 coverImage: {uri: picture},
+
             };
         } else {
             this.state = {
@@ -74,7 +75,10 @@ class AddBusiness extends Component {
                 categories: [],
                 formData: {},
                 locations: {},
-                location: {}
+                location: {},
+                IdIdentifier:'',
+                LetterOfIncorporation:'',
+
             };
         }
     }
@@ -116,6 +120,8 @@ class AddBusiness extends Component {
             type: this.state.type,
             website: this.state.website,
             logoImage: this.state.image,
+            IdIdentifierImage:this.state.IdIdentifier,
+            LetterOfIncorporationImage: this.state.LetterOfIncorporation
         };
         if (this.state.item) {
             business._id = this.state.item._id;
@@ -169,7 +175,15 @@ class AddBusiness extends Component {
 
     setIdDocument(image){
 
+        this.setState({
+            IdIdentifierImage:image
+        })
+    }
 
+    setLetterDocument(image){
+        this.setState({
+            LetterOfIncorporationImage:image
+        })
     }
     createImageComponent(coverPic) {
         if (this.state.path) {
@@ -305,9 +319,15 @@ class AddBusiness extends Component {
                     </View>
 
                     <View style={[styles.inputTextLayout, {width: StyleUtils.getWidth()-15}]}>
-                        <DocumentPicker  ref="id" isMandatory field={'Id Identifier'}setDocument={this.setIdDocument.bind(this)} />
+                        <DocumentPicker  ref="id" isMandatory field={strings.IdIdentifier} setDocument={this.setIdDocument.bind(this)} />
 
                     </View>
+                    <View style={[styles.inputTextLayout, {width: StyleUtils.getWidth()-15}]}>
+                        <DocumentPicker  ref="LetterOfIncorporation" isMandatory field={strings.LetterOfIncorporation} setDocument={this.setLetterDocument.bind(this)} />
+
+                    </View>
+
+
 
                 </ScrollView>
 
