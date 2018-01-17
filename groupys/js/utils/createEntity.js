@@ -11,7 +11,7 @@ class EntityUtils {
         return json.formData;
     }
 
-    doUpload(imagePath, imageMime, token, callbackFunction, entityApi, responseData) {
+    doUpload(imagePath, imageMime, token, callbackFunction, entityApi, responseData,imageApi) {
         let files = [
             {
                 name: imagePath + '___' + responseData._id,
@@ -20,10 +20,16 @@ class EntityUtils {
                 filetype: imageMime,
             }
         ];
+
+        let uri = `${server_host}/api/images/` + responseData._id;
+        if(imageApi){
+             uri = `${server_host}/api/images/`+ imageApi + '/' + responseData._id;
+        }
+
         let getEntity = this.getEntity.bind(this);
         if (Platform.OS === 'ios') {
             let opts = {
-                url: `${server_host}/api/images/` + responseData._id,
+                url: uri,
                 path: 'file:' + imagePath,
                 method: 'POST',
                 headers: {'Accept': 'application/json', 'Authorization': 'Bearer ' + token},  // optional
@@ -45,7 +51,7 @@ class EntityUtils {
             ;
         } else {
             let option2 = {
-                uploadUrl: `${server_host}/api/images/` + responseData._id,
+                uploadUrl: uri,
                 files: files,
                 method: 'POST',
                 type: 'raw',// optional: POST or PUT
@@ -259,6 +265,14 @@ class EntityUtils {
                     }
                     if (entityData.image && entityData.image.path && entityData.image.mime) {
                         this.doUpload(entityData.image.path, entityData.image.mime, token,  this.doLogg.bind(this), entityApi, responseData);
+                    }
+
+                    if (entityData.IdIdentifierImage && entityData.IdIdentifierImage.path && entityData.IdIdentifierImage.mime) {
+                        this.doUpload(entityData.IdIdentifierImage.path, entityData.IdIdentifierImage.mime, token,  this.doLogg.bind(this), entityApi, responseData,'identificationCard');
+                    }
+
+                    if (entityData.LetterOfIncorporationImage && entityData.LetterOfIncorporationImage.path && entityData.LetterOfIncorporationImage.mime) {
+                        this.doUpload(entityData.LetterOfIncorporationImage.path, entityData.LetterOfIncorporationImage.mime, token,  this.doLogg.bind(this), entityApi, responseData,'letterOfIncorporation');
                     }
 
                     resolve(responseData);

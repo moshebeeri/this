@@ -94,6 +94,9 @@ export default class DocumentPicker extends Component {
         if(this.state.invalid){
             iconColor = 'red';
         }
+        if(this.state.document){
+            iconColor = 'green';
+        }
         return <View style={containerStyle}>
             <View style={styles.textInputTitleContainer}>
                 <View style={{flexDirection:'row'}}>

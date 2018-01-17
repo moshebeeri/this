@@ -120,8 +120,8 @@ class AddBusiness extends Component {
             type: this.state.type,
             website: this.state.website,
             logoImage: this.state.image,
-            IdIdentifierImage:this.state.IdIdentifier,
-            LetterOfIncorporationImage: this.state.LetterOfIncorporation
+            IdIdentifierImage:this.state.IdIdentifierImage,
+            LetterOfIncorporationImage: this.state.LetterOfIncorporationImage
         };
         if (this.state.item) {
             business._id = this.state.item._id;
