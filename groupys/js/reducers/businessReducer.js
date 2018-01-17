@@ -10,6 +10,7 @@ const initialState = {
     selectedBusiness: undefined,
     savingForm: false,
     paymentMessage: '',
+    templateBusiness:{},
 };
 import {REHYDRATE} from "redux-persist/constants";
 import * as actions from "./reducerActions";
@@ -185,6 +186,13 @@ export default function business(state = initialState, action) {
                 ...state,
                 paymentMessage: action.message,
             };
+        case actions.SAVE_BUSINESS_TAMPLATE:
+            return {
+                ...state,
+                templateBusiness: action.templateBusiness,
+            };
+
+
 
         default:
             return state;

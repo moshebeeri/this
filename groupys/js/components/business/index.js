@@ -57,6 +57,7 @@ export default connect(
         selectedBusiness: state.businesses.selectedBusiness,
         update: state.businesses.update,
         businesses: getMyBusinessesItems(state),
+        network: state.network,
     }),
     (dispatch) => ({
         actions: bindActionCreators(businessAction, dispatch),

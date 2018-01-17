@@ -230,6 +230,9 @@ ScanBarcode                                   : "Scan Barcode",
 Offline                                       : "Offline",
 Claimed                                       : "Claimed",
 VerifyPassword                                : "Verify Password",
+IdIdentifier                                  : "Id Identifier",
+LetterOfIncorporation                         : "Letter Of Incorporation",
+
 
 
 

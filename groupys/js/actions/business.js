@@ -324,6 +324,10 @@ export function saveBusiness(business, navigation) {
             dispatch({
                 type: actions.SAVING_BUSINESS_DONE,
             });
+            dispatch({
+                type: actions.SAVE_BUSINESS_TAMPLATE,
+                templateBusiness: {},
+            });
             navigation.goBack();
         } catch (error) {
             dispatch({
@@ -467,6 +471,16 @@ export function checkFreeTier(business) {
         }
     }
 }
+
+export function saveBusinessTemplate(templateBusiness) {
+    return async function (dispatch) {
+        dispatch({
+            type: actions.SAVE_BUSINESS_TAMPLATE,
+            templateBusiness: templateBusiness,
+        });
+    }
+}
+
 
 export default {
     getAll,
