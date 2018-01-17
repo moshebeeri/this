@@ -20,7 +20,7 @@ export default class DocumentPicker extends Component {
     }
 
     isValid() {
-        const {isMandatory, validateContent, invalid} = this.props;
+        const {isMandatory, validateContent, invalid,value} = this.props;
         if (invalid) {
             this.setState({
                 invalid: true
@@ -29,9 +29,11 @@ export default class DocumentPicker extends Component {
         }
         if (isMandatory) {
             if (!this.state.document) {
-                this.setState({
-                    invalid: true
-                })
+                if(!value) {
+                    this.setState({
+                        invalid: true
+                    })
+                }
                 return false
             }
         }
@@ -78,7 +80,7 @@ export default class DocumentPicker extends Component {
     }
 
     render() {
-        const {fieldColor, field, isMandatory,} = this.props;
+        const {fieldColor, field, isMandatory,value} = this.props;
         let textStyle = styles.textInputTextStyle;
         let mandatoryIconColor = 'red';
         if (fieldColor === 'white') {
@@ -94,7 +96,7 @@ export default class DocumentPicker extends Component {
         if(this.state.invalid){
             iconColor = 'red';
         }
-        if(this.state.document){
+        if(this.state.document || value){
             iconColor = 'green';
         }
         return <View style={containerStyle}>

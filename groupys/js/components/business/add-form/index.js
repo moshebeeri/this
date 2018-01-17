@@ -5,7 +5,15 @@ import styles from './styles'
 import * as businessAction from "../../../actions/business";
 import {connect} from 'react-redux';
 import {bindActionCreators} from "redux";
-import {AddressInput, CategoryPicker, FormHeader, ImagePicker, Spinner, TextInput,DocumentPicker} from '../../../ui/index';
+import {
+    AddressInput,
+    CategoryPicker,
+    DocumentPicker,
+    FormHeader,
+    ImagePicker,
+    Spinner,
+    TextInput
+} from '../../../ui/index';
 import FormUtils from "../../../utils/fromUtils";
 import strings from '../../../i18n/i18n';
 import StyleUtils from "../../../utils/styleUtils";
@@ -17,6 +25,7 @@ class AddBusiness extends Component {
 
     constructor(props) {
         super(props);
+        let templateBusiness = props.templateBusiness;
         if (props.navigation.state.params && props.navigation.state.params.item) {
             let item = props.navigation.state.params.item;
             let picture = undefined;
@@ -51,34 +60,60 @@ class AddBusiness extends Component {
                 categories: [Number(category), Number(subcategory)],
                 formData: {},
                 coverImage: {uri: picture},
-
             };
         } else {
+
+            let categories = [];
+            if(templateBusiness.category){
+                categories.push(Number(templateBusiness.category))
+            }
+
+            if(templateBusiness.subcategory){
+                categories.push(Number(templateBusiness.subcategory))
+            }
+            let path = ''
+            if(templateBusiness.logoImage){
+                if(templateBusiness.logoImage.path) {
+                    path = templateBusiness.logoImage.path;
+                }else{
+                    path = templateBusiness.logoImage.uri;
+                }
+            }
+            let coverPath = '';
+            if(templateBusiness.image){
+                if(templateBusiness.image.path) {
+                    coverPath = templateBusiness.image.path;
+                }else{
+                    coverPath = templateBusiness.image.uri;
+                }
+            }
+
             this.state = {
                 updateMode: false,
-                name: '',
-                address: '',
-                email: '',
-                website: '',
+                name: templateBusiness.name,
+                address: templateBusiness.address,
+                email: templateBusiness.email,
+                website: templateBusiness.website,
                 country: 'Israel',
-                city: '',
+                city:templateBusiness.city,
                 state: '',
-                path: '',
-                image: '',
+                path: path,
+                image: templateBusiness.logoImage,
+                coverImage: templateBusiness.image,
+                coverPath: coverPath,
                 type: 'SMALL_BUSINESS',
                 images: '',
-                tax_id: '',
+                tax_id: templateBusiness.tax_id,
                 formID: '12345',
                 userId: '',
-                category: '',
-                subcategory: '',
-                categories: [],
+                category:templateBusiness.category,
+                subcategory:templateBusiness.subcategory,
+                categories: categories,
                 formData: {},
                 locations: {},
-                location: {},
-                IdIdentifier:'',
-                LetterOfIncorporation:'',
-
+                location: templateBusiness.location,
+                IdIdentifierImage:templateBusiness.IdIdentifierImage,
+                LetterOfIncorporationImage: templateBusiness.LetterOfIncorporationImage,
             };
         }
     }
@@ -93,7 +128,7 @@ class AddBusiness extends Component {
     }
 
     setCategory(categories) {
-        this.setState({
+        this.setReduxState({
             category: categories[0],
             subcategory: categories[1]
         })
@@ -120,7 +155,7 @@ class AddBusiness extends Component {
             type: this.state.type,
             website: this.state.website,
             logoImage: this.state.image,
-            IdIdentifierImage:this.state.IdIdentifierImage,
+            IdIdentifierImage: this.state.IdIdentifierImage,
             LetterOfIncorporationImage: this.state.LetterOfIncorporationImage
         };
         if (this.state.item) {
@@ -129,15 +164,32 @@ class AddBusiness extends Component {
         return business;
     }
 
+    async setReduxState(value) {
+        await this.setState(value);
+        if (value.name) {
+            return;
+        }
+        if (value.website) {
+            return;
+        }
+        if (value.email) {
+            return;
+        }
+        if (value.tax_id) {
+            return;
+        }
+        let partialBusiness = this.createBusiness();
+        this.props.saveBusinessTemplate(partialBusiness);
+    }
+
     updateFormData() {
         if (this.validateForm()) {
-            ;
             this.props.updateBusiness(this.createBusiness(), this.props.navigation);
         }
     }
 
     updateLocation(location) {
-        this.setState({
+        this.setReduxState({
             location: location.location,
             city: location.city,
             address: location.address,
@@ -146,14 +198,14 @@ class AddBusiness extends Component {
     }
 
     setImage(image) {
-        this.setState({
+        this.setReduxState({
             image: {uri: image.path, width: image.width, height: image.height, mime: image.mime},
             path: image.path
         });
     }
 
     setCoverImage(image) {
-        this.setState({
+        this.setReduxState({
             coverImage: {uri: image.path, width: image.width, height: image.height, mime: image.mime},
             coverPath: image.path
         });
@@ -173,18 +225,18 @@ class AddBusiness extends Component {
         return result
     }
 
-    setIdDocument(image){
-
-        this.setState({
-            IdIdentifierImage:image
+    setIdDocument(image) {
+        this.setReduxState({
+            IdIdentifierImage: image
         })
     }
 
-    setLetterDocument(image){
-        this.setState({
-            LetterOfIncorporationImage:image
+    setLetterDocument(image) {
+        this.setReduxState({
+            LetterOfIncorporationImage: image
         })
     }
+
     createImageComponent(coverPic) {
         if (this.state.path) {
             if (coverPic) {
@@ -267,7 +319,7 @@ class AddBusiness extends Component {
                 <ScrollView contentContainerStyle={{
                     justifyContent: 'center',
                     alignItems: 'center',
-                }}  style={[styles.contentContainer, {width: StyleUtils.getWidth()}]} >
+                }} style={[styles.contentContainer, {width: StyleUtils.getWidth()}]}>
 
                     <View style={[styles.business_upper_container, {width: StyleUtils.getWidth()}]}>
                         <View style={[styles.cmeraLogoContainer, {width: StyleUtils.getWidth()}]}>
@@ -278,11 +330,11 @@ class AddBusiness extends Component {
                         {this.props.saving && <Spinner/>}
 
                     </View>
-                    <View style={[styles.inputTextLayout, {width: StyleUtils.getWidth() -15}]}>
+                    <View style={[styles.inputTextLayout, {width: StyleUtils.getWidth() - 15}]}>
                         <TextInput field={strings.BusinessName} value={this.state.name}
                                    returnKeyType='next' ref="1" refNext="1"
                                    onSubmitEditing={this.focusNextField.bind(this, "2")}
-                                   onChangeText={(name) => this.setState({name})} isMandatory={true}/>
+                                   onChangeText={(name) => this.setReduxState({name})} isMandatory={true}/>
                     </View>
 
                     <View style={[styles.inputTextLayout, {width: StyleUtils.getWidth() - 15}]}>
@@ -291,42 +343,43 @@ class AddBusiness extends Component {
                                         setFormCategories={this.setCategory.bind(this)}
                                         setCategoriesApi={this.props.fetchBusinessCategories}/>
                     </View>
-                    <View style={[styles.inputTextLayout, {width: StyleUtils.getWidth() -15}]}>
+                    <View style={[styles.inputTextLayout, {width: StyleUtils.getWidth() - 15}]}>
 
 
                         <TextInput field={strings.Email} value={this.state.email} returnKeyType='next' ref="2"
                                    refNext="2"
                                    onSubmitEditing={this.focusNextField.bind(this, "3")}
                                    validateContent={FormUtils.validateEmail}
-                                   onChangeText={(email) => this.setState({email})} isMandatory={true}/>
+                                   onChangeText={(email) => this.setReduxState({email})} isMandatory={true}/>
                     </View>
-                    <View style={[styles.inputTextLayout, {width: StyleUtils.getWidth()-15}]}>
+                    <View style={[styles.inputTextLayout, {width: StyleUtils.getWidth() - 15}]}>
 
                         <TextInput field={strings.Website} value={this.state.website} returnKeyType='next' ref="3"
                                    refNext="3"
                                    onSubmitEditing={this.focusNextField.bind(this, "5")}
                                    validateContent={FormUtils.validateWebsite}
-                                   onChangeText={(website) => this.setState({website})} isMandatory={false}/>
+                                   onChangeText={(website) => this.setReduxState({website})} isMandatory={false}/>
                     </View>
                     <AddressInput city={this.state.city} address={this.state.address} country={this.state.country}
                                   refNext="5" ref="5" isMandatory onSubmitEditing={this.updateLocation.bind(this)}/>
 
-                    <View style={[styles.inputTextLayout, {width: StyleUtils.getWidth()-15}]}>
+                    <View style={[styles.inputTextLayout, {width: StyleUtils.getWidth() - 15}]}>
 
                         <TextInput field={strings.TaxID} value={this.state.tax_id} returnKeyType='done' ref="6"
                                    refNext="6"
-                                   onChangeText={(tax_id) => this.setState({tax_id})} isMandatory={true}/>
+                                   onChangeText={(tax_id) => this.setReduxState({tax_id})} isMandatory={true}/>
                     </View>
 
-                    <View style={[styles.inputTextLayout, {width: StyleUtils.getWidth()-15}]}>
-                        <DocumentPicker  ref="id" isMandatory field={strings.IdIdentifier} setDocument={this.setIdDocument.bind(this)} />
+                    <View style={[styles.inputTextLayout, {width: StyleUtils.getWidth() - 15}]}>
+                        <DocumentPicker value={this.state.IdIdentifierImage} ref="id" isMandatory field={strings.IdIdentifier}
+                                        setDocument={this.setIdDocument.bind(this)}/>
 
                     </View>
-                    <View style={[styles.inputTextLayout, {width: StyleUtils.getWidth()-15}]}>
-                        <DocumentPicker  ref="LetterOfIncorporation" isMandatory field={strings.LetterOfIncorporation} setDocument={this.setLetterDocument.bind(this)} />
+                    <View style={[styles.inputTextLayout, {width: StyleUtils.getWidth() - 15}]}>
+                        <DocumentPicker value={this.state.LetterOfIncorporationImage} ref="LetterOfIncorporation" isMandatory field={strings.LetterOfIncorporation}
+                                        setDocument={this.setLetterDocument.bind(this)}/>
 
                     </View>
-
 
 
                 </ScrollView>
@@ -352,6 +405,7 @@ export default connect(
         saving: state.businesses.savingForm,
         currentScreen: state.render.currentScreen,
         network: state.network,
+        templateBusiness: state.businesses.templateBusiness,
     }),
     dispatch => bindActionCreators(businessAction, dispatch)
 )(AddBusiness);
