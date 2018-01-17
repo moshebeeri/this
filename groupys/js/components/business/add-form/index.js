@@ -323,6 +323,7 @@ export default connect(
         token: state.authentication.token,
         saving: state.businesses.savingForm,
         currentScreen: state.render.currentScreen,
+        network: state.network,
     }),
     dispatch => bindActionCreators(businessAction, dispatch)
 )(AddBusiness);

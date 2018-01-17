@@ -185,6 +185,7 @@ export default connect(
         businesses: state.businesses.myBusinesses,
         paymentMessage: state.businesses.paymentMessage,
         currentScreen: state.render.currentScreen,
+        network: state.network,
     }),
     dispatch => bindActionCreators(businessAction, dispatch)
 )(BusinessAccount);
