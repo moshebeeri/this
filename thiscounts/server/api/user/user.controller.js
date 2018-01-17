@@ -441,7 +441,6 @@ exports.verification = function (req, res) {
         {upsert: true, new: true, runValidators: true},
         (err, number) => {
           if(err) return handleError(res, err);
-          console.log(JSON.stringify(number));
           new_user_follow(user);
           return res.status(200).send('user verified');
         }

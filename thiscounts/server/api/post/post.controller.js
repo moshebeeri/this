@@ -75,17 +75,20 @@ exports.create = function(req, res) {
         act.audience =['SELF', 'FOLLOWERS'];
       else if(act.actor_group)
         act.ids = [act.actor_group];
+      Post.findById(post._id).exec( (err, post) =>{
 
-      pricing.balance(post.behalf, function (err, positiveBalance) {
-        if (err) return handleError(res, err);
-        if (!positiveBalance) return res.status(402).send(post);
-        activity.activity(act, function (err) {
-          if (err) {
-            return handleError(res, err);
-          }
-          pricing.chargeActivityDistribution(post.behalf, activity);
-          return res.status(201).send(post);
-        });
+        if (err) { return handleError(res, err); }
+        pricing.balance(post.behalf, function (err, positiveBalance) {
+          if (err) return handleError(res, err);
+          if (!positiveBalance) return res.status(402).send(post);
+          activity.activity(act, function (err) {
+            if (err) {
+              return handleError(res, err);
+            }
+            pricing.chargeActivityDistribution(post.behalf, activity);
+            return res.status(201).send(post);
+          });
+        })
       })
     });
   });
