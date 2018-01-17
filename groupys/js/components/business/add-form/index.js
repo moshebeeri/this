@@ -240,7 +240,7 @@ class AddBusiness extends Component {
             savveOperation = this.updateFormData.bind(this);
         }
         return (
-            <View style={styles.business_container}>
+            <View style={[styles.business_container, {width: StyleUtils.getWidth()}]}>
 
                 <FormHeader disableAction={this.props.saving} showBack submitForm={savveOperation}
                             navigation={this.props.navigation}
@@ -249,10 +249,10 @@ class AddBusiness extends Component {
                 <ScrollView contentContainerStyle={{
                     justifyContent: 'center',
                     alignItems: 'center',
-                }} style={styles.contentContainer}>
+                }}  style={[styles.contentContainer, {width: StyleUtils.getWidth()}]} >
 
-                    <View style={styles.business_upper_container}>
-                        <View style={styles.cmeraLogoContainer}>
+                    <View style={[styles.business_upper_container, {width: StyleUtils.getWidth()}]}>
+                        <View style={[styles.cmeraLogoContainer, {width: StyleUtils.getWidth()}]}>
 
                             {this.createCoverImageComponent()}
                         </View>
@@ -260,20 +260,20 @@ class AddBusiness extends Component {
                         {this.props.saving && <Spinner/>}
 
                     </View>
-                    <View style={styles.inputTextLayout}>
+                    <View style={[styles.inputTextLayout, {width: StyleUtils.getWidth() -15}]}>
                         <TextInput field={strings.BusinessName} value={this.state.name}
                                    returnKeyType='next' ref="1" refNext="1"
                                    onSubmitEditing={this.focusNextField.bind(this, "2")}
                                    onChangeText={(name) => this.setState({name})} isMandatory={true}/>
                     </View>
 
-                    <View style={styles.inputTextLayout}>
+                    <View style={[styles.inputTextLayout, {width: StyleUtils.getWidth() - 15}]}>
                         <CategoryPicker ref={"picker"} isMandatory categories={this.props.categories}
                                         selectedCategories={this.state.categories}
                                         setFormCategories={this.setCategory.bind(this)}
                                         setCategoriesApi={this.props.fetchBusinessCategories}/>
                     </View>
-                    <View style={styles.inputTextLayout}>
+                    <View style={[styles.inputTextLayout, {width: StyleUtils.getWidth() -15}]}>
 
 
                         <TextInput field={strings.Email} value={this.state.email} returnKeyType='next' ref="2"
@@ -282,7 +282,7 @@ class AddBusiness extends Component {
                                    validateContent={FormUtils.validateEmail}
                                    onChangeText={(email) => this.setState({email})} isMandatory={true}/>
                     </View>
-                    <View style={styles.inputTextLayout}>
+                    <View style={[styles.inputTextLayout, {width: StyleUtils.getWidth()-15}]}>
 
                         <TextInput field={strings.Website} value={this.state.website} returnKeyType='next' ref="3"
                                    refNext="3"
@@ -293,7 +293,7 @@ class AddBusiness extends Component {
                     <AddressInput city={this.state.city} address={this.state.address} country={this.state.country}
                                   refNext="5" ref="5" isMandatory onSubmitEditing={this.updateLocation.bind(this)}/>
 
-                    <View style={styles.inputTextLayout}>
+                    <View style={[styles.inputTextLayout, {width: StyleUtils.getWidth()-15}]}>
 
                         <TextInput field={strings.TaxID} value={this.state.tax_id} returnKeyType='done' ref="6"
                                    refNext="6"
@@ -307,8 +307,9 @@ class AddBusiness extends Component {
             </View>
         );
     }
-    shouldComponentUpdate(){
-        if(this.props.currentScreen ==='addBusiness' ){
+
+    shouldComponentUpdate() {
+        if (this.props.currentScreen === 'addBusiness') {
             return true;
         }
         return false;
@@ -321,7 +322,7 @@ export default connect(
         categories: state.businesses.categories,
         token: state.authentication.token,
         saving: state.businesses.savingForm,
-        currentScreen:state.render.currentScreen,
+        currentScreen: state.render.currentScreen,
     }),
     dispatch => bindActionCreators(businessAction, dispatch)
 )(AddBusiness);

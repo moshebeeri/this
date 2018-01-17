@@ -7,6 +7,7 @@ import {connect} from 'react-redux';
 import {bindActionCreators} from "redux";
 import * as addressAction from "../../actions/address";
 import strings from "../../i18n/i18n"
+import StyleUtils from "../../utils/styleUtils";
 
 class AddressInput extends Component {
     constructor(props) {
@@ -119,8 +120,9 @@ class AddressInput extends Component {
     render() {
         const {isMandatory, addressForm, refNext} = this.props;
         return <View>
-            <View style={styles.inputTextLayout}>
-                <View style={{flexDirection: "row", justifyContent: I18nManager.isRTL ? 'flex-start' : 'flex-end'}}>
+            <View style={[styles.inputTextLayout, {width: StyleUtils.getWidth() - 15}]}>
+
+                <View style={{flexDirection: "row", justifyContent: 'flex-start' }}>
                     {/*{!I18nManager.isRTL && isMandatory &&*/}
                     {/*<Icon style={{margin: 5, color: 'red', fontSize: 12}} name='star'/>}*/}
 
