@@ -5,7 +5,7 @@ import styles from './styles'
 import * as businessAction from "../../../actions/business";
 import {connect} from 'react-redux';
 import {bindActionCreators} from "redux";
-import {AddressInput, CategoryPicker, FormHeader, ImagePicker, Spinner, TextInput} from '../../../ui/index';
+import {AddressInput, CategoryPicker, FormHeader, ImagePicker, Spinner, TextInput,DocumentPicker} from '../../../ui/index';
 import FormUtils from "../../../utils/fromUtils";
 import strings from '../../../i18n/i18n';
 import StyleUtils from "../../../utils/styleUtils";
@@ -167,6 +167,10 @@ class AddBusiness extends Component {
         return result
     }
 
+    setIdDocument(image){
+
+
+    }
     createImageComponent(coverPic) {
         if (this.state.path) {
             if (coverPic) {
@@ -300,6 +304,10 @@ class AddBusiness extends Component {
                                    onChangeText={(tax_id) => this.setState({tax_id})} isMandatory={true}/>
                     </View>
 
+                    <View style={[styles.inputTextLayout, {width: StyleUtils.getWidth()-15}]}>
+                        <DocumentPicker  ref="id" isMandatory field={'Id Identifier'}setDocument={this.setIdDocument.bind(this)} />
+
+                    </View>
 
                 </ScrollView>
 

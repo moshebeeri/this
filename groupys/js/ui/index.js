@@ -32,7 +32,8 @@ import BusinessList from './BusinessList/BusinessList';
 import GroupsList from './groupsList/GroupsList';
 import BrainTreeWeb from './BrainTree/BrainTreeWeb'
 import BarcodeScanner from './BarcodeScanner/BarcodeScanner';
-import UrlPreview from './UrlPreview/UrlPreview'
+import UrlPreview from './UrlPreview/UrlPreview';
+import DocumentPicker from './DocumentPicker/DocumentPicker'
 export {
     ImagePicker,
     CategoryPicker,
@@ -68,5 +69,6 @@ export {
     BusinessList,
     GroupsList,
     BarcodeScanner,
-    UrlPreview
+    UrlPreview,
+    DocumentPicker
 }
