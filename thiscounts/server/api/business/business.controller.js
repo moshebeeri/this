@@ -406,9 +406,9 @@ function sendRejectEmail(business) {
     business.email, {
       name: business.creator.name,
       businessName: business.name,
-      accepted: false,
+      accepted: business.review.result === 'accepted',
       businessId: business._id,
-      reason: business.reason
+      reason: business.review.reason
     }, function (err) {
       if (err) console.error(err);
     });
@@ -420,14 +420,19 @@ exports.review = function (req, res) {
   Business.findById(businessId).exec((err, business) => {
     if (err) return handleError(res, err);
     if (!business) return res.status(404).send('Not Found');
+    business.review.status = 'done';
     if (status === 'accepted') {
-      business.status = 'accepted';
+      business.review.result = 'accepted';
       business.save(err => {
         if (err) return handleError(res, err);
         return createValidatedBusiness(res, businessId);
       });
     } else {
-      sendRejectEmail();
+      business.review.result = 'rejected';
+      business.save(err => {
+        if (err) return handleError(res, err);
+        return sendRejectEmail(business);
+      });
     }
     return res.status(201).send();
   })
@@ -452,8 +457,13 @@ exports.validate_email = function (req, res) {
 };
 exports.create = function (req, res) {
   let body_business = req.body;
-  body_business = randomstring.generate({length: 12, charset: 'numeric'});
   let userId = req.user._id;
+  body_business = randomstring.generate({length: 12, charset: 'numeric'});
+  body_business.review = {
+    status:  'waiting',
+    result:  'waiting',
+    reason: '',
+  };
 
   function createBusiness() {
     location.address_location(body_business, function (err, data) {
