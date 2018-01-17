@@ -11,6 +11,8 @@ let BrandSchema = new Schema({
   logo: String,
   client: {},
   pictures: [],
+  letterOfIncorporation: {type: String},
+  identificationCard: {type: String},
   video: {type: Schema.ObjectId, ref: 'Video', autopopulate: true}
 });
 BrandSchema.index({name: 'text', description: 'text'});

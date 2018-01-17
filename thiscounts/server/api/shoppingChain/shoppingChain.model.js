@@ -26,6 +26,8 @@ let ShoppingChainSchema = new Schema({
   logo: String,
   branches: [{type: Schema.ObjectId, ref: 'Business', autopopulate: true}],
   pictures : [],
+  letterOfIncorporation: {type: String},
+  identificationCard: {type: String},
   video: {type: Schema.ObjectId, ref: 'Video', autopopulate: true},
 });
 ShoppingChainSchema.plugin(autopopulate);

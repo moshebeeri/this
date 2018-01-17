@@ -82,6 +82,14 @@ exports.logo = function (req, res) {
   return handle_image(req, res, 'logo');
 };
 
+exports.letterOfIncorporation = function (req, res) {
+  return handle_image(req, res, 'letterOfIncorporation');
+};
+
+exports.identificationCard = function (req, res) {
+  return handle_image(req, res, 'identificationCard');
+};
+
 function checkSafeSearch(annotation, callback) {
   function violates(category){
     return category === 'Possible' || category === 'Likely' || category === 'Very Likely'
@@ -234,15 +242,25 @@ function updateImageVersions(versions, id, meta_data, type, callback) {
         for (let key in results) {
           let updated = results[key];
           if (updated) {
-            if (type === 'logo')
-              updated.logo = pictures[0];
-            //type === 'image'
-            else updated.pictures.push({
-              pictures: pictures,
-              meta: meta_data,
-              date: Date.now(),
-              order: 0
-            });
+            switch(type){
+              case 'logo':
+                updated.logo = pictures[0];
+                break;
+              case 'letterOfIncorporation':
+                updated.letterOfIncorporation = pictures[0];
+                break;
+              case 'identificationCard':
+                updated.identificationCard = pictures[0];
+                break;
+              default:
+                updated.pictures.push({
+                  pictures: pictures,
+                  meta: meta_data,
+                  date: Date.now(),
+                  order: 0
+                });
+                break;
+            }
             updated.save(saveCallback);
           }
         }
