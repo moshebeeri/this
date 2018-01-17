@@ -4,19 +4,20 @@ import {
     Image,
     KeyboardAvoidingView,
     Platform,
+    ScrollView,
     TextInput,
     TouchableHighlight,
     TouchableOpacity
 } from "react-native";
 import {connect} from "react-redux";
 import {actions} from "react-native-navigation-redux-helpers";
-import {Button, Icon, Input, Item, Text, View,Spinner} from "native-base";
+import {Button, Icon, Input, Item, Spinner, Text, View} from "native-base";
 import {bindActionCreators} from "redux";
 import * as loginAction from "../../actions/login";
 import styles from "./styles";
 import {isAuthenticated} from "../../selectors/appSelector";
-import LinearGradient from "react-native-linear-gradient";
 import strings from "../../i18n/i18n"
+import StyleUtils from "../../utils/styleUtils";
 
 const {width, height} = Dimensions.get('window');
 const thisLogo = require('../../../images/this-logo.png');
@@ -61,13 +62,14 @@ class Login extends Component {
     render() {
         const {focusPassword, focusPhone, failedMessage, doLogin} = this.props;
         return (
+            <ScrollView>
+            <KeyboardAvoidingView  behavior={'position'} style={[styles.inputContainer, {width: StyleUtils.getWidth()}]}>
 
-                <KeyboardAvoidingView behavior={'position'} style={styles.inputContainer}>
-
-                    <View style={{position:'absolute',height:height,width:width}}>
-                        <Image style={{position:'absolute',height:height,width:width}} resizeMode='cover' source={bg}/>
+                    <View style={{backgroundColor:'white',position:'absolute',height:height,width:StyleUtils.getWidth()}}>
+                        <Image style={{position:'absolute',height:height,width:StyleUtils.getWidth()}}resizeMode='cover' source={bg}/>
 
                     </View>
+
                     <View style={{
                         flexDirection: 'column',
                         justifyContent: 'center',
@@ -75,7 +77,7 @@ class Login extends Component {
                     }}>
 
 
-                        <View style={styles.thisContainer}>
+                        <View  style={[styles.thisContainer, {width: StyleUtils.getWidth()}]} >
                             <Image style={{position:'absolute',top:-175,width:140}} resizeMode='contain' source={thisLogo}/>
                             <Text style={styles.this}>THIS</Text>
                         </View>
@@ -85,22 +87,23 @@ class Login extends Component {
                             alignItems: 'center',
                         }}>
 
-                            <View style={{height: 5, justifyContent: 'flex-end', width: width / 2 + 120}}>
+                            <View style={{height: 5, justifyContent: 'flex-end', width: StyleUtils.getWidth() / 2 + 120}}>
 
                             </View>
+                            <View  style={[styles.phoneTextInput, {width: StyleUtils.getWidth()}]} regular >
 
-                            <View style={styles.phoneTextInput} regular>
                                 <TextInput focus={focusPhone} keyboardType='phone-pad' value={this.state.name}
                                        blurOnSubmit={true} returnKeyType='next'
                                        onSubmitEditing={this.focusNextField.bind(this, "password")}
                                            underlineColorAndroid={'transparent'}
                                        onChangeText={(phoneNumber) => this.setState({phoneNumber})}
                                            placeholderTextColor={'white'}
-                                           style={{width:width / 2 + 120,color:'white',borderColor:'white',height:50,fontSize:20,borderBottomWidth:1}}
+                                           style={{width:StyleUtils.getWidth() / 2 + 120,color:'white',borderColor:'white',height:50,fontSize:20,borderBottomWidth:1}}
                                        placeholder={strings.PhoneNumber}/>
                             </View>
 
-                            <View style={styles.passwordTextInput} regular>
+                            <View  style={[styles.passwordTextInput, {width: StyleUtils.getWidth()}]} regular >
+
 
                                 <TextInput
                                     focus={focusPassword}
@@ -109,7 +112,7 @@ class Login extends Component {
                                     returnKeyType='done'
                                     defaultValue=""
                                     placeholderTextColor={'white'}
-                                    style={{width:width / 2 + 120,color:'white',borderColor:'white',height:50,fontSize:20,borderBottomWidth:1}}
+                                    style={{width:StyleUtils.getWidth() / 2 + 120,color:'white',borderColor:'white',height:50,fontSize:20,borderBottomWidth:1}}
                                     placeholder={strings.Password}
                                     secureTextEntry
                                     onChangeText={password => this.setState({password})}
@@ -126,11 +129,11 @@ class Login extends Component {
                                 height: 40,
                                 justifyContent: 'center',
                                 alignItems: 'center',
-                                width: width / 2 + 120
+                                width: StyleUtils.getWidth() / 2 + 120
                             }}>
 
                                 <TouchableOpacity onPress={() => this.login()} style={{
-                                    width: width-90,
+                                    width: StyleUtils.getWidth()-90,
                                     height: 50,
                                     borderRadius: 30,
                                     backgroundColor: 'white',
@@ -164,8 +167,10 @@ class Login extends Component {
 
                     </View>
 
-                </KeyboardAvoidingView>
 
+
+                </KeyboardAvoidingView>
+            </ScrollView>
 
         );
     }
@@ -179,6 +184,7 @@ export default connect(
         loginstate: state.loginForm,
         doLogin:state.loginForm.loginProcess,
         isAuthenticated: isAuthenticated(state),
+        network: state.network,
     }),
     (dispatch) => ({
         actions: bindActionCreators(loginAction, dispatch)

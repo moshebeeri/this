@@ -27,7 +27,7 @@ function get_businesses_state(businesses, userId, callback) {
 
 exports.test_email = function (req, res) {
   const email = require('../../components/email');
-  email.send('mars', 'moshe.beeri@gmail.com', {name: 'moshe'}, function (err) {
+  email.send('mars', 'moshe.beeri@gmail.com', {locale: 'fr', name: 'moshe'}, function (err) {
     if(err) console.error(err);
     return res.status(200).send();
   });

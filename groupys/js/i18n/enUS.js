@@ -229,6 +229,8 @@ AssignBarcode                                 : "Assign Barcode",
 ScanBarcode                                   : "Scan Barcode",
 Offline                                       : "Offline",
 Claimed                                       : "Claimed",
+VerifyPassword                                : "Verify Password",
+
 
 
 

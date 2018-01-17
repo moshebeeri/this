@@ -10,12 +10,19 @@
 /**
  * Created by stan229 on 5/27/16.
  */
-const initialState = {message: ''};
+const initialState = {message: '',registerProcess:false};
 import * as actions from './../reducerActions';
 import {REHYDRATE} from 'redux-persist/constants'
 
 export default function registerForm(state = initialState, action) {
     switch (action.type) {
+
+
+        case actions.REGISTER_PROCESS :
+            return {
+                ...state,
+                registerProcess: action.value,
+            };
         case actions.REGISTER_CODE_INVALID :
             return {
                 ...state,
