@@ -10,62 +10,72 @@ import groupComments from '../actions/commentsGroup'
 import pageSync from './refresher';
 import FormUtils from "../utils/fromUtils";
 import simpleStore from 'react-native-simple-store';
-const store = getStore();
-let  visitedList = ['feed', 'groups', 'businesses'];
-class PageRefresher {
 
+const store = getStore();
+let visitedList = ['feed', 'groups', 'businesses'];
+
+class PageRefresher {
     constructor() {
         pageSync.createPage('feed', pageSync.createStdAverageRefresh('feed', 10, 60000), this.setMainFeedRefresh.bind(this));
         pageSync.createPage('groups', pageSync.createStdAverageRefresh('groups', 10, 60000), this.updateGroups.bind(this));
         pageSync.createPage('businesses', pageSync.createStdAverageRefresh('businesses', 10, 360000), this.updateBusinesses.bind(this));
         pageSync.createPage('notification', pageSync.createStdAverageRefresh('notification', 10, 60000), this.updateNotification.bind(this));
         pageSync.createPage('user', pageSync.createStdAverageRefresh('user', 10, 60000), this.updateUser.bind(this));
-
-
     }
-    updateUser(){
+
+    updateUser() {
         let token = store.getState().authentication.token;
         let user = store.getState().user.user;
-        users.updateUserLocale(store.dispatch,token,user,FormUtils.getLocale())
-
+        if (token && user) {
+            users.updateUserLocale(store.dispatch, token, user, FormUtils.getLocale())
+        }
     }
 
-   async updateUserFireBase(fireBaseToken){
-
+    async updateUserFireBase(fireBaseToken) {
         let token = store.getState().authentication.token;
-        if(!token){
-             token = await simpleStore.get("token");
+        if (!token) {
+            token = await simpleStore.get("token");
         }
         let user = store.getState().user.user;
-        if(!user){
+        if (!user) {
             user = await simpleStore.get("user");
         }
-        users.updateUserToken(store.dispatch,token,user,fireBaseToken)
-
+        if (token && user) {
+            users.updateUserToken(store.dispatch, token, user, fireBaseToken)
+        }
     }
 
-    updateNotification(){
+    updateNotification() {
         let token = store.getState().authentication.token;
         let user = store.getState().user.user;
         let notifications = store.getState().notification.notification;
-        notificationAction.updateNotification(store.dispatch,token,user,notifications);
+        if (token && user) {
+            notificationAction.updateNotification(store.dispatch, token, user, notifications);
+        }
     }
+
     updateGroups() {
         let token = store.getState().authentication.token;
-        groups.getAll(store.dispatch, token);
+        if (token) {
+            groups.getAll(store.dispatch, token);
+        }
     }
 
     updateBusinesses() {
         let token = store.getState().authentication.token;
-        business.getAll(store.dispatch, token);
+        if (token) {
+            business.getAll(store.dispatch, token);
+        }
     }
 
     setMainFeedRefresh() {
         if (store.getState().feeds.feedView && store.getState().feeds.feedView.length > 0) {
             let token = store.getState().authentication.token;
             let user = store.getState().user.user;
-            let id = store.getState().feeds.feedView[0]
-            feedAction.fetchTopList(id, token, user, store.dispatch);
+            let id = store.getState().feeds.feedView[0];
+            if (token && user) {
+                feedAction.fetchTopList(id, token, user, store.dispatch);
+            }
         }
     }
 
@@ -75,6 +85,7 @@ class PageRefresher {
             visitedList.push('promotion_' + businessId);
         }
     }
+
     addGroupsFeed(groupsId) {
         if (!visitedList.includes('feeds' + groupsId,)) {
             pageSync.createPage('feeds' + groupsId, pageSync.createStdAverageRefresh('feeds' + groupsId, 10, 60000), this.updateGroupFeeds.bind(this, groupsId));
@@ -86,7 +97,7 @@ class PageRefresher {
         if (!visitedList.includes('chat' + groupsId,)) {
             pageSync.createPage('chat' + groupsId, pageSync.createStdAverageRefresh('chat' + groupsId, 5, 60000), this.updateGroupChat.bind(this, groupsId));
             visitedList.push('chat' + groupsId);
-        }else{
+        } else {
             this.visitedGroupChat(groupsId);
         }
     }
@@ -99,27 +110,30 @@ class PageRefresher {
 
     updatePromotion(businessId) {
         let token = store.getState().authentication.token;
-        business.updateBusinessPromotions(businessId, token, store.dispatch);
+        if (token) {
+            business.updateBusinessPromotions(businessId, token, store.dispatch);
+        }
     }
-
 
     updateGroupFeeds(groupId) {
         let token = store.getState().authentication.token;
-
-        if (store.getState().groups.groupFeedOrder && store.getState().groups.groupFeedOrder[groupId]
-            && store.getState().groups.groupFeedOrder[groupId].length > 0) {
-            let user = store.getState().user.user;
-            groups.fetchTopList(store.getState().groups.groupFeedOrder[groupId][0], token, {_id: groupId}, store.dispatch,user);
+        if (token) {
+            if (store.getState().groups.groupFeedOrder && store.getState().groups.groupFeedOrder[groupId]
+                && store.getState().groups.groupFeedOrder[groupId].length > 0) {
+                let user = store.getState().user.user;
+                groups.fetchTopList(store.getState().groups.groupFeedOrder[groupId][0], token, {_id: groupId}, store.dispatch, user);
+            }
         }
     }
+
     updateGroupChat(groupId) {
         let token = store.getState().authentication.token;
-
-        if (store.getState().comments.groupCommentsOrder && store.getState().comments.groupCommentsOrder[groupId]
-            && store.getState().comments.groupCommentsOrder[groupId].length > 0) {
-
-            let user = store.getState().user.user;
-            groupComments.refreshComments(store.dispatch, token, {_id: groupId},user);
+        if (token) {
+            if (store.getState().comments.groupCommentsOrder && store.getState().comments.groupCommentsOrder[groupId]
+                && store.getState().comments.groupCommentsOrder[groupId].length > 0) {
+                let user = store.getState().user.user;
+                groupComments.refreshComments(store.dispatch, token, {_id: groupId}, user);
+            }
         }
     }
 
@@ -132,13 +146,14 @@ class PageRefresher {
     }
 
     visitedGroupFeeds(groupId) {
-        pageSync.visited('feeds' +groupId)
-    }
-    visitedGroupChat(groupId) {
-        pageSync.visited('chat' +groupId)
+        pageSync.visited('feeds' + groupId)
     }
 
-    createFeedSocialState(id){
+    visitedGroupChat(groupId) {
+        pageSync.visited('chat' + groupId)
+    }
+
+    createFeedSocialState(id) {
         if (!visitedList.includes('feed' + id,)) {
             pageSync.createPage('feed' + id, pageSync.createStdAverageRefresh('feed' + id, 2, 7200000), this.updateSocialState.bind(this, id));
             visitedList.push('feed' + id);
@@ -152,30 +167,30 @@ class PageRefresher {
         }
     }
 
-    checkRefreshFeedItem(item){
-        if(item.uploading){
-            if(!item.banner && !item.video){
+    checkRefreshFeedItem(item) {
+        if (item.uploading) {
+            if (!item.banner && !item.video) {
                 let token = store.getState().authentication.token;
-                switch (item.itemType){
-                    case 'POST':
-                        postAction.fetchPostById(item.id,token,store.dispatch)
-                        break;
-                    case 'PROMOTION':
-                        promotionAction.fetchPromotionById(item.promotionEntity._id,token,store.dispatch)
-
-                        break;
+                if (token) {
+                    switch (item.itemType) {
+                        case 'POST':
+                            postAction.fetchPostById(item.id, token, store.dispatch)
+                            break;
+                        case 'PROMOTION':
+                            promotionAction.fetchPromotionById(item.promotionEntity._id, token, store.dispatch)
+                            break;
+                    }
                 }
-
             }
         }
     }
 
-
-
-    updateSocialState(id){
+    updateSocialState(id) {
         console.log('refresh' + id);
         let token = store.getState().authentication.token;
-        feedAction.refreshFeedSocialState(store.dispatch,token,id);
+        if (token) {
+            feedAction.refreshFeedSocialState(store.dispatch, token, id);
+        }
     }
 }
 
