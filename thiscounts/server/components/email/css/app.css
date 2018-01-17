@@ -5,3 +5,21 @@ p {
 h1 {
   color: red;
 }
+
+/* Base styling of the button */
+.button {
+  background-color: #00b3ee;
+  border-color: #10c3fe;
+  border-radius: 5px;
+  text-align: center;
+  padding: 10px;
+}
+
+/* Style anchor tags inside the button td */
+.button a {
+  color: #ffffff;
+  display: block;
+  font-size: 14px;
+  text-decoration: none;
+  text-transform: uppercase;
+}

@@ -23,16 +23,20 @@ Email.send = Email.prototype.send = function(template, to, locals, callback) {
     views: { root: path.join(__dirname, 'templates') },
     message: {
       from: 'THIS@low.la',
-      // attachments: [
-      //   {
-      //     filename: 'THISLogo.png',
-      //     path: path.join(__dirname, 'resources'),
-      //     cid: 'THISLogo'
-      //   }
-      // ]
+      attachments: [
+        {
+          filename: 'THISLogo.png',
+          path: path.join(__dirname, 'resources', 'THISLogo.png'),
+          cid: 'THISLogo'
+        }
+      ]
     },
     send: true,
     transport: transporter,
+    i18n: {
+      locales: ['en', 'es', 'zh'],
+      directory: path.join(__dirname,'locales')
+    },
     juiceResources: {
       preserveImportant: true,
       webResources: {
