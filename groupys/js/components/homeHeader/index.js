@@ -12,9 +12,6 @@ class Header extends Component {
         navigateTo: React.PropTypes.func,
     };
 
-    navigateTo(route) {
-        this.props.navigateTo(route, 'home');
-    }
 
     render() {
         return (

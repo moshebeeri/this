@@ -105,13 +105,13 @@ export default class BusinessListView extends Component {
                             {promotionButton}
 
                         </View>}
-                        {item.business && item.business.review && <View style={{
+                        {item.business && item.business.review && item.business.review.status ==='waiting' && <View style={{
                             height: vh * 6, flexDirection: 'row', alignItems: 'center',
                             justifyContent: 'center',
                         }}>
 
 
-                            <Text>Waiting for Review</Text>
+                            <Text>Please confirm your email Address</Text>
                         </View>}
                     </View>
 

@@ -99,7 +99,7 @@ class Signup extends Component {
 
                         <View style={{
                             width: StyleUtils.getWidth(),
-                            height: 50,
+                            height: 30,
                             justifyContent: 'center',
                             backgroundColor: 'transparent'
                         }}>
@@ -116,7 +116,7 @@ class Signup extends Component {
                             </TouchableOpacity>
                         </View>
                         <View style={styles.thisContainer}>
-                            <Image style={{position: 'absolute', top: -180, width: 140}} resizeMode='contain'
+                            <Image style={{position: 'absolute', top: -185, width: 140}} resizeMode='contain'
                                    source={thisLogo}/>
                             <Text style={styles.this}>THIS</Text>
                         </View>

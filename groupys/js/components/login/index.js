@@ -40,12 +40,6 @@ class Login extends Component {
         this.refs[nextField].focus()
     }
 
-    async componentWillUpdate() {
-        const isVerified = await this.props.isAuthenticated;
-        if (isVerified) {
-            this.replaceRoute('home');
-        }
-    }
 
     login() {
         this.props.actions.login(this.state.phoneNumber, this.state.password, this.props.navigation)
