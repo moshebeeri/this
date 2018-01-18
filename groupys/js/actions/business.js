@@ -333,6 +333,9 @@ export function saveBusiness(business, navigation) {
             dispatch({
                 type: actions.NETWORK_IS_OFFLINE,
             });
+            dispatch({
+                type: actions.SAVING_BUSINESS_DONE,
+            });
         }
     }
 }

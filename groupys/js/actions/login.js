@@ -46,7 +46,6 @@ export function login(phone, password, navigation) {
                 });
                 navigation.dispatch(resetAction);
 
-                navigation.navigate('home');
             } else {
                 dispatch({
                     type: actions.LOGIN_FAILED,
@@ -162,7 +161,7 @@ export function verifyCode(code, navigation, resetAction) {
                     type: actions.REGISTER_CODE_SUCSSES,
                 });
                 navigation.dispatch(resetAction);
-                navigation.navigate('home');
+
             } else {
                 dispatch({
                     type: actions.REGISTER_CODE_INVALID,

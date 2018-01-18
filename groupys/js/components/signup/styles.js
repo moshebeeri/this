@@ -26,8 +26,8 @@ module.exports = {
         color: '#00F',
     },
     thisContainer: {
-        height: 250,
-        marginTop: height / 60,
+        height: 220,
+        marginTop: 5,
         justifyContent: 'center',
         backgroundColor: 'transparent',
         flexDirection: 'column',

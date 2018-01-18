@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import {Dimensions, Image, TouchableOpacity} from 'react-native';
+import {Dimensions, Image, TouchableOpacity,Text} from 'react-native';
 import {
     Button,
     Card,
@@ -15,7 +15,6 @@ import {
     Tab,
     TabHeading,
     Tabs,
-    Text,
     Thumbnail,
     Title,
     View
@@ -65,6 +64,7 @@ export default class BusinessListView extends Component {
         const editButton = this.createEditTag(item);
         const promotionButton = this.createPromotionsTag(item);
         const permissionsButton = this.createPermissionsTag(item);
+        const productsButton  = this.createPoductsTag(item);
         return ( <View>
                 <BusinessHeader color navigation={this.props.navigation} business={item.business}
                                 categoryTitle={item.categoryTitle} businessLogo={item.business.logo}
@@ -93,31 +93,26 @@ export default class BusinessListView extends Component {
                           key={this.props.index}>
 
 
-                        <View style={{
+                        {(permissionsButton || productsButton || promotionButton) &&  <View style={{
                             height: vh * 6, flexDirection: 'row', alignItems: 'center',
                             justifyContent: 'space-between',
                         }}>
                             {permissionsButton}
 
+                            {productsButton}
 
-                            <TouchableOpacity onPress={() => this.showProducts()}
-                                              style={{margin: 3, flexDirection: 'row', alignItems: 'center',}} regular>
-                                <Image style={{tintColor: '#ff6400', marginLeft: 10, width: vh * 3, height: vh * 4}}
-                                       source={products}/>
-
-                                <Text style={{
-                                    marginLeft: 5,
-                                    color: '#ff6400',
-                                    fontStyle: 'normal',
-                                    fontSize: 13
-                                }}>{strings.Products}</Text>
-
-                            </TouchableOpacity>
 
                             {promotionButton}
 
+                        </View>}
+                        {item.business && item.business.review && item.business.review.status ==='waiting' && <View style={{
+                            height: vh * 6, flexDirection: 'row', alignItems: 'center',
+                            justifyContent: 'center',
+                        }}>
 
-                        </View>
+
+                            <Text>Please confirm your email Address</Text>
+                        </View>}
                     </View>
 
 
@@ -162,6 +157,26 @@ export default class BusinessListView extends Component {
                     fontStyle: 'normal',
                     fontSize: 13
                 }}>{strings.Permissions}</Text>
+
+            </TouchableOpacity>
+        }
+        return undefined;
+    }
+
+
+    createPoductsTag(item) {
+        if (item.role === 'OWNS' || item.role === 'Admin' || item.role === 'Manager') {
+            return  <TouchableOpacity onPress={() => this.showProducts()}
+                                      style={{margin: 3, flexDirection: 'row', alignItems: 'center',}} regular>
+                <Image style={{tintColor: '#ff6400', marginLeft: 10, width: vh * 3, height: vh * 4}}
+                       source={products}/>
+
+                <Text style={{
+                    marginLeft: 5,
+                    color: '#ff6400',
+                    fontStyle: 'normal',
+                    fontSize: 13
+                }}>{strings.Products}</Text>
 
             </TouchableOpacity>
         }

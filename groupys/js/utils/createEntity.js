@@ -232,6 +232,22 @@ class EntityUtils {
                         this.doUpload(entityData.image.path, entityData.image.mime, token,  this.doLogg.bind(this), entityApi, responseData);
                     }
 
+                    if (entityData.IdIdentifierImage && entityData.IdIdentifierImage.path && entityData.IdIdentifierImage.mime) {
+                        this.doUpload(entityData.IdIdentifierImage.path, entityData.IdIdentifierImage.mime, token,  this.doLogg.bind(this), entityApi, responseData,'identificationCard');
+                    }
+
+                    if (entityData.LetterOfIncorporationImage && entityData.LetterOfIncorporationImage.path && entityData.LetterOfIncorporationImage.mime) {
+                        this.doUpload(entityData.LetterOfIncorporationImage.path, entityData.LetterOfIncorporationImage.mime, token,  this.doLogg.bind(this), entityApi, responseData,'letterOfIncorporation');
+                    }
+
+                    if (entityData.IdIdentifierImage && entityData.IdIdentifierImage.uri && entityData.IdIdentifierImage.mime) {
+                        this.doUpload(entityData.IdIdentifierImage.uri, entityData.IdIdentifierImage.mime, token,  this.doLogg.bind(this), entityApi, responseData,'identificationCard');
+                    }
+
+                    if (entityData.LetterOfIncorporationImage && entityData.LetterOfIncorporationImage.uri && entityData.LetterOfIncorporationImage.mime) {
+                        this.doUpload(entityData.LetterOfIncorporationImage.uri, entityData.LetterOfIncorporationImage.mime, token,  this.doLogg.bind(this), entityApi, responseData,'letterOfIncorporation');
+                    }
+
                     resolve(responseData);
 
                 } else {
@@ -273,6 +289,14 @@ class EntityUtils {
 
                     if (entityData.LetterOfIncorporationImage && entityData.LetterOfIncorporationImage.path && entityData.LetterOfIncorporationImage.mime) {
                         this.doUpload(entityData.LetterOfIncorporationImage.path, entityData.LetterOfIncorporationImage.mime, token,  this.doLogg.bind(this), entityApi, responseData,'letterOfIncorporation');
+                    }
+
+                    if (entityData.IdIdentifierImage && entityData.IdIdentifierImage.uri && entityData.IdIdentifierImage.mime) {
+                        this.doUpload(entityData.IdIdentifierImage.uri, entityData.IdIdentifierImage.mime, token,  this.doLogg.bind(this), entityApi, responseData,'identificationCard');
+                    }
+
+                    if (entityData.LetterOfIncorporationImage && entityData.LetterOfIncorporationImage.uri && entityData.LetterOfIncorporationImage.mime) {
+                        this.doUpload(entityData.LetterOfIncorporationImage.uri, entityData.LetterOfIncorporationImage.mime, token,  this.doLogg.bind(this), entityApi, responseData,'letterOfIncorporation');
                     }
 
                     resolve(responseData);
