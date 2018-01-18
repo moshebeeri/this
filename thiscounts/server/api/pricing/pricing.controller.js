@@ -284,7 +284,6 @@ exports.checkouts_id = function (req, res) {
   gateway.transaction.find(transactionId, function (err, transaction) {
     if(err) return handleError(res, err);
     result = createResultObject(transaction);
-    console.log(JSON.stringify(transaction));
     return res.status(200).json({transaction: transaction, result: result});
 
   });

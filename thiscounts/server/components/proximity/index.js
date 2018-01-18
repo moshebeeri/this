@@ -37,7 +37,7 @@ function createReport(userId, location, callback) {
     _id: userId,
     location: spatial.geo_to_location(location)
   };
-  console.log(JSON.stringify(proximity, null, 2));
+  //console.log(JSON.stringify(proximity, null, 2));
   ProximityModel.create(proximity, function (err, proximity) {
     if (err) return callback(err);
     return callback(null, proximity);

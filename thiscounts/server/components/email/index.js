@@ -18,7 +18,6 @@ function Email() {
 }
 
 Email.send = Email.prototype.send = function(template, to, locals, callback) {
-  console.log(path.join(__dirname, 'templates'));
   let email =  new EmailTemplate({
     views: { root: path.join(__dirname, 'templates') },
     message: {
@@ -34,7 +33,7 @@ Email.send = Email.prototype.send = function(template, to, locals, callback) {
     send: true,
     transport: transporter,
     i18n: {
-      locales: ['en', 'es', 'zh'],
+      locales: ['en'],
       directory: path.join(__dirname,'locales')
     },
     juiceResources: {

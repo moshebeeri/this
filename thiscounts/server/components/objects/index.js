@@ -51,7 +51,6 @@ function assembler(obj){
 
 exports.disassembler = function(obj, callback) {
   obj = disassembler(obj);
-  console.log(JSON.stringify(obj));
   callback(null, dataSet, obj)
 };
 

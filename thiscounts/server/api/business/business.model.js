@@ -22,11 +22,16 @@ let BusinessSchema = new Schema({
   state: {type: String},
   main_phone_number: String,
   email: {type: String, index: true, required: true},
+  email_validate: {type: String, required: true},
   website: String,
   creator: {type: Schema.ObjectId, index: true, ref: 'User', required: true},
   created: {type: Date, required: true},
   info: String,
-
+  review: {
+    status: {type: String, index: true, default: 'waiting'},
+    result: {type: String, index: true, default: 'rejected'},
+    reason: String,
+  },
   default_group: {type: Schema.ObjectId, index: true, ref: 'Group'},
   groups: [{type: Schema.ObjectId, index: true, ref: 'Group'}],
   qrcode: {type: Schema.ObjectId, ref:'QRCode'},
