@@ -188,7 +188,7 @@ class Signup extends Component {
 
                                     ref='password'
                                     underlineColorAndroid={'transparent'}
-                                    returnKeyType='done'
+                                    returnKeyType='next'
                                     defaultValue=""
                                     value={this.state.password}
                                     placeholderTextColor={'white'}
