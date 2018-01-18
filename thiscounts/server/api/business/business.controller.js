@@ -321,7 +321,7 @@ exports.check_address = function (req, res) {
     if (err) {
       if (err.code >= 400) return res.status(err.code).send(err.message);
       else if (err.code === 202) {
-        console.log(err);
+        console.error(err);
         return res.status(202).json(data);
       }
       else return res.status(400).send(err);
@@ -331,7 +331,6 @@ exports.check_address = function (req, res) {
 };
 
 function sendValidationEmail(business) {
-  console.log(`sendValidationEmail - ${JSON.stringify(business)}`);
   email.send('validateBusinessEmail',
     business.email, {
       name: business.creator.name,
@@ -366,55 +365,50 @@ function reviewRequest(business) {
   });
 }
 
-function createValidatedBusiness(res, businessId) {
-  Business.findById(businessId).exec((err, business) => {
-    if (err) return handleError(res, err);
-    if (!business) return res.status(404).send('Not Found');
-    qrcodeController.createAndAssign(business.creator, {
-      type: 'FOLLOW_BUSINESS',
-      assignment: {
-        business: business._id
-      }
-    }, function (err, qrcode) {
-      business.qrcode = qrcode;
-      business.save();
-      graphModel.reflect(business, {
-        _id: business._id,
-        name: business.name,
-        type: business.type,
-        creator: business.creator,
-        lat: business.location.lat,
-        lon: business.location.lng
-      }, function (err, business) {
-        if (err) return handleError(res, err);
-        if (business.type === 'PERSONAL_SERVICES' || business.type === 'SMALL_BUSINESS') {
-          let grunt_query = `MATCH (user:user{_id:"${business.creator._id}"}), (entity{_id:"${business._id}"})
+function createValidatedBusiness(res, business) {
+  qrcodeController.createAndAssign(business.creator, {
+    type: 'FOLLOW_BUSINESS',
+    assignment: {
+      business: business._id
+    }
+  }, function (err, qrcode) {
+    business.qrcode = qrcode;
+    business.save();
+    graphModel.reflect(business, {
+      _id: business._id,
+      name: business.name,
+      type: business.type,
+      creator: business.creator,
+      lat: business.location.lat,
+      lon: business.location.lng
+    }, function (err, business) {
+      if (err) return handleError(res, err);
+      if (business.type === 'PERSONAL_SERVICES' || business.type === 'SMALL_BUSINESS') {
+        let grunt_query = `MATCH (user:user{_id:"${business.creator}"}), (entity{_id:"${business._id}"})
                      CREATE (user)-[role:ROLE{name:'OWNS'}]->(entity)`;
-          console.log(`grunt_query ${grunt_query}`);
-          graphModel.query(grunt_query, function (err) {
-            if (err) console.log(err);
-            graphModel.owner_followers_follow_business(business.creator._id);
-          });
-        }
-        if (defined(business.shopping_chain))
-          graphModel.relate_ids(business._id, 'BRANCH_OF', business.shopping_chain);
-        if (defined(business.mall))
-          graphModel.relate_ids(business._id, 'IN_MALL', business.mall);
-        spatial.add2index(business.gid, function (err, result) {
-          if (err) return logger.error(err.message);
+        graphModel.query(grunt_query, function (err) {
+          if (err) return handleError(res, err);
+          graphModel.owner_followers_follow_business(business.creator);
         });
-        activity.activity({
-          business: business._id,
-          actor_user: business.creator,
-          action: 'created'
-        }, function (err) {
-          if (err) console.error(err.message)
-        });
-        create_business_default_group(business);
-        notifyOnAction(business);
-        return res.status(201).json(business);
+      }
+      if (defined(business.shopping_chain))
+        graphModel.relate_ids(business._id, 'BRANCH_OF', business.shopping_chain);
+      if (defined(business.mall))
+        graphModel.relate_ids(business._id, 'IN_MALL', business.mall);
+      spatial.add2index(business.gid, function (err, result) {
+        if (err) return handleError(res, err);
       });
-    })
+      activity.activity({
+        business: business._id,
+        actor_user: business.creator,
+        action: 'created'
+      }, function (err) {
+        if (err) return handleError(res, err);
+      });
+      create_business_default_group(business);
+      notifyOnAction(business);
+      return res.status(201).json(business);
+    });
   })
 }
 
@@ -440,9 +434,10 @@ exports.review = function (req, res) {
     business.review.status = 'done';
     if (status === 'accepted') {
       business.review.result = 'accepted';
-      business.save(err => {
+      business.save((err, business) => {
         if (err) return handleError(res, err);
-        return createValidatedBusiness(res, businessId);
+        if (!business) return res.status(404).send('Not Found');
+        return createValidatedBusiness(res, business);
       });
     } else {
       business.review.result = 'rejected';
@@ -451,7 +446,6 @@ exports.review = function (req, res) {
         return sendRejectEmail(business);
       });
     }
-    return res.status(201).send();
   })
 };
 exports.validate_email = function (req, res) {
@@ -463,10 +457,10 @@ exports.validate_email = function (req, res) {
     if (business.validationCode !== validationCode) return res.status(404).send('Validation codes mismatch');
     business.validationCode = '';
     business.review.state = 'review';
-      business.save(err => {
+    business.save(err => {
       if (err) return handleError(res, err);
       reviewRequest(business);
-      return res.status(201).send();
+      return res.status(201).send('email verified successfully');
     });
   })
 };
@@ -485,10 +479,9 @@ exports.create = function (req, res) {
     location.address_location(body_business, function (err, data) {
       if (err) {
         console.error(err);
-        console.error(JSON.stringify(body_business));
         if (err.code >= 400) return res.status(err.code).send(err.message);
         else if (err.code === 202) {
-          console.log(err);
+          console.error(err);
           return res.status(202).json(data);
         }
         else return res.status(400).send(err);
@@ -576,7 +569,6 @@ exports.destroy = function (req, res) {
 };
 
 function handleError(res, err) {
-  console.log(err);
   return res.status(500).send(err);
 }
 
