@@ -346,7 +346,7 @@ class AddBusiness extends Component {
                     <View style={[styles.inputTextLayout, {width: StyleUtils.getWidth() - 15}]}>
 
 
-                        <TextInput field={strings.Email} value={this.state.email} returnKeyType='next' ref="2"
+                        <TextInput keyboardType={'email-address'} field={strings.Email} value={this.state.email} returnKeyType='next' ref="2"
                                    refNext="2"
                                    onSubmitEditing={this.focusNextField.bind(this, "3")}
                                    validateContent={FormUtils.validateEmail}
