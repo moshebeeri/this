@@ -84,19 +84,19 @@ class Signup extends Component {
 
             <ScrollView>
                 <View style={[styles.inputContainer, {width: StyleUtils.getWidth()}]}>
+                    <View style={{
+                        backgroundColor: 'white',
+                        position: 'absolute',
+                        height: height,
+                        width: StyleUtils.getWidth()
+                    }}>
+                        <Image style={{position: 'absolute', height: height, width: StyleUtils.getWidth()}}
+                               resizeMode='cover' source={bg}/>
 
+                    </View>
                     <KeyboardAvoidingView behavior={'position'}
                                           style={[styles.avoidView, {width: StyleUtils.getWidth()}]}>
-                        <View style={{
-                            backgroundColor: 'white',
-                            position: 'absolute',
-                            height: height,
-                            width: StyleUtils.getWidth()
-                        }}>
-                            <Image style={{position: 'absolute', height: height, width: StyleUtils.getWidth()}}
-                                   resizeMode='cover' source={bg}/>
 
-                        </View>
                         <View style={{
                             width: StyleUtils.getWidth(),
                             height: 50,
@@ -116,7 +116,7 @@ class Signup extends Component {
                             </TouchableOpacity>
                         </View>
                         <View style={styles.thisContainer}>
-                            <Image style={{position: 'absolute', top: -175, width: 140}} resizeMode='contain'
+                            <Image style={{position: 'absolute', top: -180, width: 140}} resizeMode='contain'
                                    source={thisLogo}/>
                             <Text style={styles.this}>THIS</Text>
                         </View>

@@ -63,12 +63,13 @@ class Login extends Component {
         const {focusPassword, focusPhone, failedMessage, doLogin} = this.props;
         return (
             <ScrollView>
-            <KeyboardAvoidingView  behavior={'position'} style={[styles.inputContainer, {width: StyleUtils.getWidth()}]}>
+                <View style={{backgroundColor:'white',position:'absolute',height:height,width:StyleUtils.getWidth()}}>
+                    <Image style={{position:'absolute',height:height,width:StyleUtils.getWidth()}}resizeMode='cover' source={bg}/>
 
-                    <View style={{backgroundColor:'white',position:'absolute',height:height,width:StyleUtils.getWidth()}}>
-                        <Image style={{position:'absolute',height:height,width:StyleUtils.getWidth()}}resizeMode='cover' source={bg}/>
+                </View>
 
-                    </View>
+                <KeyboardAvoidingView  behavior={'position'} style={[styles.inputContainer, {width: StyleUtils.getWidth()}]}>
+
 
                     <View style={{
                         flexDirection: 'column',

@@ -32,7 +32,7 @@ export default function postForm(state = initialState, action) {
         case actions.RESET_POST_FORM:
             return {
                 ...state,
-                saving: action.false,
+                saving:false,
             };
         case actions.POST_SAVING :
             return {
