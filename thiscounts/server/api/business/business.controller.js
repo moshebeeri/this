@@ -37,7 +37,6 @@ exports.test_email = function (req, res) {
       if (err) console.error(err);
       return res.status(200).send();
     });
-
   // email.send('reviewBusiness', 'moshe@low.la', {
   //   name: 'moshe',
   //   businessEmail: "business@email.com",
@@ -57,8 +56,6 @@ exports.test_email = function (req, res) {
   // }, function (err) {
   //   if (err) console.error(err);
   // });
-
-
   // email.send('validateBusinessEmail',
   //   'moshe.beeri@gmail.com', {
   //     name: 'business.creator.name',
@@ -69,8 +66,6 @@ exports.test_email = function (req, res) {
   //     if (err) console.error(err);
   //     return res.status(200).send();
   //   });
-
-
   // email.send('mars', 'moshe.beeri@gmail.com', {locale: 'fr', name: 'moshe'}, function (err) {
   //   if(err) console.error(err);
   //   return res.status(200).send();
@@ -129,7 +124,7 @@ exports.mine = function (req, res) {
       _ids.push(business_role.business_id);
       userRoleById[business_role.business_id] = business_role.role.properties.name;
     });
-    Business.find({}).where('_id').in(_ids)
+    Business.find({}).where({$or: [{_id: {$in: _ids}}, {$and: [{creator: userId}, {'review.status': 'waiting'}]}]})
       .sort({_id: 'desc'})
       .exec(function (err, businesses) {
         if (err) return handleError(res, err);
@@ -148,6 +143,25 @@ exports.mine = function (req, res) {
   })
 };
 
+/*
+    Business.find({}).where('_id').in(_ids)
+      .sort({_id: 'desc'})
+      .exec(function (err, businesses) {
+        if (err) return handleError(res, err);
+        get_businesses_state(businesses, req.user._id, function (err, businesses) {
+          if (err) return handleError(res, err);
+          let info = [];
+          console.log(JSON.stringify(businesses));
+          businesses.forEach(business => {
+            info.push({
+              business: business,
+              role: userRoleById[business._id]
+            });
+          });
+          return res.status(200).json(info);
+        })
+      });
+ */
 function business_follow_activity(follower, business) {
   activity.activity({
     business,
@@ -322,7 +336,7 @@ function sendValidationEmail(business) {
       name: business.creator.name,
       businessName: business.name,
       businessId: business._id,
-      validationCode: business.validationCode
+      validationCode: business.email_validate
     }, function (err) {
       if (err) console.error(err);
     });
@@ -445,12 +459,10 @@ exports.validate_email = function (req, res) {
     if (!business) return res.status(404).send('Not Found');
     if (business.email_validate !== validationCode) return res.status(404).send('Validation codes mismatch');
     business.email_validate = '';
-    business.save(err => {
+    business.review.state = 'review';
+      business.save(err => {
       if (err) return handleError(res, err);
-      if (business.status === 'accepted') {
-        reviewRequest(business);
-        return createValidatedBusiness(res, businessId);
-      }
+      reviewRequest(business);
       return res.status(201).send();
     });
   })
@@ -458,16 +470,18 @@ exports.validate_email = function (req, res) {
 exports.create = function (req, res) {
   let body_business = req.body;
   let userId = req.user._id;
-  body_business = randomstring.generate({length: 12, charset: 'numeric'});
+  body_business.email_validate = randomstring.generate({length: 12, charset: 'numeric'});
   body_business.review = {
-    status:  'waiting',
-    result:  'waiting',
-    reason: '',
+    status: 'waiting',
+    result: 'waiting',
+    state: 'validation',
+    reason: ''
   };
 
   function createBusiness() {
     location.address_location(body_business, function (err, data) {
       if (err) {
+        console.error(err);
         if (err.code >= 400) return res.status(err.code).send(err.message);
         else if (err.code === 202) {
           console.log(err);
