@@ -331,12 +331,14 @@ exports.check_address = function (req, res) {
 };
 
 function sendValidationEmail(business) {
+  console.log(`sendValidationEmail - ${JSON.stringify(business)}`);
   email.send('validateBusinessEmail',
     business.email, {
       name: business.creator.name,
       businessName: business.name,
       businessId: business._id,
-      validationCode: business.email_validate
+      validationCode: business.validationCode,
+      code: business.validationCode
     }, function (err) {
       if (err) console.error(err);
     });
@@ -388,6 +390,7 @@ function createValidatedBusiness(res, businessId) {
         if (business.type === 'PERSONAL_SERVICES' || business.type === 'SMALL_BUSINESS') {
           let grunt_query = `MATCH (user:user{_id:"${business.creator._id}"}), (entity{_id:"${business._id}"})
                      CREATE (user)-[role:ROLE{name:'OWNS'}]->(entity)`;
+          console.log(`grunt_query ${grunt_query}`);
           graphModel.query(grunt_query, function (err) {
             if (err) console.log(err);
             graphModel.owner_followers_follow_business(business.creator._id);
@@ -457,8 +460,8 @@ exports.validate_email = function (req, res) {
   Business.findById(businessId).exec((err, business) => {
     if (err) return handleError(res, err);
     if (!business) return res.status(404).send('Not Found');
-    if (business.email_validate !== validationCode) return res.status(404).send('Validation codes mismatch');
-    business.email_validate = '';
+    if (business.validationCode !== validationCode) return res.status(404).send('Validation codes mismatch');
+    business.validationCode = '';
     business.review.state = 'review';
       business.save(err => {
       if (err) return handleError(res, err);
@@ -470,7 +473,7 @@ exports.validate_email = function (req, res) {
 exports.create = function (req, res) {
   let body_business = req.body;
   let userId = req.user._id;
-  body_business.email_validate = randomstring.generate({length: 12, charset: 'numeric'});
+  body_business.validationCode = randomstring.generate({length: 12, charset: 'numeric'});
   body_business.review = {
     status: 'waiting',
     result: 'waiting',
@@ -482,6 +485,7 @@ exports.create = function (req, res) {
     location.address_location(body_business, function (err, data) {
       if (err) {
         console.error(err);
+        console.error(JSON.stringify(body_business));
         if (err.code >= 400) return res.status(err.code).send(err.message);
         else if (err.code === 202) {
           console.log(err);
