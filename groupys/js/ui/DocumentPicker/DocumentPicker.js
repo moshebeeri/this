@@ -21,12 +21,7 @@ export default class DocumentPicker extends Component {
 
     isValid() {
         const {isMandatory, validateContent, invalid,value} = this.props;
-        if (invalid) {
-            this.setState({
-                invalid: true
-            })
-            return false
-        }
+
         if (isMandatory) {
             if (!this.state.document) {
                 if(!value) {
@@ -34,17 +29,9 @@ export default class DocumentPicker extends Component {
                         invalid: true
                     })
                 }
-                return false
             }
         }
-        if (validateContent) {
-            if (!validateContent(value)) {
-                this.setState({
-                    invalid: true
-                })
-                return false
-            }
-        }
+
         return true;
     }
 

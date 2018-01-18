@@ -50,7 +50,8 @@ import StyleUtils from "../../utils/styleUtils";
 const height = StyleUtils.getHeight();
 let locationApi = new LocationApi();
 let contactApi = new ContactApi();
-const store = getStore();
+const reduxStore = getStore();
+import store from 'react-native-simple-store';
 const updateDialogOption = {
     updateTitle: "update"
 };
@@ -97,15 +98,15 @@ FCM.on(FCMEvent.RefreshToken, (token) => {
 ////////// background jobs schedulers ////////////////////////
 const warch = navigator.geolocation.watchPosition((position) => {
         try {
-            if (store.getState().authentication.token) {
+            if (reduxStore.getState().authentication.token) {
                 locationApi.sendLocation(position.coords.longitude, position.coords.latitude, position.timestamp, position.coords.speed);
             }
-            store.dispatch({
+            reduxStore.dispatch({
                 type: actions.SET_LOCATION,
                 currentLocation: {lat: position.coords.latitude, long: position.coords.longitude}
             })
         } catch (error) {
-            store.dispatch({
+            reduxStore.dispatch({
                 type: actions.NETWORK_IS_OFFLINE,
             })
         }
@@ -115,16 +116,16 @@ const warch = navigator.geolocation.watchPosition((position) => {
 const timer = BackgroundTimer.setInterval(() => {
     try {
         pageSync.check();
-        if (store.getState().authentication.token) {
+        if (reduxStore.getState().authentication.token) {
             contactApi.syncContacts();
         }
-        if (store.getState().network.offline) {
-            store.dispatch({
+        if (reduxStore.getState().network.offline) {
+            reduxStore.dispatch({
                 type: actions.NETWORK_IS_ONLINE,
             })
         }
     } catch (error) {
-        store.dispatch({
+        reduxStore.dispatch({
             type: actions.NETWORK_IS_OFFLINE,
         })
     }
@@ -133,7 +134,7 @@ const refresher = BackgroundTimer.setInterval(() => {
     try {
         pageSync.check();
     } catch (error) {
-        store.dispatch({
+        reduxStore.dispatch({
             type: actions.NETWORK_IS_OFFLINE,
         })
     }
@@ -166,8 +167,8 @@ class ApplicationManager extends Component {
                 console.log('granted')).catch(() =>
             console.log('notification permission rejected'));
 
-        const isVerified = await this.props.isAuthenticated
-        if (!isVerified) {
+        let token = await store.get("token");
+        if (!token) {
             this.props.navigation.dispatch(resetAction);
         }
         FCM.getFCMToken().then(token => {
