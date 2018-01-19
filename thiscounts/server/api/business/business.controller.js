@@ -37,7 +37,6 @@ exports.test_email = function (req, res) {
       if (err) console.error(err);
       return res.status(200).send();
     });
-
   // email.send('reviewBusiness', 'moshe@low.la', {
   //   name: 'moshe',
   //   businessEmail: "business@email.com",
@@ -57,8 +56,6 @@ exports.test_email = function (req, res) {
   // }, function (err) {
   //   if (err) console.error(err);
   // });
-
-
   // email.send('validateBusinessEmail',
   //   'moshe.beeri@gmail.com', {
   //     name: 'business.creator.name',
@@ -69,8 +66,6 @@ exports.test_email = function (req, res) {
   //     if (err) console.error(err);
   //     return res.status(200).send();
   //   });
-
-
   // email.send('mars', 'moshe.beeri@gmail.com', {locale: 'fr', name: 'moshe'}, function (err) {
   //   if(err) console.error(err);
   //   return res.status(200).send();
@@ -129,7 +124,7 @@ exports.mine = function (req, res) {
       _ids.push(business_role.business_id);
       userRoleById[business_role.business_id] = business_role.role.properties.name;
     });
-    Business.find({}).where('_id').in(_ids)
+    Business.find({}).where({$or: [{_id: {$in: _ids}}, {$and: [{creator: userId}, {'review.status': 'waiting'}]}]})
       .sort({_id: 'desc'})
       .exec(function (err, businesses) {
         if (err) return handleError(res, err);
@@ -148,6 +143,25 @@ exports.mine = function (req, res) {
   })
 };
 
+/*
+    Business.find({}).where('_id').in(_ids)
+      .sort({_id: 'desc'})
+      .exec(function (err, businesses) {
+        if (err) return handleError(res, err);
+        get_businesses_state(businesses, req.user._id, function (err, businesses) {
+          if (err) return handleError(res, err);
+          let info = [];
+          console.log(JSON.stringify(businesses));
+          businesses.forEach(business => {
+            info.push({
+              business: business,
+              role: userRoleById[business._id]
+            });
+          });
+          return res.status(200).json(info);
+        })
+      });
+ */
 function business_follow_activity(follower, business) {
   activity.activity({
     business,
@@ -307,7 +321,7 @@ exports.check_address = function (req, res) {
     if (err) {
       if (err.code >= 400) return res.status(err.code).send(err.message);
       else if (err.code === 202) {
-        console.log(err);
+        console.error(err);
         return res.status(202).json(data);
       }
       else return res.status(400).send(err);
@@ -322,7 +336,8 @@ function sendValidationEmail(business) {
       name: business.creator.name,
       businessName: business.name,
       businessId: business._id,
-      validationCode: business.validationCode
+      validationCode: business.validationCode,
+      code: business.validationCode
     }, function (err) {
       if (err) console.error(err);
     });
@@ -350,54 +365,50 @@ function reviewRequest(business) {
   });
 }
 
-function createValidatedBusiness(res, businessId) {
-  Business.findById(businessId).exec((err, business) => {
-    if (err) return handleError(res, err);
-    if (!business) return res.status(404).send('Not Found');
-    qrcodeController.createAndAssign(business.creator, {
-      type: 'FOLLOW_BUSINESS',
-      assignment: {
-        business: business._id
-      }
-    }, function (err, qrcode) {
-      business.qrcode = qrcode;
-      business.save();
-      graphModel.reflect(business, {
-        _id: business._id,
-        name: business.name,
-        type: business.type,
-        creator: business.creator,
-        lat: business.location.lat,
-        lon: business.location.lng
-      }, function (err, business) {
-        if (err) return handleError(res, err);
-        if (business.type === 'PERSONAL_SERVICES' || business.type === 'SMALL_BUSINESS') {
-          let grunt_query = `MATCH (user:user{_id:"${business.creator._id}"}), (entity{_id:"${business._id}"})
+function createValidatedBusiness(res, business) {
+  qrcodeController.createAndAssign(business.creator, {
+    type: 'FOLLOW_BUSINESS',
+    assignment: {
+      business: business._id
+    }
+  }, function (err, qrcode) {
+    business.qrcode = qrcode;
+    business.save();
+    graphModel.reflect(business, {
+      _id: business._id,
+      name: business.name,
+      type: business.type,
+      creator: business.creator,
+      lat: business.location.lat,
+      lon: business.location.lng
+    }, function (err, business) {
+      if (err) return handleError(res, err);
+      if (business.type === 'PERSONAL_SERVICES' || business.type === 'SMALL_BUSINESS') {
+        let grunt_query = `MATCH (user:user{_id:"${business.creator}"}), (entity{_id:"${business._id}"})
                      CREATE (user)-[role:ROLE{name:'OWNS'}]->(entity)`;
-          graphModel.query(grunt_query, function (err) {
-            if (err) console.log(err);
-            graphModel.owner_followers_follow_business(business.creator._id);
-          });
-        }
-        if (defined(business.shopping_chain))
-          graphModel.relate_ids(business._id, 'BRANCH_OF', business.shopping_chain);
-        if (defined(business.mall))
-          graphModel.relate_ids(business._id, 'IN_MALL', business.mall);
-        spatial.add2index(business.gid, function (err, result) {
-          if (err) return logger.error(err.message);
+        graphModel.query(grunt_query, function (err) {
+          if (err) return handleError(res, err);
+          graphModel.owner_followers_follow_business(business.creator);
         });
-        activity.activity({
-          business: business._id,
-          actor_user: business.creator,
-          action: 'created'
-        }, function (err) {
-          if (err) console.error(err.message)
-        });
-        create_business_default_group(business);
-        notifyOnAction(business);
-        return res.status(201).json(business);
+      }
+      if (defined(business.shopping_chain))
+        graphModel.relate_ids(business._id, 'BRANCH_OF', business.shopping_chain);
+      if (defined(business.mall))
+        graphModel.relate_ids(business._id, 'IN_MALL', business.mall);
+      spatial.add2index(business.gid, function (err, result) {
+        if (err) return handleError(res, err);
       });
-    })
+      activity.activity({
+        business: business._id,
+        actor_user: business.creator,
+        action: 'created'
+      }, function (err) {
+        if (err) return handleError(res, err);
+      });
+      create_business_default_group(business);
+      notifyOnAction(business);
+      return res.status(201).json(business);
+    });
   })
 }
 
@@ -423,9 +434,10 @@ exports.review = function (req, res) {
     business.review.status = 'done';
     if (status === 'accepted') {
       business.review.result = 'accepted';
-      business.save(err => {
+      business.save((err, business) => {
         if (err) return handleError(res, err);
-        return createValidatedBusiness(res, businessId);
+        if (!business) return res.status(404).send('Not Found');
+        return createValidatedBusiness(res, business);
       });
     } else {
       business.review.result = 'rejected';
@@ -434,7 +446,6 @@ exports.review = function (req, res) {
         return sendRejectEmail(business);
       });
     }
-    return res.status(201).send();
   })
 };
 exports.validate_email = function (req, res) {
@@ -443,34 +454,34 @@ exports.validate_email = function (req, res) {
   Business.findById(businessId).exec((err, business) => {
     if (err) return handleError(res, err);
     if (!business) return res.status(404).send('Not Found');
-    if (business.email_validate !== validationCode) return res.status(404).send('Validation codes mismatch');
-    business.email_validate = '';
+    if (business.validationCode !== validationCode) return res.status(404).send('Validation codes mismatch');
+    business.validationCode = '';
+    business.review.state = 'review';
     business.save(err => {
       if (err) return handleError(res, err);
-      if (business.status === 'accepted') {
-        reviewRequest(business);
-        return createValidatedBusiness(res, businessId);
-      }
-      return res.status(201).send();
+      reviewRequest(business);
+      return res.status(201).send('email verified successfully');
     });
   })
 };
 exports.create = function (req, res) {
   let body_business = req.body;
   let userId = req.user._id;
-  body_business = randomstring.generate({length: 12, charset: 'numeric'});
+  body_business.validationCode = randomstring.generate({length: 12, charset: 'numeric'});
   body_business.review = {
-    status:  'waiting',
-    result:  'waiting',
-    reason: '',
+    status: 'waiting',
+    result: 'waiting',
+    state: 'validation',
+    reason: ''
   };
 
   function createBusiness() {
     location.address_location(body_business, function (err, data) {
       if (err) {
+        console.error(err);
         if (err.code >= 400) return res.status(err.code).send(err.message);
         else if (err.code === 202) {
-          console.log(err);
+          console.error(err);
           return res.status(202).json(data);
         }
         else return res.status(400).send(err);
@@ -558,7 +569,6 @@ exports.destroy = function (req, res) {
 };
 
 function handleError(res, err) {
-  console.log(err);
   return res.status(500).send(err);
 }
 
