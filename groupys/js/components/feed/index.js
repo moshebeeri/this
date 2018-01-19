@@ -12,6 +12,9 @@ import Icon2 from "react-native-vector-icons/Ionicons";
 import {createSelector} from "reselect";
 import {View,I18nManager} from 'react-native';
 
+var Analytics = require('react-native-firebase-analytics');
+
+
 import {Fab,} from 'native-base';
 
 class Feed extends Component {
@@ -23,7 +26,15 @@ class Feed extends Component {
     }
 
     componentWillMount() {
-        const {feeds, actions, firstTime} = this.props;
+        const {feeds, actions, firstTime,user} = this.props;
+        Analytics.setUserId('test4');
+        Analytics.logEvent('first_visit', {
+            'firebase_screen_id': 'feed2'
+        });
+        Analytics.logEvent('screen_view', {
+            'firebase_screen_id': 'feed2'
+        });
+
         if (firstTime) {
             actions.setNextFeeds(feeds);
             this.props.userActions.fetchUsersFollowers();
