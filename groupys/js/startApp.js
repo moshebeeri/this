@@ -42,6 +42,11 @@ import getStore from "./store";
 import setCustomStyles from './styles'
 import * as actions from "./reducers/reducerActions";
 setCustomStyles();
+
+import ActionLogger from './actions/ActionLogger'
+let logger = new ActionLogger();
+
+
 const AppNavigator = StackNavigator({
         home: {screen: ApplicationManager},
         login: {screen: Login},
@@ -114,8 +119,7 @@ class AppWithNavigationState extends Component {
                             type:actions.CURRENT_SCREEN,
                             screen:currentScreen
                         })
-                        console.log(currentScreen)
-                        console.log(prevScreen)
+                        logger.screenVisited(currentScreen,prevScreen);
 
                     }}/>
             </MenuContext>

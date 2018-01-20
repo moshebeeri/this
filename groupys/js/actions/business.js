@@ -18,6 +18,10 @@ let promotionApi = new PromotionApi();
 let entityUtils = new EntityUtils();
 let pricingApi = new PricingApi();
 
+import ActionLogger from './ActionLogger'
+let logger = new ActionLogger();
+
+
 async function getAll(dispatch, token) {
     try {
         let response = await businessApi.getAll(token);
@@ -31,6 +35,7 @@ async function getAll(dispatch, token) {
         dispatch({
             type: actions.NETWORK_IS_OFFLINE,
         });
+        logger.actionFailed("business_getAll")
     }
 }
 
@@ -48,6 +53,7 @@ async function get(dispatch, token, id) {
         dispatch({
             type: actions.NETWORK_IS_OFFLINE,
         });
+        logger.actionFailed("business_get");
     }
 }
 
@@ -64,6 +70,7 @@ async function getBusinessCategories(dispatch, gid, token) {
         dispatch({
             type: actions.NETWORK_IS_OFFLINE,
         });
+        logger.actionFailed("business_get_Categories",gid);
     }
 }
 
@@ -78,6 +85,7 @@ async function dispatchSearchBusiness(dispatch, business, token) {
         dispatch({
             type: actions.NETWORK_IS_OFFLINE,
         });
+        logger.actionFailed("business_search_business",business);
     }
 }
 
@@ -101,6 +109,7 @@ async function dispatchFollowByQrcode(dispatch, barcode, token) {
         dispatch({
             type: actions.NETWORK_IS_OFFLINE,
         });
+        logger.actionFailed("business_search_by_qrcode");
     }
 }
 
@@ -145,6 +154,7 @@ export function onEndReached() {
             dispatch({
                 type: actions.NETWORK_IS_OFFLINE,
             });
+            logger.actionFailed("business_getAll")
         }
         dispatch({
             type: actions.BUSSINESS_LOADING_DONE,
@@ -172,6 +182,7 @@ export function followBusiness(businessId) {
             dispatch({
                 type: actions.NETWORK_IS_OFFLINE,
             });
+            logger.actionFailed("business_followBusiness",businessId)
         }
     }
 }
@@ -185,6 +196,7 @@ export function unFollowBusiness(businessId) {
             dispatch({
                 type: actions.NETWORK_IS_OFFLINE,
             });
+            logger.actionFailed("business_followBusiness",businessId)
         }
     }
 }
@@ -199,6 +211,7 @@ export function groupFollowBusiness(groupid, businessId, navigation) {
             dispatch({
                 type: actions.NETWORK_IS_OFFLINE,
             });
+            logger.actionFailed("business_groupFollowBusiness",businessId)
         }
     }
 }
@@ -231,6 +244,7 @@ export function setBusinessUsers(businessId) {
             dispatch({
                 type: actions.NETWORK_IS_OFFLINE,
             });
+            logger.actionFailed("users_getBusinessUsers",businessId);
         }
     }
 }
@@ -255,6 +269,7 @@ export function setBusinessProducts(businessId) {
             dispatch({
                 type: actions.NETWORK_IS_OFFLINE,
             });
+            logger.actionFailed("product_findByBusinessId",businessId);
         }
     }
 }
@@ -279,17 +294,22 @@ export function setBusinessPromotions(businessId) {
             dispatch({
                 type: actions.NETWORK_IS_OFFLINE,
             });
+            logger.actionFailed("promotion_findByBusinessId",businessId);
         }
     }
 }
 
 async function updateBusinessPromotions(businessId, token, dispatch) {
-    let promotions = await promotionApi.getAllByBusinessId(businessId, token);
-    dispatch({
-        type: actions.SET_PROMOTION_BUSINESS,
-        businessesPromotions: promotions,
-        businessId: businessId
-    });
+    try {
+        let promotions = await promotionApi.getAllByBusinessId(businessId, token);
+        dispatch({
+            type: actions.SET_PROMOTION_BUSINESS,
+            businessesPromotions: promotions,
+            businessId: businessId
+        });
+    }catch (error){
+        logger.actionFailed("promotion_getAllByBusinessId",businessId);
+    }
 }
 
 function saveBusinessFailed() {
@@ -336,6 +356,7 @@ export function saveBusiness(business, navigation) {
             dispatch({
                 type: actions.SAVING_BUSINESS_DONE,
             });
+            logger.actionFailed("create_business",business);
         }
     }
 }
@@ -361,6 +382,7 @@ export function updateBusiness(business, navigation) {
             dispatch({
                 type: actions.NETWORK_IS_OFFLINE,
             });
+            logger.actionFailed("update_business",business);
         }
     }
 }
@@ -387,6 +409,7 @@ export function setBusinessQrCode(business) {
             dispatch({
                 type: actions.NETWORK_IS_OFFLINE,
             });
+            logger.actionFailed("business_getBusinessQrCodeImage",business);
         }
     }
 }
