@@ -103,6 +103,7 @@ function activity_impl(act, callback) {
       callback(err, null);
       return;
     }
+    console.log(JSON.stringify(activity));
 
     if(act.ids){
       let effected = [];
@@ -118,6 +119,8 @@ function activity_impl(act, callback) {
     }
 
     if (activity.actor_user) {
+      console.log("activity.actor_user=" + activity.actor_user);
+
       effected_in_rel(activity.actor_user, 'FOLLOW', function (err, effected) {
         if (err) {
           return callback(err, null);
@@ -161,8 +164,9 @@ function activity_impl(act, callback) {
         update_feeds(effected, activity);
         return handleSuccess(activity)
       });
+    }else {
+      return callback(new Error('Activity not distributed expected ids. audience or actor_*'));
     }
-    return callback(new Error('Activity not distributed expected ids. audience or actor_*'));
   });
 }
 
