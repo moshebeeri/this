@@ -158,6 +158,15 @@ android {
 }
 
 dependencies {
+    compile project(':react-native-youtube')
+    compile project(':react-native-link-preview')
+    compile project(':react-native-image-picker')
+    compile(project(':react-native-firebase')) {
+        transitive = false
+    }
+    compile project(':react-native-fcm')
+    compile project(':react-native-camera')
+    compile project(':react-native-braintree-xplat')
 
     compile (project(':react-native-braintree-xplat')){
 
@@ -181,7 +190,7 @@ dependencies {
         compile project(':react-native-file-uploader')
         compile project(':react-native-contacts')
         compile project(':react-native-fileupload')
-
+        compile project(':react-native-firebase-analytics')
         compile project(':react-native-vector-icons')
         compile fileTree(dir: "libs", include: ["*.jar"])
         compile "com.android.support:appcompat-v7:25.0.0"

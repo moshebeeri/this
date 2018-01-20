@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import {Image, Platform, View} from 'react-native';
+import {Image, Platform, View,ScrollView} from 'react-native';
 import {actions} from 'react-native-navigation-redux-helpers';
 import {
     Button,
@@ -123,7 +123,7 @@ class UserProfile extends Component {
         }} resizeMode="cover" source={source}>
         </Image>
         return (
-
+            <ScrollView>
             <View style={[styles.settingsContainer, {width: StyleUtils.getWidth()}]}>
 
                 <FormHeader showBack submitForm={this.save.bind(this)} navigation={this.props.navigation}
@@ -152,7 +152,7 @@ class UserProfile extends Component {
                     {this.props.saving && <Spinner/>}
                 </View>
             </View>
-
+            </ScrollView>
         );
     }
 

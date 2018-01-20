@@ -1,4 +1,4 @@
-ad/**
+/**
  * Copyright (c) 2015-present, Facebook, Inc.
  * All rights reserved.
  *
@@ -8,7 +8,6 @@ ad/**
  */
 
 #import <UIKit/UIKit.h>
-
 #import "AppDelegate.h"
 
 int main(int argc, char * argv[]) {

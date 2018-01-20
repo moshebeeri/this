@@ -3,10 +3,17 @@ package com.groupys;
 import android.app.Application;
 
 import com.facebook.react.ReactApplication;
+import com.inprogress.reactnativeyoutube.ReactNativeYouTube;
+import io.linkpreview.RNReactNativeLinkPreviewPackage;
+import com.imagepicker.ImagePickerPackage;
+import io.invertase.firebase.RNFirebasePackage;
+import com.evollu.react.fcm.FIRMessagingPackage;
+import com.lwansbrough.RCTCamera.RCTCameraPackage;
+import com.pw.droplet.braintree.BraintreePackage;
 import com.pw.droplet.braintree.BraintreePackage;
 import com.evollu.react.fcm.FIRMessagingPackage;
 import com.reactnative.ivpusic.imagepicker.PickerPackage;
-
+import com.evollu.react.fa.FIRAnalyticsPackage;
 import com.AlexanderZaytsev.RNI18n.RNI18nPackage;
 import com.vydia.RNUploader.UploaderReactPackage;
 import com.lwansbrough.RCTCamera.RCTCameraPackage;
@@ -51,11 +58,18 @@ public class MainApplication extends Application implements ReactApplication {
     protected List<ReactPackage> getPackages() {
       return Arrays.<ReactPackage>asList(
           new MainReactPackage(),
+            new ReactNativeYouTube(),
+            new RNReactNativeLinkPreviewPackage(),
+            new ImagePickerPackage(),
+            new RNFirebasePackage(),
+            new FIRMessagingPackage(),
+            new RCTCameraPackage(),
+            new BraintreePackage(),
             new BraintreePackage(),
             new FIRMessagingPackage(),
             new PickerPackage(),
 
-
+            new FIRAnalyticsPackage(),
             new RNI18nPackage(),
             new UploaderReactPackage(),
             new RCTCameraPackage(),
