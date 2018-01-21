@@ -396,14 +396,14 @@ function createValidatedBusiness(res, business) {
       if (defined(business.mall))
         graphModel.relate_ids(business._id, 'IN_MALL', business.mall);
       spatial.add2index(business.gid, function (err, result) {
-        if (err) return handleError(res, err);
+        if (err) return console.error(err);
       });
       activity.activity({
         business: business._id,
         actor_user: business.creator,
         action: 'created'
       }, function (err) {
-        if (err) return handleError(res, err);
+        if (err) return console.error(err);
       });
       create_business_default_group(business);
       notifyOnAction(business);
@@ -569,6 +569,7 @@ exports.destroy = function (req, res) {
 };
 
 function handleError(res, err) {
+  console.error(err);
   return res.status(500).send(err);
 }
 

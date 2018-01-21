@@ -33,6 +33,7 @@ function toPayloadData(notification, callback){
     // 'bodyLocKey': '',
     // 'bodyLocArgs': '',
   };
+  //console.log(JSON.stringify(notification));
   if( notification.promotion ) data = {model: 'promotion'  , _id: notification.promotion._id };
   if( notification.instance  ) data = {model: 'instance'   , _id: notification.instance._id  };
   if( notification.product   ) data = {model: 'product'    , _id: notification.product._id   };
@@ -84,8 +85,8 @@ function firebasePNS(notification, registrationTokens) {
 // registration tokens.
   if (!notification || !notification.options)
     return;
-  console.log(`firebasePNS options: ${JSON.stringify(notification.options)}`);
-  console.log(`firebasePNS registrationTokens: ${JSON.stringify(registrationTokens)}`);
+  // console.log(`firebasePNS options: ${JSON.stringify(notification.options)}`);
+  // console.log(`firebasePNS registrationTokens: ${JSON.stringify(registrationTokens)}`);
   toPayloadData(notification, function(err, payload) {
     if(err) return console.error(err);
     /*
@@ -150,7 +151,10 @@ exports.notify = function (note, audience) {
     note.to = to;
     Notification.create(note, function (err, notification) {
       if (err) return console.error(err);
-      pnsUserDevices(notification)
+      Notification.findById(notification._id).exec((err, populated) => {
+        if (err) return console.error(err);
+        pnsUserDevices(populated)
+      })
     });
   });
 };
