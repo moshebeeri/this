@@ -203,7 +203,7 @@ class AddPromotion extends Component {
                 case 'BUSINESS':
                     promotion.on_action = {
                         active: true,
-                        type: 'FOLLOW_BUSINESS',
+                        type: 'FOLLOW_ENTITY',
                         entity: {
                             business: this.getBusinessId()
                         }

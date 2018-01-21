@@ -146,6 +146,9 @@ export function savePromotion(promotion,businessId,navigation) {
             dispatch({
                 type: actions.NETWORK_IS_OFFLINE,
             });
+            dispatch({
+                type: actions.PROMOTION_SAVING_DONE,
+            });
             logger.actionFailed('promotions-savePromotion')
         }
     }

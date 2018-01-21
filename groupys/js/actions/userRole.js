@@ -21,8 +21,8 @@ export function saveRole(user, businessId, userRole, navigation) {
                 show: false,
                 message: '',
             });
-            await userApi.removeUserRole(user._id, businessId);
-            await userApi.setUserRole(user._id, businessId, userRole);
+            await userApi.removeUserRole(user, businessId);
+            await userApi.setUserRole(user, businessId, userRole);
             let users = await userApi.getBusinessUsers(businessId, token);
             dispatch({
                 type: actions.SET_USER_BUSINESS,
