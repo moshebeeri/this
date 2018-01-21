@@ -169,6 +169,10 @@ class AddBusiness extends Component {
         if (value.name) {
             return;
         }
+        if(this.props.navigation && this.props.navigation.state && this.props.navigation.state.params && this.props.navigation.state.params.updating){
+            return;
+        }
+
         if (value.website) {
             return;
         }

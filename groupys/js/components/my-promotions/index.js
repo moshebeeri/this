@@ -40,7 +40,7 @@ class MyPromotions extends Component {
         />
     }
     shouldComponentUpdate(){
-        if(this.props.currentScreen ==='home' && this.props.selectedTab === 1){
+        if(this.props.currentScreen ==='home' && (this.props.selectedTab === 1 || this.props.selectedTab === 2)){
             return true;
         }
         return false;

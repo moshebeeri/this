@@ -10,13 +10,11 @@ import io.invertase.firebase.RNFirebasePackage;
 import com.evollu.react.fcm.FIRMessagingPackage;
 import com.lwansbrough.RCTCamera.RCTCameraPackage;
 import com.pw.droplet.braintree.BraintreePackage;
-import com.pw.droplet.braintree.BraintreePackage;
-import com.evollu.react.fcm.FIRMessagingPackage;
 import com.reactnative.ivpusic.imagepicker.PickerPackage;
 import com.evollu.react.fa.FIRAnalyticsPackage;
 import com.AlexanderZaytsev.RNI18n.RNI18nPackage;
 import com.vydia.RNUploader.UploaderReactPackage;
-import com.lwansbrough.RCTCamera.RCTCameraPackage;
+
 //import com.inprogress.reactnativeyoutube.ReactNativeYouTube;
 import com.brentvatne.react.ReactVideoPackage;
 import com.babisoft.ReactNativeLocalization.ReactNativeLocalizationPackage;
@@ -34,7 +32,7 @@ import com.facebook.react.ReactNativeHost;
 import com.facebook.react.ReactPackage;
 import com.facebook.react.shell.MainReactPackage;
 import com.facebook.soloader.SoLoader;
-import com.lwansbrough.RCTCamera.RCTCameraPackage;
+
 import com.facebook.react.modules.i18nmanager.I18nUtil;
 
 import java.util.Arrays;
@@ -63,10 +61,10 @@ public class MainApplication extends Application implements ReactApplication {
             new ImagePickerPackage(),
             new RNFirebasePackage(),
             new FIRMessagingPackage(),
-            new RCTCameraPackage(),
+
             new BraintreePackage(),
-            new BraintreePackage(),
-            new FIRMessagingPackage(),
+
+
             new PickerPackage(),
 
             new FIRAnalyticsPackage(),

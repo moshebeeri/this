@@ -37,7 +37,7 @@ class Notification extends Component {
         return <NotificationListView navigation={navigation} item={item} actions={actions} groupActions={groupActions}/>
     }
     shouldComponentUpdate(){
-        if(this.props.currentScreen ==='home' && this.props.selectedTab === 3){
+        if(this.props.currentScreen ==='home' && (this.props.selectedTab === 3 || this.props.selectedTab === 0)){
             return true;
         }
         return false;
