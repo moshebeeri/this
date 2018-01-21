@@ -365,6 +365,8 @@ function reviewRequest(business) {
 }
 
 function createValidatedBusiness(business, callback) {
+  console.log(JSON.stringify(business));
+
   qrcodeController.createAndAssign(business.creator, {
     type: 'FOLLOW_BUSINESS',
     assignment: {
@@ -429,7 +431,7 @@ function review(businessId, status, callback) {
     if (!business) return callback(null, null);
     if(business.review.status === 'reviewed') return callback(new Error('already reviewed'));
 
-    business.review.status = 'reviewed';
+    business.review.state = 'reviewed';
     if (status === 'accepted') {
       business.review.result = 'accepted';
       business.save((err, business) => {
@@ -449,24 +451,10 @@ function review(businessId, status, callback) {
 exports.review = function (req, res) {
   const businessId = req.params.id;
   const status = req.params.status;
-  Business.findById(businessId).exec((err, business) => {
+  review(businessId, status, (err, business) => {
     if (err) return handleError(res, err);
     if (!business) return res.status(404).send('Not Found');
-    business.review.status = 'reviewed';
-    if (status === 'accepted') {
-      business.review.result = 'accepted';
-      business.save((err, business) => {
-        if (err) return handleError(res, err);
-        if (!business) return res.status(404).send('Not Found');
-        return createValidatedBusiness(res, business);
-      });
-    } else {
-      business.review.result = 'rejected';
-      business.save(err => {
-        if (err) return handleError(res, err);
-        return sendRejectEmail(business);
-      });
-    }
+    return res.status(201).json(business);
   })
 };
 
