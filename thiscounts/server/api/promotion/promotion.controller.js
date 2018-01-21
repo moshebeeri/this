@@ -232,19 +232,25 @@ function handlePromotionPostCreate(promotion, callback) {
     const params = {type: promotion.on_action.type};
     if(promotion.on_action.type === 'PROXIMITY')
       params.proximity = promotion.on_action.proximity;
-    if (utils.defined(promotion.entity.business))
-      promotionGraphModel.relate_ids(promotion.entity.business._id, 'ON_ACTION', promotion._id, params);
-    if (utils.defined(promotion.entity.shopping_chain))
-      promotionGraphModel.relate_ids(promotion.entity.shopping_chain._id, 'ON_ACTION', promotion._id, params);
-    if (utils.defined(promotion.entity.mall))
-      promotionGraphModel.relate_ids(promotion.entity.mall._id, 'ON_ACTION', promotion._id, params);
-    if (utils.defined(promotion.entity.group))
-      promotionGraphModel.relate_ids(promotion.entity.group._id, 'ON_ACTION', promotion._id, params);
-    return callback(new Error('undefined promotion.on_action.type'));
-  }
 
-  // instance.createSingleInstance(promotion, function(err, instance){
-  // })
+    let entityId = null;
+    if (utils.defined(promotion.entity.business))
+      entityId = promotion.entity.business._id;
+    else if (utils.defined(promotion.entity.shopping_chain))
+      entityId = promotion.entity.shopping_chain._id;
+    else if (utils.defined(promotion.entity.mall))
+      entityId = promotion.entity.mall._id;
+    else if (utils.defined(promotion.entity.group))
+      entityId = promotion.entity.group._id;
+    else
+      return callback(new Error('undefined promotion.on_action.type'));
+
+    let delete_on_action_query = `MATCH (f { _id:${entityId} })-[r:ON_ACTION]->(t}) delete r`;
+    promotionGraphModel.query(delete_on_action_query, (err) => {
+      if(err) return callback(err);
+      return promotionGraphModel.relate_ids(entityId, 'ON_ACTION', promotion._id, params, callback);
+    });
+  }
 
   promotionGraphModel.reflect(promotion, to_graph(promotion), function (err, promotion) {
     if (err) return callback(err, null);
