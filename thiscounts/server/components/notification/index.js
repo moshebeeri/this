@@ -45,6 +45,7 @@ function toPayloadData(notification, callback){
   if( notification.card      ) data = {model: 'card'       , _id: notification.card._id      };
   if( notification.activity  ) data = {model: 'activity'   , _id: notification.activity._id  };
   if( notification.comment   ) data = {model: 'comment'    , _id: notification.comment._id   };
+  data._id = data._id.toString();
   n.title =  data.title = notification.title;
   n.body = data.body = notification.body;
   data.note = notification.note;
@@ -55,6 +56,7 @@ function toPayloadData(notification, callback){
     if(err) return callback(err);
     n.badge = badge;
     data.badge = badge;
+    console.log(JSON.stringify(data));
     return callback(null, {
       data,
       notification : n
