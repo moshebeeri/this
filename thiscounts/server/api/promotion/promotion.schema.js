@@ -74,8 +74,7 @@ let PromotionSchemaObject = {
       shopping_chain: {type: Schema.ObjectId, ref: 'ShoppingChain', autopopulate: true},
       mall: {type: Schema.ObjectId, ref: 'Mall', autopopulate: true},
       brand: {type: Schema.ObjectId, ref: 'Brand', autopopulate: true},
-      //TODO: Check if been used
-      // group: {type: Schema.ObjectId, ref: 'Group', autopopulate: true},
+      group: {type: Schema.ObjectId, ref: 'Group', autopopulate: true},
     }
   },
   distribution: {
