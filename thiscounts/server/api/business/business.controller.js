@@ -463,7 +463,7 @@ exports.validate_email = function (req, res) {
       business.save(err => {
       if (err) return handleError(res, err);
       reviewRequest(business);
-      return res.status(201).send();
+      return res.status(201).send("email validated successfully");
     });
   })
 };
