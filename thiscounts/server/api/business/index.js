@@ -18,7 +18,7 @@ router.put('/:id', auth.isAuthenticated(), controller.update);
 router.patch('/:id', auth.isAuthenticated(), controller.update);
 router.delete('/:id', auth.hasRole('admin'), controller.destroy);
 router.get('/validate/email/:id/:code', controller.validate_email);
-router.get('/review/:id/:status', auth.isAuthenticated(), controller.review);
+router.get('/review/:id/:status', controller.review);
 router.get('/list/mine', auth.isAuthenticated(), controller.mine);
 router.get('/follow/:business', auth.isAuthenticated(), controller.follow);
 router.delete('/follow/:business', auth.isAuthenticated(), controller.un_follow);

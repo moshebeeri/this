@@ -22,7 +22,7 @@ let BusinessSchema = new Schema({
   state: {type: String},
   main_phone_number: String,
   email: {type: String, index: true, required: true},
-  email_validate: {type: String},
+  validationCode: {type: String},
   website: String,
   creator: {type: Schema.ObjectId, index: true, ref: 'User', required: true},
   created: {type: Date, required: true},

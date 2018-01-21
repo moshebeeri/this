@@ -1,7 +1,9 @@
 import NotificationApi from "../api/notification";
 import * as actions from "../reducers/reducerActions";
+import ActionLogger from './ActionLogger'
 
 let notificationApi = new NotificationApi();
+let logger = new ActionLogger();
 
 export function onEndReached() {
     return async function (dispatch, getState) {
@@ -22,6 +24,7 @@ export function onEndReached() {
             dispatch({
                 type: actions.NETWORK_IS_OFFLINE,
             });
+            logger.actionFailed('notification-onEndReached')
         }
     }
 }
@@ -41,6 +44,7 @@ export function setTopNotification() {
             dispatch({
                 type: actions.NETWORK_IS_OFFLINE,
             });
+            logger.actionFailed('notification-setTopNotification')
         }
     }
 }
@@ -58,6 +62,7 @@ export function readNotification(notificationId) {
             dispatch({
                 type: actions.NETWORK_IS_OFFLINE,
             });
+            logger.actionFailed('notification-readNotification')
         }
     }
 }
@@ -75,6 +80,7 @@ export function doNotification(notificationId,type) {
             dispatch({
                 type: actions.NETWORK_IS_OFFLINE,
             });
+            logger.actionFailed('notification-doNotification')
         }
     }
 }
@@ -94,6 +100,7 @@ export function doNotification(notificationId,type) {
         dispatch({
             type: actions.NETWORK_IS_OFFLINE,
         });
+        logger.actionFailed('notification-updateNotification')
     }
 }
 

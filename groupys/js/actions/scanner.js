@@ -2,10 +2,12 @@ import BusinessApi from "../api/business";
 import UserApi from "../api/user";
 import PromotionApi from "../api/promotion";
 import * as actions from "../reducers/reducerActions";
+import ActionLogger from './ActionLogger'
 
 let userApi = new UserApi();
 let businessApi = new BusinessApi();
 let promotionApi = new PromotionApi();
+let logger = new ActionLogger();
 
 export function scanResult(barcode, businessAssign) {
     return async function (dispatch, getState) {
@@ -74,6 +76,7 @@ export function scanResult(barcode, businessAssign) {
             dispatch({
                 type: actions.NETWORK_IS_OFFLINE,
             });
+            logger.actionFailed('scanner-scanResult')
         }
     }
 }
@@ -88,6 +91,7 @@ export function realizePromotion(code) {
             dispatch({
                 type: actions.NETWORK_IS_OFFLINE,
             });
+            logger.actionFailed('scanner-realizePromotion')
         }
     }
 }
@@ -108,6 +112,7 @@ export function followBusiness(businessId) {
             dispatch({
                 type: actions.NETWORK_IS_OFFLINE,
             });
+            logger.actionFailed('scanner-followBusiness')
         }
     }
 }
@@ -122,6 +127,7 @@ export function groupFollowBusiness(groupid, businessId) {
             dispatch({
                 type: actions.NETWORK_IS_OFFLINE,
             });
+            logger.actionFailed('scanner-groupFollowBusiness')
         }
     }
 }

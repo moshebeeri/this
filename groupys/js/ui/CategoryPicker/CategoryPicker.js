@@ -75,7 +75,7 @@ class CategoryPicker extends Component {
             invalid: false
         })
         if (isMandatory) {
-            if (!this.state.selectedCategories || this.state.selectedCategories.length < 2) {
+            if (!this.state.selectedCategories || this.state.selectedCategories.length < 3) {
                 this.setState({
                     invalid: true
                 })

@@ -5,10 +5,14 @@ import * as assemblers from "./collectionAssembler";
 import NotificationApi from "../api/notification";
 import GoupApi from "../api/groups";
 import BusinessApi from "../api/business";
+import ActionLogger from './ActionLogger'
+
 let notificationApi = new NotificationApi();
 let instanceApi = new InstanceApi();
 let groupApi = new GoupApi();
 let businessApi= new BusinessApi();
+let logger = new ActionLogger();
+
 export function changeTab(newTab) {
     return function (dispatch, getState) {
         dispatch({
@@ -51,6 +55,7 @@ export function showPromotionPopup( instanceId,notificationId) {
             dispatch({
                 type: actions.NETWORK_IS_OFFLINE,
             });
+            logger.actionFailed('showPromotionPopup')
         }
     }
 }
@@ -70,6 +75,7 @@ export function showGenericPopup( notificationTitle, notificationId, notificatio
             dispatch({
                 type: actions.NETWORK_IS_OFFLINE,
             });
+            logger.actionFailed('showGenericPopup')
         }
     }
 }
@@ -97,6 +103,7 @@ export function showGroupPopup( groupId,notificationId,notificationTitle, notifi
             dispatch({
                 type: actions.NETWORK_IS_OFFLINE,
             });
+            logger.actionFailed('showGroupPopup')
         }
     }
 }
@@ -123,6 +130,7 @@ export function showBusinessPopup( businessId,notificationId,notificationTitle, 
             dispatch({
                 type: actions.NETWORK_IS_OFFLINE,
             });
+            logger.actionFailed('showBusinessPopup')
         }
     }
 }

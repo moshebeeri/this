@@ -4,6 +4,8 @@ import * as actions from "../reducers/reducerActions";
 
 let commentsApi = new CommentsApi();
 let feedApi = new FeedApi();
+import ActionLogger from './ActionLogger'
+let logger = new ActionLogger();
 
 export function fetchTop(feeds, token, entities, generalId) {
     return fetchTopComments(entities, generalId);
@@ -44,6 +46,7 @@ export function fetchTopComments(entities, generalId) {
             dispatch({
                 type: actions.NETWORK_IS_OFFLINE,
             });
+            logger.actionFailed('fetchTopComments')
         }
     }
 }
@@ -64,6 +67,7 @@ export function sendMessage(entities, generalId, message) {
             dispatch({
                 type: actions.NETWORK_IS_OFFLINE,
             });
+            logger.actionFailed('createGlobalComment')
         }
     }
 }
@@ -119,6 +123,7 @@ export function setNextFeeds(comments, entities, generalId) {
             dispatch({
                 type: actions.NETWORK_IS_OFFLINE,
             });
+            logger.actionFailed('commentsApi.getComment')
         }
     }
 }

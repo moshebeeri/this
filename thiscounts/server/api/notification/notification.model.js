@@ -12,8 +12,8 @@ let Action = [
   'OK'
 ];
 let NotificationSchema = new Schema({
-  title: {type: String, required: true},
-  body: {type: String, required: true},
+  title: {type: String, default: ''},
+  body: {type: String, default: ''},
   note: {type: String, default: ''},
   to: {type: Schema.ObjectId, ref: 'User', required: true, index: true},
   action: {type: String, enum: Action, default: 'NONE'},

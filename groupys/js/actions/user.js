@@ -2,8 +2,11 @@ import UserApi from "../api/user";
 import LoginAPI from "../api/login";
 import * as actions from "../reducers/reducerActions";
 import simpleStore from 'react-native-simple-store';
+import ActionLogger from './ActionLogger'
+
 let userApi = new UserApi();
 let loginApi = new LoginAPI();
+let logger = new ActionLogger();
 
 async function getUser(dispatch, token) {
     try {
@@ -21,6 +24,7 @@ async function getUser(dispatch, token) {
         dispatch({
             type: actions.NETWORK_IS_OFFLINE,
         });
+        logger.actionFailed('users-getUser')
     }
 }
 
@@ -35,6 +39,7 @@ async function getUserFollowers(dispatch, token) {
         dispatch({
             type: actions.NETWORK_IS_OFFLINE,
         });
+        logger.actionFailed('users-getUserFollowers')
     }
 }
 
@@ -91,6 +96,7 @@ export function changePassword(oldPassword, newPassword, navigation) {
             dispatch({
                 type: actions.NETWORK_IS_OFFLINE,
             });
+            logger.actionFailed('users-changePassword')
         }
     }
 }
@@ -125,6 +131,7 @@ export function updateUser(newUser, navigation) {
             dispatch({
                 type: actions.NETWORK_IS_OFFLINE,
             });
+            logger.actionFailed('users-updateUser')
         }
     }
 }
@@ -169,6 +176,7 @@ export function resetPasswordForm() {
         dispatch({
             type: actions.NETWORK_IS_OFFLINE,
         });
+        logger.actionFailed('users-updateUserLocale')
     }
 }
 
@@ -201,6 +209,7 @@ async function updateUserToken(dispatch, token,user,fireBaseToken) {
         dispatch({
             type: actions.NETWORK_IS_OFFLINE,
         });
+        logger.actionFailed('users-updateUserToken')
     }
 }
 

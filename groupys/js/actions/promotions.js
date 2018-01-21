@@ -2,9 +2,12 @@ import PromotionsApi from "../api/promotion";
 import ProductApi from "../api/product";
 import * as actions from "../reducers/reducerActions";
 import EntityUtils from "../utils/createEntity";
+import ActionLogger from './ActionLogger'
+
 let promotionApi = new PromotionsApi();
 let productApi = new ProductApi();
 let entityUtils = new EntityUtils();
+let logger = new ActionLogger();
 
 async function getAll(dispatch, id, token,loading) {
     try {
@@ -25,6 +28,7 @@ async function getAll(dispatch, id, token,loading) {
         dispatch({
             type: actions.NETWORK_IS_OFFLINE,
         });
+        logger.actionFailed('promotions-getAll')
     }
 }
 
@@ -45,6 +49,7 @@ async function getAllProducts(dispatch, id, token,loading) {
         dispatch({
             type: actions.NETWORK_IS_OFFLINE,
         });
+        logger.actionFailed('promotions-getAllProducts')
     }
 }
 
@@ -76,6 +81,7 @@ export function realizePromotion(code) {
             dispatch({
                 type: actions.NETWORK_IS_OFFLINE,
             });
+            logger.actionFailed('promotions-realizePromotion')
         }
     }
 }
@@ -93,6 +99,7 @@ export function setPromotionDescription(code) {
             dispatch({
                 type: actions.NETWORK_IS_OFFLINE,
             });
+            logger.actionFailed('promotions-setPromotionDescription')
         }
     }
 }
@@ -139,6 +146,7 @@ export function savePromotion(promotion,businessId,navigation) {
             dispatch({
                 type: actions.NETWORK_IS_OFFLINE,
             });
+            logger.actionFailed('promotions-savePromotion')
         }
     }
 }
@@ -167,6 +175,7 @@ export function updatePromotion(promotion,businessId,navigation,itemId) {
             dispatch({
                 type: actions.NETWORK_IS_OFFLINE,
             });
+            logger.actionFailed('promotions-updatePromotion')
         }
     }
 
@@ -188,6 +197,7 @@ async function fetchPromotionById(id, token, dispatch) {
         dispatch({
             type: actions.NETWORK_IS_OFFLINE,
         });
+        logger.actionFailed('promotions-fetchPromotionById')
     }
 }
 export default {

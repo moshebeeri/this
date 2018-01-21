@@ -1,7 +1,9 @@
 import CommentsApi from "../api/commet";
 import * as actions from "../reducers/reducerActions";
+import ActionLogger from './ActionLogger'
 
 let commentsApi = new CommentsApi();
+let logger = new ActionLogger();
 
 export function fetchTop(feeds, token, entity, group) {
     return fetchTopComments(group, entity);
@@ -46,6 +48,7 @@ export function fetchTopComments(group, instance) {
             dispatch({
                 type: actions.NETWORK_IS_OFFLINE,
             });
+            logger.actionFailed('instance-group-fetchTopComments')
         }
     }
 }
@@ -68,6 +71,7 @@ export function sendMessage(groupId, instanceId, message) {
             dispatch({
                 type: actions.NETWORK_IS_OFFLINE,
             });
+            logger.actionFailed('instance-group-sendMessage')
         }
     }
 }
@@ -126,6 +130,7 @@ export function setNextFeeds(comments, group, instance) {
             dispatch({
                 type: actions.NETWORK_IS_OFFLINE,
             });
+            logger.actionFailed('instance-group-setNextFeeds')
         }
     }
 }
