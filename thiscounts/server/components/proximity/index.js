@@ -67,10 +67,13 @@ function handleProximityActions(userId, location, callback) {
                         entity._id as entity, labels(entity) as labels
                 ORDER BY d ASC
                 skip ${skip} limit ${limit}`;
-  //console.log(query);
-  graphModel.query(query, function (err, eligibles) {
-    if (err) return callback(err);
-    return callback(null, eligibles);
+  console.log('handleProximityActions: ' + query);
+  graphModel.query(query, function (err, eligibilities) {
+    if (err) {
+      console.error(err);
+      return callback(err);
+    }
+    return callback(null, eligibilities);
   });
 }
 
@@ -121,11 +124,11 @@ exports.reportLastLocation = function(userId, location, callback) {
     if (err) return console.error(err);
   }
 
-  handleProximityActions(userId, location, function (err, eligibles) {
+  handleProximityActions(userId, location, function (err, eligibilities) {
     if(err) return console.log('error calling handleProximityActions');
-    if(!eligibles)
-      return console.log('no eligibles found');
-    eligibles.forEach(eligible => {
+    if(!eligibilities)
+      return console.log('no eligibilities found');
+    eligibilities.forEach(eligible => {
       proximityEligibility(userId, location, eligible, eligibilityCallback);
     })
   });
