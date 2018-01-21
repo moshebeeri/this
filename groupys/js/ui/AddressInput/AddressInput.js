@@ -19,6 +19,7 @@ class AddressInput extends Component {
             address: '',
             locations: '',
             spinner: false,
+            ilegalAddress:false,
         }
         props.actions.resetForm();
     }
@@ -52,8 +53,22 @@ class AddressInput extends Component {
 
         if(!addressForm.hasValidated){
             this.onSubmit();
+            this.setState({ilegalAddress:true});
             return false;
         }
+        if(addressForm.addressNotFound){
+            this.setState({ilegalAddress:true});
+            return false;
+        }
+
+        if(addressForm.locations && addressForm.locations> 1){
+
+            if(!this.state.location) {
+                this.setState({ilegalAddress:true});
+                return false;
+            }
+        }
+        this.setState({ilegalAddress:false});
         return result;
     }
 
@@ -125,8 +140,12 @@ class AddressInput extends Component {
 
     render() {
         const {isMandatory, addressForm, refNext} = this.props;
+        let ilegalBorder = 0;
+        if(this.state.ilegalAddress || addressForm.addressNotFound){
+            ilegalBorder = 1;
+        }
         return <View>
-            <View style={[styles.inputTextLayout, {width: StyleUtils.getWidth() - 15}]}>
+            <View style={[styles.inputTextLayout, {borderWidth:ilegalBorder,borderColor:'red',width: StyleUtils.getWidth() - 15}]}>
 
                 <View style={{flexDirection: "row", justifyContent: 'flex-start' }}>
                     {/*{!I18nManager.isRTL && isMandatory &&*/}
