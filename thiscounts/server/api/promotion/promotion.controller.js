@@ -245,7 +245,7 @@ function handlePromotionPostCreate(promotion, callback) {
     else
       return callback(new Error('undefined promotion.on_action.type'));
 
-    let delete_on_action_query = `MATCH (f { _id:${entityId} })-[r:ON_ACTION]->(t) delete r`;
+    let delete_on_action_query = `MATCH (f { _id:"${entityId}" })-[r:ON_ACTION]->(t) delete r`;
     promotionGraphModel.query(delete_on_action_query, (err) => {
       if(err) return callback(err);
       return promotionGraphModel.relate_ids(entityId, 'ON_ACTION', promotion._id, params, callback);

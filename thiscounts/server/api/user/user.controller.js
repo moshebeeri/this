@@ -106,13 +106,11 @@ exports.like = function (req, res) {
       function (err, results) {
         if(err) return console.log(err);
         if( results.instance ) {
-          graphModel.relate_ids(userId, 'LIKE', results.instance.promotion._id, function (err) {
-          })
+          graphModel.relate_ids(userId, 'LIKE', results.instance.promotion._id, (err) => {})
         }
       });
-
   });
-  return res.json(200, "like called for object " + req.params.id + " and user " + userId);
+  return res.status(200).send(`like called for object ${req.params.id}  and user ${userId}`);
 };
 
 /***
