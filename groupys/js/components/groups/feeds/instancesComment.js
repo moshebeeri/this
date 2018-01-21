@@ -41,6 +41,9 @@ class instancesComment extends Component {
         let item = renderItem.item;
         if (item.message) {
             const {user} = this.props;
+            if(!user){
+                return <View></View>
+            }
             let isUser = item.message.actor === user._id;
             let messageItem = {
                 name: item.message.name,

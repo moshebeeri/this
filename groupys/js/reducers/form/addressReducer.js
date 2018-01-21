@@ -5,6 +5,7 @@ const initialState = {
     validating: false,
     locations: {},
     submitable:false,
+    hasValidated:false,
     location:'',
 
 };
@@ -37,6 +38,7 @@ export default function addressForm(state = initialState, action) {
             return {
                 ...state,
                 validating: false,
+                hasValidated:true,
             };
         case actions.ADDRESSES_MULTIPLE_FOUND :
             return {

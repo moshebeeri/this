@@ -41,6 +41,7 @@ class AddressInput extends Component {
     }
 
     isValid() {
+        const {addressForm} = this.props;
         let result = true;
         Object.keys(this.refs).forEach(key => {
             let item = this.refs[key];
@@ -48,6 +49,11 @@ class AddressInput extends Component {
                 result = false;
             }
         });
+
+        if(!addressForm.hasValidated){
+            this.onSubmit();
+            return false;
+        }
         return result;
     }
 
