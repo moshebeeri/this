@@ -32,8 +32,9 @@ class ActionLogger {
 
     async screenVisited(currentScreen,_prevScreen){
         await this.init();
-        Analytics.logEvent('screen_view', {
-            'firebase_screen_id': currentScreen,
+        Analytics.setScreenName(currentScreen)
+        Analytics.logEvent('redirect', {
+            'current_screen': currentScreen,
             'prev_screen':_prevScreen
 
         });

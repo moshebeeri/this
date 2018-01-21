@@ -2,8 +2,10 @@ import * as actions from "../reducers/reducerActions";
 import PostApi from "../api/post";
 import PageRefresher from '../refresh/pageRefresher'
 import groupAction from './groups'
+import ActionLogger from './ActionLogger'
 
 let postApi = new PostApi();
+let logger = new ActionLogger();
 
 export function createPost(post, navigation) {
     return async function (dispatch, getState) {
@@ -22,6 +24,7 @@ export function createPost(post, navigation) {
             dispatch({
                 type: actions.NETWORK_IS_OFFLINE,
             });
+            logger.actionFailed('posts-createPost')
         }
     }
 }
@@ -46,6 +49,7 @@ export function createGroupPost(post, navigation, group) {
             dispatch({
                 type: actions.NETWORK_IS_OFFLINE,
             });
+            logger.actionFailed('posts-createGroupPost')
         }
     }
 }
@@ -79,6 +83,7 @@ async function fetchPostById(id, token, dispatch) {
         dispatch({
             type: actions.NETWORK_IS_OFFLINE,
         });
+        logger.actionFailed('posts-fetchPostById')
     }
 }
 

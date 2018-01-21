@@ -4,10 +4,13 @@ import UserApi from "../api/user";
 import {NavigationActions} from "react-navigation";
 import store from "react-native-simple-store";
 import ContactApi from "../api/contacts";
+import ActionLogger from './ActionLogger'
 
 let contactApi = new ContactApi();
 let loginApi = new LoginApi();
 let userApi = new UserApi();
+let logger = new ActionLogger();
+
 const resetAction = NavigationActions.reset({
     index: 0,
     actions: [
@@ -64,6 +67,7 @@ export function login(phone, password, navigation) {
             dispatch({
                 type: actions.NETWORK_IS_OFFLINE,
             });
+            logger.actionFailed('login')
         }
     }
 }
@@ -114,6 +118,7 @@ export function signup(phone, password, firstName, lastName, navigation) {
                 type: actions.SIGNUP_PROCESS,
                 value: false
             });
+            logger.actionFailed('signup')
         }
     }
 }
@@ -180,6 +185,7 @@ export function verifyCode(code, navigation, resetAction) {
                 type: actions.REGISTER_PROCESS,
                 value: false
             });
+            logger.actionFailed('verifyCode')
         }
     }
 }
@@ -194,6 +200,7 @@ export function forgetPassword(phoneNumber) {
             dispatch({
                 type: actions.NETWORK_IS_OFFLINE,
             });
+            logger.actionFailed('forgetPassword')
         }
     }
 }
@@ -215,6 +222,7 @@ export function changePassword(currentPassword, newPassword, user, token, naviga
                 type: actions.CHANGE_PASSWORD_FAILED,
                 message: 'Failed to Authenticate Current Password'
             });
+            logger.actionFailed('changePassword')
         }
     }
 }

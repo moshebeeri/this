@@ -9,12 +9,14 @@ import ActivityApi from "../api/activity";
 import * as actions from "../reducers/reducerActions";
 import * as assemblers from "./collectionAssembler";
 import CollectionDispatcher from "./collectionDispatcher";
+import ActionLogger from './ActionLogger'
 
 let feedApi = new FeedApi();
 let userApi = new UserApi();
 let promotionApi = new PtomotionApi();
 let activityApi = new ActivityApi();
 let businessApi = new BusinessApi();
+let logger = new ActionLogger();
 
 async function fetchFeedsFromServer(feeds, dispatch, token, user) {
     try {
@@ -42,6 +44,7 @@ async function fetchFeedsFromServer(feeds, dispatch, token, user) {
         dispatch({
             type: actions.NETWORK_IS_OFFLINE,
         });
+        logger.actionFailed('fetchFeedsFromServer')
     }
 }
 
@@ -64,6 +67,7 @@ async function fetchFeedsFromServer(feeds, dispatch, token, user) {
         dispatch({
             type: actions.NETWORK_IS_OFFLINE,
         });
+        logger.actionFailed('fetchTopList-mainfeeds')
     }
 }
 
@@ -92,6 +96,7 @@ async function updateBusinessCategory(token, businesses, dispatch) {
         dispatch({
             type: actions.NETWORK_IS_OFFLINE,
         })
+        logger.actionFailed('updateBusinessCategory')
     }
 }
 
@@ -114,6 +119,7 @@ export function fetchTop(feeds, token, user) {
             dispatch({
                 type: actions.NETWORK_IS_OFFLINE,
             });
+            logger.actionFailed('fetchTop')
         }
     }
 }
@@ -129,6 +135,7 @@ async function getUserFollowers(dispatch, token) {
         dispatch({
             type: actions.NETWORK_IS_OFFLINE,
         });
+        logger.actionFailed('getUserFollowers')
     }
 }
 
@@ -198,6 +205,7 @@ export function like(id) {
             dispatch({
                 type: actions.NETWORK_IS_OFFLINE,
             });
+            logger.actionFailed('like')
         }
     }
 }
@@ -227,6 +235,7 @@ export function refresh(id, currentSocialState) {
             dispatch({
                 type: actions.NETWORK_IS_OFFLINE,
             });
+            logger.actionFailed('getFeedSocialState')
         }
     }
 }
@@ -247,6 +256,7 @@ async function refreshFeedSocialState (dispatch, token,id) {
         dispatch({
             type: actions.NETWORK_IS_OFFLINE,
         });
+        logger.actionFailed('refreshFeedSocialState')
     }
 }
 
@@ -263,6 +273,7 @@ export const unlike = (id) => {
             dispatch({
                 type: actions.NETWORK_IS_OFFLINE,
             });
+            logger.actionFailed('unlike')
         }
     }
 };
@@ -279,6 +290,7 @@ export function saveFeed(id) {
             dispatch({
                 type: actions.NETWORK_IS_OFFLINE,
             });
+            logger.actionFailed('saveFeed')
         }
     }
 }
@@ -296,6 +308,7 @@ export function setUserFollows() {
             dispatch({
                 type: actions.NETWORK_IS_OFFLINE,
             });
+            logger.actionFailed('getUserFollowers')
         }
     }
 }
@@ -315,6 +328,7 @@ export function shareActivity(id, activityId, users, token) {
             dispatch({
                 type: actions.NETWORK_IS_OFFLINE,
             });
+            logger.actionFailed('shareActivity')
         }
     }
 }

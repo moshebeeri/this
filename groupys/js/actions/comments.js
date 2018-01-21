@@ -2,6 +2,8 @@ import CommentsApi from "../api/commet";
 import * as actions from "../reducers/reducerActions";
 
 let commentsApi = new CommentsApi();
+import ActionLogger from './ActionLogger'
+let logger = new ActionLogger();
 
 async function getInstanceGroupComments(dispatch, group, instance, size, token) {
     try {
@@ -18,6 +20,7 @@ async function getInstanceGroupComments(dispatch, group, instance, size, token) 
         dispatch({
             type: actions.NETWORK_IS_OFFLINE,
         });
+        logger.actionFailed('getInstanceGroupComments');
     }
 }
 
@@ -35,6 +38,7 @@ async function getGroupComments(dispatch, group, token) {
         dispatch({
             type: actions.NETWORK_IS_OFFLINE,
         });
+        logger.actionFailed('getGroupComments');
     }
 }
 
@@ -50,6 +54,7 @@ async function getEntityComments(dispatch, entities, id, token) {
         dispatch({
             type: actions.NETWORK_IS_OFFLINE,
         });
+        logger.actionFailed('getComment');
     }
 }
 
@@ -141,6 +146,7 @@ export function setNextFeeds(comments, token, group) {
             dispatch({
                 type: actions.NETWORK_IS_OFFLINE,
             });
+            logger.actionFailed('getGroupComments');
         }
     }
 }

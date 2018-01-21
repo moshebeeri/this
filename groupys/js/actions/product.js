@@ -1,10 +1,13 @@
 import ProdictApi from "../api/product";
 import EntityUtils from "../utils/createEntity";
 import * as actions from "../reducers/reducerActions";
+import FormUtils from "../utils/fromUtils";
+import ActionLogger from './ActionLogger'
 
 let productApi = new ProdictApi();
 let entityUtils = new EntityUtils();
-import FormUtils from "../utils/fromUtils";
+let logger = new ActionLogger();
+
 async function getAllByBusinessId(dispatch, id, token) {
     try {
         let response = await productApi.findByBusinessId(id, token);
@@ -19,6 +22,7 @@ async function getAllByBusinessId(dispatch, id, token) {
         dispatch({
             type: actions.NETWORK_IS_OFFLINE,
         });
+        logger.actionFailed('product-getAllByBusinessId')
     }
 }
 
@@ -39,6 +43,7 @@ async function getProductCategories(dispatch, gid, token) {
         dispatch({
             type: actions.NETWORK_IS_OFFLINE,
         });
+        logger.actionFailed('product-getProductCategories')
     }
 }
 
@@ -86,6 +91,7 @@ export function saveProduct(product,businessId,navigation) {
             dispatch({
                 type: actions.NETWORK_IS_OFFLINE,
             });
+            logger.actionFailed('product-saveProduct')
         }
     }
 }

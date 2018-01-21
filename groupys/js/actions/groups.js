@@ -6,12 +6,14 @@ import ActivityApi from "../api/activity";
 import * as assemblers from "./collectionAssembler";
 import * as actions from "../reducers/reducerActions";
 import CollectionDispatcher from "./collectionDispatcher";
+import ActionLogger from './ActionLogger'
 
 let groupsApi = new GroupsApi();
 let feedApi = new FeedApi();
 let promotionApi = new PtomotionApi();
 let activityApi = new ActivityApi();
 let userApi = new UserApi();
+let logger = new ActionLogger();
 
 async function getAll(dispatch, token) {
     try {
@@ -26,6 +28,7 @@ async function getAll(dispatch, token) {
         dispatch({
             type: actions.NETWORK_IS_OFFLINE,
         });
+        logger.actionFailed('groupsApi.getAll')
     }
 }
 
@@ -54,6 +57,7 @@ async function getByBusinessId(dispatch, bid, token) {
         dispatch({
             type: actions.NETWORK_IS_OFFLINE,
         });
+        logger.actionFailed('groupsApi.getByBusinessId')
     }
 }
 
@@ -68,6 +72,7 @@ async function getUserFollowers(dispatch, token) {
         dispatch({
             type: actions.NETWORK_IS_OFFLINE,
         });
+        logger.actionFailed('userApi.getUserFollowers')
     }
 }
 
@@ -108,6 +113,7 @@ export function acceptInvatation(group) {
             dispatch({
                 type: actions.NETWORK_IS_OFFLINE,
             });
+            logger.actionFailed('groupsApi.acceptInvatation')
         }
     }
 }
@@ -121,6 +127,7 @@ export function touch(groupid) {
             dispatch({
                 type: actions.NETWORK_IS_OFFLINE,
             });
+            logger.actionFailed('groupsApi.touch')
         }
     }
 }
@@ -142,6 +149,7 @@ export function createGroup(group, navigation) {
             dispatch({
                 type: actions.NETWORK_IS_OFFLINE,
             });
+            logger.actionFailed('groupsApi.createGroup')
         }
     }
 }
@@ -207,6 +215,7 @@ export function setNextFeeds(feeds, token, group) {
             dispatch({
                 type: actions.NETWORK_IS_OFFLINE,
             });
+            logger.actionFailed('groups-setNextFeeds')
         }
         if (showLoadingDone && !getState().groups.loadingDone[group._id]) {
             dispatch({
@@ -234,6 +243,7 @@ export function sendMessage(groupId, message) {
             dispatch({
                 type: actions.NETWORK_IS_OFFLINE,
             });
+            logger.actionFailed('groups-sendMessage')
         }
     }
 }
@@ -286,6 +296,7 @@ async function fetchTopList(id, token, group, dispatch,user) {
         dispatch({
             type: actions.NETWORK_IS_OFFLINE,
         });
+        logger.actionFailed('groups-fetchTopList')
     }
 }
 
@@ -334,6 +345,7 @@ export function like(id) {
             dispatch({
                 type: actions.NETWORK_IS_OFFLINE,
             });
+            logger.actionFailed('groups-like')
         }
     }
 }
@@ -351,6 +363,7 @@ export const unlike = (id) => {
             dispatch({
                 type: actions.NETWORK_IS_OFFLINE,
             });
+            logger.actionFailed('groups-unlike')
         }
     }
 };
@@ -367,6 +380,7 @@ export function saveFeed(id) {
             dispatch({
                 type: actions.NETWORK_IS_OFFLINE,
             });
+            logger.actionFailed('groups-saveFeed')
         }
     }
 }
@@ -386,6 +400,7 @@ export function shareActivity(id, activityId, users, token) {
             dispatch({
                 type: actions.NETWORK_IS_OFFLINE,
             });
+            logger.actionFailed('groups-shareActivity')
         }
     }
 }
@@ -415,6 +430,7 @@ export function refresh(id, currentSocialState) {
             dispatch({
                 type: actions.NETWORK_IS_OFFLINE,
             });
+            logger.actionFailed('groups-refresh')
         }
     }
 }

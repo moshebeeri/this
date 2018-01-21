@@ -1,7 +1,9 @@
 import ProfilenApi from "../api/profile";
 import * as actions from "../reducers/reducerActions";
+import ActionLogger from './ActionLogger'
 
 let profileApi = new ProfilenApi();
+let logger = new ActionLogger();
 
 export function setNextFeeds(feeds) {
     return async function (dispatch, getState) {
@@ -51,6 +53,7 @@ export function setNextFeeds(feeds) {
             dispatch({
                 type: actions.NETWORK_IS_OFFLINE,
             });
+            logger.actionFailed('mypromotons-setNextFeeds')
         }
     }
 }
@@ -95,6 +98,7 @@ export function fetchTop() {
                 type: actions.SAVED_FEED_SHOW_TOP_LOADER,
                 showTopLoader: false,
             });
+            logger.actionFailed('mypromotons-fetchTop')
         }
     }
 }

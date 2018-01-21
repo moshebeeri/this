@@ -2,6 +2,8 @@ import * as actions from "../reducers/reducerActions";
 import UserApi from "../api/user";
 
 let userApi = new UserApi();
+import ActionLogger from './ActionLogger'
+let logger = new ActionLogger();
 
 export function saveRole(user, businessId, userRole, navigation) {
     return async function (dispatch, getState) {
@@ -35,6 +37,7 @@ export function saveRole(user, businessId, userRole, navigation) {
             dispatch({
                 type: actions.NETWORK_IS_OFFLINE,
             });
+            logger.actionFailed('userRole-saveRole')
         }
     }
 }
@@ -73,6 +76,7 @@ export function search(phoneNumber) {
             dispatch({
                 type: actions.NETWORK_IS_OFFLINE,
             });
+            logger.actionFailed('userRole-search')
         }
     }
 }
