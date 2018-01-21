@@ -80,7 +80,7 @@ class Product extends Component {
 
 
     shouldComponentUpdate() {
-        if (this.props.currentScreen === 'Products') {
+        if (this.props.currentScreen === 'Products' || this.props.currentScreen ==='AddProduct') {
             return true;
         }
         return false;

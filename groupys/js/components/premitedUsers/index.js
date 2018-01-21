@@ -59,7 +59,7 @@ class UserPermittedRoles extends Component {
     }
 
     shouldComponentUpdate() {
-        if (this.props.currentScreen === 'userPermittedRoles') {
+        if (this.props.currentScreen === 'userPermittedRoles' ||  this.props.currentScreen === 'addPremitedUsers') {
             return true;
         }
         return false;
