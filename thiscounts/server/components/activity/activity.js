@@ -103,7 +103,6 @@ function activity_impl(act, callback) {
       callback(err, null);
       return;
     }
-    console.log(JSON.stringify(activity));
 
     if(act.ids){
       let effected = [];
