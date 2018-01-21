@@ -312,7 +312,6 @@ function create_business_default_group(business) {
   }, function (err, group) {
     if (err) return console.error(err.message);
     graphModel.owner_followers_follow_default_group(business.creator);
-    console.log(`default group created successfully ${JSON.stringify(group)}`)
   });
 }
 
@@ -365,7 +364,7 @@ function reviewRequest(business) {
   });
 }
 
-function createValidatedBusiness(res, business) {
+function createValidatedBusiness(business, callback) {
   qrcodeController.createAndAssign(business.creator, {
     type: 'FOLLOW_BUSINESS',
     assignment: {
@@ -382,12 +381,12 @@ function createValidatedBusiness(res, business) {
       lat: business.location.lat,
       lon: business.location.lng
     }, function (err, business) {
-      if (err) return handleError(res, err);
+      if (err) return callback(err);
       if (business.type === 'PERSONAL_SERVICES' || business.type === 'SMALL_BUSINESS') {
         let grunt_query = `MATCH (user:user{_id:"${business.creator}"}), (entity{_id:"${business._id}"})
                      CREATE (user)-[role:ROLE{name:'OWNS'}]->(entity)`;
         graphModel.query(grunt_query, function (err) {
-          if (err) return handleError(res, err);
+          if (err) return callback(err);
           graphModel.owner_followers_follow_business(business.creator);
         });
       }
@@ -407,7 +406,7 @@ function createValidatedBusiness(res, business) {
       });
       create_business_default_group(business);
       notifyOnAction(business);
-      return res.status(201).json(business);
+      return callback(null, business);
     });
   })
 }
@@ -424,6 +423,28 @@ function sendRejectEmail(business) {
       if (err) console.error(err);
     });
 }
+function review(businessId, status, callback) {
+  Business.findById(businessId).exec((err, business) => {
+    if (err) return callback(err);
+    if (!business) return callback(null, null);
+    if(business.review.status === 'reviewed') return callback(new Error('already reviewed'));
+
+    business.review.status = 'reviewed';
+    if (status === 'accepted') {
+      business.review.result = 'accepted';
+      business.save((err, business) => {
+        if (err) return callback(err);
+        return createValidatedBusiness(business, callback);
+      });
+    } else {
+      business.review.result = 'rejected';
+      business.save(err => {
+        if (err) return callback(err);
+        return sendRejectEmail(business);
+      });
+    }
+  })
+}
 
 exports.review = function (req, res) {
   const businessId = req.params.id;
@@ -431,7 +452,7 @@ exports.review = function (req, res) {
   Business.findById(businessId).exec((err, business) => {
     if (err) return handleError(res, err);
     if (!business) return res.status(404).send('Not Found');
-    business.review.status = 'done';
+    business.review.status = 'reviewed';
     if (status === 'accepted') {
       business.review.result = 'accepted';
       business.save((err, business) => {
@@ -448,22 +469,53 @@ exports.review = function (req, res) {
     }
   })
 };
-exports.validate_email = function (req, res) {
-  const businessId = req.params.id;
-  const validationCode = req.params.code;
+
+function validate_email(businessId, validationCode, callback) {
   Business.findById(businessId).exec((err, business) => {
-    if (err) return handleError(res, err);
-    if (!business) return res.status(404).send('Not Found');
-    if (business.validationCode !== validationCode) return res.status(404).send('Validation codes mismatch');
+    if (err) return callback(err);
+    if (!business) return callback(null, null);
+    if (business.validationCode !== validationCode)
+      return callback(new Error('Validation codes mismatch'));
     business.validationCode = '';
     business.review.state = 'review';
     business.save(err => {
-      if (err) return handleError(res, err);
-      reviewRequest(business);
-      return res.status(201).send('email verified successfully');
+      if (err) callback(err);
+      if(business.review.status !== 'reviewed'){
+        reviewRequest(business);
+      }
+      return callback(null, business);
     });
   })
+}
+
+exports.validate_email = function (req, res) {
+  const businessId = req.params.id;
+  const validationCode = req.params.code;
+  validate_email(businessId, validationCode, (err, business) => {
+    if (err) return handleError(res, err);
+    if (!business) return res.status(404).send('Not Found');
+    return res.status(201).send('email verified successfully');
+  })
 };
+
+exports.update_email = function (req, res) {
+  const businessId = req.params.id;
+  const newEmail = req.params.email;
+
+  Business.findById(businessId).exec((err, business) => {
+    if (err) return handleError(res, err);
+    if (!business) return res.status(404).send('Not Found');
+    business.email = newEmail;
+    business.validationCode = randomstring.generate({length: 12, charset: 'numeric'});
+    business.review.status = 'waiting';
+    business.review.state = 'validation';
+    business.save(err => {
+      if (err) return handleError(res, err);
+      reviewRequest(business);
+    });
+  });
+};
+
 exports.create = function (req, res) {
   let body_business = req.body;
   let userId = req.user._id;

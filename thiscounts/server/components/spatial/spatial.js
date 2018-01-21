@@ -43,7 +43,7 @@ function create_layer(name) {
   db.call(operation, function (err, result, response) {
     if(err) logger.info("failed to create layer: " + err);
     if (!err) {
-      console.log('spatial layer created' + JSON.stringify(result));
+      //console.log('spatial layer created' + JSON.stringify(result));
       create_index(name);
       //layer === result;
 
@@ -69,7 +69,7 @@ function create_index(name) {
   db.call(operation, function (err, result, response) {
     if(err) logger.info("failed to create index: " + err);
     if (!err) {
-      console.log('spatial index created' + JSON.stringify(result));
+      //console.log('spatial index created' + JSON.stringify(result));
       this.index = result;
     }
   });
