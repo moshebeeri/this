@@ -27,6 +27,11 @@ class BusinessHeader extends Component {
         navigation.navigate("businessAccount", {businesses: business});
     }
 
+
+    onBordingPromotion() {
+        const {navigation, business} = this.props;
+        navigation.navigate("addPromotions", {business: business, onBoardType: 'BUSINESS'});
+    }
     unFollowBusiness(){
         const {business}  = this.props;
         this.props.actions.unFollowBusiness(business._id);
@@ -116,6 +121,9 @@ class BusinessHeader extends Component {
                     </MenuOption>
                     <MenuOption onSelect={this.showBusinessAccountDetails.bind(this)}>
                         <Text>{strings.accountDetail}</Text>
+                    </MenuOption>
+                    <MenuOption onSelect={this.onBordingPromotion.bind(this)}>
+                        <Text>{strings.OnBoardingPromotions}</Text>
                     </MenuOption>
                 </MenuOptions>
             </Menu>

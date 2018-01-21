@@ -110,7 +110,7 @@ export default class BusinessListView extends Component {
                             {promotionButton}
 
                         </View>}
-                        {item.business && item.business.review && item.business.review.state ==='review' && <View style={{
+                        {item.business && item.business.review && item.business.review.state ==='validation' && <View style={{
                             height: vh * 6, flexDirection: 'row', alignItems: 'center',
                             justifyContent: 'space-between',marginRight:10,marginLeft:10,
                         }}>
@@ -119,7 +119,7 @@ export default class BusinessListView extends Component {
                             <Text>{strings.confirmBusinessByMailMessage}</Text>
                             <EditButton iconName='refresh' onPress={this.refreshBusiness.bind(this)}/>
                         </View>}
-                        {item.business && item.business.review && item.business.review.state ==='validation' && <View style={{
+                        {item.business && item.business.review && item.business.review.state ==='review' && <View style={{
                             height: vh * 6, flexDirection: 'row', alignItems: 'center',
                             justifyContent: 'space-between',marginRight:10,marginLeft:10,
                         }}>
