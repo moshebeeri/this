@@ -37,7 +37,7 @@ class Feed extends Component {
 
 
     shouldComponentUpdate(){
-        if(this.props.currentScreen ==='home' && this.props.selectedTab === 0){
+        if(this.props.currentScreen ==='home' && (this.props.selectedTab === 0 || this.props.selectedTab === 3)){
                return true;
         }
         return false;

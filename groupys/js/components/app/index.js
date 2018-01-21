@@ -61,6 +61,9 @@ const resetAction = NavigationActions.reset({
         NavigationActions.navigate({routeName: 'login'})
     ]
 });
+import ActionLogger from '../../actions/ActionLogger'
+let logger = new ActionLogger();
+
 
 
 // this shall be called regardless of app state: running, background or not running. Won't be called when app is killed by user in iOS
@@ -194,29 +197,58 @@ class ApplicationManager extends Component {
 
     onChangeTab(tab) {
         if (tab.i === 0) {
-            PageRefresher.visitedFeed();
-            this.setState({
-                activeTab:'feed'
-            })
+
+            if(I18nManager.isRTL && (Platform.OS === 'android')){
+                logger.screenVisited('notification')
+            }else {
+                logger.screenVisited('feed')
+                PageRefresher.visitedFeed();
+                this.setState({
+                    activeTab: 'feed'
+                })
+            }
         }
         if (tab.i === 1 ){
+            if(I18nManager.isRTL && (Platform.OS === 'android')){
+                logger.screenVisited('groups')
+                PageRefresher.visitedGroups();
+            }else {
+                logger.screenVisited('savedPromotion')
+                this.setState({
+                    activeTab: 'savedPromotion'
+                })
+            }
 
-            this.setState({
-                activeTab:'savedPromotion'
-            })
         }
         //this.p
         if (tab.i === 2) {
-            PageRefresher.visitedGroups();
-            this.setState({
-                activeTab:'groups'
-            })
+
+            if(I18nManager.isRTL && (Platform.OS === 'android')){
+                logger.screenVisited('savedPromotion')
+                this.setState({
+                    activeTab: 'savedPromotion'
+                })
+            }else {
+                PageRefresher.visitedGroups();
+                logger.screenVisited('groups')
+                this.setState({
+                    activeTab:'groups'
+                })
+            }
+
         }
         if (tab.i === 3){
 
-            this.setState({
-                activeTab:'notification'
-            })
+            if(I18nManager.isRTL && (Platform.OS === 'android')){
+                logger.screenVisited('feed')
+                PageRefresher.visitedFeed();
+                this.setState({
+                    activeTab: 'feed'
+                })
+
+            }else {
+                logger.screenVisited('notification')
+            }
         }
         this.props.actions.changeTab(tab)
     }
