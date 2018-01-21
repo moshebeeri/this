@@ -38,8 +38,9 @@ export default class BusinessListView extends Component {
     }
 
     showBusiness(p) {
-        const {item, navigation} = this.props;
-        navigation.navigate("addBusiness", {item: item.business});
+        const {item, navigation,resetForm} = this.props;
+        resetForm();
+        navigation.navigate("addBusiness", {item: item.business,updating:true});
     }
 
     showUsersRoles() {
@@ -55,6 +56,10 @@ export default class BusinessListView extends Component {
     showPromotions() {
         const {item, navigation} = this.props;
         navigation.navigate("Promotions", {business: item.business});
+    }
+    refreshBusiness(){
+        const{refresh} = this.props;
+        refresh();
     }
 
 
@@ -105,13 +110,23 @@ export default class BusinessListView extends Component {
                             {promotionButton}
 
                         </View>}
-                        {item.business && item.business.review && item.business.review.status ==='waiting' && <View style={{
+                        {item.business && item.business.review && item.business.review.state ==='review' && <View style={{
                             height: vh * 6, flexDirection: 'row', alignItems: 'center',
-                            justifyContent: 'center',
+                            justifyContent: 'space-between',marginRight:10,marginLeft:10,
                         }}>
 
 
-                            <Text>Please confirm your email Address</Text>
+                            <Text>{strings.confirmBusinessByMailMessage}</Text>
+                            <EditButton iconName='refresh' onPress={this.refreshBusiness.bind(this)}/>
+                        </View>}
+                        {item.business && item.business.review && item.business.review.state ==='validation' && <View style={{
+                            height: vh * 6, flexDirection: 'row', alignItems: 'center',
+                            justifyContent: 'space-between',marginRight:10,marginLeft:10,
+                        }}>
+
+
+                            <Text>{strings.validatingBusinessMessage}</Text>
+                            <EditButton iconName='refresh' onPress={this.refreshBusiness.bind(this)}/>
                         </View>}
                     </View>
 
@@ -122,7 +137,7 @@ export default class BusinessListView extends Component {
     }
 
     createEditTag(item) {
-        if (item.role === 'OWNS') {
+        if (item.role === 'OWNS' || (item.business && item.business.review && item.business.review.status ==='waiting')) {
             return <EditButton onPress={this.showBusiness.bind(this, this.props, item)}/>
         }
         return undefined;

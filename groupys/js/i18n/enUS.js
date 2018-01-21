@@ -232,6 +232,8 @@ Claimed                                       : "Claimed",
 VerifyPassword                                : "Verify Password",
 IdIdentifier                                  : "Id Identifier",
 LetterOfIncorporation                         : "Letter Of Incorporation",
+confirmBusinessByMailMessage                  : "Please confirm your email Address",
+validatingBusinessMessage                     : "Please wait while we validate your business",
 
 
 

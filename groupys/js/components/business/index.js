@@ -14,10 +14,12 @@ class Business extends Component {
     }
 
     renderItem(item) {
-        const {navigation} = this.props;
+        const {navigation,actions} = this.props;
         return <BusinessListView
             item={item.item}
             index={item.index}
+            resetForm={actions.resetForm}
+            refresh={actions.updateBusinesStatuss}
             navigation={navigation}
         />
     }

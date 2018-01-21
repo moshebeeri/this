@@ -377,7 +377,31 @@ export function updateBusiness(business, navigation) {
             dispatch({
                 type: actions.SAVING_BUSINESS_DONE,
             });
+            dispatch({
+                type: actions.SAVE_BUSINESS_TAMPLATE,
+                templateBusiness: {},
+            });
             navigation.goBack();
+        } catch (error) {
+            dispatch({
+                type: actions.NETWORK_IS_OFFLINE,
+            });
+            logger.actionFailed("update_business",business);
+        }
+    }
+}
+
+export function updateBusinesStatuss() {
+    return async function (dispatch, getState) {
+        try {
+
+            const token = getState().authentication.token;
+            let updatedBusiness = await businessApi.getAll(token);
+            dispatch({
+                type: actions.UPSERT_MY_BUSINESS,
+                item: updatedBusiness
+            });
+
         } catch (error) {
             dispatch({
                 type: actions.NETWORK_IS_OFFLINE,
@@ -506,6 +530,17 @@ export function saveBusinessTemplate(templateBusiness) {
         });
     }
 }
+export function resetForm() {
+    return async function (dispatch) {
+        dispatch({
+            type: actions.SAVE_BUSINESS_TAMPLATE,
+            templateBusiness: {},
+        });
+    }
+}
+
+
+
 
 
 export default {
