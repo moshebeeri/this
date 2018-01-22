@@ -37,16 +37,17 @@ export function login(phone, password, navigation) {
                     type: actions.LOGIN_SUCSESS,
                 });
                 let user = await userApi.getUser(response.token);
+                dispatch({
+                    type: actions.SET_USER,
+                    user: user
+                });
                 await  store.save("user_id", user._id)
                 dispatch({
                     type: actions.SAVE_APP_USER,
                     user: user
                 });
                 contactApi.syncContacts();
-                dispatch({
-                    type: actions.SET_USER,
-                    user: user
-                });
+
                 navigation.dispatch(resetAction);
 
             } else {
