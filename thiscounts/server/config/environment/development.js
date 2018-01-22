@@ -32,8 +32,8 @@ module.exports = {
 
   },
   pricing:{
-    freeTier: 15000,
-    CPM: 2
+    freeTier: 5000,
+    CPM: 1
   },
   seedDB: true,
   //seedDB: false,

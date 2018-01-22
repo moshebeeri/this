@@ -50,13 +50,12 @@ function toPayloadData(notification, callback){
   n.body = data.body = notification.body;
   data.note = notification.note;
   data.action = notification.action;
-  data.notificationId = notification._id;
+  data.notificationId = notification._id.toString();
   n.tag = data._id? data._id : '';
   unread(notification.to, function(err, badge){
     if(err) return callback(err);
     n.badge = badge;
     data.badge = badge;
-    console.log(JSON.stringify(data));
     return callback(null, {
       data,
       notification : n
