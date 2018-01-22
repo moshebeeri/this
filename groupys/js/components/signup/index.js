@@ -19,6 +19,7 @@ import * as loginAction from "../../actions/login";
 import strings from "../../i18n/i18n"
 import Icon from 'react-native-vector-icons/Ionicons';
 import StyleUtils from "../../utils/styleUtils";
+import {TermsOfUse} from "../../ui/index"
 
 const {width, height} = Dimensions.get('window')
 const thisLogo = require('../../../images/this-logo.png');
@@ -42,6 +43,7 @@ class Signup extends Component {
             validationMessage: '',
             verifyPassword: '',
             badPassword: false,
+            showPopup:true,
         };
     }
 
@@ -63,6 +65,8 @@ class Signup extends Component {
             }
         }
     }
+
+
 
     back() {
         this.props.navigation.goBack();
@@ -94,6 +98,11 @@ class Signup extends Component {
                                resizeMode='cover' source={bg}/>
 
                     </View>
+                    {this.state.showPopup && <View style={{ top:0,height:height,position:'absolute',opacity:0.8,alignItems:'center',backgroundColor:'white',width: StyleUtils.getWidth()  }}>
+
+
+                    </View>}
+
                     <KeyboardAvoidingView behavior={'position'}
                                           style={[styles.avoidView, {width: StyleUtils.getWidth()}]}>
 
@@ -263,6 +272,11 @@ class Signup extends Component {
 
                             </View>
 
+
+                            {this.state.showPopup &&   <View style={{ top:0,position:'absolute',alignItems:'center',backgroundColor:'white',width: StyleUtils.getWidth()  }}>
+
+                                <TermsOfUse declineTerms = {this.back.bind(this)} acceptTerms={this.closePopup.bind(this)}/>
+                            </View>}
                         </View>
 
                     </KeyboardAvoidingView>
@@ -282,6 +296,12 @@ class Signup extends Component {
             </Text>
         }
         return undefined;
+    }
+
+    closePopup(){
+        this.setState({
+            showPopup:false
+        })
     }
 }
 

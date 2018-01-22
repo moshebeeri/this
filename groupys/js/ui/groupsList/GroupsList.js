@@ -46,7 +46,7 @@ export default class GroupsList extends Component {
                         alignItems: 'center',
                         justifyContent:'space-between'
                     }}>
-                        <View style={{flex:2,backgroundColor:'red'}}>
+                        <View style={{flex:2,backgroundColor:'white'}}>
                             <GroupHeader group={group}/>
                         </View>
 

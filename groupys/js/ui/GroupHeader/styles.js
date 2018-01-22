@@ -136,7 +136,7 @@ module.exports = {
         borderBottomLeftRadius: 250, borderBottomRightRadius: 250,
         borderBottomWidth: 200,
         bottom: 20,
-        backgroundColor: 'red',
+        backgroundColor: 'white',
     },
     img: {
         width: Dimensions.get('window').width,

@@ -34,7 +34,7 @@ import {NavigationActions} from "react-navigation";
 import '../../conf/global';
 import pageSync from "../../refresh/refresher"
 import PageRefresher from '../../refresh/pageRefresher'
-import {BusinessHeader, GroupHeader, ScrolTabView, SubmitButton,BusinessList,GroupsList} from '../../ui/index'
+import {BusinessHeader, GroupHeader, ScrolTabView, SubmitButton,BusinessList,GroupsList,TermsOfUse} from '../../ui/index'
 import FCM, {
     FCMEvent,
     NotificationType,

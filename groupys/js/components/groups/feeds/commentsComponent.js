@@ -122,8 +122,13 @@ class CommentsComponent extends Component {
     }
 
     renderItem(renderItem) {
-        let item = renderItem.item;
         const {user} = this.props;
+        if(!user){
+
+            return <View></View>
+        }
+        let item = renderItem.item;
+
         let isUser = item.actor === user._id;
         let messageItem = {
             name: item.name,
