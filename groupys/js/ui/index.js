@@ -34,6 +34,7 @@ import BrainTreeWeb from './BrainTree/BrainTreeWeb'
 import BarcodeScanner from './BarcodeScanner/BarcodeScanner';
 import UrlPreview from './UrlPreview/UrlPreview';
 import DocumentPicker from './DocumentPicker/DocumentPicker'
+import TermsOfUse from './TermOfUse/TermsOfUse'
 export {
     ImagePicker,
     CategoryPicker,
@@ -70,5 +71,6 @@ export {
     GroupsList,
     BarcodeScanner,
     UrlPreview,
-    DocumentPicker
+    DocumentPicker,
+    TermsOfUse
 }

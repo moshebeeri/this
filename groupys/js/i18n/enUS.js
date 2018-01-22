@@ -234,6 +234,13 @@ IdIdentifier                                  : "Id Identifier",
 LetterOfIncorporation                         : "Letter Of Incorporation",
 confirmBusinessByMailMessage                  : "Please confirm your email Address",
 validatingBusinessMessage                     : "Please wait while we validate your business",
+IAGREE                                        : "I Agree",
+TermsofUse                                    : "Terms of Use",
+and                                           : "and",
+PrivacyPolicy                                 : "Privacy Policy",
+UseOfTermMessage                              : "By Creating an account you agree to THIS",
+
+
 
 
 
