@@ -41,6 +41,12 @@ function getKey(data) {
       return prop;
 }
 
+exports.terms = function (req, res) {
+  if(req.param.ver === '1.0')
+    res.status(200).send(require('../../config/terms/Terms Of Service.htm'));
+  res.status(404).send('Not Found');
+};
+
 /**
  * Get list of users
  * restriction: 'admin'
