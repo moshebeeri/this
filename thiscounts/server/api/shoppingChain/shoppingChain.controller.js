@@ -1,10 +1,12 @@
 'use strict';
 
-let _ = require('lodash');
-let ShoppingChain = require('./shoppingChain.model');
-let graphTools = require('../../components/graph-tools');
-let graphModel = graphTools.createGraphModel('shoppingChain');
-let MongodbSearch = require('../../components/mongo-search');
+const _ = require('lodash');
+const ShoppingChain = require('./shoppingChain.model');
+const Business = require('../business/business.model');
+const graphTools = require('../../components/graph-tools');
+const graphModel = graphTools.createGraphModel('shoppingChain');
+const MongodbSearch = require('../../components/mongo-search');
+const Role = require('../../components/role');
 
 exports.search = MongodbSearch.create(ShoppingChain);
 
@@ -25,15 +27,46 @@ exports.show = function(req, res) {
   });
 };
 
+exports.addBusinessToChain = function(req, res) {
+  Business.findById(req.params.businessId, (err, business) => {
+    if(err) { return handleError(res, err); }
+    if(!business) return res.status(404).send('Not Found');
+    ShoppingChain.findById(req.params.chainId, (err, shoppingChain) => {
+      if(err) { return handleError(res, err); }
+      if(!shoppingChain) return res.status(404).send('Not Found');
+      if(shoppingChain.creator !== business.creator._id) return res.status(4041).send('Only business and chain creator can add branches');
+      graphModel.relate_ids(business._id, 'BRANCH_OF', shoppingChain._id, `{timestamp: "${Date.now()}"}`, (err)=> {
+        if (err) {
+          return handleError(res, err);
+        }
+        return res.status(201).json(shoppingChain);
+      })
+    });
+  })
+};
+
 // Creates a new shoppingChain in the DB.
 exports.create = function(req, res) {
-  ShoppingChain.create(req.body, function(err, shoppingChain) {
+  Business.findById(req.params.businessId, (err, business) => {
     if(err) { return handleError(res, err); }
-    graphModel.reflect(shoppingChain, function (err) {
-      if (err) {  return handleError(res, err); }
+    if(!business) return res.status(404).send('Not Found');
+    if(req.user._id !== business.creator._id) return res.status(4041).send('Only business creator can make it a chain');
+    let chain = req.body;
+    chain.branches = [business._id];
+    chain.creator = req.user._id;
+    ShoppingChain.create(chain, function(err, shoppingChain) {
+        if(err) { return handleError(res, err); }
+        graphModel.reflect(shoppingChain, function (err) {
+          if (err) { return handleError(res, err); }
+          Role.createRole(req.user._id, business._id, Role.Roles.get('OWNS'), function (err) {
+            if (err) return console.error(err);
+            graphModel.relate_ids(business._id, 'BRANCH_OF', shoppingChain._id, `{timestamp: "${Date.now()}"}`, (err)=>{
+            if (err) { return handleError(res, err); }
+            return res.status(201).json(shoppingChain);
+          });
+        });
+      });
     });
-    return res.status(201).json(shoppingChain);
-  });
 };
 
 // Updates an existing shoppingChain in the DB.

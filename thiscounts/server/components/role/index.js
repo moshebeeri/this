@@ -13,10 +13,6 @@ function Role() {
 Role.Roles =
   Role.prototype.Roles = Roles;
 
-Role.extractPayer =
-  Role.prototype.extractPayer = function (entity) {
-};
-
 Role.createRole =
   Role.prototype.createRole = function(user, entity, role, callback) {
   if (!Roles.get(role))
