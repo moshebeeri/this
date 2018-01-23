@@ -101,9 +101,8 @@ const warch = navigator.geolocation.watchPosition((position) => {
             })
         }
     }, (error) => {
-        reduxStore.dispatch({
-            type: actions.NETWORK_IS_OFFLINE,
-        })
+        console.log('unable to get location')
+
     },
     {enableHighAccuracy: true, timeout: 20000, maximumAge: 1000, distanceFilter: 100}
 );
