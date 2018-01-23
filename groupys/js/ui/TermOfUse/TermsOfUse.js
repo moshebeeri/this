@@ -42,7 +42,8 @@ export default class TermsOfUse extends Component {
             backgroundColor: 'white',
             height: 150,
             borderWidth: 2,
-            width: StyleUtils.getWidth() - 10,
+            marginTop:200,
+            width: StyleUtils.getWidth() ,
             borderColor: '#cccccc',
             position: 'absolute',
             justifyContent: 'center',
@@ -51,6 +52,7 @@ export default class TermsOfUse extends Component {
             <View style={{
                 backgroundColor: 'white',
                 position: 'absolute',
+
                 height: 150,
                 width: StyleUtils.getWidth() -10
             }}>
@@ -62,22 +64,21 @@ export default class TermsOfUse extends Component {
             <View style={{
                 marginTop: 10,
 
-                flexDirection: 'row',
+                flexDirection: 'column',
                 backgroundColor:'transparent',
                 width: StyleUtils.getWidth() - 30
             }}>
                 <Text style={{flexWrap: 'wrap',color: 'white',backgroundColor:'transparent'}}> {strings.UseOfTermMessage}
-                    <TouchableOpacity style={{width: 120, alignItems: 'center', justifyContent: 'center', height: 10}}
-                                      onPress={() => Linking.openURL('https://creativecommons.org/terms/')}>
-                        <Text style={{color: 'blue'}}>{strings.TermsofUse}</Text>
-                    </TouchableOpacity>
-                    <Text style={{color: 'white'}}> {strings.and} </Text>
-                    <TouchableOpacity
-                        style={{marginLeft:10,width: 130, alignItems: 'flex-start', justifyContent: 'flex-start', height: 15}}
-                        onPress={() => Linking.openURL('https://creativecommons.org/terms/')}>
-                        <Text style={{color: 'blue'}}>{strings.PrivacyPolicy}</Text>
-                    </TouchableOpacity>
+
+
                 </Text>
+
+                <TouchableOpacity style={{marginTop:10,width: StyleUtils.getWidth() - 30, alignItems: 'center', justifyContent: 'center', height: 20}}
+                                  onPress={() => Linking.openURL(`${server_host}/api/users/terms/1.0` )}>
+                    <Text style={{color: 'blue'}}>{strings.TermsofUse}</Text>
+                </TouchableOpacity>
+
+
 
             </View>
             <View style={{
