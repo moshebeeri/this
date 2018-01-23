@@ -239,7 +239,7 @@ TermsofUse                                    : "Terms of Use and Privacy Policy
 and                                           : "and",
 PrivacyPolicy                                 : "Privacy Policy",
 UseOfTermMessage                              : "By Creating an account you agree to THIS",
-
+Select                                        : "Select",
 
 
 

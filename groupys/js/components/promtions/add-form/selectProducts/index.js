@@ -1,12 +1,18 @@
 import React, {Component} from "react";
 import {connect} from "react-redux";
-import {Platform, Provider} from "react-native";
-import {Container, Content, Text, Button, Body, Fab, Icon, Left, ListItem, Right, Thumbnail} from "native-base";
+import {I18nManager, Platform, Provider, View,ScrollView} from "react-native";
+import {Button, Container, Content, Fab, Icon, Left, ListItem, Right, Thumbnail} from "native-base";
 import {bindActionCreators} from "redux";
+import ProductListView from "../../../product/listView/index"
 import * as promotionsAction from "../../../../actions/promotions";
 import strings from "../../../../i18n/i18n"
-import {I18nManager} from 'react-native';
+import {FormHeader} from '../../../../ui/index';
+
 class SelectProductsComponent extends Component {
+    static navigationOptions = {
+        header: null
+    };
+
     constructor(props) {
         super(props);
     }
@@ -27,68 +33,21 @@ class SelectProductsComponent extends Component {
         const products = businesses.businessesProducts[this.props.navigation.state.params.businessId];
         if (products && products.length > 0) {
             productsRows = products.map((r, i) => {
-                index++;
-                if (r.pictures.length > 0) {
-                    return <ListItem key={index} thumbnail>
-                        <Left>
-                            {I18nManager.isRTL &&       <Thumbnail square size={80} source={{uri: r.pictures[0].pictures[3]}}/>}
-                            {!I18nManager.isRTL &&   <Button transparent
-                                                             onPress={() => this.selectProduct(r)}
-                            >
-                                <Text>{strings.Select}</Text>
-                            </Button>}
-
-                        </Left>
-                        <Body  style={{ alignItems:  'flex-start' , justifyContent:  'flex-start' ,}}>
-                        <Text style={{ justifyContent: 'flex-start' ,}}>{r.name}</Text>
-                        <Text style={{ justifyContent: 'flex-start',}}note>{r.info}</Text>
-                        </Body>
-                        <Right>
-                            {!I18nManager.isRTL &&  <Thumbnail square size={80} source={{uri: r.pictures[0].pictures[3]}}/>}
-
-                            {I18nManager.isRTL &&   <Button transparent
-                                                            onPress={() => this.selectProduct(r)}
-                            >
-                                <Text>{strings.Select}</Text>
-                            </Button>}
-                        </Right>
-                    </ListItem>
-                }
-                return <ListItem key={index} thumbnail style={{backgroundColor: '#fff'}}>
-                    <Left>
-                        {I18nManager.isRTL && <Thumbnail square size={80} source={require('../../../../../images/client_1.png')}/>}
-                        {!I18nManager.isRTL &&   <Button transparent
-                                                        onPress={() => this.selectProduct(r)}
-                        >
-                            <Text>{strings.Select}</Text>
-                        </Button>}
-                    </Left>
-                    <Body  style={{ alignItems: 'flex-start', justifyContent: I18nManager.isRTL ? 'flex-start' : 'flex-end',}}>
-
-                    <Text style={{ justifyContent:  'flex-start' ,}}>{r.name}</Text>
-                    <Text style={{ justifyContent: 'flex-start' }}note>{r.info}</Text>
-                    </Body>
-                    <Right>
-                        {!I18nManager.isRTL && <Thumbnail square size={80} source={require('../../../../../images/client_1.png')}/>}
-
-                        {I18nManager.isRTL &&   <Button transparent
-                                onPress={() => this.selectProduct(r)}
-                        >
-                            <Text>{strings.Select}</Text>
-                        </Button>}
-                    </Right>
-                </ListItem>
+                return <ProductListView key={i} index={i} item={r} select={this.selectProduct.bind(this)}/>
             });
         }
         return (
 
-            <Container>
-                <Content style={{backgroundColor: '#fff'}}>
+            <View style={{flex: 1,backgroundColor: '#fff'}}>
+                <ScrollView style={{backgroundColor: '#fff'}}>
+                    <FormHeader showBack navigation={this.props.navigation}
+                                title={strings.Products} bgc="#FA8559"/>
 
 
                     {productsRows}
 
-                </Content>
+                </ScrollView>
+
                 <Fab
 
                     direction="right"
@@ -100,7 +59,7 @@ class SelectProductsComponent extends Component {
                     <Icon size={20} name="ios-add"/>
 
                 </Fab>
-            </Container>
+            </View>
 
 
         );

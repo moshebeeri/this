@@ -32,6 +32,7 @@ module.exports = {
         alignItems:'center',
         justifyContent:'center',
 
+
     },
     editButtonConntainer:{
         borderRadius:30,
