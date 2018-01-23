@@ -55,7 +55,7 @@ export default class PromotionListView extends Component {
         }
         const styles = this.createStyle();
         const result =
-            <View key={promotionItem._id} style={[styles.promotion_container, {width: StyleUtils.getWidth()}]}>
+            <View key={promotionItem._id} style={[styles.promotion_container, {marginTop:10,width: StyleUtils.getWidth()}]}>
 
 
                 {this.createImageTage(item, styles)}

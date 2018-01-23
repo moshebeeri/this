@@ -3,8 +3,8 @@ import {actions} from 'react-native-navigation-redux-helpers';
 import {Icon, Thumbnail,} from 'native-base';
 import {Text, TouchableOpacity, View} from 'react-native';
 import styles from './styles'
-import {EditButton} from '../../../ui/index';
-
+import {EditButton,SubmitButton} from '../../../ui/index';
+import strings from "../../../i18n/i18n"
 const ILS = '₪';
 export default class ProductListView extends Component {
     constructor(props) {
@@ -28,8 +28,14 @@ export default class ProductListView extends Component {
         return <EditButton onPress={this.navigateToEdit.bind(this, item)}/>
     }
 
+    createSelectTag(item) {
+        const {select} = this.props;
+
+        return <SubmitButton color={'#ff6400'} title={strings.Select.toUpperCase()} onPress={() => select(item)}/>
+    }
+
     render() {
-        const {item, index} = this.props;
+        const {item, index,select} = this.props;
         return <View key={index} style={styles.productContainer}>
             <View style={styles.productImageContainer}>
                 {this.createImage(item)}
@@ -43,9 +49,16 @@ export default class ProductListView extends Component {
                 </View>
 
             </View>
-            <View style={styles.productEditContainer}>
+            {!select && <View style={styles.productEditContainer}>
                 {this.createEditTag(item)}
-            </View>
+            </View>}
+
+
+
+            {select &&   <View style={[styles.productEditContainer, {marginRight: 20}]}>
+                {this.createSelectTag(item)}
+            </View>}
+
         </View>
     }
 }

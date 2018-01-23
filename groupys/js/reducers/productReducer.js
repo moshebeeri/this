@@ -32,6 +32,11 @@ export default function products(state = initialState, action) {
                 ...state,
                 savingForm: true,
             };
+        case actions.PRODUCT_RESET_FORM:
+            return {
+                ...state,
+                savingForm: false,
+            };
         case actions.PRODUCT_LOADING_DONE:
             productsState.loadingDone[action.businessId] = true
 

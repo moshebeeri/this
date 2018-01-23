@@ -100,7 +100,6 @@ class Signup extends Component {
                     </View>
                     {this.state.showPopup && <View style={{ top:0,height:height,position:'absolute',opacity:0.8,alignItems:'center',backgroundColor:'white',width: StyleUtils.getWidth()  }}>
 
-
                     </View>}
 
                     <KeyboardAvoidingView behavior={'position'}
@@ -273,14 +272,12 @@ class Signup extends Component {
                             </View>
 
 
-                            {this.state.showPopup &&   <View style={{ top:0,position:'absolute',alignItems:'center',backgroundColor:'white',width: StyleUtils.getWidth()  }}>
 
-                                <TermsOfUse declineTerms = {this.back.bind(this)} acceptTerms={this.closePopup.bind(this)}/>
-                            </View>}
                         </View>
 
                     </KeyboardAvoidingView>
 
+                    {this.state.showPopup && <TermsOfUse  declineTerms = {this.back.bind(this)} acceptTerms={this.closePopup.bind(this)}/>}
 
                 </View>
             </ScrollView>

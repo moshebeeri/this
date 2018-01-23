@@ -1,17 +1,14 @@
 import React, {Component} from "react";
-import {Dimensions, I18nManager, Image, Platform, StyleSheetm, Text, TouchableOpacity, View} from "react-native";
+import {Dimensions, I18nManager, Image, Platform, StyleSheetm, Text, TouchableOpacity, View,AppState} from "react-native";
 import {connect} from "react-redux";
-import {Container, Drawer, Fab, Icon, Tab, TabHeading, Tabs} from "native-base";
+import {Container, Drawer, Fab, Icon, Tab, TabHeading, Tabs,} from "native-base";
 import GeneralComponentHeader from "../header/index";
 import Feeds from "../feed/index";
 import MydPromotions from "../my-promotions/index";
 import Notification from "../notifications/index";
 import Groups from "../groups/index";
-import BackgroundTimer from "react-native-background-timer";
 import LocationApi from "../../api/location";
-import ContactApi from "../../api/contacts";
 import getStore from "../../store";
-
 import SideBar from "../drawer/index";
 import * as actions from "../../reducers/reducerActions";
 import {bindActionCreators} from "redux";
@@ -27,14 +24,12 @@ import * as mainAction from "../../actions/mainTab";
 import * as userAction from "../../actions/user";
 import * as businessActions from "../../actions/business";
 import * as groupsActions from "../../actions/groups";
-
-
 import {createSelector} from "reselect";
 import {NavigationActions} from "react-navigation";
 import '../../conf/global';
-import pageSync from "../../refresh/refresher"
 import PageRefresher from '../../refresh/pageRefresher'
-import {BusinessHeader, GroupHeader, ScrolTabView, SubmitButton,BusinessList,GroupsList,TermsOfUse} from '../../ui/index'
+import Tasks from '../../tasks/tasks'
+import {BusinessHeader, BusinessList, GroupHeader, GroupsList, ScrolTabView, SubmitButton} from '../../ui/index'
 import FCM, {
     FCMEvent,
     NotificationType,
@@ -44,28 +39,20 @@ import FCM, {
 import Icon2 from 'react-native-vector-icons/Ionicons';
 import FeedPromotion from '../generic-feed-manager/generic-feed/feed-components/feedPromotion'
 import strings from "../../i18n/i18n"
-
 import StyleUtils from "../../utils/styleUtils";
+import store from 'react-native-simple-store';
+import ActionLogger from '../../actions/ActionLogger'
 
 const height = StyleUtils.getHeight();
 let locationApi = new LocationApi();
-let contactApi = new ContactApi();
 const reduxStore = getStore();
-import store from 'react-native-simple-store';
-const updateDialogOption = {
-    updateTitle: "update"
-};
 const resetAction = NavigationActions.reset({
     index: 0,
     actions: [
         NavigationActions.navigate({routeName: 'login'})
     ]
 });
-import ActionLogger from '../../actions/ActionLogger'
 let logger = new ActionLogger();
-
-
-
 // this shall be called regardless of app state: running, background or not running. Won't be called when app is killed by user in iOS
 FCM.on(FCMEvent.Notification, async (notif) => {
     console.log(notif);
@@ -113,35 +100,12 @@ const warch = navigator.geolocation.watchPosition((position) => {
                 type: actions.NETWORK_IS_OFFLINE,
             })
         }
+    }, (error) => {
+        console.log('unable to get location')
+
     },
     {enableHighAccuracy: true, timeout: 20000, maximumAge: 1000, distanceFilter: 100}
 );
-const timer = BackgroundTimer.setInterval(() => {
-    try {
-        pageSync.check();
-        if (reduxStore.getState().authentication.token) {
-            contactApi.syncContacts();
-        }
-        if (reduxStore.getState().network.offline) {
-            reduxStore.dispatch({
-                type: actions.NETWORK_IS_ONLINE,
-            })
-        }
-    } catch (error) {
-        reduxStore.dispatch({
-            type: actions.NETWORK_IS_OFFLINE,
-        })
-    }
-}, 60000);
-const refresher = BackgroundTimer.setInterval(() => {
-    try {
-        pageSync.check();
-    } catch (error) {
-        reduxStore.dispatch({
-            type: actions.NETWORK_IS_OFFLINE,
-        })
-    }
-}, 1000);
 
 /////////////////////////////////////////////////
 class ApplicationManager extends Component {
@@ -154,9 +118,8 @@ class ApplicationManager extends Component {
         this.state = {
             orientation: StyleUtils.isPortrait() ? 'portrait' : 'landscape',
             devicetype: StyleUtils.isTablet() ? 'tablet' : 'phone',
-            activeTab:'feed'
+            activeTab: 'feed'
         }
-
     }
 
     replaceRoute(route) {
@@ -164,12 +127,10 @@ class ApplicationManager extends Component {
     }
 
     async componentWillMount() {
-
         FCM.requestPermissions().then(
             () =>
                 console.log('granted')).catch(() =>
             console.log('notification permission rejected'));
-
         let token = await store.get("token");
         if (!token) {
             this.props.navigation.dispatch(resetAction);
@@ -177,6 +138,7 @@ class ApplicationManager extends Component {
         FCM.getFCMToken().then(token => {
             PageRefresher.updateUserFireBase(token);
         });
+        Tasks.start();
         let notification = await  FCM.getInitialNotification();
         if (notification && notification.model === 'instance') {
             this.props.actions.showPromotionPopup(notification._id, notification.notificationId);
@@ -193,14 +155,24 @@ class ApplicationManager extends Component {
         if (notification && notification.title) {
             this.props.actions.showGenericPopup(notification.title, notification.notificationId, notification.action);
         }
+
+        AppState.addEventListener('change', this._handleAppStateChange);
     }
 
+
+    _handleAppStateChange = (nextAppState) => {
+        if ( nextAppState !== 'active') {
+            Tasks.stop();
+        }else{
+            Tasks.start();
+        }
+
+    }
     onChangeTab(tab) {
         if (tab.i === 0) {
-
-            if(I18nManager.isRTL && (Platform.OS === 'android')){
+            if (I18nManager.isRTL && (Platform.OS === 'android')) {
                 logger.screenVisited('notification')
-            }else {
+            } else {
                 logger.screenVisited('feed')
                 PageRefresher.visitedFeed();
                 this.setState({
@@ -208,45 +180,40 @@ class ApplicationManager extends Component {
                 })
             }
         }
-        if (tab.i === 1 ){
-            if(I18nManager.isRTL && (Platform.OS === 'android')){
+        if (tab.i === 1) {
+            if (I18nManager.isRTL && (Platform.OS === 'android')) {
                 logger.screenVisited('groups')
                 PageRefresher.visitedGroups();
-            }else {
+            } else {
                 logger.screenVisited('savedPromotion')
                 this.setState({
                     activeTab: 'savedPromotion'
                 })
             }
-
         }
         //this.p
         if (tab.i === 2) {
-
-            if(I18nManager.isRTL && (Platform.OS === 'android')){
+            if (I18nManager.isRTL && (Platform.OS === 'android')) {
                 logger.screenVisited('savedPromotion')
                 this.setState({
                     activeTab: 'savedPromotion'
                 })
-            }else {
+            } else {
                 PageRefresher.visitedGroups();
                 logger.screenVisited('groups')
                 this.setState({
-                    activeTab:'groups'
+                    activeTab: 'groups'
                 })
             }
-
         }
-        if (tab.i === 3){
-
-            if(I18nManager.isRTL && (Platform.OS === 'android')){
+        if (tab.i === 3) {
+            if (I18nManager.isRTL && (Platform.OS === 'android')) {
                 logger.screenVisited('feed')
                 PageRefresher.visitedFeed();
                 this.setState({
                     activeTab: 'feed'
                 })
-
-            }else {
+            } else {
                 logger.screenVisited('notification')
             }
         }
@@ -279,11 +246,12 @@ class ApplicationManager extends Component {
     }
 
     render() {
-        const {selectedTab, showAdd, showComponent, notifications,
+        const {
+            selectedTab, showAdd, showComponent, notifications,
             item, location, showPopup, token, notificationTitle,
             notificationAction, notificationGroup, notificationBusiness,
-            showSearchResults,businesses,businessActions,groups,groupsActions} = this.props;
-
+            showSearchResults, businesses, businessActions, groups, groupsActions
+        } = this.props;
         if (!showComponent) {
             return <View></View>
         }
@@ -297,7 +265,6 @@ class ApplicationManager extends Component {
         if (notificationAction) {
             notificationActionString = this.translateNotificationAction(notificationAction)
         }
-
         closeDrawer = () => {
             this.drawer._root.close()
         };
@@ -335,22 +302,28 @@ class ApplicationManager extends Component {
                         <ScrolTabView initialPage={0} onChangeTab={this.onChangeTab.bind(this)}
                                       tabBarBackgroundColor='white'
                                       tabBarUnderlineStyle={{backgroundColor: '#2db6c8'}}>
-                            <Feeds  activeTab={this.state.activeTab} tabLabel="promotions" index={0} navigation={this.props.navigation}/>
-                            <MydPromotions  activeTab={this.state.activeTab}  tabLabel="save" navigation={this.props.navigation} index={1}/>
-                            <Groups   activeTab={this.state.activeTab}  tabLabel="groups" navigation={this.props.navigation} index={2}/>
-                            <Notification   activeTab={this.state.activeTab}  tabLabel={notificationLabel} navigation={this.props.navigation} index={3}/>
+                            <Feeds activeTab={this.state.activeTab} tabLabel="promotions" index={0}
+                                   navigation={this.props.navigation}/>
+                            <MydPromotions activeTab={this.state.activeTab} tabLabel="save"
+                                           navigation={this.props.navigation} index={1}/>
+                            <Groups activeTab={this.state.activeTab} tabLabel="groups"
+                                    navigation={this.props.navigation} index={2}/>
+                            <Notification activeTab={this.state.activeTab} tabLabel={notificationLabel}
+                                          navigation={this.props.navigation} index={3}/>
 
 
                         </ScrolTabView>
                     }
 
-                    {showSearchResults && businesses &&  <View style={{ top:45,position: 'absolute',backgroundColor:'white',width: StyleUtils.getWidth()  }}>
+                    {showSearchResults && businesses && <View
+                        style={{top: 45, position: 'absolute', backgroundColor: 'white', width: StyleUtils.getWidth()}}>
 
-                    <BusinessList businesses={businesses} followBusiness={businessActions.followBusiness}/>
-                </View>}
+                        <BusinessList businesses={businesses} followBusiness={businessActions.followBusiness}/>
+                    </View>}
 
 
-                    {showSearchResults && groups &&  <View style={{ top:45,position: 'absolute',backgroundColor:'white',width: StyleUtils.getWidth()  }}>
+                    {showSearchResults && groups && <View
+                        style={{top: 45, position: 'absolute', backgroundColor: 'white', width: StyleUtils.getWidth()}}>
 
                         <GroupsList groups={groups} joinGroup={groupsActions.joinGroup}/>
                     </View>}
@@ -361,7 +334,7 @@ class ApplicationManager extends Component {
                         borderColor: 'black',
                         top: notificationnTopPadding,
                         position: 'absolute',
-                        width: StyleUtils.getWidth()  - 5,
+                        width: StyleUtils.getWidth() - 5,
                         height: height - notificationPopupHeight,
                         backgroundColor: 'white',
                         justifyContent: 'center',
@@ -374,13 +347,23 @@ class ApplicationManager extends Component {
                         </TouchableOpacity>
 
                         {item &&
-                        <View style={{flex: 1, width: StyleUtils.getWidth()  - 5, justifyContent: 'center', alignItems: 'center'}}>
+                        <View style={{
+                            flex: 1,
+                            width: StyleUtils.getWidth() - 5,
+                            justifyContent: 'center',
+                            alignItems: 'center'
+                        }}>
                             <FeedPromotion showActions={true} token={token}
                                            location={location} hideSocial={true} showInPopup={true}
                                            navigation={this.props.navigation} item={item}/>
                         </View>}
                         {notificationTitle &&
-                        <View style={{flex: 1, width: StyleUtils.getWidth() - 5, justifyContent: 'flex-start', alignItems: 'center'}}>
+                        <View style={{
+                            flex: 1,
+                            width: StyleUtils.getWidth() - 5,
+                            justifyContent: 'flex-start',
+                            alignItems: 'center'
+                        }}>
 
 
                             <View style={{flex: 1, alignItems: 'flex-start', justifyContent: 'flex-start'}}>
@@ -392,9 +375,10 @@ class ApplicationManager extends Component {
                                                                          hideMenu
                                                                          showActions={false}/>
                                 }
-                                <Text style={{paddingLeft:10,paddingTop: 10}}>{notificationTitle}</Text>
+                                <Text style={{paddingLeft: 10, paddingTop: 10}}>{notificationTitle}</Text>
                             </View>
-                            {notificationActionString && <View style={{flex: 1, paddingBottom: 10, justifyContent: 'flex-end',}}>
+                            {notificationActionString &&
+                            <View style={{flex: 1, paddingBottom: 10, justifyContent: 'flex-end',}}>
                                 <SubmitButton color={'#2db6c8'} title={notificationActionString}
                                               onPress={this.handleGenericNotification.bind(this)}/>
                             </View>}
@@ -411,7 +395,8 @@ class ApplicationManager extends Component {
             return strings.Approve.toUpperCase();
         }
         if (action === 'FOLLOW') {
-            return strings.Follow.toUpperCase();;
+            return strings.Follow.toUpperCase();
+            ;
         }
         return undefined;
     }

@@ -67,6 +67,17 @@ export function setProductCategories(gid) {
         getProductCategories(dispatch, gid, token);
     }
 }
+export function resetForm() {
+    return function (dispatch) {
+        dispatch({
+            type: actions.PRODUCT_RESET_FORM,
+        });
+
+    }
+}
+
+
+
 
 export function saveProduct(product,businessId,navigation) {
     return async function (dispatch, getState) {

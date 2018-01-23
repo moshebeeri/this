@@ -604,7 +604,7 @@ class AddPromotion extends Component {
     }
 
     shouldComponentUpdate(){
-        if(this.props.currentScreen ==='addPromotions' ){
+        if(this.props.currentScreen ==='addPromotions' || this.props.currentScreen ==='SelectGroupsComponent' || this.props.currentScreen ==='SelectProductsComponent'  ){
             return true;
         }
         return false;

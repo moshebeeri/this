@@ -4,7 +4,7 @@ const {width, height} = Dimensions.get('window')
 module.exports = {
 
     promotion_container:{
-        borderWidth:5,
+
         borderColor:'#e7e7e7',
         backgroundColor:'white',
         borderTopWidth:5,

@@ -71,6 +71,10 @@ class AddProduct extends Component {
         this.props.navigation.goBack();
     }
 
+    componentWillMount(){
+        this.props.actions.resetForm()
+    }
+
     validateForm() {
         let result = true;
         Object.keys(this.refs).forEach(key => {
