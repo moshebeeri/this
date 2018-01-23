@@ -48,25 +48,34 @@ exports.addBusinessToChain = function(req, res) {
 // Creates a new shoppingChain in the DB.
 exports.create = function(req, res) {
   Business.findById(req.params.businessId, (err, business) => {
-    if(err) { return handleError(res, err); }
-    if(!business) return res.status(404).send('Not Found');
-    if(req.user._id !== business.creator._id) return res.status(4041).send('Only business creator can make it a chain');
+    if (err) {
+      return handleError(res, err);
+    }
+    if (!business) return res.status(404).send('Not Found');
+    if (req.user._id !== business.creator._id) return res.status(4041).send('Only business creator can make it a chain');
     let chain = req.body;
     chain.branches = [business._id];
     chain.creator = req.user._id;
-    ShoppingChain.create(chain, function(err, shoppingChain) {
-        if(err) { return handleError(res, err); }
-        graphModel.reflect(shoppingChain, function (err) {
-          if (err) { return handleError(res, err); }
-          Role.createRole(req.user._id, business._id, Role.Roles.get('OWNS'), function (err) {
-            if (err) return console.error(err);
-            graphModel.relate_ids(business._id, 'BRANCH_OF', shoppingChain._id, `{timestamp: "${Date.now()}"}`, (err)=>{
-            if (err) { return handleError(res, err); }
+    ShoppingChain.create(chain, function (err, shoppingChain) {
+      if (err) {
+        return handleError(res, err);
+      }
+      graphModel.reflect(shoppingChain, function (err) {
+        if (err) {
+          return handleError(res, err);
+        }
+        Role.createRole(req.user._id, business._id, Role.Roles.get('OWNS'), function (err) {
+          if (err) return console.error(err);
+          graphModel.relate_ids(business._id, 'BRANCH_OF', shoppingChain._id, `{timestamp: "${Date.now()}"}`, (err) => {
+            if (err) {
+              return handleError(res, err);
+            }
             return res.status(201).json(shoppingChain);
           });
         });
       });
     });
+  })
 };
 
 // Updates an existing shoppingChain in the DB.
