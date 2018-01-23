@@ -55,6 +55,7 @@ class AddBusiness extends Component {
                 tax_id: item.tax_id,
                 formID: '12345',
                 item: item,
+                hideIds:true,
                 category: category,
                 subcategory: subcategory,
                 categories: [Number(category), Number(subcategory)],
@@ -89,6 +90,7 @@ class AddBusiness extends Component {
             }
 
             this.state = {
+                hideIds:false,
                 updateMode: false,
                 name: templateBusiness.name,
                 address: templateBusiness.address,
@@ -374,16 +376,16 @@ class AddBusiness extends Component {
                                    onChangeText={(tax_id) => this.setReduxState({tax_id})} isMandatory={true}/>
                     </View>
 
-                    <View style={[styles.inputTextLayout, {width: StyleUtils.getWidth() - 15}]}>
+                    {!this.state.hideIds && <View style={[styles.inputTextLayout, {width: StyleUtils.getWidth() - 15}]}>
                         <DocumentPicker value={this.state.IdIdentifierImage} ref="id" isMandatory field={strings.IdIdentifier}
                                         setDocument={this.setIdDocument.bind(this)}/>
 
-                    </View>
-                    <View style={[styles.inputTextLayout, {width: StyleUtils.getWidth() - 15}]}>
+                    </View>}
+                    {!this.state.hideIds && <View style={[styles.inputTextLayout, {width: StyleUtils.getWidth() - 15}]}>
                         <DocumentPicker value={this.state.LetterOfIncorporationImage} ref="LetterOfIncorporation" isMandatory field={strings.LetterOfIncorporation}
                                         setDocument={this.setLetterDocument.bind(this)}/>
 
-                    </View>
+                    </View>}
 
 
                 </ScrollView>

@@ -18,7 +18,7 @@ class PageRefresher {
     constructor() {
         pageSync.createPage('feed', pageSync.createStdAverageRefresh('feed', 10, 60000), this.setMainFeedRefresh.bind(this));
         pageSync.createPage('groups', pageSync.createStdAverageRefresh('groups', 10, 60000), this.updateGroups.bind(this));
-        pageSync.createPage('businesses', pageSync.createStdAverageRefresh('businesses', 10, 360000), this.updateBusinesses.bind(this));
+        pageSync.createPage('businesses', pageSync.createStdAverageRefresh('businesses', 10, 60000), this.updateBusinesses.bind(this));
         pageSync.createPage('notification', pageSync.createStdAverageRefresh('notification', 10, 60000), this.updateNotification.bind(this));
         pageSync.createPage('user', pageSync.createStdAverageRefresh('user', 10, 60000), this.updateUser.bind(this));
     }
