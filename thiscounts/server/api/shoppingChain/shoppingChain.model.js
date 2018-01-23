@@ -7,6 +7,8 @@ const autopopulate = require('mongoose-autopopulate');
 let ShoppingChainSchema = new Schema({
   social_state : {},
   pricing: {type: Schema.ObjectId, ref: 'Pricing', autopopulate: true},
+  name: String,
+  gid: { type: Number, index: true},
   tax_id: {type: String, index: true, required: true},
   description: String,
   address: {type: String, required: true},
@@ -21,8 +23,6 @@ let ShoppingChainSchema = new Schema({
   website: String,
   creator: {type: Schema.ObjectId, index: true, ref: 'User', required: true},
   created: {type: Date, required: true},
-  name: String,
-  gid: { type: Number, index: true},
   logo: String,
   branches: [{type: Schema.ObjectId, ref: 'Business', autopopulate: true}],
   pictures : [],
@@ -34,7 +34,7 @@ ShoppingChainSchema.plugin(autopopulate);
 
 ShoppingChainSchema.index({
   name: 'text',
-  info: 'text'
+  description: 'text'
 });
 
 module.exports = mongoose.model('ShoppingChain', ShoppingChainSchema);

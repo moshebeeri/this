@@ -384,14 +384,12 @@ function createValidatedBusiness(business, callback) {
       lon: business.location.lng
     }, function (err, business) {
       if (err) return callback(err);
-      if (business.type === 'PERSONAL_SERVICES' || business.type === 'SMALL_BUSINESS') {
-        let grunt_query = `MATCH (user:user{_id:"${business.creator}"}), (entity{_id:"${business._id}"})
-                     CREATE (user)-[role:ROLE{name:'OWNS'}]->(entity)`;
-        graphModel.query(grunt_query, function (err) {
-          if (err) return callback(err);
+      Role.createRole(business.creator, business._id, Role.Roles.get('OWNS'), function (err) {
+        if (err) return console.error(err);
+        if (business.type === 'PERSONAL_SERVICES' || business.type === 'SMALL_BUSINESS') {
           graphModel.owner_followers_follow_business(business.creator);
-        });
-      }
+        }
+      });
       if (defined(business.shopping_chain))
         graphModel.relate_ids(business._id, 'BRANCH_OF', business.shopping_chain);
       if (defined(business.mall))
