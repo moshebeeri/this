@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import {Dimensions, I18nManager, Platform, TouchableOpacity} from 'react-native';
+import {Dimensions, I18nManager, Platform, TouchableOpacity,TextInput} from 'react-native';
 import {Button, Header, Input, InputGroup, Tab, TabHeading, Tabs, Text, View} from 'native-base';
 import Icon from 'react-native-vector-icons/Ionicons';
 import Icon2 from 'react-native-vector-icons/Entypo';
@@ -15,6 +15,10 @@ import StyleUtils from "../../utils/styleUtils";
 class FormHeader extends Component {
     constructor(props) {
         super(props);
+        this.state={
+            showSearch:false,
+            searchText:'',
+        }
     }
 
     back() {
@@ -40,8 +44,25 @@ class FormHeader extends Component {
         return styles.formHeadrTitleStyle;
     }
 
+
+    filter(){
+        this.setState({
+            showSearch:true
+        })
+    }
+
+    searchText(text){
+        const{filter} = this.props;
+        this.setState({
+            searchText:text
+        })
+        if(filter){
+            filter(text);
+        }
+
+    }
     render() {
-        const {submitForm, showBack, title, bgc, submitIcon, titleColor, backIconColor,network} = this.props;
+        const {filter,submitForm, showBack, title, bgc, submitIcon, titleColor, backIconColor,network} = this.props;
         let icon = <Icon2 active color={"white"} size={25} name={'check'}/>
         let headerHeight = vh * 7;
         if (Platform.OS === 'ios') {
@@ -86,7 +107,26 @@ class FormHeader extends Component {
                     flex: 5, justifyContent: 'center',
                     alignItems: 'center',
                 }}>
-                    <Text transparent style={titleStyle}>{title}</Text>
+                    {!this.state.showSearch && <Text transparent style={titleStyle}>{title}</Text>}
+                    {this.state.showSearch &&
+                    <TextInput style={{
+                        color: "white",
+                        marginLeft: 10,
+                        marginRight: 40,
+                        marginTop: 5,
+
+                        fontSize: 18,
+                        width: StyleUtils.getWidth() - 100,
+                        height:40
+                    }}
+                               placeholderTextColor={'white'}
+                               underlineColorAndroid='transparent'
+                               value={this.state.searchText}
+                               autoFocus={true}
+                               returnKeyType='search'
+                               onChangeText={(searchText) => this.searchText(searchText)}
+                               placeholder={'Search'}
+                    />}
                 </View>
 
                 <View style={styles.formHeaderSubmitButoon}>
@@ -97,7 +137,19 @@ class FormHeader extends Component {
                         {icon}
                     </TouchableOpacity>
                     }
+
+                    {filter && !this.state.showSearch &&
+                    <TouchableOpacity transparent
+                                      style={{width: 50, alignItems: 'flex-end', justifyContent: 'flex-end'}}
+                                      onPress={() => this.filter()}>
+                        <Icon style={{fontSize: 30, color: "white"}} name="ios-search"/>
+                    </TouchableOpacity>
+                    }
+
+
                 </View>
+
+
             </View>
             </View>
         );

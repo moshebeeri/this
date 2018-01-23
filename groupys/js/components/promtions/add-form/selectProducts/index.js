@@ -15,6 +15,7 @@ class SelectProductsComponent extends Component {
 
     constructor(props) {
         super(props);
+        this.state = {filter:''}
     }
 
     navigateToAdd() {
@@ -26,6 +27,10 @@ class SelectProductsComponent extends Component {
         this.props.navigation.goBack();
     }
 
+    filterProduct(product){
+        this.setState({filter:product});
+
+    }
     render() {
         const {businesses} = this.props;
         let index = 0;
@@ -33,15 +38,21 @@ class SelectProductsComponent extends Component {
         const products = businesses.businessesProducts[this.props.navigation.state.params.businessId];
         if (products && products.length > 0) {
             productsRows = products.map((r, i) => {
+                if(this.state.filter){
+                    if(!r.name.toLowerCase().includes(this.state.filter.toLowerCase())){
+                        return undefined;
+                    }
+                }
                 return <ProductListView key={i} index={i} item={r} select={this.selectProduct.bind(this)}/>
             });
+            productsRows = productsRows.filter((p) => p);
         }
         return (
 
             <View style={{flex: 1,backgroundColor: '#fff'}}>
                 <ScrollView style={{backgroundColor: '#fff'}}>
-                    <FormHeader showBack navigation={this.props.navigation}
-                                title={strings.Products} bgc="#FA8559"/>
+                    <FormHeader filter={this.filterProduct.bind(this)} showBack navigation={this.props.navigation}
+                                title={strings.SelectProduct} bgc="#FA8559"/>
 
 
                     {productsRows}
