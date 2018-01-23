@@ -78,7 +78,7 @@ class SelectGroupsComponent extends Component {
             <View style={{flex: 1,backgroundColor: '#fff'}}>
                 <ScrollView style={{backgroundColor: '#fff'}}>
                     <FormHeader submitForm={this.saveFormData.bind(this)}  showBack navigation={this.props.navigation}
-                                title={'Select Groups'} bgc="#FA8559"/>
+                                title={strings.SelectGroups} bgc="#FA8559"/>
 
 
                     {productsRows}

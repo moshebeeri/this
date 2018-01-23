@@ -1,6 +1,6 @@
 import React, {Component} from "react";
 import {connect} from "react-redux";
-import {I18nManager, Platform, Provider, View,ScrollView} from "react-native";
+import {I18nManager, Platform, Provider, ScrollView, View} from "react-native";
 import {Button, Container, Content, Fab, Icon, Left, ListItem, Right, Thumbnail} from "native-base";
 import {bindActionCreators} from "redux";
 import ProductListView from "../../../product/listView/index"
@@ -15,7 +15,7 @@ class SelectProductsComponent extends Component {
 
     constructor(props) {
         super(props);
-        this.state = {filter:''}
+        this.state = {filter: ''}
     }
 
     navigateToAdd() {
@@ -27,19 +27,18 @@ class SelectProductsComponent extends Component {
         this.props.navigation.goBack();
     }
 
-    filterProduct(product){
-        this.setState({filter:product});
-
+    filterProduct(product) {
+        this.setState({filter: product});
     }
+
     render() {
         const {businesses} = this.props;
-        let index = 0;
         let productsRows = undefined
         const products = businesses.businessesProducts[this.props.navigation.state.params.businessId];
         if (products && products.length > 0) {
             productsRows = products.map((r, i) => {
-                if(this.state.filter){
-                    if(!r.name.toLowerCase().includes(this.state.filter.toLowerCase())){
+                if (this.state.filter) {
+                    if (!r.name.toLowerCase().includes(this.state.filter.toLowerCase())) {
                         return undefined;
                     }
                 }
@@ -49,7 +48,7 @@ class SelectProductsComponent extends Component {
         }
         return (
 
-            <View style={{flex: 1,backgroundColor: '#fff'}}>
+            <View style={{flex: 1, backgroundColor: '#fff'}}>
                 <ScrollView style={{backgroundColor: '#fff'}}>
                     <FormHeader filter={this.filterProduct.bind(this)} showBack navigation={this.props.navigation}
                                 title={strings.SelectProduct} bgc="#FA8559"/>
