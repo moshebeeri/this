@@ -23,6 +23,7 @@ const activity = require('../../components/activity').createActivity();
 const MongodbSearch = require('../../components/mongo-search');
 const Role = require('../../components/role');
 const feed = require('../../components/feed-tools');
+const path = require('path');
 
 exports.search = MongodbSearch.create(User);
 
@@ -42,9 +43,9 @@ function getKey(data) {
 }
 
 exports.terms = function (req, res) {
-  if(req.param.ver === '1.0')
-    res.status(200).send(require('../../config/terms/Terms Of Service.htm'));
-  res.status(404).send('Not Found');
+  if(req.params.ver === '1.0')
+    return res.sendFile(path.join(__dirname, '../../config/terms/Terms Of Service.htm'));
+  return res.status(404).send('Not Found');
 };
 
 /**

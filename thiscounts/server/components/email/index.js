@@ -3,7 +3,7 @@
 const config = require('../../config/environment');
 const nodemailer = require('nodemailer');
 const EmailTemplate = require('email-templates');
-var path = require('path');
+const path = require('path');
 
 
 const transporter = nodemailer.createTransport({
