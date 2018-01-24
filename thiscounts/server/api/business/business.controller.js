@@ -172,7 +172,7 @@ function business_follow_activity(follower, business) {
   });
 }
 
-function follow(userId, businessId, callback) {
+exports.followBusiness = function(userId, businessId, callback) {
   console.log(`function follow: userId=${userId}, businessId=${businessId}`);
   Business.findById(businessId)
     .exec(function (err, business) {
@@ -209,7 +209,7 @@ function follow(userId, businessId, callback) {
 exports.follow = function (req, res) {
   let userId = req.user._id;
   let businessId = req.params.business;
-  follow(userId, businessId, function (err) {
+  this.followBusiness(userId, businessId, function (err) {
     if (err) return handleError(res, err);
     return res.status(200).send();
   })

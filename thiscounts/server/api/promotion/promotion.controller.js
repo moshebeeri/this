@@ -249,6 +249,7 @@ function handlePromotionPostCreate(promotion, callback) {
     let delete_on_action_query = `MATCH (f { _id:"${entityId}" })-[r:ON_ACTION]->(t) delete r`;
     promotionGraphModel.query(delete_on_action_query, (err) => {
       if(err) return callback(err);
+      console.log(`promotionGraphModel.relate_ids(${entityId}, 'ON_ACTION', ${promotion._id}, ${JSON.stringify(params)}, callback);`)
       return promotionGraphModel.relate_ids(entityId, 'ON_ACTION', promotion._id, params, callback);
     });
   }
