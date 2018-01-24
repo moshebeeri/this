@@ -54,8 +54,8 @@ function toPayloadData(notification, callback){
   n.tag = data._id? data._id : '';
   unread(notification.to, function(err, badge){
     if(err) return callback(err);
-    n.badge = badge;
-    data.badge = badge;
+    n.badge = badge.toString();
+    data.badge = badge.toString();
     return callback(null, {
       data,
       notification : n

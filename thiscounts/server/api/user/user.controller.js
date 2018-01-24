@@ -5,6 +5,7 @@ const mongoose = require('mongoose');
 const async = require('async');
 const User = require('./user.model');
 const Business = require('../business/business.model');
+const BusinessController = require('../business/business.controller');
 const ShoppingChain = require('../shoppingChain/shoppingChain.model');
 const Mall = require('../mall/mall.model');
 const Group = require('../group/group.model');
@@ -23,6 +24,7 @@ const activity = require('../../components/activity').createActivity();
 const MongodbSearch = require('../../components/mongo-search');
 const Role = require('../../components/role');
 const feed = require('../../components/feed-tools');
+const path = require('path');
 
 exports.search = MongodbSearch.create(User);
 
@@ -42,9 +44,9 @@ function getKey(data) {
 }
 
 exports.terms = function (req, res) {
-  if(req.param.ver === '1.0')
-    res.status(200).send(require('../../config/terms/Terms Of Service.htm'));
-  res.status(404).send('Not Found');
+  if(req.params.ver === '1.0')
+    return res.sendFile(path.join(__dirname, '../../config/terms/Terms Of Service.htm'));
+  return res.status(404).send('Not Found');
 };
 
 /**
@@ -59,33 +61,55 @@ exports.index = function (req, res) {
 };
 
 let generate_follow = function (userId, itemId) {
-  graphModel.relate_ids(userId, 'FOLLOW', itemId, function (err) {
-    async.parallel({
-        user: function (callback) {
-          User.findById(itemId, callback);
-        },
-        business: function (callback) {
-          Business.findById(itemId, callback);
-        },
-        group: function (callback) {
-          Group.findById(itemId, callback);
-        },
-        shoppingChain: function (callback) {
-          ShoppingChain.findById(itemId, callback);
-        },
-        mall: function (callback) {
-          Mall.findById(itemId, callback);
-        }
+  async.parallel({
+      user: function (callback) {
+        User.findById(itemId, callback);
       },
-      function (err, results) {
-        // results is now equals to: {one: 1, two: 2}
-        if (results.user)               {activity_follow(userId, {user: results.user._id})}
-        else if( results.business )     {activity_follow(userId, {business: results.business._id})}
-        else if( results.group )        {activity_follow(userId, {group: results.group._id})}
-        else if( results.shoppingChain ){activity_follow(userId, {shoppingChain: results.shoppingChain._id})}
-        else if( results.mall )         {activity_follow(userId, {mall: results.mall._id})}
-      });
-  });
+      business: function (callback) {
+        Business.findById(itemId, callback);
+      },
+      group: function (callback) {
+        Group.findById(itemId, callback);
+      },
+      shoppingChain: function (callback) {
+        ShoppingChain.findById(itemId, callback);
+      },
+      mall: function (callback) {
+        Mall.findById(itemId, callback);
+      }
+    },
+    function (err, results) {
+      // results is now equals to: {one: 1, two: 2}
+      if (results.user)               {
+        graphModel.relate_ids(userId, 'FOLLOW', itemId, function (err) {
+          if(err) return console.error(err);
+          activity_follow(userId, {user: results.user._id})
+        })
+      }
+      else if( results.business )     {
+        BusinessController.followBusiness(userId, results.business._id, (err)=>{
+          if(err) return console.error(err);
+        });
+      }
+      else if( results.group )        {
+        graphModel.relate_ids(userId, 'FOLLOW', itemId, function (err) {
+          if(err) return console.error(err);
+          activity_follow(userId, {group: results.group._id})
+        })
+      }
+      else if( results.shoppingChain ){
+        graphModel.relate_ids(userId, 'FOLLOW', itemId, function (err) {
+          if(err) return console.error(err);
+          activity_follow(userId, {shoppingChain: results.shoppingChain._id})
+        });
+      }
+      else if( results.mall )         {
+        graphModel.relate_ids(userId, 'FOLLOW', itemId, function (err) {
+          if(err) return console.error(err);
+          activity_follow(userId, {mall: results.mall._id})
+        })
+      }
+    });
 };
 
 /**
@@ -157,7 +181,7 @@ exports.follow = function (req, res) {
 exports.unfollow = function (req, res) {
   let userId = req.user._id;
   graphModel.unrelate_ids(userId, 'FOLLOW', req.params.id);
-  return res.json(200, "unlike called for promotion " + req.params.id + " and user " + userId);
+  return res.status(200).send("unlike called for promotion " + req.params.id + " and user " + userId);
 };
 
 
