@@ -118,8 +118,6 @@ function activity_impl(act, callback) {
     }
 
     if (activity.actor_user) {
-      console.log("activity.actor_user=" + activity.actor_user);
-
       effected_in_rel(activity.actor_user, 'FOLLOW', function (err, effected) {
         if (err) {
           return callback(err, null);

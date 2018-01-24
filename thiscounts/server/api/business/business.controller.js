@@ -173,14 +173,17 @@ function business_follow_activity(follower, business) {
 }
 
 function follow(userId, businessId, callback) {
+  console.log(`function follow: userId=${userId}, businessId=${businessId}`);
   Business.findById(businessId)
     .exec(function (err, business) {
       if (err) return console.error(err);
       graphModel.is_related_ids(userId, 'FOLLOW', businessId, function (err, exist) {
         if (err) return callback(err);
         if (exist) return callback(null); //new Error('user already follows');
+        console.log(`function follow: no follow`);
         graphModel.is_related_ids(userId, 'UN_FOLLOW', businessId, function (err, unFollowExist) {
           if (err) return callback(err);
+          console.log(`function follow: unfollow = ${unFollowExist}`);
           graphModel.relate_ids(userId, 'FOLLOW', businessId, function (err) {
             if (err) return callback(err);
             if (unFollowExist) return callback(null);
@@ -190,6 +193,7 @@ function follow(userId, businessId, callback) {
                     CREATE UNIQUE (user:user{_id:"${userId}"})-[f:FOLLOW]->(g)`;
             graphModel.query(query, function (err) {
               if (err) return callback(err);
+              console.log(`onAction.follow`);
               onAction.follow(userId, businessId);
               if (business.shopping_chain) {
                 return graphModel.relate_ids(userId, 'FOLLOW', businessId, callback)
