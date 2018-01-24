@@ -3,7 +3,8 @@ const initialState = {
     groups: [],
     cameraOn: false,
     searching: false,
-    howSearchResults: false,
+    showSearchResults: false,
+    showSearchGroupResults: false,
     searchPlaceHolder: '', searchType: ''
 };
 import * as actions from "./reducerActions";
@@ -15,12 +16,13 @@ export default function business(state = initialState, action) {
                 ...state,
                 businesses: action.businesses,
                 showSearchResults: true,
+                searching:false,
             };
         case actions.SEARCH_GROUPS:
             return {
                 ...state,
                 groups: action.groups,
-                showSearchResults: true,
+                showSearchGroupResults: true,
                 searching:false,
             };
         case actions.SHOW_CAMERA :
@@ -45,6 +47,7 @@ export default function business(state = initialState, action) {
                 searching: false,
                 cameraOn: false,
                 showSearchResults: false,
+                showSearchGroupResults:false,
                 searchType: '',
                 searchPlaceHolder: '',
                 businesses: [],

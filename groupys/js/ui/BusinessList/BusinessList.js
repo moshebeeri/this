@@ -46,7 +46,7 @@ export default class BusinessList extends Component {
                         alignItems: 'center',
                         justifyContent:'space-between'
                     }}>
-                        <View>
+                        <View style={{width:200}}>
                             <BusinessHeader hideMenu navigation={navigation} business={businees}
                                             businessLogo={businees.logo}
                                             businessName={businees.name}/>

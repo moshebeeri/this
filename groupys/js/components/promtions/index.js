@@ -30,9 +30,9 @@ class Promotions extends Component {
     }
 
     componentWillMount() {
-        const {navigation, promotions, actions, update, promotionsLoading} = this.props;
+        const {navigation, promotions, promotionsChange,actions, update, promotionsLoading} = this.props;
         const businessId = navigation.state.params.business._id;
-        if(promotions && !promotions[businessId]) {
+        if((promotions && !promotions[businessId]) || !promotionsChange.loadingDone[businessId]) {
             PageRefresher.addBusinessPromotion(businessId);
             this.setBusinessPromotions();
         }
