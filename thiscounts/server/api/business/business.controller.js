@@ -125,7 +125,7 @@ exports.mine = function (req, res) {
       userRoleById[business_role.business_id] = business_role.role.properties.name;
     });
     Business.find({}).where({$or: [{_id: {$in: _ids}}, {$and: [{creator: userId}, {'review.status': 'waiting'}]}]})
-      .sort({_id: 'desc'})
+      .sort('-_id')
       .exec(function (err, businesses) {
         if (err) return handleError(res, err);
         get_businesses_state(businesses, req.user._id, function (err, businesses) {
@@ -178,7 +178,7 @@ function follow(userId, businessId, callback) {
       if (err) return console.error(err);
       graphModel.is_related_ids(userId, 'FOLLOW', businessId, function (err, exist) {
         if (err) return callback(err);
-        if (exist) return callback(new Error('user already follows'));
+        if (exist) return callback(null); //new Error('user already follows');
         graphModel.is_related_ids(userId, 'UN_FOLLOW', businessId, function (err, unFollowExist) {
           if (err) return callback(err);
           graphModel.relate_ids(userId, 'FOLLOW', businessId, function (err) {

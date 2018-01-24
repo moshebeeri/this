@@ -60,6 +60,7 @@ function to_graph(promotion) {
 }
 
 let set_promotion_location = function (promotion, callback) {
+  console.log(`set_promotion_location promotion:${JSON.stringify(promotion)}`);
   if (!utils.defined(promotion.entity))
     callback(null, promotion);
   if (!(utils.defined(promotion.entity.mall) || utils.defined(promotion.entity.business)))
