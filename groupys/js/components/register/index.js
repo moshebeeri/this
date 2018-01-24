@@ -57,7 +57,7 @@ class Register extends Component {
         const errorMessage = this.createMessage(message);
         let arrowName = I18nManager.isRTL ? "ios-arrow-forward" : "ios-arrow-back";
         return (
-            <ScrollView>
+            <ScrollView keyboardShouldPersistTaps={true} >
 
                 <View style={styles.inputContainer}>
                     <View style={{

@@ -86,7 +86,7 @@ class Signup extends Component {
         }
         return (
 
-            <ScrollView>
+            <ScrollView keyboardShouldPersistTaps={true} >
                 <View style={[styles.inputContainer, {width: StyleUtils.getWidth()}]}>
                     <View style={{
                         backgroundColor: 'white',

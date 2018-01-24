@@ -322,7 +322,7 @@ class AddBusiness extends Component {
                             navigation={this.props.navigation}
                             title={strings.AddBusiness} bgc="#FA8559"/>
 
-                <ScrollView contentContainerStyle={{
+                <ScrollView keyboardShouldPersistTaps={true}contentContainerStyle={{
                     justifyContent: 'center',
                     alignItems: 'center',
                 }} style={[styles.contentContainer, {width: StyleUtils.getWidth()}]}>

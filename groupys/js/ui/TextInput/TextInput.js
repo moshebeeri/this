@@ -92,6 +92,7 @@ export default class TextInputField extends Component {
                                      secureTextEntry={secureTextEntry}
                                      numberOfLines={numberOfLines}
                                      multiline={multiline}
+                                     blurOnSubmit={false}
                                      onSubmitEditing={this.onSubmit.bind(this)}
                                      onChangeText={this.onChange.bind(this)} placeholder={placeholder}/>
 
