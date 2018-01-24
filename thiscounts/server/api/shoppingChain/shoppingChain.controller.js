@@ -52,7 +52,7 @@ exports.create = function(req, res) {
       return handleError(res, err);
     }
     if (!business) return res.status(404).send('Not Found');
-    if (req.user._id !== business.creator._id) return res.status(4041).send('Only business creator can make it a chain');
+    if (req.user._id !== business.creator._id) return res.status(401).send('Only business creator can make it a chain');
     let chain = req.body;
     chain.branches = [business._id];
     chain.creator = req.user._id;
