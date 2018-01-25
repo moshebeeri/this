@@ -173,27 +173,23 @@ function business_follow_activity(follower, business) {
 }
 
 exports.followBusiness = function(userId, businessId, callback) {
-  console.log(`function follow: userId=${userId}, businessId=${businessId}`);
   Business.findById(businessId)
     .exec(function (err, business) {
       if (err) return console.error(err);
       graphModel.is_related_ids(userId, 'FOLLOW', businessId, function (err, exist) {
         if (err) return callback(err);
         if (exist) return callback(null); //new Error('user already follows');
-        console.log(`function follow: no follow`);
         graphModel.is_related_ids(userId, 'UN_FOLLOW', businessId, function (err, unFollowExist) {
           if (err) return callback(err);
-          console.log(`function follow: unfollow = ${unFollowExist}`);
           graphModel.relate_ids(userId, 'FOLLOW', businessId, function (err) {
             if (err) return callback(err);
             if (unFollowExist) return callback(null);
             //first time follow
             business_follow_activity(userId, businessId);
             let query = `MATCH (b:business{_id:"${businessId}"})-[d:DEFAULT_GROUP]->(g:group) 
-                    CREATE UNIQUE (user:user{_id:"${userId}"})-[f:FOLLOW]->(g)`;
+                         CREATE UNIQUE (user:user{_id:"${userId}"})-[f:FOLLOW]->(g)`;
             graphModel.query(query, function (err) {
               if (err) return callback(err);
-              console.log(`onAction.follow`);
               onAction.follow(userId, businessId);
               if (business.shopping_chain) {
                 return graphModel.relate_ids(userId, 'FOLLOW', businessId, callback)
@@ -204,7 +200,7 @@ exports.followBusiness = function(userId, businessId, callback) {
         })
       });
     });
-}
+};
 
 exports.follow = function (req, res) {
   let userId = req.user._id;
@@ -333,17 +329,21 @@ exports.check_address = function (req, res) {
   })
 };
 
-function sendValidationEmail(business) {
-  email.send('validateBusinessEmail',
-    business.email, {
-      name: business.creator.name,
-      businessName: business.name,
-      businessId: business._id,
-      validationCode: business.validationCode,
-      code: business.validationCode
-    }, function (err) {
-      if (err) console.error(err);
-    });
+function sendValidationEmail(businessId) {
+  Business.findById(businessId).exec((err, business)=> {
+    if(err) return console.error(err);
+    if(!business) return console.error(new Error('Business not found'));
+    email.send('validateBusinessEmail',
+      business.email, {
+        name: business.creator.name,
+        businessName: business.name,
+        businessId: business._id,
+        validationCode: business.validationCode,
+        code: business.validationCode
+      }, function (err) {
+        if (err) console.error(err);
+      });
+  });
 }
 
 function reviewRequest(business) {
@@ -509,6 +509,8 @@ exports.update_email = function (req, res) {
 exports.create = function (req, res) {
   let body_business = req.body;
   let userId = req.user._id;
+
+  body_business.creator = userId;
   body_business.validationCode = randomstring.generate({length: 12, charset: 'numeric'});
   body_business.review = {
     status: 'waiting',
@@ -529,9 +531,10 @@ exports.create = function (req, res) {
         else return res.status(400).send(err);
       }
       body_business.location = spatial.geo_to_location(data);
+      console.log(JSON.stringify(body_business));
       Business.create(body_business, function (err, business) {
         if (err) return handleError(res, err);
-        sendValidationEmail(business);
+        sendValidationEmail(business._id);
         return res.status(201).json(business);
       });
     });
@@ -592,6 +595,7 @@ exports.update = function (req, res) {
     });
   });
 };
+
 // Deletes a business from the DB.
 exports.destroy = function (req, res) {
   Business.findById(req.params.id, function (err, business) {

@@ -112,6 +112,11 @@ function handle_image(req, res, type) {
   let size = 0;
   let fileName = randomstring.generate({length: 8, charset: 'hex'});
 
+  form.on('error', function(err) {
+    console.log(`handle_image: ${err.message}`);
+    console.error(err);
+  });
+
   form.on('part', function (part) {
     part.filename = part.name;
     if (!part.filename) return;
@@ -153,6 +158,11 @@ function base64_handle_image(req, res, type) {
   let form = new multiparty.Form();
   let size = 0;
   let fileName = randomstring.generate({length: 8, charset: 'hex'});
+
+  form.on('error', function(err) {
+    console.log(`handle_image: ${err.message}`);
+    console.error(err);
+  });
 
   form.on('part', function (part) {
     part.filename = part.name;
