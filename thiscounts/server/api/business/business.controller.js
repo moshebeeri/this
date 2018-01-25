@@ -509,6 +509,8 @@ exports.update_email = function (req, res) {
 exports.create = function (req, res) {
   let body_business = req.body;
   let userId = req.user._id;
+
+  body_business.creator = userId;
   body_business.validationCode = randomstring.generate({length: 12, charset: 'numeric'});
   body_business.review = {
     status: 'waiting',
@@ -529,6 +531,7 @@ exports.create = function (req, res) {
         else return res.status(400).send(err);
       }
       body_business.location = spatial.geo_to_location(data);
+      console.log(JSON.stringify(body_business));
       Business.create(body_business, function (err, business) {
         if (err) return handleError(res, err);
         sendValidationEmail(business);

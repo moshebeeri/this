@@ -62,6 +62,7 @@ exports.create = function(req, res) {
       if (err) { return handleError(res, err); }
       handlePostCreation(post);
       const act = {
+        creator         : post.creator,
         actor_user      : post.behalf.user    ,
         actor_business  : post.behalf.business,
         actor_mall      : post.behalf.mall    ,
@@ -69,6 +70,7 @@ exports.create = function(req, res) {
         actor_group     : post.behalf.group   ,
         post: post._id,
         action: 'post',
+        audience: ['SELF', 'FOLLOWERS']
       };
 
       if(act.actor_user)
