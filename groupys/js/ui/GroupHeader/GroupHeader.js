@@ -20,7 +20,7 @@ export default class GroupHeader extends Component {
 
     createImage(group) {
         if (group.pictures && group.pictures.length > 0) {
-            if (group.pictures[0].pictures[3]) {
+            if (group.pictures[group.pictures.length -1].pictures[3]) {
                 return <Thumbnail medium source={{uri: group.pictures[0].pictures[3]}}/>
             }
         } else {

@@ -123,7 +123,7 @@ class UserProfile extends Component {
         }} resizeMode="cover" source={source}>
         </Image>
         return (
-            <ScrollView>
+            <ScrollView keyboardShouldPersistTaps={true} >
             <View style={[styles.settingsContainer, {width: StyleUtils.getWidth()}]}>
 
                 <FormHeader showBack submitForm={this.save.bind(this)} navigation={this.props.navigation}

@@ -63,7 +63,7 @@ export default class SimplePicker extends Component {
 
     }
     createIosRender() {
-        const {list, itemTitle, defaultHeader, isMandatory, defaultValue} = this.props;
+        const {list, itemTitle, defaultHeader, isMandatory, defaultValue,value} = this.props;
         let options = list.map((s) => {
             return s.label;
         })
@@ -72,6 +72,10 @@ export default class SimplePicker extends Component {
             pickerStyle = styles.modalViewInvalid;
         }
         options.unshift(defaultValue);
+        let selectValue = strings.PleaseSelect
+        if(value){
+            selectValue = value
+        }
 
 
         return <View>
@@ -89,7 +93,7 @@ export default class SimplePicker extends Component {
                                textStyle={{alignItems:'flex-start',fontSize: 20}}
                                onSelect={this.selectIos.bind(this)}
                                renderRow = {this.renderRow.bind(this)}
-                               defaultValue={strings.PleaseSelect}
+                               defaultValue={selectValue}
                                // defaultValue={options[0]}
                                showsVerticalScrollIndicator={true}
                 />
@@ -101,13 +105,17 @@ export default class SimplePicker extends Component {
     }
 
     render() {
-        const {list, itemTitle, defaultHeader, isMandatory, defaultValue} = this.props;
+        const {list, value,itemTitle, defaultHeader, isMandatory, defaultValue} = this.props;
         if (Platform.OS === 'ios') {
             return this.createIosRender();
         }
         let pickerStyle = styles.picker;
         if (this.state.invalid) {
             pickerStyle = styles.pickerInvalid;
+        }
+        let selectedValue = this.state.type;
+        if(value){
+            selectedValue = value
         }
         return <View>
             <View style={styles.pickerTitleContainer}>
@@ -120,7 +128,7 @@ export default class SimplePicker extends Component {
                 iosHeader={itemTitle}
                 mode="dropdown"
                 style={pickerStyle}
-                selectedValue={this.state.type}
+                selectedValue={selectedValue}
                 onValueChange={this.selectPromotionType.bind(this)}
             >
                 <Item

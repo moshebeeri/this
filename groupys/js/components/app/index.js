@@ -250,7 +250,7 @@ class ApplicationManager extends Component {
             selectedTab, showAdd, showComponent, notifications,
             item, location, showPopup, token, notificationTitle,
             notificationAction, notificationGroup, notificationBusiness,
-            showSearchResults, businesses, businessActions, groups, groupsActions
+            showSearchResults, businesses, businessActions, groups, groupsActions,showSearchGroupResults
         } = this.props;
         if (!showComponent) {
             return <View></View>
@@ -318,11 +318,11 @@ class ApplicationManager extends Component {
                     {showSearchResults && businesses && <View
                         style={{top: 45, position: 'absolute', backgroundColor: 'white', width: StyleUtils.getWidth()}}>
 
-                        <BusinessList businesses={businesses} followBusiness={businessActions.followBusiness}/>
+                        <BusinessList navigation={this.props.navigation} businesses={businesses} followBusiness={businessActions.followBusiness}/>
                     </View>}
 
 
-                    {showSearchResults && groups && <View
+                    {showSearchGroupResults && groups && <View
                         style={{top: 45, position: 'absolute', backgroundColor: 'white', width: StyleUtils.getWidth()}}>
 
                         <GroupsList groups={groups} joinGroup={groupsActions.joinGroup}/>
@@ -435,6 +435,7 @@ const mapStateToProps = (state) => {
         businesses: state.follow_businesses.businesses,
         groups: state.follow_businesses.groups,
         showSearchResults: state.follow_businesses.showSearchResults,
+        showSearchGroupResults: state.follow_businesses.showSearchGroupResults,
         businessesState: state.follow_businesses
     }
 }

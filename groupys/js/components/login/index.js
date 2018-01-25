@@ -56,7 +56,7 @@ class Login extends Component {
     render() {
         const {focusPassword, focusPhone, failedMessage, doLogin} = this.props;
         return (
-            <ScrollView>
+            <ScrollView keyboardShouldPersistTaps={true}>
                 <View style={{backgroundColor:'white',position:'absolute',height:height,width:StyleUtils.getWidth()}}>
                     <Image style={{position:'absolute',height:height,width:StyleUtils.getWidth()}}resizeMode='cover' source={bg}/>
 

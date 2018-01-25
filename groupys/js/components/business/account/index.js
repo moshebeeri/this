@@ -111,7 +111,7 @@ class BusinessAccount extends Component {
                                 businessName={business.name} noMargin
                 />
 
-                <ScrollView>
+                <ScrollView keyboardShouldPersistTaps={true} >
                     <View style={{alignItems: 'center', justifyContent: 'center'}}>
                         <View style={{marginTop: 10}}>
                             <Text>{strings.AccountBalance}</Text>

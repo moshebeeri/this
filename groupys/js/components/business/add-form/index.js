@@ -120,6 +120,10 @@ class AddBusiness extends Component {
         }
     }
 
+    componentWillMount(){
+        this.props.resetSave();
+    }
+
     focusNextField(nextField) {
         if (this.refs[nextField].wrappedInstance) {
             this.refs[nextField].wrappedInstance.focus()
@@ -137,7 +141,8 @@ class AddBusiness extends Component {
     }
 
     saveFormData() {
-        if (this.validateForm()) {
+        let formIsValid = this.validateForm(this.saveFormData.bind(this));
+        if (formIsValid) {
             this.props.saveBusiness(this.createBusiness(), this.props.navigation);
         }
     }
@@ -189,7 +194,7 @@ class AddBusiness extends Component {
     }
 
     updateFormData() {
-        if (this.validateForm()) {
+        if (this.validateForm(this.updateFormData.bind(this))) {
             this.props.updateBusiness(this.createBusiness(), this.props.navigation);
         }
     }
@@ -217,14 +222,15 @@ class AddBusiness extends Component {
         });
     }
 
-    validateForm() {
+     validateForm(onValid) {
         let result = true;
         Object.keys(this.refs).forEach(key => {
             let item = this.refs[key];
             if (this.refs[key].wrappedInstance) {
                 item = this.refs[key].wrappedInstance;
             }
-            if (!item.isValid()) {
+
+            if (!item.isValid(onValid)) {
                 result = false;
             }
         });
@@ -322,7 +328,7 @@ class AddBusiness extends Component {
                             navigation={this.props.navigation}
                             title={strings.AddBusiness} bgc="#FA8559"/>
 
-                <ScrollView contentContainerStyle={{
+                <ScrollView keyboardShouldPersistTaps={true}contentContainerStyle={{
                     justifyContent: 'center',
                     alignItems: 'center',
                 }} style={[styles.contentContainer, {width: StyleUtils.getWidth()}]}>

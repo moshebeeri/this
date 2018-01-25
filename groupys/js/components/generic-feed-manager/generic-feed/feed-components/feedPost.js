@@ -74,10 +74,10 @@ export default class FeedPost extends Component {
             width: StyleUtils.getWidth()
         }
         let postMessageContainerStyle = {
-            height: 80,
+
             width: StyleUtils.getWidth(),
             paddingBottom: 10,
-            backgroundColor: 'white'
+            backgroundColor:'white'
         };
         if (shared) {
             titleContainerStyle = {

@@ -482,7 +482,7 @@ class AddPromotion extends Component {
 
                 <FormHeader showBack submitForm={this.saveFormData.bind(this)} navigation={this.props.navigation}
                             title={header} bgc="#FA8559"/>
-                <ScrollView contentContainerStyle={{
+                <ScrollView keyboardShouldPersistTaps={true}  ontentContainerStyle={{
                     justifyContent: 'center',
                     alignItems: 'center',
                 }}>

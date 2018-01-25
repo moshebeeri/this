@@ -187,7 +187,7 @@ class AddPost extends Component {
             <View style={styles.product_container}>
                 <FormHeader showBack submitForm={this.saveFormData.bind(this)} navigation={this.props.navigation}
                             title={strings.AddPost} bgc="#2db6c8"/>
-                <ScrollView contentContainerStyle={{
+                <ScrollView keyboardShouldPersistTaps={true} contentContainerStyle={{
                     justifyContent: 'center',
                     alignItems: 'center',
                 }} style={styles.contentContainer}>

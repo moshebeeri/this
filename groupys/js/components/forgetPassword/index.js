@@ -65,7 +65,7 @@ class ForgetPassword extends Component {
         const {failedMessage} = this.props;
         let arrowName = I18nManager.isRTL ? "ios-arrow-forward" : "ios-arrow-back";
         return (
-            <ScrollView>
+            <ScrollView keyboardShouldPersistTaps={true}>
                 <KeyboardAvoidingView behavior={'position'}
                                       style={[styles.inputContainer, {width: StyleUtils.getWidth()}]}>
 

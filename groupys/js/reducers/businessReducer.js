@@ -2,6 +2,7 @@ const initialState = {
     businesses: {},
     categories: [],
     myBusinesses: {},
+    myBusinessOrder :[],
     businessesUsers: {},
     businessesProducts: {},
     businessesPromotions: {},
@@ -10,7 +11,7 @@ const initialState = {
     selectedBusiness: undefined,
     savingForm: false,
     paymentMessage: '',
-    templateBusiness:{},
+    templateBusiness: {},
 };
 import {REHYDRATE} from "redux-persist/constants";
 import * as actions from "./reducerActions";
@@ -27,14 +28,16 @@ export default function business(state = initialState, action) {
     let businessesState = {...state};
     let myCurrentbusinesses = businessesState.myBusinesses;
     let currentbusinesses = businessesState.businesses;
+    let businessesMap = businessesState.myBusinesses;
+    let myBusinessOrder = businessesState.myBusinessOrder;
+
     switch (action.type) {
         case actions.UPSERT_BUSINESS:
-
             businessesState.update = !businessesState.update;
             //not all the time we get the business social state in this case we need to make sure we take the social state from the last business
             action.item.forEach(eventItem => {
                 let categoryTitle = eventItem.categoryTitle;
-                if(!currentbusinesses[eventItem._id]){
+                if (!currentbusinesses[eventItem._id]) {
                     currentbusinesses[eventItem._id] = eventItem;
                 }
                 if (!categoryTitle && currentbusinesses[eventItem._id]) {
@@ -48,37 +51,55 @@ export default function business(state = initialState, action) {
                     currentbusinesses[eventItem._id] = eventItem;
                 } else {
                     eventItem.social_state = currentbusinesses[eventItem._id].social_state;
-
                     currentbusinesses[eventItem._id] = eventItem;
                 }
-
                 currentbusinesses[eventItem._id].qrcodeSource = qrSource;
                 currentbusinesses[eventItem._id].categoryTitle = categoryTitle;
             });
             return businessesState;
         case actions.UPSERT_MY_BUSINESS:
-            let businessesMap = {};
 
             action.item.forEach(eventItem => {
+                if(!myBusinessOrder.includes(eventItem.business._id)){
+                    myBusinessOrder.push(eventItem.business._id);
+                }
+                if( businessesMap[eventItem.business._id]){
+                    if(eventItem.business.pictures.length === 0){
+                        eventItem.business.pictures = businessesMap[eventItem.business._id].business.pictures;
+                        eventItem.business.logo =  businessesMap[eventItem.business._id].business.logo;
+                    }
+                }
+
                 businessesMap[eventItem.business._id] = eventItem;
+
             });
+
             return {
                 ...state,
                 myBusinesses: businessesMap,
                 update: !businessesState.update,
+                myBusinessOrder:myBusinessOrder
+            };
+        case actions.UPSERT_MY_BUSINESS_SINGLE:
+            if(!myBusinessOrder.includes(action.item.business._id)){
+                myBusinessOrder.unshift(action.item.business._id);
+            }
+            businessesMap[action.item.business._id] = action.item;
+            return {
+                ...state,
+                myBusinesses: businessesMap,
+                update: !businessesState.update,
+                myBusinessOrder:myBusinessOrder
             };
         case actions.UPSERT_BUSINESS_QRCODE:
-
             businessesState.update = !businessesState.update;
-            if( currentbusinesses[action.business._id]) {
+            if (currentbusinesses[action.business._id]) {
                 currentbusinesses[action.business._id].qrcodeSource = action.qrcodeSource;
-            }else{
+            } else {
                 currentbusinesses[action.business._id] = action.business;
                 currentbusinesses[action.business._id].qrcodeSource = action.qrcodeSource;
             }
-
             return businessesState;
-
         case actions.LIKE:
             let item = businessesState.businesses[action.id];
             if (item) {
@@ -191,9 +212,6 @@ export default function business(state = initialState, action) {
                 ...state,
                 templateBusiness: action.templateBusiness,
             };
-
-
-
         default:
             return state;
     }
