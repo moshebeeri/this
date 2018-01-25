@@ -30,6 +30,8 @@
             android:name=".MainApplication"
             android:supportsRtl="true"
             android:allowBackup="true"
+            android:hardwareAccelerated="false"
+            android:largeHeap="true"
             android:label="THIS"
             android:icon="@mipmap/ic_launcher"
             tools:replace="android:label"

@@ -327,8 +327,10 @@ export function saveBusiness(business, navigation) {
                 type: actions.SAVING_BUSINESS,
             });
             const token = getState().authentication.token;
-            const user = getState().user.user;
-            let createdBusiness =  await entityUtils.create('businesses', business, token, undefined, undefined, user._id);
+
+            let createdBusiness =  await entityUtils.create('businesses', business, token);
+
+
             createdBusiness.pictures = [];
             let pictures = [];
             if(business.image.path) {
@@ -343,8 +345,12 @@ export function saveBusiness(business, navigation) {
                 createdBusiness.logo = business.logoImage.path;
             }else{
                 createdBusiness.logo = business.logoImage.uri;
-            }
 
+            }
+            dispatch({
+                type: actions.BUSINESS_UPLOAD_PIC,
+                item:{businessResponse:createdBusiness, business:business}
+            })
 
             dispatch({
                 type: actions.UPSERT_MY_BUSINESS_SINGLE,
@@ -362,6 +368,8 @@ export function saveBusiness(business, navigation) {
                 templateBusiness: {},
             });
             navigation.goBack();
+
+
         } catch (error) {
             dispatch({
                 type: actions.NETWORK_IS_OFFLINE,

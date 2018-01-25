@@ -114,12 +114,12 @@ export default class ImagePickerComponent extends Component {
         if (color) {
             cameraColor = color;
         }
-        let trigger = <Icon size={35} color={cameraColor} name='camera'/>;
+        let trigger =  <Icon size={35} color={cameraColor} name='camera'/>;
         if (image) {
             trigger = image;
         }
         if (this.state.invalid && !image) {
-            trigger = <Icon size={35} color={'red'} name='camera'/>;
+            trigger =<Icon size={35} color={'red'} name='camera'/>;
         }
         let videoPickerOption;
         if (video) {

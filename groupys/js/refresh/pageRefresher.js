@@ -10,10 +10,11 @@ import groupComments from '../actions/commentsGroup'
 import pageSync from './refresher';
 import FormUtils from "../utils/fromUtils";
 import simpleStore from 'react-native-simple-store';
-
+import EntityUtils from "../utils/createEntity";
+let entityUtils = new EntityUtils();
 const store = getStore();
 let visitedList = ['feed', 'groups', 'businesses'];
-
+import * as actions from "../reducers/reducerActions";
 class PageRefresher {
     constructor() {
         pageSync.createPage('feed', pageSync.createStdAverageRefresh('feed', 10, 60000), this.setMainFeedRefresh.bind(this));
@@ -64,8 +65,24 @@ class PageRefresher {
     updateBusinesses() {
         let token = store.getState().authentication.token;
         if (token) {
+
+            this.checkUploadPictures(store.getState().businesses.businessPictures,token)
             business.getAll(store.dispatch, token);
         }
+    }
+
+    checkUploadPictures(businesses,token){
+        if(businesses.length > 0){
+            businesses.forEach(business => {
+                entityUtils.uploadPicture('businesses', business.businessResponse, token, business.business);
+
+            });
+            store.dispatch({
+                type: actions.BUSINESS_CLEAR_PIC,
+
+            });
+        }
+
     }
 
     setMainFeedRefresh() {

@@ -186,10 +186,16 @@ class EntityUtils {
     }
 
 
-    create(entityApi, entityData, token, callbackFunction, errorCallBack, userId) {
+    create(entityApi, entityData, token) {
         //let entity = transformJson(entityData);
         let json = JSON.stringify(entityData);
         return this.updateEntity(entityData, entityApi, json, token);
+    }
+
+    async uploadPicture(entityApi, entityData, token,responseDatad) {
+        //let entity = transformJson(entityData);
+        let json = JSON.stringify(entityData);
+        return this.updateLoadEntityPic(entityData, entityApi, json, token,responseDatad);
     }
 
     doLogg(){
@@ -220,6 +226,46 @@ class EntityUtils {
                     }
                     let responseData = await response.json();
                     resolve(responseData);
+
+                } else {
+                    const response = await fetch(`${server_host}/api/` + entityApi + '/', {
+                        method: 'POST',
+                        headers: {
+                            'Accept': 'application/json, text/plain, */*',
+                            'Content-Type': 'application/json;charset=utf-8',
+                            'Authorization': 'Bearer ' + token,
+                        },
+                        body: json
+                    });
+                    if (response.status === 401) {
+                        reject(response);
+                        return;
+                    }
+                    if (response.status === 500) {
+                        reject(response);
+                        return;
+                    }
+
+
+                    let responseData = await response.json();
+                    resolve(responseData);
+
+
+
+                }
+            }
+            catch (error) {
+                console.log('There has been a problem with your fetch operation: ' + error.message);
+                reject(error);
+            }
+        })
+    }
+
+    updateLoadEntityPic(entityData, entityApi, json, token,responseData) {
+        return new Promise(async (resolve, reject) => {
+            try {
+
+                if (entityData && entityData._id) {
 
                     if (entityData.logoImage) {
                         this.doLogoUpload(entityData.logoImage.uri, entityData.logoImage.mime, token, this.doLogg.bind(this), entityApi, responseData);
@@ -252,27 +298,7 @@ class EntityUtils {
 
 
                 } else {
-                    const response = await fetch(`${server_host}/api/` + entityApi + '/', {
-                        method: 'POST',
-                        headers: {
-                            'Accept': 'application/json, text/plain, */*',
-                            'Content-Type': 'application/json;charset=utf-8',
-                            'Authorization': 'Bearer ' + token,
-                        },
-                        body: json
-                    });
-                    if (response.status === 401) {
-                        reject(response);
-                        return;
-                    }
-                    if (response.status === 500) {
-                        reject(response);
-                        return;
-                    }
 
-
-                    let responseData = await response.json();
-                    resolve(responseData);
                     if (entityData.logoImage) {
                         this.doLogoUpload(entityData.logoImage.uri, entityData.logoImage.mime, token, this.doLogg.bind(this), entityApi, responseData);
                     }

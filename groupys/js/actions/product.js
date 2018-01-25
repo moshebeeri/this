@@ -86,7 +86,8 @@ export function saveProduct(product,businessId,navigation) {
                 type: actions.PRODUCT_SAVING,
             });
             const token = getState().authentication.token;
-            await entityUtils.create('products', product, token);
+            let response = await entityUtils.create('products', product, token);
+            entityUtils.uploadPicture('products', product, token,response)
             let products = await productApi.findByBusinessId(businessId, token);
             dispatch({
                 type: actions.SET_PRODUCT_BUSINESS,

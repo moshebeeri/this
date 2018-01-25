@@ -2,7 +2,7 @@ const initialState = {
     businesses: {},
     categories: [],
     myBusinesses: {},
-    myBusinessOrder :[],
+    myBusinessOrder: [],
     businessesUsers: {},
     businessesProducts: {},
     businessesPromotions: {},
@@ -12,6 +12,7 @@ const initialState = {
     savingForm: false,
     paymentMessage: '',
     templateBusiness: {},
+    businessPictures: [],
 };
 import {REHYDRATE} from "redux-persist/constants";
 import * as actions from "./reducerActions";
@@ -30,7 +31,6 @@ export default function business(state = initialState, action) {
     let currentbusinesses = businessesState.businesses;
     let businessesMap = businessesState.myBusinesses;
     let myBusinessOrder = businessesState.myBusinessOrder;
-
     switch (action.type) {
         case actions.UPSERT_BUSINESS:
             businessesState.update = !businessesState.update;
@@ -58,30 +58,26 @@ export default function business(state = initialState, action) {
             });
             return businessesState;
         case actions.UPSERT_MY_BUSINESS:
-
             action.item.forEach(eventItem => {
-                if(!myBusinessOrder.includes(eventItem.business._id)){
+                if (!myBusinessOrder.includes(eventItem.business._id)) {
                     myBusinessOrder.push(eventItem.business._id);
                 }
-                if( businessesMap[eventItem.business._id]){
-                    if(eventItem.business.pictures.length === 0){
+                if (businessesMap[eventItem.business._id]) {
+                    if (eventItem.business.pictures.length === 0) {
                         eventItem.business.pictures = businessesMap[eventItem.business._id].business.pictures;
-                        eventItem.business.logo =  businessesMap[eventItem.business._id].business.logo;
+                        eventItem.business.logo = businessesMap[eventItem.business._id].business.logo;
                     }
                 }
-
                 businessesMap[eventItem.business._id] = eventItem;
-
             });
-
             return {
                 ...state,
                 myBusinesses: businessesMap,
                 update: !businessesState.update,
-                myBusinessOrder:myBusinessOrder
+                myBusinessOrder: myBusinessOrder
             };
         case actions.UPSERT_MY_BUSINESS_SINGLE:
-            if(!myBusinessOrder.includes(action.item.business._id)){
+            if (!myBusinessOrder.includes(action.item.business._id)) {
                 myBusinessOrder.unshift(action.item.business._id);
             }
             businessesMap[action.item.business._id] = action.item;
@@ -89,7 +85,19 @@ export default function business(state = initialState, action) {
                 ...state,
                 myBusinesses: businessesMap,
                 update: !businessesState.update,
-                myBusinessOrder:myBusinessOrder
+                myBusinessOrder: myBusinessOrder
+            };
+        case actions.BUSINESS_UPLOAD_PIC:
+            let businessPic = businessesState.businessPictures;
+            businessPic.push(action.item)
+            return {
+                ...state,
+                businessPictures: businessPic,
+            };
+        case actions.BUSINESS_CLEAR_PIC:
+            return {
+                ...state,
+                businessPictures: [],
             };
         case actions.UPSERT_BUSINESS_QRCODE:
             businessesState.update = !businessesState.update;
