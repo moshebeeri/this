@@ -187,7 +187,7 @@ exports.followBusiness = function(userId, businessId, callback) {
             //first time follow
             business_follow_activity(userId, businessId);
             let query = `MATCH (b:business{_id:"${businessId}"})-[d:DEFAULT_GROUP]->(g:group) 
-                    CREATE UNIQUE (user:user{_id:"${userId}"})-[f:FOLLOW]->(g)`;
+                         CREATE UNIQUE (user:user{_id:"${userId}"})-[f:FOLLOW]->(g)`;
             graphModel.query(query, function (err) {
               if (err) return callback(err);
               onAction.follow(userId, businessId);
@@ -330,6 +330,7 @@ exports.check_address = function (req, res) {
 };
 
 function sendValidationEmail(business) {
+  console.log(JSON.stringify(business));
   email.send('validateBusinessEmail',
     business.email, {
       name: business.creator.name,
