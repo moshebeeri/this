@@ -329,18 +329,21 @@ exports.check_address = function (req, res) {
   })
 };
 
-function sendValidationEmail(business) {
-  console.log(JSON.stringify(business));
-  email.send('validateBusinessEmail',
-    business.email, {
-      name: business.creator.name,
-      businessName: business.name,
-      businessId: business._id,
-      validationCode: business.validationCode,
-      code: business.validationCode
-    }, function (err) {
-      if (err) console.error(err);
-    });
+function sendValidationEmail(businessId) {
+  Business.findById(businessId).exec((err, business)=> {
+    if(err) return console.error(err);
+    if(!business) return console.error(new Error('Business not found'));
+    email.send('validateBusinessEmail',
+      business.email, {
+        name: business.creator.name,
+        businessName: business.name,
+        businessId: business._id,
+        validationCode: business.validationCode,
+        code: business.validationCode
+      }, function (err) {
+        if (err) console.error(err);
+      });
+  });
 }
 
 function reviewRequest(business) {
@@ -531,7 +534,7 @@ exports.create = function (req, res) {
       console.log(JSON.stringify(body_business));
       Business.create(body_business, function (err, business) {
         if (err) return handleError(res, err);
-        sendValidationEmail(business);
+        sendValidationEmail(business._id);
         return res.status(201).json(business);
       });
     });
