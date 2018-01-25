@@ -154,6 +154,28 @@ export function createGroup(group, navigation) {
     }
 }
 
+export function updateGroup(group, navigation) {
+    return async function (dispatch, getState) {
+        try {
+            dispatch({
+                type: actions.GROUP_SAVING,
+            });
+            const token = getState().authentication.token;
+            await groupsApi.updteGroup(group, uploadGroupPic, token);
+            await getAll(dispatch, token);
+            dispatch({
+                type: actions.GROUP_SAVING_DONE,
+            });
+            navigation.goBack();
+        } catch (error) {
+            dispatch({
+                type: actions.NETWORK_IS_OFFLINE,
+            });
+            logger.actionFailed('groupsApi.createGroup')
+        }
+    }
+}
+
 function uploadGroupPic() {
     return function (dispatch, getState) {
         const token = getState().authentication.token;
