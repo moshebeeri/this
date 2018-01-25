@@ -194,7 +194,7 @@ class AddBusiness extends Component {
     }
 
     updateFormData() {
-        if (this.validateForm()) {
+        if (this.validateForm(this.updateFormData.bind(this))) {
             this.props.updateBusiness(this.createBusiness(), this.props.navigation);
         }
     }
