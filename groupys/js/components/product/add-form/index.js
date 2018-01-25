@@ -91,12 +91,15 @@ class AddProduct extends Component {
 
     saveFormData() {
         const {navigation, actions, saving} = this.props;
-        if (saving && !this.validateForm()) {
+        if (saving) {
             return
         }
         const product = this.createProduct();
-        const businessId = this.getBusinessId(navigation);
-        actions.saveProduct(product, businessId, navigation)
+
+        if(this.validateForm()) {
+            const businessId = this.getBusinessId(navigation);
+            actions.saveProduct(product, businessId, navigation)
+        }
     }
 
     createProduct() {
