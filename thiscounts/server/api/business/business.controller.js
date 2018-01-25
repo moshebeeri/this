@@ -595,6 +595,7 @@ exports.update = function (req, res) {
     });
   });
 };
+
 // Deletes a business from the DB.
 exports.destroy = function (req, res) {
   Business.findById(req.params.id, function (err, business) {
