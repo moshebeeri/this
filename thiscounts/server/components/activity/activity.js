@@ -99,10 +99,7 @@ function activity_impl(act, callback) {
   }
 
   ActivitySchema.create(act, function (err, activity) {
-    if (err) {
-      callback(err, null);
-      return;
-    }
+    if (err) return callback(err, null);
 
     if(act.ids){
       let effected = [];

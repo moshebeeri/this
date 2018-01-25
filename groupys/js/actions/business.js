@@ -328,18 +328,31 @@ export function saveBusiness(business, navigation) {
             });
             const token = getState().authentication.token;
             const user = getState().user.user;
-            await entityUtils.create('businesses', business, token, undefined, undefined, user._id);
-            let businesses = await businessApi.getAll(token);
+            let createdBusiness =  await entityUtils.create('businesses', business, token, undefined, undefined, user._id);
+            createdBusiness.pictures = [];
+            let pictures = [];
+            if(business.image.path) {
+                pictures.push(business.image.path);
+                createdBusiness.pictures.push({pictures:pictures});
+            }else{
+                pictures.push(business.image.uri);
+                createdBusiness.pictures.push({pictures:pictures});
+            }
+
+            if(business.logoImage.path){
+                createdBusiness.logo = business.logoImage.path;
+            }else{
+                createdBusiness.logo = business.logoImage.uri;
+            }
+
+
             dispatch({
-                type: actions.UPSERT_MY_BUSINESS,
-                item: businesses
-            });
-            let selectedBusiness = businesses.filter(newBusiness => {
-                newBusiness.business.name = business.name
+                type: actions.UPSERT_MY_BUSINESS_SINGLE,
+                item: {business:createdBusiness}
             });
             dispatch({
                 type: actions.SELECT_BUSINESS,
-                selectedBusiness: selectedBusiness[0]
+                selectedBusiness: createdBusiness
             });
             dispatch({
                 type: actions.SAVING_BUSINESS_DONE,
@@ -539,6 +552,14 @@ export function resetForm() {
     }
 }
 
+export function resetSave(){
+    return async function (dispatch) {
+        dispatch({
+            type: actions.SAVING_BUSINESS_DONE,
+        });
+    }
+
+}
 
 
 

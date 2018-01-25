@@ -73,6 +73,13 @@ class GroupFeedHeader extends Component {
         this.props.navigation.navigate("addPromotions", {business: group.entity.business, group: group});
     }
 
+
+    updateGroup(){
+        let group = this.props.item;
+        this.props.navigation.navigate("AddGroups", { group: group});
+
+
+    }
     inviteUser(users) {
         if (users) {
             let groupId = this.props.item._id;
@@ -148,11 +155,11 @@ class GroupFeedHeader extends Component {
                     <Icon2 style={{fontSize: 25, color: "#2db6c8"}} name="options-vertical"/>
                 </MenuTrigger>
                 <MenuOptions>
+                    <MenuOption onSelect={this.updateGroup.bind(this)}>
+                        <Text>{strings.Edit}</Text>
+                    </MenuOption>
                     <MenuOption onSelect={this.showUsers.bind(this)}>
                         <Text>{strings.Invite}</Text>
-                    </MenuOption>
-                    <MenuOption onSelect={this.followBusiness.bind(this)}>
-                        <Text>{strings.FollowBusiness}</Text>
                     </MenuOption>
                     {addPromotionMenu}
                 </MenuOptions>

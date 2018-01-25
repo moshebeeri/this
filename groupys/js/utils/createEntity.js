@@ -219,6 +219,7 @@ class EntityUtils {
                         return;
                     }
                     let responseData = await response.json();
+                    resolve(responseData);
 
                     if (entityData.logoImage) {
                         this.doLogoUpload(entityData.logoImage.uri, entityData.logoImage.mime, token, this.doLogg.bind(this), entityApi, responseData);
@@ -248,7 +249,7 @@ class EntityUtils {
                         this.doUpload(entityData.LetterOfIncorporationImage.uri, entityData.LetterOfIncorporationImage.mime, token,  this.doLogg.bind(this), entityApi, responseData,'letterOfIncorporation');
                     }
 
-                    resolve(responseData);
+
 
                 } else {
                     const response = await fetch(`${server_host}/api/` + entityApi + '/', {
@@ -271,7 +272,7 @@ class EntityUtils {
 
 
                     let responseData = await response.json();
-
+                    resolve(responseData);
                     if (entityData.logoImage) {
                         this.doLogoUpload(entityData.logoImage.uri, entityData.logoImage.mime, token, this.doLogg.bind(this), entityApi, responseData);
                     }
@@ -299,7 +300,7 @@ class EntityUtils {
                         this.doUpload(entityData.LetterOfIncorporationImage.uri, entityData.LetterOfIncorporationImage.mime, token,  this.doLogg.bind(this), entityApi, responseData,'letterOfIncorporation');
                     }
 
-                    resolve(responseData);
+
 
                 }
             }

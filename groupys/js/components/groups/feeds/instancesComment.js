@@ -80,22 +80,7 @@ class instancesComment extends Component {
 
     render() {
         const {group, comments, navigation, actions, update, loadingDone, showTopLoader, allState} = this.props;
-        if (!comments[group._id]) {
-            return <View>
 
-                <GenericFeedManager feeds={new Array()}
-                                    entity={group}
-                                    setNextFeeds={this.setNextFeed.bind(this)}
-                                    navigation={navigation}
-                                    actions={actions}
-                                    update={update}
-                                    showTopLoader={showTopLoader[group._id]}
-                                    loadingDone={loadingDone[group._id]}
-                                    ItemDetail={this.renderItem.bind(this)}/>
-
-
-            </View>
-        }
         return <View style={{flex: 1}}>
             <View style={{flex: 1}}>
                 <GenericFeedManager feeds={comments[group._id]}

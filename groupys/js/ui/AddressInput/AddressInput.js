@@ -41,7 +41,7 @@ class AddressInput extends Component {
         this.refs[nextField].focus()
     }
 
-    isValid() {
+    isValid(onValid) {
         const {addressForm} = this.props;
         let result = true;
         Object.keys(this.refs).forEach(key => {
@@ -52,19 +52,21 @@ class AddressInput extends Component {
         });
 
         if(!addressForm.hasValidated){
-            this.onSubmit();
-            this.setState({ilegalAddress:true});
+            this.onSubmit(onValid);
+
             return false;
         }
         if(addressForm.addressNotFound){
-            this.setState({ilegalAddress:true});
+            this.onSubmit(onValid);
+
             return false;
         }
 
         if(addressForm.locations && addressForm.locations> 1){
 
             if(!this.state.location) {
-                this.setState({ilegalAddress:true});
+                this.onSubmit(onValid);
+
                 return false;
             }
         }
@@ -72,13 +74,13 @@ class AddressInput extends Component {
         return result;
     }
 
-    checkAddress() {
+    checkAddress(onValid) {
         let address = {
             city: this.state.city,
             address: this.state.address,
             country: this.state.country,
         }
-        this.props.actions.validateAddress(address);
+        this.props.actions.validateAddress(address,onValid);
     }
 
     chooseAddress(address) {
@@ -120,8 +122,13 @@ class AddressInput extends Component {
         return !(this.state.locations && this.state.locations.length > 0)
     }
 
-    onSubmit() {
-        this.checkAddress();
+    setValue(value){
+        this.setState(value);
+        this.props.actions.addressChangeed();
+    }
+
+    async onSubmit(onValid) {
+        this.checkAddress(onValid);
         this.setSubmut();
     }
 
@@ -141,7 +148,7 @@ class AddressInput extends Component {
     render() {
         const {isMandatory, addressForm, refNext} = this.props;
         let ilegalBorder = 0;
-        if(this.state.ilegalAddress || addressForm.addressNotFound){
+        if(addressForm.ilegalAddress || addressForm.addressNotFound){
             ilegalBorder = 1;
         }
         return <View>
@@ -161,14 +168,14 @@ class AddressInput extends Component {
                                refNext={refNext}
                                onSubmitEditing={this.focusNextField.bind(this, "city")}
                                validateContent={this.validateAddress.bind(this)}
-                               onChangeText={(country) => this.setState({country})} isMandatory={isMandatory}/>
+                               onChangeText={(country) => this.setValue({country})} isMandatory={isMandatory}/>
 
 
                     <TextInput placeholder={strings.City} value={this.state.city} returnKeyType='next' ref="city"
                                refNext="city"
                                onSubmitEditing={this.focusNextField.bind(this, "address")}
                                validateContent={this.validateAddress.bind(this)}
-                               onChangeText={(city) => this.setState({city})} isMandatory={isMandatory}/>
+                               onChangeText={(city) => this.setValue({city})} isMandatory={isMandatory}/>
 
 
 
@@ -178,7 +185,7 @@ class AddressInput extends Component {
                         refNext="address"
                         onSubmitEditing={this.onSubmit.bind(this)}
                         validateContent={this.validateAddress.bind(this)}
-                        onChangeText={(address) => this.setState({address})} isMandatory={isMandatory}/>
+                        onChangeText={(address) => this.setValue({address})} isMandatory={isMandatory}/>
 
 
                 </View>

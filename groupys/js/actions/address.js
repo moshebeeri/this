@@ -4,7 +4,7 @@ let businessApi = new BusinessApi();
 import ActionLogger from './ActionLogger'
 let logger = new ActionLogger();
 
-export function validateAddress(address) {
+export function validateAddress(address,onValid) {
     return async function (dispatch, getState) {
         try {
             const token = getState().authentication.token;
@@ -36,6 +36,9 @@ export function validateAddress(address) {
                     lng: response.lng
                 }
             });
+            if(onValid){
+                onValid();
+            }
         }catch (error){
             logger.actionFailed('business_checkAddress');
             dispatch({
@@ -54,6 +57,15 @@ export function addressChoose() {
         });
     }
 }
+export function addressChangeed() {
+    return function (dispatch) {
+        dispatch({
+            type: actions.ADDRESS_CHANGE,
+        });
+    }
+}
+
+
 export function resetForm() {
     return function (dispatch) {
         dispatch({
