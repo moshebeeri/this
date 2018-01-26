@@ -285,7 +285,7 @@ exports.touch = function (req, res) {
 };
 
 function user_follow_group(user_id, group, callback) {
-  graphModel.relate_ids(user_id, 'FOLLOW', group._id, {timestamp: Date.now()}, function (err) {
+  graphModel.relate_ids(user_id, 'FOLLOW', group._id, `{timestamp: "${Date.now()}"}`, function (err) {
     if (err) {
       console.error(err);
     }
