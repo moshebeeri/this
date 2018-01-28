@@ -30,10 +30,16 @@ function getActivityActor(activity) {
 
 //pagination http://blog.mongodirector.com/fast-paging-with-mongodb/
 function update_feeds(effected, activity) {
+  console.log(JSON.stringify(activity));
+
   activity.distributions = 0;
   if(!activity.audience || _.includes(activity.audience, 'FOLLOWERS')) {
     activity.distributions += effected.length;
+
+    console.log(JSON.stringify(effected));
     effected.forEach(function (entity) {
+      console.log(`include followers sends to ${JSON.stringify(entity._id)}`);
+
       Feed.create({
         entity: entity._id,
         activity: activity._id
@@ -46,6 +52,8 @@ function update_feeds(effected, activity) {
   }
   if (_.includes(activity.audience, 'SELF')) {
     activity.distributions += 1;
+    console.log(`include self sends to ${JSON.stringify(getActivityActor(activity))}`);
+
     Feed.create({
       entity: getActivityActor(activity),
       activity: activity._id

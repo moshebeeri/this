@@ -150,7 +150,7 @@ exports.like = function (req, res) {
 exports.unlike = function (req, res) {
   let userId = req.user._id;
   graphModel.unrelate_ids(userId, 'LIKE', req.params.id);
-  return res.json(200, "unlike called for promotion " + req.params.id + " and user " + userId);
+  return res.status(200).send("unlike called for promotion " + req.params.id + " and user " + userId);
 };
 
 exports.share = function (req, res) {
