@@ -166,7 +166,7 @@ function applyToFollowing(promotion, instances, callback) {
 
 function handlePromotionPostCreate(promotion, callback) {
   function relatePromotion(promotion, callback) {
-    const params = {end: promotion.end};
+    const params = `{end: "${promotion.end}"}`;
     let db = promotionGraphModel.db();
     async.parallel({
         created: function (callback) {
@@ -230,9 +230,9 @@ function handlePromotionPostCreate(promotion, callback) {
   }
 
   function relateOnActionPromotion(promotion, callback) {
-    const params = {type: promotion.on_action.type};
+    let params = `{type: "${promotion.on_action.type}"}`;
     if(promotion.on_action.type === 'PROXIMITY')
-      params.proximity = promotion.on_action.proximity;
+      params = `{type: "${promotion.on_action.type}", proximity: "${promotion.on_action.proximity}"}`;
 
     let entityId = null;
     if (utils.defined(promotion.entity.business))
@@ -249,7 +249,7 @@ function handlePromotionPostCreate(promotion, callback) {
     let delete_on_action_query = `MATCH (f { _id:"${entityId}" })-[r:ON_ACTION]->(t) delete r`;
     promotionGraphModel.query(delete_on_action_query, (err) => {
       if(err) return callback(err);
-      console.log(`promotionGraphModel.relate_ids(${entityId}, 'ON_ACTION', ${promotion._id}, ${JSON.stringify(params)}, callback);`)
+      console.log(`promotionGraphModel.relate_ids(${entityId}, 'ON_ACTION', ${promotion._id}, ${params}, callback);`);
       return promotionGraphModel.relate_ids(entityId, 'ON_ACTION', promotion._id, params, callback);
     });
   }
