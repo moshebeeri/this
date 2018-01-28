@@ -83,9 +83,9 @@ class ProfileDrawer extends Component {
         }
         let name = StyleUtils.toTitleCase(this.props.user ? this.props.user.name : 'name');
         let phoneNumber = StyleUtils.parseUserPhoneNumber(this.props.user);
-        let borderRadiusSize = 50;
+        let borderRadiusSize = 60;
         if (Platform.OS === 'ios') {
-            borderRadiusSize = 50;
+            borderRadiusSize = 60;
         }
         let userImage = <Image style={{width: 120, height: 120, borderRadius: borderRadiusSize,}} source={source}/>;
         return (
