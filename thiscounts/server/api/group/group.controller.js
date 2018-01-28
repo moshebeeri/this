@@ -620,7 +620,7 @@ exports.approve_join_group = function (req, res) {
     user_follow_group(userId, group, function (err) {
       if (err) return handleError(res, err);
       graphModel.unrelate_ids(user, 'ASK_JOIN_GROUP', group);
-      sendGroupNotification(userId, [user], group._id, 'approve_join');
+      //sendGroupNotification(userId, [user], group._id, 'approve_join');
       return res.status(200).json(group);
     });
   });
@@ -672,7 +672,7 @@ exports.approve_invite_group = function (req, res) {
     user_follow_group(userId, {_id: group}, function (err) {
       if (err) return handleError(res, err);
       graphModel.unrelate_ids(userId, 'INVITE_GROUP', group);
-      sendGroupNotification(userId, [userId], group, 'approve_invite');
+      //sendGroupNotification(userId, [userId], group, 'approve_invite');
       return res.status(200).json(group);
     })
   });
