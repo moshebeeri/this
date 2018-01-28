@@ -148,9 +148,8 @@ class UserApi {
                     reject(error);
                     return;
                 }
-                let responseData = await response.json();
                 timer.logTime(from, new Date(), 'users', 'like');
-                resolve(responseData);
+                resolve(true);
             }
             catch (error) {
                 console.log('There has been a problem with your fetch operation: ' + error.message);
@@ -175,9 +174,8 @@ class UserApi {
                     reject(error);
                     return;
                 }
-                let responseData = await response.json();
                 timer.logTime(from, new Date(), 'users', 'unlike');
-                resolve(responseData);
+                resolve(true);
             }
             catch (error) {
                 console.log('There has been a problem with your fetch operation: ' + error.message);
