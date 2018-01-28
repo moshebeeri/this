@@ -53,7 +53,7 @@ export default function comment(state = initialState, action) {
                     currentState.groupCommentsOrder[action.gid] = [];
                 }
                 if (!currentState.groupUnreadComments[action.gid]) {
-                    currentState.groupUnreadComments[action.gid] = 0;
+                    currentState.groupUnreadComments[action.gid] = [];
                 }
 
                 if (!currentState.groupCommentsOrder[action.gid].includes(comment._id)) {

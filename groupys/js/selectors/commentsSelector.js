@@ -29,14 +29,14 @@ export const getFeeds = createSelector([getStateFeeds],
                             )
                             || (lastPost && feeds[groupId][feedId].entities.instance)) {
                             if (lastGroupInstance) {
-                                response[groupId].push({instance: feedUiConverter.createPromotionInstance(lastGroupInstance)});
+                                response[groupId].unshift({instance: feedUiConverter.createPromotionInstance(lastGroupInstance)});
                             } else {
-                                response[groupId].push({instance: feedUiConverter.createPost(lastPost)});
+                                response[groupId].unshift({instance: feedUiConverter.createPost(lastPost)});
                             }
                             lastGroupInstance = feeds[groupId][feedId].entities.instance;
                             lastPost = feeds[groupId][feedId].entities.post;
                         }
-                        response[groupId].push({message: createFeed(feeds[groupId][feedId])});
+                        response[groupId].unshift({message: createFeed(feeds[groupId][feedId])});
                     })
                 }
             })

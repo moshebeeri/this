@@ -38,7 +38,7 @@ export default class UrlPreview extends Component {
                 <View style={{flex: 1}}>
                     {image}
                 </View>
-                <View style={{flex: 3, marginLeft: 5, marginRight: 5}}>
+                <View style={{flex: 3, marginRight: 5, marginLeft: 5, marginRight: 5}}>
                     <Text>{this.state.data.title}</Text>
                     <Text>{this.state.data.description}</Text>
                 </View>

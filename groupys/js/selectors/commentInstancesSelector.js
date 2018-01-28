@@ -32,7 +32,7 @@ export const getFeeds = createSelector([getStateFeeds],
                                 if (!response[groupId][instanceId]) {
                                     response[groupId][instanceId] = new Array();
                                 }
-                                response[groupId][instanceId].push(createFeed(feeds[groupId][instanceId][feedId]))
+                                response[groupId][instanceId].unshift(createFeed(feeds[groupId][instanceId][feedId]))
                             })
                         }
                     })
