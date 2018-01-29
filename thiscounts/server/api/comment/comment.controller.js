@@ -132,9 +132,17 @@ exports.find = function(req, res) {
 
 // match (u:user)-[:COMMENTED]-(g:group{_id:"59f98c2d188c39245676df87"})-[:COMMENTED]-(e)-[:COMMENTED]-(c:comment)
 // return distinct u,g,c,labels(e) order by c._id desc
+//https://stackoverflow.com/questions/26474453/match-with-or-condition
 exports.group_chat = function(req, res) {
   let query = ` match (u:user)-[:COMMENTED]-(g:group{_id:"${req.params.group}"})-[:COMMENTED]-(e)-[:COMMENTED]-(c:comment)
                 return distinct c._id as _id`;
+  let query2 = ` match (c:comment) 
+                where (u:user)-[:COMMENTED]-(g:group{_id:"${req.params.group}"})-[:COMMENTED]-(e)-[:COMMENTED]-(c:comment) OR
+                      (u:user)-[:COMMENTED]-(g:group{_id:"${req.params.group}"})-[:COMMENTED]-(c:comment) 
+                return distinct c._id as _id`;
+  console.log(query);
+  console.log('group_chat query2:');
+  console.log(query2);
   graphModel.query_objects(Comment, query,
     `order by c._id desc`,
     req.params.skip, req.params.limit, function (err, comments) {
