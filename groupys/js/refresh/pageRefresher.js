@@ -74,7 +74,7 @@ class PageRefresher {
     checkUploadPictures(businesses,token){
         if(businesses.length > 0){
             businesses.forEach(business => {
-                entityUtils.uploadPicture('businesses', business.businessResponse, token, business.business);
+                entityUtils.uploadPicture('businesses',business.business, token, business.businessResponse);
 
             });
             store.dispatch({

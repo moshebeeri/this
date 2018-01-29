@@ -135,7 +135,7 @@ class GroupFeedHeader extends Component {
         if (this.props.item.pictures && this.props.item.pictures.length > 0) {
             image = <Thumbnail square source={{uri: this.props.item.pictures[0].pictures[3]}}/>
         } else {
-            if (group.entity && group.entity.business &&  group.entity.business.pictures) {
+            if (group.entity && group.entity.business &&  group.entity.business.pictures &&  group.entity.business.pictures[0]) {
                 image = <Thumbnail square source={{uri: group.entity.business.pictures[0].pictures[3]}}/>
             }
         }
