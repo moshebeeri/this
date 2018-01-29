@@ -42,7 +42,7 @@ export default function commentInstances(state = initialState, action) {
             if (currentState.groupCommentsOrder[action.gid][action.instanceId].includes(action.item._id)) {
                 return state
             }
-            currentState.groupCommentsOrder[action.gid][action.instanceId].push(action.item._id);
+            currentState.groupCommentsOrder[action.gid][action.instanceId].unshift(action.item._id);
             currentState.update = !currentState.update;
             return currentState;
         case actions.UPSERT_GROUP_INSTANCE_TOP_COMMENT :
@@ -63,7 +63,7 @@ export default function commentInstances(state = initialState, action) {
             if (currentState.groupCommentsOrder[action.gid][action.instanceId].includes(action.item._id)) {
                 return state
             }
-            currentState.groupCommentsOrder[action.gid][action.instanceId].unshift(action.item._id);
+            currentState.groupCommentsOrder[action.gid][action.instanceId].push(action.item._id);
             currentState.update = !currentState.update;
             return currentState;
         case actions.GROUP_COMMENT_INSTANCE_LOADING_DONE:
