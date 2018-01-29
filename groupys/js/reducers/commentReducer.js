@@ -27,7 +27,7 @@ export default function comment(state = initialState, action) {
     let groupsComment = currentState.groupComments;
     switch (action.type) {
         case actions.UPSERT_GROUP_COMMENT :
-            action.item.forEach(comment => {
+            action.item.reverse().forEach(comment => {
                 if (!groupsComment[action.gid]) {
                     groupsComment[action.gid] = {}
                 }
@@ -36,12 +36,15 @@ export default function comment(state = initialState, action) {
                     currentState.groupCommentsOrder[action.gid] = [];
                 }
                 if (!currentState.groupCommentsOrder[action.gid].includes(comment._id)) {
-                    currentState.groupCommentsOrder[action.gid].push(comment._id);
+                    currentState.groupCommentsOrder[action.gid].unshift(comment._id);
                 }
             });
             currentState.update = !currentState.update;
-            currentState.lastInstanceId = groupsComment[action.gid][currentState.groupCommentsOrder[action.gid]
-                [currentState.groupCommentsOrder[action.gid].length - 1]].entities.instance._id;
+            let lastCommentGroup =  groupsComment[action.gid][currentState.groupCommentsOrder[action.gid]
+                [currentState.groupCommentsOrder[action.gid].length - 1]]
+            if( lastCommentGroup && lastCommentGroup.entities && lastCommentGroup.entities.instance){
+                currentState.lastInstanceId =  lastCommentGroup.entities.instance._id
+            }
             return currentState;
         case actions.UPSERT_GROUP_TOP_COMMENT :
             action.item.forEach(comment => {
@@ -60,11 +63,14 @@ export default function comment(state = initialState, action) {
                     if(comment.user._id !== action.user._id) {
                         currentState.groupUnreadComments[action.gid] = currentState.groupUnreadComments[action.gid] + 1;
                     }
-                    currentState.groupCommentsOrder[action.gid].unshift(comment._id);
+                    currentState.groupCommentsOrder[action.gid].push(comment._id);
                 }
             });
-            currentState.lastInstanceId = groupsComment[action.gid][currentState.groupCommentsOrder[action.gid]
-                [currentState.groupCommentsOrder[action.gid].length - 1]].entities.instance._id;
+            let lastComment =  groupsComment[action.gid][currentState.groupCommentsOrder[action.gid]
+                [currentState.groupCommentsOrder[action.gid].length - 1]]
+            if( lastComment && lastComment.entities.instance){
+                currentState.lastInstanceId =  lastComment.entities.instance._id
+            }
             currentState.update = !currentState.update;
             return currentState;
         case actions.CLEAR_GROUP_COMMENT_UNREAD:

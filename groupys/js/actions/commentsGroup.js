@@ -13,6 +13,9 @@ export function fetchTopComments(group) {
     return async function (dispatch, getState) {
         try {
             const token = getState().authentication.token;
+            if(!getState().comments.groupCommentsOrder[group._id]){
+                return;
+            }
             let response = await commentsApi.getGroupComments(group, token, 0, 10);
             if (!getState().comments.loadingDone[group._id]) {
                 dispatch({
@@ -133,7 +136,7 @@ export function setNextFeeds(comments, group) {
                 response = await commentsApi.getGroupComments(group, token, 0, 10);
             }
 
-            if (!getState().comments.loadingDone[group._id]) {getState().commemts.groupUnreadComments[group._id]
+            if (!getState().comments.loadingDone[group._id]) {
                 dispatch({
                     type: actions.GROUP_COMMENT_LOADING_DONE,
                     loadingDone: true,
