@@ -22,6 +22,10 @@ export function fetchTopComments(group) {
                 });
             }
             if (response.length > 0) {
+                if(getState().comments.groupCommentsOrder[group._id] && getState().comments.groupCommentsOrder[group._id].includes(response[0]._id)){
+                    return;
+                }
+
                 dispatch({
                     type: actions.UPSERT_GROUP_TOP_COMMENT,
                     item: response,
@@ -103,11 +107,14 @@ function createMessage(message, user) {
 }
 
 export function clearUnreadComments(group) {
-    return async function (dispatch) {
-        dispatch({
-            type: actions.CLEAR_GROUP_COMMENT_UNREAD,
-            gid: group._id,
-        });
+    return async function (dispatch,getState) {
+        let groupUnred = getState().comments.groupUnreadComments[group._id];
+        if(groupUnred && groupUnred > 0) {
+            dispatch({
+                type: actions.CLEAR_GROUP_COMMENT_UNREAD,
+                gid: group._id,
+            });
+        }
     }
 }
 export function setNextFeeds(comments, group) {
@@ -121,12 +128,12 @@ export function setNextFeeds(comments, group) {
             let response;
 
             if (comments && comments.length > 0) {
-                response = await commentsApi.getGroupComments(group, token, comments.length, comments.length + 10);
+                response = await commentsApi.getGroupComments(group, token, comments.length + 1, comments.length + 10);
             } else {
                 response = await commentsApi.getGroupComments(group, token, 0, 10);
             }
 
-            if (!getState().comments.loadingDone[group._id]) {
+            if (!getState().comments.loadingDone[group._id]) {getState().commemts.groupUnreadComments[group._id]
                 dispatch({
                     type: actions.GROUP_COMMENT_LOADING_DONE,
                     loadingDone: true,

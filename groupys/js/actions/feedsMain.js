@@ -28,9 +28,13 @@ async function fetchFeedsFromServer(feeds, dispatch, token, user) {
             let id = keys[keys.length - 1];
             response = await feedApi.getAll('down', feeds[id].fid, token, user);
         }
+        console.log(response)
         if (!response)
             return;
         if (response.length === 0) {
+            dispatch({
+                type: actions.MAX_FEED_RETUNED
+             })
             return;
         }
         let collectionDispatcher = new CollectionDispatcher();
@@ -161,6 +165,11 @@ export function setNextFeeds(feeds) {
                 type: actions.FEEDS_GET_NEXT_BULK,
             });
         }
+
+        if(getState().feeds.maxFeedReturned){
+            return;
+        }
+        
         if (_.isEmpty(feeds) && getState().feeds.firstTime) {
             dispatch({
                 type: actions.FIRST_TIME_FEED,
@@ -169,7 +178,8 @@ export function setNextFeeds(feeds) {
             await fetchFeedsFromServer(feeds, dispatch, token, user)
             showLoadingDone = true;
         }
-        if (feeds && feeds.length > 0) {
+        if (feeds && feeds.length > 0 ) {
+
             let length = getState().feeds.feedView.length
             let id = getState().feeds.feedView[length - 1]
             dispatch({
