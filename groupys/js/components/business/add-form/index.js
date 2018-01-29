@@ -317,14 +317,12 @@ class AddBusiness extends Component {
     }
 
     render() {
-        let savveOperation = this.saveFormData.bind(this);
-        if (this.state.updateMode) {
-            savveOperation = this.updateFormData.bind(this);
-        }
+        let saveOperation = this.state.updateMode? this.updateFormData.bind(this) : this.saveFormData.bind(this);
+
         return (
             <View style={[styles.business_container, {width: StyleUtils.getWidth()}]}>
 
-                <FormHeader disableAction={this.props.saving} showBack submitForm={savveOperation}
+                <FormHeader disableAction={this.props.saving} showBack submitForm={saveOperation}
                             navigation={this.props.navigation}
                             title={strings.AddBusiness} bgc="#FA8559"/>
 
@@ -377,7 +375,7 @@ class AddBusiness extends Component {
 
                     <View style={[styles.inputTextLayout, {width: StyleUtils.getWidth() - 15}]}>
 
-                        <TextInput field={strings.TaxID} value={this.state.tax_id} returnKeyType='done' ref="6"
+                        <TextInput field={strings.TaxID} value={this.state.tax_id} returnKeyType='next' ref="6"
                                    refNext="6"
                                    onChangeText={(tax_id) => this.setReduxState({tax_id})} isMandatory={true}/>
                     </View>
@@ -402,10 +400,7 @@ class AddBusiness extends Component {
     }
 
     shouldComponentUpdate() {
-        if (this.props.currentScreen === 'addBusiness') {
-            return true;
-        }
-        return false;
+        return this.props.currentScreen === 'addBusiness';
     }
 }
 
