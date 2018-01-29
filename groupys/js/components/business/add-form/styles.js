@@ -38,7 +38,7 @@ module.exports = {
         flexDirection: 'row',
         justifyContent: 'center',
         alignItems: 'center',
-        margin: 15,
+
     },
     addCoverText: {
         color: 'white', margin: 5, fontSize: 16
@@ -50,8 +50,8 @@ module.exports = {
         justifyContent: 'space-between'
     },
     business_upper_image_container: {
-        width: width / 3,
-        height: 110,
+        width: 105,
+        height: 111,
         marginTop: 10,
         marginBottom: 60,
         alignItems: 'center',
@@ -59,35 +59,29 @@ module.exports = {
         marginRight: 12,
         position: 'absolute',
         top: 5,
-        borderWidth: 2,
-        borderRadius: 2,
-        borderColor: '#ddd',
         borderBottomWidth: 0,
         shadowColor: '#000',
-        shadowOffset: {width: 20, height: 10},
+        shadowOffset: {width: 5, height: 5},
         shadowOpacity: 0.5,
         shadowRadius: 2,
         marginLeft: 10,
-        backgroundColor: 'white'
+
     },
     business_no_pic_no_cover_upper_image_container: {
-        width: width / 3,
-        height: 110,
+        width: 111,
+        height: 105,
         marginTop: 10,
         marginBottom: 60,
         alignItems: 'center',
         justifyContent: 'center',
         marginRight: 12,
-        borderWidth: 2,
-        borderRadius: 2,
-        borderColor: '#ddd',
-        borderBottomWidth: 0,
+
         shadowColor: '#000',
-        shadowOffset: {width: 20, height: 10},
+        shadowOffset: {width: 5, height: 5},
         shadowOpacity: 0.5,
         shadowRadius: 2,
         marginLeft: 10,
-        backgroundColor: 'white'
+
     },
     business_no_pic_upper_image_container: {
         width: width / 3,
