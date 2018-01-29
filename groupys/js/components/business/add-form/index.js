@@ -28,7 +28,7 @@ class AddBusiness extends Component {
         let templateBusiness = props.templateBusiness;
         if (props.navigation.state.params && props.navigation.state.params.item) {
             let item = props.navigation.state.params.item;
-            let picture = undefined;
+            let picture = null;
             if (item.pictures.length > 0 && item.pictures[0].pictures[1]) {
                 picture = item.pictures[0].pictures[1]
             }
@@ -72,7 +72,7 @@ class AddBusiness extends Component {
             if(templateBusiness.subcategory){
                 categories.push(Number(templateBusiness.subcategory))
             }
-            let path = ''
+            let path = '';
             if(templateBusiness.logoImage){
                 if(templateBusiness.logoImage.path) {
                     path = templateBusiness.logoImage.path;
