@@ -14,7 +14,7 @@ module.exports = {
     },
     business_upper_container: {
         width: width,
-        height: 220,
+        height: 250,
         backgroundColor: '#FA8559',
         marginBottom: 4,
         alignItems: 'center',
@@ -75,7 +75,10 @@ module.exports = {
         alignItems: 'center',
         justifyContent: 'center',
         marginRight: 12,
-
+        borderWidth: 2,
+        borderRadius: 2,
+        borderColor: '#ddd',
+        borderBottomWidth: 0,
         shadowColor: '#000',
         shadowOffset: {width: 5, height: 5},
         shadowOpacity: 0.5,
