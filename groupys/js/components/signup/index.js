@@ -12,6 +12,7 @@ import {
 } from 'react-native';
 import {connect} from 'react-redux';
 import {actions} from 'react-native-navigation-redux-helpers';
+import {Keyboard} from 'react-native';
 import {Button, Container, Content, Input, InputGroup, Item, Spinner, Text} from 'native-base';
 import styles from './styles';
 import {bindActionCreators} from "redux";
@@ -57,6 +58,7 @@ class Signup extends Component {
                 this.setState({
                     badPassword: false
                 })
+                Keyboard.dismiss();
                 this.props.actions.signup(this.state.phoneNumber, this.state.password, this.state.name, this.state.lastname, this.props.navigation)
             } else {
                 this.setState({
