@@ -38,7 +38,7 @@ exports.feed = function (req, res) {
   let entity_id = req.params.entity_id;
   let scroll = req.params.scroll;
 
-  if (req.params.scroll !== 'up' && req.params.scroll !== 'down')
+  if (scroll !== 'up' && scroll !== 'down')
     return res.status(400).send('scroll value may be only up or down');
 
   let query_builder;

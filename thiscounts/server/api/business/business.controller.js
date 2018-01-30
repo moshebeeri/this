@@ -333,6 +333,7 @@ function sendValidationEmail(businessId) {
   Business.findById(businessId).exec((err, business)=> {
     if(err) return console.error(err);
     if(!business) return console.error(new Error('Business not found'));
+    console.log(JSON.stringify(business));
     email.send('validateBusinessEmail',
       business.email, {
         name: business.creator.name,

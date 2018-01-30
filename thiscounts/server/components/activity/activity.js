@@ -108,6 +108,7 @@ function activity_impl(act, callback) {
 
   ActivitySchema.create(act, function (err, activity) {
     if (err) return callback(err, null);
+    activity.audience = act.audience;
 
     if(act.ids){
       let effected = [];
@@ -117,7 +118,6 @@ function activity_impl(act, callback) {
     }
 
     if(act.audience && !_.includes(act.audience, 'FOLLOWERS')) {
-      activity.audience = act.audience;
       update_feeds([], activity);
       return handleSuccess(activity)
     }

@@ -114,6 +114,34 @@ exports.destroy = function(req, res) {
   });
 };
 
+exports.scroll = function(req, res) {
+  const page_size = 50;
+  const from_id = req.params.from_id;
+  const scroll = req.params.scroll;
+
+  if (scroll !== 'up' && scroll !== 'down')
+    return res.status(400).send('scroll value may be only up or down');
+  let condition = scroll === 'up'? `c._id > ${from_id}` : `c._id < ${from_id}`;
+
+  let query = ` match (c:comment) 
+                where (
+                      (u:user)-[:COMMENTED]-(g:group{_id:"${req.params.group}"})-[:COMMENTED]-(e)-[:COMMENTED]-(c:comment) 
+                        OR
+                      (u:user)-[:COMMENTED]-(g:group{_id:"${req.params.group}"})-[:COMMENTED]-(c:comment)
+                      )
+                      AND ${condition}
+                      
+                return distinct c._id as _id`;
+  console.log(`group_chat query: ${query}`);
+
+  graphModel.query_objects(Comment, query,
+    `order by c._id desc`,
+    0, page_size, function (err, comments) {
+      if(err) { return handleError(res, err); }
+      return res.status(200).json(comments);
+    })
+};
+
 exports.find = function(req, res) {
   let query = 'match (:user)-[:COMMENTED]';
   let entities = extract_ids(req.body.entities);
@@ -136,13 +164,6 @@ exports.find = function(req, res) {
 exports.group_chat = function(req, res) {
   let query = ` match (u:user)-[:COMMENTED]-(g:group{_id:"${req.params.group}"})-[:COMMENTED]-(e)-[:COMMENTED]-(c:comment)
                 return distinct c._id as _id`;
-  let query2 = ` match (c:comment) 
-                where (u:user)-[:COMMENTED]-(g:group{_id:"${req.params.group}"})-[:COMMENTED]-(e)-[:COMMENTED]-(c:comment) OR
-                      (u:user)-[:COMMENTED]-(g:group{_id:"${req.params.group}"})-[:COMMENTED]-(c:comment) 
-                return distinct c._id as _id`;
-  console.log(query);
-  console.log('group_chat query2:');
-  console.log(query2);
   graphModel.query_objects(Comment, query,
     `order by c._id desc`,
     req.params.skip, req.params.limit, function (err, comments) {
