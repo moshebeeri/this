@@ -81,13 +81,18 @@ export function sendMessage(groupId, message) {
             const token = getState().authentication.token;
             const user = getState().user.user;
             const instanceId = getState().comments.lastInstanceId;
+
             let messageItem = createMessage(message, user);
             dispatch({
                 type: actions.GROUP_COMMENT_ADD_MESSAGE,
                 groupId: groupId,
                 message: messageItem
             });
-            commentsApi.createComment(groupId, instanceId, message, token)
+            if(instanceId === 0){
+                commentsApi.createComment(groupId, undefined, message, token);
+            }else {
+                commentsApi.createComment(groupId, instanceId, message, token);
+            }
         } catch (error) {
             dispatch({
                 type: actions.NETWORK_IS_OFFLINE,
@@ -130,8 +135,9 @@ export function setNextFeeds(comments, group) {
 
             let response;
 
-            if (comments && comments.length > 0) {
-                response = await commentsApi.getGroupComments(group, token, comments.length + 1, comments.length + 10);
+            let commentsFromServer = comments.filter(comment => comment._id);
+            if (commentsFromServer && commentsFromServer.length > 0) {
+                response = await commentsApi.getGroupComments(group, token, commentsFromServer.length + 1, commentsFromServer.length + 10);
             } else {
                 response = await commentsApi.getGroupComments(group, token, 0, 10);
             }

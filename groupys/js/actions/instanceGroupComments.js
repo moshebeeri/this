@@ -105,7 +105,7 @@ export function setNextFeeds(comments, group, instance) {
                 response = await commentsApi.getInstanceGroupComments(group._id, instance.id, comments.length, token);
             } else {
                 response = await commentsApi.getInstanceGroupComments(group._id, instance.id, 0, token);
-            } feeds[groupId][feedsOrder[groupId][0]]
+            }
             dispatch({
                 type: actions.GROUP_COMMENT_INSTANCE_LOADING_DONE,
                 loadingDone: true,

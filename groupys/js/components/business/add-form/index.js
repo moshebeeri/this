@@ -254,7 +254,7 @@ class AddBusiness extends Component {
             if (coverPic) {
                 return <View style={styles.business_upper_image_container}>
                     <ImagePicker logo ref={"logoImage"} mandatory
-                                 image={<Image style={{width: 111, height: 105}} source={{uri: this.state.path}}/>}
+                                 image={<Image resizeMode="cover" style={{width: 111, height: 105}} source={{uri: this.state.path}}/>}
                                  color='black' pickFromCamera
                                  setImage={this.setImage.bind(this)}/>
 
@@ -262,7 +262,7 @@ class AddBusiness extends Component {
             } else {
                 return <View style={styles.business_no_pic_no_cover_upper_image_container}>
                     <ImagePicker logo ref={"logoImage"} mandatory
-                                 image={<Image style={{width: 111, height: 105}} source={{uri: this.state.path}}/>}
+                                 image={<Image resizeMode="cover" style={{width: 111, height: 105}} source={{uri: this.state.path}}/>}
                                  color='black' pickFromCamera
                                  setImage={this.setImage.bind(this)}/>
 
@@ -294,7 +294,8 @@ class AddBusiness extends Component {
             let coverImage =
                 <View>
                     <Image
-                        style={{width: StyleUtils.getWidth() - 10, height: 210, borderWidth: 1, borderColor: 'white'}}
+                        resizeMode="cover"
+                        style={{width: StyleUtils.getWidth(), height: 250,  alignSelf: 'stretch', borderColor: 'white'}}
                         source={{uri: this.state.coverImage.uri}}
                     >
 
