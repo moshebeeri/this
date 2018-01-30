@@ -292,7 +292,7 @@ class AddGroup extends Component {
                                   defaultHeader={strings.ChooseType} isMandatory
                                   onValueSelected={this.selectGroupType.bind(this)}/>}
 
-                    {!this.state.updateMode && {BusinessPiker}}
+                    {!this.state.updateMode && BusinessPiker}
                     <View style={styles.inputTextLayour}>
                         <TextInput field={strings.GroupName} value={this.state.name}
                                    returnKeyType='next' ref="1" refNext="1"
@@ -351,7 +351,7 @@ class AddGroup extends Component {
 export default connect(
     state => ({
         businesses: getMyBusinesses(state),
-        user: state.authentication.user,
+        user: state.user.user,
         userFollowers: state.user.followers,
         saving: state.groups.saving,
         currentScreen: state.render.currentScreen,
