@@ -19,6 +19,8 @@ const feed = require('../../components/feed-tools');
 const Role = require('../../components/role');
 const randomstring = require("randomstring");
 const email = require('../../components/email');
+const geolib = require('geolib');
+
 exports.search = MongodbSearch.create(Business);
 
 function get_businesses_state(businesses, userId, callback) {
@@ -172,7 +174,7 @@ function business_follow_activity(follower, business) {
   });
 }
 
-exports.followBusiness = function(userId, businessId, callback) {
+exports.followBusiness = function (userId, businessId, callback) {
   Business.findById(businessId)
     .exec(function (err, business) {
       if (err) return console.error(err);
@@ -330,9 +332,9 @@ exports.check_address = function (req, res) {
 };
 
 function sendValidationEmail(businessId) {
-  Business.findById(businessId).exec((err, business)=> {
-    if(err) return console.error(err);
-    if(!business) return console.error(new Error('Business not found'));
+  Business.findById(businessId).exec((err, business) => {
+    if (err) return console.error(err);
+    if (!business) return console.error(new Error('Business not found'));
     console.log(JSON.stringify(business));
     email.send('validateBusinessEmail',
       business.email, {
@@ -428,11 +430,12 @@ function sendRejectEmail(business) {
       if (err) console.error(err);
     });
 }
+
 function review(businessId, status, callback) {
   Business.findById(businessId).exec((err, business) => {
     if (err) return callback(err);
     if (!business) return callback(null, null);
-    if(business.review.status === 'reviewed') return callback(new Error('already reviewed'));
+    if (business.review.status === 'reviewed') return callback(new Error('already reviewed'));
 
     business.review.state = 'reviewed';
     if (status === 'accepted') {
@@ -471,13 +474,50 @@ function validate_email(businessId, validationCode, callback) {
     business.review.state = 'review';
     business.save(err => {
       if (err) callback(err);
-      if(business.review.status !== 'reviewed'){
+      if (business.review.status !== 'reviewed') {
         reviewRequest(business);
       }
       return callback(null, business);
     });
   })
 }
+
+function approveBusiness(business, callback) {
+  review(business._id, 'accepted', (err, business) => {
+    if (err) return callback(err);
+    if (!business) return callback(null, null);
+    return callback(null, business);
+  })
+}
+
+// post '/agent/approve/:business/:code'
+exports.agent_approve_business = function (req, res) {
+  const businessId = req.params.business;
+  const user = req.user;
+  const code = req.params.code;
+  const agent_coordinates = req.body;
+  if (user.agent.code === code) {
+    Business.findById(businessId).exec((err, business) => {
+      if (err) return handleError(res, err);
+      if (business.creator._id === user._id)
+        return handleError(res, new Error(`Agent can't approve business that he created`));
+      //check distance of agent from business
+      if (geolib.getDistance(
+          agent_coordinates,
+          {latitude: business.location.lat, longitude: business.location.lng}
+        ) > 500)
+        return handleError(res, new Error(`Agent should be in proximity to business in order to approve it`));
+
+      approveBusiness(business, (err, business) => {
+        if (err) return handleError(res, err);
+        if (!business) return res.status(404).send('Not Found');
+        return res.status(201).json(business);
+      })
+    })
+  }
+  else
+    return handleError(res, new Error(`Usr is not an agent`));
+};
 
 exports.validate_email = function (req, res) {
   const businessId = req.params.id;
