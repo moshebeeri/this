@@ -116,12 +116,13 @@ exports.destroy = function(req, res) {
 
 exports.scroll = function(req, res) {
   const page_size = 50;
-  const from_id = req.params.from_id;
+  const from_id = req.params.from;
   const scroll = req.params.scroll;
 
   if (scroll !== 'up' && scroll !== 'down')
     return res.status(400).send('scroll value may be only up or down');
-  let condition = scroll === 'up'? `c._id > ${from_id}` : `c._id < ${from_id}`;
+
+  let condition = scroll === 'up'? `c._id < ${from_id}` : `c._id > ${from_id}`;
 
   let query = ` match (c:comment) 
                 where (
@@ -204,5 +205,6 @@ exports.conversed = function(req, res) {
 };
 
 function handleError(res, err) {
-  return res.send(500, err);
+  console.error(err);
+  return res.status(500).send(err);
 }
