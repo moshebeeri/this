@@ -40,9 +40,5 @@ server.listen(config.port, config.ip, function () {
   console.log('Express server listening on %d, in %s mode', config.port, app.get('env'));
 });
 
-console.prototype.logJSON = function(obj) {
-  return console.log(JSON.stringify(obj))
-};
-
 // Expose app
 module.exports = app;
