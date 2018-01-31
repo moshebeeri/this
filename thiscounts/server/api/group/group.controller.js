@@ -285,7 +285,7 @@ exports.touch = function (req, res) {
 };
 
 function user_follow_group(user_id, group, callback) {
-  graphModel.relate_ids(user_id, 'FOLLOW', group._id, `{timestamp: "${Date.now()}"}`, function (err) {
+  graphModel.relate_ids(user_id, 'FOLLOW', group._id, `{timestamp: ${Date.now()}}`, function (err) {
     if (err) {
       console.error(err);
     }
@@ -525,12 +525,13 @@ exports.user_follow = function (req, res) {
   const query = `MATCH (u:user {_id:'${req.user._id}'})-[r:FOLLOW]->(g:group) 
                         OPTIONAL MATCH (u)-[role:ROLE]->(:business)-[:DEFAULT_GROUP|BUSINESS_GROUP]->(g)
                         RETURN g._id as _id, r.timestamp as touched, role.name AS role`;
-
+  console.log(`user_follow query: ${query}`);
   graphModel.query_ids(query,
     'order by r.timestamp desc', skip, limit, function (err, gObjects) {
       let _ids = [];
       let id2touch = {};
 
+      if(err) {return handleError(res, err)}
       if(!gObjects) return res.status(404).json(`no groups for user _id: ${req.user._id}`);
 
       gObjects.forEach(gObject => {

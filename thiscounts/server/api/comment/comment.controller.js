@@ -122,23 +122,23 @@ exports.scroll = function(req, res) {
   if (scroll !== 'up' && scroll !== 'down')
     return res.status(400).send('scroll value may be only up or down');
 
-  let condition = scroll === 'up'? `c._id < ${from_id}` : `c._id > ${from_id}`;
+  let condition = scroll === 'up'? `c._id < '${from_id}'` : `c._id > '${from_id}'`;
 
-  let query = ` match (c:comment) 
+  let query = ` match (c:comment), (u:user), (g:group{_id:'${req.params.group}'}) 
                 where (
-                      (u:user)-[:COMMENTED]-(g:group{_id:"${req.params.group}"})-[:COMMENTED]-(e)-[:COMMENTED]-(c:comment) 
+                      (u)-[:COMMENTED]->(g)-[:COMMENTED]->()-[:COMMENTED]->(c) 
                         OR
-                      (u:user)-[:COMMENTED]-(g:group{_id:"${req.params.group}"})-[:COMMENTED]-(c:comment)
+                      (u)-[:COMMENTED]->(g)-[:COMMENTED]->(c)
                       )
                       AND ${condition}
                       
                 return distinct c._id as _id`;
-  console.log(`group_chat query: ${query}`);
-
+  console.log(query);
   graphModel.query_objects(Comment, query,
     `order by c._id desc`,
     0, page_size, function (err, comments) {
       if(err) { return handleError(res, err); }
+      console.log(JSON.stringify(comments));
       return res.status(200).json(comments);
     })
 };
