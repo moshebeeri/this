@@ -28,6 +28,7 @@ let ActivitySchema = new Schema({
   actor_mall: {type: Schema.ObjectId, ref: 'Mall', autopopulate: true },
   actor_chain: {type: Schema.ObjectId, ref: 'ShoppingChain', autopopulate: true },
   actor_group: {type: Schema.ObjectId, ref: 'Group', autopopulate: true },
+  actor_brand: {type: Schema.ObjectId, ref: 'Brand', autopopulate: true },
   location : {
     lng : Number,
     lat : Number,
