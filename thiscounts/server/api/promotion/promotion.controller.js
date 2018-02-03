@@ -49,6 +49,8 @@ exports.show = function (req, res) {
 function to_graph(promotion) {
   return {
     _id: promotion._id,
+    start: promotion.start,
+    end: promotion.end,
     name: promotion.name,
     lat: promotion.location.lat,
     lon: promotion.location.lng,
@@ -141,6 +143,7 @@ function applyToFollowingUsers(promotion, instances, callback) {
         pricing.balance(instance.promotion.entity, function (err, positiveBalance) {
           if (err) return callback(err);
           if (!positiveBalance) return callback(new Error('HTTP_PAYMENT_REQUIRED'));
+          instanceGraphModel.relate_ids(user._id, 'ELIGIBLE', `{start: ${promotion.start}, end: ${promotion.end}`, instance._id);
           user_instance_eligible_activity(user._id, instance);
         })
       })
@@ -339,25 +342,13 @@ function promotion_created_activity(promotion) {
   activity.create(act);
 }
 
-function instance_eligible_activity(instance) {
-  if (utils.defined(instance.promotion.entity.business)) {
-    let act = {
-      instance: instance._id,
-      promotion: instance.promotion._id,
-      action: "eligible"
-    };
-    act.actor_business = instance.promotion.entity.business;
-    activity.create(act);
-  }
-}
-
 function user_instance_eligible_activity(userId, instance){
   if (utils.defined(instance.promotion.entity.business)) {
     let act = {
       instance: instance._id,
       promotion: instance.promotion._id,
       ids: [userId],
-      action: "eligible"
+      action: 'eligible'
     };
     act.actor_business = instance.promotion.entity.business;
     activity.create(act, function(err, activity){

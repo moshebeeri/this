@@ -157,6 +157,31 @@ exports.selling_businesses = function(req, res) {
     })
 };
 
+exports.eligible_products = function(req, res){
+  //match (u:user)-[:SAVED]->(s:SavedInstance)-[:SAVE_OF]-(i:instance)-[:INSTANCE_OF]-(p:promotion)-[:PRODUCT]-(pr:product) return u,i,s,p,pr
+  const page_size = 50;
+  const from_id = req.params.from;
+  const scroll = req.params.scroll;
+  if (scroll !== 'up' && scroll !== 'down')
+    return res.status(400).send('scroll value may be only up or down');
+  let condition = scroll === 'up'? `b._id < '${from_id}'` : `b._id > '${from_id}'`;
+  let query = ` match (u:user{_id:'${req.user._id}'}), (s:SavedInstance), (i:instance), (p:promotion), (pr:product)
+                where ${condition} 
+                AND (
+                    (u)-[:SAVED]->(s)-[:SAVE_OF]-(i)-[:INSTANCE_OF]-(p)-[:PRODUCT]-(pr)
+                  OR
+                    (u)-[:ELIGIBLE]-(i)-[:INSTANCE_OF]-(p)-[:PRODUCT]-(pr) 
+                ) 
+                AND (i.start > timestamp() and i.end < timestamp())
+                return pr._id as _id`;
+  console.log(query);
+  graphModel.query_objects(Product, query, '',
+    0, page_size, function (err, products) {
+      if(err) { return handleError(res, err); }
+      return res.status(200).json(products);
+    })
+};
+
 exports.branded = function(req, res){
   const code = req.params.barcode;
   let query = ` (p:product{code:'${code}'})-[:BRANDED]->(b:brand)
@@ -167,6 +192,7 @@ exports.branded = function(req, res){
       return res.status(200).json(businesses && businesses.length? businesses[0] : {});
     })
 };
+
 
 //TODO: Sort by distance from user
 exports.business_selling_brand = function(req, res){
