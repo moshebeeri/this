@@ -87,7 +87,7 @@ export default class PromotionHeaderSnippet extends Component {
                     {promotion.banner &&   <Thumbnail square small source={{uri: promotion.banner.uri}}/>}
                     <View style={{flex:1,justifyContent:'flex-start',marginLeft:5,alignItems:'flex-start'}}>
                         <Text>{promotion.business.name}</Text>
-                        {/*<Text>{strings.punchCardTerm.formatUnicorn(punches)}</Text>*/}
+                        <Text>{strings.punchCardTerm.formatUnicorn(promotion.punches)}</Text>
 
                     </View>
                 </View>
