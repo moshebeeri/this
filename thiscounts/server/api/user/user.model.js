@@ -9,6 +9,7 @@ const autopopulate = require('mongoose-autopopulate');
 let UserSchema = new Schema({
   social_state : {},
   name: String,
+  agent:{},
   gid: { type: Number, index: true},
   phone_number: { type: String, index: true, unique : true, required : true},
   country_code: { type: Number, required : true },

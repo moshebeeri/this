@@ -3,6 +3,8 @@
 let mongoose = require('mongoose'),
   Schema = mongoose.Schema;
 const autopopulate = require('mongoose-autopopulate');
+const utils = require('../../components/utils').createUtils();
+
 //pricing free tier
 let BusinessSchema = new Schema({
   social_state: {},
@@ -24,7 +26,7 @@ let BusinessSchema = new Schema({
   email: {type: String, index: true, required: true},
   validationCode: {type: String},
   website: String,
-  creator: {type: Schema.ObjectId, index: true, ref: 'User', required: true},
+  creator: {type: Schema.ObjectId, index: true, ref: 'User', required: true, autopopulate: utils.userAutopopulateOptions},
   created: {type: Date, required: true},
   info: String,
   review: {

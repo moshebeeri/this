@@ -17,7 +17,13 @@ router.post('/', auth.isAuthenticated(), controller.create);
 router.put('/:id', auth.isAuthenticated(), controller.update);
 router.patch('/:id', auth.isAuthenticated(), controller.update);
 router.delete('/:id', auth.isAuthenticated(),  controller.destroy);
+router.post('/entity/scroll/:entity/:from/:scroll', auth.isAuthenticated(), controller.scroll);
+router.post('/sold/by/:barcode/:from/:scroll', auth.isAuthenticated(), controller.selling_businesses);
+router.post('/branded/by/:product', auth.isAuthenticated(), controller.branded);
+router.post('/selling/brand/:brand', auth.isAuthenticated(), controller.business_selling_brand);
+router.post('/eligible/:from/:scroll', auth.isAuthenticated(), controller.eligible_products);
+
 router.get('/find/by/business/:id', auth.isAuthenticated(), controller.find_by_business);
-router.get('/find/by/barcode/:barcode/skip/limit', auth.isAuthenticated(), controller.find_by_business);
+router.get('/find/by/barcode/:barcode/skip/limit', auth.isAuthenticated(), controller.find_by_barcode);
 
 module.exports = router;

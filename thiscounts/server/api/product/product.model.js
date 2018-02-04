@@ -7,16 +7,15 @@ const autopopulate = require('mongoose-autopopulate');
 let ProductSchema = new Schema({
   social_state : {},
   name: String,
+  info: String,
   url: String,
   inAppOrder: {type:Boolean, default: false},
-  barcode: String,
-  url:String,
   SKU: String,
   price: Number,
   gid: { type: Number, index: true},
-  info: String,
   brand: {type: Schema.ObjectId, ref: 'Brand', required: false},
   business: {type: Schema.ObjectId, ref: 'Business', required: false},
+  shoppingChain: {type: Schema.ObjectId, ref: 'ShoppingChain', required: false},
   retail_price: Number,
   category: {type: String, required: true},
   variants:{
@@ -39,5 +38,13 @@ ProductSchema.index({
   'business.name': 'text',
   info: 'text'
 });
+
+ProductSchema.virtual('barcode')
+  .set(function() {
+    function getProductCode(product){
+      return product.costumeBarcode? `${product.business}_${product.userBarcode}` : product.userBarcode;
+    }
+    this.barcode = getProductCode(this);
+  });
 
 module.exports = mongoose.model('Product', ProductSchema);

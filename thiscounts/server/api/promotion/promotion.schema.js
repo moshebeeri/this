@@ -31,7 +31,7 @@ const promotionTypes = [
   'CASH_BACK',
   'EARLY_BOOKING',
   'HAPPY_HOUR',
-  'MORE_THAN'       //15% off for purchases more than 1000$ OR buy iphone for 600$ and get 50% off for earphones
+  'MORE_THAN'       //e.g. 15% off for purchases more than 1000$ OR buy iphone for 600$ and get 50% off for earphones
 ];
 
 const Variations = ['SINGLE', 'RANGE', 'VALUES'];
@@ -39,6 +39,7 @@ const Variations = ['SINGLE', 'RANGE', 'VALUES'];
 let PromotionSchemaObject = {
   social_state : {},
 
+  //barcode validation required upon claim
   validate_barcode :{type: Boolean, default: false},
 
   automatic: {
@@ -122,8 +123,8 @@ let PromotionSchemaObject = {
   },
   realize_code: String,
   description:String,
-  start: { type : Date, default: Date.now },
-  end: { type: Date, default: new Date(+new Date() + 14*24*60*60*1000) },
+  start: { type : Date, required: true },
+  end: { type: Date, required: true },
 
   social: {
     type: String,

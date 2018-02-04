@@ -116,24 +116,21 @@ exports.destroy = function(req, res) {
 
 exports.scroll = function(req, res) {
   const page_size = 50;
-  const from_id = req.params.from_id;
+  const from_id = req.params.from;
   const scroll = req.params.scroll;
 
   if (scroll !== 'up' && scroll !== 'down')
     return res.status(400).send('scroll value may be only up or down');
-  let condition = scroll === 'up'? `c._id > ${from_id}` : `c._id < ${from_id}`;
 
-  let query = ` match (c:comment) 
-                where (
-                      (u:user)-[:COMMENTED]-(g:group{_id:"${req.params.group}"})-[:COMMENTED]-(e)-[:COMMENTED]-(c:comment) 
-                        OR
-                      (u:user)-[:COMMENTED]-(g:group{_id:"${req.params.group}"})-[:COMMENTED]-(c:comment)
+  let condition = scroll === 'up'? `c._id < '${from_id}'` : `c._id > '${from_id}'`;
+
+  let query = ` match (c:comment), (u:user), (g:group{_id:'${req.params.group}'}) 
+                where ((u)-[:COMMENTED]->(g)-[:COMMENTED]->()-[:COMMENTED]->(c) 
+                          OR
+                       (u)-[:COMMENTED]->(g)-[:COMMENTED]->(c)
                       )
                       AND ${condition}
-                      
                 return distinct c._id as _id`;
-  console.log(`group_chat query: ${query}`);
-
   graphModel.query_objects(Comment, query,
     `order by c._id desc`,
     0, page_size, function (err, comments) {
@@ -204,5 +201,6 @@ exports.conversed = function(req, res) {
 };
 
 function handleError(res, err) {
-  return res.send(500, err);
+  console.error(err);
+  return res.status(500).send(err);
 }
