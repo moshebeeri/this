@@ -23,7 +23,7 @@ router.post('/branded/by/:product', auth.isAuthenticated(), controller.branded);
 router.post('/selling/brand/:brand', auth.isAuthenticated(), controller.business_selling_brand);
 router.post('/eligible/:from/:scroll', auth.isAuthenticated(), controller.eligible_products);
 
-// router.get('/find/by/business/:id', auth.isAuthenticated(), controller.find_by_business);
-// router.get('/find/by/barcode/:barcode/skip/limit', auth.isAuthenticated(), controller.find_by_business);
+router.get('/find/by/business/:id', auth.isAuthenticated(), controller.find_by_business);
+router.get('/find/by/barcode/:barcode/skip/limit', auth.isAuthenticated(), controller.find_by_barcode);
 
 module.exports = router;

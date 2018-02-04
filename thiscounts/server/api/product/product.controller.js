@@ -57,14 +57,14 @@ exports.show = function (req, res) {
   });
 };
 
-// exports.find_by_business = function (req, res) {
-//   Product.find({business: req.params.id}, function (err, products) {
-//     if (err) {
-//       return handleError(res, err);
-//     }
-//     return res.status(200).json(products);
-//   });
-// };
+exports.find_by_business = function (req, res) {
+  Product.find({business: req.params.id}, function (err, products) {
+    if (err) {
+      return handleError(res, err);
+    }
+    return res.status(200).json(products);
+  });
+};
 
 exports.find_by_barcode = function (req, res) {
   Product.find({barcode: req.params.barcode})
