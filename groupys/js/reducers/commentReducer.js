@@ -8,7 +8,7 @@ const initialState = {
     clientMessages: {},
     update: false,
     lastCall: {},
-    lastInstanceId: 0
+    lastInstanceId: {}
 };
 import {REHYDRATE} from "redux-persist/constants";
 import * as actions from "./reducerActions";
@@ -43,7 +43,8 @@ export default function comment(state = initialState, action) {
             let lastCommentGroup =  groupsComment[action.gid][currentState.groupCommentsOrder[action.gid]
                 [currentState.groupCommentsOrder[action.gid].length - 1]]
             if( lastCommentGroup && lastCommentGroup.entities && lastCommentGroup.entities.instance){
-                currentState.lastInstanceId =  lastCommentGroup.entities.instance._id
+
+                currentState.lastInstanceId[action.gid]  =   lastCommentGroup.entities.instance._id
             }
             return currentState;
         case actions.UPSERT_GROUP_TOP_COMMENT :
@@ -69,7 +70,7 @@ export default function comment(state = initialState, action) {
             let lastComment =  groupsComment[action.gid][currentState.groupCommentsOrder[action.gid]
                 [currentState.groupCommentsOrder[action.gid].length - 1]]
             if( lastComment && lastComment.entities.instance){
-                currentState.lastInstanceId =  lastComment.entities.instance._id
+                currentState.lastInstanceId[action.gid] =  lastComment.entities.instance._id
             }
             currentState.update = !currentState.update;
             return currentState;

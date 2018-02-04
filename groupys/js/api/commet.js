@@ -105,11 +105,11 @@ class CommentApi {
         });
     }
 
-    getGroupComments(group, token, skip, limit) {
+    getGroupComments(group, token, id, direction) {
         return new Promise(async (resolve, reject) => {
             try {
                 let from = new Date();
-                const response = await fetch(`${server_host}/api/comments/group/chat/` + group._id + '/' + skip + '/' + limit, {
+                const response = await fetch(`${server_host}/api/comments//group/chat/scroll/`+ group._id + '/' + id + '/' + direction, {
                     method: 'POST',
                     headers: {
                         'Accept': 'application/json, text/plain, */*',

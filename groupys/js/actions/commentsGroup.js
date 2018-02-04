@@ -13,10 +13,11 @@ export function fetchTopComments(group) {
     return async function (dispatch, getState) {
         try {
             const token = getState().authentication.token;
-            if(!getState().comments.groupCommentsOrder[group._id]){
+           let groupComments =  getState().comments.groupCommentsOrder[group._id];
+            if(!groupComments){
                 return;
             }
-            let response = await commentsApi.getGroupComments(group, token, 0, 10);
+            let response = await commentsApi.getGroupComments(group, token, groupComments[0], 'up');
             if (!getState().comments.loadingDone[group._id]) {
                 dispatch({
                     type: actions.GROUP_COMMENT_LOADING_DONE,
@@ -52,8 +53,11 @@ export function fetchTopComments(group) {
 async function refreshComments(dispatch,token,group,user) {
     try {
 
-        let response = await commentsApi.getGroupComments(group, token, 0, 10);
-
+        let response = await commentsApi.getGroupComments(group, token, groupComments[0], 'up');
+        let groupComments =  getState().comments.groupCommentsOrder[group._id];
+        if(!groupComments){
+            return;
+        }
         if (response.length > 0) {
             dispatch({
                 type: actions.UPSERT_GROUP_TOP_COMMENT,
@@ -80,7 +84,7 @@ export function sendMessage(groupId, message) {
         try {
             const token = getState().authentication.token;
             const user = getState().user.user;
-            const instanceId = getState().comments.lastInstanceId;
+            const instanceId = getState().comments.lastInstanceId[groupId];
 
             let messageItem = createMessage(message, user);
             dispatch({
@@ -88,11 +92,9 @@ export function sendMessage(groupId, message) {
                 groupId: groupId,
                 message: messageItem
             });
-            if(instanceId === 0){
-                commentsApi.createComment(groupId, undefined, message, token);
-            }else {
-                commentsApi.createComment(groupId, instanceId, message, token);
-            }
+
+            commentsApi.createComment(groupId, instanceId, message, token);
+
         } catch (error) {
             dispatch({
                 type: actions.NETWORK_IS_OFFLINE,
@@ -133,13 +135,14 @@ export function setNextFeeds(comments, group) {
             if (!user)
                 return;
 
+            const groupcomments = getState().comments.groupCommentsOrder[group._id];
+
             let response;
 
-            let commentsFromServer = comments.filter(comment => comment._id);
-            if (commentsFromServer && commentsFromServer.length > 0) {
-                response = await commentsApi.getGroupComments(group, token, commentsFromServer.length + 1, commentsFromServer.length + 10);
+            if (groupcomments && groupcomments.length > 0) {
+                response = await commentsApi.getGroupComments(group, token, groupcomments[groupcomments.length - 1], 'down');
             } else {
-                response = await commentsApi.getGroupComments(group, token, 0, 10);
+                response = await commentsApi.getGroupComments(group, token, 0, 'down');
             }
 
             if (!getState().comments.loadingDone[group._id]) {

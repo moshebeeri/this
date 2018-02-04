@@ -18,7 +18,7 @@ const groupPolicy = [
         label: strings.GroupIsOpen
     },
     {
-        value: 'CLOSED',
+        value: 'CLOSE',
         label: strings.GroupIsClosed
     }
 ]
@@ -70,7 +70,7 @@ class AddGroup extends Component {
                 images: '',
                 users: [],
                 selectedUsers: null,
-                groupPolocy: 'OPEN',
+                groupPolocy: '',
                 groupType: 'USERS',
                 path: '',
                 image: '',

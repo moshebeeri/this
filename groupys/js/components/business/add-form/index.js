@@ -29,8 +29,10 @@ class AddBusiness extends Component {
         if (props.navigation.state.params && props.navigation.state.params.item) {
             let item = props.navigation.state.params.item;
             let picture = null;
+            let source = null;
             if (item.pictures.length > 0 && item.pictures[0].pictures[1]) {
-                picture = item.pictures[0].pictures[1]
+                picture = item.pictures[0].pictures[1];
+                source = {uri: picture};
             }
             let category = item.category;
             if (!category) {
@@ -55,49 +57,46 @@ class AddBusiness extends Component {
                 tax_id: item.tax_id,
                 formID: '12345',
                 item: item,
-                hideIds:true,
+                hideIds: true,
                 category: category,
                 subcategory: subcategory,
                 categories: [Number(category), Number(subcategory)],
                 formData: {},
-                coverImage: {uri: picture},
+                coverImage: source,
             };
         } else {
-
             let categories = [];
-            if(templateBusiness.category){
+            if (templateBusiness.category) {
                 categories.push(Number(templateBusiness.category))
             }
-
-            if(templateBusiness.subcategory){
+            if (templateBusiness.subcategory) {
                 categories.push(Number(templateBusiness.subcategory))
             }
             let path = '';
-            if(templateBusiness.logoImage){
-                if(templateBusiness.logoImage.path) {
+            if (templateBusiness.logoImage) {
+                if (templateBusiness.logoImage.path) {
                     path = templateBusiness.logoImage.path;
-                }else{
+                } else {
                     path = templateBusiness.logoImage.uri;
                 }
             }
             let coverPath = '';
-            if(templateBusiness.image){
-                if(templateBusiness.image.path) {
+            if (templateBusiness.image) {
+                if (templateBusiness.image.path) {
                     coverPath = templateBusiness.image.path;
-                }else{
+                } else {
                     coverPath = templateBusiness.image.uri;
                 }
             }
-
             this.state = {
-                hideIds:false,
+                hideIds: false,
                 updateMode: false,
                 name: templateBusiness.name,
                 address: templateBusiness.address,
                 email: templateBusiness.email,
                 website: templateBusiness.website,
                 country: 'Israel',
-                city:templateBusiness.city,
+                city: templateBusiness.city,
                 state: '',
                 path: path,
                 image: templateBusiness.logoImage,
@@ -108,19 +107,19 @@ class AddBusiness extends Component {
                 tax_id: templateBusiness.tax_id,
                 formID: '12345',
                 userId: '',
-                category:templateBusiness.category,
-                subcategory:templateBusiness.subcategory,
+                category: templateBusiness.category,
+                subcategory: templateBusiness.subcategory,
                 categories: categories,
                 formData: {},
                 locations: {},
                 location: templateBusiness.location,
-                IdIdentifierImage:templateBusiness.IdIdentifierImage,
+                IdIdentifierImage: templateBusiness.IdIdentifierImage,
                 LetterOfIncorporationImage: templateBusiness.LetterOfIncorporationImage,
             };
         }
     }
 
-    componentWillMount(){
+    componentWillMount() {
         this.props.resetSave();
     }
 
@@ -176,10 +175,9 @@ class AddBusiness extends Component {
         if (value.name) {
             return;
         }
-        if(this.props.navigation && this.props.navigation.state && this.props.navigation.state.params && this.props.navigation.state.params.updating){
+        if (this.props.navigation && this.props.navigation.state && this.props.navigation.state.params && this.props.navigation.state.params.updating) {
             return;
         }
-
         if (value.website) {
             return;
         }
@@ -222,14 +220,13 @@ class AddBusiness extends Component {
         });
     }
 
-     validateForm(onValid) {
+    validateForm(onValid) {
         let result = true;
         Object.keys(this.refs).forEach(key => {
             let item = this.refs[key];
             if (this.refs[key].wrappedInstance) {
                 item = this.refs[key].wrappedInstance;
             }
-
             if (!item.isValid(onValid)) {
                 result = false;
             }
@@ -254,7 +251,8 @@ class AddBusiness extends Component {
             if (coverPic) {
                 return <View style={styles.business_upper_image_container}>
                     <ImagePicker logo ref={"logoImage"} mandatory
-                                 image={<Image resizeMode="cover" style={{width: 111, height: 105}} source={{uri: this.state.path}}/>}
+                                 image={<Image resizeMode="cover" style={{width: 111, height: 105}}
+                                               source={{uri: this.state.path}}/>}
                                  color='black' pickFromCamera
                                  setImage={this.setImage.bind(this)}/>
 
@@ -262,7 +260,8 @@ class AddBusiness extends Component {
             } else {
                 return <View style={styles.business_no_pic_no_cover_upper_image_container}>
                     <ImagePicker logo ref={"logoImage"} mandatory
-                                 image={<Image resizeMode="cover" style={{width: 111, height: 105}} source={{uri: this.state.path}}/>}
+                                 image={<Image resizeMode="cover" style={{width: 111, height: 105}}
+                                               source={{uri: this.state.path}}/>}
                                  color='black' pickFromCamera
                                  setImage={this.setImage.bind(this)}/>
 
@@ -295,7 +294,7 @@ class AddBusiness extends Component {
                 <View>
                     <Image
                         resizeMode="cover"
-                        style={{width: StyleUtils.getWidth(), height: 250,  alignSelf: 'stretch', borderColor: 'white'}}
+                        style={{width: StyleUtils.getWidth(), height: 250, alignSelf: 'stretch', borderColor: 'white'}}
                         source={{uri: this.state.coverImage.uri}}
                     >
 
@@ -318,8 +317,7 @@ class AddBusiness extends Component {
     }
 
     render() {
-        let saveOperation = this.state.updateMode? this.updateFormData.bind(this) : this.saveFormData.bind(this);
-
+        let saveOperation = this.state.updateMode ? this.updateFormData.bind(this) : this.saveFormData.bind(this);
         return (
             <View style={[styles.business_container, {width: StyleUtils.getWidth()}]}>
 
@@ -327,7 +325,7 @@ class AddBusiness extends Component {
                             navigation={this.props.navigation}
                             title={strings.AddBusiness} bgc="#FA8559"/>
 
-                <ScrollView keyboardShouldPersistTaps={true}contentContainerStyle={{
+                <ScrollView keyboardShouldPersistTaps={true} contentContainerStyle={{
                     justifyContent: 'center',
                     alignItems: 'center',
                 }} style={[styles.contentContainer, {width: StyleUtils.getWidth()}]}>
@@ -357,7 +355,8 @@ class AddBusiness extends Component {
                     <View style={[styles.inputTextLayout, {width: StyleUtils.getWidth() - 15}]}>
 
 
-                        <TextInput keyboardType={'email-address'} field={strings.Email} value={this.state.email} returnKeyType='next' ref="2"
+                        <TextInput keyboardType={'email-address'} field={strings.Email} value={this.state.email}
+                                   returnKeyType='next' ref="2"
                                    refNext="2"
                                    onSubmitEditing={this.focusNextField.bind(this, "3")}
                                    validateContent={FormUtils.validateEmail}
@@ -382,12 +381,14 @@ class AddBusiness extends Component {
                     </View>
 
                     {!this.state.hideIds && <View style={[styles.inputTextLayout, {width: StyleUtils.getWidth() - 15}]}>
-                        <DocumentPicker value={this.state.IdIdentifierImage} ref="id" isMandatory field={strings.IdIdentifier}
+                        <DocumentPicker value={this.state.IdIdentifierImage} ref="id" isMandatory
+                                        field={strings.IdIdentifier}
                                         setDocument={this.setIdDocument.bind(this)}/>
 
                     </View>}
                     {!this.state.hideIds && <View style={[styles.inputTextLayout, {width: StyleUtils.getWidth() - 15}]}>
-                        <DocumentPicker value={this.state.LetterOfIncorporationImage} ref="LetterOfIncorporation" isMandatory field={strings.LetterOfIncorporation}
+                        <DocumentPicker value={this.state.LetterOfIncorporationImage} ref="LetterOfIncorporation"
+                                        isMandatory field={strings.LetterOfIncorporation}
                                         setDocument={this.setLetterDocument.bind(this)}/>
 
                     </View>}
