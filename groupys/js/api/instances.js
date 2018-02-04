@@ -1,7 +1,7 @@
 import Timer from "./LogTimer";
 
 let timer = new Timer();
-
+import * as errors from './Errors'
 class InstanceApi {
     getInstance(token,instanceId) {
         return new Promise(async (resolve, reject) => {
@@ -24,7 +24,7 @@ class InstanceApi {
                 resolve(responseData);
             }
             catch (error) {
-                reject(error);
+                reject(errors.NETWORK_ERROR);
             }
         })
     }

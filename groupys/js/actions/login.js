@@ -5,12 +5,11 @@ import {NavigationActions} from "react-navigation";
 import store from "react-native-simple-store";
 import ContactApi from "../api/contacts";
 import ActionLogger from './ActionLogger'
-
+import  handler from './ErrorHandler'
 let contactApi = new ContactApi();
 let loginApi = new LoginApi();
 let userApi = new UserApi();
 let logger = new ActionLogger();
-
 const resetAction = NavigationActions.reset({
     index: 0,
     actions: [
@@ -28,7 +27,6 @@ export function login(phone, password, navigation) {
             let response = await loginApi.login(phone, password);
             if (response.token) {
                 await store.save("token", response.token)
-
                 dispatch({
                     type: actions.SAVE_USER_TOKEN,
                     token: response.token
@@ -47,9 +45,7 @@ export function login(phone, password, navigation) {
                     user: user
                 });
                 contactApi.syncContacts();
-
                 navigation.dispatch(resetAction);
-
             } else {
                 dispatch({
                     type: actions.LOGIN_FAILED,
@@ -65,9 +61,7 @@ export function login(phone, password, navigation) {
                 type: actions.LOGIN_PROCESS,
                 value: false
             });
-            dispatch({
-                type: actions.NETWORK_IS_OFFLINE,
-            });
+            handler.handleError(error, dispatch)
             logger.actionFailed('login')
         }
     }
@@ -76,7 +70,6 @@ export function login(phone, password, navigation) {
 export function signup(phone, password, firstName, lastName, navigation) {
     return async function (dispatch) {
         try {
-
             dispatch({
                 type: actions.SIGNUP_PROCESS,
                 value: true
@@ -104,17 +97,13 @@ export function signup(phone, password, firstName, lastName, navigation) {
                     type: actions.SIGNUP_FAILED,
                     message: 'invalid phone number'
                 });
-
             }
-
             dispatch({
                 type: actions.SIGNUP_PROCESS,
                 value: false
             });
         } catch (error) {
-            dispatch({
-                type: actions.NETWORK_IS_OFFLINE,
-            });
+            handler.handleError(error, dispatch)
             dispatch({
                 type: actions.SIGNUP_PROCESS,
                 value: false
@@ -167,7 +156,6 @@ export function verifyCode(code, navigation, resetAction) {
                     type: actions.REGISTER_CODE_SUCSSES,
                 });
                 navigation.dispatch(resetAction);
-
             } else {
                 dispatch({
                     type: actions.REGISTER_CODE_INVALID,
@@ -179,9 +167,7 @@ export function verifyCode(code, navigation, resetAction) {
                 value: false
             });
         } catch (error) {
-            dispatch({
-                type: actions.NETWORK_IS_OFFLINE,
-            });
+            handler.handleError(error, dispatch)
             dispatch({
                 type: actions.REGISTER_PROCESS,
                 value: false
@@ -198,9 +184,7 @@ export function forgetPassword(phoneNumber) {
                 loginApi.recoverPassword(phoneNumber)
             }
         } catch (error) {
-            dispatch({
-                type: actions.NETWORK_IS_OFFLINE,
-            });
+            handler.handleError(error, dispatch)
             logger.actionFailed('forgetPassword')
         }
     }

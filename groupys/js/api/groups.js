@@ -13,7 +13,7 @@ import Timer from "./LogTimer";
 
 let entityUtils = new EntityUtils();
 let timer = new Timer();
-
+import * as errors from './Errors'
 class GroupsApi {
     createGroup(group, callbackFunction, token) {
         return new Promise(async (resolve, reject) => {
@@ -45,8 +45,7 @@ class GroupsApi {
                 resolve(responseData);
             }
             catch (error) {
-                console.log('There has been a problem with your fetch operation: ' + error.message);
-                reject(error);
+                reject(errors.NETWORK_ERROR);
             }
         })
     }
@@ -77,8 +76,7 @@ class GroupsApi {
                 resolve(responseData);
             }
             catch (error) {
-                console.log('There has been a problem with your fetch operation: ' + error.message);
-                reject(error);
+                reject(errors.NETWORK_ERROR);
             }
         })
     }
@@ -112,8 +110,7 @@ class GroupsApi {
                 resolve(responseData);
             }
             catch (error) {
-                console.log('There has been a problem with your fetch operation: ' + error.message);
-                reject(error);
+                reject(errors.NETWORK_ERROR);
             }
         })
     }
@@ -140,8 +137,7 @@ class GroupsApi {
                 resolve(responseData);
             }
             catch (error) {
-                console.log('There has been a problem with your fetch operation: ' + error.message);
-                reject(error);
+                reject(errors.NETWORK_ERROR);
             }
         })
     }
@@ -166,7 +162,7 @@ class GroupsApi {
                 resolve(true);
             }
             catch (error) {
-                reject(error);
+                reject(errors.NETWORK_ERROR);
             }
         })
     }
@@ -192,8 +188,7 @@ class GroupsApi {
                 resolve(responseData);
             }
             catch (error) {
-                console.log('There has been a problem with your fetch operation: ' + error.message);
-                reject(error);
+                reject(errors.NETWORK_ERROR);
             }
         })
     }
@@ -219,8 +214,7 @@ class GroupsApi {
                 resolve(responseData);
             }
             catch (error) {
-                console.log('There has been a problem with your fetch operation: ' + error.message);
-                reject(error);
+                reject(errors.NETWORK_ERROR);
             }
         })
     }
@@ -246,8 +240,7 @@ class GroupsApi {
                 resolve(responseData);
             }
             catch (error) {
-                console.log('There has been a problem with your fetch operation: ' + error.message);
-                reject(error);
+                reject(errors.NETWORK_ERROR);
             }
         })
     }
@@ -272,8 +265,7 @@ class GroupsApi {
                 resolve(true)
             }
             catch (error) {
-                console.log('There has been a problem with your fetch operation: ' + error.message);
-                reject(error);
+                reject(errors.NETWORK_ERROR);
             }
         })
     }
@@ -297,8 +289,7 @@ class GroupsApi {
                 resolve(true)
             }
             catch (error) {
-                console.log('There has been a problem with your fetch operation: ' + error.message);
-                reject(error);
+                reject(errors.NETWORK_ERROR);
             }
         })
     }
@@ -327,8 +318,7 @@ class GroupsApi {
                 resolve(true)
             }
             catch (error) {
-                console.log('There has been a problem with your fetch operation');
-                reject('Failed to deliver message');
+                reject(errors.NETWORK_ERROR);
             }
         })
     }
@@ -354,8 +344,7 @@ class GroupsApi {
                 resolve(responseData);
             }
             catch (error) {
-                console.log('There has been a problem with your fetch operation: ' + error.message);
-                reject(error);
+                reject(errors.NETWORK_ERROR);
             }
         })
     }

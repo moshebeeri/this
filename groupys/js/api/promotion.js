@@ -10,7 +10,7 @@ import Timer from "./LogTimer";
 
 let entityUtils = new EntityUtils();
 let timer = new Timer();
-
+import * as errors from './Errors'
 class PromotionApi {
     createPromotion(promotion, token) {
         return new Promise(async (resolve, reject) => {
@@ -41,8 +41,7 @@ class PromotionApi {
                 resolve(responseData);
             }
             catch (error) {
-                console.log('There has been a problem with your fetch operation: ');
-                reject('failed');
+                reject(errors.NETWORK_ERROR);
             }
         })
     }
@@ -74,8 +73,7 @@ class PromotionApi {
                 resolve(responseData);
             }
             catch (error) {
-                console.log('There has been a problem with your fetch operation: ');
-                reject('failed');
+                reject(errors.NETWORK_ERROR);
             }
         })
     }
@@ -102,8 +100,7 @@ class PromotionApi {
                 resolve(responseData);
             }
             catch (error) {
-                console.log('There has been a problem with your fetch operation: ');
-                reject('failed');
+                reject(errors.NETWORK_ERROR);
             }
         })
     }
@@ -129,8 +126,7 @@ class PromotionApi {
                 resolve(responseData);
             }
             catch (error) {
-                console.log('There has been a problem with your fetch operation: ');
-                reject('failed');
+                reject(errors.NETWORK_ERROR);
             }
         })
     }
@@ -165,8 +161,7 @@ class PromotionApi {
 
             }
             catch (error) {
-                console.log('There has been a problem with your fetch operation: ');
-                reject('failed');
+                reject(errors.NETWORK_ERROR);
             }
         })
     }
@@ -192,8 +187,7 @@ class PromotionApi {
                 resolve(responseData);
             }
             catch (error) {
-                console.log('There has been a problem with your fetch operation: ');
-                reject('failed');
+                reject(errors.NETWORK_ERROR);
             }
         })
     }
@@ -220,8 +214,7 @@ class PromotionApi {
                 resolve(responseData);
             }
             catch (error) {
-                console.log('There has been a problem with your fetch operation: ' + error.message);
-                reject(error);
+                reject(errors.NETWORK_ERROR);
             }
         })
     }
@@ -248,8 +241,7 @@ class PromotionApi {
                 resolve(responseData);
             }
             catch (error) {
-                console.log('There has been a problem with your fetch operation: ' + error.message);
-                reject(error);
+                reject(errors.NETWORK_ERROR);
             }
         })
     }
@@ -275,8 +267,7 @@ class PromotionApi {
                 resolve(responseData);
             }
             catch (error) {
-                console.log('There has been a problem with your fetch operation: ' + error.message);
-                reject(error);
+                reject(errors.NETWORK_ERROR);
             }
         })
     }

@@ -4,6 +4,7 @@ import UserApi from "../api/user";
 let userApi = new UserApi();
 import ActionLogger from './ActionLogger'
 let logger = new ActionLogger();
+import  handler from './ErrorHandler'
 
 export function saveRole(user, businessId, userRole, navigation) {
     return async function (dispatch, getState) {
@@ -38,9 +39,7 @@ export function saveRole(user, businessId, userRole, navigation) {
             });
             navigation.goBack();
         } catch (error) {
-            dispatch({
-                type: actions.NETWORK_IS_OFFLINE,
-            });
+            handler.handleError(error,dispatch)
             logger.actionFailed('userRole-saveRole')
         }
     }
@@ -77,9 +76,7 @@ export function search(phoneNumber) {
                 show: false,
             });
         } catch (error) {
-            dispatch({
-                type: actions.NETWORK_IS_OFFLINE,
-            });
+            handler.handleError(error,dispatch)
             logger.actionFailed('userRole-search')
         }
     }

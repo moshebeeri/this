@@ -1,7 +1,7 @@
 import Timer from "./LogTimer";
 
 let timer = new Timer();
-
+import * as errors from './Errors'
 class NotificationApi {
     getAll(token, user, skip, limit) {
         return new Promise(async (resolve, reject) => {
@@ -24,7 +24,7 @@ class NotificationApi {
                 resolve(responseData);
             }
             catch (error) {
-                reject(error);
+                reject(errors.NETWORK_ERROR);
             }
         })
     }
@@ -50,7 +50,7 @@ class NotificationApi {
                 resolve(responseData);
             }
             catch (error) {
-                reject(error);
+                reject(errors.NETWORK_ERROR);
             }
         })
     }
@@ -88,7 +88,7 @@ class NotificationApi {
                 resolve(responseData);
             }
             catch (error) {
-                reject(error);
+                reject(errors.NETWORK_ERROR);
             }
         })
     }

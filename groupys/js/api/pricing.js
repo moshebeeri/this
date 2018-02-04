@@ -1,7 +1,7 @@
 import Timer from "./LogTimer";
 
 let timer = new Timer();
-
+import * as errors from './Errors'
 class PricingApi {
     checkoutNew( token) {
         return new Promise(async (resolve, reject) => {
@@ -24,7 +24,7 @@ class PricingApi {
                 resolve(responseData);
             }
             catch (error) {
-                reject(error);
+                reject(errors.NETWORK_ERROR);
             }
         })
     }
@@ -50,7 +50,7 @@ class PricingApi {
                 resolve(responseData);
             }
             catch (error) {
-                reject(error);
+                reject(errors.NETWORK_ERROR);
             }
         })
     }
@@ -75,7 +75,7 @@ class PricingApi {
                 resolve(responseData);
             }
             catch (error) {
-                reject(error);
+                reject(errors.NETWORK_ERROR);
             }
         })
     }
@@ -102,7 +102,7 @@ class PricingApi {
                 resolve(responseData);
             }
             catch (error) {
-                reject(error);
+                reject(errors.NETWORK_ERROR);
             }
         })
     }

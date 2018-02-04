@@ -7,6 +7,7 @@ import ActionLogger from './ActionLogger'
 let userApi = new UserApi();
 let loginApi = new LoginAPI();
 let logger = new ActionLogger();
+import  handler from './ErrorHandler'
 
 async function getUser(dispatch, token) {
     try {
@@ -21,9 +22,7 @@ async function getUser(dispatch, token) {
             user: user
         })
     } catch (error) {
-        dispatch({
-            type: actions.NETWORK_IS_OFFLINE,
-        });
+         handler.handleError(error,dispatch)
         logger.actionFailed('users-getUser')
     }
 }
@@ -36,9 +35,7 @@ async function getUserFollowers(dispatch, token) {
             followers: users
         });
     } catch (error) {
-        dispatch({
-            type: actions.NETWORK_IS_OFFLINE,
-        });
+         handler.handleError(error,dispatch)
         logger.actionFailed('users-getUserFollowers')
     }
 }
@@ -173,9 +170,7 @@ export function resetPasswordForm() {
         }
 
     } catch (error) {
-        dispatch({
-            type: actions.NETWORK_IS_OFFLINE,
-        });
+         handler.handleError(error,dispatch)
         logger.actionFailed('users-updateUserLocale')
     }
 }
@@ -206,9 +201,7 @@ async function updateUserToken(dispatch, token,user,fireBaseToken) {
         }
 
     } catch (error) {
-        dispatch({
-            type: actions.NETWORK_IS_OFFLINE,
-        });
+         handler.handleError(error,dispatch)
         logger.actionFailed('users-updateUserToken')
     }
 }

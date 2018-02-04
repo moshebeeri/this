@@ -1,5 +1,5 @@
 import store from "react-native-simple-store";
-
+import * as errors from './Errors'
 class LoginApi {
     clean_phone_number(number) {
         // remove all non digits, and then remove 0 if it is the first digit
@@ -30,8 +30,7 @@ class LoginApi {
                 resolve(responseData);
             }
             catch (error) {
-                console.log('There has been a problem with your fetch operation: ' + error.message);
-                reject({error: 'Login Failed '});
+                reject(errors.NETWORK_ERROR);
             }
         })
     }
@@ -70,8 +69,7 @@ class LoginApi {
                 resolve(responseData);
             }
             catch (error) {
-                console.log('There has been a problem with your fetch operation: ' + error.message);
-                reject({error: 'signup Failed '});
+                reject(errors.NETWORK_ERROR);
             }
         })
     }
@@ -99,8 +97,7 @@ class LoginApi {
                 resolve(result);
             }
             catch (error) {
-                console.log('There has been a problem with your fetch operation: ' + error.message);
-                reject({error: 'signup Failed '});
+                reject(errors.NETWORK_ERROR);
             }
         })
     }
@@ -124,7 +121,7 @@ class LoginApi {
                 resolve(responseData);
             }
             catch (error) {
-                reject({error: 'signup Failed '});
+                reject(errors.NETWORK_ERROR);
             }
         })
     }
@@ -154,7 +151,7 @@ class LoginApi {
                 });
             }
             catch (error) {
-                reject({error: 'failed to change password '});
+                reject(errors.NETWORK_ERROR);
             }
         })
     }

@@ -4,7 +4,7 @@
 
 let Contacts = require('react-native-contacts');
 let store = require('react-native-simple-store');
-
+import * as errors from './Errors'
 class ContactsApi {
     async addAllContacts(token, userId) {
         Contacts.getAll((err, contacts) => {
@@ -73,7 +73,7 @@ class ContactsApi {
                 body: json
             });
         } catch (error) {
-            console.log(error);
+            reject(errors.NETWORK_ERROR);
         }
     }
 
@@ -95,8 +95,7 @@ class ContactsApi {
                     resolve(true);
                 }
                 catch (error) {
-                    console.log('There has been a problem with your fetch operation: ' + error.message);
-                    reject(error);
+                    reject(errors.NETWORK_ERROR);
                 }
             }
         })

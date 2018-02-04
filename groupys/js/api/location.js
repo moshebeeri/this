@@ -1,5 +1,5 @@
 import store from "react-native-simple-store";
-
+import * as errors from './Errors'
 class LocationApi {
     sendLocation(lng, lat, time, speed) {
         return new Promise(async (resolve, reject) => {
@@ -31,7 +31,7 @@ class LocationApi {
                 resolve(responseData);
             }
             catch (error) {
-                reject(error);
+                reject(errors.NETWORK_ERROR);
             }
         })
     }

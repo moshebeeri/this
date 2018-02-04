@@ -2,6 +2,7 @@ import store from 'react-native-simple-store';
 import Timer from './LogTimer'
 
 let timer = new Timer();
+import * as errors from './Errors'
 import FormUtils from "../utils/fromUtils";
 class ProductsApi {
     getAll(token) {
@@ -25,8 +26,7 @@ class ProductsApi {
                 resolve(responseData);
             }
             catch (error) {
-                console.log('There has been a problem with your fetch operation: ' + error.message);
-                reject(error);
+                reject(errors.NETWORK_ERROR);
             }
         })
     }
@@ -52,8 +52,7 @@ class ProductsApi {
                 resolve(responseData);
             }
             catch (error) {
-                console.log('There has been a problem with your fetch operation: ');
-                reject(error);
+                reject(errors.NETWORK_ERROR);
             }
         })
     }
@@ -80,8 +79,7 @@ class ProductsApi {
                 resolve(responseData);
             }
             catch (error) {
-                console.log('There has been a problem with your fetch operation: ' + error.message);
-                reject(error);
+                reject(errors.NETWORK_ERROR);
             }
         })
     }

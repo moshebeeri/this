@@ -8,6 +8,7 @@ let promotionApi = new PromotionsApi();
 let productApi = new ProductApi();
 let entityUtils = new EntityUtils();
 let logger = new ActionLogger();
+import  handler from './ErrorHandler'
 
 async function getAll(dispatch, id, token,loading) {
     try {
@@ -25,9 +26,7 @@ async function getAll(dispatch, id, token,loading) {
             });
         }
     } catch (error) {
-        dispatch({
-            type: actions.NETWORK_IS_OFFLINE,
-        });
+        handler.handleError(error,dispatch)
         logger.actionFailed('promotions-getAll')
     }
 }
@@ -46,9 +45,7 @@ async function getAllProducts(dispatch, id, token,loading) {
         }
 
     } catch (error) {
-        dispatch({
-            type: actions.NETWORK_IS_OFFLINE,
-        });
+        handler.handleError(error,dispatch)
         logger.actionFailed('promotions-getAllProducts')
     }
 }
@@ -197,9 +194,7 @@ async function fetchPromotionById(id, token, dispatch) {
         });
 
     } catch (error) {
-        dispatch({
-            type: actions.NETWORK_IS_OFFLINE,
-        });
+        handler.handleError(error,dispatch)
         logger.actionFailed('promotions-fetchPromotionById')
     }
 }

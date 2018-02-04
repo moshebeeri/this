@@ -8,6 +8,7 @@ let userApi = new UserApi();
 let businessApi = new BusinessApi();
 let promotionApi = new PromotionApi();
 let logger = new ActionLogger();
+import  handler from './ErrorHandler'
 
 export function scanResult(barcode, businessAssign) {
     return async function (dispatch, getState) {
@@ -73,9 +74,7 @@ export function scanResult(barcode, businessAssign) {
             }
         }
         catch (error) {
-            dispatch({
-                type: actions.NETWORK_IS_OFFLINE,
-            });
+            handler.handleError(error,dispatch)
             logger.actionFailed('scanner-scanResult')
         }
     }
@@ -88,9 +87,7 @@ export function realizePromotion(code) {
             dispatch({type: actions.SCANNER_RESET});
             await promotionApi.realizePromotion(code, token)
         } catch (error) {
-            dispatch({
-                type: actions.NETWORK_IS_OFFLINE,
-            });
+            handler.handleError(error,dispatch)
             logger.actionFailed('scanner-realizePromotion')
         }
     }
@@ -109,9 +106,7 @@ export function followBusiness(businessId) {
             const token = getState().authentication.token;
             await businessApi.followBusiness(businessId, token);
         } catch (error) {
-            dispatch({
-                type: actions.NETWORK_IS_OFFLINE,
-            });
+            handler.handleError(error,dispatch)
             logger.actionFailed('scanner-followBusiness')
         }
     }
@@ -124,9 +119,7 @@ export function groupFollowBusiness(groupid, businessId) {
             const token = getState().authentication.token;
             await businessApi.groupFollowBusiness(groupid, businessId, token);
         } catch (error) {
-            dispatch({
-                type: actions.NETWORK_IS_OFFLINE,
-            });
+            handler.handleError(error,dispatch)
             logger.actionFailed('scanner-groupFollowBusiness')
         }
     }

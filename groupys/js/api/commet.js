@@ -1,5 +1,5 @@
 import Timer from "./LogTimer";
-
+import * as errors from './Errors'
 let timer = new Timer();
 
 class CommentApi {
@@ -35,8 +35,7 @@ class CommentApi {
             }
             catch (error) {
 
-                // console.log('There has been a problem with your fetch operation: ' + error.message);
-                reject(error);
+                reject(errors.NETWORK_ERROR);
             }
         });
     }
@@ -68,8 +67,7 @@ class CommentApi {
             }
             catch (error) {
 
-                // console.log('There has been a problem with your fetch operation: ' + error.message);
-                reject(error);
+                reject(errors.NETWORK_ERROR);
             }
         });
     }
@@ -99,8 +97,7 @@ class CommentApi {
             }
             catch (error) {
 
-                // console.log('There has been a problem with your fetch operation: ' + error.message);
-                reject(error);
+                reject(errors.NETWORK_ERROR);
             }
         });
     }
@@ -127,8 +124,7 @@ class CommentApi {
             }
             catch (error) {
 
-                // console.log('There has been a problem with your fetch operation: ' + error.message);
-                reject(error);
+                reject(errors.NETWORK_ERROR);
             }
         });
     }
@@ -161,7 +157,7 @@ class CommentApi {
                 resolve(responseData);
             }
             catch (error) {
-                reject(error);
+                reject(errors.NETWORK_ERROR);
             }
         });
     }

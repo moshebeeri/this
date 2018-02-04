@@ -4,7 +4,8 @@ import * as actions from "../reducers/reducerActions";
 let commentsApi = new CommentsApi();
 import ActionLogger from './ActionLogger'
 let logger = new ActionLogger();
-
+import * as errors from '../api/Errors'
+import  handler from './ErrorHandler'
 async function getInstanceGroupComments(dispatch, group, instance, size, token) {
     try {
         let response = await commentsApi.getInstanceGroupComments(group, instance, size, token);
@@ -17,9 +18,7 @@ async function getInstanceGroupComments(dispatch, group, instance, size, token) 
             });
         }
     } catch (error) {
-        dispatch({
-            type: actions.NETWORK_IS_OFFLINE,
-        });
+        handler.handleError(error,dispatch)
         logger.actionFailed('getInstanceGroupComments');
     }
 }
@@ -35,9 +34,7 @@ async function getGroupComments(dispatch, group, token) {
             });
         }
     } catch (error) {
-        dispatch({
-            type: actions.NETWORK_IS_OFFLINE,
-        });
+        handler.handleError(error,dispatch)
         logger.actionFailed('getGroupComments');
     }
 }
@@ -51,9 +48,7 @@ async function getEntityComments(dispatch, entities, id, token) {
             id: id,
         });
     } catch (error) {
-        dispatch({
-            type: actions.NETWORK_IS_OFFLINE,
-        });
+        handler.handleError(error,dispatch)
         logger.actionFailed('getComment');
     }
 }
@@ -143,9 +138,11 @@ export function setNextFeeds(comments, token, group) {
                 }))
             }
         } catch (error) {
-            dispatch({
-                type: actions.NETWORK_IS_OFFLINE,
-            });
+            if(error === errors.NETWORK_ERROR) {
+                dispatch({
+                    type: actions.NETWORK_IS_OFFLINE,
+                });
+            }
             logger.actionFailed('getGroupComments');
         }
     }

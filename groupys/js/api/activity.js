@@ -1,4 +1,5 @@
 import Timer from "./LogTimer";
+import * as errors from './Errors'
 
 let timer = new Timer();
 
@@ -24,7 +25,7 @@ class ActivityApi {
                 resolve(responseData);
             }
             catch (error) {
-                reject(error);
+                reject(errors.NETWORK_ERROR);
             }
         })
     }
@@ -50,7 +51,7 @@ class ActivityApi {
                 resolve(responseData);
             }
             catch (error) {
-                reject(error);
+                reject(errors.NETWORK_ERROR);
             }
         })
     }

@@ -4,7 +4,7 @@
 import Timer from "./LogTimer";
 
 let timer = new Timer();
-
+import * as errors from './Errors'
 class FeedApi {
     clean_phone_number(number) {
         // remove all non digits, and then remove 0 if it is the first digit
@@ -33,7 +33,7 @@ class FeedApi {
                 resolve(responseData);
             }
             catch (error) {
-                reject(error);
+                reject(errors.NETWORK_ERROR);
             }
         })
     }
@@ -59,7 +59,7 @@ class FeedApi {
                 resolve(responseData);
             }
             catch (error) {
-                reject(error);
+                reject(errors.NETWORK_ERROR);
             }
         })
     }

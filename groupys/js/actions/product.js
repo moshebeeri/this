@@ -7,6 +7,7 @@ import ActionLogger from './ActionLogger'
 let productApi = new ProdictApi();
 let entityUtils = new EntityUtils();
 let logger = new ActionLogger();
+import  handler from './ErrorHandler'
 
 async function getAllByBusinessId(dispatch, id, token) {
     try {
@@ -19,9 +20,7 @@ async function getAllByBusinessId(dispatch, id, token) {
             });
         }
     } catch (error) {
-        dispatch({
-            type: actions.NETWORK_IS_OFFLINE,
-        });
+        handler.handleError(error,dispatch)
         logger.actionFailed('product-getAllByBusinessId')
     }
 }
@@ -40,9 +39,7 @@ async function getProductCategories(dispatch, gid, token) {
             }
         }
     } catch (error) {
-        dispatch({
-            type: actions.NETWORK_IS_OFFLINE,
-        });
+        handler.handleError(error,dispatch)
         logger.actionFailed('product-getProductCategories')
     }
 }
@@ -100,9 +97,7 @@ export function saveProduct(product,businessId,navigation) {
             });
             navigation.goBack();
         } catch (error) {
-            dispatch({
-                type: actions.NETWORK_IS_OFFLINE,
-            });
+            handler.handleError(error,dispatch)
             logger.actionFailed('product-saveProduct')
         }
     }

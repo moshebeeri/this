@@ -13,6 +13,7 @@ import Timer from "./LogTimer";
 
 let entityUtils = new EntityUtils();
 let timer = new Timer();
+import * as errors from './Errors'
 
 class PostApi {
     createPost(post, callbackFunction, token) {
@@ -48,8 +49,7 @@ class PostApi {
                 resolve(responseData);
             }
             catch (error) {
-                console.log('There has been a problem with your fetch operation: ' + error.message);
-                reject(error);
+                reject(errors.NETWORK_ERROR);
             }
         })
     }
@@ -75,7 +75,7 @@ class PostApi {
                 resolve(responseData);
             }
             catch (error) {
-                reject(error);
+                reject(errors.NETWORK_ERROR);
             }
         })
     }
