@@ -104,6 +104,17 @@ export default class PercentComponent extends Component {
 
     selectPromotionType(value) {
         if (value) {
+            if (value === 'GLOBAL') {
+                this.selectProduct(undefined);
+                this.props.setState(
+                    {
+                        percent: {
+                            retail_price: '',
+                        },
+                    }
+                )
+            }
+
             this.props.setState({
                 discount_on: value,
                 choose_distribution: true
