@@ -90,7 +90,7 @@ export default class PunchCardComponent extends Component {
                 <View style={styles.inputPrecenComponent}>
                     <TextInput field={strings.NumberOfPunches} value={numberOfPunches}
                                returnKeyType='next' ref="2" refNext="2"
-                               keyboardType='numeric'
+                               keyboardType='done'
                                validateContent={FormUtils.validatePuches}
                                onChangeText={(value) => this.setPunchCard(value)} isMandatory={true}/>
                 </View>

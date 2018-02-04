@@ -136,7 +136,7 @@ export default class XPlusYOffComponent extends Component {
 
                 <View style={styles.inputPrecenComponent}>
                     <TextInput field={strings.PercentageOff} value={discount}
-                               returnKeyType='next' ref="2" refNext="2"
+                               returnKeyType='done' ref="2" refNext="2"
                                keyboardType='numeric'
                                validateContent={FormUtils.validatePercent}
                                onChangeText={(value) => this.setOff(value)} isMandatory={true}/>

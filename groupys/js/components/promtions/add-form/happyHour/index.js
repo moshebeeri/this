@@ -217,7 +217,7 @@ export default class HappyHourComponent extends Component {
                 </View>
                 <View style={styles.inputPrecenComponent}>
                     <TextInput field={strings.NumberOfHours} value={this.state.numberOfHours}
-                               returnKeyType='next' ref="off" refNext="off"
+                               returnKeyType='done' ref="off" refNext="off"
                                keyboardType='numeric'
                                onChangeText={(value) => this.setUntil(value)} isMandatory={true}/>
 
