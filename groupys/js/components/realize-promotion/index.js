@@ -41,6 +41,7 @@ export default class RealizePromotion extends Component {
 
     render() {
         let item = this.props.navigation.state.params.item;
+
         return (
         <ScrollView>
             <View style={{flex: 1, justifyContent: 'center', alignItems: 'center'}}>
@@ -49,7 +50,7 @@ export default class RealizePromotion extends Component {
                                 businessName={item.businessName}/>
 
 
-                <PromotionColumnHeader columnStyle type={item.promotion} feed titleText={item.promotionTitle}
+                <PromotionColumnHeader item={item} columnStyle type={item.promotion} feed = {true} titleText={item.promotionTitle}
                                        titleValue={item.promotionValue} term={item.promotionTerm}/>
 
 

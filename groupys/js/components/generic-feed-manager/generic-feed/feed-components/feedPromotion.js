@@ -51,7 +51,7 @@ export default class FeedPromotion extends Component {
     }
 
     render() {
-        const {showInPopup, showActions, item, save, shared, like, unlike, showUsers, comment, token, location, hideSocial, realize,navigation} = this.props;
+        const {showInPopup, showActions, item, save, shared, like, unlike, showUsers, comment, token, location, hideSocial, realize,navigation,scanner} = this.props;
         const styles = this.createPromotionStyle();
         const image = this.createImageComponent(item, styles);
         const container = this.createContainerStyle(item);
@@ -74,6 +74,9 @@ export default class FeedPromotion extends Component {
             categoruTitle = item.business.categoryTitle;
         }
 
+
+
+
         const result =
             <InViewPort onChange={this.visited.bind(this)} style={container}>
                 <View style={[styles.promotion_card, {width: StyleUtils.getWidth()}]}>
@@ -89,14 +92,20 @@ export default class FeedPromotion extends Component {
 
                     {image}
 
-
-                    <View style={{width: StyleUtils.getWidth(), backgroundColor: 'white'}}>
+                    {!scanner ?   <View style={{width: StyleUtils.getWidth(), backgroundColor: 'white'}}>
                         <View style={[promotaionDesc, {backgroundColor:'white',width: StyleUtils.getWidth()}]}>
                             <PromotionHeader item={item} type={item.promotion} feed titleText={item.promotionTitle}
                                              titleValue={item.promotionValue} term={item.promotionTerm}/>
                         </View>
 
-                    </View>
+                    </View> :
+                        <View style={{ flex: 1,
+                            alignItems: 'center',
+                            justifyContent: 'center',}}>
+                    <PromotionHeader item={item} type={item.promotion} feed titleText={item.promotionTitle}
+                                     titleValue={item.promotionValue} term={item.promotionTerm}/>
+                        </View>}
+
                     <View style={ {marginBottom:10,alignItems:'center',justifyContent:'center',backgroundColor:'white',width: StyleUtils.getWidth()}}>
                         <Text numberOfLines={2} style={{marginRight: 10, marginLeft: 10, fontSize: 18}}>{item.name}
                             - {item.description}</Text>
@@ -129,7 +138,6 @@ export default class FeedPromotion extends Component {
                         </View>
                         }
                     </View>}
-
 
                     {!hideSocial &&
                     <View style={[styles.promotion_bottomContainer, {width: StyleUtils.getWidth()}]}>

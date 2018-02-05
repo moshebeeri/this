@@ -74,6 +74,16 @@ export default class BusinessFollow extends Component {
         }
 
 
+        let comnfirmLastPunc = false;
+        if(instance){
+            if(instance.promotion ==='PUNCH_CARD'){
+                let missingPunches = instance.punches - instance.realizedPunches;
+                if(missingPunches === 1){
+                    comnfirmLastPunc = true;
+                }
+            }
+        }
+
         return ( <View style={styles.follow_container}>
 
                 {cameraOn && <View style={styles.payment_camera_container}><Camera
@@ -110,15 +120,16 @@ export default class BusinessFollow extends Component {
                 {instance &&
                 <View style={{flex:1,  }}>
                     <View style={{flex:3,  }}>
-                    <FeedPromotion  refresh={this.refresh.bind(this)}
+                    <FeedPromotion scanner={true} refresh={this.refresh.bind(this)}
 
-                                   navigation={navigation} item={instance}
+                                   hideSocial={true} navigation={navigation} item={instance}
 
                     />
                     </View>
                     <View style={{flex:1, alignItems:'center' }}>
                         <View>
-                        <SubmitButton color={'#2db6c8'} title={strings.Confirm.toUpperCase()} onPress={() => realizePromotion(code)}/>
+                            {comnfirmLastPunc ? <SubmitButton width={200} color={'#2db6c8'} title={strings.ConfirmLast.toUpperCase()} onPress={() => realizePromotion(code)}/> :
+                                <SubmitButton color={'#2db6c8'} title={strings.Confirm.toUpperCase()} onPress={() => realizePromotion(code)}/>}
                         </View>
                     </View>
                 </View>

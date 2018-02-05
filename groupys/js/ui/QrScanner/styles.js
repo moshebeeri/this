@@ -61,6 +61,7 @@ module.exports = {
     follow_container: {
         height: height,
         width:width,
+        backgroundColor:'white'
     },
     follow_search: {
         height: 50,

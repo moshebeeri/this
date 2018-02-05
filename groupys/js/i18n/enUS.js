@@ -161,7 +161,6 @@ XNOFFTitle                                    : "Buy X get Y with Discount",
 XYPattern                                     : "Buy {0} {1} Get {2} {3} free",
 XYTitle                                       : "Buy X get Y",
 HappyHourTerm                                 : "Every {0} happy hour from  {1} - {2} get special price for {3}",
-punchCardTerm                                 : "Punch Card {0} Slots",
 Logo                                          : "logo",
 SelectSubCategory                             : "Select Sub Category",
 Category                                      : "Category",
@@ -244,7 +243,8 @@ UpdateGroup                                   : "Update Group",
 InvalidValidationCode                         : "Invalid Validation Code",
 OldPasswordValidationFailed                   : "Old Password Validation Failed",
 invalidPhoneNumber                            : "invalid Phone Number",
-
+punchCardTerm                                 : "Punch Card {0} Slots - Get {1} For Free",
+ConfirmLast                                   : "Confirm Last Punch",
 
 
 

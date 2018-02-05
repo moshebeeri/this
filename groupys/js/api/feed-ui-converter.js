@@ -260,6 +260,7 @@ class FeedConverter {
             responseFeed.id = id;
             responseFeed.fid = id;
             responseFeed.key = id;
+            responseFeed.promotionItem = promotion;
             responseFeed.location = instance.location;
             responseFeed.name = instance.promotion.name;
             responseFeed.description = instance.promotion.description;
@@ -354,7 +355,7 @@ class FeedConverter {
                     let punches = promotion.punch_card.values[0].number_of_punches;
                     responseFeed.promotionTerm = punches;
                     responseFeed.itemTitle = '';
-                    responseFeed.promotionTitle = strings.punchCardTerm.formatUnicorn(punches);
+                    responseFeed.promotionTitle = strings.punchCardTerm.formatUnicorn(punches,promotion.condition.product.name);
                     responseFeed.punches = punches;
                     responseFeed.quantity = promotion.punch_card.quantity;
                     responseFeed.promotion = 'PUNCH_CARD';
@@ -516,7 +517,7 @@ class FeedConverter {
                     let punches = promotion.punch_card.values[0].number_of_punches;
                     responseFeed.promotionTerm = punches;
                     responseFeed.itemTitle = '';
-                    responseFeed.promotionTitle = strings.punchCardTerm.formatUnicorn(punches);
+                    responseFeed.promotionTitle = strings.punchCardTerm.formatUnicorn(punches,promotion.condition.product.name);
                     responseFeed.punches = punches;
                     responseFeed.quantity = promotion.punch_card.quantity;
                     responseFeed.promotion = 'PUNCH_CARD';
@@ -635,7 +636,7 @@ class FeedConverter {
                 let punches = promotion.punch_card.values[0].number_of_punches;
                 response.promotionTerm = punches;
                 response.itemTitle = '';
-                response.promotionTitle = strings.punchCardTerm.formatUnicorn(punches);
+                response.promotionTitle = strings.punchCardTerm.formatUnicorn(punches,promotion.condition.product.name);
                 response.punches = punches;
                 response.quantity = promotion.punch_card.quantity;
                 response.promotion = 'PUNCH_CARD';
