@@ -25,7 +25,11 @@ export default class RealizePromotion extends Component {
     }
 
     async componentWillMount() {
-        let qrCode = await promotionApi.getPromotionQrcode(this.props.navigation.state.params.item.id);
+        let id = this.props.navigation.state.params.item.id;
+        if(this.props.navigation.state.params.id){
+            id = this.props.navigation.state.params.id;
+        }
+        let qrCode = await promotionApi.getPromotionQrcode(id);
         this.setState({
             image: qrCode
         })
@@ -63,12 +67,13 @@ export default class RealizePromotion extends Component {
                 }}>
                     <Text>{strings.RealizeMessage1}</Text>
                     <Text>{strings.RealizeMessage2}</Text>
+                    {this.state.image &&
                     <Image style={{
                         width: 300,
                         height: 300,
                         resizeMode: Image.resizeMode.contain,
                     }} source={{uri: this.state.image.qrcode}}/>
-
+                    }
                 </View>
             </View>
 

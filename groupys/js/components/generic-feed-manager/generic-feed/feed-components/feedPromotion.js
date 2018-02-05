@@ -51,7 +51,7 @@ export default class FeedPromotion extends Component {
     }
 
     render() {
-        const {showInPopup, showActions, item, save, shared, like, unlike, showUsers, comment, token, location, hideSocial, realize} = this.props;
+        const {showInPopup, showActions, item, save, shared, like, unlike, showUsers, comment, token, location, hideSocial, realize,navigation} = this.props;
         const styles = this.createPromotionStyle();
         const image = this.createImageComponent(item, styles);
         const container = this.createContainerStyle(item);
@@ -119,7 +119,7 @@ export default class FeedPromotion extends Component {
                         {save &&
                         <View style={styles.editButtonContainer}>
                             <SubmitButton disabledText={strings.Claimed.toUpperCase()} title={strings.Claim.toUpperCase()} color={'#2db6c8'}
-                                          disabled={claimDisabled} onPress={() => save(item.id)}/>
+                                          disabled={claimDisabled} onPress={() => save(item.id,navigation,item)}/>
                         </View>
                         }
                         {realize &&
