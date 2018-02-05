@@ -92,7 +92,7 @@ Pricing.handleFreeTier =
         points: config.pricing.freeTier
       };
       pricing.freeTier.push(freePoints);
-      pricing.lastFreeTier = this.firstOfThisMonth();
+      pricing.lastFreeTier = Pricing.firstOfThisMonth();
       pricing.freeTierPoints += freePoints.points;
       pricing.save(function (err, pricing) {
         if (err) return callback(err);

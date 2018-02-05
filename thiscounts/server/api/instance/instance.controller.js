@@ -231,7 +231,7 @@ function saveInstance(req, res, instance) {
         if (err) return handleError(res, err);
         graphModel.query(`MATCH (i:instance { _id:'${req.params.id}'}) SET i.quantity=i.quantity-1`, function (err) {
           if (err) return handleError(res, err);
-          return res.status(200).json(instance);
+          return res.status(200).json(savedInstance);
         });
       });
     });
@@ -363,6 +363,12 @@ function redeemPunchCard(saved, callback) {
     punch_card.redeemTimes.won = true;
     saved.save(function (err, savedInstance) {
       if (err) return callback(err);
+      //mark as won in graphDB as well
+      graphModel.query(`MATCH (saved:SavedInstance) 
+                        WHERE saved._id = '${saved._id}' 
+                        SET saved.won = true;
+                        `, (err)=>{if(err) console.error(err)});
+
       return callback(null, {
         terminate: true,
         savedInstance: savedInstance
@@ -376,6 +382,7 @@ function redeemPunchCard(saved, callback) {
       punch_card.redeemTimes.push(Date.now());
       saved.save(function (err, savedInstance) {
         if (err) return callback(err);
+
         return callback(null, {
           terminate: false,
           savedInstance: savedInstance
