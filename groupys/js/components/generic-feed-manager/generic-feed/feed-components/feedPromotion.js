@@ -92,7 +92,7 @@ export default class FeedPromotion extends Component {
 
                     <View style={{width: StyleUtils.getWidth(), backgroundColor: 'white'}}>
                         <View style={[promotaionDesc, {backgroundColor:'white',width: StyleUtils.getWidth()}]}>
-                            <PromotionHeader type={item.promotion} feed titleText={item.promotionTitle}
+                            <PromotionHeader item={item} type={item.promotion} feed titleText={item.promotionTitle}
                                              titleValue={item.promotionValue} term={item.promotionTerm}/>
                         </View>
 

@@ -345,6 +345,7 @@ class FeedConverter {
                         responseFeed.quantity = promotion.happy_hour.quantity;
                         responseFeed.promotion = 'HAPPY_HOUR';
                         responseFeed.promotionColor = '#d279a6';
+
                     } else {
                         return undefined;
                     }
@@ -358,6 +359,7 @@ class FeedConverter {
                     responseFeed.quantity = promotion.punch_card.quantity;
                     responseFeed.promotion = 'PUNCH_CARD';
                     responseFeed.promotionColor = '#d279a6';
+                    responseFeed.realizedPunches =  feed.savedData.punch_card.redeemTimes.length;
                     break;
                 default:
                     responseFeed.itemTitle = instance.type + " NOT SUPPORTED";

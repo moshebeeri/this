@@ -62,7 +62,7 @@ export default class PromotionListView extends Component {
 
                 <View style={[styles.promotion_card, {width: StyleUtils.getWidth()}]}>
 
-                    <PromotionHeader type={promotionItem.type} titleText={item.promotionTitle}
+                    <PromotionHeader item={item} type={promotionItem.type} titleText={item.promotionTitle}
                                      titleValue={item.promotionValue} term={item.promotionTerm}/>
 
                     <View style={[styles.promotionInformation, {width: StyleUtils.getWidth()}]}>

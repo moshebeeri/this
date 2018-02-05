@@ -13,7 +13,7 @@ export default class PromotionHeader extends Component {
     }
 
     render() {
-        const {type, titleValue, titleText, term, feed, columnStyle} = this.props;
+        const {item,type, titleValue, titleText, term, feed, columnStyle} = this.props;
         let titleValueStyle = styles.titleValue;
         let titleTextStyle = styles.titleText;
         let XplusYtitleValueStyle = styles.XplusYtitleValue;
@@ -132,7 +132,7 @@ export default class PromotionHeader extends Component {
                     <View style={styles.promotionPunchValue}>
                         <Text style={puncCardtitleValue}>{titleText}</Text>
                     </View>
-                    <PunchView feed={feed} numberOfPunches={term}/>
+                    <PunchView numberRealized={item.realizedPunches} feed={feed} numberOfPunches={term}/>
                 </View>;
             default:
                 return <View style={promotionHeader}>
