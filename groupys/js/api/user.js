@@ -7,7 +7,7 @@ import * as actions from "../reducers/reducerActions";
 import EntityUtils from "../utils/createEntity";
 let entityUtils = new EntityUtils();
 let timer = new Timer();
-
+import * as errors from './Errors'
 class UserApi {
     getUser(token) {
         return new Promise(async (resolve, reject) => {
@@ -34,8 +34,7 @@ class UserApi {
                 }
             }
             catch (error) {
-                console.log('There has been a problem with your fetch operation: ' + error.message);
-                reject(error);
+                reject(errors.NETWORK_ERROR);
             }
         })
     }
@@ -53,8 +52,8 @@ class UserApi {
                             'Authorization': 'Bearer ' + token,
                         }
                     })
-                    if (response.status === '401') {
-                        reject(error);
+                    if (response.status ==='401' || response.status === 401) {
+                        reject(errors.UN_AUTHOTIZED_ACCESS);
                         return;
                     }
                     let responseData = await response.json();
@@ -65,8 +64,7 @@ class UserApi {
                 }
             }
             catch (error) {
-                console.log('There has been a problem with your fetch operation: ' + error.message);
-                reject(error);
+                reject(errors.NETWORK_ERROR);
             }
         })
     }
@@ -83,8 +81,8 @@ class UserApi {
                         'Authorization': 'Bearer ' + token,
                     }
                 })
-                if (response.status === '401') {
-                    reject(error);
+                if (response.status ==='401' || response.status === 401) {
+                    reject(errors.UN_AUTHOTIZED_ACCESS);
                     return;
                 }
                 let responseData = await response.json();
@@ -92,8 +90,7 @@ class UserApi {
                 resolve(responseData);
             }
             catch (error) {
-                console.log('There has been a problem with your fetch operation: ' + error.message);
-                reject(error);
+                reject(errors.NETWORK_ERROR);
             }
         })
     }
@@ -144,16 +141,15 @@ class UserApi {
                         'Authorization': 'Bearer ' + token,
                     }
                 })
-                if (response.status === '401') {
-                    reject(error);
+                if (response.status ==='401' || response.status === 401) {
+                    reject(errors.UN_AUTHOTIZED_ACCESS);
                     return;
                 }
                 timer.logTime(from, new Date(), 'users', 'like');
                 resolve(true);
             }
             catch (error) {
-                console.log('There has been a problem with your fetch operation: ' + error.message);
-                reject(error);
+                reject(errors.NETWORK_ERROR);
             }
         })
     }
@@ -170,16 +166,15 @@ class UserApi {
                         'Authorization': 'Bearer ' + token,
                     }
                 })
-                if (response.status === '401') {
-                    reject(error);
+                if (response.status ==='401' || response.status === 401) {
+                    reject(errors.UN_AUTHOTIZED_ACCESS);
                     return;
                 }
                 timer.logTime(from, new Date(), 'users', 'unlike');
                 resolve(true);
             }
             catch (error) {
-                console.log('There has been a problem with your fetch operation: ' + error.message);
-                reject(error);
+                reject(errors.NETWORK_ERROR);
             }
         })
     }
@@ -198,8 +193,8 @@ class UserApi {
                         'Authorization': 'Bearer ' + token,
                     }
                 })
-                if (response.status === '401') {
-                    reject(error);
+                if (response.status ==='401' || response.status === 401) {
+                    reject(errors.UN_AUTHOTIZED_ACCESS);
                     return;
                 }
                 let responseData = await response.json();
@@ -207,8 +202,7 @@ class UserApi {
                 timer.logTime(from, new Date(), 'users', 'get/user/by/phone/')
             }
             catch (error) {
-                console.log('There has been a problem with your fetch operation: ' + error.message);
-                reject(error);
+                reject(errors.NETWORK_ERROR);
             }
         })
     }
@@ -226,8 +220,8 @@ class UserApi {
                         'Authorization': 'Bearer ' + token,
                     }
                 });
-                if (response.status === '401') {
-                    reject(error);
+                if (response.status ==='401' || response.status === 401) {
+                    reject(errors.UN_AUTHOTIZED_ACCESS);
                     return;
                 }
                 let responseData = await response.json();
@@ -235,8 +229,7 @@ class UserApi {
                 resolve(responseData);
             }
             catch (error) {
-                console.log('There has been a problem with your fetch operation: ' + error.message);
-                reject(error);
+                reject(errors.NETWORK_ERROR);
             }
         })
     }
@@ -254,8 +247,8 @@ class UserApi {
                         'Authorization': 'Bearer ' + token,
                     }
                 })
-                if (response.status === '401') {
-                    reject(error);
+                if (response.status ==='401' || response.status === 401) {
+                    reject(errors.UN_AUTHOTIZED_ACCESS);
                     return;
                 }
                 let responseData = await response.json();
@@ -263,8 +256,7 @@ class UserApi {
                 resolve(responseData);
             }
             catch (error) {
-                console.log('There has been a problem with your fetch operation: ' + error.message);
-                reject(error);
+                reject(errors.NETWORK_ERROR);
             }
         })
     }
@@ -281,8 +273,8 @@ class UserApi {
                         'Authorization': 'Bearer ' + token,
                     }
                 });
-                if (response.status === '401') {
-                    reject(error);
+                if (response.status ==='401' || response.status === 401) {
+                    reject(errors.UN_AUTHOTIZED_ACCESS);
                     return;
                 }
                 let responseData = await response.json();
@@ -290,8 +282,7 @@ class UserApi {
                 resolve(responseData);
             }
             catch (error) {
-                console.log('There has been a problem with your fetch operation: ' + error.message);
-                reject(error);
+                reject(errors.NETWORK_ERROR);
             }
         })
     }
@@ -310,8 +301,8 @@ class UserApi {
                     },
                     body: JSON.stringify(user)
                 });
-                if (response.status ===401) {
-                    reject(response);
+                if (response.status ==='401' || response.status === 401) {
+                    reject(errors.UN_AUTHOTIZED_ACCESS);
                     return;
                 }
 
@@ -328,8 +319,7 @@ class UserApi {
                 resolve(true);
             }
             catch (error) {
-                console.log('There has been a problem with your fetch operation: ');
-                reject('failed');
+                reject(errors.NETWORK_ERROR);
             }
         })
     }

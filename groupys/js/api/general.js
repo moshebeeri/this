@@ -1,5 +1,5 @@
 import store from "react-native-simple-store";
-
+import * as errors from './Errors'
 class GeneralApi {
     submitREqeust(api, jsonRequest) {
         let json = JSON.parse(jsonRequest);
@@ -17,6 +17,11 @@ class GeneralApi {
                     },
                     body: JSON.stringify(json)
                 });
+
+                if (response.status ==='401' || response.status === 401) {
+                    reject(errors.UN_AUTHOTIZED_ACCESS);
+                    return;
+                }
                 if (response.status ==='401' || response.status ==='400') {
                     reject(response);
                     return;
@@ -25,8 +30,7 @@ class GeneralApi {
                 resolve(responseData);
             }
             catch (error) {
-                console.log('There has been a problem with your fetch operation: ' + error.message);
-                reject(error);
+                reject(errors.NETWORK_ERROR);
             }
         })
     }

@@ -1,5 +1,5 @@
 import Timer from "./LogTimer";
-
+import * as errors from './Errors'
 let timer = new Timer();
 import FormUtils from "../utils/fromUtils";
 class BusinessApi {
@@ -15,8 +15,8 @@ class BusinessApi {
                         'Authorization': 'Bearer ' + token
                     }
                 });
-                if (response.status ==='401') {
-                    reject(response);
+                if (response.status ==='401' || response.status === 401) {
+                    reject(errors.UN_AUTHOTIZED_ACCESS);
                     return;
                 }
                 let responseData = await response.json();
@@ -30,8 +30,7 @@ class BusinessApi {
                 resolve(responseData);
             }
             catch (error) {
-                console.log('There has been a problem with your fetch operation: ' + error.message);
-                reject(error);
+                reject(errors.NETWORK_ERROR);
             }
         })
     }
@@ -48,8 +47,8 @@ class BusinessApi {
                         'Authorization': 'Bearer ' + token
                     }
                 });
-                if (response.status ==='401') {
-                    reject(response);
+                if (response.status ==='401' || response.status === 401) {
+                    reject(errors.UN_AUTHOTIZED_ACCESS);
                     return;
                 }
                 let responseData = await response.json();
@@ -59,8 +58,7 @@ class BusinessApi {
                 resolve(responseData);
             }
             catch (error) {
-                console.log('There has been a problem with your fetch operation: ' + error.message);
-                reject(error);
+                reject(errors.NETWORK_ERROR);
             }
         })
     }
@@ -79,8 +77,8 @@ class BusinessApi {
                         'Authorization': 'Bearer ' + token
                     }
                 });
-                if (response.status ==='401') {
-                    reject(response);
+                if (response.status ==='401' || response.status === 401) {
+                    reject(errors.UN_AUTHOTIZED_ACCESS);
                     return;
                 }
                 let responseData = await response.json();
@@ -88,8 +86,7 @@ class BusinessApi {
                 resolve(responseData[0].translations.en);
             }
             catch (error) {
-                console.log('There has been a problem with your fetch operation: ' + error.message);
-                reject(error);
+                reject(errors.NETWORK_ERROR);
             }
         })
     }
@@ -109,8 +106,8 @@ class BusinessApi {
                         'Authorization': 'Bearer ' + token
                     }
                 });
-                if (response.status ==='401') {
-                    reject(response);
+                if (response.status ==='401' || response.status === 401) {
+                    reject(errors.UN_AUTHOTIZED_ACCESS);
                     return;
                 }
                 timer.logTime(from, new Date(), 'categories', 'business/en');
@@ -118,8 +115,7 @@ class BusinessApi {
                 resolve(responseData);
             }
             catch (error) {
-                console.log('There has been a problem with your fetch operation: ' + error.message);
-                reject(error);
+                reject(errors.NETWORK_ERROR);
             }
         })
     }
@@ -136,8 +132,8 @@ class BusinessApi {
                         'Authorization': 'Bearer ' + token
                     }
                 });
-                if (response.status ==='401') {
-                    reject(response);
+                if (response.status ==='401' || response.status === 401) {
+                    reject(errors.UN_AUTHOTIZED_ACCESS);
                     return;
                 }
                 timer.logTime(from, new Date(), '/businesses/search', 'business/en');
@@ -145,8 +141,7 @@ class BusinessApi {
                 resolve(responseData);
             }
             catch (error) {
-                console.log('There has been a problem with your fetch operation: ' + error.message);
-                reject(error);
+                reject(errors.NETWORK_ERROR);
             }
         })
     }
@@ -162,8 +157,8 @@ class BusinessApi {
                         'Authorization': 'Bearer ' + token
                     }
                 });
-                if (response.status ==='401') {
-                    reject(response);
+                if (response.status ==='401' || response.status === 401) {
+                    reject(errors.UN_AUTHOTIZED_ACCESS);
                     return;
                 }
                 timer.logTime(from, new Date(), '/businesses/search', 'business/en');
@@ -171,8 +166,7 @@ class BusinessApi {
                 resolve(responseData);
             }
             catch (error) {
-                console.log('There has been a problem with your fetch operation: ' + error.message);
-                reject(error);
+                reject(errors.NETWORK_ERROR);
             }
         })
     }
@@ -188,8 +182,8 @@ class BusinessApi {
                         'Authorization': 'Bearer ' + token
                     }
                 });
-                if (response.status ==='401') {
-                    reject(response);
+                if (response.status ==='401' || response.status === 401) {
+                    reject(errors.UN_AUTHOTIZED_ACCESS);
                     return;
                 }
                 timer.logTime(from, new Date(), '/groups/', 'follow');
@@ -197,8 +191,7 @@ class BusinessApi {
                 resolve(responseData);
             }
             catch (error) {
-                console.log('There has been a problem with your fetch operation: ');
-                reject(error);
+                reject(errors.NETWORK_ERROR);
             }
         })
     }
@@ -216,6 +209,12 @@ class BusinessApi {
                     },
                     body: JSON.stringify(businesses)
                 });
+
+                if (response.status ==='401' || response.status === 401) {
+                    reject(errors.UN_AUTHOTIZED_ACCESS);
+                    return;
+                }
+
                 if (parseInt(response.status) >= 400) {
                     let response = {
                         message: 'Address not found',
@@ -230,8 +229,7 @@ class BusinessApi {
                 resolve(responseData);
             }
             catch (error) {
-                console.log('There has been a problem with your fetch operation: ' + error.message);
-                reject(error);
+                reject(errors.NETWORK_ERROR);
             }
         })
     }
@@ -248,8 +246,8 @@ class BusinessApi {
                         'Authorization': 'Bearer ' + token
                     }
                 });
-                if (response.status ==='401') {
-                    reject(response);
+                if (response.status ==='401' || response.status === 401) {
+                    reject(errors.UN_AUTHOTIZED_ACCESS);
                     return;
                 }
                 timer.logTime(from, new Date(), '/businesses/search', 'business/en');
@@ -257,8 +255,7 @@ class BusinessApi {
                 resolve(responseData);
             }
             catch (error) {
-                console.log('There has been a problem with your fetch operation: ' + error.message);
-                reject(error);
+                reject(errors.NETWORK_ERROR);
             }
         })
     }
@@ -275,8 +272,8 @@ class BusinessApi {
                         'Authorization': 'Bearer ' + token
                     }
                 });
-                if (response.status ==='401') {
-                    reject(response);
+                if (response.status ==='401' || response.status === 401) {
+                    reject(errors.UN_AUTHOTIZED_ACCESS);
                     return;
                 }
                 timer.logTime(from, new Date(), '/businesses/search', 'business/en');
@@ -284,8 +281,7 @@ class BusinessApi {
                 resolve(responseData);
             }
             catch (error) {
-                console.log('There has been a problem with your fetch operation: ' + error.message);
-                reject(error);
+                reject(errors.NETWORK_ERROR);
             }
         })
     }
@@ -309,8 +305,8 @@ class BusinessApi {
                     },
                     body: JSON.stringify(requset)
                 });
-                if (response.status ==='401') {
-                    reject(response);
+                if (response.status ==='401' || response.status === 401) {
+                    reject(errors.UN_AUTHOTIZED_ACCESS);
                     return;
                 }
                 timer.logTime(from, new Date(), '/businesses/search', 'business/en');
@@ -318,8 +314,7 @@ class BusinessApi {
                 resolve(responseData);
             }
             catch (error) {
-                console.log('There has been a problem with your fetch operation: ' + error.message);
-                reject(error);
+                reject(errors.NETWORK_ERROR);
             }
         })
     }
@@ -336,8 +331,8 @@ class BusinessApi {
                         'Authorization': 'Bearer ' + token
                     }
                 });
-                if (response.status ===401) {
-                    reject(response);
+                if (response.status ==='401' || response.status === 401) {
+                    reject(errors.UN_AUTHOTIZED_ACCESS);
                     return;
                 }
                 timer.logTime(from, new Date(), '/api/qrcodes/', 'image/code/');
@@ -345,7 +340,7 @@ class BusinessApi {
                 resolve(responseData);
             }
             catch (error) {
-                reject('failed');
+                reject(errors.NETWORK_ERROR);
             }
         })
     }

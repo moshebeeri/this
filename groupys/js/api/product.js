@@ -2,6 +2,7 @@ import store from 'react-native-simple-store';
 import Timer from './LogTimer'
 
 let timer = new Timer();
+import * as errors from './Errors'
 import FormUtils from "../utils/fromUtils";
 class ProductsApi {
     getAll(token) {
@@ -16,8 +17,8 @@ class ProductsApi {
                         'Authorization': 'Bearer ' + token
                     }
                 });
-                if (response.status ==='401') {
-                    reject(response);
+                if (response.status ==='401' || response.status === 401) {
+                    reject(errors.UN_AUTHOTIZED_ACCESS);
                     return;
                 }
                 let responseData = await response.json();
@@ -25,8 +26,7 @@ class ProductsApi {
                 resolve(responseData);
             }
             catch (error) {
-                console.log('There has been a problem with your fetch operation: ' + error.message);
-                reject(error);
+                reject(errors.NETWORK_ERROR);
             }
         })
     }
@@ -43,8 +43,8 @@ class ProductsApi {
                         'Authorization': 'Bearer ' + token
                     }
                 });
-                if (response.status ==='401') {
-                    reject(response);
+                if (response.status ==='401' || response.status === 401) {
+                    reject(errors.UN_AUTHOTIZED_ACCESS);
                     return;
                 }
                 timer.logTime(from, new Date(), 'products', 'find/by/business');
@@ -52,8 +52,7 @@ class ProductsApi {
                 resolve(responseData);
             }
             catch (error) {
-                console.log('There has been a problem with your fetch operation: ');
-                reject(error);
+                reject(errors.NETWORK_ERROR);
             }
         })
     }
@@ -71,8 +70,8 @@ class ProductsApi {
                         'Authorization': 'Bearer ' + token
                     }
                 })
-                if (response.status ==='401') {
-                    reject(response);
+                if (response.status ==='401' || response.status === 401) {
+                    reject(errors.UN_AUTHOTIZED_ACCESS);
                     return;
                 }
                 timer.logTime(from, new Date(), 'categories', 'product/en')
@@ -80,8 +79,7 @@ class ProductsApi {
                 resolve(responseData);
             }
             catch (error) {
-                console.log('There has been a problem with your fetch operation: ' + error.message);
-                reject(error);
+                reject(errors.NETWORK_ERROR);
             }
         })
     }

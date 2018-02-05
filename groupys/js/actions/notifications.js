@@ -1,6 +1,7 @@
 import NotificationApi from "../api/notification";
 import * as actions from "../reducers/reducerActions";
 import ActionLogger from './ActionLogger'
+import  handler from './ErrorHandler'
 
 let notificationApi = new NotificationApi();
 let logger = new ActionLogger();
@@ -21,9 +22,7 @@ export function onEndReached() {
                 notifications: response,
             });
         } catch (error) {
-            dispatch({
-                type: actions.NETWORK_IS_OFFLINE,
-            });
+            handler.handleError(error, dispatch)
             logger.actionFailed('notification-onEndReached')
         }
     }
@@ -34,16 +33,13 @@ export function setTopNotification() {
         try {
             const token = getState().authentication.token;
             const user = getState().user.user;
-
             let response = await notificationApi.getAll(token, user, 0, 10);
             dispatch({
                 type: actions.SET_TOP_NOTIFICATION,
                 notifications: response,
             });
         } catch (error) {
-            dispatch({
-                type: actions.NETWORK_IS_OFFLINE,
-            });
+            handler.handleError(error, dispatch)
             logger.actionFailed('notification-setTopNotification')
         }
     }
@@ -59,37 +55,33 @@ export function readNotification(notificationId) {
                 id: notificationId,
             });
         } catch (error) {
-            dispatch({
-                type: actions.NETWORK_IS_OFFLINE,
-            });
+            handler.handleError(error, dispatch)
             logger.actionFailed('notification-readNotification')
         }
     }
 }
 
-export function doNotification(notificationId,type) {
+export function doNotification(notificationId, type) {
     return function (dispatch, getState) {
         try {
             const token = getState().authentication.token;
-            notificationApi.doNotificationAction(token, notificationId,type);
+            notificationApi.doNotificationAction(token, notificationId, type);
             dispatch({
                 type: actions.EXECUTE_NOTIFICATION_ACTION,
                 id: notificationId,
             });
         } catch (error) {
-            dispatch({
-                type: actions.NETWORK_IS_OFFLINE,
-            });
+            handler.handleError(error, dispatch)
             logger.actionFailed('notification-doNotification')
         }
     }
 }
 
- async function updateNotification(dispatch, token,user,notifications) {
+async function updateNotification(dispatch, token, user, notifications) {
     try {
         let skip = 0;
         if (notifications.length >= 10) {
-            skip = notifications.length  -1 ;
+            skip = notifications.length - 1;
         }
         let response = await notificationApi.getAll(token, user, skip, 10);
         dispatch({
@@ -97,12 +89,12 @@ export function doNotification(notificationId,type) {
             notifications: response,
         });
     } catch (error) {
-        dispatch({
-            type: actions.NETWORK_IS_OFFLINE,
-        });
+        handler.handleError(error, dispatch)
         logger.actionFailed('notification-updateNotification')
     }
 }
+
+
 
 export default {
     updateNotification

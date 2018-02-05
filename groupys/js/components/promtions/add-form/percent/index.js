@@ -104,6 +104,17 @@ export default class PercentComponent extends Component {
 
     selectPromotionType(value) {
         if (value) {
+            if (value === 'GLOBAL') {
+                this.selectProduct(undefined);
+                this.props.setState(
+                    {
+                        percent: {
+                            retail_price: '',
+                        },
+                    }
+                )
+            }
+
             this.props.setState({
                 discount_on: value,
                 choose_distribution: true
@@ -134,7 +145,7 @@ export default class PercentComponent extends Component {
             let discount =
                 <View style={styles.inputPrecenComponent}>
                     <TextInput field={strings.Discount} value={this.props.state.percent.percent}
-                               returnKeyType='next' ref="discount" refNext="discount"
+                               returnKeyType='done' ref="discount" refNext="discount"
                                keyboardType='numeric'
                                placeholder="%"
                                validateContent={FormUtils.validatePercent}
@@ -147,7 +158,7 @@ export default class PercentComponent extends Component {
 
 
                 <TextInput field={strings.PercentageOff} value={this.props.state.percent.percent}
-                           returnKeyType='next' ref="off" refNext="off"
+                           returnKeyType='done' ref="off" refNext="off"
                            keyboardType='numeric'
                            validateContent={FormUtils.validatePercent}
                            onChangeText={(value) => this.setPercent(value)} isMandatory={true}/>

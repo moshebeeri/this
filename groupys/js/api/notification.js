@@ -1,7 +1,7 @@
 import Timer from "./LogTimer";
 
 let timer = new Timer();
-
+import * as errors from './Errors'
 class NotificationApi {
     getAll(token, user, skip, limit) {
         return new Promise(async (resolve, reject) => {
@@ -15,8 +15,8 @@ class NotificationApi {
                         'Authorization': 'Bearer ' + token
                     }
                 });
-                if (response.status ==='401') {
-                    reject(response);
+                if (response.status ==='401' || response.status === 401) {
+                    reject(errors.UN_AUTHOTIZED_ACCESS);
                     return;
                 }
                 let responseData = await response.json();
@@ -24,7 +24,7 @@ class NotificationApi {
                 resolve(responseData);
             }
             catch (error) {
-                reject(error);
+                reject(errors.NETWORK_ERROR);
             }
         })
     }
@@ -41,8 +41,8 @@ class NotificationApi {
                         'Authorization': 'Bearer ' + token
                     }
                 });
-                if (response.status ==='401') {
-                    reject(response);
+                if (response.status ==='401' || response.status === 401) {
+                    reject(errors.UN_AUTHOTIZED_ACCESS);
                     return;
                 }
                 let responseData = await response.json();
@@ -50,7 +50,7 @@ class NotificationApi {
                 resolve(responseData);
             }
             catch (error) {
-                reject(error);
+                reject(errors.NETWORK_ERROR);
             }
         })
     }
@@ -79,8 +79,8 @@ class NotificationApi {
                         }
                     });
                 }
-                if (response.status ==='401') {
-                    reject(response);
+                if (response.status ==='401' || response.status === 401) {
+                    reject(errors.UN_AUTHOTIZED_ACCESS);
                     return;
                 }
                 let responseData = await response.json();
@@ -88,7 +88,7 @@ class NotificationApi {
                 resolve(responseData);
             }
             catch (error) {
-                reject(error);
+                reject(errors.NETWORK_ERROR);
             }
         })
     }

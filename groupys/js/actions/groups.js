@@ -7,14 +7,14 @@ import * as assemblers from "./collectionAssembler";
 import * as actions from "../reducers/reducerActions";
 import CollectionDispatcher from "./collectionDispatcher";
 import ActionLogger from './ActionLogger'
-
+import * as errors from '../api/Errors'
 let groupsApi = new GroupsApi();
 let feedApi = new FeedApi();
 let promotionApi = new PtomotionApi();
 let activityApi = new ActivityApi();
 let userApi = new UserApi();
 let logger = new ActionLogger();
-
+import  handler from './ErrorHandler'
 async function getAll(dispatch, token) {
     try {
         let response = await groupsApi.getAll(token);
@@ -25,9 +25,7 @@ async function getAll(dispatch, token) {
             });
         }
     } catch (error) {
-        dispatch({
-            type: actions.NETWORK_IS_OFFLINE,
-        });
+        handler.handleError(error,dispatch)
         logger.actionFailed('groupsApi.getAll')
     }
 }
@@ -54,9 +52,7 @@ async function getByBusinessId(dispatch, bid, token) {
             });
         }
     } catch (error) {
-        dispatch({
-            type: actions.NETWORK_IS_OFFLINE,
-        });
+        handler.handleError(error,dispatch)
         logger.actionFailed('groupsApi.getByBusinessId')
     }
 }
@@ -69,9 +65,7 @@ async function getUserFollowers(dispatch, token) {
             followers: users
         });
     } catch (error) {
-        dispatch({
-            type: actions.NETWORK_IS_OFFLINE,
-        });
+        handler.handleError(error,dispatch)
         logger.actionFailed('userApi.getUserFollowers')
     }
 }
@@ -110,9 +104,11 @@ export function acceptInvatation(group) {
                 });
             })
         } catch (error) {
-            dispatch({
-                type: actions.NETWORK_IS_OFFLINE,
-            });
+            if(error === errors.NETWORK_ERROR) {
+                dispatch({
+                    type: actions.NETWORK_IS_OFFLINE,
+                });
+            }
             logger.actionFailed('groupsApi.acceptInvatation')
         }
     }
@@ -124,9 +120,11 @@ export function touch(groupid) {
             const token = getState().authentication.token;
             groupsApi.touch(groupid, token);
         } catch (error) {
-            dispatch({
-                type: actions.NETWORK_IS_OFFLINE,
-            });
+            if(error === errors.NETWORK_ERROR) {
+                dispatch({
+                    type: actions.NETWORK_IS_OFFLINE,
+                });
+            }
             logger.actionFailed('groupsApi.touch')
         }
     }
@@ -146,9 +144,11 @@ export function createGroup(group, navigation) {
             });
             navigation.goBack();
         } catch (error) {
-            dispatch({
-                type: actions.NETWORK_IS_OFFLINE,
-            });
+            if(error === errors.NETWORK_ERROR) {
+                dispatch({
+                    type: actions.NETWORK_IS_OFFLINE,
+                });
+            }
             logger.actionFailed('groupsApi.createGroup')
         }
     }
@@ -168,9 +168,11 @@ export function updateGroup(group, navigation) {
             });
             navigation.goBack();
         } catch (error) {
-            dispatch({
-                type: actions.NETWORK_IS_OFFLINE,
-            });
+            if(error === errors.NETWORK_ERROR) {
+                dispatch({
+                    type: actions.NETWORK_IS_OFFLINE,
+                });
+            }
             logger.actionFailed('groupsApi.createGroup')
         }
     }
@@ -234,9 +236,11 @@ export function setNextFeeds(feeds, token, group) {
                 })
             }
         } catch (error) {
-            dispatch({
-                type: actions.NETWORK_IS_OFFLINE,
-            });
+            if(error === errors.NETWORK_ERROR) {
+                dispatch({
+                    type: actions.NETWORK_IS_OFFLINE,
+                });
+            }
             logger.actionFailed('groups-setNextFeeds')
         }
         if (showLoadingDone && !getState().groups.loadingDone[group._id]) {
@@ -262,9 +266,11 @@ export function sendMessage(groupId, message) {
         try {
             groupsApi.meesage(groupId, message, token)
         } catch (error) {
-            dispatch({
-                type: actions.NETWORK_IS_OFFLINE,
-            });
+            if(error === errors.NETWORK_ERROR) {
+                dispatch({
+                    type: actions.NETWORK_IS_OFFLINE,
+                });
+            }
             logger.actionFailed('groups-sendMessage')
         }
     }
@@ -315,9 +321,7 @@ async function fetchTopList(id, token, group, dispatch,user) {
             user:user,
         })
     } catch (error) {
-        dispatch({
-            type: actions.NETWORK_IS_OFFLINE,
-        });
+        handler.handleError(error,dispatch)
         logger.actionFailed('groups-fetchTopList')
     }
 }
@@ -364,9 +368,11 @@ export function like(id) {
             });
             await userApi.like(id, token);
         } catch (error) {
-            dispatch({
-                type: actions.NETWORK_IS_OFFLINE,
-            });
+            if(error === errors.NETWORK_ERROR) {
+                dispatch({
+                    type: actions.NETWORK_IS_OFFLINE,
+                });
+            }
             logger.actionFailed('groups-like')
         }
     }
@@ -382,9 +388,11 @@ export const unlike = (id) => {
                 id: id
             });
         } catch (error) {
-            dispatch({
-                type: actions.NETWORK_IS_OFFLINE,
-            });
+            if(error === errors.NETWORK_ERROR) {
+                dispatch({
+                    type: actions.NETWORK_IS_OFFLINE,
+                });
+            }
             logger.actionFailed('groups-unlike')
         }
     }
@@ -399,9 +407,11 @@ export function saveFeed(id) {
             });
             await promotionApi.save(id);
         } catch (error) {
-            dispatch({
-                type: actions.NETWORK_IS_OFFLINE,
-            });
+            if(error === errors.NETWORK_ERROR) {
+                dispatch({
+                    type: actions.NETWORK_IS_OFFLINE,
+                });
+            }
             logger.actionFailed('groups-saveFeed')
         }
     }
@@ -419,9 +429,11 @@ export function shareActivity(id, activityId, users, token) {
                 shares: users.length
             });
         } catch (error) {
-            dispatch({
-                type: actions.NETWORK_IS_OFFLINE,
-            });
+            if(error === errors.NETWORK_ERROR) {
+                dispatch({
+                    type: actions.NETWORK_IS_OFFLINE,
+                });
+            }
             logger.actionFailed('groups-shareActivity')
         }
     }
@@ -449,9 +461,11 @@ export function refresh(id, currentSocialState) {
             });
             // await userApi.like(id, token);
         } catch (error) {
-            dispatch({
-                type: actions.NETWORK_IS_OFFLINE,
-            });
+            if(error === errors.NETWORK_ERROR) {
+                dispatch({
+                    type: actions.NETWORK_IS_OFFLINE,
+                });
+            }
             logger.actionFailed('groups-refresh')
         }
     }
@@ -472,9 +486,7 @@ async function dispatchSearchGroups(dispatch, business, token) {
         dispatch({type: actions.SEARCH_GROUPS, groups: response});
 
     } catch (error) {
-        dispatch({
-            type: actions.NETWORK_IS_OFFLINE,
-        });
+        handler.handleError(error,dispatch)
     }
 }
 
@@ -486,9 +498,7 @@ export function joinGroup(groupId) {
             dispatch({type: actions.RESET_FOLLOW_FORM})
 
         } catch (error) {
-            dispatch({
-                type: actions.NETWORK_IS_OFFLINE,
-            });
+            handler.handleError(error,dispatch);
         }
     }
 }

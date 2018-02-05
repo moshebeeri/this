@@ -230,6 +230,7 @@ class AddProduct extends Component {
                         <TextInput field={strings.Price} value={this.state.retail_price} returnKeyType='done' ref="6"
                                    refNext="6"
                                    keyboardType="numeric"
+                                   onSubmitEditing={this.saveFormData.bind(this)}
                                    onChangeText={(retail_price) => this.setState({retail_price})} isMandatory={true}/>
                     </View>
 

@@ -4,12 +4,12 @@
 import GroupsApi from "../api/groups";
 import UserApi from "../api/user";
 import store from "react-native-simple-store";
-
+import * as errors from '../api/Errors'
 let groupsApi = new GroupsApi();
 let userApi = new UserApi();
 import ActionLogger from './ActionLogger'
 let logger = new ActionLogger();
-
+import  handler from './ErrorHandler'
 async function fetchList(action, feeds, api, dispatch, groupid) {
     try {
         let response = null;
@@ -46,9 +46,7 @@ async function fetchList(action, feeds, api, dispatch, groupid) {
         }
         dispatchDone(dispatch, action, groupid);
     } catch (error) {
-        dispatch({
-            type: actions.NETWORK_IS_OFFLINE,
-        });
+         handler.handleError(error,dispatch)
         logger.actionFailed('feed-fetchList')
     }
 }

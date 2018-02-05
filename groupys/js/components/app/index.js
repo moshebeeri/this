@@ -138,6 +138,8 @@ class ApplicationManager extends Component {
         FCM.getFCMToken().then(token => {
             PageRefresher.updateUserFireBase(token);
         });
+
+
         Tasks.start();
         let notification = await  FCM.getInitialNotification();
         if (notification && notification.model === 'instance') {
@@ -155,6 +157,8 @@ class ApplicationManager extends Component {
         if (notification && notification.title) {
             this.props.actions.showGenericPopup(notification.title, notification.notificationId, notification.action);
         }
+
+        FCM.getBadgeNumber().then(number=> FCM.setBadgeNumber(0))
 
         AppState.addEventListener('change', this._handleAppStateChange);
     }

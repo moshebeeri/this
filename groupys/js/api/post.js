@@ -13,6 +13,7 @@ import Timer from "./LogTimer";
 
 let entityUtils = new EntityUtils();
 let timer = new Timer();
+import * as errors from './Errors'
 
 class PostApi {
     createPost(post, callbackFunction, token) {
@@ -28,8 +29,8 @@ class PostApi {
                     },
                     body: JSON.stringify(post)
                 });
-                if (response.status ==='401' || response.status ==='500') {
-                    reject(response);
+                if (response.status ==='401' || response.status === 401) {
+                    reject(errors.UN_AUTHOTIZED_ACCESS);
                     return;
                 }
                 let responseData = await response.json();
@@ -48,8 +49,7 @@ class PostApi {
                 resolve(responseData);
             }
             catch (error) {
-                console.log('There has been a problem with your fetch operation: ' + error.message);
-                reject(error);
+                reject(errors.NETWORK_ERROR);
             }
         })
     }
@@ -66,8 +66,8 @@ class PostApi {
                         'Authorization': 'Bearer ' + token
                     }
                 });
-                if (response.status ==='401') {
-                    reject(response);
+                if (response.status ==='401' || response.status === 401) {
+                    reject(errors.UN_AUTHOTIZED_ACCESS);
                     return;
                 }
                 let responseData = await response.json();
@@ -75,7 +75,7 @@ class PostApi {
                 resolve(responseData);
             }
             catch (error) {
-                reject(error);
+                reject(errors.NETWORK_ERROR);
             }
         })
     }

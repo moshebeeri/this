@@ -163,7 +163,7 @@ export default class XPlusYComponent extends Component {
             <View style={{flexDirection: 'row', justifyContent: 'center', alignItems: 'center'}}>
                 <View style={styles.inputPrecenComponent}>
                     <TextInput field={strings.NumberOfGifts} value={eligibleValue}
-                               returnKeyType='next' ref="Number of Gifts" refNext="Number of Gifts"
+                               returnKeyType='done' ref="Number of Gifts" refNext="Number of Gifts"
                                keyboardType='numeric'
                                onChangeText={(value) => this.setEligible(value)} isMandatory={true}/>
                 </View>

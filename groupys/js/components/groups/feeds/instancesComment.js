@@ -19,8 +19,10 @@ class instancesComment extends Component {
     }
 
     componentWillMount() {
-        const {comments, group, actions} = this.props;
-        this.setNextFeed();
+        const {comments, group} = this.props;
+        if (!comments[group._id] || (comments[group._id] && comments[group._id].length ===0)) {
+            this.setNextFeed();
+        }
     }
 
     setNextFeed() {
@@ -28,7 +30,7 @@ class instancesComment extends Component {
         if (comments[group._id]) {
             actions.setNextFeeds(comments[group._id].filter(comment => comment.message), group);
         } else {
-            actions.setNextFeeds(comments[group._id], group);
+            actions.setNextFeeds([], group);
         }
     }
 
@@ -108,7 +110,7 @@ export default connect(
         loadingDone: state.comments.loadingDone,
         showTopLoader: state.comments.showTopLoader,
         update: state.comments.update,
-        user: state.authentication.user,
+        user: state.user.user,
     }),
     (dispatch) => ({
         actions: bindActionCreators(commentAction, dispatch)
