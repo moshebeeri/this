@@ -59,9 +59,10 @@ module.exports = {
         width: Dimensions.get('window').width,
     },
     follow_container: {
-        height: height,
+        height: height -10,
         width:width,
-        backgroundColor:'white'
+
+
     },
     follow_search: {
         height: 50,

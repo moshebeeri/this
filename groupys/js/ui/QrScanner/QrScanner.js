@@ -4,6 +4,8 @@ import {Button, Input, Item, Spinner, Text, View} from "native-base";
 import Camera from "react-native-camera";
 import styles from "./styles";
 import {BusinessHeader,SubmitButton} from '../../ui/index';
+import StyleUtils from '../../utils/styleUtils'
+
 const {width, height} = Dimensions.get('window')
 import FeedPromotion from '../../components/generic-feed-manager/generic-feed/feed-components/feedPromotion'
 import strings from "../../i18n/i18n"
@@ -119,15 +121,15 @@ export default class BusinessFollow extends Component {
                 </View>}
                 {instance &&
                 <View style={{flex:1,  }}>
-                    <View style={{flex:3,  }}>
+                    <View style={{flex:3, backgroundColor:'white'  }}>
                     <FeedPromotion scanner={true} refresh={this.refresh.bind(this)}
 
                                    hideSocial={true} navigation={navigation} item={instance}
 
                     />
                     </View>
-                    <View style={{flex:1, alignItems:'center' }}>
-                        <View>
+                    <View style={{flex:1, alignItems:'center'}}>
+                        <View style={{height:60,width:StyleUtils.getWidth(),backgroundColor:'white', alignItems:'center',justifyContent:'flex-start' }}>
                             {comnfirmLastPunc ? <SubmitButton width={200} color={'#2db6c8'} title={strings.ConfirmLast.toUpperCase()} onPress={() => realizePromotion(code)}/> :
                                 <SubmitButton color={'#2db6c8'} title={strings.Confirm.toUpperCase()} onPress={() => realizePromotion(code)}/>}
                         </View>
