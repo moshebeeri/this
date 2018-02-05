@@ -61,7 +61,7 @@ class LoginApi {
                     })
                 });
                 if (response.status === '401') {
-                    reject({error: 'Signup Failed Validation'});
+                    reject(errors.SIGNUP_FAILED);
                     return;
                 }
                 let responseData = await response.json();
@@ -86,15 +86,22 @@ class LoginApi {
                         'Authorization': 'Bearer ' + token,
                     }
                 });
-                console.log(response);
-                if (response.status ==='401') {
-                    reject({error: 'Signup Failed Validation'});
+
+                if(response.status ==='200' || response.status === 200 ) {
+                    let result = {
+                        token: token
+                    };
+                    resolve(result);
                     return;
                 }
-                let result = {
-                    token: token
-                };
-                resolve(result);
+
+                if (response.status ==='401' || response.status === 401) {
+                    reject(errors.UN_AUTHOTIZED_ACCESS);
+                    return;
+                }
+
+                reject(errors.FAILED_SMS_VALIDATION);
+
             }
             catch (error) {
                 reject(errors.NETWORK_ERROR);
@@ -113,8 +120,8 @@ class LoginApi {
                         'Content-Type': 'application/json;charset=utf-8',
                     }
                 });
-                if (response.status === '401') {
-                    resolve({error: 'Signup Failed Validation'});
+                if (response.status ==='401' || response.status === 401) {
+                    reject(errors.UN_AUTHOTIZED_ACCESS);
                     return;
                 }
                 let responseData = await response.json();
@@ -141,14 +148,20 @@ class LoginApi {
                         newPassword: newPassowrd,
                     })
                 });
+
+                if (response.status ==='401' || response.status === 401) {
+                    reject(errors.UN_AUTHOTIZED_ACCESS);
+                    return;
+                }
+
                 if (response.status === 200) {
                     resolve({response: true});
                     return;
                 }
-                resolve({
-                    error: 'Old Passowrd Validation failed',
-                    response: false
-                });
+
+
+                reject(errors.PASSOWRD_VALIDATION_FAILED);
+
             }
             catch (error) {
                 reject(errors.NETWORK_ERROR);

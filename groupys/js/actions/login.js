@@ -1,11 +1,14 @@
 import * as actions from "../reducers/reducerActions";
+import * as errors from '../api/Errors';
 import LoginApi from "../api/login";
 import UserApi from "../api/user";
 import {NavigationActions} from "react-navigation";
 import store from "react-native-simple-store";
 import ContactApi from "../api/contacts";
 import ActionLogger from './ActionLogger'
-import  handler from './ErrorHandler'
+import handler from './ErrorHandler'
+import strings from "../i18n/i18n"
+
 let contactApi = new ContactApi();
 let loginApi = new LoginApi();
 let userApi = new UserApi();
@@ -75,35 +78,36 @@ export function signup(phone, password, firstName, lastName, navigation) {
                 value: true
             });
             let response = await loginApi.signup(phone, password, firstName, lastName);
-            if (response.token) {
-                await store.save("token", response.token)
-                dispatch({
-                    type: actions.SAVE_USER_TOKEN,
-                    token: response.token
-                });
-                dispatch({
-                    type: actions.SIGNUP_SUCSESS,
-                });
-                let user = await userApi.getUser(response.token);
-                await store.save("user_id", user._id);
-                dispatch({
-                    type: actions.SET_USER,
-                    user: user
-                });
-                contactApi.syncContacts();
-                navigation.navigate('Register');
-            } else {
-                dispatch({
-                    type: actions.SIGNUP_FAILED,
-                    message: 'invalid phone number'
-                });
-            }
+            await store.save("token", response.token)
+            dispatch({
+                type: actions.SAVE_USER_TOKEN,
+                token: response.token
+            });
+            dispatch({
+                type: actions.SIGNUP_SUCSESS,
+            });
+            let user = await userApi.getUser(response.token);
+            await store.save("user_id", user._id);
+            dispatch({
+                type: actions.SET_USER,
+                user: user
+            });
+            contactApi.syncContacts();
+            navigation.navigate('Register');
             dispatch({
                 type: actions.SIGNUP_PROCESS,
                 value: false
             });
-        } catch (error) {
-            handler.handleError(error, dispatch)
+        }
+        catch (error) {
+            if (error === errors.SIGNUP_FAILED) {
+                dispatch({
+                    type: actions.SIGNUP_FAILED,
+                    message: strings.invalidPhoneNumber
+                });
+            } else {
+                handler.handleError(error, dispatch)
+            }
             dispatch({
                 type: actions.SIGNUP_PROCESS,
                 value: false
@@ -150,29 +154,29 @@ export function verifyCode(code, navigation, resetAction) {
                 type: actions.REGISTER_PROCESS,
                 value: true
             });
-            let response = await loginApi.verifyCode(code);
-            if (response.token) {
-                dispatch({
-                    type: actions.REGISTER_CODE_SUCSSES,
-                });
-                navigation.dispatch(resetAction);
-            } else {
+            await loginApi.verifyCode(code);
+            dispatch({
+                type: actions.REGISTER_CODE_SUCSSES,
+            });
+            dispatch({
+                type: actions.REGISTER_PROCESS,
+                value: false
+            });
+            navigation.dispatch(resetAction);
+        } catch (error) {
+            if (error === errors.FAILED_SMS_VALIDATION) {
                 dispatch({
                     type: actions.REGISTER_CODE_INVALID,
-                    message: 'invalid validation code'
+                    message: strings.InvalidValidationCode
                 });
+            } else {
+                handler.handleError(error, dispatch)
             }
+            logger.actionFailed('verifyCode');
             dispatch({
                 type: actions.REGISTER_PROCESS,
                 value: false
             });
-        } catch (error) {
-            handler.handleError(error, dispatch)
-            dispatch({
-                type: actions.REGISTER_PROCESS,
-                value: false
-            });
-            logger.actionFailed('verifyCode')
         }
     }
 }

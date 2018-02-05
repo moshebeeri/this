@@ -72,6 +72,10 @@ class ContactsApi {
                 },
                 body: json
             });
+            if (response.status ==='401' || response.status === 401) {
+                reject(errors.UN_AUTHOTIZED_ACCESS);
+
+            }
         } catch (error) {
             reject(errors.NETWORK_ERROR);
         }

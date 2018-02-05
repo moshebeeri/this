@@ -241,6 +241,12 @@ PrivacyPolicy                                 : "Privacy Policy",
 UseOfTermMessage                              : "By Creating an account you agree to THIS",
 Select                                        : "Select",
 UpdateGroup                                   : "Update Group",
+InvalidValidationCode                         : "Invalid Validation Code",
+OldPasswordValidationFailed                   : "Old Password Validation Failed",
+invalidPhoneNumber                            : "invalid Phone Number",
+
+
+
 
 
 

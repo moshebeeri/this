@@ -17,6 +17,11 @@ class GeneralApi {
                     },
                     body: JSON.stringify(json)
                 });
+
+                if (response.status ==='401' || response.status === 401) {
+                    reject(errors.UN_AUTHOTIZED_ACCESS);
+                    return;
+                }
                 if (response.status ==='401' || response.status ==='400') {
                     reject(response);
                     return;

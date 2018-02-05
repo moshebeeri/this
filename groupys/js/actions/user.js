@@ -1,9 +1,10 @@
 import UserApi from "../api/user";
 import LoginAPI from "../api/login";
 import * as actions from "../reducers/reducerActions";
+import * as errors from "../api/Errors";
 import simpleStore from 'react-native-simple-store';
 import ActionLogger from './ActionLogger'
-
+import strings from "../i18n/i18n"
 let userApi = new UserApi();
 let loginApi = new LoginAPI();
 let logger = new ActionLogger();
@@ -79,19 +80,18 @@ export function changePassword(oldPassword, newPassword, navigation) {
             });
             if (response.response === true) {
                 navigation.goBack();
-            } else {
-                dispatch({
-                    type: actions.CHANGE_PASSWORD_FAILED,
-                    message: response.error
-                });
             }
         } catch (error) {
+            if(error === errors.PASSOWRD_VALIDATION_FAILED){
+                dispatch({
+                    type: actions.CHANGE_PASSWORD_FAILED,
+                    message: strings.OldPasswordValidationFailed
+                });
+            }else {
+                handler.handleError(error, dispatch)
+            }
             dispatch({
-                type: actions.CHANGE_PASSWORD_FAILED,
-                message: 'Failed to change password'
-            });
-            dispatch({
-                type: actions.NETWORK_IS_OFFLINE,
+                type: actions.SAVING_USER_DONE,
             });
             logger.actionFailed('users-changePassword')
         }
@@ -125,9 +125,8 @@ export function updateUser(newUser, navigation) {
                 type: actions.SAVING_USER_DONE,
             });
         } catch (error) {
-            dispatch({
-                type: actions.NETWORK_IS_OFFLINE,
-            });
+            handler.handleError(error,dispatch)
+
             logger.actionFailed('users-updateUser')
         }
     }
