@@ -1,14 +1,18 @@
 import React, {Component} from 'react';
 import {Button, Card, CardItem, Container, Content, Footer, Icon, Input, Item, List, ListItem, Text} from 'native-base';
-import {Dimensions, Image, View,ScrollView} from 'react-native';
+import {Dimensions, Image, View,ScrollView,BackHandler} from 'react-native';
 import PromotionApi from '../../api/promotion'
 import {BusinessHeader, PromotionColumnHeader, PromotionSeperator} from '../../ui/index';
 import strings from "../../i18n/i18n"
+import {connect} from 'react-redux';
 const deviceHeight = Dimensions.get('window').width;
 let promotionApi = new PromotionApi()
 import StyleUtils from "../../utils/styleUtils";
+import Tasks from '../../tasks/tasks'
+import FeedUiConverter from "../../api/feed-ui-converter";
 
-export default class RealizePromotion extends Component {
+let feedUiConverter = new FeedUiConverter();
+class RealizePromotion extends Component {
     static navigationOptions = {
         header: null
     };
@@ -25,27 +29,74 @@ export default class RealizePromotion extends Component {
     }
 
     async componentWillMount() {
-        let qrCode = await promotionApi.getPromotionQrcode(this.props.navigation.state.params.item.id);
+
+        let id = this.props.navigation.state.params.item.id;
+        if(this.props.navigation.state.params.id){
+            id = this.props.navigation.state.params.id;
+        }
+        let qrCode = await promotionApi.getPromotionQrcode(id);
+        Tasks.realizeTaskStart(id);
+        BackHandler.addEventListener('hardwareBackPress', this.handleBack.bind(this));
+
         this.setState({
             image: qrCode
         })
     }
 
+    handleBack(){
+        Tasks.realizeTaskstop();
+    }
+    componentWillUnmount(){
+        Tasks.realizeTaskstop();
+    }
+
     async realize() {
+        Tasks.realizeTaskstop();
         this.props.navigation.goBack();
     }
 
+    createItem(feed){
+        let savedinstance = feed;
+        if(feed.savedInstance){
+            savedinstance = feed.savedInstance;
+        }
+        return feedUiConverter.createSavedPromotion(savedinstance, savedinstance._id)
+    }
+
+    checkIfRealized(feed){
+        let savedinstance = feed;
+        if(feed.savedInstance){
+            savedinstance = feed.savedInstance;
+        }
+        if(savedinstance.savedData && savedinstance.savedData && savedinstance.savedData.other ){
+            return true;
+        }
+        if(savedinstance.savedData && savedinstance.savedData.punch_card && savedinstance.savedData.punch_card.number_of_punches){
+            let remainPunches =  savedinstance.savedData.punch_card.number_of_punches - savedinstance.savedData.punch_card.redeemTimes.length;
+            return remainPunches === 0;
+        }
+
+        return false;
+    }
+
     render() {
-        let item = this.props.navigation.state.params.item;
+        const{myPromotions} = this.props;
+        let id = this.props.navigation.state.params.item.id;
+        if(this.props.navigation.state.params.id){
+            id = this.props.navigation.state.params.id;
+        }
+        let item = this.createItem(myPromotions[id]);
+        let isRealized = this.checkIfRealized(myPromotions[id]);
         return (
         <ScrollView>
             <View style={{flex: 1, justifyContent: 'center', alignItems: 'center'}}>
-                <BusinessHeader showBack navigation={this.props.navigation} business={item.business}
+
+                <BusinessHeader backAction={this.handleBack.bind(this)} showBack navigation={this.props.navigation} business={item.business}
                                 categoryTitle={item.categoryTitle} businessLogo={item.businessLogo}
                                 businessName={item.businessName}/>
 
 
-                <PromotionColumnHeader columnStyle type={item.promotion} feed titleText={item.promotionTitle}
+                <PromotionColumnHeader item={item} columnStyle type={item.promotion} feed = {true} titleText={item.promotionTitle}
                                        titleValue={item.promotionValue} term={item.promotionTerm}/>
 
 
@@ -63,17 +114,27 @@ export default class RealizePromotion extends Component {
                 }}>
                     <Text>{strings.RealizeMessage1}</Text>
                     <Text>{strings.RealizeMessage2}</Text>
+                    {this.state.image &&
                     <Image style={{
                         width: 300,
                         height: 300,
                         resizeMode: Image.resizeMode.contain,
                     }} source={{uri: this.state.image.qrcode}}/>
-
+                    }
                 </View>
             </View>
-
+            {isRealized && <View style={{position:'absolute' ,left:15,top:350,backgroundColor:'transparent'}}>
+                <Text style={{backgroundColor:'white',fontSize:70,fontWeight:'bold', transform: [{ rotate: '45deg'}],color:'red'}}>{strings.Realized.toUpperCase()}</Text>
+            </View>}
         </ScrollView>
 
         );
     }
 }
+
+export default connect(
+    state => ({
+        update: state.myPromotions.update,
+        myPromotions: state.myPromotions.feeds,
+    })
+)(RealizePromotion);

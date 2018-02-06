@@ -88,33 +88,27 @@ export default class WeekDaysPicker extends Component {
         return <View style={[containerStyle, {width: StyleUtils.getWidth() - 15}]}>
             <View style={[styles.textInputTitleContainer, {width: StyleUtils.getWidth() - 15}]}>
 
-                {!I18nManager.isRTL && field && isMandatory &&
-                <Icon style={{margin: 5, color: mandtoryIconColor, fontSize: 12}} name='star'/>}
+
+                <Icon style={{margin: 5, color: mandtoryIconColor, fontSize: 12}} name='star'/>
 
                 <Text style={textStyle}>{field}</Text>
-                {I18nManager.isRTL && field && isMandatory &&
-                <Icon style={{margin: 5, color: mandtoryIconColor, fontSize: 12}} name='star'/>}
 
             </View>
             <View style={[weekscontainerStyle, {width: StyleUtils.getWidth() - 15}]}>
-                {I18nManager.isRTL && <SelectMultiple
+
+
+                 <SelectMultiple
                     items={days}
-                    selectedItems={this.state.selectedDays}
-                    onSelectionsChange={this.onChange.bind(this)}/>
-                }
-                <SelectMultiple
-                    items={days2}
-                    rowStyle={{justifyContent: I18nManager.isRTL ? 'flex-start' : 'space-between'}}
-                    selectedItems={this.state.selectedDays}
-                    onSelectionsChange={this.onChange.bind(this)}/>
-                {!I18nManager.isRTL && <SelectMultiple
-                    items={days}
-                    rowStyle={{justifyContent: 'space-between'}}
+
                     checkboxStyle={{justifyContent: 'flex-start'}}
                     selectedItems={this.state.selectedDays}
                     onSelectionsChange={this.onChange.bind(this)}/>
-                }
 
+                <SelectMultiple
+                    items={days2}
+                    rowStyle={{justifyContent: 'flex-start' }}
+                    selectedItems={this.state.selectedDays}
+                    onSelectionsChange={this.onChange.bind(this)}/>
             </View>
         </View>
     }

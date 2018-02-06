@@ -177,7 +177,7 @@ export default function business(state = initialState, action) {
                         if (update) {
                             businessesPromotions[action.businessId][updaeIndex] = promotion;
                         } else {
-                            businessesPromotions[action.businessId].push(promotion);
+                            businessesPromotions[action.businessId].unshift(promotion);
                         }
                     })
                 }

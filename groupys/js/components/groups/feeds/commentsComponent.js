@@ -58,7 +58,7 @@ class CommentsComponent extends Component {
         let promotionHeader;
         if (item.promotion) {
             promotionHeader = <View style={styles.comments_promotions}>
-                <PromotionHeader type={item.promotion} feed titleText={item.promotionTitle}
+                <PromotionHeader  item={item} type={item.promotion} feed titleText={item.promotionTitle}
                                  titleValue={item.promotionValue} term={item.promotionTerm}/>
 
 

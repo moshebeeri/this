@@ -70,7 +70,7 @@ class CommentsComponent extends Component {
             promotionHeader =
                 <View style={[styles.comments_promotions, {width: StyleUtils.getWidth() - 15}]}>
 
-                <PromotionHeader type={item.promotion} feed titleText={item.promotionTitle}
+                <PromotionHeader item={item} type={item.promotion} feed titleText={item.promotionTitle}
                                  titleValue={item.promotionValue} term={item.promotionTerm}/>
 
 

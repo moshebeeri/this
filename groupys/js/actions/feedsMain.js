@@ -10,7 +10,9 @@ import * as actions from "../reducers/reducerActions";
 import * as assemblers from "./collectionAssembler";
 import CollectionDispatcher from "./collectionDispatcher";
 import ActionLogger from './ActionLogger'
+import FeedUiConverter from "../api/feed-ui-converter";
 
+let feedUiConverter = new FeedUiConverter();
 let feedApi = new FeedApi();
 let userApi = new UserApi();
 let promotionApi = new PtomotionApi();
@@ -29,6 +31,9 @@ async function fetchFeedsFromServer(feeds, dispatch, token, user) {
             let id = keys[keys.length - 1];
             response = await feedApi.getAll('down', feeds[id].fid, token, user);
         }
+        dispatch({
+            type: actions.FEEDS_GET_NEXT_BULK_DONE,
+        });
         console.log(response)
         if (!response)
             return;
@@ -162,6 +167,9 @@ export function setNextFeeds(feeds) {
         }
 
         if(getState().feeds.maxFeedReturned){
+            dispatch({
+                type: actions.FEEDS_GET_NEXT_BULK_DONE,
+            });
             return;
         }
         
@@ -287,14 +295,18 @@ export const unlike = (id) => {
     }
 };
 
-export function saveFeed(id) {
+export function saveFeed(id,navigation,feed) {
     return async function (dispatch, getState) {
         try {
             dispatch({
                 type: actions.SAVE,
                 id: id
             });
-            await promotionApi.save(id);
+           let savedInstance =  await promotionApi.save(id);
+            navigation.navigate('realizePromotion', {item: feed,id:savedInstance._id})
+            await  promotionApi.getAll();
+
+
         } catch (error) {
             if(error === errors.NETWORK_ERROR) {
                 dispatch({

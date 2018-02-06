@@ -1,5 +1,5 @@
 import React, {Component} from "react";
-import {Dimensions, I18nManager, Image, ScrollView, View} from "react-native";
+import {Dimensions, I18nManager, Image, ScrollView, View,Keyboard} from "react-native";
 import {connect} from "react-redux";
 import {actions} from "react-native-navigation-redux-helpers";
 import {Button, Container, Content, Footer, Icon, Input, Item, Picker, Text} from "native-base";
@@ -166,6 +166,7 @@ class AddPromotion extends Component {
 
     async saveFormData() {
         const {actions, navigation, saving} = this.props;
+        Keyboard.dismiss();
         if (saving) {
             return;
         }
@@ -390,7 +391,9 @@ class AddPromotion extends Component {
         }
         return result;
     }
-
+    dismiss(){
+        Keyboard.dismiss();
+    }
     selectDistributionType(type) {
         if (type === 'PERSONAL') {
             this.setState({
@@ -528,7 +531,7 @@ class AddPromotion extends Component {
                     <View style={[styles.inputTextLayout, {width: StyleUtils.getWidth() - 15}]}>
                         <TextInput field={strings.Description} value={this.state.info}
                                    returnKeyType='next' ref="5" refNext="5"
-                                   onSubmitEditing={this.focusNextField.bind(this, "5")}
+                                   onSubmitEditing={this.dismiss.bind(this)}
                                    onChangeText={(info) => this.setState({info})} isMandatory={true}/>
                     </View>
 
@@ -536,7 +539,7 @@ class AddPromotion extends Component {
                     {distributionForm}
                 </ScrollView>
 
-                {saving && <View style={{justifyContent:'center',alignItems:'center',position:'absolute',width:StyleUtils.getWidth(),opacity:0.7,height:height,top:60,backgroundColor:'white'}}>
+                {saving && <View style={{justifyContent:'center',alignItems:'center',position:'absolute',width:StyleUtils.getWidth(),opacity:0.7,height:height,top:40,backgroundColor:'white'}}>
                     <Spinner/>
                 </View>}
             </View>

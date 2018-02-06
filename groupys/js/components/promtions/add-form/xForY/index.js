@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import {Text, View} from 'react-native'
+import {Text, View,Keyboard} from 'react-native'
 import styles from './styles'
 import {SelectButton, TextInput} from '../../../../ui/index';
 import strings from "../../../../i18n/i18n"
@@ -68,6 +68,9 @@ export default class XForYComponent extends Component {
         }
     }
 
+    done(){
+        Keyboard.dismiss();
+    }
     setPay(value) {
         if (value) {
             let eligible = undefined;
@@ -133,6 +136,7 @@ export default class XForYComponent extends Component {
                     <TextInput field={strings.PayAmount} value={pay}
                                returnKeyType='done' ref="Pay $" refNext="Pay $"
                                keyboardType='numeric'
+                               onSubmitEditing={this.done.bind(this)}
                                onChangeText={(value) => this.setPay(value)} isMandatory={true}/>
                 </View>
             </View>

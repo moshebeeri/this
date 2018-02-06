@@ -29,7 +29,7 @@ export default function myPromotions(state = initialState, action) {
                 action.item.forEach(item =>{
                     currentFeeds[item.savedInstance._id] = item;
                     if (!feedstate.feedOrder.includes(item.savedInstance._id)) {
-                        feedstate.feedOrder.unshift(item.savedInstance._id);
+                        feedstate.feedOrder.push(item.savedInstance._id);
                     }
 
                 });
@@ -43,7 +43,7 @@ export default function myPromotions(state = initialState, action) {
                 action.item.forEach(item =>{
                     currentFeeds[item.savedInstance._id] = item;
                     if (!feedstate.feedOrder.includes(item.savedInstance._id)) {
-                        feedstate.feedOrder.push(item.savedInstance._id);
+                        feedstate.feedOrder.unshift(item.savedInstance._id);
                     }
 
                 });
@@ -53,6 +53,11 @@ export default function myPromotions(state = initialState, action) {
             }
 
             return state;
+        case actions.UPDATE_SINGLE_SAVED_INSTANCE:
+            currentFeeds[action.item._id] = action.item;
+            feedstate.update = !feedstate.update
+            return feedstate
+
         case actions.SAVE_PROMOTION_FIRST_TIME_FEED:
             return {
                 ...state,

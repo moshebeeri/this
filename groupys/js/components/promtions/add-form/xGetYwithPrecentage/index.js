@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import {Platform, Text, View} from 'react-native'
+import {Platform, Text, View,Keyboard} from 'react-native'
 import FormUtils from "../../../../utils/fromUtils";
 import styles from './styles'
 import {SelectButton, TextInput} from '../../../../ui/index';
@@ -24,7 +24,9 @@ export default class XPlusYOffComponent extends Component {
             }
         )
     }
-
+    done(){
+        Keyboard.dismiss();
+    }
     isValid() {
         let result = true;
         Object.keys(this.refs).forEach(key => {
@@ -139,6 +141,7 @@ export default class XPlusYOffComponent extends Component {
                                returnKeyType='done' ref="2" refNext="2"
                                keyboardType='numeric'
                                validateContent={FormUtils.validatePercent}
+                               onSubmitEditing={this.done.bind(this)}
                                onChangeText={(value) => this.setOff(value)} isMandatory={true}/>
                 </View>
 

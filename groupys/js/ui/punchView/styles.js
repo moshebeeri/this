@@ -14,10 +14,21 @@ module.exports = {
         marginRight: 5,
         marginLeft: 5,
     },
+
     punchFeed: {
         width: 20,
         height: 20,
         backgroundColor: 'white',
+        borderRadius: 20,
+        borderWidth: 1,
+        borderColor: '#2db6c8',
+        marginRight: 5,
+        marginLeft: 5,
+    },
+    punchFeedFull: {
+        width: 20,
+        height: 20,
+        backgroundColor: '#2db6c8',
         borderRadius: 20,
         borderWidth: 1,
         borderColor: '#2db6c8',

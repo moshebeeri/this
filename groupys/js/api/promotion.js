@@ -178,6 +178,10 @@ class PromotionApi {
                         'Authorization': 'Bearer ' + token
                     }
                 });
+                if (response.status ==='404' || response.status === 404) {
+                    reject('invalid code')
+
+                }
                 if (response.status ==='401' || response.status === 401) {
                     reject(errors.UN_AUTHOTIZED_ACCESS);
                     return;

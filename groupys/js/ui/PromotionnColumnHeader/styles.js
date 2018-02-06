@@ -66,6 +66,10 @@ module.exports = {
         fontSize: 16,
         color: '#e65100'
     },
+    puncCardtitleFeedValue: {
+        fontSize: 16,
+        color: '#2db6c8'
+    },
     titleTextFeed: {
 
         fontSize: 20,
