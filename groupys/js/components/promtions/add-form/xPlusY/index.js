@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import {Platform, Text, View} from 'react-native'
+import {Platform, Text, View,Keyboard} from 'react-native'
 import styles from './styles'
 import {SelectButton, TextInput} from '../../../../ui/index';
 import strings from "../../../../i18n/i18n"
@@ -118,7 +118,9 @@ export default class XPlusYComponent extends Component {
         }
         return undefined
     }
-
+    done(){
+        Keyboard.dismiss();
+    }
     createProductGiftView() {
         if (this.props.state.giftProduct) {
             let productName = this.props.state.giftProduct.name
@@ -165,6 +167,7 @@ export default class XPlusYComponent extends Component {
                     <TextInput field={strings.NumberOfGifts} value={eligibleValue}
                                returnKeyType='done' ref="Number of Gifts" refNext="Number of Gifts"
                                keyboardType='numeric'
+                               onSubmitEditing={this.done.bind(this)}
                                onChangeText={(value) => this.setEligible(value)} isMandatory={true}/>
                 </View>
                 <View style={{flex: 1.7, marginTop: 25}}><SelectButton ref="xplusyselectOmProduct" isMandatory

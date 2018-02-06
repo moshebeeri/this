@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import {Platform, Text, View} from 'react-native'
+import {Platform, Text, View,Keyboard} from 'react-native'
 import styles from './styles'
 import {TextInput} from '../../../../ui/index';
 import strings from "../../../../i18n/i18n"
@@ -15,6 +15,9 @@ export default class ReduceAmountComponent extends Component {
                 discount_on: 'GLOBAL'
             }
         )
+    }
+    done(){
+        Keyboard.dismiss();
     }
 
     isValid() {
@@ -93,6 +96,7 @@ export default class ReduceAmountComponent extends Component {
                     <TextInput field={strings.Pay} value={pay}
                                returnKeyType='done' ref="Pay $" refNext="Pay $"
                                keyboardType='numeric'
+                               onSubmitEditing={this.done.bind(this)}
                                onChangeText={(value) => this.setPay(value)} isMandatory={true}/>
                 </View>
             </View>

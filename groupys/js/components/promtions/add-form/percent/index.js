@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import {Text, View} from 'react-native'
+import {Text, View,Keyboard} from 'react-native'
 import styles from './styles'
 import {SelectButton, SimplePicker, TextInput} from '../../../../ui/index';
 import FormUtils from "../../../../utils/fromUtils";
@@ -101,7 +101,9 @@ export default class PercentComponent extends Component {
             businessId: businessId
         })
     }
-
+    done(){
+        Keyboard.dismiss();
+    }
     selectPromotionType(value) {
         if (value) {
             if (value === 'GLOBAL') {
@@ -159,6 +161,7 @@ export default class PercentComponent extends Component {
 
                 <TextInput field={strings.PercentageOff} value={this.props.state.percent.percent}
                            returnKeyType='done' ref="off" refNext="off"
+                           onSubmitEditing={this.done.bind(this)}
                            keyboardType='numeric'
                            validateContent={FormUtils.validatePercent}
                            onChangeText={(value) => this.setPercent(value)} isMandatory={true}/>

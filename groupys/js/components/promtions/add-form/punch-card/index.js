@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import {Platform, Text, View} from 'react-native'
+import {Platform, Text, View,Keyboard} from 'react-native'
 import FormUtils from "../../../../utils/fromUtils";
 import styles from './styles'
 import {SelectButton, TextInput} from '../../../../ui/index';
@@ -40,14 +40,14 @@ export default class PunchCardComponent extends Component {
     }
 
     setPunchCard(value) {
-        if (value) {
+
             this.props.setState({
                 choose_distribution: true,
                 punch_card: {
                     values: {number_of_punches: value},
                 }
             })
-        }
+
     }
 
     showBuyProducts() {
@@ -70,6 +70,9 @@ export default class PunchCardComponent extends Component {
         }
         return undefined
     }
+    done(){
+        Keyboard.dismiss();
+    }
 
     render() {
         let numberOfPunches = '';
@@ -89,8 +92,9 @@ export default class PunchCardComponent extends Component {
 
                 <View style={styles.inputPrecenComponent}>
                     <TextInput field={strings.NumberOfPunches} value={numberOfPunches}
-                               returnKeyType='next' ref="2" refNext="2"
-                               keyboardType='done'
+                               returnKeyType='done' ref="2" refNext="2"
+                               keyboardType='numeric'
+                               onSubmitEditing={this.done.bind(this)}
                                validateContent={FormUtils.validatePuches}
                                onChangeText={(value) => this.setPunchCard(value)} isMandatory={true}/>
                 </View>
