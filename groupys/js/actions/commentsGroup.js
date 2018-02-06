@@ -66,9 +66,8 @@ async function refreshComments(dispatch, token, group, user) {
             });
         }
     } catch (error) {
-        dispatch({
-            type: actions.NETWORK_IS_OFFLINE,
-        });
+
+        handler.handleError(error, dispatch)
         logger.actionFailed('refreshComments')
     }
 }
