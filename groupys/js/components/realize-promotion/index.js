@@ -63,6 +63,22 @@ class RealizePromotion extends Component {
         return feedUiConverter.createSavedPromotion(savedinstance, savedinstance._id)
     }
 
+    checkIfRealized(feed){
+        let savedinstance = feed;
+        if(feed.savedInstance){
+            savedinstance = feed.savedInstance;
+        }
+        if(savedinstance.savedData && savedinstance.savedData && savedinstance.savedData.other ){
+            return true;
+        }
+        if(savedinstance.savedData && savedinstance.savedData.punch_card && savedinstance.savedData.punch_card.number_of_punches){
+            let remainPunches =  savedinstance.savedData.punch_card.number_of_punches - savedinstance.savedData.punch_card.redeemTimes.length;
+            return remainPunches === 0;
+        }
+
+        return false;
+    }
+
     render() {
         const{myPromotions} = this.props;
         let id = this.props.navigation.state.params.item.id;
@@ -70,10 +86,11 @@ class RealizePromotion extends Component {
             id = this.props.navigation.state.params.id;
         }
         let item = this.createItem(myPromotions[id]);
-
+        let isRealized = this.checkIfRealized(myPromotions[id]);
         return (
         <ScrollView>
             <View style={{flex: 1, justifyContent: 'center', alignItems: 'center'}}>
+
                 <BusinessHeader backAction={this.handleBack.bind(this)} showBack navigation={this.props.navigation} business={item.business}
                                 categoryTitle={item.categoryTitle} businessLogo={item.businessLogo}
                                 businessName={item.businessName}/>
@@ -106,7 +123,9 @@ class RealizePromotion extends Component {
                     }
                 </View>
             </View>
-
+            {isRealized && <View style={{position:'absolute' ,left:15,top:350,backgroundColor:'transparent'}}>
+                <Text style={{backgroundColor:'white',fontSize:70,fontWeight:'bold', transform: [{ rotate: '45deg'}],color:'red'}}>{strings.Realized.toUpperCase()}</Text>
+            </View>}
         </ScrollView>
 
         );

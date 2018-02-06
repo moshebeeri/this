@@ -31,9 +31,12 @@ class MyPromotions extends Component {
     }
 
     renderItem(item) {
-        const {navigation, location} = this.props;
+        const {navigation, location,rawFeeds} = this.props;
+        let isRealized = this.checkIfRealized(rawFeeds[item.item.id])
+
         return <FeedPromotion refresh={this.refresh.bind(this)}
                               location={location}
+                              isRealized={isRealized}
                               hideSocial
                               navigation={navigation} item={item.item}
                               realize={this.realize.bind(this, item.item)}
@@ -46,6 +49,22 @@ class MyPromotions extends Component {
         return false;
     }
     refresh() {
+    }
+
+    checkIfRealized(feed){
+        let savedinstance = feed;
+        if(feed.savedInstance){
+            savedinstance = feed.savedInstance;
+        }
+        if(savedinstance.savedData && savedinstance.savedData && savedinstance.savedData.other ){
+            return true;
+        }
+        if(savedinstance.savedData && savedinstance.savedData.punch_card && savedinstance.savedData.punch_card.number_of_punches){
+            let remainPunches =  savedinstance.savedData.punch_card.number_of_punches - savedinstance.savedData.punch_card.redeemTimes.length;
+            return remainPunches === 0;
+        }
+
+        return false;
     }
 
     realize(item) {
@@ -87,6 +106,7 @@ const mapStateToProps = state => {
         update: state.myPromotions.update,
         user: state.user.user,
         feeds: getFeeds(state),
+        rawFeeds: state.myPromotions.feeds,
         showTopLoader: state.myPromotions.showTopLoader,
         loadingDone: state.myPromotions.loadingDone,
         myPromotions: state.myPromotions,
