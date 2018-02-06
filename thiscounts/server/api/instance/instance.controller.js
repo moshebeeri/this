@@ -309,6 +309,7 @@ function createRealizeMongodbReport(user_id, instance_id, callback) {
         instance.remaining -= 1;
         if(!instance.realizations) instance.realizations = [];
         instance.realizations.push(realize._id);
+        console.log(`createRealizeMongodbReport instance to save ${JSON.stringify(instance)}`);
         instance.save(function (err) {
           if (err) {
             return callback(err)
