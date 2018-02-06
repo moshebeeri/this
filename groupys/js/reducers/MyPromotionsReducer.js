@@ -53,6 +53,11 @@ export default function myPromotions(state = initialState, action) {
             }
 
             return state;
+        case actions.UPDATE_SINGLE_SAVED_INSTANCE:
+            currentFeeds[action.item._id] = action.item;
+            feedstate.update = !feedstate.update
+            return feedstate
+
         case actions.SAVE_PROMOTION_FIRST_TIME_FEED:
             return {
                 ...state,

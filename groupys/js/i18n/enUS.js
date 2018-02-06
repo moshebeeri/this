@@ -245,6 +245,8 @@ OldPasswordValidationFailed                   : "Old Password Validation Failed"
 invalidPhoneNumber                            : "invalid Phone Number",
 punchCardTerm                                 : "Punch Card {0} Slots - Get {1} For Free",
 ConfirmLast                                   : "Confirm Last Punch",
+PleaseScanCode                                : "Please Scan Code",
+
 
 
 

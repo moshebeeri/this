@@ -84,6 +84,7 @@ class MyPromotions extends Component {
 const mapStateToProps = state => {
     return {
         userFollower: state.user.followers,
+        update: state.myPromotions.update,
         user: state.user.user,
         feeds: getFeeds(state),
         showTopLoader: state.myPromotions.showTopLoader,

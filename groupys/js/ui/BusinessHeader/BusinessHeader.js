@@ -73,6 +73,10 @@ class BusinessHeader extends Component {
         this.props.navigation.navigate('ReadQrCode',{business:business})
     }
     back() {
+        const{backAction} = this.props;
+        if(backAction){
+            backAction();
+        }
         this.props.navigation.goBack();
     }
     render() {

@@ -3,6 +3,7 @@ import simpleStore from 'react-native-simple-store';
 import BackgroundTimer from "react-native-background-timer";
 import pageSync from '../refresh/refresher'
 import * as actions from "../reducers/reducerActions";
+import myPromotionAction from '../actions/myPromotions'
 import ContactApi from '../api/contacts';
 const contactApi = new ContactApi();
 
@@ -45,6 +46,31 @@ class Tasks {
 
     async stop() {
         let tasks = await simpleStore.get("tasks");
+        if (tasks) {
+            tasks.forEach((task) => {
+                BackgroundTimer.clearInterval(task);
+            });
+        }
+    }
+
+    async realizeTaskStart(id) {
+        await this.realizeTaskstop();
+
+        const refresher = BackgroundTimer.setInterval(() => {
+            let token = reduxStore.getState().authentication.token;
+            try {
+                myPromotionAction.updateInstance(token,reduxStore.dispatch,id);
+            } catch (error) {
+                reduxStore.dispatch({
+                    type: actions.NETWORK_IS_OFFLINE,
+                })
+            }
+        }, 5000);
+        simpleStore.save("realize_task", [ refresher])
+    }
+
+    async realizeTaskstop() {
+        let tasks = await simpleStore.get("realize_task");
         if (tasks) {
             tasks.forEach((task) => {
                 BackgroundTimer.clearInterval(task);

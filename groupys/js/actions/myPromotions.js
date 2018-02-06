@@ -98,3 +98,43 @@ export function fetchTop() {
         }
     }
 }
+
+async function fetchTopList( token, dispatch) {
+    try {
+
+
+        let response = await profileApi.fetch(token, 0, 10);
+        if (response.length === 0) {
+            return;
+        }
+        dispatch({
+            type: actions.FETCH_TOP_SAVED_FEEDS,
+            item: response
+        });
+    } catch (error) {
+        handler.handleError(error,dispatch)
+        logger.actionFailed('fetchTopList-mainfeeds')
+    }
+}
+
+async function updateInstance( token, dispatch,id) {
+    try {
+
+
+        let response = await profileApi.getSavedInstance(token,id);
+
+        dispatch({
+            type: actions.UPDATE_SINGLE_SAVED_INSTANCE,
+            item: response
+        });
+    } catch (error) {
+        handler.handleError(error,dispatch)
+        logger.actionFailed('fetchTopList-mainfeeds')
+    }
+}
+
+
+export default {
+    fetchTopList,
+    updateInstance
+}
