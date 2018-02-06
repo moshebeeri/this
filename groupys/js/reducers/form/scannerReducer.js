@@ -6,6 +6,7 @@ const initialState = {
     cameraOn: true,
     submitable:false,
     showAssigmentMessage:false,
+    notAuthotized:false,
     showAssigmentMessageFailed:false,
     code:'',
     location:'',
@@ -24,6 +25,7 @@ export default function scannerForm(state = initialState, action) {
                 showAssigmentMessage:false,
                 searching:false,
                 cameraOn:true,
+                notAuthotized:false,
                 showAssigmentMessageFailed:false,
                 code:''
             };
@@ -54,6 +56,13 @@ export default function scannerForm(state = initialState, action) {
                 showAssigmentMessageFailed:true,
 
             };
+        case actions.SCANNER_SHOW_NOT_AUTHOTIZED:
+            return {
+                ...state,
+                notAuthotized:true,
+
+            };
+
 
         case actions.SCANNER_CODE:
             return {

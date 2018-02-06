@@ -85,8 +85,13 @@ class RealizePromotion extends Component {
         if(this.props.navigation.state.params.id){
             id = this.props.navigation.state.params.id;
         }
-        let item = this.createItem(myPromotions[id]);
-        let isRealized = this.checkIfRealized(myPromotions[id]);
+        let item = this.props.navigation.state.params.item;
+        let isRealized = false;
+        if(myPromotions[id]) {
+            item = this.createItem(myPromotions[id]);
+            isRealized = this.checkIfRealized(myPromotions[id]);
+        }
+
         return (
         <ScrollView>
             <View style={{flex: 1, justifyContent: 'center', alignItems: 'center'}}>
@@ -124,7 +129,7 @@ class RealizePromotion extends Component {
                 </View>
             </View>
             {isRealized && <View style={{position:'absolute' ,left:15,top:350,backgroundColor:'transparent'}}>
-                <Text style={{backgroundColor:'white',fontSize:70,fontWeight:'bold', transform: [{ rotate: '45deg'}],color:'red'}}>{strings.Realized.toUpperCase()}</Text>
+                <Text style={{backgroundColor:'white',fontSize:70,fontWeight:'bold', transform: [{ rotate: '45deg'}],color:'#2db6c8'}}>{strings.Realized.toUpperCase()}</Text>
             </View>}
         </ScrollView>
 

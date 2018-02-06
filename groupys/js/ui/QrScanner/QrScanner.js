@@ -36,7 +36,7 @@ export default class BusinessFollow extends Component {
     }
 
     createView() {
-        const {showAssigmentMessageFailed,showAssigmentMessage,navigation, code, cameraOn, searching, business, instance, group, followBusiness, groupFollowBusiness, scanResult, realizePromotion} = this.props;
+        const {showNotAuthorizedMessage,showAssigmentMessageFailed,showAssigmentMessage,navigation, code, cameraOn, searching, business, instance, group, followBusiness, groupFollowBusiness, scanResult, realizePromotion} = this.props;
         let followComponent = undefined;
         if (business) {
             let followStyle = {
@@ -63,13 +63,20 @@ export default class BusinessFollow extends Component {
         }
 
         if(showAssigmentMessage){
-            return (<View style={{alignItems:'center',justifyContent:'flex-start',flex:1}}>
+            return (<View style={{backgroundColor:'transparent',alignItems:'center',justifyContent:'flex-start',flex:1}}>
                 <Text>{strings.AssignmenofQrcCodesucceeded}</Text>
             </View>)
 
         }
+        if(showNotAuthorizedMessage){
+            return (<View style={{backgroundColor:'transparent',alignItems:'center',justifyContent:'flex-start',flex:1}}>
+                <Text>{strings.notAuthorizedMessage}</Text>
+            </View>)
+
+        }
+
         if(showAssigmentMessageFailed){
-            return (<View style={{alignItems:'center',justifyContent:'flex-start',flex:1}}>
+            return (<View style={{backgroundColor:'transparent',alignItems:'center',justifyContent:'flex-start',flex:1}}>
                 <Text>{strings.AssignmenofQrcCodefailed}</Text>
             </View>)
 
