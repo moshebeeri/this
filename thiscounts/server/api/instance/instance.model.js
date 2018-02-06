@@ -14,7 +14,7 @@ let InstanceSchema = new Schema({
 
   quantity: Number,
   remaining: Number,
-  realizations: [{type: Schema.ObjectId, ref: 'Realized', index: true, required: true}],
+  realizations: [{type: Schema.ObjectId, ref: 'Realize', required: true}],
 
   location : {
     lng : Number,
