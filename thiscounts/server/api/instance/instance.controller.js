@@ -307,7 +307,8 @@ function createRealizeMongodbReport(user_id, instance_id, callback) {
         if (instance.remaining <= 0)
           return callback(new Error('instance remaining <= 0'));
         instance.remaining -= 1;
-        instance.realizations.push(realize);
+        if(!instance.realizations) instance.realizations = [];
+        instance.realizations.push(realize._id);
         instance.save(function (err) {
           if (err) {
             return callback(err)
@@ -624,5 +625,6 @@ exports.qrcode = function (req, res) {
 };
 
 function handleError(res, err) {
+  console.error(err);
   return res.send(500, err);
 }
