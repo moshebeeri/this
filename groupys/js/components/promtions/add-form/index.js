@@ -536,7 +536,7 @@ class AddPromotion extends Component {
                     {distributionForm}
                 </ScrollView>
 
-                {saving && <View style={{justifyContent:'center',alignItems:'center',position:'absolute',width:StyleUtils.getWidth(),opacity:0.7,height:height,top:60,backgroundColor:'white'}}>
+                {saving && <View style={{justifyContent:'center',alignItems:'center',position:'absolute',width:StyleUtils.getWidth(),opacity:0.7,height:height,top:40,backgroundColor:'white'}}>
                     <Spinner/>
                 </View>}
             </View>
