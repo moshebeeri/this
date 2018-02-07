@@ -9,7 +9,7 @@ import PromotionApi from "../api/promotion";
 import * as actions from "../reducers/reducerActions";
 import EntityUtils from "../utils/createEntity";
 import FormUtils from "../utils/fromUtils";
-
+import  handler from './ErrorHandler'
 const BTClient = require('react-native-braintree-xplat');
 let businessApi = new BusinessApi();
 let userApi = new UserApi();
@@ -17,7 +17,7 @@ let productApi = new ProductApi();
 let promotionApi = new PromotionApi();
 let entityUtils = new EntityUtils();
 let pricingApi = new PricingApi();
-
+import * as errors from '../api/Errors'
 import ActionLogger from './ActionLogger'
 let logger = new ActionLogger();
 
@@ -32,9 +32,7 @@ async function getAll(dispatch, token) {
             });
         }
     } catch (error) {
-        dispatch({
-            type: actions.NETWORK_IS_OFFLINE,
-        });
+        handler.handleError(error,dispatch)
         logger.actionFailed("business_getAll")
     }
 }
@@ -50,9 +48,7 @@ async function get(dispatch, token, id) {
             });
         }
     } catch (error) {
-        dispatch({
-            type: actions.NETWORK_IS_OFFLINE,
-        });
+        handler.handleError(error,dispatch)
         logger.actionFailed("business_get");
     }
 }
@@ -67,9 +63,7 @@ async function getBusinessCategories(dispatch, gid, token) {
             catId: gid
         });
     } catch (error) {
-        dispatch({
-            type: actions.NETWORK_IS_OFFLINE,
-        });
+        handler.handleError(error,dispatch)
         logger.actionFailed("business_get_Categories",gid);
     }
 }
@@ -82,9 +76,7 @@ async function dispatchSearchBusiness(dispatch, business, token) {
         dispatch({type: actions.SEARCH_BUSINESS, businesses: response});
         dispatch({type: actions.SHOW_SEARCH_SPIN, searching: false})
     } catch (error) {
-        dispatch({
-            type: actions.NETWORK_IS_OFFLINE,
-        });
+        handler.handleError(error,dispatch)
         logger.actionFailed("business_search_business",business);
     }
 }
@@ -106,9 +98,7 @@ async function dispatchFollowByQrcode(dispatch, barcode, token) {
         }
         dispatch({type: actions.SHOW_SEARCH_SPIN, searching: false})
     } catch (error) {
-        dispatch({
-            type: actions.NETWORK_IS_OFFLINE,
-        });
+        handler.handleError(error,dispatch)
         logger.actionFailed("business_search_by_qrcode");
     }
 }
@@ -151,9 +141,11 @@ export function onEndReached() {
                 item: businesses
             });
         } catch (error) {
-            dispatch({
-                type: actions.NETWORK_IS_OFFLINE,
-            });
+            if(error === errors.NETWORK_ERROR) {
+                dispatch({
+                    type: actions.NETWORK_IS_OFFLINE,
+                });
+            }
             logger.actionFailed("business_getAll")
         }
         dispatch({
@@ -179,9 +171,7 @@ export function followBusiness(businessId) {
             dispatch({type: actions.RESET_FOLLOW_FORM})
 
         } catch (error) {
-            dispatch({
-                type: actions.NETWORK_IS_OFFLINE,
-            });
+            handler.handleError(error,dispatch)
             logger.actionFailed("business_followBusiness",businessId)
         }
     }
@@ -193,9 +183,7 @@ export function unFollowBusiness(businessId) {
             const token = getState().authentication.token;
             await businessApi.unFollowBusiness(businessId, token);
         } catch (error) {
-            dispatch({
-                type: actions.NETWORK_IS_OFFLINE,
-            });
+            handler.handleError(error,dispatch)
             logger.actionFailed("business_followBusiness",businessId)
         }
     }
@@ -208,9 +196,7 @@ export function groupFollowBusiness(groupid, businessId, navigation) {
             await businessApi.groupFollowBusiness(groupid, businessId, token);
             navigation.goBack();
         } catch (error) {
-            dispatch({
-                type: actions.NETWORK_IS_OFFLINE,
-            });
+            handler.handleError(error,dispatch)
             logger.actionFailed("business_groupFollowBusiness",businessId)
         }
     }
@@ -241,9 +227,7 @@ export function setBusinessUsers(businessId) {
                 businessId: businessId
             });
         } catch (error) {
-            dispatch({
-                type: actions.NETWORK_IS_OFFLINE,
-            });
+            handler.handleError(error,dispatch)
             logger.actionFailed("users_getBusinessUsers",businessId);
         }
     }
@@ -266,9 +250,7 @@ export function setBusinessProducts(businessId) {
                 });
             }
         } catch (error) {
-            dispatch({
-                type: actions.NETWORK_IS_OFFLINE,
-            });
+            handler.handleError(error,dispatch)
             logger.actionFailed("product_findByBusinessId",businessId);
         }
     }
@@ -291,9 +273,7 @@ export function setBusinessPromotions(businessId) {
                 });
             }
         } catch (error) {
-            dispatch({
-                type: actions.NETWORK_IS_OFFLINE,
-            });
+            handler.handleError(error,dispatch)
             logger.actionFailed("promotion_findByBusinessId",businessId);
         }
     }
@@ -308,6 +288,11 @@ async function updateBusinessPromotions(businessId, token, dispatch) {
             businessId: businessId
         });
     }catch (error){
+        if(error === errors.NETWORK_ERROR) {
+            dispatch({
+                type: actions.NETWORK_IS_OFFLINE,
+            });
+        }
         logger.actionFailed("promotion_getAllByBusinessId",businessId);
     }
 }
@@ -371,9 +356,7 @@ export function saveBusiness(business, navigation) {
 
 
         } catch (error) {
-            dispatch({
-                type: actions.NETWORK_IS_OFFLINE,
-            });
+             handler.handleError(error,dispatch)
             dispatch({
                 type: actions.SAVING_BUSINESS_DONE,
             });
@@ -389,8 +372,42 @@ export function updateBusiness(business, navigation) {
                 type: actions.SAVING_BUSINESS,
             });
             const token = getState().authentication.token;
-            await entityUtils.update('businesses', business, token, business._id);
+            let createdBusiness = await entityUtils.update('businesses', business, token, business._id);
             let businesses = await businessApi.getAll(token);
+
+            let uploadPic = false;
+            createdBusiness.pictures = [];
+            let pictures = [];
+            let coverPicsNumber = 0;
+            if(createdBusiness.pictures){
+                coverPicsNumber = createdBusiness.pictures.length;
+            };
+            if( coverPicsNumber === 0 || ( createdBusiness.pictures[coverPicsNumber -1].pictures[0].path !== business.image.uri || createdBusiness.pictures[coverPicsNumber -1].pictures[0].path !== business.image.path)) {
+                uploadPic = true;
+                if (business.image.path) {
+                    pictures.push(business.image.path);
+                    createdBusiness.pictures.push({pictures: pictures});
+                } else {
+                    pictures.push(business.image.uri);
+                    createdBusiness.pictures.push({pictures: pictures});
+                }
+            }
+
+            if( business.logoImage && (!createdBusiness.logo ||  (createdBusiness.logo !==  business.logoImage.path || createdBusiness.logo !==  business.logoImage.uri ))){
+                uploadPic = true;
+                if (business.logoImage.path) {
+                    createdBusiness.logo = business.logoImage.path;
+                } else {
+                    createdBusiness.logo = business.logoImage.uri;
+                }
+            }
+
+            if(uploadPic) {
+                dispatch({
+                    type: actions.BUSINESS_UPLOAD_PIC,
+                    item: {businessResponse: createdBusiness, business: business}
+                })
+            }
             dispatch({
                 type: actions.UPSERT_MY_BUSINESS,
                 item: businesses
@@ -404,9 +421,7 @@ export function updateBusiness(business, navigation) {
             });
             navigation.goBack();
         } catch (error) {
-            dispatch({
-                type: actions.NETWORK_IS_OFFLINE,
-            });
+             handler.handleError(error,dispatch)
             logger.actionFailed("update_business",business);
         }
     }
@@ -424,9 +439,7 @@ export function updateBusinesStatuss() {
             });
 
         } catch (error) {
-            dispatch({
-                type: actions.NETWORK_IS_OFFLINE,
-            });
+             handler.handleError(error,dispatch)
             logger.actionFailed("update_business",business);
         }
     }
@@ -451,9 +464,7 @@ export function setBusinessQrCode(business) {
                 qrcodeSource: response.qrcode
             });
         } catch (error) {
-            dispatch({
-                type: actions.NETWORK_IS_OFFLINE,
-            });
+             handler.handleError(error,dispatch)
             logger.actionFailed("business_getBusinessQrCodeImage",business);
         }
     }
@@ -498,9 +509,7 @@ export function doPaymentTransaction(amount) {
                 });
             }
         } catch (error) {
-            dispatch({
-                type: actions.NETWORK_IS_OFFLINE,
-            });
+             handler.handleError(error,dispatch)
             dispatch({
                 type: actions.PAYMENT_SUCCSESS,
                 message: 'Payment Failed',
@@ -536,9 +545,7 @@ export function checkFreeTier(business) {
             }
 
         } catch (error) {
-            dispatch({
-                type: actions.NETWORK_IS_OFFLINE,
-            });
+             handler.handleError(error,dispatch)
         }
     }
 }

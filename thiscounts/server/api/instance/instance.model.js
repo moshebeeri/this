@@ -14,7 +14,7 @@ let InstanceSchema = new Schema({
 
   quantity: Number,
   remaining: Number,
-  realizations: [{type: Schema.ObjectId, ref: 'Realized', index: true, required: true}],
+  realizations: [{type: Schema.ObjectId, ref: 'Realize', required: true}],
 
   location : {
     lng : Number,
@@ -84,7 +84,7 @@ let InstanceSchema = new Schema({
     happy_hour: {
       product: {type: Schema.ObjectId, ref: 'Product', autopopulate: true},
       pay     : Number,
-      days    : Number,
+      days    : [Number],
       from    : Number, // seconds from midnight
       until   : Number // seconds from 'from'
     },

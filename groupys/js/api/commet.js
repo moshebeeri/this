@@ -1,4 +1,5 @@
 import Timer from "./LogTimer";
+import * as errors from './Errors'
 
 let timer = new Timer();
 
@@ -11,7 +12,6 @@ class CommentApi {
                     entities: [
                         {group: group},
                         {instance: instance},
-
                     ]
                     ,
                     message: comment
@@ -25,8 +25,8 @@ class CommentApi {
                     },
                     body: JSON.stringify(request)
                 });
-                if (response.status === '401') {
-                    reject(response);
+                if (response.status === '401' || response.status === 401) {
+                    reject(errors.UN_AUTHOTIZED_ACCESS);
                     return;
                 }
                 let responseData = await response.json();
@@ -34,9 +34,7 @@ class CommentApi {
                 resolve(responseData);
             }
             catch (error) {
-
-                // console.log('There has been a problem with your fetch operation: ' + error.message);
-                reject(error);
+                reject(errors.NETWORK_ERROR);
             }
         });
     }
@@ -58,8 +56,8 @@ class CommentApi {
                     },
                     body: JSON.stringify(request)
                 });
-                if (response.status === '401') {
-                    reject(response);
+                if (response.status === '401' || response.status === 401) {
+                    reject(errors.UN_AUTHOTIZED_ACCESS);
                     return;
                 }
                 let responseData = await response.json();
@@ -67,9 +65,7 @@ class CommentApi {
                 resolve(responseData);
             }
             catch (error) {
-
-                // console.log('There has been a problem with your fetch operation: ' + error.message);
-                reject(error);
+                reject(errors.NETWORK_ERROR);
             }
         });
     }
@@ -89,8 +85,8 @@ class CommentApi {
                     },
                     body: JSON.stringify(request)
                 });
-                if (response.status === '401') {
-                    reject(response);
+                if (response.status === '401' || response.status === 401) {
+                    reject(errors.UN_AUTHOTIZED_ACCESS);
                     return;
                 }
                 let responseData = await response.json();
@@ -98,18 +94,16 @@ class CommentApi {
                 resolve(responseData);
             }
             catch (error) {
-
-                // console.log('There has been a problem with your fetch operation: ' + error.message);
-                reject(error);
+                reject(errors.NETWORK_ERROR);
             }
         });
     }
 
-    getGroupComments(group, token, skip, limit) {
+    getGroupComments(group, token, id, direction) {
         return new Promise(async (resolve, reject) => {
             try {
                 let from = new Date();
-                const response = await fetch(`${server_host}/api/comments/group/chat/` + group._id + '/' + skip + '/' + limit, {
+                const response = await fetch(`${server_host}/api/comments//group/chat/scroll/` + group._id + '/' + id + '/' + direction, {
                     method: 'POST',
                     headers: {
                         'Accept': 'application/json, text/plain, */*',
@@ -117,8 +111,8 @@ class CommentApi {
                         'Authorization': 'Bearer ' + token
                     },
                 })
-                if (response.status === '401') {
-                    reject(response);
+                if (response.status === '401' || response.status === 401) {
+                    reject(errors.UN_AUTHOTIZED_ACCESS);
                     return;
                 }
                 timer.logTime(from, new Date(), 'comments', 'api/comments/group/chat/');
@@ -126,9 +120,7 @@ class CommentApi {
                 resolve(responseData);
             }
             catch (error) {
-
-                // console.log('There has been a problem with your fetch operation: ' + error.message);
-                reject(error);
+                reject(errors.NETWORK_ERROR);
             }
         });
     }
@@ -152,8 +144,8 @@ class CommentApi {
                     },
                     body: JSON.stringify(request)
                 });
-                if (response.status === '401') {
-                    reject(response);
+                if (response.status === '401' || response.status === 401) {
+                    reject(errors.UN_AUTHOTIZED_ACCESS);
                     return;
                 }
                 let responseData = await response.json();
@@ -161,7 +153,7 @@ class CommentApi {
                 resolve(responseData);
             }
             catch (error) {
-                reject(error);
+                reject(errors.NETWORK_ERROR);
             }
         });
     }

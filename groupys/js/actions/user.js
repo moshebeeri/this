@@ -1,12 +1,14 @@
 import UserApi from "../api/user";
 import LoginAPI from "../api/login";
 import * as actions from "../reducers/reducerActions";
+import * as errors from "../api/Errors";
 import simpleStore from 'react-native-simple-store';
 import ActionLogger from './ActionLogger'
-
+import strings from "../i18n/i18n"
 let userApi = new UserApi();
 let loginApi = new LoginAPI();
 let logger = new ActionLogger();
+import  handler from './ErrorHandler'
 
 async function getUser(dispatch, token) {
     try {
@@ -21,9 +23,7 @@ async function getUser(dispatch, token) {
             user: user
         })
     } catch (error) {
-        dispatch({
-            type: actions.NETWORK_IS_OFFLINE,
-        });
+         handler.handleError(error,dispatch)
         logger.actionFailed('users-getUser')
     }
 }
@@ -36,9 +36,7 @@ async function getUserFollowers(dispatch, token) {
             followers: users
         });
     } catch (error) {
-        dispatch({
-            type: actions.NETWORK_IS_OFFLINE,
-        });
+         handler.handleError(error,dispatch)
         logger.actionFailed('users-getUserFollowers')
     }
 }
@@ -82,19 +80,19 @@ export function changePassword(oldPassword, newPassword, navigation) {
             });
             if (response.response === true) {
                 navigation.goBack();
-            } else {
+            }
+            handler.handleSuccses(getState(),dispatch)
+        } catch (error) {
+            if(error === errors.PASSOWRD_VALIDATION_FAILED){
                 dispatch({
                     type: actions.CHANGE_PASSWORD_FAILED,
-                    message: response.error
+                    message: strings.OldPasswordValidationFailed
                 });
+            }else {
+                handler.handleError(error, dispatch)
             }
-        } catch (error) {
             dispatch({
-                type: actions.CHANGE_PASSWORD_FAILED,
-                message: 'Failed to change password'
-            });
-            dispatch({
-                type: actions.NETWORK_IS_OFFLINE,
+                type: actions.SAVING_USER_DONE,
             });
             logger.actionFailed('users-changePassword')
         }
@@ -127,10 +125,10 @@ export function updateUser(newUser, navigation) {
             dispatch({
                 type: actions.SAVING_USER_DONE,
             });
+            handler.handleSuccses(getState(),dispatch)
         } catch (error) {
-            dispatch({
-                type: actions.NETWORK_IS_OFFLINE,
-            });
+            handler.handleError(error,dispatch)
+
             logger.actionFailed('users-updateUser')
         }
     }
@@ -173,9 +171,7 @@ export function resetPasswordForm() {
         }
 
     } catch (error) {
-        dispatch({
-            type: actions.NETWORK_IS_OFFLINE,
-        });
+         handler.handleError(error,dispatch)
         logger.actionFailed('users-updateUserLocale')
     }
 }
@@ -206,9 +202,7 @@ async function updateUserToken(dispatch, token,user,fireBaseToken) {
         }
 
     } catch (error) {
-        dispatch({
-            type: actions.NETWORK_IS_OFFLINE,
-        });
+         handler.handleError(error,dispatch)
         logger.actionFailed('users-updateUserToken')
     }
 }

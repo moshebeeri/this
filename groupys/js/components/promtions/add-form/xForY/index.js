@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import {Text, View} from 'react-native'
+import {Keyboard, Text, View} from 'react-native'
 import styles from './styles'
 import {SelectButton, TextInput} from '../../../../ui/index';
 import strings from "../../../../i18n/i18n"
@@ -51,40 +51,40 @@ export default class XForYComponent extends Component {
     }
 
     setBuyAmount(value) {
-        if (value) {
-            let pay = undefined;
-            if (this.props.state.x_for_y && this.props.state.x_for_y.values) {
-                pay = this.props.state.x_for_y.values.pay;
-            }
-            this.props.setState({
-                choose_distribution: true,
-                x_for_y: {
-                    values: {
-                        pay: pay,
-                        eligible: value
-                    }
-                }
-            })
+        let pay = undefined;
+        if (this.props.state.x_for_y && this.props.state.x_for_y.values) {
+            pay = this.props.state.x_for_y.values.pay;
         }
+        this.props.setState({
+            choose_distribution: true,
+            x_for_y: {
+                values: {
+                    pay: pay,
+                    eligible: value
+                }
+            }
+        })
+    }
+
+    done() {
+        Keyboard.dismiss();
     }
 
     setPay(value) {
-        if (value) {
-            let eligible = undefined;
-            if (this.props.state.x_for_y && this.props.state.x_for_y.values) {
-                eligible = this.props.state.x_for_y.values.eligible;
-            }
-            this.props.setState({
-                choose_distribution: true,
-                x_for_y:
-                    {
-                        values: {
-                            pay: value,
-                            eligible: eligible,
-                        }
-                    }
-            })
+        let eligible = undefined;
+        if (this.props.state.x_for_y && this.props.state.x_for_y.values) {
+            eligible = this.props.state.x_for_y.values.eligible;
         }
+        this.props.setState({
+            choose_distribution: true,
+            x_for_y:
+                {
+                    values: {
+                        pay: value,
+                        eligible: eligible,
+                    }
+                }
+        })
     }
 
     createProductView() {
@@ -131,8 +131,9 @@ export default class XForYComponent extends Component {
                 </View>
                 <View style={styles.inputPrecenComponent}>
                     <TextInput field={strings.PayAmount} value={pay}
-                               returnKeyType='next' ref="Pay $" refNext="Pay $"
+                               returnKeyType='done' ref="Pay $" refNext="Pay $"
                                keyboardType='numeric'
+                               onSubmitEditing={this.done.bind(this)}
                                onChangeText={(value) => this.setPay(value)} isMandatory={true}/>
                 </View>
             </View>

@@ -4,7 +4,7 @@
 import Timer from "./LogTimer";
 
 let timer = new Timer();
-
+import * as errors from './Errors'
 class FeedApi {
     clean_phone_number(number) {
         // remove all non digits, and then remove 0 if it is the first digit
@@ -24,8 +24,8 @@ class FeedApi {
                         'Authorization': 'Bearer ' + token
                     }
                 });
-                if (response.status ==='401') {
-                    reject(response);
+                if (response.status ==='401' || response.status === 401) {
+                    reject(errors.UN_AUTHOTIZED_ACCESS);
                     return;
                 }
                 let responseData = await response.json();
@@ -33,7 +33,7 @@ class FeedApi {
                 resolve(responseData);
             }
             catch (error) {
-                reject(error);
+                reject(errors.NETWORK_ERROR);
             }
         })
     }
@@ -50,8 +50,8 @@ class FeedApi {
                         'Authorization': 'Bearer ' + token
                     }
                 });
-                if (response.status ==='401') {
-                    reject(response);
+                if (response.status ==='401' || response.status === 401) {
+                    reject(errors.UN_AUTHOTIZED_ACCESS);
                     return;
                 }
                 let responseData = await response.json();
@@ -59,7 +59,7 @@ class FeedApi {
                 resolve(responseData);
             }
             catch (error) {
-                reject(error);
+                reject(errors.NETWORK_ERROR);
             }
         })
     }

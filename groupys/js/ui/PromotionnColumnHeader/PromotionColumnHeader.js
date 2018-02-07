@@ -13,7 +13,7 @@ export default class PromotionColumnHeader extends Component {
     }
 
     render() {
-        const {type, titleValue, titleText, term} = this.props;
+        const {type, titleValue, titleText, term,item} = this.props;
         switch (type) {
             case "PERCENT":
             case "X+N%OFF":
@@ -72,9 +72,9 @@ export default class PromotionColumnHeader extends Component {
             case "PUNCH_CARD":
                 return <View style={[styles.promotionPunchHeader, {width: StyleUtils.getWidth() - 15}]}>
                     <View style={styles.promotionPunchValue}>
-                        <Text style={styles.puncCardtitleValue}>{titleText}</Text>
+                        <Text style={styles.puncCardtitleFeedValue}>{titleText}</Text>
                     </View>
-                    <PunchView feed numberOfPunches={term}/>
+                    <PunchView feed numberRealized={item.realizedPunches}  numberOfPunches={term}/>
                 </View>;
             default:
                 return <View style={promotionHeader}>

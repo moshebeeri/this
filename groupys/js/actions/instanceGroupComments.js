@@ -1,6 +1,7 @@
 import CommentsApi from "../api/commet";
 import * as actions from "../reducers/reducerActions";
 import ActionLogger from './ActionLogger'
+import  handler from './ErrorHandler'
 
 let commentsApi = new CommentsApi();
 let logger = new ActionLogger();
@@ -44,10 +45,9 @@ export function fetchTopComments(group, instance) {
                     instanceId: instance.id
                 }))
             }
+            handler.handleSuccses(getState(),dispatch)
         } catch (error) {
-            dispatch({
-                type: actions.NETWORK_IS_OFFLINE,
-            });
+            handler.handleError(error, dispatch)
             logger.actionFailed('instance-group-fetchTopComments')
         }
     }
@@ -59,7 +59,6 @@ export function sendMessage(groupId, instanceId, message) {
             const token = getState().authentication.token;
             const user = getState().user.user;
             commentsApi.createComment(groupId, instanceId, message, token)
-
             let messageItem = createMessage(message, user);
             dispatch({
                 type: actions.GROUP_COMMENT_INSTANCE_ADD_MESSAGE,
@@ -67,10 +66,9 @@ export function sendMessage(groupId, instanceId, message) {
                 groupId: groupId,
                 message: messageItem
             });
+            handler.handleSuccses(getState(),dispatch)
         } catch (error) {
-            dispatch({
-                type: actions.NETWORK_IS_OFFLINE,
-            });
+            handler.handleError(error, dispatch)
             logger.actionFailed('instance-group-sendMessage')
         }
     }
@@ -105,7 +103,7 @@ export function setNextFeeds(comments, group, instance) {
                 response = await commentsApi.getInstanceGroupComments(group._id, instance.id, comments.length, token);
             } else {
                 response = await commentsApi.getInstanceGroupComments(group._id, instance.id, 0, token);
-            } feeds[groupId][feedsOrder[groupId][0]]
+            }
             dispatch({
                 type: actions.GROUP_COMMENT_INSTANCE_LOADING_DONE,
                 loadingDone: true,
@@ -125,11 +123,11 @@ export function setNextFeeds(comments, group, instance) {
                     gid: group._id,
                     instanceId: instance.id
                 });
+
             }
+            handler.handleSuccses(getState(),dispatch)
         } catch (error) {
-            dispatch({
-                type: actions.NETWORK_IS_OFFLINE,
-            });
+            handler.handleError(error, dispatch)
             logger.actionFailed('instance-group-setNextFeeds')
         }
     }

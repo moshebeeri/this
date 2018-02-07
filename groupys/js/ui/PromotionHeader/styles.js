@@ -37,8 +37,8 @@ module.exports = {
     promotionPunchValue: {
         flex: 1,
         margin: 5,
-        alignItems: 'flex-start',
-        justifyContent: 'flex-start',
+        alignItems: 'center',
+        justifyContent: 'center'
     },
     promotiontDescription: {
         flex: 3,
@@ -110,7 +110,7 @@ module.exports = {
     },
     puncCardtitleValueFeed: {
         flex: 1,
-        fontSize: 14,
+        fontSize: 18,
         color: '#2db6c8'
     },
     promotionImageContainer: {

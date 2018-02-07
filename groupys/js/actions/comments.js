@@ -4,8 +4,9 @@ import * as actions from "../reducers/reducerActions";
 let commentsApi = new CommentsApi();
 import ActionLogger from './ActionLogger'
 let logger = new ActionLogger();
-
-async function getInstanceGroupComments(dispatch, group, instance, size, token) {
+import * as errors from '../api/Errors'
+import  handler from './ErrorHandler'
+async function getInstanceGroupComments(state,dispatch, group, instance, size, token) {
     try {
         let response = await commentsApi.getInstanceGroupComments(group, instance, size, token);
         if (response.length > 0) {
@@ -16,15 +17,14 @@ async function getInstanceGroupComments(dispatch, group, instance, size, token) 
                 instanceId: instance
             });
         }
+        handler.handleSuccses(state,dispatch)
     } catch (error) {
-        dispatch({
-            type: actions.NETWORK_IS_OFFLINE,
-        });
+        handler.handleError(error,dispatch)
         logger.actionFailed('getInstanceGroupComments');
     }
 }
 
-async function getGroupComments(dispatch, group, token) {
+async function getGroupComments(state,dispatch, group, token) {
     try {
         let response = await commentsApi.getGroupComments(group, token, 0, 100);
         if (response.length > 0) {
@@ -34,15 +34,14 @@ async function getGroupComments(dispatch, group, token) {
                 gid: group,
             });
         }
+        handler.handleSuccses(state,dispatch)
     } catch (error) {
-        dispatch({
-            type: actions.NETWORK_IS_OFFLINE,
-        });
+        handler.handleError(error,dispatch)
         logger.actionFailed('getGroupComments');
     }
 }
 
-async function getEntityComments(dispatch, entities, id, token) {
+async function getEntityComments(state,dispatch, entities, id, token) {
     try {
         let response = await commentsApi.getComment(entities, token);
         dispatch({
@@ -50,25 +49,24 @@ async function getEntityComments(dispatch, entities, id, token) {
             comments: response,
             id: id,
         });
+        handler.handleSuccses(state,dispatch)
     } catch (error) {
-        dispatch({
-            type: actions.NETWORK_IS_OFFLINE,
-        });
+        handler.handleError(error,dispatch)
         logger.actionFailed('getComment');
     }
 }
 
 export function fetchInstanceGroupComments(group, instance, size) {
-    return function (dispatch) {
+    return function (dispatch,getState) {
         const token = getState().authentication.token;
-        getInstanceGroupComments(dispatch, group, instance, size, token);
+        getInstanceGroupComments(getState(),dispatch, group, instance, size, token);
     }
 }
 
 export function fetchEntityComments(entities, id) {
-    return function (dispatch) {
+    return function (dispatch,getState) {
         const token = getState().authentication.token;
-        getEntityComments(dispatch, entities, id, token);
+        getEntityComments(getState(),dispatch, entities, id, token);
     }
 }
 
@@ -94,9 +92,9 @@ export function updateInstanceEntityComments(group, instance, comment) {
 }
 
 export function fetchGroupComments(group) {
-    return function (dispatch) {
+    return function (dispatch,getState) {
         const token = getState().authentication.token;
-        dispatch(getGroupComments(dispatch, group, token));
+        dispatch(getGroupComments(getState(),dispatch, group, token));
     }
 }
 
@@ -142,10 +140,13 @@ export function setNextFeeds(comments, token, group) {
                     gid: group._id,
                 }))
             }
+            handler.handleSuccses(getState(),dispatch)
         } catch (error) {
-            dispatch({
-                type: actions.NETWORK_IS_OFFLINE,
-            });
+            if(error === errors.NETWORK_ERROR) {
+                dispatch({
+                    type: actions.NETWORK_IS_OFFLINE,
+                });
+            }
             logger.actionFailed('getGroupComments');
         }
     }

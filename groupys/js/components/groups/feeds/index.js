@@ -13,6 +13,7 @@ import strings from "../../../i18n/i18n"
 import PageRefresher from '../../../refresh/pageRefresher'
 import {ScrolTabView} from '../../../ui/index'
 import GroupFeedComponent from './groupsFeeds'
+import Tasks from '../../../tasks/tasks'
 
 class GroupFeed extends Component {
     static navigationOptions = ({navigation}) => ({
@@ -44,6 +45,7 @@ class GroupFeed extends Component {
     }
 
     handleBack() {
+        Tasks.groupChatTaskstop();
         //this.props.actions.fetchGroups();
     }
 
@@ -69,8 +71,11 @@ class GroupFeed extends Component {
         const {navigation, commentGroupAction} = this.props;
         const group = navigation.state.params.group;
         if (tab.i === 1) {
+            Tasks.groupChatTaskStart(group._id)
             PageRefresher.upSertGroupsChat(group._id);
             commentGroupAction.clearUnreadComments(group);
+        }else{
+            Tasks.groupChatTaskstop();
         }
         this.setState({
             showChat: !this.state.showChat

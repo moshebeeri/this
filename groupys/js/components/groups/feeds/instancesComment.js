@@ -13,14 +13,18 @@ const {width, height} = Dimensions.get('window')
 const vw = width / 100;
 const vh = height / 100
 import strings from '../../../i18n/i18n';
+import Tasks from '../../../tasks/tasks'
 class instancesComment extends Component {
     constructor(props) {
         super(props);
     }
 
     componentWillMount() {
-        const {comments, group, actions} = this.props;
-        this.setNextFeed();
+        const {comments, group} = this.props;
+        if (!comments[group._id] || (comments[group._id] && comments[group._id].length ===0)) {
+            this.setNextFeed();
+        }
+        Tasks.groupChatTaskStart(group._id);
     }
 
     setNextFeed() {
@@ -28,7 +32,7 @@ class instancesComment extends Component {
         if (comments[group._id]) {
             actions.setNextFeeds(comments[group._id].filter(comment => comment.message), group);
         } else {
-            actions.setNextFeeds(comments[group._id], group);
+            actions.setNextFeeds([], group);
         }
     }
 
@@ -108,7 +112,7 @@ export default connect(
         loadingDone: state.comments.loadingDone,
         showTopLoader: state.comments.showTopLoader,
         update: state.comments.update,
-        user: state.authentication.user,
+        user: state.user.user,
     }),
     (dispatch) => ({
         actions: bindActionCreators(commentAction, dispatch)

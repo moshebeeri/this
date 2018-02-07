@@ -10,14 +10,17 @@ import * as actions from "../reducers/reducerActions";
 import * as assemblers from "./collectionAssembler";
 import CollectionDispatcher from "./collectionDispatcher";
 import ActionLogger from './ActionLogger'
+import FeedUiConverter from "../api/feed-ui-converter";
 
+let feedUiConverter = new FeedUiConverter();
 let feedApi = new FeedApi();
 let userApi = new UserApi();
 let promotionApi = new PtomotionApi();
 let activityApi = new ActivityApi();
 let businessApi = new BusinessApi();
 let logger = new ActionLogger();
-
+import  handler from './ErrorHandler'
+import * as errors from '../api/Errors'
 async function fetchFeedsFromServer(feeds, dispatch, token, user) {
     try {
         let response = null;
@@ -28,6 +31,9 @@ async function fetchFeedsFromServer(feeds, dispatch, token, user) {
             let id = keys[keys.length - 1];
             response = await feedApi.getAll('down', feeds[id].fid, token, user);
         }
+        dispatch({
+            type: actions.FEEDS_GET_NEXT_BULK_DONE,
+        });
         console.log(response)
         if (!response)
             return;
@@ -45,9 +51,7 @@ async function fetchFeedsFromServer(feeds, dispatch, token, user) {
             items: disassemblerItems
         });
     } catch (error) {
-        dispatch({
-            type: actions.NETWORK_IS_OFFLINE,
-        });
+        handler.handleError(error,dispatch)
         logger.actionFailed('fetchFeedsFromServer')
     }
 }
@@ -68,9 +72,7 @@ async function fetchFeedsFromServer(feeds, dispatch, token, user) {
             item: item
         }))
     } catch (error) {
-        dispatch({
-            type: actions.NETWORK_IS_OFFLINE,
-        });
+        handler.handleError(error,dispatch)
         logger.actionFailed('fetchTopList-mainfeeds')
     }
 }
@@ -97,9 +99,7 @@ async function updateBusinessCategory(token, businesses, dispatch) {
             });
         }
     } catch (error) {
-        dispatch({
-            type: actions.NETWORK_IS_OFFLINE,
-        })
+        handler.handleError(error,dispatch)
         logger.actionFailed('updateBusinessCategory')
     }
 }
@@ -119,10 +119,13 @@ export function fetchTop(feeds, token, user) {
                 type: actions.FEED_SHOW_TOP_LOADER,
                 showTopLoader: false,
             });
+            handler.handleSuccses(getState(),dispatch)
         } catch (error) {
-            dispatch({
-                type: actions.NETWORK_IS_OFFLINE,
-            });
+            if(error === errors.NETWORK_ERROR) {
+                dispatch({
+                    type: actions.NETWORK_IS_OFFLINE,
+                });
+            }
             logger.actionFailed('fetchTop')
         }
     }
@@ -136,9 +139,7 @@ async function getUserFollowers(dispatch, token) {
             followers: users
         });
     } catch (error) {
-        dispatch({
-            type: actions.NETWORK_IS_OFFLINE,
-        });
+        handler.handleError(error,dispatch)
         logger.actionFailed('getUserFollowers')
     }
 }
@@ -167,6 +168,9 @@ export function setNextFeeds(feeds) {
         }
 
         if(getState().feeds.maxFeedReturned){
+            dispatch({
+                type: actions.FEEDS_GET_NEXT_BULK_DONE,
+            });
             return;
         }
         
@@ -199,6 +203,7 @@ export function setNextFeeds(feeds) {
         dispatch({
             type: actions.FEEDS_GET_NEXT_BULK_DONE,
         });
+        handler.handleSuccses(getState(),dispatch)
     }
 }
 
@@ -211,10 +216,13 @@ export function like(id) {
                 id: id
             });
             await userApi.like(id, token);
+            handler.handleSuccses(getState(),dispatch)
         } catch (error) {
-            dispatch({
-                type: actions.NETWORK_IS_OFFLINE,
-            });
+            if(error === errors.NETWORK_ERROR) {
+                dispatch({
+                    type: actions.NETWORK_IS_OFFLINE,
+                });
+            }
             logger.actionFailed('like')
         }
     }
@@ -240,11 +248,14 @@ export function refresh(id, currentSocialState) {
                 social_state: response,
                 id: id
             });
+            handler.handleSuccses(getState(),dispatch)
             // await userApi.like(id, token);
         } catch (error) {
-            dispatch({
-                type: actions.NETWORK_IS_OFFLINE,
-            });
+            if(error === errors.NETWORK_ERROR) {
+                dispatch({
+                    type: actions.NETWORK_IS_OFFLINE,
+                });
+            }
             logger.actionFailed('getFeedSocialState')
         }
     }
@@ -262,10 +273,9 @@ async function refreshFeedSocialState (dispatch, token,id) {
             id: id
         });
 
+
     } catch (error) {
-        dispatch({
-            type: actions.NETWORK_IS_OFFLINE,
-        });
+        handler.handleError(error,dispatch)
         logger.actionFailed('refreshFeedSocialState')
     }
 }
@@ -279,27 +289,36 @@ export const unlike = (id) => {
                 type: actions.UNLIKE,
                 id: id
             });
+            handler.handleSuccses(getState(),dispatch)
         } catch (error) {
-            dispatch({
-                type: actions.NETWORK_IS_OFFLINE,
-            });
+            if(error === errors.NETWORK_ERROR) {
+                dispatch({
+                    type: actions.NETWORK_IS_OFFLINE,
+                });
+            }
             logger.actionFailed('unlike')
         }
     }
 };
 
-export function saveFeed(id) {
+export function saveFeed(id,navigation,feed) {
     return async function (dispatch, getState) {
         try {
             dispatch({
                 type: actions.SAVE,
                 id: id
             });
-            await promotionApi.save(id);
+           let savedInstance =  await promotionApi.save(id);
+            navigation.navigate('realizePromotion', {item: feed,id:savedInstance._id})
+            await  promotionApi.getAll();
+            handler.handleSuccses(getState(),dispatch)
+
         } catch (error) {
-            dispatch({
-                type: actions.NETWORK_IS_OFFLINE,
-            });
+            if(error === errors.NETWORK_ERROR) {
+                dispatch({
+                    type: actions.NETWORK_IS_OFFLINE,
+                });
+            }
             logger.actionFailed('saveFeed')
         }
     }
@@ -315,9 +334,11 @@ export function setUserFollows() {
                 followers: response
             });
         } catch (error) {
-            dispatch({
-                type: actions.NETWORK_IS_OFFLINE,
-            });
+            if(error === errors.NETWORK_ERROR) {
+                dispatch({
+                    type: actions.NETWORK_IS_OFFLINE,
+                });
+            }
             logger.actionFailed('getUserFollowers')
         }
     }
@@ -335,9 +356,11 @@ export function shareActivity(id, activityId, users, token) {
                 shares: users.length
             });
         } catch (error) {
-            dispatch({
-                type: actions.NETWORK_IS_OFFLINE,
-            });
+            if(error === errors.NETWORK_ERROR) {
+                dispatch({
+                    type: actions.NETWORK_IS_OFFLINE,
+                });
+            }
             logger.actionFailed('shareActivity')
         }
     }

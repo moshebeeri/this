@@ -1,5 +1,5 @@
 import React, {Component} from "react";
-import {Dimensions, I18nManager, Image, ScrollView, View} from "react-native";
+import {Dimensions, I18nManager, Image, ScrollView, View,Keyboard} from "react-native";
 import {connect} from "react-redux";
 import {actions} from "react-native-navigation-redux-helpers";
 import {Button, Container, Content, Footer, Icon, Input, Item, Picker, Text} from "native-base";
@@ -166,6 +166,7 @@ class AddPromotion extends Component {
 
     async saveFormData() {
         const {actions, navigation, saving} = this.props;
+        Keyboard.dismiss();
         if (saving) {
             return;
         }
@@ -390,7 +391,9 @@ class AddPromotion extends Component {
         }
         return result;
     }
-
+    dismiss(){
+        Keyboard.dismiss();
+    }
     selectDistributionType(type) {
         if (type === 'PERSONAL') {
             this.setState({
@@ -464,6 +467,7 @@ class AddPromotion extends Component {
     }
 
     render() {
+        const {saving} = this.props;
         let conditionForm = this.createDiscountConditionForm();
         let distributionForm = this.createDistributionForm();
         if (this.props.navigation.state.params.group) {
@@ -482,6 +486,7 @@ class AddPromotion extends Component {
 
                 <FormHeader showBack submitForm={this.saveFormData.bind(this)} navigation={this.props.navigation}
                             title={header} bgc="#FA8559"/>
+
                 <ScrollView keyboardShouldPersistTaps={true}  ontentContainerStyle={{
                     justifyContent: 'center',
                     alignItems: 'center',
@@ -526,13 +531,17 @@ class AddPromotion extends Component {
                     <View style={[styles.inputTextLayout, {width: StyleUtils.getWidth() - 15}]}>
                         <TextInput field={strings.Description} value={this.state.info}
                                    returnKeyType='next' ref="5" refNext="5"
-                                   onSubmitEditing={this.focusNextField.bind(this, "5")}
+                                   onSubmitEditing={this.dismiss.bind(this)}
                                    onChangeText={(info) => this.setState({info})} isMandatory={true}/>
                     </View>
 
                     {conditionForm}
                     {distributionForm}
                 </ScrollView>
+
+                {saving && <View style={{justifyContent:'center',alignItems:'center',position:'absolute',width:StyleUtils.getWidth(),opacity:0.7,height:height,top:40,backgroundColor:'white'}}>
+                    <Spinner/>
+                </View>}
             </View>
         );
     }
@@ -553,7 +562,7 @@ class AddPromotion extends Component {
     }
 
     createCoverImageComponnent() {
-        const {saving} = this.props;
+
         if (this.state.image) {
             let coverImage = <Image
                 style={{width: width - 10, height: 210, borderWidth: 1, borderColor: 'white'}}
@@ -570,13 +579,13 @@ class AddPromotion extends Component {
 
                         <ImagePicker ref={"coverImage"} mandatory image={coverImage} color='white' pickFromCamera
                                      setImage={this.setCoverImage.bind(this)}/>
-                        {saving && <Spinner/>}
+
                     </View>
                 </View>
             </View>
         }
         return <View style={[styles.product_upper_container, {width: StyleUtils.getWidth()}]}>
-            {saving && <Spinner/>}
+
             <View style={styles.cmeraLogoContainer}>
 
                 <View style={styles.addCoverNoImageContainer}>

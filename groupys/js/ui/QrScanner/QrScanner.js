@@ -4,6 +4,8 @@ import {Button, Input, Item, Spinner, Text, View} from "native-base";
 import Camera from "react-native-camera";
 import styles from "./styles";
 import {BusinessHeader,SubmitButton} from '../../ui/index';
+import StyleUtils from '../../utils/styleUtils'
+
 const {width, height} = Dimensions.get('window')
 import FeedPromotion from '../../components/generic-feed-manager/generic-feed/feed-components/feedPromotion'
 import strings from "../../i18n/i18n"
@@ -34,7 +36,7 @@ export default class BusinessFollow extends Component {
     }
 
     createView() {
-        const {showAssigmentMessageFailed,showAssigmentMessage,navigation, code, cameraOn, searching, business, instance, group, followBusiness, groupFollowBusiness, scanResult, realizePromotion} = this.props;
+        const {showNotAuthorizedMessage,showAssigmentMessageFailed,showAssigmentMessage,navigation, code, cameraOn, searching, business, instance, group, followBusiness, groupFollowBusiness, scanResult, realizePromotion,ShowOutOffScope} = this.props;
         let followComponent = undefined;
         if (business) {
             let followStyle = {
@@ -61,18 +63,43 @@ export default class BusinessFollow extends Component {
         }
 
         if(showAssigmentMessage){
-            return (<View style={{alignItems:'center',justifyContent:'flex-start',flex:1}}>
+            return (<View style={{backgroundColor:'transparent',alignItems:'center',justifyContent:'flex-start',flex:1}}>
                 <Text>{strings.AssignmenofQrcCodesucceeded}</Text>
             </View>)
 
         }
+        if(ShowOutOffScope){
+            return (<View style={{backgroundColor:'transparent',alignItems:'center',justifyContent:'flex-start',flex:1}}>
+                <Text>{strings.ConditionOutOfScope}</Text>
+            </View>)
+
+        }
+
+
+        if(showNotAuthorizedMessage){
+            return (<View style={{backgroundColor:'transparent',alignItems:'center',justifyContent:'flex-start',flex:1}}>
+                <Text>{strings.notAuthorizedMessage}</Text>
+            </View>)
+
+        }
+
         if(showAssigmentMessageFailed){
-            return (<View style={{alignItems:'center',justifyContent:'flex-start',flex:1}}>
+            return (<View style={{backgroundColor:'transparent',alignItems:'center',justifyContent:'flex-start',flex:1}}>
                 <Text>{strings.AssignmenofQrcCodefailed}</Text>
             </View>)
 
         }
 
+
+        let comnfirmLastPunc = false;
+        if(instance){
+            if(instance.promotion ==='PUNCH_CARD'){
+                let missingPunches = instance.punches - instance.realizedPunches;
+                if(missingPunches === 1){
+                    comnfirmLastPunc = true;
+                }
+            }
+        }
 
         return ( <View style={styles.follow_container}>
 
@@ -84,7 +111,7 @@ export default class BusinessFollow extends Component {
                     style={styles.payment_camera}
                     aspect={Camera.constants.Aspect.fill}>
                 </Camera>
-                    <Text>Please Scan Code</Text>
+                    <Text>{strings.PleaseScanCode}</Text>
                 </View>}
                 {searching && <View><Spinner color='red'/></View>}
                 {business && <View style={{
@@ -109,16 +136,17 @@ export default class BusinessFollow extends Component {
                 </View>}
                 {instance &&
                 <View style={{flex:1,  }}>
-                    <View style={{flex:3,  }}>
-                    <FeedPromotion  refresh={this.refresh.bind(this)}
+                    <View style={{flex:3, backgroundColor:'white'  }}>
+                    <FeedPromotion scanner={true} refresh={this.refresh.bind(this)}
 
-                                   navigation={navigation} item={instance}
+                                   hideSocial={true} navigation={navigation} item={instance}
 
                     />
                     </View>
-                    <View style={{flex:1, alignItems:'center' }}>
-                        <View>
-                        <SubmitButton color={'#2db6c8'} title={strings.Confirm.toUpperCase()} onPress={() => realizePromotion(code)}/>
+                    <View style={{flex:1, alignItems:'center'}}>
+                        <View style={{height:60,width:StyleUtils.getWidth(),backgroundColor:'white', alignItems:'center',justifyContent:'flex-start' }}>
+                            {comnfirmLastPunc ? <SubmitButton width={200} color={'#2db6c8'} title={strings.ConfirmLast.toUpperCase()} onPress={() => realizePromotion(code)}/> :
+                                <SubmitButton color={'#2db6c8'} title={strings.Confirm.toUpperCase()} onPress={() => realizePromotion(code)}/>}
                         </View>
                     </View>
                 </View>

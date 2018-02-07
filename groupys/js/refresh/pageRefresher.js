@@ -3,6 +3,7 @@ import feedAction from '../actions/feedsMain'
 import notificationAction from '../actions/notifications'
 import postAction from '../actions/posts'
 import promotionAction from '../actions/promotions'
+import myPromotionAction from '../actions/myPromotions'
 import business from '../actions/business'
 import groups from '../actions/groups'
 import users from '../actions/user'
@@ -12,16 +13,20 @@ import FormUtils from "../utils/fromUtils";
 import simpleStore from 'react-native-simple-store';
 import EntityUtils from "../utils/createEntity";
 let entityUtils = new EntityUtils();
+import Tasks from '../tasks/tasks'
+
 const store = getStore();
 let visitedList = ['feed', 'groups', 'businesses'];
 import * as actions from "../reducers/reducerActions";
 class PageRefresher {
     constructor() {
-        pageSync.createPage('feed', pageSync.createStdAverageRefresh('feed', 10, 60000), this.setMainFeedRefresh.bind(this));
+        pageSync.createPage('feed', pageSync.createStdAverageRefresh('feed', 10, 360000), this.setMainFeedRefresh.bind(this));
         pageSync.createPage('groups', pageSync.createStdAverageRefresh('groups', 10, 60000), this.updateGroups.bind(this));
         pageSync.createPage('businesses', pageSync.createStdAverageRefresh('businesses', 10, 60000), this.updateBusinesses.bind(this));
         pageSync.createPage('notification', pageSync.createStdAverageRefresh('notification', 10, 60000), this.updateNotification.bind(this));
         pageSync.createPage('user', pageSync.createStdAverageRefresh('user', 10, 60000), this.updateUser.bind(this));
+        pageSync.createPage('myPromotions', pageSync.createStdAverageRefresh('myPromotions', 10, 60000), this.updateMyPromotions.bind(this));
+
     }
 
     updateUser() {
@@ -29,6 +34,13 @@ class PageRefresher {
         let user = store.getState().user.user;
         if (token && user) {
             users.updateUserLocale(store.dispatch, token, user, FormUtils.getLocale())
+        }
+    }
+
+    updateMyPromotions() {
+        let token = store.getState().authentication.token;
+        if (token ) {
+            myPromotionAction.fetchTopList(token, store.dispatch )
         }
     }
 
@@ -155,6 +167,7 @@ class PageRefresher {
     }
 
     visitedFeed() {
+        Tasks.mainFeedTaskStart();
         pageSync.visited('feed')
     }
 

@@ -1,7 +1,7 @@
 import ProfilenApi from "../api/profile";
 import * as actions from "../reducers/reducerActions";
 import ActionLogger from './ActionLogger'
-
+import  handler from './ErrorHandler'
 let profileApi = new ProfilenApi();
 let logger = new ActionLogger();
 
@@ -49,10 +49,9 @@ export function setNextFeeds(feeds) {
                 type: actions.UPSERT_SAVED_FEEDS,
                 item: response
             });
+            handler.handleSuccses(getState(),dispatch)
         } catch (error) {
-            dispatch({
-                type: actions.NETWORK_IS_OFFLINE,
-            });
+            handler.handleError(error, dispatch)
             logger.actionFailed('mypromotons-setNextFeeds')
         }
     }
@@ -90,10 +89,9 @@ export function fetchTop() {
                 type: actions.SAVED_FEED_SHOW_TOP_LOADER,
                 showTopLoader: false,
             });
+            handler.handleSuccses(getState(),dispatch)
         } catch (error) {
-            dispatch({
-                type: actions.NETWORK_IS_OFFLINE,
-            });
+            handler.handleError(error, dispatch)
             dispatch({
                 type: actions.SAVED_FEED_SHOW_TOP_LOADER,
                 showTopLoader: false,
@@ -101,4 +99,44 @@ export function fetchTop() {
             logger.actionFailed('mypromotons-fetchTop')
         }
     }
+}
+
+async function fetchTopList( token, dispatch) {
+    try {
+
+
+        let response = await profileApi.fetch(token, 0, 10);
+        if (response.length === 0) {
+            return;
+        }
+        dispatch({
+            type: actions.FETCH_TOP_SAVED_FEEDS,
+            item: response
+        });
+    } catch (error) {
+        handler.handleError(error,dispatch)
+        logger.actionFailed('fetchTopList-mainfeeds')
+    }
+}
+
+async function updateInstance( token, dispatch,id) {
+    try {
+
+
+        let response = await profileApi.getSavedInstance(token,id);
+
+        dispatch({
+            type: actions.UPDATE_SINGLE_SAVED_INSTANCE,
+            item: response
+        });
+    } catch (error) {
+        handler.handleError(error,dispatch)
+        logger.actionFailed('fetchTopList-mainfeeds')
+    }
+}
+
+
+export default {
+    fetchTopList,
+    updateInstance
 }

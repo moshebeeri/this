@@ -1,5 +1,5 @@
 import store from "react-native-simple-store";
-
+import * as errors from './Errors'
 class LocationApi {
     sendLocation(lng, lat, time, speed) {
         return new Promise(async (resolve, reject) => {
@@ -23,15 +23,15 @@ class LocationApi {
                     },
                     body: JSON.stringify(request)
                 });
-                if (response.status ==='401') {
-                    reject(response);
+                if (response.status ==='401' || response.status === 401) {
+                    reject(errors.UN_AUTHOTIZED_ACCESS);
                     return;
                 }
                 let responseData = await response.json();
                 resolve(responseData);
             }
             catch (error) {
-                reject(error);
+                reject(errors.NETWORK_ERROR);
             }
         })
     }

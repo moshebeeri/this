@@ -145,8 +145,9 @@ export default class BusinessListView extends Component {
 
     createBannerTag(item) {
         if (item.business.pictures && item.business.pictures.length > 0) {
+            let picLength = item.business.pictures.length;
             return <View style={{}}><Image  style={[styles.bannerImageContainer, {width: StyleUtils.getWidth()}]}  resizeMode="cover"
-                                           source={{uri: item.business.pictures[0].pictures[0]}}>
+                                           source={{uri: item.business.pictures[picLength -1].pictures[0]}}>
 
             </Image>
 

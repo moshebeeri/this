@@ -7,7 +7,7 @@ module.exports = {
         height: height,
         width: width,
         alignItems: 'center',
-        padding: 5,
+
     },
     business_upper_container: {
         width: width - 15,

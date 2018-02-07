@@ -6,6 +6,7 @@ import ActionLogger from './ActionLogger'
 
 let postApi = new PostApi();
 let logger = new ActionLogger();
+import  handler from './ErrorHandler'
 
 export function createPost(post, navigation) {
     return async function (dispatch, getState) {
@@ -20,10 +21,9 @@ export function createPost(post, navigation) {
                 type: actions.POST_SAVING_DONE,
             });
             navigation.goBack();
+            handler.handleSuccses(getState(),dispatch)
         } catch (error) {
-            dispatch({
-                type: actions.NETWORK_IS_OFFLINE,
-            });
+             handler.handleError(error,dispatch)
             logger.actionFailed('posts-createPost')
         }
     }
@@ -45,10 +45,9 @@ export function createGroupPost(post, navigation, group) {
                 type: actions.POST_SAVING_DONE,
             });
             navigation.goBack();
+            handler.handleSuccses(getState(),dispatch)
         } catch (error) {
-            dispatch({
-                type: actions.NETWORK_IS_OFFLINE,
-            });
+             handler.handleError(error,dispatch)
             logger.actionFailed('posts-createGroupPost')
         }
     }
@@ -80,9 +79,7 @@ async function fetchPostById(id, token, dispatch) {
         });
 
     } catch (error) {
-        dispatch({
-            type: actions.NETWORK_IS_OFFLINE,
-        });
+        handler.handleError(error,dispatch)
         logger.actionFailed('posts-fetchPostById')
     }
 }

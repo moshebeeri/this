@@ -26,6 +26,7 @@ import Icon from 'react-native-vector-icons/Ionicons';
 import StyleUtils from '../../../utils/styleUtils'
 import {bindActionCreators} from "redux";
 import strings from "../../../i18n/i18n"
+import Tasks from '../../../tasks/tasks'
 
 class GroupFeedHeader extends Component {
     constructor(props) {
@@ -41,6 +42,7 @@ class GroupFeedHeader extends Component {
     }
 
     handleBack() {
+        Tasks.groupChatTaskstop();
         this.props.fetchGroups();
     }
 

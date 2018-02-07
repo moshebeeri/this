@@ -56,6 +56,13 @@ let SavedInstanceSchema = new Schema({
       number_of_punches: Number,
       days: Number,
     },
+     happy_hour: {
+      redeemTimes: [{type: Date}],
+      product: {type: Schema.ObjectId, ref: 'Product'},
+      days    : [Number],
+      from    : Number, // seconds from midnight
+      until   : Number // seconds from 'from'
+    },
     cash_back: {
       redeemTime: {type: Date},
       pay: Number,

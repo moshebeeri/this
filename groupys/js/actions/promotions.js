@@ -8,6 +8,7 @@ let promotionApi = new PromotionsApi();
 let productApi = new ProductApi();
 let entityUtils = new EntityUtils();
 let logger = new ActionLogger();
+import  handler from './ErrorHandler'
 
 async function getAll(dispatch, id, token,loading) {
     try {
@@ -25,9 +26,7 @@ async function getAll(dispatch, id, token,loading) {
             });
         }
     } catch (error) {
-        dispatch({
-            type: actions.NETWORK_IS_OFFLINE,
-        });
+        handler.handleError(error,dispatch)
         logger.actionFailed('promotions-getAll')
     }
 }
@@ -46,9 +45,7 @@ async function getAllProducts(dispatch, id, token,loading) {
         }
 
     } catch (error) {
-        dispatch({
-            type: actions.NETWORK_IS_OFFLINE,
-        });
+        handler.handleError(error,dispatch)
         logger.actionFailed('promotions-getAllProducts')
     }
 }
@@ -77,10 +74,9 @@ export function realizePromotion(code) {
                 type: actions.SCAN_QRCODE_CLEAR,
 
             });
+            handler.handleSuccses(getState(),dispatch)
         }catch (error){
-            dispatch({
-                type: actions.NETWORK_IS_OFFLINE,
-            });
+            handler.handleError(error,dispatch)
             logger.actionFailed('promotions-realizePromotion')
         }
     }
@@ -95,10 +91,9 @@ export function setPromotionDescription(code) {
                 type: actions.SCAN_QRCODE_INSTANCE,
                 instance: instance
             });
+            handler.handleSuccses(getState(),dispatch)
         }catch (error){
-            dispatch({
-                type: actions.NETWORK_IS_OFFLINE,
-            });
+            handler.handleError(error,dispatch)
             logger.actionFailed('promotions-setPromotionDescription')
         }
     }
@@ -141,11 +136,10 @@ export function savePromotion(promotion,businessId,navigation) {
             dispatch({
                 type: actions.PROMOTION_SAVING_DONE,
             });
+            handler.handleSuccses(getState(),dispatch)
             navigation.goBack();
         } catch (error) {
-            dispatch({
-                type: actions.NETWORK_IS_OFFLINE,
-            });
+            handler.handleError(error,dispatch)
             dispatch({
                 type: actions.PROMOTION_SAVING_DONE,
             });
@@ -174,10 +168,9 @@ export function updatePromotion(promotion,businessId,navigation,itemId) {
                 type: actions.PROMOTION_SAVING_DONE,
             });
             navigation.goBack();
+            handler.handleSuccses(getState(),dispatch)
         } catch (error) {
-            dispatch({
-                type: actions.NETWORK_IS_OFFLINE,
-            });
+            handler.handleError(error,dispatch)
             logger.actionFailed('promotions-updatePromotion')
         }
     }
@@ -197,9 +190,7 @@ async function fetchPromotionById(id, token, dispatch) {
         });
 
     } catch (error) {
-        dispatch({
-            type: actions.NETWORK_IS_OFFLINE,
-        });
+        handler.handleError(error,dispatch)
         logger.actionFailed('promotions-fetchPromotionById')
     }
 }

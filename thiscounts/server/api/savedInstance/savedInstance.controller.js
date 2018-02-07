@@ -42,9 +42,7 @@ function toGraph(savedInstance) {
 exports.createSavedInstance = function (savedInstance, callback) {
   savedInstance.created = Date.now();
   SavedInstance.create(savedInstance, function (err, savedInstance) {
-    if (err) {
-      return callback(err);
-    }
+    if (err) { return callback(err); }
     graphModel.reflect(savedInstance, toGraph(savedInstance), function (err, savedInstance) {
       if (err) {
         return callback(err);
@@ -112,6 +110,7 @@ exports.qrcode = function (req, res) {
     '', 0, 1, function (err, savedInstances) {
       if(err) { return handleError(res, err); }
       if(savedInstances.length > 1) { return handleError(res, new Error('multi instances save on same code')); }
+      if(savedInstances.length === 0) { return res.status(404).json('user has no role to authorize promotions for this business'); }
       return res.status(200).json(savedInstances[0]);
     })
 };

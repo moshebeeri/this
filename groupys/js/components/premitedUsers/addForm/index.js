@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import {I18nManager, View} from 'react-native';
+import {I18nManager, View,Keyboard} from 'react-native';
 import {Button, Container, Content, Fab, Footer, Form, Icon, Input, Item, Picker, Text, Thumbnail} from 'native-base';
 import Icon2 from 'react-native-vector-icons/MaterialIcons';
 import styles from './styles'
@@ -97,6 +97,7 @@ class AddPermittedUser extends Component {
 
     searchUser() {
         const {actions} = this.props;
+        Keyboard.dismiss();
         actions.search(this.state.phoneNumber);
     }
 
@@ -121,7 +122,7 @@ class AddPermittedUser extends Component {
         return  <View style={[styles.inputTextLayout, {width: StyleUtils.getWidth() - 15}]}>
 
             <TextInput field={strings.UserPhoneNumber} value={this.state.phoneNumber}
-                       returnKeyType='next' ref="1" refNext="1"
+                       returnKeyType='done' ref="1" refNext="1"
                        keyboardType='numeric'
                        placeholder={strings.InYourContacts}
                        onSubmitEditing={this.searchUser.bind(this)}

@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import {Platform, Text, View} from 'react-native'
+import {Keyboard, Platform, Text, View} from 'react-native'
 import styles from './styles'
 import {TextInput} from '../../../../ui/index';
 import strings from "../../../../i18n/i18n"
@@ -17,6 +17,10 @@ export default class ReduceAmountComponent extends Component {
         )
     }
 
+    done() {
+        Keyboard.dismiss();
+    }
+
     isValid() {
         let result = true;
         Object.keys(this.refs).forEach(key => {
@@ -32,39 +36,35 @@ export default class ReduceAmountComponent extends Component {
     }
 
     setPay(value) {
-        if (value) {
-            let price = undefined;
-            if (this.props.state.reduced_amount && this.props.state.reduced_amount.values) {
-                price = this.props.state.reduced_amount.values.price;
-            }
-            this.props.setState({
-                choose_distribution: true,
-                reduced_amount: {
-                    values: {
-                        pay: value,
-                        price: price
-                    },
-                }
-            })
+        let price = undefined;
+        if (this.props.state.reduced_amount && this.props.state.reduced_amount.values) {
+            price = this.props.state.reduced_amount.values.price;
         }
+        this.props.setState({
+            choose_distribution: true,
+            reduced_amount: {
+                values: {
+                    pay: value,
+                    price: price
+                },
+            }
+        })
     }
 
     setBuy(value) {
-        if (value) {
-            let pay = undefined;
-            if (this.props.state.reduced_amount && this.props.state.reduced_amount.values) {
-                pay = this.props.state.reduced_amount.values.pay;
-            }
-            this.props.setState({
-                choose_distribution: true,
-                reduced_amount: {
-                    values: {
-                        pay: pay,
-                        price: value
-                    },
-                }
-            })
+        let pay = undefined;
+        if (this.props.state.reduced_amount && this.props.state.reduced_amount.values) {
+            pay = this.props.state.reduced_amount.values.pay;
         }
+        this.props.setState({
+            choose_distribution: true,
+            reduced_amount: {
+                values: {
+                    pay: pay,
+                    price: value
+                },
+            }
+        })
     }
 
     render() {
@@ -91,8 +91,9 @@ export default class ReduceAmountComponent extends Component {
                 </View>
                 <View style={styles.inputPrecenComponent}>
                     <TextInput field={strings.Pay} value={pay}
-                               returnKeyType='next' ref="Pay $" refNext="Pay $"
+                               returnKeyType='done' ref="Pay $" refNext="Pay $"
                                keyboardType='numeric'
+                               onSubmitEditing={this.done.bind(this)}
                                onChangeText={(value) => this.setPay(value)} isMandatory={true}/>
                 </View>
             </View>

@@ -13,24 +13,32 @@ export default class PunchView extends Component {
 
 
     render() {
-        const {color,numberOfPunches} = this.props;
-        let row = this.createPunches(numberOfPunches);
+        const {color,numberOfPunches,numberRealized} = this.props;
+        let row = this.createPunches(numberOfPunches,numberRealized);
         return  <View style={styles.container}>{row}</View>
     }
-    createPunches(number){
+    createPunches(number,numberRealized){
+
         let row =[];
         for (i = 0; i < number; i++) {
-            row.push(this.createPunch(i));
+            let isFull = false;
+            if(numberRealized && i < numberRealized){
+                isFull = true;
+            }
+            row.push(this.createPunch(i,isFull));
         }
         return row
     }
 
 
 
-    createPunch(index){
+    createPunch(index,isFull){
         let style = styles.punch;
         if(this.props.feed) {
             style = styles.punchFeed;
+        }
+        if(isFull){
+            style = styles.punchFeedFull;
         }
         return <View key={index}style={style}></View>
     }

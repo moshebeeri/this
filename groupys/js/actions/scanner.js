@@ -8,6 +8,8 @@ let userApi = new UserApi();
 let businessApi = new BusinessApi();
 let promotionApi = new PromotionApi();
 let logger = new ActionLogger();
+import * as errors from '../api/Errors'
+import  handler from './ErrorHandler'
 
 export function scanResult(barcode, businessAssign) {
     return async function (dispatch, getState) {
@@ -48,7 +50,15 @@ export function scanResult(barcode, businessAssign) {
                 } else {
                     let instance = await promotionApi.getPromotionInstance(data.code, token)
                     if (instance) {
-                        console.log(instance);
+                        let intime = inTime(instance);
+
+                        if(!intime){
+                            dispatch({
+                                type: actions.SCANNER_CONDITION_OUT_OF_SCOPE,
+                            });
+                            return;
+                        }
+
                         let users = await userApi.getBusinessUsers(instance.instance.promotion.entity.business._id, token);
                         let isPermited = users.filter(permitedUser => {
                             return permitedUser.user._id === user._id
@@ -71,14 +81,36 @@ export function scanResult(barcode, businessAssign) {
                 }
                 dispatch({type: actions.SHOW_SEARCH_SPIN, searching: false})
             }
+            handler.handleSuccses(getState(),dispatch)
         }
         catch (error) {
-            dispatch({
-                type: actions.NETWORK_IS_OFFLINE,
-            });
+            dispatch({type: actions.SHOW_SEARCH_SPIN, searching: false})
+            if(error && error === errors.REALIZATIOn_NOT_ALLOWED){
+                dispatch({
+                    type: actions.SCANNER_SHOW_NOT_AUTHOTIZED,
+                });
+            }
+            if(error) {
+                handler.handleError(error, dispatch)
+            }
+
             logger.actionFailed('scanner-scanResult')
         }
     }
+}
+
+export function inTime(instance){
+    let date = new Date();
+
+    if(instance.type ==='HAPPY_HOUR') {
+        let now_seconds = date.getHours() * 60 * 60 + date.getMinutes() * 60;
+        if (instance.savedData.happy_hour.days.includes(date.getDay()) &&
+            instance.savedData.happy_hour.from <= now_seconds && now_seconds <= instance.savedData.happy_hour.until) {
+            return true;
+        }
+        return false
+    }
+    return true;
 }
 
 export function realizePromotion(code) {
@@ -87,10 +119,9 @@ export function realizePromotion(code) {
         try {
             dispatch({type: actions.SCANNER_RESET});
             await promotionApi.realizePromotion(code, token)
+            handler.handleSuccses(getState(),dispatch)
         } catch (error) {
-            dispatch({
-                type: actions.NETWORK_IS_OFFLINE,
-            });
+            handler.handleError(error,dispatch)
             logger.actionFailed('scanner-realizePromotion')
         }
     }
@@ -108,10 +139,9 @@ export function followBusiness(businessId) {
             dispatch({type: actions.SCANNER_RESET});
             const token = getState().authentication.token;
             await businessApi.followBusiness(businessId, token);
+            handler.handleSuccses(getState(),dispatch)
         } catch (error) {
-            dispatch({
-                type: actions.NETWORK_IS_OFFLINE,
-            });
+            handler.handleError(error,dispatch)
             logger.actionFailed('scanner-followBusiness')
         }
     }
@@ -123,10 +153,9 @@ export function groupFollowBusiness(groupid, businessId) {
             dispatch({type: actions.SCANNER_RESET});
             const token = getState().authentication.token;
             await businessApi.groupFollowBusiness(groupid, businessId, token);
+            handler.handleSuccses(getState(),dispatch)
         } catch (error) {
-            dispatch({
-                type: actions.NETWORK_IS_OFFLINE,
-            });
+            handler.handleError(error,dispatch)
             logger.actionFailed('scanner-groupFollowBusiness')
         }
     }

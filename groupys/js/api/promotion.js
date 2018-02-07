@@ -10,7 +10,7 @@ import Timer from "./LogTimer";
 
 let entityUtils = new EntityUtils();
 let timer = new Timer();
-
+import * as errors from './Errors'
 class PromotionApi {
     createPromotion(promotion, token) {
         return new Promise(async (resolve, reject) => {
@@ -25,8 +25,8 @@ class PromotionApi {
                     },
                     body: JSON.stringify(promotion)
                 });
-                if (response.status ==='401') {
-                    reject(response);
+                if (response.status ==='401' || response.status === 401) {
+                    reject(errors.UN_AUTHOTIZED_ACCESS);
                     return;
                 }
                 let responseData = await response.json();
@@ -41,8 +41,7 @@ class PromotionApi {
                 resolve(responseData);
             }
             catch (error) {
-                console.log('There has been a problem with your fetch operation: ');
-                reject('failed');
+                reject(errors.NETWORK_ERROR);
             }
         })
     }
@@ -65,8 +64,8 @@ class PromotionApi {
                     },
                     body: JSON.stringify(promotion)
                 });
-                if (response.status ==='401') {
-                    reject(response);
+                if (response.status ==='401' || response.status === 401) {
+                    reject(errors.UN_AUTHOTIZED_ACCESS);
                     return;
                 }
                 timer.logTime(from, new Date(), 'promotions', 'update');
@@ -74,8 +73,7 @@ class PromotionApi {
                 resolve(responseData);
             }
             catch (error) {
-                console.log('There has been a problem with your fetch operation: ');
-                reject('failed');
+                reject(errors.NETWORK_ERROR);
             }
         })
     }
@@ -93,8 +91,8 @@ class PromotionApi {
                         'Authorization': 'Bearer ' + token
                     }
                 });
-                if (response.status ==='401') {
-                    reject(response);
+                if (response.status ==='401' || response.status === 401) {
+                    reject(errors.UN_AUTHOTIZED_ACCESS);
                     return;
                 }
                 timer.logTime(from, new Date(), 'instances', 'save');
@@ -102,8 +100,7 @@ class PromotionApi {
                 resolve(responseData);
             }
             catch (error) {
-                console.log('There has been a problem with your fetch operation: ');
-                reject('failed');
+                reject(errors.NETWORK_ERROR);
             }
         })
     }
@@ -111,17 +108,23 @@ class PromotionApi {
     realizePromotion(code,token) {
         return new Promise(async (resolve, reject) => {
             try {
+                let date = new Date();
+                let time = {};
+                time.hours = date.getHours();
+                time.day = date.getDay();
+                time.minutes = date.getMinutes()
                 let from = new Date();
-                const response = await fetch(`${server_host}/api/instances/realize/` + code, {
-                    method: 'GET',
+                const response = await fetch(`${server_host}/api/instances/post/realize/` + code, {
+                    method: 'POST',
                     headers: {
                         'Accept': 'application/json, text/plain, */*',
                         'Content-Type': 'application/json;charset=utf-8',
                         'Authorization': 'Bearer ' + token
-                    }
+                    },
+                    body: JSON.stringify(time)
                 });
-                if (response.status ==='401') {
-                    reject(response);
+                if (response.status ==='401' || response.status === 401) {
+                    reject(errors.UN_AUTHOTIZED_ACCESS);
                     return;
                 }
                 timer.logTime(from, new Date(), 'instances', 'realize');
@@ -129,11 +132,11 @@ class PromotionApi {
                 resolve(responseData);
             }
             catch (error) {
-                console.log('There has been a problem with your fetch operation: ');
-                reject('failed');
+                reject(errors.NETWORK_ERROR);
             }
         })
     }
+
 
     getPromotionInstance(code,token) {
         return new Promise(async (resolve, reject) => {
@@ -148,8 +151,13 @@ class PromotionApi {
                     }
                 });
                 console.log('after call')
-                if (response.status === 401) {
-                    reject(response);
+                if (response.status ==='401' || response.status === 401) {
+                    reject(errors.UN_AUTHOTIZED_ACCESS);
+                    return;
+                }
+
+                if (response.status ==='404' || response.status === 404) {
+                    reject(errors.REALIZATIOn_NOT_ALLOWED);
                     return;
                 }
                 console.log('check status ')
@@ -165,8 +173,7 @@ class PromotionApi {
 
             }
             catch (error) {
-                console.log('There has been a problem with your fetch operation: ');
-                reject('failed');
+                reject(errors.NETWORK_ERROR);
             }
         })
     }
@@ -183,8 +190,12 @@ class PromotionApi {
                         'Authorization': 'Bearer ' + token
                     }
                 });
-                if (response.status === 401) {
-                    reject(response);
+                if (response.status ==='404' || response.status === 404) {
+                    reject('invalid code')
+
+                }
+                if (response.status ==='401' || response.status === 401) {
+                    reject(errors.UN_AUTHOTIZED_ACCESS);
                     return;
                 }
                 timer.logTime(from, new Date(), 'instances', 'qrcode');
@@ -192,8 +203,7 @@ class PromotionApi {
                 resolve(responseData);
             }
             catch (error) {
-                console.log('There has been a problem with your fetch operation: ');
-                reject('failed');
+                reject(errors.NETWORK_ERROR);
             }
         })
     }
@@ -211,8 +221,8 @@ class PromotionApi {
                         'Authorization': 'Bearer ' + token
                     }
                 });
-                if (response.status ==='401') {
-                    reject(response);
+                if (response.status ==='401' || response.status === 401) {
+                    reject(errors.UN_AUTHOTIZED_ACCESS);
                     return;
                 }
                 timer.logTime(from, new Date(), 'promotions', 'list/create/by/user');
@@ -220,8 +230,7 @@ class PromotionApi {
                 resolve(responseData);
             }
             catch (error) {
-                console.log('There has been a problem with your fetch operation: ' + error.message);
-                reject(error);
+                reject(errors.NETWORK_ERROR);
             }
         })
     }
@@ -239,8 +248,8 @@ class PromotionApi {
                         'Authorization': 'Bearer ' + token
                     }
                 });
-                if (response.status ==='401') {
-                    reject(response);
+                if (response.status ==='401' || response.status === 401) {
+                    reject(errors.UN_AUTHOTIZED_ACCESS);
                     return;
                 }
                 timer.logTime(from, new Date(), 'promotions', 'id');
@@ -248,8 +257,7 @@ class PromotionApi {
                 resolve(responseData);
             }
             catch (error) {
-                console.log('There has been a problem with your fetch operation: ' + error.message);
-                reject(error);
+                reject(errors.NETWORK_ERROR);
             }
         })
     }
@@ -266,8 +274,8 @@ class PromotionApi {
                         'Authorization': 'Bearer ' + token
                     }
                 });
-                if (response.status ==='401') {
-                    reject(response);
+                if (response.status ==='401' || response.status === 401) {
+                    reject(errors.UN_AUTHOTIZED_ACCESS);
                     return;
                 }
                 let responseData = await response.json();
@@ -275,8 +283,7 @@ class PromotionApi {
                 resolve(responseData);
             }
             catch (error) {
-                console.log('There has been a problem with your fetch operation: ' + error.message);
-                reject(error);
+                reject(errors.NETWORK_ERROR);
             }
         })
     }

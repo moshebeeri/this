@@ -1,12 +1,7 @@
 import React, {Component} from 'react';
-import {
-    Platform,View,Text
-} from 'react-native'
-
-
+import {Keyboard, Platform, Text, View} from 'react-native'
 import styles from './styles'
-import {SelectButton, SimplePicker, TextInput,TimePicker,WeekDaysPicker} from '../../../../ui/index';
-
+import {SelectButton, TextInput, TimePicker, WeekDaysPicker} from '../../../../ui/index';
 import FormUtils from "../../../../utils/fromUtils";
 import strings from "../../../../i18n/i18n"
 import StyleUtils from '../../../../utils/styleUtils'
@@ -15,7 +10,7 @@ export default class HappyHourComponent extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            numberOfHours:'',
+            numberOfHours: '',
         }
     }
 
@@ -26,6 +21,7 @@ export default class HappyHourComponent extends Component {
             }
         )
     }
+
     isValid() {
         let result = true;
         Object.keys(this.refs).forEach(key => {
@@ -52,29 +48,25 @@ export default class HappyHourComponent extends Component {
     }
 
     setPay(value) {
-        if (value) {
-            let from = undefined;
-            let until = undefined;
-            let days = undefined;
-
-            if (this.props.state.happy_hour && this.props.state.happy_hour.values) {
-                from = this.props.state.happy_hour.values.from;
-                until = this.props.state.happy_hour.values.until;
-                days = this.props.state.happy_hour.values.days;
-
-            }
-            this.props.setState({
-                choose_distribution: true,
-                happy_hour: {
-                    values: {
-                        pay: value,
-                        from: from,
-                        until:until,
-                        days:days
-                    }
-                }
-            })
+        let from = undefined;
+        let until = undefined;
+        let days = undefined;
+        if (this.props.state.happy_hour && this.props.state.happy_hour.values) {
+            from = this.props.state.happy_hour.values.from;
+            until = this.props.state.happy_hour.values.until;
+            days = this.props.state.happy_hour.values.days;
         }
+        this.props.setState({
+            choose_distribution: true,
+            happy_hour: {
+                values: {
+                    pay: value,
+                    from: from,
+                    until: until,
+                    days: days
+                }
+            }
+        })
     }
 
     setFrom(value) {
@@ -82,12 +74,10 @@ export default class HappyHourComponent extends Component {
             let pay = undefined;
             let until = undefined;
             let days = undefined;
-
             if (this.props.state.happy_hour && this.props.state.happy_hour.values) {
                 pay = this.props.state.happy_hour.values.pay;
                 until = this.props.state.happy_hour.values.until;
                 days = this.props.state.happy_hour.values.days;
-
             }
             this.props.setState({
                 choose_distribution: true,
@@ -95,8 +85,8 @@ export default class HappyHourComponent extends Component {
                     values: {
                         pay: pay,
                         from: FormUtils.getSecondSinceMidnight(value),
-                        until:until,
-                        days:days
+                        until: until,
+                        days: days
                     }
                 }
             })
@@ -104,47 +94,40 @@ export default class HappyHourComponent extends Component {
     }
 
     setUntil(value) {
-        if (value) {
-            let pay = undefined;
-            let from = undefined;
-            let days = undefined;
-
-            if (this.props.state.happy_hour && this.props.state.happy_hour.values) {
-                pay = this.props.state.happy_hour.values.pay;
-                from = this.props.state.happy_hour.values.from;
-                days = this.props.state.happy_hour.values.days;
-
-            }
-            let until = value * 60 * 60 ;
-            this.props.setState({
-                choose_distribution: true,
-                happy_hour: {
-                    values: {
-                        pay: pay,
-                        from: from,
-                        until:until,
-                        days:days
-                    }
-                },
-
-            })
-
-            this.setState({
-                numberOfHours:value
-            });
+        let pay = undefined;
+        let from = undefined;
+        let days = undefined;
+        if (this.props.state.happy_hour && this.props.state.happy_hour.values) {
+            pay = this.props.state.happy_hour.values.pay;
+            from = this.props.state.happy_hour.values.from;
+            days = this.props.state.happy_hour.values.days;
         }
+        let until = value * 60 * 60;
+        this.props.setState({
+            choose_distribution: true,
+            happy_hour: {
+                values: {
+                    pay: pay,
+                    from: from,
+                    until: until,
+                    days: days
+                }
+            },
+        })
+        this.setState({
+            numberOfHours: value
+        });
     }
+
     setDays(value) {
         if (value) {
             let pay = undefined;
             let from = undefined;
             let until = undefined;
-
             if (this.props.state.happy_hour && this.props.state.happy_hour.values) {
                 pay = this.props.state.happy_hour.values.pay;
                 from = this.props.state.happy_hour.values.from;
                 until = this.props.state.happy_hour.values.until;
-
             }
             let days = value.map(day => parseInt(day.value));
             this.props.setState({
@@ -153,60 +136,83 @@ export default class HappyHourComponent extends Component {
                     values: {
                         pay: pay,
                         from: from,
-                        until:until,
-                        days:days
+                        until: until,
+                        days: days
                     }
                 }
             })
         }
     }
 
+    focusNextField(nextField) {
+        if (this.refs[nextField] && this.refs[nextField].wrappedInstance) {
+            this.refs[nextField].wrappedInstance.focus()
+        }
+        if (this.refs[nextField] && this.refs[nextField].focus) {
+            this.refs[nextField].focus()
+        }
+    }
 
     createProductView() {
         if (this.props.state.product) {
             let productName = this.props.state.product.name
             return <View style={styles.textLayout}>
-                <Text style={{color: '#FA8559', marginLeft: 8, marginRight: 8}}>{strings.PromotionOn}: {productName}</Text>
+                <Text style={{
+                    color: '#FA8559',
+                    marginLeft: 8,
+                    marginRight: 8
+                }}>{strings.PromotionOn}: {productName}</Text>
             </View>
         }
         return undefined
     }
 
-
-    validateFrom(){
-        if(!this.props.state.happy_hour.values.from){
+    validateFrom() {
+        if (!this.props.state.happy_hour.values.from) {
             return false;
         }
         return true;
     }
 
+    done() {
+        Keyboard.dismiss();
+    }
+
     render() {
         let product = this.createProductView();
         let pay = '';
-
         if (this.props.state.happy_hour && this.props.state.happy_hour.values) {
             pay = this.props.state.happy_hour.values.pay;
-
         }
         return <View>
             <View style={[styles.textLayout, {width: StyleUtils.getWidth() - 15}]}>
 
                 <Text style={{color: '#FA8559', marginLeft: 8, marginRight: 8}}>Happy Hour</Text>
             </View>
-            <View style={{flexDirection:'row',justifyContent:'center',alignItems:'center'}}>
-                <View style={{flex:1.7,marginTop:25}}><SelectButton isMandatory ref="precentSelectProduct" selectedValue={this.props.state.product} title={strings.SelectProduct} action={this.showProducts.bind(this, true)}/></View>
+            <View style={{flexDirection: 'row', justifyContent: 'center', alignItems: 'center'}}>
+                <View style={{flex: 1.7, marginTop: 25}}><SelectButton isMandatory ref="precentSelectProduct"
+                                                                       selectedValue={this.props.state.product}
+                                                                       title={strings.SelectProduct}
+                                                                       action={this.showProducts.bind(this, true)}/></View>
 
                 <View style={styles.inputPrecenComponent}>
                     <TextInput field={strings.Pay} value={pay}
                                returnKeyType='next' ref="Pay $" refNext="2"
                                keyboardType='numeric'
+                               onSubmitEditing={this.focusNextField.bind(this, "off")}
                                onChangeText={(value) => this.setPay(value)} isMandatory={true}/>
                 </View>
 
             </View>
             {product}
 
-            <View style={{flexDirection:'row',marginTop:5,marginBottom:5,justifyContent:'center',alignItems:'center'}}>
+            <View style={{
+                flexDirection: 'row',
+                marginTop: 5,
+                marginBottom: 5,
+                justifyContent: 'center',
+                alignItems: 'center'
+            }}>
 
                 <View style={styles.inputPrecenComponent}>
                     <TimePicker field={strings.FromHour}
@@ -217,18 +223,20 @@ export default class HappyHourComponent extends Component {
                 </View>
                 <View style={styles.inputPrecenComponent}>
                     <TextInput field={strings.NumberOfHours} value={this.state.numberOfHours}
-                               returnKeyType='next' ref="off" refNext="off"
+                               returnKeyType='done' ref="off" refNext="off"
                                keyboardType='numeric'
+                               validateContent={FormUtils.validateHappyHour}
+                               onSubmitEditing={this.done.bind(this)}
                                onChangeText={(value) => this.setUntil(value)} isMandatory={true}/>
 
                 </View>
             </View>
-            <View style={{flexDirection:'row',justifyContent:'center',alignItems:'center'}}>
+            <View style={{flexDirection: 'row', justifyContent: 'center', alignItems: 'center'}}>
 
 
                 <View style={styles.inputPrecenComponent}>
                     <WeekDaysPicker field={strings.DaysOfWeek}
-                                ref="Days of Week" refNext="Days of Week"
+                                    ref="Days of Week" refNext="Days of Week"
                                     onChangeSelected={(value) => this.setDays(value)} isMandatory={true}/>
                 </View>
 

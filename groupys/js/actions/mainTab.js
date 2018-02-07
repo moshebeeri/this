@@ -6,13 +6,13 @@ import NotificationApi from "../api/notification";
 import GoupApi from "../api/groups";
 import BusinessApi from "../api/business";
 import ActionLogger from './ActionLogger'
-
+import * as errors from '../api/Errors'
 let notificationApi = new NotificationApi();
 let instanceApi = new InstanceApi();
 let groupApi = new GoupApi();
 let businessApi= new BusinessApi();
 let logger = new ActionLogger();
-
+import  handler from './ErrorHandler'
 export function changeTab(newTab) {
     return function (dispatch, getState) {
         dispatch({
@@ -52,9 +52,7 @@ export function showPromotionPopup( instanceId,notificationId) {
                 notificationId:notificationId
             });
         } catch (error) {
-            dispatch({
-                type: actions.NETWORK_IS_OFFLINE,
-            });
+            handler.handleError(error,dispatch)
             logger.actionFailed('showPromotionPopup')
         }
     }
@@ -72,9 +70,7 @@ export function showGenericPopup( notificationTitle, notificationId, notificatio
                 notificationAction: notificationAction
             });
         } catch (error) {
-            dispatch({
-                type: actions.NETWORK_IS_OFFLINE,
-            });
+            handler.handleError(error,dispatch)
             logger.actionFailed('showGenericPopup')
         }
     }
@@ -100,9 +96,7 @@ export function showGroupPopup( groupId,notificationId,notificationTitle, notifi
                 notificationGroup: group,
             });
         } catch (error) {
-            dispatch({
-                type: actions.NETWORK_IS_OFFLINE,
-            });
+            handler.handleError(error,dispatch)
             logger.actionFailed('showGroupPopup')
         }
     }
@@ -127,9 +121,7 @@ export function showBusinessPopup( businessId,notificationId,notificationTitle, 
                 notificationBusiness: business,
             });
         } catch (error) {
-            dispatch({
-                type: actions.NETWORK_IS_OFFLINE,
-            });
+            handler.handleError(error,dispatch)
             logger.actionFailed('showBusinessPopup')
         }
     }
@@ -150,9 +142,7 @@ export function closePopup(  notificationId) {
                 notificationBusiness:''
             });
         } catch (error) {
-            dispatch({
-                type: actions.NETWORK_IS_OFFLINE,
-            });
+            handler.handleError(error,dispatch)
         }
     }
 }
@@ -171,9 +161,7 @@ export function doNotification(  notificationId, notificationAction) {
                 notificationBusiness:''
             });
         } catch (error) {
-            dispatch({
-                type: actions.NETWORK_IS_OFFLINE,
-            });
+            handler.handleError(error,dispatch)
         }
     }
 }
