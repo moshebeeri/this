@@ -13,12 +13,14 @@ import FormUtils from "../utils/fromUtils";
 import simpleStore from 'react-native-simple-store';
 import EntityUtils from "../utils/createEntity";
 let entityUtils = new EntityUtils();
+import Tasks from '../tasks/tasks'
+
 const store = getStore();
 let visitedList = ['feed', 'groups', 'businesses'];
 import * as actions from "../reducers/reducerActions";
 class PageRefresher {
     constructor() {
-        pageSync.createPage('feed', pageSync.createStdAverageRefresh('feed', 10, 60000), this.setMainFeedRefresh.bind(this));
+        pageSync.createPage('feed', pageSync.createStdAverageRefresh('feed', 10, 360000), this.setMainFeedRefresh.bind(this));
         pageSync.createPage('groups', pageSync.createStdAverageRefresh('groups', 10, 60000), this.updateGroups.bind(this));
         pageSync.createPage('businesses', pageSync.createStdAverageRefresh('businesses', 10, 60000), this.updateBusinesses.bind(this));
         pageSync.createPage('notification', pageSync.createStdAverageRefresh('notification', 10, 60000), this.updateNotification.bind(this));
@@ -165,6 +167,7 @@ class PageRefresher {
     }
 
     visitedFeed() {
+        Tasks.mainFeedTaskStart();
         pageSync.visited('feed')
     }
 

@@ -11,6 +11,7 @@ import * as activityAction from "../../actions/activity";
 import Icon2 from "react-native-vector-icons/Ionicons";
 import {createSelector} from "reselect";
 import {View,I18nManager} from 'react-native';
+import Tasks from '../../tasks/tasks'
 
 var Analytics = require('react-native-firebase-analytics');
 
@@ -27,8 +28,7 @@ class Feed extends Component {
 
     componentWillMount() {
         const {feeds, actions, firstTime,user} = this.props;
-
-
+        Tasks.mainFeedTaskStart();
         if (firstTime) {
             actions.setNextFeeds(feeds);
             this.props.userActions.fetchUsersFollowers();
@@ -40,7 +40,12 @@ class Feed extends Component {
         if(this.props.currentScreen ==='home' && (this.props.selectedTab === 0 || this.props.selectedTab === 3)){
                return true;
         }
+        Tasks.mainFeddTaskstop();
         return false;
+    }
+
+    componentWillUnmount(){
+        Tasks.mainFeddTaskstop();
     }
     navigateToAdd() {
         this.props.navigation.navigate('PostForm')
