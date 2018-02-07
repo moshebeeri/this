@@ -148,6 +148,11 @@ class PromotionApi {
                     reject(errors.UN_AUTHOTIZED_ACCESS);
                     return;
                 }
+
+                if (response.status ==='404' || response.status === 404) {
+                    reject(errors.REALIZATIOn_NOT_ALLOWED);
+                    return;
+                }
                 console.log('check status ')
              //   timer.logTime(from, new Date(), 'instances', 'realize');
                 try {

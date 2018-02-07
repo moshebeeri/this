@@ -8,6 +8,7 @@ let userApi = new UserApi();
 let businessApi = new BusinessApi();
 let promotionApi = new PromotionApi();
 let logger = new ActionLogger();
+import * as errors from '../api/Errors'
 import  handler from './ErrorHandler'
 
 export function scanResult(barcode, businessAssign) {
@@ -74,7 +75,16 @@ export function scanResult(barcode, businessAssign) {
             }
         }
         catch (error) {
-            handler.handleError(error,dispatch)
+            dispatch({type: actions.SHOW_SEARCH_SPIN, searching: false})
+            if(error && error === errors.REALIZATIOn_NOT_ALLOWED){
+                dispatch({
+                    type: actions.SCANNER_SHOW_NOT_AUTHOTIZED,
+                });
+            }
+            if(error) {
+                handler.handleError(error, dispatch)
+            }
+
             logger.actionFailed('scanner-scanResult')
         }
     }

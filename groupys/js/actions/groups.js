@@ -398,14 +398,18 @@ export const unlike = (id) => {
     }
 };
 
-export function saveFeed(id) {
+export function saveFeed(id,navigation,feed) {
     return async function (dispatch) {
         try {
             dispatch({
                 type: actions.SAVE,
                 id: id
             });
-            await promotionApi.save(id);
+            let savedInstance = await promotionApi.save(id);
+
+            navigation.navigate('realizePromotion', {item: feed,id:savedInstance._id})
+            await  promotionApi.getAll();
+
         } catch (error) {
             if(error === errors.NETWORK_ERROR) {
                 dispatch({
