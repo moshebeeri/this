@@ -22,27 +22,25 @@ GraphModel.prototype.connect = function connect(){
 
 GraphModel.prototype.reflect = function reflect(object, g_object, callback) {
   this.model.save(g_object, function(err, in_graph) {
-    if(err) callback(err, null );
+    if(err) return callback(err, null );
     object.gid = in_graph.id;
-    object.save(function (err) {});
-    callback(null, object )
+    return object.save(callback);
   });
 };
 
 GraphModel.prototype.reflect_create = function reflect(object, create, callback) {
   db.query(object, function(err, in_graph) {
-    if(err) callback(err, null );
+    if(err) return callback(err, null );
     object.gid = in_graph.id;
     object.save(function (err) {});
-    callback(null, object )
+    return callback(null, object )
   });
 };
 
 GraphModel.prototype.save = function save(object, callback) {
   this.model.save(object, function(err, object) {
-    if(err) callback(err, object );
-    callback(null, object);
-    logger.info('object created gid: ' + object.id)
+    if(err) return callback(err, object );
+    return callback(null, object);
   });
 };
 
@@ -93,7 +91,7 @@ GraphModel.prototype.is_related_ids = function relate(from, name, to, callback){
   let query = util.format("MATCH (me{_id:'%s'})-[f:%s]->(follower{_id:'%s'}) return sign(count(f)) as exists", from, name, to);
   db.query(query, function(err, result) {
     if (err) { return callback(err) }
-    callback(null, result[0].exists !== 0)
+    return callback(null, result[0].exists !== 0)
   });
 };
 
@@ -102,7 +100,7 @@ GraphModel.prototype.is_related_saved_instance = function(user_id, rel, instance
   return sign(count(savedInstance)) as exists`;
   db.query(query, function(err, result) {
     if (err) { return callback(err) }
-    callback(null, result[0].exists !== 0)
+    return callback(null, result[0].exists !== 0)
   });
 };
 /**
@@ -120,7 +118,7 @@ GraphModel.prototype.saved_instance_rel_count = function(item_id, rel, callback)
   return count(savedInstance) as count`;
   db.query(query, function(err, result) {
     if (err) { return callback(err) }
-    callback(null, result[0].count)
+    return callback(null, result[0].count)
   });
 };
 
@@ -131,7 +129,7 @@ GraphModel.prototype.sample_count_ids = function sample_count_ids(from, name, li
     from, name, limit);
   db.query(query, function(err, result) {
     if (err) { return callback(err) }
-    callback(null, result)
+    return callback(null, result)
   });
 };
 
@@ -149,7 +147,7 @@ GraphModel.prototype.count_in_rel_id = function count_in_rel(name, to, callback)
     name, to);
   db.query(query, function(err, result) {
     if (err) { return callback(err) }
-    callback(null, result[0].count)
+    return callback(null, result[0].count)
   });
 };
 /**
@@ -168,7 +166,7 @@ GraphModel.prototype.count_in_though = function count_in_rel(to, rel, rel_betwee
                   return count(direct)+count(indirect) as count`;
   db.query(query, function(err, result) {
     if (err) { return callback(err) }
-    callback(null, result[0].count)
+    return callback(null, result[0].count)
   });
 };
 
@@ -330,8 +328,8 @@ GraphModel.prototype.related_type_id_dir = function related_type_id_dir(start, n
   db.query(
     this.related_type_id_dir_query(start, name, ret_type, dir, skip, limit),
     function(err, related) {
-      if (err) { callback(err, null) }
-      else callback(null, related)
+      if (err) { return callback(err, null) }
+      return callback(null, related)
   });
 };
 
@@ -342,8 +340,8 @@ GraphModel.prototype.incoming_ids = function related_incoming_ids(start, name, r
     "ORDER BY r.name DESC " + //TODO: make order an input
     "skip %d limit %d", start, name, ret_type, skip, limit);
   db.query(query, function(err, related) {
-    if (err) { callback(err, null) }
-    else callback(null, related)
+    if (err) { return callback(err, null) }
+    return callback(null, related)
   });
 };
 
@@ -352,8 +350,8 @@ GraphModel.prototype.incoming_ids = function related_incoming_ids(start, name, r
 GraphModel.prototype.query_ids = function query_ids(query, order, skip, limit, callback){
   let query_str  = util.format("%s %s skip %d limit %d", query, order, skip, limit);
   db.query(query_str, function(err, related) {
-    if (err) { callback(err, null) }
-    else callback(null, related)
+    if (err) { return callback(err, null) }
+    return callback(null, related)
   });
 };
 
@@ -362,8 +360,8 @@ GraphModel.prototype.query_ids_relation = function query_ids(from_id, rel, to_id
     "MATCH (from_id{ _id:'{%s}' })-[r:%s]->(to_id:%s) " +
     "return r%s ", from_id, rel, to_id, ret!==''? '.' + ret:'');
   db.query(query, function(err, related) {
-    if (err) { callback(err, null) }
-    else callback(null, related)
+    if (err) { return callback(err, null) }
+    return callback(null, related)
   });
 };
 
@@ -403,7 +401,8 @@ GraphModel.prototype.query_objects_parallel = function query_objects_parallel(sc
       })(schemas[key], Array.from(reduced[key]));
     });
     return async.parallel(queryFunctions, function(err, result) {
-      return callback();
+      if (err) return callback(err, null);
+      return callback(null, result)
     });
   });
 };
@@ -413,8 +412,8 @@ GraphModel.prototype.query_objects_general = function query_objects_general(sche
   db.query(query, function(err, _ids) {
     if (err) { callback(err, null) }
     schema.find({}).where('_id').in(_ids).exec((err, objects) =>{
-      if (err) { callback(err, null) }
-      else callback(null, objects)
+      if (err) { return callback(err, null) }
+      return callback(null, objects)
     });
   });
 };

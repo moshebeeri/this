@@ -196,7 +196,7 @@ function createSavedInstance(instance, user_id, callback) {
   } else if (instance.type === 'PUNCH_CARD') {
     savedInstance.savedData.punch_card = initializePunchCard(instance)
   } else if (instance.type === 'HAPPY_HOUR') {
-    savedInstance.savedData.punch_card = initializeHappyHour(instance)
+    savedInstance.savedData.happy_hour = initializeHappyHour(instance)
   } else if (instance.type === 'CASH_BACK') {
     savedInstance.savedData.cash_back = initializeCashBack(instance)
   } else if (instance.type === 'EARLY_BOOKING') {
@@ -259,6 +259,7 @@ function isUniqueInstance(status) {
 
 //'/save/:id'
 exports.save = function (req, res) {
+  console.log(`instance save ${req.params.id}`)
   Instance
     .findById(req.params.id)
     .exec(function (err, instance) {
