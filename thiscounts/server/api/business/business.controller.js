@@ -372,8 +372,6 @@ function reviewRequest(business) {
 }
 
 function createValidatedBusiness(business, callback) {
-  console.log(JSON.stringify(business));
-
   qrcodeController.createAndAssign(business.creator, {
     type: 'FOLLOW_BUSINESS',
     assignment: {
@@ -386,11 +384,16 @@ function createValidatedBusiness(business, callback) {
       _id: business._id,
       name: business.name,
       type: business.type,
-      creator: business.creator,
+      creator: business.creator._id,
       lat: business.location.lat,
       lon: business.location.lng
     }, function (err, business) {
-      if (err) return callback(err);
+      if (err) {
+        console.error(err);
+        return callback(err);
+      }
+
+
       Role.createRole(business.creator, business._id, Role.Roles.get('OWNS'), function (err) {
         if (err) return console.error(err);
         if (business.type === 'PERSONAL_SERVICES' || business.type === 'SMALL_BUSINESS') {

@@ -42,9 +42,7 @@ function toGraph(savedInstance) {
 exports.createSavedInstance = function (savedInstance, callback) {
   savedInstance.created = Date.now();
   SavedInstance.create(savedInstance, function (err, savedInstance) {
-    if (err) {
-      return callback(err);
-    }
+    if (err) { return callback(err); }
     graphModel.reflect(savedInstance, toGraph(savedInstance), function (err, savedInstance) {
       if (err) {
         return callback(err);
