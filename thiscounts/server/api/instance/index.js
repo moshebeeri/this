@@ -13,6 +13,7 @@ router.get('/save/:id', auth.isAuthenticated(), controller.save);
 router.get('/unsave/:id', auth.isAuthenticated(), controller.unsave);
 router.get('/available/:id', auth.isAuthenticated(), controller.available);
 router.get('/realize/:code', auth.isAuthenticated(), controller.realize);
+router.post('/post/realize/:code', auth.isAuthenticated(), controller.post_realize);
 router.get('/realized/:code', auth.isAuthenticated(), controller.realized);
 router.get('/', auth.hasRole('admin'), controller.index);
 router.get('/:id', auth.isAuthenticated(), controller.show);

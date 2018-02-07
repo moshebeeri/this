@@ -84,7 +84,7 @@ let InstanceSchema = new Schema({
     happy_hour: {
       product: {type: Schema.ObjectId, ref: 'Product', autopopulate: true},
       pay     : Number,
-      days    : Number,
+      days    : [Number],
       from    : Number, // seconds from midnight
       until   : Number // seconds from 'from'
     },

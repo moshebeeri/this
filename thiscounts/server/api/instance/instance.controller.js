@@ -153,6 +153,15 @@ function initializePunchCard(instance) {
     days: instance.value.punch_card.days,
   };
 }
+function initializeHappyHour(instance) {
+  return {
+    redeemTimes: [],
+    product: instance.value.happy_hour.product,
+    days: instance.value.happy_hour.days,
+    from: instance.value.happy_hour.from,
+    until: instance.value.happy_hour.until
+  };
+}
 
 function initializeCashBack(instance) {
   return {
@@ -186,6 +195,8 @@ function createSavedInstance(instance, user_id, callback) {
     savedInstance.savedData.prepay_discount = initializePrepayDiscount(instance)
   } else if (instance.type === 'PUNCH_CARD') {
     savedInstance.savedData.punch_card = initializePunchCard(instance)
+  } else if (instance.type === 'HAPPY_HOUR') {
+    savedInstance.savedData.punch_card = initializeHappyHour(instance)
   } else if (instance.type === 'CASH_BACK') {
     savedInstance.savedData.cash_back = initializeCashBack(instance)
   } else if (instance.type === 'EARLY_BOOKING') {
@@ -505,7 +516,57 @@ function redeemEarlyBooking(saved, callback) {
   })
 }
 
-function handleRealizeBySavedInstanceType(saved, callback) {
+function redeemHappyHour(saved, data, callback) {
+  let happy_hour = saved.savedData.happy_hour;
+
+  function realize_happy_hour(saved, callback) {
+    const query = `MATCH (:instance)<-[sf:SAVE_OF]-(saved:SavedInstance)<-[r:SAVED]-(:user{ _id: '${saved.user._id}'})
+                      where saved._id = '${saved._id}' and saved.type = 'HAPPY_HOUR'
+                      return saved`;
+    graphModel.query(query, function (err, savedInstances) {
+      if (err) {
+        return callback(err);
+      }
+      if (savedInstances.length !== 1) {
+        return callback(new Error(`Expecting exactly one not yet redeemed punch card found ${savedInstances.length}`));
+      }
+      const query = `MATCH (:instance)<-[sf:SAVE_OF]-(saved:SavedInstance)<-[r:SAVED]-(:user{ _id: '${saved.user._id}'})
+                      where saved._id = '${saved._id}' and saved.type = 'HAPPY_HOUR'
+                      set r.code = '${createRealizationCode()}'`;
+      graphModel.query(query, callback)
+    })
+  }
+  if(!data || !data.day || !data.hours || !data.minutes)
+    return callback(new Error('data object is ot preset or ot valid'));
+
+  realize_happy_hour(saved, function (err) {
+    if (err) return callback(err);
+    if(!happy_hour.days.includes(data.day)) {
+      return callback(new Error('data object is ot preset or ot valid'));
+    }
+    if(!happy_hour.days.includes(data.hours)) {
+      return callback(new Error('data object is ot preset or ot valid'));
+    }
+    if(!happy_hour.days.includes(data.minutes)) {
+      return callback(new Error('data object is ot preset or ot valid'));
+    }
+    let now_seconds = data.hours*60*60+data.minutes*60;
+    if( happy_hour.days.includes(data.day) &&
+        data.from <= now_seconds && now_seconds <= data.until ) {
+      happy_hour.redeemTimes.push(Date.now());
+      saved.save(function (err, savedInstance) {
+        if (err) return callback(err);
+        return callback(null, {
+          terminate: false,
+          savedInstance: savedInstance
+        })
+      })
+    }else
+      return callback(new Error('Redeem is out of happy hour time'))
+  });
+}
+
+function handleRealizeBySavedInstanceType(saved, data, callback) {
   let type = saved.instance.type;
   switch (type) {
     case 'INCREASING':
@@ -518,6 +579,8 @@ function handleRealizeBySavedInstanceType(saved, callback) {
       return redeemPrepayDiscount(saved, callback);
     case 'PUNCH_CARD':
       return redeemPunchCard(saved, callback);
+    case 'HAPPY_HOUR':
+      return redeemHappyHour(saved, data, callback);
     case 'CASH_BACK':
       return redeemCashBack(saved, callback);
     case 'EARLY_BOOKING':
@@ -527,11 +590,11 @@ function handleRealizeBySavedInstanceType(saved, callback) {
   }
 }
 
-function realizeSavedInstance(user, savedInstance, rel, res) {
+function realizeSavedInstance(user, savedInstance, rel, res, data) {
   SavedInstance.findById(savedInstance._id).exec(function (err, saved) {
     if (err) return handleError(res, err);
     if (!saved) return handleError(res, new Error('no saved Instance found'));
-    handleRealizeBySavedInstanceType(saved, function (err, status) {
+    handleRealizeBySavedInstanceType(saved, data, function (err, status) {
       let terminate = status.terminate;
       let savedInstance = status.savedInstance;
       if (terminate) {
@@ -580,6 +643,40 @@ exports.realize = function (req, res) {
           if (barcodes[0].barcode !== req.params.barcode)
             return res.status(403).send('required barcode mismatch');
           return realizeSavedInstance(user, savedInstance, rel, res, instance);
+        });
+    } else {
+      return realizeSavedInstance(user, savedInstance, rel, res, instance);
+    }
+  });
+};
+
+//TODO: validate sale_point_code
+exports.post_realize = function (req, res) {
+  const query = `MATCH (promotion:promotion)<-[:INSTANCE_OF]-(instance:instance)<-[sf:SAVE_OF]-(savedInstance:SavedInstance)<-[rel:SAVED{code: '${req.params.code}'}]-(user:user) 
+                return promotion,instance, savedInstance, rel,user`;
+  graphModel.query(query, function (err, objects) {
+    if (err) return handleError(res, err);
+    if (objects.length === 0)
+      return res.status(404).send(`realize code mismatch`);
+
+    if (objects.length > 1)
+      return res.status(500).send('multiple instances found');
+
+    let promotion = objects[0].promotion;
+    let instance = objects[0].instance;
+    let savedInstance = objects[0].savedInstance;
+    let rel = objects[0].rel;
+    let user = objects[0].user;
+
+    if (promotion.validate_barcode) {
+      graphModel.query(`MATCH (pn:promotion)-[:PRODUCT]->(pt:product)-[:BARCODE]->(barcode:barcode) where id(pn)=${promotion.id} return barcode`,
+        function (err, barcodes) {
+          if (err) return handleError(res, err);
+          if (barcodes.length !== 1)
+            return res.status(403).send('non or multiple barcode found');
+          if (barcodes[0].barcode !== req.params.barcode)
+            return res.status(403).send('required barcode mismatch');
+          return realizeSavedInstance(user, savedInstance, rel, res, instance, req.body || {});
         });
     } else {
       return realizeSavedInstance(user, savedInstance, rel, res, instance);
