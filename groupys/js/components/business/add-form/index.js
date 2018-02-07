@@ -358,6 +358,7 @@ class AddBusiness extends Component {
                         <TextInput keyboardType={'email-address'} field={strings.Email} value={this.state.email}
                                    returnKeyType='next' ref="2"
                                    refNext="2"
+                                   placeholder={strings.validateByemail}
                                    onSubmitEditing={this.focusNextField.bind(this, "3")}
                                    validateContent={FormUtils.validateEmail}
                                    onChangeText={(email) => this.setReduxState({email})} isMandatory={true}/>
@@ -366,6 +367,7 @@ class AddBusiness extends Component {
 
                         <TextInput field={strings.Website} value={this.state.website} returnKeyType='next' ref="3"
                                    refNext="3"
+
                                    onSubmitEditing={this.focusNextField.bind(this, "5")}
                                    validateContent={FormUtils.validateWebsite}
                                    onChangeText={(website) => this.setReduxState({website})} isMandatory={false}/>

@@ -248,7 +248,7 @@ ConfirmLast                                   : "Confirm Last Punch",
 PleaseScanCode                                : "Please Scan Code",
 Realized                                      : "Realized",
 notAuthorizedMessage                          : "You are not Authorized To Accept Code",
-
+validateByemail                               : "Email Validation Will be Sent"
 
 
 
