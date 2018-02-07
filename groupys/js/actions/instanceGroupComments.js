@@ -45,6 +45,7 @@ export function fetchTopComments(group, instance) {
                     instanceId: instance.id
                 }))
             }
+            handler.handleSuccses(getState(),dispatch)
         } catch (error) {
             handler.handleError(error, dispatch)
             logger.actionFailed('instance-group-fetchTopComments')
@@ -65,6 +66,7 @@ export function sendMessage(groupId, instanceId, message) {
                 groupId: groupId,
                 message: messageItem
             });
+            handler.handleSuccses(getState(),dispatch)
         } catch (error) {
             handler.handleError(error, dispatch)
             logger.actionFailed('instance-group-sendMessage')
@@ -121,7 +123,9 @@ export function setNextFeeds(comments, group, instance) {
                     gid: group._id,
                     instanceId: instance.id
                 });
+
             }
+            handler.handleSuccses(getState(),dispatch)
         } catch (error) {
             handler.handleError(error, dispatch)
             logger.actionFailed('instance-group-setNextFeeds')

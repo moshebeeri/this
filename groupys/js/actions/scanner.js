@@ -73,6 +73,7 @@ export function scanResult(barcode, businessAssign) {
                 }
                 dispatch({type: actions.SHOW_SEARCH_SPIN, searching: false})
             }
+            handler.handleSuccses(getState(),dispatch)
         }
         catch (error) {
             dispatch({type: actions.SHOW_SEARCH_SPIN, searching: false})
@@ -90,12 +91,27 @@ export function scanResult(barcode, businessAssign) {
     }
 }
 
+function inTime(instance){
+    let date = new Date();
+
+    if(instance.type ==='HAPPY_HOUR') {
+        let now_seconds = date.getHours() * 60 * 60 + date.getMinutes() * 60;
+        if (instance.savedData.happy_hour.days.includes(date.getDay()) &&
+            instance.savedData.happy_hour.from <= now_seconds && now_seconds <= instance.savedData.happy_hour.until) {
+            return true;
+        }
+        return false
+    }
+    return true;
+}
+
 export function realizePromotion(code) {
     return async function (dispatch, getState) {
         const token = getState().authentication.token;
         try {
             dispatch({type: actions.SCANNER_RESET});
             await promotionApi.realizePromotion(code, token)
+            handler.handleSuccses(getState(),dispatch)
         } catch (error) {
             handler.handleError(error,dispatch)
             logger.actionFailed('scanner-realizePromotion')
@@ -115,6 +131,7 @@ export function followBusiness(businessId) {
             dispatch({type: actions.SCANNER_RESET});
             const token = getState().authentication.token;
             await businessApi.followBusiness(businessId, token);
+            handler.handleSuccses(getState(),dispatch)
         } catch (error) {
             handler.handleError(error,dispatch)
             logger.actionFailed('scanner-followBusiness')
@@ -128,6 +145,7 @@ export function groupFollowBusiness(groupid, businessId) {
             dispatch({type: actions.SCANNER_RESET});
             const token = getState().authentication.token;
             await businessApi.groupFollowBusiness(groupid, businessId, token);
+            handler.handleSuccses(getState(),dispatch)
         } catch (error) {
             handler.handleError(error,dispatch)
             logger.actionFailed('scanner-groupFollowBusiness')

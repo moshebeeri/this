@@ -108,14 +108,20 @@ class PromotionApi {
     realizePromotion(code,token) {
         return new Promise(async (resolve, reject) => {
             try {
+                let date = new Date();
+                let time = {};
+                time.hours = date.getHours();
+                time.day = date.getDay();
+                time.minutes = date.getMinutes()
                 let from = new Date();
-                const response = await fetch(`${server_host}/api/instances/realize/` + code, {
-                    method: 'GET',
+                const response = await fetch(`${server_host}/api/instances/post/realize/` + code, {
+                    method: 'POST',
                     headers: {
                         'Accept': 'application/json, text/plain, */*',
                         'Content-Type': 'application/json;charset=utf-8',
                         'Authorization': 'Bearer ' + token
-                    }
+                    },
+                    body: JSON.stringify(time)
                 });
                 if (response.status ==='401' || response.status === 401) {
                     reject(errors.UN_AUTHOTIZED_ACCESS);
@@ -130,6 +136,7 @@ class PromotionApi {
             }
         })
     }
+
 
     getPromotionInstance(code,token) {
         return new Promise(async (resolve, reject) => {

@@ -225,6 +225,7 @@ export default class HappyHourComponent extends Component {
                     <TextInput field={strings.NumberOfHours} value={this.state.numberOfHours}
                                returnKeyType='done' ref="off" refNext="off"
                                keyboardType='numeric'
+                               validateContent={FormUtils.validateHappyHour}
                                onSubmitEditing={this.done.bind(this)}
                                onChangeText={(value) => this.setUntil(value)} isMandatory={true}/>
 

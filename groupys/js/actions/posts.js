@@ -21,6 +21,7 @@ export function createPost(post, navigation) {
                 type: actions.POST_SAVING_DONE,
             });
             navigation.goBack();
+            handler.handleSuccses(getState(),dispatch)
         } catch (error) {
              handler.handleError(error,dispatch)
             logger.actionFailed('posts-createPost')
@@ -44,6 +45,7 @@ export function createGroupPost(post, navigation, group) {
                 type: actions.POST_SAVING_DONE,
             });
             navigation.goBack();
+            handler.handleSuccses(getState(),dispatch)
         } catch (error) {
              handler.handleError(error,dispatch)
             logger.actionFailed('posts-createGroupPost')

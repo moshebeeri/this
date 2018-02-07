@@ -399,7 +399,7 @@ export const unlike = (id) => {
 };
 
 export function saveFeed(id,navigation,feed) {
-    return async function (dispatch) {
+    return async function (dispatch,getState) {
         try {
             dispatch({
                 type: actions.SAVE,
@@ -409,6 +409,7 @@ export function saveFeed(id,navigation,feed) {
 
             navigation.navigate('realizePromotion', {item: feed,id:savedInstance._id})
             await  promotionApi.getAll();
+            handler.handleSuccses(getState(),dispatch)
 
         } catch (error) {
             if(error === errors.NETWORK_ERROR) {
@@ -422,7 +423,7 @@ export function saveFeed(id,navigation,feed) {
 }
 
 export function shareActivity(id, activityId, users, token) {
-    return async function (dispatch) {
+    return async function (dispatch,getState) {
         try {
             users.forEach(function (user) {
                 activityApi.shareActivity(user, activityId, token)
@@ -432,6 +433,7 @@ export function shareActivity(id, activityId, users, token) {
                 id: id,
                 shares: users.length
             });
+            handler.handleSuccses(getState(),dispatch)
         } catch (error) {
             if(error === errors.NETWORK_ERROR) {
                 dispatch({
@@ -463,6 +465,7 @@ export function refresh(id, currentSocialState) {
                 social_state: response,
                 id: id
             });
+            handler.handleSuccses(getState(),dispatch)
             // await userApi.like(id, token);
         } catch (error) {
             if(error === errors.NETWORK_ERROR) {

@@ -49,6 +49,7 @@ export function setNextFeeds(feeds) {
                 type: actions.UPSERT_SAVED_FEEDS,
                 item: response
             });
+            handler.handleSuccses(getState(),dispatch)
         } catch (error) {
             handler.handleError(error, dispatch)
             logger.actionFailed('mypromotons-setNextFeeds')
@@ -88,6 +89,7 @@ export function fetchTop() {
                 type: actions.SAVED_FEED_SHOW_TOP_LOADER,
                 showTopLoader: false,
             });
+            handler.handleSuccses(getState(),dispatch)
         } catch (error) {
             handler.handleError(error, dispatch)
             dispatch({

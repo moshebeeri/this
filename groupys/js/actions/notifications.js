@@ -21,6 +21,7 @@ export function onEndReached() {
                 type: actions.SET_NOTIFICATION,
                 notifications: response,
             });
+            handler.handleSuccses(getState(),dispatch)
         } catch (error) {
             handler.handleError(error, dispatch)
             logger.actionFailed('notification-onEndReached')
@@ -38,6 +39,7 @@ export function setTopNotification() {
                 type: actions.SET_TOP_NOTIFICATION,
                 notifications: response,
             });
+            handler.handleSuccses(getState(),dispatch)
         } catch (error) {
             handler.handleError(error, dispatch)
             logger.actionFailed('notification-setTopNotification')
@@ -54,6 +56,7 @@ export function readNotification(notificationId) {
                 type: actions.READ_NOTIFICATION,
                 id: notificationId,
             });
+            handler.handleSuccses(getState(),dispatch)
         } catch (error) {
             handler.handleError(error, dispatch)
             logger.actionFailed('notification-readNotification')
@@ -69,7 +72,8 @@ export function doNotification(notificationId, type) {
             dispatch({
                 type: actions.EXECUTE_NOTIFICATION_ACTION,
                 id: notificationId,
-            });
+            })
+            handler.handleSuccses(getState(),dispatch)
         } catch (error) {
             handler.handleError(error, dispatch)
             logger.actionFailed('notification-doNotification')
@@ -88,6 +92,7 @@ async function updateNotification(dispatch, token, user, notifications) {
             type: actions.SET_NOTIFICATION,
             notifications: response,
         });
+
     } catch (error) {
         handler.handleError(error, dispatch)
         logger.actionFailed('notification-updateNotification')

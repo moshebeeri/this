@@ -13,6 +13,7 @@ const {width, height} = Dimensions.get('window')
 const vw = width / 100;
 const vh = height / 100
 import strings from '../../../i18n/i18n';
+import Tasks from '../../../tasks/tasks'
 class instancesComment extends Component {
     constructor(props) {
         super(props);
@@ -23,6 +24,7 @@ class instancesComment extends Component {
         if (!comments[group._id] || (comments[group._id] && comments[group._id].length ===0)) {
             this.setNextFeed();
         }
+        Tasks.groupChatTaskStart(group._id);
     }
 
     setNextFeed() {

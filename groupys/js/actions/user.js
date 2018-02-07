@@ -81,6 +81,7 @@ export function changePassword(oldPassword, newPassword, navigation) {
             if (response.response === true) {
                 navigation.goBack();
             }
+            handler.handleSuccses(getState(),dispatch)
         } catch (error) {
             if(error === errors.PASSOWRD_VALIDATION_FAILED){
                 dispatch({
@@ -124,6 +125,7 @@ export function updateUser(newUser, navigation) {
             dispatch({
                 type: actions.SAVING_USER_DONE,
             });
+            handler.handleSuccses(getState(),dispatch)
         } catch (error) {
             handler.handleError(error,dispatch)
 

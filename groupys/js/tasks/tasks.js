@@ -6,6 +6,7 @@ import pageSync from '../refresh/refresher'
 import * as actions from "../reducers/reducerActions";
 import myPromotionAction from '../actions/myPromotions'
 import ContactApi from '../api/contacts';
+import groupComments from '../actions/commentsGroup'
 const contactApi = new ContactApi();
 
 const reduxStore = getStore();
@@ -107,6 +108,33 @@ class Tasks {
                 feedAction.fetchTopList(id, token, user, reduxStore.dispatch);
             }
         }
+    }
+
+    async groupChatTaskStart(groupId) {
+        await this.mainFeddTaskstop();
+        const refresher = BackgroundTimer.setInterval(() => {
+            this.updateGroupChat(groupId);
+        }, 5000);
+
+        simpleStore.save("group_chat", [ refresher])
+    }
+
+    async groupChatTaskstop() {
+        let tasks = await simpleStore.get("group_chat");
+        if (tasks) {
+            tasks.forEach((task) => {
+                BackgroundTimer.clearInterval(task);
+            });
+        }
+    }
+
+    updateGroupChat(groupId) {
+        console.log('update group chat: ' + groupId);
+        let token = reduxStore.getState().authentication.token;
+        let user = reduxStore.getState().user.user;
+        let groupCommentsItems = reduxStore.getState().comments.groupCommentsOrder[groupId];
+        groupComments.refreshComments(reduxStore.dispatch, token, {_id: groupId}, user,groupCommentsItems);
+
     }
 }
 

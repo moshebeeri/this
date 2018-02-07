@@ -26,7 +26,17 @@ const handleError  = (error,dispatch) => {
     }
 };
 
+const handleSuccses  = (reduxState, dispatch) => {
+    if(reduxState.network.offline) {
+        dispatch({
+            type: actions.NETWORK_IS_ONLINE,
+        });
+    }
+
+};
+
 export default {
 
-    handleError
+    handleError,
+    handleSuccses
 };

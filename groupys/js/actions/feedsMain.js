@@ -119,6 +119,7 @@ export function fetchTop(feeds, token, user) {
                 type: actions.FEED_SHOW_TOP_LOADER,
                 showTopLoader: false,
             });
+            handler.handleSuccses(getState(),dispatch)
         } catch (error) {
             if(error === errors.NETWORK_ERROR) {
                 dispatch({
@@ -202,6 +203,7 @@ export function setNextFeeds(feeds) {
         dispatch({
             type: actions.FEEDS_GET_NEXT_BULK_DONE,
         });
+        handler.handleSuccses(getState(),dispatch)
     }
 }
 
@@ -214,6 +216,7 @@ export function like(id) {
                 id: id
             });
             await userApi.like(id, token);
+            handler.handleSuccses(getState(),dispatch)
         } catch (error) {
             if(error === errors.NETWORK_ERROR) {
                 dispatch({
@@ -245,6 +248,7 @@ export function refresh(id, currentSocialState) {
                 social_state: response,
                 id: id
             });
+            handler.handleSuccses(getState(),dispatch)
             // await userApi.like(id, token);
         } catch (error) {
             if(error === errors.NETWORK_ERROR) {
@@ -269,6 +273,7 @@ async function refreshFeedSocialState (dispatch, token,id) {
             id: id
         });
 
+
     } catch (error) {
         handler.handleError(error,dispatch)
         logger.actionFailed('refreshFeedSocialState')
@@ -284,6 +289,7 @@ export const unlike = (id) => {
                 type: actions.UNLIKE,
                 id: id
             });
+            handler.handleSuccses(getState(),dispatch)
         } catch (error) {
             if(error === errors.NETWORK_ERROR) {
                 dispatch({
@@ -305,7 +311,7 @@ export function saveFeed(id,navigation,feed) {
            let savedInstance =  await promotionApi.save(id);
             navigation.navigate('realizePromotion', {item: feed,id:savedInstance._id})
             await  promotionApi.getAll();
-
+            handler.handleSuccses(getState(),dispatch)
 
         } catch (error) {
             if(error === errors.NETWORK_ERROR) {

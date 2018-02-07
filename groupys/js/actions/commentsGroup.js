@@ -39,6 +39,7 @@ export function fetchTopComments(group) {
                     groupId: group._id,
                 });
             }
+            handler.handleSuccses(getState(),dispatch)
         } catch (error) {
             handler.handleError(error, dispatch)
             logger.actionFailed('commentsApi.getGroupComments')
@@ -46,13 +47,15 @@ export function fetchTopComments(group) {
     }
 }
 
-async function refreshComments(dispatch, token, group, user) {
+export async function refreshComments(dispatch, token, group, user,groupComments) {
     try {
-        let response = await commentsApi.getGroupComments(group, token, groupComments[0], 'up');
-        let groupComments = getState().comments.groupCommentsOrder[group._id];
+
+
         if (!groupComments) {
             return;
         }
+        let response = await commentsApi.getGroupComments(group, token, groupComments[0], 'up');
+
         if (response.length > 0) {
             dispatch({
                 type: actions.UPSERT_GROUP_TOP_COMMENT,
@@ -85,6 +88,7 @@ export function sendMessage(groupId, message) {
                 message: messageItem
             });
             commentsApi.createComment(groupId, instanceId, message, token);
+            handler.handleSuccses(getState(),dispatch)
         } catch (error) {
             handler.handleError(error, dispatch)
             logger.actionFailed('sendMessage')
@@ -126,9 +130,14 @@ export function setNextFeeds(comments, group) {
             const groupcomments = getState().comments.groupCommentsOrder[group._id];
             let response;
             if (groupcomments && groupcomments.length > 0) {
-                response = await commentsApi.getGroupComments(group, token, groupcomments[groupcomments.length - 1], 'down');
+                response = await commentsApi.getGroupComments(group, token, groupcomments[groupcomments.length], 'down');
+
             } else {
                 response = await commentsApi.getGroupComments(group, token, 0, 'down');
+                dispatch({
+                    type: actions.GROUP_COMMENT_CLEAR_MESSAGE,
+                    groupId: group._id,
+                });
             }
             if (!getState().comments.loadingDone[group._id]) {
                 dispatch({
@@ -149,6 +158,7 @@ export function setNextFeeds(comments, group) {
                     gid: group._id,
                 });
             }
+            handler.handleSuccses(getState(),dispatch)
         } catch (error) {
             handler.handleError(error, dispatch)
             logger.actionFailed('commentsApi.getGroupComments')

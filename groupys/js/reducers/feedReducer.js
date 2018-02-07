@@ -76,6 +76,9 @@ export default function feeds(state = initialState, action) {
             currentFeeds[action.item._id] = action.item;
             if (!feedstate.feedView.includes(action.item._id)) {
                 feedstate.feedView.unshift(action.item._id);
+            }else{
+                feedstate.feedView = feedstate.feedView.filter(item => item !== action.item._id);
+                feedstate.feedView.unshift(action.item._id);
             }
             feedstate.feeds = currentFeeds;
             feedstate.renderFeed = true;
@@ -121,3 +124,7 @@ export default function feeds(state = initialState, action) {
             return state;
     }
 };
+
+function remove(array, element) {
+    return array.filter(e => e !== element);
+}

@@ -57,6 +57,20 @@ const validatePuches = (number) => {
     }
     return true;
 };
+
+const validateHappyHour = (number) => {
+    if (number > 24) {
+        return false;
+    }
+    if (number === 0) {
+        return false;
+    }
+    if (number < 0) {
+        return false;
+    }
+    return true;
+};
+
 const validatePercent = (number) => {
     if (number > 100) {
         return false;
@@ -207,6 +221,7 @@ function getLocale() {
 export default {
     validateEmail,
     validateWebsite,
+    validateHappyHour,
     validateYouTube,
     validatePuches, validatePercent,
     getDistanceString,

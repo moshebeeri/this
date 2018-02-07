@@ -48,6 +48,7 @@ export function fetchProducts() {
     return function (dispatch, getState) {
         const token = getState().authentication.token;
         getAll(dispatch, token);
+
     }
 }
 
@@ -96,6 +97,7 @@ export function saveProduct(product,businessId,navigation) {
                 type: actions.PRODUCT_SAVING_DONE,
             });
             navigation.goBack();
+            handler.handleSuccses(getState(),dispatch)
         } catch (error) {
             handler.handleError(error,dispatch)
             logger.actionFailed('product-saveProduct')

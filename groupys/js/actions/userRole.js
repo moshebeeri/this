@@ -38,6 +38,7 @@ export function saveRole(user, businessId, userRole, navigation) {
                 type: actions.USER_ROLE_SAVING_DONE,
             });
             navigation.goBack();
+            handler.handleSuccses(getState(),dispatch)
         } catch (error) {
             handler.handleError(error,dispatch)
             logger.actionFailed('userRole-saveRole')
@@ -46,7 +47,7 @@ export function saveRole(user, businessId, userRole, navigation) {
 }
 
 export function search(phoneNumber) {
-    return async function (dispatch) {
+    return async function (dispatch,getState) {
         try {
             dispatch({
                 type: actions.USER_ROLE_SHOW_SPINNER,
@@ -75,6 +76,7 @@ export function search(phoneNumber) {
                 type: actions.USER_ROLE_SHOW_SPINNER,
                 show: false,
             });
+            handler.handleSuccses(getState(),dispatch)
         } catch (error) {
             handler.handleError(error,dispatch)
             logger.actionFailed('userRole-search')
