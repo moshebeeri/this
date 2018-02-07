@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import {Platform, Text, View,Keyboard} from 'react-native'
+import {Keyboard, Platform, Text, View} from 'react-native'
 import styles from './styles'
 import {SelectButton, TextInput} from '../../../../ui/index';
 import strings from "../../../../i18n/i18n"
@@ -69,40 +69,36 @@ export default class XPlusYComponent extends Component {
     }
 
     setBuy(value) {
-        if (value) {
-            let eligible = undefined;
-            if (this.props.state.x_plus_y && this.props.state.x_plus_y.values) {
-                eligible = this.props.state.x_plus_y.values.eligible;
-            }
-            this.props.setState({
-                choose_distribution: true,
-                x_plus_y:
-                    {
-                        values: {
-                            buy: value,
-                            eligible: eligible,
-                        }
-                    }
-            })
+        let eligible = undefined;
+        if (this.props.state.x_plus_y && this.props.state.x_plus_y.values) {
+            eligible = this.props.state.x_plus_y.values.eligible;
         }
+        this.props.setState({
+            choose_distribution: true,
+            x_plus_y:
+                {
+                    values: {
+                        buy: value,
+                        eligible: eligible,
+                    }
+                }
+        })
     }
 
     setEligible(value) {
-        if (value) {
-            let buy = undefined;
-            if (this.props.state.x_plus_y && this.props.state.x_plus_y.values) {
-                buy = this.props.state.x_plus_y.values.buy;
-            }
-            this.props.setState({
-                x_plus_y:
-                    {
-                        values: {
-                            buy: buy,
-                            eligible: value,
-                        }
-                    }
-            })
+        let buy = undefined;
+        if (this.props.state.x_plus_y && this.props.state.x_plus_y.values) {
+            buy = this.props.state.x_plus_y.values.buy;
         }
+        this.props.setState({
+            x_plus_y:
+                {
+                    values: {
+                        buy: buy,
+                        eligible: value,
+                    }
+                }
+        })
     }
 
     createProductView() {
@@ -118,9 +114,11 @@ export default class XPlusYComponent extends Component {
         }
         return undefined
     }
-    done(){
+
+    done() {
         Keyboard.dismiss();
     }
+
     createProductGiftView() {
         if (this.props.state.giftProduct) {
             let productName = this.props.state.giftProduct.name

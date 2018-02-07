@@ -48,27 +48,25 @@ export default class HappyHourComponent extends Component {
     }
 
     setPay(value) {
-        if (value) {
-            let from = undefined;
-            let until = undefined;
-            let days = undefined;
-            if (this.props.state.happy_hour && this.props.state.happy_hour.values) {
-                from = this.props.state.happy_hour.values.from;
-                until = this.props.state.happy_hour.values.until;
-                days = this.props.state.happy_hour.values.days;
-            }
-            this.props.setState({
-                choose_distribution: true,
-                happy_hour: {
-                    values: {
-                        pay: value,
-                        from: from,
-                        until: until,
-                        days: days
-                    }
-                }
-            })
+        let from = undefined;
+        let until = undefined;
+        let days = undefined;
+        if (this.props.state.happy_hour && this.props.state.happy_hour.values) {
+            from = this.props.state.happy_hour.values.from;
+            until = this.props.state.happy_hour.values.until;
+            days = this.props.state.happy_hour.values.days;
         }
+        this.props.setState({
+            choose_distribution: true,
+            happy_hour: {
+                values: {
+                    pay: value,
+                    from: from,
+                    until: until,
+                    days: days
+                }
+            }
+        })
     }
 
     setFrom(value) {
@@ -96,31 +94,29 @@ export default class HappyHourComponent extends Component {
     }
 
     setUntil(value) {
-        if (value) {
-            let pay = undefined;
-            let from = undefined;
-            let days = undefined;
-            if (this.props.state.happy_hour && this.props.state.happy_hour.values) {
-                pay = this.props.state.happy_hour.values.pay;
-                from = this.props.state.happy_hour.values.from;
-                days = this.props.state.happy_hour.values.days;
-            }
-            let until = value * 60 * 60;
-            this.props.setState({
-                choose_distribution: true,
-                happy_hour: {
-                    values: {
-                        pay: pay,
-                        from: from,
-                        until: until,
-                        days: days
-                    }
-                },
-            })
-            this.setState({
-                numberOfHours: value
-            });
+        let pay = undefined;
+        let from = undefined;
+        let days = undefined;
+        if (this.props.state.happy_hour && this.props.state.happy_hour.values) {
+            pay = this.props.state.happy_hour.values.pay;
+            from = this.props.state.happy_hour.values.from;
+            days = this.props.state.happy_hour.values.days;
         }
+        let until = value * 60 * 60;
+        this.props.setState({
+            choose_distribution: true,
+            happy_hour: {
+                values: {
+                    pay: pay,
+                    from: from,
+                    until: until,
+                    days: days
+                }
+            },
+        })
+        this.setState({
+            numberOfHours: value
+        });
     }
 
     setDays(value) {
