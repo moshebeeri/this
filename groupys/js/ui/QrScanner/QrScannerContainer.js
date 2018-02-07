@@ -30,6 +30,7 @@ class BusinessFollow extends Component {
                 searching={state.searching}
                 business={state.business}
                 showNotAuthorizedMessage={state.notAuthotized}
+                ShowOutOffScope={state.conditionOutOfScope}
                 showAssigmentMessage ={state.showAssigmentMessage}
                 showAssigmentMessageFailed ={state.showAssigmentMessageFailed}
                 businessAssign ={business}

@@ -50,7 +50,15 @@ export function scanResult(barcode, businessAssign) {
                 } else {
                     let instance = await promotionApi.getPromotionInstance(data.code, token)
                     if (instance) {
-                        console.log(instance);
+                        let intime = inTime(instance);
+
+                        if(!intime){
+                            dispatch({
+                                type: actions.SCANNER_CONDITION_OUT_OF_SCOPE,
+                            });
+                            return;
+                        }
+
                         let users = await userApi.getBusinessUsers(instance.instance.promotion.entity.business._id, token);
                         let isPermited = users.filter(permitedUser => {
                             return permitedUser.user._id === user._id
@@ -91,7 +99,7 @@ export function scanResult(barcode, businessAssign) {
     }
 }
 
-function inTime(instance){
+export function inTime(instance){
     let date = new Date();
 
     if(instance.type ==='HAPPY_HOUR') {

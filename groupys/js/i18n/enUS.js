@@ -248,8 +248,8 @@ ConfirmLast                                   : "Confirm Last Punch",
 PleaseScanCode                                : "Please Scan Code",
 Realized                                      : "Realized",
 notAuthorizedMessage                          : "You are not Authorized To Accept Code",
-validateByEmail                               : "Email Validation Will be Sent"
-
+validateByEmail                               : "Email Validation Will be Sent",
+ConditionOutOfScope                           : "Promotion Cannot be Realized - out of date and time"
 
 
 

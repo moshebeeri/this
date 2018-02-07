@@ -8,6 +8,7 @@ const initialState = {
     showAssigmentMessage:false,
     notAuthotized:false,
     showAssigmentMessageFailed:false,
+    conditionOutOfScope:false,
     code:'',
     location:'',
 
@@ -27,6 +28,7 @@ export default function scannerForm(state = initialState, action) {
                 cameraOn:true,
                 notAuthotized:false,
                 showAssigmentMessageFailed:false,
+                conditionOutOfScope:false,
                 code:''
             };
         case actions.SCANNER_SHOW_SEARCH_SPIN:
@@ -56,6 +58,14 @@ export default function scannerForm(state = initialState, action) {
                 showAssigmentMessageFailed:true,
 
             };
+        case actions.SCANNER_CONDITION_OUT_OF_SCOPE:
+            return {
+                ...state,
+                conditionOutOfScope:true,
+
+            };
+
+
         case actions.SCANNER_SHOW_NOT_AUTHOTIZED:
             return {
                 ...state,

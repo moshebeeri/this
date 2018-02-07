@@ -36,7 +36,7 @@ export default class BusinessFollow extends Component {
     }
 
     createView() {
-        const {showNotAuthorizedMessage,showAssigmentMessageFailed,showAssigmentMessage,navigation, code, cameraOn, searching, business, instance, group, followBusiness, groupFollowBusiness, scanResult, realizePromotion} = this.props;
+        const {showNotAuthorizedMessage,showAssigmentMessageFailed,showAssigmentMessage,navigation, code, cameraOn, searching, business, instance, group, followBusiness, groupFollowBusiness, scanResult, realizePromotion,ShowOutOffScope} = this.props;
         let followComponent = undefined;
         if (business) {
             let followStyle = {
@@ -68,6 +68,14 @@ export default class BusinessFollow extends Component {
             </View>)
 
         }
+        if(ShowOutOffScope){
+            return (<View style={{backgroundColor:'transparent',alignItems:'center',justifyContent:'flex-start',flex:1}}>
+                <Text>{strings.ConditionOutOfScope}</Text>
+            </View>)
+
+        }
+
+
         if(showNotAuthorizedMessage){
             return (<View style={{backgroundColor:'transparent',alignItems:'center',justifyContent:'flex-start',flex:1}}>
                 <Text>{strings.notAuthorizedMessage}</Text>
