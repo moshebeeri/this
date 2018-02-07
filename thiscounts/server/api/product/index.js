@@ -9,7 +9,6 @@ let router = express.Router();
 router.get('/search/:skip/:limit/:searchString', auth.isAuthenticated(), controller.search);
 router.get('/list/create/by/user/:skip/:limit', auth.isAuthenticated(), controller.user_products);
 
-
 router.get('/', auth.hasRole('admin'), controller.index);
 router.get('/:skip/:limit', auth.isAuthenticated(), controller.index_paginated);
 router.get('/:id', auth.isAuthenticated(), controller.show);
