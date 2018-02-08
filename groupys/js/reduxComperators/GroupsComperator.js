@@ -5,14 +5,18 @@ const reduxStore = getStore();
 class GroupsComperator {
     shouldUpdateGroups(newgroups) {
         let groups = reduxStore.getState().groups.groups;
+        if(Object.keys(groups).length === 0){
+            return true;
+        }
         let shouldUpdate = false;
         if (newgroups) {
             newgroups.forEach(group => {
                 if (!groups[group._id]) {
                     shouldUpdate =  true;
-                }
-                if (this.shouldUpdateGroup(group, groups[group._id])) {
-                    shouldUpdate =  true;
+                }else {
+                    if (this.shouldUpdateGroup(group, groups[group._id])) {
+                        shouldUpdate = true;
+                    }
                 }
             })
         }

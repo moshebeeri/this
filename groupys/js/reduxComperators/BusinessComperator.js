@@ -4,15 +4,23 @@ const reduxStore = getStore();
 
 class BusinessComperator {
     shouldUpdateBusinesses(newBusinesses) {
+
+
         let businesses = reduxStore.getState().businesses.businesses;
+
+        if(Object.keys(businesses).length === 0){
+            return true;
+        }
+
         let shouldUpdate = false;
         if (newBusinesses) {
             newBusinesses.forEach(business => {
                 if (!businesses[business.business._id]) {
                     shouldUpdate =  true;
-                }
-                if (this.businessUdated(businesses[business.business._id], business.business, business.categoryTitle)) {
-                    shouldUpdate =  true;
+                }else {
+                    if (this.businessUdated(businesses[business.business._id], business.business, business.categoryTitle)) {
+                        shouldUpdate = true;
+                    }
                 }
             })
         }
