@@ -150,6 +150,7 @@ exports.pnsUserDevices = function (notification, audience) {
 exports.notify = function (note, audience) {
   audience.forEach(to => {
     note.to = to;
+    note.timestamp = Date.now();
     Notification.create(note, function (err, notification) {
       if (err) return console.error(err);
       Notification.findById(notification._id).exec((err, populated) => {
