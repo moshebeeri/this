@@ -14,10 +14,11 @@ class Business extends Component {
     }
 
     renderItem(item) {
-        const {navigation,actions} = this.props;
+        const {navigation,actions,user} = this.props;
         return <BusinessListView
             item={item.item}
             index={item.index}
+            user={user}
             resetForm={actions.resetForm}
             refresh={actions.updateBusinesStatuss}
             navigation={navigation}
@@ -56,6 +57,7 @@ class Business extends Component {
 export default connect(
     state => ({
         businessLoading: state.businesses.loading,
+        user: state.user.user,
         selectedBusiness: state.businesses.selectedBusiness,
         update: state.businesses.update,
         businesses: getMyBusinessesItems(state),

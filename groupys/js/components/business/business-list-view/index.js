@@ -160,7 +160,7 @@ export default class BusinessListView extends Component {
     }
 
     createPermissionsTag(item) {
-        if (item.role === 'OWNS' || item.role === 'Admin' || item.role === 'Manager') {
+        if (this.checkPermission(item)) {
             return <TouchableOpacity onPress={() => this.showUsersRoles()}
                                      style={{margin: 3, flexDirection: 'row', alignItems: 'center',}}
                                      regular>
@@ -181,7 +181,7 @@ export default class BusinessListView extends Component {
 
 
     createPoductsTag(item) {
-        if (item.role === 'OWNS' || item.role === 'Admin' || item.role === 'Manager') {
+        if (this.checkPermission(item)) {
             return  <TouchableOpacity onPress={() => this.showProducts()}
                                       style={{margin: 3, flexDirection: 'row', alignItems: 'center',}} regular>
                 <Image style={{tintColor: '#ff6400', marginLeft: 10, width: vh * 3, height: vh * 4}}
@@ -199,8 +199,25 @@ export default class BusinessListView extends Component {
         return undefined;
     }
 
+    checkPermission(item){
+        const{user} = this.props;
+        if (item.role === 'OWNS' || item.role === 'Admin' || item.role === 'Manager' ) {
+            return true
+        }
+
+        if(item.business){
+            if(item.business.creator  && item.business.creator._id === user._id){
+                if(item.business.review.state !=='validation'  && item.business.review.state !=='review' ) {
+                    return true;
+                }
+
+            }
+        }
+        return false;
+
+    }
     createPromotionsTag(item) {
-        if (item.role === 'OWNS' || item.role === 'Admin' || item.role === 'Manager') {
+        if (this.checkPermission(item)) {
             return <TouchableOpacity onPress={() => this.showPromotions()}
                                      style={{margin: 3, flexDirection: 'row', alignItems: 'center',}}
                                      regular>
