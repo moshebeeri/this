@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import {Dimensions,  ScrollView, TouchableOpacity, View} from 'react-native';
+import {Dimensions,  ScrollView, TouchableOpacity, View,Image} from 'react-native';
 import {
     Button,
     Card,
@@ -112,11 +112,11 @@ class BusinessProfile extends Component {
 
                                 {business.qrcodeSource &&
                                 <TouchableOpacity onPress={() => this.changeQrLook()}
-                                                  style={this.state.codeContainerStyle}><ImageController
+                                                  style={this.state.codeContainerStyle}><Image
                                     style={this.state.codeStyle} resizeMode="cover"
                                     source={{uri: business.qrcodeSource}}>
 
-                                </ImageController>
+                                </Image>
                                 </TouchableOpacity>
                                 }
                             </View>

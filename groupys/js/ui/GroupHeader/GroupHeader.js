@@ -12,7 +12,7 @@ export default class GroupHeader extends Component {
 
     createBusinessLogo(business) {
         if (business && business.logo) {
-            return <ImageController thumbnail size={30} square source={{uri: business.logo}}/>
+            return <ImageController thumbnail size={30}  source={{uri: business.logo}}/>
         } else {
             return <ImageController thumbnail size={30} source={require('../../../images/client_1.png')}/>
         }
@@ -26,11 +26,11 @@ export default class GroupHeader extends Component {
         } else {
             if (group.entity && group.entity.business) {
                 if (group.entity.business.logo) {
-                    return <ImageController humbnail size={50}  source={{uri: group.entity.business.logo}}/>
+                    return <ImageController thumbnail size={50}  source={{uri: group.entity.business.logo}}/>
                 }
             }
         }
-        return <ImageController humbnail size={50}  source={require('../../../images/client_1.png')}/>
+        return <ImageController thumbnail size={50}  source={require('../../../images/client_1.png')}/>
     }
 
     createTitle(groupType) {

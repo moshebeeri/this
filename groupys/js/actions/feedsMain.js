@@ -32,9 +32,11 @@ async function fetchFeedsFromServer(feeds, dispatch, token, user) {
             let id = keys[keys.length - 1];
             response = await feedApi.getAll('down', feeds[id].fid, token, user);
         }
-        dispatch({
-            type: actions.FEEDS_GET_NEXT_BULK_DONE,
-        });
+        // if(!getState().feeds.stopDispatchMaxFeed) {
+        //     dispatch({
+        //         type: actions.FEEDS_GET_NEXT_BULK_DONE,
+        //     });
+        // }
         console.log(response)
         if (!response)
             return;
@@ -167,9 +169,11 @@ export function setNextFeeds(feeds) {
             });
         }
         if (getState().feeds.maxFeedReturned) {
-            dispatch({
-                type: actions.FEEDS_GET_NEXT_BULK_DONE,
-            });
+            if(!getState().feeds.stopDispatchMaxFeed) {
+                dispatch({
+                    type: actions.FEEDS_GET_NEXT_BULK_DONE,
+                });
+            }
             return;
         }
         if (_.isEmpty(feeds) && getState().feeds.firstTime) {
@@ -195,9 +199,11 @@ export function setNextFeeds(feeds) {
                 loadingDone: true,
             });
         }
-        dispatch({
-            type: actions.FEEDS_GET_NEXT_BULK_DONE,
-        });
+        if(!getState().feeds.stopDispatchMaxFeed) {
+            dispatch({
+                type: actions.FEEDS_GET_NEXT_BULK_DONE,
+            });
+        }
         handler.handleSuccses(getState(), dispatch)
     }
 }

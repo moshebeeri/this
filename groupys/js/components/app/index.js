@@ -91,10 +91,14 @@ const warch = navigator.geolocation.watchPosition((position) => {
             if (reduxStore.getState().authentication.token) {
                 locationApi.sendLocation(position.coords.longitude, position.coords.latitude, position.timestamp, position.coords.speed);
             }
-            reduxStore.dispatch({
-                type: actions.SET_LOCATION,
-                currentLocation: {lat: position.coords.latitude, long: position.coords.longitude}
-            })
+            let lastPosition = reduxStore.getState().phone.currentLocation;
+            if(!lastPosition || (lastPosition && lastPosition.lat !== position.coords.latitude && lastPosition.long !== position.coords.longitude)){
+                reduxStore.dispatch({
+                    type: actions.SET_LOCATION,
+                    currentLocation: {lat: position.coords.latitude, long: position.coords.longitude}
+                })
+            }
+
         } catch (error) {
             reduxStore.dispatch({
                 type: actions.NETWORK_IS_OFFLINE,
