@@ -8,21 +8,26 @@ import * as actions from "../reducers/reducerActions";
 import CollectionDispatcher from "./collectionDispatcher";
 import ActionLogger from './ActionLogger'
 import * as errors from '../api/Errors'
+import GroupsComperator from "../reduxComperators/GroupsComperator"
 let groupsApi = new GroupsApi();
 let feedApi = new FeedApi();
 let promotionApi = new PtomotionApi();
 let activityApi = new ActivityApi();
 let userApi = new UserApi();
 let logger = new ActionLogger();
+let groupsComperator = new GroupsComperator();
 import  handler from './ErrorHandler'
 async function getAll(dispatch, token) {
     try {
         let response = await groupsApi.getAll(token);
+
         if (response.length > 0) {
-            dispatch({
-                type: actions.UPSERT_GROUP,
-                item: response,
-            });
+            if(groupsComperator.shouldUpdateGroups(response)) {
+                dispatch({
+                    type: actions.UPSERT_GROUP,
+                    item: response,
+                });
+            }
         }
     } catch (error) {
         handler.handleError(error,dispatch)

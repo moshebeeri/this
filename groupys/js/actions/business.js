@@ -10,6 +10,7 @@ import * as actions from "../reducers/reducerActions";
 import EntityUtils from "../utils/createEntity";
 import FormUtils from "../utils/fromUtils";
 import  handler from './ErrorHandler'
+import BusinessComperator from "../reduxComperators/BusinessComperator"
 const BTClient = require('react-native-braintree-xplat');
 let businessApi = new BusinessApi();
 let userApi = new UserApi();
@@ -17,6 +18,7 @@ let productApi = new ProductApi();
 let promotionApi = new PromotionApi();
 let entityUtils = new EntityUtils();
 let pricingApi = new PricingApi();
+let businessComperator = new BusinessComperator();
 import * as errors from '../api/Errors'
 import ActionLogger from './ActionLogger'
 let logger = new ActionLogger();
@@ -24,12 +26,15 @@ let logger = new ActionLogger();
 
 async function getAll(dispatch, token) {
     try {
-        let response = await businessApi.getAll(token);
+        let response = await businessApi.getAll(token)
+
         if (response.length > 0) {
-            dispatch({
-                type: actions.UPSERT_MY_BUSINESS,
-                item: response
-            });
+            if(businessComperator.shouldUpdateBusinesses(response)) {
+                dispatch({
+                    type: actions.UPSERT_MY_BUSINESS,
+                    item: response
+                });
+            }
         }
     } catch (error) {
         handler.handleError(error,dispatch)
@@ -136,10 +141,12 @@ export function onEndReached() {
         });
         try {
             let businesses = await businessApi.getAll(token);
-            dispatch({
-                type: actions.UPSERT_MY_BUSINESS,
-                item: businesses
-            });
+            if(businessComperator.shouldUpdateBusinesses(businesses)){
+                dispatch({
+                    type: actions.UPSERT_MY_BUSINESS,
+                    item: businesses
+                });
+            }
         } catch (error) {
             if(error === errors.NETWORK_ERROR) {
                 dispatch({
@@ -433,10 +440,12 @@ export function updateBusinesStatuss() {
 
             const token = getState().authentication.token;
             let updatedBusiness = await businessApi.getAll(token);
-            dispatch({
-                type: actions.UPSERT_MY_BUSINESS,
-                item: updatedBusiness
-            });
+            if(businessComperator.shouldUpdateBusinesses(updatedBusiness)) {
+                dispatch({
+                    type: actions.UPSERT_MY_BUSINESS,
+                    item: updatedBusiness
+                });
+            }
 
         } catch (error) {
              handler.handleError(error,dispatch)
