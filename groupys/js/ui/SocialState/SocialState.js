@@ -1,12 +1,9 @@
 import React, {Component} from 'react';
-import {Text, TouchableOpacity, View,Image} from 'react-native';
+import { Text, TouchableOpacity, View} from 'react-native';
 import {Button} from 'native-base';
-import Icon from 'react-native-vector-icons/FontAwesome';
-import Icon2 from 'react-native-vector-icons/EvilIcons';
-import Icon3 from 'react-native-vector-icons/Entypo';
 import styles from './styles'
 import StyleUtils from "../../utils/styleUtils";
-
+import {ImageController} from '../index'
 const like_icon = require('../../../images/Like.png');
 const comments_icon = require('../../../images/Comment.png');
 const user_like_icon = require('../../../images/user_like.png');
@@ -39,25 +36,24 @@ export default class SocialState extends Component {
         if (feed) {
             componentStyle = styles.promotionFeed;
         }
-
         let componenColor = '#e19c73';
         if (feed) {
             componenColor = '#2db6c8';
-            if(disabled) {
+            if (disabled) {
                 componenColor = '#cccccc';
             }
         }
         if (disabled) {
             return <View transparent style={styles.promotion_iconView}>
-                <Image style={{tintColor: componenColor, marginRight: 10, width: 30, height: 25}}
+                <ImageController style={{tintColor: componenColor, marginRight: 10, width: 30, height: 25}}
                        source={comments_icon}/>
                 <Text style={styles.socialTextColor}>{comments}</Text>
             </View>;
         }
         return <TouchableOpacity transparent style={styles.promotion_iconView} onPress={onPressComment}>
-            <Image style={{tintColor: componenColor, marginRight: 10, width: 30, height: 25}}
+            <ImageController style={{tintColor: componenColor, marginRight: 10, width: 30, height: 25}}
                    source={comments_icon}/>
-             <Text style={styles.socialTextColor}>{comments}</Text>
+            <Text style={styles.socialTextColor}>{comments}</Text>
         </TouchableOpacity>;
     }
 
@@ -66,13 +62,13 @@ export default class SocialState extends Component {
         let componenColor = '#e19c73';
         if (feed) {
             componenColor = '#2db6c8';
-            if(disabled) {
+            if (disabled) {
                 componenColor = '#cccccc';
             }
         }
         if (disabled) {
             return <View transparent style={styles.promotion_iconView}>
-                <Image style={{tintColor:componenColor, marginRight: 10, width: 25, height: 25}} source={like_icon}/>
+                <ImageController style={{tintColor: componenColor, marginRight: 10, width: 25, height: 25}} source={like_icon}/>
                 <Text style={styles.socialTextColor}>{likes}</Text>
             </View>
         }
@@ -80,7 +76,7 @@ export default class SocialState extends Component {
             return <TouchableOpacity transparent style={styles.promotion_iconView} onPress={onPressUnLike}>
 
 
-                <Image style={{tintColor: componenColor, marginRight: 10, width: 25, height: 25}}
+                <ImageController style={{tintColor: componenColor, marginRight: 10, width: 25, height: 25}}
                        source={user_like_icon}/>
                 <Text style={styles.socialTextColor}>{likes}</Text>
 
@@ -88,7 +84,7 @@ export default class SocialState extends Component {
         }
         return <TouchableOpacity transparent style={styles.promotion_iconView} onPress={onPressLike}>
 
-            <Image style={{tintColor: componenColor, marginRight: 10, width: 25, height: 25}}
+            <ImageController style={{tintColor: componenColor, marginRight: 10, width: 25, height: 25}}
                    source={like_icon}/>
             <Text style={styles.socialTextColor}>{likes}</Text>
 
@@ -101,18 +97,17 @@ export default class SocialState extends Component {
         if (feed) {
             componentStyle = styles.promotionFeed;
         }
-
         let componenColor = '#e19c73';
         if (feed) {
             componenColor = '#2db6c8';
-            if(disabled) {
+            if (disabled) {
                 componenColor = '#cccccc';
             }
         }
         if (disabled || shareDisabled) {
             return <View transparent style={styles.promotion_iconView}>
 
-                <Image style={{tintColor: componenColor, marginRight: 10, width: 25, height: 25}}
+                <ImageController style={{tintColor: componenColor, marginRight: 10, width: 25, height: 25}}
                        source={share_icon}/>
                 <Text style={styles.socialTextColor}>{shares}</Text>
 
@@ -121,7 +116,7 @@ export default class SocialState extends Component {
         if (share) {
             return <TouchableOpacity transparent style={styles.promotion_iconView} onPress={shareAction}>
 
-                <Image style={{tintColor: componenColor, marginRight: 10, width: 25, height: 25}}
+                <ImageController style={{tintColor: componenColor, marginRight: 10, width: 25, height: 25}}
                        source={share_icon}/>
                 <Text style={styles.socialTextColor}>{shares}</Text>
 
@@ -130,7 +125,7 @@ export default class SocialState extends Component {
         }
         return <TouchableOpacity transparent style={styles.promotion_iconView} onPress={shareAction}>
 
-            <Image style={{tintColor: componenColor, marginRight: 10, width: 25, height: 25}}
+            <ImageController style={{tintColor: componenColor, marginRight: 10, width: 25, height: 25}}
                    source={share_icon}/>
             <Text style={styles.socialTextColor}>{shares}</Text>
         </TouchableOpacity>;

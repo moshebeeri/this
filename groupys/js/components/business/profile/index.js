@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import {Dimensions, Image, ScrollView, TouchableOpacity, View} from 'react-native';
+import {Dimensions,  ScrollView, TouchableOpacity, View} from 'react-native';
 import {
     Button,
     Card,
@@ -18,10 +18,9 @@ import {
     Thumbnail,
     Title,
 } from 'native-base';
-import {CachedImage} from "react-native-img-cache";
 
 import styles from './styles'
-import {BusinessHeader, FormHeader, TextInput} from '../../../ui/index';
+import {BusinessHeader, FormHeader, TextInput,ImageController} from '../../../ui/index';
 import * as businessAction from "../../../actions/business";
 import {connect} from 'react-redux';
 import {bindActionCreators} from "redux";
@@ -59,12 +58,12 @@ class BusinessProfile extends Component {
 
     createBusinessLogo(selectedBusiness) {
         if (selectedBusiness && selectedBusiness.logo) {
-            return <Thumbnail medium square source={{uri: selectedBusiness.logo}}/>
+            return <ImageController thumbnail size={50} square source={{uri: selectedBusiness.logo}}/>
         }
         if (selectedBusiness && selectedBusiness.businessLogo) {
-            return <Thumbnail medium square source={{uri: selectedBusiness.businessLogo}}/>
+            return <ImageController thumbnail size={50}  square source={{uri: selectedBusiness.businessLogo}}/>
         }
-        return <Thumbnail source={require('../../../../images/client_1.png')}/>
+        return <ImageController thumbnail size={50} source={require('../../../../images/client_1.png')}/>
     }
 
     changeQrLook() {
@@ -113,11 +112,11 @@ class BusinessProfile extends Component {
 
                                 {business.qrcodeSource &&
                                 <TouchableOpacity onPress={() => this.changeQrLook()}
-                                                  style={this.state.codeContainerStyle}><CachedImage
+                                                  style={this.state.codeContainerStyle}><ImageController
                                     style={this.state.codeStyle} resizeMode="cover"
                                     source={{uri: business.qrcodeSource}}>
 
-                                </CachedImage>
+                                </ImageController>
                                 </TouchableOpacity>
                                 }
                             </View>
@@ -156,30 +155,30 @@ class BusinessProfile extends Component {
 
     createBannerTag(business) {
         if (business.pictures) {
-            return <View style={{}}><CachedImage
+            return <View style={{}}><ImageController
                 style={[styles.bannerImageContainer, {width: StyleUtils.getWidth()}]}
 
                 resizeMode="cover"
                 source={{uri: business.pictures[0].pictures[0]}}>
 
-            </CachedImage>
+            </ImageController>
 
             </View>
         }
         if (business.banner) {
-            return <View style={{}}><CachedImage
+            return <View style={{}}><ImageController
                 style={[styles.bannerImageContainer, {width: StyleUtils.getWidth()}]}
                 resizeMode="cover"
                 source={business.banner}>
 
-            </CachedImage>
+            </ImageController>
 
             </View>
         }
-        return <CachedImage
+        return <ImageController
             style={{padding: 0, flex: -1, height: 300}}
             source={require('../../../../images/client_1.png')}>
-        </CachedImage>
+        </ImageController>
     }
 
     shouldComponentUpdate() {

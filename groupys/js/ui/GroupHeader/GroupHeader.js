@@ -4,7 +4,7 @@ import {Button, Thumbnail} from 'native-base';
 import styles from './styles'
 import strings from "../../i18n/i18n"
 import StyleUtils from "../../utils/styleUtils";
-
+import {ImageController} from '../index'
 export default class GroupHeader extends Component {
     constructor(props) {
         super(props);
@@ -12,25 +12,25 @@ export default class GroupHeader extends Component {
 
     createBusinessLogo(business) {
         if (business && business.logo) {
-            return <Thumbnail small square source={{uri: business.logo}}/>
+            return <ImageController thumbnail size={30} square source={{uri: business.logo}}/>
         } else {
-            return <Thumbnail source={require('../../../images/client_1.png')}/>
+            return <ImageController thumbnail size={30} source={require('../../../images/client_1.png')}/>
         }
     }
 
     createImage(group) {
         if (group.pictures && group.pictures.length > 0) {
             if (group.pictures[group.pictures.length -1].pictures[3]) {
-                return <Thumbnail medium source={{uri: group.pictures[0].pictures[3]}}/>
+                return <ImageController thumbnail size={50} source={{uri: group.pictures[0].pictures[3]}}/>
             }
         } else {
             if (group.entity && group.entity.business) {
                 if (group.entity.business.logo) {
-                    return <Thumbnail medium source={{uri: group.entity.business.logo}}/>
+                    return <ImageController humbnail size={50}  source={{uri: group.entity.business.logo}}/>
                 }
             }
         }
-        return <Thumbnail medium source={require('../../../images/client_1.png')}/>
+        return <ImageController humbnail size={50}  source={require('../../../images/client_1.png')}/>
     }
 
     createTitle(groupType) {

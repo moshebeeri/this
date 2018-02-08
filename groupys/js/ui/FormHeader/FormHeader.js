@@ -80,10 +80,11 @@ class FormHeader extends Component {
         let back = undefined;
         if (showBack) {
             back = <TouchableOpacity transparent style={{
-                width: 50,
+                width: 80,
                 alignItems: 'flex-start',
                 justifyContent: 'flex-start',
                 marginLeft: 5,
+
                 marginRight: 5
             }} onPress={() => this.back()}>
                 <Icon active color={iconColor} size={25} name={arrowName}/>

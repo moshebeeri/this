@@ -9,6 +9,7 @@ import {Menu, MenuOption, MenuOptions, MenuTrigger,} from 'react-native-popup-me
 import * as businessActions from "../../actions/business";
 import Icon2 from 'react-native-vector-icons/SimpleLineIcons';
 import strings from "../../i18n/i18n"
+import {ImageController} from '../index'
 import StyleUtils from "../../utils/styleUtils";
 
 class BusinessHeader extends Component {
@@ -42,20 +43,20 @@ class BusinessHeader extends Component {
             if (noProfile) {
                 return <View style={{margin: 5}}>
                     <View>
-                        <Thumbnail square={true} size={40} source={{uri: businessLogo}}/>
+                        <ImageController thumbnail square={true} size={40} source={{uri: businessLogo}}/>
                     </View>
                 </View>
             }
             if (small) {
                 return <TouchableOpacity style={{margin: 5}} onPress={this.showBusiness.bind(this)}>
                     <View>
-                        <Thumbnail small square={true} size={40} source={{uri: businessLogo}}/>
+                        <ImageController  thumbnail square={true} size={30} source={{uri: businessLogo}}/>
                     </View>
                 </TouchableOpacity>
             }
             return <TouchableOpacity style={{margin: 5}} onPress={this.showBusiness.bind(this)}>
                 <View>
-                    <Thumbnail square={true} size={40} source={{uri: businessLogo}}/>
+                    <ImageController thumbnail square={true} size={40} source={{uri: businessLogo}}/>
                 </View>
             </TouchableOpacity>
         }

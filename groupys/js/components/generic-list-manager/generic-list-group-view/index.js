@@ -21,7 +21,7 @@ import GroupApi from "../../../api/groups"
 import stylesPortrate from './styles'
 import DateUtils from '../../../utils/dateUtils';
 import UiConverter from '../../../api/feed-ui-converter'
-import {GroupHeader, PromotionHeaderSnippet} from '../../../ui/index';
+import {GroupHeader, PromotionHeaderSnippet,ImageController} from '../../../ui/index';
 import strings from '../../../i18n/i18n';
 
 const {width, height} = Dimensions.get('window');
@@ -142,7 +142,7 @@ export default class GenericListGroupView extends Component {
                     name: name
                 }
             }
-            const image = <Thumbnail small source={itemChat.avetar}/>
+            const image = <ImageController thumbnail size={30} source={itemChat.avetar}/>
             return <View style={styles.group_message_container}>
 
 
@@ -188,7 +188,7 @@ export default class GenericListGroupView extends Component {
                     name: name
                 }
             }
-            const image = <Thumbnail square small source={post.avetar}/>
+            const image = <ImageController thumbnail square size={30} source={post.avetar}/>
             return <View style={styles.group_message_container}>
 
 
