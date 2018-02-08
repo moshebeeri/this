@@ -144,6 +144,7 @@ export const UPSERT_ACTIVITY = 'UPSERTactivity';
 //network
 export const NETWORK_IS_OFFLINE = 'NETWORK_IS_OFFLINE';
 export const NETWORK_IS_ONLINE = 'NETWORK_IS_ONLINE';
+export const TIME_OUT = 'TIME_OUT';
 //Render
 export const CURRENT_SCREEN = 'CURRENT_SCREEN';
 export const CURRENT_TAB = 'CURRENT_TAB';

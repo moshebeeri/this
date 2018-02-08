@@ -14,6 +14,12 @@ const handleError  = (error,dispatch) => {
             type: actions.NETWORK_IS_OFFLINE,
         });
     }
+    if(error.type === errors.TIME_OUT) {
+        dispatch({
+            type: actions.TIME_OUT,
+            message:error.debugMessage
+        })
+    }
 
     if(error === errors.UN_AUTHOTIZED_ACCESS){
         store.save('token','');

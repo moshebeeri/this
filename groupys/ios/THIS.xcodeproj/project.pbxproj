@@ -80,6 +80,7 @@
 		F66BD8F51FF2A0E1000E6352 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = F66BD8F41FF2A0E1000E6352 /* GoogleService-Info.plist */; };
 		F68506CF1FF2E5DF00CEDE6A /* libRNFIRMessaging.a in Frameworks */ = {isa = PBXBuildFile; fileRef = F68506CE1FF2E5BE00CEDE6A /* libRNFIRMessaging.a */; };
 		F6DD540C1FFCF8D9002B5D74 /* libRCTBraintree.a in Frameworks */ = {isa = PBXBuildFile; fileRef = F6DD54051FFCF57E002B5D74 /* libRCTBraintree.a */; };
+		F6DDCBF9202C86E200599466 /* libRNFetchBlob.a in Frameworks */ = {isa = PBXBuildFile; fileRef = F6DDCBEF202C860A00599466 /* libRNFetchBlob.a */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -517,6 +518,13 @@
 			remoteGlobalIDString = DE4F06CC1D156AA8005F99CD;
 			remoteInfo = RCTBraintree;
 		};
+		F6DDCBEE202C860A00599466 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = F6DDCBB7202C860900599466 /* RNFetchBlob.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = A15C300E1CD25C330074CB35;
+			remoteInfo = RNFetchBlob;
+		};
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -688,6 +696,7 @@
 		F66BD8F41FF2A0E1000E6352 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = "GoogleService-Info.plist"; path = "THIS/GoogleService-Info.plist"; sourceTree = "<group>"; };
 		F68506C91FF2E5BE00CEDE6A /* RNFIRMessaging.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = RNFIRMessaging.xcodeproj; path = "../node_modules/react-native-fcm/ios/RNFIRMessaging.xcodeproj"; sourceTree = "<group>"; };
 		F6DD54061FFCF853002B5D74 /* RCTBraintree.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = RCTBraintree.xcodeproj; path = "../node_modules/react-native-braintree-xplat/ios/RCTBraintree.xcodeproj"; sourceTree = "<group>"; };
+		F6DDCBB7202C860900599466 /* RNFetchBlob.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = RNFetchBlob.xcodeproj; path = "../node_modules/react-native-fetch-blob/ios/RNFetchBlob.xcodeproj"; sourceTree = "<group>"; };
 		F7284580BB3244258F6F4CEB /* libimageCropPicker.a */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = archive.ar; path = libimageCropPicker.a; sourceTree = "<group>"; };
 		F7C5D157DE1B4D2CB66815C3 /* Roboto_medium.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = Roboto_medium.ttf; path = "../node_modules/native-base/Fonts/Roboto_medium.ttf"; sourceTree = "<group>"; };
 		F94859BF11084B71D45F9EAB /* libPods-THIS-tvOS.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-THIS-tvOS.a"; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -742,6 +751,7 @@
 				B3EADD98A1D043E2A8FC0E5F /* libRCTVideo.a in Frameworks */,
 				B683F3B11A3B492CA0C8C8F8 /* libRCTYouTube.a in Frameworks */,
 				7C101115747B4B90BC3FD8AD /* libRCTCamera.a in Frameworks */,
+				F6DDCBF9202C86E200599466 /* libRNFetchBlob.a in Frameworks */,
 				D0C377D66E2F440C9D3A268D /* libRNI18n.a in Frameworks */,
 				D34863DA6DFE4654B36A8D1A /* libVydiaRNFileUploader.a in Frameworks */,
 				AC6F1146FAB448424991D57B /* Pods_THIS.framework in Frameworks */,
@@ -1055,6 +1065,7 @@
 		832341AE1AAA6A7D00B99B32 /* Libraries */ = {
 			isa = PBXGroup;
 			children = (
+				F6DDCBB7202C860900599466 /* RNFetchBlob.xcodeproj */,
 				F667CAB12011F17000E05859 /* RNFIRAnalytics.xcodeproj */,
 				F6DD54061FFCF853002B5D74 /* RCTBraintree.xcodeproj */,
 				F68506C91FF2E5BE00CEDE6A /* RNFIRMessaging.xcodeproj */,
@@ -1319,6 +1330,14 @@
 			name = Products;
 			sourceTree = "<group>";
 		};
+		F6DDCBB8202C860900599466 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				F6DDCBEF202C860A00599466 /* libRNFetchBlob.a */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -1536,6 +1555,10 @@
 				{
 					ProductGroup = F6B583431EB5A3A7008643C1 /* Products */;
 					ProjectRef = 9484CB2CFACB4883A2616F02 /* RNBackgroundTimer.xcodeproj */;
+				},
+				{
+					ProductGroup = F6DDCBB8202C860900599466 /* Products */;
+					ProjectRef = F6DDCBB7202C860900599466 /* RNFetchBlob.xcodeproj */;
 				},
 				{
 					ProductGroup = F667CAB22011F17000E05859 /* Products */;
@@ -1999,6 +2022,13 @@
 			fileType = archive.ar;
 			path = libRCTBraintree.a;
 			remoteRef = F6DD540A1FFCF853002B5D74 /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		F6DDCBEF202C860A00599466 /* libRNFetchBlob.a */ = {
+			isa = PBXReferenceProxy;
+			fileType = archive.ar;
+			path = libRNFetchBlob.a;
+			remoteRef = F6DDCBEE202C860A00599466 /* PBXContainerItemProxy */;
 			sourceTree = BUILT_PRODUCTS_DIR;
 		};
 /* End PBXReferenceProxy section */

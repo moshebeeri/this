@@ -18,6 +18,8 @@ import {
     Thumbnail,
     Title,
 } from 'native-base';
+import {CachedImage} from "react-native-img-cache";
+
 import styles from './styles'
 import {BusinessHeader, FormHeader, TextInput} from '../../../ui/index';
 import * as businessAction from "../../../actions/business";
@@ -111,11 +113,11 @@ class BusinessProfile extends Component {
 
                                 {business.qrcodeSource &&
                                 <TouchableOpacity onPress={() => this.changeQrLook()}
-                                                  style={this.state.codeContainerStyle}><Image
+                                                  style={this.state.codeContainerStyle}><CachedImage
                                     style={this.state.codeStyle} resizeMode="cover"
                                     source={{uri: business.qrcodeSource}}>
 
-                                </Image>
+                                </CachedImage>
                                 </TouchableOpacity>
                                 }
                             </View>
@@ -154,30 +156,30 @@ class BusinessProfile extends Component {
 
     createBannerTag(business) {
         if (business.pictures) {
-            return <View style={{}}><Image
+            return <View style={{}}><CachedImage
                 style={[styles.bannerImageContainer, {width: StyleUtils.getWidth()}]}
 
                 resizeMode="cover"
                 source={{uri: business.pictures[0].pictures[0]}}>
 
-            </Image>
+            </CachedImage>
 
             </View>
         }
         if (business.banner) {
-            return <View style={{}}><Image
+            return <View style={{}}><CachedImage
                 style={[styles.bannerImageContainer, {width: StyleUtils.getWidth()}]}
                 resizeMode="cover"
                 source={business.banner}>
 
-            </Image>
+            </CachedImage>
 
             </View>
         }
-        return <Image
+        return <CachedImage
             style={{padding: 0, flex: -1, height: 300}}
             source={require('../../../../images/client_1.png')}>
-        </Image>
+        </CachedImage>
     }
 
     shouldComponentUpdate() {

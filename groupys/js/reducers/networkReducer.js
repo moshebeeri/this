@@ -1,4 +1,4 @@
-const initialState = {offline: false, dimensionsChanged: false};
+const initialState = {offline: false, dimensionsChanged: false,debugMessage:''};
 import * as actions from "./reducerActions";
 
 export default function network(state = initialState, action) {
@@ -7,6 +7,11 @@ export default function network(state = initialState, action) {
             return {
                 ...state,
                 offline: false,
+            };
+        case action.TIME_OUT:
+            return {
+                 ...state,
+                 debugMessage:action.debugMessage
             };
         case  actions.NETWORK_IS_OFFLINE:
             return {

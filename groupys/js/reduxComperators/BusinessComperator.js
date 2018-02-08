@@ -18,7 +18,17 @@ class BusinessComperator {
                 if (!businesses[business.business._id]) {
                     shouldUpdate =  true;
                 }else {
-                    if (this.businessUdated(businesses[business.business._id], business.business, business.categoryTitle)) {
+                    let oldBusiness = businesses[business.business._id]
+                    if(business.role){
+                        if(!oldBusiness.role){
+                            shouldUpdate = true;
+                        }
+
+                        if(business.role !== oldBusiness.role){
+                            shouldUpdate = true;
+                        }
+                    }
+                    if (this.businessUdated(oldBusiness, business.business, business.categoryTitle)) {
                         shouldUpdate = true;
                     }
                 }

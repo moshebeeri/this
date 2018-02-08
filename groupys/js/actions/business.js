@@ -24,6 +24,7 @@ import ActionLogger from './ActionLogger'
 let logger = new ActionLogger();
 
 
+
 async function getAll(dispatch, token) {
     try {
         let response = await businessApi.getAll(token)
@@ -37,6 +38,7 @@ async function getAll(dispatch, token) {
             }
         }
     } catch (error) {
+
         handler.handleError(error,dispatch)
         logger.actionFailed("business_getAll")
     }
