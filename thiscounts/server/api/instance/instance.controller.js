@@ -596,6 +596,8 @@ function realizeSavedInstance(user, savedInstance, rel, res, data) {
     if (err) return handleError(res, err);
     if (!saved) return handleError(res, new Error('no saved Instance found'));
     handleRealizeBySavedInstanceType(saved, data, function (err, status) {
+      if (err) return handleError(res, err);
+      console.log(`realizeSavedInstance: ${JSON.stringify(status)}`);
       let terminate = status.terminate;
       let savedInstance = status.savedInstance;
       if (terminate) {

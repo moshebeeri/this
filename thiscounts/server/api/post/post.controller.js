@@ -51,6 +51,8 @@ function handlePostCreation(post) {
 // Creates a new post in the DB.
 exports.create = function(req, res) {
   let post = req.body;
+  console.log(JSON.stringify(post));
+
   if(!getActorId(post))
     return handleError(res, new Error('no actor (behalf) present'));
 
@@ -125,5 +127,6 @@ exports.destroy = function(req, res) {
 };
 
 function handleError(res, err) {
+  console.error(err);
   return res.status(500).send(err);
 }

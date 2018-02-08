@@ -277,6 +277,7 @@ let PromotionSchemaObject = {
       until: Number // seconds from 'from'
     }],
   },
+  //v1 discount by buying quantity e.g. buy more than (or equal) to 5 ad pay 100 (or get 20% off)
   more_than: {
     variation: {type: String, enum: Variations},
     quantity: Number,
