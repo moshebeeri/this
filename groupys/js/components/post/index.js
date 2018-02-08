@@ -233,7 +233,7 @@ class AddPost extends Component {
 
 export default connect(
     state => ({
-        user: state.authentication.user,
+        user: state.user.user,
         saving: state.postForm.saving,
         currentScreen: state.render.currentScreen,
     }),
