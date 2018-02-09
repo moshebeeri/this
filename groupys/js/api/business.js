@@ -16,7 +16,7 @@ class BusinessApi {
         return new Promise(async (resolve, reject) => {
             try {
                 let from = new Date();
-                const response = await this.timeout(2000,fetch(`${server_host}/api/businesses/list/mine`, {
+                const response = await this.timeout(5000,fetch(`${server_host}/api/businesses/list/mine`, {
                     method: 'GET',
                     headers: {
                         'Accept': 'application/json, text/plain, */*',

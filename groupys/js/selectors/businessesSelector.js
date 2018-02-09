@@ -47,7 +47,21 @@ export const getBusinessProducts = createSelector([getStateMyBusinesses],
 export const getBusinessPromotions = createSelector([getStateMyBusinesses],
     (businesses) => {
         if (!_.isEmpty(businesses.businessesPromotions)) {
-            return businesses.businessesPromotions;
+            let responseMap = {};
+            Object.keys(businesses.businessesPromotions).forEach(
+                key => {
+                    responseMap[key] = businesses.businessesPromotions[key].sort(function(a,b){
+                        if(a._id < b._id){
+                            return 1
+                        }
+                        if(a._id > b._id){
+                            return -1
+                        }
+                        return 0;
+                    });
+                }
+            )
+            return responseMap;
         }
         return new Map();
     });
