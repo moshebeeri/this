@@ -2,8 +2,12 @@ import ProfilenApi from "../api/profile";
 import * as actions from "../reducers/reducerActions";
 import ActionLogger from './ActionLogger'
 import  handler from './ErrorHandler'
+import SavedPromotionComperator from "../reduxComperators/SavedPromotionComperator"
+
+
 let profileApi = new ProfilenApi();
 let logger = new ActionLogger();
+let savedPromotionComperator = new SavedPromotionComperator();
 
 export function setNextFeeds(feeds) {
     return async function (dispatch, getState) {
@@ -51,7 +55,7 @@ export function setNextFeeds(feeds) {
             });
             handler.handleSuccses(getState(),dispatch)
         } catch (error) {
-            handler.handleError(error, dispatch)
+            handler.handleError(error, dispatch,'mypromotons-setNextFeeds')
             logger.actionFailed('mypromotons-setNextFeeds')
         }
     }
@@ -81,6 +85,7 @@ export function fetchTop() {
             if (response.length === 0) {
                 return;
             }
+
             dispatch({
                 type: actions.FETCH_TOP_SAVED_FEEDS,
                 item: response
@@ -91,7 +96,7 @@ export function fetchTop() {
             });
             handler.handleSuccses(getState(),dispatch)
         } catch (error) {
-            handler.handleError(error, dispatch)
+            handler.handleError(error, dispatch,'mypromotons-fetchTop')
             dispatch({
                 type: actions.SAVED_FEED_SHOW_TOP_LOADER,
                 showTopLoader: false,
@@ -109,12 +114,14 @@ async function fetchTopList( token, dispatch) {
         if (response.length === 0) {
             return;
         }
-        dispatch({
-            type: actions.FETCH_TOP_SAVED_FEEDS,
-            item: response
-        });
+        if(savedPromotionComperator.shuoldAddInstances(response)) {
+            dispatch({
+                type: actions.FETCH_TOP_SAVED_FEEDS,
+                item: response
+            });
+        }
     } catch (error) {
-        handler.handleError(error,dispatch)
+        handler.handleError(error,dispatch,'fetchTopList-mainfeeds')
         logger.actionFailed('fetchTopList-mainfeeds')
     }
 }
@@ -125,12 +132,14 @@ async function updateInstance( token, dispatch,id) {
 
         let response = await profileApi.getSavedInstance(token,id);
 
-        dispatch({
-            type: actions.UPDATE_SINGLE_SAVED_INSTANCE,
-            item: response
-        });
+        if(savedPromotionComperator.shuoldUpdateInstance(response)) {
+            dispatch({
+                type: actions.UPDATE_SINGLE_SAVED_INSTANCE,
+                item: response
+            });
+        }
     } catch (error) {
-        handler.handleError(error,dispatch)
+        handler.handleError(error,dispatch,'fetchTopList-mainfeeds')
         logger.actionFailed('fetchTopList-mainfeeds')
     }
 }

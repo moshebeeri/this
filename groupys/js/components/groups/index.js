@@ -101,6 +101,7 @@ export default connect(
     state => ({
         groups: getGroups(state),
         update: state.groups.update,
+        user: state.user.user,
         selectedTab:state.mainTab.selectedTab,
         currentScreen:state.render.currentScreen,
     }),

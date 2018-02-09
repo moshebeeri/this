@@ -124,15 +124,47 @@ export function savePromotion(promotion,businessId,navigation) {
                 type: actions.PROMOTION_SAVING,
             });
             const token = getState().authentication.token;
-            await promotionApi.createPromotion(promotion,token);
-            let response = await promotionApi.getAllByBusinessId(businessId, token);
-            if (response.length > 0) {
-                dispatch({
-                    type: actions.SET_PROMOTION_BUSINESS,
-                    businessesPromotions: response,
-                    businessId: businessId
-                });
+            let response = await promotionApi.createPromotion(promotion,token);
+            let createdPromotion = response.promotions[0];
+            createdPromotion.pictures = [];
+            let pictures = [];
+            if(promotion.image.path) {
+                pictures.push(promotion.image.path);
+                pictures.push(promotion.image.path);
+                pictures.push(promotion.image.path);
+                pictures.push(promotion.image.path);
+                createdPromotion.pictures.push({pictures:pictures});
+
+            }else{
+                pictures.push(promotion.image.uri);
+                pictures.push(promotion.image.uri);
+                pictures.push(promotion.image.uri);
+                pictures.push(promotion.image.uri);
+                createdPromotion.pictures.push({pictures:pictures});
             }
+            createdPromotion.social_state ={};
+            createdPromotion.social_state.saves =0;
+            createdPromotion.social_state.comments =0;
+            createdPromotion.social_state.likes =0;
+            createdPromotion.social_state.shares =0;
+            createdPromotion.social_state.realizes =0;
+
+
+
+
+            dispatch({
+                type: actions.PROMOTION_UPLOAD_PIC,
+                item:{promotionResponse:createdPromotion, promotion:promotion},
+
+            })
+
+            dispatch({
+                type: actions.UPSERT_PROMOTION_SINGLE,
+                item: createdPromotion,
+                businessId:businessId
+            });
+
+
             dispatch({
                 type: actions.PROMOTION_SAVING_DONE,
             });
@@ -143,6 +175,7 @@ export function savePromotion(promotion,businessId,navigation) {
             dispatch({
                 type: actions.PROMOTION_SAVING_DONE,
             });
+            navigation.goBack();
             logger.actionFailed('promotions-savePromotion')
         }
     }

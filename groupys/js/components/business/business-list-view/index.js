@@ -24,6 +24,7 @@ import Promotions from '../../promtions/index'
 import Products from '../../product/index'
 import {EditButton,BusinessHeader} from '../../../ui/index';
 import strings from '../../../i18n/i18n';
+import {CachedImage} from "react-native-img-cache";
 
 const promotions = require('../../../../images/promotion.png');
 const products = require('../../../../images/barcode.png');
@@ -146,25 +147,25 @@ export default class BusinessListView extends Component {
     createBannerTag(item) {
         if (item.business.pictures && item.business.pictures.length > 0) {
             let picLength = item.business.pictures.length;
-            return <View style={{}}><Image  style={[styles.bannerImageContainer, {width: StyleUtils.getWidth()}]}  resizeMode="cover"
+            return <View style={{}}><CachedImage  style={[styles.bannerImageContainer, {width: StyleUtils.getWidth()}]}  resizeMode="cover"
                                            source={{uri: item.business.pictures[picLength -1].pictures[0]}}>
 
-            </Image>
+            </CachedImage>
 
             </View>
         }
-        return <Image
+        return <CachedImage
             style={{padding: 0, flex: -1, height: 300}}
             source={require('../../../../images/client_1.png')}>
-        </Image>
+        </CachedImage>
     }
 
     createPermissionsTag(item) {
-        if (item.role === 'OWNS' || item.role === 'Admin' || item.role === 'Manager') {
+        if (this.checkPermission(item)) {
             return <TouchableOpacity onPress={() => this.showUsersRoles()}
                                      style={{margin: 3, flexDirection: 'row', alignItems: 'center',}}
                                      regular>
-                <Image style={{tintColor: '#ff6400', marginLeft: 10, width: vh * 4, height: vh * 4}}
+                <CachedImage style={{tintColor: '#ff6400', marginLeft: 10, width: vh * 4, height: vh * 4}}
                        source={permissions}/>
 
                 <Text style={{
@@ -181,10 +182,10 @@ export default class BusinessListView extends Component {
 
 
     createPoductsTag(item) {
-        if (item.role === 'OWNS' || item.role === 'Admin' || item.role === 'Manager') {
+        if (this.checkPermission(item)) {
             return  <TouchableOpacity onPress={() => this.showProducts()}
                                       style={{margin: 3, flexDirection: 'row', alignItems: 'center',}} regular>
-                <Image style={{tintColor: '#ff6400', marginLeft: 10, width: vh * 3, height: vh * 4}}
+                <CachedImage style={{tintColor: '#ff6400', marginLeft: 10, width: vh * 3, height: vh * 4}}
                        source={products}/>
 
                 <Text style={{
@@ -199,12 +200,29 @@ export default class BusinessListView extends Component {
         return undefined;
     }
 
+    checkPermission(item){
+        const{user} = this.props;
+        if (item.role === 'OWNS' || item.role === 'Admin' || item.role === 'Manager' ) {
+            return true
+        }
+
+        if(item.business){
+            if(item.business.creator  && item.business.creator._id === user._id){
+                if(item.business.review.state !=='validation'  && item.business.review.state !=='review' ) {
+                    return true;
+                }
+
+            }
+        }
+        return false;
+
+    }
     createPromotionsTag(item) {
-        if (item.role === 'OWNS' || item.role === 'Admin' || item.role === 'Manager') {
+        if (this.checkPermission(item)) {
             return <TouchableOpacity onPress={() => this.showPromotions()}
                                      style={{margin: 3, flexDirection: 'row', alignItems: 'center',}}
                                      regular>
-                <Image style={{tintColor: '#ff6400', marginLeft: 10, width: vh * 4, height: vh * 4}}
+                <CachedImage style={{tintColor: '#ff6400', marginLeft: 10, width: vh * 4, height: vh * 4}}
                        source={promotions}/>
 
                 <Text style={{

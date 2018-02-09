@@ -3,18 +3,27 @@ import * as errors from './Errors'
 let timer = new Timer();
 import FormUtils from "../utils/fromUtils";
 class BusinessApi {
+
+     timeout(ms, promise) {
+        return new Promise(function(resolve, reject) {
+            setTimeout(function() {
+                reject(errors.TIME_OUT);
+            }, ms)
+            promise.then(resolve, reject)
+        })
+    }
     getAll(token) {
         return new Promise(async (resolve, reject) => {
             try {
                 let from = new Date();
-                const response = await fetch(`${server_host}/api/businesses/list/mine`, {
+                const response = await this.timeout(5000,fetch(`${server_host}/api/businesses/list/mine`, {
                     method: 'GET',
                     headers: {
                         'Accept': 'application/json, text/plain, */*',
                         'Content-Type': 'application/json;charset=utf-8',
                         'Authorization': 'Bearer ' + token
                     }
-                });
+                }));
                 if (response.status ==='401' || response.status === 401) {
                     reject(errors.UN_AUTHOTIZED_ACCESS);
                     return;
@@ -30,6 +39,9 @@ class BusinessApi {
                 resolve(responseData);
             }
             catch (error) {
+                if(error === errors.TIME_OUT){
+                    reject({ type: errors.TIME_OUT, debugMessage:'api/businesses/list/mine Timed out'});
+                }
                 reject(errors.NETWORK_ERROR);
             }
         })

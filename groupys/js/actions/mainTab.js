@@ -52,7 +52,7 @@ export function showPromotionPopup( instanceId,notificationId) {
                 notificationId:notificationId
             });
         } catch (error) {
-            handler.handleError(error,dispatch)
+            handler.handleError(error,dispatch,'showPromotionPopup')
             logger.actionFailed('showPromotionPopup')
         }
     }
@@ -70,7 +70,7 @@ export function showGenericPopup( notificationTitle, notificationId, notificatio
                 notificationAction: notificationAction
             });
         } catch (error) {
-            handler.handleError(error,dispatch)
+            handler.handleError(error,dispatch,'showGenericPopup')
             logger.actionFailed('showGenericPopup')
         }
     }
@@ -96,7 +96,7 @@ export function showGroupPopup( groupId,notificationId,notificationTitle, notifi
                 notificationGroup: group,
             });
         } catch (error) {
-            handler.handleError(error,dispatch)
+            handler.handleError(error,dispatch,'showGroupPopup')
             logger.actionFailed('showGroupPopup')
         }
     }
@@ -121,7 +121,7 @@ export function showBusinessPopup( businessId,notificationId,notificationTitle, 
                 notificationBusiness: business,
             });
         } catch (error) {
-            handler.handleError(error,dispatch)
+            handler.handleError(error,dispatch,'showBusinessPopup')
             logger.actionFailed('showBusinessPopup')
         }
     }
@@ -142,7 +142,7 @@ export function closePopup(  notificationId) {
                 notificationBusiness:''
             });
         } catch (error) {
-            handler.handleError(error,dispatch)
+            handler.handleError(error,dispatch,'closePopup')
         }
     }
 }
@@ -161,7 +161,7 @@ export function doNotification(  notificationId, notificationAction) {
                 notificationBusiness:''
             });
         } catch (error) {
-            handler.handleError(error,dispatch)
+            handler.handleError(error,dispatch,'doNotification')
         }
     }
 }

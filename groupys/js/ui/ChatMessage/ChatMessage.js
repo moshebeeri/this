@@ -10,12 +10,12 @@ import {actions} from 'react-native-navigation-redux-helpers';
 import {Button, Container, Footer, Icon, Text, Thumbnail} from 'native-base';
 import styles from './styles'
 import DateUtils from '../../utils/dateUtils'
-
+import {ImageController} from '../index'
 let dateUtils = new DateUtils();
 export default class ChatMessage extends Component {
     render() {
         const {item,wide} = this.props;
-        const image = <Thumbnail small source={item.avetar}/>
+        const image = <ImageController thumbnail size={40} source={item.avetar}/>
         const containerStyle = {
             marginTop: 10,
             alignItems: 'flex-start',
@@ -48,6 +48,7 @@ export default class ChatMessage extends Component {
                         {image}
 
                     </View>
+
                 </View>
                 <View>
                 <View style={styleContainer}>

@@ -19,7 +19,7 @@ async function getInstanceGroupComments(state,dispatch, group, instance, size, t
         }
         handler.handleSuccses(state,dispatch)
     } catch (error) {
-        handler.handleError(error,dispatch)
+        handler.handleError(error,dispatch,'getInstanceGroupComments')
         logger.actionFailed('getInstanceGroupComments');
     }
 }
@@ -36,7 +36,7 @@ async function getGroupComments(state,dispatch, group, token) {
         }
         handler.handleSuccses(state,dispatch)
     } catch (error) {
-        handler.handleError(error,dispatch)
+        handler.handleError(error,dispatch,'getGroupComments')
         logger.actionFailed('getGroupComments');
     }
 }
@@ -51,7 +51,7 @@ async function getEntityComments(state,dispatch, entities, id, token) {
         });
         handler.handleSuccses(state,dispatch)
     } catch (error) {
-        handler.handleError(error,dispatch)
+        handler.handleError(error,dispatch,'getComment')
         logger.actionFailed('getComment');
     }
 }
@@ -142,11 +142,7 @@ export function setNextFeeds(comments, token, group) {
             }
             handler.handleSuccses(getState(),dispatch)
         } catch (error) {
-            if(error === errors.NETWORK_ERROR) {
-                dispatch({
-                    type: actions.NETWORK_IS_OFFLINE,
-                });
-            }
+            handler.handleError(error,dispatch,'getGroupComments')
             logger.actionFailed('getGroupComments');
         }
     }

@@ -1,10 +1,10 @@
 import React, {Component} from "react";
-import {Image, TouchableOpacity} from "react-native";
+import { TouchableOpacity} from "react-native";
 import {Button, Input, Item, Spinner, Text, View} from "native-base";
 import Icon3 from "react-native-vector-icons/Ionicons";
 import Camera from "react-native-camera";
 import styles from "./styles";
-import {BusinessHeader} from '../../../ui/index';
+import {BusinessHeade,ImageControllerr} from '../../../ui/index';
 import strings from '../../../i18n/i18n';
 
 const qrcode = require('../../../../images/qr-code.png');
@@ -115,14 +115,14 @@ export default class BusinessFollow extends Component {
                            placeholder={strings.SearchBusiness}/>
                     <TouchableOpacity onPress={() => searchBusiness(this.state.searchText)}
                                       style={{marginRight: 5, flexDirection: 'row', alignItems: 'center',}} regular>
-                        <Image style={{marginLeft: 10, width: 20, height: 20}} source={scan}/>
+                        <ImageControllerr style={{marginLeft: 10, width: 20, height: 20}} source={scan}/>
 
 
                     </TouchableOpacity>
 
                     <TouchableOpacity onPress={() => this.showScanner()}
                                       style={{marginRight: 5, flexDirection: 'row', alignItems: 'center',}} regular>
-                        <Image style={{marginLeft: 10, width: 20, height: 20}} source={qrcode}/>
+                        <ImageControllerr style={{marginLeft: 10, width: 20, height: 20}} source={qrcode}/>
 
 
                     </TouchableOpacity>

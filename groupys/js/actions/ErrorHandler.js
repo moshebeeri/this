@@ -8,11 +8,20 @@ const resetAction = NavigationActions.reset({
         NavigationActions.navigate({routeName: 'login'})
     ]
 });
-const handleError  = (error,dispatch) => {
+const handleError  = (error,dispatch,api) => {
+
+    console.log(error + ' api: ' + api );
     if(error === errors.NETWORK_ERROR) {
         dispatch({
             type: actions.NETWORK_IS_OFFLINE,
         });
+    }
+
+    if(error.type === errors.TIME_OUT) {
+        dispatch({
+            type: actions.TIME_OUT,
+            message:error.debugMessage
+        })
     }
 
     if(error === errors.UN_AUTHOTIZED_ACCESS){
@@ -36,6 +45,7 @@ const handleSuccses  = (reduxState, dispatch) => {
 };
 
 export default {
+
 
     handleError,
     handleSuccses

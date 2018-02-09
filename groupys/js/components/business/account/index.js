@@ -20,7 +20,7 @@ import {
     Title,
 } from 'native-base';
 import styles from './styles'
-import {BusinessHeader, FormHeader, SubmitButton, TextInput} from '../../../ui/index';
+import {BusinessHeader, FormHeader, SubmitButton, TextInput,ImageController} from '../../../ui/index';
 import * as businessAction from "../../../actions/business";
 import {connect} from 'react-redux';
 import {bindActionCreators} from "redux";
@@ -152,25 +152,25 @@ class BusinessAccount extends Component {
 
     createBannerTag(business) {
         if (business.pictures) {
-            return <View style={{}}><Image style={styles.bannerImageContainer} resizeMode="cover"
+            return <View style={{}}><ImageController style={styles.bannerImageContainer} resizeMode="cover"
                                            source={{uri: business.pictures[0].pictures[0]}}>
 
-            </Image>
+            </ImageController>
 
             </View>
         }
         if (business.banner) {
-            return <View style={{}}><Image style={styles.bannerImageContainer} resizeMode="cover"
+            return <View style={{}}><ImageController style={styles.bannerImageContainer} resizeMode="cover"
                                            source={business.banner}>
 
-            </Image>
+            </ImageController>
 
             </View>
         }
-        return <Image
+        return <ImageController
             style={{padding: 0, flex: -1, height: 300}}
             source={require('../../../../images/client_1.png')}>
-        </Image>
+        </ImageController>
     }
     shouldComponentUpdate() {
         if (this.props.currentScreen === 'businessAccount') {

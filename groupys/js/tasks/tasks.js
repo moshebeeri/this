@@ -11,7 +11,8 @@ const contactApi = new ContactApi();
 
 const reduxStore = getStore();
 
-
+import  handler from '../actions/ErrorHandler'
+import  * as errors from '../api/Errors'
 
 
 class Tasks {
@@ -29,18 +30,16 @@ class Tasks {
                     })
                 }
             } catch (error) {
-                reduxStore.dispatch({
-                    type: actions.NETWORK_IS_OFFLINE,
-                })
+                handler.handleError(errors.NETWORK_ERROR,reduxStore.dispatch,'tasks-synccontact')
+
             }
         }, 60000);
         const refresher = BackgroundTimer.setInterval(() => {
             try {
                 pageSync.check();
             } catch (error) {
-                reduxStore.dispatch({
-                    type: actions.NETWORK_IS_OFFLINE,
-                })
+                handler.handleError(errors.PAGE_SYNC,reduxStore.dispatch,'page-sync')
+
             }
         }, 1000);
         simpleStore.save("tasks", [timer, refresher])
@@ -63,9 +62,8 @@ class Tasks {
             try {
                 myPromotionAction.updateInstance(token,reduxStore.dispatch,id);
             } catch (error) {
-                reduxStore.dispatch({
-                    type: actions.NETWORK_IS_OFFLINE,
-                })
+                handler.handleError(errors.NETWORK_ERROR,reduxStore.dispatch,'realize-updateInstance task')
+
             }
         }, 5000);
         simpleStore.save("realize_task", [ refresher])

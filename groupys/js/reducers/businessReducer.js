@@ -31,6 +31,7 @@ export default function business(state = initialState, action) {
     let currentbusinesses = businessesState.businesses;
     let businessesMap = businessesState.myBusinesses;
     let myBusinessOrder = businessesState.myBusinessOrder;
+    let businessesPromotions = businessesState.businessesPromotions;
     switch (action.type) {
         case actions.UPSERT_BUSINESS:
             businessesState.update = !businessesState.update;
@@ -161,7 +162,7 @@ export default function business(state = initialState, action) {
             businessesProducts[action.businessId] = action.businessProducts;
             return businessesState;
         case actions.SET_PROMOTION_BUSINESS:
-            let businessesPromotions = businessesState.businessesPromotions;
+
             businessesState.update = !businessesState.update;
             if (businessesPromotions[action.businessId]) {
                 if (action.businessesPromotions && action.businessesPromotions.length > 0) {
@@ -184,6 +185,13 @@ export default function business(state = initialState, action) {
             } else {
                 businessesPromotions[action.businessId] = action.businessesPromotions;
             }
+            return businessesState;
+        case actions.UPSERT_PROMOTION_SINGLE:
+            if(!businessesPromotions[action.businessId]){
+                businessesPromotions[action.businessId] = []
+            }
+            businessesPromotions[action.businessId].push(action.item)
+
             return businessesState;
         case actions.BUSSINESS_LOADING:
             return {

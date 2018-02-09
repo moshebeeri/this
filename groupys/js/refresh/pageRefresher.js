@@ -78,6 +78,7 @@ class PageRefresher {
         let token = store.getState().authentication.token;
         if (token) {
 
+            this.checkUploadPromotionPictures(store.getState().promotions.promotionPictures,token)
             this.checkUploadPictures(store.getState().businesses.businessPictures,token)
             business.getAll(store.dispatch, token);
         }
@@ -91,6 +92,20 @@ class PageRefresher {
             });
             store.dispatch({
                 type: actions.BUSINESS_CLEAR_PIC,
+
+            });
+        }
+
+    }
+
+    checkUploadPromotionPictures(promotions,token){
+        if(promotions.length > 0){
+            promotions.forEach(promotion => {
+                entityUtils.uploadPicture('promotions',promotion.promotion, token, promotion.promotionResponse);
+
+            });
+            store.dispatch({
+                type: actions.PROMOTION_CLEAR_PIC,
 
             });
         }

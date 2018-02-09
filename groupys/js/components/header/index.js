@@ -6,10 +6,12 @@ import {Menu, MenuOption, MenuOptions, MenuTrigger,} from 'react-native-popup-me
 import Icon from 'react-native-vector-icons/Ionicons';
 import Icon2 from 'react-native-vector-icons/SimpleLineIcons';
 import * as notificationAction from "../../actions/notifications";
+import * as debugAction from "../../actions/debug";
 import * as businessAction from "../../actions/business";
 import * as groupsAction from "../../actions/groups";
 import {connect} from 'react-redux';
 import {bindActionCreators} from "redux";
+import globals from '../../conf/global'
 import strings from "../../i18n/i18n"
 import StyleUtils from "../../utils/styleUtils";
 const { height} = Dimensions.get('window')
@@ -65,6 +67,11 @@ class GeneralComponentHeader extends Component {
             searchText: ''
         })
     }
+    resetMessage(){
+        const{debug} = this.props;
+        debug.resetMessag();
+    }
+
 
     render() {
         const {businessActions, state, network} = this.props;
@@ -92,6 +99,19 @@ class GeneralComponentHeader extends Component {
                     }}>
                         <Text style={{color: 'gray'}}>Offline</Text>
                     </View>}
+                    {network.debugMessage && globals.debug &&  <TouchableOpacity
+                        onPress={() => this.resetMessage()}
+                        style={{
+                        width: StyleUtils.getWidth(),
+                        height: 20,
+                        justifyContent: 'center',
+                        alignItems: 'center',
+                        backgroundColor: 'white',
+
+
+                    }}>
+                        <Text style={{color: 'gray'}}>{network.debugMessage}</Text>
+                    </TouchableOpacity>}
                     <View style={{
                         height: headerHeight, flexDirection: 'row', alignItems: 'center', backgroundColor: 'white',
                         justifyContent: 'space-between',
@@ -220,6 +240,7 @@ export default connect(
         actions: bindActionCreators(notificationAction, dispatch),
         businessActions: bindActionCreators(businessAction, dispatch),
         groupsAction: bindActionCreators(groupsAction, dispatch),
+        debug:bindActionCreators(debugAction, dispatch),
     })
 )(GeneralComponentHeader);
 

@@ -45,6 +45,7 @@ import ActionLogger from '../../actions/ActionLogger'
 
 const height = StyleUtils.getHeight();
 let locationApi = new LocationApi();
+import  handler from '../../actions/ErrorHandler'
 const reduxStore = getStore();
 const resetAction = NavigationActions.reset({
     index: 0,
@@ -91,14 +92,17 @@ const warch = navigator.geolocation.watchPosition((position) => {
             if (reduxStore.getState().authentication.token) {
                 locationApi.sendLocation(position.coords.longitude, position.coords.latitude, position.timestamp, position.coords.speed);
             }
-            reduxStore.dispatch({
-                type: actions.SET_LOCATION,
-                currentLocation: {lat: position.coords.latitude, long: position.coords.longitude}
-            })
+            let lastPosition = reduxStore.getState().phone.currentLocation;
+            if(!lastPosition || (lastPosition && lastPosition.lat !== position.coords.latitude && lastPosition.long !== position.coords.longitude)){
+                reduxStore.dispatch({
+                    type: actions.SET_LOCATION,
+                    currentLocation: {lat: position.coords.latitude, long: position.coords.longitude}
+                })
+            }
+
         } catch (error) {
-            reduxStore.dispatch({
-                type: actions.NETWORK_IS_OFFLINE,
-            })
+            handler.handleError(actions.SET_LOCATION,dispatch,'SET_LOCATION')
+
         }
     }, (error) => {
         console.log('unable to get location')

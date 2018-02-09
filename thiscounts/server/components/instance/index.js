@@ -34,22 +34,44 @@ Instances.createAutomaticPromotionInstances =
   };
 
 
-function createPercentInstances(promotion) {
-  let instances = [];
-  const p = promotion.percent;
+function createSingle(promotion, p, name) {
+  let value = {};
+  value[name] = p.values[0];
+  let instance = createInstance(promotion, value, p.quantity, p.variation);
+  promotion[name].product = promotion.condition.product;
+  return [instance]
+}
 
+function createValues(promotion, p, name) {
+  let instances = [];
+  p.values.forEach(value => {
+    let namedValue = {};
+    namedValue[name] = value;
+    let instance = createInstance(promotion, namedValue, value.quantity, p.variation);
+    promotion.punch_card.product = promotion.condition.product;
+    instances.push(instance);
+  });
+  return instances;
+}
+
+
+function createTypedInstances(promotion, p, name, rangeCreator){
   if (p.variation === 'SINGLE') {
-    let instance = createInstance(promotion, {percent: p.values[0]}, p.quantity, p.variation);
-    return [instance]
+    return createSingle(promotion, p, name)
   }
   else if (p.variation === 'VALUES') {
-    p.values.forEach(value => {
-      let instance = createInstance(promotion, value, value.quantity, p.variation);
-      instances.push(instance);
-    });
-    return instances;
+    return createValues(promotion, p, name);
   }
   else if (p.variation === 'RANGE') {
+    return rangeCreator(promotion, p)
+  } else {
+    throw new Error('Missing Variation field')
+  }
+}
+
+function createPercentInstances(promotion) {
+  return createTypedInstances(promotion, promotion.percent, 'percent', (promotion, p) => {
+    let instances = [];
     let minMax = utils.minMax(p.values[0], p.values[1]);
     let spreads = distributor.distributePromotions(minMax.min, minMax.max, 5, p.quantity, p.variation);
     spreads.forEach((spread) => {
@@ -57,12 +79,26 @@ function createPercentInstances(promotion) {
       instances.push(instance);
     });
     return instances;
-  } else {
-    throw new Error('Missing Variation field')
-  }
+  })
 }
 
 function createPunchCardInstances(promotion) {
+  return createTypedInstances(promotion, promotion.punch_card, 'punch_card', (promotion, p) => {
+    let instances = [];
+    let minMax = utils.minMax(p.values[0].number_of_punches, p.values[1].number_of_punches);
+    let spreads = distributor.distributePromotions(minMax.min, minMax.max, 1, p.quantity, p.variation);
+    spreads.forEach((spread) => {
+      let value = {
+        number_of_punches: spread.value,
+        days: p.values[0].days,
+        product: promotion.condition.product,
+      };
+      let instance = createInstance(promotion, value, spread.quantity);
+      instances.push(instance);
+    });
+    return instances;
+  })
+/*
   let instances = [];
   const p = promotion.punch_card;
 
@@ -95,6 +131,7 @@ function createPunchCardInstances(promotion) {
   } else {
     throw new Error('Missing Variation field')
   }
+*/
 }
 
 function createGiftInstances(promotion) {
@@ -226,33 +263,65 @@ function createEarlyBookingInstances(promotion) {
     return [instance]
   }
 }
+
 function createHappyHourInstances(promotion) {
+  return createTypedInstances(promotion, promotion.happy_hour, 'happy_hour', (promotion, p) => {
+    let instances = [];
+      let value = {
+        product : p.values[0].product ,
+        pay     : p.values[0].pay     ,
+        days    : p.values[0].days    ,
+        from    : p.values[0].from    ,
+        until   : p.values[0].until
+      };
+      let instance = createInstance(promotion, value, p.quantity);
+      instances.push(instance);
+    return instances;
+  })
+/*
   const p = promotion.happy_hour;
 
   if (p.variation === 'SINGLE') {
-    let instance = createInstance(promotion, {
-      product : p.values[0].product ,
-      pay     : p.values[0].pay     ,
-      days    : p.values[0].days    ,
-      from    : p.values[0].from    ,
-      until   : p.values[0].until   ,
+    let instance = createInstance(promotion, { happy_hour : p.values[0]
+      // product : p.values[0].product ,
+      // pay     : p.values[0].pay     ,
+      // days    : p.values[0].days    ,
+      // from    : p.values[0].from    ,
+      // until   : p.values[0].until   ,
 
     }, p.quantity, p.variation);
     return [instance]
   }
+*/
 }
 function createMoreThanInstances(promotion) {
-  const p = promotion.more_than;
-
-  if (p.variation === 'SINGLE') {
-    let instance = createInstance(promotion, {
-      value_type: p.values[0].value_type ,
-      more_than : p.values[0].more_than  ,
-      product   : p.values[0].product    ,
-      value     : p.values[0].value      ,
-    }, p.quantity, p.variation);
-    return [instance]
-  }
+  return createTypedInstances(promotion, promotion.more_than, 'more_than', (promotion, p) => {
+    let instances = [];
+    let minMax = utils.minMax(p.values[0].value, p.values[1].value);
+    let spreads = distributor.distributePromotions(minMax.min, minMax.max, 5, p.quantity, p.variation);
+    spreads.forEach((spread) => {
+      let value = {
+            value_type: p.values[0].value_type ,
+            more_than : p.values[0].more_than  ,
+            product   : p.values[0].product    ,
+            value     : spread.value           ,
+          };
+      let instance = createInstance(promotion, value, spread.quantity);
+      instances.push(instance);
+    });
+    return instances;
+  })
+  // const p = promotion.more_than;
+  //
+  // if (p.variation === 'SINGLE') {
+  //   let instance = createInstance(promotion, {
+  //     value_type: p.values[0].value_type ,
+  //     more_than : p.values[0].more_than  ,
+  //     product   : p.values[0].product    ,
+  //     value     : p.values[0].value      ,
+  //   }, p.quantity, p.variation);
+  //   return [instance]
+  // }
 }
 
 function getValue(instance) {
