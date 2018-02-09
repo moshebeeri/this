@@ -19,8 +19,6 @@ class SavedPromotionComperator {
         }
         return false;
 
-
-
     }
 }
 

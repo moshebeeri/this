@@ -30,7 +30,7 @@ async function getAll(dispatch, token) {
             }
         }
     } catch (error) {
-        handler.handleError(error,dispatch)
+        handler.handleError(error,dispatch,'groupsApi.getAll')
         logger.actionFailed('groupsApi.getAll')
     }
 }
@@ -57,7 +57,7 @@ async function getByBusinessId(dispatch, bid, token) {
             });
         }
     } catch (error) {
-        handler.handleError(error,dispatch)
+        handler.handleError(error,dispatch,'groupsApi.getByBusinessId')
         logger.actionFailed('groupsApi.getByBusinessId')
     }
 }
@@ -70,7 +70,7 @@ async function getUserFollowers(dispatch, token) {
             followers: users
         });
     } catch (error) {
-        handler.handleError(error,dispatch)
+        handler.handleError(error,dispatch,'userApi.getUserFollowers')
         logger.actionFailed('userApi.getUserFollowers')
     }
 }
@@ -109,11 +109,7 @@ export function acceptInvatation(group) {
                 });
             })
         } catch (error) {
-            if(error === errors.NETWORK_ERROR) {
-                dispatch({
-                    type: actions.NETWORK_IS_OFFLINE,
-                });
-            }
+            handler.handleError(error,dispatch,'groupsApi.acceptInvatation')
             logger.actionFailed('groupsApi.acceptInvatation')
         }
     }
@@ -125,11 +121,7 @@ export function touch(groupid) {
             const token = getState().authentication.token;
             groupsApi.touch(groupid, token);
         } catch (error) {
-            if(error === errors.NETWORK_ERROR) {
-                dispatch({
-                    type: actions.NETWORK_IS_OFFLINE,
-                });
-            }
+            handler.handleError(error,dispatch,'groupsApi.touch')
             logger.actionFailed('groupsApi.touch')
         }
     }
@@ -149,11 +141,7 @@ export function createGroup(group, navigation) {
             });
             navigation.goBack();
         } catch (error) {
-            if(error === errors.NETWORK_ERROR) {
-                dispatch({
-                    type: actions.NETWORK_IS_OFFLINE,
-                });
-            }
+            handler.handleError(error,dispatch,'createGroup')
             logger.actionFailed('groupsApi.createGroup')
         }
     }
@@ -173,11 +161,7 @@ export function updateGroup(group, navigation) {
             });
             navigation.goBack();
         } catch (error) {
-            if(error === errors.NETWORK_ERROR) {
-                dispatch({
-                    type: actions.NETWORK_IS_OFFLINE,
-                });
-            }
+            handler.handleError(error,dispatch,'groupsApi.createGroup')
             logger.actionFailed('groupsApi.createGroup')
         }
     }
@@ -241,11 +225,7 @@ export function setNextFeeds(feeds, token, group) {
                 })
             }
         } catch (error) {
-            if(error === errors.NETWORK_ERROR) {
-                dispatch({
-                    type: actions.NETWORK_IS_OFFLINE,
-                });
-            }
+            handler.handleError(error,dispatch,'groups-setNextFeeds')
             logger.actionFailed('groups-setNextFeeds')
         }
         if (showLoadingDone && !getState().groups.loadingDone[group._id]) {
@@ -271,11 +251,7 @@ export function sendMessage(groupId, message) {
         try {
             groupsApi.meesage(groupId, message, token)
         } catch (error) {
-            if(error === errors.NETWORK_ERROR) {
-                dispatch({
-                    type: actions.NETWORK_IS_OFFLINE,
-                });
-            }
+            handler.handleError(error,dispatch,'groups-sendMessage')
             logger.actionFailed('groups-sendMessage')
         }
     }
@@ -326,7 +302,7 @@ async function fetchTopList(id, token, group, dispatch,user) {
             user:user,
         })
     } catch (error) {
-        handler.handleError(error,dispatch)
+        handler.handleError(error,dispatch,'groups-fetchTopList')
         logger.actionFailed('groups-fetchTopList')
     }
 }
@@ -373,11 +349,7 @@ export function like(id) {
             });
             await userApi.like(id, token);
         } catch (error) {
-            if(error === errors.NETWORK_ERROR) {
-                dispatch({
-                    type: actions.NETWORK_IS_OFFLINE,
-                });
-            }
+            handler.handleError(error,dispatch,'groups-like')
             logger.actionFailed('groups-like')
         }
     }
@@ -393,11 +365,7 @@ export const unlike = (id) => {
                 id: id
             });
         } catch (error) {
-            if(error === errors.NETWORK_ERROR) {
-                dispatch({
-                    type: actions.NETWORK_IS_OFFLINE,
-                });
-            }
+            handler.handleError(error,dispatch,'groups-unlike')
             logger.actionFailed('groups-unlike')
         }
     }
@@ -417,11 +385,7 @@ export function saveFeed(id,navigation,feed) {
             handler.handleSuccses(getState(),dispatch)
 
         } catch (error) {
-            if(error === errors.NETWORK_ERROR) {
-                dispatch({
-                    type: actions.NETWORK_IS_OFFLINE,
-                });
-            }
+            handler.handleError(error,dispatch,'groups-saveFeed')
             logger.actionFailed('groups-saveFeed')
         }
     }
@@ -440,11 +404,7 @@ export function shareActivity(id, activityId, users, token) {
             });
             handler.handleSuccses(getState(),dispatch)
         } catch (error) {
-            if(error === errors.NETWORK_ERROR) {
-                dispatch({
-                    type: actions.NETWORK_IS_OFFLINE,
-                });
-            }
+            handler.handleError(error,dispatch,'groups-shareActivity')
             logger.actionFailed('groups-shareActivity')
         }
     }
@@ -473,11 +433,7 @@ export function refresh(id, currentSocialState) {
             handler.handleSuccses(getState(),dispatch)
             // await userApi.like(id, token);
         } catch (error) {
-            if(error === errors.NETWORK_ERROR) {
-                dispatch({
-                    type: actions.NETWORK_IS_OFFLINE,
-                });
-            }
+            handler.handleError(error,dispatch,'groups-refresh')
             logger.actionFailed('groups-refresh')
         }
     }
@@ -498,7 +454,7 @@ async function dispatchSearchGroups(dispatch, business, token) {
         dispatch({type: actions.SEARCH_GROUPS, groups: response});
 
     } catch (error) {
-        handler.handleError(error,dispatch)
+        handler.handleError(error,dispatch,'dispatchSearchGroups')
     }
 }
 
@@ -510,7 +466,7 @@ export function joinGroup(groupId) {
             dispatch({type: actions.RESET_FOLLOW_FORM})
 
         } catch (error) {
-            handler.handleError(error,dispatch);
+            handler.handleError(error,dispatch,'joinGroup');
         }
     }
 }

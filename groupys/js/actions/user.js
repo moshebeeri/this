@@ -23,7 +23,7 @@ async function getUser(dispatch, token) {
             user: user
         })
     } catch (error) {
-         handler.handleError(error,dispatch)
+         handler.handleError(error,dispatch,'getUser')
         logger.actionFailed('users-getUser')
     }
 }
@@ -36,7 +36,7 @@ async function getUserFollowers(dispatch, token) {
             followers: users
         });
     } catch (error) {
-         handler.handleError(error,dispatch)
+         handler.handleError(error,dispatch,'getUserFollowers')
         logger.actionFailed('users-getUserFollowers')
     }
 }
@@ -89,7 +89,7 @@ export function changePassword(oldPassword, newPassword, navigation) {
                     message: strings.OldPasswordValidationFailed
                 });
             }else {
-                handler.handleError(error, dispatch)
+                handler.handleError(error, dispatch,'changePassword')
             }
             dispatch({
                 type: actions.SAVING_USER_DONE,
@@ -127,7 +127,7 @@ export function updateUser(newUser, navigation) {
             });
             handler.handleSuccses(getState(),dispatch)
         } catch (error) {
-            handler.handleError(error,dispatch)
+            handler.handleError(error,dispatch,'updateUser')
 
             logger.actionFailed('users-updateUser')
         }
@@ -171,7 +171,7 @@ export function resetPasswordForm() {
         }
 
     } catch (error) {
-         handler.handleError(error,dispatch)
+         handler.handleError(error,dispatch,'updateUserLocale')
         logger.actionFailed('users-updateUserLocale')
     }
 }
@@ -202,7 +202,7 @@ async function updateUserToken(dispatch, token,user,fireBaseToken) {
         }
 
     } catch (error) {
-         handler.handleError(error,dispatch)
+         handler.handleError(error,dispatch,'updateUserToken')
         logger.actionFailed('users-updateUserToken')
     }
 }

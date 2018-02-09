@@ -55,7 +55,7 @@ export function setNextFeeds(feeds) {
             });
             handler.handleSuccses(getState(),dispatch)
         } catch (error) {
-            handler.handleError(error, dispatch)
+            handler.handleError(error, dispatch,'mypromotons-setNextFeeds')
             logger.actionFailed('mypromotons-setNextFeeds')
         }
     }
@@ -96,7 +96,7 @@ export function fetchTop() {
             });
             handler.handleSuccses(getState(),dispatch)
         } catch (error) {
-            handler.handleError(error, dispatch)
+            handler.handleError(error, dispatch,'mypromotons-fetchTop')
             dispatch({
                 type: actions.SAVED_FEED_SHOW_TOP_LOADER,
                 showTopLoader: false,
@@ -121,7 +121,7 @@ async function fetchTopList( token, dispatch) {
             });
         }
     } catch (error) {
-        handler.handleError(error,dispatch)
+        handler.handleError(error,dispatch,'fetchTopList-mainfeeds')
         logger.actionFailed('fetchTopList-mainfeeds')
     }
 }
@@ -139,7 +139,7 @@ async function updateInstance( token, dispatch,id) {
             });
         }
     } catch (error) {
-        handler.handleError(error,dispatch)
+        handler.handleError(error,dispatch,'fetchTopList-mainfeeds')
         logger.actionFailed('fetchTopList-mainfeeds')
     }
 }

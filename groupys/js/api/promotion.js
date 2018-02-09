@@ -7,16 +7,27 @@
 import store from "react-native-simple-store";
 import EntityUtils from "../utils/createEntity";
 import Timer from "./LogTimer";
-
+import PromotionComperator from "../reduxComperators/PromotionComperator"
+let promotionComperator = new PromotionComperator();
 let entityUtils = new EntityUtils();
 let timer = new Timer();
+
 import * as errors from './Errors'
 class PromotionApi {
+
+    timeout(ms, promise) {
+        return new Promise(function(resolve, reject) {
+            setTimeout(function() {
+                reject(errors.TIME_OUT);
+            }, ms)
+            promise.then(resolve, reject)
+        })
+    }
     createPromotion(promotion, token) {
         return new Promise(async (resolve, reject) => {
             try {
                 let from = new Date();
-                const response = await fetch(`${server_host}/api/promotions/campaign`, {
+                const response = await this.timeout(10000,fetch(`${server_host}/api/promotions/campaign`, {
                     method: 'POST',
                     headers: {
                         'Accept': 'application/json, text/plain, */*',
@@ -24,23 +35,26 @@ class PromotionApi {
                         'Authorization': 'Bearer ' + token
                     },
                     body: JSON.stringify(promotion)
-                });
+                }));
                 if (response.status ==='401' || response.status === 401) {
                     reject(errors.UN_AUTHOTIZED_ACCESS);
                     return;
                 }
                 let responseData = await response.json();
                 timer.logTime(from, new Date(), 'promotions', 'campaign');
-                if (promotion.image) {
-                    let imagePath = promotion.image.uri;
-                    if(!imagePath){
-                        imagePath = promotion.image.path;
-                    }
-                    entityUtils.doUpload(imagePath, promotion.image.mime, token, this.doLog.bind(this), 'promotions', responseData.promotions[0]);
-                }
+                // if (promotion.image) {
+                //     let imagePath = promotion.image.uri;
+                //     if(!imagePath){
+                //         imagePath = promotion.image.path;
+                //     }
+                //     entityUtils.doUpload(imagePath, promotion.image.mime, token, this.doLog.bind(this), 'promotions', responseData.promotions[0]);
+                // }
                 resolve(responseData);
             }
             catch (error) {
+                if(error === errors.TIME_OUT){
+                    reject({ type: errors.TIME_OUT, debugMessage:'/api/promotions/campaige Timed out'});
+                }
                 reject(errors.NETWORK_ERROR);
             }
         })
@@ -266,23 +280,30 @@ class PromotionApi {
         return new Promise(async (resolve, reject) => {
             try {
                 let from = new Date();
-                const response = await fetch(`${server_host}/api/promotions/list/by/business/` + id, {
+                const response = await this.timeout(20000,fetch(`${server_host}/api/promotions/list/by/business/` + id, {
                     method: 'GET',
                     headers: {
                         'Accept': 'application/json, text/plain, */*',
                         'Content-Type': 'application/json;charset=utf-8',
                         'Authorization': 'Bearer ' + token
                     }
-                });
+                }));
                 if (response.status ==='401' || response.status === 401) {
                     reject(errors.UN_AUTHOTIZED_ACCESS);
                     return;
                 }
+
                 let responseData = await response.json();
+                if(responseData.length > 0) {
+                    responseData = responseData.filter(promotion => promotionComperator.filterPromotion(promotion));
+                }
                 timer.logTime(from, new Date(), 'promotions', 'list/by/business');
                 resolve(responseData);
             }
             catch (error) {
+                if(error === errors.TIME_OUT){
+                    reject({ type: errors.TIME_OUT, debugMessage:'/promotions/list/by/business Timed out'});
+                }
                 reject(errors.NETWORK_ERROR);
             }
         })

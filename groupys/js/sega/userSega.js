@@ -8,7 +8,7 @@ import NotificationApi from "../api/notification"
 import * as actions from "../reducers/reducerActions";
 import * as segaActions from './segaActions'
 
-let promotionApi = new PromotionApi();
+//let promotionApi = new PromotionApi();
 let groupApi = new GroupApi();
 let feedApi = new FeedApi();
 let businessApi = new BusinessApi();
@@ -111,12 +111,12 @@ function* updateGroupTopList(action) {
 
 function* updateBusinessPromotions(action) {
     try {
-        const response = yield call(promotionApi.getAllByBusinessId, action.payload.businessId, action.payload.token);
-        yield put({
-            type: actions.SET_PROMOTION_BUSINESS,
-            businessesPromotions: response,
-            businessId: action.payload.businessId
-        });
+        // const response = yield call(promotionApi.getAllByBusinessId, action.payload.businessId, action.payload.token);
+        // yield put({
+        //     type: actions.SET_PROMOTION_BUSINESS,
+        //     businessesPromotions: response,
+        //     businessId: action.payload.businessId
+        // });
         yield put({type: actions.NETWORK_IS_ONLINE});
     } catch (e) {
         yield put({type: actions.NETWORK_IS_OFFLINE, message: e.message});

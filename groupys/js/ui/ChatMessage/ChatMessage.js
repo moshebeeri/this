@@ -48,6 +48,7 @@ export default class ChatMessage extends Component {
                         {image}
 
                     </View>
+
                 </View>
                 <View>
                 <View style={styleContainer}>

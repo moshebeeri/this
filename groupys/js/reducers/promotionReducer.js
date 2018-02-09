@@ -10,7 +10,7 @@
 /**
  * Created by stan229 on 5/27/16.
  */
-const initialState = {promotions: {}, savingForm: false,loadingDone:{}};
+const initialState = {promotions: {}, savingForm: false,loadingDone:{},promotionPictures:[]};
 import {REHYDRATE} from "redux-persist/constants";
 import * as actions from "./reducerActions";
 
@@ -37,6 +37,10 @@ export default function promotion(state = initialState, action) {
                 }
             });
             return promotionsState;
+        case actions.UPSERT_PROMOTION_SINGLE:
+            currentPromotions[ action.item._id] =  action.item;
+            return promotionsState;
+
         case actions.FEED_UPDATE_SOCIAL_STATE:
             if (currentPromotions[action.id]) {
                 currentPromotions[action.id].social_state = action.social_state;
@@ -79,6 +83,19 @@ export default function promotion(state = initialState, action) {
         case actions.PROMOTION_LOADING_DONE:
             promotionsState.loadingDone[action.businessId] = true
             return promotionsState;
+        case actions.PROMOTION_UPLOAD_PIC:
+            let promotionPic = promotionsState.promotionPictures;
+            promotionPic.push(action.item)
+            return {
+                ...state,
+                promotionPictures: promotionPictures,
+            };
+
+        case actions.PROMOTION_CLEAR_PIC:
+            return {
+                ...state,
+                promotionPictures: [],
+            };
 
         case actions.SAVE_PROMOTIONS :
             let currentState = {...state};

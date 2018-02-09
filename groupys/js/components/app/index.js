@@ -45,6 +45,7 @@ import ActionLogger from '../../actions/ActionLogger'
 
 const height = StyleUtils.getHeight();
 let locationApi = new LocationApi();
+import  handler from '../../actions/ErrorHandler'
 const reduxStore = getStore();
 const resetAction = NavigationActions.reset({
     index: 0,
@@ -100,9 +101,8 @@ const warch = navigator.geolocation.watchPosition((position) => {
             }
 
         } catch (error) {
-            reduxStore.dispatch({
-                type: actions.NETWORK_IS_OFFLINE,
-            })
+            handler.handleError(actions.SET_LOCATION,dispatch,'SET_LOCATION')
+
         }
     }, (error) => {
         console.log('unable to get location')

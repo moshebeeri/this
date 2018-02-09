@@ -36,7 +36,7 @@ export function scanResult(barcode, businessAssign) {
             let data = JSON.parse(barcode.data);
             if (!data.code) {
                 dispatch({
-                    type: actions.NETWORK_IS_OFFLINE,
+                    type: actions.SCANNER_SHOW_QRCODE_ASSIGMEN_FAILED,
                 });
                 return;
             }
@@ -64,15 +64,7 @@ export function scanResult(barcode, businessAssign) {
                                 type: actions.SCANNER_SHOW_PROMOTION,
                                 instance: instance,
                             });
-                        } else {
-                            dispatch({
-                                type: actions.NETWORK_IS_OFFLINE,
-                            });
                         }
-                    } else {
-                        dispatch({
-                            type: actions.NETWORK_IS_OFFLINE,
-                        });
                     }
                 }
                 dispatch({type: actions.SHOW_SEARCH_SPIN, searching: false})
@@ -87,7 +79,7 @@ export function scanResult(barcode, businessAssign) {
                 });
             }
             if (error) {
-                handler.handleError(error, dispatch)
+                handler.handleError(error, dispatch,'scanner-scanResult')
             }
             logger.actionFailed('scanner-scanResult')
         }
@@ -128,7 +120,7 @@ export function realizePromotion(code) {
             await promotionApi.realizePromotion(code, token)
             handler.handleSuccses(getState(), dispatch)
         } catch (error) {
-            handler.handleError(error, dispatch)
+            handlerhandleError(error, dispatch,'scanner-realizePromotion')
             logger.actionFailed('scanner-realizePromotion')
         }
     }
@@ -148,7 +140,7 @@ export function followBusiness(businessId) {
             await businessApi.followBusiness(businessId, token);
             handler.handleSuccses(getState(), dispatch)
         } catch (error) {
-            handler.handleError(error, dispatch)
+            handler.handleError(error, dispatch,'scanner-followBusiness')
             logger.actionFailed('scanner-followBusiness')
         }
     }
@@ -162,7 +154,7 @@ export function groupFollowBusiness(groupid, businessId) {
             await businessApi.groupFollowBusiness(groupid, businessId, token);
             handler.handleSuccses(getState(), dispatch)
         } catch (error) {
-            handler.handleError(error, dispatch)
+            handler.handleError(error, dispatch,'scanner-groupFollowBusiness')
             logger.actionFailed('scanner-groupFollowBusiness')
         }
     }

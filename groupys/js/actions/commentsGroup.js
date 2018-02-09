@@ -41,7 +41,7 @@ export function fetchTopComments(group) {
             }
             handler.handleSuccses(getState(),dispatch)
         } catch (error) {
-            handler.handleError(error, dispatch)
+            handler.handleError(error, dispatch,'commentsApi.getGroupComments')
             logger.actionFailed('commentsApi.getGroupComments')
         }
     }
@@ -70,7 +70,7 @@ export async function refreshComments(dispatch, token, group, user,groupComments
         }
     } catch (error) {
 
-        handler.handleError(error, dispatch)
+        handler.handleError(error, dispatch,'refreshComments')
         logger.actionFailed('refreshComments')
     }
 }
@@ -90,7 +90,7 @@ export function sendMessage(groupId, message) {
             commentsApi.createComment(groupId, instanceId, message, token);
             handler.handleSuccses(getState(),dispatch)
         } catch (error) {
-            handler.handleError(error, dispatch)
+            handler.handleError(error, dispatch,'sendMessage-group')
             logger.actionFailed('sendMessage')
         }
     }
@@ -160,7 +160,7 @@ export function setNextFeeds(comments, group) {
             }
             handler.handleSuccses(getState(),dispatch)
         } catch (error) {
-            handler.handleError(error, dispatch)
+            handler.handleError(error, dispatch,'commentsApi.getGroupComments')
             logger.actionFailed('commentsApi.getGroupComments')
         }
     }
