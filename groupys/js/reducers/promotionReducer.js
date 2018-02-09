@@ -37,9 +37,6 @@ export default function promotion(state = initialState, action) {
                 }
             });
             return promotionsState;
-        case actions.UPSERT_PROMOTION_SINGLE:
-            currentPromotions[ action.item._id] =  action.item;
-            return promotionsState;
 
         case actions.FEED_UPDATE_SOCIAL_STATE:
             if (currentPromotions[action.id]) {
@@ -88,7 +85,7 @@ export default function promotion(state = initialState, action) {
             promotionPic.push(action.item)
             return {
                 ...state,
-                promotionPictures: promotionPictures,
+                promotionPictures: promotionPic,
             };
 
         case actions.PROMOTION_CLEAR_PIC:

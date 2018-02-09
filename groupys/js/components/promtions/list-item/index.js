@@ -92,25 +92,25 @@ export default class PromotionListView extends Component {
                             <Text style={styles.promotion_addressText} note>{item.quantity} </Text>
 
                         </View>
-                        <View style={styles.promotionAnalyticsAttribute}>
+                        {promotionItem.social_state && <View style={styles.promotionAnalyticsAttribute}>
 
                             <Text>{strings.Saved.toUpperCase()}</Text>
                             <Text style={styles.promotion_addressText}
                                   note>{promotionItem.social_state.saves}</Text>
 
-                        </View>
-                        <View style={styles.promotionAnalyticsAttribute}>
+                        </View>}
+                        {promotionItem.social_state && <View style={styles.promotionAnalyticsAttribute}>
 
                             <Text>{strings.Used.toUpperCase()}</Text>
                             <Text style={styles.promotion_addressText} note>{promotionItem.social_state.realizes}</Text>
 
-                        </View>
+                        </View>}
 
                     </View>
 
-                    <SocialState disabled shares={promotionItem.social_state.shares}
+                    {promotionItem.social_state &&  <SocialState disabled shares={promotionItem.social_state.shares}
                                  likes={promotionItem.social_state.likes}
-                                 comments={promotionItem.social_state.comments}/>
+                                 comments={promotionItem.social_state.comments}/>}
 
 
                 </View>
