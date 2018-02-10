@@ -179,6 +179,7 @@ exports.create_business_default_group = function (group, callback) {
       group.save();
       graphModel.reflect(group, {
         _id: group._id,
+        name: group.name,
         default: true,
         created: group.created
       }, function (err) {

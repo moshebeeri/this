@@ -313,6 +313,8 @@ function create_business_default_group(business) {
     post_policy: 'MANAGERS',
   }, function (err, group) {
     if (err) return console.error(err.message);
+    business.groups.push(group._id);
+    business.save();
     graphModel.owner_followers_follow_default_group(business.creator);
   });
 }
@@ -393,30 +395,29 @@ function createValidatedBusiness(business, callback) {
         return callback(err);
       }
 
-
       Role.createRole(business.creator, business._id, Role.Roles.get('OWNS'), function (err) {
-        if (err) return console.error(err);
+        if (err) return callback(err);
         if (business.type === 'PERSONAL_SERVICES' || business.type === 'SMALL_BUSINESS') {
           graphModel.owner_followers_follow_business(business.creator);
         }
+        if (defined(business.shopping_chain))
+          graphModel.relate_ids(business._id, 'BRANCH_OF', business.shopping_chain);
+        if (defined(business.mall))
+          graphModel.relate_ids(business._id, 'IN_MALL', business.mall);
+        spatial.add2index(business.gid, function (err /*, result*/) {
+          if (err) return console.error(err);
+        });
+        activity.activity({
+          business: business._id,
+          actor_user: business.creator,
+          action: 'created'
+        }, function (err) {
+          if (err) return console.error(err);
+        });
+        create_business_default_group(business);
+        notifyOnAction(business);
+        return callback(null, business);
       });
-      if (defined(business.shopping_chain))
-        graphModel.relate_ids(business._id, 'BRANCH_OF', business.shopping_chain);
-      if (defined(business.mall))
-        graphModel.relate_ids(business._id, 'IN_MALL', business.mall);
-      spatial.add2index(business.gid, function (err, result) {
-        if (err) return console.error(err);
-      });
-      activity.activity({
-        business: business._id,
-        actor_user: business.creator,
-        action: 'created'
-      }, function (err) {
-        if (err) return console.error(err);
-      });
-      create_business_default_group(business);
-      notifyOnAction(business);
-      return callback(null, business);
     });
   })
 }
