@@ -72,7 +72,7 @@ export default class BusinessListView extends Component {
         const permissionsButton = this.createPermissionsTag(item);
         const productsButton  = this.createPoductsTag(item);
         return ( <View>
-                <BusinessHeader color navigation={this.props.navigation} business={item.business}
+                <BusinessHeader businesscolor navigation={this.props.navigation} business={item.business}
                                 categoryTitle={item.categoryTitle} businessLogo={item.business.logo}
                                 businessName={item.business.name} noMargin businessView
                                 editButton={editButton}/>

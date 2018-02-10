@@ -88,6 +88,7 @@ class BusinessProfile extends Component {
         if (!business) {
             business = this.props.navigation.state.params.businesses;
         }
+        let businessView = this.props.navigation.state.params.fromBusiness;
         let address = business.city + ' ' + business.address
         const banner = this.createBannerTag(business);
         return ( <ScrollView>
@@ -97,7 +98,7 @@ class BusinessProfile extends Component {
                                 title={strings.Business} bgc="#2db6c8"/>
                     <BusinessHeader noProfile navigation={this.props.navigation} business={business}
                                     categoryTitle={business.categoryTitle} businessLogo={business.logo}
-                                    businessName={business.name} noMargin
+                                    businessView={businessView} usinessName={business.name} noMargin
                     />
                     <View style={{marginTop: 1, backgroundColor: '#eaeaea'}}>
                         <View style={{
