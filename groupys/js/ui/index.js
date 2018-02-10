@@ -35,6 +35,7 @@ import BarcodeScanner from './BarcodeScanner/BarcodeScanner';
 import UrlPreview from './UrlPreview/UrlPreview';
 import DocumentPicker from './DocumentPicker/DocumentPicker'
 import TermsOfUse from './TermOfUse/TermsOfUse'
+import ImageController from './ImageController/ImageController'
 export {
     ImagePicker,
     CategoryPicker,
@@ -72,5 +73,6 @@ export {
     BarcodeScanner,
     UrlPreview,
     DocumentPicker,
-    TermsOfUse
+    TermsOfUse,
+    ImageController
 }

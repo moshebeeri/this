@@ -78,6 +78,7 @@ class PageRefresher {
         let token = store.getState().authentication.token;
         if (token) {
 
+            this.checkUploadPromotionPictures(store.getState().promotions.promotionPictures,token)
             this.checkUploadPictures(store.getState().businesses.businessPictures,token)
             business.getAll(store.dispatch, token);
         }
@@ -91,6 +92,20 @@ class PageRefresher {
             });
             store.dispatch({
                 type: actions.BUSINESS_CLEAR_PIC,
+
+            });
+        }
+
+    }
+
+    checkUploadPromotionPictures(promotions,token){
+        if(promotions.length > 0){
+            promotions.forEach(promotion => {
+                entityUtils.uploadPicture('promotions',promotion.promotion, token, promotion.promotionResponse);
+
+            });
+            store.dispatch({
+                type: actions.PROMOTION_CLEAR_PIC,
 
             });
         }
@@ -194,6 +209,29 @@ class PageRefresher {
         if (visitedList.includes('feed' + item.id,)) {
             pageSync.visited('feed' + item.id)
             this.checkRefreshFeedItem(item);
+        }
+    }
+
+    createPromotionUpdate(id) {
+        if (!visitedList.includes('promotion' + id,)) {
+            pageSync.createPage('promotion' + id, pageSync.createStdAverageRefresh('promotion' + id, 2, 7200000), this.updateBusinessPromotion.bind(this, id));
+            visitedList.push('promotion' + id);
+        }
+    }
+
+
+    updateBusinessPromotion(id){
+        let token = store.getState().authentication.token;
+        if (token) {
+            promotionAction.refershBusinessPromotion(id,token,store.dispatch );
+        }
+    }
+
+
+    visitedBusinessPromotion(itemId) {
+        if (visitedList.includes('promotion' + itemId,)) {
+            pageSync.visited('promotion' + itemId)
+
         }
     }
 

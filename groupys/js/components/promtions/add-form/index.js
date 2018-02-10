@@ -112,6 +112,7 @@ class AddPromotion extends Component {
     }
 
     back() {
+
         this.props.navigation.goBack();
     }
 
@@ -467,7 +468,7 @@ class AddPromotion extends Component {
     }
 
     render() {
-        const {saving} = this.props;
+        const {saving,savingFailed} = this.props;
         let conditionForm = this.createDiscountConditionForm();
         let distributionForm = this.createDistributionForm();
         if (this.props.navigation.state.params.group) {
@@ -542,6 +543,10 @@ class AddPromotion extends Component {
                 {saving && <View style={{justifyContent:'center',alignItems:'center',position:'absolute',width:StyleUtils.getWidth(),opacity:0.7,height:height,top:40,backgroundColor:'white'}}>
                     <Spinner/>
                 </View>}
+                {savingFailed &&  <View style={{justifyContent:'center',alignItems:'center',position:'absolute',width:StyleUtils.getWidth(),opacity:0.9,height:height,top:40,backgroundColor:'white'}}>
+                    <Text style={{margin:10,fontWeight:'bold',color:'black',fontSize:20}}>{strings.PromotionFailedSavingMessage}</Text>
+                </View>}
+
             </View>
         );
     }
@@ -624,6 +629,7 @@ export default connect(
     state => ({
         promotions: state.promotions,
         saving: state.promotions.savingForm,
+        savingFailed: state.promotions.savingFormFailed,
         products: state.products,
         currentScreen:state.render.currentScreen,
     }),

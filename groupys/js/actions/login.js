@@ -64,7 +64,7 @@ export function login(phone, password, navigation) {
                 type: actions.LOGIN_PROCESS,
                 value: false
             });
-            handler.handleError(error, dispatch)
+            handler.handleError(error, dispatch,'login')
             logger.actionFailed('login')
         }
     }
@@ -106,7 +106,7 @@ export function signup(phone, password, firstName, lastName, navigation) {
                     message: strings.invalidPhoneNumber
                 });
             } else {
-                handler.handleError(error, dispatch)
+                handler.handleError(error, dispatch,'signup')
             }
             dispatch({
                 type: actions.SIGNUP_PROCESS,
@@ -170,7 +170,7 @@ export function verifyCode(code, navigation, resetAction) {
                     message: strings.InvalidValidationCode
                 });
             } else {
-                handler.handleError(error, dispatch)
+                handler.handleError(error, dispatch,'verifyCode')
             }
             logger.actionFailed('verifyCode');
             dispatch({
@@ -188,7 +188,7 @@ export function forgetPassword(phoneNumber) {
                 loginApi.recoverPassword(phoneNumber)
             }
         } catch (error) {
-            handler.handleError(error, dispatch)
+            handler.handleError(error, dispatch,'forgetPassword')
             logger.actionFailed('forgetPassword')
         }
     }

@@ -21,6 +21,27 @@ class MainFeedComperator{
 
     }
 
+    //in case some data is missing we should filter the feed
+    filterFeed(feed){
+        if(feed.activity && feed.activity.promotion ) {
+            let promotion = feed.activity.promotion;
+            if (promotion.pictures.length === 0) {
+                return false
+            }
+            if (!promotion.entity) {
+                return false
+            }
+            if (!promotion.entity.business) {
+                return false
+            }
+            if (promotion.entity.business.pictures.length === 0) {
+                return false
+            }
+        }
+        return true;
+
+    }
+
 
 
 

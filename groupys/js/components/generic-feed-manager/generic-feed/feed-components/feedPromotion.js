@@ -45,7 +45,6 @@ export default class FeedPromotion extends Component {
     visited(visible) {
         const {item} = this.props;
         if (visible) {
-            console.log(item.id + ' visited');
             PageRefresher.visitedFeedItem(item);
         }
     }
@@ -83,12 +82,12 @@ export default class FeedPromotion extends Component {
             <InViewPort onChange={this.visited.bind(this)} style={container}>
                 <View style={[styles.promotion_card, {width: StyleUtils.getWidth()}]}>
                     <View style={{ width: StyleUtils.getWidth()}}>
-
+                        {item.business &&
                         <BusinessHeader navigation={this.props.navigation} business={item.business}
                                         categoryTitle={categoruTitle} businessLogo={item.business.logo}
                                         businessName={item.business.name} noMargin
                                         id={item.activityId} showActions={showActions}
-                        />
+                        />}
                     </View>
 
 

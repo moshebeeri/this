@@ -13,6 +13,7 @@ const initialState = {
     upTime:new Date().getTime(),
     renderFeed: true,
     maxFeedReturned: false,
+    stopDispatchMaxFeed:false,
 };
 import {REHYDRATE} from "redux-persist/constants";
 import * as actions from "./reducerActions";
@@ -104,7 +105,8 @@ export default function feeds(state = initialState, action) {
         case actions.FEEDS_GET_NEXT_BULK_DONE:
             return {
                 ...state,
-                nextBulkLoad: false
+                nextBulkLoad: false,
+                stopDispatchMaxFeed:true,
             };
         case actions.FEED_NO_RENDER:
             return {
@@ -115,7 +117,8 @@ export default function feeds(state = initialState, action) {
         case actions.MAX_FEED_RETUNED:
             return {
                 ...state,
-                maxFeedReturned: true
+                maxFeedReturned: true,
+
             };
 
 

@@ -14,16 +14,18 @@ export function onEndReached() {
             const notifications = getState().notification.notification;
             let skip = 0;
             if (notifications) {
-                skip = notifications.length + 1;
+                skip = notifications.length ;
             }
             let response = await notificationApi.getAll(token, user, skip, 10);
-            dispatch({
-                type: actions.SET_NOTIFICATION,
-                notifications: response,
-            });
+            if(response.length > 0) {
+                dispatch({
+                    type: actions.SET_NOTIFICATION,
+                    notifications: response,
+                });
+            }
             handler.handleSuccses(getState(),dispatch)
         } catch (error) {
-            handler.handleError(error, dispatch)
+            handler.handleError(error, dispatch,'notification-onEndReached')
             logger.actionFailed('notification-onEndReached')
         }
     }
@@ -41,7 +43,7 @@ export function setTopNotification() {
             });
             handler.handleSuccses(getState(),dispatch)
         } catch (error) {
-            handler.handleError(error, dispatch)
+            handler.handleError(error, dispatch,'notification-setTopNotification')
             logger.actionFailed('notification-setTopNotification')
         }
     }
@@ -58,7 +60,7 @@ export function readNotification(notificationId) {
             });
             handler.handleSuccses(getState(),dispatch)
         } catch (error) {
-            handler.handleError(error, dispatch)
+            handler.handleError(error, dispatch,'notification-readNotification')
             logger.actionFailed('notification-readNotification')
         }
     }
@@ -75,7 +77,7 @@ export function doNotification(notificationId, type) {
             })
             handler.handleSuccses(getState(),dispatch)
         } catch (error) {
-            handler.handleError(error, dispatch)
+            handler.handleError(error, dispatch,'notification-doNotification')
             logger.actionFailed('notification-doNotification')
         }
     }
@@ -84,17 +86,19 @@ export function doNotification(notificationId, type) {
 async function updateNotification(dispatch, token, user, notifications) {
     try {
         let skip = 0;
-        if (notifications.length >= 10) {
-            skip = notifications.length - 1;
+        if (notifications) {
+            skip = notifications.length;
         }
         let response = await notificationApi.getAll(token, user, skip, 10);
-        dispatch({
-            type: actions.SET_NOTIFICATION,
-            notifications: response,
-        });
+        if(response.length > 0) {
+            dispatch({
+                type: actions.SET_NOTIFICATION,
+                notifications: response,
+            });
+        }
 
     } catch (error) {
-        handler.handleError(error, dispatch)
+        handler.handleError(error, dispatch,'notification-updateNotification')
         logger.actionFailed('notification-updateNotification')
     }
 }

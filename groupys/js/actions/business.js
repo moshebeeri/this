@@ -39,7 +39,7 @@ async function getAll(dispatch, token) {
         }
     } catch (error) {
 
-        handler.handleError(error,dispatch)
+        handler.handleError(error,dispatch,'getAll-businesses')
         logger.actionFailed("business_getAll")
     }
 }
@@ -55,7 +55,7 @@ async function get(dispatch, token, id) {
             });
         }
     } catch (error) {
-        handler.handleError(error,dispatch)
+        handler.handleError(error,dispatch,'get - business')
         logger.actionFailed("business_get");
     }
 }
@@ -70,7 +70,7 @@ async function getBusinessCategories(dispatch, gid, token) {
             catId: gid
         });
     } catch (error) {
-        handler.handleError(error,dispatch)
+        handler.handleError(error,dispatch,'getBusinessCategories')
         logger.actionFailed("business_get_Categories",gid);
     }
 }
@@ -83,7 +83,7 @@ async function dispatchSearchBusiness(dispatch, business, token) {
         dispatch({type: actions.SEARCH_BUSINESS, businesses: response});
         dispatch({type: actions.SHOW_SEARCH_SPIN, searching: false})
     } catch (error) {
-        handler.handleError(error,dispatch)
+        handler.handleError(error,dispatch,'dispatchSearchBusiness')
         logger.actionFailed("business_search_business",business);
     }
 }
@@ -105,7 +105,7 @@ async function dispatchFollowByQrcode(dispatch, barcode, token) {
         }
         dispatch({type: actions.SHOW_SEARCH_SPIN, searching: false})
     } catch (error) {
-        handler.handleError(error,dispatch)
+        handler.handleError(error,dispatch,'dispatchFollowByQrcode')
         logger.actionFailed("business_search_by_qrcode");
     }
 }
@@ -150,11 +150,7 @@ export function onEndReached() {
                 });
             }
         } catch (error) {
-            if(error === errors.NETWORK_ERROR) {
-                dispatch({
-                    type: actions.NETWORK_IS_OFFLINE,
-                });
-            }
+            handler.handleError(error,dispatch,'business_getAll')
             logger.actionFailed("business_getAll")
         }
         dispatch({
@@ -180,7 +176,7 @@ export function followBusiness(businessId) {
             dispatch({type: actions.RESET_FOLLOW_FORM})
 
         } catch (error) {
-            handler.handleError(error,dispatch)
+            handler.handleError(error,dispatch,'followBusiness')
             logger.actionFailed("business_followBusiness",businessId)
         }
     }
@@ -192,7 +188,7 @@ export function unFollowBusiness(businessId) {
             const token = getState().authentication.token;
             await businessApi.unFollowBusiness(businessId, token);
         } catch (error) {
-            handler.handleError(error,dispatch)
+            handler.handleError(error,dispatch,'unFollowBusiness')
             logger.actionFailed("business_followBusiness",businessId)
         }
     }
@@ -205,7 +201,7 @@ export function groupFollowBusiness(groupid, businessId, navigation) {
             await businessApi.groupFollowBusiness(groupid, businessId, token);
             navigation.goBack();
         } catch (error) {
-            handler.handleError(error,dispatch)
+            handler.handleError(error,dispatch,'groupFollowBusiness')
             logger.actionFailed("business_groupFollowBusiness",businessId)
         }
     }
@@ -236,7 +232,7 @@ export function setBusinessUsers(businessId) {
                 businessId: businessId
             });
         } catch (error) {
-            handler.handleError(error,dispatch)
+            handler.handleError(error,dispatch,'setBusinessUsers')
             logger.actionFailed("users_getBusinessUsers",businessId);
         }
     }
@@ -259,7 +255,7 @@ export function setBusinessProducts(businessId) {
                 });
             }
         } catch (error) {
-            handler.handleError(error,dispatch)
+            handler.handleError(error,dispatch,'setBusinessProducts')
             logger.actionFailed("product_findByBusinessId",businessId);
         }
     }
@@ -282,7 +278,11 @@ export function setBusinessPromotions(businessId) {
                 });
             }
         } catch (error) {
-            handler.handleError(error,dispatch)
+            handler.handleError(error,dispatch,'setBusinessPromotions')
+            dispatch({
+                type: actions.PROMOTION_LOADING_DONE,
+                businessId: businessId
+            });
             logger.actionFailed("promotion_findByBusinessId",businessId);
         }
     }
@@ -365,7 +365,7 @@ export function saveBusiness(business, navigation) {
 
 
         } catch (error) {
-             handler.handleError(error,dispatch)
+             handler.handleError(error,dispatch,'saveBusiness')
             dispatch({
                 type: actions.SAVING_BUSINESS_DONE,
             });
@@ -430,7 +430,7 @@ export function updateBusiness(business, navigation) {
             });
             navigation.goBack();
         } catch (error) {
-             handler.handleError(error,dispatch)
+             handler.handleError(error,dispatch,'update_business')
             logger.actionFailed("update_business",business);
         }
     }
@@ -450,7 +450,7 @@ export function updateBusinesStatuss() {
             }
 
         } catch (error) {
-             handler.handleError(error,dispatch)
+             handler.handleError(error,dispatch,'updateBusinesStatuss')
             logger.actionFailed("update_business",business);
         }
     }
@@ -475,7 +475,7 @@ export function setBusinessQrCode(business) {
                 qrcodeSource: response.qrcode
             });
         } catch (error) {
-             handler.handleError(error,dispatch)
+             handler.handleError(error,dispatch,'setBusinessQrCode')
             logger.actionFailed("business_getBusinessQrCodeImage",business);
         }
     }
@@ -520,7 +520,7 @@ export function doPaymentTransaction(amount) {
                 });
             }
         } catch (error) {
-             handler.handleError(error,dispatch)
+             handler.handleError(error,dispatch,'doPaymentTransaction')
             dispatch({
                 type: actions.PAYMENT_SUCCSESS,
                 message: 'Payment Failed',
@@ -556,7 +556,7 @@ export function checkFreeTier(business) {
             }
 
         } catch (error) {
-             handler.handleError(error,dispatch)
+             handler.handleError(error,dispatch,'checkFreeTier')
         }
     }
 }

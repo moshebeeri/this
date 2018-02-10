@@ -26,7 +26,7 @@ import {
 import Icon3 from 'react-native-vector-icons/MaterialIcons';
 import StyleUtils from '../../../../utils/styleUtils'
 import * as componentCreator from "./feedCommonView";
-import {BusinessHeader, SocialState} from '../../../../ui/index';
+import {BusinessHeader, SocialState,ImageController} from '../../../../ui/index';
 import FormUtils from "../../../../utils/fromUtils";
 import PageRefresher from '../../../../refresh/pageRefresher'
 
@@ -115,9 +115,9 @@ export default class FeedBusiness extends Component {
         if (item.banner && item.banner.uri) {
             return <View style={[styles.promotion_image_view, {width: StyleUtils.getWidth()}]}>
 
-                <Image resizeMode="cover" style={[styles.promotion_image, {width: StyleUtils.getWidth()}]}
+                <ImageController resizeMode="cover" style={[styles.promotion_image, {width: StyleUtils.getWidth()}]}
                        source={{uri: item.banner.uri}}>
-                </Image>
+                </ImageController>
             </View>
         }
         return undefined;

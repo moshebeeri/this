@@ -14,7 +14,7 @@ import {getBusinessPromotions} from '../../selectors/businessesSelector'
 import {bindActionCreators} from "redux";
 import {FormHeader} from '../../ui/index';
 import PageRefresher from '../../refresh/pageRefresher'
-
+import * as promotionsAction from "../../actions/promotions";
 import strings from "../../i18n/i18n"
 class Promotions extends Component {
     static navigationOptions = {
@@ -57,7 +57,8 @@ class Promotions extends Component {
     }
 
     navigateToAdd() {
-        const {navigation} = this.props;
+        const {navigation,promotionActions} = this.props;
+        promotionActions.resetForm();
         this.props.navigation.navigate("addPromotions", {business: navigation.state.params.business});
     }
 
@@ -136,6 +137,7 @@ export default connect(
     }),
     (dispatch) => ({
         actions: bindActionCreators(businessAction, dispatch),
+        promotionActions: bindActionCreators(promotionsAction, dispatch)
     })
 )(Promotions);
 

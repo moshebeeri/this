@@ -10,7 +10,7 @@
 /**
  * Created by stan229 on 5/27/16.
  */
-const initialState = {promotions: {}, savingForm: false,loadingDone:{}};
+const initialState = {promotions: {}, savingForm: false,loadingDone:{},promotionPictures:[],savingFormFailed:false};
 import {REHYDRATE} from "redux-persist/constants";
 import * as actions from "./reducerActions";
 
@@ -21,12 +21,20 @@ export default function promotion(state = initialState, action) {
         // retrive stored data for reducer callApi
         const savedData = action.payload || initialState;
         return {
-            ...state, ...savedData.promotions
+            ...state, ...savedData.promotions,savingForm:false,savingFormFailed:false
         };
     }
     let promotionsState = {...state};
     let currentPromotions = promotionsState.promotions;
     switch (action.type) {
+        case actions.PROMOTION_RESET:
+            return {
+                ...state,
+                savingForm: false,
+                savingFormFailed:false
+            };
+
+
         case actions.UPSERT_PROMOTION:
             action.item.forEach(eventItem => {
                 if (eventItem.social_state || !currentPromotions[eventItem._id]) {
@@ -37,6 +45,7 @@ export default function promotion(state = initialState, action) {
                 }
             });
             return promotionsState;
+
         case actions.FEED_UPDATE_SOCIAL_STATE:
             if (currentPromotions[action.id]) {
                 currentPromotions[action.id].social_state = action.social_state;
@@ -71,6 +80,11 @@ export default function promotion(state = initialState, action) {
                 ...state,
                 savingForm: false,
             };
+        case actions.PROMOTION_SAVING_FAILED:
+            return {
+                ...state,
+                savingFormFailed: true,
+            };
         case actions.PROMOTION_RESET:
             return {
                 ...state,
@@ -79,6 +93,19 @@ export default function promotion(state = initialState, action) {
         case actions.PROMOTION_LOADING_DONE:
             promotionsState.loadingDone[action.businessId] = true
             return promotionsState;
+        case actions.PROMOTION_UPLOAD_PIC:
+            let promotionPic = promotionsState.promotionPictures;
+            promotionPic.push(action.item)
+            return {
+                ...state,
+                promotionPictures: promotionPic,
+            };
+
+        case actions.PROMOTION_CLEAR_PIC:
+            return {
+                ...state,
+                promotionPictures: [],
+            };
 
         case actions.SAVE_PROMOTIONS :
             let currentState = {...state};

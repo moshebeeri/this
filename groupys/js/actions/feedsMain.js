@@ -32,9 +32,11 @@ async function fetchFeedsFromServer(feeds, dispatch, token, user) {
             let id = keys[keys.length - 1];
             response = await feedApi.getAll('down', feeds[id].fid, token, user);
         }
-        dispatch({
-            type: actions.FEEDS_GET_NEXT_BULK_DONE,
-        });
+        // if(!getState().feeds.stopDispatchMaxFeed) {
+        //     dispatch({
+        //         type: actions.FEEDS_GET_NEXT_BULK_DONE,
+        //     });
+        // }
         console.log(response)
         if (!response)
             return;
@@ -52,7 +54,7 @@ async function fetchFeedsFromServer(feeds, dispatch, token, user) {
             items: disassemblerItems
         });
     } catch (error) {
-        handler.handleError(error, dispatch)
+        handler.handleError(error, dispatch,'fetchFeedsFromServer')
         logger.actionFailed('fetchFeedsFromServer')
     }
 }
@@ -73,7 +75,7 @@ async function fetchTopList(id, token, user, dispatch) {
             item: item
         }))
     } catch (error) {
-        handler.handleError(error, dispatch)
+        handler.handleError(error, dispatch,'fetchTopList-mainfeeds')
         logger.actionFailed('fetchTopList-mainfeeds')
     }
 }
@@ -99,7 +101,7 @@ async function updateBusinessCategory(token, businesses, dispatch) {
             });
         }
     } catch (error) {
-        handler.handleError(error, dispatch)
+        handler.handleError(error, dispatch,'updateBusinessCategory')
         logger.actionFailed('updateBusinessCategory')
     }
 }
@@ -121,11 +123,7 @@ export function fetchTop(feeds, token, user) {
             });
             handler.handleSuccses(getState(), dispatch)
         } catch (error) {
-            if (error === errors.NETWORK_ERROR) {
-                dispatch({
-                    type: actions.NETWORK_IS_OFFLINE,
-                });
-            }
+            handler.handleError(error, dispatch,'feed-fetchTop')
             logger.actionFailed('fetchTop')
         }
     }
@@ -139,7 +137,7 @@ async function getUserFollowers(dispatch, token) {
             followers: users
         });
     } catch (error) {
-        handler.handleError(error, dispatch)
+        handler.handleError(error, dispatch,'getUserFollowers')
         logger.actionFailed('getUserFollowers')
     }
 }
@@ -167,9 +165,11 @@ export function setNextFeeds(feeds) {
             });
         }
         if (getState().feeds.maxFeedReturned) {
-            dispatch({
-                type: actions.FEEDS_GET_NEXT_BULK_DONE,
-            });
+            if(!getState().feeds.stopDispatchMaxFeed) {
+                dispatch({
+                    type: actions.FEEDS_GET_NEXT_BULK_DONE,
+                });
+            }
             return;
         }
         if (_.isEmpty(feeds) && getState().feeds.firstTime) {
@@ -195,9 +195,11 @@ export function setNextFeeds(feeds) {
                 loadingDone: true,
             });
         }
-        dispatch({
-            type: actions.FEEDS_GET_NEXT_BULK_DONE,
-        });
+        if(!getState().feeds.stopDispatchMaxFeed) {
+            dispatch({
+                type: actions.FEEDS_GET_NEXT_BULK_DONE,
+            });
+        }
         handler.handleSuccses(getState(), dispatch)
     }
 }
@@ -213,11 +215,7 @@ export function like(id) {
             await userApi.like(id, token);
             handler.handleSuccses(getState(), dispatch)
         } catch (error) {
-            if (error === errors.NETWORK_ERROR) {
-                dispatch({
-                    type: actions.NETWORK_IS_OFFLINE,
-                });
-            }
+            handler.handleError(error, dispatch,'like')
             logger.actionFailed('like')
         }
     }
@@ -241,11 +239,7 @@ export function refresh(id, currentSocialState) {
             handler.handleSuccses(getState(), dispatch)
             // await userApi.like(id, token);
         } catch (error) {
-            if (error === errors.NETWORK_ERROR) {
-                dispatch({
-                    type: actions.NETWORK_IS_OFFLINE,
-                });
-            }
+            handler.handleError(error, dispatch,'feed-getFeedSocialState')
             logger.actionFailed('getFeedSocialState')
         }
     }
@@ -262,7 +256,7 @@ async function refreshFeedSocialState(dispatch, token, id) {
             });
         }
     } catch (error) {
-        handler.handleError(error, dispatch)
+        handler.handleError(error, dispatch,'refreshFeedSocialState')
         logger.actionFailed('refreshFeedSocialState')
     }
 }
@@ -278,11 +272,7 @@ export const unlike = (id) => {
             });
             handler.handleSuccses(getState(), dispatch)
         } catch (error) {
-            if (error === errors.NETWORK_ERROR) {
-                dispatch({
-                    type: actions.NETWORK_IS_OFFLINE,
-                });
-            }
+            handler.handleError(error, dispatch,'unlike')
             logger.actionFailed('unlike')
         }
     }
@@ -300,11 +290,7 @@ export function saveFeed(id, navigation, feed) {
             await  promotionApi.getAll();
             handler.handleSuccses(getState(), dispatch)
         } catch (error) {
-            if (error === errors.NETWORK_ERROR) {
-                dispatch({
-                    type: actions.NETWORK_IS_OFFLINE,
-                });
-            }
+            handler.handleError(error, dispatch,'saveFeed')
             logger.actionFailed('saveFeed')
         }
     }
@@ -320,11 +306,7 @@ export function setUserFollows() {
                 followers: response
             });
         } catch (error) {
-            if (error === errors.NETWORK_ERROR) {
-                dispatch({
-                    type: actions.NETWORK_IS_OFFLINE,
-                });
-            }
+            handler.handleError(error, dispatch,'getUserFollowers')
             logger.actionFailed('getUserFollowers')
         }
     }
@@ -342,11 +324,7 @@ export function shareActivity(id, activityId, users, token) {
                 shares: users.length
             });
         } catch (error) {
-            if (error === errors.NETWORK_ERROR) {
-                dispatch({
-                    type: actions.NETWORK_IS_OFFLINE,
-                });
-            }
+            handler.handleError(error, dispatch,'shareActivity')
             logger.actionFailed('shareActivity')
         }
     }

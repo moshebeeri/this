@@ -20,7 +20,9 @@ import stylesPortrate from './styles'
 import FeedUiConverter from '../../../api/feed-ui-converter'
 import StyleUtils from '../../../utils/styleUtils'
 import FormUtils from "../../../utils/fromUtils";
+import InViewPort from '../../../utils/inviewport'
 import {PromotionHeader, SocialState, SubmitButton} from '../../../ui/index';
+import PageRefresher from '../../../refresh/pageRefresher'
 import strings from "../../../i18n/i18n"
 
 let feedUiConverter = new FeedUiConverter();
@@ -46,6 +48,18 @@ export default class PromotionListView extends Component {
         }
         return <View/>
     }
+    componentWillMount() {
+        const {item} = this.props;
+        PageRefresher.createPromotionUpdate(item._id);
+    }
+
+    visited(visible){
+        const {item} = this.props;
+        if(visible){
+            PageRefresher.visitedBusinessPromotion(item._id);
+        }
+
+    }
 
     createPromotion(promotionItem) {
         const {location} = this.props;
@@ -55,7 +69,8 @@ export default class PromotionListView extends Component {
         }
         const styles = this.createStyle();
         const result =
-            <View key={promotionItem._id} style={[styles.promotion_container, {marginTop:10,width: StyleUtils.getWidth()}]}>
+
+            <InViewPort onChange={this.visited.bind(this)}  key={promotionItem._id} style={[styles.promotion_container, {marginTop:10,width: StyleUtils.getWidth()}]}>
 
 
                 {this.createImageTage(item, styles)}
@@ -92,29 +107,29 @@ export default class PromotionListView extends Component {
                             <Text style={styles.promotion_addressText} note>{item.quantity} </Text>
 
                         </View>
-                        <View style={styles.promotionAnalyticsAttribute}>
+                        {promotionItem.social_state && <View style={styles.promotionAnalyticsAttribute}>
 
                             <Text>{strings.Saved.toUpperCase()}</Text>
                             <Text style={styles.promotion_addressText}
                                   note>{promotionItem.social_state.saves}</Text>
 
-                        </View>
-                        <View style={styles.promotionAnalyticsAttribute}>
+                        </View>}
+                        {promotionItem.social_state && <View style={styles.promotionAnalyticsAttribute}>
 
                             <Text>{strings.Used.toUpperCase()}</Text>
                             <Text style={styles.promotion_addressText} note>{promotionItem.social_state.realizes}</Text>
 
-                        </View>
+                        </View>}
 
                     </View>
 
-                    <SocialState disabled shares={promotionItem.social_state.shares}
+                    {promotionItem.social_state &&  <SocialState disabled shares={promotionItem.social_state.shares}
                                  likes={promotionItem.social_state.likes}
-                                 comments={promotionItem.social_state.comments}/>
+                                 comments={promotionItem.social_state.comments}/>}
 
 
                 </View>
-            </View>
+            </InViewPort>
         return result;
     }
 
