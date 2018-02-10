@@ -45,7 +45,6 @@ export default class FeedPromotion extends Component {
     visited(visible) {
         const {item} = this.props;
         if (visible) {
-            console.log(item.id + ' visited');
             PageRefresher.visitedFeedItem(item);
         }
     }

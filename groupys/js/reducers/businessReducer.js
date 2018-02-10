@@ -190,8 +190,18 @@ export default function business(state = initialState, action) {
             businessesState.update = !businessesState.update;
             if(!businessesPromotions[action.businessId]){
                 businessesPromotions[action.businessId] = []
+                businessesPromotions[action.businessId].push(action.item)
             }
-            businessesPromotions[action.businessId].push(action.item)
+            else{
+                let index =  businessesPromotions[action.businessId].findIndex(promotion => promotion._id === action.item._id);
+                if(index > 0 || index === 0){
+                    businessesPromotions[action.businessId][index] = action.item
+                }
+                else{
+                    businessesPromotions[action.businessId].push(action.item)
+                }
+            }
+
 
             return businessesState;
         case actions.BUSSINESS_LOADING:

@@ -266,9 +266,14 @@ class PromotionApi {
                     reject(errors.UN_AUTHOTIZED_ACCESS);
                     return;
                 }
-                timer.logTime(from, new Date(), 'promotions', 'id');
+
                 let responseData = await response.json();
-                resolve(responseData);
+                if(promotionComperator.filterPromotion(responseData)) {
+                    timer.logTime(from, new Date(), 'promotions', 'id');
+
+                    resolve(responseData);
+                }
+                resolve('')
             }
             catch (error) {
                 reject(errors.NETWORK_ERROR);

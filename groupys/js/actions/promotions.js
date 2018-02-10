@@ -213,13 +213,32 @@ export function updatePromotion(promotion,businessId,navigation,itemId) {
 
 
 }
+async function refershBusinessPromotion(id, token, dispatch) {
+    try {
+        let response = await promotionApi.getPromotionById(id, token);
 
+        if (!response)
+            return;
+
+        dispatch({
+            type: actions.UPSERT_PROMOTION_SINGLE,
+            item: response
+        });
+
+    } catch (error) {
+        handler.handleError(error,dispatch)
+        logger.actionFailed('promotions-fetchPromotionById')
+    }
+}
 
 async function fetchPromotionById(id, token, dispatch) {
     try {
         let response = await promotionApi.getPromotionById(id, token);
+
+
         if (!response)
             return;
+
         dispatch({
             type: actions.UPSERT_PROMOTION,
             item: [response]
@@ -232,6 +251,7 @@ async function fetchPromotionById(id, token, dispatch) {
 }
 export default {
     fetchPromotionById,
+    refershBusinessPromotion,
 
 
 };

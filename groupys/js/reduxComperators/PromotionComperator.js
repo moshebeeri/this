@@ -8,6 +8,9 @@ class PromotionComperator {
         if (promotion.pictures && promotion.pictures.length === 0) {
             return false
         }
+        if(!promotion.social_state){
+            return false
+        }
         return true;
     }
 }

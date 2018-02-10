@@ -20,7 +20,9 @@ import stylesPortrate from './styles'
 import FeedUiConverter from '../../../api/feed-ui-converter'
 import StyleUtils from '../../../utils/styleUtils'
 import FormUtils from "../../../utils/fromUtils";
+import InViewPort from '../../../utils/inviewport'
 import {PromotionHeader, SocialState, SubmitButton} from '../../../ui/index';
+import PageRefresher from '../../../refresh/pageRefresher'
 import strings from "../../../i18n/i18n"
 
 let feedUiConverter = new FeedUiConverter();
@@ -46,6 +48,18 @@ export default class PromotionListView extends Component {
         }
         return <View/>
     }
+    componentWillMount() {
+        const {item} = this.props;
+        PageRefresher.createPromotionUpdate(item._id);
+    }
+
+    visited(visible){
+        const {item} = this.props;
+        if(visible){
+            PageRefresher.visitedBusinessPromotion(item._id);
+        }
+
+    }
 
     createPromotion(promotionItem) {
         const {location} = this.props;
@@ -55,7 +69,8 @@ export default class PromotionListView extends Component {
         }
         const styles = this.createStyle();
         const result =
-            <View key={promotionItem._id} style={[styles.promotion_container, {marginTop:10,width: StyleUtils.getWidth()}]}>
+
+            <InViewPort onChange={this.visited.bind(this)}  key={promotionItem._id} style={[styles.promotion_container, {marginTop:10,width: StyleUtils.getWidth()}]}>
 
 
                 {this.createImageTage(item, styles)}
@@ -114,7 +129,7 @@ export default class PromotionListView extends Component {
 
 
                 </View>
-            </View>
+            </InViewPort>
         return result;
     }
 
