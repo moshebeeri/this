@@ -171,11 +171,14 @@ export function savePromotion(promotion,businessId,navigation) {
             handler.handleSuccses(getState(),dispatch)
             navigation.goBack();
         } catch (error) {
+            dispatch({
+                type: actions.PROMOTION_SAVING_FAILED,
+            });
             handler.handleError(error,dispatch)
             dispatch({
                 type: actions.PROMOTION_SAVING_DONE,
             });
-            navigation.goBack();
+
             logger.actionFailed('promotions-savePromotion')
         }
     }

@@ -187,6 +187,7 @@ export default function business(state = initialState, action) {
             }
             return businessesState;
         case actions.UPSERT_PROMOTION_SINGLE:
+            businessesState.update = !businessesState.update;
             if(!businessesPromotions[action.businessId]){
                 businessesPromotions[action.businessId] = []
             }
