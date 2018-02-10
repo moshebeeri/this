@@ -8,8 +8,17 @@ class PromotionComperator {
         if (promotion.pictures && promotion.pictures.length === 0) {
             return false
         }
-        if(!promotion.social_state){
-            return false
+        return true;
+    }
+
+    shouldUpdateSocial(item, response) {
+        let currentSocialState = item.social_state;
+        if (response.likes === currentSocialState.likes &&
+            response.shares === currentSocialState.shares &&
+            response.comments === currentSocialState.comments
+            && response.saves === currentSocialState.saves
+            && response.realizes === currentSocialState.realizes) {
+            return false;
         }
         return true;
     }

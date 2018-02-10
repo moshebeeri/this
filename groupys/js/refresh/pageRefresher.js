@@ -212,18 +212,18 @@ class PageRefresher {
         }
     }
 
-    createPromotionUpdate(id) {
-        if (!visitedList.includes('promotion' + id,)) {
-            pageSync.createPage('promotion' + id, pageSync.createStdAverageRefresh('promotion' + id, 2, 7200000), this.updateBusinessPromotion.bind(this, id));
-            visitedList.push('promotion' + id);
+    createPromotionUpdate(item,businessId) {
+        if (!visitedList.includes('promotion' + item._id,)) {
+            pageSync.createPage('promotion' + item._id, pageSync.createStdAverageRefresh('promotion' + item._id, 2, 7200000), this.updateBusinessPromotion.bind(this, item,businessId));
+            visitedList.push('promotion' + item._id);
         }
     }
 
 
-    updateBusinessPromotion(id){
+    updateBusinessPromotion(item,businessId){
         let token = store.getState().authentication.token;
         if (token) {
-            promotionAction.refershBusinessPromotion(id,token,store.dispatch );
+            promotionAction.refershBusinessPromotion(item,businessId,token,store.dispatch );
         }
     }
 
