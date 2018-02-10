@@ -6,7 +6,6 @@ const Notifications = require('../../components/notification');
 
 // Get list of notifications
 exports.find = function(req, res) {
-  //TODO: Validate authorization
   Notification.find({to: req.params.entity_id})
     .skip(req.params.skip)
     .limit(req.params.limit)

@@ -73,6 +73,7 @@ exports.test_email = function (req, res) {
   //   return res.status(200).send();
   // });
 };
+
 exports.address2 = function (req, res) {
   location.address(req.body.address, function (err, data) {
     if (err) {
@@ -337,7 +338,6 @@ function sendValidationEmail(businessId) {
   Business.findById(businessId).exec((err, business) => {
     if (err) return console.error(err);
     if (!business) return console.error(new Error('Business not found'));
-    console.log(JSON.stringify(business));
     email.send('validateBusinessEmail',
       business.email, {
         name: business.creator.name,
@@ -394,7 +394,7 @@ function createValidatedBusiness(business, callback) {
         console.error(err);
         return callback(err);
       }
-
+      console.log('Role.createRole');
       Role.createRole(business.creator, business._id, Role.Roles.get('OWNS'), function (err) {
         if (err) return callback(err);
         if (business.type === 'PERSONAL_SERVICES' || business.type === 'SMALL_BUSINESS') {
@@ -446,7 +446,13 @@ function review(businessId, status, callback) {
       business.review.result = 'accepted';
       business.save((err, business) => {
         if (err) return callback(err);
-        return createValidatedBusiness(business, callback);
+        createValidatedBusiness(business, (err, business) => {
+          if(err) {
+            console.log(err);
+            return callback(err);
+          }
+          callback(null, business);
+        });
       });
     } else {
       business.review.result = 'rejected';
@@ -576,7 +582,6 @@ exports.create = function (req, res) {
         else return res.status(400).send(err);
       }
       body_business.location = spatial.geo_to_location(data);
-      console.log(JSON.stringify(body_business));
       Business.create(body_business, function (err, business) {
         if (err) return handleError(res, err);
         sendValidationEmail(business._id);
