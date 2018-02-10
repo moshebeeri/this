@@ -181,13 +181,14 @@ exports.create_business_default_group = function (group, callback) {
           console.error(err);
           return callback(err);
         }
-        console.log(`create_business_default_group: ${JSON.stringify(group)}`);
         graphModel.reflect(group, {
           _id: group._id,
           default: true,
+          name: group.name,
           created: group.created
         }, function (err) {
           if (err) return callback(err);
+          console.log('create_business_default_group graphModel.reflected group');
           graphModel.relate_ids(group._id, 'CREATED_BY', group.creator);
           graphModel.relate_ids(group.creator, 'FOLLOW', group._id);
           graphModel.relate_ids(group.creator, 'GROUP_ADMIN', group._id);

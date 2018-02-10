@@ -315,8 +315,11 @@ function create_business_default_group(business) {
   }, function (err, group) {
     if (err) return console.error(err.message);
     business.groups.push(group._id);
-    business.save();
-    graphModel.owner_followers_follow_default_group(business.creator);
+    business.save((err) => {
+      if(err) return console.error(err);
+      graphModel.owner_followers_follow_default_group(business.creator);
+
+    });
   });
 }
 
