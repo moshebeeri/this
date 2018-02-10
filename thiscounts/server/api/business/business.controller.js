@@ -397,22 +397,21 @@ function createValidatedBusiness(business, callback) {
         console.error(err);
         return callback(err);
       }
-      console.log(`business.creator: ${JSON.stringify(business.creator)}`);
-      Role.createRole(business.creator, business._id, Role.Roles.get('OWNS'), function (err) {
+      Role.createRole(business.creator._id, business._id, Role.Roles.get('OWNS'), function (err) {
         if (err) return callback(err);
         if (business.type === 'PERSONAL_SERVICES' || business.type === 'SMALL_BUSINESS') {
-          graphModel.owner_followers_follow_business(business.creator);
+          graphModel.owner_followers_follow_business(business.creator._id);
         }
         if (defined(business.shopping_chain))
-          graphModel.relate_ids(business._id, 'BRANCH_OF', business.shopping_chain);
+          graphModel.relate_ids(business._id, 'BRANCH_OF', business.shopping_chain._id);
         if (defined(business.mall))
-          graphModel.relate_ids(business._id, 'IN_MALL', business.mall);
+          graphModel.relate_ids(business._id, 'IN_MALL', business.mall._id);
         spatial.add2index(business.gid, function (err /*, result*/) {
           if (err) return console.error(err);
         });
         activity.activity({
           business: business._id,
-          actor_user: business.creator,
+          actor_user: business.creator._id,
           action: 'created'
         }, function (err) {
           if (err) return console.error(err);
@@ -451,7 +450,7 @@ function review(businessId, status, callback) {
         if (err) return callback(err);
         createValidatedBusiness(business, (err, business) => {
           if(err) {
-            console.log(err);
+            console.error(err);
             return callback(err);
           }
           callback(null, business);

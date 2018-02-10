@@ -16,7 +16,6 @@ Role.Roles =
 Role.createRole =
   Role.prototype.createRole = function(user, entity, role, callback) {
   if (!Roles.get(role)) {
-    console.log(`!Roles.get(role)`);
     return callback(new Error(`undefined role ${role} maybe one of ${Roles.enums}`));
   }
   let existing_query = `MATCH (user:user{_id:"${user}"})-[role:ROLE]->(entity{_id:"${entity}"}) return role`;
@@ -24,9 +23,9 @@ Role.createRole =
                      CREATE (user)-[role:ROLE{name:"${role}"}]->(entity)`;
   let set_query = `MATCH (user:user{_id:"${user}"})-[role:ROLE]->(entity{_id:"${entity}"}) set role.name=${role}`;
 
-  console.log(`existing_query: ${existing_query}`);
-  console.log(`grunt_query: ${grunt_query}`);
-  console.log(`set_query: ${set_query}`);
+  // console.log(`existing_query: ${existing_query}`);
+  // console.log(`grunt_query: ${grunt_query}`);
+  // console.log(`set_query: ${set_query}`);
 
   graphModel.query(existing_query, function (err, roles) {
     if (err) return callback(err);
