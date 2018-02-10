@@ -397,7 +397,7 @@ function createValidatedBusiness(business, callback) {
         console.error(err);
         return callback(err);
       }
-
+      console.log(`business.creator: ${JSON.stringify(business.creator)}`);
       Role.createRole(business.creator, business._id, Role.Roles.get('OWNS'), function (err) {
         if (err) return callback(err);
         if (business.type === 'PERSONAL_SERVICES' || business.type === 'SMALL_BUSINESS') {
