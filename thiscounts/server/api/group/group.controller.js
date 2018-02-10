@@ -176,21 +176,26 @@ exports.create_business_default_group = function (group, callback) {
       }
     }, function (err, qrcode) {
       group.qrcode = qrcode;
-      group.save();
-      graphModel.reflect(group, {
-        _id: group._id,
-        name: group.name,
-        default: true,
-        created: group.created
-      }, function (err) {
-        if (err) return callback(err);
-        graphModel.relate_ids(group._id, 'CREATED_BY', group.creator);
-        graphModel.relate_ids(group.creator, 'FOLLOW', group._id);
-        graphModel.relate_ids(group.creator, 'GROUP_ADMIN', group._id);
-        graphModel.relate_ids(group._id, 'FOLLOW', group.entity.business);
-        graphModel.relate_ids(group.entity.business, 'DEFAULT_GROUP', group._id, function (err) {
+      group.save((err, group) => {
+        if(err) {
+          console.error(err);
+          return callback(err);
+        }
+        console.log(`create_business_default_group: ${JSON.stringify(group)}`);
+        graphModel.reflect(group, {
+          _id: group._id,
+          default: true,
+          created: group.created
+        }, function (err) {
           if (err) return callback(err);
-          return callback(null, group);
+          graphModel.relate_ids(group._id, 'CREATED_BY', group.creator);
+          graphModel.relate_ids(group.creator, 'FOLLOW', group._id);
+          graphModel.relate_ids(group.creator, 'GROUP_ADMIN', group._id);
+          graphModel.relate_ids(group._id, 'FOLLOW', group.entity.business);
+          graphModel.relate_ids(group.entity.business, 'DEFAULT_GROUP', group._id, function (err) {
+            if (err) return callback(err);
+            return callback(null, group);
+          });
         });
       });
     });
