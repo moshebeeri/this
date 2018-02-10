@@ -13,6 +13,7 @@ router.delete('/:id', auth.hasRole('admin'), controller.destroy);
 router.get('/search/:skip/:limit/:searchString', auth.isAuthenticated(), controller.search);
 router.get('/me', auth.isAuthenticated(), controller.me);
 router.get('/password/:phone_number', controller.recover_password);
+router.get('/refresh/token',  auth.isAuthenticated(), controller.refresh_token);
 router.get('/verification/:code', auth.isAuthenticated(), controller.verification);
 router.get('/verify', auth.isAuthenticated(), controller.verify);
 router.put('/:id/password', auth.isAuthenticated(), controller.changePassword);

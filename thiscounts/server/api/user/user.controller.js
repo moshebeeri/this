@@ -438,6 +438,11 @@ exports.recover_password = function (req, res) {
   })
 };
 
+exports.refresh_token = function (req, res) {
+  let token = jwt.sign({_id: req.user._id}, config.secrets.session, {expiresIn: 60 * 24 * 30});
+  res.status(200).json({token: token});
+};
+
 /**
  * code verification
  */
