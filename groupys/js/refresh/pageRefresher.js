@@ -80,7 +80,7 @@ class PageRefresher {
 
             this.checkUploadPromotionPictures(store.getState().promotions.promotionPictures,token)
             this.checkUploadPictures(store.getState().businesses.businessPictures,token)
-            this.checkUploadProductsPictures(store.getState().products.productsPictures)
+            this.checkUploadProductsPictures(store.getState().products.productsPictures,token)
             business.getAll(store.dispatch, token);
         }
     }
@@ -99,9 +99,9 @@ class PageRefresher {
 
     }
 
-    checkUploadProductsPictures(businesses,token){
-        if(businesses.length > 0){
-            businesses.forEach(product => {
+    checkUploadProductsPictures(products,token){
+        if(products.length > 0){
+            products.forEach(product => {
                 entityUtils.uploadPicture('products', product.product, token,product.productResponse)
             });
             store.dispatch({
