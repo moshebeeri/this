@@ -73,6 +73,7 @@ exports.test_email = function (req, res) {
   //   return res.status(200).send();
   // });
 };
+
 exports.address2 = function (req, res) {
   location.address(req.body.address, function (err, data) {
     if (err) {
@@ -313,7 +314,12 @@ function create_business_default_group(business) {
     post_policy: 'MANAGERS',
   }, function (err, group) {
     if (err) return console.error(err.message);
-    graphModel.owner_followers_follow_default_group(business.creator);
+    business.groups.push(group._id);
+    business.save((err) => {
+      if(err) return console.error(err);
+      graphModel.owner_followers_follow_default_group(business.creator);
+
+    });
   });
 }
 
@@ -335,7 +341,6 @@ function sendValidationEmail(businessId) {
   Business.findById(businessId).exec((err, business) => {
     if (err) return console.error(err);
     if (!business) return console.error(new Error('Business not found'));
-    console.log(JSON.stringify(business));
     email.send('validateBusinessEmail',
       business.email, {
         name: business.creator.name,
@@ -392,31 +397,29 @@ function createValidatedBusiness(business, callback) {
         console.error(err);
         return callback(err);
       }
-
-
-      Role.createRole(business.creator, business._id, Role.Roles.get('OWNS'), function (err) {
-        if (err) return console.error(err);
+      Role.createRole(business.creator._id, business._id, Role.Roles.get('OWNS'), function (err) {
+        if (err) return callback(err);
         if (business.type === 'PERSONAL_SERVICES' || business.type === 'SMALL_BUSINESS') {
-          graphModel.owner_followers_follow_business(business.creator);
+          graphModel.owner_followers_follow_business(business.creator._id);
         }
+        if (defined(business.shopping_chain))
+          graphModel.relate_ids(business._id, 'BRANCH_OF', business.shopping_chain._id);
+        if (defined(business.mall))
+          graphModel.relate_ids(business._id, 'IN_MALL', business.mall._id);
+        spatial.add2index(business.gid, function (err /*, result*/) {
+          if (err) return console.error(err);
+        });
+        activity.activity({
+          business: business._id,
+          actor_user: business.creator._id,
+          action: 'created'
+        }, function (err) {
+          if (err) return console.error(err);
+        });
+        create_business_default_group(business);
+        notifyOnAction(business);
+        return callback(null, business);
       });
-      if (defined(business.shopping_chain))
-        graphModel.relate_ids(business._id, 'BRANCH_OF', business.shopping_chain);
-      if (defined(business.mall))
-        graphModel.relate_ids(business._id, 'IN_MALL', business.mall);
-      spatial.add2index(business.gid, function (err, result) {
-        if (err) return console.error(err);
-      });
-      activity.activity({
-        business: business._id,
-        actor_user: business.creator,
-        action: 'created'
-      }, function (err) {
-        if (err) return console.error(err);
-      });
-      create_business_default_group(business);
-      notifyOnAction(business);
-      return callback(null, business);
     });
   })
 }
@@ -445,7 +448,13 @@ function review(businessId, status, callback) {
       business.review.result = 'accepted';
       business.save((err, business) => {
         if (err) return callback(err);
-        return createValidatedBusiness(business, callback);
+        createValidatedBusiness(business, (err, business) => {
+          if(err) {
+            console.error(err);
+            return callback(err);
+          }
+          callback(null, business);
+        });
       });
     } else {
       business.review.result = 'rejected';
@@ -575,7 +584,6 @@ exports.create = function (req, res) {
         else return res.status(400).send(err);
       }
       body_business.location = spatial.geo_to_location(data);
-      console.log(JSON.stringify(body_business));
       Business.create(body_business, function (err, business) {
         if (err) return handleError(res, err);
         sendValidationEmail(business._id);
