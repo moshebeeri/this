@@ -109,17 +109,24 @@ export default class ImagePickerComponent extends Component {
     }
 
     render() {
-        const {color, image, video} = this.props;
+        const {color, image, video,customStyles,text} = this.props;
         let cameraColor = '#003d99';
         if (color) {
             cameraColor = color;
         }
         let trigger =  <Icon size={35} color={cameraColor} name='camera'/>;
+        if(text){
+            trigger = <View style={{flexDirection:'row'}}>
+                <Icon size={35} color={cameraColor} name='camera'/>
+                {text}
+            </View>
+        }
         if (image) {
             trigger = image;
         }
         if (this.state.invalid && !image) {
             trigger =<Icon size={35} color={'red'} name='camera'/>;
+
         }
         let videoPickerOption;
         if (video) {
@@ -128,7 +135,7 @@ export default class ImagePickerComponent extends Component {
             </MenuOption>
         }
         return <Menu>
-            <MenuTrigger>
+            <MenuTrigger customStyles={customStyles}>
                 {trigger}
             </MenuTrigger>
             <MenuOptions>
