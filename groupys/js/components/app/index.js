@@ -225,7 +225,7 @@ class ApplicationManager extends Component {
                 logger.screenVisited('notification')
             }
         }
-        this.props.actions.changeTab(tab)
+        //this.props.actions.changeTab(tab)
     }
 
     navigateToAdd() {
@@ -255,11 +255,12 @@ class ApplicationManager extends Component {
 
     render() {
         const {
-            selectedTab, showAdd, showComponent, notifications,
+            showAdd, showComponent, notifications,
             item, location, showPopup, token, notificationTitle,
             notificationAction, notificationGroup, notificationBusiness,
             showSearchResults, businesses, businessActions, groups, groupsActions,showSearchGroupResults
         } = this.props;
+        console.log('rendering main');
         if (!showComponent) {
             return <View></View>
         }
@@ -423,9 +424,8 @@ class ApplicationManager extends Component {
 
 const mapStateToProps = (state) => {
     return {
-        state: state,
         isAuthenticated: isAuthenticated(state),
-        selectedTab: state.mainTab.selectedTab,
+
         showPopup: state.mainTab.showPopup,
         notifications: countUnreadNotifications(state),
         showAdd: showAddAction(state),
