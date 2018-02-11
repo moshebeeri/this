@@ -1,4 +1,4 @@
-const initialState = {products: {}, categories: [],savingForm:false,loadingDone:{}};
+const initialState = {products: {}, categories: [],savingForm:false,loadingDone:{},productsPictures:[]};
 import {REHYDRATE} from "redux-persist/constants";
 import * as actions from "./reducerActions";
 
@@ -20,6 +20,18 @@ export default function products(state = initialState, action) {
                 currentProducts[eventItem._id] = eventItem;
             });
             return productsState;
+        case actions.PRODUCTS_UPLOAD_PIC:
+            let productsPic = productsState.productsPictures;
+            productsPic.push(action.item)
+            return {
+                ...state,
+                productsPictures: productsPic,
+            };
+        case actions.PRODUCTS_CLEAR_PIC:
+            return {
+                ...state,
+                productsPictures: [],
+            };
         case actions.SET_PRODUCT_CATEGORIES :
             let categoriesState = {...state};
             if(!categoriesState.categories[action.language]){

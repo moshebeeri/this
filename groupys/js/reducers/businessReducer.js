@@ -32,6 +32,7 @@ export default function business(state = initialState, action) {
     let businessesMap = businessesState.myBusinesses;
     let myBusinessOrder = businessesState.myBusinessOrder;
     let businessesPromotions = businessesState.businessesPromotions;
+    let businessesProducts = businessesState.businessesProducts;
     switch (action.type) {
         case actions.UPSERT_BUSINESS:
             businessesState.update = !businessesState.update;
@@ -157,9 +158,49 @@ export default function business(state = initialState, action) {
             businessesUsers[action.businessId] = action.businessUsers;
             return businessesState;
         case actions.SET_PRODUCT_BUSINESS:
-            let businessesProducts = businessesState.businessesProducts;
+
             businessesState.update = !businessesState.update;
-            businessesProducts[action.businessId] = action.businessProducts;
+            businessesState.update = !businessesState.update;
+            if (businessesProducts[action.businessId]) {
+                if (action.businessProducts && action.businessProducts.length > 0) {
+                    action.businessProducts.forEach(product => {
+                        let update = false;
+                        let updaeIndex = 0;
+                        businessesProducts[action.businessId].forEach((currentProduct, index) => {
+                            if (currentProduct._id === product._id) {
+                                updaeIndex = index;
+                                update = true;
+                            }
+                        });
+                        if (update) {
+                            businessesProducts[action.businessId][updaeIndex] = product;
+                        } else {
+                            businessesProducts[action.businessId].unshift(product);
+                        }
+                    })
+                }
+            } else {
+                businessesProducts[action.businessId] = action.businessProducts;
+            }
+
+            return businessesState;
+        case actions.UPSERT_PRODUCT_SINGLE:
+            businessesState.update = !businessesState.update;
+            if(!businessesProducts[action.businessId]){
+                businessesProducts[action.businessId] = []
+                businessesProducts[action.businessId].push(action.item)
+            }
+            else{
+                let index =  businessesProducts[action.businessId].findIndex(product => product._id === action.item._id);
+                if(index > 0 || index === 0){
+                    businessesProducts[action.businessId][index] = action.item
+                }
+                else{
+                    businessesProducts[action.businessId].push(action.item)
+                }
+            }
+
+
             return businessesState;
         case actions.SET_PROMOTION_BUSINESS:
 

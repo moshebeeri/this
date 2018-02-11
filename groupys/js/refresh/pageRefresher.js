@@ -80,6 +80,7 @@ class PageRefresher {
 
             this.checkUploadPromotionPictures(store.getState().promotions.promotionPictures,token)
             this.checkUploadPictures(store.getState().businesses.businessPictures,token)
+            this.checkUploadProductsPictures(store.getState().products.productsPictures)
             business.getAll(store.dispatch, token);
         }
     }
@@ -92,6 +93,19 @@ class PageRefresher {
             });
             store.dispatch({
                 type: actions.BUSINESS_CLEAR_PIC,
+
+            });
+        }
+
+    }
+
+    checkUploadProductsPictures(businesses,token){
+        if(businesses.length > 0){
+            businesses.forEach(product => {
+                entityUtils.uploadPicture('products', product.product, token,product.productResponse)
+            });
+            store.dispatch({
+                type: actions.PRODUCTS_CLEAR_PIC,
 
             });
         }

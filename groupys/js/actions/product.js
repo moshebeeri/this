@@ -85,11 +85,31 @@ export function saveProduct(product,businessId,navigation) {
             });
             const token = getState().authentication.token;
             let response = await entityUtils.create('products', product, token);
-            entityUtils.uploadPicture('products', product, token,response)
-            let products = await productApi.findByBusinessId(businessId, token);
+
+            response.pictures = [];
+            let pictures = [];
+            if (product.image.path) {
+                pictures.push(product.image.path);
+                pictures.push(product.image.path);
+                pictures.push(product.image.path);
+                pictures.push(product.image.path);
+                response.pictures.push({pictures: pictures});
+            } else {
+                pictures.push(product.image.uri);
+                pictures.push(product.image.uri);
+                pictures.push(product.image.uri);
+                pictures.push(product.image.uri);
+                response.pictures.push({pictures: pictures});
+            }
+
             dispatch({
-                type: actions.SET_PRODUCT_BUSINESS,
-                businessProducts: products,
+                type: actions.PRODUCTS_UPLOAD_PIC,
+                item:{product:product, productResponse:response}
+            })
+
+            dispatch({
+                type: actions.UPSERT_PRODUCT_SINGLE,
+                item: response,
                 businessId: businessId
             });
 
