@@ -110,11 +110,11 @@ function group_follow_group_activity(following, followed) {
   });
 }
 
-function group_follow_business_activity(following, followed) {
+function group_follow_business_activity(business_id, following_group_id) {
   sendActivity({
-    business: followed,
+    business: business_id,
     action: "group_follow",
-    actor_group: following,
+    actor_group: following_group_id,
     audience: ['SELF', 'FOLLOWERS']
   });
 }
