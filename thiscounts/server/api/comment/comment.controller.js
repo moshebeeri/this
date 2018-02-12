@@ -131,6 +131,7 @@ exports.scroll = function(req, res) {
                       )
                       AND ${condition}
                 return distinct c._id as _id`;
+  console.log(query);
   graphModel.query_objects(Comment, query,
     `order by c._id desc`,
     0, page_size, function (err, comments) {
