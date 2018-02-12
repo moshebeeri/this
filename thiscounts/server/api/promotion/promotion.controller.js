@@ -455,9 +455,9 @@ exports.business_promotions = function (req, res) {
   if (scroll !== 'up' && scroll !== 'down')
     return res.status(400).send('scroll value may be only up or down');
 
-  let condition = scroll === 'up'? `_id > '${from_id}'` : `_id < '${from_id}'`;
+  let condition = scroll === 'up'? `p._id > '${from_id}'` : `p._id < '${from_id}'`;
   if(from_id === 'start')
-    condition = `_id > ''`;
+    condition = `p._id > ''`;
 
   promotionGraphModel.query_objects(Promotion,
     `MATCH (b:business {_id:'${businessID}'})<-[:BUSINESS_PROMOTION]-(p:promotion) 
