@@ -49,8 +49,8 @@ export default class PromotionListView extends Component {
         return <View/>
     }
     componentWillMount() {
-        const {item} = this.props;
-        PageRefresher.createPromotionUpdate(item._id);
+        const {item,businessId} = this.props;
+        PageRefresher.createPromotionUpdate(item,businessId);
     }
 
     visited(visible){

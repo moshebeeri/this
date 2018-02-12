@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import {Text, View} from 'react-native';
+import {Text, View,Image} from 'react-native';
 import {CachedImage} from "react-native-img-cache";
 import store from 'react-native-simple-store';
 export default class ImageControllerComponent  extends Component {
@@ -30,6 +30,21 @@ export default class ImageControllerComponent  extends Component {
         if(size){
             defaultSize = size;
         }
+        if(source.path || (source.uri && !source.uri.includes('http'))){
+            if(thumbnail){
+                if(square){
+
+                    return <View style={{width:defaultSize,height:defaultSize}}>
+                        <Image source={source} style={{width:defaultSize,height:defaultSize}}/></View>
+                }else{
+                    return <Image source={source} style={{borderRadius:defaultSize/2,width:defaultSize,height:defaultSize}}/>
+                }
+
+            }
+
+            return <Image resizeMode={resizeMode} source={source} style={style}/>
+        }
+
         if(thumbnail){
             if(square){
 

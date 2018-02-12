@@ -46,9 +46,10 @@ class Promotions extends Component {
     }
 
     renderItem(item) {
-        const {location} = this.props;
+        const {location,navigation} = this.props;
         return <PromotionListItem
             item={item.item}
+            businessId={navigation.state.params.business._id}
             index={item.index}
             key={item.item._id}
             location={location}

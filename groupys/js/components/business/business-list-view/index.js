@@ -22,9 +22,8 @@ import {
 import styles from './styles'
 import Promotions from '../../promtions/index'
 import Products from '../../product/index'
-import {EditButton,BusinessHeader} from '../../../ui/index';
+import {EditButton,BusinessHeader,ImageController} from '../../../ui/index';
 import strings from '../../../i18n/i18n';
-import {CachedImage} from "react-native-img-cache";
 
 const promotions = require('../../../../images/promotion.png');
 const products = require('../../../../images/barcode.png');
@@ -71,8 +70,8 @@ export default class BusinessListView extends Component {
         const promotionButton = this.createPromotionsTag(item);
         const permissionsButton = this.createPermissionsTag(item);
         const productsButton  = this.createPoductsTag(item);
-        return ( <View>
-                <BusinessHeader color navigation={this.props.navigation} business={item.business}
+        return ( <View style={{marginBottom:10}}>
+                <BusinessHeader businesscolor navigation={this.props.navigation} business={item.business}
                                 categoryTitle={item.categoryTitle} businessLogo={item.business.logo}
                                 businessName={item.business.name} noMargin businessView
                                 editButton={editButton}/>
@@ -147,17 +146,17 @@ export default class BusinessListView extends Component {
     createBannerTag(item) {
         if (item.business.pictures && item.business.pictures.length > 0) {
             let picLength = item.business.pictures.length;
-            return <View style={{}}><CachedImage  style={[styles.bannerImageContainer, {width: StyleUtils.getWidth()}]}  resizeMode="cover"
+            return <View style={{}}><ImageController  style={[styles.bannerImageContainer, {width: StyleUtils.getWidth()}]}  resizeMode="cover"
                                            source={{uri: item.business.pictures[picLength -1].pictures[0]}}>
 
-            </CachedImage>
+            </ImageController >
 
             </View>
         }
-        return <CachedImage
+        return <ImageController
             style={{padding: 0, flex: -1, height: 300}}
             source={require('../../../../images/client_1.png')}>
-        </CachedImage>
+        </ImageController>
     }
 
     createPermissionsTag(item) {
@@ -165,7 +164,7 @@ export default class BusinessListView extends Component {
             return <TouchableOpacity onPress={() => this.showUsersRoles()}
                                      style={{margin: 3, flexDirection: 'row', alignItems: 'center',}}
                                      regular>
-                <CachedImage style={{tintColor: '#ff6400', marginLeft: 10, width: vh * 4, height: vh * 4}}
+                <ImageController style={{tintColor: '#ff6400', marginLeft: 10, width: vh * 4, height: vh * 4}}
                        source={permissions}/>
 
                 <Text style={{
@@ -185,7 +184,7 @@ export default class BusinessListView extends Component {
         if (this.checkPermission(item)) {
             return  <TouchableOpacity onPress={() => this.showProducts()}
                                       style={{margin: 3, flexDirection: 'row', alignItems: 'center',}} regular>
-                <CachedImage style={{tintColor: '#ff6400', marginLeft: 10, width: vh * 3, height: vh * 4}}
+                <ImageController style={{tintColor: '#ff6400', marginLeft: 10, width: vh * 3, height: vh * 4}}
                        source={products}/>
 
                 <Text style={{
@@ -222,7 +221,7 @@ export default class BusinessListView extends Component {
             return <TouchableOpacity onPress={() => this.showPromotions()}
                                      style={{margin: 3, flexDirection: 'row', alignItems: 'center',}}
                                      regular>
-                <CachedImage style={{tintColor: '#ff6400', marginLeft: 10, width: vh * 4, height: vh * 4}}
+                <ImageController style={{tintColor: '#ff6400', marginLeft: 10, width: vh * 4, height: vh * 4}}
                        source={promotions}/>
 
                 <Text style={{

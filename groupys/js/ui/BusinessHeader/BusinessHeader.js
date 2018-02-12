@@ -18,8 +18,8 @@ class BusinessHeader extends Component {
     }
 
     showBusiness() {
-        const {navigation, business} = this.props;
-        navigation.navigate("businessProfile", {businesses: business});
+        const {navigation, business,businessView} = this.props;
+        navigation.navigate("businessProfile", {businesses: business,fromBusiness:businessView});
     }
 
     showBusinessAccountDetails() {
