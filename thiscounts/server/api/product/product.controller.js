@@ -129,7 +129,7 @@ exports.scroll = function(req, res) {
   if(from_id === 'start')
     condition = `p._id > ''`;
 
-  let query = ` match (e:{_id:'${entity}'})-[:SELL|BRANDED]->(p:product)
+  let query = ` match (e{_id:'${entity}'})-[:SELL|BRANDED]->(p:product)
                 where ${condition}
                 return distinct p._id as _id`;
   graphModel.query_objects(Product, query,
@@ -296,5 +296,6 @@ exports.destroy = function (req, res) {
 };
 
 function handleError(res, err) {
+  console.error(err);
   return res.send(500, err);
 }

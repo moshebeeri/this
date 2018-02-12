@@ -317,7 +317,7 @@ function create_business_default_group(business) {
     business.groups.push(group._id);
     business.save((err) => {
       if(err) return console.error(err);
-      graphModel.owner_followers_follow_default_group(business.creator);
+      graphModel.owner_followers_follow_default_group(business.creator._id);
 
     });
   });
@@ -416,6 +416,7 @@ function createValidatedBusiness(business, callback) {
         }, function (err) {
           if (err) return console.error(err);
         });
+        console.log('createValidatedBusiness creating create_business_default_group');
         create_business_default_group(business);
         notifyOnAction(business);
         return callback(null, business);
