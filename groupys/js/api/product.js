@@ -37,7 +37,7 @@ class ProductsApi {
         return new Promise(async (resolve, reject) => {
             try {
                 let from = new Date();
-                const response = await fetch(`${server_host}/api/products/find/by/business/${id}`, {
+                const response = await fetch(`${server_host}/api/products/entity/scroll/${id}`  +'/start/down', {
                     method: 'GET',
                     headers: {
                         'Accept': 'application/json, text/plain, */*',
@@ -50,6 +50,9 @@ class ProductsApi {
                     return;
                 }
 
+                if(response.status > 400){
+                    reject(errors.APPLICATION_ERROR);
+                }
                 timer.logTime(from, new Date(), 'products', 'find/by/business');
                 let responseData = await response.json();
                 if(responseData.length > 0) {
