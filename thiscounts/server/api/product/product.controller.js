@@ -125,9 +125,9 @@ exports.scroll = function(req, res) {
   const scroll = req.params.scroll;
   if (scroll !== 'up' && scroll !== 'down')
     return res.status(400).send('scroll value may be only up or down');
-  let condition = scroll === 'up'? `c._id > '${from_id}'` : `c._id < '${from_id}'`;
+  let condition = scroll === 'up'? `_id > '${from_id}'` : `_id < '${from_id}'`;
   if(from_id === 'start')
-    condition = `c._id > ''`;
+    condition = `_id > ''`;
 
   let query = ` match (e:{_id:'${entity}'})-[:SELL|BRANDED]->(p:product)
                 where ${condition}
