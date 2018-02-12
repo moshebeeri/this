@@ -124,7 +124,7 @@ exports.scroll = function(req, res) {
 
   let condition = scroll === 'up'? `c._id > '${from_id}'` : `c._id < '${from_id}'`;
   if(from_id === 'start')
-    condition = `c._id > 0`;
+    condition = `c._id > ''`;
 
   let query = ` match (c:comment), (u:user), (g:group{_id:'${req.params.group}'}) 
                 where ((u)-[:COMMENTED]->(g)-[:COMMENTED]->()-[:COMMENTED]->(c) 
@@ -133,7 +133,6 @@ exports.scroll = function(req, res) {
                       )
                       AND ${condition}
                 return distinct c._id as _id`;
-  console.log(query);
   graphModel.query_objects(Comment, query,
     `order by c._id desc`,
     0, page_size, function (err, comments) {
