@@ -306,7 +306,6 @@ class UserApi {
                     return;
                 }
 
-                console.log('we are here')
 
                 timer.logTime(from, new Date(), 'user', 'update');
                 if (user.image) {
@@ -314,9 +313,10 @@ class UserApi {
                     if(!imagePath){
                         imagePath = user.image.path;
                     }
-                    entityUtils.doUpload(imagePath, user.image.mime, token, this.setUser.bind(this,dispatch,token), 'users', user);
+                   // entityUtils.doUpload(imagePath, user.image.mime, token, callback, 'users', user);
                 }
                 resolve(true);
+
             }
             catch (error) {
                 reject(errors.NETWORK_ERROR);

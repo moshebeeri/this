@@ -8,6 +8,8 @@ import strings from "../i18n/i18n"
 let userApi = new UserApi();
 let loginApi = new LoginAPI();
 let logger = new ActionLogger();
+import * as types from '../sega/segaActions';
+
 import  handler from './ErrorHandler'
 
 async function getUser(dispatch, token) {
@@ -99,42 +101,26 @@ export function changePassword(oldPassword, newPassword, navigation) {
     }
 }
 
-export function updateUser(newUser, navigation) {
-    return async function (dispatch, getState) {
-        const token = getState().authentication.token;
-        const user = getState().user.user;
-        try {
-            dispatch({
-                type: actions.SAVING_USER,
-            });
-            console.log('updating user')
-            await userApi.saveUserDetails(newUser,user._id,token,dispatch);
-            let updatedUser = await userApi.getUser(token);
-            simpleStore.save('user',updatedUser);
-            dispatch({
-                type: actions.UPSERT_SINGLE_USER,
-                item: updatedUser
-            });
-            dispatch({
-                type: actions.SET_USER,
-                user: updatedUser
-            });
-            if(navigation) {
-                navigation.goBack();
-            }
-            dispatch({
-                type: actions.SAVING_USER_DONE,
-            });
-            handler.handleSuccses(getState(),dispatch)
-        } catch (error) {
-            handler.handleError(error,dispatch,'updateUser')
+export function updateUser(newUser,getState) {
 
-            logger.actionFailed('users-updateUser')
-        }
+    return function (dispatch,getState) {
+        const token = getState().authentication.token
+        dispatch( {
+            type: types.SAVB_USER_REQUEST,
+            newUser: newUser,
+            token:token,
+        })
     }
+
 }
 
 
+export function upSertUserSuccsess(response){
+    return{
+        type:actions.SET_USER,
+        user:response
+    }
+}
 
 
 
@@ -207,7 +193,42 @@ async function updateUserToken(dispatch, token,user,fireBaseToken) {
     }
 }
 
+
+async function updateUserTask(dispatch, token,newUser) {
+
+    try {
+
+        dispatch({
+            type: actions.SAVING_USER,
+        });
+        console.log('updating user')
+        userApi.saveUserDetails(newUser, user._id, token, dispatch);
+        let updatedUser = await userApi.getUser(token);
+        simpleStore.save('user', updatedUser);
+        dispatch({
+            type: actions.UPSERT_SINGLE_USER,
+            item: newUser
+        });
+        dispatch({
+            type: actions.SET_USER,
+            user: newUser
+        });
+        if (navigation) {
+            navigation.goBack();
+        }
+        dispatch({
+            type: actions.SAVING_USER_DONE,
+        });
+
+        handler.handleSuccses(getState(), dispatch)
+    } catch (error) {
+        handler.handleError(error, dispatch, 'updateUser')
+        logger.actionFailed('users-updateUser')
+    }
+}
+
 export default {
     updateUserLocale,
-    updateUserToken
+    updateUserToken,
+    updateUserTask
 }

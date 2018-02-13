@@ -2,7 +2,9 @@
  * Created by roilandshut on 08/06/2017.
  */
 import FeedApi from "../api/feed";
+import getStore from "../store";
 import UserApi from "../api/user";
+const store = getStore();
 import BusinessApi from "../api/business";
 import PtomotionApi from "../api/promotion";
 import ActivityApi from "../api/activity";
@@ -12,6 +14,8 @@ import CollectionDispatcher from "./collectionDispatcher";
 import ActionLogger from './ActionLogger'
 import MainFeedReduxComperator from "../reduxComperators/MainFeedComperator"
 import handler from './ErrorHandler'
+import * as types from '../sega/segaActions';
+
 import * as errors from '../api/Errors'
 
 let feedApi = new FeedApi();
@@ -32,11 +36,7 @@ async function fetchFeedsFromServer(feeds, dispatch, token, user) {
             let id = keys[keys.length - 1];
             response = await feedApi.getAll('down', feeds[id].fid, token, user);
         }
-        // if(!getState().feeds.stopDispatchMaxFeed) {
-        //     dispatch({
-        //         type: actions.FEEDS_GET_NEXT_BULK_DONE,
-        //     });
-        // }
+
         console.log(response)
         if (!response)
             return;
@@ -155,51 +155,55 @@ export function setNextFeeds(feeds) {
         const user = getState().user.user
         if (!user)
             return
-        let showLoadingDone = false;
-        if (getState().feeds.nextBulkLoad) {
-            return;
-        }
-        if (feeds.length > 10) {
-            dispatch({
-                type: actions.FEEDS_GET_NEXT_BULK,
-            });
-        }
-        if (getState().feeds.maxFeedReturned) {
-            if(!getState().feeds.stopDispatchMaxFeed) {
-                dispatch({
-                    type: actions.FEEDS_GET_NEXT_BULK_DONE,
-                });
-            }
-            return;
-        }
-        if (_.isEmpty(feeds) && getState().feeds.firstTime) {
-            dispatch({
-                type: actions.FIRST_TIME_FEED,
-            });
-            console.log('first time feeds');
-            await fetchFeedsFromServer(feeds, dispatch, token, user)
-            showLoadingDone = true;
-        }
-        if (feeds && feeds.length > 0) {
-            let length = getState().feeds.feedView.length
-            let id = getState().feeds.feedView[length - 1]
-            dispatch({
-                type: actions.LAST_FEED_DOWN,
-                id: id,
-            });
-            await fetchFeedsFromServer(feeds, dispatch, token, user)
-        }
-        if (showLoadingDone && !getState().feeds.loadingDone) {
-            dispatch({
-                type: actions.FEED_LOADING_DONE,
-                loadingDone: true,
-            });
-        }
-        if(!getState().feeds.stopDispatchMaxFeed) {
-            dispatch({
-                type: actions.FEEDS_GET_NEXT_BULK_DONE,
-            });
-        }
+
+        dispatch({
+            type: types.FEED_SCROL_DOWN,
+            feeds: feeds,
+            token: token,
+            user:user,
+        });
+
+        // if (feeds.length > 10) {
+        //     dispatch({
+        //         type: actions.FEEDS_GET_NEXT_BULK,
+        //     });
+        // }
+        // if (getState().feeds.maxFeedReturned) {
+        //     if(!getState().feeds.stopDispatchMaxFeed) {
+        //         dispatch({
+        //             type: actions.FEEDS_GET_NEXT_BULK_DONE,
+        //         });
+        //     }
+        //     return;
+        // }
+        // if (_.isEmpty(feeds) && getState().feeds.firstTime) {
+        //     dispatch({
+        //         type: actions.FIRST_TIME_FEED,
+        //     });
+        //     console.log('first time feeds');
+        //     await fetchFeedsFromServer(feeds, dispatch, token, user)
+        //     showLoadingDone = true;
+        // }
+        // if (feeds && feeds.length > 0) {
+        //     let length = getState().feeds.feedView.length
+        //     let id = getState().feeds.feedView[length - 1]
+        //     dispatch({
+        //         type: actions.LAST_FEED_DOWN,
+        //         id: id,
+        //     });
+        //     await fetchFeedsFromServer(feeds, dispatch, token, user)
+        // }
+        // if (showLoadingDone && !getState().feeds.loadingDone) {
+        //     dispatch({
+        //         type: actions.FEED_LOADING_DONE,
+        //         loadingDone: true,
+        //     });
+        // }
+        // if(!getState().feeds.stopDispatchMaxFeed) {
+        //     dispatch({
+        //         type: actions.FEEDS_GET_NEXT_BULK_DONE,
+        //     });
+        // }
         handler.handleSuccses(getState(), dispatch)
     }
 }
@@ -345,6 +349,59 @@ export function stopReneder() {
         });
     }
 }
+
+export function loadingFeeds(){
+
+    return {
+        type: actions.FIRST_TIME_FEED,
+    }
+
+}
+
+export function loadingFeedsDone(){
+    return {
+        type: actions.FEED_LOADING_DONE,
+        loadingDone: true,
+    }
+}
+
+
+export function updateFeeds(feeds){
+    if(feeds){
+        let filteredFeeds = feeds.filter(feed => feedComperator.filterFeed(feed));
+        let collectionDispatcher = new CollectionDispatcher();
+        let disassemblerItems = filteredFeeds.map(item => assemblers.disassembler(item, collectionDispatcher));
+        collectionDispatcher.dispatchEvents(store.dispatch, updateBusinessCategory, token);
+        return {
+            type: actions.UPSERT_FEEDS_ITEMS,
+            items: disassemblerItems
+        }
+    }
+
+}
+import {put} from 'redux-saga/effects'
+
+export function* updateFeeds2(feeds){
+    if(feeds){
+        let filteredFeeds = feeds.filter(feed => feedComperator.filterFeed(feed));
+        let collectionDispatcher = new CollectionDispatcher();
+        let disassemblerItems = filteredFeeds.map(item => assemblers.disassembler(item, collectionDispatcher));
+        let keys = Object.keys(collectionDispatcher.events);
+        let eventType;
+        while(eventType = keys.pop()){
+            yield put( {
+                type: eventType,
+                item: collectionDispatcher.events[eventType]
+            });
+        }
+        yield put({
+            type: actions.UPSERT_FEEDS_ITEMS,
+            items: disassemblerItems
+        })
+    }
+}
+
+
 
 export default {
     nextLoad,

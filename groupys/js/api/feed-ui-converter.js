@@ -157,6 +157,9 @@ class FeedConverter {
         if (!user) {
             user = feed.activity.user;
         }
+        if(!user){
+            return undefined;
+        }
         let name = user.phone_number;
         if (user.name) {
             name = user.name;
