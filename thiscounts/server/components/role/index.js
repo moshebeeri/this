@@ -21,7 +21,7 @@ Role.createRole =
   let existing_query = `MATCH (user:user{_id:"${user}"})-[role:ROLE]->(entity{_id:"${entity}"}) return role`;
   let grunt_query = `MATCH (user:user{_id:"${user}"}), (entity{_id:"${entity}"})
                      CREATE (user)-[role:ROLE{name:"${role}"}]->(entity)`;
-  let set_query = `MATCH (user:user{_id:"${user}"})-[role:ROLE]->(entity{_id:"${entity}"}) set role.name=${role}`;
+  let set_query = `MATCH (user:user{_id:"${user}"})-[role:ROLE]->(entity{_id:"${entity}"}) set role.name='${role}'`;
 
   // console.log(`existing_query: ${existing_query}`);
   // console.log(`grunt_query: ${grunt_query}`);

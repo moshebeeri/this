@@ -110,11 +110,11 @@ function group_follow_group_activity(following, followed) {
   });
 }
 
-function group_follow_business_activity(following, followed) {
+function group_follow_business_activity(business_id, following_group_id) {
   sendActivity({
-    business: followed,
+    business: business_id,
     action: "group_follow",
-    actor_group: following,
+    actor_group: following_group_id,
     audience: ['SELF', 'FOLLOWERS']
   });
 }
@@ -188,7 +188,6 @@ exports.create_business_default_group = function (group, callback) {
           created: group.created
         }, function (err) {
           if (err) return callback(err);
-          console.log('create_business_default_group graphModel.reflected group');
           graphModel.relate_ids(group._id, 'CREATED_BY', group.creator);
           graphModel.relate_ids(group.creator, 'FOLLOW', group._id);
           graphModel.relate_ids(group.creator, 'GROUP_ADMIN', group._id);
