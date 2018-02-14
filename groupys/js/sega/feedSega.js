@@ -1,34 +1,46 @@
 import {call, put, takeLatest} from 'redux-saga/effects'
 import FeedApi from "../api/feed";
-import {loadingFeeds, loadingFeedsDone, updateFeeds2} from "../actions/feedsMain";
+import {loadingFeeds, loadingFeedsDone, updateFeeds, updateFeedsTop,scrolling,stopScrolling,renderFeed} from "../actions/feedsMain";
 import * as segaActions from './segaActions'
 
 let feedApi = new FeedApi();
 
 function* feedScrollDown(action) {
     try {
-        yield put(loadingFeeds());
+
         let response = {};
         if (_.isEmpty(action.feeds)) {
+            yield put(loadingFeeds());
             response = yield call(feedApi.getAll, 'down', 'start', action.token, action.user);
+            yield put(loadingFeedsDone());
         } else {
+            yield put(renderFeed());
+            yield put(scrolling());
             let keys = Object.keys(action.feeds);
-            let id = keys[keys.length - 1];
-            response = yield call(feedApi.getAll, 'down', action.feeds[id].fid, token, user);
+            let id = action.feeds[keys.length - 1].id;
+            response = yield call(feedApi.getAll, 'down', id, action.token, action.user);
+            yield put(stopScrolling());
         }
-
-        console.log(response);
-        yield* updateFeeds2(response);
+        yield* updateFeeds(response);
 
 
-        yield put(loadingFeedsDone());
     } catch (error) {
+    }
+}
 
+function* feedScrollUp(action) {
+    try {
+
+        let response = yield call(feedApi.getAll, 'up', action.id, token, user);
+        yield* updateFeedsTop(response);
+
+    } catch (error) {
     }
 }
 
 function* feedSega() {
     yield takeLatest(segaActions.FEED_SCROLL_DOWN, feedScrollDown);
+    yield takeLatest(segaActions.FEED_SCROLL_UP, feedScrollUp);
 }
 
 export default feedSega;

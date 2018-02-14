@@ -3,61 +3,73 @@ import * as actions from "../reducers/reducerActions";
 import ActionLogger from './ActionLogger'
 import  handler from './ErrorHandler'
 import SavedPromotionComperator from "../reduxComperators/SavedPromotionComperator"
+import * as types from '../sega/segaActions';
 
 
 let profileApi = new ProfilenApi();
 let logger = new ActionLogger();
 let savedPromotionComperator = new SavedPromotionComperator();
 
-export function setNextFeeds(feeds) {
+
+
+export function setNextFeeds() {
     return async function (dispatch, getState) {
         try {
             const token = getState().authentication.token;
             const user = getState().user.user;
+
+            const feeds = getState().myPromotions.feeds;
             if (!user)
                 return;
-            if (getState().myPromotions.lastCall) {
-                if (new Date().getTime() - new Date(getState().myPromotions.lastCall).getTime() < 20000) {
-                    return;
-                }
-            }
-            if (_.isEmpty(feeds) && getState().myPromotions.firstTime) {
-                dispatch({
-                    type: actions.SAVE_PROMOTION_FIRST_TIME_FEED,
-                });
-            }
-            let showLoadingDone = false;
-            if (_.isEmpty(feeds) && !getState().myPromotions.loadingDone) {
-                dispatch({
-                    type: actions.SAVED_FEED_LOADING_DONE,
-                    loadingDone: false,
-                });
-                showLoadingDone = true;
-            }
-            let response;
-            if (feeds && feeds.length > 0) {
-                response = await profileApi.fetch(token, feeds.length, feeds.length + 10)
-            } else {
-                response = await profileApi.fetch(token, 0, 10);
-            }
-            if (showLoadingDone && !getState().myPromotions.loadingDone) {
-                dispatch({
-                    type: actions.SAVED_FEED_LOADING_DONE,
-                    loadingDone: true,
-                });
-            }
-            if (response.length === 0) {
-                return;
-            }
+
             dispatch({
-                type: actions.UPSERT_SAVED_FEEDS,
-                item: response
+                type: types.SAVE_MYPROMOTIONS_REQUEST,
+                token: token,
+                feeds: feeds,
             });
-            handler.handleSuccses(getState(),dispatch)
         } catch (error) {
             handler.handleError(error, dispatch,'mypromotons-setNextFeeds')
             logger.actionFailed('mypromotons-setNextFeeds')
         }
+    }
+}
+
+export function stopReneder(){
+    return async function (dispatch) {
+
+        dispatch({
+            type: actions.SAVED_PROMOTION_STOP_RENDER,
+        });
+    }
+}
+export function setFirstTime() {
+    return async function (dispatch, getState) {
+        try {
+            const token = getState().authentication.token;
+            const user = getState().user.user;
+
+            const feeds = getState().myPromotions.feeds;
+            if (!user)
+                return;
+
+            if(!feeds ||  Object.keys(feeds).length ===0) {
+                dispatch({
+                    type: types.SAVE_MYPROMOTIONS_REQUEST,
+                    token: token,
+                    feeds: feeds,
+                });
+            }
+        } catch (error) {
+            handler.handleError(error, dispatch,'mypromotons-setNextFeeds')
+            logger.actionFailed('mypromotons-setNextFeeds')
+        }
+    }
+}
+
+export function setSavedPromotions(response){
+    return {
+        type: actions.UPSERT_SAVED_FEEDS,
+        item: response
     }
 }
 
