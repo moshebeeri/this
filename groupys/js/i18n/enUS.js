@@ -250,9 +250,9 @@ Realized                                      : "Realized",
 notAuthorizedMessage                          : "You are not Authorized To Accept Code",
 validateByEmail                               : "Email Validation Will be Sent",
 ConditionOutOfScope                           : "Promotion Cannot be Realized - out of date and time",
-PromotionFailedSavingMessage                  : "Temporally We were Unable to Save Promotion, Please try later or contact Us "
-
-
+PromotionFailedSavingMessage                  : "Temporally We were Unable to Save Promotion, Please try later or contact Us ",
+NoGiftSelected                                : "No Gift Selected",
+NoProductSelected                             : "No Product Selected"
 
 
 

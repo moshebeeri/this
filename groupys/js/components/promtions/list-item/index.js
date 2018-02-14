@@ -43,7 +43,7 @@ export default class PromotionListView extends Component {
         if (item.banner) {
             return <View style={[styles.promotionImageContainer, {width: StyleUtils.getWidth()}]}>
 
-                <Image resizeMode="cover" style={styles.promotion_image} source={{uri: item.banner.uri}}></Image>
+                <Image resizeMode="cover" style={styles.promotion_image} source={{uri: item.banner.uri}}/>
             </View>
         }
         return <View/>
@@ -65,7 +65,7 @@ export default class PromotionListView extends Component {
         const {location} = this.props;
         const item = feedUiConverter.createPromotionAttributes(promotionItem, promotionItem.type)
         if (!item) {
-            return <View></View>
+            return <View/>
         }
         const styles = this.createStyle();
         const result =

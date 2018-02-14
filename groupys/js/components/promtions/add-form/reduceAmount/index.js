@@ -82,14 +82,14 @@ export default class ReduceAmountComponent extends Component {
             </View>
             <View style={{flexDirection: 'row', justifyContent: 'center', alignItems: 'center'}}>
 
-                <View style={styles.inputPrecenComponent}>
+                <View style={styles.inputPercentComponent}>
                     <TextInput field={strings.Buy} value={price}
                                returnKeyType='next' ref="Buy $" refNext="Buy $"
                                keyboardType='numeric'
                                onSubmitEditing={this.focusNextField.bind(this, "Pay $")}
                                onChangeText={(value) => this.setBuy(value)} isMandatory={true}/>
                 </View>
-                <View style={styles.inputPrecenComponent}>
+                <View style={styles.inputPercentComponent}>
                     <TextInput field={strings.Pay} value={pay}
                                returnKeyType='done' ref="Pay $" refNext="Pay $"
                                keyboardType='numeric'

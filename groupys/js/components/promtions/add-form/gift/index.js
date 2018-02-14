@@ -1,15 +1,16 @@
 import React, {Component} from 'react';
 import {Keyboard, Platform, Text, View} from 'react-native'
 import styles from './styles'
-import {SelectButton, TextInput} from '../../../../ui/index';
+import {SelectButton} from '../../../../ui/index';
 import strings from "../../../../i18n/i18n"
 import StyleUtils from '../../../../utils/styleUtils';
 import {Thumbnail} from 'native-base';
 import ProductPreview from "../../../product/productPreview/index";
 
-export default class XPlusYComponent extends Component {
+export default class GiftComponent extends Component {
     constructor(props) {
         super(props);
+        this.state = {}
     }
 
     componentWillMount() {
@@ -27,6 +28,7 @@ export default class XPlusYComponent extends Component {
     }
 
     selectBuyProduct(product) {
+        this.setState({product: product});
         this.props.setState(
             {
                 product: product
@@ -72,12 +74,12 @@ export default class XPlusYComponent extends Component {
 
     setBuy(value) {
         let eligible = undefined;
-        if (this.props.state.x_plus_y && this.props.state.x_plus_y.values) {
-            eligible = this.props.state.x_plus_y.values.eligible;
+        if (this.props.state.gift && this.props.state.gift.values) {
+            eligible = this.props.state.gift.values.eligible;
         }
         this.props.setState({
             choose_distribution: true,
-            x_plus_y:
+            gift:
                 {
                     values: {
                         buy: value,
@@ -89,11 +91,11 @@ export default class XPlusYComponent extends Component {
 
     setEligible(value) {
         let buy = undefined;
-        if (this.props.state.x_plus_y && this.props.state.x_plus_y.values) {
-            buy = this.props.state.x_plus_y.values.buy;
+        if (this.props.state.gift && this.props.state.gift.values) {
+            buy = this.props.state.gift.values.buy;
         }
         this.props.setState({
-            x_plus_y:
+            gift:
                 {
                     values: {
                         buy: buy,
@@ -108,41 +110,28 @@ export default class XPlusYComponent extends Component {
     }
 
     render() {
-        let buyValue = undefined;
-        if (this.props.state.x_plus_y && this.props.state.x_plus_y.values) {
-            buyValue = this.props.state.x_plus_y.values.buy;
-        }
-        let eligibleValue = undefined;
-        if (this.props.state.x_plus_y && this.props.state.x_plus_y.values) {
-            eligibleValue = this.props.state.x_plus_y.values.eligible;
-        }
         return <View>
 
             <View style={[styles.textLayout, {width: StyleUtils.getWidth() - 15}]}>
-                <Text style={{color: '#FA8559', marginLeft: 8, marginRight: 8}}>{strings.XPlusY}</Text>
+                <Text style={{color: '#FA8559', marginLeft: 8, marginRight: 8}}>{strings.Gift}</Text>
             </View>
             <View style={{flexDirection: 'row', justifyContent: 'center', alignItems: 'center'}}>
-                <View style={styles.inputPercentComponent}>
-                    <TextInput field={strings.BuyAmount} value={buyValue}
-                               returnKeyType='next' ref="Buy Amount" refNext="Buy Amount"
-                               keyboardType='numeric'
-                               onSubmitEditing={this.focusNextField.bind(this, "Number of Gifts")}
-                               onChangeText={(value) => this.setBuy(value)} isMandatory={true}/>
-                </View>
+                <View style={{flex: 1.7, marginTop: 25}}><SelectButton ref="giftSelectProduct"
+                                                                       isMandatory={true}
+                                                                       selectedValue={this.props.state.product}
+                                                                       title={strings.SelectProduct}
+                                                                       action={this.showBuyProducts.bind(this, true)}/></View>
             </View>
             <ProductPreview product={this.props.state.product} />
 
             <View style={{flexDirection: 'row', justifyContent: 'center', alignItems: 'center'}}>
-                <View style={styles.inputPercentComponent}>
-                    <TextInput field={strings.NumberOfGifts} value={eligibleValue}
-                               returnKeyType='done' ref="Number of Gifts" refNext="Number of Gifts"
-                               keyboardType='numeric'
-                               onSubmitEditing={this.done.bind(this)}
-                               onChangeText={(value) => this.setEligible(value)} isMandatory={true}/>
-                </View>
+                <View style={{flex: 1.7, marginTop: 25}}><SelectButton ref="giftSelectGift"
+                                                                       isMandatory={true}
+                                                                       selectedValue={this.props.state.giftProduct}
+                                                                       title={strings.SelectGift}
+                                                                       action={this.showProducts.bind(this, true)}/></View>
             </View>
             <ProductPreview product={this.props.state.giftProduct} type='gift' />
-
         </View>
     }
 

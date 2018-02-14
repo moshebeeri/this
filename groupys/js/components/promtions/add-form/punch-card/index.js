@@ -5,6 +5,7 @@ import styles from './styles'
 import {SelectButton, TextInput} from '../../../../ui/index';
 import strings from "../../../../i18n/i18n"
 import StyleUtils from '../../../../utils/styleUtils';
+import ProductPreview from "../../../product/productPreview/index";
 
 export default class PunchCardComponent extends Component {
     constructor(props) {
@@ -61,15 +62,6 @@ export default class PunchCardComponent extends Component {
         })
     }
 
-    createProductView() {
-        if (this.props.state.product) {
-            let productName = this.props.state.product.name
-            return <View style={styles.inputTextLayout}>
-                <Text style={{color: '#FA8559', marginLeft: 8, marginRight: 8}}>Promotion on: {productName}</Text>
-            </View>
-        }
-        return undefined
-    }
     done(){
         Keyboard.dismiss();
     }
@@ -90,7 +82,7 @@ export default class PunchCardComponent extends Component {
                                                                        title={strings.SelectProduct}
                                                                        action={this.showBuyProducts.bind(this, true)}/></View>
 
-                <View style={styles.inputPrecenComponent}>
+                <View style={styles.inputPercentComponent}>
                     <TextInput field={strings.NumberOfPunches} value={numberOfPunches}
                                returnKeyType='done' ref="2" refNext="2"
                                keyboardType='numeric'
@@ -101,7 +93,7 @@ export default class PunchCardComponent extends Component {
 
 
             </View>
-            {this.createProductView()}
+            <ProductPreview product={this.props.state.product} />
 
         </View>
     }
