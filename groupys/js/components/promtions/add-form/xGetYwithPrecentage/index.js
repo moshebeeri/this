@@ -5,6 +5,8 @@ import styles from './styles'
 import {SelectButton, TextInput} from '../../../../ui/index';
 import strings from "../../../../i18n/i18n";
 import StyleUtils from '../../../../utils/styleUtils';
+import {Thumbnail} from 'native-base';
+import ProductPreview from "../../../product/productPreview/index";
 
 export default class XPlusYOffComponent extends Component {
     constructor(props) {
@@ -82,35 +84,9 @@ export default class XPlusYOffComponent extends Component {
         }
     }
 
-    createProductView() {
-        if (this.props.state.product) {
-            let productName = this.props.state.product.name
-            return <View style={styles.textLayout}>
-                <Text style={{
-                    color: '#FA8559',
-                    marginLeft: 8,
-                    marginRight: 8
-                }}>{strings.PromotionOn}: {productName}</Text>
-            </View>
-        }
-        return undefined
-    }
-
-    createProductGiftView() {
-        if (this.props.state.giftProduct) {
-            let productName = this.props.state.giftProduct.name;
-            return <View style={styles.textLayout}>
-                <Text
-                    style={{color: '#FA8559', marginLeft: 8, marginRight: 8}}>{strings.DiscountOn}: {productName}</Text>
-            </View>
-        }
-        return undefined
-    }
 
     render() {
-        let productGiftView = this.createProductGiftView();
-        let productView = this.createProductView();
-        let discount = ''
+        let discount = '';
         if (this.props.state.x_plus_n_percent_off && this.props.state.x_plus_n_percent_off.eligible) {
             discount = this.props.state.x_plus_n_percent_off.eligible;
         }
@@ -129,14 +105,15 @@ export default class XPlusYOffComponent extends Component {
                                                                        action={this.showBuyProducts.bind(this, true)}/></View>
 
             </View>
-            {productView}
+            <ProductPreview product={this.props.state.product} />
+
             <View style={{flexDirection: 'row', justifyContent: 'center', alignItems: 'center'}}>
                 <View style={{flex: 1.7, marginTop: 25}}><SelectButton ref="xgetyselectOmProduct" isMandatory
                                                                        selectedValue={this.props.state.giftProduct}
                                                                        title={strings.SelectOn}
                                                                        action={this.showProducts.bind(this, true)}/></View>
 
-                <View style={styles.inputPrecenComponent}>
+                <View style={styles.inputPercentComponent}>
                     <TextInput field={strings.PercentageOff} value={discount}
                                returnKeyType='done' ref="2" refNext="2"
                                keyboardType='numeric'
@@ -146,7 +123,7 @@ export default class XPlusYOffComponent extends Component {
                 </View>
 
             </View>
-            {productGiftView}
+            <ProductPreview product={this.props.state.giftProduct} type='gift' />
 
         </View>
     }

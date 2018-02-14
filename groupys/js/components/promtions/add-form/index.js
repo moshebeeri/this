@@ -10,6 +10,7 @@ import * as businessAction from "../../../actions/business";
 import PercentComponent from "./percent/index";
 import PunchCardComponent from "./punch-card/index";
 import XPlusYComponent from "./xPlusY/index";
+import GiftComponent from "./gift/index";
 import XPlusYOffComponent from "./xGetYwithPrecentage/index";
 import XForYComponent from "./xForY/index";
 import ReduceAmountComponent from "./reduceAmount/index";
@@ -19,7 +20,7 @@ import {DatePicker, FormHeader, ImagePicker, SelectButton, SimplePicker, Spinner
 import strings from "../../../i18n/i18n"
 import StyleUtils from '../../../utils/styleUtils'
 
-const {width, height} = Dimensions.get('window')
+const {width, height} = Dimensions.get('window');
 let promotionApi = new PromotionApi();
 const types = [
         {
@@ -37,6 +38,10 @@ const types = [
         {
             value: 'X+Y',
             label: strings.XPlusY
+        },
+        {
+            value: 'GIFT',
+            label: strings.Gift
         },
         {
             value: 'REDUCED_AMOUNT',
@@ -150,7 +155,7 @@ class AddPromotion extends Component {
             }
             if (this.props.navigation.state.params.group) {
                 let groups = new Array();
-                groups.push(this.props.navigation.state.params.group)
+                groups.push(this.props.navigation.state.params.group);
                 this.setState({
                     distribution: 'GROUP',
                     groups: groups
@@ -209,7 +214,7 @@ class AddPromotion extends Component {
                         entity: {
                             business: this.getBusinessId()
                         }
-                    }
+                    };
                     break;
             }
         }
@@ -353,37 +358,42 @@ class AddPromotion extends Component {
             switch (this.state.type) {
                 case 'PERCENT':
                     discountForm = <PercentComponent navigation={this.props.navigation} api={this} state={this.state}
-                                                     ref={"precent"} setState={this.setState.bind(this)}/>
+                                                     ref={"precent"} setState={this.setState.bind(this)}/>;
                     break;
                 case 'PUNCH_CARD':
                     discountForm = <PunchCardComponent navigation={this.props.navigation} api={this} state={this.state}
-                                                       ref={"PUNCH_CARD"} setState={this.setState.bind(this)}/>
+                                                       ref={"PUNCH_CARD"} setState={this.setState.bind(this)}/>;
                     break;
                 case 'X+Y':
                     discountForm =
                         <XPlusYComponent ref={"X+Y"} navigation={this.props.navigation} api={this} state={this.state}
-                                         setState={this.setState.bind(this)}/>
+                                         setState={this.setState.bind(this)}/>;
+                    break;
+                case 'GIFT':
+                    discountForm =
+                        <GiftComponent ref={"GIFT"} navigation={this.props.navigation} api={this} state={this.state}
+                                         setState={this.setState.bind(this)}/>;
                     break;
                 case 'X+N%OFF':
                     discountForm = <XPlusYOffComponent ref={"X+N%OFF"} navigation={this.props.navigation} api={this}
                                                        state={this.state}
-                                                       setState={this.setState.bind(this)}/>
+                                                       setState={this.setState.bind(this)}/>;
                     break;
                 case 'X_FOR_Y':
                     discountForm =
                         <XForYComponent ref={"X_FOR_Y"} navigation={this.props.navigation} api={this} state={this.state}
-                                        setState={this.setState.bind(this)}/>
+                                        setState={this.setState.bind(this)}/>;
                     break;
                 case 'REDUCED_AMOUNT':
                     discountForm =
                         <ReduceAmountComponent ref={"REDUCED_AMOUNT"} navigation={this.props.navigation} api={this}
                                                state={this.state}
-                                               setState={this.setState.bind(this)}/>
+                                               setState={this.setState.bind(this)}/>;
                     break;
                 case 'HAPPY_HOUR':
                     discountForm = <HappyHourComponent ref={"HAPPY_HOUR"} navigation={this.props.navigation} api={this}
                                                        state={this.state}
-                                                       setState={this.setState.bind(this)}/>
+                                                       setState={this.setState.bind(this)}/>;
                     break;
             }
         }

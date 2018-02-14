@@ -120,10 +120,7 @@ class Promotions extends Component {
     }
 
     shouldComponentUpdate() {
-        if (this.props.currentScreen === 'Promotions') {
-            return true;
-        }
-        return false;
+        return this.props.currentScreen === 'Promotions';
     }
 }
 

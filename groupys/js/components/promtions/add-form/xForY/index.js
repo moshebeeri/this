@@ -4,6 +4,8 @@ import styles from './styles'
 import {SelectButton, TextInput} from '../../../../ui/index';
 import strings from "../../../../i18n/i18n"
 import StyleUtils from '../../../../utils/styleUtils';
+import {Thumbnail} from 'native-base';
+import ProductPreview from "../../../product/productPreview/index";
 
 export default class XForYComponent extends Component {
     constructor(props) {
@@ -87,22 +89,7 @@ export default class XForYComponent extends Component {
         })
     }
 
-    createProductView() {
-        if (this.props.state.product) {
-            let productName = this.props.state.product.name
-            return <View style={styles.textLayout}>
-                <Text style={{
-                    color: '#FA8559',
-                    marginLeft: 8,
-                    marginRight: 8
-                }}>{strings.PromotionOn}: {productName}</Text>
-            </View>
-        }
-        return undefined
-    }
-
     render() {
-        let product = this.createProductView();
         let pay = '';
         if (this.props.state.x_for_y && this.props.state.x_for_y.values && this.props.state.x_for_y.values.pay) {
             pay = this.props.state.x_for_y.values.pay;
@@ -122,14 +109,14 @@ export default class XForYComponent extends Component {
                                                                        isMandatory title={strings.SelectProduct}
                                                                        action={this.showBuyProducts.bind(this, true)}/></View>
 
-                <View style={styles.inputPrecenComponent}>
+                <View style={styles.inputPercentComponent}>
                     <TextInput field={strings.BuyAmount} value={eligible}
                                returnKeyType='next' ref="Buy Amount" refNext="Buy Amount"
                                keyboardType='numeric'
                                onSubmitEditing={this.focusNextField.bind(this, "Pay $")}
                                onChangeText={(value) => this.setBuyAmount(value)} isMandatory={true}/>
                 </View>
-                <View style={styles.inputPrecenComponent}>
+                <View style={styles.inputPercentComponent}>
                     <TextInput field={strings.PayAmount} value={pay}
                                returnKeyType='done' ref="Pay $" refNext="Pay $"
                                keyboardType='numeric'
@@ -137,8 +124,7 @@ export default class XForYComponent extends Component {
                                onChangeText={(value) => this.setPay(value)} isMandatory={true}/>
                 </View>
             </View>
-            {product}
-
+            <ProductPreview product={this.props.state.product} />
         </View>
     }
 
