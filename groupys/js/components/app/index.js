@@ -21,8 +21,10 @@ import {
     showCompoenent
 } from "../../selectors/appSelector";
 import * as mainAction from "../../actions/mainTab";
+import * as feedAction from "../../actions/feedsMain";
 import * as userAction from "../../actions/user";
 import * as businessActions from "../../actions/business";
+import * as myPromotionsActions from "../../actions/myPromotions";
 import * as groupsActions from "../../actions/groups";
 import * as notificationsActions from "../../actions/notifications";
 import {createSelector} from "reselect";
@@ -178,13 +180,15 @@ class ApplicationManager extends Component {
 
     }
     onChangeTab(tab) {
-        const{notificationAction} = this.props;
+        const{notificationAction,myPromotionsAction,feedAction} = this.props;
         if (tab.i === 0) {
             if (I18nManager.isRTL && (Platform.OS === 'android')) {
                 logger.screenVisited('notification')
                 notificationAction.onEndReached();
             } else {
+
                 logger.screenVisited('feed')
+                feedAction.setTopFeeds();
                 PageRefresher.visitedFeed();
                 this.setState({
                     activeTab: 'feed'
@@ -196,6 +200,7 @@ class ApplicationManager extends Component {
                 logger.screenVisited('groups')
                 PageRefresher.visitedGroups();
             } else {
+                myPromotionsAction.setNextFeeds();
                 logger.screenVisited('savedPromotion')
                 this.setState({
                     activeTab: 'savedPromotion'
@@ -206,6 +211,7 @@ class ApplicationManager extends Component {
         if (tab.i === 2) {
             if (I18nManager.isRTL && (Platform.OS === 'android')) {
                 logger.screenVisited('savedPromotion')
+                myPromotionsAction.setNextFeeds();
                 this.setState({
                     activeTab: 'savedPromotion'
                 })
@@ -219,7 +225,7 @@ class ApplicationManager extends Component {
         }
         if (tab.i === 3) {
             if (I18nManager.isRTL && (Platform.OS === 'android')) {
-                logger.screenVisited('feed')
+                feedAction.setTopFeeds();
                 PageRefresher.visitedFeed();
                 this.setState({
                     activeTab: 'feed'
@@ -265,6 +271,7 @@ class ApplicationManager extends Component {
             showSearchResults, businesses, businessActions, groups, groupsActions,showSearchGroupResults
         } = this.props;
         console.log('rendering main');
+        console.log(this.state.activeTab);
         if (!showComponent) {
             return <View></View>
         }
@@ -459,6 +466,8 @@ export default connect(
         businessActions: bindActionCreators(businessActions, dispatch),
         groupsActions: bindActionCreators(groupsActions, dispatch),
         notificationAction:bindActionCreators(notificationsActions, dispatch),
+        myPromotionsAction:bindActionCreators(myPromotionsActions, dispatch),
+        feedAction:bindActionCreators(feedAction, dispatch),
     })
 )(ApplicationManager);
 
