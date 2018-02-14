@@ -75,7 +75,7 @@ export default class TermsOfUse extends Component {
 
                 <TouchableOpacity style={{marginTop:10,width: StyleUtils.getWidth() - 30, alignItems: 'center', justifyContent: 'center', height: 20}}
                                   onPress={() => Linking.openURL(`${server_host}/api/users/terms/1.0` )}>
-                    <Text style={{color: 'blue'}}>{strings.TermsofUse}</Text>
+                    <Text style={{color: 'blue'}}>{strings.TermsOfUse}</Text>
                 </TouchableOpacity>
 
 
@@ -127,7 +127,7 @@ export default class TermsOfUse extends Component {
                     <Text style={{color: 'skyblue',
                         fontWeight: 'bold',
                         fontStyle: 'normal',
-                        fontSize: 18}}>{strings.IAGREE.toUpperCase()}</Text>
+                        fontSize: 18}}>{strings.IAgree.toUpperCase()}</Text>
                 </TouchableOpacity>
             </View>
 

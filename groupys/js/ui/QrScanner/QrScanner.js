@@ -64,7 +64,7 @@ export default class BusinessFollow extends Component {
 
         if(showAssigmentMessage){
             return (<View style={{backgroundColor:'transparent',alignItems:'center',justifyContent:'flex-start',flex:1}}>
-                <Text>{strings.AssignmenofQrcCodesucceeded}</Text>
+                <Text>{strings.AssignmentOfQRCodeSucceeded}</Text>
             </View>)
 
         }
@@ -85,7 +85,7 @@ export default class BusinessFollow extends Component {
 
         if(showAssigmentMessageFailed){
             return (<View style={{backgroundColor:'transparent',alignItems:'center',justifyContent:'flex-start',flex:1}}>
-                <Text>{strings.AssignmenofQrcCodefailed}</Text>
+                <Text>{strings.AssignmentOfQRCodeFailed}</Text>
             </View>)
 
         }
