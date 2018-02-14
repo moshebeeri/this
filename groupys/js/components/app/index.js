@@ -24,6 +24,7 @@ import * as mainAction from "../../actions/mainTab";
 import * as userAction from "../../actions/user";
 import * as businessActions from "../../actions/business";
 import * as groupsActions from "../../actions/groups";
+import * as notificationsActions from "../../actions/notifications";
 import {createSelector} from "reselect";
 import {NavigationActions} from "react-navigation";
 import '../../conf/global';
@@ -177,9 +178,11 @@ class ApplicationManager extends Component {
 
     }
     onChangeTab(tab) {
+        const{notificationAction} = this.props;
         if (tab.i === 0) {
             if (I18nManager.isRTL && (Platform.OS === 'android')) {
                 logger.screenVisited('notification')
+                notificationAction.onEndReached();
             } else {
                 logger.screenVisited('feed')
                 PageRefresher.visitedFeed();
@@ -222,6 +225,7 @@ class ApplicationManager extends Component {
                     activeTab: 'feed'
                 })
             } else {
+                notificationAction.onEndReached();
                 logger.screenVisited('notification')
             }
         }
@@ -454,6 +458,7 @@ export default connect(
         userActions: bindActionCreators(userAction, dispatch),
         businessActions: bindActionCreators(businessActions, dispatch),
         groupsActions: bindActionCreators(groupsActions, dispatch),
+        notificationAction:bindActionCreators(notificationsActions, dispatch),
     })
 )(ApplicationManager);
 

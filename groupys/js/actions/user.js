@@ -106,7 +106,7 @@ export function updateUser(newUser,getState) {
     return function (dispatch,getState) {
         const token = getState().authentication.token
         dispatch( {
-            type: types.SAVB_USER_REQUEST,
+            type: types.SAVE_USER_REQUEST,
             newUser: newUser,
             token:token,
         })

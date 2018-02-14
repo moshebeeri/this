@@ -28,7 +28,7 @@ function* feedScrollDown(action) {
 }
 
 function* feedSega() {
-    yield takeLatest(segaActions.FEED_SCROL_DOWN, feedScrollDown);
+    yield takeLatest(segaActions.FEED_SCROLL_DOWN, feedScrollDown);
 }
 
 export default feedSega;

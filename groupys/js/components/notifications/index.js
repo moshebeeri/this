@@ -27,20 +27,11 @@ class Notification extends Component {
         super(props);
     }
 
-    componentWillMount() {
-        const {actions} = this.props;
-        actions.onEndReached();
-    }
+
 
     renderItem(item) {
         const {groupActions, actions, navigation} = this.props;
         return <NotificationListView navigation={navigation} item={item} actions={actions} groupActions={groupActions}/>
-    }
-    shouldComponentUpdate(){
-        if(this.props.currentScreen ==='home' && (this.props.selectedTab === 3 || this.props.selectedTab === 0)){
-            return true;
-        }
-        return false;
     }
 
     render() {
@@ -58,26 +49,11 @@ class Notification extends Component {
     }
 }
 
-/*
-                   <YouTube
-                    videoId="BY6VntTmtIo"   // The YouTube video ID
-                    play={true}             // control playback of video with true/false
-                    fullscreen={false}       // control whether the video should play in fullscreen or inline
-                    loop={false}             // control whether the video should loop when ended
-//
-//                    onReady={e => this.setState({ isReady: true })}
-//                    onChangeState={e => this.setState({ status: e.state })}
-//                    onChangeQuality={e => this.setState({ quality: e.quality })}
-//                    onError={e => this.setState({ error: e.error })}
-//
-style={{ alignSelf: 'stretch', height: 300 }}
-/>
-* */
 export default connect(
     state => ({
         notification: state.notification,
-        selectedTab:state.mainTab.selectedTab,
-        currentScreen:state.render.currentScreen,
+        // selectedTab:state.mainTab.selectedTab,
+        // currentScreen:state.render.currentScreen,
     }),
     (dispatch) => ({
         actions: bindActionCreators(notificationAction, dispatch),

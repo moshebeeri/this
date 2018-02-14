@@ -151,13 +151,13 @@ export function fetchUsersFollowers() {
 
 export function setNextFeeds(feeds) {
     return async function (dispatch, getState) {
-        const token = getState().authentication.token
-        const user = getState().user.user
+        const token = getState().authentication.token;
+        const user = getState().user.user;
         if (!user)
-            return
+            return;
 
         dispatch({
-            type: types.FEED_SCROL_DOWN,
+            type: types.FEED_SCROLL_DOWN,
             feeds: feeds,
             token: token,
             user:user,
