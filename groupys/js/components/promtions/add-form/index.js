@@ -441,7 +441,7 @@ class AddPromotion extends Component {
             <SimplePicker ref="TyoePicker" list={Distribution} itemTitle={strings.DistributionType}
                           defaultHeader={strings.ChooseDistribution}
                           isMandatory onValueSelected={this.selectDistributionType.bind(this)}/>
-        </View>
+        </View>;
         let button = undefined;
         let selectedGroup = undefined;
         if (this.state.distribution === 'GROUP') {
@@ -505,7 +505,6 @@ class AddPromotion extends Component {
 
                     {this.createCoverImageComponnent()}
                     <View style={[styles.textLayout, {width: StyleUtils.getWidth() - 15}]}>
-
                         <Text style={{color: '#FA8559', marginLeft: 8, marginRight: 8}}>{strings.Details}</Text>
                     </View>
                     <View style={[styles.inputTextLayout, {width: StyleUtils.getWidth() - 15}]}>
