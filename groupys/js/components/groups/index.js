@@ -42,7 +42,7 @@ class Groups extends Component {
         navigation.navigate('GroupFeed', {chat:true,group: item, role: 'admin'});
     }
     shouldComponentUpdate(){
-        if(this.props.currentScreen ==='home' && (this.props.selectedTab === 2 || this.props.selectedTab === 1)){
+        if(this.props.currentScreen ==='home' && this.props.activeTab ==='groups'){
             return true;
         }
         return false;

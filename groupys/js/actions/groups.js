@@ -7,8 +7,9 @@ import * as assemblers from "./collectionAssembler";
 import * as actions from "../reducers/reducerActions";
 import CollectionDispatcher from "./collectionDispatcher";
 import ActionLogger from './ActionLogger'
-import * as errors from '../api/Errors'
 import GroupsComperator from "../reduxComperators/GroupsComperator"
+import handler from './ErrorHandler'
+import * as types from '../sega/segaActions';
 let groupsApi = new GroupsApi();
 let feedApi = new FeedApi();
 let promotionApi = new PtomotionApi();
@@ -16,23 +17,14 @@ let activityApi = new ActivityApi();
 let userApi = new UserApi();
 let logger = new ActionLogger();
 let groupsComperator = new GroupsComperator();
-import  handler from './ErrorHandler'
-async function getAll(dispatch, token) {
-    try {
-        let response = await groupsApi.getAll(token);
 
-        if (response.length > 0) {
-            if(groupsComperator.shouldUpdateGroups(response)) {
-                dispatch({
-                    type: actions.UPSERT_GROUP,
-                    item: response,
-                });
-            }
-        }
-    } catch (error) {
-        handler.handleError(error,dispatch,'groupsApi.getAll')
-        logger.actionFailed('groupsApi.getAll')
-    }
+async function getAll(dispatch, token) {
+    dispatch({
+        type: types.SAVE_GROUPS_REQUEST,
+        token:token
+
+    });
+
 }
 
 export function clearUnreadPosts(group) {
@@ -43,8 +35,6 @@ export function clearUnreadPosts(group) {
         });
     }
 }
-
-
 
 async function getByBusinessId(dispatch, bid, token) {
     try {
@@ -57,7 +47,7 @@ async function getByBusinessId(dispatch, bid, token) {
             });
         }
     } catch (error) {
-        handler.handleError(error,dispatch,'groupsApi.getByBusinessId')
+        handler.handleError(error, dispatch, 'groupsApi.getByBusinessId')
         logger.actionFailed('groupsApi.getByBusinessId')
     }
 }
@@ -70,7 +60,7 @@ async function getUserFollowers(dispatch, token) {
             followers: users
         });
     } catch (error) {
-        handler.handleError(error,dispatch,'userApi.getUserFollowers')
+        handler.handleError(error, dispatch, 'userApi.getUserFollowers')
         logger.actionFailed('userApi.getUserFollowers')
     }
 }
@@ -109,7 +99,7 @@ export function acceptInvatation(group) {
                 });
             })
         } catch (error) {
-            handler.handleError(error,dispatch,'groupsApi.acceptInvatation')
+            handler.handleError(error, dispatch, 'groupsApi.acceptInvatation')
             logger.actionFailed('groupsApi.acceptInvatation')
         }
     }
@@ -121,7 +111,7 @@ export function touch(groupid) {
             const token = getState().authentication.token;
             groupsApi.touch(groupid, token);
         } catch (error) {
-            handler.handleError(error,dispatch,'groupsApi.touch')
+            handler.handleError(error, dispatch, 'groupsApi.touch')
             logger.actionFailed('groupsApi.touch')
         }
     }
@@ -135,13 +125,13 @@ export function createGroup(group, navigation) {
             });
             const token = getState().authentication.token;
             await groupsApi.createGroup(group, uploadGroupPic, token);
-            await getAll(dispatch, token);
+            await (dispatch, token);
             dispatch({
                 type: actions.GROUP_SAVING_DONE,
             });
             navigation.goBack();
         } catch (error) {
-            handler.handleError(error,dispatch,'createGroup')
+            handler.handleError(error, dispatch, 'createGroup')
             logger.actionFailed('groupsApi.createGroup')
         }
     }
@@ -161,7 +151,7 @@ export function updateGroup(group, navigation) {
             });
             navigation.goBack();
         } catch (error) {
-            handler.handleError(error,dispatch,'groupsApi.createGroup')
+            handler.handleError(error, dispatch, 'groupsApi.createGroup')
             logger.actionFailed('groupsApi.createGroup')
         }
     }
@@ -225,7 +215,7 @@ export function setNextFeeds(feeds, token, group) {
                 })
             }
         } catch (error) {
-            handler.handleError(error,dispatch,'groups-setNextFeeds')
+            handler.handleError(error, dispatch, 'groups-setNextFeeds')
             logger.actionFailed('groups-setNextFeeds')
         }
         if (showLoadingDone && !getState().groups.loadingDone[group._id]) {
@@ -251,7 +241,7 @@ export function sendMessage(groupId, message) {
         try {
             groupsApi.meesage(groupId, message, token)
         } catch (error) {
-            handler.handleError(error,dispatch,'groups-sendMessage')
+            handler.handleError(error, dispatch, 'groups-sendMessage')
             logger.actionFailed('groups-sendMessage')
         }
     }
@@ -269,7 +259,7 @@ function createMessage(message, user) {
     }
 }
 
-async function fetchTopList(id, token, group, dispatch,user) {
+async function fetchTopList(id, token, group, dispatch, user) {
     try {
         if (!id) {
             return;
@@ -288,21 +278,19 @@ async function fetchTopList(id, token, group, dispatch,user) {
             return assemblers.disassembler(item, collectionDispatcher)
         });
         collectionDispatcher.dispatchEvents(dispatch)
-
-
         dispatch({
             type: actions.UPSERT_GROUP_FEEDS_TOP,
             groupId: group._id,
             groupFeed: disassemblerItems,
-            user:user
+            user: user
         });
         dispatch({
-            type:actions.UPDATE_FEED_GROUP_UNREAD,
-            feeds:response,
-            user:user,
+            type: actions.UPDATE_FEED_GROUP_UNREAD,
+            feeds: response,
+            user: user,
         })
     } catch (error) {
-        handler.handleError(error,dispatch,'groups-fetchTopList')
+        handler.handleError(error, dispatch, 'groups-fetchTopList')
         logger.actionFailed('groups-fetchTopList')
     }
 }
@@ -314,7 +302,7 @@ export function setFeeds(group, feeds) {
     return async function (dispatch, getState) {
         const token = getState().authentication.token;
         const user = getState().user.user;
-        await fetchTopList(feeds[0].id, token, group, dispatch,user)
+        await fetchTopList(feeds[0].id, token, group, dispatch, user)
     }
 }
 
@@ -330,7 +318,7 @@ export function fetchTop(feeds, token, group) {
             showTopLoader: true,
         });
         const user = getState().user.user;
-        await fetchTopList(feeds[0].id, token, group, dispatch,user);
+        await fetchTopList(feeds[0].id, token, group, dispatch, user);
         dispatch({
             type: actions.GROUP_FEED_SHOWTOPLOADER,
             groupId: group._id,
@@ -349,7 +337,7 @@ export function like(id) {
             });
             await userApi.like(id, token);
         } catch (error) {
-            handler.handleError(error,dispatch,'groups-like')
+            handler.handleError(error, dispatch, 'groups-like')
             logger.actionFailed('groups-like')
         }
     }
@@ -365,34 +353,32 @@ export const unlike = (id) => {
                 id: id
             });
         } catch (error) {
-            handler.handleError(error,dispatch,'groups-unlike')
+            handler.handleError(error, dispatch, 'groups-unlike')
             logger.actionFailed('groups-unlike')
         }
     }
 };
 
-export function saveFeed(id,navigation,feed) {
-    return async function (dispatch,getState) {
+export function saveFeed(id, navigation, feed) {
+    return async function (dispatch, getState) {
         try {
             dispatch({
                 type: actions.SAVE,
                 id: id
             });
             let savedInstance = await promotionApi.save(id);
-
-            navigation.navigate('realizePromotion', {item: feed,id:savedInstance._id})
+            navigation.navigate('realizePromotion', {item: feed, id: savedInstance._id})
             await  promotionApi.getAll();
-            handler.handleSuccses(getState(),dispatch)
-
+            handler.handleSuccses(getState(), dispatch)
         } catch (error) {
-            handler.handleError(error,dispatch,'groups-saveFeed')
+            handler.handleError(error, dispatch, 'groups-saveFeed')
             logger.actionFailed('groups-saveFeed')
         }
     }
 }
 
 export function shareActivity(id, activityId, users, token) {
-    return async function (dispatch,getState) {
+    return async function (dispatch, getState) {
         try {
             users.forEach(function (user) {
                 activityApi.shareActivity(user, activityId, token)
@@ -402,9 +388,9 @@ export function shareActivity(id, activityId, users, token) {
                 id: id,
                 shares: users.length
             });
-            handler.handleSuccses(getState(),dispatch)
+            handler.handleSuccses(getState(), dispatch)
         } catch (error) {
-            handler.handleError(error,dispatch,'groups-shareActivity')
+            handler.handleError(error, dispatch, 'groups-shareActivity')
             logger.actionFailed('groups-shareActivity')
         }
     }
@@ -430,14 +416,15 @@ export function refresh(id, currentSocialState) {
                 social_state: response,
                 id: id
             });
-            handler.handleSuccses(getState(),dispatch)
+            handler.handleSuccses(getState(), dispatch)
             // await userApi.like(id, token);
         } catch (error) {
-            handler.handleError(error,dispatch,'groups-refresh')
+            handler.handleError(error, dispatch, 'groups-refresh')
             logger.actionFailed('groups-refresh')
         }
     }
 }
+
 export function searchGroup(group) {
     return function (dispatch, getState) {
         const token = getState().authentication.token;
@@ -445,16 +432,13 @@ export function searchGroup(group) {
     }
 }
 
-
 async function dispatchSearchGroups(dispatch, business, token) {
     try {
         dispatch({type: actions.SHOW_SEARCH_SPIN, searching: true});
-
         let response = await groupsApi.searchGroup(business, token);
         dispatch({type: actions.SEARCH_GROUPS, groups: response});
-
     } catch (error) {
-        handler.handleError(error,dispatch,'dispatchSearchGroups')
+        handler.handleError(error, dispatch, 'dispatchSearchGroups')
     }
 }
 
@@ -464,10 +448,16 @@ export function joinGroup(groupId) {
             const token = getState().authentication.token;
             await groupsApi.join(groupId, token);
             dispatch({type: actions.RESET_FOLLOW_FORM})
-
         } catch (error) {
-            handler.handleError(error,dispatch,'joinGroup');
+            handler.handleError(error, dispatch, 'joinGroup');
         }
+    }
+}
+
+export function setGroups(response) {
+    return {
+        type: actions.UPSERT_GROUP,
+        item: response,
     }
 }
 
