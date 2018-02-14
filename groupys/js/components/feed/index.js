@@ -10,58 +10,60 @@ import * as userAction from "../../actions/user";
 import * as activityAction from "../../actions/activity";
 import Icon2 from "react-native-vector-icons/Ionicons";
 import {createSelector} from "reselect";
-import {View,I18nManager} from 'react-native';
+import {I18nManager, View} from 'react-native';
 import Tasks from '../../tasks/tasks'
+import {Fab,} from 'native-base';
 
 var Analytics = require('react-native-firebase-analytics');
-
-
-import {Fab,} from 'native-base';
 
 class Feed extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            showFab:true,
+            showFab: true,
+            renderNow: true
         }
     }
 
     componentWillMount() {
-        const {feeds, actions, firstTime,user} = this.props;
-        Tasks.mainFeedTaskStart();
-        if (firstTime) {
-            actions.setNextFeeds(feeds);
-            this.props.userActions.fetchUsersFollowers();
-        }
+        const {feeds, actions} = this.props;
+        actions.setNextFeeds(feeds);
+        this.props.userActions.fetchUsersFollowers();
     }
 
-
-    shouldComponentUpdate(){
-        if(this.props.currentScreen ==='home' && (this.props.selectedTab === 0 || this.props.selectedTab === 3)){
-               return true;
+    shouldComponentUpdate() {
+        if (this.props.currentScreen === 'home' && this.props.activeTab === 'feed') {
+            // if (this.props.shouldRender || this.state.renderNow) {
+            //     this.props.actions.stopRender();
+            //     this.setState({renderNow:false})
+            //     return true;
+            // }
+            return true;
         }
-        Tasks.mainFeddTaskstop();
         return false;
     }
 
-    componentWillUnmount(){
+    componentWillUnmount() {
         Tasks.mainFeddTaskstop();
     }
+
     navigateToAdd() {
         this.props.navigation.navigate('PostForm')
     }
-    showFab(show){
+
+
+
+    showFab(show) {
         this.setState({
-            showFab:show
+            showFab: show
         })
     }
 
     render() {
-        const {activityAction,navigation, loadingDone, showTopLoader, feeds, userFollower, actions, token, user, location,nextBulkLoad} = this.props;
+        const {activityAction, navigation, loadingDone, showTopLoader, feeds, userFollower, actions, token, user, location, nextBulkLoad} = this.props;
         let icon = <Icon2 active size={40} name="md-create"/>;
-
         return (
-            <View style={{flex: 1,backgroundColor:'#cccccc'}}>
+            <View style={{flex: 1, backgroundColor: '#cccccc'}}>
 
                 <GenericFeedManager
                     navigation={navigation}
@@ -81,7 +83,7 @@ class Feed extends Component {
                     ItemDetail={GenericFeedItem}>
 
                 </GenericFeedManager>
-                {this.state.showFab  && <Fab
+                {this.state.showFab && <Fab
 
                     direction="right"
                     active={false}
@@ -100,23 +102,22 @@ class Feed extends Component {
 
 const mapStateToProps = state => {
     return {
-        loadingDone:state.feeds.loadingDone,
-        firstTime:state.feeds.firstTime,
+        loadingDone: state.feeds.loadingDone,
+        shouldRender: state.feeds.shouldRender,
+        firstTime: state.feeds.firstTime,
         updated: state.feeds.updated,
         renderFeed: state.feeds.renderFeed,
         nextBulkLoad: state.feeds.nextBulkLoad,
         token: state.authentication.token,
-        showTopLoader:state.feeds.showTopLoader,
+        showTopLoader: state.feeds.showTopLoader,
         userFollower: state.user.followers,
         user: state.user.user,
         feeds: getFeeds(state),
         location: state.phone.currentLocation,
-        selectedTab:state.mainTab.selectedTab,
-        currentScreen:state.render.currentScreen,
-
+        selectedTab: state.mainTab.selectedTab,
+        currentScreen: state.render.currentScreen,
     }
 };
-
 export default connect(
     mapStateToProps,
     (dispatch) => ({

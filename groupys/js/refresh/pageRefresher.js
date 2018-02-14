@@ -20,12 +20,11 @@ let visitedList = ['feed', 'groups', 'businesses'];
 import * as actions from "../reducers/reducerActions";
 class PageRefresher {
     constructor() {
-        pageSync.createPage('feed', pageSync.createStdAverageRefresh('feed', 10, 360000), this.setMainFeedRefresh.bind(this));
+      //  pageSync.createPage('feed', pageSync.createStdAverageRefresh('feed', 10, 360000), this.setMainFeedRefresh.bind(this));
         pageSync.createPage('groups', pageSync.createStdAverageRefresh('groups', 10, 60000), this.updateGroups.bind(this));
         pageSync.createPage('businesses', pageSync.createStdAverageRefresh('businesses', 10, 60000), this.updateBusinesses.bind(this));
         pageSync.createPage('notification', pageSync.createStdAverageRefresh('notification', 10, 60000), this.updateNotification.bind(this));
         pageSync.createPage('user', pageSync.createStdAverageRefresh('user', 10, 60000), this.updateUser.bind(this));
-        pageSync.createPage('myPromotions', pageSync.createStdAverageRefresh('myPromotions', 10, 60000), this.updateMyPromotions.bind(this));
 
     }
 
@@ -37,12 +36,7 @@ class PageRefresher {
         }
     }
 
-    updateMyPromotions() {
-        let token = store.getState().authentication.token;
-        if (token ) {
-            myPromotionAction.fetchTopList(token, store.dispatch )
-        }
-    }
+
 
     async updateUserFireBase(fireBaseToken) {
         let token = store.getState().authentication.token;
@@ -80,7 +74,8 @@ class PageRefresher {
 
             this.checkUploadPromotionPictures(store.getState().promotions.promotionPictures,token)
             this.checkUploadPictures(store.getState().businesses.businessPictures,token)
-            business.getAll(store.dispatch, token);
+            this.checkUploadProductsPictures(store.getState().products.productsPictures,token)
+           // business.getAll(store.dispatch, token);
         }
     }
 
@@ -92,6 +87,19 @@ class PageRefresher {
             });
             store.dispatch({
                 type: actions.BUSINESS_CLEAR_PIC,
+
+            });
+        }
+
+    }
+
+    checkUploadProductsPictures(products,token){
+        if(products.length > 0){
+            products.forEach(product => {
+                entityUtils.uploadPicture('products', product.product, token,product.productResponse)
+            });
+            store.dispatch({
+                type: actions.PRODUCTS_CLEAR_PIC,
 
             });
         }
@@ -112,16 +120,6 @@ class PageRefresher {
 
     }
 
-    setMainFeedRefresh() {
-        if (store.getState().feeds.feedView && store.getState().feeds.feedView.length > 0) {
-            let token = store.getState().authentication.token;
-            let user = store.getState().user.user;
-            let id = store.getState().feeds.feedView[0];
-            if (token && user) {
-                feedAction.fetchTopList(id, token, user, store.dispatch);
-            }
-        }
-    }
 
     addBusinessPromotion(businessId) {
         if (!visitedList.includes('promotion_' + businessId,)) {
@@ -182,8 +180,7 @@ class PageRefresher {
     }
 
     visitedFeed() {
-        Tasks.mainFeedTaskStart();
-        pageSync.visited('feed')
+        //pageSync.visited('feed')
     }
 
     visitedGroups() {
@@ -209,6 +206,29 @@ class PageRefresher {
         if (visitedList.includes('feed' + item.id,)) {
             pageSync.visited('feed' + item.id)
             this.checkRefreshFeedItem(item);
+        }
+    }
+
+    createPromotionUpdate(item,businessId) {
+        if (!visitedList.includes('promotion' + item._id,)) {
+            pageSync.createPage('promotion' + item._id, pageSync.createStdAverageRefresh('promotion' + item._id, 2, 7200000), this.updateBusinessPromotion.bind(this, item,businessId));
+            visitedList.push('promotion' + item._id);
+        }
+    }
+
+
+    updateBusinessPromotion(item,businessId){
+        let token = store.getState().authentication.token;
+        if (token) {
+            promotionAction.refershBusinessPromotion(item,businessId,token,store.dispatch );
+        }
+    }
+
+
+    visitedBusinessPromotion(itemId) {
+        if (visitedList.includes('promotion' + itemId,)) {
+            pageSync.visited('promotion' + itemId)
+
         }
     }
 

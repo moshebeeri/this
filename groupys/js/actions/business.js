@@ -9,8 +9,12 @@ import PromotionApi from "../api/promotion";
 import * as actions from "../reducers/reducerActions";
 import EntityUtils from "../utils/createEntity";
 import FormUtils from "../utils/fromUtils";
-import  handler from './ErrorHandler'
+import handler from './ErrorHandler'
 import BusinessComperator from "../reduxComperators/BusinessComperator"
+import * as errors from '../api/Errors'
+import ActionLogger from './ActionLogger'
+import * as types from '../sega/segaActions';
+
 const BTClient = require('react-native-braintree-xplat');
 let businessApi = new BusinessApi();
 let userApi = new UserApi();
@@ -19,30 +23,7 @@ let promotionApi = new PromotionApi();
 let entityUtils = new EntityUtils();
 let pricingApi = new PricingApi();
 let businessComperator = new BusinessComperator();
-import * as errors from '../api/Errors'
-import ActionLogger from './ActionLogger'
 let logger = new ActionLogger();
-
-
-
-async function getAll(dispatch, token) {
-    try {
-        let response = await businessApi.getAll(token)
-
-        if (response.length > 0) {
-            if(businessComperator.shouldUpdateBusinesses(response)) {
-                dispatch({
-                    type: actions.UPSERT_MY_BUSINESS,
-                    item: response
-                });
-            }
-        }
-    } catch (error) {
-
-        handler.handleError(error,dispatch,'getAll-businesses')
-        logger.actionFailed("business_getAll")
-    }
-}
 
 async function get(dispatch, token, id) {
     try {
@@ -55,7 +36,7 @@ async function get(dispatch, token, id) {
             });
         }
     } catch (error) {
-        handler.handleError(error,dispatch,'get - business')
+        handler.handleError(error, dispatch, 'get - business')
         logger.actionFailed("business_get");
     }
 }
@@ -70,8 +51,8 @@ async function getBusinessCategories(dispatch, gid, token) {
             catId: gid
         });
     } catch (error) {
-        handler.handleError(error,dispatch,'getBusinessCategories')
-        logger.actionFailed("business_get_Categories",gid);
+        handler.handleError(error, dispatch, 'getBusinessCategories')
+        logger.actionFailed("business_get_Categories", gid);
     }
 }
 
@@ -83,8 +64,8 @@ async function dispatchSearchBusiness(dispatch, business, token) {
         dispatch({type: actions.SEARCH_BUSINESS, businesses: response});
         dispatch({type: actions.SHOW_SEARCH_SPIN, searching: false})
     } catch (error) {
-        handler.handleError(error,dispatch,'dispatchSearchBusiness')
-        logger.actionFailed("business_search_business",business);
+        handler.handleError(error, dispatch, 'dispatchSearchBusiness')
+        logger.actionFailed("business_search_business", business);
     }
 }
 
@@ -105,7 +86,7 @@ async function dispatchFollowByQrcode(dispatch, barcode, token) {
         }
         dispatch({type: actions.SHOW_SEARCH_SPIN, searching: false})
     } catch (error) {
-        handler.handleError(error,dispatch,'dispatchFollowByQrcode')
+        handler.handleError(error, dispatch, 'dispatchFollowByQrcode')
         logger.actionFailed("business_search_by_qrcode");
     }
 }
@@ -117,11 +98,12 @@ export function searchBusiness(business) {
     }
 }
 
-export function showSearchForm(searchType,searchPlaceHolder) {
+export function showSearchForm(searchType, searchPlaceHolder) {
     return function (dispatch) {
-        dispatch({type: actions.SEARCH_PARAMS, searchType: searchType,searchPlaceHolder:searchPlaceHolder})
+        dispatch({type: actions.SEARCH_PARAMS, searchType: searchType, searchPlaceHolder: searchPlaceHolder})
     }
 }
+
 export function followByQrCode(barcode) {
     return function (dispatch, getState) {
         const token = getState().authentication.token;
@@ -132,30 +114,6 @@ export function followByQrCode(barcode) {
 export function showCamera() {
     return function (dispatch, getState) {
         dispatch({type: actions.SHOW_CAMERA, cameraOn: true})
-    }
-}
-
-export function onEndReached() {
-    return async function (dispatch, getState) {
-        const token = getState().authentication.token;
-        dispatch({
-            type: actions.BUSSINESS_LOADING,
-        });
-        try {
-            let businesses = await businessApi.getAll(token);
-            if(businessComperator.shouldUpdateBusinesses(businesses)){
-                dispatch({
-                    type: actions.UPSERT_MY_BUSINESS,
-                    item: businesses
-                });
-            }
-        } catch (error) {
-            handler.handleError(error,dispatch,'business_getAll')
-            logger.actionFailed("business_getAll")
-        }
-        dispatch({
-            type: actions.BUSSINESS_LOADING_DONE,
-        });
     }
 }
 
@@ -174,10 +132,9 @@ export function followBusiness(businessId) {
             const token = getState().authentication.token;
             await businessApi.followBusiness(businessId, token);
             dispatch({type: actions.RESET_FOLLOW_FORM})
-
         } catch (error) {
-            handler.handleError(error,dispatch,'followBusiness')
-            logger.actionFailed("business_followBusiness",businessId)
+            handler.handleError(error, dispatch, 'followBusiness')
+            logger.actionFailed("business_followBusiness", businessId)
         }
     }
 }
@@ -188,8 +145,8 @@ export function unFollowBusiness(businessId) {
             const token = getState().authentication.token;
             await businessApi.unFollowBusiness(businessId, token);
         } catch (error) {
-            handler.handleError(error,dispatch,'unFollowBusiness')
-            logger.actionFailed("business_followBusiness",businessId)
+            handler.handleError(error, dispatch, 'unFollowBusiness')
+            logger.actionFailed("business_followBusiness", businessId)
         }
     }
 }
@@ -201,8 +158,8 @@ export function groupFollowBusiness(groupid, businessId, navigation) {
             await businessApi.groupFollowBusiness(groupid, businessId, token);
             navigation.goBack();
         } catch (error) {
-            handler.handleError(error,dispatch,'groupFollowBusiness')
-            logger.actionFailed("business_groupFollowBusiness",businessId)
+            handler.handleError(error, dispatch, 'groupFollowBusiness')
+            logger.actionFailed("business_groupFollowBusiness", businessId)
         }
     }
 }
@@ -232,8 +189,8 @@ export function setBusinessUsers(businessId) {
                 businessId: businessId
             });
         } catch (error) {
-            handler.handleError(error,dispatch,'setBusinessUsers')
-            logger.actionFailed("users_getBusinessUsers",businessId);
+            handler.handleError(error, dispatch, 'setBusinessUsers')
+            logger.actionFailed("users_getBusinessUsers", businessId);
         }
     }
 }
@@ -255,8 +212,8 @@ export function setBusinessProducts(businessId) {
                 });
             }
         } catch (error) {
-            handler.handleError(error,dispatch,'setBusinessProducts')
-            logger.actionFailed("product_findByBusinessId",businessId);
+            handler.handleError(error, dispatch, 'setBusinessProducts')
+            logger.actionFailed("product_findByBusinessId", businessId);
         }
     }
 }
@@ -278,12 +235,12 @@ export function setBusinessPromotions(businessId) {
                 });
             }
         } catch (error) {
-            handler.handleError(error,dispatch,'setBusinessPromotions')
+            handler.handleError(error, dispatch, 'setBusinessPromotions')
             dispatch({
                 type: actions.PROMOTION_LOADING_DONE,
                 businessId: businessId
             });
-            logger.actionFailed("promotion_findByBusinessId",businessId);
+            logger.actionFailed("promotion_findByBusinessId", businessId);
         }
     }
 }
@@ -296,13 +253,13 @@ async function updateBusinessPromotions(businessId, token, dispatch) {
             businessesPromotions: promotions,
             businessId: businessId
         });
-    }catch (error){
-        if(error === errors.NETWORK_ERROR) {
+    } catch (error) {
+        if (error === errors.NETWORK_ERROR) {
             dispatch({
                 type: actions.NETWORK_IS_OFFLINE,
             });
         }
-        logger.actionFailed("promotion_getAllByBusinessId",businessId);
+        logger.actionFailed("promotion_getAllByBusinessId", businessId);
     }
 }
 
@@ -321,34 +278,28 @@ export function saveBusiness(business, navigation) {
                 type: actions.SAVING_BUSINESS,
             });
             const token = getState().authentication.token;
-
-            let createdBusiness =  await entityUtils.create('businesses', business, token);
-
-
+            let createdBusiness = await entityUtils.create('businesses', business, token);
             createdBusiness.pictures = [];
             let pictures = [];
-            if(business.image.path) {
+            if (business.image.path) {
                 pictures.push(business.image.path);
-                createdBusiness.pictures.push({pictures:pictures});
-            }else{
+                createdBusiness.pictures.push({pictures: pictures});
+            } else {
                 pictures.push(business.image.uri);
-                createdBusiness.pictures.push({pictures:pictures});
+                createdBusiness.pictures.push({pictures: pictures});
             }
-
-            if(business.logoImage.path){
+            if (business.logoImage.path) {
                 createdBusiness.logo = business.logoImage.path;
-            }else{
+            } else {
                 createdBusiness.logo = business.logoImage.uri;
-
             }
             dispatch({
                 type: actions.BUSINESS_UPLOAD_PIC,
-                item:{businessResponse:createdBusiness, business:business}
+                item: {businessResponse: createdBusiness, business: business}
             })
-
             dispatch({
                 type: actions.UPSERT_MY_BUSINESS_SINGLE,
-                item: {business:createdBusiness}
+                item: {business: createdBusiness}
             });
             dispatch({
                 type: actions.SELECT_BUSINESS,
@@ -362,14 +313,12 @@ export function saveBusiness(business, navigation) {
                 templateBusiness: {},
             });
             navigation.goBack();
-
-
         } catch (error) {
-             handler.handleError(error,dispatch,'saveBusiness')
+            handler.handleError(error, dispatch, 'saveBusiness')
             dispatch({
                 type: actions.SAVING_BUSINESS_DONE,
             });
-            logger.actionFailed("create_business",business);
+            logger.actionFailed("create_business", business);
         }
     }
 }
@@ -383,15 +332,15 @@ export function updateBusiness(business, navigation) {
             const token = getState().authentication.token;
             let createdBusiness = await entityUtils.update('businesses', business, token, business._id);
             let businesses = await businessApi.getAll(token);
-
             let uploadPic = false;
             createdBusiness.pictures = [];
             let pictures = [];
             let coverPicsNumber = 0;
-            if(createdBusiness.pictures){
+            if (createdBusiness.pictures) {
                 coverPicsNumber = createdBusiness.pictures.length;
-            };
-            if( coverPicsNumber === 0 || ( createdBusiness.pictures[coverPicsNumber -1].pictures[0].path !== business.image.uri || createdBusiness.pictures[coverPicsNumber -1].pictures[0].path !== business.image.path)) {
+            }
+            ;
+            if (coverPicsNumber === 0 || ( createdBusiness.pictures[coverPicsNumber - 1].pictures[0].path !== business.image.uri || createdBusiness.pictures[coverPicsNumber - 1].pictures[0].path !== business.image.path)) {
                 uploadPic = true;
                 if (business.image.path) {
                     pictures.push(business.image.path);
@@ -401,8 +350,7 @@ export function updateBusiness(business, navigation) {
                     createdBusiness.pictures.push({pictures: pictures});
                 }
             }
-
-            if( business.logoImage && (!createdBusiness.logo ||  (createdBusiness.logo !==  business.logoImage.path || createdBusiness.logo !==  business.logoImage.uri ))){
+            if (business.logoImage && (!createdBusiness.logo || (createdBusiness.logo !== business.logoImage.path || createdBusiness.logo !== business.logoImage.uri ))) {
                 uploadPic = true;
                 if (business.logoImage.path) {
                     createdBusiness.logo = business.logoImage.path;
@@ -410,8 +358,7 @@ export function updateBusiness(business, navigation) {
                     createdBusiness.logo = business.logoImage.uri;
                 }
             }
-
-            if(uploadPic) {
+            if (uploadPic) {
                 dispatch({
                     type: actions.BUSINESS_UPLOAD_PIC,
                     item: {businessResponse: createdBusiness, business: business}
@@ -430,28 +377,8 @@ export function updateBusiness(business, navigation) {
             });
             navigation.goBack();
         } catch (error) {
-             handler.handleError(error,dispatch,'update_business')
-            logger.actionFailed("update_business",business);
-        }
-    }
-}
-
-export function updateBusinesStatuss() {
-    return async function (dispatch, getState) {
-        try {
-
-            const token = getState().authentication.token;
-            let updatedBusiness = await businessApi.getAll(token);
-            if(businessComperator.shouldUpdateBusinesses(updatedBusiness)) {
-                dispatch({
-                    type: actions.UPSERT_MY_BUSINESS,
-                    item: updatedBusiness
-                });
-            }
-
-        } catch (error) {
-             handler.handleError(error,dispatch,'updateBusinesStatuss')
-            logger.actionFailed("update_business",business);
+            handler.handleError(error, dispatch, 'update_business')
+            logger.actionFailed("update_business", business);
         }
     }
 }
@@ -475,8 +402,8 @@ export function setBusinessQrCode(business) {
                 qrcodeSource: response.qrcode
             });
         } catch (error) {
-             handler.handleError(error,dispatch,'setBusinessQrCode')
-            logger.actionFailed("business_getBusinessQrCodeImage",business);
+            handler.handleError(error, dispatch, 'setBusinessQrCode')
+            logger.actionFailed("business_getBusinessQrCodeImage", business);
         }
     }
 }
@@ -520,7 +447,7 @@ export function doPaymentTransaction(amount) {
                 });
             }
         } catch (error) {
-             handler.handleError(error,dispatch,'doPaymentTransaction')
+            handler.handleError(error, dispatch, 'doPaymentTransaction')
             dispatch({
                 type: actions.PAYMENT_SUCCSESS,
                 message: 'Payment Failed',
@@ -538,7 +465,6 @@ export function resetPaymentForm() {
     }
 }
 
-
 export function checkFreeTier(business) {
     return async function (dispatch, getState) {
         try {
@@ -546,7 +472,7 @@ export function checkFreeTier(business) {
                 type: actions.SAVING_BUSINESS,
             });
             const token = getState().authentication.token;
-            if(!business.pricing) {
+            if (!business.pricing) {
                 await pricingApi.createBusinessPricing(business._id, token);
                 let businesses = await businessApi.getAll(token);
                 dispatch({
@@ -554,9 +480,8 @@ export function checkFreeTier(business) {
                     item: businesses
                 });
             }
-
         } catch (error) {
-             handler.handleError(error,dispatch,'checkFreeTier')
+            handler.handleError(error, dispatch, 'checkFreeTier')
         }
     }
 }
@@ -569,6 +494,7 @@ export function saveBusinessTemplate(templateBusiness) {
         });
     }
 }
+
 export function resetForm() {
     return async function (dispatch) {
         dispatch({
@@ -578,17 +504,86 @@ export function resetForm() {
     }
 }
 
-export function resetSave(){
+//////////// MOVE TO SEGA ACTIONS ////////////////////////////
+export function resetSave() {
     return async function (dispatch) {
         dispatch({
             type: actions.SAVING_BUSINESS_DONE,
         });
     }
-
 }
 
+async function getAll(dispatch, token) {
+    dispatch({
+        type: types.UPDATE_BUSINESS_REQUEST,
+        token: token,
+    })
+}
 
+export function updateBusinesses(response) {
+    if (response.length > 0) {
+        if (businessComperator.shouldUpdateBusinesses(response)) {
+            return {
+                type: actions.UPSERT_MY_BUSINESS,
+                item: response
+            }
+        }
+    }
+}
 
+export function setBusinessCategory(response, business) {
+    business.categoryTitle = response;
+    return {
+        type: actions.UPSERT_MY_BUSINESS_SINGLE,
+        item: business
+    }
+}
+
+export function businessLoading() {
+    return {
+        type: actions.BUSSINESS_LOADING,
+    }
+}
+
+export function businessLoadingDone() {
+    return {
+        type: actions.BUSSINESS_LOADING_DONE,
+    }
+}
+
+export function onEndReached() {
+    return async function (dispatch, getState) {
+        const token = getState().authentication.token;
+        dispatch({
+            type: types.UPDATE_BUSINESS_REQUEST_FIRST_TIME,
+            token: token,
+        })
+    }
+}
+
+export function updateBusinesStatuss() {
+    return async function (dispatch, getState) {
+        const token = getState().authentication.token;
+        dispatch({
+            type: types.UPDATE_BUSINESS_REQUEST,
+            token: token,
+        })
+    }
+}
+
+export function updateBusinesCategory(item) {
+    return async function (dispatch, getState) {
+        const token = getState().authentication.token;
+        let locale = FormUtils.getLocale();
+
+        dispatch({
+            type: types.UPDATE_BUSINESS_CATEGORY_REQUEST,
+            token: token,
+            business:item,
+            locale:locale
+        })
+    }
+}
 
 export default {
     getAll,

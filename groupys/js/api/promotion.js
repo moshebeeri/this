@@ -266,9 +266,14 @@ class PromotionApi {
                     reject(errors.UN_AUTHOTIZED_ACCESS);
                     return;
                 }
-                timer.logTime(from, new Date(), 'promotions', 'id');
+
                 let responseData = await response.json();
-                resolve(responseData);
+                if(promotionComperator.filterPromotion(responseData)) {
+                    timer.logTime(from, new Date(), 'promotions', 'id');
+
+                    resolve(responseData);
+                }
+                resolve('')
             }
             catch (error) {
                 reject(errors.NETWORK_ERROR);
@@ -280,7 +285,7 @@ class PromotionApi {
         return new Promise(async (resolve, reject) => {
             try {
                 let from = new Date();
-                const response = await this.timeout(20000,fetch(`${server_host}/api/promotions/list/by/business/` + id, {
+                const response = await this.timeout(20000,fetch(`${server_host}/api/promotions/list/by/business/` + id+ '/start/down', {
                     method: 'GET',
                     headers: {
                         'Accept': 'application/json, text/plain, */*',
@@ -293,6 +298,9 @@ class PromotionApi {
                     return;
                 }
 
+                if(response.status > 400){
+                    reject(errors.APPLICATION_ERROR);
+                }
                 let responseData = await response.json();
                 if(responseData.length > 0) {
                     responseData = responseData.filter(promotion => promotionComperator.filterPromotion(promotion));

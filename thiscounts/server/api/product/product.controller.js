@@ -125,8 +125,11 @@ exports.scroll = function(req, res) {
   const scroll = req.params.scroll;
   if (scroll !== 'up' && scroll !== 'down')
     return res.status(400).send('scroll value may be only up or down');
-  let condition = scroll === 'up'? `p._id < '${from_id}'` : `p._id > '${from_id}'`;
-  let query = ` match (e:{_id:'${entity}'})-[:SELL|BRANDED]->(p:product)
+  let condition = scroll === 'up'? `p._id > '${from_id}'` : `p._id < '${from_id}'`;
+  if(from_id === 'start')
+    condition = `p._id > ''`;
+
+  let query = ` match (e{_id:'${entity}'})-[:SELL|BRANDED]->(p:product)
                 where ${condition}
                 return distinct p._id as _id`;
   graphModel.query_objects(Product, query,
@@ -293,5 +296,6 @@ exports.destroy = function (req, res) {
 };
 
 function handleError(res, err) {
+  console.error(err);
   return res.send(500, err);
 }

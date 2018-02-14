@@ -15,6 +15,7 @@ router.delete('/:id', auth.isAuthenticated(), controller.destroy);
 
 router.post('/group/chat/scroll/:group/:from/:scroll', auth.isAuthenticated(), controller.scroll);
 router.post('/find/:skip/:limit', auth.isAuthenticated(), controller.find);
+
 router.post('/group/chat/:group/:skip/:limit', auth.isAuthenticated(), controller.group_chat);
 router.post('/conversed/:type/:skip/:limit', auth.isAuthenticated(), controller.conversed);
 

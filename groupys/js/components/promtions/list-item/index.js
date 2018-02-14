@@ -20,7 +20,9 @@ import stylesPortrate from './styles'
 import FeedUiConverter from '../../../api/feed-ui-converter'
 import StyleUtils from '../../../utils/styleUtils'
 import FormUtils from "../../../utils/fromUtils";
+import InViewPort from '../../../utils/inviewport'
 import {PromotionHeader, SocialState, SubmitButton} from '../../../ui/index';
+import PageRefresher from '../../../refresh/pageRefresher'
 import strings from "../../../i18n/i18n"
 
 let feedUiConverter = new FeedUiConverter();
@@ -41,21 +43,34 @@ export default class PromotionListView extends Component {
         if (item.banner) {
             return <View style={[styles.promotionImageContainer, {width: StyleUtils.getWidth()}]}>
 
-                <Image resizeMode="cover" style={styles.promotion_image} source={{uri: item.banner.uri}}></Image>
+                <Image resizeMode="cover" style={styles.promotion_image} source={{uri: item.banner.uri}}/>
             </View>
         }
         return <View/>
+    }
+    componentWillMount() {
+        const {item,businessId} = this.props;
+        PageRefresher.createPromotionUpdate(item,businessId);
+    }
+
+    visited(visible){
+        const {item} = this.props;
+        if(visible){
+            PageRefresher.visitedBusinessPromotion(item._id);
+        }
+
     }
 
     createPromotion(promotionItem) {
         const {location} = this.props;
         const item = feedUiConverter.createPromotionAttributes(promotionItem, promotionItem.type)
         if (!item) {
-            return <View></View>
+            return <View/>
         }
         const styles = this.createStyle();
         const result =
-            <View key={promotionItem._id} style={[styles.promotion_container, {marginTop:10,width: StyleUtils.getWidth()}]}>
+
+            <InViewPort onChange={this.visited.bind(this)}  key={promotionItem._id} style={[styles.promotion_container, {marginTop:10,width: StyleUtils.getWidth()}]}>
 
 
                 {this.createImageTage(item, styles)}
@@ -114,7 +129,7 @@ export default class PromotionListView extends Component {
 
 
                 </View>
-            </View>
+            </InViewPort>
         return result;
     }
 

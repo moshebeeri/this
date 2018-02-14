@@ -1,16 +1,18 @@
 import PromotionsApi from "../api/promotion";
 import ProductApi from "../api/product";
+import FeedApi from "../api/feed";
 import * as actions from "../reducers/reducerActions";
-import EntityUtils from "../utils/createEntity";
 import ActionLogger from './ActionLogger'
+import handler from './ErrorHandler'
+import PromotionComperator from "../reduxComperators/PromotionComperator"
 
+let promotionComperator = new PromotionComperator();
 let promotionApi = new PromotionsApi();
 let productApi = new ProductApi();
-let entityUtils = new EntityUtils();
+let feedApi = new FeedApi();
 let logger = new ActionLogger();
-import  handler from './ErrorHandler'
 
-async function getAll(dispatch, id, token,loading) {
+async function getAll(dispatch, id, token, loading) {
     try {
         let response = await promotionApi.getAllByBusinessId(id, token);
         if (response.length > 0) {
@@ -20,20 +22,18 @@ async function getAll(dispatch, id, token,loading) {
                 businessId: id
             });
         }
-        if(loading) {
+        if (loading) {
             dispatch({
                 type: actions.PROMOTION_LOADING_DONE,
             });
         }
     } catch (error) {
-        handler.handleError(error,dispatch)
+        handler.handleError(error, dispatch)
         logger.actionFailed('promotions-getAll')
     }
 }
 
-
-
-async function getAllProducts(dispatch, id, token,loading) {
+async function getAllProducts(dispatch, id, token, loading) {
     try {
         let response = await productApi.findByBusinessId(id, token);
         if (response.length > 0) {
@@ -43,9 +43,8 @@ async function getAllProducts(dispatch, id, token,loading) {
                 businessId: id
             });
         }
-
     } catch (error) {
-        handler.handleError(error,dispatch)
+        handler.handleError(error, dispatch)
         logger.actionFailed('promotions-getAllProducts')
     }
 }
@@ -54,7 +53,7 @@ export function fetchPromotions(id) {
     return function (dispatch, getState) {
         const token = getState().authentication.token;
         const loading = getState().promotions.loading;
-        getAll(dispatch, id, token,loading);
+        getAll(dispatch, id, token, loading);
     }
 }
 
@@ -72,11 +71,10 @@ export function realizePromotion(code) {
             await promotionApi.realizePromotion(code, token)
             dispatch({
                 type: actions.SCAN_QRCODE_CLEAR,
-
             });
-            handler.handleSuccses(getState(),dispatch)
-        }catch (error){
-            handler.handleError(error,dispatch)
+            handler.handleSuccses(getState(), dispatch)
+        } catch (error) {
+            handler.handleError(error, dispatch)
             logger.actionFailed('promotions-realizePromotion')
         }
     }
@@ -91,20 +89,18 @@ export function setPromotionDescription(code) {
                 type: actions.SCAN_QRCODE_INSTANCE,
                 instance: instance
             });
-            handler.handleSuccses(getState(),dispatch)
-        }catch (error){
-            handler.handleError(error,dispatch)
+            handler.handleSuccses(getState(), dispatch)
+        } catch (error) {
+            handler.handleError(error, dispatch)
             logger.actionFailed('promotions-setPromotionDescription')
         }
     }
 }
 
-
 export function clearRealizationForm() {
     return function (dispatch) {
         dispatch({
             type: actions.SCAN_QRCODE_CLEAR,
-
         });
     }
 }
@@ -113,75 +109,68 @@ export function resetForm() {
     return function (dispatch) {
         dispatch({
             type: actions.PROMOTION_RESET,
-
         });
     }
 }
-export function savePromotion(promotion,businessId,navigation) {
+
+export function savePromotion(promotion, businessId, navigation) {
     return async function (dispatch, getState) {
         try {
             dispatch({
                 type: actions.PROMOTION_SAVING,
             });
             const token = getState().authentication.token;
-            let response = await promotionApi.createPromotion(promotion,token);
+            let response = await promotionApi.createPromotion(promotion, token);
             let createdPromotion = response.promotions[0];
             createdPromotion.pictures = [];
             let pictures = [];
-            if(promotion.image.path) {
+            if (promotion.image.path) {
                 pictures.push(promotion.image.path);
                 pictures.push(promotion.image.path);
                 pictures.push(promotion.image.path);
                 pictures.push(promotion.image.path);
-                createdPromotion.pictures.push({pictures:pictures});
-
-            }else{
+                createdPromotion.pictures.push({pictures: pictures});
+            } else {
                 pictures.push(promotion.image.uri);
                 pictures.push(promotion.image.uri);
                 pictures.push(promotion.image.uri);
                 pictures.push(promotion.image.uri);
-                createdPromotion.pictures.push({pictures:pictures});
+                createdPromotion.pictures.push({pictures: pictures});
             }
-            createdPromotion.social_state ={};
-            createdPromotion.social_state.saves =0;
-            createdPromotion.social_state.comments =0;
-            createdPromotion.social_state.likes =0;
-            createdPromotion.social_state.shares =0;
-            createdPromotion.social_state.realizes =0;
-
-
-
-
+            createdPromotion.social_state = {};
+            createdPromotion.social_state.saves = 0;
+            createdPromotion.social_state.comments = 0;
+            createdPromotion.social_state.likes = 0;
+            createdPromotion.social_state.shares = 0;
+            createdPromotion.social_state.realizes = 0;
             dispatch({
                 type: actions.PROMOTION_UPLOAD_PIC,
-                item:{promotionResponse:createdPromotion, promotion:promotion},
-
+                item: {promotionResponse: createdPromotion, promotion: promotion},
             })
-
             dispatch({
                 type: actions.UPSERT_PROMOTION_SINGLE,
                 item: createdPromotion,
-                businessId:businessId
+                businessId: businessId
             });
-
-
             dispatch({
                 type: actions.PROMOTION_SAVING_DONE,
             });
-            handler.handleSuccses(getState(),dispatch)
+            handler.handleSuccses(getState(), dispatch)
             navigation.goBack();
         } catch (error) {
-            handler.handleError(error,dispatch)
+            dispatch({
+                type: actions.PROMOTION_SAVING_FAILED,
+            });
+            handler.handleError(error, dispatch)
             dispatch({
                 type: actions.PROMOTION_SAVING_DONE,
             });
-            navigation.goBack();
             logger.actionFailed('promotions-savePromotion')
         }
     }
 }
 
-export function updatePromotion(promotion,businessId,navigation,itemId) {
+export function updatePromotion(promotion, businessId, navigation, itemId) {
     return async function (dispatch, getState) {
         try {
             dispatch({
@@ -201,16 +190,32 @@ export function updatePromotion(promotion,businessId,navigation,itemId) {
                 type: actions.PROMOTION_SAVING_DONE,
             });
             navigation.goBack();
-            handler.handleSuccses(getState(),dispatch)
+            handler.handleSuccses(getState(), dispatch)
         } catch (error) {
-            handler.handleError(error,dispatch)
+            handler.handleError(error, dispatch)
             logger.actionFailed('promotions-updatePromotion')
         }
     }
-
-
 }
 
+async function refershBusinessPromotion(item,businessId, token, dispatch) {
+    try {
+        let response = await feedApi.getFeedSocialState(item._id, token);
+        if (!response)
+            return;
+        if (promotionComperator.shouldUpdateSocial(item, response)){
+            item.social_state = response;
+            dispatch({
+                type: actions.UPSERT_PROMOTION_SINGLE,
+                item: item,
+                businessId: businessId
+            });
+        }
+    } catch (error) {
+        handler.handleError(error, dispatch)
+        logger.actionFailed('promotions-fetchPromotionById')
+    }
+}
 
 async function fetchPromotionById(id, token, dispatch) {
     try {
@@ -221,14 +226,13 @@ async function fetchPromotionById(id, token, dispatch) {
             type: actions.UPSERT_PROMOTION,
             item: [response]
         });
-
     } catch (error) {
-        handler.handleError(error,dispatch)
+        handler.handleError(error, dispatch)
         logger.actionFailed('promotions-fetchPromotionById')
     }
 }
+
 export default {
     fetchPromotionById,
-
-
+    refershBusinessPromotion,
 };

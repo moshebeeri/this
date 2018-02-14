@@ -62,7 +62,6 @@ function to_graph(promotion) {
 }
 
 let set_promotion_location = function (promotion, callback) {
-  console.log(`set_promotion_location promotion:${JSON.stringify(promotion)}`);
   if (!utils.defined(promotion.entity))
     callback(null, promotion);
   if (!(utils.defined(promotion.entity.mall) || utils.defined(promotion.entity.business)))
@@ -85,7 +84,6 @@ let set_promotion_location = function (promotion, callback) {
       spatial.location_to_point(promotion);
       callback(null, promotion)
     });
-
 };
 
 exports.test_me = function (req, res) {
@@ -252,7 +250,6 @@ function handlePromotionPostCreate(promotion, callback) {
     let delete_on_action_query = `MATCH (f { _id:"${entityId}" })-[r:ON_ACTION]->(t) delete r`;
     promotionGraphModel.query(delete_on_action_query, (err) => {
       if(err) return callback(err);
-      console.log(`promotionGraphModel.relate_ids(${entityId}, 'ON_ACTION', ${promotion._id}, ${params}, callback);`);
       return promotionGraphModel.relate_ids(entityId, 'ON_ACTION', promotion._id, params, callback);
     });
   }
@@ -451,10 +448,22 @@ function get_promotions_state(promotions, userId, callback){
 exports.business_promotions = function (req, res) {
   let businessID = req.params.business_id;
   let userId = req.user._id;
+  const page_size = 50;
+  const from_id = req.params.from;
+  const scroll = req.params.scroll;
+
+  if (scroll !== 'up' && scroll !== 'down')
+    return res.status(400).send('scroll value may be only up or down');
+
+  let condition = scroll === 'up'? `p._id > '${from_id}'` : `p._id < '${from_id}'`;
+  if(from_id === 'start')
+    condition = `p._id > ''`;
 
   promotionGraphModel.query_objects(Promotion,
-    `MATCH (b:business {_id:'${businessID}'})<-[:BUSINESS_PROMOTION]-(p:promotion) RETURN p._id as _id`,
-    'order by p.created DESC', 0, 1000, function(err, promotions) {
+    `MATCH (b:business {_id:'${businessID}'})<-[:BUSINESS_PROMOTION]-(p:promotion) 
+     WHERE ${condition} 
+     RETURN p._id as _id`,
+    'order by p._id DESC', 0, page_size, function(err, promotions) {
       if (err) {
         return handleError(res, err)
       }

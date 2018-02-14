@@ -14,6 +14,7 @@ const initialState = {
     renderFeed: true,
     maxFeedReturned: false,
     stopDispatchMaxFeed:false,
+    shouldRender:true
 };
 import {REHYDRATE} from "redux-persist/constants";
 import * as actions from "./reducerActions";
@@ -28,6 +29,7 @@ export default function feeds(state = initialState, action) {
             ...savedData.feeds,
             showTopLoader: false,
             nextBulkLoad:false,
+            shouldRender:true,
             upTime:new Date().getTime()
         };
     }
@@ -45,6 +47,7 @@ export default function feeds(state = initialState, action) {
                 ...state,
                 updated:!feedstate.updated,
                 renderFeed:true,
+                shouldRender:true
             };
         case actions.FIRST_TIME_FEED:
             feedstate.firstTime = false;
@@ -59,6 +62,7 @@ export default function feeds(state = initialState, action) {
             }
             feedstate.feeds = currentFeeds;
             feedstate.renderFeed = true;
+            feedstate.shouldRender = true;
             return feedstate;
         case actions.UPSERT_FEEDS_ITEMS:
             action.items.forEach(item => {
@@ -72,6 +76,7 @@ export default function feeds(state = initialState, action) {
             });
             feedstate.feeds = currentFeeds;
             feedstate.renderFeed = true;
+            feedstate.shouldRender = true;
             return feedstate;
         case actions.UPSERT_FEEDS_TOP:
             currentFeeds[action.item._id] = action.item;
@@ -83,13 +88,14 @@ export default function feeds(state = initialState, action) {
             }
             feedstate.feeds = currentFeeds;
             feedstate.renderFeed = true;
+            feedstate.shouldRender = true;
             return feedstate;
 
         case actions.FEED_LOADING_DONE:
             return {
                 ...state,
                 loadingDone: action.loadingDone,
-                renderFeed : true,
+                shouldRender : true,
             };
         case actions.FEED_SHOW_TOP_LOADER:
             return {
@@ -100,18 +106,32 @@ export default function feeds(state = initialState, action) {
         case actions.FEEDS_GET_NEXT_BULK:
             return {
                 ...state,
-                nextBulkLoad: true
+                nextBulkLoad: true,
+                shouldRender : true
             };
         case actions.FEEDS_GET_NEXT_BULK_DONE:
             return {
                 ...state,
                 nextBulkLoad: false,
-                stopDispatchMaxFeed:true,
+                shouldRender : true,
             };
+        case actions.FEEDS_STOP_RENDER:
+            return {
+                ...state,
+                shouldRender: false,
+            };
+
+        case actions.FEEDS_START_RENDER:
+            return {
+                ...state,
+                shouldRender: true,
+            };
+
+
         case actions.FEED_NO_RENDER:
             return {
                 ...state,
-                renderFeed: false
+                shouldRender: false
             };
 
         case actions.MAX_FEED_RETUNED:

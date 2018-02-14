@@ -122,7 +122,9 @@ exports.scroll = function(req, res) {
   if (scroll !== 'up' && scroll !== 'down')
     return res.status(400).send('scroll value may be only up or down');
 
-  let condition = scroll === 'up'? `c._id < '${from_id}'` : `c._id > '${from_id}'`;
+  let condition = scroll === 'up'? `c._id > '${from_id}'` : `c._id < '${from_id}'`;
+  if(from_id === 'start')
+    condition = `c._id > ''`;
 
   let query = ` match (c:comment), (u:user), (g:group{_id:'${req.params.group}'}) 
                 where ((u)-[:COMMENTED]->(g)-[:COMMENTED]->()-[:COMMENTED]->(c) 

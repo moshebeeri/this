@@ -10,6 +10,7 @@ import * as businessAction from "../../../actions/business";
 import PercentComponent from "./percent/index";
 import PunchCardComponent from "./punch-card/index";
 import XPlusYComponent from "./xPlusY/index";
+import GiftComponent from "./gift/index";
 import XPlusYOffComponent from "./xGetYwithPrecentage/index";
 import XForYComponent from "./xForY/index";
 import ReduceAmountComponent from "./reduceAmount/index";
@@ -19,7 +20,7 @@ import {DatePicker, FormHeader, ImagePicker, SelectButton, SimplePicker, Spinner
 import strings from "../../../i18n/i18n"
 import StyleUtils from '../../../utils/styleUtils'
 
-const {width, height} = Dimensions.get('window')
+const {width, height} = Dimensions.get('window');
 let promotionApi = new PromotionApi();
 const types = [
         {
@@ -37,6 +38,10 @@ const types = [
         {
             value: 'X+Y',
             label: strings.XPlusY
+        },
+        {
+            value: 'GIFT',
+            label: strings.Gift
         },
         {
             value: 'REDUCED_AMOUNT',
@@ -112,6 +117,7 @@ class AddPromotion extends Component {
     }
 
     back() {
+
         this.props.navigation.goBack();
     }
 
@@ -149,7 +155,7 @@ class AddPromotion extends Component {
             }
             if (this.props.navigation.state.params.group) {
                 let groups = new Array();
-                groups.push(this.props.navigation.state.params.group)
+                groups.push(this.props.navigation.state.params.group);
                 this.setState({
                     distribution: 'GROUP',
                     groups: groups
@@ -208,7 +214,7 @@ class AddPromotion extends Component {
                         entity: {
                             business: this.getBusinessId()
                         }
-                    }
+                    };
                     break;
             }
         }
@@ -352,37 +358,42 @@ class AddPromotion extends Component {
             switch (this.state.type) {
                 case 'PERCENT':
                     discountForm = <PercentComponent navigation={this.props.navigation} api={this} state={this.state}
-                                                     ref={"precent"} setState={this.setState.bind(this)}/>
+                                                     ref={"precent"} setState={this.setState.bind(this)}/>;
                     break;
                 case 'PUNCH_CARD':
                     discountForm = <PunchCardComponent navigation={this.props.navigation} api={this} state={this.state}
-                                                       ref={"PUNCH_CARD"} setState={this.setState.bind(this)}/>
+                                                       ref={"PUNCH_CARD"} setState={this.setState.bind(this)}/>;
                     break;
                 case 'X+Y':
                     discountForm =
                         <XPlusYComponent ref={"X+Y"} navigation={this.props.navigation} api={this} state={this.state}
-                                         setState={this.setState.bind(this)}/>
+                                         setState={this.setState.bind(this)}/>;
+                    break;
+                case 'GIFT':
+                    discountForm =
+                        <GiftComponent ref={"GIFT"} navigation={this.props.navigation} api={this} state={this.state}
+                                         setState={this.setState.bind(this)}/>;
                     break;
                 case 'X+N%OFF':
                     discountForm = <XPlusYOffComponent ref={"X+N%OFF"} navigation={this.props.navigation} api={this}
                                                        state={this.state}
-                                                       setState={this.setState.bind(this)}/>
+                                                       setState={this.setState.bind(this)}/>;
                     break;
                 case 'X_FOR_Y':
                     discountForm =
                         <XForYComponent ref={"X_FOR_Y"} navigation={this.props.navigation} api={this} state={this.state}
-                                        setState={this.setState.bind(this)}/>
+                                        setState={this.setState.bind(this)}/>;
                     break;
                 case 'REDUCED_AMOUNT':
                     discountForm =
                         <ReduceAmountComponent ref={"REDUCED_AMOUNT"} navigation={this.props.navigation} api={this}
                                                state={this.state}
-                                               setState={this.setState.bind(this)}/>
+                                               setState={this.setState.bind(this)}/>;
                     break;
                 case 'HAPPY_HOUR':
                     discountForm = <HappyHourComponent ref={"HAPPY_HOUR"} navigation={this.props.navigation} api={this}
                                                        state={this.state}
-                                                       setState={this.setState.bind(this)}/>
+                                                       setState={this.setState.bind(this)}/>;
                     break;
             }
         }
@@ -430,7 +441,7 @@ class AddPromotion extends Component {
             <SimplePicker ref="TyoePicker" list={Distribution} itemTitle={strings.DistributionType}
                           defaultHeader={strings.ChooseDistribution}
                           isMandatory onValueSelected={this.selectDistributionType.bind(this)}/>
-        </View>
+        </View>;
         let button = undefined;
         let selectedGroup = undefined;
         if (this.state.distribution === 'GROUP') {
@@ -467,7 +478,7 @@ class AddPromotion extends Component {
     }
 
     render() {
-        const {saving} = this.props;
+        const {saving,savingFailed} = this.props;
         let conditionForm = this.createDiscountConditionForm();
         let distributionForm = this.createDistributionForm();
         if (this.props.navigation.state.params.group) {
@@ -494,7 +505,6 @@ class AddPromotion extends Component {
 
                     {this.createCoverImageComponnent()}
                     <View style={[styles.textLayout, {width: StyleUtils.getWidth() - 15}]}>
-
                         <Text style={{color: '#FA8559', marginLeft: 8, marginRight: 8}}>{strings.Details}</Text>
                     </View>
                     <View style={[styles.inputTextLayout, {width: StyleUtils.getWidth() - 15}]}>
@@ -542,6 +552,10 @@ class AddPromotion extends Component {
                 {saving && <View style={{justifyContent:'center',alignItems:'center',position:'absolute',width:StyleUtils.getWidth(),opacity:0.7,height:height,top:40,backgroundColor:'white'}}>
                     <Spinner/>
                 </View>}
+                {savingFailed &&  <View style={{justifyContent:'center',alignItems:'center',position:'absolute',width:StyleUtils.getWidth(),opacity:0.9,height:height,top:40,backgroundColor:'white'}}>
+                    <Text style={{margin:10,fontWeight:'bold',color:'black',fontSize:20}}>{strings.PromotionFailedSavingMessage}</Text>
+                </View>}
+
             </View>
         );
     }
@@ -624,6 +638,7 @@ export default connect(
     state => ({
         promotions: state.promotions,
         saving: state.promotions.savingForm,
+        savingFailed: state.promotions.savingFormFailed,
         products: state.products,
         currentScreen:state.render.currentScreen,
     }),

@@ -25,7 +25,7 @@ import {
 } from 'native-base';
 import stylesPortrate from './styles'
 import StyleUtils from '../../../../utils/styleUtils'
-import {BusinessHeader, PromotionHeader, PromotionSeperator, SocialState, SubmitButton} from '../../../../ui/index';
+import {BusinessHeader, PromotionHeader, PromotionSeperator, SocialState, SubmitButton,ImageController} from '../../../../ui/index';
 import FormUtils from "../../../../utils/fromUtils";
 import strings from "../../../../i18n/i18n"
 import PageRefresher from '../../../../refresh/pageRefresher'
@@ -45,7 +45,6 @@ export default class FeedPromotion extends Component {
     visited(visible) {
         const {item} = this.props;
         if (visible) {
-            console.log(item.id + ' visited');
             PageRefresher.visitedFeedItem(item);
         }
     }
@@ -54,6 +53,7 @@ export default class FeedPromotion extends Component {
 
     render() {
         const {showInPopup, showActions, item, save, shared, like, unlike, showUsers, comment, token, location, hideSocial, realize,navigation,scanner,isRealized} = this.props;
+
         const styles = this.createPromotionStyle();
         const image = this.createImageComponent(item, styles);
         const container = this.createContainerStyle(item);
@@ -203,9 +203,9 @@ export default class FeedPromotion extends Component {
         if (item.banner) {
             return <View style={[styles.promotion_image_view, {width: StyleUtils.getWidth()}]}>
 
-                <Image resizeMode="cover" style={[styles.promotion_image, {width: StyleUtils.getWidth()}]}
+                <ImageController resizeMode="cover" style={[styles.promotion_image, {width: StyleUtils.getWidth()}]}
                        source={{uri: item.banner.uri}}>
-                </Image>
+                </ImageController>
             </View>
         }
         return undefined;

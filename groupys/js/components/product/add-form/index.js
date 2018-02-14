@@ -177,9 +177,9 @@ class AddProduct extends Component {
             <View style={styles.cmeraLogoContainer}>
 
                 <View style={styles.addCoverNoImageContainer}>
-                    <ImagePicker ref={"coverImage"} mandatory color='white' pickFromCamera
+                    <ImagePicker ref={"coverImage"}  text={ <Text style={styles.addCoverText}>{strings.AddACoverPhoto}</Text>} customStyles={{ triggerWrapper:{alignItems:'center',justifyContent:'center',width:StyleUtils.getWidth(),height:220}}} mandatory color='white' pickFromCamera
                                  setImage={this.setCoverImage.bind(this)}/>
-                    <Text style={styles.addCoverText}>{strings.AddACoverPhoto}</Text>
+
                 </View>
             </View>
 

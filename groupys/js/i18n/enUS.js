@@ -201,17 +201,17 @@ Accept                                        : "Accept",
 Create                                        : "Create",
 Approve                                       : "Approve",
 Decline                                       : "Decline",
-UnFollow                                      : "Un-follow Business ",
-assignQrCode                                  : "Assign QrCode ",
-AssignmenofQrcCodesucceeded                   : "Assignment of QrcCode succeeded",
-AssignmenofQrcCodefailed                      : "Assignment of QrcCode failed",
+UnFollow                                      : "Un-follow Business",
+assignQrCode                                  : "Assign QR Code ",
+AssignmentOfQRCodeSucceeded                   : "QR Code Assignment  Succeeded",
+AssignmentOfQRCodeFailed                      : "QR Code Assignment Failed",
 reportActivity                                : "Give Feedback",
 Offensive                                     : "Offensive",
 Nudity                                        : "Nudity",
 Hate                                          : "Hate",
 Violence                                      : "Violence",
 Weapons                                       : "Weapons",
-ADDPOINTS                                     : "ADD POINTS",
+AddPoints                                     : "Add Points",
 falseDeal                                     : "False Deal",
 accountDetail                                 : 'Account Details',
 AccountBalance                                : 'Account Balance',
@@ -233,47 +233,27 @@ IdIdentifier                                  : "Id Identifier",
 LetterOfIncorporation                         : "Letter Of Incorporation",
 confirmBusinessByMailMessage                  : "Please confirm your email Address",
 validatingBusinessMessage                     : "Please wait while we validate your business",
-IAGREE                                        : "I Agree",
-TermsofUse                                    : "Terms of Use and Privacy Policy",
+IAgree                                        : "I Agree",
+TermsOfUse                                    : "Terms of Use and Privacy Policy",
 and                                           : "and",
 PrivacyPolicy                                 : "Privacy Policy",
 UseOfTermMessage                              : "By Creating an account you agree to THIS",
-Select                                        : "Select",
 UpdateGroup                                   : "Update Group",
 InvalidValidationCode                         : "Invalid Validation Code",
 OldPasswordValidationFailed                   : "Old Password Validation Failed",
 invalidPhoneNumber                            : "invalid Phone Number",
 punchCardTerm                                 : "Punch Card {0} Slots - Get {1} For Free",
 ConfirmLast                                   : "Confirm Last Punch",
-PleaseScanCode                                : "Please Scan Code",
 Realized                                      : "Realized",
-notAuthorizedMessage                          : "You are not Authorized To Accept Code",
+notAuthorizedMessage                          : "You are unauthorized to accept this QR Code",
 validateByEmail                               : "Email Validation Will be Sent",
-ConditionOutOfScope                           : "Promotion Cannot be Realized - out of date and time"
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+ConditionOutOfScope                           : "Promotion Cannot be Realized - out of date and time",
+PromotionFailedSavingMessage                  : "Temporally We were Unable to Save Promotion, Please try later or contact Us ",
+NoGiftSelected                                : "No Gift Selected",
+NoProductSelected                             : "No Product Selected",
+MyBusiness                                    : "My Business",
+OtherBusiness                                 : "Other Business",
+GiftingBusiness                               : "Gifting Business",
 
 };
 

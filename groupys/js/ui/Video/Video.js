@@ -8,7 +8,7 @@ const style = {
     width : 300,
     height:200,
     backgroundColor: 'orange',
-}
+};
 //
 // const App = () => (
 //     <YouTube

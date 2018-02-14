@@ -6,6 +6,7 @@ import styles from './styles'
 import {EditButton,SubmitButton} from '../../../ui/index';
 import strings from "../../../i18n/i18n"
 const ILS = '₪';
+
 export default class ProductListView extends Component {
     constructor(props) {
         super(props);

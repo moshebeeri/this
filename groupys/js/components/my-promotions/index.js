@@ -28,6 +28,11 @@ import FeedPromotion from '../generic-feed-manager/generic-feed/feed-components/
 class MyPromotions extends Component {
     constructor(props) {
         super(props);
+        this.state={render:true}
+    }
+
+    componentWillMount(){
+        console.log('mount saved');
     }
 
     renderItem(item) {
@@ -42,13 +47,18 @@ class MyPromotions extends Component {
                               realize={this.realize.bind(this, item.item)}
         />
     }
+
+    refresh() {
+    }
+
     shouldComponentUpdate(){
-        if(this.props.currentScreen ==='home' && (this.props.selectedTab === 1 || this.props.selectedTab === 2)){
+        if(this.props.activeTab ==='savedPromotion' && this.props.shouldRender){
+
+            this.props.actions.stopReneder();
             return true;
+
         }
         return false;
-    }
-    refresh() {
     }
 
     checkIfRealized(feed){
@@ -71,15 +81,12 @@ class MyPromotions extends Component {
         this.props.navigation.navigate('realizePromotion', {item: item})
     }
 
-    componentWillMount() {
-        const {feeds, actions, firstTime} = this.props;
-        if (firstTime || feeds.length === 0) {
-            actions.setNextFeeds(feeds);
-        }
-    }
+
 
     render() {
-        const {navigation, feeds, userFollower, actions, token, loadingDone, showTopLoader, user} = this.props;
+        const {navigation, feeds, userFollower, actions, token, loadingDone, showTopLoader, user,activeTab} = this.props;
+        console.log('render my PROMTOIONS');
+        console.log(activeTab);
         return (
             <GenericFeedManager
                 navigation={navigation}
@@ -104,6 +111,7 @@ const mapStateToProps = state => {
     return {
         userFollower: state.user.followers,
         update: state.myPromotions.update,
+        shouldRender: state.myPromotions.shouldRender,
         user: state.user.user,
         feeds: getFeeds(state),
         rawFeeds: state.myPromotions.feeds,

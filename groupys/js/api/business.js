@@ -12,25 +12,30 @@ class BusinessApi {
             promise.then(resolve, reject)
         })
     }
-    getAll(token) {
+    getAll(token,noSideEffects) {
         return new Promise(async (resolve, reject) => {
             try {
                 let from = new Date();
-                const response = await this.timeout(5000,fetch(`${server_host}/api/businesses/list/mine`, {
+                const response = await fetch(`${server_host}/api/businesses/list/mine`, {
                     method: 'GET',
                     headers: {
                         'Accept': 'application/json, text/plain, */*',
                         'Content-Type': 'application/json;charset=utf-8',
                         'Authorization': 'Bearer ' + token
                     }
-                }));
+                });
                 if (response.status ==='401' || response.status === 401) {
                     reject(errors.UN_AUTHOTIZED_ACCESS);
                     return;
                 }
                 let responseData = await response.json();
 
+                if(noSideEffects){
+                    resolve(responseData);
+                    return;
+                }
                 responseData =  await Promise.all(responseData.map(async (item) => {
+
                     item.categoryTitle = await this.getSubCategory(token,item.business.subcategory);
                     return item;
                 }));
@@ -75,10 +80,9 @@ class BusinessApi {
         })
     }
 
-    getSubCategory(token,categoryId) {
+    getSubCategory(token,categoryId,locale) {
         return new Promise(async (resolve, reject) => {
             try {
-                let locale = FormUtils.getLocale();
 
                 let from = new Date();
                 const response = await fetch(`${server_host}/api/categories/by/id/`+locale+'/'+ categoryId, {

@@ -139,7 +139,7 @@ class BusinessAccount extends Component {
 
                         </View>
                         <View style={{marginTop: 20}}>
-                            <SubmitButton color='#FA8559' title={strings.ADDPOINTS}
+                            <SubmitButton color='#FA8559' title={strings.AddPoints}
                                           onPress={this.chargeAccount.bind(this)}/>
                         </View>
 

@@ -10,6 +10,18 @@ class PromotionComperator {
         }
         return true;
     }
+
+    shouldUpdateSocial(item, response) {
+        let currentSocialState = item.social_state;
+        if (response.likes === currentSocialState.likes &&
+            response.shares === currentSocialState.shares &&
+            response.comments === currentSocialState.comments
+            && response.saves === currentSocialState.saves
+            && response.realizes === currentSocialState.realizes) {
+            return false;
+        }
+        return true;
+    }
 }
 
 export default PromotionComperator;

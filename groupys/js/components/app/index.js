@@ -21,9 +21,12 @@ import {
     showCompoenent
 } from "../../selectors/appSelector";
 import * as mainAction from "../../actions/mainTab";
+import * as feedAction from "../../actions/feedsMain";
 import * as userAction from "../../actions/user";
 import * as businessActions from "../../actions/business";
+import * as myPromotionsActions from "../../actions/myPromotions";
 import * as groupsActions from "../../actions/groups";
+import * as notificationsActions from "../../actions/notifications";
 import {createSelector} from "reselect";
 import {NavigationActions} from "react-navigation";
 import '../../conf/global';
@@ -177,11 +180,15 @@ class ApplicationManager extends Component {
 
     }
     onChangeTab(tab) {
+        const{notificationAction,myPromotionsAction,feedAction} = this.props;
         if (tab.i === 0) {
             if (I18nManager.isRTL && (Platform.OS === 'android')) {
                 logger.screenVisited('notification')
+                notificationAction.onEndReached();
             } else {
+
                 logger.screenVisited('feed')
+                feedAction.setTopFeeds();
                 PageRefresher.visitedFeed();
                 this.setState({
                     activeTab: 'feed'
@@ -193,6 +200,7 @@ class ApplicationManager extends Component {
                 logger.screenVisited('groups')
                 PageRefresher.visitedGroups();
             } else {
+                myPromotionsAction.setNextFeeds();
                 logger.screenVisited('savedPromotion')
                 this.setState({
                     activeTab: 'savedPromotion'
@@ -203,6 +211,7 @@ class ApplicationManager extends Component {
         if (tab.i === 2) {
             if (I18nManager.isRTL && (Platform.OS === 'android')) {
                 logger.screenVisited('savedPromotion')
+                myPromotionsAction.setNextFeeds();
                 this.setState({
                     activeTab: 'savedPromotion'
                 })
@@ -216,16 +225,17 @@ class ApplicationManager extends Component {
         }
         if (tab.i === 3) {
             if (I18nManager.isRTL && (Platform.OS === 'android')) {
-                logger.screenVisited('feed')
+                feedAction.setTopFeeds();
                 PageRefresher.visitedFeed();
                 this.setState({
                     activeTab: 'feed'
                 })
             } else {
+                notificationAction.onEndReached();
                 logger.screenVisited('notification')
             }
         }
-        this.props.actions.changeTab(tab)
+        //this.props.actions.changeTab(tab)
     }
 
     navigateToAdd() {
@@ -255,11 +265,13 @@ class ApplicationManager extends Component {
 
     render() {
         const {
-            selectedTab, showAdd, showComponent, notifications,
+            showAdd, showComponent, notifications,
             item, location, showPopup, token, notificationTitle,
             notificationAction, notificationGroup, notificationBusiness,
             showSearchResults, businesses, businessActions, groups, groupsActions,showSearchGroupResults
         } = this.props;
+        console.log('rendering main');
+        console.log(this.state.activeTab);
         if (!showComponent) {
             return <View></View>
         }
@@ -423,9 +435,8 @@ class ApplicationManager extends Component {
 
 const mapStateToProps = (state) => {
     return {
-        state: state,
         isAuthenticated: isAuthenticated(state),
-        selectedTab: state.mainTab.selectedTab,
+
         showPopup: state.mainTab.showPopup,
         notifications: countUnreadNotifications(state),
         showAdd: showAddAction(state),
@@ -454,6 +465,9 @@ export default connect(
         userActions: bindActionCreators(userAction, dispatch),
         businessActions: bindActionCreators(businessActions, dispatch),
         groupsActions: bindActionCreators(groupsActions, dispatch),
+        notificationAction:bindActionCreators(notificationsActions, dispatch),
+        myPromotionsAction:bindActionCreators(myPromotionsActions, dispatch),
+        feedAction:bindActionCreators(feedAction, dispatch),
     })
 )(ApplicationManager);
 

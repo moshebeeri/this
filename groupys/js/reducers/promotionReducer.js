@@ -10,7 +10,7 @@
 /**
  * Created by stan229 on 5/27/16.
  */
-const initialState = {promotions: {}, savingForm: false,loadingDone:{},promotionPictures:[]};
+const initialState = {promotions: {}, savingForm: false,loadingDone:{},promotionPictures:[],savingFormFailed:false};
 import {REHYDRATE} from "redux-persist/constants";
 import * as actions from "./reducerActions";
 
@@ -21,12 +21,20 @@ export default function promotion(state = initialState, action) {
         // retrive stored data for reducer callApi
         const savedData = action.payload || initialState;
         return {
-            ...state, ...savedData.promotions
+            ...state, ...savedData.promotions,savingForm:false,savingFormFailed:false
         };
     }
     let promotionsState = {...state};
     let currentPromotions = promotionsState.promotions;
     switch (action.type) {
+        case actions.PROMOTION_RESET:
+            return {
+                ...state,
+                savingForm: false,
+                savingFormFailed:false
+            };
+
+
         case actions.UPSERT_PROMOTION:
             action.item.forEach(eventItem => {
                 if (eventItem.social_state || !currentPromotions[eventItem._id]) {
@@ -71,6 +79,11 @@ export default function promotion(state = initialState, action) {
             return {
                 ...state,
                 savingForm: false,
+            };
+        case actions.PROMOTION_SAVING_FAILED:
+            return {
+                ...state,
+                savingFormFailed: true,
             };
         case actions.PROMOTION_RESET:
             return {

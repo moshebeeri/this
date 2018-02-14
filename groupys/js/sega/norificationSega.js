@@ -1,0 +1,21 @@
+import {call, takeLatest, put, take} from 'redux-saga/effects'
+import NotificationApi from "../api/notification";
+import {setNotification} from "../actions/notifications";
+import * as segaActions from './segaActions'
+
+let notificationApi = new NotificationApi();
+
+function* saveNotificationRequest(action) {
+    try {
+        let response = yield call(notificationApi.getAll, action.token, action.user, action.skip, action.limit);
+        yield put(setNotification(response))
+    } catch (error) {
+        
+    }
+}
+
+function* notificationSega() {
+    yield takeLatest(segaActions.SAVE_NOTIFICATION_REQUEST, saveNotificationRequest);
+}
+
+export default notificationSega;
