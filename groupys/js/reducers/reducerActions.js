@@ -149,6 +149,8 @@ export const SAVING_USER_DONE = 'SAVING_USER_DONE';
 export const USER_SELECT = 'USER_SELECT';
 export const USER_SELECT_RESET = 'USER_SELECT_RESET';
 export const USER_UNSELECT = 'USER_UNSELECT';
+export const USERS_UPLOAD_PIC ='USERS_UPLOAD_PIC';
+export const CLEAR_USERS_UPLOAD_PIC ='CLEAR_USERS_UPLOAD_PIC';
 //activity
 export const UPSERT_ACTIVITY = 'UPSERTactivity';
 //network

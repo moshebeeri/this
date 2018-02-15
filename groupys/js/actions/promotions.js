@@ -145,7 +145,7 @@ export function savePromotion(promotion, businessId, navigation) {
             createdPromotion.social_state.realizes = 0;
             dispatch({
                 type: actions.PROMOTION_UPLOAD_PIC,
-                item: {promotionResponse: createdPromotion, promotion: promotion},
+                item: {itemResponse: createdPromotion, item: promotion},
             })
             dispatch({
                 type: actions.UPSERT_PROMOTION_SINGLE,
