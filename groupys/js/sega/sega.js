@@ -5,6 +5,7 @@ import feedSega from './feedSega'
 import notificationSega from './norificationSega'
 import groupsSega from './groupsSega'
 import myPromotionsnSega from './myPromotionsSega'
+import groupsChatSega from './groupsChatSega'
 
 
 function* sega() {
@@ -14,6 +15,7 @@ function* sega() {
     yield fork(notificationSega);
     yield fork(myPromotionsnSega);
     yield fork(groupsSega);
+    yield fork(groupsChatSega);
 
 }
 

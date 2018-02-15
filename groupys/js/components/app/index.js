@@ -180,7 +180,8 @@ class ApplicationManager extends Component {
 
     }
     onChangeTab(tab) {
-        const{notificationAction,myPromotionsAction,feedAction} = this.props;
+        const{notificationAction,myPromotionsAction,feedAction,groupsActions} = this.props;
+        groupsActions.stopListenForChat();
         if (tab.i === 0) {
             if (I18nManager.isRTL && (Platform.OS === 'android')) {
                 logger.screenVisited('notification')
