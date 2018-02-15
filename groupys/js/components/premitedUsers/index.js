@@ -37,7 +37,7 @@ class UserPermittedRoles extends Component {
     navigateToAdd() {
         const {navigation} = this.props;
 
-        this.props.navigation.navigate("addPremitedUsers", {business: navigation.state.params.business});
+        this.props.navigation.navigate("addPermittedUser", {business: navigation.state.params.business});
     }
 
     render() {
@@ -59,7 +59,7 @@ class UserPermittedRoles extends Component {
     }
 
     shouldComponentUpdate() {
-        if (this.props.currentScreen === 'userPermittedRoles' ||  this.props.currentScreen === 'addPremitedUsers') {
+        if (this.props.currentScreen === 'userPermittedRoles' ||  this.props.currentScreen === 'addPermittedUser') {
             return true;
         }
         return false;

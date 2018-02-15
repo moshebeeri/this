@@ -26,20 +26,20 @@ class FeedApi {
             try {
                 let from = new Date();
                 let userId = user._id;
-                const response = await this.timeout(30000,fetch(`${server_host}/api/feeds/` + id + `/` + direction + `/` + userId, {
+                const response = await fetch(`${server_host}/api/feeds/` + id + `/` + direction + `/` + userId, {
                     method: 'GET',
                     headers: {
                         'Accept': 'application/json, text/plain, */*',
                         'Content-Type': 'application/json;charset=utf-8',
                         'Authorization': 'Bearer ' + token
                     }
-                }));
+                });
                 if (response.status ==='401' || response.status === 401) {
                     reject(errors.UN_AUTHOTIZED_ACCESS);
                     return;
                 }
                 let responseData = await response.json();
-                responseData = responseData.filter(feed => feedComperator.filterFeed(feed));
+               // responseData = responseData.filter(feed => feedComperator.filterFeed(feed));
                 timer.logTime(from, new Date(), 'feeds', '/');
                 resolve(responseData);
             }

@@ -54,6 +54,8 @@ export async function refreshComments(dispatch, token, group, user,groupComments
         if (!groupComments) {
             return;
         }
+
+
         let response = await commentsApi.getGroupComments(group, token, groupComments[0], 'up');
 
         if (response.length > 0) {
@@ -133,7 +135,7 @@ export function setNextFeeds(comments, group) {
                 response = await commentsApi.getGroupComments(group, token, groupcomments[groupcomments.length], 'down');
 
             } else {
-                response = await commentsApi.getGroupComments(group, token, 0, 'down');
+                response = await commentsApi.getGroupComments(group, token, 'start', 'down');
                 dispatch({
                     type: actions.GROUP_COMMENT_CLEAR_MESSAGE,
                     groupId: group._id,

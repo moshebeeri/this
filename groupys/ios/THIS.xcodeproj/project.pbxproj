@@ -38,10 +38,10 @@
 		2DCD954D1E0B4F2C00145EB5 /* THISTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 00E356F21AD99517003FC87E /* THISTests.m */; };
 		32FC3A8CAF2440B7853A0EE3 /* libz.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = DDC8DC017FE14E21A7B46E73 /* libz.tbd */; };
 		461B085E1E65C9C40081775B /* ImageCropPickerSDK in Resources */ = {isa = PBXBuildFile; fileRef = 461B085D1E65C9C40081775B /* ImageCropPickerSDK */; };
-		461B08601E65C9D50081775B /* RSKImageCropper.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 461B085F1E65C9D50081775B /* RSKImageCropper.framework */; };
-		461B08611E65C9D50081775B /* RSKImageCropper.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 461B085F1E65C9D50081775B /* RSKImageCropper.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		461B08641E65C9D90081775B /* QBImagePicker.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 461B08631E65C9D90081775B /* QBImagePicker.framework */; };
 		461B08651E65C9D90081775B /* QBImagePicker.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 461B08631E65C9D90081775B /* QBImagePicker.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		4650B010202F2B3500B95F25 /* RSKImageCropper.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 461B085F1E65C9D50081775B /* RSKImageCropper.framework */; settings = {ATTRIBUTES = (Required, ); }; };
+		4650B011202F2B3500B95F25 /* RSKImageCropper.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 461B085F1E65C9D50081775B /* RSKImageCropper.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		467FC90A1FD4574800900761 /* libCodePush.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 467FC8571FD4521A00900761 /* libCodePush.a */; };
 		468812111E914DE60040997E /* libRCTContacts.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 468812101E914D9A0040997E /* libRCTContacts.a */; };
 		46DF5ABC1FE6BC600048ABDB /* Roboto-Regular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 46DF5ABB1FE6BC530048ABDB /* Roboto-Regular.ttf */; };
@@ -534,8 +534,8 @@
 			dstPath = "";
 			dstSubfolderSpec = 10;
 			files = (
-				461B08611E65C9D50081775B /* RSKImageCropper.framework in Embed Frameworks */,
 				461B08651E65C9D90081775B /* QBImagePicker.framework in Embed Frameworks */,
+				4650B011202F2B3500B95F25 /* RSKImageCropper.framework in Embed Frameworks */,
 			);
 			name = "Embed Frameworks";
 			runOnlyForDeploymentPostprocessing = 0;
@@ -728,7 +728,6 @@
 				F68506CF1FF2E5DF00CEDE6A /* libRNFIRMessaging.a in Frameworks */,
 				F63143761FF27890001339E2 /* Firebase.h in Frameworks */,
 				00C302E51ABCBA2D00DB3ED1 /* libRCTActionSheet.a in Frameworks */,
-				461B08601E65C9D50081775B /* RSKImageCropper.framework in Frameworks */,
 				00C302E71ABCBA2D00DB3ED1 /* libRCTGeolocation.a in Frameworks */,
 				461B08641E65C9D90081775B /* QBImagePicker.framework in Frameworks */,
 				00C302E81ABCBA2D00DB3ED1 /* libRCTImage.a in Frameworks */,
@@ -748,6 +747,7 @@
 				5CBA0E7484CA4CBD9E0F2E2E /* libBVLinearGradient.a in Frameworks */,
 				4EA30BC394F6424D956926D2 /* libRCTActionSheet.a in Frameworks */,
 				0218D7BA2D3342A880BD6D0C /* libReactNativeLocalization.a in Frameworks */,
+				4650B010202F2B3500B95F25 /* RSKImageCropper.framework in Frameworks */,
 				B3EADD98A1D043E2A8FC0E5F /* libRCTVideo.a in Frameworks */,
 				B683F3B11A3B492CA0C8C8F8 /* libRCTYouTube.a in Frameworks */,
 				7C101115747B4B90BC3FD8AD /* libRCTCamera.a in Frameworks */,
@@ -2364,7 +2364,7 @@
 					"-ObjC",
 					"-lc++",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = la.low.dev;
+				PRODUCT_BUNDLE_IDENTIFIER = la.low.this.test;
 				PRODUCT_NAME = THIS;
 				VERSIONING_SYSTEM = "apple-generic";
 			};
@@ -2393,7 +2393,7 @@
 					"$(SRCROOT)/../node_modules/react-native-braintree-xplat/ios/RCTBraintree/**",
 					"$(SRCROOT)/../node_modules/react-native-link-preview/ios",
 				);
-				"HEADER_SEARCH_PATHS[arch=*]" = (
+				"HEADER_SEARCH_PATHS[sdk=*]" = (
 					"$(inherited)",
 					"$(SRCROOT)/../node_modules/react-native-code-push/ios/**",
 					"$(SRCROOT)/../node_modules/react-native-linear-gradient/BVLinearGradient",
@@ -2411,8 +2411,9 @@
 					"-ObjC",
 					"-lc++",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = la.low.dev;
+				PRODUCT_BUNDLE_IDENTIFIER = la.low.this.test;
 				PRODUCT_NAME = THIS;
+				"VALID_ARCHS[sdk=*]" = "arm64 armv7 armv7s";
 				VERSIONING_SYSTEM = "apple-generic";
 			};
 			name = Release;

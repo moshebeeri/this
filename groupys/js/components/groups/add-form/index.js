@@ -11,7 +11,7 @@ import * as userAction from "../../../actions/user";
 import {bindActionCreators} from "redux";
 import strings from "../../../i18n/i18n"
 
-const {width, height} = Dimensions.get('window')
+const {width, height} = Dimensions.get('window');
 const groupPolicy = [
     {
         value: 'OPEN',
@@ -21,7 +21,7 @@ const groupPolicy = [
         value: 'CLOSE',
         label: strings.GroupIsClosed
     }
-]
+];
 const groupType = [
     {
         value: 'USERS',
@@ -31,7 +31,7 @@ const groupType = [
         value: 'BUSINESS',
         label: strings.BusinessGroup
     }
-]
+];
 
 class AddGroup extends Component {
     static navigationOptions = ({navigation}) => ({

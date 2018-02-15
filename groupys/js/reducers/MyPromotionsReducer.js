@@ -1,4 +1,4 @@
-const initialState = {feeds: {}, feedOrder: [], showTopLoader: false, update: false, lastfeed: undefined, lastCall: {},firstTime:true};
+const initialState = {feeds: {}, feedOrder: [], showTopLoader: false, update: false, lastfeed: undefined, lastCall: {},firstTime:true,shouldRender:true};
 import {REHYDRATE} from "redux-persist/constants";
 import * as actions from "./reducerActions";
 
@@ -33,7 +33,7 @@ export default function myPromotions(state = initialState, action) {
                     }
 
                 });
-
+                feedstate.shouldRender = true;
                 return feedstate
             }
             return state;
@@ -48,13 +48,14 @@ export default function myPromotions(state = initialState, action) {
 
                 });
                 feedstate.lastCall = new Date();
-
+                feedstate.shouldRender = true;
                 return feedstate
             }
 
             return state;
         case actions.UPDATE_SINGLE_SAVED_INSTANCE:
             currentFeeds[action.item._id] = action.item;
+            feedstate.shouldRender = true;
             feedstate.update = !feedstate.update
             return feedstate
 
@@ -72,6 +73,11 @@ export default function myPromotions(state = initialState, action) {
             return {
                 ...state,
                 showTopLoader: action.showTopLoader
+            };
+        case actions.SAVED_PROMOTION_STOP_RENDER:
+            return {
+                ...state,
+                shouldRender: false
             };
         default:
             return state;

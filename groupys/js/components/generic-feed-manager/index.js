@@ -40,7 +40,7 @@ export default class GenericFeedManager extends Component {
     }
 
     renderItem(item) {
-        const {navigation, token, userFollowers, group, ItemDetail, actions, entity, location} = this.props;
+        const {navigation, token, userFollowers, group, ItemDetail, actions,entity, location} = this.props;
         return <ItemDetail
             key={item.item.id}
             user={entity}
@@ -113,7 +113,7 @@ export default class GenericFeedManager extends Component {
 
 
                     />
-                    {nextBulkLoad && !showTopLoader &&  <View style={ {bottom:0,width:width,backgroundColor:'#cccccc',position:'absolute'}}>
+                    {nextBulkLoad &&  <View style={ {bottom:0,width:width,backgroundColor:'#cccccc',position:'absolute'}}>
                         <Spinner color='red'/>
                     </View>}
                     {this.state.showActions && <View style={{bottom:0,position:'absolute',width:StyleUtils.getWidth(),height:150,backgroundColor:'white'}}>

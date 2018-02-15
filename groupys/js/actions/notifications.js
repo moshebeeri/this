@@ -2,34 +2,10 @@ import NotificationApi from "../api/notification";
 import * as actions from "../reducers/reducerActions";
 import ActionLogger from './ActionLogger'
 import  handler from './ErrorHandler'
+import * as types from '../sega/segaActions';
 
 let notificationApi = new NotificationApi();
 let logger = new ActionLogger();
-
-export function onEndReached() {
-    return async function (dispatch, getState) {
-        try {
-            const token = getState().authentication.token;
-            const user = getState().user.user;
-            const notifications = getState().notification.notification;
-            let skip = 0;
-            if (notifications) {
-                skip = notifications.length ;
-            }
-            let response = await notificationApi.getAll(token, user, skip, 10);
-            if(response.length > 0) {
-                dispatch({
-                    type: actions.SET_NOTIFICATION,
-                    notifications: response,
-                });
-            }
-            handler.handleSuccses(getState(),dispatch)
-        } catch (error) {
-            handler.handleError(error, dispatch,'notification-onEndReached')
-            logger.actionFailed('notification-onEndReached')
-        }
-    }
-}
 
 export function setTopNotification() {
     return async function (dispatch, getState) {
@@ -102,6 +78,42 @@ async function updateNotification(dispatch, token, user, notifications) {
         logger.actionFailed('notification-updateNotification')
     }
 }
+
+export function onEndReached() {
+    return async function (dispatch, getState) {
+        try {
+            const token = getState().authentication.token;
+            const user = getState().user.user;
+            const notifications = getState().notification.notification;
+            let skip = 0;
+            if (notifications) {
+                skip = notifications.length ;
+            }
+            dispatch({
+                type: types.SAVE_NOTIFICATION_REQUEST,
+                user: user,
+                skip: skip,
+                token: token,
+                limit: 20,
+            });
+
+            handler.handleSuccses(getState(),dispatch)
+        } catch (error) {
+            handler.handleError(error, dispatch,'notification-onEndReached')
+            logger.actionFailed('notification-onEndReached')
+        }
+    }
+}
+
+export function setNotification(response){
+    return {
+        type: actions.SET_NOTIFICATION,
+        notifications: response,
+    }
+}
+
+
+
 
 
 

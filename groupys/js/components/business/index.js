@@ -20,6 +20,7 @@ class Business extends Component {
             index={item.index}
             user={user}
             resetForm={actions.resetForm}
+            updateBusinesCategory={actions.updateBusinesCategory}
             refresh={actions.updateBusinesStatuss}
             navigation={navigation}
         />

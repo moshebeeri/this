@@ -37,6 +37,13 @@ export default class BusinessListView extends Component {
         super(props);
     }
 
+    componentWillMount(){
+        const {item,updateBusinesCategory} = this.props;
+        if(!item.categoryTitle){
+            updateBusinesCategory(item)
+        }
+    }
+
     showBusiness(p) {
         const {item, navigation,resetForm} = this.props;
         resetForm();
