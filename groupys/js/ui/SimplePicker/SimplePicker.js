@@ -20,7 +20,7 @@ export default class SimplePicker extends Component {
         const {onValueSelected} = this.props;
         this.setState({
             type: value,
-        })
+        });
         onValueSelected(value)
     }
 
@@ -28,10 +28,10 @@ export default class SimplePicker extends Component {
         const {onValueSelected, list} = this.props;
         let options = list.map((s) => {
             return s.value;
-        })
+        });
         this.setState({
             type: options[value -1],
-        })
+        });
         onValueSelected(options[value -1])
     }
 
@@ -50,7 +50,7 @@ export default class SimplePicker extends Component {
             if (!this.state.type) {
                 this.setState({
                     invalid: true
-                })
+                });
                 return false
             }
         }
@@ -66,13 +66,13 @@ export default class SimplePicker extends Component {
         const {list, itemTitle, defaultHeader, isMandatory, defaultValue,value} = this.props;
         let options = list.map((s) => {
             return s.label;
-        })
+        });
         let pickerStyle=styles.modalView;
         if (this.state.invalid) {
             pickerStyle = styles.modalViewInvalid;
         }
         options.unshift(defaultValue);
-        let selectValue = strings.PleaseSelect
+        let selectValue = strings.PleaseSelect;
         if(value){
             selectValue = value
         }
@@ -105,7 +105,7 @@ export default class SimplePicker extends Component {
     }
 
     render() {
-        const {list, value,itemTitle, defaultHeader, isMandatory, defaultValue} = this.props;
+        const {list, value, itemTitle, defaultHeader, isMandatory, defaultValue} = this.props;
         if (Platform.OS === 'ios') {
             return this.createIosRender();
         }

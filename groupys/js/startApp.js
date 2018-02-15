@@ -69,7 +69,7 @@ const AppNavigator = StackNavigator({
         SelectProductsComponent: {screen: SelectProductsComponent},
         SelectGroupsComponent: {screen: SelectGroupsComponent},
         InstanceGroupComments: {screen: InstanceGroupComments},
-        addPremitedUsers: {screen: AddPermittedUser},
+        addPermittedUser: {screen: AddPermittedUser},
         userPermittedRoles: {screen: UserPermittedRoles},
         genericComments: {screen: GenericComments},
         changePassword: {screen: ChangePassword},
