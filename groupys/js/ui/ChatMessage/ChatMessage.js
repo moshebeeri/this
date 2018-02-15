@@ -10,7 +10,7 @@ import {actions} from 'react-native-navigation-redux-helpers';
 import {Button, Container, Footer, Icon, Text, Thumbnail} from 'native-base';
 import styles from './styles'
 import DateUtils from '../../utils/dateUtils'
-import {ImageController} from '../index'
+import {ImageController,ThisText} from '../index'
 let dateUtils = new DateUtils();
 export default class ChatMessage extends Component {
     render() {
@@ -52,9 +52,9 @@ export default class ChatMessage extends Component {
                 </View>
                 <View>
                 <View style={styleContainer}>
-                    <Text style={styles.messageNameText}>{item.name}</Text>
+                    <ThisText style={styles.messageNameText}>{item.name}</ThisText>
                     <View style={styles.message_container}>
-                        <Text numberOfLines={3} style={styles.messageText}>{item.message}</Text>
+                        <ThisText numberOfLines={3} style={styles.messageText}>{item.message}</ThisText>
 
                     </View>
                 </View>
@@ -78,9 +78,9 @@ export default class ChatMessage extends Component {
                 <View style={styles.messageComponent}>
                     <View>
                     <View style={styles.messageName}>
-                        <Text style={styles.messageNameText}>{item.name}</Text>
+                        <ThisText style={styles.messageNameText}>{item.name}</ThisText>
                         <View style={styles.message_container}>
-                            <Text numberOfLines={3} style={styles.messageText}>{item.message}</Text>
+                            <ThisText numberOfLines={3} style={styles.messageText}>{item.message}</ThisText>
 
                         </View>
                     </View>
@@ -119,8 +119,8 @@ export default class ChatMessage extends Component {
 
     createMessageTime(date) {
         if (date) {
-            return <Text note
-                         style={styles.dateFont}>{dateUtils.messageFormater(date)}</Text>
+            return <ThisText note
+                         style={styles.dateFont}>{dateUtils.messageFormater(date)}</ThisText>
         }
         return undefined;
     }

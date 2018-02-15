@@ -7,6 +7,7 @@ import strings from "../../../../i18n/i18n";
 import StyleUtils from '../../../../utils/styleUtils';
 import {Thumbnail} from 'native-base';
 import ProductPreview from "../../../product/productPreview/index";
+import {ThisText} from '../../../../ui/index';
 
 const Discouint_on = [
     {
@@ -177,7 +178,7 @@ export default class PercentComponent extends Component {
         return <View>
             <View style={[styles.textLayout, {width: StyleUtils.getWidth() - 15}]}>
 
-                <Text style={{color: '#FA8559', marginLeft: 8, marginRight: 8}}>{strings.PercentDiscount}</Text>
+                <ThisText style={{color: '#FA8559', marginLeft: 8, marginRight: 8}}>{strings.PercentDiscount}</ThisText>
             </View>
             <View style={[styles.inputTextLayout, {width: StyleUtils.getWidth() - 15}]}>
 

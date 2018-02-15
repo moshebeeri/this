@@ -6,6 +6,7 @@ const save = require('../../../images/savedPromotions.png');
 const groups = require('../../../images/GroupsIcon.png');
 const notification = require('../../../images/notification.png');
 const createReactClass = require('create-react-class');
+import {ThisText} from '../index';
 const {
     StyleSheet,
     Text,
@@ -47,7 +48,7 @@ const DefaultTabBar = createReactClass({
                         style={{tintColor: '#2db6c8', marginLeft: 0, width: 30, height: 30}}
                         source={notification}/>
                     <View style={{position:'absolute',bottom:18,right:17,borderRadius:10,width:15,alignItems:'center',justifyContent:'center',backgroundColor:'#FA8559'}}>
-                    <Text style={{fontSize:12,fontWeight:'bold',color:'white'}} >{notifications}</Text>
+                    <ThisText style={{fontSize:12,fontWeight:'bold',color:'white'}} >{notifications}</ThisText>
                     </View>
                 </View>
             }
@@ -66,9 +67,9 @@ const DefaultTabBar = createReactClass({
                 style={{tintColor: '#2db6c8', marginLeft: 0, width: 30, height: 30}}
                 source={save}/>
         }
-        return <Text style={[{color: '#2db6c8'}]}>
+        return <ThisText style={[{color: '#2db6c8'}]}>
             {name}
-        </Text>
+        </ThisText>
     },
     renderTabOption(name, page) {
     },

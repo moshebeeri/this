@@ -6,7 +6,7 @@ import styles from './styles'
 import * as userRoleAction from "../../../actions/userRole";
 import {connect} from 'react-redux';
 import {bindActionCreators} from "redux";
-import {FormHeader, SimplePicker, Spinner, TextInput} from '../../../ui/index';
+import {FormHeader, SimplePicker, Spinner, TextInput,ThisText} from '../../../ui/index';
 import strings from "../../../i18n/i18n"
 import StyleUtils from "../../../utils/styleUtils";
 
@@ -166,7 +166,7 @@ class AddPermittedUser extends Component {
 
     createMessageTag(showMessage, message) {
         if (showMessage) {
-            return <View><Text>{message}</Text></View>
+            return <View><ThisText>{message}</ThisText></View>
         }
         return undefined;
     }
@@ -180,7 +180,7 @@ class AddPermittedUser extends Component {
             const pic = this.createUserPic(user);
             return  <View style={[styles.user_view, {width: StyleUtils.getWidth() - 15}]}>
                 {pic}
-                <Text style={{margin: 10}}>{user.name}</Text>
+                <ThisText style={{margin: 10}}>{user.name}</ThisText>
 
             </View>
         }

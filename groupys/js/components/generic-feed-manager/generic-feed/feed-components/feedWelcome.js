@@ -27,6 +27,8 @@ import {
 } from 'native-base';
 import * as componentCreator from "./feedCommonView";
 import StyleUtils from '../../../../utils/styleUtils'
+import {ThisText} from '../../../../ui/index';
+
 export default class FeedWelcome extends Component {
     render() {
         return this.createWelcome(this.props.item)
@@ -41,12 +43,12 @@ export default class FeedWelcome extends Component {
                         <View style={styles.logo_view}>
 
                             <View style={{flexDirection: 'column'}}>
-                                <Text style={styles.promotion_nameText} note>{item.name} </Text>
+                                <ThisText style={styles.promotion_nameText} note>{item.name} </ThisText>
                             </View>
                         </View>
 
                         <View style={styles.promotion_description}>
-                            <Text style={styles.promotion_text_description}>{item.message}</Text>
+                            <ThisText style={styles.promotion_text_description}>{item.message}</ThisText>
 
                         </View>
                     </View>

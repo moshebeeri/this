@@ -2,7 +2,7 @@ import React, {Component} from "react";
 import {Image, ScrollView, TouchableOpacity, View} from "react-native";
 import {Button, Input, Item, Spinner, Text} from "native-base";
 import styles from "./styles";
-import {BusinessHeader,SubmitButton} from '../../ui/index';
+import {BusinessHeader,SubmitButton,ThisText} from '../../ui/index';
 import strings from '../../i18n/i18n';
 
 
@@ -64,7 +64,7 @@ export default class BusinessList extends Component {
 
 
         }else{
-            rows = <View style={styles.noResults}><Text>{strings.NoResultsFound}</Text></View>
+            rows = <View style={styles.noResults}><ThisText>{strings.NoResultsFound}</ThisText></View>
         }
 
         return ( <ScrollView style={styles.follow_container}>

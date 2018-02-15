@@ -5,6 +5,7 @@ import Camera from "react-native-camera";
 import styles from "./styles";
 import {BusinessHeader,SubmitButton} from '../../ui/index';
 import StyleUtils from '../../utils/styleUtils'
+import {ThisText} from '../../ui/index';
 
 const {width, height} = Dimensions.get('window')
 import FeedPromotion from '../../components/generic-feed-manager/generic-feed/feed-components/feedPromotion'
@@ -64,13 +65,13 @@ export default class BusinessFollow extends Component {
 
         if(showAssigmentMessage){
             return (<View style={{backgroundColor:'transparent',alignItems:'center',justifyContent:'flex-start',flex:1}}>
-                <Text>{strings.AssignmentOfQRCodeSucceeded}</Text>
+                <ThisText>{strings.AssignmentOfQRCodeSucceeded}</ThisText>
             </View>)
 
         }
         if(ShowOutOffScope){
             return (<View style={{backgroundColor:'transparent',alignItems:'center',justifyContent:'flex-start',flex:1}}>
-                <Text>{strings.ConditionOutOfScope}</Text>
+                <ThisText>{strings.ConditionOutOfScope}</ThisText>
             </View>)
 
         }
@@ -78,14 +79,14 @@ export default class BusinessFollow extends Component {
 
         if(showNotAuthorizedMessage){
             return (<View style={{backgroundColor:'transparent',alignItems:'center',justifyContent:'flex-start',flex:1}}>
-                <Text>{strings.notAuthorizedMessage}</Text>
+                <ThisText>{strings.notAuthorizedMessage}</ThisText>
             </View>)
 
         }
 
         if(showAssigmentMessageFailed){
             return (<View style={{backgroundColor:'transparent',alignItems:'center',justifyContent:'flex-start',flex:1}}>
-                <Text>{strings.AssignmentOfQRCodeFailed}</Text>
+                <ThisText>{strings.AssignmentOfQRCodeFailed}</ThisText>
             </View>)
 
         }
@@ -111,7 +112,7 @@ export default class BusinessFollow extends Component {
                     style={styles.payment_camera}
                     aspect={Camera.constants.Aspect.fill}>
                 </Camera>
-                    <Text>{strings.PleaseScanCode}</Text>
+                    <ThisText>{strings.PleaseScanCode}</ThisText>
                 </View>}
                 {searching && <View><Spinner color='red'/></View>}
                 {business && <View style={{

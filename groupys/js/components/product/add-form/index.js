@@ -19,7 +19,7 @@ import * as productsAction from "../../../actions/product";
 import * as businessAction from "../../../actions/business";
 import {bindActionCreators} from "redux";
 import styles from './styles'
-import {BarcodeScanner, CategoryPicker, FormHeader, ImagePicker, Spinner, TextInput} from '../../../ui/index';
+import {BarcodeScanner, CategoryPicker, FormHeader, ImagePicker, Spinner, TextInput,ThisText} from '../../../ui/index';
 import strings from "../../../i18n/i18n"
 import StyleUtils from "../../../utils/styleUtils";
 
@@ -177,7 +177,7 @@ class AddProduct extends Component {
             <View style={styles.cmeraLogoContainer}>
 
                 <View style={styles.addCoverNoImageContainer}>
-                    <ImagePicker ref={"coverImage"}  text={ <Text style={styles.addCoverText}>{strings.AddACoverPhoto}</Text>} customStyles={{ triggerWrapper:{alignItems:'center',justifyContent:'center',width:StyleUtils.getWidth(),height:220}}} mandatory color='white' pickFromCamera
+                    <ImagePicker ref={"coverImage"}  text={ <ThisText style={styles.addCoverText}>{strings.AddACoverPhoto}</ThisText>} customStyles={{ triggerWrapper:{alignItems:'center',justifyContent:'center',width:StyleUtils.getWidth(),height:220}}} mandatory color='white' pickFromCamera
                                  setImage={this.setCoverImage.bind(this)}/>
 
                 </View>

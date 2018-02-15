@@ -10,6 +10,8 @@ import {actions} from 'react-native-navigation-redux-helpers';
 import {Button, Container, Footer, Icon, Text, Thumbnail} from 'native-base';
 import styles from './styles'
 import StyleUtils from '../../../../utils/styleUtils'
+import {ThisText} from '../../../../ui/index';
+
 export default class FeedComment extends Component {
     render() {
         return this.createMessage(this.props.item)
@@ -31,16 +33,16 @@ export default class FeedComment extends Component {
 
                 <View style={styles.messageName}>
                     <View style={{alignItems: 'flex-end', height: 30}}>
-                        <Text>{item.name}</Text>
+                        <ThisText>{item.name}</ThisText>
                     </View>
                     <View style={messageStyle}>
-                        <Text numberOfLines={5} style={{
+                        <ThisText numberOfLines={5} style={{
                             fontSize: 16,
                             flex: 0.4,
                             color: 'white',
                             textAlign: 'center',
                             flexWrap: 'wrap', marginLeft: 10
-                        }}>{item.description}</Text>
+                        }}>{item.description}</ThisText>
                     </View>
                 </View>
                 {image}
@@ -49,9 +51,9 @@ export default class FeedComment extends Component {
         return <View style={[styles.messageContainer, {width: StyleUtils.getWidth()}]}>
             {image}
             <View style={styles.messageName}>
-                <Text>{item.name}</Text>
+                <ThisText>{item.name}</ThisText>
                 <View style={messageStyle}>
-                    <Text>{item.description}</Text>
+                    <ThisText>{item.description}</ThisText>
                 </View>
             </View>
 

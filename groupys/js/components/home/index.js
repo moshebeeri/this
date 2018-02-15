@@ -7,6 +7,7 @@ import HeaderContent from './../homeHeader';
 import TabHome from './tabHome';
 import TabOffer from './tabOffer';
 import theme from '../../themes/base-theme';
+import {ThisText} from '../../ui/index';
 
 class Home extends Component {  // eslint-disable-line
     static propTypes = {
@@ -31,10 +32,10 @@ class Home extends Component {  // eslint-disable-line
                     <HeaderContent/>
                 </Header>
                 <View>
-                    <Text>HOME</Text>
-                    <Text>HOME</Text>
+                    <ThisText>HOME</ThisText>
+                    <ThisText>HOME</ThisText>
                 </View>
-                <Text>HOME</Text>
+                <ThisText>HOME</ThisText>
             </Container>
         );
     }

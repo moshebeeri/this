@@ -4,7 +4,7 @@ import {Icon} from 'native-base';
 import styles from './styles';
 import Icon2 from 'react-native-vector-icons/Ionicons';
 import {ImagePicker} from '../index';
-
+import {ThisText} from '../index';
 export default class DocumentPicker extends Component {
     constructor(props) {
         super(props);
@@ -89,7 +89,7 @@ export default class DocumentPicker extends Component {
         return <View style={containerStyle}>
             <View style={styles.textInputTitleContainer}>
                 <View style={{flexDirection:'row'}}>
-                    <Text style={textStyle}>{field}</Text>
+                    <ThisText style={textStyle}>{field}</ThisText>
                     {field && isMandatory &&
                     <Icon style={{margin: 5, color: mandatoryIconColor, fontSize: 12}} name='star'/>}
 

@@ -26,7 +26,7 @@ import {
 import Icon3 from 'react-native-vector-icons/MaterialIcons';
 import StyleUtils from '../../../../utils/styleUtils'
 import * as componentCreator from "./feedCommonView";
-import {BusinessHeader, SocialState,ImageController} from '../../../../ui/index';
+import {BusinessHeader, SocialState,ImageController,ThisText} from '../../../../ui/index';
 import FormUtils from "../../../../utils/fromUtils";
 import PageRefresher from '../../../../refresh/pageRefresher'
 
@@ -75,7 +75,7 @@ export default class FeedBusiness extends Component {
                         justifyContent: 'flex-start',
                         alignItems: 'flex-start'
                     }}>
-                        <Text style={styles.promotion_type}>{item.itemTitle}</Text>
+                        <ThisText style={styles.promotion_type}>{item.itemTitle}</ThisText>
                     </View>
 
                     {imageBusiness}
@@ -87,10 +87,10 @@ export default class FeedBusiness extends Component {
                             <View style={styles.promotion_bottom_location}>
                                 <Icon3 style={styles.promotion_location} size={25} name="location-on"/>
                                 <View style={{flexDirection: 'row'}}>
-                                    <Text style={styles.promotion_addressText} note>{item.businessAddress} </Text>
-                                    <Text style={styles.detailsText}>
+                                    <ThisText style={styles.promotion_addressText} note>{item.businessAddress} </ThisText>
+                                    <ThisText style={styles.detailsText}>
                                         {FormUtils.getDistanceString(location.lat, location.long, item.location.lat, item.location.lng)}
-                                    </Text>
+                                    </ThisText>
                                 </View>
                             </View>
                         </View>

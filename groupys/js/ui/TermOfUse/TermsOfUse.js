@@ -13,6 +13,8 @@ import {
 } from 'react-native';
 import StyleUtils from "../../utils/styleUtils";
 import strings from "../../i18n/i18n"
+import {ThisText} from '../../ui/index';
+
 const bg = require('../../../images/bg.png');
 export default class TermsOfUse extends Component {
     constructor(props) {
@@ -68,14 +70,14 @@ export default class TermsOfUse extends Component {
                 backgroundColor:'transparent',
                 width: StyleUtils.getWidth() - 30
             }}>
-                <Text style={{flexWrap: 'wrap',color: 'white',backgroundColor:'transparent'}}> {strings.UseOfTermMessage}
+                <ThisText style={{flexWrap: 'wrap',color: 'white',backgroundColor:'transparent'}}> {strings.UseOfTermMessage}
 
 
-                </Text>
+                </ThisText>
 
                 <TouchableOpacity style={{marginTop:10,width: StyleUtils.getWidth() - 30, alignItems: 'center', justifyContent: 'center', height: 20}}
                                   onPress={() => Linking.openURL(`${server_host}/api/users/terms/1.0` )}>
-                    <Text style={{color: 'blue'}}>{strings.TermsOfUse}</Text>
+                    <ThisText style={{color: 'blue'}}>{strings.TermsOfUse}</ThisText>
                 </TouchableOpacity>
 
 
@@ -103,11 +105,11 @@ export default class TermsOfUse extends Component {
                     margin: 3,
                     flexDirection: 'row',
                 }} onPress={() => this.declineTerms()}>
-                    <Text style={{
+                    <ThisText style={{
                         fontWeight: 'bold',
                         fontStyle: 'normal',
                         fontSize: 18,
-                        color: '#cccccc'}}>{strings.Cancel.toUpperCase()}</Text>
+                        color: '#cccccc'}}>{strings.Cancel.toUpperCase()}</ThisText>
                 </TouchableOpacity>
                 <TouchableOpacity style={{
                     marginRight: 7,
@@ -124,10 +126,10 @@ export default class TermsOfUse extends Component {
                     flexDirection: 'row',
 
                 }} onPress={() => this.acceptTerms()}>
-                    <Text style={{color: 'skyblue',
+                    <ThisText style={{color: 'skyblue',
                         fontWeight: 'bold',
                         fontStyle: 'normal',
-                        fontSize: 18}}>{strings.IAgree.toUpperCase()}</Text>
+                        fontSize: 18}}>{strings.IAgree.toUpperCase()}</ThisText>
                 </TouchableOpacity>
             </View>
 

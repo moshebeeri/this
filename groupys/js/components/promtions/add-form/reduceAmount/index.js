@@ -1,7 +1,7 @@
 import React, {Component} from 'react';
 import {Keyboard, Platform, Text, View} from 'react-native'
 import styles from './styles'
-import {TextInput} from '../../../../ui/index';
+import {TextInput,ThisText} from '../../../../ui/index';
 import strings from "../../../../i18n/i18n"
 import StyleUtils from '../../../../utils/styleUtils';
 
@@ -78,7 +78,7 @@ export default class ReduceAmountComponent extends Component {
         }
         return <View>
             <View style={[styles.textLayout, {width: StyleUtils.getWidth() - 15}]}>
-                <Text style={{color: '#FA8559', marginLeft: 8, marginRight: 8}}>{strings.BuyPayOnly}</Text>
+                <ThisText style={{color: '#FA8559', marginLeft: 8, marginRight: 8}}>{strings.BuyPayOnly}</ThisText>
             </View>
             <View style={{flexDirection: 'row', justifyContent: 'center', alignItems: 'center'}}>
 

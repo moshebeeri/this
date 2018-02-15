@@ -3,6 +3,7 @@ import {Button, Dimensions, I18nManager, Image, Linking, TextInput, View,Text} f
 
 import LinkPreview from 'react-native-link-preview';
 import StyleUtils from "../../utils/styleUtils";
+import {ThisText} from '../../ui/index';
 
 export default class UrlPreview extends Component {
     constructor(props) {
@@ -39,8 +40,8 @@ export default class UrlPreview extends Component {
                     {image}
                 </View>
                 <View style={{flex: 3, marginRight: 5, marginLeft: 5, marginRight: 5}}>
-                    <Text>{this.state.data.title}</Text>
-                    <Text>{this.state.data.description}</Text>
+                    <ThisText>{this.state.data.title}</ThisText>
+                    <ThisText>{this.state.data.description}</ThisText>
                 </View>
 
             </View>
@@ -52,7 +53,7 @@ export default class UrlPreview extends Component {
             }}/>
             </View>
             <View style={{alignItems: 'center', justifyContent: 'center'}}>
-                <Text>{this.state.postText}</Text>
+                <ThisText>{this.state.postText}</ThisText>
             </View>
 
         </View>

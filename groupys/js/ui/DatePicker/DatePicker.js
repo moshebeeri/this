@@ -3,6 +3,7 @@ import {Dimensions, TextInput, View} from 'react-native';
 import {Icon, Input, Text} from 'native-base';
 import styles from './styles';
 import DatePicker from "react-native-datepicker";
+import {ThisText} from '../index';
 import { I18nManager } from 'react-native';
 const {width, height} = Dimensions.get('window');
 import strings from "../../i18n/i18n"
@@ -90,7 +91,7 @@ export default class DatePickerField extends Component {
         return <View style={containerStyle}>
             <View style={styles.textInputTitleContainer}>
 
-                <Text style={textStyle}>{field}</Text>
+                <ThisText style={textStyle}>{field}</ThisText>
                 {field && isMandatory && <Icon style={{margin: 5, color: mandtoryIconColor, fontSize: 12}} name='star'/>}
 
             </View>

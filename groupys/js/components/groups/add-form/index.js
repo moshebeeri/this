@@ -10,6 +10,7 @@ import * as businessesAction from "../../../actions/business";
 import * as userAction from "../../../actions/user";
 import {bindActionCreators} from "redux";
 import strings from "../../../i18n/i18n"
+import {ThisText} from '../../../ui/index';
 
 const {width, height} = Dimensions.get('window');
 const groupPolicy = [
@@ -254,7 +255,7 @@ class AddGroup extends Component {
                 <View style={styles.addCoverNoImageContainer}>
                     <ImagePicker ref={"coverImage"} mandatory={isManadory} color='white' pickFromCamera
                                  setImage={this.setCoverImage.bind(this)}/>
-                    <Text style={styles.addCoverText}>Add a cover photo</Text>
+                    <ThisText style={styles.addCoverText}>Add a cover photo</ThisText>
                 </View>
             </View>
 
@@ -315,7 +316,7 @@ class AddGroup extends Component {
                             title="Members"
                             action={this.showUsers.bind(this, true)}/>
                         {this.state.selectedUsers &&
-                        <Text> {strings.SelectedMembers}: {this.state.selectedUsers.length}</Text>}
+                        <ThisText> {strings.SelectedMembers}: {this.state.selectedUsers.length}</ThisText>}
 
                     </View>}
                 </ScrollView>

@@ -5,12 +5,12 @@
  * Created by roilandshut on 19/07/2017.
  */
 import React, {Component} from 'react';
-import {Image, TextInput, Platform, View} from 'react-native';
-import {connect} from 'react-redux';
+import {Image, Platform, TextInput, View} from 'react-native';
 import {actions} from 'react-native-navigation-redux-helpers';
-import {Container, Footer, Icon, Button, Thumbnail, Text} from 'native-base';
+import {Button, Container, Footer, Icon, Text, Thumbnail} from 'native-base';
 import styles from './styles'
 import DateUtils from '../../../../utils/dateUtils'
+import {ThisText} from '../../../../ui/index';
 
 let dateUtils = new DateUtils();
 export default class FeedMessage extends Component {
@@ -29,9 +29,9 @@ export default class FeedMessage extends Component {
         const messageContainer = <View style={styles.message_component}>
             {image}
             <View style={styles.messageName}>
-                <Text style={{fontWeight: 'bold'}}>{item.name}</Text>
+                <ThisText style={{fontWeight: 'bold'}}>{item.name}</ThisText>
                 <View style={styles.message_container}>
-                    <Text>{item.description}</Text>
+                    <ThisText>{item.description}</ThisText>
 
                 </View>
             </View>
@@ -48,8 +48,8 @@ export default class FeedMessage extends Component {
 
     createMessageTime(item) {
         if (item.date) {
-            return <Text note
-                         style={styles.dateFont}>{dateUtils.messageFormater(item.date)}</Text>
+            return <ThisText note
+                         style={styles.dateFont}>{dateUtils.messageFormater(item.date)}</ThisText>
         }
         return undefined;
     }

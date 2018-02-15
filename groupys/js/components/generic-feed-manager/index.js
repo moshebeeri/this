@@ -24,6 +24,8 @@ import strings from "../../i18n/i18n"
 const {width, height} = Dimensions.get('window')
 import Icon2 from 'react-native-vector-icons/Ionicons';
 import StyleUtils from "../../utils/styleUtils";
+import {ThisText} from '../../ui/index';
+
 export default class GenericFeedManager extends Component {
     constructor(props) {
         super(props);
@@ -120,7 +122,7 @@ export default class GenericFeedManager extends Component {
                         <View>
                             <View style={{flexDirection:'row',borderTopWidth:10,borderColor:'#cccccc' ,justifyContent:'flex-end',alignItems:'center',width:width}}>
                                 <View style={{flex:4,alignItems:'center',justifyContent:'center'}}>
-                                    <Text>{strings.reportActivity}</Text>
+                                    <ThisText>{strings.reportActivity}</ThisText>
                                 </View>
                                 <TouchableOpacity style= {{flex:0.5,paddingTop:5,paddingRight:10,justifyContent:'flex-end'}} onPress={() => this.showActions(false)}>
                                     <Icon2 style={{fontSize: 30}} name="ios-close-circle-outline"/>
@@ -133,28 +135,28 @@ export default class GenericFeedManager extends Component {
 
                         <View style={{flex:1,padding:5,flexDirection:'row',justifyContent:'space-between',alignItems:'center'}}>
                             <TouchableOpacity style= {{borderRadius:10,width:100,justifyContent:'center',alignItems:'center',height:40,backgroundColor:'#cccccc'}} onPress={() => this.reportActivity('FalseDeal')}>
-                                <Text style={{fontSize:14}}>{strings.falseDeal}</Text>
+                                <ThisText style={{fontSize:14}}>{strings.falseDeal}</ThisText>
                             </TouchableOpacity>
 
                             <TouchableOpacity style= {{borderRadius:10,width:100,justifyContent:'center',alignItems:'center',height:40,backgroundColor:'#cccccc'}} onPress={() => this.reportActivity('Nudity')}>
-                                <Text style={{fontSize:14}}>{strings.Nudity}</Text>
+                                <ThisText style={{fontSize:14}}>{strings.Nudity}</ThisText>
                             </TouchableOpacity>
                             <TouchableOpacity style= {{borderRadius:10,width:100,justifyContent:'center',alignItems:'center',height:40,backgroundColor:'#cccccc'}} onPress={() => this.reportActivity('Hate')}>
-                                <Text style={{fontSize:14}}>{strings.Hate}</Text>
+                                <ThisText style={{fontSize:14}}>{strings.Hate}</ThisText>
                             </TouchableOpacity>
 
 
                         </View>
                         <View style={{flex:1,padding:5,flexDirection:'row',justifyContent:'space-between',alignItems:'center'}}>
                             <TouchableOpacity style= {{borderRadius:10,width:100,justifyContent:'center',alignItems:'center',height:40,backgroundColor:'#cccccc'}} onPress={() => this.reportActivity('Violence')}>
-                                <Text style={{fontSize:14}}>{strings.Violence}</Text>
+                                <ThisText style={{fontSize:14}}>{strings.Violence}</ThisText>
                             </TouchableOpacity>
                             <TouchableOpacity style= {{borderRadius:10,width:100,justifyContent:'center',alignItems:'center',height:40,backgroundColor:'#cccccc'}} onPress={() => this.reportActivity('Offensive')}>
-                                <Text style={{fontSize:14}}>{strings.Offensive}</Text>
+                                <ThisText style={{fontSize:14}}>{strings.Offensive}</ThisText>
                             </TouchableOpacity>
 
                             <TouchableOpacity style= {{borderRadius:10,width:100,justifyContent:'center',alignItems:'center',height:40,backgroundColor:'#cccccc'}} onPress={() => this.reportActivity('Weapons')}>
-                                <Text style={{fontSize:14}}>{strings.Weapons}</Text>
+                                <ThisText style={{fontSize:14}}>{strings.Weapons}</ThisText>
                             </TouchableOpacity>
 
                         </View>
@@ -185,7 +187,7 @@ export default class GenericFeedManager extends Component {
                     <View>
                         <View style={{flexDirection:'row',borderTopWidth:10,borderColor:'#cccccc' ,justifyContent:'flex-end',alignItems:'center',width:width}}>
                             <View style={{flex:4,alignItems:'center',justifyContent:'center'}}>
-                                <Text>{strings.reportActivity}</Text>
+                                <ThisText>{strings.reportActivity}</ThisText>
                             </View>
                         <TouchableOpacity style= {{flex:0.5,paddingTop:5,paddingRight:10,justifyContent:'flex-end'}} onPress={() => this.showActions(false)}>
                           <Icon2 style={{fontSize: 30}} name="ios-close-circle-outline"/>
@@ -198,28 +200,28 @@ export default class GenericFeedManager extends Component {
 
                     <View style={{flex:1,padding:5,flexDirection:'row',justifyContent:'space-between',alignItems:'center'}}>
                         <TouchableOpacity style= {{borderRadius:10,width:100,justifyContent:'center',alignItems:'center',height:40,backgroundColor:'#cccccc'}} onPress={() => this.reportActivity('FalseDeal')}>
-                            <Text style={{fontSize:14}}>{strings.falseDeal}</Text>
+                            <ThisText style={{fontSize:14}}>{strings.falseDeal}</ThisText>
                         </TouchableOpacity>
 
                         <TouchableOpacity style= {{borderRadius:10,width:100,justifyContent:'center',alignItems:'center',height:40,backgroundColor:'#cccccc'}} onPress={() => this.reportActivity('Nudity')}>
-                            <Text style={{fontSize:14}}>{strings.Nudity}</Text>
+                            <ThisText style={{fontSize:14}}>{strings.Nudity}</ThisText>
                         </TouchableOpacity>
                         <TouchableOpacity style= {{borderRadius:10,width:100,justifyContent:'center',alignItems:'center',height:40,backgroundColor:'#cccccc'}} onPress={() => this.reportActivity('Hate')}>
-                            <Text style={{fontSize:14}}>{strings.Hate}</Text>
+                            <ThisText style={{fontSize:14}}>{strings.Hate}</ThisText>
                         </TouchableOpacity>
 
 
                     </View>
                     <View style={{flex:1,padding:5,flexDirection:'row',justifyContent:'space-between',alignItems:'center'}}>
                         <TouchableOpacity style= {{borderRadius:10,width:100,justifyContent:'center',alignItems:'center',height:40,backgroundColor:'#cccccc'}} onPress={() => this.reportActivity('Violence')}>
-                            <Text style={{fontSize:14}}>{strings.Violence}</Text>
+                            <ThisText style={{fontSize:14}}>{strings.Violence}</ThisText>
                         </TouchableOpacity>
                         <TouchableOpacity style= {{borderRadius:10,width:100,justifyContent:'center',alignItems:'center',height:40,backgroundColor:'#cccccc'}} onPress={() => this.reportActivity('Offensive')}>
-                            <Text style={{fontSize:14}}>{strings.Offensive}</Text>
+                            <ThisText style={{fontSize:14}}>{strings.Offensive}</ThisText>
                         </TouchableOpacity>
 
                         <TouchableOpacity style= {{borderRadius:10,width:100,justifyContent:'center',alignItems:'center',height:40,backgroundColor:'#cccccc'}} onPress={() => this.reportActivity('Weapons')}>
-                            <Text style={{fontSize:14}}>{strings.Weapons}</Text>
+                            <ThisText style={{fontSize:14}}>{strings.Weapons}</ThisText>
                         </TouchableOpacity>
 
                     </View>

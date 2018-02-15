@@ -12,7 +12,8 @@ import {
     FormHeader,
     ImagePicker,
     Spinner,
-    TextInput
+    TextInput,
+    ThisText
 } from '../../../ui/index';
 import FormUtils from "../../../utils/fromUtils";
 import strings from '../../../i18n/i18n';
@@ -273,7 +274,7 @@ class AddBusiness extends Component {
 
                     <ImagePicker logo ref={"logoImage"} mandatory color='black' pickFromCamera
                                  setImage={this.setImage.bind(this)}/>
-                    <Text>{strings.Logo}</Text>
+                    <ThisText>{strings.Logo}</ThisText>
 
                 </View>
             } else {
@@ -281,7 +282,7 @@ class AddBusiness extends Component {
 
                     <ImagePicker logo ref={"logoImage"} mandatory color='black' pickFromCamera
                                  setImage={this.setImage.bind(this)}/>
-                    <Text>{strings.Logo}</Text>
+                    <ThisText>{strings.Logo}</ThisText>
 
                 </View>
             }
@@ -312,7 +313,7 @@ class AddBusiness extends Component {
                 {this.createImageComponent(false)}
                 <ImagePicker ref={"coverImage"} mandatory color='white' pickFromCamera
                              setImage={this.setCoverImage.bind(this)}/>
-                <Text style={styles.addCoverText}>{strings.AddACoverPhoto}</Text>
+                <ThisText style={styles.addCoverText}>{strings.AddACoverPhoto}</ThisText>
             </View>)
     }
 

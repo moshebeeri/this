@@ -3,7 +3,7 @@ import {actions} from 'react-native-navigation-redux-helpers';
 import {Icon, Thumbnail,} from 'native-base';
 import {Text, TouchableOpacity, View} from 'react-native';
 import styles from './styles'
-import {EditButton,SubmitButton} from '../../../ui/index';
+import {EditButton,SubmitButton,ThisText} from '../../../ui/index';
 import strings from "../../../i18n/i18n"
 const ILS = '₪';
 
@@ -43,10 +43,10 @@ export default class ProductListView extends Component {
             </View>
             <View style={styles.productMainContainer}>
                 <View style={styles.productDescContainer}>
-                    <Text>{item.name} - <Text>{item.info}</Text></Text>
+                    <ThisText>{item.name} - <ThisText>{item.info}</ThisText></ThisText>
                 </View>
                 <View style={styles.productPriceContainer}>
-                    <Text style={styles.retailTextStyle} note>{ILS}{item.retail_price}</Text>
+                    <ThisText style={styles.retailTextStyle} note>{ILS}{item.retail_price}</ThisText>
                 </View>
 
             </View>

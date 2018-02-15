@@ -9,6 +9,7 @@ import StyleUtils from "../../utils/styleUtils";
 import Icon from 'react-native-vector-icons/FontAwesome';
 import {CloseDrawer, ImagePicker} from "../../ui/index";
 import strings from "../../i18n/i18n"
+import {ThisText} from '../../ui/index';
 
 const noPic = require('../../../images/client_1.png');
 const briefcase = require('../../../images/briefcase.png');
@@ -138,7 +139,7 @@ class ProfileDrawer extends Component {
 
 
                 }}>
-                    <Text numberOfLines={2} style={{
+                    <ThisText numberOfLines={2} style={{
                         color: '#fff',
                         lineHeight: 32,
 
@@ -146,13 +147,13 @@ class ProfileDrawer extends Component {
                         marginTop: 5,
                         fontStyle: 'normal',
                         fontSize: 20,
-                    }}>{name}</Text>
-                    <Text numberOfLines={2} style={{
+                    }}>{name}</ThisText>
+                    <ThisText numberOfLines={2} style={{
                         color: '#fff',
                         marginTop: 7,
                         fontStyle: 'normal',
                         fontSize: 16,
-                    }}>{phoneNumber}</Text>
+                    }}>{phoneNumber}</ThisText>
 
 
                 </View>
@@ -164,26 +165,26 @@ class ProfileDrawer extends Component {
                                           style={{flex: 1, flexDirection: 'row', alignItems: 'center'}} regular>
                             <Image style={{tintColor: 'white', marginLeft: 20, width: 30, height: 30}}
                                    source={briefcase}/>
-                            <Text
+                            <ThisText
                                 style={{
 
                                     color: 'white',
                                     fontStyle: 'normal',
                                     marginLeft:20,
                                     fontSize: 16
-                                }}>{strings.Businesses}</Text>
+                                }}>{strings.Businesses}</ThisText>
                         </TouchableOpacity>
                     </View>
                     <View style={{height:70,width:deviceWidth/5*4,borderBottomWidth:1,flexDirection: 'row',borderColor: '#E5E5E5'}}>
                         <TouchableOpacity onPress={() => this.changePassword()}
                                           style={{flex: 1, flexDirection: 'row', alignItems: 'center'}} regular>
                             <Icon style={{marginLeft: 20, marginBottom: -6}} color="white" size={36} name="lock"/>
-                            <Text style={{
+                            <ThisText style={{
                                 marginLeft:22,
                                 color: 'white',
                                 fontStyle: 'normal',
                                 fontSize: 16
-                            }}>{strings.ChangePassword} </Text>
+                            }}>{strings.ChangePassword} </ThisText>
 
                         </TouchableOpacity>
                     </View>

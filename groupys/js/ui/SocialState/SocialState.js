@@ -8,6 +8,8 @@ const like_icon = require('../../../images/Like.png');
 const comments_icon = require('../../../images/Comment.png');
 const user_like_icon = require('../../../images/user_like.png');
 const share_icon = require('../../../images/share.png');
+import {ThisText} from '../../ui/index';
+
 export default class SocialState extends Component {
     constructor(props) {
         super(props);
@@ -47,13 +49,13 @@ export default class SocialState extends Component {
             return <View transparent style={styles.promotion_iconView}>
                 <ImageController style={{tintColor: componenColor, marginRight: 10, width: 30, height: 25}}
                        source={comments_icon}/>
-                <Text style={styles.socialTextColor}>{comments}</Text>
+                <ThisText style={styles.socialTextColor}>{comments}</ThisText>
             </View>;
         }
         return <TouchableOpacity transparent style={styles.promotion_iconView} onPress={onPressComment}>
             <ImageController style={{tintColor: componenColor, marginRight: 10, width: 30, height: 25}}
                    source={comments_icon}/>
-            <Text style={styles.socialTextColor}>{comments}</Text>
+            <ThisText style={styles.socialTextColor}>{comments}</ThisText>
         </TouchableOpacity>;
     }
 
@@ -69,7 +71,7 @@ export default class SocialState extends Component {
         if (disabled) {
             return <View transparent style={styles.promotion_iconView}>
                 <ImageController style={{tintColor: componenColor, marginRight: 10, width: 25, height: 25}} source={like_icon}/>
-                <Text style={styles.socialTextColor}>{likes}</Text>
+                <ThisText style={styles.socialTextColor}>{likes}</ThisText>
             </View>
         }
         if (like) {
@@ -78,7 +80,7 @@ export default class SocialState extends Component {
 
                 <ImageController style={{tintColor: componenColor, marginRight: 10, width: 25, height: 25}}
                        source={user_like_icon}/>
-                <Text style={styles.socialTextColor}>{likes}</Text>
+                <ThisText style={styles.socialTextColor}>{likes}</ThisText>
 
             </TouchableOpacity>
         }
@@ -86,7 +88,7 @@ export default class SocialState extends Component {
 
             <ImageController style={{tintColor: componenColor, marginRight: 10, width: 25, height: 25}}
                    source={like_icon}/>
-            <Text style={styles.socialTextColor}>{likes}</Text>
+            <ThisText style={styles.socialTextColor}>{likes}</ThisText>
 
         </TouchableOpacity>
     }
@@ -109,7 +111,7 @@ export default class SocialState extends Component {
 
                 <ImageController style={{tintColor: componenColor, marginRight: 10, width: 25, height: 25}}
                        source={share_icon}/>
-                <Text style={styles.socialTextColor}>{shares}</Text>
+                <ThisText style={styles.socialTextColor}>{shares}</ThisText>
 
             </View>
         }
@@ -118,7 +120,7 @@ export default class SocialState extends Component {
 
                 <ImageController style={{tintColor: componenColor, marginRight: 10, width: 25, height: 25}}
                        source={share_icon}/>
-                <Text style={styles.socialTextColor}>{shares}</Text>
+                <ThisText style={styles.socialTextColor}>{shares}</ThisText>
 
 
             </TouchableOpacity>
@@ -127,7 +129,7 @@ export default class SocialState extends Component {
 
             <ImageController style={{tintColor: componenColor, marginRight: 10, width: 25, height: 25}}
                    source={share_icon}/>
-            <Text style={styles.socialTextColor}>{shares}</Text>
+            <ThisText style={styles.socialTextColor}>{shares}</ThisText>
         </TouchableOpacity>;
     }
 }

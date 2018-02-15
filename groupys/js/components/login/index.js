@@ -18,6 +18,7 @@ import styles from "./styles";
 import {isAuthenticated} from "../../selectors/appSelector";
 import strings from "../../i18n/i18n"
 import StyleUtils from "../../utils/styleUtils";
+import {ThisText} from '../../ui/index';
 
 const {width, height} = Dimensions.get('window');
 const thisLogo = require('../../../images/this-logo.png');
@@ -74,7 +75,7 @@ class Login extends Component {
 
                         <View  style={[styles.thisContainer, {width: StyleUtils.getWidth()}]} >
                             <Image style={{position:'absolute',top:-175,width:140}} resizeMode='contain' source={thisLogo}/>
-                            <Text style={styles.this}>THIS</Text>
+                            <ThisText style={styles.this}>THIS</ThisText>
                         </View>
                         <View style={{
                             flexDirection: 'column',
@@ -116,9 +117,9 @@ class Login extends Component {
                             </View>
 
 
-                            <Text style={{backgroundColor: 'transparent', padding: 10, fontSize: 16, color: 'red'}}>
+                            <ThisText style={{backgroundColor: 'transparent', padding: 10, fontSize: 16, color: 'red'}}>
                                 {failedMessage}
-                            </Text>
+                            </ThisText>
 
                             <View style={{
                                 height: 40,
@@ -138,24 +139,24 @@ class Login extends Component {
                                     alignItems: 'center',
                                 }} regular>
 
-                                    <Text style={{
+                                    <ThisText style={{
                                         color: 'skyblue',
                                         fontWeight:'bold',
                                         fontStyle: 'normal',
                                         fontSize: 20
-                                    }}>{strings.Login.toUpperCase()}</Text>
+                                    }}>{strings.Login.toUpperCase()}</ThisText>
 
                                 </TouchableOpacity>
                             </View>
                             {doLogin && <Spinner style={{position:'absolute',top:-15}}/>}
                             <View style={styles.signup_container}>
                                 <View style={{flexDirection:'row'}}>
-                                    <Text style={{backgroundColor:'transparent',color:'white'}}> Dosen't have an account? </Text>
-                                <Text onPress={() => this.replaceRoute('Signup')}
-                                      style={styles.signgupText}>{strings.SignUp}</Text>
+                                    <ThisText style={{backgroundColor:'transparent',color:'white'}}> Dosen't have an account? </ThisText>
+                                <ThisText onPress={() => this.replaceRoute('Signup')}
+                                      style={styles.signgupText}>{strings.SignUp}</ThisText>
                                 </View>
-                                <Text onPress={this.forgetPassword.bind(this)}
-                                      style={styles.forgetText}>{strings.ForgotPassword}</Text>
+                                <ThisText onPress={this.forgetPassword.bind(this)}
+                                      style={styles.forgetText}>{strings.ForgotPassword}</ThisText>
 
                             </View>
                         </View>

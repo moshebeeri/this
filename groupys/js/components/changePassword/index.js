@@ -23,7 +23,7 @@ import {bindActionCreators} from "redux";
 import {connect} from 'react-redux';
 import * as userAction from "../../actions/user";
 import styles from './styles'
-import {FormHeader, Spinner, TextInput} from '../../ui/index';
+import {FormHeader, Spinner, TextInput,ThisText} from '../../ui/index';
 import strings from "../../i18n/i18n"
 import StyleUtils from "../../utils/styleUtils";
 
@@ -135,16 +135,16 @@ class ChangePassword extends Component {
 
     createMessage(changeForm) {
         if (this.state.showMessage) {
-            return <Text style={{
+            return <ThisText style={{
                 fontSize: 16,
                 color: 'red',
-            }}>{this.state.validationMessage}</Text>
+            }}>{this.state.validationMessage}</ThisText>
         }
         if (changeForm.validationMessage) {
-            return <Text style={{
+            return <ThisText style={{
                 fontSize: 16,
                 color: 'red',
-            }}>{changeForm.validationMessage}</Text>
+            }}>{changeForm.validationMessage}</ThisText>
         }
         return undefined;
     }

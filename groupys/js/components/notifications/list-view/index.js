@@ -3,6 +3,7 @@ import {Dimensions, TouchableOpacity} from "react-native";
 import {Button, Text, Thumbnail, View} from "native-base";
 import * as notification from "./notofications";
 import strings from "../../../i18n/i18n"
+import {ThisText} from '../../../ui/index';
 
 const {width, height} = Dimensions.get('window')
 const vw = width / 100;
@@ -98,10 +99,10 @@ export default class NotificationListView extends Component {
 
                     <View style={{flexDirection: 'column', marginLeft: 5, width: StyleUtils.getWidth() , height: vh * 10}}>
                         <View style={{width: StyleUtils.getWidth()  - 20, flexDirection: 'row'}}>
-                            <Text numberOfLines={2}
+                            <ThisText numberOfLines={2}
                                   style={{height: vh * 7}}>
                                 {title}
-                            </Text>
+                            </ThisText>
                         </View>
                     </View>
                 </TouchableOpacity>
@@ -145,15 +146,15 @@ export default class NotificationListView extends Component {
                     {image}
                     <View style={{flexDirection: 'column', marginLeft: 5, width: StyleUtils.getWidth()  - 50, height: vh * 10}}>
                         <View style={{flexDirection: 'row'}}>
-                            <Text numberOfLines={2}
+                            <ThisText numberOfLines={2}
                                   style={{width: vw * 75, height: vh * 7}}>{strings.CreatePromotionForEveryoneBusiness}
-                                <Text style={{
+                                <ThisText style={{
                                     marginLeft: vw * 3,
                                     fontWeight: 'bold',
                                     height: vh * 5,
                                     width: nameWidth
-                                }}> {viewItem.business.name} </Text>
-                            </Text>
+                                }}> {viewItem.business.name} </ThisText>
+                            </ThisText>
                         </View>
                     </View>
                 </TouchableOpacity>
@@ -212,21 +213,21 @@ export default class NotificationListView extends Component {
                 case 'FOLLOW':
                     return <View style={actionStyle}>
                         <TouchableOpacity style={redeemStyle} onPress={this.notify.bind(this, 'FOLLOW')}>
-                            <Text style={{
+                            <ThisText style={{
                                 alignItems: 'center',
                                 justifyContent: 'center',
                                 fontWeight: 'bold',
                                 color: '#2db6c8'
-                            }}>{strings.Follow}</Text>
+                            }}>{strings.Follow}</ThisText>
                         </TouchableOpacity>
                     </View>
                 case 'APPROVE':
                     return <View style={actionStyle}>
                         <TouchableOpacity style={redeemStyle} onPress={this.notify.bind(this, 'APPROVE')}>
-                            <Text style={{fontWeight: 'bold', color: '#2db6c8'}}>{strings.Approve}</Text>
+                            <ThisText style={{fontWeight: 'bold', color: '#2db6c8'}}>{strings.Approve}</ThisText>
                         </TouchableOpacity>
                         <TouchableOpacity style={redeemStyle} onPress={this.notify.bind(this, 'DECLINE')}>
-                            <Text style={{fontWeight: 'bold', color: '#2db6c8'}}>{strings.Decline}</Text>
+                            <ThisText style={{fontWeight: 'bold', color: '#2db6c8'}}>{strings.Decline}</ThisText>
                         </TouchableOpacity>
                     </View>
             }
@@ -239,7 +240,7 @@ export default class NotificationListView extends Component {
         }
         return <View style={actionStyle}>
             <TouchableOpacity style={redeemStyle} onPress={this.accept.bind(this)}>
-                <Text style={{fontWeight: 'bold', color: '#2db6c8'}}>{strings.Accept}</Text>
+                <ThisText style={{fontWeight: 'bold', color: '#2db6c8'}}>{strings.Accept}</ThisText>
             </TouchableOpacity>
         </View>
     }
@@ -250,7 +251,7 @@ export default class NotificationListView extends Component {
         }
         return <View style={actionStyle}>
             <TouchableOpacity style={redeemStyle} onPress={this.createBusiness.bind(this, viewItem.business)}>
-                <Text style={{fontWeight: 'bold', color: '#2db6c8'}}>{strings.Create}</Text>
+                <ThisText style={{fontWeight: 'bold', color: '#2db6c8'}}>{strings.Create}</ThisText>
             </TouchableOpacity>
         </View>
     }
@@ -261,7 +262,7 @@ export default class NotificationListView extends Component {
         }
         return <View style={actionStyle}>
             <TouchableOpacity style={redeemStyle} onPress={this.create.bind(this, viewItem.group)}>
-                <Text style={{fontWeight: 'bold', color: '#2db6c8'}}>{strings.Create}</Text>
+                <ThisText style={{fontWeight: 'bold', color: '#2db6c8'}}>{strings.Create}</ThisText>
             </TouchableOpacity>
         </View>
     }
@@ -297,15 +298,15 @@ export default class NotificationListView extends Component {
                     {image}
                     <View style={{flexDirection: 'column', width: StyleUtils.getWidth()  - 50, height: vh * 10}}>
                         <View style={{flexDirection: 'row'}}>
-                            <Text style={{fontWeight: 'bold', marginLeft: vw * 4}}>{user.name}</Text>
-                            <Text style={{height: vh * 4}}>{strings.InvitesYouToJoinGroup}</Text>
+                            <ThisText style={{fontWeight: 'bold', marginLeft: vw * 4}}>{user.name}</ThisText>
+                            <ThisText style={{height: vh * 4}}>{strings.InvitesYouToJoinGroup}</ThisText>
                         </View>
-                        <Text style={{
+                        <ThisText style={{
                             marginLeft: vw * 3,
                             fontWeight: 'bold',
                             height: vh * 5,
                             width: nameWidth
-                        }}> {viewItem.group.name} </Text>
+                        }}> {viewItem.group.name} </ThisText>
                     </View>
                 </TouchableOpacity>
                 {action}
@@ -344,15 +345,15 @@ export default class NotificationListView extends Component {
                     {image}
                     <View style={{flexDirection: 'column', marginLeft: 5, width: StyleUtils.getWidth()  - 50, height: vh * 10}}>
                         <View style={{flexDirection: 'row'}}>
-                            <Text numberOfLines={2}
+                            <ThisText numberOfLines={2}
                                   style={{width: vw * 75, height: vh * 7}}>{strings.CreatePromotionForEveryoneGroup}
-                                <Text style={{
+                                <ThisText style={{
                                     marginLeft: vw * 3,
                                     fontWeight: 'bold',
                                     height: vh * 5,
                                     width: nameWidth
-                                }}> {viewItem.group.name} </Text>
-                            </Text>
+                                }}> {viewItem.group.name} </ThisText>
+                            </ThisText>
                         </View>
                     </View>
                 </TouchableOpacity>

@@ -21,7 +21,7 @@ import FeedUiConverter from '../../../api/feed-ui-converter'
 import StyleUtils from '../../../utils/styleUtils'
 import FormUtils from "../../../utils/fromUtils";
 import InViewPort from '../../../utils/inviewport'
-import {PromotionHeader, SocialState, SubmitButton} from '../../../ui/index';
+import {PromotionHeader, SocialState, SubmitButton,ThisText} from '../../../ui/index';
 import PageRefresher from '../../../refresh/pageRefresher'
 import strings from "../../../i18n/i18n"
 
@@ -83,17 +83,17 @@ export default class PromotionListView extends Component {
                     <View style={[styles.promotionInformation, {width: StyleUtils.getWidth()}]}>
 
 
-                        <Text style={styles.promotionInfoTextI}>{item.name} - {item.description}</Text>
+                        <ThisText style={styles.promotionInfoTextI}>{item.name} - {item.description}</ThisText>
                     </View>
                     <View style={styles.promotionDetailsContainer}>
                         <View style={styles.promotionLoctionContainer}>
-                            <View><Text style={styles.detailsTitleText}>{strings.Location}</Text></View>
-                            <View><Text
-                                style={styles.detailsText}>{FormUtils.getDistanceString(location.lat, location.long, promotionItem.location.lat, promotionItem.location.lng)}</Text></View>
+                            <View><ThisText style={styles.detailsTitleText}>{strings.Location}</ThisText></View>
+                            <View><ThisText
+                                style={styles.detailsText}>{FormUtils.getDistanceString(location.lat, location.long, promotionItem.location.lat, promotionItem.location.lng)}</ThisText></View>
                         </View>
                         <View style={styles.expireDateContainer}>
-                            <View><Text style={styles.detailsTitleText}>{strings.Expire}</Text></View>
-                            <View><Text style={styles.detailsText}>{item.endDate}</Text></View>
+                            <View><ThisText style={styles.detailsTitleText}>{strings.Expire}</ThisText></View>
+                            <View><ThisText style={styles.detailsText}>{item.endDate}</ThisText></View>
                         </View>
                         <View style={styles.editButtonContainer}>
                             <SubmitButton title={strings.Edit.toUpperCase()} color="#e65100"
@@ -103,21 +103,21 @@ export default class PromotionListView extends Component {
                     <View style={[styles.promotionAnalyticsContainer, {width: StyleUtils.getWidth()}]}>
 
                         <View style={styles.promotionAnalyticsAttribute}>
-                            <Text>{strings.Total.toUpperCase()} </Text>
-                            <Text style={styles.promotion_addressText} note>{item.quantity} </Text>
+                            <ThisText>{strings.Total.toUpperCase()} </ThisText>
+                            <ThisText style={styles.promotion_addressText} note>{item.quantity} </ThisText>
 
                         </View>
                         {promotionItem.social_state && <View style={styles.promotionAnalyticsAttribute}>
 
-                            <Text>{strings.Saved.toUpperCase()}</Text>
-                            <Text style={styles.promotion_addressText}
-                                  note>{promotionItem.social_state.saves}</Text>
+                            <ThisText>{strings.Saved.toUpperCase()}</ThisText>
+                            <ThisText style={styles.promotion_addressText}
+                                  note>{promotionItem.social_state.saves}</ThisText>
 
                         </View>}
                         {promotionItem.social_state && <View style={styles.promotionAnalyticsAttribute}>
 
-                            <Text>{strings.Used.toUpperCase()}</Text>
-                            <Text style={styles.promotion_addressText} note>{promotionItem.social_state.realizes}</Text>
+                            <ThisText>{strings.Used.toUpperCase()}</ThisText>
+                            <ThisText style={styles.promotion_addressText} note>{promotionItem.social_state.realizes}</ThisText>
 
                         </View>}
 
