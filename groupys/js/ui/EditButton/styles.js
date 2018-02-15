@@ -1,6 +1,6 @@
 const React = require('react-native');
 const {StyleSheet, Platform, Dimensions} = React;
-const {width, height} = Dimensions.get('window')
+const {width, height} = Dimensions.get('window');
 module.exports = {
 
     editButtonConntainer:{

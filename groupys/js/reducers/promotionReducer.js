@@ -108,9 +108,14 @@ export default function promotion(state = initialState, action) {
             };
 
         case actions.SAVE_PROMOTIONS :
-            let currentState = {...state};
-            currentPromotions[action.businessId] = action.promotions;
+
+            promotionsState[action.businessId] = action.promotions;
             return currentState;
+
+        case actions.OTHER_BUSINESS_USER :
+            //TODO: currentPromotions[action.currentPromotionInEdit] = action.otherBusinessUser;
+            return currentState;
+
         default:
             return state;
     }

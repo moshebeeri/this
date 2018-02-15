@@ -17,7 +17,7 @@ module.exports = {
     logo_view_no_margin: {
         flexDirection: 'row',
         backgroundColor: 'white',
-       paddingTop: (Platform.OS === 'ios') ? 5 : 5,
+       paddingTop: (Platform.OS === 'ios') ? 0 : 0,
         width:StyleUtils.getWidth(),
     },
     businessNameText: {

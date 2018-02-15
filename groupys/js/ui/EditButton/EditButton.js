@@ -9,12 +9,12 @@ export default class EditButton extends Component {
     }
 
     render() {
-        const {onPress,iconName} = this.props
+        const {onPress,iconName} = this.props;
         let name = "edit";
         if(iconName){
             name = iconName;
         }
-        return <TouchableOpacity style={styles.editButtonConntainer}
+        return <TouchableOpacity style={styles.editButtonContainer}
                                  onPress={onPress}>
             <Icon2 size={20} style={styles.productIcon} name={name}/>
         </TouchableOpacity>
