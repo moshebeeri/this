@@ -34,11 +34,13 @@ class Groups extends Component {
     onPressItem(item) {
         const {actions, navigation} = this.props;
         actions.touch(item._id);
+        actions.listenForChat(item);
         navigation.navigate('GroupFeed', {group: item, role: 'admin'});
     }
     onPressMessageItem(item) {
         const {actions, navigation} = this.props;
         actions.touch(item._id);
+        actions.listenForChat(item);
         navigation.navigate('GroupFeed', {chat:true,group: item, role: 'admin'});
     }
     shouldComponentUpdate(){

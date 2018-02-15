@@ -5,6 +5,7 @@ import {Menu, MenuOption, MenuOptions, MenuTrigger,} from 'react-native-popup-me
 import Icon from 'react-native-vector-icons/Entypo';
 import ImagePicker from 'react-native-image-crop-picker'
 import strings from "../../i18n/i18n"
+import {ThisText} from '../../ui/index';
 
 export default class ImagePickerComponent extends Component {
     constructor(props) {
@@ -131,7 +132,7 @@ export default class ImagePickerComponent extends Component {
         let videoPickerOption;
         if (video) {
             videoPickerOption = <MenuOption onSelect={this.pickVideo.bind(this)}>
-                <Text>{strings.PickVideo}</Text>
+                <ThisText>{strings.PickVideo}</ThisText>
             </MenuOption>
         }
         return <Menu>
@@ -141,10 +142,10 @@ export default class ImagePickerComponent extends Component {
             <MenuOptions>
 
                 <MenuOption onSelect={this.pickFromCamera.bind(this)}>
-                    <Text>{strings.TakePictures}</Text>
+                    <ThisText>{strings.TakePictures}</ThisText>
                 </MenuOption>
                 <MenuOption onSelect={this.pickPicture.bind(this)}>
-                    <Text>{strings.PickFromPhotos}</Text>
+                    <ThisText>{strings.PickFromPhotos}</ThisText>
                 </MenuOption>
                 {videoPickerOption}
 

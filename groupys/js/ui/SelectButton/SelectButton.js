@@ -1,6 +1,7 @@
 import React, {Component} from 'react';
 import { View,Text,TouchableOpacity} from 'react-native';
 import {Item,Picker,Icon,Spinner} from 'native-base';
+import {ThisText} from '../../ui/index';
 
 import styles from './styles'
 
@@ -47,7 +48,7 @@ export default class SelectButton extends Component {
             textStyle = styles.buttonTextStyleInvalid;
         }
         return <TouchableOpacity style={buttonStyle} onPress={action}>
-                    <Text style={textStyle}>{title}</Text>
+                    <ThisText style={textStyle}>{title}</ThisText>
         </TouchableOpacity>
     }
 }

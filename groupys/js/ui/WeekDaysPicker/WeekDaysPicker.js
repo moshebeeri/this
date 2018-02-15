@@ -5,6 +5,7 @@ import styles from './styles';
 import SelectMultiple from 'react-native-select-multiple'
 import strings from "../../i18n/i18n"
 import StyleUtils from '../../utils/styleUtils'
+import {ThisText} from '../../ui/index';
 
 const days = [
     {label: strings.Sunday, value: '1'},
@@ -91,7 +92,7 @@ export default class WeekDaysPicker extends Component {
 
                 <Icon style={{margin: 5, color: mandtoryIconColor, fontSize: 12}} name='star'/>
 
-                <Text style={textStyle}>{field}</Text>
+                <ThisText style={textStyle}>{field}</ThisText>
 
             </View>
             <View style={[weekscontainerStyle, {width: StyleUtils.getWidth() - 15}]}>

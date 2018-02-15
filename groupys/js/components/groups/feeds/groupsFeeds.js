@@ -56,6 +56,7 @@ class GroupFeedComponent extends Component {
         const {navigation, activityAction,group,feeds, userFollower, actions, token, loadingDone, location, showTopLoader,postUpdated} = this.props;
 
         const icon = <Icon2 active size={40} name="md-create"/>;
+        console.log('group feed render');
         return <View style={styles.inputContainer}>
             <GenericFeedManager
                 navigation={navigation}

@@ -5,7 +5,7 @@ import {Menu, MenuOption, MenuOptions, MenuTrigger,} from 'react-native-popup-me
 import Icon2 from 'react-native-vector-icons/SimpleLineIcons';
 import styles from './styles'
 import strings from "../../i18n/i18n"
-
+import {ThisText} from '../index';
 export default class ActivityActions extends Component {
     constructor(props) {
         super(props);
@@ -48,7 +48,7 @@ export default class ActivityActions extends Component {
             <MenuOptions>
 
                 <MenuOption onSelect={this.showFeedBack.bind(this)}>
-                    <Text>{strings.reportActivity}</Text>
+                    <ThisText>{strings.reportActivity}</ThisText>
                 </MenuOption>
 
 

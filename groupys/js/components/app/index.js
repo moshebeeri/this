@@ -1,5 +1,15 @@
 import React, {Component} from "react";
-import {Dimensions, I18nManager, Image, Platform, StyleSheetm, Text, TouchableOpacity, View,AppState} from "react-native";
+import {
+    AppState,
+    Dimensions,
+    I18nManager,
+    Image,
+    Platform,
+    StyleSheetm,
+    Text,
+    TouchableOpacity,
+    View
+} from "react-native";
 import {connect} from "react-redux";
 import {Container, Drawer, Fab, Icon, Tab, TabHeading, Tabs,} from "native-base";
 import GeneralComponentHeader from "../header/index";
@@ -32,7 +42,15 @@ import {NavigationActions} from "react-navigation";
 import '../../conf/global';
 import PageRefresher from '../../refresh/pageRefresher'
 import Tasks from '../../tasks/tasks'
-import {BusinessHeader, BusinessList, GroupHeader, GroupsList, ScrolTabView, SubmitButton} from '../../ui/index'
+import {
+    BusinessHeader,
+    BusinessList,
+    GroupHeader,
+    GroupsList,
+    ScrolTabView,
+    SubmitButton,
+    ThisText
+} from '../../ui/index'
 import FCM, {
     FCMEvent,
     NotificationType,
@@ -45,10 +63,10 @@ import strings from "../../i18n/i18n"
 import StyleUtils from "../../utils/styleUtils";
 import store from 'react-native-simple-store';
 import ActionLogger from '../../actions/ActionLogger'
+import handler from '../../actions/ErrorHandler'
 
 const height = StyleUtils.getHeight();
 let locationApi = new LocationApi();
-import  handler from '../../actions/ErrorHandler'
 const reduxStore = getStore();
 const resetAction = NavigationActions.reset({
     index: 0,
@@ -96,20 +114,17 @@ const warch = navigator.geolocation.watchPosition((position) => {
                 locationApi.sendLocation(position.coords.longitude, position.coords.latitude, position.timestamp, position.coords.speed);
             }
             let lastPosition = reduxStore.getState().phone.currentLocation;
-            if(!lastPosition || (lastPosition && lastPosition.lat !== position.coords.latitude && lastPosition.long !== position.coords.longitude)){
+            if (!lastPosition || (lastPosition && lastPosition.lat !== position.coords.latitude && lastPosition.long !== position.coords.longitude)) {
                 reduxStore.dispatch({
                     type: actions.SET_LOCATION,
                     currentLocation: {lat: position.coords.latitude, long: position.coords.longitude}
                 })
             }
-
         } catch (error) {
-            handler.handleError(actions.SET_LOCATION,dispatch,'SET_LOCATION')
-
+            handler.handleError(actions.SET_LOCATION, dispatch, 'SET_LOCATION')
         }
     }, (error) => {
         console.log('unable to get location')
-
     },
     {enableHighAccuracy: true, timeout: 20000, maximumAge: 1000, distanceFilter: 100}
 );
@@ -145,8 +160,6 @@ class ApplicationManager extends Component {
         FCM.getFCMToken().then(token => {
             PageRefresher.updateUserFireBase(token);
         });
-
-
         Tasks.start();
         let notification = await  FCM.getInitialNotification();
         if (notification && notification.model === 'instance') {
@@ -164,29 +177,26 @@ class ApplicationManager extends Component {
         if (notification && notification.title) {
             this.props.actions.showGenericPopup(notification.title, notification.notificationId, notification.action);
         }
-
-        FCM.getBadgeNumber().then(number=> FCM.setBadgeNumber(0))
-
+        FCM.getBadgeNumber().then(number => FCM.setBadgeNumber(0))
         AppState.addEventListener('change', this._handleAppStateChange);
     }
 
-
     _handleAppStateChange = (nextAppState) => {
-        if ( nextAppState !== 'active') {
+        if (nextAppState !== 'active') {
             Tasks.stop();
-        }else{
+        } else {
             Tasks.start();
         }
-
     }
+
     onChangeTab(tab) {
-        const{notificationAction,myPromotionsAction,feedAction} = this.props;
+        const {notificationAction, myPromotionsAction, feedAction, groupsActions} = this.props;
+        groupsActions.stopListenForChat();
         if (tab.i === 0) {
             if (I18nManager.isRTL && (Platform.OS === 'android')) {
                 logger.screenVisited('notification')
                 notificationAction.onEndReached();
             } else {
-
                 logger.screenVisited('feed')
                 feedAction.setTopFeeds();
                 PageRefresher.visitedFeed();
@@ -257,7 +267,7 @@ class ApplicationManager extends Component {
     renderTabeBar(props) {
         switch (props.activeTab) {
             default:
-                return <View ref={'tabs'}> <Text>bla</Text>
+                return <View ref={'tabs'}> <ThisText>bla</ThisText>
 
                 </View>
         }
@@ -268,7 +278,7 @@ class ApplicationManager extends Component {
             showAdd, showComponent, notifications,
             item, location, showPopup, token, notificationTitle,
             notificationAction, notificationGroup, notificationBusiness,
-            showSearchResults, businesses, businessActions, groups, groupsActions,showSearchGroupResults
+            showSearchResults, businesses, businessActions, groups, groupsActions, showSearchGroupResults
         } = this.props;
         console.log('rendering main');
         console.log(this.state.activeTab);
@@ -338,7 +348,8 @@ class ApplicationManager extends Component {
                     {showSearchResults && businesses && <View
                         style={{top: 45, position: 'absolute', backgroundColor: 'white', width: StyleUtils.getWidth()}}>
 
-                        <BusinessList navigation={this.props.navigation} businesses={businesses} followBusiness={businessActions.followBusiness}/>
+                        <BusinessList navigation={this.props.navigation} businesses={businesses}
+                                      followBusiness={businessActions.followBusiness}/>
                     </View>}
 
 
@@ -395,7 +406,7 @@ class ApplicationManager extends Component {
                                                                          hideMenu
                                                                          showActions={false}/>
                                 }
-                                <Text style={{paddingLeft: 10, paddingTop: 10}}>{notificationTitle}</Text>
+                                <ThisText style={{paddingLeft: 10, paddingTop: 10}}>{notificationTitle}</ThisText>
                             </View>
                             {notificationActionString &&
                             <View style={{flex: 1, paddingBottom: 10, justifyContent: 'flex-end',}}>
@@ -436,7 +447,6 @@ class ApplicationManager extends Component {
 const mapStateToProps = (state) => {
     return {
         isAuthenticated: isAuthenticated(state),
-
         showPopup: state.mainTab.showPopup,
         notifications: countUnreadNotifications(state),
         showAdd: showAddAction(state),
@@ -465,9 +475,9 @@ export default connect(
         userActions: bindActionCreators(userAction, dispatch),
         businessActions: bindActionCreators(businessActions, dispatch),
         groupsActions: bindActionCreators(groupsActions, dispatch),
-        notificationAction:bindActionCreators(notificationsActions, dispatch),
-        myPromotionsAction:bindActionCreators(myPromotionsActions, dispatch),
-        feedAction:bindActionCreators(feedAction, dispatch),
+        notificationAction: bindActionCreators(notificationsActions, dispatch),
+        myPromotionsAction: bindActionCreators(myPromotionsActions, dispatch),
+        feedAction: bindActionCreators(feedAction, dispatch),
     })
 )(ApplicationManager);
 

@@ -8,6 +8,7 @@ import {bindActionCreators} from "redux";
 import strings from "../../i18n/i18n"
 import FormUtils from "../../utils/fromUtils";
 const {width, height} = Dimensions.get('window')
+import {ThisText} from '../../ui/index';
 
 class AddPost extends Component {
     static navigationOptions = ({navigation}) => ({
@@ -175,7 +176,7 @@ class AddPost extends Component {
                 <View style={styles.addCoverNoImageContainer}>
                     <ImagePicker video ref={"coverImage"} color='white' pickFromCamera
                                  setVideo={this.setVideo.bind(this)} setImage={this.setCoverImage.bind(this)}/>
-                    <Text style={styles.addCoverText}>{strings.AddPictureOrVideo}</Text>
+                    <ThisText style={styles.addCoverText}>{strings.AddPictureOrVideo}</ThisText>
                 </View>
             </View>
 

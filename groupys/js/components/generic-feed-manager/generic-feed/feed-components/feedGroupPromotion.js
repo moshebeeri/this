@@ -29,6 +29,7 @@ import Icon2 from 'react-native-vector-icons/EvilIcons';
 import Icon3 from 'react-native-vector-icons/MaterialIcons';
 import StyleUtils from '../../../../utils/styleUtils'
 import * as componentCreator from "./feedCommonView";
+import {ThisText} from '../../../../ui/index';
 
 export default class FeedGroupPromotion extends Component {
     render() {
@@ -41,7 +42,7 @@ export default class FeedGroupPromotion extends Component {
             color: item.promotionColor,
             fontFamily: 'Roboto-Regular', marginLeft: 10, marginTop: 4, fontSize: 16
         }
-        const promotion = <Text style={colorStyle}>{item.promotion}</Text>
+        const promotion = <ThisText style={colorStyle}>{item.promotion}</ThisText>
         const buisnessLogo = componentCreator.createBusinessLog(item);
         const likeIcon = componentCreator.createLikeButton(item, styles, like, unlike);
         const commentICon = componentCreator.createCommentButton(styles, comment);
@@ -54,15 +55,15 @@ export default class FeedGroupPromotion extends Component {
                        <View style={styles.logo_view}>
                             {buisnessLogo}
                             <View style={{flexDirection: 'column'}}>
-                                <Text style={styles.promotion_nameText} note>{item.businessName} </Text>
-                                <Text style={styles.promotion_addressText} note>{item.businessAddress} </Text>
+                                <ThisText style={styles.promotion_nameText} note>{item.businessName} </ThisText>
+                                <ThisText style={styles.promotion_addressText} note>{item.businessAddress} </ThisText>
                             </View>
                         </View>
 
                         <View style={styles.promotion_description}>
 
-                            <Text style={styles.promotion_text_description}>{item.name}</Text>
-                            <Text style={styles.promotion_text_description}>{item.description}</Text>
+                            <ThisText style={styles.promotion_text_description}>{item.name}</ThisText>
+                            <ThisText style={styles.promotion_text_description}>{item.description}</ThisText>
 
                         </View>
                     </View>
@@ -73,14 +74,14 @@ export default class FeedGroupPromotion extends Component {
                     <View style={styles.promotion_bottomUpperContainer}>
                         <View style={styles.promotion_bottom_description}>
                             {promotion}
-                            <Text style={styles.promotion_type}>{item.itemTitle}</Text>
+                            <ThisText style={styles.promotion_type}>{item.itemTitle}</ThisText>
                             <View style={styles.promotion_bottom_location}>
                                 <Icon2 style={styles.promotion_location} size={25} name="clock"/>
 
                             </View>
                             <View style={styles.promotion_bottom_location}>
                                 <Icon3 style={styles.promotion_location} size={25} name="location-on"/>
-                                <Text style={styles.promotion_addressText} note>{item.businessAddress} </Text>
+                                <ThisText style={styles.promotion_addressText} note>{item.businessAddress} </ThisText>
                             </View>
                         </View>
                     </View>

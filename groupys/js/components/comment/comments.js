@@ -19,7 +19,7 @@ import CommentsComponenet from './commentsComponent';
 import styles from './styles'
 import {bindActionCreators} from "redux";
 import * as commentAction from "../../actions/comments";
-import {BusinessHeader} from '../../ui/index';
+import {BusinessHeader,ThisText} from '../../ui/index';
 import StyleUtils from "../../utils/styleUtils";
 
 class GenericComments extends Component {
@@ -79,8 +79,8 @@ class GenericComments extends Component {
                     <Thumbnail small source={item.avetar}/>
                 </View>
                 <View style={{paddingLeft: 20, justifyContent: 'center'}}>
-                    <Text>{item.name}</Text>
-                    <Text>{item.feed.activity.post.title}</Text>
+                    <ThisText>{item.name}</ThisText>
+                    <ThisText>{item.feed.activity.post.title}</ThisText>
                 </View>
 
             </View>

@@ -109,21 +109,21 @@ class Tasks {
     }
 
     async groupChatTaskStart(groupId) {
-        await this.mainFeddTaskstop();
-        const refresher = BackgroundTimer.setInterval(() => {
-            this.updateGroupChat(groupId);
-        }, 5000);
-
-        simpleStore.save("group_chat", [ refresher])
+        // await this.mainFeddTaskstop();
+        // const refresher = BackgroundTimer.setInterval(() => {
+        //     this.updateGroupChat(groupId);
+        // }, 5000);
+        //
+        // simpleStore.save("group_chat", [ refresher])
     }
 
     async groupChatTaskstop() {
-        let tasks = await simpleStore.get("group_chat");
-        if (tasks) {
-            tasks.forEach((task) => {
-                BackgroundTimer.clearInterval(task);
-            });
-        }
+        // let tasks = await simpleStore.get("group_chat");
+        // if (tasks) {
+        //     tasks.forEach((task) => {
+        //         BackgroundTimer.clearInterval(task);
+        //     });
+        // }
     }
 
     updateGroupChat(groupId) {

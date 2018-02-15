@@ -36,6 +36,7 @@ import UrlPreview from './UrlPreview/UrlPreview';
 import DocumentPicker from './DocumentPicker/DocumentPicker'
 import TermsOfUse from './TermOfUse/TermsOfUse'
 import ImageController from './ImageController/ImageController'
+import ThisText from './ThisText/ThisText'
 export {
     ImagePicker,
     CategoryPicker,
@@ -74,5 +75,6 @@ export {
     UrlPreview,
     DocumentPicker,
     TermsOfUse,
-    ImageController
+    ImageController,
+    ThisText
 }

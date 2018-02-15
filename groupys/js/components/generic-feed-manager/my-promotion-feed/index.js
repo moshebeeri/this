@@ -25,6 +25,7 @@ import Icon3 from 'react-native-vector-icons/MaterialIcons';
 import stylesPortrate from './styles'
 import stylesLandscape from './styles_landscape'
 import StyleUtils from '../../../utils/styleUtils'
+import {ThisText} from '../../../ui/index';
 
 const ReactNative = require('react-native');
 const {StyleSheet, Platform, Dimensions} = ReactNative;
@@ -93,7 +94,7 @@ export default class MyPromotionFeedItem extends Component {
             color: item.promotionColor,
             fontFamily: 'Roboto-Regular', marginLeft: 10, marginTop: 4, fontSize: 16
         }
-        const promotion = <Text style={colorStyle}>{item.promotion}</Text>
+        const promotion = <ThisText style={colorStyle}>{item.promotion}</ThisText>
         const buisnessLogo = this.createBusinessLogi(item);
         const redeemStyle = {
             flex: -1,
@@ -121,7 +122,7 @@ export default class MyPromotionFeedItem extends Component {
                             <View style={styles.logo_view}>
                                 {buisnessLogo}
                                 <View style={{flexDirection: 'column'}}>
-                                    <Text style={styles.promotion_nameText} note>{item.businessName} </Text>
+                                    <ThisText style={styles.promotion_nameText} note>{item.businessName} </ThisText>
                                 </View>
                             </View>
 
@@ -130,15 +131,15 @@ export default class MyPromotionFeedItem extends Component {
                         <View style={styles.promotion_bottomUpperContainer}>
                             <View style={styles.promotion_bottom_description}>
                                 {promotion}
-                                <Text style={styles.promotion_type}>{item.itemTitle}</Text>
+                                <ThisText style={styles.promotion_type}>{item.itemTitle}</ThisText>
                                 <View style={styles.promotion_bottom_location}>
                                     <Icon2 style={styles.promotion_location} size={25} name="clock"/>
-                                    <Text style={styles.promotion_addressText} note>{item.endDate} </Text>
+                                    <ThisText style={styles.promotion_addressText} note>{item.endDate} </ThisText>
 
                                 </View>
                                 <View style={styles.promotion_bottom_location}>
                                     <Icon3 style={styles.promotion_location} size={25} name="location-on"/>
-                                    <Text style={styles.promotion_addressText} note>{item.businessAddress} </Text>
+                                    <ThisText style={styles.promotion_addressText} note>{item.businessAddress} </ThisText>
                                 </View>
                             </View>
                         </View>
@@ -146,14 +147,14 @@ export default class MyPromotionFeedItem extends Component {
                             <Button style={postStyle} onPress={this.comment.bind(this)}>
 
 
-                                <Text>{strings.ViewPost}</Text>
+                                <ThisText>{strings.ViewPost}</ThisText>
 
 
                             </Button>
                             <Button style={redeemStyle} onPress={this.realize.bind(this)}>
 
 
-                                <Text>{strings.Redeem}</Text>
+                                <ThisText>{strings.Redeem}</ThisText>
 
 
                             </Button>

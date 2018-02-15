@@ -21,6 +21,7 @@ import {isAuthenticated} from "../../selectors/appSelector";
 import strings from "../../i18n/i18n"
 import Icon from 'react-native-vector-icons/Ionicons';
 import StyleUtils from "../../utils/styleUtils";
+import {ThisText} from '../../ui/index';
 
 const thisLogo = require('../../../images/this-logo.png');
 const bg = require('../../../images/bg.png');
@@ -106,7 +107,7 @@ class ForgetPassword extends Component {
 
                             <Image style={{position: 'absolute', top: -175, width: 140}} resizeMode='contain'
                                    source={thisLogo}/>
-                            <Text style={styles.this}>THIS</Text>
+                            <ThisText style={styles.this}>THIS</ThisText>
                         </View>
                         <View style={{
                             flexDirection: 'column',
@@ -136,12 +137,12 @@ class ForgetPassword extends Component {
                                 height: 60, marginTop: 10, justifyContent: 'center',
                                 alignItems: 'center', width: width / 2 + 120
                             }}>
-                                <Text style={styles.SignUpText}>{strings.PasswordRecoverySMSNotificationMessage}</Text>
+                                <ThisText style={styles.SignUpText}>{strings.PasswordRecoverySMSNotificationMessage}</ThisText>
                             </View>
 
-                            <Text style={{backgroundColor: 'transparent', padding: 10, fontSize: 16, color: 'red'}}>
+                            <ThisText style={{backgroundColor: 'transparent', padding: 10, fontSize: 16, color: 'red'}}>
                                 {failedMessage}
-                            </Text>
+                            </ThisText>
 
                             <View style={{
                                 height: 40,
@@ -162,12 +163,12 @@ class ForgetPassword extends Component {
                                     alignItems: 'center',
                                 }} regular>
 
-                                    <Text style={{
+                                    <ThisText style={{
                                         color: 'skyblue',
                                         fontWeight: 'bold',
                                         fontStyle: 'normal',
                                         fontSize: 20
-                                    }}>{strings.SendSMS.toUpperCase()}</Text>
+                                    }}>{strings.SendSMS.toUpperCase()}</ThisText>
 
                                 </TouchableOpacity>
                             </View>

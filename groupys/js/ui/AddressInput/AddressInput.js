@@ -2,7 +2,7 @@ import React, {Component} from 'react';
 import {I18nManager, Text, View} from 'react-native';
 import {Icon, Input, Spinner} from 'native-base';
 import styles from './styles';
-import {DynamicMessage, TextInput} from '../index';
+import {DynamicMessage, TextInput,ThisText} from '../index';
 import {connect} from 'react-redux';
 import {bindActionCreators} from "redux";
 import * as addressAction from "../../actions/address";
@@ -158,7 +158,7 @@ class AddressInput extends Component {
                     {/*{!I18nManager.isRTL && isMandatory &&*/}
                     {/*<Icon style={{margin: 5, color: 'red', fontSize: 12}} name='star'/>}*/}
 
-                    <Text style={styles.textInputTextStyle}>{strings.LocationAddress}</Text>
+                    <ThisText style={styles.textInputTextStyle}>{strings.LocationAddress}</ThisText>
                     { isMandatory &&
                     <Icon style={{margin: 5, color: 'red', fontSize: 12}} name='star'/>}
                 </View>
@@ -192,7 +192,7 @@ class AddressInput extends Component {
             </View>
             {addressForm.validating && <Spinner/>}
             {addressForm.addressNotFound &&
-            <Text style={{marginLeft: 10, color: 'red'}}>{addressForm.addressNotFoundMessage}</Text>}
+            <ThisText style={{marginLeft: 10, color: 'red'}}>{addressForm.addressNotFoundMessage}</ThisText>}
             {addressForm.locations && addressForm.locations.length > 0 &&
             <DynamicMessage messagesObject={addressForm.locations} messageToString={this.locationToString.bind(this)}
                             onMessage={this.chooseAddress.bind(this)}/>}

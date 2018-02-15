@@ -10,7 +10,7 @@ import styles from "./styles";
 import {DatePicker, FormHeader, Spinner, TextInput} from '../../../ui/index';
 import strings from "../../../i18n/i18n"
 import StyleUtils from '../../../utils/styleUtils'
-
+import {ThisText} from '../index';
 class EditPromotion extends Component {
     constructor(props) {
         super(props);
@@ -167,15 +167,15 @@ class EditPromotion extends Component {
                 }}>
 
                     <View style={[styles.textLayout, {width: StyleUtils.getWidth()}]}>
-                        <Text style={{
+                        <ThisText style={{
                             color: '#FA8559',
                             marginLeft: 8,
                             marginRight: 8
-                        }}>{strings.EditPromotionMessage}</Text>
+                        }}>{strings.EditPromotionMessage}</ThisText>
 
                     </View>
                     <View style={[styles.textLayout, {width: StyleUtils.getWidth()}]}>
-                        <Text style={{color: '#FA8559', marginLeft: 8, marginRight: 8}}>{strings.General}</Text>
+                        <ThisText style={{color: '#FA8559', marginLeft: 8, marginRight: 8}}>{strings.General}</ThisText>
                     </View>
                     <View style={[styles.inputTextMediumLayout, {width: StyleUtils.getWidth()}]}>
                         <View style={{flex: 1, marginRight: 10}}>

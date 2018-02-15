@@ -145,7 +145,7 @@ class GroupFeedHeader extends Component {
         let addPromotionMenu = undefined;
         if (group.role && (group.role === "owner" || group.role === "OWNS" || group.role === "Admin" || group.role === "Manager"  )) {
             addPromotionMenu = <MenuOption onSelect={this.addPromotion.bind(this)}>
-                <Text>{strings.AddPromotion}</Text>
+                <ThisText>{strings.AddPromotion}</ThisText>
             </MenuOption>
         }
 
@@ -158,10 +158,10 @@ class GroupFeedHeader extends Component {
                 </MenuTrigger>
                 <MenuOptions>
                     <MenuOption onSelect={this.updateGroup.bind(this)}>
-                        <Text>{strings.Edit}</Text>
+                        <ThisText>{strings.Edit}</ThisText>
                     </MenuOption>
                     <MenuOption onSelect={this.showUsers.bind(this)}>
-                        <Text>{strings.Invite}</Text>
+                        <ThisText>{strings.Invite}</ThisText>
                     </MenuOption>
                     {addPromotionMenu}
                 </MenuOptions>

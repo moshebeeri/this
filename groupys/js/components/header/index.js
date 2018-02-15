@@ -15,6 +15,7 @@ import globals from '../../conf/global'
 import strings from "../../i18n/i18n"
 import StyleUtils from "../../utils/styleUtils";
 const { height} = Dimensions.get('window')
+import {ThisText} from '../../ui/index';
 
 const vh = height / 100
 
@@ -97,7 +98,7 @@ class GeneralComponentHeader extends Component {
                         alignItems: 'center',
                         backgroundColor: '#f4ce42'
                     }}>
-                        <Text style={{color: 'gray'}}>Offline</Text>
+                        <ThisText style={{color: 'gray'}}>Offline</ThisText>
                     </View>}
                     {network.debugMessage && globals.debug &&  <TouchableOpacity
                         onPress={() => this.resetMessage()}
@@ -110,7 +111,7 @@ class GeneralComponentHeader extends Component {
 
 
                     }}>
-                        <Text style={{color: 'gray'}}>{network.debugMessage}</Text>
+                        <ThisText style={{color: 'gray'}}>{network.debugMessage}</ThisText>
                     </TouchableOpacity>}
                     <View style={{
                         height: headerHeight, flexDirection: 'row', alignItems: 'center', backgroundColor: 'white',
@@ -164,10 +165,10 @@ class GeneralComponentHeader extends Component {
             <MenuOptions>
 
                 <MenuOption onSelect={this.searchBusiness.bind(this)}>
-                    <Text>{strings.SearchBusiness}</Text>
+                    <ThisText>{strings.SearchBusiness}</ThisText>
                 </MenuOption>
                 <MenuOption onSelect={this.searchGroups.bind(this)}>
-                    <Text>{strings.SearchGroups}</Text>
+                    <ThisText>{strings.SearchGroups}</ThisText>
                 </MenuOption>
 
 
@@ -182,7 +183,7 @@ class GeneralComponentHeader extends Component {
                     alignItems: 'center',
                     backgroundColor: '#f4ce42'
                 }}>
-                    <Text style={{color: 'gray'}}>{strings.Offline}</Text>
+                    <ThisText style={{color: 'gray'}}>{strings.Offline}</ThisText>
                 </View>}
                 <View style={{
                     height: headerHeight, flexDirection: 'row', alignItems: 'center', backgroundColor: 'white',
@@ -200,7 +201,7 @@ class GeneralComponentHeader extends Component {
                     </View>
                     }
 
-                    <Text transparent style={{color: "#2db6c8", backgroundColor: 'transparent'}}>THIS</Text>
+                    <ThisText transparent style={{color: "#2db6c8", backgroundColor: 'transparent'}}>THIS</ThisText>
                     {<View style={{
                         height: vh * 6, flexDirection: 'row', justifyContent: 'center', alignItems: 'center'
                     }}>

@@ -27,6 +27,7 @@ import stylesLandscape from './styles'
 import StyleUtils from '../../../../utils/styleUtils'
 import {ActivityReport, SocialState, UrlPreview, Video} from '../../../../ui/index';
 import PageRefresher from '../../../../refresh/pageRefresher'
+import {ThisText} from '../../../../ui/index';
 
 const {width, height} = Dimensions.get('window');
 const vh = height / 100;
@@ -115,8 +116,8 @@ export default class FeedPost extends Component {
                             <Thumbnail square meduim source={item.avetar}/>
                         </View>
                         <View style={{marginTop: 10, paddingLeft: 10, alignItems: 'flex-start'}}>
-                            <Text>{item.name}</Text>
-                            <Text style={{width: 240, alignItems: 'flex-start'}}>{item.feed.activity.post.title}</Text>
+                            <ThisText>{item.name}</ThisText>
+                            <ThisText style={{width: 240, alignItems: 'flex-start'}}>{item.feed.activity.post.title}</ThisText>
                         </View>
                         <View style={{marginTop: 10, flex: 1, paddingRight: 10, alignItems: 'flex-end', justifyContent: 'flex-start'}}>
                             <ActivityReport id={item.activityId} showActions={showActions}/>
@@ -126,9 +127,9 @@ export default class FeedPost extends Component {
                     {!this.state.containLink && <View style={postMessageContainerStyle}>
 
                         <View style={[promotionDetalis, {width: StyleUtils.getWidth() - 15}]}>
-                            <Text numberOfLines={4}
+                            <ThisText numberOfLines={4}
                                   style={{marginRight: 10, marginLeft: 10, fontSize: 18}}>{item.feed.activity.post.text}
-                            </Text>
+                            </ThisText>
                         </View>
                     </View>}
                     {image}

@@ -1,4 +1,6 @@
 const React = require('react');
+import {ThisText} from '../../ui/index';
+
 const {ViewPropTypes, I18nManager} = ReactNative = require('react-native');
 const PropTypes = require('prop-types');
 const createReactClass = require('create-react-class');
@@ -121,9 +123,9 @@ const ScrollableTabBar = createReactClass({
             onLayout={onLayoutHandler}
         >
             <View style={[styles.tab, this.props.tabStyle,]}>
-                <Text style={[{color: textColor, fontWeight,}, textStyle,]}>
+                <ThisText style={[{color: textColor, fontWeight,}, textStyle,]}>
                     {name}
-                </Text>
+                </ThisText>
             </View>
         </Button>;
     },

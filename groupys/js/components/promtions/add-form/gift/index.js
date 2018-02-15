@@ -6,6 +6,7 @@ import strings from "../../../../i18n/i18n"
 import StyleUtils from '../../../../utils/styleUtils';
 import {Thumbnail} from 'native-base';
 import ProductPreview from "../../../product/productPreview/index";
+import {ThisText} from '../../../../ui/index';
 
 const types = [
         {
@@ -132,7 +133,7 @@ export default class GiftComponent extends Component {
         return <View>
 
             <View style={[styles.textLayout, {width: StyleUtils.getWidth() - 15}]}>
-                <Text style={{color: '#FA8559', marginLeft: 8, marginRight: 8}}>{strings.Gift}</Text>
+                <ThisText style={{color: '#FA8559', marginLeft: 8, marginRight: 8}}>{strings.Gift}</ThisText>
             </View>
             <View style={{flexDirection: 'row', justifyContent: 'center', alignItems: 'center'}}>
                 <View style={{flex: 1.7, marginTop: 25}}><SelectButton ref="giftSelectProduct"

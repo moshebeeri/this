@@ -4,7 +4,7 @@ import {Button, Input, Item, Spinner, Text, View} from "native-base";
 import Icon3 from "react-native-vector-icons/Ionicons";
 import Camera from "react-native-camera";
 import styles from "./styles";
-import {BusinessHeade,ImageControllerr} from '../../../ui/index';
+import {BusinessHeade,ImageControllerr,ThisText} from '../../../ui/index';
 import strings from '../../../i18n/i18n';
 
 const qrcode = require('../../../../images/qr-code.png');
@@ -57,7 +57,7 @@ export default class BusinessFollow extends Component {
                 let followComponent = <TouchableOpacity onPress={() => followBusiness(businees._id, navigation)}
                                                         style={followStyle} regular>
 
-                    <Text style={{color: 'white', fontStyle: 'normal', fontSize: 15}}>{strings.Follow}</Text>
+                    <ThisText style={{color: 'white', fontStyle: 'normal', fontSize: 15}}>{strings.Follow}</ThisText>
 
                 </TouchableOpacity>;
                 if (group) {
@@ -65,7 +65,7 @@ export default class BusinessFollow extends Component {
                         <TouchableOpacity onPress={() => groupFollowBusiness(group._id, businees._id, navigation)}
                                           style={followStyle} regular>
 
-                            <Text style={{color: 'white', fontStyle: 'normal', fontSize: 15}}>{strings.Follow}</Text>
+                            <ThisText style={{color: 'white', fontStyle: 'normal', fontSize: 15}}>{strings.Follow}</ThisText>
 
                         </TouchableOpacity>;
                 }
@@ -83,7 +83,7 @@ export default class BusinessFollow extends Component {
                                             businessName={businees.name}/>
                         </View>
 
-                        <Text style={{width: 100, marginLeft: 10}}>{businees.name}</Text>
+                        <ThisText style={{width: 100, marginLeft: 10}}>{businees.name}</ThisText>
                         <View
                             style={{marginLeft: 20, flex: -1, flexDirection: 'row', width: 180, alignItems: 'center',}}>
                             {followComponent}
@@ -103,7 +103,7 @@ export default class BusinessFollow extends Component {
                 style={styles.payment_camera}
                 aspect={Camera.constants.Aspect.fill}>
             </Camera>
-                <Text>strings.PleaseScanCode</Text>
+                <ThisText>strings.PleaseScanCode</ThisText>
             </View>
         }
         return ( <View style={styles.follow_container}>

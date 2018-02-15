@@ -5,6 +5,8 @@ import styles from './styles'
 import strings from "../../i18n/i18n"
 import StyleUtils from "../../utils/styleUtils";
 import {ImageController} from '../index'
+import {ThisText} from '../../ui/index';
+
 export default class GroupHeader extends Component {
     constructor(props) {
         super(props);
@@ -12,7 +14,7 @@ export default class GroupHeader extends Component {
 
     createBusinessLogo(business) {
         if (business && business.logo) {
-            return <ImageController thumbnail size={30}  source={{uri: business.logo}}/>
+            return <ImageController thumbnail size={30} source={{uri: business.logo}}/>
         } else {
             return <ImageController thumbnail size={30} source={require('../../../images/client_1.png')}/>
         }
@@ -20,17 +22,17 @@ export default class GroupHeader extends Component {
 
     createImage(group) {
         if (group.pictures && group.pictures.length > 0) {
-            if (group.pictures[group.pictures.length -1].pictures[3]) {
+            if (group.pictures[group.pictures.length - 1].pictures[3]) {
                 return <ImageController thumbnail size={50} source={{uri: group.pictures[0].pictures[3]}}/>
             }
         } else {
             if (group.entity && group.entity.business) {
                 if (group.entity.business.logo) {
-                    return <ImageController thumbnail size={50}  source={{uri: group.entity.business.logo}}/>
+                    return <ImageController thumbnail size={50} source={{uri: group.entity.business.logo}}/>
                 }
             }
         }
-        return <ImageController thumbnail size={50}  source={require('../../../images/client_1.png')}/>
+        return <ImageController thumbnail size={50} source={require('../../../images/client_1.png')}/>
     }
 
     createTitle(groupType) {
@@ -60,7 +62,7 @@ export default class GroupHeader extends Component {
                             {this.createBusinessLogo(business)}
                         </View>
                         <View style={styles.businessPickerComponent}>
-                            <Text style={styles.businessNameText}>{business.name}</Text>
+                            <ThisText style={styles.businessNameText}>{business.name}</ThisText>
                         </View>
 
                     </View>;
@@ -71,7 +73,7 @@ export default class GroupHeader extends Component {
 
     render() {
         const {group, noColor} = this.props;
-        let containerStyle = {backgroundColor: 'white',marginTop:10,marginBottom:10,marginLeft:20};
+        let containerStyle = {backgroundColor: 'white', marginTop: 10, marginBottom: 10, marginLeft: 20};
         if (noColor) {
             containerStyle = {};
         }
@@ -83,12 +85,13 @@ export default class GroupHeader extends Component {
                 </View>
                 <View style={styles.groupName}>
                     <View style={{flexDirection: 'row'}}>
-                        <Text style={this.createStyle(group.entity_type)}>{this.createTitle(group.entity_type)}</Text>
-                        <Text> | </Text>
-                        {group.social_state && <Text>{group.social_state.followers} {strings.Members} </Text>}
+                        <ThisText
+                            style={this.createStyle(group.entity_type)}>{this.createTitle(group.entity_type)}</ThisText>
+                        <ThisText> | </ThisText>
+                        {group.social_state && <ThisText>{group.social_state.followers} {strings.Members} </ThisText>}
                     </View>
                     <View>
-                        <Text style={styles.groupNameText}>{group.name}</Text>
+                        <ThisText style={styles.groupNameText}>{group.name}</ThisText>
                     </View>
 
                 </View>

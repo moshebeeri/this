@@ -1,7 +1,7 @@
 import React, {Component} from 'react';
 import {Dimensions, I18nManager, TextInput,TouchableOpacity, View,ScrollView} from 'react-native';
 import {Icon, Input, Text} from 'native-base';
-
+import {ThisText} from '../index';
 const {width, height} = Dimensions.get('window');
 export default class EmojiList extends Component {
     constructor(props) {
@@ -28,7 +28,7 @@ export default class EmojiList extends Component {
                                           onPress={() => {
                                               this.onEmojiSelect(emoji)
                                           }}>
-                            <Text style={{height: 37, fontSize: 30}} key={index}>{emoji}</Text>
+                            <ThisText style={{height: 37, fontSize: 30}} key={index}>{emoji}</ThisText>
                         </TouchableOpacity>
                     ))
                 }

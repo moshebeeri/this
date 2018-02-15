@@ -9,6 +9,7 @@ const style = {
     height:200,
     backgroundColor: 'orange',
 };
+
 //
 // const App = () => (
 //     <YouTube
@@ -88,7 +89,7 @@ export default class RNVideo extends Component {
                             />
 
 
-                    {/*<Text>{this.state.paused? 'paused' : 'playing'}</Text>*/}
+                    {/*<ThisText>{this.state.paused? 'paused' : 'playing'}</ThisText>*/}
                 </TouchableOpacity> }
                 {this.state.source === 'YOUTUBE'&& <WebView style={{width:this.state.width,height:this.state.height}}source={{ uri: `https://www.youtube.com/embed/${this.state.videoId}?version=3&autoplay=1&showinfo=0&controls=0&modestbranding=1&fs=1&rel=0` }} />}
 

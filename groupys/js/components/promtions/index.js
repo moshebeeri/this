@@ -12,7 +12,7 @@ import Icon5 from 'react-native-vector-icons/MaterialCommunityIcons';
 import * as businessAction from "../../actions/business";
 import {getBusinessPromotions} from '../../selectors/businessesSelector'
 import {bindActionCreators} from "redux";
-import {FormHeader} from '../../ui/index';
+import {FormHeader,ThisText} from '../../ui/index';
 import PageRefresher from '../../refresh/pageRefresher'
 import * as promotionsAction from "../../actions/promotions";
 import strings from "../../i18n/i18n"
@@ -112,7 +112,7 @@ class Promotions extends Component {
 
 
                 <MenuOption onSelect={this.onBoardingPromotion.bind(this)}>
-                    <Text>{strings.OnBoardingPromotion}</Text>
+                    <ThisText>{strings.OnBoardingPromotion}</ThisText>
                 </MenuOption>
 
             </MenuOptions>

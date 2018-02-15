@@ -13,6 +13,7 @@ import FeedUiConverter from "../../api/feed-ui-converter";
 const deviceHeight = Dimensions.get('window').width;
 let promotionApi = new PromotionApi()
 let feedUiConverter = new FeedUiConverter();
+import {ThisText} from '../../ui/index';
 
 class RealizePromotion extends Component {
     static navigationOptions = {
@@ -103,8 +104,8 @@ class RealizePromotion extends Component {
                         justifyContent: 'center',
                         alignItems: 'center'
                     }}>
-                        <Text>{strings.RealizeMessage1}</Text>
-                        <Text>{strings.RealizeMessage2}</Text>
+                        <ThisText>{strings.RealizeMessage1}</ThisText>
+                        <ThisText>{strings.RealizeMessage2}</ThisText>
                         {this.state.image &&
                         <Image style={{
                             width: 300,
@@ -115,13 +116,13 @@ class RealizePromotion extends Component {
                     </View>
                 </View>
                 {isRealized && <View style={{position: 'absolute', left: 15, top: 350, backgroundColor: 'transparent'}}>
-                    <Text style={{
+                    <ThisText style={{
                         backgroundColor: 'white',
                         fontSize: 70,
                         fontWeight: 'bold',
                         transform: [{rotate: '45deg'}],
                         color: '#2db6c8'
-                    }}>{strings.Realized.toUpperCase()}</Text>
+                    }}>{strings.Realized.toUpperCase()}</ThisText>
                 </View>}
             </ScrollView>
 

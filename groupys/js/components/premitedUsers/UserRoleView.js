@@ -27,7 +27,9 @@ const rolesTypes = {
         Admin: 'Admin',
         Manager: 'Manager',
         Seller: 'Seller'
-};
+    };
+import {ThisText} from '../../ui/index';
+
 
 export default class UserRoleView extends Component {
     createUserView(user, role, index) {
@@ -36,13 +38,13 @@ export default class UserRoleView extends Component {
             let path = user.pictures[user.pictures.length - 1].pictures[0];
             pic = <Thumbnail square size={80} source={{uri: path}}/>
         }
-        let roleView = <Text>{rolesTypes[role]}</Text>;
+        let roleView = <ThisText>{rolesTypes[role]}</ThisText>
         return <View key={index} style={styles.list_user_view}>
             <View style={{justifyContent:'center',flex:1}}>
                 {pic}
             </View>
             <View style={{justifyContent:'center',alignItems:'flex-start',flex:3}}>
-                <Text >{user.name} - <Text>{roleView}</Text></Text>
+                <ThisText >{user.name} - <ThisText>{roleView}</ThisText></ThisText>
             </View>
             <View style={{flex:0.5,justifyContent:'center'}}>
                 <EditButton onPress={this.editPermission.bind(this, user, rolesTypes[role])}/>
@@ -51,7 +53,7 @@ export default class UserRoleView extends Component {
         </View>
     }
 
-    editPermission(user,role){
+    editPremission(user,role){
         const{navigation,business} = this.props;
         navigation.navigate("addPermittedUser", {role:role, user:user, business: business});
     }

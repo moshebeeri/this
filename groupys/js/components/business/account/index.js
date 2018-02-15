@@ -20,7 +20,7 @@ import {
     Title,
 } from 'native-base';
 import styles from './styles'
-import {BusinessHeader, FormHeader, SubmitButton, TextInput,ImageController} from '../../../ui/index';
+import {BusinessHeader, FormHeader, SubmitButton, TextInput,ImageController,ThisText} from '../../../ui/index';
 import * as businessAction from "../../../actions/business";
 import {connect} from 'react-redux';
 import {bindActionCreators} from "redux";
@@ -99,7 +99,7 @@ class BusinessAccount extends Component {
         let message = undefined;
         if (paymentMessage) {
             message = <View style={{marginTop: 20, alignItems: 'center', justifyContent: 'center'}}>
-                <Text>{paymentMessage}</Text>
+                <ThisText>{paymentMessage}</ThisText>
             </View>
         }
         return ( <KeyboardAvoidingView>
@@ -114,7 +114,7 @@ class BusinessAccount extends Component {
                 <ScrollView keyboardShouldPersistTaps={true} >
                     <View style={{alignItems: 'center', justifyContent: 'center'}}>
                         <View style={{marginTop: 10}}>
-                            <Text>{strings.AccountBalance}</Text>
+                            <ThisText>{strings.AccountBalance}</ThisText>
                         </View>
                         <View style={[styles.inputFullTextLayout, {width: StyleUtils.getWidth() - 15}]}>
 
