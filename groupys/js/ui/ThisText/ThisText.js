@@ -1,5 +1,6 @@
 import React, {Component} from 'react';
-import {Text} from 'react-native';
+import {Text,Platform} from 'react-native';
+
 
 export default class ThisText extends Component {
     constructor(props) {
@@ -7,6 +8,6 @@ export default class ThisText extends Component {
     }
 
     render() {
-        return <Text note={this.props.note} style={[this.props.style, {}]}>{this.props.children}</Text>
+        return <Text note={this.props.note} style={[this.props.style, {fontFamily: (Platform.OS === 'ios') ? 'Helvetica Neue' : 'Roboto-Regular'}]}>{this.props.children}</Text>
     }
 }
