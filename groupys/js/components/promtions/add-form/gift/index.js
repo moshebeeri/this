@@ -1,11 +1,22 @@
 import React, {Component} from 'react';
 import {Keyboard, Platform, Text, View} from 'react-native'
 import styles from './styles'
-import {SelectButton} from '../../../../ui/index';
+import {SelectButton, SimplePicker} from '../../../../ui/index';
 import strings from "../../../../i18n/i18n"
 import StyleUtils from '../../../../utils/styleUtils';
 import {Thumbnail} from 'native-base';
 import ProductPreview from "../../../product/productPreview/index";
+
+const types = [
+        {
+            value: 'MY_BUSINESS',
+            label: strings.MyBusiness
+        },
+        {
+            value: 'OTHER_BUSINESS',
+            label: strings.OtherBusiness
+        }
+    ];
 
 export default class GiftComponent extends Component {
     constructor(props) {
@@ -109,6 +120,12 @@ export default class GiftComponent extends Component {
         Keyboard.dismiss();
     }
 
+    async selectGiftingBusiness(value) {
+        this.setState({
+            type: value,
+        });
+    }
+
     render() {
         return <View>
 
@@ -123,6 +140,12 @@ export default class GiftComponent extends Component {
                                                                        action={this.showBuyProducts.bind(this, true)}/></View>
             </View>
             <ProductPreview product={this.props.state.product} />
+
+            <View style={[styles.inputTextLayout, {width: StyleUtils.getWidth() - 15}]}>
+                <SimplePicker ref="promotionType" list={types} itemTitle={strings.GiftingBusiness}
+                              defaultHeader="MY_BUSINESS" isMandatory
+                              onValueSelected={this.selectGiftingBusiness.bind(this)}/>
+            </View>
 
             <View style={{flexDirection: 'row', justifyContent: 'center', alignItems: 'center'}}>
                 <View style={{flex: 1.7, marginTop: 25}}><SelectButton ref="giftSelectGift"
