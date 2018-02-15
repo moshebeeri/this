@@ -237,8 +237,8 @@ class AddPromotion extends Component {
         if (this.state.type === 'PERCENT') {
             promotion.percent = {};
             promotion.percent.variation = 'SINGLE';
-            promotion.percent.values = [this.state.percent.percent]
-            promotion.percent.quantity = Number(this.state.quantity)
+            promotion.percent.values = [this.state.percent.percent];
+            promotion.percent.quantity = Number(this.state.quantity);
             if (this.state.percent.retail_price) {
                 promotion.retail_price = Number(this.state.percent.retail_price)
             }
@@ -246,7 +246,7 @@ class AddPromotion extends Component {
         if (this.state.type === 'REDUCED_AMOUNT') {
             promotion.reduced_amount = {};
             promotion.reduced_amount.variation = 'SINGLE';
-            promotion.reduced_amount.quantity = Number(this.state.quantity)
+            promotion.reduced_amount.quantity = Number(this.state.quantity);
             promotion.reduced_amount.values = [{
                 price: Number(this.state.reduced_amount.values.price),
                 pay: Number(this.state.reduced_amount.values.pay),
@@ -255,7 +255,7 @@ class AddPromotion extends Component {
         if (this.state.type === 'X_FOR_Y') {
             promotion.x_for_y = {};
             promotion.x_for_y.variation = 'SINGLE';
-            promotion.x_for_y.quantity = Number(this.state.quantity)
+            promotion.x_for_y.quantity = Number(this.state.quantity);
             promotion.x_for_y.values = [{
                 eligible: Number(this.state.x_for_y.values.eligible),
                 pay: Number(this.state.x_for_y.values.pay),

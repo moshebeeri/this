@@ -21,19 +21,19 @@ import {
 } from 'native-base';
 import {EditButton} from '../../ui/index';
 const noPic = require('../../../images/client_1.png');
-const rolesTypes =
-    {
+const rolesTypes = {
         OWNS: 'Owner',
         Owner: 'Owner',
         Admin: 'Admin',
         Manager: 'Manager',
         Seller: 'Seller'
-    }
+    };
 import {ThisText} from '../../ui/index';
+
 
 export default class UserRoleView extends Component {
     createUserView(user, role, index) {
-        let pic = <Thumbnail square size={80} source={noPic}/>
+        let pic = <Thumbnail square size={80} source={noPic}/>;
         if (user && user.pictures && user.pictures.length > 0) {
             let path = user.pictures[user.pictures.length - 1].pictures[0];
             pic = <Thumbnail square size={80} source={{uri: path}}/>
@@ -47,7 +47,7 @@ export default class UserRoleView extends Component {
                 <ThisText >{user.name} - <ThisText>{roleView}</ThisText></ThisText>
             </View>
             <View style={{flex:0.5,justifyContent:'center'}}>
-                <EditButton onPress={this.editPremission.bind(this,user,rolesTypes[role])}/>
+                <EditButton onPress={this.editPermission.bind(this, user, rolesTypes[role])}/>
             </View>
 
         </View>
@@ -55,7 +55,7 @@ export default class UserRoleView extends Component {
 
     editPremission(user,role){
         const{navigation,business} = this.props;
-        navigation.navigate("addPremitedUsers", {role:role,user:user,business: business});
+        navigation.navigate("addPermittedUser", {role:role, user:user, business: business});
     }
 
     render() {

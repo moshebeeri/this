@@ -28,7 +28,7 @@ const rolesTypes = [
         value: 'Seller',
         label: strings.Seller
     },
-]
+];
 
 class AddPermittedUser extends Component {
     constructor(props) {
@@ -210,7 +210,7 @@ class AddPermittedUser extends Component {
     }
 
     shouldComponentUpdate() {
-        if (this.props.currentScreen === 'addPremitedUsers') {
+        if (this.props.currentScreen === 'addPermittedUser') {
             return true;
         }
         return false;
