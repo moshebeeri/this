@@ -10,6 +10,7 @@ import ActionLogger from './ActionLogger'
 import GroupsComperator from "../reduxComperators/GroupsComperator"
 import handler from './ErrorHandler'
 import * as types from '../sega/segaActions';
+
 let groupsApi = new GroupsApi();
 let feedApi = new FeedApi();
 let promotionApi = new PtomotionApi();
@@ -21,10 +22,8 @@ let groupsComperator = new GroupsComperator();
 async function getAll(dispatch, token) {
     dispatch({
         type: types.SAVE_GROUPS_REQUEST,
-        token:token
-
+        token: token
     });
-
 }
 
 export function clearUnreadPosts(group) {
@@ -458,6 +457,41 @@ export function setGroups(response) {
     return {
         type: actions.UPSERT_GROUP,
         item: response,
+    }
+}
+
+export function listenForChat(group) {
+    return function (dispatch, getState) {
+        const token = getState().authentication.token;
+        const groupsChats = getState().comments.groupComments[group._id];
+        const user = getState().user.user;
+        if (groupsChats) {
+
+            let groupChatIds = Object.keys(groupsChats).sort(function (a, b) {
+                if (a < b) {
+                    return 1
+                }
+                if (a > b) {
+                    return -1
+                }
+                return 0;
+            });
+            dispatch({
+                type: types.LISTEN_FOR_GROUP_CHATS,
+                group: group,
+                token: token,
+                lastChatId: groupChatIds[0],
+                user:user,
+            })
+        }
+    }
+}
+
+export function stopListenForChat() {
+    return function (dispatch) {
+        dispatch({
+            type: types.CANCEL_GROUP_CHAT_LISTENER,
+        })
     }
 }
 

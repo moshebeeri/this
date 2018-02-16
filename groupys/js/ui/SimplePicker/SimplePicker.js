@@ -7,6 +7,7 @@ import styles from './styles'
 import { I18nManager } from 'react-native';
 import strings from "../../i18n/i18n";
 import StyleUtils from "../../utils/styleUtils";
+import {ThisText} from '../../ui/index';
 
 export default class SimplePicker extends Component {
     constructor(props) {
@@ -20,7 +21,7 @@ export default class SimplePicker extends Component {
         const {onValueSelected} = this.props;
         this.setState({
             type: value,
-        })
+        });
         onValueSelected(value)
     }
 
@@ -28,10 +29,10 @@ export default class SimplePicker extends Component {
         const {onValueSelected, list} = this.props;
         let options = list.map((s) => {
             return s.value;
-        })
+        });
         this.setState({
             type: options[value -1],
-        })
+        });
         onValueSelected(options[value -1])
     }
 
@@ -50,7 +51,7 @@ export default class SimplePicker extends Component {
             if (!this.state.type) {
                 this.setState({
                     invalid: true
-                })
+                });
                 return false
             }
         }
@@ -59,20 +60,20 @@ export default class SimplePicker extends Component {
 
     renderRow(value){
 
-        return <View style={{justifyContent:I18nManager.isRTL?'flex-start':'flex-end',alignItems: 'flex-end'}}><Text style={{paddingLeft:10,paddingRight:10,fontSize:14 }}>{value}</Text></View>
+        return <View style={{justifyContent:I18nManager.isRTL?'flex-start':'flex-end',alignItems: 'flex-end'}}><ThisText style={{paddingLeft:10,paddingRight:10,fontSize:14 }}>{value}</ThisText></View>
 
     }
     createIosRender() {
         const {list, itemTitle, defaultHeader, isMandatory, defaultValue,value} = this.props;
         let options = list.map((s) => {
             return s.label;
-        })
+        });
         let pickerStyle=styles.modalView;
         if (this.state.invalid) {
             pickerStyle = styles.modalViewInvalid;
         }
         options.unshift(defaultValue);
-        let selectValue = strings.PleaseSelect
+        let selectValue = strings.PleaseSelect;
         if(value){
             selectValue = value
         }
@@ -81,7 +82,7 @@ export default class SimplePicker extends Component {
         return <View>
             <View style={[styles.pickerTitleContainer, {width: StyleUtils.getWidth() - 15}]}>
 
-                <Text style={styles.pickerTextStyle}>{itemTitle}</Text>
+                <ThisText style={styles.pickerTextStyle}>{itemTitle}</ThisText>
                 {isMandatory && <Icon style={{margin: 5, color: 'red', fontSize: 12}} name='star'/>}
             </View>
 
@@ -105,7 +106,7 @@ export default class SimplePicker extends Component {
     }
 
     render() {
-        const {list, value,itemTitle, defaultHeader, isMandatory, defaultValue} = this.props;
+        const {list, value, itemTitle, defaultHeader, isMandatory, defaultValue} = this.props;
         if (Platform.OS === 'ios') {
             return this.createIosRender();
         }
@@ -119,7 +120,7 @@ export default class SimplePicker extends Component {
         }
         return <View>
             <View style={styles.pickerTitleContainer}>
-                <Text style={styles.pickerTextStyle}>{itemTitle}</Text>
+                <ThisText style={styles.pickerTextStyle}>{itemTitle}</ThisText>
                 { isMandatory && <Icon style={{margin: 5, color: 'red', fontSize: 12}} name='star'/>}
             </View>
 

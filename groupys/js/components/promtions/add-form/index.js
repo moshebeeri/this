@@ -16,7 +16,7 @@ import XForYComponent from "./xForY/index";
 import ReduceAmountComponent from "./reduceAmount/index";
 import HappyHourComponent from "./happyHour/index";
 import styles from "./styles";
-import {DatePicker, FormHeader, ImagePicker, SelectButton, SimplePicker, Spinner, TextInput} from '../../../ui/index';
+import {DatePicker, FormHeader, ImagePicker, SelectButton, SimplePicker, Spinner, TextInput,ThisText} from '../../../ui/index';
 import strings from "../../../i18n/i18n"
 import StyleUtils from '../../../utils/styleUtils'
 
@@ -237,8 +237,8 @@ class AddPromotion extends Component {
         if (this.state.type === 'PERCENT') {
             promotion.percent = {};
             promotion.percent.variation = 'SINGLE';
-            promotion.percent.values = [this.state.percent.percent]
-            promotion.percent.quantity = Number(this.state.quantity)
+            promotion.percent.values = [this.state.percent.percent];
+            promotion.percent.quantity = Number(this.state.quantity);
             if (this.state.percent.retail_price) {
                 promotion.retail_price = Number(this.state.percent.retail_price)
             }
@@ -246,7 +246,7 @@ class AddPromotion extends Component {
         if (this.state.type === 'REDUCED_AMOUNT') {
             promotion.reduced_amount = {};
             promotion.reduced_amount.variation = 'SINGLE';
-            promotion.reduced_amount.quantity = Number(this.state.quantity)
+            promotion.reduced_amount.quantity = Number(this.state.quantity);
             promotion.reduced_amount.values = [{
                 price: Number(this.state.reduced_amount.values.price),
                 pay: Number(this.state.reduced_amount.values.pay),
@@ -255,7 +255,7 @@ class AddPromotion extends Component {
         if (this.state.type === 'X_FOR_Y') {
             promotion.x_for_y = {};
             promotion.x_for_y.variation = 'SINGLE';
-            promotion.x_for_y.quantity = Number(this.state.quantity)
+            promotion.x_for_y.quantity = Number(this.state.quantity);
             promotion.x_for_y.values = [{
                 eligible: Number(this.state.x_for_y.values.eligible),
                 pay: Number(this.state.x_for_y.values.pay),
@@ -447,8 +447,8 @@ class AddPromotion extends Component {
         if (this.state.distribution === 'GROUP') {
             if (this.state.groups) {
                 selectedGroup =
-                    <Text style={{color: '#FA8559', marginLeft: 8, marginRight: 8}}>
-                        {strings.SelectedGroups}: {this.state.groups.length} </Text>
+                    <ThisText style={{color: '#FA8559', marginLeft: 8, marginRight: 8}}>
+                        {strings.SelectedGroups}: {this.state.groups.length} </ThisText>
             }
             button = <View style={{flexDirection: 'row', alignItems: 'center'}}>
                 <SelectButton title={strings.SelectGroups} action={this.showGroups.bind(this)}/>
@@ -457,7 +457,7 @@ class AddPromotion extends Component {
         }
         return <View>
             <View style={[styles.textLayout, {width: StyleUtils.getWidth() - 15}]}>
-                <Text style={{color: '#FA8559', marginLeft: 8, marginRight: 8}}>{strings.Distribution}</Text>
+                <ThisText style={{color: '#FA8559', marginLeft: 8, marginRight: 8}}>{strings.Distribution}</ThisText>
             </View>
             <View style={{flexDirection: 'row', justifyContent: 'flex-start', alignItems: 'center'}}>
 
@@ -505,7 +505,7 @@ class AddPromotion extends Component {
 
                     {this.createCoverImageComponnent()}
                     <View style={[styles.textLayout, {width: StyleUtils.getWidth() - 15}]}>
-                        <Text style={{color: '#FA8559', marginLeft: 8, marginRight: 8}}>{strings.Details}</Text>
+                        <ThisText style={{color: '#FA8559', marginLeft: 8, marginRight: 8}}>{strings.Details}</ThisText>
                     </View>
                     <View style={[styles.inputTextLayout, {width: StyleUtils.getWidth() - 15}]}>
                         <SimplePicker ref="promotionType" list={types} itemTitle={strings.PromotionType}
@@ -513,7 +513,7 @@ class AddPromotion extends Component {
                                       onValueSelected={this.selectPromotionType.bind(this)}/>
                     </View>
                     <View style={[styles.textLayout, {width: StyleUtils.getWidth() - 15}]}>
-                        <Text style={{color: '#FA8559', marginLeft: 8, marginRight: 8}}>{strings.General}</Text>
+                        <ThisText style={{color: '#FA8559', marginLeft: 8, marginRight: 8}}>{strings.General}</ThisText>
                     </View>
                     <View style={[styles.inputTextMediumLayout, {width: StyleUtils.getWidth() - 15}]}>
 
@@ -553,7 +553,7 @@ class AddPromotion extends Component {
                     <Spinner/>
                 </View>}
                 {savingFailed &&  <View style={{justifyContent:'center',alignItems:'center',position:'absolute',width:StyleUtils.getWidth(),opacity:0.9,height:height,top:40,backgroundColor:'white'}}>
-                    <Text style={{margin:10,fontWeight:'bold',color:'black',fontSize:20}}>{strings.PromotionFailedSavingMessage}</Text>
+                    <ThisText style={{margin:10,fontWeight:'bold',color:'black',fontSize:20}}>{strings.PromotionFailedSavingMessage}</ThisText>
                 </View>}
 
             </View>
@@ -605,7 +605,7 @@ class AddPromotion extends Component {
                 <View style={styles.addCoverNoImageContainer}>
                     <ImagePicker ref={"coverImage"} mandatory color='white' pickFromCamera
                                  setImage={this.setCoverImage.bind(this)}/>
-                    <Text style={styles.addCoverText}>{strings.AddACoverPhoto}</Text>
+                    <ThisText style={styles.addCoverText}>{strings.AddACoverPhoto}</ThisText>
                 </View>
             </View>
 

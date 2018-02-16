@@ -25,6 +25,7 @@ import {TermsOfUse} from "../../ui/index"
 const {width, height} = Dimensions.get('window')
 const thisLogo = require('../../../images/this-logo.png');
 const bg = require('../../../images/bg.png');
+import {ThisText} from '../../ui/index';
 
 class Signup extends Component {
     static navigationOptions = {
@@ -128,7 +129,7 @@ class Signup extends Component {
                         <View style={styles.thisContainer}>
                             <Image style={{position: 'absolute', top: -185, width: 140}} resizeMode='contain'
                                    source={thisLogo}/>
-                            <Text style={styles.this}>THIS</Text>
+                            <ThisText style={styles.this}>THIS</ThisText>
                         </View>
                         <View style={{
                             width:  StyleUtils.getWidth(),
@@ -262,12 +263,12 @@ class Signup extends Component {
                                     alignItems: 'center',
                                 }} regular>
 
-                                    <Text style={{
+                                    <ThisText style={{
                                         color: 'skyblue',
                                         fontWeight: 'bold',
                                         fontStyle: 'normal',
                                         fontSize: 20
-                                    }}>{strings.SignUp.toUpperCase()}</Text>
+                                    }}>{strings.SignUp.toUpperCase()}</ThisText>
 
                                 </TouchableOpacity>
 
@@ -290,9 +291,9 @@ class Signup extends Component {
 
     createMessage(message) {
         if (message) {
-            return <Text style={{backgroundColor: 'transparent', padding: 10, fontSize: 16, color: 'red'}}>
+            return <ThisText style={{backgroundColor: 'transparent', padding: 10, fontSize: 16, color: 'red'}}>
                 {message}
-            </Text>
+            </ThisText>
         }
         return undefined;
     }

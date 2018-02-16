@@ -4,6 +4,7 @@ import ActionLogger from './ActionLogger'
 import  handler from './ErrorHandler'
 let commentsApi = new CommentsApi();
 let logger = new ActionLogger();
+import {put} from 'redux-saga/effects'
 
 export function fetchTop(feeds, token, entity, group) {
     return fetchTopComments(group, entity);
@@ -168,6 +169,19 @@ export function setNextFeeds(comments, group) {
     }
 }
 
+export function* updateChatTop(response,group,user) {
+    yield put({
+        type: actions.UPSERT_GROUP_TOP_COMMENT,
+        item: response,
+        gid: group._id,
+        user:user
+    });
+    yield put({
+        type: actions.GROUP_COMMENT_CLEAR_MESSAGE,
+        groupId: group._id,
+    });
+
+}
 export default {
     refreshComments
 };

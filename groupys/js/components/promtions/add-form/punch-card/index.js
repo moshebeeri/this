@@ -2,7 +2,7 @@ import React, {Component} from 'react';
 import {Platform, Text, View,Keyboard} from 'react-native'
 import FormUtils from "../../../../utils/fromUtils";
 import styles from './styles'
-import {SelectButton, TextInput} from '../../../../ui/index';
+import {SelectButton, TextInput,ThisText} from '../../../../ui/index';
 import strings from "../../../../i18n/i18n"
 import StyleUtils from '../../../../utils/styleUtils';
 import ProductPreview from "../../../product/productPreview/index";
@@ -74,7 +74,7 @@ export default class PunchCardComponent extends Component {
         return <View>
             <View style={[styles.textLayout, {width: StyleUtils.getWidth() - 15}]}>
 
-                <Text style={{color: '#FA8559', marginLeft: 8, marginRight: 8}}>{strings.PunchCard}</Text>
+                <ThisText style={{color: '#FA8559', marginLeft: 8, marginRight: 8}}>{strings.PunchCard}</ThisText>
             </View>
             <View style={{flexDirection: 'row', justifyContent: 'center', alignItems: 'center'}}>
                 <View style={{flex: 1.7, marginTop: 25}}><SelectButton ref="PunchSelectProduct" isMandatory

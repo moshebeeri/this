@@ -6,6 +6,7 @@ import strings from "../../../../i18n/i18n"
 import StyleUtils from '../../../../utils/styleUtils';
 import {Thumbnail} from 'native-base';
 import ProductPreview from "../../../product/productPreview/index";
+import {ThisText} from '../../../../ui/index';
 
 export default class XForYComponent extends Component {
     constructor(props) {
@@ -100,7 +101,7 @@ export default class XForYComponent extends Component {
         }
         return <View>
             <View style={[styles.textLayout, {width: StyleUtils.getWidth() - 15}]}>
-                <Text style={{color: '#FA8559', marginLeft: 8, marginRight: 8}}>{strings.BuyProductsFor}</Text>
+                <ThisText style={{color: '#FA8559', marginLeft: 8, marginRight: 8}}>{strings.BuyProductsFor}</ThisText>
             </View>
 
             <View style={{flexDirection: 'row', justifyContent: 'center', alignItems: 'center'}}>

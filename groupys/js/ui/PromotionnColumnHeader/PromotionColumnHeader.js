@@ -2,7 +2,7 @@ import React, {Component} from 'react';
 import {Dimensions, Text, View} from 'react-native';
 import {Button, Icon, Input} from 'native-base';
 import styles from './styles';
-import {PunchView} from '../index'
+import {PunchView,ThisText} from '../index'
 import StyleUtils from "../../utils/styleUtils";
 
 const {width, height} = Dimensions.get('window')
@@ -26,11 +26,11 @@ export default class PromotionColumnHeader extends Component {
                     backgroundColor: 'white'
                 }}>
 
-                    <Text style={{color: '#2db6c8', fontSize: 50,}}>{titleValue}%</Text>
+                    <ThisText style={{color: '#2db6c8', fontSize: 50,}}>{titleValue}%</ThisText>
 
-                    <Text style={styles.titleTextFeed}>{titleText}</Text>
+                    <ThisText style={styles.titleTextFeed}>{titleText}</ThisText>
 
-                    <Text style={styles.promotionTermlTextStyle}>{term}</Text>
+                    <ThisText style={styles.promotionTermlTextStyle}>{term}</ThisText>
 
                 </View>;
             case "HAPPY_HOUR":
@@ -45,11 +45,11 @@ export default class PromotionColumnHeader extends Component {
                     backgroundColor: 'white'
                 }}>
 
-                    <Text style={{color: '#2db6c8', fontSize: 50,}}>{ILS}{titleValue}</Text>
+                    <ThisText style={{color: '#2db6c8', fontSize: 50,}}>{ILS}{titleValue}</ThisText>
 
-                    <Text style={styles.titleTextFeed}>{titleText}</Text>
+                    <ThisText style={styles.titleTextFeed}>{titleText}</ThisText>
 
-                    <Text style={styles.promotionTermlTextStyle}>{term}</Text>
+                    <ThisText style={styles.promotionTermlTextStyle}>{term}</ThisText>
 
                 </View>;
             case "X+Y":
@@ -62,17 +62,17 @@ export default class PromotionColumnHeader extends Component {
                     backgroundColor: 'white'
                 }}>
 
-                    <Text style={{color: '#2db6c8', fontSize: 50,}}>{titleValue}</Text>
+                    <ThisText style={{color: '#2db6c8', fontSize: 50,}}>{titleValue}</ThisText>
 
-                    <Text style={styles.titleTextFeed}>{titleText}</Text>
+                    <ThisText style={styles.titleTextFeed}>{titleText}</ThisText>
 
-                    <Text style={styles.promotionTermlTextStyle}>{term}</Text>
+                    <ThisText style={styles.promotionTermlTextStyle}>{term}</ThisText>
 
                 </View>;
             case "PUNCH_CARD":
                 return <View style={[styles.promotionPunchHeader, {width: StyleUtils.getWidth() - 15}]}>
                     <View style={styles.promotionPunchValue}>
-                        <Text style={styles.puncCardtitleFeedValue}>{titleText}</Text>
+                        <ThisText style={styles.puncCardtitleFeedValue}>{titleText}</ThisText>
                     </View>
                     <PunchView feed numberRealized={item.realizedPunches}  numberOfPunches={term}/>
                 </View>;

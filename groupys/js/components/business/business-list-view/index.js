@@ -30,6 +30,7 @@ const products = require('../../../../images/barcode.png');
 const {width, height} = Dimensions.get('window');
 import StyleUtils from '../../../utils/styleUtils'
 const vh = height / 100;
+import {ThisText} from '../../../ui/index';
 
 const permissions = require('../../../../images/permissions.png');
 export default class BusinessListView extends Component {
@@ -123,7 +124,7 @@ export default class BusinessListView extends Component {
                         }}>
 
 
-                            <Text>{strings.confirmBusinessByMailMessage}</Text>
+                            <ThisText>{strings.confirmBusinessByMailMessage}</ThisText>
                             <EditButton iconName='refresh' onPress={this.refreshBusiness.bind(this)}/>
                         </View>}
                         {item.business && item.business.review && item.business.review.state ==='review' && <View style={{
@@ -132,7 +133,7 @@ export default class BusinessListView extends Component {
                         }}>
 
 
-                            <Text>{strings.validatingBusinessMessage}</Text>
+                            <ThisText>{strings.validatingBusinessMessage}</ThisText>
                             <EditButton iconName='refresh' onPress={this.refreshBusiness.bind(this)}/>
                         </View>}
                     </View>
@@ -174,12 +175,12 @@ export default class BusinessListView extends Component {
                 <ImageController style={{tintColor: '#ff6400', marginLeft: 10, width: vh * 4, height: vh * 4}}
                        source={permissions}/>
 
-                <Text style={{
+                <ThisText style={{
                     marginLeft: 5,
                     color: '#ff6400',
                     fontStyle: 'normal',
                     fontSize: 13
-                }}>{strings.Permissions}</Text>
+                }}>{strings.Permissions}</ThisText>
 
             </TouchableOpacity>
         }
@@ -194,12 +195,12 @@ export default class BusinessListView extends Component {
                 <ImageController style={{tintColor: '#ff6400', marginLeft: 10, width: vh * 3, height: vh * 4}}
                        source={products}/>
 
-                <Text style={{
+                <ThisText style={{
                     marginLeft: 5,
                     color: '#ff6400',
                     fontStyle: 'normal',
                     fontSize: 13
-                }}>{strings.Products}</Text>
+                }}>{strings.Products}</ThisText>
 
             </TouchableOpacity>
         }
@@ -231,12 +232,12 @@ export default class BusinessListView extends Component {
                 <ImageController style={{tintColor: '#ff6400', marginLeft: 10, width: vh * 4, height: vh * 4}}
                        source={promotions}/>
 
-                <Text style={{
+                <ThisText style={{
                     marginLeft: 5,
                     color: '#ff6400',
                     fontStyle: 'normal',
                     fontSize: 13
-                }}>{strings.Promotions}</Text>
+                }}>{strings.Promotions}</ThisText>
 
             </TouchableOpacity>
         }

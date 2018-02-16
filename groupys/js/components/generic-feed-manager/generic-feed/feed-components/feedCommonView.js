@@ -2,39 +2,35 @@
  * Created by roilandshut on 07/09/2017.
  */
 import React, {Component} from 'react';
-import {Image, Platform, PanResponder, TouchableHighlight, TouchableOpacity, Dimensions} from 'react-native';
-import {connect} from 'react-redux';
+import {Dimensions, Image, PanResponder, Platform, TouchableHighlight, TouchableOpacity} from 'react-native';
 import {actions} from 'react-native-navigation-redux-helpers';
 import {
+    Button,
+    Card,
+    CardItem,
     Container,
     Content,
-    Text,
-    InputGroup,
+    Footer,
+    Header,
     Input,
-    Thumbnail,
-    Button,
-    Picker,
-    Right,
+    InputGroup,
     Item,
     Left,
-    Header,
-    Footer,
-    Body,
-    View,
-    Card,
-    CardItem
+    Picker,
+    Right,
+    Thumbnail,
+    View
 } from 'native-base';
+import Icon from 'react-native-vector-icons/FontAwesome';
+import Icon2 from 'react-native-vector-icons/EvilIcons';
+import stylesPortrate from './styles'
+import {ThisText} from '../../../../ui/index';
 
 const {width, height} = Dimensions.get('window')
 const vw = width / 100;
 const vh = height / 100
 const vmin = Math.min(vw, vh);
 const vmax = Math.max(vw, vh);
-import Icon from 'react-native-vector-icons/FontAwesome';
-import Icon2 from 'react-native-vector-icons/EvilIcons';
-import stylesPortrate from './styles'
-import stylesLandscape from './styles_lendscape'
-import StyleUtils from '../../../../utils/styleUtils'
 
 export function createSaveButton(item, save) {
     if (item.showsave) {
@@ -49,7 +45,7 @@ export function createSaveButton(item, save) {
         };
         return (
             <Button style={saveStyle} onPress={() => save(item.id)}>
-                <Text>Strings.Save</Text>
+                <ThisText>Strings.Save</ThisText>
             </Button>
         )
     }
@@ -65,7 +61,7 @@ export function createSaveButton(item, save) {
     return <Button style={saveStyle}>
 
 
-        <Text>strings.saved</Text>
+        <ThisText>strings.saved</ThisText>
 
 
     </Button>;
@@ -80,7 +76,7 @@ export function createShareButton(styles, showUsers, item) {
         return <Button transparent style={styles.promotion_iconView} onPress={showUsers}>
 
             <Icon2 style={styles.promotion_share} size={30} name="share-google"/>
-            <Text>{shares}</Text>
+            <ThisText>{shares}</ThisText>
 
 
         </Button>
@@ -88,19 +84,18 @@ export function createShareButton(styles, showUsers, item) {
     return <Button transparent style={styles.promotion_iconView} onPress={showUsers}>
 
         <Icon2 style={styles.promotion_comment} size={30} name="share-google"/>
-        <Text>{shares}</Text>
+        <ThisText>{shares}</ThisText>
     </Button>;
 }
 
 export function createCommentButton(styles, comment, item) {
     return <Button transparent style={styles.promotion_iconView} onPress={comment}>
         <Icon2 style={styles.promotion_comment} size={30} name="comment"/>
-        <Text>0</Text>
+        <ThisText>0</ThisText>
     </Button>;
 }
 
 export function createStyle() {
-
     return stylesPortrate;
 }
 
@@ -114,14 +109,14 @@ export function createLikeButton(item, styles, like, unlike, token) {
 
 
             <Icon style={styles.promotion_like} size={25} name="heart"/>
-            <Text>{likes}</Text>
+            <ThisText>{likes}</ThisText>
 
         </Button>
     }
     return <Button transparent style={styles.promotion_iconView} onPress={() => like(item.id, token)}>
 
         <Icon style={styles.promotion_unlike} size={25} name="heart"/>
-        <Text>{likes}</Text>
+        <ThisText>{likes}</ThisText>
 
     </Button>
 }

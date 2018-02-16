@@ -7,6 +7,7 @@ import {connect} from 'react-redux';
 import {bindActionCreators} from "redux";
 import { I18nManager } from 'react-native';
 import FormUtils from "../../utils/fromUtils";
+import {ThisText} from '../index';
 import strings from "../../i18n/i18n"
 import StyleUtils from "../../utils/styleUtils";
 
@@ -183,7 +184,7 @@ class CategoryPicker extends Component {
         return <View>
             <View style={styles.pickerTitleContainer}>
 
-                <Text style={styles.pickerTextStyle}>{strings.Category}</Text>
+                <ThisText style={styles.pickerTextStyle}>{strings.Category}</ThisText>
                 { isMandatory && <Icon style={{margin: 5, color: 'red', fontSize: 12}} name='star'/>}
             </View>
 

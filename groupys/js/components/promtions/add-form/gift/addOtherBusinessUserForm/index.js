@@ -3,41 +3,21 @@ import {I18nManager, View,Keyboard} from 'react-native';
 import {Button, Container, Content, Fab, Footer, Form, Icon, Input, Item, Picker, Text, Thumbnail} from 'native-base';
 import Icon2 from 'react-native-vector-icons/MaterialIcons';
 import styles from './styles'
-import * as userRoleAction from "../../../actions/userRole";
+import * as userRoleAction from "../../../../../actions/userRole";
 import {connect} from 'react-redux';
 import {bindActionCreators} from "redux";
-import {FormHeader, SimplePicker, Spinner, TextInput,ThisText} from '../../../ui/index';
+import {FormHeader, SimplePicker, Spinner, TextInput} from '../../../ui/index';
 import strings from "../../../i18n/i18n"
 import StyleUtils from "../../../utils/styleUtils";
 
 const noPic = require('../../../../images/client_1.png');
-const rolesTypes = [
-    {
-        value: 'Owner',
-        label: strings.Owner
-    },
-    {
-        value: 'Admin',
-        label: strings.Admin
-    },
-    {
-        value: 'Manager',
-        label: strings.Manager
-    },
-    {
-        value: 'Seller',
-        label: strings.Seller
-    },
-];
 
-class AddPermittedUser extends Component {
+class AddOtherBusinessUser extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            userRole: '',
             user: '',
             searchUser: true,
-            defaultRole: '',
         }
     }
 
@@ -51,7 +31,6 @@ class AddPermittedUser extends Component {
             this.setState({
                 user: navigation.state.params.user,
                 searchUser: false,
-                defaultRole: navigation.state.params.role,
             });
         }
         this.props.actions.clearForm()
@@ -76,16 +55,16 @@ class AddPermittedUser extends Component {
     }
 
     save() {
-        const {actions, user, role, navigation, saving} = this.props;
+        const {actions, user, navigation, saving} = this.props;
         if (saving) {
             return;
         }
         const businessId = navigation.state.params.business._id;
         if (this.validateForm()) {
             if (user) {
-                actions.saveRole(user, businessId, role, navigation)
+                //actions.saveRole(user, businessId, role, navigation)
             } else {
-                actions.saveRole(navigation.state.params.user, businessId, role, navigation)
+                //actions.saveRole(navigation.state.params.user, businessId, role, navigation)
             }
         }
     }
@@ -140,8 +119,7 @@ class AddPermittedUser extends Component {
     }
 
     render() {
-        const {showSpinner, showMessage, role, fullUser, message, saving} = this.props;
-        const roles = this.createUserRollPicker(role);
+        const {showSpinner, showMessage, fullUser, message, saving} = this.props;
         const spinner = this.createSpinnerTag(showSpinner);
         const userMessage = this.createMessageTag(showMessage, message);
         const userView = this.createUserView(fullUser);
@@ -159,14 +137,13 @@ class AddPermittedUser extends Component {
             {spinner}
             {userMessage}
             {userView}
-            {roles}
             {saving && <Spinner/>}
         </View>
     }
 
     createMessageTag(showMessage, message) {
         if (showMessage) {
-            return <View><ThisText>{message}</ThisText></View>
+            return <View><Text>{message}</Text></View>
         }
         return undefined;
     }
@@ -180,7 +157,7 @@ class AddPermittedUser extends Component {
             const pic = this.createUserPic(user);
             return  <View style={[styles.user_view, {width: StyleUtils.getWidth() - 15}]}>
                 {pic}
-                <ThisText style={{margin: 10}}>{user.name}</ThisText>
+                <Text style={{margin: 10}}>{user.name}</Text>
 
             </View>
         }
@@ -193,13 +170,6 @@ class AddPermittedUser extends Component {
             return <Thumbnail square size={80} source={{uri: path}}/>
         }
         return <Thumbnail square size={80} source={noPic}/>;
-    }
-
-    createUserRollPicker(role) {
-        return <SimplePicker ref="promotionType" list={rolesTypes} itemTitle={strings.ManagementRole}
-                             defaultHeader={strings.ChooseRole} isMandatory
-            // defaultValue={this.state.defaultRole}
-                             onValueSelected={this.setUserRoles.bind(this)}/>
     }
 
     createSpinnerTag(showSpinner) {
@@ -219,14 +189,6 @@ class AddPermittedUser extends Component {
 
 export default connect(
     state => ({
-        userRole: state.userRole,
-        showSpinner: state.userRole.showSpinner,
-        showMessage: state.userRole.showMessage,
-        fullUser: state.userRole.fullUser,
-        user: state.userRole.user,
-        message: state.userRole.message,
-        role: state.userRole.role,
-        saving: state.userRole.saving,
         currentScreen: state.render.currentScreen,
     }),
     (dispatch) => ({

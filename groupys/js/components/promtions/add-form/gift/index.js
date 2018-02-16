@@ -6,6 +6,7 @@ import strings from "../../../../i18n/i18n"
 import StyleUtils from '../../../../utils/styleUtils';
 import {Thumbnail} from 'native-base';
 import ProductPreview from "../../../product/productPreview/index";
+import {ThisText} from '../../../../ui/index';
 
 const types = [
         {
@@ -21,7 +22,9 @@ const types = [
 export default class GiftComponent extends Component {
     constructor(props) {
         super(props);
-        this.state = {}
+        this.state = {
+            giftingBusiness: strings.MyBusiness
+        }
     }
 
     componentWillMount() {
@@ -122,7 +125,7 @@ export default class GiftComponent extends Component {
 
     async selectGiftingBusiness(value) {
         this.setState({
-            type: value,
+            giftingBusiness: value,
         });
     }
 
@@ -130,7 +133,7 @@ export default class GiftComponent extends Component {
         return <View>
 
             <View style={[styles.textLayout, {width: StyleUtils.getWidth() - 15}]}>
-                <Text style={{color: '#FA8559', marginLeft: 8, marginRight: 8}}>{strings.Gift}</Text>
+                <ThisText style={{color: '#FA8559', marginLeft: 8, marginRight: 8}}>{strings.Gift}</ThisText>
             </View>
             <View style={{flexDirection: 'row', justifyContent: 'center', alignItems: 'center'}}>
                 <View style={{flex: 1.7, marginTop: 25}}><SelectButton ref="giftSelectProduct"
@@ -143,18 +146,27 @@ export default class GiftComponent extends Component {
 
             <View style={[styles.inputTextLayout, {width: StyleUtils.getWidth() - 15}]}>
                 <SimplePicker ref="promotionType" list={types} itemTitle={strings.GiftingBusiness}
-                              defaultHeader="MY_BUSINESS" isMandatory
+                              isMandatory
+                              value={strings.MyBusiness}
                               onValueSelected={this.selectGiftingBusiness.bind(this)}/>
             </View>
-
-            <View style={{flexDirection: 'row', justifyContent: 'center', alignItems: 'center'}}>
-                <View style={{flex: 1.7, marginTop: 25}}><SelectButton ref="giftSelectGift"
-                                                                       isMandatory={true}
-                                                                       selectedValue={this.props.state.giftProduct}
-                                                                       title={strings.SelectGift}
-                                                                       action={this.showProducts.bind(this, true)}/></View>
-            </View>
-            <ProductPreview product={this.props.state.giftProduct} type='gift' />
+            {
+                this.state.giftingBusiness === 'MY_BUSINESS' ?
+                <View>
+                    <View style={{flexDirection: 'row', justifyContent: 'center', alignItems: 'center'}}>
+                        <View style={{flex: 1.7, marginTop: 25}}><SelectButton ref="giftSelectGift"
+                                                                               isMandatory={true}
+                                                                               selectedValue={this.props.state.giftProduct}
+                                                                               title={strings.SelectGift}
+                                                                               action={this.showProducts.bind(this, true)}/></View>
+                    </View>
+                    < ProductPreview product = {this.props.state.giftProduct} type='gift' />
+                </View>
+                    :
+                <View>
+                    <Text>{this.state.giftingBusiness}</Text>
+                </View>
+            }
         </View>
     }
 

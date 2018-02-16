@@ -9,7 +9,7 @@ import {Menu, MenuOption, MenuOptions, MenuTrigger,} from 'react-native-popup-me
 import * as businessActions from "../../actions/business";
 import Icon2 from 'react-native-vector-icons/SimpleLineIcons';
 import strings from "../../i18n/i18n"
-import {ImageController} from '../index'
+import {ImageController,ThisText} from '../index'
 import StyleUtils from "../../utils/styleUtils";
 
 class BusinessHeader extends Component {
@@ -41,20 +41,20 @@ class BusinessHeader extends Component {
         const {businessLogo, small, noProfile} = this.props;
         if (businessLogo) {
             if (noProfile) {
-                return <View style={{margin: 5}}>
+                return <View style={{margin: 7}}>
                     <View>
                         <ImageController thumbnail square={true} size={40} source={{uri: businessLogo}}/>
                     </View>
                 </View>
             }
             if (small) {
-                return <TouchableOpacity style={{margin: 5}} onPress={this.showBusiness.bind(this)}>
+                return <TouchableOpacity style={{margin: 7}} onPress={this.showBusiness.bind(this)}>
                     <View>
                         <ImageController  thumbnail square={true} size={30} source={{uri: businessLogo}}/>
                     </View>
                 </TouchableOpacity>
             }
-            return <TouchableOpacity style={{margin: 5}} onPress={this.showBusiness.bind(this)}>
+            return <TouchableOpacity style={{margin: 12}} onPress={this.showBusiness.bind(this)}>
                 <View>
                     <ImageController thumbnail square={true} size={40} source={{uri: businessLogo}}/>
                 </View>
@@ -104,10 +104,10 @@ class BusinessHeader extends Component {
             <MenuOptions>
 
                 <MenuOption onSelect={this.unFollowBusiness.bind(this)}>
-                    <Text>{strings.UnFollow}</Text>
+                    <ThisText>{strings.UnFollow}</ThisText>
                 </MenuOption>
                 {showActions && <MenuOption onSelect={this.showFeedBack.bind(this)}>
-                    <Text>{strings.reportActivity}</Text>
+                    <ThisText>{strings.reportActivity}</ThisText>
                 </MenuOption>}
             </MenuOptions>
         </Menu>
@@ -119,13 +119,13 @@ class BusinessHeader extends Component {
                 <MenuOptions>
 
                     <MenuOption onSelect={this.assignQrCode.bind(this)}>
-                        <Text>{strings.assignQrCode}</Text>
+                        <ThisText>{strings.assignQrCode}</ThisText>
                     </MenuOption>
                     <MenuOption onSelect={this.showBusinessAccountDetails.bind(this)}>
-                        <Text>{strings.accountDetail}</Text>
+                        <ThisText>{strings.accountDetail}</ThisText>
                     </MenuOption>
                     <MenuOption onSelect={this.onBordingPromotion.bind(this)}>
-                        <Text>{strings.OnBoardingPromotions}</Text>
+                        <ThisText>{strings.OnBoardingPromotions}</ThisText>
                     </MenuOption>
                 </MenuOptions>
             </Menu>
@@ -150,9 +150,8 @@ class BusinessHeader extends Component {
 
             {this.createBusinessLog()}
             <View style={{flex: 1, flexDirection: 'column', justifyContent: 'center'}}>
-                <Text style={nameTextStyle} note>{businessName}</Text>
-                {categoryTitle && <Text numberOfLines={1} style={styles.businessAddressText}
-                                        note>{categoryTitle}</Text>}
+                <ThisText style={nameTextStyle} note>{businessName}</ThisText>{categoryTitle && <ThisText numberOfLines={1} style={styles.businessAddressText}
+                                        note>{categoryTitle}</ThisText>}
             </View>
             {showEdit && <View style={{flex: 0.2, flexDirection: 'row', alignItems: 'center',}}>
                 {editButton}

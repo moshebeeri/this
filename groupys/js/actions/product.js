@@ -104,7 +104,7 @@ export function saveProduct(product,businessId,navigation) {
 
             dispatch({
                 type: actions.PRODUCTS_UPLOAD_PIC,
-                item:{product:product, productResponse:response}
+                item:{item:product, itemResponse:response}
             })
 
             dispatch({

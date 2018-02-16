@@ -2,6 +2,7 @@ import React, {Component} from 'react';
 import {Image, Text, View} from 'react-native';
 import {Button, Icon, Input, Thumbnail} from 'native-base';
 import styles from './styles';
+import {ThisText} from '../../ui/index';
 
 import strings from "../../i18n/i18n"
 
@@ -22,8 +23,8 @@ export default class PromotionHeaderSnippet extends Component {
                 return <View style={{flex:1,justifyContent:'center',alignItems:'center',marginLeft:15,flexDirection: 'row'}}>
                     {promotion.banner && <Thumbnail square small source={{uri: promotion.banner.uri}}/>}
                     <View style={{flex:1,justifyContent:'flex-start',marginLeft:5,alignItems:'flex-start'}}>
-                        <Text>{promotion.business.name}</Text>
-                        <Text>{strings.ReduceAmountShortDescription.formatUnicorn(totalValue,discount)}</Text>
+                        <ThisText>{promotion.business.name}</ThisText>
+                        <ThisText>{strings.ReduceAmountShortDescription.formatUnicorn(totalValue,discount)}</ThisText>
 
                     </View>
                 </View>
@@ -35,8 +36,8 @@ export default class PromotionHeaderSnippet extends Component {
                 return <View style={{flex:1,justifyContent:'center',alignItems:'center',marginLeft:15,flexDirection: 'row'}}>
                     {promotion.banner &&  <Thumbnail square small source={{uri: promotion.banner.uri}}/>}
                         <View style={{flex:1,justifyContent:'flex-start',marginLeft:5,alignItems:'flex-start'}}>
-                            <Text>{promotion.business.name}</Text>
-                            <Text>{strings.DiscountShortDescription.formatUnicorn(promotion.promotionEntity.percent.values[0],discountOn)}</Text>
+                            <ThisText>{promotion.business.name}</ThisText>
+                            <ThisText>{strings.DiscountShortDescription.formatUnicorn(promotion.promotionEntity.percent.values[0],discountOn)}</ThisText>
 
                         </View>
                     </View>
@@ -44,8 +45,8 @@ export default class PromotionHeaderSnippet extends Component {
                 return <View style={{flex:1,justifyContent:'center',alignItems:'center',marginLeft:15,flexDirection: 'row'}}>
                     {promotion.banner &&  <Thumbnail square small source={{uri: promotion.banner.uri}}/>}
                     <View style={{flex:1,justifyContent:'flex-start',marginLeft:5,alignItems:'flex-start'}}>
-                        <Text>{promotion.business.name}</Text>
-                        <Text>{strings.XForYShortDescription.formatUnicorn(promotion.promotionEntity.x_for_y.values[0].pay,promotion.promotionEntity.x_for_y.values[0].eligible,promotion.promotionEntity.condition.product.name)}</Text>
+                        <ThisText>{promotion.business.name}</ThisText>
+                        <ThisText>{strings.XForYShortDescription.formatUnicorn(promotion.promotionEntity.x_for_y.values[0].pay,promotion.promotionEntity.x_for_y.values[0].eligible,promotion.promotionEntity.condition.product.name)}</ThisText>
 
                     </View>
                 </View>
@@ -56,8 +57,8 @@ export default class PromotionHeaderSnippet extends Component {
                 return <View style={{flex:1,justifyContent:'center',alignItems:'center',marginLeft:15,flexDirection: 'row'}}>
                     {promotion.banner &&   <Thumbnail square small source={{uri: promotion.banner.uri}}/>}
                     <View style={{flex:1,justifyContent:'flex-start',marginLeft:5,alignItems:'flex-start'}}>
-                        <Text>{promotion.business.name}</Text>
-                        <Text>{strings.XForYPercentageOffShortDescription.formatUnicorn(promotion.condition.product.name,promotion.promotionEntity.x_plus_n_percent_off.values[0].product.name,promotion.promotionEntity.x_plus_n_percent_off.values[0].eligible)}</Text>
+                        <ThisText>{promotion.business.name}</ThisText>
+                        <ThisText>{strings.XForYPercentageOffShortDescription.formatUnicorn(promotion.condition.product.name,promotion.promotionEntity.x_plus_n_percent_off.values[0].product.name,promotion.promotionEntity.x_plus_n_percent_off.values[0].eligible)}</ThisText>
 
                     </View>
                 </View>
@@ -66,8 +67,8 @@ export default class PromotionHeaderSnippet extends Component {
                 return <View style={{flex:1,justifyContent:'center',alignItems:'center',marginLeft:15,flexDirection: 'row'}}>
                     {promotion.banner && <Thumbnail square small source={{uri: promotion.banner.uri}}/>}
                     <View style={{flex:1,justifyContent:'flex-start',marginLeft:5,alignItems:'flex-start'}}>
-                        <Text>{promotion.business.name}</Text>
-                        <Text>{strings.HappyHourShortDescription.formatUnicorn(promotion.promotionEntity.happy_hour.values[0].pay,promotion.promotionEntity.condition.product.name)}</Text>
+                        <ThisText>{promotion.business.name}</ThisText>
+                        <ThisText>{strings.HappyHourShortDescription.formatUnicorn(promotion.promotionEntity.happy_hour.values[0].pay,promotion.promotionEntity.condition.product.name)}</ThisText>
 
                     </View>
                 </View>
@@ -76,8 +77,8 @@ export default class PromotionHeaderSnippet extends Component {
                 return <View style={{flex:1,justifyContent:'center',alignItems:'center',marginLeft:15,flexDirection: 'row'}}>
                     {promotion.banner &&   <Thumbnail square small source={{uri: promotion.banner.uri}}/>}
                     <View style={{flex:1,justifyContent:'flex-start',marginLeft:5,alignItems:'flex-start'}}>
-                        <Text>{promotion.business.name}</Text>
-                        <Text>{strings.XYPattern.formatUnicorn(promotion.x_plus_y.values[0].buy, promotion.condition.product.name, promotion.x_plus_y.values[0].eligible, promotion.x_plus_y.values[0].product.name)}</Text>
+                        <ThisText>{promotion.business.name}</ThisText>
+                        <ThisText>{strings.XYPattern.formatUnicorn(promotion.x_plus_y.values[0].buy, promotion.condition.product.name, promotion.x_plus_y.values[0].eligible, promotion.x_plus_y.values[0].product.name)}</ThisText>
 
                     </View>
                 </View>
@@ -86,8 +87,8 @@ export default class PromotionHeaderSnippet extends Component {
                 return <View style={{flex:1,justifyContent:'center',alignItems:'center',marginLeft:15,flexDirection: 'row'}}>
                     {promotion.banner &&   <Thumbnail square small source={{uri: promotion.banner.uri}}/>}
                     <View style={{flex:1,justifyContent:'flex-start',marginLeft:5,alignItems:'flex-start'}}>
-                        <Text>{promotion.business.name}</Text>
-                        <Text>{strings.punchCardTerm.formatUnicorn(promotion.punches)}</Text>
+                        <ThisText>{promotion.business.name}</ThisText>
+                        <ThisText>{strings.punchCardTerm.formatUnicorn(promotion.punches)}</ThisText>
 
                     </View>
                 </View>

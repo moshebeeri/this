@@ -192,7 +192,7 @@ class UserApi {
                         'Content-Type': 'application/json;charset=utf-8',
                         'Authorization': 'Bearer ' + token,
                     }
-                })
+                });
                 if (response.status ==='401' || response.status === 401) {
                     reject(errors.UN_AUTHOTIZED_ACCESS);
                     return;
@@ -246,7 +246,7 @@ class UserApi {
                         'Content-Type': 'application/json;charset=utf-8',
                         'Authorization': 'Bearer ' + token,
                     }
-                })
+                });
                 if (response.status ==='401' || response.status === 401) {
                     reject(errors.UN_AUTHOTIZED_ACCESS);
                     return;

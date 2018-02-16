@@ -3,6 +3,8 @@ import {Dimensions, TextInput, View} from 'react-native';
 import {Icon, Input, Text} from 'native-base';
 import styles from './styles';
 import { I18nManager } from 'react-native';
+import {ThisText} from '../../ui/index';
+
 const {width, height} = Dimensions.get('window');
 export default class TextInputField extends Component {
     constructor(props) {
@@ -99,11 +101,11 @@ export default class TextInputField extends Component {
         if(disabled){
             if(value) {
                 inputField = <View style={styles.textInputDisabledComponentStyle}>
-                    <Text>{value}</Text>
+                    <ThisText>{value}</ThisText>
                 </View>
             }else{
                 inputField = <View style={styles.textInputDisabledComponentStyle}>
-                    <Text>{placeholder}</Text>
+                    <ThisText>{placeholder}</ThisText>
                 </View>
             }
         }
@@ -111,7 +113,7 @@ export default class TextInputField extends Component {
         return <View style={containerStyle}>
             <View style={styles.textInputTitleContainer}>
 
-                <Text style={textStyle}>{field}</Text>
+                <ThisText style={textStyle}>{field}</ThisText>
                 {field && isMandatory && <Icon style={{margin: 5, color: mandatoryIconColor, fontSize: 12}} name='star'/>}
 
             </View>

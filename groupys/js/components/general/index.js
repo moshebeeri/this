@@ -17,6 +17,7 @@ import {
     View
 } from 'native-base';
 import AddFormHeader from '../header/addFormHeader';
+import {ThisText} from '../../ui/index';
 
 const {
     replaceAt,
@@ -136,8 +137,8 @@ class General extends Component {
                                placeholder='Request'/>
                     </Item>
 
-                    <Text>{this.state.error}</Text>
-                    <Text>{this.state.response}</Text>
+                    <ThisText>{this.state.error}</ThisText>
+                    <ThisText>{this.state.response}</ThisText>
 
 
                 </Content>
@@ -146,7 +147,7 @@ class General extends Component {
                     <Button transparent
                             onPress={this.sendRequest.bind(this)}
                     >
-                        <Text>{strings.PostRequest}</Text>
+                        <ThisText>{strings.PostRequest}</ThisText>
                     </Button>
                 </Footer>
             </Container>

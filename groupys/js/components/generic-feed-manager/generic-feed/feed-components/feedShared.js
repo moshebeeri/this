@@ -28,6 +28,7 @@ import FeedBusiness from './feedBusiness'
 import FeedPost from './feedPost'
 import strings from "../../../../i18n/i18n"
 import StyleUtils from '../../../../utils/styleUtils'
+import {ThisText} from '../../../../ui/index';
 
 const {height} = Dimensions.get('window');
 const vh = height / 100;
@@ -48,7 +49,7 @@ export default class FeedShared extends Component {
                     alignItems: 'flex-start',
                     backgroundColor: 'white'
                 }}>
-                    <Text style={{padding: 5, backgroundColor: 'white'}}>{item.user.name} {strings.Shared}</Text>
+                    <ThisText style={{padding: 5, backgroundColor: 'white'}}>{item.user.name} {strings.Shared}</ThisText>
                 </View>
                 <View style={{flex: 10}}>
                     {this.createSharedActivity(item)}

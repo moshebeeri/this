@@ -3,6 +3,7 @@ import {Dimensions, View,TextInput,Text,TouchableOpacity} from 'react-native';
 import {Icon, Input, Button} from 'native-base';
 import styles from './styles';
 
+import {ThisText} from '../../ui/index';
 
 export default class SubmitButton extends Component {
     constructor(props) {
@@ -31,7 +32,7 @@ export default class SubmitButton extends Component {
         }
         return  <TouchableOpacity disabled={disabled} style={{height:40,width:defaultWidth,alignItems:'center', justifyContent:'center',borderRadius: 20,backgroundColor:bgc}}
                         onPress={onPress}>
-            <Text style={{color:textColor}}>{buttonTitle}</Text>
+            <ThisText style={{color:textColor}}>{buttonTitle}</ThisText>
         </TouchableOpacity>
 
     }

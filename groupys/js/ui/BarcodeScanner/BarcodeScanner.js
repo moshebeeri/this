@@ -2,6 +2,7 @@ import React, {Component} from "react";
 import {Dimensions, Image, Text, TouchableOpacity, View} from "react-native";
 import Icon from 'react-native-vector-icons/Ionicons';
 import strings from "../../i18n/i18n"
+import {ThisText} from '../index';
 const {width, height} = Dimensions.get('window')
 export default class BarcodeScanner extends Component {
     static navigationOptions = {
@@ -39,8 +40,8 @@ export default class BarcodeScanner extends Component {
                 marginLeft: 10,
                 marginRight: 10
             }}>
-                <Text>{strings.AssignBarcode}</Text>
-                {this.state.code && <Text>{this.state.code.data}</Text>}
+                <ThisText>{strings.AssignBarcode}</ThisText>
+                {this.state.code && <ThisText>{this.state.code.data}</ThisText>}
                 <TouchableOpacity onPress={this.showScanner.bind(this)}>
 
                     <Icon size={35} color={'#FA8559'} name='ios-barcode-outline'/>

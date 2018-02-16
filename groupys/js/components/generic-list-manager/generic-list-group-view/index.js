@@ -21,7 +21,7 @@ import GroupApi from "../../../api/groups"
 import stylesPortrate from './styles'
 import DateUtils from '../../../utils/dateUtils';
 import UiConverter from '../../../api/feed-ui-converter'
-import {GroupHeader, PromotionHeaderSnippet,ImageController} from '../../../ui/index';
+import {GroupHeader, PromotionHeaderSnippet,ImageController,ThisText} from '../../../ui/index';
 import strings from '../../../i18n/i18n';
 
 const {width, height} = Dimensions.get('window');
@@ -66,10 +66,10 @@ export default class GenericListGroupView extends Component {
                     {post}
                     {promotion && item.unreadFeeds > 0 &&
                     <View style={{marginLeft: 30, width: width, justifyContent: 'flex-start'}}>
-                        <Text style={{
+                        <ThisText style={{
                             color: '#2db6c8',
                             fontWeight: 'bold'
-                        }}>{strings.UnReadPost.formatUnicorn(item.unreadFeeds)}</Text>
+                        }}>{strings.UnReadPost.formatUnicorn(item.unreadFeeds)}</ThisText>
                     </View>}
 
 
@@ -78,10 +78,10 @@ export default class GenericListGroupView extends Component {
                     {message}
                     {message && item.unreadMessages > 0 &&
                     <View style={{marginLeft: 30, marginBottom: 5, width: width, justifyContent: 'flex-start'}}>
-                        <Text style={{
+                        <ThisText style={{
                             color: '#25964e',
                             fontWeight: 'bold'
-                        }}>{strings.UnReadMessages.formatUnicorn(item.unreadMessages)}</Text>
+                        }}>{strings.UnReadMessages.formatUnicorn(item.unreadMessages)}</ThisText>
                     </View>}
                 </TouchableOpacity>
             </View>
@@ -151,8 +151,8 @@ export default class GenericListGroupView extends Component {
                     {image}
 
                     <View style={{padding: 2, alignItems: 'flex-start'}}>
-                        <Text>{itemChat.name}</Text>
-                        <Text>{itemChat.message}</Text>
+                        <ThisText>{itemChat.name}</ThisText>
+                        <ThisText>{itemChat.message}</ThisText>
                     </View>
                 </View>
 
@@ -198,8 +198,8 @@ export default class GenericListGroupView extends Component {
                     </View>
 
                     <View style={{padding: 5, alignItems: 'flex-start'}}>
-                        <Text>{post.name} {strings.Posted}</Text>
-                        <Text>{post.title} - {post.message}</Text>
+                        <ThisText>{post.name} {strings.Posted}</ThisText>
+                        <ThisText>{post.title} - {post.message}</ThisText>
                     </View>
                 </View>
 

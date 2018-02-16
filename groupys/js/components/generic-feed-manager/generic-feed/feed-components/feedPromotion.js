@@ -25,7 +25,7 @@ import {
 } from 'native-base';
 import stylesPortrate from './styles'
 import StyleUtils from '../../../../utils/styleUtils'
-import {BusinessHeader, PromotionHeader, PromotionSeperator, SocialState, SubmitButton,ImageController} from '../../../../ui/index';
+import {BusinessHeader, PromotionHeader, PromotionSeperator, SocialState, SubmitButton,ImageController,ThisText} from '../../../../ui/index';
 import FormUtils from "../../../../utils/fromUtils";
 import strings from "../../../../i18n/i18n"
 import PageRefresher from '../../../../refresh/pageRefresher'
@@ -109,8 +109,8 @@ export default class FeedPromotion extends Component {
                         </View>}
 
                     <View style={ {marginBottom:10,alignItems:'center',justifyContent:'center',backgroundColor:'white',width: StyleUtils.getWidth()}}>
-                        <Text numberOfLines={2} style={{marginRight: 10, marginLeft: 10, fontSize: 18}}>{item.name}
-                            - {item.description}</Text>
+                        <ThisText numberOfLines={2} style={{marginRight: 10, marginLeft: 10, fontSize: 18}}>{item.name}
+                            - {item.description}</ThisText>
                     </View>
                     {!shared && location && <View style={[styles.promotionsSeparator, {width: StyleUtils.getWidth()}]}>
                         <PromotionSeperator/>
@@ -119,13 +119,13 @@ export default class FeedPromotion extends Component {
                     {!shared && location &&
                     <View style={[styles.promotionDetailsContainer, {width: StyleUtils.getWidth()}]}>
                         <View style={styles.promotionLoctionContainer}>
-                            <View><Text style={styles.detailsTitleText}>{strings.Location}</Text></View>
-                            <View><Text
-                                style={styles.detailsText}>{FormUtils.getDistanceString(location.lat, location.long, item.location.lat, item.location.lng)}</Text></View>
+                            <View><ThisText style={styles.detailsTitleText}>{strings.Location}</ThisText></View>
+                            <View><ThisText
+                                style={styles.detailsText}>{FormUtils.getDistanceString(location.lat, location.long, item.location.lat, item.location.lng)}</ThisText></View>
                         </View>
                         <View style={styles.expireDateContainer}>
-                            <View><Text style={styles.detailsTitleText}>{strings.Expire}</Text></View>
-                            <View><Text style={styles.detailsText}>{item.endDate}</Text></View>
+                            <View><ThisText style={styles.detailsTitleText}>{strings.Expire}</ThisText></View>
+                            <View><ThisText style={styles.detailsText}>{item.endDate}</ThisText></View>
                         </View>
                         {save &&
                         <View style={styles.editButtonContainer}>

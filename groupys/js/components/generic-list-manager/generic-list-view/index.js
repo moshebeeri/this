@@ -19,6 +19,7 @@ import {
     Thumbnail,
     Left
 } from 'native-base';
+import {ThisText} from '../../../ui/index';
 
 export default class GenericListView extends Component {
     constructor(props) {
@@ -38,12 +39,12 @@ export default class GenericListView extends Component {
                     <Thumbnail source={{uri: this.props.item.pictures[0].pictures[3]}}/>
                 </Left>
                 <Body>
-                <Text>{this.props.item.name}</Text>
-                <Text note>{this.props.item.info}</Text>
+                <ThisText>{this.props.item.name}</ThisText>
+                <ThisText note>{this.props.item.info}</ThisText>
                 </Body>
                 <Right>
                     {/*<Button transparent onPress={() =>  this.props.deleteProduct(`${this.props.index}`)}>*/}
-                    {/*<Text>Remove</Text>*/}
+                    {/*<ThisText>Remove</ThisText>*/}
                     {/*</Button>*/}
                 </Right>
             </ListItem>
@@ -55,12 +56,12 @@ export default class GenericListView extends Component {
                 </Left>
                 <Body>
 
-                <Text>{this.props.item.name}</Text>
-                <Text note>{this.props.item.info}</Text>
+                <ThisText>{this.props.item.name}</ThisText>
+                <ThisText note>{this.props.item.info}</ThisText>
                 </Body>
                 <Right>
                     {/*<Button transparent onPress={() =>  this.props.deleteProduct(`${this.props.index}`)}>*/}
-                    {/*<Text>Remove</Text>*/}
+                    {/*<ThisText>Remove</ThisText>*/}
                     {/*</Button>*/}
                 </Right>
             </ListItem>

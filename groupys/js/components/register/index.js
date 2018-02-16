@@ -20,6 +20,7 @@ import * as loginAction from "../../actions/login";
 import strings from "../../i18n/i18n"
 import Icon from 'react-native-vector-icons/Ionicons';
 import StyleUtils from "../../utils/styleUtils";
+import {ThisText} from '../../ui/index';
 
 const {width, height} = Dimensions.get('window')
 const logo = require('../../../images/logo.png')
@@ -90,12 +91,12 @@ class Register extends Component {
                             <View style={styles.thisContainer}>
                                 <Image style={{position: 'absolute', top: -175, width: 140}} resizeMode='contain'
                                        source={thisLogo}/>
-                                <Text style={styles.this}>THIS</Text>
+                                <ThisText style={styles.this}>THIS</ThisText>
                             </View>
                             <View style={styles.mainContainer}>
 
-                                <Text style={styles.SignUpText}>{strings.SmsMessagePart1}</Text>
-                                <Text style={styles.decritpionLine2}>{strings.SmsMessagePart2}</Text>
+                                <ThisText style={styles.SignUpText}>{strings.SmsMessagePart1}</ThisText>
+                                <ThisText style={styles.decritpionLine2}>{strings.SmsMessagePart2}</ThisText>
 
 
                                 <View style={styles.nameTextInput} regular>
@@ -137,12 +138,12 @@ class Register extends Component {
                                         alignItems: 'center',
                                     }} regular>
 
-                                        <Text style={{
+                                        <ThisText style={{
                                             color: 'skyblue',
                                             fontWeight: 'bold',
                                             fontStyle: 'normal',
                                             fontSize: 20
-                                        }}>{strings.Validate.toUpperCase()}</Text>
+                                        }}>{strings.Validate.toUpperCase()}</ThisText>
 
                                     </TouchableOpacity>
                                 </View>
@@ -162,9 +163,9 @@ class Register extends Component {
 
     createMessage(message) {
         if (message) {
-            return <Text style={{backgroundColor: 'transparent', padding: 10, fontSize: 16, color: 'red'}}>
+            return <ThisText style={{backgroundColor: 'transparent', padding: 10, fontSize: 16, color: 'red'}}>
                 {this.state.validationMessage}
-            </Text>
+            </ThisText>
         }
         return undefined;
     }

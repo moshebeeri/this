@@ -6,6 +6,7 @@ import Icon2 from 'react-native-vector-icons/Entypo';
 import styles from './styles';
 import strings from "../../i18n/i18n"
 import {connect} from 'react-redux';
+import {ThisText} from '../../ui/index';
 
 const {width, height} = Dimensions.get('window')
 
@@ -95,7 +96,7 @@ class FormHeader extends Component {
         return (
             <View style={{width:StyleUtils.getWidth()}}>
                 {network.offline &&   <View style={{width:width,height:20,justifyContent:'center',alignItems:'center',backgroundColor:'#f4ce42'}}>
-                    <Text style={{color:'gray'}}>{strings.Offline}</Text>
+                    <ThisText style={{color:'gray'}}>{strings.Offline}</ThisText>
                 </View>}
             <View style={{
                 height: headerHeight, flexDirection: 'row', alignItems: 'center', backgroundColor: bgc,
@@ -108,7 +109,7 @@ class FormHeader extends Component {
                     flex: 5, justifyContent: 'center',
                     alignItems: 'center',
                 }}>
-                    {!this.state.showSearch && <Text transparent style={titleStyle}>{title}</Text>}
+                    {!this.state.showSearch && <ThisText transparent style={titleStyle}>{title}</ThisText>}
                     {this.state.showSearch &&
                     <TextInput style={{
                         color: "white",

@@ -10,7 +10,7 @@ import {
 import {getUserFollowesr} from '../../../selectors/userSelector'
 import {bindActionCreators} from "redux";
 import * as selectUserAction from "../../../actions/selectUsers";
-import {FormHeader, TextInput} from '../../../ui/index';
+import {FormHeader, ThisText} from '../../../ui/index';
 import strings from "../../../i18n/i18n"
 class SelectUsersComponent extends Component {
     static navigationOptions = ({navigation}) => ({
@@ -61,8 +61,8 @@ class SelectUsersComponent extends Component {
                         <Thumbnail size={80} source={{uri: path}}/>
                     </Left>
                     <Body>
-                    <Text>{r.name}</Text>
-                    <Text note>{r.phone_number}</Text>
+                    <ThisText>{r.name}</ThisText>
+                    <ThisText note>{r.phone_number}</ThisText>
 
                     </Body>
                     <Right>
@@ -79,8 +79,8 @@ class SelectUsersComponent extends Component {
                 </Left>
                 <Body>
 
-                <Text>{r.name}</Text>
-                <Text note>{r.phone_number}</Text>
+                <ThisText>{r.name}</ThisText>
+                <ThisText note>{r.phone_number}</ThisText>
                 </Body>
                 <Right>
                     <CheckBox onPress={this.selectCheckBox.bind(this, index, r)}

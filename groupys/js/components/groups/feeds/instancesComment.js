@@ -7,7 +7,7 @@ import {getFeeds} from "../../../selectors/commentsSelector";
 import {bindActionCreators} from "redux";
 import * as commentAction from "../../../actions/commentsGroup";
 import styles from './styles'
-import {ChatMessage, MessageBox, PromotionHeader} from '../../../ui/index';
+import {ChatMessage, MessageBox, PromotionHeader,ThisText} from '../../../ui/index';
 import {Thumbnail} from 'native-base';
 const {width, height} = Dimensions.get('window')
 const vw = width / 100;
@@ -72,8 +72,8 @@ class instancesComment extends Component {
                         <Thumbnail small source={item.instance.avetar}/>
                     </View>
                     <View style={{paddingLeft: 20, justifyContent: 'center'}}>
-                        <Text>{item.instance.name} {strings.Posted} </Text>
-                        <Text>{item.instance.title}</Text>
+                        <ThisText>{item.instance.name} {strings.Posted} </ThisText>
+                        <ThisText>{item.instance.title}</ThisText>
                     </View>
                 </View>
                 }
@@ -84,7 +84,7 @@ class instancesComment extends Component {
 
     render() {
         const {group, comments, navigation, actions, update, loadingDone, showTopLoader, allState} = this.props;
-
+        console.log('group comments rendered')
         return <View style={{flex: 1}}>
             <View style={{flex: 1}}>
                 <GenericFeedManager feeds={comments[group._id]}
