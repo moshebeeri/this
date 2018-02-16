@@ -1,4 +1,4 @@
-import {call, put, takeLatest} from 'redux-saga/effects'
+import {call, put, takeLatest,throttle} from 'redux-saga/effects'
 import FeedApi from "../api/feed";
 import {loadingFeeds, loadingFeedsDone, updateFeeds, updateFeedsTop,scrolling,stopScrolling,renderFeed} from "../actions/feedsMain";
 import * as segaActions from './segaActions'
