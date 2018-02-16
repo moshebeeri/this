@@ -254,7 +254,11 @@ NoProductSelected                             : "No Product Selected",
 MyBusiness                                    : "My Business",
 OtherBusiness                                 : "Other Business",
 GiftingBusiness                               : "Gifting Business",
-
+SelectUser                                    : "Select User",
+SearchOtherBusiness                           : "Search Other Business",
+User                                          : "User",
+NoUserSelected                                : "No User Selected",
+NoBusinessSelected                            : "No Business Selected"
 };
 
 export default enUS;

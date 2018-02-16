@@ -3,7 +3,7 @@ import {I18nManager, View,Keyboard} from 'react-native';
 import {Button, Container, Content, Fab, Footer, Form, Icon, Input, Item, Picker, Text, Thumbnail} from 'native-base';
 import Icon2 from 'react-native-vector-icons/MaterialIcons';
 import styles from './styles'
-import * as userRoleAction from "../../../../../actions/userRole";
+import * as userRoleAction from "../../../actions/userRole";
 import {connect} from 'react-redux';
 import {bindActionCreators} from "redux";
 import {FormHeader, SimplePicker, Spinner, TextInput} from '../../../ui/index';
@@ -12,7 +12,7 @@ import StyleUtils from "../../../utils/styleUtils";
 
 const noPic = require('../../../../images/client_1.png');
 
-class AddOtherBusinessUser extends Component {
+class SearchBusinessByPermittedUser extends Component {
     constructor(props) {
         super(props);
         this.state = {
@@ -128,7 +128,7 @@ class AddOtherBusinessUser extends Component {
         if (!this.state.searchUser) {
             title = strings.UpdateUserRole;
         }
-        return <View style={[styles.premtied_usesrs_container, {width: StyleUtils.getWidth()}]}>
+        return <View style={[styles.permitted_users_container, {width: StyleUtils.getWidth()}]}>
 
             <FormHeader showBack submitForm={this.saveFormData.bind(this)} navigation={this.props.navigation}
                         title={title} bgc="#FA8559"/>
@@ -180,10 +180,7 @@ class AddOtherBusinessUser extends Component {
     }
 
     shouldComponentUpdate() {
-        if (this.props.currentScreen === 'addPermittedUser') {
-            return true;
-        }
-        return false;
+        return this.props.currentScreen === 'addPermittedUser';
     }
 }
 
@@ -194,4 +191,4 @@ export default connect(
     (dispatch) => ({
         actions: bindActionCreators(userRoleAction, dispatch),
     })
-)(AddPermittedUser);
+)(SearchBusinessByPermittedUser);

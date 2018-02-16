@@ -26,6 +26,7 @@ import SelectProductsComponent from "./components/promtions/add-form/selectProdu
 import SelectGroupsComponent from "./components/promtions/add-form/selectGroups/index";
 import QrCode from "./components/qrcode/index";
 import InstanceGroupComments from "./components/groups/feeds/comments";
+import SearchBusinessByPermittedUser from "./components/business/searchBusinessByPermittedUser";
 import AddPermittedUser from "./components/premitedUsers/addForm/index";
 import UserPermittedRoles from "./components/premitedUsers/index";
 import GenericComments from "./components/comment/comments";
@@ -70,6 +71,7 @@ const AppNavigator = StackNavigator({
         SelectGroupsComponent: {screen: SelectGroupsComponent},
         InstanceGroupComments: {screen: InstanceGroupComments},
         addPermittedUser: {screen: AddPermittedUser},
+        SearchBusinessByPermittedUser: {screen: SearchBusinessByPermittedUser},
         userPermittedRoles: {screen: UserPermittedRoles},
         genericComments: {screen: GenericComments},
         changePassword: {screen: ChangePassword},
@@ -118,7 +120,7 @@ class AppWithNavigationState extends Component {
                         store.dispatch({
                             type:actions.CURRENT_SCREEN,
                             screen:currentScreen
-                        })
+                        });
                         logger.screenVisited(currentScreen,prevScreen);
 
                     }}/>

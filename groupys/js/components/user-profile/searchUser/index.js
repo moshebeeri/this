@@ -30,7 +30,7 @@ const rolesTypes = [
     },
 ];
 
-class AddPermittedUser extends Component {
+class SearchUser extends Component {
     constructor(props) {
         super(props);
         this.state = {
@@ -210,7 +210,10 @@ class AddPermittedUser extends Component {
     }
 
     shouldComponentUpdate() {
-        return this.props.currentScreen === 'addPermittedUser';
+        if (this.props.currentScreen === 'searchUser') {
+            return true;
+        }
+        return false;
     }
 }
 
@@ -229,4 +232,4 @@ export default connect(
     (dispatch) => ({
         actions: bindActionCreators(userRoleAction, dispatch),
     })
-)(AddPermittedUser);
+)(SearchUser);
