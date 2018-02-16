@@ -242,7 +242,10 @@ function saveInstance(req, res, instance) {
         if (err) return handleError(res, err);
         graphModel.query(`MATCH (i:instance { _id:'${req.params.id}'}) SET i.quantity=i.quantity-1`, function (err) {
           if (err) return handleError(res, err);
-          return res.status(200).json(savedInstance);
+          SavedInstance.findById(savedInstance._id).exec((err, si) => {
+            if (err) return handleError(res, err);
+            return res.status(200).json(si);
+            })
         });
       });
     });

@@ -295,7 +295,7 @@ export function saveBusiness(business, navigation) {
             }
             dispatch({
                 type: actions.BUSINESS_UPLOAD_PIC,
-                item: {businessResponse: createdBusiness, business: business}
+                item: {itemResponse: createdBusiness, item: business}
             })
             dispatch({
                 type: actions.UPSERT_MY_BUSINESS_SINGLE,

@@ -10,7 +10,9 @@ function* saveUserRequest() {
     try {
         yield call(userApi.saveUserDetails, newUser, newUser._id, token);
         const response = yield call(userApi.getUserById, token, newUser._id);
-        yield put(upSertUserSuccsess(response))
+
+
+        yield* upSertUserSuccsess(response,newUser)
     } catch (error) {
     }
 }

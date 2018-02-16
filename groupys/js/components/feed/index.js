@@ -27,7 +27,9 @@ class Feed extends Component {
 
     componentWillMount() {
         const {feeds, actions} = this.props;
-        actions.setNextFeeds(feeds);
+        if(!feeds || feeds.length === 0) {
+            actions.setNextFeeds(feeds);
+        }
         this.props.userActions.fetchUsersFollowers();
     }
 

@@ -3,7 +3,6 @@ import feedAction from '../actions/feedsMain'
 import notificationAction from '../actions/notifications'
 import postAction from '../actions/posts'
 import promotionAction from '../actions/promotions'
-import myPromotionAction from '../actions/myPromotions'
 import business from '../actions/business'
 import groups from '../actions/groups'
 import users from '../actions/user'
@@ -12,20 +11,18 @@ import pageSync from './refresher';
 import FormUtils from "../utils/fromUtils";
 import simpleStore from 'react-native-simple-store';
 import EntityUtils from "../utils/createEntity";
-let entityUtils = new EntityUtils();
-import Tasks from '../tasks/tasks'
+import * as actions from "../reducers/reducerActions";
 
+let entityUtils = new EntityUtils();
 const store = getStore();
 let visitedList = ['feed', 'groups', 'businesses'];
-import * as actions from "../reducers/reducerActions";
+
 class PageRefresher {
     constructor() {
-      //  pageSync.createPage('feed', pageSync.createStdAverageRefresh('feed', 10, 360000), this.setMainFeedRefresh.bind(this));
         pageSync.createPage('groups', pageSync.createStdAverageRefresh('groups', 10, 60000), this.updateGroups.bind(this));
-        pageSync.createPage('businesses', pageSync.createStdAverageRefresh('businesses', 10, 60000), this.updateBusinesses.bind(this));
+        pageSync.createPage('pictures', pageSync.createStdAverageRefresh('pictures', 10, 60000), this.uploadPictures.bind(this));
         pageSync.createPage('notification', pageSync.createStdAverageRefresh('notification', 10, 60000), this.updateNotification.bind(this));
         pageSync.createPage('user', pageSync.createStdAverageRefresh('user', 10, 60000), this.updateUser.bind(this));
-
     }
 
     updateUser() {
@@ -35,8 +32,6 @@ class PageRefresher {
             users.updateUserLocale(store.dispatch, token, user, FormUtils.getLocale())
         }
     }
-
-
 
     async updateUserFireBase(fireBaseToken) {
         let token = store.getState().authentication.token;
@@ -68,58 +63,26 @@ class PageRefresher {
         }
     }
 
-    updateBusinesses() {
+    uploadPictures() {
         let token = store.getState().authentication.token;
         if (token) {
-
-            this.checkUploadPromotionPictures(store.getState().promotions.promotionPictures,token)
-            this.checkUploadPictures(store.getState().businesses.businessPictures,token)
-            this.checkUploadProductsPictures(store.getState().products.productsPictures,token)
-           // business.getAll(store.dispatch, token);
+            this.checkUploadPictures('businesses', store.getState().businesses.businessPictures, token, actions.BUSINESS_CLEAR_PIC)
+            this.checkUploadPictures('products', store.getState().products.productsPictures, token, actions.PRODUCTS_CLEAR_PIC)
+            this.checkUploadPictures('promotions', store.getState().promotions.promotionPictures, token, actions.PROMOTION_CLEAR_PIC)
+            this.checkUploadPictures('users', store.getState().user.userPictures, token, actions.CLEAR_USERS_UPLOAD_PIC)
         }
     }
 
-    checkUploadPictures(businesses,token){
-        if(businesses.length > 0){
-            businesses.forEach(business => {
-                entityUtils.uploadPicture('businesses',business.business, token, business.businessResponse);
-
+    checkUploadPictures(api, items, token, clearType) {
+        if (items.length > 0) {
+            items.forEach(item => {
+                entityUtils.uploadPicture(api, item.item, token, item.itemResponse);
             });
             store.dispatch({
-                type: actions.BUSINESS_CLEAR_PIC,
-
+                type: clearType,
             });
         }
-
     }
-
-    checkUploadProductsPictures(products,token){
-        if(products.length > 0){
-            products.forEach(product => {
-                entityUtils.uploadPicture('products', product.product, token,product.productResponse)
-            });
-            store.dispatch({
-                type: actions.PRODUCTS_CLEAR_PIC,
-
-            });
-        }
-
-    }
-
-    checkUploadPromotionPictures(promotions,token){
-        if(promotions.length > 0){
-            promotions.forEach(promotion => {
-                entityUtils.uploadPicture('promotions',promotion.promotion, token, promotion.promotionResponse);
-
-            });
-            store.dispatch({
-                type: actions.PROMOTION_CLEAR_PIC,
-
-            });
-        }
-
-    }
-
 
     addBusinessPromotion(businessId) {
         if (!visitedList.includes('promotion_' + businessId,)) {
@@ -209,26 +172,23 @@ class PageRefresher {
         }
     }
 
-    createPromotionUpdate(item,businessId) {
+    createPromotionUpdate(item, businessId) {
         if (!visitedList.includes('promotion' + item._id,)) {
-            pageSync.createPage('promotion' + item._id, pageSync.createStdAverageRefresh('promotion' + item._id, 2, 7200000), this.updateBusinessPromotion.bind(this, item,businessId));
+            pageSync.createPage('promotion' + item._id, pageSync.createStdAverageRefresh('promotion' + item._id, 2, 7200000), this.updateBusinessPromotion.bind(this, item, businessId));
             visitedList.push('promotion' + item._id);
         }
     }
 
-
-    updateBusinessPromotion(item,businessId){
+    updateBusinessPromotion(item, businessId) {
         let token = store.getState().authentication.token;
         if (token) {
-            promotionAction.refershBusinessPromotion(item,businessId,token,store.dispatch );
+            promotionAction.refershBusinessPromotion(item, businessId, token, store.dispatch);
         }
     }
-
 
     visitedBusinessPromotion(itemId) {
         if (visitedList.includes('promotion' + itemId,)) {
             pageSync.visited('promotion' + itemId)
-
         }
     }
 
