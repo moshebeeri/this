@@ -14,7 +14,6 @@ function* feedScrollDown(action) {
             response = yield call(feedApi.getAll, 'down', 'start', action.token, action.user);
             yield put(loadingFeedsDone());
         } else {
-            yield put(renderFeed());
             yield put(scrolling());
             let keys = Object.keys(action.feeds);
             let id = action.feeds[keys.length - 1].id;
@@ -30,16 +29,18 @@ function* feedScrollDown(action) {
 
 function* feedScrollUp(action) {
     try {
-
-        let response = yield call(feedApi.getAll, 'up', action.id, token, user);
+        console.log('scrolling Up');
+        let response = yield call(feedApi.getAll, 'up', action.id, action.token, action.user);
         yield* updateFeedsTop(response);
 
     } catch (error) {
+        console.log(error);
     }
 }
 
 function* feedSega() {
-    yield takeLatest(segaActions.FEED_SCROLL_DOWN, feedScrollDown);
+
+    yield throttle(500, segaActions.FEED_SCROLL_DOWN, feedScrollDown)
     yield takeLatest(segaActions.FEED_SCROLL_UP, feedScrollUp);
 }
 

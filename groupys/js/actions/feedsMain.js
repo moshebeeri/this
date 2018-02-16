@@ -53,18 +53,14 @@ export function setNextFeeds(feeds) {
         const user = getState().user.user;
         if (!user)
             return;
-        dispatch({
-            type: actions.FEEDS_START_RENDER,
-        });
+
         dispatch({
             type: types.FEED_SCROLL_DOWN,
             feeds: feeds,
             token: token,
             user: user,
         });
-        dispatch({
-            type: actions.FEEDS_START_RENDER,
-        });
+
         handler.handleSuccses(getState(), dispatch)
     }
 }
@@ -183,7 +179,12 @@ export function saveFeed(id, navigation, feed) {
                 id: id
             });
             let savedInstance = await promotionApi.save(id);
+
             navigation.navigate('realizePromotion', {item: feed, id: savedInstance._id})
+            dispatch({
+                type: types.SAVE_SINGLE_MYPROMOTIONS_REQUEST,
+                item: savedInstance
+            })
             handler.handleSuccses(getState(), dispatch)
         } catch (error) {
             handler.handleError(error, dispatch, 'saveFeed')
