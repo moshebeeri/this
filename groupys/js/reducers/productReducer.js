@@ -6,7 +6,7 @@ export default function products(state = initialState, action) {
 
     if (action.type === REHYDRATE) {
 
-        // retrive stored data for reducer callApi
+        // retrieve stored data for reducer callApi
         const savedData = action.payload || initialState;
         return {
             ...state, ...savedData.products
@@ -22,7 +22,7 @@ export default function products(state = initialState, action) {
             return productsState;
         case actions.PRODUCTS_UPLOAD_PIC:
             let productsPic = productsState.productsPictures;
-            productsPic.push(action.item)
+            productsPic.push(action.item);
             return {
                 ...state,
                 productsPictures: productsPic,
