@@ -91,6 +91,47 @@ async function dispatchFollowByQrcode(dispatch, barcode, token) {
     }
 }
 
+export function searchUserBusinessesByPhoneNumber(phoneNumber) {
+    return async function (dispatch,getState) {
+        try {
+            // dispatch({
+            //     type: actions.USER_ROLE_SHOW_SPINNER,
+            //     show: true,
+            // });
+            // dispatch({
+            //     type: actions.USER_ROLE_SHOW_MESSAGE,
+            //     show: false,
+            //     message: '',
+            // });
+
+            let {user, info} = await businessApi.getUserBusinessesByPhoneNumber(phoneNumber);
+            if (user && info) {
+                dispatch({
+                    type: actions.USER_BUSINESS_BY_PHONE_SET_DATA,
+                    user: user._id,
+                    fullUser: user
+                });
+            } else {
+                dispatch({
+                    type: actions.USER_BUSINESS_BY_PHONE_SHOW_MESSAGE,
+                    show: true,
+                    message: "User not found",
+                });
+            }
+            dispatch({
+                type: actions.USER_BUSINESS_BY_PHONE__SHOW_SPINNER,
+                show: false,
+            });
+            handler.handleSuccses(getState(),dispatch)
+        } catch (error) {
+            handler.handleError(error,dispatch,'UserBusinessesByPhoneNumber');
+            logger.actionFailed('UserBusinessesByPhoneNumber');
+        }
+    }
+}
+
+
+
 export function searchBusiness(business) {
     return function (dispatch, getState) {
         const token = getState().authentication.token;
@@ -583,6 +624,14 @@ export function updateBusinesCategory(item) {
             locale:locale
         })
     }
+}
+
+export function clearUserBusinessByPhoneForm() {
+    return function (dispatch) {
+        dispatch({
+            type: actions.USER_BUSINESS_BY_PHONE_CLEAR,
+        });
+    };
 }
 
 export default {

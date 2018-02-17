@@ -9,7 +9,7 @@ import  handler from './ErrorHandler'
 export function saveRole(user, businessId, userRole, navigation) {
     return async function (dispatch, getState) {
         try {
-            const token = getState().authentication.token
+            const token = getState().authentication.token;
             dispatch({
                 type: actions.USER_ROLE_SHOW_SPINNER,
                 show: false,
@@ -40,7 +40,7 @@ export function saveRole(user, businessId, userRole, navigation) {
             navigation.goBack();
             handler.handleSuccses(getState(),dispatch)
         } catch (error) {
-            handler.handleError(error,dispatch,'userRole-saveRole')
+            handler.handleError(error,dispatch,'userRole-saveRole');
             logger.actionFailed('userRole-saveRole')
         }
     }

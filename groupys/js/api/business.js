@@ -360,6 +360,34 @@ class BusinessApi {
             }
         })
     }
+
+    getUserBusinessesByPhoneNumber(phone) {
+        return new Promise(async (resolve, reject) => {
+            try {
+                let token = await store.get('token');
+                let from = new Date();
+                let phoneNumber = this.clean_phone_number(phone);
+                const response = await fetch(`${server_host}/api/businesses/user/businesses/by/phone/` + 972 + '/' + phoneNumber, {
+                    method: 'GET',
+                    headers: {
+                        'Accept': 'application/json, text/plain, */*',
+                        'Content-Type': 'application/json;charset=utf-8',
+                        'Authorization': 'Bearer ' + token,
+                    }
+                });
+                if (response.status ==='401' || response.status === 401) {
+                    reject(errors.UN_AUTHOTIZED_ACCESS);
+                    return;
+                }
+                let responseData = await response.json();
+                resolve(responseData);
+                timer.logTime(from, new Date(), 'businesses', 'user/businesses/by/phone/')
+            }
+            catch (error) {
+                reject(errors.NETWORK_ERROR);
+            }
+        })
+    }
 }
 
 export default BusinessApi;

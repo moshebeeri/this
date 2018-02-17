@@ -160,7 +160,7 @@ export const TIME_OUT = 'TIME_OUT';
 //Render
 export const CURRENT_SCREEN = 'CURRENT_SCREEN';
 export const CURRENT_TAB = 'CURRENT_TAB';
-//Notifcation screen
+//Notification screen
 export const SET_NOTIFICATION = 'SET_NOTIFICATION';
 export const SET_TOP_NOTIFICATION = 'SET_TOP_NOTIFICATION';
 export const READ_NOTIFICATION = 'READ_NOTIFICATION';
@@ -223,6 +223,14 @@ export const SET_LOCATION = 'SET_LOCATION';
 export const RESET_POST_FORM = 'RESET_POST_FORM';
 export const POST_SAVING = 'POST_SAVING';
 export const POST_SAVING_DONE = 'POST_SAVING_DONE';
-export const UPSERT_POST = 'UPSERTpost';
+export const UPSERT_POST = 'UPSERT_POST';
 //Dimensions
-export const DIMENSIONS_CHANGED = 'DIMENSIONS_CHANGED'
+export const DIMENSIONS_CHANGED = 'DIMENSIONS_CHANGED';
+
+//User Business by phone
+export const USER_BUSINESS_BY_PHONE_SET_DATA         =  "USER_BUSINESS_BY_PHONE_SET_DATA"       ;
+export const USER_BUSINESS_BY_PHONE_SHOW_MESSAGE     =  "USER_BUSINESS_BY_PHONE_SHOW_MESSAGE"   ;
+export const USER_BUSINESS_BY_PHONE__SHOW_SPINNER    =  "USER_BUSINESS_BY_PHONE__SHOW_SPINNER"  ;
+export const USER_BUSINESS_BY_PHONE_CLEAR    =  "USER_BUSINESS_BY_PHONE_CLEAR"  ;
+
+

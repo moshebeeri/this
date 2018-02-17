@@ -3,7 +3,7 @@ import {I18nManager, View,Keyboard} from 'react-native';
 import {Button, Container, Content, Fab, Footer, Form, Icon, Input, Item, Picker, Text, Thumbnail} from 'native-base';
 import Icon2 from 'react-native-vector-icons/MaterialIcons';
 import styles from './styles'
-import * as userRoleAction from "../../../actions/userRole";
+import * as businessAction from "../../../actions/business";
 import {connect} from 'react-redux';
 import {bindActionCreators} from "redux";
 import {FormHeader, SimplePicker, Spinner, TextInput} from '../../../ui/index';
@@ -33,7 +33,7 @@ class SearchBusinessByPermittedUser extends Component {
                 searchUser: false,
             });
         }
-        this.props.actions.clearForm()
+        this.props.actions.clearUserBusinessByPhoneForm()
     }
 
     replaceRoute() {
@@ -69,15 +69,11 @@ class SearchBusinessByPermittedUser extends Component {
         }
     }
 
-    setUserRoles(role) {
-        const {actions} = this.props;
-        actions.setRole(role)
-    }
 
     searchUser() {
         const {actions} = this.props;
         Keyboard.dismiss();
-        actions.search(this.state.phoneNumber);
+        actions.searchUserBusinessesByPhoneNumber(this.state.phoneNumber);
     }
 
     validateForm() {
@@ -94,7 +90,7 @@ class SearchBusinessByPermittedUser extends Component {
         return result
     }
 
-    createSearchUser() {
+    createSearchUserBusinessByPhone() {
         if (!this.state.searchUser) {
             return <View></View>
         }
@@ -123,8 +119,8 @@ class SearchBusinessByPermittedUser extends Component {
         const spinner = this.createSpinnerTag(showSpinner);
         const userMessage = this.createMessageTag(showMessage, message);
         const userView = this.createUserView(fullUser);
-        const searchUser = this.createSearchUser();
-        let title = strings.AddUserRole;
+        const searchUser = this.createSearchUserBusinessByPhone();
+        let title = strings.SearchBusinessByUserPhoneNumberTitle;
         if (!this.state.searchUser) {
             title = strings.UpdateUserRole;
         }
@@ -189,6 +185,6 @@ export default connect(
         currentScreen: state.render.currentScreen,
     }),
     (dispatch) => ({
-        actions: bindActionCreators(userRoleAction, dispatch),
+        actions: bindActionCreators(businessAction, dispatch),
     })
 )(SearchBusinessByPermittedUser);

@@ -258,7 +258,8 @@ SelectUser                                    : "Select User",
 SearchOtherBusiness                           : "Search Other Business",
 User                                          : "User",
 NoUserSelected                                : "No User Selected",
-NoBusinessSelected                            : "No Business Selected"
+NoBusinessSelected                            : "No Business Selected",
+SearchBusinessByUserPhoneNumberTitle          : "Business By User"
 };
 
 export default enUS;
