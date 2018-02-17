@@ -89,6 +89,8 @@ class GeneralComponentHeader extends Component {
         }
         let arrowName = I18nManager.isRTL ? "ios-arrow-forward" : "ios-arrow-back";
         if (state.searchType) {
+
+
             return (
                 <View style={{width: StyleUtils.getWidth()}}>
                     {network.offline && <View style={{
@@ -98,21 +100,9 @@ class GeneralComponentHeader extends Component {
                         alignItems: 'center',
                         backgroundColor: '#f4ce42'
                     }}>
-                        <ThisText style={{color: 'gray'}}>Offline</ThisText>
+                        <ThisText style={{color: 'gray'}}>{strings.Offline}</ThisText>
                     </View>}
-                    {network.debugMessage && globals.debug &&  <TouchableOpacity
-                        onPress={() => this.resetMessage()}
-                        style={{
-                        width: StyleUtils.getWidth(),
-                        height: 20,
-                        justifyContent: 'center',
-                        alignItems: 'center',
-                        backgroundColor: 'white',
 
-
-                    }}>
-                        <ThisText style={{color: 'gray'}}>{network.debugMessage}</ThisText>
-                    </TouchableOpacity>}
                     <View style={{
                         height: headerHeight, flexDirection: 'row', alignItems: 'center', backgroundColor: 'white',
                         justifyContent: 'space-between',
@@ -135,7 +125,7 @@ class GeneralComponentHeader extends Component {
 
                         </TouchableOpacity>
                         <TextInput style={{
-                            color: "#888888",
+                            color: '#888888',
                             marginLeft: 10,
                             marginRight: 40,
                             marginTop: 5,
