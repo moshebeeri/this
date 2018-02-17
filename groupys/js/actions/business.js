@@ -103,8 +103,9 @@ export function searchUserBusinessesByPhoneNumber(phoneNumber) {
             //     show: false,
             //     message: '',
             // });
-
-            let {user, info} = await businessApi.getUserBusinessesByPhoneNumber(phoneNumber);
+            const token = getState().authentication.token;
+            console.log(phoneNumber)
+            let {user, info} = await businessApi.getUserBusinessesByPhoneNumber(phoneNumber,token);
             if (user && info) {
                 dispatch({
                     type: actions.USER_BUSINESS_BY_PHONE_SET_DATA,
