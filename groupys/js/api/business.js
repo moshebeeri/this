@@ -361,10 +361,9 @@ class BusinessApi {
         })
     }
 
-    getUserBusinessesByPhoneNumber(phone) {
+    getUserBusinessesByPhoneNumber(phone,token) {
         return new Promise(async (resolve, reject) => {
             try {
-                let token = await store.get('token');
                 let from = new Date();
                 let phoneNumber = this.clean_phone_number(phone);
                 const response = await fetch(`${server_host}/api/businesses/user/businesses/by/phone/` + 972 + '/' + phoneNumber, {
