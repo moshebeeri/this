@@ -210,7 +210,7 @@ class ApplicationManager extends Component {
                 logger.screenVisited('groups')
                 PageRefresher.visitedGroups();
             } else {
-                myPromotionsAction.setNextFeeds();
+               myPromotionsAction.setFirstTime();
                 logger.screenVisited('savedPromotion')
                 this.setState({
                     activeTab: 'savedPromotion'
@@ -221,7 +221,7 @@ class ApplicationManager extends Component {
         if (tab.i === 2) {
             if (I18nManager.isRTL && (Platform.OS === 'android')) {
                 logger.screenVisited('savedPromotion')
-                myPromotionsAction.setNextFeeds();
+                myPromotionsAction.setFirstTime();
                 this.setState({
                     activeTab: 'savedPromotion'
                 })

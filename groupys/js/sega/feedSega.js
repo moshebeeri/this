@@ -40,8 +40,8 @@ function* feedScrollUp(action) {
 
 function* feedSega() {
 
-    yield throttle(500, segaActions.FEED_SCROLL_DOWN, feedScrollDown)
-    yield takeLatest(segaActions.FEED_SCROLL_UP, feedScrollUp);
+    yield throttle(1000, segaActions.FEED_SCROLL_DOWN, feedScrollDown)
+    yield throttle(2000, segaActions.FEED_SCROLL_UP, feedScrollUp);
 }
 
 export default feedSega;

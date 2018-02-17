@@ -1,4 +1,4 @@
-import {call, takeLatest, put, take} from 'redux-saga/effects'
+import {call, takeLatest, put, throttle} from 'redux-saga/effects'
 import GroupsApi from "../api/groups";
 import {setGroups} from "../actions/groups";
 import * as segaActions from './segaActions'
@@ -15,7 +15,7 @@ function* saveGroupsRequest(action) {
 }
 
 function* groupsSega() {
-    yield takeLatest(segaActions.SAVE_GROUPS_REQUEST, saveGroupsRequest);
+    yield throttle(2000,segaActions.SAVE_GROUPS_REQUEST, saveGroupsRequest);
 }
 
 

@@ -1,4 +1,4 @@
-import {call, put, takeLatest} from 'redux-saga/effects'
+import {call, put, throttle} from 'redux-saga/effects'
 import ProfileApi from "../api/profile";
 import {setSavedPromotions} from "../actions/myPromotions";
 import * as segaActions from './segaActions';
@@ -37,8 +37,8 @@ function* saveMyPromotionsSingleRequest(action) {
 }
 
 function* myPromotionsSega() {
-    yield takeLatest(segaActions.SAVE_MYPROMOTIONS_REQUEST, saveMyPromotionsRequest);
-    yield takeLatest(segaActions.SAVE_SINGLE_MYPROMOTIONS_REQUEST, saveMyPromotionsSingleRequest);
+    yield throttle(10000,segaActions.SAVE_MYPROMOTIONS_REQUEST, saveMyPromotionsRequest);
+    yield throttle(2000,segaActions.SAVE_SINGLE_MYPROMOTIONS_REQUEST, saveMyPromotionsSingleRequest);
 }
 
 export default myPromotionsSega;
