@@ -1,16 +1,13 @@
 import store from "react-native-simple-store";
 import * as errors from './Errors'
 import CallingCallUtils from '../utils/LocalToCallingCode'
+import PhoneUtils from '../utils/phoneUtils'
+
 class LoginApi {
-    clean_phone_number(number) {
-        // remove all non digits, and then remove 0 if it is the first digit
-        return number.replace(/\D/g, '').replace(/^0/, '')
-    };
 
     async login(phoneNumber, password) {
-
         return new Promise(async (resolve, reject) => {
-            let normalizePhoneNumber = this.clean_phone_number(phoneNumber);
+            let normalizePhoneNumber = PhoneUtils.clean_phone_number(phoneNumber);
             let callingCode = await CallingCallUtils.getCallingCode();
 
             let email = callingCode + normalizePhoneNumber + "@low.la";
@@ -51,7 +48,7 @@ class LoginApi {
 
             let phoneNumber = '+' + callingCode + phone;
             let normalizedPhone = this.normalizePhoneNumber(phoneNumber,'+' + callingCode);
-            let cleanPhone = this.clean_phone_number(normalizedPhone);
+            let cleanPhone = PhoneUtils.clean_phone_number(normalizedPhone);
             try {
                 const response = await fetch(`${server_host}/api/users`, {
                     method: 'POST',
@@ -117,7 +114,7 @@ class LoginApi {
     }
 
     recoverPassword(phoneNumber) {
-        let normalizedPhone = this.clean_phone_number(phoneNumber);
+        let normalizedPhone = PhoneUtils.clean_phone_number(phoneNumber);
         return new Promise(async (resolve, reject) => {
             try {
                 const response = await fetch(`${server_host}/api/users/password/` + normalizedPhone, {
