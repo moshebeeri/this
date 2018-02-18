@@ -1,6 +1,6 @@
 import CarrierInfo from 'react-native-carrier-info';
 
-const counryCodeToCallingCode = {
+const countryCodeToCallingCode = {
     'BE': '32',
     'BZ': '501',
     'BJ': '229',
@@ -215,7 +215,7 @@ async function getCallingCode() {
         if (!countryCode) {
             return '972';
         }
-        let callingCode = counryCodeToCallingCode[countryCode.toUpperCase()];
+        let callingCode = countryCodeToCallingCode[countryCode.toUpperCase()];
         if (!callingCode) {
             return '972';
         }
