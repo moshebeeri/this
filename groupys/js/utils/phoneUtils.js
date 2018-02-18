@@ -4,4 +4,5 @@ class PhoneUtils {
         return number.replace(/\D/g, '').replace(/^0/, '')
     };
 }
-export default PhoneUtils;
+const phoneUtils = new PhoneUtils();
+export default phoneUtils ;
