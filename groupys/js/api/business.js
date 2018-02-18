@@ -8,7 +8,7 @@ class BusinessApi {
         return new Promise(function(resolve, reject) {
             setTimeout(function() {
                 reject(errors.TIME_OUT);
-            }, ms)
+            }, ms);
             promise.then(resolve, reject)
         })
     }
