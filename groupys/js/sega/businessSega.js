@@ -9,7 +9,9 @@ function* updateBusiness() {
     const {token,} = yield take(segaActions.UPDATE_BUSINESS_REQUEST);
     try {
         const response = yield call(businessApi.getAll, token, true);
-        yield put(updateBusinesses(response))
+        if(response.length > 0) {
+            yield put(updateBusinesses(response))
+        }
     } catch (error) {
         //TODO handle error
     }
@@ -20,9 +22,12 @@ function* updateBusinessFirstTime() {
     try {
         yield put(businessLoading());
         const response = yield call(businessApi.getAll, token, true);
-        yield put(updateBusinesses(response));
+        if(response.length > 0 ) {
+            yield put(updateBusinesses(response));
+        }
         yield put(businessLoadingDone());
     } catch (error) {
+        yield put(businessLoadingDone());
         //TODO handle error
     }
 }

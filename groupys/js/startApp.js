@@ -35,19 +35,18 @@ import BusinessProfile from "./components/business/profile/index";
 import PostForm from "./components/post/index";
 import BusinessFollow from "./components/business/follow/follow_container";
 import BusinessAccount from "./components/business/account/index";
+import QuickSingUp from "./components/signup/quickSingup/index";
 import BarcodeScannerComponent from "./ui/BarcodeScanner/BarcodeScannerComponent"
 import './conf/global';
-const store = getStore();
 import {MenuContext} from "react-native-popup-menu";
 import getStore from "./store";
 import setCustomStyles from './styles'
 import * as actions from "./reducers/reducerActions";
-setCustomStyles();
-
 import ActionLogger from './actions/ActionLogger'
+
+const store = getStore();
+setCustomStyles();
 let logger = new ActionLogger();
-
-
 const AppNavigator = StackNavigator({
         home: {screen: ApplicationManager},
         login: {screen: Login},
@@ -78,10 +77,12 @@ const AppNavigator = StackNavigator({
         businessProfile: {screen: BusinessProfile},
         businessFollow: {screen: BusinessFollow},
         PostForm: {screen: PostForm},
-        businessAccount:{screen:BusinessAccount},
-        BarcodeScannerComponent:{screen:BarcodeScannerComponent},
+        businessAccount: {screen: BusinessAccount},
+        QuickSingUp: {screen: QuickSingUp},
+        BarcodeScannerComponent: {screen: BarcodeScannerComponent},
     }
 );
+
 // gets the current screen from navigation state
 function getCurrentRouteName(navigationState) {
     if (!navigationState) {
@@ -94,6 +95,7 @@ function getCurrentRouteName(navigationState) {
     }
     return route.routeName;
 }
+
 class AppWithNavigationState extends Component {
     constructor(props) {
         super(props);
@@ -101,14 +103,9 @@ class AppWithNavigationState extends Component {
             store.dispatch({
                 type: actions.DIMENSIONS_CHANGED,
             });
-
-
             console.log('changed dimenssion');
-
         })
     }
-
-
 
     render() {
         return (
@@ -118,19 +115,15 @@ class AppWithNavigationState extends Component {
                         const currentScreen = getCurrentRouteName(currentState);
                         const prevScreen = getCurrentRouteName(prevState);
                         store.dispatch({
-                            type:actions.CURRENT_SCREEN,
-                            screen:currentScreen
+                            type: actions.CURRENT_SCREEN,
+                            screen: currentScreen
                         });
-                        logger.screenVisited(currentScreen,prevScreen);
-
+                        logger.screenVisited(currentScreen, prevScreen);
                     }}/>
             </MenuContext>
         );
     }
-
-
 }
-
 
 export default function GROUPIES() {
     return (
