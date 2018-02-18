@@ -221,9 +221,9 @@ async function getCallingCode() {
         }
         return callingCode;
     } catch (err) {
-        console.log(err)
+        console.log('mobile not supported ')
+        return '972';
     }
-    return '972';
 }
 
 export default {

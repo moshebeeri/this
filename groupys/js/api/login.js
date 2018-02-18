@@ -7,11 +7,13 @@ class LoginApi {
         return number.replace(/\D/g, '').replace(/^0/, '')
     };
 
-    login(phoneNumber, password) {
-        let normalizePhoneNumber = this.clean_phone_number(phoneNumber);
+    async login(phoneNumber, password) {
 
-        let email = CallingCallUtils.getCallingCode() + normalizePhoneNumber + "@low.la";
         return new Promise(async (resolve, reject) => {
+            let normalizePhoneNumber = this.clean_phone_number(phoneNumber);
+            let callingCode = await CallingCallUtils.getCallingCode();
+
+            let email = callingCode + normalizePhoneNumber + "@low.la";
             try {
                 const response = await fetch(`${server_host}/auth/local`, {
                     method: 'POST',
@@ -42,11 +44,14 @@ class LoginApi {
         return newPhone;
     }
 
-    signup(phone, password, firstName, lastName) {
-        let phoneNumber = '+' +CallingCallUtils.getCallingCode() + phone;
-        let normalizedPhone = this.normalizePhoneNumber(phoneNumber, '+972');
-        let cleanPhone = this.clean_phone_number(normalizedPhone);
+     signup(phone, password, firstName, lastName) {
+
         return new Promise(async (resolve, reject) => {
+            let callingCode = await CallingCallUtils.getCallingCode();
+
+            let phoneNumber = '+' + callingCode + phone;
+            let normalizedPhone = this.normalizePhoneNumber(phoneNumber,'+' + callingCode);
+            let cleanPhone = this.clean_phone_number(normalizedPhone);
             try {
                 const response = await fetch(`${server_host}/api/users`, {
                     method: 'POST',
@@ -55,10 +60,10 @@ class LoginApi {
                         'Content-Type': 'application/json;charset=utf-8',
                     },
                     body: JSON.stringify({
-                        country_code: '+' +  +CallingCallUtils.getCallingCode(),
+                        country_code: '+' + callingCode ,
                         name: firstName + ' ' + lastName,
                         phone_number: cleanPhone,
-                        email:  CallingCallUtils.getCallingCode() + cleanPhone + "@low.la",
+                        email:  callingCode + cleanPhone + "@low.la",
                         password: password,
                     })
                 });
