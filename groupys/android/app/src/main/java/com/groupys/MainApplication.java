@@ -1,7 +1,7 @@
 package com.groupys;
 
 import android.app.Application;
-
+import com.ianlin.RNCarrierInfo.RNCarrierInfoPackage;
 import com.facebook.react.ReactApplication;
 import com.RNFetchBlob.RNFetchBlobPackage;
 import io.linkpreview.RNReactNativeLinkPreviewPackage;
@@ -80,7 +80,7 @@ public class MainApplication extends Application implements ReactApplication {
             new RCTFileUploaderPackage(),
             new ReactNativeContacts(),
             new FileUploadPackage(),
-
+            new RNCarrierInfoPackage(),
             new VectorIconsPackage()
       );
     }

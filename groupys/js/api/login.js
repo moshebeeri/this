@@ -1,5 +1,6 @@
 import store from "react-native-simple-store";
 import * as errors from './Errors'
+import CallingCallUtils from '../utils/LocalToCallingCode'
 class LoginApi {
     clean_phone_number(number) {
         // remove all non digits, and then remove 0 if it is the first digit
@@ -8,7 +9,8 @@ class LoginApi {
 
     login(phoneNumber, password) {
         let normalizePhoneNumber = this.clean_phone_number(phoneNumber);
-        let email = '972' + normalizePhoneNumber + "@low.la";
+
+        let email = CallingCallUtils.getCallingCode() + normalizePhoneNumber + "@low.la";
         return new Promise(async (resolve, reject) => {
             try {
                 const response = await fetch(`${server_host}/auth/local`, {
@@ -41,7 +43,7 @@ class LoginApi {
     }
 
     signup(phone, password, firstName, lastName) {
-        let phoneNumber = '+972' + phone;
+        let phoneNumber = '+' +CallingCallUtils.getCallingCode() + phone;
         let normalizedPhone = this.normalizePhoneNumber(phoneNumber, '+972');
         let cleanPhone = this.clean_phone_number(normalizedPhone);
         return new Promise(async (resolve, reject) => {
@@ -53,10 +55,10 @@ class LoginApi {
                         'Content-Type': 'application/json;charset=utf-8',
                     },
                     body: JSON.stringify({
-                        country_code: '+972',
+                        country_code: '+' +  +CallingCallUtils.getCallingCode(),
                         name: firstName + ' ' + lastName,
                         phone_number: cleanPhone,
-                        email: '972' + cleanPhone + "@low.la",
+                        email:  CallingCallUtils.getCallingCode() + cleanPhone + "@low.la",
                         password: password,
                     })
                 });
