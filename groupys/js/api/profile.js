@@ -9,10 +9,6 @@ import Timer from "./LogTimer";
 let timer = new Timer();
 import * as errors from './Errors'
 class ProfileApi {
-    clean_phone_number(number) {
-        // remove all non digits, and then remove 0 if it is the first digit
-        return number.replace(/\D/g, '').replace(/^0/, '')
-    };
 
     fetch(token, from, to) {
         return new Promise(async (resolve, reject) => {
