@@ -359,7 +359,7 @@ function sendValidationEmail(businessId) {
 }
 
 function reviewRequest(business) {
-  email.send('reviewBusiness', 'moshe@low.la', {
+  email.send('reviewBusiness', 'THIS@low.la', {
     name: 'moshe',
     businessEmail: business.email,
     businessName: business.name,
