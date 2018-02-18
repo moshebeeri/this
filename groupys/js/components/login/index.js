@@ -151,11 +151,13 @@ class Login extends Component {
                             {doLogin && <Spinner style={{position:'absolute',top:-15}}/>}
                             <View style={styles.signup_container}>
                                 <View style={{flexDirection:'row'}}>
-                                    <ThisText style={{backgroundColor:'transparent',color:'white'}}> Dosen't have an account? </ThisText>
+                                    <ThisText style={{backgroundColor:'transparent',color:'white'}}>{strings.NoAccountMessage}</ThisText>
                                 <ThisText onPress={() => this.replaceRoute('Signup')}
                                       style={styles.signgupText}>{strings.SignUp}</ThisText>
+
+
                                 </View>
-                                <ThisText onPress={this.forgetPassword.bind(this)}
+                                 <ThisText onPress={this.forgetPassword.bind(this)}
                                       style={styles.forgetText}>{strings.ForgotPassword}</ThisText>
 
                             </View>

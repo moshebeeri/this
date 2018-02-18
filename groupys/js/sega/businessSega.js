@@ -1,28 +1,31 @@
-import {call, fork, put, take, takeEvery} from 'redux-saga/effects'
+import {call, fork, put, throttle, takeEvery} from 'redux-saga/effects'
 import BusinessApi from "../api/business";
 import {businessLoading, businessLoadingDone, setBusinessCategory, updateBusinesses} from "../actions/business";
 import * as segaActions from './segaActions'
 
 let businessApi = new BusinessApi();
 
-function* updateBusiness() {
-    const {token,} = yield take(segaActions.UPDATE_BUSINESS_REQUEST);
-    try {
-        const response = yield call(businessApi.getAll, token, true);
-        yield put(updateBusinesses(response))
+function* updateBusiness(action) {
+     try {
+        const response = yield call(businessApi.getAll, action.token, true);
+        if(response.length > 0) {
+            yield put(updateBusinesses(response))
+        }
     } catch (error) {
         //TODO handle error
     }
 }
 
-function* updateBusinessFirstTime() {
-    const {token,} = yield take(segaActions.UPDATE_BUSINESS_REQUEST_FIRST_TIME);
+function* updateBusinessFirstTime(action) {
     try {
         yield put(businessLoading());
-        const response = yield call(businessApi.getAll, token, true);
-        yield put(updateBusinesses(response));
+        const response = yield call(businessApi.getAll, action.token, true);
+        if(response.length > 0 ) {
+            yield put(updateBusinesses(response));
+        }
         yield put(businessLoadingDone());
     } catch (error) {
+        yield put(businessLoadingDone());
         //TODO handle error
     }
 }
@@ -39,8 +42,9 @@ function* updateCategory(action) {
 }
 
 function* businessSega() {
-    yield fork(updateBusiness);
-    yield fork(updateBusinessFirstTime);
+    yield throttle(2000,segaActions.UPDATE_BUSINESS_REQUEST,updateBusiness);
+    yield throttle(2000,segaActions.UPDATE_BUSINESS_REQUEST_FIRST_TIME,updateBusinessFirstTime);
+
     yield takeEvery(segaActions.UPDATE_BUSINESS_CATEGORY_REQUEST, updateCategory);
 }
 
