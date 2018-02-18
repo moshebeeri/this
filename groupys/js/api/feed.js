@@ -8,11 +8,6 @@ import MainFeedReduxComperator from "../reduxComperators/MainFeedComperator"
 let feedComperator = new MainFeedReduxComperator();
 import * as errors from './Errors'
 class FeedApi {
-    clean_phone_number(number) {
-        // remove all non digits, and then remove 0 if it is the first digit
-        return number.replace(/\D/g, '').replace(/^0/, '')
-    };
-
     timeout(ms, promise) {
         return new Promise(function(resolve, reject) {
             setTimeout(function() {

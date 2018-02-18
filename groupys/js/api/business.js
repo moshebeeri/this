@@ -2,6 +2,7 @@ import Timer from "./LogTimer";
 import * as errors from './Errors'
 let timer = new Timer();
 import FormUtils from "../utils/fromUtils";
+import PhoneUtils from "../utils/phoneUtils";
 class BusinessApi {
 
      timeout(ms, promise) {
@@ -365,7 +366,7 @@ class BusinessApi {
         return new Promise(async (resolve, reject) => {
             try {
                 let from = new Date();
-                let phoneNumber = this.clean_phone_number(phone);
+                let phoneNumber = PhoneUtils.clean_phone_number(phone);
                 const response = await fetch(`${server_host}/api/businesses/user/businesses/by/phone/` + 972 + '/' + phoneNumber, {
                     method: 'GET',
                     headers: {
