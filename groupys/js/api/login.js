@@ -1,12 +1,19 @@
 import store from "react-native-simple-store";
 import * as errors from './Errors'
-import PhoneUtils from "../utils/phoneUtils";
-
+import CallingCallUtils from '../utils/LocalToCallingCode'
 class LoginApi {
-    login(phoneNumber, password) {
-        let normalizePhoneNumber = PhoneUtils.clean_phone_number(phoneNumber);
-        let email = '972' + normalizePhoneNumber + "@low.la";
+    clean_phone_number(number) {
+        // remove all non digits, and then remove 0 if it is the first digit
+        return number.replace(/\D/g, '').replace(/^0/, '')
+    };
+
+    async login(phoneNumber, password) {
+
         return new Promise(async (resolve, reject) => {
+            let normalizePhoneNumber = this.clean_phone_number(phoneNumber);
+            let callingCode = await CallingCallUtils.getCallingCode();
+
+            let email = callingCode + normalizePhoneNumber + "@low.la";
             try {
                 const response = await fetch(`${server_host}/auth/local`, {
                     method: 'POST',
@@ -37,11 +44,14 @@ class LoginApi {
         return newPhone;
     }
 
-    signup(phone, password, firstName, lastName) {
-        let phoneNumber = '+972' + phone;
-        let normalizedPhone = this.normalizePhoneNumber(phoneNumber, '+972');
-        let cleanPhone = PhoneUtils.clean_phone_number(normalizedPhone);
+     signup(phone, password, firstName, lastName) {
+
         return new Promise(async (resolve, reject) => {
+            let callingCode = await CallingCallUtils.getCallingCode();
+
+            let phoneNumber = '+' + callingCode + phone;
+            let normalizedPhone = this.normalizePhoneNumber(phoneNumber,'+' + callingCode);
+            let cleanPhone = this.clean_phone_number(normalizedPhone);
             try {
                 const response = await fetch(`${server_host}/api/users`, {
                     method: 'POST',
@@ -50,10 +60,10 @@ class LoginApi {
                         'Content-Type': 'application/json;charset=utf-8',
                     },
                     body: JSON.stringify({
-                        country_code: '+972',
+                        country_code: '+' + callingCode ,
                         name: firstName + ' ' + lastName,
                         phone_number: cleanPhone,
-                        email: '972' + cleanPhone + "@low.la",
+                        email:  callingCode + cleanPhone + "@low.la",
                         password: password,
                     })
                 });
@@ -107,7 +117,7 @@ class LoginApi {
     }
 
     recoverPassword(phoneNumber) {
-        let normalizedPhone = PhoneUtils.clean_phone_number(phoneNumber);
+        let normalizedPhone = this.clean_phone_number(phoneNumber);
         return new Promise(async (resolve, reject) => {
             try {
                 const response = await fetch(`${server_host}/api/users/password/` + normalizedPhone, {
