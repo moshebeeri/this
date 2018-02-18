@@ -115,12 +115,15 @@ exports.show = function (req, res) {
     })
   });
 };
-exports.mine = function (req, res) {
-  let userId = req.user._id;
-  let query = `MATCH (user:user{_id:"${userId}"})-[role:ROLE]->(b:business) return b._id as business_id, role
-                order by business_id desc`;
+
+function getUserBusinesses(userId, includeSellers, callback) {
+  let roles = includeSellers?  ['OWNS', 'Admin', 'Manager', 'Seller'] : ['OWNS', 'Admin', 'Manager'];
+  let query = `MATCH (user:user{_id:"${userId}"})-[role:ROLE]->(b:business) 
+               WHERE role.name IN ${roles}
+               return b._id as business_id, role
+               order by business_id desc`;
   graphModel.query(query, function (err, businesses_role) {
-    if (err) return handleError(res, err);
+    if (err) return callback(err);
     let _ids = [];
     let userRoleById = {};
     businesses_role.forEach(business_role => {
@@ -130,9 +133,9 @@ exports.mine = function (req, res) {
     Business.find({}).where({$or: [{_id: {$in: _ids}}, {$and: [{creator: userId}, {'review.status': 'waiting'}]}]})
       .sort('-_id')
       .exec(function (err, businesses) {
-        if (err) return handleError(res, err);
-        get_businesses_state(businesses, req.user._id, function (err, businesses) {
-          if (err) return handleError(res, err);
+        if (err) return callback(err);
+        get_businesses_state(businesses, userId, function (err, businesses) {
+          if (err) return callback(err);
           let info = [];
           businesses.forEach(business => {
             info.push({
@@ -140,31 +143,31 @@ exports.mine = function (req, res) {
               role: userRoleById[business._id]
             });
           });
-          return res.status(200).json(info);
+          return callback(info);
         })
       });
   })
+}
+
+exports.mine = function (req, res) {
+  let userId = req.user._id;
+  return getUserBusinesses(userId, true, (err, info) => {
+    if(err) return handleError(res, err);
+    return res.status(200).json(info);
+  });
 };
 
-/*
-    Business.find({}).where('_id').in(_ids)
-      .sort({_id: 'desc'})
-      .exec(function (err, businesses) {
-        if (err) return handleError(res, err);
-        get_businesses_state(businesses, req.user._id, function (err, businesses) {
-          if (err) return handleError(res, err);
-          let info = [];
-          console.log(JSON.stringify(businesses));
-          businesses.forEach(business => {
-            info.push({
-              business: business,
-              role: userRoleById[business._id]
-            });
-          });
-          return res.status(200).json(info);
-        })
-      });
- */
+exports.getUserBusinessesByPhone = function (req, res) {
+  User.findOne({ $and: [{phone_number: req.params.phone},
+    {country_code: req.params.country_code}]}, function (err, user) {
+    if(err) return handleError(res, err);
+    return getUserBusinesses(user._id, false, (err, info) => {
+      if(err) return handleError(res, err);
+      return res.status(200).json({user,info});
+    });
+  });
+};
+
 function business_follow_activity(follower, business) {
   activity.activity({
     business,
@@ -318,7 +321,7 @@ function create_business_default_group(business) {
     business.save((err) => {
       if(err) return console.error(err);
       graphModel.owner_followers_follow_default_group(business.creator._id);
-
+      //graphModel.relate_ids(business.creator._id, 'FOLLOW', group._id);
     });
   });
 }

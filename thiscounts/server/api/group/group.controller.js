@@ -188,9 +188,12 @@ exports.create_business_default_group = function (group, callback) {
           created: group.created
         }, function (err) {
           if (err) return callback(err);
-          graphModel.relate_ids(group._id, 'CREATED_BY', group.creator);
-          graphModel.relate_ids(group.creator, 'FOLLOW', group._id);
-          graphModel.relate_ids(group.creator, 'GROUP_ADMIN', group._id);
+          console.log(`group.creator ${JSON.stringify(group.creator)}`);
+          console.log(`group.entity.business ${JSON.stringify(group.entity.business)}`);
+
+          graphModel.relate_ids(group._id, 'CREATED_BY', group.creator._id);
+          graphModel.relate_ids(group.creator._id, 'FOLLOW', group._id);
+          graphModel.relate_ids(group.creator._id, 'GROUP_ADMIN', group._id);
           graphModel.relate_ids(group._id, 'FOLLOW', group.entity.business);
           graphModel.relate_ids(group.entity.business, 'DEFAULT_GROUP', group._id, function (err) {
             if (err) return callback(err);
