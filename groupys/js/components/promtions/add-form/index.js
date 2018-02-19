@@ -542,7 +542,7 @@ class AddPromotion extends Component {
                         <TextInput field={strings.Description} value={this.state.info}
                                    returnKeyType='next' ref="5" refNext="5"
                                    onSubmitEditing={this.dismiss.bind(this)}
-                                   onChangeText={(info) => this.setState({info})} isMandatory={true}/>
+                                   onChangeText={(info) => this.setState({info})} isMandatory={false}/>
                     </View>
 
                     {conditionForm}

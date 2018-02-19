@@ -53,7 +53,9 @@ export function setNextFeeds(feeds) {
         const user = getState().user.user;
         if (!user)
             return;
-
+        if(getState().feeds.maxFeedReturned){
+            return;
+        }
         dispatch({
             type: types.FEED_SCROLL_DOWN,
             feeds: feeds,
@@ -281,6 +283,12 @@ export function stopScrolling() {
         type: actions.FEEDS_GET_NEXT_BULK_DONE,
     }
 }
+export function maxFeedReturned() {
+    return {
+        type: actions.MAX_FEED_RETUNED,
+    }
+}
+
 
 export function* updateFeeds(feeds) {
     if (feeds) {
