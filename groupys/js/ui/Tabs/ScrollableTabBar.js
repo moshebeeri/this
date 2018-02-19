@@ -84,7 +84,7 @@ const ScrollableTabBar = createReactClass({
         let newScrollX = tabOffset + absolutePageOffset;
         // center tab and smooth tab change (for when tabWidth changes a lot between two tabs)
         newScrollX -= (containerWidth - (1 - pageOffset) * tabWidth - pageOffset * nextTabWidth) / 2;
-        console.log("scrolleing " + newScrollX);
+
         newScrollX = newScrollX >= 0 ? newScrollX : 0;
         if (Platform.OS === 'android') {
             this._scrollView.scrollTo({x: newScrollX, y: 0, animated: false,});

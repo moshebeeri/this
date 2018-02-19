@@ -192,6 +192,7 @@ class ApplicationManager extends Component {
     onChangeTab(tab) {
         const {notificationAction, myPromotionsAction, feedAction, groupsActions} = this.props;
         groupsActions.stopListenForChat();
+        feedAction.stopMainFeedsListener();
         if (tab.i === 0) {
             if (I18nManager.isRTL && (Platform.OS === 'android')) {
                 logger.screenVisited('notification')
@@ -245,7 +246,7 @@ class ApplicationManager extends Component {
                 logger.screenVisited('notification')
             }
         }
-        //this.props.actions.changeTab(tab)
+
     }
 
     navigateToAdd() {
@@ -280,7 +281,7 @@ class ApplicationManager extends Component {
             notificationAction, notificationGroup, notificationBusiness,
             showSearchResults, businesses, businessActions, groups, groupsActions, showSearchGroupResults
         } = this.props;
-        console.log('rendering main');
+
         console.log(this.state.activeTab);
         if (!showComponent) {
             return <View></View>

@@ -18,6 +18,7 @@ import {
 import FormUtils from "../../../utils/fromUtils";
 import strings from '../../../i18n/i18n';
 import StyleUtils from "../../../utils/styleUtils";
+const { height} = Dimensions.get('window');
 
 class AddBusiness extends Component {
     static navigationOptions = ({navigation}) => ({
@@ -337,7 +338,7 @@ class AddBusiness extends Component {
                             {this.createCoverImageComponent()}
                         </View>
 
-                        {this.props.saving && <Spinner/>}
+
 
                     </View>
                     <View style={[styles.inputTextLayout, {width: StyleUtils.getWidth() - 15}]}>
@@ -396,9 +397,11 @@ class AddBusiness extends Component {
 
                     </View>}
 
-
                 </ScrollView>
 
+                {this.props.saving &&  <View style={{justifyContent:'center',alignItems:'center',position:'absolute',width:StyleUtils.getWidth(),opacity:0.7,height:height,top:40,backgroundColor:'white'}}>
+                    <Spinner/>
+                </View>}
 
             </View>
         );

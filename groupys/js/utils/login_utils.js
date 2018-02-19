@@ -34,7 +34,7 @@ class LoginUtils {
     signup(countryCode, mobile, email, password) {
         return new Promise(async (resolve, reject) => {
             try {
-                console.log(`${server_host}/api/users`);
+
                 let body = {
                     country_code: countryCode,
                     phone_number: mobile,
@@ -71,9 +71,9 @@ class LoginUtils {
                     }
                 });
                 const responseData = await response.json();
-                console.log(JSON.stringify(responseData));
+
                 await store.save('user_id', responseData._id);
-                console.log('user_id: ' + responseData._id);
+
                 resolve(responseData._id);
             } catch (error) {
                 console.log('There has been a problem with your fetch operation: ' + error.message);

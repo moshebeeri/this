@@ -85,8 +85,7 @@ class MyPromotions extends Component {
 
     render() {
         const {navigation, feeds, userFollower, actions, token, loadingDone, showTopLoader, user,activeTab} = this.props;
-        console.log('render my PROMTOIONS');
-        console.log(activeTab);
+
         return (
             <GenericFeedManager
                 navigation={navigation}

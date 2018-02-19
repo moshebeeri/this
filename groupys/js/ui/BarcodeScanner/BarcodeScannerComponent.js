@@ -19,7 +19,7 @@ export default class BarcodeScannerComponent extends Component {
 
     scanBarcode(scanCode) {
 
-        console.log(scanCode);
+
         this.props.navigation.state.params.handleCode(scanCode);
         this.props.navigation.goBack();
     }

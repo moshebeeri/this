@@ -137,7 +137,24 @@ export function followBusiness(businessId) {
         try {
             dispatch({type: actions.SCANNER_RESET});
             const token = getState().authentication.token;
+            const user = getState().user.user;
+            const feedOrder = getState().feeds.feedView;
             await businessApi.followBusiness(businessId, token);
+
+            // start listen for feeds
+            dispatch({
+                type: types.CANCEL_MAIN_FEED_LISTENER,
+            });
+            if (feedOrder && feedOrder.length > 0) {
+                dispatch({
+                    type: types.LISTEN_FOR_MAIN_FEED,
+                    id: feedOrder[0],
+                    token: token,
+                    user: user,
+                });
+            }
+
+
             handler.handleSuccses(getState(), dispatch)
         } catch (error) {
             handler.handleError(error, dispatch,'scanner-followBusiness')

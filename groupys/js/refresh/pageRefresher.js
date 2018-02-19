@@ -211,7 +211,7 @@ class PageRefresher {
     }
 
     updateSocialState(id) {
-        console.log('refresh' + id);
+
         let token = store.getState().authentication.token;
         if (token) {
             feedAction.refreshFeedSocialState(store.getState(),store.dispatch, token, id);

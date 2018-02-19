@@ -32,7 +32,7 @@ function* updateBusinessFirstTime(action) {
 
 function* updateCategory(action) {
     try {
-        console.log(action);
+
         const response = yield call(businessApi.getSubCategory, action.token, action.business.business.subcategory, action.locale);
         yield put(setBusinessCategory(response, action.business));
     } catch (error) {

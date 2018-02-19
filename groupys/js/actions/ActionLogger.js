@@ -17,7 +17,7 @@ class ActionLogger {
     }
 
     async actionFailed(method,param) {
-        console.log(method);
+
         await this.init();
         if(param){
             Analytics.logEvent('operation_failed', {

@@ -104,7 +104,7 @@ export function searchUserBusinessesByPhoneNumber(phoneNumber) {
             //     message: '',
             // });
             const token = getState().authentication.token;
-            console.log(phoneNumber)
+
             let {user, info} = await businessApi.getUserBusinessesByPhoneNumber(phoneNumber,token);
             if (user && info) {
                 dispatch({
@@ -437,6 +437,9 @@ export function setBusinessQrCode(business) {
     return async function (dispatch, getState) {
         try {
             const token = getState().authentication.token;
+            dispatch({
+                type: actions.REST_BUSINESS_QRCODE,
+            });
             let response = await businessApi.getBusinessQrCodeImage(business.qrcode, token);
             dispatch({
                 type: actions.UPSERT_BUSINESS_QRCODE,

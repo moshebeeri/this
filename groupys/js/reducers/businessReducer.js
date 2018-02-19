@@ -13,6 +13,7 @@ const initialState = {
     paymentMessage: '',
     templateBusiness: {},
     businessPictures: [],
+    lastBusinessQrCode: undefined
 };
 import {REHYDRATE} from "redux-persist/constants";
 import * as actions from "./reducerActions";
@@ -101,6 +102,13 @@ export default function business(state = initialState, action) {
                 ...state,
                 businessPictures: [],
             };
+        case actions.REST_BUSINESS_QRCODE:
+            return {
+                ...state,
+                lastBusinessQrCode: undefined,
+            };
+
+
         case actions.UPSERT_BUSINESS_QRCODE:
             businessesState.update = !businessesState.update;
             if (currentbusinesses[action.business._id]) {
@@ -109,6 +117,7 @@ export default function business(state = initialState, action) {
                 currentbusinesses[action.business._id] = action.business;
                 currentbusinesses[action.business._id].qrcodeSource = action.qrcodeSource;
             }
+            businessesState.lastBusinessQrCode = action.qrcodeSource;
             return businessesState;
         case actions.LIKE:
             let item = businessesState.businesses[action.id];
