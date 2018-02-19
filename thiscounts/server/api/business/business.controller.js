@@ -117,7 +117,7 @@ exports.show = function (req, res) {
 };
 
 function getUserBusinesses(userId, includeSellers, callback) {
-  let roles = includeSellers?  ['OWNS', 'Admin', 'Manager', 'Seller'] : ['OWNS', 'Admin', 'Manager'];
+  let roles = includeSellers?  "['OWNS', 'Admin', 'Manager', 'Seller']" : "['OWNS', 'Admin', 'Manager']";
   let query = `MATCH (user:user{_id:"${userId}"})-[role:ROLE]->(b:business) 
                WHERE role.name IN ${roles}
                return b._id as business_id, role
@@ -126,6 +126,7 @@ function getUserBusinesses(userId, includeSellers, callback) {
     if (err) return callback(err);
     let _ids = [];
     let userRoleById = {};
+    console.log(`getUserBusinesses: ${businesses_role}`);
     businesses_role.forEach(business_role => {
       _ids.push(business_role.business_id);
       userRoleById[business_role.business_id] = business_role.role.properties.name;
@@ -143,7 +144,7 @@ function getUserBusinesses(userId, includeSellers, callback) {
               role: userRoleById[business._id]
             });
           });
-          return callback(info);
+          return callback(null, info);
         })
       });
   })
@@ -151,7 +152,7 @@ function getUserBusinesses(userId, includeSellers, callback) {
 
 exports.mine = function (req, res) {
   let userId = req.user._id;
-  return getUserBusinesses(userId, true, (err, info) => {
+  getUserBusinesses(userId, true, (err, info) => {
     if(err) return handleError(res, err);
     return res.status(200).json(info);
   });
@@ -161,7 +162,7 @@ exports.getUserBusinessesByPhone = function (req, res) {
   User.findOne({ $and: [{phone_number: req.params.phone},
     {country_code: req.params.country_code}]}, function (err, user) {
     if(err) return handleError(res, err);
-    return getUserBusinesses(user._id, false, (err, info) => {
+    getUserBusinesses(user._id, false, (err, info) => {
       if(err) return handleError(res, err);
       return res.status(200).json({user,info});
     });
@@ -358,7 +359,7 @@ function sendValidationEmail(businessId) {
 }
 
 function reviewRequest(business) {
-  email.send('reviewBusiness', 'moshe@low.la', {
+  email.send('reviewBusiness', 'THIS@low.la', {
     name: 'moshe',
     businessEmail: business.email,
     businessName: business.name,
@@ -402,9 +403,12 @@ function createValidatedBusiness(business, callback) {
       }
       Role.createRole(business.creator._id, business._id, Role.Roles.get('OWNS'), function (err) {
         if (err) return callback(err);
+        graphModel.relate_ids(business.creator._id, 'FOLLOW', business._id);
+
         if (business.type === 'PERSONAL_SERVICES' || business.type === 'SMALL_BUSINESS') {
           graphModel.owner_followers_follow_business(business.creator._id);
         }
+
         if (defined(business.shopping_chain))
           graphModel.relate_ids(business._id, 'BRANCH_OF', business.shopping_chain._id);
         if (defined(business.mall))
@@ -419,7 +423,6 @@ function createValidatedBusiness(business, callback) {
         }, function (err) {
           if (err) return console.error(err);
         });
-        console.log('createValidatedBusiness creating create_business_default_group');
         create_business_default_group(business);
         notifyOnAction(business);
         return callback(null, business);
