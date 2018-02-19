@@ -24,6 +24,7 @@ function* feedScrollDown(action) {
 
 
     } catch (error) {
+        console.log("failed scroll down");
     }
 }
 
@@ -34,7 +35,7 @@ function* feedScrollUp(action) {
         yield* updateFeedsTop(response);
 
     } catch (error) {
-        console.log(error);
+        console.log("failed scroll up");
     }
 }
 

@@ -12,7 +12,7 @@ function* updateBusiness(action) {
             yield put(updateBusinesses(response))
         }
     } catch (error) {
-        //TODO handle error
+       console.log("failed  updateBusiness")
     }
 }
 
@@ -26,7 +26,7 @@ function* updateBusinessFirstTime(action) {
         yield put(businessLoadingDone());
     } catch (error) {
         yield put(businessLoadingDone());
-        //TODO handle error
+        console.log("failed  updateBusinessFirstTime")
     }
 }
 
@@ -36,8 +36,8 @@ function* updateCategory(action) {
         const response = yield call(businessApi.getSubCategory, action.token, action.business.business.subcategory, action.locale);
         yield put(setBusinessCategory(response, action.business));
     } catch (error) {
-        console.log(error)
-        //TODO handle error
+
+        console.log("failed  updateCategory")
     }
 }
 

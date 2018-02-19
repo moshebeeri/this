@@ -19,7 +19,7 @@ function* backgroundTask(group, token, lastChatId,user) {
             }
         }
     } catch (error) {
-        console.log('failed')
+        console.log("failed groups comment request");
     }
 }
 
