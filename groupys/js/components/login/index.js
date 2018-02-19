@@ -157,7 +157,10 @@ class Login extends Component {
 
 
                                 </View>
-                                 <ThisText onPress={this.forgetPassword.bind(this)}
+                                <ThisText onPress={() => this.replaceRoute('QuickSingUp')}
+                                          style={styles.signgupText}>{strings.SignUpQuickMessage}</ThisText>
+
+                                <ThisText onPress={this.forgetPassword.bind(this)}
                                       style={styles.forgetText}>{strings.ForgotPassword}</ThisText>
 
                             </View>

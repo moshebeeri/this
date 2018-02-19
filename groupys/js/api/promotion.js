@@ -27,7 +27,7 @@ class PromotionApi {
         return new Promise(async (resolve, reject) => {
             try {
                 let from = new Date();
-                const response = await this.timeout(10000,fetch(`${server_host}/api/promotions/campaign`, {
+                const response = await this.timeout(20000,fetch(`${server_host}/api/promotions/campaign`, {
                     method: 'POST',
                     headers: {
                         'Accept': 'application/json, text/plain, */*',

@@ -154,8 +154,7 @@ class BusinessApi {
                     return;
                 }
                 timer.logTime(from, new Date(), '/businesses/search', 'business/en');
-                let responseData = await response.json();
-                resolve(responseData);
+                resolve(true);
             }
             catch (error) {
                 reject(errors.NETWORK_ERROR);

@@ -5,8 +5,8 @@ class MainFeedComperator{
 
 
 
-    shouldUpdateSocial(id,response){
-        let feedInstances = reduxStore.getState().instances.instances;
+    shouldUpdateSocial(state,id,response){
+        let feedInstances = state.instances.instances;
         if (feedInstances[id]) {
             let currentSocialState = feedInstances[id].social_state;
             if (response.likes === currentSocialState.likes &&
