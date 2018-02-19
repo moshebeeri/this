@@ -231,9 +231,9 @@ function handlePromotionPostCreate(promotion, callback) {
   }
 
   function relateOnActionPromotion(promotion, callback) {
-    let params = `{type: "${promotion.on_action.type}"}`;
+    let params = `{type: "${promotion.on_action.type}"}, end:${promotion.end.getTime()}`;
     if(promotion.on_action.type === 'PROXIMITY')
-      params = `{type: "${promotion.on_action.type}", proximity: "${promotion.on_action.proximity}"}`;
+      params = `${params}, proximity: "${promotion.on_action.proximity}"}`;
 
     let entityId = null;
     if (utils.defined(promotion.entity.business))
