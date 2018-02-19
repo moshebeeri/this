@@ -26,6 +26,7 @@ import {connect} from 'react-redux';
 import {bindActionCreators} from "redux";
 import strings from "../../../i18n/i18n"
 import StyleUtils from "../../../utils/styleUtils";
+import ThisText from "../../../ui/ThisText/ThisText";
 
 const {width, height} = Dimensions.get('window')
 const vw = width / 100;
@@ -39,8 +40,9 @@ class BusinessProfile extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            codeStyle: {width: 80, height: 80},
-            codeContainerStyle: {position: 'absolute', top: 150, right: 20},
+            codeStyle: {width: 80, height: 80,alignItems:'center',justifyContent:'center'},
+            codeContainerStyle: {backgroundColor:'white',position: 'absolute', top: 150, right: 20,alignItems:'center',justifyContent:'center'},
+            codeTextStyle:{fontSize:6,marginTop:5},
             codeFullSize: false,
         }
     }
@@ -69,21 +71,23 @@ class BusinessProfile extends Component {
     changeQrLook() {
         if (this.state.codeFullSize) {
             this.setState({
-                codeStyle: {width: 80, height: 80},
-                codeContainerStyle: {position: 'absolute', top: 150, right: 20},
+                codeStyle: {width: 80, height: 80,alignItems:'center',justifyContent:'center'},
+                codeTextStyle:{fontSize:6,marginTop:5},
+                codeContainerStyle: {backgroundColor:'white',position: 'absolute', top: 150, right: 20,alignItems:'center',justifyContent:'center'},
                 codeFullSize: false,
             })
         } else {
             this.setState({
-                codeStyle: {width: 250, height: 250},
-                codeContainerStyle: {position: 'absolute', top: 0, right: 70},
+                codeStyle: {width: 250, height: 230,alignItems:'center',justifyContent:'center'},
+                codeTextStyle:{fontSize:14,marginTop:5,},
+                codeContainerStyle: {backgroundColor:'white',position: 'absolute', top: 0, right: 70,alignItems:'center',justifyContent:'center'},
                 codeFullSize: true,
             })
         }
     }
 
     render() {
-        const {businesses} = this.props
+        const {businesses,lastBusinessQrCode} = this.props
         let business = businesses[this.props.navigation.state.params.businesses._id];
         if (!business) {
             business = this.props.navigation.state.params.businesses;
@@ -113,9 +117,22 @@ class BusinessProfile extends Component {
 
                                 {business.qrcodeSource &&
                                 <TouchableOpacity onPress={() => this.changeQrLook()}
-                                                  style={this.state.codeContainerStyle}><Image
+                                                  style={this.state.codeContainerStyle}>
+                                    <ThisText style={this.state.codeTextStyle} >{strings.ScanToFollow}</ThisText>
+                                    <Image
                                     style={this.state.codeStyle} resizeMode="cover"
                                     source={{uri: business.qrcodeSource}}>
+
+                                </Image>
+                                </TouchableOpacity>
+                                }
+                                {lastBusinessQrCode && !business.qrcodeSource &&
+                                <TouchableOpacity onPress={() => this.changeQrLook()}
+                                                  style={this.state.codeContainerStyle}>
+                                    <ThisText>{strings.ScanToFollow}</ThisText>
+                                    <Image
+                                    style={this.state.codeStyle} resizeMode="cover"
+                                    source={{uri: lastBusinessQrCode}}>
 
                                 </Image>
                                 </TouchableOpacity>
@@ -194,6 +211,7 @@ export default connect(
     state => ({
         businesses: state.businesses.businesses,
         currentScreen: state.render.currentScreen,
+        lastBusinessQrCode: state.businesses.lastBusinessQrCode
     }),
     dispatch => bindActionCreators(businessAction, dispatch)
 )(BusinessProfile);

@@ -437,6 +437,9 @@ export function setBusinessQrCode(business) {
     return async function (dispatch, getState) {
         try {
             const token = getState().authentication.token;
+            dispatch({
+                type: actions.REST_BUSINESS_QRCODE,
+            });
             let response = await businessApi.getBusinessQrCodeImage(business.qrcode, token);
             dispatch({
                 type: actions.UPSERT_BUSINESS_QRCODE,
