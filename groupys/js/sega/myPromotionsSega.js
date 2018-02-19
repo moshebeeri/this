@@ -20,7 +20,7 @@ function* saveMyPromotionsRequest(action) {
             yield put(setSavedPromotions(filteredResponse))
         }
     } catch (error) {
-        console.log('error')
+        console.log("failed saveMyPromotionsRequest");
     }
 }
 
@@ -32,7 +32,7 @@ function* saveMyPromotionsSingleRequest(action) {
         savedInstances.push(feed);
         yield put(setSavedPromotions(savedInstances))
     } catch (error) {
-        console.log('error')
+        console.log("failed saveMyPromotionsSingleRequest");
     }
 }
 

@@ -14,6 +14,7 @@ function* saveUserRequest() {
 
         yield* upSertUserSuccsess(response,newUser)
     } catch (error) {
+
     }
 }
 

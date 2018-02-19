@@ -10,7 +10,7 @@ function* saveNotificationRequest(action) {
         let response = yield call(notificationApi.getAll, action.token, action.user, action.skip, action.limit);
         yield put(setNotification(response))
     } catch (error) {
-        
+        console.log("failed  saveNotificationRequest");
     }
 }
 
