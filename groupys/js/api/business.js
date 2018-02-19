@@ -53,6 +53,35 @@ class BusinessApi {
         })
     }
 
+    createBusiness(business,token){
+        return new Promise(async (resolve, reject) => {
+            try {
+                const response = await fetch(`${server_host}/api/businesses/`, {
+                    method: 'POST',
+                    headers: {
+                        'Accept': 'application/json, text/plain, */*',
+                        'Content-Type': 'application/json;charset=utf-8',
+                        'Authorization': 'Bearer ' + token,
+                    },
+                    body: JSON.stringify(business)
+                });
+                if (response.status === 401) {
+                    reject(response);
+                    return;
+                }
+                if (response.status === 500) {
+                    reject(response);
+                    return;
+                }
+                let responseData = await response.json();
+                resolve(responseData);
+            }catch (error) {
+
+                    reject(errors.NETWORK_ERROR);
+                }
+            })
+    }
+
     get(token,id) {
         return new Promise(async (resolve, reject) => {
             try {

@@ -92,7 +92,7 @@ async function dispatchFollowByQrcode(dispatch, barcode, token) {
 }
 
 export function searchUserBusinessesByPhoneNumber(phoneNumber) {
-    return async function (dispatch,getState) {
+    return async function (dispatch, getState) {
         try {
             // dispatch({
             //     type: actions.USER_ROLE_SHOW_SPINNER,
@@ -104,8 +104,7 @@ export function searchUserBusinessesByPhoneNumber(phoneNumber) {
             //     message: '',
             // });
             const token = getState().authentication.token;
-
-            let {user, info} = await businessApi.getUserBusinessesByPhoneNumber(phoneNumber,token);
+            let {user, info} = await businessApi.getUserBusinessesByPhoneNumber(phoneNumber, token);
             if (user && info) {
                 dispatch({
                     type: actions.USER_BUSINESS_BY_PHONE_SET_DATA,
@@ -123,15 +122,13 @@ export function searchUserBusinessesByPhoneNumber(phoneNumber) {
                 type: actions.USER_BUSINESS_BY_PHONE__SHOW_SPINNER,
                 show: false,
             });
-            handler.handleSuccses(getState(),dispatch)
+            handler.handleSuccses(getState(), dispatch)
         } catch (error) {
-            handler.handleError(error,dispatch,'UserBusinessesByPhoneNumber');
+            handler.handleError(error, dispatch, 'UserBusinessesByPhoneNumber');
             logger.actionFailed('UserBusinessesByPhoneNumber');
         }
     }
 }
-
-
 
 export function searchBusiness(business) {
     return function (dispatch, getState) {
@@ -320,35 +317,10 @@ export function saveBusiness(business, navigation) {
                 type: actions.SAVING_BUSINESS,
             });
             const token = getState().authentication.token;
-            let createdBusiness = await entityUtils.create('businesses', business, token);
-            createdBusiness.pictures = [];
-            let pictures = [];
-            if (business.image.path) {
-                pictures.push(business.image.path);
-                createdBusiness.pictures.push({pictures: pictures});
-            } else {
-                pictures.push(business.image.uri);
-                createdBusiness.pictures.push({pictures: pictures});
-            }
-            if (business.logoImage.path) {
-                createdBusiness.logo = business.logoImage.path;
-            } else {
-                createdBusiness.logo = business.logoImage.uri;
-            }
             dispatch({
-                type: actions.BUSINESS_UPLOAD_PIC,
-                item: {itemResponse: createdBusiness, item: business}
-            })
-            dispatch({
-                type: actions.UPSERT_MY_BUSINESS_SINGLE,
-                item: {business: createdBusiness}
-            });
-            dispatch({
-                type: actions.SELECT_BUSINESS,
-                selectedBusiness: createdBusiness
-            });
-            dispatch({
-                type: actions.SAVING_BUSINESS_DONE,
+                type: types.SAVE_BUSINESS,
+                business: business,
+                token: token
             });
             dispatch({
                 type: actions.SAVE_BUSINESS_TAMPLATE,
@@ -620,12 +592,11 @@ export function updateBusinesCategory(item) {
     return async function (dispatch, getState) {
         const token = getState().authentication.token;
         let locale = FormUtils.getLocale();
-
         dispatch({
             type: types.UPDATE_BUSINESS_CATEGORY_REQUEST,
             token: token,
-            business:item,
-            locale:locale
+            business: item,
+            locale: locale
         })
     }
 }
@@ -636,6 +607,13 @@ export function clearUserBusinessByPhoneForm() {
             type: actions.USER_BUSINESS_BY_PHONE_CLEAR,
         });
     };
+}
+
+export function setBusiness(createdBusiness) {
+    return {
+        type: actions.UPSERT_MY_BUSINESS_SINGLE,
+        item: {business: createdBusiness}
+    }
 }
 
 export default {
