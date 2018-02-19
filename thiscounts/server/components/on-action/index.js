@@ -15,7 +15,6 @@ exports.follow = function(userId, entityId, callback){
   console.log(query);
   graphModel.query(query, function(err, actions){
     if(err) return callback(err);
-    console.log(`on action follow ${actions}`);
     actions.forEach( action => {
       Promotion.findById(action.promotionId, function (err, promotion) {
         if(err) return callback(err);

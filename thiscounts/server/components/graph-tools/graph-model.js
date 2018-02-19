@@ -252,7 +252,7 @@ GraphModel.prototype.owner_followers_follow_business = function owner_followers_
   let userFilter = utils.undefined(follower_id)? '' : `{ _id:'${follower_id}'}`;
 
   let query = `MATCH (u:user ${userFilter})-[:FOLLOW]->(owner:user { _id:'${owner_id}' })-[:ROLE{name:"OWNS"}]->(b:business{type:'SMALL_BUSINESS'})
-  OPTIONAL MATCH (u:user)-[:FOLLOW]->(owner:user { _id:'${owner_id}' })-[:ROLE{name:"OWNS"}]->(b:business{type:'PERSONAL_SERVICE'})
+  WHERE b.type = 'SMALL_BUSINESS' OR b.type = 'PERSONAL_SERVICE'
   CREATE UNIQUE (u)-[r:FOLLOW]->(b)` ;
   if (utils.defined(callback)) {
     db.query(query, callback);
@@ -265,16 +265,11 @@ GraphModel.prototype.owner_followers_follow_business = function owner_followers_
   }
 };
 
-GraphModel.prototype.owner_followers_follow_default_group = function owner_followers_follow_default_group(owner_id, follower_id, callback){
-  if(typeof follower_id === 'function'){
-    callback = follower_id;
-    follower_id = null;
-  }
-  let userFilter = utils.undefined(follower_id)? '' : `{ _id:'${follower_id}'}`;
+GraphModel.prototype.owner_followers_follow_default_group = function owner_followers_follow_default_group(owner_id, callback){
 
-  let query = `MATCH (u:user ${userFilter})-[:FOLLOW]->(owner:user { _id:'${owner_id}' })-[:ROLE{name:"OWNS"}]->(b:business{type:'SMALL_BUSINESS'})-[:DEFAULT_GROUP]->(g)
-  OPTIONAL MATCH (u:user)-[:FOLLOW]->(owner:user { _id:'${owner_id}' })-[:ROLE{name:"OWNS"}]->(b:business{type:'PERSONAL_SERVICE'})-[:DEFAULT_GROUP]->(g)
-  CREATE UNIQUE (u)-[r:FOLLOW]->(g)` ;
+  let query = `MATCH (u:user)-[:FOLLOW]->(owner:user { _id:'${owner_id}' })-[:ROLE{name:"OWNS"}]->(b:business)-[:DEFAULT_GROUP]->(g)
+                WHERE b.type = 'SMALL_BUSINESS' OR b.type = 'PERSONAL_SERVICE'   
+                CREATE UNIQUE (u)-[r:FOLLOW]->(g)` ;
   if (utils.defined(callback)) {
     db.query(query, callback);
   } else {
@@ -304,12 +299,11 @@ GraphModel.prototype.related_type_id_dir_query = function related_type_id_dir_qu
     match = "MATCH (s { _id:'%s' })-[r:%s]->(ret:%s) ";
   else if(dir==="in")
     match = "MATCH (s { _id:'%s' })<-[r:%s]-(ret:%s) ";
-  let query = util.format(
+  return util.format(
     match +
     "return ret._id as _id " +
     "ORDER BY r.timestamp DESC " +
     "skip %d limit %d", start, name, ret_type, skip, limit);
-  return query;
 };
 
 GraphModel.prototype.paginate_query = function(query, skip, limit){
