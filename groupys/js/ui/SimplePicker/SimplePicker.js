@@ -91,7 +91,7 @@ export default class SimplePicker extends Component {
 
                                style={[styles.modalViewStyle, {width: StyleUtils.getWidth() - 20}]}
                                options={options}
-                               textStyle={{alignItems:'flex-start',fontSize: 20}}
+                               textStyle={{alignItems:'flex-end',fontSize: 20}}
                                onSelect={this.selectIos.bind(this)}
                                renderRow = {this.renderRow.bind(this)}
                                defaultValue={selectValue}

@@ -67,6 +67,14 @@ export function setNextFeeds(feeds) {
     }
 }
 
+export function stopMainFeedsListener() {
+    return async function (dispatch) {
+        dispatch({
+            type: types.CANCEL_MAIN_FEED_LISTENER,
+        });
+    }
+}
+
 export function setTopFeeds() {
     return async function (dispatch, getState) {
         const token = getState().authentication.token;
@@ -74,17 +82,18 @@ export function setTopFeeds() {
         const feedOrder = getState().feeds.feedView;
         if (!user)
             return;
+        dispatch({
+            type: types.CANCEL_MAIN_FEED_LISTENER,
+        });
         if (feedOrder && feedOrder.length > 0) {
             dispatch({
-                type: types.FEED_SCROLL_UP,
+                type: types.LISTEN_FOR_MAIN_FEED,
                 id: feedOrder[0],
                 token: token,
                 user: user,
             });
         }
-        dispatch({
-            type: actions.FEEDS_START_RENDER,
-        });
+
         handler.handleSuccses(getState(), dispatch)
     }
 }
