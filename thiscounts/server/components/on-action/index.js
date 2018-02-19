@@ -14,6 +14,7 @@ exports.follow = function(userId, entityId, callback){
                return p._id as promotionId, labels(e) as entity_type`;
   graphModel.query(query, function(err, actions){
     if(err) return callback(err);
+    console.log(`on action follow`);
     actions.forEach( action => {
       Promotion.findById(action.promotionId, function (err, promotion) {
         if(err) return callback(err);
@@ -26,6 +27,7 @@ exports.follow = function(userId, entityId, callback){
             action: "eligible_on_activity_follow"
           };
           act['actor_' + action.entity_type[0]] = entityId;
+          console.log(`on action follow act: ${act}`);
           activity.create(act);
         })
       })

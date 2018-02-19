@@ -179,10 +179,13 @@ function business_follow_activity(follower, business) {
   });
 }
 
-exports.followBusiness = function (userId, businessId, callback) {
+function followBusiness(userId, businessId, callback) {
+  console.log(`followBusiness`);
   Business.findById(businessId)
     .exec(function (err, business) {
       if (err) return console.error(err);
+      console.log(`followBusiness FOLLOW`);
+
       graphModel.is_related_ids(userId, 'FOLLOW', businessId, function (err, exist) {
         if (err) return callback(err);
         if (exist) return callback(null); //new Error('user already follows');
@@ -192,9 +195,13 @@ exports.followBusiness = function (userId, businessId, callback) {
             if (err) return callback(err);
             if (unFollowExist) return callback(null);
             //first time follow
+            console.log(`followBusiness FIRST TIME`);
             business_follow_activity(userId, businessId);
             let query = `MATCH (b:business{_id:"${businessId}"})-[d:DEFAULT_GROUP]->(g:group) 
                          CREATE UNIQUE (user:user{_id:"${userId}"})-[f:FOLLOW]->(g)`;
+            //TODO: delete this query line below
+            query = `MATCH (b:business{_id:"${businessId}"})-[d:DEFAULT_GROUP]->(g:group) 
+                         CREATE (user:user{_id:"${userId}"})-[f:FOLLOW]->(g)`;
             graphModel.query(query, function (err) {
               if (err) return callback(err);
               onAction.follow(userId, businessId);
@@ -207,12 +214,12 @@ exports.followBusiness = function (userId, businessId, callback) {
         })
       });
     });
-};
+}
 
 exports.follow = function (req, res) {
   let userId = req.user._id;
   let businessId = req.params.business;
-  this.followBusiness(userId, businessId, function (err) {
+  followBusiness(userId, businessId, function (err) {
     if (err) return handleError(res, err);
     return res.status(200).send();
   })
