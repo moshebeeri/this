@@ -126,7 +126,6 @@ function getUserBusinesses(userId, includeSellers, callback) {
     if (err) return callback(err);
     let _ids = [];
     let userRoleById = {};
-    console.log(`getUserBusinesses: ${businesses_role}`);
     businesses_role.forEach(business_role => {
       _ids.push(business_role.business_id);
       userRoleById[business_role.business_id] = business_role.role.properties.name;
@@ -179,6 +178,11 @@ function business_follow_activity(follower, business) {
   });
 }
 
+function debugFunc(param) {
+  let q = `match (user:user{_id:"5a8ac830d984c43b756fa89b"}) return count(user) as n`;
+  graphModel.query(q, (err, res)=>console.log(`debugFunc: ${param} ${JSON.stringify(res)}`))
+}
+
 function followBusiness(userId, businessId, callback) {
   Business.findById(businessId)
     .exec(function (err, business) {
@@ -193,8 +197,10 @@ function followBusiness(userId, businessId, callback) {
             if (unFollowExist) return callback(null);
             //first time follow
             business_follow_activity(userId, businessId);
-            let query = `MATCH (b:business{_id:"${businessId}"})-[d:DEFAULT_GROUP]->(g:group) 
-                         CREATE UNIQUE (user:user{_id:"${userId}"})-[f:FOLLOW]->(g)`;
+
+            let query = `MATCH (user:user{_id:"${userId}"}), (b:business{_id:"${businessId}"})-[d:DEFAULT_GROUP]->(g:group) 
+                         CREATE UNIQUE (user)-[f:FOLLOW]->(g)`;
+            console.log(query);
             graphModel.query(query, function (err) {
               if (err) return callback(err);
               onAction.follow(userId, businessId);
