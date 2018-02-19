@@ -134,10 +134,10 @@ export function refresh(id, currentSocialState) {
     }
 }
 
-async function refreshFeedSocialState(dispatch, token, id) {
+async function refreshFeedSocialState(state,dispatch, token, id) {
     try {
         let response = await feedApi.getFeedSocialState(id, token);
-        if (feedComperator.shouldUpdateSocial(id, response)) {
+        if (feedComperator.shouldUpdateSocial(state,id, response)) {
             dispatch({
                 type: actions.FEED_UPDATE_SOCIAL_STATE,
                 social_state: response,

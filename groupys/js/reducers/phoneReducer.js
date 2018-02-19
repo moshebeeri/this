@@ -3,7 +3,7 @@ import {REHYDRATE} from "redux-persist/constants";
 import * as actions from "./reducerActions";
 
 export default function phone(state = initialState, action) {
-    console.log(action.type);
+    //console.log(action.type);
     let extendedState = {...state};
     if (action.type === REHYDRATE) {
 

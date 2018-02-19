@@ -214,7 +214,7 @@ class PageRefresher {
         console.log('refresh' + id);
         let token = store.getState().authentication.token;
         if (token) {
-            feedAction.refreshFeedSocialState(store.dispatch, token, id);
+            feedAction.refreshFeedSocialState(store.getState(),store.dispatch, token, id);
         }
     }
 }
