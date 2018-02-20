@@ -244,6 +244,7 @@ function saveInstance(req, res, instance) {
           if (err) return handleError(res, err);
           SavedInstance.findById(savedInstance._id).exec((err, si) => {
             if (err) return handleError(res, err);
+            graphModel.relate_ids(req.user._id, 'SAVED', instance.promotion._id);
             return res.status(200).json(si);
             })
         });
