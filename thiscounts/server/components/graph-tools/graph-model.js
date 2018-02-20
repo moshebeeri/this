@@ -254,7 +254,7 @@ GraphModel.prototype.owner_followers_follow_business = function owner_followers_
   let query = `MATCH (u:user ${userFilter})-[:FOLLOW]->(owner:user { _id:'${owner_id}' })-[:ROLE{name:"OWNS"}]->(b:business{type:'SMALL_BUSINESS'})
   WHERE b.type = 'SMALL_BUSINESS' OR b.type = 'PERSONAL_SERVICE'
   CREATE UNIQUE (u)-[r:FOLLOW]->(b)` ;
-  console.log(`owner_followers_follow_business: ${query}`);
+
   if (utils.defined(callback)) {
     db.query(query, callback);
   } else {
@@ -271,7 +271,6 @@ GraphModel.prototype.owner_followers_follow_default_group = function owner_follo
                 WHERE b.type = 'SMALL_BUSINESS' OR b.type = 'PERSONAL_SERVICE'   
                 CREATE UNIQUE (u)-[r:FOLLOW]->(g)`;
 
-  console.log(`owner_followers_follow_default_group: ${query}`);
   if (utils.defined(callback)) {
     db.query(query, callback);
   } else {
