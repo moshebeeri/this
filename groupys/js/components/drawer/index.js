@@ -9,7 +9,7 @@ import StyleUtils from "../../utils/styleUtils";
 import Icon from 'react-native-vector-icons/FontAwesome';
 import {CloseDrawer, ImagePicker} from "../../ui/index";
 import strings from "../../i18n/i18n"
-import {ThisText} from '../../ui/index';
+import {ThisText,ImageController} from '../../ui/index';
 
 const noPic = require('../../../images/client_1.png');
 const briefcase = require('../../../images/briefcase.png');
@@ -88,7 +88,7 @@ class ProfileDrawer extends Component {
         if (Platform.OS === 'ios') {
             borderRadiusSize = 60;
         }
-        let userImage = <Image style={{width: 120, height: 120, borderRadius: borderRadiusSize,}} source={source}/>;
+        let userImage = <ImageController style={{width: 120, height: 120, borderRadius: borderRadiusSize,}} source={source}/>;
         return (
             <ScrollView>
             <View style={{width:deviceWidth/5*4,justifyContent:'flex-start',height:deviceHeight,opacity:0.9,backgroundColor: '#41aad9'}}>
