@@ -10,17 +10,13 @@ import groupComments from '../actions/commentsGroup'
 import pageSync from './refresher';
 import FormUtils from "../utils/fromUtils";
 import simpleStore from 'react-native-simple-store';
-import EntityUtils from "../utils/createEntity";
-import * as actions from "../reducers/reducerActions";
 
-let entityUtils = new EntityUtils();
 const store = getStore();
 let visitedList = ['feed', 'groups', 'businesses'];
 
 class PageRefresher {
     constructor() {
         pageSync.createPage('groups', pageSync.createStdAverageRefresh('groups', 10, 60000), this.updateGroups.bind(this));
-        pageSync.createPage('pictures', pageSync.createStdAverageRefresh('pictures', 10, 60000), this.uploadPictures.bind(this));
         pageSync.createPage('notification', pageSync.createStdAverageRefresh('notification', 10, 60000), this.updateNotification.bind(this));
         pageSync.createPage('user', pageSync.createStdAverageRefresh('user', 10, 60000), this.updateUser.bind(this));
     }
@@ -60,27 +56,6 @@ class PageRefresher {
         let token = store.getState().authentication.token;
         if (token) {
             groups.getAll(store.dispatch, token);
-        }
-    }
-
-    uploadPictures() {
-        let token = store.getState().authentication.token;
-        if (token) {
-            this.checkUploadPictures('businesses', store.getState().businesses.businessPictures, token, actions.BUSINESS_CLEAR_PIC)
-            this.checkUploadPictures('products', store.getState().products.productsPictures, token, actions.PRODUCTS_CLEAR_PIC)
-            this.checkUploadPictures('promotions', store.getState().promotions.promotionPictures, token, actions.PROMOTION_CLEAR_PIC)
-            this.checkUploadPictures('users', store.getState().user.userPictures, token, actions.CLEAR_USERS_UPLOAD_PIC)
-        }
-    }
-
-    checkUploadPictures(api, items, token, clearType) {
-        if (items.length > 0) {
-            items.forEach(item => {
-                entityUtils.uploadPicture(api, item.item, token, item.itemResponse);
-            });
-            store.dispatch({
-                type: clearType,
-            });
         }
     }
 
@@ -211,10 +186,9 @@ class PageRefresher {
     }
 
     updateSocialState(id) {
-
         let token = store.getState().authentication.token;
         if (token) {
-            feedAction.refreshFeedSocialState(store.getState(),store.dispatch, token, id);
+            feedAction.refreshFeedSocialState(store.getState(), store.dispatch, token, id);
         }
     }
 }

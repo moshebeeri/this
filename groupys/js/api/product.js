@@ -1,11 +1,11 @@
-import store from 'react-native-simple-store';
 import Timer from './LogTimer'
-
-let timer = new Timer();
 import * as errors from './Errors'
 import FormUtils from "../utils/fromUtils";
 import ProductComperator from "../reduxComperators/ProductComperator"
+
+let timer = new Timer();
 let productComperator = new ProductComperator();
+
 class ProductsApi {
     getAll(token) {
         return new Promise(async (resolve, reject) => {
@@ -19,7 +19,7 @@ class ProductsApi {
                         'Authorization': 'Bearer ' + token
                     }
                 });
-                if (response.status ==='401' || response.status === 401) {
+                if (response.status === '401' || response.status === 401) {
                     reject(errors.UN_AUTHOTIZED_ACCESS);
                     return;
                 }
@@ -33,11 +33,41 @@ class ProductsApi {
         })
     }
 
+    createProduct(product, token) {
+        return new Promise(async (resolve, reject) => {
+            try {
+                let from = new Date();
+                const response = await fetch(`${server_host}/api/products/`, {
+                    method: 'POST',
+                    headers: {
+                        'Accept': 'application/json, text/plain, */*',
+                        'Content-Type': 'application/json;charset=utf-8',
+                        'Authorization': 'Bearer ' + token
+                    },
+                    body: JSON.stringify(product)
+                });
+                if (response.status === '401' || response.status === 401) {
+                    reject(errors.UN_AUTHOTIZED_ACCESS);
+                    return;
+                }
+                let responseData = await response.json();
+                timer.logTime(from, new Date(), 'products', 'campaign');
+                resolve(responseData);
+            }
+            catch (error) {
+                if (error === errors.TIME_OUT) {
+                    reject({type: errors.TIME_OUT, debugMessage: '/api/product Timed out'});
+                }
+                reject(errors.NETWORK_ERROR);
+            }
+        })
+    }
+
     findByBusinessId(id, token) {
         return new Promise(async (resolve, reject) => {
             try {
                 let from = new Date();
-                const response = await fetch(`${server_host}/api/products/entity/scroll/${id}`  +'/start/down', {
+                const response = await fetch(`${server_host}/api/products/entity/scroll/${id}` + '/start/down', {
                     method: 'GET',
                     headers: {
                         'Accept': 'application/json, text/plain, */*',
@@ -45,17 +75,16 @@ class ProductsApi {
                         'Authorization': 'Bearer ' + token
                     }
                 });
-                if (response.status ==='401' || response.status === 401) {
+                if (response.status === '401' || response.status === 401) {
                     reject(errors.UN_AUTHOTIZED_ACCESS);
                     return;
                 }
-
-                if(response.status > 400){
+                if (response.status > 400) {
                     reject(errors.APPLICATION_ERROR);
                 }
                 timer.logTime(from, new Date(), 'products', 'find/by/business');
                 let responseData = await response.json();
-                if(responseData.length > 0) {
+                if (responseData.length > 0) {
                     responseData = responseData.filter(product => productComperator.filterProduct(product));
                 }
                 resolve(responseData);
@@ -71,7 +100,7 @@ class ProductsApi {
             try {
                 let from = new Date();
                 let locale = FormUtils.getLocale();
-                const response = await fetch(`${server_host}/api/categories/product/` + locale+'/' + gid, {
+                const response = await fetch(`${server_host}/api/categories/product/` + locale + '/' + gid, {
                     method: 'GET',
                     headers: {
                         'Accept': 'application/json, text/plain, */*',
@@ -79,7 +108,7 @@ class ProductsApi {
                         'Authorization': 'Bearer ' + token
                     }
                 })
-                if (response.status ==='401' || response.status === 401) {
+                if (response.status === '401' || response.status === 401) {
                     reject(errors.UN_AUTHOTIZED_ACCESS);
                     return;
                 }
@@ -93,5 +122,5 @@ class ProductsApi {
         })
     }
 }
-
-export default ProductsApi;
+let productApi = new ProductsApi();
+export default productApi;
