@@ -70,6 +70,9 @@ export default function business(state = initialState, action) {
                         eventItem.business.pictures = businessesMap[eventItem.business._id].business.pictures;
                         eventItem.business.logo = businessesMap[eventItem.business._id].business.logo;
                     }
+                    if(businessesMap[eventItem.business._id] && businessesMap[eventItem.business._id].categoryTitle ){
+                        eventItem.categoryTitle = businessesMap[eventItem.business._id].categoryTitle;
+                    }
                 }
                 businessesMap[eventItem.business._id] = eventItem;
             });
@@ -82,6 +85,9 @@ export default function business(state = initialState, action) {
         case actions.UPSERT_MY_BUSINESS_SINGLE:
             if (!myBusinessOrder.includes(action.item.business._id)) {
                 myBusinessOrder.unshift(action.item.business._id);
+            }
+            if(businessesMap[action.item.business._id] && businessesMap[action.item.business._id].categoryTitle ){
+                action.item.categoryTitle = businessesMap[action.item.business._id].categoryTitle;
             }
             businessesMap[action.item.business._id] = action.item;
             return {

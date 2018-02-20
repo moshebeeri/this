@@ -60,7 +60,7 @@ export default class SimplePicker extends Component {
 
     renderRow(value){
 
-        return <View style={{justifyContent:I18nManager.isRTL?'flex-start':'flex-end',alignItems: 'flex-end'}}><ThisText style={{paddingLeft:10,paddingRight:10,fontSize:14 }}>{value}</ThisText></View>
+        return <View style={{justifyContent:'flex-start',alignItems: 'flex-end'}}><ThisText style={{paddingLeft:10,paddingRight:10,fontSize:14 }}>{value}</ThisText></View>
 
     }
     createIosRender() {
