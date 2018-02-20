@@ -48,6 +48,7 @@ class AddProduct extends Component {
                 business: item.business,
                 info: item.info,
                 retail_price: item.retail_price.toString(),
+                SKU: '',
                 token: '',
                 item: item,
                 updateMode: true,
@@ -59,6 +60,7 @@ class AddProduct extends Component {
                 coverImage: '',
                 info: '',
                 retail_price: '',
+                SKU: '',
                 token: '',
                 categories: [],
                 updateMode: false,
@@ -109,10 +111,11 @@ class AddProduct extends Component {
             image: this.state.coverImage,
             business: this.getBusinessId(navigation),
             info: this.state.info,
+            SKU: this.state.SKU,
             barcode: this.state.barcode,
             retail_price: this.state.retail_price,
             category: this.state.categories,
-        }
+        };
         if (this.state.item) {
             product._id = this.state.item._id;
         }
@@ -154,17 +157,11 @@ class AddProduct extends Component {
         if (this.state.coverImage) {
             let coverImage = <Image
                 style={{width: width - 10, height: 210, borderWidth: 1, borderColor: 'white'}}
-                source={{uri: this.state.coverImage.path}}
-            >
-
-            </Image>
+                source={{uri: this.state.coverImage.path}}/>;
             return <View style={[styles.product_upper_container, {width: StyleUtils.getWidth()}]}>
 
-
                 <View style={styles.cmeraLogoContainer}>
-
                     <View style={styles.addCoverContainer}>
-
                         <ImagePicker ref={"coverImage"} mandatory image={coverImage} color='white' pickFromCamera
                                      setImage={this.setCoverImage.bind(this)}/>
                         {saving && <Spinner/>}
@@ -179,10 +176,8 @@ class AddProduct extends Component {
                 <View style={styles.addCoverNoImageContainer}>
                     <ImagePicker ref={"coverImage"}  text={ <ThisText style={styles.addCoverText}>{strings.AddACoverPhoto}</ThisText>} customStyles={{ triggerWrapper:{alignItems:'center',justifyContent:'center',width:StyleUtils.getWidth(),height:220}}} mandatory color='white' pickFromCamera
                                  setImage={this.setCoverImage.bind(this)}/>
-
                 </View>
             </View>
-
         </View>
     }
 
@@ -224,10 +219,8 @@ class AddProduct extends Component {
                                    onChangeText={(info) => this.setState({info})}/>
                     </View>
 
-
                     <View style={[styles.inputTextLayout, {width: StyleUtils.getWidth() - 15}]}>
-
-                        <TextInput field={strings.Price} value={this.state.retail_price} returnKeyType='done' ref="6"
+                        <TextInput field={strings.Price} value={this.state.retail_price} returnKeyType='next' ref="6"
                                    refNext="6"
                                    keyboardType="numeric"
                                    onSubmitEditing={this.saveFormData.bind(this)}
@@ -235,22 +228,23 @@ class AddProduct extends Component {
                     </View>
 
                     <View style={[styles.inputTextLayout, {width: StyleUtils.getWidth() - 15}]}>
+                        <TextInput field={strings.SKU} value={this.state.SKU} returnKeyType='next' ref="7"
+                                   refNext="6"
+                                   onSubmitEditing={this.saveFormData.bind(this)}
+                                   onChangeText={(SKU) => this.setState({SKU})} />
+                    </View>
+
+                    <View style={[styles.inputTextLayout, {width: StyleUtils.getWidth() - 15}]}>
                         <BarcodeScanner handleCode={this.handleCode.bind(this)} navigation={this.props.navigation}/>
                     </View>
 
                 </ScrollView>
-
-
             </View>
         );
     }
 
-
     shouldComponentUpdate(){
-        if(this.props.currentScreen ==='AddProduct' ){
-            return true;
-        }
-        return false;
+        return this.props.currentScreen ==='AddProduct';
     }
 }
 
