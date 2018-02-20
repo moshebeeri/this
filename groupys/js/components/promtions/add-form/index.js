@@ -110,6 +110,8 @@ class AddPromotion extends Component {
             show_save: false,
             showProductsList: false,
             quantity: '',
+            otherBusinessPermittedUser:'',
+            otherBusiness: '',
             promotion: {}
         }
         let businessId = this.getBusinessId();
