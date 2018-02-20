@@ -33,7 +33,7 @@ class ActionLogger {
 
     async screenVisited(currentScreen,_prevScreen){
         await this.init();
-        Analytics.setScreenName(currentScreen)
+        Analytics.setScreenName(currentScreen);
         Analytics.logEvent('redirect', {
             'current_screen': currentScreen,
             'prev_screen':_prevScreen

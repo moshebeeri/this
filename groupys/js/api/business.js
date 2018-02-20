@@ -13,6 +13,7 @@ class BusinessApi {
             promise.then(resolve, reject)
         })
     }
+
     getAll(token,noSideEffects) {
         return new Promise(async (resolve, reject) => {
             try {
@@ -186,6 +187,7 @@ class BusinessApi {
             }
         })
     }
+
     groupFollowBusiness(groupId,businessId, token) {
         return new Promise(async (resolve, reject) => {
             try {

@@ -91,26 +91,26 @@ async function dispatchFollowByQrcode(dispatch, barcode, token) {
     }
 }
 
-export function searchUserBusinessesByPhoneNumber(phoneNumber) {
+export function searchUserBusinessesByPhoneNumber(phoneNumber, navigation) {
     return async function (dispatch,getState) {
         try {
-            // dispatch({
-            //     type: actions.USER_ROLE_SHOW_SPINNER,
-            //     show: true,
-            // });
-            // dispatch({
-            //     type: actions.USER_ROLE_SHOW_MESSAGE,
-            //     show: false,
-            //     message: '',
-            // });
+            dispatch({
+                type: actions.USER_BUSINESS_BY_PHONE_SHOW_SPINNER,
+                show: true,
+            });
+            dispatch({
+                type: actions.USER_BUSINESS_BY_PHONE_SHOW_MESSAGE,
+                show: false,
+                message: '',
+            });
             const token = getState().authentication.token;
 
             let {user, info} = await businessApi.getUserBusinessesByPhoneNumber(phoneNumber,token);
             if (user && info) {
                 dispatch({
                     type: actions.USER_BUSINESS_BY_PHONE_SET_DATA,
-                    user: user._id,
-                    fullUser: user
+                    user,
+                    info
                 });
             } else {
                 dispatch({
@@ -120,10 +120,11 @@ export function searchUserBusinessesByPhoneNumber(phoneNumber) {
                 });
             }
             dispatch({
-                type: actions.USER_BUSINESS_BY_PHONE__SHOW_SPINNER,
+                type: actions.USER_BUSINESS_BY_PHONE_SHOW_SPINNER,
                 show: false,
             });
-            handler.handleSuccses(getState(),dispatch)
+            handler.handleSuccses(getState(),dispatch);
+            //navigation.goBack();
         } catch (error) {
             handler.handleError(error,dispatch,'UserBusinessesByPhoneNumber');
             logger.actionFailed('UserBusinessesByPhoneNumber');
@@ -338,7 +339,7 @@ export function saveBusiness(business, navigation) {
             dispatch({
                 type: actions.BUSINESS_UPLOAD_PIC,
                 item: {itemResponse: createdBusiness, item: business}
-            })
+            });
             dispatch({
                 type: actions.UPSERT_MY_BUSINESS_SINGLE,
                 item: {business: createdBusiness}
@@ -437,9 +438,6 @@ export function setBusinessQrCode(business) {
     return async function (dispatch, getState) {
         try {
             const token = getState().authentication.token;
-            dispatch({
-                type: actions.REST_BUSINESS_QRCODE,
-            });
             let response = await businessApi.getBusinessQrCodeImage(business.qrcode, token);
             dispatch({
                 type: actions.UPSERT_BUSINESS_QRCODE,

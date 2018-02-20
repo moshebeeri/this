@@ -1,6 +1,6 @@
 import React, {Component} from 'react';
-import {I18nManager, View,Keyboard} from 'react-native';
-import {Button, Container, Content, Fab, Footer, Form, Icon, Input, Item, Picker, Text, Thumbnail} from 'native-base';
+import {I18nManager, View, ScrollView, Keyboard, TouchableOpacity} from 'react-native';
+import {Button, Container, Content, Form, Icon, Input, Item, Picker, Text, Thumbnail} from 'native-base';
 import Icon2 from 'react-native-vector-icons/MaterialIcons';
 import styles from './styles'
 import * as businessAction from "../../../actions/business";
@@ -9,6 +9,8 @@ import {bindActionCreators} from "redux";
 import {FormHeader, SimplePicker, Spinner, TextInput} from '../../../ui/index';
 import strings from "../../../i18n/i18n"
 import StyleUtils from "../../../utils/styleUtils";
+import BusinessPreview from "../businessPreview/index";
+import {BusinessHeader,ThisText} from '../../../ui/index';
 
 const noPic = require('../../../../images/client_1.png');
 
@@ -16,7 +18,7 @@ class SearchBusinessByPermittedUser extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            user: '',
+            userBusinesses: '',
             searchUser: true,
         }
     }
@@ -56,24 +58,24 @@ class SearchBusinessByPermittedUser extends Component {
 
     save() {
         const {actions, user, navigation, saving} = this.props;
-        if (saving) {
-            return;
-        }
+        // if (saving) {
+        //     return;
+        // }
         const businessId = navigation.state.params.business._id;
         if (this.validateForm()) {
             if (user) {
-                //actions.saveRole(user, businessId, role, navigation)
+                //actions.searchUserBusinessesByPhoneNumber(user, businessId, role, navigation)
             } else {
-                //actions.saveRole(navigation.state.params.user, businessId, role, navigation)
+                //actions.searchUserBusinessesByPhoneNumber(navigation.state.params.user, businessId, role, navigation)
             }
         }
     }
 
 
-    searchUser() {
+    searchUserBusinesses() {
         const {actions} = this.props;
         Keyboard.dismiss();
-        actions.searchUserBusinessesByPhoneNumber(this.state.phoneNumber);
+        actions.searchUserBusinessesByPhoneNumber(this.state.phoneNumber, this.props.navigation);
     }
 
     validateForm() {
@@ -100,12 +102,12 @@ class SearchBusinessByPermittedUser extends Component {
                        returnKeyType='done' ref="1" refNext="1"
                        keyboardType='numeric'
                        placeholder={strings.InYourContacts}
-                       onSubmitEditing={this.searchUser.bind(this)}
+                       onSubmitEditing={this.searchUserBusinesses.bind(this)}
                        onChangeText={(phoneNumber) => this.setState({phoneNumber})} isMandatory={true}/>
 
 
             <Button style={{position: 'absolute', right: 5, top: 25}} large transparent
-                    onPress={() => this.searchUser()}>
+                    onPress={() => this.searchUserBusinesses()}>
                 <Icon2 size={40} style={styles.productIcon} name="search"/>
 
             </Button>
@@ -115,10 +117,11 @@ class SearchBusinessByPermittedUser extends Component {
     }
 
     render() {
-        const {showSpinner, showMessage, fullUser, message, saving} = this.props;
+        const {showSpinner, showMessage, user, info, message, saving} = this.props;
         const spinner = this.createSpinnerTag(showSpinner);
         const userMessage = this.createMessageTag(showMessage, message);
-        const userView = this.createUserView(fullUser);
+        const userView = this.createUserView(user);
+        const businessSelectionView = this.createBusinessSelectionView(info);
         const searchUser = this.createSearchUserBusinessByPhone();
         let title = strings.SearchBusinessByUserPhoneNumberTitle;
         if (!this.state.searchUser) {
@@ -133,6 +136,7 @@ class SearchBusinessByPermittedUser extends Component {
             {spinner}
             {userMessage}
             {userView}
+            {businessSelectionView}
             {saving && <Spinner/>}
         </View>
     }
@@ -160,6 +164,45 @@ class SearchBusinessByPermittedUser extends Component {
         return undefined
     }
 
+    businessSelected(business) {
+        this.props.navigation.state.params.selectOtherBusiness(this.props.user, business);
+        this.props.navigation.goBack();
+    }
+
+    createBusinessSelectionView(info){
+        if (info) {
+            let businesses = info.map(businessInfo => {
+                let business = businessInfo.business;
+                return <View key={'v'+business._id} style={{flexDirection:'row'}}>
+                    <TouchableOpacity key={'to'+business._id} onPress={() => this.businessSelected(business)}>
+                        <BusinessHeader key={'bh'+business._id} hideMenu
+                            navigation={this.props.navigation} business={business}
+                            categoryTitle={business.categoryTitle}
+                            businessLogo={business.logo}
+                            businessName={business.name}/>
+                    </TouchableOpacity>
+                </View>;
+                {/*<BusinessPreview key={"createBusinessSelectionView" + business._id} business={business}/>;*/}
+                {/*<View key={"createBusinessSelectionView" + business._id}>*/}
+                    {/*<ThisText style={{*/}
+                        {/*color: '#FA8559',*/}
+                        {/*marginLeft: 8,*/}
+                        {/*marginRight: 8*/}
+                    {/*}}>{business.name}</ThisText>*/}
+                    {/*<Thumbnail square source={{uri: business.pictures[0].pictures[3]}}/>*/}
+                {/*</View>*/}
+
+
+            });
+
+            return  <ScrollView style={[styles.user_view, {width: StyleUtils.getWidth() - 15}]}>
+                        {businesses}
+                    </ScrollView>
+        }
+        return undefined
+
+    }
+
     createUserPic(user) {
         if (user.pictures && user.pictures.length > 0) {
             const path = user.pictures[user.pictures.length - 1].pictures[0];
@@ -176,13 +219,17 @@ class SearchBusinessByPermittedUser extends Component {
     }
 
     shouldComponentUpdate() {
-        return this.props.currentScreen === 'addPermittedUser';
+        return this.props.currentScreen === 'SearchBusinessByPermittedUser';
     }
 }
 
 export default connect(
     state => ({
         currentScreen: state.render.currentScreen,
+        user: state.userBusinessesByPhone.user,
+        info: state.userBusinessesByPhone.info,
+
+
     }),
     (dispatch) => ({
         actions: bindActionCreators(businessAction, dispatch),

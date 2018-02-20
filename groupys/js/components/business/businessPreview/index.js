@@ -13,17 +13,21 @@ export default class BusinessPreview extends Component {
     }
 
     render() {
-        let businessName = this.props.business? this.props.business.name : '';
+        const{business,isSelect} = this.props;
+
+        let businessName = business? business.name : '';
         return <View style={styles.textLayout}>
-            <ThisText style={{
-                fontWeight: 'bold',
-                color: '#FA8559',
-                marginLeft: 8,
-                marginRight: 8
-            }}>{strings.Business}:</ThisText>
+            { isSelect &&
+                <ThisText style={{
+                    fontWeight: 'bold',
+                    color: '#FA8559',
+                    marginLeft: 8,
+                    marginRight: 8
+                }}>{strings.Business}:</ThisText>
+            }
             {
                 this.props.business ?
-                    <View>
+                    <View key={BusinessPreview + this.props.business._id}>
                         <ThisText style={{
                             color: '#FA8559',
                             marginLeft: 8,
@@ -32,12 +36,14 @@ export default class BusinessPreview extends Component {
                         <Thumbnail square source={{uri: this.props.business.pictures[0].pictures[3]}}/>
                     </View> :
                     <View style={styles.textLayout}>
-                        <ThisText style={{
-                            fontWeight: 'bold',
-                            color: '#FA8559',
-                            marginLeft: 8,
-                            marginRight: 8
-                        }}>{strings.NoBusinessSelected}</ThisText>
+                        {   isSelect &&
+                            <ThisText style={{
+                                fontWeight: 'bold',
+                                color: '#FA8559',
+                                marginLeft: 8,
+                                marginRight: 8
+                            }}>{strings.NoBusinessSelected}</ThisText>
+                        }
                     </View>
             }
         </View>;
