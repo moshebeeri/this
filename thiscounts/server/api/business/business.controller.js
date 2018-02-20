@@ -200,7 +200,7 @@ function followBusiness(userId, businessId, callback) {
 
             let query = `MATCH (user:user{_id:"${userId}"}), (b:business{_id:"${businessId}"})-[d:DEFAULT_GROUP]->(g:group) 
                          CREATE UNIQUE (user)-[f:FOLLOW]->(g)`;
-            console.log(query);
+
             graphModel.query(query, function (err) {
               if (err) return callback(err);
               onAction.follow(userId, businessId);

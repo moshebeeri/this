@@ -12,7 +12,7 @@ exports.follow = function(userId, entityId, callback){
   let query = `MATCH (e{_id:'${entityId}'})-[action:ON_ACTION]->(p:promotion) 
                WHERE action.type = 'FOLLOW_ENTITY' and action.end > timestamp()
                return p._id as promotionId, labels(e) as entity_type`;
-  console.log(query);
+
   graphModel.query(query, function(err, actions){
     if(err) return callback(err);
     actions.forEach( action => {

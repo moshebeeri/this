@@ -95,27 +95,19 @@ GraphModel.prototype.is_related_ids = function relate(from, name, to, callback){
   });
 };
 
-GraphModel.prototype.is_related_saved_instance = function(user_id, rel, instance_id, callback) {
-  let query = `MATCH (u:user{_id:'${user_id}' })-[rel:${rel}]->(savedInstance:SavedInstance)-[sf:SAVE_OF]->(instance:instance{_id:'${instance_id}'}) 
-  return sign(count(savedInstance)) as exists`;
+GraphModel.prototype.is_promotion_realized = function(user_id, promotion_id, callback) {
+  let query = `match (p:promotion{_id:'${promotion_id}'})<-[:INSTANCE_OF]-(:instance)<-[:SAVE_OF]-(sv:SavedInstance)<-[:REALIZED]-(u:user{_id:'${user_id}'}) 
+              return sign(count(sv)) as exists`;
   db.query(query, function(err, result) {
     if (err) { return callback(err) }
     return callback(null, result[0].exists !== 0)
   });
 };
-/**
-*
- let query = util.format("MATCH ()-[f:%s]->({_id:'%s'}) return count(f) as count",
- name, to);
- db.query(query, function(err, result) {
-    if (err) { return callback(err) }
-    callback(null, result[0].count)
-  });
-*
-**/
-GraphModel.prototype.saved_instance_rel_count = function(item_id, rel, callback){
-  let query = `MATCH (u:user)-[rel:${rel}]->(savedInstance:SavedInstance)-[sf:SAVE_OF]->(instance:instance{_id:'${item_id}'}) 
-  return count(savedInstance) as count`;
+
+GraphModel.prototype.promotion_realized_count = function(promotion_id, rel, callback){
+  let query = `match (p:promotion{_id:${promotion_id})<-[:INSTANCE_OF]-(:instance)<-[:SAVE_OF]-(sv:SavedInstance)<-[:REALIZED]-(u:user) 
+              return count(sv) as count`;
+  console.log(query);
   db.query(query, function(err, result) {
     if (err) { return callback(err) }
     return callback(null, result[0].count)
