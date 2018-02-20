@@ -104,8 +104,8 @@ GraphModel.prototype.is_promotion_realized = function(user_id, promotion_id, cal
   });
 };
 
-GraphModel.prototype.promotion_realized_count = function(promotion_id, rel, callback){
-  let query = `match (p:promotion{_id:${promotion_id})<-[:INSTANCE_OF]-(:instance)<-[:SAVE_OF]-(sv:SavedInstance)<-[:REALIZED]-(u:user) 
+GraphModel.prototype.promotion_realized_count = function(promotion_id, callback){
+  let query = `match (p:promotion{_id:'${promotion_id}')<-[:INSTANCE_OF]-(:instance)<-[:SAVE_OF]-(sv:SavedInstance)<-[:REALIZED]-(u:user) 
               return count(sv) as count`;
   db.query(query, function(err, result) {
     if (err) { return callback(err) }
