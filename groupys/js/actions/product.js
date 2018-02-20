@@ -1,10 +1,9 @@
-import ProdictApi from "../api/product";
+import productApi from "../api/product";
 import EntityUtils from "../utils/createEntity";
 import * as actions from "../reducers/reducerActions";
 import FormUtils from "../utils/fromUtils";
 import ActionLogger from './ActionLogger'
 
-let productApi = new ProdictApi();
 let entityUtils = new EntityUtils();
 let logger = new ActionLogger();
 import  handler from './ErrorHandler'

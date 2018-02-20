@@ -3,7 +3,7 @@
  */
 import BusinessApi from "../api/business";
 import UserApi from "../api/user";
-import ProductApi from "../api/product";
+import productApi from "../api/product";
 import PricingApi from "../api/pricing";
 import PromotionApi from "../api/promotion";
 import * as actions from "../reducers/reducerActions";
@@ -18,7 +18,7 @@ import * as types from '../sega/segaActions';
 const BTClient = require('react-native-braintree-xplat');
 let businessApi = new BusinessApi();
 let userApi = new UserApi();
-let productApi = new ProductApi();
+
 let promotionApi = new PromotionApi();
 let entityUtils = new EntityUtils();
 let pricingApi = new PricingApi();
@@ -325,6 +325,9 @@ export function saveBusiness(business, navigation) {
             dispatch({
                 type: actions.SAVE_BUSINESS_TAMPLATE,
                 templateBusiness: {},
+            });
+            dispatch({
+                type: actions.SAVING_BUSINESS_DONE,
             });
             navigation.goBack();
         } catch (error) {

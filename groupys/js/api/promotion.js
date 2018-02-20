@@ -8,26 +8,27 @@ import store from "react-native-simple-store";
 import EntityUtils from "../utils/createEntity";
 import Timer from "./LogTimer";
 import PromotionComperator from "../reduxComperators/PromotionComperator"
+import * as errors from './Errors'
+
 let promotionComperator = new PromotionComperator();
 let entityUtils = new EntityUtils();
 let timer = new Timer();
 
-import * as errors from './Errors'
 class PromotionApi {
-
     timeout(ms, promise) {
-        return new Promise(function(resolve, reject) {
-            setTimeout(function() {
+        return new Promise(function (resolve, reject) {
+            setTimeout(function () {
                 reject(errors.TIME_OUT);
             }, ms)
             promise.then(resolve, reject)
         })
     }
+
     createPromotion(promotion, token) {
         return new Promise(async (resolve, reject) => {
             try {
                 let from = new Date();
-                const response = await this.timeout(20000,fetch(`${server_host}/api/promotions/campaign`, {
+                const response = await fetch(`${server_host}/api/promotions/campaign`, {
                     method: 'POST',
                     headers: {
                         'Accept': 'application/json, text/plain, */*',
@@ -35,33 +36,25 @@ class PromotionApi {
                         'Authorization': 'Bearer ' + token
                     },
                     body: JSON.stringify(promotion)
-                }));
-                if (response.status ==='401' || response.status === 401) {
+                });
+                if (response.status === '401' || response.status === 401) {
                     reject(errors.UN_AUTHOTIZED_ACCESS);
                     return;
                 }
                 let responseData = await response.json();
                 timer.logTime(from, new Date(), 'promotions', 'campaign');
-                // if (promotion.image) {
-                //     let imagePath = promotion.image.uri;
-                //     if(!imagePath){
-                //         imagePath = promotion.image.path;
-                //     }
-                //     entityUtils.doUpload(imagePath, promotion.image.mime, token, this.doLog.bind(this), 'promotions', responseData.promotions[0]);
-                // }
                 resolve(responseData);
             }
             catch (error) {
-                if(error === errors.TIME_OUT){
-                    reject({ type: errors.TIME_OUT, debugMessage:'/api/promotions/campaige Timed out'});
+                if (error === errors.TIME_OUT) {
+                    reject({type: errors.TIME_OUT, debugMessage: '/api/promotions/campaige Timed out'});
                 }
                 reject(errors.NETWORK_ERROR);
             }
         })
     }
 
-    doLog(){
-
+    doLog() {
     }
 
     updatePromotion(promotion, id) {
@@ -78,7 +71,7 @@ class PromotionApi {
                     },
                     body: JSON.stringify(promotion)
                 });
-                if (response.status ==='401' || response.status === 401) {
+                if (response.status === '401' || response.status === 401) {
                     reject(errors.UN_AUTHOTIZED_ACCESS);
                     return;
                 }
@@ -105,7 +98,7 @@ class PromotionApi {
                         'Authorization': 'Bearer ' + token
                     }
                 });
-                if (response.status ==='401' || response.status === 401) {
+                if (response.status === '401' || response.status === 401) {
                     reject(errors.UN_AUTHOTIZED_ACCESS);
                     return;
                 }
@@ -119,7 +112,7 @@ class PromotionApi {
         })
     }
 
-    realizePromotion(code,token) {
+    realizePromotion(code, token) {
         return new Promise(async (resolve, reject) => {
             try {
                 let date = new Date();
@@ -137,7 +130,7 @@ class PromotionApi {
                     },
                     body: JSON.stringify(time)
                 });
-                if (response.status ==='401' || response.status === 401) {
+                if (response.status === '401' || response.status === 401) {
                     reject(errors.UN_AUTHOTIZED_ACCESS);
                     return;
                 }
@@ -151,8 +144,7 @@ class PromotionApi {
         })
     }
 
-
-    getPromotionInstance(code,token) {
+    getPromotionInstance(code, token) {
         return new Promise(async (resolve, reject) => {
             try {
                 let from = new Date();
@@ -165,32 +157,30 @@ class PromotionApi {
                     }
                 });
                 console.log('after call')
-                if (response.status ==='401' || response.status === 401) {
+                if (response.status === '401' || response.status === 401) {
                     reject(errors.UN_AUTHOTIZED_ACCESS);
                     return;
                 }
-
-                if (response.status ==='404' || response.status === 404) {
+                if (response.status === '404' || response.status === 404) {
                     reject(errors.REALIZATIOn_NOT_ALLOWED);
                     return;
                 }
                 console.log('check status ')
-             //   timer.logTime(from, new Date(), 'instances', 'realize');
+                //   timer.logTime(from, new Date(), 'instances', 'realize');
                 try {
                     let responseData = await response.json();
                     resolve(responseData);
-                }catch (error){
+                } catch (error) {
                     console.log(error);
                     reject(response);
                 }
-
-
             }
             catch (error) {
                 reject(errors.NETWORK_ERROR);
             }
         })
     }
+
     getPromotionQrcode(id) {
         return new Promise(async (resolve, reject) => {
             try {
@@ -204,11 +194,10 @@ class PromotionApi {
                         'Authorization': 'Bearer ' + token
                     }
                 });
-                if (response.status ==='404' || response.status === 404) {
+                if (response.status === '404' || response.status === 404) {
                     reject('invalid code')
-
                 }
-                if (response.status ==='401' || response.status === 401) {
+                if (response.status === '401' || response.status === 401) {
                     reject(errors.UN_AUTHOTIZED_ACCESS);
                     return;
                 }
@@ -235,7 +224,7 @@ class PromotionApi {
                         'Authorization': 'Bearer ' + token
                     }
                 });
-                if (response.status ==='401' || response.status === 401) {
+                if (response.status === '401' || response.status === 401) {
                     reject(errors.UN_AUTHOTIZED_ACCESS);
                     return;
                 }
@@ -249,11 +238,10 @@ class PromotionApi {
         })
     }
 
-    getPromotionById(id,token) {
+    getPromotionById(id, token) {
         return new Promise(async (resolve, reject) => {
             try {
                 let from = new Date();
-
                 const response = await fetch(`${server_host}/api/promotions/` + id, {
                     method: 'GET',
                     headers: {
@@ -262,15 +250,13 @@ class PromotionApi {
                         'Authorization': 'Bearer ' + token
                     }
                 });
-                if (response.status ==='401' || response.status === 401) {
+                if (response.status === '401' || response.status === 401) {
                     reject(errors.UN_AUTHOTIZED_ACCESS);
                     return;
                 }
-
                 let responseData = await response.json();
-                if(promotionComperator.filterPromotion(responseData)) {
+                if (promotionComperator.filterPromotion(responseData)) {
                     timer.logTime(from, new Date(), 'promotions', 'id');
-
                     resolve(responseData);
                 }
                 resolve('')
@@ -285,7 +271,7 @@ class PromotionApi {
         return new Promise(async (resolve, reject) => {
             try {
                 let from = new Date();
-                const response = await this.timeout(20000,fetch(`${server_host}/api/promotions/list/by/business/` + id+ '/start/down', {
+                const response = await this.timeout(20000, fetch(`${server_host}/api/promotions/list/by/business/` + id + '/start/down', {
                     method: 'GET',
                     headers: {
                         'Accept': 'application/json, text/plain, */*',
@@ -293,24 +279,23 @@ class PromotionApi {
                         'Authorization': 'Bearer ' + token
                     }
                 }));
-                if (response.status ==='401' || response.status === 401) {
+                if (response.status === '401' || response.status === 401) {
                     reject(errors.UN_AUTHOTIZED_ACCESS);
                     return;
                 }
-
-                if(response.status > 400){
+                if (response.status > 400) {
                     reject(errors.APPLICATION_ERROR);
                 }
                 let responseData = await response.json();
-                if(responseData.length > 0) {
+                if (responseData.length > 0) {
                     responseData = responseData.filter(promotion => promotionComperator.filterPromotion(promotion));
                 }
                 timer.logTime(from, new Date(), 'promotions', 'list/by/business');
                 resolve(responseData);
             }
             catch (error) {
-                if(error === errors.TIME_OUT){
-                    reject({ type: errors.TIME_OUT, debugMessage:'/promotions/list/by/business Timed out'});
+                if (error === errors.TIME_OUT) {
+                    reject({type: errors.TIME_OUT, debugMessage: '/promotions/list/by/business Timed out'});
                 }
                 reject(errors.NETWORK_ERROR);
             }

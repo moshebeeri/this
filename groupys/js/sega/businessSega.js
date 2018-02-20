@@ -45,7 +45,7 @@ function* saveBusiness(action) {
             yield call(ImageApi.uploadImage, action.token, action.business.image, createdBusiness._id);
         }
         if (action.business.logoImage) {
-            yield call(ImageApi.uploadImage, action.token, action.business.logoImage, createdBusiness._id);
+            yield call(ImageApi.uploadImageLogo, action.token, action.business.logoImage, createdBusiness._id);
         }
         if (action.business.IdIdentifierImage) {
             yield call(ImageApi.uploadImage, action.token, action.business.IdIdentifierImage, createdBusiness._id);

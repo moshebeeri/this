@@ -66,10 +66,10 @@ class PageRefresher {
     uploadPictures() {
         let token = store.getState().authentication.token;
         if (token) {
-            this.checkUploadPictures('businesses', store.getState().businesses.businessPictures, token, actions.BUSINESS_CLEAR_PIC)
+          //  this.checkUploadPictures('businesses', store.getState().businesses.businessPictures, token, actions.BUSINESS_CLEAR_PIC)
             this.checkUploadPictures('products', store.getState().products.productsPictures, token, actions.PRODUCTS_CLEAR_PIC)
-            this.checkUploadPictures('promotions', store.getState().promotions.promotionPictures, token, actions.PROMOTION_CLEAR_PIC)
-            this.checkUploadPictures('users', store.getState().user.userPictures, token, actions.CLEAR_USERS_UPLOAD_PIC)
+           // this.checkUploadPictures('promotions', store.getState().promotions.promotionPictures, token, actions.PROMOTION_CLEAR_PIC)
+           // this.checkUploadPictures('users', store.getState().user.userPictures, token, actions.CLEAR_USERS_UPLOAD_PIC)
         }
     }
 
