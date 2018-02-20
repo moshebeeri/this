@@ -91,7 +91,7 @@ GraphModel.prototype.is_related_ids = function relate(from, name, to, callback){
   let query = util.format("MATCH (me{_id:'%s'})-[f:%s]->(follower{_id:'%s'}) return sign(count(f)) as exists", from, name, to);
   db.query(query, function(err, result) {
     if (err) { return callback(err) }
-    return callback(null, result[0].exists !== 0)
+    return callback(null, result[0] && result[0].exists !== 0)
   });
 };
 
@@ -100,16 +100,16 @@ GraphModel.prototype.is_promotion_realized = function(user_id, promotion_id, cal
               return sign(count(sv)) as exists`;
   db.query(query, function(err, result) {
     if (err) { return callback(err) }
-    return callback(null, result[0].exists !== 0)
+    return callback(null, result[0] && result[0].exists !== 0)
   });
 };
 
 GraphModel.prototype.promotion_realized_count = function(promotion_id, callback){
-  let query = `match (p:promotion{_id:'${promotion_id}')<-[:INSTANCE_OF]-(:instance)<-[:SAVE_OF]-(sv:SavedInstance)<-[:REALIZED]-(u:user) 
+  let query = `match (p:promotion{_id:'${promotion_id}'})<-[:INSTANCE_OF]-(:instance)<-[:SAVE_OF]-(sv:SavedInstance)<-[:REALIZED]-(u:user) 
               return count(sv) as count`;
   db.query(query, function(err, result) {
     if (err) { return callback(err) }
-    return callback(null, result[0].count)
+    return callback(null, result[0]? result[0].count : 0)
   });
 };
 
@@ -129,7 +129,7 @@ GraphModel.prototype.count_out_rel_id = function count_out_rel(from, name, callb
     from, name);
   db.query(query, function(err, result) {
     if (err) { return callback(err) }
-    callback(null, result[0].count)
+    callback(null, result[0]? result[0].count : 0)
   });
 };
 
@@ -138,7 +138,7 @@ GraphModel.prototype.count_in_rel_id = function count_in_rel(name, to, callback)
     name, to);
   db.query(query, function(err, result) {
     if (err) { return callback(err) }
-    return callback(null, result[0].count)
+    return callback(null, result[0]? result[0].count : 0)
   });
 };
 /**
@@ -152,12 +152,16 @@ GraphModel.prototype.count_in_rel_id = function count_in_rel(name, to, callback)
  * return count(direct_comments)+count(indirect_comments) as count
  */
 GraphModel.prototype.count_in_though = function count_in_rel(to, rel, rel_between, callback) {
-  let query =   `MATCH (p{_id:'${to}'})<-[direct:${rel}]-()
-                  OPTIONAL MATCH (p)<-[:${rel_between}]-()<-[indirect:${rel}]-()
-                  return count(direct)+count(indirect) as count`;
+  let query = ` MATCH (e{_id:'${to}'})<-[direct:${rel}]-()
+                WITH count(direct) as directs
+                MATCH (e{_id:'${to}'})<-[:${rel_between}]-()<-[indirect:${rel}]-()
+                RETURN directs + count(indirect) as count`;
+  // query =   `MATCH (p{_id:'${to}'})<-[direct:${rel}]-()
+  //             OPTIONAL MATCH (p)<-[:${rel_between}]-()<-[indirect:${rel}]-()
+  //             return count(direct)+count(indirect) as count`;
   db.query(query, function(err, result) {
     if (err) { return callback(err) }
-    return callback(null, result[0].count)
+    return callback(null, result[0]? result[0].count : 0 )
   });
 };
 
