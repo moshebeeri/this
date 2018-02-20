@@ -7,6 +7,7 @@ import groupsSega from './groupsSega'
 import myPromotionsnSega from './myPromotionsSega'
 import groupsChatSega from './groupsChatSega'
 import promotionSega from './promotionSega'
+import productSega from './productSega'
 
 function* sega() {
     yield fork(userSega);
@@ -17,6 +18,7 @@ function* sega() {
     yield fork(groupsSega);
     yield fork(groupsChatSega);
     yield fork(promotionSega);
+    yield fork(productSega);
 
 }
 

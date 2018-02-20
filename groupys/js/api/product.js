@@ -33,6 +33,36 @@ class ProductsApi {
         })
     }
 
+    createProduct(product, token) {
+        return new Promise(async (resolve, reject) => {
+            try {
+                let from = new Date();
+                const response = await fetch(`${server_host}/api/products/`, {
+                    method: 'POST',
+                    headers: {
+                        'Accept': 'application/json, text/plain, */*',
+                        'Content-Type': 'application/json;charset=utf-8',
+                        'Authorization': 'Bearer ' + token
+                    },
+                    body: JSON.stringify(product)
+                });
+                if (response.status === '401' || response.status === 401) {
+                    reject(errors.UN_AUTHOTIZED_ACCESS);
+                    return;
+                }
+                let responseData = await response.json();
+                timer.logTime(from, new Date(), 'products', 'campaign');
+                resolve(responseData);
+            }
+            catch (error) {
+                if (error === errors.TIME_OUT) {
+                    reject({type: errors.TIME_OUT, debugMessage: '/api/product Timed out'});
+                }
+                reject(errors.NETWORK_ERROR);
+            }
+        })
+    }
+
     findByBusinessId(id, token) {
         return new Promise(async (resolve, reject) => {
             try {

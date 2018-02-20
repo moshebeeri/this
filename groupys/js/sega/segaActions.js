@@ -31,5 +31,8 @@ export const LISTEN_FOR_GROUP_FEEDS = 'LISTEN_FOR_GROUP_FEEDS';
 //promotion
 export const SAVE_PROMOTION = 'SAVE_PROMOTION';
 
+//product
+export const SAVE_PRODUCT = 'SAVE_PRODUCT';
+
 
 

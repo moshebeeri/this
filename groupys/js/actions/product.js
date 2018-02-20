@@ -1,12 +1,11 @@
 import productApi from "../api/product";
-import EntityUtils from "../utils/createEntity";
 import * as actions from "../reducers/reducerActions";
 import FormUtils from "../utils/fromUtils";
 import ActionLogger from './ActionLogger'
+import handler from './ErrorHandler'
+import * as types from '../sega/segaActions';
 
-let entityUtils = new EntityUtils();
 let logger = new ActionLogger();
-import  handler from './ErrorHandler'
 
 async function getAllByBusinessId(dispatch, id, token) {
     try {
@@ -19,7 +18,7 @@ async function getAllByBusinessId(dispatch, id, token) {
             });
         }
     } catch (error) {
-        handler.handleError(error,dispatch)
+        handler.handleError(error, dispatch)
         logger.actionFailed('product-getAllByBusinessId')
     }
 }
@@ -38,7 +37,7 @@ async function getProductCategories(dispatch, gid, token) {
             }
         }
     } catch (error) {
-        handler.handleError(error,dispatch)
+        handler.handleError(error, dispatch)
         logger.actionFailed('product-getProductCategories')
     }
 }
@@ -47,7 +46,6 @@ export function fetchProducts() {
     return function (dispatch, getState) {
         const token = getState().authentication.token;
         getAll(dispatch, token);
-
     }
 }
 
@@ -64,65 +62,48 @@ export function setProductCategories(gid) {
         getProductCategories(dispatch, gid, token);
     }
 }
+
 export function resetForm() {
     return function (dispatch) {
         dispatch({
             type: actions.PRODUCT_RESET_FORM,
         });
-
     }
 }
 
-
-
-
-export function saveProduct(product,businessId,navigation) {
+export function saveProduct(product, businessId, navigation) {
     return async function (dispatch, getState) {
         try {
             dispatch({
                 type: actions.PRODUCT_SAVING,
             });
             const token = getState().authentication.token;
-            let response = await entityUtils.create('products', product, token);
-
-            response.pictures = [];
-            let pictures = [];
-            if (product.image.path) {
-                pictures.push(product.image.path);
-                pictures.push(product.image.path);
-                pictures.push(product.image.path);
-                pictures.push(product.image.path);
-                response.pictures.push({pictures: pictures});
-            } else {
-                pictures.push(product.image.uri);
-                pictures.push(product.image.uri);
-                pictures.push(product.image.uri);
-                pictures.push(product.image.uri);
-                response.pictures.push({pictures: pictures});
-            }
-
             dispatch({
-                type: actions.PRODUCTS_UPLOAD_PIC,
-                item:{item:product, itemResponse:response}
-            })
-
-            dispatch({
-                type: actions.UPSERT_PRODUCT_SINGLE,
-                item: response,
-                businessId: businessId
+                type: types.SAVE_PRODUCT,
+                product: product,
+                businessId: businessId,
+                token: token
             });
-
             dispatch({
                 type: actions.PRODUCT_SAVING_DONE,
             });
             navigation.goBack();
-            handler.handleSuccses(getState(),dispatch)
+            handler.handleSuccses(getState(), dispatch)
         } catch (error) {
-            handler.handleError(error,dispatch)
+            handler.handleError(error, dispatch)
             logger.actionFailed('product-saveProduct')
         }
     }
 }
+
+export function setProduct(response, businessId) {
+    return {
+        type: actions.UPSERT_PRODUCT_SINGLE,
+        item: response,
+        businessId: businessId
+    }
+}
+
 
 
 
