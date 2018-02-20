@@ -48,10 +48,10 @@ function* saveBusiness(action) {
             yield call(ImageApi.uploadImageLogo, action.token, action.business.logoImage, createdBusiness._id);
         }
         if (action.business.IdIdentifierImage) {
-            yield call(ImageApi.uploadImage, action.token, action.business.IdIdentifierImage, createdBusiness._id);
+            yield call(ImageApi.uploadImagIdentificationCardr, action.token, action.business.IdIdentifierImage, createdBusiness._id);
         }
         if (action.business.LetterOfIncorporationImage) {
-            yield call(ImageApi.uploadImage, action.token, action.business.LetterOfIncorporationImage, createdBusiness._id);
+            yield call(ImageApi.uploadImagletter, action.token, action.business.LetterOfIncorporationImage, createdBusiness._id);
         }
     } catch (error) {
         console.log("failed  updateBusiness")
