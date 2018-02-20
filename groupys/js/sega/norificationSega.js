@@ -14,6 +14,7 @@ function* saveNotificationRequest(action) {
     }
 }
 
+
 function* notificationSega() {
     yield throttle(2000, segaActions.SAVE_NOTIFICATION_REQUEST, saveNotificationRequest);
 }
