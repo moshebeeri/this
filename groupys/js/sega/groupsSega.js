@@ -8,7 +8,9 @@ let groupsApi = new GroupsApi();
 function* saveGroupsRequest(action) {
     try {
         let response = yield call(groupsApi.getAll, action.token,0, 100);
-        yield put(setGroups(response))
+        if(response.length > 0) {
+            yield put(setGroups(response))
+        }
     } catch (error) {
         console.log("failed saveGroupsRequest");
     }

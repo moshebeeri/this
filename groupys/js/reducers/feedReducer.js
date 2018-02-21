@@ -140,6 +140,12 @@ export default function feeds(state = initialState, action) {
                 maxFeedReturned: true,
 
             };
+        case actions.MAX_FEED_NOT_RETUNED:
+            return {
+                ...state,
+                maxFeedReturned: false,
+
+            };
 
 
 

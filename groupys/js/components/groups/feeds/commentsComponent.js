@@ -21,11 +21,7 @@ class CommentsComponent extends Component {
     }
 
     componentWillMount() {
-        const item = this.getInstance();
-        const {group, actions} = this.props;
-        if (group) {
-            actions.fetchTopComments(group, item);
-        }
+
     }
 
     getInstance() {

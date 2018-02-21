@@ -68,17 +68,16 @@ class PageRefresher {
 
     addGroupsFeed(groupsId) {
         if (!visitedList.includes('feeds' + groupsId,)) {
-            pageSync.createPage('feeds' + groupsId, pageSync.createStdAverageRefresh('feeds' + groupsId, 10, 60000), this.updateGroupFeeds.bind(this, groupsId));
             visitedList.push('feeds' + groupsId);
         }
     }
 
     upSertGroupsChat(groupsId) {
         if (!visitedList.includes('chat' + groupsId,)) {
-            pageSync.createPage('chat' + groupsId, pageSync.createStdAverageRefresh('chat' + groupsId, 5, 60000), this.updateGroupChat.bind(this, groupsId));
+         //   pageSync.createPage('chat' + groupsId, pageSync.createStdAverageRefresh('chat' + groupsId, 5, 60000), this.updateGroupChat.bind(this, groupsId));
             visitedList.push('chat' + groupsId);
         } else {
-            this.visitedGroupChat(groupsId);
+          //  this.visitedGroupChat(groupsId);
         }
     }
 
@@ -126,11 +125,11 @@ class PageRefresher {
     }
 
     visitedGroupFeeds(groupId) {
-        pageSync.visited('feeds' + groupId)
+       // pageSync.visited('feeds' + groupId)
     }
 
     visitedGroupChat(groupId) {
-        pageSync.visited('chat' + groupId)
+      //  pageSync.visited('chat' + groupId)
     }
 
     createFeedSocialState(id) {

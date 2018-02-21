@@ -53,7 +53,7 @@ export function setNextFeeds(feeds) {
         const user = getState().user.user;
         if (!user)
             return;
-        if(getState().feeds.maxFeedReturned){
+        if(getState().feeds.maxFeedReturned && getState().feeds.feeds.length > 0  ){
             return;
         }
         dispatch({
@@ -297,6 +297,13 @@ export function maxFeedReturned() {
         type: actions.MAX_FEED_RETUNED,
     }
 }
+
+export function maxFeedNotReturned() {
+    return {
+        type: actions.MAX_FEED_NOT_RETUNED,
+    }
+}
+
 
 
 export function* updateFeeds(feeds) {

@@ -271,14 +271,14 @@ class PromotionApi {
         return new Promise(async (resolve, reject) => {
             try {
                 let from = new Date();
-                const response = await this.timeout(20000, fetch(`${server_host}/api/promotions/list/by/business/` + id + '/start/down', {
+                const response = await  fetch(`${server_host}/api/promotions/list/by/business/` + id + '/start/down', {
                     method: 'GET',
                     headers: {
                         'Accept': 'application/json, text/plain, */*',
                         'Content-Type': 'application/json;charset=utf-8',
                         'Authorization': 'Bearer ' + token
                     }
-                }));
+                });
                 if (response.status === '401' || response.status === 401) {
                     reject(errors.UN_AUTHOTIZED_ACCESS);
                     return;

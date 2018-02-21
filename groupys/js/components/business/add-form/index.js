@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import {Dimensions, Image, ScrollView, View} from 'react-native';
+import {Dimensions, Image, ScrollView, View,Keyboard} from 'react-native';
 import {Button, Container, Content, Fab, Footer, Form, Icon, Input, Item, Picker, Text} from 'native-base';
 import styles from './styles'
 import * as businessAction from "../../../actions/business";
@@ -221,6 +221,9 @@ class AddBusiness extends Component {
             coverPath: image.path
         });
     }
+    dismissKyeboard(){
+        Keyboard.dismiss();
+    }
 
     validateForm(onValid) {
         let result = true;
@@ -381,6 +384,7 @@ class AddBusiness extends Component {
 
                         <TextInput field={strings.TaxID} value={this.state.tax_id} returnKeyType='next' ref="6"
                                    refNext="6"
+                                   onSubmitEditing={this.dismissKyeboard.bind(this)}
                                    onChangeText={(tax_id) => this.setReduxState({tax_id})} isMandatory={true}/>
                     </View>
 

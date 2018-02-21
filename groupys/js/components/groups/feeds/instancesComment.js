@@ -20,20 +20,15 @@ class instancesComment extends Component {
     }
 
     componentWillMount() {
-        const {comments, group} = this.props;
+        const {comments, group,actions} = this.props;
         if (!comments[group._id] || (comments[group._id] && comments[group._id].length ===0)) {
-            this.setNextFeed();
+            actions.setNextFeeds(group);
         }
-        Tasks.groupChatTaskStart(group._id);
     }
 
     setNextFeed() {
-        const {comments, group, actions} = this.props;
-        if (comments[group._id]) {
-            actions.setNextFeeds(comments[group._id].filter(comment => comment.message), group);
-        } else {
-            actions.setNextFeeds([], group);
-        }
+        const {group, actions} = this.props;
+        actions.setNextFeeds(group);
     }
 
     _onPressButton(message) {

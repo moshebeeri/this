@@ -12,12 +12,13 @@ import GroupApi from "../../../api/groups"
 import {GroupHeader, ThisText} from '../../../ui/index';
 import {Menu, MenuOption, MenuOptions, MenuTrigger,} from 'react-native-popup-menu';
 import * as groupsAction from "../../../actions/groups";
+
+import * as commentGroupAction from "../../../actions/commentsGroup";
 import Icon2 from 'react-native-vector-icons/SimpleLineIcons';
 import Icon from 'react-native-vector-icons/Ionicons';
 import StyleUtils from '../../../utils/styleUtils'
 import {bindActionCreators} from "redux";
 import strings from "../../../i18n/i18n"
-import Tasks from '../../../tasks/tasks'
 
 const {height} = Dimensions.get('window');
 const vh = height / 100
@@ -38,8 +39,7 @@ class GroupFeedHeader extends Component {
     }
 
     handleBack() {
-        Tasks.groupChatTaskstop();
-        this.props.fetchGroups();
+        this.props.actions.fetchGroups();
     }
 
     showScanner() {
@@ -49,6 +49,7 @@ class GroupFeedHeader extends Component {
 
     navigateBack() {
         this.handleBack();
+        this.props.actions.stopListenForChat()
         this.props.navigation.goBack();
     }
 
@@ -198,6 +199,8 @@ export default connect(
         businesses: state.businesses,
         user: state.user,
     }),
-    dispatch => bindActionCreators(groupsAction, dispatch)
+    (dispatch) => ({
+        actions: bindActionCreators(groupsAction, dispatch),
+    })
 )(GroupFeedHeader);
 

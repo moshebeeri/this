@@ -8,7 +8,8 @@ import {
     stopScrolling,
     updateFeeds,
     updateFeedsTop,
-    maxFeedReturned
+    maxFeedReturned,
+    maxFeedNotReturned
 } from "../actions/feedsMain";
 import * as segaActions from './segaActions'
 
@@ -28,6 +29,8 @@ function* feedScrollDown(action) {
             response = yield call(feedApi.getAll, 'down', id, action.token, action.user);
             if (response.length === 0) {
                 yield put(maxFeedReturned());
+            }else{
+                yield put(maxFeedNotReturned());
             }
             yield put(stopScrolling());
         }
@@ -74,7 +77,7 @@ function* watchStartBackgroundTask() {
 
 
 function* feedSega() {
-    yield throttle(1000, segaActions.FEED_SCROLL_DOWN, feedScrollDown)
+    yield throttle(1000, segaActions.FEED_SCROLL_DOWN, feedScrollDown);
     yield fork(watchStartBackgroundTask);
 }
 

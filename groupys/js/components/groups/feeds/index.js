@@ -10,7 +10,6 @@ import InstanceComment from "./instancesComment";
 import {getFeeds} from "../../../selectors/groupFeedsSelector";
 import * as commentAction from "../../../actions/commentsGroup";
 import strings from "../../../i18n/i18n"
-import PageRefresher from '../../../refresh/pageRefresher'
 import {ScrolTabView} from '../../../ui/index'
 import GroupFeedComponent from './groupsFeeds'
 import Tasks from '../../../tasks/tasks'
@@ -36,8 +35,6 @@ class GroupFeed extends Component {
         BackHandler.addEventListener('hardwareBackPress', this.handleBack.bind(this));
         const {navigation, feeds} = this.props;
         const group = navigation.state.params.group;
-        PageRefresher.addGroupsFeed(group._id);
-        PageRefresher.visitedGroupFeeds(group._id);
         if (!feeds[group._id] || (feeds[group._id] && feeds[group._id].length === 0)) {
             this.props.actions.setFeeds(group, feeds[group._id]);
         }
@@ -45,8 +42,7 @@ class GroupFeed extends Component {
     }
 
     handleBack() {
-        Tasks.groupChatTaskstop();
-        //this.props.actions.fetchGroups();
+        this.props.commentGroupAction.stopListenForChat()
     }
 
     handlePick(emoji) {
@@ -68,21 +64,12 @@ class GroupFeed extends Component {
     }
 
     changeTab(tab) {
-        const {navigation, commentGroupAction} = this.props;
+        const {navigation} = this.props;
         const group = navigation.state.params.group;
-        if (tab.i === 1) {
-            Tasks.groupChatTaskStart(group._id)
-            PageRefresher.upSertGroupsChat(group._id);
-            commentGroupAction.clearUnreadComments(group);
-        }else{
-            Tasks.groupChatTaskstop();
-        }
+
         this.setState({
             showChat: !this.state.showChat
         })
-        if (!this.state.showChat) {
-            commentGroupAction.fetchTopComments(group)
-        }
     }
 
     allowPost(group) {
