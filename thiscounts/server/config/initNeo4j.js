@@ -47,6 +47,12 @@ function initNeo4j() {
   db.index.createIfNone('category', '_id', function(err, index) {
     console.log(index);
   });
+  db.index.createIfNone('comment', '_id', function(err, index) {
+    console.log(index);
+  });
+  db.index.createIfNone('savedInstance', '_id', function(err, index) {
+    console.log(index);
+  });
   db.index.createIfNone('feed', '_id', function(err, index) {
     console.log(index);
   });
@@ -60,6 +66,9 @@ function initNeo4j() {
     console.log(index);
   });
   db.index.createIfNone('phonebook', '_id', function(err, index) {
+    console.log(index);
+  });
+  db.index.createIfNone('post', '_id', function(err, index) {
     console.log(index);
   });
   db.index.createIfNone('product', '_id', function(err, index) {
