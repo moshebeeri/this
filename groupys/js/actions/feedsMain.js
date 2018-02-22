@@ -2,9 +2,7 @@
  * Created by roilandshut on 08/06/2017.
  */
 import FeedApi from "../api/feed";
-import getStore from "../store";
 import UserApi from "../api/user";
-import BusinessApi from "../api/business";
 import PtomotionApi from "../api/promotion";
 import ActivityApi from "../api/activity";
 import * as actions from "../reducers/reducerActions";
@@ -16,16 +14,12 @@ import handler from './ErrorHandler'
 import * as types from '../sega/segaActions';
 import {put} from 'redux-saga/effects'
 
-const store = getStore();
 let feedApi = new FeedApi();
 let userApi = new UserApi();
 let promotionApi = new PtomotionApi();
 let activityApi = new ActivityApi();
-let businessApi = new BusinessApi();
 let feedComperator = new MainFeedReduxComperator();
 let logger = new ActionLogger();
-
-
 
 async function getUserFollowers(dispatch, token) {
     try {
@@ -53,7 +47,7 @@ export function setNextFeeds(feeds) {
         const user = getState().user.user;
         if (!user)
             return;
-        if(getState().feeds.maxFeedReturned && getState().feeds.feeds.length > 0  ){
+        if (getState().feeds.maxFeedReturned && getState().feeds.feedView.length > 0) {
             return;
         }
         dispatch({
@@ -62,7 +56,6 @@ export function setNextFeeds(feeds) {
             token: token,
             user: user,
         });
-
         handler.handleSuccses(getState(), dispatch)
     }
 }
@@ -93,7 +86,6 @@ export function setTopFeeds() {
                 user: user,
             });
         }
-
         handler.handleSuccses(getState(), dispatch)
     }
 }
@@ -102,14 +94,11 @@ export function like(id) {
     return async function (dispatch, getState) {
         try {
             const token = getState().authentication.token
-
             dispatch({
                 type: actions.LIKE,
                 id: id
             });
-
             await userApi.like(id, token);
-
             handler.handleSuccses(getState(), dispatch)
         } catch (error) {
             handler.handleError(error, dispatch, 'like')
@@ -145,10 +134,10 @@ export function refresh(id, currentSocialState) {
     }
 }
 
-async function refreshFeedSocialState(state,dispatch, token, id) {
+async function refreshFeedSocialState(state, dispatch, token, id) {
     try {
         let response = await feedApi.getFeedSocialState(id, token);
-        if (feedComperator.shouldUpdateSocial(state,id, response)) {
+        if (feedComperator.shouldUpdateSocial(state, id, response)) {
             dispatch({
                 type: actions.FEED_UPDATE_SOCIAL_STATE,
                 social_state: response,
@@ -165,15 +154,11 @@ export const unlike = (id) => {
     return async function (dispatch, getState) {
         try {
             const token = getState().authentication.token
-
             dispatch({
                 type: actions.UNLIKE,
                 id: id
             });
-
             await userApi.unlike(id, token);
-
-
             handler.handleSuccses(getState(), dispatch)
         } catch (error) {
             handler.handleError(error, dispatch, 'unlike')
@@ -190,7 +175,6 @@ export function saveFeed(id, navigation, feed) {
                 id: id
             });
             let savedInstance = await promotionApi.save(id);
-
             navigation.navigate('realizePromotion', {item: feed, id: savedInstance._id})
             dispatch({
                 type: types.SAVE_SINGLE_MYPROMOTIONS_REQUEST,
@@ -292,6 +276,7 @@ export function stopScrolling() {
         type: actions.FEEDS_GET_NEXT_BULK_DONE,
     }
 }
+
 export function maxFeedReturned() {
     return {
         type: actions.MAX_FEED_RETUNED,
@@ -303,8 +288,6 @@ export function maxFeedNotReturned() {
         type: actions.MAX_FEED_NOT_RETUNED,
     }
 }
-
-
 
 export function* updateFeeds(feeds) {
     if (feeds) {

@@ -13,13 +13,13 @@ import {
 } from 'react-native';
 import {connect} from 'react-redux';
 import {actions} from 'react-native-navigation-redux-helpers';
-import {Button, Container, Footer, Input, Text, Thumbnail} from 'native-base';
+import {Button, Container, Footer, Input, Thumbnail} from 'native-base';
 import Icon from 'react-native-vector-icons/Ionicons';
 import CommentsComponenet from './commentsComponent';
 import styles from './styles'
 import {bindActionCreators} from "redux";
 import * as commentAction from "../../actions/comments";
-import {BusinessHeader,ThisText} from '../../ui/index';
+import {BusinessHeader, ThisText} from '../../ui/index';
 import StyleUtils from "../../utils/styleUtils";
 
 class GenericComments extends Component {
@@ -43,7 +43,7 @@ class GenericComments extends Component {
 
     getBusiness(item) {
         if (item.business) {
-            return item.business
+            return item.business;
         }
         return item;
     }
@@ -63,7 +63,7 @@ class GenericComments extends Component {
                                                   businessLogo={item.businessLogo}
                                                   businessName={item.businessName}/>}
             {item.feed && item.feed.activity && item.feed.activity.post &&
-            <View style={{flexDirection: 'row', backgroundColor: 'white', height: 60, width: StyleUtils.getWidth() }}>
+            <View style={{flexDirection: 'row', backgroundColor: 'white', height: 60, width: StyleUtils.getWidth()}}>
                 <TouchableOpacity transparent style={{
                     width: 40,
                     justifyContent: 'center',
@@ -95,10 +95,7 @@ class GenericComments extends Component {
     }
 
     shouldComponentUpdate() {
-        if (this.props.currentScreen === 'genericComments') {
-            return true;
-        }
-        return false;
+        return this.props.currentScreen === 'genericComments';
     }
 }
 

@@ -12,8 +12,7 @@ import GroupApi from "../../../api/groups"
 import {GroupHeader, ThisText} from '../../../ui/index';
 import {Menu, MenuOption, MenuOptions, MenuTrigger,} from 'react-native-popup-menu';
 import * as groupsAction from "../../../actions/groups";
-
-import * as commentGroupAction from "../../../actions/commentsGroup";
+import * as instanceGroupCommentsAction from "../../../actions/instanceGroupComments"
 import Icon2 from 'react-native-vector-icons/SimpleLineIcons';
 import Icon from 'react-native-vector-icons/Ionicons';
 import StyleUtils from '../../../utils/styleUtils'
@@ -49,7 +48,8 @@ class GroupFeedHeader extends Component {
 
     navigateBack() {
         this.handleBack();
-        this.props.actions.stopListenForChat()
+        this.props.actions.stopListenForChat();
+        this.props.instanceGroupCommentsAction.stopListenForChat();
         this.props.navigation.goBack();
     }
 
@@ -201,6 +201,7 @@ export default connect(
     }),
     (dispatch) => ({
         actions: bindActionCreators(groupsAction, dispatch),
+        instanceGroupCommentsAction: bindActionCreators(instanceGroupCommentsAction, dispatch),
     })
 )(GroupFeedHeader);
 
