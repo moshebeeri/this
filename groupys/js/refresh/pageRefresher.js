@@ -106,14 +106,7 @@ class PageRefresher {
     }
 
     updateGroupChat(groupId) {
-        let token = store.getState().authentication.token;
-        if (token) {
-            if (store.getState().comments.groupCommentsOrder && store.getState().comments.groupCommentsOrder[groupId]
-                && store.getState().comments.groupCommentsOrder[groupId].length > 0) {
-                let user = store.getState().user.user;
-                groupComments.refreshComments(store.dispatch, token, {_id: groupId}, user);
-            }
-        }
+
     }
 
     visitedFeed() {
