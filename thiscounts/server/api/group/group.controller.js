@@ -144,10 +144,8 @@ exports.create = function (req, res) {
       }
     }, function (err, qrcode) {
       if(err) console.error(err);
-      console.log(`1) Creates a new group ${JSON.stringify(qrcode)}`);
       group.qrcode = qrcode;
       group.save((err, group)=>{
-        console.log(`2) Creates a new group ${JSON.stringify(qrcode)}`);
         graphModel.reflect(group, to_graph(group), function (err) {
           if (err) {
             return handleError(res, err);
