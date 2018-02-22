@@ -45,7 +45,7 @@ export default class GiftComponent extends Component {
     selectOtherBusiness(otherBusinessPermittedUser, otherBusiness) {
         this.setState({otherBusinessPermittedUser: otherBusinessPermittedUser});
         this.setState({otherBusiness: otherBusiness});
-        this.props.setState({otherBusinessPermittedUser, otherBusiness});
+        //this.props.setState({otherBusinessPermittedUser, otherBusiness});
 
     }
 
@@ -184,13 +184,12 @@ export default class GiftComponent extends Component {
                     :
                     <View>
                         <View style={{flex: 1.7, marginTop: 25}}>
-                            <SelectButton ref="SearchBusinessByPermittedUser"
-                                          isMandatory
+                            <SelectButton ref='SearchBusinessByPermittedUser'
                                           title={strings.SearchOtherBusiness}
                                           action={this.searchBusinessByPermittedUser.bind(this, true)}/>
                         </View>
-                        <UserPreview user={this.props.state.otherBusinessPermittedUser}/>
-                        <BusinessPreview isSelect business={this.props.state.otherBusiness}/>
+                        <UserPreview user={this.state.otherBusinessPermittedUser}/>
+                        <BusinessPreview isSelect={false} business={this.state.otherBusiness}/>
                     </View>
 
             }
