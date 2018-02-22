@@ -47,7 +47,7 @@ export default function promotion(state = initialState, action) {
             return promotionsState;
 
         case actions.FEED_UPDATE_SOCIAL_STATE:
-            if (currentPromotions[action.id]) {
+            if (action.social_state && currentPromotions[action.id]) {
                 currentPromotions[action.id].social_state = action.social_state;
             }
             promotionsState.promotions = currentPromotions;

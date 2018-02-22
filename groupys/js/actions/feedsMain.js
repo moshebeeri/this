@@ -9,7 +9,7 @@ import * as actions from "../reducers/reducerActions";
 import * as assemblers from "./collectionAssembler";
 import CollectionDispatcher from "./collectionDispatcher";
 import ActionLogger from './ActionLogger'
-import MainFeedReduxComperator from "../reduxComperators/MainFeedComperator"
+import feedComperator from "../reduxComperators/MainFeedComperator"
 import handler from './ErrorHandler'
 import * as types from '../sega/segaActions';
 import {put} from 'redux-saga/effects'
@@ -18,7 +18,6 @@ let feedApi = new FeedApi();
 let userApi = new UserApi();
 let promotionApi = new PtomotionApi();
 let activityApi = new ActivityApi();
-let feedComperator = new MainFeedReduxComperator();
 let logger = new ActionLogger();
 
 async function getUserFollowers(dispatch, token) {
@@ -107,26 +106,23 @@ export function like(id) {
     }
 }
 
-export function refresh(id, currentSocialState) {
+export function refresh(id) {
+    return async function (dispatch, getState) {
+    }
+}
+
+export function setSocialState(item) {
     return async function (dispatch, getState) {
         try {
             const token = getState().authentication.token;
-            if (new Date().getTime() - getState().feeds.upTime < 360000) {
-                return;
-            }
-            let response = await feedApi.getFeedSocialState(id, token);
-            if (feedComperator.shouldUpdateSocial(id, response)) {
-                dispatch({
-                    type: actions.FEED_UPDATE_SOCIAL_STATE,
-                    social_state: response,
-                    id: id
-                });
-            }
+            let feedInstance = getState().instances.instances[item.id];
             dispatch({
-                type: actions.FEEDS_START_RENDER,
+                type: types.FEED_SET_SOCIAL_STATE,
+                token: token,
+                feed: feedInstance,
+                id: item.id
             });
             handler.handleSuccses(getState(), dispatch)
-            // await userApi.like(id, token);
         } catch (error) {
             handler.handleError(error, dispatch, 'feed-getFeedSocialState')
             logger.actionFailed('getFeedSocialState')
@@ -286,6 +282,14 @@ export function maxFeedReturned() {
 export function maxFeedNotReturned() {
     return {
         type: actions.MAX_FEED_NOT_RETUNED,
+    }
+}
+
+export function updateSocialState(response, feedId) {
+    return {
+        type: actions.FEED_UPDATE_SOCIAL_STATE,
+        social_state: response,
+        id: feedId
     }
 }
 

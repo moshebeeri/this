@@ -8,11 +8,11 @@ const refreshFeeds = (store) => {
         if(store.getState().instances && store.getState().instances.instances) {
             Object.keys(store.getState().instances.instances).forEach(async instance => {
                 let response = await feedApi.getFeedSocialState(instance, token);
-                store.dispatch({
-                    type: actions.FEED_UPDATE_SOCIAL_STATE,
-                    social_state: response,
-                    id: instance
-                });
+                // store.dispatch({
+                //     type: actions.FEED_UPDATE_SOCIAL_STATE,
+                //     social_state: response,
+                //     id: instance
+                // });
             });
         }
     }
