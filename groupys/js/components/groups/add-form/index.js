@@ -45,6 +45,12 @@ class AddGroup extends Component {
             let currentImage = '';
             if (group.pictures.length > 0) {
                 currentImage = group.pictures[group.pictures.length - 1].pictures[0];
+            }else{
+                if (group.entity && group.entity.business) {
+                    if (group.entity.business.logo) {
+                        currentImage = group.entity.business.logo;
+                    }
+                }
             }
             this.state = {
                 name: group.name,
