@@ -139,10 +139,11 @@ exports.create = function (req, res) {
     }
     qrcodeController.createAndAssign(group.creator, {
       type: 'FOLLOW_GROUP',
-      entities: {
+      assignment: {
         group: group._id
       }
     }, function (err, qrcode) {
+      if(err) console.error(err);
       console.log(`1) Creates a new group ${JSON.stringify(qrcode)}`);
       group.qrcode = qrcode;
       group.save((err, group)=>{
@@ -154,7 +155,7 @@ exports.create = function (req, res) {
           graphModel.relate_ids(group._id, 'CREATED_BY', req.user._id);
           graphModel.relate_ids(req.user._id, 'FOLLOW', group._id);
           graphModel.relate_ids(req.user._id, 'GROUP_ADMIN', group._id);
-          touch(group.creator._id, group._id);
+          touch(group.creator, group._id);
           if (group.entity_type === 'BUSINESS' && utils.defined(group.entity.business)) {
             graphModel.relate_ids(group._id, 'FOLLOW', group.entity.business);
             graphModel.relate_ids(group.entity.business, 'BUSINESS_GROUP', group._id);
@@ -175,10 +176,11 @@ exports.create_business_default_group = function (group, callback) {
     }
     qrcodeController.createAndAssign(group.creator, {
       type: 'FOLLOW_GROUP',
-      entities: {
+      assignment: {
         group: group._id
       }
     }, function (err, qrcode) {
+      if(err) console.error(err);
       group.qrcode = qrcode;
       group.save((err, group) => {
         if(err) {
@@ -192,11 +194,11 @@ exports.create_business_default_group = function (group, callback) {
           created: group.created
         }, function (err) {
           if (err) return callback(err);
-          graphModel.relate_ids(group._id, 'CREATED_BY', group.creator._id);
-          graphModel.relate_ids(group.creator._id, 'FOLLOW', group._id);
-          graphModel.relate_ids(group.creator._id, 'GROUP_ADMIN', group._id);
+          graphModel.relate_ids(group._id, 'CREATED_BY', group.creator);
+          graphModel.relate_ids(group.creator, 'FOLLOW', group._id);
+          graphModel.relate_ids(group.creator, 'GROUP_ADMIN', group._id);
           graphModel.relate_ids(group._id, 'FOLLOW', group.entity.business);
-          touch(group.creator._id, group._id);
+          touch(group.creator, group._id);
           graphModel.relate_ids(group.entity.business, 'DEFAULT_GROUP', group._id, function (err) {
             if (err) return callback(err);
             return callback(null, group);

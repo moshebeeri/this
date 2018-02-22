@@ -98,6 +98,8 @@ TODO: This should be more affective
 };
 
 exports.createAndAssign = function (userId, data, callback) {
+  console.log(JSON.stringify(userId));
+  console.log(JSON.stringify(data));
   if (!data.assignment || !data.type || !userId)
     return callback(new Error('invalid data'));
   allocate_one(userId, function (err, qrcode) {
