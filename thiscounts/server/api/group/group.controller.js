@@ -143,23 +143,27 @@ exports.create = function (req, res) {
         group: group._id
       }
     }, function (err, qrcode) {
+      console.log(`1) Creates a new group ${JSON.stringify(qrcode)}`);
       group.qrcode = qrcode;
-      group.save();
-      graphModel.reflect(group, to_graph(group), function (err) {
-        if (err) {
-          return handleError(res, err);
-        }
-        graphModel.relate_ids(group._id, 'CREATED_BY', req.user._id);
-        graphModel.relate_ids(req.user._id, 'FOLLOW', group._id);
-        graphModel.relate_ids(req.user._id, 'GROUP_ADMIN', group._id);
-        if (group.entity_type === 'BUSINESS' && utils.defined(group.entity.business)) {
-          graphModel.relate_ids(group._id, 'FOLLOW', group.entity.business);
-          graphModel.relate_ids(group.entity.business, 'BUSINESS_GROUP', group._id);
-          notifyOnAction(group);
-        }
-        group_activity(group, 'create');
+      group.save((err, group)=>{
+        console.log(`2) Creates a new group ${JSON.stringify(qrcode)}`);
+        graphModel.reflect(group, to_graph(group), function (err) {
+          if (err) {
+            return handleError(res, err);
+          }
+          graphModel.relate_ids(group._id, 'CREATED_BY', req.user._id);
+          graphModel.relate_ids(req.user._id, 'FOLLOW', group._id);
+          graphModel.relate_ids(req.user._id, 'GROUP_ADMIN', group._id);
+          touch(group.creator._id, group._id);
+          if (group.entity_type === 'BUSINESS' && utils.defined(group.entity.business)) {
+            graphModel.relate_ids(group._id, 'FOLLOW', group.entity.business);
+            graphModel.relate_ids(group.entity.business, 'BUSINESS_GROUP', group._id);
+            notifyOnAction(group);
+          }
+          group_activity(group, 'create');
+        });
+        return res.status(201).json(group);
       });
-      return res.status(201).json(group);
     });
   });
 };
@@ -192,6 +196,7 @@ exports.create_business_default_group = function (group, callback) {
           graphModel.relate_ids(group.creator._id, 'FOLLOW', group._id);
           graphModel.relate_ids(group.creator._id, 'GROUP_ADMIN', group._id);
           graphModel.relate_ids(group._id, 'FOLLOW', group.entity.business);
+          touch(group.creator._id, group._id);
           graphModel.relate_ids(group.entity.business, 'DEFAULT_GROUP', group._id, function (err) {
             if (err) return callback(err);
             return callback(null, group);
@@ -282,9 +287,14 @@ exports.business_candidates = function (req, res) {
   });
 };
 
+function touch(userId, groupId, callback){
+  let query = `match (u:user{_id:'${userId}'})-[r:FOLLOW]->(g:group{_id:'${groupId}'}) set r.timestamp=timestamp()`;
+  graphModel.query(query, callback? callback : ()=>{});
+
+}
+
 exports.touch = function (req, res) {
-  let query = `match (u:user{_id:'${req.user._id}'})-[r:FOLLOW]->(g:group{_id:'${req.params.group_id}'}) set r.timestamp=timestamp()`;
-  graphModel.query(query, function (err) {
+  touch(req.user._id, req.params.group_id, function (err) {
     if (err) console.error(err.message);
   });
   return res.status(200).send();
