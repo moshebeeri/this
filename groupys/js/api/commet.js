@@ -99,11 +99,40 @@ class CommentApi {
         });
     }
 
+    getFeedComments(entities, token, id, direction) {
+        return new Promise(async (resolve, reject) => {
+            try {
+                let from = new Date();
+                let request = {};
+                request.entities = entities;
+                const response = await fetch(`${server_host}/api/comments/find/scroll/`  + id + '/' + direction, {
+                    method: 'POST',
+                    headers: {
+                        'Accept': 'application/json, text/plain, */*',
+                        'Content-Type': 'application/json;charset=utf-8',
+                        'Authorization': 'Bearer ' + token
+                    },
+                    body: JSON.stringify(request)
+                })
+                if (response.status === '401' || response.status === 401) {
+                    reject(errors.UN_AUTHOTIZED_ACCESS);
+                    return;
+                }
+                timer.logTime(from, new Date(), 'comments', 'api/comments/group/chat/');
+                let responseData = await response.json();
+                resolve(responseData);
+            }
+            catch (error) {
+                reject(errors.NETWORK_ERROR);
+            }
+        });
+    }
+
     getGroupComments(group, token, id, direction) {
         return new Promise(async (resolve, reject) => {
             try {
                 let from = new Date();
-                const response = await fetch(`${server_host}/api/comments//group/chat/scroll/` + group._id + '/' + id + '/' + direction, {
+                const response = await fetch(`${server_host}/api/comments/group/chat/scroll/` + group._id + '/' + id + '/' + direction, {
                     method: 'POST',
                     headers: {
                         'Accept': 'application/json, text/plain, */*',
