@@ -25,11 +25,15 @@ function initNeo4j() {
       else console.log("SocialType " + JSON.stringify(obj) + " created");
     });
   });
+
   // create indexes
   db.index.createIfNone('activity', '_id', function(err, index) {
     console.log(index);
   });
   db.index.createIfNone('brand', '_id', function(err, index) {
+    console.log(index);
+  });
+  db.index.createIfNone('barcode', 'code', function(err, index) {
     console.log(index);
   });
   db.index.createIfNone('business', '_id', function(err, index) {
@@ -47,6 +51,12 @@ function initNeo4j() {
   db.index.createIfNone('category', '_id', function(err, index) {
     console.log(index);
   });
+  db.index.createIfNone('comment', '_id', function(err, index) {
+    console.log(index);
+  });
+  db.index.createIfNone('SavedInstance', '_id', function(err, index) {
+    console.log(index);
+  });
   db.index.createIfNone('feed', '_id', function(err, index) {
     console.log(index);
   });
@@ -60,6 +70,9 @@ function initNeo4j() {
     console.log(index);
   });
   db.index.createIfNone('phonebook', '_id', function(err, index) {
+    console.log(index);
+  });
+  db.index.createIfNone('post', '_id', function(err, index) {
     console.log(index);
   });
   db.index.createIfNone('product', '_id', function(err, index) {
