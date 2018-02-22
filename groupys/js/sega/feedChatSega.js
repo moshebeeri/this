@@ -21,8 +21,9 @@ function* backgroundTask(entities, token, lastChatId, generalId) {
             if(id !== 0){
                 let response = yield call(commentsApi.getFeedComments, entities, token, id, "up");
                 if (response.length > 0) {
-                    yield* updateChatTop(response, generalId);
                     id = response[response.length - 1]._id;
+                    yield* updateChatTop(response, generalId);
+
                 }
             }
 

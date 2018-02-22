@@ -9,10 +9,10 @@ import * as groupAction from "../../../actions/groups";
 import InstanceComment from "./instancesComment";
 import {getFeeds} from "../../../selectors/groupFeedsSelector";
 import * as commentAction from "../../../actions/commentsGroup";
+import * as instanceGroupCommentsAction from "../../../actions/instanceGroupComments"
 import strings from "../../../i18n/i18n"
 import {ScrolTabView} from '../../../ui/index'
 import GroupFeedComponent from './groupsFeeds'
-import Tasks from '../../../tasks/tasks'
 
 class GroupFeed extends Component {
     static navigationOptions = ({navigation}) => ({
@@ -39,10 +39,12 @@ class GroupFeed extends Component {
             this.props.actions.setFeeds(group, feeds[group._id]);
         }
         this.props.actions.clearUnreadPosts(group);
+        this.props.instanceGroupCommentsAction.stopListenForChat();
     }
 
     handleBack() {
-        this.props.commentGroupAction.stopListenForChat()
+        this.props.commentGroupAction.stopListenForChat();
+        this.props.instanceGroupCommentsAction.stopListenForChat();
     }
 
     handlePick(emoji) {
@@ -151,7 +153,8 @@ export default connect(
     }),
     (dispatch) => ({
         actions: bindActionCreators(groupAction, dispatch),
-        commentGroupAction: bindActionCreators(commentAction, dispatch)
+        commentGroupAction: bindActionCreators(commentAction, dispatch),
+        instanceGroupCommentsAction: bindActionCreators(instanceGroupCommentsAction, dispatch)
     })
 )(GroupFeed);
 

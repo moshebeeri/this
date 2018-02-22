@@ -154,17 +154,21 @@ class CommentApi {
         });
     }
 
-    getInstanceGroupComments(group, instance, size, token) {
+    getInstanceGroupComments(group, instance,token, id,direction) {
         return new Promise(async (resolve, reject) => {
             try {
                 let from = new Date();
+                let instanceId = instance._id;
+                if(!instanceId){
+                    instanceId = instance.id;
+                }
                 let request = {
                     entities: [
-                        {group: group},
-                        {instance: instance},
+                        {group: group._id},
+                        {instance: instanceId},
                     ]
                 };
-                const response = await fetch(`${server_host}/api/comments/find/` + size + '/' + 10, {
+                const response = await fetch(`${server_host}/api/comments/find/scroll/`  + id + '/' + direction, {
                     method: 'POST',
                     headers: {
                         'Accept': 'application/json, text/plain, */*',
@@ -178,7 +182,7 @@ class CommentApi {
                     return;
                 }
                 let responseData = await response.json();
-                timer.logTime(from, new Date(), 'comments', '/skip/limit');
+                timer.logTime(from, new Date(), 'comments', 'find/scroll');
                 resolve(responseData);
             }
             catch (error) {

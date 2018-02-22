@@ -37,6 +37,7 @@ import * as businessActions from "../../actions/business";
 import * as myPromotionsActions from "../../actions/myPromotions";
 import * as groupsActions from "../../actions/groups";
 import * as notificationsActions from "../../actions/notifications";
+import * as instanceGroupCommentsAction from "../../actions/instanceGroupComments"
 import {createSelector} from "reselect";
 import {NavigationActions} from "react-navigation";
 import '../../conf/global';
@@ -190,8 +191,9 @@ class ApplicationManager extends Component {
     }
 
     onChangeTab(tab) {
-        const {notificationAction, myPromotionsAction, feedAction, groupsActions} = this.props;
+        const {notificationAction, myPromotionsAction, feedAction, groupsActions,instanceGroupCommentsAction} = this.props;
         groupsActions.stopListenForChat();
+        instanceGroupCommentsAction.stopListenForChat();
         feedAction.stopMainFeedsListener();
         if (tab.i === 0) {
             if (I18nManager.isRTL && (Platform.OS === 'android')) {
@@ -479,6 +481,7 @@ export default connect(
         notificationAction: bindActionCreators(notificationsActions, dispatch),
         myPromotionsAction: bindActionCreators(myPromotionsActions, dispatch),
         feedAction: bindActionCreators(feedAction, dispatch),
+        instanceGroupCommentsAction: bindActionCreators(instanceGroupCommentsAction, dispatch)
     })
 )(ApplicationManager);
 
