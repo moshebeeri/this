@@ -78,6 +78,11 @@ class GroupFeedHeader extends Component {
         this.props.navigation.navigate("AddGroups", {group: group});
     }
 
+    viewGroup() {
+        let group = this.props.item;
+        this.props.navigation.navigate("AddGroups", {group: group,view:true});
+    }
+
     inviteUser(users) {
         if (users) {
             let groupId = this.props.item._id;
@@ -132,14 +137,6 @@ class GroupFeedHeader extends Component {
             };
         }
         let group = this.props.item;
-        let image = <Thumbnail square source={require('../../../../images/client_1.png')}/>
-        if (this.props.item.pictures && this.props.item.pictures.length > 0) {
-            image = <Thumbnail square source={{uri: this.props.item.pictures[0].pictures[3]}}/>
-        } else {
-            if (group.entity && group.entity.business && group.entity.business.pictures && group.entity.business.pictures[0]) {
-                image = <Thumbnail square source={{uri: group.entity.business.pictures[0].pictures[3]}}/>
-            }
-        }
         let groupInvite = undefined;
         let addPromotionMenu = undefined;
         if (group.role && (group.role === "owner" || group.role === "OWNS" || group.role === "Admin" || group.role === "Manager"  )) {
@@ -173,7 +170,7 @@ class GroupFeedHeader extends Component {
                 </Button>
             </View>
             <View style={{flex: 10}}>
-                <GroupHeader noColor group={group}/>
+                <GroupHeader onPressAction={this.viewGroup.bind(this)} enablePress noColor group={group}/>
             </View>
             <View style={styles.group_actions}>
                 <TouchableOpacity onPress={() => this.showScanner()}

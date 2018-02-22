@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import {I18nManager, Text, View} from 'react-native';
+import {I18nManager, Text, View,TouchableOpacity} from 'react-native';
 import {Button, Thumbnail} from 'native-base';
 import styles from './styles'
 import strings from "../../i18n/i18n"
@@ -72,12 +72,17 @@ export default class GroupHeader extends Component {
     }
 
     render() {
-        const {group, noColor} = this.props;
+        const {group, noColor, enablePress, onPressAction} = this.props;
         let containerStyle = {backgroundColor: 'white', marginTop: 10, marginBottom: 10, marginLeft: 20};
         if (noColor) {
             containerStyle = {};
         }
-        return <View style={containerStyle}>
+        let disabled  = true;
+        if(enablePress){
+            disabled = false;
+        }
+
+        return <TouchableOpacity onPress={onPressAction} disabled={disabled} style={containerStyle}>
             <View style={[styles.groupHeader, {width: StyleUtils.getWidth()}]}>
                 <View style={styles.groupImage}>
                     {this.createImage(group)}
@@ -97,7 +102,7 @@ export default class GroupHeader extends Component {
                 </View>
             </View>
 
-        </View>
+        </TouchableOpacity>
     }
 }
 
