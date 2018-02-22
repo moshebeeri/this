@@ -57,11 +57,12 @@ function* chatScrollUp(action) {
             }
         }
         if (response.length > 0) {
+            const chatFeeds = response.slice(0);
 
-            if(_.isEmpty(action.comments)){
-                yield* restartListenForChat(action.group, action.instance,response,action.token)
-            }
             yield* updateChatScrollUp(response, action.group, action.instance);
+            if(_.isEmpty(action.comments)){
+                yield* restartListenForChat(action.group, action.instance,chatFeeds,action.token)
+            }
         }
     } catch (error) {
         console.log("failed scroll down");

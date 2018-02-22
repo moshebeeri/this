@@ -103,7 +103,7 @@ export function startListenForChat(group, instance) {
                 token: token,
                 group: group,
                 instance: instance,
-                lastChatId: entitiesComents[0]
+                lastChatId: entitiesComents[entitiesComents.length -1]
             })
         }
         else {
