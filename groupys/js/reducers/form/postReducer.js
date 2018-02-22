@@ -75,7 +75,7 @@ export default function postForm(state = initialState, action) {
                 return state;
             }
         case actions.FEED_UPDATE_SOCIAL_STATE:
-            if (currentState.posts[action.id]) {
+            if (action.social_state && currentState.posts[action.id]) {
                 currentState.posts[action.id].social_state = action.social_state;
                 return currentState;
             } else {

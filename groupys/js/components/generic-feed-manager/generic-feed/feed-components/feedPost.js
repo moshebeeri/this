@@ -50,12 +50,14 @@ export default class FeedPost extends Component {
     }
 
     visited(visible) {
-        const {item} = this.props;
+        const {item,actions} = this.props;
         if (this.refs[item.id]) {
             this.refs[item.id].visible(visible);
         }
         if (visible) {
-            PageRefresher.visitedFeedItem(item);
+            if (visible && actions && actions.setSocialState) {
+                actions.setSocialState(item);
+            }
         }
         this.setState({
             visible: visible

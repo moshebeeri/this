@@ -66,20 +66,7 @@ class PageRefresher {
         }
     }
 
-    addGroupsFeed(groupsId) {
-        if (!visitedList.includes('feeds' + groupsId,)) {
-            visitedList.push('feeds' + groupsId);
-        }
-    }
 
-    upSertGroupsChat(groupsId) {
-        if (!visitedList.includes('chat' + groupsId,)) {
-         //   pageSync.createPage('chat' + groupsId, pageSync.createStdAverageRefresh('chat' + groupsId, 5, 60000), this.updateGroupChat.bind(this, groupsId));
-            visitedList.push('chat' + groupsId);
-        } else {
-          //  this.visitedGroupChat(groupsId);
-        }
-    }
 
     visitedPromotions(businessId) {
         if (visitedList.includes('promotion_' + businessId,)) {
@@ -94,20 +81,7 @@ class PageRefresher {
         }
     }
 
-    updateGroupFeeds(groupId) {
-        let token = store.getState().authentication.token;
-        if (token) {
-            if (store.getState().groups.groupFeedOrder && store.getState().groups.groupFeedOrder[groupId]
-                && store.getState().groups.groupFeedOrder[groupId].length > 0) {
-                let user = store.getState().user.user;
-                groups.fetchTopList(store.getState().groups.groupFeedOrder[groupId][0], token, {_id: groupId}, store.dispatch, user);
-            }
-        }
-    }
 
-    updateGroupChat(groupId) {
-
-    }
 
     visitedFeed() {
         //pageSync.visited('feed')
@@ -117,13 +91,6 @@ class PageRefresher {
         pageSync.visited('groups')
     }
 
-    visitedGroupFeeds(groupId) {
-       // pageSync.visited('feeds' + groupId)
-    }
-
-    visitedGroupChat(groupId) {
-      //  pageSync.visited('chat' + groupId)
-    }
 
     createFeedSocialState(id) {
         if (!visitedList.includes('feed' + id,)) {
@@ -179,9 +146,7 @@ class PageRefresher {
 
     updateSocialState(id) {
         let token = store.getState().authentication.token;
-        if (token) {
-            feedAction.refreshFeedSocialState(store.getState(), store.dispatch, token, id);
-        }
+
     }
 }
 

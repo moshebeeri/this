@@ -2,11 +2,10 @@
  * Created by roilandshut on 25/04/2017.
  */
 import Timer from "./LogTimer";
+import * as errors from './Errors'
 
 let timer = new Timer();
-import MainFeedReduxComperator from "../reduxComperators/MainFeedComperator"
-let feedComperator = new MainFeedReduxComperator();
-import * as errors from './Errors'
+
 class FeedApi {
     timeout(ms, promise) {
         return new Promise(function(resolve, reject) {
