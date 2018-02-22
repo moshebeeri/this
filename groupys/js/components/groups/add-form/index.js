@@ -4,7 +4,7 @@ import {connect} from 'react-redux';
 import styles from './styles'
 import {getMyBusinesses} from '../../../selectors/businessesSelector'
 import SelectUsersComponent from '../selectUser';
-import {FormHeader, ImagePicker, SelectButton, SimplePicker, Spinner, TextInput, ThisText} from '../../../ui/index';
+import {FormHeader, ImagePicker, SelectButton, SimplePicker, Spinner, TextInput, ThisText,ImageController} from '../../../ui/index';
 import * as groupsAction from "../../../actions/groups";
 import * as businessesAction from "../../../actions/business";
 import * as userAction from "../../../actions/user";
@@ -229,17 +229,17 @@ class AddGroup extends Component {
         if (this.state.image || this.state.currentImage) {
             let coverImage = undefined;
             if (this.state.image) {
-                coverImage = <Image
+                coverImage = <ImageController
                     style={{width: width - 10, height: 210, borderWidth: 1, borderColor: 'white'}}
                     source={{uri: this.state.image.path}}
                 >
-                </Image>
+                </ImageController>
             } else {
-                coverImage = <Image
+                coverImage = <ImageController
                     style={{width: width - 10, height: 210, borderWidth: 1, borderColor: 'white'}}
                     source={{uri: this.state.currentImage}}
                 >
-                </Image>
+                </ImageController>
             }
             return <View style={styles.product_upper_container}>
 
