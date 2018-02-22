@@ -133,6 +133,9 @@ let PromotionSchemaObject = {
       'GIVE_TO_FRIEND'
     ]
   },
+  beneficial: {
+
+  },
   //v1
   percent: {
     variation: {type: String, enum: Variations},
