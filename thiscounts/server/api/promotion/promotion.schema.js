@@ -133,8 +133,13 @@ let PromotionSchemaObject = {
       'GIVE_TO_FRIEND'
     ]
   },
+  //applies only in other business case.
   beneficial: {
-
+    approver: {type: Schema.ObjectId, ref: 'User'},
+    business: {type: Schema.ObjectId, ref: 'Business'},
+    shopping_chain: {type: Schema.ObjectId, ref: 'ShoppingChain'},
+    mall: {type: Schema.ObjectId, ref: 'Mall'},
+    approved: {type: Boolean, default: false}
   },
   //v1
   percent: {

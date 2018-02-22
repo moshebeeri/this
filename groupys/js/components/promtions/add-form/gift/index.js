@@ -69,6 +69,8 @@ export default class GiftComponent extends Component {
         })
     }
 
+
+
     searchBusinessByPermittedUser() {
         let selectOtherBusiness = this.selectOtherBusiness.bind(this);
         this.props.navigation.navigate("SearchBusinessByPermittedUser", {

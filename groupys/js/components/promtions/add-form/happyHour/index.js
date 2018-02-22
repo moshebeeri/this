@@ -116,7 +116,7 @@ export default class HappyHourComponent extends Component {
                     days: days
                 }
             },
-        })
+        });
         this.setState({
             numberOfHours: value
         });
@@ -171,7 +171,6 @@ export default class HappyHourComponent extends Component {
         }
         return <View>
             <View style={[styles.textLayout, {width: StyleUtils.getWidth() - 15}]}>
-
                 <ThisText style={{color: '#FA8559', marginLeft: 8, marginRight: 8}}>Happy Hour</ThisText>
             </View>
             <View style={{flexDirection: 'row', justifyContent: 'center', alignItems: 'center'}}>
@@ -179,7 +178,6 @@ export default class HappyHourComponent extends Component {
                                                                        selectedValue={this.props.state.product}
                                                                        title={strings.SelectProduct}
                                                                        action={this.showProducts.bind(this, true)}/></View>
-
                 <View style={styles.inputPercentComponent}>
                     <TextInput field={strings.Pay} value={pay}
                                returnKeyType='next' ref="Pay $" refNext="2"
@@ -187,10 +185,8 @@ export default class HappyHourComponent extends Component {
                                onSubmitEditing={this.focusNextField.bind(this, "off")}
                                onChangeText={(value) => this.setPay(value)} isMandatory={true}/>
                 </View>
-
             </View>
             <ProductPreview product={this.props.state.product} />
-
             <View style={{
                 flexDirection: 'row',
                 marginTop: 5,
@@ -198,13 +194,11 @@ export default class HappyHourComponent extends Component {
                 justifyContent: 'center',
                 alignItems: 'center'
             }}>
-
                 <View style={styles.inputPercentComponent}>
                     <TimePicker field={strings.FromHour}
                                 validateContent={this.validateFrom.bind(this)}
                                 returnKeyType='next' ref="From Hour" refNext="3"
                                 onChangeDate={(value) => this.setFrom(value)} isMandatory={true}/>
-
                 </View>
                 <View style={styles.inputPercentComponent}>
                     <TextInput field={strings.NumberOfHours} value={this.state.numberOfHours}
@@ -213,22 +207,15 @@ export default class HappyHourComponent extends Component {
                                validateContent={FormUtils.validateHappyHour}
                                onSubmitEditing={this.done.bind(this)}
                                onChangeText={(value) => this.setUntil(value)} isMandatory={true}/>
-
                 </View>
             </View>
             <View style={{flexDirection: 'row', justifyContent: 'center', alignItems: 'center'}}>
-
-
                 <View style={styles.inputPercentComponent}>
                     <WeekDaysPicker field={strings.DaysOfWeek}
                                     ref="Days of Week" refNext="Days of Week"
                                     onChangeSelected={(value) => this.setDays(value)} isMandatory={true}/>
                 </View>
-
-
             </View>
-
-
         </View>
     }
 }

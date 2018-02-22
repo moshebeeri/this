@@ -312,7 +312,7 @@ class AddPromotion extends Component {
             discount_on: '',
             distribution: '',
             show_save: false,
-        })
+        });
         if (this.props.navigation.state.params.group) {
             this.setState({
                 distribution: 'GROUP',
