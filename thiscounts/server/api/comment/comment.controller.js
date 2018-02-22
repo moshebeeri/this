@@ -141,7 +141,7 @@ exports.scroll = function(req, res) {
     })
 };
 
-exports.find_scroll = function(req, res) {
+  exports.find_scroll = function(req, res) {
   const page_size = 50;
   const from_id = req.params.from;
   const scroll = req.params.scroll;
@@ -159,9 +159,9 @@ exports.find_scroll = function(req, res) {
   for(let i=0; i<entities.length; i++) {
     query += `->(e${i}{_id:'${entities[i]}'})-[:COMMENTED]`;
   }
-  query += `->(c:comment) where ${condition} return c._id as _id `;
+  query += `->(c:comment) where ${condition} return distinct c._id as _id `;
   graphModel.query_objects(Comment, query,
-    `ORDER BY e${entities.length-1}._id DESC`,
+    `ORDER BY c._id DESC`,
     0, page_size, function (err, comments) {
       if(err) { return handleError(res, err); }
       return res.status(200).json(comments);
