@@ -43,7 +43,7 @@ class GroupFeed extends Component {
     }
 
     handleBack() {
-        this.props.commentGroupAction.stopListenForChat();
+        this.props.actions.stopListenForChat();
         this.props.instanceGroupCommentsAction.stopListenForChat();
     }
 
@@ -68,7 +68,6 @@ class GroupFeed extends Component {
     changeTab(tab) {
         const {navigation} = this.props;
         const group = navigation.state.params.group;
-
         this.setState({
             showChat: !this.state.showChat
         })

@@ -1,12 +1,12 @@
 import React, {Component} from 'react';
-import {I18nManager, Platform, Text, TouchableOpacity, View} from 'react-native';
+import {I18nManager, Platform, Text, TouchableOpacity, View,} from 'react-native';
 import {Icon, Item, Picker, Spinner} from 'native-base';
 import ModalDropdown from 'react-native-modal-dropdown';
 import Icon3 from 'react-native-vector-icons/EvilIcons';
 import styles from './styles'
 import strings from "../../i18n/i18n";
 import StyleUtils from "../../utils/styleUtils";
-import {ThisText} from '../../ui/index';
+import {ThisText,TextInput} from '../../ui/index';
 
 export default class SimplePicker extends Component {
     constructor(props) {
@@ -129,10 +129,8 @@ export default class SimplePicker extends Component {
                 {isMandatory && <Icon style={{margin: 5, color: 'red', fontSize: 12}} name='star'/>}
             </View>
 
-            {disable ? <View style={[pickerStyle, {
-                    backgroundColor: '#cccccc',
-                    width: StyleUtils.getWidth() - 20
-                }]}><ThisText>{selectValue}</ThisText></View> :
+            {disable ?   <View style={[styles.pickerTitleContainer, {alignItems:'center',backgroundColor:'#cccccc',height:40,width: StyleUtils.getWidth() - 15}]}>
+                    <ThisText style={styles.pickerTextStyle}>{selectedValue}</ThisText></View> :
                 <Picker
                     iosHeader={itemTitle}
                     mode="dropdown"

@@ -115,14 +115,10 @@ export function updateUser(newUser) {
     }
 }
 
-export function* upSertUserSuccsess(response, newUser) {
-    yield put({
-        type: actions.USERS_UPLOAD_PIC,
-        item: {item: newUser, itemResponse: response}
-    });
+export function* upSertUserSuccsess( newUser) {
     yield put({
         type: actions.SET_USER,
-        user: response
+        user: newUser
     });
 }
 
