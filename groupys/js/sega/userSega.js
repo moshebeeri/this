@@ -13,10 +13,9 @@ function* saveUserRequest() {
         if(newUser.image){
             ImageApi.uploadImage(token,newUser.image,newUser._id);
         }
-        const response = yield call(userApi.getUserById, token, newUser._id);
 
 
-        yield* upSertUserSuccsess(response,newUser)
+        yield* upSertUserSuccsess(newUser)
     } catch (error) {
 
     }

@@ -88,7 +88,7 @@ export default class GenericFeedManager extends Component {
 
 
     render() {
-        const {loadingDone, showTopLoader, feeds, update, setNextFeeds, color,nextBulkLoad} = this.props;
+        const {loadingDone, showTopLoader, feeds, update, setNextFeeds, color,nextBulkLoad,initialNumToRender} = this.props;
         const topLoader = showTopLoader ? <View><Spinner color='red'/></View> : null;
         if (!loadingDone) {
             return <View><Spinner color='red'/></View>;
@@ -112,7 +112,7 @@ export default class GenericFeedManager extends Component {
                         renderItem={this.renderItem.bind(this)}
                         extraData={update}
                         keyExtractor={(item, index) => index}
-
+                        initialNumToRender={5}
 
                     />
                     {nextBulkLoad &&  <View style={ {bottom:0,width:width,backgroundColor:'#cccccc',position:'absolute'}}>
@@ -177,7 +177,7 @@ export default class GenericFeedManager extends Component {
                     onEndReached={this.onEndReach.bind(this)}
                     renderItem={this.renderItem.bind(this)}
                     extraData={update}
-
+                    initialNumToRender={5}
                 />
 
                 {nextBulkLoad && !showTopLoader &&  <View style={ {bottom:0,width:width,backgroundColor:'#cccccc',position:'absolute'}}>

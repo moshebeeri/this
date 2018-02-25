@@ -105,7 +105,7 @@ class ProfileDrawer extends Component {
                 }}>
                     <TouchableOpacity onPress={() => this.showUserProfile()}
                                       style={{marginLeft:15,width: 40, height: 30,flexDirection: 'column', alignItems: 'center'}} regular>
-                        <Image style={{tintColor: 'white', width: 30, height: 30}}
+                        <ImageController style={{tintColor: 'white', width: 30, height: 30}}
                                source={settings}/>
 
 

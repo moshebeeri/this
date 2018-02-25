@@ -79,12 +79,13 @@ class instancesComment extends Component {
 
     render() {
         const {group, comments, navigation, actions, update, loadingDone, showTopLoader, allState} = this.props;
-        console.log('group comments rendered')
+        console.log('group comments rendered');
         return <View style={{flex: 1}}>
             <View style={{flex: 1}}>
                 <GenericFeedManager feeds={comments[group._id]}
                                     scrolToEnd
                                     entity={group}
+                                    initialNumToRender={7}
                                     navigation={navigation}
                                     setNextFeeds={this.setNextFeed.bind(this)}
                                     actions={actions}
