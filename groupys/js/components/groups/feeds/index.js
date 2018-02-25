@@ -88,6 +88,7 @@ class GroupFeed extends Component {
     }
 
     render() {
+        console.log('rendering main group');
         let initPage = 0;
         if (this.props.navigation.state.params.chat) {
             initPage = 1;
