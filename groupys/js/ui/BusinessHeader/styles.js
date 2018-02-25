@@ -26,7 +26,7 @@ module.exports = {
         alignSelf:  'flex-start' ,
         marginLeft: I18nManager.isRTL ? 5 : 0,
         marginRight: I18nManager.isRTL ? 0 : 5,
-        fontSize: 16,
+        fontSize: 18,
     },
     businessColorNameText: {
         fontFamily: 'Roboto-Regular',
@@ -35,14 +35,14 @@ module.exports = {
         alignSelf:  'flex-start' ,
         marginLeft:  5 ,
         //marginRight: I18nManager.isRTL ? 0 : 5,
-        fontSize: 16,
+        fontSize: 18,
     },
     businessAddressText: {
         fontFamily: 'Roboto-Regular',
         marginLeft: 0 ,
       //  marginRight: I18nManager.isRTL ? 0 : 5,
         alignSelf:'flex-start',
-        color: 'gray',
+        color: '#a5a5a5',
         fontSize: 16
     },
 };

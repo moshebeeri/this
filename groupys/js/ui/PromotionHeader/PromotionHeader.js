@@ -57,7 +57,7 @@ export default class PromotionHeader extends Component {
             case "PERCENT":
                 return <View style={[promotionHeader, {width: StyleUtils.getWidth()}]}>
                     <View style={promotionValue}>
-                        <ThisText style={titleValueStyle}>{titleValue}%</ThisText>
+                        <Text style={titleValueStyle}>{titleValue}%</Text>
 
                     </View>
                     <View style={promotiontDescription}>

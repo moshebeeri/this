@@ -48,7 +48,17 @@ export default class PromotionSeperator extends Component {
                 <View style={styles.roundView}/>
                 <View style={styles.roundView}/>
                 <View style={styles.roundView}/>
-            </View>
+                <View style={styles.roundView}/>
+                <View style={styles.roundView}/>
+                <View style={styles.roundView}/>
+                <View style={styles.roundView}/>
+                <View style={styles.roundView}/>
+                <View style={styles.roundView}/>
+                <View style={styles.roundView}/>
+                <View style={styles.roundView}/>
+                <View style={styles.roundView}/>
+
+        </View>
 
         </View>
     }
