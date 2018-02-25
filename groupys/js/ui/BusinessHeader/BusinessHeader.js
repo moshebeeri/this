@@ -27,7 +27,7 @@ class BusinessHeader extends Component {
         navigation.navigate("businessAccount", {businesses: business});
     }
 
-    onBordingPromotion() {
+    onBoardingPromotion() {
         const {navigation, business} = this.props;
         navigation.navigate("addPromotions", {business: business, onBoardType: 'BUSINESS'});
     }
@@ -102,7 +102,6 @@ class BusinessHeader extends Component {
                 <Icon2 style={{paddingLeft: 10, fontSize: 15}} name="options"/>
             </MenuTrigger>
             <MenuOptions>
-
                 <MenuOption onSelect={this.unFollowBusiness.bind(this)}>
                     <ThisText>{strings.UnFollow}</ThisText>
                 </MenuOption>
@@ -110,7 +109,7 @@ class BusinessHeader extends Component {
                     <ThisText>{strings.reportActivity}</ThisText>
                 </MenuOption>}
             </MenuOptions>
-        </Menu>
+        </Menu>;
         if (businessView) {
             menuAction = <Menu>
                 <MenuTrigger placement="right">
@@ -124,7 +123,7 @@ class BusinessHeader extends Component {
                     <MenuOption onSelect={this.showBusinessAccountDetails.bind(this)}>
                         <ThisText>{strings.accountDetail}</ThisText>
                     </MenuOption>
-                    <MenuOption onSelect={this.onBordingPromotion.bind(this)}>
+                    <MenuOption onSelect={this.onBoardingPromotion.bind(this)}>
                         <ThisText>{strings.OnBoardingPromotions}</ThisText>
                     </MenuOption>
                 </MenuOptions>
@@ -139,19 +138,31 @@ class BusinessHeader extends Component {
                 marginRight: 10
             }} onPress={() => this.back()}>
                 <Icon active color={"#2db6c8"} size={30} name={arrowName}/>
-
             </TouchableOpacity>
         }
+        return  <View>
+            {!this.props.noProfile ?
+                <TouchableOpacity style={{margin: 7}} onPress={this.showBusiness.bind(this)}>
+                    {this.headerInternals(headerContainerStyle, back, nameTextStyle, businessName, categoryTitle, showEdit, editButton, hideMenu, menuAction)}
+                </TouchableOpacity>
+                :
+                <View>
+                    {this.headerInternals(headerContainerStyle, back, nameTextStyle, businessName, categoryTitle, showEdit, editButton, hideMenu, menuAction)}
+                </View>
+            }
+            </View>
+    }
+
+    headerInternals(headerContainerStyle, back, nameTextStyle, businessName, categoryTitle, showEdit, editButton, hideMenu, menuAction) {
         return <View style={[headerContainerStyle, {width: StyleUtils.getWidth()}]}>
             <View style={{alignItems: 'center', justifyContent: 'center'}}>
                 {back}
             </View>
-
-
             {this.createBusinessLog()}
             <View style={{flex: 1, flexDirection: 'column', justifyContent: 'center'}}>
-                <ThisText style={nameTextStyle} note>{businessName}</ThisText>{categoryTitle && <ThisText numberOfLines={1} style={styles.businessAddressText}
-                                        note>{categoryTitle}</ThisText>}
+                <ThisText style={nameTextStyle} note>{businessName}</ThisText>{categoryTitle &&
+            <ThisText numberOfLines={1} style={styles.businessAddressText}
+                      note>{categoryTitle}</ThisText>}
             </View>
             {showEdit && <View style={{flex: 0.2, flexDirection: 'row', alignItems: 'center',}}>
                 {editButton}
@@ -159,7 +170,7 @@ class BusinessHeader extends Component {
             <View style={{marginRight: 10, padding: 5, alignItems: 'flex-start', justifyContent: 'flex-start'}}>
                 {!hideMenu && menuAction}
             </View>
-        </View>
+        </View>;
     }
 }
 
