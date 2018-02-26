@@ -3,13 +3,13 @@
  */
 import {createSelector} from 'reselect'
 
-const getStateGroups = (state) => state.groups
-const getStateComments = (state) => state.comments
+const getStateGroups = (state) => state.groups;
+const getStateComments = (state) => state.comments;
 export const getGroups = createSelector([getStateGroups,getStateComments],
     (groups,comments) => {
         if (!_.isEmpty(groups.groups)) {
             return Object.keys(groups.groups).map(key => {
-                let response = groups.groups[key]
+                let response = groups.groups[key];
                 if(groups.groupFeedsUnread[key]){
                     response.unreadFeeds = groups.groupFeedsUnread[key];
                 }else{
@@ -22,19 +22,11 @@ export const getGroups = createSelector([getStateGroups,getStateComments],
                 else{
                     response.unreadMessages = 0;
                 }
-                response.key = key
+                response.key = key;
                 return response;
             }).sort(function(a, b){
-                let aTouched = a.touched;
-                if(!a.touched){
-                   return -1;
-                }
-                let bTouched = b.touched;
-                if(!b.touched){
-                  return 1;
-                }
-                return bTouched - aTouched  ;
+                return b.touched - a.touched;
             });
         }
-        return new Array();
-    })
+        return [];
+    });
