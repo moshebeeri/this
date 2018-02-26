@@ -144,7 +144,7 @@ export function setGroupQrCode(group) {
         try {
             const token = getState().authentication.token;
             dispatch({
-                type: actions.REST_BUSINESS_QRCODE,
+                type: actions.REST_GROUP_QRCODE,
             });
             let response = await imageApi.getQrCodeImage(group.qrcode, token);
             dispatch({

@@ -36,7 +36,8 @@ class BusinessFollow extends Component {
                 businessAssign ={business}
                 instance={instance}
                 code={state.code}
-                group={group}x
+                group={group}
+                followGroup={state.followGroup}
                 navigation={navigation}
                 {...actions} />
         );

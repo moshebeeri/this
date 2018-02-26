@@ -8,6 +8,7 @@ const initialState = {
     showTopLoader: {},
     lastFeed: {},
     lastFeedTime: {},
+    lastGroupQrcode: '',
     saving: false
 };
 import {REHYDRATE} from "redux-persist/constants";
@@ -32,10 +33,10 @@ export default function group(state = initialState, action) {
             return imutableState;
         case actions.UPSERT_GROUP:
             action.item.forEach(eventItem => {
-                if(!eventItem.preview){
+                if (!eventItem.preview) {
                     currentGroups[eventItem._id] = eventItem;
-                }else {
-                    if ((eventItem.preview.comment && eventItem.preview.comment.created) ||(eventItem.preview.post && eventItem.preview.post.created) ||
+                } else {
+                    if ((eventItem.preview.comment && eventItem.preview.comment.created) || (eventItem.preview.post && eventItem.preview.post.created) ||
                         (eventItem.preview.instance_activity && eventItem.preview.instance_activity.action)) {
                         currentGroups[eventItem._id] = eventItem;
                     }
@@ -99,11 +100,16 @@ export default function group(state = initialState, action) {
             imutableState.lastFeed[action.groupId] = action.id;
             imutableState.lastFeedTime[action.groupId] = new Date().getTime();
             return imutableState;
-
         case actions.UPSERT_GROUP_QRCODE:
-            currentGroups[action.group._id].qrcodeSoruce= action.qrcodeSource;
+            currentGroups[action.group._id].qrcodeSoruce = action.qrcodeSource;
+            imutableState.lastGroupQrcode = action.qrcodeSource;
             imutableState.update = !imutableState.update;
             return imutableState;
+        case actions.REST_GROUP_QRCODE:
+            imutableState.lastGroupQrcode = ''
+            imutableState.update = !imutableState.update;
+            return imutableState;
+
         case 'GET_GROUPS_BUSINESS' :
             imutableState['groups' + action.bid] = action.groups;
             return imutableState;
