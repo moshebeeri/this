@@ -2,6 +2,7 @@ import GroupsApi from "../api/groups";
 import FeedApi from "../api/feed";
 import UserApi from "../api/user";
 import PtomotionApi from "../api/promotion";
+import imageApi from "../api/image";
 import ActivityApi from "../api/activity";
 import * as assemblers from "./collectionAssembler";
 import * as actions from "../reducers/reducerActions";
@@ -132,6 +133,28 @@ export function createGroup(group, navigation) {
         } catch (error) {
             handler.handleError(error, dispatch, 'createGroup')
             logger.actionFailed('groupsApi.createGroup')
+        }
+    }
+}
+
+
+
+export function setGroupQrCode(group) {
+    return async function (dispatch, getState) {
+        try {
+            const token = getState().authentication.token;
+            dispatch({
+                type: actions.REST_BUSINESS_QRCODE,
+            });
+            let response = await imageApi.getQrCodeImage(group.qrcode, token);
+            dispatch({
+                type: actions.UPSERT_GROUP_QRCODE,
+                group: group,
+                qrcodeSource: response.qrcode
+            });
+        } catch (error) {
+            handler.handleError(error, dispatch, 'setBusinessQrCode')
+            logger.actionFailed("business_getBusinessQrCodeImage", business);
         }
     }
 }

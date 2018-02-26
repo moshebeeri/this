@@ -5,6 +5,7 @@ import BusinessApi from "../api/business";
 import UserApi from "../api/user";
 import productApi from "../api/product";
 import PricingApi from "../api/pricing";
+import imageApi from "../api/image";
 import PromotionApi from "../api/promotion";
 import * as actions from "../reducers/reducerActions";
 import EntityUtils from "../utils/createEntity";
@@ -76,7 +77,7 @@ async function dispatchFollowByQrcode(dispatch, barcode, token) {
         if (barcode.type && barcode.type === 'QR_CODE') {
             let data = JSON.parse(barcode.data);
             if (data.code) {
-                let response = await businessApi.searchBusinessByCode(data.code, token);
+                let response = await imageApi.getQrCodeImage(data.code, token);
                 if (response && response.assignment && response.assignment.business) {
                     dispatch({type: actions.SEARCH_BUSINESS, businesses: [response.assignment.business]})
                 } else {

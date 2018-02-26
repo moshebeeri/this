@@ -99,6 +99,11 @@ export default function group(state = initialState, action) {
             imutableState.lastFeed[action.groupId] = action.id;
             imutableState.lastFeedTime[action.groupId] = new Date().getTime();
             return imutableState;
+
+        case actions.UPSERT_GROUP_QRCODE:
+            currentGroups[action.group._id].qrcodeSoruce= action.qrcodeSource;
+            imutableState.update = !imutableState.update;
+            return imutableState;
         case 'GET_GROUPS_BUSINESS' :
             imutableState['groups' + action.bid] = action.groups;
             return imutableState;
