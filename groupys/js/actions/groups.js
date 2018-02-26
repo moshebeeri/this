@@ -116,21 +116,17 @@ async function groupTouched(groupId) {
 export function touch(groupId) {
     return function (dispatch, getState) {
         try {
+            const token = getState().authentication.token;
+            groupsApi.touch(groupId, token);
             dispatch({
                 type: actions.GROUP_TOUCHED,
                 groupId: groupId
             });
-        }catch (error) {
-            console.error(error);
-            logger.actionFailed('actions.GROUP_TOUCHED')
-        }
-        try {
-            const token = getState().authentication.token;
-            groupsApi.touch(groupId, token);
         } catch (error) {
             handler.handleError(error, dispatch, 'groupsApi.touch');
             logger.actionFailed('groupsApi.touch')
         }
+
     }
 }
 
