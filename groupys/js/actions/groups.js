@@ -40,7 +40,7 @@ async function getByBusinessId(dispatch, bid, token) {
         let response = await groupsApi.getByBusinessId(bid, token);
         if (response.length > 0) {
             dispatch({
-                type: 'GET_GROUPS_BUSINESS',
+                type: actions.GET_GROUPS_BUSINESS,
                 groups: response,
                 bid: bid
             });
@@ -59,7 +59,7 @@ async function getUserFollowers(dispatch, token) {
             followers: users
         });
     } catch (error) {
-        handler.handleError(error, dispatch, 'userApi.getUserFollowers')
+        handler.handleError(error, dispatch, 'userApi.getUserFollowers');
         logger.actionFailed('userApi.getUserFollowers')
     }
 }
@@ -85,11 +85,11 @@ export function fetchUsersFollowers() {
     }
 }
 
-export function acceptInvatation(group) {
+export function acceptInvitation(group) {
     return async function (dispatch, getState) {
         try {
             const token = getState().authentication.token;
-            await groupsApi.acceptInvatation(group, token);
+            await groupsApi.acceptInvitation(group, token);
             let groups = await groupsApi.getAll(token);
             groups.forEach(function (group) {
                 dispatch({
@@ -98,19 +98,37 @@ export function acceptInvatation(group) {
                 });
             })
         } catch (error) {
-            handler.handleError(error, dispatch, 'groupsApi.acceptInvatation')
-            logger.actionFailed('groupsApi.acceptInvatation')
+            handler.handleError(error, dispatch, 'groupsApi.acceptInvitation');
+            logger.actionFailed('groupsApi.acceptInvitation')
         }
     }
 }
 
-export function touch(groupid) {
+async function groupTouched(groupId) {
+    return async function (dispatch) {
+        dispatch({
+            type: actions.GROUP_TOUCHED,
+            groupId: groupId
+        });
+    };
+}
+
+export function touch(groupId) {
     return function (dispatch, getState) {
         try {
+            dispatch({
+                type: actions.GROUP_TOUCHED,
+                groupId: groupId
+            });
+        }catch (error) {
+            console.error(error);
+            logger.actionFailed('actions.GROUP_TOUCHED')
+        }
+        try {
             const token = getState().authentication.token;
-            groupsApi.touch(groupid, token);
+            groupsApi.touch(groupId, token);
         } catch (error) {
-            handler.handleError(error, dispatch, 'groupsApi.touch')
+            handler.handleError(error, dispatch, 'groupsApi.touch');
             logger.actionFailed('groupsApi.touch')
         }
     }

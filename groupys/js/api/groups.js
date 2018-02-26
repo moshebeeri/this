@@ -142,7 +142,7 @@ class GroupsApi {
         })
     }
 
-    acceptInvatation(group, token) {
+    acceptInvitation(group, token) {
         return new Promise(async (resolve, reject) => {
             try {
                 let from = new Date();

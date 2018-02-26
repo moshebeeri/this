@@ -99,7 +99,7 @@ export default function group(state = initialState, action) {
             imutableState.lastFeed[action.groupId] = action.id;
             imutableState.lastFeedTime[action.groupId] = new Date().getTime();
             return imutableState;
-        case 'GET_GROUPS_BUSINESS' :
+        case actions.GET_GROUPS_BUSINESS :
             imutableState['groups' + action.bid] = action.groups;
             return imutableState;
         case actions.GROUP_SAVING:
@@ -112,6 +112,11 @@ export default function group(state = initialState, action) {
                 ...state,
                 saving: false,
             };
+        case actions.GROUP_TOUCHED:
+            //Object.keys(currentGroups).forEach(group => {if(!group.touched) group.touched = new Date().getTime()});
+            if(currentGroups[action.groupId])
+                currentGroups[action.groupId].touched = new Date().getTime();
+            return imutableState;
         default:
             return state;
     }
