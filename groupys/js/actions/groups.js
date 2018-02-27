@@ -466,7 +466,6 @@ export function listenForChat(group) {
         const groupsChats = getState().comments.groupComments[group._id];
         const user = getState().user.user;
         if (groupsChats) {
-
             let groupChatIds = Object.keys(groupsChats).sort(function (a, b) {
                 if (a < b) {
                     return 1
@@ -481,7 +480,7 @@ export function listenForChat(group) {
                 group: group,
                 token: token,
                 lastChatId: groupChatIds[0],
-                user:user,
+                user: user,
             })
         }
     }
@@ -492,6 +491,25 @@ export function stopListenForChat() {
         dispatch({
             type: types.CANCEL_GROUP_CHAT_LISTENER,
         })
+    }
+}
+
+export function setSocialState(item) {
+    return async function (dispatch, getState) {
+        try {
+            const token = getState().authentication.token;
+            let feedInstance = getState().instances.instances[item.id];
+            dispatch({
+                type: types.FEED_SET_SOCIAL_STATE,
+                token: token,
+                feed: feedInstance,
+                id: item.id
+            });
+            handler.handleSuccses(getState(), dispatch)
+        } catch (error) {
+            handler.handleError(error, dispatch, 'feed-getFeedSocialState')
+            logger.actionFailed('getFeedSocialState')
+        }
     }
 }
 

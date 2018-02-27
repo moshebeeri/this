@@ -6,11 +6,12 @@ import {Button, Icon, Input, Thumbnail} from "native-base";
 import GenericFeedManager from "../../generic-feed-manager/index";
 import styles from "./styles";
 import {bindActionCreators} from "redux";
-import * as commentGroupAction from "../../../actions/instanceGroupComments";
+import * as instanceGroupComments from "../../../actions/instanceGroupComments";
 import {getFeeds} from "../../../selectors/commentInstancesSelector";
 import {ChatMessage, MessageBox, PromotionHeader} from '../../../ui/index';
+import StyleUtils from "../../../utils/styleUtils";
 
-const {width, height} = Dimensions.get('window')
+const {width} = Dimensions.get('window')
 
 class CommentsComponent extends Component {
     constructor(props) {
@@ -23,9 +24,8 @@ class CommentsComponent extends Component {
     componentWillMount() {
         const item = this.getInstance();
         const {group, actions} = this.props;
-        if (group) {
-            actions.fetchTopComments(group, item);
-        }
+        actions.setNextFeeds(group, item);
+        actions.startListenForChat(group, item);
     }
 
     getInstance() {
@@ -57,8 +57,8 @@ class CommentsComponent extends Component {
         const item = this.getInstance();
         let promotionHeader;
         if (item.promotion) {
-            promotionHeader = <View style={styles.comments_promotions}>
-                <PromotionHeader  item={item} type={item.promotion} feed titleText={item.promotionTitle}
+            promotionHeader = <View style={[styles.comments_promotions, {width: StyleUtils.getWidth() - 15}]}>
+                <PromotionHeader item={item} type={item.promotion} feed titleText={item.promotionTitle}
                                  titleValue={item.promotionValue} term={item.promotionTerm}/>
 
 
@@ -67,7 +67,7 @@ class CommentsComponent extends Component {
         const commentsView = this.createCommentView(true, item);
         return (
             <View style={{
-                width: width - 15,
+                width: StyleUtils.getWidth(),
                 marginTop: 5,
                 marginBottom: 5,
                 backgroundColor: 'white',
@@ -93,7 +93,7 @@ class CommentsComponent extends Component {
     nextCommentPage() {
         const item = this.getInstance();
         const {actions, group, feeds} = this.props;
-        actions.setNextFeeds(feeds[group._id][item.id], group, item)
+        actions.setNextFeeds(group, item)
     }
 
     createCommentView(showComment, item) {
@@ -123,12 +123,10 @@ class CommentsComponent extends Component {
 
     renderItem(renderItem) {
         const {user} = this.props;
-        if(!user){
-
+        if (!user) {
             return <View></View>
         }
         let item = renderItem.item;
-
         let isUser = item.actor === user._id;
         let messageItem = {
             name: item.name,
@@ -160,7 +158,7 @@ export default connect(
         loadingDone: state.commentInstances.groupLoadingDone,
     }),
     (dispatch) => ({
-        actions: bindActionCreators(commentGroupAction, dispatch)
+        actions: bindActionCreators(instanceGroupComments, dispatch)
     })
 )(CommentsComponent);
 

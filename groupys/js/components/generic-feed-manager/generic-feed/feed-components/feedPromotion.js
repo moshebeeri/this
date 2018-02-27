@@ -19,13 +19,20 @@ import {
     Left,
     Picker,
     Right,
-    Text,
     Thumbnail,
     View
 } from 'native-base';
 import stylesPortrate from './styles'
 import StyleUtils from '../../../../utils/styleUtils'
-import {BusinessHeader, PromotionHeader, PromotionSeperator, SocialState, SubmitButton,ImageController,ThisText} from '../../../../ui/index';
+import {
+    BusinessHeader,
+    ImageController,
+    PromotionHeader,
+    PromotionSeperator,
+    SocialState,
+    SubmitButton,
+    ThisText
+} from '../../../../ui/index';
 import FormUtils from "../../../../utils/fromUtils";
 import strings from "../../../../i18n/i18n"
 import PageRefresher from '../../../../refresh/pageRefresher'
@@ -43,17 +50,14 @@ export default class FeedPromotion extends Component {
     }
 
     visited(visible) {
-        const {item} = this.props;
-        if (visible) {
-            PageRefresher.visitedFeedItem(item);
+        const {item, actions} = this.props;
+        if (visible && actions && actions.setSocialState) {
+            actions.setSocialState(item);
         }
     }
 
-
-
     render() {
-        const {showInPopup, showActions, item, save, shared, like, unlike, showUsers, comment, token, location, hideSocial, realize,navigation,scanner,isRealized} = this.props;
-
+        const {showInPopup, showActions, item, save, shared, like, unlike, showUsers, comment, token, location, hideSocial, realize, navigation, scanner, isRealized} = this.props;
         const styles = this.createPromotionStyle();
         const image = this.createImageComponent(item, styles);
         const container = this.createContainerStyle(item);
@@ -75,10 +79,6 @@ export default class FeedPromotion extends Component {
         if (item.business) {
             categoruTitle = item.business.categoryTitle;
         }
-
-
-
-
         const result =
             <InViewPort onChange={this.visited.bind(this)} style={container}>
                 <View style={[styles.promotion_card, {width: StyleUtils.getWidth()}]}>
@@ -130,8 +130,9 @@ export default class FeedPromotion extends Component {
                         </View>
                         {save &&
                         <View style={styles.editButtonContainer}>
-                            <SubmitButton disabledText={strings.Claimed.toUpperCase()} title={strings.Claim.toUpperCase()} color={'#2db6c8'}
-                                          disabled={claimDisabled} onPress={() => save(item.id,navigation,item)}/>
+                            <SubmitButton disabledText={strings.Claimed.toUpperCase()}
+                                          title={strings.Claim.toUpperCase()} color={'#2db6c8'}
+                                          disabled={claimDisabled} onPress={() => save(item.id, navigation, item)}/>
                         </View>
                         }
                         {realize && !isRealized &&
@@ -192,7 +193,6 @@ export default class FeedPromotion extends Component {
             flex: 1,
             width: StyleUtils.getWidth(),
             overflow: 'hidden',
-
             backgroundColor: 'pink',
             marginBottom: 10,
             alignItems: 'center',
@@ -204,7 +204,7 @@ export default class FeedPromotion extends Component {
         if (item.banner) {
             return <View style={[styles.promotion_image_view, {width: StyleUtils.getWidth()}]}>
                 <ImageController resizeMode="cover" style={[styles.promotion_image, {width: StyleUtils.getWidth()}]}
-                       source={{uri: item.banner.uri}}>
+                                 source={{uri: item.banner.uri}}>
                 </ImageController>
             </View>
         }

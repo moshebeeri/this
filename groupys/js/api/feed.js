@@ -2,17 +2,11 @@
  * Created by roilandshut on 25/04/2017.
  */
 import Timer from "./LogTimer";
+import * as errors from './Errors'
 
 let timer = new Timer();
-import MainFeedReduxComperator from "../reduxComperators/MainFeedComperator"
-let feedComperator = new MainFeedReduxComperator();
-import * as errors from './Errors'
-class FeedApi {
-    clean_phone_number(number) {
-        // remove all non digits, and then remove 0 if it is the first digit
-        return number.replace(/\D/g, '').replace(/^0/, '')
-    };
 
+class FeedApi {
     timeout(ms, promise) {
         return new Promise(function(resolve, reject) {
             setTimeout(function() {
@@ -56,14 +50,14 @@ class FeedApi {
         return new Promise(async (resolve, reject) => {
             try {
                 let from = new Date();
-                const response = await this.timeout(2000,fetch(`${server_host}/api/feeds/social_state/` + id, {
+                const response = await fetch(`${server_host}/api/feeds/social_state/` + id, {
                     method: 'GET',
                     headers: {
                         'Accept': 'application/json, text/plain, */*',
                         'Content-Type': 'application/json;charset=utf-8',
                         'Authorization': 'Bearer ' + token
                     }
-                }));
+                });
                 if (response.status ==='401' || response.status === 401) {
                     reject(errors.UN_AUTHOTIZED_ACCESS);
                     return;

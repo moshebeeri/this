@@ -141,6 +141,33 @@ exports.scroll = function(req, res) {
     })
 };
 
+  exports.find_scroll = function(req, res) {
+  const page_size = 50;
+  const from_id = req.params.from;
+  const scroll = req.params.scroll;
+
+  if (scroll !== 'up' && scroll !== 'down')
+    return res.status(400).send('scroll value may be only up or down');
+
+  let condition = scroll === 'up'? `c._id > '${from_id}'` : `c._id < '${from_id}'`;
+  if(from_id === 'start')
+    condition = `c._id > ''`;
+
+  let query = 'match (:user)-[:COMMENTED]';
+  let entities = extract_ids(req.body.entities);
+
+  for(let i=0; i<entities.length; i++) {
+    query += `->(e${i}{_id:'${entities[i]}'})-[:COMMENTED]`;
+  }
+  query += `->(c:comment) where ${condition} return distinct c._id as _id `;
+  graphModel.query_objects(Comment, query,
+    `ORDER BY c._id DESC`,
+    0, page_size, function (err, comments) {
+      if(err) { return handleError(res, err); }
+      return res.status(200).json(comments);
+  })
+};
+
 exports.find = function(req, res) {
   let query = 'match (:user)-[:COMMENTED]';
   let entities = extract_ids(req.body.entities);

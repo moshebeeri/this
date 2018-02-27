@@ -231,9 +231,11 @@ function handlePromotionPostCreate(promotion, callback) {
   }
 
   function relateOnActionPromotion(promotion, callback) {
-    let params = `{type: "${promotion.on_action.type}"}`;
+    let params = `{type: "${promotion.on_action.type}", end:${promotion.end.getTime()}`;
     if(promotion.on_action.type === 'PROXIMITY')
-      params = `{type: "${promotion.on_action.type}", proximity: "${promotion.on_action.proximity}"}`;
+      params = `${params}, proximity: "${promotion.on_action.proximity}"}`;
+    else
+      params = `${params}}`;
 
     let entityId = null;
     if (utils.defined(promotion.entity.business))
@@ -462,7 +464,7 @@ exports.business_promotions = function (req, res) {
   promotionGraphModel.query_objects(Promotion,
     `MATCH (b:business {_id:'${businessID}'})<-[:BUSINESS_PROMOTION]-(p:promotion) 
      WHERE ${condition} 
-     RETURN p._id as _id`,
+     RETURN distinct p._id as _id`,
     'order by p._id DESC', 0, page_size, function(err, promotions) {
       if (err) {
         return handleError(res, err)

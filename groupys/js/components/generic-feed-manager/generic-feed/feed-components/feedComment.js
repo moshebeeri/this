@@ -7,7 +7,7 @@
 import React, {Component} from 'react';
 import {Image, Platform, TextInput, View} from 'react-native';
 import {actions} from 'react-native-navigation-redux-helpers';
-import {Button, Container, Footer, Icon, Text, Thumbnail} from 'native-base';
+import {Button, Container, Footer, Icon, Thumbnail} from 'native-base';
 import styles from './styles'
 import StyleUtils from '../../../../utils/styleUtils'
 import {ThisText} from '../../../../ui/index';

@@ -5,7 +5,8 @@ const initialState = {
     loadingDone: {},
     showTopLoader: {},
     update: false,
-    lastCall: {}
+    lastCall: {},
+    maxLoadingDone: {},
 };
 import {REHYDRATE} from "redux-persist/constants";
 import * as actions from "./reducerActions";
@@ -54,6 +55,10 @@ export default function entityComments(state = initialState, action) {
         case actions.ENTITIES_COMMENT_LOADING_DONE:
             currentState.loadingDone[action.generalId] = action.loadingDone;
             return currentState;
+        case actions.ENTITIES_COMMENT_MAX_LOADING_DONE:
+            currentState.maxLoadingDone[action.generalId] = action.loadingDone;
+            return currentState;
+
         case actions.ENTITIES_COMMENT_LAST_CALL:
             currentState.lastCall[action.generalId] = action.lastCall;
             return currentState;

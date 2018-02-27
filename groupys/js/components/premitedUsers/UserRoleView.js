@@ -53,7 +53,7 @@ export default class UserRoleView extends Component {
         </View>
     }
 
-    editPremission(user,role){
+    editPermission(user,role){
         const{navigation,business} = this.props;
         navigation.navigate("addPermittedUser", {role:role, user:user, business: business});
     }

@@ -28,5 +28,6 @@ router.get('/users/following/:business/:skip/:limit', auth.isAuthenticated(), co
 router.get('/groups/following/:business/:skip/:limit', auth.isAuthenticated(), controller.following_groups);
 router.get('/users/following/default/group/:business/:skip/:limit', auth.isAuthenticated(), controller.users_following_default_group);
 router.get('/groups/following/default/group/:business/:skip/:limit', auth.isAuthenticated(), controller.groups_following_default_group);
+router.get('/user/businesses/by/phone/:country_code/:phone', auth.isAuthenticated(), controller.getUserBusinessesByPhone);
 
 module.exports = router;

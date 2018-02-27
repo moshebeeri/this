@@ -176,7 +176,7 @@ exports.eligible_products = function(req, res){
                     (u)-[:ELIGIBLE]-(i)-[:INSTANCE_OF]-(p)-[:PRODUCT]-(pr) 
                 ) 
                 AND (i.start > timestamp() and i.end < timestamp())
-                return pr._id as _id`;
+                return distinct pr._id as _id`;
   console.log(query);
   graphModel.query_objects(Product, query, '',
     0, page_size, function (err, products) {
@@ -208,7 +208,7 @@ exports.business_selling_brand = function(req, res){
   let condition = scroll === 'up'? `b._id < '${from_id}'` : `b._id > '${from_id}'`;
   let query = ` match match (b:business)-[:SELL]->(p:product)-[:BRANDED]->(b:brand{_id: '${brand}'})
                 where ${condition}
-                return b._id as _id`;
+                return distinct b._id as _id`;
   graphModel.query_objects(Business, query, '',
     0, page_size, function (err, businesses) {
       if(err) { return handleError(res, err); }

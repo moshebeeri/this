@@ -2,30 +2,23 @@
  * Created by roilandshut on 08/06/2017.
  */
 import FeedApi from "../api/feed";
-import getStore from "../store";
 import UserApi from "../api/user";
-import BusinessApi from "../api/business";
 import PtomotionApi from "../api/promotion";
 import ActivityApi from "../api/activity";
 import * as actions from "../reducers/reducerActions";
 import * as assemblers from "./collectionAssembler";
 import CollectionDispatcher from "./collectionDispatcher";
 import ActionLogger from './ActionLogger'
-import MainFeedReduxComperator from "../reduxComperators/MainFeedComperator"
+import feedComperator from "../reduxComperators/MainFeedComperator"
 import handler from './ErrorHandler'
 import * as types from '../sega/segaActions';
 import {put} from 'redux-saga/effects'
 
-const store = getStore();
 let feedApi = new FeedApi();
 let userApi = new UserApi();
 let promotionApi = new PtomotionApi();
 let activityApi = new ActivityApi();
-let businessApi = new BusinessApi();
-let feedComperator = new MainFeedReduxComperator();
 let logger = new ActionLogger();
-
-
 
 async function getUserFollowers(dispatch, token) {
     try {
@@ -53,19 +46,24 @@ export function setNextFeeds(feeds) {
         const user = getState().user.user;
         if (!user)
             return;
-        dispatch({
-            type: actions.FEEDS_START_RENDER,
-        });
+        if (getState().feeds.maxFeedReturned && getState().feeds.feedView.length > 0) {
+            return;
+        }
         dispatch({
             type: types.FEED_SCROLL_DOWN,
             feeds: feeds,
             token: token,
             user: user,
         });
-        dispatch({
-            type: actions.FEEDS_START_RENDER,
-        });
         handler.handleSuccses(getState(), dispatch)
+    }
+}
+
+export function stopMainFeedsListener() {
+    return async function (dispatch) {
+        dispatch({
+            type: types.CANCEL_MAIN_FEED_LISTENER,
+        });
     }
 }
 
@@ -76,17 +74,17 @@ export function setTopFeeds() {
         const feedOrder = getState().feeds.feedView;
         if (!user)
             return;
+        dispatch({
+            type: types.CANCEL_MAIN_FEED_LISTENER,
+        });
         if (feedOrder && feedOrder.length > 0) {
             dispatch({
-                type: types.FEED_SCROLL_UP,
+                type: types.LISTEN_FOR_MAIN_FEED,
                 id: feedOrder[0],
                 token: token,
                 user: user,
             });
         }
-        dispatch({
-            type: actions.FEEDS_START_RENDER,
-        });
         handler.handleSuccses(getState(), dispatch)
     }
 }
@@ -95,14 +93,11 @@ export function like(id) {
     return async function (dispatch, getState) {
         try {
             const token = getState().authentication.token
-
             dispatch({
                 type: actions.LIKE,
                 id: id
             });
-
             await userApi.like(id, token);
-
             handler.handleSuccses(getState(), dispatch)
         } catch (error) {
             handler.handleError(error, dispatch, 'like')
@@ -111,26 +106,23 @@ export function like(id) {
     }
 }
 
-export function refresh(id, currentSocialState) {
+export function refresh(id) {
+    return async function (dispatch, getState) {
+    }
+}
+
+export function setSocialState(item) {
     return async function (dispatch, getState) {
         try {
             const token = getState().authentication.token;
-            if (new Date().getTime() - getState().feeds.upTime < 360000) {
-                return;
-            }
-            let response = await feedApi.getFeedSocialState(id, token);
-            if (feedComperator.shouldUpdateSocial(id, response)) {
-                dispatch({
-                    type: actions.FEED_UPDATE_SOCIAL_STATE,
-                    social_state: response,
-                    id: id
-                });
-            }
+            let feedInstance = getState().instances.instances[item.id];
             dispatch({
-                type: actions.FEEDS_START_RENDER,
+                type: types.FEED_SET_SOCIAL_STATE,
+                token: token,
+                feed: feedInstance,
+                id: item.id
             });
             handler.handleSuccses(getState(), dispatch)
-            // await userApi.like(id, token);
         } catch (error) {
             handler.handleError(error, dispatch, 'feed-getFeedSocialState')
             logger.actionFailed('getFeedSocialState')
@@ -138,10 +130,10 @@ export function refresh(id, currentSocialState) {
     }
 }
 
-async function refreshFeedSocialState(dispatch, token, id) {
+async function refreshFeedSocialState(state, dispatch, token, id) {
     try {
         let response = await feedApi.getFeedSocialState(id, token);
-        if (feedComperator.shouldUpdateSocial(id, response)) {
+        if (feedComperator.shouldUpdateSocial(state, id, response)) {
             dispatch({
                 type: actions.FEED_UPDATE_SOCIAL_STATE,
                 social_state: response,
@@ -158,15 +150,11 @@ export const unlike = (id) => {
     return async function (dispatch, getState) {
         try {
             const token = getState().authentication.token
-
             dispatch({
                 type: actions.UNLIKE,
                 id: id
             });
-
             await userApi.unlike(id, token);
-
-
             handler.handleSuccses(getState(), dispatch)
         } catch (error) {
             handler.handleError(error, dispatch, 'unlike')
@@ -184,6 +172,10 @@ export function saveFeed(id, navigation, feed) {
             });
             let savedInstance = await promotionApi.save(id);
             navigation.navigate('realizePromotion', {item: feed, id: savedInstance._id})
+            dispatch({
+                type: types.SAVE_SINGLE_MYPROMOTIONS_REQUEST,
+                item: savedInstance
+            })
             handler.handleSuccses(getState(), dispatch)
         } catch (error) {
             handler.handleError(error, dispatch, 'saveFeed')
@@ -278,6 +270,26 @@ export function renderFeed() {
 export function stopScrolling() {
     return {
         type: actions.FEEDS_GET_NEXT_BULK_DONE,
+    }
+}
+
+export function maxFeedReturned() {
+    return {
+        type: actions.MAX_FEED_RETUNED,
+    }
+}
+
+export function maxFeedNotReturned() {
+    return {
+        type: actions.MAX_FEED_NOT_RETUNED,
+    }
+}
+
+export function updateSocialState(response, feedId) {
+    return {
+        type: actions.FEED_UPDATE_SOCIAL_STATE,
+        social_state: response,
+        id: feedId
     }
 }
 

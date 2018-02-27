@@ -6,15 +6,10 @@ import {Button, Icon, Input, Thumbnail} from "native-base";
 import GenericFeedManager from "../generic-feed-manager/index";
 import styles from "./styles";
 import {bindActionCreators} from "redux";
-
 import * as commentEntitiesAction from "../../actions/commentsEntities";
 import {getFeeds} from "../../selectors/commentsEntitiesSelector";
 import {ChatMessage, MessageBox, PromotionHeader} from '../../ui/index';
 import StyleUtils from "../../utils/styleUtils";
-
-const {width, height} = Dimensions.get('window')
-const vw = width / 100;
-const vh = height / 100
 
 class CommentsComponent extends Component {
     constructor(props) {
@@ -30,7 +25,8 @@ class CommentsComponent extends Component {
         if (group) {
             actions.fetchTopComments(group, item);
         } else {
-            actions.fetchTopComments(item.entities, item.generalId);
+            actions.setNextFeeds(item.entities, item.generalId);
+            actions.startListenForChat(item.entities, item.generalId);
         }
     }
 
@@ -56,13 +52,6 @@ class CommentsComponent extends Component {
         }
     }
 
-    getBusiness(item) {
-        if (item.business) {
-            return item.business
-        }
-        return item;
-    }
-
     render() {
         const item = this.getInstance();
         let promotionHeader;
@@ -70,11 +59,11 @@ class CommentsComponent extends Component {
             promotionHeader =
                 <View style={[styles.comments_promotions, {width: StyleUtils.getWidth() - 15}]}>
 
-                <PromotionHeader item={item} type={item.promotion} feed titleText={item.promotionTitle}
-                                 titleValue={item.promotionValue} term={item.promotionTerm}/>
+                    <PromotionHeader item={item} type={item.promotion} feed titleText={item.promotionTitle}
+                                     titleValue={item.promotionValue} term={item.promotionTerm}/>
 
 
-            </View>;
+                </View>;
         }
         const commentsView = this.createCommentView(true, item);
         return (
@@ -104,15 +93,13 @@ class CommentsComponent extends Component {
 
     nextCommentPage() {
         const item = this.getInstance();
-        const {actions,feeds} = this.props;
-        actions.setNextFeeds(feeds[item.generalId], item.entities, item.generalId)
+        const {actions} = this.props;
+        actions.setNextFeeds(item.entities, item.generalId)
     }
 
     createCommentView(showComment, item) {
-        const {navigation, feeds, userFollower, actions, token, loadingDone,user} = this.props;
-
+        const {navigation, feeds, userFollower, actions, token, loadingDone} = this.props;
         if (showComment) {
-
             return <GenericFeedManager
                 navigation={navigation}
                 color='white'
@@ -126,12 +113,10 @@ class CommentsComponent extends Component {
                 title='Feeds'
                 ItemDetail={this.renderItem.bind(this)}>
 
-            </GenericFeedManager>
+            </GenericFeedManager>;
         }
         return undefined;
     }
-
-
 
     renderItem(renderItem) {
         let item = renderItem.item;
@@ -148,13 +133,7 @@ class CommentsComponent extends Component {
                             item={messageItem}/>
     }
 
-    async fetchTopList(id) {
-        const item = this.getInstance();
-        const {token, feeds, group, actions} = this.props;
-        if (id === feeds[item.generalId][0].fid) {
-            actions.fetchTop(feeds[item.generalId], token, item.entities, item.generalId)
-        }
-    }
+
 }
 
 export default connect(

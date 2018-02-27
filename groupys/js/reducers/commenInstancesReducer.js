@@ -4,6 +4,7 @@ const initialState = {
     groupComments: {},
     groupCommentsOrder: {},
     groupLoadingDone: {},
+    groupCommentsMaxDone:{},
     groupShowTopLoader: {},
     update: false,
     groupLastCall: {}
@@ -12,7 +13,7 @@ import {REHYDRATE} from "redux-persist/constants";
 import * as actions from "./reducerActions";
 
 export default function commentInstances(state = initialState, action) {
-    console.log(action.type);
+    //console.log(action.type);
     if (action.type === REHYDRATE) {
 
         // retrive stored data for reducer callApi
@@ -23,6 +24,7 @@ export default function commentInstances(state = initialState, action) {
     }
     let currentState = {...state};
     let clientMessage = currentState.clientMessages;
+    let groupCommentsMaxDone = currentState.groupCommentsMaxDone;
     switch (action.type) {
         case actions.UPSERT_GROUP_INSTANCE_COMMENT :
             let currentGroupComments = currentState.groupComments;
@@ -102,6 +104,16 @@ export default function commentInstances(state = initialState, action) {
             }
             clientMessage[action.groupId][action.instanceId] = [];
             return currentState;
+
+        case actions.GROUP_COMMENT_INSTANCE_MAX:
+            if (!groupCommentsMaxDone[action.groupId]) {
+                groupCommentsMaxDone[action.groupId] = {};
+            }
+            groupCommentsMaxDone[action.groupId][action.instanceId] = action.loadingDone;
+            return currentState;
+
+
+
         default:
             return state;
     }

@@ -43,10 +43,12 @@ export default class FeedBusiness extends Component {
     }
 
     visited(visible) {
-        const {item} = this.props;
+        const {item,actions} = this.props;
         if (visible) {
-            console.log(item.id + ' visited');
-            PageRefresher.visitedFeedItem(item);
+            if (visible && actions && actions.setSocialState) {
+                actions.setSocialState(item);
+            }
+
         }
     }
 

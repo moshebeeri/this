@@ -37,6 +37,7 @@ import * as businessActions from "../../actions/business";
 import * as myPromotionsActions from "../../actions/myPromotions";
 import * as groupsActions from "../../actions/groups";
 import * as notificationsActions from "../../actions/notifications";
+import * as instanceGroupCommentsAction from "../../actions/instanceGroupComments"
 import {createSelector} from "reselect";
 import {NavigationActions} from "react-navigation";
 import '../../conf/global';
@@ -77,7 +78,7 @@ const resetAction = NavigationActions.reset({
 let logger = new ActionLogger();
 // this shall be called regardless of app state: running, background or not running. Won't be called when app is killed by user in iOS
 FCM.on(FCMEvent.Notification, async (notif) => {
-    console.log(notif);
+    //console.log(notif);
     // there are two parts of notif. notif.notification contains the notification payload, notif.data contains data payload
     if (notif.local_notification) {
         //this is a local notification
@@ -190,8 +191,10 @@ class ApplicationManager extends Component {
     }
 
     onChangeTab(tab) {
-        const {notificationAction, myPromotionsAction, feedAction, groupsActions} = this.props;
+        const {notificationAction, myPromotionsAction, feedAction, groupsActions,instanceGroupCommentsAction} = this.props;
         groupsActions.stopListenForChat();
+        instanceGroupCommentsAction.stopListenForChat();
+        feedAction.stopMainFeedsListener();
         if (tab.i === 0) {
             if (I18nManager.isRTL && (Platform.OS === 'android')) {
                 logger.screenVisited('notification')
@@ -210,7 +213,7 @@ class ApplicationManager extends Component {
                 logger.screenVisited('groups')
                 PageRefresher.visitedGroups();
             } else {
-                myPromotionsAction.setNextFeeds();
+               myPromotionsAction.setFirstTime();
                 logger.screenVisited('savedPromotion')
                 this.setState({
                     activeTab: 'savedPromotion'
@@ -221,7 +224,7 @@ class ApplicationManager extends Component {
         if (tab.i === 2) {
             if (I18nManager.isRTL && (Platform.OS === 'android')) {
                 logger.screenVisited('savedPromotion')
-                myPromotionsAction.setNextFeeds();
+                myPromotionsAction.setFirstTime();
                 this.setState({
                     activeTab: 'savedPromotion'
                 })
@@ -245,7 +248,7 @@ class ApplicationManager extends Component {
                 logger.screenVisited('notification')
             }
         }
-        //this.props.actions.changeTab(tab)
+
     }
 
     navigateToAdd() {
@@ -280,7 +283,7 @@ class ApplicationManager extends Component {
             notificationAction, notificationGroup, notificationBusiness,
             showSearchResults, businesses, businessActions, groups, groupsActions, showSearchGroupResults
         } = this.props;
-        console.log('rendering main');
+
         console.log(this.state.activeTab);
         if (!showComponent) {
             return <View></View>
@@ -478,6 +481,7 @@ export default connect(
         notificationAction: bindActionCreators(notificationsActions, dispatch),
         myPromotionsAction: bindActionCreators(myPromotionsActions, dispatch),
         feedAction: bindActionCreators(feedAction, dispatch),
+        instanceGroupCommentsAction: bindActionCreators(instanceGroupCommentsAction, dispatch)
     })
 )(ApplicationManager);
 

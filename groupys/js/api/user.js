@@ -8,6 +8,7 @@ import EntityUtils from "../utils/createEntity";
 let entityUtils = new EntityUtils();
 let timer = new Timer();
 import * as errors from './Errors'
+import PhoneUtils from "../utils/phoneUtils";
 class UserApi {
     getUser(token) {
         return new Promise(async (resolve, reject) => {
@@ -101,9 +102,9 @@ class UserApi {
             let contacts = await store.get('all-contacts');
             contacts = JSON.parse(contacts);
             if (contacts) {
-                let normalizeFuncrion = this.clean_phone_number.bind(this);
+                let normalizeFunction = PhoneUtils.clean_phone_number.bind(this);
                 contacts.forEach(function (element) {
-                    contacsMap.set(normalizeFuncrion(element.phoneNumbers[0].number), element);
+                    contacsMap.set(normalizeFunction(element.phoneNumbers[0].number), element);
                 });
             }
             let fullContacts = contactPhones.map(function (contact) {
@@ -119,15 +120,10 @@ class UserApi {
                     phone: contact.phone_number,
                     _id: contact._id
                 };
-            })
+            });
             resolve(fullContacts);
         })
     }
-
-    clean_phone_number(number) {
-        // remove all non digits, and then remove 0 if it is the first digit
-        return number.replace(/\D/g, '').replace(/^0/, '')
-    };
 
     like(id, token) {
         return new Promise(async (resolve, reject) => {
@@ -165,7 +161,7 @@ class UserApi {
                         'Content-Type': 'application/json;charset=utf-8',
                         'Authorization': 'Bearer ' + token,
                     }
-                })
+                });
                 if (response.status ==='401' || response.status === 401) {
                     reject(errors.UN_AUTHOTIZED_ACCESS);
                     return;
@@ -184,7 +180,7 @@ class UserApi {
             try {
                 let token = await store.get('token');
                 let from = new Date();
-                let phoneNumber = this.clean_phone_number(phone);
+                let phoneNumber = PhoneUtils.clean_phone_number(phone);
                 const response = await fetch(`${server_host}/api/users/get/user/by/phone/` + 972 + '/' + phoneNumber, {
                     method: 'GET',
                     headers: {

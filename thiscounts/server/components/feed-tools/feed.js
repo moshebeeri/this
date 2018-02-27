@@ -8,7 +8,8 @@ const logger = require('../logger').createLogger();
 const graphTools = require('../graph-tools');
 const graphModel = graphTools.createGraphModel('user');
 const SortedArray = require('sorted-array');
-
+const Promotion = require('../../api/promotion/promotion.model');
+const Instance = require('../../api/instance/instance.model');
 
 exports.generate = function(msg) {
   return "generated " + msg;
@@ -33,6 +34,42 @@ exports.fetch_feed = function(userId, query_builder, Model, res) {
       });
 };
 
+function get_promotion( promotion_or_instance_id, callback){
+  async.parallel({
+    promotion: function (callback) {
+      Promotion.findById(promotion_or_instance_id, callback);
+    },
+    instance: function (callback) {
+      Instance.findById(promotion_or_instance_id, callback);
+    }
+  }, function (err, res) {
+    if(err) return callback(err);
+    if(res.promotion) return callback(null, res.promotion._id );
+    if(res.instance) return callback(null, res.instance.promotion._id );
+    // neither promotion nor instance
+    return callback(null, null);
+  });
+}
+
+function promotion_is_realized(user_id, item_id, callback) {
+  get_promotion(item_id, (err, promotion)=>{
+    if(err) return callback(err);
+    if(promotion)
+      return graphModel.is_promotion_realized(user_id, promotion, callback);
+    return callback(null, 0);
+  });
+}
+
+function promotion_realized_count(item_id, callback) {
+  get_promotion(item_id, (err, promotion)=>{
+    if(err) return callback(err);
+    if(promotion)
+      return graphModel.promotion_realized_count(item_id, callback);
+    return callback(null, 0);
+  });
+
+}
+
 //MATCH (n:comment)<-[r:COMMENTED]-(p) RETURN n,p
 
 //see http://www.markhneedham.com/blog/2013/02/24/neo4jcypher-combining-count-and-collect-in-one-query/
@@ -40,10 +77,10 @@ function social_state(user_id, item_id, callback) {
 
   async.parallel({
       saved: function (callback) {
-        graphModel.is_related_saved_instance(user_id, 'SAVED', item_id, callback);
+        graphModel.is_related_ids(user_id, 'SAVED', item_id, callback);
       },
       realized: function (callback) {
-        graphModel.is_related_saved_instance(user_id, 'REALIZED', item_id, callback);
+        promotion_is_realized(user_id, item_id, callback);
       },
       like: function (callback) {
         graphModel.is_related_ids(user_id, 'LIKE', item_id, callback);
@@ -55,10 +92,10 @@ function social_state(user_id, item_id, callback) {
         graphModel.is_related_ids(user_id, 'FOLLOW', item_id, callback);
       },
       saves: function (callback) {
-        graphModel.saved_instance_rel_count(item_id, 'SAVED', callback);
+        graphModel.count_in_rel_id('SAVED', item_id, callback);
       },
       realizes: function (callback) {
-        graphModel.saved_instance_rel_count(item_id, 'REALIZED', callback);
+        promotion_realized_count(item_id, callback);
       },
       likes: function (callback) {
         graphModel.count_in_rel_id('LIKE', item_id, callback);

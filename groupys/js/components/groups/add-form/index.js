@@ -1,16 +1,15 @@
 import React, {Component} from 'react';
-import {Dimensions, Image, ScrollView, Text, View,Platform} from 'react-native';
+import {Dimensions, Image, Platform, ScrollView, Text, View} from 'react-native';
 import {connect} from 'react-redux';
 import styles from './styles'
 import {getMyBusinesses} from '../../../selectors/businessesSelector'
 import SelectUsersComponent from '../selectUser';
-import {FormHeader, ImagePicker, SelectButton, SimplePicker, Spinner, TextInput} from '../../../ui/index';
+import {FormHeader, ImagePicker, SelectButton, SimplePicker, Spinner, TextInput, ThisText,ImageController} from '../../../ui/index';
 import * as groupsAction from "../../../actions/groups";
 import * as businessesAction from "../../../actions/business";
 import * as userAction from "../../../actions/user";
 import {bindActionCreators} from "redux";
 import strings from "../../../i18n/i18n"
-import {ThisText} from '../../../ui/index';
 
 const {width, height} = Dimensions.get('window');
 const groupPolicy = [
@@ -44,8 +43,14 @@ class AddGroup extends Component {
         if (props.navigation.state.params && props.navigation.state.params.group) {
             let group = props.navigation.state.params.group;
             let currentImage = '';
-            if(group.pictures.length > 0){
+            if (group.pictures.length > 0) {
                 currentImage = group.pictures[group.pictures.length - 1].pictures[0];
+            }else{
+                if (group.entity && group.entity.business) {
+                    if (group.entity.business.logo) {
+                        currentImage = group.entity.business.logo;
+                    }
+                }
             }
             this.state = {
                 name: group.name,
@@ -58,9 +63,10 @@ class AddGroup extends Component {
                 groupType: group.entity_type,
                 path: '',
                 image: '',
-                currentImage:currentImage,
+                currentImage: currentImage,
                 business: '',
                 updateMode: true,
+                viewOnly: props.navigation.state.params.view,
                 services: []
             };
         } else {
@@ -77,6 +83,7 @@ class AddGroup extends Component {
                 image: '',
                 updateMode: false,
                 business: '',
+                viewOnly:false,
                 services: []
             };
         }
@@ -130,7 +137,7 @@ class AddGroup extends Component {
             group.name = this.state.name;
             group.description = this.state.info;
             group.image = this.state.image;
-            actions.updateGroup(group,this.props.navigation)
+            actions.updateGroup(group, this.props.navigation)
         }
     }
 
@@ -221,18 +228,18 @@ class AddGroup extends Component {
         }
         if (this.state.image || this.state.currentImage) {
             let coverImage = undefined;
-            if(this.state.image) {
-                coverImage = <Image
+            if (this.state.image) {
+                coverImage = <ImageController
                     style={{width: width - 10, height: 210, borderWidth: 1, borderColor: 'white'}}
                     source={{uri: this.state.image.path}}
                 >
-                </Image>
-            }else{
-                coverImage = <Image
+                </ImageController>
+            } else {
+                coverImage = <ImageController
                     style={{width: width - 10, height: 210, borderWidth: 1, borderColor: 'white'}}
                     source={{uri: this.state.currentImage}}
                 >
-                </Image>
+                </ImageController>
             }
             return <View style={styles.product_upper_container}>
 
@@ -240,9 +247,9 @@ class AddGroup extends Component {
 
                     <View style={styles.addCoverContainer}>
 
-                        <ImagePicker ref={"coverImage"} mandatory={isManadory} image={coverImage} color='white'
+                        {this.state.viewOnly ? coverImage : <ImagePicker ref={"coverImage"} mandatory={isManadory} image={coverImage} color='white'
                                      pickFromCamera
-                                     setImage={this.setCoverImage.bind(this)}/>
+                                     setImage={this.setCoverImage.bind(this)}/>}
                         {saving && <Spinner/>}
                     </View>
                 </View>
@@ -265,18 +272,22 @@ class AddGroup extends Component {
     render() {
         const {businesses} = this.props;
         let selectedGroupPolicy = this.state.groupPolocy
-        if(Platform.OS === 'ios'){
+        if (Platform.OS === 'ios') {
             selectedGroupPolicy = this.getGroupPolicy(this.state.groupPolocy);
         }
         const BusinessPiker = this.createBusinessPicker(this.state.groupType, businesses);
+
+
         return (
             <View style={styles.product_container}>
-                {this.state.updateMode ?
+                {this.state.updateMode && !this.state.viewOnly &&
                     <FormHeader showBack submitForm={this.updateGroup.bind(this)} navigation={this.props.navigation}
-                                title={strings.UpdateGroup} bgc="#2db6c8"/>
-                    : <FormHeader showBack submitForm={this.saveFormData.bind(this)} navigation={this.props.navigation}
+                                title={strings.UpdateGroup} bgc="#2db6c8"/>}
+                {!this.state.updateMode && !this.state.viewOnly && <FormHeader showBack submitForm={this.saveFormData.bind(this)} navigation={this.props.navigation}
                                   title={strings.AddGroup} bgc="#2db6c8"/>
                 }
+                {this.state.viewOnly && <FormHeader showBack  navigation={this.props.navigation}
+                                                    title={strings.ViewGroup} bgc="#2db6c8"/>}
                 <ScrollView keyboardShouldPersistTaps={true} contentContainerStyle={{
                     justifyContent: 'center',
                     alignItems: 'center',
@@ -285,17 +296,19 @@ class AddGroup extends Component {
 
                     {this.createCoverImageComponnent()}
                     <SimplePicker value={selectedGroupPolicy} ref="groupPolicyType"
+                                  disable={this.state.viewOnly}
                                   list={groupPolicy} itemTitle={strings.GroupPolicy}
                                   defaultHeader={strings.ChooseType} isMandatory={!this.state.updateMode}
                                   onValueSelected={this.selectGroupPolocy.bind(this)}/>
                     {!this.state.updateMode &&
                     <SimplePicker ref="groupType" list={groupType} itemTitle={strings.GroupType}
+                                  disable={this.state.viewOnly}
                                   defaultHeader={strings.ChooseType} isMandatory
                                   onValueSelected={this.selectGroupType.bind(this)}/>}
 
                     {!this.state.updateMode && BusinessPiker}
                     <View style={styles.inputTextLayour}>
-                        <TextInput field={strings.GroupName} value={this.state.name}
+                        <TextInput  disabled={this.state.viewOnly} field={strings.GroupName} value={this.state.name}
                                    returnKeyType='next' ref="1" refNext="1"
                                    onSubmitEditing={this.focusNextField.bind(this, "2")}
                                    onChangeText={(name) => this.setState({name})} isMandatory={true}/>
@@ -304,7 +317,7 @@ class AddGroup extends Component {
                     <View style={styles.inputTextLayour}>
 
 
-                        <TextInput field={strings.Description} value={this.state.info} returnKeyType='next' ref="2"
+                        <TextInput disabled={this.state.viewOnly}  field={strings.Description} value={this.state.info} returnKeyType='next' ref="2"
                                    refNext="2"
 
 

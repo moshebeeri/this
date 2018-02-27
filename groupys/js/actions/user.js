@@ -5,12 +5,13 @@ import * as errors from "../api/Errors";
 import simpleStore from 'react-native-simple-store';
 import ActionLogger from './ActionLogger'
 import strings from "../i18n/i18n"
+import {put} from 'redux-saga/effects'
+import * as types from '../sega/segaActions';
+import handler from './ErrorHandler'
+
 let userApi = new UserApi();
 let loginApi = new LoginAPI();
 let logger = new ActionLogger();
-import * as types from '../sega/segaActions';
-
-import  handler from './ErrorHandler'
 
 async function getUser(dispatch, token) {
     try {
@@ -19,13 +20,13 @@ async function getUser(dispatch, token) {
             type: actions.UPSERT_SINGLE_USER,
             item: user
         })
-        simpleStore.save('user',user);
+        simpleStore.save('user', user);
         dispatch({
             type: actions.SET_USER,
             user: user
         })
     } catch (error) {
-         handler.handleError(error,dispatch,'getUser')
+        handler.handleError(error, dispatch, 'getUser')
         logger.actionFailed('users-getUser')
     }
 }
@@ -38,7 +39,7 @@ async function getUserFollowers(dispatch, token) {
             followers: users
         });
     } catch (error) {
-         handler.handleError(error,dispatch,'getUserFollowers')
+        handler.handleError(error, dispatch, 'getUserFollowers')
         logger.actionFailed('users-getUserFollowers')
     }
 }
@@ -83,15 +84,15 @@ export function changePassword(oldPassword, newPassword, navigation) {
             if (response.response === true) {
                 navigation.goBack();
             }
-            handler.handleSuccses(getState(),dispatch)
+            handler.handleSuccses(getState(), dispatch)
         } catch (error) {
-            if(error === errors.PASSOWRD_VALIDATION_FAILED){
+            if (error === errors.PASSOWRD_VALIDATION_FAILED) {
                 dispatch({
                     type: actions.CHANGE_PASSWORD_FAILED,
                     message: strings.OldPasswordValidationFailed
                 });
-            }else {
-                handler.handleError(error, dispatch,'changePassword')
+            } else {
+                handler.handleError(error, dispatch, 'changePassword')
             }
             dispatch({
                 type: actions.SAVING_USER_DONE,
@@ -101,28 +102,25 @@ export function changePassword(oldPassword, newPassword, navigation) {
     }
 }
 
-export function updateUser(newUser,getState) {
-
-    return function (dispatch,getState) {
+export function updateUser(newUser) {
+    return function (dispatch, getState) {
         const token = getState().authentication.token
-        dispatch( {
-            type: types.SAVE_USER_REQUEST,
-            newUser: newUser,
-            token:token,
-        })
-    }
-
-}
-
-
-export function upSertUserSuccsess(response){
-    return{
-        type:actions.SET_USER,
-        user:response
+        if(newUser) {
+            dispatch({
+                type: types.SAVE_USER_REQUEST,
+                newUser: newUser,
+                token: token,
+            })
+        }
     }
 }
 
-
+export function* upSertUserSuccsess( newUser) {
+    yield put({
+        type: actions.SET_USER,
+        user: newUser
+    });
+}
 
 export function resetPasswordForm() {
     return function (dispatch) {
@@ -132,17 +130,16 @@ export function resetPasswordForm() {
     }
 }
 
-
- async function updateUserLocale(dispatch, token,user,locale) {
+async function updateUserLocale(dispatch, token, user, locale) {
     try {
-        if(!user.locale ||(user.locale  && user.locale!== locale)){
+        if (!user.locale || (user.locale && user.locale !== locale)) {
             dispatch({
                 type: actions.SAVING_USER,
             });
             user.locale = locale;
             await userApi.saveUserDetails(user, user._id, token, dispatch);
             let updatedUser = await userApi.getUser(token);
-            simpleStore.save('user',updatedUser);
+            simpleStore.save('user', updatedUser);
             dispatch({
                 type: actions.UPSERT_SINGLE_USER,
                 item: updatedUser
@@ -155,25 +152,24 @@ export function resetPasswordForm() {
                 type: actions.SAVING_USER_DONE,
             });
         }
-
     } catch (error) {
-         handler.handleError(error,dispatch,'updateUserLocale')
+        handler.handleError(error, dispatch, 'updateUserLocale')
         logger.actionFailed('users-updateUserLocale')
     }
 }
 
-async function updateUserToken(dispatch, token,user,fireBaseToken) {
+async function updateUserToken(dispatch, token, user, fireBaseToken) {
     try {
-        if(!user.firebase ||(user.firebase  && !user.firebase.tokens ) || (
-            user.firebase && user.firebase.tokens && user.firebase.tokens[0] !== fireBaseToken
-            )){
+        if (!user.firebase || (user.firebase && !user.firebase.tokens ) || (
+                user.firebase && user.firebase.tokens && user.firebase.tokens[0] !== fireBaseToken
+            )) {
             dispatch({
                 type: actions.SAVING_USER,
             });
-            user.firebase = {tokens:[fireBaseToken]};
+            user.firebase = {tokens: [fireBaseToken]};
             await userApi.saveUserDetails(user, user._id, token, dispatch);
             let updatedUser = await userApi.getUser(token);
-            simpleStore.save('user',updatedUser);
+            simpleStore.save('user', updatedUser);
             dispatch({
                 type: actions.UPSERT_SINGLE_USER,
                 item: updatedUser
@@ -186,18 +182,14 @@ async function updateUserToken(dispatch, token,user,fireBaseToken) {
                 type: actions.SAVING_USER_DONE,
             });
         }
-
     } catch (error) {
-         handler.handleError(error,dispatch,'updateUserToken')
+        handler.handleError(error, dispatch, 'updateUserToken')
         logger.actionFailed('users-updateUserToken')
     }
 }
 
-
-async function updateUserTask(dispatch, token,newUser) {
-
+async function updateUserTask(dispatch, token, newUser) {
     try {
-
         dispatch({
             type: actions.SAVING_USER,
         });
@@ -219,7 +211,6 @@ async function updateUserTask(dispatch, token,newUser) {
         dispatch({
             type: actions.SAVING_USER_DONE,
         });
-
         handler.handleSuccses(getState(), dispatch)
     } catch (error) {
         handler.handleError(error, dispatch, 'updateUser')

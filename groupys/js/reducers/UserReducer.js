@@ -7,7 +7,7 @@
 /**
  * Created by stan229 on 5/27/16.
  */
-const initialState = {selectedUsers: [], users: {}, followers: [], user: undefined, saving: false};
+const initialState = {selectedUsers: [], users: {}, userPictures:[],followers: [], user: undefined, saving: false};
 import {REHYDRATE} from "redux-persist/constants";
 import * as actions from "./reducerActions";
 
@@ -62,6 +62,20 @@ export default function user(state = initialState, action) {
                 selectedUsers: new Array(),
                 saving: false,
             };
+        case actions.USERS_UPLOAD_PIC:
+            let pictures =userState.userPictures;
+            pictures.push(action.item);
+            return {
+                ...state,
+                userPictures: pictures,
+            };
+        case actions.CLEAR_USERS_UPLOAD_PIC:
+             return {
+                ...state,
+                userPictures: [],
+            };
+
+
         default:
             return state;
     }

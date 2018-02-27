@@ -2,16 +2,18 @@ import Timer from "./LogTimer";
 import * as errors from './Errors'
 let timer = new Timer();
 import FormUtils from "../utils/fromUtils";
+import PhoneUtils from "../utils/phoneUtils";
 class BusinessApi {
 
      timeout(ms, promise) {
         return new Promise(function(resolve, reject) {
             setTimeout(function() {
                 reject(errors.TIME_OUT);
-            }, ms)
+            }, ms);
             promise.then(resolve, reject)
         })
     }
+
     getAll(token,noSideEffects) {
         return new Promise(async (resolve, reject) => {
             try {
@@ -50,6 +52,35 @@ class BusinessApi {
                 reject(errors.NETWORK_ERROR);
             }
         })
+    }
+
+    createBusiness(business,token){
+        return new Promise(async (resolve, reject) => {
+            try {
+                const response = await fetch(`${server_host}/api/businesses/`, {
+                    method: 'POST',
+                    headers: {
+                        'Accept': 'application/json, text/plain, */*',
+                        'Content-Type': 'application/json;charset=utf-8',
+                        'Authorization': 'Bearer ' + token,
+                    },
+                    body: JSON.stringify(business)
+                });
+                if (response.status === 401) {
+                    reject(response);
+                    return;
+                }
+                if (response.status === 500) {
+                    reject(response);
+                    return;
+                }
+                let responseData = await response.json();
+                resolve(responseData);
+            }catch (error) {
+
+                    reject(errors.NETWORK_ERROR);
+                }
+            })
     }
 
     get(token,id) {
@@ -153,8 +184,7 @@ class BusinessApi {
                     return;
                 }
                 timer.logTime(from, new Date(), '/businesses/search', 'business/en');
-                let responseData = await response.json();
-                resolve(responseData);
+                resolve(true);
             }
             catch (error) {
                 reject(errors.NETWORK_ERROR);
@@ -186,6 +216,7 @@ class BusinessApi {
             }
         })
     }
+
     groupFollowBusiness(groupId,businessId, token) {
         return new Promise(async (resolve, reject) => {
             try {
@@ -354,6 +385,33 @@ class BusinessApi {
                 timer.logTime(from, new Date(), '/api/qrcodes/', 'image/code/');
                 let responseData = await response.json();
                 resolve(responseData);
+            }
+            catch (error) {
+                reject(errors.NETWORK_ERROR);
+            }
+        })
+    }
+
+    getUserBusinessesByPhoneNumber(phone,token) {
+        return new Promise(async (resolve, reject) => {
+            try {
+                let from = new Date();
+                let phoneNumber = PhoneUtils.clean_phone_number(phone);
+                const response = await fetch(`${server_host}/api/businesses/user/businesses/by/phone/` + 972 + '/' + phoneNumber, {
+                    method: 'GET',
+                    headers: {
+                        'Accept': 'application/json, text/plain, */*',
+                        'Content-Type': 'application/json;charset=utf-8',
+                        'Authorization': 'Bearer ' + token,
+                    }
+                });
+                if (response.status ==='401' || response.status === 401) {
+                    reject(errors.UN_AUTHOTIZED_ACCESS);
+                    return;
+                }
+                let responseData = await response.json();
+                resolve(responseData);
+                timer.logTime(from, new Date(), 'businesses', 'user/businesses/by/phone/')
             }
             catch (error) {
                 reject(errors.NETWORK_ERROR);

@@ -114,6 +114,24 @@ class EntityUtils {
     }
 
     doLogoUpload(imagePath, imageMime, token, callbackFunction, entityApi, responseData) {
+        const data = new FormData();
+        data.append('name', 'testName'); // you can append anyone.
+        data.append('photo', {
+            url: `${server_host}/api/images/logo/` + responseData._id,
+            type: 'image/jpeg', // or photo.type
+            name: 'testPhotoName',
+            path: 'file:' + imagePath,
+        });
+        fetch(url, {
+            method: 'POST',                             // optional: POST or PUT
+            headers: {'Accept': 'application/json', 'Authorization': 'Bearer ' + token},  // optional
+            field: 'uploaded_media',
+            body: data
+        }).then(res => {
+            console.log(res)
+        });
+
+
         let files = [
             {
                 name: imagePath + '___' + responseData._id,
@@ -122,6 +140,9 @@ class EntityUtils {
                 filetype: imageMime,
             }
         ];
+
+
+
         let getEntity = this.getEntity.bind(this);
         if (Platform.OS === 'ios') {
             let opts = {

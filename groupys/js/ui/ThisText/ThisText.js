@@ -8,6 +8,6 @@ export default class ThisText extends Component {
     }
 
     render() {
-        return <Text note={this.props.note} style={[this.props.style, {fontFamily: (Platform.OS === 'ios') ? 'Helvetica Neue' : 'Roboto-Regular'}]}>{this.props.children}</Text>
+        return <Text onPress={this.props.onPress} note={this.props.note} style={[this.props.style, {fontFamily: (Platform.OS === 'ios') ? 'Helvetica Neue' : 'Roboto-Regular'}]}>{this.props.children}</Text>
     }
 }

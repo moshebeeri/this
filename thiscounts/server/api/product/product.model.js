@@ -11,6 +11,7 @@ let ProductSchema = new Schema({
   url: String,
   inAppOrder: {type:Boolean, default: false},
   SKU: String,
+  barcode: String,
   price: Number,
   gid: { type: Number, index: true},
   brand: {type: Schema.ObjectId, ref: 'Brand', required: false},
@@ -39,12 +40,5 @@ ProductSchema.index({
   info: 'text'
 });
 
-ProductSchema.virtual('barcode')
-  .set(function() {
-    function getProductCode(product){
-      return product.costumeBarcode? `${product.business}_${product.userBarcode}` : product.userBarcode;
-    }
-    this.barcode = getProductCode(this);
-  });
 
 module.exports = mongoose.model('Product', ProductSchema);

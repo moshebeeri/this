@@ -7,23 +7,24 @@ import StyleUtils from '../../../../utils/styleUtils';
 import {Thumbnail} from 'native-base';
 import ProductPreview from "../../../product/productPreview/index";
 import {ThisText} from '../../../../ui/index';
+import UserPreview from "../../../user-profile/userPreview/index";
+import BusinessPreview from "../../../business/businessPreview/index";
 
 const types = [
-        {
-            value: 'MY_BUSINESS',
-            label: strings.MyBusiness
-        },
-        {
-            value: 'OTHER_BUSINESS',
-            label: strings.OtherBusiness
-        }
-    ];
-
+    {
+        value: 'MY_BUSINESS',
+        label: strings.MyBusiness
+    },
+    {
+        value: 'OTHER_BUSINESS',
+        label: strings.OtherBusiness
+    }
+];
 export default class GiftComponent extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            giftingBusiness: strings.MyBusiness
+            giftingBusiness: 'MY_BUSINESS'
         }
     }
 
@@ -39,6 +40,13 @@ export default class GiftComponent extends Component {
                 giftProduct: product
             }
         )
+    }
+
+    selectOtherBusiness(otherBusinessPermittedUser, otherBusiness) {
+        this.setState({otherBusinessPermittedUser: otherBusinessPermittedUser});
+        this.setState({otherBusiness: otherBusiness});
+        //this.props.setState({otherBusinessPermittedUser, otherBusiness});
+
     }
 
     selectBuyProduct(product) {
@@ -58,6 +66,15 @@ export default class GiftComponent extends Component {
             products: products,
             selectProduct: selectProductFunction,
             businessId: businessId
+        })
+    }
+
+
+
+    searchBusinessByPermittedUser() {
+        let selectOtherBusiness = this.selectOtherBusiness.bind(this);
+        this.props.navigation.navigate("SearchBusinessByPermittedUser", {
+            selectOtherBusiness: selectOtherBusiness,
         })
     }
 
@@ -136,13 +153,15 @@ export default class GiftComponent extends Component {
                 <ThisText style={{color: '#FA8559', marginLeft: 8, marginRight: 8}}>{strings.Gift}</ThisText>
             </View>
             <View style={{flexDirection: 'row', justifyContent: 'center', alignItems: 'center'}}>
-                <View style={{flex: 1.7, marginTop: 25}}><SelectButton ref="giftSelectProduct"
-                                                                       isMandatory={true}
-                                                                       selectedValue={this.props.state.product}
-                                                                       title={strings.SelectProduct}
-                                                                       action={this.showBuyProducts.bind(this, true)}/></View>
+                <View style={{flex: 1.7, marginTop: 25}}>
+                    <SelectButton ref="giftSelectProduct"
+                                  isMandatory={true}
+                                  selectedValue={this.props.state.product}
+                                  title={strings.SelectProduct}
+                                  action={this.showBuyProducts.bind(this, true)}/>
+                </View>
             </View>
-            <ProductPreview product={this.props.state.product} />
+            <ProductPreview product={this.props.state.product}/>
 
             <View style={[styles.inputTextLayout, {width: StyleUtils.getWidth() - 15}]}>
                 <SimplePicker ref="promotionType" list={types} itemTitle={strings.GiftingBusiness}
@@ -152,20 +171,29 @@ export default class GiftComponent extends Component {
             </View>
             {
                 this.state.giftingBusiness === 'MY_BUSINESS' ?
-                <View>
-                    <View style={{flexDirection: 'row', justifyContent: 'center', alignItems: 'center'}}>
-                        <View style={{flex: 1.7, marginTop: 25}}><SelectButton ref="giftSelectGift"
-                                                                               isMandatory={true}
-                                                                               selectedValue={this.props.state.giftProduct}
-                                                                               title={strings.SelectGift}
-                                                                               action={this.showProducts.bind(this, true)}/></View>
+                    <View>
+                        <View style={{flexDirection: 'row', justifyContent: 'center', alignItems: 'center'}}>
+                            <View style={{flex: 1.7, marginTop: 25}}>
+                                <SelectButton ref="giftSelectGift"
+                                              isMandatory={true}
+                                              selectedValue={this.props.state.giftProduct}
+                                              title={strings.SelectGift}
+                                              action={this.showProducts.bind(this, true)}/>
+                            </View>
+                        </View>
+                        < ProductPreview product={this.props.state.giftProduct} type='gift'/>
                     </View>
-                    < ProductPreview product = {this.props.state.giftProduct} type='gift' />
-                </View>
                     :
-                <View>
-                    <Text>{this.state.giftingBusiness}</Text>
-                </View>
+                    <View>
+                        <View style={{flex: 1.7, marginTop: 25}}>
+                            <SelectButton ref='SearchBusinessByPermittedUser'
+                                          title={strings.SearchOtherBusiness}
+                                          action={this.searchBusinessByPermittedUser.bind(this, true)}/>
+                        </View>
+                        <UserPreview user={this.state.otherBusinessPermittedUser}/>
+                        <BusinessPreview isSelect={false} business={this.state.otherBusiness}/>
+                    </View>
+
             }
         </View>
     }

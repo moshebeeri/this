@@ -242,7 +242,11 @@ function saveInstance(req, res, instance) {
         if (err) return handleError(res, err);
         graphModel.query(`MATCH (i:instance { _id:'${req.params.id}'}) SET i.quantity=i.quantity-1`, function (err) {
           if (err) return handleError(res, err);
-          return res.status(200).json(savedInstance);
+          SavedInstance.findById(savedInstance._id).exec((err, si) => {
+            if (err) return handleError(res, err);
+            graphModel.relate_ids(req.user._id, 'SAVED', instance.promotion._id);
+            return res.status(200).json(si);
+            })
         });
       });
     });
@@ -259,7 +263,6 @@ function isUniqueInstance(status) {
 
 //'/save/:id'
 exports.save = function (req, res) {
-  console.log(`instance save ${req.params.id}`)
   Instance
     .findById(req.params.id)
     .exec(function (err, instance) {
@@ -707,14 +710,17 @@ exports.qrcode = function (req, res) {
     if (codes.length === 0)
       return res.status(404).send(`realize code mismatch`);
 
-    if (codes.length > 1)
+    if (codes.length > 1) {
+      console.error(`multiple instances found for ${req.params.id}`);
+      console.log(query);
       return res.status(500).send('multiple instances found');
-
+    }
     QRCode.toDataURL(JSON.stringify({
       t: 'i',
       code: codes[0]['rel.code']
     }), function (err, url) {
       if (err) {
+        console.error(err);
         return res.status(500).send(err);
       } else {
         return res.status(200).json({

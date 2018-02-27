@@ -3,7 +3,7 @@
  */
 import BusinessApi from "../api/business";
 import UserApi from "../api/user";
-import ProductApi from "../api/product";
+import productApi from "../api/product";
 import PricingApi from "../api/pricing";
 import PromotionApi from "../api/promotion";
 import * as actions from "../reducers/reducerActions";
@@ -18,7 +18,7 @@ import * as types from '../sega/segaActions';
 const BTClient = require('react-native-braintree-xplat');
 let businessApi = new BusinessApi();
 let userApi = new UserApi();
-let productApi = new ProductApi();
+
 let promotionApi = new PromotionApi();
 let entityUtils = new EntityUtils();
 let pricingApi = new PricingApi();
@@ -88,6 +88,46 @@ async function dispatchFollowByQrcode(dispatch, barcode, token) {
     } catch (error) {
         handler.handleError(error, dispatch, 'dispatchFollowByQrcode')
         logger.actionFailed("business_search_by_qrcode");
+    }
+}
+
+export function searchUserBusinessesByPhoneNumber(phoneNumber, navigation) {
+    return async function (dispatch,getState) {
+        try {
+            dispatch({
+                type: actions.USER_BUSINESS_BY_PHONE_SHOW_SPINNER,
+                show: true,
+            });
+            dispatch({
+                type: actions.USER_BUSINESS_BY_PHONE_SHOW_MESSAGE,
+                show: false,
+                message: '',
+            });
+            const token = getState().authentication.token;
+            let {user, info} = await businessApi.getUserBusinessesByPhoneNumber(phoneNumber, token);
+            if (user && info) {
+                dispatch({
+                    type: actions.USER_BUSINESS_BY_PHONE_SET_DATA,
+                    user,
+                    info
+                });
+            } else {
+                dispatch({
+                    type: actions.USER_BUSINESS_BY_PHONE_SHOW_MESSAGE,
+                    show: true,
+                    message: "User not found",
+                });
+            }
+            dispatch({
+                type: actions.USER_BUSINESS_BY_PHONE_SHOW_SPINNER,
+                show: false,
+            });
+            handler.handleSuccses(getState(),dispatch);
+            //navigation.goBack();
+        } catch (error) {
+            handler.handleError(error, dispatch, 'UserBusinessesByPhoneNumber');
+            logger.actionFailed('UserBusinessesByPhoneNumber');
+        }
     }
 }
 
@@ -278,39 +318,17 @@ export function saveBusiness(business, navigation) {
                 type: actions.SAVING_BUSINESS,
             });
             const token = getState().authentication.token;
-            let createdBusiness = await entityUtils.create('businesses', business, token);
-            createdBusiness.pictures = [];
-            let pictures = [];
-            if (business.image.path) {
-                pictures.push(business.image.path);
-                createdBusiness.pictures.push({pictures: pictures});
-            } else {
-                pictures.push(business.image.uri);
-                createdBusiness.pictures.push({pictures: pictures});
-            }
-            if (business.logoImage.path) {
-                createdBusiness.logo = business.logoImage.path;
-            } else {
-                createdBusiness.logo = business.logoImage.uri;
-            }
             dispatch({
-                type: actions.BUSINESS_UPLOAD_PIC,
-                item: {businessResponse: createdBusiness, business: business}
-            })
-            dispatch({
-                type: actions.UPSERT_MY_BUSINESS_SINGLE,
-                item: {business: createdBusiness}
-            });
-            dispatch({
-                type: actions.SELECT_BUSINESS,
-                selectedBusiness: createdBusiness
-            });
-            dispatch({
-                type: actions.SAVING_BUSINESS_DONE,
+                type: types.SAVE_BUSINESS,
+                business: business,
+                token: token
             });
             dispatch({
                 type: actions.SAVE_BUSINESS_TAMPLATE,
                 templateBusiness: {},
+            });
+            dispatch({
+                type: actions.SAVING_BUSINESS_DONE,
             });
             navigation.goBack();
         } catch (error) {
@@ -395,6 +413,9 @@ export function setBusinessQrCode(business) {
     return async function (dispatch, getState) {
         try {
             const token = getState().authentication.token;
+            dispatch({
+                type: actions.REST_BUSINESS_QRCODE,
+            });
             let response = await businessApi.getBusinessQrCodeImage(business.qrcode, token);
             dispatch({
                 type: actions.UPSERT_BUSINESS_QRCODE,
@@ -575,13 +596,27 @@ export function updateBusinesCategory(item) {
     return async function (dispatch, getState) {
         const token = getState().authentication.token;
         let locale = FormUtils.getLocale();
-
         dispatch({
             type: types.UPDATE_BUSINESS_CATEGORY_REQUEST,
             token: token,
-            business:item,
-            locale:locale
+            business: item,
+            locale: locale
         })
+    }
+}
+
+export function clearUserBusinessByPhoneForm() {
+    return function (dispatch) {
+        dispatch({
+            type: actions.USER_BUSINESS_BY_PHONE_CLEAR,
+        });
+    };
+}
+
+export function setBusiness(createdBusiness) {
+    return {
+        type: actions.UPSERT_MY_BUSINESS_SINGLE,
+        item: {business: createdBusiness}
     }
 }
 

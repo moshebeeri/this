@@ -15,7 +15,7 @@ import {REHYDRATE} from "redux-persist/constants";
 import * as actions from "./reducerActions";
 
 export default function promotion(state = initialState, action) {
-    console.log(action.type);
+  //  console.log(action.type);
     if (action.type === REHYDRATE) {
 
         // retrive stored data for reducer callApi
@@ -47,7 +47,7 @@ export default function promotion(state = initialState, action) {
             return promotionsState;
 
         case actions.FEED_UPDATE_SOCIAL_STATE:
-            if (currentPromotions[action.id]) {
+            if (action.social_state && currentPromotions[action.id]) {
                 currentPromotions[action.id].social_state = action.social_state;
             }
             promotionsState.promotions = currentPromotions;

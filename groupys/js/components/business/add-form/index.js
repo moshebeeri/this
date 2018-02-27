@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import {Dimensions, Image, ScrollView, View} from 'react-native';
+import {Dimensions, Image, ScrollView, View,Keyboard} from 'react-native';
 import {Button, Container, Content, Fab, Footer, Form, Icon, Input, Item, Picker, Text} from 'native-base';
 import styles from './styles'
 import * as businessAction from "../../../actions/business";
@@ -18,6 +18,7 @@ import {
 import FormUtils from "../../../utils/fromUtils";
 import strings from '../../../i18n/i18n';
 import StyleUtils from "../../../utils/styleUtils";
+const { height} = Dimensions.get('window');
 
 class AddBusiness extends Component {
     static navigationOptions = ({navigation}) => ({
@@ -220,6 +221,9 @@ class AddBusiness extends Component {
             coverPath: image.path
         });
     }
+    dismissKyeboard(){
+        Keyboard.dismiss();
+    }
 
     validateForm(onValid) {
         let result = true;
@@ -337,7 +341,7 @@ class AddBusiness extends Component {
                             {this.createCoverImageComponent()}
                         </View>
 
-                        {this.props.saving && <Spinner/>}
+
 
                     </View>
                     <View style={[styles.inputTextLayout, {width: StyleUtils.getWidth() - 15}]}>
@@ -380,6 +384,7 @@ class AddBusiness extends Component {
 
                         <TextInput field={strings.TaxID} value={this.state.tax_id} returnKeyType='next' ref="6"
                                    refNext="6"
+                                   onSubmitEditing={this.dismissKyeboard.bind(this)}
                                    onChangeText={(tax_id) => this.setReduxState({tax_id})} isMandatory={true}/>
                     </View>
 
@@ -396,9 +401,11 @@ class AddBusiness extends Component {
 
                     </View>}
 
-
                 </ScrollView>
 
+                {this.props.saving &&  <View style={{justifyContent:'center',alignItems:'center',position:'absolute',width:StyleUtils.getWidth(),opacity:0.7,height:height,top:40,backgroundColor:'white'}}>
+                    <Spinner/>
+                </View>}
 
             </View>
         );

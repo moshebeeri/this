@@ -8,7 +8,8 @@ const initialState = {
     clientMessages: {},
     update: false,
     lastCall: {},
-    lastInstanceId: {}
+    lastInstanceId: {},
+    maxCallDone:{},
 };
 import {REHYDRATE} from "redux-persist/constants";
 import * as actions from "./reducerActions";
@@ -89,6 +90,14 @@ export default function comment(state = initialState, action) {
         case actions.GROUP_COMMENT_SHOW_TOP_LOADER:
             currentState.showTopLoader[action.gid] = action.showTopLoader;
             return currentState;
+        case actions.GROUP_COMMENT_MAX:
+            currentState.maxCallDone[action.gid] = true;
+            return currentState;
+        case actions.GROUP_COMMENT_MAX_NOT_RETRUNED:
+            currentState.maxCallDone[action.gid] = false;
+            return currentState;
+
+
         case actions.GROUP_COMMENT_ADD_MESSAGE:
 
             if (!clientMessage[action.groupId]) {

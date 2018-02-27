@@ -91,34 +91,25 @@ GraphModel.prototype.is_related_ids = function relate(from, name, to, callback){
   let query = util.format("MATCH (me{_id:'%s'})-[f:%s]->(follower{_id:'%s'}) return sign(count(f)) as exists", from, name, to);
   db.query(query, function(err, result) {
     if (err) { return callback(err) }
-    return callback(null, result[0].exists !== 0)
+    return callback(null, result[0] && result[0].exists !== 0)
   });
 };
 
-GraphModel.prototype.is_related_saved_instance = function(user_id, rel, instance_id, callback) {
-  let query = `MATCH (u:user{_id:'${user_id}' })-[rel:${rel}]->(savedInstance:SavedInstance)-[sf:SAVE_OF]->(instance:instance{_id:'${instance_id}'}) 
-  return sign(count(savedInstance)) as exists`;
+GraphModel.prototype.is_promotion_realized = function(user_id, promotion_id, callback) {
+  let query = `match (p:promotion{_id:'${promotion_id}'})<-[:INSTANCE_OF]-(:instance)<-[:SAVE_OF]-(sv:SavedInstance)<-[:REALIZED]-(u:user{_id:'${user_id}'}) 
+              return sign(count(sv)) as exists`;
   db.query(query, function(err, result) {
     if (err) { return callback(err) }
-    return callback(null, result[0].exists !== 0)
+    return callback(null, result[0] && result[0].exists !== 0)
   });
 };
-/**
-*
- let query = util.format("MATCH ()-[f:%s]->({_id:'%s'}) return count(f) as count",
- name, to);
- db.query(query, function(err, result) {
-    if (err) { return callback(err) }
-    callback(null, result[0].count)
-  });
-*
-**/
-GraphModel.prototype.saved_instance_rel_count = function(item_id, rel, callback){
-  let query = `MATCH (u:user)-[rel:${rel}]->(savedInstance:SavedInstance)-[sf:SAVE_OF]->(instance:instance{_id:'${item_id}'}) 
-  return count(savedInstance) as count`;
+
+GraphModel.prototype.promotion_realized_count = function(promotion_id, callback){
+  let query = `match (p:promotion{_id:'${promotion_id}'})<-[:INSTANCE_OF]-(:instance)<-[:SAVE_OF]-(sv:SavedInstance)<-[:REALIZED]-(u:user) 
+              return count(sv) as count`;
   db.query(query, function(err, result) {
     if (err) { return callback(err) }
-    return callback(null, result[0].count)
+    return callback(null, result[0]? result[0].count : 0)
   });
 };
 
@@ -138,7 +129,7 @@ GraphModel.prototype.count_out_rel_id = function count_out_rel(from, name, callb
     from, name);
   db.query(query, function(err, result) {
     if (err) { return callback(err) }
-    callback(null, result[0].count)
+    callback(null, result[0]? result[0].count : 0)
   });
 };
 
@@ -147,7 +138,7 @@ GraphModel.prototype.count_in_rel_id = function count_in_rel(name, to, callback)
     name, to);
   db.query(query, function(err, result) {
     if (err) { return callback(err) }
-    return callback(null, result[0].count)
+    return callback(null, result[0]? result[0].count : 0)
   });
 };
 /**
@@ -161,12 +152,16 @@ GraphModel.prototype.count_in_rel_id = function count_in_rel(name, to, callback)
  * return count(direct_comments)+count(indirect_comments) as count
  */
 GraphModel.prototype.count_in_though = function count_in_rel(to, rel, rel_between, callback) {
-  let query =   `MATCH (p{_id:'${to}'})<-[direct:${rel}]-()
-                  OPTIONAL MATCH (p)<-[:${rel_between}]-()<-[indirect:${rel}]-()
-                  return count(direct)+count(indirect) as count`;
+  let query = ` MATCH (e{_id:'${to}'})<-[direct:${rel}]-()
+                WITH count(direct) as directs
+                MATCH (e{_id:'${to}'})<-[:${rel_between}]-()<-[indirect:${rel}]-()
+                RETURN directs + count(indirect) as count`;
+  // query =   `MATCH (p{_id:'${to}'})<-[direct:${rel}]-()
+  //             OPTIONAL MATCH (p)<-[:${rel_between}]-()<-[indirect:${rel}]-()
+  //             return count(direct)+count(indirect) as count`;
   db.query(query, function(err, result) {
     if (err) { return callback(err) }
-    return callback(null, result[0].count)
+    return callback(null, result[0]? result[0].count : 0 )
   });
 };
 
@@ -252,8 +247,9 @@ GraphModel.prototype.owner_followers_follow_business = function owner_followers_
   let userFilter = utils.undefined(follower_id)? '' : `{ _id:'${follower_id}'}`;
 
   let query = `MATCH (u:user ${userFilter})-[:FOLLOW]->(owner:user { _id:'${owner_id}' })-[:ROLE{name:"OWNS"}]->(b:business{type:'SMALL_BUSINESS'})
-  OPTIONAL MATCH (u:user)-[:FOLLOW]->(owner:user { _id:'${owner_id}' })-[:ROLE{name:"OWNS"}]->(b:business{type:'PERSONAL_SERVICE'})
+  WHERE b.type = 'SMALL_BUSINESS' OR b.type = 'PERSONAL_SERVICE'
   CREATE UNIQUE (u)-[r:FOLLOW]->(b)` ;
+
   if (utils.defined(callback)) {
     db.query(query, callback);
   } else {
@@ -265,16 +261,11 @@ GraphModel.prototype.owner_followers_follow_business = function owner_followers_
   }
 };
 
-GraphModel.prototype.owner_followers_follow_default_group = function owner_followers_follow_default_group(owner_id, follower_id, callback){
-  if(typeof follower_id === 'function'){
-    callback = follower_id;
-    follower_id = null;
-  }
-  let userFilter = utils.undefined(follower_id)? '' : `{ _id:'${follower_id}'}`;
+GraphModel.prototype.owner_followers_follow_default_group = function owner_followers_follow_default_group(owner_id, callback){
+  let query = `MATCH (u:user)-[:FOLLOW]->(owner:user { _id:'${owner_id}' })-[:ROLE{name:"OWNS"}]->(b:business)-[:DEFAULT_GROUP]->(g)
+                WHERE b.type = 'SMALL_BUSINESS' OR b.type = 'PERSONAL_SERVICE'   
+                CREATE UNIQUE (u)-[r:FOLLOW]->(g)`;
 
-  let query = `MATCH (u:user ${userFilter})-[:FOLLOW]->(owner:user { _id:'${owner_id}' })-[:ROLE{name:"OWNS"}]->(b:business{type:'SMALL_BUSINESS'})-[:DEFAULT_GROUP]->(g)
-  OPTIONAL MATCH (u:user)-[:FOLLOW]->(owner:user { _id:'${owner_id}' })-[:ROLE{name:"OWNS"}]->(b:business{type:'PERSONAL_SERVICE'})-[:DEFAULT_GROUP]->(g)
-  CREATE UNIQUE (u)-[r:FOLLOW]->(g)` ;
   if (utils.defined(callback)) {
     db.query(query, callback);
   } else {
@@ -304,12 +295,11 @@ GraphModel.prototype.related_type_id_dir_query = function related_type_id_dir_qu
     match = "MATCH (s { _id:'%s' })-[r:%s]->(ret:%s) ";
   else if(dir==="in")
     match = "MATCH (s { _id:'%s' })<-[r:%s]-(ret:%s) ";
-  let query = util.format(
+  return util.format(
     match +
     "return ret._id as _id " +
     "ORDER BY r.timestamp DESC " +
     "skip %d limit %d", start, name, ret_type, skip, limit);
-  return query;
 };
 
 GraphModel.prototype.paginate_query = function(query, skip, limit){

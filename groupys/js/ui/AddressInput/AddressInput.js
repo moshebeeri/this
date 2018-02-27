@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import {I18nManager, Text, View} from 'react-native';
+import {I18nManager, Text, View,Keyboard} from 'react-native';
 import {Icon, Input, Spinner} from 'native-base';
 import styles from './styles';
 import {DynamicMessage, TextInput,ThisText} from '../index';
@@ -129,6 +129,7 @@ class AddressInput extends Component {
 
     async onSubmit(onValid) {
         this.checkAddress(onValid);
+        Keyboard.dismiss();
         this.setSubmut();
     }
 

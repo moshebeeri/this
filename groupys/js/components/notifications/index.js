@@ -20,6 +20,7 @@ import NotificationListView from './list-view/index'
 import GenericListManager from '../generic-list-manager/index'
 import * as notificationAction from "../../actions/notifications";
 import * as groupActions from "../../actions/groups";
+import {getNotification} from '../../selectors/notificationSelector'
 import {bindActionCreators} from "redux";
 
 class Notification extends Component {
@@ -35,12 +36,12 @@ class Notification extends Component {
     }
 
     render() {
-        const {notification, navigation, actions} = this.props;
+        const {notification, navigation, actions,rows} = this.props;
         return (
             <View style={{flex: 1}}>
 
 
-                <GenericListManager navigation={navigation} rows={notification.notification} actions={actions}
+                <GenericListManager navigation={navigation} rows={rows} actions={actions}
                                     update={notification.update} ItemDetail={this.renderItem.bind(this)}/>
             </View>
 
@@ -51,9 +52,9 @@ class Notification extends Component {
 
 export default connect(
     state => ({
+        rows: getNotification(state.notification),
         notification: state.notification,
-        // selectedTab:state.mainTab.selectedTab,
-        // currentScreen:state.render.currentScreen,
+
     }),
     (dispatch) => ({
         actions: bindActionCreators(notificationAction, dispatch),

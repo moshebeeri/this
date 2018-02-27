@@ -19,6 +19,7 @@ import loginForm from './form/loginReducer'
 import registerForm from './form/registerReducer'
 import signupForm from './form/signupReducer'
 import userRole from './form/userRoleReducer'
+import userBusinessesByPhone from './form/userBusinessesByPhoneReducer'
 import network from './networkReducer'
 import myPromotions from './MyPromotionsReducer'
 import commentInstances from './commenInstancesReducer'
@@ -42,6 +43,7 @@ export default function getRootReducer() {
         products: products,
         user: user,
         userRole: userRole,
+        userBusinessesByPhone: userBusinessesByPhone,
         notification: notification,
         comments: comments,
         instances: instances,

@@ -9,11 +9,10 @@ import * as groupAction from "../../../actions/groups";
 import InstanceComment from "./instancesComment";
 import {getFeeds} from "../../../selectors/groupFeedsSelector";
 import * as commentAction from "../../../actions/commentsGroup";
+import * as instanceGroupCommentsAction from "../../../actions/instanceGroupComments"
 import strings from "../../../i18n/i18n"
-import PageRefresher from '../../../refresh/pageRefresher'
 import {ScrolTabView} from '../../../ui/index'
 import GroupFeedComponent from './groupsFeeds'
-import Tasks from '../../../tasks/tasks'
 
 class GroupFeed extends Component {
     static navigationOptions = ({navigation}) => ({
@@ -36,17 +35,16 @@ class GroupFeed extends Component {
         BackHandler.addEventListener('hardwareBackPress', this.handleBack.bind(this));
         const {navigation, feeds} = this.props;
         const group = navigation.state.params.group;
-        PageRefresher.addGroupsFeed(group._id);
-        PageRefresher.visitedGroupFeeds(group._id);
         if (!feeds[group._id] || (feeds[group._id] && feeds[group._id].length === 0)) {
             this.props.actions.setFeeds(group, feeds[group._id]);
         }
         this.props.actions.clearUnreadPosts(group);
+        this.props.instanceGroupCommentsAction.stopListenForChat();
     }
 
     handleBack() {
-        Tasks.groupChatTaskstop();
-        //this.props.actions.fetchGroups();
+        this.props.actions.stopListenForChat();
+        this.props.instanceGroupCommentsAction.stopListenForChat();
     }
 
     handlePick(emoji) {
@@ -68,21 +66,11 @@ class GroupFeed extends Component {
     }
 
     changeTab(tab) {
-        const {navigation, commentGroupAction} = this.props;
+        const {navigation} = this.props;
         const group = navigation.state.params.group;
-        if (tab.i === 1) {
-            Tasks.groupChatTaskStart(group._id)
-            PageRefresher.upSertGroupsChat(group._id);
-            commentGroupAction.clearUnreadComments(group);
-        }else{
-            Tasks.groupChatTaskstop();
-        }
         this.setState({
             showChat: !this.state.showChat
         })
-        if (!this.state.showChat) {
-            commentGroupAction.fetchTopComments(group)
-        }
     }
 
     allowPost(group) {
@@ -100,6 +88,7 @@ class GroupFeed extends Component {
     }
 
     render() {
+        console.log('rendering main group');
         let initPage = 0;
         if (this.props.navigation.state.params.chat) {
             initPage = 1;
@@ -164,7 +153,8 @@ export default connect(
     }),
     (dispatch) => ({
         actions: bindActionCreators(groupAction, dispatch),
-        commentGroupAction: bindActionCreators(commentAction, dispatch)
+        commentGroupAction: bindActionCreators(commentAction, dispatch),
+        instanceGroupCommentsAction: bindActionCreators(instanceGroupCommentsAction, dispatch)
     })
 )(GroupFeed);
 

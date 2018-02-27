@@ -115,12 +115,15 @@ exports.show = function (req, res) {
     })
   });
 };
-exports.mine = function (req, res) {
-  let userId = req.user._id;
-  let query = `MATCH (user:user{_id:"${userId}"})-[role:ROLE]->(b:business) return b._id as business_id, role
-                order by business_id desc`;
+
+function getUserBusinesses(userId, includeSellers, callback) {
+  let roles = includeSellers?  "['OWNS', 'Admin', 'Manager', 'Seller']" : "['OWNS', 'Admin', 'Manager']";
+  let query = `MATCH (user:user{_id:"${userId}"})-[role:ROLE]->(b:business) 
+               WHERE role.name IN ${roles}
+               return b._id as business_id, role
+               order by business_id desc`;
   graphModel.query(query, function (err, businesses_role) {
-    if (err) return handleError(res, err);
+    if (err) return callback(err);
     let _ids = [];
     let userRoleById = {};
     businesses_role.forEach(business_role => {
@@ -130,9 +133,9 @@ exports.mine = function (req, res) {
     Business.find({}).where({$or: [{_id: {$in: _ids}}, {$and: [{creator: userId}, {'review.status': 'waiting'}]}]})
       .sort('-_id')
       .exec(function (err, businesses) {
-        if (err) return handleError(res, err);
-        get_businesses_state(businesses, req.user._id, function (err, businesses) {
-          if (err) return handleError(res, err);
+        if (err) return callback(err);
+        get_businesses_state(businesses, userId, function (err, businesses) {
+          if (err) return callback(err);
           let info = [];
           businesses.forEach(business => {
             info.push({
@@ -140,31 +143,31 @@ exports.mine = function (req, res) {
               role: userRoleById[business._id]
             });
           });
-          return res.status(200).json(info);
+          return callback(null, info);
         })
       });
   })
+}
+
+exports.mine = function (req, res) {
+  let userId = req.user._id;
+  getUserBusinesses(userId, true, (err, info) => {
+    if(err) return handleError(res, err);
+    return res.status(200).json(info);
+  });
 };
 
-/*
-    Business.find({}).where('_id').in(_ids)
-      .sort({_id: 'desc'})
-      .exec(function (err, businesses) {
-        if (err) return handleError(res, err);
-        get_businesses_state(businesses, req.user._id, function (err, businesses) {
-          if (err) return handleError(res, err);
-          let info = [];
-          console.log(JSON.stringify(businesses));
-          businesses.forEach(business => {
-            info.push({
-              business: business,
-              role: userRoleById[business._id]
-            });
-          });
-          return res.status(200).json(info);
-        })
-      });
- */
+exports.getUserBusinessesByPhone = function (req, res) {
+  User.findOne({ $and: [{phone_number: req.params.phone},
+    {country_code: req.params.country_code}]}, function (err, user) {
+    if(err) return handleError(res, err);
+    getUserBusinesses(user._id, false, (err, info) => {
+      if(err) return handleError(res, err);
+      return res.status(200).json({user,info});
+    });
+  });
+};
+
 function business_follow_activity(follower, business) {
   activity.activity({
     business,
@@ -175,7 +178,12 @@ function business_follow_activity(follower, business) {
   });
 }
 
-exports.followBusiness = function (userId, businessId, callback) {
+function debugFunc(param) {
+  let q = `match (user:user{_id:"5a8ac830d984c43b756fa89b"}) return count(user) as n`;
+  graphModel.query(q, (err, res)=>console.log(`debugFunc: ${param} ${JSON.stringify(res)}`))
+}
+
+function followBusiness(userId, businessId, callback) {
   Business.findById(businessId)
     .exec(function (err, business) {
       if (err) return console.error(err);
@@ -189,8 +197,10 @@ exports.followBusiness = function (userId, businessId, callback) {
             if (unFollowExist) return callback(null);
             //first time follow
             business_follow_activity(userId, businessId);
-            let query = `MATCH (b:business{_id:"${businessId}"})-[d:DEFAULT_GROUP]->(g:group) 
-                         CREATE UNIQUE (user:user{_id:"${userId}"})-[f:FOLLOW]->(g)`;
+
+            let query = `MATCH (user:user{_id:"${userId}"}), (b:business{_id:"${businessId}"})-[d:DEFAULT_GROUP]->(g:group) 
+                         CREATE UNIQUE (user)-[f:FOLLOW]->(g)`;
+
             graphModel.query(query, function (err) {
               if (err) return callback(err);
               onAction.follow(userId, businessId);
@@ -203,12 +213,12 @@ exports.followBusiness = function (userId, businessId, callback) {
         })
       });
     });
-};
+}
 
 exports.follow = function (req, res) {
   let userId = req.user._id;
   let businessId = req.params.business;
-  this.followBusiness(userId, businessId, function (err) {
+  followBusiness(userId, businessId, function (err) {
     if (err) return handleError(res, err);
     return res.status(200).send();
   })
@@ -318,7 +328,7 @@ function create_business_default_group(business) {
     business.save((err) => {
       if(err) return console.error(err);
       graphModel.owner_followers_follow_default_group(business.creator._id);
-
+      //graphModel.relate_ids(business.creator._id, 'FOLLOW', group._id);
     });
   });
 }
@@ -355,7 +365,7 @@ function sendValidationEmail(businessId) {
 }
 
 function reviewRequest(business) {
-  email.send('reviewBusiness', 'moshe@low.la', {
+  email.send('reviewBusiness', 'THIS@low.la', {
     name: 'moshe',
     businessEmail: business.email,
     businessName: business.name,
@@ -399,9 +409,12 @@ function createValidatedBusiness(business, callback) {
       }
       Role.createRole(business.creator._id, business._id, Role.Roles.get('OWNS'), function (err) {
         if (err) return callback(err);
+        graphModel.relate_ids(business.creator._id, 'FOLLOW', business._id);
+
         if (business.type === 'PERSONAL_SERVICES' || business.type === 'SMALL_BUSINESS') {
           graphModel.owner_followers_follow_business(business.creator._id);
         }
+
         if (defined(business.shopping_chain))
           graphModel.relate_ids(business._id, 'BRANCH_OF', business.shopping_chain._id);
         if (defined(business.mall))
@@ -416,7 +429,6 @@ function createValidatedBusiness(business, callback) {
         }, function (err) {
           if (err) return console.error(err);
         });
-        console.log('createValidatedBusiness creating create_business_default_group');
         create_business_default_group(business);
         notifyOnAction(business);
         return callback(null, business);

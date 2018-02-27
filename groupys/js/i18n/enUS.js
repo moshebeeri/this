@@ -254,6 +254,22 @@ NoProductSelected                             : "No Product Selected",
 MyBusiness                                    : "My Business",
 OtherBusiness                                 : "Other Business",
 GiftingBusiness                               : "Gifting Business",
+SelectUser                                    : "Select User",
+SearchOtherBusiness                           : "Search Other Business",
+User                                          : "User",
+ScanToFollow                                  : "Scan To Follow",
+NoUserSelected                                : "No User Selected",
+NoBusinessSelected                            : "No Business Selected",
+SearchBusinessByUserPhoneNumberTitle          : "Business By User",
+SignUpQuick                                   : "Sign-up via QrCode",
+SignUpQuickMessage                            : "For Quick SingUp Click Here",
+NoAccountMessage                              : "Does not have an account ?",
+SKU                                           : "SKU",
+ViewGroup                                     : "View Group",
+
+
+
+
 
 };
 

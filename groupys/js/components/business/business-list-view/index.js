@@ -95,26 +95,17 @@ export default class BusinessListView extends Component {
                     }}>
                         <View style={{flexDirection: 'row', alignItems: 'center'}}>
                             {banner}
-
-
                         </View>
-
-
                     </View>
 
                     <View style={{borderTopWidth: 2, borderColor: '#eaeaea', backgroundColor: 'white'}}
                           key={this.props.index}>
-
-
                         {(permissionsButton || productsButton || promotionButton) &&  <View style={{
                             height: vh * 6, flexDirection: 'row', alignItems: 'center',
                             justifyContent: 'space-between',
                         }}>
                             {permissionsButton}
-
                             {productsButton}
-
-
                             {promotionButton}
 
                         </View>}
@@ -122,8 +113,6 @@ export default class BusinessListView extends Component {
                             height: vh * 6, flexDirection: 'row', alignItems: 'center',
                             justifyContent: 'space-between',marginRight:10,marginLeft:10,
                         }}>
-
-
                             <ThisText>{strings.confirmBusinessByMailMessage}</ThisText>
                             <EditButton iconName='refresh' onPress={this.refreshBusiness.bind(this)}/>
                         </View>}
@@ -131,14 +120,10 @@ export default class BusinessListView extends Component {
                             height: vh * 6, flexDirection: 'row', alignItems: 'center',
                             justifyContent: 'space-between',marginRight:10,marginLeft:10,
                         }}>
-
-
                             <ThisText>{strings.validatingBusinessMessage}</ThisText>
                             <EditButton iconName='refresh' onPress={this.refreshBusiness.bind(this)}/>
                         </View>}
                     </View>
-
-
                 </View>
             </View>
         );

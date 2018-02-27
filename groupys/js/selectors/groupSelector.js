@@ -27,11 +27,11 @@ export const getGroups = createSelector([getStateGroups,getStateComments],
             }).sort(function(a, b){
                 let aTouched = a.touched;
                 if(!a.touched){
-                    aTouched = 0;
+                   return -1;
                 }
                 let bTouched = b.touched;
                 if(!b.touched){
-                    bTouched = 0;
+                  return 1;
                 }
                 return bTouched - aTouched  ;
             });

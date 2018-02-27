@@ -19,7 +19,7 @@ import * as actions from './../reducerActions';
 import {REHYDRATE} from 'redux-persist/constants'
 
 export default function signupForm(state = initialState, action) {
-    console.log(action.type);
+ //   console.log(action.type);
     switch (action.type) {
 
 

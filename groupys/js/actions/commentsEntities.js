@@ -1,10 +1,11 @@
 import CommentsApi from "../api/commet";
-import FeedApi from "../api/feed";
 import * as actions from "../reducers/reducerActions";
 import ActionLogger from './ActionLogger'
-import  handler from './ErrorHandler'
+import handler from './ErrorHandler'
+import * as types from '../sega/segaActions';
+import {put} from 'redux-saga/effects'
+
 let commentsApi = new CommentsApi();
-let feedApi = new FeedApi();
 let logger = new ActionLogger();
 
 export function fetchTop(feeds, token, entities, generalId) {
@@ -42,9 +43,9 @@ export function fetchTopComments(entities, generalId) {
                     generalId: generalId,
                 }))
             }
-            handler.handleSuccses(getState(),dispatch)
+            handler.handleSuccses(getState(), dispatch)
         } catch (error) {
-            handler.handleError(error, dispatch,'fetchTopComments')
+            handler.handleError(error, dispatch, 'fetchTopComments')
             logger.actionFailed('fetchTopComments')
         }
     }
@@ -62,9 +63,9 @@ export function sendMessage(entities, generalId, message) {
                 generalId: generalId,
                 message: messageItem
             });
-            handler.handleSuccses(getState(),dispatch)
+            handler.handleSuccses(getState(), dispatch)
         } catch (error) {
-            handler.handleError(error, dispatch,'createGlobalComment')
+            handler.handleError(error, dispatch, 'createGlobalComment')
             logger.actionFailed('createGlobalComment')
         }
     }
@@ -82,45 +83,136 @@ function createMessage(message, user) {
     }
 }
 
-export function setNextFeeds(comments, entities, generalId) {
+export function setNextFeeds(entities, generalId) {
     return async function (dispatch, getState) {
         try {
             const token = getState().authentication.token;
             const user = getState().user.user;
             if (!user)
                 return;
-            if (getState().entityComments.lastCall[generalId]) {
-                if (new Date().getTime() - new Date(getState().entityComments.lastCall[generalId]).getTime() < 10000) {
-                    return;
-                }
-            }
-            let response;
-            if (comments && comments.length > 0) {
-                response = await commentsApi.getComment(entities, token, comments.length);
-            } else {
-                response = await commentsApi.getComment(entities, token, 0);
+            const comments = getState().entityComments.entityCommentsOrder[generalId];
+            if (comments && getState().entityComments.maxLoadingDone[generalId] && comments.length > 0) {
+                return;
             }
             dispatch({
-                type: actions.ENTITIES_COMMENT_LOADING_DONE,
-                loadingDone: true,
-                generalId: generalId
+                type: types.FEED_CHAT_SCROLL_UP,
+                token: token,
+                generalId: generalId,
+                entities: entities,
+                comments: comments
             });
-            if (response.length > 0) {
-                response.forEach(item => dispatch({
+            handler.handleSuccses(getState(), dispatch)
+        } catch (error) {
+            handler.handleError(error, dispatch, 'commentsApi.getComment')
+            logger.actionFailed('commentsApi.getComment')
+        }
+    }
+}
+
+export function* updateChatScrollUp(response, generalId) {
+    if (response.length > 0) {
+        while (item = response.pop()) {
+            if(item) {
+                yield put({
                     type: actions.UPSERT_ENTITIES_COMMENT,
                     item: item,
                     generalId: generalId,
-                }));
-                dispatch({
-                    type: actions.ENTITIES_COMMENT_LAST_CALL,
-                    lastCall: new Date(),
-                    generalId: generalId,
-                });
+                })
             }
-            handler.handleSuccses(getState(),dispatch)
-        } catch (error) {
-            handler.handleError(error, dispatch,'commentsApi.getComment')
-            logger.actionFailed('commentsApi.getComment')
+        }
+        yield put({
+            type: actions.ENTITIES_COMMENT_INSTANCE_CLEAR_MESSAGE,
+            generalId: generalId,
+        });
+    }
+}
+
+export function* updateChatTop(response, generalId,) {
+    if (response.length > 0) {
+        while (item = response.pop()) {
+            if(item) {
+                yield put({
+                    type: actions.UPSERT_ENTITIES_TOP_COMMENT,
+                    item: item,
+                    generalId: generalId,
+                })
+            }
+        }
+        yield put({
+            type: actions.ENTITIES_COMMENT_INSTANCE_CLEAR_MESSAGE,
+            generalId: generalId,
+        });
+    }
+}
+
+export function feedChatDone(generalId) {
+    return {
+        type: actions.ENTITIES_COMMENT_LOADING_DONE,
+        loadingDone: true,
+        generalId: generalId
+    }
+}
+
+export function feedChatMaxLoad(generalId) {
+    return {
+        type: actions.ENTITIES_COMMENT_MAX_LOADING_DONE,
+        loadingDone: true,
+        generalId: generalId
+    }
+}
+
+export function feedChatMaxLoaddNotReturned(generalId) {
+    return {
+        type: actions.ENTITIES_COMMENT_MAX_LOADING_DONE,
+        loadingDone: false,
+        generalId: generalId
+    }
+}
+
+export function* restartListenForChat(entities, generalId, entitiesComents, token) {
+
+    if(entitiesComents && entitiesComents[0] && entitiesComents[0]._id ) {
+        yield put({
+            type: types.CANCEL_FEED_CHAT_LISTENER,
+        });
+        yield put({
+            type: types.LISTEN_FOR_FEED_CHATS,
+            entities: entities,
+            token: token,
+            generalId: generalId,
+            lastChatId: entitiesComents[0]._id
+        });
+    }
+}
+
+export function stopListenForChat() {
+    return function (dispatch) {
+        dispatch({
+            type: types.CANCEL_FEED_CHAT_LISTENER,
+        })
+    }
+}
+
+export function startListenForChat(entities, generalId) {
+    return function (dispatch, getState) {
+        const token = getState().authentication.token;
+        let entitiesComents = getState().entityComments.entityCommentsOrder[generalId];
+        if (entitiesComents) {
+            dispatch({
+                type: types.LISTEN_FOR_FEED_CHATS,
+                entities: entities,
+                token: token,
+                generalId: generalId,
+                lastChatId: entitiesComents[0]
+            })
+        } else {
+            dispatch({
+                type: types.LISTEN_FOR_FEED_CHATS,
+                entities: entities,
+                token: token,
+                generalId: generalId,
+                lastChatId: 0
+            })
         }
     }
 }

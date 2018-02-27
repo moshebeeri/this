@@ -17,7 +17,7 @@ class ActionLogger {
     }
 
     async actionFailed(method,param) {
-        console.log(method);
+
         await this.init();
         if(param){
             Analytics.logEvent('operation_failed', {
@@ -33,7 +33,7 @@ class ActionLogger {
 
     async screenVisited(currentScreen,_prevScreen){
         await this.init();
-        Analytics.setScreenName(currentScreen)
+        Analytics.setScreenName(currentScreen);
         Analytics.logEvent('redirect', {
             'current_screen': currentScreen,
             'prev_screen':_prevScreen

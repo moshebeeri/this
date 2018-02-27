@@ -1,14 +1,15 @@
 import PromotionsApi from "../api/promotion";
-import ProductApi from "../api/product";
+import productApi from "../api/product";
 import FeedApi from "../api/feed";
 import * as actions from "../reducers/reducerActions";
 import ActionLogger from './ActionLogger'
 import handler from './ErrorHandler'
 import PromotionComperator from "../reduxComperators/PromotionComperator"
+import * as types from '../sega/segaActions';
 
 let promotionComperator = new PromotionComperator();
 let promotionApi = new PromotionsApi();
-let productApi = new ProductApi();
+
 let feedApi = new FeedApi();
 let logger = new ActionLogger();
 
@@ -120,37 +121,11 @@ export function savePromotion(promotion, businessId, navigation) {
                 type: actions.PROMOTION_SAVING,
             });
             const token = getState().authentication.token;
-            let response = await promotionApi.createPromotion(promotion, token);
-            let createdPromotion = response.promotions[0];
-            createdPromotion.pictures = [];
-            let pictures = [];
-            if (promotion.image.path) {
-                pictures.push(promotion.image.path);
-                pictures.push(promotion.image.path);
-                pictures.push(promotion.image.path);
-                pictures.push(promotion.image.path);
-                createdPromotion.pictures.push({pictures: pictures});
-            } else {
-                pictures.push(promotion.image.uri);
-                pictures.push(promotion.image.uri);
-                pictures.push(promotion.image.uri);
-                pictures.push(promotion.image.uri);
-                createdPromotion.pictures.push({pictures: pictures});
-            }
-            createdPromotion.social_state = {};
-            createdPromotion.social_state.saves = 0;
-            createdPromotion.social_state.comments = 0;
-            createdPromotion.social_state.likes = 0;
-            createdPromotion.social_state.shares = 0;
-            createdPromotion.social_state.realizes = 0;
             dispatch({
-                type: actions.PROMOTION_UPLOAD_PIC,
-                item: {promotionResponse: createdPromotion, promotion: promotion},
-            })
-            dispatch({
-                type: actions.UPSERT_PROMOTION_SINGLE,
-                item: createdPromotion,
-                businessId: businessId
+                type: types.SAVE_PROMOTION,
+                promotion: promotion,
+                businessId: businessId,
+                token: token
             });
             dispatch({
                 type: actions.PROMOTION_SAVING_DONE,
@@ -198,12 +173,12 @@ export function updatePromotion(promotion, businessId, navigation, itemId) {
     }
 }
 
-async function refershBusinessPromotion(item,businessId, token, dispatch) {
+async function refershBusinessPromotion(item, businessId, token, dispatch) {
     try {
         let response = await feedApi.getFeedSocialState(item._id, token);
         if (!response)
             return;
-        if (promotionComperator.shouldUpdateSocial(item, response)){
+        if (promotionComperator.shouldUpdateSocial(item, response)) {
             item.social_state = response;
             dispatch({
                 type: actions.UPSERT_PROMOTION_SINGLE,
@@ -229,6 +204,14 @@ async function fetchPromotionById(id, token, dispatch) {
     } catch (error) {
         handler.handleError(error, dispatch)
         logger.actionFailed('promotions-fetchPromotionById')
+    }
+}
+
+export function setPromotion(response,businessId) {
+    return{
+        type: actions.UPSERT_PROMOTION_SINGLE,
+        item: response,
+        businessId: businessId
     }
 }
 

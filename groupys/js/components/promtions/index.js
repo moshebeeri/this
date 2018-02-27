@@ -96,32 +96,8 @@ class Promotions extends Component {
         );
     }
 
-    createBackButtonTag() {
-        return <Button transparent style={{}} onPress={() => this.back()}>
-            <Icon3 active color={"#2db6c8"} size={20} name="ios-arrow-back"/>
-
-        </Button>;
-    }
-
-    createMenuTag() {
-        return <Menu>
-            <MenuTrigger>
-                <Icon4 style={{fontSize: 25, color: "#2db6c8"}} name="options-vertical"/>
-            </MenuTrigger>
-            <MenuOptions>
 
 
-                <MenuOption onSelect={this.onBoardingPromotion.bind(this)}>
-                    <ThisText>{strings.OnBoardingPromotion}</ThisText>
-                </MenuOption>
-
-            </MenuOptions>
-        </Menu>;
-    }
-
-    shouldComponentUpdate() {
-        return this.props.currentScreen === 'Promotions';
-    }
 }
 
 export default connect(

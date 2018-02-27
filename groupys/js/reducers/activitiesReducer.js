@@ -12,7 +12,7 @@ export default function activities(state = initialState, action) {
         };
     }
     let activityState = {...state};
-    console.log(action.type);
+  //      console.log(action.type);
     switch (action.type) {
         case actions.UPSERT_ACTIVITY:
             let currentActivities = activityState.activities;

@@ -3,7 +3,7 @@ import {REHYDRATE} from "redux-persist/constants";
 import * as actions from "./reducerActions";
 
 export default function notification(state = initialState, action) {
-    console.log(action.type);
+    //console.log(action.type);
     if (action.type === REHYDRATE) {
 
         // retrive stored data for reducer callApi
@@ -18,9 +18,11 @@ export default function notification(state = initialState, action) {
     switch (action.type) {
         case actions.SET_NOTIFICATION :
             if (action.notifications && action.notifications.length > 0) {
+                let shouldUpdate = imutableState.update;
                 action.notifications.forEach(notification => {
                     if(!currentNotificationsIds.includes(notification._id)) {
                         notification.key = notification._id;
+                        shouldUpdate = !imutableState.update;
                         currentNotificationsIds.push(notification._id);
                         currentNotifications.push(notification)
                         if(!notification.read){
@@ -31,6 +33,7 @@ export default function notification(state = initialState, action) {
                 return {
                     ...state,
                     notification: currentNotifications,
+                    update:shouldUpdate
                 };
             }
             return state;

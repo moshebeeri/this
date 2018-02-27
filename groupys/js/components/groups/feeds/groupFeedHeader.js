@@ -2,31 +2,27 @@
  * Created by roilandshut on 19/07/2017.
  */
 import React, {Component} from 'react';
-import {Image, TextInput, Platform, View,TouchableOpacity,Dimensions,I18nManager} from 'react-native';
+import {Dimensions, I18nManager, Image, Platform, TextInput, TouchableOpacity, View} from 'react-native';
 import {connect} from 'react-redux';
 import {actions} from 'react-native-navigation-redux-helpers';
-import {Container, Footer, Button, Thumbnail, Text} from 'native-base';
+import {Button, Container, Footer, Thumbnail} from 'native-base';
 import styles from './styles'
 import store from 'react-native-simple-store';
 import GroupApi from "../../../api/groups"
-import {GroupHeader, PromotionHeaderSnippet} from '../../../ui/index';
-const {width, height} = Dimensions.get('window')
-const vh = height / 100
-const qrcode = require('../../../../images/qr-code.png');
-let groupApi = new GroupApi();
-import {
-    Menu,
-    MenuOptions,
-    MenuOption,
-    MenuTrigger,
-} from 'react-native-popup-menu';
+import {GroupHeader, ThisText} from '../../../ui/index';
+import {Menu, MenuOption, MenuOptions, MenuTrigger,} from 'react-native-popup-menu';
 import * as groupsAction from "../../../actions/groups";
+import * as instanceGroupCommentsAction from "../../../actions/instanceGroupComments"
 import Icon2 from 'react-native-vector-icons/SimpleLineIcons';
 import Icon from 'react-native-vector-icons/Ionicons';
 import StyleUtils from '../../../utils/styleUtils'
 import {bindActionCreators} from "redux";
 import strings from "../../../i18n/i18n"
-import Tasks from '../../../tasks/tasks'
+
+const {height} = Dimensions.get('window');
+const vh = height / 100
+const qrcode = require('../../../../images/qr-code.png');
+let groupApi = new GroupApi();
 
 class GroupFeedHeader extends Component {
     constructor(props) {
@@ -42,16 +38,18 @@ class GroupFeedHeader extends Component {
     }
 
     handleBack() {
-        Tasks.groupChatTaskstop();
-        this.props.fetchGroups();
+        this.props.actions.fetchGroups();
     }
 
     showScanner() {
         let group = this.props.item;
-        this.props.navigation.navigate('ReadQrCode',{group:group});
+        this.props.navigation.navigate('ReadQrCode', {group: group});
     }
+
     navigateBack() {
         this.handleBack();
+        this.props.actions.stopListenForChat();
+        this.props.instanceGroupCommentsAction.stopListenForChat();
         this.props.navigation.goBack();
     }
 
@@ -75,13 +73,16 @@ class GroupFeedHeader extends Component {
         this.props.navigation.navigate("addPromotions", {business: group.entity.business, group: group});
     }
 
-
-    updateGroup(){
+    updateGroup() {
         let group = this.props.item;
-        this.props.navigation.navigate("AddGroups", { group: group});
-
-
+        this.props.navigation.navigate("AddGroups", {group: group});
     }
+
+    viewGroup() {
+        let group = this.props.item;
+        this.props.navigation.navigate("AddGroups", {group: group,view:true});
+    }
+
     inviteUser(users) {
         if (users) {
             let groupId = this.props.item._id;
@@ -100,13 +101,13 @@ class GroupFeedHeader extends Component {
         }
         let userId = this.state.userId;
         let isGroupAdmin = false;
-        if(Array.isArray(group.admins)) {
+        if (Array.isArray(group.admins)) {
             group.admins.forEach(function (adminId) {
                 if (userId === adminId) {
                     isGroupAdmin = true;
                 }
             });
-        }else{
+        } else {
             Object.keys(group.admins).forEach(key => {
                 if (userId === group.admins[key]) {
                     isGroupAdmin = true;
@@ -117,30 +118,25 @@ class GroupFeedHeader extends Component {
     }
 
     render() {
-        let headerHeight = {   flexDirection: 'row',
+        let headerHeight = {
+            flexDirection: 'row',
             width: StyleUtils.getWidth(),
             height: vh * 10,
             backgroundColor: '#fff',
-            justifyContent:'center',
-            alignItems:'center'};
-
+            justifyContent: 'center',
+            alignItems: 'center'
+        };
         if (Platform.OS === 'ios') {
-            headerHeight = {   flexDirection: 'row',
+            headerHeight = {
+                flexDirection: 'row',
                 width: StyleUtils.getWidth(),
                 height: vh * 13,
                 backgroundColor: '#fff',
-                justifyContent:'center',
-                alignItems:'center'};
+                justifyContent: 'center',
+                alignItems: 'center'
+            };
         }
         let group = this.props.item;
-        let image = <Thumbnail square source={require('../../../../images/client_1.png')}/>
-        if (this.props.item.pictures && this.props.item.pictures.length > 0) {
-            image = <Thumbnail square source={{uri: this.props.item.pictures[0].pictures[3]}}/>
-        } else {
-            if (group.entity && group.entity.business &&  group.entity.business.pictures &&  group.entity.business.pictures[0]) {
-                image = <Thumbnail square source={{uri: group.entity.business.pictures[0].pictures[3]}}/>
-            }
-        }
         let groupInvite = undefined;
         let addPromotionMenu = undefined;
         if (group.role && (group.role === "owner" || group.role === "OWNS" || group.role === "Admin" || group.role === "Manager"  )) {
@@ -148,12 +144,10 @@ class GroupFeedHeader extends Component {
                 <ThisText>{strings.AddPromotion}</ThisText>
             </MenuOption>
         }
-
         let arrowName = I18nManager.isRTL ? "ios-arrow-forward" : "ios-arrow-back";
-
         if (this.isGroupAdmin(group)) {
             groupInvite = <Menu>
-                <MenuTrigger customStyles={{alignItems:'center',justifyContent:'center'}}>
+                <MenuTrigger customStyles={{alignItems: 'center', justifyContent: 'center'}}>
                     <Icon2 style={{fontSize: 25, color: "#2db6c8"}} name="options-vertical"/>
                 </MenuTrigger>
                 <MenuOptions>
@@ -169,12 +163,14 @@ class GroupFeedHeader extends Component {
         }
         return <View style={headerHeight}>
             <View style={styles.imageStyle}>
-                <Button style={{width:30,alignItems:'center',justifyContent:'center'}} transparent onPress={this.navigateBack.bind(this)}>
-                    <Icon style={{alignItems:'center',justifyContent:'center',fontSize: 20, color: "#2db6c8"}} name={arrowName}/>
+                <Button style={{width: 30, alignItems: 'center', justifyContent: 'center'}} transparent
+                        onPress={this.navigateBack.bind(this)}>
+                    <Icon style={{alignItems: 'center', justifyContent: 'center', fontSize: 20, color: "#2db6c8"}}
+                          name={arrowName}/>
                 </Button>
             </View>
-            <View style={{flex:10}}>
-           <GroupHeader noColor group={group}/>
+            <View style={{flex: 10}}>
+                <GroupHeader onPressAction={this.viewGroup.bind(this)} enablePress noColor group={group}/>
             </View>
             <View style={styles.group_actions}>
                 <TouchableOpacity onPress={() => this.showScanner()}
@@ -182,11 +178,10 @@ class GroupFeedHeader extends Component {
                                       width: 30, height: 30,
                                       flexDirection: 'column',
                                       alignItems: 'center',
-                                      justifyContent:'center',
-
+                                      justifyContent: 'center',
                                   }}
                                   regular>
-                    <Image resizeMode="cover" style={{ tintColor: '#2db6c8', marginTop:3,width: 25, height: 25}}
+                    <Image resizeMode="cover" style={{tintColor: '#2db6c8', marginTop: 3, width: 25, height: 25}}
                            source={qrcode}/>
 
                 </TouchableOpacity>
@@ -201,6 +196,9 @@ export default connect(
         businesses: state.businesses,
         user: state.user,
     }),
-    dispatch => bindActionCreators(groupsAction, dispatch)
+    (dispatch) => ({
+        actions: bindActionCreators(groupsAction, dispatch),
+        instanceGroupCommentsAction: bindActionCreators(instanceGroupCommentsAction, dispatch),
+    })
 )(GroupFeedHeader);
 

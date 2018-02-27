@@ -110,6 +110,8 @@ class AddPromotion extends Component {
             show_save: false,
             showProductsList: false,
             quantity: '',
+            otherBusinessPermittedUser:'',
+            otherBusiness: '',
             promotion: {}
         }
         let businessId = this.getBusinessId();
@@ -310,7 +312,7 @@ class AddPromotion extends Component {
             discount_on: '',
             distribution: '',
             show_save: false,
-        })
+        });
         if (this.props.navigation.state.params.group) {
             this.setState({
                 distribution: 'GROUP',
@@ -438,7 +440,7 @@ class AddPromotion extends Component {
 
     createDistributionForm() {
         let distribution = <View style={[styles.inputTextLayout, {width: StyleUtils.getWidth() - 15}]}>
-            <SimplePicker ref="TyoePicker" list={Distribution} itemTitle={strings.DistributionType}
+            <SimplePicker ref="TypePicker" list={Distribution} itemTitle={strings.DistributionType}
                           defaultHeader={strings.ChooseDistribution}
                           isMandatory onValueSelected={this.selectDistributionType.bind(this)}/>
         </View>;
@@ -542,7 +544,7 @@ class AddPromotion extends Component {
                         <TextInput field={strings.Description} value={this.state.info}
                                    returnKeyType='next' ref="5" refNext="5"
                                    onSubmitEditing={this.dismiss.bind(this)}
-                                   onChangeText={(info) => this.setState({info})} isMandatory={true}/>
+                                   onChangeText={(info) => this.setState({info})}/>
                     </View>
 
                     {conditionForm}
@@ -627,10 +629,9 @@ class AddPromotion extends Component {
     }
 
     shouldComponentUpdate(){
-        if(this.props.currentScreen ==='addPromotions' || this.props.currentScreen ==='SelectGroupsComponent' || this.props.currentScreen ==='SelectProductsComponent'  ){
-            return true;
-        }
-        return false;
+        return this.props.currentScreen ==='addPromotions' ||
+            this.props.currentScreen ==='SelectGroupsComponent' ||
+            this.props.currentScreen ==='SelectProductsComponent';
     }
 }
 

@@ -150,7 +150,7 @@ class AddPermittedUser extends Component {
         if (!this.state.searchUser) {
             title = strings.UpdateUserRole;
         }
-        return <View style={[styles.premtied_usesrs_container, {width: StyleUtils.getWidth()}]}>
+        return <View style={[styles.permitted_users_container, {width: StyleUtils.getWidth()}]}>
 
             <FormHeader showBack submitForm={this.saveFormData.bind(this)} navigation={this.props.navigation}
                         title={title} bgc="#FA8559"/>
@@ -210,10 +210,7 @@ class AddPermittedUser extends Component {
     }
 
     shouldComponentUpdate() {
-        if (this.props.currentScreen === 'addPermittedUser') {
-            return true;
-        }
-        return false;
+        return this.props.currentScreen === 'addPermittedUser';
     }
 }
 

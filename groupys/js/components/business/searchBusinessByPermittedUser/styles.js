@@ -2,7 +2,7 @@ const React = require('react-native');
 const {Dimensions, Platform} = React;
 const {width, height} = Dimensions.get('window')
 module.exports = {
-    premtied_usesrs_container: {
+    permitted_users_container: {
         flex: 1,
         height: height,
         width: width,
