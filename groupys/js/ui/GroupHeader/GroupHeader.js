@@ -38,7 +38,7 @@ export default class GroupHeader extends Component {
     createTitle(groupType) {
         switch (groupType) {
             case 'USERS':
-                return strings.PublicGroup;
+                return strings.PublicGroup; //change to icons @yb
             case 'BUSINESS':
                 return strings.BusinessGroup;
         }
@@ -50,6 +50,15 @@ export default class GroupHeader extends Component {
                 return {color: '#e65100'}
             case 'USERS':
                 return {color: '#2db6c8'}
+        }
+    }
+
+    createIcon(groupType) {
+        switch (groupType) {
+            case 'BUSINESS':
+                return <ImageController thumbnail size={16} source={require('../../../images/client_1.png')}/>
+            case 'USERS':
+                return <ImageController thumbnail size={16} source={require('../../../images/client_1.png')}/>
         }
     }
 
@@ -89,16 +98,25 @@ export default class GroupHeader extends Component {
 
                 </View>
                 <View style={styles.groupName}>
-                    <View style={{flexDirection: 'row'}}>
+                    <View style={{}}>
+                        <ThisText style={styles.groupNameText}>{group.name}</ThisText>
+                    </View>
+                    <View style={{flexDirection: 'row',  flex: 5,
+                        justifyContent: 'space-between',
+                        alignItems: 'center'}}>
                         <ThisText
                             style={this.createStyle(group.entity_type)}>{this.createTitle(group.entity_type)}</ThisText>
                         <ThisText> | </ThisText>
                         {group.social_state && <ThisText>{group.social_state.followers} {strings.Members} </ThisText>}
-                    </View>
-                    <View>
-                        <ThisText style={styles.groupNameText}>{group.name}</ThisText>
+
+
                     </View>
 
+                </View>
+                <View style={{flex: 1,
+                    justifyContent: 'center',
+                    alignItems: 'flex-end', marginRight:30}}>
+                    {this.createIcon(group.entity_type)}
                 </View>
             </View>
 

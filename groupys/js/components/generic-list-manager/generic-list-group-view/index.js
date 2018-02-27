@@ -23,6 +23,7 @@ import DateUtils from '../../../utils/dateUtils';
 import UiConverter from '../../../api/feed-ui-converter'
 import {GroupHeader, PromotionHeaderSnippet,ImageController,ThisText} from '../../../ui/index';
 import strings from '../../../i18n/i18n';
+import styles from "../../../ui/PromotionHeaderSnippet/styles";
 
 const {width, height} = Dimensions.get('window');
 const vw = width / 100;
@@ -56,11 +57,20 @@ export default class GenericListGroupView extends Component {
             alignItems: 'center',
             backgroundColor: 'white'
         };
+        const SubContainerStyle = {
+            alignItems: 'center',
+            backgroundColor: 'white',
+            padding:0,
+        };
+
         const row = <View key={index}>
-            <View style={{marginBottom: 10}}>
+            <View style={{marginBottom: 8}}>
                 <TouchableOpacity key={index} onPress={onPressItem} style={containerStyle}>
                     <GroupHeader group={item}/>
 
+                    {(promotion || post || message) && <View style={{marginLeft: 30, marginRight:30, width: width-30, justifyContent: 'flex-start', borderBottomWidth:1, borderBottomColor:'#CACACA', marginBottom:10}}>
+                        <ThisText style={{marginLeft: 4, marginBottom:2, fontWeight:'200', color:'#616F70', fontSize:14, textAlign:'left', backgroundColor:'white'}}>{strings.LatestActivity}</ThisText>
+                   </View>}
 
                     {promotion}
                     {post}
@@ -74,10 +84,10 @@ export default class GenericListGroupView extends Component {
 
 
                 </TouchableOpacity>
-                <TouchableOpacity style={containerStyle} onPress={onPressMessageItem}>
+                <TouchableOpacity style={SubContainerStyle} onPress={onPressMessageItem}>
                     {message}
                     {message && item.unreadMessages > 0 &&
-                    <View style={{marginLeft: 30, marginBottom: 5, width: width, justifyContent: 'flex-start'}}>
+                    <View style={{marginLeft: 30, marginBottom: 5, width: width, justifyContent: 'flex-start', backgroundColor:'white'}}>
                         <ThisText style={{
                             color: '#25964e',
                             fontWeight: 'bold'
@@ -142,7 +152,7 @@ export default class GenericListGroupView extends Component {
                     name: name
                 }
             }
-            const image = <ImageController thumbnail size={30} source={itemChat.avetar}/>
+            const image = <ImageController thumbnail size={36} source={itemChat.avetar}/>
             return <View style={styles.group_message_container}>
 
 
@@ -150,9 +160,9 @@ export default class GenericListGroupView extends Component {
 
                     {image}
 
-                    <View style={{padding: 2, alignItems: 'flex-start'}}>
-                        <ThisText>{itemChat.name}</ThisText>
-                        <ThisText>{itemChat.message}</ThisText>
+                    <View style={{marginLeft:15, alignItems: 'flex-start'}}>
+                        <ThisText style={styles.chatListLineTitleText}>{itemChat.name}</ThisText>
+                        <ThisText style={styles.chatListLineDescText}>{itemChat.message}</ThisText>
                     </View>
                 </View>
 
