@@ -117,6 +117,10 @@ export default class ChatMessage extends Component {
         }
     }
 
+    shouldComponentUpdate(){
+        return false;
+    }
+
     createMessageTime(date) {
         if (date) {
             return <ThisText note

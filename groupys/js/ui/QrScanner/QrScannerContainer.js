@@ -2,6 +2,7 @@
  * Created by roilandshut on 04/09/2017.
  */
 import React, {Component} from 'react';
+import {InteractionManager} from 'react-native';
 import {bindActionCreators} from 'redux';
 import {connect} from 'react-redux';
 import * as scannerAction from "../../actions/scanner";
@@ -19,7 +20,8 @@ class BusinessFollow extends Component {
 
     componentWillMount() {
         const {actions} = this.props;
-        actions.resetForm();
+        InteractionManager.runAfterInteractions(() => {
+        actions.resetForm()});
     }
 
     render() {
