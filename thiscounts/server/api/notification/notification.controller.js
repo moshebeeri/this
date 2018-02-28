@@ -6,7 +6,7 @@ const Notifications = require('../../components/notification');
 
 // Get list of notifications
 exports.find = function(req, res) {
-  Notification.find({$and:[{to: req.params.entity_id}, {list: true}]})
+  Notification.find({$and:[{to: {$eq: req.params.entity_id}}, {list: {$eq: true}}]})
     .skip(req.params.skip)
     .limit(req.params.limit)
     .exec(function (err, notifications) {
@@ -36,6 +36,7 @@ exports.show = function(req, res) {
 exports.create = function(req, res) {
   let notification = req.body;
   notification.timestamp = Date.now();
+  notification.list = notification.list? notification.list : true;
   Notification.create(notification, function(err, notification) {
     if(err) { return handleError(res, err); }
     return res.json(201, notification);
