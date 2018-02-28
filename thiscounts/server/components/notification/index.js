@@ -60,7 +60,6 @@ function toPayloadData(notification, callback){
   data.action = notification.action;
   data.notificationId = notification._id.toString();
   n.tag = data._id? data._id : '';
-  n.collapse_key = notification.collapse_key;
   unread(notification.to, function(err, badge){
     if(err) return callback(err);
     n.badge = badge.toString();

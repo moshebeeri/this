@@ -105,6 +105,7 @@ function groupFollowersExclude(groupId, exUserId, callback) {
 }
 
 function notifyGroupComment(comment) {
+  console.log(`notifyGroupComment`);
   groupFollowersExclude(comment.entities.group, comment.user, (err, ids)=> {
     let _ids = ids.map( id => id._id);
     console.log(JSON.stringify(_ids));
@@ -116,7 +117,6 @@ function notifyGroupComment(comment) {
       title: `new group comment`,
       body: comment.message,
       list: false,
-      collapse_key: `comment_${comment.entities.group.toString()}`
     }, _ids);
   });
 }
