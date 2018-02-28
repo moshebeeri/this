@@ -170,7 +170,11 @@ class ApplicationManager extends Component {
             return;
         }
         if (notification && notification.model === 'group') {
-            this.props.actions.showGroupPopup(notification._id, notification.notificationId, notification.title, notification.action);
+            if(notification.note ==="ask_invite"){
+                this.props.actions.showInviteGroupPopup(notification._id,notification.actor_user,notification.notificationId);
+            }else {
+                this.props.actions.showGroupPopup(notification._id, notification.notificationId, notification.title, notification.action);
+            }
             return;
         }
         if (notification && notification.model === 'business') {
@@ -297,22 +301,22 @@ class ApplicationManager extends Component {
             showAdd, showComponent, notifications,
             item, location, showPopup, token, notificationTitle,
             notificationAction, notificationGroup, notificationBusiness,
-            showSearchResults, businesses, businessActions, groups, groupsActions, showSearchGroupResults
+            showSearchResults, businesses, businessActions, groups, groupsActions, showSearchGroupResults,notificationOnAction
         } = this.props;
 
         console.log(this.state.activeTab);
         if (!showComponent) {
             return <View></View>
         }
-        let notificationPopupHeight = 300;
+        let notificationPopupHeight = 350;
         let notificationnTopPadding = 150
         if (item) {
             notificationPopupHeight = 80
             notificationnTopPadding = 30;
         }
         let notificationActionString
-        if (notificationAction) {
-            notificationActionString = this.translateNotificationAction(notificationAction)
+        if (notificationOnAction) {
+            notificationActionString = this.translateNotificationAction(notificationOnAction)
         }
         closeDrawer = () => {
             this.drawer._root.close()
@@ -378,13 +382,12 @@ class ApplicationManager extends Component {
                         <GroupsList groups={groups} joinGroup={groupsActions.joinGroup}/>
                     </View>}
                     {showPopup && <View style={{
-                        left: 2.5,
-                        borderBottomWidth: 2,
-                        borderTopWidth: 2,
+                        left: 10,
+                        borderWidth: 2,
                         borderColor: 'black',
                         top: notificationnTopPadding,
                         position: 'absolute',
-                        width: StyleUtils.getWidth() - 5,
+                        width: StyleUtils.getWidth() - 20,
                         height: height - notificationPopupHeight,
                         backgroundColor: 'white',
                         justifyContent: 'center',
@@ -416,7 +419,7 @@ class ApplicationManager extends Component {
                         }}>
 
 
-                            <View style={{flex: 1, alignItems: 'flex-start', justifyContent: 'flex-start'}}>
+                            <View style={{flex: 1, alignItems: 'center', justifyContent: 'center'}}>
                                 {notificationGroup && <GroupHeader group={notificationGroup}/>}
                                 {notificationBusiness && <BusinessHeader noProfile business={notificationBusiness}
                                                                          businessLogo={notificationBusiness.logo}
@@ -425,7 +428,7 @@ class ApplicationManager extends Component {
                                                                          hideMenu
                                                                          showActions={false}/>
                                 }
-                                <ThisText style={{paddingLeft: 10, paddingTop: 10}}>{notificationTitle}</ThisText>
+                                <ThisText style={{width: StyleUtils.getWidth() - 40, paddingTop: 10}}>{notificationTitle}</ThisText>
                             </View>
                             {notificationActionString &&
                             <View style={{flex: 1, paddingBottom: 10, justifyContent: 'flex-end',}}>
@@ -448,18 +451,23 @@ class ApplicationManager extends Component {
             return strings.Follow.toUpperCase();
             ;
         }
-        return undefined;
+        return action;
     }
 
     closePopup() {
-        const {notificationId} = this.props;
+        const {notificationId,notificationAction} = this.props;
+        notificationAction.readNotification(notificationId);
         this.props.actions.closePopup(notificationId);
     }
 
     handleGenericNotification() {
-        const {notificationAction, notificationId} = this.props;
+        const {notificationAction, notificationId,notificationGroup,notificationOnAction} = this.props;
         this.props.actions.doNotification(notificationId, notificationAction);
+        notificationAction.readNotification(notificationId);
         //Add generic API result
+        if(notificationOnAction === strings.JoinGroup.toUpperCase()) {
+            this.props.groupsActions.acceptInvitation(notificationGroup);
+        }
     }
 }
 
@@ -473,7 +481,7 @@ const mapStateToProps = (state) => {
         showComponent: showCompoenent(state),
         serFollower: state.user.followers,
         item: getPopUpInstance(state),
-        notificationAction: state.mainTab.notificationAction,
+        notificationOnAction: state.mainTab.notificationAction,
         notificationTitle: state.mainTab.notificationTitle,
         notificationId: state.mainTab.notificationId,
         notificationGroup: state.mainTab.notificationGroup,

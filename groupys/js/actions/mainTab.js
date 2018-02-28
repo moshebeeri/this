@@ -6,12 +6,15 @@ import NotificationApi from "../api/notification";
 import * as groupsActions from './groups'
 import GoupApi from "../api/groups";
 import BusinessApi from "../api/business";
+import UserApi from "../api/user";
 import ActionLogger from './ActionLogger';
 import handler from './ErrorHandler'
+import strings from '../i18n/i18n';
 
 let notificationApi = new NotificationApi();
 let instanceApi = new InstanceApi();
 let groupApi = new GoupApi();
+let userApi = new UserApi();
 let businessApi = new BusinessApi();
 let logger = new ActionLogger();
 
@@ -96,6 +99,34 @@ export function showGroupPopup(groupId, notificationId, notificationTitle, notif
                 notificationAction: notificationAction,
                 notificationGroup: group,
             });
+        } catch (error) {
+            handler.handleError(error, dispatch, 'showGroupPopup')
+            logger.actionFailed('showGroupPopup')
+        }
+    }
+}
+
+export function showInviteGroupPopup(groupId, userId, notificationId) {
+    return async function (dispatch, getState) {
+        try {
+            notificationApi.readNotification(notificationId);
+            const groups = getState().groups.groups;
+            const token = getState().authentication.token;
+            if(token) {
+                let group = groups[groupId];
+                if (!group) {
+                    group = await groupApi.get(token, groupId);
+                }
+                let user = await userApi.getUserById(token, userId)
+                dispatch({
+                    type: actions.APP_SHOW_GENERAL_POPUP,
+                    showPopup: true,
+                    notificationTitle: strings.inviteUserToGroup.formatUnicorn(user.name, group.name),
+                    notificationId: notificationId,
+                    notificationAction: strings.JoinGroup.toUpperCase(),
+                    notificationGroup: group,
+                });
+            }
         } catch (error) {
             handler.handleError(error, dispatch, 'showGroupPopup')
             logger.actionFailed('showGroupPopup')
