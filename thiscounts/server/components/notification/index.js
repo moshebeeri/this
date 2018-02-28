@@ -45,6 +45,14 @@ function toPayloadData(notification, callback){
   if( notification.card      ) data = {model: 'card'       , _id: notification.card._id      };
   if( notification.activity  ) data = {model: 'activity'   , _id: notification.activity._id  };
   if( notification.comment   ) data = {model: 'comment'    , _id: notification.comment._id   };
+
+  if( notification.actor_user       ) data.actor_user     = notification.actor_user._id.toString()       ;
+  if( notification.actor_business   ) data.actor_business = notification.actor_business._id.toString()   ;
+  if( notification.actor_mall       ) data.actor_mall     = notification.actor_mall._id.toString()       ;
+  if( notification.actor_chain      ) data.actor_chain    = notification.actor_chain._id.toString()      ;
+  if( notification.actor_group      ) data.actor_group    = notification.actor_group._id.toString()      ;
+
+
   data._id = data._id.toString();
   n.title =  data.title = notification.title;
   n.body = data.body = notification.body;
@@ -52,6 +60,7 @@ function toPayloadData(notification, callback){
   data.action = notification.action;
   data.notificationId = notification._id.toString();
   n.tag = data._id? data._id : '';
+  n.collapse_key = notification.collapse_key;
   unread(notification.to, function(err, badge){
     if(err) return callback(err);
     n.badge = badge.toString();
@@ -128,15 +137,19 @@ function firebasePNS(notification, registrationTokens) {
 }
 
 function getUserFirebaseTokens(user) {
-  return [_.last(user.firebase.tokens)]
+  if(user && user.firebase )
+    return [_.last(user.firebase.tokens)];
+  return [];
 }
 
 function pnsUserDevices(notification) {
   User.findById(notification.to)
     .exec(function (err, user) {
-      if (err) {
+      if (err)
         return console.error(err);
-      }
+
+      if(!user)
+        return console.error(new Error(`user id:${notification.to} not found`));
       //flatten(users.map(user => getUserFirebaseTokens(user)));
       let registrationTokens = getUserFirebaseTokens(user);
       firebasePNS(notification, registrationTokens)
