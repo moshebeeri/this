@@ -34,6 +34,9 @@ export default function group(state = initialState, action) {
         case actions.UPSERT_GROUP:
             action.item.forEach(eventItem => {
                 if (!eventItem.preview) {
+                    if( eventItem.pictures.length  === 0 && currentGroups[eventItem._id]){
+                        eventItem.pictures = currentGroups[eventItem._id].pictures
+                    }
                     currentGroups[eventItem._id] = eventItem;
                 } else {
                     if ((eventItem.preview.comment && eventItem.preview.comment.created) || (eventItem.preview.post && eventItem.preview.post.created) ||
@@ -97,18 +100,18 @@ export default function group(state = initialState, action) {
             topLoader[action.groupId] = action.showTopLoader;
             return immutableState;
         case actions.GROUP_LAST_FEED_DOWN:
-            imutableState.lastFeed[action.groupId] = action.id;
-            imutableState.lastFeedTime[action.groupId] = new Date().getTime();
-            return imutableState;
+            immutableState.lastFeed[action.groupId] = action.id;
+            immutableState.lastFeedTime[action.groupId] = new Date().getTime();
+            return immutableState;
         case actions.UPSERT_GROUP_QRCODE:
             currentGroups[action.group._id].qrcodeSoruce = action.qrcodeSource;
-            imutableState.lastGroupQrcode = action.qrcodeSource;
-            imutableState.update = !imutableState.update;
-            return imutableState;
+            immutableState.lastGroupQrcode = action.qrcodeSource;
+            immutableState.update = !immutableState.update;
+            return immutableState;
         case actions.REST_GROUP_QRCODE:
-            imutableState.lastGroupQrcode = ''
-            imutableState.update = !imutableState.update;
-            return imutableState;
+            immutableState.lastGroupQrcode = ''
+            immutableState.update = !immutableState.update;
+            return immutableState;
 
         case actions.GET_GROUPS_BUSINESS :
             immutableState['groups' + action.bid] = action.groups;
