@@ -187,7 +187,7 @@ export default class PercentComponent extends Component {
                               onValueSelected={this.selectPromotionType.bind(this)}/>
             </View>
             {promotionOn}
-            <ProductPreview product={this.props.state.product} />
+            {this.props.state.discount_on === 'PRODUCT' && <ProductPreview product={this.props.state.product} />}
         </View>
     }
 }
