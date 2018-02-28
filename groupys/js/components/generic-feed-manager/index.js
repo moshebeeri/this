@@ -63,7 +63,7 @@ export default class GenericFeedManager extends Component {
 
     onEndReach() {
         const {feeds, token, actions, entity,} = this.props;
-        //actions.setNextFeeds(feeds, token, entity);
+        actions.setNextFeeds(feeds, token, entity);
     }
 
     showActions(show,activityId){
