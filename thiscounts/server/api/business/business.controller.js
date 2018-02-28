@@ -183,7 +183,7 @@ function debugFunc(param) {
   graphModel.query(q, (err, res)=>console.log(`debugFunc: ${param} ${JSON.stringify(res)}`))
 }
 
-function followBusiness(userId, businessId, callback) {
+function doFollowBusiness(userId, businessId, callback) {
   Business.findById(businessId)
     .exec(function (err, business) {
       if (err) return console.error(err);
@@ -215,10 +215,14 @@ function followBusiness(userId, businessId, callback) {
     });
 }
 
+exports.followBusiness = function(userId, businessId, callback){
+  return doFollowBusiness(userId, businessId, callback)
+};
+
 exports.follow = function (req, res) {
   let userId = req.user._id;
   let businessId = req.params.business;
-  followBusiness(userId, businessId, function (err) {
+  doFollowBusiness(userId, businessId, function (err) {
     if (err) return handleError(res, err);
     return res.status(200).send();
   })
