@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import {Dimensions, Image, ScrollView} from 'react-native';
+import {Dimensions, Image, ScrollView,Keyboard} from 'react-native';
 import {connect} from 'react-redux';
 import {
     Button,
@@ -96,6 +96,7 @@ class AddProduct extends Component {
         if (saving) {
             return
         }
+        Keyboard.dismiss();
         const product = this.createProduct();
 
         if(this.validateForm()) {

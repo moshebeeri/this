@@ -265,10 +265,10 @@ SignUpQuick                                   : "Sign-up via QrCode",
 SignUpQuickMessage                            : "For Quick SingUp Click Here",
 NoAccountMessage                              : "Does not have an account ?",
 SKU                                           : "SKU",
+JoinGroup                                     : "Join Group",
 ViewGroup                                     : "View Group",
 FollowGroupMessage                            : "Approve this request to follow {0} Group",
-
-
+inviteUserToGroup                             : "{0} Invites you to join {1} group",
 
 
 

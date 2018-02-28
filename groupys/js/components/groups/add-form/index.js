@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import {Dimensions, Image, Platform, ScrollView, Text, TouchableOpacity, View} from 'react-native';
+import {Dimensions, Image, Platform, ScrollView, Text, TouchableOpacity, View,Keyboard} from 'react-native';
 import {connect} from 'react-redux';
 import styles from './styles'
 import {getMyBusinesses} from '../../../selectors/businessesSelector'
@@ -141,6 +141,7 @@ class AddGroup extends Component {
 
     async saveFormData() {
         const {actions} = this.props;
+        Keyboard.dismiss();
         if (this.validateForm()) {
             const group = this.createGroupFromState();
             actions.createGroup(group, this.props.navigation);

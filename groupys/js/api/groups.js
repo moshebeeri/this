@@ -15,7 +15,7 @@ let entityUtils = new EntityUtils();
 let timer = new Timer();
 import * as errors from './Errors'
 class GroupsApi {
-    createGroup(group, callbackFunction, token) {
+    createGroup(group, token) {
         return new Promise(async (resolve, reject) => {
             try {
                 let from = new Date();
@@ -34,14 +34,10 @@ class GroupsApi {
                 }
                 let responseData = await response.json();
                 timer.logTime(from, new Date(), 'groups', '/');
-                if (group.groupUsers) {
-                    this.addUsersToGroup(group, responseData,token);
-                }
-                if (group.image) {
-                    entityUtils.doUpload(group.image.path, group.image.mime, token, callbackFunction, 'groups', responseData);
-                } else {
-                    callbackFunction(responseData);
-                }
+                // if (group.groupUsers) {
+                //     this.addUsersToGroup(group, responseData,token);
+                // }
+
                 resolve(responseData);
             }
             catch (error) {

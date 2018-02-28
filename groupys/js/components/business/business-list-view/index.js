@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import {Dimensions, Image, TouchableOpacity,Text} from 'react-native';
+import {Dimensions, Image, Text, TouchableOpacity} from 'react-native';
 import {
     Button,
     Card,
@@ -22,33 +22,31 @@ import {
 import styles from './styles'
 import Promotions from '../../promtions/index'
 import Products from '../../product/index'
-import {EditButton,BusinessHeader,ImageController} from '../../../ui/index';
+import {BusinessHeader, EditButton, ImageController, SocialState, ThisText} from '../../../ui/index';
 import strings from '../../../i18n/i18n';
+import StyleUtils from '../../../utils/styleUtils'
 
 const promotions = require('../../../../images/promotion.png');
 const products = require('../../../../images/barcode.png');
 const {width, height} = Dimensions.get('window');
-import StyleUtils from '../../../utils/styleUtils'
 const vh = height / 100;
-import {ThisText} from '../../../ui/index';
-
 const permissions = require('../../../../images/permissions.png');
 export default class BusinessListView extends Component {
     constructor(props) {
         super(props);
     }
 
-    componentWillMount(){
-        const {item,updateBusinesCategory} = this.props;
-        if(!item.categoryTitle){
+    componentWillMount() {
+        const {item, updateBusinesCategory} = this.props;
+        if (!item.categoryTitle) {
             updateBusinesCategory(item)
         }
     }
 
     showBusiness(p) {
-        const {item, navigation,resetForm} = this.props;
+        const {item, navigation, resetForm} = this.props;
         resetForm();
-        navigation.navigate("addBusiness", {item: item.business,updating:true});
+        navigation.navigate("addBusiness", {item: item.business, updating: true});
     }
 
     showUsersRoles() {
@@ -65,11 +63,11 @@ export default class BusinessListView extends Component {
         const {item, navigation} = this.props;
         navigation.navigate("Promotions", {business: item.business});
     }
-    refreshBusiness(){
-        const{refresh} = this.props;
+
+    refreshBusiness() {
+        const {refresh} = this.props;
         refresh();
     }
-
 
     createView() {
         const {item, index} = this.props;
@@ -77,8 +75,8 @@ export default class BusinessListView extends Component {
         const editButton = this.createEditTag(item);
         const promotionButton = this.createPromotionsTag(item);
         const permissionsButton = this.createPermissionsTag(item);
-        const productsButton  = this.createPoductsTag(item);
-        return ( <View style={{marginBottom:10}}>
+        const productsButton = this.createPoductsTag(item);
+        return ( <View style={{marginBottom: 10}}>
                 <BusinessHeader businesscolor navigation={this.props.navigation} business={item.business}
                                 categoryTitle={item.categoryTitle} businessLogo={item.business.logo}
                                 businessName={item.business.name} noMargin businessView
@@ -100,7 +98,7 @@ export default class BusinessListView extends Component {
 
                     <View style={{borderTopWidth: 2, borderColor: '#eaeaea', backgroundColor: 'white'}}
                           key={this.props.index}>
-                        {(permissionsButton || productsButton || promotionButton) &&  <View style={{
+                        {(permissionsButton || productsButton || promotionButton) && <View style={{
                             height: vh * 6, flexDirection: 'row', alignItems: 'center',
                             justifyContent: 'space-between',
                         }}>
@@ -109,20 +107,35 @@ export default class BusinessListView extends Component {
                             {promotionButton}
 
                         </View>}
-                        {item.business && item.business.review && item.business.review.state ==='validation' && <View style={{
+                        {item.business && item.business.review && item.business.review.state === 'validation' &&
+                        <View style={{
                             height: vh * 6, flexDirection: 'row', alignItems: 'center',
-                            justifyContent: 'space-between',marginRight:10,marginLeft:10,
+                            justifyContent: 'space-between', marginRight: 10, marginLeft: 10,
                         }}>
                             <ThisText>{strings.confirmBusinessByMailMessage}</ThisText>
                             <EditButton iconName='refresh' onPress={this.refreshBusiness.bind(this)}/>
                         </View>}
-                        {item.business && item.business.review && item.business.review.state ==='review' && <View style={{
+                        {item.business && item.business.review && item.business.review.state === 'review' &&
+                        <View style={{
                             height: vh * 6, flexDirection: 'row', alignItems: 'center',
-                            justifyContent: 'space-between',marginRight:10,marginLeft:10,
+                            justifyContent: 'space-between', marginRight: 10, marginLeft: 10,
                         }}>
                             <ThisText>{strings.validatingBusinessMessage}</ThisText>
                             <EditButton iconName='refresh' onPress={this.refreshBusiness.bind(this)}/>
                         </View>}
+
+                        {item.business.social_state &&
+                        <View style={{borderTopWidth: 1, borderColor:'#cccccc'}}>
+                            <SocialState disabled
+                                         like={item.business.social_state.like} likes={item.business.social_state.likes}
+                                         showFollowers
+                                         followers={item.business.social_state.followers}
+                                         share={item.business.social_state.share}
+                                         shares={item.business.social_state.shares}
+
+                            />
+                        </View>}
+
                     </View>
                 </View>
             </View>
@@ -130,7 +143,7 @@ export default class BusinessListView extends Component {
     }
 
     createEditTag(item) {
-        if (item.role === 'OWNS' || (item.business && item.business.review && item.business.review.status ==='waiting')) {
+        if (item.role === 'OWNS' || (item.business && item.business.review && item.business.review.status === 'waiting')) {
             return <EditButton onPress={this.showBusiness.bind(this, this.props, item)}/>
         }
         return undefined;
@@ -139,10 +152,11 @@ export default class BusinessListView extends Component {
     createBannerTag(item) {
         if (item.business.pictures && item.business.pictures.length > 0) {
             let picLength = item.business.pictures.length;
-            return <View style={{}}><ImageController  style={[styles.bannerImageContainer, {width: StyleUtils.getWidth()}]}  resizeMode="cover"
-                                           source={{uri: item.business.pictures[picLength -1].pictures[0]}}>
+            return <View style={{}}><ImageController
+                style={[styles.bannerImageContainer, {width: StyleUtils.getWidth()}]} resizeMode="cover"
+                source={{uri: item.business.pictures[picLength - 1].pictures[0]}}>
 
-            </ImageController >
+            </ImageController>
 
             </View>
         }
@@ -158,7 +172,7 @@ export default class BusinessListView extends Component {
                                      style={{margin: 3, flexDirection: 'row', alignItems: 'center',}}
                                      regular>
                 <ImageController style={{tintColor: '#ff6400', marginLeft: 10, width: vh * 4, height: vh * 4}}
-                       source={permissions}/>
+                                 source={permissions}/>
 
                 <ThisText style={{
                     marginLeft: 5,
@@ -172,13 +186,12 @@ export default class BusinessListView extends Component {
         return undefined;
     }
 
-
     createPoductsTag(item) {
         if (this.checkPermission(item)) {
-            return  <TouchableOpacity onPress={() => this.showProducts()}
-                                      style={{margin: 3, flexDirection: 'row', alignItems: 'center',}} regular>
+            return <TouchableOpacity onPress={() => this.showProducts()}
+                                     style={{margin: 3, flexDirection: 'row', alignItems: 'center',}} regular>
                 <ImageController style={{tintColor: '#ff6400', marginLeft: 10, width: vh * 3, height: vh * 4}}
-                       source={products}/>
+                                 source={products}/>
 
                 <ThisText style={{
                     marginLeft: 5,
@@ -192,30 +205,28 @@ export default class BusinessListView extends Component {
         return undefined;
     }
 
-    checkPermission(item){
-        const{user} = this.props;
-        if (item.role === 'OWNS' || item.role === 'Admin' || item.role === 'Manager' ) {
+    checkPermission(item) {
+        const {user} = this.props;
+        if (item.role === 'OWNS' || item.role === 'Admin' || item.role === 'Manager') {
             return true
         }
-
-        if(item.business){
-            if(item.business.creator  && item.business.creator._id === user._id){
-                if(item.business.review.state !=='validation'  && item.business.review.state !=='review' ) {
+        if (item.business) {
+            if (item.business.creator && item.business.creator._id === user._id) {
+                if (item.business.review.state !== 'validation' && item.business.review.state !== 'review') {
                     return true;
                 }
-
             }
         }
         return false;
-
     }
+
     createPromotionsTag(item) {
         if (this.checkPermission(item)) {
             return <TouchableOpacity onPress={() => this.showPromotions()}
                                      style={{margin: 3, flexDirection: 'row', alignItems: 'center',}}
                                      regular>
                 <ImageController style={{tintColor: '#ff6400', marginLeft: 10, width: vh * 4, height: vh * 4}}
-                       source={promotions}/>
+                                 source={promotions}/>
 
                 <ThisText style={{
                     marginLeft: 5,
