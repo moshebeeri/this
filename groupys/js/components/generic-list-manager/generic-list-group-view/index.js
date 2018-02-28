@@ -64,25 +64,13 @@ export default class GenericListGroupView extends Component {
 
                     {promotion}
                     {post}
-                    {promotion && item.unreadFeeds > 0 &&
-                    <View style={{marginLeft: 30, width: width, justifyContent: 'flex-start'}}>
-                        <ThisText style={{
-                            color: '#2db6c8',
-                            fontWeight: 'bold'
-                        }}>{strings.UnReadPost.formatUnicorn(item.unreadFeeds)}</ThisText>
-                    </View>}
+
 
 
                 </TouchableOpacity>
                 <TouchableOpacity style={containerStyle} onPress={onPressMessageItem}>
                     {message}
-                    {message && item.unreadMessages > 0 &&
-                    <View style={{marginLeft: 30, marginBottom: 5, width: width, justifyContent: 'flex-start'}}>
-                        <ThisText style={{
-                            color: '#25964e',
-                            fontWeight: 'bold'
-                        }}>{strings.UnReadMessages.formatUnicorn(item.unreadMessages)}</ThisText>
-                    </View>}
+
                 </TouchableOpacity>
             </View>
         </View>

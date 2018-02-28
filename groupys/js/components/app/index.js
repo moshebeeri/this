@@ -139,6 +139,7 @@ class ApplicationManager extends Component {
 
     constructor(props) {
         super(props)
+
         this.state = {
             orientation: StyleUtils.isPortrait() ? 'portrait' : 'landscape',
             devicetype: StyleUtils.isTablet() ? 'tablet' : 'phone',
@@ -176,10 +177,17 @@ class ApplicationManager extends Component {
             this.props.actions.showBusinessPopup(notification._id, notification.notificationId, notification.title, notification.action);
             return;
         }
+
+        if (notification && notification.model === 'comment') {
+            this.props.actions.redirectToChatGroup(notification.actor_group,notification.notificationId, notification.action,this.props.navigation);
+            FCM.getBadgeNumber().then(number => FCM.setBadgeNumber(0));
+            return;
+        }
+
         if (notification && notification.title) {
             this.props.actions.showGenericPopup(notification.title, notification.notificationId, notification.action);
         }
-        FCM.getBadgeNumber().then(number => FCM.setBadgeNumber(0))
+
         AppState.addEventListener('change', this._handleAppStateChange);
     }
 
