@@ -18,6 +18,8 @@ let NotificationSchema = new Schema({
   to: {type: Schema.ObjectId, ref: 'User', required: true, index: true},
   action: {type: String, enum: Action, default: 'NONE'},
   read: {type: Boolean, default: false},
+  list: {type: Boolean, default: true},
+  collapse_key:  {type: String, index: true},
   timestamp: {type: Date, required: true},
 
   promotion: {type: Schema.ObjectId, ref: 'Promotion', autopopulate: true},

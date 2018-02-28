@@ -115,6 +115,8 @@ function notifyGroupComment(comment) {
       comment: comment._id,
       title: `new group comment`,
       body: comment.message,
+      list: false,
+      collapse_key: `comment_${comment.entities.group.toString()}`
     }, _ids);
   });
 }
