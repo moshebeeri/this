@@ -5,6 +5,7 @@ const Comment = require('./comment.model');
 const graphTools = require('../../components/graph-tools');
 const graphModel = graphTools.createGraphModel('comment');
 const Group         = require('../group/group.model');
+const groupCtrl     = require('../group/group.controller');
 const User          = require('../user/user.model');
 const Brand         = require('../brand/brand.model');
 const Business      = require('../business/business.model');
@@ -94,14 +95,15 @@ exports.create = function(req, res) {
 };
 
 function groupFollowersExclude(groupId, exUserId, callback) {
-  const query = `MATCH (u:user),(g:group)
-                 WHERE (u)-[:FOLLOW]->(g) AND u._id <> '${exUserId}' AND g._id = '${groupId}'
-                 RETURN u._id as _id limit 1000
-                 `;
-  graphModel.query(query,(err, ids) => {
-    if(err) return callback(err);
-    return callback(null, ids);
-  })
+  return groupCtrl.groupFollowersExclude(groupId, exUserId, callback);
+  // const query = `MATCH (u:user),(g:group)
+  //                WHERE (u)-[:FOLLOW]->(g) AND u._id <> '${exUserId}' AND g._id = '${groupId}'
+  //                RETURN u._id as _id limit 1000
+  //                `;
+  // graphModel.query(query,(err, ids) => {
+  //   if(err) return callback(err);
+  //   return callback(null, ids);
+  // })
 }
 
 function notifyGroupComment(comment) {

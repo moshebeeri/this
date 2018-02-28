@@ -98,6 +98,7 @@ function proximityEligibility(userId, location, eligible, callback) {
         action: "eligible_by_proximity",
         location: location
       });
+      Instance.notify(instance._id, [userId]);
       entityRoleMembers(eligible.entity, function(err, userIds) {
         Notifications.notify({
           note: 'ELIGIBLE_BY_PROXIMITY',
