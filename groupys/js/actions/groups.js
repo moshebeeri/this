@@ -118,17 +118,21 @@ export function touch(groupId) {
     return function (dispatch, getState) {
         try {
             const token = getState().authentication.token;
-            groupsApi.touch(groupId, token);
-            dispatch({
-                type: actions.GROUP_TOUCHED,
-                groupId: groupId
-            });
+            this.dispatchGroupTOuch(token,groupId,dispatch)
         } catch (error) {
             handler.handleError(error, dispatch, 'groupsApi.touch');
             logger.actionFailed('groupsApi.touch')
         }
 
     }
+}
+
+export function dispatchGroupTOuch(token,groupId,dispatch){
+    groupsApi.touch(groupId, token);
+    dispatch({
+        type: actions.GROUP_TOUCHED,
+        groupId: groupId
+    });
 }
 
 export function createGroup(group, navigation) {
@@ -503,26 +507,29 @@ export function listenForChat(group) {
         const groupsChats = getState().comments.groupComments[group._id];
         const user = getState().user.user;
         if (groupsChats) {
-            let groupChatIds = Object.keys(groupsChats).sort(function (a, b) {
-                if (a < b) {
-                    return 1
-                }
-                if (a > b) {
-                    return -1
-                }
-                return 0;
-            });
-            dispatch({
-                type: types.LISTEN_FOR_GROUP_CHATS,
-                group: group,
-                token: token,
-                lastChatId: groupChatIds[0],
-                user: user,
-            })
+            this.dispatchGroupChatsListener(groupsChats,group,user,token,dispatch)
         }
     }
 }
 
+export function dispatchGroupChatsListener(groupsChats,group,user,token,dispatch){
+    let groupChatIds = Object.keys(groupsChats).sort(function (a, b) {
+        if (a < b) {
+            return 1
+        }
+        if (a > b) {
+            return -1
+        }
+        return 0;
+    });
+    dispatch({
+        type: types.LISTEN_FOR_GROUP_CHATS,
+        group: group,
+        token: token,
+        lastChatId: groupChatIds[0],
+        user: user,
+    })
+}
 export function stopListenForChat() {
     return function (dispatch) {
         dispatch({
