@@ -105,11 +105,13 @@ function groupFollowersExclude(groupId, exUserId, callback) {
 }
 
 function notifyGroupComment(comment) {
-  groupFollowersExclude(comment.group.id, comment.user, (err, _ids)=> {
+  groupFollowersExclude(comment.entities.group, comment.user, (err, ids)=> {
+    let _ids = ids.map( id => id._id);
+    console.log(JSON.stringify(_ids));
     if(err) return console.error(err);
     Notifications.notify( {
       note: 'GROUP_COMMENT',
-      actor_group: comment.group.id,
+      actor_group: comment.entities.group,
       comment: comment._id,
       title: `new group comment`,
       body: comment.message,
