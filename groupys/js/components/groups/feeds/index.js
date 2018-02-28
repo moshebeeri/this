@@ -1,5 +1,5 @@
 import React, {Component} from "react";
-import {BackHandler, I18nManager, Platform, View} from "react-native";
+import {BackHandler, I18nManager, Platform, View,InteractionManager} from "react-native";
 import {connect} from "react-redux";
 import {Button, Container, Fab, Icon, Input, Tab, TabHeading, Tabs} from "native-base";
 import {actions} from "react-native-navigation-redux-helpers";
@@ -35,57 +35,39 @@ class GroupFeed extends Component {
         BackHandler.addEventListener('hardwareBackPress', this.handleBack.bind(this));
         const {navigation, feeds} = this.props;
         const group = navigation.state.params.group;
-        if (!feeds[group._id] || (feeds[group._id] && feeds[group._id].length === 0)) {
-            this.props.actions.setFeeds(group, feeds[group._id]);
-        }
-        this.props.actions.clearUnreadPosts(group);
-        this.props.instanceGroupCommentsAction.stopListenForChat();
+        InteractionManager.runAfterInteractions(() => {
+            if (!feeds[group._id] || (feeds[group._id] && feeds[group._id].length === 0)) {
+                this.props.actions.setFeeds(group, feeds[group._id]);
+            }
+            this.props.actions.clearUnreadPosts(group);
+            this.props.instanceGroupCommentsAction.stopListenForChat();
+        });
     }
 
     handleBack() {
-        this.props.actions.stopListenForChat();
-        this.props.instanceGroupCommentsAction.stopListenForChat();
+        InteractionManager.runAfterInteractions(() => {
+            this.props.actions.stopListenForChat();
+            this.props.instanceGroupCommentsAction.stopListenForChat();
+        });
     }
 
     handlePick(emoji) {
         let message = this.state.messsage;
+        InteractionManager.runAfterInteractions(() => {
         this.setState({
             messsage: message + emoji,
-        });
+        })});
     }
 
-    selectPromotions() {
-        this.setState({
-            showChat: false
-        })
-    }
+
 
     navigateToAdd() {
         const group = this.props.navigation.state.params.group;
         this.props.navigation.navigate('PostForm', {group: group})
     }
 
-    changeTab(tab) {
-        const {navigation} = this.props;
-        const group = navigation.state.params.group;
-        this.setState({
-            showChat: !this.state.showChat
-        })
-    }
 
-    allowPost(group) {
-        switch (group.entity_type) {
-            case 'USERS':
-                return true;
-            case 'BUSINESS':
-                if (group.role && (group.role === "owner" || group.role === "OWNS" || group.role === "Admin" )) {
-                    return true;
-                }
-                return false;
-            default:
-                return false;
-        }
-    }
+
 
     render() {
         console.log('rendering main group');
@@ -105,7 +87,7 @@ class GroupFeed extends Component {
 
 
                 {I18nManager.isRTL && (Platform.OS === 'android') ?
-                    <ScrolTabView initialPage={initPage} onChangeTab={this.changeTab.bind(this)}
+                    <ScrolTabView initialPage={initPage}
                                   tabBarBackgroundColor='white'
                                   tabBarUnderlineStyle={{backgroundColor: '#2db6c8'}}>
                         <InstanceComment tabLabel={strings.Posts} navigation={this.props.navigation}
@@ -113,7 +95,7 @@ class GroupFeed extends Component {
                         <GroupFeedComponent tabLabel={strings.Chat} navigation={this.props.navigation}
                                             group={this.props.navigation.state.params.group}/>
                     </ScrolTabView> :
-                    <ScrolTabView initialPage={initPage} onChangeTab={this.changeTab.bind(this)}
+                    <ScrolTabView initialPage={initPage}
                                   tabBarBackgroundColor='white'
                                   tabBarUnderlineStyle={{backgroundColor: '#2db6c8'}}>
                         <GroupFeedComponent tabLabel={strings.Posts} navigation={this.props.navigation}

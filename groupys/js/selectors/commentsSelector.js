@@ -3,6 +3,7 @@
  */
 import {createSelector} from 'reselect'
 import FeedUiConverter from '../api/feed-ui-converter'
+
 const noPic = require('../../images/client_1.png');
 let feedUiConverter = new FeedUiConverter();
 const getStateFeeds = (state) => state.comments
@@ -20,8 +21,14 @@ export const getFeeds = createSelector([getStateFeeds],
                 if (feedsOrder[groupId] && feedsOrder[groupId].length > 0) {
                     let lastGroupInstance = feeds[groupId][feedsOrder[groupId][0]].entities.instance;
                     let lastPost = feeds[groupId][feedsOrder[groupId][0]].entities.post;
+                    let headerCreated = false;
                     feedsOrder[groupId].forEach(function (feedId) {
-                        if (( lastGroupInstance && feeds[groupId][feedId].entities.instance &&
+                        if (!lastGroupInstance && !lastPost) {
+                            lastGroupInstance = feeds[groupId][feedId].entities.instance;
+                            lastPost = feeds[groupId][feedId].entities.post;
+                        }
+
+                        if ((!headerCreated && (lastGroupInstance || lastPost)) || (lastGroupInstance && feeds[groupId][feedId].entities.instance &&
                                 feeds[groupId][feedId].entities.instance._id !== lastGroupInstance._id) ||
                             (lastPost && feeds[groupId][feedId].entities.post &&
                                 feeds[groupId][feedId].entities.post._id !== lastPost._id) || (
@@ -29,14 +36,18 @@ export const getFeeds = createSelector([getStateFeeds],
                             )
                             || (lastPost && feeds[groupId][feedId].entities.instance)) {
                             if (lastGroupInstance) {
-                                response[groupId].unshift({instance: feedUiConverter.createPromotionInstance(lastGroupInstance)});
+                                response[groupId].unshift({
+                                    id: feedId,
+                                    instance: feedUiConverter.createPromotionInstance(lastGroupInstance)
+                                });
+                                headerCreated = true;
                             } else {
-                                response[groupId].unshift({instance: feedUiConverter.createPost(lastPost)});
+                                response[groupId].unshift({id: feedId, instance: feedUiConverter.createPost(lastPost)});
+                                headerCreated = true;
                             }
-                            lastGroupInstance = feeds[groupId][feedId].entities.instance;
-                            lastPost = feeds[groupId][feedId].entities.post;
                         }
-                        response[groupId].unshift({message: createFeed(feeds[groupId][feedId])});
+
+                        response[groupId].unshift({id: feedId, message: createFeed(feeds[groupId][feedId])});
                     })
                 }
             })
@@ -48,7 +59,7 @@ export const getFeeds = createSelector([getStateFeeds],
                         response[groupId] = [];
                     }
                     clientComments[groupId].forEach(feed => {
-                            response[groupId].unshift({message: createFeed(feed)})
+                            response[groupId].unshift({id: feed.id, message: createFeed(feed)})
                         }
                     )
                 }

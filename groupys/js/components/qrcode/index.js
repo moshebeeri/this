@@ -1,6 +1,6 @@
 import React, {Component} from 'react';
 import {connect} from 'react-redux';
-import {View,ScrollView} from 'react-native';
+import {View,ScrollView,InteractionManager} from 'react-native';
 import {Button, Container, Content, Footer, Header, Icon, Input, InputGrou} from 'native-base';
 import * as promotionAction from "../../actions/promotions";
 import {bindActionCreators} from "redux";
@@ -18,7 +18,8 @@ class Qrcode extends Component {
 
     componentWillMount() {
         const {actions} = this.props;
-        actions.clearRealizationForm();
+        InteractionManager.runAfterInteractions(() => {
+        actions.clearRealizationForm()});
     }
 
     render() {

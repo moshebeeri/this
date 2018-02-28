@@ -45,10 +45,16 @@ module.exports = {
         borderBottomLeftRadius:50,
         borderBottomRightRadius:15,
         maxWidth:width  -100,
+        backgroundColor:'#cccccc',
+    },
+    message_container_user: {
         backgroundColor:'#0699dc',
+        margin:5,
+        justifyContent: 'flex-start',
+        borderRadius:50,
     },
     message_container: {
-        backgroundColor:'#0699dc',
+        backgroundColor:'#cccccc',
         margin:5,
         justifyContent: 'flex-start',
         borderRadius:50,

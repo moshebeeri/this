@@ -43,8 +43,12 @@ export default class GenericFeedManager extends Component {
 
     renderItem(item) {
         const {navigation, token, userFollowers, group, ItemDetail, actions,entity, location} = this.props;
+        let id = item.item.id;
+        if(!id){
+            id = item.item._id;
+        }
         return <ItemDetail
-            key={item.item.id}
+            key={id}
             user={entity}
             token={token}
             location={location}
@@ -86,7 +90,7 @@ export default class GenericFeedManager extends Component {
     }
 
 
-
+    _keyExtractor = (item, index) => item.id;
     render() {
         const {loadingDone, showTopLoader, feeds, update, setNextFeeds, color,nextBulkLoad,initialNumToRender} = this.props;
         const topLoader = showTopLoader ? <View><Spinner color='red'/></View> : null;
@@ -111,8 +115,8 @@ export default class GenericFeedManager extends Component {
                         onEndReached={setNextFeeds}
                         renderItem={this.renderItem.bind(this)}
                         extraData={update}
-                        keyExtractor={(item, index) => index}
                         initialNumToRender={5}
+
 
                     />
                     {nextBulkLoad &&  <View style={ {bottom:0,width:width,backgroundColor:'#cccccc',position:'absolute'}}>
@@ -178,6 +182,10 @@ export default class GenericFeedManager extends Component {
                     renderItem={this.renderItem.bind(this)}
                     extraData={update}
                     initialNumToRender={5}
+                    getItemLayout={(data, index) => (
+                        {length: 100, offset: 50 * index, index}
+                    )}
+
                 />
 
                 {nextBulkLoad && !showTopLoader &&  <View style={ {bottom:0,width:width,backgroundColor:'#cccccc',position:'absolute'}}>

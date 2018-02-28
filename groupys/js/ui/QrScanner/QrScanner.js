@@ -3,7 +3,7 @@ import {Image, TouchableOpacity,Dimensions} from "react-native";
 import {Button, Input, Item, Spinner, Text, View} from "native-base";
 import Camera from "react-native-camera";
 import styles from "./styles";
-import {BusinessHeader,SubmitButton} from '../../ui/index';
+import {BusinessHeader,SubmitButton,GroupHeader} from '../../ui/index';
 import StyleUtils from '../../utils/styleUtils'
 import {ThisText} from '../../ui/index';
 
@@ -37,7 +37,7 @@ export default class BusinessFollow extends Component {
     }
 
     createView() {
-        const {showNotAuthorizedMessage,showAssigmentMessageFailed,showAssigmentMessage,navigation, code, cameraOn, searching, business, instance, group, followBusiness, groupFollowBusiness, scanResult, realizePromotion,ShowOutOffScope} = this.props;
+        const {followGroup,showNotAuthorizedMessage,showAssigmentMessageFailed,showAssigmentMessage,navigation, code, cameraOn, searching, business, instance, group, followGroupAction,followBusiness, groupFollowBusiness, scanResult, realizePromotion,ShowOutOffScope} = this.props;
         let followComponent = undefined;
         if (business) {
             let followStyle = {
@@ -152,7 +152,20 @@ export default class BusinessFollow extends Component {
                     </View>
                 </View>
                 }
+                {followGroup && <View style={{height:200,alignItems:'center',justifyContent:'center' }}>
+                    <View style={{flex:3, backgroundColor:'white' ,alignItems:'center',justifyContent:'center' }}>
+                        <GroupHeader group={followGroup} disabled={true}
 
+                        />
+                        <ThisText>{strings.FollowGroupMessage.formatUnicorn(followGroup.name)}</ThisText>
+                    </View>
+                    <View style={{flex:1, alignItems:'center'}}>
+                        <View style={{height:60,width:StyleUtils.getWidth(),backgroundColor:'white', alignItems:'center',justifyContent:'flex-start' }}>
+                            <SubmitButton color={'#2db6c8'} title={strings.Follow.toUpperCase()} onPress={() => followGroupAction(followGroup)}/>
+                        </View>
+                    </View>
+                </View>
+                }
             </View>
         );
     }

@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import {I18nManager, Image, Platform, StyleSheet, TouchableOpacity,Dimensions,ScrollView} from 'react-native';
+import {I18nManager, Image, Platform, StyleSheet, TouchableOpacity,Dimensions,ScrollView,InteractionManager} from 'react-native';
 import {Button, Container, Content, Input, InputGroup, Item, Text, View} from 'native-base';
 import styles from './styles';
 import {connect} from 'react-redux';
@@ -34,9 +34,10 @@ class ProfileDrawer extends Component {
     async componentWillMount() {
         const user = this.props.user;
         if (user) {
+            InteractionManager.runAfterInteractions(() => {
             this.setState({
                 phoneNumber: user.country_code + '-' + user.phone_number
-            });
+            })});
         }
     }
 
