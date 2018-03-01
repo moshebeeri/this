@@ -58,15 +58,24 @@ function handleProximityActions(userId, location, callback) {
   let skip = 0;
   let limit = 20;
   let coordinate = spatial.location_to_special(location);
-  let query = ` MATCH (p:promotion)<-[on:ON_ACTION]-(entity)<-[:FOLLOW]-(u:user{_id:'${userId}'})
-                WITH on, entity, {longitude:${coordinate.longitude},latitude:${coordinate.latitude}} AS coordinate
-                CALL spatial.withinDistance('world', coordinate, on.proximity) YIELD node AS p
-                WITH p._id as _id, ${coordinate.longitude} as lon, ${coordinate.latitude} as lat, p.lat as p_lat, p.lon as p_lon, entity
-                WHERE _id IS NOT NULL AND on.type = 'PROXIMITY'
-                RETURN _id, 2 * 6371 * asin(sqrt(haversin(radians(lat - p_lat))+ cos(radians(lat))* cos(radians(p_lat))* haversin(radians(lon - p_lon)))) as d,
-                        entity._id as entity, labels(entity) as labels
-                ORDER BY d ASC
-                skip ${skip} limit ${limit}`;
+
+  // let query = ` MATCH (p:promotion)<-[on:ON_ACTION]-(entity)<-[:FOLLOW]-(u:user{_id:'${userId}'})
+  //               WITH on, entity, {longitude:${coordinate.longitude},latitude:${coordinate.latitude}} AS coordinate
+  //               CALL spatial.withinDistance('world', coordinate, on.proximity) YIELD node AS p
+  //               WITH p._id as _id, ${coordinate.longitude} as lon, ${coordinate.latitude} as lat, p.lat as p_lat, p.lon as p_lon, entity
+  //               WHERE _id IS NOT NULL AND on.type = 'PROXIMITY'
+  //               RETURN _id, 2 * 6371 * asin(sqrt(haversin(radians(lat - p_lat))+ cos(radians(lat))* cos(radians(p_lat))* haversin(radians(lon - p_lon)))) as d,
+  //                       entity._id as entity, labels(entity) as labels
+  //               ORDER BY d ASC
+  //               skip ${skip} limit ${limit}`;
+
+  const query = ` MATCH (p:promotion)<-[on:ON_ACTION]-(entity)<-[:FOLLOW]-(u:user{_id:'${userId}'})
+                  WHERE  p._id IS NOT NULL AND on.type = 'PROXIMITY'
+                  WITH   p, on, entity, u, {longitude:${coordinate.longitude},latitude:${coordinate.latitude}} AS coordinate, ${coordinate.longitude} as lon, ${coordinate.latitude} as lat, p.lat as p_lat, p.lon as p_lon
+                  RETURN p._id, 2 * 6371 * asin(sqrt(haversin(radians(lat - p_lat))+ cos(radians(lat))*cos(radians(p_lat))*haversin(radians(lon - p_lon)))) as d, entity._id as entity, labels(entity) as labels
+                  ORDER BY d ASC
+                  SKIP ${skip} LIMIT ${limit}`;
+
   console.log('handleProximityActions: ' + query);
   graphModel.query(query, function (err, eligibilities) {
     if (err) {

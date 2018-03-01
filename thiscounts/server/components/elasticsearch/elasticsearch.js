@@ -4,7 +4,7 @@ let elasticsearch = require('elasticsearch');
 let config = require('../../config/environment');
 
 let client = new elasticsearch.Client( config.elasticsearch );
-let perPage = 50
+let perPage = 50;
 
 function Elasticsearch() {
 
