@@ -36,22 +36,26 @@ export function showFab(showAdd) {
 
 export function showPromotionPopup(instanceId, notificationId) {
     return async function (dispatch, getState) {
-        try {
-            notificationApi.readNotification(notificationId);
-            const token = getState().authentication.token;
-            if (token) {
-                let instance = await instanceApi.getInstance(token, instanceId);
-                dispatch({
-                    type: actions.APP_SHOW_PROMOTION_POPUP,
-                    showPopup: true,
-                    instance: instance,
-                    notificationId: notificationId
-                });
-            }
-        } catch (error) {
-            handler.handleError(error, dispatch, 'showPromotionPopup')
-            logger.actionFailed('showPromotionPopup')
+        const token = getState().authentication.token;
+        promotionPopAction(instanceId, notificationId, dispatch, token);
+    }
+}
+
+async function promotionPopAction(instanceId, notificationId, dispatch, token) {
+    try {
+        notificationApi.readNotification(notificationId);
+        if (token) {
+            let instance = await instanceApi.getInstance(token, instanceId);
+            dispatch({
+                type: actions.APP_SHOW_PROMOTION_POPUP,
+                showPopup: true,
+                instance: instance,
+                notificationId: notificationId
+            });
         }
+    } catch (error) {
+        handler.handleError(error, dispatch, 'refreshFeedSocialState')
+        logger.actionFailed('refreshFeedSocialState')
     }
 }
 
@@ -211,3 +215,6 @@ export function redirectToChatGroup(groupId, notificationId, notificationAction,
     }
 }
 
+export default {
+    promotionPopAction
+}

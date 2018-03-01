@@ -66,7 +66,7 @@ import StyleUtils from "../../utils/styleUtils";
 import store from 'react-native-simple-store';
 import ActionLogger from '../../actions/ActionLogger'
 import handler from '../../actions/ErrorHandler'
-
+import popupActions from '../../actions/mainTab'
 const height = StyleUtils.getHeight();
 let locationApi = new LocationApi();
 const reduxStore = getStore();
@@ -87,6 +87,13 @@ FCM.on(FCMEvent.Notification, async (notif) => {
     if (notif.opened_from_tray) {
         //iOS: app is open/resumed because user clicked banner
         //Android: app is open/resumed because user clicked banner or tapped app icon
+    }
+
+    if (notif && notif.model === 'instance') {
+        let token = reduxStore.getState().authentication.token;
+
+        popupActions.promotionPopAction(notif._id, notif.notificationId,reduxStore.dispatch,token);
+        return;
     }
     if (Platform.OS === 'ios') {
         //optional
