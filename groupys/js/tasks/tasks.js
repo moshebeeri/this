@@ -20,7 +20,7 @@ class Tasks {
         await this.stop();
         const timer = BackgroundTimer.setInterval(() => {
             try {
-                pageSync.check();
+
                 if (reduxStore.getState().authentication.token) {
                     contactApi.syncContacts();
                 }
@@ -33,7 +33,7 @@ class Tasks {
                 handler.handleError(errors.NETWORK_ERROR,reduxStore.dispatch,'tasks-synccontact')
 
             }
-        }, 60000);
+        }, 3600000);
         const refresher = BackgroundTimer.setInterval(() => {
             try {
                 pageSync.check();

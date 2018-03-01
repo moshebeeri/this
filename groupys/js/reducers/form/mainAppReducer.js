@@ -11,7 +11,7 @@ const initialState = {
     selectedTab: 0,
     showAdd: false,
     showPopup: false,
-    instanceId: '',
+    instance: undefined,
     notificationTitle: '',
     notificationId: '',
     notificationAction: '',
@@ -36,7 +36,7 @@ export default function mainTab(state = initialState, action) {
             return {
                 ...state,
                 showPopup: action.showPopup,
-                instanceId: action.instanceId,
+                instance: action.instance,
                 notificationId: action.notificationId,
             };
         case actions.APP_SHOW_GENERAL_POPUP :
@@ -47,7 +47,8 @@ export default function mainTab(state = initialState, action) {
                 notificationId: action.notificationId,
                 notificationAction: action.notificationAction,
                 notificationGroup: action.notificationGroup,
-                notificationBusiness: action.notificationBusiness
+                notificationBusiness: action.notificationBusiness,
+                instance: undefined,
             };
         default:
             return state;
