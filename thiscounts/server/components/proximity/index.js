@@ -58,7 +58,6 @@ function handleProximityActions(userId, location, callback) {
   let skip = 0;
   let limit = 20;
   let coordinate = spatial.location_to_special(location);
-
   // let query = ` MATCH (p:promotion)<-[on:ON_ACTION]-(entity)<-[:FOLLOW]-(u:user{_id:'${userId}'})
   //               WITH on, entity, {longitude:${coordinate.longitude},latitude:${coordinate.latitude}} AS coordinate
   //               CALL spatial.withinDistance('world', coordinate, on.proximity) YIELD node AS p
@@ -68,11 +67,19 @@ function handleProximityActions(userId, location, callback) {
   //                       entity._id as entity, labels(entity) as labels
   //               ORDER BY d ASC
   //               skip ${skip} limit ${limit}`;
-
-  const query = ` MATCH (p:promotion)<-[on:ON_ACTION]-(entity)<-[:FOLLOW]-(u:user{_id:'${userId}'})
-                  WHERE  p._id IS NOT NULL AND on.type = 'PROXIMITY'
-                  WITH   p, on, entity, u, {longitude:${coordinate.longitude},latitude:${coordinate.latitude}} AS coordinate, ${coordinate.longitude} as lon, ${coordinate.latitude} as lat, p.lat as p_lat, p.lon as p_lon
-                  RETURN p._id, 2 * 6371 * asin(sqrt(haversin(radians(lat - p_lat))+ cos(radians(lat))*cos(radians(p_lat))*haversin(radians(lon - p_lon)))) as d, entity._id as entity, labels(entity) as labels
+  // MATCH (promo:promotion)<-[on:ON_ACTION]-(entity)<-[:FOLLOW]-(u:user{_id:'${userId}'})
+  // WHERE  promo._id IS NOT NULL AND on.type = 'PROXIMITY'
+  // WITH   promo, on, entity, u, {longitude:${coordinate.longitude},latitude:${coordinate.latitude}} AS coordinate, ${coordinate.longitude} as lon, ${coordinate.latitude} as lat, p.lat as p_lat, p.lon as p_lon
+  // CALL spatial.withinDistance('world', coordinate, on.proximity) YIELD node AS p
+  // RETURN promo._id, 2 * 6371 * asin(sqrt(haversin(radians(lat - p_lat))+ cos(radians(lat))*cos(radians(p_lat))*haversin(radians(lon - p_lon)))) as d, entity._id as entity, labels(entity) as labels
+  // ORDER BY d ASC
+  // SKIP ${skip} LIMIT ${limit}`;
+  const query = ` MATCH (promo:promotion)<-[on:ON_ACTION]-(entity)<-[:FOLLOW]-(u:user{_id:'${userId}'})
+                  WHERE  promo._id IS NOT NULL AND on.type = 'PROXIMITY'
+                  WITH   entity,promo,u,on, {longitude:${coordinate.longitude},latitude:${coordinate.latitude}} AS coordinate
+                  CALL spatial.withinDistance('world', coordinate, on.proximity) YIELD node AS p
+                  WITH   promo, on, entity, u, {longitude:${coordinate.longitude},latitude:${coordinate.latitude}} AS coordinate, ${coordinate.longitude} as lon, ${coordinate.latitude} as lat, p.lat as p_lat, p.lon as p_lon
+                  RETURN promo._id, 2 * 6371 * asin(sqrt(haversin(radians(lat - p_lat))+ cos(radians(lat))*cos(radians(p_lat))*haversin(radians(lon - p_lon)))) as d, entity._id as entity, labels(entity) as labels
                   ORDER BY d ASC
                   SKIP ${skip} LIMIT ${limit}`;
 
