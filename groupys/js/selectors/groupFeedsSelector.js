@@ -11,9 +11,10 @@ const getStateFeeds = (state) => state.groups;
 const getPosts = (state) => state.postForm;
 const getInstance = (state) => state.instances;
 const getPromotion= (state) => state.promotions;
+const getStateSavedInstances = (state) => state.myPromotions;
 const store = getStore();
-export const getFeeds = createSelector([  getStateFeeds,getPosts,getInstance,getPromotion],
-    (groups,post,instances,promotions) => {
+export const getFeeds = createSelector([  getStateFeeds,getPosts,getInstance,getPromotion,getStateSavedInstances],
+    (groups,post,instances,promotions,savedPromotion) => {
         const collections = {
             activities: store.getState().activities.activities,
             promotions: promotions.promotions,
@@ -27,6 +28,10 @@ export const getFeeds = createSelector([  getStateFeeds,getPosts,getInstance,get
         let feeds = groups.groupFeeds;
         let clientMessage = groups.clientMessages;
         let feedsUi = new Map();
+        let savedInstancesIds = [];
+        if(savedPromotion.feeds){
+            savedInstancesIds = Object.values(savedPromotion.feeds).map(savedFeed => savedFeed.savedInstance.instance._id);
+        }
         if (!_.isEmpty(feeds)) {
             Object.keys(feedsOrder).forEach(function (groupId) {
                 let assembledFeeds = [];
@@ -38,7 +43,7 @@ export const getFeeds = createSelector([  getStateFeeds,getPosts,getInstance,get
                     }
                     return assemblers.assembler(feed, collections);
                 });
-                let newFeedsList = assembledFeeds.map(feed => feedUiConverter.createFeed(feed));
+                let newFeedsList = assembledFeeds.map(feed => feedUiConverter.createFeed(feed,savedInstancesIds));
                 newFeedsList = newFeedsList.filter(feed => feed);
                 newFeedsList = newFeedsList.filter(feed => feed.id);
                 newFeedsList = newFeedsList.filter(feed => !feed.blocked);

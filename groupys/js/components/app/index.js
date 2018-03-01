@@ -296,9 +296,16 @@ class ApplicationManager extends Component {
         }
     }
 
+    savePromotionFromPopup(id, navigation, feed){
+
+        const{feedAction} = this.props;
+        this.closePopup();
+        feedAction.saveFeed(id, navigation, feed);
+    }
+
     render() {
         const {
-            showAdd, showComponent, notifications,
+            showAdd, showComponent, notifications,feedAction,
             item, location, showPopup, token, notificationTitle,
             notificationAction, notificationGroup, notificationBusiness,
             showSearchResults, businesses, businessActions, groups, groupsActions, showSearchGroupResults,notificationOnAction
@@ -309,10 +316,16 @@ class ApplicationManager extends Component {
             return <View></View>
         }
         let notificationPopupHeight = 350;
-        let notificationnTopPadding = 150
+        let notificationnTopPadding = 150;
+        let leftPadding = 10;
+        let sideMargin = 20;
+        let borderSideWidth=2;
         if (item) {
-            notificationPopupHeight = 80
+            notificationPopupHeight = 100
             notificationnTopPadding = 30;
+            leftPadding = 0;
+            borderSideWidth = 0;
+            sideMargin = 0;
         }
         let notificationActionString
         if (notificationOnAction) {
@@ -382,12 +395,15 @@ class ApplicationManager extends Component {
                         <GroupsList groups={groups} joinGroup={groupsActions.joinGroup}/>
                     </View>}
                     {showPopup && <View style={{
-                        left: 10,
-                        borderWidth: 2,
+                        left: leftPadding,
+                        borderTopWidth: 2,
+                        borderBottomWidth:2,
+                        borderLeftWidth:borderSideWidth,
+                        borderRightWidth:borderSideWidth,
                         borderColor: 'black',
                         top: notificationnTopPadding,
                         position: 'absolute',
-                        width: StyleUtils.getWidth() - 20,
+                        width: StyleUtils.getWidth() - sideMargin,
                         height: height - notificationPopupHeight,
                         backgroundColor: 'white',
                         justifyContent: 'center',
@@ -399,18 +415,22 @@ class ApplicationManager extends Component {
 
                         </TouchableOpacity>
 
-                        {item &&
+                        {item ?
                         <View style={{
                             flex: 1,
                             width: StyleUtils.getWidth() - 5,
                             justifyContent: 'center',
                             alignItems: 'center'
                         }}>
-                            <FeedPromotion showActions={true} token={token}
-                                           location={location} hideSocial={true} showInPopup={true}
-                                           navigation={this.props.navigation} item={item}/>
-                        </View>}
-                        {notificationTitle &&
+                            <FeedPromotion scanner showActions={true}  token={token}
+                                           location={location} actions={feedAction}
+                                           navigation={this.props.navigation} item={item}
+                                           like={feedAction.like} unlike={feedAction.unlike}
+                                           save={this.savePromotionFromPopup.bind(this)}/>
+
+
+                        </View> :
+
                         <View style={{
                             flex: 1,
                             width: StyleUtils.getWidth() - 5,

@@ -55,7 +55,9 @@ export const addComponent = createSelector(
 export const getPopUpInstance = createSelector(
     [getMainTab], function (mainTab) {
         if (mainTab.instance) {
-            return feedUiConverter.createPromotionInstance(mainTab.instance);
+            let item = feedUiConverter.createPromotionInstance(mainTab.instance);
+            item.showsave = true;
+            return item;
         }
         return undefined;
     }

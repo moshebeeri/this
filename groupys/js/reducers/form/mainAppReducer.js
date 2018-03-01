@@ -18,9 +18,18 @@ const initialState = {
     notificationGroup: undefined,
     notificationBusiness: undefined
 };
+import {REHYDRATE} from "redux-persist/constants";
 import * as actions from './../reducerActions';
 
 export default function mainTab(state = initialState, action) {
+    if (action.type === REHYDRATE) {
+
+        // retrive stored data for reducer callApi
+        const savedData = action.payload || initialState;
+        return {
+            ...state, ...savedData.mainTab
+        };
+    }
     switch (action.type) {
         case actions.APP_CHANGE_TAB :
             return {

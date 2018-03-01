@@ -11,9 +11,10 @@ const getStateFeeds = (state) => state.feeds;
 const getStatePosts = (state) => state.postForm;
 const getStateBusiness = (state) => state.businesses;
 const getStatePromotions = (state) => state.promotions;
+const getStateSavedInstances = (state) => state.myPromotions;
 const store = getStore();
-export const getFeeds = createSelector([getStateFeeds, getStatePosts, getStateBusiness, getStatePromotions],
-    (feeds, posts, businesses, promotions) => {
+export const getFeeds = createSelector([getStateFeeds, getStatePosts, getStateBusiness, getStatePromotions,getStateSavedInstances],
+    (feeds, posts, businesses, promotions,savedPromotion) => {
         const collections = {
             activities: store.getState().activities.activities,
             promotions: promotions.promotions,
@@ -25,6 +26,10 @@ export const getFeeds = createSelector([getStateFeeds, getStatePosts, getStateBu
         };
         let feedsUi = [];
         let feedsOrder = feeds.feedView;
+        let savedInstancesIds = [];
+        if(savedPromotion.feeds){
+            savedInstancesIds = Object.values(savedPromotion.feeds).map(savedFeed => savedFeed.savedInstance.instance._id);
+        }
         if (feedsOrder.length > 0) {
             try {
                 let feedArray = feedsOrder.map(key => feeds.feeds[key]);
@@ -33,7 +38,7 @@ export const getFeeds = createSelector([getStateFeeds, getStatePosts, getStateBu
                 });
                 feedsUi = assembledFeeds.map(feed => {
                         try {
-                            return feedUiConverter.createFeed(feed)
+                            return feedUiConverter.createFeed(feed,savedInstancesIds);
                         } catch (err) {
                             console.error(err);
                             return undefined;
