@@ -118,7 +118,7 @@ export function touch(groupId) {
     return function (dispatch, getState) {
         try {
             const token = getState().authentication.token;
-            this.dispatchGroupTOuch(token,groupId,dispatch)
+            dispatchGroupTOuch(token,groupId,dispatch)
         } catch (error) {
             handler.handleError(error, dispatch, 'groupsApi.touch');
             logger.actionFailed('groupsApi.touch')
@@ -523,7 +523,7 @@ export function listenForChat(group) {
         const groupsChats = getState().comments.groupComments[group._id];
         const user = getState().user.user;
         if (groupsChats) {
-            this.dispatchGroupChatsListener(groupsChats,group,user,token,dispatch)
+            dispatchGroupChatsListener(groupsChats,group,user,token,dispatch)
         }
     }
 }
@@ -577,5 +577,6 @@ export function setSocialState(item) {
 
 export default {
     getAll,
-    fetchTopList
+    fetchTopList,
+
 };
