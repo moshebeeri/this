@@ -605,7 +605,7 @@ function sendGroupNotification(actor_user, audience, group_id, type) {
   Notifications.notify(note, audience);
 }
 
-exports.instanceNotify = function(instance, group){
+exports.instanceNotify = function(instance, group) {
   groupFollowersExclude(group, (err, ids)=>{
     if(err) return console.error(err);
     const _ids = ids.map(id=>id._id);
@@ -614,10 +614,16 @@ exports.instanceNotify = function(instance, group){
 };
 
 function groupFollowersExclude(groupId, exUserId, callback) {
-  const ex = `AND u._id <> '${exUserId}'`;
-  if(!exUserId) callback = exUserId;
+  if(!exUserId && !callback)
+    return console.error(new Error(`error calling groupFollowersExclude`));
+  if(!callback){
+    callback = exUserId;
+    exUserId = null;
+  }
+  const ex = exUserId? `AND u._id <> '${exUserId}'`: '' ;
+
   const query = `MATCH (u:user),(g:group)
-                 WHERE (u)-[:FOLLOW]->(g) AND g._id = '${groupId} ${exUserId? ex : '' }'
+                 WHERE (u)-[:FOLLOW]->(g) AND g._id = '${groupId} ${ex}'
                  RETURN u._id as _id limit 1000
                  `;
   graphModel.query(query,(err, ids) => {
