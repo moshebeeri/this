@@ -251,11 +251,7 @@ function handlePromotionPostCreate(promotion, callback) {
     else
       return callback(new Error('undefined promotion.on_action.type'));
 
-    let delete_on_action_query = `MATCH (f { _id:"${entityId}" })-[r:ON_ACTION]->(t) delete r`;
-    promotionGraphModel.query(delete_on_action_query, (err) => {
-      if(err) return callback(err);
-      return promotionGraphModel.relate_ids(entityId, 'ON_ACTION', promotion._id, params, callback);
-    });
+    return promotionGraphModel.relate_ids(entityId, 'ON_ACTION', promotion._id, params, callback);
   }
 
   promotionGraphModel.reflect(promotion, to_graph(promotion), function (err, promotion) {
@@ -318,7 +314,7 @@ exports.get_action = function (req, res) {
 };
 
 function getPromotionEntity(promotion){
-  if(promotion.entity) return null;
+  if(!promotion.entity) return null;
   if(promotion.entity.business      ) return promotion.entity.business      ;
   if(promotion.entity.shopping_chain) return promotion.entity.shopping_chain;
   if(promotion.entity.mall          ) return promotion.entity.mall          ;
@@ -331,28 +327,37 @@ function create_action(req, res) {
   let promotion = req.body;
   const type = promotion.on_action.type;
   const entity = getPromotionEntity(promotion);
-  if(type !== 'FOLLOW_ENTITY' && type !== 'PROXIMITY' )
-    return res.status(404).send(new Error(`invalid type ${type} should be FOLLOW_ENTITY or PROXIMITY`));
-  if(!entity)
-    return res.status(404).send(new Error(`No entity present`));
+
+  if(type !== 'FOLLOW_ENTITY' && type !== 'PROXIMITY' ) {
+    let  err = new Error(`invalid type ${type} should be FOLLOW_ENTITY or PROXIMITY`);
+    console.error(err);
+    return res.status(404).send(err);
+  }
+  if(!entity) {
+    let  err = new Error(`No entity present`);
+    console.error(err);
+    return res.status(404).send(err);
+  }
+
   function createIt() {
     promotion.creator = req.user._id;
     create_promotion(promotion, function (err, promotion) {
       if (err) return handleError(res, err);
+      console.log(promotion._id);
       return res.status(201).json(promotion);
     })
   }
 
   const query = `MATCH (p:promotion)<-[on:ON_ACTION]-(entity{_id:'${entity}'})
                  WHERE  p._id IS NOT NULL AND on.type = '${type}'
-                 RETURN p, on, entity`;
+                 RETURN p._id as p, on, entity._id as e`;
   promotionGraphModel.query(query, (err, results) => {
     if(err) return handleError(res, err);
     if(results && results.length > 0){
       // see: https://stackoverflow.com/questions/22670369/neo4j-cypher-how-to-change-the-type-of-a-relationship
       let rnQuery = ` MATCH (p:promotion)<-[on:ON_ACTION]-(entity{_id:'${entity}'})
                       WHERE  p._id IS NOT NULL AND on.type = '${type}'
-                      CREATE (p)-[on_prev:ON_PREV_ACTION]->(entity)
+                      CREATE (p)<-[on_prev:ON_PREV_ACTION]-(entity)
                       // copy properties, if necessary
                       SET on_prev = on
                       WITH on
@@ -365,7 +370,7 @@ function create_action(req, res) {
       return createIt()
     }
   })
-};
+}
 
 exports.create = function(req, res) {
   let promotion = req.body;
@@ -384,6 +389,10 @@ exports.create_campaign = function (req, res) {
   let promotion = req.body;
   let campaign = req.body;
   promotion.creator = req.user._id;
+  console.log(`promotion.on_action`);
+  if(promotion.on_action)
+    return create_action(req, res);
+
   create_promotion(promotion, function (err, promotion) {
     if (err) return handleError(res, err);
     campaign.promotions = [promotion];
