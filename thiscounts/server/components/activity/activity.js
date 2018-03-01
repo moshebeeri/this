@@ -159,6 +159,7 @@ function activity_impl(act, callback) {
         return handleSuccess(activity)
       });
     }else {
+      console.log(`Activity not distributed: ${act}`);
       return callback(new Error('Activity not distributed expected ids. audience or actor_*'));
     }
   });

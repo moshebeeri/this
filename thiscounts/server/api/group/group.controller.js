@@ -14,6 +14,7 @@ const MongodbSearch = require('../../components/mongo-search');
 const qrcodeController = require('../qrcode/qrcode.controller');
 const onAction = require('../../components/on-action');
 const feed = require('../../components/feed-tools');
+const Instance = require('../../components/instance');
 
 exports.search = MongodbSearch.create(Group);
 
@@ -150,10 +151,12 @@ exports.create = function (req, res) {
           if (err) {
             return handleError(res, err);
           }
-          graphModel.relate_ids(group._id, 'CREATED_BY', req.user._id);
-          graphModel.relate_ids(req.user._id, 'FOLLOW', group._id);
-          graphModel.relate_ids(req.user._id, 'GROUP_ADMIN', group._id);
-          touch(group.creator, group._id);
+          graphModel.relate_ids(req.user._id, 'FOLLOW', group._id, (err)=>{
+            if(err) return handleError(res, err);
+            graphModel.relate_ids(group._id, 'CREATED_BY', req.user._id);
+            graphModel.relate_ids(req.user._id, 'GROUP_ADMIN', group._id);
+            touch(group.creator, group._id);
+          });
           if (group.entity_type === 'BUSINESS' && utils.defined(group.entity.business)) {
             graphModel.relate_ids(group._id, 'FOLLOW', group.entity.business);
             graphModel.relate_ids(group.entity.business, 'BUSINESS_GROUP', group._id);
@@ -193,14 +196,16 @@ exports.create_business_default_group = function (group, callback) {
         }, function (err) {
           if (err) return callback(err);
           //console.log(`group.creator -> ${JSON.stringify(group.creator)}`);
-          graphModel.relate_ids(group._id, 'CREATED_BY', group.creator);
-          graphModel.relate_ids(group.creator._id, 'FOLLOW', group._id);
-          graphModel.relate_ids(group.creator._id, 'GROUP_ADMIN', group._id);
-          graphModel.relate_ids(group._id, 'FOLLOW', group.entity.business);
-          touch(group.creator._id, group._id);
-          graphModel.relate_ids(group.entity.business, 'DEFAULT_GROUP', group._id, function (err) {
-            if (err) return callback(err);
-            return callback(null, group);
+          graphModel.relate_ids(group.creator._id, 'FOLLOW', group._id, (err)=>{
+            if(err) return callback(err);
+            graphModel.relate_ids(group._id, 'CREATED_BY', group.creator);
+            graphModel.relate_ids(group.creator._id, 'GROUP_ADMIN', group._id);
+            graphModel.relate_ids(group._id, 'FOLLOW', group.entity.business);
+            touch(group.creator._id, group._id);
+            graphModel.relate_ids(group.entity.business, 'DEFAULT_GROUP', group._id, function (err) {
+              if (err) return callback(err);
+              return callback(null, group);
+            });
           });
         });
       });
@@ -290,7 +295,9 @@ exports.business_candidates = function (req, res) {
 
 function touch(userId, groupId, callback){
   let query = `match (u:user{_id:'${userId}'})-[r:FOLLOW]->(g:group{_id:'${groupId}'}) set r.timestamp=timestamp()`;
-  graphModel.query(query, callback? callback : ()=>{});
+  graphModel.query(query, callback? callback : (err)=>{
+    if(err) console.error(err);
+  });
 
 }
 
@@ -591,11 +598,37 @@ function sendGroupNotification(actor_user, audience, group_id, type) {
   let note = {
     note: type,
     group: group_id,
+    title: `Invitation to join group`,
     actor_user: actor_user,
     timestamp: Date.now()
   };
   Notifications.notify(note, audience);
 }
+
+exports.instanceNotify = function(instance, group){
+  groupFollowersExclude(group, (err, ids)=>{
+    if(err) return console.error(err);
+    const _ids = ids.map(id=>id._id);
+    Instance.notify(instance, _ids);
+  })
+};
+
+function groupFollowersExclude(groupId, exUserId, callback) {
+  const ex = `AND u._id <> '${exUserId}'`;
+  if(!exUserId) callback = exUserId;
+  const query = `MATCH (u:user),(g:group)
+                 WHERE (u)-[:FOLLOW]->(g) AND g._id = '${groupId} ${exUserId? ex : '' }'
+                 RETURN u._id as _id limit 1000
+                 `;
+  graphModel.query(query,(err, ids) => {
+    if(err) return callback(err);
+    return callback(null, ids);
+  })
+}
+
+exports.groupFollowersExclude = function(groupId, exUserId, callback) {
+  return groupFollowersExclude(groupId, exUserId, callback)
+};
 
 exports.ask_join_group = function (req, res) {
   let userId = req.user._id;

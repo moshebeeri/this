@@ -19,7 +19,8 @@ const instance = require('../../components/instance');
 const MongodbSearch = require('../../components/mongo-search');
 const feed = require('../../components/feed-tools');
 const pricing = require('../../components/pricing');
-
+const Instance = require('../../components/instance');
+const groupCtrl = require('../group/group.controller');
 
 exports.search = MongodbSearch.create(Promotion);
 
@@ -100,6 +101,8 @@ function applyToGroupList(groups_ids, instance, callback) {
         if (err) return callback(err);
         if (!positiveBalance) return callback(new Error('HTTP_PAYMENT_REQUIRED'));
         instance_group_activity(instance, group);
+        groupCtrl.instanceNotify(instance._id, group._id);
+
       })
     }, callback);
   })
@@ -122,7 +125,7 @@ function applyToFollowingGroups(promotion, instances, callback) {
         let query = instanceGraphModel.related_type_id_dir_query(business._id, 'FOLLOW', 'group', 'in', 0, instance.quantity);
         instanceGraphModel.query(query, function (err, groups_ids) {
           if (err) return callback(err);
-          return applyToGroupList(groups_ids, instance, callback)
+          return applyToGroupList(groups_ids, instance, promotion.creator, callback)
         })
         }
       }
@@ -143,6 +146,7 @@ function applyToFollowingUsers(promotion, instances, callback) {
           if (!positiveBalance) return callback(new Error('HTTP_PAYMENT_REQUIRED'));
           instanceGraphModel.relate_ids(user._id, 'ELIGIBLE', `{start: ${promotion.start}, end: ${promotion.end}`, instance._id);
           user_instance_eligible_activity(user._id, instance);
+          Instance.notify(instance._id, [user._id]);
         })
       })
     });

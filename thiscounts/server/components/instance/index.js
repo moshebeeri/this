@@ -5,7 +5,8 @@ const graphTools = require('../graph-tools');
 const instanceGraphModel = graphTools.createGraphModel('instance');
 const utils = require('../utils').createUtils();
 const spatial = require('../spatial').createSpatial();
-const distributor = require('../../components/distributor');
+const distributor = require('../distributor');
+const Notifications = require('../notification');
 const InstanceSchema = require('../../api/instance/instance.model');
 const async = require('async');
 
@@ -553,6 +554,17 @@ Instances.createSingleInstance =
       if (err) return callback(err);
       callback(null, instances[0]);
     });
+  };
+
+Instances.notify =
+  Instances.prototype.createSingleInstance = function (instance, audience) {
+      let note = {
+        note: 'instance_eligible',
+        instance: instance,
+        title: `New Promotion Eligible`,
+        timestamp: Date.now()
+      };
+      Notifications.notify(note, audience);
   };
 
 module.exports = Instances;
