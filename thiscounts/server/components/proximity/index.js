@@ -103,7 +103,7 @@ function entityRoleMembers(entity, callback) {
 
 function proximityEligibility(userId, location, eligible, callback) {
   console.log(`proximityEligibility userId ${userId}, location ${JSON.stringify(location)}, eligible ${JSON.stringify(eligible)}`);
-  Promotion.findbyId(eligible._id, function (err, promotion) {
+  Promotion.findById(eligible._id, function (err, promotion) {
     if (err) return callback(err);
     if (!promotion) return callback(new Error('promotion not found for _id:' + eligible._id));
     Instance.createSingleInstance(promotion, function (err, instance) {
