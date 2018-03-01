@@ -39,7 +39,7 @@ RealizeMessage1                               : "LET AN AUTHORIZED EMPLOYEE",
 RealizeMessage2                               : "SCAN THIS QR CODE",
 QrScanner                                     : "QR Scanner",
 MyPromotions                                  : "My Promotions",
-OnBoardingPromotion                           : "On Boarding Promotions",
+OnBoardingPromotion                           : "On Boarding Promotion",
 Edit                                          : "Edit",
 Total                                         : "Total",
 Used                                          : "Used",
@@ -269,9 +269,11 @@ JoinGroup                                     : "Join Group",
 ViewGroup                                     : "View Group",
 FollowGroupMessage                            : "Approve this request to follow {0} Group",
 inviteUserToGroup                             : "{0} Invites you to join {1} group",
-
-
-
+OnProximityPromotion                          : "On Proximity Promotion",
+proximityDistance                             : "{0} Km From Business",
+chooseProximityDistance                       : "Choose Proximity Distance ",
+Proximity                                     : "Proximity",
+ProximityDistanceTitle                        : "Proximity Distance",
 };
 
 export default enUS;

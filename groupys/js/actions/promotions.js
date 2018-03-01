@@ -127,6 +127,21 @@ export function savePromotion(promotion, businessId, navigation) {
                 businessId: businessId,
                 token: token
             });
+            if(promotion.on_action){
+                if(promotion.on_action.type ==='FOLLOW_ENTITY'){
+                    dispatch({
+                        type: actions.SAVE_ON_BOARDING_PROMOTIONS,
+                        onBoardingPromotion: promotion,
+                        businessId: businessId,
+                    });
+                }else {
+                    dispatch({
+                        type: actions.SAVE_ON_PROXIMITY_PROMOTIONS,
+                        proximityPromotion: promotion,
+                        businessId: businessId,
+                    });
+                }
+            }
             dispatch({
                 type: actions.PROMOTION_SAVING_DONE,
             });

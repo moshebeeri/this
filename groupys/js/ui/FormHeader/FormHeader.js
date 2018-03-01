@@ -1,24 +1,23 @@
 import React, {Component} from 'react';
-import {Dimensions, I18nManager, Platform, TouchableOpacity,TextInput} from 'react-native';
-import {Button, Header, Input, InputGroup, Tab, TabHeading, Tabs, Text, View} from 'native-base';
+import {Dimensions, I18nManager, Platform, TextInput, TouchableOpacity} from 'react-native';
+import {Button, Header, Input, InputGroup, Tab, TabHeading, Tabs, View} from 'native-base';
 import Icon from 'react-native-vector-icons/Ionicons';
 import Icon2 from 'react-native-vector-icons/Entypo';
 import styles from './styles';
 import strings from "../../i18n/i18n"
 import {connect} from 'react-redux';
 import {ThisText} from '../../ui/index';
+import StyleUtils from "../../utils/styleUtils";
 
 const {width, height} = Dimensions.get('window')
-
 const vh = height / 100
-import StyleUtils from "../../utils/styleUtils";
 
 class FormHeader extends Component {
     constructor(props) {
         super(props);
-        this.state={
-            showSearch:false,
-            searchText:'',
+        this.state = {
+            showSearch: false,
+            searchText: '',
         }
     }
 
@@ -45,25 +44,24 @@ class FormHeader extends Component {
         return styles.formHeadrTitleStyle;
     }
 
-
-    filter(){
+    filter() {
         this.setState({
-            showSearch:true
+            showSearch: true
         })
     }
 
-    searchText(text){
-        const{filter} = this.props;
+    searchText(text) {
+        const {filter} = this.props;
         this.setState({
-            searchText:text
+            searchText: text
         })
-        if(filter){
+        if (filter) {
             filter(text);
         }
-
     }
+
     render() {
-        const {filter,submitForm, showBack, title, bgc, submitIcon, titleColor, backIconColor,network} = this.props;
+        const {filter, submitForm, showBack, title, bgc, submitIcon, titleColor, backIconColor, network, menu} = this.props;
         let icon = <Icon2 active color={"white"} size={25} name={'check'}/>
         let headerHeight = vh * 7;
         if (Platform.OS === 'ios') {
@@ -85,7 +83,6 @@ class FormHeader extends Component {
                 alignItems: 'flex-start',
                 justifyContent: 'flex-start',
                 marginLeft: 5,
-
                 marginRight: 5
             }} onPress={() => this.back()}>
                 <Icon active color={iconColor} size={25} name={arrowName}/>
@@ -94,65 +91,81 @@ class FormHeader extends Component {
         }
         let titleStyle = this.createTitleStyle(titleColor);
         return (
-            <View style={{width:StyleUtils.getWidth()}}>
-                {network.offline &&   <View style={{width:width,height:20,justifyContent:'center',alignItems:'center',backgroundColor:'#f4ce42'}}>
-                    <ThisText style={{color:'gray'}}>{strings.Offline}</ThisText>
-                </View>}
-            <View style={{
-                height: headerHeight, flexDirection: 'row', alignItems: 'center', backgroundColor: bgc,
-                justifyContent: 'center',
-            }}>
-                <View style={styles.formHeaderBackButoon}>
-                    {back}
-                </View>
-                <View style={{
-                    flex: 5, justifyContent: 'center',
+            <View style={{width: StyleUtils.getWidth()}}>
+                {network.offline && <View style={{
+                    width: width,
+                    height: 20,
+                    justifyContent: 'center',
                     alignItems: 'center',
+                    backgroundColor: '#f4ce42'
                 }}>
-                    {!this.state.showSearch && <ThisText transparent style={titleStyle}>{title}</ThisText>}
-                    {this.state.showSearch &&
-                    <TextInput style={{
-                        color: "white",
-                        marginLeft: 10,
-                        marginRight: 40,
-                        marginTop: 5,
+                    <ThisText style={{color: 'gray'}}>{strings.Offline}</ThisText>
+                </View>}
+                <View style={{
+                    height: headerHeight, flexDirection: 'row', alignItems: 'center', backgroundColor: bgc,
+                    justifyContent: 'center',
+                }}>
+                    <View style={styles.formHeaderBackButoon}>
+                        {back}
+                    </View>
+                    <View style={{
+                        flex: 5, justifyContent: 'center',
+                        alignItems: 'center',
+                    }}>
+                        {!this.state.showSearch && <ThisText transparent style={titleStyle}>{title}</ThisText>}
+                        {this.state.showSearch &&
+                        <TextInput style={{
+                            color: "white",
+                            marginLeft: 10,
+                            marginRight: 40,
+                            marginTop: 5,
+                            fontSize: 18,
+                            width: StyleUtils.getWidth() - 100,
+                            height: 40
+                        }}
+                                   placeholderTextColor={'white'}
+                                   underlineColorAndroid='transparent'
+                                   value={this.state.searchText}
+                                   autoFocus={true}
+                                   returnKeyType='search'
+                                   onChangeText={(searchText) => this.searchText(searchText)}
+                                   placeholder={'Search'}
+                        />}
+                    </View>
 
-                        fontSize: 18,
-                        width: StyleUtils.getWidth() - 100,
-                        height:40
-                    }}
-                               placeholderTextColor={'white'}
-                               underlineColorAndroid='transparent'
-                               value={this.state.searchText}
-                               autoFocus={true}
-                               returnKeyType='search'
-                               onChangeText={(searchText) => this.searchText(searchText)}
-                               placeholder={'Search'}
-                    />}
+                    {menu ? <View style={styles.formHeaderSubmitButoon}>
+
+
+                        {menu}
+                        {filter && !this.state.showSearch &&
+                        <TouchableOpacity transparent
+                                          style={{width: 50, alignItems: 'flex-end', justifyContent: 'flex-end'}}
+                                          onPress={() => this.filter()}>
+                            <Icon style={{fontSize: 30, color: "white"}} name="ios-search"/>
+                        </TouchableOpacity>
+                        }
+
+
+                    </View> : <View style={styles.formHeaderSubmitButoon}>
+                        {submitForm &&
+                        <TouchableOpacity transparent
+                                          style={{width: 50, alignItems: 'flex-end', justifyContent: 'flex-end'}}
+                                          onPress={() => this.submitForm()}>
+                            {icon}
+                        </TouchableOpacity>
+                        }
+
+                        {filter && !this.state.showSearch &&
+                        <TouchableOpacity transparent
+                                          style={{width: 50, alignItems: 'flex-end', justifyContent: 'flex-end'}}
+                                          onPress={() => this.filter()}>
+                            <Icon style={{fontSize: 30, color: "white"}} name="ios-search"/>
+                        </TouchableOpacity>
+                        }
+
+
+                    </View>}
                 </View>
-
-                <View style={styles.formHeaderSubmitButoon}>
-                    {submitForm &&
-                    <TouchableOpacity transparent
-                                      style={{width: 50, alignItems: 'flex-end', justifyContent: 'flex-end'}}
-                                      onPress={() => this.submitForm()}>
-                        {icon}
-                    </TouchableOpacity>
-                    }
-
-                    {filter && !this.state.showSearch &&
-                    <TouchableOpacity transparent
-                                      style={{width: 50, alignItems: 'flex-end', justifyContent: 'flex-end'}}
-                                      onPress={() => this.filter()}>
-                        <Icon style={{fontSize: 30, color: "white"}} name="ios-search"/>
-                    </TouchableOpacity>
-                    }
-
-
-                </View>
-
-
-            </View>
             </View>
         );
     }

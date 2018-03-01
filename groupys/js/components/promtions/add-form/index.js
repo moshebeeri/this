@@ -69,6 +69,38 @@ const Distribution = [
     }
 ];
 
+
+const Proximity = [
+    {
+        value: 0.5,
+        label: strings.proximityDistance.formatUnicorn(0.5)
+    },
+    {
+        value: 1,
+        label: strings.proximityDistance.formatUnicorn(1)
+    },
+    {
+        value: 1.5,
+        label: strings.proximityDistance.formatUnicorn(1.5)
+    },
+    {
+        value: 2,
+        label: strings.proximityDistance.formatUnicorn(2)
+    },
+    {
+        value: 3,
+        label: strings.proximityDistance.formatUnicorn(3)
+    },
+    {
+        value: 4,
+        label: strings.proximityDistance.formatUnicorn(4)
+    },
+    {
+        value: 5,
+        label: strings.proximityDistance.formatUnicorn(5)
+    }
+];
+
 class AddPromotion extends Component {
     static navigationOptions = {
         header: null
@@ -124,7 +156,17 @@ class AddPromotion extends Component {
     }
 
     async componentWillMount() {
+
         this.props.actions.resetForm();
+
+        if(this.props.navigation.state.params && this.props.navigation.state.params.onBoardingPromotion){
+            this.setPromotion(this.props.navigation.state.params.onBoardingPromotion);
+            return;
+        }
+        if(this.props.navigation.state.params && this.props.navigation.state.params.proximityPromotion){
+            this.setPromotion(this.props.navigation.state.params.proximityPromotion);
+            return;
+        }
         try {
             if (this.props.navigation.state.params && this.props.navigation.state.params.item) {
                 let item = this.props.navigation.state.params.item;
@@ -195,6 +237,25 @@ class AddPromotion extends Component {
         return businessId;
     }
 
+    setPromotion(promotion){
+
+        let image = promotion.image;
+        if(!image &&  promotion.pictures &&  promotion.pictures.length > 0){
+            image = promotion.pictures[0].pictures[0]
+        }
+        this.setState({
+            image: image,
+            type: promotion.type,
+            // percent_range: this.state.percent_range,
+            start: promotion.start,
+            end: promotion.end,
+            description: promotion.info,
+            name: promotion.name,
+
+        })
+
+        //TODO add all parameters
+    }
     createPromotionFromState() {
         let promotion = {
             image: this.state.image,
@@ -213,6 +274,16 @@ class AddPromotion extends Component {
                     promotion.on_action = {
                         active: true,
                         type: 'FOLLOW_ENTITY',
+                        entity: {
+                            business: this.getBusinessId()
+                        }
+                    };
+                    break;
+                case 'PROXIMITY':
+                    promotion.on_action = {
+                        active: true,
+                        type: 'PROXIMITY',
+                        proximity:this.state.proximity,
                         entity: {
                             business: this.getBusinessId()
                         }
@@ -421,6 +492,10 @@ class AddPromotion extends Component {
         }
     }
 
+    selectProximity(proximity) {
+        this.setState({proximity:proximity});
+    }
+
     selectGroup(group) {
         if (group && group.length > 0) {
             this.setState({
@@ -479,21 +554,53 @@ class AddPromotion extends Component {
         </View>
     }
 
+    createProximityForm() {
+        let proximity = <View style={[styles.inputTextLayout, {width: StyleUtils.getWidth() - 15}]}>
+            <SimplePicker ref="TypePicker" list={Proximity} itemTitle={strings.Proximity}
+                          defaultHeader={strings.chooseProximityDistance}
+                          isMandatory onValueSelected={this.selectProximity.bind(this)}/>
+        </View>;
+
+        return <View>
+            <View style={[styles.textLayout, {width: StyleUtils.getWidth() - 15}]}>
+                <ThisText style={{color: '#FA8559', marginLeft: 8, marginRight: 8}}>{strings.ProximityDistanceTitle}</ThisText>
+            </View>
+            <View style={{flexDirection: 'row', justifyContent: 'flex-start', alignItems: 'center'}}>
+
+                <View style={{flex: 2}}>
+                    {proximity}
+                </View>
+
+            </View>
+
+
+        </View>
+    }
+
     render() {
         const {saving,savingFailed} = this.props;
-        let conditionForm = this.createDiscountConditionForm();
-        let distributionForm = this.createDistributionForm();
-        if (this.props.navigation.state.params.group) {
-            distributionForm = undefined;
-        }
+        let proximityForm = undefined;
         let header = strings.AddPromotion;
         if (this.props.navigation.state.params.onBoardType) {
             switch (this.props.navigation.state.params.onBoardType) {
                 case 'BUSINESS':
-                    header = strings.AddOnBoardingPromotion
+                    header = strings.AddOnBoardingPromotion;
                     break;
+                case 'PROXIMITY':
+                    header = strings.OnProximityPromotion;
+                    proximityForm = this.createProximityForm();
+                    break;
+
             }
         }
+        let conditionForm = this.createDiscountConditionForm();
+        let distributionForm = this.createDistributionForm();
+
+        if (this.props.navigation.state.params.group || proximityForm) {
+            distributionForm = undefined;
+        }
+
+
         return (
             <View style={[styles.product_container, {width: StyleUtils.getWidth()}]}>
 
@@ -548,6 +655,7 @@ class AddPromotion extends Component {
                     </View>
 
                     {conditionForm}
+                    {proximityForm}
                     {distributionForm}
                 </ScrollView>
 
