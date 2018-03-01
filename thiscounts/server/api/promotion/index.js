@@ -14,9 +14,7 @@ router.get('/list/by/user/business', auth.isAuthenticated(), controller.user_bus
 router.get('/list/by/business/:business_id/:from/:scroll', auth.isAuthenticated(), controller.business_promotions);
 router.get('/list/:business_id/:campaign_id', auth.isAuthenticated(), controller.campaign_promotions);
 router.post('/campaign', auth.isAuthenticated(), controller.create_campaign);
-
 router.get('/action/:type/:entity', auth.isAuthenticated(), controller.get_action);
-router.post('/action', auth.isAuthenticated(), controller.create_action);
 
 router.get('/', auth.hasRole('admin'), controller.index);
 router.get('/:id', auth.isAuthenticated(), controller.show);
