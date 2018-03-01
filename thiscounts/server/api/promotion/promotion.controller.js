@@ -317,13 +317,25 @@ exports.get_action = function (req, res) {
   })
 };
 
-exports.create_action = function (req, res) {
-  if( req.params.type !== 'FOLLOW_ENTITY' &&
-    req.params.type !== 'PROXIMITY' )
-    return res.status(404).send(new Error(`invalid type ${req.params.type} should be FOLLOW_ENTITY or PROXIMITY`));
+function getPromotionEntity(promotion){
+  if(promotion.entity) return null;
+  if(promotion.entity.business      ) return promotion.entity.business      ;
+  if(promotion.entity.shopping_chain) return promotion.entity.shopping_chain;
+  if(promotion.entity.mall          ) return promotion.entity.mall          ;
+  if(promotion.entity.brand         ) return promotion.entity.brand         ;
+  if(promotion.entity.group         ) return promotion.entity.group         ;
+  return null;
+}
 
+function create_action(req, res) {
+  let promotion = req.body;
+  const type = promotion.on_action.type;
+  const entity = getPromotionEntity(promotion);
+  if(type !== 'FOLLOW_ENTITY' && type !== 'PROXIMITY' )
+    return res.status(404).send(new Error(`invalid type ${type} should be FOLLOW_ENTITY or PROXIMITY`));
+  if(!entity)
+    return res.status(404).send(new Error(`No entity present`));
   function createIt() {
-    let promotion = req.body;
     promotion.creator = req.user._id;
     create_promotion(promotion, function (err, promotion) {
       if (err) return handleError(res, err);
@@ -331,15 +343,15 @@ exports.create_action = function (req, res) {
     })
   }
 
-  const query = `MATCH (p:promotion)<-[on:ON_ACTION]-(entity{_id:'${req.params.entity}'})
-                 WHERE  p._id IS NOT NULL AND on.type = '${req.params.type}'
+  const query = `MATCH (p:promotion)<-[on:ON_ACTION]-(entity{_id:'${entity}'})
+                 WHERE  p._id IS NOT NULL AND on.type = '${type}'
                  RETURN p, on, entity`;
   promotionGraphModel.query(query, (err, results) => {
     if(err) return handleError(res, err);
     if(results && results.length > 0){
       // see: https://stackoverflow.com/questions/22670369/neo4j-cypher-how-to-change-the-type-of-a-relationship
-      let rnQuery = ` MATCH (p:promotion)<-[on:ON_ACTION]-(entity{_id:'${req.params.entity}'})
-                      WHERE  p._id IS NOT NULL AND on.type = '${req.params.type}'
+      let rnQuery = ` MATCH (p:promotion)<-[on:ON_ACTION]-(entity{_id:'${entity}'})
+                      WHERE  p._id IS NOT NULL AND on.type = '${type}'
                       CREATE (p)-[on_prev:ON_PREV_ACTION]->(entity)
                       // copy properties, if necessary
                       SET on_prev = on
@@ -355,12 +367,12 @@ exports.create_action = function (req, res) {
   })
 };
 
-exports.create = function (req, res) {
+exports.create = function(req, res) {
   let promotion = req.body;
   promotion.creator = req.user._id;
 
   if(promotion.on_action)
-    return res.status(404).send(new Error('on_action promotions should be submitted using proprietary api calls'));
+    return create_action(req, res);
 
   create_promotion(promotion, function (err, promotion) {
     if (err) return handleError(res, err);
