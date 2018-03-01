@@ -1,9 +1,13 @@
 'use strict';
 
 let _ = require('lodash');
-let db = require('seraph')({  server: "http://localhost:7474",
-                              user: "neo4j",
-                              pass: "saywhat" });
+let config = require('../../config/environment');
+
+let db = require('seraph')({
+  server: config.neo4j.uri,
+  user: "neo4j",
+  pass: "saywhat"
+});
 
 let seraph_model = require('seraph-model');
 let logger = require('../logger').createLogger();

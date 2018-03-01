@@ -1,6 +1,9 @@
 //see http://neo4j.com/developer/javascript/
+let _ = require('lodash');
+let config = require('../../config/environment');
+
 let db = require('seraph')({
-  server: "http://localhost:7474",
+  server: config.neo4j.uri,
   user: "neo4j",
   pass: "saywhat"
 });
@@ -173,7 +176,7 @@ Spatial.prototype.userLocationWithinDistance = function add(coordinate, distance
 Spatial.prototype.add = function add(gid, callback) {
   let operation = db.operation('ext/SpatialPlugin/graphdb/addNodeToLayer', 'POST', {
     "layer": "world",
-    "node": "http://localhost:7474/db/data/node/" + gid
+    "node": `${config.neo4j.uri}/db/data/node/` + gid
   });
   db.call(operation, function (err, result, response) {
     if (err) console.error(`Spatial.prototype.add error: ${err.message}`);
