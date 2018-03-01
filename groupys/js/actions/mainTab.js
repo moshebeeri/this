@@ -1,7 +1,5 @@
 import * as actions from "../reducers/reducerActions";
 import InstanceApi from "../api/instances";
-import CollectionDispatcher from "./collectionDispatcher";
-import * as assemblers from "./collectionAssembler";
 import NotificationApi from "../api/notification";
 import * as groupsActions from './groups'
 import GoupApi from "../api/groups";
@@ -40,22 +38,16 @@ export function showPromotionPopup(instanceId, notificationId) {
     return async function (dispatch, getState) {
         try {
             notificationApi.readNotification(notificationId);
-            let instances = getState().instances.instances;
-            if (show && !instances[instanceId]) {
-                const token = getState().authentication.token;
+            const token = getState().authentication.token;
+            if (token) {
                 let instance = await instanceApi.getInstance(token, instanceId);
-                if (instance) {
-                    let collectionDispatcher = new CollectionDispatcher();
-                    assemblers.disassembler(instance, collectionDispatcher);
-                    collectionDispatcher.dispatchEvents(dispatch, updateBusinessCategory, token);
-                }
+                dispatch({
+                    type: actions.APP_SHOW_PROMOTION_POPUP,
+                    showPopup: true,
+                    instance: instance,
+                    notificationId: notificationId
+                });
             }
-            dispatch({
-                type: actions.APP_SHOW_PROMOTION_POPUP,
-                showPopup: true,
-                instanceId: instanceId,
-                notificationId: notificationId
-            });
         } catch (error) {
             handler.handleError(error, dispatch, 'showPromotionPopup')
             logger.actionFailed('showPromotionPopup')
@@ -112,7 +104,7 @@ export function showInviteGroupPopup(groupId, userId, notificationId) {
             notificationApi.readNotification(notificationId);
             const groups = getState().groups.groups;
             const token = getState().authentication.token;
-            if(token) {
+            if (token) {
                 let group = groups[groupId];
                 if (!group) {
                     group = await groupApi.get(token, groupId);

@@ -40,8 +40,9 @@ class ContactsApi {
             });
             if (newContacts.length > 0) {
                 store.save('all-contacts', currentContacts);
+                this.updateServer(token, userId, currentContacts);
             }
-            this.updateServer(token, userId, currentContacts)
+
         })
     }
 
@@ -63,7 +64,7 @@ class ContactsApi {
         let json = JSON.stringify(phoneBooks);
        // console.log('Sending phone book' + json);
         try {
-            let response = await fetch(`${server_host}/api/users/phonebook`, {
+            let response = await fetch(`${server_host}/api/users/phonebookNew`, {
                 method: 'POST',
                 headers: {
                     'Accept': 'application/json, text/plain, */*',
