@@ -3,7 +3,7 @@ import FormUtils from "../utils/fromUtils";
 import strings from "../i18n/i18n"
 
 class FeedConverter {
-    createFeed(feed) {
+    createFeed(feed,savedInstancesIds) {
         let response = {};
         if (feed.activity.business) {
             response = this.createBusinessUo(feed);
@@ -31,7 +31,7 @@ class FeedConverter {
             response = this.createMessageUi(feed);
         }
         if (feed.activity.action === 'instance' || feed.activity.action === 'eligible' || feed.activity.action === 'eligible_on_activity_follow') {
-            return this.createPromotionInstance(feed);
+            return this.createPromotionInstance(feed,savedInstancesIds);
         }
         if (feed.activity.action === 'share') {
             return this.createShared(feed);
@@ -402,7 +402,10 @@ class FeedConverter {
         return feed.promotion;
     }
 
-    createPromotionInstance(feed) {
+    createPromotionInstance(feed,savedInstancesIds) {
+        if(!savedInstancesIds){
+            savedInstancesIds = [];
+        }
         let instance = this.getInstance(feed);
         if (!instance) {
             return;
@@ -429,7 +432,7 @@ class FeedConverter {
             if (instance.social_state) {
                 responseFeed.social = instance.social_state
                 responseFeed.social.activityId = feed.activity._id;
-                responseFeed.showsave = !instance.social_state.saved && !instance.social_state.realized;
+                responseFeed.showsave = !instance.social_state.saved && !instance.social_state.realized && !savedInstancesIds.includes(instance._id);
             }
             responseFeed.shareable = !instance.shareable;
             responseFeed.endDate = date.toLocaleDateString();
