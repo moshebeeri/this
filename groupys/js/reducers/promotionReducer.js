@@ -10,7 +10,7 @@
 /**
  * Created by stan229 on 5/27/16.
  */
-const initialState = {promotions: {}, savingForm: false,loadingDone:{},promotionPictures:[],savingFormFailed:false};
+const initialState = {proximityPromotion:{},onBoardingPromotion:{},promotions: {}, savingForm: false,loadingDone:{},promotionPictures:[],savingFormFailed:false};
 import {REHYDRATE} from "redux-persist/constants";
 import * as actions from "./reducerActions";
 
@@ -110,11 +110,20 @@ export default function promotion(state = initialState, action) {
         case actions.SAVE_PROMOTIONS :
 
             promotionsState[action.businessId] = action.promotions;
-            return currentState;
+            return promotionsState;
+        case actions.SAVE_ON_PROXIMITY_PROMOTIONS :
+
+            promotionsState.proximityPromotion[action.businessId] = action.proximityPromotion;
+            return promotionsState;
+
+        case actions.SAVE_ON_BOARDING_PROMOTIONS :
+
+            promotionsState.onBoardingPromotion[action.businessId] = action.onBoardingPromotion;
+            return promotionsState;
 
         case actions.OTHER_BUSINESS_USER :
             //TODO: currentPromotions[action.currentPromotionInEdit] = action.otherBusinessUser;
-            return currentState;
+            return promotionsState;
 
         default:
             return state;
