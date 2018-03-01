@@ -304,6 +304,9 @@ function create_promotion(promotion, callback) {
 // WHERE  promo._id IS NOT NULL AND on.type = 'FOLLOW_ENTITY'
 // RETURN promo, on, entity
 exports.get_action = function (req, res) {
+  if( req.params.type !== 'FOLLOW_ENTITY' &&
+    req.params.type !== 'PROXIMITY' )
+    return res.status(404).send(new Error(`invalid type ${req.params.type} should be FOLLOW_ENTITY or PROXIMITY`));
   const query = `MATCH (p:promotion)<-[on:ON_ACTION]-(entity{_id:'${req.params.entity}'})
                  WHERE  p._id IS NOT NULL AND on.type = '${req.params.type}'
                  RETURN p._id as _id`;
@@ -315,9 +318,9 @@ exports.get_action = function (req, res) {
 };
 
 exports.create_action = function (req, res) {
-  const query = `MATCH (p:promotion)<-[on:ON_ACTION]-(entity{_id:'${req.params.entity}'})
-                 WHERE  p._id IS NOT NULL AND on.type = '${req.params.type}'
-                 RETURN p, on, entity`;
+  if( req.params.type !== 'FOLLOW_ENTITY' &&
+    req.params.type !== 'PROXIMITY' )
+    return res.status(404).send(new Error(`invalid type ${req.params.type} should be FOLLOW_ENTITY or PROXIMITY`));
 
   function createIt() {
     let promotion = req.body;
@@ -328,6 +331,9 @@ exports.create_action = function (req, res) {
     })
   }
 
+  const query = `MATCH (p:promotion)<-[on:ON_ACTION]-(entity{_id:'${req.params.entity}'})
+                 WHERE  p._id IS NOT NULL AND on.type = '${req.params.type}'
+                 RETURN p, on, entity`;
   promotionGraphModel.query(query, (err, results) => {
     if(err) return handleError(res, err);
     if(results && results.length > 0){
@@ -354,7 +360,7 @@ exports.create = function (req, res) {
   promotion.creator = req.user._id;
 
   if(promotion.on_action)
-    return res.status(404).send('on_action promotions should be submitted using proprietary api calls');
+    return res.status(404).send(new Error('on_action promotions should be submitted using proprietary api calls'));
 
   create_promotion(promotion, function (err, promotion) {
     if (err) return handleError(res, err);
