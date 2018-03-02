@@ -25,7 +25,7 @@
 	<key>CodePushDeploymentKey</key>
 	<string>ghm4tw6_UUO3hqeU2_AqsKuFZ2U6V1hL3Uigm</string>
 	<key>LSApplicationCategoryType</key>
-	<string/>
+	<string></string>
 	<key>LSRequiresIPhoneOS</key>
 	<true/>
 	<key>NSAppTransportSecurity</key>
@@ -45,15 +45,15 @@
 		</dict>
 	</dict>
 	<key>NSCameraUsageDescription</key>
-	<string/>
+	<string>Used when uploading new picture or video to THIS </string>
 	<key>NSContactsUsageDescription</key>
-	<string/>
+	<string>THIS Uses your contacts in order to create your social connections</string>
 	<key>NSLocationWhenInUseUsageDescription</key>
-	<string/>
+	<string>Used to find greate deals aroud you</string>
 	<key>NSMicrophoneUsageDescription</key>
-	<string/>
+	<string>Used when recording a new video</string>
 	<key>NSPhotoLibraryUsageDescription</key>
-	<string/>
+	<string>UsUsed when uploading new picture or video to THIS ed </string>
 	<key>UIAppFonts</key>
 	<array>
 		<string>Entypo.ttf</string>
