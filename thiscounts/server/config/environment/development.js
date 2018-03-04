@@ -5,7 +5,7 @@
 module.exports = {
   // MongoDB connection options
   mongo: {
-    uri: 'mongodb://localhost/lowla-dev'
+    uri: process.env.MONGODB_URI || 'mongodb://localhost/lowla-dev'
   },
   neo4j: {
     uri: process.env.NEO4J_URI || 'http://localhost:7474'
