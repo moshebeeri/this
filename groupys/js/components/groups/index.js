@@ -76,15 +76,18 @@ class Groups extends Component {
     }
 
     render() {
-        const {update, groups, navigation, actions} = this.props;
+        const {update, groups, navigation, actions,visibleItem} = this.props;
         let icon = <Icon5 active color={"#FA8559"} size={25} name="plus"/>
         if (Platform.OS === 'ios') {
             icon = <Icon2 active size={40} name="ios-add"/>;
         }
         return (
             <View style={{flex: 1}}>
-                <GenericListManager rows={groups} navigation={navigation} actions={actions} update={update}
-                                    ItemDetail={this.renderItem.bind(this)}/>
+                <GenericListManager rows={groups} navigation={navigation} actions={actions} update={update} setVisibleItem={actions.setVisibleItem}
+                                    visibleItem={visibleItem}
+                                    onPressItem={this.onPressItem.bind(this)}
+                                    onPressMessageItem = {this.onPressMessageItem.bind(this)}
+                                    ItemDetail={GenericListGroupView}/>
                 <Fab
 
                     direction="right"

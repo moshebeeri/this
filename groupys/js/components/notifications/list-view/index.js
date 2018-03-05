@@ -22,6 +22,11 @@ export default class NotificationListView extends Component {
         groupActions.acceptInvitation(viewItem.group);
         actions.doNotification(viewItem._id)
     }
+    shouldComponentUpdate() {
+
+
+        return false;
+    }
 
     notify(notification) {
         const {item, actions} = this.props;
@@ -55,8 +60,8 @@ export default class NotificationListView extends Component {
 
     render() {
         const {item} = this.props;
-        console.log("rendering notification " + item.id)
-        switch (item.item.note) {
+        //console.log("rendering notification " )
+        switch (item.note) {
             case notification.APPROVE_GROUP_INVITATION:
             case notification.ASK_GROUP_INVITATION:
                 return this.createApproveUi(item);
@@ -70,7 +75,7 @@ export default class NotificationListView extends Component {
     }
 
     createGeneralAction(item) {
-        const viewItem = item.item;
+        const viewItem = item;
         const redeemStyle = {
             flex: -1,
             justifyContent: 'center',
@@ -117,7 +122,7 @@ export default class NotificationListView extends Component {
     }
 
     createBusinessFollowOn(item) {
-        const viewItem = item.item;
+        const viewItem = item;
         const business = viewItem.business;
         if (!business) {
             return <View></View>;
@@ -271,7 +276,7 @@ export default class NotificationListView extends Component {
     }
 
     createApproveUi(item) {
-        const viewItem = item.item;
+        const viewItem = item;
         const group = viewItem.group;
         const user = viewItem.actor_user;
         const image = this.extractGroupImage(group);
@@ -318,7 +323,7 @@ export default class NotificationListView extends Component {
     }
 
     createFollowUi(item) {
-        const viewItem = item.item;
+        const viewItem = item;
         const group = viewItem.group;
         const user = viewItem.actor_user;
         const redeemStyle = {

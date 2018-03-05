@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import {FlatList, Image, Platform} from 'react-native';
+import {FlatList} from 'react-native';
 import {connect} from 'react-redux';
 import {actions} from 'react-native-navigation-redux-helpers';
 import {
@@ -25,15 +25,34 @@ class GenericListManager extends Component {
         super(props);
     }
 
+    renderItem(item) {
+        const {navigation,  actions, groupActions,ItemDetail,setVisibleItem,onPressItem,onPressMessageItem,visibleItem} = this.props;
+        let id = item.item.id;
+        if (!id) {
+            id = item.item._id;
+        }
+        return <ItemDetail
+            key={id}
+            index={item.item.index}
+            onPressMessageItem={onPressMessageItem}
+            setVisibleItem={setVisibleItem}
+            visibleItem={visibleItem}
+            groupActions={groupActions}
+            navigation={navigation}
+            onPressItem={onPressItem}
+            item={item.item}
+            actions={actions}/>
+    }
+
     render() {
-        const {rows, ItemDetail, actions, update, onEndReached, noRefresh} = this.props;
+        const {rows,  actions, update, onEndReached, noRefresh} = this.props;
         if (noRefresh) {
             return (
                 <Content style={{backgroundColor: '#dddddd'}}>
 
                     <FlatList
                         data={rows}
-                        renderItem={ItemDetail}
+                        renderItem={this.renderItem.bind(this)}
                         extraData={update}
                     />
 
@@ -48,7 +67,7 @@ class GenericListManager extends Component {
                 <FlatList
                     data={rows}
                     onEndReached={onEndActions}
-                    renderItem={ItemDetail}
+                    renderItem={this.renderItem.bind(this)}
                     extraData={update}
                 />
 

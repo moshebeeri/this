@@ -43,12 +43,19 @@ const DefaultTabBar = createReactClass({
         if (name.includes('notification')) {
             let notifications = parseInt(name.substring('notification'.length + 1))
             if(notifications > 0){
+                let addedPlus = undefined;
+                let styleNotification = {position:'absolute',bottom:18,right:17,borderRadius:10,width:15,alignItems:'center',justifyContent:'center',backgroundColor:'#FA8559'};
+                if(notifications > 20){
+                    addedPlus ='+';
+                    notifications = 20;
+                    styleNotification = {position:'absolute',bottom:18,right:17,borderRadius:15,height:25,width:25,alignItems:'center',justifyContent:'center',backgroundColor:'#FA8559'};
+                }
                 return <View>
                     <Image
                         style={{tintColor: '#2db6c8', marginLeft: 0, width: 30, height: 30}}
                         source={notification}/>
-                    <View style={{position:'absolute',bottom:18,right:17,borderRadius:10,width:15,alignItems:'center',justifyContent:'center',backgroundColor:'#FA8559'}}>
-                    <ThisText style={{fontSize:12,fontWeight:'bold',color:'white'}} >{notifications}</ThisText>
+                    <View style={styleNotification}>
+                    <ThisText style={{fontSize:12,fontWeight:'bold',color:'white'}} >{addedPlus}{notifications}</ThisText>
                     </View>
                 </View>
             }

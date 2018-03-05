@@ -295,9 +295,8 @@ export function updateSocialState(response, feedId) {
 
 export function* updateFeeds(feeds) {
     if (feeds) {
-        let filteredFeeds = feeds.filter(feed => feedComperator.filterFeed(feed));
         let collectionDispatcher = new CollectionDispatcher();
-        let disassemblerItems = filteredFeeds.map(item => assemblers.disassembler(item, collectionDispatcher));
+        let disassemblerItems = feeds.map(item => assemblers.disassembler(item, collectionDispatcher));
         let keys = Object.keys(collectionDispatcher.events);
         let eventType;
         while (eventType = keys.pop()) {
@@ -318,9 +317,8 @@ export function* updateFeeds(feeds) {
 
 export function* updateFeedsTop(feeds) {
     if (feeds) {
-        let filteredFeeds = feeds.filter(feed => feedComperator.filterFeed(feed));
         let collectionDispatcher = new CollectionDispatcher();
-        let disassemblerItems = filteredFeeds.map(item => assemblers.disassembler(item, collectionDispatcher));
+        let disassemblerItems = feeds.map(item => assemblers.disassembler(item, collectionDispatcher));
         let keys = Object.keys(collectionDispatcher.events);
         let eventType;
         while (eventType = keys.pop()) {

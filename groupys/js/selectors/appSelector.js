@@ -5,6 +5,7 @@ import {createSelector} from 'reselect'
 import FeedUiConverter from "../api/feed-ui-converter";
 import getStore from "../store";
 import store from 'react-native-simple-store';
+import * as notificationTypes from "../components/notifications/list-view/notofications";
 
 let feedUiConverter = new FeedUiConverter();
 const reduxStore = getStore();
@@ -66,15 +67,32 @@ export const countUnreadNotifications = createSelector(
     [getNotifications], function (notification) {
         let result = 0;
         if (notification.notification) {
-            notification.notification.forEach(notification => {
-                if (!notification.read) {
-                    if (notification.note === 'ADD_BUSINESS_FOLLOW_ON_ACTION' && !notification.business) {
-                        //Todo
-                    } else {
-                        result = result + 1;
-                    }
+            let results = notification.notification.filter(notification =>{
+                if(notification.note === notificationTypes.ADD_BUSINESS_FOLLOW_ON_ACTION){
+                    return true;
                 }
-            });
+                if(notification.note === notificationTypes.ADD_FOLLOW_PROMOTION){
+                    return true;
+                }
+                if(notification.note === notificationTypes.ASK_GROUP_INVITATION){
+                    return true;
+                }
+                if(notification.note === notificationTypes.APPROVE_GROUP_INVITATION){
+                    return true;
+                }
+                return false;
+            })
+            if(results.length > 0) {
+                results.forEach(notification => {
+                    if (!notification.read) {
+                        if (notification.note === 'ADD_BUSINESS_FOLLOW_ON_ACTION' && !notification.business) {
+                            //Todo
+                        } else {
+                            result = result + 1;
+                        }
+                    }
+                });
+            }
         }
         return result;
     }
