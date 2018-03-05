@@ -152,15 +152,23 @@ export default class GenericListGroupView extends Component {
                     name: name
                 }
             }
-            const image = <ImageController thumbnail size={36} source={itemChat.avetar}/>
+            const image = <ImageController thumbnail size={30} source={itemChat.avetar}/>
+
+
             return <View style={styles.group_message_container}>
 
 
                 <View style={styles.message_container}>
 
+                    <ImageController style={{marginLeft:0, marginRight:12,alignItems: 'flex-start', width:19, height:18 }} source={require('../../../../images/chaticon.png')}/>
+
+
+
+
                     {image}
 
                     <View style={{marginLeft:15, alignItems: 'flex-start'}}>
+
                         <ThisText style={styles.chatListLineTitleText}>{itemChat.name}</ThisText>
                         <ThisText style={styles.chatListLineDescText}>{itemChat.message}</ThisText>
                     </View>

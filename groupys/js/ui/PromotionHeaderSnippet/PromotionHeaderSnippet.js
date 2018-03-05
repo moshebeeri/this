@@ -7,6 +7,7 @@ import {ThisText,ImageController} from '../../ui/index';
 import strings from "../../i18n/i18n"
 
 const ILS = '₪';
+const promoIcon = <ImageController style={{marginLeft:0, marginRight:12,alignItems: 'flex-start', width:18, height:18 }} source={require('../../../images/promoicon.png')}/>;
 export default class PromotionHeaderSnippet extends Component {
     constructor(props) {
         super(props);
@@ -36,7 +37,8 @@ export default class PromotionHeaderSnippet extends Component {
                 //changed marginLeft to 0 why we dont have styles here? @yb
                 //added styles - need to all other types
                 return <View style={{flex:1,justifyContent:'center',alignItems:'center',marginLeft:0,flexDirection: 'row'}}>
-                    {promotion.banner &&   <ImageController  thumbnail size={36} source={{uri: promotion.banner.uri}}/>}
+                    {promoIcon}
+                    {promotion.banner &&   <ImageController  thumbnail size={30} source={{uri: promotion.banner.uri}}/>}
                         <View style={{flex:1,justifyContent:'flex-start',marginLeft:12,alignItems:'flex-start'}}>
                             <ThisText style={styles.promotionListLineTitleText}>{promotion.business.name}</ThisText>
                             <ThisText style={styles.promotionListLineDescText}>{strings.DiscountShortDescription.formatUnicorn(promotion.promotionEntity.percent.values[0],discountOn)}</ThisText>
@@ -45,7 +47,8 @@ export default class PromotionHeaderSnippet extends Component {
                     </View>
             case "X_FOR_Y":
                 return <View style={{flex:1,justifyContent:'center',alignItems:'center',marginLeft:0,flexDirection: 'row'}}>
-                    {promotion.banner &&   <ImageController  thumbnail size={36} source={{uri: promotion.banner.uri}}/>}
+                    {promoIcon}
+                    {promotion.banner &&   <ImageController  thumbnail size={30} source={{uri: promotion.banner.uri}}/>}
                     <View style={{flex:1,justifyContent:'flex-start',marginLeft:12,alignItems:'flex-start'}}>
                         <ThisText>{promotion.business.name}</ThisText>
                         <ThisText>{strings.XForYShortDescription.formatUnicorn(promotion.promotionEntity.x_for_y.values[0].pay,promotion.promotionEntity.x_for_y.values[0].eligible,promotion.promotionEntity.condition.product.name)}</ThisText>
@@ -57,7 +60,8 @@ export default class PromotionHeaderSnippet extends Component {
             case "X+N%OFF":
 
                 return <View style={{flex:1,justifyContent:'center',alignItems:'center',marginLeft:0,flexDirection: 'row'}}>
-                    {promotion.banner &&    <ImageController  thumbnail size={36} source={{uri: promotion.banner.uri}}/>}
+                    {promoIcon}
+                    {promotion.banner &&    <ImageController  thumbnail size={30} source={{uri: promotion.banner.uri}}/>}
                     <View style={{flex:1,justifyContent:'flex-start',marginLeft:12,alignItems:'flex-start'}}>
                         <ThisText>{promotion.business.name}</ThisText>
                         <ThisText>{strings.XForYPercentageOffShortDescription.formatUnicorn(promotion.condition.product.name,promotion.promotionEntity.x_plus_n_percent_off.values[0].product.name,promotion.promotionEntity.x_plus_n_percent_off.values[0].eligible)}</ThisText>
@@ -67,7 +71,8 @@ export default class PromotionHeaderSnippet extends Component {
 
             case "HAPPY_HOUR":
                 return <View style={{flex:1,justifyContent:'center',alignItems:'center',marginLeft:0,flexDirection: 'row'}}>
-                    {promotion.banner && <ImageController  thumbnail size={36}  source={{uri: promotion.banner.uri}}/>}
+                    {promoIcon}
+                    {promotion.banner && <ImageController  thumbnail size={30}  source={{uri: promotion.banner.uri}}/>}
                     <View style={{flex:1,justifyContent:'flex-start',marginLeft:12,alignItems:'flex-start'}}>
                         <ThisText>{promotion.business.name}</ThisText>
                         <ThisText>{strings.HappyHourShortDescription.formatUnicorn(promotion.promotionEntity.happy_hour.values[0].pay,promotion.promotionEntity.condition.product.name)}</ThisText>
@@ -77,7 +82,8 @@ export default class PromotionHeaderSnippet extends Component {
 
             case "X+Y":
                 return <View style={{flex:1,justifyContent:'center',alignItems:'center',marginLeft:0,flexDirection: 'row'}}>
-                    {promotion.banner &&    <ImageController  thumbnail size={36}  source={{uri: promotion.banner.uri}}/>}
+                    {promoIcon}
+                    {promotion.banner &&    <ImageController  thumbnail size={30}  source={{uri: promotion.banner.uri}}/>}
                     <View style={{flex:1,justifyContent:'flex-start',marginLeft:12,alignItems:'flex-start'}}>
                         <ThisText>{promotion.business.name}</ThisText>
                         <ThisText>{strings.XYPattern.formatUnicorn(promotion.x_plus_y.values[0].buy, promotion.condition.product.name, promotion.x_plus_y.values[0].eligible, promotion.x_plus_y.values[0].product.name)}</ThisText>
@@ -87,8 +93,9 @@ export default class PromotionHeaderSnippet extends Component {
 
             case "PUNCH_CARD":
                 return <View style={{flex:1,justifyContent:'center',alignItems:'center',marginLeft:0,flexDirection: 'row'}}>
-                    {promotion.banner &&   <ImageController  thumbnail size={36}  source={{uri: promotion.banner.uri}}/>}
-                    {promotion.banner &&   <ImageController  thumbnail size={36}  source={{uri: promotion.banner.uri}}/>}
+                    {promoIcon}
+
+                    {promotion.banner &&   <ImageController  thumbnail size={30}  source={{uri: promotion.banner.uri}}/>}
                     <View style={{flex:1,justifyContent:'flex-start',marginLeft:12,alignItems:'flex-start'}}>
                         <ThisText>{promotion.business.name}</ThisText>
                         <ThisText>{strings.punchCardTerm.formatUnicorn(promotion.punches)}</ThisText>
