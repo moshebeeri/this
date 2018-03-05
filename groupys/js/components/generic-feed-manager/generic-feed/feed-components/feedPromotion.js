@@ -99,7 +99,26 @@ export default class FeedPromotion extends Component {
         const result =
             <InViewPort onChange={this.visited.bind(this)} style={container}>
                 <View style={[styles.promotion_card, {width: StyleUtils.getWidth()}]}>
-                    <View style={{width: StyleUtils.getWidth()}}>
+                    {!scanner ?   <View style={{width: StyleUtils.getWidth(), backgroundColor: 'red'}}>
+                            <View style={[promotaionDesc, {backgroundColor:'white',width: StyleUtils.getWidth()}]}>
+                                <PromotionHeader item={item} type={item.promotion} feed titleText={item.promotionTitle}
+                                                 titleValue={item.promotionValue} term={item.promotionTerm}/>
+                            </View>
+
+                        </View> :
+                        <View style={{ flex: 1,
+                            alignItems: 'center',
+                            justifyContent: 'center',}}>
+                            <PromotionHeader item={item} type={item.promotion} feed titleText={item.promotionTitle}
+                                             titleValue={item.promotionValue} term={item.promotionTerm}/>
+                        </View>}
+
+
+
+
+                    {image}
+
+                    <View style={{ width: StyleUtils.getWidth()}}>
                         {item.business &&
                         <BusinessHeader navigation={this.props.navigation} business={item.business}
                                         categoryTitle={categoruTitle} businessLogo={item.business.logo}
@@ -107,35 +126,9 @@ export default class FeedPromotion extends Component {
                                         id={item.activityId} showActions={showActions}
                         />}
                     </View>
-
-
-                    {image}
-
-                    {!scanner ? <View style={{width: StyleUtils.getWidth(), backgroundColor: 'white'}}>
-                            <View style={[promotaionDesc, {backgroundColor: 'white', width: StyleUtils.getWidth()}]}>
-                                <PromotionHeader item={item} type={item.promotion} feed titleText={item.promotionTitle}
-                                                 titleValue={item.promotionValue} term={item.promotionTerm}/>
-                            </View>
-
-                        </View> :
-                        <View style={{
-                            flex: 1,
-                            alignItems: 'center',
-                            justifyContent: 'center',
-                        }}>
-                            <PromotionHeader item={item} type={item.promotion} feed titleText={item.promotionTitle}
-                                             titleValue={item.promotionValue} term={item.promotionTerm}/>
-                        </View>}
-
-                    <View style={{
-                        marginBottom: 10,
-                        alignItems: 'center',
-                        justifyContent: 'center',
-                        backgroundColor: 'white',
-                        width: StyleUtils.getWidth()
-                    }}>
-                        <ThisText numberOfLines={2} style={{marginRight: 10, marginLeft: 10, fontSize: 18}}>{item.name}
-                            - {item.description}</ThisText>
+                    <View style={ {marginBottom:10,backgroundColor:'white',width: StyleUtils.getWidth()}}>
+                        <ThisText numberOfLines={2} style={{marginRight: 10, marginLeft: 20, fontSize: 18}}>{item.name}
+                         - {item.description}</ThisText>
                     </View>
                     {!shared && location && <View style={[styles.promotionsSeparator, {width: StyleUtils.getWidth()}]}>
                         <PromotionSeperator/>
@@ -227,7 +220,6 @@ export default class FeedPromotion extends Component {
     createImageComponent(item, styles) {
         if (item.banner) {
             return <View style={[styles.promotion_image_view, {width: StyleUtils.getWidth()}]}>
-
                 <ImageController resizeMode="cover" style={[styles.promotion_image, {width: StyleUtils.getWidth()}]}
                                  source={{uri: item.banner.uri}}>
                 </ImageController>

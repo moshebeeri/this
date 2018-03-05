@@ -274,6 +274,12 @@ proximityDistance                             : "{0} Km From Business",
 chooseProximityDistance                       : "Choose Proximity Distance ",
 Proximity                                     : "Proximity",
 ProximityDistanceTitle                        : "Proximity Distance",
+LatestActivity                                : "Latest Activity",
+
+
+
+
+
 };
 
 export default enUS;

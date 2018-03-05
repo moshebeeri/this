@@ -30,7 +30,7 @@ export default class PromotionSeperator extends Component {
         }
         return <View style={seperatorContainer}>
 
-            <View style={{flex: 15, flexDirection: 'row', justifyContent: 'space-between', alignItems: 'flex-start'}}>
+            <View style={{flex: 25, flexDirection: 'row', justifyContent: 'space-between', alignItems: 'flex-start'}}>
                 <View style={styles.roundView}/>
                 <View style={styles.roundView}/>
                 <View style={styles.roundView}/>
@@ -48,7 +48,17 @@ export default class PromotionSeperator extends Component {
                 <View style={styles.roundView}/>
                 <View style={styles.roundView}/>
                 <View style={styles.roundView}/>
-            </View>
+                <View style={styles.roundView}/>
+                <View style={styles.roundView}/>
+                <View style={styles.roundView}/>
+                <View style={styles.roundView}/>
+                <View style={styles.roundView}/>
+                <View style={styles.roundView}/>
+                <View style={styles.roundView}/>
+                <View style={styles.roundView}/>
+                <View style={styles.roundView}/>
+
+        </View>
 
         </View>
     }

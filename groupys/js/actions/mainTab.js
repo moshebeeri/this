@@ -18,7 +18,7 @@ let businessApi = new BusinessApi();
 let logger = new ActionLogger();
 
 export function changeTab(newTab) {
-    return function (dispatch) {
+    return function (dispatch, getState) {
         dispatch({
             type: types.CHANGE_TAB,
             tab: newTab

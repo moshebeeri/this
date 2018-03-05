@@ -12,23 +12,17 @@ import {
     Left,
     ListItem,
     Right,
-    Text,
     Thumbnail,
     Title,
     View
 } from 'native-base';
-import GroupApi from "../../../api/groups"
 import stylesPortrate from './styles'
-import DateUtils from '../../../utils/dateUtils';
 import UiConverter from '../../../api/feed-ui-converter'
-import {GroupHeader, PromotionHeaderSnippet,ImageController,ThisText} from '../../../ui/index';
+import {GroupHeader, ImageController, PromotionHeaderSnippet, ThisText} from '../../../ui/index';
 import strings from '../../../i18n/i18n';
+import InViewPort from '../../../utils/inviewport'
 
 const {width, height} = Dimensions.get('window');
-const vw = width / 100;
-const vh = height / 100;
-let groupApi = new GroupApi();
-let dateUtils = new DateUtils();
 let uiConverter = new UiConverter();
 export default class GenericListGroupView extends Component {
     constructor(props) {
@@ -44,8 +38,21 @@ export default class GenericListGroupView extends Component {
         }
     }
 
+    shouldComponentUpdate() {
+        const {visibleItem} = this.props;
+        if (visibleItem) {
+            return true;
+        }
+        return false;
+    }
+
+    visited() {
+        const {item, setVisibleItem} = this.props;
+        setVisibleItem(item._id);
+    }
+
     render() {
-        const {item, onPressItem, index, onPressMessageItem} = this.props;
+        const {item, onPressItem, index, onPressMessageItem,} = this.props;
         const styles = this.createStyle();
         let promotionItem = this.createPromotionItem(item);
         let showBusinessHeader = this.isBusiness(item.entity_type);
@@ -56,25 +63,47 @@ export default class GenericListGroupView extends Component {
             alignItems: 'center',
             backgroundColor: 'white'
         };
-        console.log("rendering group " + item.id)
-        const row = <View key={index}>
-            <View style={{marginBottom: 10}}>
+        const SubContainerStyle = {
+            alignItems: 'center',
+            backgroundColor: 'white',
+            padding: 0,
+        };
+        const row = <InViewPort onChange={this.visited.bind(this)} key={index}>
+            <View style={{marginBottom: 8}}>
                 <TouchableOpacity key={index} onPress={onPressItem} style={containerStyle}>
                     <GroupHeader group={item}/>
 
+                    {(promotion || post || message) && <View style={{
+                        marginLeft: 30,
+                        marginRight: 30,
+                        width: width - 30,
+                        justifyContent: 'flex-start',
+                        borderBottomWidth: 1,
+                        borderBottomColor: '#CACACA',
+                        marginBottom: 10
+                    }}>
+                        <ThisText style={{
+                            marginLeft: 4,
+                            marginBottom: 2,
+                            fontWeight: '200',
+                            color: '#616F70',
+                            fontSize: 14,
+                            textAlign: 'left',
+                            backgroundColor: 'white'
+                        }}>{strings.LatestActivity}</ThisText>
+                    </View>}
 
                     {promotion}
                     {post}
 
 
-
                 </TouchableOpacity>
-                <TouchableOpacity style={containerStyle} onPress={onPressMessageItem}>
+                <TouchableOpacity style={SubContainerStyle} onPress={onPressMessageItem}>
                     {message}
 
                 </TouchableOpacity>
             </View>
-        </View>
+        </InViewPort>
         return ( row
 
         );
@@ -137,11 +166,17 @@ export default class GenericListGroupView extends Component {
 
                 <View style={styles.message_container}>
 
+                    <ImageController
+                        style={{marginLeft: 0, marginRight: 12, alignItems: 'flex-start', width: 19, height: 18}}
+                        source={require('../../../../images/chaticon.png')}/>
+
+
                     {image}
 
-                    <View style={{padding: 2, alignItems: 'flex-start'}}>
-                        <ThisText>{itemChat.name}</ThisText>
-                        <ThisText>{itemChat.message}</ThisText>
+                    <View style={{marginLeft: 15, alignItems: 'flex-start'}}>
+
+                        <ThisText style={styles.chatListLineTitleText}>{itemChat.name}</ThisText>
+                        <ThisText style={styles.chatListLineDescText}>{itemChat.message}</ThisText>
                     </View>
                 </View>
 

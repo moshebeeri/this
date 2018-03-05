@@ -21,8 +21,9 @@ module.exports = {
         fontSize: 18
     },
     groupNameText: {
-        fontFamily: 'Roboto-Regular',
-        color: 'gray',
+        fontFamily: 'Roboto',
+        color: '#616F70',
+        fontWeight:'bold',
         fontSize: 18
     },
     groupHeader:{
@@ -34,10 +35,11 @@ module.exports = {
         width:width-30
     },
     groupImage:{
-
+        alignItems: 'center'
     },
     groupName:{
         margin:5,
+        marginLeft:10,
     },
     editButtonConntainer: {
         margin:5,width: 40, height: 40, opacity: 0.65,backgroundColor: 'white', alignItems: 'center', justifyContent: 'center'

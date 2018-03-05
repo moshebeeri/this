@@ -44,19 +44,21 @@ class Groups extends Component {
         navigation.navigate('GroupFeed', {chat:true,group: item, role: 'admin'});
     }
     shouldComponentUpdate(){
-        if(this.props.currentScreen ==='home' && this.props.activeTab ==='groups'){
+        if(this.props.currentScreen ==='home' && this.props.selectedTab ==='groups'){
             return true;
         }
         return false;
     }
 
     renderItem(item) {
-        const {navigation} = this.props;
+        const {navigation,actions,visibleItem} = this.props;
         return <GenericListGroupView
             onPressItem={this.onPressItem.bind(this, item.item)}
             onPressMessageItem = {this.onPressMessageItem.bind(this,item.item)}
             item={item.item}
+            setVisibleItem={actions.setVisibleItem}
             navigation={navigation}
+            visibleItem={visibleItem}
             index={item.index}
             key={item.index}
         />
@@ -106,6 +108,7 @@ export default connect(
         user: state.user.user,
         selectedTab:state.mainTab.selectedTab,
         currentScreen:state.render.currentScreen,
+        visibleItem:state.feeds.visibleFeed,
     }),
     (dispatch) => ({
         actions: bindActionCreators(groupsAction, dispatch),

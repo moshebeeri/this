@@ -14,6 +14,7 @@ module.exports = {
         flex: 1,
         width: width - 15,
         flexDirection: 'row',
+        backgroundColor: 'white',
     },
     promotionHeaderColumn: {
         flex: 1,
@@ -30,6 +31,9 @@ module.exports = {
         flex: 1,
         justifyContent: 'center',
         alignItems: 'center',
+        flex: 1,
+        paddingTop:7, //need to find a way to verticly align @yb
+
     },
     promotionColumnValue: {
         flex: 1,
@@ -97,7 +101,7 @@ module.exports = {
         flex: 1,
         fontSize: 30,
         textAlign: "center",
-        color: '#2db6c8'
+        color: '#2db6c8',
     },
     titleValueColumnFeed: {
         flex: 1,
