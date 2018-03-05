@@ -89,12 +89,12 @@ FCM.on(FCMEvent.Notification, async (notif) => {
         //Android: app is open/resumed because user clicked banner or tapped app icon
     }
 
-    if (notif && notif.model === 'instance') {
-        let token = reduxStore.getState().authentication.token;
-
-        popupActions.promotionPopAction(notif._id, notif.notificationId,reduxStore.dispatch,token);
-        return;
-    }
+    // if (notif && notif.model === 'instance') {
+    //     let token = reduxStore.getState().authentication.token;
+    //
+    //     popupActions.promotionPopAction(notif._id, notif.notificationId,reduxStore.dispatch,token);
+    //     return;
+    // }
     if (Platform.OS === 'ios') {
         //optional
         //iOS requires developers to call completionHandler to end notification process. If you do not call it your background remote notifications could be throttled, to read more about it see https://developer.apple.com/documentation/uikit/uiapplicationdelegate/1623013-application.
@@ -216,66 +216,6 @@ class ApplicationManager extends Component {
         instanceGroupCommentsAction.stopListenForChat();
         feedAction.stopMainFeedsListener();
         actions.changeTab(tab);
-        if (tab.i === 0) {
-            if (I18nManager.isRTL && (Platform.OS === 'android')) {
-                InteractionManager.runAfterInteractions(() => { logger.screenVisited('notification')
-                notificationAction.onEndReached()})
-            } else {
-                InteractionManager.runAfterInteractions(() => {
-                    logger.screenVisited('feed')
-                    feedAction.setTopFeeds();
-                    PageRefresher.visitedFeed();
-                    this.setState({
-                        activeTab: 'feed'
-                    })
-                });
-            }
-        }
-        if (tab.i === 1) {
-            if (I18nManager.isRTL && (Platform.OS === 'android')) {
-                InteractionManager.runAfterInteractions(() => {  logger.screenVisited('groups')
-                PageRefresher.visitedGroups()})
-            } else {
-                InteractionManager.runAfterInteractions(() => {  myPromotionsAction.setFirstTime();
-                logger.screenVisited('savedPromotion')
-                this.setState({
-                    activeTab: 'savedPromotion'
-                })})
-            }
-        }
-        //this.p
-        if (tab.i === 2) {
-            if (I18nManager.isRTL && (Platform.OS === 'android')) {
-                InteractionManager.runAfterInteractions(() => { logger.screenVisited('savedPromotion')
-                myPromotionsAction.setFirstTime();
-                this.setState({
-                    activeTab: 'savedPromotion'
-                })})
-            } else {
-                InteractionManager.runAfterInteractions(() => {
-                PageRefresher.visitedGroups();
-                logger.screenVisited('groups')
-                this.setState({
-                    activeTab: 'groups'
-                })})
-            }
-        }
-        if (tab.i === 3) {
-            if (I18nManager.isRTL && (Platform.OS === 'android')) {
-                InteractionManager.runAfterInteractions(() => {
-                    feedAction.setTopFeeds();
-                    PageRefresher.visitedFeed();
-                    this.setState({
-                        activeTab: 'feed'
-                    })
-                });
-            } else {
-                InteractionManager.runAfterInteractions(() => {
-                    notificationAction.onEndReached();
-                    logger.screenVisited('notification')
-                });
-            }
-        }
 
     }
 

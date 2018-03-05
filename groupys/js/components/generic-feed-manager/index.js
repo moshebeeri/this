@@ -45,7 +45,7 @@ export default class GenericFeedManager extends Component {
     }
 
     renderItem(item) {
-        const {navigation, token, userFollowers, group, ItemDetail, actions,entity, location,visibleItem,realize} = this.props;
+        const {navigation, token, userFollowers, group, ItemDetail, actions,entity, location,visibleItem,realize,visibleFeeds} = this.props;
         let id = item.item.id;
         if(!id){
             id = item.item._id;
@@ -58,6 +58,7 @@ export default class GenericFeedManager extends Component {
             userFollowers={userFollowers}
             visibleItem={visibleItem}
             group={group}
+            visibleFeeds={visibleFeeds}
             realize={realize}
             navigation={navigation}
             item={item.item}

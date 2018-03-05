@@ -85,7 +85,7 @@ export default class GenericFeedItem extends Component {
     }
 
     render() {
-        const {item, actions, token, location, showActions, visibleItem,realize} = this.props;
+        const {item, actions, token, location, showActions, visibleItem,realize,visibleFeeds} = this.props;
         const showUsers = this.showUsers.bind(this);
         const comment = this.comment.bind(this);
         switch (item.itemType) {
@@ -97,6 +97,7 @@ export default class GenericFeedItem extends Component {
                     let isRealized = this.checkIfRealized(item);
                     return this.createFeedView(<FeedPromotion showActions={showActions} refresh={actions.refresh}
                                                               isRealized={isRealized}
+                                                              visibleFeeds={visibleFeeds}
                                                               realize={realize}
                                                               token={token} comment={comment}
                                                               location={location} actions={actions}
@@ -110,6 +111,7 @@ export default class GenericFeedItem extends Component {
                                                           token={token} comment={comment}
                                                           location={location} actions={actions}
                                                           visibleItem={visibleItem}
+                                                          visibleFeeds={visibleFeeds}
                                                           navigation={this.props.navigation} item={item}
                                                           like={actions.like} unlike={actions.unlike}
                                                           showUsers={showUsers} save={actions.saveFeed}/>)
@@ -118,6 +120,7 @@ export default class GenericFeedItem extends Component {
                                                        actions={actions} refresh={actions.refresh} token={token}
                                                        comment={this.commentShare.bind(this)}
                                                        location={location}
+                                                       visibleFeeds={visibleFeeds}
                                                        navigation={this.props.navigation} item={item}
                                                        like={actions.like} unlike={actions.unlike}
                                                        showUsers={showUsers}/>)
@@ -127,6 +130,7 @@ export default class GenericFeedItem extends Component {
                 return this.createFeedView(<FeedPost visibleItem={visibleItem} showActions={showActions} token={token}
                                                      navigation={this.props.navigation} item={item} like={actions.like}
                                                      unlike={actions.unlike}
+                                                     visibleFeeds={visibleFeeds}
                                                      showUsers={showUsers} actions={actions} comment={comment}/>)
             case 'WELCOME':
                 return this.createFeedView(<FeedWelcome token={token} navigation={this.props.navigation} item={item}/>)
@@ -134,6 +138,7 @@ export default class GenericFeedItem extends Component {
                 return this.createFeedView(<FeedBusiness visibleItem={visibleItem} actions={actions}
                                                          showActions={showActions} location={location} token={token}
                                                          refresh={actions.refresh}
+                                                         visibleFeeds={visibleFeeds}
                                                          navigation={this.props.navigation} item={item}
                                                          comment={comment} like={actions.like} unlike={actions.unlike}
                                                          showUsers={showUsers} save={actions.saveFeed}

@@ -340,7 +340,7 @@ export function* updateFeedsTop(feeds) {
 export function setVisibleItem(itemId) {
     return function (dispatch) {
         dispatch({
-            type: actions.VISIBLE_FEED,
+            type: actions.VISIBLE_MAIN_FEED,
             feedId:itemId
         });
     }

@@ -48,10 +48,20 @@ export default class FeedPost extends Component {
         })
         PageRefresher.createFeedSocialState(item.id);
     }
-    shouldComponentUpdate(){
-        const {item, visibleItem} = this.props;
+    shouldComponentUpdate() {
+        const {item, visibleItem,shouldUpdate, visibleFeeds} = this.props;
+        if(shouldUpdate){
+            return true;
+        }
+        let results =  item.id === visibleItem  ;
+        if(results){
+            return results
+        }
+        if(visibleFeeds && item.fid && visibleFeeds.includes(item.fid)){
+            return true;
+        }
 
-        return item.id===visibleItem;
+        return false;
     }
     visited(visible) {
         const {item,actions} = this.props;

@@ -7,15 +7,16 @@ const initialState = {
     showTopLoader: false,
     update: false,
     lastfeed: undefined,
-    maxFeeds:10,
-    nextBulkLoad:false,
-    updated:false,
-    upTime:new Date().getTime(),
+    maxFeeds: 10,
+    nextBulkLoad: false,
+    updated: false,
+    upTime: new Date().getTime(),
     renderFeed: true,
     maxFeedReturned: false,
-    stopDispatchMaxFeed:false,
-    shouldRender:true,
+    stopDispatchMaxFeed: false,
+    shouldRender: true,
     visibleFeed: undefined,
+    visibleFeeds: [],
 };
 import {REHYDRATE} from "redux-persist/constants";
 import * as actions from "./reducerActions";
@@ -29,27 +30,25 @@ export default function feeds(state = initialState, action) {
             ...state,
             ...savedData.feeds,
             showTopLoader: false,
-            nextBulkLoad:false,
-            shouldRender:true,
+            nextBulkLoad: false,
+            shouldRender: true,
             visibleFeed: undefined,
-            upTime:new Date().getTime()
+            upTime: new Date().getTime()
         };
     }
     let feedstate = {...state};
     let currentFeeds = feedstate.feeds;
     switch (action.type) {
-
         case actions.FEED_UPDATE_SOCIAL_STATE:
         case actions.LIKE:
         case actions.UNLIKE:
         case actions.SAVE:
         case actions.SHARE:
-
             return {
                 ...state,
-                updated:!feedstate.updated,
-                renderFeed:true,
-                shouldRender:true
+                updated: !feedstate.updated,
+                renderFeed: true,
+                shouldRender: true
             };
         case actions.FIRST_TIME_FEED:
             feedstate.firstTime = false;
@@ -84,7 +83,7 @@ export default function feeds(state = initialState, action) {
             currentFeeds[action.item._id] = action.item;
             if (!feedstate.feedView.includes(action.item._id)) {
                 feedstate.feedView.unshift(action.item._id);
-            }else{
+            } else {
                 feedstate.feedView = feedstate.feedView.filter(item => item !== action.item._id);
                 feedstate.feedView.unshift(action.item._id);
             }
@@ -92,72 +91,87 @@ export default function feeds(state = initialState, action) {
             feedstate.renderFeed = true;
             feedstate.shouldRender = true;
             return feedstate;
-
         case actions.FEED_LOADING_DONE:
             return {
                 ...state,
                 loadingDone: action.loadingDone,
-                shouldRender : true,
+                shouldRender: true,
             };
         case actions.FEED_SHOW_TOP_LOADER:
             return {
                 ...state,
                 showTopLoader: action.showTopLoader,
-                renderFeed : true,
+                renderFeed: true,
             };
         case actions.FEEDS_GET_NEXT_BULK:
             return {
                 ...state,
                 nextBulkLoad: true,
-                shouldRender : true
+                shouldRender: true
             };
         case actions.FEEDS_GET_NEXT_BULK_DONE:
             return {
                 ...state,
                 nextBulkLoad: false,
-                shouldRender : true,
+                shouldRender: true,
             };
         case actions.FEEDS_STOP_RENDER:
             return {
                 ...state,
                 shouldRender: false,
             };
-
         case actions.FEEDS_START_RENDER:
             return {
                 ...state,
                 shouldRender: true,
             };
-
-
         case actions.FEED_NO_RENDER:
             return {
                 ...state,
                 shouldRender: false
             };
-
         case actions.MAX_FEED_RETUNED:
             return {
                 ...state,
                 maxFeedReturned: true,
-
             };
         case actions.MAX_FEED_NOT_RETUNED:
             return {
                 ...state,
                 maxFeedReturned: false,
-
             };
         case actions.VISIBLE_FEED:
             return {
                 ...state,
                 visibleFeed: action.feedId,
-
             };
-
-
-
-
+        case actions.CURRENT_TAB:{
+            return {
+                ...state,
+                visibleFeeds: [],
+            };
+        }
+        case actions.VISIBLE_MAIN_FEED:
+            let visitedFeeds = [];
+            let idIndex = feedstate.feedView.findIndex(element => {
+                    if (element === action.feedId) {
+                        return true;
+                    }
+                    return false;
+                }
+            );
+            if (idIndex === 0) {
+                visitedFeeds.push(feedstate.feedView[0]);
+                visitedFeeds.push(feedstate.feedView[1]);
+            } else {
+                visitedFeeds.push(feedstate.feedView[idIndex - 1]);
+                visitedFeeds.push(feedstate.feedView[idIndex]);
+                visitedFeeds.push(feedstate.feedView[idIndex + 1]);
+            }
+            return {
+                ...state,
+                visibleFeeds: visitedFeeds,
+            };
         default:
             return state;
     }

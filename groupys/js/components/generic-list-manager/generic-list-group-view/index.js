@@ -54,6 +54,7 @@ export default class GenericListGroupView extends Component {
     render() {
         const {item, onPressItem, index, onPressMessageItem,} = this.props;
         const styles = this.createStyle();
+        console.log('render group');
         let promotionItem = this.createPromotionItem(item);
         let showBusinessHeader = this.isBusiness(item.entity_type);
         const promotion = this.createPromotion(styles, promotionItem, showBusinessHeader);
