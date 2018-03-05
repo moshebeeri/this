@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import {Dimensions, TouchableOpacity} from 'react-native';
+import {TouchableOpacity} from 'react-native';
 import {actions} from 'react-native-navigation-redux-helpers';
 import {
     Button,
@@ -12,23 +12,15 @@ import {
     Left,
     ListItem,
     Right,
-    Text,
     Thumbnail,
     Title,
     View
 } from 'native-base';
-import GroupApi from "../../../api/groups"
 import stylesPortrate from './styles'
-import DateUtils from '../../../utils/dateUtils';
 import UiConverter from '../../../api/feed-ui-converter'
-import {GroupHeader, PromotionHeaderSnippet,ImageController,ThisText} from '../../../ui/index';
+import {GroupHeader, ImageController, PromotionHeaderSnippet, ThisText} from '../../../ui/index';
 import strings from '../../../i18n/i18n';
-
-const {width, height} = Dimensions.get('window');
-const vw = width / 100;
-const vh = height / 100;
-let groupApi = new GroupApi();
-let dateUtils = new DateUtils();
+import InViewPort from '../../../utils/inviewport'
 let uiConverter = new UiConverter();
 export default class GenericListGroupView extends Component {
     constructor(props) {
@@ -44,8 +36,21 @@ export default class GenericListGroupView extends Component {
         }
     }
 
+    shouldComponentUpdate() {
+        const {visibleItem} = this.props;
+        if(visibleItem) {
+            return true;
+        }
+        return false;
+    }
+    visited(){
+      const  {item,setVisibleItem} = this.props;
+      setVisibleItem(item._id);
+
+    }
+
     render() {
-        const {item, onPressItem, index, onPressMessageItem} = this.props;
+        const {item, onPressItem, index, onPressMessageItem,} = this.props;
         const styles = this.createStyle();
         let promotionItem = this.createPromotionItem(item);
         let showBusinessHeader = this.isBusiness(item.entity_type);
@@ -56,8 +61,9 @@ export default class GenericListGroupView extends Component {
             alignItems: 'center',
             backgroundColor: 'white'
         };
-        console.log("rendering group " + item.id)
-        const row = <View key={index}>
+        console.log('rendering');
+        const row =  <InViewPort key={index} onChange={this.visited.bind(this)} >
+
             <View style={{marginBottom: 10}}>
                 <TouchableOpacity key={index} onPress={onPressItem} style={containerStyle}>
                     <GroupHeader group={item}/>
@@ -67,14 +73,13 @@ export default class GenericListGroupView extends Component {
                     {post}
 
 
-
                 </TouchableOpacity>
                 <TouchableOpacity style={containerStyle} onPress={onPressMessageItem}>
                     {message}
 
                 </TouchableOpacity>
             </View>
-        </View>
+        </InViewPort>
         return ( row
 
         );
