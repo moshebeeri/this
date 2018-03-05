@@ -8,7 +8,7 @@ const spatial = require('../spatial').createSpatial();
 const graphModel = require('../graph-tools').createGraphModel('promotion');
 const Promotion = require('../../api/promotion/promotion.model');
 const Instance = require('../instance');
-const activity = require('../activity');
+const activity = require('../activity').createActivity();
 const Notifications = require('../notification');
 
 let ProximitySchema = new Schema({
@@ -94,9 +94,11 @@ function handleProximityActions(userId, location, callback) {
 }
 
 function entityRoleMembers(entity, callback) {
-  let query = `MATCH (entity{_id:'${entity}'}<-[role:ROLE]-(u:user) return u._id as users`;
+  let query = `MATCH (entity{_id:'${entity}'})<-[role:ROLE]-(u:user) return u._id as _id`;
+  console.log(`entityRoleMembers query: ${query}`);
   graphModel.query(query, function(err, users){
     if(err) return callback(err);
+    users = users.map(user => user._id);
     return callback(null, users);
   })
 }
@@ -116,6 +118,14 @@ function proximityEligibility(userId, location, eligible, callback) {
       });
       Instance.notify(instance._id, [userId]);
       entityRoleMembers(eligible.entity, function(err, userIds) {
+        if(err) {
+          console.error(err);
+          callback(err);
+        }
+        if(!userIds) {
+          console.error(new Error(`Not Entity role found`));
+          callback(null);
+        }
         Notifications.notify({
           note: 'ELIGIBLE_BY_PROXIMITY',
           instance: instance._id

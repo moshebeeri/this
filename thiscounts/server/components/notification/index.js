@@ -160,6 +160,9 @@ exports.pnsUserDevices = function (notification, audience) {
 };
 
 exports.notify = function (note, audience) {
+  if(!audience || !note)
+    return console.error(new Error(`notification.notify params error audience=${audience} note=${note}`));
+
   audience.forEach(to => {
     note.to = to;
     note.timestamp = Date.now();
