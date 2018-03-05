@@ -9,7 +9,11 @@ let promotionApi = new PromotionApi();
 function* savePromotion(action) {
     try {
         let response = yield call(promotionApi.createPromotion, action.promotion, action.token);
-        let createdPromotion = response.promotions[0];
+        //  on-action  returns promotion instead of campaign
+        let createdPromotion = response;
+        if (response.promotions) {
+            createdPromotion = response.promotions[0];
+        }
         createdPromotion.pictures = [];
         let pictures = [];
         if (action.promotion.image.path) {

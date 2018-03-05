@@ -55,6 +55,7 @@ export default class NotificationListView extends Component {
 
     render() {
         const {item} = this.props;
+        console.log("rendering notification " + item.id)
         switch (item.item.note) {
             case notification.APPROVE_GROUP_INVITATION:
             case notification.ASK_GROUP_INVITATION:

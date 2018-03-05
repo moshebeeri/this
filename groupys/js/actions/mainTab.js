@@ -1,4 +1,5 @@
 import * as actions from "../reducers/reducerActions";
+import * as types from "../sega/segaActions";
 import InstanceApi from "../api/instances";
 import NotificationApi from "../api/notification";
 import * as groupsActions from './groups'
@@ -17,10 +18,10 @@ let businessApi = new BusinessApi();
 let logger = new ActionLogger();
 
 export function changeTab(newTab) {
-    return function (dispatch, getState) {
+    return function (dispatch) {
         dispatch({
-            type: actions.APP_CHANGE_TAB,
-            selectedTab: newTab.i
+            type: types.CHANGE_TAB,
+            tab: newTab
         });
     }
 }
