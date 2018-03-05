@@ -19,13 +19,7 @@ module.exports = {
         height:8,
         width:8,
         borderRadius:8,
-        backgroundColor:'#b7b7b7',
 
-
-        shadowOffset: { width: 1, height: 1 },
-        shadowColor: 'black',
-        shadowOpacity: 1,
-        elevation: 1,
         // background color must be set
         backgroundColor : "#b7b7b7", // invisible color
 

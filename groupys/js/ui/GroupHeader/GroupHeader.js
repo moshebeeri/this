@@ -110,11 +110,6 @@ export default class GroupHeader extends Component {
                         <ImageController style={{marginLeft:0, marginRight:8,alignItems: 'flex-start', width:18, height:18 }} source={require('../../../images/usersicon.png')}/>
                         {group.social_state && <ThisText style={{fontSize:15}}>{group.social_state.followers}</ThisText>}
 
-                        <ImageController style={{marginLeft:12, marginRight:8,alignItems: 'flex-start', width:19, height:18 }} source={require('../../../images/chaticon.png')}/>
-                        {group.social_state && <ThisText style={{fontSize:15}}>{group.social_state.followers}</ThisText>}
-
-                        <ImageController style={{marginLeft:12, marginRight:8,alignItems: 'flex-start', width:18, height:18 }} source={require('../../../images/promoicon.png')}/>
-                        {group.social_state && <ThisText style={{fontSize:15}}>{group.social_state.followers}</ThisText>}
 
                     </View>
 

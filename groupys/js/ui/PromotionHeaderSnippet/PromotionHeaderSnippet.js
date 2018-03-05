@@ -7,7 +7,6 @@ import {ThisText,ImageController} from '../../ui/index';
 import strings from "../../i18n/i18n"
 
 const ILS = '₪';
-const promoIcon = <ImageController style={{marginLeft:0, marginRight:12,alignItems: 'flex-start', width:18, height:18 }} source={require('../../../images/promoicon.png')}/>;
 export default class PromotionHeaderSnippet extends Component {
     constructor(props) {
         super(props);
@@ -16,6 +15,7 @@ export default class PromotionHeaderSnippet extends Component {
     render() {
         const {promotion, type, titleValue, titleText, term, business} = this.props;
 
+        const promoIcon = <ImageController style={{marginLeft:0, marginRight:12,alignItems: 'flex-start', width:18, height:18 }} source={require('../../../images/promoicon.png')}/>;
 
         switch (type) {
             case "REDUCED_AMOUNT":

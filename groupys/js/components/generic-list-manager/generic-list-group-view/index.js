@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import {TouchableOpacity} from 'react-native';
+import {Dimensions, TouchableOpacity} from 'react-native';
 import {actions} from 'react-native-navigation-redux-helpers';
 import {
     Button,
@@ -20,14 +20,9 @@ import stylesPortrate from './styles'
 import UiConverter from '../../../api/feed-ui-converter'
 import {GroupHeader, ImageController, PromotionHeaderSnippet, ThisText} from '../../../ui/index';
 import strings from '../../../i18n/i18n';
-import styles from "../../../ui/PromotionHeaderSnippet/styles";
+import InViewPort from '../../../utils/inviewport'
 
 const {width, height} = Dimensions.get('window');
-const vw = width / 100;
-const vh = height / 100;
-let groupApi = new GroupApi();
-let dateUtils = new DateUtils();
-import InViewPort from '../../../utils/inviewport'
 let uiConverter = new UiConverter();
 export default class GenericListGroupView extends Component {
     constructor(props) {
@@ -45,15 +40,15 @@ export default class GenericListGroupView extends Component {
 
     shouldComponentUpdate() {
         const {visibleItem} = this.props;
-        if(visibleItem) {
+        if (visibleItem) {
             return true;
         }
         return false;
     }
-    visited(){
-      const  {item,setVisibleItem} = this.props;
-      setVisibleItem(item._id);
 
+    visited() {
+        const {item, setVisibleItem} = this.props;
+        setVisibleItem(item._id);
     }
 
     render() {
@@ -71,17 +66,32 @@ export default class GenericListGroupView extends Component {
         const SubContainerStyle = {
             alignItems: 'center',
             backgroundColor: 'white',
-            padding:0,
+            padding: 0,
         };
-
-        const row = <View key={index}>
+        const row = <InViewPort onChange={this.visited.bind(this)} key={index}>
             <View style={{marginBottom: 8}}>
                 <TouchableOpacity key={index} onPress={onPressItem} style={containerStyle}>
                     <GroupHeader group={item}/>
 
-                    {(promotion || post || message) && <View style={{marginLeft: 30, marginRight:30, width: width-30, justifyContent: 'flex-start', borderBottomWidth:1, borderBottomColor:'#CACACA', marginBottom:10}}>
-                        <ThisText style={{marginLeft: 4, marginBottom:2, fontWeight:'200', color:'#616F70', fontSize:14, textAlign:'left', backgroundColor:'white'}}>{strings.LatestActivity}</ThisText>
-                   </View>}
+                    {(promotion || post || message) && <View style={{
+                        marginLeft: 30,
+                        marginRight: 30,
+                        width: width - 30,
+                        justifyContent: 'flex-start',
+                        borderBottomWidth: 1,
+                        borderBottomColor: '#CACACA',
+                        marginBottom: 10
+                    }}>
+                        <ThisText style={{
+                            marginLeft: 4,
+                            marginBottom: 2,
+                            fontWeight: '200',
+                            color: '#616F70',
+                            fontSize: 14,
+                            textAlign: 'left',
+                            backgroundColor: 'white'
+                        }}>{strings.LatestActivity}</ThisText>
+                    </View>}
 
                     {promotion}
                     {post}
@@ -151,21 +161,19 @@ export default class GenericListGroupView extends Component {
                 }
             }
             const image = <ImageController thumbnail size={30} source={itemChat.avetar}/>
-
-
             return <View style={styles.group_message_container}>
 
 
                 <View style={styles.message_container}>
 
-                    <ImageController style={{marginLeft:0, marginRight:12,alignItems: 'flex-start', width:19, height:18 }} source={require('../../../../images/chaticon.png')}/>
-
-
+                    <ImageController
+                        style={{marginLeft: 0, marginRight: 12, alignItems: 'flex-start', width: 19, height: 18}}
+                        source={require('../../../../images/chaticon.png')}/>
 
 
                     {image}
 
-                    <View style={{marginLeft:15, alignItems: 'flex-start'}}>
+                    <View style={{marginLeft: 15, alignItems: 'flex-start'}}>
 
                         <ThisText style={styles.chatListLineTitleText}>{itemChat.name}</ThisText>
                         <ThisText style={styles.chatListLineDescText}>{itemChat.message}</ThisText>
