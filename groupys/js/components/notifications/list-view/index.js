@@ -18,7 +18,7 @@ export default class NotificationListView extends Component {
     accept() {
         const {item, groupActions, actions} = this.props;
         const viewItem = item.item;
-        groupActions.acceptInvatation(viewItem.group);
+        groupActions.acceptInvitation(viewItem.group);
         actions.doNotification(viewItem._id)
     }
 
@@ -54,8 +54,8 @@ export default class NotificationListView extends Component {
     render() {
         const {item} = this.props;
         switch (item.item.note) {
-            case notification.APPROVE_GROUP_INVATATION:
-            case notification.ASK_GROUP_INVATATION:
+            case notification.APPROVE_GROUP_INVITATION:
+            case notification.ASK_GROUP_INVITATION:
                 return this.createApproveUi(item);
             case notification.ADD_FOLLOW_PROMOTION:
                 return this.createFollowUi(item);

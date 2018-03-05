@@ -2,6 +2,7 @@ import GroupsApi from "../api/groups";
 import FeedApi from "../api/feed";
 import UserApi from "../api/user";
 import PtomotionApi from "../api/promotion";
+import imageApi from "../api/image";
 import ActivityApi from "../api/activity";
 import * as assemblers from "./collectionAssembler";
 import * as actions from "../reducers/reducerActions";
@@ -40,7 +41,7 @@ async function getByBusinessId(dispatch, bid, token) {
         let response = await groupsApi.getByBusinessId(bid, token);
         if (response.length > 0) {
             dispatch({
-                type: 'GET_GROUPS_BUSINESS',
+                type: actions.GET_GROUPS_BUSINESS,
                 groups: response,
                 bid: bid
             });
@@ -59,7 +60,7 @@ async function getUserFollowers(dispatch, token) {
             followers: users
         });
     } catch (error) {
-        handler.handleError(error, dispatch, 'userApi.getUserFollowers')
+        handler.handleError(error, dispatch, 'userApi.getUserFollowers');
         logger.actionFailed('userApi.getUserFollowers')
     }
 }
@@ -85,11 +86,11 @@ export function fetchUsersFollowers() {
     }
 }
 
-export function acceptInvatation(group) {
+export function acceptInvitation(group) {
     return async function (dispatch, getState) {
         try {
             const token = getState().authentication.token;
-            await groupsApi.acceptInvatation(group, token);
+            await groupsApi.acceptInvitation(group, token);
             let groups = await groupsApi.getAll(token);
             groups.forEach(function (group) {
                 dispatch({
@@ -98,21 +99,35 @@ export function acceptInvatation(group) {
                 });
             })
         } catch (error) {
-            handler.handleError(error, dispatch, 'groupsApi.acceptInvatation')
-            logger.actionFailed('groupsApi.acceptInvatation')
+            handler.handleError(error, dispatch, 'groupsApi.acceptInvitation');
+            logger.actionFailed('groupsApi.acceptInvitation')
         }
     }
 }
 
-export function touch(groupid) {
+async function groupTouched(groupId) {
+    return async function (dispatch) {
+        dispatch({
+            type: actions.GROUP_TOUCHED,
+            groupId: groupId
+        });
+    };
+}
+
+export function touch(groupId) {
     return function (dispatch, getState) {
         try {
             const token = getState().authentication.token;
-            groupsApi.touch(groupid, token);
+            groupsApi.touch(groupId, token);
+            dispatch({
+                type: actions.GROUP_TOUCHED,
+                groupId: groupId
+            });
         } catch (error) {
-            handler.handleError(error, dispatch, 'groupsApi.touch')
+            handler.handleError(error, dispatch, 'groupsApi.touch');
             logger.actionFailed('groupsApi.touch')
         }
+
     }
 }
 
@@ -132,6 +147,28 @@ export function createGroup(group, navigation) {
         } catch (error) {
             handler.handleError(error, dispatch, 'createGroup')
             logger.actionFailed('groupsApi.createGroup')
+        }
+    }
+}
+
+
+
+export function setGroupQrCode(group) {
+    return async function (dispatch, getState) {
+        try {
+            const token = getState().authentication.token;
+            dispatch({
+                type: actions.REST_GROUP_QRCODE,
+            });
+            let response = await imageApi.getQrCodeImage(group.qrcode, token);
+            dispatch({
+                type: actions.UPSERT_GROUP_QRCODE,
+                group: group,
+                qrcodeSource: response.qrcode
+            });
+        } catch (error) {
+            handler.handleError(error, dispatch, 'setBusinessQrCode')
+            logger.actionFailed("business_getBusinessQrCodeImage", business);
         }
     }
 }

@@ -266,6 +266,7 @@ SignUpQuickMessage                            : "For Quick SingUp Click Here",
 NoAccountMessage                              : "Does not have an account ?",
 SKU                                           : "SKU",
 ViewGroup                                     : "View Group",
+FollowGroupMessage                            : "Approve this request to follow {0} Group",
 LatestActivity                                : "Latest Activity",
 
 

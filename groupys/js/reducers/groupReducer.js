@@ -8,6 +8,7 @@ const initialState = {
     showTopLoader: {},
     lastFeed: {},
     lastFeedTime: {},
+    lastGroupQrcode: '',
     saving: false
 };
 import {REHYDRATE} from "redux-persist/constants";
@@ -23,85 +24,96 @@ export default function group(state = initialState, action) {
             , saving: false, showTopLoader: {}
         };
     }
-    let imutableState = {...state};
-    let currentGroups = imutableState.groups;
+    let immutableState = {...state};
+    let currentGroups = immutableState.groups;
     switch (action.type) {
         case actions.UPSERT_SINGLE_GROUP:
             currentGroups[action.group._id] = action.group;
-            imutableState.update = !imutableState.update;
-            return imutableState;
+            immutableState.update = !immutableState.update;
+            return immutableState;
         case actions.UPSERT_GROUP:
             action.item.forEach(eventItem => {
-                if(!eventItem.preview){
+                if (!eventItem.preview) {
                     currentGroups[eventItem._id] = eventItem;
-                }else {
-                    if ((eventItem.preview.comment && eventItem.preview.comment.created) ||(eventItem.preview.post && eventItem.preview.post.created) ||
+                } else {
+                    if ((eventItem.preview.comment && eventItem.preview.comment.created) || (eventItem.preview.post && eventItem.preview.post.created) ||
                         (eventItem.preview.instance_activity && eventItem.preview.instance_activity.action)) {
                         currentGroups[eventItem._id] = eventItem;
                     }
                 }
             });
-            return imutableState;
+            return immutableState;
         case actions.UPSERT_GROUP_FEEDS_BOTTOM:
             action.groupFeed.forEach(item => {
-                if (!imutableState.groupFeeds[action.groupId]) {
-                    imutableState.groupFeeds[action.groupId] = {};
-                    imutableState.groupFeedOrder[action.groupId] = [];
+                if (!immutableState.groupFeeds[action.groupId]) {
+                    immutableState.groupFeeds[action.groupId] = {};
+                    immutableState.groupFeedOrder[action.groupId] = [];
                 }
-                imutableState.groupFeeds[action.groupId][item._id] = item;
-                if (!imutableState.groupFeedOrder[action.groupId].includes(item._id)) {
-                    imutableState.groupFeedOrder[action.groupId].push(item._id);
+                immutableState.groupFeeds[action.groupId][item._id] = item;
+                if (!immutableState.groupFeedOrder[action.groupId].includes(item._id)) {
+                    immutableState.groupFeedOrder[action.groupId].push(item._id);
                 }
             });
-            imutableState.update = !imutableState.update;
-            return imutableState;
+            immutableState.update = !immutableState.update;
+            return immutableState;
         case actions.UPDATE_FEED_GROUP_UNREAD:
             action.feeds.forEach(item => {
                     if (item.activity.post && item.activity.post.creator._id !== action.user._id) {
-                        imutableState.groupFeedsUnread[action.groupId] = imutableState.groupFeedsUnread[action.groupId] + 1;
+                        immutableState.groupFeedsUnread[action.groupId] = immutableState.groupFeedsUnread[action.groupId] + 1;
                     }
                     if (item.activity.promotion && item.activity.promotion.creator && item.activity.promotion.creator._id !== action.user._id) {
-                        imutableState.groupFeedsUnread[action.groupId] = imutableState.groupFeedsUnread[action.groupId] + 1;
+                        immutableState.groupFeedsUnread[action.groupId] = immutableState.groupFeedsUnread[action.groupId] + 1;
                     }
                 }
             );
-            return imutableState;
+            return immutableState;
         case actions.UPSERT_GROUP_FEEDS_TOP:
             action.groupFeed.forEach(item => {
-                if (!imutableState.groupFeeds[action.groupId]) {
-                    imutableState.groupFeeds[action.groupId] = {};
-                    imutableState.groupFeedOrder[action.groupId] = [];
+                if (!immutableState.groupFeeds[action.groupId]) {
+                    immutableState.groupFeeds[action.groupId] = {};
+                    immutableState.groupFeedOrder[action.groupId] = [];
                 }
-                if (!imutableState.groupFeedsUnread[action.groupId]) {
-                    imutableState.groupFeedsUnread[action.groupId] = 0;
+                if (!immutableState.groupFeedsUnread[action.groupId]) {
+                    immutableState.groupFeedsUnread[action.groupId] = 0;
                 }
-                imutableState.groupFeeds[action.groupId][item._id] = item;
-                if (!imutableState.groupFeedOrder[action.groupId].includes(item._id)) {
-                    imutableState.groupFeedOrder[action.groupId].unshift(item._id);
+                immutableState.groupFeeds[action.groupId][item._id] = item;
+                if (!immutableState.groupFeedOrder[action.groupId].includes(item._id)) {
+                    immutableState.groupFeedOrder[action.groupId].unshift(item._id);
                 }
             });
-            imutableState.update = !imutableState.update;
-            return imutableState;
+            immutableState.update = !immutableState.update;
+            return immutableState;
         case actions.GROIP_CLEAR_UNREAD_POST:
-            if (imutableState.groupFeedsUnread[action.gid]) {
-                imutableState.groupFeedsUnread[action.gid] = 0;
+            if (immutableState.groupFeedsUnread[action.gid]) {
+                immutableState.groupFeedsUnread[action.gid] = 0;
             }
-            return imutableState;
+            return immutableState;
         case actions.GROUP_FEED_LOADING_DONE:
-            let loadingDone = imutableState.loadingDone;
+            let loadingDone = immutableState.loadingDone;
             loadingDone[action.groupId] = action.loadingDone;
-            return imutableState;
+            return immutableState;
         case actions.GROUP_FEED_SHOWTOPLOADER:
-            let topLoader = imutableState.showTopLoader;
+            let topLoader = immutableState.showTopLoader;
             topLoader[action.groupId] = action.showTopLoader;
-            return imutableState;
+            return immutableState;
         case actions.GROUP_LAST_FEED_DOWN:
             imutableState.lastFeed[action.groupId] = action.id;
             imutableState.lastFeedTime[action.groupId] = new Date().getTime();
             return imutableState;
-        case 'GET_GROUPS_BUSINESS' :
-            imutableState['groups' + action.bid] = action.groups;
+        case actions.UPSERT_GROUP_QRCODE:
+            currentGroups[action.group._id].qrcodeSoruce = action.qrcodeSource;
+            imutableState.lastGroupQrcode = action.qrcodeSource;
+            imutableState.update = !imutableState.update;
             return imutableState;
+        case actions.REST_GROUP_QRCODE:
+            imutableState.lastGroupQrcode = ''
+            imutableState.update = !imutableState.update;
+            return imutableState;
+
+        case actions.GET_GROUPS_BUSINESS :
+            immutableState['groups' + action.bid] = action.groups;
+            return immutableState;
+
         case actions.GROUP_SAVING:
             return {
                 ...state,
@@ -112,6 +124,14 @@ export default function group(state = initialState, action) {
                 ...state,
                 saving: false,
             };
+        case actions.GROUP_TOUCHED:
+            Object.keys(currentGroups).forEach(groupId => {
+                if(!currentGroups[groupId].touched)
+                    currentGroups[action.groupId].touched = new Date().getTime()
+            });
+            if(currentGroups[action.groupId])
+                currentGroups[action.groupId].touched = new Date().getTime();
+            return immutableState;
         default:
             return state;
     }

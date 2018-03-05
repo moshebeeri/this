@@ -366,31 +366,7 @@ class BusinessApi {
         })
     }
 
-    getBusinessQrCodeImage(qrCode, token) {
-        return new Promise(async (resolve, reject) => {
-            try {
-                let from = new Date();
-                const response = await fetch(`${server_host}/api/qrcodes/image/id/` + qrCode, {
-                    method: 'GET',
-                    headers: {
-                        'Accept': 'application/json, text/plain, */*',
-                        'Content-Type': 'application/json;charset=utf-8',
-                        'Authorization': 'Bearer ' + token
-                    }
-                });
-                if (response.status ==='401' || response.status === 401) {
-                    reject(errors.UN_AUTHOTIZED_ACCESS);
-                    return;
-                }
-                timer.logTime(from, new Date(), '/api/qrcodes/', 'image/code/');
-                let responseData = await response.json();
-                resolve(responseData);
-            }
-            catch (error) {
-                reject(errors.NETWORK_ERROR);
-            }
-        })
-    }
+
 
     getUserBusinessesByPhoneNumber(phone,token) {
         return new Promise(async (resolve, reject) => {

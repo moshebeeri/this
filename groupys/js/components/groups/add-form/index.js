@@ -1,10 +1,19 @@
 import React, {Component} from 'react';
-import {Dimensions, Image, Platform, ScrollView, Text, View} from 'react-native';
+import {Dimensions, Image, Platform, ScrollView, Text, TouchableOpacity, View} from 'react-native';
 import {connect} from 'react-redux';
 import styles from './styles'
 import {getMyBusinesses} from '../../../selectors/businessesSelector'
 import SelectUsersComponent from '../selectUser';
-import {FormHeader, ImagePicker, SelectButton, SimplePicker, Spinner, TextInput, ThisText,ImageController} from '../../../ui/index';
+import {
+    FormHeader,
+    ImageController,
+    ImagePicker,
+    SelectButton,
+    SimplePicker,
+    Spinner,
+    TextInput,
+    ThisText
+} from '../../../ui/index';
 import * as groupsAction from "../../../actions/groups";
 import * as businessesAction from "../../../actions/business";
 import * as userAction from "../../../actions/user";
@@ -45,7 +54,7 @@ class AddGroup extends Component {
             let currentImage = '';
             if (group.pictures.length > 0) {
                 currentImage = group.pictures[group.pictures.length - 1].pictures[0];
-            }else{
+            } else {
                 if (group.entity && group.entity.business) {
                     if (group.entity.business.logo) {
                         currentImage = group.entity.business.logo;
@@ -58,6 +67,7 @@ class AddGroup extends Component {
                 showUsers: false,
                 images: '',
                 users: [],
+                qrcodeSource: group.qrcodeSource,
                 selectedUsers: null,
                 groupPolocy: group.add_policy,
                 groupType: group.entity_type,
@@ -66,12 +76,26 @@ class AddGroup extends Component {
                 currentImage: currentImage,
                 business: '',
                 updateMode: true,
+                codeStyle: {width: 80, height: 80, alignItems: 'center', justifyContent: 'center'},
+                codeTextStyle: {fontSize: 6, marginTop: 5},
+                codeContainerStyle: {
+                    backgroundColor: 'white',
+                    position: 'absolute',
+                    top: 100,
+                    right: 20,
+                    alignItems: 'center',
+                    justifyContent: 'center'
+                },
+                codeFullSize: false,
+                showQrcCode: true,
                 viewOnly: props.navigation.state.params.view,
                 services: []
             };
         } else {
             this.state = {
                 name: null,
+                showQrcCode: false,
+                codeFullSize: false,
                 info: null,
                 showUsers: false,
                 images: '',
@@ -83,7 +107,7 @@ class AddGroup extends Component {
                 image: '',
                 updateMode: false,
                 business: '',
-                viewOnly:false,
+                viewOnly: false,
                 services: []
             };
         }
@@ -96,7 +120,10 @@ class AddGroup extends Component {
     }
 
     componentWillMount() {
-        const {businessActions, userActions} = this.props;
+        const {businessActions, userActions, actions} = this.props;
+        if (this.state.showQrcCode && this.props.navigation.state.params.group) {
+            actions.setGroupQrCode(this.props.navigation.state.params.group)
+        }
         businessActions.setBusinessUsers();
         userActions.fetchUsersFollowers();
     }
@@ -247,10 +274,13 @@ class AddGroup extends Component {
 
                     <View style={styles.addCoverContainer}>
 
-                        {this.state.viewOnly ? coverImage : <ImagePicker ref={"coverImage"} mandatory={isManadory} image={coverImage} color='white'
-                                     pickFromCamera
-                                     setImage={this.setCoverImage.bind(this)}/>}
+                        {this.state.viewOnly ? coverImage :
+                            <ImagePicker ref={"coverImage"} mandatory={isManadory} image={coverImage} color='white'
+                                         pickFromCamera
+                                         setImage={this.setCoverImage.bind(this)}/>}
                         {saving && <Spinner/>}
+
+
                     </View>
                 </View>
             </View>
@@ -269,24 +299,79 @@ class AddGroup extends Component {
         </View>
     }
 
+    changeQrLook() {
+        if (this.state.codeFullSize) {
+            this.setState({
+                codeStyle: {width: 80, height: 80, alignItems: 'center', justifyContent: 'center'},
+                codeTextStyle: {fontSize: 6, marginTop: 5},
+                codeContainerStyle: {
+                    backgroundColor: 'white',
+                    position: 'absolute',
+                    top: 100,
+                    right: 20,
+                    alignItems: 'center',
+                    justifyContent: 'center'
+                },
+                codeFullSize: false,
+            })
+        } else {
+            this.setState({
+                codeStyle: {width: 200, height: 180, alignItems: 'center', justifyContent: 'center'},
+                codeTextStyle: {fontSize: 14, marginTop: 5,},
+                codeContainerStyle: {
+                    backgroundColor: 'white',
+                    position: 'absolute',
+                    top: 10,
+                    right: 70,
+                    alignItems: 'center',
+                    justifyContent: 'center'
+                },
+                codeFullSize: true,
+            })
+        }
+    }
+
     render() {
-        const {businesses} = this.props;
+        const {businesses, lastGroupQrCode} = this.props;
         let selectedGroupPolicy = this.state.groupPolocy
         if (Platform.OS === 'ios') {
             selectedGroupPolicy = this.getGroupPolicy(this.state.groupPolocy);
         }
         const BusinessPiker = this.createBusinessPicker(this.state.groupType, businesses);
+        let qrcodeView = undefined;
+        if (this.state.showQrcCode) {
+            if (this.state.qrcodeSource) {
+                qrcodeView = <TouchableOpacity onPress={() => this.changeQrLook()}
+                                               style={this.state.codeContainerStyle}>
+                    <ThisText style={this.state.codeTextStyle}>{strings.ScanToFollow}</ThisText>
+                    <Image
+                        style={this.state.codeStyle} resizeMode="cover"
+                        source={{uri: this.state.qrcodeSource}}>
 
+                    </Image>
+                </TouchableOpacity>
+            } else {
+                qrcodeView = <TouchableOpacity onPress={() => this.changeQrLook()}
+                                               style={this.state.codeContainerStyle}>
+                    <ThisText>{strings.ScanToFollow}</ThisText>
+                    <Image
+                        style={this.state.codeStyle} resizeMode="cover"
+                        source={{uri: lastGroupQrCode}}>
 
+                    </Image>
+                </TouchableOpacity>
+            }
+        }
         return (
             <View style={styles.product_container}>
                 {this.state.updateMode && !this.state.viewOnly &&
-                    <FormHeader showBack submitForm={this.updateGroup.bind(this)} navigation={this.props.navigation}
-                                title={strings.UpdateGroup} bgc="#2db6c8"/>}
-                {!this.state.updateMode && !this.state.viewOnly && <FormHeader showBack submitForm={this.saveFormData.bind(this)} navigation={this.props.navigation}
-                                  title={strings.AddGroup} bgc="#2db6c8"/>
+                <FormHeader showBack submitForm={this.updateGroup.bind(this)} navigation={this.props.navigation}
+                            title={strings.UpdateGroup} bgc="#2db6c8"/>}
+                {!this.state.updateMode && !this.state.viewOnly &&
+                <FormHeader showBack submitForm={this.saveFormData.bind(this)} navigation={this.props.navigation}
+                            title={strings.AddGroup} bgc="#2db6c8"/>
                 }
-                {this.state.viewOnly && <FormHeader showBack  navigation={this.props.navigation}
+                {this.state.viewOnly && <FormHeader showBack navigation={this.props.navigation}
                                                     title={strings.ViewGroup} bgc="#2db6c8"/>}
                 <ScrollView keyboardShouldPersistTaps={true} contentContainerStyle={{
                     justifyContent: 'center',
@@ -295,6 +380,7 @@ class AddGroup extends Component {
 
 
                     {this.createCoverImageComponnent()}
+                    {qrcodeView}
                     <SimplePicker value={selectedGroupPolicy} ref="groupPolicyType"
                                   disable={this.state.viewOnly}
                                   list={groupPolicy} itemTitle={strings.GroupPolicy}
@@ -308,7 +394,7 @@ class AddGroup extends Component {
 
                     {!this.state.updateMode && BusinessPiker}
                     <View style={styles.inputTextLayour}>
-                        <TextInput  disabled={this.state.viewOnly} field={strings.GroupName} value={this.state.name}
+                        <TextInput disabled={this.state.viewOnly} field={strings.GroupName} value={this.state.name}
                                    returnKeyType='next' ref="1" refNext="1"
                                    onSubmitEditing={this.focusNextField.bind(this, "2")}
                                    onChangeText={(name) => this.setState({name})} isMandatory={true}/>
@@ -317,7 +403,8 @@ class AddGroup extends Component {
                     <View style={styles.inputTextLayour}>
 
 
-                        <TextInput disabled={this.state.viewOnly}  field={strings.Description} value={this.state.info} returnKeyType='next' ref="2"
+                        <TextInput disabled={this.state.viewOnly} field={strings.Description} value={this.state.info}
+                                   returnKeyType='next' ref="2"
                                    refNext="2"
 
 
@@ -369,6 +456,7 @@ export default connect(
         userFollowers: state.user.followers,
         saving: state.groups.saving,
         currentScreen: state.render.currentScreen,
+        lastGroupQrCode: state.groups.lastGroupQrcode
     }),
     (dispatch) => ({
         actions: bindActionCreators(groupsAction, dispatch),

@@ -35,7 +35,7 @@ class GroupsApi {
                 let responseData = await response.json();
                 timer.logTime(from, new Date(), 'groups', '/');
                 if (group.groupUsers) {
-                    this.addUsersToGroup(group, responseData);
+                    this.addUsersToGroup(group, responseData,token);
                 }
                 if (group.image) {
                     entityUtils.doUpload(group.image.path, group.image.mime, token, callbackFunction, 'groups', responseData);
@@ -81,18 +81,17 @@ class GroupsApi {
         })
     }
 
-    addUsersToGroup(group, responseData) {
+    addUsersToGroup(group, responseData,token) {
         let addGroupsUsers = this.addUserToGroup.bind(this);
         group.groupUsers.forEach(function (user) {
-            addGroupsUsers(user._id, responseData._id);
+            addGroupsUsers(user._id, responseData._id,token);
         });
     }
 
-    addUserToGroup(user, group) {
+    addUserToGroup(user, group,token) {
         return new Promise(async (resolve, reject) => {
             try {
                 let from = new Date();
-                let token = await store.get('token');
                 const response = await fetch(`${server_host}/api/groups/add/user/${user}/${group}`, {
                     method: 'GET',
                     headers: {
@@ -142,7 +141,7 @@ class GroupsApi {
         })
     }
 
-    acceptInvatation(group, token) {
+    acceptInvitation(group, token) {
         return new Promise(async (resolve, reject) => {
             try {
                 let from = new Date();
