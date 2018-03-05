@@ -27,10 +27,8 @@ exports.show = function (req, res) {
     return res.status(201).json(location);
   });
 };
-
 // Creates a new location in the DB.
 exports.simulate = function (req, res) {
-
   function toRad(coordinate) {
     return coordinate * Math.PI / 180;
   }
@@ -56,23 +54,28 @@ exports.simulate = function (req, res) {
       lon: leftLng,
     }
   }
+
   console.log(`req.params.lat ${req.params.lat}, req.params.lng ${req.params.lng}, req.params.distance ${req.params.distance}`)
   const location = getBoundingBox(parseFloat(req.params.lat),
-                                  parseFloat(req.params.lng),
-                                  parseFloat(req.params.distance));
-  graphModel.save({
-    lat: location.lat,
-    lon: location.lng,
-    speed: 0,
-    time: new Date(),
-    userId: req.user._id
-  }, function (err, location) {
-    spatial.add2index(location.id, function (err, result) {
-      if (err) return handleError(res,err);
-      //else logger.info('object added to layer ' + result)
-      proximity.reportLastLocation(location.userId, location, function (err) {
-        if (err) return handleError(res,err);
-        res.status(200).json(location);
+    parseFloat(req.params.lng),
+    parseFloat(req.params.distance));
+  const deletePrevQuery = `match (l:location{userId:'${req.user._id}'})-[r]-() delete l,r`;
+  graphModel.query(deletePrevQuery, (err) => {
+    if (err) {return handleError(res, err)}
+    graphModel.save({
+      lat: location.lat,
+      lon: location.lng,
+      speed: 0,
+      time: new Date(),
+      userId: req.user._id
+    }, function (err, location) {
+      spatial.add2index(location.id, function (err, result) {
+        if (err) return handleError(res, err);
+        //else logger.info('object added to layer ' + result)
+        proximity.reportLastLocation(location.userId, location, function (err) {
+          if (err) return handleError(res, err);
+          res.status(200).json(location);
+        });
       });
     });
   });
@@ -83,29 +86,32 @@ exports.create = function (req, res) {
   let locations = req.body.locations;
   if (locations.length === 0)
     return res.status(404).send('locations list is empty');
-  Location.create(req.body, function (err, location) {
-    if (err) {
-      return handleError(res, err);
-    }
-    locations.forEach(function (location) {
-      graphModel.save({
-        lat: location.lat,
-        lon: location.lng,
-        speed: location.speed,
-        time: new Date(),
-        userId: userId
-      }, function (err, location) {
-        spatial.add2index(location.id, function (err, result) {
-          if (err) return logger.error(err.message);
-          //else logger.info('object added to layer ' + result)
+
+  const deletePrevQuery = `match (l:location{userId:'${userId}'})-[r]-() delete l,r`;
+  graphModel.query(deletePrevQuery, (err) => {
+    if (err) { return handleError(res,err) }
+    Location.create(req.body, function (err, location) {
+      if (err) {return handleError(res, err)}
+      locations.forEach(function (location) {
+        graphModel.save({
+          lat: location.lat,
+          lon: location.lng,
+          speed: location.speed,
+          time: new Date(),
+          userId: userId
+        }, function (err, location) {
+          spatial.add2index(location.id, function (err, result) {
+            if (err) return logger.error(err.message);
+            //else logger.info('object added to layer ' + result)
+          });
         });
       });
+      proximity.reportLastLocation(userId, locations[locations.length - 1], function (err) {
+        if (err) console.error(err);
+      });
+      return res.status(201).json(location);
     });
-    proximity.reportLastLocation(userId, locations[locations.length - 1], function (err) {
-      if (err) console.error(err);
-    });
-    return res.status(201).json(location);
-  });
+  })
 };
 // Updates an existing location in the DB.
 exports.update = function (req, res) {

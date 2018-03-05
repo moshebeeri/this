@@ -6,16 +6,7 @@ let mongoose = require('mongoose'),
 let ImageSchema = new Schema({
   title: String,
   description: String,
-  orientation: {
-    type: String,
-    required: false,
-    enum: [
-      'UNKNOWN',
-      'LANDSCAPE',
-      'PORTRAIT'
-    ],
-    default : 'UNKNOWN'
-  }
+  pictures : [],
 });
 
 module.exports = mongoose.model('Image', ImageSchema);

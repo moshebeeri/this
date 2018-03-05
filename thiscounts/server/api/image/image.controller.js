@@ -74,6 +74,15 @@ function createClient() {
   });
 }
 
+// Creates a new invite in the DB.
+exports.create_image = function(req, res) {
+  Image.create({}, function(err, image) {
+    if(err) { return handleError(res, err); }
+    return res.json(201, image);
+  });
+};
+
+
 exports.create = function (req, res) {
   return handle_image(req, res, 'image');
 };
