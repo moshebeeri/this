@@ -41,22 +41,22 @@ class BusinessHeader extends Component {
         const {businessLogo, small, noProfile} = this.props;
         if (businessLogo) {
             if (noProfile) {
-                return <View style={{margin: 7}}>
+                return <View style={{margin: 10}}>
                     <View>
-                        <ImageController thumbnail square={true} size={40} source={{uri: businessLogo}}/>
+                        <ImageController thumbnail  size={40} source={{uri: businessLogo}}/>
                     </View>
                 </View>
             }
             if (small) {
-                return <TouchableOpacity style={{margin: 7}} onPress={this.showBusiness.bind(this)}>
+                return <TouchableOpacity style={{margin: 10}} onPress={this.showBusiness.bind(this)}>
                     <View>
-                        <ImageController  thumbnail square={true} size={30} source={{uri: businessLogo}}/>
+                        <ImageController  thumbnail  size={36} source={{uri: businessLogo}}/>
                     </View>
                 </TouchableOpacity>
             }
-            return <TouchableOpacity style={{margin: 12}} onPress={this.showBusiness.bind(this)}>
+            return <TouchableOpacity style={{margin: 10}} onPress={this.showBusiness.bind(this)}>
                 <View>
-                    <ImageController thumbnail square={true} size={40} source={{uri: businessLogo}}/>
+                    <ImageController thumbnail  size={40} source={{uri: businessLogo}}/>
                 </View>
             </TouchableOpacity>
         }

@@ -24,9 +24,9 @@ module.exports = {
         flexDirection: 'row',
         alignItems: 'center',
         justifyContent: 'center',
-        borderColor: 'gray',
-        borderTopWidth: 1,
-        borderColor: '#cccccc'
+        borderColor: 'black',
+        borderTopWidth: 0,
+
     },
     group_promotion_container: {
         flexDirection: 'row',
@@ -71,15 +71,27 @@ module.exports = {
         flexDirection: 'row',
         paddingBottom: 8,
         marginLeft: 15,
+
+        backgroundColor:'white',
     },
     message_container2: {
         flex: 3,
         alignItems: 'center',
         flexDirection: 'row',
         paddingBottom: 8,
-        borderTopWidth: 1,
-        borderColor: '#cccccc'
+        marginLeft:15,
+        borderTopWidth: 0,
+        borderColor: '#cccccc',
+        backgroundColor:'white',
+
     },
+
+    chatListLineTitleText:{
+        fontWeight:'bold', color:'#616F70', fontSize:16,
+    },
+    chatListLineDescText:{
+        fontWeight:'200', color:'#616F70', fontSize:14,     },
+
     post_container: {
         flex: 1,
         height: 70,

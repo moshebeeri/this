@@ -84,7 +84,7 @@ export default class FeedBusiness extends Component {
                         justifyContent: 'flex-start',
                         alignItems: 'flex-start'
                     }}>
-                        <ThisText style={styles.promotion_type}>{item.itemTitle}</ThisText>
+                        <ThisText style={styles.promotion_type}>{item.itemTitle}c</ThisText>
                     </View>
 
                     {imageBusiness}
@@ -123,7 +123,6 @@ export default class FeedBusiness extends Component {
     createBusinessImage(item, styles) {
         if (item.banner && item.banner.uri) {
             return <View style={[styles.promotion_image_view, {width: StyleUtils.getWidth()}]}>
-
                 <ImageController resizeMode="cover" style={[styles.promotion_image, {width: StyleUtils.getWidth()}]}
                        source={{uri: item.banner.uri}}>
                 </ImageController>
