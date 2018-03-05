@@ -79,7 +79,7 @@ function handleProximityActions(userId, location, callback) {
                   WITH   entity,promo,u,on, {longitude:${coordinate.longitude},latitude:${coordinate.latitude}} AS coordinate
                   CALL spatial.withinDistance('world', coordinate, on.proximity) YIELD node AS p
                   WITH   promo, on, entity, u, {longitude:${coordinate.longitude},latitude:${coordinate.latitude}} AS coordinate, ${coordinate.longitude} as lon, ${coordinate.latitude} as lat, p.lat as p_lat, p.lon as p_lon
-                  RETURN promo._id, 2 * 6371 * asin(sqrt(haversin(radians(lat - p_lat))+ cos(radians(lat))*cos(radians(p_lat))*haversin(radians(lon - p_lon)))) as d, entity._id as entity, labels(entity) as labels
+                  RETURN promo._id as _id, 2 * 6371 * asin(sqrt(haversin(radians(lat - p_lat))+ cos(radians(lat))*cos(radians(p_lat))*haversin(radians(lon - p_lon)))) as d, entity._id as entity, labels(entity) as labels
                   ORDER BY d ASC
                   SKIP ${skip} LIMIT ${limit}`;
 
