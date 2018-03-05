@@ -30,10 +30,6 @@ class Notification extends Component {
 
 
 
-    renderItem(item) {
-        const {groupActions, actions, navigation} = this.props;
-        return <NotificationListView navigation={navigation} item={item} actions={actions} groupActions={groupActions}/>
-    }
 
     render() {
         const {notification, navigation, actions,rows,update} = this.props;
@@ -41,8 +37,8 @@ class Notification extends Component {
             <View style={{flex: 1}}>
 
 
-                <GenericListManager navigation={navigation} rows={rows} actions={actions}
-                                    update={update} ItemDetail={this.renderItem.bind(this)}/>
+                <GenericListManager navigation={navigation} rows={rows} groupActions={groupActions} actions={actions}
+                                    update={update} ItemDetail={NotificationListView}/>
             </View>
 
 

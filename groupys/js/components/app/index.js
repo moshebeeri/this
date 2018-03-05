@@ -211,10 +211,11 @@ class ApplicationManager extends Component {
     }
 
     onChangeTab(tab) {
-        const {notificationAction, myPromotionsAction, feedAction, groupsActions,instanceGroupCommentsAction} = this.props;
+        const {notificationAction, myPromotionsAction, feedAction, groupsActions,instanceGroupCommentsAction,actions} = this.props;
         groupsActions.stopListenForChat();
         instanceGroupCommentsAction.stopListenForChat();
         feedAction.stopMainFeedsListener();
+        actions.changeTab(tab);
         if (tab.i === 0) {
             if (I18nManager.isRTL && (Platform.OS === 'android')) {
                 InteractionManager.runAfterInteractions(() => { logger.screenVisited('notification')

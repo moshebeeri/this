@@ -30,7 +30,7 @@ class FeedConverter {
         if (feed.activity.action === 'group_message' || feed.activity.action === 'group_follow') {
             response = this.createMessageUi(feed);
         }
-        if (feed.activity.action === 'instance' || feed.activity.action === 'eligible' || feed.activity.action === 'eligible_on_activity_follow') {
+        if (feed.activity.action === 'instance'|| feed.activity.action === 'eligible_by_proximity'  || feed.activity.action === 'eligible' || feed.activity.action === 'eligible_on_activity_follow') {
             return this.createPromotionInstance(feed,savedInstancesIds);
         }
         if (feed.activity.action === 'share') {

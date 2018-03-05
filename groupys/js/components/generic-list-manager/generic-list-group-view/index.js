@@ -70,7 +70,7 @@ export default class GenericListGroupView extends Component {
         };
         const row = <InViewPort onChange={this.visited.bind(this)} key={index}>
             <View style={{marginBottom: 8}}>
-                <TouchableOpacity key={index} onPress={onPressItem} style={containerStyle}>
+                <TouchableOpacity key={index} onPress={() => onPressItem(item)} style={containerStyle}>
                     <GroupHeader group={item}/>
 
                     {(promotion || post || message) && <View style={{
@@ -98,7 +98,7 @@ export default class GenericListGroupView extends Component {
 
 
                 </TouchableOpacity>
-                <TouchableOpacity style={SubContainerStyle} onPress={onPressMessageItem}>
+                <TouchableOpacity style={SubContainerStyle} onPress={() => onPressMessageItem(item)}>
                     {message}
 
                 </TouchableOpacity>
