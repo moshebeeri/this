@@ -10,6 +10,7 @@ const Promotion = require('../../api/promotion/promotion.model');
 const Instance = require('../instance');
 const activity = require('../activity').createActivity();
 const Notifications = require('../notification');
+const async = require('async');
 
 let ProximitySchema = new Schema({
   _id: {type: Schema.ObjectId, ref: 'User', require: true, index: true},
@@ -58,29 +59,13 @@ function handleProximityActions(userId, location, callback) {
   let skip = 0;
   let limit = 20;
   let coordinate = spatial.location_to_special(location);
-  // let query = ` MATCH (p:promotion)<-[on:ON_ACTION]-(entity)<-[:FOLLOW]-(u:user{_id:'${userId}'})
-  //               WITH on, entity, {longitude:${coordinate.longitude},latitude:${coordinate.latitude}} AS coordinate
-  //               CALL spatial.withinDistance('world', coordinate, on.proximity) YIELD node AS p
-  //               WITH p._id as _id, ${coordinate.longitude} as lon, ${coordinate.latitude} as lat, p.lat as p_lat, p.lon as p_lon, entity
-  //               WHERE _id IS NOT NULL AND on.type = 'PROXIMITY'
-  //               RETURN _id, 2 * 6371 * asin(sqrt(haversin(radians(lat - p_lat))+ cos(radians(lat))* cos(radians(p_lat))* haversin(radians(lon - p_lon)))) as d,
-  //                       entity._id as entity, labels(entity) as labels
-  //               ORDER BY d ASC
-  //               skip ${skip} limit ${limit}`;
-  // MATCH (promo:promotion)<-[on:ON_ACTION]-(entity)<-[:FOLLOW]-(u:user{_id:'${userId}'})
-  // WHERE  promo._id IS NOT NULL AND on.type = 'PROXIMITY'
-  // WITH   promo, on, entity, u, {longitude:${coordinate.longitude},latitude:${coordinate.latitude}} AS coordinate, ${coordinate.longitude} as lon, ${coordinate.latitude} as lat, p.lat as p_lat, p.lon as p_lon
-  // CALL spatial.withinDistance('world', coordinate, on.proximity) YIELD node AS p
-  // RETURN promo._id, 2 * 6371 * asin(sqrt(haversin(radians(lat - p_lat))+ cos(radians(lat))*cos(radians(p_lat))*haversin(radians(lon - p_lon)))) as d, entity._id as entity, labels(entity) as labels
-  // ORDER BY d ASC
-  // SKIP ${skip} LIMIT ${limit}`;
   const query = ` MATCH (promo:promotion)<-[on:ON_ACTION]-(entity)<-[:FOLLOW]-(u:user{_id:'${userId}'})
                   WHERE  promo._id IS NOT NULL AND on.type = 'PROXIMITY'
                   WITH   entity,promo,u,on, {longitude:${coordinate.longitude},latitude:${coordinate.latitude}} AS coordinate
                   CALL spatial.withinDistance('world', coordinate, on.proximity) YIELD node AS p
-                  WITH   promo, on, entity, u, {longitude:${coordinate.longitude},latitude:${coordinate.latitude}} AS coordinate, ${coordinate.longitude} as lon, ${coordinate.latitude} as lat, p.lat as p_lat, p.lon as p_lon
-                  RETURN promo._id as _id, 2 * 6371 * asin(sqrt(haversin(radians(lat - p_lat))+ cos(radians(lat))*cos(radians(p_lat))*haversin(radians(lon - p_lon)))) as d, entity._id as entity, labels(entity) as labels
-                  ORDER BY d ASC
+                  WITH   promo, entity
+                  RETURN distinct promo, entity, labels(entity) as labels
+                  ORDER BY (2 * 6371 * asin(sqrt(haversin(radians(promo.lat - entity.lat))+ cos(radians(promo.lat))*cos(radians(entity.lat))*haversin(radians(promo.lon - entity.lat))))) desc
                   SKIP ${skip} LIMIT ${limit}`;
 
   console.log('handleProximityActions: ' + query);
@@ -94,7 +79,7 @@ function handleProximityActions(userId, location, callback) {
 }
 
 function entityRoleMembers(entity, callback) {
-  let query = `MATCH (entity{_id:'${entity}'})<-[role:ROLE]-(u:user) return u._id as _id`;
+  let query = `MATCH (entity{_id:'${entity}'})<-[role:ROLE]-(u:user) return distinct u._id as _id`;
   console.log(`entityRoleMembers query: ${query}`);
   graphModel.query(query, function(err, users){
     if(err) return callback(err);
@@ -104,10 +89,9 @@ function entityRoleMembers(entity, callback) {
 }
 
 function proximityEligibility(userId, location, eligible, callback) {
-  console.log(`proximityEligibility userId ${userId}, location ${JSON.stringify(location)}, eligible ${JSON.stringify(eligible)}`);
-  Promotion.findById(eligible._id, function (err, promotion) {
+  Promotion.findById(eligible.promo._id, function (err, promotion) {
     if (err) return callback(err);
-    if (!promotion) return callback(new Error('promotion not found for _id:' + eligible._id));
+    if (!promotion) return callback(new Error('promotion not found for _id:' + eligible.promo._id));
     Instance.createSingleInstance(promotion, function (err, instance) {
       activity.activity({
         instance: instance._id,
@@ -117,12 +101,12 @@ function proximityEligibility(userId, location, eligible, callback) {
         location: location
       });
       Instance.notify(instance._id, [userId]);
-      entityRoleMembers(eligible.entity, function(err, userIds) {
-        if(err) {
+      entityRoleMembers(eligible.entity._id, function (err, userIds) {
+        if (err) {
           console.error(err);
           callback(err);
         }
-        if(!userIds) {
+        if (!userIds) {
           console.error(new Error(`Not Entity role found`));
           callback(null);
         }
@@ -131,6 +115,7 @@ function proximityEligibility(userId, location, eligible, callback) {
           instance: instance._id
         }, userIds)
       })
+
     });
   })
 }
@@ -147,16 +132,25 @@ exports.reportLastLocation = function(userId, location, callback) {
     });
   });
 
-  function eligibilityCallback(err, info) {
-    if (err) return console.error(err);
-  }
-
+  // function eligibilityCallback(err, info) {
+  //   if (err) return console.error(err);
+  // }
   handleProximityActions(userId, location, function (err, eligibilities) {
     if(err) return console.log('error calling handleProximityActions');
     if(!eligibilities)
       return console.log('no eligibilities found');
-    eligibilities.forEach(eligible => {
-      proximityEligibility(userId, location, eligible, eligibilityCallback);
-    })
+    //console.log(JSON.stringify(eligibilities));
+
+    async.each(eligibilities, function(eligible, callback) {
+      proximityEligibility(userId, location, eligible, callback);
+    }, function(err) {
+      // if any of the file processing produced an error, err would equal that error
+      if( err ) {
+        console.log('handleProximityActions - one of the eligible failed to process with the following error:');
+        console.error(err);
+      }
+      //const entitiesUniqueIds = [...new Set( eligibilities.map(eligible => eligible.entity)) ];
+
+    });
   });
 };

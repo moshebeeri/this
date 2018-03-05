@@ -41,3 +41,5 @@ match (u:location) optional match (u)-[r]-() delete u,r
 WITH count(*) as dummy
 match (u:barcode) optional match (u)-[r]-() delete u,r
 `;
+
+let clean =`db.feeds.remove({_id: {$gt:new ObjectId( Math.floor(new Date(new Date()-1000*60*60*6).getTime()/1000).toString(16) + "0000000000000000" )}})`;

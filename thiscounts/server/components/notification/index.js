@@ -71,7 +71,7 @@ function toPayloadData(notification, callback){
   });
 }
 
-function firebasePNS(notification, registrationTokens) {
+function firebasePNS(notification, registrationTokens, userId) {
 
 // See the "Defining the message payload" section below for details
 // on how to define a message payload.
@@ -127,10 +127,10 @@ function firebasePNS(notification, registrationTokens) {
     //admin.messaging().sendToDevice(registrationTokens, notification.payload, notification.options)
     admin.messaging().sendToDevice(registrationTokens, payload, notification.options)
       .then(function (response) {
-        console.log("Successfully sent message:", response);
+        console.log(`Successfully sent message to ${userId}:  ${JSON.stringify(response)}`);
       })
       .catch(function (error) {
-        console.log("Error sending message:", error);
+        console.log(`Error sending message to ${userId}: ${JSON.stringify(error)}`);
       });
   })
 }
@@ -151,7 +151,8 @@ function pnsUserDevices(notification) {
         return console.error(new Error(`user id:${notification.to} not found`));
       //flatten(users.map(user => getUserFirebaseTokens(user)));
       let registrationTokens = getUserFirebaseTokens(user);
-      firebasePNS(notification, registrationTokens)
+      console.log(`send notifications to ${notification.to} with tokens ${JSON.stringify(registrationTokens)}`);
+      firebasePNS(notification, registrationTokens, notification.to)
     });
 }
 
