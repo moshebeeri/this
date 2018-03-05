@@ -10,6 +10,7 @@ import promotionSega from './promotionSega'
 import productSega from './productSega'
 import feedChatSega from './feedChatSega'
 import groupInstanceChatSega from './groupInstanceChatSega'
+import mainSega from './mainSega'
 
 function* sega() {
     yield fork(userSega);
@@ -23,6 +24,7 @@ function* sega() {
     yield fork(productSega);
     yield fork(feedChatSega);
     yield fork(groupInstanceChatSega);
+    yield fork(mainSega);
 
 }
 

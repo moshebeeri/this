@@ -22,6 +22,9 @@ import {
 //  'Offensive', 'Nudity', 'Hate', 'Violence', 'Weapons'
 import strings from "../../i18n/i18n"
 const {width, height} = Dimensions.get('window')
+
+import { LargeList } from "react-native-largelist";
+
 import Icon2 from 'react-native-vector-icons/Ionicons';
 import StyleUtils from "../../utils/styleUtils";
 import {ThisText} from '../../ui/index';
@@ -42,7 +45,7 @@ export default class GenericFeedManager extends Component {
     }
 
     renderItem(item) {
-        const {navigation, token, userFollowers, group, ItemDetail, actions,entity, location} = this.props;
+        const {navigation, token, userFollowers, group, ItemDetail, actions,entity, location,visibleItem,realize} = this.props;
         let id = item.item.id;
         if(!id){
             id = item.item._id;
@@ -53,7 +56,9 @@ export default class GenericFeedManager extends Component {
             token={token}
             location={location}
             userFollowers={userFollowers}
+            visibleItem={visibleItem}
             group={group}
+            realize={realize}
             navigation={navigation}
             item={item.item}
             fetchTopList={this.fetchTopList.bind(this)}
@@ -63,7 +68,7 @@ export default class GenericFeedManager extends Component {
 
     onEndReach() {
         const {feeds, token, actions, entity,} = this.props;
-        //actions.setNextFeeds(feeds, token, entity);
+        actions.setNextFeeds(feeds, token, entity);
     }
 
     showActions(show,activityId){
@@ -182,9 +187,7 @@ export default class GenericFeedManager extends Component {
                     renderItem={this.renderItem.bind(this)}
                     extraData={update}
                     initialNumToRender={5}
-                    getItemLayout={(data, index) => (
-                        {length: 100, offset: 50 * index, index}
-                    )}
+
 
                 />
 

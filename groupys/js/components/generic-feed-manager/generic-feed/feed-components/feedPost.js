@@ -48,7 +48,11 @@ export default class FeedPost extends Component {
         })
         PageRefresher.createFeedSocialState(item.id);
     }
+    shouldComponentUpdate(){
+        const {item, visibleItem} = this.props;
 
+        return item.id===visibleItem;
+    }
     visited(visible) {
         const {item,actions} = this.props;
         if (this.refs[item.id]) {
@@ -58,6 +62,7 @@ export default class FeedPost extends Component {
             if (visible && actions && actions.setSocialState) {
                 actions.setSocialState(item);
             }
+            actions.setVisibleItem(item.id);
         }
         this.setState({
             visible: visible

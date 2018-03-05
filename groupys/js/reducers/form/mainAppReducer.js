@@ -7,25 +7,64 @@
 /**
  * Created by stan229 on 5/27/16.
  */
+import {I18nManager, Platform} from 'react-native';
+import {REHYDRATE} from "redux-persist/constants";
+import * as actions from './../reducerActions';
+
 const initialState = {
-    selectedTab: 0,
+    selectedTab: 'feed',
     showAdd: false,
     showPopup: false,
-    instanceId: '',
+    instance: undefined,
     notificationTitle: '',
     notificationId: '',
     notificationAction: '',
     notificationGroup: undefined,
     notificationBusiness: undefined
 };
-import * as actions from './../reducerActions';
-
 export default function mainTab(state = initialState, action) {
+    if (action.type === REHYDRATE) {
+
+        // retrive stored data for reducer callApi
+        const savedData = action.payload || initialState;
+        return {
+            ...state, ...savedData.mainTab
+        };
+    }
     switch (action.type) {
-        case actions.APP_CHANGE_TAB :
+        case  actions.CURRENT_TAB:
+            let tab = 'feed'
+            if (action.currentTab.i === 0) {
+                if (I18nManager.isRTL && (Platform.OS === 'android')) {
+                    tab = 'notification';
+                } else {
+                    tab = 'feed';
+                }
+            }
+            if (action.currentTab.i === 1) {
+                if (I18nManager.isRTL && (Platform.OS === 'android')) {
+                    tab = 'groups';
+                } else {
+                    tab = 'savedPromotion';
+                }
+            }
+            if (action.currentTab.i === 2) {
+                if (I18nManager.isRTL && (Platform.OS === 'android')) {
+                    tab = 'savedPromotion';
+                } else {
+                    tab = 'groups';
+                }
+            }
+            if (action.currentTab.i === 3) {
+                if (I18nManager.isRTL && (Platform.OS === 'android')) {
+                    tab = 'feed';
+                } else {
+                    tab = 'notification';
+                }
+            }
             return {
                 ...state,
-                selectedTab: action.selectedTab,
+                selectedTab: tab,
             };
         case actions.APP_SHOW_ADD_FAB :
             return {
@@ -36,7 +75,7 @@ export default function mainTab(state = initialState, action) {
             return {
                 ...state,
                 showPopup: action.showPopup,
-                instanceId: action.instanceId,
+                instance: action.instance,
                 notificationId: action.notificationId,
             };
         case actions.APP_SHOW_GENERAL_POPUP :
@@ -47,7 +86,8 @@ export default function mainTab(state = initialState, action) {
                 notificationId: action.notificationId,
                 notificationAction: action.notificationAction,
                 notificationGroup: action.notificationGroup,
-                notificationBusiness: action.notificationBusiness
+                notificationBusiness: action.notificationBusiness,
+                instance: undefined,
             };
         default:
             return state;

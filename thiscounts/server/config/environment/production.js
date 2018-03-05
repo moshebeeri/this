@@ -15,10 +15,15 @@ module.exports = {
 
   // MongoDB connection options
   mongo: {
-    uri:    process.env.MONGOLAB_URI ||
+    uri:    process.env.MONGODB_URI ||
+            process.env.MONGOLAB_URI ||
             process.env.MONGOHQ_URL ||
             process.env.OPENSHIFT_MONGODB_DB_URL+process.env.OPENSHIFT_APP_NAME ||
             'mongodb://localhost/lowla'
+  },
+  neo4j: {
+    uri:    process.env.NEO4J_URI ||
+            'http://localhost:7474'
   },
   aws: {
     key: 'AKIAJCUWYC5LA4HQRDEQ',

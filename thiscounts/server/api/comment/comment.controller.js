@@ -1,18 +1,21 @@
 'use strict';
 
-let _ = require('lodash');
-let Comment = require('./comment.model');
-let graphTools = require('../../components/graph-tools');
-let graphModel = graphTools.createGraphModel('comment');
-let Group         = require('../group/group.model');
-let Brand         = require('../brand/brand.model');
-let Business      = require('../business/business.model');
-let ShoppingChain = require('../shoppingChain/shoppingChain.model');
-let Mall          = require('../mall/mall.model');
-let Product       = require('../product/product.model');
-let Promotion     = require('../promotion/promotion.model');
-let Instance      = require('../instance/instance.model');
-let Activity      = require('../activity/activity.model');
+const _ = require('lodash');
+const Comment = require('./comment.model');
+const graphTools = require('../../components/graph-tools');
+const graphModel = graphTools.createGraphModel('comment');
+const Group         = require('../group/group.model');
+const groupCtrl     = require('../group/group.controller');
+const User          = require('../user/user.model');
+const Brand         = require('../brand/brand.model');
+const Business      = require('../business/business.model');
+const ShoppingChain = require('../shoppingChain/shoppingChain.model');
+const Mall          = require('../mall/mall.model');
+const Product       = require('../product/product.model');
+const Promotion     = require('../promotion/promotion.model');
+const Instance      = require('../instance/instance.model');
+const Activity      = require('../activity/activity.model');
+const Notifications = require('../../components/notification');
 
 // Get list of comments
 exports.index = function(req, res) {
@@ -83,10 +86,42 @@ exports.create = function(req, res) {
         else
           graphModel.relate_ids(entities[i], 'COMMENTED', entities[i+1], params);
       }
+      if(comment.entities.group)
+        notifyGroupComment(comment);
+
     });
     return res.status(201).json(comment);
   });
 };
+
+function groupFollowersExclude(groupId, exUserId, callback) {
+  return groupCtrl.groupFollowersExclude(groupId, exUserId, callback);
+  // const query = `MATCH (u:user),(g:group)
+  //                WHERE (u)-[:FOLLOW]->(g) AND u._id <> '${exUserId}' AND g._id = '${groupId}'
+  //                RETURN u._id as _id limit 1000
+  //                `;
+  // graphModel.query(query,(err, ids) => {
+  //   if(err) return callback(err);
+  //   return callback(null, ids);
+  // })
+}
+
+function notifyGroupComment(comment) {
+  console.log(`notifyGroupComment`);
+  groupFollowersExclude(comment.entities.group, comment.user, (err, ids)=> {
+    let _ids = ids.map( id => id._id);
+    console.log(JSON.stringify(_ids));
+    if(err) return console.error(err);
+    Notifications.notify( {
+      note: 'GROUP_COMMENT',
+      actor_group: comment.entities.group,
+      comment: comment._id,
+      title: `new group comment`,
+      body: comment.message,
+      list: false,
+    }, _ids);
+  });
+}
 
 // Updates an existing comment in the DB.
 exports.update = function(req, res) {
@@ -141,7 +176,7 @@ exports.scroll = function(req, res) {
     })
 };
 
-  exports.find_scroll = function(req, res) {
+exports.find_scroll = function(req, res) {
   const page_size = 50;
   const from_id = req.params.from;
   const scroll = req.params.scroll;

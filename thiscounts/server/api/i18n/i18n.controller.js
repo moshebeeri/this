@@ -2,16 +2,15 @@
 
 const _ = require('lodash');
 const I18n = require('./i18n.model.js');
-const md5 = require('md5');
-const translate = require('@google-cloud/translate');
+const googleTranslate = require('@google-cloud/translate');
 const limit = require("simple-rate-limiter");
 
-const Translate = translate({
+const Translate = googleTranslate({
   projectId: 'this-f2f45',
   keyFilename: './server/config/keys/this-vision.json'
 });
 
-exports.translate = function (to) {
+function translate(to) {
   const callTranslateApi = limit(function(category_name, callback) {
     Translate.translate(category_name, to, callback);
   }).to(20).per(1000);
@@ -34,14 +33,12 @@ exports.translate = function (to) {
       });
     });
   });
-};
+}
 
 exports.translateAPI = function (req, res) {
-  this.translate(req.params.to);
+  translate(req.params.to);
   return res.status(200).send(`translation to ${req.params.to} has started`);
 };
-
-
 
 // Get list of i18ns
 exports.index = function(req, res) {
@@ -60,10 +57,10 @@ exports.show = function(req, res) {
   });
 };
 
-exports.createI18N = function (enUS, callback) {
+exports.createI18N = function (key, enUS, callback) {
   let i18n = {
     enUS,
-    md5: md5(enUS)
+    key: key
   };
   I18n.create(i18n, callback)
 };

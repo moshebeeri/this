@@ -3,13 +3,14 @@
  */
 import {createSelector} from 'reselect'
 
-const getStateNotification = (state) => state.notification
+const getStateNotification = (state) => state.notification;
 export const getNotification = createSelector([getStateNotification],
     (notification) => {
-        if (!_.isEmpty(notification)) {
-            return notification.sort(function(a, b){
+        let notifications =  notification.notification;
+        if (!_.isEmpty(notifications)) {
+            return notifications.sort(function(a, b){
                 return a._id < b._id  ;
             });
         }
-        return new Array();
-    })
+        return [];
+    });

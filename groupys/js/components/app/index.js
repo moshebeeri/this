@@ -66,7 +66,7 @@ import StyleUtils from "../../utils/styleUtils";
 import store from 'react-native-simple-store';
 import ActionLogger from '../../actions/ActionLogger'
 import handler from '../../actions/ErrorHandler'
-
+import popupActions from '../../actions/mainTab'
 const height = StyleUtils.getHeight();
 let locationApi = new LocationApi();
 const reduxStore = getStore();
@@ -87,6 +87,13 @@ FCM.on(FCMEvent.Notification, async (notif) => {
     if (notif.opened_from_tray) {
         //iOS: app is open/resumed because user clicked banner
         //Android: app is open/resumed because user clicked banner or tapped app icon
+    }
+
+    if (notif && notif.model === 'instance') {
+        let token = reduxStore.getState().authentication.token;
+
+        popupActions.promotionPopAction(notif._id, notif.notificationId,reduxStore.dispatch,token);
+        return;
     }
     if (Platform.OS === 'ios') {
         //optional
@@ -139,6 +146,7 @@ class ApplicationManager extends Component {
 
     constructor(props) {
         super(props)
+
         this.state = {
             orientation: StyleUtils.isPortrait() ? 'portrait' : 'landscape',
             devicetype: StyleUtils.isTablet() ? 'tablet' : 'phone',
@@ -169,17 +177,28 @@ class ApplicationManager extends Component {
             return;
         }
         if (notification && notification.model === 'group') {
-            this.props.actions.showGroupPopup(notification._id, notification.notificationId, notification.title, notification.action);
+            if(notification.note ==="ask_invite"){
+                this.props.actions.showInviteGroupPopup(notification._id,notification.actor_user,notification.notificationId);
+            }else {
+                this.props.actions.showGroupPopup(notification._id, notification.notificationId, notification.title, notification.action);
+            }
             return;
         }
         if (notification && notification.model === 'business') {
             this.props.actions.showBusinessPopup(notification._id, notification.notificationId, notification.title, notification.action);
             return;
         }
+
+        if (notification && notification.model === 'comment') {
+            this.props.actions.redirectToChatGroup(notification.actor_group,notification.notificationId, notification.action,this.props.navigation);
+            FCM.getBadgeNumber().then(number => FCM.setBadgeNumber(0));
+            return;
+        }
+
         if (notification && notification.title) {
             this.props.actions.showGenericPopup(notification.title, notification.notificationId, notification.action);
         }
-        FCM.getBadgeNumber().then(number => FCM.setBadgeNumber(0))
+
         AppState.addEventListener('change', this._handleAppStateChange);
     }
 
@@ -284,27 +303,40 @@ class ApplicationManager extends Component {
         }
     }
 
+    savePromotionFromPopup(id, navigation, feed){
+
+        const{feedAction} = this.props;
+        this.closePopup();
+        feedAction.saveFeed(id, navigation, feed);
+    }
+
     render() {
         const {
-            showAdd, showComponent, notifications,
+            showAdd, showComponent, notifications,feedAction,
             item, location, showPopup, token, notificationTitle,
             notificationAction, notificationGroup, notificationBusiness,
-            showSearchResults, businesses, businessActions, groups, groupsActions, showSearchGroupResults
+            showSearchResults, businesses, businessActions, groups, groupsActions, showSearchGroupResults,notificationOnAction
         } = this.props;
 
         console.log(this.state.activeTab);
         if (!showComponent) {
             return <View></View>
         }
-        let notificationPopupHeight = 300;
-        let notificationnTopPadding = 150
+        let notificationPopupHeight = 350;
+        let notificationnTopPadding = 150;
+        let leftPadding = 10;
+        let sideMargin = 20;
+        let borderSideWidth=2;
         if (item) {
-            notificationPopupHeight = 80
+            notificationPopupHeight = 100
             notificationnTopPadding = 30;
+            leftPadding = 0;
+            borderSideWidth = 0;
+            sideMargin = 0;
         }
         let notificationActionString
-        if (notificationAction) {
-            notificationActionString = this.translateNotificationAction(notificationAction)
+        if (notificationOnAction) {
+            notificationActionString = this.translateNotificationAction(notificationOnAction)
         }
         closeDrawer = () => {
             this.drawer._root.close()
@@ -370,13 +402,15 @@ class ApplicationManager extends Component {
                         <GroupsList groups={groups} joinGroup={groupsActions.joinGroup}/>
                     </View>}
                     {showPopup && <View style={{
-                        left: 2.5,
-                        borderBottomWidth: 2,
+                        left: leftPadding,
                         borderTopWidth: 2,
+                        borderBottomWidth:2,
+                        borderLeftWidth:borderSideWidth,
+                        borderRightWidth:borderSideWidth,
                         borderColor: 'black',
                         top: notificationnTopPadding,
                         position: 'absolute',
-                        width: StyleUtils.getWidth() - 5,
+                        width: StyleUtils.getWidth() - sideMargin,
                         height: height - notificationPopupHeight,
                         backgroundColor: 'white',
                         justifyContent: 'center',
@@ -388,18 +422,22 @@ class ApplicationManager extends Component {
 
                         </TouchableOpacity>
 
-                        {item &&
+                        {item ?
                         <View style={{
                             flex: 1,
                             width: StyleUtils.getWidth() - 5,
                             justifyContent: 'center',
                             alignItems: 'center'
                         }}>
-                            <FeedPromotion showActions={true} token={token}
-                                           location={location} hideSocial={true} showInPopup={true}
-                                           navigation={this.props.navigation} item={item}/>
-                        </View>}
-                        {notificationTitle &&
+                            <FeedPromotion scanner showActions={true}  token={token}
+                                           location={location} actions={feedAction}
+                                           navigation={this.props.navigation} item={item}
+                                           like={feedAction.like} unlike={feedAction.unlike}
+                                           save={this.savePromotionFromPopup.bind(this)}/>
+
+
+                        </View> :
+
                         <View style={{
                             flex: 1,
                             width: StyleUtils.getWidth() - 5,
@@ -408,7 +446,7 @@ class ApplicationManager extends Component {
                         }}>
 
 
-                            <View style={{flex: 1, alignItems: 'flex-start', justifyContent: 'flex-start'}}>
+                            <View style={{flex: 1, alignItems: 'center', justifyContent: 'center'}}>
                                 {notificationGroup && <GroupHeader group={notificationGroup}/>}
                                 {notificationBusiness && <BusinessHeader noProfile business={notificationBusiness}
                                                                          businessLogo={notificationBusiness.logo}
@@ -417,7 +455,7 @@ class ApplicationManager extends Component {
                                                                          hideMenu
                                                                          showActions={false}/>
                                 }
-                                <ThisText style={{paddingLeft: 10, paddingTop: 10}}>{notificationTitle}</ThisText>
+                                <ThisText style={{width: StyleUtils.getWidth() - 40, paddingTop: 10}}>{notificationTitle}</ThisText>
                             </View>
                             {notificationActionString &&
                             <View style={{flex: 1, paddingBottom: 10, justifyContent: 'flex-end',}}>
@@ -440,18 +478,23 @@ class ApplicationManager extends Component {
             return strings.Follow.toUpperCase();
             ;
         }
-        return undefined;
+        return action;
     }
 
     closePopup() {
-        const {notificationId} = this.props;
+        const {notificationId,notificationAction} = this.props;
+        notificationAction.readNotification(notificationId);
         this.props.actions.closePopup(notificationId);
     }
 
     handleGenericNotification() {
-        const {notificationAction, notificationId} = this.props;
+        const {notificationAction, notificationId,notificationGroup,notificationOnAction} = this.props;
         this.props.actions.doNotification(notificationId, notificationAction);
+        notificationAction.readNotification(notificationId);
         //Add generic API result
+        if(notificationOnAction === strings.JoinGroup.toUpperCase()) {
+            this.props.groupsActions.acceptInvitation(notificationGroup);
+        }
     }
 }
 
@@ -465,7 +508,7 @@ const mapStateToProps = (state) => {
         showComponent: showCompoenent(state),
         serFollower: state.user.followers,
         item: getPopUpInstance(state),
-        notificationAction: state.mainTab.notificationAction,
+        notificationOnAction: state.mainTab.notificationAction,
         notificationTitle: state.mainTab.notificationTitle,
         notificationId: state.mainTab.notificationId,
         notificationGroup: state.mainTab.notificationGroup,

@@ -5,9 +5,11 @@
 module.exports = {
   // MongoDB connection options
   mongo: {
-    uri: 'mongodb://localhost/lowla-dev'
+    uri: process.env.MONGODB_URI || 'mongodb://localhost/lowla-dev'
   },
-
+  neo4j: {
+    uri: process.env.NEO4J_URI || 'http://localhost:7474'
+  },
   aws: {
     key: 'AKIAJCUWYC5LA4HQRDEQ',
     secret: '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',

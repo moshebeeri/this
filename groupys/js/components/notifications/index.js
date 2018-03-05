@@ -36,13 +36,13 @@ class Notification extends Component {
     }
 
     render() {
-        const {notification, navigation, actions,rows} = this.props;
+        const {notification, navigation, actions,rows,update} = this.props;
         return (
             <View style={{flex: 1}}>
 
 
                 <GenericListManager navigation={navigation} rows={rows} actions={actions}
-                                    update={notification.update} ItemDetail={this.renderItem.bind(this)}/>
+                                    update={update} ItemDetail={this.renderItem.bind(this)}/>
             </View>
 
 
@@ -52,8 +52,9 @@ class Notification extends Component {
 
 export default connect(
     state => ({
-        rows: getNotification(state.notification),
+        rows: getNotification(state),
         notification: state.notification,
+        update: state.notification.update
 
     }),
     (dispatch) => ({

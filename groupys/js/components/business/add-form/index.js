@@ -1,6 +1,6 @@
 import React, {Component} from 'react';
-import {Dimensions, Image, ScrollView, View,Keyboard} from 'react-native';
-import {Button, Container, Content, Fab, Footer, Form, Icon, Input, Item, Picker, Text} from 'native-base';
+import {Dimensions, Image, Keyboard, ScrollView, View} from 'react-native';
+import {Button, Container, Content, Fab, Footer, Form, Icon, Input, Item, Picker} from 'native-base';
 import styles from './styles'
 import * as businessAction from "../../../actions/business";
 import {connect} from 'react-redux';
@@ -18,7 +18,8 @@ import {
 import FormUtils from "../../../utils/fromUtils";
 import strings from '../../../i18n/i18n';
 import StyleUtils from "../../../utils/styleUtils";
-const { height} = Dimensions.get('window');
+
+const {height} = Dimensions.get('window');
 
 class AddBusiness extends Component {
     static navigationOptions = ({navigation}) => ({
@@ -143,6 +144,7 @@ class AddBusiness extends Component {
 
     saveFormData() {
         let formIsValid = this.validateForm(this.saveFormData.bind(this));
+        Keyboard.dismiss();
         if (formIsValid) {
             this.props.saveBusiness(this.createBusiness(), this.props.navigation);
         }
@@ -221,7 +223,8 @@ class AddBusiness extends Component {
             coverPath: image.path
         });
     }
-    dismissKyeboard(){
+
+    dismissKyeboard() {
         Keyboard.dismiss();
     }
 
@@ -342,7 +345,6 @@ class AddBusiness extends Component {
                         </View>
 
 
-
                     </View>
                     <View style={[styles.inputTextLayout, {width: StyleUtils.getWidth() - 15}]}>
                         <TextInput field={strings.BusinessName} value={this.state.name}
@@ -403,7 +405,16 @@ class AddBusiness extends Component {
 
                 </ScrollView>
 
-                {this.props.saving &&  <View style={{justifyContent:'center',alignItems:'center',position:'absolute',width:StyleUtils.getWidth(),opacity:0.7,height:height,top:40,backgroundColor:'white'}}>
+                {this.props.saving && <View style={{
+                    justifyContent: 'center',
+                    alignItems: 'center',
+                    position: 'absolute',
+                    width: StyleUtils.getWidth(),
+                    opacity: 0.7,
+                    height: height,
+                    top: 40,
+                    backgroundColor: 'white'
+                }}>
                     <Spinner/>
                 </View>}
 

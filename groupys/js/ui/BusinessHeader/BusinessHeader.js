@@ -123,9 +123,6 @@ class BusinessHeader extends Component {
                     <MenuOption onSelect={this.showBusinessAccountDetails.bind(this)}>
                         <ThisText>{strings.accountDetail}</ThisText>
                     </MenuOption>
-                    <MenuOption onSelect={this.onBoardingPromotion.bind(this)}>
-                        <ThisText>{strings.OnBoardingPromotions}</ThisText>
-                    </MenuOption>
                 </MenuOptions>
             </Menu>
         }

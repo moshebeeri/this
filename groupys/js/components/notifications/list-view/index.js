@@ -9,6 +9,7 @@ const {width, height} = Dimensions.get('window')
 const vw = width / 100;
 const vh = height / 100;
 import StyleUtils from "../../../utils/styleUtils";
+import FCM from 'react-native-fcm';
 
 export default class NotificationListView extends Component {
     constructor(props) {
@@ -47,12 +48,14 @@ export default class NotificationListView extends Component {
     read(notification_id) {
         const {item, actions} = this.props;
         if (!item.read) {
+            FCM.getBadgeNumber().then(number => FCM.setBadgeNumber(number -1));
             actions.readNotification(notification_id)
         }
     }
 
     render() {
         const {item} = this.props;
+        console.log("rendering notification " + item.id)
         switch (item.item.note) {
             case notification.APPROVE_GROUP_INVITATION:
             case notification.ASK_GROUP_INVITATION:

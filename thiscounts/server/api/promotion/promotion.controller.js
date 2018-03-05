@@ -19,7 +19,8 @@ const instance = require('../../components/instance');
 const MongodbSearch = require('../../components/mongo-search');
 const feed = require('../../components/feed-tools');
 const pricing = require('../../components/pricing');
-
+const Instance = require('../../components/instance');
+const groupCtrl = require('../group/group.controller');
 
 exports.search = MongodbSearch.create(Promotion);
 
@@ -100,6 +101,8 @@ function applyToGroupList(groups_ids, instance, callback) {
         if (err) return callback(err);
         if (!positiveBalance) return callback(new Error('HTTP_PAYMENT_REQUIRED'));
         instance_group_activity(instance, group);
+        groupCtrl.instanceNotify(instance._id, group._id);
+
       })
     }, callback);
   })
@@ -122,7 +125,7 @@ function applyToFollowingGroups(promotion, instances, callback) {
         let query = instanceGraphModel.related_type_id_dir_query(business._id, 'FOLLOW', 'group', 'in', 0, instance.quantity);
         instanceGraphModel.query(query, function (err, groups_ids) {
           if (err) return callback(err);
-          return applyToGroupList(groups_ids, instance, callback)
+          return applyToGroupList(groups_ids, instance, promotion.creator, callback)
         })
         }
       }
@@ -143,6 +146,7 @@ function applyToFollowingUsers(promotion, instances, callback) {
           if (!positiveBalance) return callback(new Error('HTTP_PAYMENT_REQUIRED'));
           instanceGraphModel.relate_ids(user._id, 'ELIGIBLE', `{start: ${promotion.start}, end: ${promotion.end}`, instance._id);
           user_instance_eligible_activity(user._id, instance);
+          Instance.notify(instance._id, [user._id]);
         })
       })
     });
@@ -161,8 +165,6 @@ function applyToFollowing(promotion, instances, callback) {
     if (err) return callback(err, null);
     callback(null, state);
   })
-  // applyToFollowingGroups(promotion, instances);
-  // applyToFollowingUsers(promotion, instances);
 }
 
 function handlePromotionPostCreate(promotion, callback) {
@@ -233,7 +235,7 @@ function handlePromotionPostCreate(promotion, callback) {
   function relateOnActionPromotion(promotion, callback) {
     let params = `{type: "${promotion.on_action.type}", end:${promotion.end.getTime()}`;
     if(promotion.on_action.type === 'PROXIMITY')
-      params = `${params}, proximity: "${promotion.on_action.proximity}"}`;
+      params = `${params}, proximity: ${promotion.on_action.proximity}}`;
     else
       params = `${params}}`;
 
@@ -249,11 +251,7 @@ function handlePromotionPostCreate(promotion, callback) {
     else
       return callback(new Error('undefined promotion.on_action.type'));
 
-    let delete_on_action_query = `MATCH (f { _id:"${entityId}" })-[r:ON_ACTION]->(t) delete r`;
-    promotionGraphModel.query(delete_on_action_query, (err) => {
-      if(err) return callback(err);
-      return promotionGraphModel.relate_ids(entityId, 'ON_ACTION', promotion._id, params, callback);
-    });
+    return promotionGraphModel.relate_ids(entityId, 'ON_ACTION', promotion._id, params, callback);
   }
 
   promotionGraphModel.reflect(promotion, to_graph(promotion), function (err, promotion) {
@@ -296,9 +294,91 @@ function create_promotion(promotion, callback) {
   });
 }
 
-exports.create = function (req, res) {
+// router.get('/action/:type/:entity', auth.isAuthenticated(), controller.get_action);
+// router.post('/action', auth.isAuthenticated(), controller.create_action);
+// MATCH (promo:promotion)<-[on:ON_ACTION]-(entity{_id:'5a8ad3d8ab90273d759dd0cb'})
+// WHERE  promo._id IS NOT NULL AND on.type = 'FOLLOW_ENTITY'
+// RETURN promo, on, entity
+exports.get_action = function (req, res) {
+  if( req.params.type !== 'FOLLOW_ENTITY' &&
+    req.params.type !== 'PROXIMITY' )
+    return res.status(404).send(new Error(`invalid type ${req.params.type} should be FOLLOW_ENTITY or PROXIMITY`));
+  const query = `MATCH (p:promotion)<-[on:ON_ACTION]-(entity{_id:'${req.params.entity}'})
+                 WHERE  p._id IS NOT NULL AND on.type = '${req.params.type}'
+                 RETURN p._id as _id`;
+  promotionGraphModel.query_objects(Promotion, query, 'ORDER BY _id DESC', 0, 10, (err, promotions) => {
+    if(err) return handleError(res, err);
+    if(promotions.length < 1) return res.status(404).send(new Error(`no ${req.params.type} promotion found for entity ${req.params.entity}`));
+    return res.status(201).json(promotions[0]);
+  })
+};
+
+function getPromotionEntity(promotion){
+  if(!promotion.entity) return null;
+  if(promotion.entity.business      ) return promotion.entity.business      ;
+  if(promotion.entity.shopping_chain) return promotion.entity.shopping_chain;
+  if(promotion.entity.mall          ) return promotion.entity.mall          ;
+  if(promotion.entity.brand         ) return promotion.entity.brand         ;
+  if(promotion.entity.group         ) return promotion.entity.group         ;
+  return null;
+}
+
+function create_action(req, res) {
+  let promotion = req.body;
+  const type = promotion.on_action.type;
+  const entity = getPromotionEntity(promotion);
+
+  if(type !== 'FOLLOW_ENTITY' && type !== 'PROXIMITY' ) {
+    let  err = new Error(`invalid type ${type} should be FOLLOW_ENTITY or PROXIMITY`);
+    console.error(err);
+    return res.status(404).send(err);
+  }
+  if(!entity) {
+    let  err = new Error(`No entity present`);
+    console.error(err);
+    return res.status(404).send(err);
+  }
+
+  function createIt() {
+    promotion.creator = req.user._id;
+    create_promotion(promotion, function (err, promotion) {
+      if (err) return handleError(res, err);
+      console.log(promotion._id);
+      return res.status(201).json(promotion);
+    })
+  }
+
+  const query = `MATCH (p:promotion)<-[on:ON_ACTION]-(entity{_id:'${entity}'})
+                 WHERE  p._id IS NOT NULL AND on.type = '${type}'
+                 RETURN p._id as p, on, entity._id as e`;
+  promotionGraphModel.query(query, (err, results) => {
+    if(err) return handleError(res, err);
+    if(results && results.length > 0){
+      // see: https://stackoverflow.com/questions/22670369/neo4j-cypher-how-to-change-the-type-of-a-relationship
+      let rnQuery = ` MATCH (p:promotion)<-[on:ON_ACTION]-(entity{_id:'${entity}'})
+                      WHERE  p._id IS NOT NULL AND on.type = '${type}'
+                      CREATE (p)<-[on_prev:ON_PREV_ACTION]-(entity)
+                      // copy properties, if necessary
+                      SET on_prev = on
+                      WITH on
+                      DELETE on`;
+      promotionGraphModel.query(rnQuery, (err) => {
+        if(err) handleError(res, err);
+        return createIt()
+      })
+    }else{
+      return createIt()
+    }
+  })
+}
+
+exports.create = function(req, res) {
   let promotion = req.body;
   promotion.creator = req.user._id;
+
+  if(promotion.on_action)
+    return create_action(req, res);
+
   create_promotion(promotion, function (err, promotion) {
     if (err) return handleError(res, err);
     return res.status(201).json(promotion);
@@ -309,6 +389,10 @@ exports.create_campaign = function (req, res) {
   let promotion = req.body;
   let campaign = req.body;
   promotion.creator = req.user._id;
+  console.log(`promotion.on_action`);
+  if(promotion.on_action)
+    return create_action(req, res);
+
   create_promotion(promotion, function (err, promotion) {
     if (err) return handleError(res, err);
     campaign.promotions = [promotion];

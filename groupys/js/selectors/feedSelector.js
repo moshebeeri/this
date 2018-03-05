@@ -11,9 +11,11 @@ const getStateFeeds = (state) => state.feeds;
 const getStatePosts = (state) => state.postForm;
 const getStateBusiness = (state) => state.businesses;
 const getStatePromotions = (state) => state.promotions;
+const getStateSavedInstances = (state) => state.myPromotions;
+const getMainTab = (state) => state.mainTab;
 const store = getStore();
-export const getFeeds = createSelector([getStateFeeds, getStatePosts, getStateBusiness, getStatePromotions],
-    (feeds, posts, businesses, promotions) => {
+export const getFeeds = createSelector([getStateFeeds, getStatePosts, getStateBusiness, getStatePromotions, getStateSavedInstances, getMainTab],
+    (feeds, posts, businesses, promotions, savedPromotion, mainTab) => {
         const collections = {
             activities: store.getState().activities.activities,
             promotions: promotions.promotions,
@@ -25,6 +27,10 @@ export const getFeeds = createSelector([getStateFeeds, getStatePosts, getStateBu
         };
         let feedsUi = [];
         let feedsOrder = feeds.feedView;
+        let savedInstancesIds = [];
+        if (savedPromotion.feeds) {
+            savedInstancesIds = Object.values(savedPromotion.feeds).map(savedFeed => savedFeed.savedInstance.instance._id);
+        }
         if (feedsOrder.length > 0) {
             try {
                 let feedArray = feedsOrder.map(key => feeds.feeds[key]);
@@ -32,16 +38,22 @@ export const getFeeds = createSelector([getStateFeeds, getStatePosts, getStateBu
                     return assemblers.assembler(feed, collections);
                 });
                 feedsUi = assembledFeeds.map(feed => {
-                        try {
-                            return feedUiConverter.createFeed(feed)
-                        } catch (err) {
-                            console.error(err);
-                            return undefined;
-                        }
-                    });
+                    try {
+                        return feedUiConverter.createFeed(feed, savedInstancesIds);
+                    } catch (err) {
+                        console.error(err);
+                        return undefined;
+                    }
+                });
                 feedsUi = feedsUi.filter(feed => feed);
                 feedsUi = feedsUi.filter(filter => filter.id);
                 feedsUi = feedsUi.filter(filter => !filter.blocked);
+                if (mainTab.selectedTab !== 'feed' || store.getState().render.currentScreen !== 'home') {
+                    feedsUi = feedsUi.slice(0, 10)
+                    return feedsUi;
+                }
+
+                return feedsUi;
             } catch (err) {
                 console.error(err)
                 return feedsUi;
