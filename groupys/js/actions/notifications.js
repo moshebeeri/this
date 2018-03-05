@@ -12,11 +12,13 @@ export function setTopNotification() {
         try {
             const token = getState().authentication.token;
             const user = getState().user.user;
-            let response = await notificationApi.getAll(token, user, 0, 10);
-            dispatch({
-                type: actions.SET_TOP_NOTIFICATION,
-                notifications: response,
-            });
+            if(user && token) {
+                let response = await notificationApi.getAll(token, user, 0, 10);
+                dispatch({
+                    type: actions.SET_TOP_NOTIFICATION,
+                    notifications: response,
+                });
+            }
             handler.handleSuccses(getState(),dispatch)
         } catch (error) {
             handler.handleError(error, dispatch,'notification-setTopNotification')
@@ -85,18 +87,19 @@ export function onEndReached() {
             const token = getState().authentication.token;
             const user = getState().user.user;
             const notifications = getState().notification.notification;
-            let skip = 0;
-            if (notifications) {
-                skip = notifications.length ;
+            if(user && token) {
+                let skip = 0;
+                if (notifications) {
+                    skip = notifications.length;
+                }
+                dispatch({
+                    type: types.SAVE_NOTIFICATION_REQUEST,
+                    user: user,
+                    skip: skip,
+                    token: token,
+                    limit: 20,
+                });
             }
-            dispatch({
-                type: types.SAVE_NOTIFICATION_REQUEST,
-                user: user,
-                skip: skip,
-                token: token,
-                limit: 20,
-            });
-
             handler.handleSuccses(getState(),dispatch)
         } catch (error) {
             handler.handleError(error, dispatch,'notification-onEndReached')
