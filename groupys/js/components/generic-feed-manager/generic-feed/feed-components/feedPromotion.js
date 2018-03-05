@@ -2,7 +2,7 @@
  * Created by roilandshut on 23/07/2017.
  */
 import React, {Component} from 'react';
-import {Dimensions, Image, Platform} from 'react-native';
+import {Dimensions} from 'react-native';
 import InViewPort from '../../../../utils/inviewport'
 import {actions} from 'react-native-navigation-redux-helpers';
 import {
@@ -53,12 +53,29 @@ export default class FeedPromotion extends Component {
         const {item, actions} = this.props;
         if (visible && actions && actions.setSocialState) {
             actions.setSocialState(item);
+            actions.setVisibleItem(item.id);
         }
+    }
+
+
+
+    shouldComponentUpdate() {
+        const {item, visibleItem,shouldUpdate} = this.props;
+        if(shouldUpdate){
+            return true;
+        }
+        let results =  item.id === visibleItem  ;
+        if(results){
+            return results
+        }
+
+        return false;
     }
 
     render() {
         const {showInPopup, showActions, item, save, shared, like, unlike, showUsers, comment, token, location, hideSocial, realize, navigation, scanner, isRealized} = this.props;
         const styles = this.createPromotionStyle();
+        console.log("rendering item " + item.id)
         const image = this.createImageComponent(item, styles);
         const container = this.createContainerStyle(item);
         let claimDisabled = true;
@@ -145,14 +162,14 @@ export default class FeedPromotion extends Component {
                         {realize && !isRealized &&
                         <View style={styles.editButtonContainer}>
                             <SubmitButton title={strings.Realize.toUpperCase()} color={'#2db6c8'}
-                                          onPress={realize}/>
+                                          onPress={() => realize(item)}/>
                         </View>
                         }
 
                         {realize && isRealized &&
                         <View style={styles.editButtonContainer}>
                             <SubmitButton disabled title={strings.Realized.toUpperCase()} color={'#cccccc'}
-                                          onPress={realize}/>
+                                          onPress={() => realize(item)}/>
                         </View>}
 
                     </View>}

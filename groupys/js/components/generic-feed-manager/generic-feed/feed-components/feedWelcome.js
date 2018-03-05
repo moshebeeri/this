@@ -33,6 +33,9 @@ export default class FeedWelcome extends Component {
     render() {
         return this.createWelcome(this.props.item)
     }
+    shouldComponentUpdate(){
+        return false;
+    }
 
     createWelcome(item) {
         const styles = componentCreator.createStyle();

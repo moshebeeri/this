@@ -46,7 +46,7 @@ class Feed extends Component {
     }
 
     componentWillUnmount() {
-        Tasks.mainFeddTaskstop();
+
     }
 
     navigateToAdd() {
@@ -62,14 +62,14 @@ class Feed extends Component {
     }
 
     render() {
-        const {activityAction, navigation, loadingDone, showTopLoader, feeds, userFollower, actions, token, user, location, nextBulkLoad} = this.props;
+        const {activityAction, navigation, loadingDone, showTopLoader, feeds, userFollower, actions, token, user, location, nextBulkLoad,visibleItem} = this.props;
         let icon = <Icon2 active size={40} name="md-create"/>;
         return (
             <View style={{flex: 1, backgroundColor: '#cccccc'}}>
 
                 <GenericFeedManager
                     navigation={navigation}
-
+                    visibleItem={visibleItem}
                     loadingDone={loadingDone}
                     showTopLoader={showTopLoader}
                     userFollowers={userFollower}
@@ -116,6 +116,7 @@ const mapStateToProps = state => {
         user: state.user.user,
         feeds: getFeeds(state),
         location: state.phone.currentLocation,
+        visibleItem:state.feeds.visibleFeed,
         selectedTab: state.mainTab.selectedTab,
         currentScreen: state.render.currentScreen,
     }

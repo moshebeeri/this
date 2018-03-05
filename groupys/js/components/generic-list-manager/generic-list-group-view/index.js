@@ -56,6 +56,7 @@ export default class GenericListGroupView extends Component {
             alignItems: 'center',
             backgroundColor: 'white'
         };
+        console.log("rendering group " + item.id)
         const row = <View key={index}>
             <View style={{marginBottom: 10}}>
                 <TouchableOpacity key={index} onPress={onPressItem} style={containerStyle}>

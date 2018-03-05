@@ -8,7 +8,7 @@ const getStateComments = (state) => state.comments;
 export const getGroups = createSelector([getStateGroups,getStateComments],
     (groups,comments) => {
         if (!_.isEmpty(groups.groups)) {
-            return Object.keys(groups.groups).map(key => {
+            let result =  Object.keys(groups.groups).map(key => {
                 let response = groups.groups[key];
                 if(groups.groupFeedsUnread[key]){
                     response.unreadFeeds = groups.groupFeedsUnread[key];
@@ -27,6 +27,7 @@ export const getGroups = createSelector([getStateGroups,getStateComments],
             }).sort(function(a, b){
                 return b.touched - a.touched;
             });
+            return result;
         }
         return [];
     });

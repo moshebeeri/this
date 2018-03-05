@@ -1,26 +1,9 @@
 import React, {Component} from 'react';
-import {Image, Platform} from 'react-native';
-import {
-    Button,
-    Card,
-    CardItem,
-    Container,
-    Content,
-    Footer,
-    Header,
-    Icon,
-    Input,
-    InputGroup,
-    Item,
-    Left,
-    Picker,
-    Right,
-    Thumbnail,
-    View
-} from 'native-base';
+import {View} from 'react-native';
 import GenericFeedManager from '../generic-feed-manager/index'
 import {bindActionCreators} from "redux";
 import {getFeeds} from '../../selectors/myPromotionsSelector'
+import GenericFeedItem from "../generic-feed-manager/generic-feed";
 import * as promotionAction from "../../actions/myPromotions";
 import {connect} from 'react-redux';
 import FeedPromotion from '../generic-feed-manager/generic-feed/feed-components/feedPromotion'
@@ -28,77 +11,60 @@ import FeedPromotion from '../generic-feed-manager/generic-feed/feed-components/
 class MyPromotions extends Component {
     constructor(props) {
         super(props);
-        this.state={render:true}
+        this.state = {render: true}
     }
 
-    componentWillMount(){
-        console.log('mount saved');
+    componentWillMount() {
+        this.props.actions.setFirstTime();
     }
 
     renderItem(item) {
-        const {navigation, location,rawFeeds} = this.props;
+        const {navigation, location, rawFeeds} = this.props;
         let isRealized = this.checkIfRealized(rawFeeds[item.item.id])
-
-        return <FeedPromotion refresh={this.refresh.bind(this)}
-                              location={location}
-                              isRealized={isRealized}
-                              hideSocial
-                              navigation={navigation} item={item.item}
-                              realize={this.realize.bind(this, item.item)}
-        />
+        return <View key={item.item.id}>
+            <FeedPromotion refresh={this.refresh.bind(this)}
+                           location={location}
+                           isRealized={isRealized}
+                           hideSocial
+                           shouldUpdate={isRealized}
+                           navigation={navigation} item={item.item}
+                           realize={this.realize.bind(this, item.item)}
+            /></View>
     }
 
     refresh() {
     }
 
-    shouldComponentUpdate(){
-        if(this.props.activeTab ==='savedPromotion' && this.props.shouldRender){
-
-            this.props.actions.stopReneder();
+    shouldComponentUpdate() {
+        if (this.props.activeTab === 'savedPromotion') {
             return true;
-
         }
         return false;
     }
 
-    checkIfRealized(feed){
-        let savedinstance = feed;
-        if(feed.savedInstance){
-            savedinstance = feed.savedInstance;
-        }
-        if(savedinstance.savedData && savedinstance.savedData && savedinstance.savedData.other ){
-            return true;
-        }
-        if(savedinstance.savedData && savedinstance.savedData.punch_card && savedinstance.savedData.punch_card.number_of_punches){
-            let remainPunches =  savedinstance.savedData.punch_card.number_of_punches - savedinstance.savedData.punch_card.redeemTimes.length;
-            return remainPunches === 0;
-        }
 
-        return false;
-    }
 
     realize(item) {
         this.props.navigation.navigate('realizePromotion', {item: item})
     }
 
-
-
     render() {
-        const {navigation, feeds, userFollower, actions, token, loadingDone, showTopLoader, user,activeTab} = this.props;
-
+        const {navigation, feeds, userFollower, actions, token, loadingDone, showTopLoader, user, rawFeeds,location} = this.props;
         return (
             <GenericFeedManager
                 navigation={navigation}
-
+                realize={this.realize.bind(this)}
+                rawFeed={rawFeeds}
                 loadingDone={loadingDone}
                 showTopLoader={showTopLoader}
                 userFollowers={userFollower}
                 feeds={feeds}
+                location={location}
                 actions={actions}
                 token={token}
                 entity={user}
                 title='Feeds'
-                ItemDetail={this.renderItem.bind(this)}>
+                ItemDetail={GenericFeedItem}>
 
             </GenericFeedManager>
 
@@ -119,9 +85,8 @@ const mapStateToProps = state => {
         myPromotions: state.myPromotions,
         firstTime: state.myPromotions.firstTime,
         location: state.phone.currentLocation,
-        selectedTab:state.mainTab.selectedTab,
-        currentScreen:state.render.currentScreen,
-
+        selectedTab: state.mainTab.selectedTab,
+        currentScreen: state.render.currentScreen,
     }
 }
 export default connect(

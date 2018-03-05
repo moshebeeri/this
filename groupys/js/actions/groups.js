@@ -572,6 +572,14 @@ export function setSocialState(item) {
         }
     }
 }
+export function setVisibleItem(itemId) {
+    return function (dispatch) {
+        dispatch({
+            type: actions.VISIBLE_FEED,
+            feedId:itemId
+        });
+    }
+}
 
 
 

@@ -338,6 +338,17 @@ export function* updateFeedsTop(feeds) {
     }
 }
 
+
+export function setVisibleItem(itemId) {
+    return function (dispatch) {
+        dispatch({
+            type: actions.VISIBLE_FEED,
+            feedId:itemId
+        });
+    }
+}
+
+
 export default {
     nextLoad,
     shareActivity,

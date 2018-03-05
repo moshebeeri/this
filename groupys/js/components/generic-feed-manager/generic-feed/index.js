@@ -1,5 +1,4 @@
 import React, {Component} from 'react';
-import {PanResponder} from 'react-native';
 import {actions} from 'react-native-navigation-redux-helpers';
 import {
     Button,
@@ -24,37 +23,13 @@ import FeedShared from './feed-components/feedShared'
 import FeedBusiness from './feed-components/feedBusiness'
 import FeedWelcome from './feed-components/feedWelcome'
 import FeedPost from './feed-components/feedPost'
+
 export default class GenericFeedItem extends Component {
     constructor(props) {
         super(props);
     }
 
     async componentWillMount() {
-        const getDirectionAndColor = ({moveX, moveY, dx, dy}) => {
-            const height = dx;
-            const width = dy;
-            const draggedDown = dy > 30;
-            const draggedUp = dy < -30;
-            const draggedLeft = dx < -30;
-            const draggedRight = dx > 30;
-            const isRed = moveY < 90 && moveY > 40 && moveX > 0 && moveX < width;
-            const isBlue = moveY > (height - 50) && moveX > 0 && moveX < width;
-            let dragDirection = '';
-            if (draggedDown || draggedUp) {
-                if (draggedDown) dragDirection += 'dragged down '
-                if (draggedUp) dragDirection += 'dragged up ';
-            }
-            if (draggedLeft || draggedRight) {
-                if (draggedLeft) dragDirection += 'dragged left '
-                if (draggedRight) dragDirection += 'dragged right ';
-            }
-            if (isRed) return `red ${dragDirection}`
-            if (isBlue) return `blue ${dragDirection}`
-            if (dragDirection) return dragDirection;
-        }
-        this._panResponder = PanResponder.create({
-            onMoveShouldSetPanResponder: (evt, gestureState) => this.onMove(evt, gestureState),
-        });
     }
 
     showUsers(show) {
@@ -81,6 +56,7 @@ export default class GenericFeedItem extends Component {
             entities: this.props.item.entities,
         })
     }
+
     commentShare() {
         if (this.props.group) {
             this.props.navigation.navigate('InstanceGroupComments', {
@@ -109,34 +85,55 @@ export default class GenericFeedItem extends Component {
     }
 
     render() {
-        const {item, actions, token, location,showActions} = this.props;
+        const {item, actions, token, location, showActions, visibleItem,realize} = this.props;
         const showUsers = this.showUsers.bind(this);
         const comment = this.comment.bind(this);
         switch (item.itemType) {
+            case 'EMPTY':
+                return this.createFeedView(undefined);
             case 'PROMOTION':
-                return this.createFeedView(<FeedPromotion showActions={showActions}  refresh={actions.refresh} token={token} comment={comment}
+
+                if(realize){
+                    let isRealized = this.checkIfRealized(item);
+                    return this.createFeedView(<FeedPromotion showActions={showActions} refresh={actions.refresh}
+                                                              isRealized={isRealized}
+                                                              realize={realize}
+                                                              token={token} comment={comment}
+                                                              location={location} actions={actions}
+                                                              visibleItem={visibleItem}
+                                                              navigation={this.props.navigation} item={item}
+                                                              like={actions.like} unlike={actions.unlike}
+                                                              showUsers={showUsers} save={actions.saveFeed}/>)
+
+                }
+                return this.createFeedView(<FeedPromotion showActions={showActions} refresh={actions.refresh}
+                                                          token={token} comment={comment}
                                                           location={location} actions={actions}
+                                                          visibleItem={visibleItem}
                                                           navigation={this.props.navigation} item={item}
                                                           like={actions.like} unlike={actions.unlike}
                                                           showUsers={showUsers} save={actions.saveFeed}/>)
             case 'SHARE':
-                return this.createFeedView(<FeedShared showActions={showActions}   actions={actions} refresh={actions.refresh} token={token} comment={this.commentShare.bind(this)}
-                                                          location={location}
-                                                          navigation={this.props.navigation} item={item}
-                                                          like={actions.like} unlike={actions.unlike}
-                                                          showUsers={showUsers} />)
-
+                return this.createFeedView(<FeedShared showActions={showActions} visibleItem={visibleItem}
+                                                       actions={actions} refresh={actions.refresh} token={token}
+                                                       comment={this.commentShare.bind(this)}
+                                                       location={location}
+                                                       navigation={this.props.navigation} item={item}
+                                                       like={actions.like} unlike={actions.unlike}
+                                                       showUsers={showUsers}/>)
             case 'MESSAGE':
                 return this.createFeedView(<FeedMessage token={token} navigation={this.props.navigation} item={item}/>)
             case'POST':
-                return this.createFeedView(<FeedPost showActions={showActions} token={token} navigation={this.props.navigation} item={item} like={actions.like} unlike={actions.unlike}
-                                                     showUsers={showUsers}  actions={actions} comment={comment}/>)
-
+                return this.createFeedView(<FeedPost visibleItem={visibleItem} showActions={showActions} token={token}
+                                                     navigation={this.props.navigation} item={item} like={actions.like}
+                                                     unlike={actions.unlike}
+                                                     showUsers={showUsers} actions={actions} comment={comment}/>)
             case 'WELCOME':
-
                 return this.createFeedView(<FeedWelcome token={token} navigation={this.props.navigation} item={item}/>)
             default:
-                return this.createFeedView(<FeedBusiness  actions={actions} showActions={showActions}  location={location} token={token} refresh={actions.refresh}
+                return this.createFeedView(<FeedBusiness visibleItem={visibleItem} actions={actions}
+                                                         showActions={showActions} location={location} token={token}
+                                                         refresh={actions.refresh}
                                                          navigation={this.props.navigation} item={item}
                                                          comment={comment} like={actions.like} unlike={actions.unlike}
                                                          showUsers={showUsers} save={actions.saveFeed}
@@ -146,11 +143,27 @@ export default class GenericFeedItem extends Component {
 
     createFeedView(item) {
         if (item) {
-            return <View key={this.props.item.id} style={{ backgroundColor: '#cccccc'}} {...this._panResponder.panHandlers} >
+            return <View key={this.props.item.id}
+                         style={{backgroundColor: '#cccccc'}}  >
                 {item}
             </View>
         }
         return <View></View>
+    }
+
+    checkIfRealized(feed) {
+        let savedinstance = feed;
+        if (feed.savedInstance) {
+            savedinstance = feed.savedInstance;
+        }
+        if (savedinstance.savedData && savedinstance.savedData && savedinstance.savedData.other) {
+            return true;
+        }
+        if (savedinstance.savedData && savedinstance.savedData.punch_card && savedinstance.savedData.punch_card.number_of_punches) {
+            let remainPunches = savedinstance.savedData.punch_card.number_of_punches - savedinstance.savedData.punch_card.redeemTimes.length;
+            return remainPunches === 0;
+        }
+        return false;
     }
 }
 
