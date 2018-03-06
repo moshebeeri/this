@@ -10,6 +10,7 @@ const initialState = {
     lastFeedTime: {},
     lastGroupQrcode: '',
     visibleGroup:'',
+    touch:false,
     saving: false
 };
 import {REHYDRATE} from "redux-persist/constants";
@@ -141,6 +142,7 @@ export default function group(state = initialState, action) {
             });
             if(currentGroups[action.groupId])
                 currentGroups[action.groupId].touched = new Date().getTime();
+            immutableState.update = !immutableState.update;
             return immutableState;
         default:
             return state;

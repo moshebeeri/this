@@ -60,7 +60,7 @@ export default class BraintreePaymentWebview extends Component {
     handlePurchaseResponse = response => {
         console.log('handlePurchaseResponse');
         if (response === 'PAYMENT_SUCCESS') {
-            console.log('emitting purchaseSuccess');
+
             this.setState({ showSubmitPaymentActivityIndicator: false });
             this.webview.emit('PURCHASE_FULFILLED');
         } else {

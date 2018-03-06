@@ -11,7 +11,6 @@ function* backgroundTask(group, token, lastChatId, user) {
         let id = lastChatId;
         while (true) {
             yield call(delay, 2000);
-            console.log('fetching groups top comments')
             let response = yield call(commentsApi.getGroupComments, group, token, id, "up");
             if (response.length > 0) {
                 yield* updateChatTop(response, group, user);

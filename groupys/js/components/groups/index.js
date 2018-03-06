@@ -44,7 +44,7 @@ class Groups extends Component {
         navigation.navigate('GroupFeed', {chat:true,group: item, role: 'admin'});
     }
     shouldComponentUpdate(){
-        if(this.props.currentScreen ==='home' && this.props.selectedTab ==='groups'){
+        if(this.props.currentScreen ==='home' ){
             return true;
         }
         return false;
