@@ -39,13 +39,7 @@ export default class GenericListGroupView extends Component {
         }
     }
 
-    shouldComponentUpdate() {
-        const {visibleItem} = this.props;
-        if (visibleItem) {
-            return true;
-        }
-        return false;
-    }
+
 
 
 

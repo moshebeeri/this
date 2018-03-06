@@ -53,14 +53,14 @@ class GroupFeedComponent extends Component {
 
 
     render() {
-        const {visibleItem,navigation, activityAction,group,feeds, userFollower, actions, token, loadingDone, location, showTopLoader,postUpdated} = this.props;
+        const {visibleFeeds,navigation, activityAction,group,feeds, userFollower, actions, token, loadingDone, location, showTopLoader,postUpdated} = this.props;
 
         const icon = <Icon2 active size={40} name="md-create"/>;
 
         return <View style={styles.inputContainer}>
             <GenericFeedManager
                 navigation={navigation}
-                visibleItem={visibleItem}
+                visibleFeeds={visibleFeeds}
                 loadingDone={loadingDone[group._id]}
                 showTopLoader={showTopLoader[group._id]}
                 userFollowers={userFollower}
@@ -101,7 +101,7 @@ export default connect(
         loadingDone: state.groups.loadingDone,
         postUpdated: state.postForm,
         location: state.phone.currentLocation,
-        visibleItem:state.feeds.visibleFeed,
+        visibleFeeds:state.groups.visibleFeeds,
     }),
     (dispatch) => ({
         actions: bindActionCreators(groupAction, dispatch),
