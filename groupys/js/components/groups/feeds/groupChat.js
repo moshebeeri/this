@@ -29,7 +29,7 @@ export default class GroupChat extends Component {
                 date: item.message.date,
                 isUser: isUser
             };
-            return <View style={{backgroundColor: 'white', flex: 1}}>
+            return <View style={{backgroundColor: '#E6E6E6', flex: 1}}>
                 <ChatMessage key={item.id}
                              item={messageItem}/>
             </View>

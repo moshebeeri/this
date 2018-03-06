@@ -20,7 +20,8 @@ import stylesPortrate from './styles'
 import UiConverter from '../../../api/feed-ui-converter'
 import {GroupHeader, ImageController, PromotionHeaderSnippet, ThisText} from '../../../ui/index';
 import strings from '../../../i18n/i18n';
-import InViewPort from '../../../utils/inviewport'
+import DateUtils from '../../../utils/dateUtils'
+let dateUtils = new DateUtils();
 
 const {width, height} = Dimensions.get('window');
 let uiConverter = new UiConverter();
@@ -46,10 +47,7 @@ export default class GenericListGroupView extends Component {
         return false;
     }
 
-    visited() {
-        const {item, setVisibleItem} = this.props;
-        setVisibleItem(item._id);
-    }
+
 
     render() {
         const {item, onPressItem, index, onPressMessageItem,} = this.props;
@@ -68,7 +66,9 @@ export default class GenericListGroupView extends Component {
             backgroundColor: 'white',
             padding: 0,
         };
-        const row = <InViewPort onChange={this.visited.bind(this)} key={index}>
+
+
+        const row = <View  key={index}>
             <View style={{marginBottom: 8}}>
                 <TouchableOpacity key={index} onPress={() => onPressItem(item)} style={containerStyle}>
                     <GroupHeader group={item}/>
@@ -103,7 +103,7 @@ export default class GenericListGroupView extends Component {
 
                 </TouchableOpacity>
             </View>
-        </InViewPort>
+        </View>
         return ( row
 
         );
@@ -141,7 +141,7 @@ export default class GenericListGroupView extends Component {
             let userImage = undefined;
             if (user && user.pictures && user.pictures.length > 0) {
                 itemChat = {
-                    date: item.preview.comment.timestamp,
+                    date: item.preview.comment.created,
                     message: item.preview.comment.message,
                     isUser: true,
                     avetar: {uri: user.pictures[user.pictures.length - 1].pictures[3]},
@@ -153,7 +153,7 @@ export default class GenericListGroupView extends Component {
                     name = user.name;
                 }
                 itemChat = {
-                    date: item.preview.comment.timestamp,
+                    date: item.preview.comment.created,
                     isUser: true,
                     message: item.preview.comment.message,
                     avetar: require('../../../../images/client_1.png'),
@@ -175,8 +175,8 @@ export default class GenericListGroupView extends Component {
 
                     <View style={{marginLeft: 15, alignItems: 'flex-start'}}>
 
-                        <ThisText style={styles.chatListLineTitleText}>{itemChat.name}</ThisText>
-                        <ThisText style={styles.chatListLineDescText}>{itemChat.message}</ThisText>
+                        <ThisText  numberOfLines={1} ellipsizeMode='tail'  style={styles.chatListLineTitleText}>{itemChat.message}</ThisText>
+                        <ThisText style={styles.chatListLineDescText}>{dateUtils.messageFormater(item.preview.comment.created)}</ThisText>
                     </View>
                 </View>
 

@@ -199,5 +199,5 @@ module.exports = {
         fontWeight:'bold', color:'#616F70', fontSize:16,
     },
     promotionListLineDescText:{
-        fontWeight:'200', color:'#616F70', fontSize:14,     }
+        fontWeight:'200', color:'#616F70', fontSize:14, width:260    }
 };

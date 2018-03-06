@@ -10,8 +10,7 @@ import * as userAction from "../../actions/user";
 import * as activityAction from "../../actions/activity";
 import Icon2 from "react-native-vector-icons/Ionicons";
 import {createSelector} from "reselect";
-import {I18nManager, View} from 'react-native';
-import Tasks from '../../tasks/tasks'
+import {View} from 'react-native';
 import {Fab,} from 'native-base';
 
 var Analytics = require('react-native-firebase-analytics');
@@ -27,33 +26,26 @@ class Feed extends Component {
 
     componentWillMount() {
         const {feeds, actions} = this.props;
-        if(!feeds || feeds.length === 0) {
+        if (!feeds || feeds.length === 0) {
             actions.setNextFeeds(feeds);
         }
         this.props.userActions.fetchUsersFollowers();
     }
 
     shouldComponentUpdate() {
-        if (this.props.currentScreen === 'home' && this.props.activeTab === 'feed') {
-            // if (this.props.shouldRender || this.state.renderNow) {
-            //     this.props.actions.stopRender();
-            //     this.setState({renderNow:false})
-            //     return true;
-            // }
+        if (this.props.currentScreen === 'home') {
+
             return true;
         }
         return false;
     }
 
     componentWillUnmount() {
-
     }
 
     navigateToAdd() {
         this.props.navigation.navigate('PostForm')
     }
-
-
 
     showFab(show) {
         this.setState({
@@ -62,7 +54,7 @@ class Feed extends Component {
     }
 
     render() {
-        const {activityAction, navigation, loadingDone, showTopLoader, feeds, userFollower, actions, token, user, location, nextBulkLoad,visibleItem} = this.props;
+        const {activityAction, navigation, loadingDone, showTopLoader, feeds, userFollower, actions, token, user, location, nextBulkLoad, visibleItem,visibleFeeds} = this.props;
         let icon = <Icon2 active size={40} name="md-create"/>;
         return (
             <View style={{flex: 1, backgroundColor: '#cccccc'}}>
@@ -70,6 +62,7 @@ class Feed extends Component {
                 <GenericFeedManager
                     navigation={navigation}
                     visibleItem={visibleItem}
+                    visibleFeeds={visibleFeeds}
                     loadingDone={loadingDone}
                     showTopLoader={showTopLoader}
                     userFollowers={userFollower}
@@ -116,7 +109,8 @@ const mapStateToProps = state => {
         user: state.user.user,
         feeds: getFeeds(state),
         location: state.phone.currentLocation,
-        visibleItem:state.feeds.visibleFeed,
+        visibleItem: state.feeds.visibleFeed,
+        visibleFeeds: state.feeds.visibleFeeds,
         selectedTab: state.mainTab.selectedTab,
         currentScreen: state.render.currentScreen,
     }

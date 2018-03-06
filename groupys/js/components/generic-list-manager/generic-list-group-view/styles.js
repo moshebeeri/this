@@ -87,7 +87,7 @@ module.exports = {
     },
 
     chatListLineTitleText:{
-        fontWeight:'bold', color:'#616F70', fontSize:16,
+        fontWeight:'bold', color:'#616F70', fontSize:16, width:260,
     },
     chatListLineDescText:{
         fontWeight:'200', color:'#616F70', fontSize:14,     },

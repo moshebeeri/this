@@ -22,39 +22,47 @@ module.exports = {
     },
     messageUserName: {
         flexDirection: 'column',
-        borderBottomLeftRadius:15,
-        borderTopRightRadius:50,
-        borderBottomRightRadius:50,
+        borderBottomLeftRadius:8,
+        borderTopRightRadius:8,
+        borderBottomRightRadius:8,
+        paddingRight:4,
+        paddingLeft:4,
 
         maxWidth:width  -100,
-        backgroundColor:'#0699dc',
+        backgroundColor:'white',
     },
     messageWideUserName: {
         flexDirection: 'column',
-        borderBottomLeftRadius:15,
-        borderTopRightRadius:50,
-        borderBottomRightRadius:50,
+        borderBottomLeftRadius:8,
+        borderTopRightRadius:8,
+        borderBottomRightRadius:8,
+        paddingRight:4,
+        paddingLeft:4,
 
         width:width  -60,
         backgroundColor:'#0699dc',
     },
     messageName: {
         flexDirection: 'column',
+        justifyContent:'flex-end',
 
-        borderTopLeftRadius:50,
-        borderBottomLeftRadius:50,
-        borderBottomRightRadius:15,
+        borderTopLeftRadius:8,
+        borderBottomLeftRadius:8,
+        borderBottomRightRadius:8,
+        paddingRight:4,
+        paddingLeft:4,
         maxWidth:width  -100,
-        backgroundColor:'#cccccc',
+        backgroundColor:'#0699dc',
     },
     message_container_user: {
-        backgroundColor:'#0699dc',
-        margin:5,
+        backgroundColor:'transparent',
+        margin:8,
+        marginTop:4,
         justifyContent: 'flex-start',
-        borderRadius:50,
+        borderRadius:5,
     },
     message_container: {
-        backgroundColor:'#cccccc',
+        backgroundColor:'transparent',
         margin:5,
         justifyContent: 'flex-start',
         borderRadius:50,
@@ -75,10 +83,18 @@ module.exports = {
     },
     messageText:{
         color: 'white',
-        marginRight:20,
 
+    },
+    timeText:{
+        color: 'white',
 
-        marginLeft:20,
+        marginBottom:8,
+        marginRight:8,
+        marginLeft:8,
+        justifyContent:'flex-end',
+        backgroundColor:'transparent',
+        fontSize:12,
+
     },
     messageNameText:{
         color: 'white',

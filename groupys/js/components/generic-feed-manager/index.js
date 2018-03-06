@@ -45,7 +45,7 @@ export default class GenericFeedManager extends Component {
     }
 
     renderItem(item) {
-        const {navigation, token, userFollowers, group, ItemDetail, actions,entity, location,visibleItem,realize} = this.props;
+        const {navigation, token, userFollowers, group, ItemDetail, actions,entity, location,visibleItem,realize,visibleFeeds} = this.props;
         let id = item.item.id;
         if(!id){
             id = item.item._id;
@@ -58,6 +58,7 @@ export default class GenericFeedManager extends Component {
             userFollowers={userFollowers}
             visibleItem={visibleItem}
             group={group}
+            visibleFeeds={visibleFeeds}
             realize={realize}
             navigation={navigation}
             item={item.item}
@@ -103,14 +104,14 @@ export default class GenericFeedManager extends Component {
             return <View><Spinner color='red'/></View>;
         }
         const spining = undefined;
-        let backgroundColor = '#cccccc';
+        let backgroundColor = '#E6E6E6';
         if (color) {
             backgroundColor = color;
         }
         if (setNextFeeds) {
             return (
 
-                <View style={{backgroundColor: 'white'}}>
+                <View style={{backgroundColor: '#E6E6E6'}}>
                     {topLoader}
 
                     <FlatList
@@ -120,7 +121,7 @@ export default class GenericFeedManager extends Component {
                         onEndReached={setNextFeeds}
                         renderItem={this.renderItem.bind(this)}
                         extraData={update}
-                        initialNumToRender={5}
+                        initialNumToRender={3}
 
 
                     />
@@ -186,7 +187,7 @@ export default class GenericFeedManager extends Component {
                     onEndReached={this.onEndReach.bind(this)}
                     renderItem={this.renderItem.bind(this)}
                     extraData={update}
-                    initialNumToRender={5}
+                    initialNumToRender={3}
 
 
                 />

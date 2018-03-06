@@ -67,12 +67,14 @@ async function updateNotification(dispatch, token, user, notifications) {
         if (notifications) {
             skip = notifications.length;
         }
-        let response = await notificationApi.getAll(token, user, skip, 10);
-        if(response.length > 0) {
-            dispatch({
-                type: actions.SET_NOTIFICATION,
-                notifications: response,
-            });
+        if(user && token) {
+            let response = await notificationApi.getAll(token, user, skip, 10);
+            if (response.length > 0) {
+                dispatch({
+                    type: actions.SET_NOTIFICATION,
+                    notifications: response,
+                });
+            }
         }
 
     } catch (error) {

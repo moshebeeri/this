@@ -275,7 +275,7 @@ chooseProximityDistance                       : "Choose Proximity Distance ",
 Proximity                                     : "Proximity",
 ProximityDistanceTitle                        : "Proximity Distance",
 LatestActivity                                : "Latest Activity",
-
+DateAtTime                                    : "{0} at {1}",
 
 
 

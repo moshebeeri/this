@@ -3,9 +3,9 @@ import {Image, Text, View} from 'react-native';
 import {Button, Icon, Input, Thumbnail} from 'native-base';
 import styles from './styles';
 import {ThisText,ImageController} from '../../ui/index';
-
+import DateUtils from '../../utils/dateUtils'
 import strings from "../../i18n/i18n"
-
+let dateUtils = new DateUtils();
 const ILS = '₪';
 export default class PromotionHeaderSnippet extends Component {
     constructor(props) {
@@ -24,8 +24,8 @@ export default class PromotionHeaderSnippet extends Component {
                 return <View style={{flex:1,justifyContent:'center',alignItems:'center',marginLeft:0,flexDirection: 'row'}}>
                     {promotion.banner && <ImageController  thumbnail size={36} source={{uri: promotion.banner.uri}}/>}
                     <View style={{flex:1,justifyContent:'flex-start',marginLeft:12,alignItems:'flex-start'}}>
-                        <ThisText>{promotion.business.name}</ThisText>
-                        <ThisText>{strings.ReduceAmountShortDescription.formatUnicorn(totalValue,discount)}</ThisText>
+                        <ThisText style={styles.promotionListLineTitleText}>{promotion.business.name}</ThisText>
+                        <ThisText style={styles.promotionListLineDescText}> >{strings.ReduceAmountShortDescription.formatUnicorn(totalValue,discount)}</ThisText>
 
                     </View>
                 </View>
@@ -40,8 +40,8 @@ export default class PromotionHeaderSnippet extends Component {
                     {promoIcon}
                     {promotion.banner &&   <ImageController  thumbnail size={30} source={{uri: promotion.banner.uri}}/>}
                         <View style={{flex:1,justifyContent:'flex-start',marginLeft:12,alignItems:'flex-start'}}>
-                            <ThisText style={styles.promotionListLineTitleText}>{promotion.business.name}</ThisText>
-                            <ThisText style={styles.promotionListLineDescText}>{strings.DiscountShortDescription.formatUnicorn(promotion.promotionEntity.percent.values[0],discountOn)}</ThisText>
+                            <ThisText style={styles.promotionListLineTitleText}>{strings.DiscountShortDescription.formatUnicorn(promotion.promotionEntity.percent.values[0],discountOn)}</ThisText>
+                            <ThisText numberOfLines={1} ellipsizeMode='tail' style={styles.promotionListLineDescText}>{dateUtils.messageFormater(promotion.created)}</ThisText>
 
                         </View>
                     </View>

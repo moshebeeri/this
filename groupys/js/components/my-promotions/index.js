@@ -35,12 +35,7 @@ class MyPromotions extends Component {
     refresh() {
     }
 
-    shouldComponentUpdate() {
-        if (this.props.activeTab === 'savedPromotion') {
-            return true;
-        }
-        return false;
-    }
+
 
 
 

@@ -53,20 +53,23 @@ export default class FeedPromotion extends Component {
         const {item, actions} = this.props;
         if (visible && actions && actions.setSocialState) {
             actions.setSocialState(item);
-            actions.setVisibleItem(item.id);
+            actions.setVisibleItem(item.fid);
         }
     }
 
 
 
     shouldComponentUpdate() {
-        const {item, visibleItem,shouldUpdate} = this.props;
+        const {item, visibleItem,shouldUpdate, visibleFeeds} = this.props;
         if(shouldUpdate){
             return true;
         }
         let results =  item.id === visibleItem  ;
         if(results){
             return results
+        }
+        if(visibleFeeds && item.fid && visibleFeeds.includes(item.fid)){
+            return true;
         }
 
         return false;

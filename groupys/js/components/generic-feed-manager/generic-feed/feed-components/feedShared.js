@@ -73,11 +73,12 @@ export default class FeedShared extends Component {
     }
 
     createSharedActivity(item) {
-        const {refresh, like, unlike, showUsers, comment, token, location, showActions} = this.props;
+        const {refresh, like, unlike, showUsers, comment, token, location, showActions,visibleFeeds} = this.props;
         switch (item.shared) {
             case 'PROMOTION':
                 return this.createFeedView(<FeedPromotion shared refresh={refresh} token={token} comment={comment}
                                                           location={location}
+                                                          visibleFeeds={visibleFeeds}
                                                           showActions={showActions}
                                                           navigation={this.props.navigation} item={item.shardeActivity}
                                                           like={like} unlike={unlike}
@@ -87,11 +88,14 @@ export default class FeedShared extends Component {
                                                         item={item.shardeActivity}/>)
             case'POST':
                 return this.createFeedView(<FeedPost showActions={showActions} shared token={token}
+                                                     visibleFeeds={visibleFeeds}
                                                      navigation={this.props.navigation} item={item.shardeActivity}
                                                      like={actions.like} unlike={actions.unlike}
                                                      showUsers={showUsers} comment={comment}/>)
             default:
-                return this.createFeedView(<FeedBusiness shared location={location} token={token} refresh={refresh}
+                return this.createFeedView(<FeedBusiness shared location={location}
+                                                         visibleFeeds={visibleFeeds}
+                                                         token={token} refresh={refresh}
                                                          showActions={showActions}
                                                          navigation={this.props.navigation}
                                                          item={item.shardeActivity}

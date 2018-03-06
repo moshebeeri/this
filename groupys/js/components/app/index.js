@@ -215,68 +215,9 @@ class ApplicationManager extends Component {
         groupsActions.stopListenForChat();
         instanceGroupCommentsAction.stopListenForChat();
         feedAction.stopMainFeedsListener();
-        actions.changeTab(tab);
-        if (tab.i === 0) {
-            if (I18nManager.isRTL && (Platform.OS === 'android')) {
-                InteractionManager.runAfterInteractions(() => { logger.screenVisited('notification')
-                notificationAction.onEndReached()})
-            } else {
-                InteractionManager.runAfterInteractions(() => {
-                    logger.screenVisited('feed')
-                    feedAction.setTopFeeds();
-                    PageRefresher.visitedFeed();
-                    this.setState({
-                        activeTab: 'feed'
-                    })
-                });
-            }
-        }
-        if (tab.i === 1) {
-            if (I18nManager.isRTL && (Platform.OS === 'android')) {
-                InteractionManager.runAfterInteractions(() => {  logger.screenVisited('groups')
-                PageRefresher.visitedGroups()})
-            } else {
-                InteractionManager.runAfterInteractions(() => {  myPromotionsAction.setFirstTime();
-                logger.screenVisited('savedPromotion')
-                this.setState({
-                    activeTab: 'savedPromotion'
-                })})
-            }
-        }
-        //this.p
-        if (tab.i === 2) {
-            if (I18nManager.isRTL && (Platform.OS === 'android')) {
-                InteractionManager.runAfterInteractions(() => { logger.screenVisited('savedPromotion')
-                myPromotionsAction.setFirstTime();
-                this.setState({
-                    activeTab: 'savedPromotion'
-                })})
-            } else {
-                InteractionManager.runAfterInteractions(() => {
-                PageRefresher.visitedGroups();
-                logger.screenVisited('groups')
-                this.setState({
-                    activeTab: 'groups'
-                })})
-            }
-        }
-        if (tab.i === 3) {
-            if (I18nManager.isRTL && (Platform.OS === 'android')) {
-                InteractionManager.runAfterInteractions(() => {
-                    feedAction.setTopFeeds();
-                    PageRefresher.visitedFeed();
-                    this.setState({
-                        activeTab: 'feed'
-                    })
-                });
-            } else {
-                InteractionManager.runAfterInteractions(() => {
-                    notificationAction.onEndReached();
-                    logger.screenVisited('notification')
-                });
-            }
-        }
+       // actions.changeTab(tab);
 
+       // this.setState({activeTab:tab.i})
     }
 
     navigateToAdd() {
@@ -384,6 +325,7 @@ class ApplicationManager extends Component {
                                     navigation={this.props.navigation} index={2}/>
                             <Notification activeTab={this.state.activeTab} tabLabel={notificationLabel}
                                           navigation={this.props.navigation} index={3}/>
+
 
 
                         </ScrolTabView>
