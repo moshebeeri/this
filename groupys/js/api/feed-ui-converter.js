@@ -296,7 +296,8 @@ class FeedConverter {
                         responseFeed.promotionTerm = strings.PercentTermWithTerm.formatUnicorn(promotion.condition.product.name, promotion.percent.values[0]);
                     } else {
                         //responseFeed.itemTitle = "Get " + promotion.percent.values[0] + ' % Off ';
-                        responseFeed.promotionTerm = strings.NoTerms
+                        responseFeed.promotionTerm = strings.NoTerms.formatUnicorn(promotion.percent.values[0])
+
                     }
                     responseFeed.promotion = 'PERCENT';
                     responseFeed.promotionValue = promotion.percent.values[0];
@@ -462,7 +463,8 @@ class FeedConverter {
                         responseFeed.promotionTerm = strings.PercentTermWithTerm.formatUnicorn(promotion.condition.product.name, promotion.percent.values[0]);
                     } else {
                         responseFeed.itemTitle = "Get " + promotion.percent.values[0] + ' % Off ';
-                        responseFeed.promotionTerm = strings.NoTerms
+                        responseFeed.promotionTerm = strings.NoTerms.formatUnicorn(promotion.percent.values[0])
+
                     }
                     responseFeed.promotion = 'PERCENT';
                     responseFeed.promotionValue = promotion.percent.values[0];
@@ -582,7 +584,7 @@ class FeedConverter {
                     response.promotionTerm = strings.PercentTermWithTerm.formatUnicorn(promotion.condition.product.name, promotion.percent.values[0]);
                 } else {
                     response.itemTitle = "Get " + promotion.percent.values[0] + ' % Off ';
-                    response.promotionTerm = strings.NoTerms
+                    response.promotionTerm = strings.NoTerms.formatUnicorn(promotion.percent.values[0])
                 }
                 response.promotion = 'PERCENT';
                 response.promotionValue = promotion.percent.values[0];
