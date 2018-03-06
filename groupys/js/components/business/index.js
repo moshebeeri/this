@@ -36,7 +36,7 @@ class Business extends Component {
 
 
     render() {
-        const {businesses, navigation, businessLoading, update, actions} = this.props;
+        const {businesses, navigation, businessLoading, update, actions,user} = this.props;
         if (businessLoading && businesses.length === 0) {
             return <Spinner/>
         }
@@ -47,8 +47,8 @@ class Business extends Component {
             <Container style={{backgroundColor: '#b7b7b7'}}>
 
 
-                <GenericListManager  noRefresh rows={businesses} navigation={navigation} actions={actions} update={update}
-                                    ItemDetail={this.renderItem.bind(this)}/>
+                <GenericListManager  user={user} noRefresh rows={businesses} navigation={navigation} actions={actions} update={update}
+                                    ItemDetail={BusinessListView}/>
 
             </Container>
         );
