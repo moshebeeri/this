@@ -234,7 +234,7 @@ function handlePromotionPostCreate(promotion, callback) {
 
   function relateOnActionPromotion(promotion, callback) {
     let params = `{type: "${promotion.on_action.type}", end:${promotion.end.getTime()}`;
-    if(promotion.on_action.type === 'PROXIMITY')
+    if(promotion.on_action.type === 'PROXIMITY' || promotion.on_action.type === 'FOLLOWER_PROXIMITY')
       params = `${params}, proximity: ${promotion.on_action.proximity}}`;
     else
       params = `${params}}`;
@@ -300,9 +300,8 @@ function create_promotion(promotion, callback) {
 // WHERE  promo._id IS NOT NULL AND on.type = 'FOLLOW_ENTITY'
 // RETURN promo, on, entity
 exports.get_action = function (req, res) {
-  if( req.params.type !== 'FOLLOW_ENTITY' &&
-    req.params.type !== 'PROXIMITY' )
-    return res.status(404).send(new Error(`invalid type ${req.params.type} should be FOLLOW_ENTITY or PROXIMITY`));
+  if( req.params.type !== 'FOLLOW_ENTITY' && req.params.type !== 'PROXIMITY' && req.params.type !== 'FOLLOWER_PROXIMITY')
+    return res.status(404).send(new Error(`invalid type ${req.params.type}`));
   const query = `MATCH (p:promotion)<-[on:ON_ACTION]-(entity{_id:'${req.params.entity}'})
                  WHERE  p._id IS NOT NULL AND on.type = '${req.params.type}'
                  RETURN p._id as _id`;
@@ -328,8 +327,8 @@ function create_action(req, res) {
   const type = promotion.on_action.type;
   const entity = getPromotionEntity(promotion);
 
-  if(type !== 'FOLLOW_ENTITY' && type !== 'PROXIMITY' ) {
-    let  err = new Error(`invalid type ${type} should be FOLLOW_ENTITY or PROXIMITY`);
+  if(type !== 'FOLLOW_ENTITY' && type !== 'PROXIMITY' && type !== 'FOLLOWER_PROXIMITY' ) {
+    let  err = new Error(`invalid type ${type}`);
     console.error(err);
     return res.status(404).send(err);
   }

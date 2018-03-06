@@ -20,6 +20,7 @@ for(var i = 0, len = collectionNames.length; i < len ; i++){
     }
 }
 `;
+
 let a = `
 match (u:user) optional match (u)-[r]-() delete u,r
 WITH count(*) as dummy

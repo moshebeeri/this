@@ -44,6 +44,7 @@ function createReport(userId, location, callback) {
     return callback(null, proximity);
   });
 }
+
 /**   Working example
 *     MATCH (p:promotion)<-[on:ON_ACTION]-(entity)<-[:FOLLOW]-(u:user{_id:'59a412c7f7956ee14eca6d41'})
 *     WITH on,entity, {longitude:34.785981,latitude:32.090955} AS coordinate
@@ -55,13 +56,38 @@ function createReport(userId, location, callback) {
 *     ORDER BY d ASC
 *     skip 0 limit 20
 * */
-function handleProximityActions(userId, location, callback) {
+function handleFollowersProximityActions(userId, location, callback) {
   let skip = 0;
   let limit = 20;
   let coordinate = spatial.location_to_special(location);
   const query = ` MATCH (promo:promotion)<-[on:ON_ACTION]-(entity)<-[:FOLLOW]-(u:user{_id:'${userId}'})
-                  WHERE  promo._id IS NOT NULL AND on.type = 'PROXIMITY'
+                  WHERE  promo._id IS NOT NULL AND on.type = 'FOLLOWER_PROXIMITY'
                   WITH   entity,promo,u,on, {longitude:${coordinate.longitude},latitude:${coordinate.latitude}} AS coordinate
+                  CALL spatial.withinDistance('world', coordinate, on.proximity) YIELD node AS p
+                  WITH   promo, entity
+                  RETURN distinct promo, entity, labels(entity) as labels
+                  ORDER BY (2 * 6371 * asin(sqrt(haversin(radians(promo.lat - entity.lat))+ cos(radians(promo.lat))*cos(radians(entity.lat))*haversin(radians(promo.lon - entity.lat))))) desc
+                  SKIP ${skip} LIMIT ${limit}`;
+
+  console.log('handleFollowersProximityActions: ' + query);
+  graphModel.query(query, function (err, eligibilities) {
+    if (err) {
+      console.error(err);
+      return callback(err);
+    }
+    return callback(null, eligibilities);
+  });
+}
+
+function handleProximityActions(userId, location, callback) {
+  let skip = 0;
+  let limit = 20;
+  let coordinate = spatial.location_to_special(location);
+  const query = ` MATCH (promo:promotion)<-[on:ON_ACTION]-(entity),(u:user{_id:'${userId}'})  
+                  WHERE  promo._id IS NOT NULL AND on.type = 'PROXIMITY'
+                  AND NOT (entity)<-[:FOLLOW]-(u)
+                  AND NOT (entity)<-[:NO_ON_PROXIMITY_ACTION]-(u)
+                  WITH   entity,promo,on, {longitude:${coordinate.longitude},latitude:${coordinate.latitude}} AS coordinate
                   CALL spatial.withinDistance('world', coordinate, on.proximity) YIELD node AS p
                   WITH   promo, entity
                   RETURN distinct promo, entity, labels(entity) as labels
@@ -88,7 +114,7 @@ function entityRoleMembers(entity, callback) {
   })
 }
 
-function proximityEligibility(userId, location, eligible, callback) {
+function proximityEligibility(userId, location, eligible, isFollower, callback) {
   Promotion.findById(eligible.promo._id, function (err, promotion) {
     if (err) return callback(err);
     if (!promotion) return callback(new Error('promotion not found for _id:' + eligible.promo._id));
@@ -97,29 +123,30 @@ function proximityEligibility(userId, location, eligible, callback) {
         instance: instance._id,
         promotion: instance.promotion._id,
         ids: [userId],
-        action: "eligible_by_proximity",
+        action: isFollower? 'follower_eligible_by_proximity' : 'eligible_by_proximity',
         location: location
       });
       Instance.notify(instance._id, [userId]);
-      entityRoleMembers(eligible.entity._id, function (err, userIds) {
-        if (err) {
-          console.error(err);
-          callback(err);
-        }
-        if (!userIds) {
-          console.error(new Error(`Not Entity role found`));
-          callback(null);
-        }
-        Notifications.notify({
-          note: 'ELIGIBLE_BY_PROXIMITY',
-          instance: instance._id
-        }, userIds)
-      })
-
+      //Notify new costumer received eligible by proximity
+      if(!isFollower) {
+        entityRoleMembers(eligible.entity._id, function (err, userIds) {
+          if (err) {
+            console.error(err);
+            callback(err);
+          }
+          if (!userIds) {
+            console.error(new Error(`Not Entity role found`));
+            callback(null);
+          }
+          Notifications.notify({
+            note: 'ELIGIBLE_BY_PROXIMITY',
+            instance: instance._id
+          }, userIds)
+        })
+      }
     });
   })
 }
-
 exports.reportLastLocation = function(userId, location, callback) {
   ProximityModel.findById(userId, function (err, proximity) {
     if (err) return callback(err);
@@ -135,8 +162,8 @@ exports.reportLastLocation = function(userId, location, callback) {
   // function eligibilityCallback(err, info) {
   //   if (err) return console.error(err);
   // }
-  handleProximityActions(userId, location, function (err, eligibilities) {
-    if(err) return console.log('error calling handleProximityActions');
+  handleFollowersProximityActions(userId, location, function (err, eligibilities) {
+    if(err) return console.log('error calling handleFollowersProximityActions');
     if(!eligibilities)
       return console.log('no eligibilities found');
     //console.log(JSON.stringify(eligibilities));
@@ -146,11 +173,27 @@ exports.reportLastLocation = function(userId, location, callback) {
     }, function(err) {
       // if any of the file processing produced an error, err would equal that error
       if( err ) {
-        console.log('handleProximityActions - one of the eligible failed to process with the following error:');
+        console.log('handleFollowersProximityActions - one of the eligible failed to process with the following error:');
         console.error(err);
       }
       //const entitiesUniqueIds = [...new Set( eligibilities.map(eligible => eligible.entity)) ];
-
     });
   });
+
+  handleProximityActions(userId, location, function (err, eligibilities) {
+    if(err) return console.log('error calling handleFollowersProximityActions');
+    if(!eligibilities)
+      return console.log('no eligibilities found');
+    async.each(eligibilities, function(eligible, callback) {
+      proximityEligibility(userId, location, eligible, callback);
+    }, function(err) {
+      // if any of the file processing produced an error, err would equal that error
+      if( err ) {
+        console.log('handleFollowersProximityActions - one of the eligible failed to process with the following error:');
+        console.error(err);
+      }
+      //const entitiesUniqueIds = [...new Set( eligibilities.map(eligible => eligible.entity)) ];
+    });
+  });
+
 };
