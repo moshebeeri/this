@@ -135,11 +135,19 @@ export function savePromotion(promotion, businessId, navigation) {
                         businessId: businessId,
                     });
                 }else {
-                    dispatch({
-                        type: actions.SAVE_ON_PROXIMITY_PROMOTIONS,
-                        proximityPromotion: promotion,
-                        businessId: businessId,
-                    });
+                    if(promotion.on_action.type ==='FOLLOWER_PROXIMITY'){
+                        dispatch({
+                            type: actions.SAVE_ON_FOLLOER_PROXIMITY_PROMOTIONS,
+                            followerProximity: promotion,
+                            businessId: businessId,
+                        });
+                    }else {
+                        dispatch({
+                            type: actions.SAVE_ON_PROXIMITY_PROMOTIONS,
+                            proximityPromotion: promotion,
+                            businessId: businessId,
+                        });
+                    }
                 }
             }
             dispatch({

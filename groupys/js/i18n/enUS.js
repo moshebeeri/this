@@ -277,6 +277,7 @@ ProximityDistanceTitle                        : "Proximity Distance",
 LatestActivity                                : "Latest Activity",
 DateAtTime                                    : "{0} at {1}",
 NoTerms                                       : "Global Discount {0} % Off",
+OnFollowerProximity                           : "On Follower Proximity",
 
 
 

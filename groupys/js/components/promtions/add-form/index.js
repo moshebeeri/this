@@ -167,6 +167,12 @@ class AddPromotion extends Component {
             this.setPromotion(this.props.navigation.state.params.proximityPromotion);
             return;
         }
+        if(this.props.navigation.state.params && this.props.navigation.state.params.followerProximity){
+            this.setPromotion(this.props.navigation.state.params.followerProximity);
+            return;
+        }
+
+
         try {
             if (this.props.navigation.state.params && this.props.navigation.state.params.item) {
                 let item = this.props.navigation.state.params.item;
@@ -283,6 +289,16 @@ class AddPromotion extends Component {
                     promotion.on_action = {
                         active: true,
                         type: 'PROXIMITY',
+                        proximity:this.state.proximity,
+                        entity: {
+                            business: this.getBusinessId()
+                        }
+                    };
+                    break;
+                case 'FOLLOWER_PROXIMITY':
+                    promotion.on_action = {
+                        active: true,
+                        type: 'FOLLOWER_PROXIMITY',
                         proximity:this.state.proximity,
                         entity: {
                             business: this.getBusinessId()
@@ -588,6 +604,10 @@ class AddPromotion extends Component {
                     break;
                 case 'PROXIMITY':
                     header = strings.OnProximityPromotion;
+                    proximityForm = this.createProximityForm();
+                    break;
+                case 'FOLLOWER_PROXIMITY':
+                    header = strings.OnFollowerProximity;
                     proximityForm = this.createProximityForm();
                     break;
 

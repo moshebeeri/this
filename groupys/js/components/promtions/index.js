@@ -76,13 +76,25 @@ class Promotions extends Component {
     }
 
     onProximityPromotion() {
-        const {business,navigation,proximityPromotion} = this.props;
+        const {business,navigation,followerProximity} = this.props;
         let addToBusiness = business;
         if(!addToBusiness){
             addToBusiness = navigation.state.params.business;
         }
         this.props.navigation.navigate("addPromotions", {
             onBoardType: 'PROXIMITY',
+            business: addToBusiness,
+            followerProximity: followerProximity[addToBusiness._id]
+        });
+    }
+    onProximityPromotion() {
+        const {business,navigation,proximityPromotion} = this.props;
+        let addToBusiness = business;
+        if(!addToBusiness){
+            addToBusiness = navigation.state.params.business;
+        }
+        this.props.navigation.navigate("addPromotions", {
+            onBoardType: 'FOLLOWER_PROXIMITY',
             business: addToBusiness,
             proximityPromotion: proximityPromotion[addToBusiness._id]
         });
@@ -108,6 +120,9 @@ class Promotions extends Component {
                 </MenuOption>
                 <MenuOption onSelect={this.onProximityPromotion.bind(this)}>
                     <ThisText>{strings.OnProximityPromotion}</ThisText>
+                </MenuOption>
+                <MenuOption onSelect={this.onProximityPromotion.bind(this)}>
+                    <ThisText>{strings.OnFollowerProximity}</ThisText>
                 </MenuOption>
             </MenuOptions>
         </Menu>;
@@ -139,6 +154,7 @@ export default connect(
         promotionsLoading: state.promotions.loadingDone,
         proximityPromotion: state.promotions.proximityPromotion,
         onBoardingPromotion: state.promotions.onBoardingPromotion,
+        followerProximity: state.promotions.followerProximity,
         promotionsChange: state.promotions,
         currentScreen: state.render.currentScreen,
     }),

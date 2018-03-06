@@ -44,7 +44,7 @@ export function showPromotionPopup(instanceId, notificationId) {
 
 async function promotionPopAction(instanceId, notificationId, dispatch, token) {
     try {
-        notificationApi.readNotification(notificationId);
+        notificationApi.readNotification(token,notificationId);
         if (token) {
             let instance = await instanceApi.getInstance(token, instanceId);
             dispatch({
