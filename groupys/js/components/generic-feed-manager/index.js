@@ -104,14 +104,14 @@ export default class GenericFeedManager extends Component {
             return <View><Spinner color='red'/></View>;
         }
         const spining = undefined;
-        let backgroundColor = '#cccccc';
+        let backgroundColor = '#E6E6E6';
         if (color) {
             backgroundColor = color;
         }
         if (setNextFeeds) {
             return (
 
-                <View style={{backgroundColor: 'white'}}>
+                <View style={{backgroundColor: '#E6E6E6'}}>
                     {topLoader}
 
                     <FlatList
@@ -121,7 +121,7 @@ export default class GenericFeedManager extends Component {
                         onEndReached={setNextFeeds}
                         renderItem={this.renderItem.bind(this)}
                         extraData={update}
-                        initialNumToRender={5}
+                        initialNumToRender={3}
 
 
                     />
@@ -187,7 +187,7 @@ export default class GenericFeedManager extends Component {
                     onEndReached={this.onEndReach.bind(this)}
                     renderItem={this.renderItem.bind(this)}
                     extraData={update}
-                    initialNumToRender={5}
+                    initialNumToRender={3}
 
 
                 />

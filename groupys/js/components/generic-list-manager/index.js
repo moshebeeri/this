@@ -62,7 +62,7 @@ class GenericListManager extends Component {
         const onEndActions = this.getOnEndAction(actions, onEndReached);
         return (
 
-            <Content style={{backgroundColor: '#CACACA'}}>
+            <Content style={{backgroundColor: '#E6E6E6'}}>
 
                 <FlatList
                     data={rows}

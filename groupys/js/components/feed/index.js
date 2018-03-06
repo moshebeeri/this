@@ -33,12 +33,8 @@ class Feed extends Component {
     }
 
     shouldComponentUpdate() {
-        if (this.props.currentScreen === 'home' && this.props.selectedTab === 'feed') {
-            // if (this.props.shouldRender || this.state.renderNow) {
-            //     this.props.actions.stopRender();
-            //     this.setState({renderNow:false})
-            //     return true;
-            // }
+        if (this.props.currentScreen === 'home') {
+
             return true;
         }
         return false;

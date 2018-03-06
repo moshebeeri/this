@@ -160,9 +160,14 @@ async function updateUserLocale(dispatch, token, user, locale) {
 
 async function updateUserToken(dispatch, token, user, fireBaseToken) {
     try {
-        if (!user.firebase || (user.firebase && !user.firebase.tokens ) || (
-                user.firebase && user.firebase.tokens && user.firebase.tokens[0] !== fireBaseToken
-            )) {
+        // if(!(user.firebase && user.firebase.tokens && user.firebase.tokens[0] === fireBaseToken)){
+        //     //not update token
+        // }
+        console.log(`${user.firebase.tokens[0]} !== ${fireBaseToken}`);
+        if (/*!user.firebase || (user.firebase && !user.firebase.tokens ) || (
+                user.firebase && user.firebase.tokens && user.firebase.tokens[0] !== fireBaseToken)*/
+            true
+            ) {
             dispatch({
                 type: actions.SAVING_USER,
             });
