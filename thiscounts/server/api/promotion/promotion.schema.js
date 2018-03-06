@@ -67,7 +67,8 @@ let PromotionSchemaObject = {
       type: String,
       enum: [
         'FOLLOW_ENTITY',
-        'PROXIMITY'
+        'PROXIMITY',
+        'FOLLOWER_PROXIMITY'
       ]
     },
     entity :{
