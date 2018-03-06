@@ -10,7 +10,7 @@ module.exports = {
         flexDirection: 'row',
         justifyContent: 'flex-end',
         alignItems:'flex-start',
-        backgroundColor:'white'
+        backgroundColor:'#E6E6E6'
 
     },
     messageUsercomponent: {
@@ -40,7 +40,7 @@ module.exports = {
         paddingLeft:4,
 
         width:width  -60,
-        backgroundColor:'#0699dc',
+        backgroundColor:'#2db6c8',
     },
     messageName: {
         flexDirection: 'column',
@@ -52,7 +52,7 @@ module.exports = {
         paddingRight:4,
         paddingLeft:4,
         maxWidth:width  -100,
-        backgroundColor:'#0699dc',
+        backgroundColor:'#2db6c8',
     },
     message_container_user: {
         backgroundColor:'transparent',
@@ -69,7 +69,8 @@ module.exports = {
     },
     dateUsercontainer: {
         justifyContent: 'flex-start',
-        marginRight: 10,
+        marginLeft: 12,
+        marginBottom:2,
         flexDirection: 'row',
     },
     dateContainer: {
@@ -82,10 +83,27 @@ module.exports = {
         fontFamily: 'Roboto-Regular', marginRight: 10, marginLeft: 10, marginTop: vh * 1, fontSize: 14, color: 'gray'
     },
     messageText:{
+        color: '#616F70',
+        fontSize: 18
+
+    },
+    messageTextWhite:{
         color: 'white',
+        fontSize: 18
 
     },
     timeText:{
+        color: '#616F70',
+
+        marginBottom:8,
+        marginRight:8,
+        marginLeft:8,
+        justifyContent:'flex-end',
+        backgroundColor:'transparent',
+        fontSize:12,
+
+    },
+    timeTextWhite:{
         color: 'white',
 
         marginBottom:8,

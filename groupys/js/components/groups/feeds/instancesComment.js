@@ -58,7 +58,7 @@ class instancesComment extends Component {
                                     ItemDetail={this.renderItem.bind(this)}/>
             </View>
 
-            <View>
+            <View style={{marginTop:10}}>
                 <MessageBox onPress={this._onPressButton.bind(this)}/>
             </View>
         </View>

@@ -23,7 +23,7 @@ export default class ChatMessage extends Component {
             alignItems: 'flex-start',
             backgroundColor: '#E6E6E6',
         };
-        const messageTime = this.createMessageTime(item.date);
+        const messageTime = this.createMessageTime(item.date,item.isUser);
         let styleContainer = styles.messageUserName;
         if (wide) {
             styleContainer = styles.messageWideUserName;
@@ -35,24 +35,24 @@ export default class ChatMessage extends Component {
 
                     <View>
                         <View style={styles.dateUsercontainer}>
-                            <ThisText >{item.name}</ThisText>
+                            <ThisText style={{color:'#616F70'}}>{item.name}</ThisText>
 
                         </View>
                         <View style={{flexDirection:'row'}}>
                         <View style={{
                             justifyContent: 'flex-start',
                             alignItems: 'flex-start',
-                            height: 10,
-                            width: 5,
+                            height: 15,
+                            width: 10,
                             backgroundColor: 'white'
                         }}>
                             <View style={{
-                                width: 5,
-                                height: 10,
+                                width: 10,
+                                height: 15,
                                 alignItems: 'center',
                                 justifyContent: 'center',
                                 backgroundColor: '#E6E6E6',
-                                borderTopRightRadius: 5
+                                borderTopRightRadius: 10
                             }}>
 
 
@@ -95,7 +95,7 @@ export default class ChatMessage extends Component {
 
 
                             <View style={styles.message_container}>
-                                <ThisText numberOfLines={3} style={styles.messageText}>{item.message}</ThisText>
+                                <ThisText numberOfLines={3} style={styles.messageTextWhite}>{item.message}</ThisText>
 
                             </View>
                             <View style={{ alignItems:'flex-end',justifyContent:'flex-end'}}>
@@ -113,16 +113,16 @@ export default class ChatMessage extends Component {
                     justifyContent: 'flex-end',
                     alignItems: 'flex-end',
                     height: 10,
-                    width: 5,
-                    backgroundColor: '#0699dc'
+                    width: 15,
+                    backgroundColor: '#2db6c8'
                 }}>
                     <View style={{
                         height: 10,
-                        width: 5,
+                        width: 15,
                         alignItems: 'center',
                         justifyContent: 'center',
-                        backgroundColor: 'white',
-                        borderTopLeftRadius: 5
+                        backgroundColor: '#E6E6E6',
+                        borderTopLeftRadius: 10
                     }}>
 
                     </View>
@@ -138,10 +138,16 @@ export default class ChatMessage extends Component {
         return false;
     }
 
-    createMessageTime(date) {
+    createMessageTime(date,isUser) {
         if (date) {
-            return <ThisText note
-                             style={styles.timeText}>{dateUtils.messageFormater(date)}</ThisText>
+            if(isUser) {
+                return <ThisText note
+                                 style={styles.timeTextWhite}>{dateUtils.messageFormater(date)}</ThisText>
+            }else{
+                return <ThisText note
+                                 style={styles.timeText}>{dateUtils.messageFormater(date)}</ThisText>
+
+            }
         }
         return undefined;
     }
