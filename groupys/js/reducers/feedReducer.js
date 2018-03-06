@@ -144,6 +144,7 @@ export default function feeds(state = initialState, action) {
             return {
                 ...state,
                 visibleFeed: action.feedId,
+                visibleFeeds: [],
             };
         case actions.CURRENT_TAB:{
             return {
@@ -162,11 +163,11 @@ export default function feeds(state = initialState, action) {
             );
             if (idIndex === 0) {
                 visitedFeeds.push(feedstate.feedView[0]);
-                visitedFeeds.push(feedstate.feedView[1]);
+
             } else {
                 visitedFeeds.push(feedstate.feedView[idIndex - 1]);
                 visitedFeeds.push(feedstate.feedView[idIndex]);
-                visitedFeeds.push(feedstate.feedView[idIndex + 1]);
+
             }
             return {
                 ...state,

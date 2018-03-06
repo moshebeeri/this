@@ -3,26 +3,13 @@
  */
 import {createSelector} from 'reselect'
 
-const getStateGroups = (state) => state.groups;
-const getStateComments = (state) => state.comments;
-export const getGroups = createSelector([getStateGroups,getStateComments],
-    (groups,comments) => {
-        if (!_.isEmpty(groups.groups)) {
-            let result =  Object.keys(groups.groups).map(key => {
-                let response = groups.groups[key];
-                if(groups.groupFeedsUnread[key]){
-                    response.unreadFeeds = groups.groupFeedsUnread[key];
-                }else{
-                    response.unreadFeeds = 0;
-                }
+const getStateGroups = (state) => state.groups.groups;
 
-                if(comments.groupUnreadComments[key]){
-                    response.unreadMessages = comments.groupUnreadComments[key];
-                }
-                else{
-                    response.unreadMessages = 0;
-                }
-                response.key = key;
+export const getGroups = createSelector([getStateGroups],
+    (groups) => {
+        if (!_.isEmpty(groups)) {
+            let result =  Object.keys(groups).map(key => {
+                let response = groups[key];
                 return response;
             }).sort(function(a, b){
                 return b.touched - a.touched;

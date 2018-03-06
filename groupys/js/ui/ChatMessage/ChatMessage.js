@@ -21,30 +21,57 @@ export default class ChatMessage extends Component {
             marginLeft:10,
             marginRight:10,
             alignItems: 'flex-start',
-            backgroundColor: 'white',
+            backgroundColor: '#E6E6E6',
         };
         const messageTime = this.createMessageTime(item.date);
         let styleContainer = styles.messageUserName;
         if (wide) {
             styleContainer = styles.messageWideUserName;
         }
-        if (item.isUser) {
+        if (!item.isUser) {
             return <View style={containerStyle}>
                 <View style={styles.messageUsercomponent}>
 
 
                     <View>
+                        <View style={styles.dateUsercontainer}>
+                            <ThisText >{item.name}</ThisText>
+
+                        </View>
+                        <View style={{flexDirection:'row'}}>
+                        <View style={{
+                            justifyContent: 'flex-start',
+                            alignItems: 'flex-start',
+                            height: 10,
+                            width: 5,
+                            backgroundColor: 'white'
+                        }}>
+                            <View style={{
+                                width: 5,
+                                height: 10,
+                                alignItems: 'center',
+                                justifyContent: 'center',
+                                backgroundColor: '#E6E6E6',
+                                borderTopRightRadius: 5
+                            }}>
+
+
+                            </View>
+
+                        </View>
                         <View style={styleContainer}>
-                            <ThisText style={styles.messageNameText}>{item.name}</ThisText>
+
                             <View style={styles.message_container_user}>
                                 <ThisText numberOfLines={3} style={styles.messageText}>{item.message}</ThisText>
 
                             </View>
-                        </View>
-                        <View style={styles.dateUsercontainer}>
+                            <View style={{ alignItems:'flex-end',justifyContent:'flex-end'}}>
                             {messageTime}
+                            </View>
 
                         </View>
+                        </View>
+
                     </View>
 
 
@@ -58,29 +85,52 @@ export default class ChatMessage extends Component {
                 marginLeft:10,
                 marginRight:10,
                 alignItems: 'flex-end',
-                backgroundColor: 'white',
+                backgroundColor: '#E6E6E6',
             }}>
+                <View style={{flexDirection:'row'}}>
                 <View style={styles.messageComponent}>
                     <View>
+
                         <View style={styles.messageName}>
-                            <ThisText style={styles.messageNameText}>{item.name}</ThisText>
+
+
                             <View style={styles.message_container}>
                                 <ThisText numberOfLines={3} style={styles.messageText}>{item.message}</ThisText>
 
                             </View>
+                            <View style={{ alignItems:'flex-end',justifyContent:'flex-end'}}>
+                                {messageTime}
+                            </View>
                         </View>
-                        <View style={styles.dateContainer}>
-                            {messageTime}
 
-                        </View>
                     </View>
 
 
 
                 </View>
 
+                <View style={{
+                    justifyContent: 'flex-end',
+                    alignItems: 'flex-end',
+                    height: 10,
+                    width: 5,
+                    backgroundColor: '#0699dc'
+                }}>
+                    <View style={{
+                        height: 10,
+                        width: 5,
+                        alignItems: 'center',
+                        justifyContent: 'center',
+                        backgroundColor: 'white',
+                        borderTopLeftRadius: 5
+                    }}>
 
+                    </View>
+                </View>
+                </View>
             </View>
+
+
         }
     }
 
@@ -91,7 +141,7 @@ export default class ChatMessage extends Component {
     createMessageTime(date) {
         if (date) {
             return <ThisText note
-                             style={styles.dateFont}>{dateUtils.messageFormater(date)}</ThisText>
+                             style={styles.timeText}>{dateUtils.messageFormater(date)}</ThisText>
         }
         return undefined;
     }

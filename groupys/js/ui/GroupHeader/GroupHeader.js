@@ -106,25 +106,19 @@ export default class GroupHeader extends Component {
                         flexDirection: 'row', flex: 5, marginTop: 8,
                         alignItems: 'center'
                     }}>
-                        {/*<ThisText style={this.createStyle(group.entity_type)}>{this.createTitle(group.entity_type)}</ThisText>*/}
+                        <ThisText style={styles.groupEntity}>{this.createTitle(group.entity_type)}</ThisText>
 
-                        <ImageController
-                            style={{marginLeft: 0, marginRight: 8, alignItems: 'flex-start', width: 18, height: 18}}
-                            source={require('../../../images/usersicon.png')}/>
-                        {group.social_state &&
-                        <ThisText style={{fontSize: 15}}>{group.social_state.followers}</ThisText>}
+
+                        {group.social_state && <View style={{flexDirection:'row'}}>
+                        <ThisText style={styles.groupEntity}> | {group.social_state.followers}</ThisText>
+                        <ThisText style={styles.groupEntity}> {strings.Members}</ThisText>
+                        </View>}
 
 
                     </View>
 
                 </View>
-                <View style={{
-                    flex: 1,
-                    justifyContent: 'center',
-                    alignItems: 'flex-end', marginRight: 30
-                }}>
-                    {this.createIcon(group.entity_type)}
-                </View>
+
             </View>
 
         </TouchableOpacity>

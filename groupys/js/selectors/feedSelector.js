@@ -48,7 +48,7 @@ export const getFeeds = createSelector([getStateFeeds, getStatePosts, getStateBu
                 feedsUi = feedsUi.filter(feed => feed);
                 feedsUi = feedsUi.filter(filter => filter.id);
                 feedsUi = feedsUi.filter(filter => !filter.blocked);
-                if (mainTab.selectedTab !== 'feed' || store.getState().render.currentScreen !== 'home') {
+                if (store.getState().render.currentScreen !== 'home') {
                     feedsUi = feedsUi.slice(0, 10)
                     return feedsUi;
                 }

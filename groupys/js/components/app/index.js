@@ -89,12 +89,12 @@ FCM.on(FCMEvent.Notification, async (notif) => {
         //Android: app is open/resumed because user clicked banner or tapped app icon
     }
 
-    // if (notif && notif.model === 'instance') {
-    //     let token = reduxStore.getState().authentication.token;
-    //
-    //     popupActions.promotionPopAction(notif._id, notif.notificationId,reduxStore.dispatch,token);
-    //     return;
-    // }
+    if (notif && notif.model === 'instance') {
+        let token = reduxStore.getState().authentication.token;
+
+        popupActions.promotionPopAction(notif._id, notif.notificationId,reduxStore.dispatch,token);
+        return;
+    }
     if (Platform.OS === 'ios') {
         //optional
         //iOS requires developers to call completionHandler to end notification process. If you do not call it your background remote notifications could be throttled, to read more about it see https://developer.apple.com/documentation/uikit/uiapplicationdelegate/1623013-application.
@@ -215,8 +215,9 @@ class ApplicationManager extends Component {
         groupsActions.stopListenForChat();
         instanceGroupCommentsAction.stopListenForChat();
         feedAction.stopMainFeedsListener();
-        actions.changeTab(tab);
+       // actions.changeTab(tab);
 
+       // this.setState({activeTab:tab.i})
     }
 
     navigateToAdd() {
@@ -324,6 +325,7 @@ class ApplicationManager extends Component {
                                     navigation={this.props.navigation} index={2}/>
                             <Notification activeTab={this.state.activeTab} tabLabel={notificationLabel}
                                           navigation={this.props.navigation} index={3}/>
+
 
 
                         </ScrolTabView>

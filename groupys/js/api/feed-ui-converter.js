@@ -269,6 +269,7 @@ class FeedConverter {
             responseFeed.description = instance.promotion.description;
             let date = new Date(instance.promotion.end);
             responseFeed.endDate = date.toLocaleDateString();
+            responseFeed.created = instance.promotion.created;
             responseFeed.generalId = instance.promotion._id;
             responseFeed.entities = [{promotion: instance.promotion._id}];
             if (promotion.pictures && promotion.pictures[0]) {
@@ -436,6 +437,7 @@ class FeedConverter {
             }
             responseFeed.shareable = !instance.shareable;
             responseFeed.endDate = date.toLocaleDateString();
+            responseFeed.created = instance.promotion.created;
             responseFeed.name = promotion.name;
             responseFeed.description = promotion.description;
             responseFeed.showSocial = true;

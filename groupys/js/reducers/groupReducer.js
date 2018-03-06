@@ -9,6 +9,7 @@ const initialState = {
     lastFeed: {},
     lastFeedTime: {},
     lastGroupQrcode: '',
+    visibleGroup:'',
     saving: false
 };
 import {REHYDRATE} from "redux-persist/constants";
@@ -127,6 +128,12 @@ export default function group(state = initialState, action) {
                 ...state,
                 saving: false,
             };
+        case actions.VISIBLE_FEED:
+            return {
+                ...state,
+                visibleGroup: action.feedId,
+            };
+
         case actions.GROUP_TOUCHED:
             Object.keys(currentGroups).forEach(groupId => {
                 if(!currentGroups[groupId].touched)
