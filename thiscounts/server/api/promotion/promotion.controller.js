@@ -144,7 +144,7 @@ function applyToFollowingUsers(promotion, instances, callback) {
         pricing.balance(instance.promotion.entity, function (err, positiveBalance) {
           if (err) return callback(err);
           if (!positiveBalance) return callback(new Error('HTTP_PAYMENT_REQUIRED'));
-          instanceGraphModel.relate_ids(user._id, 'ELIGIBLE', `{start: ${promotion.start}, end: ${promotion.end}`, instance._id);
+          instanceGraphModel.relate_ids(user._id, 'ELIGIBLE', instance._id, `{start: ${promotion.start}, end: ${promotion.end}`);
           user_instance_eligible_activity(user._id, instance);
           Instance.notify(instance._id, [user._id]);
         })

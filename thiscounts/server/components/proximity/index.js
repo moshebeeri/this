@@ -45,28 +45,63 @@ function createReport(userId, location, callback) {
   });
 }
 
-/**   Working example
-*     MATCH (p:promotion)<-[on:ON_ACTION]-(entity)<-[:FOLLOW]-(u:user{_id:'59a412c7f7956ee14eca6d41'})
-*     WITH on,entity, {longitude:34.785981,latitude:32.090955} AS coordinate
-*     CALL spatial.withinDistance('world', coordinate, on.proximity) YIELD node AS p
-*     WITH p._id as _id, 34.785981 as lon, 32.090955 as lat, p.lat as p_lat, p.lon as p_lon, entity
-*     WHERE _id IS NOT NULL AND on.type = 'PROXIMITY'
-*     RETURN _id, 2 * 6371 * asin(sqrt(haversin(radians(lat - p_lat))+ cos(radians(lat))* cos(radians(p_lat))* haversin(radians(lon - p_lon)))) as d,
-*             entity._id as entity, labels(entity) as labels
-*     ORDER BY d ASC
-*     skip 0 limit 20
-* */
+function coordinatesDistance(point1, point2) {
+  const lat1 = point1.lat;
+  const lon1 = point1.lon;
+  const lat2 = point2.lat;
+  const lon2 = point2.lon;
+  const R = 6371e3; // metres
+  const phi1 = lat1.toRadians();
+  const phi2 = lat2.toRadians();
+  const deltaPhi = (lat2-lat1).toRadians();
+  const deltaGamma = (lon2-lon1).toRadians();
+  const a = Math.sin(deltaPhi/2) * Math.sin(deltaPhi/2) +
+          Math.cos(phi1) * Math.cos(phi2) *
+          Math.sin(deltaGamma/2) * Math.sin(deltaGamma/2);
+  const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
+  const d = R * c;
+  return d;
+}
+
+//   MATCH (b:business)-[o:ON_ACTION]-(p:promotion)
+//   WITH point({longitude:34.7843949,latitude:32.0907389}) AS coordinate, point({ longitude: p.lon, latitude: p.lat }) AS promotionPoint, b,o,p
+//   WHERE distance( coordinate, promotionPoint) < 1
+//   return b,o,p, distance( coordinate, promotionPoint) as d
+//   backup:
+//   CALL spatial.withinDistance('world', coordinate, on.proximity) YIELD node AS p
+//   (2 *
+//    6371 * asin(
+//      sqrt(
+//      haversin(radians(promo.lat - entity.lat))+
+//      cos(radians(promo.lat)) *
+//      cos(radians(entity.lat))*
+//      haversin(radians(promo.lon - entity.lat)))
+//   )
+//  )
+//
+//   RETURN 2 * 6371 * asin(
+//     sqrt(
+//       haversin(radians(n.lat - 53.489271)) +
+//       cos(radians(n.lat)) *
+//       cos(radians(53.489271)) *
+//       haversin(radians(n.lon - (-2.246704)))
+//     )
+//   ) AS dist
+
 function handleFollowersProximityActions(userId, location, callback) {
   let skip = 0;
   let limit = 20;
   let coordinate = spatial.location_to_special(location);
-  const query = ` MATCH (promo:promotion)<-[on:ON_ACTION]-(entity)<-[:FOLLOW]-(u:user{_id:'${userId}'})
+  const query = ` MATCH (promo:promotion)<-[on:ON_ACTION]-(entity)<-[f:FOLLOW]-(u:user{_id:'${userId}'})
+                  WITH   entity,promo,u,on, 
+                          point({longitude:${coordinate.longitude},latitude:${coordinate.latitude}}) AS coordinate,
+                          point({longitude:promo.lon,latitude:promo.lat}) AS promoLocation
                   WHERE  promo._id IS NOT NULL AND on.type = 'FOLLOWER_PROXIMITY'
-                  WITH   entity,promo,u,on, {longitude:${coordinate.longitude},latitude:${coordinate.latitude}} AS coordinate
-                  CALL spatial.withinDistance('world', coordinate, on.proximity) YIELD node AS p
+                  			AND ( NOT exists(f.eligible_by_proximity_time) OR f.eligible_by_proximity_time + 1000*60*60*24*14 > timestamp()) 
+                  			AND distance(coordinate, promoLocation) < on.proximity*1000
                   WITH   promo, entity
                   RETURN distinct promo, entity, labels(entity) as labels
-                  ORDER BY (2 * 6371 * asin(sqrt(haversin(radians(promo.lat - entity.lat))+ cos(radians(promo.lat))*cos(radians(entity.lat))*haversin(radians(promo.lon - entity.lat))))) desc
+                  ORDER BY distance(coordinate, promoLocation) desc
                   SKIP ${skip} LIMIT ${limit}`;
 
   console.log('handleFollowersProximityActions: ' + query);
@@ -84,14 +119,16 @@ function handleProximityActions(userId, location, callback) {
   let limit = 20;
   let coordinate = spatial.location_to_special(location);
   const query = ` MATCH (promo:promotion)<-[on:ON_ACTION]-(entity),(u:user{_id:'${userId}'})  
+                  WITH   entity,promo,on, 
+                          point({longitude:${coordinate.longitude},latitude:${coordinate.latitude}}) AS coordinate,
+                          point({longitude:promo.lon,latitude:promo.lat}) AS promoLocation                  
                   WHERE  promo._id IS NOT NULL AND on.type = 'PROXIMITY'
-                  AND NOT (entity)<-[:FOLLOW]-(u)
-                  AND NOT (entity)<-[:NO_ON_PROXIMITY_ACTION]-(u)
-                  WITH   entity,promo,on, {longitude:${coordinate.longitude},latitude:${coordinate.latitude}} AS coordinate
-                  CALL spatial.withinDistance('world', coordinate, on.proximity) YIELD node AS p
+                  			AND distance(coordinate, promoLocation) < on.proximity*1000
+                        AND NOT (entity)<-[:FOLLOW]-(u)
+                        AND NOT (entity)<-[:NO_ON_PROXIMITY_ACTION]-(u)
                   WITH   promo, entity
                   RETURN distinct promo, entity, labels(entity) as labels
-                  ORDER BY (2 * 6371 * asin(sqrt(haversin(radians(promo.lat - entity.lat))+ cos(radians(promo.lat))*cos(radians(entity.lat))*haversin(radians(promo.lon - entity.lat))))) desc
+                  ORDER BY distance(coordinate, promoLocation) desc
                   SKIP ${skip} LIMIT ${limit}`;
 
   console.log('handleProximityActions: ' + query);
@@ -118,14 +155,30 @@ function proximityEligibility(userId, location, eligible, isFollower, callback) 
   Promotion.findById(eligible.promo._id, function (err, promotion) {
     if (err) return callback(err);
     if (!promotion) return callback(new Error('promotion not found for _id:' + eligible.promo._id));
+    const action = isFollower? 'follower_eligible_by_proximity' : 'eligible_by_proximity';
     Instance.createSingleInstance(promotion, function (err, instance) {
       activity.activity({
         instance: instance._id,
         promotion: instance.promotion._id,
         ids: [userId],
-        action: isFollower? 'follower_eligible_by_proximity' : 'eligible_by_proximity',
+        action: action,
         location: location
       });
+
+      if(!isFollower)
+        graphModel.relate_ids(userId, 'ON_ACTION_SENT', eligible.entity._id,  `{time: timestamp(), action: '${action}'`);
+      else{ //FOLLOWER
+        let q = `MATCH (u:user)-[f:FOLLOW]->(e) 
+                 WHERE u._id='${userId}' and e._id='${eligible.entity._id}' 
+                 SET   f.eligible_by_proximity_time = timestamp()`;
+        graphModel.query(q,(err)=>{
+          if(err) {
+            console.log(`failed to set eligible_by_proximity_time`);
+            console.error(err);
+          }
+        })
+      }
+
       Instance.notify(instance._id, [userId]);
       //Notify new costumer received eligible by proximity
       if(!isFollower) {
@@ -198,11 +251,3 @@ exports.reportLastLocation = function(userId, location, callback) {
 
 };
 
-/*
-*
-* MATCH (b:business)-[o:ON_ACTION]-(p:promotion)
-WITH point({longitude:34.7843949,latitude:32.0907389}) AS coordinate, point({ longitude: p.lon, latitude: p.lat }) AS promotionPoint, b,o,p
-WHERE distance( coordinate, promotionPoint) < 1
-return b,o,p, distance( coordinate, promotionPoint) as d
-*
-* */
