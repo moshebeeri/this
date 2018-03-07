@@ -60,8 +60,9 @@ function handleFollowersProximityActions(userId, location, callback) {
   let skip = 0;
   let limit = 20;
   let coordinate = spatial.location_to_special(location);
-  const query = ` MATCH (promo:promotion)<-[on:ON_ACTION]-(entity)<-[:FOLLOW]-(u:user{_id:'${userId}'})
+  const query = ` MATCH (promo:promotion)<-[on:ON_ACTION]-(entity)<-[f:FOLLOW]-(u:user{_id:'${userId}'})
                   WHERE  promo._id IS NOT NULL AND on.type = 'FOLLOWER_PROXIMITY'
+                  			AND ( NOT exists(f.eligible_by_proximity_time) OR f.eligible_by_proximity_time + 1000*60*60*24*14 > timestamp()) 
                   WITH   entity,promo,u,on, {longitude:${coordinate.longitude},latitude:${coordinate.latitude}} AS coordinate
                   CALL spatial.withinDistance('world', coordinate, on.proximity) YIELD node AS p
                   WITH   promo, entity
@@ -118,14 +119,30 @@ function proximityEligibility(userId, location, eligible, isFollower, callback) 
   Promotion.findById(eligible.promo._id, function (err, promotion) {
     if (err) return callback(err);
     if (!promotion) return callback(new Error('promotion not found for _id:' + eligible.promo._id));
+    const action = isFollower? 'follower_eligible_by_proximity' : 'eligible_by_proximity';
     Instance.createSingleInstance(promotion, function (err, instance) {
       activity.activity({
         instance: instance._id,
         promotion: instance.promotion._id,
         ids: [userId],
-        action: isFollower? 'follower_eligible_by_proximity' : 'eligible_by_proximity',
+        action: action,
         location: location
       });
+
+      if(!isFollower)
+        graphModel.relate_ids(userId, 'ON_ACTION_SENT', eligible.entity._id,  `{time: timestamp(), action: '${action}'`);
+      else{ //FOLLOWER
+        let q = `MATCH (u:user)-[f:FOLLOW]->(e) 
+                 WHERE u._id='${userId}' and e._id='${eligible.entity._id}' 
+                 SET   f.eligible_by_proximity_time = timestamp()`;
+        graphModel.query(q,(err)=>{
+          if(err) {
+            console.log(`failed to set eligible_by_proximity_time`);
+            console.error(err);
+          }
+        })
+      }
+
       Instance.notify(instance._id, [userId]);
       //Notify new costumer received eligible by proximity
       if(!isFollower) {

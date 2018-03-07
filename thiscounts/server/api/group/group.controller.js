@@ -623,7 +623,7 @@ function groupFollowersExclude(groupId, exUserId, callback) {
   const ex = exUserId? `AND u._id <> '${exUserId}'`: '' ;
 
   const query = `MATCH (u:user),(g:group)
-                 WHERE (u)-[:FOLLOW]->(g) AND g._id = '${groupId} ${ex}'
+                 WHERE (u)-[:FOLLOW]->(g) AND g._id = '${groupId}' ${ex}
                  RETURN u._id as _id limit 1000
                  `;
   graphModel.query(query,(err, ids) => {

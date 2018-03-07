@@ -59,7 +59,7 @@ exports.update = function(req, res) {
 
 exports.read = function(req, res) {
   Notification.findById(req.params.id, function (err, notification) {
-    if (err) { return handleError(res, err); }
+    if (err) {return handleError(res, err); }
     if(!notification) { return res.send(404); }
     notification.read = true;
     notification.save(function (err) {
