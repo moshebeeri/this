@@ -26,7 +26,7 @@ class GenericListManager extends Component {
     }
 
     renderItem(item) {
-        const {navigation, user, actions, groupActions,ItemDetail,setVisibleItem,onPressItem,onPressMessageItem,visibleItem} = this.props;
+        const {navigation, user, business,businessId,actions, groupActions,ItemDetail,setVisibleItem,onPressItem,onPressMessageItem,visibleItem,location} = this.props;
         let id = item.item.id;
         if (!id) {
             id = item.item._id;
@@ -38,12 +38,15 @@ class GenericListManager extends Component {
         return <ItemDetail
             key={id}
             user={user}
+            business={business}
             index={index}
+            businessId={businessId}
             onPressMessageItem={onPressMessageItem}
             setVisibleItem={setVisibleItem}
             visibleItem={visibleItem}
             groupActions={groupActions}
             navigation={navigation}
+            location={location}
             onPressItem={onPressItem}
             item={item.item}
             actions={actions}/>

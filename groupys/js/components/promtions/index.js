@@ -44,17 +44,6 @@ class Promotions extends Component {
         actions.setBusinessPromotions(navigation.state.params.business._id);
     }
 
-    renderItem(item) {
-        const {location, navigation} = this.props;
-        return <PromotionListItem
-            item={item.item}
-            businessId={navigation.state.params.business._id}
-            index={item.index}
-            key={item.item._id}
-            location={location}
-            navigation={this.props.navigation}
-        />
-    }
 
     navigateToAdd() {
         const {navigation, promotionActions} = this.props;
@@ -138,7 +127,9 @@ class Promotions extends Component {
                 <GenericListManager rows={promotions[businessId]} navigation={navigation} actions={actions}
                                     update={update}
                                     noRefresh
-                                    ItemDetail={this.renderItem.bind(this)}/>}
+                                    businessId={navigation.state.params.business._id}
+                                    location={location}
+                                    ItemDetail={PromotionListItem}/>}
 
 
             </Container>

@@ -24,15 +24,7 @@ class UserPermittedRoles extends Component {
         this.props.actions.setBusinessUsers(navigation.state.params.business._id);
     }
 
-    renderItem(item) {
-        const {navigation} = this.props;
-        return <UserRoleView
-            item={item.item}
-            index={item.index}
-            navigation={navigation}
-            business = {navigation.state.params.business}
-        />
-    }
+
 
     navigateToAdd() {
         const {navigation} = this.props;
@@ -51,7 +43,7 @@ class UserPermittedRoles extends Component {
                             titleColor="#FA8559" backIconColor="#FA8559"/>
 
                 <GenericListManager rows={users[business._id]} navigation={navigation} actions={actions} update={update}
-                                    onEndReached={actions.setBusinessUsers} ItemDetail={this.renderItem.bind(this)}/>
+                                    business = {navigation.state.params.business} onEndReached={actions.setBusinessUsers} ItemDetail={UserRoleView}/>
 
 
             </Container>
