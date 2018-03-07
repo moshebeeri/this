@@ -57,12 +57,41 @@ exports.show = function(req, res) {
   });
 };
 
-exports.createI18N = function (key, enUS, callback) {
-  let i18n = {
-    enUS,
-    key: key
-  };
-  I18n.create(i18n, callback)
+function getToLanguages() {
+  return []
+}
+
+exports.createI18N = function(req, res) {
+  const strings = require('./strings/strings.json');
+  Object.entries(strings).forEach(([key, enUS]) => {
+      console.log('translating key: ', key, 'with value: ', enUS);
+      I18n.create({key, enUS}, function(err, i18n) {
+        if (err) return handleError(res, err);
+        getToLanguages().forEach(to => {
+          const callTranslateApi = limit(function (category_name, callback) {
+            Translate.translate(category_name, to, callback);
+          }).to(20).per(1000);
+
+          callTranslateApi(i18n.enUS, function (err, translation) {
+            if (err) return console.log(err.message);
+            let translations = i18n.translations;
+            let newTranslations = {};
+            Object.keys(translations).forEach(key => {
+              newTranslations[key] = translations[key];
+            });
+            newTranslations[to] = translation;
+            i18n.translations = newTranslations;
+
+            i18n.save(function (err, i18n) {
+              if (err) return console.log(err.message);
+              console.log(`saving ${i18n.enUS} translation to ${to} is ${translation}`);
+            });
+          });
+          return res.json(201, i18n);
+        });
+      })
+    }
+  );
 };
 
 

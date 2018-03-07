@@ -7,6 +7,7 @@ let auth = require('../../auth/auth.service');
 let router = express.Router();
 
 //methods should not be available for outsiders
+router.get('/translate/:to', auth.hasRole('admin'), controller.translateAPI);
 router.get('/', auth.hasRole('admin'), controller.index);
 router.get('/:id', auth.hasRole('admin'), controller.show);
 router.post('/', auth.hasRole('admin'), controller.create);
