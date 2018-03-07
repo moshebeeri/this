@@ -21,6 +21,8 @@ import UiConverter from '../../../api/feed-ui-converter'
 import {GroupHeader, ImageController, PromotionHeaderSnippet, ThisText} from '../../../ui/index';
 import strings from '../../../i18n/i18n';
 import DateUtils from '../../../utils/dateUtils'
+import SimpleLineIcons from "react-native-vector-icons/SimpleLineIcons";
+
 let dateUtils = new DateUtils();
 
 const {width, height} = Dimensions.get('window');
@@ -160,10 +162,9 @@ export default class GenericListGroupView extends Component {
 
                 <View style={styles.message_container}>
 
-                    <ImageController
-                        style={{marginLeft: 0, marginRight: 12, alignItems: 'flex-start', width: 19, height: 18}}
-                        source={require('../../../../images/chaticon.png')}/>
 
+                    <SimpleLineIcons size={18} style={{marginRight:12,}}color={'#2db6c8'}
+                                     name="bubble"/>
 
                     {image}
 
