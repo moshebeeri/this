@@ -1,5 +1,5 @@
 import React, {Component} from "react";
-import {Dimensions, Platform, View} from "react-native";
+import {View} from "react-native";
 import {connect} from "react-redux";
 import {actions} from "react-native-navigation-redux-helpers";
 import {Button, Icon, Input, Thumbnail} from "native-base";
@@ -69,9 +69,10 @@ class CommentsComponent extends Component {
         return (
             <View style={{
                 width: StyleUtils.getWidth(),
-                marginTop: 5,
                 marginBottom: 5,
-                backgroundColor: 'white',
+                alignItems: 'center',
+                justifyContent: 'center',
+                backgroundColor: '#E6E6E6',
                 flex: 1,
             }}>
                 {promotionHeader}
@@ -132,8 +133,6 @@ class CommentsComponent extends Component {
         return <ChatMessage key={item.id}
                             item={messageItem}/>
     }
-
-
 }
 
 export default connect(

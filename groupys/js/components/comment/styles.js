@@ -9,7 +9,7 @@ module.exports = {
     },
     inputContainer: {
         flex: 1,
-        backgroundColor: '#bfbfbf',
+        backgroundColor: '#E6E6E6',
         alignItems:'center',
         justifyContent:'center'
     },
@@ -127,7 +127,6 @@ module.exports = {
     },
     comments_promotions: {
         padding: 0,
-        margin: 10,
         flex:1.4,
         backgroundColor: 'white',
         flexDirection: 'row',

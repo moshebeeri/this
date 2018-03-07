@@ -137,7 +137,7 @@ module.exports = {
     },
     comments_promotions: {
         padding: 0,
-        margin: 10,
+        margin: 4,
         flex:1.4,
         backgroundColor: 'white',
         flexDirection: 'row',
