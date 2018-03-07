@@ -6,8 +6,8 @@ const googleTranslate = require('@google-cloud/translate');
 const limit = require("simple-rate-limiter");
 
 const Translate = googleTranslate({
-  projectId: 'this-f2f45',
-  keyFilename: './server/config/keys/this-vision.json'
+  projectId: 'this-1000',
+  keyFilename: './server/config/keys/this-1000-vision.json'
 });
 
 function translate(to) {
