@@ -90,7 +90,7 @@ class Promotions extends Component {
     }
 
     render() {
-        const {navigation, promotions, actions, update, promotionsLoading} = this.props;
+        const {navigation, promotions, actions, update, promotionsLoading,location} = this.props;
         const businessId = navigation.state.params.business._id;
         let icon = <Icon5 active color={"#FA8559"} size={25} name="plus"/>
         if (Platform.OS === 'ios') {
