@@ -214,3 +214,12 @@ exports.reportLastLocation = function(userId, location, callback) {
   });
 
 };
+
+/*
+*
+* MATCH (b:business)-[o:ON_ACTION]-(p:promotion)
+WITH point({longitude:34.7843949,latitude:32.0907389}) AS coordinate, point({ longitude: p.lon, latitude: p.lat }) AS promotionPoint, b,o,p
+WHERE distance( coordinate, promotionPoint) < 1
+return b,o,p, distance( coordinate, promotionPoint) as d
+*
+* */

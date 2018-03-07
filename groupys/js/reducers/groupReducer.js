@@ -9,7 +9,9 @@ const initialState = {
     lastFeed: {},
     lastFeedTime: {},
     lastGroupQrcode: '',
-    visibleGroup:'',
+    visibleGroup: '',
+    visibleFeeds: [],
+    touch: false,
     saving: false
 };
 import {REHYDRATE} from "redux-persist/constants";
@@ -35,7 +37,7 @@ export default function group(state = initialState, action) {
         case actions.UPSERT_GROUP:
             action.item.forEach(eventItem => {
                 if (!eventItem.preview) {
-                    if( eventItem.pictures.length  === 0 && currentGroups[eventItem._id]){
+                    if (eventItem.pictures.length === 0 && currentGroups[eventItem._id]) {
                         eventItem.pictures = currentGroups[eventItem._id].pictures
                     }
                     currentGroups[eventItem._id] = eventItem;
@@ -113,11 +115,9 @@ export default function group(state = initialState, action) {
             immutableState.lastGroupQrcode = ''
             immutableState.update = !immutableState.update;
             return immutableState;
-
         case actions.GET_GROUPS_BUSINESS :
             immutableState['groups' + action.bid] = action.groups;
             return immutableState;
-
         case actions.GROUP_SAVING:
             return {
                 ...state,
@@ -133,15 +133,36 @@ export default function group(state = initialState, action) {
                 ...state,
                 visibleGroup: action.feedId,
             };
-
         case actions.GROUP_TOUCHED:
             Object.keys(currentGroups).forEach(groupId => {
-                if(!currentGroups[groupId].touched)
+                if (!currentGroups[groupId].touched)
                     currentGroups[action.groupId].touched = new Date().getTime()
             });
-            if(currentGroups[action.groupId])
+            if (currentGroups[action.groupId])
                 currentGroups[action.groupId].touched = new Date().getTime();
+            immutableState.update = !immutableState.update;
             return immutableState;
+        case actions.VISIBLE_GROUP_FEED:
+            let visitedFeeds = [];
+            let idIndex = immutableState.groupFeedOrder[action.groupId].findIndex(element => {
+                    if (element === action.feedId) {
+                        return true;
+                    }
+                    return false;
+                }
+            );
+            if (idIndex === 0) {
+                visitedFeeds.push(immutableState.groupFeedOrder[action.groupId][0]);
+
+            } else {
+                visitedFeeds.push(immutableState.groupFeedOrder[action.groupId][idIndex - 1]);
+                visitedFeeds.push(immutableState.groupFeedOrder[action.groupId][idIndex]);
+
+            }
+            return {
+                ...state,
+                visibleFeeds: visitedFeeds,
+            };
         default:
             return state;
     }

@@ -3,13 +3,13 @@
  */
 import {createSelector} from 'reselect'
 
-const getStateGroups = (state) => state.groups.groups;
+const getStateGroups = (state) => state.groups;
 
 export const getGroups = createSelector([getStateGroups],
     (groups) => {
         if (!_.isEmpty(groups)) {
-            let result =  Object.keys(groups).map(key => {
-                let response = groups[key];
+            let result =  Object.keys(groups.groups).map(key => {
+                let response = groups.groups[key];
                 return response;
             }).sort(function(a, b){
                 return b.touched - a.touched;

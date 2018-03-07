@@ -45,11 +45,6 @@ class Product extends Component {
         actions.setBusinessProducts(navigation.state.params.business._id);
     }
 
-    renderItem(item) {
-        const {navigation} = this.props;
-        return <ProductListView item={item.item} index={item.index} navigation={navigation}/>
-    }
-
     navigateToAdd() {
         const {navigation} = this.props;
         navigation.navigate("AddProduct", {business: navigation.state.params.business});
@@ -72,7 +67,7 @@ class Product extends Component {
                 <GenericListManager rows={products[businessId]} navigation={navigation} actions={actions}
                                     update={update}
                                     onEndReached={this.setBusinessProducts.bind(this)}
-                                    ItemDetail={this.renderItem.bind(this)}/>
+                                    ItemDetail={ProductListView}/>
 
             </Container>
         );

@@ -152,7 +152,7 @@ ReduceAmountTerms                             : "Purchase {0} Pay only {1}",
 ReduceAmountPromotionTitle                    : "Reduce Amount",
 PercentWithTerm                               : "Get {0} with {1} % Off",
 PercentTermWithTerm                           : "Get {0} with {1} % Off",
-NoTerms                                       : "No terms",
+
 XForYTitle                                    : "Buy X For Y",
 XForYItemTitle                                : "Buy {0} {1} Pay only {2}",
 XForYTitlePattern                             : "Buy {0} {1} Pay only {2}",
@@ -276,7 +276,8 @@ Proximity                                     : "Proximity",
 ProximityDistanceTitle                        : "Proximity Distance",
 LatestActivity                                : "Latest Activity",
 DateAtTime                                    : "{0} at {1}",
-
+NoTerms                                       : "Global Discount {0} % Off",
+OnFollowerProximity                           : "On Follower Proximity",
 
 
 

@@ -42,7 +42,6 @@ class instancesComment extends Component {
 
     render() {
         const {group, comments, navigation, actions, update, loadingDone, showTopLoader, allState} = this.props;
-        console.log('group comments rendered');
         return <View style={{flex: 1}}>
             <View style={{flex: 1}}>
                 <GenericFeedManager feeds={comments[group._id]}
@@ -58,7 +57,7 @@ class instancesComment extends Component {
                                     ItemDetail={this.renderItem.bind(this)}/>
             </View>
 
-            <View>
+            <View style={{marginTop:10}}>
                 <MessageBox onPress={this._onPressButton.bind(this)}/>
             </View>
         </View>

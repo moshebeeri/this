@@ -101,7 +101,7 @@ class Tasks {
             let token = reduxStore.getState().authentication.token;
             let user = reduxStore.getState().user.user;
             let id = reduxStore.getState().feeds.feedView[0];
-            console.log('fetching feeds');
+
             if (token && user) {
                 feedAction.fetchTopList(id, token, user, reduxStore.dispatch);
             }

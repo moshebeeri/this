@@ -27,6 +27,8 @@ export default class GroupChat extends Component {
                 avetar: item.message.logo,
                 message: item.message.description,
                 date: item.message.date,
+                post: item.post,
+                instance: item.instance,
                 isUser: isUser
             };
             return <View style={{backgroundColor: '#E6E6E6', flex: 1}}>

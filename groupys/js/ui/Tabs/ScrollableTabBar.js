@@ -110,7 +110,7 @@ const ScrollableTabBar = createReactClass({
         }
     },
     renderTab(name, page, isTabActive, onPressHandler, onLayoutHandler) {
-        console.log("rendering tav}");
+
         const {activeTextColor, inactiveTextColor, textStyle,} = this.props;
         const textColor = isTabActive ? activeTextColor : inactiveTextColor;
         const fontWeight = isTabActive ? 'bold' : 'normal';

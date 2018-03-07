@@ -64,7 +64,7 @@ export default class FeedPost extends Component {
         return false;
     }
     visited(visible) {
-        const {item,actions} = this.props;
+        const {item,actions,group} = this.props;
         if (this.refs[item.id]) {
             this.refs[item.id].visible(visible);
         }
@@ -72,7 +72,12 @@ export default class FeedPost extends Component {
             if (visible && actions && actions.setSocialState) {
                 actions.setSocialState(item);
             }
-            actions.setVisibleItem(item.id);
+            if(group){
+                actions.setVisibleItem(item.fid,group._id);
+            }else {
+                actions.setVisibleItem(item.fid);
+            }
+
         }
         this.setState({
             visible: visible

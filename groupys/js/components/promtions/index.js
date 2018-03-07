@@ -44,17 +44,6 @@ class Promotions extends Component {
         actions.setBusinessPromotions(navigation.state.params.business._id);
     }
 
-    renderItem(item) {
-        const {location, navigation} = this.props;
-        return <PromotionListItem
-            item={item.item}
-            businessId={navigation.state.params.business._id}
-            index={item.index}
-            key={item.item._id}
-            location={location}
-            navigation={this.props.navigation}
-        />
-    }
 
     navigateToAdd() {
         const {navigation, promotionActions} = this.props;
@@ -76,7 +65,7 @@ class Promotions extends Component {
     }
 
     onProximityPromotion() {
-        const {business,navigation,proximityPromotion} = this.props;
+        const {business,navigation,followerProximity} = this.props;
         let addToBusiness = business;
         if(!addToBusiness){
             addToBusiness = navigation.state.params.business;
@@ -84,12 +73,24 @@ class Promotions extends Component {
         this.props.navigation.navigate("addPromotions", {
             onBoardType: 'PROXIMITY',
             business: addToBusiness,
+            followerProximity: followerProximity[addToBusiness._id]
+        });
+    }
+    onProximityPromotion() {
+        const {business,navigation,proximityPromotion} = this.props;
+        let addToBusiness = business;
+        if(!addToBusiness){
+            addToBusiness = navigation.state.params.business;
+        }
+        this.props.navigation.navigate("addPromotions", {
+            onBoardType: 'FOLLOWER_PROXIMITY',
+            business: addToBusiness,
             proximityPromotion: proximityPromotion[addToBusiness._id]
         });
     }
 
     render() {
-        const {navigation, promotions, actions, update, promotionsLoading} = this.props;
+        const {navigation, promotions, actions, update, promotionsLoading,location} = this.props;
         const businessId = navigation.state.params.business._id;
         let icon = <Icon5 active color={"#FA8559"} size={25} name="plus"/>
         if (Platform.OS === 'ios') {
@@ -109,6 +110,9 @@ class Promotions extends Component {
                 <MenuOption onSelect={this.onProximityPromotion.bind(this)}>
                     <ThisText>{strings.OnProximityPromotion}</ThisText>
                 </MenuOption>
+                <MenuOption onSelect={this.onProximityPromotion.bind(this)}>
+                    <ThisText>{strings.OnFollowerProximity}</ThisText>
+                </MenuOption>
             </MenuOptions>
         </Menu>;
         return (
@@ -123,7 +127,9 @@ class Promotions extends Component {
                 <GenericListManager rows={promotions[businessId]} navigation={navigation} actions={actions}
                                     update={update}
                                     noRefresh
-                                    ItemDetail={this.renderItem.bind(this)}/>}
+                                    businessId={navigation.state.params.business._id}
+                                    location={location}
+                                    ItemDetail={PromotionListItem}/>}
 
 
             </Container>
@@ -139,6 +145,7 @@ export default connect(
         promotionsLoading: state.promotions.loadingDone,
         proximityPromotion: state.promotions.proximityPromotion,
         onBoardingPromotion: state.promotions.onBoardingPromotion,
+        followerProximity: state.promotions.followerProximity,
         promotionsChange: state.promotions,
         currentScreen: state.render.currentScreen,
     }),

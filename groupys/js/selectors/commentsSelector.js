@@ -19,35 +19,21 @@ export const getFeeds = createSelector([getStateFeeds],
                     response[groupId] = new Array();
                 }
                 if (feedsOrder[groupId] && feedsOrder[groupId].length > 0) {
-                    let lastGroupInstance = feeds[groupId][feedsOrder[groupId][0]].entities.instance;
-                    let lastPost = feeds[groupId][feedsOrder[groupId][0]].entities.post;
-                    let headerCreated = false;
                     feedsOrder[groupId].forEach(function (feedId) {
-                        if (!lastGroupInstance && !lastPost) {
-                            lastGroupInstance = feeds[groupId][feedId].entities.instance;
-                            lastPost = feeds[groupId][feedId].entities.post;
+                        let instance = feeds[groupId][feedId].entities.instance;
+                        let post = feeds[groupId][feedId].entities.post;
+                        if (instance) {
+                            instance = feedUiConverter.createPromotionInstance(instance)
                         }
-
-                        if ((!headerCreated && (lastGroupInstance || lastPost)) || (lastGroupInstance && feeds[groupId][feedId].entities.instance &&
-                                feeds[groupId][feedId].entities.instance._id !== lastGroupInstance._id) ||
-                            (lastPost && feeds[groupId][feedId].entities.post &&
-                                feeds[groupId][feedId].entities.post._id !== lastPost._id) || (
-                                lastGroupInstance && feeds[groupId][feedId].entities.post
-                            )
-                            || (lastPost && feeds[groupId][feedId].entities.instance)) {
-                            if (lastGroupInstance) {
-                                response[groupId].unshift({
-                                    id: feedId,
-                                    instance: feedUiConverter.createPromotionInstance(lastGroupInstance)
-                                });
-                                headerCreated = true;
-                            } else {
-                                response[groupId].unshift({id: feedId, instance: feedUiConverter.createPost(lastPost)});
-                                headerCreated = true;
-                            }
+                        if (post) {
+                            post = feedUiConverter.createPost(lastPost)
                         }
-
-                        response[groupId].unshift({id: feedId, message: createFeed(feeds[groupId][feedId])});
+                        response[groupId].unshift({
+                            id: feedId,
+                            instance: instance,
+                            post: post,
+                            message: createFeed(feeds[groupId][feedId])
+                        });
                     })
                 }
             })

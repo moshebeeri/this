@@ -415,7 +415,10 @@ export function saveFeed(id, navigation, feed) {
             });
             let savedInstance = await promotionApi.save(id);
             navigation.navigate('realizePromotion', {item: feed, id: savedInstance._id})
-            await  promotionApi.getAll();
+            dispatch({
+                type: types.SAVE_SINGLE_MYPROMOTIONS_REQUEST,
+                item: savedInstance
+            })
             handler.handleSuccses(getState(), dispatch)
         } catch (error) {
             handler.handleError(error, dispatch, 'groups-saveFeed')
@@ -572,11 +575,12 @@ export function setSocialState(item) {
         }
     }
 }
-export function setVisibleItem(itemId) {
+export function setVisibleItem(itemId,groupId) {
     return function (dispatch) {
         dispatch({
-            type: actions.VISIBLE_FEED,
-            feedId:itemId
+            type: actions.VISIBLE_GROUP_FEED,
+            feedId:itemId,
+            groupId:groupId
         });
     }
 }

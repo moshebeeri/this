@@ -1,5 +1,5 @@
 import React, {Component} from "react";
-import {Dimensions, Platform, View} from "react-native";
+import {Dimensions, View} from "react-native";
 import {connect} from "react-redux";
 import {actions} from "react-native-navigation-redux-helpers";
 import {Button, Icon, Input, Thumbnail} from "native-base";
@@ -68,9 +68,11 @@ class CommentsComponent extends Component {
         return (
             <View style={{
                 width: StyleUtils.getWidth(),
-                marginTop: 5,
+
                 marginBottom: 5,
-                backgroundColor: 'white',
+                backgroundColor: '#E6E6E6',
+                alignItems: 'center',
+                justifyContent: 'center',
                 flex: 1,
             }}>
                 {promotionHeader}

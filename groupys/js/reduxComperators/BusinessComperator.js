@@ -58,6 +58,13 @@ class BusinessComperator {
         if (newBusiness.pictures.length !== Object.keys(business.pictures).length) {
             return true;
         }
+        if(!newBusiness.social_state){
+            return false;
+        }
+        if(newBusiness.social_state && !business.social_state){
+            return true;
+        }
+
         if (newBusiness.social_state.comments !== business.social_state.comments) {
             return true;
         }

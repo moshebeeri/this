@@ -7,10 +7,12 @@
 import React, {Component} from 'react';
 import {View} from 'react-native';
 import {actions} from 'react-native-navigation-redux-helpers';
-import {Button, Container, Footer, Icon, Thumbnail} from 'native-base';
+import {Button, Container, Footer, Thumbnail} from 'native-base';
 import styles from './styles'
 import DateUtils from '../../utils/dateUtils'
 import {ThisText} from '../index'
+import Icon from 'react-native-vector-icons/EvilIcons';
+import Icon2 from 'react-native-vector-icons/MaterialIcons'
 
 let dateUtils = new DateUtils();
 export default class ChatMessage extends Component {
@@ -18,12 +20,12 @@ export default class ChatMessage extends Component {
         const {item, wide} = this.props;
         const containerStyle = {
             marginTop: 10,
-            marginLeft:10,
-            marginRight:10,
+            marginLeft: 10,
+            marginRight: 10,
             alignItems: 'flex-start',
             backgroundColor: '#E6E6E6',
         };
-        const messageTime = this.createMessageTime(item.date);
+        const messageTime = this.createMessageTime(item.date, item.isUser);
         let styleContainer = styles.messageUserName;
         if (wide) {
             styleContainer = styles.messageWideUserName;
@@ -35,45 +37,63 @@ export default class ChatMessage extends Component {
 
                     <View>
                         <View style={styles.dateUsercontainer}>
-                            <ThisText >{item.name}</ThisText>
+                            <ThisText style={{color: '#616F70'}}>{item.name}</ThisText>
 
                         </View>
-                        <View style={{flexDirection:'row'}}>
-                        <View style={{
-                            justifyContent: 'flex-start',
-                            alignItems: 'flex-start',
-                            height: 10,
-                            width: 5,
-                            backgroundColor: 'white'
-                        }}>
+                        <View style={{flexDirection: 'row'}}>
                             <View style={{
-                                width: 5,
-                                height: 10,
-                                alignItems: 'center',
-                                justifyContent: 'center',
-                                backgroundColor: '#E6E6E6',
-                                borderTopRightRadius: 5
+                                justifyContent: 'flex-start',
+                                alignItems: 'flex-start',
+                                height: 15,
+                                width: 10,
+                                backgroundColor: 'white'
                             }}>
+                                <View style={{
+                                    width: 10,
+                                    height: 15,
+                                    alignItems: 'center',
+                                    justifyContent: 'center',
+                                    backgroundColor: '#E6E6E6',
+                                    borderTopRightRadius: 10
+                                }}>
+
+
+                                </View>
+
+                            </View>
+                            <View style={styleContainer}>
+
+                                <View style={styles.message_container_user}>
+                                    <ThisText numberOfLines={3} style={styles.messageText}>{item.message}</ThisText>
+
+                                    {item.instance && <View style={{
+                                        borderTopColor: '#CACACA',
+                                        paddingTop: 2,
+                                        marginTop: 10,
+                                        borderTopWidth: 1,
+                                        flexDirection:'row'
+                                    }}>
+                                        <Icon active color={"#2db6c8"} size={25} name={'tag'}/>
+                                        <ThisText style={{
+                                        fontSize: 14,
+                                        color: '#616F70'
+                                    }}>{item.instance.promotionTerm}</ThisText></View>}
+
+                                </View>
 
 
                             </View>
-
+                            {item.instance && <View style={{alignItems: 'center', justifyContent: 'center'}}>
+                                <Icon2 active color={"#616F70"} size={25} name={'touch-app'}/>
+                            </View>}
                         </View>
-                        <View style={styleContainer}>
-
-                            <View style={styles.message_container_user}>
-                                <ThisText numberOfLines={3} style={styles.messageText}>{item.message}</ThisText>
-
-                            </View>
-                            <View style={{ alignItems:'flex-end',justifyContent:'flex-end'}}>
+                        {item.instance ? <View style={{marginRight:14,alignItems: 'flex-end', justifyContent: 'flex-end'}}>
                             {messageTime}
-                            </View>
-
-                        </View>
-                        </View>
+                        </View> :  <View style={{alignItems: 'flex-end', justifyContent: 'flex-end'}}>
+                            {messageTime}
+                        </View>}
 
                     </View>
-
 
                 </View>
 
@@ -82,55 +102,72 @@ export default class ChatMessage extends Component {
         } else {
             return <View style={{
                 marginTop: 10,
-                marginLeft:10,
-                marginRight:10,
+                marginLeft: 10,
+                marginRight: 10,
                 alignItems: 'flex-end',
                 backgroundColor: '#E6E6E6',
             }}>
-                <View style={{flexDirection:'row'}}>
-                <View style={styles.messageComponent}>
-                    <View>
+                <View style={{flexDirection: 'row'}}>
+                    {item.instance && <View style={{alignItems: 'center', justifyContent: 'center'}}>
+                        <Icon2 active color={"#616F70"} size={25} name={'touch-app'}/>
+                    </View>}
+                    <View style={styles.messageComponent}>
 
-                        <View style={styles.messageName}>
 
+                            <View style={styles.messageName}>
 
-                            <View style={styles.message_container}>
-                                <ThisText numberOfLines={3} style={styles.messageText}>{item.message}</ThisText>
+                                <View>
+
+                                <View style={styles.message_container}>
+                                    <ThisText numberOfLines={3}
+                                              style={styles.messageTextWhite}>{item.message}</ThisText>
+
+                                    {item.instance && <View style={{
+                                        borderTopColor: 'white',
+                                        paddingTop: 2,
+                                        marginTop: 10,
+                                        borderTopWidth: 1,
+                                        flexDirection:'row'
+                                    }}>
+                                        <Icon active color={"white"} size={25} name={'tag'}/>
+                                        <ThisText style={{
+                                        fontSize: 14,
+                                        color: 'white'
+                                    }}>{item.instance.promotionTerm}</ThisText></View>}
+
+                                </View>
 
                             </View>
-                            <View style={{ alignItems:'flex-end',justifyContent:'flex-end'}}>
-                                {messageTime}
-                            </View>
+
                         </View>
 
+
                     </View>
 
-
-
-                </View>
-
-                <View style={{
-                    justifyContent: 'flex-end',
-                    alignItems: 'flex-end',
-                    height: 10,
-                    width: 5,
-                    backgroundColor: '#0699dc'
-                }}>
                     <View style={{
+                        justifyContent: 'flex-end',
+                        alignItems: 'flex-end',
                         height: 10,
-                        width: 5,
-                        alignItems: 'center',
-                        justifyContent: 'center',
-                        backgroundColor: 'white',
-                        borderTopLeftRadius: 5
+                        width: 15,
+                        backgroundColor: '#2db6c8'
                     }}>
+                        <View style={{
+                            height: 10,
+                            width: 15,
+                            alignItems: 'center',
+                            justifyContent: 'center',
+                            backgroundColor: '#E6E6E6',
+                            borderTopLeftRadius: 10
+                        }}>
 
+                        </View>
                     </View>
+
                 </View>
+                <View style={{marginRight:8,alignItems: 'flex-end', justifyContent: 'flex-end'}}>
+                    {messageTime}
                 </View>
             </View>
-
-
         }
     }
 
@@ -138,10 +175,11 @@ export default class ChatMessage extends Component {
         return false;
     }
 
-    createMessageTime(date) {
+    createMessageTime(date, isUser) {
         if (date) {
             return <ThisText note
                              style={styles.timeText}>{dateUtils.messageFormater(date)}</ThisText>
+
         }
         return undefined;
     }
