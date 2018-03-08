@@ -114,6 +114,20 @@ function checkSafeSearch(annotation, callback) {
   return callback(null);
 }
 
+function getUpdateId(id, callback){
+  console.log(`getUpdateId :${id}`);
+  if(id === 'image'){
+    Image.create({}, (err, image) => {
+      console.log(`image._id :${image._id}`);
+
+      if(err) console.error(err);
+      return callback(err? '' : image._id)
+    })
+  }
+  else
+    return callback(id);
+}
+
 function handle_image(req, res, type) {
   //let meta_data = req.headers.meta;
   let meta_data = {};
@@ -139,10 +153,12 @@ function handle_image(req, res, type) {
         if (err) {return handleError(res, err);}
         checkSafeSearch(response[0].safeSearchAnnotation, function (err) {
           if (err) {return res.status(400).send(err.message);}
-          updateImageVersions(versions, req.params.id, meta_data, type, function (err, updated) {
-            if (err) return handleError(res, err);
-            return res.status(201).json(updated);
-          });
+          getUpdateId(req.params.id, function (updatedId) {
+            updateImageVersions(versions, updatedId, meta_data, type, function (err, updated) {
+              if (err) return handleError(res, err);
+              return res.status(201).json(updated);
+            });
+          })
         });
       }).catch(err => {
         console.error(err);
@@ -196,10 +212,12 @@ function base64_handle_image(req, res, type) {
             console.log(err);
             return handleError(res, err);
           }
-          updateImageVersions(versions, req.params.id, meta_data, type, function (err, updated) {
-            if (err) return handleError(res, err);
-            return res.status(201).json(updated);
-          });
+          getUpdateId(req.params.id, function (updatedId) {
+            updateImageVersions(versions, updatedId, meta_data, type, function (err, updated) {
+              if (err) return handleError(res, err);
+              return res.status(201).json(updated);
+            });
+          })
         });
       });
 
@@ -246,6 +264,9 @@ function updateImageVersions(versions, id, meta_data, type, callback) {
       },
       cardType: function (callback) {
         CardType.findById(id, callback);
+      },
+      image: function (callback) {
+        Image.findById(id, callback);
       }
     },
     function (err, results) {
@@ -318,6 +339,9 @@ function find_object(id, callback) {
       },
       cardType: function (callback) {
         CardType.findById(id, callback);
+      },
+      image: function (callback) {
+        Image.findById(id, callback);
       }
     },
     function (err, results) {

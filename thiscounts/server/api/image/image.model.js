@@ -6,6 +6,7 @@ let mongoose = require('mongoose'),
 let ImageSchema = new Schema({
   title: String,
   description: String,
+  logo: String,
   pictures : [],
 });
 
