@@ -4,6 +4,7 @@ const admin = require('firebase-admin');
 const User = require('../../api/user/user.model');
 const Notification = require('../../api/notification/notification.model');
 const serviceAccount = require("../../config/keys/this-1000-firebase-adminsdk-reo90-e33ec01e27.json");
+const i18n = require('../i18n');
 
 admin.initializeApp({
   credential: admin.credential.cert(serviceAccount),
@@ -141,7 +142,7 @@ function getUserFirebaseTokens(user) {
   return [];
 }
 
-function pnsUserDevices(notification) {
+function pnsUserDevices(notification, translate) {
   User.findById(notification.to)
     .exec(function (err, user) {
       if (err)
@@ -150,6 +151,10 @@ function pnsUserDevices(notification) {
       if(!user)
         return console.error(new Error(`user id:${notification.to} not found`));
       //flatten(users.map(user => getUserFirebaseTokens(user)));
+      if(translate){
+        notification.title = i18n.get(notification.title, user.locale);
+      }
+
       let registrationTokens = getUserFirebaseTokens(user);
       console.log(`send notifications to ${notification.to} with tokens ${JSON.stringify(registrationTokens)}`);
       firebasePNS(notification, registrationTokens, notification.to)
@@ -160,7 +165,7 @@ exports.pnsUserDevices = function (notification, audience) {
   pnsUserDevices(notification, audience)
 };
 
-exports.notify = function (note, audience) {
+exports.notify = function (note, audience, translate) {
   if(!audience || !note)
     return console.error(new Error(`notification.notify params error audience=${audience} note=${note}`));
 
@@ -171,7 +176,7 @@ exports.notify = function (note, audience) {
       if (err) return console.error(err);
       Notification.findById(notification._id).exec((err, populated) => {
         if (err) return console.error(err);
-        pnsUserDevices(populated)
+        pnsUserDevices(populated, translate)
       })
     });
   });

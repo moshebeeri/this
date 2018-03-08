@@ -48,6 +48,7 @@ module.exports = function(app) {
   app.use('/api/things', require('./api/thing'));
   app.use('/api/users', require('./api/user'));
   app.use('/api/ip', require('./components/ip'));
+  app.use('/api/i18n', require('./api/i18n'));
 
   app.use('/api/tests', require('./api/test'));
 

@@ -107,7 +107,6 @@ function groupFollowersExclude(groupId, exUserId, callback) {
 }
 
 function notifyGroupComment(comment) {
-  console.log(`notifyGroupComment`);
   groupFollowersExclude(comment.entities.group, comment.user, (err, ids)=> {
     if(err) return console.error(err);
     if(!ids) return;
@@ -116,10 +115,10 @@ function notifyGroupComment(comment) {
       note: 'GROUP_COMMENT',
       actor_group: comment.entities.group,
       comment: comment._id,
-      title: `new group comment`,
+      title: 'NEW_GROUP_COMMENT',
       body: comment.message,
       list: false,
-    }, _ids);
+    }, _ids, true);
   });
 }
 
