@@ -34,7 +34,8 @@ class ImageApi {
                     reject(errors.UN_AUTHOTIZED_ACCESS);
                     return;
                 }
-                resolve(true);
+                let responseData = await response.json();
+                resolve(responseData);
             }
             catch (error) {
                 reject(errors.NETWORK_ERROR);

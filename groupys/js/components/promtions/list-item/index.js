@@ -86,10 +86,11 @@ export default class PromotionListView extends Component {
                         <ThisText style={styles.promotionInfoTextI}>{item.name} - {item.description}</ThisText>
                     </View>
                     <View style={styles.promotionDetailsContainer}>
-                        <View style={styles.promotionLoctionContainer}>
+                         <View style={styles.promotionLoctionContainer}>
                             <View><ThisText style={styles.detailsTitleText}>{strings.Location}</ThisText></View>
-                            <View><ThisText
-                                style={styles.detailsText}>{FormUtils.getDistanceString(location.lat, location.long, promotionItem.location.lat, promotionItem.location.lng)}</ThisText></View>
+                             {promotionItem.location &&    <View><ThisText
+                                style={styles.detailsText}>{FormUtils.getDistanceString(location.lat, location.long, promotionItem.location.lat, promotionItem.location.lng)}</ThisText>
+                             </View>}
                         </View>
                         <View style={styles.expireDateContainer}>
                             <View><ThisText style={styles.detailsTitleText}>{strings.Expire}</ThisText></View>
