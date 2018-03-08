@@ -268,7 +268,7 @@ class AddPromotion extends Component {
             type: this.state.type,
             total_discount: Number(this.state.total_discount),
             // percent_range: this.state.percent_range,
-            start: this.state.start,
+            start: new Date().getTime(),
             end: this.state.end,
             description: this.state.info,
             name: this.state.name,

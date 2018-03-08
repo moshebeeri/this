@@ -152,9 +152,13 @@ export function savePromotion(promotion, businessId, navigation) {
             }
             dispatch({
                 type: actions.PROMOTION_SAVING_DONE,
+
             });
-            handler.handleSuccses(getState(), dispatch)
+
             navigation.goBack();
+
+            handler.handleSuccses(getState(), dispatch)
+
         } catch (error) {
             dispatch({
                 type: actions.PROMOTION_SAVING_FAILED,
@@ -230,11 +234,12 @@ async function fetchPromotionById(id, token, dispatch) {
     }
 }
 
-export function setPromotion(response,businessId) {
+export function setPromotion(response,businessId,removeId) {
     return{
         type: actions.UPSERT_PROMOTION_SINGLE,
         item: response,
-        businessId: businessId
+        businessId: businessId,
+        removeId : removeId
     }
 }
 

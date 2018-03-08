@@ -3,7 +3,7 @@ import FormUtils from "../utils/fromUtils";
 import strings from "../i18n/i18n"
 
 class FeedConverter {
-    createFeed(feed,savedInstancesIds) {
+    createFeed(feed, savedInstancesIds) {
         let response = {};
         if (feed.activity.business) {
             response = this.createBusinessUo(feed);
@@ -30,8 +30,10 @@ class FeedConverter {
         if (feed.activity.action === 'group_message' || feed.activity.action === 'group_follow') {
             response = this.createMessageUi(feed);
         }
-        if (feed.activity.action === 'instance'|| feed.activity.action === 'eligible_by_proximity'  || feed.activity.action === 'eligible' || feed.activity.action === 'eligible_on_activity_follow') {
-            return this.createPromotionInstance(feed,savedInstancesIds);
+        if (feed.activity.action === 'instance' || feed.activity.action === 'follower_eligible_by_proximity' ||
+            feed.activity.action === 'eligible_by_proximity' || feed.activity.action === 'eligible' ||
+            feed.activity.action === 'eligible_on_activity_follow') {
+            return this.createPromotionInstance(feed, savedInstancesIds);
         }
         if (feed.activity.action === 'share') {
             return this.createShared(feed);
@@ -47,7 +49,7 @@ class FeedConverter {
             id: feed.activity.post._id,
             fid: feed._id,
             activityId: feed.activity._id,
-            blocked : feed.activity.blocked,
+            blocked: feed.activity.blocked,
             generalId: feed.activity.post._id,
             entities: [{post: feed.activity.post._id}],
         }
@@ -143,8 +145,7 @@ class FeedConverter {
         response.user = feed.activity.actor_user;
         response.itemType = 'SHARE';
         response.fid = feed._id,
-
-        response.shared = response.shardeActivity.itemType;
+            response.shared = response.shardeActivity.itemType;
         response.id = response.shardeActivity.id;
         response.activityId = feed.activity._id;
         response.blocked = feed.activity.blocked;
@@ -157,7 +158,7 @@ class FeedConverter {
         if (!user) {
             user = feed.activity.user;
         }
-        if(!user){
+        if (!user) {
             return undefined;
         }
         let name = user.phone_number;
@@ -297,7 +298,6 @@ class FeedConverter {
                     } else {
                         //responseFeed.itemTitle = "Get " + promotion.percent.values[0] + ' % Off ';
                         responseFeed.promotionTerm = strings.NoTerms.formatUnicorn(promotion.percent.values[0])
-
                     }
                     responseFeed.promotion = 'PERCENT';
                     responseFeed.promotionValue = promotion.percent.values[0];
@@ -351,7 +351,6 @@ class FeedConverter {
                         responseFeed.quantity = promotion.happy_hour.quantity;
                         responseFeed.promotion = 'HAPPY_HOUR';
                         responseFeed.promotionColor = '#d279a6';
-
                     } else {
                         return undefined;
                     }
@@ -360,12 +359,12 @@ class FeedConverter {
                     let punches = promotion.punch_card.values[0].number_of_punches;
                     responseFeed.promotionTerm = punches;
                     responseFeed.itemTitle = '';
-                    responseFeed.promotionTitle = strings.punchCardTerm.formatUnicorn(punches,promotion.condition.product.name);
+                    responseFeed.promotionTitle = strings.punchCardTerm.formatUnicorn(punches, promotion.condition.product.name);
                     responseFeed.punches = punches;
                     responseFeed.quantity = promotion.punch_card.quantity;
                     responseFeed.promotion = 'PUNCH_CARD';
                     responseFeed.promotionColor = '#d279a6';
-                    responseFeed.realizedPunches =  feed.savedData.punch_card.redeemTimes.length;
+                    responseFeed.realizedPunches = feed.savedData.punch_card.redeemTimes.length;
                     break;
                 default:
                     responseFeed.itemTitle = instance.type + " NOT SUPPORTED";
@@ -404,8 +403,8 @@ class FeedConverter {
         return feed.promotion;
     }
 
-    createPromotionInstance(feed,savedInstancesIds) {
-        if(!savedInstancesIds){
+    createPromotionInstance(feed, savedInstancesIds) {
+        if (!savedInstancesIds) {
             savedInstancesIds = [];
         }
         let instance = this.getInstance(feed);
@@ -422,7 +421,7 @@ class FeedConverter {
             responseFeed.id = instance._id;
             responseFeed.fid = feed._id;
             responseFeed.key = feed._id;
-            if(feed.activity) {
+            if (feed.activity) {
                 responseFeed.activityId = feed.activity._id;
                 responseFeed.blocked = feed.activity.blocked;
             }
@@ -464,7 +463,6 @@ class FeedConverter {
                     } else {
                         responseFeed.itemTitle = "Get " + promotion.percent.values[0] + ' % Off ';
                         responseFeed.promotionTerm = strings.NoTerms.formatUnicorn(promotion.percent.values[0])
-
                     }
                     responseFeed.promotion = 'PERCENT';
                     responseFeed.promotionValue = promotion.percent.values[0];
@@ -527,7 +525,7 @@ class FeedConverter {
                     let punches = promotion.punch_card.values[0].number_of_punches;
                     responseFeed.promotionTerm = punches;
                     responseFeed.itemTitle = '';
-                    responseFeed.promotionTitle = strings.punchCardTerm.formatUnicorn(punches,promotion.condition.product.name);
+                    responseFeed.promotionTitle = strings.punchCardTerm.formatUnicorn(punches, promotion.condition.product.name);
                     responseFeed.punches = punches;
                     responseFeed.quantity = promotion.punch_card.quantity;
                     responseFeed.promotion = 'PUNCH_CARD';
@@ -558,7 +556,7 @@ class FeedConverter {
         let response = {};
         response.name = promotion.name;
         response.description = promotion.description;
-        if (promotion.pictures.length > 0) {
+        if (promotion.pictures && promotion.pictures.length > 0) {
             response.banner = {
                 uri: promotion.pictures[0].pictures[1]
             };
@@ -646,7 +644,7 @@ class FeedConverter {
                 let punches = promotion.punch_card.values[0].number_of_punches;
                 response.promotionTerm = punches;
                 response.itemTitle = '';
-                response.promotionTitle = strings.punchCardTerm.formatUnicorn(punches,promotion.condition.product.name);
+                response.promotionTitle = strings.punchCardTerm.formatUnicorn(punches, promotion.condition.product.name);
                 response.punches = punches;
                 response.quantity = promotion.punch_card.quantity;
                 response.promotion = 'PUNCH_CARD';

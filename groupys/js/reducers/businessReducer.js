@@ -244,6 +244,10 @@ export default function business(state = initialState, action) {
             return businessesState;
         case actions.UPSERT_PROMOTION_SINGLE:
             businessesState.update = !businessesState.update;
+            if(action.removeId &&  businessesPromotions[action.businessId]){
+                businessesPromotions[action.businessId] =  businessesPromotions[action.businessId].filter(promotion => promotion._id !== action.removeId);
+                businessesPromotions[action.businessId] =  businessesPromotions[action.businessId].filter(promotion => promotion._id);
+            }
             if(!businessesPromotions[action.businessId]){
                 businessesPromotions[action.businessId] = []
                 businessesPromotions[action.businessId].push(action.item)

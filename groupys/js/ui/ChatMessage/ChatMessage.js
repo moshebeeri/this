@@ -13,9 +13,19 @@ import DateUtils from '../../utils/dateUtils'
 import {ThisText} from '../index'
 import Icon from 'react-native-vector-icons/EvilIcons';
 import Icon2 from 'react-native-vector-icons/MaterialIcons'
+import {Menu, MenuOption, MenuOptions, MenuTrigger,} from 'react-native-popup-menu';
+import strings from "../../i18n/i18n"
 
 let dateUtils = new DateUtils();
 export default class ChatMessage extends Component {
+
+    reply(){
+
+    }
+
+    claim(){
+
+    }
     render() {
         const {item, wide} = this.props;
         const containerStyle = {
@@ -30,6 +40,23 @@ export default class ChatMessage extends Component {
         if (wide) {
             styleContainer = styles.messageWideUserName;
         }
+
+        let replayMenu = <Menu>
+            <MenuTrigger >
+                <Icon2 active color={"#90a1a2"} size={25} name={'touch-app'}/>
+    </MenuTrigger>
+        <MenuOptions>
+
+            <MenuOption onSelect={this.reply.bind(this)}>
+                <ThisText style={{color: '#616F70'}}>{strings.Reply}</ThisText>
+            </MenuOption>
+            <MenuOption onSelect={this.claim.bind(this)}>
+            <ThisText style={{color: '#616F70'}}>{strings.Claim}</ThisText>
+    </MenuOption>
+
+
+    </MenuOptions>
+    </Menu>;
         if (!item.isUser) {
             return <View style={containerStyle}>
                 <View style={styles.messageUsercomponent}>
@@ -67,7 +94,7 @@ export default class ChatMessage extends Component {
                                     <ThisText numberOfLines={3} style={styles.messageText}>{item.message}</ThisText>
 
                                     {item.instance && <View style={{
-                                        borderTopColor: '#CACACA',
+                                        borderTopColor: '#E6E6E6',
                                         paddingTop: 2,
                                         marginTop: 10,
                                         borderTopWidth: 1,
@@ -83,8 +110,8 @@ export default class ChatMessage extends Component {
 
 
                             </View>
-                            {item.instance && <View style={{alignItems: 'center', justifyContent: 'center'}}>
-                                <Icon2 active color={"#616F70"} size={25} name={'touch-app'}/>
+                            {item.instance && <View style={{marginLeft:4,alignItems: 'center', justifyContent: 'center'}}>
+                                {replayMenu}
                             </View>}
                         </View>
                         {item.instance ? <View style={{marginRight:14,alignItems: 'flex-end', justifyContent: 'flex-end'}}>
@@ -108,8 +135,8 @@ export default class ChatMessage extends Component {
                 backgroundColor: '#E6E6E6',
             }}>
                 <View style={{flexDirection: 'row'}}>
-                    {item.instance && <View style={{alignItems: 'center', justifyContent: 'center'}}>
-                        <Icon2 active color={"#616F70"} size={25} name={'touch-app'}/>
+                    {item.instance && <View style={{marginRight:4,alignItems: 'center', justifyContent: 'center'}}>
+                        {replayMenu}
                     </View>}
                     <View style={styles.messageComponent}>
 
@@ -127,6 +154,7 @@ export default class ChatMessage extends Component {
                                         paddingTop: 2,
                                         marginTop: 10,
                                         borderTopWidth: 1,
+
                                         flexDirection:'row'
                                     }}>
                                         <Icon active color={"white"} size={25} name={'tag'}/>
