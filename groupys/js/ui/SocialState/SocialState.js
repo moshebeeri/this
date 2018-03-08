@@ -1,14 +1,11 @@
 import React, {Component} from 'react';
-import { Text, TouchableOpacity, View} from 'react-native';
+import {TouchableOpacity, View} from 'react-native';
 import {Button} from 'native-base';
 import styles from './styles'
 import StyleUtils from "../../utils/styleUtils";
-import Icon from "react-native-vector-icons/Ionicons";
-import {ImageController} from '../index'
-const like_icon = require('../../../images/Like.png');
-const comments_icon = require('../../../images/Comment.png');
-const user_like_icon = require('../../../images/user_like.png');
-const share_icon = require('../../../images/share.png');
+import Ionicons from "react-native-vector-icons/Ionicons";
+import EvilIcons from "react-native-vector-icons/EvilIcons";
+import SimpleLineIcons from "react-native-vector-icons/SimpleLineIcons";
 import {ThisText} from '../../ui/index';
 
 export default class SocialState extends Component {
@@ -25,7 +22,7 @@ export default class SocialState extends Component {
     }
 
     render() {
-        const{showFollowers} = this.props;
+        const {showFollowers} = this.props;
         return <View style={[styles.socialContainer, {width: StyleUtils.getWidth()}]}>
 
             {this.createLikeButton()}
@@ -48,14 +45,11 @@ export default class SocialState extends Component {
                 componenColor = '#cccccc';
             }
         }
-
-
         return <View transparent style={styles.promotion_iconView}>
-            <Icon size={40} color={componenColor} style={{ marginRight: 10, width: 40, height: 40}}
-                             name="ios-people"/>
+            <Ionicons size={40} color={componenColor} style={{marginRight: 10, width: 40, height: 40}}
+                      name="ios-people"/>
             <ThisText style={styles.socialTextColor}>{followers}</ThisText>
         </View>;
-
     }
 
     createCommentButton() {
@@ -73,14 +67,15 @@ export default class SocialState extends Component {
         }
         if (disabled) {
             return <View transparent style={styles.promotion_iconView}>
-                <ImageController style={{tintColor: componenColor, marginRight: 10, width: 30, height: 25}}
-                       source={comments_icon}/>
+                <SimpleLineIcons size={30} color={componenColor} style={{marginRight: 10, width: 40, height: 40}}
+                                 name="bubbles"/>
+
                 <ThisText style={styles.socialTextColor}>{comments}</ThisText>
             </View>;
         }
         return <TouchableOpacity transparent style={styles.promotion_iconView} onPress={onPressComment}>
-            <ImageController style={{tintColor: componenColor, marginRight: 10, width: 30, height: 25}}
-                   source={comments_icon}/>
+            <SimpleLineIcons size={30} color={componenColor} style={{marginRight: 10}}
+                             name="bubbles"/>
             <ThisText style={styles.socialTextColor}>{comments}</ThisText>
         </TouchableOpacity>;
     }
@@ -96,7 +91,9 @@ export default class SocialState extends Component {
         }
         if (disabled) {
             return <View transparent style={styles.promotion_iconView}>
-                <ImageController style={{tintColor: componenColor, marginRight: 10, width: 25, height: 25}} source={like_icon}/>
+
+                <Ionicons size={30} color={componenColor} style={{marginRight: 10}}
+                          name="md-heart-outline"/>
                 <ThisText style={styles.socialTextColor}>{likes}</ThisText>
             </View>
         }
@@ -104,16 +101,16 @@ export default class SocialState extends Component {
             return <TouchableOpacity transparent style={styles.promotion_iconView} onPress={onPressUnLike}>
 
 
-                <ImageController style={{tintColor: componenColor, marginRight: 10, width: 25, height: 25}}
-                       source={user_like_icon}/>
+                <Ionicons size={30} color={componenColor} style={{marginRight: 10}}
+                          name="md-heart"/>
                 <ThisText style={styles.socialTextColor}>{likes}</ThisText>
 
             </TouchableOpacity>
         }
         return <TouchableOpacity transparent style={styles.promotion_iconView} onPress={onPressLike}>
 
-            <ImageController style={{tintColor: componenColor, marginRight: 10, width: 25, height: 25}}
-                   source={like_icon}/>
+            <Ionicons size={30} color={componenColor} style={{marginRight: 10}}
+                      name="md-heart-outline"/>
             <ThisText style={styles.socialTextColor}>{likes}</ThisText>
 
         </TouchableOpacity>
@@ -134,9 +131,8 @@ export default class SocialState extends Component {
         }
         if (disabled || shareDisabled) {
             return <View transparent style={styles.promotion_iconView}>
-
-                <ImageController style={{tintColor: componenColor, marginRight: 10, width: 25, height: 25}}
-                       source={share_icon}/>
+                <EvilIcons size={35} color={componenColor} style={{marginRight: 10}}
+                           name="share-google"/>
                 <ThisText style={styles.socialTextColor}>{shares}</ThisText>
 
             </View>
@@ -144,8 +140,8 @@ export default class SocialState extends Component {
         if (share) {
             return <TouchableOpacity transparent style={styles.promotion_iconView} onPress={shareAction}>
 
-                <ImageController style={{tintColor: componenColor, marginRight: 10, width: 25, height: 25}}
-                       source={share_icon}/>
+                <EvilIcons size={35} color={componenColor} style={{marginRight: 10}}
+                           name="share-google"/>
                 <ThisText style={styles.socialTextColor}>{shares}</ThisText>
 
 
@@ -153,8 +149,8 @@ export default class SocialState extends Component {
         }
         return <TouchableOpacity transparent style={styles.promotion_iconView} onPress={shareAction}>
 
-            <ImageController style={{tintColor: componenColor, marginRight: 10, width: 25, height: 25}}
-                   source={share_icon}/>
+            <EvilIcons size={35} color={componenColor} style={{marginRight: 10}}
+                       name="share-google"/>
             <ThisText style={styles.socialTextColor}>{shares}</ThisText>
         </TouchableOpacity>;
     }

@@ -1,12 +1,14 @@
 const React = require('react');
 const {ViewPropTypes, Image, I18nManager, Platform} = ReactNative = require('react-native');
 const PropTypes = require('prop-types');
-const promotions = require('../../../images/Feeds.png');
-const save = require('../../../images/savedPromotions.png');
-const groups = require('../../../images/GroupsIcon.png');
 const notification = require('../../../images/notification.png');
 const createReactClass = require('create-react-class');
+import Ionicons from "react-native-vector-icons/Ionicons";
+import EvilIcons from "react-native-vector-icons/EvilIcons";
+import MaterialCommunityIcons from "react-native-vector-icons/MaterialCommunityIcons";
+import SimpleLineIcons from "react-native-vector-icons/SimpleLineIcons";
 import {ThisText} from '../index';
+
 const {
     StyleSheet,
     Text,
@@ -36,43 +38,62 @@ const DefaultTabBar = createReactClass({
     },
     createTabvView(name) {
         if (name === 'promotions') {
-            return <Image
-                style={{tintColor: '#2db6c8', marginLeft: 0, width: 30, height: 30}}
-                source={promotions}/>
+            return <SimpleLineIcons size={28} color={'#2db6c8'}
+                                    name="layers"/>
         }
         if (name.includes('notification')) {
             let notifications = parseInt(name.substring('notification'.length + 1))
-            if(notifications > 0){
+            if (notifications > 0) {
                 let addedPlus = undefined;
-                let styleNotification = {position:'absolute',bottom:18,right:17,borderRadius:10,width:15,alignItems:'center',justifyContent:'center',backgroundColor:'#FA8559'};
-                if(notifications > 20){
-                    addedPlus ='+';
+                let styleNotification = {
+                    position: 'absolute',
+                    bottom: 18,
+                    right: 17,
+                    borderRadius: 10,
+                    width: 15,
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    backgroundColor: '#FA8559'
+                };
+                if (notifications > 20) {
+                    addedPlus = '+';
                     notifications = 20;
-                    styleNotification = {position:'absolute',bottom:18,right:17,borderRadius:15,height:25,width:25,alignItems:'center',justifyContent:'center',backgroundColor:'#FA8559'};
+                    styleNotification = {
+                        position: 'absolute',
+                        bottom: 18,
+                        right: 17,
+                        borderRadius: 15,
+                        height: 25,
+                        width: 25,
+                        alignItems: 'center',
+                        justifyContent: 'center',
+                        backgroundColor: '#FA8559'
+                    };
                 }
                 return <View>
-                    <Image
-                        style={{tintColor: '#2db6c8', marginLeft: 0, width: 30, height: 30}}
-                        source={notification}/>
+
+                    <MaterialCommunityIcons size={35} color={'#2db6c8'} style={{marginRight: 10}}
+                                            name="bell-outline"/>
+
                     <View style={styleNotification}>
-                    <ThisText style={{fontSize:12,fontWeight:'bold',color:'white'}} >{addedPlus}{notifications}</ThisText>
+                        <ThisText style={{
+                            fontSize: 12,
+                            fontWeight: 'bold',
+                            color: 'white'
+                        }}>{addedPlus}{notifications}</ThisText>
                     </View>
                 </View>
             }
-            return <Image
-                style={{tintColor: '#2db6c8', marginLeft: 0, width: 30, height: 30}}
-                source={notification}/>
-
+            return <EvilIcons size={35} color={'#2db6c8'}
+                              name="bell"/>
         }
         if (name === 'groups') {
-            return <Image
-                style={{tintColor: '#2db6c8', marginLeft: 0, width: 30, height: 30}}
-                source={groups}/>
+            return <Ionicons size={42} color={'#2db6c8'}
+                             name="ios-people-outline"/>
         }
         if (name === 'save') {
-            return <Image
-                style={{tintColor: '#2db6c8', marginLeft: 0, width: 30, height: 30}}
-                source={save}/>
+            return <SimpleLineIcons size={25} color={'#2db6c8'}
+                                    name="tag"/>
         }
         return <ThisText style={[{color: '#2db6c8'}]}>
             {name}

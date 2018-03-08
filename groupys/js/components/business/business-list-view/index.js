@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import {Dimensions, Image, Text, TouchableOpacity} from 'react-native';
+import {Dimensions, TouchableOpacity} from 'react-native';
 import {
     Button,
     Card,
@@ -25,12 +25,12 @@ import Products from '../../product/index'
 import {BusinessHeader, EditButton, ImageController, SocialState, ThisText} from '../../../ui/index';
 import strings from '../../../i18n/i18n';
 import StyleUtils from '../../../utils/styleUtils'
+import Feather from "react-native-vector-icons/Feather";
+import FontAwesome from "react-native-vector-icons/FontAwesome";
+import SimpleLineIcons from "react-native-vector-icons/SimpleLineIcons";
 
-const promotions = require('../../../../images/promotion.png');
-const products = require('../../../../images/barcode.png');
 const {width, height} = Dimensions.get('window');
 const vh = height / 100;
-const permissions = require('../../../../images/permissions.png');
 export default class BusinessListView extends Component {
     constructor(props) {
         super(props);
@@ -125,7 +125,7 @@ export default class BusinessListView extends Component {
                         </View>}
 
                         {item.business.social_state &&
-                        <View style={{borderTopWidth: 1, borderColor:'#cccccc'}}>
+                        <View style={{borderTopWidth: 1, borderColor: '#cccccc'}}>
                             <SocialState disabled
                                          like={item.business.social_state.like} likes={item.business.social_state.likes}
                                          showFollowers
@@ -171,9 +171,8 @@ export default class BusinessListView extends Component {
             return <TouchableOpacity onPress={() => this.showUsersRoles()}
                                      style={{margin: 3, flexDirection: 'row', alignItems: 'center',}}
                                      regular>
-                <ImageController style={{tintColor: '#ff6400', marginLeft: 10, width: vh * 4, height: vh * 4}}
-                                 source={permissions}/>
-
+                <Feather size={25} color={'#ff6400'}
+                         name="user-check"/>
                 <ThisText style={{
                     marginLeft: 5,
                     color: '#ff6400',
@@ -190,9 +189,9 @@ export default class BusinessListView extends Component {
         if (this.checkPermission(item)) {
             return <TouchableOpacity onPress={() => this.showProducts()}
                                      style={{margin: 3, flexDirection: 'row', alignItems: 'center',}} regular>
-                <ImageController style={{tintColor: '#ff6400', marginLeft: 10, width: vh * 3, height: vh * 4}}
-                                 source={products}/>
 
+                <FontAwesome size={25} color={'#ff6400'}
+                             name="barcode"/>
                 <ThisText style={{
                     marginLeft: 5,
                     color: '#ff6400',
@@ -225,9 +224,9 @@ export default class BusinessListView extends Component {
             return <TouchableOpacity onPress={() => this.showPromotions()}
                                      style={{margin: 3, flexDirection: 'row', alignItems: 'center',}}
                                      regular>
-                <ImageController style={{tintColor: '#ff6400', marginLeft: 10, width: vh * 4, height: vh * 4}}
-                                 source={promotions}/>
 
+                <SimpleLineIcons size={25} color={'#ff6400'}
+                                 name="tag"/>
                 <ThisText style={{
                     marginLeft: 5,
                     color: '#ff6400',
