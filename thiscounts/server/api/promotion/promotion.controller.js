@@ -144,7 +144,7 @@ function applyToFollowingUsers(promotion, instances, callback) {
         pricing.balance(instance.promotion.entity, function (err, positiveBalance) {
           if (err) return callback(err);
           if (!positiveBalance) return callback(new Error('HTTP_PAYMENT_REQUIRED'));
-          instanceGraphModel.relate_ids(user._id, 'ELIGIBLE', instance._id, `{start: ${promotion.start}, end: ${promotion.end}`);
+          instanceGraphModel.relate_ids(user._id, 'ELIGIBLE', instance._id, `{start: ${promotion.start.getTime()}, end: ${promotion.end.getTime()}}`);
           user_instance_eligible_activity(user._id, instance);
           Instance.notify(instance._id, [user._id]);
         })
@@ -154,6 +154,8 @@ function applyToFollowingUsers(promotion, instances, callback) {
 }
 
 function applyToFollowing(promotion, instances, callback) {
+  console.log(`applyToFollowing ${JSON.stringify(promotion)}`);
+  console.log(`applyToFollowing ${promotion.start.getTime()}`);
   async.parallel({
     groups: function (callback) {
       applyToFollowingGroups(promotion, instances, callback);

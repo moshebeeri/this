@@ -99,9 +99,9 @@ function handleFollowersProximityActions(userId, location, callback) {
                   WHERE  promo._id IS NOT NULL AND on.type = 'FOLLOWER_PROXIMITY'
                   			AND ( NOT exists(f.eligible_by_proximity_time) OR f.eligible_by_proximity_time + 1000*60*60*24*14 > timestamp()) 
                   			AND distance(coordinate, promoLocation) < on.proximity*1000
-                  WITH   promo, entity
-                  RETURN distinct promo, entity, labels(entity) as labels
-                  ORDER BY distance(coordinate, promoLocation) desc
+                  WITH   promo, entity, coordinate, promoLocation
+                  RETURN distinct promo, entity, labels(entity) as labels, distance(coordinate, promoLocation) as d
+                  ORDER BY d desc
                   SKIP ${skip} LIMIT ${limit}`;
 
   console.log('handleFollowersProximityActions: ' + query);
@@ -126,9 +126,9 @@ function handleProximityActions(userId, location, callback) {
                   			AND distance(coordinate, promoLocation) < on.proximity*1000
                         AND NOT (entity)<-[:FOLLOW]-(u)
                         AND NOT (entity)<-[:NO_ON_PROXIMITY_ACTION]-(u)
-                  WITH   promo, entity
-                  RETURN distinct promo, entity, labels(entity) as labels
-                  ORDER BY distance(coordinate, promoLocation) desc
+                  WITH   promo, entity, coordinate, promoLocation
+                  RETURN distinct promo, entity, labels(entity) as labels, distance(coordinate, promoLocation) as d
+                  ORDER BY d desc
                   SKIP ${skip} LIMIT ${limit}`;
 
   console.log('handleProximityActions: ' + query);
