@@ -1,8 +1,8 @@
 import React, {Component} from "react";
-import {Dimensions, I18nManager, Image, ScrollView, View,Keyboard} from "react-native";
+import {Dimensions, Image, Keyboard, ScrollView, Switch, View} from "react-native";
 import {connect} from "react-redux";
 import {actions} from "react-native-navigation-redux-helpers";
-import {Button, Container, Content, Footer, Icon, Input, Item, Picker, Text} from "native-base";
+import {Button, Container, Content, Footer, Icon, Input, Item, Picker} from "native-base";
 import {bindActionCreators} from "redux";
 import * as promotionsAction from "../../../actions/promotions";
 import PromotionApi from "../../../api/promotion";
@@ -16,7 +16,16 @@ import XForYComponent from "./xForY/index";
 import ReduceAmountComponent from "./reduceAmount/index";
 import HappyHourComponent from "./happyHour/index";
 import styles from "./styles";
-import {DatePicker, FormHeader, ImagePicker, SelectButton, SimplePicker, Spinner, TextInput,ThisText} from '../../../ui/index';
+import {
+    DatePicker,
+    FormHeader,
+    ImagePicker,
+    SelectButton,
+    SimplePicker,
+    Spinner,
+    TextInput,
+    ThisText
+} from '../../../ui/index';
 import strings from "../../../i18n/i18n"
 import StyleUtils from '../../../utils/styleUtils'
 
@@ -58,6 +67,38 @@ const types = [
     ]
     //15% off for purchases more than 1000$ OR buy iphone for 600$ and get 50% off for earphones
 ;
+const promotion_type = [
+        {
+            value: '',
+            label: strings.GeneralPromotion,
+        },
+        {
+            value: 'BUSINESS',
+            label: strings.OnBoardingPromotion
+        },
+        {
+            value: 'PROXIMITY',
+            label: strings.OnProximityPromotion
+        },
+        {
+            value: 'FOLLOWER_PROXIMITY',
+            label: strings.OnFollowerProximity
+        },
+    ]
+    //15% off for purchases more than 1000$ OR buy iphone for 600$ and get 50% off for earphones
+;
+const types_simple = [
+        {
+            value: 'PERCENT',
+            label: strings.PercentageOff
+        },
+        {
+            value: 'REDUCED_AMOUNT',
+            label: strings.ReduceAmount
+        },
+    ]
+    //15% off for purchases more than 1000$ OR buy iphone for 600$ and get 50% off for earphones
+;
 const Distribution = [
     {
         value: 'GROUP',
@@ -68,8 +109,6 @@ const Distribution = [
         label: strings.BusinessFollowers
     }
 ];
-
-
 const Proximity = [
     {
         value: 0.5,
@@ -108,20 +147,13 @@ class AddPromotion extends Component {
 
     constructor(props) {
         let defaultDate = new Date();
-        let month = defaultDate.getMonth();
-        if (month < 12) {
-            defaultDate.setMonth(month + 1);
-        } else {
-            let year = defaultDate.getYear();
-            defaultDate.setMonth(1);
-            defaultDate.setYear(year + 1);
-        }
+        defaultDate.setDate(defaultDate.getDate() + 1);
         super(props);
         this.state = {
             token: '',
             path: '',
             image: '',
-            type: '',
+            type: 'PERCENT',
             images: '',
             businesses: [],
             business: '',
@@ -136,43 +168,44 @@ class AddPromotion extends Component {
             end: defaultDate,
             location: "",
             info: "",
-            discount_on: '',
-            distribution: '',
+            discount_on: 'PRODUCT',
+            distribution: 'PERSONAL',
             choose_distribution: false,
             show_save: false,
             showProductsList: false,
-            quantity: '',
-            otherBusinessPermittedUser:'',
+            quantity: 100,
+            otherBusinessPermittedUser: '',
             otherBusiness: '',
-            promotion: {}
+            promotion: {},
+            toggle: false,
         }
         let businessId = this.getBusinessId();
         this.props.actions.fetchProducts(businessId);
     }
 
     back() {
-
         this.props.navigation.goBack();
     }
 
+
     async componentWillMount() {
-
         this.props.actions.resetForm();
-
-        if(this.props.navigation.state.params && this.props.navigation.state.params.onBoardingPromotion){
-            this.setPromotion(this.props.navigation.state.params.onBoardingPromotion);
+        if (this.props.navigation.state.params.onBoardType) {
+            this.setToggleOn();
+            this.setState({toggle: true, onBoardType: this.props.navigation.state.params.onBoardType});
             return;
         }
-        if(this.props.navigation.state.params && this.props.navigation.state.params.proximityPromotion){
+        if (this.props.navigation.state.params && this.props.navigation.state.params.onBoardingPromotion) {
+            this.setPromotion(this.props.navigation.state.params.onBoardingPromotion);
+        }
+        if (this.props.navigation.state.params && this.props.navigation.state.params.proximityPromotion) {
             this.setPromotion(this.props.navigation.state.params.proximityPromotion);
             return;
         }
-        if(this.props.navigation.state.params && this.props.navigation.state.params.followerProximity){
+        if (this.props.navigation.state.params && this.props.navigation.state.params.followerProximity) {
             this.setPromotion(this.props.navigation.state.params.followerProximity);
             return;
         }
-
-
         try {
             if (this.props.navigation.state.params && this.props.navigation.state.params.item) {
                 let item = this.props.navigation.state.params.item;
@@ -229,7 +262,8 @@ class AddPromotion extends Component {
         if (this.validateForm()) {
             let promotion = this.createPromotionFromState();
             let businessId = this.getBusinessId();
-            actions.savePromotion(promotion, businessId, navigation)
+            let simpleProductPercent = !this.state.toggle && this.state.discount_on === 'PRODUCT' && this.state.type === 'PERCENT'
+            actions.savePromotion(promotion, businessId, navigation, simpleProductPercent)
         }
     }
 
@@ -243,10 +277,9 @@ class AddPromotion extends Component {
         return businessId;
     }
 
-    setPromotion(promotion){
-
+    setPromotion(promotion) {
         let image = promotion.image;
-        if(!image &&  promotion.pictures &&  promotion.pictures.length > 0){
+        if (!image && promotion.pictures && promotion.pictures.length > 0) {
             image = promotion.pictures[0].pictures[0]
         }
         this.setState({
@@ -257,11 +290,10 @@ class AddPromotion extends Component {
             end: promotion.end,
             description: promotion.info,
             name: promotion.name,
-
         })
-
         //TODO add all parameters
     }
+
     createPromotionFromState() {
         let promotion = {
             image: this.state.image,
@@ -274,8 +306,8 @@ class AddPromotion extends Component {
             name: this.state.name,
             client: {uploading: true}
         };
-        if (this.props.navigation.state.params.onBoardType) {
-            switch (this.props.navigation.state.params.onBoardType) {
+        if (this.state.onBoardType) {
+            switch (this.state.onBoardType) {
                 case 'BUSINESS':
                     promotion.on_action = {
                         active: true,
@@ -289,7 +321,7 @@ class AddPromotion extends Component {
                     promotion.on_action = {
                         active: true,
                         type: 'PROXIMITY',
-                        proximity:this.state.proximity,
+                        proximity: this.state.proximity,
                         entity: {
                             business: this.getBusinessId()
                         }
@@ -299,7 +331,7 @@ class AddPromotion extends Component {
                     promotion.on_action = {
                         active: true,
                         type: 'FOLLOWER_PROXIMITY',
-                        proximity:this.state.proximity,
+                        proximity: this.state.proximity,
                         entity: {
                             business: this.getBusinessId()
                         }
@@ -391,7 +423,7 @@ class AddPromotion extends Component {
         return promotion;
     }
 
-    async selectPromotionType(value) {
+    async selectDiscount(value) {
         this.setState({
             type: value,
             choose_distribution: false,
@@ -446,8 +478,10 @@ class AddPromotion extends Component {
         if (this.state.type) {
             switch (this.state.type) {
                 case 'PERCENT':
-                    discountForm = <PercentComponent navigation={this.props.navigation} api={this} state={this.state}
-                                                     ref={"precent"} setState={this.setState.bind(this)}/>;
+                    discountForm =
+                        <PercentComponent toggle={this.state.toggle} navigation={this.props.navigation} api={this}
+                                          state={this.state}
+                                          ref={"precent"} setState={this.setState.bind(this)}/>;
                     break;
                 case 'PUNCH_CARD':
                     discountForm = <PunchCardComponent navigation={this.props.navigation} api={this} state={this.state}
@@ -461,7 +495,7 @@ class AddPromotion extends Component {
                 case 'GIFT':
                     discountForm =
                         <GiftComponent ref={"GIFT"} navigation={this.props.navigation} api={this} state={this.state}
-                                         setState={this.setState.bind(this)}/>;
+                                       setState={this.setState.bind(this)}/>;
                     break;
                 case 'X+N%OFF':
                     discountForm = <XPlusYOffComponent ref={"X+N%OFF"} navigation={this.props.navigation} api={this}
@@ -491,9 +525,11 @@ class AddPromotion extends Component {
         }
         return result;
     }
-    dismiss(){
+
+    dismiss() {
         Keyboard.dismiss();
     }
+
     selectDistributionType(type) {
         if (type === 'PERSONAL') {
             this.setState({
@@ -509,7 +545,7 @@ class AddPromotion extends Component {
     }
 
     selectProximity(proximity) {
-        this.setState({proximity:proximity});
+        this.setState({proximity: proximity});
     }
 
     selectGroup(group) {
@@ -576,10 +612,13 @@ class AddPromotion extends Component {
                           defaultHeader={strings.chooseProximityDistance}
                           isMandatory onValueSelected={this.selectProximity.bind(this)}/>
         </View>;
-
         return <View>
             <View style={[styles.textLayout, {width: StyleUtils.getWidth() - 15}]}>
-                <ThisText style={{color: '#FA8559', marginLeft: 8, marginRight: 8}}>{strings.ProximityDistanceTitle}</ThisText>
+                <ThisText style={{
+                    color: '#FA8559',
+                    marginLeft: 8,
+                    marginRight: 8
+                }}>{strings.ProximityDistanceTitle}</ThisText>
             </View>
             <View style={{flexDirection: 'row', justifyContent: 'flex-start', alignItems: 'center'}}>
 
@@ -593,10 +632,110 @@ class AddPromotion extends Component {
         </View>
     }
 
+    toogleSwitch(value) {
+
+        if (this.state.toggle) {
+            this.setToggleOn()
+        } else {
+           this.setToggleOff();
+        }
+    }
+
+    getDefaultDate(toggle) {
+        let defaultDate = new Date();
+        if (toggle) {
+            defaultDate.setDate(defaultDate.getDate() + 1);
+        } else {
+            let month = defaultDate.getMonth();
+            if (month < 12) {
+                defaultDate.setMonth(month + 1);
+            } else {
+                let year = defaultDate.getYear();
+                defaultDate.setMonth(1);
+                defaultDate.setYear(year + 1);
+            }
+        }
+        return defaultDate;
+    }
+
+    setToggleOff(){
+        let defaultDate = this.getDefaultDate(false);
+        this.setState({
+            token: '',
+            path: '',
+            image: '',
+            type: 'PERCENT',
+            images: '',
+            businesses: [],
+            business: '',
+            product: '',
+            productList: [],
+            percent: {},
+            amount: '',
+            retail_price: '',
+            total_discount: '',
+            percent_range: {},
+            start: "",
+            end: defaultDate,
+            location: "",
+            info: "",
+            discount_on: 'PRODUCT',
+            distribution: 'PERSONAL',
+            choose_distribution: false,
+            show_save: false,
+            showProductsList: false,
+            quantity: 100,
+            otherBusinessPermittedUser: '',
+            otherBusiness: '',
+            promotion: {},
+            toggle: !this.state.toggle
+        });
+    }
+
+    setToggleOn(){
+        let defaultDate = this.getDefaultDate(true);
+        this.setState(  {
+            token: '',
+            path: '',
+            image: '',
+            type: '',
+            images: '',
+            businesses: [],
+            business: '',
+            product: '',
+            productList: [],
+            percent: {},
+            amount: '',
+            retail_price: '',
+            total_discount: '',
+            percent_range: {},
+            start: "",
+            end: defaultDate,
+            location: "",
+            info: "",
+            discount_on: '',
+            distribution: '',
+            choose_distribution: false,
+            show_save: false,
+            showProductsList: false,
+            quantity: '',
+            otherBusinessPermittedUser: '',
+            otherBusiness: '',
+            promotion: {},
+            toggle: !this.state.toggle
+        });
+    }
+
+    selectPromotionType(type) {
+        this.setState({
+            onBoardType: type,
+        })
+    }
+
     render() {
-        const {saving,savingFailed} = this.props;
+        const {saving, savingFailed} = this.props;
         let proximityForm = undefined;
-        let header = strings.AddPromotion;
+        let header = '';
         if (this.props.navigation.state.params.onBoardType) {
             switch (this.props.navigation.state.params.onBoardType) {
                 case 'BUSINESS':
@@ -610,49 +749,100 @@ class AddPromotion extends Component {
                     header = strings.OnFollowerProximity;
                     proximityForm = this.createProximityForm();
                     break;
-
             }
         }
         let conditionForm = this.createDiscountConditionForm();
         let distributionForm = this.createDistributionForm();
-
         if (this.props.navigation.state.params.group || proximityForm) {
             distributionForm = undefined;
         }
-
-
         return (
             <View style={[styles.product_container, {width: StyleUtils.getWidth()}]}>
 
                 <FormHeader showBack submitForm={this.saveFormData.bind(this)} navigation={this.props.navigation}
-                            title={header} bgc="#FA8559"/>
+                            title={strings.AddPromotion} bgc="#FA8559"/>
 
-                <ScrollView keyboardShouldPersistTaps={true}  ontentContainerStyle={{
+                <ScrollView keyboardShouldPersistTaps={true} ontentContainerStyle={{
                     justifyContent: 'center',
                     alignItems: 'center',
                 }}>
+                    <View style={{
+                        marginBottom: 10,
+                        paddingBottom: 10,
+                        backgroundColor: '#FA8559',
+                        alignItems: 'center',
+                        justifyContent: 'space-between',
+                        flexDirection: 'row'
+                    }}>
+                        {this.state.toggle ? <ThisText style={{
+                                color: 'white',
+                                marginLeft: 8,
+                                marginRight: 8
+                            }}>{strings.AdvancedPromotions}</ThisText> :
+                            <ThisText style={{
+                                color: 'white',
+                                marginLeft: 8,
+                                marginRight: 8
+                            }}>{strings.SimplePromotions}</ThisText>
+                        }
+
+                        <Switch
+
+                            onTintColor={'#2db6c8'}
+                            style={{marginRight: 10,}}
+                            onValueChange={this.toogleSwitch.bind(this)}
+                            value={this.state.toggle}/>
+                    </View>
+
 
                     {this.createCoverImageComponnent()}
                     <View style={[styles.textLayout, {width: StyleUtils.getWidth() - 15}]}>
                         <ThisText style={{color: '#FA8559', marginLeft: 8, marginRight: 8}}>{strings.Details}</ThisText>
                     </View>
+                    {!this.state.toggle && <View style={[styles.inputTextLayout, {width: StyleUtils.getWidth() - 15}]}>
+                        <TextInput field={strings.Name} value={this.state.name}
+                                   returnKeyType='done' ref="4" refNext="4"
+
+                                   onChangeText={(name) => this.setState({name})} isMandatory={true}/>
+                    </View>}
+                    {this.state.toggle && <View style={[styles.inputTextLayout, {width: StyleUtils.getWidth() - 15}]}>
+
+                        {header ?
+                            <SimplePicker ref="promotionType" list={promotion_type} itemTitle={strings.PromotionType}
+                                          selectedValue={this.props.navigation.state.params.onBoardType}
+                                          value={header}
+                                          defaultHeader="Choose Type" isMandatory
+                                          onValueSelected={this.selectPromotionType.bind(this)}/> :
+                            <SimplePicker ref="promotionType" list={promotion_type} itemTitle={strings.PromotionType}
+
+                                          defaultHeader="Choose Type" isMandatory
+                                          onValueSelected={this.selectPromotionType.bind(this)}/>
+                        }
+
+                    </View>}
                     <View style={[styles.inputTextLayout, {width: StyleUtils.getWidth() - 15}]}>
-                        <SimplePicker ref="promotionType" list={types} itemTitle={strings.PromotionType}
-                                      defaultHeader="Choose Type" isMandatory
-                                      onValueSelected={this.selectPromotionType.bind(this)}/>
+                        {this.state.toggle ?
+                            <SimplePicker ref="promotionType" list={types} itemTitle={strings.DiscountType}
+                                          defaultHeader="Choose Type" isMandatory
+                                          onValueSelected={this.selectDiscount.bind(this)}/> :
+                            <SimplePicker ref="promotionType" list={types_simple} itemTitle={strings.DiscountType}
+                                          selectedValue="PERCENT"
+                                          value={strings.PercentageOff}
+                                          defaultHeader="Choose Type" isMandatory
+                                          onValueSelected={this.selectDiscount.bind(this)}/>}
                     </View>
-                    <View style={[styles.textLayout, {width: StyleUtils.getWidth() - 15}]}>
+                    {this.state.toggle && <View style={[styles.textLayout, {width: StyleUtils.getWidth() - 15}]}>
                         <ThisText style={{color: '#FA8559', marginLeft: 8, marginRight: 8}}>{strings.General}</ThisText>
-                    </View>
+                    </View>}
                     <View style={[styles.inputTextMediumLayout, {width: StyleUtils.getWidth() - 15}]}>
 
-                        <View style={{flex: 1, marginRight: 10}}>
+                        {this.state.toggle && <View style={{flex: 1, marginRight: 10}}>
                             <TextInput field={strings.Quantity} value={this.state.quantity}
                                        keyboardType='numeric'
                                        returnKeyType='next' ref="2" refNext="2"
                                        onSubmitEditing={this.focusNextField.bind(this, "4")}
                                        onChangeText={(quantity) => this.setState({quantity})} isMandatory={true}/>
-                        </View>
+                        </View>}
                         <View style={{flex: 3, marginLeft: 5}}>
                             <DatePicker field={strings.ExpirationDate} value={this.state.end}
                                         returnKeyType='next' ref="3" refNext="3"
@@ -661,29 +851,52 @@ class AddPromotion extends Component {
                                         }} isMandatory={true}/>
                         </View>
                     </View>
-                    <View style={[styles.inputTextLayout, {width: StyleUtils.getWidth() - 15}]}>
+                    {this.state.toggle && <View style={[styles.inputTextLayout, {width: StyleUtils.getWidth() - 15}]}>
                         <TextInput field={strings.Name} value={this.state.name}
                                    returnKeyType='next' ref="4" refNext="4"
                                    onSubmitEditing={this.focusNextField.bind(this, "5")}
                                    onChangeText={(name) => this.setState({name})} isMandatory={true}/>
-                    </View>
-                    <View style={[styles.inputTextLayout, {width: StyleUtils.getWidth() - 15}]}>
+                    </View>}
+                    {this.state.toggle && <View style={[styles.inputTextLayout, {width: StyleUtils.getWidth() - 15}]}>
                         <TextInput field={strings.Description} value={this.state.info}
                                    returnKeyType='next' ref="5" refNext="5"
                                    onSubmitEditing={this.dismiss.bind(this)}
                                    onChangeText={(info) => this.setState({info})}/>
-                    </View>
+                    </View>}
 
                     {conditionForm}
                     {proximityForm}
-                    {distributionForm}
+                    {this.state.toggle && distributionForm}
                 </ScrollView>
 
-                {saving && <View style={{justifyContent:'center',alignItems:'center',position:'absolute',width:StyleUtils.getWidth(),opacity:0.7,height:height,top:40,backgroundColor:'white'}}>
+                {saving && <View style={{
+                    justifyContent: 'center',
+                    alignItems: 'center',
+                    position: 'absolute',
+                    width: StyleUtils.getWidth(),
+                    opacity: 0.7,
+                    height: height,
+                    top: 40,
+                    backgroundColor: 'white'
+                }}>
                     <Spinner/>
                 </View>}
-                {savingFailed &&  <View style={{justifyContent:'center',alignItems:'center',position:'absolute',width:StyleUtils.getWidth(),opacity:0.9,height:height,top:40,backgroundColor:'white'}}>
-                    <ThisText style={{margin:10,fontWeight:'bold',color:'black',fontSize:20}}>{strings.PromotionFailedSavingMessage}</ThisText>
+                {savingFailed && <View style={{
+                    justifyContent: 'center',
+                    alignItems: 'center',
+                    position: 'absolute',
+                    width: StyleUtils.getWidth(),
+                    opacity: 0.9,
+                    height: height,
+                    top: 40,
+                    backgroundColor: 'white'
+                }}>
+                    <ThisText style={{
+                        margin: 10,
+                        fontWeight: 'bold',
+                        color: 'black',
+                        fontSize: 20
+                    }}>{strings.PromotionFailedSavingMessage}</ThisText>
                 </View>}
 
             </View>
@@ -706,7 +919,6 @@ class AddPromotion extends Component {
     }
 
     createCoverImageComponnent() {
-
         if (this.state.image) {
             let coverImage = <Image
                 style={{width: width - 10, height: 210, borderWidth: 1, borderColor: 'white'}}
@@ -735,7 +947,9 @@ class AddPromotion extends Component {
                 <View style={styles.addCoverNoImageContainer}>
                     <ImagePicker ref={"coverImage"} mandatory color='white' pickFromCamera
                                  setImage={this.setCoverImage.bind(this)}/>
-                    <ThisText style={styles.addCoverText}>{strings.AddACoverPhoto}</ThisText>
+                    {this.state.toggle ? <ThisText style={styles.addCoverText}>{strings.AddACoverPhoto}</ThisText> :
+                        <ThisText style={styles.addCoverText}>Take Product Picture</ThisText>
+                    }
                 </View>
             </View>
 
@@ -756,10 +970,10 @@ class AddPromotion extends Component {
         return result
     }
 
-    shouldComponentUpdate(){
-        return this.props.currentScreen ==='addPromotions' ||
-            this.props.currentScreen ==='SelectGroupsComponent' ||
-            this.props.currentScreen ==='SelectProductsComponent';
+    shouldComponentUpdate() {
+        return this.props.currentScreen === 'addPromotions' ||
+            this.props.currentScreen === 'SelectGroupsComponent' ||
+            this.props.currentScreen === 'SelectProductsComponent';
     }
 }
 
@@ -769,7 +983,7 @@ export default connect(
         saving: state.promotions.savingForm,
         savingFailed: state.promotions.savingFormFailed,
         products: state.products,
-        currentScreen:state.render.currentScreen,
+        currentScreen: state.render.currentScreen,
     }),
     (dispatch) => ({
         businessActions: bindActionCreators(businessAction, dispatch),

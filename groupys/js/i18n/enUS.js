@@ -278,7 +278,11 @@ LatestActivity                                : "Latest Activity",
 DateAtTime                                    : "{0} at {1}",
 NoTerms                                       : "Global Discount {0} % Off",
 OnFollowerProximity                           : "On Follower Proximity",
+GeneralPromotion                              : "Promotion",
 Reply                                         : "Reply",
+DiscountType                                  : "Discount Type",
+AdvancedPromotions                            : "Advanced Promotions",
+SimplePromotions                              : "Simple Promotions",
 
 
 

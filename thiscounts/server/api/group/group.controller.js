@@ -606,11 +606,15 @@ function sendGroupNotification(actor_user, audience, group_id, type) {
 }
 
 exports.instanceNotify = function(instance, group) {
-  groupFollowersExclude(group, (err, ids)=>{
-    if(err) return console.error(err);
-    const _ids = ids.map(id=>id._id);
-    Instance.notify(instance, _ids);
-  })
+  try{
+    groupFollowersExclude(group, (err, ids)=>{
+      if(err) return console.error(err);
+      const _ids = ids.map(id=>id._id);
+      Instance.notify(instance, _ids);
+    })
+  }catch (err){
+    console.error('exports.instanceNotify', err)
+  }
 };
 
 function groupFollowersExclude(groupId, exUserId, callback) {

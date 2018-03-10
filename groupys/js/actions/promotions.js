@@ -9,7 +9,6 @@ import * as types from '../sega/segaActions';
 
 let promotionComperator = new PromotionComperator();
 let promotionApi = new PromotionsApi();
-
 let feedApi = new FeedApi();
 let logger = new ActionLogger();
 
@@ -114,34 +113,37 @@ export function resetForm() {
     }
 }
 
-export function savePromotion(promotion, businessId, navigation) {
+export function savePromotion(promotion, businessId, navigation, simpleProductPercent) {
     return async function (dispatch, getState) {
         try {
             dispatch({
                 type: actions.PROMOTION_SAVING,
             });
             const token = getState().authentication.token;
+            const products = getState().businesses.businessesProducts[businessId];
             dispatch({
                 type: types.SAVE_PROMOTION,
                 promotion: promotion,
                 businessId: businessId,
-                token: token
+                token: token,
+                products: products,
+                simpleProductPercent: simpleProductPercent
             });
-            if(promotion.on_action){
-                if(promotion.on_action.type ==='FOLLOW_ENTITY'){
+            if (promotion.on_action) {
+                if (promotion.on_action.type === 'FOLLOW_ENTITY') {
                     dispatch({
                         type: actions.SAVE_ON_BOARDING_PROMOTIONS,
                         onBoardingPromotion: promotion,
                         businessId: businessId,
                     });
-                }else {
-                    if(promotion.on_action.type ==='FOLLOWER_PROXIMITY'){
+                } else {
+                    if (promotion.on_action.type === 'FOLLOWER_PROXIMITY') {
                         dispatch({
                             type: actions.SAVE_ON_FOLLOER_PROXIMITY_PROMOTIONS,
                             followerProximity: promotion,
                             businessId: businessId,
                         });
-                    }else {
+                    } else {
                         dispatch({
                             type: actions.SAVE_ON_PROXIMITY_PROMOTIONS,
                             proximityPromotion: promotion,
@@ -152,13 +154,9 @@ export function savePromotion(promotion, businessId, navigation) {
             }
             dispatch({
                 type: actions.PROMOTION_SAVING_DONE,
-
             });
-
             navigation.goBack();
-
             handler.handleSuccses(getState(), dispatch)
-
         } catch (error) {
             dispatch({
                 type: actions.PROMOTION_SAVING_FAILED,
@@ -234,12 +232,12 @@ async function fetchPromotionById(id, token, dispatch) {
     }
 }
 
-export function setPromotion(response,businessId,removeId) {
-    return{
+export function setPromotion(response, businessId, removeId) {
+    return {
         type: actions.UPSERT_PROMOTION_SINGLE,
         item: response,
         businessId: businessId,
-        removeId : removeId
+        removeId: removeId
     }
 }
 

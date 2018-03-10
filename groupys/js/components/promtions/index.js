@@ -120,7 +120,7 @@ class Promotions extends Component {
                 <FormHeader showBack submitForm={this.navigateToAdd.bind(this)} navigation={this.props.navigation}
                             title={strings.MyPromotions} bgc="white"
                             submitIcon={icon}
-                            menu={headerMenu}
+
                             titleColor="#FA8559" backIconColor="#FA8559"/>
                 {!promotionsLoading[businessId] && <Spinner/>}
                 {promotions[businessId] && promotions[businessId].length > 0 &&

@@ -133,8 +133,10 @@ export default class PercentComponent extends Component {
     }
 
     createSelectProductButton() {
+        const{toggle} = this.props;
+
         let result = undefined;
-        if (this.props.state.discount_on === 'PRODUCT') {
+        if (this.props.state.discount_on === 'PRODUCT' && toggle) {
             let button = <View style={{marginTop: 25}}><SelectButton isMandatory ref="precentSelectProduct"
                                                                      selectedValue={this.props.state.product}
                                                                      title={strings.SelectProduct}
@@ -158,7 +160,7 @@ export default class PercentComponent extends Component {
                 </View>
             return <View style={{flexDirection: 'row'}}>{button}{retailPrice}{discount}</View>
         }
-        if (this.props.state.discount_on === 'GLOBAL') {
+        if (this.props.state.discount_on === 'GLOBAL' || !toggle) {
             return <View style={[styles.inputTextLayout, {width: StyleUtils.getWidth() - 15}]}>
 
 
@@ -174,6 +176,7 @@ export default class PercentComponent extends Component {
     }
 
     render() {
+        const{toggle} = this.props;
         let promotionOn = this.createSelectProductButton();
         return <View>
             <View style={[styles.textLayout, {width: StyleUtils.getWidth() - 15}]}>
@@ -182,12 +185,18 @@ export default class PercentComponent extends Component {
             </View>
             <View style={[styles.inputTextLayout, {width: StyleUtils.getWidth() - 15}]}>
 
-                <SimplePicker ref="PromotionOn" list={Discouint_on} itemTitle={strings.PromotionOn}
+                {toggle ? <SimplePicker ref="PromotionOn" list={Discouint_on} itemTitle={strings.PromotionOn}
                               defaultHeader="Choose Type" isMandatory
-                              onValueSelected={this.selectPromotionType.bind(this)}/>
+
+                              onValueSelected={this.selectPromotionType.bind(this)}/> :
+                    <SimplePicker ref="PromotionOn" list={Discouint_on} itemTitle={strings.PromotionOn}
+                    defaultHeader="Choose Type" isMandatory
+                    selectedValue="PRODUCT"
+                    value={strings.ProductDiscount}
+                    onValueSelected={this.selectPromotionType.bind(this)}/>}
             </View>
             {promotionOn}
-            {this.props.state.discount_on === 'PRODUCT' && <ProductPreview product={this.props.state.product} />}
+            {toggle && this.props.state.discount_on === 'PRODUCT' && <ProductPreview product={this.props.state.product} />}
         </View>
     }
 }
