@@ -95,7 +95,7 @@ export default class SimplePicker extends Component {
                                    onSelect={this.selectIos.bind(this)}
                                    renderRow={this.renderRow.bind(this)}
                                    defaultValue={selectValue}
-                        // defaultValue={options[0]}
+
                                    showsVerticalScrollIndicator={true}
                     />
                     <Icon3 style={{right: 10, position: 'absolute', fontSize: 25, color: "black"}} name="chevron-down"/>
@@ -106,6 +106,21 @@ export default class SimplePicker extends Component {
         </View>
     }
 
+    componentWillMount(){
+        const {selectedValue,onValueSelected} =  this.props;
+        if(selectedValue){
+            if (Platform.OS === 'ios') {
+                this.setState({
+                    type:selectedValue,
+                });
+                onValueSelected(selectedValue)
+            }else {
+                this.selectPromotionType(selectedValue);
+            }
+        }
+
+
+    }
     render() {
         const {list, value, itemTitle, defaultHeader, isMandatory, defaultValue, disable} = this.props;
         if (Platform.OS === 'ios') {

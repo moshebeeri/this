@@ -42,12 +42,13 @@ class AddProduct extends Component {
             if (categories.length > 0) {
                 categories = categories.filter(catString => catString).map(catString => parseInt(catString));
             }
+
             this.state = {
                 name: item.name,
                 coverImage: {path: picture},
                 business: item.business,
                 info: item.info,
-                retail_price: item.retail_price.toString(),
+                retail_price: item.retail_price ? item.retail_price.toString(): '',
                 SKU: '',
                 token: '',
                 item: item,

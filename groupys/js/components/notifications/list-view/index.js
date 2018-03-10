@@ -30,14 +30,12 @@ export default class NotificationListView extends Component {
 
     notify(notification) {
         const {item, actions} = this.props;
-        const viewItem = item.item;
-        actions.doNotification(viewItem._id, notification)
+        actions.doNotification(item._id, notification)
     }
 
     create(group) {
         const {item, actions} = this.props;
-        const viewItem = item.item;
-        actions.doNotification(viewItem._id)
+        actions.doNotification(item._id)
         if (group.entity.business) {
             this.props.navigation.navigate("addPromotions", {business: group.entity.business, group: group});
         }
@@ -45,8 +43,7 @@ export default class NotificationListView extends Component {
 
     createBusiness(business) {
         const {item, actions} = this.props;
-        const viewItem = item.item;
-        actions.doNotification(viewItem._id)
+        actions.doNotification(item._id)
         this.props.navigation.navigate("addPromotions", {business: business, onBoardType: 'BUSINESS'});
     }
 
