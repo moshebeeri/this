@@ -2,6 +2,7 @@
 
 const _ = require('lodash');
 const I18n = require('./i18n.model.js');
+const i18n = require('../../components/i18n');
 const googleTranslate = require('@google-cloud/translate');
 const limit = require("simple-rate-limiter");
 
@@ -35,6 +36,18 @@ function translate(to) {
   });
 }
 
+exports.test = function (req, res) {
+  return res.status(200).send('OK');
+};
+
+exports.term = function (req, res) {
+  return res.status(200).send(i18n.get(req.params.key, req.params.lang));
+};
+exports.load = function (req, res) {
+  i18n.load();
+  return res.status(200);
+};
+
 exports.translateAPI = function (req, res) {
   translate(req.params.to);
   return res.status(200).send(`translation to ${req.params.to} has started`);
@@ -58,14 +71,15 @@ exports.show = function(req, res) {
 };
 
 function getToLanguages() {
-  return []
+  let languages = require('./strings/languages.json');
+  return Object.values(languages);
 }
 
 exports.createI18N = function(req, res) {
   const strings = require('./strings/strings.json');
   Object.entries(strings).forEach(([key, enUS]) => {
       console.log('translating key: ', key, 'with value: ', enUS);
-      I18n.create({key, enUS}, function(err, i18n) {
+      I18n.create({key, enUS, translations:{ en: enUS}}, function(err, i18n) {
         if (err) return handleError(res, err);
         getToLanguages().forEach(to => {
           const callTranslateApi = limit(function (category_name, callback) {
@@ -87,11 +101,10 @@ exports.createI18N = function(req, res) {
               console.log(`saving ${i18n.enUS} translation to ${to} is ${translation}`);
             });
           });
-          return res.json(201, i18n);
         });
       })
-    }
-  );
+    });
+  return res.status(201).json(strings);
 };
 
 
