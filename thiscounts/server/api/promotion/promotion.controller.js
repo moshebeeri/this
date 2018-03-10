@@ -290,7 +290,10 @@ function create_promotion(promotion, callback) {
       if (err) return callback(err, null);
       handlePromotionPostCreate(promotion, function(err){
         if(err) return callback(err);
-        callback(null, promotion);
+        Promotion.findById(promotion._id)
+          .populate('condition.product')
+          .exec(callback)
+        //callback(null, promotion);
       });
     });
   });
