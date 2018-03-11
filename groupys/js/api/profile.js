@@ -2,7 +2,7 @@ import serverRequestHandler from './serverRequestHandler';
 
 class ProfileApi {
     fetch(token, from, to) {
-        return serverRequestHandler.fetch_handler(`${server_host}//api/profiles/instances/saved/${from}/${to}`, {
+        return serverRequestHandler.fetch_handler(`${server_host}/api/profiles/instances/saved/${from}/${to}`, {
             method: 'GET',
             headers: {
                 'Accept': 'application/json, text/plain, */*',
@@ -13,7 +13,7 @@ class ProfileApi {
     }
 
     getSavedInstance(token, id) {
-        return serverRequestHandler.fetch_handler(`${server_host}//api/savedInstances/${id}`, {
+        return serverRequestHandler.fetch_handler(`${server_host}/api/savedInstances/${id}`, {
             method: 'GET',
             headers: {
                 'Accept': 'application/json, text/plain, */*',

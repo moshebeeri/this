@@ -96,7 +96,7 @@ class UserApi {
                 'Content-Type': 'application/json;charset=utf-8',
                 'Authorization': 'Bearer ' + token
             }
-        }, 'user', 'like/:id')
+        }, 'user', 'like/:id','BOOLEAN')
     }
 
     unlike(id, token) {
@@ -107,7 +107,7 @@ class UserApi {
                 'Content-Type': 'application/json;charset=utf-8',
                 'Authorization': 'Bearer ' + token
             }
-        }, 'user', 'delete /like/:id')
+        }, 'user', 'delete /like/:id','BOOLEAN')
     }
 
     async getUserByPhone(phone) {
@@ -170,7 +170,7 @@ class UserApi {
                 'Authorization': 'Bearer ' + token,
             },
             body: JSON.stringify(user)
-        }, 'user', 'update user');
+        }, 'user', 'update user','BOOLEAN');
     }
 
     async setUser(dispatch, token) {

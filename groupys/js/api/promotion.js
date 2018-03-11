@@ -31,7 +31,7 @@ class PromotionApi {
 
     async save(id) {
         let token = await store.get('token');
-        return serverRequestHandler.fetch_handler(`${server_host}/api/instances/${id}`, {
+        return serverRequestHandler.fetch_handler(`${server_host}/api/instances/save/${id}`, {
             method: 'GET',
             headers: {
                 'Accept': 'application/json, text/plain, */*',

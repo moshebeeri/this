@@ -35,9 +35,13 @@ class ServerRequestHandler {
                         timer.logTime(start, new Date(), entity, api);
                         switch (type) {
                             case 'JSON':
-                                response.json().then(responseData => {
-                                    return resolve(responseData);
-                                });
+                                try {
+                                    response.json().then(responseData => {
+                                        return resolve(responseData);
+                                    });
+                                }catch (e){
+                                    console.log(entity + api +' failed');
+                                }
                                 break;
                             case 'TEXT':
                                 return response._bodyText
