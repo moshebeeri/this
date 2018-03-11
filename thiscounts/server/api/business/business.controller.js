@@ -463,15 +463,26 @@ function review(businessId, status, callback) {
     business.review.state = 'reviewed';
     if (status === 'accepted') {
       business.review.result = 'accepted';
+      let create_business = false;
+
+      if(!business.review.created){
+        business.review.created = true;
+        create_business = true;
+      }
+
       business.save((err, business) => {
         if (err) return callback(err);
-        createValidatedBusiness(business, (err, business) => {
-          if(err) {
-            console.error(err);
-            return callback(err);
-          }
-          callback(null, business);
-        });
+        if(create_business){
+          createValidatedBusiness(business, (err, business) => {
+            if(err) {
+              console.error(err);
+              return callback(err);
+            }
+            return callback(null, business);
+          });
+        }else{
+          return callback(null, business);
+        }
       });
     } else {
       business.review.result = 'rejected';
