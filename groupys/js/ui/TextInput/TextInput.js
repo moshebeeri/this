@@ -86,9 +86,12 @@ export default class TextInputField extends Component {
         if(field){
             containerStyle = styles.textInputContainer;
         }
+        let stringValue ='';
+        if(value){
+            stringValue = value.toString();
+        }
 
-
-        let inputField =  <TextInput style={textInputStyle} value={value} returnKeyType={returnKeyType}
+        let inputField =  <TextInput style={textInputStyle} value={stringValue} returnKeyType={returnKeyType}
                                      ref={refNext} underlineColorAndroid='transparent' disabled
                                      keyboardType={keyboardType}
                                      secureTextEntry={secureTextEntry}

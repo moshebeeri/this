@@ -15,8 +15,11 @@ function* savePromotion(action) {
         let promotionProduct;
         let uploadProductPicture = false;
         if (action.simpleProductPercent) {
-            let products = action.products.filter(product => product.name.toUpperCase() === tempPromotion.name.toUpperCase())
-            if (products.length > 0) {
+            let products;
+            if(action.products){
+                products = action.products.filter(product => product.name.toUpperCase() === tempPromotion.name.toUpperCase())
+            }
+            if (products && products.length > 0) {
                 //Product with the same name already exist
                 promotionProduct = products[0];
             } else {
@@ -78,7 +81,6 @@ function* savePromotion(action) {
         if (action.promotion.image) {
             let imageResponse = yield call(ImageApi.uploadImage, action.token, action.promotion.image, 'image');
             tempPromotion.pictures = imageResponse.pictures;
-
             tempPromotion._id = undefined;
             let response = yield call(promotionApi.createPromotion, tempPromotion, action.token);
             let createdPromotion = response;
@@ -91,7 +93,6 @@ function* savePromotion(action) {
             createdPromotion.social_state.likes = 0;
             createdPromotion.social_state.shares = 0;
             createdPromotion.social_state.realizes = 0;
-
             yield put(setPromotion(createdPromotion, action.businessId, tempId));
         }
     } catch (error) {
