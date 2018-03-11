@@ -127,7 +127,9 @@ function* updateBusinessFirstTime(action) {
 function* updateCategory(action) {
     try {
         const response = yield call(businessApi.getSubCategory, action.token, action.business.business.subcategory, action.locale);
-        yield put(setBusinessCategory(response, action.business));
+        const locale =  action.locale;
+        let category = response[0].translations[locale];
+        yield put(setBusinessCategory(category, action.business,));
     } catch (error) {
         console.log("failed  updateCategory")
     }

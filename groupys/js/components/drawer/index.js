@@ -69,6 +69,9 @@ class ProfileDrawer extends Component {
         this.replaceRoute('businesses');
     }
 
+    testError(){
+        this.props.actions.testError();
+    }
     render() {
         let source = noPic;
         if (this.props.user) {
@@ -189,6 +192,20 @@ class ProfileDrawer extends Component {
 
                         </TouchableOpacity>
                     </View>
+
+                <View style={{height:70,width:deviceWidth/5*4,borderBottomWidth:1,flexDirection: 'row',borderColor: '#E5E5E5'}}>
+                    <TouchableOpacity onPress={() => this.testError()}
+                                      style={{flex: 1, flexDirection: 'row', alignItems: 'center'}} regular>
+                        <Icon style={{marginLeft: 20, marginBottom: -6}} color="white" size={36} name="lock"/>
+                        <ThisText style={{
+                            marginLeft:22,
+                            color: 'white',
+                            fontStyle: 'normal',
+                            fontSize: 16
+                        }}>Test Errors </ThisText>
+
+                    </TouchableOpacity>
+                </View>
 
 
             </View>

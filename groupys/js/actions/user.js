@@ -105,7 +105,7 @@ export function changePassword(oldPassword, newPassword, navigation) {
 export function updateUser(newUser) {
     return function (dispatch, getState) {
         const token = getState().authentication.token
-        if(newUser) {
+        if (newUser) {
             dispatch({
                 type: types.SAVE_USER_REQUEST,
                 newUser: newUser,
@@ -115,7 +115,7 @@ export function updateUser(newUser) {
     }
 }
 
-export function* upSertUserSuccsess( newUser) {
+export function* upSertUserSuccsess(newUser) {
     yield put({
         type: actions.SET_USER,
         user: newUser
@@ -167,7 +167,7 @@ async function updateUserToken(dispatch, token, user, fireBaseToken) {
         if (/*!user.firebase || (user.firebase && !user.firebase.tokens ) || (
                 user.firebase && user.firebase.tokens && user.firebase.tokens[0] !== fireBaseToken)*/
             true
-            ) {
+        ) {
             dispatch({
                 type: actions.SAVING_USER,
             });
@@ -220,6 +220,17 @@ async function updateUserTask(dispatch, token, newUser) {
     } catch (error) {
         handler.handleError(error, dispatch, 'updateUser')
         logger.actionFailed('users-updateUser')
+    }
+}
+
+export function testError() {
+    return function (dispatch, getState) {
+        try {
+            userApi.testError();
+        } catch (error) {
+            handler.handleError(error, dispatch, 'updateUser')
+            logger.actionFailed('users-updateUser')
+        }
     }
 }
 

@@ -16,7 +16,7 @@ function* savePromotion(action) {
         let uploadProductPicture = false;
         if (action.simpleProductPercent) {
             let products;
-            if(action.products){
+            if (action.products) {
                 products = action.products.filter(product => product.name.toUpperCase() === tempPromotion.name.toUpperCase())
             }
             if (products && products.length > 0) {
@@ -27,6 +27,7 @@ function* savePromotion(action) {
                 let product = {
                     name: tempPromotion.name,
                     category: [247183, 247467],
+                    price: tempPromotion.retail_price,
                 }
                 promotionProduct = yield call(productApi.createProduct, product, action.token);
                 uploadProductPicture = true;

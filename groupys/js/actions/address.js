@@ -3,7 +3,7 @@ import BusinessApi from '../api/business'
 let businessApi = new BusinessApi();
 import ActionLogger from './ActionLogger'
 let logger = new ActionLogger();
-
+import strings from "../i18n/i18n"
 export function validateAddress(address,onValid) {
     return async function (dispatch, getState) {
         try {
@@ -15,10 +15,10 @@ export function validateAddress(address,onValid) {
             dispatch({
                 type: actions.ADDRESS_VALADATING_DONE,
             });
-            if (!response.valid) {
+            if (response.message === 'No Content') {
                 dispatch({
                     type: actions.ADDRESS_NOT_FOUND,
-                    message: response.message
+                    message: strings.AddressNotFound
                 });
                 return;
             }
@@ -43,7 +43,10 @@ export function validateAddress(address,onValid) {
             logger.actionFailed('business_checkAddress');
             dispatch({
                 type: actions.ADDRESS_NOT_FOUND,
-                message: 'failed'
+                message: strings.AddressNotFound
+            });
+            dispatch({
+                type: actions.ADDRESS_VALADATING_DONE,
             });
         }
     }
