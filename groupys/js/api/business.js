@@ -155,19 +155,17 @@ class BusinessApi {
         }, 'qrcodes', '/assign');
     }
 
-    getUserBusinessesByPhoneNumber(phone, token) {
+    async getUserBusinessesByPhoneNumber(phone, token) {
+        let callingCode = await CallingCallUtils.getCallingCode();
         let phoneNumber = PhoneUtils.clean_phone_number(phone);
-        CallingCallUtils.getCallingCode().then(callingCode => {
-                return serverRequestHandler.fetch_handler(`${server_host}/api/user/businesses/by/phone/${callingCode}/${phoneNumber}`, {
-                    method: 'GET',
-                    headers: {
-                        'Accept': 'application/json, text/plain, */*',
-                        'Content-Type': 'application/json;charset=utf-8',
-                        'Authorization': 'Bearer ' + token,
-                    }
-                }, 'businesses', '/user/businesses/by/phone');
+        return serverRequestHandler.fetch_handler(`${server_host}/api/user/businesses/by/phone/${callingCode}/${phoneNumber}`, {
+            method: 'GET',
+            headers: {
+                'Accept': 'application/json, text/plain, */*',
+                'Content-Type': 'application/json;charset=utf-8',
+                'Authorization': 'Bearer ' + token,
             }
-        )
+        }, 'businesses', '/user/businesses/by/phone');
     }
 }
 
