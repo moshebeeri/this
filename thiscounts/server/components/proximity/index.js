@@ -63,30 +63,11 @@ function coordinatesDistance(point1, point2) {
   return d;
 }
 
-//   MATCH (b:business)-[o:ON_ACTION]-(p:promotion)
-//   WITH point({longitude:34.7843949,latitude:32.0907389}) AS coordinate, point({ longitude: p.lon, latitude: p.lat }) AS promotionPoint, b,o,p
-//   WHERE distance( coordinate, promotionPoint) < 1
-//   return b,o,p, distance( coordinate, promotionPoint) as d
-//   backup:
-//   CALL spatial.withinDistance('world', coordinate, on.proximity) YIELD node AS p
-//   (2 *
-//    6371 * asin(
-//      sqrt(
-//      haversin(radians(promo.lat - entity.lat))+
-//      cos(radians(promo.lat)) *
-//      cos(radians(entity.lat))*
-//      haversin(radians(promo.lon - entity.lat)))
-//   )
-//  )
-//
-//   RETURN 2 * 6371 * asin(
-//     sqrt(
-//       haversin(radians(n.lat - 53.489271)) +
-//       cos(radians(n.lat)) *
-//       cos(radians(53.489271)) *
-//       haversin(radians(n.lon - (-2.246704)))
-//     )
-//   ) AS dist
+// The distance calculation was verify against the site in the url,
+// distance return in km.
+//https://www.movable-type.co.uk/scripts/latlong.html
+//WITH 46.9163 AS lat1, -114.09 AS lon1, 46.9163 AS lat2, -114.1 AS lon2
+//RETURN 2 * 6371 * asin(sqrt(haversin(radians(lat1 - lat2))+ cos(radians(lat1))* cos(radians(lat2))* haversin(radians(lon1 - lon2))))
 
 function handleFollowersProximityActions(userId, location, callback) {
   let skip = 0;

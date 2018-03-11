@@ -290,7 +290,10 @@ function create_promotion(promotion, callback) {
       if (err) return callback(err, null);
       handlePromotionPostCreate(promotion, function(err){
         if(err) return callback(err);
-        callback(null, promotion);
+        Promotion.findById(promotion._id)
+          .populate('condition.product')
+          .exec(callback)
+        //callback(null, promotion);
       });
     });
   });
@@ -445,17 +448,21 @@ function user_instance_eligible_activity(userId, instance){
 
 
 function instance_group_activity(instance, group) {
-  activity.create({
-    instance: instance._id,
-    promotion: instance.promotion._id,
-    action: "instance",
-    ids: [group._id],
-  }, function(err, activity){
-    if(err) return console.error(err);
-    group.preview.instance_activity = activity._id;
-    group.save();
-    pricing.chargeActivityDistribution(group.entity, activity);
-  });
+  try {
+    activity.create({
+      instance: instance._id,
+      promotion: instance.promotion._id,
+      action: "instance",
+      ids: [group._id],
+    }, function (err, activity) {
+      if (err) return console.error(err);
+      group.preview.instance_activity = activity._id;
+      group.save();
+      pricing.chargeActivityDistribution(group.entity, activity);
+    })
+  }catch (err){
+    console.error('instance_group_activity', err);
+  }
 }
 
 // Updates an existing promotion in the DB.

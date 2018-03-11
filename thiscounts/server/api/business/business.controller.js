@@ -463,15 +463,26 @@ function review(businessId, status, callback) {
     business.review.state = 'reviewed';
     if (status === 'accepted') {
       business.review.result = 'accepted';
+      let create_business = false;
+
+      if(!business.review.created){
+        business.review.created = true;
+        create_business = true;
+      }
+
       business.save((err, business) => {
         if (err) return callback(err);
-        createValidatedBusiness(business, (err, business) => {
-          if(err) {
-            console.error(err);
-            return callback(err);
-          }
-          callback(null, business);
-        });
+        if(create_business){
+          createValidatedBusiness(business, (err, business) => {
+            if(err) {
+              console.error(err);
+              return callback(err);
+            }
+            return callback(null, business);
+          });
+        }else{
+          return callback(null, business);
+        }
       });
     } else {
       business.review.result = 'rejected';
@@ -558,22 +569,30 @@ exports.validate_email = function (req, res) {
   })
 };
 
-exports.update_email = function (req, res) {
-  const businessId = req.params.id;
-  const newEmail = req.params.email;
-
+function update_email(businessId, newEmail, callback) {
   Business.findById(businessId).exec((err, business) => {
-    if (err) return handleError(res, err);
-    if (!business) return res.status(404).send('Not Found');
+    if (err) return callback(err);
+    if (!business) return callback(new Error('Not Found'));
     business.email = newEmail;
     business.validationCode = randomstring.generate({length: 12, charset: 'numeric'});
     business.review.status = 'waiting';
     business.review.state = 'validation';
-    business.save(err => {
-      if (err) return handleError(res, err);
-      reviewRequest(business);
+    business.save( (err, business) => {
+      if (err) return callback(err);
+      sendValidationEmail(business._id);
+      callback(null, business)
     });
   });
+}
+
+exports.update_email = function (req, res) {
+  const businessId = req.params.id;
+  const newEmail = req.params.email;
+
+  update_email(businessId, newEmail, (err, business) =>{
+    if (err) return handleError(res, err);
+    return res.status(201).json(business);
+  })
 };
 
 exports.create = function (req, res) {
@@ -655,11 +674,18 @@ exports.update = function (req, res) {
     if (!business) {
       return res.status(404).send('Not Found');
     }
+    let should_validate_email = false;
+    if(req.body.email && req.body.email !== business.email)
+      should_validate_email = true;
     let updated = _.merge(business, req.body);
     updated.save(function (err) {
       if (err) {
         return handleError(res, err);
       }
+      if(should_validate_email)
+        update_email(business, business.email, (err)=>{
+          if(err) return console.error(err);
+        }) ;
       return res.status(200).json(business);
     });
   });
