@@ -65,8 +65,8 @@ export default class BusinessListView extends Component {
     }
 
     refreshBusiness() {
-        const {refresh} = this.props;
-        refresh();
+        const {actions} = this.props;
+        actions.updateBusinesStatuss();
     }
 
     createView() {
@@ -76,6 +76,7 @@ export default class BusinessListView extends Component {
         const promotionButton = this.createPromotionsTag(item);
         const permissionsButton = this.createPermissionsTag(item);
         const productsButton = this.createPoductsTag(item);
+        const inReview =  item.business.review && (item.business.review.state === 'validation' || item.business.review.state === 'review');
         return ( <View style={{marginBottom: 10}}>
                 <BusinessHeader businesscolor navigation={this.props.navigation} business={item.business}
                                 categoryTitle={item.categoryTitle} businessLogo={item.business.logo}
@@ -98,7 +99,7 @@ export default class BusinessListView extends Component {
 
                     <View style={{borderTopWidth: 2, borderColor: '#eaeaea', backgroundColor: 'white'}}
                           key={this.props.index}>
-                        {(permissionsButton || productsButton || promotionButton) && <View style={{
+                        {!inReview && (permissionsButton || productsButton || promotionButton) && <View style={{
                             height: vh * 6, flexDirection: 'row', alignItems: 'center',
                             justifyContent: 'space-between',
                         }}>
@@ -144,7 +145,7 @@ export default class BusinessListView extends Component {
 
     createEditTag(item) {
         if (item.role === 'OWNS' || (item.business && item.business.review && item.business.review.status === 'waiting')) {
-            return <EditButton onPress={this.showBusiness.bind(this, this.props, item)}/>
+            return <EditButton touchSize={40} onPress={this.showBusiness.bind(this, this.props, item)}/>
         }
         return undefined;
     }

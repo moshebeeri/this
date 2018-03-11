@@ -348,45 +348,14 @@ export function updateBusiness(business, navigation) {
             dispatch({
                 type: actions.SAVING_BUSINESS,
             });
+
             const token = getState().authentication.token;
-            let createdBusiness = await entityUtils.update('businesses', business, token, business._id);
-            let businesses = await businessApi.getAll(token);
-            let uploadPic = false;
-            createdBusiness.pictures = [];
-            let pictures = [];
-            let coverPicsNumber = 0;
-            if (createdBusiness.pictures) {
-                coverPicsNumber = createdBusiness.pictures.length;
-            }
-            ;
-            if (coverPicsNumber === 0 || ( createdBusiness.pictures[coverPicsNumber - 1].pictures[0].path !== business.image.uri || createdBusiness.pictures[coverPicsNumber - 1].pictures[0].path !== business.image.path)) {
-                uploadPic = true;
-                if (business.image.path) {
-                    pictures.push(business.image.path);
-                    createdBusiness.pictures.push({pictures: pictures});
-                } else {
-                    pictures.push(business.image.uri);
-                    createdBusiness.pictures.push({pictures: pictures});
-                }
-            }
-            if (business.logoImage && (!createdBusiness.logo || (createdBusiness.logo !== business.logoImage.path || createdBusiness.logo !== business.logoImage.uri ))) {
-                uploadPic = true;
-                if (business.logoImage.path) {
-                    createdBusiness.logo = business.logoImage.path;
-                } else {
-                    createdBusiness.logo = business.logoImage.uri;
-                }
-            }
-            if (uploadPic) {
-                dispatch({
-                    type: actions.BUSINESS_UPLOAD_PIC,
-                    item: {businessResponse: createdBusiness, business: business}
-                })
-            }
             dispatch({
-                type: actions.UPSERT_MY_BUSINESS,
-                item: businesses
+                type: types.UPDATE_BUSINESS,
+                business: business,
+                token: token
             });
+
             dispatch({
                 type: actions.SAVING_BUSINESS_DONE,
             });
@@ -417,12 +386,15 @@ export function setBusinessQrCode(business) {
             dispatch({
                 type: actions.REST_BUSINESS_QRCODE,
             });
-            let response = await imageApi.getQrCodeImage(business.qrcode, token);
-            dispatch({
-                type: actions.UPSERT_BUSINESS_QRCODE,
-                business: business,
-                qrcodeSource: response.qrcode
-            });
+
+            if(business.qrcode) {
+                let response = await imageApi.getQrCodeImage(business.qrcode, token);
+                dispatch({
+                    type: actions.UPSERT_BUSINESS_QRCODE,
+                    business: business,
+                    qrcodeSource: response.qrcode
+                });
+            }
         } catch (error) {
             handler.handleError(error, dispatch, 'setBusinessQrCode')
             logger.actionFailed("business_getBusinessQrCodeImage", business);

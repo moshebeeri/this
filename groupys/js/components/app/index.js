@@ -146,7 +146,10 @@ class ApplicationManager extends Component {
 
     constructor(props) {
         super(props)
-
+        FCM.getFCMToken().then(token => {
+            PageRefresher.updateUserFireBase(token);
+        });
+        FCM.getBadgeNumber().then(number => 0);
         this.state = {
             orientation: StyleUtils.isPortrait() ? 'portrait' : 'landscape',
             devicetype: StyleUtils.isTablet() ? 'tablet' : 'phone',

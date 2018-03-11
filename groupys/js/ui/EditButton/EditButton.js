@@ -9,12 +9,16 @@ export default class EditButton extends Component {
     }
 
     render() {
-        const {onPress,iconName} = this.props;
+        const {onPress,iconName,touchSize} = this.props;
         let name = "edit";
         if(iconName){
             name = iconName;
         }
-        return <TouchableOpacity style={styles.editButtonContainer}
+        let style ={};
+        if(touchSize){
+            style = {height:touchSize,width:touchSize};
+        }
+        return <TouchableOpacity style={style}
                                  onPress={onPress}>
             <Icon2 size={20} style={styles.productIcon} name={name}/>
         </TouchableOpacity>
