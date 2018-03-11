@@ -304,13 +304,8 @@ class UserApi {
 
 
                 timer.logTime(from, new Date(), 'user', 'update');
-                if (user.image) {
-                    let imagePath = user.image.uri;
-                    if(!imagePath){
-                        imagePath = user.image.path;
-                    }
-                   // entityUtils.doUpload(imagePath, user.image.mime, token, callback, 'users', user);
-                }
+
+
                 resolve(true);
 
             }

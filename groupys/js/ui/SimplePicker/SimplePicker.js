@@ -131,8 +131,13 @@ export default class SimplePicker extends Component {
             pickerStyle = styles.pickerInvalid;
         }
         let selectedValue = this.state.type;
-        if (value) {
-            selectedValue = value
+        if (value && !selectedValue) {
+            let valueType = list.filter( listValue => listValue.label === value)
+            if(valueType.length > 0){
+                selectedValue = valueType[0].value;
+            }
+
+
         }
         let enable = true;
         if (disable) {

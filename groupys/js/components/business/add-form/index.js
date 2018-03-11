@@ -33,7 +33,7 @@ class AddBusiness extends Component {
             let item = props.navigation.state.params.item;
             let picture = null;
             let source = null;
-            if (item.pictures.length > 0 && item.pictures[0].pictures[1]) {
+            if (item.pictures.length > 0 && item.pictures[0].pictures[0]) {
                 picture = item.pictures[0].pictures[1];
                 source = {uri: picture};
             }
