@@ -342,10 +342,12 @@ exports.check_address = function (req, res) {
     if (err) {
       if (err.code === 204) return res.status(err.code).send(err.message);
       else if (err.code === 202) {
-        console.error(err);
         return res.status(202).json(data);
       }
-      else return res.status(400).send(err);
+      else{
+        console.error(err);
+        return res.status(400).send(err);
+      }
     }
     return res.status(200).json(data);
   })
