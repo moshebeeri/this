@@ -340,7 +340,7 @@ function create_business_default_group(business) {
 exports.check_address = function (req, res) {
   location.address_location(req.body, function (err, data) {
     if (err) {
-      if (err.code >= 400) return res.status(err.code).send(err.message);
+      if (err.code === 204) return res.status(err.code).send(err.message);
       else if (err.code === 202) {
         console.error(err);
         return res.status(202).json(data);

@@ -5,6 +5,7 @@ const async = require('async');
 
 const Promotion = require('./promotion.model');
 const Group = require('../group/group.model');
+const User = require('../user/user.model');
 const campaign_controller = require('../campaign/campaign.controller');
 
 const logger = require('../../components/logger').createLogger();
@@ -108,6 +109,20 @@ function applyToGroupList(groups_ids, instance, callback) {
   })
 }
 
+function applyToUserList(users_ids, instance, callback) {
+  User.find({}).where('_id').in(users_ids).exec(function (err, users) {
+    if (err) return callback(err);
+    async.each(users, (user, callback) => {
+      pricing.balance(instance.promotion.entity, function (err, positiveBalance) {
+        if (err) return callback(err);
+        if (!positiveBalance) return callback(new Error('HTTP_PAYMENT_REQUIRED'));
+        user_instance_eligible_activity(user._id, instance);
+        Instance.notify(instance._id, [user._id]);
+      })
+    }, callback);
+  })
+}
+
 function applyToGroups(promotion, instances, callback){
   async.each(instances, (instance, callback) => {
     let groups;
@@ -124,6 +139,7 @@ function applyToFollowingGroups(promotion, instances, callback) {
       if (instance.variation === 'SINGLE') {
         let query = instanceGraphModel.related_type_id_dir_query(business._id, 'FOLLOW', 'group', 'in', 0, instance.quantity);
         instanceGraphModel.query(query, function (err, groups_ids) {
+          console.log(`applyToFollowingGroups: ${JSON.stringify(groups_ids)}`);
           if (err) return callback(err);
           return applyToGroupList(groups_ids, instance, promotion.creator, callback)
         })
@@ -134,6 +150,22 @@ function applyToFollowingGroups(promotion, instances, callback) {
 
 //see https://neo4j.com/blog/real-time-recommendation-engine-data-science/
 function applyToFollowingUsers(promotion, instances, callback) {
+  async.each(instances, (instance, callback) => {
+    let business;
+    if (instance && promotion && (business = promotion.entity.business)) {
+      if (instance.variation === 'SINGLE') {
+        let query = instanceGraphModel.related_type_id_dir_query(business._id, 'FOLLOW', 'user', 'in', 0, instance.quantity);
+        instanceGraphModel.query(query, function (err, users_ids) {
+          if (err) return callback(err);
+          return applyToUserList(users_ids, instance, promotion.creator, callback)
+        })
+      }
+    }
+  }, callback);
+}
+
+//see https://neo4j.com/blog/real-time-recommendation-engine-data-science/
+function applyToFollowingUsersWithinDistance(promotion, instances, callback) {
   async.each(instances, (instance, callback) => {
     spatial.userLocationWithinDistance({
       longitude: instance.location.lng,
@@ -154,8 +186,6 @@ function applyToFollowingUsers(promotion, instances, callback) {
 }
 
 function applyToFollowing(promotion, instances, callback) {
-  console.log(`applyToFollowing ${JSON.stringify(promotion)}`);
-  console.log(`applyToFollowing ${promotion.start.getTime()}`);
   async.parallel({
     groups: function (callback) {
       applyToFollowingGroups(promotion, instances, callback);
@@ -306,13 +336,13 @@ function create_promotion(promotion, callback) {
 // RETURN promo, on, entity
 exports.get_action = function (req, res) {
   if( req.params.type !== 'FOLLOW_ENTITY' && req.params.type !== 'PROXIMITY' && req.params.type !== 'FOLLOWER_PROXIMITY')
-    return res.status(404).send(new Error(`invalid type ${req.params.type}`));
+    return res.status(404).send(`invalid type ${req.params.type}`);
   const query = `MATCH (p:promotion)<-[on:ON_ACTION]-(entity{_id:'${req.params.entity}'})
                  WHERE  p._id IS NOT NULL AND on.type = '${req.params.type}'
                  RETURN p._id as _id`;
   promotionGraphModel.query_objects(Promotion, query, 'ORDER BY _id DESC', 0, 10, (err, promotions) => {
     if(err) return handleError(res, err);
-    if(promotions.length < 1) return res.status(404).send(new Error(`no ${req.params.type} promotion found for entity ${req.params.entity}`));
+    if(promotions.length < 1) return res.status(404).send(`no ${req.params.type} promotion found for entity ${req.params.entity}`);
     return res.status(201).json(promotions[0]);
   })
 };
