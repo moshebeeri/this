@@ -78,7 +78,7 @@ class ContactsApi {
 
             }
         } catch (error) {
-            reject(errors.NETWORK_ERROR);
+           // reject(errors.NETWORK_ERROR);
         }
     }
 
