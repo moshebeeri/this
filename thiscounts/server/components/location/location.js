@@ -36,6 +36,12 @@ Location.prototype.address_location = function address_location(addressed, callb
   let address = format_address(addressed);
   geocode_address(address, function (err, data) {
     if (err) {
+      if(err === 'bad address'){
+        return callback({
+          code: 204,
+          message: 'bad address : ' + address
+        }, null);
+      }
       return callback(err, data);
     }
     //logger.info(data);
