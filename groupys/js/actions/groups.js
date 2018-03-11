@@ -191,7 +191,7 @@ export function updateGroup(group, navigation) {
                 type: actions.GROUP_SAVING,
             });
             const token = getState().authentication.token;
-            await groupsApi.updteGroup(group, uploadGroupPic, token);
+            await groupsApi.updateGroup(group, token);
             await getAll(dispatch, token);
             dispatch({
                 type: actions.GROUP_SAVING_DONE,
