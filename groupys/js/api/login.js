@@ -1,39 +1,24 @@
 import store from "react-native-simple-store";
-import * as errors from './Errors'
 import CallingCallUtils from '../utils/LocalToCallingCode'
 import PhoneUtils from '../utils/phoneUtils'
+import serverRequestHandler from './serverRequestHandler';
 
 class LoginApi {
-
     async login(phoneNumber, password) {
-        return new Promise(async (resolve, reject) => {
-            let normalizePhoneNumber = PhoneUtils.clean_phone_number(phoneNumber);
-            let callingCode = await CallingCallUtils.getCallingCode();
-
-            let email = callingCode + normalizePhoneNumber + "@low.la";
-            try {
-                const response = await fetch(`${server_host}/auth/local`, {
-                    method: 'POST',
-                    headers: {
-                        'Accept': 'application/json, text/plain, */*',
-                        'Content-Type': 'application/json;charset=utf-8',
-                    },
-                    body: JSON.stringify({
-                        email: email,
-                        password: password,
-                    })
-                });
-                if (response.status ==='401') {
-                    resolve({});
-                    return;
-                }
-                let responseData = await response.json();
-                resolve(responseData);
-            }
-            catch (error) {
-                reject(errors.NETWORK_ERROR);
-            }
-        })
+        let normalizePhoneNumber = PhoneUtils.clean_phone_number(phoneNumber);
+        let callingCode = await CallingCallUtils.getCallingCode();
+        let email = callingCode + normalizePhoneNumber + "@low.la";
+        return serverRequestHandler.fetch_handler(`${server_host}/auth/local`, {
+            method: 'POST',
+            headers: {
+                'Accept': 'application/json, text/plain, */*',
+                'Content-Type': 'application/json;charset=utf-8',
+            },
+            body: JSON.stringify({
+                email: email,
+                password: password,
+            })
+        }, 'auth', '/login');
     }
 
     normalizePhoneNumber(phone, countryCode) {
@@ -41,136 +26,64 @@ class LoginApi {
         return newPhone;
     }
 
-     signup(phone, password, firstName, lastName) {
-
-        return new Promise(async (resolve, reject) => {
-            let callingCode = await CallingCallUtils.getCallingCode();
-
-            let phoneNumber = '+' + callingCode + phone;
-            let normalizedPhone = this.normalizePhoneNumber(phoneNumber,'+' + callingCode);
-            let cleanPhone = PhoneUtils.clean_phone_number(normalizedPhone);
-            try {
-                const response = await fetch(`${server_host}/api/users`, {
-                    method: 'POST',
-                    headers: {
-                        'Accept': 'application/json, text/plain, */*',
-                        'Content-Type': 'application/json;charset=utf-8',
-                    },
-                    body: JSON.stringify({
-                        country_code: '+' + callingCode ,
-                        name: firstName + ' ' + lastName,
-                        phone_number: cleanPhone,
-                        email:  callingCode + cleanPhone + "@low.la",
-                        password: password,
-                    })
-                });
-                if (response.status === '401') {
-                    reject(errors.SIGNUP_FAILED);
-                    return;
-                }
-                let responseData = await response.json();
-                store.save('token', responseData.token);
-                resolve(responseData);
+    async signup(phone, password, firstName, lastName) {
+        let callingCode = await CallingCallUtils.getCallingCode();
+        let phoneNumber = '+' + callingCode + phone;
+        let normalizedPhone = this.normalizePhoneNumber(phoneNumber, '+' + callingCode);
+        let cleanPhone = PhoneUtils.clean_phone_number(normalizedPhone);
+        return serverRequestHandler.fetch_handler(`${server_host}/api/users`, {
+                method: 'POST',
+                headers: {
+                    'Accept': 'application/json, text/plain, */*',
+                    'Content-Type': 'application/json;charset=utf-8',
+                },
+                body: JSON.stringify({
+                    country_code: '+' + callingCode,
+                    name: firstName + ' ' + lastName,
+                    phone_number: cleanPhone,
+                    email: callingCode + cleanPhone + "@low.la",
+                    password: password
+                })
             }
-            catch (error) {
-                reject(errors.NETWORK_ERROR);
-            }
-        })
+            , 'users', '/signup')
     }
 
-    verifyCode(code) {
-        return new Promise(async (resolve, reject) => {
-            try {
-                let token = await store.get('token');
-                const response = await fetch(`${server_host}/api/users/verification/` + code, {
-                    method: 'GET',
-                    headers: {
-                        'Accept': 'application/json, text/plain, */*',
-                        'Content-Type': 'application/json;charset=utf-8',
-                        'Authorization': 'Bearer ' + token,
-                    }
-                });
-
-                if(response.status ==='200' || response.status === 200 ) {
-                    let result = {
-                        token: token
-                    };
-                    resolve(result);
-                    return;
-                }
-
-                if (response.status ==='401' || response.status === 401) {
-                    reject(errors.UN_AUTHOTIZED_ACCESS);
-                    return;
-                }
-
-                reject(errors.FAILED_SMS_VALIDATION);
-
-            }
-            catch (error) {
-                reject(errors.NETWORK_ERROR);
-            }
-        })
+    async verifyCode(code) {
+        let token = await store.get('token');
+        return serverRequestHandler.fetch_handler(`${server_host}/api/users/verification/${code}`, {
+            method: 'GET',
+            headers: {
+                'Accept': 'application/json, text/plain, */*',
+                'Content-Type': 'application/json;charset=utf-8',
+                'Authorization': 'Bearer ' + token,
+            },
+        }, 'users', '/verification');
     }
 
     recoverPassword(phoneNumber) {
         let normalizedPhone = PhoneUtils.clean_phone_number(phoneNumber);
-        return new Promise(async (resolve, reject) => {
-            try {
-                const response = await fetch(`${server_host}/api/users/password/` + normalizedPhone, {
-                    method: 'GET',
-                    headers: {
-                        'Accept': 'application/json, text/plain, */*',
-                        'Content-Type': 'application/json;charset=utf-8',
-                    }
-                });
-                if (response.status ==='401' || response.status === 401) {
-                    reject(errors.UN_AUTHOTIZED_ACCESS);
-                    return;
-                }
-                let responseData = await response.json();
-                resolve(responseData);
-            }
-            catch (error) {
-                reject(errors.NETWORK_ERROR);
-            }
-        })
+        return serverRequestHandler.fetch_handler(`${server_host}/api/users/password/${normalizedPhone}`, {
+            method: 'GET',
+            headers: {
+                'Accept': 'application/json, text/plain, */*',
+                'Content-Type': 'application/json;charset=utf-8',
+            },
+        }, 'users', '/password');
     }
 
     changePassword(oldPassword, newPassowrd, userId, token) {
-        return new Promise(async (resolve, reject) => {
-            try {
-                const response = await fetch(`${server_host}/api/users/` + userId + `/password/`, {
-                    method: 'PUT',
-                    headers: {
-                        'Accept': 'application/json, text/plain, */*',
-                        'Content-Type': 'application/json;charset=utf-8',
-                        'Authorization': 'Bearer ' + token,
-                    },
-                    body: JSON.stringify({
-                        oldPassword: oldPassword,
-                        newPassword: newPassowrd,
-                    })
-                });
-
-                if (response.status ==='401' || response.status === 401) {
-                    reject(errors.UN_AUTHOTIZED_ACCESS);
-                    return;
-                }
-
-                if (response.status === 200) {
-                    resolve({response: true});
-                    return;
-                }
-
-
-                reject(errors.PASSOWRD_VALIDATION_FAILED);
-
-            }
-            catch (error) {
-                reject(errors.NETWORK_ERROR);
-            }
-        })
+        return serverRequestHandler.fetch_handler(`${server_host}/api/users/${userId}/password`, {
+            method: 'PUT',
+            headers: {
+                'Accept': 'application/json, text/plain, */*',
+                'Content-Type': 'application/json;charset=utf-8',
+                'Authorization': 'Bearer ' + token,
+            },
+            body: JSON.stringify({
+                oldPassword: oldPassword,
+                newPassword: newPassowrd,
+            })
+        }, 'users', '/password', 'BOOLEAN');
     }
 }
 

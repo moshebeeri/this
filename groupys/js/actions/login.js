@@ -164,7 +164,7 @@ export function verifyCode(code, navigation, resetAction) {
             });
             navigation.dispatch(resetAction);
         } catch (error) {
-            if (error === errors.FAILED_SMS_VALIDATION) {
+            if (error === errors.UNHANDLED_ERROR) {
                 dispatch({
                     type: actions.REGISTER_CODE_INVALID,
                     message: strings.InvalidValidationCode
@@ -198,7 +198,7 @@ export function changePassword(currentPassword, newPassword, user, token, naviga
     return async function (dispatch,) {
         try {
             let response = await loginApi.changePassword(currentPassword, newPassword, user._id, token);
-            if (response === true) {
+            if (response) {
                 navigation.goBack();
             } else {
                 dispatch({

@@ -43,7 +43,7 @@ class ServerRequestHandler {
                                 return response._bodyText
                                 break;
                             case 'BOOLEAN':
-                                return true;
+                                return resolve(true);
                                 break;
                         }
                     }
