@@ -7,7 +7,6 @@ import * as actions from "../reducers/reducerActions";
 import EntityUtils from "../utils/createEntity";
 import * as errors from './Errors'
 import PhoneUtils from "../utils/phoneUtils";
-import serverRequestHandler from './serverRequestHandler';
 
 let entityUtils = new EntityUtils();
 let timer = new Timer();
@@ -329,39 +328,6 @@ class UserApi {
                 type: actions.NETWORK_IS_OFFLINE,
             });
         }
-    }
-
-    testError() {
-        return new Promise(async (resolve, reject) => {
-            try {
-                fetch(`${server_host}/api/users/error/test`, {
-                    method: 'GET',
-                    headers: {
-                        'Accept': 'application/json, text/plain, */*',
-                        'Content-Type': 'application/json;charset=utf-8',
-                    }
-                }).then(
-                    response => {
-                        const status = parseInt(response.status);
-                        let statusValidate = serverRequestHandler.handleServerRequest(status);
-                        if (statusValidate) {
-                            return reject(statusValidate);
-                        }
-                        return resolve(true)
-                    }
-                ).catch(
-                    err => {
-                        if (err.message === 'Network request failed') {
-                            return reject(errors.NETWORK_ERROR);
-                        }
-                        return reject(errors.UNHANDLED_ERROR)
-                    }
-                );
-            }
-            catch (error) {
-                reject(errors.NETWORK_ERROR);
-            }
-        })
     }
 }
 
