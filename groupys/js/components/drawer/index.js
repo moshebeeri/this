@@ -1,15 +1,14 @@
 import React, {Component} from 'react';
-import {I18nManager, Image, Platform, StyleSheet, TouchableOpacity,Dimensions,ScrollView,InteractionManager} from 'react-native';
-import {Button, Container, Content, Input, InputGroup, Item, Text, View} from 'native-base';
+import {Dimensions, Image, InteractionManager, Platform, ScrollView, TouchableOpacity} from 'react-native';
+import {Button, Container, Content, Input, InputGroup, Item, View} from 'native-base';
 import styles from './styles';
 import {connect} from 'react-redux';
 import {bindActionCreators} from "redux";
 import * as userAction from "../../actions/user";
 import StyleUtils from "../../utils/styleUtils";
 import Icon from 'react-native-vector-icons/FontAwesome';
-import {CloseDrawer, ImagePicker} from "../../ui/index";
+import {CloseDrawer, ImageController, ImagePicker, ThisText} from "../../ui/index";
 import strings from "../../i18n/i18n"
-import {ThisText,ImageController} from '../../ui/index';
 
 const noPic = require('../../../images/client_1.png');
 const briefcase = require('../../../images/briefcase.png');

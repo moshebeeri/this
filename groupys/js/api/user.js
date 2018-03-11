@@ -5,10 +5,12 @@ import store from "react-native-simple-store";
 import Timer from "./LogTimer";
 import * as actions from "../reducers/reducerActions";
 import EntityUtils from "../utils/createEntity";
-let entityUtils = new EntityUtils();
-let timer = new Timer();
 import * as errors from './Errors'
 import PhoneUtils from "../utils/phoneUtils";
+
+let entityUtils = new EntityUtils();
+let timer = new Timer();
+
 class UserApi {
     getUser(token) {
         return new Promise(async (resolve, reject) => {
@@ -53,7 +55,7 @@ class UserApi {
                             'Authorization': 'Bearer ' + token,
                         }
                     })
-                    if (response.status ==='401' || response.status === 401) {
+                    if (response.status === '401' || response.status === 401) {
                         reject(errors.UN_AUTHOTIZED_ACCESS);
                         return;
                     }
@@ -82,7 +84,7 @@ class UserApi {
                         'Authorization': 'Bearer ' + token,
                     }
                 })
-                if (response.status ==='401' || response.status === 401) {
+                if (response.status === '401' || response.status === 401) {
                     reject(errors.UN_AUTHOTIZED_ACCESS);
                     return;
                 }
@@ -137,7 +139,7 @@ class UserApi {
                         'Authorization': 'Bearer ' + token,
                     }
                 })
-                if (response.status ==='401' || response.status === 401) {
+                if (response.status === '401' || response.status === 401) {
                     reject(errors.UN_AUTHOTIZED_ACCESS);
                     return;
                 }
@@ -162,7 +164,7 @@ class UserApi {
                         'Authorization': 'Bearer ' + token,
                     }
                 });
-                if (response.status ==='401' || response.status === 401) {
+                if (response.status === '401' || response.status === 401) {
                     reject(errors.UN_AUTHOTIZED_ACCESS);
                     return;
                 }
@@ -189,7 +191,7 @@ class UserApi {
                         'Authorization': 'Bearer ' + token,
                     }
                 });
-                if (response.status ==='401' || response.status === 401) {
+                if (response.status === '401' || response.status === 401) {
                     reject(errors.UN_AUTHOTIZED_ACCESS);
                     return;
                 }
@@ -216,7 +218,7 @@ class UserApi {
                         'Authorization': 'Bearer ' + token,
                     }
                 });
-                if (response.status ==='401' || response.status === 401) {
+                if (response.status === '401' || response.status === 401) {
                     reject(errors.UN_AUTHOTIZED_ACCESS);
                     return;
                 }
@@ -243,7 +245,7 @@ class UserApi {
                         'Authorization': 'Bearer ' + token,
                     }
                 });
-                if (response.status ==='401' || response.status === 401) {
+                if (response.status === '401' || response.status === 401) {
                     reject(errors.UN_AUTHOTIZED_ACCESS);
                     return;
                 }
@@ -269,7 +271,7 @@ class UserApi {
                         'Authorization': 'Bearer ' + token,
                     }
                 });
-                if (response.status ==='401' || response.status === 401) {
+                if (response.status === '401' || response.status === 401) {
                     reject(errors.UN_AUTHOTIZED_ACCESS);
                     return;
                 }
@@ -283,11 +285,11 @@ class UserApi {
         })
     }
 
-    saveUserDetails(user, id,token,dispatch) {
+    saveUserDetails(user, id, token, dispatch) {
         return new Promise(async (resolve, reject) => {
             try {
                 console.log('start updating')
-               let from = new Date();
+                let from = new Date();
                 const response = await fetch(`${server_host}/api/users/`, {
                     method: 'PUT',
                     headers: {
@@ -297,17 +299,12 @@ class UserApi {
                     },
                     body: JSON.stringify(user)
                 });
-                if (response.status ==='401' || response.status === 401) {
+                if (response.status === '401' || response.status === 401) {
                     reject(errors.UN_AUTHOTIZED_ACCESS);
                     return;
                 }
-
-
                 timer.logTime(from, new Date(), 'user', 'update');
-
-
                 resolve(true);
-
             }
             catch (error) {
                 reject(errors.NETWORK_ERROR);
@@ -315,24 +312,23 @@ class UserApi {
         })
     }
 
-   async setUser(dispatch,token){
-       try{
-          let user = await this.getUser(token);
-           dispatch({
-               type: actions.UPSERT_SINGLE_USER,
-               item: user
-           })
-           dispatch({
-               type: actions.SET_USER,
-               user: user
-           })
-       }catch (error){
-           dispatch({
-               type: actions.NETWORK_IS_OFFLINE,
-           });
-       }
+    async setUser(dispatch, token) {
+        try {
+            let user = await this.getUser(token);
+            dispatch({
+                type: actions.UPSERT_SINGLE_USER,
+                item: user
+            })
+            dispatch({
+                type: actions.SET_USER,
+                user: user
+            })
+        } catch (error) {
+            dispatch({
+                type: actions.NETWORK_IS_OFFLINE,
+            });
+        }
     }
-
 }
 
 export default UserApi;
