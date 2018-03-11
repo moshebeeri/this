@@ -81,12 +81,12 @@ export function changePassword(oldPassword, newPassword, navigation) {
             dispatch({
                 type: actions.SAVING_USER_DONE,
             });
-            if (response.response === true) {
+            if (response) {
                 navigation.goBack();
             }
             handler.handleSuccses(getState(), dispatch)
         } catch (error) {
-            if (error === errors.PASSOWRD_VALIDATION_FAILED) {
+            if (error === errors.UN_AUTHOTIZED_ACCESS) {
                 dispatch({
                     type: actions.CHANGE_PASSWORD_FAILED,
                     message: strings.OldPasswordValidationFailed
