@@ -26,44 +26,46 @@ function* getAll(action) {
 function* saveBusiness(action) {
     try {
         let createdBusiness = yield call(businessApi.createBusiness, action.business, action.token, true);
-        createdBusiness.pictures = [];
-        let pictures = [];
-        if (action.business.image.path) {
-            pictures.push(action.business.image.path);
-            pictures.push(action.business.image.path);
-            pictures.push(action.business.image.path);
-            pictures.push(action.business.image.path);
-            createdBusiness.pictures.push({pictures: pictures});
-        } else {
-            pictures.push(action.business.image.uri);
-            pictures.push(action.business.image.uri);
-            pictures.push(action.business.image.uri);
-            pictures.push(action.business.image.uri);
-            createdBusiness.pictures.push({pictures: pictures});
-        }
-        if (action.business.logoImage.path) {
-            createdBusiness.logo = action.business.logoImage.path;
-        } else {
-            createdBusiness.logo = action.business.logoImage.uri;
-        }
-        createdBusiness.social_state = {};
-        createdBusiness.social_state.saves = 0;
-        createdBusiness.social_state.comments = 0;
-        createdBusiness.social_state.likes = 0;
-        createdBusiness.social_state.shares = 0;
-        createdBusiness.social_state.realizes = 0;
-        yield put(setBusiness(createdBusiness));
-        if (action.business.image) {
-            yield call(ImageApi.uploadImage, action.token, action.business.image, createdBusiness._id);
-        }
-        if (action.business.logoImage) {
-            yield call(ImageApi.uploadImageLogo, action.token, action.business.logoImage, createdBusiness._id);
-        }
-        if (action.business.IdIdentifierImage) {
-            yield call(ImageApi.uploadImagIdentificationCardr, action.token, action.business.IdIdentifierImage, createdBusiness._id);
-        }
-        if (action.business.LetterOfIncorporationImage) {
-            yield call(ImageApi.uploadImagletter, action.token, action.business.LetterOfIncorporationImage, createdBusiness._id);
+        if(createdBusiness._id) {
+            createdBusiness.pictures = [];
+            let pictures = [];
+            if (action.business.image.path) {
+                pictures.push(action.business.image.path);
+                pictures.push(action.business.image.path);
+                pictures.push(action.business.image.path);
+                pictures.push(action.business.image.path);
+                createdBusiness.pictures.push({pictures: pictures});
+            } else {
+                pictures.push(action.business.image.uri);
+                pictures.push(action.business.image.uri);
+                pictures.push(action.business.image.uri);
+                pictures.push(action.business.image.uri);
+                createdBusiness.pictures.push({pictures: pictures});
+            }
+            if (action.business.logoImage.path) {
+                createdBusiness.logo = action.business.logoImage.path;
+            } else {
+                createdBusiness.logo = action.business.logoImage.uri;
+            }
+            createdBusiness.social_state = {};
+            createdBusiness.social_state.saves = 0;
+            createdBusiness.social_state.comments = 0;
+            createdBusiness.social_state.likes = 0;
+            createdBusiness.social_state.shares = 0;
+            createdBusiness.social_state.realizes = 0;
+            yield put(setBusiness(createdBusiness));
+            if (action.business.image) {
+                yield call(ImageApi.uploadImage, action.token, action.business.image, createdBusiness._id);
+            }
+            if (action.business.logoImage) {
+                yield call(ImageApi.uploadImageLogo, action.token, action.business.logoImage, createdBusiness._id);
+            }
+            if (action.business.IdIdentifierImage) {
+                yield call(ImageApi.uploadImagIdentificationCardr, action.token, action.business.IdIdentifierImage, createdBusiness._id);
+            }
+            if (action.business.LetterOfIncorporationImage) {
+                yield call(ImageApi.uploadImagletter, action.token, action.business.LetterOfIncorporationImage, createdBusiness._id);
+            }
         }
     } catch (error) {
         console.log("failed  updateBusiness")

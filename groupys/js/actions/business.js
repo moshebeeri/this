@@ -44,13 +44,15 @@ async function get(dispatch, token, id) {
 
 async function getBusinessCategories(dispatch, gid, token) {
     try {
-        let response = await businessApi.getBusinessCategories(gid, token);
-        dispatch({
-            type: actions.SET_BUSINESS_CATEGORIES,
-            categories: response,
-            language: FormUtils.getLocale(),
-            catId: gid
-        });
+        if(gid) {
+            let response = await businessApi.getBusinessCategories(gid, token);
+            dispatch({
+                type: actions.SET_BUSINESS_CATEGORIES,
+                categories: response,
+                language: FormUtils.getLocale(),
+                catId: gid
+            });
+        }
     } catch (error) {
         handler.handleError(error, dispatch, 'getBusinessCategories')
         logger.actionFailed("business_get_Categories", gid);
