@@ -7,96 +7,57 @@ import * as actions from "../reducers/reducerActions";
 import EntityUtils from "../utils/createEntity";
 import * as errors from './Errors'
 import PhoneUtils from "../utils/phoneUtils";
+import CallingCallUtils from '../utils/LocalToCallingCode'
 
 let entityUtils = new EntityUtils();
 let timer = new Timer();
 
+import serverRequestHandler from './serverRequestHandler';
+
 class UserApi {
-    getUser(token) {
+
+    noTokenReject(){
         return new Promise(async (resolve, reject) => {
-            try {
-                let from = new Date();
-                if (token) {
-                    const response = await fetch(`${server_host}/api/users/me/`, {
-                        method: 'GET',
-                        headers: {
-                            'Accept': 'application/json, text/plain, */*',
-                            'Content-Type': 'application/json;charset=utf-8',
-                            'Authorization': 'Bearer ' + token,
-                        }
-                    })
-                    if (response.status === '401') {
-                        reject(error);
-                        return;
-                    }
-                    let responseData = await response.json();
-                    timer.logTime(from, new Date(), 'users', 'me');
-                    resolve(responseData);
-                } else {
-                    reject('no token');
-                }
-            }
-            catch (error) {
-                reject(errors.NETWORK_ERROR);
-            }
+            reject('no token');
         })
+    }
+
+    getUser(token) {
+        if (!token) return this.noTokenReject();
+        return serverRequestHandler.fetch_handler(`${server_host}/api/users/me`, {
+            method: 'GET',
+            headers: {
+                'Accept': 'application/json, text/plain, */*',
+                'Content-Type': 'application/json;charset=utf-8',
+                'Authorization': 'Bearer ' + token
+            }
+        }, 'user', 'users/me');
     }
 
     getUserById(token, id) {
-        return new Promise(async (resolve, reject) => {
-            try {
-                let from = new Date();
-                if (token) {
-                    const response = await fetch(`${server_host}/api/users/` + id, {
-                        method: 'GET',
-                        headers: {
-                            'Accept': 'application/json, text/plain, */*',
-                            'Content-Type': 'application/json;charset=utf-8',
-                            'Authorization': 'Bearer ' + token,
-                        }
-                    })
-                    if (response.status === '401' || response.status === 401) {
-                        reject(errors.UN_AUTHOTIZED_ACCESS);
-                        return;
-                    }
-                    let responseData = await response.json();
-                    timer.logTime(from, new Date(), 'users', 'me');
-                    resolve(responseData);
-                } else {
-                    reject('no token');
-                }
+        if (!token) return this.noTokenReject();
+        return serverRequestHandler.fetch_handler(`${server_host}/api/users/${id}`, {
+            method: 'GET',
+            headers: {
+                'Accept': 'application/json, text/plain, */*',
+                'Content-Type': 'application/json;charset=utf-8',
+                'Authorization': 'Bearer ' + token
             }
-            catch (error) {
-                reject(errors.NETWORK_ERROR);
-            }
-        })
+        }, 'user', 'users/:id');
     }
 
+    //TODO: pagination
     getUserFollowers(token) {
-        return new Promise(async (resolve, reject) => {
-            try {
-                let from = new Date();
-                const response = await fetch(`${server_host}/api/profiles/follow/followers/0/1000`, {
-                    method: 'GET',
-                    headers: {
-                        'Accept': 'application/json, text/plain, */*',
-                        'Content-Type': 'application/json;charset=utf-8',
-                        'Authorization': 'Bearer ' + token,
-                    }
-                })
-                if (response.status === '401' || response.status === 401) {
-                    reject(errors.UN_AUTHOTIZED_ACCESS);
-                    return;
-                }
-                let responseData = await response.json();
-                timer.logTime(from, new Date(), 'profiles', 'follow/followers')
-                resolve(responseData);
+        return serverRequestHandler.fetch_handler(`${server_host}/api/profiles/follow/followers/0/1000`, {
+            method: 'GET',
+            headers: {
+                'Accept': 'application/json, text/plain, */*',
+                'Content-Type': 'application/json;charset=utf-8',
+                'Authorization': 'Bearer ' + token
             }
-            catch (error) {
-                reject(errors.NETWORK_ERROR);
-            }
-        })
+        }, 'user', 'profiles/follow/followers');
     }
+
 
     async getFullContacts(contactPhones) {
         return new Promise(async (resolve, reject) => {
@@ -128,197 +89,97 @@ class UserApi {
     }
 
     like(id, token) {
-        return new Promise(async (resolve, reject) => {
-            try {
-                let from = new Date();
-                const response = await fetch(`${server_host}/api/users/like/` + id, {
-                    method: 'GET',
-                    headers: {
-                        'Accept': 'application/json, text/plain, */*',
-                        'Content-Type': 'application/json;charset=utf-8',
-                        'Authorization': 'Bearer ' + token,
-                    }
-                })
-                if (response.status === '401' || response.status === 401) {
-                    reject(errors.UN_AUTHOTIZED_ACCESS);
-                    return;
-                }
-                timer.logTime(from, new Date(), 'users', 'like');
-                resolve(true);
+        return serverRequestHandler.fetch_handler(`${server_host}/api/users/like/${id}`, {
+            method: 'GET',
+            headers: {
+                'Accept': 'application/json, text/plain, */*',
+                'Content-Type': 'application/json;charset=utf-8',
+                'Authorization': 'Bearer ' + token
             }
-            catch (error) {
-                reject(errors.NETWORK_ERROR);
-            }
-        })
+        }, 'user', 'like/:id')
     }
 
     unlike(id, token) {
-        return new Promise(async (resolve, reject) => {
-            try {
-                let from = new Date();
-                const response = await fetch(`${server_host}/api/users/like/` + id, {
-                    method: 'DELETE',
-                    headers: {
-                        'Accept': 'application/json, text/plain, */*',
-                        'Content-Type': 'application/json;charset=utf-8',
-                        'Authorization': 'Bearer ' + token,
-                    }
-                });
-                if (response.status === '401' || response.status === 401) {
-                    reject(errors.UN_AUTHOTIZED_ACCESS);
-                    return;
-                }
-                timer.logTime(from, new Date(), 'users', 'unlike');
-                resolve(true);
+        return serverRequestHandler.fetch_handler(`${server_host}/api/users/like/${id}`, {
+            method: 'DELETE',
+            headers: {
+                'Accept': 'application/json, text/plain, */*',
+                'Content-Type': 'application/json;charset=utf-8',
+                'Authorization': 'Bearer ' + token
             }
-            catch (error) {
-                reject(errors.NETWORK_ERROR);
-            }
-        })
+        }, 'user', 'delete /like/:id')
     }
 
-    getUserByPhone(phone) {
-        return new Promise(async (resolve, reject) => {
-            try {
-                let token = await store.get('token');
-                let from = new Date();
-                let phoneNumber = PhoneUtils.clean_phone_number(phone);
-                const response = await fetch(`${server_host}/api/users/get/user/by/phone/` + 972 + '/' + phoneNumber, {
-                    method: 'GET',
-                    headers: {
-                        'Accept': 'application/json, text/plain, */*',
-                        'Content-Type': 'application/json;charset=utf-8',
-                        'Authorization': 'Bearer ' + token,
-                    }
-                });
-                if (response.status === '401' || response.status === 401) {
-                    reject(errors.UN_AUTHOTIZED_ACCESS);
-                    return;
-                }
-                let responseData = await response.json();
-                resolve(responseData);
-                timer.logTime(from, new Date(), 'users', 'get/user/by/phone/')
+    async getUserByPhone(phone) {
+        let token = await store.get('token');
+        let callingCode = await CallingCallUtils.getCallingCode();
+        let phoneNumber = PhoneUtils.clean_phone_number(phone);
+
+        return serverRequestHandler.fetch_handler(`${server_host}/api/users/get/user/by/phone/${callingCode}/${phoneNumber}`, {
+            method: 'GET',
+            headers: {
+                'Accept': 'application/json, text/plain, */*',
+                'Content-Type': 'application/json;charset=utf-8',
+                'Authorization': 'Bearer ' + token
             }
-            catch (error) {
-                reject(errors.NETWORK_ERROR);
-            }
-        })
+        }, 'user', 'get/user/by/phone');
     }
 
-    setUserRole(user, business, role) {
-        return new Promise(async (resolve, reject) => {
-            try {
-                let token = await store.get('token');
-                let from = new Date();
-                const response = await fetch(`${server_host}/api/users/role/` + user + '/' + role + '/' + business, {
-                    method: 'GET',
-                    headers: {
-                        'Accept': 'application/json, text/plain, */*',
-                        'Content-Type': 'application/json;charset=utf-8',
-                        'Authorization': 'Bearer ' + token,
-                    }
-                });
-                if (response.status === '401' || response.status === 401) {
-                    reject(errors.UN_AUTHOTIZED_ACCESS);
-                    return;
-                }
-                let responseData = await response.json();
-                timer.logTime(from, new Date(), 'users', 'get/user/by/phone/');
-                resolve(responseData);
+    async setUserRole(user, business, role) {
+        let token = await store.get('token');
+        return serverRequestHandler.fetch_handler(`${server_host}/api/users/role/${user}/${role}/${business}`, {
+            method: 'GET',
+            headers: {
+                'Accept': 'application/json, text/plain, */*',
+                'Content-Type': 'application/json;charset=utf-8',
+                'Authorization': 'Bearer ' + token
             }
-            catch (error) {
-                reject(errors.NETWORK_ERROR);
-            }
-        })
+        }, 'user', 'users/role/:user/:role/:business');
     }
 
-    removeUserRole(user, business) {
-        return new Promise(async (resolve, reject) => {
-            try {
-                let token = await store.get('token');
-                let from = new Date();
-                const response = await fetch(`${server_host}/api/users/role/` + user + '/' + business, {
-                    method: 'DELETE',
-                    headers: {
-                        'Accept': 'application/json, text/plain, */*',
-                        'Content-Type': 'application/json;charset=utf-8',
-                        'Authorization': 'Bearer ' + token,
-                    }
-                });
-                if (response.status === '401' || response.status === 401) {
-                    reject(errors.UN_AUTHOTIZED_ACCESS);
-                    return;
-                }
-                let responseData = await response.json();
-                timer.logTime(from, new Date(), 'users', 'get/user/by/phone/');
-                resolve(responseData);
+    async removeUserRole(user, business) {
+        let token = await store.get('token');
+        return serverRequestHandler.fetch_handler(`${server_host}/api/users/role/${user}/${business}`, {
+            method: 'DELETE',
+            headers: {
+                'Accept': 'application/json, text/plain, */*',
+                'Content-Type': 'application/json;charset=utf-8',
+                'Authorization': 'Bearer ' + token
             }
-            catch (error) {
-                reject(errors.NETWORK_ERROR);
-            }
-        })
+        }, 'user', 'delete /role/:user/:role/:business');
     }
 
+    //TODO: pagination
     getBusinessUsers(business, token) {
-        return new Promise(async (resolve, reject) => {
-            try {
-                let from = new Date();
-                const response = await fetch(`${server_host}/api/users/roles/` + business + '/' + 0 + '/' + 100, {
-                    method: 'GET',
-                    headers: {
-                        'Accept': 'application/json, text/plain, */*',
-                        'Content-Type': 'application/json;charset=utf-8',
-                        'Authorization': 'Bearer ' + token,
-                    }
-                });
-                if (response.status === '401' || response.status === 401) {
-                    reject(errors.UN_AUTHOTIZED_ACCESS);
-                    return;
-                }
-                let responseData = await response.json();
-                timer.logTime(from, new Date(), 'users', 'get/user/by/phone/');
-                resolve(responseData);
+        return serverRequestHandler.fetch_handler(`${server_host}/api/users/roles/${business}/0/100`, {
+            method: 'GET',
+            headers: {
+                'Accept': 'application/json, text/plain, */*',
+                'Content-Type': 'application/json;charset=utf-8',
+                'Authorization': 'Bearer ' + token,
             }
-            catch (error) {
-                reject(errors.NETWORK_ERROR);
-            }
-        })
+        }, 'user', 'roles/:business');
     }
 
     saveUserDetails(user, id, token, dispatch) {
-        return new Promise(async (resolve, reject) => {
-            try {
-                console.log('start updating')
-                let from = new Date();
-                const response = await fetch(`${server_host}/api/users/`, {
-                    method: 'PUT',
-                    headers: {
-                        'Accept': 'application/json, text/plain, */*',
-                        'Content-Type': 'application/json;charset=utf-8',
-                        'Authorization': 'Bearer ' + token
-                    },
-                    body: JSON.stringify(user)
-                });
-                if (response.status === '401' || response.status === 401) {
-                    reject(errors.UN_AUTHOTIZED_ACCESS);
-                    return;
-                }
-                timer.logTime(from, new Date(), 'user', 'update');
-                resolve(true);
-            }
-            catch (error) {
-                reject(errors.NETWORK_ERROR);
-            }
-        })
+        return serverRequestHandler.fetch_handler(`${server_host}/api/users`, {
+            method: 'PUT',
+            headers: {
+                'Accept': 'application/json, text/plain, */*',
+                'Content-Type': 'application/json;charset=utf-8',
+                'Authorization': 'Bearer ' + token,
+            },
+            body: JSON.stringify(user)
+        }, 'user', 'update user');
     }
 
     async setUser(dispatch, token) {
         try {
-            let user = await this.getUser(token);
+            let user = await UserApi.getUser(token);
             dispatch({
                 type: actions.UPSERT_SINGLE_USER,
                 item: user
-            })
+            });
             dispatch({
                 type: actions.SET_USER,
                 user: user
