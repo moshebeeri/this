@@ -47,7 +47,7 @@ exports.userRequestDiscounts = function(req, res) {
   let products = req.body.products;
   checkUserFollows(userId, businessId, function(err, follows){
     if(err) { return handleError(res, err); }
-    if(!follows) return res.status(404).send(new Error('user is not following business nor one of its groups'));
+    if(!follows) return res.status(404).send('user is not following business nor one of its groups');
     getDiscounts(userId, businessId, products, function (err, eligible_saved_instances) {
       if(err) { return handleError(res, err); }
       return res.status(200).json(eligible_saved_instances);
@@ -63,7 +63,7 @@ exports.businessRequestDiscounts = function(req, res) {
   let products = req.body.products;
   checkUserRole(requester, businessId, function(err, role){
     if(err) { return handleError(res, err); }
-    if(!role) return res.status(404).send(new Error('unauthorised request'));
+    if(!role) return res.status(404).send('unauthorised request');
     getDiscounts(userId, businessId, products, function (err, discounts) {
       if(err) { return handleError(res, err); }
       return res.status(200).json(discounts);

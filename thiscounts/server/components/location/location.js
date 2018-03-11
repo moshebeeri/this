@@ -41,7 +41,7 @@ Location.prototype.address_location = function address_location(addressed, callb
     //logger.info(data);
     if (!data.results || data.results.length === 0)
       return callback({
-        code: 400,
+        code: 204,
         message: 'No location under this address : ' + address
       }, null);
 
@@ -110,6 +110,6 @@ function geocode_address(address, callback) {
     logger.error(e.message);
     callback('HTTP_ERROR ' + e.message, null)
   });
-};
+}
 
 module.exports = Location;

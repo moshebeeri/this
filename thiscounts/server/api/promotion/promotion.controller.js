@@ -298,7 +298,6 @@ function handlePromotionPostCreate(promotion, callback) {
         else {
           instance.createPromotionInstances(promotion, function (err, instances) {
             if (err) return callback(err, null);
-            console.log(`promotionGraphModel.reflect: ${JSON.stringify(instances)}`);
             if (promotion.distribution.business) {
               applyToFollowing(promotion, instances);
             } else if (promotion.distribution.groups && promotion.distribution.groups.length > 0) {
@@ -337,13 +336,13 @@ function create_promotion(promotion, callback) {
 // RETURN promo, on, entity
 exports.get_action = function (req, res) {
   if( req.params.type !== 'FOLLOW_ENTITY' && req.params.type !== 'PROXIMITY' && req.params.type !== 'FOLLOWER_PROXIMITY')
-    return res.status(404).send(new Error(`invalid type ${req.params.type}`));
+    return res.status(404).send(`invalid type ${req.params.type}`);
   const query = `MATCH (p:promotion)<-[on:ON_ACTION]-(entity{_id:'${req.params.entity}'})
                  WHERE  p._id IS NOT NULL AND on.type = '${req.params.type}'
                  RETURN p._id as _id`;
   promotionGraphModel.query_objects(Promotion, query, 'ORDER BY _id DESC', 0, 10, (err, promotions) => {
     if(err) return handleError(res, err);
-    if(promotions.length < 1) return res.status(404).send(new Error(`no ${req.params.type} promotion found for entity ${req.params.entity}`));
+    if(promotions.length < 1) return res.status(404).send(`no ${req.params.type} promotion found for entity ${req.params.entity}`);
     return res.status(201).json(promotions[0]);
   })
 };
