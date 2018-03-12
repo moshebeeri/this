@@ -76,9 +76,9 @@
 		F667CABB2011F37800E05859 /* RNFIRAnalytics.h in Frameworks */ = {isa = PBXBuildFile; fileRef = F667CABA2011F37100E05859 /* RNFIRAnalytics.h */; };
 		F667CABC2011FA7B00E05859 /* RNFIRAnalytics.h in Sources */ = {isa = PBXBuildFile; fileRef = F667CABA2011F37100E05859 /* RNFIRAnalytics.h */; };
 		F66BD8F31FF2A0D0000E6352 /* Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = F66BD8F21FF2A0D0000E6352 /* Info.plist */; };
-		F66BD8F51FF2A0E1000E6352 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = F66BD8F41FF2A0E1000E6352 /* GoogleService-Info.plist */; };
 		F66F9B3A203947C00043F180 /* libRNCarrierInfo.a in Frameworks */ = {isa = PBXBuildFile; fileRef = F66F9B39203947930043F180 /* libRNCarrierInfo.a */; };
 		F68506CF1FF2E5DF00CEDE6A /* libRNFIRMessaging.a in Frameworks */ = {isa = PBXBuildFile; fileRef = F68506CE1FF2E5BE00CEDE6A /* libRNFIRMessaging.a */; };
+		F6DC17FB2056A72D00294468 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = F6DC17FA2056A72C00294468 /* GoogleService-Info.plist */; };
 		F6DD540C1FFCF8D9002B5D74 /* libRCTBraintree.a in Frameworks */ = {isa = PBXBuildFile; fileRef = F6DD54051FFCF57E002B5D74 /* libRCTBraintree.a */; };
 		F6DDCBF9202C86E200599466 /* libRNFetchBlob.a in Frameworks */ = {isa = PBXBuildFile; fileRef = F6DDCBEF202C860A00599466 /* libRNFetchBlob.a */; };
 /* End PBXBuildFile section */
@@ -713,9 +713,9 @@
 		F667CAB12011F17000E05859 /* RNFIRAnalytics.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = RNFIRAnalytics.xcodeproj; path = "../node_modules/react-native-firebase-analytics/ios/RNFIRAnalytics.xcodeproj"; sourceTree = "<group>"; };
 		F667CABA2011F37100E05859 /* RNFIRAnalytics.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = RNFIRAnalytics.h; path = "../node_modules/react-native-firebase-analytics/ios/RNFIRAnalytics.h"; sourceTree = "<group>"; };
 		F66BD8F21FF2A0D0000E6352 /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = Info.plist; path = THIS/Info.plist; sourceTree = "<group>"; };
-		F66BD8F41FF2A0E1000E6352 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = "GoogleService-Info.plist"; path = "THIS/GoogleService-Info.plist"; sourceTree = "<group>"; };
 		F66F9B34203947930043F180 /* RNCarrierInfo.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = RNCarrierInfo.xcodeproj; path = "../node_modules/react-native-carrier-info/ios/RNCarrierInfo.xcodeproj"; sourceTree = "<group>"; };
 		F68506C91FF2E5BE00CEDE6A /* RNFIRMessaging.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = RNFIRMessaging.xcodeproj; path = "../node_modules/react-native-fcm/ios/RNFIRMessaging.xcodeproj"; sourceTree = "<group>"; };
+		F6DC17FA2056A72C00294468 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = "GoogleService-Info.plist"; path = "THIS/GoogleService-Info.plist"; sourceTree = "<group>"; };
 		F6DD54061FFCF853002B5D74 /* RCTBraintree.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = RCTBraintree.xcodeproj; path = "../node_modules/react-native-braintree-xplat/ios/RCTBraintree.xcodeproj"; sourceTree = "<group>"; };
 		F6DDCBB7202C860900599466 /* RNFetchBlob.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = RNFetchBlob.xcodeproj; path = "../node_modules/react-native-fetch-blob/ios/RNFetchBlob.xcodeproj"; sourceTree = "<group>"; };
 		F7284580BB3244258F6F4CEB /* libimageCropPicker.a */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = archive.ar; path = libimageCropPicker.a; sourceTree = "<group>"; };
@@ -890,6 +890,7 @@
 		13B07FAE1A68108700A75B9A /* THIS */ = {
 			isa = PBXGroup;
 			children = (
+				F6DC17FA2056A72C00294468 /* GoogleService-Info.plist */,
 				F66BD8F21FF2A0D0000E6352 /* Info.plist */,
 				008F07F21AC5B25A0029DE68 /* main.jsbundle */,
 				13B07FAF1A68108700A75B9A /* AppDelegate.h */,
@@ -897,7 +898,6 @@
 				13B07FB51A68108700A75B9A /* Images.xcassets */,
 				13B07FB61A68108700A75B9A /* Info.plist */,
 				13B07FB11A68108700A75B9A /* LaunchScreen.xib */,
-				F66BD8F41FF2A0E1000E6352 /* GoogleService-Info.plist */,
 				13B07FB71A68108700A75B9A /* main.m */,
 			);
 			name = THIS;
@@ -2117,8 +2117,8 @@
 				46DF5C301FE6C0530048ABDB /* MaterialIcons.ttf in Resources */,
 				46DF5ABC1FE6BC600048ABDB /* Roboto-Regular.ttf in Resources */,
 				F66BD8F31FF2A0D0000E6352 /* Info.plist in Resources */,
-				F66BD8F51FF2A0E1000E6352 /* GoogleService-Info.plist in Resources */,
 				46DF5C281FE6C0530048ABDB /* Entypo.ttf in Resources */,
+				F6DC17FB2056A72D00294468 /* GoogleService-Info.plist in Resources */,
 				46DF5C261FE6C0530048ABDB /* Octicons.ttf in Resources */,
 				46DF5C291FE6C0530048ABDB /* MaterialCommunityIcons.ttf in Resources */,
 				062D8F00CC914EB599F94009 /* YTPlayerView-iframe-player.html in Resources */,
