@@ -256,12 +256,13 @@ class FeedConverter {
         return response;
     }
 
-    createSavedPromotion(feed, id, extraData) {
+    createSavedPromotion(feed, id, isRealized) {
         let instance = feed.instance;
         let promotion = instance.promotion;
         let responseFeed = {};
         try {
             responseFeed.id = id;
+            responseFeed.isRealized = isRealized;
             responseFeed.fid = id;
             responseFeed.key = id;
             responseFeed.promotionItem = promotion;

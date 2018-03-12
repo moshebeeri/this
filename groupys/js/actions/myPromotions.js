@@ -145,6 +145,7 @@ async function updateInstance( token, dispatch,id) {
         let response = await profileApi.getSavedInstance(token,id);
 
         if(savedPromotionComperator.shuoldUpdateInstance(response)) {
+
             dispatch({
                 type: actions.UPDATE_SINGLE_SAVED_INSTANCE,
                 item: response
