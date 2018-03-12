@@ -310,8 +310,13 @@ exports.unsave = function (req, res) {
 function createRealizeMongodbReport(user_id, instance_id, callback) {
   Realize.create({
     user: user_id,
-    instance: instance_id
+    instance: instance_id,
+    timestamp: Date.now()
   }, function (err, realize) {
+    if(err) {
+      console.error(err);
+      return callback(err)
+    }
     Instance
       .findById(instance_id)
       .populate('promotion')

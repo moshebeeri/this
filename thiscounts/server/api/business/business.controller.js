@@ -460,7 +460,7 @@ function review(businessId, status, callback) {
   Business.findById(businessId).exec((err, business) => {
     if (err) return callback(err);
     if (!business) return callback(null, null);
-    if (business.review.status === 'reviewed') return callback(new Error('already reviewed'));
+    if (business.review.state === 'reviewed') return callback('already reviewed');
 
     business.review.state = 'reviewed';
     if (status === 'accepted') {
@@ -500,7 +500,7 @@ exports.review = function (req, res) {
   const businessId = req.params.id;
   const status = req.params.status;
   review(businessId, status, (err, business) => {
-    if (err) return handleError(res, err);
+    if (err) return res.status(400).send(err);
     if (!business) return res.status(404).send('Not Found');
     return res.status(201).json(business);
   })
