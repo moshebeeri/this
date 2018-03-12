@@ -426,6 +426,7 @@ exports.recover_password = function (req, res) {
   let phone_number = req.params.phone_number;
   User.findOne({'phone_number': phone_number}, function (err, user) {
     if (err) return handleError(err);
+    if(!user) return res.status(500).send(`could not find user for number ${phone_number}`);
     let new_password = randomstring.generate({length: 6, charset: 'alphanumeric'});
     user.password = new_password;
     user.save(function (err, user) {
