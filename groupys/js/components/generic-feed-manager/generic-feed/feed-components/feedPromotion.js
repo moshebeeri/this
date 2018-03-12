@@ -50,33 +50,29 @@ export default class FeedPromotion extends Component {
     }
 
     visited(visible) {
-        const {item, actions,group} = this.props;
+        const {item, actions, group} = this.props;
         if (visible && actions && actions.setSocialState) {
             actions.setSocialState(item);
-            if(group){
-                actions.setVisibleItem(item.fid,group._id);
-            }else {
+            if (group) {
+                actions.setVisibleItem(item.fid, group._id);
+            } else {
                 actions.setVisibleItem(item.fid);
             }
-
         }
     }
 
-
-
     shouldComponentUpdate() {
-        const {item, visibleItem,shouldUpdate, visibleFeeds} = this.props;
-        if(shouldUpdate){
+        const {item, visibleItem, shouldUpdate, visibleFeeds} = this.props;
+        if (shouldUpdate) {
             return true;
         }
-        let results =  item.id === visibleItem  ;
-        if(results){
+        let results = item.id === visibleItem;
+        if (results) {
             return results
         }
-        if(visibleFeeds && item.fid && visibleFeeds.includes(item.fid)){
+        if (visibleFeeds && item.fid && visibleFeeds.includes(item.fid)) {
             return true;
         }
-
         return false;
     }
 
@@ -106,26 +102,26 @@ export default class FeedPromotion extends Component {
         const result =
             <InViewPort onChange={this.visited.bind(this)} style={container}>
                 <View style={[styles.promotion_card, {width: StyleUtils.getWidth()}]}>
-                    {!scanner ?   <View style={{width: StyleUtils.getWidth(), backgroundColor: 'red'}}>
-                            <View style={[promotaionDesc, {backgroundColor:'white',width: StyleUtils.getWidth()}]}>
+                    {!scanner ? <View style={{width: StyleUtils.getWidth(), backgroundColor: 'red'}}>
+                            <View style={[promotaionDesc, {backgroundColor: 'white', width: StyleUtils.getWidth()}]}>
                                 <PromotionHeader item={item} type={item.promotion} feed titleText={item.promotionTitle}
                                                  titleValue={item.promotionValue} term={item.promotionTerm}/>
                             </View>
 
                         </View> :
-                        <View style={{ flex: 1,
+                        <View style={{
+                            flex: 1,
                             alignItems: 'center',
-                            justifyContent: 'center',}}>
+                            justifyContent: 'center',
+                        }}>
                             <PromotionHeader item={item} type={item.promotion} feed titleText={item.promotionTitle}
                                              titleValue={item.promotionValue} term={item.promotionTerm}/>
                         </View>}
 
 
-
-
                     {image}
 
-                    <View style={{ width: StyleUtils.getWidth()}}>
+                    <View style={{width: StyleUtils.getWidth()}}>
                         {item.business &&
                         <BusinessHeader navigation={this.props.navigation} business={item.business}
                                         categoryTitle={categoruTitle} businessLogo={item.business.logo}
@@ -133,9 +129,14 @@ export default class FeedPromotion extends Component {
                                         id={item.activityId} showActions={showActions}
                         />}
                     </View>
-                    <View style={ {marginBottom:10,backgroundColor:'white',width: StyleUtils.getWidth()}}>
-                        <ThisText numberOfLines={2} style={{marginRight: 10, marginLeft: 20, fontSize: 18}}>{item.name}
-                         - {item.description}</ThisText>
+                    <View style={{marginBottom: 10, backgroundColor: 'white', width: StyleUtils.getWidth()}}>
+                        {item.description ? <ThisText numberOfLines={2} style={{
+                                marginRight: 10,
+                                marginLeft: 20,
+                                fontSize: 18
+                            }}>{item.name} - {item.description}</ThisText>
+                            : <ThisText numberOfLines={2}
+                                        style={{marginRight: 10, marginLeft: 20, fontSize: 18}}>{item.name}</ThisText>}
                     </View>
                     {!shared && location && <View style={[styles.promotionsSeparator, {width: StyleUtils.getWidth()}]}>
                         <PromotionSeperator/>
