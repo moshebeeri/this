@@ -48,9 +48,7 @@ exports.terms = function (req, res) {
     return res.sendFile(path.join(__dirname, '../../config/terms/Terms Of Service.htm'));
   return res.status(404).send('Not Found');
 };
-exports.error_test = function (req, res) {
-  return res.status(404).json(new Error(`Some Text Error`)); // new Error(`Some Text Error`)
-};
+
 /**
  * Get list of users
  * restriction: 'admin'

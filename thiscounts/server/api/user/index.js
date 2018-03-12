@@ -7,7 +7,6 @@ let auth = require('../../auth/auth.service');
 
 let router = express.Router();
 
-router.get('/error/test', controller.error_test);
 router.get('/', auth.hasRole('admin'), controller.index);
 router.get('/terms/:ver', controller.terms);
 router.delete('/:id', auth.hasRole('admin'), controller.destroy);
@@ -26,6 +25,7 @@ router.get('/like/:id', auth.isAuthenticated(), controller.like);
 router.delete('/like/:id', auth.isAuthenticated(), controller.unlike);
 router.get('/share/:id', auth.isAuthenticated(), controller.share);
 router.post('/phonebookNew', auth.isAuthenticated(), controller.phonebook);
+router.post('/phonebook', auth.isAuthenticated(), controller.phonebook);
 router.get('/follow/:id', auth.isAuthenticated(), controller.follow);
 router.delete('/follow/:id', auth.isAuthenticated(), controller.unfollow);
 
