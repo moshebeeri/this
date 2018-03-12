@@ -1,8 +1,8 @@
 import serverRequestHandler from './serverRequestHandler';
 
 class FeedApi {
-    getAll(direction, id, token, user) {
-        return serverRequestHandler.fetch_handler(`${server_host}/api/feeds/${id}/${direction}/${user._id}`, {
+    getAll(direction, id, token, entity) {
+        return serverRequestHandler.fetch_handler(`${server_host}/api/feeds/${id}/${direction}/${entity._id}`, {
             method: 'GET',
             headers: {
                 'Accept': 'application/json, text/plain, */*',

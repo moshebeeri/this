@@ -41,6 +41,12 @@ class Feed extends Component {
         return false;
     }
 
+    refreshTop(){
+        console.log('refreshing')
+        this.setState({refreshing:true})
+        this.props.actions.setTopFeeds();
+        this.setState({refreshing:false})
+    }
     componentWillUnmount() {
     }
 
@@ -66,6 +72,8 @@ class Feed extends Component {
                     visibleFeeds={visibleFeeds}
                     loadingDone={loadingDone}
                     showTopLoader={showTopLoader}
+                    refreshing={this.state.refreshing}
+                    onRefresh={this.refreshTop.bind(this)}
                     userFollowers={userFollower}
                     feeds={feeds}
                     actions={actions}

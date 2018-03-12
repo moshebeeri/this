@@ -20,7 +20,7 @@ class ImageApi {
             method: 'POST',
             headers: {
                 'Accept': 'application/json, text/plain, */*',
-                'Content-Type': 'application/json;charset=utf-8',
+                'Content-Type': 'multipart/form-data',
                 'Authorization': 'Bearer ' + token,
             },
             body: data
@@ -46,7 +46,7 @@ class ImageApi {
             method: 'POST',
             headers: {
                 'Accept': 'application/json, text/plain, */*',
-                'Content-Type': 'application/json;charset=utf-8',
+                'Content-Type': 'multipart/form-data',
                 'Authorization': 'Bearer ' + token,
             },
             body: data
@@ -72,7 +72,7 @@ class ImageApi {
             method: 'POST',
             headers: {
                 'Accept': 'application/json, text/plain, */*',
-                'Content-Type': 'application/json;charset=utf-8',
+                'Content-Type': 'multipart/form-data',
                 'Authorization': 'Bearer ' + token,
             },
             body: data
@@ -98,7 +98,7 @@ class ImageApi {
             method: 'POST',
             headers: {
                 'Accept': 'application/json, text/plain, */*',
-                'Content-Type': 'application/json;charset=utf-8',
+                'Content-Type': 'multipart/form-data',
                 'Authorization': 'Bearer ' + token,
             },
             body: data
@@ -110,7 +110,7 @@ class ImageApi {
             method: 'POST',
             headers: {
                 'Accept': 'application/json, text/plain, */*',
-                'Content-Type': 'application/json;charset=utf-8',
+                'Content-Type': 'multipart/form-data',
                 'Authorization': 'Bearer ' + token,
             },
             body: data

@@ -98,7 +98,7 @@ export default class GenericFeedManager extends Component {
 
     _keyExtractor = (item, index) => item.id;
     render() {
-        const {loadingDone, showTopLoader, feeds, update, setNextFeeds, color,nextBulkLoad,initialNumToRender} = this.props;
+        const {onRefresh,refreshing,loadingDone, showTopLoader, feeds, update, setNextFeeds, color,nextBulkLoad,initialNumToRender} = this.props;
         const topLoader = showTopLoader ? <View><Spinner color='red'/></View> : null;
         if (!loadingDone) {
             return <View><Spinner color='red'/></View>;
@@ -107,6 +107,10 @@ export default class GenericFeedManager extends Component {
         let backgroundColor = '#E6E6E6';
         if (color) {
             backgroundColor = color;
+        }
+        let isRefresh = false;
+        if(refreshing){
+            isRefresh = true;
         }
         if (setNextFeeds) {
             return (
@@ -121,6 +125,8 @@ export default class GenericFeedManager extends Component {
                         onEndReached={setNextFeeds}
                         renderItem={this.renderItem.bind(this)}
                         extraData={update}
+                        onRefresh={onRefresh}
+                        refreshing={isRefresh}
                         initialNumToRender={3}
 
 
@@ -184,6 +190,8 @@ export default class GenericFeedManager extends Component {
                 <FlatList
                     ref='flatList'
                     data={feeds}
+                    onRefresh={onRefresh}
+                    refreshing={isRefresh}
                     onEndReached={this.onEndReach.bind(this)}
                     renderItem={this.renderItem.bind(this)}
                     extraData={update}

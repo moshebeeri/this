@@ -1,7 +1,7 @@
 import PhoneUtils from "../utils/phoneUtils";
 import serverRequestHandler from './serverRequestHandler';
 import CallingCallUtils from '../utils/LocalToCallingCode'
-
+import FormUtils from "../utils/fromUtils";
 class BusinessApi {
     getAll(token) {
         return serverRequestHandler.fetch_handler(`${server_host}/api/businesses/list/mine`, {
@@ -50,6 +50,7 @@ class BusinessApi {
     }
 
     getSubCategory(token, categoryId, locale) {
+
         return serverRequestHandler.fetch_handler(`${server_host}/api/categories/by/id/${locale}/${categoryId}`, {
             method: 'GET',
             headers: {
@@ -61,14 +62,15 @@ class BusinessApi {
     }
 
     getBusinessCategories(gid, token) {
-        return serverRequestHandler.fetch_handler(`${server_host}/api/categories/by/id/${locale}/${gid}`, {
+        let locale = FormUtils.getLocale();
+        return serverRequestHandler.fetch_handler(`${server_host}/api/categories/business/${locale}/${gid}`, {
             method: 'GET',
             headers: {
                 'Accept': 'application/json, text/plain, */*',
                 'Content-Type': 'application/json;charset=utf-8',
                 'Authorization': 'Bearer ' + token,
             }
-        }, 'categories', '/by/id');
+        }, 'categories', 'business');
     }
 
     followBusiness(businessId, token) {

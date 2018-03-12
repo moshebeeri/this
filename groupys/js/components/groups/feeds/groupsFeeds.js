@@ -41,6 +41,13 @@ class GroupFeedComponent extends Component {
                 return false;
         }
     }
+    refreshTop(){
+        const group = this.props.navigation.state.params.group;
+        this.setState({refreshing:true});
+        this.props.actions.setTopFeeds(group);
+        this.setState({refreshing:false});
+
+    }
     navigateToAdd() {
         const group = this.props.navigation.state.params.group;
         this.props.navigation.navigate('PostForm', {group: group})
@@ -69,6 +76,8 @@ class GroupFeedComponent extends Component {
                 token={token}
                 entity={group}
                 group={group}
+                refreshing={this.state.refreshing}
+                onRefresh={this.refreshTop.bind(this)}
                 location={location}
                 showFab={this.showFab.bind(this)}
                 activityAction={activityAction}

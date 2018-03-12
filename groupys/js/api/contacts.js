@@ -14,8 +14,10 @@ class ContactsApi {
             contacts = contacts.filter(function (element) {
                 return element.phoneNumbers.length > 0;
             });
-            store.save('all-contacts', JSON.stringify(contacts));
-            this.updateServer(token, userId, contacts)
+           if(token) {
+               this.updateServer(token, userId, contacts)
+               store.save('all-contacts', JSON.stringify(contacts));
+           }
         })
     };
 

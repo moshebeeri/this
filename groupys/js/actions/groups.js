@@ -11,7 +11,7 @@ import ActionLogger from './ActionLogger'
 import GroupsComperator from "../reduxComperators/GroupsComperator"
 import handler from './ErrorHandler'
 import * as types from '../sega/segaActions';
-
+import {put} from 'redux-saga/effects'
 let groupsApi = new GroupsApi();
 let feedApi = new FeedApi();
 let promotionApi = new PtomotionApi();
@@ -584,6 +584,53 @@ export function setVisibleItem(itemId,groupId) {
         });
     }
 }
+export function setTopFeeds(group) {
+    return async function (dispatch, getState) {
+        const token = getState().authentication.token;
+        const user = getState().user.user;
+        const feedOrder = getState().groups.groupFeedOrder[group._id];
+        if(feedOrder){
+            if (!user)
+                return;
+            dispatch({
+                type: types.CANCEL_GROUP_FEED_LISTENER,
+            });
+            if (feedOrder && feedOrder.length > 0) {
+                dispatch({
+                    type: types.LISTEN_FOR_GROUP_FEED,
+                    id: feedOrder[0],
+                    group:group,
+                    token: token,
+                    user: user,
+                });
+            }
+            handler.handleSuccses(getState(), dispatch)
+        }
+
+    }
+}
+
+export function* updateFeedsTop(feeds,group,user) {
+    if (feeds) {
+        let collectionDispatcher = new CollectionDispatcher();
+        let disassemblerItems = feeds.map(item => assemblers.disassembler(item, collectionDispatcher));
+        let keys = Object.keys(collectionDispatcher.events);
+        let eventType;
+        while (eventType = keys.pop()) {
+            yield put({
+                type: eventType,
+                item: collectionDispatcher.events[eventType]
+            });
+        }
+        yield put({
+            type: actions.UPSERT_GROUP_FEEDS_TOP,
+            groupId: group._id,
+            groupFeed: disassemblerItems,
+            user: user
+        });
+    }
+}
+
 
 
 

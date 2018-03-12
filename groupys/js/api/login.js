@@ -57,7 +57,7 @@ class LoginApi {
                 'Content-Type': 'application/json;charset=utf-8',
                 'Authorization': 'Bearer ' + token,
             },
-        }, 'users', '/verification');
+        }, 'users', '/verification','BOOLEAN');
     }
 
     recoverPassword(phoneNumber) {
