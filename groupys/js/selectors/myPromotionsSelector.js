@@ -17,14 +17,14 @@ export const getFeeds = createSelector([getStateFeeds],
                 if (feed.savedInstance) {
                     savedinstance = feed.savedInstance;
                 }
-                return feedUiConverter.createSavedPromotion(savedinstance, savedinstance._id)
+                return feedUiConverter.createSavedPromotion(savedinstance, savedinstance._id,false)
             });
             response = response.concat(realized.map((feed) => {
                 let savedinstance = feed;
                 if (feed.savedInstance) {
                     savedinstance = feed.savedInstance;
                 }
-                return feedUiConverter.createSavedPromotion(savedinstance, savedinstance._id)
+                return feedUiConverter.createSavedPromotion(savedinstance, savedinstance._id,true)
             }))
         }
         return response;

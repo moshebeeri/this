@@ -29,7 +29,12 @@ export const getFeeds = createSelector([getStateFeeds, getStatePosts, getStateBu
         let feedsOrder = feeds.feedView;
         let savedInstancesIds = [];
         if (savedPromotion.feeds) {
-            savedInstancesIds = Object.values(savedPromotion.feeds).map(savedFeed => savedFeed.savedInstance.instance._id);
+            savedInstancesIds = Object.values(savedPromotion.feeds).map(savedFeed => {
+                if(savedFeed.savedInstance) {
+                    return savedFeed.savedInstance.instance._id
+                }
+                return savedFeed.instance._id
+            });
         }
         if (feedsOrder.length > 0) {
             try {

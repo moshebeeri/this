@@ -81,7 +81,7 @@ export default class FeedPromotion extends Component {
     }
 
     render() {
-        const {showInPopup, showActions, item, save, shared, like, unlike, showUsers, comment, token, location, hideSocial, realize, navigation, scanner, isRealized} = this.props;
+        const {showInPopup, showActions, item, save, shared, like, unlike, showUsers, comment, token, location, hideSocial, realize, navigation, scanner,} = this.props;
         const styles = this.createPromotionStyle();
         const image = this.createImageComponent(item, styles);
         const container = this.createContainerStyle(item);
@@ -159,14 +159,14 @@ export default class FeedPromotion extends Component {
                                           disabled={claimDisabled} onPress={() => save(item.id, navigation, item)}/>
                         </View>
                         }
-                        {realize && !isRealized &&
+                        {realize && !item.isRealized &&
                         <View style={styles.editButtonContainer}>
                             <SubmitButton title={strings.Realize.toUpperCase()} color={'#2db6c8'}
                                           onPress={() => realize(item)}/>
                         </View>
                         }
 
-                        {realize && isRealized &&
+                        {realize && item.isRealized &&
                         <View style={styles.editButtonContainer}>
                             <SubmitButton disabled title={strings.Realized.toUpperCase()} color={'#cccccc'}
                                           onPress={() => realize(item)}/>

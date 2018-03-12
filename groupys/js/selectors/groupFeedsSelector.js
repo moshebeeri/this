@@ -30,7 +30,12 @@ export const getFeeds = createSelector([  getStateFeeds,getPosts,getInstance,get
         let feedsUi = new Map();
         let savedInstancesIds = [];
         if(savedPromotion.feeds){
-            savedInstancesIds = Object.values(savedPromotion.feeds).map(savedFeed => savedFeed.savedInstance.instance._id);
+            savedInstancesIds = Object.values(savedPromotion.feeds).map(savedFeed => {
+                if(savedFeed.savedInstance) {
+                    return savedFeed.savedInstance.instance._id
+                }
+                return savedFeed.instance._id
+            });
         }
         if (!_.isEmpty(feeds)) {
             Object.keys(feedsOrder).forEach(function (groupId) {
