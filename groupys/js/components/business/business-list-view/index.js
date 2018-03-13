@@ -77,7 +77,7 @@ export default class BusinessListView extends Component {
         const permissionsButton = this.createPermissionsTag(item);
         const productsButton = this.createPoductsTag(item);
         const inReview =  item.business.review && (item.business.review.state === 'validation' || item.business.review.state === 'review');
-        return ( <View style={{marginBottom: 10}}>
+        return ( <View style={{marginTop: 10,backgroundColor:'white'}}>
                 <BusinessHeader businesscolor navigation={this.props.navigation} business={item.business}
                                 categoryTitle={item.categoryTitle} businessLogo={item.business.logo}
                                 businessName={item.business.name} noMargin businessView
@@ -100,7 +100,9 @@ export default class BusinessListView extends Component {
                     <View style={{borderTopWidth: 2, borderColor: '#eaeaea', backgroundColor: 'white'}}
                           key={this.props.index}>
                         {!inReview && (permissionsButton || productsButton || promotionButton) && <View style={{
-                            height: vh * 6, flexDirection: 'row', alignItems: 'center',
+                             flexDirection: 'row', alignItems: 'center',
+                            padding:10,
+                            height:56,
                             justifyContent: 'space-between',
                         }}>
                             {permissionsButton}
@@ -110,23 +112,23 @@ export default class BusinessListView extends Component {
                         </View>}
                         {item.business && item.business.review && item.business.review.state === 'validation' &&
                         <View style={{
-                            height: vh * 6, flexDirection: 'row', alignItems: 'center',
-                            justifyContent: 'space-between', marginRight: 10, marginLeft: 10,
+                           flexDirection: 'row', alignItems: 'center',
+                            justifyContent: 'space-between',
                         }}>
                             <ThisText>{strings.confirmBusinessByMailMessage}</ThisText>
                             <EditButton iconName='refresh' onPress={this.refreshBusiness.bind(this)}/>
                         </View>}
                         {item.business && item.business.review && item.business.review.state === 'review' &&
                         <View style={{
-                            height: vh * 6, flexDirection: 'row', alignItems: 'center',
-                            justifyContent: 'space-between', marginRight: 10, marginLeft: 10,
+                             flexDirection: 'row', alignItems: 'center',
+                            justifyContent: 'space-between',
                         }}>
                             <ThisText>{strings.validatingBusinessMessage}</ThisText>
                             <EditButton iconName='refresh' onPress={this.refreshBusiness.bind(this)}/>
                         </View>}
 
                         {item.business.social_state &&
-                        <View style={{borderTopWidth: 1, borderColor: '#cccccc'}}>
+                        <View style={{height:56,justifyContent:'center',alignItems:'center',borderTopWidth: 1, borderColor: '#cccccc'}}>
                             <SocialState disabled
                                          like={item.business.social_state.like} likes={item.business.social_state.likes}
                                          showFollowers

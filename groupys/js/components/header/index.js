@@ -77,9 +77,9 @@ class GeneralComponentHeader extends Component {
     render() {
         const {businessActions, state, network} = this.props;
         let back = undefined;
-        let headerHeight = vh * 7;
+        let headerHeight = vh * 9;
         if (Platform.OS === 'ios') {
-            headerHeight = vh * 9;
+            headerHeight = vh * 11;
         }
         if (this.props.showBack) {
             back = <Button transparent style={{marginLeft: 5, marginRight: 5}} onPress={() => this.back()}>
@@ -155,10 +155,10 @@ class GeneralComponentHeader extends Component {
             <MenuOptions>
 
                 <MenuOption onSelect={this.searchBusiness.bind(this)}>
-                    <ThisText>{strings.SearchBusiness}</ThisText>
+                    <ThisText style={{padding:10,paddingBottom:5}}>{strings.SearchBusiness}</ThisText>
                 </MenuOption>
                 <MenuOption onSelect={this.searchGroups.bind(this)}>
-                    <ThisText>{strings.SearchGroups}</ThisText>
+                    <ThisText style={{padding:10,paddingTop:5,}}>{strings.SearchGroups}</ThisText>
                 </MenuOption>
 
 
@@ -177,13 +177,13 @@ class GeneralComponentHeader extends Component {
                 </View>}
                 <View style={{
                     height: headerHeight, flexDirection: 'row', alignItems: 'center', backgroundColor: 'white',
-                    justifyContent: 'space-between',
+                    justifyContent: 'flex-start',
                 }}>
 
                     {<View style={{height: vh * 7, flexDirection: 'row', alignItems: 'flex-start'}}>
                         {back}
 
-                        <Button transparent style={{marginLeft: 5, marginRight: 5}} onPress={this.props.openDrawer}>
+                        <Button transparent style={{marginLeft: 15, marginRight: 5}} onPress={this.props.openDrawer}>
                             <Icon2 active color={"#2db6c8"} size={20} name="menu"/>
 
                         </Button>
@@ -191,16 +191,18 @@ class GeneralComponentHeader extends Component {
                     </View>
                     }
 
-                    <ThisText transparent style={{color: "#2db6c8", backgroundColor: 'transparent'}}>THIS</ThisText>
+                    <ThisText transparent style={{fontSize:20,marginLeft:15,color: "#2db6c8", backgroundColor: 'transparent'}}>THIS</ThisText>
                     {<View style={{
-                        height: vh * 6, flexDirection: 'row', justifyContent: 'center', alignItems: 'center'
+                        flex:1,flexDirection: 'row', justifyContent: 'flex-end', alignItems: 'center'
                     }}>
+
                         {menuAction}
+
                         <TouchableOpacity onPress={() => this.showPromotionScaning()}
                                           style={{
                                               width: 30, height: 30,
-                                              marginRight: 5,
-                                              marginLeft: 5,
+                                              marginRight: 20,
+                                              marginLeft: 20,
                                               flexDirection: 'column',
                                               alignItems: 'center',
                                           }}

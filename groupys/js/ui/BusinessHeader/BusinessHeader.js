@@ -103,10 +103,10 @@ class BusinessHeader extends Component {
             </MenuTrigger>
             <MenuOptions>
                 <MenuOption onSelect={this.unFollowBusiness.bind(this)}>
-                    <ThisText>{strings.UnFollow}</ThisText>
+                    <ThisText style={{padding:10,paddingBottom:5}}>{strings.UnFollow}</ThisText>
                 </MenuOption>
                 {showActions && <MenuOption onSelect={this.showFeedBack.bind(this)}>
-                    <ThisText>{strings.reportActivity}</ThisText>
+                    <ThisText  style={{padding:10,paddingTop:5}}>{strings.reportActivity}</ThisText>
                 </MenuOption>}
             </MenuOptions>
         </Menu>;
@@ -118,10 +118,10 @@ class BusinessHeader extends Component {
                 <MenuOptions>
 
                     <MenuOption onSelect={this.assignQrCode.bind(this)}>
-                        <ThisText>{strings.assignQrCode}</ThisText>
+                        <ThisText style={{padding:10,paddingBottom:5}}>{strings.assignQrCode}</ThisText>
                     </MenuOption>
                     <MenuOption onSelect={this.showBusinessAccountDetails.bind(this)}>
-                        <ThisText>{strings.accountDetail}</ThisText>
+                        <ThisText style={{padding:10,paddingTop:5}}>{strings.accountDetail}</ThisText>
                     </MenuOption>
                 </MenuOptions>
             </Menu>
@@ -134,14 +134,14 @@ class BusinessHeader extends Component {
                 marginLeft: 10,
                 marginRight: 10
             }} onPress={() => this.back()}>
-                <Icon active color={"#2db6c8"} size={30} name={arrowName}/>
+                <Icon active  color={"#2db6c8"} size={30} name={arrowName}/>
             </TouchableOpacity>
         }
         return  <View>
             {!this.props.noProfile ?
-                <TouchableOpacity style={{margin: 7}} onPress={this.showBusiness.bind(this)}>
+                <View style={{margin: 7}} >
                     {this.headerInternals(headerContainerStyle, back, nameTextStyle, businessName, categoryTitle, showEdit, editButton, hideMenu, menuAction)}
-                </TouchableOpacity>
+                </View>
                 :
                 <View style={{margin: 7}}>
                     {this.headerInternals(headerContainerStyle, back, nameTextStyle, businessName, categoryTitle, showEdit, editButton, hideMenu, menuAction)}
