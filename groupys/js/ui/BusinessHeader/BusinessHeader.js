@@ -43,20 +43,20 @@ class BusinessHeader extends Component {
             if (noProfile) {
                 return <View style={{margin: 10}}>
                     <View>
-                        <ImageController thumbnail  size={40} source={{uri: businessLogo}}/>
+                        <ImageController  thumbnail  size={40} source={{uri: businessLogo}}/>
                     </View>
                 </View>
             }
             if (small) {
                 return <TouchableOpacity style={{margin: 10}} onPress={this.showBusiness.bind(this)}>
                     <View>
-                        <ImageController  thumbnail  size={36} source={{uri: businessLogo}}/>
+                        <ImageController  square thumbnail  size={36} source={{uri: businessLogo}}/>
                     </View>
                 </TouchableOpacity>
             }
             return <TouchableOpacity style={{margin: 10}} onPress={this.showBusiness.bind(this)}>
                 <View>
-                    <ImageController thumbnail  size={40} source={{uri: businessLogo}}/>
+                    <ImageController  thumbnail  size={40} source={{uri: businessLogo}}/>
                 </View>
             </TouchableOpacity>
         }
@@ -82,7 +82,7 @@ class BusinessHeader extends Component {
     }
 
     render() {
-        const {showActions, categoryTitle, color, businessName, showBack, noMargin, editButton, businessView, hideMenu} = this.props;
+        const {showActions,categoryTitle, color, businessName, showBack, noMargin, editButton, businessView, hideMenu} = this.props;
         let nameTextStyle = styles.businessNameText;
         if (color) {
             nameTextStyle = styles.businessColorNameText;
@@ -99,14 +99,14 @@ class BusinessHeader extends Component {
         let back = undefined;
         let menuAction = <Menu>
             <MenuTrigger placement="right">
-                <Icon2 style={{paddingLeft: 10, fontSize: 15}} name="options"/>
+                <Icon2 style={{color:'white',paddingLeft: 10, fontSize: 15}} name="options"/>
             </MenuTrigger>
             <MenuOptions>
                 <MenuOption onSelect={this.unFollowBusiness.bind(this)}>
-                    <ThisText>{strings.UnFollow}</ThisText>
+                    <ThisText style={{padding:10,paddingBottom:5}}>{strings.UnFollow}</ThisText>
                 </MenuOption>
                 {showActions && <MenuOption onSelect={this.showFeedBack.bind(this)}>
-                    <ThisText>{strings.reportActivity}</ThisText>
+                    <ThisText  style={{padding:10,paddingTop:5}}>{strings.reportActivity}</ThisText>
                 </MenuOption>}
             </MenuOptions>
         </Menu>;
@@ -118,10 +118,10 @@ class BusinessHeader extends Component {
                 <MenuOptions>
 
                     <MenuOption onSelect={this.assignQrCode.bind(this)}>
-                        <ThisText>{strings.assignQrCode}</ThisText>
+                        <ThisText style={{padding:10,paddingBottom:5}}>{strings.assignQrCode}</ThisText>
                     </MenuOption>
                     <MenuOption onSelect={this.showBusinessAccountDetails.bind(this)}>
-                        <ThisText>{strings.accountDetail}</ThisText>
+                        <ThisText style={{padding:10,paddingTop:5}}>{strings.accountDetail}</ThisText>
                     </MenuOption>
                 </MenuOptions>
             </Menu>
@@ -134,16 +134,16 @@ class BusinessHeader extends Component {
                 marginLeft: 10,
                 marginRight: 10
             }} onPress={() => this.back()}>
-                <Icon active color={"#2db6c8"} size={30} name={arrowName}/>
+                <Icon active  color={"#2db6c8"} size={30} name={arrowName}/>
             </TouchableOpacity>
         }
         return  <View>
             {!this.props.noProfile ?
-                <TouchableOpacity style={{margin: 7}} onPress={this.showBusiness.bind(this)}>
+                <View style={{margin: 7}} >
                     {this.headerInternals(headerContainerStyle, back, nameTextStyle, businessName, categoryTitle, showEdit, editButton, hideMenu, menuAction)}
-                </TouchableOpacity>
+                </View>
                 :
-                <View>
+                <View style={{margin: 7}}>
                     {this.headerInternals(headerContainerStyle, back, nameTextStyle, businessName, categoryTitle, showEdit, editButton, hideMenu, menuAction)}
                 </View>
             }
@@ -151,22 +151,33 @@ class BusinessHeader extends Component {
     }
 
     headerInternals(headerContainerStyle, back, nameTextStyle, businessName, categoryTitle, showEdit, editButton, hideMenu, menuAction) {
-        return <View style={[headerContainerStyle, {width: StyleUtils.getWidth()}]}>
+        const{bgColor,textColor} = this.props;
+        let backgroundColor= 'white';
+        if(bgColor){
+            backgroundColor = bgColor;
+        }
+
+        return <View style={[headerContainerStyle, {backgroundColor:backgroundColor,width: StyleUtils.getWidth()}]}>
             <View style={{alignItems: 'center', justifyContent: 'center'}}>
                 {back}
             </View>
             {this.createBusinessLog()}
             <View style={{flex: 1, flexDirection: 'column', justifyContent: 'center'}}>
-                <ThisText style={nameTextStyle} note>{businessName}</ThisText>{categoryTitle &&
+                <ThisText style={[nameTextStyle, {color:textColor,fontWeight:'bold'}]} note>{businessName}</ThisText>{categoryTitle &&
             <ThisText numberOfLines={1} style={styles.businessAddressText}
                       note>{categoryTitle}</ThisText>}
             </View>
-            {showEdit && <View style={{flex: 0.2, flexDirection: 'row', alignItems: 'center',}}>
+            {showEdit ? <View style={{flexDirection: 'row', alignItems: 'center',}}>
+                <View style={{marginTop:10}}>
                 {editButton}
-            </View>}
-            <View style={{marginRight: 10, padding: 5, alignItems: 'flex-start', justifyContent: 'flex-start'}}>
+                </View>
+                <View style={{marginRight: 20,  alignItems: 'center', justifyContent: 'center'}}>
+                    {menuAction}
+                </View>
+            </View> :  <View style={{marginRight: 10, padding: 5, marginTop:20, alignItems: 'center', justifyContent: 'center'}}>
                 {!hideMenu && menuAction}
-            </View>
+            </View>}
+
         </View>;
     }
 }

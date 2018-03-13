@@ -12,6 +12,7 @@ import {
     updateFeedsTop,
     updateSocialState
 } from "../actions/feedsMain";
+import {handleSucsess}from './SegaSuccsesHandler'
 import * as segaActions from './segaActions'
 import feedComperator from "../reduxComperators/MainFeedComperator"
 
@@ -23,12 +24,14 @@ function* feedScrollDown(action) {
         if (_.isEmpty(action.feeds)) {
             yield put(loadingFeeds());
             response = yield call(feedApi.getAll, 'down', 'start', action.token, action.user);
+            handleSucsess();
             yield put(loadingFeedsDone());
         } else {
             yield put(scrolling());
             let keys = Object.keys(action.feeds);
             let id = action.feeds[keys.length - 1].id;
             response = yield call(feedApi.getAll, 'down', id, action.token, action.user);
+            handleSucsess();
             if (response.length === 0) {
                 yield put(maxFeedReturned());
             } else {
@@ -53,6 +56,7 @@ function* backgroundTask(token, lastId, user) {
             yield call(delay, delayTime);
             console.log('calling feeds fetch ' + lastId);
             let response = yield call(feedApi.getAll, 'up', id, token, user);
+            handleSucsess();
             if (response.length > 0) {
                 yield* updateFeedsTop(response);
                 id = response[response.length - 1]._id;
@@ -77,6 +81,7 @@ function* watchStartBackgroundTask() {
 function* setSocialState(action) {
     try {
         const response = yield call(feedApi.getFeedSocialState, action.id, action.token);
+        handleSucsess();
         if (feedComperator.shouldUpdateSocial(action.feed, response)) {
             yield put(updateSocialState(response, action.id));
         }

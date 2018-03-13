@@ -3,7 +3,7 @@ import FeedApi from "../api/feed";
 import {delay} from 'redux-saga'
 import {updateFeedsTop,} from "../actions/groups";
 import * as segaActions from './segaActions'
-
+import {handleSucsess}from './SegaSuccsesHandler'
 let feedApi = new FeedApi();
 
 function* backgroundTask(token, lastId, group, user) {
@@ -16,6 +16,7 @@ function* backgroundTask(token, lastId, group, user) {
             }
             yield call(delay, delayTime);
             let response = yield call(feedApi.getAll, 'up', id, token, group);
+            handleSucsess();
             if (response.length > 0) {
                 yield* updateFeedsTop(response, group, user);
                 id = response[response.length - 1]._id;

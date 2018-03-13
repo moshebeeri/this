@@ -3,7 +3,7 @@ import CommentsApi from "../api/commet";
 import {groupChatDone, groupChatMaxLoad, updateChatScrollUp, updateChatTop,groupChatMaxLoaddNotReturned} from "../actions/commentsGroup";
 import * as segaActions from './segaActions'
 import {delay} from 'redux-saga'
-
+import {handleSucsess}from './SegaSuccsesHandler'
 let commentsApi = new CommentsApi();
 
 function* backgroundTask(group, token, lastChatId, user) {
@@ -12,6 +12,7 @@ function* backgroundTask(group, token, lastChatId, user) {
         while (true) {
             yield call(delay, 2000);
             let response = yield call(commentsApi.getGroupComments, group, token, id, "up");
+            handleSucsess();
             if (response.length > 0) {
                 yield* updateChatTop(response, group, user);
                 id = response[response.length - 1]._id;
@@ -37,11 +38,13 @@ function* chatScrollUp(action) {
         let response = {};
         if (_.isEmpty(action.comments)) {
             response = yield call(commentsApi.getGroupComments, action.group, action.token, 'start', "down");
+            handleSucsess();
             yield put(groupChatDone(action.group));
         } else {
 
             let id = action.comments[0];
             response = yield call(commentsApi.getGroupComments, action.group, action.token, id, "down");
+            handleSucsess();
             if (response.length === 0) {
                 yield put(groupChatMaxLoad(action.group));
             } else {

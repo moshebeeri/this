@@ -8,6 +8,7 @@ import {
     updateChatTop,
     restartListenForChat
 } from "../actions/commentsEntities";
+import {handleSucsess}from './SegaSuccsesHandler'
 import * as segaActions from './segaActions'
 import {delay} from 'redux-saga'
 
@@ -20,6 +21,7 @@ function* backgroundTask(entities, token, lastChatId, generalId) {
             yield call(delay, 2000);
             if(id !== 0){
                 let response = yield call(commentsApi.getFeedComments, entities, token, id, "up");
+                handleSucsess();
                 if (response.length > 0) {
                     id = response[response.length - 1]._id;
                     yield* updateChatTop(response, generalId);
@@ -48,10 +50,12 @@ function* chatScrollUp(action) {
         let response = {};
         if (_.isEmpty(action.comments)) {
             response = yield call(commentsApi.getFeedComments, action.entities, action.token, 'start', "down");
+            handleSucsess();
             yield put(feedChatDone(action.generalId));
         } else {
             let id = action.comments[action.comments.length -1];
             response = yield call(commentsApi.getFeedComments, action.entities, action.token, id, "down");
+            handleSucsess();
             if (response.length === 0) {
                 yield put(feedChatMaxLoad(action.generalId));
             } else {

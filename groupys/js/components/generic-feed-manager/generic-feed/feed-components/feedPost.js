@@ -19,18 +19,15 @@ import {
     Left,
     Picker,
     Right,
-    Text,
     Thumbnail,
     View
 } from 'native-base';
 import stylesLandscape from './styles'
 import StyleUtils from '../../../../utils/styleUtils'
-import {ActivityReport, SocialState, UrlPreview, Video} from '../../../../ui/index';
+import {ActivityReport, SocialState, ThisText, UrlPreview, Video} from '../../../../ui/index';
 import PageRefresher from '../../../../refresh/pageRefresher'
-import {ThisText} from '../../../../ui/index';
+import strings from "../../../../i18n/i18n"
 
-const {width, height} = Dimensions.get('window');
-const vh = height / 100;
 export default class FeedPost extends Component {
     constructor() {
         super();
@@ -48,23 +45,24 @@ export default class FeedPost extends Component {
         })
         PageRefresher.createFeedSocialState(item.id);
     }
+
     shouldComponentUpdate() {
-        const {item, visibleItem,shouldUpdate, visibleFeeds} = this.props;
-        if(shouldUpdate){
+        const {item, visibleItem, shouldUpdate, visibleFeeds} = this.props;
+        if (shouldUpdate) {
             return true;
         }
-        let results =  item.id === visibleItem  ;
-        if(results){
+        let results = item.id === visibleItem;
+        if (results) {
             return results
         }
-        if(visibleFeeds && item.fid && visibleFeeds.includes(item.fid)){
+        if (visibleFeeds && item.fid && visibleFeeds.includes(item.fid)) {
             return true;
         }
-
         return false;
     }
+
     visited(visible) {
-        const {item,actions,group} = this.props;
+        const {item, actions, group} = this.props;
         if (this.refs[item.id]) {
             this.refs[item.id].visible(visible);
         }
@@ -72,12 +70,11 @@ export default class FeedPost extends Component {
             if (visible && actions && actions.setSocialState) {
                 actions.setSocialState(item);
             }
-            if(group){
-                actions.setVisibleItem(item.fid,group._id);
-            }else {
+            if (group) {
+                actions.setVisibleItem(item.fid, group._id);
+            } else {
                 actions.setVisibleItem(item.fid);
             }
-
         }
         this.setState({
             visible: visible
@@ -93,14 +90,11 @@ export default class FeedPost extends Component {
         let titleContainerStyle = {
             flexDirection: 'row',
             backgroundColor: 'white',
-            height: 80,
             width: StyleUtils.getWidth()
         }
         let postMessageContainerStyle = {
-
             width: StyleUtils.getWidth(),
-            paddingBottom: 10,
-            backgroundColor:'white'
+            backgroundColor: 'white'
         };
         if (shared) {
             titleContainerStyle = {
@@ -115,7 +109,6 @@ export default class FeedPost extends Component {
             }
             promotionDetalis = styles.promotionShareDetails;
             postMessageContainerStyle = {
-
                 borderLeftWidth: 1,
                 borderColor: '#cccccc',
                 marginLeft: 10,
@@ -131,26 +124,41 @@ export default class FeedPost extends Component {
         const result =
             <InViewPort onChange={this.visited.bind(this)} style={container}>
 
-                <View style={[styles.promotion_card, {backgroundColor: 'white', width: StyleUtils.getWidth()}]}>
+                <View style={{backgroundColor: 'white', width: StyleUtils.getWidth()}}>
 
-                    <View style={[titleContainerStyle, {width: StyleUtils.getWidth()}]}>
+                    <View style={[titleContainerStyle, {
+                        backgroundColor: 'white',
+                        alignItems: 'center',
+                        width: StyleUtils.getWidth()
+                    }]}>
                         <View style={{marginTop: 10, paddingLeft: 10, justifyContent: 'flex-start'}}>
-                            <Thumbnail square meduim source={item.avetar}/>
+                            <Thumbnail small source={item.avetar}/>
                         </View>
-                        <View style={{marginTop: 10, paddingLeft: 10, alignItems: 'flex-start'}}>
-                            <ThisText>{item.name}</ThisText>
-                            <ThisText style={{width: 240, alignItems: 'flex-start'}}>{item.feed.activity.post.title}</ThisText>
+                        <View style={{marginTop: 10, paddingLeft: 10, alignItems: 'center'}}>
+                            <ThisText>{strings.postMessage.formatUnicorn(item.name)}</ThisText>
                         </View>
-                        <View style={{marginTop: 10, flex: 1, paddingRight: 10, alignItems: 'flex-end', justifyContent: 'flex-start'}}>
+                        <View style={{
+                            marginTop: 10,
+                            flex: 1,
+                            paddingRight: 10,
+                            alignItems: 'flex-end',
+                            justifyContent: 'flex-start'
+                        }}>
                             <ActivityReport id={item.activityId} showActions={showActions}/>
                         </View>
                     </View>
                     <UrlPreview text={item.feed.activity.post.text}/>
                     {!this.state.containLink && <View style={postMessageContainerStyle}>
 
-                        <View style={[promotionDetalis, {width: StyleUtils.getWidth() - 15}]}>
-                            <ThisText numberOfLines={4}
-                                  style={{marginRight: 10, marginLeft: 10, fontSize: 18}}>{item.feed.activity.post.text}
+                        <View style={{width: StyleUtils.getWidth() - 15}}>
+                            <ThisText
+                                      style={{
+                                          paddingTop: 10,
+                                          marginRight: 10,
+                                          marginLeft: 20,
+                                          paddingBottom: 10,
+                                          fontSize: 18
+                                      }}>{item.feed.activity.post.text}
                             </ThisText>
                         </View>
                     </View>}
@@ -169,8 +177,8 @@ export default class FeedPost extends Component {
 
                     {item.social && <View style={[styles.post_bottomContainer, {
                         backgroundColor: 'white',
-                        borderTopWidth:1,
-                        borderColor:'#cccccc',
+                        borderTopWidth: 1,
+                        borderColor: '#cccccc',
                         width: StyleUtils.getWidth()
                     }]}>
                         <SocialState feed comments={item.social.comments} onPressComment={comment}

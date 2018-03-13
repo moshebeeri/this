@@ -3,12 +3,13 @@ import productApi from "../api/product";
 import {setProduct} from "../actions/product";
 import * as segaActions from './segaActions'
 import ImageApi from "../api/image";
+import {handleSucsess}from './SegaSuccsesHandler'
 
 
 function* saveProduct(action) {
     try {
         let createdProduct = yield call(productApi.createProduct, action.product, action.token);
-
+        handleSucsess();
         createdProduct.pictures = [];
         let pictures = [];
         if (action.product.image.path) {

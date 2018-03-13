@@ -5,6 +5,7 @@ import * as segaActions from './segaActions'
 import ImageApi from "../api/image";
 import productApi from "../api/product";
 import {setProduct} from "../actions/product";
+import {handleSucsess}from './SegaSuccsesHandler'
 
 let promotionApi = new PromotionApi();
 
@@ -30,6 +31,7 @@ function* savePromotion(action) {
                     price: tempPromotion.retail_price,
                 }
                 promotionProduct = yield call(productApi.createProduct, product, action.token);
+                handleSucsess();
                 uploadProductPicture = true;
                 let pictures = []
                 if (action.promotion.image.path) {

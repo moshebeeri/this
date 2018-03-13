@@ -215,7 +215,7 @@ class FeedConverter {
                 key: feed._id,
                 social: socialState,
                 actor: feed.activity.actor_user._id,
-                itemTitle: name + ' ' + feed.activity.action,
+                itemTitle:  strings.businessCreated.formatUnicorn(name) ,
                 name: feed.activity.business.name,
                 address: feed.activity.business.address,
                 website: feed.activity.business.website,
@@ -240,7 +240,7 @@ class FeedConverter {
                 social: socialState,
                 name: feed.activity.business.name,
                 actor: feed.activity.actor_user._id,
-                itemTitle: name + ' ' + feed.activity.action,
+                itemTitle: strings.businessCreated.formatUnicorn(name) ,
                 businessAddress: feed.activity.business.city + ' ' + feed.activity.business.address,
                 showSocial: true,
             }
@@ -253,6 +253,17 @@ class FeedConverter {
         response.businessName = feed.activity.business.name;
         response.location = feed.activity.business.location;
         response.business = feed.activity.business;
+        let user = feed.activity.actor_user;
+
+        if (user && user.pictures && Object.keys(user.pictures).length > 0) {
+            response.avetar = {
+                uri: user.pictures[Object.keys(user.pictures).length - 1].pictures[3]
+            }
+        }
+        else {
+            response.avetar = noPic
+        }
+
         return response;
     }
 

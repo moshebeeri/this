@@ -27,6 +27,7 @@ import {bindActionCreators} from "redux";
 import strings from "../../../i18n/i18n"
 import StyleUtils from "../../../utils/styleUtils";
 import ThisText from "../../../ui/ThisText/ThisText";
+import LinearGradient from 'react-native-linear-gradient';
 
 const {width, height} = Dimensions.get('window')
 const vw = width / 100;
@@ -94,16 +95,13 @@ class BusinessProfile extends Component {
         }
         let businessView = this.props.navigation.state.params.fromBusiness;
         let address = business.city + ' ' + business.address
-        const banner = this.createBannerTag(business);
+        const banner = this.createBannerTag(business,businessView);
         return ( <ScrollView>
                 <View>
 
                     <FormHeader showBack navigation={this.props.navigation}
                                 title={strings.Business} bgc="#2db6c8"/>
-                    <BusinessHeader noProfile navigation={this.props.navigation} business={business}
-                                    categoryTitle={business.categoryTitle} businessLogo={business.logo}
-                                    businessView={businessView} usinessName={business.name} noMargin
-                    />
+
                     <View style={{marginTop: 1, backgroundColor: '#eaeaea'}}>
                         <View style={{
                             flex: -1,
@@ -171,7 +169,7 @@ class BusinessProfile extends Component {
         );
     }
 
-    createBannerTag(business) {
+    createBannerTag(business,businessView) {
         if (business.pictures) {
             return <View style={{}}><ImageController
                 style={[styles.bannerImageContainer, {width: StyleUtils.getWidth()}]}
@@ -180,6 +178,19 @@ class BusinessProfile extends Component {
                 source={{uri: business.pictures[0].pictures[0]}}>
 
             </ImageController>
+                <LinearGradient start={{x: 1, y: 1}} end={{x: 1, y: 0}}
+                                locations={[0,0.8]}
+                                colors={['#00000099', 'transparent']}  style={{height:120,position:'absolute',justifyContent:'flex-end',top:130,backgroundColor:'transparent',width: StyleUtils.getWidth()}}>
+                    {business &&
+
+                    <BusinessHeader noProfile navigation={this.props.navigation} business={business}
+                                    categoryTitle={business.categoryTitle} businessLogo={business.logo}
+                                    businessView={businessView} businessName={business.name} noMargin
+                                    bgColor={'transparent'}
+                                    textColor={'white'}
+
+                    />}
+                </LinearGradient>
 
             </View>
         }

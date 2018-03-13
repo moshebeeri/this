@@ -240,7 +240,7 @@ export const SET_LOCATION = 'SET_LOCATION';
 export const RESET_POST_FORM = 'RESET_POST_FORM';
 export const POST_SAVING = 'POST_SAVING';
 export const POST_SAVING_DONE = 'POST_SAVING_DONE';
-export const UPSERT_POST = 'UPSERT_POST';
+export const UPSERT_POST = 'UPSERTpost';
 //Dimensions
 export const DIMENSIONS_CHANGED = 'DIMENSIONS_CHANGED';
 

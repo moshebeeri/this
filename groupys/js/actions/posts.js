@@ -1,12 +1,11 @@
 import * as actions from "../reducers/reducerActions";
 import PostApi from "../api/post";
 import PageRefresher from '../refresh/pageRefresher'
-import groupAction from './groups'
 import ActionLogger from './ActionLogger'
-
+import handler from './ErrorHandler'
+import * as types from '../sega/segaActions';
 let postApi = new PostApi();
 let logger = new ActionLogger();
-import  handler from './ErrorHandler'
 
 export function createPost(post, navigation) {
     return async function (dispatch, getState) {
@@ -16,14 +15,24 @@ export function createPost(post, navigation) {
             });
             const token = getState().authentication.token;
             await postApi.createPost(post, uploadPostPic, token);
-            PageRefresher.setMainFeedRefresh()
+            const user = getState().user.user;
+            const feedOrder = getState().feeds.feedView;
+            dispatch({
+                type: types.CANCEL_MAIN_FEED_LISTENER,
+            });
+            dispatch({
+                type: types.LISTEN_FOR_MAIN_FEED,
+                id: feedOrder[0],
+                token: token,
+                user: user,
+            });
             dispatch({
                 type: actions.POST_SAVING_DONE,
             });
             navigation.goBack();
-            handler.handleSuccses(getState(),dispatch)
+            handler.handleSuccses(getState(), dispatch)
         } catch (error) {
-             handler.handleError(error,dispatch,'posts-createPost')
+            handler.handleError(error, dispatch, 'posts-createPost')
             logger.actionFailed('posts-createPost')
         }
     }
@@ -37,17 +46,30 @@ export function createGroupPost(post, navigation, group) {
             });
             const token = getState().authentication.token;
             await postApi.createPost(post, uploadPostPic, token);
-            if (getState().groups.groupFeedOrder && getState().groups.groupFeedOrder[group._id]
-                && getState().groups.groupFeedOrder[group._id].length > 0) {
-                groupAction.fetchTopList(getState().groups.groupFeedOrder[group._id][0], token, group, dispatch);
+
+            const user = getState().user.user;
+            const feedOrder = getState().groups.groupFeedOrder[group._id];
+            if(feedOrder){
+                dispatch({
+                    type: types.CANCEL_GROUP_FEED_LISTENER,
+                });
+                if (feedOrder && feedOrder.length > 0) {
+                    dispatch({
+                        type: types.LISTEN_FOR_GROUP_FEED,
+                        id: feedOrder[0],
+                        group:group,
+                        token: token,
+                        user: user,
+                    });
+                }
             }
             dispatch({
                 type: actions.POST_SAVING_DONE,
             });
             navigation.goBack();
-            handler.handleSuccses(getState(),dispatch)
+            handler.handleSuccses(getState(), dispatch)
         } catch (error) {
-             handler.handleError(error,dispatch,'posts-createGroupPost')
+            handler.handleError(error, dispatch, 'posts-createGroupPost')
             logger.actionFailed('posts-createGroupPost')
         }
     }
@@ -77,16 +99,12 @@ async function fetchPostById(id, token, dispatch) {
             type: actions.UPSERT_POST,
             item: [response]
         });
-
     } catch (error) {
-        handler.handleError(error,dispatch,'posts-fetchPostById')
+        handler.handleError(error, dispatch, 'posts-fetchPostById')
         logger.actionFailed('posts-fetchPostById')
     }
 }
 
 export default {
     fetchPostById,
-
-
-
 };

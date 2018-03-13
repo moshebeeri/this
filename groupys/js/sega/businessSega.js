@@ -9,12 +9,13 @@ import {
 } from "../actions/business";
 import * as segaActions from './segaActions'
 import ImageApi from "../api/image";
-
+import {handleSucsess}from './SegaSuccsesHandler'
 let businessApi = new BusinessApi();
 
 function* getAll(action) {
     try {
         const response = yield call(businessApi.getAll, action.token, true);
+        handleSucsess();
         if (response.length > 0) {
             yield put(updateBusinesses(response))
         }
@@ -26,6 +27,7 @@ function* getAll(action) {
 function* saveBusiness(action) {
     try {
         let createdBusiness = yield call(businessApi.createBusiness, action.business, action.token, true);
+        handleSucsess();
         if(createdBusiness._id) {
             createdBusiness.pictures = [];
             let pictures = [];
@@ -75,6 +77,7 @@ function* saveBusiness(action) {
 function* updateBusiness(action) {
     try {
         let updatedBusiness = yield call(businessApi.updateBusiness, action.business, action.token);
+        handleSucsess();
         let pictures = [];
         let uploadCoverImage = false;
         let currentPicturePath = action.business.image.path;
@@ -114,6 +117,7 @@ function* updateBusinessFirstTime(action) {
     try {
         yield put(businessLoading());
         const response = yield call(businessApi.getAll, action.token, true);
+        handleSucsess();
         if (response.length > 0) {
             yield put(updateBusinesses(response));
         }
@@ -127,6 +131,7 @@ function* updateBusinessFirstTime(action) {
 function* updateCategory(action) {
     try {
         const response = yield call(businessApi.getSubCategory, action.token, action.business.business.subcategory, action.locale);
+        handleSucsess();
         const locale =  action.locale;
         let category = response[0].translations[locale];
         yield put(setBusinessCategory(category, action.business,));
