@@ -76,6 +76,14 @@ const GroupSchema = new Schema({
       'MANAGERS'
     ]
   },
+  chat_policy: {
+    type: String,
+    required: true,
+    enum: [
+      'ON',
+      'OFF',
+    ]
+  },
   client: {},
   pictures: [],
   video: {type: Schema.ObjectId, ref: 'Video', autopopulate: true}
