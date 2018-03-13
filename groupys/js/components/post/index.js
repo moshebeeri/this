@@ -78,7 +78,7 @@ class AddPost extends Component {
         }
         if (navigation.state.params && navigation.state.params.group) {
             return {
-                title: this.state.title,
+
                 text: this.state.post,
                 image: this.state.image,
                 uploadVideo: this.state.video,
@@ -90,7 +90,7 @@ class AddPost extends Component {
             }
         }
         return {
-            title: this.state.title,
+
             text: this.state.post,
             image: this.state.image,
             uploadVideo: this.state.video,
@@ -195,17 +195,13 @@ class AddPost extends Component {
 
 
                     {this.createCoverImageComponnent()}
-                    <View style={styles.inputTextLayour}>
-                        <TextInput field={strings.Title} value={this.state.title}
-                                   returnKeyType='next' ref="1" refNext="1"
-                                   onSubmitEditing={this.focusNextField.bind(this, "2")}
-                                   onChangeText={(title) => this.setState({title})} isMandatory={true}/>
-                    </View>
+
                     <View style={styles.inputTextLayour}>
                         <TextInput field={strings.Post} value={this.state.post}
                                    returnKeyType='next' ref="2" refNext="2"
                                    multiline={true}
                                    numberOfLines={4}
+                                   textArea={true}
                                    onSubmitEditing={this.focusNextField.bind(this, "3")}
                                    onChangeText={(post) => this.setState({post})} isMandatory={false}/>
                     </View>
@@ -213,7 +209,7 @@ class AddPost extends Component {
                         <TextInput field={strings.YouTubeUrl} value={this.state.youTubeUrl}
                                    returnKeyType='done' ref="3" refNext="3"
                                    multiline={true}
-                                   numberOfLines={4}
+                                   numberOfLines={10}
                                    validateContent={FormUtils.validateYouTube}
                                    onChangeText={(youTubeUrl) => this.setState({youTubeUrl})} isMandatory={false}/>
                     </View>
