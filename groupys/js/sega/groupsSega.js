@@ -3,12 +3,13 @@ import GroupsApi from "../api/groups";
 import ImageApi from "../api/image";
 import {setGroups,setGroup} from "../actions/groups";
 import * as segaActions from './segaActions'
-
+import {handleSucsess}from './SegaSuccsesHandler'
 let groupsApi = new GroupsApi();
 
 function* saveGroupsRequest(action) {
     try {
         let response = yield call(groupsApi.getAll, action.token,0, 100);
+        handleSucsess();
         if(response.length > 0) {
             yield put(setGroups(response))
         }
@@ -21,6 +22,7 @@ function* saveGroup(action) {
     try {
         console.log(action);
         let createdGroup = yield call(groupsApi.createGroup, action.group, action.token);
+        handleSucsess();
         createdGroup.touched = new Date().getTime();
         let users = action.group.groupUsers.slice(0);
         let user;

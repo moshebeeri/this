@@ -4,10 +4,14 @@ import * as actions from "./reducerActions";
 export default function network(state = initialState, action) {
     switch (action.type) {
         case actions.NETWORK_IS_ONLINE:
-            return {
-                ...state,
-                offline: false,
-            };
+            if(state.offline) {
+                return {
+                    ...state,
+                    offline: false,
+                };
+            }else{
+                return state;
+            }
         case action.TIME_OUT:
             return {
                  ...state,

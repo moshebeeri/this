@@ -9,7 +9,7 @@ import {
 } from "../actions/instanceGroupComments";
 import * as segaActions from './segaActions'
 import {delay} from 'redux-saga'
-
+import {handleSucsess}from './SegaSuccsesHandler'
 let commentsApi = new CommentsApi();
 
 function* backgroundTask(group, instance, token, lastChatId) {
@@ -20,6 +20,7 @@ function* backgroundTask(group, instance, token, lastChatId) {
             yield call(delay, 2000);
             if(id !== 0) {
                 let response = yield call(commentsApi.getInstanceGroupComments, group, instance, token, id, "up");
+                handleSucsess();
                 if (response.length > 0) {
                     id = response[response.length - 1]._id;
                     yield* updateChatTop(response, group, instance);
@@ -46,10 +47,12 @@ function* chatScrollUp(action) {
         let response = {};
         if (_.isEmpty(action.comments)) {
             response = yield call(commentsApi.getInstanceGroupComments, action.group, action.instance, action.token, 'start', "down");
+            handleSucsess();
             yield put(groupChatDone(action.group,action.instance));
         } else {
             let id = action.comments[0];
             response = yield call(commentsApi.getInstanceGroupComments, action.group, action.instance, action.token, id, "down");
+            handleSucsess();
             if (response.length === 0) {
                 yield put(groupChatMaxLoad(action.group, action.instance));
             } else {
