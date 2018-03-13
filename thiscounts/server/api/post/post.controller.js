@@ -51,7 +51,6 @@ function handlePostCreation(post) {
 // Creates a new post in the DB.
 exports.create = function(req, res) {
   let post = req.body;
-  console.log(JSON.stringify(post));
 
   if(!getActorId(post))
     return handleError(res, new Error('no actor (behalf) present'));
@@ -79,16 +78,15 @@ exports.create = function(req, res) {
         act.audience =['SELF', 'FOLLOWERS'];
       else if(act.actor_group)
         act.ids = [act.actor_group];
-      Post.findById(post._id).exec( (err, post) =>{
+
+      Post.findById(post._id).exec((err, post) => {
 
         if (err) { return handleError(res, err); }
         pricing.balance(post.behalf, function (err, positiveBalance) {
           if (err) return handleError(res, err);
           if (!positiveBalance) return res.status(402).send(post);
           activity.activity(act, function (err) {
-            if (err) {
-              return handleError(res, err);
-            }
+            if (err) { return handleError(res, err);}
             pricing.chargeActivityDistribution(post.behalf, activity);
             return res.status(201).send(post);
           });
