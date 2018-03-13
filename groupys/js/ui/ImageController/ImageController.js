@@ -37,7 +37,7 @@ export default class ImageControllerComponent  extends Component {
                     return <View style={{width:defaultSize,height:defaultSize}}>
                         <Image source={source} style={{width:defaultSize,height:defaultSize}}/></View>
                 }else{
-                    return <Image source={source} style={{borderRadius:defaultSize/2,width:defaultSize,height:defaultSize}}/>
+                    return <Image source={source} style={{borderWidth:1,borderColor:'white',borderRadius:defaultSize/2,width:defaultSize,height:defaultSize}}/>
                 }
 
             }
@@ -51,7 +51,7 @@ export default class ImageControllerComponent  extends Component {
                 return <View style={{width:defaultSize,height:defaultSize}}>
                     <CachedImage source={source} style={{width:defaultSize,height:defaultSize}}/></View>
             }else{
-                return <CachedImage source={source} style={{borderRadius:defaultSize/2,width:defaultSize,height:defaultSize}}/>
+                return <CachedImage source={source} style={{borderWidth:0.6,borderColor:'#ffffff99',borderRadius:defaultSize/2,width:defaultSize,height:defaultSize}}/>
             }
 
         }

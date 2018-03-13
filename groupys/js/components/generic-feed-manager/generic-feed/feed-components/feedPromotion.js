@@ -23,6 +23,7 @@ import {
     View
 } from 'native-base';
 import stylesPortrate from './styles'
+import LinearGradient from 'react-native-linear-gradient';
 import StyleUtils from '../../../../utils/styleUtils'
 import {
     BusinessHeader,
@@ -78,8 +79,12 @@ export default class FeedPromotion extends Component {
 
     render() {
         const {showInPopup, showActions, item, save, shared, like, unlike, showUsers, comment, token, location, hideSocial, realize, navigation, scanner,} = this.props;
+        let categoruTitle = item.categoryTitle;
+        if (item.business) {
+            categoruTitle = item.business.categoryTitle;
+        }
         const styles = this.createPromotionStyle();
-        const image = this.createImageComponent(item, styles);
+        const image = this.createImageComponent(item, styles,categoruTitle,showActions);
         const container = this.createContainerStyle(item);
         let claimDisabled = true;
         if (item.showsave) {
@@ -95,10 +100,7 @@ export default class FeedPromotion extends Component {
             promotaionDesc = styles.promotiosShareDescription;
             promotionDetalis = styles.promotionShareDetails;
         }
-        let categoruTitle = item.categoryTitle;
-        if (item.business) {
-            categoruTitle = item.business.categoryTitle;
-        }
+
         const result =
             <InViewPort onChange={this.visited.bind(this)} style={container}>
                 <View style={[styles.promotion_card, {width: StyleUtils.getWidth()}]}>
@@ -121,26 +123,8 @@ export default class FeedPromotion extends Component {
 
                     {image}
 
-                    <View style={{width: StyleUtils.getWidth()}}>
-                        {item.business &&
-                        <BusinessHeader navigation={this.props.navigation} business={item.business}
-                                        categoryTitle={categoruTitle} businessLogo={item.business.logo}
-                                        businessName={item.business.name} noMargin
-                                        id={item.activityId} showActions={showActions}
-                        />}
-                    </View>
-                    <View style={{marginBottom: 10, backgroundColor: 'white', width: StyleUtils.getWidth()}}>
-                        {item.description ? <ThisText numberOfLines={2} style={{
-                                marginRight: 10,
-                                marginLeft: 20,
-                                fontSize: 18
-                            }}>{item.name} - {item.description}</ThisText>
-                            : <ThisText numberOfLines={2}
-                                        style={{marginRight: 10, marginLeft: 20, fontSize: 18}}>{item.name}</ThisText>}
-                    </View>
-                    {!shared && location && <View style={[styles.promotionsSeparator, {width: StyleUtils.getWidth()}]}>
-                        <PromotionSeperator/>
-                    </View>}
+
+
 
                     {!shared && location &&
                     <View style={[styles.promotionDetailsContainer, {width: StyleUtils.getWidth()}]}>
@@ -225,12 +209,24 @@ export default class FeedPromotion extends Component {
         }
     }
 
-    createImageComponent(item, styles) {
+    createImageComponent(item, styles,categoruTitle,showActions) {
         if (item.banner) {
             return <View style={[styles.promotion_image_view, {width: StyleUtils.getWidth()}]}>
                 <ImageController resizeMode="cover" style={[styles.promotion_image, {width: StyleUtils.getWidth()}]}
                                  source={{uri: item.banner.uri}}>
                 </ImageController>
+                <LinearGradient start={{x: 1, y: 1}} end={{x: 1, y: 0}}
+                                locations={[0,0.8]}
+                                colors={['#00000099', 'transparent']}  style={{height:120,position:'absolute',justifyContent:'flex-end',top:130,backgroundColor:'transparent',width: StyleUtils.getWidth()}}>
+                    {item.business &&
+                    <BusinessHeader navigation={this.props.navigation} business={item.business}
+                                    categoryTitle={categoruTitle} businessLogo={item.business.logo}
+                                    businessName={item.business.name} noMargin
+                                    bgColor={'transparent'}
+                                    textColor={'white'}
+                                    id={item.activityId} showActions={showActions}
+                    />}
+                </LinearGradient>
             </View>
         }
         return undefined;

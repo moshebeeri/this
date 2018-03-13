@@ -284,6 +284,7 @@ DiscountType                                  : "Discount Type",
 AdvancedPromotions                            : "Advanced Promotions",
 SimplePromotions                              : "Simple Promotions",
 AddressNotFound                               : "Address Not Found",
+businessCreated                               : "{0} created new business",
 
 
 
