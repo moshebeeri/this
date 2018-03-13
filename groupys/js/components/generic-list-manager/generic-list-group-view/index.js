@@ -22,6 +22,7 @@ import {GroupHeader, ImageController, PromotionHeaderSnippet, ThisText} from '..
 import strings from '../../../i18n/i18n';
 import DateUtils from '../../../utils/dateUtils'
 import SimpleLineIcons from "react-native-vector-icons/SimpleLineIcons";
+import Ionicons from "react-native-vector-icons/Ionicons";
 
 let dateUtils = new DateUtils();
 
@@ -155,6 +156,8 @@ export default class GenericListGroupView extends Component {
                     avetar: require('../../../../images/client_1.png'),
                     name: name
                 }
+
+
             }
             const image = <ImageController thumbnail size={30} source={itemChat.avetar}/>
             return <View style={styles.group_message_container}>
@@ -207,18 +210,21 @@ export default class GenericListGroupView extends Component {
                     name: name
                 }
             }
-            const image = <ImageController thumbnail square size={30} source={post.avetar}/>
+            const image = <ImageController thumbnail small size={30} source={post.avetar}/>
             return <View style={styles.group_message_container}>
 
+                <View style={styles.message_container}>
 
-                <View style={styles.post_container}>
-                    <View style={{paddingTop: 5}}>
+                <Ionicons size={30} style={{marginRight:12,}}color={'#2db6c8'}
+                                 name="ios-person-outline"/>
+
+
                         {image}
-                    </View>
+
 
                     <View style={{padding: 5, alignItems: 'flex-start'}}>
-                        <ThisText>{post.name} {strings.Posted}</ThisText>
-                        <ThisText>{post.title} - {post.message}</ThisText>
+                        <ThisText style={styles.chatListLineTitleText}>{strings.postMessage.formatUnicorn(post.name)}</ThisText>
+                        <ThisText style={{width:250}}ellipsizeMode={'tail'} numberOfLines={1}>{post.message}</ThisText>
                     </View>
                 </View>
 
