@@ -43,6 +43,7 @@ function handlePostCreation(post) {
   if(post.behalf.group) {
     Group.findById(post.behalf.group).exec(function (err, group) {
       group.preview.post = post._id;
+      group.preview.instance_activity = null;
       group.save();
     })
   }

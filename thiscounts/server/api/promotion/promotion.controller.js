@@ -487,6 +487,7 @@ function instance_group_activity(instance, group) {
     }, function (err, activity) {
       if (err) return console.error(err);
       group.preview.instance_activity = activity._id;
+      group.preview.post = null;
       group.save();
       pricing.chargeActivityDistribution(group.entity, activity);
     })
