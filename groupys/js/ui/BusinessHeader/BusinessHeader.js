@@ -167,12 +167,17 @@ class BusinessHeader extends Component {
             <ThisText numberOfLines={1} style={styles.businessAddressText}
                       note>{categoryTitle}</ThisText>}
             </View>
-            {showEdit && <View style={{flex: 0.2, flexDirection: 'row', alignItems: 'center',}}>
+            {showEdit ? <View style={{flexDirection: 'row', alignItems: 'center',}}>
+                <View style={{marginTop:10}}>
                 {editButton}
-            </View>}
-            <View style={{marginRight: 10, padding: 5, marginTop:20, alignItems: 'center', justifyContent: 'center'}}>
+                </View>
+                <View style={{marginRight: 20,  alignItems: 'center', justifyContent: 'center'}}>
+                    {menuAction}
+                </View>
+            </View> :  <View style={{marginRight: 10, padding: 5, marginTop:20, alignItems: 'center', justifyContent: 'center'}}>
                 {!hideMenu && menuAction}
-            </View>
+            </View>}
+
         </View>;
     }
 }

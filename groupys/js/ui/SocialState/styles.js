@@ -18,7 +18,7 @@ module.exports = {
         justifyContent: 'center',
         alignItems:'center',
         backgroundColor:'white',
-        height:30
+        height:40
     },
     promotion_like: {
         marginRight: 5,

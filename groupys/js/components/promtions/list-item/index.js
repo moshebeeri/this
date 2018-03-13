@@ -124,9 +124,12 @@ export default class PromotionListView extends Component {
 
                     </View>
 
-                    {promotionItem.social_state &&  <SocialState disabled shares={promotionItem.social_state.shares}
+                    {promotionItem.social_state &&
+                        <View style={{paddingTop:5}}>
+                    <SocialState disabled shares={promotionItem.social_state.shares}
                                  likes={promotionItem.social_state.likes}
-                                 comments={promotionItem.social_state.comments}/>}
+                                 comments={promotionItem.social_state.comments}/>
+                        </View>}
 
 
                 </View>

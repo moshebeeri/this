@@ -1,16 +1,5 @@
 import React, {Component} from "react";
-import {
-    AppState,
-    Dimensions,
-    I18nManager,
-    Image,
-    Platform,
-    StyleSheetm,
-    Text,
-    TouchableOpacity,
-    View,
-    InteractionManager
-} from "react-native";
+import {AppState, I18nManager, Platform, StyleSheetm, TouchableOpacity, View} from "react-native";
 import {connect} from "react-redux";
 import {Container, Drawer, Fab, Icon, Tab, TabHeading, Tabs,} from "native-base";
 import GeneralComponentHeader from "../header/index";
@@ -32,6 +21,7 @@ import {
     showCompoenent
 } from "../../selectors/appSelector";
 import * as mainAction from "../../actions/mainTab";
+import popupActions from "../../actions/mainTab";
 import * as feedAction from "../../actions/feedsMain";
 import * as userAction from "../../actions/user";
 import * as businessActions from "../../actions/business";
@@ -66,7 +56,7 @@ import StyleUtils from "../../utils/styleUtils";
 import store from 'react-native-simple-store';
 import ActionLogger from '../../actions/ActionLogger'
 import handler from '../../actions/ErrorHandler'
-import popupActions from '../../actions/mainTab'
+
 const height = StyleUtils.getHeight();
 let locationApi = new LocationApi();
 const reduxStore = getStore();
@@ -88,11 +78,9 @@ FCM.on(FCMEvent.Notification, async (notif) => {
         //iOS: app is open/resumed because user clicked banner
         //Android: app is open/resumed because user clicked banner or tapped app icon
     }
-
     if (notif && notif.model === 'instance') {
         let token = reduxStore.getState().authentication.token;
-
-        popupActions.promotionPopAction(notif._id, notif.notificationId,reduxStore.dispatch,token);
+        popupActions.promotionPopAction(notif._id, notif.notificationId, reduxStore.dispatch, token);
         return;
     }
     if (Platform.OS === 'ios') {
@@ -180,9 +168,9 @@ class ApplicationManager extends Component {
             return;
         }
         if (notification && notification.model === 'group') {
-            if(notification.note ==="ask_invite"){
-                this.props.actions.showInviteGroupPopup(notification._id,notification.actor_user,notification.notificationId);
-            }else {
+            if (notification.note === "ask_invite") {
+                this.props.actions.showInviteGroupPopup(notification._id, notification.actor_user, notification.notificationId);
+            } else {
                 this.props.actions.showGroupPopup(notification._id, notification.notificationId, notification.title, notification.action);
             }
             return;
@@ -191,17 +179,14 @@ class ApplicationManager extends Component {
             this.props.actions.showBusinessPopup(notification._id, notification.notificationId, notification.title, notification.action);
             return;
         }
-
         if (notification && notification.model === 'comment') {
-            this.props.actions.redirectToChatGroup(notification.actor_group,notification.notificationId, notification.action,this.props.navigation);
+            this.props.actions.redirectToChatGroup(notification.actor_group, notification.notificationId, notification.action, this.props.navigation);
             FCM.getBadgeNumber().then(number => FCM.setBadgeNumber(0));
             return;
         }
-
         if (notification && notification.title) {
             this.props.actions.showGenericPopup(notification.title, notification.notificationId, notification.action);
         }
-
         AppState.addEventListener('change', this._handleAppStateChange);
     }
 
@@ -214,13 +199,12 @@ class ApplicationManager extends Component {
     }
 
     onChangeTab(tab) {
-        const {notificationAction, myPromotionsAction, feedAction, groupsActions,instanceGroupCommentsAction,actions} = this.props;
+        const {notificationAction, myPromotionsAction, feedAction, groupsActions, instanceGroupCommentsAction, actions} = this.props;
         groupsActions.stopListenForChat();
         instanceGroupCommentsAction.stopListenForChat();
         feedAction.stopMainFeedsListener();
-       // actions.changeTab(tab);
-
-       // this.setState({activeTab:tab.i})
+        // actions.changeTab(tab);
+        // this.setState({activeTab:tab.i})
     }
 
     navigateToAdd() {
@@ -248,21 +232,19 @@ class ApplicationManager extends Component {
         }
     }
 
-    savePromotionFromPopup(id, navigation, feed){
-
-        const{feedAction} = this.props;
+    savePromotionFromPopup(id, navigation, feed) {
+        const {feedAction} = this.props;
         this.closePopup();
         feedAction.saveFeed(id, navigation, feed);
     }
 
     render() {
         const {
-            showAdd, showComponent, notifications,feedAction,
+            showAdd, showComponent, notifications, feedAction,
             item, location, showPopup, token, notificationTitle,
             notificationAction, notificationGroup, notificationBusiness,
-            showSearchResults, businesses, businessActions, groups, groupsActions, showSearchGroupResults,notificationOnAction
+            showSearchResults, businesses, businessActions, groups, groupsActions, showSearchGroupResults, notificationOnAction
         } = this.props;
-
         console.log(this.state.activeTab);
         if (!showComponent) {
             return <View></View>
@@ -271,7 +253,7 @@ class ApplicationManager extends Component {
         let notificationnTopPadding = 150;
         let leftPadding = 10;
         let sideMargin = 20;
-        let borderSideWidth=2;
+        let borderSideWidth = 2;
         if (item) {
             notificationPopupHeight = 100
             notificationnTopPadding = 30;
@@ -330,7 +312,6 @@ class ApplicationManager extends Component {
                                           navigation={this.props.navigation} index={3}/>
 
 
-
                         </ScrolTabView>
                     }
 
@@ -350,9 +331,9 @@ class ApplicationManager extends Component {
                     {showPopup && <View style={{
                         left: leftPadding,
                         borderTopWidth: 2,
-                        borderBottomWidth:2,
-                        borderLeftWidth:borderSideWidth,
-                        borderRightWidth:borderSideWidth,
+                        borderBottomWidth: 2,
+                        borderLeftWidth: borderSideWidth,
+                        borderRightWidth: borderSideWidth,
                         borderColor: 'black',
                         top: notificationnTopPadding,
                         position: 'absolute',
@@ -369,46 +350,48 @@ class ApplicationManager extends Component {
                         </TouchableOpacity>
 
                         {item ?
-                        <View style={{
-                            flex: 1,
-                            width: StyleUtils.getWidth() - 5,
-                            justifyContent: 'center',
-                            alignItems: 'center'
-                        }}>
-                            <FeedPromotion scanner showActions={true}  token={token}
-                                           location={location} actions={feedAction}
-                                           navigation={this.props.navigation} item={item}
-                                           like={feedAction.like} unlike={feedAction.unlike}
-                                           save={this.savePromotionFromPopup.bind(this)}/>
+                            <View style={{
+                                flex: 1,
+                                width: StyleUtils.getWidth() - 5,
+                                justifyContent: 'center',
+                                alignItems: 'center'
+                            }}>
+                                <FeedPromotion scanner showActions={true} token={token}
+                                               location={location} actions={feedAction}
+                                               navigation={this.props.navigation} item={item}
+                                               like={feedAction.like} unlike={feedAction.unlike}
+                                               save={this.savePromotionFromPopup.bind(this)}/>
 
 
-                        </View> :
+                            </View> :
+                            <View style={{
+                                flex: 1,
+                                width: StyleUtils.getWidth() - 5,
+                                justifyContent: 'flex-start',
+                                alignItems: 'center'
+                            }}>
 
-                        <View style={{
-                            flex: 1,
-                            width: StyleUtils.getWidth() - 5,
-                            justifyContent: 'flex-start',
-                            alignItems: 'center'
-                        }}>
 
-
-                            <View style={{flex: 1, alignItems: 'center', justifyContent: 'center'}}>
-                                {notificationGroup && <GroupHeader group={notificationGroup}/>}
-                                {notificationBusiness && <BusinessHeader noProfile business={notificationBusiness}
-                                                                         businessLogo={notificationBusiness.logo}
-                                                                         businessName={notificationBusiness.name}
-                                                                         noMargin
-                                                                         hideMenu
-                                                                         showActions={false}/>
-                                }
-                                <ThisText style={{width: StyleUtils.getWidth() - 40, paddingTop: 10}}>{notificationTitle}</ThisText>
-                            </View>
-                            {notificationActionString &&
-                            <View style={{flex: 1, paddingBottom: 10, justifyContent: 'flex-end',}}>
-                                <SubmitButton color={'#2db6c8'} title={notificationActionString}
-                                              onPress={this.handleGenericNotification.bind(this)}/>
+                                <View style={{flex: 1, alignItems: 'center', justifyContent: 'center'}}>
+                                    {notificationGroup && <GroupHeader group={notificationGroup}/>}
+                                    {notificationBusiness && <BusinessHeader noProfile business={notificationBusiness}
+                                                                             businessLogo={notificationBusiness.logo}
+                                                                             businessName={notificationBusiness.name}
+                                                                             noMargin
+                                                                             hideMenu
+                                                                             showActions={false}/>
+                                    }
+                                    <ThisText style={{
+                                        width: StyleUtils.getWidth() - 40,
+                                        paddingTop: 10
+                                    }}>{notificationTitle}</ThisText>
+                                </View>
+                                {notificationActionString &&
+                                <View style={{flex: 1, paddingBottom: 10, justifyContent: 'flex-end',}}>
+                                    <SubmitButton color={'#2db6c8'} title={notificationActionString}
+                                                  onPress={this.handleGenericNotification.bind(this)}/>
+                                </View>}
                             </View>}
-                        </View>}
                     </View>}
 
                 </Container>
@@ -428,17 +411,17 @@ class ApplicationManager extends Component {
     }
 
     closePopup() {
-        const {notificationId,notificationAction} = this.props;
+        const {notificationId, notificationAction} = this.props;
         notificationAction.readNotification(notificationId);
         this.props.actions.closePopup(notificationId);
     }
 
     handleGenericNotification() {
-        const {notificationAction, notificationId,notificationGroup,notificationOnAction} = this.props;
+        const {notificationAction, notificationId, notificationGroup, notificationOnAction} = this.props;
         this.props.actions.doNotification(notificationId, notificationAction);
         notificationAction.readNotification(notificationId);
         //Add generic API result
-        if(notificationOnAction === strings.JoinGroup.toUpperCase()) {
+        if (notificationOnAction === strings.JoinGroup.toUpperCase()) {
             this.props.groupsActions.acceptInvitation(notificationGroup);
         }
     }
