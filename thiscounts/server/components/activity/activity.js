@@ -34,6 +34,7 @@ function update_feeds(effected, activity) {
   if(!activity.audience || _.includes(activity.audience, 'FOLLOWERS')) {
     activity.distributions += effected.length;
     effected.forEach(function (entity) {
+      //console.log(`update_feeds FOLLOWERS entity: ${entity._id} `);
       Feed.create({
         entity: entity._id,
         activity: activity._id
@@ -45,15 +46,20 @@ function update_feeds(effected, activity) {
     });
   }
   if (_.includes(activity.audience, 'SELF')) {
-    activity.distributions += 1;
-    Feed.create({
-      entity: getActivityActor(activity),
+    const actor = getActivityActor(activity);
+    effected = effected.map(e=>e._id);
+    //console.log(`update_feeds SELF ${JSON.stringify({effected, actor, includes: effected.includes(actor)})} `);
+    if (!effected.includes(actor)) {
+      activity.distributions += 1;
+      Feed.create({
+      entity: actor,
       activity: activity._id
-    }, function (err) {
-      if (err) {
-        logger.error(err.message);
-      }
-    });
+      }, function (err) {
+        if (err) {
+          logger.error(err.message);
+        }
+      });
+    }
   }
 }
 

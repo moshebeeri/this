@@ -7,7 +7,7 @@ const autopopulate = require('mongoose-autopopulate');
 
 let PostSchema = new Schema({
   social_state : {},
-  title: {type: String, required: true},
+  title: {type: String},
   gid: {type: Number, index: true},
   creator: {type: Schema.ObjectId, ref: 'User', autopopulate: utils.userAutopopulateOptions},
   created: {type: Date, required: true},
