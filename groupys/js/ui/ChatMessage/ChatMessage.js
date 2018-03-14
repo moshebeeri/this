@@ -15,17 +15,15 @@ import Icon from 'react-native-vector-icons/EvilIcons';
 import Icon2 from 'react-native-vector-icons/MaterialIcons'
 import {Menu, MenuOption, MenuOptions, MenuTrigger,} from 'react-native-popup-menu';
 import strings from "../../i18n/i18n"
-
+import Ionicons from 'react-native-vector-icons/Ionicons';
 let dateUtils = new DateUtils();
 export default class ChatMessage extends Component {
-
-    reply(){
-
+    reply() {
     }
 
-    claim(){
-
+    claim() {
     }
+
     render() {
         const {item, wide} = this.props;
         const containerStyle = {
@@ -40,23 +38,22 @@ export default class ChatMessage extends Component {
         if (wide) {
             styleContainer = styles.messageWideUserName;
         }
-
         let replayMenu = <Menu>
-            <MenuTrigger >
+            <MenuTrigger>
                 <Icon2 active color={"#90a1a2"} size={25} name={'touch-app'}/>
-    </MenuTrigger>
-        <MenuOptions>
+            </MenuTrigger>
+            <MenuOptions>
 
-            <MenuOption onSelect={this.reply.bind(this)}>
-                <ThisText style={{color: '#616F70'}}>{strings.Reply}</ThisText>
-            </MenuOption>
-            <MenuOption onSelect={this.claim.bind(this)}>
-            <ThisText style={{color: '#616F70'}}>{strings.Claim}</ThisText>
-    </MenuOption>
+                <MenuOption onSelect={this.reply.bind(this)}>
+                    <ThisText style={{color: '#616F70'}}>{strings.Reply}</ThisText>
+                </MenuOption>
+                <MenuOption onSelect={this.claim.bind(this)}>
+                    <ThisText style={{color: '#616F70'}}>{strings.Claim}</ThisText>
+                </MenuOption>
 
 
-    </MenuOptions>
-    </Menu>;
+            </MenuOptions>
+        </Menu>;
         if (!item.isUser) {
             return <View style={containerStyle}>
                 <View style={styles.messageUsercomponent}>
@@ -89,36 +86,67 @@ export default class ChatMessage extends Component {
 
                             </View>
                             <View style={styleContainer}>
+                                {item.instance && <View>
+                                    <View style={{marginTop: 5}}><ThisText style={{
+                                        fontSize: 14,
+                                        color: '#616F70'
+                                    }}>{strings.CreatedByBusiness.formatUnicorn(item.instance.businessName)}</ThisText>
+                                    </View>
 
+                                    <View style={{
+                                        borderBottomColor: '#E6E6E6',
+                                        paddingTop: 2,
+                                        marginTop: 10,
+                                        borderBottomWidth: 1,
+                                        flexDirection: 'row'
+                                    }}>
+                                        <Icon active color={"#2db6c8"} size={25} name={'tag'}/>
+
+                                        <ThisText style={{
+                                            fontSize: 14,
+                                            color: '#616F70'
+                                        }}>{item.instance.promotionTerm}</ThisText></View>
+                                </View>}
+
+                                {item.post && <View>
+                                    <View style={{marginTop: 5}}><ThisText style={{
+                                        fontSize: 14,
+                                        color: '#616F70'
+                                    }}>{strings.postMessage.formatUnicorn(item.post.name)}</ThisText>
+                                    </View>
+
+                                    <View style={{
+                                        borderBottomColor: '#E6E6E6',
+                                        paddingTop: 2,
+                                        marginTop: 10,
+                                        paddingBottom: 8,
+                                        borderBottomWidth: 1,
+                                        flexDirection: 'row'
+                                    }}>
+                                        <Ionicons size={25} style={{marginRight:12,}}color={'#2db6c8'}
+                                                  name="ios-person-outline"/>
+                                        <ThisText style={{
+                                            fontSize: 14,
+                                            color: '#616F70',
+                                            width: 200,
+                                        }}>{item.post.feed.text}</ThisText></View>
+                                </View>}
                                 <View style={styles.message_container_user}>
                                     <ThisText numberOfLines={3} style={styles.messageText}>{item.message}</ThisText>
 
-                                    {item.instance && <View style={{
-                                        borderTopColor: '#E6E6E6',
-                                        paddingTop: 2,
-                                        marginTop: 10,
-                                        borderTopWidth: 1,
-                                        flexDirection:'row'
-                                    }}>
-                                        <Icon active color={"#2db6c8"} size={25} name={'tag'}/>
-                                        <ThisText style={{
-                                        fontSize: 14,
-                                        color: '#616F70'
-                                    }}>{item.instance.promotionTerm}</ThisText></View>}
 
                                 </View>
 
 
                             </View>
-                            {item.instance && <View style={{marginLeft:4,alignItems: 'center', justifyContent: 'center'}}>
-                                {replayMenu}
-                            </View>}
+
                         </View>
-                        {item.instance ? <View style={{marginRight:14,alignItems: 'flex-end', justifyContent: 'flex-end'}}>
-                            {messageTime}
-                        </View> :  <View style={{alignItems: 'flex-end', justifyContent: 'flex-end'}}>
-                            {messageTime}
-                        </View>}
+                        {item.instance ?
+                            <View style={{marginRight: 14, alignItems: 'flex-end', justifyContent: 'flex-end'}}>
+                                {messageTime}
+                            </View> : <View style={{alignItems: 'flex-end', justifyContent: 'flex-end'}}>
+                                {messageTime}
+                            </View>}
 
                     </View>
 
@@ -135,33 +163,61 @@ export default class ChatMessage extends Component {
                 backgroundColor: '#E6E6E6',
             }}>
                 <View style={{flexDirection: 'row'}}>
-                    {item.instance && <View style={{marginRight:4,alignItems: 'center', justifyContent: 'center'}}>
-                        {replayMenu}
-                    </View>}
+
                     <View style={styles.messageComponent}>
 
 
-                            <View style={styles.messageName}>
+                        <View style={styles.messageName}>
 
+                            <View>
+                                {item.instance &&
                                 <View>
+                                    <View style={{marginTop: 5}}><ThisText style={{
+                                        fontSize: 14,
+                                        color: 'white'
+                                    }}>{strings.CreatedByBusiness.formatUnicorn(item.instance.businessName)}</ThisText>
+                                    </View>
+                                    <View style={{
+                                        borderBottomColor: 'white',
+                                        paddingTop: 2,
+                                        marginTop: 10,
+                                        borderBottomWidth: 1,
+                                        flexDirection: 'row'
+                                    }}>
+                                        <Icon active color={"white"} size={25} name={'tag'}/>
+                                        <ThisText style={{
+                                            fontSize: 14,
+                                            color: 'white'
+                                        }}>{item.instance.promotionTerm}</ThisText></View>
+                                </View>}
+                                {item.post &&
+                                <View >
+                                    <View style={{marginTop: 5}}><ThisText style={{
+                                        fontSize: 14,
+                                        color: 'white'
+                                    }}>{strings.postMessage.formatUnicorn(item.post.name)}</ThisText>
+                                    </View>
+                                    <View style={{
+                                        borderBottomColor: 'white',
+                                        paddingTop: 2,
+                                        borderBottomWidth: 1,
+                                        paddingBottom: 8,
+                                        flexDirection: 'row'
+                                    }}>
+                                        <Ionicons size={25} style={{marginRight:12,}}color={'white'}
+                                                  name="ios-person-outline"/>
+                                        <ThisText style={{
+                                            fontSize: 14,
+                                            color: 'white',
+                                            width: 200,
+
+                                        }}>{item.post.feed.text}</ThisText></View>
+                                </View>}
 
                                 <View style={styles.message_container}>
                                     <ThisText numberOfLines={3}
                                               style={styles.messageTextWhite}>{item.message}</ThisText>
 
-                                    {item.instance && <View style={{
-                                        borderTopColor: 'white',
-                                        paddingTop: 2,
-                                        marginTop: 10,
-                                        borderTopWidth: 1,
-
-                                        flexDirection:'row'
-                                    }}>
-                                        <Icon active color={"white"} size={25} name={'tag'}/>
-                                        <ThisText style={{
-                                        fontSize: 14,
-                                        color: 'white'
-                                    }}>{item.instance.promotionTerm}</ThisText></View>}
 
                                 </View>
 
@@ -192,7 +248,7 @@ export default class ChatMessage extends Component {
                     </View>
 
                 </View>
-                <View style={{marginRight:8,alignItems: 'flex-end', justifyContent: 'flex-end'}}>
+                <View style={{marginRight: 8, alignItems: 'flex-end', justifyContent: 'flex-end'}}>
                     {messageTime}
                 </View>
             </View>
@@ -207,7 +263,6 @@ export default class ChatMessage extends Component {
         if (date) {
             return <ThisText note
                              style={styles.timeText}>{dateUtils.messageFormater(date)}</ThisText>
-
         }
         return undefined;
     }

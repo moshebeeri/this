@@ -2,6 +2,7 @@ const initialState = {
     comments: [],
     groupComments: {},
     groupCommentsOrder: {},
+    replyInstance: {},
     groupUnreadComments:{},
     loadingDone: {},
     showTopLoader: {},
@@ -48,6 +49,7 @@ export default function comment(state = initialState, action) {
                 currentState.lastInstanceId[action.gid]  =   lastCommentGroup.entities.instance._id
             }
             return currentState;
+
         case actions.UPSERT_GROUP_TOP_COMMENT :
             action.item.forEach(comment => {
                 if (!groupsComment[action.gid]) {
@@ -96,8 +98,12 @@ export default function comment(state = initialState, action) {
         case actions.GROUP_COMMENT_MAX_NOT_RETRUNED:
             currentState.maxCallDone[action.gid] = false;
             return currentState;
-
-
+        case actions.GROUP_COMMENT_INSTANCE:
+            currentState.replyInstance = action.instance;
+            return currentState;
+        case actions.GROUP_CLEAR_COMMENT_INSTANCE:
+            currentState.replyInstance = undefined;
+            return currentState;
         case actions.GROUP_COMMENT_ADD_MESSAGE:
 
             if (!clientMessage[action.groupId]) {

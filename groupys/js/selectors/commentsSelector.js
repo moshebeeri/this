@@ -26,7 +26,7 @@ export const getFeeds = createSelector([getStateFeeds],
                             instance = feedUiConverter.createPromotionInstance(instance)
                         }
                         if (post) {
-                            post = feedUiConverter.createPost(lastPost)
+                            post = feedUiConverter.createPost(post)
                         }
                         response[groupId].unshift({
                             id: feedId,

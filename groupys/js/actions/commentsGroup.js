@@ -8,12 +8,11 @@ import {put} from 'redux-saga/effects'
 let commentsApi = new CommentsApi();
 let logger = new ActionLogger();
 
-export function sendMessage(groupId, message) {
+export function sendMessage(groupId, message,instanceId) {
     return async function (dispatch, getState) {
         try {
             const token = getState().authentication.token;
             const user = getState().user.user;
-            const instanceId = getState().comments.lastInstanceId[groupId];
             let messageItem = createMessage(message, user);
             dispatch({
                 type: actions.GROUP_COMMENT_ADD_MESSAGE,

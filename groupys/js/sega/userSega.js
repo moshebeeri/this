@@ -10,10 +10,11 @@ let userApi = new UserApi();
 function* saveUserRequest() {
     const {newUser, token,} = yield take(segaActions.SAVE_USER_REQUEST);
     try {
+
         yield call(userApi.saveUserDetails, newUser, newUser._id, token);
         handleSucsess();
         if (newUser.image) {
-            ImageApi.uploadImage(token, newUser.image, newUser._id);
+            yield call(ImageApi.uploadImage,token, newUser.image, newUser._id);
         }
         let pictures = []
         if (newUser.image.path) {
@@ -24,6 +25,8 @@ function* saveUserRequest() {
             newUser.pictures.push({pictures: pictures});
         }
         yield* upSertUserSuccsess(newUser)
+
+
     }
     catch
         (error) {

@@ -37,6 +37,7 @@ import DocumentPicker from './DocumentPicker/DocumentPicker'
 import TermsOfUse from './TermOfUse/TermsOfUse'
 import ImageController from './ImageController/ImageController'
 import ThisText from './ThisText/ThisText'
+import ChatPreviewPromotion from './ChatPreviewPromotion/ChatPreviewPromotion'
 export {
     ImagePicker,
     CategoryPicker,
@@ -76,5 +77,6 @@ export {
     DocumentPicker,
     TermsOfUse,
     ImageController,
-    ThisText
+    ThisText,
+    ChatPreviewPromotion
 }

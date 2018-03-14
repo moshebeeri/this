@@ -6,6 +6,7 @@ class CommentApi {
             entities: [
                 {group: group},
                 {instance: instance},
+                {post: instance},
             ]
             ,
             message: comment

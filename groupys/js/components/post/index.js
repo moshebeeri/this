@@ -203,7 +203,7 @@ class AddPost extends Component {
                                    numberOfLines={4}
                                    textArea={true}
                                    onSubmitEditing={this.focusNextField.bind(this, "3")}
-                                   onChangeText={(post) => this.setState({post})} isMandatory={false}/>
+                                   onChangeText={(post) => this.setState({post})} isMandatory={true}/>
                     </View>
                     <View style={styles.inputTextLayour}>
                         <TextInput field={strings.YouTubeUrl} value={this.state.youTubeUrl}

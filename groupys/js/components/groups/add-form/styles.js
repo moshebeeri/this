@@ -34,6 +34,16 @@ module.exports = {
     addCoverText: {
         color: 'white', margin: 5, fontSize: 16
     },
+    textInputTextStyle: {
+        color: '#3A3A3A',
+        fontFamily: 'Roboto-Regular',
+        fontSize: 16,
+        justifyContent:   'flex-start' ,
+        marginLeft:  8,
+        // margiRight:  I18nManager.isRTL ? 0:10,
+        marginBottom:5,
+
+    },
     inputTextLayour: {
         marginTop: 4, padding: 3,
         width: width - 15

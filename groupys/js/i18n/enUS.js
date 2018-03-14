@@ -286,6 +286,9 @@ SimplePromotions                              : "Simple Promotions",
 AddressNotFound                               : "Address Not Found",
 businessCreated                               : "{0} created new business",
 postMessage                                   : "{0} posted",
+GroupChat                                     : "Group Chat",
+CreatedByBusiness                             : "Created by {0}",
+
 
 
 
