@@ -253,7 +253,7 @@ async function getUserFollowers(dispatch) {
 
 async function getUser(dispatch) {
     try {
-        let user = await userApi.getUser();
+        let user = await UserApi.getUser();
         dispatch({
             type: 'GET_USER',
             user: user

@@ -15,7 +15,7 @@ let logger = new ActionLogger();
 
 async function getUser(dispatch, token) {
     try {
-        let user = await userApi.getUser(token);
+        let user = await UserApi.getUser(token);
         dispatch({
             type: actions.UPSERT_SINGLE_USER,
             item: user
@@ -138,7 +138,7 @@ async function updateUserLocale(dispatch, token, user, locale) {
             });
             user.locale = locale;
             await userApi.saveUserDetails(user, user._id, token, dispatch);
-            let updatedUser = await userApi.getUser(token);
+            let updatedUser = await UserApi.getUser(token);
             simpleStore.save('user', updatedUser);
             dispatch({
                 type: actions.UPSERT_SINGLE_USER,
@@ -173,7 +173,7 @@ async function updateUserToken(dispatch, token, user, fireBaseToken) {
             });
             user.firebase = {tokens: [fireBaseToken]};
             await userApi.saveUserDetails(user, user._id, token, dispatch);
-            let updatedUser = await userApi.getUser(token);
+            let updatedUser = await UserApi.getUser(token);
             simpleStore.save('user', updatedUser);
             dispatch({
                 type: actions.UPSERT_SINGLE_USER,
@@ -200,7 +200,7 @@ async function updateUserTask(dispatch, token, newUser) {
         });
         console.log('updating user')
         userApi.saveUserDetails(newUser, user._id, token, dispatch);
-        let updatedUser = await userApi.getUser(token);
+        let updatedUser = await UserApi.getUser(token);
         simpleStore.save('user', updatedUser);
         dispatch({
             type: actions.UPSERT_SINGLE_USER,
