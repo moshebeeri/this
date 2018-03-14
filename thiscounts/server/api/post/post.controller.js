@@ -76,15 +76,12 @@ exports.create = function(req, res) {
         audience        : ['SELF', 'FOLLOWERS']
       };
 
-      console.log(`POST: ${JSON.stringify(act)}`);
-
       if(act.actor_user)
         act.audience =['SELF', 'FOLLOWERS'];
       else if(act.actor_group)
         act.ids = [act.actor_group];
 
       Post.findById(post._id).exec((err, post) => {
-
         if (err) { return handleError(res, err); }
         pricing.balance(post.behalf, function (err, positiveBalance) {
           if (err) return handleError(res, err);
