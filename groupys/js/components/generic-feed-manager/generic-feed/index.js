@@ -43,6 +43,11 @@ export default class GenericFeedItem extends Component {
     }
 
     comment() {
+        if (this.props.group && this.props.navigateToChat) {
+            this.props.navigateToChat(this.props.item)
+            return;
+        }
+
         if (this.props.group) {
             this.props.navigation.navigate('InstanceGroupComments', {
                 group: this.props.group,

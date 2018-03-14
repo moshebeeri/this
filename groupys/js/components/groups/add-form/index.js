@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import {Dimensions, Image, Platform, ScrollView, Text, TouchableOpacity, View,Keyboard} from 'react-native';
+import {Dimensions, Image, Keyboard, Platform, ScrollView, Switch, TouchableOpacity, View} from 'react-native';
 import {connect} from 'react-redux';
 import styles from './styles'
 import {getMyBusinesses} from '../../../selectors/businessesSelector'
@@ -64,6 +64,7 @@ class AddGroup extends Component {
             this.state = {
                 name: group.name,
                 info: group.description,
+                groupChat: (group.group_chat==='ON') ? true : false,
                 showUsers: false,
                 images: '',
                 users: [],
@@ -104,11 +105,12 @@ class AddGroup extends Component {
                 groupPolocy: '',
                 groupType: 'USERS',
                 path: '',
+                groupChat: false,
                 image: '',
                 updateMode: false,
                 business: '',
                 viewOnly: false,
-                services: []
+                services: [],
             };
         }
     }
@@ -117,6 +119,10 @@ class AddGroup extends Component {
         this.setState({
             business: value
         })
+    }
+
+    groupChatToggle(value) {
+        this.setState({groupChat: !this.state.groupChat});
     }
 
     componentWillMount() {
@@ -165,6 +171,7 @@ class AddGroup extends Component {
             group.name = this.state.name;
             group.description = this.state.info;
             group.image = this.state.image;
+            group.chat_policy = this.state.groupChat ? 'ON' : 'OFF';
             actions.updateGroup(group, this.props.navigation)
         }
     }
@@ -190,6 +197,7 @@ class AddGroup extends Component {
                 name: this.state.name,
                 description: this.state.info,
                 entity_type: this.state.groupType,
+                chat_policy: this.state.groupChat ? 'ON' : 'OFF',
                 add_policy: this.state.groupPolocy,
                 image: this.state.image,
                 groupUsers: this.state.selectedUsers,
@@ -204,6 +212,7 @@ class AddGroup extends Component {
             description: this.state.info,
             entity_type: this.state.groupType,
             add_policy: this.state.groupPolocy,
+            chat_policy: this.state.groupChat ? 'ON' : 'OFF',
             image: this.state.image,
             groupUsers: this.state.selectedUsers,
             entity: {
@@ -382,6 +391,18 @@ class AddGroup extends Component {
 
                     {this.createCoverImageComponnent()}
                     {qrcodeView}
+                    <View style={{
+                        marginTop: 4, padding: 3, marginBottom: 5,
+                        width: width - 15, justifyContent: 'space-between', flexDirection: 'row'
+                    }}>
+                        <ThisText style={styles.textInputTextStyle}>{strings.GroupChat}</ThisText>
+                        <Switch
+
+                            onTintColor={'#2db6c8'}
+
+                            onValueChange={this.groupChatToggle.bind(this)}
+                            value={this.state.groupChat}/>
+                    </View>
                     <SimplePicker value={selectedGroupPolicy} ref="groupPolicyType"
                                   disable={this.state.viewOnly}
                                   list={groupPolicy} itemTitle={strings.GroupPolicy}
@@ -394,6 +415,8 @@ class AddGroup extends Component {
                                   onValueSelected={this.selectGroupType.bind(this)}/>}
 
                     {!this.state.updateMode && BusinessPiker}
+
+
                     <View style={styles.inputTextLayour}>
                         <TextInput disabled={this.state.viewOnly} field={strings.GroupName} value={this.state.name}
                                    returnKeyType='next' ref="1" refNext="1"

@@ -45,13 +45,14 @@ export default class GenericFeedManager extends Component {
     }
 
     renderItem(item) {
-        const {navigation, token, userFollowers, group, ItemDetail, actions,entity, location,visibleItem,realize,visibleFeeds} = this.props;
+        const {navigation,navigateToChat, token, userFollowers, group, ItemDetail, actions,entity, location,visibleItem,realize,visibleFeeds} = this.props;
         let id = item.item.id;
         if(!id){
             id = item.item._id;
         }
         return <ItemDetail
             key={id}
+            navigateToChat={navigateToChat}
             user={entity}
             token={token}
             location={location}

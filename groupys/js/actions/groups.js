@@ -584,6 +584,27 @@ export function setVisibleItem(itemId,groupId) {
         });
     }
 }
+
+export function clearReplyInstance() {
+    return function (dispatch) {
+        dispatch({
+            type: actions.GROUP_CLEAR_COMMENT_INSTANCE,
+        });
+    }
+}
+
+
+export function setReplayInstance(item) {
+    return function (dispatch) {
+        dispatch({
+            type: actions.GROUP_COMMENT_INSTANCE,
+            instance: item
+        });
+    }
+}
+
+
+
 export function setTopFeeds(group) {
     return async function (dispatch, getState) {
         const token = getState().authentication.token;

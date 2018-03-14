@@ -60,7 +60,7 @@ class GroupFeedComponent extends Component {
 
 
     render() {
-        const {visibleFeeds,navigation, activityAction,group,feeds, userFollower, actions, token, loadingDone, location, showTopLoader,postUpdated} = this.props;
+        const {visibleFeeds,navigateToChat,navigation, activityAction,group,feeds, userFollower, actions, token, loadingDone, location, showTopLoader,postUpdated} = this.props;
 
         const icon = <Icon2 active size={40} name="md-create"/>;
 
@@ -72,6 +72,7 @@ class GroupFeedComponent extends Component {
                 showTopLoader={showTopLoader[group._id]}
                 userFollowers={userFollower}
                 feeds={feeds[group._id]}
+                navigateToChat={navigateToChat}
                 actions={actions}
                 token={token}
                 entity={group}

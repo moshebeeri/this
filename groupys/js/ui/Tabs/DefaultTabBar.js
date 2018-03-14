@@ -95,6 +95,11 @@ const DefaultTabBar = createReactClass({
             return <SimpleLineIcons size={25} color={'#2db6c8'}
                                     name="tag"/>
         }
+
+        if(name === 'chat'){
+            return <SimpleLineIcons size={25} color={'#2db6c8'}
+                                    name="bubble"/>
+        }
         return <ThisText style={[{color: '#2db6c8'}]}>
             {name}
         </ThisText>

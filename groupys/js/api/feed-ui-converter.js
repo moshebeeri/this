@@ -93,6 +93,7 @@ class FeedConverter {
             id: post._id,
             generalId: post._id,
             entities: [{post: post._id}],
+            feed:post
         }
         if (post.pictures && post.pictures[0]) {
             responseFeed.banner = {

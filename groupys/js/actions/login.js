@@ -37,7 +37,7 @@ export function login(phone, password, navigation) {
                 dispatch({
                     type: actions.LOGIN_SUCSESS,
                 });
-                let user = await UserApi.getUser(response.token);
+                let user = await userApi.getUser(response.token);
                 dispatch({
                     type: actions.SET_USER,
                     user: user

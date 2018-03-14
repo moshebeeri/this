@@ -81,6 +81,7 @@ class CommentsComponent extends Component {
                     <View style={{flex: 10}}>
                         {commentsView}
                     </View>
+
                     <View>
                         <MessageBox onPress={this._onPressButton.bind(this)}/>
                     </View>
