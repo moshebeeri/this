@@ -53,6 +53,7 @@ class FeedConverter {
             generalId: feed.activity.post._id,
             entities: [{post: feed.activity.post._id}],
         }
+        responseFeed.shareable = feed.activity.shareable;
         if (feed.activity.post.pictures && feed.activity.post.pictures[0]) {
             responseFeed.banner = {
                 uri: feed.activity.post.pictures[0].pictures[1]
@@ -434,6 +435,7 @@ class FeedConverter {
             responseFeed.id = instance._id;
             responseFeed.fid = feed._id;
             responseFeed.key = feed._id;
+            responseFeed.shareable = feed.activity.shareable;
             if (feed.activity) {
                 responseFeed.activityId = feed.activity._id;
                 responseFeed.blocked = feed.activity.blocked;

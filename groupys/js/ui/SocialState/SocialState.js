@@ -117,11 +117,13 @@ export default class SocialState extends Component {
     }
 
     createShareButton() {
-        const {share, shares, disabled, shareAction, feed, shareDisabled} = this.props;
+        const {share, shares, disabled, shareAction, feed, shareDisabled,shareable} = this.props;
         let componentStyle = styles.promotionBusiness;
         if (feed) {
             componentStyle = styles.promotionFeed;
         }
+
+
         let componenColor = '#e19c73';
         if (feed) {
             componenColor = '#2db6c8';
@@ -129,9 +131,9 @@ export default class SocialState extends Component {
                 componenColor = '#cccccc';
             }
         }
-        if (disabled || shareDisabled) {
+        if (disabled || shareDisabled ||!shareable) {
             return <View transparent style={styles.promotion_iconView}>
-                <EvilIcons size={35} color={componenColor} style={{marginRight: 10}}
+                <EvilIcons size={35} color={'#cccccc'} style={{marginRight: 10}}
                            name="share-google"/>
                 <ThisText style={styles.socialTextColor}>{shares}</ThisText>
 

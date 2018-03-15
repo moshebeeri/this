@@ -186,6 +186,7 @@ export default class FeedPost extends Component {
                                      onPressUnLike={() => unlike(item.id, token)}
                                      onPressLike={() => like(item.id, token)}
                                      shareDisabled={shared}
+                                     shareable = {item.shareable}
                                      share={item.social.share} shares={item.social.shares}
                                      shareAction={showUsers}/>
                     </View>}

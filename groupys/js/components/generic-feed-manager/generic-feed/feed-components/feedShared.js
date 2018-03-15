@@ -73,12 +73,13 @@ export default class FeedShared extends Component {
     }
 
     createSharedActivity(item) {
-        const {refresh, like, unlike, showUsers, comment, token, location, showActions,visibleFeeds} = this.props;
+        const {refresh, like, unlike, actions,showUsers, comment, token, location, showActions,visibleFeeds} = this.props;
         switch (item.shared) {
             case 'PROMOTION':
                 return this.createFeedView(<FeedPromotion shared refresh={refresh} token={token} comment={comment}
                                                           location={location}
                                                           visibleFeeds={visibleFeeds}
+                                                          actions={actions}
                                                           showActions={showActions}
                                                           navigation={this.props.navigation} item={item.shardeActivity}
                                                           like={like} unlike={unlike}
@@ -89,11 +90,13 @@ export default class FeedShared extends Component {
             case'POST':
                 return this.createFeedView(<FeedPost showActions={showActions} shared token={token}
                                                      visibleFeeds={visibleFeeds}
+                                                     actions={actions}
                                                      navigation={this.props.navigation} item={item.shardeActivity}
                                                      like={actions.like} unlike={actions.unlike}
                                                      showUsers={showUsers} comment={comment}/>)
             default:
                 return this.createFeedView(<FeedBusiness shared location={location}
+                                                         actions={actions}
                                                          visibleFeeds={visibleFeeds}
                                                          token={token} refresh={refresh}
                                                          showActions={showActions}
