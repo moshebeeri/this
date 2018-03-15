@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import {Dimensions, Image, ScrollView,Keyboard} from 'react-native';
+import {Dimensions, Image, ScrollView,Keyboard,TouchableOpacity} from 'react-native';
 import {connect} from 'react-redux';
 import {
     Button,
@@ -154,6 +154,9 @@ class AddProduct extends Component {
         })
     }
 
+    openMenu(){
+        this.refs["coverImage"].openMenu();
+    }
     createCoverImageComponnent() {
         const {saving} = this.props;
         if (this.state.coverImage) {
@@ -171,7 +174,7 @@ class AddProduct extends Component {
                 </View>
             </View>
         }
-        return <View style={[styles.product_upper_container, {width: StyleUtils.getWidth()}]}>
+        return <TouchableOpacity onPress={this.openMenu.bind(this)}   style={[styles.product_upper_container, {width: StyleUtils.getWidth()}]}>
             {saving && <Spinner/>}
             <View style={styles.cmeraLogoContainer}>
 
@@ -180,7 +183,7 @@ class AddProduct extends Component {
                                  setImage={this.setCoverImage.bind(this)}/>
                 </View>
             </View>
-        </View>
+        </TouchableOpacity>
     }
 
     render() {

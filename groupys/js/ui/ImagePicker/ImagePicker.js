@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import {Text, View} from 'react-native';
+import {View} from 'react-native';
 import {Button, Input} from 'native-base';
 import {Menu, MenuOption, MenuOptions, MenuTrigger,} from 'react-native-popup-menu';
 import Icon from 'react-native-vector-icons/Entypo';
@@ -12,13 +12,22 @@ export default class ImagePickerComponent extends Component {
         super(props);
         this.state = {
             value: false,
-            invalid: false
+            invalid: false,
+            name: this.props.name,
         }
     }
 
     focus() {
         const {refNext} = this.props;
         this.refs[refNext].focus()
+    }
+
+    openMenu() {
+        if (this.state.name) {
+            this.refs[this.state.name].open();
+        } else {
+            this.refs["picker"].open();
+        }
     }
 
     isValid() {
@@ -110,14 +119,14 @@ export default class ImagePickerComponent extends Component {
     }
 
     render() {
-        const {color, image, video,customStyles,text} = this.props;
+        const {color, image, video, customStyles, text} = this.props;
         let cameraColor = '#003d99';
         if (color) {
             cameraColor = color;
         }
-        let trigger =  <Icon size={35} color={cameraColor} name='camera'/>;
-        if(text){
-            trigger = <View style={{flexDirection:'row'}}>
+        let trigger = <Icon size={35} color={cameraColor} name='camera'/>;
+        if (text) {
+            trigger = <View style={{flexDirection: 'row'}}>
                 <Icon size={35} color={cameraColor} name='camera'/>
                 {text}
             </View>
@@ -126,8 +135,7 @@ export default class ImagePickerComponent extends Component {
             trigger = image;
         }
         if (this.state.invalid && !image) {
-            trigger =<Icon size={35} color={'red'} name='camera'/>;
-
+            trigger = <Icon size={35} color={'red'} name='camera'/>;
         }
         let videoPickerOption;
         if (video) {
@@ -135,7 +143,11 @@ export default class ImagePickerComponent extends Component {
                 <ThisText>{strings.PickVideo}</ThisText>
             </MenuOption>
         }
-        return <Menu>
+        let name = "picker";
+        if (this.state.name) {
+            name = this.state.name;
+        }
+        return <Menu ref={name} name={name}>
             <MenuTrigger customStyles={customStyles}>
                 {trigger}
             </MenuTrigger>

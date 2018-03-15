@@ -1,5 +1,5 @@
 import React, {Component} from "react";
-import {Dimensions, Image, Keyboard, ScrollView, Switch, View} from "react-native";
+import {Dimensions, Image, Keyboard, ScrollView, Switch, View,TouchableOpacity} from "react-native";
 import {connect} from "react-redux";
 import {actions} from "react-native-navigation-redux-helpers";
 import {Button, Container, Content, Footer, Icon, Input, Item, Picker} from "native-base";
@@ -187,7 +187,9 @@ class AddPromotion extends Component {
         this.props.navigation.goBack();
     }
 
-
+    openMenu(){
+        this.refs["coverImage"].openMenu();
+    }
     async componentWillMount() {
         this.props.actions.resetForm();
         if (this.props.navigation.state.params.onBoardType) {
@@ -940,7 +942,7 @@ class AddPromotion extends Component {
                 </View>
             </View>
         }
-        return <View style={[styles.product_upper_container, {width: StyleUtils.getWidth()}]}>
+        return <TouchableOpacity onPress={this.openMenu.bind(this)}  style={[styles.product_upper_container, {width: StyleUtils.getWidth()}]}>
 
             <View style={styles.cmeraLogoContainer}>
 
@@ -953,7 +955,7 @@ class AddPromotion extends Component {
                 </View>
             </View>
 
-        </View>
+        </TouchableOpacity>
     }
 
     validateForm() {
