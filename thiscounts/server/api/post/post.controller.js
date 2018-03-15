@@ -64,15 +64,16 @@ exports.create = function(req, res) {
       if (err) { return handleError(res, err); }
       handlePostCreation(post);
       const act = {
-        creator         : post.creator,
+        creator         : post.creator        ,
         actor_user      : post.behalf.user    ,
         actor_business  : post.behalf.business,
         actor_mall      : post.behalf.mall    ,
         actor_chain     : post.behalf.chain   ,
         actor_group     : post.behalf.group   ,
-        post: post._id,
-        action: 'post',
-        audience: ['SELF', 'FOLLOWERS']
+        sharable        : typeof(post.sharable) === 'boolean'? post.sharable : true,
+        post            : post._id            ,
+        action          : 'post'              ,
+        audience        : ['SELF', 'FOLLOWERS']
       };
 
       if(act.actor_user)
@@ -81,7 +82,6 @@ exports.create = function(req, res) {
         act.ids = [act.actor_group];
 
       Post.findById(post._id).exec((err, post) => {
-
         if (err) { return handleError(res, err); }
         pricing.balance(post.behalf, function (err, positiveBalance) {
           if (err) return handleError(res, err);

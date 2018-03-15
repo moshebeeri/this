@@ -106,6 +106,10 @@ function activity_impl(act, callback) {
 
   ActivitySchema.create(act, function (err, activity) {
     if (err) return callback(err, null);
+    // console.log('=======act======');
+    // console.log(JSON.stringify(act));
+    // console.log('====activity====');
+    // console.log(JSON.stringify(activity));
     activity.audience = act.audience;
 
     if(act.ids){

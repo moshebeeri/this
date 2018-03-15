@@ -97,32 +97,44 @@ exports.share = function (req, res) {
   Activity.findById(req.params.activity, function (err, sharedActivity) {
     if (err) { return handleError(res, err);}
     if (!sharedActivity) {return res.send(404);}
-    if(sharedActivity.sharable === false) { return handleError(res, new Error('activity is not sharable'));}
+    if(sharedActivity.sharable === false) {
+      return handleError(res, new Error('activity is not sharable'));
+    }
 
     let checkQuery =  `MATCH (I:user{_id:'${req.user._id}'})-[:SHARED]->` +
-                            `(item:{_id:'${getActivityEntityId(sharedActivity)}'})-[:SHARED_WITH]->`+
+                            `(item{_id:'${getActivityEntityId(sharedActivity)}'})-[:SHARED_WITH]->`+
                             `(friend:user{_id:'${req.params.user}'})
                       return count(friend) as count`;
-    graphModel.query(checkQuery, (err, count) => {
-      if (err) { return handleError(res, err);}
-      if(count>0) { return handleError(res, new Error('Entity already shared with this user'));}
-    });
+    console.log(`qqq ${checkQuery}`);
+    graphModel.query(checkQuery, (err, result) => {
+      if (err) {
+        console.error(err);
+        return handleError(res, err);
+      }
+      const count = result[0].count;
 
-    let act = {
-      activity: req.params.activity,
-      ids: [req.params.user],
-      action: 'share',
-      sharable: false
-    };
-    act.actor_user = req.user._id;
-    activityUtils.create(act, function (err, shareActivity) {
-      let sharedQuery = ` MATCH (I:user{_id:'${req.user._id}'}), 
-                                (item:{_id:'${getActivityEntityId(sharedActivity)}'}),
+      if(count>0) {
+        return res.status(204).send('Entity already shared with this user');
+      }
+      let act = {
+        activity: req.params.activity,
+        ids: [req.params.user],
+        action: 'share',
+        sharable: false //TODO: Allow re sharing
+      };
+      act.actor_user = req.user._id;
+      activityUtils.create(act, function (err, shareActivity) {
+        if(err) return handleError(res, err);
+
+        let sharedQuery = ` MATCH (I:user{_id:'${req.user._id}'}), 
+                                (item{_id:'${getActivityEntityId(sharedActivity)}'}),
                                 (friend:user{_id:'${req.params.user}'})
                           CREATE UNIQUE (I)-[:SHARED]->(item)-[:SHARED_WITH]->(friend)`;
-      graphModel.query(sharedQuery, () => {});
-      //graphModel.relate_ids(req.user._id, 'SHARE', getActivityEntityId(sharedActivity));
-      return res.json(200, shareActivity);
+        graphModel.query(sharedQuery, (err) => {
+          if(err) return handleError(res, err);
+          return res.status(200).json(shareActivity);
+        });
+      });
     });
   });
 };
@@ -204,5 +216,6 @@ exports.blocked = function (req, res) {
 };
 
 function handleError(res, err) {
-  return res.status(500).send(err);
+  console.error(err);
+  return res.status(500).send(err.message);
 }
