@@ -66,7 +66,7 @@ export function setFirstTime() {
     }
 }
 
-export function setSavedPromotions(response){
+export function setSavedPromotions(response,feedId){
     return {
         type: actions.UPSERT_SAVED_FEEDS,
         item: response

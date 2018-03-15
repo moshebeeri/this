@@ -38,7 +38,12 @@ class BusinessHeader extends Component {
     }
 
     createBusinessLog() {
-        const {businessLogo, small, noProfile} = this.props;
+        const {businessLogo, small, noProfile,size} = this.props;
+
+        let defaultSize = 40;
+        if(size){
+            defaultSize = size;
+        }
         if (businessLogo) {
             if (noProfile) {
                 return <View style={{margin: 10}}>
@@ -56,7 +61,7 @@ class BusinessHeader extends Component {
             }
             return <TouchableOpacity style={{margin: 10}} onPress={this.showBusiness.bind(this)}>
                 <View>
-                    <ImageController  thumbnail  size={40} source={{uri: businessLogo}}/>
+                    <ImageController  thumbnail  size={defaultSize} source={{uri: businessLogo}}/>
                 </View>
             </TouchableOpacity>
         }
@@ -162,7 +167,7 @@ class BusinessHeader extends Component {
                 {back}
             </View>
             {this.createBusinessLog()}
-            <View style={{flex: 1, flexDirection: 'column', justifyContent: 'center'}}>
+            <View style={{flex: 1, marginLeft:10,flexDirection: 'column', justifyContent: 'center'}}>
                 <ThisText style={[nameTextStyle, {color:textColor,fontWeight:'bold'}]} note>{businessName}</ThisText>{categoryTitle &&
             <ThisText numberOfLines={1} style={styles.businessAddressText}
                       note>{categoryTitle}</ThisText>}
@@ -174,7 +179,7 @@ class BusinessHeader extends Component {
                 <View style={{marginRight: 20,  alignItems: 'center', justifyContent: 'center'}}>
                     {menuAction}
                 </View>
-            </View> :  <View style={{marginRight: 10, padding: 5, marginTop:20, alignItems: 'center', justifyContent: 'center'}}>
+            </View> :  <View style={{marginRight: 20, padding: 5, marginTop:20, alignItems: 'center', justifyContent: 'center'}}>
                 {!hideMenu && menuAction}
             </View>}
 

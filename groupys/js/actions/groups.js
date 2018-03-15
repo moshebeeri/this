@@ -414,7 +414,7 @@ export function saveFeed(id, navigation, feed) {
                 id: id
             });
             let savedInstance = await promotionApi.save(id);
-            navigation.navigate('realizePromotion', {item: feed, id: savedInstance._id})
+            //navigation.navigate('realizePromotion', {item: feed, id: savedInstance._id})
             dispatch({
                 type: types.SAVE_SINGLE_MYPROMOTIONS_REQUEST,
                 item: savedInstance

@@ -137,21 +137,21 @@ export default class FeedPromotion extends Component {
                             <View><ThisText style={styles.detailsTitleText}>{strings.Expire}</ThisText></View>
                             <View><ThisText style={styles.detailsText}>{item.endDate}</ThisText></View>
                         </View>
-                        {save &&
+                        {!claimDisabled && save &&
                         <View style={styles.editButtonContainer}>
                             <SubmitButton disabledText={strings.Claimed.toUpperCase()}
                                           title={strings.Claim.toUpperCase()} color={'#2db6c8'}
-                                          disabled={claimDisabled} onPress={() => save(item.id, navigation, item)}/>
+                                          onPress={() => save(item.id, navigation, item)}/>
                         </View>
                         }
-                        {realize && !item.isRealized &&
+                        {claimDisabled && !item.isRealized &&
                         <View style={styles.editButtonContainer}>
                             <SubmitButton title={strings.Realize.toUpperCase()} color={'#2db6c8'}
                                           onPress={() => realize(item)}/>
                         </View>
                         }
 
-                        {realize && item.isRealized &&
+                        {claimDisabled && item.isRealized &&
                         <View style={styles.editButtonContainer}>
                             <SubmitButton disabled title={strings.Realized.toUpperCase()} color={'#cccccc'}
                                           onPress={() => realize(item)}/>
@@ -219,13 +219,14 @@ export default class FeedPromotion extends Component {
                 </ImageController>
                 <LinearGradient start={{x: 1, y: 1}} end={{x: 1, y: 0}}
                                 locations={[0,0.8]}
-                                colors={['#00000099', 'transparent']}  style={{height:120,position:'absolute',justifyContent:'flex-end',top:130,backgroundColor:'transparent',width: StyleUtils.getWidth()}}>
+                                colors={['#00000099', 'transparent']}  style={{height:140,position:'absolute',justifyContent:'flex-end',top:110,backgroundColor:'transparent',width: StyleUtils.getWidth()}}>
                     {item.business &&
                     <BusinessHeader navigation={this.props.navigation} business={item.business}
                                     categoryTitle={categoruTitle} businessLogo={item.business.logo}
                                     businessName={item.business.name} noMargin
                                     bgColor={'transparent'}
                                     textColor={'white'}
+                                    size={60}
                                     id={item.activityId} showActions={showActions}
                     />}
                 </LinearGradient>

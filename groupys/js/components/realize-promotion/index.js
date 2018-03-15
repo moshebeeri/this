@@ -36,6 +36,10 @@ class RealizePromotion extends Component {
         if (this.props.navigation.state.params.id) {
             id = this.props.navigation.state.params.id;
         }
+        const{feedToSavedFeed} = this.props;
+        if(feedToSavedFeed[id]){
+            id = feedToSavedFeed[id];
+        }
         let qrCode = await promotionApi.getPromotionQrcode(id);
         Tasks.realizeTaskStart(id);
         BackHandler.addEventListener('hardwareBackPress', this.handleBack.bind(this));
@@ -134,5 +138,6 @@ export default connect(
     state => ({
         update: state.myPromotions.update,
         myPromotions: state.myPromotions.feeds,
+        feedToSavedFeed: state.myPromotions.feedToSavedFeed,
     })
 )(RealizePromotion);

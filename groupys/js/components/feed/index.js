@@ -59,6 +59,9 @@ class Feed extends Component {
             showFab: show
         })
     }
+    realize(item) {
+        this.props.navigation.navigate('realizePromotion', {item: item})
+    }
 
     render() {
         const {activityAction, navigation, loadingDone, showTopLoader, feeds, userFollower, actions, token, user, location, nextBulkLoad, visibleItem,visibleFeeds} = this.props;
@@ -71,6 +74,7 @@ class Feed extends Component {
                     visibleItem={visibleItem}
                     visibleFeeds={visibleFeeds}
                     loadingDone={loadingDone}
+                    realize={this.realize.bind(this)}
                     showTopLoader={showTopLoader}
                     refreshing={this.state.refreshing}
                     onRefresh={this.refreshTop.bind(this)}
