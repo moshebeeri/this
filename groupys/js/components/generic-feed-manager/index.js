@@ -186,7 +186,6 @@ export default class GenericFeedManager extends Component {
         return (
 
             <View style={{backgroundColor: backgroundColor}}>
-                {topLoader}
 
                 <FlatList
                     ref='flatList'

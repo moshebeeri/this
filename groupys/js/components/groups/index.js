@@ -29,18 +29,20 @@ import {bindActionCreators} from "redux";
 class Groups extends Component {
     constructor(props) {
         super(props);
+        this.state={
+            refreshing:false
+        }
     }
 
     onPressItem(item) {
         const {actions, navigation} = this.props;
         actions.touch(item._id);
-        actions.listenForChat(item);
+
         navigation.navigate('GroupFeed', {group: item, role: 'admin'});
     }
     onPressMessageItem(item) {
         const {actions, navigation} = this.props;
-        actions.touch(item._id);
-        actions.listenForChat(item);
+
         navigation.navigate('GroupFeed', {chat:true,group: item, role: 'admin'});
     }
     shouldComponentUpdate(){
@@ -75,6 +77,12 @@ class Groups extends Component {
         }
     }
 
+    refreshTop(){
+        this.setState({refreshing:true});
+        this.props.actions.fetchGroups();
+        this.setState({refreshing:false});
+    }
+
     render() {
         const {update, groups, navigation, actions,visibleItem} = this.props;
         let icon = <Icon5 active color={"#FA8559"} size={25} name="plus"/>
@@ -85,6 +93,8 @@ class Groups extends Component {
             <View style={{flex: 1}}>
                 <GenericListManager rows={groups} navigation={navigation} actions={actions} update={update} setVisibleItem={actions.setVisibleItem}
                                     visibleItem={visibleItem}
+                                    refreshing={this.state.refreshing}
+                                    onRefreshing={this.refreshTop.bind(this)}
                                     onPressItem={this.onPressItem.bind(this)}
                                     onPressMessageItem = {this.onPressMessageItem.bind(this)}
                                     ItemDetail={GenericListGroupView}/>

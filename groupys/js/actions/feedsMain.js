@@ -163,7 +163,7 @@ export const unlike = (id) => {
     }
 };
 
-export function saveFeed(id, navigation, feed) {
+export function saveFeed(id,) {
     return async function (dispatch, getState) {
         try {
             dispatch({
