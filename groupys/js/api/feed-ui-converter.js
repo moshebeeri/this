@@ -53,7 +53,7 @@ class FeedConverter {
             generalId: feed.activity.post._id,
             entities: [{post: feed.activity.post._id}],
         }
-        responseFeed.shareable = feed.activity.shareable;
+        responseFeed.shareable = feed.activity.sharable;
         if (feed.activity.post.pictures && feed.activity.post.pictures[0]) {
             responseFeed.banner = {
                 uri: feed.activity.post.pictures[0].pictures[1]
@@ -435,7 +435,7 @@ class FeedConverter {
             responseFeed.id = instance._id;
             responseFeed.fid = feed._id;
             responseFeed.key = feed._id;
-            responseFeed.shareable = feed.activity.shareable;
+            responseFeed.shareable = feed.activity.sharable;
             if (feed.activity) {
                 responseFeed.activityId = feed.activity._id;
                 responseFeed.blocked = feed.activity.blocked;
@@ -450,7 +450,7 @@ class FeedConverter {
                 responseFeed.social.activityId = feed.activity._id;
                 responseFeed.showsave = !instance.social_state.saved && !instance.social_state.realized && !savedInstancesIds.includes(instance._id);
             }
-            responseFeed.shareable = !instance.shareable;
+            responseFeed.shareable = !instance.sharable;
             responseFeed.endDate = date.toLocaleDateString();
             responseFeed.created = instance.promotion.created;
             responseFeed.name = promotion.name;
