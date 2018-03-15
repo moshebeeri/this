@@ -435,9 +435,10 @@ class FeedConverter {
             responseFeed.id = instance._id;
             responseFeed.fid = feed._id;
             responseFeed.key = feed._id;
-            responseFeed.shareable = feed.activity.sharable;
+
             if (feed.activity) {
                 responseFeed.activityId = feed.activity._id;
+                responseFeed.shareable = feed.activity.sharable;
                 responseFeed.blocked = feed.activity.blocked;
             }
             responseFeed.promotionEntity = promotion;
