@@ -1,8 +1,8 @@
 import React, {Component} from 'react';
-import {Button, Card, CardItem, Container, Content, Footer, Icon, Input, Item, List, ListItem, Text} from 'native-base';
+import {Button, Card, CardItem, Container, Content, Footer, Icon, Input, Item, List, ListItem} from 'native-base';
 import {BackHandler, Dimensions, Image, ScrollView, View} from 'react-native';
 import PromotionApi from '../../api/promotion'
-import {BusinessHeader, PromotionColumnHeader, PromotionSeperator} from '../../ui/index';
+import {BusinessHeader, PromotionColumnHeader, PromotionSeperator, ThisText} from '../../ui/index';
 import strings from "../../i18n/i18n"
 import {connect} from 'react-redux';
 import instanceUtils from '../../utils/instanceUtils'
@@ -13,7 +13,6 @@ import FeedUiConverter from "../../api/feed-ui-converter";
 const deviceHeight = Dimensions.get('window').width;
 let promotionApi = new PromotionApi()
 let feedUiConverter = new FeedUiConverter();
-import {ThisText} from '../../ui/index';
 
 class RealizePromotion extends Component {
     static navigationOptions = {
@@ -32,14 +31,7 @@ class RealizePromotion extends Component {
     }
 
     async componentWillMount() {
-        let id = this.props.navigation.state.params.item.id;
-        if (this.props.navigation.state.params.id) {
-            id = this.props.navigation.state.params.id;
-        }
-        const{feedToSavedFeed} = this.props;
-        if(feedToSavedFeed[id]){
-            id = feedToSavedFeed[id];
-        }
+        const id = this.getSavedId();
         let qrCode = await promotionApi.getPromotionQrcode(id);
         Tasks.realizeTaskStart(id);
         BackHandler.addEventListener('hardwareBackPress', this.handleBack.bind(this));
@@ -69,12 +61,21 @@ class RealizePromotion extends Component {
         return feedUiConverter.createSavedPromotion(savedinstance, savedinstance._id)
     }
 
-    render() {
-        const {myPromotions} = this.props;
+    getSavedId() {
+        const {feedToSavedFeed} = this.props;
         let id = this.props.navigation.state.params.item.id;
         if (this.props.navigation.state.params.id) {
             id = this.props.navigation.state.params.id;
         }
+        if (feedToSavedFeed[id]) {
+            id = feedToSavedFeed[id];
+        }
+        return id;
+    }
+
+    render() {
+        const {myPromotions} = this.props;
+        const id = this.getSavedId();
         let item = this.props.navigation.state.params.item;
         let isRealized = false;
         if (myPromotions[id]) {
@@ -122,7 +123,9 @@ class RealizePromotion extends Component {
                 {isRealized && <View style={{position: 'absolute', left: 15, top: 350, backgroundColor: 'transparent'}}>
                     <ThisText style={{
                         backgroundColor: 'white',
-                        fontSize: 70,
+                        fontSize: 50,
+                        marginLeft:30,
+                        marginTop:20,
                         fontWeight: 'bold',
                         transform: [{rotate: '45deg'}],
                         color: '#2db6c8'

@@ -3,7 +3,7 @@ import FormUtils from "../utils/fromUtils";
 import strings from "../i18n/i18n"
 
 class FeedConverter {
-    createFeed(feed, savedInstancesIds) {
+    createFeed(feed, savedInstancesIds,redeemedInstancesIds) {
         let response = {};
         if (feed.activity.business) {
             response = this.createBusinessUo(feed);
@@ -33,7 +33,7 @@ class FeedConverter {
         if (feed.activity.action === 'instance' || feed.activity.action === 'follower_eligible_by_proximity' ||
             feed.activity.action === 'eligible_by_proximity' || feed.activity.action === 'eligible' ||
             feed.activity.action === 'eligible_on_activity_follow') {
-            return this.createPromotionInstance(feed, savedInstancesIds);
+            return this.createPromotionInstance(feed, savedInstancesIds,redeemedInstancesIds);
         }
         if (feed.activity.action === 'share') {
             return this.createShared(feed);
@@ -417,7 +417,7 @@ class FeedConverter {
         return feed.promotion;
     }
 
-    createPromotionInstance(feed, savedInstancesIds) {
+    createPromotionInstance(feed, savedInstancesIds,redeemedInstancesIds) {
         if (!savedInstancesIds) {
             savedInstancesIds = [];
         }
@@ -450,6 +450,9 @@ class FeedConverter {
                 responseFeed.social = instance.social_state
                 responseFeed.social.activityId = feed.activity._id;
                 responseFeed.showsave = !instance.social_state.saved && !instance.social_state.realized && !savedInstancesIds.includes(instance._id);
+            }
+            if(redeemedInstancesIds && redeemedInstancesIds.includes(instance._id)){
+                responseFeed.isRealized = true;
             }
             responseFeed.shareable = !instance.sharable;
             responseFeed.endDate = date.toLocaleDateString();
