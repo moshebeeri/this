@@ -15,9 +15,13 @@ export default class SubmitButton extends Component {
 
 
     render() {
-        const {disabled,title,color,onPress,disabledText,width} = this.props;
+        const {disabled,title,color,onPress,disabledText,width,fontSize,height,textColor} = this.props;
         let bgc = color;
-        let textColor= 'white';
+
+        let defaultTextColor= 'white';
+        if(textColor){
+            defaultTextColor = textColor;
+        }
         let buttonTitle= title;
         let defaultWidth = 100;
         if(width){
@@ -25,14 +29,25 @@ export default class SubmitButton extends Component {
         }
         if(disabled){
             bgc = 'gray';
-            textColor = 'white';
+            defaultTextColor = 'white';
             if(disabledText){
                 buttonTitle = disabledText;
             }
         }
-        return  <TouchableOpacity disabled={disabled} style={{height:40,width:defaultWidth,alignItems:'center', justifyContent:'center',borderRadius: 20,backgroundColor:bgc}}
+
+        let defaultHeight = 40;
+        if(height){
+            defaultHeight = height;
+        }
+
+
+        let defaultFontSize = 14;
+        if(fontSize){
+            defaultFontSize = fontSize;
+        }
+        return  <TouchableOpacity disabled={disabled} style={{height:defaultHeight,width:defaultWidth,alignItems:'center', justifyContent:'center',borderRadius: defaultWidth/4,backgroundColor:bgc}}
                         onPress={onPress}>
-            <ThisText style={{color:textColor}}>{buttonTitle}</ThisText>
+            <ThisText style={{color:defaultTextColor,fontSize:defaultFontSize}}>{buttonTitle}</ThisText>
         </TouchableOpacity>
 
     }

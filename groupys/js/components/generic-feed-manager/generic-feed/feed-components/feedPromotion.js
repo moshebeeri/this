@@ -78,7 +78,7 @@ export default class FeedPromotion extends Component {
     }
 
     render() {
-        const {showInPopup, showActions, item, save, shared, like, unlike, showUsers, comment, token, location, hideSocial, realize, navigation, scanner,} = this.props;
+        const {showInPopup, showActions, item, save, shared, like, unlike, showUsers, comment, token, location, hideSocial, realize, navigation, scanner,group} = this.props;
         let categoruTitle = item.categoryTitle;
         if (item.business) {
             categoruTitle = item.business.categoryTitle;
@@ -167,6 +167,7 @@ export default class FeedPromotion extends Component {
                                                      onPressUnLike={() => unlike(item.id, token)}
                                                      onPressLike={() => like(item.id, token)}
                                                      shareDisabled={shared}
+                                                     groupChat={group}
                                                      shareable = {item.shareable}
                                                      share={item.social.share} shares={item.social.shares}
                                                      shareAction={showUsers}/>}

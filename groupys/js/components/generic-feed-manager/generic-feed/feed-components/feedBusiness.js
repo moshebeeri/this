@@ -68,7 +68,7 @@ export default class FeedBusiness extends Component {
         return false;
     }
 
-    createBusiness(item, like, unlike, showUsers, comment) {
+    createBusiness(item, like, unlike, showUsers, comment,group) {
         const {location, refresh, showActions} = this.props;
         if (!item.name) {
             return <View></View>;
@@ -119,6 +119,7 @@ export default class FeedBusiness extends Component {
                                      onPressUnLike={() => unlike(item.id)}
                                      onPressLike={() => like(item.id)}
                                      shareable = {item.shareable}
+                                     groupChat={group}
                                      share={item.social.share} shares={item.social.shares} shareAction={showUsers}/>
 
 

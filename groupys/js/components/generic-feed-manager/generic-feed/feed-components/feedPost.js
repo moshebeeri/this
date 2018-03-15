@@ -82,7 +82,7 @@ export default class FeedPost extends Component {
     }
 
     render() {
-        const {refresh, item, save, shared, like, unlike, showUsers, comment, token, showActions} = this.props;
+        const {refresh, item, save, shared, like, unlike, showUsers, comment, token, showActions,group} = this.props;
         const styles = this.createPromotionStyle();
         const image = this.createImageComponent(item, styles);
         const container = this.createContainerStyle(item);
@@ -186,6 +186,7 @@ export default class FeedPost extends Component {
                                      onPressUnLike={() => unlike(item.id, token)}
                                      onPressLike={() => like(item.id, token)}
                                      shareDisabled={shared}
+                                     groupChat={group}
                                      shareable = {item.shareable}
                                      share={item.social.share} shares={item.social.shares}
                                      shareAction={showUsers}/>

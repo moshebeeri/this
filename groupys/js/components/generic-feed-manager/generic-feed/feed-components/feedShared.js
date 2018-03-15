@@ -73,7 +73,7 @@ export default class FeedShared extends Component {
     }
 
     createSharedActivity(item) {
-        const {refresh, like, unlike, actions,showUsers, comment, token, location, showActions,visibleFeeds} = this.props;
+        const {refresh, like, unlike, actions,showUsers, comment, token, location, showActions,visibleFeeds,group} = this.props;
         switch (item.shared) {
             case 'PROMOTION':
                 return this.createFeedView(<FeedPromotion shared refresh={refresh} token={token} comment={comment}
@@ -83,7 +83,9 @@ export default class FeedShared extends Component {
                                                           showActions={showActions}
                                                           navigation={this.props.navigation} item={item.shardeActivity}
                                                           like={like} unlike={unlike}
+                                                          group={group}
                                                           showUsers={showUsers}/>)
+
             case 'MESSAGE':
                 return this.createFeedView(<FeedMessage shared token={token} navigation={this.props.navigation}
                                                         item={item.shardeActivity}/>)
@@ -91,12 +93,14 @@ export default class FeedShared extends Component {
                 return this.createFeedView(<FeedPost showActions={showActions} shared token={token}
                                                      visibleFeeds={visibleFeeds}
                                                      actions={actions}
+                                                     group={group}
                                                      navigation={this.props.navigation} item={item.shardeActivity}
                                                      like={actions.like} unlike={actions.unlike}
                                                      showUsers={showUsers} comment={comment}/>)
             default:
                 return this.createFeedView(<FeedBusiness shared location={location}
                                                          actions={actions}
+                                                         group={group}
                                                          visibleFeeds={visibleFeeds}
                                                          token={token} refresh={refresh}
                                                          showActions={showActions}
