@@ -10,7 +10,7 @@ import {actions} from 'react-native-navigation-redux-helpers';
 import {Button, Container, Footer, Thumbnail} from 'native-base';
 import styles from './styles'
 import DateUtils from '../../utils/dateUtils'
-import {ThisText} from '../index'
+import {ThisText,SubmitButton} from '../index'
 import Icon from 'react-native-vector-icons/EvilIcons';
 import Icon2 from 'react-native-vector-icons/MaterialIcons'
 import {Menu, MenuOption, MenuOptions, MenuTrigger,} from 'react-native-popup-menu';
@@ -23,6 +23,7 @@ export default class ChatMessage extends Component {
 
     claim() {
     }
+
 
     render() {
         const {item, wide} = this.props;
@@ -87,7 +88,7 @@ export default class ChatMessage extends Component {
                             </View>
                             <View style={styleContainer}>
                                 {item.instance && <View>
-                                    <View style={{marginTop: 5}}><ThisText style={{
+                                    <View style={{marginTop: 5,alignItems:'flex-start',justifyContent:'center'}}><ThisText style={{
                                         fontSize: 14,
                                         color: '#616F70'
                                     }}>{strings.CreatedByBusiness.formatUnicorn(item.instance.businessName)}</ThisText>
@@ -97,7 +98,10 @@ export default class ChatMessage extends Component {
                                         borderBottomColor: '#E6E6E6',
                                         paddingTop: 2,
                                         marginTop: 10,
+                                        paddingBottom:10,
+                                        paddingRight:5,
                                         borderBottomWidth: 1,
+                                        alignItems:'flex-start',justifyContent:'center',
                                         flexDirection: 'row'
                                     }}>
                                         <Icon active color={"#2db6c8"} size={25} name={'tag'}/>
@@ -105,7 +109,14 @@ export default class ChatMessage extends Component {
                                         <ThisText style={{
                                             fontSize: 14,
                                             color: '#616F70'
-                                        }}>{item.instance.promotionTerm}</ThisText></View>
+                                        }}>{item.instance.promotionTerm}</ThisText>
+                                        <View style={{marginLeft:10,}}>
+
+                                        <SubmitButton  fontSize={12} height={25} width={45} title={strings.Claim.toUpperCase()} color={'#2db6c8'}
+                                                      onPress={() => this.claim()}/>
+                                        </View>
+
+                                    </View>
                                 </View>}
 
                                 {item.post && <View>
@@ -118,6 +129,7 @@ export default class ChatMessage extends Component {
                                     <View style={{
                                         borderBottomColor: '#E6E6E6',
                                         paddingTop: 2,
+                                        paddingLeft:5,
                                         marginTop: 10,
                                         paddingBottom: 8,
                                         borderBottomWidth: 1,
@@ -172,7 +184,7 @@ export default class ChatMessage extends Component {
                             <View>
                                 {item.instance &&
                                 <View>
-                                    <View style={{marginTop: 5}}><ThisText style={{
+                                    <View style={{marginTop: 5,alignItems:'flex-start',justifyContent:'center'}}><ThisText style={{
                                         fontSize: 14,
                                         color: 'white'
                                     }}>{strings.CreatedByBusiness.formatUnicorn(item.instance.businessName)}</ThisText>
@@ -180,7 +192,9 @@ export default class ChatMessage extends Component {
                                     <View style={{
                                         borderBottomColor: 'white',
                                         paddingTop: 2,
+                                        paddingRight:5,
                                         marginTop: 10,
+                                        paddingBottom:10,
                                         borderBottomWidth: 1,
                                         flexDirection: 'row'
                                     }}>
@@ -188,7 +202,14 @@ export default class ChatMessage extends Component {
                                         <ThisText style={{
                                             fontSize: 14,
                                             color: 'white'
-                                        }}>{item.instance.promotionTerm}</ThisText></View>
+                                        }}>{item.instance.promotionTerm}</ThisText>
+                                        <View style={{marginLeft:10,alignItems:'center'}}>
+
+                                            <SubmitButton  fontSize={12} height={25} width={45} title={strings.Claim.toUpperCase()} textColor={'#2db6c8'} color={'white'}
+                                                           onPress={() => this.claim()}/>
+                                        </View>
+                                    </View>
+
                                 </View>}
                                 {item.post &&
                                 <View >
@@ -200,6 +221,7 @@ export default class ChatMessage extends Component {
                                     <View style={{
                                         borderBottomColor: 'white',
                                         paddingTop: 2,
+                                        paddingLeft:5,
                                         borderBottomWidth: 1,
                                         paddingBottom: 8,
                                         flexDirection: 'row'
