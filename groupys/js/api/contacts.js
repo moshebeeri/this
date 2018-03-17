@@ -90,9 +90,6 @@ class ContactsApi {
     async syncContacts() {
         return new Promise(async (resolve, reject) => {
             let contacts = await store.get('all-contacts');
-            if (contacts) {
-                contacts = JSON.parse(contacts);
-            }
             let token = await store.get('token');
             let userId = await store.get('user_id');
             if (token && userId) {
