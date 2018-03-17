@@ -49,10 +49,10 @@ class instancesComment extends Component {
     renderItem(renderItem) {
         const {user,navigation,groupActions} = this.props;
         return <GroupChat actions={groupActions} navigation={navigation} key={renderItem.item.id} renderItem={renderItem} user={user}/>
-    }n
+    }
 
     render() {
-        const {group, instance,comments, navigation, actions, update, loadingDone, showTopLoader, allState} = this.props;
+        const {group, instance,comments, navigation, actions, update, loadingDone, showTopLoader, groupActions} = this.props;
         return <View style={{flex: 1}}>
             <View style={{flex: 1}}>
                 <GenericFeedManager feeds={comments[group._id]}
@@ -62,11 +62,11 @@ class instancesComment extends Component {
                                     chat
                                     navigation={navigation}
                                     setNextFeeds={this.setNextFeed.bind(this)}
-                                    actions={actions}
+                                    actions={groupActions}
                                     update={update}
                                     showTopLoader={showTopLoader[group._id]}
                                     loadingDone={loadingDone[group._id]}
-                                    ItemDetail={this.renderItem.bind(this)}/>
+                                    ItemDetail={GroupChat}/>
             </View>
 
             <View>
