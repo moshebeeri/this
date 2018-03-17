@@ -37,6 +37,7 @@ class GroupFeed extends Component {
         const {navigation, feeds} = this.props;
         const group = navigation.state.params.group;
         this.props.actions.clearReplyInstance();
+        this.props.actions.listenForChat(group);
         InteractionManager.runAfterInteractions(() => {
             if (!feeds[group._id] || (feeds[group._id] && feeds[group._id].length === 0)) {
                 this.props.actions.setFeeds(group, feeds[group._id]);
