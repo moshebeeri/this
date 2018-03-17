@@ -3,12 +3,23 @@ import {View} from 'react-native';
 import {Thumbnail} from 'native-base';
 import styles from './styles';
 import {ChatMessage, PromotionHeader, ThisText} from '../../../ui/index';
+
 const noPic = require('../../../../images/client_1.png');
 export default class GroupChat extends Component {
     constructor(props) {
         super(props);
     }
 
+
+    claim(){
+        const {actions,renderItem} = this.props;
+        actions.save(renderItem.item.instance.id)
+    }
+
+    realize(){
+        const {renderItem, navigation} = this.props;
+        navigation.navigate('realizePromotion', {item: renderItem.item.instance})
+    }
     render() {
         const {renderItem, user} = this.props;
         console.log('rendering' + renderItem.item.id);
@@ -32,7 +43,7 @@ export default class GroupChat extends Component {
                 isUser: isUser
             };
             return <View style={{backgroundColor: '#E6E6E6', flex: 1}}>
-                <ChatMessage key={item.id}
+                <ChatMessage realize={this.realize.bind(this)} claim={this.claim.bind(this)} key={item.id}
                              item={messageItem}/>
             </View>
         } else {

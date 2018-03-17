@@ -28,7 +28,7 @@ module.exports = {
         paddingRight:4,
         paddingLeft:4,
 
-        maxWidth:width  -100,
+        maxWidth:width  -50,
         backgroundColor:'white',
     },
     messageWideUserName: {
