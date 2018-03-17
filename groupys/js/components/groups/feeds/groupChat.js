@@ -10,25 +10,19 @@ export default class GroupChat extends Component {
         super(props);
     }
 
-
-    claim(){
-        const {actions,renderItem} = this.props;
-        actions.save(renderItem.item.instance.id)
+    claim() {
+        const {actions, item} = this.props;
+        actions.save(item.instance.id)
     }
 
-    realize(){
-        const {renderItem, navigation} = this.props;
-        navigation.navigate('realizePromotion', {item: renderItem.item.instance})
+    realize() {
+        const {item, navigation} = this.props;
+        navigation.navigate('realizePromotion', {item: item.instance})
     }
+
     render() {
-        const {renderItem, user} = this.props;
-        console.log('rendering' + renderItem.item.id);
-
-        let item = renderItem.item;
-
+        const {item, user} = this.props;
         if (item.message) {
-
-
             if (!user) {
                 return <View></View>
             }
@@ -76,7 +70,7 @@ export default class GroupChat extends Component {
         }
     }
 
-     createFeed(message) {
+    createFeed(message) {
         let user = undefined
         if (message.activity) {
             user = message.activity.actor_user;
@@ -107,7 +101,7 @@ export default class GroupChat extends Component {
         return response;
     }
 
-    shouldComponentUpdate(){
+    shouldComponentUpdate() {
         return false;
     }
 }
