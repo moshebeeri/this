@@ -70,22 +70,18 @@ export default class PromotionListView extends Component {
         const styles = this.createStyle();
         const result =
 
-            <InViewPort onChange={this.visited.bind(this)}  key={promotionItem._id} style={[styles.promotion_container, {marginTop:10,width: StyleUtils.getWidth()}]}>
+            <InViewPort onChange={this.visited.bind(this)}  key={promotionItem._id} style={[styles.promotion_container, {marginTop:0.5,marginBottom:9.5,width: StyleUtils.getWidth()}]}>
 
 
                 {this.createImageTage(item, styles)}
 
-                <View style={[styles.promotion_card, {width: StyleUtils.getWidth()}]}>
+                <View style={[styles.promotion_card, {padding:5,width: StyleUtils.getWidth()}]}>
 
                     <PromotionHeader item={item} type={promotionItem.type} titleText={item.promotionTitle}
                                      titleValue={item.promotionValue} term={item.promotionTerm}/>
 
-                    <View style={[styles.promotionInformation, {width: StyleUtils.getWidth()}]}>
 
-
-                        <ThisText style={styles.promotionInfoTextI}>{item.name} - {item.description}</ThisText>
-                    </View>
-                    <View style={styles.promotionDetailsContainer}>
+                    <View style={[styles.promotionDetailsContainer , {width: StyleUtils.getWidth()}]}>
                          <View style={styles.promotionLoctionContainer}>
                             <View><ThisText style={styles.detailsTitleText}>{strings.Location}</ThisText></View>
                              {promotionItem.location &&    <View><ThisText
@@ -103,21 +99,21 @@ export default class PromotionListView extends Component {
                     </View>
                     <View style={[styles.promotionAnalyticsContainer, {width: StyleUtils.getWidth()}]}>
 
-                        <View style={styles.promotionAnalyticsAttribute}>
-                            <ThisText>{strings.Total.toUpperCase()} </ThisText>
+                        <View style={styles.promotionTotalsAttribute}>
+                            <ThisText style={styles.detailsTitleText}>{strings.Total} </ThisText>
                             <ThisText style={styles.promotion_addressText} note>{item.quantity} </ThisText>
 
                         </View>
-                        {promotionItem.social_state && <View style={styles.promotionAnalyticsAttribute}>
+                        {promotionItem.social_state && <View style={styles.promotionSavedsAttribute}>
 
-                            <ThisText>{strings.Saved.toUpperCase()}</ThisText>
+                            <ThisText style={styles.detailsTitleText}>{strings.Saved}</ThisText>
                             <ThisText style={styles.promotion_addressText}
                                   note>{promotionItem.social_state.saves}</ThisText>
 
                         </View>}
                         {promotionItem.social_state && <View style={styles.promotionAnalyticsAttribute}>
 
-                            <ThisText>{strings.Used.toUpperCase()}</ThisText>
+                            <ThisText style={styles.detailsTitleText}>{strings.Used}</ThisText>
                             <ThisText style={styles.promotion_addressText} note>{promotionItem.social_state.realizes}</ThisText>
 
                         </View>}

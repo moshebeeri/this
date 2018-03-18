@@ -4,7 +4,7 @@ import CallingCallUtils from '../utils/LocalToCallingCode'
 import FormUtils from "../utils/fromUtils";
 class BusinessApi {
     getAll(token) {
-        return serverRequestHandler.fetch_handler(`${server_host}/api/businesses/list/mine`, {
+        return serverRequestHandler.fetch_handler(`ç/api/businesses/list/mine`, {
             method: 'GET',
             headers: {
                 'Accept': 'application/json, text/plain, */*',

@@ -58,7 +58,7 @@ class Product extends Component {
             icon = <Icon3 active color={"#FA8559"} size={25} name="ios-add"/>;
         }
         return (
-            <Container style={{flex: -1}}>
+            <Container style={{flex: -1,backgroundColor:`${appBackgroundColor}`}}>
                 <FormHeader showBack submitForm={this.navigateToAdd.bind(this)} navigation={this.props.navigation}
                             title={strings.AddProduct} bgc="white"
                             submitIcon={icon}

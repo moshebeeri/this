@@ -77,7 +77,7 @@ export default class BusinessListView extends Component {
         const permissionsButton = this.createPermissionsTag(item);
         const productsButton = this.createPoductsTag(item);
         const inReview =  item.business.review && (item.business.review.state === 'validation' || item.business.review.state === 'review');
-        return ( <View style={{marginTop: 10,backgroundColor:'white'}}>
+        return ( <View style={{marginTop:1,marginBottom: 9,backgroundColor:'white'}}>
                 <BusinessHeader businesscolor navigation={this.props.navigation} business={item.business}
                                 categoryTitle={item.categoryTitle} businessLogo={item.business.logo}
                                 businessName={item.business.name} noMargin businessView
