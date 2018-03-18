@@ -5,6 +5,8 @@ import styles from './styles';
 import Icon2 from 'react-native-vector-icons/Ionicons';
 import {ImagePicker} from '../index';
 import {ThisText} from '../index';
+import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
+
 export default class DocumentPicker extends Component {
     constructor(props) {
         super(props);
@@ -91,7 +93,8 @@ export default class DocumentPicker extends Component {
                 <View style={{flexDirection:'row'}}>
                     <ThisText style={textStyle}>{field}</ThisText>
                     {field && isMandatory &&
-                    <Icon style={{margin: 5, color: mandatoryIconColor, fontSize: 12}} name='star'/>}
+                    <MaterialCommunityIcons style={{marginLeft: 3, marginTop: 4, color: 'red', fontSize: 8}}
+                                            name='asterisk'/>}
 
                 </View>
                 <View style={{marginRight:10}}>

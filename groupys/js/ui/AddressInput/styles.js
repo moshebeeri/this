@@ -3,17 +3,21 @@ const {Dimensions} = React;
 const {width, height} = Dimensions.get('window');
 module.exports = {
     inputTextLayout: {
-        marginTop: 4, padding: 3,
+        paddingTop:5, paddingRight: 10,paddingLeft: 10,
         width: width - 15
     },
+
     textInputTextStyle: {
-        color: '#3A3A3A',
+        color: '#666666',
         fontFamily: 'Roboto-Regular',
-        fontSize: 16,
-        marginLeft: 10,
-        marginBottom:5,
+        fontSize: 15,
+        justifyContent:   'flex-start' ,
+        marginLeft:  2,
+        // margiRight:  I18nManager.isRTL ? 0:10,
+        marginBottom:2,
 
     },
+
 };
 
 

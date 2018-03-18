@@ -181,7 +181,7 @@ class ApplicationManager extends Component {
         }
         if (notification && notification.model === 'comment') {
             this.props.actions.redirectToChatGroup(notification.actor_group, notification.notificationId, notification.action, this.props.navigation);
-            FCM.getBadgeNumber().then(number => FCM.setBadgeNumber(0));
+            FCM.getBadgeNumber().then(number => FCM.setBadgeNumber(number -1));
             return;
         }
         if (notification && notification.title) {

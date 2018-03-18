@@ -65,13 +65,13 @@ module.exports = {
 
     },
     textInputTextStyle: {
-        color: '#3A3A3A',
+        color: '#666666',
         fontFamily: 'Roboto-Regular',
-        fontSize: 16,
+        fontSize: 15,
         justifyContent:   'flex-start' ,
-        marginLeft:  10,
-       // margiRight:  I18nManager.isRTL ? 0:10,
-        marginBottom:5,
+        marginLeft:  2,
+        // margiRight:  I18nManager.isRTL ? 0:10,
+        marginBottom:2,
 
     },
     textInputTextStyleWhite: {

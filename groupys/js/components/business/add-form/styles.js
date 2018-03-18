@@ -184,7 +184,7 @@ module.exports = {
         width: width - 18
     },
     inputTextLayout: {
-        marginTop: 4, padding: 3,
+        paddingTop:10, paddingRight: 10,paddingLeft: 10,
         width: width - 15
     }
 };

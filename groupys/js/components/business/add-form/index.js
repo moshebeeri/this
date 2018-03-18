@@ -386,9 +386,11 @@ class AddBusiness extends Component {
                                    validateContent={FormUtils.validateWebsite}
                                    onChangeText={(website) => this.setReduxState({website})} isMandatory={false}/>
                     </View>
+                    <View style={[styles.inputTextLayout, {width: StyleUtils.getWidth() - 15}]}>
+
                     <AddressInput city={this.state.city} address={this.state.address} country={this.state.country}
                                   refNext="5" ref="5" isMandatory onSubmitEditing={this.updateLocation.bind(this)}/>
-
+                    </View>
                     <View style={[styles.inputTextLayout, {width: StyleUtils.getWidth() - 15}]}>
 
                         <TextInput field={strings.TaxID} value={this.state.tax_id} returnKeyType='next' ref="6"

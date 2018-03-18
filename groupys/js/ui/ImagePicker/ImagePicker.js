@@ -154,10 +154,10 @@ export default class ImagePickerComponent extends Component {
             <MenuOptions>
 
                 <MenuOption onSelect={this.pickFromCamera.bind(this)}>
-                    <ThisText>{strings.TakePictures}</ThisText>
+                    <ThisText style={{padding:10,paddingBottom:5}}>{strings.TakePictures}</ThisText>
                 </MenuOption>
                 <MenuOption onSelect={this.pickPicture.bind(this)}>
-                    <ThisText>{strings.PickFromPhotos}</ThisText>
+                    <ThisText style={{padding:10,paddingTop:5}}>{strings.PickFromPhotos}</ThisText>
                 </MenuOption>
                 {videoPickerOption}
 

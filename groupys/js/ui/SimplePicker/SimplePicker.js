@@ -7,6 +7,7 @@ import styles from './styles'
 import strings from "../../i18n/i18n";
 import StyleUtils from "../../utils/styleUtils";
 import {ThisText,TextInput} from '../../ui/index';
+import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 
 export default class SimplePicker extends Component {
     constructor(props) {
@@ -87,9 +88,9 @@ export default class SimplePicker extends Component {
                     width: StyleUtils.getWidth() - 20
                 }]}><ThisText>{selectValue}</ThisText></View> :
                 <TouchableOpacity onPress={() => this.showDropDownn()}
-                                  style={[pickerStyle, {width: StyleUtils.getWidth() - 20}]} s>
+                                  style={[pickerStyle, {width: StyleUtils.getWidth() - 40}]} s>
                     <ModalDropdown ref={'dropDown'}
-                                   style={[styles.modalViewStyle, {width: StyleUtils.getWidth() - 20}]}
+                                   style={[styles.modalViewStyle, {width: StyleUtils.getWidth() - 40}]}
                                    options={options}
                                    textStyle={{alignItems: 'flex-end', fontSize: 20}}
                                    onSelect={this.selectIos.bind(this)}
@@ -146,7 +147,8 @@ export default class SimplePicker extends Component {
         return <View>
             <View style={styles.pickerTitleContainer}>
                 <ThisText style={styles.pickerTextStyle}>{itemTitle}</ThisText>
-                {isMandatory && <Icon style={{margin: 5, color: 'red', fontSize: 12}} name='star'/>}
+                {isMandatory &&  <MaterialCommunityIcons style={{marginLeft: 3, marginTop: 4, color: 'red', fontSize: 8}}
+                                                         name='asterisk'/>}
             </View>
 
             {disable ?   <View style={[styles.pickerTitleContainer, {alignItems:'center',backgroundColor:'#cccccc',height:40,width: StyleUtils.getWidth() - 15}]}>

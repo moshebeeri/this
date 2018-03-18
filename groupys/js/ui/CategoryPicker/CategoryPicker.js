@@ -1,22 +1,22 @@
 import React, {Component} from 'react';
-import {Text, View} from 'react-native';
-import {Button, Icon, Input, Item, Picker,Spinner} from 'native-base';
+import {View} from 'react-native';
+import {Button, Icon, Input, Item, Picker, Spinner} from 'native-base';
 import styles from './styles';
 import * as categoriesAction from "../../actions/categories";
 import {connect} from 'react-redux';
 import {bindActionCreators} from "redux";
-import { I18nManager } from 'react-native';
 import FormUtils from "../../utils/fromUtils";
 import {ThisText} from '../index';
 import strings from "../../i18n/i18n"
 import StyleUtils from "../../utils/styleUtils";
+import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 
 class CategoryPicker extends Component {
     constructor(props) {
         super(props);
-        this.state ={
-            invalid :false,
-            selectedCategories:[""]
+        this.state = {
+            invalid: false,
+            selectedCategories: [""]
         }
     }
 
@@ -26,20 +26,19 @@ class CategoryPicker extends Component {
     }
 
     componentWillMount() {
-        const{selectedCategories} = this.props;
-        if(selectedCategories) {
+        const {selectedCategories} = this.props;
+        if (selectedCategories) {
             let setCategoryFunc = this.setCategory.bind(this);
             let index = 0;
             selectedCategories.forEach(category => {
-                setCategoryFunc(index,category)
-                index = index +1;
+                setCategoryFunc(index, category)
+                index = index + 1;
             });
-
         }
     }
 
     setCategory(index, category) {
-        const {setFormCategories, categories,setCategoriesApi} = this.props;
+        const {setFormCategories, categories, setCategoriesApi} = this.props;
         const locale = FormUtils.getLocale();
         this.setState({
             invalid: false
@@ -47,7 +46,6 @@ class CategoryPicker extends Component {
         if (!category) {
             return;
         }
-
         if (this.state.selectedCategories.length <= index) {
             this.state.selectedCategories.push(category);
             this.state.selectedCategories.push("");
@@ -60,16 +58,16 @@ class CategoryPicker extends Component {
             this.state.selectedCategories.push(category);
             this.state.selectedCategories.push("");
         }
-        if(!categories[locale]){
+        if (!categories[locale]) {
             return;
         }
         let reduxxCategories = categories[locale][category];
         if (!reduxxCategories) {
-            this.props.actions.fetchCategories(category,setCategoriesApi);
+            this.props.actions.fetchCategories(category, setCategoriesApi);
         }
         setFormCategories(this.state.selectedCategories);
-
     }
+
     isValid() {
         const {isMandatory, validateContent} = this.props;
         this.setState({
@@ -84,7 +82,7 @@ class CategoryPicker extends Component {
             }
         }
         if (validateContent) {
-            if(!validateContent(value)){
+            if (!validateContent(value)) {
                 this.setState({
                     invalid: true
                 })
@@ -94,22 +92,20 @@ class CategoryPicker extends Component {
         return true;
     }
 
-
     render() {
-        const {categories, isMandatory,categoriesForm} = this.props;
+        const {categories, isMandatory, categoriesForm} = this.props;
         const locale = FormUtils.getLocale();
         if (!categories[locale]) {
             return <View/>
         }
         let pickerStyle = styles.picker;
-        if(this.state.invalid){
+        if (this.state.invalid) {
             pickerStyle = styles.pickerInvalid;
         }
         let root = categories[locale]['root'];
         let rootOicker = undefined;
         if (root) {
             let categoriesWIthBlank = new Array();
-
             root.forEach(function (cat) {
                 categoriesWIthBlank.push(cat);
             })
@@ -124,7 +120,7 @@ class CategoryPicker extends Component {
 
                 mode="dropdown"
                 placeholder={strings.SelectCategory}
-                style={[pickerStyle, {width: StyleUtils.getWidth() - 25}]}
+                style={[pickerStyle, {width: StyleUtils.getWidth() - 35}]}
 
                 selectedValue={this.state.selectedCategories[0]}
                 onValueChange={(category) => this.setCategory(0, category)}>
@@ -159,7 +155,7 @@ class CategoryPicker extends Component {
 
                     placeholder={strings.SelectCategory}
                     mode="dropdown"
-                    style={[pickerStyle, {width: StyleUtils.getWidth() - 25}]}
+                    style={[pickerStyle, {width: StyleUtils.getWidth() - 35}]}
                     selectedValue={stateCategories[i + 1]}
                     onValueChange={(category) => selectCategoryFunction(i + 1, category)}>
 
@@ -174,18 +170,18 @@ class CategoryPicker extends Component {
             }
             return undefined;
         })
-
         let spinner = undefined
-        if(categoriesForm.categoriesFetching){
-            spinner =  <Spinner/>;
+        if (categoriesForm.categoriesFetching) {
+            spinner = <Spinner/>;
         }
-
-
         return <View>
             <View style={styles.pickerTitleContainer}>
 
                 <ThisText style={styles.pickerTextStyle}>{strings.Category}</ThisText>
-                { isMandatory && <Icon style={{margin: 5, color: 'red', fontSize: 12}} name='star'/>}
+                {isMandatory &&
+                <MaterialCommunityIcons style={{marginLeft: 3, marginTop: 4, color: 'red', fontSize: 8}}
+                                        name='asterisk'/>}
+
             </View>
 
             {rootOicker}{pickers}
