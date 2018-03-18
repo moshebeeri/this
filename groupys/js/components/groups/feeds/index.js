@@ -38,6 +38,11 @@ class GroupFeed extends Component {
         const group = navigation.state.params.group;
         this.props.actions.clearReplyInstance();
         this.props.actions.listenForChat(group);
+
+        if (this.props.navigation.state.params.chat) {
+           this.setState({page:this.getChatTab()})
+        }
+
         InteractionManager.runAfterInteractions(() => {
             if (!feeds[group._id] || (feeds[group._id] && feeds[group._id].length === 0)) {
                 this.props.actions.setFeeds(group, feeds[group._id]);
@@ -84,20 +89,22 @@ class GroupFeed extends Component {
     }
 
 
+    getChatTab(){
+        if (I18nManager.isRTL && (Platform.OS === 'android')) {
+            return 0;
+        }
+
+        return 1;
+    }
+
     render() {
         const group = this.props.navigation.state.params.group;
         let chatDisabled = group.chat_policy === 'OFF';
         let initPage = 0;
         if (this.props.navigation.state.params.chat) {
-            initPage = 1;
+            initPage = this.getChatTab();
         }
-        if (I18nManager.isRTL && (Platform.OS === 'android')) {
-            if (this.props.navigation.state.params.chat) {
-                initPage = 0;
-            } else {
-                initPage = 1;
-            }
-        }
+
         return (
             <Container style={{backgroundColor: '#ebebeb'}}>
 
