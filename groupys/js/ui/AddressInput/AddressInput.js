@@ -71,6 +71,7 @@ class AddressInput extends Component {
             }
         }
         this.setState({ilegalAddress:false});
+        this.setSubmut();
         return result;
     }
 
@@ -135,6 +136,9 @@ class AddressInput extends Component {
 
     setSubmut() {
         const {onSubmitEditing, addressForm} = this.props;
+        if(!addressForm.location){
+            return;
+        }
         let address = {
             location: addressForm.location,
             city: this.state.city,

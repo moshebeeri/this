@@ -92,6 +92,15 @@ function* updateBusiness(action) {
             pictures.push(currentPicturePath);
             updatedBusiness.pictures.push({pictures: pictures});
         }
+
+        if(!updatedBusiness.social_state){
+            updatedBusiness.social_state = {};
+            updatedBusiness.social_state.saves = 0;
+            updatedBusiness.social_state.comments = 0;
+            updatedBusiness.social_state.likes = 0;
+            updatedBusiness.social_state.shares = 0;
+            updatedBusiness.social_state.realizes = 0;
+        }
         let uploadLogo = false;
         if (action.business.logoImage && updatedBusiness.logo !== action.business.logoImage) {
             uploadLogo = true;

@@ -21,12 +21,12 @@ export default class GroupChat extends Component {
     }
 
     render() {
-        const {item, user} = this.props;
+        const {item, currentUser} = this.props;
         if (item.message) {
-            if (!user) {
+            if (!currentUser) {
                 return <View></View>
             }
-            let isUser = item.message.actor === user._id;
+            let isUser = item.message.actor === currentUser._id;
             let messageItem = {
                 name: item.message.name,
                 avetar: item.message.logo,

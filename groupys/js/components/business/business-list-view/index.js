@@ -114,17 +114,19 @@ export default class BusinessListView extends Component {
                         <View style={{
                            flexDirection: 'row', alignItems: 'center',
                             justifyContent: 'space-between',
+                            padding:10,
                         }}>
                             <ThisText>{strings.confirmBusinessByMailMessage}</ThisText>
-                            <EditButton iconName='refresh' onPress={this.refreshBusiness.bind(this)}/>
+                            <EditButton size={30} iconName='refresh' onPress={this.refreshBusiness.bind(this)}/>
                         </View>}
                         {item.business && item.business.review && item.business.review.state === 'review' &&
                         <View style={{
                              flexDirection: 'row', alignItems: 'center',
                             justifyContent: 'space-between',
+                            padding:10,
                         }}>
                             <ThisText>{strings.validatingBusinessMessage}</ThisText>
-                            <EditButton iconName='refresh' onPress={this.refreshBusiness.bind(this)}/>
+                            <EditButton size={30} iconName='refresh'  onPress={this.refreshBusiness.bind(this)}/>
                         </View>}
 
                         {item.business.social_state &&

@@ -151,6 +151,7 @@ export default class FeedBusiness extends Component {
                                     businessName={item.business.name} noMargin
                                     bgColor={'transparent'}
                                     textColor={'white'}
+                                    size={60}
                                     id={item.activityId} showActions={showActions}
                     />}
                 </LinearGradient>
