@@ -87,10 +87,13 @@ export default class FeedBusiness extends Component {
                         justifyContent: 'flex-start',
                         flexDirection:'row',
                         alignItems: 'center',
-                        marginTop:5,
+
+                        padding:10,
                     }}>
                         {item.avetar && <ImageController thumbnail size={30} source={item.avetar}/>}
-                        <ThisText style={{}}>{item.itemTitle}</ThisText>
+
+                        <ThisText style={{paddingLeft:10}}>{item.itemTitle}</ThisText>
+
                     </View>
 
                     {imageBusiness}
