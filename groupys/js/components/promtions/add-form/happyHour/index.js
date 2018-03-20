@@ -171,14 +171,21 @@ export default class HappyHourComponent extends Component {
         }
         return <View>
             <View style={[styles.textLayout, {width: StyleUtils.getWidth() - 15}]}>
-                <ThisText style={{color: '#FA8559', marginLeft: 8, marginRight: 8}}>Happy Hour</ThisText>
+                <ThisText style={{color: '#FA8559', marginLeft: 8, marginRight: 8}}>{strings.HappyHour}</ThisText>
             </View>
-            <View style={{flexDirection: 'row', justifyContent: 'center', alignItems: 'center'}}>
-                <View style={{flex: 1.7, marginTop: 25}}><SelectButton isMandatory ref="precentSelectProduct"
+            <View style={{
+                flexDirection: 'row',
+                justifyContent: 'space-between',
+                alignItems: 'center',
+                paddingTop: 10,
+                paddingRight: 5,
+                paddingLeft: 5,
+                width: StyleUtils.getWidth() - 15}}>
+                <View style={{ marginTop: 20}}><SelectButton isMandatory ref="precentSelectProduct"
                                                                        selectedValue={this.props.state.product}
                                                                        title={strings.SelectProduct}
                                                                        action={this.showProducts.bind(this, true)}/></View>
-                <View style={styles.inputPercentComponent}>
+                <View style={{width:160}}>
                     <TextInput field={strings.Pay} value={pay}
                                returnKeyType='next' ref="Pay $" refNext="2"
                                keyboardType='numeric'
@@ -189,18 +196,19 @@ export default class HappyHourComponent extends Component {
             <ProductPreview product={this.props.state.product} />
             <View style={{
                 flexDirection: 'row',
-                marginTop: 5,
-                marginBottom: 5,
-                justifyContent: 'center',
-                alignItems: 'center'
-            }}>
-                <View style={styles.inputPercentComponent}>
+                justifyContent: 'space-between',
+                alignItems: 'center',
+                paddingTop: 10,
+                paddingRight: 5,
+                paddingLeft: 5,
+                width: StyleUtils.getWidth() - 15}}>
+                <View style={{width:160,marginTop:0}}>
                     <TimePicker field={strings.FromHour}
                                 validateContent={this.validateFrom.bind(this)}
                                 returnKeyType='next' ref="From Hour" refNext="3"
                                 onChangeDate={(value) => this.setFrom(value)} isMandatory={true}/>
                 </View>
-                <View style={styles.inputPercentComponent}>
+                <View style={{width:160,}}>
                     <TextInput field={strings.NumberOfHours} value={this.state.numberOfHours}
                                returnKeyType='done' ref="off" refNext="off"
                                keyboardType='numeric'
@@ -210,11 +218,11 @@ export default class HappyHourComponent extends Component {
                 </View>
             </View>
             <View style={{flexDirection: 'row', justifyContent: 'center', alignItems: 'center'}}>
-                <View style={styles.inputPercentComponent}>
+
                     <WeekDaysPicker field={strings.DaysOfWeek}
                                     ref="Days of Week" refNext="Days of Week"
                                     onChangeSelected={(value) => this.setDays(value)} isMandatory={true}/>
-                </View>
+
             </View>
         </View>
     }
