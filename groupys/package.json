@@ -5,14 +5,16 @@
   "scripts": {
     "start": "node node_modules/react-native/local-cli/cli.js start",
     "test": "jest",
-    "build:ios": "react-native bundle --entry-file='index.ios.js' --bundle-output='./ios/YourAppName/main.jsbundle' --dev=false --platform='ios' --assets-dest='./ios'"
+    "build:ios": "react-native bundle --entry-file='index.ios.js' --bundle-output='./ios/THIS/main.jsbundle' --dev=false --platform='ios' --assets-dest='./ios'"
   },
   "dependencies": {
     "color": "^1.0.3",
+    "email-templates": "^3.5.2",
     "events": "^1.1.1",
     "impagination": "^1.0.0-alpha.3",
     "moment": "^2.18.1",
     "native-base": "^2.3.3",
+    "pug": "^2.0.2",
     "radio-button-react-native": "^1.1.6",
     "react": "^16.0.0",
     "react-dom": "^0.14.0 || ^15.0.0",
