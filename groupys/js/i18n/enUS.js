@@ -288,6 +288,7 @@ businessCreated                               : "{0} created new business",
 postMessage                                   : "{0} posted",
 GroupChat                                     : "Group Chat",
 CreatedByBusiness                             : "Created by {0}",
+HappyHour                                     : "Happy Hour",
 
 
 

@@ -1,12 +1,11 @@
 import React, {Component} from 'react';
-import {Keyboard, Text, View} from 'react-native'
+import {Keyboard, View} from 'react-native'
 import styles from '../styles'
-import {SelectButton, TextInput} from '../../../../ui/index';
+import {SelectButton, TextInput, ThisText} from '../../../../ui/index';
 import strings from "../../../../i18n/i18n"
 import StyleUtils from '../../../../utils/styleUtils';
 import {Thumbnail} from 'native-base';
 import ProductPreview from "../../../product/productPreview/index";
-import {ThisText} from '../../../../ui/index';
 
 export default class XForYComponent extends Component {
     constructor(props) {
@@ -100,24 +99,34 @@ export default class XForYComponent extends Component {
             eligible = this.props.state.x_for_y.values.eligible;
         }
         return <View>
-            <View style={[styles.textLayout, {width: StyleUtils.getWidth() - 15}]}>
-                <ThisText style={{color: '#FA8559', marginLeft: 8, marginRight: 8}}>{strings.BuyProductsFor}</ThisText>
-            </View>
+                <View style={[styles.textLayout, {width: StyleUtils.getWidth() - 15}]}>
+                    <ThisText style={{color: '#FA8559', marginLeft: 8, marginRight: 8}}>{strings.BuyProductsFor}</ThisText>
+                </View>
 
-            <View style={{flexDirection: 'row', justifyContent: 'center', alignItems: 'center'}}>
-                <View style={{flex: 1.7, marginTop: 25}}><SelectButton ref="xplusySelectProduct"
-                                                                       selectedValue={this.props.state.product}
-                                                                       isMandatory title={strings.SelectProduct}
-                                                                       action={this.showBuyProducts.bind(this, true)}/></View>
+                <View style={{
+                    flexDirection: 'row',
+                    justifyContent: 'space-between',
+                    alignItems: 'center',
+                    paddingTop: 10,
+                    paddingRight: 5,
+                    paddingLeft: 5,
+                    width: StyleUtils.getWidth() - 15
+                }}>
+                    <View style={{marginTop:20}}>
+                    <SelectButton ref="xplusySelectProduct"
+                                  selectedValue={this.props.state.product}
+                                  isMandatory title={strings.SelectProduct}
+                                  action={this.showBuyProducts.bind(this, true)}/>
+                    </View>
 
-                <View style={styles.inputTextLayout}>
+                <View style={{width:100}}>
                     <TextInput field={strings.BuyAmount} value={eligible}
                                returnKeyType='next' ref="Buy Amount" refNext="Buy Amount"
                                keyboardType='numeric'
                                onSubmitEditing={this.focusNextField.bind(this, "Pay $")}
                                onChangeText={(value) => this.setBuyAmount(value)} isMandatory={true}/>
                 </View>
-                <View style={styles.inputTextLayout}>
+                    <View style={{width:100}}>
                     <TextInput field={strings.PayAmount} value={pay}
                                returnKeyType='done' ref="Pay $" refNext="Pay $"
                                keyboardType='numeric'
@@ -125,17 +134,20 @@ export default class XForYComponent extends Component {
                                onChangeText={(value) => this.setPay(value)} isMandatory={true}/>
                 </View>
             </View>
-            <ProductPreview product={this.props.state.product} />
-        </View>
+            < ProductPreview
+        product = {this.props.state.product
+    }
+        />
+    </View>
     }
 
     focusNextField(nextField) {
         if (this.refs[nextField] && this.refs[nextField].wrappedInstance) {
-            this.refs[nextField].wrappedInstance.focus()
-        }
-        if (this.refs[nextField] && this.refs[nextField].focus) {
-            this.refs[nextField].focus()
-        }
+        this.refs[nextField].wrappedInstance.focus()
     }
-}
+        if (this.refs[nextField] && this.refs[nextField].focus) {
+        this.refs[nextField].focus()
+    }
+    }
+    }
 

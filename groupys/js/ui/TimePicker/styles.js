@@ -43,11 +43,13 @@ module.exports = {
         justifyContent: 'flex-start',
     },
     textInputTextStyle: {
-        color: '#3A3A3A',
+        color: '#666666',
         fontFamily: 'Roboto-Regular',
-        fontSize: 16,
-        marginLeft: 10,
-        marginBottom:5,
+        fontSize: 15,
+        justifyContent:   'flex-start' ,
+        marginLeft:  2,
+        // margiRight:  I18nManager.isRTL ? 0:10,
+        marginBottom:2,
 
     },
     textInputTextStyleWhite: {

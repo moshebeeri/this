@@ -76,13 +76,20 @@ export default class PunchCardComponent extends Component {
 
                 <ThisText style={{color: '#FA8559', marginLeft: 8, marginRight: 8}}>{strings.PunchCard}</ThisText>
             </View>
-            <View style={{flexDirection: 'row', justifyContent: 'center', alignItems: 'center'}}>
-                <View style={{flex: 1.7, marginTop: 25}}><SelectButton ref="PunchSelectProduct" isMandatory
+            <View style={{ flexDirection: 'row',
+                justifyContent: 'space-between',
+                alignItems: 'center',
+                paddingTop: 10,
+                paddingRight: 5,
+                paddingLeft: 5,
+                width: StyleUtils.getWidth() - 15}}>
+                <View style={{ marginTop: 25}}><SelectButton ref="PunchSelectProduct" isMandatory
                                                                        selectedValue={this.props.state.product}
                                                                        title={strings.SelectProduct}
-                                                                       action={this.showBuyProducts.bind(this, true)}/></View>
+                                                                       action={this.showBuyProducts.bind(this, true)}/>
+                </View>
 
-                <View style={styles.inputTextLayout}>
+                <View style={{width:200}}>
                     <TextInput field={strings.NumberOfPunches} value={numberOfPunches}
                                returnKeyType='done' ref="2" refNext="2"
                                keyboardType='numeric'

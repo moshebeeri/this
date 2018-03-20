@@ -81,7 +81,10 @@ export default class SimplePicker extends Component {
             <View style={[styles.pickerTitleContainer, {width: StyleUtils.getWidth() - 15}]}>
 
                 <ThisText style={styles.pickerTextStyle}>{itemTitle}</ThisText>
-                {isMandatory && <Icon style={{margin: 5, color: 'red', fontSize: 12}} name='star'/>}
+                {isMandatory &&
+                <MaterialCommunityIcons style={{marginLeft: 3, marginTop: 4, color: 'red', fontSize: 8}}
+                                        name='asterisk'/>}
+
             </View>
             {disable ? <View style={[pickerStyle, {
                     backgroundColor: '#cccccc',
