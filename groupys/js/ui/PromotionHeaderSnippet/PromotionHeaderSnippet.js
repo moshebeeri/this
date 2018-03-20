@@ -139,7 +139,6 @@ export default class PromotionHeaderSnippet extends Component {
                     <View style={{flex: 1, justifyContent: 'flex-start', marginLeft: 12, alignItems: 'flex-start'}}>
                         <ThisText>{promotion.business.name}</ThisText>
                         <ThisText>{strings.punchCardTerm.formatUnicorn(promotion.punches,promotion.promotionEntity.condition.product.name)}</ThisText>
-                        <PunchView numberRealized={promotion.realizedPunches} feed={promotion} numberOfPunches={promotion.punches}/>
                     </View>
                 </View>
             default:

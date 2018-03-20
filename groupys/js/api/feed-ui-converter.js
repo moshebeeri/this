@@ -660,7 +660,7 @@ class FeedConverter {
                 }
                 break;
             case "PUNCH_CARD":
-                let punches = promotion.punch_card.values.number_of_punches;
+                let punches = promotion.punch_card.values[0].number_of_punches;
                 response.promotionTerm = strings.punchCardTerm.formatUnicorn(punches, promotion.condition.product.name);;
                 response.itemTitle = '';
                 response.promotionTitle = strings.punchCardTerm.formatUnicorn(punches, promotion.condition.product.name);
