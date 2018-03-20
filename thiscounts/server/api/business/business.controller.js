@@ -666,10 +666,41 @@ function notifyOnAction(business) {
 
 // Updates an existing business in the DB.
 exports.update = function (req, res) {
+
   if (req.body._id) {
     delete req.body._id;
   }
   Business.findById(req.params.id, function (err, business) {
+
+    function update_location(callback){
+      const updated = req.body;
+      const current = business;
+      if(updated.country !== current.country ||
+        updated.city !== current.city ||
+        updated.address !== current.address ||
+        updated.address2 !== current.address2 ||
+        updated.country !== current.country ||
+        !updated.location ||
+        updated.location.lng !==  current.location.lng ||
+        updated.location.lat !==  current.location.lat ){
+        location.address_location(updated, function (err, data) {
+          if (err) {
+            console.error(err);
+            if (err.code >= 400) return res.status(err.code).send(err.message);
+            else if (err.code === 202) {
+              console.error(err);
+              return res.status(202).json(data);
+            }
+            else return res.status(400).send(err);
+          }
+          updated.location = spatial.geo_to_location(data);
+          return callback(null);
+        })
+      }else{
+        return callback(null);
+      }
+    }
+
     if (err) {
       return handleError(res, err);
     }
@@ -679,16 +710,20 @@ exports.update = function (req, res) {
     let should_validate_email = false;
     if(req.body.email && req.body.email !== business.email)
       should_validate_email = true;
-    let updated = _.merge(business, req.body);
-    updated.save(function (err) {
-      if (err) {
-        return handleError(res, err);
-      }
-      if(should_validate_email)
-        update_email(business, business.email, (err)=>{
-          if(err) return console.error(err);
-        }) ;
-      return res.status(200).json(business);
+    update_location(err => {
+      if (err) return handleError(res, err);
+
+      let updated = _.merge(business, req.body);
+      updated.save(function (err) {
+        if (err) {
+          return handleError(res, err);
+        }
+        if(should_validate_email)
+          update_email(business, business.email, (err)=>{
+            if(err) return console.error(err);
+          });
+        return res.status(200).json(business);
+      });
     });
   });
 };
