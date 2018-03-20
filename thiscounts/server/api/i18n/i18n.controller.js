@@ -88,6 +88,8 @@ exports.createI18N = function(req, res) {
 
           callTranslateApi(i18n.enUS, function (err, translation) {
             if (err) return console.log(err.message);
+            //fix google translate issue with %s
+            translation = translation.replace('% s',' %s');
             let translations = i18n.translations;
             let newTranslations = {};
             Object.keys(translations).forEach(key => {
@@ -97,7 +99,7 @@ exports.createI18N = function(req, res) {
             i18n.translations = newTranslations;
 
             i18n.save(function (err, i18n) {
-              if (err) return console.log(err.message);
+              if (err) return console.log(`error i18n.save ${err.message}`);
               console.log(`saving ${i18n.enUS} translation to ${to} is ${translation}`);
             });
           });
