@@ -28,7 +28,7 @@ module.exports = {
         paddingRight:4,
         paddingLeft:4,
 
-        maxWidth:width  -50,
+
         backgroundColor:'white',
     },
     messageWideUserName: {
@@ -39,7 +39,7 @@ module.exports = {
         paddingRight:4,
         paddingLeft:4,
 
-        width:width  -60,
+
         backgroundColor:'#2db6c8',
     },
     messageName: {
@@ -51,7 +51,7 @@ module.exports = {
         borderBottomRightRadius:8,
         paddingRight:4,
         paddingLeft:4,
-        maxWidth:width  -100,
+        maxWidth:width  -50,
         backgroundColor:'#2db6c8',
     },
     message_container_user: {

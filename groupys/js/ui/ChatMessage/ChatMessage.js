@@ -88,6 +88,7 @@ export default class ChatMessage extends Component {
                                         borderBottomColor: '#E6E6E6',
                                         paddingTop: 2,
                                         marginTop: 10,
+
                                         paddingBottom: 10,
                                         paddingRight: 5,
                                         borderBottomWidth: 1,
@@ -98,12 +99,13 @@ export default class ChatMessage extends Component {
 
                                         <ThisText style={{
                                             fontSize: 14,
-                                            color: '#616F70'
+                                            color: '#616F70',
+                                            maxWidth:200
                                         }}>{item.instance.promotionTerm}</ThisText>
                                         {item.instance.showSave && <View style={{marginLeft: 10,}}>
 
                                             <SubmitButton fontSize={12} height={25} width={45}
-                                                          title={strings.Claim.toUpperCase()} color={'#2db6c8'}
+                                                           title={strings.Claim.toUpperCase()} color={'#2db6c8'}
                                                           onPress={() => this.claim()}/>
                                         </View>}
                                         {!item.instance.isRealized && <View style={{marginLeft: 10,}}>
@@ -201,13 +203,15 @@ export default class ChatMessage extends Component {
                                         paddingRight: 5,
                                         marginTop: 10,
                                         paddingBottom: 10,
+
                                         borderBottomWidth: 1,
                                         flexDirection: 'row'
                                     }}>
                                         <Icon active color={"white"} size={25} name={'tag'}/>
                                         <ThisText style={{
                                             fontSize: 14,
-                                            color: 'white'
+                                            color: 'white',
+                                            maxWidth:200
                                         }}>{item.instance.promotionTerm}</ThisText>
 
 
