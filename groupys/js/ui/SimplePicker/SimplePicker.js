@@ -60,7 +60,7 @@ export default class SimplePicker extends Component {
 
     renderRow(value) {
         return <View style={{justifyContent: 'flex-start', alignItems: 'flex-end'}}><ThisText
-            style={{paddingLeft: 10, paddingRight: 10, fontSize: 14}}>{value}</ThisText></View>
+            style={{padding:10,paddingLeft: 10, paddingRight: 10, fontSize: 14}}>{value}</ThisText></View>
     }
 
     createIosRender() {
@@ -85,14 +85,14 @@ export default class SimplePicker extends Component {
             </View>
             {disable ? <View style={[pickerStyle, {
                     backgroundColor: '#cccccc',
-                    width: StyleUtils.getWidth() - 20
+                    width: StyleUtils.getWidth() - 25
                 }]}><ThisText>{selectValue}</ThisText></View> :
                 <TouchableOpacity onPress={() => this.showDropDownn()}
-                                  style={[pickerStyle, {width: StyleUtils.getWidth() - 40}]} s>
+                                  style={[pickerStyle, {width: StyleUtils.getWidth() - 25}]} s>
                     <ModalDropdown ref={'dropDown'}
-                                   style={[styles.modalViewStyle, {width: StyleUtils.getWidth() - 40}]}
+                                   style={[styles.modalViewStyle, {width: StyleUtils.getWidth() - 25}]}
                                    options={options}
-                                   textStyle={{alignItems: 'flex-end', fontSize: 20}}
+                                   textStyle={{alignItems: 'flex-end', fontSize: 15}}
                                    onSelect={this.selectIos.bind(this)}
                                    renderRow={this.renderRow.bind(this)}
                                    defaultValue={selectValue}

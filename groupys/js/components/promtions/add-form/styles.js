@@ -53,11 +53,11 @@ module.exports = {
     },
 
     inputTextLayout: {
-        paddingTop:10, paddingRight: 5,paddingLeft: 20,
+        paddingTop:10, paddingRight:5 ,paddingLeft: 5,
         width: width - 15
     },
     conditionForm:{
-        paddingTop:10,paddingLeft:18,
+        paddingTop:10,paddingRight: 5,paddingLeft: 5,
         width: width - 15
     },
     cmeraLogoContainer: {

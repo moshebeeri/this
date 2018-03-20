@@ -764,7 +764,7 @@ class AddPromotion extends Component {
                 <FormHeader showBack submitForm={this.saveFormData.bind(this)} navigation={this.props.navigation}
                             title={strings.AddPromotion} bgc="#FA8559"/>
 
-                <ScrollView keyboardShouldPersistTaps={true} ontentContainerStyle={{
+                <ScrollView keyboardShouldPersistTaps={true} contentContainerStyle={{
                     justifyContent: 'center',
                     alignItems: 'center',
 
@@ -774,7 +774,7 @@ class AddPromotion extends Component {
                         backgroundColor: '#FA8559',
                         alignItems: 'center',
                         justifyContent: 'space-between',
-                        flexDirection: 'row'
+                        flexDirection: 'row', width: StyleUtils.getWidth()
                     }}>
                         {this.state.toggle ? <ThisText style={{
                                 color: 'white',
@@ -866,7 +866,7 @@ class AddPromotion extends Component {
                                    onChangeText={(info) => this.setState({info})}/>
                     </View>}
 
-                    <View style={[styles.conditionForm, {width: StyleUtils.getWidth() - 15}]}>
+                    <View style={[styles.conditionForm, {width: StyleUtils.getWidth()}]}>
                     {conditionForm}
                     </View>
                     {proximityForm}

@@ -3,12 +3,12 @@ const {Dimensions} = React;
 const {width, height} = Dimensions.get('window');
 module.exports = {
     picker: {
-        marginTop: 5, height: 50, width: width - 40, backgroundColor: 'white', justifyContent: 'flex-start'
+        marginTop: 5, height: 50, width: width - 15, backgroundColor: 'white', justifyContent: 'flex-start'
     },
     pickerInvalid: {
         marginTop: 5,
         height: 50,
-        width: width - 40,
+        width: width - 15,
         backgroundColor: 'red',
         justifyContent: 'flex-start',
         borderWidth: 1,
@@ -53,7 +53,7 @@ module.exports = {
     },
     modalViewStyle: {
         width: width - 20,
-        height: 40,
+        height: 70,
         // paddingRight: I18nManager.isRTL ? 0 : 50,
         justifyContent: 'center',
         alignItems: 'flex-start'
