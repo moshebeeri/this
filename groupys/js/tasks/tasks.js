@@ -71,30 +71,30 @@ class Tasks {
     }
 
     async mainFeedTaskStart() {
-        await this.mainFeddTaskstop();
-        const refresher = BackgroundTimer.setInterval(() => {
-            this.setMainFeedRefresh();
-        }, 5000);
-        simpleStore.save("main_feed", [refresher])
+        // await this.mainFeddTaskstop();
+        // const refresher = BackgroundTimer.setInterval(() => {
+        //     this.setMainFeedRefresh();
+        // }, 5000);
+        // simpleStore.save("main_feed", [refresher])
     }
 
     async mainFeddTaskstop() {
-        let tasks = await simpleStore.get("main_feed");
-        if (tasks) {
-            tasks.forEach((task) => {
-                BackgroundTimer.clearInterval(task);
-            });
-        }
+        // let tasks = await simpleStore.get("main_feed");
+        // if (tasks) {
+        //     tasks.forEach((task) => {
+        //         BackgroundTimer.clearInterval(task);
+        //     });
+        // }
     }
 
     setMainFeedRefresh() {
         if (reduxStore.getState().feeds.feedView && reduxStore.getState().feeds.feedView.length > 0) {
-            let token = reduxStore.getState().authentication.token;
-            let user = reduxStore.getState().user.user;
-            let id = reduxStore.getState().feeds.feedView[0];
-            if (token && user) {
-                feedAction.fetchTopList(id, token, user, reduxStore.dispatch);
-            }
+            // let token = reduxStore.getState().authentication.token;
+            // let user = reduxStore.getState().user.user;
+            // let id = reduxStore.getState().feeds.feedView[0];
+            // if (token && user) {
+            //     feedAction.fetchTopList(id, token, user, reduxStore.dispatch);
+            // }
         }
     }
 }

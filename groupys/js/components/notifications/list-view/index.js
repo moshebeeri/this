@@ -3,7 +3,7 @@ import {Dimensions, TouchableOpacity} from "react-native";
 import {Button, Text, Thumbnail, View} from "native-base";
 import * as notification from "./notofications";
 import strings from "../../../i18n/i18n"
-import {ThisText} from '../../../ui/index';
+import {ThisText,SubmitButton} from '../../../ui/index';
 
 const {width, height} = Dimensions.get('window')
 const vw = width / 100;
@@ -244,9 +244,9 @@ export default class NotificationListView extends Component {
             return undefined;
         }
         return <View style={actionStyle}>
-            <TouchableOpacity style={redeemStyle} onPress={this.accept.bind(this)}>
-                <ThisText style={{fontWeight: 'bold', color: '#2db6c8'}}>{strings.Accept}</ThisText>
-            </TouchableOpacity>
+            <SubmitButton  title={strings.Accept.toUpperCase()}  color={'#2db6c8'}
+                           onPress={() => this.accept()}/>
+
         </View>
     }
 
@@ -255,9 +255,10 @@ export default class NotificationListView extends Component {
             return undefined;
         }
         return <View style={actionStyle}>
-            <TouchableOpacity style={redeemStyle} onPress={this.createBusiness.bind(this, viewItem.business)}>
-                <ThisText style={{fontWeight: 'bold', color: '#2db6c8'}}>{strings.Create}</ThisText>
-            </TouchableOpacity>
+
+            <SubmitButton  title={strings.Create.toUpperCase()} color={'#2db6c8'}
+                          onPress={() => this.createBusiness(viewItem.business)}/>
+
         </View>
     }
 
@@ -266,9 +267,9 @@ export default class NotificationListView extends Component {
             return undefined;
         }
         return <View style={actionStyle}>
-            <TouchableOpacity style={redeemStyle} onPress={this.create.bind(this, viewItem.group)}>
-                <ThisText style={{fontWeight: 'bold', color: '#2db6c8'}}>{strings.Create}</ThisText>
-            </TouchableOpacity>
+            <SubmitButton  title={strings.Create.toUpperCase()}  color={'#2db6c8'}
+                           onPress={() => this.create(viewItem.group)}/>
+
         </View>
     }
 
