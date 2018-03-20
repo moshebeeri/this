@@ -1,11 +1,9 @@
 'use strict';
-
 const _ = require('lodash');
 const Group = require('./group.model');
 const User = require('../user/user.model');
 const Product = require('../product/product.model');
 const Notifications = require('../../components/notification');
-
 const graphTools = require('../../components/graph-tools');
 const graphModel = graphTools.createGraphModel('group');
 const activity = require('../../components/activity').createActivity();
@@ -15,9 +13,9 @@ const qrcodeController = require('../qrcode/qrcode.controller');
 const onAction = require('../../components/on-action');
 const feed = require('../../components/feed-tools');
 const Instance = require('../../components/instance');
-
+const util = require('util');
+const i18n = require('../i18n');
 exports.search = MongodbSearch.create(Group);
-
 // Get list of groups
 exports.index = function (req, res) {
   Group.find(function (err, groups) {
@@ -27,7 +25,6 @@ exports.index = function (req, res) {
     return res.status(200).json(groups);
   });
 };
-
 // Get a single group
 exports.show = function (req, res) {
   Group.findById(req.params.id, function (err, group) {
@@ -79,14 +76,13 @@ function user_follow_group_activity(group, user) {
 
 function sendActivity(act, callback) {
   activity.activity(act, function (err, activity) {
-    if(callback) {
+    if (callback) {
       if (err) return callback(err);
       callback(null, activity)
-    }else{
-      if(err) console.error(err);
+    } else {
+      if (err) console.error(err);
     }
   });
-
 }
 
 function group_message_activity(group, user_id, message) {
@@ -121,7 +117,7 @@ function group_follow_business_activity(business_id, following_group_id) {
 }
 
 function notifyOnAction(group) {
-  Notifications.notify( {
+  Notifications.notify({
     note: 'ADD_GROUP_FOLLOW_ON_ACTION',
     group: group.id,
     actor_user: group.creator
@@ -144,15 +140,15 @@ exports.create = function (req, res) {
         group: group._id
       }
     }, function (err, qrcode) {
-      if(err) console.error(err);
+      if (err) console.error(err);
       group.qrcode = qrcode;
-      group.save((err, group)=>{
+      group.save((err, group) => {
         graphModel.reflect(group, to_graph(group), function (err) {
           if (err) {
             return handleError(res, err);
           }
-          graphModel.relate_ids(req.user._id, 'FOLLOW', group._id, (err)=>{
-            if(err) return handleError(res, err);
+          graphModel.relate_ids(req.user._id, 'FOLLOW', group._id, (err) => {
+            if (err) return handleError(res, err);
             graphModel.relate_ids(group._id, 'CREATED_BY', req.user._id);
             graphModel.relate_ids(req.user._id, 'GROUP_ADMIN', group._id);
             touch(group.creator, group._id);
@@ -169,7 +165,6 @@ exports.create = function (req, res) {
     });
   });
 };
-
 exports.create_business_default_group = function (group, callback) {
   Group.create(group, function (err, group) {
     if (err) {
@@ -181,10 +176,10 @@ exports.create_business_default_group = function (group, callback) {
         group: group._id
       }
     }, function (err, qrcode) {
-      if(err) console.error(err);
+      if (err) console.error(err);
       group.qrcode = qrcode;
       group.save((err, group) => {
-        if(err) {
+        if (err) {
           console.error(err);
           return callback(err);
         }
@@ -196,8 +191,8 @@ exports.create_business_default_group = function (group, callback) {
         }, function (err) {
           if (err) return callback(err);
           //console.log(`group.creator -> ${JSON.stringify(group.creator)}`);
-          graphModel.relate_ids(group.creator._id, 'FOLLOW', group._id, (err)=>{
-            if(err) return callback(err);
+          graphModel.relate_ids(group.creator._id, 'FOLLOW', group._id, (err) => {
+            if (err) return callback(err);
             graphModel.relate_ids(group._id, 'CREATED_BY', group.creator);
             graphModel.relate_ids(group.creator._id, 'GROUP_ADMIN', group._id);
             graphModel.relate_ids(group._id, 'FOLLOW', group.entity.business);
@@ -212,7 +207,6 @@ exports.create_business_default_group = function (group, callback) {
     });
   });
 };
-
 // Updates an existing group in the DB.
 exports.update = function (req, res) {
   if (req.body._id) {
@@ -234,7 +228,6 @@ exports.update = function (req, res) {
     });
   });
 };
-
 // Deletes a group from the DB.
 exports.destroy = function (req, res) {
   Group.findById(req.params.id, function (err, group) {
@@ -252,7 +245,6 @@ exports.destroy = function (req, res) {
     });
   });
 };
-
 exports.message = function (req, res) {
   Group.findById(req.params.group, function (err, group) {
     if (err) {
@@ -265,7 +257,6 @@ exports.message = function (req, res) {
     return res.status(200).json(group);
   });
 };
-
 exports.small_business_candidates = function (req, res) {
   let groupId = req.params.group;
   let query = `MATCH (candidate:user)-[:FOLLOW]->(user:user{_id:'${req.user._id}'})-[role:ROLE{name:'OWNS'}]->(b:business)
@@ -278,7 +269,6 @@ exports.small_business_candidates = function (req, res) {
     return res.status(200).send();
   });
 };
-
 exports.business_candidates = function (req, res) {
   let groupId = req.params.group;
   let businessId = req.params.business;
@@ -293,12 +283,11 @@ exports.business_candidates = function (req, res) {
   });
 };
 
-function touch(userId, groupId, callback){
+function touch(userId, groupId, callback) {
   let query = `match (u:user{_id:'${userId}'})-[r:FOLLOW]->(g:group{_id:'${groupId}'}) set r.timestamp=timestamp()`;
-  graphModel.query(query, callback? callback : (err)=>{
-    if(err) console.error(err);
+  graphModel.query(query, callback ? callback : (err) => {
+    if (err) console.error(err);
   });
-
 }
 
 exports.touch = function (req, res) {
@@ -314,8 +303,9 @@ function user_follow_group(user_id, group, callback) {
       console.error(err);
     }
     user_follow_group_activity(group, user_id);
-    onAction.follow(user_id, group._id, (err) => {if(err) console.error(err)});
-
+    onAction.follow(user_id, group._id, (err) => {
+      if (err) console.error(err)
+    });
     if (typeof callback === 'function')
       callback(null, group);
   });
@@ -396,7 +386,6 @@ exports.add_user = function (req, res) {
     return res.status(201).json(group);
   });
 };
-
 exports.add_users = function (req, res) {
   Group.findById(req.params.to_group, function (err, group) {
     if (err) {
@@ -416,7 +405,6 @@ exports.add_users = function (req, res) {
     return res.status(201).send('users added');
   });
 };
-
 exports.join_group = function (req, res) {
   Group.findById(req.params.group, function (err, group) {
     if (err) {
@@ -425,17 +413,14 @@ exports.join_group = function (req, res) {
     if (!group) {
       return res.status(404).send('source group not found');
     }
-
     if (group.add_policy !== 'OPEN')
       return res.status(404).send('Group you try to follow is not open');
-
     user_follow_group(req.user._id, group, function (err) {
       if (err) return handleError(res, err);
       return res.status(200).json(group);
     });
   })
 };
-
 exports.group_join_group = function (req, res) {
   Group.findById(req.params.group, function (err, following_group) {
     if (err) {
@@ -444,15 +429,12 @@ exports.group_join_group = function (req, res) {
     if (!following_group) {
       return res.status(404).send('source group not found');
     }
-
     //user must be one of the admins
     if (!utils.defined(_.find(following_group.admins, req.user._id)))
       return res.status(404).send('Only group admin may follow other groups');
-
     Group.findById(req.params.group2follow, function (err, group2follow) {
       if (group2follow.add_policy !== 'OPEN')
         return res.status(404).send('Group you try to follow is not open');
-
       group_follow_group(following_group._id, group2follow._id, function (err) {
         if (err) return handleError(res, err);
         return res.status(200).json(following_group);
@@ -460,7 +442,6 @@ exports.group_join_group = function (req, res) {
     })
   });
 };
-
 exports.group_follow_business = function (req, res) {
   Group.findById(req.params.group, function (err, following_group) {
     if (err) {
@@ -469,33 +450,27 @@ exports.group_follow_business = function (req, res) {
     if (!following_group) {
       return res.status(404).send('source group not found');
     }
-
     //user must be one of the admins
     if (!utils.defined(_.find(following_group.admins, req.user._id)))
       return res.status(404).send('Only group admin may follow other groups');
-
     group_follow_business(following_group._id, req.params.business, function (err) {
       if (err) return handleError(res, err);
       return res.status(200).json(following_group);
     });
   })
 };
-
 exports.groups_following_business = function (req, res) {
   let skip = req.params.skip;
   let limit = req.params.limit;
-
   let query = `MATCH (g:group)-[r:FOLLOW]->(b:business{_id:"${req.params.business}"}) RETURN g._id as _id`;
   graphModel.query_objects(Group, query, 'order by r.timestamp desc', skip, limit, function (err, groups) {
     if (err) return handleError(res, err);
     return res.status(200).json(groups);
   })
 };
-
 exports.test_add_user = function (req, res) {
   return res.status(200).json("tested");
 };
-
 exports.following = function (req, res) {
   let group = req.params.group;
   let skip = req.params.skip;
@@ -509,12 +484,10 @@ exports.following = function (req, res) {
       return res.status(200).json(objects);
     });
 };
-
 exports.following_groups = function (req, res) {
   let group = req.params.group;
   let skip = req.params.skip;
   let limit = req.params.limit;
-
   graphModel.query_objects(Group,
     `MATCH (g:group {_id:'${group}'})<-[r:FOLLOW]-(g:group) RETURN g._id as _id`,
     '', skip, limit, function (err, groups) {
@@ -524,12 +497,10 @@ exports.following_groups = function (req, res) {
       });
     });
 };
-
 exports.following_users = function (req, res) {
   let group = req.params.group;
   let skip = req.params.skip;
   let limit = req.params.limit;
-
   graphModel.query_objects(User,
     `MATCH (g:group {_id:'${group}'})<-[r:FOLLOW]-(u:user) RETURN u._id as _id`,
     '', skip, limit, function (err, users) {
@@ -542,7 +513,6 @@ function get_groups_state(groups, userId, callback) {
   feed.generate_state(groups, userId, feed.group_state, callback)
 }
 
-
 exports.user_follow = function (req, res) {
   let skip = req.params.skip;
   let limit = req.params.limit;
@@ -554,10 +524,10 @@ exports.user_follow = function (req, res) {
     'order by r.timestamp desc', skip, limit, function (err, gObjects) {
       let _ids = [];
       let id2touch = {};
-
-      if(err) {return handleError(res, err)}
-      if(!gObjects) return res.status(404).json(`no groups for user _id: ${req.user._id}`);
-
+      if (err) {
+        return handleError(res, err)
+      }
+      if (!gObjects) return res.status(404).json(`no groups for user _id: ${req.user._id}`);
       gObjects.forEach(gObject => {
         _ids.push(gObject._id);
         id2touch[gObject._id] = {touched: gObject.touched, role: gObject.role}
@@ -576,12 +546,11 @@ exports.user_follow = function (req, res) {
               group.touched = id2touch[group._id].touched;
               group.role = id2touch[group._id].role;
             });
-           return res.status(200).json(groups);
+            return res.status(200).json(groups);
           });
         });
     });
 };
-
 exports.user_products = function (req, res) {
   let userID = req.user._id;
   let skip = req.params.skip;
@@ -594,52 +563,75 @@ exports.user_products = function (req, res) {
     });
 };
 
-function sendGroupNotification(actor_user, audience, group_id, type) {
-  let note = {
-    note: type,
-    group: group_id,
-    title: `Invitation to join group`,
-    actor_user: actor_user,
-    timestamp: Date.now()
-  };
-  Notifications.notify(note, audience);
+function sendGroupNotification(actor_user, audience, group, type) {
+  //'ask_join'ask_invite'
+  audience.forEach(to => {
+    User.findById(to).exec(user => {
+      function generateText() {
+        if (type === 'ask_join') {
+          return {
+            title: 'ASK_JOIN_GROUP_JOIN_TITLE',
+            body: util.format(i18n.get('ASK_JOIN_GROUP_JOIN_BODY', user.locale), group.name)
+          }
+        }else if(type === 'ask_invite'){
+          return {
+            title: 'ASK_INVITE_GROUP_JOIN_TITLE',
+            body: util.format(i18n.get('ASK_INVITE_GROUP_JOIN_BODY', user.locale), group.name)
+          }
+        }
+        throw new Error('unsupported type')
+      }
+      try{
+        let {title, body} = generateText();
+        let note = {
+          note: type,
+          group: group._id,
+          title: title,
+          body: body,
+          actor_user: actor_user,
+          timestamp: Date.now()
+        };
+        Notifications.notifyUser(note, user._id, true);
+      }catch(err){
+        console.error(err)
+      }
+    })
+  });
 }
 
-exports.instanceNotify = function(instance, group) {
-  try{
-    groupFollowersExclude(group, (err, ids)=>{
-      if(err) return console.error(err);
-      const _ids = ids.map(id=>id._id);
+exports.instanceNotify = function (instance, group) {
+  try {
+    groupFollowersExclude(group, (err, ids) => {
+      if (err) return console.error(err);
+      const _ids = ids.map(id => id._id);
       Instance.notify(instance, _ids);
     })
-  }catch (err){
+  } catch (err) {
     console.error('exports.instanceNotify', err)
   }
 };
 
 function groupFollowersExclude(groupId, exUserId, callback) {
-  if(!exUserId && !callback)
+  if (!exUserId && !callback)
     return console.error(new Error(`error calling groupFollowersExclude`));
-  if(!callback){
+  if (!callback) {
     callback = exUserId;
     exUserId = null;
   }
-  const ex = exUserId? `AND u._id <> '${exUserId}'`: '' ;
-
+  const ex = exUserId ? `AND u._id <> '${exUserId}'` : '';
   const query = `MATCH (u:user),(g:group)
                  WHERE (u)-[:FOLLOW]->(g) AND g._id = '${groupId}' ${ex}
                  RETURN u._id as _id limit 1000
                  `;
-  graphModel.query(query,(err, ids) => {
-    if(err) return callback(err);
+  graphModel.query(query, (err, ids) => {
+    if (err) return callback(err);
     return callback(null, ids);
   })
 }
 
-exports.groupFollowersExclude = function(groupId, exUserId, callback) {
+exports.groupFollowersExclude = function (groupId, exUserId, callback) {
   return groupFollowersExclude(groupId, exUserId, callback)
 };
-
 exports.ask_join_group = function (req, res) {
   let userId = req.user._id;
   let group = req.params.group;
@@ -656,26 +648,22 @@ exports.ask_join_group = function (req, res) {
           if (err) return handleError(res, err);
           return res.status(200).json(group);
         });
-
       if (group.add_policy !== 'REQUEST')
         return res.status(404).send('group.add_policy miss match');
-
       let create = `MATCH (g:group{_id:'${group}'})
                     CREATE (u:user{_id:'${userId}'})-[a:ASK_JOIN_GROUP]->(g)`;
       graphModel.query(create, function (err) {
         if (err) return handleError(res, err);
-        sendGroupNotification(userId, group.admins, group._id, 'ask_join');
+        sendGroupNotification(userId, group.admins, group, 'ask_join');
         return res.status(200).json(group);
       })
     });
   });
 };
-
 exports.approve_join_group = function (req, res) {
   let userId = req.user._id;
   let group = req.params.group;
   let user = req.params.user;
-
   Group.findById(group, function (err, group) {
     if (err) return handleError(res, err);
     if (!group) return res.status(404).send('no group');
@@ -684,12 +672,11 @@ exports.approve_join_group = function (req, res) {
     user_follow_group(userId, group, function (err) {
       if (err) return handleError(res, err);
       graphModel.unrelate_ids(user, 'ASK_JOIN_GROUP', group);
-      //sendGroupNotification(userId, [user], group._id, 'approve_join');
+      //sendGroupNotification(userId, [user], group, 'approve_join');
       return res.status(200).json(group);
     });
   });
 };
-
 exports.invite_group = function (req, res) {
   let userId = req.user._id;
   let group = req.params.group;
@@ -723,11 +710,9 @@ exports.invite_group = function (req, res) {
     }
   });
 };
-
 exports.approve_invite_group = function (req, res) {
   let userId = req.user._id;
   let group = req.params.group;
-
   let query = `MATCH (u:user {_id:'${userId}'})-[r:INVITE_GROUP]->(g:group{_id:"${group}"}) return r, type(r) as type`;
   graphModel.query(query, function (err, rs) {
     if (err) return handleError(res, err);
