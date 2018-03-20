@@ -150,15 +150,7 @@ export default function business(state = initialState, action) {
             } else {
                 return state;
             }
-        case actions.SHARE:
-            let shareItem = businessesState.businesses[action.id];
-            if (shareItem) {
-                shareItem.social_state.share = true;
-                shareItem.social_state.shares = shareItem.social_state.shares + action.shares;
-                return businessesState;
-            } else {
-                return state;
-            }
+
         case actions.SET_BUSINESS_CATEGORIES :
             let categoriesState = {...state};
             categoriesState.categories.language

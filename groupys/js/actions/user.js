@@ -122,6 +122,18 @@ export function* upSertUserSuccsess(newUser) {
     });
 }
 
+
+
+
+export function resetForm() {
+    return function (dispatch) {
+        dispatch({
+            type: actions.SAVING_USER_DONE,
+        });
+
+    }
+}
+
 export function resetPasswordForm() {
     return function (dispatch) {
         dispatch({

@@ -55,6 +55,7 @@ class UserProfile extends Component {
             name: this.props.user.user.name,
             phone_number: this.props.user.user.phone_number,
         })
+        this.props.resetForm();
     }
 
     validateForm() {

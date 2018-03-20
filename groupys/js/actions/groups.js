@@ -433,11 +433,7 @@ export function shareActivity(id, activityId, users, token) {
             users.forEach(function (user) {
                 activityApi.shareActivity(user, activityId, token)
             })
-            dispatch({
-                type: actions.SHARE,
-                id: id,
-                shares: users.length
-            });
+
             handler.handleSuccses(getState(), dispatch)
         } catch (error) {
             handler.handleError(error, dispatch, 'groups-shareActivity')

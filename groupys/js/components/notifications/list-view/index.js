@@ -150,7 +150,7 @@ export default class NotificationListView extends Component {
                 }}>
                     {image}
                     <View style={{flexDirection: 'column', marginLeft: 5, width: StyleUtils.getWidth()  - 50, height: vh * 10}}>
-                        <View style={{flexDirection: 'row'}}>
+                        <View style={{padding:10,flexDirection: 'row'}}>
                             <ThisText numberOfLines={2}
                                   style={{width: vw * 75, height: vh * 7}}>{strings.CreatePromotionForEveryoneBusiness}
                                 <ThisText style={{
@@ -303,7 +303,7 @@ export default class NotificationListView extends Component {
                 }}>
                     {image}
                     <View style={{flexDirection: 'column', width: StyleUtils.getWidth()  - 50, height: vh * 10}}>
-                        <View style={{flexDirection: 'row'}}>
+                        <View style={{adding:10,flexDirection: 'row'}}>
                             <ThisText style={{fontWeight: 'bold', marginLeft: vw * 4}}>{user.name}</ThisText>
                             <ThisText style={{height: vh * 4}}>{strings.InvitesYouToJoinGroup}</ThisText>
                         </View>
@@ -350,7 +350,7 @@ export default class NotificationListView extends Component {
                 }}>
                     {image}
                     <View style={{flexDirection: 'column', marginLeft: 5, width: StyleUtils.getWidth()  - 50, height: vh * 10}}>
-                        <View style={{flexDirection: 'row'}}>
+                        <View style={{adding:10,flexDirection: 'row'}}>
                             <ThisText numberOfLines={2}
                                   style={{width: vw * 75, height: vh * 7}}>{strings.CreatePromotionForEveryoneGroup}
                                 <ThisText style={{

@@ -17,7 +17,7 @@ export default function user(state = initialState, action) {
         // retrive stored data for reducer callApi
         const savedData = action.payload || initialState;
         return {
-            ...state, ...savedData.user
+            ...state, ...savedData.user,saving: false
         };
     }
     let userState = {...state};
