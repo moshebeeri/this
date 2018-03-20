@@ -157,7 +157,10 @@ export default class SimplePicker extends Component {
                     iosHeader={itemTitle}
                     mode="dropdown"
                     enabled={enable}
-                    style={pickerStyle}
+                    style={[pickerStyle, {
+
+                        width: StyleUtils.getWidth() - 25
+                    }]}
                     selectedValue={selectedValue}
                     onValueChange={this.selectPromotionType.bind(this)}
                 >

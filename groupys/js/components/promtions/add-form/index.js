@@ -845,7 +845,7 @@ class AddPromotion extends Component {
                                        onSubmitEditing={this.focusNextField.bind(this, "4")}
                                        onChangeText={(quantity) => this.setState({quantity})} isMandatory={true}/>
                         </View>}
-                        <View style={{flex: 3, marginLeft: 5}}>
+                        <View style={{flex: 3, }}>
                             <DatePicker field={strings.ExpirationDate} value={this.state.end}
                                         returnKeyType='next' ref="3" refNext="3"
                                         onChangeDate={(date) => {

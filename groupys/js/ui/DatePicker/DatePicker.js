@@ -1,12 +1,13 @@
 import React, {Component} from 'react';
-import {Dimensions, TextInput, View} from 'react-native';
-import {Icon, Input, Text} from 'native-base';
+import {Dimensions, View} from 'react-native';
+import {Icon, Input} from 'native-base';
 import styles from './styles';
 import DatePicker from "react-native-datepicker";
 import {ThisText} from '../index';
-import { I18nManager } from 'react-native';
-const {width, height} = Dimensions.get('window');
+import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import strings from "../../i18n/i18n"
+
+const {width, height} = Dimensions.get('window');
 export default class DatePickerField extends Component {
     constructor(props) {
         super(props);
@@ -21,8 +22,8 @@ export default class DatePickerField extends Component {
     }
 
     isValid() {
-        const {isMandatory, value, validateContent,invalid} = this.props;
-        if(invalid){
+        const {isMandatory, value, validateContent, invalid} = this.props;
+        if (invalid) {
             this.setState({
                 invalid: true
             })
@@ -37,7 +38,7 @@ export default class DatePickerField extends Component {
             }
         }
         if (validateContent) {
-            if(!validateContent(value)){
+            if (!validateContent(value)) {
                 this.setState({
                     invalid: true
                 })
@@ -57,7 +58,7 @@ export default class DatePickerField extends Component {
                 return;
             }
         }
-        if(onSubmitEditing) {
+        if (onSubmitEditing) {
             onSubmitEditing();
         }
     }
@@ -82,18 +83,17 @@ export default class DatePickerField extends Component {
         if (this.state.invalid) {
             textInputStyle = styles.textInputInvalidComponentStyle;
         }
-
         let containerStyle = styles.textInputNoFiledContainer;
-        if(field){
+        if (field) {
             containerStyle = styles.textInputContainer;
         }
-
         return <View style={containerStyle}>
             <View style={styles.textInputTitleContainer}>
 
                 <ThisText style={textStyle}>{field}</ThisText>
-                {field && isMandatory && <Icon style={{margin: 5, color: mandtoryIconColor, fontSize: 12}} name='star'/>}
-
+                {field && isMandatory &&
+                <MaterialCommunityIcons style={{marginLeft: 3, marginTop:-5, color: 'red', fontSize: 8}}
+                                        name='asterisk'/>}
             </View>
             <View style={styles.textInputComponentLayout}>
                 <DatePicker
