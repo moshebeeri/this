@@ -48,10 +48,10 @@ const types = [
             value: 'X+Y',
             label: strings.XPlusY
         },
-        {
-            value: 'GIFT',
-            label: strings.Gift
-        },
+        // {
+        //     value: 'GIFT',
+        //     label: strings.Gift
+        // },
         {
             value: 'REDUCED_AMOUNT',
             label: strings.ReduceAmount
