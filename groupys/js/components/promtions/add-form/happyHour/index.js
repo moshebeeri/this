@@ -1,6 +1,6 @@
 import React, {Component} from 'react';
 import {Keyboard, Platform, Text, View} from 'react-native'
-import styles from './styles'
+import styles from '../styles'
 import {SelectButton, TextInput, TimePicker, WeekDaysPicker} from '../../../../ui/index';
 import FormUtils from "../../../../utils/fromUtils";
 import strings from "../../../../i18n/i18n"

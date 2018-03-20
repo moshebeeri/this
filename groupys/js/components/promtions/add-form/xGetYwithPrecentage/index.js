@@ -1,13 +1,12 @@
 import React, {Component} from 'react';
-import {Platform, Text, View,Keyboard} from 'react-native'
+import {Keyboard, View} from 'react-native'
 import FormUtils from "../../../../utils/fromUtils";
-import styles from './styles'
-import {SelectButton, TextInput} from '../../../../ui/index';
+import styles from '../styles'
+import {SelectButton, TextInput, ThisText} from '../../../../ui/index';
 import strings from "../../../../i18n/i18n";
 import StyleUtils from '../../../../utils/styleUtils';
 import {Thumbnail} from 'native-base';
 import ProductPreview from "../../../product/productPreview/index";
-import {ThisText} from '../../../../ui/index';
 
 export default class XPlusYOffComponent extends Component {
     constructor(props) {
@@ -27,9 +26,11 @@ export default class XPlusYOffComponent extends Component {
             }
         )
     }
-    done(){
+
+    done() {
         Keyboard.dismiss();
     }
+
     isValid() {
         let result = true;
         Object.keys(this.refs).forEach(key => {
@@ -85,7 +86,6 @@ export default class XPlusYOffComponent extends Component {
         }
     }
 
-
     render() {
         let discount = '';
         if (this.props.state.x_plus_n_percent_off && this.props.state.x_plus_n_percent_off.eligible) {
@@ -98,23 +98,23 @@ export default class XPlusYOffComponent extends Component {
 
                 <ThisText style={{color: '#FA8559', marginLeft: 8, marginRight: 8}}>{strings.XPlusYOff}</ThisText>
             </View>
-            <View style={{flexDirection: 'row', justifyContent: 'center', alignItems: 'center'}}>
+            <View style={[styles.inputTextLayout, {flexDirection: 'row'}]}>
 
-                <View style={{flex: 1.7, marginTop: 25}}><SelectButton ref="xgetyselectProduct" isMandatory
+                <View style={{flex: 1.7, marginTop: 20}}><SelectButton ref="xgetyselectProduct" isMandatory
                                                                        selectedValue={this.props.state.product}
                                                                        title={strings.SelectProduct}
                                                                        action={this.showBuyProducts.bind(this, true)}/></View>
 
             </View>
-            <ProductPreview product={this.props.state.product} />
+            <ProductPreview product={this.props.state.product}/>
 
-            <View style={{flexDirection: 'row', justifyContent: 'center', alignItems: 'center'}}>
-                <View style={{flex: 1.7, marginTop: 25}}><SelectButton ref="xgetyselectOmProduct" isMandatory
+            <View style={[styles.inputTextLayout, {flexDirection: 'row'}]}>
+                <View style={{flex: 1.7, marginTop: 20}}><SelectButton ref="xgetyselectOmProduct" isMandatory
                                                                        selectedValue={this.props.state.giftProduct}
                                                                        title={strings.SelectOn}
                                                                        action={this.showProducts.bind(this, true)}/></View>
 
-                <View style={styles.inputPercentComponent}>
+                <View style={{width: 200}}>
                     <TextInput field={strings.PercentageOff} value={discount}
                                returnKeyType='done' ref="2" refNext="2"
                                keyboardType='numeric'
@@ -124,7 +124,7 @@ export default class XPlusYOffComponent extends Component {
                 </View>
 
             </View>
-            <ProductPreview product={this.props.state.giftProduct} type='gift' />
+            <ProductPreview product={this.props.state.giftProduct} type='gift'/>
 
         </View>
     }

@@ -866,7 +866,7 @@ class AddPromotion extends Component {
                                    onChangeText={(info) => this.setState({info})}/>
                     </View>}
 
-                    <View style={[styles.conditionForm, {width: StyleUtils.getWidth()}]}>
+                    <View style={[styles.conditionForm, {width: StyleUtils.getWidth() }]}>
                     {conditionForm}
                     </View>
                     {proximityForm}

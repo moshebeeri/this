@@ -1,8 +1,8 @@
 import React, {Component} from 'react';
 import {Platform, Text, View,Keyboard} from 'react-native'
 import FormUtils from "../../../../utils/fromUtils";
-import styles from './styles'
 import {SelectButton, TextInput,ThisText} from '../../../../ui/index';
+import styles from '../styles'
 import strings from "../../../../i18n/i18n"
 import StyleUtils from '../../../../utils/styleUtils';
 import ProductPreview from "../../../product/productPreview/index";
@@ -82,7 +82,7 @@ export default class PunchCardComponent extends Component {
                                                                        title={strings.SelectProduct}
                                                                        action={this.showBuyProducts.bind(this, true)}/></View>
 
-                <View style={styles.inputPercentComponent}>
+                <View style={styles.inputTextLayout}>
                     <TextInput field={strings.NumberOfPunches} value={numberOfPunches}
                                returnKeyType='done' ref="2" refNext="2"
                                keyboardType='numeric'

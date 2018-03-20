@@ -1,6 +1,6 @@
 import React, {Component} from 'react';
 import {Keyboard, Platform, Text, View} from 'react-native'
-import styles from './styles'
+import styles from '../styles'
 import {TextInput,ThisText} from '../../../../ui/index';
 import strings from "../../../../i18n/i18n"
 import StyleUtils from '../../../../utils/styleUtils';
@@ -80,16 +80,17 @@ export default class ReduceAmountComponent extends Component {
             <View style={[styles.textLayout, {width: StyleUtils.getWidth() - 15}]}>
                 <ThisText style={{color: '#FA8559', marginLeft: 8, marginRight: 8}}>{strings.BuyPayOnly}</ThisText>
             </View>
-            <View style={{flexDirection: 'row', justifyContent: 'center', alignItems: 'center'}}>
+            <View style={{flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' ,paddingTop:10, paddingRight:5 ,paddingLeft: 5,
+                width: StyleUtils.getWidth() - 15}}>
 
-                <View style={styles.inputPercentComponent}>
+                <View style={{width:160}}>
                     <TextInput field={strings.Buy} value={price}
                                returnKeyType='next' ref="Buy $" refNext="Buy $"
                                keyboardType='numeric'
                                onSubmitEditing={this.focusNextField.bind(this, "Pay $")}
                                onChangeText={(value) => this.setBuy(value)} isMandatory={true}/>
                 </View>
-                <View style={styles.inputPercentComponent}>
+                <View style={{width:160}}>
                     <TextInput field={strings.Pay} value={pay}
                                returnKeyType='done' ref="Pay $" refNext="Pay $"
                                keyboardType='numeric'

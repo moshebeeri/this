@@ -37,7 +37,7 @@ module.exports = {
         color: 'white', margin: 5, fontSize: 16
     },
     textLayout: {
-        marginTop: 4, padding: 3,
+        marginTop: 4,
         justifyContent:  'flex-start' ,
         alignItems: 'flex-start',
         width: width - 15

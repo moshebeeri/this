@@ -10,11 +10,12 @@ module.exports = {
     button: {
         backgroundColor: 'transparent'
     },
+
+
     inputTextLayout: {
-        marginTop: 4, padding: 3,
+        paddingTop:10, paddingRight:5 ,paddingLeft: 5,
         width: width - 15
     },
-
     inputPercentComponent: {
 
         marginRight:5,

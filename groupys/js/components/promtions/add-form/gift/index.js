@@ -1,6 +1,6 @@
 import React, {Component} from 'react';
 import {Keyboard, Platform, Text, View} from 'react-native'
-import styles from './styles'
+import styles from '../styles'
 import {SelectButton, SimplePicker} from '../../../../ui/index';
 import strings from "../../../../i18n/i18n"
 import StyleUtils from '../../../../utils/styleUtils';
