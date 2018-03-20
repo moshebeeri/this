@@ -44,7 +44,7 @@ class Business extends Component {
             return <View></View>
         }
         return (
-            <Container style={{backgroundColor: '#b7b7b7'}}>
+            <Container style={{backgroundColor: `${appBackgroundColor}`}}>
 
 
                 <GenericListManager  user={user} noRefresh rows={businesses} navigation={navigation} actions={actions} update={update}

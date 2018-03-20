@@ -1,4 +1,4 @@
-const initialState = {feeds: {}, feedOrder: [], showTopLoader: false, update: false, lastfeed: undefined, lastCall: {},firstTime:true,shouldRender:true};
+const initialState = {feeds: {},feedToSavedFeed: {}, feedOrder: [], showTopLoader: false, update: false, lastfeed: undefined, lastCall: {},firstTime:true,shouldRender:true};
 import {REHYDRATE} from "redux-persist/constants";
 import * as actions from "./reducerActions";
 
@@ -30,6 +30,7 @@ export default function myPromotions(state = initialState, action) {
                     currentFeeds[item.savedInstance._id] = item;
                     if (!feedstate.feedOrder.includes(item.savedInstance._id)) {
                         feedstate.feedOrder.push(item.savedInstance._id);
+                        feedstate.feedToSavedFeed[item.savedInstance.instance._id] = item.savedInstance._id;
                     }
 
                 });
@@ -44,6 +45,8 @@ export default function myPromotions(state = initialState, action) {
                     currentFeeds[item.savedInstance._id] = item;
                     if (!feedstate.feedOrder.includes(item.savedInstance._id)) {
                         feedstate.feedOrder.unshift(item.savedInstance._id);
+                        feedstate.feedToSavedFeed[item.savedInstance.instance._id] = item.savedInstance._id;
+
                     }
 
                 });

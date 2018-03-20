@@ -1,6 +1,6 @@
 import React, {Component} from 'react';
 import {Keyboard, Platform, Text, View} from 'react-native'
-import styles from './styles'
+import styles from '../styles'
 import {SelectButton, TextInput} from '../../../../ui/index';
 import strings from "../../../../i18n/i18n"
 import StyleUtils from '../../../../utils/styleUtils';
@@ -123,7 +123,7 @@ export default class XPlusYComponent extends Component {
                 <ThisText style={{color: '#FA8559', marginLeft: 8, marginRight: 8}}>{strings.XPlusY}</ThisText>
             </View>
             <View style={{flexDirection: 'row', justifyContent: 'center', alignItems: 'center'}}>
-                <View style={styles.inputPercentComponent}>
+                <View style={styles.inputTextLayout}>
                     <TextInput field={strings.BuyAmount} value={buyValue}
                                returnKeyType='next' ref="Buy Amount" refNext="Buy Amount"
                                keyboardType='numeric'
@@ -134,7 +134,7 @@ export default class XPlusYComponent extends Component {
             <ProductPreview product={this.props.state.product} />
 
             <View style={{flexDirection: 'row', justifyContent: 'center', alignItems: 'center'}}>
-                <View style={styles.inputPercentComponent}>
+                <View style={styles.inputTextLayout}>
                     <TextInput field={strings.NumberOfGifts} value={eligibleValue}
                                returnKeyType='done' ref="Number of Gifts" refNext="Number of Gifts"
                                keyboardType='numeric'

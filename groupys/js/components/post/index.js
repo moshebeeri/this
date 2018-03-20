@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import {Dimensions, Image, ScrollView, Text, View} from 'react-native';
+import {Dimensions, Image, ScrollView, Text, View,TouchableOpacity} from 'react-native';
 import {connect} from 'react-redux';
 import styles from './styles'
 import {FormHeader, ImagePicker, Spinner, TextInput, Video} from '../../ui/index';
@@ -129,6 +129,10 @@ class AddPost extends Component {
         this.setState({video: video});
     }
 
+    openMenu(){
+        this.refs["coverImage"].openMenu();
+    }
+
     createCoverImageComponnent() {
         const {saving} = this.props;
         let item;
@@ -162,14 +166,14 @@ class AddPost extends Component {
 
                     <View style={styles.addCoverContainer}>
 
-                        <ImagePicker video ref={"coverImage"} image={item} color='white' pickFromCamera
+                        <ImagePicker video  name={"coverImage"} ref={"coverImage"} image={item} color='white' pickFromCamera
                                      setVideo={this.setVideo.bind(this)} setImage={this.setCoverImage.bind(this)}/>
                     </View>
                     {saving && <Spinner/>}
                 </View>
             </View>
         }
-        return <View style={styles.product_upper_container}>
+        return <TouchableOpacity onPress={this.openMenu.bind(this)} style={styles.product_upper_container}>
             {saving && <Spinner/>}
             <View style={styles.cmeraLogoContainer}>
 
@@ -180,7 +184,7 @@ class AddPost extends Component {
                 </View>
             </View>
 
-        </View>
+        </TouchableOpacity>
     }
 
     render() {

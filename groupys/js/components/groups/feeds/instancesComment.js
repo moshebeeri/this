@@ -47,12 +47,12 @@ class instancesComment extends Component {
         this.props.groupActions.clearReplyInstance();
     }
     renderItem(renderItem) {
-        const {user} = this.props;
-        return <GroupChat key={renderItem.item.id} renderItem={renderItem} user={user}/>
+        const {user,navigation,groupActions} = this.props;
+        return <GroupChat actions={groupActions} navigation={navigation} key={renderItem.item.id} renderItem={renderItem} user={user}/>
     }
 
     render() {
-        const {group, instance,comments, navigation, actions, update, loadingDone, showTopLoader, allState} = this.props;
+        const {group, instance,comments, navigation, actions, update, loadingDone, showTopLoader, groupActions,user} = this.props;
         return <View style={{flex: 1}}>
             <View style={{flex: 1}}>
                 <GenericFeedManager feeds={comments[group._id]}
@@ -60,13 +60,14 @@ class instancesComment extends Component {
                                     entity={group}
                                     initialNumToRender={7}
                                     chat
+                                    user={user}
                                     navigation={navigation}
                                     setNextFeeds={this.setNextFeed.bind(this)}
-                                    actions={actions}
+                                    actions={groupActions}
                                     update={update}
                                     showTopLoader={showTopLoader[group._id]}
                                     loadingDone={loadingDone[group._id]}
-                                    ItemDetail={this.renderItem.bind(this)}/>
+                                    ItemDetail={GroupChat}/>
             </View>
 
             <View>

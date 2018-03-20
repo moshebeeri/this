@@ -163,7 +163,7 @@ export const unlike = (id) => {
     }
 };
 
-export function saveFeed(id, navigation, feed) {
+export function saveFeed(id,) {
     return async function (dispatch, getState) {
         try {
             dispatch({
@@ -171,11 +171,13 @@ export function saveFeed(id, navigation, feed) {
                 id: id
             });
             let savedInstance = await promotionApi.save(id);
-            navigation.navigate('realizePromotion', {item: feed, id: savedInstance._id})
             dispatch({
                 type: types.SAVE_SINGLE_MYPROMOTIONS_REQUEST,
-                item: savedInstance
+                item: savedInstance,
+                feedId: id
             })
+
+
             handler.handleSuccses(getState(), dispatch)
         } catch (error) {
             handler.handleError(error, dispatch, 'saveFeed')

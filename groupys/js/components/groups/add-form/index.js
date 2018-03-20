@@ -295,7 +295,7 @@ class AddGroup extends Component {
                 </View>
             </View>
         }
-        return <View style={styles.product_upper_container}>
+        return <TouchableOpacity onPress={this.openMenu.bind(this)} style={styles.product_upper_container}>
             {saving && <Spinner/>}
             <View style={styles.cmeraLogoContainer}>
 
@@ -306,7 +306,10 @@ class AddGroup extends Component {
                 </View>
             </View>
 
-        </View>
+        </TouchableOpacity>
+    }
+    openMenu(){
+        this.refs["coverImage"].openMenu();
     }
 
     changeQrLook() {

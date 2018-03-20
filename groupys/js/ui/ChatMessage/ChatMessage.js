@@ -10,18 +10,21 @@ import {actions} from 'react-native-navigation-redux-helpers';
 import {Button, Container, Footer, Thumbnail} from 'native-base';
 import styles from './styles'
 import DateUtils from '../../utils/dateUtils'
-import {ThisText} from '../index'
+import {SubmitButton, ThisText} from '../index'
 import Icon from 'react-native-vector-icons/EvilIcons';
-import Icon2 from 'react-native-vector-icons/MaterialIcons'
-import {Menu, MenuOption, MenuOptions, MenuTrigger,} from 'react-native-popup-menu';
 import strings from "../../i18n/i18n"
 import Ionicons from 'react-native-vector-icons/Ionicons';
+
 let dateUtils = new DateUtils();
 export default class ChatMessage extends Component {
-    reply() {
+    claim() {
+        const {claim} = this.props;
+        claim();
     }
 
-    claim() {
+    realize() {
+        const {realize} = this.props;
+        realize();
     }
 
     render() {
@@ -38,22 +41,6 @@ export default class ChatMessage extends Component {
         if (wide) {
             styleContainer = styles.messageWideUserName;
         }
-        let replayMenu = <Menu>
-            <MenuTrigger>
-                <Icon2 active color={"#90a1a2"} size={25} name={'touch-app'}/>
-            </MenuTrigger>
-            <MenuOptions>
-
-                <MenuOption onSelect={this.reply.bind(this)}>
-                    <ThisText style={{color: '#616F70'}}>{strings.Reply}</ThisText>
-                </MenuOption>
-                <MenuOption onSelect={this.claim.bind(this)}>
-                    <ThisText style={{color: '#616F70'}}>{strings.Claim}</ThisText>
-                </MenuOption>
-
-
-            </MenuOptions>
-        </Menu>;
         if (!item.isUser) {
             return <View style={containerStyle}>
                 <View style={styles.messageUsercomponent}>
@@ -87,7 +74,11 @@ export default class ChatMessage extends Component {
                             </View>
                             <View style={styleContainer}>
                                 {item.instance && <View>
-                                    <View style={{marginTop: 5}}><ThisText style={{
+                                    <View style={{
+                                        marginTop: 5,
+                                        alignItems: 'flex-start',
+                                        justifyContent: 'center'
+                                    }}><ThisText style={{
                                         fontSize: 14,
                                         color: '#616F70'
                                     }}>{strings.CreatedByBusiness.formatUnicorn(item.instance.businessName)}</ThisText>
@@ -97,7 +88,10 @@ export default class ChatMessage extends Component {
                                         borderBottomColor: '#E6E6E6',
                                         paddingTop: 2,
                                         marginTop: 10,
+                                        paddingBottom: 10,
+                                        paddingRight: 5,
                                         borderBottomWidth: 1,
+                                        alignItems: 'flex-start', justifyContent: 'center',
                                         flexDirection: 'row'
                                     }}>
                                         <Icon active color={"#2db6c8"} size={25} name={'tag'}/>
@@ -105,7 +99,26 @@ export default class ChatMessage extends Component {
                                         <ThisText style={{
                                             fontSize: 14,
                                             color: '#616F70'
-                                        }}>{item.instance.promotionTerm}</ThisText></View>
+                                        }}>{item.instance.promotionTerm}</ThisText>
+                                        {item.instance.showSave && <View style={{marginLeft: 10,}}>
+
+                                            <SubmitButton fontSize={12} height={25} width={45}
+                                                          title={strings.Claim.toUpperCase()} color={'#2db6c8'}
+                                                          onPress={() => this.claim()}/>
+                                        </View>}
+                                        {!item.instance.isRealized && <View style={{marginLeft: 10,}}>
+
+                                            <SubmitButton fontSize={12} height={25} width={65}
+                                                          title={strings.Realize.toUpperCase()} color={'#2db6c8'}
+                                                          onPress={() => this.realize()}/>
+                                        </View>}
+                                        {item.instance.isRealized && <View style={{marginLeft: 10,}}>
+
+                                            <SubmitButton fontSize={12} height={25} width={75} disabled
+                                                          title={strings.Realized.toUpperCase()} color={'#cccccc'}/>
+                                        </View>}
+
+                                    </View>
                                 </View>}
 
                                 {item.post && <View>
@@ -118,12 +131,13 @@ export default class ChatMessage extends Component {
                                     <View style={{
                                         borderBottomColor: '#E6E6E6',
                                         paddingTop: 2,
+                                        paddingLeft: 5,
                                         marginTop: 10,
                                         paddingBottom: 8,
                                         borderBottomWidth: 1,
                                         flexDirection: 'row'
                                     }}>
-                                        <Ionicons size={25} style={{marginRight:12,}}color={'#2db6c8'}
+                                        <Ionicons size={25} style={{marginRight: 12,}} color={'#2db6c8'}
                                                   name="ios-person-outline"/>
                                         <ThisText style={{
                                             fontSize: 14,
@@ -172,7 +186,11 @@ export default class ChatMessage extends Component {
                             <View>
                                 {item.instance &&
                                 <View>
-                                    <View style={{marginTop: 5}}><ThisText style={{
+                                    <View style={{
+                                        marginTop: 5,
+                                        alignItems: 'flex-start',
+                                        justifyContent: 'center'
+                                    }}><ThisText style={{
                                         fontSize: 14,
                                         color: 'white'
                                     }}>{strings.CreatedByBusiness.formatUnicorn(item.instance.businessName)}</ThisText>
@@ -180,7 +198,9 @@ export default class ChatMessage extends Component {
                                     <View style={{
                                         borderBottomColor: 'white',
                                         paddingTop: 2,
+                                        paddingRight: 5,
                                         marginTop: 10,
+                                        paddingBottom: 10,
                                         borderBottomWidth: 1,
                                         flexDirection: 'row'
                                     }}>
@@ -188,10 +208,34 @@ export default class ChatMessage extends Component {
                                         <ThisText style={{
                                             fontSize: 14,
                                             color: 'white'
-                                        }}>{item.instance.promotionTerm}</ThisText></View>
+                                        }}>{item.instance.promotionTerm}</ThisText>
+
+
+                                        {item.instance.showSave && <View style={{marginLeft: 10,}}>
+
+                                            <SubmitButton fontSize={12} height={25} width={45}
+                                                          title={strings.Claim.toUpperCase()} textColor={'#2db6c8'}
+                                                          color={'white'}
+                                                          onPress={() => this.claim()}/>
+                                        </View>}
+                                        {!item.instance.isRealized && <View style={{marginLeft: 10,}}>
+
+                                            <SubmitButton fontSize={12} height={25} width={65}
+                                                          title={strings.Realize.toUpperCase()} textColor={'#2db6c8'}
+                                                          color={'white'}
+                                                          onPress={() => this.realize()}/>
+                                        </View>}
+                                        {item.instance.isRealized && <View style={{marginLeft: 10,}}>
+
+                                            <SubmitButton fontSize={12} height={25} width={75} disabled
+                                                          title={strings.Realized.toUpperCase()} textColor={'#2db6c8'}
+                                                          color={'#cccccc'}/>
+                                        </View>}
+                                    </View>
+
                                 </View>}
                                 {item.post &&
-                                <View >
+                                <View>
                                     <View style={{marginTop: 5}}><ThisText style={{
                                         fontSize: 14,
                                         color: 'white'
@@ -200,17 +244,17 @@ export default class ChatMessage extends Component {
                                     <View style={{
                                         borderBottomColor: 'white',
                                         paddingTop: 2,
+                                        paddingLeft: 5,
                                         borderBottomWidth: 1,
                                         paddingBottom: 8,
                                         flexDirection: 'row'
                                     }}>
-                                        <Ionicons size={25} style={{marginRight:12,}}color={'white'}
+                                        <Ionicons size={25} style={{marginRight: 12,}} color={'white'}
                                                   name="ios-person-outline"/>
                                         <ThisText style={{
                                             fontSize: 14,
                                             color: 'white',
                                             width: 200,
-
                                         }}>{item.post.feed.text}</ThisText></View>
                                 </View>}
 

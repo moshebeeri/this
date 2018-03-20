@@ -38,7 +38,7 @@ class ProductsApi {
 
     getProductCategories(gid, token) {
         let locale = FormUtils.getLocale();
-        return serverRequestHandler.fetch_handler(`${server_host}/api/categories/product//${locale}/${gid}`, {
+        return serverRequestHandler.fetch_handler(`${server_host}/api/categories/product/${locale}/${gid}`, {
             method: 'GET',
             headers: {
                 'Accept': 'application/json, text/plain, */*',

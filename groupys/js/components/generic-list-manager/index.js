@@ -53,33 +53,40 @@ class GenericListManager extends Component {
     }
 
     render() {
-        const {rows,  actions, update, onEndReached, noRefresh} = this.props;
+        const {rows,  actions, update, onEndReached, noRefresh,refreshing,onRefreshing} = this.props;
         if (noRefresh) {
             return (
-                <Content style={{backgroundColor: '#dddddd'}}>
+                <View style={{backgroundColor: `${appBackgroundColor}`}}>
+
 
                     <FlatList
+                        ref='flatList'
                         data={rows}
                         renderItem={this.renderItem.bind(this)}
                         extraData={update}
+                        refreshing={refreshing}
+                        onRefresh={onRefreshing}
                     />
 
-                </Content>
+                </View>
             )
         }
         const onEndActions = this.getOnEndAction(actions, onEndReached);
         return (
 
-            <Content style={{backgroundColor: '#E6E6E6'}}>
+            <View style={{backgroundColor: `${appBackgroundColor}`}}>
 
                 <FlatList
+                    ref='flatList'
                     data={rows}
                     onEndReached={onEndActions}
+                    refreshing={refreshing}
+                    onRefresh={onRefreshing}
                     renderItem={this.renderItem.bind(this)}
                     extraData={update}
                 />
 
-            </Content>
+            </View>
 
         );
     }

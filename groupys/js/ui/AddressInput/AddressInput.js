@@ -1,13 +1,13 @@
 import React, {Component} from 'react';
-import {I18nManager, Text, View,Keyboard} from 'react-native';
+import {Keyboard, View} from 'react-native';
 import {Icon, Input, Spinner} from 'native-base';
 import styles from './styles';
-import {DynamicMessage, TextInput,ThisText} from '../index';
+import {DynamicMessage, TextInput, ThisText} from '../index';
 import {connect} from 'react-redux';
 import {bindActionCreators} from "redux";
 import * as addressAction from "../../actions/address";
 import strings from "../../i18n/i18n"
-import StyleUtils from "../../utils/styleUtils";
+import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 
 class AddressInput extends Component {
     constructor(props) {
@@ -19,7 +19,7 @@ class AddressInput extends Component {
             address: '',
             locations: '',
             spinner: false,
-            ilegalAddress:false,
+            ilegalAddress: false,
         }
         props.actions.resetForm();
     }
@@ -50,27 +50,22 @@ class AddressInput extends Component {
                 result = false;
             }
         });
-
-        if(!addressForm.hasValidated){
+        if (!addressForm.hasValidated) {
             this.onSubmit(onValid);
-
             return false;
         }
-        if(addressForm.addressNotFound){
+        if (addressForm.addressNotFound) {
             this.onSubmit(onValid);
-
             return false;
         }
-
-        if(addressForm.locations && addressForm.locations> 1){
-
-            if(!this.state.location) {
+        if (addressForm.locations && addressForm.locations > 1) {
+            if (!this.state.location) {
                 this.onSubmit(onValid);
-
                 return false;
             }
         }
-        this.setState({ilegalAddress:false});
+        this.setState({ilegalAddress: false});
+        this.setSubmut();
         return result;
     }
 
@@ -80,7 +75,7 @@ class AddressInput extends Component {
             address: this.state.address,
             country: this.state.country,
         }
-        this.props.actions.validateAddress(address,onValid);
+        this.props.actions.validateAddress(address, onValid);
     }
 
     chooseAddress(address) {
@@ -122,7 +117,7 @@ class AddressInput extends Component {
         return !(this.state.locations && this.state.locations.length > 0)
     }
 
-    setValue(value){
+    setValue(value) {
         this.setState(value);
         this.props.actions.addressChangeed();
     }
@@ -135,6 +130,9 @@ class AddressInput extends Component {
 
     setSubmut() {
         const {onSubmitEditing, addressForm} = this.props;
+        if (!addressForm.location) {
+            return;
+        }
         let address = {
             location: addressForm.location,
             city: this.state.city,
@@ -149,21 +147,24 @@ class AddressInput extends Component {
     render() {
         const {isMandatory, addressForm, refNext} = this.props;
         let ilegalBorder = 0;
-        if(addressForm.ilegalAddress || addressForm.addressNotFound){
+        if (addressForm.ilegalAddress || addressForm.addressNotFound) {
             ilegalBorder = 1;
         }
         return <View>
-            <View style={[styles.inputTextLayout, {borderWidth:ilegalBorder,borderColor:'red',width: StyleUtils.getWidth() - 15}]}>
+            <View style={{borderWidth: ilegalBorder, borderColor: 'red'}}>
 
-                <View style={{flexDirection: "row", justifyContent: 'flex-start' }}>
+                <View style={{flexDirection: "row", justifyContent: 'flex-start'}}>
                     {/*{!I18nManager.isRTL && isMandatory &&*/}
                     {/*<Icon style={{margin: 5, color: 'red', fontSize: 12}} name='star'/>}*/}
 
                     <ThisText style={styles.textInputTextStyle}>{strings.LocationAddress}</ThisText>
-                    { isMandatory &&
-                    <Icon style={{margin: 5, color: 'red', fontSize: 12}} name='star'/>}
+                    {isMandatory &&
+                    <MaterialCommunityIcons style={{marginLeft: 3, marginTop: 4, color: 'red', fontSize: 8}}
+                                            name='asterisk'/>}
+
                 </View>
                 <View>
+
                     <TextInput placeholder={strings.Country} value={this.state.country} returnKeyType='next'
                                ref={refNext}
                                refNext={refNext}
@@ -179,8 +180,7 @@ class AddressInput extends Component {
                                onChangeText={(city) => this.setValue({city})} isMandatory={isMandatory}/>
 
 
-
-                   <TextInput
+                    <TextInput
                         placeholder={strings.Address} value={this.state.address} returnKeyType='next'
                         ref="address"
                         refNext="address"

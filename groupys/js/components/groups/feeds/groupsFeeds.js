@@ -1,31 +1,29 @@
 import React, {Component} from "react";
-import {Dimensions, View,Text} from "react-native";
+import {Dimensions, View} from "react-native";
 import {connect} from "react-redux";
 import {actions} from "react-native-navigation-redux-helpers";
 import GenericFeedManager from "../../generic-feed-manager/index";
 import {bindActionCreators} from "redux";
 import * as groupAction from "../../../actions/groups";
-
 import {getFeeds} from "../../../selectors/groupFeedsSelector";
 import * as commentAction from "../../../actions/commentsGroup";
 import * as activityAction from "../../../actions/activity";
 import styles from './styles'
-import { Fab} from "native-base";
+import {Fab, Thumbnail} from "native-base";
 import GenericFeedItem from "../../generic-feed-manager/generic-feed";
 import Icon2 from "react-native-vector-icons/Ionicons";
-import {Thumbnail} from 'native-base';
+
 const {width, height} = Dimensions.get('window')
 const vw = width / 100;
 const vh = height / 100
-import strings from '../../../i18n/i18n';
+
 class GroupFeedComponent extends Component {
     constructor(props) {
         super(props);
-        this.state={showFab:true}
+        this.state = {showFab: true}
     }
 
     componentWillMount() {
-
     }
 
     allowPost(group) {
@@ -41,32 +39,36 @@ class GroupFeedComponent extends Component {
                 return false;
         }
     }
-    refreshTop(){
-        const group = this.props.navigation.state.params.group;
-        this.setState({refreshing:true});
-        this.props.actions.setTopFeeds(group);
-        this.setState({refreshing:false});
 
+    refreshTop() {
+        const group = this.props.navigation.state.params.group;
+        this.setState({refreshing: true});
+        this.props.actions.setTopFeeds(group);
+        this.setState({refreshing: false});
     }
+
     navigateToAdd() {
         const group = this.props.navigation.state.params.group;
         this.props.navigation.navigate('PostForm', {group: group})
     }
-    showFab(show){
+
+    showFab(show) {
         this.setState({
-            showFab:show
+            showFab: show
         })
     }
 
+    realize(item) {
+        this.props.navigation.navigate('realizePromotion', {item: item})
+    }
 
     render() {
-        const {visibleFeeds,navigateToChat,navigation, activityAction,group,feeds, userFollower, actions, token, loadingDone, location, showTopLoader,postUpdated} = this.props;
-
+        const {visibleFeeds, navigateToChat, navigation, activityAction, group, feeds, userFollower, actions, token, loadingDone, location, showTopLoader, postUpdated} = this.props;
         const icon = <Icon2 active size={40} name="md-create"/>;
-
         return <View style={styles.inputContainer}>
             <GenericFeedManager
                 navigation={navigation}
+                realize={this.realize.bind(this)}
                 visibleFeeds={visibleFeeds}
                 loadingDone={loadingDone[group._id]}
                 showTopLoader={showTopLoader[group._id]}
@@ -111,7 +113,7 @@ export default connect(
         loadingDone: state.groups.loadingDone,
         postUpdated: state.postForm,
         location: state.phone.currentLocation,
-        visibleFeeds:state.groups.visibleFeeds,
+        visibleFeeds: state.groups.visibleFeeds,
     }),
     (dispatch) => ({
         actions: bindActionCreators(groupAction, dispatch),

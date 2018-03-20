@@ -1,6 +1,6 @@
 import React, {Component} from 'react';
 import {Keyboard, Text, View} from 'react-native'
-import styles from './styles'
+import styles from '../styles'
 import {SelectButton, TextInput} from '../../../../ui/index';
 import strings from "../../../../i18n/i18n"
 import StyleUtils from '../../../../utils/styleUtils';
@@ -110,14 +110,14 @@ export default class XForYComponent extends Component {
                                                                        isMandatory title={strings.SelectProduct}
                                                                        action={this.showBuyProducts.bind(this, true)}/></View>
 
-                <View style={styles.inputPercentComponent}>
+                <View style={styles.inputTextLayout}>
                     <TextInput field={strings.BuyAmount} value={eligible}
                                returnKeyType='next' ref="Buy Amount" refNext="Buy Amount"
                                keyboardType='numeric'
                                onSubmitEditing={this.focusNextField.bind(this, "Pay $")}
                                onChangeText={(value) => this.setBuyAmount(value)} isMandatory={true}/>
                 </View>
-                <View style={styles.inputPercentComponent}>
+                <View style={styles.inputTextLayout}>
                     <TextInput field={strings.PayAmount} value={pay}
                                returnKeyType='done' ref="Pay $" refNext="Pay $"
                                keyboardType='numeric'

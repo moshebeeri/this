@@ -19,7 +19,7 @@ module.exports = {
     inputPercentComponent: {
 
         marginRight:5,
-        flex:1.4
+        flex:1.2
     },
 
     inputRetailComponent: {

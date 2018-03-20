@@ -119,7 +119,7 @@ class ProfileDrawer extends Component {
                 <View style={styles.image}>
                     <View style={styles.thumbnail}>
 
-                        <ImagePicker imageWidth={3000} imageHeight={3000} image={userImage}
+                        <ImagePicker name={"drawerPicker"} ref={"drawerPicker"} imageWidth={3000} imageHeight={3000} image={userImage}
                                      setImage={this.setImage.bind(this)}/>
 
                     </View>

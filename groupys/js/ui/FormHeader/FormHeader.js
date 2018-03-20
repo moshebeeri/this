@@ -63,7 +63,7 @@ class FormHeader extends Component {
     render() {
         const {filter, submitForm, showBack, title, bgc, submitIcon, titleColor, backIconColor, network, menu} = this.props;
         let icon = <Icon2 active color={"white"} size={25} name={'check'}/>
-        let headerHeight = vh * 7;
+        let headerHeight = vh * 9;
         if (Platform.OS === 'ios') {
             icon = <Icon active color={"white"} size={30} name={'ios-checkmark'}/>
             headerHeight = vh * 9;
@@ -91,7 +91,12 @@ class FormHeader extends Component {
         }
         let titleStyle = this.createTitleStyle(titleColor);
         return (
-            <View style={{width: StyleUtils.getWidth()}}>
+            <View style={{
+                backgroundColor: bgc,
+                width: StyleUtils.getWidth(),
+                justifyContent: 'center',
+                alignItems: 'center'
+            }}>
                 {network.offline && <View style={{
                     width: width,
                     height: 20,
@@ -102,7 +107,11 @@ class FormHeader extends Component {
                     <ThisText style={{color: 'gray'}}>{strings.Offline}</ThisText>
                 </View>}
                 <View style={{
-                    height: headerHeight, flexDirection: 'row', alignItems: 'center', backgroundColor: bgc,
+                    height: headerHeight,
+                    paddingTop: Platform.OS === 'ios' ? 20 : 0,
+                    flexDirection: 'row',
+                    alignItems: 'center',
+                    backgroundColor: bgc,
                     justifyContent: 'center',
                 }}>
                     <View style={styles.formHeaderBackButoon}>
@@ -149,7 +158,12 @@ class FormHeader extends Component {
                     </View> : <View style={styles.formHeaderSubmitButoon}>
                         {submitForm &&
                         <TouchableOpacity transparent
-                                          style={{width: 50, alignItems: 'flex-end', justifyContent: 'flex-end'}}
+                                          style={{
+                                              width: 50,
+                                              marginRight: 10,
+                                              alignItems: 'flex-end',
+                                              justifyContent: 'flex-end'
+                                          }}
                                           onPress={() => this.submitForm()}>
                             {icon}
                         </TouchableOpacity>

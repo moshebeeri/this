@@ -7,7 +7,8 @@ module.exports = {
     formHeaderBackButoon: {
         flex: 1,
 
-        height:  (Platform.OS === 'ios') ? vh * 6 : vh * 7,
+        marginLeft:10,
+
         justifyContent: 'flex-start',
         flexDirection: 'row',
         alignItems: 'center'

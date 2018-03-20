@@ -7,6 +7,7 @@ import styles from './styles'
 import strings from "../../i18n/i18n";
 import StyleUtils from "../../utils/styleUtils";
 import {ThisText,TextInput} from '../../ui/index';
+import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 
 export default class SimplePicker extends Component {
     constructor(props) {
@@ -59,7 +60,7 @@ export default class SimplePicker extends Component {
 
     renderRow(value) {
         return <View style={{justifyContent: 'flex-start', alignItems: 'flex-end'}}><ThisText
-            style={{paddingLeft: 10, paddingRight: 10, fontSize: 14}}>{value}</ThisText></View>
+            style={{padding:10,paddingLeft: 10, paddingRight: 10, fontSize: 14}}>{value}</ThisText></View>
     }
 
     createIosRender() {
@@ -84,14 +85,14 @@ export default class SimplePicker extends Component {
             </View>
             {disable ? <View style={[pickerStyle, {
                     backgroundColor: '#cccccc',
-                    width: StyleUtils.getWidth() - 20
+                    width: StyleUtils.getWidth() - 25
                 }]}><ThisText>{selectValue}</ThisText></View> :
                 <TouchableOpacity onPress={() => this.showDropDownn()}
-                                  style={[pickerStyle, {width: StyleUtils.getWidth() - 20}]} s>
+                                  style={[pickerStyle, {width: StyleUtils.getWidth() - 25}]} s>
                     <ModalDropdown ref={'dropDown'}
-                                   style={[styles.modalViewStyle, {width: StyleUtils.getWidth() - 20}]}
+                                   style={[styles.modalViewStyle, {width: StyleUtils.getWidth() - 25}]}
                                    options={options}
-                                   textStyle={{alignItems: 'flex-end', fontSize: 20}}
+                                   textStyle={{alignItems: 'flex-end', fontSize: 15}}
                                    onSelect={this.selectIos.bind(this)}
                                    renderRow={this.renderRow.bind(this)}
                                    defaultValue={selectValue}
@@ -146,7 +147,8 @@ export default class SimplePicker extends Component {
         return <View>
             <View style={styles.pickerTitleContainer}>
                 <ThisText style={styles.pickerTextStyle}>{itemTitle}</ThisText>
-                {isMandatory && <Icon style={{margin: 5, color: 'red', fontSize: 12}} name='star'/>}
+                {isMandatory &&  <MaterialCommunityIcons style={{marginLeft: 3, marginTop: 4, color: 'red', fontSize: 8}}
+                                                         name='asterisk'/>}
             </View>
 
             {disable ?   <View style={[styles.pickerTitleContainer, {alignItems:'center',backgroundColor:'#cccccc',height:40,width: StyleUtils.getWidth() - 15}]}>
@@ -155,7 +157,10 @@ export default class SimplePicker extends Component {
                     iosHeader={itemTitle}
                     mode="dropdown"
                     enabled={enable}
-                    style={pickerStyle}
+                    style={[pickerStyle, {
+
+                        width: StyleUtils.getWidth() - 25
+                    }]}
                     selectedValue={selectedValue}
                     onValueChange={this.selectPromotionType.bind(this)}
                 >

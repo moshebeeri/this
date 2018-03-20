@@ -2,150 +2,161 @@ const React = require('react-native');
 const {StyleSheet, Platform, Dimensions} = React;
 const {width, height} = Dimensions.get('window')
 module.exports = {
-
-    promotion_container:{
-
-        borderColor:'#e7e7e7',
-        backgroundColor:'white',
-        borderTopWidth:5,
+    promotion_container: {
+        borderColor: '#e7e7e7',
+        backgroundColor: 'white',
+        borderTopWidth: 5,
     },
-    promotionHeader:{
-        backgroundColor:'white',
-        flex:3,
+    promotionHeader: {
+        backgroundColor: 'white',
+        flex: 3,
         width: width,
-        alignItems:'center',
-        justifyContent:'center',
-
+        alignItems: 'center',
+        justifyContent: 'center',
         flexDirection: 'row',
     },
-    promotionPunchHeader:{
-        backgroundColor:'white',
-        flex:3,
+    promotionPunchHeader: {
+        backgroundColor: 'white',
+        flex: 3,
         width: width,
-        alignItems:'flex-start',
-        justifyContent:'center',
-
-
+        alignItems: 'flex-start',
+        justifyContent: 'center',
     },
-    promotionValue:{
-        flex:1,
-        margin:5,
-        alignItems:'flex-start',
-        backgroundColor:'red',
-        justifyContent:'center',
+    promotionValue: {
+        flex: 1,
+        margin: 5,
+        alignItems: 'flex-start',
+        backgroundColor: 'red',
+        justifyContent: 'center',
     },
-    promotionPunchValue:{
-        flex:1,
-        margin:5,
-
-        alignItems:'flex-start',
-        justifyContent:'flex-start',
+    promotionPunchValue: {
+        flex: 1,
+        margin: 5,
+        alignItems: 'flex-start',
+        justifyContent: 'flex-start',
     },
-    promotiontDescription:{
-        flex:3.5,
-        alignItems:'flex-start',
-        justifyContent:'center',
+    promotiontDescription: {
+        flex: 3.5,
+        alignItems: 'flex-start',
+        justifyContent: 'center',
     },
-    titleText:{
-        fontSize:20,
-        color:'#e65100'
+    titleText: {
+        fontSize: 20,
+        color: '#e65100'
     },
-    titleValue:{
-        fontSize:40,
-        color:'#e65100'
+    titleValue: {
+        fontSize: 40,
+        color: '#e65100'
     },
-    XplusYtitleValue:{
-        fontSize:30,
-
-        color:'#e65100'
+    XplusYtitleValue: {
+        fontSize: 30,
+        color: '#e65100'
     },
-    puncCardtitleValue:{
-        fontSize:16,
-        color:'#e65100'
+    puncCardtitleValue: {
+        fontSize: 16,
+        color: '#e65100'
     },
-    promotionImageContainer:{
+    promotionImageContainer: {
         width: width,
-        flex:1,
-        backgroundColor:'white',
-        height:220,
+        flex: 1,
+        backgroundColor: 'white',
+        height: 220,
     },
-    promotionInformation:{
-        width: width -25,
-        marginBottom:10,
-        flex:1,
-        alignItems:'center',
-        justifyContent:'flex-start',
-        backgroundColor:'white',
-        flexDirection:'row'
+    promotionInformation: {
+        width: width - 25,
+        marginBottom: 10,
+        flex: 1,
+        alignItems: 'center',
+        justifyContent: 'flex-start',
+        backgroundColor: 'white',
+        flexDirection: 'row'
     },
-    promotion_image:{
+    promotion_image: {
         flex: 1,
         alignSelf: 'stretch',
         width: undefined,
         height: undefined
     },
-    promotionInfoTextI:{
-        fontSize:16,
-        marginLeft:5,
-        marginRight:5,
-
+    promotionInfoTextI: {
+        fontSize: 16,
+        marginLeft: 5,
+        marginRight: 5,
     },
-    promotionTermlTextStyle:{
-        color:'#839192',
+    promotionTermlTextStyle: {
+        color: '#839192',
     },
-    promotionDetailsContainer:{
-        flexDirection:'row',
+    promotionDetailsContainer: {
+        flexDirection: 'row',
+        backgroundColor: 'white',
+        marginTop:10,
+        marginBottom:10,
+        alignItems: 'center',
+        justifyContent: 'space-between',
+    },
+    promotionLoctionContainer: {
+        alignItems:  'flex-start',
         backgroundColor:'white',
-        height:55
-    },
-    promotionLoctionContainer:{
-        alignItems:'flex-start',
+        marginLeft:20,
 
-        flex:2.5,
     },
-    expireDateContainer:{
-        alignItems:'flex-start',
+    expireDateContainer: {
+        alignItems: 'flex-start' ,
+        backgroundColor:'white',
 
-        flex:3,
     },
-    editButtonContainer:{
-        flex:2.4,
-    },
-    detailsTitleText:{
-        marginLeft:5,
-        marginRight:5,
-
-        color:'#839192',
-        fontSize:14
-    },
-    detailsText:{
-        marginLeft:5,
-        marginRight:5,
-        justifyContent:'center',
+    editButtonContainer: {
+        backgroundColor:'white',
         alignItems:'center',
+        marginRight:20,
+        justifyContent:'center',
 
     },
-    promotionAnalyticsContainer:{
-        flexDirection:'row',
-        width:width ,
-        height:55,
-        justifyContent:'center',
-        alignItems:'center',
-        borderTopWidth:1,
-        borderColor:'#b3b3b3',
+    detailsTitleText: {
+        marginLeft: 5,
+        marginRight: 5,
+        color: '#839192',
+        fontSize: 14
     },
-    promotionAnalyticsAttribute:{
-        flex:1,
-        flexDirection:'column',
-        justifyContent:'center',
-        alignItems:'center',
+    detailsText: {
+        marginLeft: 5,
+        marginRight: 5,
+        justifyContent: 'center',
+        alignItems: 'center',
+    },
+    promotionAnalyticsContainer: {
+        flexDirection: 'row',
+        paddingTop:5,
+        paddingBottom: 5,
+        justifyContent: 'center',
+        alignItems: 'center',
+        borderTopWidth: 1,
+        borderBottomWidth:1,
+        borderColor: '#b3b3b3',
+    },
+    promotionAnalyticsAttribute: {
+        flex: 1,
+        flexDirection: 'column',
+        justifyContent: 'center',
+        alignItems: 'center',
+    },
+    promotionTotalsAttribute: {
+        justifyContent: 'center',
+        alignItems: 'center',
+        marginLeft: 20,
 
     },
-    promotion_addressText:{
-        color:'#e65100',
-        fontSize:20
+    promotionSavedsAttribute: {
+        justifyContent: 'center',
+        alignItems: 'center',
+        marginLeft: 40,
+
     },
-    promotion_card:{
-       margin:5
+
+    promotion_addressText: {
+        color: '#e65100',
+        fontSize: 20
+    },
+    promotion_card: {
+
     }
 };

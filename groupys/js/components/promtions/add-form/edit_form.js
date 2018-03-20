@@ -7,10 +7,9 @@ import {bindActionCreators} from "redux";
 import * as promotionsAction from "../../../actions/promotions";
 import * as businessAction from "../../../actions/business";
 import styles from "./styles";
-import {DatePicker, FormHeader, Spinner, TextInput} from '../../../ui/index';
+import {DatePicker, FormHeader, Spinner, TextInput,ThisText} from '../../../ui/index';
 import strings from "../../../i18n/i18n"
 import StyleUtils from '../../../utils/styleUtils'
-import {ThisText} from '../index';
 class EditPromotion extends Component {
     constructor(props) {
         super(props);
@@ -202,13 +201,7 @@ class EditPromotion extends Component {
                                    onSubmitEditing={this.focusNextField.bind(this, "5")}
                                    onChangeText={(name) => this.setState({name})} isMandatory={true}/>
                     </View>
-                    <View style={[styles.inputTextLayout, {width: StyleUtils.getWidth()}]}>
-                        <TextInput field={strings.Description} value={this.state.info}
-                                   returnKeyType='next' ref="5" refNext="5"
 
-                                   onSubmitEditing={this.focusNextField.bind(this, "5")}
-                                   onChangeText={(info) => this.setState({info})} isMandatory={true}/>
-                    </View>
 
                 </ScrollView>
                 {saving && <Spinner height={500}/>}

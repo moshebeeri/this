@@ -3,17 +3,40 @@
  */
 import {createSelector} from 'reselect'
 import FeedUiConverter from '../api/feed-ui-converter'
-
+import instanceUtils from '../utils/instanceUtils'
 const noPic = require('../../images/client_1.png');
 let feedUiConverter = new FeedUiConverter();
 const getStateFeeds = (state) => state.comments
-export const getFeeds = createSelector([getStateFeeds],
-    (comments) => {
+const getStateSavedInstances = (state) => state.myPromotions;
+export const getFeeds = createSelector([getStateFeeds,getStateSavedInstances],
+    (comments,savedPromotion) => {
         let feedsOrder = comments.groupCommentsOrder
         let feeds = comments.groupComments;
         let clientComments = comments.clientMessages;
         let response = {}
         if (!_.isEmpty(feedsOrder)) {
+            let savedInstancesIds = [];
+            let redeemedInstancesIds = [];
+            if (savedPromotion.feeds) {
+                savedInstancesIds = Object.values(savedPromotion.feeds).map(savedFeed => {
+                    if(savedFeed.savedInstance) {
+                        return savedFeed.savedInstance.instance._id
+                    }
+                    return savedFeed.instance._id
+                });
+
+                redeemedInstancesIds = Object.values(savedPromotion.feeds).map(savedFeed => {
+                    let isRedeemed = instanceUtils.checkIfRealized(savedFeed);
+                    if(isRedeemed){
+                        if(savedFeed.savedInstance) {
+                            return savedFeed.savedInstance.instance._id
+                        }
+                        return savedFeed.instance._id
+                    }
+
+                    return undefined;
+                });
+            }
             Object.keys(feedsOrder).forEach(function (groupId) {
                 if (!response[groupId]) {
                     response[groupId] = new Array();
@@ -23,7 +46,7 @@ export const getFeeds = createSelector([getStateFeeds],
                         let instance = feeds[groupId][feedId].entities.instance;
                         let post = feeds[groupId][feedId].entities.post;
                         if (instance) {
-                            instance = feedUiConverter.createPromotionInstance(instance)
+                            instance = feedUiConverter.createPromotionInstance(instance,savedInstancesIds,redeemedInstancesIds)
                         }
                         if (post) {
                             post = feedUiConverter.createPost(post)

@@ -3,25 +3,30 @@ import {View} from 'react-native';
 import {Thumbnail} from 'native-base';
 import styles from './styles';
 import {ChatMessage, PromotionHeader, ThisText} from '../../../ui/index';
+
 const noPic = require('../../../../images/client_1.png');
 export default class GroupChat extends Component {
     constructor(props) {
         super(props);
     }
 
+    claim() {
+        const {actions, item} = this.props;
+        actions.save(item.instance.id)
+    }
+
+    realize() {
+        const {item, navigation} = this.props;
+        navigation.navigate('realizePromotion', {item: item.instance})
+    }
+
     render() {
-        const {renderItem, user} = this.props;
-        console.log('rendering' + renderItem.item.id);
-
-        let item = renderItem.item;
-
+        const {item, currentUser} = this.props;
         if (item.message) {
-
-
-            if (!user) {
+            if (!currentUser) {
                 return <View></View>
             }
-            let isUser = item.message.actor === user._id;
+            let isUser = item.message.actor === currentUser._id;
             let messageItem = {
                 name: item.message.name,
                 avetar: item.message.logo,
@@ -32,7 +37,7 @@ export default class GroupChat extends Component {
                 isUser: isUser
             };
             return <View style={{backgroundColor: '#E6E6E6', flex: 1}}>
-                <ChatMessage key={item.id}
+                <ChatMessage realize={this.realize.bind(this)} claim={this.claim.bind(this)} key={item.id}
                              item={messageItem}/>
             </View>
         } else {
@@ -65,7 +70,7 @@ export default class GroupChat extends Component {
         }
     }
 
-     createFeed(message) {
+    createFeed(message) {
         let user = undefined
         if (message.activity) {
             user = message.activity.actor_user;
@@ -96,7 +101,7 @@ export default class GroupChat extends Component {
         return response;
     }
 
-    shouldComponentUpdate(){
+    shouldComponentUpdate() {
         return false;
     }
 }

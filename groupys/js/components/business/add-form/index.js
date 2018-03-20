@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import {Dimensions, Image, Keyboard, ScrollView, View} from 'react-native';
+import {Dimensions, Image, Keyboard, ScrollView, View,TouchableOpacity} from 'react-native';
 import {Button, Container, Content, Fab, Footer, Form, Icon, Input, Item, Picker} from 'native-base';
 import styles from './styles'
 import * as businessAction from "../../../actions/business";
@@ -257,8 +257,8 @@ class AddBusiness extends Component {
     createImageComponent(coverPic) {
         if (this.state.path) {
             if (coverPic) {
-                return <View style={styles.business_upper_image_container}>
-                    <ImagePicker logo ref={"logoImage"} mandatory
+                return <View onPress={this.openLogoMenu.bind(this)} style={styles.business_upper_image_container}>
+                    <ImagePicker logo  name={"logoImage"}  ref={"logoImage"} mandatory
                                  image={<Image resizeMode="cover" style={{width: 111, height: 105}}
                                                source={{uri: this.state.path}}/>}
                                  color='black' pickFromCamera
@@ -267,7 +267,7 @@ class AddBusiness extends Component {
                 </View>
             } else {
                 return <View style={styles.business_no_pic_no_cover_upper_image_container}>
-                    <ImagePicker logo ref={"logoImage"} mandatory
+                    <ImagePicker logo  name={"logoImage"} ref={"logoImage"} mandatory
                                  image={<Image resizeMode="cover" style={{width: 111, height: 105}}
                                                source={{uri: this.state.path}}/>}
                                  color='black' pickFromCamera
@@ -277,23 +277,30 @@ class AddBusiness extends Component {
             }
         } else {
             if (coverPic) {
-                return <View style={styles.business_no_pic_upper_image_container}>
+                return <TouchableOpacity onPress={this.openLogoMenu.bind(this)} style={styles.business_no_pic_upper_image_container}>
 
-                    <ImagePicker logo ref={"logoImage"} mandatory color='black' pickFromCamera
+                    <ImagePicker logo name={"logoImage"} ref={"logoImage"} mandatory color='black' pickFromCamera
                                  setImage={this.setImage.bind(this)}/>
                     <ThisText>{strings.Logo}</ThisText>
 
-                </View>
+                </TouchableOpacity>
             } else {
-                return <View style={styles.business_no_pic_no_cover_upper_image_container}>
+                return <TouchableOpacity onPress={this.openLogoMenu.bind(this)}  style={styles.business_no_pic_no_cover_upper_image_container}>
 
-                    <ImagePicker logo ref={"logoImage"} mandatory color='black' pickFromCamera
+                    <ImagePicker logo name={"logoImage"}ref={"logoImage"} mandatory color='black' pickFromCamera
                                  setImage={this.setImage.bind(this)}/>
                     <ThisText>{strings.Logo}</ThisText>
 
-                </View>
+                </TouchableOpacity>
             }
         }
+    }
+    openLogoMenu(){
+        this.refs["logoImage"].openMenu();
+    }
+
+    openoMenu(){
+        this.refs["coverImage"].openMenu();
     }
 
     createCoverImageComponent() {
@@ -311,17 +318,17 @@ class AddBusiness extends Component {
                 </View>;
             return (
                 <View style={styles.addCoverContainer}>
-                    <ImagePicker ref={"coverImage"} mandatory image={coverImage} color='white' pickFromCamera
+                    <ImagePicker name={"coverImage"}  ref={"coverImage"} mandatory image={coverImage} color='white' pickFromCamera
                                  setImage={this.setCoverImage.bind(this)}/>
                 </View>)
         }
         return (
-            <View style={styles.addCoverNoImageContainer}>
+            <TouchableOpacity onPress={this.openoMenu.bind(this)}  style={styles.addCoverNoImageContainer}>
                 {this.createImageComponent(false)}
-                <ImagePicker ref={"coverImage"} mandatory color='white' pickFromCamera
+                <ImagePicker name={"coverImage"} ref={"coverImage"} mandatory color='white' pickFromCamera
                              setImage={this.setCoverImage.bind(this)}/>
                 <ThisText style={styles.addCoverText}>{strings.AddACoverPhoto}</ThisText>
-            </View>)
+            </TouchableOpacity>)
     }
 
     render() {
@@ -379,9 +386,11 @@ class AddBusiness extends Component {
                                    validateContent={FormUtils.validateWebsite}
                                    onChangeText={(website) => this.setReduxState({website})} isMandatory={false}/>
                     </View>
+                    <View style={[styles.inputTextLayout, {width: StyleUtils.getWidth() - 15}]}>
+
                     <AddressInput city={this.state.city} address={this.state.address} country={this.state.country}
                                   refNext="5" ref="5" isMandatory onSubmitEditing={this.updateLocation.bind(this)}/>
-
+                    </View>
                     <View style={[styles.inputTextLayout, {width: StyleUtils.getWidth() - 15}]}>
 
                         <TextInput field={strings.TaxID} value={this.state.tax_id} returnKeyType='next' ref="6"

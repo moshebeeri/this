@@ -82,7 +82,7 @@ export default class FeedPost extends Component {
     }
 
     render() {
-        const {refresh, item, save, shared, like, unlike, showUsers, comment, token, showActions} = this.props;
+        const {refresh, item, save, shared, like, unlike, showUsers, comment, token, showActions,group} = this.props;
         const styles = this.createPromotionStyle();
         const image = this.createImageComponent(item, styles);
         const container = this.createContainerStyle(item);
@@ -105,21 +105,17 @@ export default class FeedPost extends Component {
                 flexDirection: 'row',
                 backgroundColor: 'white',
                 height: 80,
-                width: StyleUtils.getWidth()
+
             }
-            promotionDetalis = styles.promotionShareDetails;
+
             postMessageContainerStyle = {
                 borderLeftWidth: 1,
                 borderColor: '#cccccc',
                 marginLeft: 10,
-                width: StyleUtils.getWidth(),
+                width: StyleUtils.getWidth() -15,
                 paddingBottom: 10,
                 backgroundColor: 'white'
             };
-        }
-        let headeerSize = 80;
-        if ((Platform.OS === 'ios')) {
-            headeerSize = 50;
         }
         const result =
             <InViewPort onChange={this.visited.bind(this)} style={container}>
@@ -140,7 +136,7 @@ export default class FeedPost extends Component {
                         <View style={{
                             marginTop: 10,
                             flex: 1,
-                            paddingRight: 10,
+                            paddingRight: 30,
                             alignItems: 'flex-end',
                             justifyContent: 'flex-start'
                         }}>
@@ -186,6 +182,8 @@ export default class FeedPost extends Component {
                                      onPressUnLike={() => unlike(item.id, token)}
                                      onPressLike={() => like(item.id, token)}
                                      shareDisabled={shared}
+                                     groupChat={group}
+                                     shareable = {item.shareable}
                                      share={item.social.share} shares={item.social.shares}
                                      shareAction={showUsers}/>
                     </View>}

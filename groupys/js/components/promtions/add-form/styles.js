@@ -36,12 +36,8 @@ module.exports = {
     addCoverText: {
         color: 'white', margin: 5, fontSize: 16
     },
-    inputTextLayout: {
-        marginTop: 4, padding: 3,
-        width: width - 15
-    },
     textLayout: {
-        marginTop: 4, padding: 3,
+        marginTop: 4,
         justifyContent:  'flex-start' ,
         alignItems: 'flex-start',
         width: width - 15
@@ -53,6 +49,15 @@ module.exports = {
     },
     inputTextLayoutImage: {
         marginBottom: 10, padding: 3,
+        width: width - 15
+    },
+
+    inputTextLayout: {
+        paddingTop:10, paddingRight:5 ,paddingLeft: 5,
+        width: width - 15
+    },
+    conditionForm:{
+        paddingTop:10,paddingRight: 5,paddingLeft: 5,
         width: width - 15
     },
     cmeraLogoContainer: {

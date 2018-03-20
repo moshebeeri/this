@@ -1,6 +1,6 @@
 import React, {Component} from 'react';
 import {Keyboard, View} from 'react-native'
-import styles from './styles'
+import styles from '../styles'
 import {SelectButton, SimplePicker, TextInput, ThisText} from '../../../../ui/index';
 import FormUtils from "../../../../utils/fromUtils";
 import strings from "../../../../i18n/i18n";
@@ -142,7 +142,7 @@ export default class PercentComponent extends Component {
                                                                          title={strings.SelectProduct}
                                                                          action={this.showProducts.bind(this, true)}/></View>
                 let retailPrice =
-                    <View style={styles.inputPercentComponent}>
+                    <View style={styles.inputTextLayout}>
 
                         <TextInput field={strings.RetailPrice} value={this.props.state.percent.retail_price}
                                    returnKeyType='next' ref="retail" refNext="retail"
@@ -150,7 +150,7 @@ export default class PercentComponent extends Component {
                                    onChangeText={(value) => this.setRetailPrice(value)} isMandatory={true}/>
                     </View>
                 let discount =
-                    <View style={styles.inputPercentComponent}>
+                    <View style={styles.inputTextLayout}>
                         <TextInput field={strings.Discount} value={this.props.state.percent.percent}
                                    returnKeyType='done' ref="discount" refNext="discount"
                                    keyboardType='numeric'
@@ -160,7 +160,7 @@ export default class PercentComponent extends Component {
                     </View>
                 return <View style={{flexDirection: 'row'}}>{button}{retailPrice}{discount}</View>
             } else {
-                return <View><View style={styles.inputPercentComponent}>
+                return <View><View style={styles.inputTextLayout}>
 
                     <TextInput field={strings.RetailPrice} value={this.props.state.percent.retail_price}
                                returnKeyType='next' ref="retail" refNext="retail"

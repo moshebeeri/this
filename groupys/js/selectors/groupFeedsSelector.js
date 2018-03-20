@@ -4,6 +4,7 @@
 import {createSelector} from "reselect";
 import * as assemblers from "../actions/collectionAssembler";
 import FeedUiConverter from "../api/feed-ui-converter";
+import instanceUtils from '../utils/instanceUtils';
 import getStore from "../store";
 let feedUiConverter = new FeedUiConverter();
 
@@ -29,12 +30,25 @@ export const getFeeds = createSelector([  getStateFeeds,getPosts,getInstance,get
         let clientMessage = groups.clientMessages;
         let feedsUi = new Map();
         let savedInstancesIds = [];
+        let redeemedInstancesIds = [];
         if(savedPromotion.feeds){
             savedInstancesIds = Object.values(savedPromotion.feeds).map(savedFeed => {
                 if(savedFeed.savedInstance) {
                     return savedFeed.savedInstance.instance._id
                 }
                 return savedFeed.instance._id
+            });
+
+            redeemedInstancesIds = Object.values(savedPromotion.feeds).map(savedFeed => {
+                let isRedeemed = instanceUtils.checkIfRealized(savedFeed);
+                if(isRedeemed){
+                    if(savedFeed.savedInstance) {
+                        return savedFeed.savedInstance.instance._id
+                    }
+                    return savedFeed.instance._id
+                }
+
+                return undefined;
             });
         }
         if (!_.isEmpty(feeds)) {
@@ -48,7 +62,7 @@ export const getFeeds = createSelector([  getStateFeeds,getPosts,getInstance,get
                     }
                     return assemblers.assembler(feed, collections);
                 });
-                let newFeedsList = assembledFeeds.map(feed => feedUiConverter.createFeed(feed,savedInstancesIds));
+                let newFeedsList = assembledFeeds.map(feed => feedUiConverter.createFeed(feed,savedInstancesIds,redeemedInstancesIds));
                 newFeedsList = newFeedsList.filter(feed => feed);
                 newFeedsList = newFeedsList.filter(feed => feed.id);
                 newFeedsList = newFeedsList.filter(feed => !feed.blocked);

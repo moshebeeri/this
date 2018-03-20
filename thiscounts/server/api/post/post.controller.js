@@ -70,13 +70,11 @@ exports.create = function(req, res) {
         actor_mall      : post.behalf.mall    ,
         actor_chain     : post.behalf.chain   ,
         actor_group     : post.behalf.group   ,
-        sharable        : true                ,
+        sharable        : typeof(post.sharable) === 'boolean'? post.sharable : true,
         post            : post._id            ,
         action          : 'post'              ,
         audience        : ['SELF', 'FOLLOWERS']
       };
-
-      console.log(`POST: ${JSON.stringify(act)}`);
 
       if(act.actor_user)
         act.audience =['SELF', 'FOLLOWERS'];
@@ -84,7 +82,6 @@ exports.create = function(req, res) {
         act.ids = [act.actor_group];
 
       Post.findById(post._id).exec((err, post) => {
-
         if (err) { return handleError(res, err); }
         pricing.balance(post.behalf, function (err, positiveBalance) {
           if (err) return handleError(res, err);

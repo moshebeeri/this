@@ -28,7 +28,8 @@ function* savePromotion(action) {
                 let product = {
                     name: tempPromotion.name,
                     category: [247183, 247467],
-                    price: tempPromotion.retail_price,
+                    business: tempPromotion.entity.business,
+                    retail_price: tempPromotion.retail_price,
                 }
                 promotionProduct = yield call(productApi.createProduct, product, action.token);
                 handleSucsess();

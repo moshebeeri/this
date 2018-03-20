@@ -714,6 +714,7 @@
 		F667CABA2011F37100E05859 /* RNFIRAnalytics.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = RNFIRAnalytics.h; path = "../node_modules/react-native-firebase-analytics/ios/RNFIRAnalytics.h"; sourceTree = "<group>"; };
 		F66BD8F21FF2A0D0000E6352 /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = Info.plist; path = THIS/Info.plist; sourceTree = "<group>"; };
 		F66F9B34203947930043F180 /* RNCarrierInfo.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = RNCarrierInfo.xcodeproj; path = "../node_modules/react-native-carrier-info/ios/RNCarrierInfo.xcodeproj"; sourceTree = "<group>"; };
+		F67ABCAB205EE30B0011E6D1 /* THIS.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; name = THIS.entitlements; path = THIS/THIS.entitlements; sourceTree = "<group>"; };
 		F68506C91FF2E5BE00CEDE6A /* RNFIRMessaging.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = RNFIRMessaging.xcodeproj; path = "../node_modules/react-native-fcm/ios/RNFIRMessaging.xcodeproj"; sourceTree = "<group>"; };
 		F6DC17FA2056A72C00294468 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = "GoogleService-Info.plist"; path = "THIS/GoogleService-Info.plist"; sourceTree = "<group>"; };
 		F6DD54061FFCF853002B5D74 /* RCTBraintree.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = RCTBraintree.xcodeproj; path = "../node_modules/react-native-braintree-xplat/ios/RCTBraintree.xcodeproj"; sourceTree = "<group>"; };
@@ -890,6 +891,7 @@
 		13B07FAE1A68108700A75B9A /* THIS */ = {
 			isa = PBXGroup;
 			children = (
+				F67ABCAB205EE30B0011E6D1 /* THIS.entitlements */,
 				F6DC17FA2056A72C00294468 /* GoogleService-Info.plist */,
 				F66BD8F21FF2A0D0000E6352 /* Info.plist */,
 				008F07F21AC5B25A0029DE68 /* main.jsbundle */,
@@ -1473,6 +1475,14 @@
 					13B07F861A680F5B00A75B9A = {
 						DevelopmentTeam = 83BBSM6K22;
 						ProvisioningStyle = Automatic;
+						SystemCapabilities = {
+							com.apple.BackgroundModes = {
+								enabled = 0;
+							};
+							com.apple.Push = {
+								enabled = 1;
+							};
+						};
 					};
 					2D02E47A1E0B4A5D006451C7 = {
 						CreatedOnToolsVersion = 8.2.1;
@@ -2389,6 +2399,7 @@
 			baseConfigurationReference = DB0698C916350FBFBE8AD4AF /* Pods-THIS.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_ENTITLEMENTS = THIS/THIS.entitlements;
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				CURRENT_PROJECT_VERSION = 1;
 				DEAD_CODE_STRIPPING = NO;
@@ -2429,7 +2440,7 @@
 					"-ObjC",
 					"-lc++",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = la.low.this.test;
+				PRODUCT_BUNDLE_IDENTIFIER = la.low.this;
 				PRODUCT_NAME = THIS;
 				VERSIONING_SYSTEM = "apple-generic";
 			};
@@ -2440,6 +2451,7 @@
 			baseConfigurationReference = 13C9FDEC4A88FAB66972459E /* Pods-THIS.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_ENTITLEMENTS = THIS/THIS.entitlements;
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = 83BBSM6K22;
@@ -2476,7 +2488,7 @@
 					"-ObjC",
 					"-lc++",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = la.low.this.test;
+				PRODUCT_BUNDLE_IDENTIFIER = la.low.this;
 				PRODUCT_NAME = THIS;
 				"VALID_ARCHS[sdk=*]" = "arm64 armv7 armv7s";
 				VERSIONING_SYSTEM = "apple-generic";

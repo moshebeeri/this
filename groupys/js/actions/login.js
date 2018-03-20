@@ -86,7 +86,7 @@ export function signup(phone, password, firstName, lastName, navigation) {
             dispatch({
                 type: actions.SIGNUP_SUCSESS,
             });
-            let user = await UserApi.getUser(response.token);
+            let user = await userApi.getUser(response.token);
             await store.save("user_id", user._id);
             dispatch({
                 type: actions.SET_USER,

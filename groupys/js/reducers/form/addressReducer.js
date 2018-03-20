@@ -20,6 +20,7 @@ export default function addressForm(state = initialState, action) {
                 ...state,
                 addressNotFound: false,
                 validating: false,
+                hasValidated:false,
                 ilegalAddress:false,
                 location:'',
                 submitable:false

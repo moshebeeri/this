@@ -68,7 +68,7 @@ export default class FeedBusiness extends Component {
         return false;
     }
 
-    createBusiness(item, like, unlike, showUsers, comment) {
+    createBusiness(item, like, unlike, showUsers, comment,group) {
         const {location, refresh, showActions} = this.props;
         if (!item.name) {
             return <View></View>;
@@ -87,10 +87,13 @@ export default class FeedBusiness extends Component {
                         justifyContent: 'flex-start',
                         flexDirection:'row',
                         alignItems: 'center',
-                        marginTop:5,
+
+                        padding:10,
                     }}>
                         {item.avetar && <ImageController thumbnail size={30} source={item.avetar}/>}
-                        <ThisText style={{}}>{item.itemTitle}</ThisText>
+
+                        <ThisText style={{paddingLeft:10}}>{item.itemTitle}</ThisText>
+
                     </View>
 
                     {imageBusiness}
@@ -118,6 +121,8 @@ export default class FeedBusiness extends Component {
                                      like={item.social.like} likes={item.social.likes}
                                      onPressUnLike={() => unlike(item.id)}
                                      onPressLike={() => like(item.id)}
+                                     shareable = {item.shareable}
+                                     groupChat={group}
                                      share={item.social.share} shares={item.social.shares} shareAction={showUsers}/>
 
 
@@ -149,6 +154,7 @@ export default class FeedBusiness extends Component {
                                     businessName={item.business.name} noMargin
                                     bgColor={'transparent'}
                                     textColor={'white'}
+                                    size={60}
                                     id={item.activityId} showActions={showActions}
                     />}
                 </LinearGradient>

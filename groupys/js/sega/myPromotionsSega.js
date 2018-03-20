@@ -29,6 +29,7 @@ function* saveMyPromotionsSingleRequest(action) {
         let savedInstances = [];
         let feed = {};
         feed.savedInstance = action.item;
+        feed.savedInstance.feedId = action.feedId;
         savedInstances.push(feed);
         yield put(setSavedPromotions(savedInstances))
     } catch (error) {

@@ -16,7 +16,7 @@ class ContactsApi {
             });
            if(token) {
                this.updateServer(token, userId, contacts)
-               store.save('all-contacts', JSON.stringify(contacts));
+
            }
         })
     };
@@ -41,7 +41,7 @@ class ContactsApi {
                 }
             });
             if (newContacts.length > 0) {
-                store.save('all-contacts', currentContacts);
+
                 this.updateServer(token, userId, currentContacts);
             }
 
@@ -77,8 +77,11 @@ class ContactsApi {
             });
             if (response.status ==='401' || response.status === 401) {
                 reject(errors.UN_AUTHOTIZED_ACCESS);
+                return;
 
             }
+
+            store.save('all-contacts', contacts);
         } catch (error) {
            // reject(errors.NETWORK_ERROR);
         }
@@ -87,9 +90,6 @@ class ContactsApi {
     async syncContacts() {
         return new Promise(async (resolve, reject) => {
             let contacts = await store.get('all-contacts');
-            if (contacts) {
-                contacts = JSON.parse(contacts);
-            }
             let token = await store.get('token');
             let userId = await store.get('user_id');
             if (token && userId) {

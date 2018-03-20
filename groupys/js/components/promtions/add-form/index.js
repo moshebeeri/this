@@ -1,5 +1,5 @@
 import React, {Component} from "react";
-import {Dimensions, Image, Keyboard, ScrollView, Switch, View} from "react-native";
+import {Dimensions, Image, Keyboard, ScrollView, Switch, View,TouchableOpacity} from "react-native";
 import {connect} from "react-redux";
 import {actions} from "react-native-navigation-redux-helpers";
 import {Button, Container, Content, Footer, Icon, Input, Item, Picker} from "native-base";
@@ -187,7 +187,9 @@ class AddPromotion extends Component {
         this.props.navigation.goBack();
     }
 
-
+    openMenu(){
+        this.refs["coverImage"].openMenu();
+    }
     async componentWillMount() {
         this.props.actions.resetForm();
         if (this.props.navigation.state.params.onBoardType) {
@@ -762,17 +764,17 @@ class AddPromotion extends Component {
                 <FormHeader showBack submitForm={this.saveFormData.bind(this)} navigation={this.props.navigation}
                             title={strings.AddPromotion} bgc="#FA8559"/>
 
-                <ScrollView keyboardShouldPersistTaps={true} ontentContainerStyle={{
+                <ScrollView keyboardShouldPersistTaps={true} contentContainerStyle={{
                     justifyContent: 'center',
                     alignItems: 'center',
+
                 }}>
                     <View style={{
-                        marginBottom: 10,
-                        paddingBottom: 10,
+
                         backgroundColor: '#FA8559',
                         alignItems: 'center',
                         justifyContent: 'space-between',
-                        flexDirection: 'row'
+                        flexDirection: 'row', width: StyleUtils.getWidth()
                     }}>
                         {this.state.toggle ? <ThisText style={{
                                 color: 'white',
@@ -834,16 +836,16 @@ class AddPromotion extends Component {
                     {this.state.toggle && <View style={[styles.textLayout, {width: StyleUtils.getWidth() - 15}]}>
                         <ThisText style={{color: '#FA8559', marginLeft: 8, marginRight: 8}}>{strings.General}</ThisText>
                     </View>}
-                    <View style={[styles.inputTextMediumLayout, {width: StyleUtils.getWidth() - 15}]}>
+                    <View style={[styles.inputTextLayout, {width: StyleUtils.getWidth() - 15}]}>
 
-                        {this.state.toggle && <View style={{flex: 1, marginRight: 10}}>
+                        {this.state.toggle && <View style={{flex: 1}}>
                             <TextInput field={strings.Quantity} value={this.state.quantity}
                                        keyboardType='numeric'
                                        returnKeyType='next' ref="2" refNext="2"
                                        onSubmitEditing={this.focusNextField.bind(this, "4")}
                                        onChangeText={(quantity) => this.setState({quantity})} isMandatory={true}/>
                         </View>}
-                        <View style={{flex: 3, marginLeft: 5}}>
+                        <View style={{flex: 3, }}>
                             <DatePicker field={strings.ExpirationDate} value={this.state.end}
                                         returnKeyType='next' ref="3" refNext="3"
                                         onChangeDate={(date) => {
@@ -864,7 +866,9 @@ class AddPromotion extends Component {
                                    onChangeText={(info) => this.setState({info})}/>
                     </View>}
 
+                    <View style={[styles.conditionForm, {width: StyleUtils.getWidth() }]}>
                     {conditionForm}
+                    </View>
                     {proximityForm}
                     {this.state.toggle && distributionForm}
                 </ScrollView>
@@ -940,7 +944,7 @@ class AddPromotion extends Component {
                 </View>
             </View>
         }
-        return <View style={[styles.product_upper_container, {width: StyleUtils.getWidth()}]}>
+        return <TouchableOpacity onPress={this.openMenu.bind(this)}  style={[styles.product_upper_container, {width: StyleUtils.getWidth()}]}>
 
             <View style={styles.cmeraLogoContainer}>
 
@@ -953,7 +957,7 @@ class AddPromotion extends Component {
                 </View>
             </View>
 
-        </View>
+        </TouchableOpacity>
     }
 
     validateForm() {
