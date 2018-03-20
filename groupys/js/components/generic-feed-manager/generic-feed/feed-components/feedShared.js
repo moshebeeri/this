@@ -114,7 +114,9 @@ export default class FeedShared extends Component {
 
     createFeedView(item) {
         if (item) {
-            return item
+            return <View style={{}}>
+                {item}
+            </View>
         }
         return <View></View>
     }

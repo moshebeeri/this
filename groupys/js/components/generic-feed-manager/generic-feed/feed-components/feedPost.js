@@ -105,21 +105,17 @@ export default class FeedPost extends Component {
                 flexDirection: 'row',
                 backgroundColor: 'white',
                 height: 80,
-                width: StyleUtils.getWidth()
+
             }
-            promotionDetalis = styles.promotionShareDetails;
+
             postMessageContainerStyle = {
                 borderLeftWidth: 1,
                 borderColor: '#cccccc',
                 marginLeft: 10,
-                width: StyleUtils.getWidth(),
+                width: StyleUtils.getWidth() -15,
                 paddingBottom: 10,
                 backgroundColor: 'white'
             };
-        }
-        let headeerSize = 80;
-        if ((Platform.OS === 'ios')) {
-            headeerSize = 50;
         }
         const result =
             <InViewPort onChange={this.visited.bind(this)} style={container}>
@@ -140,7 +136,7 @@ export default class FeedPost extends Component {
                         <View style={{
                             marginTop: 10,
                             flex: 1,
-                            paddingRight: 10,
+                            paddingRight: 30,
                             alignItems: 'flex-end',
                             justifyContent: 'flex-start'
                         }}>
