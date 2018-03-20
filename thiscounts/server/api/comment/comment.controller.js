@@ -115,7 +115,7 @@ function notifyGroupComment(comment) {
       note: 'GROUP_COMMENT',
       actor_group: comment.entities.group,
       comment: comment._id,
-      title: 'NEW_GROUP_COMMENT',
+      title: 'NEW_GROUP_COMMENT_TITLE',
       body: comment.message,
       list: false,
     }, _ids, true);

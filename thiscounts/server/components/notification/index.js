@@ -181,3 +181,17 @@ exports.notify = function (note, audience, translate) {
     });
   });
 };
+
+exports.notifyUser = function (note, user, translate) {
+  if(!user || !note)
+    return console.error(new Error(`notification.notify params error user=${user} note=${note}`));
+  note.to = user;
+  note.timestamp = Date.now();
+  Notification.create(note, function (err, notification) {
+    if (err) return console.error(err);
+    Notification.findById(notification._id).exec((err, populated) => {
+      if (err) return console.error(err);
+      pnsUserDevices(populated, translate)
+    })
+  });
+};

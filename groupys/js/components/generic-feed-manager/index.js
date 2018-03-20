@@ -23,7 +23,6 @@ import {
 import strings from "../../i18n/i18n"
 const {width, height} = Dimensions.get('window')
 
-import { LargeList } from "react-native-largelist";
 
 import Icon2 from 'react-native-vector-icons/Ionicons';
 import StyleUtils from "../../utils/styleUtils";

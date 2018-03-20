@@ -1,4 +1,7 @@
 {
-  "HELLO_WORLD": "Hello World",
-  "NEW_GROUP_COMMENT": "new group comment"
+  "NEW_GROUP_COMMENT_TITLE": "New group comment",
+  "ASK_JOIN_GROUP_JOIN_TITLE": "Asking to join group",
+  "ASK_JOIN_GROUP_JOIN_BODY": "You have request to join %s group",
+  "ASK_INVITE_GROUP_JOIN_TITLE": "Invitation to join group",
+  "ASK_INVITE_GROUP_JOIN_BODY": "You have new invitation to %s group"
 }
