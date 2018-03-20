@@ -120,7 +120,7 @@ class CategoryPicker extends Component {
 
                 mode="dropdown"
                 placeholder={strings.SelectCategory}
-                style={[pickerStyle, {width: StyleUtils.getWidth() - 35}]}
+                style={[pickerStyle, {width: StyleUtils.getWidth() - 25}]}
 
                 selectedValue={this.state.selectedCategories[0]}
                 onValueChange={(category) => this.setCategory(0, category)}>
@@ -155,7 +155,7 @@ class CategoryPicker extends Component {
 
                     placeholder={strings.SelectCategory}
                     mode="dropdown"
-                    style={[pickerStyle, {width: StyleUtils.getWidth() - 35}]}
+                    style={[pickerStyle, {width: StyleUtils.getWidth() - 25}]}
                     selectedValue={stateCategories[i + 1]}
                     onValueChange={(category) => selectCategoryFunction(i + 1, category)}>
 
