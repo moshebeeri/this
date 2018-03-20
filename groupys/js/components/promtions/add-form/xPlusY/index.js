@@ -122,25 +122,50 @@ export default class XPlusYComponent extends Component {
             <View style={[styles.textLayout, {width: StyleUtils.getWidth() - 15}]}>
                 <ThisText style={{color: '#FA8559', marginLeft: 8, marginRight: 8}}>{strings.XPlusY}</ThisText>
             </View>
-            <View style={{flexDirection: 'row', justifyContent: 'center', alignItems: 'center'}}>
-                <View style={styles.inputTextLayout}>
+            <View style={{ flexDirection: 'row',
+                justifyContent: 'space-between',
+                alignItems: 'center',
+                paddingTop: 10,
+                paddingRight: 5,
+                paddingLeft: 5,
+                width: StyleUtils.getWidth() - 15}}>
+                <View style={{ marginTop: 20}}><SelectButton ref="xplusyselectProduct" isMandatory
+                                                                       selectedValue={this.props.state.product}
+                                                                       title={strings.SelectProduct}
+                                                                       action={this.showBuyProducts.bind(this, true)}/></View>
+
+                <View style={{width:200}}>
                     <TextInput field={strings.BuyAmount} value={buyValue}
                                returnKeyType='next' ref="Buy Amount" refNext="Buy Amount"
                                keyboardType='numeric'
                                onSubmitEditing={this.focusNextField.bind(this, "Number of Gifts")}
                                onChangeText={(value) => this.setBuy(value)} isMandatory={true}/>
                 </View>
+
             </View>
             <ProductPreview product={this.props.state.product} />
 
-            <View style={{flexDirection: 'row', justifyContent: 'center', alignItems: 'center'}}>
-                <View style={styles.inputTextLayout}>
+            <View style={{ flexDirection: 'row',
+                justifyContent: 'space-between',
+                alignItems: 'center',
+                paddingTop: 10,
+                paddingRight: 5,
+                paddingLeft: 5,
+                width: StyleUtils.getWidth() - 15}}>
+                <View style={{ marginTop: 20}}><SelectButton ref="xplusyselectOmProduct" isMandatory
+                                                                       selectedValue={this.props.state.giftProduct}
+                                                                       title={strings.SelectGift}
+                                                                       action={this.showProducts.bind(this, true)}/></View>
+
+                <View style={{width:200}}>
                     <TextInput field={strings.NumberOfGifts} value={eligibleValue}
                                returnKeyType='done' ref="Number of Gifts" refNext="Number of Gifts"
                                keyboardType='numeric'
                                onSubmitEditing={this.done.bind(this)}
                                onChangeText={(value) => this.setEligible(value)} isMandatory={true}/>
                 </View>
+
+
             </View>
             <ProductPreview product={this.props.state.giftProduct} type='gift' />
 
