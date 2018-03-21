@@ -183,7 +183,7 @@ export default class FeedPost extends Component {
                                      onPressLike={() => like(item.id, token)}
                                      shareDisabled={shared}
                                      groupChat={group}
-                                     shareable = {item.shareable}
+                                     sharable = {item.sharable}
                                      share={item.social.share} shares={item.social.shares}
                                      shareAction={showUsers}/>
                     </View>}
