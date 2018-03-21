@@ -15,6 +15,7 @@ const feed = require('../../components/feed-tools');
 const Instance = require('../../components/instance');
 const util = require('util');
 const i18n = require('../i18n');
+
 exports.search = MongodbSearch.create(Group);
 // Get list of groups
 exports.index = function (req, res) {

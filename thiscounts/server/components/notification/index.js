@@ -182,6 +182,19 @@ exports.notify = function (note, audience, translate) {
   });
 };
 
+exports.inAppNotify = function (note, audience) {
+  if(!audience || !note)
+    return console.error(new Error(`notification.notify params error audience=${audience} note=${note}`));
+
+  audience.forEach(to => {
+    note.to = to;
+    note.timestamp = Date.now();
+    Notification.create(note, function (err) {
+      if (err) return console.error(err);
+    });
+  });
+};
+
 exports.notifyUser = function (note, user, translate) {
   if(!user || !note)
     return console.error(new Error(`notification.notify params error user=${user} note=${note}`));
