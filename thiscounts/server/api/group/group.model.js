@@ -35,8 +35,8 @@ const GroupSchema = new Schema({
   qrcode: {type: Schema.ObjectId, ref:'QRCode'},
   preview: {
     post: {type: Schema.ObjectId, ref: 'Post'},
+    comment: {type: Schema.ObjectId, ref: 'Comment'},
     instance_activity: {type: Schema.ObjectId, ref: 'Activity'},
-    message_activity: {type: Schema.ObjectId, ref: 'Activity'},
   },
   entity: {
     user: {type: Schema.ObjectId, ref: 'User', autopopulate: utils.userAutopopulateOptions},
