@@ -76,25 +76,25 @@ Email.sendTest =
     //     console.log(info);
     // });
 
-  //   let send = require('gmail-send')({
-  //     user: 'THIS@low.la',
-  //     // user: credentials.user,                  // Your GMail account used to send emails
-  //     pass: 's3EE2rzhRtxA',
-  //     to:   'moshe.beeri@gmail.com',
-  //     // to:   credentials.user,                  // Send to yourself
-  //     // you also may set array of recipients:
-  //     // [ 'user1@gmail.com', 'user2@gmail.com' ]
-  //     // from:    credentials.user             // from: by default equals to user
-  //     // replyTo: credentials.user             // replyTo: by default undefined
-  //     subject: 'test subject',
-  //     text:    'gmail-send example 1',         // Plain text
-  //     //html:    '<b>html text</b>'            // HTML
-  //   });
-  // send({
-  //   to:   'moshe.beeri@gmail.com',
-  //   subject: 'test subject',
-  //   text:    'gmail-send example 1',         // Plain text
-  // }, callback)
+    //   let send = require('gmail-send')({
+    //     user: 'THIS@low.la',
+    //     // user: credentials.user,                  // Your GMail account used to send emails
+    //     pass: 's3EE2rzhRtxA',
+    //     to:   'moshe.beeri@gmail.com',
+    //     // to:   credentials.user,                  // Send to yourself
+    //     // you also may set array of recipients:
+    //     // [ 'user1@gmail.com', 'user2@gmail.com' ]
+    //     // from:    credentials.user             // from: by default equals to user
+    //     // replyTo: credentials.user             // replyTo: by default undefined
+    //     subject: 'test subject',
+    //     text:    'gmail-send example 1',         // Plain text
+    //     //html:    '<b>html text</b>'            // HTML
+    //   });
+    // send({
+    //   to:   'moshe.beeri@gmail.com',
+    //   subject: 'test subject',
+    //   text:    'gmail-send example 1',         // Plain text
+    // }, callback)
 };
 
 

@@ -537,7 +537,6 @@ exports.user_follow = function (req, res) {
         .where('_id').in(_ids)
         .populate('preview.post')
         .populate('preview.comment')
-        .populate('preview.message_activity')
         .populate('preview.instance_activity')
         .exec(function (err, groups) {
           if (err) return handleError(res, err);
@@ -546,6 +545,7 @@ exports.user_follow = function (req, res) {
               group.touched = id2touch[group._id].touched;
               group.role = id2touch[group._id].role;
             });
+            console.log(`group user_follow ${JSON.stringify(groups)}`);
             return res.status(200).json(groups);
           });
         });
