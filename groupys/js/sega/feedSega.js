@@ -90,8 +90,25 @@ function* setSocialState(action) {
     }
 }
 
+function* feedUpdate(action) {
+    try {
+        const response = yield call(feedApi.get, action.item.fid, action.token);
+        let listFeeds = [];
+        listFeeds.push(response);
+        handleSucsess();
+        yield* updateFeeds(listFeeds);
+
+    } catch (error) {
+        console.log("failed to update feed");
+    }
+}
+
+
+
+
 function* feedSega() {
     yield throttle(1000, segaActions.FEED_SCROLL_DOWN, feedScrollDown);
+    yield throttle(1000, segaActions.FEED_UPDATE_ITEM, feedUpdate);
     yield throttle(3000, segaActions.FEED_SET_SOCIAL_STATE, setSocialState);
     yield fork(watchStartBackgroundTask);
 }

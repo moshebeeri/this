@@ -289,7 +289,7 @@ postMessage                                   : "{0} posted",
 GroupChat                                     : "Group Chat",
 CreatedByBusiness                             : "Created by {0}",
 HappyHour                                     : "Happy Hour",
-
+ReducedAmountInvalidCondition                 : "Buy amount must be greater then Payment",
 
 
 

@@ -53,7 +53,7 @@ class FeedConverter {
             generalId: feed.activity.post._id,
             entities: [{post: feed.activity.post._id}],
         }
-        responseFeed.shareable = feed.activity.sharable;
+        responseFeed.sharable = feed.activity.sharable;
         if (feed.activity.post.pictures && feed.activity.post.pictures[0]) {
             responseFeed.banner = {
                 uri: feed.activity.post.pictures[0].pictures[1]
@@ -371,7 +371,7 @@ class FeedConverter {
                     break;
                 case "PUNCH_CARD":
                     let punches = promotion.punch_card.values[0].number_of_punches;
-                    responseFeed.promotionTerm = punches;
+                    responseFeed.promotionTerm = strings.punchCardTerm.formatUnicorn(punches, promotion.condition.product.name);;
                     responseFeed.itemTitle = '';
                     responseFeed.promotionTitle = strings.punchCardTerm.formatUnicorn(punches, promotion.condition.product.name);
                     responseFeed.punches = punches;
@@ -438,7 +438,7 @@ class FeedConverter {
 
             if (feed.activity) {
                 responseFeed.activityId = feed.activity._id;
-                responseFeed.shareable = feed.activity.sharable;
+                responseFeed.sharable = feed.activity.sharable;
                 responseFeed.blocked = feed.activity.blocked;
             }
             responseFeed.promotionEntity = promotion;
@@ -454,7 +454,7 @@ class FeedConverter {
             if(redeemedInstancesIds && redeemedInstancesIds.includes(instance._id)){
                 responseFeed.isRealized = true;
             }
-            responseFeed.shareable = !instance.sharable;
+
             responseFeed.endDate = date.toLocaleDateString();
             responseFeed.created = instance.promotion.created;
             responseFeed.name = promotion.name;
@@ -542,7 +542,7 @@ class FeedConverter {
                     break;
                 case "PUNCH_CARD":
                     let punches = promotion.punch_card.values[0].number_of_punches;
-                    responseFeed.promotionTerm = punches;
+                    responseFeed.promotionTerm = strings.punchCardTerm.formatUnicorn(punches, promotion.condition.product.name);
                     responseFeed.itemTitle = '';
                     responseFeed.promotionTitle = strings.punchCardTerm.formatUnicorn(punches, promotion.condition.product.name);
                     responseFeed.punches = punches;
@@ -661,7 +661,7 @@ class FeedConverter {
                 break;
             case "PUNCH_CARD":
                 let punches = promotion.punch_card.values[0].number_of_punches;
-                response.promotionTerm = punches;
+                response.promotionTerm = strings.punchCardTerm.formatUnicorn(punches, promotion.condition.product.name);;
                 response.itemTitle = '';
                 response.promotionTitle = strings.punchCardTerm.formatUnicorn(punches, promotion.condition.product.name);
                 response.punches = punches;

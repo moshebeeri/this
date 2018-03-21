@@ -134,7 +134,7 @@ export default class SocialState extends Component {
     }
 
     createShareButton() {
-        const {share, shares, disabled, shareAction, feed, shareDisabled,shareable} = this.props;
+        const {share, shares, disabled, shareAction, feed, shareDisabled,sharable} = this.props;
         let componentStyle = styles.promotionBusiness;
         if (feed) {
             componentStyle = styles.promotionFeed;
@@ -148,7 +148,7 @@ export default class SocialState extends Component {
                 componenColor = '#cccccc';
             }
         }
-        if (disabled || shareDisabled ||!shareable) {
+        if (disabled || shareDisabled ||!sharable) {
             return <View transparent style={styles.promotion_iconView}>
                 <SimpleLineIcons size={28} color={'#cccccc'} style={{marginRight: 10}}
                            name="share"/>

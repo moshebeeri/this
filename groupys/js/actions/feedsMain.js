@@ -130,6 +130,23 @@ export function setSocialState(item) {
     }
 }
 
+export function updateFeed(item) {
+    return async function (dispatch, getState) {
+        try {
+            const token = getState().authentication.token;
+            dispatch({
+                type: types.FEED_UPDATE_ITEM,
+                token: token,
+                item: item,
+            });
+            handler.handleSuccses(getState(), dispatch)
+        } catch (error) {
+            handler.handleError(error, dispatch, 'feed-getFeedSocialState')
+            logger.actionFailed('getFeedSocialState')
+        }
+    }
+}
+
 async function refreshFeedSocialState(state, dispatch, token, id) {
     try {
         let response = await feedApi.getFeedSocialState(id, token);
@@ -290,6 +307,8 @@ export function updateSocialState(response, feedId) {
         id: feedId
     }
 }
+
+
 
 export function* updateFeeds(feeds) {
     if (feeds) {

@@ -131,8 +131,9 @@ export default class PromotionHeader extends Component {
                 return <View style={[styles.promotionPunchHeader, {width: StyleUtils.getWidth()}]}>
                     <View style={styles.promotionPunchValue}>
                         <ThisText style={puncCardtitleValue}>{titleText}</ThisText>
+                        <PunchView numberRealized={item.realizedPunches} feed={feed} numberOfPunches={item.punches}/>
                     </View>
-                    <PunchView numberRealized={item.realizedPunches} feed={feed} numberOfPunches={term}/>
+
                 </View>;
             default:
                 return <View style={promotionHeader}>

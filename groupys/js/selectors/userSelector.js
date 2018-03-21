@@ -29,6 +29,7 @@ export const getUserFollowesr = createSelector([getStateUsers],
                 }
                 return user;
             });
+            response = response.filter(user => user._id !== users.user._id );
             return response;
         }
         return new Array();

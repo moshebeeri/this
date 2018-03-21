@@ -48,10 +48,10 @@ const types = [
             value: 'X+Y',
             label: strings.XPlusY
         },
-        {
-            value: 'GIFT',
-            label: strings.Gift
-        },
+        // {
+        //     value: 'GIFT',
+        //     label: strings.Gift
+        // },
         {
             value: 'REDUCED_AMOUNT',
             label: strings.ReduceAmount
@@ -69,7 +69,7 @@ const types = [
 ;
 const promotion_type = [
         {
-            value: '',
+            value: 'GENERAL',
             label: strings.GeneralPromotion,
         },
         {
@@ -816,7 +816,6 @@ class AddPromotion extends Component {
                                           defaultHeader="Choose Type" isMandatory
                                           onValueSelected={this.selectPromotionType.bind(this)}/> :
                             <SimplePicker ref="promotionType" list={promotion_type} itemTitle={strings.PromotionType}
-
                                           defaultHeader="Choose Type" isMandatory
                                           onValueSelected={this.selectPromotionType.bind(this)}/>
                         }
@@ -824,10 +823,10 @@ class AddPromotion extends Component {
                     </View>}
                     <View style={[styles.inputTextLayout, {width: StyleUtils.getWidth() - 15}]}>
                         {this.state.toggle ?
-                            <SimplePicker ref="promotionType" list={types} itemTitle={strings.DiscountType}
+                            <SimplePicker ref="discountType" list={types} itemTitle={strings.DiscountType}
                                           defaultHeader="Choose Type" isMandatory
                                           onValueSelected={this.selectDiscount.bind(this)}/> :
-                            <SimplePicker ref="promotionType" list={types_simple} itemTitle={strings.DiscountType}
+                            <SimplePicker ref="discountType" list={types_simple} itemTitle={strings.DiscountType}
                                           selectedValue="PERCENT"
                                           value={strings.PercentageOff}
                                           defaultHeader="Choose Type" isMandatory

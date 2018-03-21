@@ -2,7 +2,7 @@ import React, {Component} from 'react';
 import {View} from 'react-native';
 import {Button, Icon, Input, Thumbnail} from 'native-base';
 import styles from './styles';
-import {ImageController, ThisText} from '../../ui/index';
+import {ImageController, ThisText,PunchView} from '../../ui/index';
 import DateUtils from '../../utils/dateUtils'
 import strings from "../../i18n/i18n"
 import SimpleLineIcons from "react-native-vector-icons/SimpleLineIcons";
@@ -89,7 +89,7 @@ export default class PromotionHeaderSnippet extends Component {
                     {promotion.banner && <ImageController thumbnail size={30} source={{uri: promotion.banner.uri}}/>}
                     <View style={{flex: 1, justifyContent: 'flex-start', marginLeft: 12, alignItems: 'flex-start'}}>
                         <ThisText>{promotion.business.name}</ThisText>
-                        <ThisText>{strings.XForYPercentageOffShortDescription.formatUnicorn(promotion.condition.product.name, promotion.promotionEntity.x_plus_n_percent_off.values[0].product.name, promotion.promotionEntity.x_plus_n_percent_off.values[0].eligible)}</ThisText>
+                        <ThisText>{strings.XForYPercentageOffShortDescription.formatUnicorn(promotion.promotionEntity.condition.product.name, promotion.promotionEntity.x_plus_n_percent_off.values[0].product.name, promotion.promotionEntity.x_plus_n_percent_off.values[0].eligible)}</ThisText>
 
                     </View>
                 </View>
@@ -121,7 +121,7 @@ export default class PromotionHeaderSnippet extends Component {
                     {promotion.banner && <ImageController thumbnail size={30} source={{uri: promotion.banner.uri}}/>}
                     <View style={{flex: 1, justifyContent: 'flex-start', marginLeft: 12, alignItems: 'flex-start'}}>
                         <ThisText>{promotion.business.name}</ThisText>
-                        <ThisText>{strings.XYPattern.formatUnicorn(promotion.x_plus_y.values[0].buy, promotion.condition.product.name, promotion.x_plus_y.values[0].eligible, promotion.x_plus_y.values[0].product.name)}</ThisText>
+                        <ThisText>{strings.XYPattern.formatUnicorn(promotion.promotionEntity.x_plus_y.values[0].buy, promotion.promotionEntity.condition.product.name, promotion.promotionEntity.x_plus_y.values[0].eligible, promotion.promotionEntity.x_plus_y.values[0].product.name)}</ThisText>
 
                     </View>
                 </View>
@@ -138,8 +138,7 @@ export default class PromotionHeaderSnippet extends Component {
                     {promotion.banner && <ImageController thumbnail size={30} source={{uri: promotion.banner.uri}}/>}
                     <View style={{flex: 1, justifyContent: 'flex-start', marginLeft: 12, alignItems: 'flex-start'}}>
                         <ThisText>{promotion.business.name}</ThisText>
-                        <ThisText>{strings.punchCardTerm.formatUnicorn(promotion.punches)}</ThisText>
-
+                        <ThisText>{strings.punchCardTerm.formatUnicorn(promotion.punches,promotion.promotionEntity.condition.product.name)}</ThisText>
                     </View>
                 </View>
             default:
