@@ -26,13 +26,16 @@ export default function postForm(state = initialState, action) {
         case actions.UPSERT_POST:
             let currentPosts = currentState.posts;
             action.item.forEach(eventItem => {
+                if (!eventItem.social_state && currentPosts[eventItem._id]) {
+                    eventItem.social_state = currentPosts[eventItem._id].social_state
+                }
                 currentPosts[eventItem._id] = eventItem;
             });
             return currentState;
         case actions.RESET_POST_FORM:
             return {
                 ...state,
-                saving:false,
+                saving: false,
             };
         case actions.POST_SAVING :
             return {

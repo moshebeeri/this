@@ -2,7 +2,7 @@
  * Created by roilandshut on 23/07/2017.
  */
 import React, {Component} from 'react';
-import {Dimensions, Image, Platform} from 'react-native';
+import {Image} from 'react-native';
 import InViewPort from '../../../../utils/inviewport'
 import {actions} from 'react-native-navigation-redux-helpers';
 import {
@@ -75,14 +75,25 @@ export default class FeedPost extends Component {
             } else {
                 actions.setVisibleItem(item.fid);
             }
+            if(this.itemMissingImageOrVideo(item)){
+                actions.updateFeed(item);
+
+            }
         }
         this.setState({
             visible: visible
         })
     }
 
+    itemMissingImageOrVideo(item) {
+        if (!item.video && !item.videoId && (!item.banner || (item.banner && !item.banner.uri))) {
+            return true
+        }
+        return false
+    }
+
     render() {
-        const {refresh, item, save, shared, like, unlike, showUsers, comment, token, showActions,group} = this.props;
+        const {refresh, item, save, shared, like, unlike, showUsers, comment, token, showActions, group} = this.props;
         const styles = this.createPromotionStyle();
         const image = this.createImageComponent(item, styles);
         const container = this.createContainerStyle(item);
@@ -105,14 +116,12 @@ export default class FeedPost extends Component {
                 flexDirection: 'row',
                 backgroundColor: 'white',
                 height: 80,
-
             }
-
             postMessageContainerStyle = {
                 borderLeftWidth: 1,
                 borderColor: '#cccccc',
                 marginLeft: 10,
-                width: StyleUtils.getWidth() -15,
+                width: StyleUtils.getWidth() - 15,
                 paddingBottom: 10,
                 backgroundColor: 'white'
             };
@@ -148,13 +157,13 @@ export default class FeedPost extends Component {
 
                         <View style={{width: StyleUtils.getWidth() - 15}}>
                             <ThisText
-                                      style={{
-                                          paddingTop: 10,
-                                          marginRight: 10,
-                                          marginLeft: 20,
-                                          paddingBottom: 10,
-                                          fontSize: 18
-                                      }}>{item.feed.activity.post.text}
+                                style={{
+                                    paddingTop: 10,
+                                    marginRight: 10,
+                                    marginLeft: 20,
+                                    paddingBottom: 10,
+                                    fontSize: 18
+                                }}>{item.feed.activity.post.text}
                             </ThisText>
                         </View>
                     </View>}
@@ -183,7 +192,7 @@ export default class FeedPost extends Component {
                                      onPressLike={() => like(item.id, token)}
                                      shareDisabled={shared}
                                      groupChat={group}
-                                     sharable = {item.sharable}
+                                     sharable={item.sharable}
                                      share={item.social.share} shares={item.social.shares}
                                      shareAction={showUsers}/>
                     </View>}
