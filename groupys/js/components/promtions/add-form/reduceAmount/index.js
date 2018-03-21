@@ -8,6 +8,7 @@ import StyleUtils from '../../../../utils/styleUtils';
 export default class ReduceAmountComponent extends Component {
     constructor(props) {
         super(props);
+        this.state={invalidMessage:false};
     }
 
     componentWillMount() {
@@ -23,6 +24,7 @@ export default class ReduceAmountComponent extends Component {
 
     isValid() {
         let result = true;
+        this.setState({invalidMessage:false})
         Object.keys(this.refs).forEach(key => {
             let item = this.refs[key];
             if (this.refs[key].wrappedInstance) {
@@ -32,6 +34,11 @@ export default class ReduceAmountComponent extends Component {
                 result = false;
             }
         });
+
+        if(this.props.state.reduced_amount.values.pay > this.props.state.reduced_amount.values.price){
+            result = false;
+            this.setState({invalidMessage:true})
+        }
         return result
     }
 
@@ -80,7 +87,11 @@ export default class ReduceAmountComponent extends Component {
             <View style={[styles.textLayout, {width: StyleUtils.getWidth() - 15}]}>
                 <ThisText style={{color: '#FA8559', marginLeft: 8, marginRight: 8}}>{strings.BuyPayOnly}</ThisText>
             </View>
-            <View style={{flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' ,paddingTop:10, paddingRight:5 ,paddingLeft: 5,
+            {this.state.invalidMessage && <View>
+                <ThisText style={{color: 'red', marginBottom:5,marginTop:10,marginLeft: 8, marginRight: 8}}>{strings.ReducedAmountInvalidCondition}</ThisText>
+
+            </View>}
+            <View style={{borderColor:'red',borderWidth:this.state.invalidMessage? 1:0,flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' ,paddingTop:10, paddingRight:5 ,paddingLeft: 5,
                 width: StyleUtils.getWidth() - 15}}>
 
                 <View style={{width:160}}>
@@ -97,6 +108,7 @@ export default class ReduceAmountComponent extends Component {
                                onSubmitEditing={this.done.bind(this)}
                                onChangeText={(value) => this.setPay(value)} isMandatory={true}/>
                 </View>
+
             </View>
 
 
