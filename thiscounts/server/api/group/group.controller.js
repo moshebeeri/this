@@ -15,6 +15,7 @@ const feed = require('../../components/feed-tools');
 const Instance = require('../../components/instance');
 const util = require('util');
 const i18n = require('../i18n');
+
 exports.search = MongodbSearch.create(Group);
 // Get list of groups
 exports.index = function (req, res) {
@@ -545,7 +546,6 @@ exports.user_follow = function (req, res) {
               group.touched = id2touch[group._id].touched;
               group.role = id2touch[group._id].role;
             });
-            console.log(`group user_follow ${JSON.stringify(groups)}`);
             return res.status(200).json(groups);
           });
         });

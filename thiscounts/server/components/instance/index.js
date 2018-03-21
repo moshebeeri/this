@@ -9,6 +9,9 @@ const distributor = require('../distributor');
 const Notifications = require('../notification');
 const InstanceSchema = require('../../api/instance/instance.model');
 const async = require('async');
+const util = require('util');
+const i18n = require('../i18n');
+const User = require('../../api/user/user.model');
 
 function Instances() {
 }
@@ -558,13 +561,19 @@ Instances.createSingleInstance =
 
 Instances.notify =
   Instances.prototype.createSingleInstance = function (instance, audience) {
-      let note = {
-        note: 'instance_eligible',
-        instance: instance,
-        title: `New Promotion Eligible`,
-        timestamp: Date.now()
-      };
-      Notifications.notify(note, audience);
+    audience.forEach(to => {
+      User.findById(to).exec(user => {
+        let note = {
+          note: 'instance_eligible',
+          instance: instance,
+          // new discount from instance.promotion.business.name
+          title: util.format(i18n.get('NEW_PROMOTION_ELIGIBLE_TITLE', user.locale), instance.promotion.business.name),
+          body: instance.promotion.name,
+          timestamp: Date.now()
+        };
+        Notifications.notifyUser(note, user._id);
+      })
+    })
   };
 
 module.exports = Instances;
