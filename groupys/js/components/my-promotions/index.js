@@ -1,12 +1,10 @@
 import React, {Component} from 'react';
-import {View} from 'react-native';
 import GenericFeedManager from '../generic-feed-manager/index'
 import {bindActionCreators} from "redux";
 import {getFeeds} from '../../selectors/myPromotionsSelector'
 import GenericFeedItem from "../generic-feed-manager/generic-feed";
 import * as promotionAction from "../../actions/myPromotions";
 import {connect} from 'react-redux';
-import FeedPromotion from '../generic-feed-manager/generic-feed/feed-components/feedPromotion'
 
 class MyPromotions extends Component {
     constructor(props) {
@@ -18,33 +16,15 @@ class MyPromotions extends Component {
         this.props.actions.setFirstTime();
     }
 
-    renderItem(item) {
-        const {navigation, location, rawFeeds} = this.props;
-        let isRealized = this.checkIfRealized(rawFeeds[item.item.id])
-        return <View key={item.item.id}>
-            <FeedPromotion refresh={this.refresh.bind(this)}
-                           location={location}
-                           isRealized={isRealized}
-                           hideSocial
-                           shouldUpdate={isRealized}
-                           navigation={navigation} item={item.item}
-                           realize={this.realize.bind(this, item.item)}
-            /></View>
-    }
-
     refresh() {
     }
-
-
-
-
 
     realize(item) {
         this.props.navigation.navigate('realizePromotion', {item: item})
     }
 
     render() {
-        const {navigation, feeds, userFollower, actions, token, loadingDone, showTopLoader, user, rawFeeds,location} = this.props;
+        const {navigation, feeds, userFollower, actions, token, loadingDone, showTopLoader, user, rawFeeds, location} = this.props;
         return (
             <GenericFeedManager
                 navigation={navigation}

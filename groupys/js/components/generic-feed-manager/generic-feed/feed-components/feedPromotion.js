@@ -29,7 +29,6 @@ import {
     BusinessHeader,
     ImageController,
     PromotionHeader,
-    PromotionSeperator,
     SocialState,
     SubmitButton,
     ThisText
@@ -78,13 +77,13 @@ export default class FeedPromotion extends Component {
     }
 
     render() {
-        const {showInPopup, showActions, item, save, shared, like, unlike, showUsers, comment, token, location, hideSocial, realize, navigation, scanner,group} = this.props;
+        const {showInPopup, showActions, item, save, shared, like, unlike, showUsers, comment, token, location, hideSocial, realize, navigation, scanner, group} = this.props;
         let categoruTitle = item.categoryTitle;
         if (item.business) {
             categoruTitle = item.business.categoryTitle;
         }
         const styles = this.createPromotionStyle();
-        const image = this.createImageComponent(item, styles,categoruTitle,showActions);
+        const image = this.createImageComponent(item, styles, categoruTitle, showActions);
         const container = this.createContainerStyle(item);
         let claimDisabled = true;
         if (item.showsave) {
@@ -100,7 +99,6 @@ export default class FeedPromotion extends Component {
             promotaionDesc = styles.promotiosShareDescription;
             promotionDetalis = styles.promotionShareDetails;
         }
-
         const result =
             <InViewPort onChange={this.visited.bind(this)} style={container}>
                 <View style={[styles.promotion_card, {width: StyleUtils.getWidth()}]}>
@@ -124,8 +122,6 @@ export default class FeedPromotion extends Component {
                     {image}
 
 
-
-
                     {!shared && location &&
                     <View style={[styles.promotionDetailsContainer, {width: StyleUtils.getWidth()}]}>
                         <View style={styles.promotionLoctionContainer}>
@@ -137,23 +133,33 @@ export default class FeedPromotion extends Component {
                             <View><ThisText style={styles.detailsTitleText}>{strings.Expire}</ThisText></View>
                             <View><ThisText style={styles.detailsText}>{item.endDate}</ThisText></View>
                         </View>
-                        {!claimDisabled && save &&
+                        {!claimDisabled && save && !item.isExpired && item.isActive &&
                         <View style={styles.editButtonContainer}>
                             <SubmitButton
-                                          title={strings.Claim.toUpperCase()} color={'#2db6c8'}
-                                          onPress={() => save(item.id)}/>
+                                title={strings.Claim.toUpperCase()} color={'#2db6c8'}
+                                onPress={() => save(item.id)}/>
                         </View>
                         }
-                        {claimDisabled && !item.isRealized &&
+                        {claimDisabled && !item.isRealized && !item.isExpired && item.isActive &&
                         <View style={styles.editButtonContainer}>
                             <SubmitButton title={strings.Realize.toUpperCase()} color={'#2db6c8'}
                                           onPress={() => realize(item)}/>
                         </View>
                         }
 
-                        {claimDisabled && item.isRealized &&
+                        {claimDisabled && item.isRealized && !item.isExpired && item.isActive &&
                         <View style={styles.editButtonContainer}>
                             <SubmitButton disabled title={strings.Realized.toUpperCase()} color={'#cccccc'}
+                                          onPress={() => realize(item)}/>
+                        </View>}
+                        {claimDisabled && item.isExpired &&
+                        <View style={styles.editButtonContainer}>
+                            <SubmitButton title={strings.Expired.toUpperCase()} color={'#cccccc'}
+                                          onPress={() => realize(item)}/>
+                        </View>}
+                        {claimDisabled && !item.isActive && !item.isExpired &&
+                        <View style={styles.editButtonContainer}>
+                            <SubmitButton title={strings.ImActive.toUpperCase()} color={'#cccccc'}
                                           onPress={() => realize(item)}/>
                         </View>}
 
@@ -168,7 +174,7 @@ export default class FeedPromotion extends Component {
                                                      onPressLike={() => like(item.id, token)}
                                                      shareDisabled={shared}
                                                      groupChat={group}
-                                                     sharable = {item.sharable}
+                                                     sharable={item.sharable}
                                                      share={item.social.share} shares={item.social.shares}
                                                      shareAction={showUsers}/>}
                     </View>}
@@ -211,15 +217,22 @@ export default class FeedPromotion extends Component {
         }
     }
 
-    createImageComponent(item, styles,categoruTitle,showActions) {
+    createImageComponent(item, styles, categoruTitle, showActions) {
         if (item.banner) {
             return <View style={[styles.promotion_image_view, {width: StyleUtils.getWidth()}]}>
                 <ImageController resizeMode="cover" style={[styles.promotion_image, {width: StyleUtils.getWidth()}]}
                                  source={{uri: item.banner.uri}}>
                 </ImageController>
                 <LinearGradient start={{x: 1, y: 1}} end={{x: 1, y: 0}}
-                                locations={[0,0.8]}
-                                colors={['#00000099', 'transparent']}  style={{height:140,position:'absolute',justifyContent:'flex-end',top:110,backgroundColor:'transparent',width: StyleUtils.getWidth()}}>
+                                locations={[0, 0.8]}
+                                colors={['#00000099', 'transparent']} style={{
+                    height: 140,
+                    position: 'absolute',
+                    justifyContent: 'flex-end',
+                    top: 110,
+                    backgroundColor: 'transparent',
+                    width: StyleUtils.getWidth()
+                }}>
                     {item.business &&
                     <BusinessHeader navigation={this.props.navigation} business={item.business}
                                     categoryTitle={categoruTitle} businessLogo={item.business.logo}

@@ -1,5 +1,6 @@
 import {createSelector} from "reselect";
 import FeedUiConverter from "../api/feed-ui-converter";
+import InstanceLifeCycle from '../utils/InstanceLifeCycle'
 
 let feedUiConverter = new FeedUiConverter();
 const getStateFeeds = (state) => state.myPromotions
@@ -7,42 +8,53 @@ export const getFeeds = createSelector([getStateFeeds],
     (myPromotions) => {
         let feedsOrder = myPromotions.feedOrder
         let feeds = myPromotions.feeds;
+        let instanceLifeCycle = new InstanceLifeCycle(myPromotions.feeds);
         let response = [];
         if (!_.isEmpty(feedsOrder)) {
             let feedArray = feedsOrder.map(feedId => feeds[feedId])
-            let nonREalized = feedArray.filter(feed => !checkIfRealized(feed))
-            let realized = feedArray.filter(feed => checkIfRealized(feed))
+            let nonREalized = feedArray.filter(feed => instanceLifeCycle.nonRealize(getInstanceId(feed)));
+            let inActive = feedArray.filter(feed => !instanceLifeCycle.isExpired(getInstanceId(feed)) &&
+                !instanceLifeCycle.isActive(getInstanceId(feed)) &&
+                !instanceLifeCycle.isReedemed(getInstanceId(feed)));
+
+            let realized = feedArray.filter(feed => instanceLifeCycle.isReedemed(getInstanceId(feed)));
+            let expired = feedArray.filter(feed => instanceLifeCycle.isExpired(getInstanceId(feed)));
             response = nonREalized.map((feed) => {
                 let savedinstance = feed;
                 if (feed.savedInstance) {
                     savedinstance = feed.savedInstance;
                 }
-                return feedUiConverter.createSavedPromotion(savedinstance, savedinstance._id,false)
+                return feedUiConverter.createSavedPromotion(savedinstance, savedinstance._id, instanceLifeCycle)
             });
+            response = response.concat(inActive.map((feed) => {
+                let savedinstance = feed;
+                if (feed.savedInstance) {
+                    savedinstance = feed.savedInstance;
+                }
+                return feedUiConverter.createSavedPromotion(savedinstance, savedinstance._id, instanceLifeCycle)
+            }))
             response = response.concat(realized.map((feed) => {
                 let savedinstance = feed;
                 if (feed.savedInstance) {
                     savedinstance = feed.savedInstance;
                 }
-                return feedUiConverter.createSavedPromotion(savedinstance, savedinstance._id,true)
+                return feedUiConverter.createSavedPromotion(savedinstance, savedinstance._id, instanceLifeCycle)
+            }))
+            response = response.concat(expired.map((feed) => {
+                let savedinstance = feed;
+                if (feed.savedInstance) {
+                    savedinstance = feed.savedInstance;
+                }
+                return feedUiConverter.createSavedPromotion(savedinstance, savedinstance._id, instanceLifeCycle)
             }))
         }
         return response;
     });
 
-
-function checkIfRealized(feed){
+function getInstanceId(feed) {
     let savedinstance = feed;
-    if(feed.savedInstance){
+    if (feed.savedInstance) {
         savedinstance = feed.savedInstance;
     }
-    if(savedinstance.savedData && savedinstance.savedData && savedinstance.savedData.other ){
-        return true;
-    }
-    if(savedinstance.savedData && savedinstance.savedData.punch_card && savedinstance.savedData.punch_card.number_of_punches){
-        let remainPunches =  savedinstance.savedData.punch_card.number_of_punches - savedinstance.savedData.punch_card.redeemTimes.length;
-        return remainPunches === 0;
-    }
-
-    return false;
+    return savedinstance.instance._id
 }
