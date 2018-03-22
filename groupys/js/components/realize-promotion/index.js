@@ -120,7 +120,7 @@ class RealizePromotion extends Component {
                         }} source={{uri: this.state.image.qrcode}}/>
                         }
                     </View>
-                    {true && <View style={{transform: [{rotate: '45deg'}],position: 'absolute', left:40, top: 370, backgroundColor: 'transparent'}}>
+                    {isRealized && <View style={{transform: [{rotate: '45deg'}],position: 'absolute', left:40, top: 370, backgroundColor: 'transparent'}}>
                         <ThisText style={{
                             backgroundColor: 'white',
                             fontSize: 50,
