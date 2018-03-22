@@ -717,21 +717,28 @@ exports.qrcode = function (req, res) {
 
     if (codes.length > 1) {
       console.error(`multiple instances found for ${req.params.id}`);
-      console.log(query);
       return res.status(500).send('multiple instances found');
     }
-    QRCode.toDataURL(JSON.stringify({
-      t: 'i',
-      code: codes[0]['rel.code']
-    }), function (err, url) {
-      if (err) {
-        console.error(err);
-        return res.status(500).send(err);
-      } else {
-        return res.status(200).json({
-          qrcode: url
-        });
+    const r_query = `MATCH (savedInstance:SavedInstance{_id:"${req.params.id}"})<-[rel:REALIZED]-(user:user{_id:"${req.user._id}"}) return rel`;
+    graphModel.query(r_query, function (err, reals) {
+      if (err) return handleError(res, err);
+      if (reals.length > 1) {
+        console.error(`already realized ${req.params.id}`);
+        return res.status(412).send(err);
       }
+      QRCode.toDataURL(JSON.stringify({
+        t: 'i',
+        code: codes[0]['rel.code']
+      }), function (err, url) {
+        if (err) {
+          console.error(err);
+          return res.status(500).send(err);
+        } else {
+          return res.status(200).json({
+            qrcode: url
+          });
+        }
+      });
     });
   })
 };
