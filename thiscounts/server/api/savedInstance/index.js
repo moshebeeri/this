@@ -13,6 +13,7 @@ router.put('/:id', auth.isAuthenticated(), controller.update);
 router.patch('/:id', auth.isAuthenticated(), controller.update);
 router.delete('/:id', auth.hasRole('admin'), controller.destroy);
 router.get('/qrcode/:code', auth.isAuthenticated(), controller.qrcode);
+router.get('/by/instance/:id', auth.isAuthenticated(), controller.byInstance);
 
 
 module.exports = router;
