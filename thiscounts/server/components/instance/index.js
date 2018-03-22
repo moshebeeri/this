@@ -562,7 +562,9 @@ Instances.createSingleInstance =
 Instances.notify =
   Instances.prototype.createSingleInstance = function (instance, audience) {
     audience.forEach(to => {
-      User.findById(to).exec(user => {
+      User.findById(to).exec((err, user) => {
+        if(err) return console.error(err);
+        if(!user) return console.error(new Error(`could not find user ${to}`));
         let note = {
           note: 'instance_eligible',
           instance: instance,
