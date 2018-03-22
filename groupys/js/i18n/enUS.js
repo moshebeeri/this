@@ -276,7 +276,7 @@ Proximity                                     : "Proximity",
 ProximityDistanceTitle                        : "Proximity Distance",
 LatestActivity                                : "Latest Activity",
 DateAtTime                                    : "{0} at {1}",
-NoTerms                                       : "Global Discount {0} % Off",
+NoTerms                                       : "No Terms",
 OnFollowerProximity                           : "On Follower Proximity",
 GeneralPromotion                              : "Promotion",
 Reply                                         : "Reply",
@@ -292,7 +292,7 @@ ImActive                                      : "ImActive",
 CreatedByBusiness                             : "Created by {0}",
 HappyHour                                     : "Happy Hour",
 ReducedAmountInvalidCondition                 : "Buy amount must be greater then Payment",
-
+PercentTerm                                   : "Global Discount {0} % Off",
 
 
 };
