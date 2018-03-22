@@ -23,7 +23,9 @@ import strings from '../../../i18n/i18n';
 import DateUtils from '../../../utils/dateUtils'
 import SimpleLineIcons from "react-native-vector-icons/SimpleLineIcons";
 import Ionicons from "react-native-vector-icons/Ionicons";
+import withPreventDoubleClick from '../../../ui/TochButton/TouchButton';
 
+const TouchableOpacityFix = withPreventDoubleClick(TouchableOpacity);
 let dateUtils = new DateUtils();
 
 const {width, height} = Dimensions.get('window');
@@ -67,7 +69,7 @@ export default class GenericListGroupView extends Component {
 
         const row = <View  key={index}>
             <View style={{marginBottom: 8}}>
-                <TouchableOpacity key={index} onPress={() => onPressItem(item)} style={containerStyle}>
+                <TouchableOpacityFix key={index} onPress={() => onPressItem(item)} style={containerStyle}>
                     <GroupHeader group={item}/>
 
                     {(promotion || post || message) && <View style={{
@@ -94,11 +96,11 @@ export default class GenericListGroupView extends Component {
                     {post}
 
 
-                </TouchableOpacity>
-                <TouchableOpacity style={SubContainerStyle} onPress={() => onPressMessageItem(item)}>
+                </TouchableOpacityFix>
+                <TouchableOpacityFix style={SubContainerStyle} onPress={() => onPressMessageItem(item)}>
                     {message}
 
-                </TouchableOpacity>
+                </TouchableOpacityFix>
             </View>
         </View>
         return ( row

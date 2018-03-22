@@ -1,5 +1,5 @@
 import React from 'react'
-import {ScrollView, Text, TouchableOpacity, View,I18nManager,Platform} from 'react-native'
+import {I18nManager, Platform, View} from 'react-native'
 import {Container, Drawer, Fab, Icon, Tab, TabHeading, Tabs} from "native-base";
 import {ScrolTabView} from '../index'
 import EmojiList from './emojiList';
@@ -19,8 +19,6 @@ export default class extends React.Component {
         }
     }
 
-
-
     onEmojiSelect(emoji) {
         this.props.onEmojiSelect(emoji)
     }
@@ -29,33 +27,44 @@ export default class extends React.Component {
         return (
             <View style={{flex: 5, padding: 10}}>
 
-                { I18nManager.isRTL && (Platform.OS==='android') ?   <ScrolTabView  initialPage={0} tabBarBackgroundColor='white'
-                                                                                    tabBarUnderlineStyle={{backgroundColor: '#2db6c8'}}>
-                        <EmojiList tabLabel="😀" emojis={SYMBOLS_FLAGS_EMOJIS} index={0} onEmojiSelect={this.onEmojiSelect.bind(this)}/>
-                        <EmojiList tabLabel="🐼" emojis={OBJECTS_EMOJIS } index={0} onEmojiSelect={this.onEmojiSelect.bind(this)}/>
-                        <EmojiList tabLabel="🍏" emojis={TRAVEL_PLACES_EMOJIS} index={0} onEmojiSelect={this.onEmojiSelect.bind(this)}/>
-                        <EmojiList tabLabel="🚘" emojis={FOOD_SPORTS_EMOJIS} index={0} onEmojiSelect={this.onEmojiSelect.bind(this)}/>
-                        <EmojiList tabLabel="💎" emojis={ANIMALS_NATURE_EMOJIS} index={0} onEmojiSelect={this.onEmojiSelect.bind(this)}/>
-                        <EmojiList tabLabel="❤" emojis={PEOPLE_EMOJIS} index={0} onEmojiSelect={this.onEmojiSelect.bind(this)}/>
+                {I18nManager.isRTL && (Platform.OS === 'android') ?
+                    <ScrolTabView initialPage={0} tabBarBackgroundColor='white'
+                                  tabBarUnderlineStyle={{backgroundColor: '#2db6c8'}}>
+                        <EmojiList tabLabel="😀" emojis={SYMBOLS_FLAGS_EMOJIS} index={0}
+                                   onEmojiSelect={this.onEmojiSelect.bind(this)}/>
+                        <EmojiList tabLabel="🐼" emojis={OBJECTS_EMOJIS} index={0}
+                                   onEmojiSelect={this.onEmojiSelect.bind(this)}/>
+                        <EmojiList tabLabel="🍏" emojis={TRAVEL_PLACES_EMOJIS} index={0}
+                                   onEmojiSelect={this.onEmojiSelect.bind(this)}/>
+                        <EmojiList tabLabel="🚘" emojis={FOOD_SPORTS_EMOJIS} index={0}
+                                   onEmojiSelect={this.onEmojiSelect.bind(this)}/>
+                        <EmojiList tabLabel="💎" emojis={ANIMALS_NATURE_EMOJIS} index={0}
+                                   onEmojiSelect={this.onEmojiSelect.bind(this)}/>
+                        <EmojiList tabLabel="❤" emojis={PEOPLE_EMOJIS} index={0}
+                                   onEmojiSelect={this.onEmojiSelect.bind(this)}/>
 
 
                     </ScrolTabView> :
+                    <ScrolTabView initialPage={0} tabBarBackgroundColor='white'
+                                  tabBarUnderlineStyle={{backgroundColor: '#2db6c8'}}>
+                        <EmojiList tabLabel="😀" emojis={PEOPLE_EMOJIS} index={0}
+                                   onEmojiSelect={this.onEmojiSelect.bind(this)}/>
+                        <EmojiList tabLabel="🐼" emojis={ANIMALS_NATURE_EMOJIS} index={0}
+                                   onEmojiSelect={this.onEmojiSelect.bind(this)}/>
+                        <EmojiList tabLabel="🍏" emojis={FOOD_SPORTS_EMOJIS} index={0}
+                                   onEmojiSelect={this.onEmojiSelect.bind(this)}/>
+                        <EmojiList tabLabel="🚘" emojis={TRAVEL_PLACES_EMOJIS} index={0}
+                                   onEmojiSelect={this.onEmojiSelect.bind(this)}/>
+                        <EmojiList tabLabel="💎" emojis={OBJECTS_EMOJIS} index={0}
+                                   onEmojiSelect={this.onEmojiSelect.bind(this)}/>
+                        <EmojiList tabLabel="❤" emojis={SYMBOLS_FLAGS_EMOJIS} index={0}
+                                   onEmojiSelect={this.onEmojiSelect.bind(this)}/>
 
-                <ScrolTabView  initialPage={0} tabBarBackgroundColor='white'
-                               tabBarUnderlineStyle={{backgroundColor: '#2db6c8'}}>
-                    <EmojiList tabLabel="😀" emojis={PEOPLE_EMOJIS} index={0} onEmojiSelect={this.onEmojiSelect.bind(this)}/>
-                    <EmojiList tabLabel="🐼" emojis={ANIMALS_NATURE_EMOJIS} index={0} onEmojiSelect={this.onEmojiSelect.bind(this)}/>
-                    <EmojiList tabLabel="🍏" emojis={FOOD_SPORTS_EMOJIS} index={0} onEmojiSelect={this.onEmojiSelect.bind(this)}/>
-                    <EmojiList tabLabel="🚘" emojis={TRAVEL_PLACES_EMOJIS} index={0} onEmojiSelect={this.onEmojiSelect.bind(this)}/>
-                    <EmojiList tabLabel="💎" emojis={OBJECTS_EMOJIS} index={0} onEmojiSelect={this.onEmojiSelect.bind(this)}/>
-                    <EmojiList tabLabel="❤" emojis={SYMBOLS_FLAGS_EMOJIS} index={0} onEmojiSelect={this.onEmojiSelect.bind(this)}/>
 
-
-                </ScrolTabView>}
+                    </ScrolTabView>}
 
 
             </View>
         )
     }
-
 }

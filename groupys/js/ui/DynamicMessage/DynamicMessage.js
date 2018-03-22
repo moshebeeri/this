@@ -1,5 +1,8 @@
 import React, {Component} from 'react';
 import {Text, TouchableOpacity, View} from 'react-native';
+import withPreventDoubleClick from '../../ui/TochButton/TouchButton';
+
+const TouchableOpacityFix = withPreventDoubleClick(TouchableOpacity);
 import {Button, Input} from 'native-base';
 import {ThisText} from '../index';
 export default class DynamicMessage extends Component {
@@ -18,7 +21,7 @@ export default class DynamicMessage extends Component {
             return <View/>
         }
         const options = messagesObject.map(message => {
-            return <TouchableOpacity key={messageToString(message)}
+            return <TouchableOpacityFix key={messageToString(message)}
                                      style={{height: 30, borderTopWidth: 0.5, backgroundColor: 'white'}}
                                      onPress={() => onMessage(message)} regular>
 
@@ -29,7 +32,7 @@ export default class DynamicMessage extends Component {
                     fontSize: 18
                 }}>{messageToString(message)}</ThisText>
 
-            </TouchableOpacity>
+            </TouchableOpacityFix>
         })
         return <View>{options}</View>
     }

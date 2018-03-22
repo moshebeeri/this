@@ -1,9 +1,11 @@
 import React, {Component} from "react";
-import {Dimensions, Image, Text, TouchableOpacity, View} from "react-native";
+import {TouchableOpacity, View} from "react-native";
 import Icon from 'react-native-vector-icons/Ionicons';
 import strings from "../../i18n/i18n"
 import {ThisText} from '../index';
-const {width, height} = Dimensions.get('window')
+import withPreventDoubleClick from '../../ui/TochButton/TouchButton';
+
+const TouchableOpacityFix = withPreventDoubleClick(TouchableOpacity);
 export default class BarcodeScanner extends Component {
     static navigationOptions = {
         header: null
@@ -16,8 +18,6 @@ export default class BarcodeScanner extends Component {
             showCamera: false
         }
     }
-
-
 
     showScanner() {
         this.props.navigation.navigate('BarcodeScannerComponent', {handleCode: this.handleCode.bind(this)})
@@ -42,10 +42,10 @@ export default class BarcodeScanner extends Component {
             }}>
                 <ThisText>{strings.AssignBarcode}</ThisText>
                 {this.state.code && <ThisText>{this.state.code.data}</ThisText>}
-                <TouchableOpacity onPress={this.showScanner.bind(this)}>
+                <TouchableOpacityFix onPress={this.showScanner.bind(this)}>
 
                     <Icon size={35} color={'#FA8559'} name='ios-barcode-outline'/>
-                </TouchableOpacity>
+                </TouchableOpacityFix>
 
             </View>
 

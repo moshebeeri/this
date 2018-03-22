@@ -1,13 +1,14 @@
 import React, {Component} from 'react';
-import {TouchableOpacity, View,I18nManager} from 'react-native';
+import {I18nManager, TouchableOpacity, View} from 'react-native';
 import {Button} from 'native-base';
 import styles from './styles'
 import StyleUtils from "../../utils/styleUtils";
 import Ionicons from "react-native-vector-icons/Ionicons";
-import EvilIcons from "react-native-vector-icons/EvilIcons";
 import SimpleLineIcons from "react-native-vector-icons/SimpleLineIcons";
 import {ThisText} from '../../ui/index';
+import withPreventDoubleClick from '../../ui/TochButton/TouchButton';
 
+const TouchableOpacityFix = withPreventDoubleClick(TouchableOpacity);
 export default class SocialState extends Component {
     constructor(props) {
         super(props);
@@ -53,7 +54,7 @@ export default class SocialState extends Component {
     }
 
     createCommentButton() {
-        const {comments, disabled, onPressComment, feed,groupChat} = this.props;
+        const {comments, disabled, onPressComment, feed, groupChat} = this.props;
         let componentStyle = styles.promotionBusiness;
         if (feed) {
             componentStyle = styles.promotionFeed;
@@ -65,24 +66,22 @@ export default class SocialState extends Component {
                 componenColor = '#cccccc';
             }
         }
-
-        if(groupChat){
-            if(I18nManager.isRTL) {
-                return <TouchableOpacity transparent style={styles.promotion_iconView} onPress={onPressComment}>
+        if (groupChat) {
+            if (I18nManager.isRTL) {
+                return <TouchableOpacityFix transparent style={styles.promotion_iconView} onPress={onPressComment}>
                     <SimpleLineIcons size={28} color={componenColor} style={{marginRight: 10}}
                                      name="action-undo"/>
 
-                </TouchableOpacity>;
-            }else{
-                return <TouchableOpacity transparent style={styles.promotion_iconView} onPress={onPressComment}>
+                </TouchableOpacityFix>;
+            } else {
+                return <TouchableOpacityFix transparent style={styles.promotion_iconView} onPress={onPressComment}>
                     <SimpleLineIcons size={28} color={componenColor} style={{marginRight: 10}}
                                      name="action-redo"/>
 
-                </TouchableOpacity>;
+                </TouchableOpacityFix>;
             }
         }
         if (disabled) {
-
             return <View transparent style={styles.promotion_iconView}>
                 <SimpleLineIcons size={30} color={componenColor} style={{marginRight: 10, width: 40, height: 40}}
                                  name="bubbles"/>
@@ -90,11 +89,11 @@ export default class SocialState extends Component {
                 <ThisText style={styles.socialTextColor}>{comments}</ThisText>
             </View>;
         }
-        return <TouchableOpacity transparent style={styles.promotion_iconView} onPress={onPressComment}>
+        return <TouchableOpacityFix transparent style={styles.promotion_iconView} onPress={onPressComment}>
             <SimpleLineIcons size={30} color={componenColor} style={{marginRight: 10}}
                              name="bubbles"/>
             <ThisText style={styles.socialTextColor}>{comments}</ThisText>
-        </TouchableOpacity>;
+        </TouchableOpacityFix>;
     }
 
     createLikeButton() {
@@ -115,32 +114,30 @@ export default class SocialState extends Component {
             </View>
         }
         if (like) {
-            return <TouchableOpacity transparent style={styles.promotion_iconView} onPress={onPressUnLike}>
+            return <TouchableOpacityFix transparent style={styles.promotion_iconView} onPress={onPressUnLike}>
 
 
                 <Ionicons size={30} color={componenColor} style={{marginRight: 10}}
                           name="md-heart"/>
                 <ThisText style={styles.socialTextColor}>{likes}</ThisText>
 
-            </TouchableOpacity>
+            </TouchableOpacityFix>
         }
-        return <TouchableOpacity transparent style={styles.promotion_iconView} onPress={onPressLike}>
+        return <TouchableOpacityFix transparent style={styles.promotion_iconView} onPress={onPressLike}>
 
             <Ionicons size={30} color={componenColor} style={{marginRight: 10}}
                       name="md-heart-outline"/>
             <ThisText style={styles.socialTextColor}>{likes}</ThisText>
 
-        </TouchableOpacity>
+        </TouchableOpacityFix>
     }
 
     createShareButton() {
-        const {share, shares, disabled, shareAction, feed, shareDisabled,sharable} = this.props;
+        const {share, shares, disabled, shareAction, feed, shareDisabled, sharable} = this.props;
         let componentStyle = styles.promotionBusiness;
         if (feed) {
             componentStyle = styles.promotionFeed;
         }
-
-
         let componenColor = '#e19c73';
         if (feed) {
             componenColor = '#2db6c8';
@@ -148,30 +145,30 @@ export default class SocialState extends Component {
                 componenColor = '#cccccc';
             }
         }
-        if (disabled || shareDisabled ||!sharable) {
+        if (disabled || shareDisabled || !sharable) {
             return <View transparent style={styles.promotion_iconView}>
                 <SimpleLineIcons size={28} color={'#cccccc'} style={{marginRight: 10}}
-                           name="share"/>
+                                 name="share"/>
                 <ThisText style={styles.socialTextColor}>{shares}</ThisText>
 
             </View>
         }
         if (share) {
-            return <TouchableOpacity transparent style={styles.promotion_iconView} onPress={shareAction}>
+            return <TouchableOpacityFix transparent style={styles.promotion_iconView} onPress={shareAction}>
 
                 <SimpleLineIcons size={28} color={componenColor} style={{marginRight: 10}}
-                           name="share"/>
+                                 name="share"/>
                 <ThisText style={styles.socialTextColor}>{shares}</ThisText>
 
 
-            </TouchableOpacity>
+            </TouchableOpacityFix>
         }
-        return <TouchableOpacity transparent style={styles.promotion_iconView} onPress={shareAction}>
+        return <TouchableOpacityFix transparent style={styles.promotion_iconView} onPress={shareAction}>
 
             <SimpleLineIcons size={28} color={componenColor} style={{marginRight: 10}}
-                       name="share"/>
+                             name="share"/>
             <ThisText style={styles.socialTextColor}>{shares}</ThisText>
-        </TouchableOpacity>;
+        </TouchableOpacityFix>;
     }
 }
 

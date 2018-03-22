@@ -21,7 +21,9 @@ import strings from "../../i18n/i18n"
 import Icon from 'react-native-vector-icons/Ionicons';
 import StyleUtils from "../../utils/styleUtils";
 import {ThisText} from '../../ui/index';
+import withPreventDoubleClick from '../../ui/TochButton/TouchButton';
 
+const TouchableOpacityFix = withPreventDoubleClick(TouchableOpacity);
 const {width, height} = Dimensions.get('window')
 const logo = require('../../../images/logo.png')
 const thisLogo = require('../../../images/this-logo.png');
@@ -72,7 +74,7 @@ class Register extends Component {
 
                     </View>
                     <View style={{width: width, height: 60, justifyContent: 'center', backgroundColor: 'transparent'}}>
-                        <TouchableOpacity transparent style={{
+                        <TouchableOpacityFix transparent style={{
                             width: 50,
                             alignItems: 'flex-start',
                             justifyContent: 'flex-start',
@@ -82,7 +84,7 @@ class Register extends Component {
                         }} onPress={() => this.back()}>
                             <Icon active color={'white'} size={35} name={arrowName}/>
 
-                        </TouchableOpacity>
+                        </TouchableOpacityFix>
                     </View>
                     <KeyboardAvoidingView behavior={'position'}
                                           style={[styles.avoidView, {width: StyleUtils.getWidth()}]}>
@@ -127,7 +129,7 @@ class Register extends Component {
                                 }}>
 
 
-                                    <TouchableOpacity onPress={() => this.validateCode()} style={{
+                                    <TouchableOpacityFix onPress={() => this.validateCode()} style={{
                                         width: width - 90,
                                         height: 50,
                                         borderRadius: 30,
@@ -145,7 +147,7 @@ class Register extends Component {
                                             fontSize: 20
                                         }}>{strings.Validate.toUpperCase()}</ThisText>
 
-                                    </TouchableOpacity>
+                                    </TouchableOpacityFix>
                                 </View>
                                 {doRegister && <Spinner style={{position: 'absolute', top: 40}}/>}
 

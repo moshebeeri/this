@@ -11,7 +11,9 @@ import Icon2 from 'react-native-vector-icons/SimpleLineIcons';
 import strings from "../../i18n/i18n"
 import {ImageController,ThisText} from '../index'
 import StyleUtils from "../../utils/styleUtils";
+import withPreventDoubleClick from '../../ui/TochButton/TouchButton';
 
+const TouchableOpacityFix = withPreventDoubleClick(TouchableOpacity);
 class BusinessHeader extends Component {
     constructor(props) {
         super(props);
@@ -53,17 +55,17 @@ class BusinessHeader extends Component {
                 </View>
             }
             if (small) {
-                return <TouchableOpacity style={{margin: 10}} onPress={this.showBusiness.bind(this)}>
+                return <TouchableOpacityFix style={{margin: 10}} onPress={this.showBusiness.bind(this)}>
                     <View>
                         <ImageController  square thumbnail  size={36} source={{uri: businessLogo}}/>
                     </View>
-                </TouchableOpacity>
+                </TouchableOpacityFix>
             }
-            return <TouchableOpacity style={{margin: 10}} onPress={this.showBusiness.bind(this)}>
+            return <TouchableOpacityFix style={{margin: 10}} onPress={this.showBusiness.bind(this)}>
                 <View>
                     <ImageController  thumbnail  size={defaultSize} source={{uri: businessLogo}}/>
                 </View>
-            </TouchableOpacity>
+            </TouchableOpacityFix>
         }
         return undefined;
     }
@@ -132,7 +134,7 @@ class BusinessHeader extends Component {
             </Menu>
         }
         if (showBack) {
-            back = <TouchableOpacity transparent style={{
+            back = <TouchableOpacityFix transparent style={{
                 alignItems: 'flex-start',
                 justifyContent: 'flex-start',
                 width: 40,
@@ -140,7 +142,7 @@ class BusinessHeader extends Component {
                 marginRight: 10
             }} onPress={() => this.back()}>
                 <Icon active  color={"#2db6c8"} size={30} name={arrowName}/>
-            </TouchableOpacity>
+            </TouchableOpacityFix>
         }
         return  <View>
             {!this.props.noProfile ?
