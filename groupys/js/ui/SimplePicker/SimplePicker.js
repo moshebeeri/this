@@ -8,7 +8,9 @@ import strings from "../../i18n/i18n";
 import StyleUtils from "../../utils/styleUtils";
 import {ThisText,TextInput} from '../../ui/index';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
+import withPreventDoubleClick from '../../ui/TochButton/TouchButton';
 
+const TouchableOpacityFix = withPreventDoubleClick(TouchableOpacity);
 export default class SimplePicker extends Component {
     constructor(props) {
         super(props);
@@ -90,7 +92,7 @@ export default class SimplePicker extends Component {
                     backgroundColor: '#cccccc',
                     width: StyleUtils.getWidth() - 25
                 }]}><ThisText>{selectValue}</ThisText></View> :
-                <TouchableOpacity onPress={() => this.showDropDownn()}
+                <TouchableOpacityFix onPress={() => this.showDropDownn()}
                                   style={[pickerStyle, {width: StyleUtils.getWidth() - 25}]} s>
                     <ModalDropdown ref={'dropDown'}
                                    style={[styles.modalViewStyle, {width: StyleUtils.getWidth() - 25}]}
@@ -105,7 +107,7 @@ export default class SimplePicker extends Component {
                     <Icon3 style={{right: 10, position: 'absolute', fontSize: 25, color: "black"}} name="chevron-down"/>
 
 
-                </TouchableOpacity>
+                </TouchableOpacityFix>
             }
         </View>
     }

@@ -15,9 +15,9 @@ const briefcase = require('../../../images/briefcase.png');
 const settings = require('../../../images/settings-work-tool.png');
 const deviceHeight = Dimensions.get('window').height;
 const deviceWidth = Dimensions.get('window').width;
-// import pageSync from "../../refresh/refresher"
-//
-// pageSync.check();
+import withPreventDoubleClick from '../../ui/TochButton/TouchButton';
+
+const TouchableOpacityFix = withPreventDoubleClick(TouchableOpacity);
 class ProfileDrawer extends Component {
     static navigationOptions = {
         header: null
@@ -103,13 +103,13 @@ class ProfileDrawer extends Component {
 
 
                 }}>
-                    <TouchableOpacity onPress={() => this.showUserProfile()}
+                    <TouchableOpacityFix onPress={() => this.showUserProfile()}
                                       style={{marginLeft:15,width: 40, height: 30,flexDirection: 'column', alignItems: 'center'}} regular>
                         <ImageController style={{tintColor: 'white', width: 30, height: 30}}
                                source={settings}/>
 
 
-                    </TouchableOpacity>
+                    </TouchableOpacityFix>
                     <View style={{marginRight:20}}>
                     <CloseDrawer active color={'white'} size={30} onPress={() => this.props.closeDrawer()}/>
                     </View>
@@ -161,7 +161,7 @@ class ProfileDrawer extends Component {
                 {/*button grid*/}
 
                     <View style={{ borderTopWidth:1,borderBottomWidth:1,marginTop:10,height:70,width:deviceWidth/5*4,flexDirection: 'column',  borderColor: '#E5E5E5'}}>
-                        <TouchableOpacity onPress={() => this.showBusinesses()}
+                        <TouchableOpacityFix onPress={() => this.showBusinesses()}
                                           style={{flex: 1, flexDirection: 'row', alignItems: 'center'}} regular>
                             <Image style={{tintColor: 'white', marginLeft: 20, width: 30, height: 30}}
                                    source={briefcase}/>
@@ -173,10 +173,10 @@ class ProfileDrawer extends Component {
                                     marginLeft:20,
                                     fontSize: 16
                                 }}>{strings.Businesses}</ThisText>
-                        </TouchableOpacity>
+                        </TouchableOpacityFix>
                     </View>
                     <View style={{height:70,width:deviceWidth/5*4,borderBottomWidth:1,flexDirection: 'row',borderColor: '#E5E5E5'}}>
-                        <TouchableOpacity onPress={() => this.changePassword()}
+                        <TouchableOpacityFix onPress={() => this.changePassword()}
                                           style={{flex: 1, flexDirection: 'row', alignItems: 'center'}} regular>
                             <Icon style={{marginLeft: 20, marginBottom: -6}} color="white" size={36} name="lock"/>
                             <ThisText style={{
@@ -186,7 +186,7 @@ class ProfileDrawer extends Component {
                                 fontSize: 16
                             }}>{strings.ChangePassword} </ThisText>
 
-                        </TouchableOpacity>
+                        </TouchableOpacityFix>
                     </View>
 
 

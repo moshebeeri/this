@@ -36,6 +36,7 @@ import UrlPreview from './UrlPreview/UrlPreview';
 import DocumentPicker from './DocumentPicker/DocumentPicker'
 import TermsOfUse from './TermOfUse/TermsOfUse'
 import ImageController from './ImageController/ImageController'
+import TouchButton from './TochButton/TouchButton'
 import ThisText from './ThisText/ThisText'
 import ChatPreviewPromotion from './ChatPreviewPromotion/ChatPreviewPromotion'
 export {
@@ -78,5 +79,5 @@ export {
     TermsOfUse,
     ImageController,
     ThisText,
-    ChatPreviewPromotion
+    ChatPreviewPromotion,TouchButton
 }

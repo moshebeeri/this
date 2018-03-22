@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import {Dimensions, TouchableOpacity} from 'react-native';
+import {TouchableOpacity} from 'react-native';
 import {
     Button,
     Card,
@@ -28,9 +28,9 @@ import StyleUtils from '../../../utils/styleUtils'
 import Feather from "react-native-vector-icons/Feather";
 import FontAwesome from "react-native-vector-icons/FontAwesome";
 import SimpleLineIcons from "react-native-vector-icons/SimpleLineIcons";
+import withPreventDoubleClick from '../../../ui/TochButton/TouchButton';
 
-const {width, height} = Dimensions.get('window');
-const vh = height / 100;
+const TouchableOpacityFix = withPreventDoubleClick(TouchableOpacity);
 export default class BusinessListView extends Component {
     constructor(props) {
         super(props);
@@ -76,8 +76,8 @@ export default class BusinessListView extends Component {
         const promotionButton = this.createPromotionsTag(item);
         const permissionsButton = this.createPermissionsTag(item);
         const productsButton = this.createPoductsTag(item);
-        const inReview =  item.business.review && (item.business.review.state === 'validation' || item.business.review.state === 'review');
-        return ( <View style={{marginTop:1,marginBottom: 9,backgroundColor:'white'}}>
+        const inReview = item.business.review && (item.business.review.state === 'validation' || item.business.review.state === 'review');
+        return ( <View style={{marginTop: 1, marginBottom: 9, backgroundColor: 'white'}}>
                 <BusinessHeader businesscolor navigation={this.props.navigation} business={item.business}
                                 categoryTitle={item.categoryTitle} businessLogo={item.business.logo}
                                 businessName={item.business.name} noMargin businessView
@@ -100,9 +100,9 @@ export default class BusinessListView extends Component {
                     <View style={{borderTopWidth: 2, borderColor: '#eaeaea', backgroundColor: 'white'}}
                           key={this.props.index}>
                         {!inReview && (permissionsButton || productsButton || promotionButton) && <View style={{
-                             flexDirection: 'row', alignItems: 'center',
-                            padding:10,
-                            height:56,
+                            flexDirection: 'row', alignItems: 'center',
+                            padding: 10,
+                            height: 56,
                             justifyContent: 'space-between',
                         }}>
                             {permissionsButton}
@@ -112,25 +112,31 @@ export default class BusinessListView extends Component {
                         </View>}
                         {item.business && item.business.review && item.business.review.state === 'validation' &&
                         <View style={{
-                           flexDirection: 'row', alignItems: 'center',
+                            flexDirection: 'row', alignItems: 'center',
                             justifyContent: 'space-between',
-                            padding:10,
+                            padding: 10,
                         }}>
                             <ThisText>{strings.confirmBusinessByMailMessage}</ThisText>
                             <EditButton size={30} iconName='refresh' onPress={this.refreshBusiness.bind(this)}/>
                         </View>}
                         {item.business && item.business.review && item.business.review.state === 'review' &&
                         <View style={{
-                             flexDirection: 'row', alignItems: 'center',
+                            flexDirection: 'row', alignItems: 'center',
                             justifyContent: 'space-between',
-                            padding:10,
+                            padding: 10,
                         }}>
                             <ThisText>{strings.validatingBusinessMessage}</ThisText>
-                            <EditButton size={30} iconName='refresh'  onPress={this.refreshBusiness.bind(this)}/>
+                            <EditButton size={30} iconName='refresh' onPress={this.refreshBusiness.bind(this)}/>
                         </View>}
 
                         {item.business.social_state &&
-                        <View style={{height:56,justifyContent:'center',alignItems:'center',borderTopWidth: 1, borderColor: '#cccccc'}}>
+                        <View style={{
+                            height: 56,
+                            justifyContent: 'center',
+                            alignItems: 'center',
+                            borderTopWidth: 1,
+                            borderColor: '#cccccc'
+                        }}>
                             <SocialState disabled
                                          like={item.business.social_state.like} likes={item.business.social_state.likes}
                                          showFollowers
@@ -173,9 +179,9 @@ export default class BusinessListView extends Component {
 
     createPermissionsTag(item) {
         if (this.checkPermission(item)) {
-            return <TouchableOpacity onPress={() => this.showUsersRoles()}
-                                     style={{margin: 3, flexDirection: 'row', alignItems: 'center',}}
-                                     regular>
+            return <TouchableOpacityFix onPress={() => this.showUsersRoles()}
+                                        style={{margin: 3, flexDirection: 'row', alignItems: 'center',}}
+                                        regular>
                 <Feather size={25} color={'#ff6400'}
                          name="user-check"/>
                 <ThisText style={{
@@ -185,15 +191,15 @@ export default class BusinessListView extends Component {
                     fontSize: 13
                 }}>{strings.Permissions}</ThisText>
 
-            </TouchableOpacity>
+            </TouchableOpacityFix>
         }
         return undefined;
     }
 
     createPoductsTag(item) {
         if (this.checkPermission(item)) {
-            return <TouchableOpacity onPress={() => this.showProducts()}
-                                     style={{margin: 3, flexDirection: 'row', alignItems: 'center',}} regular>
+            return <TouchableOpacityFix onPress={() => this.showProducts()}
+                                        style={{margin: 3, flexDirection: 'row', alignItems: 'center',}} regular>
 
                 <FontAwesome size={25} color={'#ff6400'}
                              name="barcode"/>
@@ -204,7 +210,7 @@ export default class BusinessListView extends Component {
                     fontSize: 13
                 }}>{strings.Products}</ThisText>
 
-            </TouchableOpacity>
+            </TouchableOpacityFix>
         }
         return undefined;
     }
@@ -226,9 +232,9 @@ export default class BusinessListView extends Component {
 
     createPromotionsTag(item) {
         if (this.checkPermission(item)) {
-            return <TouchableOpacity onPress={() => this.showPromotions()}
-                                     style={{margin: 3, flexDirection: 'row', alignItems: 'center',}}
-                                     regular>
+            return <TouchableOpacityFix onPress={() => this.showPromotions()}
+                                        style={{margin: 3, flexDirection: 'row', alignItems: 'center',}}
+                                        regular>
 
                 <SimpleLineIcons size={25} color={'#ff6400'}
                                  name="tag"/>
@@ -239,7 +245,7 @@ export default class BusinessListView extends Component {
                     fontSize: 13
                 }}>{strings.Promotions}</ThisText>
 
-            </TouchableOpacity>
+            </TouchableOpacityFix>
         }
         return undefined;
     }

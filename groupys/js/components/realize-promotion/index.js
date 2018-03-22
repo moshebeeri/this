@@ -5,7 +5,7 @@ import PromotionApi from '../../api/promotion'
 import {BusinessHeader, PromotionColumnHeader, PromotionSeperator, ThisText} from '../../ui/index';
 import strings from "../../i18n/i18n"
 import {connect} from 'react-redux';
-import instanceUtils from '../../utils/instanceUtils'
+import InstanceLifeCycle from '../../utils/InstanceLifeCycle'
 import StyleUtils from "../../utils/styleUtils";
 import Tasks from '../../tasks/tasks'
 import FeedUiConverter from "../../api/feed-ui-converter";
@@ -54,11 +54,12 @@ class RealizePromotion extends Component {
     }
 
     createItem(feed) {
+        let instanceLifeCycle = new InstanceLifeCycle(this.props.myPromotions);
         let savedinstance = feed;
         if (feed.savedInstance) {
             savedinstance = feed.savedInstance;
         }
-        return feedUiConverter.createSavedPromotion(savedinstance, savedinstance._id)
+        return feedUiConverter.createSavedPromotion(savedinstance, savedinstance._id, instanceLifeCycle);
     }
 
     getSavedId() {
@@ -80,7 +81,7 @@ class RealizePromotion extends Component {
         let isRealized = false;
         if (myPromotions[id]) {
             item = this.createItem(myPromotions[id]);
-            isRealized = instanceUtils.checkIfRealized(myPromotions[id]);
+            isRealized = item.isRealized;
         }
         return (
             <ScrollView>
@@ -124,8 +125,8 @@ class RealizePromotion extends Component {
                     <ThisText style={{
                         backgroundColor: 'white',
                         fontSize: 50,
-                        marginLeft:30,
-                        marginTop:20,
+                        marginLeft: 30,
+                        marginTop: 20,
                         fontWeight: 'bold',
                         transform: [{rotate: '45deg'}],
                         color: '#2db6c8'

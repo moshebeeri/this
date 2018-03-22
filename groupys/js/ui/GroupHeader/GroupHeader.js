@@ -6,7 +6,9 @@ import strings from "../../i18n/i18n"
 import StyleUtils from "../../utils/styleUtils";
 import {ImageController} from '../index'
 import {ThisText} from '../../ui/index';
+import withPreventDoubleClick from '../../ui/TochButton/TouchButton';
 
+const TouchableOpacityFix = withPreventDoubleClick(TouchableOpacity);
 export default class GroupHeader extends Component {
     constructor(props) {
         super(props);
@@ -92,7 +94,7 @@ export default class GroupHeader extends Component {
         if (enablePress) {
             disabled = false;
         }
-        return <TouchableOpacity onPress={onPressAction} disabled={disabled} style={containerStyle}>
+        return <TouchableOpacityFix onPress={onPressAction} disabled={disabled} style={containerStyle}>
             <View style={[styles.groupHeader, {width: StyleUtils.getWidth()}]}>
                 <View style={styles.groupImage}>
                     {this.createImage(group)}
@@ -121,7 +123,7 @@ export default class GroupHeader extends Component {
 
             </View>
 
-        </TouchableOpacity>
+        </TouchableOpacityFix>
     }
 }
 

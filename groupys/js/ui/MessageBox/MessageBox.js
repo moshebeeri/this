@@ -6,7 +6,9 @@ import EmojiPicker from "../emojiPicker/emojiPicker"
 import styles from './styles'
 import strings from "../../i18n/i18n"
 import StyleUtils from "../../utils/styleUtils";
+import withPreventDoubleClick from '../../ui/TochButton/TouchButton';
 
+const TouchableOpacityFix = withPreventDoubleClick(TouchableOpacity);
 const {height} = Dimensions.get('window')
 export default class MessageBox extends Component {
     constructor(props) {
@@ -104,10 +106,10 @@ export default class MessageBox extends Component {
                     backgroundColor: 'white',
                     flexDirection: 'row'
                 }}>
-                    <TouchableOpacity onPress={() => this.showEmoji()} style={styles.icon} transparent>
+                    <TouchableOpacityFix onPress={() => this.showEmoji()} style={styles.icon} transparent>
 
                         <Icon2 style={{fontSize: 35, color: "#2db6c8"}} name={this.state.iconEmoji}/>
-                    </TouchableOpacity>
+                    </TouchableOpacityFix>
 
 
                     <TextInput style={styles.textInputTextStyleWhite} value={this.state.message}
@@ -119,9 +121,9 @@ export default class MessageBox extends Component {
                                onChangeText={(message) => this.setState({message})} placeholder={strings.Message}/>
 
 
-                    <TouchableOpacity onPress={() => this._onPressButton()} style={styles.icon} transparent>
+                    <TouchableOpacityFix onPress={() => this._onPressButton()} style={styles.icon} transparent>
                         <Icon style={{fontSize: 35, color: "#2db6c8"}} name='send'/>
-                    </TouchableOpacity>
+                    </TouchableOpacityFix>
                 </View>
 
 

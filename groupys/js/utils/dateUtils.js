@@ -25,6 +25,7 @@ class DateUtils {
         return moment(itemDate).isSame(moment(), 'day');
     }
 
+
     isThisWeek(date) {
         var now = moment();
         var input = moment(date);

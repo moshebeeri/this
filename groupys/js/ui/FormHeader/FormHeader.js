@@ -8,7 +8,9 @@ import strings from "../../i18n/i18n"
 import {connect} from 'react-redux';
 import {ThisText} from '../../ui/index';
 import StyleUtils from "../../utils/styleUtils";
+import withPreventDoubleClick from '../../ui/TochButton/TouchButton';
 
+const TouchableOpacityFix = withPreventDoubleClick(TouchableOpacity);
 const {width, height} = Dimensions.get('window')
 const vh = height / 100
 
@@ -78,7 +80,7 @@ class FormHeader extends Component {
         let arrowName = I18nManager.isRTL ? "ios-arrow-forward" : "ios-arrow-back";
         let back = undefined;
         if (showBack) {
-            back = <TouchableOpacity transparent style={{
+            back = <TouchableOpacityFix transparent style={{
                 width: 80,
                 alignItems: 'flex-start',
                 justifyContent: 'flex-start',
@@ -87,7 +89,7 @@ class FormHeader extends Component {
             }} onPress={() => this.back()}>
                 <Icon active color={iconColor} size={25} name={arrowName}/>
 
-            </TouchableOpacity>
+            </TouchableOpacityFix>
         }
         let titleStyle = this.createTitleStyle(titleColor);
         return (
@@ -147,17 +149,17 @@ class FormHeader extends Component {
 
                         {menu}
                         {filter && !this.state.showSearch &&
-                        <TouchableOpacity transparent
+                        <TouchableOpacityFix transparent
                                           style={{width: 50, alignItems: 'flex-end', justifyContent: 'flex-end'}}
                                           onPress={() => this.filter()}>
                             <Icon style={{fontSize: 30, color: "white"}} name="ios-search"/>
-                        </TouchableOpacity>
+                        </TouchableOpacityFix>
                         }
 
 
                     </View> : <View style={styles.formHeaderSubmitButoon}>
                         {submitForm &&
-                        <TouchableOpacity transparent
+                        <TouchableOpacityFix transparent
                                           style={{
                                               width: 50,
                                               marginRight: 10,
@@ -166,15 +168,15 @@ class FormHeader extends Component {
                                           }}
                                           onPress={() => this.submitForm()}>
                             {icon}
-                        </TouchableOpacity>
+                        </TouchableOpacityFix>
                         }
 
                         {filter && !this.state.showSearch &&
-                        <TouchableOpacity transparent
+                        <TouchableOpacityFix transparent
                                           style={{width: 50, alignItems: 'flex-end', justifyContent: 'flex-end'}}
                                           onPress={() => this.filter()}>
                             <Icon style={{fontSize: 30, color: "white"}} name="ios-search"/>
-                        </TouchableOpacity>
+                        </TouchableOpacityFix>
                         }
 
 

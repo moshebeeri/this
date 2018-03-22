@@ -3,10 +3,10 @@
  */
 import {createSelector} from "reselect";
 import * as assemblers from "../actions/collectionAssembler";
-
+import InstanceLifeCycle from '../utils/InstanceLifeCycle'
 import FeedUiConverter from "../api/feed-ui-converter";
 import getStore from "../store";
-import instanceUtils from '../utils/instanceUtils'
+
 let feedUiConverter = new FeedUiConverter();
 const getStateFeeds = (state) => state.feeds;
 const getStatePosts = (state) => state.postForm;
@@ -28,28 +28,7 @@ export const getFeeds = createSelector([getStateFeeds, getStatePosts, getStateBu
         };
         let feedsUi = [];
         let feedsOrder = feeds.feedView;
-        let savedInstancesIds = [];
-        let redeemedInstancesIds = [];
-        if (savedPromotion.feeds) {
-            savedInstancesIds = Object.values(savedPromotion.feeds).map(savedFeed => {
-                if(savedFeed.savedInstance) {
-                    return savedFeed.savedInstance.instance._id
-                }
-                return savedFeed.instance._id
-            });
-
-            redeemedInstancesIds = Object.values(savedPromotion.feeds).map(savedFeed => {
-                let isRedeemed = instanceUtils.checkIfRealized(savedFeed);
-                if(isRedeemed){
-                    if(savedFeed.savedInstance) {
-                        return savedFeed.savedInstance.instance._id
-                    }
-                    return savedFeed.instance._id
-                }
-
-                return undefined;
-            });
-        }
+        let instanceLifeCycle = new InstanceLifeCycle(savedPromotion.feeds);
         if (feedsOrder.length > 0) {
             try {
                 let feedArray = feedsOrder.map(key => feeds.feeds[key]);
@@ -58,7 +37,7 @@ export const getFeeds = createSelector([getStateFeeds, getStatePosts, getStateBu
                 });
                 feedsUi = assembledFeeds.map(feed => {
                     try {
-                        return feedUiConverter.createFeed(feed, savedInstancesIds,redeemedInstancesIds);
+                        return feedUiConverter.createFeed(feed, instanceLifeCycle);
                     } catch (err) {
                         console.error(err);
                         return undefined;
@@ -71,7 +50,6 @@ export const getFeeds = createSelector([getStateFeeds, getStatePosts, getStateBu
                     feedsUi = feedsUi.slice(0, 10)
                     return feedsUi;
                 }
-
                 return feedsUi;
             } catch (err) {
                 console.error(err)
