@@ -21,7 +21,7 @@ export default class PromotionHeaderSnippet extends Component {
                                            name="tag"/>
         switch (type) {
             case "REDUCED_AMOUNT":
-                let totalValue = promotion.promotionEntity.reduced_amount.values[0].price * promotion.promotionEntity.reduced_amount.quantity;
+                let totalValue = promotion.promotionEntity.reduced_amount.values[0].price;
                 let discount = promotion.promotionEntity.reduced_amount.values[0].pay;
                 return <View style={{
                     flex: 1,
@@ -30,6 +30,7 @@ export default class PromotionHeaderSnippet extends Component {
                     marginLeft: 0,
                     flexDirection: 'row'
                 }}>
+                    {promoIcon}
                     {promotion.banner && <ImageController thumbnail size={36} source={{uri: promotion.banner.uri}}/>}
                     <View style={{flex: 1, justifyContent: 'flex-start', marginLeft: 12, alignItems: 'flex-start'}}>
                         <ThisText style={styles.promotionListLineTitleText}>{promotion.business.name}</ThisText>
