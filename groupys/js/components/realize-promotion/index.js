@@ -120,18 +120,21 @@ class RealizePromotion extends Component {
                         }} source={{uri: this.state.image.qrcode}}/>
                         }
                     </View>
+                    {true && <View style={{transform: [{rotate: '45deg'}],position: 'absolute', left:40, top: 370, backgroundColor: 'transparent'}}>
+                        <ThisText style={{
+                            backgroundColor: 'white',
+                            fontSize: 50,
+                            marginRight:70,
+                            marginTop: 30,
+
+                            fontWeight: 'bold',
+
+                            color: '#2db6c8'
+                        }}>{strings.Realized.toUpperCase()}</ThisText>
+                    </View>}
+
                 </View>
-                {isRealized && <View style={{position: 'absolute', left: 15, top: 350, backgroundColor: 'transparent'}}>
-                    <ThisText style={{
-                        backgroundColor: 'white',
-                        fontSize: 50,
-                        marginLeft: 30,
-                        marginTop: 20,
-                        fontWeight: 'bold',
-                        transform: [{rotate: '45deg'}],
-                        color: '#2db6c8'
-                    }}>{strings.Realized.toUpperCase()}</ThisText>
-                </View>}
+
             </ScrollView>
 
         );
