@@ -47,7 +47,11 @@ class InstanceLifeCycle {
         }
     }
 
-    isExpired(instanceId) {
+    isExpired(instanceId,endDate) {
+        if(endDate){
+            return endDate.getTime() < new Date().getTime();
+        }
+
         if(!this.savedInstancesIds.includes(instanceId)){
             return false;
         }

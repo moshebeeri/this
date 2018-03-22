@@ -599,6 +599,22 @@ export function setReplayInstance(item) {
     }
 }
 
+export function updateFeed(item) {
+    return async function (dispatch, getState) {
+        try {
+            const token = getState().authentication.token;
+            dispatch({
+                type: types.FEED_UPDATE_ITEM,
+                token: token,
+                item: item,
+            });
+            handler.handleSuccses(getState(), dispatch)
+        } catch (error) {
+            handler.handleError(error, dispatch, 'feed-getFeedSocialState')
+            logger.actionFailed('getFeedSocialState')
+        }
+    }
+}
 
 
 export function setTopFeeds(group) {

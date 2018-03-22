@@ -14,7 +14,7 @@ import {SubmitButton, ThisText} from '../index'
 import Icon from 'react-native-vector-icons/EvilIcons';
 import strings from "../../i18n/i18n"
 import Ionicons from 'react-native-vector-icons/Ionicons';
-
+import instanceUtils from '../../utils/instanceUtils'
 let dateUtils = new DateUtils();
 export default class ChatMessage extends Component {
     claim() {
@@ -102,26 +102,37 @@ export default class ChatMessage extends Component {
                                             color: '#616F70',
                                             maxWidth:200
                                         }}>{item.instance.promotionTerm}</ThisText>
-                                        {item.instance.showSave && <View style={{marginLeft: 10,}}>
+                                        {instanceUtils.showClaim(item.instance) && <View style={{marginLeft: 10,}}>
 
                                             <SubmitButton fontSize={12} height={25} width={45}
                                                            title={strings.Claim.toUpperCase()} color={'#2db6c8'}
                                                           onPress={() => this.claim()}/>
                                         </View>}
-                                        {!item.instance.isRealized && <View style={{marginLeft: 10,}}>
+                                        {instanceUtils.showRedeem(item.instance) &&  <View style={{marginLeft: 10,}}>
 
                                             <SubmitButton fontSize={12} height={25} width={65}
                                                           title={strings.Realize.toUpperCase()} color={'#2db6c8'}
                                                           onPress={() => this.realize()}/>
                                         </View>}
-                                        {item.instance.isRealized && <View style={{marginLeft: 10,}}>
+                                        {instanceUtils.showRedeemed(item.instance) && <View style={{marginLeft: 10,}}>
 
                                             <SubmitButton fontSize={12} height={25} width={75} disabled
                                                           title={strings.Realized.toUpperCase()} color={'#cccccc'}/>
                                         </View>}
 
+                                        {instanceUtils.showExpired(item.instance) && <View style={{marginLeft: 10,}}>
+
+                                            <SubmitButton fontSize={12} height={25} width={75} disabled
+                                                          title={strings.Expired.toUpperCase()} color={'#cccccc'}/>
+                                        </View>}
+                                        {instanceUtils.showInActive(item.instance) && <View style={{marginLeft: 10,}}>
+
+                                            <SubmitButton fontSize={12} height={25} width={75} disabled
+                                                          title={strings.InActive.toUpperCase()} color={'#cccccc'}/>
+                                        </View>}
                                     </View>
                                 </View>}
+
 
                                 {item.post && <View>
                                     <View style={{marginTop: 5}}><ThisText style={{
@@ -215,26 +226,39 @@ export default class ChatMessage extends Component {
                                         }}>{item.instance.promotionTerm}</ThisText>
 
 
-                                        {item.instance.showSave && <View style={{marginLeft: 10,}}>
+                                        {instanceUtils.showClaim(item.instance) && <View style={{marginLeft: 10,}}>
 
                                             <SubmitButton fontSize={12} height={25} width={45}
                                                           title={strings.Claim.toUpperCase()} textColor={'#2db6c8'}
                                                           color={'white'}
                                                           onPress={() => this.claim()}/>
                                         </View>}
-                                        {!item.instance.isRealized && <View style={{marginLeft: 10,}}>
+                                        {instanceUtils.showRedeem(item.instance) && <View style={{marginLeft: 10,}}>
 
                                             <SubmitButton fontSize={12} height={25} width={65}
                                                           title={strings.Realize.toUpperCase()} textColor={'#2db6c8'}
                                                           color={'white'}
                                                           onPress={() => this.realize()}/>
                                         </View>}
-                                        {item.instance.isRealized && <View style={{marginLeft: 10,}}>
+                                        {instanceUtils.showRedeemed(item.instance)  && <View style={{marginLeft: 10,}}>
 
                                             <SubmitButton fontSize={12} height={25} width={75} disabled
                                                           title={strings.Realized.toUpperCase()} textColor={'#2db6c8'}
                                                           color={'#cccccc'}/>
                                         </View>}
+                                        {instanceUtils.showExpired(item.instance)  && <View style={{marginLeft: 10,}}>
+
+                                            <SubmitButton fontSize={12} height={25} width={75} disabled
+                                                          title={strings.Expired.toUpperCase()} textColor={'#2db6c8'}
+                                                          color={'#cccccc'}/>
+                                        </View>}
+                                        {instanceUtils.showInActive(item.instance)  &&  <View style={{marginLeft: 10,}}>
+
+                                            <SubmitButton fontSize={12} height={25} width={75} disabled
+                                                          title={strings.InActive.toUpperCase()} textColor={'#2db6c8'}
+                                                          color={'#cccccc'}/>
+                                        </View>}
+
                                     </View>
 
                                 </View>}

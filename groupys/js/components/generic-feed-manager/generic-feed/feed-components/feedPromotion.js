@@ -4,6 +4,7 @@
 import React, {Component} from 'react';
 import {Dimensions} from 'react-native';
 import InViewPort from '../../../../utils/inviewport'
+import instanceUtils from '../../../../utils/instanceUtils'
 import {actions} from 'react-native-navigation-redux-helpers';
 import {
     Button,
@@ -133,33 +134,33 @@ export default class FeedPromotion extends Component {
                             <View><ThisText style={styles.detailsTitleText}>{strings.Expire}</ThisText></View>
                             <View><ThisText style={styles.detailsText}>{item.endDate}</ThisText></View>
                         </View>
-                        {!claimDisabled && save && !item.isExpired && item.isActive &&
+                        {instanceUtils.showClaim(item) &&
                         <View style={styles.editButtonContainer}>
                             <SubmitButton
                                 title={strings.Claim.toUpperCase()} color={'#2db6c8'}
                                 onPress={() => save(item.id)}/>
                         </View>
                         }
-                        {claimDisabled && !item.isRealized && !item.isExpired && item.isActive &&
+                        {instanceUtils.showRedeem(item) &&
                         <View style={styles.editButtonContainer}>
                             <SubmitButton title={strings.Realize.toUpperCase()} color={'#2db6c8'}
                                           onPress={() => realize(item)}/>
                         </View>
                         }
 
-                        {claimDisabled && item.isRealized && !item.isExpired && item.isActive &&
+                        { instanceUtils.showRedeemed(item) &&
                         <View style={styles.editButtonContainer}>
                             <SubmitButton disabled title={strings.Realized.toUpperCase()} color={'#cccccc'}
                                           onPress={() => realize(item)}/>
                         </View>}
-                        {claimDisabled && item.isExpired &&
+                        { instanceUtils.showExpired(item) &&
                         <View style={styles.editButtonContainer}>
-                            <SubmitButton title={strings.Expired.toUpperCase()} color={'#cccccc'}
+                            <SubmitButton  disabled title={strings.Expired.toUpperCase()} color={'#cccccc'}
                                           onPress={() => realize(item)}/>
                         </View>}
-                        {claimDisabled && !item.isActive && !item.isExpired &&
+                        {  instanceUtils.showInActive(item) &&
                         <View style={styles.editButtonContainer}>
-                            <SubmitButton title={strings.ImActive.toUpperCase()} color={'#cccccc'}
+                            <SubmitButton  disabled title={strings.InActive.toUpperCase()} color={'#cccccc'}
                                           onPress={() => realize(item)}/>
                         </View>}
 
@@ -173,7 +174,7 @@ export default class FeedPromotion extends Component {
                                                      onPressUnLike={() => unlike(item.id, token)}
                                                      onPressLike={() => like(item.id, token)}
                                                      shareDisabled={shared}
-                                                     groupChat={group}
+                                                     groupChat={group && group.group_chat ==='ON'}
                                                      sharable={item.sharable}
                                                      share={item.social.share} shares={item.social.shares}
                                                      shareAction={showUsers}/>}

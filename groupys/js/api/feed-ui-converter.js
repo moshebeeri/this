@@ -272,17 +272,18 @@ class FeedConverter {
         let promotion = instance.promotion;
         let responseFeed = {};
         try {
+            let date = new Date(instance.promotion.end);
             responseFeed.id = id;
             responseFeed.isRealized = instanceLifeCycle.isReedemed(instance._id);
             responseFeed.isActive = instanceLifeCycle.isActive(instance._id);
-            responseFeed.isExpired = instanceLifeCycle.isExpired(instance._id);
+            responseFeed.isExpired = instanceLifeCycle.isExpired(instance._id, date);
+            responseFeed.isSaved = true;
             responseFeed.fid = id;
             responseFeed.key = id;
             responseFeed.promotionItem = promotion;
             responseFeed.location = instance.location;
             responseFeed.name = instance.promotion.name;
             responseFeed.description = instance.promotion.description;
-            let date = new Date(instance.promotion.end);
             responseFeed.endDate = date.toLocaleDateString();
             responseFeed.created = instance.promotion.created;
             responseFeed.generalId = instance.promotion._id;
@@ -443,13 +444,14 @@ class FeedConverter {
             responseFeed.generalId = instance._id;
             responseFeed.uploading = true;
             responseFeed.entities = [{instance: instance._id}];
+            responseFeed.isActive = instanceLifeCycle.isActive(instance._id);
+            responseFeed.isExpired = instanceLifeCycle.isExpired(instance._id, date);
+            responseFeed.isSaved = instanceLifeCycle.isSaved(instance._id);
+            responseFeed.isRealized = instanceLifeCycle.isReedemed(instance._id);
             if (instance.social_state) {
                 responseFeed.social = instance.social_state
                 responseFeed.social.activityId = feed.activity._id;
                 responseFeed.isRealized = instanceLifeCycle.isReedemed(instance._id) || instance.social_state.realized;
-                responseFeed.isActive = instanceLifeCycle.isActive(instance._id);
-                responseFeed.isExpired = instanceLifeCycle.isExpired(instance._id);
-                responseFeed.showsave = !instance.social_state.saved && !instance.social_state.realized && !instanceLifeCycle.isSaved(instance._id);
             }
             responseFeed.endDate = date.toLocaleDateString();
             responseFeed.created = instance.promotion.created;
@@ -657,9 +659,9 @@ class FeedConverter {
                 break;
             case "PUNCH_CARD":
                 let punches = 0;
-                if(promotion.punch_card.values[0]) {
-                     punches = promotion.punch_card.values[0].number_of_punches;
-                }else{
+                if (promotion.punch_card.values[0]) {
+                    punches = promotion.punch_card.values[0].number_of_punches;
+                } else {
                     punches = promotion.punch_card.values.number_of_punches;
                 }
                 response.promotionTerm = strings.punchCardTerm.formatUnicorn(punches, promotion.condition.product.name);

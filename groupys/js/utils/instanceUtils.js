@@ -51,8 +51,33 @@ function checkIfActive(feed) {
     return true;
 }
 
+function showClaim(item){
+    return !item.isRealized && !item.isExpired && item.isActive && !item.isSaved
+}
+function showRedeemed(item){
+    return item.isRealized  && item.isSaved
+}
+
+function showRedeem(item){
+    return !item.isRealized && !item.isExpired && item.isActive && item.isSaved
+}
+
+function showExpired(item){
+    return !item.isRealized && item.isExpired
+}
+
+function showInActive(item){
+    return !item.isRealized && !item.isActive && !item.isExpired
+}
+
 export default {
     checkIfRealized,
     checkIfExpired,
     checkIfActive,
+    showClaim,
+    showRedeem,
+    showRedeemed,
+    showExpired,
+    showInActive
+
 };
