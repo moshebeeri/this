@@ -43,7 +43,7 @@ function checkIfActive(feed) {
             }
             let currentTime = new Date();
             let secs = currentTime.getSeconds() + (60 * currentTime.getMinutes()) + (60 * 60 * currentTime.getHours());
-            if (secs < happyHourData.from || sec > happyHourData.from + happyHourData.until) {
+            if (secs < happyHourData.from || secs > happyHourData.from + happyHourData.until) {
                 return false;
             }
             break;
