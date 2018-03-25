@@ -26,7 +26,7 @@ module.exports = {
         color: '#00F',
     },
     thisContainer: {
-        height: 250,
+
         width:width,
 
         marginTop: height / 10,
@@ -37,8 +37,8 @@ module.exports = {
     },
     this: {
         // fontFamily:'BackToBlack',
-        marginTop:150,
-        fontSize: 90,
+        marginTop:120,
+        fontSize: 50,
         color: 'white',
         fontWeight:'bold',
         backgroundColor: 'transparent'
