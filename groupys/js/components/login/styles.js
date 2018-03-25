@@ -5,9 +5,13 @@ const {StyleSheet, Platform, Dimensions} = React;
 const {width, height} = Dimensions.get('window');
 module.exports = {
     inputContainer: {
-        flex: -1,
-        height: height,
-        width: width,
+
+        justifyContent: 'center',
+        alignItems: 'center',
+
+        height:height
+
+
     },
     forgotButton: {
         alignSelf: 'flex-end',
@@ -28,10 +32,10 @@ module.exports = {
         color: '#00F',
     },
     thisContainer: {
-        height: 250,
+
         width:width,
 
-        marginTop: height / 10,
+
         justifyContent: 'center',
         backgroundColor: 'transparent',
         flexDirection: 'column',
@@ -40,7 +44,7 @@ module.exports = {
     this: {
         // fontFamily:'BackToBlack',
         marginTop:150,
-        fontSize: 90,
+        fontSize: 50,
         color: 'white',
         fontWeight:'bold',
         backgroundColor: 'transparent'
@@ -56,11 +60,11 @@ module.exports = {
         alignItems:'center',
     },
     signup_container: {
-        width: width / 2 + 120,
+
         justifyContent: 'center',
         alignItems:'center',
         flexDirection: 'column',
-        marginTop:20,
+        marginTop:10,
 
     },
     thiscount: {
