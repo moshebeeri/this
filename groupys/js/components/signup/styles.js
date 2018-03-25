@@ -43,28 +43,28 @@ module.exports = {
         backgroundColor: 'transparent'
     },
     phoneTextInput: {
-        marginTop: 10, backgroundColor: 'transparent', height: 40, width: width / 2 + 120,
+        marginTop: 10, backgroundColor: 'transparent', height:  (Platform.OS === 'ios') ? 40 :60, width: width / 2 + 120,
         justifyContent: 'center',
         alignItems: 'center',
         flexDirection: 'row'
     },
     firstLastNameContainer: {
-        marginTop: 5, backgroundColor: 'transparent', height: 40, width: width / 2 + 120,
+        marginTop: 5, backgroundColor: 'transparent', height:(Platform.OS === 'ios') ? 40 :60, width: width / 2 + 120,
         marginBottom:5,
         justifyContent: 'space-between',
         alignItems: 'center',
         flexDirection: 'row'
     },
     passwordTextInput: {
-        marginTop: 5, backgroundColor: 'transparent', height: 40, width: width / 2 + 120,
+        marginTop: 5, backgroundColor: 'transparent', height: (Platform.OS === 'ios') ? 40 :60, width: width / 2 + 120,
         justifyContent: 'center',
         alignItems: 'center',
     },
     nameTextInput: {
-        marginTop: 10, backgroundColor: 'transparent', height: 40, width: 150,
+        marginTop: 10, backgroundColor: 'transparent', height: (Platform.OS === 'ios') ? 40 :60, width: 150,
     },
     lastnameTextInput: {
-        marginTop: 10, backgroundColor: 'transparent', height: 40, width: 150,
+        marginTop: 10, backgroundColor: 'transparent', height: (Platform.OS === 'ios') ? 40 :60, width: 150,
     },
     nameContainer: {
         width: width / 2 + 120,

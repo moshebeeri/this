@@ -91,7 +91,7 @@ class Register extends Component {
 
                         <View>
                             <View style={styles.thisContainer}>
-                                <Image style={{position: 'absolute', top: -175, width: 120}} resizeMode='contain'
+                                <Image style={{position: 'absolute', top: -175, width: 110}} resizeMode='contain'
                                        source={thisLogo}/>
                                 <ThisText style={styles.this}>THIS</ThisText>
                             </View>
