@@ -1,58 +1,51 @@
 import ProfilenApi from "../api/profile";
 import * as actions from "../reducers/reducerActions";
 import ActionLogger from './ActionLogger'
-import  handler from './ErrorHandler'
+import handler from './ErrorHandler'
 import SavedPromotionComperator from "../reduxComperators/SavedPromotionComperator"
 import * as types from '../sega/segaActions';
-
 
 let profileApi = new ProfilenApi();
 let logger = new ActionLogger();
 let savedPromotionComperator = new SavedPromotionComperator();
-
-
 
 export function setNextFeeds() {
     return async function (dispatch, getState) {
         try {
             const token = getState().authentication.token;
             const user = getState().user.user;
-
             const feeds = getState().myPromotions.feeds;
             if (!user)
                 return;
-
             dispatch({
                 type: types.SAVE_MYPROMOTIONS_REQUEST,
                 token: token,
                 feeds: feeds,
             });
         } catch (error) {
-            handler.handleError(error, dispatch,'mypromotons-setNextFeeds')
+            handler.handleError(error, dispatch, 'mypromotons-setNextFeeds')
             logger.actionFailed('mypromotons-setNextFeeds')
         }
     }
 }
 
-export function stopReneder(){
+export function stopReneder() {
     return async function (dispatch) {
-
         dispatch({
             type: actions.SAVED_PROMOTION_STOP_RENDER,
         });
     }
 }
+
 export function setFirstTime() {
     return async function (dispatch, getState) {
         try {
             const token = getState().authentication.token;
             const user = getState().user.user;
-
             const feeds = getState().myPromotions.feeds;
             if (!user)
                 return;
-
-            if(!feeds ||  Object.keys(feeds).length ===0) {
+            if (!feeds || Object.keys(feeds).length === 0) {
                 dispatch({
                     type: types.SAVE_MYPROMOTIONS_REQUEST,
                     token: token,
@@ -60,13 +53,13 @@ export function setFirstTime() {
                 });
             }
         } catch (error) {
-            handler.handleError(error, dispatch,'mypromotons-setNextFeeds')
+            handler.handleError(error, dispatch, 'mypromotons-setNextFeeds')
             logger.actionFailed('mypromotons-setNextFeeds')
         }
     }
 }
 
-export function setSavedPromotions(response,feedId){
+export function setSavedPromotions(response, feedId) {
     return {
         type: actions.UPSERT_SAVED_FEEDS,
         item: response
@@ -97,7 +90,6 @@ export function fetchTop() {
             if (response.length === 0) {
                 return;
             }
-
             dispatch({
                 type: actions.FETCH_TOP_SAVED_FEEDS,
                 item: response
@@ -106,9 +98,9 @@ export function fetchTop() {
                 type: actions.SAVED_FEED_SHOW_TOP_LOADER,
                 showTopLoader: false,
             });
-            handler.handleSuccses(getState(),dispatch)
+            handler.handleSuccses(getState(), dispatch)
         } catch (error) {
-            handler.handleError(error, dispatch,'mypromotons-fetchTop')
+            handler.handleError(error, dispatch, 'mypromotons-fetchTop')
             dispatch({
                 type: actions.SAVED_FEED_SHOW_TOP_LOADER,
                 showTopLoader: false,
@@ -118,45 +110,55 @@ export function fetchTop() {
     }
 }
 
-async function fetchTopList( token, dispatch) {
+async function fetchTopList(token, dispatch) {
     try {
-
-
         let response = await profileApi.fetch(token, 0, 10);
         if (response.length === 0) {
             return;
         }
-        if(savedPromotionComperator.shuoldAddInstances(response)) {
+        if (savedPromotionComperator.shuoldAddInstances(response)) {
             dispatch({
                 type: actions.FETCH_TOP_SAVED_FEEDS,
                 item: response
             });
         }
     } catch (error) {
-        handler.handleError(error,dispatch,'fetchTopList-mainfeeds')
+        handler.handleError(error, dispatch, 'fetchTopList-mainfeeds')
         logger.actionFailed('fetchTopList-mainfeeds')
     }
 }
 
-async function updateInstance( token, dispatch,id) {
+async function updateInstance(token, dispatch, id) {
     try {
+        let response = await profileApi.getSavedInstance(token, id);
+        dispatch({
+            type: actions.UPDATE_SINGLE_SAVED_INSTANCE,
+            item: response
+        });
+    } catch (error) {
+        handler.handleError(error, dispatch, 'fetchTopList-mainfeeds')
+        logger.actionFailed('fetchTopList-mainfeeds')
+    }
+}
 
-
-        let response = await profileApi.getSavedInstance(token,id);
-
-        if(savedPromotionComperator.shuoldUpdateInstance(response)) {
-
+export function updateSavedInstance(item) {
+    return async function (dispatch, getState) {
+        try {
+            const token = getState().authentication.token;
+            let response = await profileApi.getSavedInstance(token, item.id);
+            //if(savedPromotionComperator.shuoldUpdateInstance(response)) {
             dispatch({
                 type: actions.UPDATE_SINGLE_SAVED_INSTANCE,
                 item: response
             });
+            // }
+            handler.handleSuccses(getState(), dispatch)
+        } catch (error) {
+            handler.handleError(error, dispatch, 'feed-getFeedSocialState')
+            logger.actionFailed('getFeedSocialState')
         }
-    } catch (error) {
-        handler.handleError(error,dispatch,'fetchTopList-mainfeeds')
-        logger.actionFailed('fetchTopList-mainfeeds')
     }
 }
-
 
 export default {
     fetchTopList,

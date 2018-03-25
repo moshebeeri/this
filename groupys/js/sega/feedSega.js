@@ -1,5 +1,6 @@
 import {call, fork, put, race, take, throttle} from 'redux-saga/effects'
 import FeedApi from "../api/feed";
+import PromotionApi from "../api/promotion";
 import {delay} from 'redux-saga'
 import {
     loadingFeeds,
@@ -10,13 +11,15 @@ import {
     stopScrolling,
     updateFeeds,
     updateFeedsTop,
-    updateSocialState
+    updateSocialState,
+    setSavedInstance
 } from "../actions/feedsMain";
 import {handleSucsess}from './SegaSuccsesHandler'
 import * as segaActions from './segaActions'
 import feedComperator from "../reduxComperators/MainFeedComperator"
 
 let feedApi = new FeedApi();
+let promotionApi =new PromotionApi();
 
 function* feedScrollDown(action) {
     try {
@@ -103,12 +106,25 @@ function* feedUpdate(action) {
     }
 }
 
+function* savedInstanceUpdate(action) {
+    try {
+        const response = yield call(promotionApi.getPromotionSavedInstance, action.item.id, action.token);
+        yield put(setSavedInstance(response));
+
+    } catch (error) {
+        console.log("failed to update saved feed");
+    }
+}
+
+
+
 
 
 
 function* feedSega() {
     yield throttle(1000, segaActions.FEED_SCROLL_DOWN, feedScrollDown);
     yield throttle(1000, segaActions.FEED_UPDATE_ITEM, feedUpdate);
+    yield throttle(1000, segaActions.FEED_UPDATE_SAVED_ITEM, savedInstanceUpdate);
     yield throttle(3000, segaActions.FEED_SET_SOCIAL_STATE, setSocialState);
     yield fork(watchStartBackgroundTask);
 }

@@ -101,15 +101,12 @@ export default class MessageBox extends Component {
             <View style={style}>
                 <View style={{
                     flex: 1,
+
                     alignItems: 'center',
                     justifyContent: 'center',
                     backgroundColor: 'white',
                     flexDirection: 'row'
                 }}>
-                    <TouchableOpacityFix onPress={() => this.showEmoji()} style={styles.icon} transparent>
-
-                        <Icon2 style={{fontSize: 35, color: "#2db6c8"}} name={this.state.iconEmoji}/>
-                    </TouchableOpacityFix>
 
 
                     <TextInput style={styles.textInputTextStyleWhite} value={this.state.message}
@@ -126,8 +123,6 @@ export default class MessageBox extends Component {
                     </TouchableOpacityFix>
                 </View>
 
-
-                {this.state.showEmoji && <EmojiPicker onEmojiSelect={this.handlePick.bind(this)}/>}
 
 
             </View>

@@ -664,7 +664,24 @@ export function* updateFeedsTop(feeds,group,user) {
     }
 }
 
+export function updateSavedInstance(item){
+    return async function (dispatch, getState) {
+        try {
+            const token = getState().authentication.token;
+            dispatch({
+                type: types.FEED_UPDATE_SAVED_ITEM,
+                token: token,
+                item: item,
+            });
+            handler.handleSuccses(getState(), dispatch)
+        } catch (error) {
+            handler.handleError(error, dispatch, 'feed-getFeedSocialState')
+            logger.actionFailed('getFeedSocialState')
+        }
+    }
 
+
+}
 
 
 export default {

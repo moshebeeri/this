@@ -59,12 +59,18 @@ export default class FeedPromotion extends Component {
             } else {
                 actions.setVisibleItem(item.fid);
             }
+
         }
+
     }
 
     shouldComponentUpdate() {
         const {item, visibleItem, shouldUpdate, visibleFeeds} = this.props;
         if (shouldUpdate) {
+            return true;
+        }
+
+        if(item.promotion ==='PUNCH_CARD'){
             return true;
         }
         let results = item.id === visibleItem;
