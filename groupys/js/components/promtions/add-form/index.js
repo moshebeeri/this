@@ -1,5 +1,15 @@
 import React, {Component} from "react";
-import {Dimensions, Image, Keyboard, ScrollView, Switch, View,TouchableOpacity} from "react-native";
+import {
+    Dimensions,
+    Image,
+    Keyboard,
+    KeyboardAvoidingView,
+    ScrollView,
+    Switch,
+    TouchableOpacity,
+    View,
+    Platform
+} from "react-native";
 import {connect} from "react-redux";
 import {actions} from "react-native-navigation-redux-helpers";
 import {Button, Container, Content, Footer, Icon, Input, Item, Picker} from "native-base";
@@ -187,9 +197,10 @@ class AddPromotion extends Component {
         this.props.navigation.goBack();
     }
 
-    openMenu(){
+    openMenu() {
         this.refs["coverImage"].openMenu();
     }
+
     async componentWillMount() {
         this.props.actions.resetForm();
         if (this.props.navigation.state.params.onBoardType) {
@@ -635,11 +646,10 @@ class AddPromotion extends Component {
     }
 
     toogleSwitch(value) {
-
         if (this.state.toggle) {
             this.setToggleOn()
         } else {
-           this.setToggleOff();
+            this.setToggleOff();
         }
     }
 
@@ -660,7 +670,7 @@ class AddPromotion extends Component {
         return defaultDate;
     }
 
-    setToggleOff(){
+    setToggleOff() {
         let defaultDate = this.getDefaultDate(false);
         this.setState({
             token: '',
@@ -694,9 +704,9 @@ class AddPromotion extends Component {
         });
     }
 
-    setToggleOn(){
+    setToggleOn() {
         let defaultDate = this.getDefaultDate(true);
-        this.setState(  {
+        this.setState({
             token: '',
             path: '',
             image: '',
@@ -757,153 +767,164 @@ class AddPromotion extends Component {
         let distributionForm = this.createDistributionForm();
         if (this.props.navigation.state.params.group || proximityForm) {
             distributionForm = undefined;
+
+
         }
-        return (
-            <View style={[styles.product_container, {width: StyleUtils.getWidth()}]}>
 
-                <FormHeader showBack submitForm={this.saveFormData.bind(this)} navigation={this.props.navigation}
-                            title={strings.AddPromotion} bgc="#FA8559"/>
+        if(Platform.OS === 'ios'){
+            return (<KeyboardAvoidingView behavior={'padding'}
+                                          style={[styles.product_container, {width: StyleUtils.getWidth()}]}>
+                {this.createView(header, conditionForm, proximityForm, distributionForm, saving, savingFailed)}
+            </KeyboardAvoidingView>)
+        }
+        return (<View style={[styles.product_container, {width: StyleUtils.getWidth()}]}>
+            {this.createView(header, conditionForm, proximityForm, distributionForm, saving, savingFailed)}
+        </View>)
+        ;
+    }
 
-                <ScrollView keyboardShouldPersistTaps={true} contentContainerStyle={{
-                    justifyContent: 'center',
+    createView(header, conditionForm, proximityForm, distributionForm, saving, savingFailed) {
+        return <View>
+            <FormHeader showBack submitForm={this.saveFormData.bind(this)} navigation={this.props.navigation}
+                        title={strings.AddPromotion} bgc="#FA8559"/>
+
+            <ScrollView keyboardShouldPersistTaps={true} contentContainerStyle={{
+                justifyContent: 'center',
+                alignItems: 'center',
+            }}>
+                <View style={{
+                    backgroundColor: '#FA8559',
                     alignItems: 'center',
-
+                    justifyContent: 'space-between',
+                    flexDirection: 'row', width: StyleUtils.getWidth()
                 }}>
-                    <View style={{
+                    {this.state.toggle ? <ThisText style={{
+                            color: 'white',
+                            marginLeft: 8,
+                            marginRight: 8
+                        }}>{strings.AdvancedPromotions}</ThisText> :
+                        <ThisText style={{
+                            color: 'white',
+                            marginLeft: 8,
+                            marginRight: 8
+                        }}>{strings.SimplePromotions}</ThisText>
+                    }
 
-                        backgroundColor: '#FA8559',
-                        alignItems: 'center',
-                        justifyContent: 'space-between',
-                        flexDirection: 'row', width: StyleUtils.getWidth()
-                    }}>
-                        {this.state.toggle ? <ThisText style={{
-                                color: 'white',
-                                marginLeft: 8,
-                                marginRight: 8
-                            }}>{strings.AdvancedPromotions}</ThisText> :
-                            <ThisText style={{
-                                color: 'white',
-                                marginLeft: 8,
-                                marginRight: 8
-                            }}>{strings.SimplePromotions}</ThisText>
-                        }
+                    <Switch
 
-                        <Switch
+                        onTintColor={'#2db6c8'}
+                        style={{marginRight: 10,}}
+                        onValueChange={this.toogleSwitch.bind(this)}
+                        value={this.state.toggle}/>
+                </View>
 
-                            onTintColor={'#2db6c8'}
-                            style={{marginRight: 10,}}
-                            onValueChange={this.toogleSwitch.bind(this)}
-                            value={this.state.toggle}/>
+
+                {this.createCoverImageComponnent()}
+                <View style={[styles.textLayout, {width: StyleUtils.getWidth() - 15}]}>
+                    <ThisText style={{color: '#FA8559', marginLeft: 8, marginRight: 8}}>{strings.Details}</ThisText>
+                </View>
+                {!this.state.toggle && <View style={[styles.inputTextLayout, {width: StyleUtils.getWidth() - 15}]}>
+                    <TextInput field={strings.Name} value={this.state.name}
+                               returnKeyType='done' ref="4" refNext="4"
+
+                               onChangeText={(name) => this.setState({name})} isMandatory={true}/>
+                </View>}
+                {this.state.toggle && <View style={[styles.inputTextLayout, {width: StyleUtils.getWidth() - 15}]}>
+
+                    {header ?
+                        <SimplePicker ref="promotionType" list={promotion_type} itemTitle={strings.PromotionType}
+                                      selectedValue={this.props.navigation.state.params.onBoardType}
+                                      value={header}
+                                      defaultHeader="Choose Type" isMandatory
+                                      onValueSelected={this.selectPromotionType.bind(this)}/> :
+                        <SimplePicker ref="promotionType" list={promotion_type} itemTitle={strings.PromotionType}
+                                      defaultHeader="Choose Type" isMandatory
+                                      onValueSelected={this.selectPromotionType.bind(this)}/>
+                    }
+
+                </View>}
+                <View style={[styles.inputTextLayout, {width: StyleUtils.getWidth() - 15}]}>
+                    {this.state.toggle ?
+                        <SimplePicker ref="discountType" list={types} itemTitle={strings.DiscountType}
+                                      defaultHeader="Choose Type" isMandatory
+                                      onValueSelected={this.selectDiscount.bind(this)}/> :
+                        <SimplePicker ref="discountType" list={types_simple} itemTitle={strings.DiscountType}
+                                      selectedValue="PERCENT"
+                                      value={strings.PercentageOff}
+                                      defaultHeader="Choose Type" isMandatory
+                                      onValueSelected={this.selectDiscount.bind(this)}/>}
+                </View>
+                {this.state.toggle && <View style={[styles.textLayout, {width: StyleUtils.getWidth() - 15}]}>
+                    <ThisText style={{color: '#FA8559', marginLeft: 8, marginRight: 8}}>{strings.General}</ThisText>
+                </View>}
+                <View style={[styles.inputTextLayout, {width: StyleUtils.getWidth() - 15}]}>
+
+                    {this.state.toggle && <View style={{flex: 1}}>
+                        <TextInput field={strings.Quantity} value={this.state.quantity}
+                                   keyboardType='numeric'
+                                   returnKeyType='next' ref="2" refNext="2"
+                                   onSubmitEditing={this.focusNextField.bind(this, "4")}
+                                   onChangeText={(quantity) => this.setState({quantity})} isMandatory={true}/>
+                    </View>}
+                    <View style={{flex: 3,}}>
+                        <DatePicker field={strings.ExpirationDate} value={this.state.end}
+                                    returnKeyType='next' ref="3" refNext="3"
+                                    onChangeDate={(date) => {
+                                        this.setState({end: date})
+                                    }} isMandatory={true}/>
                     </View>
+                </View>
+                {this.state.toggle && <View style={[styles.inputTextLayout, {width: StyleUtils.getWidth() - 15}]}>
+                    <TextInput field={strings.Name} value={this.state.name}
+                               returnKeyType='next' ref="4" refNext="4"
+                               onSubmitEditing={this.focusNextField.bind(this, "5")}
+                               onChangeText={(name) => this.setState({name})} isMandatory={true}/>
+                </View>}
+                {this.state.toggle && <View style={[styles.inputTextLayout, {width: StyleUtils.getWidth() - 15}]}>
+                    <TextInput field={strings.Description} value={this.state.info}
+                               returnKeyType='next' ref="5" refNext="5"
+                               onSubmitEditing={this.dismiss.bind(this)}
+                               onChangeText={(info) => this.setState({info})}/>
+                </View>}
 
-
-                    {this.createCoverImageComponnent()}
-                    <View style={[styles.textLayout, {width: StyleUtils.getWidth() - 15}]}>
-                        <ThisText style={{color: '#FA8559', marginLeft: 8, marginRight: 8}}>{strings.Details}</ThisText>
-                    </View>
-                    {!this.state.toggle && <View style={[styles.inputTextLayout, {width: StyleUtils.getWidth() - 15}]}>
-                        <TextInput field={strings.Name} value={this.state.name}
-                                   returnKeyType='done' ref="4" refNext="4"
-
-                                   onChangeText={(name) => this.setState({name})} isMandatory={true}/>
-                    </View>}
-                    {this.state.toggle && <View style={[styles.inputTextLayout, {width: StyleUtils.getWidth() - 15}]}>
-
-                        {header ?
-                            <SimplePicker ref="promotionType" list={promotion_type} itemTitle={strings.PromotionType}
-                                          selectedValue={this.props.navigation.state.params.onBoardType}
-                                          value={header}
-                                          defaultHeader="Choose Type" isMandatory
-                                          onValueSelected={this.selectPromotionType.bind(this)}/> :
-                            <SimplePicker ref="promotionType" list={promotion_type} itemTitle={strings.PromotionType}
-                                          defaultHeader="Choose Type" isMandatory
-                                          onValueSelected={this.selectPromotionType.bind(this)}/>
-                        }
-
-                    </View>}
-                    <View style={[styles.inputTextLayout, {width: StyleUtils.getWidth() - 15}]}>
-                        {this.state.toggle ?
-                            <SimplePicker ref="discountType" list={types} itemTitle={strings.DiscountType}
-                                          defaultHeader="Choose Type" isMandatory
-                                          onValueSelected={this.selectDiscount.bind(this)}/> :
-                            <SimplePicker ref="discountType" list={types_simple} itemTitle={strings.DiscountType}
-                                          selectedValue="PERCENT"
-                                          value={strings.PercentageOff}
-                                          defaultHeader="Choose Type" isMandatory
-                                          onValueSelected={this.selectDiscount.bind(this)}/>}
-                    </View>
-                    {this.state.toggle && <View style={[styles.textLayout, {width: StyleUtils.getWidth() - 15}]}>
-                        <ThisText style={{color: '#FA8559', marginLeft: 8, marginRight: 8}}>{strings.General}</ThisText>
-                    </View>}
-                    <View style={[styles.inputTextLayout, {width: StyleUtils.getWidth() - 15}]}>
-
-                        {this.state.toggle && <View style={{flex: 1}}>
-                            <TextInput field={strings.Quantity} value={this.state.quantity}
-                                       keyboardType='numeric'
-                                       returnKeyType='next' ref="2" refNext="2"
-                                       onSubmitEditing={this.focusNextField.bind(this, "4")}
-                                       onChangeText={(quantity) => this.setState({quantity})} isMandatory={true}/>
-                        </View>}
-                        <View style={{flex: 3, }}>
-                            <DatePicker field={strings.ExpirationDate} value={this.state.end}
-                                        returnKeyType='next' ref="3" refNext="3"
-                                        onChangeDate={(date) => {
-                                            this.setState({end: date})
-                                        }} isMandatory={true}/>
-                        </View>
-                    </View>
-                    {this.state.toggle && <View style={[styles.inputTextLayout, {width: StyleUtils.getWidth() - 15}]}>
-                        <TextInput field={strings.Name} value={this.state.name}
-                                   returnKeyType='next' ref="4" refNext="4"
-                                   onSubmitEditing={this.focusNextField.bind(this, "5")}
-                                   onChangeText={(name) => this.setState({name})} isMandatory={true}/>
-                    </View>}
-                    {this.state.toggle && <View style={[styles.inputTextLayout, {width: StyleUtils.getWidth() - 15}]}>
-                        <TextInput field={strings.Description} value={this.state.info}
-                                   returnKeyType='next' ref="5" refNext="5"
-                                   onSubmitEditing={this.dismiss.bind(this)}
-                                   onChangeText={(info) => this.setState({info})}/>
-                    </View>}
-
-                    <View style={[styles.conditionForm, {width: StyleUtils.getWidth() }]}>
+                <View style={[styles.conditionForm, {width: StyleUtils.getWidth()}]}>
                     {conditionForm}
-                    </View>
-                    {proximityForm}
-                    {this.state.toggle && distributionForm}
-                </ScrollView>
+                </View>
+                {proximityForm}
+                {this.state.toggle && distributionForm}
+            </ScrollView>
 
-                {saving && <View style={{
-                    justifyContent: 'center',
-                    alignItems: 'center',
-                    position: 'absolute',
-                    width: StyleUtils.getWidth(),
-                    opacity: 0.7,
-                    height: height,
-                    top: 40,
-                    backgroundColor: 'white'
-                }}>
-                    <Spinner/>
-                </View>}
-                {savingFailed && <View style={{
-                    justifyContent: 'center',
-                    alignItems: 'center',
-                    position: 'absolute',
-                    width: StyleUtils.getWidth(),
-                    opacity: 0.9,
-                    height: height,
-                    top: 40,
-                    backgroundColor: 'white'
-                }}>
-                    <ThisText style={{
-                        margin: 10,
-                        fontWeight: 'bold',
-                        color: 'black',
-                        fontSize: 20
-                    }}>{strings.PromotionFailedSavingMessage}</ThisText>
-                </View>}
+            {saving && <View style={{
+                justifyContent: 'center',
+                alignItems: 'center',
+                position: 'absolute',
+                width: StyleUtils.getWidth(),
+                opacity: 0.7,
+                height: height,
+                top: 40,
+                backgroundColor: 'white'
+            }}>
+                <Spinner/>
+            </View>}
+            {savingFailed && <View style={{
+                justifyContent: 'center',
+                alignItems: 'center',
+                position: 'absolute',
+                width: StyleUtils.getWidth(),
+                opacity: 0.9,
+                height: height,
+                top: 40,
+                backgroundColor: 'white'
+            }}>
+                <ThisText style={{
+                    margin: 10,
+                    fontWeight: 'bold',
+                    color: 'black',
+                    fontSize: 20
+                }}>{strings.PromotionFailedSavingMessage}</ThisText>
+            </View>}
 
-            </View>
-        );
+        </View>;
     }
 
     setCoverImage(image) {
@@ -943,7 +964,8 @@ class AddPromotion extends Component {
                 </View>
             </View>
         }
-        return <TouchableOpacity onPress={this.openMenu.bind(this)}  style={[styles.product_upper_container, {width: StyleUtils.getWidth()}]}>
+        return <TouchableOpacity onPress={this.openMenu.bind(this)}
+                                 style={[styles.product_upper_container, {width: StyleUtils.getWidth()}]}>
 
             <View style={styles.cmeraLogoContainer}>
 

@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import {Dimensions, Image, Keyboard, Platform, ScrollView, Switch, TouchableOpacity, View} from 'react-native';
+import {Dimensions, Image, Keyboard, Platform, ScrollView, Switch, TouchableOpacity, View,KeyboardAvoidingView} from 'react-native';
 import {connect} from 'react-redux';
 import styles from './styles'
 import {getMyBusinesses} from '../../../selectors/businessesSelector'
@@ -375,82 +375,95 @@ class AddGroup extends Component {
                 </TouchableOpacity>
             }
         }
+        if(Platform.OS ==='ios') {
+            return (
+                <KeyboardAvoidingView behavior={'position'} style={styles.product_container}>
+                    {this.createView(qrcodeView, selectedGroupPolicy, BusinessPiker)}
+                </KeyboardAvoidingView>
+            );
+        }
         return (
-            <View style={styles.product_container}>
-                {this.state.updateMode && !this.state.viewOnly &&
-                <FormHeader showBack submitForm={this.updateGroup.bind(this)} navigation={this.props.navigation}
-                            title={strings.UpdateGroup} bgc="#2db6c8"/>}
-                {!this.state.updateMode && !this.state.viewOnly &&
-                <FormHeader showBack submitForm={this.saveFormData.bind(this)} navigation={this.props.navigation}
-                            title={strings.AddGroup} bgc="#2db6c8"/>
-                }
-                {this.state.viewOnly && <FormHeader showBack navigation={this.props.navigation}
-                                                    title={strings.ViewGroup} bgc="#2db6c8"/>}
-                <ScrollView keyboardShouldPersistTaps={true} contentContainerStyle={{
-                    justifyContent: 'center',
-                    alignItems: 'center',
-                }} style={styles.contentContainer}>
-
-
-                    {this.createCoverImageComponnent()}
-                    {qrcodeView}
-                    <View style={{
-                        marginTop: 4, padding: 3, marginBottom: 5,
-                        width: width - 15, justifyContent: 'space-between', flexDirection: 'row'
-                    }}>
-                        <ThisText style={styles.textInputTextStyle}>{strings.GroupChat}</ThisText>
-                        <Switch
-
-                            onTintColor={'#2db6c8'}
-
-                            onValueChange={this.groupChatToggle.bind(this)}
-                            value={this.state.groupChat}/>
-                    </View>
-                    <SimplePicker value={selectedGroupPolicy} ref="groupPolicyType"
-                                  disable={this.state.viewOnly}
-                                  list={groupPolicy} itemTitle={strings.GroupPolicy}
-                                  defaultHeader={strings.ChooseType} isMandatory={!this.state.updateMode}
-                                  onValueSelected={this.selectGroupPolocy.bind(this)}/>
-                    {!this.state.updateMode &&
-                    <SimplePicker ref="groupType" list={groupType} itemTitle={strings.GroupType}
-                                  disable={this.state.viewOnly}
-                                  defaultHeader={strings.ChooseType} isMandatory
-                                  onValueSelected={this.selectGroupType.bind(this)}/>}
-
-                    {!this.state.updateMode && BusinessPiker}
-
-
-                    <View style={styles.inputTextLayour}>
-                        <TextInput disabled={this.state.viewOnly} field={strings.GroupName} value={this.state.name}
-                                   returnKeyType='next' ref="1" refNext="1"
-                                   onSubmitEditing={this.focusNextField.bind(this, "2")}
-                                   onChangeText={(name) => this.setState({name})} isMandatory={true}/>
-                    </View>
-
-                    <View style={styles.inputTextLayour}>
-
-
-                        <TextInput disabled={this.state.viewOnly} field={strings.Description} value={this.state.info}
-                                   returnKeyType='next' ref="2"
-                                   refNext="2"
-
-
-                                   onChangeText={(info) => this.setState({info})}/>
-                    </View>
-                    {!this.state.updateMode && <View style={styles.groupSelectUserContainer}>
-                        <SelectButton
-                            client ref="selectUsers" selectedValue={this.state.selectedUsers} isMandatory
-                            title="Members"
-                            action={this.showUsers.bind(this, true)}/>
-                        {this.state.selectedUsers &&
-                        <ThisText> {strings.SelectedMembers}: {this.state.selectedUsers.length}</ThisText>}
-
-                    </View>}
-                </ScrollView>
-
-
+            <View  style={styles.product_container}>
+                {this.createView(qrcodeView, selectedGroupPolicy, BusinessPiker)}
             </View>
         );
+    }
+
+
+    createView(qrcodeView, selectedGroupPolicy, BusinessPiker) {
+        return <View>
+            {this.state.updateMode && !this.state.viewOnly &&
+            <FormHeader showBack submitForm={this.updateGroup.bind(this)} navigation={this.props.navigation}
+                        title={strings.UpdateGroup} bgc="#2db6c8"/>}
+            {!this.state.updateMode && !this.state.viewOnly &&
+            <FormHeader showBack submitForm={this.saveFormData.bind(this)} navigation={this.props.navigation}
+                        title={strings.AddGroup} bgc="#2db6c8"/>
+            }
+            {this.state.viewOnly && <FormHeader showBack navigation={this.props.navigation}
+                                                title={strings.ViewGroup} bgc="#2db6c8"/>}
+            <ScrollView keyboardShouldPersistTaps={true} contentContainerStyle={{
+                justifyContent: 'center',
+                alignItems: 'center',
+            }} style={styles.contentContainer}>
+
+
+                {this.createCoverImageComponnent()}
+                {qrcodeView}
+                <View style={{
+                    marginTop: 4, padding: 3, marginBottom: 5,
+                    width: width - 15, justifyContent: 'space-between', flexDirection: 'row'
+                }}>
+                    <ThisText style={styles.textInputTextStyle}>{strings.GroupChat}</ThisText>
+                    <Switch
+
+                        onTintColor={'#2db6c8'}
+
+                        onValueChange={this.groupChatToggle.bind(this)}
+                        value={this.state.groupChat}/>
+                </View>
+                <SimplePicker value={selectedGroupPolicy} ref="groupPolicyType"
+                              disable={this.state.viewOnly}
+                              list={groupPolicy} itemTitle={strings.GroupPolicy}
+                              defaultHeader={strings.ChooseType} isMandatory={!this.state.updateMode}
+                              onValueSelected={this.selectGroupPolocy.bind(this)}/>
+                {!this.state.updateMode &&
+                <SimplePicker ref="groupType" list={groupType} itemTitle={strings.GroupType}
+                              disable={this.state.viewOnly}
+                              defaultHeader={strings.ChooseType} isMandatory
+                              onValueSelected={this.selectGroupType.bind(this)}/>}
+
+                {!this.state.updateMode && BusinessPiker}
+
+
+                <View style={styles.inputTextLayour}>
+                    <TextInput disabled={this.state.viewOnly} field={strings.GroupName} value={this.state.name}
+                               returnKeyType='next' ref="1" refNext="1"
+                               onSubmitEditing={this.focusNextField.bind(this, "2")}
+                               onChangeText={(name) => this.setState({name})} isMandatory={true}/>
+                </View>
+
+                <View style={styles.inputTextLayour}>
+
+
+                    <TextInput disabled={this.state.viewOnly} field={strings.Description} value={this.state.info}
+                               returnKeyType='next' ref="2"
+                               refNext="2"
+
+
+                               onChangeText={(info) => this.setState({info})}/>
+                </View>
+                {!this.state.updateMode && <View style={styles.groupSelectUserContainer}>
+                    <SelectButton
+                        client ref="selectUsers" selectedValue={this.state.selectedUsers} isMandatory
+                        title="Members"
+                        action={this.showUsers.bind(this, true)}/>
+                    {this.state.selectedUsers &&
+                    <ThisText> {strings.SelectedMembers}: {this.state.selectedUsers.length}</ThisText>}
+
+                </View>}
+            </ScrollView>
+
+        </View>;
     }
 
     createBusinessPicker(groupType, businesses) {

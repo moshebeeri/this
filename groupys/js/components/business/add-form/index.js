@@ -1,5 +1,14 @@
 import React, {Component} from 'react';
-import {Dimensions, Image, Keyboard, ScrollView, View,TouchableOpacity} from 'react-native';
+import {
+    Dimensions,
+    Image,
+    Keyboard,
+    KeyboardAvoidingView,
+    Platform,
+    ScrollView,
+    TouchableOpacity,
+    View
+} from 'react-native';
 import {Button, Container, Content, Fab, Footer, Form, Icon, Input, Item, Picker} from 'native-base';
 import styles from './styles'
 import * as businessAction from "../../../actions/business";
@@ -258,7 +267,7 @@ class AddBusiness extends Component {
         if (this.state.path) {
             if (coverPic) {
                 return <View onPress={this.openLogoMenu.bind(this)} style={styles.business_upper_image_container}>
-                    <ImagePicker logo  name={"logoImage"}  ref={"logoImage"} mandatory
+                    <ImagePicker logo name={"logoImage"} ref={"logoImage"} mandatory
                                  image={<Image resizeMode="cover" style={{width: 111, height: 105}}
                                                source={{uri: this.state.path}}/>}
                                  color='black' pickFromCamera
@@ -267,7 +276,7 @@ class AddBusiness extends Component {
                 </View>
             } else {
                 return <View style={styles.business_no_pic_no_cover_upper_image_container}>
-                    <ImagePicker logo  name={"logoImage"} ref={"logoImage"} mandatory
+                    <ImagePicker logo name={"logoImage"} ref={"logoImage"} mandatory
                                  image={<Image resizeMode="cover" style={{width: 111, height: 105}}
                                                source={{uri: this.state.path}}/>}
                                  color='black' pickFromCamera
@@ -277,7 +286,8 @@ class AddBusiness extends Component {
             }
         } else {
             if (coverPic) {
-                return <TouchableOpacity onPress={this.openLogoMenu.bind(this)} style={styles.business_no_pic_upper_image_container}>
+                return <TouchableOpacity onPress={this.openLogoMenu.bind(this)}
+                                         style={styles.business_no_pic_upper_image_container}>
 
                     <ImagePicker logo name={"logoImage"} ref={"logoImage"} mandatory color='black' pickFromCamera
                                  setImage={this.setImage.bind(this)}/>
@@ -285,9 +295,10 @@ class AddBusiness extends Component {
 
                 </TouchableOpacity>
             } else {
-                return <TouchableOpacity onPress={this.openLogoMenu.bind(this)}  style={styles.business_no_pic_no_cover_upper_image_container}>
+                return <TouchableOpacity onPress={this.openLogoMenu.bind(this)}
+                                         style={styles.business_no_pic_no_cover_upper_image_container}>
 
-                    <ImagePicker logo name={"logoImage"}ref={"logoImage"} mandatory color='black' pickFromCamera
+                    <ImagePicker logo name={"logoImage"} ref={"logoImage"} mandatory color='black' pickFromCamera
                                  setImage={this.setImage.bind(this)}/>
                     <ThisText>{strings.Logo}</ThisText>
 
@@ -295,11 +306,12 @@ class AddBusiness extends Component {
             }
         }
     }
-    openLogoMenu(){
+
+    openLogoMenu() {
         this.refs["logoImage"].openMenu();
     }
 
-    openoMenu(){
+    openoMenu() {
         this.refs["coverImage"].openMenu();
     }
 
@@ -318,12 +330,13 @@ class AddBusiness extends Component {
                 </View>;
             return (
                 <View style={styles.addCoverContainer}>
-                    <ImagePicker name={"coverImage"}  ref={"coverImage"} mandatory image={coverImage} color='white' pickFromCamera
+                    <ImagePicker name={"coverImage"} ref={"coverImage"} mandatory image={coverImage} color='white'
+                                 pickFromCamera
                                  setImage={this.setCoverImage.bind(this)}/>
                 </View>)
         }
         return (
-            <TouchableOpacity onPress={this.openoMenu.bind(this)}  style={styles.addCoverNoImageContainer}>
+            <TouchableOpacity onPress={this.openoMenu.bind(this)} style={styles.addCoverNoImageContainer}>
                 {this.createImageComponent(false)}
                 <ImagePicker name={"coverImage"} ref={"coverImage"} mandatory color='white' pickFromCamera
                              setImage={this.setCoverImage.bind(this)}/>
@@ -333,102 +346,119 @@ class AddBusiness extends Component {
 
     render() {
         let saveOperation = this.state.updateMode ? this.updateFormData.bind(this) : this.saveFormData.bind(this);
+        if (Platform.OS === 'ios') {
+            return (
+                <KeyboardAvoidingView behavior={'position'}
+                                      style={[styles.business_container, {width: StyleUtils.getWidth()}]}>
+
+                    {this.createView(saveOperation)}
+
+                </KeyboardAvoidingView>
+            );
+        }
         return (
-            <View style={[styles.business_container, {width: StyleUtils.getWidth()}]}>
+            <View
+                style={[styles.business_container, {width: StyleUtils.getWidth()}]}>
 
-                <FormHeader disableAction={this.props.saving} showBack submitForm={saveOperation}
-                            navigation={this.props.navigation}
-                            title={strings.AddBusiness} bgc="#FA8559"/>
-
-                <ScrollView keyboardShouldPersistTaps={true} contentContainerStyle={{
-                    justifyContent: 'center',
-                    alignItems: 'center',
-                }} style={[styles.contentContainer, {width: StyleUtils.getWidth()}]}>
-
-                    <View style={[styles.business_upper_container, {width: StyleUtils.getWidth()}]}>
-                        <View style={[styles.cmeraLogoContainer, {width: StyleUtils.getWidth()}]}>
-
-                            {this.createCoverImageComponent()}
-                        </View>
-
-
-                    </View>
-                    <View style={[styles.inputTextLayout, {width: StyleUtils.getWidth() - 15}]}>
-                        <TextInput field={strings.BusinessName} value={this.state.name}
-                                   returnKeyType='next' ref="1" refNext="1"
-                                   onSubmitEditing={this.focusNextField.bind(this, "2")}
-                                   onChangeText={(name) => this.setReduxState({name})} isMandatory={true}/>
-                    </View>
-
-                    <View style={[styles.inputTextLayout, {width: StyleUtils.getWidth() - 15}]}>
-                        <CategoryPicker ref={"picker"} isMandatory categories={this.props.categories}
-                                        selectedCategories={this.state.categories}
-                                        setFormCategories={this.setCategory.bind(this)}
-                                        setCategoriesApi={this.props.fetchBusinessCategories}/>
-                    </View>
-                    <View style={[styles.inputTextLayout, {width: StyleUtils.getWidth() - 15}]}>
-
-
-                        <TextInput keyboardType={'email-address'} field={strings.Email} value={this.state.email}
-                                   returnKeyType='next' ref="2"
-                                   refNext="2"
-                                   placeholder={strings.validateByEmail}
-                                   onSubmitEditing={this.focusNextField.bind(this, "3")}
-                                   validateContent={FormUtils.validateEmail}
-                                   onChangeText={(email) => this.setReduxState({email})} isMandatory={true}/>
-                    </View>
-                    <View style={[styles.inputTextLayout, {width: StyleUtils.getWidth() - 15}]}>
-
-                        <TextInput field={strings.Website} value={this.state.website} returnKeyType='next' ref="3"
-                                   refNext="3"
-
-                                   onSubmitEditing={this.focusNextField.bind(this, "5")}
-                                   validateContent={FormUtils.validateWebsite}
-                                   onChangeText={(website) => this.setReduxState({website})} isMandatory={false}/>
-                    </View>
-                    <View style={[styles.inputTextLayout, {width: StyleUtils.getWidth() - 15}]}>
-
-                    <AddressInput city={this.state.city} address={this.state.address} country={this.state.country}
-                                  refNext="5" ref="5" isMandatory onSubmitEditing={this.updateLocation.bind(this)}/>
-                    </View>
-                    <View style={[styles.inputTextLayout, {width: StyleUtils.getWidth() - 15}]}>
-
-                        <TextInput field={strings.TaxID} value={this.state.tax_id} returnKeyType='next' ref="6"
-                                   refNext="6"
-                                   onSubmitEditing={this.dismissKyeboard.bind(this)}
-                                   onChangeText={(tax_id) => this.setReduxState({tax_id})} isMandatory={true}/>
-                    </View>
-
-                    {!this.state.hideIds && <View style={[styles.inputTextLayout, {width: StyleUtils.getWidth() - 15}]}>
-                        <DocumentPicker value={this.state.IdIdentifierImage} ref="id" isMandatory
-                                        field={strings.IdIdentifier}
-                                        setDocument={this.setIdDocument.bind(this)}/>
-
-                    </View>}
-                    {!this.state.hideIds && <View style={[styles.inputTextLayout, {width: StyleUtils.getWidth() - 15}]}>
-                        <DocumentPicker value={this.state.LetterOfIncorporationImage} ref="LetterOfIncorporation"
-                                        isMandatory field={strings.LetterOfIncorporation}
-                                        setDocument={this.setLetterDocument.bind(this)}/>
-
-                    </View>}
-
-                </ScrollView>
-
-                {this.props.saving && <View style={{
-                    justifyContent: 'center',
-                    alignItems: 'center',
-                    position: 'absolute',
-                    width: StyleUtils.getWidth(),
-                    opacity: 0.7,
-                    height: height,
-                    top: 40,
-                    backgroundColor: 'white'
-                }}>
-                    <Spinner/>
-                </View>}
+                {this.createView(saveOperation)}
 
             </View>
         );
+    }
+
+    createView(saveOperation) {
+        return <View>
+            <FormHeader disableAction={this.props.saving} showBack submitForm={saveOperation}
+                        navigation={this.props.navigation}
+                        title={strings.AddBusiness} bgc="#FA8559"/>
+
+            <ScrollView keyboardShouldPersistTaps={true} contentContainerStyle={{
+                justifyContent: 'center',
+                alignItems: 'center',
+            }} style={[styles.contentContainer, {width: StyleUtils.getWidth()}]}>
+
+                <View style={[styles.business_upper_container, {width: StyleUtils.getWidth()}]}>
+                    <View style={[styles.cmeraLogoContainer, {width: StyleUtils.getWidth()}]}>
+
+                        {this.createCoverImageComponent()}
+                    </View>
+
+
+                </View>
+                <View style={[styles.inputTextLayout, {width: StyleUtils.getWidth() - 15}]}>
+                    <TextInput field={strings.BusinessName} value={this.state.name}
+                               returnKeyType='next' ref="1" refNext="1"
+                               onSubmitEditing={this.focusNextField.bind(this, "2")}
+                               onChangeText={(name) => this.setReduxState({name})} isMandatory={true}/>
+                </View>
+
+                <View style={[styles.inputTextLayout, {width: StyleUtils.getWidth() - 15}]}>
+                    <CategoryPicker ref={"picker"} isMandatory categories={this.props.categories}
+                                    selectedCategories={this.state.categories}
+                                    setFormCategories={this.setCategory.bind(this)}
+                                    setCategoriesApi={this.props.fetchBusinessCategories}/>
+                </View>
+                <View style={[styles.inputTextLayout, {width: StyleUtils.getWidth() - 15}]}>
+
+
+                    <TextInput keyboardType={'email-address'} field={strings.Email} value={this.state.email}
+                               returnKeyType='next' ref="2"
+                               refNext="2"
+                               placeholder={strings.validateByEmail}
+                               onSubmitEditing={this.focusNextField.bind(this, "3")}
+                               validateContent={FormUtils.validateEmail}
+                               onChangeText={(email) => this.setReduxState({email})} isMandatory={true}/>
+                </View>
+                <View style={[styles.inputTextLayout, {width: StyleUtils.getWidth() - 15}]}>
+
+                    <TextInput field={strings.Website} value={this.state.website} returnKeyType='next' ref="3"
+                               refNext="3"
+
+                               onSubmitEditing={this.focusNextField.bind(this, "5")}
+                               validateContent={FormUtils.validateWebsite}
+                               onChangeText={(website) => this.setReduxState({website})} isMandatory={false}/>
+                </View>
+                <View style={[styles.inputTextLayout, {width: StyleUtils.getWidth() - 15}]}>
+
+                    <AddressInput city={this.state.city} address={this.state.address} country={this.state.country}
+                                  refNext="5" ref="5" isMandatory onSubmitEditing={this.updateLocation.bind(this)}/>
+                </View>
+                <View style={[styles.inputTextLayout, {width: StyleUtils.getWidth() - 15}]}>
+
+                    <TextInput field={strings.TaxID} value={this.state.tax_id} returnKeyType='next' ref="6"
+                               refNext="6"
+                               onSubmitEditing={this.dismissKyeboard.bind(this)}
+                               onChangeText={(tax_id) => this.setReduxState({tax_id})} isMandatory={true}/>
+                </View>
+
+                {!this.state.hideIds && <View style={[styles.inputTextLayout, {width: StyleUtils.getWidth() - 15}]}>
+                    <DocumentPicker value={this.state.IdIdentifierImage} ref="id" isMandatory
+                                    field={strings.IdIdentifier}
+                                    setDocument={this.setIdDocument.bind(this)}/>
+
+                </View>}
+                {!this.state.hideIds && <View style={[styles.inputTextLayout, {width: StyleUtils.getWidth() - 15}]}>
+                    <DocumentPicker value={this.state.LetterOfIncorporationImage} ref="LetterOfIncorporation"
+                                    isMandatory field={strings.LetterOfIncorporation}
+                                    setDocument={this.setLetterDocument.bind(this)}/>
+
+                </View>}
+
+            </ScrollView>
+
+            {this.props.saving && <View style={{
+                justifyContent: 'center',
+                alignItems: 'center',
+                position: 'absolute',
+                width: StyleUtils.getWidth(),
+                opacity: 0.7,
+                height: height,
+                top: 40,
+                backgroundColor: 'white'
+            }}>
+                <Spinner/>
+            </View>}
+        </View>;
     }
 
     shouldComponentUpdate() {
