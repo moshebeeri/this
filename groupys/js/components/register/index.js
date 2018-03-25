@@ -24,8 +24,8 @@ import {ThisText} from '../../ui/index';
 import withPreventDoubleClick from '../../ui/TochButton/TouchButton';
 
 const TouchableOpacityFix = withPreventDoubleClick(TouchableOpacity);
-const {width, height} = Dimensions.get('window')
-const logo = require('../../../images/logo.png')
+const {width, height} = Dimensions.get('window');
+const logo = require('../../../images/logo.png');
 const thisLogo = require('../../../images/this-logo.png');
 const bg = require('../../../images/bg.png');
 const resetAction = NavigationActions.reset({
