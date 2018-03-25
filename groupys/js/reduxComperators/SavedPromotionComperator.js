@@ -14,7 +14,7 @@ class SavedPromotionComperator {
     }
 
     shuoldUpdateInstance(response) {
-        if(instanceUtils.checkIfRealized(response)){
+        if(instanceUtils.checkIfRealized(response) ){
             return true;
         }
         return false;

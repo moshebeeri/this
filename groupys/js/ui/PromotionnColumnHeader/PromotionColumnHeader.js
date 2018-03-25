@@ -73,8 +73,9 @@ export default class PromotionColumnHeader extends Component {
                 return <View style={[styles.promotionPunchHeader, {width: StyleUtils.getWidth() - 15}]}>
                     <View style={styles.promotionPunchValue}>
                         <ThisText style={styles.puncCardtitleFeedValue}>{titleText}</ThisText>
+                        <PunchView feed numberRealized={item.realizedPunches}  numberOfPunches={item.punches}/>
                     </View>
-                    <PunchView feed numberRealized={item.realizedPunches}  numberOfPunches={term}/>
+
                 </View>;
             default:
                 return <View style={promotionHeader}>

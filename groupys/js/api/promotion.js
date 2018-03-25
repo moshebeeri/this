@@ -69,6 +69,16 @@ class PromotionApi {
         }, 'savedInstances', 'qrcode/:code');
     }
 
+    getPromotionSavedInstance(instanceId, token) {
+        return serverRequestHandler.fetch_handler(`${server_host}/api/savedInstances/by/instance/${instanceId}`, {
+            method: 'GET',
+            headers: {
+                'Accept': 'application/json, text/plain, */*',
+                'Content-Type': 'application/json;charset=utf-8',
+                'Authorization': 'Bearer ' + token
+            },
+        }, 'savedInstances', '/by/instance/:id');
+    }
     async getPromotionQrcode(id) {
         let token = await store.get('token');
         return serverRequestHandler.fetch_handler(`${server_host}/api/instances/qrcode/${id}`, {

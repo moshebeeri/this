@@ -1,25 +1,12 @@
 import React, {Component} from 'react';
-import {Dimensions, Image, ScrollView,Keyboard,TouchableOpacity} from 'react-native';
+import {Dimensions, Image, Keyboard, KeyboardAvoidingView, Platform, ScrollView, TouchableOpacity} from 'react-native';
 import {connect} from 'react-redux';
-import {
-    Button,
-    Container,
-    Content,
-    Footer,
-    Header,
-    Icon,
-    Input,
-    InputGroup,
-    Item,
-    Picker,
-    Text,
-    View
-} from 'native-base';
+import {Button, Container, Content, Footer, Header, Icon, Input, InputGroup, Item, Picker, View} from 'native-base';
 import * as productsAction from "../../../actions/product";
 import * as businessAction from "../../../actions/business";
 import {bindActionCreators} from "redux";
 import styles from './styles'
-import {BarcodeScanner, CategoryPicker, FormHeader, ImagePicker, Spinner, TextInput,ThisText} from '../../../ui/index';
+import {BarcodeScanner, CategoryPicker, FormHeader, ImagePicker, Spinner, TextInput, ThisText} from '../../../ui/index';
 import strings from "../../../i18n/i18n"
 import StyleUtils from "../../../utils/styleUtils";
 
@@ -42,13 +29,12 @@ class AddProduct extends Component {
             if (categories.length > 0) {
                 categories = categories.filter(catString => catString).map(catString => parseInt(catString));
             }
-
             this.state = {
                 name: item.name,
                 coverImage: {path: picture},
                 business: item.business,
                 info: item.info,
-                retail_price: item.retail_price ? item.retail_price.toString(): '',
+                retail_price: item.retail_price ? item.retail_price.toString() : '',
                 SKU: '',
                 token: '',
                 item: item,
@@ -74,7 +60,7 @@ class AddProduct extends Component {
         this.props.navigation.goBack();
     }
 
-    componentWillMount(){
+    componentWillMount() {
         this.props.actions.resetForm()
     }
 
@@ -99,8 +85,7 @@ class AddProduct extends Component {
         }
         Keyboard.dismiss();
         const product = this.createProduct();
-
-        if(this.validateForm()) {
+        if (this.validateForm()) {
             const businessId = this.getBusinessId(navigation);
             actions.saveProduct(product, businessId, navigation)
         }
@@ -154,9 +139,10 @@ class AddProduct extends Component {
         })
     }
 
-    openMenu(){
+    openMenu() {
         this.refs["coverImage"].openMenu();
     }
+
     createCoverImageComponnent() {
         const {saving} = this.props;
         if (this.state.coverImage) {
@@ -174,12 +160,22 @@ class AddProduct extends Component {
                 </View>
             </View>
         }
-        return <TouchableOpacity onPress={this.openMenu.bind(this)}   style={[styles.product_upper_container, {width: StyleUtils.getWidth()}]}>
+        return <TouchableOpacity onPress={this.openMenu.bind(this)}
+                                 style={[styles.product_upper_container, {width: StyleUtils.getWidth()}]}>
             {saving && <Spinner/>}
             <View style={styles.cmeraLogoContainer}>
 
                 <View style={styles.addCoverNoImageContainer}>
-                    <ImagePicker ref={"coverImage"}  text={ <ThisText style={styles.addCoverText}>{strings.AddACoverPhoto}</ThisText>} customStyles={{ triggerWrapper:{alignItems:'center',justifyContent:'center',width:StyleUtils.getWidth(),height:220}}} mandatory color='white' pickFromCamera
+                    <ImagePicker ref={"coverImage"}
+                                 text={<ThisText style={styles.addCoverText}>{strings.AddACoverPhoto}</ThisText>}
+                                 customStyles={{
+                                     triggerWrapper: {
+                                         alignItems: 'center',
+                                         justifyContent: 'center',
+                                         width: StyleUtils.getWidth(),
+                                         height: 220
+                                     }
+                                 }} mandatory color='white' pickFromCamera
                                  setImage={this.setCoverImage.bind(this)}/>
                 </View>
             </View>
@@ -187,69 +183,82 @@ class AddProduct extends Component {
     }
 
     render() {
+        if (Platform.OS === 'ios') {
+            return (
+                <KeyboardAvoidingView behavior={'position'}
+                                      style={[styles.product_container, {width: StyleUtils.getWidth()}]}>
+                    {this.createView()}
+                </KeyboardAvoidingView>
+            );
+        }
         return (
-
             <View style={[styles.product_container, {width: StyleUtils.getWidth()}]}>
-                <FormHeader showBack submitForm={this.saveFormData.bind(this)} navigation={this.props.navigation}
-                            title={strings.AddProduct} bgc="#FA8559"/>
-                <ScrollView keyboardShouldPersistTaps={true} contentContainerStyle={{
-                    justifyContent: 'center',
-                    alignItems: 'center',
-                }} style={styles.contentContainer}>
-
-                    {this.createCoverImageComponnent()}
-
-                    <View style={[styles.inputTextLayout, {width: StyleUtils.getWidth() - 15}]}>
-                        <TextInput field={strings.ProductName} value={this.state.name}
-                                   returnKeyType='next' ref="1" refNext="1"
-                                   onSubmitEditing={this.focusNextField.bind(this, "2")}
-                                   onChangeText={(name) => this.setState({name})} isMandatory={true}/>
-                    </View>
-
-
-                    <View style={[styles.inputTextLayout, {width: StyleUtils.getWidth() - 15}]}>
-                        <CategoryPicker ref={"picker"} isMandatory categories={this.props.products.categories}
-                                        selectedCategories={this.state.categories}
-                                        setFormCategories={this.setCategory.bind(this)}
-                                        setCategoriesApi={this.props.actions.setProductCategories}/>
-                    </View>
-
-                    <View style={[styles.inputTextLayout, {width: StyleUtils.getWidth() - 15}]}>
-
-
-                        <TextInput field={strings.Description} value={this.state.info} returnKeyType='next' ref="2"
-                                   refNext="2"
-                                   onSubmitEditing={this.focusNextField.bind(this, "6")}
-
-                                   onChangeText={(info) => this.setState({info})}/>
-                    </View>
-
-                    <View style={[styles.inputTextLayout, {width: StyleUtils.getWidth() - 15}]}>
-                        <TextInput field={strings.Price} value={this.state.retail_price} returnKeyType='next' ref="6"
-                                   refNext="6"
-                                   keyboardType="numeric"
-                                   onSubmitEditing={this.saveFormData.bind(this)}
-                                   onChangeText={(retail_price) => this.setState({retail_price})} isMandatory={true}/>
-                    </View>
-
-                    <View style={[styles.inputTextLayout, {width: StyleUtils.getWidth() - 15}]}>
-                        <TextInput field={strings.SKU} value={this.state.SKU} returnKeyType='next' ref="7"
-                                   refNext="6"
-                                   onSubmitEditing={this.saveFormData.bind(this)}
-                                   onChangeText={(SKU) => this.setState({SKU})} />
-                    </View>
-
-                    <View style={[styles.inputTextLayout, {width: StyleUtils.getWidth() - 15}]}>
-                        <BarcodeScanner handleCode={this.handleCode.bind(this)} navigation={this.props.navigation}/>
-                    </View>
-
-                </ScrollView>
+                {this.createView()}
             </View>
         );
     }
 
-    shouldComponentUpdate(){
-        return this.props.currentScreen ==='AddProduct';
+    createView() {
+        return <View>
+            <FormHeader showBack submitForm={this.saveFormData.bind(this)} navigation={this.props.navigation}
+                        title={strings.AddProduct} bgc="#FA8559"/>
+            <ScrollView keyboardShouldPersistTaps={true} contentContainerStyle={{
+                justifyContent: 'center',
+                alignItems: 'center',
+            }} style={styles.contentContainer}>
+
+                {this.createCoverImageComponnent()}
+
+                <View style={[styles.inputTextLayout, {width: StyleUtils.getWidth() - 15}]}>
+                    <TextInput field={strings.ProductName} value={this.state.name}
+                               returnKeyType='next' ref="1" refNext="1"
+                               onSubmitEditing={this.focusNextField.bind(this, "2")}
+                               onChangeText={(name) => this.setState({name})} isMandatory={true}/>
+                </View>
+
+
+                <View style={[styles.inputTextLayout, {width: StyleUtils.getWidth() - 15}]}>
+                    <CategoryPicker ref={"picker"} isMandatory categories={this.props.products.categories}
+                                    selectedCategories={this.state.categories}
+                                    setFormCategories={this.setCategory.bind(this)}
+                                    setCategoriesApi={this.props.actions.setProductCategories}/>
+                </View>
+
+                <View style={[styles.inputTextLayout, {width: StyleUtils.getWidth() - 15}]}>
+
+
+                    <TextInput field={strings.Description} value={this.state.info} returnKeyType='next' ref="2"
+                               refNext="2"
+                               onSubmitEditing={this.focusNextField.bind(this, "6")}
+
+                               onChangeText={(info) => this.setState({info})}/>
+                </View>
+
+                <View style={[styles.inputTextLayout, {width: StyleUtils.getWidth() - 15}]}>
+                    <TextInput field={strings.Price} value={this.state.retail_price} returnKeyType='next' ref="6"
+                               refNext="6"
+                               keyboardType="numeric"
+                               onSubmitEditing={this.saveFormData.bind(this)}
+                               onChangeText={(retail_price) => this.setState({retail_price})} isMandatory={true}/>
+                </View>
+
+                <View style={[styles.inputTextLayout, {width: StyleUtils.getWidth() - 15}]}>
+                    <TextInput field={strings.SKU} value={this.state.SKU} returnKeyType='next' ref="7"
+                               refNext="6"
+                               onSubmitEditing={this.saveFormData.bind(this)}
+                               onChangeText={(SKU) => this.setState({SKU})}/>
+                </View>
+
+                <View style={[styles.inputTextLayout, {width: StyleUtils.getWidth() - 15}]}>
+                    <BarcodeScanner handleCode={this.handleCode.bind(this)} navigation={this.props.navigation}/>
+                </View>
+
+            </ScrollView>
+        </View>;
+    }
+
+    shouldComponentUpdate() {
+        return this.props.currentScreen === 'AddProduct';
     }
 }
 
@@ -257,7 +266,7 @@ export default connect(
     state => ({
         products: state.products,
         saving: state.products.savingForm,
-        currentScreen:state.render.currentScreen,
+        currentScreen: state.render.currentScreen,
     }),
     (dispatch) => ({
         actions: bindActionCreators(productsAction, dispatch),

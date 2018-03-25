@@ -5,6 +5,7 @@ module.exports = {
     textInputTextStyleWhite: {
         color: 'black',
         flex:2.9,
+        padding:10,
         fontFamily: 'Roboto-Regular',
         fontSize: 18,
 

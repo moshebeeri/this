@@ -1,10 +1,12 @@
 import {createSelector} from 'reselect'
 import FeedUiConverter from "../../api/feed-ui-converter";
+import InstanceLifeCycle from '../../utils/InstanceLifeCycle'
 
 let feedUiConverter = new FeedUiConverter();
 const getQrcodeInstance = (state) => state.scannerForm;
-export const getInstance = createSelector([getQrcodeInstance],
-    (qrcode) => {
+const getStateFeeds = (state) => state.myPromotions
+export const getInstance = createSelector([getQrcodeInstance,getStateFeeds],
+    (qrcode,myPromotions) => {
         if (!qrcode.instance || !qrcode.instance.instance) {
             return undefined;
         }
@@ -15,6 +17,7 @@ export const getInstance = createSelector([getQrcodeInstance],
                 break;
 
         }
-        let promotion = feedUiConverter.createSavedPromotion(qrcode.instance,0,extraData);
+        let instanceLifeCycle = new InstanceLifeCycle(myPromotions.feeds);
+        let promotion = feedUiConverter.createSavedPromotion(qrcode.instance,0,instanceLifeCycle,extraData);
         return promotion;
     })

@@ -104,30 +104,33 @@ class Signup extends Component {
                     {this.state.showPopup && <View style={{ top:0,height:height,position:'absolute',opacity:0.8,alignItems:'center',backgroundColor:'white',width: StyleUtils.getWidth()  }}>
 
                     </View>}
+                    <View style={{
+                        width: StyleUtils.getWidth(),
+
+                        justifyContent: 'center',
+                        backgroundColor: 'transparent'
+                    }}>
+                        <TouchableOpacity transparent style={{
+                            width: 50,
+                            alignItems: 'flex-start',
+                            justifyContent: 'flex-start',
+
+
+                            marginLeft: 10,
+                            marginRight: 5
+                        }} onPress={() => this.back()}>
+                            <Icon active color={'white'} size={35} name={arrowName}/>
+
+                        </TouchableOpacity>
+                    </View>
 
                     <KeyboardAvoidingView behavior={'position'}
                                           style={[styles.avoidView, {width: StyleUtils.getWidth()}]}>
+                        <View style={{marginBottom:20,height:height,justifyContent:'center'}}>
 
-                        <View style={{
-                            width: StyleUtils.getWidth(),
-                            height: 30,
-                            justifyContent: 'center',
-                            backgroundColor: 'transparent'
-                        }}>
-                            <TouchableOpacity transparent style={{
-                                width: 50,
-                                alignItems: 'flex-start',
-                                justifyContent: 'flex-start',
-                                marginTop: 5,
-                                marginLeft: 10,
-                                marginRight: 5
-                            }} onPress={() => this.back()}>
-                                <Icon active color={'white'} size={35} name={arrowName}/>
 
-                            </TouchableOpacity>
-                        </View>
                         <View style={styles.thisContainer}>
-                            <Image style={{position: 'absolute', top: -185, width: 140}} resizeMode='contain'
+                            <Image style={{position: 'absolute', top: -200, width: 110}} resizeMode='contain'
                                    source={thisLogo}/>
                             <ThisText style={styles.this}>THIS</ThisText>
                         </View>
@@ -136,6 +139,7 @@ class Signup extends Component {
                             flexDirection: 'column',
                             justifyContent: 'center',
                             alignItems: 'center',
+
                         }}>
 
                             <View style={styles.firstLastNameContainer}>
@@ -278,6 +282,8 @@ class Signup extends Component {
 
                         </View>
 
+
+                        </View>
                     </KeyboardAvoidingView>
 
                     {this.state.showPopup && <TermsOfUse  declineTerms = {this.back.bind(this)} acceptTerms={this.closePopup.bind(this)}/>}

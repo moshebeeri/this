@@ -267,7 +267,7 @@ class FeedConverter {
         return response;
     }
 
-    createSavedPromotion(feed, id, instanceLifeCycle) {
+    createSavedPromotion(feed, id, instanceLifeCycle,extraData) {
         let instance = feed.instance;
         let promotion = instance.promotion;
         let responseFeed = {};
@@ -380,7 +380,7 @@ class FeedConverter {
                     responseFeed.quantity = promotion.punch_card.quantity;
                     responseFeed.promotion = 'PUNCH_CARD';
                     responseFeed.promotionColor = '#d279a6';
-                    responseFeed.realizedPunches = feed.savedData.punch_card.redeemTimes.length;
+                    responseFeed.realizedPunches = (extraData ? extraData : feed.savedData.punch_card.redeemTimes.length);
                     break;
                 default:
                     responseFeed.itemTitle = instance.type + " NOT SUPPORTED";

@@ -147,6 +147,25 @@ export function updateFeed(item) {
     }
 }
 
+export function updateSavedInstance(item){
+    return async function (dispatch, getState) {
+        try {
+            const token = getState().authentication.token;
+            dispatch({
+                type: types.FEED_UPDATE_SAVED_ITEM,
+                token: token,
+                item: item,
+            });
+            handler.handleSuccses(getState(), dispatch)
+        } catch (error) {
+            handler.handleError(error, dispatch, 'feed-getFeedSocialState')
+            logger.actionFailed('getFeedSocialState')
+        }
+    }
+
+
+}
+
 async function refreshFeedSocialState(state, dispatch, token, id) {
     try {
         let response = await feedApi.getFeedSocialState(id, token);
@@ -329,6 +348,13 @@ export function* updateFeeds(feeds) {
         yield put({
             type: actions.FEEDS_START_RENDER,
         })
+    }
+}
+
+export function setSavedInstance(response) {
+    return {
+        type: actions.UPSERT_SAVED_FEEDS,
+        savedInstance: response,
     }
 }
 

@@ -105,7 +105,7 @@ class ForgetPassword extends Component {
                     }}>
                         <View style={[styles.thisContainer, {width: StyleUtils.getWidth()}]}>
 
-                            <Image style={{position: 'absolute', top: -175, width: 140}} resizeMode='contain'
+                            <Image style={{position: 'absolute', top: -200, width: 110}} resizeMode='contain'
                                    source={thisLogo}/>
                             <ThisText style={styles.this}>THIS</ThisText>
                         </View>
@@ -113,6 +113,7 @@ class ForgetPassword extends Component {
                             flexDirection: 'column',
                             justifyContent: 'center',
                             alignItems: 'center',
+
                         }}>
 
                             <View regular style={[styles.phoneTextInput, {width: StyleUtils.getWidth()}]}>

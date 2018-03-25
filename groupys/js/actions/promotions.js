@@ -241,6 +241,8 @@ export function setPromotion(response, businessId, removeId) {
     }
 }
 
+
+
 export default {
     fetchPromotionById,
     refershBusinessPromotion,

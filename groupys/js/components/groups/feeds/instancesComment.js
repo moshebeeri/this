@@ -1,5 +1,5 @@
 import React, {Component} from "react";
-import {Dimensions, Text, View} from "react-native";
+import {Dimensions, Text, View,KeyboardAvoidingView,Platform} from "react-native";
 import {connect} from "react-redux";
 import {actions} from "react-native-navigation-redux-helpers";
 import GenericFeedManager from "../../generic-feed-manager/index";
@@ -53,6 +53,17 @@ class instancesComment extends Component {
 
     render() {
         const {group, instance,comments, navigation, actions, update, loadingDone, showTopLoader, groupActions,user} = this.props;
+       if(Platform.OS ==='ios') {
+           return <KeyboardAvoidingView behavior={"padding"} style={{flex: 1}} contentContainerStyle={{flex: 1}}>
+               {this.createView(comments, group, user, navigation, groupActions, update, showTopLoader, loadingDone, instance)}
+           </KeyboardAvoidingView>
+       }
+        return <View  style={{flex: 1}}>
+            {this.createView(comments, group, user, navigation, groupActions, update, showTopLoader, loadingDone, instance)}
+        </View>
+    }
+
+    createView(comments, group, userc, navigation, groupActions, update, showTopLoader, loadingDone, instance) {
         return <View style={{flex: 1}}>
             <View style={{flex: 1}}>
                 <GenericFeedManager feeds={comments[group._id]}
@@ -60,7 +71,7 @@ class instancesComment extends Component {
                                     entity={group}
                                     initialNumToRender={7}
                                     chat
-                                    user={user}
+                                    user={userc}
                                     navigation={navigation}
                                     setNextFeeds={this.setNextFeed.bind(this)}
                                     actions={groupActions}
@@ -70,16 +81,30 @@ class instancesComment extends Component {
                                     ItemDetail={GroupChat}/>
             </View>
 
-            <View>
+            {Platform.OS === 'ios' ?
+            <KeyboardAvoidingView behavior={"position"} contentContainerStyle={{marginTop: 10}}>
+                {instance && instance.feed && instance.feed.activity && instance.feed.activity.post &&
+                <ChatPreviewPromotion isPost cancelReply={this.cancelReply.bind(this)}
+                                      title={instance.feed.activity.post.creator.name}
+                                      text={instance.feed.activity.post.text}/>}
 
-            </View>
-            <View style={{marginTop:10}}>
-                {instance && instance.feed && instance.feed.activity  && instance.feed.activity.post && <ChatPreviewPromotion  isPost cancelReply={this.cancelReply.bind(this)} title={instance.feed.activity.post.creator.name} text={instance.feed.activity.post.text}/>}
-
-                {instance  && instance.promotionTerm &&  <ChatPreviewPromotion  cancelReply={this.cancelReply.bind(this)}  title={instance.businessName}  text={instance.promotionTerm}/>}
+                {instance && instance.promotionTerm &&
+                <ChatPreviewPromotion cancelReply={this.cancelReply.bind(this)} title={instance.businessName}
+                                      text={instance.promotionTerm}/>}
                 <MessageBox onPress={this._onPressButton.bind(this)}/>
-            </View>
-        </View>
+            </KeyboardAvoidingView> :
+                <View contentContainerStyle={{marginTop: 10}}>
+                    {instance && instance.feed && instance.feed.activity && instance.feed.activity.post &&
+                    <ChatPreviewPromotion isPost cancelReply={this.cancelReply.bind(this)}
+                                          title={instance.feed.activity.post.creator.name}
+                                          text={instance.feed.activity.post.text}/>}
+
+                    {instance && instance.promotionTerm &&
+                    <ChatPreviewPromotion cancelReply={this.cancelReply.bind(this)} title={instance.businessName}
+                                          text={instance.promotionTerm}/>}
+                    <MessageBox onPress={this._onPressButton.bind(this)}/>
+                </View> }
+        </View>;
     }
 }
 

@@ -3,9 +3,9 @@ const {StyleSheet, Platform, Dimensions} = React;
 const {width, height} = Dimensions.get('window')
 module.exports = {
     inputContainer: {
-        flex: -1,
-        height: height,
-        width: width,
+        justifyContent: 'flex-start',
+        alignItems: 'center',
+        height: height
     },
     forgotButton: {
         alignSelf: 'flex-end',
@@ -26,8 +26,9 @@ module.exports = {
         color: '#00F',
     },
     thisContainer: {
-        height: 220,
-        marginTop: 5,
+
+
+
         justifyContent: 'center',
         backgroundColor: 'transparent',
         flexDirection: 'column',
@@ -35,38 +36,36 @@ module.exports = {
     },
     this: {
         // fontFamily:'BackToBlack',
-        marginTop:150,
-        fontSize: 90,
+        marginTop: 110,
+        fontSize: 50,
         color: 'white',
-        fontWeight:'bold',
+        fontWeight: 'bold',
         backgroundColor: 'transparent'
     },
     phoneTextInput: {
-        marginTop: 5, backgroundColor: 'transparent', height: 60, width: width / 2 + 120,
+        marginTop: 10, backgroundColor: 'transparent', height:  (Platform.OS === 'ios') ? 40 :60, width: width / 2 + 120,
         justifyContent: 'center',
-        alignItems:'center',
-        flexDirection:'row'
+        alignItems: 'center',
+        flexDirection: 'row'
     },
     firstLastNameContainer: {
-        marginTop: 5, backgroundColor: 'transparent', height: 60, width: width / 2 + 120,
+        marginTop: 5, backgroundColor: 'transparent', height:(Platform.OS === 'ios') ? 40 :60, width: width / 2 + 120,
+        marginBottom:5,
         justifyContent: 'space-between',
-        alignItems:'center',
-        flexDirection:'row'
+        alignItems: 'center',
+        flexDirection: 'row'
     },
     passwordTextInput: {
-        marginTop: 10, backgroundColor: 'transparent', height: 50, width: width / 2 + 120,
+        marginTop: 5, backgroundColor: 'transparent', height: (Platform.OS === 'ios') ? 40 :60, width: width / 2 + 120,
         justifyContent: 'center',
-        alignItems:'center',
+        alignItems: 'center',
     },
     nameTextInput: {
-        marginTop: 5, backgroundColor: 'transparent', height: 50, width: 150,
-
+        marginTop: 10, backgroundColor: 'transparent', height: (Platform.OS === 'ios') ? 40 :60, width: 150,
     },
     lastnameTextInput: {
-        marginTop: 5, backgroundColor: 'transparent', height: 50, width:150,
-
+        marginTop: 10, backgroundColor: 'transparent', height: (Platform.OS === 'ios') ? 40 :60, width: 150,
     },
-
     nameContainer: {
         width: width / 2 + 120,
         flexDirection: 'row',
@@ -134,5 +133,7 @@ module.exports = {
     avoidView: {
         alignItems: 'center',
 
+        justifyContent: 'flex-start',
+        height: height
     },
 };

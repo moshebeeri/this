@@ -73,7 +73,7 @@ class Register extends Component {
                                resizeMode='cover' source={bg}/>
 
                     </View>
-                    <View style={{width: width, height: 60, justifyContent: 'center', backgroundColor: 'transparent'}}>
+                    <View style={{width: width, height: 40, justifyContent: 'center', backgroundColor: 'transparent'}}>
                         <TouchableOpacityFix transparent style={{
                             width: 50,
                             alignItems: 'flex-start',
@@ -91,7 +91,7 @@ class Register extends Component {
 
                         <View>
                             <View style={styles.thisContainer}>
-                                <Image style={{position: 'absolute', top: -175, width: 140}} resizeMode='contain'
+                                <Image style={{position: 'absolute', top: -175, width: 110}} resizeMode='contain'
                                        source={thisLogo}/>
                                 <ThisText style={styles.this}>THIS</ThisText>
                             </View>

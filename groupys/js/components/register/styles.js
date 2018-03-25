@@ -3,7 +3,7 @@ const {StyleSheet, Platform, Dimensions} = React;
 const {width, height} = Dimensions.get('window')
 module.exports = {
     inputContainer: {
-        flex: -1,
+
         height: height,
         width: width,
     },
@@ -26,7 +26,7 @@ module.exports = {
         color: '#00F',
     },
     thisContainer: {
-        height: 250,
+
         width:width,
 
         marginTop: height / 10,
@@ -38,7 +38,7 @@ module.exports = {
     this: {
         // fontFamily:'BackToBlack',
         marginTop:150,
-        fontSize: 90,
+        fontSize: 50,
         color: 'white',
         fontWeight:'bold',
         backgroundColor: 'transparent'
