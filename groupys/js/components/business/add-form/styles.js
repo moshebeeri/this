@@ -14,7 +14,7 @@ module.exports = {
     },
     business_upper_container: {
         width: width,
-        height: 250,
+        height:  StyleUtils.relativeHeight(30,30),
         backgroundColor: '#FA8559',
         marginBottom: 4,
         alignItems: 'center',
@@ -41,7 +41,7 @@ module.exports = {
 
     },
     addCoverText: {
-        color: 'white', margin: 5, fontSize: 16
+        color: 'white', margin: 5, fontSize:  StyleUtils.scale(16)
     },
     avoidView: {
         alignSelf: 'stretch',
@@ -50,10 +50,10 @@ module.exports = {
         justifyContent: 'space-between'
     },
     business_upper_image_container: {
-        width: 105,
-        height: 111,
-        marginTop: 10,
-        marginBottom: 60,
+        width:  StyleUtils.scale(105),
+        height: StyleUtils.scale(111),
+        marginTop:  StyleUtils.scale(10),
+        marginBottom:  StyleUtils.scale(60),
         alignItems: 'center',
         justifyContent: 'center',
         marginRight: 12,
@@ -68,10 +68,10 @@ module.exports = {
 
     },
     business_no_pic_no_cover_upper_image_container: {
-        width: 111,
-        height: 105,
-        marginTop: 10,
-        marginBottom: 60,
+        width:  StyleUtils.scale(111),
+        height:  StyleUtils.scale(105),
+        marginTop:  StyleUtils.scale(10),
+        marginBottom:  StyleUtils.scale(60),
         alignItems: 'center',
         justifyContent: 'center',
         marginRight: 12,
@@ -88,9 +88,9 @@ module.exports = {
     },
     business_no_pic_upper_image_container: {
         width: width / 3,
-        height: 110,
-        marginTop: 10,
-        marginBottom: 60,
+        height:  StyleUtils.scale(110),
+        marginTop:  StyleUtils.scale(10),
+        marginBottom:  StyleUtils.scale(60),
         alignItems: 'center',
         justifyContent: 'center',
         marginRight: 12,

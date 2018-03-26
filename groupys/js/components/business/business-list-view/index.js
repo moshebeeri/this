@@ -172,7 +172,7 @@ export default class BusinessListView extends Component {
             </View>
         }
         return <ImageController
-            style={{padding: 0, flex: -1, height: 300}}
+            style={{padding: 0, flex: -1,  height:  StyleUtils.relativeHeight(40,40),}}
             source={require('../../../../images/client_1.png')}>
         </ImageController>
     }
