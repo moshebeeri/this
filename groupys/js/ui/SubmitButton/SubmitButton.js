@@ -3,8 +3,9 @@ import {TouchableOpacity} from 'react-native';
 import {Button, Icon, Input} from 'native-base';
 import {ThisText} from '../../ui/index';
 import withPreventDoubleClick from '../../ui/TochButton/TouchButton';
-
+import StyleUtils from '../../utils/styleUtils'
 const TouchableOpacityFix = withPreventDoubleClick(TouchableOpacity);
+
 export default class SubmitButton extends Component {
     constructor(props) {
         super(props);
@@ -18,9 +19,9 @@ export default class SubmitButton extends Component {
             defaultTextColor = textColor;
         }
         let buttonTitle = title;
-        let defaultWidth = 100;
+        let defaultWidth =  StyleUtils.scale(100);
         if (width) {
-            defaultWidth = width;
+            defaultWidth =  StyleUtils.scale(width);
         }
         if (disabled) {
             bgc = 'gray';
@@ -29,13 +30,13 @@ export default class SubmitButton extends Component {
                 buttonTitle = disabledText;
             }
         }
-        let defaultHeight = 40;
+        let defaultHeight = StyleUtils.scale(40);
         if (height) {
-            defaultHeight = height;
+            defaultHeight = StyleUtils.scale(height);
         }
-        let defaultFontSize = 14;
+        let defaultFontSize =  StyleUtils.scale(14);
         if (fontSize) {
-            defaultFontSize = fontSize;
+            defaultFontSize =  StyleUtils.scale(fontSize);
         }
         return <TouchableOpacityFix disabled={disabled} style={{
             height: defaultHeight,
