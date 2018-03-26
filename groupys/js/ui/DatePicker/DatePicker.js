@@ -6,8 +6,8 @@ import DatePicker from "react-native-datepicker";
 import {ThisText} from '../index';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import strings from "../../i18n/i18n"
+import StyleUtils from '../../utils/styleUtils';
 
-const {width, height} = Dimensions.get('window');
 export default class DatePickerField extends Component {
     constructor(props) {
         super(props);
@@ -92,7 +92,7 @@ export default class DatePickerField extends Component {
 
                 <ThisText style={textStyle}>{field}</ThisText>
                 {field && isMandatory &&
-                <MaterialCommunityIcons style={{marginLeft: 3, marginTop:-5, color: 'red', fontSize: 8}}
+                <MaterialCommunityIcons style={{marginLeft: 3, marginTop:-5, color: 'red', fontSize: StyleUtils.scale(8)}}
                                         name='asterisk'/>}
             </View>
             <View style={styles.textInputComponentLayout}>

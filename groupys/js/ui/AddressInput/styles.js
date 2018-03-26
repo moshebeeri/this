@@ -1,4 +1,6 @@
 const React = require('react-native');
+import StyleUtils from '../../utils/styleUtils';
+
 const {Dimensions} = React;
 const {width, height} = Dimensions.get('window');
 module.exports = {
@@ -10,7 +12,7 @@ module.exports = {
     textInputTextStyle: {
         color: '#666666',
         fontFamily: 'Roboto-Regular',
-        fontSize: 15,
+        fontSize: StyleUtils.scale(15),
         justifyContent:   'flex-start' ,
         marginLeft:  2,
         // margiRight:  I18nManager.isRTL ? 0:10,

@@ -2,6 +2,8 @@ import React, {Component} from 'react';
 import {TextInput, View} from 'react-native';
 import {Icon, Input} from 'native-base';
 import styles from './styles';
+import StyleUtils from '../../utils/styleUtils';
+
 import {ThisText} from '../../ui/index';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 export default class TextInputField extends Component {
@@ -115,7 +117,7 @@ export default class TextInputField extends Component {
 
                 <ThisText style={textStyle}>{field}</ThisText>
                 {field && isMandatory &&
-                <MaterialCommunityIcons style={{marginLeft:3,marginTop: 4, color: mandatoryIconColor, fontSize: 8}} name='asterisk'/>}
+                <MaterialCommunityIcons style={{marginLeft:3,marginTop: 4, color: mandatoryIconColor, fontSize: StyleUtils.scale(8)}} name='asterisk'/>}
 
             </View>
             <View style={styles.textInputComponentLayout}>
