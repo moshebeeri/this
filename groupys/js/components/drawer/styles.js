@@ -1,9 +1,8 @@
 import loginTheme from './drwaer-theme';
 
 const React = require('react-native');
+import StyleUtils from "../../utils/styleUtils";
 const {Dimensions, StyleSheet, Platform} = React;
-const deviceHeight = Dimensions.get('window').height;
-const deviceWidth = Dimensions.get('window').width;
 module.exports = {
     shadow: {
         flex: 1,
@@ -40,33 +39,32 @@ module.exports = {
         alignItems: 'flex-start',
     },
     thumbnail: {
-        position: 'absolute',
-        left: 90,
-        top: 10,
+
 
         borderRadius: (Platform.OS === 'ios') ? 90 : 90,
-
-        width: 120,
-        height: 120,
+        width: StyleUtils.scale(120),
+        height: StyleUtils.scale(120),
     },
     thumbnail_image: {
         position: 'absolute',
         borderWidth: 2,
-
         shadowColor: '#000',
         shadowOffset: {width: 2, height: 2},
         shadowOpacity: 0.4,
         shadowRadius: 1,
-        borderRadius: 90,
-        opacity:1,
-        backgroundColor:'black',
-        width: 120,
-        height: 120,
+        borderRadius: StyleUtils.scale(90),
+        opacity: 1,
+        backgroundColor: 'black',
+        width: StyleUtils.scale(120),
+        height: StyleUtils.scale(120),
     },
     image: {
         backgroundColor: '#41aad9',
         flexDirection: 'column',
-        height: 152,
-        width: 300,
+        alignItems : 'center',
+        justifyContent: 'center',
+
+        height: StyleUtils.scale(152),
+
     },
 };
