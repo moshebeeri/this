@@ -3,6 +3,7 @@ import {TouchableOpacity} from 'react-native';
 import Icon2 from 'react-native-vector-icons/MaterialIcons';
 import {Button} from 'native-base';
 import styles from './styles'
+import StyleUtils from '../../utils/styleUtils'
 import withPreventDoubleClick from '../../ui/TochButton/TouchButton';
 
 const TouchableOpacityFix = withPreventDoubleClick(TouchableOpacity);
@@ -18,12 +19,12 @@ export default class EditButton extends Component {
             name = iconName;
         }
         let style ={};
-        let defaultSize = 20;
+        let defaultSize = StyleUtils.scale(20);
         if(size){
-            defaultSize = size;
+            defaultSize = StyleUtils.scale(size);
         }
         if(touchSize){
-            style = {height:touchSize,width:touchSize};
+            style = {height:StyleUtils.scale(touchSize),width:StyleUtils.scale(touchSize)};
         }
         return <TouchableOpacityFix style={style}
                                  onPress={onPress}>
