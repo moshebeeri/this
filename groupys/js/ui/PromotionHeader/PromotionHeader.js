@@ -1,11 +1,10 @@
 import React, {Component} from 'react';
-import {Dimensions, Text, View} from 'react-native';
+import {Text, View} from 'react-native';
 import {Button, Icon, Input} from 'native-base';
 import styles from './styles';
-import {PunchView,ThisText} from '../index'
+import {ThisText} from '../index'
 import StyleUtils from '../../utils/styleUtils'
 
-const {width, height} = Dimensions.get('window')
 const ILS = '₪';
 export default class PromotionHeader extends Component {
     constructor(props) {
@@ -13,7 +12,7 @@ export default class PromotionHeader extends Component {
     }
 
     render() {
-        const {item,type, titleValue, titleText, term, feed, columnStyle} = this.props;
+        const {item, type, titleValue, titleText, term, feed, columnStyle} = this.props;
         let titleValueStyle = styles.titleValue;
         let titleTextStyle = styles.titleText;
         let XplusYtitleValueStyle = styles.XplusYtitleValue;
@@ -100,16 +99,17 @@ export default class PromotionHeader extends Component {
             case "HAPPY_HOUR":
                 return <View style={[promotionHeader, {width: StyleUtils.getWidth()}]}>
                     <View style={promotionValue}>
-                        <ThisText numberOfLines={1} allowFontScaling={true} style={titleValueStyle}>{ILS}{titleValue}</ThisText>
+                        <ThisText numberOfLines={1} allowFontScaling={true}
+                                  style={titleValueStyle}>{ILS}{titleValue}</ThisText>
                     </View>
                     <View style={styles.promotiontHappyDescription}>
                         <View style={{flex: 1, justifyContent: 'flex-start'}}>
                             <ThisText allowFontScaling={true} adjustsFontSizeToFit
-                                  style={happyHourTextStyle}>{titleText}</ThisText>
+                                      style={happyHourTextStyle}>{titleText}</ThisText>
                         </View>
                         <View style={{flex: 1}}>
                             <ThisText allowFontScaling={true} adjustsFontSizeToFit numberOfLines={3}
-                                  style={promotionTermStyle}>{term}</ThisText>
+                                      style={promotionTermStyle}>{term}</ThisText>
                         </View>
                     </View>
                 </View>;
@@ -131,7 +131,7 @@ export default class PromotionHeader extends Component {
                 return <View style={[styles.promotionPunchHeader, {width: StyleUtils.getWidth()}]}>
                     <View style={styles.promotionPunchValue}>
                         <ThisText style={puncCardtitleValue}>{titleText}</ThisText>
-                     </View>
+                    </View>
 
                 </View>;
             default:

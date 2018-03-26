@@ -47,7 +47,7 @@ export default class SocialState extends Component {
             }
         }
         return <View transparent style={styles.promotion_iconView}>
-            <Ionicons size={40} color={componenColor} style={{marginRight: 10, width: 40, height: 40}}
+            <Ionicons size={StyleUtils.scale(40)} color={componenColor} style={{marginRight: 10, width: 40, height: 40}}
                       name="ios-people"/>
             <ThisText style={styles.socialTextColor}>{followers}</ThisText>
         </View>;
@@ -69,13 +69,13 @@ export default class SocialState extends Component {
         if (groupChat) {
             if (I18nManager.isRTL) {
                 return <TouchableOpacityFix transparent style={styles.promotion_iconView} onPress={onPressComment}>
-                    <SimpleLineIcons size={28} color={componenColor} style={{marginRight: 10}}
+                    <SimpleLineIcons size={StyleUtils.scale(28)} color={componenColor} style={{marginRight: 10}}
                                      name="action-undo"/>
 
                 </TouchableOpacityFix>;
             } else {
                 return <TouchableOpacityFix transparent style={styles.promotion_iconView} onPress={onPressComment}>
-                    <SimpleLineIcons size={28} color={componenColor} style={{marginRight: 10}}
+                    <SimpleLineIcons size={StyleUtils.scale(28)} color={componenColor} style={{marginRight: 10}}
                                      name="action-redo"/>
 
                 </TouchableOpacityFix>;
@@ -83,14 +83,14 @@ export default class SocialState extends Component {
         }
         if (disabled) {
             return <View transparent style={styles.promotion_iconView}>
-                <SimpleLineIcons size={30} color={componenColor} style={{marginRight: 10, width: 40, height: 40}}
+                <SimpleLineIcons size={StyleUtils.scale(30)} color={componenColor} style={{marginRight: 10, width: 40, height: 40}}
                                  name="bubbles"/>
 
                 <ThisText style={styles.socialTextColor}>{comments}</ThisText>
             </View>;
         }
         return <TouchableOpacityFix transparent style={styles.promotion_iconView} onPress={onPressComment}>
-            <SimpleLineIcons size={30} color={componenColor} style={{marginRight: 10}}
+            <SimpleLineIcons size={StyleUtils.scale(30)} color={componenColor} style={{marginRight: 10}}
                              name="bubbles"/>
             <ThisText style={styles.socialTextColor}>{comments}</ThisText>
         </TouchableOpacityFix>;
@@ -108,7 +108,7 @@ export default class SocialState extends Component {
         if (disabled) {
             return <View transparent style={styles.promotion_iconView}>
 
-                <Ionicons size={30} color={componenColor} style={{marginRight: 10}}
+                <Ionicons size={StyleUtils.scale(30)} color={componenColor} style={{marginRight: 10}}
                           name="md-heart-outline"/>
                 <ThisText style={styles.socialTextColor}>{likes}</ThisText>
             </View>
@@ -117,7 +117,7 @@ export default class SocialState extends Component {
             return <TouchableOpacityFix transparent style={styles.promotion_iconView} onPress={onPressUnLike}>
 
 
-                <Ionicons size={30} color={componenColor} style={{marginRight: 10}}
+                <Ionicons size={StyleUtils.scale(30)} color={componenColor} style={{marginRight: 10}}
                           name="md-heart"/>
                 <ThisText style={styles.socialTextColor}>{likes}</ThisText>
 
@@ -125,7 +125,7 @@ export default class SocialState extends Component {
         }
         return <TouchableOpacityFix transparent style={styles.promotion_iconView} onPress={onPressLike}>
 
-            <Ionicons size={30} color={componenColor} style={{marginRight: 10}}
+            <Ionicons size={StyleUtils.scale(30)} color={componenColor} style={{marginRight: 10}}
                       name="md-heart-outline"/>
             <ThisText style={styles.socialTextColor}>{likes}</ThisText>
 
@@ -147,7 +147,7 @@ export default class SocialState extends Component {
         }
         if (disabled || shareDisabled || !sharable) {
             return <View transparent style={styles.promotion_iconView}>
-                <SimpleLineIcons size={28} color={'#cccccc'} style={{marginRight: 10}}
+                <SimpleLineIcons size={StyleUtils.scale(28)} color={'#cccccc'} style={{marginRight: 10}}
                                  name="share"/>
                 <ThisText style={styles.socialTextColor}>{shares}</ThisText>
 
@@ -156,7 +156,7 @@ export default class SocialState extends Component {
         if (share) {
             return <TouchableOpacityFix transparent style={styles.promotion_iconView} onPress={shareAction}>
 
-                <SimpleLineIcons size={28} color={componenColor} style={{marginRight: 10}}
+                <SimpleLineIcons size={StyleUtils.scale(28)} color={componenColor} style={{marginRight: 10}}
                                  name="share"/>
                 <ThisText style={styles.socialTextColor}>{shares}</ThisText>
 
@@ -165,7 +165,7 @@ export default class SocialState extends Component {
         }
         return <TouchableOpacityFix transparent style={styles.promotion_iconView} onPress={shareAction}>
 
-            <SimpleLineIcons size={28} color={componenColor} style={{marginRight: 10}}
+            <SimpleLineIcons size={StyleUtils.scale(28)} color={componenColor} style={{marginRight: 10}}
                              name="share"/>
             <ThisText style={styles.socialTextColor}>{shares}</ThisText>
         </TouchableOpacityFix>;

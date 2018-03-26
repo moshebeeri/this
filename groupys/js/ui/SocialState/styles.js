@@ -1,6 +1,7 @@
 const React = require('react-native');
 const {Dimensions} = React;
-const {width, height} = Dimensions.get('window');
+import StyleUtils from "../../utils/styleUtils";
+
 module.exports = {
     socialContainer: {
         flexDirection: 'row',
@@ -11,14 +12,14 @@ module.exports = {
         marginBottom:5,
     },
     promotion_iconView: {
-        marginRight:20,
-        marginLeft:20,
+        marginRight:StyleUtils.scale(20),
+        marginLeft:StyleUtils.scale(20),
 
         flexDirection: 'row',
         justifyContent: 'center',
         alignItems:'center',
         backgroundColor:'white',
-        height:40
+        height:StyleUtils.scale(40)
     },
     promotion_like: {
         marginRight: 5,
@@ -51,7 +52,8 @@ module.exports = {
         color: '#cccccc'
     },
     socialTextColor: {
-        color: '#898989'
+        color: '#898989',
+        fontSize: StyleUtils.scale(16)
     }
 };
 
