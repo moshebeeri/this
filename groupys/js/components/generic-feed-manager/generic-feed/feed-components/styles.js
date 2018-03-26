@@ -6,7 +6,7 @@ const vh = height / 100
 const vmin = Math.min(vw, vh);
 const vmax = Math.max(vw, vh);
 import {I18nManager} from 'react-native';
-
+import StyleUtils from '../../../../utils/styleUtils'
 module.exports = {
     button: {
         width: vmin * 100,
@@ -161,11 +161,12 @@ module.exports = {
     promotion_image: {
         flex: 1,
         alignSelf: 'stretch',
-        width: width,
-        height: 250,
+        width: undefined,
+        height: undefined
     },
     promotion_image_view: {
-        height: 250
+        width: StyleUtils.getWidth(),
+        height: StyleUtils.relativeHeight(40,40),
     },
     promotion_upperContainer: {
         backgroundColor: 'white',
