@@ -21,6 +21,7 @@ import UiConverter from '../../../api/feed-ui-converter'
 import {GroupHeader, ImageController, PromotionHeaderSnippet, ThisText} from '../../../ui/index';
 import strings from '../../../i18n/i18n';
 import DateUtils from '../../../utils/dateUtils'
+import StyleUtils from '../../../utils/styleUtils'
 import SimpleLineIcons from "react-native-vector-icons/SimpleLineIcons";
 import Ionicons from "react-native-vector-icons/Ionicons";
 import withPreventDoubleClick from '../../../ui/TochButton/TouchButton';
@@ -86,7 +87,7 @@ export default class GenericListGroupView extends Component {
                             marginBottom: 2,
                             fontWeight: '200',
                             color: '#616F70',
-                            fontSize: 14,
+                            fontSize: StyleUtils.scale(14),
                             textAlign: 'left',
                             backgroundColor: 'white'
                         }}>{strings.LatestActivity}</ThisText>
@@ -161,14 +162,14 @@ export default class GenericListGroupView extends Component {
 
 
             }
-            const image = <ImageController thumbnail size={30} source={itemChat.avetar}/>
+            const image = <ImageController thumbnail size={StyleUtils.scale(30)} source={itemChat.avetar}/>
             return <View style={styles.group_message_container}>
 
 
                 <View style={styles.message_container}>
 
 
-                    <SimpleLineIcons size={18} style={{marginRight:12,}}color={'#2db6c8'}
+                    <SimpleLineIcons size={StyleUtils.scale(18)} style={{marginRight:12,}}color={'#2db6c8'}
                                      name="bubble"/>
 
                     {image}

@@ -1,92 +1,91 @@
 const React = require('react-native');
-const {StyleSheet, Platform, Dimensions} = React;
-const {width, height} = Dimensions.get('window')
-const vw = width / 100;
-const vh = height / 100
-const vmin = Math.min(vw, vh);
-const vmax = Math.max(vw, vh);
+const {Dimensions} = React;
+import StyleUtils from "../../utils/styleUtils";
+const {width} = Dimensions.get('window')
 module.exports = {
     logo_view: {
         flexDirection: 'row',
-        backgroundColor:'white',
+        backgroundColor: 'white',
     },
-    groupEntity:{
-        fontWeight:'200', color:'#616F70', fontSize:14,     },
-
+    groupEntity: {
+        fontWeight: '200', color: '#616F70', fontSize: StyleUtils.scale(14),
+    },
     businessNameText: {
         fontFamily: 'Roboto-Regular',
-
         marginRight: 20,
         marginLeft: 10,
         marginTop: 5,
         marginBottom: 5,
         color: 'gray',
-        fontSize: 18
+        fontSize: StyleUtils.scale(18)
     },
     groupNameText: {
         fontFamily: 'Roboto',
         color: '#616F70',
-        fontWeight:'bold',
-        fontSize: 18
+        fontWeight: 'bold',
+        fontSize: StyleUtils.scale(18)
     },
-    groupHeader:{
-        margin:5,
-        flexDirection:'row',
-        justifyContent:'flex-start',
-        alignItems:"center",
-
-        width:width-30
+    groupHeader: {
+        margin: 5,
+        flexDirection: 'row',
+        justifyContent: 'flex-start',
+        alignItems: "center",
+        width: width - 30
     },
-    groupImage:{
+    groupImage: {
         alignItems: 'center'
     },
-    groupName:{
-        margin:5,
-        marginLeft:10,
+    groupName: {
+        margin: 5,
+        marginLeft: 10,
     },
     editButtonConntainer: {
-        margin:5,width: 40, height: 40, opacity: 0.65,backgroundColor: 'white', alignItems: 'center', justifyContent: 'center'
+        margin: 5,
+        width: 40,
+        height: 40,
+        opacity: 0.65,
+        backgroundColor: 'white',
+        alignItems: 'center',
+        justifyContent: 'center'
     },
     businessPicker: {
         flexDirection: 'row',
         alignItems: 'center',
         justifyContent: 'center',
-        backgroundColor:'white',
-
+        backgroundColor: 'white',
     },
     pickerStyle: {
         margin: 3, height: 50, width: width - 60, backgroundColor: 'white'
     },
-    businessTopLogo:{
-        padding:10,
-        flex:1
+    businessTopLogo: {
+        padding: 10,
+        flex: 1
     },
-    businessPickerComponent:{
-        flex:7
+    businessPickerComponent: {
+        flex: 7
     },
-    businessGroupText:{
+    businessGroupText: {
         color: '#ff6400',
     },
-    businessCategoryText:{
-        color:'#839192',
+    businessCategoryText: {
+        color: '#839192',
     },
     productIcon: {
-        fontSize: 25,
+        fontSize: StyleUtils.scale(25),
         color: 'black',
     },
-    bannerImageContainer:{
+    bannerImageContainer: {
         flex: -1,
         alignSelf: 'center',
-        alignItems:'flex-end',
+        alignItems: 'flex-end',
         height: 250,
-
         width: width,
         borderWidth: 1,
     },
     imageTopText: {
         textShadowOffset: {width: 1, height: 1},
         textShadowColor: 'black',
-        fontWeight: 'bold', marginLeft: 20, marginTop: -100, fontSize: 25, color: 'white'
+        fontWeight: 'bold', marginLeft: 20, marginTop: -100, fontSize: StyleUtils.scale(25), color: 'white'
     },
     imageBottomText: {
         textShadowOffset: {width: 1, height: 1},
@@ -96,19 +95,17 @@ module.exports = {
         marginTop: -100,
         marginBottom: 10,
         color: 'white',
-        fontSize: 15
+        fontSize: StyleUtils.scale(15)
     },
-    tabHeadingStyle:{
-        flexDirection:"row",
+    tabHeadingStyle: {
+        flexDirection: "row",
         justifyContent: 'space-between',
-
     },
-    tabTextStyle:{
+    tabTextStyle: {
         color: '#ff6400',
-        marginRight:10,
-        marginLeft:10,
-        fontSize:14
-
+        marginRight: 10,
+        marginLeft: 10,
+        fontSize: StyleUtils.scale(14)
     },
     container: {
         flex: 1,
@@ -146,5 +143,4 @@ module.exports = {
     img: {
         width: Dimensions.get('window').width,
     },
-
 };

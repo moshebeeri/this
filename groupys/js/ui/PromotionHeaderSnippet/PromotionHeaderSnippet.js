@@ -2,22 +2,22 @@ import React, {Component} from 'react';
 import {View} from 'react-native';
 import {Button, Icon, Input, Thumbnail} from 'native-base';
 import styles from './styles';
-import {ImageController, ThisText,PunchView} from '../../ui/index';
+import {ImageController, ThisText} from '../../ui/index';
 import DateUtils from '../../utils/dateUtils'
+import StyleUtils from '../../utils/styleUtils'
 import strings from "../../i18n/i18n"
 import SimpleLineIcons from "react-native-vector-icons/SimpleLineIcons";
 
 let dateUtils = new DateUtils();
-const ILS = '₪';
 export default class PromotionHeaderSnippet extends Component {
     constructor(props) {
         super(props);
     }
 
     render() {
-        const {promotion, type, titleValue, titleText, term, business} = this.props;
+        const {promotion, type} = this.props;
         // const promoIcon = <ImageController style={{marginLeft:0, marginRight:12,alignItems: 'flex-start', width:18, height:18 }} source={require('../../../images/promoicon.png')}/>;
-        const promoIcon = <SimpleLineIcons style={{marginLeft: 0, marginRight: 12}} size={18} color={'#2db6c8'}
+        const promoIcon = <SimpleLineIcons style={{marginLeft: 0, marginRight: 12}} size={StyleUtils.scale(18)} color={'#2db6c8'}
                                            name="tag"/>
         switch (type) {
             case "REDUCED_AMOUNT":
@@ -31,10 +31,11 @@ export default class PromotionHeaderSnippet extends Component {
                     flexDirection: 'row'
                 }}>
                     {promoIcon}
-                    {promotion.banner && <ImageController thumbnail size={36} source={{uri: promotion.banner.uri}}/>}
+                    {promotion.banner && <ImageController thumbnail size={StyleUtils.scale(36)} source={{uri: promotion.banner.uri}}/>}
                     <View style={{flex: 1, justifyContent: 'flex-start', marginLeft: 12, alignItems: 'flex-start'}}>
                         <ThisText style={styles.promotionListLineTitleText}>{promotion.business.name}</ThisText>
-                        <ThisText style={styles.promotionListLineDescText}>{strings.ReduceAmountShortDescription.formatUnicorn(totalValue, discount)}</ThisText>
+                        <ThisText
+                            style={styles.promotionListLineDescText}>{strings.ReduceAmountShortDescription.formatUnicorn(totalValue, discount)}</ThisText>
 
                     </View>
                 </View>
@@ -139,7 +140,7 @@ export default class PromotionHeaderSnippet extends Component {
                     {promotion.banner && <ImageController thumbnail size={30} source={{uri: promotion.banner.uri}}/>}
                     <View style={{flex: 1, justifyContent: 'flex-start', marginLeft: 12, alignItems: 'flex-start'}}>
                         <ThisText>{promotion.business.name}</ThisText>
-                        <ThisText>{strings.punchCardTerm.formatUnicorn(promotion.punches,promotion.promotionEntity.condition.product.name)}</ThisText>
+                        <ThisText>{strings.punchCardTerm.formatUnicorn(promotion.punches, promotion.promotionEntity.condition.product.name)}</ThisText>
                     </View>
                 </View>
             default:
