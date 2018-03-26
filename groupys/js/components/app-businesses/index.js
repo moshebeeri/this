@@ -29,6 +29,7 @@ import {FormHeader} from '../../ui/index';
 import Icon from 'react-native-vector-icons/Ionicons';
 import Icon2 from 'react-native-vector-icons/MaterialCommunityIcons';
 import strings from "../../i18n/i18n"
+import StyleUtils from "../../utils/styleUtils";
 
 class ApplicationBusinessManager extends Component {
     static navigationOptions = {
@@ -56,9 +57,9 @@ class ApplicationBusinessManager extends Component {
     }
 
     render() {
-        let icon = <Icon2 active color={"#FA8559"} size={25} name="plus"/>
+        let icon = <Icon2 active color={"#FA8559"} size={StyleUtils.scale(25)} name="plus"/>
         if (Platform.OS === 'ios') {
-            icon = <Icon active color={"#FA8559"} size={25} name="ios-add"/>;
+            icon = <Icon active color={"#FA8559"} size={StyleUtils.scale(25)} name="ios-add"/>;
         }
 
         return (

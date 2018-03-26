@@ -47,7 +47,7 @@ export default class SocialState extends Component {
             }
         }
         return <View transparent style={styles.promotion_iconView}>
-            <Ionicons size={StyleUtils.scale(40)} color={componenColor} style={{marginRight: 10, width: 40, height: 40}}
+            <Ionicons size={StyleUtils.scale(40)} color={componenColor} style={{marginRight: 10, width: StyleUtils.scale(40), height: StyleUtils.scale(40)}}
                       name="ios-people"/>
             <ThisText style={styles.socialTextColor}>{followers}</ThisText>
         </View>;

@@ -41,7 +41,7 @@ class FormHeader extends Component {
         if (titleColor) {
             return {
                 color: titleColor,
-                fontSize: 16,
+                fontSize: StyleUtils.scale(16),
                 backgroundColor: 'transparent'
             }
         }
@@ -132,7 +132,7 @@ class FormHeader extends Component {
                             marginLeft: 10,
                             marginRight: 40,
                             marginTop: 5,
-                            fontSize: 18,
+                            fontSize: StyleUtils.scale(18),
                             width: StyleUtils.getWidth() - 100,
                             height: 40
                         }}
