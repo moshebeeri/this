@@ -39,7 +39,7 @@ const DefaultTabBar = createReactClass({
     },
     createTabvView(name) {
         if (name === 'promotions') {
-            return <SimpleLineIcons size={styleUtils.scale(28)} color={'#2db6c8'}
+            return <SimpleLineIcons size={styleUtils.scale(24)} color={'#2db6c8'}
                                     name="layers"/>
         }
         if (name.includes('notification')) {

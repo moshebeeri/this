@@ -1,4 +1,5 @@
 const React = require('react-native');
+import StyleUtils from '../../utils/styleUtils'
 const {StyleSheet, Platform, Dimensions} = React;
 const {width, height} = Dimensions.get('window')
 const vw = width / 100;
@@ -84,12 +85,12 @@ module.exports = {
     },
     messageText:{
         color: '#616F70',
-        fontSize: 18
+        fontSize:  StyleUtils.scale(18)
 
     },
     messageTextWhite:{
         color: 'white',
-        fontSize: 18
+        fontSize: StyleUtils.scale(18)
 
     },
     timeText:{
@@ -100,7 +101,7 @@ module.exports = {
         marginLeft:8,
         justifyContent:'flex-end',
         backgroundColor:'transparent',
-        fontSize:12,
+        fontSize:StyleUtils.scale(12),
 
     },
     timeTextWhite:{
@@ -111,7 +112,7 @@ module.exports = {
         marginLeft:8,
         justifyContent:'flex-end',
         backgroundColor:'transparent',
-        fontSize:12,
+        fontSize:StyleUtils.scale(12),
 
     },
     messageNameText:{

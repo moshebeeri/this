@@ -110,7 +110,7 @@ class GroupFeed extends Component {
 
                 {chatDisabled ? <GroupFeedComponent tabLabel="promotions" navigation={this.props.navigation}
                                                     group={this.props.navigation.state.params.group}/> :
-                    <View style={{flex:1}}>
+                    <View style={{flex:1,}}>
 
                         {I18nManager.isRTL && (Platform.OS === 'android') ?
                             <ScrolTabView initialPage={initPage}
