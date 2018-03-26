@@ -1,3 +1,4 @@
+import StyleUtils from '../../utils/styleUtils';
 const React = require('react-native');
 const {StyleSheet, Platform, Dimensions} = React;
 const {width, height} = Dimensions.get('window')
@@ -72,12 +73,12 @@ module.exports = {
     },
     titleTextFeed: {
 
-        fontSize: 20,
+        fontSize: StyleUtils.scale(20),
         color: '#2db6c8'
     },
     titleTextColumnFeed: {
         flex: 1,
-        fontSize: 25,
+        fontSize: StyleUtils.scale(25),
 
         color: '#2db6c8',
 
@@ -89,24 +90,24 @@ module.exports = {
     },
     titleValueFeed: {
         flex:1,
-        fontSize: 30,
+        fontSize: StyleUtils.scale(30),
         textAlign: "center",
         color: '#2db6c8'
     },
     titleValueColumnFeed: {
         flex: 1,
 
-        fontSize: 50,
+        fontSize: StyleUtils.scale(50),
         color: '#2db6c8',
 
     },
     XplusYtitleValueFeed: {
-        fontSize: 30,
+        fontSize: StyleUtils.scale(30),
         color: '#2db6c8'
     },
     puncCardtitleValueFeed: {
         flex: 1,
-        fontSize: 25,
+        fontSize: StyleUtils.scale(25),
         color: '#2db6c8'
     },
     promotionImageContainer: {
@@ -138,12 +139,12 @@ module.exports = {
     promotionTermlTextStyle: {
         color: '#839192',
 
-        fontSize: 13,
+        fontSize: StyleUtils.scale(13),
     },
     promotionColumnTermlTextStyle: {
         color: '#839192',
         flex: 1,
-        fontSize: 13,
+        fontSize: StyleUtils.scale(13),
 
 
     },
@@ -167,7 +168,7 @@ module.exports = {
         marginLeft: 5,
         marginRight: 5,
         color: '#839192',
-        fontSize: 14
+        fontSize: StyleUtils.scale(14)
     },
     detailsText: {
         marginLeft: 5,
@@ -192,7 +193,7 @@ module.exports = {
     },
     promotion_addressText: {
         color: '#e65100',
-        fontSize: 20
+        fontSize: StyleUtils.scale(20)
     },
     promotion_card: {
         margin: 5
