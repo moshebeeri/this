@@ -90,9 +90,9 @@ export default class FeedBusiness extends Component {
 
                         padding:10,
                     }}>
-                        {item.avetar && <ImageController thumbnail size={30} source={item.avetar}/>}
+                        {item.avetar && <ImageController thumbnail size={StyleUtils.scale(30)} source={item.avetar}/>}
 
-                        <ThisText style={{paddingLeft:10}}>{item.itemTitle}</ThisText>
+                        <ThisText style={{fontSize: StyleUtils.scale(14), paddingLeft:StyleUtils.scale(10)}}>{item.itemTitle}</ThisText>
 
                     </View>
 
@@ -103,7 +103,7 @@ export default class FeedBusiness extends Component {
 
 
                             <View style={styles.promotion_bottom_location}>
-                                <Icon3 style={styles.promotion_location} size={25} name="location-on"/>
+                                <Icon3 style={styles.promotion_location} size={StyleUtils.scale(25)} name="location-on"/>
                                 <View style={{flexDirection: 'row'}}>
                                     <ThisText style={styles.promotion_addressText}
                                               note>{item.businessAddress} </ThisText>
@@ -141,10 +141,10 @@ export default class FeedBusiness extends Component {
                 <LinearGradient start={{x: 1, y: 1}} end={{x: 1, y: 0}}
                                 locations={[0, 0.8]}
                                 colors={['#00000099', 'transparent']} style={{
-                    height: 120,
+                    height: StyleUtils.relativeHeight(15, 10),
                     position: 'absolute',
                     justifyContent: 'flex-end',
-                    top: 130,
+                    top: StyleUtils.relativeHeight(25,30),
                     backgroundColor: 'transparent',
                     width: StyleUtils.getWidth()
                 }}>
