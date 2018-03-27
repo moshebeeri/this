@@ -1,7 +1,7 @@
 const React = require('react-native');
 const {StyleSheet, Platform, Dimensions} = React;
 const {width, height} = Dimensions.get('window')
-import {I18nManager} from 'react-native';
+import StyleUtils from '../../utils/styleUtils'
 
 module.exports = {
     promotion_container: {
@@ -32,8 +32,7 @@ module.exports = {
         justifyContent: 'center',
         alignItems: 'center',
         flex: 1,
-        paddingTop:7, //need to find a way to verticly align @yb
-
+        paddingTop: 7, //need to find a way to verticly align @yb
     },
     promotionColumnValue: {
         flex: 1,
@@ -60,61 +59,61 @@ module.exports = {
         justifyContent: 'flex-start'
     },
     titleText: {
-        fontSize: 20,
+        fontSize: StyleUtils.scale(20),
         color: '#e65100'
     },
     titleValue: {
-        fontSize: 40,
-        width: 100,
+        fontSize: StyleUtils.scale(40),
+        width: StyleUtils.scale(100),
         textAlign: "center",
         color: '#e65100',
     },
     XplusYtitleValue: {
-        fontSize: 30,
+        fontSize: StyleUtils.scale(30),
         color: '#e65100'
     },
     puncCardtitleValue: {
-        fontSize: 16,
+        fontSize: StyleUtils.scale(16),
         color: '#e65100'
     },
     titleTextFeed: {
         flex: 1,
-        fontSize: 20,
+        fontSize: StyleUtils.scale(20),
         color: '#2db6c8'
     },
     titleTextColumnFeed: {
         flex: 1,
-        fontSize: 25,
+        fontSize: StyleUtils.scale(25),
         color: '#2db6c8',
     },
     titleFeedHappyTextFeed: {
         flex: 1,
-        fontSize: 15,
+        fontSize: StyleUtils.scale(15),
         color: '#2db6c8'
     },
     titleHappyTextFeed: {
         flex: 1,
-        fontSize: 15,
+        fontSize: StyleUtils.scale(15),
         color: '#e65100'
     },
     titleValueFeed: {
         flex: 1,
-        fontSize: 30,
+        fontSize: StyleUtils.scale(30),
         textAlign: "center",
         color: '#2db6c8',
     },
     titleValueColumnFeed: {
         flex: 1,
-        fontSize: 50,
+        fontSize: StyleUtils.scale(50),
         color: '#2db6c8',
     },
     XplusYtitleValueFeed: {
-        fontSize: 30,
+        fontSize: StyleUtils.scale(30),
         color: '#2db6c8'
     },
     puncCardtitleValueFeed: {
         flex: 1,
-        fontSize: 18,
+        fontSize: StyleUtils.scale(18),
         color: '#2db6c8'
     },
     promotionImageContainer: {
@@ -139,25 +138,25 @@ module.exports = {
         height: undefined
     },
     promotionInfoTextI: {
-        fontSize: 16,
+        fontSize: StyleUtils.scale(16),
         marginLeft: 5,
         marginRight: 5,
     },
     promotionTermlTextStyle: {
         color: '#839192',
         flex: 1,
-        fontSize: 13,
+        fontSize: StyleUtils.scale(13),
         alignItems: 'flex-end'
     },
     promotionColumnTermlTextStyle: {
         color: '#839192',
         flex: 1,
-        fontSize: 13,
+        fontSize: StyleUtils.scale(13),
     },
     promotionDetailsContainer: {
         flexDirection: 'row',
         backgroundColor: 'white',
-        height: 55
+        height: StyleUtils.scale(55)
     },
     promotionLoctionContainer: {
         alignItems: 'flex-start',
@@ -174,7 +173,7 @@ module.exports = {
         marginLeft: 5,
         marginRight: 5,
         color: '#839192',
-        fontSize: 14
+        fontSize: StyleUtils.scale(14)
     },
     detailsText: {
         marginLeft: 5,
@@ -185,7 +184,7 @@ module.exports = {
     promotionAnalyticsContainer: {
         flexDirection: 'row',
         width: width,
-        height: 55,
+        height: StyleUtils.scale(55),
         justifyContent: 'center',
         alignItems: 'center',
         borderTopWidth: 0.3,
@@ -199,7 +198,7 @@ module.exports = {
     },
     promotion_addressText: {
         color: '#e65100',
-        fontSize: 20
+        fontSize: StyleUtils.scale(20)
     },
     promotion_card: {
         margin: 5

@@ -1,16 +1,15 @@
 import React, {Component} from "react";
 import {Dimensions, TouchableOpacity} from "react-native";
-import {Button, Text, Thumbnail, View} from "native-base";
+import {Button, Thumbnail, View} from "native-base";
 import * as notification from "./notofications";
 import strings from "../../../i18n/i18n"
-import {ThisText,SubmitButton} from '../../../ui/index';
+import {SubmitButton, ThisText} from '../../../ui/index';
+import StyleUtils from "../../../utils/styleUtils";
+import FCM from 'react-native-fcm';
 
 const {width, height} = Dimensions.get('window')
 const vw = width / 100;
 const vh = height / 100;
-import StyleUtils from "../../../utils/styleUtils";
-import FCM from 'react-native-fcm';
-
 export default class NotificationListView extends Component {
     constructor(props) {
         super(props);
@@ -22,9 +21,8 @@ export default class NotificationListView extends Component {
         groupActions.acceptInvitation(viewItem.group);
         actions.doNotification(viewItem._id)
     }
+
     shouldComponentUpdate() {
-
-
         return false;
     }
 
@@ -50,7 +48,7 @@ export default class NotificationListView extends Component {
     read(notification_id) {
         const {item, actions} = this.props;
         if (!item.read) {
-            FCM.getBadgeNumber().then(number => FCM.setBadgeNumber(number -1));
+            FCM.getBadgeNumber().then(number => FCM.setBadgeNumber(number - 1));
             actions.readNotification(notification_id)
         }
     }
@@ -81,7 +79,7 @@ export default class NotificationListView extends Component {
             borderWidth: 1,
             flexDirection: 'row',
             height: 40,
-            width: StyleUtils.getWidth()  / 2,
+            width: StyleUtils.getWidth() / 2,
             backgroundColor: 'white',
             borderColor: '#2db6c8',
         };
@@ -102,10 +100,11 @@ export default class NotificationListView extends Component {
                     alignItems: 'center',
                 }}>
 
-                    <View style={{flexDirection: 'column', marginLeft: 5, width: StyleUtils.getWidth() , height: vh * 10}}>
-                        <View style={{width: StyleUtils.getWidth()  - 20, flexDirection: 'row'}}>
+                    <View
+                        style={{flexDirection: 'column', marginLeft: 5, width: StyleUtils.getWidth(), height: vh * 10}}>
+                        <View style={{width: StyleUtils.getWidth() - 20, flexDirection: 'row'}}>
                             <ThisText numberOfLines={2}
-                                  style={{height: vh * 7}}>
+                                      style={{height: vh * 7}}>
                                 {title}
                             </ThisText>
                         </View>
@@ -127,11 +126,11 @@ export default class NotificationListView extends Component {
         const redeemStyle = {
             flex: -1,
             justifyContent: 'center',
-            marginLeft: StyleUtils.getWidth()  / 4,
+            marginLeft: StyleUtils.getWidth() / 4,
             borderWidth: 1,
             flexDirection: 'row',
             height: 40,
-            width: StyleUtils.getWidth()  / 2,
+            width: StyleUtils.getWidth() / 2,
             backgroundColor: 'white',
             borderColor: '#2db6c8',
         };
@@ -146,17 +145,27 @@ export default class NotificationListView extends Component {
                     flex: -1,
                     backgroundColor: backgroundColor,
                     flexDirection: 'row',
+                    paddingTop: StyleUtils.scale(5),
+                    paddingLeft: StyleUtils.scale(5),
                     alignItems: 'center',
                 }}>
                     {image}
-                    <View style={{flexDirection: 'column', marginLeft: 5, width: StyleUtils.getWidth()  - 50, height: vh * 10}}>
-                        <View style={{padding:10,flexDirection: 'row'}}>
+                    <View style={{
+                        flexDirection: 'column',
+                        marginLeft: StyleUtils.scale(5),
+                        width: StyleUtils.getWidth() - 60,
+                    }}>
+                        <View style={{padding: 10, flexDirection: 'row'}}>
                             <ThisText numberOfLines={2}
-                                  style={{width: vw * 75, height: vh * 7}}>{strings.CreatePromotionForEveryoneBusiness}
+                                      style={{
+                                          fontSize: StyleUtils.scale(14),
+                                          paddingRight: StyleUtils.scale(5),
+                                      }}>{strings.CreatePromotionForEveryoneBusiness}
                                 <ThisText style={{
                                     marginLeft: vw * 3,
                                     fontWeight: 'bold',
                                     height: vh * 5,
+                                    fontSize: StyleUtils.scale(14),
                                     width: nameWidth
                                 }}> {viewItem.business.name} </ThisText>
                             </ThisText>
@@ -192,7 +201,7 @@ export default class NotificationListView extends Component {
         if (viewItem.read) {
             return {
                 backgroundColor: 'white',
-                width: StyleUtils.getWidth() ,
+                width: StyleUtils.getWidth(),
                 height: vh * 9,
                 flexDirection: 'row',
                 justifyContent: 'center',
@@ -201,7 +210,7 @@ export default class NotificationListView extends Component {
         }
         return {
             backgroundColor: '#d3f9ff',
-            width: StyleUtils.getWidth() ,
+            width: StyleUtils.getWidth(),
             height: 50,
             flexDirection: 'row',
             justifyContent: 'center',
@@ -244,8 +253,8 @@ export default class NotificationListView extends Component {
             return undefined;
         }
         return <View style={actionStyle}>
-            <SubmitButton  title={strings.Accept.toUpperCase()}  color={'#2db6c8'}
-                           onPress={() => this.accept()}/>
+            <SubmitButton title={strings.Accept.toUpperCase()} color={'#2db6c8'}
+                          onPress={() => this.accept()}/>
 
         </View>
     }
@@ -256,19 +265,19 @@ export default class NotificationListView extends Component {
         }
         return <View style={actionStyle}>
 
-            <SubmitButton  title={strings.Create.toUpperCase()} color={'#2db6c8'}
+            <SubmitButton title={strings.Create.toUpperCase()} color={'#2db6c8'}
                           onPress={() => this.createBusiness(viewItem.business)}/>
 
         </View>
     }
 
-    getPromotionAction(viewItem, actionStyle, redeemStyle) {
+    getPromotionAction(viewItem, actionStyle) {
         if (viewItem.actionDone) {
             return undefined;
         }
         return <View style={actionStyle}>
-            <SubmitButton  title={strings.Create.toUpperCase()}  color={'#2db6c8'}
-                           onPress={() => this.create(viewItem.group)}/>
+            <SubmitButton title={strings.Create.toUpperCase()} color={'#2db6c8'}
+                          onPress={() => this.create(viewItem.group)}/>
 
         </View>
     }
@@ -281,11 +290,11 @@ export default class NotificationListView extends Component {
         const redeemStyle = {
             flex: -1,
             justifyContent: 'center',
-            marginLeft: StyleUtils.getWidth()  / 4,
+            marginLeft: StyleUtils.getWidth() / 4,
             borderWidth: 1,
             flexDirection: 'row',
             height: 40,
-            width: StyleUtils.getWidth()  / 2,
+            width: StyleUtils.getWidth() / 2,
             backgroundColor: 'white',
             borderColor: '#2db6c8',
         };
@@ -302,8 +311,8 @@ export default class NotificationListView extends Component {
                     alignItems: 'center',
                 }}>
                     {image}
-                    <View style={{flexDirection: 'column', width: StyleUtils.getWidth()  - 50, height: vh * 10}}>
-                        <View style={{adding:10,flexDirection: 'row'}}>
+                    <View style={{flexDirection: 'column', width: StyleUtils.getWidth() - 50, height: vh * 10}}>
+                        <View style={{adding: 10, flexDirection: 'row'}}>
                             <ThisText style={{fontWeight: 'bold', marginLeft: vw * 4}}>{user.name}</ThisText>
                             <ThisText style={{height: vh * 4}}>{strings.InvitesYouToJoinGroup}</ThisText>
                         </View>
@@ -327,11 +336,11 @@ export default class NotificationListView extends Component {
         const redeemStyle = {
             flex: -1,
             justifyContent: 'center',
-            marginLeft: StyleUtils.getWidth()  / 4,
+            marginLeft: StyleUtils.getWidth() / 4,
             borderWidth: 1,
             flexDirection: 'row',
             height: 40,
-            width: StyleUtils.getWidth()  / 2,
+            width: StyleUtils.getWidth() / 2,
             backgroundColor: 'white',
             borderColor: '#2db6c8',
         };
@@ -349,10 +358,15 @@ export default class NotificationListView extends Component {
                     alignItems: 'center',
                 }}>
                     {image}
-                    <View style={{flexDirection: 'column', marginLeft: 5, width: StyleUtils.getWidth()  - 50, height: vh * 10}}>
-                        <View style={{adding:10,flexDirection: 'row'}}>
+                    <View style={{
+                        flexDirection: 'column',
+                        marginLeft: 5,
+                        width: StyleUtils.getWidth() - 50,
+                        height: vh * 10
+                    }}>
+                        <View style={{adding: 10, flexDirection: 'row'}}>
                             <ThisText numberOfLines={2}
-                                  style={{width: vw * 75, height: vh * 7}}>{strings.CreatePromotionForEveryoneGroup}
+                                      style={{width: vw * 75, height: vh * 7}}>{strings.CreatePromotionForEveryoneGroup}
                                 <ThisText style={{
                                     marginLeft: vw * 3,
                                     fontWeight: 'bold',

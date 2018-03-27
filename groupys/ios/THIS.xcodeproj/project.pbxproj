@@ -2442,6 +2442,7 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = la.low.this;
 				PRODUCT_NAME = THIS;
+				TARGETED_DEVICE_FAMILY = "1,2";
 				VERSIONING_SYSTEM = "apple-generic";
 			};
 			name = Debug;
@@ -2490,6 +2491,7 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = la.low.this;
 				PRODUCT_NAME = THIS;
+				TARGETED_DEVICE_FAMILY = "1,2";
 				"VALID_ARCHS[sdk=*]" = "arm64 armv7 armv7s";
 				VERSIONING_SYSTEM = "apple-generic";
 			};

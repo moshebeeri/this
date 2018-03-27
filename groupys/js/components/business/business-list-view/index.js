@@ -102,7 +102,7 @@ export default class BusinessListView extends Component {
                         {!inReview && (permissionsButton || productsButton || promotionButton) && <View style={{
                             flexDirection: 'row', alignItems: 'center',
                             padding: 10,
-                            height: 56,
+                            height: StyleUtils.scale(56),
                             justifyContent: 'space-between',
                         }}>
                             {permissionsButton}
@@ -131,7 +131,7 @@ export default class BusinessListView extends Component {
 
                         {item.business.social_state &&
                         <View style={{
-                            height: 56,
+                            height: StyleUtils.scale(56),
                             justifyContent: 'center',
                             alignItems: 'center',
                             borderTopWidth: 1,
@@ -172,7 +172,7 @@ export default class BusinessListView extends Component {
             </View>
         }
         return <ImageController
-            style={{padding: 0, flex: -1, height: 300}}
+            style={{padding: 0, flex: -1,  height:  StyleUtils.relativeHeight(40,40),}}
             source={require('../../../../images/client_1.png')}>
         </ImageController>
     }
@@ -182,13 +182,13 @@ export default class BusinessListView extends Component {
             return <TouchableOpacityFix onPress={() => this.showUsersRoles()}
                                         style={{margin: 3, flexDirection: 'row', alignItems: 'center',}}
                                         regular>
-                <Feather size={25} color={'#ff6400'}
+                <Feather size={StyleUtils.scale(25)} color={'#ff6400'}
                          name="user-check"/>
                 <ThisText style={{
                     marginLeft: 5,
                     color: '#ff6400',
                     fontStyle: 'normal',
-                    fontSize: 13
+                    fontSize: StyleUtils.scale(13)
                 }}>{strings.Permissions}</ThisText>
 
             </TouchableOpacityFix>
@@ -201,13 +201,13 @@ export default class BusinessListView extends Component {
             return <TouchableOpacityFix onPress={() => this.showProducts()}
                                         style={{margin: 3, flexDirection: 'row', alignItems: 'center',}} regular>
 
-                <FontAwesome size={25} color={'#ff6400'}
+                <FontAwesome size={StyleUtils.scale(25)} color={'#ff6400'}
                              name="barcode"/>
                 <ThisText style={{
                     marginLeft: 5,
                     color: '#ff6400',
                     fontStyle: 'normal',
-                    fontSize: 13
+                    fontSize: StyleUtils.scale(13)
                 }}>{strings.Products}</ThisText>
 
             </TouchableOpacityFix>
@@ -236,13 +236,13 @@ export default class BusinessListView extends Component {
                                         style={{margin: 3, flexDirection: 'row', alignItems: 'center',}}
                                         regular>
 
-                <SimpleLineIcons size={25} color={'#ff6400'}
+                <SimpleLineIcons size={StyleUtils.scale(25)} color={'#ff6400'}
                                  name="tag"/>
                 <ThisText style={{
                     marginLeft: 5,
                     color: '#ff6400',
                     fontStyle: 'normal',
-                    fontSize: 13
+                    fontSize: StyleUtils.scale(13)
                 }}>{strings.Promotions}</ThisText>
 
             </TouchableOpacityFix>

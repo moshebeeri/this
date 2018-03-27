@@ -30,6 +30,7 @@ import {
     BusinessHeader,
     ImageController,
     PromotionHeader,
+    PunchView,
     SocialState,
     SubmitButton,
     ThisText
@@ -59,9 +60,7 @@ export default class FeedPromotion extends Component {
             } else {
                 actions.setVisibleItem(item.fid);
             }
-
         }
-
     }
 
     shouldComponentUpdate() {
@@ -69,8 +68,7 @@ export default class FeedPromotion extends Component {
         if (shouldUpdate) {
             return true;
         }
-
-        if(item.promotion ==='PUNCH_CARD'){
+        if (item.promotion === 'PUNCH_CARD') {
             return true;
         }
         let results = item.id === visibleItem;
@@ -154,19 +152,19 @@ export default class FeedPromotion extends Component {
                         </View>
                         }
 
-                        { instanceUtils.showRedeemed(item) &&
+                        {instanceUtils.showRedeemed(item) &&
                         <View style={styles.editButtonContainer}>
                             <SubmitButton disabled title={strings.Realized.toUpperCase()} color={'#cccccc'}
                                           onPress={() => realize(item)}/>
                         </View>}
-                        { instanceUtils.showExpired(item) &&
+                        {instanceUtils.showExpired(item) &&
                         <View style={styles.editButtonContainer}>
-                            <SubmitButton  disabled title={strings.Expired.toUpperCase()} color={'#cccccc'}
+                            <SubmitButton disabled title={strings.Expired.toUpperCase()} color={'#cccccc'}
                                           onPress={() => realize(item)}/>
                         </View>}
-                        {  instanceUtils.showInActive(item) &&
+                        {instanceUtils.showInActive(item) &&
                         <View style={styles.editButtonContainer}>
-                            <SubmitButton  disabled title={strings.InActive.toUpperCase()} color={'#cccccc'}
+                            <SubmitButton disabled title={strings.InActive.toUpperCase()} color={'#cccccc'}
                                           onPress={() => realize(item)}/>
                         </View>}
 
@@ -180,7 +178,7 @@ export default class FeedPromotion extends Component {
                                                      onPressUnLike={() => unlike(item.id, token)}
                                                      onPressLike={() => like(item.id, token)}
                                                      shareDisabled={shared}
-                                                     groupChat={group && group.group_chat ==='ON'}
+                                                     groupChat={group && group.group_chat === 'ON'}
                                                      sharable={item.sharable}
                                                      share={item.social.share} shares={item.social.shares}
                                                      shareAction={showUsers}/>}
@@ -230,16 +228,22 @@ export default class FeedPromotion extends Component {
                 <ImageController resizeMode="cover" style={[styles.promotion_image, {width: StyleUtils.getWidth()}]}
                                  source={{uri: item.banner.uri}}>
                 </ImageController>
+
+
                 <LinearGradient start={{x: 1, y: 1}} end={{x: 1, y: 0}}
                                 locations={[0, 0.8]}
                                 colors={['#00000099', 'transparent']} style={{
-                    height: 140,
+                    height: (item.promotion === 'PUNCH_CARD' ? StyleUtils.relativeHeight(30, 35) : StyleUtils.relativeHeight(15, 10)),
                     position: 'absolute',
                     justifyContent: 'flex-end',
-                    top: 110,
+                    top: (item.promotion === 'PUNCH_CARD' ? StyleUtils.relativeHeight(10, 5) : StyleUtils.relativeHeight(25,30)),
                     backgroundColor: 'transparent',
                     width: StyleUtils.getWidth()
                 }}>
+                    {item.promotion === 'PUNCH_CARD' &&
+                    <PunchView numberRealized={item.realizedPunches} feed={this.props.feed}
+                               numberOfPunches={item.punches}/>}
+
                     {item.business &&
                     <BusinessHeader navigation={this.props.navigation} business={item.business}
                                     categoryTitle={categoruTitle} businessLogo={item.business.logo}

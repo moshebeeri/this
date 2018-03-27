@@ -2,7 +2,6 @@
  * Created by roilandshut on 23/07/2017.
  */
 import React, {Component} from 'react';
-import {Dimensions} from 'react-native';
 import {actions} from 'react-native-navigation-redux-helpers';
 import {
     Button,
@@ -18,7 +17,6 @@ import {
     Left,
     Picker,
     Right,
-    Text,
     Thumbnail,
     View
 } from 'native-base';
@@ -28,10 +26,8 @@ import FeedBusiness from './feedBusiness'
 import FeedPost from './feedPost'
 import strings from "../../../../i18n/i18n"
 import StyleUtils from '../../../../utils/styleUtils'
-import {ThisText} from '../../../../ui/index';
+import {ThisText,ImageController} from '../../../../ui/index';
 
-const {height} = Dimensions.get('window');
-const vh = height / 100;
 export default class FeedShared extends Component {
     constructor() {
         super();
@@ -40,16 +36,30 @@ export default class FeedShared extends Component {
     render() {
         const {item,} = this.props;
         const container = this.createContainerStyle(item);
+        let avetar;
+
+        if (item.user && item.user.pictures && Object.keys(item.user.pictures).length > 0) {
+           avetar = {
+                uri: item.user.pictures[Object.keys(item.user.pictures).length - 1].pictures[3]
+            }
+        }
         return (<View style={container}>
                 <View style={{
                     borderColor: '#cccccc',
                     width: StyleUtils.getWidth(),
                     flex: 1,
-                    justifyContent: 'center',
-                    alignItems: 'flex-start',
-                    backgroundColor: 'white'
+                    justifyContent: 'flex-start',
+                    alignItems: 'center',
+                    backgroundColor: 'white',
+                    flexDirection: 'row',
+                    marginBottom: StyleUtils.scale(10)
                 }}>
-                    <ThisText style={{padding: 5, backgroundColor: 'white'}}>{item.user.name} {strings.Shared}</ThisText>
+                    <View style={{marginTop:  StyleUtils.scale(5), paddingLeft: StyleUtils.scale(10), justifyContent: 'flex-start'}}>
+                        {avetar &&
+                        <ImageController thumbnail size={StyleUtils.scale(30)} source={avetar}/>}
+                    </View>
+                    <ThisText
+                        style={{fontSize:StyleUtils.scale(14),padding:  StyleUtils.scale(5), backgroundColor: 'white'}}>{item.user.name} {strings.Shared}</ThisText>
                 </View>
                 <View style={{flex: 10}}>
                     {this.createSharedActivity(item)}
@@ -59,21 +69,19 @@ export default class FeedShared extends Component {
     }
 
     createContainerStyle(item) {
-
-            return {
-                flex: 1,
-                width: StyleUtils.getWidth(),
-                overflow: 'hidden',
-                backgroundColor: 'white',
-                alignItems: 'center',
-                flexDirection: 'column',
-                marginBottom:10,
-            }
-
+        return {
+            flex: 1,
+            width: StyleUtils.getWidth(),
+            overflow: 'hidden',
+            backgroundColor: 'white',
+            alignItems: 'center',
+            flexDirection: 'column',
+            marginBottom: 10,
+        }
     }
 
     createSharedActivity(item) {
-        const {refresh, like, unlike, actions,showUsers, comment, token, location, showActions,visibleFeeds,group} = this.props;
+        const {refresh, like, unlike, actions, showUsers, comment, token, location, showActions, visibleFeeds, group} = this.props;
         switch (item.shared) {
             case 'PROMOTION':
                 return this.createFeedView(<FeedPromotion shared refresh={refresh} token={token} comment={comment}
@@ -85,7 +93,6 @@ export default class FeedShared extends Component {
                                                           like={like} unlike={unlike}
                                                           group={group}
                                                           showUsers={showUsers}/>)
-
             case 'MESSAGE':
                 return this.createFeedView(<FeedMessage shared token={token} navigation={this.props.navigation}
                                                         item={item.shardeActivity}/>)

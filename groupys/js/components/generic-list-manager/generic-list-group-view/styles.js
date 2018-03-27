@@ -1,10 +1,9 @@
+import StyleUtils from '../../../utils/styleUtils'
 const React = require('react-native');
-const {StyleSheet, Platform, Dimensions} = React;
+const {Dimensions} = React;
 const {width, height} = Dimensions.get('window')
 const vw = width / 100;
 const vh = height / 100
-const vmin = Math.min(vw, vh);
-const vmax = Math.max(vw, vh);
 module.exports = {
     group_container: {
         width: width,
@@ -26,7 +25,6 @@ module.exports = {
         justifyContent: 'center',
         borderColor: 'black',
         borderTopWidth: 0,
-
     },
     group_promotion_container: {
         flexDirection: 'row',
@@ -71,27 +69,24 @@ module.exports = {
         flexDirection: 'row',
         paddingBottom: 8,
         marginLeft: 15,
-
-        backgroundColor:'white',
+        backgroundColor: 'white',
     },
     message_container2: {
         flex: 3,
         alignItems: 'center',
         flexDirection: 'row',
         paddingBottom: 8,
-        marginLeft:15,
+        marginLeft: 15,
         borderTopWidth: 0,
         borderColor: '#cccccc',
-        backgroundColor:'white',
-
+        backgroundColor: 'white',
     },
-
-    chatListLineTitleText:{
-        fontWeight:'bold', color:'#616F70', fontSize:16, width:260,
+    chatListLineTitleText: {
+        fontWeight: 'bold', color: '#616F70', fontSize: StyleUtils.scale(16), width: 260,
     },
-    chatListLineDescText:{
-        fontWeight:'200', color:'#616F70', fontSize:14,     },
-
+    chatListLineDescText: {
+        fontWeight: '200', color: '#616F70', fontSize:  StyleUtils.scale(14),
+    },
     post_container: {
         flex: 1,
         height: 70,

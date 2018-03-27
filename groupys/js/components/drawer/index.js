@@ -16,7 +16,6 @@ const settings = require('../../../images/settings-work-tool.png');
 const deviceHeight = Dimensions.get('window').height;
 const deviceWidth = Dimensions.get('window').width;
 import withPreventDoubleClick from '../../ui/TochButton/TouchButton';
-
 const TouchableOpacityFix = withPreventDoubleClick(TouchableOpacity);
 class ProfileDrawer extends Component {
     static navigationOptions = {
@@ -88,13 +87,13 @@ class ProfileDrawer extends Component {
         if (Platform.OS === 'ios') {
             borderRadiusSize = 60;
         }
-        let userImage = <ImageController style={{width: 120, height: 120, borderRadius: borderRadiusSize,}} source={source}/>;
+        let userImage = <ImageController style={{width: StyleUtils.scale(120), height:  StyleUtils.scale(120), borderRadius: StyleUtils.scale(borderRadiusSize),}} source={source}/>;
         return (
             <ScrollView>
             <View style={{width:deviceWidth/5*4,justifyContent:'flex-start',height:deviceHeight,opacity:0.9,backgroundColor: '#41aad9'}}>
 
                 <View style={{
-                    height: 55,
+                    height:  StyleUtils.scale(55),
 
                     alignItems: 'center',
                     opacity:1,
@@ -104,14 +103,14 @@ class ProfileDrawer extends Component {
 
                 }}>
                     <TouchableOpacityFix onPress={() => this.showUserProfile()}
-                                      style={{marginLeft:15,width: 40, height: 30,flexDirection: 'column', alignItems: 'center'}} regular>
-                        <ImageController style={{tintColor: 'white', width: 30, height: 30}}
+                                      style={{marginLeft:StyleUtils.scale(15),width:  StyleUtils.scale(40), height:  StyleUtils.scale(30),flexDirection: 'column', alignItems: 'center'}} regular>
+                        <ImageController style={{tintColor: 'white', width:  StyleUtils.scale(30), height:  StyleUtils.scale(30)}}
                                source={settings}/>
 
 
                     </TouchableOpacityFix>
-                    <View style={{marginRight:20}}>
-                    <CloseDrawer active color={'white'} size={30} onPress={() => this.props.closeDrawer()}/>
+                    <View style={{marginRight:StyleUtils.scale(20)}}>
+                    <CloseDrawer active color={'white'} size={ StyleUtils.scale(30)} onPress={() => this.props.closeDrawer()}/>
                     </View>
                 </View>
                 {/*form header*/}
@@ -130,12 +129,12 @@ class ProfileDrawer extends Component {
                 <View style={{
 
 
-                    marginTop: -10,
+                    marginTop:  StyleUtils.scale(-10),
 
                     alignItems: 'center',
                     justifyContent:'center',
                     opacity:1,
-                    height:70,
+                    height: StyleUtils.scale(70),
 
 
                 }}>
@@ -146,13 +145,13 @@ class ProfileDrawer extends Component {
                         fontFamily: 'Roboto-Regular',
                         marginTop: 5,
                         fontStyle: 'normal',
-                        fontSize: 20,
+                        fontSize:  StyleUtils.scale(20),
                     }}>{name}</ThisText>
                     <ThisText numberOfLines={2} style={{
                         color: '#fff',
                         marginTop: 7,
                         fontStyle: 'normal',
-                        fontSize: 16,
+                        fontSize:  StyleUtils.scale(16),
                     }}>{phoneNumber}</ThisText>
 
 
@@ -160,30 +159,30 @@ class ProfileDrawer extends Component {
 
                 {/*button grid*/}
 
-                    <View style={{ borderTopWidth:1,borderBottomWidth:1,marginTop:10,height:70,width:deviceWidth/5*4,flexDirection: 'column',  borderColor: '#E5E5E5'}}>
+                    <View style={{ borderTopWidth:1,borderBottomWidth:1,marginTop:10,height:StyleUtils.scale(70),width:deviceWidth/5*4,flexDirection: 'column',  borderColor: '#E5E5E5'}}>
                         <TouchableOpacityFix onPress={() => this.showBusinesses()}
                                           style={{flex: 1, flexDirection: 'row', alignItems: 'center'}} regular>
-                            <Image style={{tintColor: 'white', marginLeft: 20, width: 30, height: 30}}
+                            <Image style={{tintColor: 'white', marginLeft: StyleUtils.scale(20), width:  StyleUtils.scale(30), height:  StyleUtils.scale(30)}}
                                    source={briefcase}/>
                             <ThisText
                                 style={{
 
                                     color: 'white',
                                     fontStyle: 'normal',
-                                    marginLeft:20,
-                                    fontSize: 16
+                                    marginLeft:StyleUtils.scale(20),
+                                    fontSize:  StyleUtils.scale(16)
                                 }}>{strings.Businesses}</ThisText>
                         </TouchableOpacityFix>
                     </View>
-                    <View style={{height:70,width:deviceWidth/5*4,borderBottomWidth:1,flexDirection: 'row',borderColor: '#E5E5E5'}}>
+                    <View style={{height: StyleUtils.scale(70),width:deviceWidth/5*4,borderBottomWidth:1,flexDirection: 'row',borderColor: '#E5E5E5'}}>
                         <TouchableOpacityFix onPress={() => this.changePassword()}
                                           style={{flex: 1, flexDirection: 'row', alignItems: 'center'}} regular>
-                            <Icon style={{marginLeft: 20, marginBottom: -6}} color="white" size={36} name="lock"/>
+                            <Icon style={{marginLeft: StyleUtils.scale(20), marginBottom: -6}} color="white" size={ StyleUtils.scale(36)} name="lock"/>
                             <ThisText style={{
-                                marginLeft:22,
+                                marginLeft:StyleUtils.scale(22),
                                 color: 'white',
                                 fontStyle: 'normal',
-                                fontSize: 16
+                                fontSize:  StyleUtils.scale(16)
                             }}>{strings.ChangePassword} </ThisText>
 
                         </TouchableOpacityFix>

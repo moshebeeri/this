@@ -148,7 +148,7 @@ class GroupFeedHeader extends Component {
         if (this.isGroupAdmin(group)) {
             groupInvite = <Menu>
                 <MenuTrigger customStyles={{alignItems: 'center', justifyContent: 'center'}}>
-                    <Icon2 style={{fontSize: 25, color: "#2db6c8"}} name="options-vertical"/>
+                    <Icon2 style={{fontSize: StyleUtils.scale(25), color: "#2db6c8"}} name="options-vertical"/>
                 </MenuTrigger>
                 <MenuOptions>
                     <MenuOption onSelect={this.updateGroup.bind(this)}>
@@ -163,9 +163,9 @@ class GroupFeedHeader extends Component {
         }
         return <View style={headerHeight}>
             <View style={styles.imageStyle}>
-                <Button style={{width: 30, alignItems: 'center', justifyContent: 'center'}} transparent
+                <Button style={{width:  StyleUtils.scale(30), alignItems: 'center', justifyContent: 'center'}} transparent
                         onPress={this.navigateBack.bind(this)}>
-                    <Icon style={{alignItems: 'center', justifyContent: 'center', fontSize: 20, color: "#2db6c8"}}
+                    <Icon style={{alignItems: 'center', justifyContent: 'center', fontSize:  StyleUtils.scale(20), color: "#2db6c8"}}
                           name={arrowName}/>
                 </Button>
             </View>
@@ -175,13 +175,13 @@ class GroupFeedHeader extends Component {
             <View style={styles.group_actions}>
                 <TouchableOpacity onPress={() => this.showScanner()}
                                   style={{
-                                      width: 30, height: 30,
+                                      width:  StyleUtils.scale(30), height:  StyleUtils.scale(30),
                                       flexDirection: 'column',
                                       alignItems: 'center',
                                       justifyContent: 'center',
                                   }}
                                   regular>
-                    <Image resizeMode="cover" style={{tintColor: '#2db6c8', marginTop: 3, width: 25, height: 25}}
+                    <Image resizeMode="cover" style={{tintColor: '#2db6c8', marginTop: 3, width:  StyleUtils.scale(25), height:  StyleUtils.scale(25)}}
                            source={qrcode}/>
 
                 </TouchableOpacity>

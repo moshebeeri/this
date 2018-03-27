@@ -19,12 +19,11 @@ import {
     Left,
     Picker,
     Right,
-    Thumbnail,
     View
 } from 'native-base';
 import stylesLandscape from './styles'
 import StyleUtils from '../../../../utils/styleUtils'
-import {ActivityReport, SocialState, ThisText, UrlPreview, Video} from '../../../../ui/index';
+import {ActivityReport, ImageController, SocialState, ThisText, UrlPreview, Video} from '../../../../ui/index';
 import PageRefresher from '../../../../refresh/pageRefresher'
 import strings from "../../../../i18n/i18n"
 
@@ -75,9 +74,8 @@ export default class FeedPost extends Component {
             } else {
                 actions.setVisibleItem(item.fid);
             }
-            if(this.itemMissingImageOrVideo(item)){
+            if (this.itemMissingImageOrVideo(item)) {
                 actions.updateFeed(item);
-
             }
         }
         this.setState({
@@ -137,10 +135,12 @@ export default class FeedPost extends Component {
                         width: StyleUtils.getWidth()
                     }]}>
                         <View style={{marginTop: 10, paddingLeft: 10, justifyContent: 'flex-start'}}>
-                            <Thumbnail small source={item.avetar}/>
+                            {item.avetar &&
+                            <ImageController thumbnail size={StyleUtils.scale(30)} source={item.avetar}/>}
                         </View>
                         <View style={{marginTop: 10, paddingLeft: 10, alignItems: 'center'}}>
-                            <ThisText>{strings.postMessage.formatUnicorn(item.name)}</ThisText>
+                            <ThisText
+                                style={{fontSize: StyleUtils.scale(14)}}>{strings.postMessage.formatUnicorn(item.name)}</ThisText>
                         </View>
                         <View style={{
                             marginTop: 10,
@@ -158,11 +158,11 @@ export default class FeedPost extends Component {
                         <View style={{width: StyleUtils.getWidth() - 15}}>
                             <ThisText
                                 style={{
-                                    paddingTop: 10,
-                                    marginRight: 10,
-                                    marginLeft: 20,
-                                    paddingBottom: 10,
-                                    fontSize: 18
+                                    paddingTop: StyleUtils.scale(10),
+                                    marginRight: StyleUtils.scale(10),
+                                    marginLeft: StyleUtils.scale(20),
+                                    paddingBottom: StyleUtils.scale(10),
+                                    fontSize: StyleUtils.scale(18)
                                 }}>{item.feed.activity.post.text}
                             </ThisText>
                         </View>
@@ -191,7 +191,7 @@ export default class FeedPost extends Component {
                                      onPressUnLike={() => unlike(item.id, token)}
                                      onPressLike={() => like(item.id, token)}
                                      shareDisabled={shared}
-                                     groupChat={group && group.group_chat ==='ON'}
+                                     groupChat={group && group.group_chat === 'ON'}
                                      sharable={item.sharable}
                                      share={item.social.share} shares={item.social.shares}
                                      shareAction={showUsers}/>

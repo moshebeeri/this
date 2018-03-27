@@ -8,6 +8,7 @@ import EvilIcons from "react-native-vector-icons/EvilIcons";
 import MaterialCommunityIcons from "react-native-vector-icons/MaterialCommunityIcons";
 import SimpleLineIcons from "react-native-vector-icons/SimpleLineIcons";
 import {ThisText} from '../index';
+import styleUtils from "../../utils/styleUtils";
 
 const {
     StyleSheet,
@@ -38,7 +39,7 @@ const DefaultTabBar = createReactClass({
     },
     createTabvView(name) {
         if (name === 'promotions') {
-            return <SimpleLineIcons size={28} color={'#2db6c8'}
+            return <SimpleLineIcons size={styleUtils.scale(24)} color={'#2db6c8'}
                                     name="layers"/>
         }
         if (name.includes('notification')) {
@@ -72,7 +73,7 @@ const DefaultTabBar = createReactClass({
                 }
                 return <View>
 
-                    <MaterialCommunityIcons size={35} color={'#2db6c8'} style={{marginRight: 10}}
+                    <MaterialCommunityIcons size={styleUtils.scale(35)} color={'#2db6c8'} style={{marginRight: 10}}
                                             name="bell-outline"/>
 
                     <View style={styleNotification}>
@@ -84,20 +85,20 @@ const DefaultTabBar = createReactClass({
                     </View>
                 </View>
             }
-            return <EvilIcons size={35} color={'#2db6c8'}
+            return <EvilIcons size={styleUtils.scale(35)} color={'#2db6c8'}
                               name="bell"/>
         }
         if (name === 'groups') {
-            return <Ionicons size={42} color={'#2db6c8'}
+            return <Ionicons size={styleUtils.scale(42)} color={'#2db6c8'}
                              name="ios-people-outline"/>
         }
         if (name === 'save') {
-            return <SimpleLineIcons size={25} color={'#2db6c8'}
+            return <SimpleLineIcons size={styleUtils.scale(25)} color={'#2db6c8'}
                                     name="tag"/>
         }
 
         if(name === 'chat'){
-            return <SimpleLineIcons size={25} color={'#2db6c8'}
+            return <SimpleLineIcons size={styleUtils.scale(25)} color={'#2db6c8'}
                                     name="bubble"/>
         }
         return <ThisText style={[{color: '#2db6c8'}]}>

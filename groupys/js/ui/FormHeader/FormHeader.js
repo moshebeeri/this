@@ -14,6 +14,8 @@ const TouchableOpacityFix = withPreventDoubleClick(TouchableOpacity);
 const {width, height} = Dimensions.get('window')
 const vh = height / 100
 
+
+
 class FormHeader extends Component {
     constructor(props) {
         super(props);
@@ -39,7 +41,7 @@ class FormHeader extends Component {
         if (titleColor) {
             return {
                 color: titleColor,
-                fontSize: 16,
+                fontSize: StyleUtils.scale(16),
                 backgroundColor: 'transparent'
             }
         }
@@ -64,10 +66,10 @@ class FormHeader extends Component {
 
     render() {
         const {filter, submitForm, showBack, title, bgc, submitIcon, titleColor, backIconColor, network, menu} = this.props;
-        let icon = <Icon2 active color={"white"} size={25} name={'check'}/>
+        let icon = <Icon2 active color={"white"} size={StyleUtils.scale(25)} name={'check'}/>
         let headerHeight = vh * 9;
         if (Platform.OS === 'ios') {
-            icon = <Icon active color={"white"} size={30} name={'ios-checkmark'}/>
+            icon = <Icon active color={"white"} size={StyleUtils.scale(30)} name={'ios-checkmark'}/>
             headerHeight = vh * 9;
         }
         if (submitIcon) {
@@ -81,13 +83,13 @@ class FormHeader extends Component {
         let back = undefined;
         if (showBack) {
             back = <TouchableOpacityFix transparent style={{
-                width: 80,
+                width: StyleUtils.scale(80),
                 alignItems: 'flex-start',
                 justifyContent: 'flex-start',
-                marginLeft: 5,
-                marginRight: 5
+                marginLeft: StyleUtils.scale(5),
+                marginRight: StyleUtils.scale(5)
             }} onPress={() => this.back()}>
-                <Icon active color={iconColor} size={25} name={arrowName}/>
+                <Icon active color={iconColor} size={StyleUtils.scale(25)} name={arrowName}/>
 
             </TouchableOpacityFix>
         }
@@ -101,7 +103,7 @@ class FormHeader extends Component {
             }}>
                 {network.offline && <View style={{
                     width: width,
-                    height: 20,
+                    height: StyleUtils.scale(20),
                     justifyContent: 'center',
                     alignItems: 'center',
                     backgroundColor: '#f4ce42'
@@ -110,7 +112,7 @@ class FormHeader extends Component {
                 </View>}
                 <View style={{
                     height: headerHeight,
-                    paddingTop: Platform.OS === 'ios' ? 20 : 0,
+                    paddingTop: Platform.OS === 'ios' ? StyleUtils.scale(20) : 0,
                     flexDirection: 'row',
                     alignItems: 'center',
                     backgroundColor: bgc,
@@ -130,7 +132,7 @@ class FormHeader extends Component {
                             marginLeft: 10,
                             marginRight: 40,
                             marginTop: 5,
-                            fontSize: 18,
+                            fontSize: StyleUtils.scale(18),
                             width: StyleUtils.getWidth() - 100,
                             height: 40
                         }}
@@ -150,9 +152,9 @@ class FormHeader extends Component {
                         {menu}
                         {filter && !this.state.showSearch &&
                         <TouchableOpacityFix transparent
-                                          style={{width: 50, alignItems: 'flex-end', justifyContent: 'flex-end'}}
+                                          style={{width:  StyleUtils.scale(50), alignItems: 'flex-end', justifyContent: 'flex-end'}}
                                           onPress={() => this.filter()}>
-                            <Icon style={{fontSize: 30, color: "white"}} name="ios-search"/>
+                            <Icon style={{fontSize: StyleUtils.scale(30), color: "white"}} name="ios-search"/>
                         </TouchableOpacityFix>
                         }
 
@@ -161,8 +163,8 @@ class FormHeader extends Component {
                         {submitForm &&
                         <TouchableOpacityFix transparent
                                           style={{
-                                              width: 50,
-                                              marginRight: 10,
+                                              width:  StyleUtils.scale(50),
+                                              marginRight:  StyleUtils.scale(10),
                                               alignItems: 'flex-end',
                                               justifyContent: 'flex-end'
                                           }}
@@ -173,9 +175,9 @@ class FormHeader extends Component {
 
                         {filter && !this.state.showSearch &&
                         <TouchableOpacityFix transparent
-                                          style={{width: 50, alignItems: 'flex-end', justifyContent: 'flex-end'}}
+                                          style={{width:  StyleUtils.scale(50), alignItems: 'flex-end', justifyContent: 'flex-end'}}
                                           onPress={() => this.filter()}>
-                            <Icon style={{fontSize: 30, color: "white"}} name="ios-search"/>
+                            <Icon style={{fontSize:  StyleUtils.scale(30), color: "white"}} name="ios-search"/>
                         </TouchableOpacityFix>
                         }
 

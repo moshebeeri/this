@@ -13,30 +13,15 @@ class Business extends Component {
         this.props.actions.fetchBusinessCategories('root');
     }
 
-    renderItem(item) {
-        const {navigation,actions,user} = this.props;
-        return <BusinessListView
-            item={item.item}
-            index={item.index}
-            user={user}
-            resetForm={actions.resetForm}
-            updateBusinesCategory={actions.updateBusinesCategory}
-            refresh={actions.updateBusinesStatuss}
-            navigation={navigation}
-        />
-    }
-
     componentWillMount() {
         const {businesses} = this.props;
-        if(!businesses || businesses.length === 0 ) {
+        if (!businesses || businesses.length === 0) {
             this.props.actions.onEndReached();
         }
     }
 
-
-
     render() {
-        const {businesses, navigation, businessLoading, update, actions,user} = this.props;
+        const {businesses, navigation, businessLoading, update, actions, user} = this.props;
         if (businessLoading && businesses.length === 0) {
             return <Spinner/>
         }
@@ -47,7 +32,8 @@ class Business extends Component {
             <Container style={{backgroundColor: `${appBackgroundColor}`}}>
 
 
-                <GenericListManager  user={user} noRefresh rows={businesses} navigation={navigation} actions={actions} update={update}
+                <GenericListManager user={user} noRefresh rows={businesses} navigation={navigation} actions={actions}
+                                    update={update}
                                     ItemDetail={BusinessListView}/>
 
             </Container>

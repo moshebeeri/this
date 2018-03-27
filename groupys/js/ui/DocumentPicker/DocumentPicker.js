@@ -6,7 +6,7 @@ import Icon2 from 'react-native-vector-icons/Ionicons';
 import {ImagePicker} from '../index';
 import {ThisText} from '../index';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
-
+import StyleUtils from '../../utils/styleUtils';
 export default class DocumentPicker extends Component {
     constructor(props) {
         super(props);
@@ -93,13 +93,13 @@ export default class DocumentPicker extends Component {
                 <View style={{flexDirection:'row'}}>
                     <ThisText style={textStyle}>{field}</ThisText>
                     {field && isMandatory &&
-                    <MaterialCommunityIcons style={{marginLeft: 3, marginTop: 4, color: 'red', fontSize: 8}}
+                    <MaterialCommunityIcons style={{marginLeft: 3, marginTop: 4, color: 'red', fontSize: StyleUtils.scale(8)}}
                                             name='asterisk'/>}
 
                 </View>
                 <View style={{marginRight:10}}>
                     <ImagePicker logo ref={"logoImage"} mandatory
-                                 image={<Icon2 size={35} color={iconColor} name='ios-document-outline'/>}
+                                 image={<Icon2 size={StyleUtils.scale(35)} color={iconColor} name='ios-document-outline'/>}
                                  color='black' pickFromCamera
                                  setImage={this.setDocument.bind(this)}/>
                 </View>

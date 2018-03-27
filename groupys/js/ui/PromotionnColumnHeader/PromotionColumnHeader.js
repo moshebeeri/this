@@ -1,11 +1,10 @@
 import React, {Component} from 'react';
-import {Dimensions, Text, View} from 'react-native';
+import {View} from 'react-native';
 import {Button, Icon, Input} from 'native-base';
 import styles from './styles';
-import {PunchView,ThisText} from '../index'
+import {PunchView, ThisText} from '../index'
 import StyleUtils from "../../utils/styleUtils";
 
-const {width, height} = Dimensions.get('window')
 const ILS = '₪';
 export default class PromotionColumnHeader extends Component {
     constructor(props) {
@@ -13,7 +12,7 @@ export default class PromotionColumnHeader extends Component {
     }
 
     render() {
-        const {type, titleValue, titleText, term,item} = this.props;
+        const {type, titleValue, titleText, term, item} = this.props;
         switch (type) {
             case "PERCENT":
             case "X+N%OFF":
@@ -26,7 +25,7 @@ export default class PromotionColumnHeader extends Component {
                     backgroundColor: 'white'
                 }}>
 
-                    <ThisText style={{color: '#2db6c8', fontSize: 50,}}>{titleValue}%</ThisText>
+                    <ThisText style={{color: '#2db6c8', fontSize: StyleUtils.scale(50),}}>{titleValue}%</ThisText>
 
                     <ThisText style={styles.titleTextFeed}>{titleText}</ThisText>
 
@@ -45,7 +44,7 @@ export default class PromotionColumnHeader extends Component {
                     backgroundColor: 'white'
                 }}>
 
-                    <ThisText style={{color: '#2db6c8', fontSize: 50,}}>{ILS}{titleValue}</ThisText>
+                    <ThisText style={{color: '#2db6c8', fontSize: StyleUtils.scale(50),}}>{ILS}{titleValue}</ThisText>
 
                     <ThisText style={styles.titleTextFeed}>{titleText}</ThisText>
 
@@ -62,7 +61,7 @@ export default class PromotionColumnHeader extends Component {
                     backgroundColor: 'white'
                 }}>
 
-                    <ThisText style={{color: '#2db6c8', fontSize: 50,}}>{titleValue}</ThisText>
+                    <ThisText style={{color: '#2db6c8', fontSize: StyleUtils.scale(50),}}>{titleValue}</ThisText>
 
                     <ThisText style={styles.titleTextFeed}>{titleText}</ThisText>
 
@@ -73,7 +72,7 @@ export default class PromotionColumnHeader extends Component {
                 return <View style={[styles.promotionPunchHeader, {width: StyleUtils.getWidth() - 15}]}>
                     <View style={styles.promotionPunchValue}>
                         <ThisText style={styles.puncCardtitleFeedValue}>{titleText}</ThisText>
-                        <PunchView feed numberRealized={item.realizedPunches}  numberOfPunches={item.punches}/>
+                        <PunchView feed numberRealized={item.realizedPunches} numberOfPunches={item.punches}/>
                     </View>
 
                 </View>;

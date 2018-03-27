@@ -14,27 +14,21 @@ export default class GroupHeader extends Component {
         super(props);
     }
 
-    createBusinessLogo(business) {
-        if (business && business.logo) {
-            return <ImageController thumbnail size={30} source={{uri: business.logo}}/>
-        } else {
-            return <ImageController thumbnail size={30} source={require('../../../images/client_1.png')}/>
-        }
-    }
-
     createImage(group) {
         if (group.pictures && group.pictures.length > 0) {
             if (group.pictures[group.pictures.length - 1].pictures[3]) {
-                return <ImageController thumbnail size={50} source={{uri: group.pictures[0].pictures[3]}}/>
+                return <ImageController thumbnail size={StyleUtils.scale(50)}
+                                        source={{uri: group.pictures[0].pictures[3]}}/>
             }
         } else {
             if (group.entity && group.entity.business) {
                 if (group.entity.business.logo) {
-                    return <ImageController thumbnail size={50} source={{uri: group.entity.business.logo}}/>
+                    return <ImageController thumbnail size={StyleUtils.scale(50)}
+                                            source={{uri: group.entity.business.logo}}/>
                 }
             }
         }
-        return <ImageController thumbnail size={50} source={require('../../../images/client_1.png')}/>
+        return <ImageController thumbnail size={StyleUtils.scale(50)} source={require('../../../images/client_1.png')}/>
     }
 
     createTitle(groupType) {
@@ -44,44 +38,6 @@ export default class GroupHeader extends Component {
             case 'BUSINESS':
                 return strings.BusinessGroup;
         }
-    }
-
-    createStyle(groupType) {
-        switch (groupType) {
-            case 'BUSINESS':
-                return {color: '#e65100', fontSize: 15}
-            case 'USERS':
-                return {color: '#2db6c8', fontSize: 15}
-        }
-    }
-
-    createIcon(groupType) {
-        switch (groupType) {
-            case 'BUSINESS':
-                return <ImageController style={{width: 17, height: 16}}
-                                        source={require('../../../images/busiicon.png')}/>
-            case 'USERS':
-                return <ImageController style={{width: 16, height: 16}}
-                                        source={require('../../../images/publicicon.png')}/>
-        }
-    }
-
-    createBusinessView(business, groupType) {
-        if (business) {
-            switch (groupType) {
-                case 'USERS':
-                    return <View style={styles.businessPicker}>
-                        <View style={styles.businessTopLogo}>
-                            {this.createBusinessLogo(business)}
-                        </View>
-                        <View style={styles.businessPickerComponent}>
-                            <ThisText style={styles.businessNameText}>{business.name}</ThisText>
-                        </View>
-
-                    </View>;
-            }
-        }
-        return undefined;
     }
 
     render() {
@@ -111,9 +67,9 @@ export default class GroupHeader extends Component {
                         <ThisText style={styles.groupEntity}>{this.createTitle(group.entity_type)}</ThisText>
 
 
-                        {group.social_state && <View style={{flexDirection:'row'}}>
-                        <ThisText style={styles.groupEntity}> | {group.social_state.followers}</ThisText>
-                        <ThisText style={styles.groupEntity}> {strings.Members}</ThisText>
+                        {group.social_state && <View style={{flexDirection: 'row'}}>
+                            <ThisText style={styles.groupEntity}> | {group.social_state.followers}</ThisText>
+                            <ThisText style={styles.groupEntity}> {strings.Members}</ThisText>
                         </View>}
 
 

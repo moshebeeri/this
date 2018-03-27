@@ -8,6 +8,7 @@ import {bindActionCreators} from "redux";
 import * as addressAction from "../../actions/address";
 import strings from "../../i18n/i18n"
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
+import StyleUtils from '../../utils/styleUtils';
 
 class AddressInput extends Component {
     constructor(props) {
@@ -154,12 +155,10 @@ class AddressInput extends Component {
             <View style={{borderWidth: ilegalBorder, borderColor: 'red'}}>
 
                 <View style={{flexDirection: "row", justifyContent: 'flex-start'}}>
-                    {/*{!I18nManager.isRTL && isMandatory &&*/}
-                    {/*<Icon style={{margin: 5, color: 'red', fontSize: 12}} name='star'/>}*/}
 
                     <ThisText style={styles.textInputTextStyle}>{strings.LocationAddress}</ThisText>
                     {isMandatory &&
-                    <MaterialCommunityIcons style={{marginLeft: 3, marginTop: 4, color: 'red', fontSize: 8}}
+                    <MaterialCommunityIcons style={{marginLeft: 3, marginTop: 4, color: 'red', fontSize: StyleUtils.scale(8)}}
                                             name='asterisk'/>}
 
                 </View>

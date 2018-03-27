@@ -1,4 +1,5 @@
 const React = require('react-native');
+import StyleUtils from '../../../utils/styleUtils'
 const {StyleSheet, Dimensions, Platform} = React;
 const {width, height} = Dimensions.get('window')
 module.exports = {
@@ -37,7 +38,7 @@ module.exports = {
         flex: -1,
         alignSelf: 'center',
         alignItems:'flex-end',
-        height: 250,
+        height:  StyleUtils.relativeHeight(40,40),
 
         width: width,
         borderWidth: 1,

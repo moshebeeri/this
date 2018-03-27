@@ -1,13 +1,14 @@
 const React = require('react-native');
 const {StyleSheet, Dimensions, Platform} = React;
+import StyleUtils from '../../utils/styleUtils';
 const {width, height} = Dimensions.get('window')
 module.exports = {
     textInputTextStyleWhite: {
         color: 'black',
         flex:2.9,
-        padding:10,
+        padding:StyleUtils.scale(10),
         fontFamily: 'Roboto-Regular',
-        fontSize: 18,
+        fontSize: StyleUtils.scale(18),
 
 
     },

@@ -1,8 +1,9 @@
 import React, {Component} from 'react';
-import {View} from 'react-native';
+import {View,Image} from 'react-native';
 import {Button, Icon, Input} from 'native-base';
 import styles from './styles';
-
+const punched = require('../../../images/punch.png');
+import styleUtils from '../../utils/styleUtils'
 export default class PunchView extends Component {
     constructor(props) {
         super(props);
@@ -14,8 +15,27 @@ export default class PunchView extends Component {
 
     render() {
         const {color,numberOfPunches,numberRealized} = this.props;
-        let row = this.createPunches(numberOfPunches,numberRealized);
-        return  <View style={styles.container}>{row}</View>
+        let row1 = this.createPunches(numberOfPunches,numberRealized);
+        let row2;
+        if(numberOfPunches > 5 ){
+            let row1Punches = Math.round(numberOfPunches / 2);
+            let row2Punches = numberOfPunches - row1Punches;
+            if(row1Punches > row2Punches){
+                row1 = this.createPunches(row1Punches,numberRealized);
+                let numberRealizedRow2 = numberRealized - row1Punches
+                row2 = this.createPunches(row2Punches,numberRealizedRow2);
+            }else{
+                row1 = this.createPunches(row2Punches,numberRealized);
+                let numberRealizedRow2 = numberRealized - row1Punches
+                row2 = this.createPunches(row1Punches,numberRealizedRow2);
+            }
+        }
+
+
+        return  <View >
+        <View style={styles.container}>{row1}</View>
+            {row2 &&    <View style={styles.container}>{row2}</View> }
+        </View>
     }
     createPunches(number,numberRealized){
 
@@ -40,6 +60,9 @@ export default class PunchView extends Component {
         if(isFull){
             style = styles.punchFeedFull;
         }
-        return <View key={index}style={style}></View>
+        return <View key={index }style={style}>
+            {isFull && <Image style={{ width: styleUtils.scale(5),
+                height: styleUtils.scale(5)}} resizeMode="cover" source={punched}></Image>}
+        </View>
     }
 }

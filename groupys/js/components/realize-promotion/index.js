@@ -85,12 +85,13 @@ class RealizePromotion extends Component {
         }
         return (
             <ScrollView>
-                <View style={{flex: 1, justifyContent: 'center', alignItems: 'center'}}>
+                <BusinessHeader backAction={this.handleBack.bind(this)} showBack navigation={this.props.navigation}
+                                business={item.business}
+                                categoryTitle={item.categoryTitle} businessLogo={item.businessLogo}
+                                businessName={item.businessName}/>
 
-                    <BusinessHeader backAction={this.handleBack.bind(this)} showBack navigation={this.props.navigation}
-                                    business={item.business}
-                                    categoryTitle={item.categoryTitle} businessLogo={item.businessLogo}
-                                    businessName={item.businessName}/>
+                <View style={{flex: 1, backgroundColor:'white',justifyContent: 'center', alignItems: 'center'}}>
+
 
 
                     <PromotionColumnHeader item={item} columnStyle type={item.promotion} feed={true}
@@ -98,9 +99,9 @@ class RealizePromotion extends Component {
                                            titleValue={item.promotionValue} term={item.promotionTerm}/>
 
 
-                    <View style={{flex: 0.2, width: StyleUtils.getWidth() - 30, height: 20,}}>
+                    <View style={{marginTop:5,flex: 0.2, width: StyleUtils.getWidth() - 30, height: 20,}}>
 
-                        <PromotionSeperator narrowWidth={30}/>
+                        <PromotionSeperator narrowWidth={StyleUtils.scale(30)}/>
                     </View>
                     <View style={{
                         marginBottom: 5,
@@ -110,12 +111,12 @@ class RealizePromotion extends Component {
                         justifyContent: 'center',
                         alignItems: 'center'
                     }}>
-                        <ThisText>{strings.RealizeMessage1}</ThisText>
-                        <ThisText>{strings.RealizeMessage2}</ThisText>
+                        <ThisText style={{fontSize: StyleUtils.scale(14)}}>{strings.RealizeMessage1}</ThisText>
+                        <ThisText style={{fontSize: StyleUtils.scale(14)}}>{strings.RealizeMessage2}</ThisText>
                         {this.state.image &&
                         <Image style={{
-                            width: 300,
-                            height: 300,
+                            width: StyleUtils.scale(300),
+                            height: StyleUtils.scale(300),
                             resizeMode: Image.resizeMode.contain,
                         }} source={{uri: this.state.image.qrcode}}/>
                         }

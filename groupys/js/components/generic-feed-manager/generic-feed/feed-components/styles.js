@@ -6,7 +6,7 @@ const vh = height / 100
 const vmin = Math.min(vw, vh);
 const vmax = Math.max(vw, vh);
 import {I18nManager} from 'react-native';
-
+import StyleUtils from '../../../../utils/styleUtils'
 module.exports = {
     button: {
         width: vmin * 100,
@@ -161,11 +161,12 @@ module.exports = {
     promotion_image: {
         flex: 1,
         alignSelf: 'stretch',
-        width: width,
-        height: 250,
+        width: undefined,
+        height: undefined
     },
     promotion_image_view: {
-        height: 250
+        width: StyleUtils.getWidth(),
+        height: StyleUtils.relativeHeight(40,40),
     },
     promotion_upperContainer: {
         backgroundColor: 'white',
@@ -236,7 +237,7 @@ module.exports = {
         backgroundColor: 'rgba(0,0,0,0)',
     },
     promotion_type: {
-        fontFamily: 'Roboto-Regular', fontWeight: 'bold', marginLeft: 10, marginTop: 5, fontSize: 18, color: 'black'
+        fontFamily: 'Roboto-Regular', fontWeight: 'bold', marginLeft: 10, marginTop: 5, fontSize: StyleUtils.scale(18), color: 'black'
     },
     promotion_text_description: {
         fontFamily: 'Roboto-Regular', marginLeft: 10, marginTop: 0, fontSize: 4 * vmin, color: 'black'
@@ -244,16 +245,16 @@ module.exports = {
     promotion_buttonText: {
         paddingTop: 10,
         paddingLeft: 0,
-        fontSize: 20,
+        fontSize: StyleUtils.scale(20),
         color: 'white',
         justifyContent: 'center',
         fontFamily: 'Roboto-Regular'
     },
     promotion_buttonView: {
-        flex: -1, justifyContent: 'center', flexDirection: 'row', height: 50, width: width, backgroundColor: '#363636'
+        flex: -1, justifyContent: 'center', flexDirection: 'row', height: StyleUtils.scale(50), width: width, backgroundColor: '#363636'
     },
     promotion_iconView: {
-        flex: -1, justifyContent: 'center', flexDirection: 'row', height: 40, width: 100
+        flex: -1, justifyContent: 'center', flexDirection: 'row', height: StyleUtils.scale(40), width: StyleUtils.scale(100)
     },
     promotion_bottomUpperContainer: {
         backgroundColor: 'white',
@@ -368,7 +369,7 @@ module.exports = {
         marginTop: 0,
         marginBottom: 5,
         color: 'gray',
-        fontSize: 16
+        fontSize: StyleUtils.scale(16)
     },
     promotion_nameText: {
         fontFamily: 'Roboto-Regular',
@@ -378,7 +379,7 @@ module.exports = {
         marginTop: 5,
         marginBottom: 5,
         color: 'black',
-        fontSize: 18
+        fontSize: StyleUtils.scale(18)
     },
     messageContainer: {
         flexDirection: 'row',
@@ -396,7 +397,7 @@ module.exports = {
         flexDirection: 'column',
     },
     dateFont: {
-        fontFamily: 'Roboto-Regular', marginRight: 10, marginLeft: 10, marginTop: vh * 1, fontSize: 14, color: 'gray'
+        fontFamily: 'Roboto-Regular', marginRight: 10, marginLeft: 10, marginTop: vh * 1, fontSize: StyleUtils.scale(14), color: 'gray'
     },
     date_container: {
         width: vw * 30,
@@ -426,13 +427,14 @@ module.exports = {
         marginLeft: 5,
         marginRight: 5,
         color: '#839192',
-        fontSize: 14
+        fontSize: StyleUtils.scale(14)
     },
     detailsText: {
         marginLeft: 5,
         marginRight: 5,
         justifyContent: 'center',
         alignItems: 'center',
+        fontSize: StyleUtils.scale(14)
     },
     expireDateContainer: {
         alignItems: 'flex-start' ,

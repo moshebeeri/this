@@ -2,6 +2,7 @@ const React = require('react-native');
 const {StyleSheet, Dimensions, Platform} = React;
 const {width, height} = Dimensions.get('window')
 const vw = width / 100;
+import StyleUtils from '../../utils/styleUtils';
 const vh = height / 100
 module.exports = {
     formHeaderBackButoon: {
@@ -23,7 +24,7 @@ module.exports = {
     },
     formHeadrTitleStyle: {
         color: "white",
-        fontSize: 16,
+        fontSize: StyleUtils.scale(16),
         backgroundColor: 'transparent'
     }
 };

@@ -1,21 +1,19 @@
 const React = require('react-native');
-const {Dimensions} = React;
-const {width, height} = Dimensions.get('window');
-import { I18nManager } from 'react-native';
+import StyleUtils from '../../utils/styleUtils';
 module.exports = {
     textInputContainer: {
         flexDirection: 'column',
         justifyContent: 'center',
 
 
-        height: 85,
+        height: StyleUtils.scale(85),
     },
     textInputNoFiledContainer: {
         flexDirection: 'column',
         justifyContent: 'center',
 
 
-        height: 50,
+        height:  StyleUtils.scale(50),
     },
     textInputComponentLayout: {
         flexDirection: 'row'
@@ -46,7 +44,7 @@ module.exports = {
     textInputTextStyle: {
         color: '#666666',
         fontFamily: 'Roboto-Regular',
-        fontSize: 15,
+        fontSize:  StyleUtils.scale(15),
         justifyContent:   'flex-start' ,
         marginLeft:  2,
         // margiRight:  I18nManager.isRTL ? 0:10,
@@ -57,7 +55,7 @@ module.exports = {
         color: 'white',
 
         fontFamily: 'Roboto-Regular',
-        fontSize: 16,
+        fontSize:  StyleUtils.scale(16),
         marginLeft: 10,
 
     }

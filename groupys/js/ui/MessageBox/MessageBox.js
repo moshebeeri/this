@@ -1,8 +1,6 @@
 import React, {Component} from 'react';
 import {Dimensions, Keyboard, TextInput, TouchableOpacity, View} from 'react-native';
-import Icon2 from "react-native-vector-icons/Entypo";
 import {Button, Icon, Input} from 'native-base';
-import EmojiPicker from "../emojiPicker/emojiPicker"
 import styles from './styles'
 import strings from "../../i18n/i18n"
 import StyleUtils from "../../utils/styleUtils";
@@ -89,7 +87,7 @@ export default class MessageBox extends Component {
     render() {
         let style = {
             width: StyleUtils.getWidth(),
-            height: 50,
+            height: StyleUtils.scale(50),
         }
         if (this.state.showEmoji) {
             style = {
@@ -101,7 +99,6 @@ export default class MessageBox extends Component {
             <View style={style}>
                 <View style={{
                     flex: 1,
-
                     alignItems: 'center',
                     justifyContent: 'center',
                     backgroundColor: 'white',
@@ -119,10 +116,9 @@ export default class MessageBox extends Component {
 
 
                     <TouchableOpacityFix onPress={() => this._onPressButton()} style={styles.icon} transparent>
-                        <Icon style={{fontSize: 35, color: "#2db6c8"}} name='send'/>
+                        <Icon style={{fontSize: StyleUtils.scale(35), color: "#2db6c8"}} name='send'/>
                     </TouchableOpacityFix>
                 </View>
-
 
 
             </View>

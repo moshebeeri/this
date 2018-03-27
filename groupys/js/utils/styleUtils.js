@@ -1,7 +1,7 @@
 /**
  * Created by roilandshut on 22/08/2017.
  */
-import {Dimensions} from 'react-native';
+import {Dimensions,Platform} from 'react-native';
 import LinkPreview from 'react-native-link-preview';
 const {width, height} = Dimensions.get('window')
 /**
@@ -23,6 +23,7 @@ const isPortrait = () => {
 
 
 const getWidth = () => {
+
     if(isPortrait()){
         return width;
     }
@@ -30,10 +31,11 @@ const getWidth = () => {
 }
 
 const getHeight = () => {
+    const dim =Dimensions.get('window')
     if(isPortrait()){
-        return height;
+        return dim.height;
     }
-    return width;
+    return dim.width;
 }
 
 const containLink = async (text) => {
@@ -68,20 +70,82 @@ const toTitleCase = (str) => {
     return str.replace(/\w\S*/g, function(txt){return txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase();});
 };
 
+
 const parseUserPhoneNumber = (user) => {
     if(!user)
         return '';
    return `+${user.country_code}-${user.phone_number}`
 };
+const relativeWidth= (widthIos,widthAndroid) => {
+    const {width, height} = Dimensions.get('window')
+
+    let  vw = width / 100;
+    if(isLandscape()){
+        vw = height / 100;
+    }
+    if(isTablet()){
+        if(Platform.OS ==='ios') {
+            return widthIos * vw * 1.2
+        }
+        return widthAndroid * vw * 1.2
+
+    };
+    if(Platform.OS ==='ios'){
+        return widthIos * vw
+    }else{
+        return widthAndroid * vw
+    }
+};
+
+const relativeHeight = (heightIos,heightAndroid) => {
+    const {width, height} = Dimensions.get('window')
+
+    let  vh = height / 100;
+    if(isLandscape()){
+        vh = width / 100;
+    }
+    if(isTablet()){
+        if(Platform.OS ==='ios') {
+            return heightIos * vh * 1.2
+        }
+        return heightAndroid * vh * 1.2
+
+    };
+    if(Platform.OS ==='ios'){
+        return heightIos * vh
+    }else{
+        return heightAndroid * vh
+    }
+};
+
+//deline sizes are based on standard ~5" screen mobile device
+const guidelineBaseWidth = 350;
+const guidelineBaseHeight = 680;
+
+const scale = (size) => {
+
+    if (isTablet() && Platform.OS ==='ios' ) {
+        return width / guidelineBaseWidth * size * 0.6;
+    }
+
+    return width / guidelineBaseWidth * size
+}
+const verticalScale = size => height / guidelineBaseHeight * size;
+const moderateScale = (size, factor = 0.5) => size + ( scale(size) - size ) * factor;
 
 export default {
     isPortrait,
-    isLandscape,
+    isLandscape ,
     isTablet,
     getWidth,
     getHeight,
     isPhone,
     toTitleCase,
     parseUserPhoneNumber,
-    containLink
+    containLink,
+    relativeHeight,
+    relativeWidth,
+    verticalScale,
+    moderateScale,
+    scale
 };

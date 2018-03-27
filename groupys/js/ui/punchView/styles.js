@@ -1,47 +1,41 @@
 const React = require('react-native');
-const {Dimensions} = React;
-const {width, height} = Dimensions.get('window');
-import {I18nManager} from 'react-native';
+import styleUtils from '../../utils/styleUtils'
 
 module.exports = {
     punch: {
-        width: 20,
-        height: 20,
+        width: styleUtils.scale(50),
+        height: styleUtils.scale(50),
         backgroundColor: 'white',
-        borderRadius: 20,
+        borderRadius: styleUtils.scale(40),
         borderWidth: 1,
-        borderColor: '#ff6400',
-        marginRight: 5,
-        marginLeft: 5,
+        opacity: 0.6,
+        borderColor: '#0000004d',
+        marginRight: styleUtils.scale(10),
+        marginLeft: styleUtils.scale(10),
     },
-
     punchFeed: {
-        width: 20,
-        height: 20,
+        width: 60,
+        height: 60,
         backgroundColor: 'white',
-        borderRadius: 20,
+        borderRadius: 40,
         borderWidth: 1,
         borderColor: '#2db6c8',
-        marginRight: 5,
-        marginLeft: 5,
+        marginRight: 10,
+        marginLeft: 10,
     },
     punchFeedFull: {
-        width: 20,
-        height: 20,
-        backgroundColor: '#2db6c8',
-        borderRadius: 20,
-        borderWidth: 1,
-        borderColor: '#2db6c8',
-        marginRight: 5,
-        marginLeft: 5,
+        width: styleUtils.scale(50),
+        height: styleUtils.scale(50),
+        borderRadius: styleUtils.scale(40),
+        marginRight: styleUtils.scale(10),
+        marginLeft: styleUtils.scale(10),
     },
     container: {
         flexDirection: 'row',
         height: 30,
-        width: width,
+        marginTop: styleUtils.scale(40),
         alignItems: 'center',
-        //paddingRight: I18nManager.isRTL ? 0 : 30,
-        justifyContent: 'flex-start' ,
+        justifyContent: 'center',
     }
 };
 
