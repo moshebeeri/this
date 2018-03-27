@@ -116,11 +116,12 @@ exports.qrcode = function (req, res) {
 };
 
 exports.byInstance = function (req, res) {
-  SavedInstance.find({$and: [{instance: req.params.id}, {user: req.user._id}]}, (err, savedInstances) => {
-    if (err) {
-      return handleError(res, err);
-    }
-    return res.json(savedInstances);
+  SavedInstance.find({$and: [{instance: req.params.id}, {user: req.user._id}]})
+    .exec(function (err, savedInstances){
+      if (err) {
+        return handleError(res, err);
+      }
+      return res.json(savedInstances);
   });
 };
 
