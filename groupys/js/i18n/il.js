@@ -290,6 +290,7 @@ const il = {
     ImActive                                      : "לא פעיל",
     CreatedByBusiness                             : "נוצר ע״י {0}",
     ReducedAmountInvalidCondition                 : "עלות רכישה צריך להיות גדול מהתשלום",
+    TakeProductPicture                            : "בחר תמונת מוצר",
 
 };
 

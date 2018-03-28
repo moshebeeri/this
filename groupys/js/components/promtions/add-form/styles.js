@@ -2,7 +2,7 @@ const React = require('react-native');
 const {Dimensions, Platform} = React;
 const {width, height} = Dimensions.get('window')
 import {I18nManager} from 'react-native';
-
+import StyleUtils from '../../../utils/styleUtils'
 module.exports = {
     product_container: {
         flex: 1,
@@ -13,7 +13,7 @@ module.exports = {
     },
     product_upper_container: {
         width: width,
-        height: 220,
+        height: StyleUtils.relativeHeight(30,30),
         backgroundColor: '#FA8559',
         marginBottom: 4,
         alignItems: 'center',
@@ -34,7 +34,7 @@ module.exports = {
         margin: 15,
     },
     addCoverText: {
-        color: 'white', margin: 5, fontSize: 16
+        color: 'white', margin: 5, fontSize: StyleUtils.scale(16)
     },
     textLayout: {
         marginTop: 4,

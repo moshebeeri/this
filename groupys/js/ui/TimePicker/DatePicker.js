@@ -1,19 +1,17 @@
 import React, {Component} from 'react';
-import {Dimensions, TextInput, View} from 'react-native';
-import {Icon, Input, Text} from 'native-base';
+import {View} from 'react-native';
+import {Icon, Input} from 'native-base';
 import styles from './styles';
 import DatePicker from "react-native-datepicker";
 import strings from "../../i18n/i18n"
 import {ThisText} from '../index';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
-const {width, height} = Dimensions.get('window');
-import { I18nManager } from 'react-native';
+import StyleUtils from "../../utils/styleUtils";
 export default class TimePickerField extends Component {
     constructor(props) {
         super(props);
         this.state = {
             invalid: false,
-
         }
     }
 
@@ -33,7 +31,7 @@ export default class TimePickerField extends Component {
             }
         }
         if (validateContent) {
-            if(!validateContent()){
+            if (!validateContent()) {
                 this.setState({
                     invalid: true
                 })
@@ -43,12 +41,11 @@ export default class TimePickerField extends Component {
         return true;
     }
 
-
     onChange(date) {
         const {onChangeDate} = this.props;
         this.setState({
             invalid: false,
-            selectedValue:date
+            selectedValue: date
         })
         onChangeDate(date);
     }
@@ -65,18 +62,16 @@ export default class TimePickerField extends Component {
         if (this.state.invalid) {
             textInputStyle = styles.textInputInvalidComponentStyle;
         }
-
         let containerStyle = styles.textInputNoFiledContainer;
-        if(field){
+        if (field) {
             containerStyle = styles.textInputContainer;
         }
-
         return <View style={containerStyle}>
             <View style={styles.textInputTitleContainer}>
 
                 <ThisText style={textStyle}>{field}</ThisText>
                 {isMandatory &&
-                <MaterialCommunityIcons style={{marginLeft: 3, marginTop: 4, color: 'red', fontSize: 8}}
+                <MaterialCommunityIcons style={{marginLeft: 3, marginTop: 4, color: 'red', fontSize: StyleUtils.scale(8)}}
                                         name='asterisk'/>}
             </View>
             <View style={styles.textInputComponentLayout}>

@@ -293,7 +293,7 @@ CreatedByBusiness                             : "Created by {0}",
 HappyHour                                     : "Happy Hour",
 ReducedAmountInvalidCondition                 : "Buy amount should be greater then payment amount",
 PercentTerm                                   : "Global Discount {0} % Off",
-
+TakeProductPicture                            : "Take Product Picture",
 
 };
 

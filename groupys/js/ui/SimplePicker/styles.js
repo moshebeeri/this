@@ -1,6 +1,7 @@
 const React = require('react-native');
 const {Dimensions} = React;
 const {width, height} = Dimensions.get('window');
+import StyleUtils from "../../utils/styleUtils";
 module.exports = {
     picker: {
         marginTop: 5, height: 50, width: width - 15, backgroundColor: 'white', justifyContent: 'flex-start'
@@ -21,7 +22,7 @@ module.exports = {
     pickerTextStyle: {
         color: '#666666',
         fontFamily: 'Roboto-Regular',
-        fontSize: 15,
+        fontSize: StyleUtils.scale(15),
         justifyContent: 'flex-start',
         marginLeft: 2,
         // margiRight:  I18nManager.isRTL ? 0:10,

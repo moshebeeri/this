@@ -92,7 +92,7 @@ export default class WeekDaysPicker extends Component {
 
                 <ThisText style={textStyle}>{field}</ThisText>
                 {isMandatory &&
-                <MaterialCommunityIcons style={{marginLeft: 3, marginTop: 4, color: 'red', fontSize: 8}}
+                <MaterialCommunityIcons style={{marginLeft: 3, marginTop: 4, color: 'red', fontSize: StyleUtils.scale(8)}}
                                         name='asterisk'/>}
 
 

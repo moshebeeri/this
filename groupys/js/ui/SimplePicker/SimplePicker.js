@@ -97,14 +97,14 @@ export default class SimplePicker extends Component {
                     <ModalDropdown ref={'dropDown'}
                                    style={[styles.modalViewStyle, {width: StyleUtils.getWidth() - 25}]}
                                    options={options}
-                                   textStyle={{alignItems: 'flex-end', fontSize: 15}}
+                                   textStyle={{alignItems: 'flex-end', fontSize: StyleUtils.scale(15)}}
                                    onSelect={this.selectIos.bind(this)}
                                    renderRow={this.renderRow.bind(this)}
                                    defaultValue={selectValue}
 
                                    showsVerticalScrollIndicator={true}
                     />
-                    <Icon3 style={{right: 10, position: 'absolute', fontSize: 25, color: "black"}} name="chevron-down"/>
+                    <Icon3 style={{right: 10, position: 'absolute', fontSize: StyleUtils.scale(25), color: "black"}} name="chevron-down"/>
 
 
                 </TouchableOpacityFix>
@@ -152,7 +152,7 @@ export default class SimplePicker extends Component {
         return <View>
             <View style={styles.pickerTitleContainer}>
                 <ThisText style={styles.pickerTextStyle}>{itemTitle}</ThisText>
-                {isMandatory &&  <MaterialCommunityIcons style={{marginLeft: 3, marginTop: 4, color: 'red', fontSize: 8}}
+                {isMandatory &&  <MaterialCommunityIcons style={{marginLeft: 3, marginTop: 4, color: 'red', fontSize: StyleUtils.scale(8)}}
                                                          name='asterisk'/>}
             </View>
 

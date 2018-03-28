@@ -945,7 +945,7 @@ class AddPromotion extends Component {
     createCoverImageComponnent() {
         if (this.state.image) {
             let coverImage = <Image
-                style={{width: width - 10, height: 210, borderWidth: 1, borderColor: 'white'}}
+                style={{width: width - 10, height: StyleUtils.relativeHeight(40,40), borderWidth: 1, borderColor: 'white'}}
                 source={{uri: this.state.image.path}}
             >
 
@@ -973,7 +973,7 @@ class AddPromotion extends Component {
                     <ImagePicker ref={"coverImage"} mandatory color='white' pickFromCamera
                                  setImage={this.setCoverImage.bind(this)}/>
                     {this.state.toggle ? <ThisText style={styles.addCoverText}>{strings.AddACoverPhoto}</ThisText> :
-                        <ThisText style={styles.addCoverText}>Take Product Picture</ThisText>
+                        <ThisText style={styles.addCoverText}>{strings.TakeProductPicture}</ThisText>
                     }
                 </View>
             </View>
