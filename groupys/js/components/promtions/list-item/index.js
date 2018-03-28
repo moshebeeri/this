@@ -106,8 +106,8 @@ export default class PromotionListView extends Component {
                         </View>
                         {promotionItem.social_state && <View style={styles.promotionSavedsAttribute}>
 
-                            <ThisText style={styles.detailsTitleText}>{strings.Saved}</ThisText>
-                            <ThisText style={styles.promotion_addressText}
+                            <ThisText style={styles.detailsTitleSavedText}>{strings.Saved}</ThisText>
+                            <ThisText style={styles.promotion_addressText_saved}
                                   note>{promotionItem.social_state.saves}</ThisText>
 
                         </View>}

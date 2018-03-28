@@ -1,4 +1,6 @@
 const React = require('react-native');
+import StyleUtils from '../../../utils/styleUtils';
+
 const {StyleSheet, Platform, Dimensions} = React;
 const {width, height} = Dimensions.get('window')
 module.exports = {
@@ -60,7 +62,7 @@ module.exports = {
         width: width,
         flex: 1,
         backgroundColor: 'white',
-        height: 220,
+        height: StyleUtils.relativeHeight(40, 40),
     },
     promotionInformation: {
         width: width - 25,
@@ -78,7 +80,7 @@ module.exports = {
         height: undefined
     },
     promotionInfoTextI: {
-        fontSize: 16,
+        fontSize: StyleUtils.scale(16),
         marginLeft: 5,
         marginRight: 5,
     },
@@ -88,75 +90,83 @@ module.exports = {
     promotionDetailsContainer: {
         flexDirection: 'row',
         backgroundColor: 'white',
-        marginTop:10,
-        marginBottom:10,
+        marginTop: 10,
+        marginBottom: 10,
         alignItems: 'center',
         justifyContent: 'space-between',
     },
     promotionLoctionContainer: {
-        alignItems:  'flex-start',
-        backgroundColor:'white',
-        marginLeft:20,
-
+        alignItems: 'flex-start',
+        backgroundColor: 'white',
+        marginLeft: 20,
     },
     expireDateContainer: {
-        alignItems: 'flex-start' ,
-        backgroundColor:'white',
-
+        alignItems: 'flex-start',
+        backgroundColor: 'white',
     },
     editButtonContainer: {
-        backgroundColor:'white',
-        alignItems:'center',
-        marginRight:20,
-        justifyContent:'center',
-
+        backgroundColor: 'white',
+        alignItems: 'center',
+        marginRight: 20,
+        justifyContent: 'center',
     },
     detailsTitleText: {
         marginLeft: 5,
         marginRight: 5,
         color: '#839192',
-        fontSize: 14
+        fontSize: StyleUtils.scale(14)
+    },
+    detailsTitleSavedText: {
+        marginRight: StyleUtils.scale(20),
+
+        color: '#839192',
+        fontSize: StyleUtils.scale(14)
     },
     detailsText: {
         marginLeft: 5,
+        fontSize: StyleUtils.scale(14),
         marginRight: 5,
         justifyContent: 'center',
         alignItems: 'center',
     },
     promotionAnalyticsContainer: {
         flexDirection: 'row',
-        paddingTop:5,
+        paddingTop: 5,
         paddingBottom: 5,
-        justifyContent: 'center',
+        justifyContent: 'space-between',
         alignItems: 'center',
         borderTopWidth: 1,
-        borderBottomWidth:1,
+        borderBottomWidth: 1,
         borderColor: '#b3b3b3',
     },
     promotionAnalyticsAttribute: {
-        flex: 1,
+        width: StyleUtils.scale(90),
         flexDirection: 'column',
         justifyContent: 'center',
+        marginRight: StyleUtils.scale(25),
         alignItems: 'center',
     },
     promotionTotalsAttribute: {
         justifyContent: 'center',
+        width: StyleUtils.scale(100),
+        marginLeft: StyleUtils.scale(5),
         alignItems: 'center',
-        marginLeft: 20,
-
     },
     promotionSavedsAttribute: {
         justifyContent: 'center',
+        width: StyleUtils.scale(100),
         alignItems: 'center',
-        marginLeft: 40,
 
     },
-
     promotion_addressText: {
         color: '#e65100',
-        fontSize: 20
+        fontSize: StyleUtils.scale(20)
     },
-    promotion_card: {
+    promotion_addressText_saved: {
+        color: '#e65100',
+        fontSize: StyleUtils.scale(20),
+        marginRight: StyleUtils.scale(20),
 
-    }
+    },
+    promotion_card: {}
 };
