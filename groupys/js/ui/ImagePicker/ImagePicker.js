@@ -6,6 +6,7 @@ import Icon from 'react-native-vector-icons/Entypo';
 import ImagePicker from 'react-native-image-crop-picker'
 import strings from "../../i18n/i18n"
 import {ThisText} from '../../ui/index';
+import StyleUtils from '../../utils/styleUtils';
 
 export default class ImagePickerComponent extends Component {
     constructor(props) {
@@ -124,10 +125,10 @@ export default class ImagePickerComponent extends Component {
         if (color) {
             cameraColor = color;
         }
-        let trigger = <Icon size={35} color={cameraColor} name='camera'/>;
+        let trigger = <Icon size={StyleUtils.scale(35)} color={cameraColor} name='camera'/>;
         if (text) {
             trigger = <View style={{flexDirection: 'row'}}>
-                <Icon size={35} color={cameraColor} name='camera'/>
+                <Icon size={StyleUtils.scale(35)} color={cameraColor} name='camera'/>
                 {text}
             </View>
         }
@@ -135,12 +136,12 @@ export default class ImagePickerComponent extends Component {
             trigger = image;
         }
         if (this.state.invalid && !image) {
-            trigger = <Icon size={35} color={'red'} name='camera'/>;
+            trigger = <Icon size={StyleUtils.scale(35)} color={'red'} name='camera'/>;
         }
         let videoPickerOption;
         if (video) {
             videoPickerOption = <MenuOption onSelect={this.pickVideo.bind(this)}>
-                <ThisText>{strings.PickVideo}</ThisText>
+                <ThisText style={{fontSize:StyleUtils.scale(14)}}>{strings.PickVideo}</ThisText>
             </MenuOption>
         }
         let name = "picker";
@@ -154,10 +155,10 @@ export default class ImagePickerComponent extends Component {
             <MenuOptions>
 
                 <MenuOption onSelect={this.pickFromCamera.bind(this)}>
-                    <ThisText style={{padding:10,paddingBottom:5}}>{strings.TakePictures}</ThisText>
+                    <ThisText style={{fontSize:StyleUtils.scale(14),padding:10,paddingBottom:5}}>{strings.TakePictures}</ThisText>
                 </MenuOption>
                 <MenuOption onSelect={this.pickPicture.bind(this)}>
-                    <ThisText style={{padding:10,paddingTop:5}}>{strings.PickFromPhotos}</ThisText>
+                    <ThisText style={{fontSize:StyleUtils.scale(14),padding:10,paddingTop:5}}>{strings.PickFromPhotos}</ThisText>
                 </MenuOption>
                 {videoPickerOption}
 

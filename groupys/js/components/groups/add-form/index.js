@@ -17,6 +17,7 @@ import {
 import * as groupsAction from "../../../actions/groups";
 import * as businessesAction from "../../../actions/business";
 import * as userAction from "../../../actions/user";
+import StyleUtils from '../../../utils/styleUtils'
 import {bindActionCreators} from "redux";
 import strings from "../../../i18n/i18n"
 
@@ -267,13 +268,13 @@ class AddGroup extends Component {
             let coverImage = undefined;
             if (this.state.image) {
                 coverImage = <ImageController
-                    style={{width: width - 10, height: 210, borderWidth: 1, borderColor: 'white'}}
+                    style={{width: width - 10, height: StyleUtils.relativeHeight(30,30), borderWidth: 1, borderColor: 'white'}}
                     source={{uri: this.state.image.path}}
                 >
                 </ImageController>
             } else {
                 coverImage = <ImageController
-                    style={{width: width - 10, height: 210, borderWidth: 1, borderColor: 'white'}}
+                    style={{width: width - 10, height: StyleUtils.relativeHeight(30,30), borderWidth: 1, borderColor: 'white'}}
                     source={{uri: this.state.currentImage}}
                 >
                 </ImageController>
@@ -302,7 +303,7 @@ class AddGroup extends Component {
                 <View style={styles.addCoverNoImageContainer}>
                     <ImagePicker ref={"coverImage"} mandatory={isManadory} color='white' pickFromCamera
                                  setImage={this.setCoverImage.bind(this)}/>
-                    <ThisText style={styles.addCoverText}>Add a cover photo</ThisText>
+                    <ThisText style={styles.addCoverText}>{strings.AddACoverPhoto}</ThisText>
                 </View>
             </View>
 
@@ -458,7 +459,7 @@ class AddGroup extends Component {
                         title="Members"
                         action={this.showUsers.bind(this, true)}/>
                     {this.state.selectedUsers &&
-                    <ThisText> {strings.SelectedMembers}: {this.state.selectedUsers.length}</ThisText>}
+                    <ThisText style={{fontSize:StyleUtils.scale(14)}}> {strings.SelectedMembers}: {this.state.selectedUsers.length}</ThisText>}
 
                 </View>}
             </ScrollView>
