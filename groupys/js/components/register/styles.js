@@ -1,6 +1,7 @@
 const React = require('react-native');
 const {StyleSheet, Platform, Dimensions} = React;
 const {width, height} = Dimensions.get('window')
+import StyleUtils from "../../utils/styleUtils";
 module.exports = {
     inputContainer: {
 
@@ -38,7 +39,7 @@ module.exports = {
     this: {
         // fontFamily:'BackToBlack',
         marginTop:150,
-        fontSize: 50,
+        fontSize:  StyleUtils.scale(50),
         color: 'white',
         fontWeight:'bold',
         backgroundColor: 'transparent'
@@ -47,7 +48,8 @@ module.exports = {
         marginLeft: 0, marginTop: 5, backgroundColor: 'white', height: 50, width: width - 10
     },
     nameTextInput: {
-        marginLeft: 0, marginTop: 5, backgroundColor: 'transparent', height: 50, width: width - 60
+        marginTop: 5, backgroundColor: 'transparent', height:(Platform.OS === 'ios') ? StyleUtils.scale(35) :50, width: width / 2 + StyleUtils.scale(120),
+
     },
     lastnameTextInput: {
         marginLeft: 10, marginTop: 5, backgroundColor: 'white', height: 50, width: width / 2 - 35
@@ -72,7 +74,7 @@ module.exports = {
     },
     SignUpText: {
         fontFamily: 'Roboto-Regular',
-        fontSize: 22,
+        fontSize: StyleUtils.scale(22),
         backgroundColor: 'transparent',
         color: 'white',
         marginLeft: 0,
@@ -80,7 +82,7 @@ module.exports = {
     },
     decritpionLine2: {
         fontFamily: 'Roboto-Regular',
-        fontSize: 22,
+        fontSize:  StyleUtils.scale(22),
         color: 'white',
         backgroundColor: 'transparent',
         marginLeft: 0,
