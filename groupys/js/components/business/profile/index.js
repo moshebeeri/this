@@ -180,7 +180,7 @@ class BusinessProfile extends Component {
             </ImageController>
                 <LinearGradient start={{x: 1, y: 1}} end={{x: 1, y: 0}}
                                 locations={[0,0.8]}
-                                colors={['#00000099', 'transparent']}  style={{height:120,position:'absolute',justifyContent:'flex-end',top:130,backgroundColor:'transparent',width: StyleUtils.getWidth()}}>
+                                colors={['#00000099', 'transparent']}  style={{    height: StyleUtils.relativeHeight(15, 10),position:'absolute',justifyContent:'flex-end',top: StyleUtils.relativeHeight(25,30),backgroundColor:'transparent',width: StyleUtils.getWidth()}}>
                     {business &&
 
                     <BusinessHeader noProfile navigation={this.props.navigation} business={business}

@@ -120,7 +120,7 @@ class BusinessHeader extends Component {
         if (businessView) {
             menuAction = <Menu>
                 <MenuTrigger placement="right">
-                    <Icon2 style={{paddingLeft: 10, fontSize: StyleUtils.scale(15)}} name="options"/>
+                    <Icon2 style={{color: 'white',paddingLeft: 10, fontSize: StyleUtils.scale(15)}} name="options"/>
                 </MenuTrigger>
                 <MenuOptions>
 

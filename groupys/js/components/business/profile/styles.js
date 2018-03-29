@@ -1,6 +1,8 @@
 const React = require('react-native');
 const {StyleSheet, Dimensions, Platform} = React;
 const {width, height} = Dimensions.get('window')
+import StyleUtils from "../../../utils/styleUtils";
+
 module.exports = {
     editButtonConntainer: {
         margin:5,width: 40, height: 40, opacity: 0.65,backgroundColor: 'white', alignItems: 'center', justifyContent: 'center'
@@ -37,7 +39,7 @@ module.exports = {
         flex: -1,
         alignSelf: 'center',
         alignItems:'flex-end',
-        height: 250,
+        height:  StyleUtils.relativeHeight(40,40),
 
         width: width,
         borderWidth: 1,
