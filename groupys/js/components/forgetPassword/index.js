@@ -4,16 +4,14 @@ import {
     I18nManager,
     Image,
     KeyboardAvoidingView,
-    Platform,
     ScrollView,
     TextInput,
-    TouchableHighlight,
     TouchableOpacity,
     View
 } from "react-native";
 import {connect} from "react-redux";
 import {actions} from "react-native-navigation-redux-helpers";
-import {Button, Input, Item, Text} from "native-base";
+import {Button, Input, Item} from "native-base";
 import {bindActionCreators} from "redux";
 import * as loginAction from "../../actions/login";
 import styles from "./styles";
@@ -94,7 +92,7 @@ class ForgetPassword extends Component {
                             marginLeft: 10,
                             marginRight: 5
                         }} onPress={() => this.back()}>
-                            <Icon active color={'white'} size={35} name={arrowName}/>
+                            <Icon active color={'white'} size={StyleUtils.scale(35)} name={arrowName}/>
 
                         </TouchableOpacity>
                     </View>
@@ -113,7 +111,6 @@ class ForgetPassword extends Component {
                             flexDirection: 'column',
                             justifyContent: 'center',
                             alignItems: 'center',
-
                         }}>
 
                             <View regular style={[styles.phoneTextInput, {width: StyleUtils.getWidth()}]}>
@@ -125,12 +122,12 @@ class ForgetPassword extends Component {
                                            onChangeText={(phoneNumber) => this.setState({phoneNumber})}
                                            placeholderTextColor={'white'}
                                            style={{
-                                               width: width / 2 + 120,
+                                               width: StyleUtils.getWidth() / 2 + StyleUtils.scale(120),
                                                color: 'white',
+                                               height: StyleUtils.scale(40),
+                                               fontSize: StyleUtils.scale(20),
+                                               borderBottomWidth: 1,
                                                borderColor: 'white',
-                                               height: 50,
-                                               fontSize: 20,
-                                               borderBottomWidth: 1
                                            }}
                                            placeholder={strings.PhoneNumber}/>
                             </View>
@@ -138,7 +135,8 @@ class ForgetPassword extends Component {
                                 height: 60, marginTop: 10, justifyContent: 'center',
                                 alignItems: 'center', width: width / 2 + 120
                             }}>
-                                <ThisText style={styles.SignUpText}>{strings.PasswordRecoverySMSNotificationMessage}</ThisText>
+                                <ThisText
+                                    style={styles.SignUpText}>{strings.PasswordRecoverySMSNotificationMessage}</ThisText>
                             </View>
 
                             <ThisText style={{backgroundColor: 'transparent', padding: 10, fontSize: 16, color: 'red'}}>
@@ -154,7 +152,8 @@ class ForgetPassword extends Component {
 
 
                                 <TouchableOpacity onPress={() => this.forgetPassword()} style={{
-                                    width: width - 90,
+                                    width: StyleUtils.getWidth() - StyleUtils.scale(180),
+
                                     height: 50,
                                     borderRadius: 30,
                                     backgroundColor: 'white',
@@ -168,7 +167,7 @@ class ForgetPassword extends Component {
                                         color: 'skyblue',
                                         fontWeight: 'bold',
                                         fontStyle: 'normal',
-                                        fontSize: 20
+                                        fontSize: StyleUtils.scale(20)
                                     }}>{strings.SendSMS.toUpperCase()}</ThisText>
 
                                 </TouchableOpacity>

@@ -1,6 +1,7 @@
 const React = require('react-native');
 const {StyleSheet, Platform, Dimensions} = React;
 const {width, height} = Dimensions.get('window')
+import StyleUtils from '../../utils/styleUtils';
 module.exports = {
     inputContainer: {
         flex: -1,
@@ -21,7 +22,7 @@ module.exports = {
         marginTop: (Platform.OS === 'ios') ? -10 : 0,
     },
     signUpHereText: {
-        fontSize: 14,
+        fontSize: StyleUtils.scale(14),
         textDecorationLine: 'underline',
         color: '#00F',
     },
@@ -38,7 +39,7 @@ module.exports = {
     this: {
         // fontFamily:'BackToBlack',
         marginTop:120,
-        fontSize: 50,
+        fontSize: StyleUtils.scale(50),
         color: 'white',
         fontWeight:'bold',
         backgroundColor: 'transparent'
@@ -64,7 +65,7 @@ module.exports = {
     },
     SignUpText: {
         fontFamily: 'Roboto-Regular',
-        fontSize: 16,
+        fontSize: StyleUtils.scale(16),
         color: 'white',
         backgroundColor: 'transparent',
         justifyContent: 'center',
