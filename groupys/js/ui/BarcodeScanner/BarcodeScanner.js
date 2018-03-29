@@ -4,6 +4,7 @@ import Icon from 'react-native-vector-icons/Ionicons';
 import strings from "../../i18n/i18n"
 import {ThisText} from '../index';
 import withPreventDoubleClick from '../../ui/TochButton/TouchButton';
+import StyleUtils from '../../utils/styleUtils';
 
 const TouchableOpacityFix = withPreventDoubleClick(TouchableOpacity);
 export default class BarcodeScanner extends Component {
@@ -40,11 +41,11 @@ export default class BarcodeScanner extends Component {
                 marginLeft: 10,
                 marginRight: 10
             }}>
-                <ThisText>{strings.AssignBarcode}</ThisText>
+                <ThisText style={{fontSize: StyleUtils.scale(14)}}>{strings.AssignBarcode}</ThisText>
                 {this.state.code && <ThisText>{this.state.code.data}</ThisText>}
                 <TouchableOpacityFix onPress={this.showScanner.bind(this)}>
 
-                    <Icon size={35} color={'#FA8559'} name='ios-barcode-outline'/>
+                    <Icon size={StyleUtils.scale(35)} color={'#FA8559'} name='ios-barcode-outline'/>
                 </TouchableOpacityFix>
 
             </View>

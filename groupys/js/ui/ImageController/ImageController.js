@@ -2,6 +2,7 @@ import React, {Component} from 'react';
 import {Text, View,Image} from 'react-native';
 import {CachedImage} from "react-native-img-cache";
 import store from 'react-native-simple-store';
+import StylesUtils from '../../utils/styleUtils';
 export default class ImageControllerComponent  extends Component {
     constructor(props) {
         super(props);
@@ -26,7 +27,7 @@ export default class ImageControllerComponent  extends Component {
 
     render() {
         const { square,thumbnail,source, style,size,resizeMode} = this.props;
-        let defaultSize = 50;
+        let defaultSize = StylesUtils.scale(50);
         if(size){
             defaultSize = size;
         }

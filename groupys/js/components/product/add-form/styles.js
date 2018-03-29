@@ -1,4 +1,5 @@
-import loginTheme from './add-product-theme';
+import StyleUtils from '../../../utils/styleUtils';
+
 const React = require('react-native');
 const {Dimensions, Platform} = React;
 const {width, height} = Dimensions.get('window')
@@ -12,7 +13,7 @@ module.exports = {
     },
     product_upper_container: {
         width: width,
-        height: 220,
+        height: StyleUtils.relativeHeight(30, 30),
         backgroundColor: '#FA8559',
         marginBottom: 4,
         alignItems: 'center',

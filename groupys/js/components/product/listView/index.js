@@ -1,8 +1,9 @@
 import React, {Component} from 'react';
 import {actions} from 'react-native-navigation-redux-helpers';
 import {Icon, Thumbnail,} from 'native-base';
-import {Text, TouchableOpacity, View} from 'react-native';
+import { View} from 'react-native';
 import styles from './styles'
+import StyleUtils from '../../../utils/styleUtils';
 import {EditButton,SubmitButton,ThisText,ImageController} from '../../../ui/index';
 import strings from "../../../i18n/i18n"
 const ILS = '₪';
@@ -43,12 +44,12 @@ export default class ProductListView extends Component {
             </View>
             <View style={styles.productMainContainer}>
                 <View style={styles.productDescContainer}>
-                    <ThisText>{item.name} - <ThisText>{item.info}</ThisText></ThisText>
+                    <ThisText style={{fontSize:StyleUtils.scale(14)}}>{item.name}</ThisText>
+                    {item.info ? <ThisText style={{fontSize:StyleUtils.scale(14)}}>{item.info}</ThisText>:<View/>}
                 </View>
                 <View style={styles.productPriceContainer}>
                     <ThisText style={styles.retailTextStyle} note>{ILS}{item.retail_price}</ThisText>
                 </View>
-
             </View>
             {!select && <View style={styles.productEditContainer}>
                 {this.createEditTag(item)}
