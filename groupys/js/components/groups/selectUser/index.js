@@ -1,21 +1,36 @@
 import React, {Component} from 'react';
 import {connect} from 'react-redux';
 import {
-    Platform
-} from 'react-native'
-import {
-    Container, Content, Text, InputGroup, Input, Button, Body, Icon, Left,
-    View, Header, Item, Footer, Picker, ListItem, Right, Thumbnail, CheckBox
+    Body,
+    Button,
+    CheckBox,
+    Container,
+    Content,
+    Footer,
+    Header,
+    Icon,
+    Input,
+    InputGroup,
+    Item,
+    Left,
+    ListItem,
+    Picker,
+    Right,
+    Thumbnail,
+    View
 } from 'native-base';
 import {getUserFollowesr} from '../../../selectors/userSelector'
 import {bindActionCreators} from "redux";
 import * as selectUserAction from "../../../actions/selectUsers";
-import {FormHeader, ThisText} from '../../../ui/index';
+import {FormHeader, ImageController, ThisText} from '../../../ui/index';
 import strings from "../../../i18n/i18n"
+import StyleUtils from '../../../utils/styleUtils';
+
 class SelectUsersComponent extends Component {
     static navigationOptions = ({navigation}) => ({
         header: null
     });
+
     constructor(props) {
         super(props);
         let selectCheckBox = this.props.userFollower.map(function (user) {
@@ -58,11 +73,11 @@ class SelectUsersComponent extends Component {
                 return <ListItem key={index} onPress={this.selectCheckBox.bind(this, index, r)} thumbnail>
                     <Left>
 
-                        <Thumbnail size={80} source={{uri: path}}/>
+                        <ImageController thumbnail size={StyleUtils.scale(50)} source={{uri: path}}/>
                     </Left>
                     <Body>
-                    <ThisText>{r.name}</ThisText>
-                    <ThisText note>{r.phone_number}</ThisText>
+                    <ThisText style={{fontSize: StyleUtils.scale(14)}}>{r.name}</ThisText>
+                    <ThisText style={{fontSize: StyleUtils.scale(14)}} note>{r.phone_number}</ThisText>
 
                     </Body>
                     <Right>
@@ -75,12 +90,13 @@ class SelectUsersComponent extends Component {
             return <ListItem key={index} onPress={this.selectCheckBox.bind(this, index, r)} thumbnail
                              style={{backgroundColor: '#fff'}}>
                 <Left>
-                    <Thumbnail square size={80} source={require('../../../../images/client_1.png')}/>
+                    <ImageController thumbnail size={StyleUtils.scale(50)} source={require('../../../../images/client_1.png')}/>
                 </Left>
                 <Body>
 
-                <ThisText>{r.name}</ThisText>
-                <ThisText note>{r.phone_number}</ThisText>
+                <ThisText style={{fontSize: StyleUtils.scale(14)}}>{r.name}</ThisText>
+                <ThisText style={{fontSize: StyleUtils.scale(14)}} note>{r.phone_number}</ThisText>
+
                 </Body>
                 <Right>
                     <CheckBox onPress={this.selectCheckBox.bind(this, index, r)}
@@ -93,7 +109,7 @@ class SelectUsersComponent extends Component {
 
 
                     <FormHeader showBack navigation={this.props.navigation}
-                                submitForm={this.saveFormData.bind(this)}title={strings.SelectUsers} bgc="#2db6c8"/>
+                                submitForm={this.saveFormData.bind(this)} title={strings.SelectUsers} bgc="#2db6c8"/>
 
                     {productsRows}
 
@@ -106,8 +122,8 @@ class SelectUsersComponent extends Component {
         );
     }
 
-    shouldComponentUpdate(){
-        if(this.props.currentScreen ==='SelectUsersComponent' ){
+    shouldComponentUpdate() {
+        if (this.props.currentScreen === 'SelectUsersComponent') {
             return true;
         }
         return false;
@@ -117,7 +133,7 @@ class SelectUsersComponent extends Component {
 const mapStateToProps = state => {
     return {
         userFollower: getUserFollowesr(state),
-        currentScreen:state.render.currentScreen,
+        currentScreen: state.render.currentScreen,
     }
 }
 export default connect(
