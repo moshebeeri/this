@@ -1,6 +1,8 @@
 const React = require('react-native');
 const {StyleSheet, Platform, Dimensions} = React;
-const {width, height} = Dimensions.get('window')
+const {width, height} = Dimensions.get('window');
+import StyleUtils from '../../utils/styleUtils';
+
 module.exports = {
     inputContainer: {
         justifyContent: 'flex-start',
@@ -37,34 +39,34 @@ module.exports = {
     this: {
         // fontFamily:'BackToBlack',
         marginTop: 110,
-        fontSize: 50,
+        fontSize: StyleUtils.scale(50),
         color: 'white',
         fontWeight: 'bold',
         backgroundColor: 'transparent'
     },
     phoneTextInput: {
-        marginTop: 10, backgroundColor: 'transparent', height:  (Platform.OS === 'ios') ? 40 :60, width: width / 2 + 120,
+        marginTop: 10, backgroundColor: 'transparent', height:  (Platform.OS === 'ios') ? StyleUtils.scale(40) :60, width: width / 2 + StyleUtils.scale(110),
         justifyContent: 'center',
         alignItems: 'center',
         flexDirection: 'row'
     },
     firstLastNameContainer: {
-        marginTop: 5, backgroundColor: 'transparent', height:(Platform.OS === 'ios') ? 40 :60, width: width / 2 + 120,
-        marginBottom:5,
+        marginTop: 5, backgroundColor: 'transparent', height:(Platform.OS === 'ios') ? StyleUtils.scale(35) :50, width: width / 2 + StyleUtils.scale(120),
+
         justifyContent: 'space-between',
         alignItems: 'center',
         flexDirection: 'row'
     },
     passwordTextInput: {
-        marginTop: 5, backgroundColor: 'transparent', height: (Platform.OS === 'ios') ? 40 :60, width: width / 2 + 120,
+        marginTop: 5, backgroundColor: 'transparent', height: (Platform.OS === 'ios') ? StyleUtils.scale(40) :60, width: width / 2 + StyleUtils.scale(110),
         justifyContent: 'center',
         alignItems: 'center',
     },
     nameTextInput: {
-        marginTop: 10, backgroundColor: 'transparent', height: (Platform.OS === 'ios') ? 40 :60, width: 150,
+        marginTop: 10, backgroundColor: 'transparent',
     },
     lastnameTextInput: {
-        marginTop: 10, backgroundColor: 'transparent', height: (Platform.OS === 'ios') ? 40 :60, width: 150,
+        marginTop: 10, backgroundColor: 'transparent',
     },
     nameContainer: {
         width: width / 2 + 120,
@@ -80,7 +82,7 @@ module.exports = {
     },
     thiscount: {
         fontFamily: (Platform.OS === 'ios') ? 'BackToBlack' : 'Back To Black',
-        fontSize: 60,
+        fontSize: StyleUtils.scale(60),
         color: 'white',
         marginTop: -40,
     },

@@ -3,6 +3,7 @@ import loginTheme from './login-theme';
 const React = require('react-native');
 const {StyleSheet, Platform, Dimensions} = React;
 const {width, height} = Dimensions.get('window');
+import StyleUtils from '../../utils/styleUtils';
 module.exports = {
     inputContainer: {
 
@@ -20,14 +21,14 @@ module.exports = {
     },
     forgotText: {
         alignSelf: 'flex-end',
-        fontSize: 14,
+        fontSize: StyleUtils.scale(14),
         textDecorationLine: 'underline',
         color: '#000',
         marginBottom: (Platform.OS === 'ios') ? 10 : 0,
         marginTop: (Platform.OS === 'ios') ? -10 : 0,
     },
     signUpHereText: {
-        fontSize: 14,
+        fontSize: StyleUtils.scale(14),
         textDecorationLine: 'underline',
         color: '#00F',
     },
@@ -44,7 +45,7 @@ module.exports = {
     this: {
         // fontFamily:'BackToBlack',
         marginTop:150,
-        fontSize: 50,
+        fontSize: StyleUtils.scale(50),
         color: 'white',
         fontWeight:'bold',
         backgroundColor: 'transparent'
@@ -69,13 +70,13 @@ module.exports = {
     },
     thiscount: {
         fontFamily:(Platform.OS === 'ios') ? 'Roboto-Regular' : 'BackToBlack',
-        fontSize: 60,
+        fontSize: StyleUtils.scale(60),
         marginTop: -20,
         color: 'white',
     },
     SignUpText: {
         fontFamily: 'Roboto-Regular',
-        fontSize: 16,
+        fontSize: StyleUtils.scale(16),
         color: 'white',
         backgroundColor: 'transparent',
     },
@@ -112,7 +113,7 @@ module.exports = {
     },
     signgupText: {
         fontFamily: 'Roboto-Regular',
-        fontSize: 17,
+        fontSize: StyleUtils.scale(17),
         color: 'white',
         marginLeft: 5,
         fontWeight:'bold',
@@ -120,7 +121,7 @@ module.exports = {
     },
     forgetText: {
         fontFamily: 'Roboto-Regular',
-        fontSize: 16,
+        fontSize: StyleUtils.scale(16),
         color: 'white',
         backgroundColor: 'transparent',
         marginTop:10,

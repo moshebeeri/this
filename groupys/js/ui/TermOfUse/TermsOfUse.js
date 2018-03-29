@@ -1,16 +1,5 @@
 import React, {Component} from 'react';
-import {
-    Button,
-    Dimensions,
-    I18nManager,
-    Image,
-    Linking,
-    Text,
-    TextInput,
-    TouchableOpacity,
-    View,
-    WebView
-} from 'react-native';
+import {Image, Linking, TouchableOpacity, View} from 'react-native';
 import StyleUtils from "../../utils/styleUtils";
 import strings from "../../i18n/i18n"
 import {ThisText} from '../../ui/index';
@@ -29,23 +18,22 @@ export default class TermsOfUse extends Component {
     }
 
     acceptTerms() {
-        const{acceptTerms} = this.props;
+        const {acceptTerms} = this.props;
         acceptTerms();
     }
 
     declineTerms() {
-        const{declineTerms} = this.props;
+        const {declineTerms} = this.props;
         declineTerms();
     }
 
     render() {
-
         return <View style={{
             backgroundColor: 'white',
             height: 150,
             borderWidth: 2,
-            marginTop:200,
-            width: StyleUtils.getWidth() ,
+            marginTop: 200,
+            width: StyleUtils.getWidth(),
             borderColor: '#cccccc',
             position: 'absolute',
             justifyContent: 'center',
@@ -54,32 +42,40 @@ export default class TermsOfUse extends Component {
             <View style={{
                 backgroundColor: 'white',
                 position: 'absolute',
-
                 height: 150,
-                width: StyleUtils.getWidth() -10
+                width: StyleUtils.getWidth() - 10
             }}>
-                <Image style={{position: 'absolute', height: 150, width: StyleUtils.getWidth() -10}}
+                <Image style={{position: 'absolute', height: 150, width: StyleUtils.getWidth() - 10}}
                        resizeMode='cover' source={bg}/>
 
             </View>
 
             <View style={{
                 marginTop: 10,
-
                 flexDirection: 'column',
-                backgroundColor:'transparent',
+                backgroundColor: 'transparent',
                 width: StyleUtils.getWidth() - 30
             }}>
-                <ThisText style={{flexWrap: 'wrap',color: 'white',backgroundColor:'transparent'}}> {strings.UseOfTermMessage}
+                <ThisText style={{
+                    flexWrap: 'wrap',
+                    color: 'white',
+                    fontSize: StyleUtils.scale(14),
+                    backgroundColor: 'transparent'
+                }}> {strings.UseOfTermMessage}
 
 
                 </ThisText>
 
-                <TouchableOpacity style={{marginTop:10,width: StyleUtils.getWidth() - 30, alignItems: 'center', justifyContent: 'center', height: 20}}
-                                  onPress={() => Linking.openURL(`${server_host}/api/users/terms/1.0` )}>
-                    <ThisText style={{color: 'blue'}}>{strings.TermsOfUse}</ThisText>
+                <TouchableOpacity style={{
+                    marginTop: 10,
+                    width: StyleUtils.getWidth() - 30,
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    height: 20
+                }}
+                                  onPress={() => Linking.openURL(`${server_host}/api/users/terms/1.0`)}>
+                    <ThisText style={{fontSize: StyleUtils.scale(14),color: 'blue'}}>{strings.TermsOfUse}</ThisText>
                 </TouchableOpacity>
-
 
 
             </View>
@@ -87,8 +83,7 @@ export default class TermsOfUse extends Component {
                 width: StyleUtils.getWidth() - 20,
                 flexDirection: 'row',
                 justifyContent: 'space-between',
-
-                marginTop:20,
+                marginTop: 20,
                 alignItems: 'space-between'
             }}>
                 <TouchableOpacity style={{
@@ -99,7 +94,6 @@ export default class TermsOfUse extends Component {
                     alignItems: 'center',
                     justifyContent: 'center',
                     height: 50,
-
                     borderRadius: 30,
                     backgroundColor: 'white',
                     margin: 3,
@@ -109,7 +103,8 @@ export default class TermsOfUse extends Component {
                         fontWeight: 'bold',
                         fontStyle: 'normal',
                         fontSize: 18,
-                        color: '#cccccc'}}>{strings.Cancel.toUpperCase()}</ThisText>
+                        color: '#cccccc'
+                    }}>{strings.Cancel.toUpperCase()}</ThisText>
                 </TouchableOpacity>
                 <TouchableOpacity style={{
                     marginRight: 7,
@@ -119,17 +114,17 @@ export default class TermsOfUse extends Component {
                     alignItems: 'center',
                     justifyContent: 'center',
                     height: 50,
-
                     borderRadius: 30,
                     backgroundColor: 'white',
                     margin: 3,
                     flexDirection: 'row',
-
                 }} onPress={() => this.acceptTerms()}>
-                    <ThisText style={{color: 'skyblue',
+                    <ThisText style={{
+                        color: 'skyblue',
                         fontWeight: 'bold',
                         fontStyle: 'normal',
-                        fontSize: 18}}>{strings.IAgree.toUpperCase()}</ThisText>
+                        fontSize: 18
+                    }}>{strings.IAgree.toUpperCase()}</ThisText>
                 </TouchableOpacity>
             </View>
 

@@ -84,11 +84,11 @@ class Login extends Component {
                                        onChangeText={(phoneNumber) => this.setState({phoneNumber})}
                                        placeholderTextColor={'white'}
                                        style={{
-                                           width: StyleUtils.getWidth() / 2 + 120,
+                                           width: StyleUtils.getWidth() / 2 + StyleUtils.scale(120),
                                            color: 'white',
                                            borderColor: 'white',
-                                           height: 50,
-                                           fontSize: 20,
+                                           height: StyleUtils.scale(40),
+                                           fontSize: StyleUtils.scale(20),
                                            borderBottomWidth: 1
                                        }}
                                        placeholder={strings.PhoneNumber}/>
@@ -105,11 +105,11 @@ class Login extends Component {
                                 defaultValue=""
                                 placeholderTextColor={'white'}
                                 style={{
-                                    width: StyleUtils.getWidth() / 2 + 120,
+                                    width: StyleUtils.getWidth() / 2 + StyleUtils.scale(120),
                                     color: 'white',
                                     borderColor: 'white',
-                                    height: 50,
-                                    fontSize: 20,
+                                    height: StyleUtils.scale(40),
+                                    fontSize: StyleUtils.scale(20),
                                     borderBottomWidth: 1
                                 }}
                                 placeholder={strings.Password}
@@ -127,11 +127,11 @@ class Login extends Component {
                         <View style={{
                             justifyContent: 'center',
                             alignItems: 'center',
-                            width: StyleUtils.getWidth() / 2 + 120
+                            width: StyleUtils.getWidth() / 2 + StyleUtils.scale(180)
                         }}>
 
                             <TouchableOpacity onPress={() => this.login()} style={{
-                                width: StyleUtils.getWidth() - 90,
+                                width: StyleUtils.getWidth() - StyleUtils.scale(180),
                                 height: 50,
                                 borderRadius: 30,
                                 backgroundColor: 'white',
@@ -145,7 +145,7 @@ class Login extends Component {
                                     color: 'skyblue',
                                     fontWeight: 'bold',
                                     fontStyle: 'normal',
-                                    fontSize: 20
+                                    fontSize: StyleUtils.scale(20)
                                 }}>{strings.Login.toUpperCase()}</ThisText>
 
                             </TouchableOpacity>
@@ -155,7 +155,9 @@ class Login extends Component {
                             <View style={{flexDirection: 'row'}}>
                                 <ThisText style={{
                                     backgroundColor: 'transparent',
-                                    color: 'white'
+                                    color: 'white',
+                                    marginTop:StyleUtils.scale(2),
+                                    fontSize: StyleUtils.scale(14)
                                 }}>{strings.NoAccountMessage}</ThisText>
                                 <ThisText onPress={() => this.replaceRoute('Signup')}
                                           style={styles.signgupText}>{strings.SignUp}</ThisText>

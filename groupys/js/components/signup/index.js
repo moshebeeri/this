@@ -3,8 +3,8 @@ import {
     Dimensions,
     I18nManager,
     Image,
+    Keyboard,
     KeyboardAvoidingView,
-    Platform,
     ScrollView,
     TextInput,
     TouchableOpacity,
@@ -12,20 +12,18 @@ import {
 } from 'react-native';
 import {connect} from 'react-redux';
 import {actions} from 'react-native-navigation-redux-helpers';
-import {Keyboard} from 'react-native';
-import {Button, Container, Content, Input, InputGroup, Item, Spinner, Text} from 'native-base';
+import {Button, Container, Content, Input, InputGroup, Item, Spinner} from 'native-base';
 import styles from './styles';
 import {bindActionCreators} from "redux";
 import * as loginAction from "../../actions/login";
 import strings from "../../i18n/i18n"
 import Icon from 'react-native-vector-icons/Ionicons';
 import StyleUtils from "../../utils/styleUtils";
-import {TermsOfUse} from "../../ui/index"
+import {TermsOfUse, ThisText} from "../../ui/index"
 
 const {width, height} = Dimensions.get('window')
 const thisLogo = require('../../../images/this-logo.png');
 const bg = require('../../../images/bg.png');
-import {ThisText} from '../../ui/index';
 
 class Signup extends Component {
     static navigationOptions = {
@@ -45,7 +43,7 @@ class Signup extends Component {
             validationMessage: '',
             verifyPassword: '',
             badPassword: false,
-            showPopup:true,
+            showPopup: true,
         };
     }
 
@@ -69,8 +67,6 @@ class Signup extends Component {
         }
     }
 
-
-
     back() {
         this.props.navigation.goBack();
     }
@@ -89,7 +85,7 @@ class Signup extends Component {
         }
         return (
 
-            <ScrollView keyboardShouldPersistTaps={true} >
+            <ScrollView keyboardShouldPersistTaps={true}>
                 <View style={[styles.inputContainer, {width: StyleUtils.getWidth()}]}>
                     <View style={{
                         backgroundColor: 'white',
@@ -101,12 +97,19 @@ class Signup extends Component {
                                resizeMode='cover' source={bg}/>
 
                     </View>
-                    {this.state.showPopup && <View style={{ top:0,height:height,position:'absolute',opacity:0.8,alignItems:'center',backgroundColor:'white',width: StyleUtils.getWidth()  }}>
+                    {this.state.showPopup && <View style={{
+                        top: 0,
+                        height: height,
+                        position: 'absolute',
+                        opacity: 0.8,
+                        alignItems: 'center',
+                        backgroundColor: 'white',
+                        width: StyleUtils.getWidth()
+                    }}>
 
                     </View>}
                     <View style={{
                         width: StyleUtils.getWidth(),
-
                         justifyContent: 'center',
                         backgroundColor: 'transparent'
                     }}>
@@ -114,179 +117,177 @@ class Signup extends Component {
                             width: 50,
                             alignItems: 'flex-start',
                             justifyContent: 'flex-start',
-
-
                             marginLeft: 10,
                             marginRight: 5
                         }} onPress={() => this.back()}>
-                            <Icon active color={'white'} size={35} name={arrowName}/>
+                            <Icon active color={'white'} size={StyleUtils.scale(35)} name={arrowName}/>
 
                         </TouchableOpacity>
                     </View>
 
                     <KeyboardAvoidingView behavior={'position'}
                                           style={[styles.avoidView, {width: StyleUtils.getWidth()}]}>
-                        <View style={{marginBottom:20,height:height,justifyContent:'center'}}>
+                        <View style={{marginBottom: 20, height: height, justifyContent: 'center'}}>
 
 
-                        <View style={styles.thisContainer}>
-                            <Image style={{position: 'absolute', top: -200, width: 110}} resizeMode='contain'
-                                   source={thisLogo}/>
-                            <ThisText style={styles.this}>THIS</ThisText>
-                        </View>
-                        <View style={{
-                            width:  StyleUtils.getWidth(),
-                            flexDirection: 'column',
-                            justifyContent: 'center',
-                            alignItems: 'center',
-
-                        }}>
-
-                            <View style={styles.firstLastNameContainer}>
-                                <View style={styles.nameTextInput} regular>
-                                    <TextInput value={this.state.name} blurOnSubmit={true} returnKeyType='next' ref="1"
-                                               onSubmitEditing={this.focusNextField.bind(this, "2")}
-                                               style={{
-                                                   width: 145,
-                                                   color: 'white',
-                                                   borderColor: 'white',
-                                                   height: 50,
-                                                   fontSize: 20,
-                                                   borderBottomWidth: 1
-                                               }}
-                                               underlineColorAndroid={'transparent'}
-                                               placeholderTextColor={'white'}
-                                               onChangeText={(name) => this.setState({name})}
-                                               placeholder={strings.FirstName}/>
-                                </View>
-                                <View style={styles.lastnameTextInput} regular>
-                                    <TextInput value={this.state.lastname} blurOnSubmit={true} returnKeyType='next'
-                                               ref="2"
-                                               onSubmitEditing={this.focusNextField.bind(this, "name")}
-                                               style={{
-                                                   width: 145,
-                                                   color: 'white',
-                                                   borderColor: 'white',
-                                                   height: 50,
-                                                   fontSize: 20,
-                                                   borderBottomWidth: 1
-                                               }}
-                                               underlineColorAndroid={'transparent'}
-                                               placeholderTextColor={'white'}
-                                               onChangeText={(lastname) => this.setState({lastname})}
-                                               placeholder={strings.LastName}/>
-                                </View>
+                            <View style={styles.thisContainer}>
+                                <Image style={{position: 'absolute', top: -200, width: 110}} resizeMode='contain'
+                                       source={thisLogo}/>
+                                <ThisText style={styles.this}>THIS</ThisText>
                             </View>
-
-
-                            <View style={styles.phoneTextInput} regular>
-                                <TextInput keyboardType='phone-pad' value={this.state.phoneNumber}
-                                           ref='name'
-                                           blurOnSubmit={true} returnKeyType='next'
-                                           onSubmitEditing={this.focusNextField.bind(this, "password")}
-                                           underlineColorAndroid={'transparent'}
-                                           onChangeText={(phoneNumber) => this.setState({phoneNumber})}
-                                           placeholderTextColor={'white'}
-                                           style={{
-                                               width: width / 2 + 120,
-                                               color: 'white',
-                                               borderColor: 'white',
-                                               height: 50,
-                                               fontSize: 20,
-                                               borderBottomWidth: 1
-                                           }}
-                                           placeholder={strings.PhoneNumber}/>
-                            </View>
-                            <View style={styles.passwordTextInput} regular>
-
-                                <TextInput
-
-                                    ref='password'
-                                    underlineColorAndroid={'transparent'}
-                                    returnKeyType='next'
-                                    defaultValue=""
-                                    value={this.state.password}
-                                    placeholderTextColor={'white'}
-                                    style={{
-                                        width: width / 2 + 120,
-                                        color: 'white',
-                                        borderColor: passwordBorder,
-                                        height: 50,
-                                        fontSize: 20,
-                                        borderBottomWidth: 1
-                                    }}
-                                    placeholder={strings.Password}
-                                    secureTextEntry
-                                    onChangeText={password => this.setState({password})}
-                                    onSubmitEditing={this.focusNextField.bind(this, "verifyPassword")}
-                                />
-                            </View>
-                            {signupProcess && <Spinner style={{position: 'absolute', top: -15}}/>}
-                            <View style={styles.passwordTextInput} regular>
-
-                                <TextInput
-
-                                    ref='verifyPassword'
-                                    underlineColorAndroid={'transparent'}
-                                    returnKeyType='done'
-                                    defaultValue=""
-                                    value={this.state.verifyPassword}
-                                    placeholderTextColor={'white'}
-                                    style={{
-                                        width: width / 2 + 120,
-                                        color: 'white',
-                                        borderColor: passwordBorder,
-                                        height: 50,
-                                        fontSize: 20,
-                                        borderBottomWidth: 1
-                                    }}
-                                    placeholder={strings.VerifyPassword}
-                                    secureTextEntry
-                                    onChangeText={verifyPassword => this.setState({verifyPassword})}
-                                    onSubmitEditing={this.signup.bind(this)}
-                                />
-                            </View>
-
-                            {message}
-
                             <View style={{
-                                height: 50,
-                                marginTop: 20,
+                                width: StyleUtils.getWidth(),
+                                flexDirection: 'column',
                                 justifyContent: 'center',
                                 alignItems: 'center',
-                                width: width / 2 + 120
                             }}>
-                                <TouchableOpacity onPress={() => this.signup()} style={{
-                                    width: width - 90,
+
+                                <View style={styles.firstLastNameContainer}>
+                                    <View style={styles.nameTextInput} regular>
+                                        <TextInput value={this.state.name} blurOnSubmit={true} returnKeyType='next'
+                                                   ref="1"
+                                                   onSubmitEditing={this.focusNextField.bind(this, "2")}
+                                                   style={{
+                                                       width: StyleUtils.scale(130),
+                                                       color: 'white',
+                                                       height: StyleUtils.scale(40),
+                                                       fontSize: StyleUtils.scale(20),
+                                                       borderBottomWidth: 1,
+                                                       borderColor: 'white',
+                                                   }}
+                                                   underlineColorAndroid={'transparent'}
+                                                   placeholderTextColor={'white'}
+                                                   onChangeText={(name) => this.setState({name})}
+                                                   placeholder={strings.FirstName}/>
+                                    </View>
+                                    <View style={styles.lastnameTextInput} regular>
+                                        <TextInput value={this.state.lastname} blurOnSubmit={true} returnKeyType='next'
+                                                   ref="2"
+                                                   onSubmitEditing={this.focusNextField.bind(this, "name")}
+                                                   style={{
+                                                       width: StyleUtils.scale(130),
+                                                       color: 'white',
+                                                       height: StyleUtils.scale(40),
+                                                       fontSize: StyleUtils.scale(20),
+                                                       borderBottomWidth: 1,
+                                                       borderColor: 'white',
+                                                   }}
+                                                   underlineColorAndroid={'transparent'}
+                                                   placeholderTextColor={'white'}
+                                                   onChangeText={(lastname) => this.setState({lastname})}
+                                                   placeholder={strings.LastName}/>
+                                    </View>
+                                </View>
+
+
+                                <View style={styles.phoneTextInput} regular>
+                                    <TextInput keyboardType='phone-pad' value={this.state.phoneNumber}
+                                               ref='name'
+                                               blurOnSubmit={true} returnKeyType='next'
+                                               onSubmitEditing={this.focusNextField.bind(this, "password")}
+                                               underlineColorAndroid={'transparent'}
+                                               onChangeText={(phoneNumber) => this.setState({phoneNumber})}
+                                               placeholderTextColor={'white'}
+                                               style={{
+                                                   width: StyleUtils.getWidth() / 2 + StyleUtils.scale(120),
+                                                   color: 'white',
+                                                   height: StyleUtils.scale(40),
+                                                   fontSize: StyleUtils.scale(20),
+                                                   borderBottomWidth: 1,
+                                                   borderColor: 'white',
+                                               }}
+                                               placeholder={strings.PhoneNumber}/>
+                                </View>
+                                <View style={styles.passwordTextInput} regular>
+
+                                    <TextInput
+
+                                        ref='password'
+                                        underlineColorAndroid={'transparent'}
+                                        returnKeyType='next'
+                                        defaultValue=""
+                                        value={this.state.password}
+                                        placeholderTextColor={'white'}
+                                        style={{
+                                            width: StyleUtils.getWidth() / 2 + StyleUtils.scale(120),
+                                            color: 'white',
+                                            height: StyleUtils.scale(40),
+                                            fontSize: StyleUtils.scale(20),
+                                            borderBottomWidth: 1,
+                                            borderColor: passwordBorder,
+                                        }}
+                                        placeholder={strings.Password}
+                                        secureTextEntry
+                                        onChangeText={password => this.setState({password})}
+                                        onSubmitEditing={this.focusNextField.bind(this, "verifyPassword")}
+                                    />
+                                </View>
+                                {signupProcess && <Spinner style={{position: 'absolute', top: -15}}/>}
+                                <View style={styles.passwordTextInput} regular>
+
+                                    <TextInput
+
+                                        ref='verifyPassword'
+                                        underlineColorAndroid={'transparent'}
+                                        returnKeyType='done'
+                                        defaultValue=""
+                                        value={this.state.verifyPassword}
+                                        placeholderTextColor={'white'}
+                                        style={{
+                                            width: StyleUtils.getWidth() / 2 + StyleUtils.scale(120),
+                                            color: 'white',
+                                            height: StyleUtils.scale(40),
+                                            fontSize: StyleUtils.scale(20),
+                                            borderBottomWidth: 1,
+                                            borderColor: passwordBorder,
+                                        }}
+                                        placeholder={strings.VerifyPassword}
+                                        secureTextEntry
+                                        onChangeText={verifyPassword => this.setState({verifyPassword})}
+                                        onSubmitEditing={this.signup.bind(this)}
+                                    />
+                                </View>
+
+                                {message}
+
+                                <View style={{
                                     height: 50,
-                                    borderRadius: 30,
-                                    backgroundColor: 'white',
-                                    margin: 3,
-                                    flexDirection: 'row',
+                                    marginTop: 20,
                                     justifyContent: 'center',
                                     alignItems: 'center',
-                                }} regular>
+                                    width: width / 2 + 120
+                                }}>
+                                    <TouchableOpacity onPress={() => this.signup()} style={{
+                                        width: StyleUtils.getWidth() - StyleUtils.scale(180),
+                                        height: 50,
+                                        borderRadius: 30,
+                                        backgroundColor: 'white',
+                                        margin: 3,
+                                        flexDirection: 'row',
+                                        justifyContent: 'center',
+                                        alignItems: 'center',
+                                    }} regular>
 
-                                    <ThisText style={{
-                                        color: 'skyblue',
-                                        fontWeight: 'bold',
-                                        fontStyle: 'normal',
-                                        fontSize: 20
-                                    }}>{strings.SignUp.toUpperCase()}</ThisText>
+                                        <ThisText style={{
+                                            color: 'skyblue',
+                                            fontWeight: 'bold',
+                                            fontStyle: 'normal',
+                                            fontSize: StyleUtils.scale(20)
+                                        }}>{strings.SignUp.toUpperCase()}</ThisText>
 
-                                </TouchableOpacity>
+                                    </TouchableOpacity>
+
+                                </View>
+
 
                             </View>
-
-
-
-                        </View>
 
 
                         </View>
                     </KeyboardAvoidingView>
 
-                    {this.state.showPopup && <TermsOfUse  declineTerms = {this.back.bind(this)} acceptTerms={this.closePopup.bind(this)}/>}
+                    {this.state.showPopup &&
+                    <TermsOfUse declineTerms={this.back.bind(this)} acceptTerms={this.closePopup.bind(this)}/>}
 
                 </View>
             </ScrollView>
@@ -304,9 +305,9 @@ class Signup extends Component {
         return undefined;
     }
 
-    closePopup(){
+    closePopup() {
         this.setState({
-            showPopup:false
+            showPopup: false
         })
     }
 }
