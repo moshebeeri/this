@@ -4,7 +4,6 @@ import {
     I18nManager,
     Image,
     KeyboardAvoidingView,
-    Platform,
     ScrollView,
     TextInput,
     TouchableOpacity,
@@ -12,7 +11,7 @@ import {
 } from 'react-native';
 import {connect} from 'react-redux';
 import {actions} from 'react-native-navigation-redux-helpers';
-import {Button, Container, Content, Input, InputGroup, Item, Spinner, Text} from 'native-base';
+import {Button, Container, Content, Input, InputGroup, Item, Spinner} from 'native-base';
 import styles from './styles';
 import {NavigationActions} from 'react-navigation'
 import {bindActionCreators} from "redux";
@@ -60,7 +59,7 @@ class Register extends Component {
         const errorMessage = this.createMessage(message);
         let arrowName = I18nManager.isRTL ? "ios-arrow-forward" : "ios-arrow-back";
         return (
-            <ScrollView keyboardShouldPersistTaps={true} >
+            <ScrollView keyboardShouldPersistTaps={true}>
 
                 <View style={styles.inputContainer}>
                     <View style={{
@@ -73,7 +72,7 @@ class Register extends Component {
                                resizeMode='cover' source={bg}/>
 
                     </View>
-                    <View style={{width: width, height: 40, justifyContent: 'center', backgroundColor: 'transparent'}}>
+                    <View style={{width: width,  height: StyleUtils.scale(50), justifyContent: 'center', backgroundColor: 'transparent'}}>
                         <TouchableOpacityFix transparent style={{
                             width: 50,
                             alignItems: 'flex-start',
@@ -82,7 +81,7 @@ class Register extends Component {
                             marginLeft: 10,
                             marginRight: 5
                         }} onPress={() => this.back()}>
-                            <Icon active color={'white'} size={35} name={arrowName}/>
+                            <Icon active color={'white'} size={StyleUtils.scale(35)} name={arrowName}/>
 
                         </TouchableOpacityFix>
                     </View>
@@ -109,19 +108,19 @@ class Register extends Component {
                                                onChangeText={(code) => this.setState({code})}
                                                placeholderTextColor={'white'}
                                                style={{
-                                                   width: width / 2 + 120,
+                                                   width: StyleUtils.getWidth() / 2 + StyleUtils.scale(120),
                                                    color: 'white',
+                                                   height: StyleUtils.scale(40),
+                                                   fontSize: StyleUtils.scale(20),
+                                                   borderBottomWidth: 1,
                                                    borderColor: 'white',
-                                                   height: 50,
-                                                   fontSize: 20,
-                                                   borderBottomWidth: 1
                                                }}
                                                placeholder={strings.ValidationCode}/>
                                 </View>
 
                                 {errorMessage}
                                 <View style={{
-                                    height: 50,
+                                    height: StyleUtils.scale(50),
                                     marginTop: 20,
                                     justifyContent: 'center',
                                     alignItems: 'center',
@@ -130,11 +129,11 @@ class Register extends Component {
 
 
                                     <TouchableOpacityFix onPress={() => this.validateCode()} style={{
-                                        width: width - 90,
-                                        height: 50,
+                                        width: StyleUtils.getWidth() - StyleUtils.scale(180),
+                                        height: StyleUtils.scale(50),
                                         borderRadius: 30,
                                         backgroundColor: 'white',
-                                        margin: 3,
+
                                         flexDirection: 'row',
                                         justifyContent: 'center',
                                         alignItems: 'center',
@@ -144,7 +143,7 @@ class Register extends Component {
                                             color: 'skyblue',
                                             fontWeight: 'bold',
                                             fontStyle: 'normal',
-                                            fontSize: 20
+                                            fontSize: StyleUtils.scale(20)
                                         }}>{strings.Validate.toUpperCase()}</ThisText>
 
                                     </TouchableOpacityFix>
