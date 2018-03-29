@@ -62,7 +62,7 @@ export default class SimplePicker extends Component {
 
     renderRow(value) {
         return <View style={{justifyContent: 'flex-start', alignItems: 'flex-end'}}><ThisText
-            style={{padding:10,paddingLeft: 10, paddingRight: 10, fontSize: 14}}>{value}</ThisText></View>
+            style={{padding:10,paddingLeft: 10, paddingRight: 10, fontSize: StyleUtils.scale(14)}}>{value}</ThisText></View>
     }
 
     createIosRender() {

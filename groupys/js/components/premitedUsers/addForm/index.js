@@ -6,7 +6,7 @@ import styles from './styles'
 import * as userRoleAction from "../../../actions/userRole";
 import {connect} from 'react-redux';
 import {bindActionCreators} from "redux";
-import {FormHeader, SimplePicker, Spinner, TextInput,ThisText} from '../../../ui/index';
+import {FormHeader, SimplePicker, Spinner, TextInput,ThisText,ImageController} from '../../../ui/index';
 import strings from "../../../i18n/i18n"
 import StyleUtils from "../../../utils/styleUtils";
 
@@ -129,9 +129,9 @@ class AddPermittedUser extends Component {
                        onChangeText={(phoneNumber) => this.setState({phoneNumber})} isMandatory={true}/>
 
 
-            <Button style={{position: 'absolute', right: 5, top: 25}} large transparent
+            <Button style={{position: 'absolute', right: 5, top: StyleUtils.scale(25)}} large transparent
                     onPress={() => this.searchUser()}>
-                <Icon2 size={40} style={styles.productIcon} name="search"/>
+                <Icon2 size={StyleUtils.scale(40)} style={styles.productIcon} name="search"/>
 
             </Button>
 
@@ -180,7 +180,7 @@ class AddPermittedUser extends Component {
             const pic = this.createUserPic(user);
             return  <View style={[styles.user_view, {width: StyleUtils.getWidth() - 15}]}>
                 {pic}
-                <ThisText style={{margin: 10}}>{user.name}</ThisText>
+                <ThisText style={{fontSize: StyleUtils.scale(14),margin: 10}}>{user.name}</ThisText>
 
             </View>
         }
@@ -190,9 +190,9 @@ class AddPermittedUser extends Component {
     createUserPic(user) {
         if (user.pictures && user.pictures.length > 0) {
             const path = user.pictures[user.pictures.length - 1].pictures[0];
-            return <Thumbnail square size={80} source={{uri: path}}/>
+            return <ImageController thumbnail square size={StyleUtils.scale(50)} source={{uri: path}}/>
         }
-        return <Thumbnail square size={80} source={noPic}/>;
+        return <ImageController thumbnail square size={StyleUtils.scale(50)} source={noPic}/>;
     }
 
     createUserRollPicker(role) {

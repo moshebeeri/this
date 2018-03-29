@@ -28,15 +28,16 @@ const rolesTypes = {
         Manager: 'Manager',
         Seller: 'Seller'
     };
-import {ThisText} from '../../ui/index';
+import {ThisText,ImageController} from '../../ui/index';
+import StyleUtils from '../../utils/styleUtils'
 
 
 export default class UserRoleView extends Component {
     createUserView(user, role, index) {
-        let pic = <Thumbnail square size={80} source={noPic}/>;
+        let pic = <ImageController thumbnail square size={60} source={noPic}/>;
         if (user && user.pictures && user.pictures.length > 0) {
             let path = user.pictures[user.pictures.length - 1].pictures[0];
-            pic = <Thumbnail square size={80} source={{uri: path}}/>
+            pic = <ImageController thumbnail square size={StyleUtils.scale(60)} source={{uri: path}}/>
         }
         let roleView = <ThisText>{rolesTypes[role]}</ThisText>
         return <View key={index} style={styles.list_user_view}>
@@ -44,7 +45,7 @@ export default class UserRoleView extends Component {
                 {pic}
             </View>
             <View style={{justifyContent:'center',alignItems:'flex-start',flex:3}}>
-                <ThisText >{user.name} - <ThisText>{roleView}</ThisText></ThisText>
+                <ThisText style={{fontSize: StyleUtils.scale(14)}} >{user.name} - <ThisText style={{fontSize: StyleUtils.scale(14)}}>{roleView}</ThisText></ThisText>
             </View>
             <View style={{flex:0.5,justifyContent:'center'}}>
                 <EditButton onPress={this.editPermission.bind(this, user, rolesTypes[role])}/>

@@ -1,6 +1,8 @@
+import StyleUtils from '../../utils/styleUtils'
+
 const React = require('react-native');
 const {StyleSheet, Dimensions, Platform} = React;
-const {width, height} = Dimensions.get('window')
+
 module.exports = {
     addProductContainer: {
         height: 40,
@@ -67,7 +69,7 @@ module.exports = {
         flex: 1,
         borderBottomWidth: 0.3,
         borderColor: '#e6e6e6',
-        padding: 2,
-        height: 60,
+        padding: 5,
+        height: StyleUtils.scale(70),
     },
 };
