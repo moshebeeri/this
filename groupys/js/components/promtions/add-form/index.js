@@ -606,12 +606,13 @@ class AddPromotion extends Component {
                 <View style={{flex: 2}}>
                     {distribution}
                 </View>
-                {button &&
-                <View style={{flex: 1, marginTop: 30, marginLeft: 20, marginRight: 20}}>
-                    {button}
-                </View>
-                }
+
             </View>
+            {button &&
+            <View style={{ marginTop: 30,}}>
+                {button}
+            </View>
+            }
             <View style={[styles.textLayout, {width: StyleUtils.getWidth() - 15}]}>
                 {selectedGroup}
             </View>

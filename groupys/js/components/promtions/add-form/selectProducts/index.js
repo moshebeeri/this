@@ -1,6 +1,6 @@
 import React, {Component} from "react";
 import {connect} from "react-redux";
-import {I18nManager, Platform, Provider, ScrollView, View} from "react-native";
+import {Provider, ScrollView, View} from "react-native";
 import {Button, Container, Content, Fab, Icon, Left, ListItem, Right, Thumbnail} from "native-base";
 import {bindActionCreators} from "redux";
 import ProductListView from "../../../product/listView/index"

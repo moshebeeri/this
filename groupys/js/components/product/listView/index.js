@@ -15,9 +15,9 @@ export default class ProductListView extends Component {
 
     createImage(item) {
         if (item.pictures && item.pictures.length > 0) {
-            return <ImageController thumbnail square source={{uri: this.props.item.pictures[0].pictures[3]}}/>
+            return <ImageController thumbnail size={StyleUtils.scale(50)} square source={{uri: this.props.item.pictures[0].pictures[3]}}/>
         } else {
-            return <Thumbnail size={150} source={require('../../../../images/client_1.png')}/>
+            return <ImageController thumbnail size={StyleUtils.scale(50)}  source={require('../../../../images/client_1.png')}/>
         }
     }
 
