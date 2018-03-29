@@ -147,7 +147,7 @@ class AddProduct extends Component {
         const {saving} = this.props;
         if (this.state.coverImage) {
             let coverImage = <Image
-                style={{width: width - 10, height: 210, borderWidth: 1, borderColor: 'white'}}
+                style={{width: width - 10, height: StyleUtils.relativeHeight(30, 30), borderWidth: 1, borderColor: 'white'}}
                 source={{uri: this.state.coverImage.path}}/>;
             return <View style={[styles.product_upper_container, {width: StyleUtils.getWidth()}]}>
 
@@ -173,7 +173,7 @@ class AddProduct extends Component {
                                          alignItems: 'center',
                                          justifyContent: 'center',
                                          width: StyleUtils.getWidth(),
-                                         height: 220
+                                         height: StyleUtils.relativeHeight(30, 30),
                                      }
                                  }} mandatory color='white' pickFromCamera
                                  setImage={this.setCoverImage.bind(this)}/>
@@ -217,12 +217,6 @@ class AddProduct extends Component {
                 </View>
 
 
-                <View style={[styles.inputTextLayout, {width: StyleUtils.getWidth() - 15}]}>
-                    <CategoryPicker ref={"picker"} isMandatory categories={this.props.products.categories}
-                                    selectedCategories={this.state.categories}
-                                    setFormCategories={this.setCategory.bind(this)}
-                                    setCategoriesApi={this.props.actions.setProductCategories}/>
-                </View>
 
                 <View style={[styles.inputTextLayout, {width: StyleUtils.getWidth() - 15}]}>
 

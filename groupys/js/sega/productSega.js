@@ -8,6 +8,10 @@ import {handleSucsess}from './SegaSuccsesHandler'
 
 function* saveProduct(action) {
     try {
+        let product = action.product;
+        // Workaround default product categories
+        product.category = [247183, 247467];
+
         let createdProduct = yield call(productApi.createProduct, action.product, action.token);
         handleSucsess();
         createdProduct.pictures = [];
