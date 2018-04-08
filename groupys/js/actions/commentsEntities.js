@@ -65,6 +65,10 @@ export function sendMessage(entities, generalId, message) {
             });
             asyncListener.syncChange('social_'+generalId,"addComment" )
             asyncListener.syncChange('instanceMessage_'+generalId,message )
+
+            if(getState().instances.instances[generalId]  &&  getState().instances.instances[generalId].promotion) {
+                asyncListener.syncChange('promotion_' + getState().instances.instances[generalId].promotion, 'add-comment');
+            }
             handler.handleSuccses(getState(), dispatch)
         } catch (error) {
             handler.handleError(error, dispatch, 'createGlobalComment')

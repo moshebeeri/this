@@ -6,9 +6,53 @@ const store = getStore();
 
 class DataSync {
     syncData() {
-        //sync group chats
-        this.syncGroups(store.getState().groups.groups, store.getState(), store.dispatch);
+        this.syncGroups(store.getState().groups.groups, store.getState(), store.dispatch,store.getState().user.user);
         this.syncInstances(store.getState().instances.instances, store.getState(), store.dispatch);
+        this.syncPromotions(store.getState().promotions.promotions, store.getState(), store.dispatch);
+        this.syncMainFeed(store.getState().user.user, store.getState(), store.dispatch);
+    }
+
+    syncMainFeed(user, state, dispatch) {
+        if (user) {
+            asyncListener.addListener('feed_' + user._id, (snap) => {
+                const token = state.authentication.token;
+                const feedOrder = state.feeds.feedView;
+                if (feedOrder && feedOrder.length > 0) {
+                    dispatch({
+                        type: types.FEED_SET_TOP_FEED,
+                        lastId: feedOrder[0],
+                        token: token,
+                        user: user,
+                    });
+                }
+            })
+        }
+    }
+
+    syncPromotions(promotions, state, dispatch) {
+        if (Object.values(promotions)) {
+            Object.values(promotions).forEach(promotion => {
+                    asyncListener.addListener('promotion_' + promotion._id, (snap) => {
+                        let promotionId = snap.key.substring('promotion_'.length);
+                        const token = state.authentication.token;
+                        let promotion = state.promotions.promotions[promotionId];
+                        if(promotion ){
+                            let businessId = promotion.entity.business;
+                            if(state.businesses.myBusinesses[businessId]) {
+                                dispatch({
+                                    type: types.UPDATE_PROMOTION,
+                                    token: token,
+                                    id: promotionId,
+                                    businessId: businessId,
+                                    item: promotion
+                                });
+                            }
+                        }
+
+                    })
+                }
+            )
+        }
     }
 
     syncInstances(instances, state, dispatch) {
@@ -56,10 +100,9 @@ class DataSync {
         }
     }
 
-    syncGroups(groups, state, dispatch) {
+    syncGroups(groups, state, dispatch,user) {
         if (Object.values(groups)) {
             Object.values(groups).forEach(group => {
-
                     //sync group chat
                     asyncListener.addListener(group._id, (snap) => {
                         let groupId = snap.key;
@@ -69,18 +112,37 @@ class DataSync {
                         if (groupsChats) {
                             this.setChatTop(groupsChats, groupId, user, token, dispatch)
                         }
-                    })
-
-                asyncListener.addListener('group_' + group._id, (snap) => {
-                    // TODO use get by group
-                    let groupId = snap.key.substring('group_'.length);
-                    const token = state.authentication.token;
-                    dispatch({
-                        type: types.SAVE_GROUPS_REQUEST,
-                        token: token,
                     });
-
-                })
+                    //sync group view
+                    asyncListener.addListener('group_' + group._id, (snap) => {
+                        // TODO use get by group
+                        let groupId = snap.key.substring('group_'.length);
+                        const token = state.authentication.token;
+                        dispatch({
+                            type: types.SAVE_GROUPS_REQUEST,
+                            token: token,
+                        });
+                    })
+                    //sync group main feeds
+                    asyncListener.addListener('feed_' + group._id, (snap) => {
+                        const feedOrder = state.groups.groupFeedOrder[group._id];
+                        const token = state.authentication.token;
+                        if (feedOrder) {
+                            if (feedOrder && feedOrder.length > 0) {
+                                dispatch({
+                                    type: types.GROUP_FEED_SET_TOP_FEED,
+                                    lastId: feedOrder[0],
+                                    group: group,
+                                    token: token,
+                                    user: user,
+                                });
+                                dispatch({
+                                    type: types.SAVE_GROUPS_REQUEST,
+                                    token: token,
+                                });
+                            }
+                        }
+                    })
                 }
             )
         }

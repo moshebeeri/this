@@ -1,14 +1,14 @@
 import {call, put, throttle} from 'redux-saga/effects'
 import PromotionApi from "../api/promotion";
-import {setPromotion} from "../actions/promotions";
+import {setPromotion,setSinglePromotion} from "../actions/promotions";
 import * as segaActions from './segaActions'
 import ImageApi from "../api/image";
 import productApi from "../api/product";
 import {setProduct} from "../actions/product";
 import {handleSucsess}from './SegaSuccsesHandler'
-
+import FeedApi from "../api/feed";
 let promotionApi = new PromotionApi();
-
+let feedApi = new FeedApi();
 function* savePromotion(action) {
     try {
         let tempPromotion = action.promotion;
@@ -102,10 +102,24 @@ function* savePromotion(action) {
     } catch (error) {
         console.log("failed  updatePromotion");
     }
+
+}
+
+function* updatePromotionSocialState(action) {
+    try {
+
+        let response = yield call(feedApi.getFeedSocialState, action.id,action.token);
+
+        yield put(setSinglePromotion(response,action.businessId,action.item))
+
+    } catch (error) {
+        console.log("failed saveMyPromotionsRequest");
+    }
 }
 
 function* promotionSega() {
     yield throttle(2000, segaActions.SAVE_PROMOTION, savePromotion);
+    yield throttle(2000, segaActions.UPDATE_PROMOTION, updatePromotionSocialState);
 }
 
 export default promotionSega;

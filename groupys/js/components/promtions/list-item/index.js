@@ -56,7 +56,7 @@ export default class PromotionListView extends Component {
     visited(visible){
         const {item} = this.props;
         if(visible){
-            PageRefresher.visitedBusinessPromotion(item._id);
+        //    PageRefresher.visitedBusinessPromotion(item._id);
         }
 
     }
