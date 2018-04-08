@@ -1,9 +1,7 @@
 import serverRequestHandler from './serverRequestHandler';
-import asyncListener from "../api/AsyncListeners";
 
 class CommentApi {
     createComment(group, instance, comment, token) {
-
         let request = {
             entities: [
                 {group: group},

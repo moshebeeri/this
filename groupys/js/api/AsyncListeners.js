@@ -1,5 +1,12 @@
 import * as firebase from "firebase";
 
+firebase.initializeApp({
+    apiKey: "AIzaSyDhJN8O4943iyTuDWjCBWpKRM_fqXvcRZw",
+    authDomain: "this-1000.firebaseapp.com",
+    databaseURL: "https://this-1000.firebaseio.com",
+    storageBucket: "this-1000.appspot.com"
+});
+
 class AsyncListeners {
 
     listeners = [];

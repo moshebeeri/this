@@ -202,11 +202,7 @@ export function redirectToChatGroup(groupId, notificationId, notificationAction,
             notificationApi.doNotificationAction(token, notificationId, notificationAction);
             let group = getState().groups.groups[groupId];
             if (group) {
-                const groupsChats = getState().comments.groupComments[group._id];
-                const user = getState().user.user;
-                if (groupsChats) {
-                    groupsActions.dispatchGroupChatsListener(groupsChats, group, user, token, dispatch);
-                }
+
                 groupsActions.dispatchGroupTOuch(token, groupId, dispatch)
                 navigation.navigate('GroupFeed', {chat: true, group: group});
             }

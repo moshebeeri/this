@@ -43,7 +43,6 @@ import getStore from "./store";
 import setCustomStyles from './styles'
 import * as actions from "./reducers/reducerActions";
 import ActionLogger from './actions/ActionLogger';
-import * as firebase from "firebase";
 
 const store = getStore();
 setCustomStyles();
@@ -84,12 +83,6 @@ const AppNavigator = StackNavigator({
     }
 );
 
-firebase.initializeApp({
-    apiKey: "AIzaSyDhJN8O4943iyTuDWjCBWpKRM_fqXvcRZw",
-    authDomain: "this-1000.firebaseapp.com",
-    databaseURL: "https://this-1000.firebaseio.com",
-    storageBucket: "this-1000.appspot.com"
-});
 // gets the current screen from navigation state
 function getCurrentRouteName(navigationState) {
     if (!navigationState) {

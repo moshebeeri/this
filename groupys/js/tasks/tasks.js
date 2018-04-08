@@ -1,7 +1,6 @@
 import getStore from "../store";
 import simpleStore from 'react-native-simple-store';
 import BackgroundTimer from "react-native-background-timer";
-import feedAction from '../actions/feedsMain'
 import pageSync from '../refresh/refresher'
 import * as actions from "../reducers/reducerActions";
 import myPromotionAction from '../actions/myPromotions'

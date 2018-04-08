@@ -4,7 +4,6 @@ import UserApi from "../api/user";
 import PtomotionApi from "../api/promotion";
 import imageApi from "../api/image";
 import ActivityApi from "../api/activity";
-import asyncListener from "../api/AsyncListeners";
 import * as assemblers from "./collectionAssembler";
 import * as actions from "../reducers/reducerActions";
 import CollectionDispatcher from "./collectionDispatcher";
@@ -501,18 +500,6 @@ export function joinGroup(groupId) {
 }
 
 export function setGroups(response, state, dispatch) {
-    response.forEach(group => {
-            asyncListener.addListener(group._id, (snap) => {
-                let groupId = snap.key;
-                const token = state.authentication.token;
-                const groupsChats = state.comments.groupComments[groupId];
-                const user = state.user.user;
-                if (groupsChats) {
-                    setChatTop(groupsChats, groupId, user, token, dispatch)
-                }
-            })
-        }
-    )
     return {
         type: actions.UPSERT_GROUP,
         item: response,
@@ -523,63 +510,6 @@ export function setGroup(response) {
     return {
         type: actions.UPSERT_SINGLE_GROUP,
         group: response,
-    }
-}
-
-export function listenForChat(group) {
-    return function (dispatch, getState) {
-        const token = getState().authentication.token;
-        const groupsChats = getState().comments.groupComments[group._id];
-        const user = getState().user.user;
-        if (groupsChats) {
-            dispatchGroupChatsListener(groupsChats, group, user, token, dispatch)
-        }
-    }
-}
-
-export function setChatTop(groupsChats, group, user, token, dispatch) {
-    let groupChatIds = Object.keys(groupsChats).sort(function (a, b) {
-        if (a < b) {
-            return 1
-        }
-        if (a > b) {
-            return -1
-        }
-        return 0;
-    });
-    dispatch({
-        type: types.GROUP_SYNC_CHAT,
-        group: group,
-        token: token,
-        lastChatId: groupChatIds[0],
-        user: user,
-    })
-}
-
-export function dispatchGroupChatsListener(groupsChats, group, user, token, dispatch) {
-    let groupChatIds = Object.keys(groupsChats).sort(function (a, b) {
-        if (a < b) {
-            return 1
-        }
-        if (a > b) {
-            return -1
-        }
-        return 0;
-    });
-    dispatch({
-        type: types.LISTEN_FOR_GROUP_CHATS,
-        group: group,
-        token: token,
-        lastChatId: groupChatIds[0],
-        user: user,
-    })
-}
-
-export function stopListenForChat() {
-    return function (dispatch) {
-        dispatch({
-            type: types.CANCEL_GROUP_CHAT_LISTENER,
-        })
     }
 }
 

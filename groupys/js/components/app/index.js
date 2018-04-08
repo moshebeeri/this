@@ -34,6 +34,7 @@ import {NavigationActions} from "react-navigation";
 import '../../conf/global';
 import PageRefresher from '../../refresh/pageRefresher'
 import Tasks from '../../tasks/tasks'
+import dataSync from '../../sync/DataSyncronizer';
 import {
     BusinessHeader,
     BusinessList,
@@ -150,6 +151,7 @@ class ApplicationManager extends Component {
     }
 
     async componentWillMount() {
+
         FCM.requestPermissions().then(
             () =>
                 console.log('granted')).catch(() =>
@@ -200,12 +202,10 @@ class ApplicationManager extends Component {
     }
 
     onChangeTab(tab) {
-        const {notificationAction, myPromotionsAction, feedAction, groupsActions, instanceGroupCommentsAction, actions} = this.props;
-        groupsActions.stopListenForChat();
+        const { feedAction,  instanceGroupCommentsAction} = this.props;
         instanceGroupCommentsAction.stopListenForChat();
         feedAction.stopMainFeedsListener();
-        // actions.changeTab(tab);
-        // this.setState({activeTab:tab.i})
+        dataSync.syncData();
     }
 
     navigateToAdd() {
@@ -221,6 +221,7 @@ class ApplicationManager extends Component {
     }
 
     componentDidMount() {
+        dataSync.syncData();
         //  codePush.sync({updateDialog: updateDialogOption});
     }
 
