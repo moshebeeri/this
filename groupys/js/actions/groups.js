@@ -4,6 +4,7 @@ import UserApi from "../api/user";
 import PtomotionApi from "../api/promotion";
 import imageApi from "../api/image";
 import ActivityApi from "../api/activity";
+import asyncListener from "../api/AsyncListeners";
 import * as assemblers from "./collectionAssembler";
 import * as actions from "../reducers/reducerActions";
 import CollectionDispatcher from "./collectionDispatcher";
@@ -12,6 +13,7 @@ import GroupsComperator from "../reduxComperators/GroupsComperator"
 import handler from './ErrorHandler'
 import * as types from '../sega/segaActions';
 import {put} from 'redux-saga/effects'
+
 let groupsApi = new GroupsApi();
 let feedApi = new FeedApi();
 let promotionApi = new PtomotionApi();
@@ -20,10 +22,12 @@ let userApi = new UserApi();
 let logger = new ActionLogger();
 let groupsComperator = new GroupsComperator();
 
-async function getAll(dispatch, token) {
+async function getAll(dispatch, token, state) {
     dispatch({
         type: types.SAVE_GROUPS_REQUEST,
-        token: token
+        token: token,
+        dispatch: dispatch,
+        state: state
     });
 }
 
@@ -68,7 +72,7 @@ async function getUserFollowers(dispatch, token) {
 export function fetchGroups() {
     return function (dispatch, getState) {
         const token = getState().authentication.token;
-        getAll(dispatch, token);
+        getAll(dispatch, token, getState());
     }
 }
 
@@ -118,16 +122,15 @@ export function touch(groupId) {
     return function (dispatch, getState) {
         try {
             const token = getState().authentication.token;
-            dispatchGroupTOuch(token,groupId,dispatch)
+            dispatchGroupTOuch(token, groupId, dispatch)
         } catch (error) {
             handler.handleError(error, dispatch, 'groupsApi.touch');
             logger.actionFailed('groupsApi.touch')
         }
-
     }
 }
 
-export function dispatchGroupTOuch(token,groupId,dispatch){
+export function dispatchGroupTOuch(token, groupId, dispatch) {
     groupsApi.touch(groupId, token);
     dispatch({
         type: actions.GROUP_TOUCHED,
@@ -158,8 +161,6 @@ export function createGroup(group, navigation) {
     }
 }
 
-
-
 export function setGroupQrCode(group) {
     return async function (dispatch, getState) {
         try {
@@ -168,7 +169,7 @@ export function setGroupQrCode(group) {
                 type: actions.REST_GROUP_QRCODE,
             });
             let code = group.qrcode;
-            if(code && code.code){
+            if (code && code.code) {
                 code = code.code;
             }
             let response = await imageApi.getQrCodeImage(code, token);
@@ -433,7 +434,6 @@ export function shareActivity(id, activityId, users, token) {
             users.forEach(function (user) {
                 activityApi.shareActivity(user, activityId, token)
             })
-
             handler.handleSuccses(getState(), dispatch)
         } catch (error) {
             handler.handleError(error, dispatch, 'groups-shareActivity')
@@ -500,7 +500,19 @@ export function joinGroup(groupId) {
     }
 }
 
-export function setGroups(response) {
+export function setGroups(response, state, dispatch) {
+    response.forEach(group => {
+            asyncListener.addListener(group._id, (snap) => {
+                let groupId = snap.key;
+                const token = state.authentication.token;
+                const groupsChats = state.comments.groupComments[groupId];
+                const user = state.user.user;
+                if (groupsChats) {
+                    setChatTop(groupsChats, groupId, user, token, dispatch)
+                }
+            })
+        }
+    )
     return {
         type: actions.UPSERT_GROUP,
         item: response,
@@ -514,20 +526,37 @@ export function setGroup(response) {
     }
 }
 
-
-
 export function listenForChat(group) {
     return function (dispatch, getState) {
         const token = getState().authentication.token;
         const groupsChats = getState().comments.groupComments[group._id];
         const user = getState().user.user;
         if (groupsChats) {
-            dispatchGroupChatsListener(groupsChats,group,user,token,dispatch)
+            dispatchGroupChatsListener(groupsChats, group, user, token, dispatch)
         }
     }
 }
 
-export function dispatchGroupChatsListener(groupsChats,group,user,token,dispatch){
+export function setChatTop(groupsChats, group, user, token, dispatch) {
+    let groupChatIds = Object.keys(groupsChats).sort(function (a, b) {
+        if (a < b) {
+            return 1
+        }
+        if (a > b) {
+            return -1
+        }
+        return 0;
+    });
+    dispatch({
+        type: types.GROUP_SYNC_CHAT,
+        group: group,
+        token: token,
+        lastChatId: groupChatIds[0],
+        user: user,
+    })
+}
+
+export function dispatchGroupChatsListener(groupsChats, group, user, token, dispatch) {
     let groupChatIds = Object.keys(groupsChats).sort(function (a, b) {
         if (a < b) {
             return 1
@@ -545,6 +574,7 @@ export function dispatchGroupChatsListener(groupsChats,group,user,token,dispatch
         user: user,
     })
 }
+
 export function stopListenForChat() {
     return function (dispatch) {
         dispatch({
@@ -571,12 +601,13 @@ export function setSocialState(item) {
         }
     }
 }
-export function setVisibleItem(itemId,groupId) {
+
+export function setVisibleItem(itemId, groupId) {
     return function (dispatch) {
         dispatch({
             type: actions.VISIBLE_GROUP_FEED,
-            feedId:itemId,
-            groupId:groupId
+            feedId: itemId,
+            groupId: groupId
         });
     }
 }
@@ -588,7 +619,6 @@ export function clearReplyInstance() {
         });
     }
 }
-
 
 export function setReplayInstance(item) {
     return function (dispatch) {
@@ -616,13 +646,12 @@ export function updateFeed(item) {
     }
 }
 
-
 export function setTopFeeds(group) {
     return async function (dispatch, getState) {
         const token = getState().authentication.token;
         const user = getState().user.user;
         const feedOrder = getState().groups.groupFeedOrder[group._id];
-        if(feedOrder){
+        if (feedOrder) {
             if (!user)
                 return;
             dispatch({
@@ -632,18 +661,17 @@ export function setTopFeeds(group) {
                 dispatch({
                     type: types.LISTEN_FOR_GROUP_FEED,
                     id: feedOrder[0],
-                    group:group,
+                    group: group,
                     token: token,
                     user: user,
                 });
             }
             handler.handleSuccses(getState(), dispatch)
         }
-
     }
 }
 
-export function* updateFeedsTop(feeds,group,user) {
+export function* updateFeedsTop(feeds, group, user) {
     if (feeds) {
         let collectionDispatcher = new CollectionDispatcher();
         let disassemblerItems = feeds.map(item => assemblers.disassembler(item, collectionDispatcher));
@@ -664,7 +692,7 @@ export function* updateFeedsTop(feeds,group,user) {
     }
 }
 
-export function updateSavedInstance(item){
+export function updateSavedInstance(item) {
     return async function (dispatch, getState) {
         try {
             const token = getState().authentication.token;
@@ -679,13 +707,9 @@ export function updateSavedInstance(item){
             logger.actionFailed('getFeedSocialState')
         }
     }
-
-
 }
-
 
 export default {
     getAll,
     fetchTopList,
-
 };

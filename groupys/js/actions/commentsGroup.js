@@ -1,4 +1,5 @@
 import CommentsApi from "../api/commet";
+import asyncListener from "../api/AsyncListeners";
 import * as actions from "../reducers/reducerActions";
 import ActionLogger from './ActionLogger'
 import handler from './ErrorHandler'
@@ -19,7 +20,12 @@ export function sendMessage(groupId, message,instanceId) {
                 groupId: groupId,
                 message: messageItem
             });
-            commentsApi.createComment(groupId, instanceId, message, token);
+            await commentsApi.createComment(groupId, instanceId, message, token);
+            if (instanceId) {
+                asyncListener.syncChange(groupId +"_"+ instanceId, {comment: message})
+            } else {
+                asyncListener.syncChange(groupId, {comment: message})
+            }
             handler.handleSuccses(getState(), dispatch)
         } catch (error) {
             handler.handleError(error, dispatch, 'sendMessage-group');

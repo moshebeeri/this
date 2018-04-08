@@ -1,5 +1,7 @@
 import CommentsApi from "../api/commet";
 import * as actions from "../reducers/reducerActions";
+import asyncListener from "../api/AsyncListeners";
+
 import ActionLogger from './ActionLogger'
 import handler from './ErrorHandler'
 import * as types from '../sega/segaActions';
@@ -13,7 +15,7 @@ export function sendMessage(groupId, instanceId, message) {
         try {
             const token = getState().authentication.token;
             const user = getState().user.user;
-            commentsApi.createComment(groupId, instanceId, message, token)
+            await commentsApi.createComment(groupId, instanceId, message, token)
             let messageItem = createMessage(message, user);
             dispatch({
                 type: actions.GROUP_COMMENT_INSTANCE_ADD_MESSAGE,
@@ -21,6 +23,11 @@ export function sendMessage(groupId, instanceId, message) {
                 groupId: groupId,
                 message: messageItem
             });
+            if (instanceId) {
+                asyncListener.syncChange(groupId +"_"+ instanceId, {comment: message})
+            } else {
+                asyncListener.syncChange(groupId, {comment: message})
+            }
             handler.handleSuccses(getState(), dispatch)
         } catch (error) {
             handler.handleError(error, dispatch, 'instance-group-sendMessage\'')

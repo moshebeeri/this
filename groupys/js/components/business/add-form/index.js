@@ -162,8 +162,8 @@ class AddBusiness extends Component {
     createBusiness() {
         let business = {
             address: this.state.address,
-            category: this.state.category,
-            subcategory: this.state.subcategory,
+            category: 246843,
+            subcategory: 246950,
             city: this.state.city,
             country: this.state.country,
             image: this.state.coverImage,
@@ -252,15 +252,22 @@ class AddBusiness extends Component {
     }
 
     setIdDocument(image) {
+        this.setState({
+            IdIdentifierImage: image
+        });
         this.setReduxState({
             IdIdentifierImage: image
         })
+
     }
 
     setLetterDocument(image) {
         this.setReduxState({
             LetterOfIncorporationImage: image
         })
+        this.setState({
+            LetterOfIncorporationImage: image
+        });
     }
 
     createImageComponent(coverPic) {
@@ -393,12 +400,6 @@ class AddBusiness extends Component {
                 </View>
 
                 <View style={[styles.inputTextLayout, {width: StyleUtils.getWidth() - 15}]}>
-                    <CategoryPicker ref={"picker"} isMandatory categories={this.props.categories}
-                                    selectedCategories={this.state.categories}
-                                    setFormCategories={this.setCategory.bind(this)}
-                                    setCategoriesApi={this.props.fetchBusinessCategories}/>
-                </View>
-                <View style={[styles.inputTextLayout, {width: StyleUtils.getWidth() - 15}]}>
 
 
                     <TextInput keyboardType={'email-address'} field={strings.Email} value={this.state.email}
@@ -432,7 +433,7 @@ class AddBusiness extends Component {
                 </View>
 
                 {!this.state.hideIds && <View style={[styles.inputTextLayout, {width: StyleUtils.getWidth() - 15}]}>
-                    <DocumentPicker value={this.state.IdIdentifierImage} ref="id" isMandatory
+                    <DocumentPicker value={this.state.IdIdentifierImage} ref="IdIdentifier" isMandatory
                                     field={strings.IdIdentifier}
                                     setDocument={this.setIdDocument.bind(this)}/>
 

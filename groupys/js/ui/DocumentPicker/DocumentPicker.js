@@ -22,7 +22,7 @@ export default class DocumentPicker extends Component {
     }
 
     isValid() {
-        const {isMandatory, validateContent, invalid,value} = this.props;
+        const {isMandatory,value} = this.props;
 
         if (isMandatory) {
             if (!this.state.document) {
@@ -30,8 +30,10 @@ export default class DocumentPicker extends Component {
                     this.setState({
                         invalid: true
                     })
+                    return false;
                 }
             }
+
         }
 
         return true;
@@ -88,6 +90,7 @@ export default class DocumentPicker extends Component {
         if(this.state.document || value){
             iconColor = 'green';
         }
+        let imageRef = "logoImage" + field;
         return <View style={containerStyle}>
             <View style={styles.textInputTitleContainer}>
                 <View style={{flexDirection:'row'}}>
@@ -98,7 +101,7 @@ export default class DocumentPicker extends Component {
 
                 </View>
                 <View style={{marginRight:10}}>
-                    <ImagePicker logo ref={"logoImage"} mandatory
+                    <ImagePicker logo ref={imageRef} mandatory
                                  image={<Icon2 size={StyleUtils.scale(35)} color={iconColor} name='ios-document-outline'/>}
                                  color='black' pickFromCamera
                                  setImage={this.setDocument.bind(this)}/>
