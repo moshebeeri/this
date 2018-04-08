@@ -444,14 +444,16 @@ class FeedConverter {
             responseFeed.generalId = instance._id;
             responseFeed.uploading = true;
             responseFeed.entities = [{instance: instance._id}];
-            responseFeed.isActive = instanceLifeCycle.isActive(instance._id);
-            responseFeed.isExpired = instanceLifeCycle.isExpired(instance._id, date);
-            responseFeed.isSaved = instanceLifeCycle.isSaved(instance._id);
-            responseFeed.isRealized = instanceLifeCycle.isReedemed(instance._id);
-            if (instance.social_state) {
-                responseFeed.social = instance.social_state
-                responseFeed.social.activityId = feed.activity._id;
-                responseFeed.isRealized = instanceLifeCycle.isReedemed(instance._id) || instance.social_state.realized;
+            if(instanceLifeCycle) {
+                responseFeed.isActive = instanceLifeCycle.isActive(instance._id);
+                responseFeed.isExpired = instanceLifeCycle.isExpired(instance._id, date);
+                responseFeed.isSaved = instanceLifeCycle.isSaved(instance._id);
+                responseFeed.isRealized = instanceLifeCycle.isReedemed(instance._id);
+                if (instance.social_state) {
+                    responseFeed.social = instance.social_state
+                    responseFeed.social.activityId = feed.activity._id;
+                    responseFeed.isRealized = instanceLifeCycle.isReedemed(instance._id) || instance.social_state.realized;
+                }
             }
             responseFeed.endDate = date.toLocaleDateString();
             responseFeed.created = instance.promotion.created;
