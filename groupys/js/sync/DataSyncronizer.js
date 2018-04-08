@@ -1,17 +1,66 @@
 import getStore from "../store";
 import asyncListener from "../api/AsyncListeners";
 import * as types from '../sega/segaActions';
+
 const store = getStore();
 
 class DataSync {
     syncData() {
         //sync group chats
-        this.syncGroupChat(store.getState().groups.groups, store.getState(), store.dispatch);
+        this.syncGroups(store.getState().groups.groups, store.getState(), store.dispatch);
+        this.syncInstances(store.getState().instances.instances, store.getState(), store.dispatch);
     }
 
-    syncGroupChat(groups, state, dispatch) {
+    syncInstances(instances, state, dispatch) {
+        if (Object.values(instances)) {
+            Object.values(instances).forEach(instance => {
+                    // sync social
+                    asyncListener.addListener('social_' + instance._id, (snap) => {
+                        let instanceId = snap.key.substring('social_'.length);
+                        const token = state.authentication.token;
+                        let feedInstance = state.instances.instances[instanceId];
+                        dispatch({
+                            type: types.FEED_SET_SOCIAL_STATE,
+                            token: token,
+                            feed: feedInstance,
+                            id: instanceId
+                        });
+                    })
+                    // sync instance comments
+                    asyncListener.addListener('instanceMessage_' + instance._id, (snap) => {
+                        let instanceId = snap.key.substring('instanceMessage_'.length);
+                        const token = state.authentication.token;
+                        let entities = [];
+                        entities.push({instance: instance._id});
+                        let entitiesComents = state.entityComments.entityCommentsOrder[instanceId];
+                        if (entitiesComents) {
+                            dispatch({
+                                type: types.FEED_SYNC_CHAT,
+                                entities: entities,
+                                token: token,
+                                generalId: instanceId,
+                                lastChatId: entitiesComents[0]
+                            })
+                        } else {
+                            dispatch({
+                                type: types.FEED_SYNC_CHAT,
+                                entities: entities,
+                                token: token,
+                                generalId: instanceId,
+                                lastChatId: 0
+                            })
+                        }
+                    })
+                }
+            )
+        }
+    }
+
+    syncGroups(groups, state, dispatch) {
         if (Object.values(groups)) {
             Object.values(groups).forEach(group => {
+
+                    //sync group chat
                     asyncListener.addListener(group._id, (snap) => {
                         let groupId = snap.key;
                         const token = state.authentication.token;
@@ -21,6 +70,17 @@ class DataSync {
                             this.setChatTop(groupsChats, groupId, user, token, dispatch)
                         }
                     })
+
+                asyncListener.addListener('group_' + group._id, (snap) => {
+                    // TODO use get by group
+                    let groupId = snap.key.substring('group_'.length);
+                    const token = state.authentication.token;
+                    dispatch({
+                        type: types.SAVE_GROUPS_REQUEST,
+                        token: token,
+                    });
+
+                })
                 }
             )
         }

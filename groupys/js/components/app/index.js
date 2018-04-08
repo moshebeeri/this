@@ -203,7 +203,6 @@ class ApplicationManager extends Component {
 
     onChangeTab(tab) {
         const { feedAction,  instanceGroupCommentsAction} = this.props;
-        instanceGroupCommentsAction.stopListenForChat();
         feedAction.stopMainFeedsListener();
         dataSync.syncData();
     }

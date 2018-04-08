@@ -21,11 +21,9 @@ export function sendMessage(groupId, message,instanceId) {
                 message: messageItem
             });
             await commentsApi.createComment(groupId, instanceId, message, token);
-            if (instanceId) {
-                asyncListener.syncChange(groupId +"_"+ instanceId, {comment: message})
-            } else {
-                asyncListener.syncChange(groupId, {comment: message})
-            }
+
+            asyncListener.syncChange(groupId, {comment: message})
+            asyncListener.syncChange('group_' + groupId, 'addComment')
             handler.handleSuccses(getState(), dispatch)
         } catch (error) {
             handler.handleError(error, dispatch, 'sendMessage-group');

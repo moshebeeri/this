@@ -1,4 +1,4 @@
-import {call, fork, put, race, take, throttle} from 'redux-saga/effects'
+import {call, put, throttle} from 'redux-saga/effects'
 import CommentsApi from "../api/commet";
 import {
     feedChatDone,
@@ -6,42 +6,21 @@ import {
     feedChatMaxLoaddNotReturned,
     updateChatScrollUp,
     updateChatTop,
-    restartListenForChat
 } from "../actions/commentsEntities";
-import {handleSucsess}from './SegaSuccsesHandler'
+import {handleSucsess} from './SegaSuccsesHandler'
 import * as segaActions from './segaActions'
-import {delay} from 'redux-saga'
 
 let commentsApi = new CommentsApi();
 
-function* backgroundTask(entities, token, lastChatId, generalId) {
+function* syncFeedComment(action) {
     try {
-        let id = lastChatId;
-        while (true) {
-            yield call(delay, 2000);
-            if(id !== 0){
-                let response = yield call(commentsApi.getFeedComments, entities, token, id, "up");
-                handleSucsess();
-                if (response.length > 0) {
-                    id = response[response.length - 1]._id;
-                    yield* updateChatTop(response, generalId);
-
-                }
-            }
-
+        let response = yield call(commentsApi.getFeedComments, action.entities, action.token, action.lastChatId, "up");
+        handleSucsess();
+        if (response.length > 0) {
+            yield* updateChatTop(response, action.generalId);
         }
     } catch (error) {
-        console.log("failed feed comment request");
-    }
-}
-
-function* watchStartBackgroundTask() {
-    while (true) {
-        const {entities, token, lastChatId, generalId} = yield take(segaActions.LISTEN_FOR_FEED_CHATS);
-        yield race({
-            task: call(backgroundTask, entities, token, lastChatId, generalId),
-            cancel: take(segaActions.CANCEL_FEED_CHAT_LISTENER)
-        })
+        console.log("failed groups comment request");
     }
 }
 
@@ -53,7 +32,7 @@ function* chatScrollUp(action) {
             handleSucsess();
             yield put(feedChatDone(action.generalId));
         } else {
-            let id = action.comments[action.comments.length -1];
+            let id = action.comments[action.comments.length - 1];
             response = yield call(commentsApi.getFeedComments, action.entities, action.token, id, "down");
             handleSucsess();
             if (response.length === 0) {
@@ -65,9 +44,6 @@ function* chatScrollUp(action) {
         if (response.length > 0) {
             const chatFeeds = response.slice(0);
             yield* updateChatScrollUp(response, action.generalId);
-            if(_.isEmpty(action.comments)){
-                yield* restartListenForChat(action.entities,action.generalId,chatFeeds,action.token)
-            }
         }
     } catch (error) {
         console.log("failed scroll down");
@@ -75,8 +51,8 @@ function* chatScrollUp(action) {
 }
 
 function* feedChatSega() {
-    yield fork(watchStartBackgroundTask);
     yield throttle(1000, segaActions.FEED_CHAT_SCROLL_UP, chatScrollUp);
+    yield throttle(1000, segaActions.FEED_SYNC_CHAT, syncFeedComment);
 }
 
 export default feedChatSega;

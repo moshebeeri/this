@@ -11,6 +11,10 @@ class AsyncListeners {
 
     listeners = [];
 
+    constructor(){
+        firebase.auth().signInAnonymously()
+    }
+
     addListener(key, callback) {
         if(!this.listeners.includes(key)) {
             this.listeners.push(key);
@@ -19,8 +23,10 @@ class AsyncListeners {
     }
 
     syncChange(key,value) {
-        firebase.database().ref(key).push(value)
+       firebase.database().ref(key).push(value);
+
     }
+
 }
 const asyncListeners = new AsyncListeners();
 export default asyncListeners;

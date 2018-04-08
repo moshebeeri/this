@@ -1,12 +1,12 @@
 import CommentsApi from "../api/commet";
 import * as actions from "../reducers/reducerActions";
+import ActionLogger from './ActionLogger'
+import handler from './ErrorHandler'
 
 let commentsApi = new CommentsApi();
-import ActionLogger from './ActionLogger'
 let logger = new ActionLogger();
-import * as errors from '../api/Errors'
-import  handler from './ErrorHandler'
-async function getInstanceGroupComments(state,dispatch, group, instance, size, token) {
+
+async function getInstanceGroupComments(state, dispatch, group, instance, size, token) {
     try {
         let response = await commentsApi.getInstanceGroupComments(group, instance, size, token);
         if (response.length > 0) {
@@ -17,14 +17,14 @@ async function getInstanceGroupComments(state,dispatch, group, instance, size, t
                 instanceId: instance
             });
         }
-        handler.handleSuccses(state,dispatch)
+        handler.handleSuccses(state, dispatch)
     } catch (error) {
-        handler.handleError(error,dispatch,'getInstanceGroupComments')
+        handler.handleError(error, dispatch, 'getInstanceGroupComments')
         logger.actionFailed('getInstanceGroupComments');
     }
 }
 
-async function getGroupComments(state,dispatch, group, token) {
+async function getGroupComments(state, dispatch, group, token) {
     try {
         let response = await commentsApi.getGroupComments(group, token, 0, 100);
         if (response.length > 0) {
@@ -34,14 +34,14 @@ async function getGroupComments(state,dispatch, group, token) {
                 gid: group,
             });
         }
-        handler.handleSuccses(state,dispatch)
+        handler.handleSuccses(state, dispatch)
     } catch (error) {
-        handler.handleError(error,dispatch,'getGroupComments')
+        handler.handleError(error, dispatch, 'getGroupComments')
         logger.actionFailed('getGroupComments');
     }
 }
 
-async function getEntityComments(state,dispatch, entities, id, token) {
+async function getEntityComments(state, dispatch, entities, id, token) {
     try {
         let response = await commentsApi.getComment(entities, token);
         dispatch({
@@ -49,24 +49,24 @@ async function getEntityComments(state,dispatch, entities, id, token) {
             comments: response,
             id: id,
         });
-        handler.handleSuccses(state,dispatch)
+        handler.handleSuccses(state, dispatch)
     } catch (error) {
-        handler.handleError(error,dispatch,'getComment')
+        handler.handleError(error, dispatch, 'getComment')
         logger.actionFailed('getComment');
     }
 }
 
 export function fetchInstanceGroupComments(group, instance, size) {
-    return function (dispatch,getState) {
+    return function (dispatch, getState) {
         const token = getState().authentication.token;
-        getInstanceGroupComments(getState(),dispatch, group, instance, size, token);
+        getInstanceGroupComments(getState(), dispatch, group, instance, size, token);
     }
 }
 
 export function fetchEntityComments(entities, id) {
-    return function (dispatch,getState) {
+    return function (dispatch, getState) {
         const token = getState().authentication.token;
-        getEntityComments(getState(),dispatch, entities, id, token);
+        getEntityComments(getState(), dispatch, entities, id, token);
     }
 }
 
@@ -92,9 +92,9 @@ export function updateInstanceEntityComments(group, instance, comment) {
 }
 
 export function fetchGroupComments(group) {
-    return function (dispatch,getState) {
+    return function (dispatch, getState) {
         const token = getState().authentication.token;
-        dispatch(getGroupComments(getState(),dispatch, group, token));
+        dispatch(getGroupComments(getState(), dispatch, group, token));
     }
 }
 
@@ -140,9 +140,9 @@ export function setNextFeeds(comments, token, group) {
                     gid: group._id,
                 }))
             }
-            handler.handleSuccses(getState(),dispatch)
+            handler.handleSuccses(getState(), dispatch)
         } catch (error) {
-            handler.handleError(error,dispatch,'getGroupComments')
+            handler.handleError(error, dispatch, 'getGroupComments')
             logger.actionFailed('getGroupComments');
         }
     }

@@ -54,7 +54,7 @@ export default class FeedPromotion extends Component {
     visited(visible) {
         const {item, actions, group} = this.props;
         if (visible && actions && actions.setSocialState) {
-            actions.setSocialState(item);
+           // actions.setSocialState(item);
             if (group) {
                 actions.setVisibleItem(item.fid, group._id);
             } else {
@@ -178,7 +178,7 @@ export default class FeedPromotion extends Component {
                                                      onPressUnLike={() => unlike(item.id, token)}
                                                      onPressLike={() => like(item.id, token)}
                                                      shareDisabled={shared}
-                                                     groupChat={group && group.group_chat === 'ON'}
+                                                     groupChat={group && group.chat_policy === 'ON'}
                                                      sharable={item.sharable}
                                                      share={item.social.share} shares={item.social.shares}
                                                      shareAction={showUsers}/>}

@@ -4,7 +4,7 @@ import ActionLogger from './ActionLogger'
 import handler from './ErrorHandler'
 import * as types from '../sega/segaActions';
 import {put} from 'redux-saga/effects'
-
+import asyncListener from "../api/AsyncListeners";
 let commentsApi = new CommentsApi();
 let logger = new ActionLogger();
 
@@ -63,6 +63,8 @@ export function sendMessage(entities, generalId, message) {
                 generalId: generalId,
                 message: messageItem
             });
+            asyncListener.syncChange('social_'+generalId,"addComment" )
+            asyncListener.syncChange('instanceMessage_'+generalId,message )
             handler.handleSuccses(getState(), dispatch)
         } catch (error) {
             handler.handleError(error, dispatch, 'createGlobalComment')
@@ -169,50 +171,3 @@ export function feedChatMaxLoaddNotReturned(generalId) {
     }
 }
 
-export function* restartListenForChat(entities, generalId, entitiesComents, token) {
-
-    if(entitiesComents && entitiesComents[0] && entitiesComents[0]._id ) {
-        yield put({
-            type: types.CANCEL_FEED_CHAT_LISTENER,
-        });
-        yield put({
-            type: types.LISTEN_FOR_FEED_CHATS,
-            entities: entities,
-            token: token,
-            generalId: generalId,
-            lastChatId: entitiesComents[0]._id
-        });
-    }
-}
-
-export function stopListenForChat() {
-    return function (dispatch) {
-        dispatch({
-            type: types.CANCEL_FEED_CHAT_LISTENER,
-        })
-    }
-}
-
-export function startListenForChat(entities, generalId) {
-    return function (dispatch, getState) {
-        const token = getState().authentication.token;
-        let entitiesComents = getState().entityComments.entityCommentsOrder[generalId];
-        if (entitiesComents) {
-            dispatch({
-                type: types.LISTEN_FOR_FEED_CHATS,
-                entities: entities,
-                token: token,
-                generalId: generalId,
-                lastChatId: entitiesComents[0]
-            })
-        } else {
-            dispatch({
-                type: types.LISTEN_FOR_FEED_CHATS,
-                entities: entities,
-                token: token,
-                generalId: generalId,
-                lastChatId: 0
-            })
-        }
-    }
-}

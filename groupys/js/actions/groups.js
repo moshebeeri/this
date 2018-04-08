@@ -12,7 +12,7 @@ import GroupsComperator from "../reduxComperators/GroupsComperator"
 import handler from './ErrorHandler'
 import * as types from '../sega/segaActions';
 import {put} from 'redux-saga/effects'
-
+import asyncListener from "../api/AsyncListeners";
 let groupsApi = new GroupsApi();
 let feedApi = new FeedApi();
 let promotionApi = new PtomotionApi();
@@ -382,7 +382,9 @@ export function like(id) {
                 type: actions.LIKE,
                 id: id
             });
+
             await userApi.like(id, token);
+            asyncListener.syncChange('social_'+id,'like' )
         } catch (error) {
             handler.handleError(error, dispatch, 'groups-like')
             logger.actionFailed('groups-like')
@@ -399,6 +401,7 @@ export const unlike = (id) => {
                 type: actions.UNLIKE,
                 id: id
             });
+            asyncListener.syncChange('social_'+id,'un-like' )
         } catch (error) {
             handler.handleError(error, dispatch, 'groups-unlike')
             logger.actionFailed('groups-unlike')
@@ -419,6 +422,7 @@ export function saveFeed(id, navigation, feed) {
                 type: types.SAVE_SINGLE_MYPROMOTIONS_REQUEST,
                 item: savedInstance
             })
+            asyncListener.syncChange('social_'+id,'saved' )
             handler.handleSuccses(getState(), dispatch)
         } catch (error) {
             handler.handleError(error, dispatch, 'groups-saveFeed')
@@ -433,6 +437,7 @@ export function shareActivity(id, activityId, users, token) {
             users.forEach(function (user) {
                 activityApi.shareActivity(user, activityId, token)
             })
+            asyncListener.syncChange('social_'+id,'shared' )
             handler.handleSuccses(getState(), dispatch)
         } catch (error) {
             handler.handleError(error, dispatch, 'groups-shareActivity')
@@ -619,6 +624,7 @@ export function* updateFeedsTop(feeds, group, user) {
             groupFeed: disassemblerItems,
             user: user
         });
+        asyncListener.syncChange('group_' + groupId, 'addActivity');
     }
 }
 

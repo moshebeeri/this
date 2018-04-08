@@ -38,7 +38,7 @@ class GroupFeedHeader extends Component {
     }
 
     handleBack() {
-        this.props.actions.fetchGroups();
+       // this.props.actions.fetchGroups();
     }
 
     showScanner() {

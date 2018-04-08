@@ -86,7 +86,7 @@ export function resetForm() {
 function uploadPostPic() {
     return function (dispatch, getState) {
         const token = getState().authentication.token;
-        PageRefresher.setMainFeedRefresh()
+
     }
 }
 

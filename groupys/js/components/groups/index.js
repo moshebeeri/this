@@ -79,7 +79,7 @@ class Groups extends Component {
 
     refreshTop(){
         this.setState({refreshing:true});
-        this.props.actions.fetchGroups();
+       // this.props.actions.fetchGroups();
         this.setState({refreshing:false});
     }
 
