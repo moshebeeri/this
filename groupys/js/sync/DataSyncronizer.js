@@ -1,12 +1,33 @@
 import getStore from "../store";
 import asyncListener from "../api/AsyncListeners";
 import * as types from '../sega/segaActions';
+
 const store = getStore();
 
 class DataSync {
     syncData() {
         //sync group chats
         this.syncGroupChat(store.getState().groups.groups, store.getState(), store.dispatch);
+        this.syncInstanceSocial(store.getState().instances.instances, store.getState(), store.dispatch);
+    }
+
+    syncInstanceSocial(instances, state, dispatch) {
+        if (Object.values(instances)) {
+            Object.values(instances).forEach(instance => {
+                    asyncListener.addListener('social_' + instance._id, (snap) => {
+                        let instanceId = snap.key.substring('social_'.length);
+                        const token = state.authentication.token;
+                        let feedInstance = state.instances.instances[instanceId];
+                        dispatch({
+                            type: types.FEED_SET_SOCIAL_STATE,
+                            token: token,
+                            feed: feedInstance,
+                            id: instanceId
+                        });
+                    })
+                }
+            )
+        }
     }
 
     syncGroupChat(groups, state, dispatch) {

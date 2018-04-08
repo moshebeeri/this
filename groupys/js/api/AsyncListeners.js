@@ -11,6 +11,10 @@ class AsyncListeners {
 
     listeners = [];
 
+    constructor(){
+        firebase.auth().signInAnonymously()
+    }
+
     addListener(key, callback) {
         if(!this.listeners.includes(key)) {
             this.listeners.push(key);

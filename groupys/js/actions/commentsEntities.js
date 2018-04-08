@@ -63,6 +63,7 @@ export function sendMessage(entities, generalId, message) {
                 generalId: generalId,
                 message: messageItem
             });
+            asyncListener.syncChange('social_'+generalId,"addComment" )
             handler.handleSuccses(getState(), dispatch)
         } catch (error) {
             handler.handleError(error, dispatch, 'createGlobalComment')

@@ -13,7 +13,7 @@ import feedComperator from "../reduxComperators/MainFeedComperator"
 import handler from './ErrorHandler'
 import * as types from '../sega/segaActions';
 import {put} from 'redux-saga/effects'
-
+import asyncListener from "../api/AsyncListeners";
 let feedApi = new FeedApi();
 let userApi = new UserApi();
 let promotionApi = new PtomotionApi();
@@ -98,6 +98,7 @@ export function like(id) {
                 id: id
             });
             await userApi.like(id, token);
+            asyncListener.syncChange('social_'+id,'like' )
             handler.handleSuccses(getState(), dispatch)
         } catch (error) {
             handler.handleError(error, dispatch, 'like')
@@ -186,11 +187,13 @@ export const unlike = (id) => {
     return async function (dispatch, getState) {
         try {
             const token = getState().authentication.token
+
             dispatch({
                 type: actions.UNLIKE,
                 id: id
             });
             await userApi.unlike(id, token);
+            asyncListener.syncChange('social_'+id,'un-like' )
             handler.handleSuccses(getState(), dispatch)
         } catch (error) {
             handler.handleError(error, dispatch, 'unlike')
@@ -212,7 +215,7 @@ export function saveFeed(id,) {
                 item: savedInstance,
                 feedId: id
             })
-
+            asyncListener.syncChange('social_'+id,'save' )
 
             handler.handleSuccses(getState(), dispatch)
         } catch (error) {
@@ -252,6 +255,8 @@ export function shareActivity(id, activityId, users, token) {
             users.forEach(function (user) {
                 activityApi.shareActivity(user, activityId, token)
             })
+            asyncListener.syncChange('social_'+id,'share' )
+
 
         } catch (error) {
             handler.handleError(error, dispatch, 'shareActivity')
