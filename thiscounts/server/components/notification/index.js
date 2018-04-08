@@ -1,15 +1,16 @@
 'use strict';
 const _ = require('lodash');
-const admin = require('firebase-admin');
 const User = require('../../api/user/user.model');
 const Notification = require('../../api/notification/notification.model');
-const serviceAccount = require("../../config/keys/this-1000-firebase-adminsdk-reo90-e33ec01e27.json");
 const i18n = require('../i18n');
 
-admin.initializeApp({
-  credential: admin.credential.cert(serviceAccount),
-  databaseURL: "https://this-1000.firebaseio.com"
-});
+const admin = require('firebase-admin');
+// const serviceAccount = require("../../config/keys/this-1000-firebase-adminsdk-reo90-e33ec01e27.json");
+//
+// admin.initializeApp({
+//   credential: admin.credential.cert(serviceAccount),
+//   databaseURL: "https://this-1000.firebaseio.com"
+// });
 
 function unread(userId, callback){
   Notification.count({})

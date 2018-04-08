@@ -5,8 +5,6 @@ let async = require('async');
 const utils = require('../../components/utils').createUtils();
 
 let logger = require('../../components/logger').createLogger();
-// let graphTools = require('../../components/graph-tools');
-// let graphModel = graphTools.createGraphModel('user');
 let feedTools = require('../../components/feed-tools');
 
 
