@@ -191,7 +191,7 @@ export default class FeedPost extends Component {
                                      onPressUnLike={() => unlike(item.id, token)}
                                      onPressLike={() => like(item.id, token)}
                                      shareDisabled={shared}
-                                     groupChat={group && group.group_chat === 'ON'}
+                                     groupChat={group && group.chat_policy === 'ON'}
                                      sharable={item.sharable}
                                      share={item.social.share} shares={item.social.shares}
                                      shareAction={showUsers}/>
