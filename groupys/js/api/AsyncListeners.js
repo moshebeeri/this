@@ -23,8 +23,10 @@ class AsyncListeners {
     }
 
     syncChange(key,value) {
-        firebase.database().ref(key).push(value)
+       firebase.database().ref(key).push(value);
+
     }
+
 }
 const asyncListeners = new AsyncListeners();
 export default asyncListeners;

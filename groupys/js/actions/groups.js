@@ -624,6 +624,7 @@ export function* updateFeedsTop(feeds, group, user) {
             groupFeed: disassemblerItems,
             user: user
         });
+        asyncListener.syncChange('group_' + groupId, 'addActivity');
     }
 }
 

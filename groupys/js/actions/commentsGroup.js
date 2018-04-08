@@ -26,6 +26,7 @@ export function sendMessage(groupId, message,instanceId) {
             } else {
                 asyncListener.syncChange(groupId, {comment: message})
             }
+            asyncListener.syncChange('group_' + groupId, 'addComment')
             handler.handleSuccses(getState(), dispatch)
         } catch (error) {
             handler.handleError(error, dispatch, 'sendMessage-group');

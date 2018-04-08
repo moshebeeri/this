@@ -56,7 +56,7 @@ function* saveGroup(action) {
 }
 
 function* groupsSega() {
-    yield throttle(2000,segaActions.SAVE_GROUPS_REQUEST, saveGroupsRequest);
+    yield throttle(2000, segaActions.SAVE_GROUPS_REQUEST, saveGroupsRequest);
     yield throttle(2000, segaActions.SAVE_GROUP, saveGroup);
 }
 

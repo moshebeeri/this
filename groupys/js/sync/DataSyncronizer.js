@@ -7,13 +7,14 @@ const store = getStore();
 class DataSync {
     syncData() {
         //sync group chats
-        this.syncGroupChat(store.getState().groups.groups, store.getState(), store.dispatch);
-        this.syncInstanceSocial(store.getState().instances.instances, store.getState(), store.dispatch);
+        this.syncGroups(store.getState().groups.groups, store.getState(), store.dispatch);
+        this.syncInstances(store.getState().instances.instances, store.getState(), store.dispatch);
     }
 
-    syncInstanceSocial(instances, state, dispatch) {
+    syncInstances(instances, state, dispatch) {
         if (Object.values(instances)) {
             Object.values(instances).forEach(instance => {
+                    // sync social
                     asyncListener.addListener('social_' + instance._id, (snap) => {
                         let instanceId = snap.key.substring('social_'.length);
                         const token = state.authentication.token;
@@ -25,6 +26,7 @@ class DataSync {
                             id: instanceId
                         });
                     })
+                    // sync instance comments
                     asyncListener.addListener('instanceMessage_' + instance._id, (snap) => {
                         let instanceId = snap.key.substring('instanceMessage_'.length);
                         const token = state.authentication.token;
@@ -54,9 +56,11 @@ class DataSync {
         }
     }
 
-    syncGroupChat(groups, state, dispatch) {
+    syncGroups(groups, state, dispatch) {
         if (Object.values(groups)) {
             Object.values(groups).forEach(group => {
+
+                    //sync group chat
                     asyncListener.addListener(group._id, (snap) => {
                         let groupId = snap.key;
                         const token = state.authentication.token;
@@ -66,6 +70,17 @@ class DataSync {
                             this.setChatTop(groupsChats, groupId, user, token, dispatch)
                         }
                     })
+
+                asyncListener.addListener('group_' + group._id, (snap) => {
+                    // TODO use get by group
+                    let groupId = snap.key.substring('group_'.length);
+                    const token = state.authentication.token;
+                    dispatch({
+                        type: types.SAVE_GROUPS_REQUEST,
+                        token: token,
+                    });
+
+                })
                 }
             )
         }
