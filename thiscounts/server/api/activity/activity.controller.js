@@ -105,7 +105,6 @@ exports.share = function (req, res) {
                             `(item{_id:'${getActivityEntityId(sharedActivity)}'})-[:SHARED_WITH]->`+
                             `(friend:user{_id:'${req.params.user}'})
                       return count(friend) as count`;
-    console.log(`qqq ${checkQuery}`);
     graphModel.query(checkQuery, (err, result) => {
       if (err) {
         console.error(err);

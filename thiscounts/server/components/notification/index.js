@@ -3,6 +3,7 @@ const _ = require('lodash');
 const User = require('../../api/user/user.model');
 const Notification = require('../../api/notification/notification.model');
 const i18n = require('../i18n');
+const fireEvent = require('../firebaseEvent');
 
 const admin = require('firebase-admin');
 // const serviceAccount = require("../../config/keys/this-1000-firebase-adminsdk-reo90-e33ec01e27.json");
@@ -192,6 +193,7 @@ exports.inAppNotify = function (note, audience) {
     note.timestamp = Date.now();
     Notification.create(note, function (err) {
       if (err) return console.error(err);
+      fireEvent.change('notification', to);
     });
   });
 };
@@ -203,6 +205,7 @@ exports.notifyUser = function (note, user, translate) {
   note.timestamp = Date.now();
   Notification.create(note, function (err, notification) {
     if (err) return console.error(err);
+    fireEvent.change('notification', user);
     Notification.findById(notification._id).exec((err, populated) => {
       if (err) return console.error(err);
       pnsUserDevices(populated, translate)
