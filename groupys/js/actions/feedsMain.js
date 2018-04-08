@@ -99,6 +99,9 @@ export function like(id) {
             });
             await userApi.like(id, token);
             asyncListener.syncChange('social_'+id,'like' )
+            if(getState().instances.instances[id] &&  getState().instances.instances[id].promotion) {
+                asyncListener.syncChange('promotion_' + getState().instances.instances[id].promotion, 'like');
+            }
             handler.handleSuccses(getState(), dispatch)
         } catch (error) {
             handler.handleError(error, dispatch, 'like')
@@ -194,6 +197,9 @@ export const unlike = (id) => {
             });
             await userApi.unlike(id, token);
             asyncListener.syncChange('social_'+id,'un-like' )
+            if(getState().instances.instances[id]  &&  getState().instances.instances[id].promotion) {
+                asyncListener.syncChange('promotion_' + getState().instances.instances[id].promotion, 'un-like');
+            }
             handler.handleSuccses(getState(), dispatch)
         } catch (error) {
             handler.handleError(error, dispatch, 'unlike')

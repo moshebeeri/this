@@ -241,9 +241,14 @@ export function setPromotion(response, businessId, removeId) {
     }
 }
 
+export function setSinglePromotion(response, businessId, item) {
+    item.social_state = response;
+    return {
+        type: actions.UPSERT_PROMOTION_SINGLE,
+        item: item,
+        businessId: businessId
+    }
+}
 
 
-export default {
-    fetchPromotionById,
-    refershBusinessPromotion,
-};
+

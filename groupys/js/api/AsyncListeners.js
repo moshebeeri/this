@@ -18,12 +18,12 @@ class AsyncListeners {
     addListener(key, callback) {
         if(!this.listeners.includes(key)) {
             this.listeners.push(key);
-            firebase.database().ref(key).on('value', callback);
+            firebase.database().ref('events').child(key).on('value', callback);
         }
     }
 
     syncChange(key,value) {
-       firebase.database().ref(key).push(value);
+       firebase.database().ref('events').child(key).push(value);
 
     }
 

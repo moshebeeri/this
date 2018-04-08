@@ -1,6 +1,5 @@
 import getStore from "../store";
 import notificationAction from '../actions/notifications'
-import promotionAction from '../actions/promotions'
 import business from '../actions/business'
 import groups from '../actions/groups'
 import users from '../actions/user'
@@ -13,7 +12,7 @@ let visitedList = ['feed', 'groups', 'businesses'];
 
 class PageRefresher {
     constructor() {
-        pageSync.createPage('notification', pageSync.createStdAverageRefresh('notification', 10, 60000), this.updateNotification.bind(this));
+        //    pageSync.createPage('notification', pageSync.createStdAverageRefresh('notification', 10, 60000), this.updateNotification.bind(this));
         pageSync.createPage('user', pageSync.createStdAverageRefresh('user', 10, 60000), this.updateUser.bind(this));
     }
 
@@ -50,7 +49,7 @@ class PageRefresher {
 
     addBusinessPromotion(businessId) {
         if (!visitedList.includes('promotion_' + businessId,)) {
-            pageSync.createPage('promotion_' + businessId, pageSync.createStdAverageRefresh('promotion_' + businessId, 10, 60000), this.updatePromotion.bind(this, businessId));
+            // pageSync.createPage('promotion_' + businessId, pageSync.createStdAverageRefresh('promotion_' + businessId, 10, 60000), this.updatePromotion.bind(this, businessId));
             visitedList.push('promotion_' + businessId);
         }
     }
@@ -70,22 +69,13 @@ class PageRefresher {
 
     createFeedSocialState(id) {
         if (!visitedList.includes('feed' + id,)) {
-            pageSync.createPage('feed' + id, pageSync.createStdAverageRefresh('feed' + id, 2, 7200000), this.updateSocialState.bind(this, id));
             visitedList.push('feed' + id);
         }
     }
 
     createPromotionUpdate(item, businessId) {
         if (!visitedList.includes('promotion' + item._id,)) {
-            pageSync.createPage('promotion' + item._id, pageSync.createStdAverageRefresh('promotion' + item._id, 2, 7200000), this.updateBusinessPromotion.bind(this, item, businessId));
             visitedList.push('promotion' + item._id);
-        }
-    }
-
-    updateBusinessPromotion(item, businessId) {
-        let token = store.getState().authentication.token;
-        if (token) {
-            promotionAction.refershBusinessPromotion(item, businessId, token, store.dispatch);
         }
     }
 
