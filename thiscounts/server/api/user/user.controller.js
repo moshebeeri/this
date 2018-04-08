@@ -149,8 +149,21 @@ exports.like = function (req, res) {
  */
 exports.unlike = function (req, res) {
   let userId = req.user._id;
-  graphModel.unrelate_ids(userId, 'LIKE', req.params.id);
-  return res.status(200).send("unlike called for promotion " + req.params.id + " and user " + userId);
+  graphModel.unrelate_ids(userId, 'LIKE', req.params.id, (err)=>{
+    if(err) return handleError(res, err);
+    async.parallel({
+        instance: function (callback) {
+          Instance.findById(req.params.id, callback);
+        }
+      },
+      function (err, results) {
+        if(err) return console.log(err);
+        if( results.instance ) {
+          graphModel.unrelate_ids(userId, 'LIKE', results.instance.promotion._id, (err) => {})
+        }
+      });
+  });
+  return res.status(200).send("unlike called for " + req.params.id + " and user " + userId);
 };
 
 exports.share = function (req, res) {
