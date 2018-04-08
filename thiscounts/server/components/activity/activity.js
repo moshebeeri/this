@@ -6,11 +6,11 @@ let graphTools = require('../graph-tools');
 let graphModel = graphTools.createGraphModel('feed');
 let logger = require('../logger').createLogger();
 let utils = require('../utils').createUtils();
-let mongoose = require('mongoose'),
-  Schema = mongoose.Schema;
+let mongoose = require('mongoose');
 
 let Feed = require('../../api/feed/feed.model');
 let ActivitySchema = require('../../api/activity/activity.model');
+const fireEvent = require('../firebaseEvent');
 
 function Activity() {
 }
@@ -38,10 +38,11 @@ function update_feeds(effected, activity) {
       Feed.create({
         entity: entity._id,
         activity: activity._id
-      }, function (err) {
+      }, function (err, feed) {
         if (err) {
-          logger.error(err.message);
+          return logger.error(err.message);
         }
+        fireEvent.change('feed', feed._id);
       });
     });
   }
@@ -54,10 +55,11 @@ function update_feeds(effected, activity) {
       Feed.create({
       entity: actor,
       activity: activity._id
-      }, function (err) {
+      }, function (err, feed) {
         if (err) {
-          logger.error(err.message);
+          return logger.error(err.message);
         }
+        fireEvent.change('feed', feed._id);
       });
     }
   }
