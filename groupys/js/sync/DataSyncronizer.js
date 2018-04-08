@@ -25,6 +25,30 @@ class DataSync {
                             id: instanceId
                         });
                     })
+                    asyncListener.addListener('instanceMessage_' + instance._id, (snap) => {
+                        let instanceId = snap.key.substring('instanceMessage_'.length);
+                        const token = state.authentication.token;
+                        let entities = [];
+                        entities.push({instance: instance._id});
+                        let entitiesComents = state.entityComments.entityCommentsOrder[instanceId];
+                        if (entitiesComents) {
+                            dispatch({
+                                type: types.FEED_SYNC_CHAT,
+                                entities: entities,
+                                token: token,
+                                generalId: instanceId,
+                                lastChatId: entitiesComents[0]
+                            })
+                        } else {
+                            dispatch({
+                                type: types.FEED_SYNC_CHAT,
+                                entities: entities,
+                                token: token,
+                                generalId: instanceId,
+                                lastChatId: 0
+                            })
+                        }
+                    })
                 }
             )
         }

@@ -49,8 +49,8 @@ export const SAVE_PROMOTION = 'SAVE_PROMOTION';
 export const SAVE_PRODUCT = 'SAVE_PRODUCT';
 
 //feed comments
-export const LISTEN_FOR_FEED_CHATS= 'LISTEN_FOR_FEED_CHATS';
-export const CANCEL_FEED_CHAT_LISTENER = 'CANCEL_FEED_CHAT_LISTENER';
+
 export const FEED_CHAT_SCROLL_UP = 'FEED_CHAT_SCROLL_UP';
+export const FEED_SYNC_CHAT = 'FEED_SYNC_CHAT';
 // change tav
 export const CHANGE_TAB = 'CHANGE_TAB';
