@@ -197,7 +197,11 @@ export function doNotification(notificationId, notificationAction) {
 
 export function redirectToChatGroup(groupId, notificationId, notificationAction, navigation) {
     return async function (dispatch, getState) {
-        const token = getState().authentication.token;
+        let token = getState().authentication.token;
+        while(!token){
+            await timeout(500);
+            token = getState().authentication.token;
+        }
         try {
             notificationApi.doNotificationAction(token, notificationId, notificationAction);
             let group = getState().groups.groups[groupId];
@@ -210,6 +214,10 @@ export function redirectToChatGroup(groupId, notificationId, notificationAction,
             handler.handleError(error, dispatch, 'doNotification')
         }
     }
+}
+
+function timeout(ms) {
+    return new Promise(resolve => setTimeout(resolve, ms));
 }
 
 export default {

@@ -70,6 +70,7 @@ const resetAction = NavigationActions.reset({
 let logger = new ActionLogger();
 // this shall be called regardless of app state: running, background or not running. Won't be called when app is killed by user in iOS
 FCM.on(FCMEvent.Notification, async (notif) => {
+    FCM.getBadgeNumber().then(number => FCM.setBadgeNumber(number -1));
     //console.log(notif);
     // there are two parts of notif. notif.notification contains the notification payload, notif.data contains data payload
     if (notif.local_notification) {
