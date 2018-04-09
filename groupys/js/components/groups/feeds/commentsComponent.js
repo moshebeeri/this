@@ -117,6 +117,7 @@ class CommentsComponent extends Component {
                 token={token}
                 group={group}
                 title='Feeds'
+                noLegacy={true}
                 ItemDetail={this.renderItem.bind(this)}>
 
             </GenericFeedManager>

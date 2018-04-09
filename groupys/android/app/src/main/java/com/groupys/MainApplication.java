@@ -15,7 +15,7 @@ import com.reactnative.ivpusic.imagepicker.PickerPackage;
 import com.evollu.react.fa.FIRAnalyticsPackage;
 import com.AlexanderZaytsev.RNI18n.RNI18nPackage;
 import com.vydia.RNUploader.UploaderReactPackage;
-
+import com.groupys.CustomBitmapMemoryCacheParamsSupplier;
 //import com.inprogress.reactnativeyoutube.ReactNativeYouTube;
 import com.brentvatne.react.ReactVideoPackage;
 import com.babisoft.ReactNativeLocalization.ReactNativeLocalizationPackage;
@@ -32,6 +32,9 @@ import com.facebook.react.ReactInstanceManager;
 import com.facebook.react.ReactNativeHost;
 import com.facebook.react.ReactPackage;
 import com.facebook.react.shell.MainReactPackage;
+import com.facebook.react.shell.MainPackageConfig;
+import com.facebook.imagepipeline.core.ImagePipelineConfig;
+
 import com.facebook.soloader.SoLoader;
 
 import com.facebook.react.modules.i18nmanager.I18nUtil;
@@ -55,8 +58,19 @@ public class MainApplication extends Application implements ReactApplication {
 
     @Override
     protected List<ReactPackage> getPackages() {
+
+     ImagePipelineConfig frescoConfig = ImagePipelineConfig
+                .newBuilder(getApplicationContext())
+                .setBitmapMemoryCacheParamsSupplier(new CustomBitmapMemoryCacheParamsSupplier(getApplicationContext()))
+                .build();
+
+    MainPackageConfig appConfig = new MainPackageConfig
+                .Builder()
+                .setFrescoConfig(frescoConfig)
+                .build();
       return Arrays.<ReactPackage>asList(
-          new MainReactPackage(),
+
+          new MainReactPackage(appConfig),
             new SvgPackage(),
             new RNFetchBlobPackage(),
             new RNReactNativeLinkPreviewPackage(),
