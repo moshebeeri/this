@@ -117,7 +117,7 @@ function applyToUserList(users_ids, instance, callback) {
         if (err) return callback(err);
         if (!positiveBalance) return callback(new Error('HTTP_PAYMENT_REQUIRED'));
         user_instance_eligible_activity(user._id, instance);
-        Instance.notify(instance._id, [user._id]);
+        Instance.notify(instance, [user._id]);
       })
     }, callback);
   })

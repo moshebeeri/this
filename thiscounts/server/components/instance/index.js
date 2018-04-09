@@ -560,7 +560,17 @@ Instances.createSingleInstance =
   };
 
 Instances.notify =
-  Instances.prototype.createSingleInstance = function (instance, audience) {
+  Instances.prototype.notifyInstance = function (instance, audience) {
+    console.log(`============> ${JSON.stringify(instance)}`);
+    function extractBusinessName(instance){
+      try{
+        return instance.promotion.entity.business.name
+      }catch(e){
+        console.error(`${e} ${JSON.stringify(instance)}`)
+      }
+      return '';
+    }
+
     audience.forEach(to => {
       User.findById(to).exec((err, user) => {
         if(err) return console.error(err);
@@ -569,8 +579,8 @@ Instances.notify =
           note: 'instance_eligible',
           instance: instance,
           // new discount from instance.promotion.business.name
-          title: util.format(i18n.get('NEW_PROMOTION_ELIGIBLE_TITLE', user.locale), instance.promotion.business.name),
-          body: instance.promotion.name,
+          title: util.format(i18n.get('NEW_PROMOTION_ELIGIBLE_TITLE', user.locale), extractBusinessName(instance)),
+          body: instance.promotion ? instance.promotion.name : '',
           timestamp: Date.now()
         };
         Notifications.notifyUser(note, user._id);

@@ -160,7 +160,7 @@ function proximityEligibility(userId, location, eligible, isFollower, callback) 
         })
       }
 
-      Instance.notify(instance._id, [userId]);
+      Instance.notify(instance, [userId]);
       //Notify new costumer received eligible by proximity
       if(!isFollower) {
         entityRoleMembers(eligible.entity._id, function (err, userIds) {
