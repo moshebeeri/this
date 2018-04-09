@@ -51,7 +51,7 @@ function* setTopFeeds(action) {
 }
 
 function* groupFeedSega() {
-    yield fork(watchStartBackgroundTask);
+   // yield fork(watchStartBackgroundTask);
     yield throttle(3000, segaActions.GROUP_FEED_SET_TOP_FEED, setTopFeeds);
 }
 

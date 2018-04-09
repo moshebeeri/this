@@ -142,7 +142,7 @@ function* feedSega() {
     yield throttle(3000, segaActions.FEED_SET_TOP_FEED, setTopFeeds);
 
 
-    yield fork(watchStartBackgroundTask);
+ //   yield fork(watchStartBackgroundTask);
 }
 
 export default feedSega;
