@@ -75,6 +75,7 @@ class AddBusiness extends Component {
                 categories: [Number(category), Number(subcategory)],
                 formData: {},
                 coverImage: source,
+                saving:false
             };
         } else {
             let categories = [];
@@ -127,6 +128,7 @@ class AddBusiness extends Component {
                 location: templateBusiness.location,
                 IdIdentifierImage: templateBusiness.IdIdentifierImage,
                 LetterOfIncorporationImage: templateBusiness.LetterOfIncorporationImage,
+                saving:false
             };
         }
     }
@@ -155,6 +157,7 @@ class AddBusiness extends Component {
         let formIsValid = this.validateForm(this.saveFormData.bind(this));
         Keyboard.dismiss();
         if (formIsValid) {
+            this.setState({saving: true});
             this.props.saveBusiness(this.createBusiness(), this.props.navigation);
         }
     }
@@ -185,6 +188,9 @@ class AddBusiness extends Component {
 
     async setReduxState(value) {
         await this.setState(value);
+        if(this.state.saving){
+            return;
+        }
         if (value.name) {
             return;
         }
@@ -252,22 +258,26 @@ class AddBusiness extends Component {
     }
 
     setIdDocument(image) {
-        this.setState({
-            IdIdentifierImage: image
-        });
-        this.setReduxState({
-            IdIdentifierImage: image
-        })
+        if(image) {
+            this.setState({
+                IdIdentifierImage: image
+            });
+            this.setReduxState({
+                IdIdentifierImage: image
+            })
+        }
 
     }
 
     setLetterDocument(image) {
-        this.setReduxState({
-            LetterOfIncorporationImage: image
-        })
-        this.setState({
-            LetterOfIncorporationImage: image
-        });
+        if(image) {
+            this.setReduxState({
+                LetterOfIncorporationImage: image
+            })
+            this.setState({
+                LetterOfIncorporationImage: image
+            });
+        }
     }
 
     createImageComponent(coverPic) {
