@@ -24,7 +24,6 @@ router.post('/', controller.create);
 router.get('/like/:id', auth.isAuthenticated(), controller.like);
 router.delete('/like/:id', auth.isAuthenticated(), controller.unlike);
 router.get('/share/:id', auth.isAuthenticated(), controller.share);
-router.post('/phonebookNew', auth.isAuthenticated(), controller.phonebook);
 router.post('/phonebook', auth.isAuthenticated(), controller.phonebook);
 router.get('/follow/:id', auth.isAuthenticated(), controller.follow);
 router.delete('/follow/:id', auth.isAuthenticated(), controller.unfollow);

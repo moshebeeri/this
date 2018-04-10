@@ -483,6 +483,7 @@ exports.verification = function (req, res) {
       if (err) {
         return handleError(res, err);
       }
+/* delete!!!
       PhoneNumber.findByIdAndUpdate(user.phone_number,
         {_id: user.phone_number, updated: Date.now(), owner: user._id},
         {upsert: true, new: true, runValidators: true},
@@ -492,15 +493,16 @@ exports.verification = function (req, res) {
           return res.status(200).send('user verified');
         }
       );
-      // mongoose.connection.db.collection('phonenumbers', function (err, numbers) {
-      //   if (err) return logger.error(err.message);
-      //   console.log(`_id: ${user.phone_number}, updated: ${Date.now()}, {$set: {owner: ${user._id}}, {upsert: ${true}}`);
-      //   numbers.update({_id: user.phone_number, updated: Date.now()}, {$set: {owner: user._id}}, {upsert: true});
-      //   //if this users number exist in phonenumbers collection
-      //   //then all users (ids in contacts) should be followed by him
-      //   new_user_follow(user)
-      //
-      // });
+*/
+      mongoose.connection.db.collection('phonenumbers', function (err, numbers) {
+        if (err) return logger.error(err.message);
+        console.log(`_id: ${user.phone_number}, updated: ${Date.now()}, {$set: {owner: ${user._id}}, {upsert: ${true}}`);
+        numbers.update({_id: user.phone_number, updated: Date.now()}, {$set: {owner: user._id}}, {upsert: true});
+        //if this users number exist in phonenumbers collection
+        //then all users (ids in contacts) should be followed by him
+        new_user_follow(user);
+        return res.status(200).send('user verified');
+      });
     });
   });
 };
