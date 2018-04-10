@@ -66,7 +66,7 @@ class ContactsApi {
         let json = JSON.stringify(phoneBooks);
        // console.log('Sending phone book' + json);
         try {
-            let response = await fetch(`${server_host}/api/users/phonebookNew`, {
+            let response = await fetch(`${server_host}/api/users/phonebook`, {
                 method: 'POST',
                 headers: {
                     'Accept': 'application/json, text/plain, */*',
