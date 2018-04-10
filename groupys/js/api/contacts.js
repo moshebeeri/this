@@ -63,6 +63,10 @@ class ContactsApi {
             phone.name = contact.givenName + ' ' + contact.familyName;
             return phone;
         });
+
+        if(!token){
+            return;
+        }
         let json = JSON.stringify(phoneBooks);
        // console.log('Sending phone book' + json);
         try {
