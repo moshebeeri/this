@@ -252,9 +252,9 @@ exports.create = function (req, res, next) {
             let token = jwt.sign({_id: user._id}, config.secrets.session, {expiresIn: 60 * 24 * 30});
             if (config.sms_verification) {
               send_sms_verification_code(user);
-            } else {
-              new_user_follow(user);
-            }
+            } //else {
+            //   new_user_follow(user);
+            // }
             activity.activity({
               user: user,
               action: "welcome",
@@ -319,7 +319,7 @@ exports.phonebook = function (req, res) {
               {
                 $addToSet: {
                   contacts: {
-                    userId: userId,
+                    userId: `${userId}`,
                     nick: contact.name
                   }
                 }
@@ -331,6 +331,7 @@ exports.phonebook = function (req, res) {
                 } else {
                   let phone_number = object.value;
                   if (utils.defined(phone_number.owner)) {
+                    console.log(`phonebook follow_user: ${phone_number._id} ${userId}`);
                     graphModel.follow_user_by_phone_number(phone_number._id, userId, function (err) {
                       if (err) return logger.error(err.message);
                       graphModel.owner_followers_follow_business(userId, phone_number.owner);
@@ -352,7 +353,8 @@ exports.phonebook = function (req, res) {
  * @param user
  */
 function new_user_follow(user) {
-  PhoneNumber.findOne({_id: user.phone_number}, function (err, phone_number) {
+  console.log(`new_user_follow: ${user.phone_number}`);
+ PhoneNumber.findOne({_id: user.phone_number}, function (err, phone_number) {
     if (err)
       return logger.error(err.message);
 
@@ -366,10 +368,12 @@ function new_user_follow(user) {
         if (err) console.log(err);
         //TODO: Suggests who to follow (All entities)
       });
-    }
-    else {
+    } else {
+      console.log(`new_user_follow phone_number: ${JSON.stringify(phone_number)}`);
       //We have this number, make user follow the users who have his number
-      phone_number.contacts.forEach(function (contact) {
+      phone_number.contacts.forEach( (contactX) => {
+        //this line is redundant but solved some bug we could not understand since contact.userId was undefined value
+        const contact = JSON.parse(JSON.stringify(contactX));
         graphModel.follow_user_by_phone_number(user.phone_number, contact.userId);
         activity_follow(user._id, {user: contact.userId});
       });
@@ -483,7 +487,6 @@ exports.verification = function (req, res) {
       if (err) {
         return handleError(res, err);
       }
-/* delete!!!
       PhoneNumber.findByIdAndUpdate(user.phone_number,
         {_id: user.phone_number, updated: Date.now(), owner: user._id},
         {upsert: true, new: true, runValidators: true},
@@ -493,16 +496,16 @@ exports.verification = function (req, res) {
           return res.status(200).send('user verified');
         }
       );
-*/
-      mongoose.connection.db.collection('phonenumbers', function (err, numbers) {
-        if (err) return logger.error(err.message);
-        console.log(`_id: ${user.phone_number}, updated: ${Date.now()}, {$set: {owner: ${user._id}}, {upsert: ${true}}`);
-        numbers.update({_id: user.phone_number, updated: Date.now()}, {$set: {owner: user._id}}, {upsert: true});
-        //if this users number exist in phonenumbers collection
-        //then all users (ids in contacts) should be followed by him
-        new_user_follow(user);
-        return res.status(200).send('user verified');
-      });
+
+      // mongoose.connection.db.collection('phonenumbers', function (err, numbers) {
+      //   if (err) return logger.error(err.message);
+      //   console.log(`_id: ${user.phone_number}, updated: ${Date.now()}, {$set: {owner: ${user._id}}, {upsert: ${true}}`);
+      //   numbers.update({_id: user.phone_number, updated: Date.now()}, {$set: {owner: user._id}}, {upsert: true});
+      //   //if this users number exist in phonenumbers collection
+      //   //then all users (ids in contacts) should be followed by him
+      //   new_user_follow(user);
+      //   return res.status(200).send('user verified');
+      // });
     });
   });
 };
