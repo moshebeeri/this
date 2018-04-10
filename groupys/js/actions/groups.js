@@ -179,7 +179,7 @@ export function setGroupQrCode(group) {
             });
         } catch (error) {
             handler.handleError(error, dispatch, 'setBusinessQrCode')
-            logger.actionFailed("business_getBusinessQrCodeImage", business);
+            logger.actionFailed("business_getBusinessQrCodeImage", group._id);
         }
     }
 }
