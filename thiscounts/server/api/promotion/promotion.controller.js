@@ -97,6 +97,8 @@ exports.test_me = function (req, res) {
 function applyToGroupList(groups_ids, instance, callback) {
   Group.find({}).where('_id').in(groups_ids).exec(function (err, groups) {
     if (err) return callback(err);
+    if(!groups || groups.length < 1)
+      callback(null);
     async.each(groups, (group, callback) => {
       pricing.balance(instance.promotion.entity, function (err, positiveBalance) {
         if (err) return callback(err);
@@ -139,7 +141,6 @@ function applyToFollowingGroups(promotion, instances, callback) {
       if (instance.variation === 'SINGLE') {
         let query = instanceGraphModel.related_type_id_dir_query(business._id, 'FOLLOW', 'group', 'in', 0, instance.quantity);
         instanceGraphModel.query(query, function (err, groups_ids) {
-          console.log(`applyToFollowingGroups: ${JSON.stringify(groups_ids)}`);
           if (err) return callback(err);
           return applyToGroupList(groups_ids, instance, promotion.creator, callback)
         })
