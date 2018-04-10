@@ -190,6 +190,7 @@ class ApplicationManager extends Component {
             this.props.actions.showGenericPopup(notification.title, notification.notificationId, notification.action);
         }
         AppState.addEventListener('change', this._handleAppStateChange);
+        this.props.userActions.resetForm();
     }
 
     _handleAppStateChange = (nextAppState) => {
