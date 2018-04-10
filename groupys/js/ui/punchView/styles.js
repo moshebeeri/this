@@ -5,13 +5,14 @@ module.exports = {
     punch: {
         width: styleUtils.scale(50),
         height: styleUtils.scale(50),
-        backgroundColor: 'white',
+        backgroundColor: '#ffffff99',
         borderRadius: styleUtils.scale(40),
         borderWidth: 1,
-        opacity: 0.6,
+
         borderColor: '#0000004d',
         marginRight: styleUtils.scale(10),
         marginLeft: styleUtils.scale(10),
+        alignItems:'center',justifyContent:'center',
     },
     punchFeed: {
         width: 60,
@@ -19,9 +20,11 @@ module.exports = {
         backgroundColor: 'white',
         borderRadius: 40,
         borderWidth: 1,
+
         borderColor: '#2db6c8',
         marginRight: 10,
         marginLeft: 10,
+        alignItems:'center',justifyContent:'center',
     },
     punchFeedFull: {
         width: styleUtils.scale(50),

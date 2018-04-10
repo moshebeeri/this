@@ -2,7 +2,8 @@ import React, {Component} from 'react';
 import {View,Image} from 'react-native';
 import {Button, Icon, Input} from 'native-base';
 import styles from './styles';
-const punched = require('../../../images/punch.png');
+const punched = require('../../../images/punch_inner_2.png');
+const punched2 = require('../../../images/punch_inner_1.png');
 import styleUtils from '../../utils/styleUtils'
 export default class PunchView extends Component {
     constructor(props) {
@@ -57,12 +58,18 @@ export default class PunchView extends Component {
         if(this.props.feed) {
             style = styles.punchFeed;
         }
-        if(isFull){
-            style = styles.punchFeedFull;
+
+        let show1  =true;
+        if(index %2 === 0){
+            show1 = false;
         }
+
         return <View key={index }style={style}>
-            {isFull && <Image style={{ width: styleUtils.scale(5),
-                height: styleUtils.scale(5)}} resizeMode="cover" source={punched}></Image>}
+            {isFull && show1 && <Image style={{ width: styleUtils.scale(30),
+                height: styleUtils.scale(30), alignItems:'center',justifyContent:'center'}} resizeMode="cover" source={punched}></Image>}
+            {isFull && !show1 && <Image style={{ width: styleUtils.scale(30),
+                height: styleUtils.scale(30), alignItems:'center',justifyContent:'center'}} resizeMode="cover" source={punched2}></Image>}
+
         </View>
     }
 }
