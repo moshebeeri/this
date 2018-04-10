@@ -112,6 +112,7 @@ class CommentsComponent extends Component {
                 actions={actions}
                 token={token}
                 title='Feeds'
+                noLegacy={true}
                 ItemDetail={this.renderItem.bind(this)}>
 
             </GenericFeedManager>;

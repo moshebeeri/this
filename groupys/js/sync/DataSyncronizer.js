@@ -6,10 +6,20 @@ const store = getStore();
 
 class DataSync {
     syncData() {
-        this.syncGroups(store.getState().groups.groups, store.getState(), store.dispatch,store.getState().user.user);
+        //workaround  until redux stores values return from hibernate
+        if (Object.values(store.getState().instances.instances).length === 0) {
+            setTimeout(this.initSyncListeners.bind(this), 2000);
+        } else {
+            this.initSyncListeners();
+        }
+    }
+
+    initSyncListeners() {
+        this.syncGroups(store.getState().groups.groups, store.getState(), store.dispatch, store.getState().user.user);
         this.syncInstances(store.getState().instances.instances, store.getState(), store.dispatch);
         this.syncPromotions(store.getState().promotions.promotions, store.getState(), store.dispatch);
         this.syncMainFeed(store.getState().user.user, store.getState(), store.dispatch);
+        this.syncNotification(store.getState().user.user, store.getState(), store.dispatch);
     }
 
     syncMainFeed(user, state, dispatch) {
@@ -29,6 +39,18 @@ class DataSync {
         }
     }
 
+    syncNotification(user, state, dispatch) {
+        if (user) {
+            asyncListener.addListener('notification_' + user._id, (snap) => {
+                const token = state.authentication.token;
+                dispatch({
+                    type: types.SAVE_NOTIFICATION_TOP_REQUEST,
+                    token: token, user: user
+                });
+            })
+        }
+    }
+
     syncPromotions(promotions, state, dispatch) {
         if (Object.values(promotions)) {
             Object.values(promotions).forEach(promotion => {
@@ -36,9 +58,9 @@ class DataSync {
                         let promotionId = snap.key.substring('promotion_'.length);
                         const token = state.authentication.token;
                         let promotion = state.promotions.promotions[promotionId];
-                        if(promotion ){
+                        if (promotion) {
                             let businessId = promotion.entity.business;
-                            if(state.businesses.myBusinesses[businessId]) {
+                            if (state.businesses.myBusinesses[businessId]) {
                                 dispatch({
                                     type: types.UPDATE_PROMOTION,
                                     token: token,
@@ -48,7 +70,6 @@ class DataSync {
                                 });
                             }
                         }
-
                     })
                 }
             )
@@ -100,7 +121,7 @@ class DataSync {
         }
     }
 
-    syncGroups(groups, state, dispatch,user) {
+    syncGroups(groups, state, dispatch, user) {
         if (Object.values(groups)) {
             Object.values(groups).forEach(group => {
                     //sync group chat

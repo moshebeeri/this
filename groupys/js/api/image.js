@@ -107,13 +107,12 @@ class ImageApi {
 
     getQrCodeImage(qrCode, token) {
         return serverRequestHandler.fetch_handler(`${server_host}/api/qrcodes/image/id/${qrCode}`, {
-            method: 'POST',
+            method: 'GET',
             headers: {
                 'Accept': 'application/json, text/plain, */*',
                 'Content-Type': 'multipart/form-data',
                 'Authorization': 'Bearer ' + token,
             },
-            body: data
         }, 'api/qrcodes', 'mage/code');
     }
 }

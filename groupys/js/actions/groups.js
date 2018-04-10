@@ -179,7 +179,7 @@ export function setGroupQrCode(group) {
             });
         } catch (error) {
             handler.handleError(error, dispatch, 'setBusinessQrCode')
-            logger.actionFailed("business_getBusinessQrCodeImage", business);
+            logger.actionFailed("business_getBusinessQrCodeImage", group._id);
         }
     }
 }
@@ -384,6 +384,9 @@ export function like(id) {
             });
 
             await userApi.like(id, token);
+            if(getState().instances.instances[id]  &&  getState().instances.instances[id].promotion) {
+                asyncListener.syncChange('promotion_' + getState().instances.instances[id].promotion, 'like');
+            }
             asyncListener.syncChange('social_'+id,'like' )
         } catch (error) {
             handler.handleError(error, dispatch, 'groups-like')
@@ -401,6 +404,9 @@ export const unlike = (id) => {
                 type: actions.UNLIKE,
                 id: id
             });
+            if(getState().instances.instances[id]  &&  getState().instances.instances[id].promotion) {
+                asyncListener.syncChange('promotion_' + getState().instances.instances[id].promotion, 'un-like');
+            }
             asyncListener.syncChange('social_'+id,'un-like' )
         } catch (error) {
             handler.handleError(error, dispatch, 'groups-unlike')
@@ -423,6 +429,9 @@ export function saveFeed(id, navigation, feed) {
                 item: savedInstance
             })
             asyncListener.syncChange('social_'+id,'saved' )
+            if(getState().instances.instances[id]  &&  getState().instances.instances[id].promotion) {
+                asyncListener.syncChange('promotion_' + getState().instances.instances[id].promotion, 'save');
+            }
             handler.handleSuccses(getState(), dispatch)
         } catch (error) {
             handler.handleError(error, dispatch, 'groups-saveFeed')

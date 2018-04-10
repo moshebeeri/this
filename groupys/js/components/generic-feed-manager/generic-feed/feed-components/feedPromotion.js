@@ -241,8 +241,10 @@ export default class FeedPromotion extends Component {
                     width: StyleUtils.getWidth()
                 }}>
                     {item.promotion === 'PUNCH_CARD' &&
+                        <View style={{marginBottom:StyleUtils.scale(20)}}>
                     <PunchView numberRealized={item.realizedPunches} feed={this.props.feed}
-                               numberOfPunches={item.punches}/>}
+                               numberOfPunches={item.punches}/>
+                        </View>}
 
                     {item.business &&
                     <BusinessHeader navigation={this.props.navigation} business={item.business}

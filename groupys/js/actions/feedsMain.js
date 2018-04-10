@@ -222,7 +222,9 @@ export function saveFeed(id,) {
                 feedId: id
             })
             asyncListener.syncChange('social_'+id,'save' )
-
+            if(getState().instances.instances[id]  &&  getState().instances.instances[id].promotion) {
+                asyncListener.syncChange('promotion_' + getState().instances.instances[id].promotion, 'save');
+            }
             handler.handleSuccses(getState(), dispatch)
         } catch (error) {
             handler.handleError(error, dispatch, 'saveFeed')

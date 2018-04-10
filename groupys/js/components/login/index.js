@@ -10,6 +10,7 @@ import {isAuthenticated} from "../../selectors/appSelector";
 import strings from "../../i18n/i18n"
 import StyleUtils from "../../utils/styleUtils";
 import {ThisText} from '../../ui/index';
+import navigationUtils from '../../utils/navigationUtils'
 
 const {width, height} = Dimensions.get('window');
 const thisLogo = require('../../../images/this-logo.png');
@@ -37,7 +38,7 @@ class Login extends Component {
     }
 
     replaceRoute(route) {
-        this.props.navigation.navigate(route);
+        navigationUtils.doNavigation(this.props.navigation, route);
     }
 
     forgetPassword() {
@@ -156,7 +157,7 @@ class Login extends Component {
                                 <ThisText style={{
                                     backgroundColor: 'transparent',
                                     color: 'white',
-                                    marginTop:StyleUtils.scale(2),
+                                    marginTop: StyleUtils.scale(2),
                                     fontSize: StyleUtils.scale(14)
                                 }}>{strings.NoAccountMessage}</ThisText>
                                 <ThisText onPress={() => this.replaceRoute('Signup')}

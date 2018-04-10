@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import {FlatList} from 'react-native';
+import {FlatList, Platform} from 'react-native';
 import {connect} from 'react-redux';
 import {actions} from 'react-native-navigation-redux-helpers';
 import {
@@ -26,13 +26,13 @@ class GenericListManager extends Component {
     }
 
     renderItem(item) {
-        const {navigation, user, business,businessId,actions, groupActions,ItemDetail,setVisibleItem,onPressItem,onPressMessageItem,visibleItem,location} = this.props;
+        const {navigation, user, business, businessId, actions, groupActions, ItemDetail, setVisibleItem, onPressItem, onPressMessageItem, visibleItem, location} = this.props;
         let id = item.item.id;
         if (!id) {
             id = item.item._id;
         }
         let index = item.item.index;
-        if(!index){
+        if (!index) {
             index = id;
         }
         return <ItemDetail
@@ -53,7 +53,7 @@ class GenericListManager extends Component {
     }
 
     render() {
-        const {rows,  actions, update, onEndReached, noRefresh,refreshing,onRefreshing} = this.props;
+        const {rows, actions, update, onEndReached, noRefresh, refreshing, onRefreshing} = this.props;
         if (noRefresh) {
             return (
                 <View style={{backgroundColor: `${appBackgroundColor}`}}>
@@ -66,6 +66,7 @@ class GenericListManager extends Component {
                         extraData={update}
                         refreshing={refreshing}
                         onRefresh={onRefreshing}
+                        removeClippedSubviews={Platform.OS === 'android'}
                     />
 
                 </View>
@@ -84,6 +85,7 @@ class GenericListManager extends Component {
                     onRefresh={onRefreshing}
                     renderItem={this.renderItem.bind(this)}
                     extraData={update}
+                    removeClippedSubviews={Platform.OS === 'android'}
                 />
 
             </View>

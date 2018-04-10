@@ -12,6 +12,7 @@ import * as commentAction from "../../../actions/commentsGroup";
 import * as instanceGroupCommentsAction from "../../../actions/instanceGroupComments"
 import {ScrolTabView} from '../../../ui/index'
 import GroupFeedComponent from './groupsFeeds'
+import navigationUtils from '../../../utils/navigationUtils'
 
 class GroupFeed extends Component {
     static navigationOptions = ({navigation}) => ({
@@ -65,7 +66,7 @@ class GroupFeed extends Component {
 
     navigateToAdd() {
         const group = this.props.navigation.state.params.group;
-        this.props.navigation.navigate('PostForm', {group: group})
+        navigationUtils.doNavigation(this.props.navigation, 'PostForm', {group: group});
     }
 
     navigateToChat(item) {

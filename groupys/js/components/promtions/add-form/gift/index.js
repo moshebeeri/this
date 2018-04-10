@@ -1,14 +1,14 @@
 import React, {Component} from 'react';
-import {Keyboard, Platform, Text, View} from 'react-native'
+import {Keyboard, View} from 'react-native'
 import styles from '../styles'
-import {SelectButton, SimplePicker} from '../../../../ui/index';
+import {SelectButton, SimplePicker, ThisText} from '../../../../ui/index';
 import strings from "../../../../i18n/i18n"
 import StyleUtils from '../../../../utils/styleUtils';
 import {Thumbnail} from 'native-base';
 import ProductPreview from "../../../product/productPreview/index";
-import {ThisText} from '../../../../ui/index';
 import UserPreview from "../../../user-profile/userPreview/index";
 import BusinessPreview from "../../../business/businessPreview/index";
+import navigationUtils from '../../../../utils/navigationUtils'
 
 const types = [
     {
@@ -46,7 +46,6 @@ export default class GiftComponent extends Component {
         this.setState({otherBusinessPermittedUser: otherBusinessPermittedUser});
         this.setState({otherBusiness: otherBusiness});
         //this.props.setState({otherBusinessPermittedUser, otherBusiness});
-
     }
 
     selectBuyProduct(product) {
@@ -62,18 +61,16 @@ export default class GiftComponent extends Component {
         let products = this.props.api.getProducts();
         let selectProductFunction = this.selectProduct.bind(this);
         let businessId = this.props.api.getBusinessId();
-        this.props.navigation.navigate("SelectProductsComponent", {
+        navigationUtils.doNavigation(this.props.navigation, "SelectProductsComponent", {
             products: products,
             selectProduct: selectProductFunction,
             businessId: businessId
         })
     }
 
-
-
     searchBusinessByPermittedUser() {
         let selectOtherBusiness = this.selectOtherBusiness.bind(this);
-        this.props.navigation.navigate("SearchBusinessByPermittedUser", {
+        navigationUtils.doNavigation(this.props.navigation, "SearchBusinessByPermittedUser", {
             selectOtherBusiness: selectOtherBusiness,
         })
     }
@@ -96,7 +93,8 @@ export default class GiftComponent extends Component {
         let products = this.props.api.getProducts();
         let selectProductFunction = this.selectBuyProduct.bind(this);
         let businessId = this.props.api.getBusinessId();
-        this.props.navigation.navigate("SelectProductsComponent", {
+
+        navigationUtils.doNavigation(this.props.navigation, "SelectProductsComponent", {
             products: products,
             selectProduct: selectProductFunction,
             businessId: businessId
@@ -193,7 +191,6 @@ export default class GiftComponent extends Component {
                         <UserPreview user={this.state.otherBusinessPermittedUser}/>
                         <BusinessPreview isSelect={false} business={this.state.otherBusiness}/>
                     </View>
-
             }
         </View>
     }

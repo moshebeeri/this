@@ -94,10 +94,22 @@ export function setNextFeeds(entities, generalId) {
         try {
             const token = getState().authentication.token;
             const user = getState().user.user;
-            if (!user)
+            if (!user){
+                dispatch({
+                    type: actions.ENTITIES_COMMENT_LOADING_DONE,
+                        loadingDone: true,
+                    generalId: generalId
+                })
                 return;
+            }
+
             const comments = getState().entityComments.entityCommentsOrder[generalId];
             if (comments && getState().entityComments.maxLoadingDone[generalId] && comments.length > 0) {
+                dispatch({
+                    type: actions.ENTITIES_COMMENT_LOADING_DONE,
+                    loadingDone: true,
+                    generalId: generalId
+                })
                 return;
             }
             dispatch({

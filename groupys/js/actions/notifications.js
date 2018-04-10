@@ -13,13 +13,11 @@ export function setTopNotification() {
             const token = getState().authentication.token;
             const user = getState().user.user;
             if(user && token) {
-                let response = await notificationApi.getAll(token, user, 0, 10);
                 dispatch({
-                    type: actions.SET_TOP_NOTIFICATION,
-                    notifications: response,
+                    type: types.SAVE_NOTIFICATION_TOP_REQUEST,
+                    token: token, user: user
                 });
             }
-            handler.handleSuccses(getState(),dispatch)
         } catch (error) {
             handler.handleError(error, dispatch,'notification-setTopNotification')
             logger.actionFailed('notification-setTopNotification')

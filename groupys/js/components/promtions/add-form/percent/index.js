@@ -7,6 +7,7 @@ import strings from "../../../../i18n/i18n";
 import StyleUtils from '../../../../utils/styleUtils';
 import {Thumbnail} from 'native-base';
 import ProductPreview from "../../../product/productPreview/index";
+import navigationUtils from '../../../../utils/navigationUtils'
 
 const Discouint_on = [
     {
@@ -97,7 +98,7 @@ export default class PercentComponent extends Component {
         let products = this.props.api.getProducts();
         let selectProductFunction = this.selectProduct.bind(this);
         let businessId = this.props.api.getBusinessId();
-        this.props.navigation.navigate("SelectProductsComponent", {
+        navigationUtils.doNavigation(this.props.navigation,"SelectProductsComponent", {
             products: products,
             selectProduct: selectProductFunction,
             businessId: businessId

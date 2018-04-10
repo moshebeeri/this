@@ -1,12 +1,12 @@
 import React, {Component} from 'react';
-import {Dimensions, I18nManager, Text, TextInput, View} from 'react-native';
+import {View} from 'react-native';
 import {Icon} from 'native-base';
 import styles from './styles';
 import Icon2 from 'react-native-vector-icons/Ionicons';
-import {ImagePicker} from '../index';
-import {ThisText} from '../index';
+import {ImagePicker, ThisText} from '../index';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import StyleUtils from '../../utils/styleUtils';
+
 export default class DocumentPicker extends Component {
     constructor(props) {
         super(props);
@@ -22,20 +22,17 @@ export default class DocumentPicker extends Component {
     }
 
     isValid() {
-        const {isMandatory,value} = this.props;
-
+        const {isMandatory, value} = this.props;
         if (isMandatory) {
             if (!this.state.document) {
-                if(!value) {
+                if (!value) {
                     this.setState({
                         invalid: true
                     })
                     return false;
                 }
             }
-
         }
-
         return true;
     }
 
@@ -71,7 +68,7 @@ export default class DocumentPicker extends Component {
     }
 
     render() {
-        const {fieldColor, field, isMandatory,value} = this.props;
+        const {fieldColor, field, isMandatory, value} = this.props;
         let textStyle = styles.textInputTextStyle;
         let mandatoryIconColor = 'red';
         if (fieldColor === 'white') {
@@ -82,27 +79,28 @@ export default class DocumentPicker extends Component {
         if (field) {
             containerStyle = styles.textInputContainer;
         }
-
         let iconColor = '#FA8559';
-        if(this.state.invalid){
+        if (this.state.invalid) {
             iconColor = 'red';
         }
-        if(this.state.document || value){
+        if (this.state.document || value) {
             iconColor = 'green';
         }
         let imageRef = "logoImage" + field;
         return <View style={containerStyle}>
             <View style={styles.textInputTitleContainer}>
-                <View style={{flexDirection:'row'}}>
+                <View style={{flexDirection: 'row'}}>
                     <ThisText style={textStyle}>{field}</ThisText>
                     {field && isMandatory &&
-                    <MaterialCommunityIcons style={{marginLeft: 3, marginTop: 4, color: 'red', fontSize: StyleUtils.scale(8)}}
-                                            name='asterisk'/>}
+                    <MaterialCommunityIcons
+                        style={{marginLeft: 3, marginTop: 4, color: 'red', fontSize: StyleUtils.scale(8)}}
+                        name='asterisk'/>}
 
                 </View>
-                <View style={{marginRight:10}}>
-                    <ImagePicker logo ref={imageRef} mandatory
-                                 image={<Icon2 size={StyleUtils.scale(35)} color={iconColor} name='ios-document-outline'/>}
+                <View style={{marginRight: 10}}>
+                    <ImagePicker logo name={imageRef} mandatory
+                                 image={<Icon2 size={StyleUtils.scale(35)} color={iconColor}
+                                               name='ios-document-outline'/>}
                                  color='black' pickFromCamera
                                  setImage={this.setDocument.bind(this)}/>
                 </View>

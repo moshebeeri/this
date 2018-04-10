@@ -30,6 +30,7 @@ import Icon from 'react-native-vector-icons/Ionicons';
 import Icon2 from 'react-native-vector-icons/MaterialCommunityIcons';
 import strings from "../../i18n/i18n"
 import StyleUtils from "../../utils/styleUtils";
+import navigationUtils from '../../utils/navigationUtils'
 
 class ApplicationBusinessManager extends Component {
     static navigationOptions = {
@@ -42,7 +43,7 @@ class ApplicationBusinessManager extends Component {
     }
 
     replaceRoute(route) {
-        this.props.navigation.navigate(route);
+        navigationUtils.doNavigation( this.props.navigation,route);
     }
 
     navigateToAdd() {

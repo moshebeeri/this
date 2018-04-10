@@ -20,6 +20,7 @@ import * as userAction from "../../../actions/user";
 import StyleUtils from '../../../utils/styleUtils'
 import {bindActionCreators} from "redux";
 import strings from "../../../i18n/i18n"
+import navigationUtils from '../../../utils/navigationUtils'
 
 const {width, height} = Dimensions.get('window');
 const groupPolicy = [
@@ -247,10 +248,11 @@ class AddGroup extends Component {
     showUsers() {
         const {userFollowers} = this.props;
         if (userFollowers.length > 0) {
-            this.props.navigation.navigate('SelectUsersComponent', {
+            navigationUtils.doNavigation(this.props.navigation, 'SelectUsersComponent', {
                 users: userFollowers,
                 selectUsers: this.selectUsers.bind(this)
-            })
+            });
+           
         }
     }
 

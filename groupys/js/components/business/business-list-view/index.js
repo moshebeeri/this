@@ -29,6 +29,7 @@ import Feather from "react-native-vector-icons/Feather";
 import FontAwesome from "react-native-vector-icons/FontAwesome";
 import SimpleLineIcons from "react-native-vector-icons/SimpleLineIcons";
 import withPreventDoubleClick from '../../../ui/TochButton/TouchButton';
+import navigationUtils from '../../../utils/navigationUtils'
 
 const TouchableOpacityFix = withPreventDoubleClick(TouchableOpacity);
 export default class BusinessListView extends Component {
@@ -46,22 +47,24 @@ export default class BusinessListView extends Component {
     showBusiness(p) {
         const {item, navigation, actions} = this.props;
         actions.resetForm();
-        navigation.navigate("addBusiness", {item: item.business, updating: true});
+        navigationUtils.doNavigation(navigation,"addBusiness", {item: item.business, updating: true})
     }
 
     showUsersRoles() {
         const {item, navigation} = this.props;
-        navigation.navigate("userPermittedRoles", {business: item.business});
+        navigationUtils.doNavigation(navigation,"userPermittedRoles", {business: item.business})
+
     }
 
     showProducts() {
         const {item, navigation} = this.props;
-        navigation.navigate("Products", {business: item.business});
+        navigationUtils.doNavigation(navigation,"Products", {business: item.business})
+
     }
 
     showPromotions() {
         const {item, navigation} = this.props;
-        navigation.navigate("Promotions", {business: item.business});
+        navigationUtils.doNavigation(navigation,"Promotions", {business: item.business})
     }
 
     refreshBusiness() {
