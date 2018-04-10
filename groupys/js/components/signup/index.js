@@ -126,7 +126,7 @@ class Signup extends Component {
                         </TouchableOpacity>
                     </View>
 
-                    <KeyboardAvoidingView behavior={'position'}
+                    <View
                                           style={[styles.avoidView, {width: StyleUtils.getWidth()}]}>
                         <View style={{marginBottom: 20, height: height, justifyContent: 'center'}}>
 
@@ -180,7 +180,7 @@ class Signup extends Component {
                                     </View>
                                 </View>
 
-
+                                <KeyboardAvoidingView behavior={'position'}>
                                 <View style={styles.phoneTextInput} regular>
                                     <TextInput keyboardType='phone-pad' value={this.state.phoneNumber}
                                                ref='name'
@@ -248,7 +248,7 @@ class Signup extends Component {
                                         onSubmitEditing={this.signup.bind(this)}
                                     />
                                 </View>
-
+                                </KeyboardAvoidingView>
                                 {message}
 
                                 <View style={{
@@ -285,7 +285,7 @@ class Signup extends Component {
 
 
                         </View>
-                    </KeyboardAvoidingView>
+                    </View>
 
                     {this.state.showPopup &&
                     <TermsOfUse declineTerms={this.back.bind(this)} acceptTerms={this.closePopup.bind(this)}/>}
