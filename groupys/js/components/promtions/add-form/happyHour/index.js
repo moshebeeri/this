@@ -1,13 +1,13 @@
 import React, {Component} from 'react';
-import {Keyboard, Platform, Text, View} from 'react-native'
+import {Keyboard, View} from 'react-native'
 import styles from '../styles'
-import {SelectButton, TextInput, TimePicker, WeekDaysPicker} from '../../../../ui/index';
+import {SelectButton, TextInput, ThisText, TimePicker, WeekDaysPicker} from '../../../../ui/index';
 import FormUtils from "../../../../utils/fromUtils";
 import strings from "../../../../i18n/i18n"
 import StyleUtils from '../../../../utils/styleUtils'
 import {Thumbnail} from 'native-base';
 import ProductPreview from "../../../product/productPreview/index";
-import {ThisText} from '../../../../ui/index';
+import navigationUtils from '../../../../utils/navigationUtils'
 
 export default class HappyHourComponent extends Component {
     constructor(props) {
@@ -43,7 +43,7 @@ export default class HappyHourComponent extends Component {
         let products = this.props.api.getProducts();
         let selectProductFunction = this.selectProduct.bind(this);
         let businessId = this.props.api.getBusinessId();
-        this.props.navigation.navigate("SelectProductsComponent", {
+        navigationUtils.doNavigation(this.props.navigation, "SelectProductsComponent", {
             products: products,
             selectProduct: selectProductFunction,
             businessId: businessId
@@ -180,12 +180,13 @@ export default class HappyHourComponent extends Component {
                 paddingTop: 10,
                 paddingRight: 5,
                 paddingLeft: 5,
-                width: StyleUtils.getWidth() - 15}}>
-                <View style={{ marginTop: 20}}><SelectButton isMandatory ref="precentSelectProduct"
-                                                                       selectedValue={this.props.state.product}
-                                                                       title={strings.SelectProduct}
-                                                                       action={this.showProducts.bind(this, true)}/></View>
-                <View style={{width:160}}>
+                width: StyleUtils.getWidth() - 15
+            }}>
+                <View style={{marginTop: 20}}><SelectButton isMandatory ref="precentSelectProduct"
+                                                            selectedValue={this.props.state.product}
+                                                            title={strings.SelectProduct}
+                                                            action={this.showProducts.bind(this, true)}/></View>
+                <View style={{width: 160}}>
                     <TextInput field={strings.Pay} value={pay}
                                returnKeyType='next' ref="Pay $" refNext="2"
                                keyboardType='numeric'
@@ -193,7 +194,7 @@ export default class HappyHourComponent extends Component {
                                onChangeText={(value) => this.setPay(value)} isMandatory={true}/>
                 </View>
             </View>
-            <ProductPreview product={this.props.state.product} />
+            <ProductPreview product={this.props.state.product}/>
             <View style={{
                 flexDirection: 'row',
                 justifyContent: 'space-between',
@@ -201,14 +202,15 @@ export default class HappyHourComponent extends Component {
                 paddingTop: 10,
                 paddingRight: 5,
                 paddingLeft: 5,
-                width: StyleUtils.getWidth() - 15}}>
-                <View style={{width:160,marginTop:0}}>
+                width: StyleUtils.getWidth() - 15
+            }}>
+                <View style={{width: 160, marginTop: 0}}>
                     <TimePicker field={strings.FromHour}
                                 validateContent={this.validateFrom.bind(this)}
                                 returnKeyType='next' ref="From Hour" refNext="3"
                                 onChangeDate={(value) => this.setFrom(value)} isMandatory={true}/>
                 </View>
-                <View style={{width:160,}}>
+                <View style={{width: 160,}}>
                     <TextInput field={strings.NumberOfHours} value={this.state.numberOfHours}
                                returnKeyType='done' ref="off" refNext="off"
                                keyboardType='numeric'
@@ -219,9 +221,9 @@ export default class HappyHourComponent extends Component {
             </View>
             <View style={{flexDirection: 'row', justifyContent: 'center', alignItems: 'center'}}>
 
-                    <WeekDaysPicker field={strings.DaysOfWeek}
-                                    ref="Days of Week" refNext="Days of Week"
-                                    onChangeSelected={(value) => this.setDays(value)} isMandatory={true}/>
+                <WeekDaysPicker field={strings.DaysOfWeek}
+                                ref="Days of Week" refNext="Days of Week"
+                                onChangeSelected={(value) => this.setDays(value)} isMandatory={true}/>
 
             </View>
         </View>

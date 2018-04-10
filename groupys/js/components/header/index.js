@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import {Dimensions, I18nManager, Image, Platform, TextInput, TouchableOpacity} from 'react-native';
+import {Dimensions, I18nManager, Image, TextInput, TouchableOpacity} from 'react-native';
 import {Button, Header, Input, InputGroup, Spinner, Tab, TabHeading, Tabs, View} from 'native-base';
 import {actions} from 'react-native-navigation-redux-helpers';
 import {Menu, MenuOption, MenuOptions, MenuTrigger,} from 'react-native-popup-menu';
@@ -14,6 +14,7 @@ import {bindActionCreators} from "redux";
 import strings from "../../i18n/i18n"
 import StyleUtils from "../../utils/styleUtils";
 import {ThisText} from '../../ui/index';
+import navigationUtils from '../../utils/navigationUtils'
 
 const {height} = Dimensions.get('window')
 const vh = height / 100
@@ -28,7 +29,7 @@ class GeneralComponentHeader extends Component {
     }
 
     realize() {
-        this.props.navigate('realizePromotion')
+        navigationUtils.doNavigation(this.props, 'realizePromotion');
     }
 
     back() {
@@ -36,7 +37,7 @@ class GeneralComponentHeader extends Component {
     }
 
     showPromotionScaning() {
-        this.props.navigate('ReadQrCode');
+        navigationUtils.doNavigation(this.props, 'ReadQrCode');
     }
 
     searchBusiness() {
@@ -52,7 +53,7 @@ class GeneralComponentHeader extends Component {
     }
 
     followBusiness() {
-        this.props.navigate("businessFollow");
+        navigationUtils.doNavigation(this.props.navigation, 'businessFollow');
     }
 
     search() {
@@ -75,7 +76,6 @@ class GeneralComponentHeader extends Component {
     render() {
         const {businessActions, state, network} = this.props;
         let back = undefined;
-
         if (this.props.showBack) {
             back = <Button transparent style={{marginLeft: 5, marginRight: 5}} onPress={() => this.back()}>
                 <Icon active color={"#2db6c8"} size={StyleUtils.scale(20)} name="ios-arrow-back"/>
@@ -168,14 +168,18 @@ class GeneralComponentHeader extends Component {
                     <ThisText style={{color: 'gray'}}>{strings.Offline}</ThisText>
                 </View>}
                 <View style={{
-                    height: StyleUtils.relativeHeight(9,9), flexDirection: 'row', alignItems: 'center', backgroundColor: 'white',
+                    height: StyleUtils.relativeHeight(9, 9),
+                    flexDirection: 'row',
+                    alignItems: 'center',
+                    backgroundColor: 'white',
                     justifyContent: 'flex-start',
                 }}>
 
-                    {<View style={{ flexDirection: 'row', alignItems: 'flex-start'}}>
+                    {<View style={{flexDirection: 'row', alignItems: 'flex-start'}}>
                         {back}
 
-                        <Button transparent style={{marginLeft: StyleUtils.scale(15), marginRight: StyleUtils.scale(5)}} onPress={this.props.openDrawer}>
+                        <Button transparent style={{marginLeft: StyleUtils.scale(15), marginRight: StyleUtils.scale(5)}}
+                                onPress={this.props.openDrawer}>
                             <Icon2 active color={"#2db6c8"} size={StyleUtils.scale(20)} name="menu"/>
 
                         </Button>
@@ -184,7 +188,12 @@ class GeneralComponentHeader extends Component {
                     }
 
                     <ThisText transparent
-                              style={{fontSize: StyleUtils.scale(20), marginLeft: StyleUtils.scale(15), color: "#2db6c8", backgroundColor: 'transparent'}}>THIS</ThisText>
+                              style={{
+                                  fontSize: StyleUtils.scale(20),
+                                  marginLeft: StyleUtils.scale(15),
+                                  color: "#2db6c8",
+                                  backgroundColor: 'transparent'
+                              }}>THIS</ThisText>
                     {<View style={{
                         flex: 1, flexDirection: 'row', justifyContent: 'flex-end', alignItems: 'center'
                     }}>
@@ -193,7 +202,6 @@ class GeneralComponentHeader extends Component {
 
                         <TouchableOpacity onPress={() => this.showPromotionScaning()}
                                           style={{
-
                                               marginRight: StyleUtils.scale(20),
                                               marginLeft: StyleUtils.scale(20),
                                               flexDirection: 'column',
@@ -201,7 +209,12 @@ class GeneralComponentHeader extends Component {
                                           }}
                                           regular>
                             <Image resizeMode="cover"
-                                   style={{tintColor: '#2db6c8', marginTop: StyleUtils.scale(3), width: StyleUtils.scale(25), height: StyleUtils.scale(25)}}
+                                   style={{
+                                       tintColor: '#2db6c8',
+                                       marginTop: StyleUtils.scale(3),
+                                       width: StyleUtils.scale(25),
+                                       height: StyleUtils.scale(25)
+                                   }}
                                    source={qrcode}/>
 
                         </TouchableOpacity>

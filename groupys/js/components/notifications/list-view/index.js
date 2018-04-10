@@ -6,6 +6,7 @@ import strings from "../../../i18n/i18n"
 import {SubmitButton, ThisText} from '../../../ui/index';
 import StyleUtils from "../../../utils/styleUtils";
 import FCM from 'react-native-fcm';
+import navigationUtils from '../../../utils/navigationUtils'
 
 const {width, height} = Dimensions.get('window')
 const vw = width / 100;
@@ -35,14 +36,20 @@ export default class NotificationListView extends Component {
         const {item, actions} = this.props;
         actions.doNotification(item._id)
         if (group.entity.business) {
-            this.props.navigation.navigate("addPromotions", {business: group.entity.business, group: group});
+            navigationUtils.doNavigation(this.props.navigation, "addPromotions", {
+                business: group.entity.business,
+                group: group
+            });
         }
     }
 
     createBusiness(business) {
         const {item, actions} = this.props;
         actions.doNotification(item._id)
-        this.props.navigation.navigate("addPromotions", {business: business, onBoardType: 'BUSINESS'});
+        navigationUtils.doNavigation(this.props.navigation, "addPromotions", {
+            business: business,
+            onBoardType: 'BUSINESS'
+        });
     }
 
     read(notification_id) {

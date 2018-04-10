@@ -7,6 +7,7 @@ import StyleUtils from '../../../../utils/styleUtils';
 import {Thumbnail} from 'native-base';
 import ProductPreview from "../../../product/productPreview/index";
 import {ThisText} from '../../../../ui/index';
+import navigationUtils from '../../../../utils/navigationUtils'
 
 export default class XPlusYComponent extends Component {
     constructor(props) {
@@ -39,7 +40,7 @@ export default class XPlusYComponent extends Component {
         let products = this.props.api.getProducts();
         let selectProductFunction = this.selectProduct.bind(this);
         let businessId = this.props.api.getBusinessId();
-        this.props.navigation.navigate("SelectProductsComponent", {
+        navigationUtils.doNavigation(this.props.navigation, "SelectProductsComponent", {
             products: products,
             selectProduct: selectProductFunction,
             businessId: businessId
@@ -64,7 +65,7 @@ export default class XPlusYComponent extends Component {
         let products = this.props.api.getProducts();
         let selectProductFunction = this.selectBuyProduct.bind(this);
         let businessId = this.props.api.getBusinessId();
-        this.props.navigation.navigate("SelectProductsComponent", {
+        navigationUtils.doNavigation(this.props.navigation, "SelectProductsComponent", {
             products: products,
             selectProduct: selectProductFunction,
             businessId: businessId

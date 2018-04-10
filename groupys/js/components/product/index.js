@@ -26,6 +26,8 @@ import {FormHeader} from '../../ui/index';
 import Icon3 from 'react-native-vector-icons/Ionicons';
 import ProductListView from './listView/index'
 import strings from "../../i18n/i18n"
+import navigationUtils from '../../utils/navigationUtils'
+
 
 class Product extends Component {
     static navigationOptions = {
@@ -47,7 +49,7 @@ class Product extends Component {
 
     navigateToAdd() {
         const {navigation} = this.props;
-        navigation.navigate("AddProduct", {business: navigation.state.params.business});
+        navigationUtils.doNavigation(navigation, "AddProduct", {business: navigation.state.params.business});
     }
 
     render() {

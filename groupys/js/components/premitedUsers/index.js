@@ -10,6 +10,8 @@ import GenericListManager from '../generic-list-manager/index'
 import Icon5 from 'react-native-vector-icons/MaterialCommunityIcons';
 import {FormHeader} from '../../ui/index';
 import strings from "../../i18n/i18n"
+import navigationUtils from '../../utils/navigationUtils'
+
 class UserPermittedRoles extends Component {
     constructor(props) {
         super(props);
@@ -24,17 +26,14 @@ class UserPermittedRoles extends Component {
         this.props.actions.setBusinessUsers(navigation.state.params.business._id);
     }
 
-
-
     navigateToAdd() {
         const {navigation} = this.props;
-
-        this.props.navigation.navigate("addPermittedUser", {business: navigation.state.params.business});
+        navigationUtils.doNavigation(this.props.navigation, "addPermittedUser", {business: navigation.state.params.business});
     }
 
     render() {
-        const {users, navigation, actions,update} = this.props;
-       let business = navigation.state.params.business;
+        const {users, navigation, actions, update} = this.props;
+        let business = navigation.state.params.business;
         return (
             <Container>
                 <FormHeader showBack submitForm={this.navigateToAdd.bind(this)} navigation={this.props.navigation}
@@ -43,7 +42,8 @@ class UserPermittedRoles extends Component {
                             titleColor="#FA8559" backIconColor="#FA8559"/>
 
                 <GenericListManager rows={users[business._id]} navigation={navigation} actions={actions} update={update}
-                                    business = {navigation.state.params.business} onEndReached={actions.setBusinessUsers} ItemDetail={UserRoleView}/>
+                                    business={navigation.state.params.business} onEndReached={actions.setBusinessUsers}
+                                    ItemDetail={UserRoleView}/>
 
 
             </Container>
@@ -51,7 +51,7 @@ class UserPermittedRoles extends Component {
     }
 
     shouldComponentUpdate() {
-        return this.props.currentScreen === 'userPermittedRoles' ||  this.props.currentScreen === 'addPermittedUser';
+        return this.props.currentScreen === 'userPermittedRoles' || this.props.currentScreen === 'addPermittedUser';
     }
 }
 

@@ -7,6 +7,7 @@ import ProductListView from "../../../product/listView/index"
 import * as promotionsAction from "../../../../actions/promotions";
 import strings from "../../../../i18n/i18n"
 import {FormHeader} from '../../../../ui/index';
+import navigationUtils from '../../../../utils/navigationUtils'
 
 class SelectProductsComponent extends Component {
     static navigationOptions = {
@@ -19,7 +20,7 @@ class SelectProductsComponent extends Component {
     }
 
     navigateToAdd() {
-        this.props.navigation.navigate("AddProduct", {business: {_id: this.props.navigation.state.params.businessId}});
+        navigationUtils.doNavigation(this.props.navigation, "AddProduct", {business: {_id: this.props.navigation.state.params.businessId}});
     }
 
     selectProduct(product) {

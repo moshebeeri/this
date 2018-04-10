@@ -17,6 +17,7 @@ const deviceHeight = Dimensions.get('window').height;
 const deviceWidth = Dimensions.get('window').width;
 import withPreventDoubleClick from '../../ui/TochButton/TouchButton';
 const TouchableOpacityFix = withPreventDoubleClick(TouchableOpacity);
+import navigationUtils from '../../utils/navigationUtils'
 class ProfileDrawer extends Component {
     static navigationOptions = {
         header: null
@@ -48,7 +49,8 @@ class ProfileDrawer extends Component {
     }
 
     replaceRoute(route) {
-        this.props.navigation.navigate(route);
+        navigationUtils.doNavigation(this.props.navigation,route)
+
     }
 
     showPromotionScaning() {

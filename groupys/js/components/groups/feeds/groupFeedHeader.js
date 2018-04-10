@@ -18,6 +18,7 @@ import Icon from 'react-native-vector-icons/Ionicons';
 import StyleUtils from '../../../utils/styleUtils'
 import {bindActionCreators} from "redux";
 import strings from "../../../i18n/i18n"
+import navigationUtils from '../../../utils/navigationUtils'
 
 const {height} = Dimensions.get('window');
 const vh = height / 100
@@ -43,7 +44,8 @@ class GroupFeedHeader extends Component {
 
     showScanner() {
         let group = this.props.item;
-        this.props.navigation.navigate('ReadQrCode', {group: group});
+        navigationUtils.doNavigation(this.props.navigation, 'ReadQrCode', {group: group});
+
     }
 
     navigateBack() {
@@ -55,31 +57,32 @@ class GroupFeedHeader extends Component {
     showUsers() {
         let users = this.props.user.followers;
         if (users) {
-            this.props.navigation.navigate('SelectUsersComponent', {
+            navigationUtils.doNavigation(this.props.navigation, 'SelectUsersComponent', {
                 users: users,
                 selectUsers: this.inviteUser.bind(this)
-            })
+            });
+
         }
     }
 
     followBusiness() {
         let group = this.props.item;
-        this.props.navigation.navigate("businessFollow", {business: group.entity.business, group: group});
+        navigationUtils.doNavigation(this.props.navigation,"businessFollow", {business: group.entity.business, group: group});
     }
 
     addPromotion() {
         let group = this.props.item;
-        this.props.navigation.navigate("addPromotions", {business: group.entity.business, group: group});
+        navigationUtils.doNavigation(this.props.navigation,"addPromotions", {business: group.entity.business, group: group});
     }
 
     updateGroup() {
         let group = this.props.item;
-        this.props.navigation.navigate("AddGroups", {group: group});
+        navigationUtils.doNavigation(this.props.navigation,"AddGroups", {group: group});
     }
 
     viewGroup() {
         let group = this.props.item;
-        this.props.navigation.navigate("AddGroups", {group: group, view: true});
+        navigationUtils.doNavigation(this.props.navigation,"AddGroups", {group: group, view: true});
     }
 
     inviteUser(users) {

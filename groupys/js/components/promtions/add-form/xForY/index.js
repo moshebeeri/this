@@ -6,6 +6,7 @@ import strings from "../../../../i18n/i18n"
 import StyleUtils from '../../../../utils/styleUtils';
 import {Thumbnail} from 'native-base';
 import ProductPreview from "../../../product/productPreview/index";
+import navigationUtils from '../../../../utils/navigationUtils'
 
 export default class XForYComponent extends Component {
     constructor(props) {
@@ -31,11 +32,10 @@ export default class XForYComponent extends Component {
         let products = this.props.api.getProducts();
         let selectProductFunction = this.selectBuyProduct.bind(this);
         let businessId = this.props.api.getBusinessId();
-        this.props.navigation.navigate("SelectProductsComponent", {
+        navigationUtils.doNavigation(this.props.navigation,"SelectProductsComponent", {
             products: products,
             selectProduct: selectProductFunction,
-            businessId: businessId
-        })
+            businessId: businessId});
     }
 
     isValid() {

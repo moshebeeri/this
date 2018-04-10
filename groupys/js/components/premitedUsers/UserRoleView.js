@@ -16,10 +16,12 @@ import {
     Item,
     Picker,
     Spinner,
-    Text,
     Thumbnail
 } from 'native-base';
-import {EditButton} from '../../ui/index';
+import {EditButton, ImageController, ThisText} from '../../ui/index';
+import StyleUtils from '../../utils/styleUtils'
+import navigationUtils from '../../utils/navigationUtils'
+
 const noPic = require('../../../images/client_1.png');
 const rolesTypes = {
         OWNS: 'Owner',
@@ -28,10 +30,6 @@ const rolesTypes = {
         Manager: 'Manager',
         Seller: 'Seller'
     };
-import {ThisText,ImageController} from '../../ui/index';
-import StyleUtils from '../../utils/styleUtils'
-
-
 export default class UserRoleView extends Component {
     createUserView(user, role, index) {
         let pic = <ImageController thumbnail square size={60} source={noPic}/>;
@@ -56,7 +54,8 @@ export default class UserRoleView extends Component {
 
     editPermission(user,role){
         const{navigation,business} = this.props;
-        navigation.navigate("addPermittedUser", {role:role, user:user, business: business});
+        navigationUtils.doNavigation(navigation, "addPermittedUser", {role:role, user:user, business: business});
+
     }
 
     render() {

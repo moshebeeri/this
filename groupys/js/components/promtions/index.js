@@ -12,8 +12,8 @@ import * as businessAction from "../../actions/business";
 import {getBusinessPromotions} from '../../selectors/businessesSelector'
 import {bindActionCreators} from "redux";
 import {FormHeader, ThisText} from '../../ui/index';
-import PageRefresher from '../../refresh/pageRefresher'
 import * as promotionsAction from "../../actions/promotions";
+import navigationUtils from '../../utils/navigationUtils'
 import strings from "../../i18n/i18n"
 
 class Promotions extends Component {
@@ -33,10 +33,10 @@ class Promotions extends Component {
         const {navigation, promotions, promotionsChange, actions, update, promotionsLoading} = this.props;
         const businessId = navigation.state.params.business._id;
         if ((promotions && !promotions[businessId]) || !promotionsChange.loadingDone[businessId]) {
-           // PageRefresher.addBusinessPromotion(businessId);
+            // PageRefresher.addBusinessPromotion(businessId);
             this.setBusinessPromotions();
         }
-       // PageRefresher.visitedPromotions(businessId);
+        // PageRefresher.visitedPromotions(businessId);
     }
 
     setBusinessPromotions() {
@@ -44,20 +44,19 @@ class Promotions extends Component {
         actions.setBusinessPromotions(navigation.state.params.business._id);
     }
 
-
     navigateToAdd() {
         const {navigation, promotionActions} = this.props;
         promotionActions.resetForm();
-        this.props.navigation.navigate("addPromotions", {business: navigation.state.params.business});
+        navigationUtils.doNavigation(navigation, "addPromotions", {business: navigation.state.params.business});
     }
 
     onBoardingPromotion() {
-        const {business,navigation,onBoardingPromotion} = this.props;
+        const {business, navigation, onBoardingPromotion} = this.props;
         let addToBusiness = business;
-        if(!addToBusiness){
+        if (!addToBusiness) {
             addToBusiness = navigation.state.params.business;
         }
-        this.props.navigation.navigate("addPromotions", {
+        navigationUtils.doNavigation(navigation, "addPromotions", {
             onBoardType: 'BUSINESS',
             business: addToBusiness,
             onBoardingPromotion: onBoardingPromotion[addToBusiness._id]
@@ -65,24 +64,25 @@ class Promotions extends Component {
     }
 
     onProximityPromotion() {
-        const {business,navigation,followerProximity} = this.props;
+        const {business, navigation, followerProximity} = this.props;
         let addToBusiness = business;
-        if(!addToBusiness){
+        if (!addToBusiness) {
             addToBusiness = navigation.state.params.business;
         }
-        this.props.navigation.navigate("addPromotions", {
+        navigationUtils.doNavigation(navigation, "addPromotions", {
             onBoardType: 'PROXIMITY',
             business: addToBusiness,
             followerProximity: followerProximity[addToBusiness._id]
         });
     }
+
     onProximityPromotion() {
-        const {business,navigation,proximityPromotion} = this.props;
+        const {business, navigation, proximityPromotion} = this.props;
         let addToBusiness = business;
-        if(!addToBusiness){
+        if (!addToBusiness) {
             addToBusiness = navigation.state.params.business;
         }
-        this.props.navigation.navigate("addPromotions", {
+        navigationUtils.doNavigation(navigation, "addPromotions", {
             onBoardType: 'FOLLOWER_PROXIMITY',
             business: addToBusiness,
             proximityPromotion: proximityPromotion[addToBusiness._id]
@@ -90,7 +90,7 @@ class Promotions extends Component {
     }
 
     render() {
-        const {navigation, promotions, actions, update, promotionsLoading,location} = this.props;
+        const {navigation, promotions, actions, update, promotionsLoading, location} = this.props;
         const businessId = navigation.state.params.business._id;
         let icon = <Icon5 active color={"#FA8559"} size={25} name="plus"/>
         if (Platform.OS === 'ios') {

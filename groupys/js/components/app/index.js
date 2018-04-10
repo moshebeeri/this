@@ -70,7 +70,7 @@ const resetAction = NavigationActions.reset({
 let logger = new ActionLogger();
 // this shall be called regardless of app state: running, background or not running. Won't be called when app is killed by user in iOS
 FCM.on(FCMEvent.Notification, async (notif) => {
-    FCM.getBadgeNumber().then(number => FCM.setBadgeNumber(number -1));
+    FCM.getBadgeNumber().then(number => FCM.setBadgeNumber(number - 1));
     //console.log(notif);
     // there are two parts of notif. notif.notification contains the notification payload, notif.data contains data payload
     if (notif.local_notification) {
@@ -152,7 +152,6 @@ class ApplicationManager extends Component {
     }
 
     async componentWillMount() {
-
         FCM.requestPermissions().then(
             () =>
                 console.log('granted')).catch(() =>
@@ -164,7 +163,6 @@ class ApplicationManager extends Component {
         FCM.getFCMToken().then(token => {
             PageRefresher.updateUserFireBase(token);
         });
-
         Tasks.start();
         let notification = await  FCM.getInitialNotification();
         if (notification && notification.model === 'instance') {
@@ -185,7 +183,7 @@ class ApplicationManager extends Component {
         }
         if (notification && notification.model === 'comment') {
             this.props.actions.redirectToChatGroup(notification.actor_group, notification.notificationId, notification.action, this.props.navigation);
-            FCM.getBadgeNumber().then(number => FCM.setBadgeNumber(number -1));
+            FCM.getBadgeNumber().then(number => FCM.setBadgeNumber(number - 1));
             return;
         }
         if (notification && notification.title) {
@@ -203,7 +201,7 @@ class ApplicationManager extends Component {
     }
 
     onChangeTab(tab) {
-        const { feedAction,  instanceGroupCommentsAction} = this.props;
+        const {feedAction, instanceGroupCommentsAction} = this.props;
         feedAction.stopMainFeedsListener();
         dataSync.syncData();
     }

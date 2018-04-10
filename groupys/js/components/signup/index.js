@@ -20,6 +20,7 @@ import strings from "../../i18n/i18n"
 import Icon from 'react-native-vector-icons/Ionicons';
 import StyleUtils from "../../utils/styleUtils";
 import {TermsOfUse, ThisText} from "../../ui/index"
+import navigationUtils from '../../utils/navigationUtils'
 
 const {width, height} = Dimensions.get('window')
 const thisLogo = require('../../../images/this-logo.png');
@@ -48,7 +49,7 @@ class Signup extends Component {
     }
 
     replaceRoute(route) {
-        this.props.navigation.navigate(route);
+        navigationUtils.doNavigation(this.props.navigation, route);
     }
 
     signup() {

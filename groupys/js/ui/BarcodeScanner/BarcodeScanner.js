@@ -5,6 +5,7 @@ import strings from "../../i18n/i18n"
 import {ThisText} from '../index';
 import withPreventDoubleClick from '../../ui/TochButton/TouchButton';
 import StyleUtils from '../../utils/styleUtils';
+import navigationUtils from '../../utils/navigationUtils'
 
 const TouchableOpacityFix = withPreventDoubleClick(TouchableOpacity);
 export default class BarcodeScanner extends Component {
@@ -21,7 +22,7 @@ export default class BarcodeScanner extends Component {
     }
 
     showScanner() {
-        this.props.navigation.navigate('BarcodeScannerComponent', {handleCode: this.handleCode.bind(this)})
+        navigationUtils.doNavigation(this.props.navigation, 'BarcodeScannerComponent', {handleCode: this.handleCode.bind(this)})
     }
 
     handleCode(code) {

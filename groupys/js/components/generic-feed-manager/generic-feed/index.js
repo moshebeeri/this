@@ -23,6 +23,7 @@ import FeedShared from './feed-components/feedShared'
 import FeedBusiness from './feed-components/feedBusiness'
 import FeedWelcome from './feed-components/feedWelcome'
 import FeedPost from './feed-components/feedPost'
+import navigationUtils from '../../../utils/navigationUtils'
 
 export default class GenericFeedItem extends Component {
     constructor(props) {
@@ -35,10 +36,10 @@ export default class GenericFeedItem extends Component {
     showUsers(show) {
         let users = this.props.userFollowers;
         if (users) {
-            this.props.navigation.navigate('SelectUsersComponent', {
+            navigationUtils.doNavigation(this.props.navigation, 'SelectUsersComponent', {
                 users: users,
                 selectUsers: this.selectUsers.bind(this)
-            })
+            });
         }
     }
 
@@ -47,15 +48,14 @@ export default class GenericFeedItem extends Component {
             this.props.navigateToChat(this.props.item)
             return;
         }
-
         if (this.props.group) {
-            this.props.navigation.navigate('InstanceGroupComments', {
+            navigationUtils.doNavigation(this.props.navigation, 'InstanceGroupComments', {
                 group: this.props.group,
                 instance: this.props.item,
-            })
+            });
             return;
         }
-        this.props.navigation.navigate('genericComments', {
+        navigationUtils.doNavigation(this.props.navigation, 'genericComments', {
             instance: this.props.item,
             generalId: this.props.item.generalId,
             entities: this.props.item.entities,
@@ -64,17 +64,17 @@ export default class GenericFeedItem extends Component {
 
     commentShare() {
         if (this.props.group) {
-            this.props.navigation.navigate('InstanceGroupComments', {
+            navigationUtils.doNavigation(this.props.navigation, 'InstanceGroupComments', {
                 group: this.props.group,
                 instance: this.props.item.shardeActivity,
             })
             return;
         }
-        this.props.navigation.navigate('genericComments', {
+        navigationUtils.doNavigation(this.props.navigation, 'genericComments', {
             instance: this.props.item.shardeActivity,
             generalId: this.props.item.generalId,
             entities: this.props.item.entities,
-        })
+        });
     }
 
     selectUsers(users) {
@@ -90,15 +90,14 @@ export default class GenericFeedItem extends Component {
     }
 
     render() {
-        const {item, actions, token, location, showActions, visibleItem,realize,visibleFeeds,group} = this.props;
+        const {item, actions, token, location, showActions, visibleItem, realize, visibleFeeds, group} = this.props;
         const showUsers = this.showUsers.bind(this);
         const comment = this.comment.bind(this);
         switch (item.itemType) {
             case 'EMPTY':
                 return this.createFeedView(undefined);
             case 'PROMOTION':
-
-                if(realize){
+                if (realize) {
                     return this.createFeedView(<FeedPromotion showActions={showActions} refresh={actions.refresh}
                                                               isRealized={item.isRealized}
                                                               visibleFeeds={visibleFeeds}
@@ -110,7 +109,6 @@ export default class GenericFeedItem extends Component {
                                                               navigation={this.props.navigation} item={item}
                                                               like={actions.like} unlike={actions.unlike}
                                                               showUsers={showUsers} save={actions.saveFeed}/>)
-
                 }
                 return this.createFeedView(<FeedPromotion showActions={showActions} refresh={actions.refresh}
                                                           token={token} comment={comment}
@@ -158,14 +156,12 @@ export default class GenericFeedItem extends Component {
     createFeedView(item) {
         if (item) {
             return <View key={this.props.item.id}
-                         style={{backgroundColor: '#cccccc'}}  >
+                         style={{backgroundColor: '#cccccc'}}>
                 {item}
             </View>
         }
         return <View></View>
     }
-
-
 }
 
 
