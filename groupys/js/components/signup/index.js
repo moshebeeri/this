@@ -223,7 +223,6 @@ class Signup extends Component {
                                         onSubmitEditing={this.focusNextField.bind(this, "verifyPassword")}
                                     />
                                 </View>
-                                {signupProcess && <Spinner style={{position: 'absolute', top: -15}}/>}
                                 <View style={styles.passwordTextInput} regular>
 
                                     <TextInput
@@ -249,6 +248,8 @@ class Signup extends Component {
                                     />
                                 </View>
                                 </KeyboardAvoidingView>
+                                {signupProcess && <Spinner style={{position: 'absolute', top: -15}}/>}
+
                                 {message}
 
                                 <View style={{

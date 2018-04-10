@@ -157,7 +157,6 @@ class AddBusiness extends Component {
         let formIsValid = this.validateForm(this.saveFormData.bind(this));
         Keyboard.dismiss();
         if (formIsValid) {
-            this.setState({saving: true});
             this.props.saveBusiness(this.createBusiness(), this.props.navigation);
         }
     }
@@ -188,10 +187,11 @@ class AddBusiness extends Component {
 
     async setReduxState(value) {
         await this.setState(value);
-        if(this.state.saving){
+
+        if (value.name) {
             return;
         }
-        if (value.name) {
+        if(value.address){
             return;
         }
         if (this.props.navigation && this.props.navigation.state && this.props.navigation.state.params && this.props.navigation.state.params.updating) {
@@ -389,7 +389,7 @@ class AddBusiness extends Component {
                         navigation={this.props.navigation}
                         title={strings.AddBusiness} bgc="#FA8559"/>
 
-            <ScrollView keyboardShouldPersistTaps={true} contentContainerStyle={{
+            <ScrollView overScrollMode={'always'} keyboardShouldPersistTaps={true} contentContainerStyle={{
                 justifyContent: 'center',
                 alignItems: 'center',
             }} style={[styles.contentContainer, {width: StyleUtils.getWidth()}]}>

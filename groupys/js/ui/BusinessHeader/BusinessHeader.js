@@ -171,9 +171,7 @@ class BusinessHeader extends Component {
             {this.createBusinessLog()}
             <View style={{flex: 1, marginLeft: 10, flexDirection: 'column', justifyContent: 'center'}}>
                 <ThisText style={[nameTextStyle, {color: textColor, fontWeight: 'bold'}]}
-                          note>{businessName}</ThisText>{categoryTitle &&
-            <ThisText numberOfLines={1} style={styles.businessAddressText}
-                      note>{categoryTitle}</ThisText>}
+                          note>{businessName}</ThisText>
             </View>
             {showEdit ? <View style={{flexDirection: 'row', alignItems: 'center',}}>
                 <View style={{marginTop: 10}}>
