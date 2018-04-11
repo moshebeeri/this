@@ -53,7 +53,8 @@ function to_graph(group) {
 function group_activity(group, action) {
   const act = {
     group: group._id,
-    action: action
+    action: action,
+    audience: ['SELF']
   };
   if (group.entity_type === 'USER')
     act.actor_user = group.creator;
@@ -63,7 +64,6 @@ function group_activity(group, action) {
     act.actor_business = group.creator;
   else if (group.entity_type === 'MALL')
     act.actor_mall = group.creator;
-  sendActivity(act);
   sendActivity(act);
 }
 
@@ -151,6 +151,9 @@ exports.create = function (req, res) {
           }
           graphModel.relate_ids(req.user._id, 'FOLLOW', group._id, (err) => {
             if (err) return handleError(res, err);
+            fireEvent.info('user', group.creator._id, 'group_created', {
+              group: group._id
+            });
             graphModel.relate_ids(group._id, 'CREATED_BY', req.user._id);
             graphModel.relate_ids(req.user._id, 'GROUP_ADMIN', group._id);
             touch(group.creator, group._id);

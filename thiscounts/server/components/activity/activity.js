@@ -59,7 +59,7 @@ function update_feeds(effected, activity) {
         if (err) {
           return logger.error(err.message);
         }
-        fireEvent.change('feed', actor);
+        fireEvent.change('feed', actor._id);
       });
     }
   }
@@ -171,7 +171,7 @@ function activity_impl(act, callback) {
         return handleSuccess(activity)
       });
     }else {
-      console.log(`Activity not distributed: ${act}`);
+      console.log(`Activity not distributed: ${JSON.stringify(act)}`);
       return callback(new Error('Activity not distributed expected ids. audience or actor_*'));
     }
   });
