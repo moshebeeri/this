@@ -157,6 +157,9 @@ class AddBusiness extends Component {
         let formIsValid = this.validateForm(this.saveFormData.bind(this));
         Keyboard.dismiss();
         if (formIsValid) {
+            if(!this.state.location){
+                return;
+            }
             this.props.saveBusiness(this.createBusiness(), this.props.navigation);
         }
     }
@@ -186,7 +189,7 @@ class AddBusiness extends Component {
     }
 
     async setReduxState(value) {
-        await this.setState(value);
+        this.setState(value);
 
         if (value.name) {
             return;
@@ -217,12 +220,21 @@ class AddBusiness extends Component {
     }
 
     updateLocation(location) {
+
         this.setReduxState({
             location: location.location,
             city: location.city,
             address: location.address,
             country: location.country,
         })
+
+        this.setState({
+            location: location.location,
+            city: location.city,
+            address: location.address,
+            country: location.country,
+        });
+
     }
 
     setImage(image) {
@@ -230,6 +242,7 @@ class AddBusiness extends Component {
             image: {uri: image.path, width: image.width, height: image.height, mime: image.mime},
             path: image.path
         });
+
     }
 
     setCoverImage(image) {

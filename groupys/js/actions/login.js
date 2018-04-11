@@ -4,12 +4,10 @@ import LoginApi from "../api/login";
 import UserApi from "../api/user";
 import {NavigationActions} from "react-navigation";
 import store from "react-native-simple-store";
-import ContactApi from "../api/contacts";
 import ActionLogger from './ActionLogger'
 import handler from './ErrorHandler'
 import strings from "../i18n/i18n"
 
-let contactApi = new ContactApi();
 let loginApi = new LoginApi();
 let userApi = new UserApi();
 let logger = new ActionLogger();
@@ -43,16 +41,19 @@ export function login(phone, password, navigation) {
                     user: user
                 });
                 await  store.save("user_id", user._id)
-                dispatch({
-                    type: actions.SAVE_APP_USER,
-                    user: user
-                });
-                contactApi.syncContacts();
-                navigation.dispatch(resetAction);
+                if (!user.sms_verified) {
+                    navigation.navigate('Register');
+                } else {
+                    dispatch({
+                        type: actions.SAVE_APP_USER,
+                        user: user
+                    });
+                    navigation.dispatch(resetAction);
+                }
             } else {
                 dispatch({
                     type: actions.LOGIN_FAILED,
-                    message: 'bad credentials'
+                    message: strings.LoginFailedMessage
                 });
             }
             dispatch({
@@ -64,7 +65,11 @@ export function login(phone, password, navigation) {
                 type: actions.LOGIN_PROCESS,
                 value: false
             });
-            handler.handleError(error, dispatch,'login')
+            dispatch({
+                type: actions.LOGIN_FAILED,
+                message: strings.LoginFailedMessage
+            });
+            handler.handleError(error, dispatch, 'login')
             logger.actionFailed('login')
         }
     }
@@ -92,7 +97,6 @@ export function signup(phone, password, firstName, lastName, navigation) {
                 type: actions.SET_USER,
                 user: user
             });
-            contactApi.syncContacts();
             navigation.navigate('Register');
             dispatch({
                 type: actions.SIGNUP_PROCESS,
@@ -106,7 +110,7 @@ export function signup(phone, password, firstName, lastName, navigation) {
                     message: strings.invalidPhoneNumber
                 });
             } else {
-                handler.handleError(error, dispatch,'signup')
+                handler.handleError(error, dispatch, 'signup')
             }
             dispatch({
                 type: actions.SIGNUP_PROCESS,
@@ -170,7 +174,7 @@ export function verifyCode(code, navigation, resetAction) {
                     message: strings.InvalidValidationCode
                 });
             } else {
-                handler.handleError(error, dispatch,'verifyCode')
+                handler.handleError(error, dispatch, 'verifyCode')
             }
             logger.actionFailed('verifyCode');
             dispatch({
@@ -188,7 +192,7 @@ export function forgetPassword(phoneNumber) {
                 loginApi.recoverPassword(phoneNumber)
             }
         } catch (error) {
-            handler.handleError(error, dispatch,'forgetPassword')
+            handler.handleError(error, dispatch, 'forgetPassword')
             logger.actionFailed('forgetPassword')
         }
     }
