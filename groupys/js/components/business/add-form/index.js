@@ -467,6 +467,7 @@ class AddBusiness extends Component {
                                     setDocument={this.setLetterDocument.bind(this)}/>
 
                 </View>}
+                <View style={{height: StyleUtils.scale(30),width: StyleUtils.getWidth()}}></View>
 
             </ScrollView>
 

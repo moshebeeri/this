@@ -7,8 +7,8 @@ import * as postAction from "../../actions/posts";
 import {bindActionCreators} from "redux";
 import strings from "../../i18n/i18n"
 import FormUtils from "../../utils/fromUtils";
-import navigationUtils from '../../utils/navigationUtils'
-
+import StyleUtils from "../../utils/styleUtils";
+import navigationUtils from '../../utils/navigationUtils';
 const {width, height} = Dimensions.get('window')
 
 class AddPost extends Component {
@@ -216,6 +216,8 @@ class AddPost extends Component {
                                    validateContent={FormUtils.validateYouTube}
                                    onChangeText={(youTubeUrl) => this.setState({youTubeUrl})} isMandatory={false}/>
                     </View>
+                    <View style={{height: StyleUtils.scale(30),width: StyleUtils.getWidth()}}></View>
+
                 </ScrollView>
 
 
