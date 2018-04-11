@@ -24,7 +24,7 @@ export function sendMessage(groupId, message,instanceId) {
             if(getState().instances.instances[instanceId]  &&  getState().instances.instances[instanceId].promotion) {
                 asyncListener.syncChange('promotion_' + getState().instances.instances[instanceId].promotion, 'add-comment');
             }
-            asyncListener.syncChange(groupId, {comment: message})
+            asyncListener.syncChange("group_chat_" + groupId, {comment: message})
             asyncListener.syncChange('group_' + groupId, 'addComment')
             handler.handleSuccses(getState(), dispatch)
         } catch (error) {

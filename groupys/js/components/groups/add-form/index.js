@@ -35,7 +35,7 @@ const groupPolicy = [
 ];
 const groupType = [
     {
-        value: 'USERS',
+        value: 'USER',
         label: strings.UserGroup
     },
     {
@@ -194,7 +194,7 @@ class AddGroup extends Component {
 
     createGroupFromState() {
         const {user} = this.props;
-        if (this.state.groupType === 'USERS') {
+        if (this.state.groupType === 'USER') {
             return {
                 name: this.state.name,
                 description: this.state.info,

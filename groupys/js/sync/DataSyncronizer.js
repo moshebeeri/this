@@ -15,11 +15,42 @@ class DataSync {
     }
 
     initSyncListeners() {
+        this.syncUser(store.getState(), store.dispatch, store.getState().user.user);
         this.syncGroups(store.getState().groups.groups, store.getState(), store.dispatch, store.getState().user.user);
         this.syncInstances(store.getState().instances.instances, store.getState(), store.dispatch);
         this.syncPromotions(store.getState().promotions.promotions, store.getState(), store.dispatch);
         this.syncMainFeed(store.getState().user.user, store.getState(), store.dispatch);
-        this.syncNotification(store.getState().user.user, store.getState(), store.dispatch);
+    }
+
+    syncUser(state, dispatch, user) {
+        if (user) {
+            asyncListener.addListener('user_' + user._id, (snap) => {
+                let info = this.parseSnap(snap);
+                const token = state.authentication.token;
+                switch (info.type) {
+                    case "group_policy_changed":
+                    case "group_created":
+                        dispatch({
+                            type: types.SAVE_GROUPS_REQUEST,
+                            token: token,
+                        });
+                        break;
+                    case "notification_sent":
+                        dispatch({
+                            type: types.SAVE_NOTIFICATION_TOP_REQUEST,
+                            token: token, user: user
+                        });
+                }
+            })
+        }
+    }
+
+    parseSnap(snap){
+
+        return {
+            type: snap.node_.children_.root_.value.value_,
+
+        }
     }
 
     syncMainFeed(user, state, dispatch) {
@@ -39,17 +70,6 @@ class DataSync {
         }
     }
 
-    syncNotification(user, state, dispatch) {
-        if (user) {
-            asyncListener.addListener('notification_' + user._id, (snap) => {
-                const token = state.authentication.token;
-                dispatch({
-                    type: types.SAVE_NOTIFICATION_TOP_REQUEST,
-                    token: token, user: user
-                });
-            })
-        }
-    }
 
     syncPromotions(promotions, state, dispatch) {
         if (Object.values(promotions)) {
@@ -125,7 +145,7 @@ class DataSync {
         if (Object.values(groups)) {
             Object.values(groups).forEach(group => {
                     //sync group chat
-                    asyncListener.addListener(group._id, (snap) => {
+                    asyncListener.addListener("group_chat_" + group._id, (snap) => {
                         let groupId = snap.key;
                         const token = state.authentication.token;
                         const groupsChats = state.comments.groupComments[groupId];
@@ -135,7 +155,7 @@ class DataSync {
                         }
                     });
                     //sync group view
-                    asyncListener.addListener('group_' + group._id, (snap) => {
+                    asyncListener.addListener('user_follow_group_' + group._id, (snap) => {
                         // TODO use get by group
                         let groupId = snap.key.substring('group_'.length);
                         const token = state.authentication.token;
