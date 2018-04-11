@@ -13,7 +13,7 @@ import feedComperator from "../reduxComperators/MainFeedComperator"
 import handler from './ErrorHandler'
 import * as types from '../sega/segaActions';
 import {put} from 'redux-saga/effects'
-
+import asyncListener from "../api/AsyncListeners";
 let feedApi = new FeedApi();
 let userApi = new UserApi();
 let promotionApi = new PtomotionApi();
@@ -29,7 +29,7 @@ async function getUserFollowers(dispatch, token) {
         });
     } catch (error) {
         handler.handleError(error, dispatch, 'getUserFollowers')
-        await logger.actionFailed('getUserFollowers')
+        logger.actionFailed('getUserFollowers')
     }
 }
 
@@ -98,10 +98,14 @@ export function like(id) {
                 id: id
             });
             await userApi.like(id, token);
+            asyncListener.syncChange('social_'+id,'like' )
+            if(getState().instances.instances[id] &&  getState().instances.instances[id].promotion) {
+                asyncListener.syncChange('promotion_' + getState().instances.instances[id].promotion, 'like');
+            }
             handler.handleSuccses(getState(), dispatch)
         } catch (error) {
             handler.handleError(error, dispatch, 'like')
-            await logger.actionFailed('like')
+            logger.actionFailed('like')
         }
     }
 }
@@ -125,7 +129,7 @@ export function setSocialState(item) {
             handler.handleSuccses(getState(), dispatch)
         } catch (error) {
             handler.handleError(error, dispatch, 'feed-getFeedSocialState')
-            await logger.actionFailed('getFeedSocialState')
+            logger.actionFailed('getFeedSocialState')
         }
     }
 }
@@ -142,7 +146,7 @@ export function updateFeed(item) {
             handler.handleSuccses(getState(), dispatch)
         } catch (error) {
             handler.handleError(error, dispatch, 'feed-getFeedSocialState')
-            await logger.actionFailed('getFeedSocialState')
+            logger.actionFailed('getFeedSocialState')
         }
     }
 }
@@ -159,7 +163,7 @@ export function updateSavedInstance(item){
             handler.handleSuccses(getState(), dispatch)
         } catch (error) {
             handler.handleError(error, dispatch, 'feed-getFeedSocialState')
-            await logger.actionFailed('getFeedSocialState')
+            logger.actionFailed('getFeedSocialState')
         }
     }
 
@@ -178,23 +182,28 @@ async function refreshFeedSocialState(state, dispatch, token, id) {
         }
     } catch (error) {
         handler.handleError(error, dispatch, 'refreshFeedSocialState')
-        await logger.actionFailed('refreshFeedSocialState')
+        logger.actionFailed('refreshFeedSocialState')
     }
 }
 
 export const unlike = (id) => {
     return async function (dispatch, getState) {
         try {
-            const token = getState().authentication.token;
+            const token = getState().authentication.token
+
             dispatch({
                 type: actions.UNLIKE,
                 id: id
             });
             await userApi.unlike(id, token);
+            asyncListener.syncChange('social_'+id,'un-like' )
+            if(getState().instances.instances[id]  &&  getState().instances.instances[id].promotion) {
+                asyncListener.syncChange('promotion_' + getState().instances.instances[id].promotion, 'un-like');
+            }
             handler.handleSuccses(getState(), dispatch)
         } catch (error) {
-            handler.handleError(error, dispatch, 'unlike');
-            await logger.actionFailed('unlike');
+            handler.handleError(error, dispatch, 'unlike')
+            logger.actionFailed('unlike')
         }
     }
 };
@@ -211,13 +220,15 @@ export function saveFeed(id,) {
                 type: types.SAVE_SINGLE_MYPROMOTIONS_REQUEST,
                 item: savedInstance,
                 feedId: id
-            });
-
-
+            })
+            asyncListener.syncChange('social_'+id,'save' )
+            if(getState().instances.instances[id]  &&  getState().instances.instances[id].promotion) {
+                asyncListener.syncChange('promotion_' + getState().instances.instances[id].promotion, 'save');
+            }
             handler.handleSuccses(getState(), dispatch)
         } catch (error) {
-            handler.handleError(error, dispatch, 'saveFeed');
-            await logger.actionFailed('saveFeed');
+            handler.handleError(error, dispatch, 'saveFeed')
+            logger.actionFailed('saveFeed')
         }
     }
 }
@@ -233,7 +244,7 @@ export function stopRender() {
 export function setUserFollows() {
     return async function (dispatch, getState) {
         try {
-            const token = getState().authentication.token;
+            const token = getState().authentication.token
             let response = await userApi.getUserFollowers(token);
             dispatch({
                 type: actions.USER_FOLLOW,
@@ -241,7 +252,7 @@ export function setUserFollows() {
             });
         } catch (error) {
             handler.handleError(error, dispatch, 'getUserFollowers')
-            await logger.actionFailed('getUserFollowers')
+            logger.actionFailed('getUserFollowers')
         }
     }
 }
@@ -252,10 +263,12 @@ export function shareActivity(id, activityId, users, token) {
             users.forEach(function (user) {
                 activityApi.shareActivity(user, activityId, token)
             })
+            asyncListener.syncChange('social_'+id,'share' )
+
 
         } catch (error) {
-            handler.handleError(error, dispatch, 'shareActivity');
-            await logger.actionFailed('shareActivity')
+            handler.handleError(error, dispatch, 'shareActivity')
+            logger.actionFailed('shareActivity')
         }
     }
 }

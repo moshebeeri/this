@@ -20,6 +20,7 @@ import strings from "../../i18n/i18n"
 import Icon from 'react-native-vector-icons/Ionicons';
 import StyleUtils from "../../utils/styleUtils";
 import {ThisText} from '../../ui/index';
+import navigationUtils from '../../utils/navigationUtils'
 
 const thisLogo = require('../../../images/this-logo.png');
 const bg = require('../../../images/bg.png');
@@ -43,7 +44,7 @@ class ForgetPassword extends Component {
     }
 
     replaceRoute(route) {
-        this.props.navigation.navigate(route);
+        navigationUtils.doNavigation(this.props.navigation, route);
     }
 
     forgetPassword() {
@@ -153,7 +154,6 @@ class ForgetPassword extends Component {
 
                                 <TouchableOpacity onPress={() => this.forgetPassword()} style={{
                                     width: StyleUtils.getWidth() - StyleUtils.scale(180),
-
                                     height: 50,
                                     borderRadius: 30,
                                     backgroundColor: 'white',

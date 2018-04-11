@@ -20,6 +20,7 @@ import * as userAction from "../../../actions/user";
 import StyleUtils from '../../../utils/styleUtils'
 import {bindActionCreators} from "redux";
 import strings from "../../../i18n/i18n"
+import navigationUtils from '../../../utils/navigationUtils'
 
 const {width, height} = Dimensions.get('window');
 const groupPolicy = [
@@ -34,7 +35,7 @@ const groupPolicy = [
 ];
 const groupType = [
     {
-        value: 'USERS',
+        value: 'USER',
         label: strings.UserGroup
     },
     {
@@ -193,7 +194,7 @@ class AddGroup extends Component {
 
     createGroupFromState() {
         const {user} = this.props;
-        if (this.state.groupType === 'USERS') {
+        if (this.state.groupType === 'USER') {
             return {
                 name: this.state.name,
                 description: this.state.info,
@@ -247,10 +248,11 @@ class AddGroup extends Component {
     showUsers() {
         const {userFollowers} = this.props;
         if (userFollowers.length > 0) {
-            this.props.navigation.navigate('SelectUsersComponent', {
+            navigationUtils.doNavigation(this.props.navigation, 'SelectUsersComponent', {
                 users: userFollowers,
                 selectUsers: this.selectUsers.bind(this)
-            })
+            });
+           
         }
     }
 
@@ -462,6 +464,8 @@ class AddGroup extends Component {
                     <ThisText style={{fontSize:StyleUtils.scale(14)}}> {strings.SelectedMembers}: {this.state.selectedUsers.length}</ThisText>}
 
                 </View>}
+                <View style={{height: StyleUtils.scale(30),width: StyleUtils.getWidth()}}></View>
+
             </ScrollView>
 
         </View>;

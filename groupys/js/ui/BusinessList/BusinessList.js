@@ -4,6 +4,7 @@ import {Button, Input, Item, Spinner} from "native-base";
 import styles from "./styles";
 import {BusinessHeader, SubmitButton, ThisText} from '../../ui/index';
 import strings from '../../i18n/i18n';
+import navigationUtils from '../../utils/navigationUtils'
 
 export default class BusinessList extends Component {
     static navigationOptions = {
@@ -18,8 +19,9 @@ export default class BusinessList extends Component {
     }
 
     showScanner() {
-        const {group} = this.props;
-        this.props.navigation.navigate('ReadQrCode', {group: group});
+        const {group,navigation} = this.props;
+        navigationUtils.doNavigation(navigation, 'ReadQrCode', {group: group});
+
     }
 
     back() {

@@ -3,6 +3,7 @@ import {View} from 'react-native';
 import {Thumbnail} from 'native-base';
 import styles from './styles';
 import {ChatMessage, PromotionHeader, ThisText} from '../../../ui/index';
+import navigationUtils from '../../../utils/navigationUtils'
 
 const noPic = require('../../../../images/client_1.png');
 export default class GroupChat extends Component {
@@ -17,7 +18,7 @@ export default class GroupChat extends Component {
 
     realize() {
         const {item, navigation} = this.props;
-        navigation.navigate('realizePromotion', {item: item.instance})
+        navigationUtils.doNavigation(navigation, 'realizePromotion', {item: item.instance});
     }
 
     render() {

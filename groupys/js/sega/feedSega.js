@@ -81,6 +81,19 @@ function* watchStartBackgroundTask() {
     }
 }
 
+function* setTopFeeds(action) {
+    try {
+        let response = yield call(feedApi.getAll, 'up', action.lastId, action.token, action.user);
+        handleSucsess();
+        if (response.length > 0) {
+            yield* updateFeedsTop(response);
+        }
+    } catch (error) {
+        console.log("failed to update social state");
+    }
+}
+
+
 function* setSocialState(action) {
     try {
         const response = yield call(feedApi.getFeedSocialState, action.id, action.token);
@@ -126,7 +139,10 @@ function* feedSega() {
     yield throttle(1000, segaActions.FEED_UPDATE_ITEM, feedUpdate);
     yield throttle(1000, segaActions.FEED_UPDATE_SAVED_ITEM, savedInstanceUpdate);
     yield throttle(3000, segaActions.FEED_SET_SOCIAL_STATE, setSocialState);
-    yield fork(watchStartBackgroundTask);
+    yield throttle(3000, segaActions.FEED_SET_TOP_FEED, setTopFeeds);
+
+
+ //   yield fork(watchStartBackgroundTask);
 }
 
 export default feedSega;

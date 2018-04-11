@@ -34,6 +34,7 @@ import {NavigationActions} from "react-navigation";
 import '../../conf/global';
 import PageRefresher from '../../refresh/pageRefresher'
 import Tasks from '../../tasks/tasks'
+import dataSync from '../../sync/DataSyncronizer';
 import {
     BusinessHeader,
     BusinessList,
@@ -69,6 +70,7 @@ const resetAction = NavigationActions.reset({
 let logger = new ActionLogger();
 // this shall be called regardless of app state: running, background or not running. Won't be called when app is killed by user in iOS
 FCM.on(FCMEvent.Notification, async (notif) => {
+    FCM.getBadgeNumber().then(number => FCM.setBadgeNumber(number - 1));
     //console.log(notif);
     // there are two parts of notif. notif.notification contains the notification payload, notif.data contains data payload
     if (notif.local_notification) {
@@ -161,7 +163,6 @@ class ApplicationManager extends Component {
         FCM.getFCMToken().then(token => {
             PageRefresher.updateUserFireBase(token);
         });
-
         Tasks.start();
         let notification = await  FCM.getInitialNotification();
         if (notification && notification.model === 'instance') {
@@ -182,13 +183,14 @@ class ApplicationManager extends Component {
         }
         if (notification && notification.model === 'comment') {
             this.props.actions.redirectToChatGroup(notification.actor_group, notification.notificationId, notification.action, this.props.navigation);
-            FCM.getBadgeNumber().then(number => FCM.setBadgeNumber(number -1));
+            FCM.getBadgeNumber().then(number => FCM.setBadgeNumber(number - 1));
             return;
         }
         if (notification && notification.title) {
             this.props.actions.showGenericPopup(notification.title, notification.notificationId, notification.action);
         }
         AppState.addEventListener('change', this._handleAppStateChange);
+        this.props.userActions.resetForm();
     }
 
     _handleAppStateChange = (nextAppState) => {
@@ -200,12 +202,9 @@ class ApplicationManager extends Component {
     }
 
     onChangeTab(tab) {
-        const {notificationAction, myPromotionsAction, feedAction, groupsActions, instanceGroupCommentsAction, actions} = this.props;
-        groupsActions.stopListenForChat();
-        instanceGroupCommentsAction.stopListenForChat();
+        const {feedAction, instanceGroupCommentsAction} = this.props;
         feedAction.stopMainFeedsListener();
-        // actions.changeTab(tab);
-        // this.setState({activeTab:tab.i})
+        dataSync.syncData();
     }
 
     navigateToAdd() {
@@ -221,6 +220,7 @@ class ApplicationManager extends Component {
     }
 
     componentDidMount() {
+        dataSync.syncData();
         //  codePush.sync({updateDialog: updateDialogOption});
     }
 

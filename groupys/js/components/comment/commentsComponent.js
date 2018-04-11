@@ -26,7 +26,7 @@ class CommentsComponent extends Component {
             actions.fetchTopComments(group, item);
         } else {
             actions.setNextFeeds(item.entities, item.generalId);
-            actions.startListenForChat(item.entities, item.generalId);
+
         }
     }
 
@@ -112,6 +112,7 @@ class CommentsComponent extends Component {
                 actions={actions}
                 token={token}
                 title='Feeds'
+                noLegacy={true}
                 ItemDetail={this.renderItem.bind(this)}>
 
             </GenericFeedManager>;

@@ -55,7 +55,7 @@ function showClaim(item){
     return !item.isRealized && !item.isExpired && item.isActive && !item.isSaved
 }
 function showRedeemed(item){
-    return item.isRealized  && item.isSaved
+    return item.isRealized
 }
 
 function showRedeem(item){

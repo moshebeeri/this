@@ -1,11 +1,12 @@
 import React, {Component} from "react";
-import { TouchableOpacity} from "react-native";
-import {Button, Input, Item, Spinner, Text, View} from "native-base";
+import {TouchableOpacity} from "react-native";
+import {Button, Input, Item, Spinner, View} from "native-base";
 import Icon3 from "react-native-vector-icons/Ionicons";
 import Camera from "react-native-camera";
 import styles from "./styles";
-import {BusinessHeade,ImageControllerr,ThisText} from '../../../ui/index';
+import {BusinessHeade, ImageControllerr, ThisText} from '../../../ui/index';
 import strings from '../../../i18n/i18n';
+import navigationUtils from '../../../utils/navigationUtils'
 
 const qrcode = require('../../../../images/qr-code.png');
 const scan = require('../../../../images/scan.png');
@@ -23,7 +24,8 @@ export default class BusinessFollow extends Component {
 
     showScanner() {
         const {group} = this.props;
-        this.props.navigation.navigate('ReadQrCode', {group: group});
+        navigationUtils.doNavigation(this.props.navigation,'ReadQrCode', {group: group})
+
     }
 
     back() {

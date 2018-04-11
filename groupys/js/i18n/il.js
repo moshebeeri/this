@@ -291,6 +291,7 @@ const il = {
     CreatedByBusiness                             : "נוצר ע״י {0}",
     ReducedAmountInvalidCondition                 : "עלות רכישה צריך להיות גדול מהתשלום",
     TakeProductPicture                            : "בחר תמונת מוצר",
+    LoginFailedMessage                            : "כניסה נכשלה, סיסמא או משתמש אינם נכונים",
 
 };
 

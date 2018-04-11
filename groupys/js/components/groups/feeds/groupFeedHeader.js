@@ -2,7 +2,7 @@
  * Created by roilandshut on 19/07/2017.
  */
 import React, {Component} from 'react';
-import {Dimensions, I18nManager, Image, Platform, TextInput, TouchableOpacity, View} from 'react-native';
+import {Dimensions, I18nManager, Image, Platform, TouchableOpacity, View} from 'react-native';
 import {connect} from 'react-redux';
 import {actions} from 'react-native-navigation-redux-helpers';
 import {Button, Container, Footer, Thumbnail} from 'native-base';
@@ -18,6 +18,7 @@ import Icon from 'react-native-vector-icons/Ionicons';
 import StyleUtils from '../../../utils/styleUtils'
 import {bindActionCreators} from "redux";
 import strings from "../../../i18n/i18n"
+import navigationUtils from '../../../utils/navigationUtils'
 
 const {height} = Dimensions.get('window');
 const vh = height / 100
@@ -38,17 +39,17 @@ class GroupFeedHeader extends Component {
     }
 
     handleBack() {
-        this.props.actions.fetchGroups();
+       // this.props.actions.fetchGroups();
     }
 
     showScanner() {
         let group = this.props.item;
-        this.props.navigation.navigate('ReadQrCode', {group: group});
+        navigationUtils.doNavigation(this.props.navigation, 'ReadQrCode', {group: group});
+
     }
 
     navigateBack() {
         this.handleBack();
-        this.props.actions.stopListenForChat();
         this.props.instanceGroupCommentsAction.stopListenForChat();
         this.props.navigation.goBack();
     }
@@ -56,31 +57,32 @@ class GroupFeedHeader extends Component {
     showUsers() {
         let users = this.props.user.followers;
         if (users) {
-            this.props.navigation.navigate('SelectUsersComponent', {
+            navigationUtils.doNavigation(this.props.navigation, 'SelectUsersComponent', {
                 users: users,
                 selectUsers: this.inviteUser.bind(this)
-            })
+            });
+
         }
     }
 
     followBusiness() {
         let group = this.props.item;
-        this.props.navigation.navigate("businessFollow", {business: group.entity.business, group: group});
+        navigationUtils.doNavigation(this.props.navigation,"businessFollow", {business: group.entity.business, group: group});
     }
 
     addPromotion() {
         let group = this.props.item;
-        this.props.navigation.navigate("addPromotions", {business: group.entity.business, group: group});
+        navigationUtils.doNavigation(this.props.navigation,"addPromotions", {business: group.entity.business, group: group});
     }
 
     updateGroup() {
         let group = this.props.item;
-        this.props.navigation.navigate("AddGroups", {group: group});
+        navigationUtils.doNavigation(this.props.navigation,"AddGroups", {group: group});
     }
 
     viewGroup() {
         let group = this.props.item;
-        this.props.navigation.navigate("AddGroups", {group: group,view:true});
+        navigationUtils.doNavigation(this.props.navigation,"AddGroups", {group: group, view: true});
     }
 
     inviteUser(users) {
@@ -163,9 +165,15 @@ class GroupFeedHeader extends Component {
         }
         return <View style={headerHeight}>
             <View style={styles.imageStyle}>
-                <Button style={{width:  StyleUtils.scale(30), alignItems: 'center', justifyContent: 'center'}} transparent
+                <Button style={{width: StyleUtils.scale(30), alignItems: 'center', justifyContent: 'center'}}
+                        transparent
                         onPress={this.navigateBack.bind(this)}>
-                    <Icon style={{alignItems: 'center', justifyContent: 'center', fontSize:  StyleUtils.scale(20), color: "#2db6c8"}}
+                    <Icon style={{
+                        alignItems: 'center',
+                        justifyContent: 'center',
+                        fontSize: StyleUtils.scale(20),
+                        color: "#2db6c8"
+                    }}
                           name={arrowName}/>
                 </Button>
             </View>
@@ -175,13 +183,18 @@ class GroupFeedHeader extends Component {
             <View style={styles.group_actions}>
                 <TouchableOpacity onPress={() => this.showScanner()}
                                   style={{
-                                      width:  StyleUtils.scale(30), height:  StyleUtils.scale(30),
+                                      width: StyleUtils.scale(30), height: StyleUtils.scale(30),
                                       flexDirection: 'column',
                                       alignItems: 'center',
                                       justifyContent: 'center',
                                   }}
                                   regular>
-                    <Image resizeMode="cover" style={{tintColor: '#2db6c8', marginTop: 3, width:  StyleUtils.scale(25), height:  StyleUtils.scale(25)}}
+                    <Image resizeMode="cover" style={{
+                        tintColor: '#2db6c8',
+                        marginTop: 3,
+                        width: StyleUtils.scale(25),
+                        height: StyleUtils.scale(25)
+                    }}
                            source={qrcode}/>
 
                 </TouchableOpacity>

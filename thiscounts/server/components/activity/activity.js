@@ -6,11 +6,11 @@ let graphTools = require('../graph-tools');
 let graphModel = graphTools.createGraphModel('feed');
 let logger = require('../logger').createLogger();
 let utils = require('../utils').createUtils();
-let mongoose = require('mongoose'),
-  Schema = mongoose.Schema;
+let mongoose = require('mongoose');
 
 let Feed = require('../../api/feed/feed.model');
 let ActivitySchema = require('../../api/activity/activity.model');
+const fireEvent = require('../firebaseEvent');
 
 function Activity() {
 }
@@ -34,30 +34,32 @@ function update_feeds(effected, activity) {
   if(!activity.audience || _.includes(activity.audience, 'FOLLOWERS')) {
     activity.distributions += effected.length;
     effected.forEach(function (entity) {
-      //console.log(`update_feeds FOLLOWERS entity: ${entity._id} `);
+      console.log(`update_feeds FOLLOWERS entity: ${entity._id} `);
       Feed.create({
         entity: entity._id,
         activity: activity._id
-      }, function (err) {
+      }, function (err, feed) {
         if (err) {
-          logger.error(err.message);
+          return logger.error(err.message);
         }
+        fireEvent.change('feed', entity._id);
       });
     });
   }
   if (_.includes(activity.audience, 'SELF')) {
     const actor = getActivityActor(activity);
     effected = effected.map(e=>e._id);
-    //console.log(`update_feeds SELF ${JSON.stringify({effected, actor, includes: effected.includes(actor)})} `);
+    console.log(`update_feeds SELF ${JSON.stringify({activity, effected, actor, includes: effected.includes(actor)})} `);
     if (!effected.includes(actor)) {
       activity.distributions += 1;
       Feed.create({
       entity: actor,
       activity: activity._id
-      }, function (err) {
+      }, function (err, feed) {
         if (err) {
-          logger.error(err.message);
+          return logger.error(err.message);
         }
+        fireEvent.change('feed', actor._id);
       });
     }
   }
@@ -169,7 +171,7 @@ function activity_impl(act, callback) {
         return handleSuccess(activity)
       });
     }else {
-      console.log(`Activity not distributed: ${act}`);
+      console.log(`Activity not distributed: ${JSON.stringify(act)}`);
       return callback(new Error('Activity not distributed expected ids. audience or actor_*'));
     }
   });

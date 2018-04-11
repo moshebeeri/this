@@ -4,11 +4,11 @@ import {
     Image,
     Keyboard,
     KeyboardAvoidingView,
+    Platform,
     ScrollView,
     Switch,
     TouchableOpacity,
-    View,
-    Platform
+    View
 } from "react-native";
 import {connect} from "react-redux";
 import {actions} from "react-native-navigation-redux-helpers";
@@ -38,6 +38,7 @@ import {
 } from '../../../ui/index';
 import strings from "../../../i18n/i18n"
 import StyleUtils from '../../../utils/styleUtils'
+import navigationUtils from '../../../utils/navigationUtils'
 
 const {width, height} = Dimensions.get('window');
 let promotionApi = new PromotionApi();
@@ -573,7 +574,7 @@ class AddPromotion extends Component {
     showGroups() {
         let bid = this.getBusinessId();
         let groupFunction = this.selectGroup.bind(this);
-        this.props.navigation.navigate("SelectGroupsComponent", {
+        navigationUtils.doNavigation(this.props.navigation, "SelectGroupsComponent", {
             bid: bid, selectGroup: groupFunction
         })
     }
@@ -609,7 +610,7 @@ class AddPromotion extends Component {
 
             </View>
             {button &&
-            <View style={{ marginTop: 30,}}>
+            <View style={{marginTop: 30,}}>
                 {button}
             </View>
             }
@@ -768,11 +769,8 @@ class AddPromotion extends Component {
         let distributionForm = this.createDistributionForm();
         if (this.props.navigation.state.params.group || proximityForm) {
             distributionForm = undefined;
-
-
         }
-
-        if(Platform.OS === 'ios'){
+        if (Platform.OS === 'ios') {
             return (<KeyboardAvoidingView behavior={'padding'}
                                           style={[styles.product_container, {width: StyleUtils.getWidth()}]}>
                 {this.createView(header, conditionForm, proximityForm, distributionForm, saving, savingFailed)}
@@ -781,7 +779,7 @@ class AddPromotion extends Component {
         return (<View style={[styles.product_container, {width: StyleUtils.getWidth()}]}>
             {this.createView(header, conditionForm, proximityForm, distributionForm, saving, savingFailed)}
         </View>)
-        ;
+            ;
     }
 
     createView(header, conditionForm, proximityForm, distributionForm, saving, savingFailed) {
@@ -893,6 +891,8 @@ class AddPromotion extends Component {
                 </View>
                 {proximityForm}
                 {this.state.toggle && distributionForm}
+                <View style={{height: StyleUtils.scale(30),width: StyleUtils.getWidth()}}></View>
+
             </ScrollView>
 
             {saving && <View style={{
@@ -946,7 +946,12 @@ class AddPromotion extends Component {
     createCoverImageComponnent() {
         if (this.state.image) {
             let coverImage = <Image
-                style={{width: width - 10, height: StyleUtils.relativeHeight(40,40), borderWidth: 1, borderColor: 'white'}}
+                style={{
+                    width: width - 10,
+                    height: StyleUtils.relativeHeight(40, 40),
+                    borderWidth: 1,
+                    borderColor: 'white'
+                }}
                 source={{uri: this.state.image.path}}
             >
 

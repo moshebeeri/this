@@ -1,15 +1,17 @@
 'use strict';
 const _ = require('lodash');
-const admin = require('firebase-admin');
 const User = require('../../api/user/user.model');
 const Notification = require('../../api/notification/notification.model');
-const serviceAccount = require("../../config/keys/this-1000-firebase-adminsdk-reo90-e33ec01e27.json");
 const i18n = require('../i18n');
+const fireEvent = require('../firebaseEvent');
 
-admin.initializeApp({
-  credential: admin.credential.cert(serviceAccount),
-  databaseURL: "https://this-1000.firebaseio.com"
-});
+const admin = require('firebase-admin');
+// const serviceAccount = require("../../config/keys/this-1000-firebase-adminsdk-reo90-e33ec01e27.json");
+//
+// admin.initializeApp({
+//   credential: admin.credential.cert(serviceAccount),
+//   databaseURL: "https://this-1000.firebaseio.com"
+// });
 
 function unread(userId, callback){
   Notification.count({})
@@ -189,8 +191,9 @@ exports.inAppNotify = function (note, audience) {
   audience.forEach(to => {
     note.to = to;
     note.timestamp = Date.now();
-    Notification.create(note, function (err) {
+    Notification.create(note, function (err, notification) {
       if (err) return console.error(err);
+      fireEvent.info('user', to, 'notification_sent', {notification: notification._id});
     });
   });
 };
@@ -202,6 +205,7 @@ exports.notifyUser = function (note, user, translate) {
   note.timestamp = Date.now();
   Notification.create(note, function (err, notification) {
     if (err) return console.error(err);
+    fireEvent.info('user', user, 'notification_sent', {notification: notification._id});
     Notification.findById(notification._id).exec((err, populated) => {
       if (err) return console.error(err);
       pnsUserDevices(populated, translate)

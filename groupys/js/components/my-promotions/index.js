@@ -5,6 +5,7 @@ import {getFeeds} from '../../selectors/myPromotionsSelector'
 import GenericFeedItem from "../generic-feed-manager/generic-feed";
 import * as promotionAction from "../../actions/myPromotions";
 import {connect} from 'react-redux';
+import navigationUtils from '../../utils/navigationUtils'
 
 class MyPromotions extends Component {
     constructor(props) {
@@ -20,7 +21,7 @@ class MyPromotions extends Component {
     }
 
     realize(item) {
-        this.props.navigation.navigate('realizePromotion', {item: item})
+        navigationUtils.doNavigation(this.props.navigation, 'realizePromotion', {item: item})
     }
 
     render() {

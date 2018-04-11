@@ -28,7 +28,7 @@ exports.follow = function(userId, entityId, callback){
           };
           act['actor_' + action.entity_type[0]] = entityId;
           activity.activity(act);
-          Instance.notify(instance._id, [userId]);
+          Instance.notify(instance, [userId]);
         });
 
       })

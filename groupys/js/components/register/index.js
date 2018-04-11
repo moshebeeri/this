@@ -106,6 +106,7 @@ class Register extends Component {
                                                onSubmitEditing={this.validateCode.bind(this)}
                                                underlineColorAndroid={'transparent'}
                                                onChangeText={(code) => this.setState({code})}
+                                               selectionColor={'black'}
                                                placeholderTextColor={'white'}
                                                style={{
                                                    width: StyleUtils.getWidth() / 2 + StyleUtils.scale(120),

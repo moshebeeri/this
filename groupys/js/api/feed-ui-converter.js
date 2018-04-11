@@ -444,14 +444,16 @@ class FeedConverter {
             responseFeed.generalId = instance._id;
             responseFeed.uploading = true;
             responseFeed.entities = [{instance: instance._id}];
-            responseFeed.isActive = instanceLifeCycle.isActive(instance._id);
-            responseFeed.isExpired = instanceLifeCycle.isExpired(instance._id, date);
-            responseFeed.isSaved = instanceLifeCycle.isSaved(instance._id);
-            responseFeed.isRealized = instanceLifeCycle.isReedemed(instance._id);
-            if (instance.social_state) {
-                responseFeed.social = instance.social_state
-                responseFeed.social.activityId = feed.activity._id;
-                responseFeed.isRealized = instanceLifeCycle.isReedemed(instance._id) || instance.social_state.realized;
+            if(instanceLifeCycle) {
+                responseFeed.isActive = instanceLifeCycle.isActive(instance._id);
+                responseFeed.isExpired = instanceLifeCycle.isExpired(instance._id, date);
+                responseFeed.isSaved = instanceLifeCycle.isSaved(instance._id);
+                responseFeed.isRealized = instanceLifeCycle.isReedemed(instance._id);
+                if (instance.social_state) {
+                    responseFeed.social = instance.social_state
+                    responseFeed.social.activityId = feed.activity._id;
+                    responseFeed.isRealized = instanceLifeCycle.isReedemed(instance._id) || instance.social_state.realized;
+                }
             }
             responseFeed.endDate = date.toLocaleDateString();
             responseFeed.created = instance.promotion.created;
@@ -540,9 +542,11 @@ class FeedConverter {
                     break;
                 case "PUNCH_CARD":
                     let punches = promotion.punch_card.values[0].number_of_punches;
-                    responseFeed.promotionTerm = strings.punchCardTerm.formatUnicorn(punches, promotion.condition.product.name);
-                    responseFeed.itemTitle = '';
-                    responseFeed.promotionTitle = strings.punchCardTerm.formatUnicorn(punches, promotion.condition.product.name);
+                    if(promotion.condition.product) {
+                        responseFeed.promotionTerm = strings.punchCardTerm.formatUnicorn(punches, promotion.condition.product.name);
+                        responseFeed.itemTitle = '';
+                        responseFeed.promotionTitle = strings.punchCardTerm.formatUnicorn(punches, promotion.condition.product.name);
+                    }
                     responseFeed.punches = punches;
                     responseFeed.quantity = promotion.punch_card.quantity;
                     responseFeed.promotion = 'PUNCH_CARD';
@@ -573,7 +577,7 @@ class FeedConverter {
         let response = {};
         response.name = promotion.name;
         response.description = promotion.description;
-        if (promotion.pictures && promotion.pictures.length > 0) {
+        if (promotion.pictures && promotion.pictures[0]  ) {
             response.banner = {
                 uri: promotion.pictures[0].pictures[1]
             };

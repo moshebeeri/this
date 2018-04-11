@@ -1,14 +1,15 @@
 import React, {Component} from 'react';
-import {Dimensions, Image, ScrollView, Text, View,TouchableOpacity} from 'react-native';
+import {Dimensions, Image, ScrollView, TouchableOpacity, View} from 'react-native';
 import {connect} from 'react-redux';
 import styles from './styles'
-import {FormHeader, ImagePicker, Spinner, TextInput, Video} from '../../ui/index';
+import {FormHeader, ImagePicker, Spinner, TextInput, ThisText, Video} from '../../ui/index';
 import * as postAction from "../../actions/posts";
 import {bindActionCreators} from "redux";
 import strings from "../../i18n/i18n"
 import FormUtils from "../../utils/fromUtils";
+import StyleUtils from "../../utils/styleUtils";
+import navigationUtils from '../../utils/navigationUtils';
 const {width, height} = Dimensions.get('window')
-import {ThisText} from '../../ui/index';
 
 class AddPost extends Component {
     static navigationOptions = ({navigation}) => ({
@@ -71,31 +72,28 @@ class AddPost extends Component {
 
     createPostFromState() {
         const {user, navigation} = this.props;
-
-        let clientParametes  = {uploading:false}
-        if(this.state.image || this.state.video){
-            clientParametes = {uploading:true}
+        let clientParametes = {uploading: false}
+        if (this.state.image || this.state.video) {
+            clientParametes = {uploading: true}
         }
         if (navigation.state.params && navigation.state.params.group) {
             return {
-
                 text: this.state.post,
                 image: this.state.image,
                 uploadVideo: this.state.video,
-                url:this.state.youTubeUrl,
-                client:clientParametes,
+                url: this.state.youTubeUrl,
+                client: clientParametes,
                 behalf: {
                     group: navigation.state.params.group
                 }
             }
         }
         return {
-
             text: this.state.post,
             image: this.state.image,
             uploadVideo: this.state.video,
-            url:this.state.youTubeUrl,
-            client:clientParametes,
+            url: this.state.youTubeUrl,
+            client: clientParametes,
             behalf: {
                 user: user
             }
@@ -114,10 +112,10 @@ class AddPost extends Component {
     showUsers() {
         const {userFollowers} = this.props;
         if (userFollowers.length > 0) {
-            this.props.navigation.navigate('SelectUsersComponent', {
+            navigationUtils.doNavigation(this.props.navigation, 'SelectUsersComponent', {
                 users: userFollowers,
                 selectUsers: this.selectUsers.bind(this)
-            })
+            });
         }
     }
 
@@ -129,7 +127,7 @@ class AddPost extends Component {
         this.setState({video: video});
     }
 
-    openMenu(){
+    openMenu() {
         this.refs["coverImage"].openMenu();
     }
 
@@ -146,14 +144,14 @@ class AddPost extends Component {
         if (this.state.video) {
             item = <Video url={this.state.video.path} muted={false} paused={false}></Video>
         }
-
-        if(this.state.youTubeUrl  && FormUtils.youtube_parser(this.state.youTubeUrl)){
+        if (this.state.youTubeUrl && FormUtils.youtube_parser(this.state.youTubeUrl)) {
             return <View style={styles.product_upper_container}>
 
                 <View style={styles.cmeraLogoContainer}>
 
                     <View style={styles.addCoverContainer}>
-                         <Video videoId={FormUtils.youtube_parser(this.state.youTubeUrl)} source={'YOUTUBE'} url={this.state.youTubeUrl} muted={false} paused={false}></Video>
+                        <Video videoId={FormUtils.youtube_parser(this.state.youTubeUrl)} source={'YOUTUBE'}
+                               url={this.state.youTubeUrl} muted={false} paused={false}></Video>
                     </View>
                     {saving && <Spinner/>}
                 </View>
@@ -166,7 +164,8 @@ class AddPost extends Component {
 
                     <View style={styles.addCoverContainer}>
 
-                        <ImagePicker video  name={"coverImage"} ref={"coverImage"} image={item} color='white' pickFromCamera
+                        <ImagePicker video name={"coverImage"} ref={"coverImage"} image={item} color='white'
+                                     pickFromCamera
                                      setVideo={this.setVideo.bind(this)} setImage={this.setCoverImage.bind(this)}/>
                     </View>
                     {saving && <Spinner/>}
@@ -217,6 +216,8 @@ class AddPost extends Component {
                                    validateContent={FormUtils.validateYouTube}
                                    onChangeText={(youTubeUrl) => this.setState({youTubeUrl})} isMandatory={false}/>
                     </View>
+                    <View style={{height: StyleUtils.scale(30),width: StyleUtils.getWidth()}}></View>
+
                 </ScrollView>
 
 

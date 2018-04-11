@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import {Image, PanResponder, TouchableHighlight} from 'react-native';
+import {PanResponder} from 'react-native';
 import {actions} from 'react-native-navigation-redux-helpers';
 import {
     Button,
@@ -15,7 +15,6 @@ import {
     Left,
     Picker,
     Right,
-    Text,
     Thumbnail,
     View
 } from 'native-base';
@@ -26,6 +25,7 @@ import stylesPortrate from './styles'
 import stylesLandscape from './styles_landscape'
 import StyleUtils from '../../../utils/styleUtils'
 import {ThisText} from '../../../ui/index';
+import navigationUtils from '../../../utils/navigationUtils'
 
 const ReactNative = require('react-native');
 const {StyleSheet, Platform, Dimensions} = ReactNative;
@@ -64,7 +64,7 @@ export default class MyPromotionFeedItem extends Component {
     }
 
     realize() {
-        this.props.navigation.navigate('realizePromotion', {item: this.props.item})
+        navigationUtils.doNavigation(this.props.navigation, 'realizePromotion', {item: this.props.item})
     }
 
     render() {
@@ -73,11 +73,11 @@ export default class MyPromotionFeedItem extends Component {
     }
 
     comment() {
-        this.props.navigation.navigate('genericComments', {
+        navigationUtils.doNavigation(this.props.navigation, 'genericComments', {
             instance: this.props.item,
             generalId: this.props.item.generalId,
             entities: this.props.item.entities,
-        })
+        });
         //TODO add comments screen
     }
 
@@ -139,7 +139,8 @@ export default class MyPromotionFeedItem extends Component {
                                 </View>
                                 <View style={styles.promotion_bottom_location}>
                                     <Icon3 style={styles.promotion_location} size={25} name="location-on"/>
-                                    <ThisText style={styles.promotion_addressText} note>{item.businessAddress} </ThisText>
+                                    <ThisText style={styles.promotion_addressText}
+                                              note>{item.businessAddress} </ThisText>
                                 </View>
                             </View>
                         </View>

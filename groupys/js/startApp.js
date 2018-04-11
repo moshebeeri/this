@@ -42,7 +42,7 @@ import {MenuContext} from "react-native-popup-menu";
 import getStore from "./store";
 import setCustomStyles from './styles'
 import * as actions from "./reducers/reducerActions";
-import ActionLogger from './actions/ActionLogger'
+import ActionLogger from './actions/ActionLogger';
 
 const store = getStore();
 setCustomStyles();

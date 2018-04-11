@@ -11,7 +11,7 @@ function* saveGroupsRequest(action) {
         let response = yield call(groupsApi.getAll, action.token,0, 100);
         handleSucsess();
         if(response.length > 0) {
-            yield put(setGroups(response))
+            yield put(setGroups(response,action.state,action.dispatch))
         }
     } catch (error) {
         console.log("failed saveGroupsRequest");
@@ -56,7 +56,7 @@ function* saveGroup(action) {
 }
 
 function* groupsSega() {
-    yield throttle(2000,segaActions.SAVE_GROUPS_REQUEST, saveGroupsRequest);
+    yield throttle(2000, segaActions.SAVE_GROUPS_REQUEST, saveGroupsRequest);
     yield throttle(2000, segaActions.SAVE_GROUP, saveGroup);
 }
 

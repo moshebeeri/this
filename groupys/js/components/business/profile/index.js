@@ -42,7 +42,7 @@ class BusinessProfile extends Component {
         super(props);
         this.state = {
             codeStyle: {width: 80, height: 80,alignItems:'center',justifyContent:'center'},
-            codeContainerStyle: {backgroundColor:'white',position: 'absolute', top: 150, right: 20,alignItems:'center',justifyContent:'center'},
+            codeContainerStyle: {backgroundColor:'white',position: 'absolute', top: 130, right: 20,alignItems:'center',justifyContent:'center'},
             codeTextStyle:{fontSize:6,marginTop:5},
             codeFullSize: false,
         }
@@ -74,7 +74,7 @@ class BusinessProfile extends Component {
             this.setState({
                 codeStyle: {width: 80, height: 80,alignItems:'center',justifyContent:'center'},
                 codeTextStyle:{fontSize:6,marginTop:5},
-                codeContainerStyle: {backgroundColor:'white',position: 'absolute', top: 150, right: 20,alignItems:'center',justifyContent:'center'},
+                codeContainerStyle: {backgroundColor:'white',position: 'absolute', top: 130, right: 20,alignItems:'center',justifyContent:'center'},
                 codeFullSize: false,
             })
         } else {

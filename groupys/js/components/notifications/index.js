@@ -29,7 +29,14 @@ class Notification extends Component {
     }
 
 
+    componentWillMount(){
+        const{rows} = this.props;
+        if(!rows || (rows && rows.length === 0)){
+            this.props.actions.setTopNotification();
+        }
 
+
+    }
 
     render() {
         const {notification, navigation, actions,rows,update} = this.props;

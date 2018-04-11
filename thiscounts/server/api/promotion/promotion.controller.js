@@ -97,6 +97,8 @@ exports.test_me = function (req, res) {
 function applyToGroupList(groups_ids, instance, callback) {
   Group.find({}).where('_id').in(groups_ids).exec(function (err, groups) {
     if (err) return callback(err);
+    if(!groups || groups.length < 1)
+      callback(null);
     async.each(groups, (group, callback) => {
       pricing.balance(instance.promotion.entity, function (err, positiveBalance) {
         if (err) return callback(err);
@@ -117,7 +119,7 @@ function applyToUserList(users_ids, instance, callback) {
         if (err) return callback(err);
         if (!positiveBalance) return callback(new Error('HTTP_PAYMENT_REQUIRED'));
         user_instance_eligible_activity(user._id, instance);
-        Instance.notify(instance._id, [user._id]);
+        Instance.notify(instance, [user._id]);
       })
     }, callback);
   })
@@ -139,7 +141,6 @@ function applyToFollowingGroups(promotion, instances, callback) {
       if (instance.variation === 'SINGLE') {
         let query = instanceGraphModel.related_type_id_dir_query(business._id, 'FOLLOW', 'group', 'in', 0, instance.quantity);
         instanceGraphModel.query(query, function (err, groups_ids) {
-          console.log(`applyToFollowingGroups: ${JSON.stringify(groups_ids)}`);
           if (err) return callback(err);
           return applyToGroupList(groups_ids, instance, promotion.creator, callback)
         })
@@ -286,6 +287,10 @@ function handlePromotionPostCreate(promotion, callback) {
     return promotionGraphModel.relate_ids(entityId, 'ON_ACTION', promotion._id, params, callback);
   }
 
+  function errReporter(err) {
+    console.error(err);
+  }
+
   promotionGraphModel.reflect(promotion, to_graph(promotion), function (err, promotion) {
     if (err) return callback(err, null);
     relatePromotion(promotion, function (err) {
@@ -299,9 +304,9 @@ function handlePromotionPostCreate(promotion, callback) {
           instance.createPromotionInstances(promotion, function (err, instances) {
             if (err) return callback(err, null);
             if (promotion.distribution.business) {
-              applyToFollowing(promotion, instances);
+              applyToFollowing(promotion, instances, errReporter);
             } else if (promotion.distribution.groups && promotion.distribution.groups.length > 0) {
-              applyToGroups(promotion, instances);
+              applyToGroups(promotion, instances, errReporter);
             }
             return callback(null);
           });

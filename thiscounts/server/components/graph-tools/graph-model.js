@@ -138,10 +138,11 @@ GraphModel.prototype.count_out_rel_id = function count_out_rel(from, name, callb
 };
 
 GraphModel.prototype.count_in_rel_id = function count_in_rel(name, to, callback) {
-  let query = util.format("MATCH ()-[f:%s]->({_id:'%s'}) return count(f) as count",
-    name, to);
+  const query = `MATCH ()-[f:${name}]->({_id:'${to}'}) return count(f) as count`;
   db.query(query, function(err, result) {
-    if (err) { return callback(err) }
+    if (err) {
+      console.error(err);
+      return callback(err) }
     return callback(null, result[0]? result[0].count : 0)
   });
 };
@@ -158,7 +159,7 @@ GraphModel.prototype.count_in_rel_id = function count_in_rel(name, to, callback)
 GraphModel.prototype.count_in_though = function count_in_rel(to, rel, rel_between, callback) {
   let query = ` MATCH (e{_id:'${to}'})<-[direct:${rel}]-()
                 WITH count(direct) as directs
-                MATCH (e{_id:'${to}'})<-[:${rel_between}]-()<-[indirect:${rel}]-()
+                OPTIONAL MATCH (e{_id:'${to}'})<-[:${rel_between}]-()<-[indirect:${rel}]-()
                 RETURN directs + count(indirect) as count`;
   // query =   `MATCH (p{_id:'${to}'})<-[direct:${rel}]-()
   //             OPTIONAL MATCH (p)<-[:${rel_between}]-()<-[indirect:${rel}]-()
@@ -212,7 +213,7 @@ GraphModel.prototype.relate_ids = function relate_id(from, name, to, params, cal
 };
 
 GraphModel.prototype.unrelate_ids = function unrelate_ids(from, name, to, callback){
-  let query = util.format("MATCH (f { _id:'%s' })-[r:%s]->(t { _id:'%s' }) delete r", from, name, to);
+  let query = `MATCH (f { _id:'${from}' })-[r:${name}]->(t { _id:'${to}' }) delete r`;
   if (utils.defined(callback)) {
     db.query(query, callback);
   } else {

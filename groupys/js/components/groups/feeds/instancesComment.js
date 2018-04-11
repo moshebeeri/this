@@ -78,6 +78,7 @@ class instancesComment extends Component {
                                     update={update}
                                     showTopLoader={showTopLoader[group._id]}
                                     loadingDone={loadingDone[group._id]}
+                                    noLegacy={true}
                                     ItemDetail={GroupChat}/>
             </View>
 

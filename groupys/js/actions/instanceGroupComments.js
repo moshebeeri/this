@@ -1,5 +1,6 @@
 import CommentsApi from "../api/commet";
 import * as actions from "../reducers/reducerActions";
+import asyncListener from "../api/AsyncListeners";
 import ActionLogger from './ActionLogger'
 import handler from './ErrorHandler'
 import * as types from '../sega/segaActions';
@@ -13,7 +14,7 @@ export function sendMessage(groupId, instanceId, message) {
         try {
             const token = getState().authentication.token;
             const user = getState().user.user;
-            commentsApi.createComment(groupId, instanceId, message, token)
+            await commentsApi.createComment(groupId, instanceId, message, token)
             let messageItem = createMessage(message, user);
             dispatch({
                 type: actions.GROUP_COMMENT_INSTANCE_ADD_MESSAGE,
@@ -21,6 +22,10 @@ export function sendMessage(groupId, instanceId, message) {
                 groupId: groupId,
                 message: messageItem
             });
+            if(getState().instances.instances[instanceId]  &&  getState().instances.instances[instanceId].promotion) {
+                asyncListener.syncChange('promotion_' + getState().instances.instances[instanceId].promotion, 'add-comment');
+            }
+            asyncListener.syncChange(groupId, {comment: message})
             handler.handleSuccses(getState(), dispatch)
         } catch (error) {
             handler.handleError(error, dispatch, 'instance-group-sendMessage\'')
@@ -70,7 +75,7 @@ export function setNextFeeds(group, instance) {
     }
 }
 
-export function* restartListenForChat( group, instance, entitiesComents, token) {
+export function* restartListenForChat(group, instance, entitiesComents, token) {
     if (entitiesComents && entitiesComents[0] && entitiesComents[0]._id) {
         yield put({
             type: types.CANCEL_GROUP_INSTANCE_CHAT_LISTENER,
@@ -103,7 +108,7 @@ export function startListenForChat(group, instance) {
                 token: token,
                 group: group,
                 instance: instance,
-                lastChatId: entitiesComents[entitiesComents.length -1]
+                lastChatId: entitiesComents[entitiesComents.length - 1]
             })
         }
         else {
@@ -167,7 +172,7 @@ export function* updateChatScrollUp(response, group, instance) {
 }
 
 export function* updateChatTop(response, group, instance) {
-    if(response.length > 0) {
+    if (response.length > 0) {
         while (item = response.pop()) {
             if (item) {
                 yield put({

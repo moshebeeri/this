@@ -43,7 +43,7 @@ export default class FeedBusiness extends Component {
         const {item, actions, group} = this.props;
         if (visible) {
             if (visible && actions && actions.setSocialState) {
-                actions.setSocialState(item);
+              //  actions.setSocialState(item);
             }
             if (group) {
                 actions.setVisibleItem(item.fid, group._id);

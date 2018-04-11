@@ -25,6 +25,7 @@ import GenericListManager from '../generic-list-manager/index'
 import {getGroups} from '../../selectors/groupSelector'
 import * as groupsAction from "../../actions/groups";
 import {bindActionCreators} from "redux";
+import navigationUtils from '../../utils/navigationUtils'
 
 class Groups extends Component {
     constructor(props) {
@@ -37,13 +38,13 @@ class Groups extends Component {
     onPressItem(item) {
         const {actions, navigation} = this.props;
         actions.touch(item._id);
+        navigationUtils.doNavigation(navigation, 'GroupFeed', {group: item, role: 'admin'});
 
-        navigation.navigate('GroupFeed', {group: item, role: 'admin'});
     }
     onPressMessageItem(item) {
         const {actions, navigation} = this.props;
-
-        navigation.navigate('GroupFeed', {chat:true,group: item, role: 'admin'});
+        actions.touch(item._id);
+        navigationUtils.doNavigation(navigation, 'GroupFeed', {chat:true,group: item, role: 'admin'});
     }
     shouldComponentUpdate(){
         if(this.props.currentScreen ==='home' ){
@@ -52,22 +53,9 @@ class Groups extends Component {
         return false;
     }
 
-    renderItem(item) {
-        const {navigation,actions,visibleItem} = this.props;
-        return <GenericListGroupView
-            onPressItem={this.onPressItem.bind(this, item.item)}
-            onPressMessageItem = {this.onPressMessageItem.bind(this,item.item)}
-            item={item.item}
-            setVisibleItem={actions.setVisibleItem}
-            navigation={navigation}
-            visibleItem={visibleItem}
-            index={item.index}
-            key={item.index}
-        />
-    }
 
     navigateToAdd() {
-        this.props.navigation.navigate('AddGroups')
+        navigationUtils.doNavigation(this.props.navigation, 'AddGroups');
     }
 
     componentWillMount() {
@@ -79,7 +67,7 @@ class Groups extends Component {
 
     refreshTop(){
         this.setState({refreshing:true});
-        this.props.actions.fetchGroups();
+       // this.props.actions.fetchGroups();
         this.setState({refreshing:false});
     }
 

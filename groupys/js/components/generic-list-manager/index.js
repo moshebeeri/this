@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import {FlatList} from 'react-native';
+import {FlatList, Platform} from 'react-native';
 import {connect} from 'react-redux';
 import {actions} from 'react-native-navigation-redux-helpers';
 import {
@@ -19,6 +19,7 @@ import {
     Title,
     View
 } from 'native-base';
+import {ListEmptyDisplay} from "../../ui/index";
 
 class GenericListManager extends Component {
     constructor(props) {
@@ -26,13 +27,13 @@ class GenericListManager extends Component {
     }
 
     renderItem(item) {
-        const {navigation, user, business,businessId,actions, groupActions,ItemDetail,setVisibleItem,onPressItem,onPressMessageItem,visibleItem,location} = this.props;
+        const {navigation, user, business, businessId, actions, groupActions, ItemDetail, setVisibleItem, onPressItem, onPressMessageItem, visibleItem, location} = this.props;
         let id = item.item.id;
         if (!id) {
             id = item.item._id;
         }
         let index = item.item.index;
-        if(!index){
+        if (!index) {
             index = id;
         }
         return <ItemDetail
@@ -53,10 +54,20 @@ class GenericListManager extends Component {
     }
 
     render() {
-        const {rows,  actions, update, onEndReached, noRefresh,refreshing,onRefreshing} = this.props;
+        const {rows, actions, update, onEndReached, noRefresh, refreshing, onRefreshing} = this.props;
+        if (!rows || (rows && rows.length === 0)) {
+            return <View style={{
+                flex: 1,
+                alignItems: 'center',
+                justifyContent: 'center',
+                backgroundColor: `${appBackgroundColor}`
+            }}>
+                <ListEmptyDisplay/>
+            </View>
+        }
         if (noRefresh) {
             return (
-                <View style={{backgroundColor: `${appBackgroundColor}`}}>
+                <View style={{ flex: 1,backgroundColor: `${appBackgroundColor}`}}>
 
 
                     <FlatList
@@ -66,6 +77,7 @@ class GenericListManager extends Component {
                         extraData={update}
                         refreshing={refreshing}
                         onRefresh={onRefreshing}
+                        removeClippedSubviews={Platform.OS === 'android'}
                     />
 
                 </View>
@@ -74,7 +86,7 @@ class GenericListManager extends Component {
         const onEndActions = this.getOnEndAction(actions, onEndReached);
         return (
 
-            <View style={{backgroundColor: `${appBackgroundColor}`}}>
+            <View style={{flex: 1,backgroundColor: `${appBackgroundColor}`}}>
 
                 <FlatList
                     ref='flatList'
@@ -84,6 +96,7 @@ class GenericListManager extends Component {
                     onRefresh={onRefreshing}
                     renderItem={this.renderItem.bind(this)}
                     extraData={update}
+                    removeClippedSubviews={Platform.OS === 'android'}
                 />
 
             </View>

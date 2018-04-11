@@ -15,6 +15,7 @@ const feed = require('../../components/feed-tools');
 const Instance = require('../../components/instance');
 const util = require('util');
 const i18n = require('../i18n');
+const fireEvent = require('../../components/firebaseEvent');
 
 exports.search = MongodbSearch.create(Group);
 // Get list of groups
@@ -52,8 +53,10 @@ function to_graph(group) {
 function group_activity(group, action) {
   const act = {
     group: group._id,
-    action: action
+    action: action,
+    audience: ['SELF']
   };
+  console.log(`group_activity ${JSON.stringify(group)}`);
   if (group.entity_type === 'USER')
     act.actor_user = group.creator;
   else if (group.entity_type === 'CHAIN')
@@ -62,7 +65,8 @@ function group_activity(group, action) {
     act.actor_business = group.creator;
   else if (group.entity_type === 'MALL')
     act.actor_mall = group.creator;
-  sendActivity(act);
+  else
+    return console.error(new Error(`group_activity: entity type ${group.entity_type} - not supported`));
   sendActivity(act);
 }
 
@@ -76,6 +80,7 @@ function user_follow_group_activity(group, user) {
 }
 
 function sendActivity(act, callback) {
+  console.log(`sendActivity: ${JSON.stringify(act)}`);
   activity.activity(act, function (err, activity) {
     if (callback) {
       if (err) return callback(err);
@@ -150,6 +155,9 @@ exports.create = function (req, res) {
           }
           graphModel.relate_ids(req.user._id, 'FOLLOW', group._id, (err) => {
             if (err) return handleError(res, err);
+            fireEvent.info('user', req.user._id, 'group_created', {
+              group: group._id
+            });
             graphModel.relate_ids(group._id, 'CREATED_BY', req.user._id);
             graphModel.relate_ids(req.user._id, 'GROUP_ADMIN', group._id);
             touch(group.creator, group._id);
@@ -166,7 +174,9 @@ exports.create = function (req, res) {
     });
   });
 };
+
 exports.create_business_default_group = function (group, callback) {
+  group.chat_policy = 'OFF';
   Group.create(group, function (err, group) {
     if (err) {
       return callback(err);
@@ -200,6 +210,9 @@ exports.create_business_default_group = function (group, callback) {
             touch(group.creator._id, group._id);
             graphModel.relate_ids(group.entity.business, 'DEFAULT_GROUP', group._id, function (err) {
               if (err) return callback(err);
+              fireEvent.info('user', group.creator._id, 'group_created', {
+                group: group._id.toString()
+              });
               return callback(null, group);
             });
           });
@@ -208,6 +221,7 @@ exports.create_business_default_group = function (group, callback) {
     });
   });
 };
+
 // Updates an existing group in the DB.
 exports.update = function (req, res) {
   if (req.body._id) {
@@ -303,6 +317,7 @@ function user_follow_group(user_id, group, callback) {
     if (err) {
       console.error(err);
     }
+    fireEvent.change('user_follow_group', user_id);
     user_follow_group_activity(group, user_id);
     onAction.follow(user_id, group._id, (err) => {
       if (err) console.error(err)
@@ -315,6 +330,7 @@ function user_follow_group(user_id, group, callback) {
 function group_follow_group(following_group_id, group_to_follow_id, callback) {
   graphModel.relate_ids(following_group_id, 'FOLLOW', group_to_follow_id, function (err) {
     if (err) return callback(err);
+    fireEvent.change('group_follow_group', following_group_id);
     group_follow_group_activity(following_group_id, group_to_follow_id);
     callback(null)
   });
@@ -323,6 +339,14 @@ function group_follow_group(following_group_id, group_to_follow_id, callback) {
 function group_follow_business(following_group_id, business_id, callback) {
   graphModel.relate_ids(following_group_id, 'FOLLOW', business_id, function (err) {
     if (err) return callback(err);
+    fireEvent.info('group', following_group_id, 'group_follow_business', {
+      following_group_id,
+      business_id
+    });
+    fireEvent.info('business' ,business_id, 'group_follow_business', {
+      following_group_id,
+      business_id
+    });
     group_follow_business_activity(business_id, following_group_id);
     callback(null)
   });

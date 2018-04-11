@@ -12,8 +12,7 @@ import Icon2 from "react-native-vector-icons/Ionicons";
 import {createSelector} from "reselect";
 import {View} from 'react-native';
 import {Fab,} from 'native-base';
-
-var Analytics = require('react-native-firebase-analytics');
+import navigationUtils from '../../utils/navigationUtils'
 
 class Feed extends Component {
     constructor(props) {
@@ -35,23 +34,23 @@ class Feed extends Component {
 
     shouldComponentUpdate() {
         if (this.props.currentScreen === 'home') {
-
             return true;
         }
         return false;
     }
 
-    refreshTop(){
+    refreshTop() {
         console.log('refreshing')
-        this.setState({refreshing:true})
+        this.setState({refreshing: true})
         this.props.actions.setTopFeeds();
-        this.setState({refreshing:false})
+        this.setState({refreshing: false})
     }
+
     componentWillUnmount() {
     }
 
     navigateToAdd() {
-        this.props.navigation.navigate('PostForm')
+        navigationUtils.doNavigation(this.props.navigation, 'PostForm');
     }
 
     showFab(show) {
@@ -59,12 +58,13 @@ class Feed extends Component {
             showFab: show
         })
     }
+
     realize(item) {
-        this.props.navigation.navigate('realizePromotion', {item: item})
+        navigationUtils.doNavigation(this.props.navigation, 'realizePromotion', {item: item});
     }
 
     render() {
-        const {activityAction, navigation, loadingDone, showTopLoader, feeds, userFollower, actions, token, user, location, nextBulkLoad, visibleItem,visibleFeeds} = this.props;
+        const {activityAction, navigation, loadingDone, showTopLoader, feeds, userFollower, actions, token, user, location, nextBulkLoad, visibleItem, visibleFeeds} = this.props;
         let icon = <Icon2 active size={40} name="md-create"/>;
         return (
             <View style={{flex: 1, backgroundColor: '#cccccc'}}>

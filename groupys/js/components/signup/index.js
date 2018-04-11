@@ -20,6 +20,7 @@ import strings from "../../i18n/i18n"
 import Icon from 'react-native-vector-icons/Ionicons';
 import StyleUtils from "../../utils/styleUtils";
 import {TermsOfUse, ThisText} from "../../ui/index"
+import navigationUtils from '../../utils/navigationUtils'
 
 const {width, height} = Dimensions.get('window')
 const thisLogo = require('../../../images/this-logo.png');
@@ -48,7 +49,7 @@ class Signup extends Component {
     }
 
     replaceRoute(route) {
-        this.props.navigation.navigate(route);
+        navigationUtils.doNavigation(this.props.navigation, route);
     }
 
     signup() {
@@ -125,7 +126,7 @@ class Signup extends Component {
                         </TouchableOpacity>
                     </View>
 
-                    <KeyboardAvoidingView behavior={'position'}
+                    <View
                                           style={[styles.avoidView, {width: StyleUtils.getWidth()}]}>
                         <View style={{marginBottom: 20, height: height, justifyContent: 'center'}}>
 
@@ -156,6 +157,7 @@ class Signup extends Component {
                                                        borderColor: 'white',
                                                    }}
                                                    underlineColorAndroid={'transparent'}
+                                                   selectionColor={'black'}
                                                    placeholderTextColor={'white'}
                                                    onChangeText={(name) => this.setState({name})}
                                                    placeholder={strings.FirstName}/>
@@ -173,13 +175,14 @@ class Signup extends Component {
                                                        borderColor: 'white',
                                                    }}
                                                    underlineColorAndroid={'transparent'}
+                                                   selectionColor={'black'}
                                                    placeholderTextColor={'white'}
                                                    onChangeText={(lastname) => this.setState({lastname})}
                                                    placeholder={strings.LastName}/>
                                     </View>
                                 </View>
 
-
+                                <KeyboardAvoidingView behavior={'position'}>
                                 <View style={styles.phoneTextInput} regular>
                                     <TextInput keyboardType='phone-pad' value={this.state.phoneNumber}
                                                ref='name'
@@ -196,6 +199,7 @@ class Signup extends Component {
                                                    borderBottomWidth: 1,
                                                    borderColor: 'white',
                                                }}
+                                               selectionColor={'black'}
                                                placeholder={strings.PhoneNumber}/>
                                 </View>
                                 <View style={styles.passwordTextInput} regular>
@@ -217,12 +221,12 @@ class Signup extends Component {
                                             borderColor: passwordBorder,
                                         }}
                                         placeholder={strings.Password}
+                                        selectionColor={'black'}
                                         secureTextEntry
                                         onChangeText={password => this.setState({password})}
                                         onSubmitEditing={this.focusNextField.bind(this, "verifyPassword")}
                                     />
                                 </View>
-                                {signupProcess && <Spinner style={{position: 'absolute', top: -15}}/>}
                                 <View style={styles.passwordTextInput} regular>
 
                                     <TextInput
@@ -230,6 +234,7 @@ class Signup extends Component {
                                         ref='verifyPassword'
                                         underlineColorAndroid={'transparent'}
                                         returnKeyType='done'
+                                        selectionColor={'black'}
                                         defaultValue=""
                                         value={this.state.verifyPassword}
                                         placeholderTextColor={'white'}
@@ -247,6 +252,8 @@ class Signup extends Component {
                                         onSubmitEditing={this.signup.bind(this)}
                                     />
                                 </View>
+                                </KeyboardAvoidingView>
+                                {signupProcess && <Spinner style={{position: 'absolute', top: -15}}/>}
 
                                 {message}
 
@@ -284,7 +291,7 @@ class Signup extends Component {
 
 
                         </View>
-                    </KeyboardAvoidingView>
+                    </View>
 
                     {this.state.showPopup &&
                     <TermsOfUse declineTerms={this.back.bind(this)} acceptTerms={this.closePopup.bind(this)}/>}

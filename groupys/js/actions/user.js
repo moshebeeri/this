@@ -139,6 +139,9 @@ export function resetPasswordForm() {
         dispatch({
             type: actions.CHANGE_PASSWORD_CLEAR
         });
+        dispatch({
+            type: actions.SAVING_USER_DONE,
+        });
     }
 }
 

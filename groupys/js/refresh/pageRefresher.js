@@ -1,12 +1,8 @@
 import getStore from "../store";
-import feedAction from '../actions/feedsMain'
 import notificationAction from '../actions/notifications'
-import postAction from '../actions/posts'
-import promotionAction from '../actions/promotions'
 import business from '../actions/business'
 import groups from '../actions/groups'
 import users from '../actions/user'
-import groupComments from '../actions/commentsGroup'
 import pageSync from './refresher';
 import FormUtils from "../utils/fromUtils";
 import simpleStore from 'react-native-simple-store';
@@ -16,8 +12,7 @@ let visitedList = ['feed', 'groups', 'businesses'];
 
 class PageRefresher {
     constructor() {
-        pageSync.createPage('groups', pageSync.createStdAverageRefresh('groups', 10, 60000), this.updateGroups.bind(this));
-        pageSync.createPage('notification', pageSync.createStdAverageRefresh('notification', 10, 60000), this.updateNotification.bind(this));
+        //    pageSync.createPage('notification', pageSync.createStdAverageRefresh('notification', 10, 60000), this.updateNotification.bind(this));
         pageSync.createPage('user', pageSync.createStdAverageRefresh('user', 10, 60000), this.updateUser.bind(this));
     }
 
@@ -52,21 +47,12 @@ class PageRefresher {
         }
     }
 
-    updateGroups() {
-        let token = store.getState().authentication.token;
-        if (token) {
-            groups.getAll(store.dispatch, token);
-        }
-    }
-
     addBusinessPromotion(businessId) {
         if (!visitedList.includes('promotion_' + businessId,)) {
-            pageSync.createPage('promotion_' + businessId, pageSync.createStdAverageRefresh('promotion_' + businessId, 10, 60000), this.updatePromotion.bind(this, businessId));
+            // pageSync.createPage('promotion_' + businessId, pageSync.createStdAverageRefresh('promotion_' + businessId, 10, 60000), this.updatePromotion.bind(this, businessId));
             visitedList.push('promotion_' + businessId);
         }
     }
-
-
 
     visitedPromotions(businessId) {
         if (visitedList.includes('promotion_' + businessId,)) {
@@ -81,42 +67,15 @@ class PageRefresher {
         }
     }
 
-
-
-    visitedFeed() {
-        //pageSync.visited('feed')
-    }
-
-    visitedGroups() {
-        pageSync.visited('groups')
-    }
-
-
     createFeedSocialState(id) {
         if (!visitedList.includes('feed' + id,)) {
-            pageSync.createPage('feed' + id, pageSync.createStdAverageRefresh('feed' + id, 2, 7200000), this.updateSocialState.bind(this, id));
             visitedList.push('feed' + id);
-        }
-    }
-
-    visitedFeedItem(item) {
-        if (visitedList.includes('feed' + item.id,)) {
-            pageSync.visited('feed' + item.id)
-            this.checkRefreshFeedItem(item);
         }
     }
 
     createPromotionUpdate(item, businessId) {
         if (!visitedList.includes('promotion' + item._id,)) {
-            pageSync.createPage('promotion' + item._id, pageSync.createStdAverageRefresh('promotion' + item._id, 2, 7200000), this.updateBusinessPromotion.bind(this, item, businessId));
             visitedList.push('promotion' + item._id);
-        }
-    }
-
-    updateBusinessPromotion(item, businessId) {
-        let token = store.getState().authentication.token;
-        if (token) {
-            promotionAction.refershBusinessPromotion(item, businessId, token, store.dispatch);
         }
     }
 
@@ -126,27 +85,8 @@ class PageRefresher {
         }
     }
 
-    checkRefreshFeedItem(item) {
-        if (item.uploading) {
-            if (!item.banner && !item.video) {
-                let token = store.getState().authentication.token;
-                if (token) {
-                    switch (item.itemType) {
-                        case 'POST':
-                            postAction.fetchPostById(item.id, token, store.dispatch)
-                            break;
-                        case 'PROMOTION':
-                            promotionAction.fetchPromotionById(item.promotionEntity._id, token, store.dispatch)
-                            break;
-                    }
-                }
-            }
-        }
-    }
-
     updateSocialState(id) {
         let token = store.getState().authentication.token;
-
     }
 }
 

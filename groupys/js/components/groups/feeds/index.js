@@ -1,5 +1,5 @@
 import React, {Component} from "react";
-import {BackHandler, I18nManager, Platform, View,InteractionManager} from "react-native";
+import {BackHandler, I18nManager, InteractionManager, Platform, View} from "react-native";
 import {connect} from "react-redux";
 import {Button, Container, Fab, Icon, Input, Tab, TabHeading, Tabs} from "native-base";
 import {actions} from "react-native-navigation-redux-helpers";
@@ -10,9 +10,9 @@ import InstanceComment from "./instancesComment";
 import {getFeeds} from "../../../selectors/groupFeedsSelector";
 import * as commentAction from "../../../actions/commentsGroup";
 import * as instanceGroupCommentsAction from "../../../actions/instanceGroupComments"
-import strings from "../../../i18n/i18n"
 import {ScrolTabView} from '../../../ui/index'
 import GroupFeedComponent from './groupsFeeds'
+import navigationUtils from '../../../utils/navigationUtils'
 
 class GroupFeed extends Component {
     static navigationOptions = ({navigation}) => ({
@@ -27,7 +27,7 @@ class GroupFeed extends Component {
             showEmoji: false,
             iconEmoji: 'emoji-neutral',
             showChat: false,
-            page:0
+            page: 0
         };
         this.handlePick = this.handlePick.bind(this);
     }
@@ -37,12 +37,9 @@ class GroupFeed extends Component {
         const {navigation, feeds} = this.props;
         const group = navigation.state.params.group;
         this.props.actions.clearReplyInstance();
-        this.props.actions.listenForChat(group);
-
         if (this.props.navigation.state.params.chat) {
-           this.setState({page:this.getChatTab()})
+            this.setState({page: this.getChatTab()})
         }
-
         InteractionManager.runAfterInteractions(() => {
             if (!feeds[group._id] || (feeds[group._id] && feeds[group._id].length === 0)) {
                 this.props.actions.setFeeds(group, feeds[group._id]);
@@ -54,7 +51,6 @@ class GroupFeed extends Component {
 
     handleBack() {
         InteractionManager.runAfterInteractions(() => {
-            this.props.actions.stopListenForChat();
             this.props.instanceGroupCommentsAction.stopListenForChat();
         });
     }
@@ -62,38 +58,34 @@ class GroupFeed extends Component {
     handlePick(emoji) {
         let message = this.state.messsage;
         InteractionManager.runAfterInteractions(() => {
-        this.setState({
-            messsage: message + emoji,
-        })});
+            this.setState({
+                messsage: message + emoji,
+            })
+        });
     }
-
-
 
     navigateToAdd() {
-       const group = this.props.navigation.state.params.group;
-       this.props.navigation.navigate('PostForm', {group: group})
+        const group = this.props.navigation.state.params.group;
+        navigationUtils.doNavigation(this.props.navigation, 'PostForm', {group: group});
     }
 
-    navigateToChat(item){
-
+    navigateToChat(item) {
         this.props.actions.setReplayInstance(item);
         if (I18nManager.isRTL && (Platform.OS === 'android')) {
-            this.setState({page:0});
-        }else{
-            this.setState({page:1});
+            this.setState({page: 0});
+        } else {
+            this.setState({page: 1});
         }
     }
 
-    onChangeTab(tab){
-        this.setState({page:tab.i});
+    onChangeTab(tab) {
+        this.setState({page: tab.i});
     }
 
-
-    getChatTab(){
+    getChatTab() {
         if (I18nManager.isRTL && (Platform.OS === 'android')) {
             return 0;
         }
-
         return 1;
     }
 
@@ -104,13 +96,12 @@ class GroupFeed extends Component {
         if (this.props.navigation.state.params.chat) {
             initPage = this.getChatTab();
         }
-
         return (
             <Container style={{backgroundColor: '#ebebeb'}}>
 
                 {chatDisabled ? <GroupFeedComponent tabLabel="promotions" navigation={this.props.navigation}
                                                     group={this.props.navigation.state.params.group}/> :
-                    <View style={{flex:1,}}>
+                    <View style={{flex: 1,}}>
 
                         {I18nManager.isRTL && (Platform.OS === 'android') ?
                             <ScrolTabView initialPage={initPage}
@@ -122,15 +113,18 @@ class GroupFeed extends Component {
                                                  group={this.props.navigation.state.params.group}/>
                                 <GroupFeedComponent tabLabel={'chat'} navigation={this.props.navigation}
                                                     navigateToChat={this.navigateToChat.bind(this)}
-                                                    navigateToAdd={this.navigateToAdd.bind(this)} group={this.props.navigation.state.params.group}/>
+                                                    navigateToAdd={this.navigateToAdd.bind(this)}
+                                                    group={this.props.navigation.state.params.group}/>
                             </ScrolTabView> :
                             <ScrolTabView initialPage={initPage}
                                           page={this.state.page}
                                           onChangeTab={this.onChangeTab.bind(this)}
                                           tabBarBackgroundColor='white'
                                           tabBarUnderlineStyle={{backgroundColor: '#2db6c8'}}>
-                                <GroupFeedComponent  navigateToChat={this.navigateToChat.bind(this)} tabLabel="promotions" navigation={this.props.navigation}
-                                                    navigateToAdd={this.navigateToAdd.bind(this)}  group={this.props.navigation.state.params.group}/>
+                                <GroupFeedComponent navigateToChat={this.navigateToChat.bind(this)}
+                                                    tabLabel="promotions" navigation={this.props.navigation}
+                                                    navigateToAdd={this.navigateToAdd.bind(this)}
+                                                    group={this.props.navigation.state.params.group}/>
 
                                 <InstanceComment tabLabel={'chat'} navigation={this.props.navigation}
                                                  group={this.props.navigation.state.params.group}/>

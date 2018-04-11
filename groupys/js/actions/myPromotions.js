@@ -4,7 +4,7 @@ import ActionLogger from './ActionLogger'
 import handler from './ErrorHandler'
 import SavedPromotionComperator from "../reduxComperators/SavedPromotionComperator"
 import * as types from '../sega/segaActions';
-
+import asyncListener from "../api/AsyncListeners";
 let profileApi = new ProfilenApi();
 let logger = new ActionLogger();
 let savedPromotionComperator = new SavedPromotionComperator();
@@ -135,6 +135,10 @@ async function updateInstance(token, dispatch, id) {
             type: actions.UPDATE_SINGLE_SAVED_INSTANCE,
             item: response
         });
+        //TODO check this
+        if(response.promotion) {
+            asyncListener.syncChange('promotion_' + response.promotion, 'save');
+        }
     } catch (error) {
         handler.handleError(error, dispatch, 'fetchTopList-mainfeeds')
         await logger.actionFailed('fetchTopList-mainfeeds')

@@ -1,11 +1,12 @@
 import React, {Component} from 'react';
-import {Platform, Text, View,Keyboard} from 'react-native'
+import {Keyboard, View} from 'react-native'
 import FormUtils from "../../../../utils/fromUtils";
-import {SelectButton, TextInput,ThisText} from '../../../../ui/index';
+import {SelectButton, TextInput, ThisText} from '../../../../ui/index';
 import styles from '../styles'
 import strings from "../../../../i18n/i18n"
 import StyleUtils from '../../../../utils/styleUtils';
 import ProductPreview from "../../../product/productPreview/index";
+import navigationUtils from '../../../../utils/navigationUtils'
 
 export default class PunchCardComponent extends Component {
     constructor(props) {
@@ -41,28 +42,25 @@ export default class PunchCardComponent extends Component {
     }
 
     setPunchCard(value) {
-
-            this.props.setState({
-                choose_distribution: true,
-                punch_card: {
-                    values: {number_of_punches: value},
-                }
-            })
-
+        this.props.setState({
+            choose_distribution: true,
+            punch_card: {
+                values: {number_of_punches: value},
+            }
+        })
     }
 
     showBuyProducts() {
         let products = this.props.api.getProducts();
         let selectProductFunction = this.selectBuyProduct.bind(this);
         let businessId = this.props.api.getBusinessId();
-        this.props.navigation.navigate("SelectProductsComponent", {
+        navigationUtils.doNavigation(this.props.navigation,"SelectProductsComponent", {
             products: products,
             selectProduct: selectProductFunction,
-            businessId: businessId
-        })
+            businessId: businessId});
     }
 
-    done(){
+    done() {
         Keyboard.dismiss();
     }
 
@@ -76,20 +74,22 @@ export default class PunchCardComponent extends Component {
 
                 <ThisText style={{color: '#FA8559', marginLeft: 8, marginRight: 8}}>{strings.PunchCard}</ThisText>
             </View>
-            <View style={{ flexDirection: 'row',
+            <View style={{
+                flexDirection: 'row',
                 justifyContent: 'space-between',
                 alignItems: 'center',
                 paddingTop: 10,
                 paddingRight: 5,
                 paddingLeft: 5,
-                width: StyleUtils.getWidth() - 15}}>
-                <View style={{ marginTop: 25}}><SelectButton ref="PunchSelectProduct" isMandatory
-                                                                       selectedValue={this.props.state.product}
-                                                                       title={strings.SelectProduct}
-                                                                       action={this.showBuyProducts.bind(this, true)}/>
+                width: StyleUtils.getWidth() - 15
+            }}>
+                <View style={{marginTop: 25}}><SelectButton ref="PunchSelectProduct" isMandatory
+                                                            selectedValue={this.props.state.product}
+                                                            title={strings.SelectProduct}
+                                                            action={this.showBuyProducts.bind(this, true)}/>
                 </View>
 
-                <View style={{width:200}}>
+                <View style={{width: 200}}>
                     <TextInput field={strings.NumberOfPunches} value={numberOfPunches}
                                returnKeyType='done' ref="2" refNext="2"
                                keyboardType='numeric'
@@ -100,7 +100,7 @@ export default class PunchCardComponent extends Component {
 
 
             </View>
-            <ProductPreview product={this.props.state.product} />
+            <ProductPreview product={this.props.state.product}/>
 
         </View>
     }

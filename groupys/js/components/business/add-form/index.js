@@ -75,6 +75,7 @@ class AddBusiness extends Component {
                 categories: [Number(category), Number(subcategory)],
                 formData: {},
                 coverImage: source,
+                saving:false
             };
         } else {
             let categories = [];
@@ -127,6 +128,7 @@ class AddBusiness extends Component {
                 location: templateBusiness.location,
                 IdIdentifierImage: templateBusiness.IdIdentifierImage,
                 LetterOfIncorporationImage: templateBusiness.LetterOfIncorporationImage,
+                saving:false
             };
         }
     }
@@ -155,6 +157,9 @@ class AddBusiness extends Component {
         let formIsValid = this.validateForm(this.saveFormData.bind(this));
         Keyboard.dismiss();
         if (formIsValid) {
+            if(!this.state.location){
+                return;
+            }
             this.props.saveBusiness(this.createBusiness(), this.props.navigation);
         }
     }
@@ -162,8 +167,8 @@ class AddBusiness extends Component {
     createBusiness() {
         let business = {
             address: this.state.address,
-            category: this.state.category,
-            subcategory: this.state.subcategory,
+            category: 246843,
+            subcategory: 246950,
             city: this.state.city,
             country: this.state.country,
             image: this.state.coverImage,
@@ -184,8 +189,12 @@ class AddBusiness extends Component {
     }
 
     async setReduxState(value) {
-        await this.setState(value);
+        this.setState(value);
+
         if (value.name) {
+            return;
+        }
+        if(value.address){
             return;
         }
         if (this.props.navigation && this.props.navigation.state && this.props.navigation.state.params && this.props.navigation.state.params.updating) {
@@ -211,12 +220,21 @@ class AddBusiness extends Component {
     }
 
     updateLocation(location) {
+
         this.setReduxState({
             location: location.location,
             city: location.city,
             address: location.address,
             country: location.country,
         })
+
+        this.setState({
+            location: location.location,
+            city: location.city,
+            address: location.address,
+            country: location.country,
+        });
+
     }
 
     setImage(image) {
@@ -224,6 +242,7 @@ class AddBusiness extends Component {
             image: {uri: image.path, width: image.width, height: image.height, mime: image.mime},
             path: image.path
         });
+
     }
 
     setCoverImage(image) {
@@ -252,15 +271,26 @@ class AddBusiness extends Component {
     }
 
     setIdDocument(image) {
-        this.setReduxState({
-            IdIdentifierImage: image
-        })
+        if(image) {
+            this.setState({
+                IdIdentifierImage: image
+            });
+            this.setReduxState({
+                IdIdentifierImage: image
+            })
+        }
+
     }
 
     setLetterDocument(image) {
-        this.setReduxState({
-            LetterOfIncorporationImage: image
-        })
+        if(image) {
+            this.setReduxState({
+                LetterOfIncorporationImage: image
+            })
+            this.setState({
+                LetterOfIncorporationImage: image
+            });
+        }
     }
 
     createImageComponent(coverPic) {
@@ -372,7 +402,7 @@ class AddBusiness extends Component {
                         navigation={this.props.navigation}
                         title={strings.AddBusiness} bgc="#FA8559"/>
 
-            <ScrollView keyboardShouldPersistTaps={true} contentContainerStyle={{
+            <ScrollView overScrollMode={'always'} keyboardShouldPersistTaps={true} contentContainerStyle={{
                 justifyContent: 'center',
                 alignItems: 'center',
             }} style={[styles.contentContainer, {width: StyleUtils.getWidth()}]}>
@@ -392,12 +422,6 @@ class AddBusiness extends Component {
                                onChangeText={(name) => this.setReduxState({name})} isMandatory={true}/>
                 </View>
 
-                <View style={[styles.inputTextLayout, {width: StyleUtils.getWidth() - 15}]}>
-                    <CategoryPicker ref={"picker"} isMandatory categories={this.props.categories}
-                                    selectedCategories={this.state.categories}
-                                    setFormCategories={this.setCategory.bind(this)}
-                                    setCategoriesApi={this.props.fetchBusinessCategories}/>
-                </View>
                 <View style={[styles.inputTextLayout, {width: StyleUtils.getWidth() - 15}]}>
 
 
@@ -432,7 +456,7 @@ class AddBusiness extends Component {
                 </View>
 
                 {!this.state.hideIds && <View style={[styles.inputTextLayout, {width: StyleUtils.getWidth() - 15}]}>
-                    <DocumentPicker value={this.state.IdIdentifierImage} ref="id" isMandatory
+                    <DocumentPicker value={this.state.IdIdentifierImage} ref="IdIdentifier" isMandatory
                                     field={strings.IdIdentifier}
                                     setDocument={this.setIdDocument.bind(this)}/>
 
@@ -443,6 +467,7 @@ class AddBusiness extends Component {
                                     setDocument={this.setLetterDocument.bind(this)}/>
 
                 </View>}
+                <View style={{height: StyleUtils.scale(30),width: StyleUtils.getWidth()}}></View>
 
             </ScrollView>
 

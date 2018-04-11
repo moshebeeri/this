@@ -12,6 +12,7 @@ import strings from "../../i18n/i18n"
 import {ImageController, ThisText} from '../index'
 import StyleUtils from "../../utils/styleUtils";
 import withPreventDoubleClick from '../../ui/TochButton/TouchButton';
+import navigationUtils from '../../utils/navigationUtils'
 
 const TouchableOpacityFix = withPreventDoubleClick(TouchableOpacity);
 
@@ -22,17 +23,17 @@ class BusinessHeader extends Component {
 
     showBusiness() {
         const {navigation, business, businessView} = this.props;
-        navigation.navigate("businessProfile", {businesses: business, fromBusiness: businessView});
+        navigationUtils.doNavigation(navigation, "businessProfile", {businesses: business, fromBusiness: businessView});
     }
 
     showBusinessAccountDetails() {
         const {navigation, business} = this.props;
-        navigation.navigate("businessAccount", {businesses: business});
+        navigationUtils.doNavigation(navigation, "businessAccount", {businesses: business});
     }
 
     onBoardingPromotion() {
         const {navigation, business} = this.props;
-        navigation.navigate("addPromotions", {business: business, onBoardType: 'BUSINESS'});
+        navigationUtils.doNavigation(navigation, "addPromotions", {business: business, onBoardType: 'BUSINESS'});
     }
 
     unFollowBusiness() {
@@ -76,8 +77,8 @@ class BusinessHeader extends Component {
     }
 
     assignQrCode() {
-        const {business} = this.props;
-        this.props.navigation.navigate('ReadQrCode', {business: business})
+        const {navigation, business} = this.props;
+        navigationUtils.doNavigation(navigation, 'ReadQrCode', {business: business})
     }
 
     back() {
@@ -120,7 +121,7 @@ class BusinessHeader extends Component {
         if (businessView) {
             menuAction = <Menu>
                 <MenuTrigger placement="right">
-                    <Icon2 style={{color: 'white',paddingLeft: 10, fontSize: StyleUtils.scale(15)}} name="options"/>
+                    <Icon2 style={{color: 'white', paddingLeft: 10, fontSize: StyleUtils.scale(15)}} name="options"/>
                 </MenuTrigger>
                 <MenuOptions>
 
@@ -170,9 +171,7 @@ class BusinessHeader extends Component {
             {this.createBusinessLog()}
             <View style={{flex: 1, marginLeft: 10, flexDirection: 'column', justifyContent: 'center'}}>
                 <ThisText style={[nameTextStyle, {color: textColor, fontWeight: 'bold'}]}
-                          note>{businessName}</ThisText>{categoryTitle &&
-            <ThisText numberOfLines={1} style={styles.businessAddressText}
-                      note>{categoryTitle}</ThisText>}
+                          note>{businessName}</ThisText>
             </View>
             {showEdit ? <View style={{flexDirection: 'row', alignItems: 'center',}}>
                 <View style={{marginTop: 10}}>
