@@ -14,14 +14,28 @@ const ref = db.ref('events');
 function FirebaseEvent() {
 }
 
-FirebaseEvent.change = function(type, _id) {
+FirebaseEvent.change = function(entityName, entity_id) {
   // create a child node of the above path and write the following data to it
-  const usersRef = ref.child(`${type}_${_id}`);
+  const usersRef = ref.child(`${entityName}_${entity_id}`);
   usersRef.set({
-    change: {
-      time: Date.now().toString()
-    }
+    type: 'change',
+    time: Date.now().toString()
+  })
+  .then()
+  .catch((err) => {
+    console.error(err);
   });
+};
+
+FirebaseEvent.info = function(entityName, entity_id, type, obj) {
+  // create a child node of the above path and write the following data to it
+  obj.type = type;
+  const usersRef = ref.child(`${entityName}_${entity_id}`);
+  usersRef.set(obj)
+    .then()
+    .catch((err) => {
+      console.error(err);
+    });
 };
 
 function handleError(res, err) {

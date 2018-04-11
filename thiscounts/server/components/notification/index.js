@@ -193,7 +193,7 @@ exports.inAppNotify = function (note, audience) {
     note.timestamp = Date.now();
     Notification.create(note, function (err) {
       if (err) return console.error(err);
-      fireEvent.change('notification', to);
+      fireEvent.info('user', to, 'notification_sent', {notification: note._id});
     });
   });
 };
@@ -205,7 +205,7 @@ exports.notifyUser = function (note, user, translate) {
   note.timestamp = Date.now();
   Notification.create(note, function (err, notification) {
     if (err) return console.error(err);
-    fireEvent.change('notification', user);
+    fireEvent.info('user', user, 'notification_sent', {notification: note._id});
     Notification.findById(notification._id).exec((err, populated) => {
       if (err) return console.error(err);
       pnsUserDevices(populated, translate)

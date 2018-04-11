@@ -42,7 +42,7 @@ function update_feeds(effected, activity) {
         if (err) {
           return logger.error(err.message);
         }
-        fireEvent.change('feed', feed._id);
+        fireEvent.change('feed', entity._id);
       });
     });
   }
@@ -59,7 +59,7 @@ function update_feeds(effected, activity) {
         if (err) {
           return logger.error(err.message);
         }
-        fireEvent.change('feed', feed._id);
+        fireEvent.change('feed', actor);
       });
     }
   }
