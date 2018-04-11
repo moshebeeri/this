@@ -204,15 +204,15 @@ exports.create_business_default_group = function (group, callback) {
           //console.log(`group.creator -> ${JSON.stringify(group.creator)}`);
           graphModel.relate_ids(group.creator._id, 'FOLLOW', group._id, (err) => {
             if (err) return callback(err);
-            fireEvent.info('user', group.creator._id, 'group_created', {
-              group: group._id.toString()
-            });
             graphModel.relate_ids(group._id, 'CREATED_BY', group.creator);
             graphModel.relate_ids(group.creator._id, 'GROUP_ADMIN', group._id);
             graphModel.relate_ids(group._id, 'FOLLOW', group.entity.business);
             touch(group.creator._id, group._id);
             graphModel.relate_ids(group.entity.business, 'DEFAULT_GROUP', group._id, function (err) {
               if (err) return callback(err);
+              fireEvent.info('user', group.creator._id, 'group_created', {
+                group: group._id.toString()
+              });
               return callback(null, group);
             });
           });
