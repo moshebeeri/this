@@ -46,11 +46,12 @@ class DataSync {
     }
 
     parseSnap(snap){
-
-        return {
-            type: snap.node_.children_.root_.value.value_,
-
+        if(snap.node_ && snap.node_.children_ && snap.node_.children_.root && snap.node_.children_.root_.value ) {
+            return {
+                type: snap.node_.children_.root_.value.value_,
+            };
         }
+        return {type: 'NONE'};
     }
 
     syncMainFeed(user, state, dispatch) {
