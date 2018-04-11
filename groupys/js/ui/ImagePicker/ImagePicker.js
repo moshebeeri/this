@@ -144,9 +144,9 @@ export default class ImagePickerComponent extends Component {
                 <ThisText style={{fontSize:StyleUtils.scale(14)}}>{strings.PickVideo}</ThisText>
             </MenuOption>
         }
-        let name = "picker";
+        let name = "picker" + new Date().getTime();;
         if (this.state.name) {
-            name = this.state.name;
+            name = this.state.name + new Date().getTime();
         }
         return <Menu ref={name} name={name}>
             <MenuTrigger customStyles={customStyles}>
