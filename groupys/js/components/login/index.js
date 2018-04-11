@@ -84,6 +84,7 @@ class Login extends Component {
                                        underlineColorAndroid={'transparent'}
                                        onChangeText={(phoneNumber) => this.setState({phoneNumber})}
                                        placeholderTextColor={'white'}
+                                       selectionColor={'black'}
                                        style={{
                                            width: StyleUtils.getWidth() / 2 + StyleUtils.scale(120),
                                            color: 'white',
@@ -104,6 +105,7 @@ class Login extends Component {
                                 underlineColorAndroid={'transparent'}
                                 returnKeyType='done'
                                 defaultValue=""
+                                selectionColor={'black'}
                                 placeholderTextColor={'white'}
                                 style={{
                                     width: StyleUtils.getWidth() / 2 + StyleUtils.scale(120),
