@@ -48,7 +48,7 @@ async function getByBusinessId(dispatch, bid, token) {
         }
     } catch (error) {
         handler.handleError(error, dispatch, 'groupsApi.getByBusinessId')
-        logger.actionFailed('groupsApi.getByBusinessId')
+        await logger.actionFailed('groupsApi.getByBusinessId')
     }
 }
 
@@ -61,7 +61,7 @@ async function getUserFollowers(dispatch, token) {
         });
     } catch (error) {
         handler.handleError(error, dispatch, 'userApi.getUserFollowers');
-        logger.actionFailed('userApi.getUserFollowers')
+        await logger.actionFailed('userApi.getUserFollowers')
     }
 }
 
@@ -100,7 +100,7 @@ export function acceptInvitation(group) {
             })
         } catch (error) {
             handler.handleError(error, dispatch, 'groupsApi.acceptInvitation');
-            logger.actionFailed('groupsApi.acceptInvitation')
+            await logger.actionFailed('groupsApi.acceptInvitation')
         }
     }
 }
@@ -121,7 +121,7 @@ export function touch(groupId) {
             dispatchGroupTOuch(token,groupId,dispatch)
         } catch (error) {
             handler.handleError(error, dispatch, 'groupsApi.touch');
-            logger.actionFailed('groupsApi.touch')
+            await logger.actionFailed('groupsApi.touch')
         }
 
     }
@@ -153,7 +153,7 @@ export function createGroup(group, navigation) {
             navigation.goBack();
         } catch (error) {
             handler.handleError(error, dispatch, 'createGroup')
-            logger.actionFailed('groupsApi.createGroup')
+            await logger.actionFailed('groupsApi.createGroup')
         }
     }
 }
@@ -179,7 +179,7 @@ export function setGroupQrCode(group) {
             });
         } catch (error) {
             handler.handleError(error, dispatch, 'setBusinessQrCode')
-            logger.actionFailed("business_getBusinessQrCodeImage", business);
+            await logger.actionFailed("business_getBusinessQrCodeImage", business);
         }
     }
 }
@@ -199,7 +199,7 @@ export function updateGroup(group, navigation) {
             navigation.goBack();
         } catch (error) {
             handler.handleError(error, dispatch, 'groupsApi.createGroup')
-            logger.actionFailed('groupsApi.createGroup')
+            await logger.actionFailed('groupsApi.createGroup')
         }
     }
 }
@@ -263,7 +263,7 @@ export function setNextFeeds(feeds, token, group) {
             }
         } catch (error) {
             handler.handleError(error, dispatch, 'groups-setNextFeeds')
-            logger.actionFailed('groups-setNextFeeds')
+            await logger.actionFailed('groups-setNextFeeds')
         }
         if (showLoadingDone && !getState().groups.loadingDone[group._id]) {
             dispatch({
@@ -289,7 +289,7 @@ export function sendMessage(groupId, message) {
             groupsApi.meesage(groupId, message, token)
         } catch (error) {
             handler.handleError(error, dispatch, 'groups-sendMessage')
-            logger.actionFailed('groups-sendMessage')
+            await logger.actionFailed('groups-sendMessage')
         }
     }
 }
@@ -338,7 +338,7 @@ async function fetchTopList(id, token, group, dispatch, user) {
         })
     } catch (error) {
         handler.handleError(error, dispatch, 'groups-fetchTopList')
-        logger.actionFailed('groups-fetchTopList')
+        await logger.actionFailed('groups-fetchTopList')
     }
 }
 
@@ -385,7 +385,7 @@ export function like(id) {
             await userApi.like(id, token);
         } catch (error) {
             handler.handleError(error, dispatch, 'groups-like')
-            logger.actionFailed('groups-like')
+            await logger.actionFailed('groups-like')
         }
     }
 }
@@ -401,7 +401,7 @@ export const unlike = (id) => {
             });
         } catch (error) {
             handler.handleError(error, dispatch, 'groups-unlike')
-            logger.actionFailed('groups-unlike')
+            await logger.actionFailed('groups-unlike')
         }
     }
 };
@@ -422,7 +422,7 @@ export function saveFeed(id, navigation, feed) {
             handler.handleSuccses(getState(), dispatch)
         } catch (error) {
             handler.handleError(error, dispatch, 'groups-saveFeed')
-            logger.actionFailed('groups-saveFeed')
+            await logger.actionFailed('groups-saveFeed')
         }
     }
 }
@@ -432,12 +432,12 @@ export function shareActivity(id, activityId, users, token) {
         try {
             users.forEach(function (user) {
                 activityApi.shareActivity(user, activityId, token)
-            })
+            });
 
             handler.handleSuccses(getState(), dispatch)
         } catch (error) {
             handler.handleError(error, dispatch, 'groups-shareActivity')
-            logger.actionFailed('groups-shareActivity')
+            await logger.actionFailed('groups-shareActivity')
         }
     }
 }
@@ -466,7 +466,7 @@ export function refresh(id, currentSocialState) {
             // await userApi.like(id, token);
         } catch (error) {
             handler.handleError(error, dispatch, 'groups-refresh')
-            logger.actionFailed('groups-refresh')
+            await logger.actionFailed('groups-refresh')
         }
     }
 }
@@ -567,7 +567,7 @@ export function setSocialState(item) {
             handler.handleSuccses(getState(), dispatch)
         } catch (error) {
             handler.handleError(error, dispatch, 'feed-getFeedSocialState')
-            logger.actionFailed('getFeedSocialState')
+            await logger.actionFailed('getFeedSocialState')
         }
     }
 }
@@ -611,7 +611,7 @@ export function updateFeed(item) {
             handler.handleSuccses(getState(), dispatch)
         } catch (error) {
             handler.handleError(error, dispatch, 'feed-getFeedSocialState')
-            logger.actionFailed('getFeedSocialState')
+            await logger.actionFailed('getFeedSocialState')
         }
     }
 }
@@ -676,7 +676,7 @@ export function updateSavedInstance(item){
             handler.handleSuccses(getState(), dispatch)
         } catch (error) {
             handler.handleError(error, dispatch, 'feed-getFeedSocialState')
-            logger.actionFailed('getFeedSocialState')
+            await logger.actionFailed('getFeedSocialState')
         }
     }
 

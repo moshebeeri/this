@@ -65,7 +65,7 @@ export function login(phone, password, navigation) {
                 value: false
             });
             handler.handleError(error, dispatch,'login')
-            logger.actionFailed('login')
+            await logger.actionFailed('login')
         }
     }
 }
@@ -112,7 +112,7 @@ export function signup(phone, password, firstName, lastName, navigation) {
                 type: actions.SIGNUP_PROCESS,
                 value: false
             });
-            logger.actionFailed('signup')
+            await logger.actionFailed('signup')
         }
     }
 }
@@ -172,7 +172,7 @@ export function verifyCode(code, navigation, resetAction) {
             } else {
                 handler.handleError(error, dispatch,'verifyCode')
             }
-            logger.actionFailed('verifyCode');
+            await logger.actionFailed('verifyCode');
             dispatch({
                 type: actions.REGISTER_PROCESS,
                 value: false
@@ -189,7 +189,7 @@ export function forgetPassword(phoneNumber) {
             }
         } catch (error) {
             handler.handleError(error, dispatch,'forgetPassword')
-            logger.actionFailed('forgetPassword')
+            await logger.actionFailed('forgetPassword')
         }
     }
 }
@@ -211,7 +211,7 @@ export function changePassword(currentPassword, newPassword, user, token, naviga
                 type: actions.CHANGE_PASSWORD_FAILED,
                 message: 'Failed to Authenticate Current Password'
             });
-            logger.actionFailed('changePassword')
+            await logger.actionFailed('changePassword')
         }
     }
 }

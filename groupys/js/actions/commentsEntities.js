@@ -46,7 +46,7 @@ export function fetchTopComments(entities, generalId) {
             handler.handleSuccses(getState(), dispatch)
         } catch (error) {
             handler.handleError(error, dispatch, 'fetchTopComments')
-            logger.actionFailed('fetchTopComments')
+            await logger.actionFailed('fetchTopComments')
         }
     }
 }
@@ -66,7 +66,7 @@ export function sendMessage(entities, generalId, message) {
             handler.handleSuccses(getState(), dispatch)
         } catch (error) {
             handler.handleError(error, dispatch, 'createGlobalComment')
-            logger.actionFailed('createGlobalComment')
+            await logger.actionFailed('createGlobalComment')
         }
     }
 }
@@ -104,7 +104,7 @@ export function setNextFeeds(entities, generalId) {
             handler.handleSuccses(getState(), dispatch)
         } catch (error) {
             handler.handleError(error, dispatch, 'commentsApi.getComment')
-            logger.actionFailed('commentsApi.getComment')
+            await logger.actionFailed('commentsApi.getComment')
         }
     }
 }

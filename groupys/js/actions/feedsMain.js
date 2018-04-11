@@ -29,7 +29,7 @@ async function getUserFollowers(dispatch, token) {
         });
     } catch (error) {
         handler.handleError(error, dispatch, 'getUserFollowers')
-        logger.actionFailed('getUserFollowers')
+        await logger.actionFailed('getUserFollowers')
     }
 }
 
@@ -101,7 +101,7 @@ export function like(id) {
             handler.handleSuccses(getState(), dispatch)
         } catch (error) {
             handler.handleError(error, dispatch, 'like')
-            logger.actionFailed('like')
+            await logger.actionFailed('like')
         }
     }
 }
@@ -125,7 +125,7 @@ export function setSocialState(item) {
             handler.handleSuccses(getState(), dispatch)
         } catch (error) {
             handler.handleError(error, dispatch, 'feed-getFeedSocialState')
-            logger.actionFailed('getFeedSocialState')
+            await logger.actionFailed('getFeedSocialState')
         }
     }
 }
@@ -142,7 +142,7 @@ export function updateFeed(item) {
             handler.handleSuccses(getState(), dispatch)
         } catch (error) {
             handler.handleError(error, dispatch, 'feed-getFeedSocialState')
-            logger.actionFailed('getFeedSocialState')
+            await logger.actionFailed('getFeedSocialState')
         }
     }
 }
@@ -159,7 +159,7 @@ export function updateSavedInstance(item){
             handler.handleSuccses(getState(), dispatch)
         } catch (error) {
             handler.handleError(error, dispatch, 'feed-getFeedSocialState')
-            logger.actionFailed('getFeedSocialState')
+            await logger.actionFailed('getFeedSocialState')
         }
     }
 
@@ -178,14 +178,14 @@ async function refreshFeedSocialState(state, dispatch, token, id) {
         }
     } catch (error) {
         handler.handleError(error, dispatch, 'refreshFeedSocialState')
-        logger.actionFailed('refreshFeedSocialState')
+        await logger.actionFailed('refreshFeedSocialState')
     }
 }
 
 export const unlike = (id) => {
     return async function (dispatch, getState) {
         try {
-            const token = getState().authentication.token
+            const token = getState().authentication.token;
             dispatch({
                 type: actions.UNLIKE,
                 id: id
@@ -193,8 +193,8 @@ export const unlike = (id) => {
             await userApi.unlike(id, token);
             handler.handleSuccses(getState(), dispatch)
         } catch (error) {
-            handler.handleError(error, dispatch, 'unlike')
-            logger.actionFailed('unlike')
+            handler.handleError(error, dispatch, 'unlike');
+            await logger.actionFailed('unlike');
         }
     }
 };
@@ -211,13 +211,13 @@ export function saveFeed(id,) {
                 type: types.SAVE_SINGLE_MYPROMOTIONS_REQUEST,
                 item: savedInstance,
                 feedId: id
-            })
+            });
 
 
             handler.handleSuccses(getState(), dispatch)
         } catch (error) {
-            handler.handleError(error, dispatch, 'saveFeed')
-            logger.actionFailed('saveFeed')
+            handler.handleError(error, dispatch, 'saveFeed');
+            await logger.actionFailed('saveFeed');
         }
     }
 }
@@ -233,7 +233,7 @@ export function stopRender() {
 export function setUserFollows() {
     return async function (dispatch, getState) {
         try {
-            const token = getState().authentication.token
+            const token = getState().authentication.token;
             let response = await userApi.getUserFollowers(token);
             dispatch({
                 type: actions.USER_FOLLOW,
@@ -241,7 +241,7 @@ export function setUserFollows() {
             });
         } catch (error) {
             handler.handleError(error, dispatch, 'getUserFollowers')
-            logger.actionFailed('getUserFollowers')
+            await logger.actionFailed('getUserFollowers')
         }
     }
 }
@@ -254,8 +254,8 @@ export function shareActivity(id, activityId, users, token) {
             })
 
         } catch (error) {
-            handler.handleError(error, dispatch, 'shareActivity')
-            logger.actionFailed('shareActivity')
+            handler.handleError(error, dispatch, 'shareActivity');
+            await logger.actionFailed('shareActivity')
         }
     }
 }

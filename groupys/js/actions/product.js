@@ -19,7 +19,7 @@ async function getAllByBusinessId(dispatch, id, token) {
         }
     } catch (error) {
         handler.handleError(error, dispatch)
-        logger.actionFailed('product-getAllByBusinessId')
+        await logger.actionFailed('product-getAllByBusinessId')
     }
 }
 
@@ -38,7 +38,7 @@ async function getProductCategories(dispatch, gid, token) {
         }
     } catch (error) {
         handler.handleError(error, dispatch)
-        logger.actionFailed('product-getProductCategories')
+        await logger.actionFailed('product-getProductCategories')
     }
 }
 
@@ -91,7 +91,7 @@ export function saveProduct(product, businessId, navigation) {
             handler.handleSuccses(getState(), dispatch)
         } catch (error) {
             handler.handleError(error, dispatch)
-            logger.actionFailed('product-saveProduct')
+            await logger.actionFailed('product-saveProduct')
         }
     }
 }

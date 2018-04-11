@@ -24,7 +24,7 @@ export function setNextFeeds() {
             });
         } catch (error) {
             handler.handleError(error, dispatch, 'mypromotons-setNextFeeds')
-            logger.actionFailed('mypromotons-setNextFeeds')
+            await logger.actionFailed('mypromotons-setNextFeeds')
         }
     }
 }
@@ -54,7 +54,7 @@ export function setFirstTime() {
             }
         } catch (error) {
             handler.handleError(error, dispatch, 'mypromotons-setNextFeeds')
-            logger.actionFailed('mypromotons-setNextFeeds')
+            await logger.actionFailed('mypromotons-setNextFeeds')
         }
     }
 }
@@ -105,7 +105,7 @@ export function fetchTop() {
                 type: actions.SAVED_FEED_SHOW_TOP_LOADER,
                 showTopLoader: false,
             });
-            logger.actionFailed('mypromotons-fetchTop')
+            await logger.actionFailed('mypromotons-fetchTop')
         }
     }
 }
@@ -124,7 +124,7 @@ async function fetchTopList(token, dispatch) {
         }
     } catch (error) {
         handler.handleError(error, dispatch, 'fetchTopList-mainfeeds')
-        logger.actionFailed('fetchTopList-mainfeeds')
+        await logger.actionFailed('fetchTopList-mainfeeds')
     }
 }
 
@@ -137,7 +137,7 @@ async function updateInstance(token, dispatch, id) {
         });
     } catch (error) {
         handler.handleError(error, dispatch, 'fetchTopList-mainfeeds')
-        logger.actionFailed('fetchTopList-mainfeeds')
+        await logger.actionFailed('fetchTopList-mainfeeds')
     }
 }
 
@@ -155,7 +155,7 @@ export function updateSavedInstance(item) {
             handler.handleSuccses(getState(), dispatch)
         } catch (error) {
             handler.handleError(error, dispatch, 'feed-getFeedSocialState')
-            logger.actionFailed('getFeedSocialState')
+            await logger.actionFailed('getFeedSocialState')
         }
     }
 }

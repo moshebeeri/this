@@ -40,7 +40,7 @@ export function validateAddress(address,onValid) {
                 onValid();
             }
         }catch (error){
-            logger.actionFailed('business_checkAddress');
+            await logger.actionFailed('business_checkAddress');
             dispatch({
                 type: actions.ADDRESS_NOT_FOUND,
                 message: strings.AddressNotFound

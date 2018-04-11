@@ -41,7 +41,7 @@ export function saveRole(user, businessId, userRole, navigation) {
             handler.handleSuccses(getState(),dispatch)
         } catch (error) {
             handler.handleError(error,dispatch,'userRole-saveRole');
-            logger.actionFailed('userRole-saveRole')
+            await logger.actionFailed('userRole-saveRole')
         }
     }
 }
@@ -79,7 +79,7 @@ export function search(phoneNumber) {
             handler.handleSuccses(getState(),dispatch)
         } catch (error) {
             handler.handleError(error,dispatch,'userRole-search')
-            logger.actionFailed('userRole-search')
+            await logger.actionFailed('userRole-search')
         }
     }
 }
