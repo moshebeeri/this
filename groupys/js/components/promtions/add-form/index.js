@@ -891,6 +891,8 @@ class AddPromotion extends Component {
                 </View>
                 {proximityForm}
                 {this.state.toggle && distributionForm}
+                <View style={{height: StyleUtils.scale(30),width: StyleUtils.getWidth()}}></View>
+
             </ScrollView>
 
             {saving && <View style={{

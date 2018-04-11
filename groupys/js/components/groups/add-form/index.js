@@ -464,6 +464,8 @@ class AddGroup extends Component {
                     <ThisText style={{fontSize:StyleUtils.scale(14)}}> {strings.SelectedMembers}: {this.state.selectedUsers.length}</ThisText>}
 
                 </View>}
+                <View style={{height: StyleUtils.scale(30),width: StyleUtils.getWidth()}}></View>
+
             </ScrollView>
 
         </View>;

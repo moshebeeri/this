@@ -246,6 +246,7 @@ class AddProduct extends Component {
                 <View style={[styles.inputTextLayout, {width: StyleUtils.getWidth() - 15}]}>
                     <BarcodeScanner handleCode={this.handleCode.bind(this)} navigation={this.props.navigation}/>
                 </View>
+                <View style={{height: StyleUtils.scale(30),width: StyleUtils.getWidth()}}></View>
 
             </ScrollView>
         </View>;

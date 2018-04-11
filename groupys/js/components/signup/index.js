@@ -157,6 +157,7 @@ class Signup extends Component {
                                                        borderColor: 'white',
                                                    }}
                                                    underlineColorAndroid={'transparent'}
+                                                   selectionColor={'black'}
                                                    placeholderTextColor={'white'}
                                                    onChangeText={(name) => this.setState({name})}
                                                    placeholder={strings.FirstName}/>
@@ -174,6 +175,7 @@ class Signup extends Component {
                                                        borderColor: 'white',
                                                    }}
                                                    underlineColorAndroid={'transparent'}
+                                                   selectionColor={'black'}
                                                    placeholderTextColor={'white'}
                                                    onChangeText={(lastname) => this.setState({lastname})}
                                                    placeholder={strings.LastName}/>
@@ -197,6 +199,7 @@ class Signup extends Component {
                                                    borderBottomWidth: 1,
                                                    borderColor: 'white',
                                                }}
+                                               selectionColor={'black'}
                                                placeholder={strings.PhoneNumber}/>
                                 </View>
                                 <View style={styles.passwordTextInput} regular>
@@ -218,12 +221,12 @@ class Signup extends Component {
                                             borderColor: passwordBorder,
                                         }}
                                         placeholder={strings.Password}
+                                        selectionColor={'black'}
                                         secureTextEntry
                                         onChangeText={password => this.setState({password})}
                                         onSubmitEditing={this.focusNextField.bind(this, "verifyPassword")}
                                     />
                                 </View>
-                                {signupProcess && <Spinner style={{position: 'absolute', top: -15}}/>}
                                 <View style={styles.passwordTextInput} regular>
 
                                     <TextInput
@@ -231,6 +234,7 @@ class Signup extends Component {
                                         ref='verifyPassword'
                                         underlineColorAndroid={'transparent'}
                                         returnKeyType='done'
+                                        selectionColor={'black'}
                                         defaultValue=""
                                         value={this.state.verifyPassword}
                                         placeholderTextColor={'white'}
@@ -249,6 +253,8 @@ class Signup extends Component {
                                     />
                                 </View>
                                 </KeyboardAvoidingView>
+                                {signupProcess && <Spinner style={{position: 'absolute', top: -15}}/>}
+
                                 {message}
 
                                 <View style={{

@@ -157,7 +157,9 @@ class AddBusiness extends Component {
         let formIsValid = this.validateForm(this.saveFormData.bind(this));
         Keyboard.dismiss();
         if (formIsValid) {
-            this.setState({saving: true});
+            if(!this.state.location){
+                return;
+            }
             this.props.saveBusiness(this.createBusiness(), this.props.navigation);
         }
     }
@@ -187,11 +189,12 @@ class AddBusiness extends Component {
     }
 
     async setReduxState(value) {
-        await this.setState(value);
-        if(this.state.saving){
+        this.setState(value);
+
+        if (value.name) {
             return;
         }
-        if (value.name) {
+        if(value.address){
             return;
         }
         if (this.props.navigation && this.props.navigation.state && this.props.navigation.state.params && this.props.navigation.state.params.updating) {
@@ -217,12 +220,21 @@ class AddBusiness extends Component {
     }
 
     updateLocation(location) {
+
         this.setReduxState({
             location: location.location,
             city: location.city,
             address: location.address,
             country: location.country,
         })
+
+        this.setState({
+            location: location.location,
+            city: location.city,
+            address: location.address,
+            country: location.country,
+        });
+
     }
 
     setImage(image) {
@@ -230,6 +242,7 @@ class AddBusiness extends Component {
             image: {uri: image.path, width: image.width, height: image.height, mime: image.mime},
             path: image.path
         });
+
     }
 
     setCoverImage(image) {
@@ -389,7 +402,7 @@ class AddBusiness extends Component {
                         navigation={this.props.navigation}
                         title={strings.AddBusiness} bgc="#FA8559"/>
 
-            <ScrollView keyboardShouldPersistTaps={true} contentContainerStyle={{
+            <ScrollView overScrollMode={'always'} keyboardShouldPersistTaps={true} contentContainerStyle={{
                 justifyContent: 'center',
                 alignItems: 'center',
             }} style={[styles.contentContainer, {width: StyleUtils.getWidth()}]}>
@@ -454,6 +467,7 @@ class AddBusiness extends Component {
                                     setDocument={this.setLetterDocument.bind(this)}/>
 
                 </View>}
+                <View style={{height: StyleUtils.scale(30),width: StyleUtils.getWidth()}}></View>
 
             </ScrollView>
 

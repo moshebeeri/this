@@ -38,12 +38,13 @@ class Groups extends Component {
     onPressItem(item) {
         const {actions, navigation} = this.props;
         actions.touch(item._id);
-        navigationUtils.doNavigation(this.props.navigation, 'GroupFeed', {group: item, role: 'admin'});
+        navigationUtils.doNavigation(navigation, 'GroupFeed', {group: item, role: 'admin'});
 
     }
     onPressMessageItem(item) {
         const {actions, navigation} = this.props;
-        navigationUtils.doNavigation(this.props.navigation, 'GroupFeed', {chat:true,group: item, role: 'admin'});
+        actions.touch(item._id);
+        navigationUtils.doNavigation(navigation, 'GroupFeed', {chat:true,group: item, role: 'admin'});
     }
     shouldComponentUpdate(){
         if(this.props.currentScreen ==='home' ){
@@ -52,19 +53,6 @@ class Groups extends Component {
         return false;
     }
 
-    renderItem(item) {
-        const {navigation,actions,visibleItem} = this.props;
-        return <GenericListGroupView
-            onPressItem={this.onPressItem.bind(this, item.item)}
-            onPressMessageItem = {this.onPressMessageItem.bind(this,item.item)}
-            item={item.item}
-            setVisibleItem={actions.setVisibleItem}
-            navigation={navigation}
-            visibleItem={visibleItem}
-            index={item.index}
-            key={item.index}
-        />
-    }
 
     navigateToAdd() {
         navigationUtils.doNavigation(this.props.navigation, 'AddGroups');

@@ -19,6 +19,7 @@ import {
     Title,
     View
 } from 'native-base';
+import {ListEmptyDisplay} from "../../ui/index";
 
 class GenericListManager extends Component {
     constructor(props) {
@@ -54,9 +55,19 @@ class GenericListManager extends Component {
 
     render() {
         const {rows, actions, update, onEndReached, noRefresh, refreshing, onRefreshing} = this.props;
+        if (!rows || (rows && rows.length === 0)) {
+            return <View style={{
+                flex: 1,
+                alignItems: 'center',
+                justifyContent: 'center',
+                backgroundColor: `${appBackgroundColor}`
+            }}>
+                <ListEmptyDisplay/>
+            </View>
+        }
         if (noRefresh) {
             return (
-                <View style={{backgroundColor: `${appBackgroundColor}`}}>
+                <View style={{ flex: 1,backgroundColor: `${appBackgroundColor}`}}>
 
 
                     <FlatList
@@ -75,7 +86,7 @@ class GenericListManager extends Component {
         const onEndActions = this.getOnEndAction(actions, onEndReached);
         return (
 
-            <View style={{backgroundColor: `${appBackgroundColor}`}}>
+            <View style={{flex: 1,backgroundColor: `${appBackgroundColor}`}}>
 
                 <FlatList
                     ref='flatList'
