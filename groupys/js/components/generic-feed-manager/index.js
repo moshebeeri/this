@@ -23,7 +23,7 @@ import {
 import strings from "../../i18n/i18n"
 import Icon2 from 'react-native-vector-icons/Ionicons';
 import StyleUtils from "../../utils/styleUtils";
-import {ThisText} from '../../ui/index';
+import {ThisText,ListEmptyDisplay} from '../../ui/index';
 
 const {width, height} = Dimensions.get('window')
 export default class GenericFeedManager extends Component {
@@ -99,6 +99,12 @@ export default class GenericFeedManager extends Component {
         if (!loadingDone) {
             return <View><Spinner color='red'/></View>;
         }
+
+        if (!feeds || (feeds && feeds.length === 0)) {
+            return <View style={{flex:1,alignItems:'center',justifyContent:'center',backgroundColor: `${appBackgroundColor}`}}>
+               <ListEmptyDisplay/>
+            </View>
+        }
         const spining = undefined;
         let backgroundColor = '#E6E6E6';
         if (color) {
@@ -111,7 +117,7 @@ export default class GenericFeedManager extends Component {
         if (setNextFeeds) {
             return (
 
-                <View style={{backgroundColor: `${appBackgroundColor}`}}>
+                <View style={{flex: 1,backgroundColor: `${appBackgroundColor}`}}>
                     {topLoader}
 
                     <FlatList
@@ -250,7 +256,7 @@ export default class GenericFeedManager extends Component {
         }
         return (
 
-            <View style={{backgroundColor: backgroundColor}}>
+            <View style={{flex: 1,backgroundColor: backgroundColor}}>
 
                 <FlatList
                     ref='flatList'
