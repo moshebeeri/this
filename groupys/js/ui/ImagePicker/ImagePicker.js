@@ -15,6 +15,7 @@ export default class ImagePickerComponent extends Component {
             value: false,
             invalid: false,
             name: this.props.name,
+            time: new Date().getTime()
         }
     }
 
@@ -25,9 +26,9 @@ export default class ImagePickerComponent extends Component {
 
     openMenu() {
         if (this.state.name) {
-            this.refs[this.state.name].open();
+            this.refs[this.state.name  + this.state.time].open();
         } else {
-            this.refs["picker"].open();
+            this.refs["picker"  + this.state.time].open();
         }
     }
 
@@ -144,9 +145,9 @@ export default class ImagePickerComponent extends Component {
                 <ThisText style={{fontSize:StyleUtils.scale(14)}}>{strings.PickVideo}</ThisText>
             </MenuOption>
         }
-        let name = "picker" + new Date().getTime();;
+        let name = "picker"  + this.state.time;
         if (this.state.name) {
-            name = this.state.name + new Date().getTime();
+            name = this.state.name  + this.state.time;
         }
         return <Menu ref={name} name={name}>
             <MenuTrigger customStyles={customStyles}>
