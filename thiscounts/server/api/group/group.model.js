@@ -52,7 +52,7 @@ const GroupSchema = new Schema({
       'BUSINESS',
       'CHAIN',
       'MALL',
-      'USERS'
+      'USER'
     ]
   },
   add_policy: {

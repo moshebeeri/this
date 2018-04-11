@@ -56,6 +56,7 @@ function group_activity(group, action) {
     action: action,
     audience: ['SELF']
   };
+  console.log(`group_activity ${JSON.stringify(group)}`);
   if (group.entity_type === 'USER')
     act.actor_user = group.creator;
   else if (group.entity_type === 'CHAIN')
@@ -64,6 +65,8 @@ function group_activity(group, action) {
     act.actor_business = group.creator;
   else if (group.entity_type === 'MALL')
     act.actor_mall = group.creator;
+  else
+    return console.error(new Error(`group_activity: entity type ${group.entity_type} - not supported`));
   sendActivity(act);
 }
 
@@ -77,6 +80,7 @@ function user_follow_group_activity(group, user) {
 }
 
 function sendActivity(act, callback) {
+  console.log(`sendActivity: ${JSON.stringify(act)}`);
   activity.activity(act, function (err, activity) {
     if (callback) {
       if (err) return callback(err);
@@ -151,7 +155,7 @@ exports.create = function (req, res) {
           }
           graphModel.relate_ids(req.user._id, 'FOLLOW', group._id, (err) => {
             if (err) return handleError(res, err);
-            fireEvent.info('user', group.creator._id, 'group_created', {
+            fireEvent.info('user', req.user._id, 'group_created', {
               group: group._id
             });
             graphModel.relate_ids(group._id, 'CREATED_BY', req.user._id);
@@ -170,7 +174,9 @@ exports.create = function (req, res) {
     });
   });
 };
+
 exports.create_business_default_group = function (group, callback) {
+  group.chat_policy = 'OFF';
   Group.create(group, function (err, group) {
     if (err) {
       return callback(err);
@@ -199,7 +205,7 @@ exports.create_business_default_group = function (group, callback) {
           graphModel.relate_ids(group.creator._id, 'FOLLOW', group._id, (err) => {
             if (err) return callback(err);
             fireEvent.info('user', group.creator._id, 'group_created', {
-              group: group._id
+              group: group._id.toString()
             });
             graphModel.relate_ids(group._id, 'CREATED_BY', group.creator);
             graphModel.relate_ids(group.creator._id, 'GROUP_ADMIN', group._id);
@@ -215,6 +221,7 @@ exports.create_business_default_group = function (group, callback) {
     });
   });
 };
+
 // Updates an existing group in the DB.
 exports.update = function (req, res) {
   if (req.body._id) {
