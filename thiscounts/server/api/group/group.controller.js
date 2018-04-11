@@ -15,6 +15,7 @@ const feed = require('../../components/feed-tools');
 const Instance = require('../../components/instance');
 const util = require('util');
 const i18n = require('../i18n');
+const fireEvent = require('../../components/firebaseEvent');
 
 exports.search = MongodbSearch.create(Group);
 // Get list of groups
@@ -52,7 +53,8 @@ function to_graph(group) {
 function group_activity(group, action) {
   const act = {
     group: group._id,
-    action: action
+    action: action,
+    audience: ['SELF']
   };
   if (group.entity_type === 'USER')
     act.actor_user = group.creator;
@@ -62,7 +64,6 @@ function group_activity(group, action) {
     act.actor_business = group.creator;
   else if (group.entity_type === 'MALL')
     act.actor_mall = group.creator;
-  sendActivity(act);
   sendActivity(act);
 }
 
@@ -150,6 +151,9 @@ exports.create = function (req, res) {
           }
           graphModel.relate_ids(req.user._id, 'FOLLOW', group._id, (err) => {
             if (err) return handleError(res, err);
+            fireEvent.info('user', group.creator._id, 'group_created', {
+              group: group._id
+            });
             graphModel.relate_ids(group._id, 'CREATED_BY', req.user._id);
             graphModel.relate_ids(req.user._id, 'GROUP_ADMIN', group._id);
             touch(group.creator, group._id);
@@ -194,6 +198,9 @@ exports.create_business_default_group = function (group, callback) {
           //console.log(`group.creator -> ${JSON.stringify(group.creator)}`);
           graphModel.relate_ids(group.creator._id, 'FOLLOW', group._id, (err) => {
             if (err) return callback(err);
+            fireEvent.info('user', group.creator._id, 'group_created', {
+              group: group._id
+            });
             graphModel.relate_ids(group._id, 'CREATED_BY', group.creator);
             graphModel.relate_ids(group.creator._id, 'GROUP_ADMIN', group._id);
             graphModel.relate_ids(group._id, 'FOLLOW', group.entity.business);
@@ -303,6 +310,7 @@ function user_follow_group(user_id, group, callback) {
     if (err) {
       console.error(err);
     }
+    fireEvent.change('user_follow_group', user_id);
     user_follow_group_activity(group, user_id);
     onAction.follow(user_id, group._id, (err) => {
       if (err) console.error(err)
@@ -315,6 +323,7 @@ function user_follow_group(user_id, group, callback) {
 function group_follow_group(following_group_id, group_to_follow_id, callback) {
   graphModel.relate_ids(following_group_id, 'FOLLOW', group_to_follow_id, function (err) {
     if (err) return callback(err);
+    fireEvent.change('group_follow_group', following_group_id);
     group_follow_group_activity(following_group_id, group_to_follow_id);
     callback(null)
   });
@@ -323,6 +332,14 @@ function group_follow_group(following_group_id, group_to_follow_id, callback) {
 function group_follow_business(following_group_id, business_id, callback) {
   graphModel.relate_ids(following_group_id, 'FOLLOW', business_id, function (err) {
     if (err) return callback(err);
+    fireEvent.info('group', following_group_id, 'group_follow_business', {
+      following_group_id,
+      business_id
+    });
+    fireEvent.info('business' ,business_id, 'group_follow_business', {
+      following_group_id,
+      business_id
+    });
     group_follow_business_activity(business_id, following_group_id);
     callback(null)
   });

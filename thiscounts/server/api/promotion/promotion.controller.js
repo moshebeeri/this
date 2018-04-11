@@ -287,6 +287,10 @@ function handlePromotionPostCreate(promotion, callback) {
     return promotionGraphModel.relate_ids(entityId, 'ON_ACTION', promotion._id, params, callback);
   }
 
+  function errReporter(err) {
+    console.error(err);
+  }
+
   promotionGraphModel.reflect(promotion, to_graph(promotion), function (err, promotion) {
     if (err) return callback(err, null);
     relatePromotion(promotion, function (err) {
@@ -300,9 +304,9 @@ function handlePromotionPostCreate(promotion, callback) {
           instance.createPromotionInstances(promotion, function (err, instances) {
             if (err) return callback(err, null);
             if (promotion.distribution.business) {
-              applyToFollowing(promotion, instances);
+              applyToFollowing(promotion, instances, errReporter);
             } else if (promotion.distribution.groups && promotion.distribution.groups.length > 0) {
-              applyToGroups(promotion, instances);
+              applyToGroups(promotion, instances, errReporter);
             }
             return callback(null);
           });
