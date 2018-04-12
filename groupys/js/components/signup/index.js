@@ -152,7 +152,7 @@ class Signup extends Component {
                                     <View style={styles.nameTextInput} regular>
                                         <TextInput value={this.state.name} blurOnSubmit={true} returnKeyType='next'
                                                    ref="1"
-                                                   onSubmitEditing={this.focusNextField.bind(this, "2")}
+                                                   onSubmitEditing={this.focusNextField.bind(this, "lastName")}
                                                    style={{
                                                        width: StyleUtils.scale(130),
                                                        color: 'white',
@@ -169,8 +169,8 @@ class Signup extends Component {
                                     </View>
                                     <View style={styles.lastnameTextInput} regular>
                                         <TextInput value={this.state.lastname} blurOnSubmit={true} returnKeyType='next'
-                                                   ref="2"
-                                                   onSubmitEditing={this.focusNextField.bind(this, "name")}
+                                                   ref="lastName"
+                                                   onSubmitEditing={this.focusNextField.bind(this, "phone")}
                                                    style={{
                                                        width: StyleUtils.scale(130),
                                                        color: 'white',
