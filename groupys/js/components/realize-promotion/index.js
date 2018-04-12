@@ -33,7 +33,6 @@ class RealizePromotion extends Component {
     async componentWillMount() {
         const id = this.getSavedId();
         let qrCode = await promotionApi.getPromotionQrcode(id);
-        Tasks.realizeTaskStart(id);
         BackHandler.addEventListener('hardwareBackPress', this.handleBack.bind(this));
         this.setState({
             image: qrCode
@@ -41,15 +40,12 @@ class RealizePromotion extends Component {
     }
 
     handleBack() {
-        Tasks.realizeTaskstop();
     }
 
     componentWillUnmount() {
-        Tasks.realizeTaskstop();
     }
 
     async realize() {
-        Tasks.realizeTaskstop();
         this.props.navigation.goBack();
     }
 

@@ -6,7 +6,7 @@ const store = getStore();
 
 class DataSync {
     syncData() {
-        if(store) {
+        if (store) {
             //workaround  until redux stores values return from hibernate
             if (Object.values(store.getState().instances.instances).length === 0) {
                 setTimeout(this.initSyncListeners.bind(this), 2000);
@@ -19,60 +19,55 @@ class DataSync {
     initSyncListeners() {
         this.syncManage();
         this.initDataLysteners();
-       }
+    }
 
-    initDataLysteners(){
+    initDataLysteners() {
         this.syncUser(store.getState(), store.dispatch, store.getState().user.user);
         this.syncGroups(store.getState().groups.groups, store.getState(), store.dispatch, store.getState().user.user);
         this.syncInstances(store.getState().instances.instances, store.getState(), store.dispatch);
+        this.syncSavedInstances(store.getState().myPromotions.feeds, store.getState(), store.dispatch);
         this.syncPromotions(store.getState().promotions.promotions, store.getState(), store.dispatch);
         this.syncMainFeed(store.getState().user.user, store.getState(), store.dispatch);
-
     }
 
-    syncManage(){
+    syncManage() {
         let initFunction = this.initDataLysteners.bind(this);
         asyncListener.addManagement((snap) => {
             asyncListener.reset();
             initFunction();
-
         })
     }
+
     syncUser(state, dispatch, user) {
         if (user) {
             asyncListener.addListener('user_' + user._id, (snap) => {
-                let info = this.parseSnap(snap);
+                let response = snap.val();
                 const token = state.authentication.token;
-                switch (info.type) {
-                    case "group_policy_changed":
-                    case "group_created":
-                        dispatch({
-                            type: types.SAVE_GROUPS_REQUEST,
-                            token: token,
-                        });
-                        break;
-                    case "notification_sent":
-                        dispatch({
-                            type: types.SAVE_NOTIFICATION_TOP_REQUEST,
-                            token: token, user: user
-                        });
+                if(response ){
+                    switch (response.type) {
+                        case "saved_instance_realized":
+                            dispatch({
+                                type: types.UPDATE_SINGLE_MYPROMOTIONS_REQUEST,
+                                token: token,
+                                savedInstanceId: response.savedInstance,
+                            });
+                            break;
+                        case "group_policy_changed":
+                        case "group_created":
+                            dispatch({
+                                type: types.SAVE_GROUPS_REQUEST,
+                                token: token,
+                            });
+                            break;
+                        case "notification_sent":
+                            dispatch({
+                                type: types.SAVE_NOTIFICATION_TOP_REQUEST,
+                                token: token, user: user
+                            });
+                    }
                 }
             })
         }
-    }
-
-    parseSnap(snap){
-        if(snap.node_ && snap.node_.children_ && snap.node_.children_.root_ && snap.node_.children_.root_.value ) {
-            if( snap.node_.children_.root_.value.value_.value_){
-                return {
-                    type: snap.node_.children_.root_.value.value_.value_,
-                };
-            }
-            return {
-                type: snap.node_.children_.root_.value.value_,
-            };
-        }
-        return {type: 'NONE'};
     }
 
     syncMainFeed(user, state, dispatch) {
@@ -91,7 +86,6 @@ class DataSync {
             })
         }
     }
-
 
     syncPromotions(promotions, state, dispatch) {
         if (Object.values(promotions)) {
@@ -118,12 +112,40 @@ class DataSync {
         }
     }
 
+    syncSavedInstances(savedInstances, state, dispatch) {
+        if (Object.values(savedInstances)) {
+            Object.values(savedInstances).forEach(savedInstances => {
+                    asyncListener.addListener('Redeem' + savedInstances._id, (snap) => {
+                        let savedInstancesId = snap.key.substring('Redeem'.length);
+                        const token = state.authentication.token;
+                        dispatch({
+                            type: types.UPDATE_SINGLE_MYPROMOTIONS_REQUEST,
+                            token: token,
+                            savedInstanceId: savedInstancesId,
+                        });
+                    })
+                }
+            )
+        }
+    }
+
     syncInstances(instances, state, dispatch) {
         if (Object.values(instances)) {
             Object.values(instances).forEach(instance => {
                     // sync social
                     asyncListener.addListener('social_' + instance._id, (snap) => {
                         let instanceId = snap.key.substring('social_'.length);
+                        const token = state.authentication.token;
+                        let feedInstance = state.instances.instances[instanceId];
+                        dispatch({
+                            type: types.FEED_SET_SOCIAL_STATE,
+                            token: token,
+                            feed: feedInstance,
+                            id: instanceId
+                        });
+                    })
+                    asyncListener.addListener('Redeem' + instance._id, (snap) => {
+                        let instanceId = snap.key.substring('Redeem'.length);
                         const token = state.authentication.token;
                         let feedInstance = state.instances.instances[instanceId];
                         dispatch({
