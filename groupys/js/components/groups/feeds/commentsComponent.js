@@ -25,7 +25,6 @@ class CommentsComponent extends Component {
         const item = this.getInstance();
         const {group, actions} = this.props;
         actions.setNextFeeds(group, item);
-        actions.startListenForChat(group, item);
     }
 
     getInstance() {

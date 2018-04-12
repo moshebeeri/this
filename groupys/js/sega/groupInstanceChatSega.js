@@ -9,16 +9,16 @@ import {
 } from "../actions/instanceGroupComments";
 import * as segaActions from './segaActions'
 import {delay} from 'redux-saga'
-import {handleSucsess}from './SegaSuccsesHandler'
+import {handleSucsess} from './SegaSuccsesHandler'
+
 let commentsApi = new CommentsApi();
 
 function* backgroundTask(group, instance, token, lastChatId) {
     try {
         let id = lastChatId;
         while (true) {
-
             yield call(delay, 2000);
-            if(id !== 0) {
+            if (id !== 0) {
                 let response = yield call(commentsApi.getInstanceGroupComments, group, instance, token, id, "up");
                 handleSucsess();
                 if (response.length > 0) {
@@ -48,7 +48,7 @@ function* chatScrollUp(action) {
         if (_.isEmpty(action.comments)) {
             response = yield call(commentsApi.getInstanceGroupComments, action.group, action.instance, action.token, 'start', "down");
             handleSucsess();
-            yield put(groupChatDone(action.group,action.instance));
+            yield put(groupChatDone(action.group, action.instance));
         } else {
             let id = action.comments[0];
             response = yield call(commentsApi.getInstanceGroupComments, action.group, action.instance, action.token, id, "down");
@@ -60,12 +60,7 @@ function* chatScrollUp(action) {
             }
         }
         if (response.length > 0) {
-            const chatFeeds = response.slice(0);
-
             yield* updateChatScrollUp(response, action.group, action.instance);
-            if(_.isEmpty(action.comments)){
-                yield* restartListenForChat(action.group, action.instance,chatFeeds,action.token)
-            }
         }
     } catch (error) {
         console.log("failed scroll down");
