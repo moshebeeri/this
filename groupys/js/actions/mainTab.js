@@ -56,7 +56,7 @@ async function promotionPopAction(instanceId, notificationId, dispatch, token) {
         }
     } catch (error) {
         handler.handleError(error, dispatch, 'refreshFeedSocialState')
-        logger.actionFailed('refreshFeedSocialState')
+        await logger.actionFailed('refreshFeedSocialState')
     }
 }
 
@@ -73,7 +73,7 @@ export function showGenericPopup(notificationTitle, notificationId, notification
             });
         } catch (error) {
             handler.handleError(error, dispatch, 'showGenericPopup')
-            logger.actionFailed('showGenericPopup')
+            await logger.actionFailed('showGenericPopup')
         }
     }
 }
@@ -98,7 +98,7 @@ export function showGroupPopup(groupId, notificationId, notificationTitle, notif
             });
         } catch (error) {
             handler.handleError(error, dispatch, 'showGroupPopup')
-            logger.actionFailed('showGroupPopup')
+            await logger.actionFailed('showGroupPopup')
         }
     }
 }
@@ -126,7 +126,7 @@ export function showInviteGroupPopup(groupId, userId, notificationId) {
             }
         } catch (error) {
             handler.handleError(error, dispatch, 'showGroupPopup')
-            logger.actionFailed('showGroupPopup')
+            await logger.actionFailed('showGroupPopup')
         }
     }
 }
@@ -151,7 +151,7 @@ export function showBusinessPopup(businessId, notificationId, notificationTitle,
             });
         } catch (error) {
             handler.handleError(error, dispatch, 'showBusinessPopup')
-            logger.actionFailed('showBusinessPopup')
+            await logger.actionFailed('showBusinessPopup')
         }
     }
 }

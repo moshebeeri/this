@@ -27,7 +27,7 @@ async function getUser(dispatch, token) {
         })
     } catch (error) {
         handler.handleError(error, dispatch, 'getUser')
-        logger.actionFailed('users-getUser')
+        await logger.actionFailed('users-getUser')
     }
 }
 
@@ -40,7 +40,7 @@ async function getUserFollowers(dispatch, token) {
         });
     } catch (error) {
         handler.handleError(error, dispatch, 'getUserFollowers')
-        logger.actionFailed('users-getUserFollowers')
+        await logger.actionFailed('users-getUserFollowers')
     }
 }
 
@@ -97,7 +97,7 @@ export function changePassword(oldPassword, newPassword, navigation) {
             dispatch({
                 type: actions.SAVING_USER_DONE,
             });
-            logger.actionFailed('users-changePassword')
+            await logger.actionFailed('users-changePassword')
         }
     }
 }
@@ -122,15 +122,11 @@ export function* upSertUserSuccsess(newUser) {
     });
 }
 
-
-
-
 export function resetForm() {
     return function (dispatch) {
         dispatch({
             type: actions.SAVING_USER_DONE,
         });
-
     }
 }
 
@@ -169,7 +165,7 @@ async function updateUserLocale(dispatch, token, user, locale) {
         }
     } catch (error) {
         handler.handleError(error, dispatch, 'updateUserLocale')
-        logger.actionFailed('users-updateUserLocale')
+        await logger.actionFailed('users-updateUserLocale')
     }
 }
 
@@ -204,7 +200,7 @@ async function updateUserToken(dispatch, token, user, fireBaseToken) {
         }
     } catch (error) {
         handler.handleError(error, dispatch, 'updateUserToken')
-        logger.actionFailed('users-updateUserToken')
+        await logger.actionFailed('users-updateUserToken')
     }
 }
 
@@ -234,23 +230,12 @@ async function updateUserTask(dispatch, token, newUser) {
         handler.handleSuccses(getState(), dispatch)
     } catch (error) {
         handler.handleError(error, dispatch, 'updateUser')
-        logger.actionFailed('users-updateUser')
-    }
-}
-
-export function testError() {
-    return function (dispatch, getState) {
-        try {
-            userApi.testError();
-        } catch (error) {
-            handler.handleError(error, dispatch, 'updateUser')
-            logger.actionFailed('users-updateUser')
-        }
+        await logger.actionFailed('users-updateUser')
     }
 }
 
 export default {
     updateUserLocale,
     updateUserToken,
-    updateUserTask
+
 }

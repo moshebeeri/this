@@ -87,7 +87,7 @@ export function scanResult(barcode, businessAssign) {
             if (error) {
                 handler.handleError(error, dispatch, 'scanner-scanResult')
             }
-            logger.actionFailed('scanner-scanResult')
+            await logger.actionFailed('scanner-scanResult')
         }
     }
 }
@@ -127,7 +127,7 @@ export function realizePromotion(code) {
             handler.handleSuccses(getState(), dispatch)
         } catch (error) {
             handlerhandleError(error, dispatch, 'scanner-realizePromotion')
-            logger.actionFailed('scanner-realizePromotion')
+            await logger.actionFailed('scanner-realizePromotion')
         }
     }
 }
@@ -161,7 +161,7 @@ export function followBusiness(businessId) {
             handler.handleSuccses(getState(), dispatch)
         } catch (error) {
             handler.handleError(error, dispatch, 'scanner-followBusiness')
-            logger.actionFailed('scanner-followBusiness')
+            await logger.actionFailed('scanner-followBusiness')
         }
     }
 }
@@ -175,7 +175,7 @@ export function groupFollowBusiness(groupid, businessId) {
             handler.handleSuccses(getState(), dispatch)
         } catch (error) {
             handler.handleError(error, dispatch, 'scanner-groupFollowBusiness')
-            logger.actionFailed('scanner-groupFollowBusiness')
+            await logger.actionFailed('scanner-groupFollowBusiness')
         }
     }
 
@@ -191,7 +191,7 @@ export function followGroupAction(group) {
             handler.handleSuccses(getState(), dispatch)
         } catch (error) {
             handler.handleError(error, dispatch, 'scanner-groupFollowBusiness')
-            logger.actionFailed('scanner-groupFollowBusiness')
+            await logger.actionFailed('scanner-groupFollowBusiness')
         }
     }
 

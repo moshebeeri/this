@@ -20,13 +20,13 @@ export function setTopNotification() {
             }
         } catch (error) {
             handler.handleError(error, dispatch,'notification-setTopNotification')
-            logger.actionFailed('notification-setTopNotification')
+            await logger.actionFailed('notification-setTopNotification')
         }
     }
 }
 
 export function readNotification(notificationId) {
-    return function (dispatch, getState) {
+    return async function (dispatch, getState) {
         try {
             const token = getState().authentication.token;
             notificationApi.readNotification(token, notificationId);
@@ -37,13 +37,13 @@ export function readNotification(notificationId) {
             handler.handleSuccses(getState(),dispatch)
         } catch (error) {
             handler.handleError(error, dispatch,'notification-readNotification')
-            logger.actionFailed('notification-readNotification')
+            await logger.actionFailed('notification-readNotification')
         }
     }
 }
 
 export function doNotification(notificationId, type) {
-    return function (dispatch, getState) {
+    return async function (dispatch, getState) {
         try {
             const token = getState().authentication.token;
             notificationApi.doNotificationAction(token, notificationId, type);
@@ -54,7 +54,7 @@ export function doNotification(notificationId, type) {
             handler.handleSuccses(getState(),dispatch)
         } catch (error) {
             handler.handleError(error, dispatch,'notification-doNotification')
-            logger.actionFailed('notification-doNotification')
+            await logger.actionFailed('notification-doNotification')
         }
     }
 }
@@ -77,7 +77,7 @@ async function updateNotification(dispatch, token, user, notifications) {
 
     } catch (error) {
         handler.handleError(error, dispatch,'notification-updateNotification')
-        logger.actionFailed('notification-updateNotification')
+        await logger.actionFailed('notification-updateNotification')
     }
 }
 
@@ -103,7 +103,7 @@ export function onEndReached() {
             handler.handleSuccses(getState(),dispatch)
         } catch (error) {
             handler.handleError(error, dispatch,'notification-onEndReached')
-            logger.actionFailed('notification-onEndReached')
+            await logger.actionFailed('notification-onEndReached')
         }
     }
 }

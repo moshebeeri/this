@@ -35,6 +35,7 @@ function* chatScrollUp(action) {
             let id = action.comments[action.comments.length - 1];
             response = yield call(commentsApi.getFeedComments, action.entities, action.token, id, "down");
             handleSucsess();
+            yield put(feedChatDone(action.generalId));
             if (response.length === 0) {
                 yield put(feedChatMaxLoad(action.generalId));
             } else {
@@ -42,7 +43,6 @@ function* chatScrollUp(action) {
             }
         }
         if (response.length > 0) {
-            const chatFeeds = response.slice(0);
             yield* updateChatScrollUp(response, action.generalId);
         }
     } catch (error) {

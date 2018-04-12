@@ -31,7 +31,7 @@ export default function signupForm(state = initialState, action) {
         case actions.SIGNUP_FAILED :
             return {
                 ...state,
-                failedMessage: action.failedMessage,
+                failedMessage: action.message,
             };
         case actions.SIGNUP_SUCSESS :
             return {

@@ -29,7 +29,7 @@ export function sendMessage(groupId, message,instanceId) {
             handler.handleSuccses(getState(), dispatch)
         } catch (error) {
             handler.handleError(error, dispatch, 'sendMessage-group');
-            logger.actionFailed('sendMessage');
+            await logger.actionFailed('sendMessage');
         }
     }
 }
@@ -66,7 +66,7 @@ export function setNextFeeds(group) {
             handler.handleSuccses(getState(), dispatch)
         } catch (error) {
             handler.handleError(error, dispatch, 'commentsApi.getGroupComments')
-            logger.actionFailed('commentsApi.getGroupComments')
+            await logger.actionFailed('commentsApi.getGroupComments')
         }
     }
 }

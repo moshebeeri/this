@@ -7,6 +7,7 @@ import store from "react-native-simple-store";
 import ActionLogger from './ActionLogger'
 import handler from './ErrorHandler'
 import strings from "../i18n/i18n"
+import FormUtils from '../utils/fromUtils';
 
 let loginApi = new LoginApi();
 let userApi = new UserApi();
@@ -18,14 +19,14 @@ const resetAction = NavigationActions.reset({
     ]
 });
 
-export function login(phone, password, navigation) {
+export function login(phone, password, navigation,callingCode) {
     return async function (dispatch) {
         try {
             dispatch({
                 type: actions.LOGIN_PROCESS,
                 value: true
             });
-            let response = await loginApi.login(phone, password);
+            let response = await loginApi.login(phone, password,callingCode);
             if (response.token) {
                 await store.save("token", response.token)
                 dispatch({
@@ -36,10 +37,14 @@ export function login(phone, password, navigation) {
                     type: actions.LOGIN_SUCSESS,
                 });
                 let user = await userApi.getUser(response.token);
+                user.locale =  FormUtils.getLocale();
+                userApi.saveUserDetails(user,null , response.token, null);
                 dispatch({
                     type: actions.SET_USER,
                     user: user
                 });
+
+
                 await  store.save("user_id", user._id)
                 if (!user.sms_verified) {
                     navigation.navigate('Register');
@@ -61,28 +66,47 @@ export function login(phone, password, navigation) {
                 value: false
             });
         } catch (error) {
+            if(error === errors.NETWORK_ERROR){
+                dispatch({
+                    type: actions.LOGIN_FAILED,
+                    message: strings.networkErrorMessage
+                });
+            }else{
+                dispatch({
+                    type: actions.LOGIN_FAILED,
+                    message: strings.LoginFailedMessage
+                });
+            }
             dispatch({
                 type: actions.LOGIN_PROCESS,
                 value: false
             });
-            dispatch({
-                type: actions.LOGIN_FAILED,
-                message: strings.LoginFailedMessage
-            });
+
             handler.handleError(error, dispatch, 'login')
             logger.actionFailed('login')
         }
     }
 }
 
-export function signup(phone, password, firstName, lastName, navigation) {
+export function signup(phone, password, firstName, lastName, navigation,callingCode) {
     return async function (dispatch) {
         try {
             dispatch({
                 type: actions.SIGNUP_PROCESS,
                 value: true
             });
-            let response = await loginApi.signup(phone, password, firstName, lastName);
+            let response = await loginApi.signup(phone, password, firstName, lastName,callingCode);
+            if(response === 'user already exist'){
+                dispatch({
+                    type: actions.SIGNUP_PROCESS,
+                    value: false
+                });
+                dispatch({
+                    type: actions.SIGNUP_FAILED,
+                    message: strings.SignUpUserExist
+                });
+                return;
+            }
             await store.save("token", response.token)
             dispatch({
                 type: actions.SAVE_USER_TOKEN,
@@ -93,6 +117,8 @@ export function signup(phone, password, firstName, lastName, navigation) {
             });
             let user = await userApi.getUser(response.token);
             await store.save("user_id", user._id);
+            user.locale = FormUtils.getLocale();
+            userApi.saveUserDetails(user,null , response.token, null);
             dispatch({
                 type: actions.SET_USER,
                 user: user
@@ -110,6 +136,12 @@ export function signup(phone, password, firstName, lastName, navigation) {
                     message: strings.invalidPhoneNumber
                 });
             } else {
+                if(error === errors.NETWORK_ERROR){
+                    dispatch({
+                        type: actions.SIGNUP_FAILED,
+                        message: strings.networkErrorMessage
+                    });
+                }
                 handler.handleError(error, dispatch, 'signup')
             }
             dispatch({

@@ -1,9 +1,9 @@
 import * as actions from "../reducers/reducerActions";
 import PostApi from "../api/post";
-import PageRefresher from '../refresh/pageRefresher'
 import ActionLogger from './ActionLogger'
 import handler from './ErrorHandler'
 import * as types from '../sega/segaActions';
+
 let postApi = new PostApi();
 let logger = new ActionLogger();
 
@@ -33,7 +33,7 @@ export function createPost(post, navigation) {
             handler.handleSuccses(getState(), dispatch)
         } catch (error) {
             handler.handleError(error, dispatch, 'posts-createPost')
-            logger.actionFailed('posts-createPost')
+            await logger.actionFailed('posts-createPost')
         }
     }
 }
@@ -46,10 +46,9 @@ export function createGroupPost(post, navigation, group) {
             });
             const token = getState().authentication.token;
             await postApi.createPost(post, uploadPostPic, token);
-
             const user = getState().user.user;
             const feedOrder = getState().groups.groupFeedOrder[group._id];
-            if(feedOrder){
+            if (feedOrder) {
                 dispatch({
                     type: types.CANCEL_GROUP_FEED_LISTENER,
                 });
@@ -57,7 +56,7 @@ export function createGroupPost(post, navigation, group) {
                     dispatch({
                         type: types.LISTEN_FOR_GROUP_FEED,
                         id: feedOrder[0],
-                        group:group,
+                        group: group,
                         token: token,
                         user: user,
                     });
@@ -70,7 +69,7 @@ export function createGroupPost(post, navigation, group) {
             handler.handleSuccses(getState(), dispatch)
         } catch (error) {
             handler.handleError(error, dispatch, 'posts-createGroupPost')
-            logger.actionFailed('posts-createGroupPost')
+            await logger.actionFailed('posts-createGroupPost')
         }
     }
 }
@@ -86,7 +85,6 @@ export function resetForm() {
 function uploadPostPic() {
     return function (dispatch, getState) {
         const token = getState().authentication.token;
-
     }
 }
 
@@ -101,7 +99,7 @@ async function fetchPostById(id, token, dispatch) {
         });
     } catch (error) {
         handler.handleError(error, dispatch, 'posts-fetchPostById')
-        logger.actionFailed('posts-fetchPostById')
+        await logger.actionFailed('posts-fetchPostById')
     }
 }
 

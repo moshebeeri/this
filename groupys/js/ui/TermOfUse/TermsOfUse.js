@@ -84,7 +84,7 @@ export default class TermsOfUse extends Component {
                 flexDirection: 'row',
                 justifyContent: 'space-between',
                 marginTop: 20,
-                alignItems: 'space-between'
+                
             }}>
                 <TouchableOpacity style={{
                     marginLeft: 7,

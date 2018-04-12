@@ -47,7 +47,7 @@ async function fetchList(action, feeds, api, dispatch, groupid) {
         dispatchDone(dispatch, action, groupid);
     } catch (error) {
          handler.handleError(error,dispatch)
-        logger.actionFailed('feed-fetchList')
+        await logger.actionFailed('feed-fetchList')
     }
 }
 

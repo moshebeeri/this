@@ -45,13 +45,11 @@ class GroupFeed extends Component {
                 this.props.actions.setFeeds(group, feeds[group._id]);
             }
             this.props.actions.clearUnreadPosts(group);
-            this.props.instanceGroupCommentsAction.stopListenForChat();
         });
     }
 
     handleBack() {
         InteractionManager.runAfterInteractions(() => {
-            this.props.instanceGroupCommentsAction.stopListenForChat();
         });
     }
 

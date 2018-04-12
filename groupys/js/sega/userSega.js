@@ -8,9 +8,10 @@ import {handleSucsess}from './SegaSuccsesHandler'
 let userApi = new UserApi();
 
 function* saveUserRequest() {
-    const {newUser, token,} = yield take(segaActions.SAVE_USER_REQUEST);
+    let {newUser, token,} = yield take(segaActions.SAVE_USER_REQUEST);
     try {
-
+        //remove file images
+        newUser.pictures == {};
         yield call(userApi.saveUserDetails, newUser, newUser._id, token);
         handleSucsess();
         if (newUser.image) {
