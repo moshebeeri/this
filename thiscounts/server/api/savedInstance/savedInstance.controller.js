@@ -126,5 +126,5 @@ exports.byInstance = function (req, res) {
 };
 
 function handleError(res, err) {
-  return res.send(500, err);
+  return res.status(500).send(err.message);
 }
