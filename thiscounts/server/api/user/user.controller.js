@@ -233,10 +233,12 @@ exports.create = function (req, res, next) {
   newUser.provider = 'local';
   newUser.role = 'user';
   newUser.sms_code = randomstring.generate({length: 4, charset: 'numeric'});
+  newUser.country_code = newUser.country_code.toString().replace(/^[+]+/g,'');
   newUser.phone_number = countryCode.validateNormalize(newUser.phone_number, newUser.country_code);
-  if(!newUser.phone_number)
-    return res.status(500).json(`validateNormalize number is null ${newUser.country_code}-${newUser.phone_number} `);
-
+  if(!newUser.phone_number) {
+    console.error(`validateNormalize number is null ${newUser.country_code}-${newUser.phone_number}`);
+    return res.status(500).send();
+  }
   User.findOne({phone_number: newUser.phone_number}, function (err, user) {
     if (user) {
       // let token = jwt.sign({_id: user._id}, config.secrets.session, {expiresIn: 60 * 24 * 30});
@@ -254,13 +256,13 @@ exports.create = function (req, res, next) {
             let token = jwt.sign({_id: user._id}, config.secrets.session, {expiresIn: 60 * 24 * 30});
             if (config.sms_verification) {
               send_sms_verification_code(user);
-            } //else {
-            //   new_user_follow(user);
-            // }
+            }
+
             activity.activity({
               user: user,
               action: "welcome",
               actor_user: user,
+              sharable: true,
               audience: ['SELF']
             }, function (err) {
               if (err) logger.error(err.message)
@@ -400,6 +402,7 @@ function new_user_follow(user) {
 function activity_follow(follower, partial_activity) {
   partial_activity.action = 'follow';
   partial_activity.actor_user = follower;
+  activity_follow.shareable = true;
   activity.activity(partial_activity, function (err) {
     if (err) {
       logger.error(err.message)

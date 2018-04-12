@@ -75,12 +75,12 @@ function user_follow_group_activity(group, user) {
     user: user,
     action: "group_follow",
     actor_group: group,
+    sharable: true,
     audience: ['SELF']
   });
 }
 
 function sendActivity(act, callback) {
-  console.log(`sendActivity: ${JSON.stringify(act)}`);
   activity.activity(act, function (err, activity) {
     if (callback) {
       if (err) return callback(err);
@@ -97,6 +97,7 @@ function group_message_activity(group, user_id, message) {
     action: 'group_message',
     message: message.message,
     actor_group: group,
+    sharable: true,
     audience: ['SELF']
   }, function (err, activity) {
     group.preview.message_activity = activity._id;
@@ -109,6 +110,7 @@ function group_follow_group_activity(following, followed) {
     group: followed,
     action: "group_follow",
     actor_group: following,
+    sharable: true,
     audience: ['SELF', 'FOLLOWERS']
   });
 }
@@ -118,6 +120,7 @@ function group_follow_business_activity(business_id, following_group_id) {
     business: business_id,
     action: "group_follow",
     actor_group: following_group_id,
+    sharable: true,
     audience: ['SELF', 'FOLLOWERS']
   });
 }

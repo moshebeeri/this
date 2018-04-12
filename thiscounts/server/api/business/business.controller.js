@@ -172,7 +172,8 @@ function business_follow_activity(follower, business) {
   activity.activity({
     business,
     actor_user: follower,
-    action: 'follow'
+    action: 'follow',
+    sharable: true
   }, function (err) {
     if (err) console.error(err.message)
   });
@@ -431,7 +432,8 @@ function createValidatedBusiness(business, callback) {
         activity.activity({
           business: business._id,
           actor_user: business.creator._id,
-          action: 'created'
+          action: 'created',
+          sharable: true
         }, function (err) {
           if (err) return console.error(err);
         });
