@@ -168,7 +168,7 @@ class DataSync {
             Object.values(groups).forEach(group => {
                     //sync group chat
                     asyncListener.addListener("group_chat_" + group._id, (snap) => {
-                        let groupId = snap.key;
+                        let groupId = snap.key.substring('group_chat_'.length);
                         const token = state.authentication.token;
                         const groupsChats = state.comments.groupComments[groupId];
                         const user = state.user.user;

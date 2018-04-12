@@ -74,7 +74,7 @@ const toTitleCase = (str) => {
 const parseUserPhoneNumber = (user) => {
     if(!user)
         return '';
-   return `+${user.country_code}-${user.phone_number}`
+   return `${user.phone_number}`
 };
 const relativeWidth= (widthIos,widthAndroid) => {
     const {width, height} = Dimensions.get('window')
