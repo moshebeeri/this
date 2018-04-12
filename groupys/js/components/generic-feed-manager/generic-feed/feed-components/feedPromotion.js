@@ -80,7 +80,11 @@ export default class FeedPromotion extends Component {
     }
 
     render() {
-        const {showInPopup, showActions, item, save, shared, like, unlike, showUsers, comment, token, location, hideSocial, realize, navigation, scanner, group} = this.props;
+        const {
+            showActions, item, save, shared, like, unlike, showUsers, comment, token, location, hideSocial, realize,
+            scanner, group
+        }
+            = this.props;
         let categoruTitle = item.categoryTitle;
         if (item.business) {
             categoruTitle = item.business.categoryTitle;
@@ -88,19 +92,9 @@ export default class FeedPromotion extends Component {
         const styles = this.createPromotionStyle();
         const image = this.createImageComponent(item, styles, categoruTitle, showActions);
         const container = this.createContainerStyle(item);
-        let claimDisabled = true;
-        if (item.showsave) {
-            claimDisabled = false
-        }
-        let promotionUpperContainer = styles.promotion_upperContainer;
-        let logtyle = styles.logo_view;
         let promotaionDesc = styles.promotiosDescription;
-        let promotionDetalis = styles.promotionDetails;
         if (shared) {
-            promotionUpperContainer = styles.promotioSharedUpperContainer;
-            logtyle = styles.logoSharedview;
             promotaionDesc = styles.promotiosShareDescription;
-            promotionDetalis = styles.promotionShareDetails;
         }
         const result =
             <InViewPort onChange={this.visited.bind(this)} style={container}>

@@ -145,13 +145,13 @@ class BusinessHeader extends Component {
                 <Icon active color={"#2db6c8"} size={StyleUtils.scale(30)} name={arrowName}/>
             </TouchableOpacityFix>
         }
-        return <View>
+        return <View style={{height:StyleUtils.scale(81)}}>
             {!this.props.noProfile ?
-                <View style={{margin: 7}}>
+                <View >
                     {this.headerInternals(headerContainerStyle, back, nameTextStyle, businessName, categoryTitle, showEdit, editButton, hideMenu, menuAction)}
                 </View>
                 :
-                <View style={{margin: 7}}>
+                <View >
                     {this.headerInternals(headerContainerStyle, back, nameTextStyle, businessName, categoryTitle, showEdit, editButton, hideMenu, menuAction)}
                 </View>
             }
@@ -164,7 +164,7 @@ class BusinessHeader extends Component {
         if (bgColor) {
             backgroundColor = bgColor;
         }
-        return <View style={[headerContainerStyle, {backgroundColor: backgroundColor, width: StyleUtils.getWidth()}]}>
+        return <View style={[headerContainerStyle, {backgroundColor: 'transparent', width: StyleUtils.getWidth()}]}>
             <View style={{alignItems: 'center', justifyContent: 'center'}}>
                 {back}
             </View>
