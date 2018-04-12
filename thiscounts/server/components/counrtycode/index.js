@@ -1,5 +1,7 @@
 'use strict';
 
+//TODO: use this package - npm i google-libphonenumber
+
 const codesData = require('./data/codes');
 
 let countryCodes = [];
@@ -46,11 +48,9 @@ CountryCode.normalize =
       return '';
   }
 
-  if(startsWithCountryCode(number)) {
-    //console.log(number);
+  if(number.length > 9 && startsWithCountryCode(number)) {
     return number;
   }
-  //console.log(defaultCode + number);
   return defaultCode + number
 };
 
