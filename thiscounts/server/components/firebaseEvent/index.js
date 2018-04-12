@@ -17,8 +17,8 @@ function FirebaseEvent() {
 FirebaseEvent.change = function(entityName, entity_id) {
   console.log(`FirebaseEvent.change ${JSON.stringify({entityName, entity_id})}`);
   // create a child node of the above path and write the following data to it
-  const usersRef = ref.child(`${entityName}_${entity_id}`);
-  usersRef.set({
+  const theRef = ref.child(`${entityName}_${entity_id}`);
+  theRef.set({
     type: 'change',
     time: Date.now().toString()
   })
@@ -32,8 +32,9 @@ FirebaseEvent.info = function(entityName, entity_id, type, obj) {
   console.log(`FirebaseEvent.info ${JSON.stringify({entityName, entity_id, type, obj})}`);
   // create a child node of the above path and write the following data to it
   obj.type = type;
-  const usersRef = ref.child(`${entityName}_${entity_id}`);
-  usersRef.set(obj)
+  obj.time = Date.now().toString();
+  const theRef = ref.child(`${entityName}_${entity_id}`);
+  theRef.set(obj)
     .then()
     .catch((err) => {
       console.error(err);
